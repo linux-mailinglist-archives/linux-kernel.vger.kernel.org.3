@@ -2,203 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 471A35258CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 01:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A92F25258CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 01:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359678AbiELX5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 19:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59854 "EHLO
+        id S1359690AbiELX5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 19:57:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359668AbiELX5i (ORCPT
+        with ESMTP id S1359688AbiELX5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 19:57:38 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449F0554B1
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 16:57:36 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id v66so8356954oib.3
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 16:57:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=7qvuAI/LbHot+Z3zgvkne2FOb1LdGua9+c4HxvF2hBM=;
-        b=eFd/xCYa6a0vzCzsVHnwJRF3FcWjsKpaBwxGVr+x8Kljpbk1guwoVq/BIW1TmRrCTS
-         olJB7RCMwpzv8ljkm8YSQgiP/n9IIyVjyXUqfIJKB1MoZns6czGr/qBXwEt73KzEqZAJ
-         KD/QrHtZiEM8I/AS2WZAMjPXv2Dcz5MNOJMEe/CiJWMrdE1z0a4a7NBs1uB22beLr/I/
-         R5AylckCoPqjFPhax1zG3QtKqJkq8dj8xwYX0yf1e2fEmRLH63JG8f+PtAO7h30OEaxj
-         s6Li+r6vbJaqiPaJCOukutWCXWpU7q4b2zBp10r7kxFCneFhFHvMdnoaj0GqyXU3J3ol
-         igrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=7qvuAI/LbHot+Z3zgvkne2FOb1LdGua9+c4HxvF2hBM=;
-        b=279jtzwoq6eLDL2w/ZY8mRBecd3RGB33rz/2UoKMVSw8agEdnONk6s3raGTkBucVox
-         B22Fa2kYWwoMaU1c7sAU0gUtCpI5EtiMN+m8xgMloNUVkbPUgESNzfNC1h98BDWYXDU1
-         jMtfN3C6GUhMG7dxSxcPtelN097dTj+l4i40yvjzjUiOnHvjFHaV1cxRQ1W5TY3y8HDK
-         /L3kJP7b1aDOX8SDFzvDFDiQRkCrYDdU4RCoDCZRucks+ow2sgBsQPxYKjqgVwmI/DMI
-         I10kJw2ZUnVqlflwBQWpabsRekp9jonXU9ECF006gh/kTKL+8QRyr8isTQkfQekjYFYr
-         jI1g==
-X-Gm-Message-State: AOAM532NwexPLCIsO+gXuEVe3kl8DusIM04uwi6FGgyTvpuR5SXRgfp4
-        iAhUbMEyYo1JsHwkrBgCE8LMc1ZgWhWM7jmTjP4Oew==
-X-Google-Smtp-Source: ABdhPJwx3bfbhZoV/hTg74ZJlzP3iMqS5eo2UO8VN2XkVLechBYYqd+yQx3tj+myeofa5RDIl9HFskNnjHJm3tnrPHw=
-X-Received: by 2002:a05:6808:c2:b0:325:eb71:7266 with SMTP id
- t2-20020a05680800c200b00325eb717266mr6676460oic.269.1652399855370; Thu, 12
- May 2022 16:57:35 -0700 (PDT)
+        Thu, 12 May 2022 19:57:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BED25A59C;
+        Thu, 12 May 2022 16:57:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D35B46209D;
+        Thu, 12 May 2022 23:57:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DF4EC385B8;
+        Thu, 12 May 2022 23:57:46 +0000 (UTC)
+Message-ID: <b128ed0f-08f8-2742-e22c-20cc5870a61c@linux-m68k.org>
+Date:   Fri, 13 May 2022 09:57:43 +1000
 MIME-Version: 1.0
-References: <20220512184514.15742-1-jon@nutanix.com> <Yn1fjAqFoszWz500@google.com>
- <Yn1hdHgMVuni/GEx@google.com> <07BEC8B1-469C-4E36-AE92-90BFDF93B2C4@nutanix.com>
- <Yn1o9ZfsQutXXdQS@google.com> <CALMp9eRQv6owjfyf+UO=96Q1dkeSrJWy0i4O-=RPSaQwz0bjTQ@mail.gmail.com>
- <C39CD5E4-3705-4D1A-A67D-43CBB7D1950B@nutanix.com>
-In-Reply-To: <C39CD5E4-3705-4D1A-A67D-43CBB7D1950B@nutanix.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Thu, 12 May 2022 16:57:24 -0700
-Message-ID: <CALMp9eRXmWvrQ1i0V3G738ndZOZ4YezQ=BqXe-BF2b4GNo1m3Q@mail.gmail.com>
-Subject: Re: [PATCH v4] x86/speculation, KVM: remove IBPB on vCPU load
-To:     Jon Kohler <jon@nutanix.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ashok Raj <ashok.raj@intel.com>,
-        KarimAllah Ahmed <karahmed@amazon.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "kvm @ vger . kernel . org" <kvm@vger.kernel.org>,
-        Waiman Long <longman@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 4/4] m68knommu: allow elf_fdpic loader to be selected
+Content-Language: en-US
+To:     linux-m68k@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, dalias@libc.org
+References: <20220512230602.1408871-1-gerg@linux-m68k.org>
+From:   Greg Ungerer <gerg@linux-m68k.org>
+In-Reply-To: <20220512230602.1408871-1-gerg@linux-m68k.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 1:34 PM Jon Kohler <jon@nutanix.com> wrote:
->
->
->
-> > On May 12, 2022, at 4:27 PM, Jim Mattson <jmattson@google.com> wrote:
-> >
-> > On Thu, May 12, 2022 at 1:07 PM Sean Christopherson <seanjc@google.com>=
- wrote:
-> >>
-> >> On Thu, May 12, 2022, Jon Kohler wrote:
-> >>>
-> >>>
-> >>>> On May 12, 2022, at 3:35 PM, Sean Christopherson <seanjc@google.com>=
- wrote:
-> >>>>
-> >>>> On Thu, May 12, 2022, Sean Christopherson wrote:
-> >>>>> On Thu, May 12, 2022, Jon Kohler wrote:
-> >>>>>> Remove IBPB that is done on KVM vCPU load, as the guest-to-guest
-> >>>>>> attack surface is already covered by switch_mm_irqs_off() ->
-> >>>>>> cond_mitigation().
-> >>>>>>
-> >>>>>> The original commit 15d45071523d ("KVM/x86: Add IBPB support") was=
- simply
-> >>>>>> wrong in its guest-to-guest design intention. There are three scen=
-arios
-> >>>>>> at play here:
-> >>>>>
-> >>>>> Jim pointed offline that there's a case we didn't consider.  When s=
-witching between
-> >>>>> vCPUs in the same VM, an IBPB may be warranted as the tasks in the =
-VM may be in
-> >>>>> different security domains.  E.g. the guest will not get a notifica=
-tion that vCPU0 is
-> >>>>> being swapped out for vCPU1 on a single pCPU.
-> >>>>>
-> >>>>> So, sadly, after all that, I think the IBPB needs to stay.  But the=
- documentation
-> >>>>> most definitely needs to be updated.
-> >>>>>
-> >>>>> A per-VM capability to skip the IBPB may be warranted, e.g. for con=
-tainer-like
-> >>>>> use cases where a single VM is running a single workload.
-> >>>>
-> >>>> Ah, actually, the IBPB can be skipped if the vCPUs have different mm=
-_structs,
-> >>>> because then the IBPB is fully redundant with respect to any IBPB pe=
-rformed by
-> >>>> switch_mm_irqs_off().  Hrm, though it might need a KVM or per-VM kno=
-b, e.g. just
-> >>>> because the VMM doesn't want IBPB doesn't mean the guest doesn't wan=
-t IBPB.
-> >>>>
-> >>>> That would also sidestep the largely theoretical question of whether=
- vCPUs from
-> >>>> different VMs but the same address space are in the same security do=
-main.  It doesn't
-> >>>> matter, because even if they are in the same domain, KVM still needs=
- to do IBPB.
-> >>>
-> >>> So should we go back to the earlier approach where we have it be only
-> >>> IBPB on always_ibpb? Or what?
-> >>>
-> >>> At minimum, we need to fix the unilateral-ness of all of this :) sinc=
-e we=E2=80=99re
-> >>> IBPB=E2=80=99ing even when the user did not explicitly tell us to.
-> >>
-> >> I think we need separate controls for the guest.  E.g. if the userspac=
-e VMM is
-> >> sufficiently hardened then it can run without "do IBPB" flag, but that=
- doesn't
-> >> mean that the entire guest it's running is sufficiently hardened.
-> >>
-> >>> That said, since I just re-read the documentation today, it does spec=
-ifically
-> >>> suggest that if the guest wants to protect *itself* it should turn on=
- IBPB or
-> >>> STIBP (or other mitigations galore), so I think we end up having to t=
-hink
-> >>> about what our =E2=80=9Ccontract=E2=80=9D is with users who host thei=
-r workloads on
-> >>> KVM - are they expecting us to protect them in any/all cases?
-> >>>
-> >>> Said another way, the internal guest areas of concern aren=E2=80=99t =
-something
-> >>> the kernel would always be able to A) identify far in advance and B)
-> >>> always solve on the users behalf. There is an argument to be made
-> >>> that the guest needs to deal with its own house, yea?
-> >>
-> >> The issue is that the guest won't get a notification if vCPU0 is repla=
-ced with
-> >> vCPU1 on the same physical CPU, thus the guest doesn't get an opportun=
-ity to emit
-> >> IBPB.  Since the host doesn't know whether or not the guest wants )IBP=
-B, unless the
-> >> owner of the host is also the owner of the guest workload, the safe ap=
-proach is to
-> >> assume the guest is vulnerable.
-> >
-> > Exactly. And if the guest has used taskset as its mitigation strategy,
-> > how is the host to know?
->
-> Yea thats fair enough. I posed a solution on Sean=E2=80=99s response just=
- as this email
-> came in, would love to know your thoughts (keying off MSR bitmap).
->
 
-I don't believe this works. The IBPBs in cond_mitigation (static in
-arch/x86/mm/tlb.c) won't be triggered if the guest has given its
-sensitive tasks exclusive use of their cores. And, if performance is a
-concern, that is exactly what someone would do.
+On 13/5/22 09:06, Greg Ungerer wrote:
+> The m68k architecture code is capable of supporting the binfmt_elf_fdpic
+> loader, so allow it to be configured. It is restricted to nommu
+> configurations at this time due to the MMU context structures/code not
+> supporting everything elf_fdpic needs when MMU is enabled.
+> 
+> Link: https://lore.kernel.org/linux-m68k/20220428033319.239341-1-gerg@linux-m68k.org/
+> Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
+> ---
+>   fs/Kconfig.binfmt | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> v2: remove superfluous surrounding "(" ")"
+
+If no one has any objections I can carry this in the m68knommu
+git tree with the rest of the series.
+
+Regards
+Greg
+
+
+> diff --git a/fs/Kconfig.binfmt b/fs/Kconfig.binfmt
+> index 21c6332fa785..fb325b3aa4b0 100644
+> --- a/fs/Kconfig.binfmt
+> +++ b/fs/Kconfig.binfmt
+> @@ -58,7 +58,7 @@ config ARCH_USE_GNU_PROPERTY
+>   config BINFMT_ELF_FDPIC
+>   	bool "Kernel support for FDPIC ELF binaries"
+>   	default y if !BINFMT_ELF
+> -	depends on (ARM || (SUPERH && !MMU))
+> +	depends on ARM || ((M68K || SUPERH) && !MMU)
+>   	select ELFCORE
+>   	help
+>   	  ELF FDPIC binaries are based on ELF, but allow the individual load

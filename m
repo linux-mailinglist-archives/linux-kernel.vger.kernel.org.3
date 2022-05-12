@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB94F524ECD
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5FED524ED2
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:52:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354721AbiELNvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 09:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60502 "EHLO
+        id S1354688AbiELNwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 09:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354509AbiELNvq (ORCPT
+        with ESMTP id S1354509AbiELNwn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 09:51:46 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1186620A;
-        Thu, 12 May 2022 06:51:42 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id t16so4297241qtr.9;
-        Thu, 12 May 2022 06:51:42 -0700 (PDT)
+        Thu, 12 May 2022 09:52:43 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B762E6542B;
+        Thu, 12 May 2022 06:52:42 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id n10so4360299qvi.5;
+        Thu, 12 May 2022 06:52:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=9AmgPpxvn6EdK4HK0dUjo8+r0C+bjsTldPYOViPnEiM=;
-        b=iVNlugp1YwMJo71BnKtgeDbh28Ui7pbxjG3thnmCDBTSz/5p4OMIWjSIoLUhobuchS
-         3pHHkiKLDRXpw1LWQPvdiPtvsyOShBDdcuzrFIrUidIgVfkrc3g24l8+ESyvP7mxxRZS
-         oqXH3S7HjgrZ5G8F8OSIb0JUj5WuQKZKxonDzXWlLUPAcHiQ0wX/ZC8B5SCpweeFqmsw
-         3xEFkVkyc4bOz+rdaEIhZC13WR4XACAnazzFuN5/HKqbW3XXjwUFclugaDYFREDWGL1F
-         yKlBnfWz8+8qVlK9FHqIsyskpy7pOAp+Or009poBY+lK0qtU2nZBVpxRknTISLgzlhVU
-         UCMg==
+        b=CGaMZSgceeiAXjZ7U/J28/bVw4EJWKiPI1Km/56Zr8PZw45Va2EUqYhgvTLSVDDmI5
+         UU5IcKMIeq6skG1u62HlA1MeFKoAmZj5SuYFdSdtZ4S5SF8tR0rOxj95wG4Nc8qLlkvE
+         0ZCsdH9B/J3N6NRy1O6HTgaMGebrzxpHQq3t7JJg5JPhc/jYLZCvqOJ4VuCCcUNEjMOM
+         4PwEq640w5QerqBZVuLzCh5XrTB4/JvOYJEg5vr/KukoVZwJCCfJxlD5JUd/7ZierVBy
+         Jsz4Ir/LLmt5QGQPmT7klktZcHfRUo7d6ldVWzTEM6odz/2pOqy4IXOmNxd+0NPmsuzy
+         rETw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=9AmgPpxvn6EdK4HK0dUjo8+r0C+bjsTldPYOViPnEiM=;
-        b=UJi9JYsZXy3d7SWEIb5/5AblYbG6xJuso6k60oNtDXPEiddtR1sRf69Wz6VVP5NP41
-         7rgdw8mx7RKUiErPRPO62Ii8BFCra0yNLlqD09JYtid6qTkSu4Ko/Rbi4vzdtQuNnS6R
-         9WwJibts76c+eSkgcE/B+iVCFydZoTFLjvOiuvRj10wRHyt9kGm8YhnxngpFwn8LCVBg
-         2uNHlTnxUve4Q56+vh84L9GcCrMwzdfvtnmUPuyjYAukeB4gyBVyiQ+Rm+pYX7fSPGPH
-         +EOKT8j3TtWqlxsUeE2jW83kPrJ3QBdOWm/xW7/rPedxVCe2F5JZCbwx2+NjU2msVwwz
-         QxNA==
-X-Gm-Message-State: AOAM533uOjY7U64F5iTr26cpu2qgBRjBHFVYqZxEua+rfDDxjgtfNzFz
-        AjfbCaQC5xYl1mMwgaiZb0Q=
-X-Google-Smtp-Source: ABdhPJwOnZvfFv3s61HvTNVHJwrqa/g8CsemUMP21n2PsTfQG3JCvTbhr/MA/Z9DMhV3QgYMMUuTyg==
-X-Received: by 2002:ac8:598a:0:b0:2f3:cbf4:7b4e with SMTP id e10-20020ac8598a000000b002f3cbf47b4emr26814459qte.449.1652363501377;
-        Thu, 12 May 2022 06:51:41 -0700 (PDT)
+        b=yy+Si+WZNr4PPnMdBYr4xv23wO1rA/Rdu/vKNREOiCHYgGCvv2mHJiQhcskz58YFGS
+         zz8h6cFFQy1IphE/GsC73+g2yvpewt6t56zcayayO44gKGq2tRqvsUVpCy6naE4hSW+H
+         fJhppHGW3QePQX7vDzfLQAV9fPnDGKGrCPdq0PNs9BfjR1aiM9jy2XtbQDwWA16t6SVX
+         WH1Nqe0/Ji4UeB9Al+OCZns2nA9vvhUzE8Gfbvawnkv7t110NLKvDBaX2VJNp3dPD905
+         c8DW0JI6ChJA6RZFFwWt5xkbZNMl+UhClvpbVRfO93oDeeDrMo23TL/hto4JBVHn69LG
+         pM+w==
+X-Gm-Message-State: AOAM532GTYYas+EQLUUgjNIhQ/SkfJEzICnoG1/jrffxo1iUUHOqSPrK
+        SXcOwav3I7dlrdpixY3kYdgYVNDHPgwb3Ocq
+X-Google-Smtp-Source: ABdhPJxtUbZjUiYVcfuwPdRVe417fmbRT6QtnO+1RzhV6qXzSSM2BdMZGCvW5a4vbMorUvAO50ykNg==
+X-Received: by 2002:a05:6214:4103:b0:440:e4d1:a2a0 with SMTP id kc3-20020a056214410300b00440e4d1a2a0mr26800735qvb.42.1652363561661;
+        Thu, 12 May 2022 06:52:41 -0700 (PDT)
 Received: from MBP.hobot.cc (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
-        by smtp.gmail.com with ESMTPSA id 193-20020a3704ca000000b0069fc13ce251sm2851503qke.130.2022.05.12.06.51.37
+        by smtp.gmail.com with ESMTPSA id r204-20020a37a8d5000000b0069fc13ce1e8sm2885591qke.25.2022.05.12.06.52.38
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 12 May 2022 06:51:41 -0700 (PDT)
+        Thu, 12 May 2022 06:52:41 -0700 (PDT)
 From:   Schspa Shi <schspa@gmail.com>
 To:     rafael@kernel.org, viresh.kumar@linaro.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         schspa@gmail.com
-Subject: [PATCH 1/2] cpufreq: fix race on cpufreq online
-Date:   Thu, 12 May 2022 21:51:28 +0800
-Message-Id: <20220512135129.8493-1-schspa@gmail.com>
+Subject: [PATCH v4 1/2] cpufreq: fix race on cpufreq online
+Date:   Thu, 12 May 2022 21:52:30 +0800
+Message-Id: <20220512135231.10076-1-schspa@gmail.com>
 X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit

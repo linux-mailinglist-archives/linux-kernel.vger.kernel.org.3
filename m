@@ -2,72 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D72D524D8B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9078F524D85
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 14:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353990AbiELMwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 08:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41646 "EHLO
+        id S1353481AbiELMvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 08:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354131AbiELMu4 (ORCPT
+        with ESMTP id S1354173AbiELMvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 08:50:56 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080F714091
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:50:41 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 202so4492393pgc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 05:50:40 -0700 (PDT)
+        Thu, 12 May 2022 08:51:01 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D442FFD6;
+        Thu, 12 May 2022 05:51:00 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id n8so4784701plh.1;
+        Thu, 12 May 2022 05:51:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=A0xOx0HJGPqe65kUT8EYAv7c6q9fmHkJFCQDDmRbELQ=;
-        b=lwxhL4wAs6Qvzati4H2W524EGSAsQhuS3/nB5BZWZ4DEpD5RDkZvry5sMHYjaX/WEw
-         y3U0PGPPxvMt6oD+WQwL4AHVAjGflqpa/Bt0K+pciJmSLHe+5NVj/LUGh9Dp1uTu01RQ
-         znnBn8BAy0KGV9DBsyKUfoiT1Sy8QscSdPlY7DZUd03IdYvEkO6Y47GwahGKpBKZ4YS2
-         oTFA9xVdwzp02a3nxDkp37gCPunfyYdIN3xquEjhbu1X9zZ+YpuOgWoeAIdpYVQZgq6F
-         SqGFY/KIvGfMxFo6rKdQROw+56A0Hn0UjJNrM2h71EC59qap64VmDCAdMBoYbnUGbGLY
-         +75w==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=27EwMlbk53oJO3mj5MrkPCMTBgjzsri0OLoJeRdN+Xk=;
+        b=hwrCWIKn1lNQ5iP8cTprtxDiQdgsMreSVVUAyf+2m6lva9mk0B0WJgcFR1btdyKcAF
+         r5U9AETUU9dZQ+8otEPYCoyqsMDop7ywLHzo1YvBPwEdKZ/zDp8iJr6wRl6YPfsmBdUC
+         Tg25iaD2FO8Kil7UA+XBjE7bHdfOpyNwJStR2ZvBB4grxA0bRtC0/BQ69JxQlUB4ppCK
+         W5tMj2DMn5bbxGq7SbLEorDVyvLZ/+ezEShhhMqAj+63M+A33wTtbcVYXaLd8X3ds+bR
+         LLNM7GpiBk8YyYQYlHnQEGXpXbtTzLht72W359j/qNant5OaJfCnuZaAFpmGERFMpLPq
+         p8sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=A0xOx0HJGPqe65kUT8EYAv7c6q9fmHkJFCQDDmRbELQ=;
-        b=l4Gw8NJYwTvGyOx26g2bizTWpSC0rftOmIrbRlnY8Zx/Ky+p5s8BhIH8grQ0f8gzUF
-         C7uuuN3bYN8Fi9JFx4hhmgEa3q5k4TF9a+Zy0jmcUc0OLIbRwDyGlP97lyKe8yyLDCG1
-         BjAXON+No9hRrlbVfNnguVBwSrWpCW1f3a8ie0RZXSrq2ToUpx/eJpKdh5nexsmNRT/X
-         4VqcafexZfVMVcqlg+aqtxEC713pH+LsQEtKWIj5BgiW5cUHjTPn44p13XKmlj7F33tY
-         lhAeDveuVhUHNGRZTT1kZ911aYnAWfdanc1l4/RFg/0+fGTfyFOlMtFzV2HuBriRNJMy
-         p4sQ==
-X-Gm-Message-State: AOAM531DJd4z5qlZxwht/J9538slth+BL5kzJYrlrgkAZu4hGfsLvYjf
-        N6H+0Z7Y0smB5KS3Cj1gCt8O3A==
-X-Google-Smtp-Source: ABdhPJzD/auBmfoLWNxs2s5aGR2dmgOFqGv/Z5slJeRepfjx/hj1IpceD0OaHmBJGL5a2oxFasebMg==
-X-Received: by 2002:a63:4549:0:b0:3db:5130:d269 with SMTP id u9-20020a634549000000b003db5130d269mr4372076pgk.101.1652359840481;
-        Thu, 12 May 2022 05:50:40 -0700 (PDT)
-Received: from localhost ([139.177.225.250])
-        by smtp.gmail.com with ESMTPSA id i21-20020a170902e49500b0015e8d4eb20dsm3758677ple.87.2022.05.12.05.50.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 05:50:40 -0700 (PDT)
-Date:   Thu, 12 May 2022 20:50:27 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     corbet@lwn.net, mike.kravetz@oracle.com, akpm@linux-foundation.org,
-        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        osalvador@suse.de, masahiroy@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        duanxiongchun@bytedance.com, smuchun@gmail.com
-Subject: Re: [PATCH v10 2/4] mm: memory_hotplug: override memmap_on_memory
- when hugetlb_free_vmemmap=on
-Message-ID: <Yn0Ck5isxx4ghQi6@FVFYT0MHHV2J.usts.net>
-References: <20220509062703.64249-1-songmuchun@bytedance.com>
- <20220509062703.64249-3-songmuchun@bytedance.com>
- <ebffd794-697b-9bf1-f41b-4b2d52c100fc@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=27EwMlbk53oJO3mj5MrkPCMTBgjzsri0OLoJeRdN+Xk=;
+        b=3/5j2eGM5weaqer8NWU5kX1++O98vjMYTLbHkGRrQFbHEb7OK6tE6DcSucjg6w7KA+
+         WacC3pWOVZqyAHjMRblYAxI75fqif/3NGNjifky+gA6TPXb7zzK2PZLokDaBsSKVfcSO
+         G0fv+YTMoBDJ3PgeWMWU1YFnJYIYe1XAGekoEWsv3emBO3Ari/EAh7j+YZLb0M0nAquy
+         sImJiDqmmjMD5pjdyuMK2m47uvO+MOJ0RWetBvVWlfzvHViJQOk5mg6mHIJdtYGHmGDq
+         BcKdKk8jraqMDMGtbIyVIiPFqKXFnGcPMLk6uxlm/5qpPw5xcTwSmaI+VcbGdVx6F27J
+         uukA==
+X-Gm-Message-State: AOAM532b9A6zCTctmvx3g7//yHwUZZ5yMqoza9cwUVhRXJpsMcV29JQU
+        yMBg+bxOWEWDDGMQsgCNtMGjx1hza4AbRqbGWw==
+X-Google-Smtp-Source: ABdhPJxnxpgAp4wv1yi22WGwb29rdhwZR+gxdFpDHWtsY7kBvNH4oytzIcA1sPJ4IFbevGo+nmHRtWbths9+TvSAhPk=
+X-Received: by 2002:a17:90a:db45:b0:1d9:29d0:4c6e with SMTP id
+ u5-20020a17090adb4500b001d929d04c6emr10742419pjx.46.1652359859746; Thu, 12
+ May 2022 05:50:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ebffd794-697b-9bf1-f41b-4b2d52c100fc@redhat.com>
+References: <20220512112106.2356120-1-zheyuma97@gmail.com> <CAHp75Vfz-Qq3qo3Re7tsL0mfXNVYZYspGDFCDXhtZxwac7bEiw@mail.gmail.com>
+In-Reply-To: <CAHp75Vfz-Qq3qo3Re7tsL0mfXNVYZYspGDFCDXhtZxwac7bEiw@mail.gmail.com>
+From:   Zheyu Ma <zheyuma97@gmail.com>
+Date:   Thu, 12 May 2022 20:50:48 +0800
+Message-ID: <CAMhUBjkbLkA-aw4rUwFAsxZpGrOefUA515RnhXY0EjECi3hdLA@mail.gmail.com>
+Subject: Re: [PATCH] gpio: ml-ioh: Add devm_free_irq() call to remove flow
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,21 +69,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 09:36:15AM +0200, David Hildenbrand wrote:
-> On 09.05.22 08:27, Muchun Song wrote:
-> > Optimizing HugeTLB vmemmap pages is not compatible with allocating memmap on
-> > hot added memory. If "hugetlb_free_vmemmap=on" and
-> > memory_hotplug.memmap_on_memory" are both passed on the kernel command line,
-> > optimizing hugetlb pages takes precedence. 
-> 
-> Why?
+On Thu, May 12, 2022 at 8:03 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
 >
+> On Thu, May 12, 2022 at 1:21 PM Zheyu Ma <zheyuma97@gmail.com> wrote:
+> >
+> > When removing the module, we will get the following flaw:
+>
+> Thanks for the report and patch! My comments below.
+>
+> > [   14.204955] remove_proc_entry: removing non-empty directory 'irq/21', leaking at least 'gpio_ml_ioh'
+> > [   14.205827] WARNING: CPU: 0 PID: 305 at fs/proc/generic.c:717 remove_proc_entry+0x389/0x3f0
+> > [   14.209994] RIP: 0010:remove_proc_entry+0x389/0x3f0
+> > [   14.217820] Call Trace:
+> > [   14.218057]  <TASK>
+> > [   14.218264]  unregister_irq_proc+0x14c/0x170
+> > [   14.218674]  irq_free_descs+0x94/0xe0
+> > [   14.219019]  mp_unmap_irq+0xb6/0x100
+> > [   14.219357]  acpi_unregister_gsi_ioapic+0x27/0x40
+> > [   14.219796]  acpi_pci_irq_disable+0x1d3/0x320
+> > [   14.220206]  pci_disable_device+0x1ad/0x380
+> > [   14.220613]  ioh_gpio_remove+0xc5/0xe0 [gpio_ml_ioh]
+> > [   14.221075]  pci_device_remove+0x92/0x240
+>
+> Can we remove not so important lines from the above? I guess ~3-4
+> selected ones would be enough.
+>
+> > Fix this bug by adding devm_free_irq() call to remove flow.
+>
+> Fixes tag?
+>
+> > Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+>
+> The code looks okay on the first glance.
+>
+> P.S. Do you have such hardware?
 
-Because both two features are not compatible since hugetlb_free_vmemmap cannot
-optimize the vmemmap pages allocated from alternative allocator (when
-memory_hotplug.memmap_on_memory=1). So when the feature of hugetlb_free_vmemmap
-is introduced, I made hugetlb_free_vmemmap take precedence.  BTW, I have a plan
-to remove this restriction, I'll post it out ASAP.
+Thanks for your comments, I've resend the patch.
+Actually, I do not have the hardware. I test the driver with a virtual
+device instead.
 
-Thanks.
-
+Zheyu Ma

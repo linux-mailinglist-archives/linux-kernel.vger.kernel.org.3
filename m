@@ -2,119 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 689FF5256F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 23:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 717325256F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 23:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358665AbiELVR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 17:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35330 "EHLO
+        id S1358683AbiELVS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 17:18:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353619AbiELVRY (ORCPT
+        with ESMTP id S1358678AbiELVSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 17:17:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FB568F8D
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 14:17:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B41B1B82799
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 21:17:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 868CDC385B8;
-        Thu, 12 May 2022 21:17:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652390241;
-        bh=LqARVq2lcGKNOIxt7wFh53bt74j0X8rRusVOxvkYpqc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=rZ3+EgEYyfYagLTq+TdC4pKBLiDez079XtAYlgTUYUFuMa0Ux2wykWoHakFcl66NP
-         DMM1LrO2Go1ZGCa7NvfLFPw1ZYpSvu+jnRIwlnyL0VtGR4+ZciJKYE6w8DA0kKhZzP
-         i/RzliIrkgPlOmyGRbUm3B8O/d+XccJEXp5059+ctKavd4qXTtyMJxGG/MRjQSCSHj
-         +1BIlMiDFc4YvnrGGbcyFsKig6kZVxRxf5RiDeSxoS1tj/Ye9jf4MBVpGltSCHdpN6
-         mqIJBjcYU+gvxi0cNXDsYkzK64SkUtAOPO0leSOiYbA1pQEMH3NmxuQ3j7Ao1SDAv+
-         jGYAbhzxC8eDg==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Sami Tolvanen <samitolvanen@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] drm/i915: Fix CFI violation with show_dynamic_id()
-Date:   Thu, 12 May 2022 14:17:04 -0700
-Message-Id: <20220512211704.3158759-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.36.1
+        Thu, 12 May 2022 17:18:54 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E77018D6B8
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 14:18:52 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2f7d7e3b5bfso71322547b3.5
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 14:18:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=l4JJk+ewG2LNWAOShIee96q+d5mTnr66IKaxT9DB1Ig=;
+        b=p+VLViJPr40k3kQbPAzBNiPW9Kmv8o59a0sJPe4L6FHZdn06b8e+lqxEm2icfgN7M8
+         cuRdhC5ct+EW4wfjW5CqaunZnXi5GplVU/oqKuWLEWMXx4BRMgVOV7uqsCV6VeR3oedB
+         Sw30gbGMsyOlN+n9zcA6doK9KeWdvJIpmxOn+R0/mmXkxggbp0GjblysEKck1PDWvfg/
+         aMDknvoRWiwQ2n9nMOWZwW6OrbuX/SnQl3fCWF09MRAZu+QZ4SpBLuhg1SYbWLI5iz1a
+         3RFmsjz0aWJ3ZsuOLAlXkWhwLn32n1DfyWOOHLjrCHcANtTOmjpItAzkB07EW9JfAurL
+         jQSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l4JJk+ewG2LNWAOShIee96q+d5mTnr66IKaxT9DB1Ig=;
+        b=Tx7xtnckFo2Ir7OxR4qhj3iKAfIdNwqDae1ac1jX8YxizNp5rg8PKQU7eEtRsYGE8r
+         shXAkVjPVokZlknJnqK3deyLC+q1mhm87feTAoIU3Sk9Snm83vrh8DfIoWuMpylopjuc
+         rIaGjwpoSqeoQhWtiU6HU0f5Uz2VInpcfRF4X+lri/65q92Yh5RqKLqtwJXgNmSZEWEV
+         sBPYlI8Vnl2LrpSefg+ML1bgyHGAN0Q06VjcQC9ppP/lMYOmHwIWGrW9Fn1jsGXYTnGb
+         wfNoJa5ncf594PadDwAa/fVM9HN/m8BaRs/e4wJvhXKHDHdApuFWdk7PJU/olTnJ54fB
+         mafg==
+X-Gm-Message-State: AOAM530HJ0+WU12WSDG4gSkd29mbNQq0nzhbMxI218DgXYIOSjHCgV8P
+        bYnOd8oRvrKVAbFC33a1Y+N3L1FelyXRT1I/be4h4Q==
+X-Google-Smtp-Source: ABdhPJyP2X1EcFupaifbXZ28oMOBGFHPAjxR2D1ve+Lki2Tw6rePByxEyHT+aLUhrc6jA0aD9BnBKmE85kLCzc6+PLE=
+X-Received: by 2002:a0d:cbd8:0:b0:2fb:958e:d675 with SMTP id
+ n207-20020a0dcbd8000000b002fb958ed675mr2270591ywd.264.1652390331960; Thu, 12
+ May 2022 14:18:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220512103322.380405-1-liujian56@huawei.com> <CANn89iJ7Lo7NNi4TrpKsaxzFrcVXdgbyopqTRQEveSzsDL7CFA@mail.gmail.com>
+In-Reply-To: <CANn89iJ7Lo7NNi4TrpKsaxzFrcVXdgbyopqTRQEveSzsDL7CFA@mail.gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 12 May 2022 23:18:15 +0200
+Message-ID: <CANpmjNPRB-4f3tUZjycpFVsDBAK_GEW-vxDbTZti+gtJaEx2iw@mail.gmail.com>
+Subject: Re: [PATCH net] tcp: Add READ_ONCE() to read tcp_orphan_count
+To:     Eric Dumazet <edumazet@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Liu Jian <liujian56@huawei.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Neal Cardwell <ncardwell@google.com>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When an attribute group is created with sysfs_create_group(), the
-->sysfs_ops() callback is set to kobj_sysfs_ops, which sets the ->show()
-callback to kobj_attr_show(). kobj_attr_show() uses container_of() to
-get the ->show() callback from the attribute it was passed, meaning the
-->show() callback needs to be the same type as the ->show() callback in
-'struct kobj_attribute'.
+On Thu, 12 May 2022 at 22:06, Eric Dumazet <edumazet@google.com> wrote:
+>
+> On Thu, May 12, 2022 at 3:32 AM Liu Jian <liujian56@huawei.com> wrote:
+> >
+> > The tcp_orphan_count per-CPU variable is read locklessly, so this commit
+> > add the READ_ONCE() to a load in order to avoid below KCSAN warnning:
+> >
+> > BUG: KCSAN: data-race in tcp_orphan_count_sum net/ipv4/tcp.c:2476 [inline]
+> > BUG: KCSAN: data-race in tcp_orphan_update+0x64/0x100 net/ipv4/tcp.c:2487
+> >
+> > race at unknown origin, with read to 0xffff9c63bbdac7a8 of 4 bytes by interrupt on cpu 2:
+> >  tcp_orphan_count_sum net/ipv4/tcp.c:2476 [inline]
+> >  tcp_orphan_update+0x64/0x100 net/ipv4/tcp.c:2487
+> >  call_timer_fn+0x33/0x210 kernel/time/timer.c:1414
+> >
+> > Fixes: 19757cebf0c5 ("tcp: switch orphan_count to bare per-cpu counters")
+> > Signed-off-by: Liu Jian <liujian56@huawei.com>
+> > ---
+> >  net/ipv4/tcp.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> > index cf18fbcbf123..7245609f41e6 100644
+> > --- a/net/ipv4/tcp.c
+> > +++ b/net/ipv4/tcp.c
+> > @@ -2718,7 +2718,7 @@ int tcp_orphan_count_sum(void)
+> >         int i, total = 0;
+> >
+> >         for_each_possible_cpu(i)
+> > -               total += per_cpu(tcp_orphan_count, i);
+> > +               total += READ_ONCE(per_cpu(tcp_orphan_count, i));
+>
+> We might raise the discussion to lkml and/or KCSAN supporters.
+>
+> Presumably, all per_cpu() uses in the kernel will have the same issue ?
+>
+> By definition per-cpu data can be changed by other cpus.
+>
+> So maybe per_cpu() should contain the annotation, instead of having to
+> annotate all users.
 
-However, show_dynamic_id() has the type of the ->show() callback in
-'struct device_attribute', which causes a CFI violation when opening the
-'id' sysfs node under drm/card0/metrics. This happens to work because
-the layout of 'struct kobj_attribute' and 'struct device_attribute' are
-the same, so the container_of() cast happens to allow the ->show()
-callback to still work.
+I guess the question is, is it the norm that per_cpu() retrieves data
+that can legally be modified concurrently, or not. If not, and in most
+cases it's a bug, the annotations should be here.
 
-Change the type of show_dynamic_id() to match the ->show() callback in
-'struct kobj_attributes' and update the type of sysfs_metric_id to
-match, which resolves the CFI violation.
+Paul, was there any guidance/documentation on this, but I fail to find
+it right now? (access-marking.txt doesn't say much about per-CPU
+data.)
 
-Fixes: f89823c21224 ("drm/i915/perf: Implement I915_PERF_ADD/REMOVE_CONFIG interface")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/gpu/drm/i915/i915_perf.c       | 4 ++--
- drivers/gpu/drm/i915/i915_perf_types.h | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/gpu/drm/i915/i915_perf.c b/drivers/gpu/drm/i915/i915_perf.c
-index 0a9c3fcc09b1..1577ab6754db 100644
---- a/drivers/gpu/drm/i915/i915_perf.c
-+++ b/drivers/gpu/drm/i915/i915_perf.c
-@@ -4050,8 +4050,8 @@ static struct i915_oa_reg *alloc_oa_regs(struct i915_perf *perf,
- 	return ERR_PTR(err);
- }
- 
--static ssize_t show_dynamic_id(struct device *dev,
--			       struct device_attribute *attr,
-+static ssize_t show_dynamic_id(struct kobject *kobj,
-+			       struct kobj_attribute *attr,
- 			       char *buf)
- {
- 	struct i915_oa_config *oa_config =
-diff --git a/drivers/gpu/drm/i915/i915_perf_types.h b/drivers/gpu/drm/i915/i915_perf_types.h
-index 473a3c0544bb..05cb9a335a97 100644
---- a/drivers/gpu/drm/i915/i915_perf_types.h
-+++ b/drivers/gpu/drm/i915/i915_perf_types.h
-@@ -55,7 +55,7 @@ struct i915_oa_config {
- 
- 	struct attribute_group sysfs_metric;
- 	struct attribute *attrs[2];
--	struct device_attribute sysfs_metric_id;
-+	struct kobj_attribute sysfs_metric_id;
- 
- 	struct kref ref;
- 	struct rcu_head rcu;
-
-base-commit: 7ecc3cc8a7b39f08eee9aea7b718187583342a70
--- 
-2.36.1
-
+Thanks,
+-- Marco

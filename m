@@ -2,230 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5817524E1E
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F11AD524E1F
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354192AbiELNVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 09:21:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41196 "EHLO
+        id S1354319AbiELNVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 09:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354183AbiELNVh (ORCPT
+        with ESMTP id S1354183AbiELNVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 09:21:37 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3983506F7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:21:33 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id v10so4559811pgl.11
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:21:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4aQRSxerZIfxG75Us/8UUQ0iqFXnrxh04bqlSeNWSLY=;
-        b=IW2hTvHv1ornPaWs/asOavYfPGh3aS+PUX88/ZdhRZDMLMqshfnOIRyKUvRCCDs1XM
-         qXCMMVCR59IvJbT8ZjbP0dxO4VlwnEi8t77fh/0oMrbW/5UfGDDRTzvgvV1prWK1iuNE
-         qbngcanQky/AMov43+2ze9brDGfUUgW1OXOZFvSvKMod4jPOzz3Mpa0jAIdA0sfZgLS8
-         /NQ0YGyYLv1N5YR6qQoz9OvPNMZKrxjkn8mROXnQYa79P+e/c9m9AIyhHCK8jvojCcgR
-         VWtEyQvZE673bHkSeTXWPv05X+f6IbP1V7CnhnSZM66AxXItpKgcoTkmZDbD9Rzo4xi7
-         sRbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4aQRSxerZIfxG75Us/8UUQ0iqFXnrxh04bqlSeNWSLY=;
-        b=ttloDoSHbXlHQE8SKvJCrjQrLF+s3MdEtjPZWyzevgNIxYDPcgJaRCy/MDLJHgGQ8Q
-         Eixsrwi9tlWrgg6zMTJEgyIKbMi0oL4K7VgJ8PJv52LtefMijhM+lngfkoSlPVDCCU/h
-         KTzEGOsiqBgeNy3/0ErqfI4qMMnE64/2d4mpMGGtLt3EJsxD2jdCxHzwUjRkvdn9Awk9
-         Z3sEEVrm24fldYyjtYCptOYGeJYP8uhGObHvS+eoKFOq4dl/Gu/DKt39IkTMuvEk+VH+
-         HrYJ+f/fM3DLFoB34COAfXt9hYneyfQR0KJNflMscXvyBbaeIJ6EfBO5M7CkI6Pp2oOm
-         /sEw==
-X-Gm-Message-State: AOAM53272feJv6CScZ0kw1LkktVsgWnHck8EpJxwKBxQsmtnGKLJNuYE
-        pjJbBq/cte9HbIGPFTWyeiTBZ6u2xau3aKYhzcyoFA==
-X-Google-Smtp-Source: ABdhPJyZOET1EER9C9AZQaqJy8BQlI2AbD8N1VzLJbA77Z/dnnf5unDxOdy+QeXxPtAgZWu9NdemKM/OpYLVX4OA/B8=
-X-Received: by 2002:aa7:9110:0:b0:4fa:e388:af57 with SMTP id
- 16-20020aa79110000000b004fae388af57mr29932676pfh.1.1652361693176; Thu, 12 May
- 2022 06:21:33 -0700 (PDT)
+        Thu, 12 May 2022 09:21:51 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2123.outbound.protection.outlook.com [40.107.255.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6A93ED02
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:21:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JiQGz/I+WL8L1f0LWwwZvMLgzG9CYcpB5IDUIiFmxUxUmp2XM/C6ptUsdW1t0UgqHWli5wn7cQj6jzUfyKN3f5dO9YrSKKfsqsFQZ/LPgCRNLeCKN12bPOIQ3mDY3O6TYeMBtULXxL34ZDSbi0zGDRr/noIcVS9hHsFLVCXus/L1IUG6xGMY8orJIPztFo0IIi7a+P5Lntor5FCsJCu1WQEv/ogARAXjexDK1WRikw5GlVUTnS17Q+3FV5SYIIZgWYa5a9QS0+ub7MdMYPieAlhRYvR13grznkfEzrI51njpcpKGwu4naT8cWx2bU3P/VgheP4cjJ2nKdp0MhAj3JA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZaLaxdhkuAMyCDEYTBdGqki0gSAV9PnKiCntZ7HQNdM=;
+ b=OyKtMr0x5rWFjcXb7ywdLytnM0PyRXtXdt4fiQs3er1TJPnOjhRHzhetrPFwbnsendlc0nMLYYHmpM0Fns+x+NVu1h3f/33JjvVTFQv0bv/RmgbK1rxW6IkDIjy186z9VSWcy+41m4vcPV0+9IxEFLay7pAicDFIbAaGqeYip11ryFstuEmOmeIvJ1mCQi5jM+oTMDPi/hNn6gsexoGXMUjqyQgro463ZpTXGtlrfC60vWLdYtH8B8QZuxG2H8DvGpuSPHFHDldBGuByXZ1dlqmUylIyPqZ8Fqj6Uool+UotNzxGTz7YUAlvLLr06PHw/imnHROT/rFkdw/WMlynTA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZaLaxdhkuAMyCDEYTBdGqki0gSAV9PnKiCntZ7HQNdM=;
+ b=PZQkHpNqf8iDWK4UcY2CYw6cohcutdl3+C25nwPqGRbK4rR/gM56JKYDXM0iDXZRtLmj0KgtBwGCtse5aVvKsfcDiqVYGvX7+qJx2RCLzObWKOxLVZnGZJ4dEPw6IxTr1L68vJrjy138APEMKLODcQysn/ToqkKTZ6TDyuESEc0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SL2PR06MB3082.apcprd06.prod.outlook.com (2603:1096:100:37::17)
+ by HK0PR06MB2145.apcprd06.prod.outlook.com (2603:1096:203:4b::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13; Thu, 12 May
+ 2022 13:21:45 +0000
+Received: from SL2PR06MB3082.apcprd06.prod.outlook.com
+ ([fe80::d161:735a:f459:c6b0]) by SL2PR06MB3082.apcprd06.prod.outlook.com
+ ([fe80::d161:735a:f459:c6b0%7]) with mapi id 15.20.5250.014; Thu, 12 May 2022
+ 13:21:45 +0000
+From:   Qing Wang <wangqing@vivo.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org
+Cc:     dietmar.eggemann@arm.com, Wang Qing <wangqing@vivo.com>
+Subject: [PATCH V3] arch_topology: support parsing cluster_id from DT
+Date:   Thu, 12 May 2022 06:21:32 -0700
+Message-Id: <1652361692-13196-1-git-send-email-wangqing@vivo.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: TYAPR03CA0005.apcprd03.prod.outlook.com
+ (2603:1096:404:14::17) To SL2PR06MB3082.apcprd06.prod.outlook.com
+ (2603:1096:100:37::17)
 MIME-Version: 1.0
-References: <20220504122725.179262-1-robert.foss@linaro.org>
- <20220504122725.179262-5-robert.foss@linaro.org> <600d13cc-962a-bb6c-6e43-c56fd63b9591@somainline.org>
-In-Reply-To: <600d13cc-962a-bb6c-6e43-c56fd63b9591@somainline.org>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Thu, 12 May 2022 15:21:22 +0200
-Message-ID: <CAG3jFysb-ZVr+9jroGs3ibjs9ysOChEz6HqR5NqHj3LvEiFN9Q@mail.gmail.com>
-Subject: Re: [PATCH v3 4/6] clk: qcom: add support for SM8350 DISPCC
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzk+dt@kernel.org, jonathan@marek.ca, tdas@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7609e97a-eb9b-4837-9a21-08da341a5c70
+X-MS-TrafficTypeDiagnostic: HK0PR06MB2145:EE_
+X-Microsoft-Antispam-PRVS: <HK0PR06MB214576D67D121D165C646425BDCB9@HK0PR06MB2145.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Vkm0Z2KN+YbwSaTE/542/E7rovlcK4pyVwVupoXm7hVd3I1dwGGzY9VLSMfaOEvkWm4QOlnlTsx3PyCGP7T+pFff0R+IGe6Jchw4Ou5AGkriI/RYAB7wCtIOqzZHKpLlU3FAjRVlBDaFkGvfkxjGaFPrxPUCVbRCbviw9gW4+s3hbZpba1PPj+CGw+pX0gDVhI3IogN70g/yrLZiv+QI8IJAis7aa7LEEUzZux0j4dvnFeN7/eblNKt2E8v6OTGWcTO8cdPoPPHcm/wBFTBLhQA13277a0xjv424yUD9OmG106adXYisbP0qz2YWAOGiu/A89pxddgM6A83UFKrvG8WxDfkS1EUKdO+3l9fAHvw0Zjg1EUNDmBWryXD15n7Fj54jS6TEk1Soj8yvj0ehgEZOd50YLWxtvdrK27CS5W/NN15FgThROIben9Z+UZc+ECbzuLNs9ZhP7HL6P1hDNj/9ytiG+2dvvVaRNr8zdJCEJEIiEj5S62LLLF4WBYumarORsK0/C7SVzgqTHKQzfIBcFHF1yOeoLjbJ3dgcEi3qPqfB1WvMALjS/QMHVzwTd7JWDrQMm4Zcz5u7RHPpgsnDvTyl56Bn8HO07xRe6zkaX82ELEXASB2r+Dn+QrmaGWiXKeBzAsIQdQ/AQ4JkGf337Bb/NN/c1a67PQ0cRllB7URETtGzs5MEHpfUiwobv6fzHKyucbXA44jSE1apyA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3082.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(110136005)(6506007)(316002)(52116002)(36756003)(6666004)(86362001)(38350700002)(38100700002)(26005)(6486002)(66946007)(83380400001)(2616005)(8676002)(2906002)(66476007)(4326008)(6512007)(66556008)(508600001)(5660300002)(8936002)(186003)(107886003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SGs3T3A2TmhUZ01YSUNWMjlscXlEM2RSSG0xL3JXbHlvRWtqMzZ6ZWsyYzhv?=
+ =?utf-8?B?cmY4a2p4S1dlc2N5NU1na1JJSnZMVldYZ0tUTXFTVjVUSmZzdFpZMGV0d212?=
+ =?utf-8?B?ZGxCcXE4ZzgxaEpvUmpVcExySHI4MnJRMTRabkdyRlQxcHdST0NCdTVrd3lV?=
+ =?utf-8?B?d09VUHcrZ1Z5V0lCcTIxZlpZTU83RytaTHVJYkhNT2h0SHNPRUpEN1FFN2JU?=
+ =?utf-8?B?ZGtVMHNIRzFEWFpHd0NvdkhReUVUSnRYLzlETTRrb29kdjcwa3RzQjFBYjN6?=
+ =?utf-8?B?aTRYUk55YkZMcUhhL3ducjFyc0NiQ3N0dEUvN1lGMVVOZW9WTmxORlg0RVdO?=
+ =?utf-8?B?ZEZiQTVNY21QczFwMzdobDJxdlEzRTAydjZDVU9ZQVpsM3YvazJiZnovcmFi?=
+ =?utf-8?B?MVZhVXpjNU4rNlk3MDI4cVN5NnZMTjk4ZWJ5VyswSHFDS0kwMmVsSElUZHVh?=
+ =?utf-8?B?bjhja1VDSjdKR2RqSWpHNDFkZHRFRit1RDZIK1Q0NGRXSTV1VjA3dXRZN0lE?=
+ =?utf-8?B?Ykl6dUFYWG5GdUIzRXAwWHJ4aGFHL2g4VFR2bVJyUXB5TTBkWlpmZndYeUhU?=
+ =?utf-8?B?dUlwVmd3MWlHUVQvSXppWUpHUE94MzZIdENXR2dsZC95aG51bTlKZjl6NXow?=
+ =?utf-8?B?M1M4TVp3RWJvS3VZVjFJd3c1QjR0emR6Mnh3YzdDK3BNbWt6MWVMdmxWcjBK?=
+ =?utf-8?B?eS9ad1U5VllaTnhLcXFrT25KMStaSk03eVJEczlRU2FtMzRUKzQ2alRwM0Jq?=
+ =?utf-8?B?M3FNczUxaFhaQmJwMDhDSTgwR05wOUY1SHJWVzFSQjVqQUhZcjZxU1llNzNv?=
+ =?utf-8?B?N2lRVTYxQVlIdlRUQURXRzFGNjNMTUp6Qnk2VHJ0dXFoWkE0KzZXZUtBbW0w?=
+ =?utf-8?B?dllhUUh2dURZQi9TUnZodk5SbzhQa0lxc3NkSmxjVUZoZWVzblpmbVQ2T1hn?=
+ =?utf-8?B?bUFtcXNGS1N5RDM3eVVnMG1td1FEVmFybjRDUkxKVDUrMTlMeE96RTFmdk1G?=
+ =?utf-8?B?T1Vhckd4Nyt1T2toTks4U2lzMjVrYXh0YTl3OS84NXpESnlUeWNBYi9sZXRW?=
+ =?utf-8?B?a0doYUxhbzl0Q1RTdXVuQlpoOS9wSlpZZzV6a2d5bkh2QnRRNUYyenJ5aElp?=
+ =?utf-8?B?emR4cnpZUHc2MlBkaDBjM3k0RGZTS3cvcTVEZXU4Ly9CMjRwSmdRdnlpVUtt?=
+ =?utf-8?B?b29kUFlGS1AySE1LOUhsTVJHRE05YTRnSWNJTVBaOHkvTWhFTXgwbEJFdFZ6?=
+ =?utf-8?B?WEhnOU9zejBhY2VsS2VOY2hSeWNnRHJJRnpqKzdqZTJRbnUzeS9PUEtnODhj?=
+ =?utf-8?B?YTcyN1FydFByK2NFYmsyOHh2aEJoM1Z3MTF2NlYyVUc3SXdRRjBVekw5UmVa?=
+ =?utf-8?B?VFZyNkY4VlEzT2p0TXI2aU1CNU9mdFhxSTNPdUpkYkI5bEVtRitmalZ1RHVV?=
+ =?utf-8?B?RzIzNzBzVk82RkcyelBIMlUxSWkzNGFrWDIwc2xvUXZBWWlkZFdTMDU0aUtV?=
+ =?utf-8?B?RlArYUNRL0RMTlEzLzNwbWx3K2NIUnpZV29SbUtNRERRZHlXdWlIMmt3OHBh?=
+ =?utf-8?B?UkJ6aWxwMmg4VVpHV252SnpTYTJlN1VCWnVPRGtKRDVLdkRGaktQeHdMNTg3?=
+ =?utf-8?B?djBJcngrSURZakhNWFpxWk10eWRvOXFZMHRGSGg3RXI3V25BUTE1T2JrOTZY?=
+ =?utf-8?B?T1dySmRDVEhtRHp1cWJpTmlVSzNjWGRPYWFUTGNwSGtiaUlldGxJNTVGSkZQ?=
+ =?utf-8?B?YVNmU3p3U1RPLzR0ZjJubHNhOHZkQnhtbTFjQlhCUy9GZXdxMmRWdm93Q0ww?=
+ =?utf-8?B?Y2k4TzNidzBDMWlnejlxdlhBalQ4QllKZkgwQ2tYVzRMdE84MTRWS0RvTVlk?=
+ =?utf-8?B?eDlOODFWdVpOMFNzR2daWGFzUlloZ2VvVkZ2VHF5NWRCLzcrZGFPdis4Wk5Y?=
+ =?utf-8?B?TU80a1NldjBYU3hMbU5oV0ZoNFlVMmEva2IxTC9laEEvRGgyRFNVS0N6WDZ4?=
+ =?utf-8?B?S2w2MjU2d0pTaTdEL3dObU9YZHh2a0xBM1pQSVJtVGJkUG05UGhHZVY5cTRm?=
+ =?utf-8?B?WldXUXF0czhBTzFjWG1OME9NbjZRdG9oUlZGVEZxYWJOZGZqQURQMEMxVm1V?=
+ =?utf-8?B?L3BXWC9LdFlSNmxSa1NxUmhadEhQbExWVllpWDBqMVBiREszY2ZTWUVoWEw4?=
+ =?utf-8?B?LzRsTWZBYUtOUWhnZnk3TGVNOUxIeVQvNFZGZ2pidzNuN0p6b1ArdHIwSW1J?=
+ =?utf-8?B?OVljY1YybkdDOGFUWUlVQU9hcGN3a2w2TjhnZTBJbG9iL3prUy9aRTRqNVI5?=
+ =?utf-8?B?cGdIVXlDNnBGcldrL1RBWGU2T2xKeFFzbWdaYjFLYkFJWTg3cWpJZz09?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7609e97a-eb9b-4837-9a21-08da341a5c70
+X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3082.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2022 13:21:45.2898
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1DVMfN63plOWb12xowtpHh9g7PSckdJMbyF8ee14gXLPtagndUJi1eVuuhhwfBrnG2+gOl8Om83Il7qcV871NQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB2145
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 4 May 2022 at 18:23, Konrad Dybcio <konrad.dybcio@somainline.org> wrote:
->
->
-> On 04/05/2022 14:27, Robert Foss wrote:
-> > From: Jonathan Marek <jonathan@marek.ca>
-> >
-> > Add support to the SM8350 display clock controller by extending the SM8250
-> > display clock controller, which is almost identical but has some minor
-> > differences.
-> >
-> > Signed-off-by: Jonathan Marek <jonathan@marek.ca>
-> > Signed-off-by: Robert Foss <robert.foss@linaro.org>
-> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > ---
-> >
-> > Changes since v1
-> >   - Remove comment - Dmitry
-> >
-> > Changes since v2
-> >   - Add my SoB - Bjorn
-> >   - Remove CLK_ASSUME_ENABLED_WHEN_UNUSED flag
-> >
-> >
-> >   drivers/clk/qcom/Kconfig         |  4 +--
-> >   drivers/clk/qcom/dispcc-sm8250.c | 60 +++++++++++++++++++++++++++++++-
-> >   2 files changed, 61 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-> > index 9b1f54e634b9..1752ca0ee405 100644
-> > --- a/drivers/clk/qcom/Kconfig
-> > +++ b/drivers/clk/qcom/Kconfig
-> > @@ -609,11 +609,11 @@ config SM_DISPCC_6125
-> >         splash screen
-> >
-> >   config SM_DISPCC_8250
-> > -     tristate "SM8150 and SM8250 Display Clock Controller"
-> > +     tristate "SM8150/SM8250/SM8350 Display Clock Controller"
-> >       depends on SM_GCC_8150 || SM_GCC_8250
->
-> || SM_GCC_8350?
+From: Wang Qing <wangqing@vivo.com>
 
-Will fix in v4.
+Use nested cluster structures in DT to support describing multi-level
+cluster topologies and increase the parsing of nested cluster.
 
->
-> sidenote: also || SC_GCC_8180X in a separate patch?
+Notice: the clusters describing in DT currently are not physical
+boundaries, since changing "cluster" to "socket" is too involved and error
+prone, this patch will not have any effect on one-level cluster topo, but
+can support the mutil-level cluster topo to support CLUSTER_SCHED.
 
-I haven't been involved in the 8180X work, and am a little bit
-hesitant to include any changes related to it in this series.
+e.g.:
+cpu-map {
+        cluster0 {
+                cluster0 {
+                        core0 {
+                                cpu = <&cpu0>;
+                        };
+                        core1 {
+                                cpu = <&cpu1>;
+                        };
+                };
+                cluster1 {
+                        core0 {
+                                cpu = <&cpu2>;
+                        };
+                        core1 {
+                                cpu = <&cpu3>;
+                        };
+                };
+        };
+        cluster1 {
+                core0 {
+                        cpu = <&cpu4>;
+                };
+                core1 {
+                        cpu = <&cpu5>;
+                };
+                core2 {
+                        cpu = <&cpu6>;
+                };
+        };
+        cluster2 {
+                core0 {
+                        cpu = <&cpu7>;
+                };
+        };
+};
 
->
-> >       help
-> >         Support for the display clock controller on Qualcomm Technologies, Inc
-> > -       SM8150 and SM8250 devices.
-> > +       SM8150/SM8250/SM8350 devices.
-> >         Say Y if you want to support display devices and functionality such as
-> >         splash screen.
-> >
-> > diff --git a/drivers/clk/qcom/dispcc-sm8250.c b/drivers/clk/qcom/dispcc-sm8250.c
-> > index db9379634fb2..8e6cb990e387 100644
-> > --- a/drivers/clk/qcom/dispcc-sm8250.c
-> > +++ b/drivers/clk/qcom/dispcc-sm8250.c
-> > @@ -43,6 +43,10 @@ static struct pll_vco vco_table[] = {
-> >       { 249600000, 2000000000, 0 },
-> >   };
-> >
-> > +static struct pll_vco lucid_5lpe_vco[] = {
-> > +     { 249600000, 1750000000, 0 },
-> > +};
-> > +
-> >   static struct alpha_pll_config disp_cc_pll0_config = {
-> >       .l = 0x47,
-> >       .alpha = 0xE000,
-> > @@ -1228,6 +1232,7 @@ static const struct of_device_id disp_cc_sm8250_match_table[] = {
-> >       { .compatible = "qcom,sc8180x-dispcc" },
-> >       { .compatible = "qcom,sm8150-dispcc" },
-> >       { .compatible = "qcom,sm8250-dispcc" },
-> > +     { .compatible = "qcom,sm8350-dispcc" },
-> >       { }
-> >   };
-> >   MODULE_DEVICE_TABLE(of, disp_cc_sm8250_match_table);
-> > @@ -1258,7 +1263,7 @@ static int disp_cc_sm8250_probe(struct platform_device *pdev)
-> >               return PTR_ERR(regmap);
-> >       }
-> >
-> > -     /* note: trion == lucid, except for the prepare() op */
-> > +     /* Apply differences for SM8150 and SM8350 */
-> >       BUILD_BUG_ON(CLK_ALPHA_PLL_TYPE_TRION != CLK_ALPHA_PLL_TYPE_LUCID);
-> >       if (of_device_is_compatible(pdev->dev.of_node, "qcom,sc8180x-dispcc") ||
-> >           of_device_is_compatible(pdev->dev.of_node, "qcom,sm8150-dispcc")) {
-> > @@ -1270,6 +1275,59 @@ static int disp_cc_sm8250_probe(struct platform_device *pdev)
-> >               disp_cc_pll1_config.config_ctl_hi1_val = 0x00000024;
-> >               disp_cc_pll1_config.user_ctl_hi1_val = 0x000000D0;
-> >               disp_cc_pll1_init.ops = &clk_alpha_pll_trion_ops;
-> > +     } else if (of_device_is_compatible(pdev->dev.of_node, "qcom,sm8350-dispcc")) {
-> > +             static struct clk_rcg2 * const rcgs[] = {
-> > +                     &disp_cc_mdss_byte0_clk_src,
-> > +                     &disp_cc_mdss_byte1_clk_src,
-> > +                     &disp_cc_mdss_dp_aux1_clk_src,
-> > +                     &disp_cc_mdss_dp_aux_clk_src,
-> > +                     &disp_cc_mdss_dp_link1_clk_src,
-> > +                     &disp_cc_mdss_dp_link_clk_src,
-> > +                     &disp_cc_mdss_dp_pixel1_clk_src,
-> > +                     &disp_cc_mdss_dp_pixel2_clk_src,
-> > +                     &disp_cc_mdss_dp_pixel_clk_src,
-> > +                     &disp_cc_mdss_esc0_clk_src,
-> > +                     &disp_cc_mdss_mdp_clk_src,
-> > +                     &disp_cc_mdss_pclk0_clk_src,
-> > +                     &disp_cc_mdss_pclk1_clk_src,
-> > +                     &disp_cc_mdss_rot_clk_src,
-> > +                     &disp_cc_mdss_vsync_clk_src,
-> > +             };
-> > +             static struct clk_regmap_div * const divs[] = {
-> > +                     &disp_cc_mdss_byte0_div_clk_src,
-> > +                     &disp_cc_mdss_byte1_div_clk_src,
-> > +                     &disp_cc_mdss_dp_link1_div_clk_src,
-> > +                     &disp_cc_mdss_dp_link_div_clk_src,
-> > +             };
-> > +             unsigned int i;
-> > +             static bool offset_applied;
-> > +
-> > +             /* only apply the offsets once (in case of deferred probe) */
-> > +             if (!offset_applied) {
-> > +                     for (i = 0; i < ARRAY_SIZE(rcgs); i++)
-> > +                             rcgs[i]->cmd_rcgr -= 4;
-> > +
-> > +                     for (i = 0; i < ARRAY_SIZE(divs); i++) {
-> > +                             divs[i]->reg -= 4;
-> > +                             divs[i]->width = 4;
-> > +                     }
-> > +
-> > +                     disp_cc_mdss_ahb_clk.halt_reg -= 4;
-> > +                     disp_cc_mdss_ahb_clk.clkr.enable_reg -= 4;
-> > +
-> > +                     offset_applied = true;
-> > +             }
-> > +
-> > +             disp_cc_mdss_ahb_clk_src.cmd_rcgr = 0x22a0;
-> > +
-> > +             disp_cc_pll0_config.config_ctl_hi1_val = 0x2A9A699C;
->
-> Lowercase hex, also below.
+sched_domain will be parsed as:
+CLS: [0,1] [2,3]
+MC: [0,1,2,3] [4,5,6]
+DIE: [0,1,2,3,4,5,6,7]
 
-Ack.
+Signed-off-by: Wang Qing <wangqing@vivo.com>
+---
+v3:
+- After the change, there may be the same core_id under the same packet_id
+- Add the handling of the above case
+---
+ drivers/base/arch_topology.c | 38 ++++++++++++++++++++++++------------
+ 1 file changed, 25 insertions(+), 13 deletions(-)
 
->
->
-> > +             disp_cc_pll0_config.test_ctl_hi1_val = 0x01800000;
-> > +             disp_cc_pll0_init.ops = &clk_alpha_pll_lucid_5lpe_ops;
-> > +             disp_cc_pll0.vco_table = lucid_5lpe_vco;
-> > +             disp_cc_pll1_config.config_ctl_hi1_val = 0x2A9A699C;
-> > +             disp_cc_pll1_config.test_ctl_hi1_val = 0x01800000;
-> > +             disp_cc_pll1_init.ops = &clk_alpha_pll_lucid_5lpe_ops;
-> > +             disp_cc_pll1.vco_table = lucid_5lpe_vco;
-> >       }
-> >
-> >       clk_lucid_pll_configure(&disp_cc_pll0, regmap, &disp_cc_pll0_config);
-> Konrad
-> >
+diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+index 1d6636ebaac5..5329c7a20afd 100644
+--- a/drivers/base/arch_topology.c
++++ b/drivers/base/arch_topology.c
+@@ -491,7 +491,7 @@ static int __init get_cpu_for_node(struct device_node *node)
+ }
+ 
+ static int __init parse_core(struct device_node *core, int package_id,
+-			     int core_id)
++			     int cluster_id, int core_id)
+ {
+ 	char name[20];
+ 	bool leaf = true;
+@@ -507,6 +507,7 @@ static int __init parse_core(struct device_node *core, int package_id,
+ 			cpu = get_cpu_for_node(t);
+ 			if (cpu >= 0) {
+ 				cpu_topology[cpu].package_id = package_id;
++				cpu_topology[cpu].cluster_id = cluster_id;
+ 				cpu_topology[cpu].core_id = core_id;
+ 				cpu_topology[cpu].thread_id = i;
+ 			} else if (cpu != -ENODEV) {
+@@ -528,6 +529,7 @@ static int __init parse_core(struct device_node *core, int package_id,
+ 		}
+ 
+ 		cpu_topology[cpu].package_id = package_id;
++		cpu_topology[cpu].cluster_id = cluster_id;
+ 		cpu_topology[cpu].core_id = core_id;
+ 	} else if (leaf && cpu != -ENODEV) {
+ 		pr_err("%pOF: Can't get CPU for leaf core\n", core);
+@@ -544,13 +546,15 @@ static int __init parse_cluster(struct device_node *cluster, int depth)
+ 	bool has_cores = false;
+ 	struct device_node *c;
+ 	static int package_id __initdata;
++	static int cluster_id __initdata;
+ 	int core_id = 0;
+ 	int i, ret;
+ 
+ 	/*
+-	 * First check for child clusters; we currently ignore any
+-	 * information about the nesting of clusters and present the
+-	 * scheduler with a flat list of them.
++	 * nesting of clusters :
++	 * level 1:  package_id
++	 * level 2:  cluster_id
++	 * level 3+: ignore
+ 	 */
+ 	i = 0;
+ 	do {
+@@ -559,6 +563,14 @@ static int __init parse_cluster(struct device_node *cluster, int depth)
+ 		if (c) {
+ 			leaf = false;
+ 			ret = parse_cluster(c, depth + 1);
++			if (depth == 0) {
++				package_id++;
++				cluster_id = 0;
++			} else if (depth == 1)
++				cluster_id++;
++			else
++				pr_err("Ignore nested clusters with more than two levels!\n");
++
+ 			of_node_put(c);
+ 			if (ret != 0)
+ 				return ret;
+@@ -582,7 +594,8 @@ static int __init parse_cluster(struct device_node *cluster, int depth)
+ 			}
+ 
+ 			if (leaf) {
+-				ret = parse_core(c, package_id, core_id++);
++				ret = parse_core(c, package_id, (depth == 2)?cluster_id : -1,
++						 core_id++);
+ 			} else {
+ 				pr_err("%pOF: Non-leaf cluster with core %s\n",
+ 				       cluster, name);
+@@ -599,9 +612,6 @@ static int __init parse_cluster(struct device_node *cluster, int depth)
+ 	if (leaf && !has_cores)
+ 		pr_warn("%pOF: empty cluster\n", cluster);
+ 
+-	if (leaf)
+-		package_id++;
+-
+ 	return 0;
+ }
+ 
+@@ -692,15 +702,17 @@ void update_siblings_masks(unsigned int cpuid)
+ 		if (cpuid_topo->package_id != cpu_topo->package_id)
+ 			continue;
+ 
+-		if (cpuid_topo->cluster_id == cpu_topo->cluster_id &&
+-		    cpuid_topo->cluster_id != -1) {
++		cpumask_set_cpu(cpuid, &cpu_topo->core_sibling);
++		cpumask_set_cpu(cpu, &cpuid_topo->core_sibling);
++
++		if (cpuid_topo->cluster_id != -1 && cpu_topo->cluster_id != -1) {
++			if (cpuid_topo->cluster_id != cpu_topo->cluster_id)
++				continue;
++
+ 			cpumask_set_cpu(cpu, &cpuid_topo->cluster_sibling);
+ 			cpumask_set_cpu(cpuid, &cpu_topo->cluster_sibling);
+ 		}
+ 
+-		cpumask_set_cpu(cpuid, &cpu_topo->core_sibling);
+-		cpumask_set_cpu(cpu, &cpuid_topo->core_sibling);
+-
+ 		if (cpuid_topo->core_id != cpu_topo->core_id)
+ 			continue;
+ 
+-- 
+2.7.4
+

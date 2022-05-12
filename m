@@ -2,183 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9F015253BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27CE45253B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 19:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357101AbiELRb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 13:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40260 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356894AbiELRbv (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1357087AbiELRbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 12 May 2022 13:31:51 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8084316D5C1;
-        Thu, 12 May 2022 10:31:50 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id w24so7118764edx.3;
-        Thu, 12 May 2022 10:31:50 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39950 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357084AbiELRbr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 12 May 2022 13:31:47 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B8853E08
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:31:46 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id z12so4021492ilp.8
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:31:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1fM6Q+QVCd0RgN41s9cVT8krA6k8tSlwArRQNdHsfaI=;
-        b=dTLmUVUtHPVrgETgl3SE8wEBx2LZCQdFe538atFhuB5eoiWSVbUxG3H9yWP377bIzB
-         YuLsvc9lc7VqlM2GBLfoDVk1mBna9O3HrxQqHEyeU0rzcP9y+ldK99ltAX1V+kAoB+Ob
-         y5MH3TU9ekkEm28zje1IsSyzr7OnRGeP7fsDA7pbVGx8uY4M28zCUdSrEPDNqKUIHHBK
-         mjjn9VliMaWqKvh3lb+xriMRmbA+FnSJlpQVxbjFA1w1YwR1oqZH2dB2Bj9Rjny/gDYw
-         gKv0fc3pcw9CpLdXZuCmR/ofkxPf9onuPuQVyM9dWYrxY3wvVcTRFr7ytzr7EFMdtwgK
-         8cYQ==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Jy6c2iz4pBZ4h+6A8F5x31O1bbz13zfB7+MvdwkltFQ=;
+        b=V5E2LbmUQEz+VqDpvO+TqhyA1VCGZZb3ILk4eW9F+NnQyIENOHalX+haeb7RBvqORn
+         jBh4SYWNLX6kNf7FdM/WCCwrR6Pefkq6GfBB1ON1K7lYr1k0jaN1QnNC4B3I1FZqj1Nz
+         A4Uhq6rzpkVVaHd2yzKh7gJ6MjwdWl3o6sNAk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1fM6Q+QVCd0RgN41s9cVT8krA6k8tSlwArRQNdHsfaI=;
-        b=C1TPsUJOo9ajFSbsR/fPpgydFpRMJqzeJKOMiVfxaVVAShYANjO6lxEaLs+l9hpFbI
-         GjrLrsHPnYMIgSPSVf9JnEXB269GXs95T/W5EJFt/CwRQjUpevW/CH65ExY8Xw3jpMag
-         cik2Y1TMrTHra8Nm6bPTvtgHN/mhrBR3HDpucI2LmeNODOxQdf3R2ki5o9iBTfqvMUG2
-         sk8oolr4To6FChzPbmzfQj0ziJl9P1qSZ5folZPBXBCtizdoyZvwF4YK+qCMVg1JK6bV
-         +FZHNgn9Y1R7Act9YNoNWTS0wJOfyuZBxsJe1JMJVeEhdmWawg3nSGDnB29wmAXmdXCo
-         IbZg==
-X-Gm-Message-State: AOAM532oMG9RqaQkEy6Plg6PrZmcnnXBS+96BR7xZTLmuOIHl3Fz6Aah
-        8MvbCzNLnPx0keNisbrnHQTF9jkXNcigzn5Ep+4=
-X-Google-Smtp-Source: ABdhPJxCtEmi5pEc/ZhnDEd1q03hRk+8aIdKlUWIhHKLAbZ9LpKs7uwP/v5cBKwHXMbxbjfcaJQ71QoTHNGDvYaotdI=
-X-Received: by 2002:aa7:d350:0:b0:425:e029:da56 with SMTP id
- m16-20020aa7d350000000b00425e029da56mr36422902edr.296.1652376708905; Thu, 12
- May 2022 10:31:48 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Jy6c2iz4pBZ4h+6A8F5x31O1bbz13zfB7+MvdwkltFQ=;
+        b=BRskMev2IWKOBeMRHSp8oR77F/wjB14u0F7DhmZdM3MJLBzgzEbabTl/zYBX+O8h8f
+         s4m2EWzyFlJy63Yqeo7GoTjv/h5LgSD1BwahuRw78mHV/QJqf41VDltxdR8B2pcgdYUR
+         G/xlXzJPzF7td+OE8TG/VNBdc1e7m7kW8jehjGPF/Pzt2frxu6+H7ZtqW0krUNWINlKm
+         Vr0OeVH+ee9zh6f9gBi+/v2qwJQ/AVa/14VgGjH9qTGskDjuUDOzLSXkoinb+9Cv3/j1
+         hZDbBz2ql6Waj7Sz2j5BqAS+4asaN37FpjQR925/x8dzoxKy85j1A5d65HbCSNjo4Wik
+         KrPg==
+X-Gm-Message-State: AOAM531gMyQFjJ6kdsYbeSXNMjHAg9RaBRkxNH2/gRgfnNg6+D0lsNli
+        H9QgxLvfO9nT4AM+onOxqs0b6Q==
+X-Google-Smtp-Source: ABdhPJxagzDS7W1MRsPhk0moVV2S6eg7NnFxnir3mVlj6mKNutZJdJBAswwbztf/bIkYcGF3exjiug==
+X-Received: by 2002:a05:6e02:1a44:b0:2cf:d085:949a with SMTP id u4-20020a056e021a4400b002cfd085949amr571164ilv.131.1652376705348;
+        Thu, 12 May 2022 10:31:45 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id x8-20020a056638034800b0032bee2b5acasm20650jap.165.2022.05.12.10.31.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 10:31:44 -0700 (PDT)
+Subject: Re: [RFC V2 PATCH 1/8] selftests: kvm: Fix inline assembly for
+ hypercall
+To:     Vishal Annapurve <vannapurve@google.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, shauh@kernel.org, yang.zhong@intel.com,
+        drjones@redhat.com, ricarkol@google.com, aaronlewis@google.com,
+        wei.w.wang@intel.com, kirill.shutemov@linux.intel.com,
+        corbet@lwn.net, hughd@google.com, jlayton@kernel.org,
+        bfields@fieldses.org, akpm@linux-foundation.org,
+        chao.p.peng@linux.intel.com, yu.c.zhang@linux.intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com,
+        michael.roth@amd.com, qperret@google.com, steven.price@arm.com,
+        ak@linux.intel.com, david@redhat.com, luto@kernel.org,
+        vbabka@suse.cz, marcorr@google.com, erdemaktas@google.com,
+        pgonda@google.com, nikunj@amd.com, seanjc@google.com,
+        diviness@google.com, Shuah Khan <skhan@linuxfoundation.org>
+References: <20220511000811.384766-1-vannapurve@google.com>
+ <20220511000811.384766-2-vannapurve@google.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <506a2e59-eea5-8c1e-ee1b-fbb7a401bd8d@linuxfoundation.org>
+Date:   Thu, 12 May 2022 11:31:43 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20220512160312.3880433-1-Qing-wu.Li@leica-geosystems.com.cn> <20220512160312.3880433-4-Qing-wu.Li@leica-geosystems.com.cn>
-In-Reply-To: <20220512160312.3880433-4-Qing-wu.Li@leica-geosystems.com.cn>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 12 May 2022 19:31:11 +0200
-Message-ID: <CAHp75Vc=duGJ+Y4QHvTG4ZZej3JbYCbhfj+LKhiOcd-+-sU5aw@mail.gmail.com>
-Subject: Re: [PATCH V5 3/5] iio: accel: sca3300: modified to support multi chips
-To:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tomas Melin <tomas.melin@vaisala.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+In-Reply-To: <20220511000811.384766-2-vannapurve@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 6:03 PM LI Qingwu
-<Qing-wu.Li@leica-geosystems.com.cn> wrote:
->
-> The driver supports sca3300 only, there are some other similar chips,
-> for instance, SCL3300. This commit prepares the way for multiple chips
-> and additional channels. Modify the driver to read the device ID and load
-> the corresponding sensor information from the table to support multiple
-> chips. add prepares for the addition of extra channels. Add prepares for
-> handling the operation modes for multiple chips.
+On 5/10/22 6:08 PM, Vishal Annapurve wrote:
+> Fix inline assembly for hypercall to explicitly set
+> eax with hypercall number to allow the implementation
+> to work even in cases where compiler would inline the
+> function.
+> 
 
-Reading it again I think you may format it better, i.e.
+Please explain what happens without this change as well.
 
-Prepare the way for multiple chips and additional channels:
-- Modify the driver to read the device ID and load the corresponding
-sensor information from the table to support multiple chips
-- Add prepares for the addition of extra channels
-- Prepare for handling the operation modes for multiple chips
+> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> ---
+>   tools/testing/selftests/kvm/lib/x86_64/processor.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> index 9f000dfb5594..4d88e1a553bf 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> @@ -1461,7 +1461,7 @@ uint64_t kvm_hypercall(uint64_t nr, uint64_t a0, uint64_t a1, uint64_t a2,
+>   
+>   	asm volatile("vmcall"
+>   		     : "=a"(r)
+> -		     : "b"(a0), "c"(a1), "d"(a2), "S"(a3));
+> +		     : "a"(nr), "b"(a0), "c"(a1), "d"(a2), "S"(a3));
+>   	return r;
+>   }
+>   
+> 
 
-...
+With the above change to commit log:
 
-> +struct sca3300_chip_info {
-> +       const unsigned long *scan_masks;
-> +       const struct iio_chan_spec *channels;
-> +       u8 num_channels;
-> +       u8 num_accel_scales;
-> +       const int (*accel_scale)[2];
-> +       const int *accel_scale_map;
-> +       u8 num_freqs;
-> +       const int *freq_table;
-> +       const int *freq_map;
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
-> +       const char *name;
-
-You can put it in the first place.
-
-> +       const int *avail_modes_table;
-> +       u8 num_avail_modes;
-> +       u8 chip_id;
-> +};
-
-...
-
-> +static const struct sca3300_chip_info sca3300_chip_tbl[] = {
-> +       {       .scan_masks = sca3300_scan_masks,
-
-Keep { on a separate line.
-
-> +               .channels = sca3300_channels,
-> +               .num_channels = ARRAY_SIZE(sca3300_channels),
-> +               .num_accel_scales = ARRAY_SIZE(sca3300_accel_scale)*2,
-> +               .accel_scale = sca3300_accel_scale,
-> +               .accel_scale_map = sca3300_accel_scale_map,
-> +               .num_freqs = ARRAY_SIZE(sca3300_lp_freq),
-> +               .freq_table = sca3300_lp_freq,
-> +               .freq_map = sca3300_lp_freq_map,
-> +               .name = "sca3300",
-> +               .avail_modes_table = sca3300_avail_modes_map,
-> +               .num_avail_modes = 4,
-> +               .chip_id = SCA3300_WHOAMI_ID,
-> +       },
-> +};
-
-...
-
-> +       ret = sca3300_read_reg(sca_data, SCA3300_REG_MODE, &reg_val);
-> +       if (ret)
-> +               return ret;
-> +
-> +       for (i = 0; i < sca_data->chip->num_avail_modes; i++) {
-> +               if (sca_data->chip->avail_modes_table[i] == reg_val&0x03)
-> +                       break;
-> +       }
-
-> +
-
-This blank line is not needed as I explained.
-
-> +       if (i >= sca_data->chip->num_avail_modes)
-
-== is enough and better to understand.
-
-> +               return -EINVAL;
-> +
-> +       *index = i;
-> +       return 0;
-> +}
-
-...
-
-> +       int index;
-> +       int i;
-
-Both can be unsigned.
-
-...
-
-> +       for (i = 0; i < chip->num_avail_modes; i++) {
-> +               if ((val == chip->freq_table[chip->freq_map[i]]) &&
-> +                   (chip->accel_scale[chip->accel_scale_map[index]] ==
-> +                    chip->accel_scale[chip->accel_scale_map[i]]))
-> +                       break;
-> +       }
-> +
-> +       if (i >= chip->num_avail_modes)
-> +               return -EINVAL;
-
-Two comments as per above for-loop case.
-
--- 
-With Best Regards,
-Andy Shevchenko
+thanks,
+-- Shuah

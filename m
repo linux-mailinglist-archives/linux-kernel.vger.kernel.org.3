@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDA7F52469E
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:14:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4DA45246A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244497AbiELHOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 03:14:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51928 "EHLO
+        id S1350827AbiELHPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 03:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350809AbiELHOZ (ORCPT
+        with ESMTP id S1350809AbiELHPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 03:14:25 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4706D4F6;
-        Thu, 12 May 2022 00:14:23 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id j25so4886728wrc.9;
-        Thu, 12 May 2022 00:14:23 -0700 (PDT)
+        Thu, 12 May 2022 03:15:00 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F9079806;
+        Thu, 12 May 2022 00:14:59 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id x52so3987007pfu.11;
+        Thu, 12 May 2022 00:14:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=pJ3Xj5lGXvl+4KOAcBBgnH2tPCO84YLTSN3mD1uxeP0=;
-        b=VHAAhkrM/8ODZpf8O/vCwz2St10UkOR9tmSW2ZFRfhnOasgqe3zrN05a30FSt15svI
-         8avbDnFtOP7a/3JWAFTA0BuBZErzab1J/smAntKIE40n2Y9WWvLFNFR2tidTtH1mTCqQ
-         oKKyNVU7NxoItgsBKjwDtKP7ZrA1t61aP20L8ZZBZpg/DtUstZPohRwUb0XGO/i0wGo6
-         4t522vjlAh5qDJsOLjAD0BGHVmEzbQT57xRn/kGnHfmKn6NWeBavWD4cQtYbhfZOUT8R
-         qafU0NqG6rc6OM4DNPHtLuUQXG/HRv+9GInzKX1xjIV0QZDvOZy7BxccHCoeM2u3Q5fk
-         tGhg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xGQI4Uoj1dr+aEskjWCNFPVBtuNGecDaxcbPpm4ndbA=;
+        b=PnA7rPHXCzS0oh9lybb9R+lMue+sbKQL/J8VRDHkkRo9cxuqJmFC90BLUdvNpvQ3yx
+         qPXAmh0JFJQTnsYzKtSTuNsch+PM+pzpvqXqxqmJCG2fLiMobPUPeAmiPzfxzF0XWnS+
+         5PcntrBUmEy6FhaVNAByXc9KhN/x1BDMX/vOPaia5RKBnV84omjEVyuc1vf+LKeDxhoI
+         kfc7kgpU61zQZ9B7SeHh4qnI9lzvmrnwDcfAWwue1iiSLlrZBAv99QX8smQQiMaJptm4
+         3STjzwEVMbrpn5TsSZln4yuKG+nySs9CC47ZVfkRyYYWaPqG/Ch436vmVVVgwsYbm3e+
+         /GSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=pJ3Xj5lGXvl+4KOAcBBgnH2tPCO84YLTSN3mD1uxeP0=;
-        b=GReKRDMM++OCh4c2Ms6BwSlZTpWWvtPzLilDi/OXygmxSB7EfI/6XtPIfCbS7pVCxS
-         lxkl6DoAtRlK1rI2FeijCo8QmcJVZG3BA2/y3F3rAzUYXuNO0L/wFWGHwYki9FM4SoQA
-         LXHNLnHlShzeMtTC12lmRofes1LVYRlct4uytohtrKg7O8JswFK5yI+fueET+bf0Cq4j
-         5TBEmfeLpzytGVks1iv4/8kv8ScjF4qjTWu16uXFD/PLD3CReG1TGQtfUMxttS5geBaD
-         0+qkaC0OUK859e3Jhxs00lWSPdlSC8iJhBWTxakqZGOu+0jQupccB5BD6DiAlF2bEg+9
-         kJlg==
-X-Gm-Message-State: AOAM530rot6o6uuu+0co5CbpaPyBLPPYp2Nz1eZpCe6vtGyR6FSRouSY
-        eyF5rkjCi/lwfKF5v2rYMSY=
-X-Google-Smtp-Source: ABdhPJy4KIopMXde/ivo/ZcM7TdmP/zsZyxsZXMzrP7+d27FNJuqQDmoCchQe3kMjJkQ4FNRFPgxKg==
-X-Received: by 2002:adf:e310:0:b0:20c:7894:99ad with SMTP id b16-20020adfe310000000b0020c789499admr26728306wrj.73.1652339662413;
-        Thu, 12 May 2022 00:14:22 -0700 (PDT)
-Received: from localhost.localdomain ([141.72.243.13])
-        by smtp.gmail.com with ESMTPSA id e8-20020a5d5308000000b0020c5253d8c2sm3341446wrv.14.2022.05.12.00.14.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 00:14:22 -0700 (PDT)
-From:   Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
-To:     andy.shevchenko@gmail.com, linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
-Subject: [PATCH v3] drivers: gpio: zevio: drop of_gpio.h header
-Date:   Thu, 12 May 2022 09:14:15 +0200
-Message-Id: <20220512071415.2786-1-mosescb.dev@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220511205959.10514-1-mosescb.dev@gmail.com>
-References: <20220511205959.10514-1-mosescb.dev@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xGQI4Uoj1dr+aEskjWCNFPVBtuNGecDaxcbPpm4ndbA=;
+        b=74rV3RvDmpq4fnSpiS3h8gGap8kCb0Lwq4Oguew7zsbO2uLSyQw3p8g3+H9DnACmox
+         HloOPnff1HvdOQfn+3N3zTyfD/iT197j4eS0KibXt0z6G//8k3ylXofr2Ed58q+LgQyj
+         8PZFutmx5y9Yicn6rTuzwG0Ud8JSrwnA8c90HnOt8d4W82HIyWQwBRXK5RzAA1+g0SuK
+         k6SOKfUyOqQAWQHj+QhhLdSBbNdVHNhxf7pkwz3++Wyvls1Pm5b5z0Pot8Z+DtDOq3Oh
+         DhfkbcR0bQD6r13Tq5lT2QTrdlqSF7yVkzcFDIdVWa8wQOzSTuDxqQlBNBjT1hEi+lDc
+         qkyg==
+X-Gm-Message-State: AOAM5316E5W7Y3jHCjDUoeDVUIyOwVHGUrImyMm2r8+ikpNTfs2Zq+gJ
+        VvGrEndzp7M4X+kFm4gkHE9rdaMKpeL4pMVWlPE=
+X-Google-Smtp-Source: ABdhPJw4HsvF11WbCOm9ikh5D4rNFJFGTUUhY31uegaRVy95168mD6K7vmft6BvhzVCuzBBmHpUrY5u54uUBWfWg6HI=
+X-Received: by 2002:a63:84c8:0:b0:3c6:4013:9e90 with SMTP id
+ k191-20020a6384c8000000b003c640139e90mr23918919pgd.415.1652339698647; Thu, 12
+ May 2022 00:14:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220510141753.3878390-1-Qing-wu.Li@leica-geosystems.com.cn> <20220510141753.3878390-2-Qing-wu.Li@leica-geosystems.com.cn>
+In-Reply-To: <20220510141753.3878390-2-Qing-wu.Li@leica-geosystems.com.cn>
+From:   Alexandru Ardelean <ardeleanalex@gmail.com>
+Date:   Thu, 12 May 2022 10:14:47 +0300
+Message-ID: <CA+U=DsqUztHxrkYsWTNz8Xm1OxRK2Wkb7L7Csque4r1tEDz_ig@mail.gmail.com>
+Subject: Re: [PATCH V2 1/6] iio: accel: bmi088: Modified the scale calculate
+To:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        mchehab+huawei@kernel.org, linux-iio <linux-iio@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mike Looijmans <mike.looijmans@topic.nl>,
+        devicetree <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -70,92 +71,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove of_gpio.h header file, replace of_* functions and structs
-with appropriate alternatives.
+On Tue, May 10, 2022 at 5:17 PM LI Qingwu
+<Qing-wu.Li@leica-geosystems.com.cn> wrote:
+>
+> The units after application of scale are 100*m/s^2,
+> The scale calculation is only for the device
+> with the range of 3, 6, 12, and 24g,
+> but some other chips have a range of 2, 4, 6, and 8g.
+>
+> Modified the formula to a scale list.
+> The scales in the list are calculated by 1/sensitivity*9.8.
+> The new units after the application of scale are m/s^2.
+>
 
-Signed-off-by: Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
----
- V2 -> V3: Add missing return in front of dev_error_probe
- V1 -> V2: Move gpio_chip member to top of the struct
-           Use dev_error_probe instead of dev_err
-           Minor style fixes
+Strictly on the code:
 
- drivers/gpio/gpio-zevio.c | 25 ++++++++++++++-----------
- 1 file changed, 14 insertions(+), 11 deletions(-)
+Reviewed-by: Alexandru Ardelean <ardeleanalex@gmail.com>
 
-diff --git a/drivers/gpio/gpio-zevio.c b/drivers/gpio/gpio-zevio.c
-index f6f8a541348f..ce9d1282165c 100644
---- a/drivers/gpio/gpio-zevio.c
-+++ b/drivers/gpio/gpio-zevio.c
-@@ -11,7 +11,6 @@
- #include <linux/bitops.h>
- #include <linux/io.h>
- #include <linux/of_device.h>
--#include <linux/of_gpio.h>
- #include <linux/slab.h>
- #include <linux/gpio/driver.h>
- 
-@@ -53,22 +52,23 @@
- #define ZEVIO_GPIO_BIT(gpio) (gpio&7)
- 
- struct zevio_gpio {
-+	struct gpio_chip        chip;
- 	spinlock_t		lock;
--	struct of_mm_gpio_chip	chip;
-+	void __iomem		*regs;
- };
- 
- static inline u32 zevio_gpio_port_get(struct zevio_gpio *c, unsigned pin,
- 					unsigned port_offset)
- {
- 	unsigned section_offset = ((pin >> 3) & 3)*ZEVIO_GPIO_SECTION_SIZE;
--	return readl(IOMEM(c->chip.regs + section_offset + port_offset));
-+	return readl(IOMEM(c->regs + section_offset + port_offset));
- }
- 
- static inline void zevio_gpio_port_set(struct zevio_gpio *c, unsigned pin,
- 					unsigned port_offset, u32 val)
- {
- 	unsigned section_offset = ((pin >> 3) & 3)*ZEVIO_GPIO_SECTION_SIZE;
--	writel(val, IOMEM(c->chip.regs + section_offset + port_offset));
-+	writel(val, IOMEM(c->regs + section_offset + port_offset));
- }
- 
- /* Functions for struct gpio_chip */
-@@ -178,12 +178,15 @@ static int zevio_gpio_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, controller);
- 
- 	/* Copy our reference */
--	controller->chip.gc = zevio_gpio_chip;
--	controller->chip.gc.parent = &pdev->dev;
-+	controller->chip = zevio_gpio_chip;
-+	controller->chip.parent = &pdev->dev;
- 
--	status = of_mm_gpiochip_add_data(pdev->dev.of_node,
--					 &(controller->chip),
--					 controller);
-+	controller->regs = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(controller->regs))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(controller->regs),
-+				     "failed to ioremap memory resource\n");
-+
-+	status = devm_gpiochip_add_data(&pdev->dev, &controller->chip, controller);
- 	if (status) {
- 		dev_err(&pdev->dev, "failed to add gpiochip: %d\n", status);
- 		return status;
-@@ -192,10 +195,10 @@ static int zevio_gpio_probe(struct platform_device *pdev)
- 	spin_lock_init(&controller->lock);
- 
- 	/* Disable interrupts, they only cause errors */
--	for (i = 0; i < controller->chip.gc.ngpio; i += 8)
-+	for (i = 0; i < controller->chip.ngpio; i += 8)
- 		zevio_gpio_port_set(controller, i, ZEVIO_GPIO_INT_MASK, 0xFF);
- 
--	dev_dbg(controller->chip.gc.parent, "ZEVIO GPIO controller set up!\n");
-+	dev_dbg(controller->chip.parent, "ZEVIO GPIO controller set up!\n");
- 
- 	return 0;
- }
--- 
-2.30.2
+On the change of IIO_VAL_FRACTIONAL_LOG2 -> IIO_VAL_INT_PLUS_MICRO  is
+still up for discussion.
 
+> Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+> ---
+>  drivers/iio/accel/bmi088-accel-core.c | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/iio/accel/bmi088-accel-core.c b/drivers/iio/accel/bmi088-accel-core.c
+> index a06dae5c971d..9300313b63cb 100644
+> --- a/drivers/iio/accel/bmi088-accel-core.c
+> +++ b/drivers/iio/accel/bmi088-accel-core.c
+> @@ -119,6 +119,7 @@ struct bmi088_accel_chip_info {
+>         u8 chip_id;
+>         const struct iio_chan_spec *channels;
+>         int num_channels;
+> +       const int scale_table[4][2];
+>  };
+>
+>  struct bmi088_accel_data {
+> @@ -280,6 +281,7 @@ static int bmi088_accel_read_raw(struct iio_dev *indio_dev,
+>         struct bmi088_accel_data *data = iio_priv(indio_dev);
+>         struct device *dev = regmap_get_device(data->regmap);
+>         int ret;
+> +       int reg;
+>
+>         switch (mask) {
+>         case IIO_CHAN_INFO_RAW:
+> @@ -330,13 +332,12 @@ static int bmi088_accel_read_raw(struct iio_dev *indio_dev,
+>                                 return ret;
+>
+>                         ret = regmap_read(data->regmap,
+> -                                         BMI088_ACCEL_REG_ACC_RANGE, val);
+> +                                         BMI088_ACCEL_REG_ACC_RANGE, &reg);
+>                         if (ret)
+>                                 goto out_read_raw_pm_put;
+> -
+> -                       *val2 = 15 - (*val & 0x3);
+> -                       *val = 3 * 980;
+> -                       ret = IIO_VAL_FRACTIONAL_LOG2;
+> +                       *val = data->chip_info->scale_table[reg&0x03][0];
+> +                       *val2 = data->chip_info->scale_table[reg&0x03][1];
+> +                       ret = IIO_VAL_INT_PLUS_MICRO;
+>
+>                         goto out_read_raw_pm_put;
+>                 default:
+> @@ -432,6 +433,7 @@ static const struct bmi088_accel_chip_info bmi088_accel_chip_info_tbl[] = {
+>                 .chip_id = 0x1E,
+>                 .channels = bmi088_accel_channels,
+>                 .num_channels = ARRAY_SIZE(bmi088_accel_channels),
+> +               .scale_table = {{0, 897}, {0, 1795}, {0, 3590}, {0, 7179}},
+>         },
+>  };
+>
+> --
+> 2.25.1
+>

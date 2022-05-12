@@ -2,162 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D822525669
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 22:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1FB352566E
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 22:37:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358385AbiELUgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 16:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41146 "EHLO
+        id S1358407AbiELUhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 16:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358384AbiELUf4 (ORCPT
+        with ESMTP id S1354711AbiELUhJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 16:35:56 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2071.outbound.protection.outlook.com [40.107.212.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C492C63AB;
-        Thu, 12 May 2022 13:35:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HX33RIRvfq12FFQOOOcZ7q1vIPMeXyIZv5t1aUnAWyc5y5uv8rr4w1mp92c/4nRjHfGtWnolkSmpxeo5Vh0qAUzMfZzzaU2+z1E5lmCvvMWm12+H37/VQIMOOR4GWEKwhQSt82anEtVx9wryZw2UaV+vz8dCIbY9fEp3bP+HVvKmCOv6XJhS424AomIn5k1cP9n4NTEWDUhFla2yv+WfSbqfOceGgh/1i8+L9+59Cn9SkIsm68nLgvgrSgP0AbUY4bZDeAkAGGXgsUu922QyCncT4eaikkHm+9oMT2c34EHxAYmAmVH8nzPdGrJo4wFITm9049W0vvif+Qkomai1+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mKXc9lWwmXF32NNeKoUQC2M4MJsdbL2PCeBURM/ukP4=;
- b=PUSXmxEnGoFWqQ8wfICJd/mpwBc5s782l59KNOABEkGnjBpDwRnj8nyhfNq+alF5VF4+/Vi7LUy7uw2LtBjc5jAivnlrbcgq6dSfennjK+DFXIbHnUugsfiGw4iZWyYCmuDTrDAA0Hu0NsfldK/I+UeLvabLhE9Eey6vUywvjKWmsS/pvK7GXSl/z/Hoe6Hi/AXE6NdtUJN5e/uKPd+cQADb2MNbEAhh/CpKtZK2y6Wa3jIHLUwHTX3pIbLsDzTeQbvUJj/ieJLvBUH2hxo3MVkMTSeLxmRnnOleRWT4dgQouljMZVVdQGPajVF56Aae99rlx6DyNiYjHMQUYDOxvw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=gondor.apana.org.au smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mKXc9lWwmXF32NNeKoUQC2M4MJsdbL2PCeBURM/ukP4=;
- b=eq+aHFDH2CQ0kegpsnPPRV5U/qVys8f9ywxbxnU/G/Fs+GFLH9wPNVOLwUG04H3HGjyuvlAlaFiN0N9qw+U83Vlgisp0r6oXUKnUJ3/bzV+cu56NEVdmWkjFHx8xPR47M42yEQL6731+mP/6rgjzYzSz3+Y5Y3fpsP+EGzp4Hpk=
-Received: from BN9PR03CA0393.namprd03.prod.outlook.com (2603:10b6:408:111::8)
- by BN7PR12MB2706.namprd12.prod.outlook.com (2603:10b6:408:2a::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.23; Thu, 12 May
- 2022 20:35:51 +0000
-Received: from BN8NAM11FT031.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:111:cafe::97) by BN9PR03CA0393.outlook.office365.com
- (2603:10b6:408:111::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.22 via Frontend
- Transport; Thu, 12 May 2022 20:35:51 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT031.mail.protection.outlook.com (10.13.177.25) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5250.13 via Frontend Transport; Thu, 12 May 2022 20:35:50 +0000
-Received: from jallen-jump-host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 12 May
- 2022 15:35:49 -0500
-From:   John Allen <john.allen@amd.com>
-To:     <herbert@gondor.apana.org.au>, <linux-crypto@vger.kernel.org>
-CC:     <seanjc@google.com>, <Thomas.Lendacky@amd.com>,
-        <Ashish.Kalra@amd.com>, <linux-kernel@vger.kernel.org>,
-        <theflow@google.com>, <rientjes@google.com>, <pgonda@google.com>,
-        John Allen <john.allen@amd.com>
-Subject: [PATCH] crypto: ccp - Use kzalloc for sev ioctl interfaces to prevent kernel memory leak
-Date:   Thu, 12 May 2022 20:34:55 +0000
-Message-ID: <20220512203455.253357-1-john.allen@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 12 May 2022 16:37:09 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79FB473B9
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 13:37:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652387827; x=1683923827;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KF4tGBP/GhFnqCIE1Kd116fqMPfABBaqmXiD+ljrLNg=;
+  b=ZUzRDcn6XduDSeJHCnYlDyk8P3lcp3hMJAHv1wZ6X/6cYfbwGt9F3JIC
+   uvEIvnHs6NdT5pRNxKhk2bqkuJKM8PHekVXgN9UuVwSIucK3Ws/0ilKGn
+   KntMKKEXcw8zF3545PLoj2EUeC/KgUxYVrQi/YKO+8SDoiauudg+sQ0fQ
+   QzZAAK9dr5JjU67J7dbGzkjfx+aMFmrllToSLMRTj/JQk7pRWhoW9zaBA
+   MztodOqNjE2we14W1pkvFPB8/1f3bUw8Nmsep/VRihSxmc4QeTqRBGWll
+   G8sMYARBLcNGa9cd4G8J1ON+x/PicIgcLofTzGaMtW6/lwlIyBA3cep79
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="333164384"
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="333164384"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 13:36:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="739860979"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 12 May 2022 13:36:49 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1npFYH-000Ku0-7K;
+        Thu, 12 May 2022 20:36:49 +0000
+Date:   Fri, 13 May 2022 04:36:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: drivers/video/fbdev/core/fbmem.c:885:17: sparse: sparse: incorrect
+ type in argument 1 (different address spaces)
+Message-ID: <202205130433.NaSS7xL7-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 12cd176b-9e66-46da-964e-08da3457009c
-X-MS-TrafficTypeDiagnostic: BN7PR12MB2706:EE_
-X-Microsoft-Antispam-PRVS: <BN7PR12MB270677289FE5D89A6A2301D49ACB9@BN7PR12MB2706.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VV7YR4xMnIw4u5su5whC2eqsogijUvICik82M6qZDC4/DUIOi3GYH6DwRH1G0ezLV1RTwr0VRafwJc7uRWm4INNXp5kIYaHkxU/kmoz5NTIPt2BJuQug5JUtLQX3s2pNMwy7Hfa1PGrFUsyoIcDOAEqp1CsCNZyViyLWtC1XOwwNgeYeOiEmQC2z4SWkm89hfvBOkZIFDaVmMOcY192Y4JPLXafAdwmbzxnjuyMOENHhqxM+CXaOiyu/8o/t7kV5Py+cGJHvsjYS3kNmDwlNwnqi8VCeZLpFmwQBtXLMHaGKtVH7s3i2NPVaA3cQYSoY+hLabdtt6qgeUXQCdPdA3CXK9TBFODiLRHzqAl+h8jkKlUOD2rSOEKEVv5dgVmSFAcLgEe72HoTJM3b3HOZpcMiRnGYsEhsy2GdAXSI64x0K/H/1ug/Pd08H3ODfnACW8nX2maiDYlUq7g2OSPlN0SLdZYHVWKRuv3tepZJzuo/ZkXAUMCKSAxPUCVi0nTfqv3gxZmBUw47TZXM8Gaw0Xr5wsu664MVK0Y/q0Np0MaBVS6JVydpF5dxWeACwFEPcMITXe4RuBWqTxz/iEv08c9UHBQP+SY1/tuFIMfpiBlLsJ2vaKRlcpKCP2zlSJq+uadeHJhLpPtdKk0JNDB6He0Bfd/1+8KnP3dRU5g1XvZCRlqyWH0uJC0PJd2Hy0ZHUOvyvISWOIWLNW+lQYu1SQw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(426003)(86362001)(356005)(81166007)(40460700003)(47076005)(26005)(83380400001)(2616005)(36860700001)(186003)(16526019)(1076003)(8676002)(4326008)(316002)(70206006)(70586007)(8936002)(82310400005)(36756003)(44832011)(7696005)(5660300002)(2906002)(508600001)(54906003)(110136005)(6666004)(336012)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2022 20:35:50.2782
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 12cd176b-9e66-46da-964e-08da3457009c
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT031.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR12MB2706
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For some sev ioctl interfaces, input may be passed that is less than or
-equal to SEV_FW_BLOB_MAX_SIZE, but larger than the data that PSP
-firmware returns. In this case, kmalloc will allocate memory that is the
-size of the input rather than the size of the data. Since PSP firmware
-doesn't fully overwrite the buffer, the sev ioctl interfaces with the
-issue may return uninitialized slab memory.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0ac824f379fba2c2b17b75fd5ada69cd68c66348
+commit: f68f2ff91512c199ec24883001245912afc17873 fortify: Detect struct member overflows in memcpy() at compile-time
+date:   3 months ago
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220513/202205130433.NaSS7xL7-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f68f2ff91512c199ec24883001245912afc17873
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f68f2ff91512c199ec24883001245912afc17873
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash drivers/video/fbdev/
 
-Currently, all of the ioctl interfaces in the ccp driver are safe, but
-to prevent future problems, change all ioctl interfaces that allocate
-memory with kmalloc to use kzalloc.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reported-by: Andy Nguyen <theflow@google.com>
-Suggested-by: David Rientjes <rientjes@google.com>
-Suggested-by: Peter Gonda <pgonda@google.com>
-Signed-off-by: John Allen <john.allen@amd.com>
----
- drivers/crypto/ccp/sev-dev.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-index 6ab93dfd478a..e2298843ea8a 100644
---- a/drivers/crypto/ccp/sev-dev.c
-+++ b/drivers/crypto/ccp/sev-dev.c
-@@ -604,7 +604,7 @@ static int sev_ioctl_do_pek_csr(struct sev_issue_cmd *argp, bool writable)
- 	if (input.length > SEV_FW_BLOB_MAX_SIZE)
- 		return -EFAULT;
- 
--	blob = kmalloc(input.length, GFP_KERNEL);
-+	blob = kzalloc(input.length, GFP_KERNEL);
- 	if (!blob)
- 		return -ENOMEM;
- 
-@@ -828,7 +828,7 @@ static int sev_ioctl_do_get_id2(struct sev_issue_cmd *argp)
- 	input_address = (void __user *)input.address;
- 
- 	if (input.address && input.length) {
--		id_blob = kmalloc(input.length, GFP_KERNEL);
-+		id_blob = kzalloc(input.length, GFP_KERNEL);
- 		if (!id_blob)
- 			return -ENOMEM;
- 
-@@ -947,14 +947,14 @@ static int sev_ioctl_do_pdh_export(struct sev_issue_cmd *argp, bool writable)
- 	if (input.cert_chain_len > SEV_FW_BLOB_MAX_SIZE)
- 		return -EFAULT;
- 
--	pdh_blob = kmalloc(input.pdh_cert_len, GFP_KERNEL);
-+	pdh_blob = kzalloc(input.pdh_cert_len, GFP_KERNEL);
- 	if (!pdh_blob)
- 		return -ENOMEM;
- 
- 	data.pdh_cert_address = __psp_pa(pdh_blob);
- 	data.pdh_cert_len = input.pdh_cert_len;
- 
--	cert_blob = kmalloc(input.cert_chain_len, GFP_KERNEL);
-+	cert_blob = kzalloc(input.cert_chain_len, GFP_KERNEL);
- 	if (!cert_blob) {
- 		ret = -ENOMEM;
- 		goto e_free_pdh;
+sparse warnings: (new ones prefixed by >>)
+   command-line: note: in included file:
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQUIRE redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_SEQ_CST redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQ_REL redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_RELEASE redefined
+   builtin:0:0: sparse: this was the original definition
+   drivers/video/fbdev/core/fbmem.c:808:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got unsigned char [noderef] [usertype] __iomem *[assigned] src @@
+   drivers/video/fbdev/core/fbmem.c:808:17: sparse:     expected void const *
+   drivers/video/fbdev/core/fbmem.c:808:17: sparse:     got unsigned char [noderef] [usertype] __iomem *[assigned] src
+   drivers/video/fbdev/core/fbmem.c:808:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got unsigned char [noderef] [usertype] __iomem *[assigned] src @@
+   drivers/video/fbdev/core/fbmem.c:808:17: sparse:     expected void const *
+   drivers/video/fbdev/core/fbmem.c:808:17: sparse:     got unsigned char [noderef] [usertype] __iomem *[assigned] src
+   drivers/video/fbdev/core/fbmem.c:808:17: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const * @@     got unsigned char [noderef] [usertype] __iomem *[assigned] src @@
+   drivers/video/fbdev/core/fbmem.c:808:17: sparse:     expected void const *
+   drivers/video/fbdev/core/fbmem.c:808:17: sparse:     got unsigned char [noderef] [usertype] __iomem *[assigned] src
+>> drivers/video/fbdev/core/fbmem.c:885:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got unsigned char [noderef] [usertype] __iomem *[assigned] dst @@
+   drivers/video/fbdev/core/fbmem.c:885:17: sparse:     expected void const *
+   drivers/video/fbdev/core/fbmem.c:885:17: sparse:     got unsigned char [noderef] [usertype] __iomem *[assigned] dst
+>> drivers/video/fbdev/core/fbmem.c:885:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got unsigned char [noderef] [usertype] __iomem *[assigned] dst @@
+   drivers/video/fbdev/core/fbmem.c:885:17: sparse:     expected void const *
+   drivers/video/fbdev/core/fbmem.c:885:17: sparse:     got unsigned char [noderef] [usertype] __iomem *[assigned] dst
+   drivers/video/fbdev/core/fbmem.c:885:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got unsigned char [noderef] [usertype] __iomem *[assigned] dst @@
+   drivers/video/fbdev/core/fbmem.c:885:17: sparse:     expected void *
+   drivers/video/fbdev/core/fbmem.c:885:17: sparse:     got unsigned char [noderef] [usertype] __iomem *[assigned] dst
+
+vim +885 drivers/video/fbdev/core/fbmem.c
+
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  826  
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  827  static ssize_t
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  828  fb_write(struct file *file, const char __user *buf, size_t count, loff_t *ppos)
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  829  {
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  830  	unsigned long p = *ppos;
+c47747fde931c02 drivers/video/fbmem.c Linus Torvalds     2011-05-11  831  	struct fb_info *info = file_fb_info(file);
+f11b478d461b711 drivers/video/fbmem.c James Hogan        2010-10-27  832  	u8 *buffer, *src;
+f11b478d461b711 drivers/video/fbmem.c James Hogan        2010-10-27  833  	u8 __iomem *dst;
+f11b478d461b711 drivers/video/fbmem.c James Hogan        2010-10-27  834  	int c, cnt = 0, err = 0;
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  835  	unsigned long total_size;
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  836  
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  837  	if (!info || !info->screen_base)
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  838  		return -ENODEV;
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  839  
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  840  	if (info->state != FBINFO_STATE_RUNNING)
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  841  		return -EPERM;
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  842  
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  843  	if (info->fbops->fb_write)
+3f9b0880e4a96b0 drivers/video/fbmem.c Antonino A. Daplas 2007-05-08  844  		return info->fbops->fb_write(info, buf, count, ppos);
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  845  
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  846  	total_size = info->screen_size;
+0a484a3af905a25 drivers/video/fbmem.c Antonino A. Daplas 2006-01-09  847  
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  848  	if (total_size == 0)
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  849  		total_size = info->fix.smem_len;
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  850  
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  851  	if (p > total_size)
+6a2a88668e90cd2 drivers/video/fbmem.c Antonino A. Daplas 2006-04-18  852  		return -EFBIG;
+0a484a3af905a25 drivers/video/fbmem.c Antonino A. Daplas 2006-01-09  853  
+6a2a88668e90cd2 drivers/video/fbmem.c Antonino A. Daplas 2006-04-18  854  	if (count > total_size) {
+6a2a88668e90cd2 drivers/video/fbmem.c Antonino A. Daplas 2006-04-18  855  		err = -EFBIG;
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  856  		count = total_size;
+6a2a88668e90cd2 drivers/video/fbmem.c Antonino A. Daplas 2006-04-18  857  	}
+6a2a88668e90cd2 drivers/video/fbmem.c Antonino A. Daplas 2006-04-18  858  
+6a2a88668e90cd2 drivers/video/fbmem.c Antonino A. Daplas 2006-04-18  859  	if (count + p > total_size) {
+6a2a88668e90cd2 drivers/video/fbmem.c Antonino A. Daplas 2006-04-18  860  		if (!err)
+6a2a88668e90cd2 drivers/video/fbmem.c Antonino A. Daplas 2006-04-18  861  			err = -ENOSPC;
+0a484a3af905a25 drivers/video/fbmem.c Antonino A. Daplas 2006-01-09  862  
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  863  		count = total_size - p;
+6a2a88668e90cd2 drivers/video/fbmem.c Antonino A. Daplas 2006-04-18  864  	}
+0a484a3af905a25 drivers/video/fbmem.c Antonino A. Daplas 2006-01-09  865  
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  866  	buffer = kmalloc((count > PAGE_SIZE) ? PAGE_SIZE : count,
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  867  			 GFP_KERNEL);
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  868  	if (!buffer)
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  869  		return -ENOMEM;
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  870  
+f11b478d461b711 drivers/video/fbmem.c James Hogan        2010-10-27  871  	dst = (u8 __iomem *) (info->screen_base + p);
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  872  
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  873  	if (info->fbops->fb_sync)
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  874  		info->fbops->fb_sync(info);
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  875  
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  876  	while (count) {
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  877  		c = (count > PAGE_SIZE) ? PAGE_SIZE : count;
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  878  		src = buffer;
+0a484a3af905a25 drivers/video/fbmem.c Antonino A. Daplas 2006-01-09  879  
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  880  		if (copy_from_user(src, buf, c)) {
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  881  			err = -EFAULT;
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  882  			break;
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  883  		}
+0a484a3af905a25 drivers/video/fbmem.c Antonino A. Daplas 2006-01-09  884  
+f11b478d461b711 drivers/video/fbmem.c James Hogan        2010-10-27 @885  		fb_memcpy_tofb(dst, src, c);
+f11b478d461b711 drivers/video/fbmem.c James Hogan        2010-10-27  886  		dst += c;
+f11b478d461b711 drivers/video/fbmem.c James Hogan        2010-10-27  887  		src += c;
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  888  		*ppos += c;
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  889  		buf += c;
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  890  		cnt += c;
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  891  		count -= c;
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  892  	}
+0a484a3af905a25 drivers/video/fbmem.c Antonino A. Daplas 2006-01-09  893  
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  894  	kfree(buffer);
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  895  
+6a2a88668e90cd2 drivers/video/fbmem.c Antonino A. Daplas 2006-04-18  896  	return (cnt) ? cnt : err;
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  897  }
+^1da177e4c3f415 drivers/video/fbmem.c Linus Torvalds     2005-04-16  898  
+
+:::::: The code at line 885 was first introduced by commit
+:::::: f11b478d461b7113eb4603b3914aaf15b7788e87 fbmem: fix fb_read, fb_write unaligned accesses
+
+:::::: TO: James Hogan <james@albanarts.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

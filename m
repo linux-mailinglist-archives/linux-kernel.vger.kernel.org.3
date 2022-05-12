@@ -2,67 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA7255247F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 10:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 577B95247F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 10:37:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351509AbiELIgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 04:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47156 "EHLO
+        id S1351521AbiELIg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 04:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351499AbiELIge (ORCPT
+        with ESMTP id S1351506AbiELIgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 04:36:34 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3164A6B7DE
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 01:36:33 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id q18so4206464pln.12
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 01:36:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Dh19HuOfdtK2F7eKYedy/v965tHvbFT9B9mkJwtbUA0=;
-        b=ybdu7ry7HXCU7gGsSZu0YTKwUSYrXBhCLjTzqhOhdYB6oEtZt83jU75Hd8NsvZ4v2O
-         6OIMD6U6a75r7Hnpy+2q5aZzaIlswA+/AaLrTuZc/g0kh3tTTsnqvnWc7yE6rYQhchCl
-         pyYS6VYPdhVw9LaagT9s4dttQC6HDBdRQaO95ns7AOISeqX6qrJTSj6kYzU47hICkF/O
-         kvudo84ZJa2ZklmQeCrO2qenpV6QeocUlKkmrjf9M8PsEtlVdfwoQjjPbEvmKuQQMRJd
-         5rGCO33pYjXm9RnwfPlOVm3csyYjTA9CTd3ieXiCZd1juQVmqHoIrpHQ5HQzd64o4EoQ
-         QD5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Dh19HuOfdtK2F7eKYedy/v965tHvbFT9B9mkJwtbUA0=;
-        b=myJsJqKR4Hva4c+cKIXNgjYwen5fToEhX9qSxZ8wGVNrK7sfhHw0S9Qk7/77sOW2PZ
-         jPTNFX9y8QjR7/G/Yv+NJRuJo54D+1HsZbk2WpDWVI1KPfDrXbO1TZNqU0yKrpEgnpX3
-         R64enBqbrzQjlC5u5hnUwUhSwsxvBEd5BTRz3KeDCB5aLWK+Nf48EbuiJr5foGVUgK0t
-         cIMbO3SFRWfoa/ELYBTq0isjfM5SyUF5+bqU+kH8f3O+Itizpfw8lWNbZoog6MZgBCyv
-         ax0x9DTpFmlbZfHZrO8VCYg/Vbso2yrhuWAiPCnqRw3K8vXZwHASpb440L5PumpAqYMs
-         q/jQ==
-X-Gm-Message-State: AOAM530LF7RrvjLTGPLomQw7VTbW0MQhcnlWIWFqGIT/1uoiEjFgbAPB
-        HXK783j3hboyPuOeaXU+b9aeWbBNiYoyZy4=
-X-Google-Smtp-Source: ABdhPJxHqU9RDjZHsCVgXg2pFU8sr7sS56Tx2FcU2aVqX5YLafxlcziyqOPAH18cBfk6Xi+lXkzl2Q==
-X-Received: by 2002:a17:902:ed83:b0:15c:e82a:e84f with SMTP id e3-20020a170902ed8300b0015ce82ae84fmr30095746plj.96.1652344592650;
-        Thu, 12 May 2022 01:36:32 -0700 (PDT)
-Received: from localhost.localdomain ([117.217.183.109])
-        by smtp.gmail.com with ESMTPSA id q10-20020a170902f34a00b0015e8d4eb1d8sm3258222ple.34.2022.05.12.01.36.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 01:36:32 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     gustavo.pimentel@synopsys.com, vkoul@kernel.org
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Frank Li <Frank.Li@nxp.com>
-Subject: [PATCH] dmaengine: dw-edma: Remove runtime PM support
-Date:   Thu, 12 May 2022 14:06:12 +0530
-Message-Id: <20220512083612.122824-1-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Thu, 12 May 2022 04:36:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0AF26131
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 01:36:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CEEC4B8271A
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 08:36:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B3B3C385B8;
+        Thu, 12 May 2022 08:36:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652344609;
+        bh=3e5g6lhyha4VVxzhEZrSIdhjvbVTgz6Wec7JaF8MggI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fzxUcUT+iAN8VGvPA3YzzKI7NdkBfHJyPG2hgMqLywMtAeNASINqC+GbVP+Oosgnv
+         n2IgFyK8BQo4efm45Oa2u1gdxrtxgiD8pKjn7ggbqqF27DD5FqH9yS2JssT8vBTYMS
+         LguibDQrrEh1epPN65IA3niSh3P7ar4PomTuxjaubKoRLmJ8QmQ6y8lgD8xpVF0kFZ
+         TjpAr6c1oSTsddOS8GSRTyYkQsUf13WnG0OwErPxAXs0f6GaxKl/AQ2jROpKVFZvcC
+         DNi9Qmh/35lpa6H83U93JGDdNKpDwt4ST3vmTFFVbdpUCIlhsUG/I46r2dJSFDYfP+
+         hIpABfuP1JhyQ==
+From:   Tzung-Bi Shih <tzungbi@kernel.org>
+To:     bleung@chromium.org, groeck@chromium.org
+Cc:     chrome-platform@lists.linux.dev, tzungbi@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/6] platform/chrome: get rid of BUG_ON()
+Date:   Thu, 12 May 2022 16:36:21 +0800
+Message-Id: <20220512083627.885338-1-tzungbi@kernel.org>
+X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,96 +52,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the dw-edma driver enables the runtime_pm for parent device
-(chip->dev) and increments/decrements the refcount during alloc/free
-chan resources callbacks.
+The series gets rid of BUG_ON()s in drivers/platform/chrome/.  Most of them
+can be replaced by returning proper return code.
 
-This leads to a problem when the eDMA driver has been probed, but the
-channels were not used. This scenario can happen when the DW PCIe driver
-probes eDMA driver successfully, but the PCI EPF driver decides not to
-use eDMA channels and use iATU instead for PCI transfers.
+The 2nd patch makes callers of cros_ec_prepare_tx() to take care of the
+return code.
 
-In this case, the underlying device would be runtime suspended due to
-pm_runtime_enable() in dw_edma_probe() and the PCI EPF driver would have
-no knowledge of it.
+The 3rd patch turns cros_ec_prepare_tx() to return error code if any.
 
-Ideally, the eDMA driver should not be the one doing the runtime PM of
-the parent device. The responsibility should instead belong to the client
-drivers like PCI EPF.
+Tzung-Bi Shih (6):
+  platform/chrome: cros_ec_proto: drop unneeded BUG_ON() in
+    prepare_packet()
+  platform/chrome: correct cros_ec_prepare_tx() usage
+  platform/chrome: cros_ec_proto: drop BUG_ON() in cros_ec_prepare_tx()
+  platform/chrome: cros_ec_proto: drop BUG_ON() in
+    cros_ec_get_host_event()
+  platform/chrome: cros_ec_i2c: drop BUG_ON() in cros_ec_pkt_xfer_i2c()
+  platform/chrome: cros_ec_spi: drop BUG_ON()
 
-So let's remove the runtime PM support from eDMA driver.
+ drivers/platform/chrome/cros_ec_i2c.c   | 12 ++++++++++--
+ drivers/platform/chrome/cros_ec_ishtp.c |  4 +++-
+ drivers/platform/chrome/cros_ec_lpc.c   |  2 ++
+ drivers/platform/chrome/cros_ec_proto.c | 13 ++++++++-----
+ drivers/platform/chrome/cros_ec_rpmsg.c |  2 ++
+ drivers/platform/chrome/cros_ec_spi.c   | 19 ++++++++++++++-----
+ 6 files changed, 39 insertions(+), 13 deletions(-)
 
-Cc: Serge Semin <fancer.lancer@gmail.com>
-Cc: Frank Li <Frank.Li@nxp.com>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
-
-Note: This patch is made on top of Frank and Serge's edma work, but should
-be applicable independently also.
-
-[PATCH v10 0/9] Enable designware PCI EP EDMA locally
-[PATCH v2 00/26] dmaengine: dw-edma: Add RP/EP local DMA controllers support
-
- drivers/dma/dw-edma/dw-edma-core.c | 12 ------------
- 1 file changed, 12 deletions(-)
-
-diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
-index 561686b51915..b2b5077d380b 100644
---- a/drivers/dma/dw-edma/dw-edma-core.c
-+++ b/drivers/dma/dw-edma/dw-edma-core.c
-@@ -9,7 +9,6 @@
- #include <linux/module.h>
- #include <linux/device.h>
- #include <linux/kernel.h>
--#include <linux/pm_runtime.h>
- #include <linux/dmaengine.h>
- #include <linux/err.h>
- #include <linux/interrupt.h>
-@@ -731,15 +730,12 @@ static int dw_edma_alloc_chan_resources(struct dma_chan *dchan)
- 		dchan->dev->chan_dma_dev = false;
- 	}
- 
--	pm_runtime_get(chan->dw->chip->dev);
--
- 	return 0;
- }
- 
- static void dw_edma_free_chan_resources(struct dma_chan *dchan)
- {
- 	unsigned long timeout = jiffies + msecs_to_jiffies(5000);
--	struct dw_edma_chan *chan = dchan2dw_edma_chan(dchan);
- 	int ret;
- 
- 	while (time_before(jiffies, timeout)) {
-@@ -752,8 +748,6 @@ static void dw_edma_free_chan_resources(struct dma_chan *dchan)
- 
- 		cpu_relax();
- 	}
--
--	pm_runtime_put(chan->dw->chip->dev);
- }
- 
- static int dw_edma_channel_setup(struct dw_edma *dw, u32 wr_alloc, u32 rd_alloc)
-@@ -1010,9 +1004,6 @@ int dw_edma_probe(struct dw_edma_chip *chip)
- 	if (err)
- 		goto err_irq_free;
- 
--	/* Power management */
--	pm_runtime_enable(dev);
--
- 	/* Turn debugfs on */
- 	dw_edma_v0_core_debugfs_on(dw);
- 
-@@ -1046,9 +1037,6 @@ int dw_edma_remove(struct dw_edma_chip *chip)
- 	for (i = (dw->nr_irqs - 1); i >= 0; i--)
- 		free_irq(chip->ops->irq_vector(dev, i), &dw->irq[i]);
- 
--	/* Power management */
--	pm_runtime_disable(dev);
--
- 	/* Deregister eDMA device */
- 	dma_async_device_unregister(&dw->dma);
- 	list_for_each_entry_safe(chan, _chan, &dw->dma.channels,
 -- 
-2.25.1
+2.36.0.512.ge40c2bad7a-goog
 

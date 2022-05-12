@@ -2,272 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF29E524A6E
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6EF2524A74
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:38:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352715AbiELKi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 06:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47760 "EHLO
+        id S1352717AbiELKin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 06:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352713AbiELKiR (ORCPT
+        with ESMTP id S1352750AbiELKih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 06:38:17 -0400
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5219760B90;
-        Thu, 12 May 2022 03:38:10 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-2ebf4b91212so50843307b3.8;
-        Thu, 12 May 2022 03:38:10 -0700 (PDT)
+        Thu, 12 May 2022 06:38:37 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F0922A2F8;
+        Thu, 12 May 2022 03:38:30 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id v10so4207322pgl.11;
+        Thu, 12 May 2022 03:38:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:content-transfer-encoding:date:message-id:cc:subject
+         :from:to:references:in-reply-to;
+        bh=r5c+fBR2rHfFwY95aZjEKFngZ4zJGMdPCvvFHNcvkDo=;
+        b=JudCj05rO0Gzldd6Yqw3ZAtTrU6WdqKkTkOMwVMYvuO3heRfFFdLC11gso2v8Zca8N
+         rwW/gRTLQwlz75sbE+ELwB069GSp8prK0pVHC5xfNNB/4tWJ21dSQAdYLqep6fUso3xn
+         IGiVGvjwdSvnuYAwwDV3F3ABFGG20eigDU5he6yye/PiNNmdkL0p1/yLtR6Q5LgnmZJc
+         zbxQDXb7G+MTsKRtG7ZOjs8WUuFq+qWd52YMWAyOCFvHyDf3flYG6FbikENAAyv8Fx+h
+         pT2MM0L+/I8rbKPyEZGMVqmmM8z9Lr5EN4puP9q8T3p6N3Mx/QXt2duKTSqvKOLa16qm
+         rYkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eKCfO7JSB2n1OqFTEQh2+eRfTjbTDU79y2zrWanFg+Q=;
-        b=Pt7Dez5VTIcw5BOHsWHI92jOoTOMfdiOqnesksjZP7W1/zM5tBy83Ju9MMiOrkQ6C8
-         b02iKA+LzbyXgxAszsI+5MJL6NirZ91Cxmqs4GXO6TT98rBIta78JwVVQnXSlU0cG6Da
-         NSyEZ6A69ta78iKcnYx1+EyEUzsDnHXhaJHrtySsYWVi86E5KPBsl7VomyorAqZmK+78
-         MHkg4TbkEdV9cpibVmjIWvf5qytUPTUd1eB7XTmetkk7+4+2D957nxbxNGGx9gF+rRAR
-         k+A4FH0U9HEV+3NI1t6GtZFUEe6T31I/y9BRA+ixe7GmUxhcNEnRRY2Do/bDU1qYc20L
-         fMgA==
-X-Gm-Message-State: AOAM533HeJgnomyrdJ/AWSE5wMxrtkFd1PUCDMd1BzGVviEPGHMj9tfr
-        GNi9qz8tiQgDLSQ/PemiC+hJQlXlMxLJe1MWnus=
-X-Google-Smtp-Source: ABdhPJx0u1x7XVKLmcbagSazedLfZUd7kUNciZXN1LKkurCRYaTgpxocVlRDqJ0seiGJJ3ZiK6rYgaO8QbatF4+31JQ=
-X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
- b145-20020a811b97000000b002db640f49d8mr29153887ywb.326.1652351889813; Thu, 12
- May 2022 03:38:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220510035259.5ep52sgahd2a6rie@vireshk-i7> <20220510154236.88753-1-schspa@gmail.com>
- <CAJZ5v0gcOmd8fXG9_BYxr6rN7ncUWnfki7K9S5wK2Vvh9SxUCA@mail.gmail.com> <m2wner47ru.fsf@gmail.com>
-In-Reply-To: <m2wner47ru.fsf@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 12 May 2022 12:37:58 +0200
-Message-ID: <CAJZ5v0ihy7vP9DbwWXjKwVT3JL+BzPziTERKhfmVCYizZwMuFw@mail.gmail.com>
-Subject: Re: [PATCH v3] cpufreq: fix race on cpufreq online
-To:     Schspa Shi <schspa@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:content-transfer-encoding:date
+         :message-id:cc:subject:from:to:references:in-reply-to;
+        bh=r5c+fBR2rHfFwY95aZjEKFngZ4zJGMdPCvvFHNcvkDo=;
+        b=V1mACVIpTiYOdC/6X+va6DLx5iNcqRoVmtyWsUvg97VzF7pe874mv3JZ89r1g/BHy8
+         ZlbHcMrdd8Rr40BMeOzK50H+PO4u/MgRO+SaKcl0i5NMS284y0O8+hfB0p7lWmMzzwXq
+         bm9i+WMpkStuXRKG7piwQbL5412mQImlO8ZanVv/lxdEloRkjEK5EYqui3aSvei+SDew
+         COHAu5xcYxFCImj9F5Cyw2mYXbdI0e4TjGyv8qQcse6xMNleXBNEHPhipZF8z+5qY4RX
+         M9XBFyetZBTS4z54plSWLWk4984qtAaDX0LFbrQKWs3OXN1d2SOPUDg5RuMjIKaxVbwY
+         rwIw==
+X-Gm-Message-State: AOAM530VI92QCK7t+OGoLkja2dNH6u+HCDSYRNXVDoZfBG+rvZWMWS4/
+        4pCb15bdfm/g2f+SnVsM3ls=
+X-Google-Smtp-Source: ABdhPJxSIudP/BeGQq3bfhQ1HqdEnTBVZ5/Y+QYu026WfYGKqLGX830nzLtEM6dm09I552VyW3xZBg==
+X-Received: by 2002:a65:6794:0:b0:3c1:922b:2b1e with SMTP id e20-20020a656794000000b003c1922b2b1emr24698350pgr.370.1652351909596;
+        Thu, 12 May 2022 03:38:29 -0700 (PDT)
+Received: from localhost ([49.204.239.218])
+        by smtp.gmail.com with ESMTPSA id u18-20020a056a00099200b00510c135da63sm3438011pfg.9.2022.05.12.03.38.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 03:38:29 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 12 May 2022 16:08:24 +0530
+Message-Id: <CJXPV5O4V9NZ.31ALTSIMKL8YO@skynet-linux>
+Cc:     <linux-arm-msm@vger.kernel.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        <bjorn.andersson@linaro.org>, <devicetree@vger.kernel.org>,
+        <phone-devel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Andy Gross" <agross@kernel.org>,
+        "Mathieu Poirier" <mathieu.poirier@linaro.org>
+Subject: Re: [PATCH 2/9] remoteproc: qcom: q6v5-mss: Add modem support on
+ MSM8953
+From:   "Sireesh Kodali" <sireeshkodali1@gmail.com>
+To:     "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>
+X-Mailer: aerc 0.9.0
+References: <20220511161602.117772-1-sireeshkodali1@gmail.com>
+ <20220511161602.117772-3-sireeshkodali1@gmail.com>
+ <1d43e1fa-30b2-dbf0-bfaf-f9cfaf987efb@linaro.org>
+In-Reply-To: <1d43e1fa-30b2-dbf0-bfaf-f9cfaf987efb@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 7:52 AM Schspa Shi <schspa@gmail.com> wrote:
+On Wed May 11, 2022 at 10:24 PM IST, Dmitry Baryshkov wrote:
+> On 11/05/2022 19:15, Sireesh Kodali wrote:
+> > The modem on the MSM8953 platform is similar to the modem on the MSM899=
+6
+> > platform in terms of set up. It differs primarily in the way it needs S=
+CM
+> > to bless the MPSS firmware region.
+> >=20
+> > Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
+> > ---
+> >   drivers/remoteproc/qcom_q6v5_mss.c | 64 +++++++++++++++++++++++++++--=
+-
+> >   1 file changed, 58 insertions(+), 6 deletions(-)
+> >=20
+> > diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qc=
+om_q6v5_mss.c
+> > index af217de75e4d..a73fdcddeda4 100644
+> > --- a/drivers/remoteproc/qcom_q6v5_mss.c
+> > +++ b/drivers/remoteproc/qcom_q6v5_mss.c
+> > @@ -234,6 +234,7 @@ struct q6v5 {
+> >  =20
+> >   enum {
+> >   	MSS_MSM8916,
+> > +	MSS_MSM8953,
+> >   	MSS_MSM8974,
+> >   	MSS_MSM8996,
+> >   	MSS_MSM8998,
+> > @@ -687,12 +688,14 @@ static int q6v5proc_reset(struct q6v5 *qproc)
+> >   		}
+> >   		goto pbl_wait;
+> >   	} else if (qproc->version =3D=3D MSS_MSM8996 ||
+> > -		   qproc->version =3D=3D MSS_MSM8998) {
+> > +		   qproc->version =3D=3D MSS_MSM8998 ||
+> > +		   qproc->version =3D=3D MSS_MSM8953) {
+> >   		int mem_pwr_ctl;
+> >  =20
+> >   		/* Override the ACC value if required */
+> > -		writel(QDSP6SS_ACC_OVERRIDE_VAL,
+> > -		       qproc->reg_base + QDSP6SS_STRAP_ACC);
+> > +		if (qproc->version !=3D MSS_MSM8953)
+> > +			writel(QDSP6SS_ACC_OVERRIDE_VAL,
+> > +					qproc->reg_base + QDSP6SS_STRAP_ACC);
+> >  =20
+> >   		/* Assert resets, stop core */
+> >   		val =3D readl(qproc->reg_base + QDSP6SS_RESET_REG);
+> > @@ -734,7 +737,8 @@ static int q6v5proc_reset(struct q6v5 *qproc)
+> >   		writel(val, qproc->reg_base + QDSP6SS_PWR_CTL_REG);
+> >  =20
+> >   		/* Turn on L1, L2, ETB and JU memories 1 at a time */
+> > -		if (qproc->version =3D=3D MSS_MSM8996) {
+> > +		if (qproc->version =3D=3D MSS_MSM8996 ||
+> > +			qproc->version =3D=3D MSS_MSM8953) {
+> >   			mem_pwr_ctl =3D QDSP6SS_MEM_PWR_CTL;
+> >   			i =3D 19;
+> >   		} else {
+> > @@ -1314,7 +1318,16 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
+> >   			max_addr =3D ALIGN(phdr->p_paddr + phdr->p_memsz, SZ_4K);
+> >   	}
+> >  =20
+> > -	/*
+> > +	if (qproc->version =3D=3D MSS_MSM8953) {
+> > +		ret =3D qcom_scm_pas_mem_setup(5, qproc->mpss_phys, qproc->mpss_size=
+);
+> > +		if (ret) {
+> > +			dev_err(qproc->dev,
+> > +					"setting up mpss memory failed: %d\n", ret);
+> > +			goto release_firmware;
+> > +		}
+> > +	}
+> > +
+> > +	/**
 >
->
-> "Rafael J. Wysocki" <rafael@kernel.org> writes:
->
-> > On Tue, May 10, 2022 at 5:42 PM Schspa Shi <schspa@gmail.com>
-> > wrote:
-> >>
-> >> When cpufreq online failed, policy->cpus are not empty while
-> >> cpufreq sysfs file available, we may access some data freed.
-> >>
-> >> Take policy->clk as an example:
-> >>
-> >> static int cpufreq_online(unsigned int cpu)
-> >> {
-> >>   ...
-> >>   // policy->cpus != 0 at this time
-> >>   down_write(&policy->rwsem);
-> >>   ret = cpufreq_add_dev_interface(policy);
-> >>   up_write(&policy->rwsem);
-> >>
-> >>   down_write(&policy->rwsem);
-> >>   ...
-> >>   /* cpufreq nitialization fails in some cases */
-> >>   if (cpufreq_driver->get && has_target()) {
-> >>     policy->cur = cpufreq_driver->get(policy->cpu);
-> >>     if (!policy->cur) {
-> >>       ret = -EIO;
-> >>       pr_err("%s: ->get() failed\n", __func__);
-> >>       goto out_destroy_policy;
-> >>     }
-> >>   }
-> >>   ...
-> >>   up_write(&policy->rwsem);
-> >>   ...
-> >>
-> >>   return 0;
-> >>
-> >> out_destroy_policy:
-> >>         for_each_cpu(j, policy->real_cpus)
-> >>                 remove_cpu_dev_symlink(policy,
-> >>                 get_cpu_device(j));
-> >>     up_write(&policy->rwsem);
-> >> ...
-> >> out_exit_policy:
-> >>   if (cpufreq_driver->exit)
-> >>     cpufreq_driver->exit(policy);
-> >>       clk_put(policy->clk);
-> >>       // policy->clk is a wild pointer
-> >> ...
-> >>                                     ^
-> >>                                     |
-> >>                             Another process access
-> >>                             __cpufreq_get
-> >>                               cpufreq_verify_current_freq
-> >>                                 cpufreq_generic_get
-> >>                                   // acces wild pointer of
-> >>                                   policy->clk;
-> >>                                     |
-> >>                                     |
-> >> out_offline_policy:                 |
-> >>   cpufreq_policy_free(policy);      |
-> >>     // deleted here, and will wait for no body reference
-> >>     cpufreq_policy_put_kobj(policy);
-> >> }
-> >>
-> >> We can fix it by clear the policy->cpus mask.
-> >> Both show_scaling_cur_freq and show_cpuinfo_cur_freq will
-> >> return an
-> >> error by checking this mask, thus avoiding UAF.
-> >
-> > So the UAF only happens if something is freed by ->offline() or
-> > ->exit() and I'm not sure where the mask is checked in the
-> > scaling_cur_freq() path.
-> >
->
-> In the current code, it is checked in the following path:
-> show();
->   down_read(&policy->rwsem);
->   ret = fattr->show(policy, buf);
->     show_cpuinfo_cur_freq
->       __cpufreq_get
->         if (unlikely(policy_is_inactive(policy)))
->           return 0;
->   up_read(&policy->rwsem);
+> Single star please
 
-This is cpuinfo_cur_freq and I was talking about scaling_cur_freq.
+Will fix in v2
 
-> > Overall, the patch is really two changes in one IMO.
-> >
-> >> Signed-off-by: Schspa Shi <schspa@gmail.com>
-> >>
-> >> ---
-> >>
-> >> Changelog:
-> >> v1 -> v2:
-> >>         - Fix bad critical region enlarge which causes
-> >>         uninitialized
-> >>           unlock.
-> >> v2 -> v3:
-> >>         - Remove the missed down_write() before
-> >>           cpumask_and(policy->cpus, policy->cpus,
-> >>           cpu_online_mask);
-> >>
-> >> Signed-off-by: Schspa Shi <schspa@gmail.com>
-> >> ---
-> >>  drivers/cpufreq/cpufreq.c | 6 +++---
-> >>  1 file changed, 3 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/drivers/cpufreq/cpufreq.c
-> >> b/drivers/cpufreq/cpufreq.c
-> >> index 80f535cc8a75..d93958dbdab8 100644
-> >> --- a/drivers/cpufreq/cpufreq.c
-> >> +++ b/drivers/cpufreq/cpufreq.c
-> >> @@ -1337,12 +1337,12 @@ static int cpufreq_online(unsigned int
-> >> cpu)
-> >>                 down_write(&policy->rwsem);
-> >>                 policy->cpu = cpu;
-> >>                 policy->governor = NULL;
-> >> -               up_write(&policy->rwsem);
-> >>         } else {
-> >>                 new_policy = true;
-> >>                 policy = cpufreq_policy_alloc(cpu);
-> >>                 if (!policy)
-> >>                         return -ENOMEM;
-> >> +               down_write(&policy->rwsem);
-> >>         }
-> >>
-> >>         if (!new_policy && cpufreq_driver->online) {
-> >> @@ -1382,7 +1382,6 @@ static int cpufreq_online(unsigned int
-> >> cpu)
-> >>                 cpumask_copy(policy->related_cpus,
-> >>                 policy->cpus);
-> >>         }
-> >>
-> >> -       down_write(&policy->rwsem);
-> >>         /*
-> >>          * affected cpus must always be the one, which are
-> >>          online. We aren't
-> >>          * managing offline cpus here.
-> >
-> > The first change, which could and probably should be a separate
-> > patch,
-> > ends here.
-> >
-> > You prevent the rwsem from being dropped in the existing policy
-> > case
-> > and acquire it right after creating a new policy.
-> >
-> > This way ->online() always runs under the rwsem, which
-> > definitely
-> > sounds like a good idea, and policy->cpus is manipulated under
-> > the
-> > rwsem which IMV is required.
-> >
-> > As a side-effect, ->init() is also run under the rwsem, but that
-> > shouldn't be a problem as per your discussion with Viresh.
-> >
-> > So the above would be patch 1 in a series.
-> >
-> > The change below is a separate one and it addresses the
-> > particular
-> > race you've discovered, as long as patch 1 above is present.  It
-> > would
-> > be patch 2 in the series.
-> >
-> >> @@ -1533,7 +1532,7 @@ static int cpufreq_online(unsigned int
-> >> cpu)
-> >>         for_each_cpu(j, policy->real_cpus)
-> >>                 remove_cpu_dev_symlink(policy,
-> >>                 get_cpu_device(j));
-> >>
-> >> -       up_write(&policy->rwsem);
-> >> +       cpumask_clear(policy->cpus);
-> >
-> > It is OK to clear policy->cpus here, because ->offline() and
-> > ->exit()
-> > are called with policy->cpus clear from cpufreq_offline() and
-> > cpufreq_remove_dev(), so they cannot assume policy->cpus to be
-> > populated when they are invoked.  However, this needs to be
-> > stated in
-> > the changelog of patch 2.
-> >
 >
-> OK, I will separate it into two patch.
+> >   	 * In case of a modem subsystem restart on secure devices, the modem
+> >   	 * memory can be reclaimed only after MBA is loaded.
+> >   	 */
+> > @@ -1413,7 +1426,6 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
+> >   			writel(RMB_CMD_LOAD_READY, qproc->rmb_base + RMB_MBA_COMMAND_REG);
+> >   		}
+> >   		writel(size, qproc->rmb_base + RMB_PMI_CODE_LENGTH_REG);
+> > -
+> >   		ret =3D readl(qproc->rmb_base + RMB_MBA_STATUS_REG);
+> >   		if (ret < 0) {
+> >   			dev_err(qproc->dev, "MPSS authentication failed: %d\n",
+> > @@ -1422,6 +1434,7 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
+> >   		}
+> >   	}
+> >  =20
+> > +
 >
-> >>  out_offline_policy:
-> >>         if (cpufreq_driver->offline)
-> >> @@ -1542,6 +1541,7 @@ static int cpufreq_online(unsigned int
-> >> cpu)
-> >>  out_exit_policy:
-> >>         if (cpufreq_driver->exit)
-> >>                 cpufreq_driver->exit(policy);
-> >> +       up_write(&policy->rwsem);
-> >
-> > It is consistent to run ->offline() and ->exit() under the
-> > rwsem, so
-> > this change is OK too.
-> >
-> >>  out_free_policy:
-> >>         cpufreq_policy_free(policy);
-> >> --
-> >
-> > That said, there still are races that are not addressed by the
-> > above,
-> > so I would add patch 3 changing show() to check
-> > policy_is_inactive()
-> > under the rwsem.
-> >
->
-> Yes, let me upload a new patch for this change.
+> Unnecessary
 
-Cool, thanks!
+Will fix in v2
+>
+>
+> >   	/* Transfer ownership of modem ddr region to q6 */
+> >   	ret =3D q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm, false, tru=
+e,
+> >   				      qproc->mpss_phys, qproc->mpss_size);
+> > @@ -2198,6 +2211,44 @@ static const struct rproc_hexagon_res msm8996_ms=
+s =3D {
+> >   	.version =3D MSS_MSM8996,
+> >   };
+> >  =20
+> > +static const struct rproc_hexagon_res msm8953_mss =3D {
+> > +	.hexagon_mba_image =3D "mba.mbn",
+> > +	.proxy_supply =3D (struct qcom_mss_reg_res[]) {
+> > +		{
+> > +			.supply =3D "pll",
+> > +			.uA =3D 100000,
+> > +		},
+> > +		{}
+> > +	},
+> > +	.proxy_pd_names =3D (char*[]) {
+> > +			"cx",
+> > +			"mx",
+> > +			NULL
+> > +	},
+> > +	.active_supply =3D (struct qcom_mss_reg_res[]) {
+> > +		{
+> > +			.supply =3D "mss",
+> > +			.uV =3D 1050000,
+> > +			.uA =3D 100000,
+> > +		},
+> > +		{}
+> > +	},
+> > +	.proxy_clk_names =3D (char*[]){
+> > +			"xo",
+> > +			NULL
+> > +	},
+> > +	.active_clk_names =3D (char*[]){
+> > +			"iface",
+> > +			"bus",
+> > +			"mem",
+> > +			NULL
+> > +	},
+> > +	.need_mem_protection =3D false,
+> > +	.has_alt_reset =3D false,
+> > +	.has_spare_reg =3D false,
+>
+>
+> Please follow the custom  and define the rest of fields here.
+
+Will fix in v2
+>
+> > +	.version =3D MSS_MSM8953,
+> > +};
+> > +
+> >   static const struct rproc_hexagon_res msm8916_mss =3D {
+> >   	.hexagon_mba_image =3D "mba.mbn",
+> >   	.proxy_supply =3D (struct qcom_mss_reg_res[]) {
+> > @@ -2301,6 +2352,7 @@ static const struct of_device_id q6v5_of_match[] =
+=3D {
+> >   	{ .compatible =3D "qcom,msm8916-mss-pil", .data =3D &msm8916_mss},
+> >   	{ .compatible =3D "qcom,msm8974-mss-pil", .data =3D &msm8974_mss},
+> >   	{ .compatible =3D "qcom,msm8996-mss-pil", .data =3D &msm8996_mss},
+> > +	{ .compatible =3D "qcom,msm8953-mss-pil", .data =3D &msm8953_mss},
+> >   	{ .compatible =3D "qcom,msm8998-mss-pil", .data =3D &msm8998_mss},
+> >   	{ .compatible =3D "qcom,sc7180-mss-pil", .data =3D &sc7180_mss},
+> >   	{ .compatible =3D "qcom,sc7280-mss-pil", .data =3D &sc7280_mss},
+>
+>
+> --=20
+> With best wishes
+> Dmitry
+
+Thanks,
+Sireesh

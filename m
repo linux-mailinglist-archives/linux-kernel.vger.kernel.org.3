@@ -2,121 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33927524DBD
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2DEF524DC1
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 15:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354106AbiELNFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 09:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40464 "EHLO
+        id S1354126AbiELNFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 09:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354109AbiELNFH (ORCPT
+        with ESMTP id S1354113AbiELNFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 09:05:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B00DF24F0D1
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:05:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652360704;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=efOMr3P/7pGohN9ErE4jqv2LFNSoc71Z8ICykAkWQU4=;
-        b=ZAd/ciL751cl3b3Gi/6Qx8aPT+I1X7d74HyQzlIusChTx20ipjI6lRtqjrRdFiIhXaX2Bh
-        hcLxJMtGrOKp9NOVe+YazU8VP0F8Oa+L8jPBvH5yN4bCwma8Z5JYhGzdaXP7xQik6bZS2w
-        74LRearqVDvaC+wNv6XIOTBJGm0kkrc=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-81-HnpCOUiZOHO01vNbvQvfbA-1; Thu, 12 May 2022 09:05:02 -0400
-X-MC-Unique: HnpCOUiZOHO01vNbvQvfbA-1
-Received: by mail-wm1-f69.google.com with SMTP id bi5-20020a05600c3d8500b0039489e1d18dso4367062wmb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 06:05:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=efOMr3P/7pGohN9ErE4jqv2LFNSoc71Z8ICykAkWQU4=;
-        b=gnFYkAyAUoXUWfu6t7BcYWUJACg5TnjDzU8246+RW0Nh5KJhQrEe5G6tYruDMP1Z/3
-         X9ZfLwcJqU2olfrbcdY8v6iS/1zGfj159fs0xUKZvFwGca5/pqnSJ/XespSBVSnmbPDa
-         XVNGJSIGP8QrnV+D6O7KIBVTO9UVJbTih+StvJSMu3KWyYbWM5/RXlkzyfOW2QtKk18z
-         pNGDGpS1jFIidHHckwCOJ268niFzjDiLGxLyYLtLCjmczjP9yXLHVmMdMCukX7OMyOsy
-         RMMcVQfDcK+FFp+yyKcHpRxLg0rGehgK/ORQ/MIs0KksAmuyZdRAcClwLBp+VZ7oi0du
-         k3wA==
-X-Gm-Message-State: AOAM531K2SYq86ATt4gfiKR4jNo+KYRePNwp6rCOSyHEDYfZSMGvEKnO
-        a2DZTTuNrd77iUN4jVgXzjPi9Hj4pq+akbLbcqFXriMqmOj7EOouPwatdOnAKdVOp3arS97uB5S
-        QoRlHXYvEGcA5NprMlg8RCbP0
-X-Received: by 2002:a5d:5502:0:b0:20a:e0aa:90bd with SMTP id b2-20020a5d5502000000b0020ae0aa90bdmr28284043wrv.551.1652360700699;
-        Thu, 12 May 2022 06:05:00 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxdbDUlWFRb1WciroIQ1XDBEiFyzj/9JbtF68Ro3xbJ4jLGkiv/MQOmwWuOkoPWwT9ahyEkiw==
-X-Received: by 2002:a5d:5502:0:b0:20a:e0aa:90bd with SMTP id b2-20020a5d5502000000b0020ae0aa90bdmr28284017wrv.551.1652360700457;
-        Thu, 12 May 2022 06:05:00 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c701:d200:ee5d:1275:f171:136d? (p200300cbc701d200ee5d1275f171136d.dip0.t-ipconnect.de. [2003:cb:c701:d200:ee5d:1275:f171:136d])
-        by smtp.gmail.com with ESMTPSA id a7-20020a7bc1c7000000b0039429bfebeasm2647067wmj.2.2022.05.12.06.04.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 06:04:59 -0700 (PDT)
-Message-ID: <284eec3f-a79d-c5f0-3cd6-53b8e64100cd@redhat.com>
-Date:   Thu, 12 May 2022 15:04:57 +0200
+        Thu, 12 May 2022 09:05:13 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BE320F4F1;
+        Thu, 12 May 2022 06:05:05 -0700 (PDT)
+X-UUID: 87dee6ed4fa44a5f9c12b7f8518422a7-20220512
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:0c1c24e1-58a1-4cc5-bb7d-54c0783dc77c,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:faefae9,CLOUDID:3eb212a7-eab7-4b74-a74d-5359964535a9,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 87dee6ed4fa44a5f9c12b7f8518422a7-20220512
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <johnson.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 2047737170; Thu, 12 May 2022 21:04:59 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 12 May 2022 21:04:59 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 12 May 2022 21:04:59 +0800
+Message-ID: <14cdb1e17015e299231e72356e661203d4beda17.camel@mediatek.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: interconnect: Add MediaTek CCI
+ dt-bindings
+From:   Johnson Wang <johnson.wang@mediatek.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>
+CC:     <krzk+dt@kernel.org>, <cw00.choi@samsung.com>,
+        <robh+dt@kernel.org>, <kyungmin.park@samsung.com>,
+        <khilman@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <jia-wei.chang@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 12 May 2022 21:04:59 +0800
+In-Reply-To: <CAGXv+5G6Qv1JcsZNrw5=USJSzPkczW42FgXRYqAK=xS-moO6nw@mail.gmail.com>
+References: <20220425125546.4129-1-johnson.wang@mediatek.com>
+         <20220425125546.4129-2-johnson.wang@mediatek.com>
+         <CAGXv+5HgyN+kp86M2GgFtbruXSAMSLxsh9vf8zVE5TxRMyTyaA@mail.gmail.com>
+         <a8e5fd9de1feece9051e1624c5cf3b672131a122.camel@mediatek.com>
+         <CAGXv+5G6Qv1JcsZNrw5=USJSzPkczW42FgXRYqAK=xS-moO6nw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v10 2/4] mm: memory_hotplug: override memmap_on_memory
- when hugetlb_free_vmemmap=on
-Content-Language: en-US
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     corbet@lwn.net, mike.kravetz@oracle.com, akpm@linux-foundation.org,
-        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        osalvador@suse.de, masahiroy@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        duanxiongchun@bytedance.com, smuchun@gmail.com
-References: <20220509062703.64249-1-songmuchun@bytedance.com>
- <20220509062703.64249-3-songmuchun@bytedance.com>
- <ebffd794-697b-9bf1-f41b-4b2d52c100fc@redhat.com>
- <Yn0Ck5isxx4ghQi6@FVFYT0MHHV2J.usts.net>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <Yn0Ck5isxx4ghQi6@FVFYT0MHHV2J.usts.net>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.05.22 14:50, Muchun Song wrote:
-> On Thu, May 12, 2022 at 09:36:15AM +0200, David Hildenbrand wrote:
->> On 09.05.22 08:27, Muchun Song wrote:
->>> Optimizing HugeTLB vmemmap pages is not compatible with allocating memmap on
->>> hot added memory. If "hugetlb_free_vmemmap=on" and
->>> memory_hotplug.memmap_on_memory" are both passed on the kernel command line,
->>> optimizing hugetlb pages takes precedence. 
->>
->> Why?
->>
+On Wed, 2022-05-11 at 18:48 +0800, Chen-Yu Tsai wrote:
+> On Mon, May 9, 2022 at 8:14 PM Johnson Wang <
+> johnson.wang@mediatek.com> wrote:
+> > 
+> > Hi Chen-Yu,
+> > 
+> > On Tue, 2022-04-26 at 11:18 +0800, Chen-Yu Tsai wrote:
+> > > On Mon, Apr 25, 2022 at 8:56 PM Johnson Wang <
+> > > johnson.wang@mediatek.com> wrote:
+> > > > 
+> > > > Add devicetree binding of MediaTek CCI on MT8183 and MT8186.
+> > > > 
+> > > > Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+> > > > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> > > > ---
+> > > >  .../bindings/interconnect/mediatek,cci.yaml   | 139
+> > > > ++++++++++++++++++
+> > > >  1 file changed, 139 insertions(+)
+> > > >  create mode 100644
+> > > > Documentation/devicetree/bindings/interconnect/mediatek,cci.yam
+> > > > l
+> > > > 
+> > > > diff --git
+> > > > a/Documentation/devicetree/bindings/interconnect/mediatek,cci.y
+> > > > aml
+> > > > b/Documentation/devicetree/bindings/interconnect/mediatek,cci.y
+> > > > aml
+> > > > new file mode 100644
+> > > > index 000000000000..e5221e17d11b
+> > > > --- /dev/null
+> > > > +++
+> > > > b/Documentation/devicetree/bindings/interconnect/mediatek,cci.y
+> > > > aml
+> > > > @@ -0,0 +1,139 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id:
+> > > > 
+https://urldefense.com/v3/__http://devicetree.org/schemas/interconnect/mediatek,cci.yaml*__;Iw!!CTRNKA9wMg0ARbw!zuufEcqpKbditY3eqLTHpL8P8humMCyh4D4QWsximmw124tJUPE3ZBUyBqBtDlQ9pSDO$
+> > > > 
+> > > > +$schema:
+> > > > 
+https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!zuufEcqpKbditY3eqLTHpL8P8humMCyh4D4QWsximmw124tJUPE3ZBUyBqBtDoE9YHyu$
+> > > > 
+> > > > +
+> > > > +title: MediaTek Cache Coherent Interconnect (CCI) frequency
+> > > > and
+> > > > voltage scaling
+> > > > +
+> > > > +maintainers:
+> > > > +  - Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> > > > +
+> > > > +description: |
+> > > > +  MediaTek Cache Coherent Interconnect (CCI) is a hardware
+> > > > engine
+> > > > used by
+> > > > +  MT8183 and MT8186 SoCs to scale the frequency and adjust the
+> > > > voltage in
+> > > > +  hardware. It can also optimize the voltage to reduce the
+> > > > power
+> > > > consumption.
+> > > > +
+> > > > +properties:
+> > > > +  compatible:
+> > > > +    enum:
+> > > > +      - mediatek,mt8183-cci
+> > > > +      - mediatek,mt8186-cci
+> > > > +
+> > > > +  clocks:
+> > > > +    items:
+> > > > +      - description:
+> > > > +          The multiplexer for clock input of CPU cluster.
+> > > 
+> > > of the bus, not CPU cluster.
+> > 
+> > Thanks for your suggestion.
+> > I will correct it in the next version.
+> > 
+> > > 
+> > > > +      - description:
+> > > > +          A parent of "cpu" clock which is used as an
+> > > > intermediate
+> > > > clock source
+> > > > +          when the original CPU is under transition and not
+> > > > stable
+> > > > yet.
+> > > 
+> > > This really should be handled in the clk controller, and not by
+> > > every
+> > > device
+> > > that happens to take a clock from a mux with upstream PLLs that
+> > > can
+> > > change
+> > > in clock rate. The end device hardware only takes one clock
+> > > input.
+> > > That's it.
+> > > 
+> > 
+> > To make this intermediate clock works properly, this driver is also
+> > responsible for handling the Vproc voltage and ensures the voltage
+> > is
+> > high enough to support intermediate clock rate.
+> > 
+> > If we move intermediate clock rate control to clock driver, then
+> > intermediate voltage control may be handled by the clock driver
+> > itself
+> > as well.
+> > 
+> > We believe that is not reasonable because clock driver shouldn't
+> > handle
+> > voltage control. On the other hand, DVFS driver is more suitable
+> > for
+> > doing this job.
 > 
-> Because both two features are not compatible since hugetlb_free_vmemmap cannot
-> optimize the vmemmap pages allocated from alternative allocator (when
-> memory_hotplug.memmap_on_memory=1). So when the feature of hugetlb_free_vmemmap
-> is introduced, I made hugetlb_free_vmemmap take precedence.  BTW, I have a plan
-> to remove this restriction, I'll post it out ASAP.
+> Either way the DVFS driver handles the voltage change.
+> 
+> Right now the driver is doing:
+> 
+> 1. Raise voltage if scaling up
+> 2. Mux CCI clock over to stable clock
+> 3. Set rate for CCI PLL
+> 4. Mux CCI clock back to CCI PLL
+> 5. Drop voltage if scaling down
+> 
+> I'm saying that the clock driver should handle 2+4 transparently when
+> any
+> driver requests a rate change on the CCI clock. So instead the driver
+> would
+> do:
+> 
+> 1. Raise voltage if scaling up
+> 2. Set rate for CCI _clock_
+>    Here the clock driver would do:
+>    a. Mux CCI clock over to stable clock
+>    b. Change clock rate for original parent, i.e. the CCI PLL
+>    c. Mux CCI clock back to original parent, i.e. the CCI PLL
+>    and back to the devfreq driver ...
+> 3. Drop voltage if scaling down
+> 
+> Does that make sense?
+> 
+> 
+> Regards
+> ChenYu
 
-I was asking why vmemmap optimization should take precedence.
-memmap_on_memory makes it more likely to succeed memory hotplug in
-close-to-OOM situations -- which is IMHO more important than a vmemmap
-optimization.
+Hi Chen-Yu,
 
-But anyhow, the proper approach should most probably be to simply not
-mess with the vmemmap if we stumble over a vmemmap that's special due to
-memmap_on_memory. I assume that's what you're talking about sending out.
+Before we mux the CCI clock to an intermediate clock(MAINPLL), we must
+ensure that regulator voltage is high enough (we call it intermediate
+voltage) to support the intermediate clock rate.
 
--- 
-Thanks,
+Based on this concept, if we move mux control to clock driver, there
+will be a dilemma about which driver to adjust the voltage.
 
-David / dhildenb
+1)When DVFS calls clk_set_rate(), clock driver scales up the regulator
+voltage to higher than intermediate voltage and then mux the CCI clock.
+
+This option is not reasonable because clock driver shouldn't handle the
+regulators.
+
+
+2)DVFS scales up the regulator voltage, then calls clk_set_rate(). 
+Clock driver mux the CCI clock to the intermediate clock.
+
+This option isn't straightforward and makes one confused easily. For a
+person who reads this driver, he may not understand why we adjust the
+voltage before clk_set_rate().
+
+That's why we put intermediate voltage/freq together in the DVFS.
+
+BRs,
+Johnson Wang
 

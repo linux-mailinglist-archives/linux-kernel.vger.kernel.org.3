@@ -2,166 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A80CB524802
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 10:38:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B27F52480A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 10:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351537AbiELIiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 04:38:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
+        id S1351513AbiELIjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 04:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351557AbiELIiC (ORCPT
+        with ESMTP id S240447AbiELIjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 04:38:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A1B611D47B
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 01:37:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652344668;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OkIXUkBDrNt6gkclimZnecKQlrFAMYowusbdeJJW6fc=;
-        b=OVOVn4V4VhKL9LG6lRWmT9StS8thsuDJDbNSteBDFxYnd7ozM6aoKC5VZZi8Bs4S46kr56
-        hasQSESulaU7lZlCtwrP2ovxFXmE2UynO7lgJgNVYcJoGTcz5sc04fMpzaS+2wlMs9MXoK
-        bIc3QSFsTeL+i/zMqhfM97nq0vfZuPM=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-497-I2ZINpajNrCOk0Mr0hAMFw-1; Thu, 12 May 2022 04:37:47 -0400
-X-MC-Unique: I2ZINpajNrCOk0Mr0hAMFw-1
-Received: by mail-wm1-f72.google.com with SMTP id i18-20020a1c5412000000b0039491a8298cso1395828wmb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 01:37:47 -0700 (PDT)
+        Thu, 12 May 2022 04:39:44 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AA126108;
+        Thu, 12 May 2022 01:39:43 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id q23so6214996wra.1;
+        Thu, 12 May 2022 01:39:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=PCs+Ktha+vtmFq4XrExb1Mfp7UobjBZfKORd/6xUEnQ=;
+        b=iH0GrPY8XRZBVfl7obokvqEguSGfgHDNW8WAl7iOB+g/Tlurte7GKIvSy3OEiTVO04
+         eeh/9EJnTUt6gzmU0bJjxim8YpzFs4XRKTC8P/aVgEsfaam05KCZbdiKxj29+g1xkBf2
+         UswmbtAGRTFvqTtmGRyBTdOYcZ91J6QPLUDDL9SOMpFlBJobtcsSwimEIYKHDMDu7YNx
+         1BVEe5l3GsRKpiGKl6dB3pC9DEHDcu+83r0s6ZCjgVOR2/pWwazCqY3XbkZXfdcQz8RU
+         dWawCs8ihVRvFOIIN+xL2Nx6s/6O7CHzwkCSwJ30NXqCG6IpajUa2NASiP9w4dKNfVa3
+         GKXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=OkIXUkBDrNt6gkclimZnecKQlrFAMYowusbdeJJW6fc=;
-        b=q72lNa7W5fROS0jhNsVhYqet0ctNTz9E0dE77WaCNCv4nzFJXWk6QcCxb9KJXv7qjN
-         nRnwDlCAh76xcijWXHDswkg5KCntyWYFIVh8BrI0podfcnCbS0YXNJisAall19cn9JRP
-         xNfP8HSMmUx6yLBWZcC3gIAqPKGCSXXvHDd2AlLJsQ/YGbS1OuOkdubb2Vfl580GYqv4
-         RT/IIOnmlT0x+dXD9r/OOKEvIgJxy7M7VQG7pANUL6JI9bHDE+6uHOVxjd0ORmYEfJdn
-         1JMiCS8rTeQZRR2anL0DWqlG7PDM5jQFnC1TUrjuOW1bMq/x/dF68pkhHcCIY7wuHzhk
-         Xkgw==
-X-Gm-Message-State: AOAM532qIGA8ZsXoVUOMoQwT8nKrQhPAZNUBot01fUX5VA60Xy5kkqW7
-        7MxZX9b00JDNJDpF9c4q6EKixVMEuhCYGACGRz6Q9qOZQbhbKCkeZyYeh+4TPPtbjcpFEYbZ2sv
-        HFvHHZpggpNyDnl997q1MTmLt
-X-Received: by 2002:a1c:a101:0:b0:392:942f:3aa with SMTP id k1-20020a1ca101000000b00392942f03aamr8816044wme.1.1652344666110;
-        Thu, 12 May 2022 01:37:46 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzgf711/RFrj05nYXdhIx+rCvhiA/Ah1yBm1xcLQHu4NExlITaxfpFeBNlbx9hzj5nysIHkzA==
-X-Received: by 2002:a1c:a101:0:b0:392:942f:3aa with SMTP id k1-20020a1ca101000000b00392942f03aamr8816024wme.1.1652344665892;
-        Thu, 12 May 2022 01:37:45 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id f16-20020a7bc8d0000000b003949dbc3790sm2035834wml.18.2022.05.12.01.37.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 01:37:45 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Subject: Re: [PATCH 2/2] x86/reboot: Disable virtualization in an emergency
- if SVM is supported
-In-Reply-To: <20220511234332.3654455-3-seanjc@google.com>
-References: <20220511234332.3654455-1-seanjc@google.com>
- <20220511234332.3654455-3-seanjc@google.com>
-Date:   Thu, 12 May 2022 10:37:44 +0200
-Message-ID: <87ee0zxi1z.fsf@redhat.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=PCs+Ktha+vtmFq4XrExb1Mfp7UobjBZfKORd/6xUEnQ=;
+        b=t2sofQsL+h0qfX2aL995CLH3Ot3hXpQZk3cvTslM2r9TcedqVezSbqd9Opa0GKCkdq
+         k/OSGvDRzc0nu5IMrp6cAPXkYtRoHxA/PCYqYygxQP4mzpl73nEoV1qwdgNrPYoJyxuq
+         6mRu4sGJscedyZkmtVQ0JjHg00YMukJynGi6Q06noiGDr35QP4IFLFbCsxwO67d4SLZD
+         XAg4WrHgoc5fVTscpIE8FihNR/BCUJEbxLTykqxaLz+Jcl2VvjIaRuMIWsBltomqFpcJ
+         /jHt0iCMEw3Gnzlve4GKCUYY0KpjZCWh1Z9noTLvKgSLbRRZ6MtZasQgPJyhi4ItXner
+         krNQ==
+X-Gm-Message-State: AOAM530a9+X1cI9LMeaux4/FZW7nld8IfbhLLCp7EtshR473yvr+L+R4
+        Yg7ZdiF2EXTSKa68xp8Hzu8=
+X-Google-Smtp-Source: ABdhPJy4QFCs5Y2zJviQsqFOIlBsNYoUoAruuqg+WA6gkEtBygBCD5Bsi3bVQffDIbA1Z2Vm9UAlEw==
+X-Received: by 2002:adf:f748:0:b0:20c:86d5:c343 with SMTP id z8-20020adff748000000b0020c86d5c343mr26423046wrp.477.1652344781737;
+        Thu, 12 May 2022 01:39:41 -0700 (PDT)
+Received: from [192.168.1.8] ([197.57.250.210])
+        by smtp.gmail.com with ESMTPSA id c1-20020a5d4cc1000000b0020c5253d8ccsm3584868wrt.24.2022.05.12.01.39.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 01:39:41 -0700 (PDT)
+Message-ID: <191b395a-996b-597e-4ee9-06722ac3c776@gmail.com>
+Date:   Thu, 12 May 2022 10:39:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH net-next v6 2/2] net: vxlan: Add extack support to
+ vxlan_fdb_delete
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, outreachy@lists.linux.dev,
+        roopa@nvidia.com, jdenham@redhat.com, sbrivio@redhat.com,
+        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, pabeni@redhat.com, vladimir.oltean@nxp.com,
+        claudiu.manoil@nxp.com, alexandre.belloni@bootlin.com,
+        shshaikh@marvell.com, manishc@marvell.com, razor@blackwall.org,
+        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, GR-Linux-NIC-Dev@marvell.com,
+        bridge@lists.linux-foundation.org
+References: <cover.1651762829.git.eng.alaamohamedsoliman.am@gmail.com>
+ <ac4b6c650b6519cc56baa32ef20415460a5aa8ee.1651762830.git.eng.alaamohamedsoliman.am@gmail.com>
+ <20220509154603.4a7b4243@kernel.org>
+From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+In-Reply-To: <20220509154603.4a7b4243@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
 
-> Disable SVM on all CPUs via NMI shootdown during an emergency reboot.
-> Like VMX, SVM can block INIT and thus prevent bringing up other CPUs via
-> INIT-SIPI-SIPI.
+On ١٠‏/٥‏/٢٠٢٢ ٠٠:٤٦, Jakub Kicinski wrote:
+> On Thu,  5 May 2022 17:09:58 +0200 Alaa Mohamed wrote:
+>> +			NL_SET_ERR_MSG(extack,
+>> +						  "DST, VNI, ifindex and port are mutually exclusive with NH_ID");
+> This continuation line still does not align with the opening bracket.
+> Look here if your email client makes it hard to see:
 >
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kernel/reboot.c | 26 ++++++++++++++------------
->  1 file changed, 14 insertions(+), 12 deletions(-)
+> https://lore.kernel.org/all/ac4b6c650b6519cc56baa32ef20415460a5aa8ee.1651762830.git.eng.alaamohamedsoliman.am@gmail.com/
 >
-> diff --git a/arch/x86/kernel/reboot.c b/arch/x86/kernel/reboot.c
-> index f9543a4e9b09..33c1f4883b27 100644
-> --- a/arch/x86/kernel/reboot.c
-> +++ b/arch/x86/kernel/reboot.c
-> @@ -533,27 +533,29 @@ static void nmi_shootdown_nop(int cpu, struct pt_regs *regs)
->  	/* Nothing to do, the NMI shootdown handler disables virtualization. */
->  }
->  
-> -/* Use NMIs as IPIs to tell all CPUs to disable virtualization */
-> -static void emergency_vmx_disable_all(void)
-> +static void emergency_reboot_disable_virtualization(void)
->  {
->  	/* Just make sure we won't change CPUs while doing this */
->  	local_irq_disable();
->  
->  	/*
-> -	 * Disable VMX on all CPUs before rebooting, otherwise we risk hanging
-> -	 * the machine, because the CPU blocks INIT when it's in VMX root.
-> +	 * Disable virtualization on all CPUs before rebooting to avoid hanging
-> +	 * the system, as VMX and SVM block INIT when running in the host
->  	 *
->  	 * We can't take any locks and we may be on an inconsistent state, so
-> -	 * use NMIs as IPIs to tell the other CPUs to exit VMX root and halt.
-> +	 * use NMIs as IPIs to tell the other CPUs to disable VMX/SVM and halt.
->  	 *
-> -	 * Do the NMI shootdown even if VMX if off on _this_ CPU, as that
-> -	 * doesn't prevent a different CPU from being in VMX root operation.
-> +	 * Do the NMI shootdown even if virtualization is off on _this_ CPU, as
-> +	 * other CPUs may have virtualization enabled.
->  	 */
-> -	if (cpu_has_vmx()) {
-> -		/* Safely force _this_ CPU out of VMX root operation. */
-> -		__cpu_emergency_vmxoff();
-> +	if (cpu_has_vmx() || cpu_has_svm(NULL)) {
-> +		/* Safely force _this_ CPU out of VMX/SVM operation. */
-> +		if (cpu_has_vmx())
-> +			__cpu_emergency_vmxoff();
-> +		else
-> +			cpu_emergency_svm_disable();
->  
-> -		/* Halt and exit VMX root operation on the other CPUs. */
-> +		/* Disable VMX/SVM and halt on other CPUs. */
->  		nmi_shootdown_cpus(nmi_shootdown_nop);
->  	}
+> Same story in patch 1:
+>
+>>   static int ocelot_port_fdb_del(struct ndmsg *ndm, struct nlattr *tb[],
+>>   			       struct net_device *dev,
+>> -			       const unsigned char *addr, u16 vid)
+>> +			       const unsigned char *addr, u16 vid,
+>> +				   struct netlink_ext_ack *extack)
+> and here:
+>
+>>   static int vxlan_fdb_delete(struct ndmsg *ndm, struct nlattr *tb[],
+>>   			    struct net_device *dev,
+>> -			    const unsigned char *addr, u16 vid)
+>> +			    const unsigned char *addr, u16 vid,
+>> +				struct netlink_ext_ack *extack)
 
-Nitpicking: we can get rid of the second cpu_has_vmx() if we write this
-as:
 
-	if (cpu_has_vmx())
-		__cpu_emergency_vmxoff();
-	else if (cpu_has_svm(NULL))
-		cpu_emergency_svm_disable();
-	else 
-		return;
-
-	nmi_shootdown_cpus(nmi_shootdown_nop);
-
->  }
-> @@ -590,7 +592,7 @@ static void native_machine_emergency_restart(void)
->  	unsigned short mode;
->  
->  	if (reboot_emergency)
-> -		emergency_vmx_disable_all();
-> +		emergency_reboot_disable_virtualization();
->  
->  	tboot_shutdown(TB_SHUTDOWN_REBOOT);
-
-Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-
--- 
-Vitaly
+I will fix it, thanks.
 

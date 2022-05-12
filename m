@@ -2,170 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 771AB525638
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 22:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6640552563A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 22:07:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358279AbiELUG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 16:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57516 "EHLO
+        id S1358273AbiELUHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 16:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358274AbiELUGx (ORCPT
+        with ESMTP id S1358284AbiELUHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 16:06:53 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E114265D17
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 13:06:50 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id s12-20020a0568301e0c00b00605f30530c2so3485106otr.9
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 13:06:50 -0700 (PDT)
+        Thu, 12 May 2022 16:07:05 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC24965D18
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 13:07:03 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id y19so7872315ljd.4
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 13:07:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=ieee.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=zQaYoCe85C4OWs0lOZEThzi3C5V4+Gn0nWrkUoVxviA=;
-        b=SZogx2/smQbOu1ljZOuPd1be4aSXBhM2T0qGSEzJH+p3lVSle6GL68sLBALkTUnEQg
-         T9fliaMhIdImcbaGR8BkughVY0chn+k+f3YuQSvMMo88ni23k2AloWvCLQBEEb8hs5H+
-         /HyRBvVbLWZLWHyM679x0swWskgKVxOAaFeCwnG+khnruWbeQiASf5mkATYeZ+bnoXTd
-         Oepk+aWBC+K/KYrcT54hgqPcgP8Jqp6A+a21SEmOw+rKBTIS8NaFWgqQ5pHe5EI17JmD
-         1xqLNu/iuY4rCLHouiBMtcF7EQqO2Qtf0apq7w1j9ZJZqZMcF3HFWbzXSSD4j8mIJ/Kw
-         j9PA==
+        bh=oO7C2vw614ul0mQK6BxzOvLBf+YYDu+I4LzerhhwUEU=;
+        b=HTV3Wkh2Lp4YrH79XsJ7m0xKncbjKkXKpfJU55vortLtEMUxXdGTLCNroyEEFytiTy
+         dB11pDocVgYUwakiYNWnPx9xXCiovqxq1mS8kxFMtFs4y9cavCyv7fkpYSyCbGcgBV0v
+         ZMWBp2vvvkseRGrEx1+gl02Ta3LNPqo54W+zU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=zQaYoCe85C4OWs0lOZEThzi3C5V4+Gn0nWrkUoVxviA=;
-        b=nHfrdzWy9Pc/JQv5ltqAKO0ITKSSJNyunai4vchzzEvdtGh+KKVvQ926+djjDB4xlK
-         NtGaAwmeORrP3Qi6y/4h2YvWz8DN2yZhQchgQ+N5XtYYWPu/JWlOK2DcAJJ+/frGOx8Z
-         TNvMDX2o7SqDnAznbdmNDw0fBWGXTGo9zTiIXiNuPeeZ/y7x20VzmwK5KRZiWq7QIk2c
-         Bl5VwvhMNUqerNmAL/sPIuiWGEaJOcs3kxz5Zj/mDaJ0FSgPr2EYkADmqWqDFmxuqy2V
-         bKcN2cWAAujpuzj/YRU7t5W3QZroTF4VeyuDyBmUWpWVKlSxWKz7lgzrgOGYXp7+EPeg
-         gqsA==
-X-Gm-Message-State: AOAM533RxQM1gwEfWmWZgs65lipXRcdsaxV5FokIgIXGz4a43cAYBnf+
-        WQ8OXPMuVdHbYWX3X/kqtKE5/FFvUmzLzRBXiu8QEg==
-X-Google-Smtp-Source: ABdhPJwhHLd3+fq+h/GEibas+/Fm3MuJ74kLY7OWh8d2BlOhKbyESRCxHoOBt0FvJPmf8JtKarC8CH3oCc/jq2zfnA4=
-X-Received: by 2002:a05:6830:280e:b0:606:ae45:6110 with SMTP id
- w14-20020a056830280e00b00606ae456110mr664767otu.14.1652386009945; Thu, 12 May
- 2022 13:06:49 -0700 (PDT)
+        bh=oO7C2vw614ul0mQK6BxzOvLBf+YYDu+I4LzerhhwUEU=;
+        b=AMbLXpHCfg8OyOASropgDZ5v38XS74CyaVdHUr4PVsQVCVA9yudr0MD/9KQFRsx9a7
+         CMZhCdD315ocHU3o81pYId+TkQS8lLmXQUZAGT35UEg6t959j3bw+GL9YAOuRSOEAONI
+         9T6o2Sfy6PD5kvpc6KRkWrU/UgHJs8LpbxelbMmBvLk5IShKS5oYWJql0DHtPxujyVPG
+         MgpNz5dBuIlTPasQffGoNy3pcDyrSvc45QqpAx/n50mtBH2FwV4oi8WfQ67OyP2Feeav
+         tuMjYmjasolKTPsjge5uUafI2fY0t1uGKgpU9X996fbIolkRSdnwp3iayjgAudq88Mph
+         c1+g==
+X-Gm-Message-State: AOAM531G8Q/ZZSRmr7/v6yVVLl7xRCRpXXlx8NXc4dCJmWe+QuoFcGwV
+        S74aHPWOqV9yRZNC5bQiv++iXt0mSaizffKYO+mPHA==
+X-Google-Smtp-Source: ABdhPJzJlTnaa7a64N7kMzAJom5twCQHCM6va8kx+fcA1V4vXHNXxciYrh9O2VwNVkpoU2ZmYx1BNMaAtK9QlwkOL7Y=
+X-Received: by 2002:a2e:9993:0:b0:250:b5a9:18dc with SMTP id
+ w19-20020a2e9993000000b00250b5a918dcmr1023327lji.364.1652386021895; Thu, 12
+ May 2022 13:07:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220512184514.15742-1-jon@nutanix.com> <Yn1fjAqFoszWz500@google.com>
- <Yn1hdHgMVuni/GEx@google.com> <07BEC8B1-469C-4E36-AE92-90BFDF93B2C4@nutanix.com>
-In-Reply-To: <07BEC8B1-469C-4E36-AE92-90BFDF93B2C4@nutanix.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Thu, 12 May 2022 13:06:39 -0700
-Message-ID: <CALMp9eQbP5DdX+SA0subeHmVxZgfQ7LEZ-Cxs3AFVHUpa6nhfg@mail.gmail.com>
-Subject: Re: [PATCH v4] x86/speculation, KVM: remove IBPB on vCPU load
-To:     Jon Kohler <jon@nutanix.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ashok Raj <ashok.raj@intel.com>,
-        KarimAllah Ahmed <karahmed@amazon.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "kvm @ vger . kernel . org" <kvm@vger.kernel.org>,
-        Waiman Long <longman@redhat.com>
+References: <CAOFRbGnQ1P4q+egG+K=BcZL4bwaAdtp7hQ1nh9TYJyky0j3WDw@mail.gmail.com>
+In-Reply-To: <CAOFRbGnQ1P4q+egG+K=BcZL4bwaAdtp7hQ1nh9TYJyky0j3WDw@mail.gmail.com>
+From:   Ozgur <ozgurk@ieee.org>
+Date:   Fri, 13 May 2022 00:06:51 +0400
+Message-ID: <CAADfD8zu9z1EPwMjc0VG2aGg9kzDfpV6qcMqUCGKa+bPNTsr+g@mail.gmail.com>
+Subject: Re: ERROR: drivers: net: ethernet: stmicro: stmmac: stmmac_main.c
+To:     Test Bot <zgrieee@gmail.com>, peppe.cavallaro@st.com
+Cc:     lkml <linux-kernel@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>, linux@armlinux.org.uk,
+        linux-stm32@st-md-mailman.stormreply.com, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 12:51 PM Jon Kohler <jon@nutanix.com> wrote:
+On Thu, May 12, 2022 at 11:49 PM Test Bot <zgrieee@gmail.com> wrote:
 >
->
->
-> > On May 12, 2022, at 3:35 PM, Sean Christopherson <seanjc@google.com> wr=
-ote:
-> >
-> > On Thu, May 12, 2022, Sean Christopherson wrote:
-> >> On Thu, May 12, 2022, Jon Kohler wrote:
-> >>> Remove IBPB that is done on KVM vCPU load, as the guest-to-guest
-> >>> attack surface is already covered by switch_mm_irqs_off() ->
-> >>> cond_mitigation().
-> >>>
-> >>> The original commit 15d45071523d ("KVM/x86: Add IBPB support") was si=
-mply
-> >>> wrong in its guest-to-guest design intention. There are three scenari=
-os
-> >>> at play here:
-> >>
-> >> Jim pointed offline that there's a case we didn't consider.  When swit=
-ching between
-> >> vCPUs in the same VM, an IBPB may be warranted as the tasks in the VM =
-may be in
-> >> different security domains.  E.g. the guest will not get a notificatio=
-n that vCPU0 is
-> >> being swapped out for vCPU1 on a single pCPU.
-> >>
-> >> So, sadly, after all that, I think the IBPB needs to stay.  But the do=
-cumentation
-> >> most definitely needs to be updated.
-> >>
-> >> A per-VM capability to skip the IBPB may be warranted, e.g. for contai=
-ner-like
-> >> use cases where a single VM is running a single workload.
-> >
-> > Ah, actually, the IBPB can be skipped if the vCPUs have different mm_st=
-ructs,
-> > because then the IBPB is fully redundant with respect to any IBPB perfo=
-rmed by
-> > switch_mm_irqs_off().  Hrm, though it might need a KVM or per-VM knob, =
-e.g. just
-> > because the VMM doesn't want IBPB doesn't mean the guest doesn't want I=
-BPB.
-> >
-> > That would also sidestep the largely theoretical question of whether vC=
-PUs from
-> > different VMs but the same address space are in the same security domai=
-n.  It doesn't
-> > matter, because even if they are in the same domain, KVM still needs to=
- do IBPB.
->
-> So should we go back to the earlier approach where we have it be only
-> IBPB on always_ibpb? Or what?
->
-> At minimum, we need to fix the unilateral-ness of all of this :) since we=
-=E2=80=99re
-> IBPB=E2=80=99ing even when the user did not explicitly tell us to.
->
-> That said, since I just re-read the documentation today, it does specific=
-ally
-> suggest that if the guest wants to protect *itself* it should turn on IBP=
-B or
-> STIBP (or other mitigations galore), so I think we end up having to think
-> about what our =E2=80=9Ccontract=E2=80=9D is with users who host their wo=
-rkloads on
-> KVM - are they expecting us to protect them in any/all cases?
->
-> Said another way, the internal guest areas of concern aren=E2=80=99t some=
-thing
-> the kernel would always be able to A) identify far in advance and B)
-> always solve on the users behalf. There is an argument to be made
-> that the guest needs to deal with its own house, yea?
+> Hi,
 
-To the extent that the guest has control over its own house, yes.
+Hello,
 
-Say the guest obviates the need for internal IBPB by statically
-partitioning virtual cores into different security domains. If the
-hypervisor breaks core isolation on the physical platform, it is
-responsible for providing the necessary mitigations.
+its a bot and still in beta and looks like same warning as any other findin=
+g.
+
+Looks like Linus e-mail Linus explained this warning and i wanted to
+share e-mail.
+
+https://lore.kernel.org/lkml/CAHk-=3Dwh5E-xdc5P6SfN-ey6zvVri43rTj0g8kjUBWD3=
+hhE-jiw@mail.gmail.com/
+
+Regards
+
+> I automatically test (RC) kernel and caught ERROR word.
+> Please ignore, if its unimportant.
+>
+> Kernel: 5.18-rc6
+> Arch: x86_64 (SMP)
+> Compiler: 7.5.0 (gcc)
+> FIle: drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+>
+> Codebase Block:
+>
+> static int stmmac_request_irq_multi_msi(struct net_device *dev)
+> {
+>         struct stmmac_priv *priv =3D netdev_priv(dev);
+>         enum request_irq_err irq_err;
+>         cpumask_t cpu_mask;
+>         int irq_idx =3D 0;
+>         char *int_name;
+>         int ret;
+>         int i;
+>
+>         int_name =3D priv->int_name_mac;
+>         sprintf(int_name, "%s:%s", dev->name, "mac");
+>         ret =3D request_irq(dev->irq, stmmac_mac_interrupt,
+>                           0, int_name, dev);
+>
+>         if (unlikely(ret < 0)) {
+>                 netdev_err(priv->dev,
+>                            "%s: alloc mac MSI %d (error: %d)\n",
+>                            __func__, dev->irq, ret);
+>                 irq_err =3D REQ_IRQ_ERR_MAC;
+>                 goto irq_error;
+>         }
+>
+>         if (priv->wol_irq > 0 && priv->wol_irq !=3D dev->irq) {
+>                 int_name =3D priv->int_name_wol;
+>                 sprintf(int_name, "%s:%s", dev->name, "wol");
+>                 ret =3D request_irq(priv->wol_irq,
+>                                   stmmac_mac_interrupt,
+>                                   0, int_name, dev);
+>
+>                 if (unlikely(ret < 0)) {
+>                         netdev_err(priv->dev,
+>                                    "%s: alloc wol MSI %d (error: %d)\n",
+>                                    __func__, priv->wol_irq, ret);
+>                         irq_err =3D REQ_IRQ_ERR_WOL;
+>                         goto irq_error;
+>                 }
+>         }
+>
+> Compiler  Log:
+>
+> drivers/net/ethernet/stmicro/stmmac/stmmac_main.c: In function
+> =E2=80=98stmmac_request_irq_multi_msi=E2=80=99:
+> drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:3562:1: warning: the
+> frame size of 1040 bytes is larger than 1024 bytes
+> [-Wframe-larger-than=3D]

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FFDC525296
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7A82525293
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 18:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356487AbiELQcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 12:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59292 "EHLO
+        id S1356500AbiELQcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 12:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352659AbiELQcC (ORCPT
+        with ESMTP id S1356491AbiELQcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 12:32:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8765D63393;
-        Thu, 12 May 2022 09:32:01 -0700 (PDT)
+        Thu, 12 May 2022 12:32:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826EC63BE3;
+        Thu, 12 May 2022 09:32:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19C0061FDA;
-        Thu, 12 May 2022 16:32:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42CD2C385B8;
-        Thu, 12 May 2022 16:31:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 413E5B829B3;
+        Thu, 12 May 2022 16:32:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F02A4C34100;
+        Thu, 12 May 2022 16:32:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652373120;
-        bh=VGcrNcu5gEaD9NOE27MHl/Wr7tluunIA7FvG7tXRfBo=;
+        s=k20201202; t=1652373122;
+        bh=LWdTtVqYchwjszzCAS1sWFBPgcYklK8169G7dA5jGtY=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=NDu0ye6cxUW/ueCuDl6gfECptIn83HktVDKdLsm7vPHHBaJ0HexH7j1/JLdHBiQOJ
-         ItrnjUClt0430jfBr5nvEOe3KvCM0lNatIKSA6jluRL5teYwooYm5ufJwsQhhUIXPR
-         5Ofa0z6oTz6WEBk4JPilGcVjEdugbCkMhbIWUqdhHVMcrTPiQh8iss76niZwJX9Yba
-         pAcXkxgGoPGUgB1o5CaL2fzyYPEFqrKkIf++LFi1CU4f9m7PwJzte1BhaBLSZh+ue/
-         p3byRZEwg3npTX6d36+l1wn+8aYUKC44c7TMTHB/6JcCV+i9RIKtV8wgq+6QQV16IB
-         Ebv/04N2aE1WQ==
+        b=Wq5cBn0hHsPaDFNBu3wpOjn2Niu4AI1GT2qkBO7PnxQVeR89X9E2FQX/4pX6hfTvF
+         +1U92h/fs1DCkJtT7pI+h1O0CeZg3rNQ8MpHSqyBREA4S62KSjjJN19eOxjvhqbIuf
+         ZHdeaVrUfohZzF3S1K6WffC+9Hem+mm4uH0Yd4zytZE/ecZ8iLJ/Ixp8CZ8T8uMJtI
+         a/5xj+0H5kBfIBGx0kf6bsYerykDV+dNx5RyLPnW8DTyQZlOwJmJ2WIb35mZojP75K
+         q5hK1j97qTvzt0VJJsN0V8vjuD3mocW4/WE8pBlTtyPJQ8DGp4DeKkrk7+NU4x7LWV
+         LFPr7b9iVFO/Q==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, vaishnav.a@ti.com,
-        linux-kernel@vger.kernel.org
-Cc:     vigneshr@ti.com, j-keerthy@ti.com, p.yadav@ti.com
-In-Reply-To: <20220511115516.14894-1-vaishnav.a@ti.com>
-References: <20220511115516.14894-1-vaishnav.a@ti.com>
-Subject: Re: [PATCH] drivers: spi: cadence-quadspi: Handle spi_unregister_master() in remove()
-Message-Id: <165237311899.1053498.14444513819547781414.b4-ty@kernel.org>
-Date:   Thu, 12 May 2022 17:31:58 +0100
+To:     sfr@canb.auug.org.au, skhan@linuxfoundation.org,
+        siddhpant.gh@gmail.com
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <4e6187a4-d0f8-4750-e407-e09cc1c91789@gmail.com>
+References: <4e6187a4-d0f8-4750-e407-e09cc1c91789@gmail.com>
+Subject: Re: [PATCH] spi: Doc fix - Describe add_lock and dma_map_dev in spi_controller
+Message-Id: <165237312070.1053498.16178641624638760904.b4-ty@kernel.org>
+Date:   Thu, 12 May 2022 17:32:00 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,17 +54,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 May 2022 17:25:16 +0530, Vaishnav Achath wrote:
-> Currently devres managed removal of the spi_controller happens after
-> removing the power domain of the host platform_device.While this
-> does not affect the clean removal of the controller, but affects
-> graceful removal of the child devices if the child  device removal
-> requires issuing commands over SPI.
+On Thu, 12 May 2022 20:06:45 +0530, Siddh Raman Pant wrote:
+> This fixes the corresponding warnings during building the docs.
 > 
-> Eg. flash device being soft reset to 1S-1S-1S mode before removal
-> so that on next probe operations in 1S-1S-1S mode is successful.
 > 
-> [...]
 
 Applied to
 
@@ -72,8 +65,8 @@ Applied to
 
 Thanks!
 
-[1/1] drivers: spi: cadence-quadspi: Handle spi_unregister_master() in remove()
-      commit: 606e5d408184989f53028125e0cb5aa6713362d5
+[1/1] spi: Doc fix - Describe add_lock and dma_map_dev in spi_controller
+      commit: 75d6fe48a21a0ea1565228c12b9c16f3fb37b673
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

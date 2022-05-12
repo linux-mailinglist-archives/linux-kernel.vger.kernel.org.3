@@ -2,182 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66BF6524693
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C916524695
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350806AbiELHLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 03:11:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41200 "EHLO
+        id S1350790AbiELHMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 03:12:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350837AbiELHLc (ORCPT
+        with ESMTP id S238760AbiELHMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 03:11:32 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B902561626
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:11:29 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 208BF218CE;
-        Thu, 12 May 2022 07:11:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1652339488; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Alzshpl205idQoQ6PhCFMgtKn9gTfUtzVsAVfrg0Ww8=;
-        b=rekDtlQ/B9IOZ/UONnhTyRY6Tlic3fXrcCS5jIu2R8mmlY5wtAL0onjED2Ejhye2rxVSzL
-        5OGn4BmHp8OxD6sp5aIMDws4aTQlRZvDEKOrCq8mKOpGDd0Uk07aUVfYg7thzVTL0nGHGy
-        57ANjN8JTXLCn4jcL3Yw34Bwy/9zcZc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1652339488;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Alzshpl205idQoQ6PhCFMgtKn9gTfUtzVsAVfrg0Ww8=;
-        b=AlAq8Y3EumZ1CTdVPkJT3yqLPqhg6R+DsNxwB6ZI6fY7cU/eX6375KR8lJEd3gJd+JAddn
-        s1ldNTvtexoi/dAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E091B13A97;
-        Thu, 12 May 2022 07:11:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id UKnqNR+zfGK4XwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 12 May 2022 07:11:27 +0000
-Message-ID: <55aa43cf-af3c-57a9-e0ea-6842faa398d9@suse.de>
-Date:   Thu, 12 May 2022 09:11:27 +0200
+        Thu, 12 May 2022 03:12:38 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC0B62204
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:12:36 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24C5qPHZ009782;
+        Thu, 12 May 2022 07:12:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=v4fdVTkpD0x7bMIL+g+Nii4Yo6oinbwoadD5PvLQjz0=;
+ b=diB/cNfUw+WRgClkFk/ijSnTTiNN+DVUtej454VcLTKn3donBPD8yMQSwfYtxD3u897r
+ 6qAol7hkmwjXU5/vOZcfLZxzyiborbue5lKTYuPa33qLi3wF2i4sf8sXFDb20D20spst
+ sUB704SazU5ga1X3EoLRIvK2d8lLDGzZVq0Qqw7+STkVk+AKGaGzJ4CC/svVlzvin6Sg
+ aIhhS+145gYAZnmhgURdz+XzRvsY/oZFlXwc2IK21GW53VN2aAp1XOgJyZ3C1xdpGe9l
+ LgOB5XKvZAloP3L5eOpTBt/VxTHIoeHOVbympQY+kAg6B/GP/3kVgiEFomFl6cU59CMb +Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g0vfm1d7j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 07:12:17 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24C6sqLs029864;
+        Thu, 12 May 2022 07:12:16 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g0vfm1d6f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 07:12:16 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24C77OB9019503;
+        Thu, 12 May 2022 07:12:12 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03fra.de.ibm.com with ESMTP id 3g0kn78g0d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 07:12:12 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24C7CAmQ21299470
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 May 2022 07:12:10 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0B3BBA405B;
+        Thu, 12 May 2022 07:12:10 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F35CCA4054;
+        Thu, 12 May 2022 07:12:03 +0000 (GMT)
+Received: from [9.43.96.94] (unknown [9.43.96.94])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 12 May 2022 07:12:03 +0000 (GMT)
+Message-ID: <c5d55131-76ff-7354-2954-7cfac365a9a5@linux.ibm.com>
+Date:   Thu, 12 May 2022 12:42:02 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] drm/amdgpu: Add 'modeset' module parameter
+ Thunderbird/91.8.0
+Subject: Re: RFC: Memory Tiering Kernel Interfaces (v2)
 Content-Language: en-US
-To:     Lyude Paul <lyude@redhat.com>, amd-gfx@lists.freedesktop.org
-Cc:     David Airlie <airlied@linux.ie>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        Solomon Chiu <solomon.chiu@amd.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Evan Quan <evan.quan@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-References: <20220511181935.810735-1-lyude@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220511181935.810735-1-lyude@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------FZwWpDiFwmiT5DnsNYDROntA"
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     "ying.huang@intel.com" <ying.huang@intel.com>,
+        Wei Xu <weixugc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Hesham Almatary <hesham.almatary@huawei.com>
+References: <CAAPL-u-DGLcKRVDnChN9ZhxPkfxQvz9Sb93kVoX_4J2oiJSkUw@mail.gmail.com>
+ <56b41ce6922ed5f640d9bd46a603fa27576532a9.camel@intel.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <56b41ce6922ed5f640d9bd46a603fa27576532a9.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: T2Iz8RIj77DdMScIW3MWDrhAhauHdWa5
+X-Proofpoint-ORIG-GUID: v5MXOij59Y8GDI03tvJAKXH726EDQAAh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-11_07,2022-05-12_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
+ suspectscore=0 spamscore=0 bulkscore=0 adultscore=0 mlxlogscore=999
+ malwarescore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205120032
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------FZwWpDiFwmiT5DnsNYDROntA
-Content-Type: multipart/mixed; boundary="------------G7mzNB08qr3M6k8RramPpjV0";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Lyude Paul <lyude@redhat.com>, amd-gfx@lists.freedesktop.org
-Cc: David Airlie <airlied@linux.ie>, "Pan, Xinhui" <Xinhui.Pan@amd.com>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
- Solomon Chiu <solomon.chiu@amd.com>,
- Kai-Heng Feng <kai.heng.feng@canonical.com>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Alex Deucher <alexander.deucher@amd.com>, Evan Quan <evan.quan@amd.com>,
- =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Message-ID: <55aa43cf-af3c-57a9-e0ea-6842faa398d9@suse.de>
-Subject: Re: [PATCH] drm/amdgpu: Add 'modeset' module parameter
-References: <20220511181935.810735-1-lyude@redhat.com>
-In-Reply-To: <20220511181935.810735-1-lyude@redhat.com>
+On 5/12/22 12:33 PM, ying.huang@intel.com wrote:
+> On Wed, 2022-05-11 at 23:22 -0700, Wei Xu wrote:
+>> Sysfs Interfaces
+>> ================
+>>
+>> * /sys/devices/system/memtier/memtierN/nodelist
+>>
+>>    where N = 0, 1, 2 (the kernel supports only 3 tiers for now).
+>>
+>>    Format: node_list
+>>
+>>    Read-only.  When read, list the memory nodes in the specified tier.
+>>
+>>    Tier 0 is the highest tier, while tier 2 is the lowest tier.
+>>
+>>    The absolute value of a tier id number has no specific meaning.
+>>    What matters is the relative order of the tier id numbers.
+>>
+>>    When a memory tier has no nodes, the kernel can hide its memtier
+>>    sysfs files.
+>>
+>> * /sys/devices/system/node/nodeN/memtier
+>>
+>>    where N = 0, 1, ...
+>>
+>>    Format: int or empty
+>>
+>>    When read, list the memory tier that the node belongs to.  Its value
+>>    is empty for a CPU-only NUMA node.
+>>
+>>    When written, the kernel moves the node into the specified memory
+>>    tier if the move is allowed.  The tier assignment of all other nodes
+>>    are not affected.
+>>
+>>    Initially, we can make this interface read-only.
+> 
+> It seems that "/sys/devices/system/node/nodeN/memtier" has all
+> information we needed.  Do we really need
+> "/sys/devices/system/memtier/memtierN/nodelist"?
+> 
+> That can be gotten via a simple shell command line,
+> 
+> $ grep . /sys/devices/system/node/nodeN/memtier | sort -n -k 2 -t ':'
+> 
 
---------------G7mzNB08qr3M6k8RramPpjV0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+It will be really useful to fetch the memory tier node list in an easy 
+fashion rather than reading multiple sysfs directories. If we don't have 
+other attributes for memorytier, we could keep
+"/sys/devices/system/memtier/memtierN" a NUMA node list there by 
+avoiding /sys/devices/system/memtier/memtierN/nodelist
 
-SGkNCg0KQW0gMTEuMDUuMjIgdW0gMjA6MTkgc2NocmllYiBMeXVkZSBQYXVsOg0KPiBNYW55
-IERSTSBkcml2ZXJzIGZlYXR1cmUgYSAnbW9kZXNldCcgYXJndW1lbnQsIHdoaWNoIGNhbiBi
-ZSB1c2VkIHRvDQo+IGVuYWJsZS9kaXNhYmxlIHRoZSBlbnRpcmUgZHJpdmVyIChhcyBvcHBv
-c2VkIHRvIHBhc3Npbmcgbm9tb2Rlc2V0IHRvIHRoZQ0KPiBrZXJuZWwsIHdoaWNoIHdvdWxk
-IGRpc2FibGUgbW9kZXNldHRpbmcgZ2xvYmFsbHkgYW5kIG1ha2UgaXQgZGlmZmljdWx0IHRv
-DQo+IGxvYWQgYW1kZ3B1IGFmdGVyd2FyZHMpLiBBcHBhcmVudGx5IGFtZGdwdSBpcyBhY3R1
-YWxseSBtaXNzaW5nIHRoaXMNCj4gaG93ZXZlciwgc28gbGV0J3MgYWRkIGl0IQ0KDQpXZSBo
-YXZlIHJlY2VudGx5IGNvbnNvbGlkYXRlZCB0aGUgaGFuZGxpbmcgb2YgdGhlIG1vZGVzZXQg
-cGFyYW1ldGVyIGluIA0KdGhlIG1hY3JvIGRybV9tb2R1bGVfcGNpX2RyaXZlcl9pZl9tb2Rl
-c2V0KCksIFsxXSAgd2hpY2ggaGFzIGEgDQpkZXByZWNhdGlvbiB3YXJuaW5nIGluIHRoZSBk
-b2NzLiBPbmx5IGEgZmV3IG9sZGVyIGRyaXZlcnMgdXNlIG1vZGVzZXQgDQphbmQgd2UgZG9u
-J3Qgd2FudCB0byB1c2UgaXQgZnVydGhlci4NCg0KQmV0dGVyIGFsdGVybmF0aXZlcyBhcmUg
-bm9tb2Rlc2V0IG9yIGluaXRjYWxsX2JsYWNrbGlzdD1hbWRncHVfaW5pdC4NCg0KQmVzdCBy
-ZWdhcmRzDQpUaG9tYXMNCg0KWzFdIA0KaHR0cHM6Ly9jZ2l0LmZyZWVkZXNrdG9wLm9yZy9k
-cm0vZHJtLXRpcC90cmVlL2luY2x1ZGUvZHJtL2RybV9tb2R1bGUuaCNuNzkNCg0KPiANCj4g
-S2VlcCBpbiBtaW5kIHRoYXQgdGhpcyBjdXJyZW50bHkganVzdCBsZXRzIG9uZSBlbmFibGUg
-b3IgZGlzYWJsZSBhbWRncHUsIEkNCj4gaGF2ZW4ndCBib3RoZXJlZCBhZGRpbmcgYSBoZWFk
-bGVzcyBtb2RlIGxpa2Ugbm91dmVhdSBoYXMgLSBob3dldmVyIEknbSBzdXJlDQo+IHNvbWVv
-bmUgZWxzZSBjYW4gYWRkIHRoaXMgaWYgbmVlZGVkLg0KPiANCj4gU2lnbmVkLW9mZi1ieTog
-THl1ZGUgUGF1bCA8bHl1ZGVAcmVkaGF0LmNvbT4NCj4gLS0tDQo+ICAgZHJpdmVycy9ncHUv
-ZHJtL2FtZC9hbWRncHUvYW1kZ3B1X2Rydi5jIHwgMTQgKysrKysrKysrKysrKysNCj4gICAx
-IGZpbGUgY2hhbmdlZCwgMTQgaW5zZXJ0aW9ucygrKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2Ry
-aXZlcnMvZ3B1L2RybS9hbWQvYW1kZ3B1L2FtZGdwdV9kcnYuYyBiL2RyaXZlcnMvZ3B1L2Ry
-bS9hbWQvYW1kZ3B1L2FtZGdwdV9kcnYuYw0KPiBpbmRleCBlYmQzN2ZiMTljZGIuLjI0ZTZm
-YjQ1MTdjYyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL2FtZC9hbWRncHUvYW1k
-Z3B1X2Rydi5jDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9hbWQvYW1kZ3B1L2FtZGdwdV9k
-cnYuYw0KPiBAQCAtODcyLDYgKzg3MiwxNSBAQCBNT0RVTEVfUEFSTV9ERVNDKHNtdV9wcHRh
-YmxlX2lkLA0KPiAgIAkic3BlY2lmeSBwcHRhYmxlIGlkIHRvIGJlIHVzZWQgKC0xID0gYXV0
-byhkZWZhdWx0KSB2YWx1ZSwgMCA9IHVzZSBwcHRhYmxlIGZyb20gdmJpb3MsID4gMCA9IHNv
-ZnQgcHB0YWJsZSBpZCkiKTsNCj4gICBtb2R1bGVfcGFyYW1fbmFtZWQoc211X3BwdGFibGVf
-aWQsIGFtZGdwdV9zbXVfcHB0YWJsZV9pZCwgaW50LCAwNDQ0KTsNCj4gICANCj4gKy8qKg0K
-PiArICogRE9DOiBtb2Rlc2V0IChpbnQpDQo+ICsgKiBVc2VkIHRvIGVuYWJsZS9kaXNhYmxl
-IG1vZGVzZXR0aW5nIGZvciBhbWRncHUgZXhjbHVzaXZlbHkuDQo+ICsgKi8NCj4gK2Jvb2wg
-YW1kZ3B1X2VuYWJsZV9tb2Rlc2V0ID0gdHJ1ZTsNCj4gK01PRFVMRV9QQVJNX0RFU0MobW9k
-ZXNldCwNCj4gKwkJICJFbmFibGUgb3IgZGlzYWJsZSBkaXNwbGF5IGRyaXZlciAoMSA9IG9u
-IChkZWZhdWx0KSwgMCA9IG9mZiIpOw0KPiArbW9kdWxlX3BhcmFtX25hbWVkKG1vZGVzZXQs
-IGFtZGdwdV9lbmFibGVfbW9kZXNldCwgYm9vbCwgMDQ0NCk7DQo+ICsNCj4gICAvKiBUaGVz
-ZSBkZXZpY2VzIGFyZSBub3Qgc3VwcG9ydGVkIGJ5IGFtZGdwdS4NCj4gICAgKiBUaGV5IGFy
-ZSBzdXBwb3J0ZWQgYnkgdGhlIG1hY2g2NCwgcjEyOCwgcmFkZW9uIGRyaXZlcnMNCj4gICAg
-Ki8NCj4gQEAgLTIwMDMsNiArMjAxMiwxMSBAQCBzdGF0aWMgaW50IGFtZGdwdV9wY2lfcHJv
-YmUoc3RydWN0IHBjaV9kZXYgKnBkZXYsDQo+ICAgCWJvb2wgaXNfZndfZmI7DQo+ICAgCXJl
-c291cmNlX3NpemVfdCBiYXNlLCBzaXplOw0KPiAgIA0KPiArCWlmICghYW1kZ3B1X2VuYWJs
-ZV9tb2Rlc2V0KSB7DQo+ICsJCURSTV9JTkZPKCJtb2Rlc2V0PTAgcGFzc2VkIHRvIGFtZGdw
-dSwgZHJpdmVyIHdpbGwgbm90IGJlIGVuYWJsZWRcbiIpOw0KPiArCQlyZXR1cm4gLUVOT0RF
-VjsNCj4gKwl9DQo+ICsNCj4gICAJLyogc2tpcCBkZXZpY2VzIHdoaWNoIGFyZSBvd25lZCBi
-eSByYWRlb24gKi8NCj4gICAJZm9yIChpID0gMDsgaSA8IEFSUkFZX1NJWkUoYW1kZ3B1X3Vu
-c3VwcG9ydGVkX3BjaWlkbGlzdCk7IGkrKykgew0KPiAgIAkJaWYgKGFtZGdwdV91bnN1cHBv
-cnRlZF9wY2lpZGxpc3RbaV0gPT0gcGRldi0+ZGV2aWNlKQ0KDQotLSANClRob21hcyBaaW1t
-ZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0
-aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2Vy
-bWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2
-byBUb3Rldg0K
-
---------------G7mzNB08qr3M6k8RramPpjV0--
-
---------------FZwWpDiFwmiT5DnsNYDROntA
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJ8sx8FAwAAAAAACgkQlh/E3EQov+DG
-QQ//STXF3Nwv+I5ztWXkBl2yfm1R1sdEPuRdBF4jIzz5Rk99SmkdwqNKOeNtipslkDEvO2xT9gZI
-gahSaQnm1nMwaRBu6Aof8pCOK2ZucchYp1ZsH8v7xdJ1Qv/6WvuJanHMZUdAm4Sc8fMjTz446eiQ
-b0M2w0ryFmmxcNUWZtvGNEw2dUyt17Bq86Y+9QcD5cWP1vLpePpiu4/0QXh4IsmIYiReKZPD2UAy
-y+eEZ1OfZjEWidad4Uo0J/4GVD1bTy2TgPXWjdRXSQgnf4NgTmuB141n5GoYFKjwBfWqXQHjHl/h
-8o29EQ7uM5eXFpbKi1esDY0Mt1nTQkKlKXH1Dw7mceGrQTnD03xnLm3V0dlWsjlQ4CnvvJfFDw3v
-lOWDoyZ+HpZas6j8FvblSKS9KD4YnWOH9RvAxFQYFIFtXIcGt5PTfhQ2zrWT1QmpTEbvYaqEqRvp
-o+vTNdJ7KW6luhdvmuFE+mFcoS//vUJWvofUeS+2cP8LbmT/0Yygc4zKHIyCRiYsaukUOtVMvJ4j
-jKocckU/YHGXUSvpnJ5sXcnTXtCrB98X++CuYkEDO+Ub+lxYW5VXgnEpNxmTXsB33h3Bs+TJl3vl
-GPEbOms4ATOeAGjgoDiN+VekCAl72B9rJJ98bM/2gbpxSQF50uRkM20j3tPSsEGhCkmnEa+XnN6u
-hAA=
-=pFEA
------END PGP SIGNATURE-----
-
---------------FZwWpDiFwmiT5DnsNYDROntA--
+-aneesh

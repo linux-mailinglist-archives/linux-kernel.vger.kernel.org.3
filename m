@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 039EB5246D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0415246D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 09:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350917AbiELHWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 03:22:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
+        id S1350937AbiELHWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 03:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350934AbiELHWJ (ORCPT
+        with ESMTP id S1350940AbiELHWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 03:22:09 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C3F27B3A;
-        Thu, 12 May 2022 00:22:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652340125; x=1683876125;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=TcvqFRo7tE7F2CGVY7lJqLdptfPjmpv6H/Lv9po1svo=;
-  b=KBWi2NK9ffH3L6RU8stGP8/c3cs8oUyY9oTK2tblBLAp6yRAMlHvds3E
-   dUKocG/603dE6zRqHRhkV0fRJddf9/cs8716RuLnpxlCXWtOB89hwlSp/
-   qJRvx2OKa8jrIdkBKGgLrhf18tjjk6jrW5q2cCYVARt2uJAQsDfyVk9Y7
-   8=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 12 May 2022 00:22:05 -0700
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 00:22:04 -0700
-Received: from [10.50.47.121] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 12 May
- 2022 00:22:00 -0700
-Message-ID: <e740f0f7-8010-a390-98e0-d549d981f5e3@quicinc.com>
-Date:   Thu, 12 May 2022 12:51:48 +0530
+        Thu, 12 May 2022 03:22:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D184529805
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 00:22:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652340127;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uLW+m9ur/lMSYv/hoja8jsAABTcjuU8qCpLCY/fAt6g=;
+        b=BnL819nsa08uMt327s7SBzXbdPMMMQIQQCNoeIttf/kI49wnn86dcfW7J7SNYZIqyfwGCS
+        aZrA6LKMIQ0dFSd8hP7ZjOYfs7GeH5GTcEEZUNm13h6My+qzye2HywM342FL12RQYUcf2x
+        yb00T9CAXSYCNoBNi7I0NOZr7KhlT88=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-524-mMkE9jedOmKW7IZwGNGlhA-1; Thu, 12 May 2022 03:22:00 -0400
+X-MC-Unique: mMkE9jedOmKW7IZwGNGlhA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0AD5F382ECC0;
+        Thu, 12 May 2022 07:22:00 +0000 (UTC)
+Received: from localhost (ovpn-12-247.pek2.redhat.com [10.72.12.247])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2FD35416363;
+        Thu, 12 May 2022 07:21:57 +0000 (UTC)
+Date:   Thu, 12 May 2022 15:21:54 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Coiby Xu <coxu@redhat.com>
+Cc:     kexec@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+        Michal Suchanek <msuchanek@suse.de>,
+        Dave Young <dyoung@redhat.com>, Will Deacon <will@kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Mimi Zohar <zohar@linux.ibm.com>, Chun-Yi Lee <jlee@suse.com>,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v8 2/4] kexec, KEYS: make the code in
+ bzImage64_verify_sig generic
+Message-ID: <Yny1kqrkgQ9u7h8L@MiWiFi-R3L-srv>
+References: <20220512070123.29486-1-coxu@redhat.com>
+ <20220512070123.29486-3-coxu@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] arm64: Enable repeat tlbi workaround on KRYO4XX gold CPUs
-Content-Language: en-US
-To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>
-CC:     Andre Przywara <andre.przywara@arm.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Prasanna Kumar <quic_kprasan@quicinc.com>
-References: <20220511080247.1530-1-quic_shrekk@quicinc.com>
- <7a7b4657-ec75-7984-1a6e-50ff928ab09c@quicinc.com>
-From:   Shreyas K K <quic_shrekk@quicinc.com>
-In-Reply-To: <7a7b4657-ec75-7984-1a6e-50ff928ab09c@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220512070123.29486-3-coxu@redhat.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,71 +73,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sai,
+On 05/12/22 at 03:01pm, Coiby Xu wrote:
+> commit 278311e417be ("kexec, KEYS: Make use of platform keyring for
+> signature verify") adds platform keyring support on x86 kexec but not
+> arm64.
+> 
+> The code in bzImage64_verify_sig makes use of system keyrings including
+> .buitin_trusted_keys, .secondary_trusted_keys and .platform keyring to
+> verify signed kernel image as PE file. Make it generic so both x86_64
+> and arm64 can use it.
 
-On 5/11/2022 4:43 PM, Sai Prakash Ranjan wrote:
-> Hi Shreyas,
->
-> On 5/11/2022 1:32 PM, Shreyas K K wrote:
->> Add KRYO4XX gold/big cores to the list of CPUs that need the
->> repeat TLBI workaround. Apply this to the affected
->> KRYO4XX cores (rcpe to rdpe).
->>
->> The variant and revision bits are implementation defined and are
->> different from the their Cortex CPU counterparts on which they are
->> based on, i.e., (r0p0 to r1p0) is equivalent to (rcpe to rdpe).
->>
->> Signed-off-by: Shreyas K K <quic_shrekk@quicinc.com>
->> ---
->>   Documentation/arm64/silicon-errata.rst | 3 +++
->>   arch/arm64/kernel/cpu_errata.c         | 2 ++
->>   2 files changed, 5 insertions(+)
->>
->> diff --git a/Documentation/arm64/silicon-errata.rst 
->> b/Documentation/arm64/silicon-errata.rst
->> index 466cb9e89047..d27db84d585e 100644
->> --- a/Documentation/arm64/silicon-errata.rst
->> +++ b/Documentation/arm64/silicon-errata.rst
->> @@ -189,6 +189,9 @@ stable kernels.
->> +----------------+-----------------+-----------------+-----------------------------+
->>   | Qualcomm Tech. | Kryo4xx Silver  | N/A             | 
->> ARM64_ERRATUM_1024718       |
->> +----------------+-----------------+-----------------+-----------------------------+
->> +| Qualcomm Tech. | Kryo4xx Gold    | N/A             | 
->> ARM64_ERRATUM_1286807       |
->> ++----------------+-----------------+-----------------+-----------------------------+ 
->>
->> +
->> +----------------+-----------------+-----------------+-----------------------------+
->>   | Fujitsu        | A64FX           | E#010001        | 
->> FUJITSU_ERRATUM_010001      |
->> +----------------+-----------------+-----------------+-----------------------------+
->> diff --git a/arch/arm64/kernel/cpu_errata.c 
->> b/arch/arm64/kernel/cpu_errata.c
->> index 4c9b5b4b7a0b..2518657e6de1 100644
->> --- a/arch/arm64/kernel/cpu_errata.c
->> +++ b/arch/arm64/kernel/cpu_errata.c
->> @@ -208,6 +208,8 @@ static const struct arm64_cpu_capabilities 
->> arm64_repeat_tlbi_list[] = {
->>   #ifdef CONFIG_ARM64_ERRATUM_1286807
->>       {
->>           ERRATA_MIDR_RANGE(MIDR_CORTEX_A76, 0, 0, 3, 0),
->> +        /* Kryo4xx Gold (rcpe to rdpe) => (r0p0 to r1p0) */
->> +        ERRATA_MIDR_RANGE(QCOM_CPU_PART_KRYO_4XX_GOLD, 0xc, 0xe, 
->> 0xd, 0xe),
->>       },
->>   #endif
->>       {},
->
-> Why not include r2p0 and r3p0 which are affected by this erratum? I 
-> see these revisions are present
-> in our SoCs as per the document.
->
-> Thanks,
-> Sai
+LGTM,
 
-Acknowledged. Changing in the next version.
+Acked-by: Baoquan He <bhe@redhat.com>
 
-Thanks,
-Shreyas
+> 
+> Cc: kexec@lists.infradead.org
+> Cc: keyrings@vger.kernel.org
+> Cc: linux-security-module@vger.kernel.org
+> Reviewed-by: Michal Suchanek <msuchanek@suse.de>
+> Signed-off-by: Coiby Xu <coxu@redhat.com>
+> ---
+>  arch/x86/kernel/kexec-bzimage64.c | 20 +-------------------
+>  include/linux/kexec.h             |  7 +++++++
+>  kernel/kexec_file.c               | 17 +++++++++++++++++
+>  3 files changed, 25 insertions(+), 19 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/kexec-bzimage64.c b/arch/x86/kernel/kexec-bzimage64.c
+> index 170d0fd68b1f..f299b48f9c9f 100644
+> --- a/arch/x86/kernel/kexec-bzimage64.c
+> +++ b/arch/x86/kernel/kexec-bzimage64.c
+> @@ -17,7 +17,6 @@
+>  #include <linux/kernel.h>
+>  #include <linux/mm.h>
+>  #include <linux/efi.h>
+> -#include <linux/verification.h>
+>  
+>  #include <asm/bootparam.h>
+>  #include <asm/setup.h>
+> @@ -528,28 +527,11 @@ static int bzImage64_cleanup(void *loader_data)
+>  	return 0;
+>  }
+>  
+> -#ifdef CONFIG_KEXEC_BZIMAGE_VERIFY_SIG
+> -static int bzImage64_verify_sig(const char *kernel, unsigned long kernel_len)
+> -{
+> -	int ret;
+> -
+> -	ret = verify_pefile_signature(kernel, kernel_len,
+> -				      VERIFY_USE_SECONDARY_KEYRING,
+> -				      VERIFYING_KEXEC_PE_SIGNATURE);
+> -	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
+> -		ret = verify_pefile_signature(kernel, kernel_len,
+> -					      VERIFY_USE_PLATFORM_KEYRING,
+> -					      VERIFYING_KEXEC_PE_SIGNATURE);
+> -	}
+> -	return ret;
+> -}
+> -#endif
+> -
+>  const struct kexec_file_ops kexec_bzImage64_ops = {
+>  	.probe = bzImage64_probe,
+>  	.load = bzImage64_load,
+>  	.cleanup = bzImage64_cleanup,
+>  #ifdef CONFIG_KEXEC_BZIMAGE_VERIFY_SIG
+> -	.verify_sig = bzImage64_verify_sig,
+> +	.verify_sig = kexec_kernel_verify_pe_sig,
+>  #endif
+>  };
+> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+> index 413235c6c797..da83abfc628b 100644
+> --- a/include/linux/kexec.h
+> +++ b/include/linux/kexec.h
+> @@ -19,6 +19,7 @@
+>  #include <asm/io.h>
+>  
+>  #include <uapi/linux/kexec.h>
+> +#include <linux/verification.h>
+>  
+>  /* Location of a reserved region to hold the crash kernel.
+>   */
+> @@ -202,6 +203,12 @@ int arch_kexec_apply_relocations(struct purgatory_info *pi,
+>  				 const Elf_Shdr *relsec,
+>  				 const Elf_Shdr *symtab);
+>  int arch_kimage_file_post_load_cleanup(struct kimage *image);
+> +#ifdef CONFIG_KEXEC_SIG
+> +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
+> +int kexec_kernel_verify_pe_sig(const char *kernel,
+> +				    unsigned long kernel_len);
+> +#endif
+> +#endif
+>  int arch_kexec_locate_mem_hole(struct kexec_buf *kbuf);
+>  
+>  extern int kexec_add_buffer(struct kexec_buf *kbuf);
+> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+> index 3720435807eb..754885b96aab 100644
+> --- a/kernel/kexec_file.c
+> +++ b/kernel/kexec_file.c
+> @@ -165,6 +165,23 @@ void kimage_file_post_load_cleanup(struct kimage *image)
+>  }
+>  
+>  #ifdef CONFIG_KEXEC_SIG
+> +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
+> +int kexec_kernel_verify_pe_sig(const char *kernel, unsigned long kernel_len)
+> +{
+> +	int ret;
+> +
+> +	ret = verify_pefile_signature(kernel, kernel_len,
+> +				      VERIFY_USE_SECONDARY_KEYRING,
+> +				      VERIFYING_KEXEC_PE_SIGNATURE);
+> +	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
+> +		ret = verify_pefile_signature(kernel, kernel_len,
+> +					      VERIFY_USE_PLATFORM_KEYRING,
+> +					      VERIFYING_KEXEC_PE_SIGNATURE);
+> +	}
+> +	return ret;
+> +}
+> +#endif
+> +
+>  static int kexec_image_verify_sig(struct kimage *image, void *buf,
+>  		unsigned long buf_len)
+>  {
+> -- 
+> 2.35.3
+> 
 

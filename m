@@ -2,111 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08A88525708
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 23:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1299052570A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 23:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358716AbiELVa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 17:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
+        id S1358714AbiELVbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 17:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343679AbiELVaU (ORCPT
+        with ESMTP id S1358720AbiELVbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 17:30:20 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7AFD1A15FD
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 14:30:19 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id l11so5688955pgt.13
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 14:30:19 -0700 (PDT)
+        Thu, 12 May 2022 17:31:00 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7462714B;
+        Thu, 12 May 2022 14:30:57 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id n10so12714907ejk.5;
+        Thu, 12 May 2022 14:30:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:user-agent:in-reply-to:references
-         :message-id:mime-version:content-transfer-encoding;
-        bh=BIPrJxqbXAd+295s29/rrMW5CvpwBx6wdUxINV63DAg=;
-        b=Zg5truXSUHQKziPjOTc4E2O6KDJH+6qHbxL+9Law57qzVH6SVKpT2voeDHzzyvzj5b
-         uggFLFxEqgtXYEb9pQplsYNKt0VUIvBSB/e/jlS+B4YlmJCuXVMoilgQjYogEfO1ShEk
-         8oRI17+p6b147utmqg5HMg+CqdgII9RBkSRNc=
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gK0S633BRVG9XKnxNIbh5zmaAdePdUb1YxCYCbMDKlQ=;
+        b=evpOXJ7mR/GrzvT5sJ8qKsvt9Wu7jYdy1syBKVEJOflRkIHbrBWaB1Xc3YgKUnNcg9
+         sStHMxncwlQnp0Z1kNGuBkA1nlu63Zvcp3jmNJn2xZHcptlYwq4dbmwVq37PhpoO5OjS
+         +yr/XthlXaMsn7PKZNa2NcJ94ToJDQwOH0u9WWtfgQ0HRbgYDx1BRooMgHro0gbG+4lr
+         z93vSGwDQqUiFJbs4vG7REmpFyAg3dUlbvdEJLaTVpf/TjkvlD8pVnl1AqMSIQ1hPLXr
+         A++leY3ieJM31ccIbIOLOPD02Wbi5NLATFSo1lztfITSWremsI4bC1iKxuXy7nMbxUNU
+         mWDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
-         :references:message-id:mime-version:content-transfer-encoding;
-        bh=BIPrJxqbXAd+295s29/rrMW5CvpwBx6wdUxINV63DAg=;
-        b=zOa/vGJc+/wFxX6apHW+1feF3Dl5w59quZS+8KSZe3i+s0xM1xalgMhqY4AtnMWCJK
-         KsdHmMYYKA8QwZbNUENWiFapOdz2T45elBp/caXpP4RGuUAV7LksKN6ILmYJYzssu4Cm
-         Tq/HhDUs6H8MqHVMEQJx9jpXJAXlHdTRaZYO9pmD7Q7pGxKaMugTw9aIZ15MiIswM/EZ
-         5zfvwyvPLz1MKrTNTyBBR/1ZJKt0nAYIwDSmZIfM71EMmDiszVJFGTf3VIxd97BMdOWV
-         6BKV+0Gnx9wLJo/eA2xlf5TDlb5FCAkYBr2z0NRkYtCb5QTKyil2cK8lk+alRDJaKbM0
-         3tEA==
-X-Gm-Message-State: AOAM5318RQJdg/JqYuSR+ZgARzX0r4PP4cot8Tosf8q4mi1oD08l+NpT
-        bX9DYpQAkQ6CSUNpElBIZFyyeQ==
-X-Google-Smtp-Source: ABdhPJzDDlG5ka/o2WcllRfswJSM7NjDXKFvt55zHZ+GNjiCVBiiEna26O0pZFz3O+Zji3jW2c7Ibw==
-X-Received: by 2002:a05:6a00:c8f:b0:510:60cf:55fa with SMTP id a15-20020a056a000c8f00b0051060cf55famr1314141pfv.37.1652391019468;
-        Thu, 12 May 2022 14:30:19 -0700 (PDT)
-Received: from [127.0.0.1] (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id q16-20020a170902edd000b0015f3d8759e4sm350899plk.167.2022.05.12.14.30.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 14:30:19 -0700 (PDT)
-Date:   Thu, 12 May 2022 14:30:17 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Nathan Chancellor <nathan@kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-CC:     Sami Tolvanen <samitolvanen@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] drm/i915: Fix CFI violation with show_dynamic_id()
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20220512211704.3158759-1-nathan@kernel.org>
-References: <20220512211704.3158759-1-nathan@kernel.org>
-Message-ID: <DEB6A9AC-845E-4656-A596-E6341D3C287F@chromium.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gK0S633BRVG9XKnxNIbh5zmaAdePdUb1YxCYCbMDKlQ=;
+        b=SCXdgRLLIcTtEwlOJkJngB4OgF0HGnU5By4f8mGQamhCMfZrEt2X6lVrcJrjqKhpBH
+         wZsY2iI6TTu1OmRPaLj2BgEJB1qmE4JxE+1EGk/v/yiM7/yhIgAz1QXvi2GZd7+GlqJE
+         a6WjlwHCqWvrn430BVim5u7ZkUHXFJJa/VDAngFmZED+wUGFygaE23s8W964tITSzG3y
+         7OyoAoq9K4T8vH1J6Mlub0l7vy4MuPA/dmq48HjoRurm8fSku1qUEzbeLr1OTkrYJ2vL
+         Hsb/tJoAUzl1RnC64rHWQUruyf6KLC2Wj7ZdV6k4y+T2fh2/Lqr9CGjLrUpZEgBWEI8G
+         8HVA==
+X-Gm-Message-State: AOAM532i+ukVLd77L/ur4+W47297nN92PZIEGZ4lBihcaZ3k8BVvr2EC
+        /EfoS+bKjUgf6NqLassa3nSotbsWq9sn8rze
+X-Google-Smtp-Source: ABdhPJzuxe1Cd5h5yKYd2ecanRmqpDYWx/bjaLfDTiaxQbNCdUd/8vXJZQMxVcqCLL0zTEEEcWA6BQ==
+X-Received: by 2002:a17:907:6daa:b0:6f4:4822:549d with SMTP id sb42-20020a1709076daa00b006f44822549dmr1688240ejc.322.1652391055346;
+        Thu, 12 May 2022 14:30:55 -0700 (PDT)
+Received: from penguin ([80.149.170.9])
+        by smtp.gmail.com with ESMTPSA id eo12-20020a056402530c00b0042617ba63c3sm93272edb.77.2022.05.12.14.30.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 14:30:54 -0700 (PDT)
+Date:   Thu, 12 May 2022 23:30:37 +0200
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Paul Lemmermann <thepaulodoom@thepaulodoom.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] input: evdev: fixed case statements
+Message-ID: <Yn177BRlC1pfj5z5@penguin>
+References: <20220401215842.58135-1-thepaulodoom@thepaulodoom.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220401215842.58135-1-thepaulodoom@thepaulodoom.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Paul,
 
+On Fri, Apr 01, 2022 at 04:58:42PM -0500, Paul Lemmermann wrote:
+> Fixed case statements which have more than one operation on a single
+> line. Found using checkpatch.pl.
 
-On May 12, 2022 2:17:04 PM PDT, Nathan Chancellor <nathan@kernel=2Eorg> wr=
-ote:
->When an attribute group is created with sysfs_create_group(), the
->->sysfs_ops() callback is set to kobj_sysfs_ops, which sets the ->show()
->callback to kobj_attr_show()=2E kobj_attr_show() uses container_of() to
->get the ->show() callback from the attribute it was passed, meaning the
->->show() callback needs to be the same type as the ->show() callback in
->'struct kobj_attribute'=2E
->
->However, show_dynamic_id() has the type of the ->show() callback in
->'struct device_attribute', which causes a CFI violation when opening the
->'id' sysfs node under drm/card0/metrics=2E This happens to work because
->the layout of 'struct kobj_attribute' and 'struct device_attribute' are
->the same, so the container_of() cast happens to allow the ->show()
->callback to still work=2E
->
->Change the type of show_dynamic_id() to match the ->show() callback in
->'struct kobj_attributes' and update the type of sysfs_metric_id to
->match, which resolves the CFI violation=2E
->
->Fixes: f89823c21224 ("drm/i915/perf: Implement I915_PERF_ADD/REMOVE_CONFI=
-G interface")
->Signed-off-by: Nathan Chancellor <nathan@kernel=2Eorg>
+While checkpatch.pl is often a useful tool, in this case the original
+code presents the information in a condensed but understandable way. I
+do not see a reason to change it just to appease a tool.
 
-This matches my own investigation into the error=2E Thanks for putting the=
- patch together! :)
+Thanks.
 
-Reviewed-by: Kees Cook <keescook@chromium=2Eorg>
-
-
---=20
-Kees Cook
+-- 
+Dmitry

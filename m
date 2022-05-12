@@ -2,221 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3BAC5248F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:31:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C186524907
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 11:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352061AbiELJb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 05:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
+        id S1352111AbiELJdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 05:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346306AbiELJb1 (ORCPT
+        with ESMTP id S1352008AbiELJcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 05:31:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F59C612B5
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:31:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652347884;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BL3CJGsqY/cqdqqI7zN3z8l2hVpezWWDtzBjCtMeqUg=;
-        b=OXF1EdD8jFeB+hmkUpriJ/6Cws4uCCun+mg6TyM1izR2NWzZY/Tp+so0IdbCIdDYfsGML5
-        Rtl5tq8T8Vo/StlpfxynWddM6JoXBWKrIPrLnpy6vRH9FVYsfPtKCZzgcAXFzKnwuQVBnq
-        pYl13KVvT/UmIULbllxQiY0OZF2yjuk=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-82-ZgWfqGL5NZaX6eqPlHUbKw-1; Thu, 12 May 2022 05:31:22 -0400
-X-MC-Unique: ZgWfqGL5NZaX6eqPlHUbKw-1
-Received: by mail-wm1-f69.google.com with SMTP id o24-20020a05600c379800b003943412e81dso1443286wmr.6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:31:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=BL3CJGsqY/cqdqqI7zN3z8l2hVpezWWDtzBjCtMeqUg=;
-        b=GFYhMmw50/vamzmKX/2I99PnR6usRG7S9dQ5qr8dqC9eOI4+pEOrEovSLuk7NIuXv3
-         HoOP5l6bhN6Wj814xyj+4OkV53IGX0m+MA3yzMOi3a/+flzPxiMYhL4TkJyVU5s+QpAF
-         oFvsyCY9cm8kpNQ1lslC8OJ/+VPFx+BXLQPhA/yNqWqFS5/IaK5ymyI9cekEPRGJp/MN
-         Ekn7jsQEZThMSb5gn/IbEk5f4BQH+hg9Z7hDb25a9LytYXEekEsCPofYeBkUF+lmj40F
-         GrYwaEGolMKWZQxK5Y3JF3f3Mp+xIKfFLtQLYwrcIYsHGwRWhDKEBTjHGeEqE+YnQMPV
-         7THA==
-X-Gm-Message-State: AOAM533/ktiGOZC63JPlkqu7Nk8jeJseH8m9pf3rbnJcwXKOLh6yNwit
-        9Ke3PKZ4EXb+j79Vhaus9dF/gBr5ZZItpNbzWPB9jv2ESayci+J7HPI1I7jNX894mK0al8ID6Rd
-        rxHGFsSYxkUk0F9TkL4VtnEX6
-X-Received: by 2002:adf:fc42:0:b0:20a:c45d:3767 with SMTP id e2-20020adffc42000000b0020ac45d3767mr26462162wrs.486.1652347880721;
-        Thu, 12 May 2022 02:31:20 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw0UBVW7EQVs+UjMZICxFii2HRETE5UGdgxRAjQ7akuex9Vg2m4qZRuQs7QskMCy38QjmY7ZA==
-X-Received: by 2002:adf:fc42:0:b0:20a:c45d:3767 with SMTP id e2-20020adffc42000000b0020ac45d3767mr26462123wrs.486.1652347880418;
-        Thu, 12 May 2022 02:31:20 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c701:d200:ee5d:1275:f171:136d? (p200300cbc701d200ee5d1275f171136d.dip0.t-ipconnect.de. [2003:cb:c701:d200:ee5d:1275:f171:136d])
-        by smtp.gmail.com with ESMTPSA id z14-20020a1c4c0e000000b003942a244ecfsm2143561wmf.20.2022.05.12.02.31.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 02:31:19 -0700 (PDT)
-Message-ID: <76fd0c11-5b9b-0032-183b-54db650f13b1@redhat.com>
-Date:   Thu, 12 May 2022 11:31:18 +0200
+        Thu, 12 May 2022 05:32:46 -0400
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 May 2022 02:32:43 PDT
+Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3889B62104
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 02:32:42 -0700 (PDT)
+X-KPN-MessageId: 4e6ffd54-d1d6-11ec-a9ff-005056994fde
+Received: from smtp.kpnmail.nl (unknown [10.31.155.8])
+        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+        id 4e6ffd54-d1d6-11ec-a9ff-005056994fde;
+        Thu, 12 May 2022 11:31:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=xs4all.nl; s=xs4all01;
+        h=content-type:from:to:subject:mime-version:date:message-id;
+        bh=J5fVuHTorFO9vS+A8/3ndPu060HnZX6yzHxBET50rjw=;
+        b=mmZthCNB1ky7U/F/upi2LoOgPKYEzOY7d/njHyBbx+WPmmYjvGdY7i+V2MFGBvC1YZXV1sOKIYVFf
+         mhyhp6hoTYzk6ZeC8RcYunL2jb8VEc0YlGEbBywC+URbhmHmmjruJBsBfw/pB5aAi8Sj3RdNW5QxIz
+         OtoCDNGdFfCOjpllti5bs32/QCVk1p8yelQfhWbxVxX+4aepquKbuvjVOEYgeMrVy1YGpRvf7+CqAH
+         mGMPFZ+41/i0RFJOhzc2o289M75aCL4YOIsa/ADzA2Z5QsoNoxesvKXwh8not51IcRrPwFQg/0iVrX
+         FuJO/Gj2FFCXqXolh+fmDJgAdRz5Nzg==
+X-KPN-MID: 33|bmNIgalGIYJXpA7CRrWfasNg2BTj8AlOHOsTV3qYhtX4j/xmA4bPP+xrXkGSHxc
+ avtd2wVqMgGpfLUuhlpISdg==
+X-KPN-VerifiedSender: Yes
+X-CMASSUN: 33|VG/RDjSU8Aq6zYZIftNGufBNEJo6kPBr8Ws9JbIXYGz1yKrLLPQYIHYeTTxKCbH
+ DpxavEf2+O8HcZHgKJQqUhw==
+X-Originating-IP: 173.38.220.60
+Received: from [10.47.77.219] (unknown [173.38.220.60])
+        by smtp.xs4all.nl (Halon) with ESMTPSA
+        id 51ee21aa-d1d6-11ec-a066-00505699d6e5;
+        Thu, 12 May 2022 11:31:39 +0200 (CEST)
+Message-ID: <03e09da3-c068-a372-a3e5-dc0459f90682@xs4all.nl>
+Date:   Thu, 12 May 2022 11:31:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v9 3/3] s390x: KVM: resetting the Topology-Change-Report
+ Thunderbird/91.6.0
+Subject: Re: [DKIM] [PATCH v12, 13/17] media: mediatek: vcodec: Extract H264
+ common code
 Content-Language: en-US
-To:     Pierre Morel <pmorel@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
-        thuth@redhat.com, imbrenda@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, wintera@linux.ibm.com, seiden@linux.ibm.com,
-        nrb@linux.ibm.com
-References: <20220506092403.47406-1-pmorel@linux.ibm.com>
- <20220506092403.47406-4-pmorel@linux.ibm.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220506092403.47406-4-pmorel@linux.ibm.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+Cc:     Irui Wang <irui.wang@mediatek.com>,
+        George Sun <george.sun@mediatek.com>,
+        Steve Cho <stevecho@chromium.org>, devicetree@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-kernel@vger.kernel.org,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        linux-mediatek@lists.infradead.org,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
+References: <20220512021950.29087-1-yunfei.dong@mediatek.com>
+ <20220512021950.29087-14-yunfei.dong@mediatek.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20220512021950.29087-14-yunfei.dong@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06.05.22 11:24, Pierre Morel wrote:
-> During a subsystem reset the Topology-Change-Report is cleared.
-> Let's give userland the possibility to clear the MTCR in the case
-> of a subsystem reset.
+Hi Yunfei,
+
+On 5/12/22 04:19, Yunfei Dong wrote:
+> Mt8192 can use some of common code with mt8183. Moves them to
+> a new file in order to reuse.
 > 
-> To migrate the MTCR, let's give userland the possibility to
-> query the MTCR state.
-> 
-> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 > ---
->  arch/s390/include/uapi/asm/kvm.h |  5 ++
->  arch/s390/kvm/kvm-s390.c         | 79 ++++++++++++++++++++++++++++++++
->  2 files changed, 84 insertions(+)
+>  .../media/platform/mediatek/vcodec/Makefile   |   1 +
+>  .../vcodec/vdec/vdec_h264_req_common.c        | 310 +++++++++++++
+>  .../vcodec/vdec/vdec_h264_req_common.h        | 274 +++++++++++
+>  .../mediatek/vcodec/vdec/vdec_h264_req_if.c   | 427 ++----------------
+>  4 files changed, 629 insertions(+), 383 deletions(-)
+>  create mode 100644 drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.c
+>  create mode 100644 drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.h
 > 
-> diff --git a/arch/s390/include/uapi/asm/kvm.h b/arch/s390/include/uapi/asm/kvm.h
-> index 7a6b14874d65..abdcf4069343 100644
-> --- a/arch/s390/include/uapi/asm/kvm.h
-> +++ b/arch/s390/include/uapi/asm/kvm.h
-> @@ -74,6 +74,7 @@ struct kvm_s390_io_adapter_req {
->  #define KVM_S390_VM_CRYPTO		2
->  #define KVM_S390_VM_CPU_MODEL		3
->  #define KVM_S390_VM_MIGRATION		4
-> +#define KVM_S390_VM_CPU_TOPOLOGY	5
->  
->  /* kvm attributes for mem_ctrl */
->  #define KVM_S390_VM_MEM_ENABLE_CMMA	0
-> @@ -171,6 +172,10 @@ struct kvm_s390_vm_cpu_subfunc {
->  #define KVM_S390_VM_MIGRATION_START	1
->  #define KVM_S390_VM_MIGRATION_STATUS	2
->  
-> +/* kvm attributes for cpu topology */
-> +#define KVM_S390_VM_CPU_TOPO_MTR_CLEAR	0
-> +#define KVM_S390_VM_CPU_TOPO_MTR_SET	1
-> +
->  /* for KVM_GET_REGS and KVM_SET_REGS */
->  struct kvm_regs {
->  	/* general purpose regs for s390 */
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index c8bdce31464f..80a1244f0ead 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -1731,6 +1731,76 @@ static void kvm_s390_sca_set_mtcr(struct kvm *kvm)
->  	ipte_unlock(kvm);
->  }
->  
-> +/**
-> + * kvm_s390_sca_clear_mtcr
-> + * @kvm: guest KVM description
-> + *
-> + * Is only relevant if the topology facility is present,
-> + * the caller should check KVM facility 11
-> + *
-> + * Updates the Multiprocessor Topology-Change-Report to signal
-> + * the guest with a topology change.
-> + */
-> +static void kvm_s390_sca_clear_mtcr(struct kvm *kvm)
+> diff --git a/drivers/media/platform/mediatek/vcodec/Makefile b/drivers/media/platform/mediatek/vcodec/Makefile
+> index 359619653a0e..3f41d748eee5 100644
+> --- a/drivers/media/platform/mediatek/vcodec/Makefile
+> +++ b/drivers/media/platform/mediatek/vcodec/Makefile
+> @@ -9,6 +9,7 @@ mtk-vcodec-dec-y := vdec/vdec_h264_if.o \
+>  		vdec/vdec_vp8_if.o \
+>  		vdec/vdec_vp9_if.o \
+>  		vdec/vdec_h264_req_if.o \
+> +		vdec/vdec_h264_req_common.o \
+>  		mtk_vcodec_dec_drv.o \
+>  		vdec_drv_if.o \
+>  		vdec_vpu_if.o \
+> diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.c
+> new file mode 100644
+> index 000000000000..4e7c9d47751d
+> --- /dev/null
+> +++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.c
+> @@ -0,0 +1,310 @@
+
+<snip>
+
+Here there is still a cast to iomem:
+
+> +void mtk_vdec_h264_copy_scaling_matrix(struct slice_api_h264_scaling_matrix *dst_matrix,
+> +				       const struct v4l2_ctrl_h264_scaling_matrix *src_matrix)
 > +{
-> +	struct bsca_block *sca = kvm->arch.sca; /* SCA version doesn't matter */
+> +	memcpy_toio((void __iomem *)dst_matrix->scaling_list_4x4, src_matrix->scaling_list_4x4,
+> +		    sizeof(dst_matrix->scaling_list_4x4));
 > +
-> +	ipte_lock(kvm);
-> +	sca->utility  &= ~SCA_UTILITY_MTCR;
-
-
-One space too much.
-
-sca->utility &= ~SCA_UTILITY_MTCR;
-
-> +	ipte_unlock(kvm);
-> +}
-> +
-> +static int kvm_s390_set_topology(struct kvm *kvm, struct kvm_device_attr *attr)
-> +{
-> +	if (!test_kvm_facility(kvm, 11))
-> +		return -ENXIO;
-> +
-> +	switch (attr->attr) {
-> +	case KVM_S390_VM_CPU_TOPO_MTR_SET:
-> +		kvm_s390_sca_set_mtcr(kvm);
-> +		break;
-> +	case KVM_S390_VM_CPU_TOPO_MTR_CLEAR:
-> +		kvm_s390_sca_clear_mtcr(kvm);
-> +		break;
-> +	}
-> +	return 0;
-> +}
-> +
-> +/**
-> + * kvm_s390_sca_get_mtcr
-> + * @kvm: guest KVM description
-> + *
-> + * Is only relevant if the topology facility is present,
-> + * the caller should check KVM facility 11
-> + *
-> + * reports to QEMU the Multiprocessor Topology-Change-Report.
-> + */
-> +static int kvm_s390_sca_get_mtcr(struct kvm *kvm)
-> +{
-> +	struct bsca_block *sca = kvm->arch.sca; /* SCA version doesn't matter */
-> +	int val;
-> +
-> +	ipte_lock(kvm);
-> +	val = !!(sca->utility & SCA_UTILITY_MTCR);
-> +	ipte_unlock(kvm);
-> +
-> +	return val;
-> +}
-> +
-> +static int kvm_s390_get_topology(struct kvm *kvm, struct kvm_device_attr *attr)
-> +{
-> +	int mtcr;
-
-I think we prefer something like u16 when copying to user space.
-
-> +
-> +	if (!test_kvm_facility(kvm, 11))
-> +		return -ENXIO;
-> +
-> +	mtcr = kvm_s390_sca_get_mtcr(kvm);
-> +	if (copy_to_user((void __user *)attr->addr, &mtcr, sizeof(mtcr)))
-> +		return -EFAULT;
-> +
-> +	return 0;
+> +	memcpy_toio((void __iomem *)dst_matrix->scaling_list_8x8, src_matrix->scaling_list_8x8,
+> +		    sizeof(dst_matrix->scaling_list_8x8));
 > +}
 
-You should probably add documentation, and document that only the last
-bit (0x1) has a meaning.
+<snip>
 
-Apart from that LGTM.
+> diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c
+> index 27119aa31dd9..b055ceea481d 100644
+> --- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c
+> +++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c
 
--- 
-Thanks,
+<snip>
 
-David / dhildenb
+> -static void
+> -get_h264_scaling_matrix(struct slice_api_h264_scaling_matrix *dst_matrix,
+> -			const struct v4l2_ctrl_h264_scaling_matrix *src_matrix)
+> -{
+> -	memcpy(dst_matrix->scaling_list_4x4, src_matrix->scaling_list_4x4,
+> -	       sizeof(dst_matrix->scaling_list_4x4));
+> -
+> -	memcpy(dst_matrix->scaling_list_8x8, src_matrix->scaling_list_8x8,
+> -	       sizeof(dst_matrix->scaling_list_8x8));
+> -}
 
+but that function was moved (AFAICT) from vdec_h264_req_if.c where a regular memcpy was
+used.
+
+Did you miss one iomem case?
+
+Can I change mtk_vdec_h264_copy_scaling_matrix() to:
+
+void mtk_vdec_h264_copy_scaling_matrix(struct slice_api_h264_scaling_matrix *dst_matrix,
+				       const struct v4l2_ctrl_h264_scaling_matrix *src_matrix)
+{
+	memcpy(dst_matrix->scaling_list_4x4, src_matrix->scaling_list_4x4,
+	       sizeof(dst_matrix->scaling_list_4x4));
+
+	memcpy(dst_matrix->scaling_list_8x8, src_matrix->scaling_list_8x8,
+	       sizeof(dst_matrix->scaling_list_8x8));
+}
+
+If that's OK, then I'll do that manually, so no need to post a v13.
+
+Everything else looks fine, so this is the only issue that needs to be resolved.
+
+Regards,
+
+	Hans

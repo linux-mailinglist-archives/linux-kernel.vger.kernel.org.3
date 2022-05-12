@@ -2,123 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E438525188
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F3F552518C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 17:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356080AbiELPr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 11:47:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53726 "EHLO
+        id S1356075AbiELPrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 11:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356075AbiELPrY (ORCPT
+        with ESMTP id S1355820AbiELPrg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 11:47:24 -0400
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9FB50E39;
-        Thu, 12 May 2022 08:47:21 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id E6D623DD7FF;
-        Thu, 12 May 2022 11:47:19 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id zv6jl3wRXIH2; Thu, 12 May 2022 11:47:19 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 4CA1F3DD747;
-        Thu, 12 May 2022 11:47:19 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 4CA1F3DD747
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1652370439;
-        bh=b8yL8neDJhlV2sjQpyvNupaaXTDO2BcJvNnSgYVO3HE=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=PR6XAF8fpA4u4SkoAhpdVi3lX+oLTj1NYpqtmcQ0d/hSJsg3ge5JgXyEWaDms5oqd
-         Czjrd1tXO3IvbfsoP23U3bN4v8n8k6ClX+2TzeKiJ8puR8eb/zJoxVjNVrBQDoLjNg
-         DLIloGp0I1CpORwhaXNPbTQfwJqT/OWNwi9+VbC1v2Q0hta5p6viBKAeMCvT7l97tf
-         alxO8BkqRF0oftk2Rio5L27DLIw/zgcnPV7ZXy2djC0bEeSPRywgCmHNIE7nFEAC9V
-         Fa31Fh/zOBZ1dQuN/AXJb+Aeld0K39be+yjKFvdfIjDGkI5HKxOGNVRJPdIGWY1Zr/
-         NQC3FcNIrBnEw==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 5OO_J6WMzGUp; Thu, 12 May 2022 11:47:19 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 3F6473DD9B0;
-        Thu, 12 May 2022 11:47:19 -0400 (EDT)
-Date:   Thu, 12 May 2022 11:47:19 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Primiano Tucci <primiano@google.com>
-Message-ID: <1651771383.54437.1652370439159.JavaMail.zimbra@efficios.com>
-Subject: Feedback on user-events UAPI
+        Thu, 12 May 2022 11:47:36 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF86654686;
+        Thu, 12 May 2022 08:47:33 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id ks9so11103858ejb.2;
+        Thu, 12 May 2022 08:47:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OdL976vLL7ORf9B/iqPYmPEs4gjTIH2k/LdAlNEcN30=;
+        b=faJwwC1MuTVmgL5xPNbDL3fF+QN4wmHB4NNbkZt62y2o4pqJqp2UFekOtyVET/OMgY
+         LPSu+Nyw3BwVZK8KY+rzl4M1T5PT1xootFOJLvXCLNdaIclcXB4eIIKzg8nzasrYr2rE
+         ellZLdfWFIzPe8q5XlAifZB4W5MkSL0F+2C+u3q0uv9HWE3Vk47nVRAIREIqiQqIBKeY
+         7zfhW8CQValihInV8dAdfdK6OtGo8PrvTYzp0a1JxsaAmSH50A/dImQGfQ6wLc55BqpR
+         eiVpSxZt7dBpmYWKomGedWkAHvt5zilfvcJ5MjMX6+7n7PaM93htSUtmVJH3lb4AJ/Zy
+         ppIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OdL976vLL7ORf9B/iqPYmPEs4gjTIH2k/LdAlNEcN30=;
+        b=BG6+FW7s8dcNNjGxTl+fgkxkLz6n2F2ccvZtOVyZCtwrI9gOUroLUo2+eu/p2ykJB7
+         rrtYZy9j/Zf6mULhYVdHEnyq4yyJHe5O0dS7KzsBDgSjI2JkX9r581K4QtyS+oa4or9D
+         t8VsJta2tZcXqaKJV9Ui8lx92yL5JSHdBiQ7os4cC9FFohP7awNkI1Wcg2qhirkuGP50
+         /cA3W9TCBF+1xzbExhZDZzSFv4BPfrGoI0SysaumxP4BCfFwOAQrQCXaeWMlRrkgISpP
+         FrErlpAQ9gOJnegZAzddlRHs6te7FP65fJGHD2qCHYh8rGKMtvwzltEQgKsT6ou63332
+         VQQg==
+X-Gm-Message-State: AOAM533aKMnQArAKBHNHzEd01NT1IzX4N7YdKayoBwp0dWdzr3swoUzu
+        +4ob0lKPZtF+zAXfp+A95pI=
+X-Google-Smtp-Source: ABdhPJyN9CavbcLznjgRYCTgBCrVJSgDYbe/sPG7azObZJbJ0mG7qKI5CAjKXKGVKbxb3iOc4yhf+g==
+X-Received: by 2002:a17:906:f857:b0:6f3:a331:c043 with SMTP id ks23-20020a170906f85700b006f3a331c043mr482360ejb.246.1652370452116;
+        Thu, 12 May 2022 08:47:32 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id g7-20020a170906c18700b006f3ef214e58sm2268677ejz.190.2022.05.12.08.47.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 08:47:31 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <8a1db30d-5cfb-6b43-c162-576e24d5dc3f@redhat.com>
+Date:   Thu, 12 May 2022 17:47:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3] KVM: x86/mmu: Update number of zapped pages even if
+ page list is stable
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>
+References: <20220511145122.3133334-1-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220511145122.3133334-1-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4257 (ZimbraWebClient - FF100 (Linux)/8.8.15_GA_4257)
-Thread-Index: o6f5mOT0knDiVDPdCZsAQKF6xvC6vQ==
-Thread-Topic: Feedback on user-events UAPI
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Beau,
+On 5/11/22 16:51, Sean Christopherson wrote:
+>   - Collect David's review.
+>   - "Rebase".  The v2 patch still applies cleanly, but Paolo apparently has
+>     a filter configured to ignore all emails related to the v2 submission.
 
-I have queued a few questions I would like to discuss with respect to the proposed
-user events UAPI. I originally planned to expand further on them, but I now think it's
-best if I ask away right now and we clarify things through discussion:
+I cannot find it at all on patchew.org in fact.  Queued this one now.
 
-First, I find it odd that the event enable bitmask and the event ID and payload
-type registration must be combined. I can think of various use-cases where other
-tracers would be interested to use the event-enable bitmask facility without
-polluting the event ID/payload registration data structures with useless data.
-Can those be split into two distinct independent ABIs ?
-
-I can't help but notice that this new user-space instrumentation infrastructure/ABI
-can only be used for tracing user-space through kernel tracers. Considering that
-ABIs dictated by the kernel usually end up being de facto standards, I am concerned
-that if it is unable to allow purely user-space tracers to use it, then all applications
-will end up being statically instrumented in ways that prevent user-space tracers from
-hooking efficiently on the static instrumentation. As I have replied in an earlier
-thread, purely user-space tracers are not just marginally faster than kernel tracers
-for tracing user-space. They are an order of magnitude faster as soon as all the proper
-configuration steps are taken to ensure there are no system calls on the tracer
-fast path. Therefore, it would be sad to effectively dismiss efficient tracer
-implementations for the sake of easiness of implementation of today's user-event
-ABI. This will cause a precedent we will be stuck with later.
-
-Linux kernel developers involved in implementation of instrumentation within Linux
-have spent a lot of effort to make sure the instrumentation is orthogonal to the
-tracing technology (tracepoints, kprobe, kretprobe...). I understand that making
-sure the user-space instrumentation ABI keeps this orthogonal is a lot more work,
-but nobody said that exposing ABIs to user-space was easy. ;-)
-
-The other point I would like to raise is container awareness. I can't help but
-notice that the user events ABI is exposed to trace all containers, with the intent
-to be used (consumed) from some privileged namespace (e.g. root pid namespace).
-This works in use-cases where the user of the tracing data controls the entire
-machine (all containers), but not so much if the user is a single tenant within
-a multi-tenants systems. I would expect that a proper namespace-aware facility
-would take care of making sure that a trace consumer could observe what is
-instrumented within its own container, and within nested containers as well.
-The fact that all container questions are entirely dismissed, thus keeping a
-event-enable bitmask registry and event ID/type registry global to the entire
-system, is not compatible with consuming traces from a non-privileged container,
-and I suspect this may also be used as a side-channel to learn information about
-what other containers are doing in a multi-tenant system.
-
-Thanks,
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Paolo

@@ -2,103 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B0B524AD2
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FCD2524AD9
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 May 2022 12:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352859AbiELKxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 06:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
+        id S1352862AbiELKyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 06:54:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352837AbiELKxP (ORCPT
+        with ESMTP id S1347401AbiELKyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 06:53:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FFD5DD07
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 03:53:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53CE4B82735
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 10:53:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6243FC385CB;
-        Thu, 12 May 2022 10:53:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652352792;
-        bh=LCPGdta7p+6aXKFPfhnyvHZTQKRdcvBKmz+5TOPyuVc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gAd2qfIUiXBmaRgfEgtCQahrXW6XIgCGFsV21I2lVUtQGFTbzaAM09z4NYekEmOsm
-         /L29phErbXupFGBYVkRPJ5dFWNctHOxu3lToissjFtRnJpksDOCFnb3+7tP9NzMo75
-         rRT4Kg8v21UZTibd+gQjZVC0Dud9qQUXslFFYFnztzr0TawxejiX+773/CtPnqh2OO
-         9IHNikr53Yom2cEsp59d3gepLYO3njzn1fTadKSjbVtFFwV86UMntXVvaH4LDydwJ3
-         A8ZWebclliFzSI8SS0NqlGidLU1Aj8X2F7fIx7bzMs3JVx2tEK7P/DC3kM58wy+ptG
-         KhirY3FY/8psA==
-Date:   Thu, 12 May 2022 11:53:07 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     linux-amarula@amarulasolutions.com, linuxfancy@googlegroups.com,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ASoC: max98088: add support for reg_4a_cfg_bypass reg
-Message-ID: <YnznExLDOvRpXNVh@sirena.org.uk>
-References: <20220512074359.446999-1-tommaso.merciai@amarulasolutions.com>
- <YnzdcubW7m+CwnvN@sirena.org.uk>
- <20220512104642.GD649073@tom-ThinkPad-T14s-Gen-2i>
+        Thu, 12 May 2022 06:54:07 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB9F5DD07;
+        Thu, 12 May 2022 03:54:06 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id gh6so9498187ejb.0;
+        Thu, 12 May 2022 03:54:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=saIXIgLCPDIyYjz9lRSB2RkGl170e531NzygSMa6KRo=;
+        b=ohw4R9Eg0c2ItbfYTsoSCNIzcYvrRzOml2pKWEQaAB4ocJSt0I8jBEz2xw6tSOU2CG
+         hh3DP8+mQs0TdYnI7eErVcX66oWFzSAVgPT3ekolBdecacsvIww7msvYLh2K7F4kyEE3
+         vTqzPB6lX4MXk7bbBc/bz6b1YPiFKsgk+4S//6wkJBKY1GAuBesTOVDTgH2QdK0Vz25w
+         ASPYe45vQr05a1VolDYvZf8IRUflA5UZ3aJRR2SiPQgUHA4hfgT8wTEDlBtZa+hjgdR3
+         QxYNc5LhO4w8r2e+XKplRSfLt4Is+jWJuEd7ZpnnjpQM1a0P2COUml31sM/Guy16eFjR
+         kNQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=saIXIgLCPDIyYjz9lRSB2RkGl170e531NzygSMa6KRo=;
+        b=jDR9mqMyKe8cPzPL8PQ9EAKi66FRO7TBvHK9k58UK11kAr+odr6+WSnVP9oYy235/G
+         BX0aGzXyIv5H20JDauwMBJL1S7woQ+wGvZ43Elb4hCbGFI0UvdSranpxeiTXwHjRLasW
+         +uH5cpzCqEvVxAqH4n4JWtxskQs0qwIyTsTu7Kibg6mfBv+i0C8wIY+1zcSz2ggGCuXu
+         D6F1W+kukkbsVxe2GYFdN5334J82fOqaJKYQgWyddn4jQy7o1bjkOShi/EhGeQYlH/tu
+         4rr1E1YrlnawpROaqE/dQM/d6qnjlY/Dhz0sjUBsRzokk/m8xoKQige1QcU5BlgF3oJh
+         Ri3Q==
+X-Gm-Message-State: AOAM533gijoFvmj638Dv9WKcpDQVetdj2eGUl7ZT62tbSBXMwNwwIlal
+        G9i0HQHk1mypaQLBqekTMcmotNIUofIkQEyYcNE=
+X-Google-Smtp-Source: ABdhPJx1lLArqdjQJqGvhsRJUpI4KPvwCeQobzGn4twNX1r2i4axTm2gv4b7doAu7EwTllKGCeOASI58WuVd4uwVUgE=
+X-Received: by 2002:a17:907:1b19:b0:6f0:1022:1430 with SMTP id
+ mp25-20020a1709071b1900b006f010221430mr30146117ejc.13.1652352845214; Thu, 12
+ May 2022 03:54:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="CKVB2CjTPqpFtP1S"
-Content-Disposition: inline
-In-Reply-To: <20220512104642.GD649073@tom-ThinkPad-T14s-Gen-2i>
-X-Cookie: Oh, wow!  Look at the moon!
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220506232850.220582-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+In-Reply-To: <20220506232850.220582-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Thu, 12 May 2022 12:53:54 +0200
+Message-ID: <CAFBinCDdBzHNzP2WiFke3E-ReTbNO34Tm-8kSV7QO_y8s_VjQQ@mail.gmail.com>
+Subject: Re: [PATCH] rtc: rtc-meson: Fix email address in MODULE_AUTHOR
+To:     Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ben Dooks <ben.dooks@codethink.co.uk>,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---CKVB2CjTPqpFtP1S
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Thu, May 12, 2022 at 12:46:42PM +0200, Tommaso Merciai wrote:
-> On Thu, May 12, 2022 at 11:12:02AM +0100, Mark Brown wrote:
-
-> > These look like they should be DAPM controls since they're controlling
-> > audio routing but they're being added as regular controls.
-
-> Sorry again. You suggest to create a new structure for these entries,
-> for example:
-
-> /* Out Bypass mixer switch */
-> static const struct snd_kcontrol_new max98088_out_bypass_mixer_controls[] = {
->        SOC_DAPM_SINGLE("INA Switch", M98088_REG_4A_CFG_BYPASS, 7, 1, 0),
->        SOC_DAPM_SINGLE("MIC2 Switch", M98088_REG_4A_CFG_BYPASS, 4, 1, 0),
->        SOC_DAPM_SINGLE("REC Switch", M98088_REG_4A_CFG_BYPASS, 1, 1, 0),
->        SOC_DAPM_SINGLE("SPK Switch", M98088_REG_4A_CFG_BYPASS, 0, 1, 0),
-> };
-
-If that's how they fit into the routing for the device, yes - you'd need
-to define the bypass mixer as well and set up appropraite routes.
-
---CKVB2CjTPqpFtP1S
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJ85xIACgkQJNaLcl1U
-h9DvDwf/e+ofKzwgZXoBDaBr7aGL0BNyy6uJeFn8xgNBBkoMYpIVAOtd/mjeCq59
-iJnxneFalVb7PAaICPVnVHiMmhM99HdY+PHzexxB/Ep0edkqvyvKzto0It8agD2i
-FUw/1u/JG60D1NWq7csC/aGzWEdznAat+unlmdMUmNpG+gM+gQyJmvUbLMmD2fAS
-pUo9WARMg+63ufOfpYSkKKnHcZD4NlBW/QM3yxt6PcOCDxOufmdg0YbWzFEnSgZe
-5/gTDDJQ5fORpmV/qlT5kYudiGjmNuG9fZOjd2Uu3Qx8cgrYXI0jRlOIlRsI0UP/
-M4V/w2MBcHZgULbvfttopdB4/Gj9hQ==
-=MmmH
------END PGP SIGNATURE-----
-
---CKVB2CjTPqpFtP1S--
+On Sat, May 7, 2022 at 1:29 AM Nobuhiro Iwamatsu <iwamatsu@nigauri.org> wrote:
+>
+> From: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+>
+> Ben Dooks's email address is <ben.dooks@codethink.co.uk>.
+> Fix Ben Dooks's email address in MODULE_AUTHOR.
+>
+> Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>

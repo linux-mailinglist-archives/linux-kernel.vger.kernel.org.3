@@ -2,131 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 437735268A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62FCC5268A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383152AbiEMRkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 13:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41794 "EHLO
+        id S1383151AbiEMRlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 13:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383141AbiEMRko (ORCPT
+        with ESMTP id S1378054AbiEMRlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 13:40:44 -0400
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C9937016;
-        Fri, 13 May 2022 10:40:43 -0700 (PDT)
-Received: by mail-qv1-f46.google.com with SMTP id p3so7165319qvi.7;
-        Fri, 13 May 2022 10:40:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=MZPDNReCfpGOB46frlHXLcrwoU/2JHKCaMINteeNS58=;
-        b=afEXoGfpoxSKjkcaEEGsTKVHodun2p9dkUAy0iJ6s18T2CqWXUB74ERilAYOJLLZN1
-         e5iYqjHdBmB7XFIPMCfZJOZvR62oRil+h1qs14wGeof12rwzEiDQixpyLsOQKwPftWqv
-         oLo75Y5IISC3/7IWru7mSuB3mns2uTLkQ1ZNYYflo61m719yRweKxoX3366BzN+C2ER9
-         QNGIk+MCwJWTRSMG8DNvSPvzRI9FHNQDbX6lZtfYJQD1XI9kTetpQwWd6QNhePaJmDAf
-         FDloEYy251sgDdps+64YZn3DP8cBbtnkfj4ucGTtyTZbzUn4PuHe+LEJM/+VD+2jKwqm
-         RpFw==
-X-Gm-Message-State: AOAM531whnONAOQKUE0dIn7owHsX6b5hRirIVPYZQEPhg9Hs2J3sqZBJ
-        YNQKSECtEH2NuG/BN20tbD4=
-X-Google-Smtp-Source: ABdhPJzp7kF41QYLvl7mWpcQEP8IwMsLosXZMY7YCtTDaXVD4DMh7jSdnT14/vWxbkpYN3ZvbpIWhg==
-X-Received: by 2002:ad4:5bc1:0:b0:42c:3700:a6df with SMTP id t1-20020ad45bc1000000b0042c3700a6dfmr5395752qvt.94.1652463642530;
-        Fri, 13 May 2022 10:40:42 -0700 (PDT)
-Received: from dev0025.ash9.facebook.com (fwdproxy-ash-119.fbsv.net. [2a03:2880:20ff:77::face:b00c])
-        by smtp.gmail.com with ESMTPSA id y68-20020a37af47000000b0069fc13ce1f3sm1723568qke.36.2022.05.13.10.40.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 10:40:42 -0700 (PDT)
-Date:   Fri, 13 May 2022 10:40:40 -0700
-From:   David Vernet <void@manifault.com>
-To:     Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-Cc:     akpm@linux-foundation.org, cgroups@vger.kernel.org,
-        hannes@cmpxchg.org, kernel-team@fb.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com,
-        tj@kernel.org, Richard Palethorpe <rpalethorpe@suse.de>
-Subject: Re: [PATCH 1/4] selftests: memcg: Fix compilation
-Message-ID: <20220513174040.x5fgcla3q3cqkeck@dev0025.ash9.facebook.com>
-References: <20220512174452.tr34tuh4k5jm6qjs@dev0025.ash9.facebook.com>
- <20220513171811.730-1-mkoutny@suse.com>
- <20220513171811.730-2-mkoutny@suse.com>
+        Fri, 13 May 2022 13:41:23 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46CA37016;
+        Fri, 13 May 2022 10:41:22 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24DFoNNJ029518;
+        Fri, 13 May 2022 17:41:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=A3XnZQ6YpqtO40TftLuafxyiFzB/TUNuZXRH/RS1lUA=;
+ b=aOOfdG8AoetdKnbZYcbjpcNC8Kn5L1qGs2fU2/qt06OfJwEoK3yhf7DIcfFYNvP8BJ9e
+ Jwlr6DNc3WdLTa61chZsWcuj8OCbAy+cVdF+xoHtoRiTNSCTmJcjez0f2vFKb8yZjHQV
+ O+ZDgluG19oCx4VpXEUCSjAMMqxw3+GwzlV143xtA8O8romhCFxC2h6CMmJFsSejm5KE
+ iiujvw9ecT8L2itRcsQ1HOzGvidVVVwqDMzWUEnj87vSQ/eunJMQ8tWz6fk3T6dkmB4v
+ WGgVGcgAEU+ZoD6Nqmla+dYOT9z4KZVWl7Chw1h6dxdy4lfAcNN420rCBKl9izvPcZpN 4A== 
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g1tay21a8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 May 2022 17:41:22 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24DHI1VG021464;
+        Fri, 13 May 2022 17:41:21 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma04dal.us.ibm.com with ESMTP id 3fwgdaxrvh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 May 2022 17:41:21 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24DHfKKM53674246
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 13 May 2022 17:41:20 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9867E28068;
+        Fri, 13 May 2022 17:41:20 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 81C742805C;
+        Fri, 13 May 2022 17:41:20 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri, 13 May 2022 17:41:20 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.ibm.com>
+To:     zohar@linux.ibm.com, linux-integrity@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH] evm: Clean up some variables
+Date:   Fri, 13 May 2022 13:41:05 -0400
+Message-Id: <20220513174105.3684229-1-stefanb@linux.ibm.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220513171811.730-2-mkoutny@suse.com>
-User-Agent: NeoMutt/20211029
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: L6-_QRwc0t-i2i1oIRntaZXFSyDdfc3Z
+X-Proofpoint-GUID: L6-_QRwc0t-i2i1oIRntaZXFSyDdfc3Z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-13_09,2022-05-13_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 mlxscore=0 mlxlogscore=999 lowpriorityscore=0
+ spamscore=0 malwarescore=0 phishscore=0 impostorscore=0 clxscore=1015
+ suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2205130074
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 07:18:08PM +0200, Michal Koutný wrote:
-> This fixes mis-applied changes from commit 72b1e03aa725 ("cgroup:
-> account for memory_localevents in test_memcg_oom_group_leaf_events()").
-> 
-> Signed-off-by: Michal Koutný <mkoutny@suse.com>
-> ---
->  .../selftests/cgroup/test_memcontrol.c        | 25 +++++++++++--------
->  1 file changed, 14 insertions(+), 11 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-> index 6ab94317c87b..4958b42201a9 100644
-> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
-> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-> @@ -1241,7 +1241,16 @@ static int test_memcg_oom_group_leaf_events(const char *root)
->  	if (cg_read_key_long(child, "memory.events", "oom_kill ") <= 0)
->  		goto cleanup;
->  
-> -	if (cg_read_key_long(parent, "memory.events", "oom_kill ") <= 0)
-> +	parent_oom_events = cg_read_key_long(
-> +			parent, "memory.events", "oom_kill ");
-> +	/*
-> +	 * If memory_localevents is not enabled (the default), the parent should
-> +	 * count OOM events in its children groups. Otherwise, it should not
-> +	 * have observed any events.
-> +	 */
-> +	if (has_localevents && parent_oom_events != 0)
-> +		goto cleanup;
-> +	else if (!has_localevents && parent_oom_events <= 0)
->  		goto cleanup;
->  
->  	ret = KSFT_PASS;
-> @@ -1349,20 +1358,14 @@ static int test_memcg_oom_group_score_events(const char *root)
->  	if (!cg_run(memcg, alloc_anon, (void *)MB(100)))
->  		goto cleanup;
->  
-> -	parent_oom_events = cg_read_key_long(
-> -			parent, "memory.events", "oom_kill ");
-> -	/*
-> -	 * If memory_localevents is not enabled (the default), the parent should
-> -	 * count OOM events in its children groups. Otherwise, it should not
-> -	 * have observed any events.
-> -	 */
-> -	if ((has_localevents && parent_oom_events == 0) ||
-> -	     parent_oom_events > 0)
-> -		ret = KSFT_PASS;
-> +	if (cg_read_key_long(memcg, "memory.events", "oom_kill ") != 3)
-> +		FAIL(cleanup);
->  
->  	if (kill(safe_pid, SIGKILL))
->  		goto cleanup;
->  
-> +	ret = KSFT_PASS;
-> +
->  cleanup:
->  	if (memcg)
->  		cg_destroy(memcg);
-> -- 
-> 2.35.3
-> 
+Make hmac_tfm static since it's not used anywhere else besides the file
+it is in.
 
-Thanks for the fix, Michal.
+Remove declaration of hash_tfm since it doesn't exist.
 
-Reviewed-by: David Vernet <void@manifault.com>
+Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+---
+ security/integrity/evm/evm.h        | 3 ---
+ security/integrity/evm/evm_crypto.c | 2 +-
+ 2 files changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/security/integrity/evm/evm.h b/security/integrity/evm/evm.h
+index 0d44f41d16f8..f8b8c5004fc7 100644
+--- a/security/integrity/evm/evm.h
++++ b/security/integrity/evm/evm.h
+@@ -38,9 +38,6 @@ extern int evm_initialized;
+ 
+ extern int evm_hmac_attrs;
+ 
+-extern struct crypto_shash *hmac_tfm;
+-extern struct crypto_shash *hash_tfm;
+-
+ /* List of EVM protected security xattrs */
+ extern struct list_head evm_config_xattrnames;
+ 
+diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
+index 0450d79afdc8..a733aff02006 100644
+--- a/security/integrity/evm/evm_crypto.c
++++ b/security/integrity/evm/evm_crypto.c
+@@ -26,7 +26,7 @@
+ static unsigned char evmkey[MAX_KEY_SIZE];
+ static const int evmkey_len = MAX_KEY_SIZE;
+ 
+-struct crypto_shash *hmac_tfm;
++static struct crypto_shash *hmac_tfm;
+ static struct crypto_shash *evm_tfm[HASH_ALGO__LAST];
+ 
+ static DEFINE_MUTEX(mutex);
+-- 
+2.35.1
+

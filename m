@@ -2,66 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD29526207
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 14:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40966526213
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 14:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355985AbiEMMeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 08:34:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51900 "EHLO
+        id S1380324AbiEMMee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 08:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380327AbiEMMdk (ORCPT
+        with ESMTP id S1380317AbiEMMe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 08:33:40 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A2E674C2;
-        Fri, 13 May 2022 05:33:39 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id A42C721A28;
-        Fri, 13 May 2022 12:33:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652445217; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Djcq6OteRPEfJn//KjLPsXwBBDlJy1Icla/0iyhv198=;
-        b=RtoFWSjaH5iSe8BXb79GYjey9O/UmVHeoV/3jkOlbZvLgsgUSLUBe16bayG8d7VxDxL8qT
-        d25mAxBYg6g2M0NdK5e1HU3ETaY5+Zhn6efOh+Obifua/+CIYSmnJaFdHuayfDBka/ehfD
-        cwQ+3BvUI8+lQ25c5+spYKDD+d6sGsg=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 7DC822C141;
-        Fri, 13 May 2022 12:33:37 +0000 (UTC)
-Date:   Fri, 13 May 2022 14:33:34 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, Rik van Riel <riel@fb.com>,
-        "song@kernel.org" <song@kernel.org>,
-        "joe.lawrence@redhat.com" <joe.lawrence@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>
-Subject: Re: [RFC] sched,livepatch: call klp_try_switch_task in __cond_resched
-Message-ID: <Yn5QHpc9YlAbP1li@alley>
-References: <6bf85ff908377508a5f5bcc7c4e75d598b96f388.camel@fb.com>
- <20220510165244.ikfh64ertnvodxb4@treble>
- <1bd15361edfd4db9fc9271d35e7bbe5edad1b87a.camel@fb.com>
- <20220510184213.l3gjweeleyg7obca@treble>
- <47440502-930F-4CBD-B859-3AC9BBFF8FC6@fb.com>
- <20220510230402.e5ymkwt45sg7bd35@treble>
- <D298A3F1-43A5-4FD5-B198-906364BF4B79@fb.com>
- <20220511003331.clfvwfgpmbr5yx6n@treble>
- <20220511092433.GA26047@pathway.suse.cz>
- <78DFED12-571B-489C-A662-DA333555266B@fb.com>
+        Fri, 13 May 2022 08:34:28 -0400
+Received: from mail-sz.amlogic.com (mail-sz.amlogic.com [211.162.65.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F325A66FB0;
+        Fri, 13 May 2022 05:34:16 -0700 (PDT)
+Received: from droid11-sz.amlogic.com (10.28.8.21) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server id 15.1.2176.2; Fri, 13 May 2022
+ 20:32:42 +0800
+From:   Liang Yang <liang.yang@amlogic.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        <linux-mtd@lists.infradead.org>
+CC:     Liang Yang <liang.yang@amlogic.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        XianWei Zhao <xianwei.zhao@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        BiChao Zheng <bichao.zheng@amlogic.com>,
+        YongHui Yu <yonghui.yu@amlogic.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v5 0/4] fix the meson NFC clock
+Date:   Fri, 13 May 2022 20:34:00 +0800
+Message-ID: <20220513123404.48513-1-liang.yang@amlogic.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <78DFED12-571B-489C-A662-DA333555266B@fb.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.28.8.21]
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,49 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-05-11 16:33:57, Song Liu wrote:
-> 
-> 
-> > On May 11, 2022, at 2:24 AM, Petr Mladek <pmladek@suse.com> wrote:
-> > 
-> > On Tue 2022-05-10 17:33:31, Josh Poimboeuf wrote:
-> >> On Tue, May 10, 2022 at 11:57:04PM +0000, Song Liu wrote:
-> >>>> If it's a real bug, we should fix it everywhere, not just for Facebook.
-> >>>> Otherwise CONFIG_PREEMPT and/or non-x86 arches become second-class
-> >>>> citizens.
-> >>> 
-> >>> I think "is it a real bug?" is the top question for me. So maybe we 
-> >>> should take a step back.
-> >>> 
-> >>> The behavior we see is: A busy kernel thread blocks klp transition 
-> >>> for more than a minute. But the transition eventually succeeded after 
-> >>> < 10 retries on most systems. The kernel thread is well-behaved, as 
-> >>> it calls cond_resched() at a reasonable frequency, so this is not a 
-> >>> deadlock. 
-> >>> 
-> >>> If I understand Petr correctly, this behavior is expected, and thus 
-> >>> is not a bug or issue for the livepatch subsystem. This is different
-> >>> to our original expectation, but if this is what we agree on, we 
-> >>> will look into ways to incorporate long wait time for patch 
-> >>> transition in our automations. 
-> >> 
-> >> That's how we've traditionally looked at it, though apparently Red Hat
-> >> and SUSE have implemented different ideas of what a long wait time is.
-> >> 
-> >> In practice, one minute has always been enough for all of kpatch's users
-> >> -- AFAIK, everybody except SUSE -- up until now.
-> > 
-> > I am actually surprised that nobody met the problem yet. There are
-> > "only" 60 attempts to transition the pending tasks.
-> 
-> Maybe we should consider increase the frequency we try? Say to 10 times
-> per second? I guess this will solve most of the failures we are seeing
-> in current case. 
+EMMC and NAND have the same clock control register named 'SD_EMMC_CLOCK'
+which is defined in EMMC port internally. bit0~5 of 'SD_EMMC_CLOCK' is
+the divider and bit6~7 is the mux for fix pll and xtal. At the beginning,
+a common MMC and NAND sub-clock was discussed and planed to be implemented
+as NFC clock provider, but now this series of patches of a common MMC and
+NAND sub-clock are never being accepted and the current binding was never
+valid. the reasons are:
+1. EMMC and NAND, which are mutually exclusive anyway
+2. coupling the EMMC and NAND.
+3. it seems that a common MMC and NAND sub-clock is over engineered.
+and let us see the link for more information:
+https://lore.kernel.org/all/20220121074508.42168-5-liang.yang@amlogic.com
+so The meson nfc can't work now, let us rework the clock.
 
-My concern is that klp_try_complete_transition() checks all processes
-under read_lock(&tasklist_lock). It might create some contention
-on this lock. I am not sure if this lock is fair. It might slow down
-block writers (creating/deleting tasks).
+Changes since v4 [5]
+ - split the dt binding patch into two patches, one for fixing, 
+   clock, the other for coverting to yaml
+ - split the nfc driver patch into two patches, one for fixing 
+   clock, the other for refining the get nfc resource.
 
-Best Regards,
-Petr
+Changes since v3 [4]
+ - use devm_platform_ioremap_resource_byname
+ - dt_binding_check for mtd/amlogic,meson-nand.yaml
+
+Changes since v2 [3]
+ - use fw_name from dts, instead the wrong way using __clk_get_name
+ - reg resource size change to 0x800
+ - use reg-names
+
+Changes since v1 [2]
+ - use clk_parent_data instead of parent_names
+ - define a reg resource instead of sd_emmc_c_clkc 
+
+[1] https://lore.kernel.org/r/20220106033130.37623-1-liang.yang@amlogic.com
+    https://lore.kernel.org/r/20220106032504.23310-1-liang.yang@amlogic.com
+[2] https://lore.kernel.org/all/20220217063346.21691-1-liang.yang@amlogic.com
+[3] https://lore.kernel.org/all/20220318124121.26117-1-liang.yang@amlogic.com
+[4] https://lore.kernel.org/all/20220402074921.13316-1-liang.yang@amlogic.com/
+
+Liang Yang (4):
+  dt-bindings: nand: meson: fix meson nfc clock
+  mtd: rawnand: meson: fix the clock
+  mtd: rawnand: meson: refine resource getting in probe
+  dt-bindings: nand: meson: convert txt to yaml
+
+ .../bindings/mtd/amlogic,meson-nand.txt       | 60 -------------
+ .../bindings/mtd/amlogic,meson-nand.yaml      | 88 +++++++++++++++++++
+ drivers/mtd/nand/raw/meson_nand.c             | 86 +++++++++---------
+ 3 files changed, 130 insertions(+), 104 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
+ create mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
+
+-- 
+2.34.1
+

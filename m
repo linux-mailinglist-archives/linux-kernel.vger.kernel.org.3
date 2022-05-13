@@ -2,56 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39CFE526D34
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 00:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83FA4526D37
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 00:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233414AbiEMW40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 18:56:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48292 "EHLO
+        id S1384913AbiEMW57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 18:57:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384919AbiEMW4Q (ORCPT
+        with ESMTP id S244418AbiEMW55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 18:56:16 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8390C36B58
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 15:56:14 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id ks9so18821852ejb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 15:56:14 -0700 (PDT)
+        Fri, 13 May 2022 18:57:57 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297AE17E3F;
+        Fri, 13 May 2022 15:57:56 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id a10so10243159ioe.9;
+        Fri, 13 May 2022 15:57:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=yHYjKyDImi3l5dDyx9DR+vuao9yWufvS15O7CLzoC40=;
-        b=cZh8FuRrzbQ1mOiYZTVxKh0ixLrtkMDJFWe6Sw1usjrJiAl5VRA0sAKlrUSLyc/QLx
-         ADCbPxnI7oAyAwl//Ks/Iop8AnNmLxW2msVsfk950kX8BNheJhferrNLXBBPt6B7UADW
-         gln+ly61FX3/OPch/MOjKDSVn2w+h8EJRJmJV4wAtQOkQ/eceKgidFphTwG8JygwCqH7
-         m2bJckksP0ymgFooHLSBl9T8Pk7ehWILO65+5H/HuGKgNMSThraC44B/T5VSOywvVJYl
-         rTdShpbqsux2Nruse0Hz42OOt0SEiO2jqfKsk7j0y22gbkr1za+20yMoHyr+7aWTix6A
-         WmFw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5qaVyZvzGf9D9TR/BSQ+mQsaNY1sb+JjxbLPRurfSus=;
+        b=YHuYmeoAoE/7wiR96FKUJtLMpKbEH1Q10Gwb/VRld1GHa8ix+eu+vAdUdlnftwTjJQ
+         6XAU58Q4V/LE77PzJjsounf/xpYRZ6cAyXbxzmW5qtqct36AyhupilJzuPfiKi11UlXV
+         /0GcNMIwPrw8PaGMMefuqeFL3QNgi5lCRbCRohKrsut50acQVrAgpe5Hz53hAt0NYlqy
+         yXLfEDfTrGnClKF40KnzTqg3+jQz2wRwdEM5DCTNQ5LRLHiRNr8rJ8Be4QubMj97FrkD
+         602VdmJ7qcKE8FyMymTqI1DW8oFz8CHif3xLVYDEz+mdDAz22fvRd5oa+jdRQ8a8r3eW
+         apVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=yHYjKyDImi3l5dDyx9DR+vuao9yWufvS15O7CLzoC40=;
-        b=20dPzkXOPTueJlG2IxDBWUmHLkYwydCCNTLlo+fSKVMZsseJk11AgOC6JYrnJ6UGOD
-         xost2vdlwQrUQqJk6g6/M3Ky+tQTew3+0lJ0jdDhsGPM/Ul8dcnhQGOn3nOynpX6qC2d
-         XsYmPm/2hdbkYq7Oo7EA9VQOQUBbodbxsfkNFq75viywe6bTFms2UdOSxAeoTPv/u/+8
-         BFqi92b0WOF2TKFF3n746vW7tAxpZfNpB9f2W4TTuIMyXTiOF9fsk7q0TzN5lBOnMiPO
-         p6BHXXvnvU/dLN9lM6Jj63rhbg843HV628KxXo1FIFO3wY+4bVWLGaXAnQuaY1288gQo
-         gQJw==
-X-Gm-Message-State: AOAM5330D4w9gppxTZBotcSPomQQSmlB74ierWRcFvePqXHBfGKuDKit
-        jMfRMad6p01wpl+OmB/fUWrZAzLYITRQlqY/dtI=
-X-Google-Smtp-Source: ABdhPJwJz/KBfqCWxJah+sFmFhNu0NNxcgima/D1cUeGVRvZtfdArdmTyYR5uMA5inyXdFvXN46H3XZNY9BtKBg9lDE=
-X-Received: by 2002:a17:906:6bd7:b0:6f4:e6e4:1d41 with SMTP id
- t23-20020a1709066bd700b006f4e6e41d41mr6295534ejs.770.1652482572925; Fri, 13
- May 2022 15:56:12 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5qaVyZvzGf9D9TR/BSQ+mQsaNY1sb+JjxbLPRurfSus=;
+        b=tQxR6/O1pvWCn9nkRVvG/nH9a0k1fuDvrCTeeXStYimiQZBwoqJbv9KL45dvrSkC3K
+         xtx2kMbF21XJLUxak1O+EzfKpSkdmHDa68J67GeQVQK03d41msLKnK3wsc6//2glkzj0
+         GI/Ta2JcnroObc+h1lpf21Zn8qvoYEOm4pn9zCWJKRGjDEVoasS2rz1Pv2AOFBQ0F8DE
+         p/gXluqC1R/WuVJWgi2VQmDoZI/8SXVhRyaToUeIPrLxwdlSJH12wwvlKfTQ8GmZbD+6
+         azCe82nFXUJwOl10yrhGtTeWI4Wn8+li2TdTeNWjpmPQ7T+mEurqPr/t6flx/Xhsvdru
+         lMTg==
+X-Gm-Message-State: AOAM532/GE6sY4TLXcHlB5JWC5zET4Zro8kR3O91HSpAfJK8MoH+74kN
+        vHokwmv5e8gCDZAzZ9Ze2RoCN62mPUQglH8OJBE=
+X-Google-Smtp-Source: ABdhPJyLI8hRmZa7wP8SIkRPRLnLX8rsCNNKr1bmq9F7Ax+IEIYKV/BkguJMrrAClsZASZEQlw27i2dQ8WiL421/9lM=
+X-Received: by 2002:a05:6638:533:b0:32a:d418:b77b with SMTP id
+ j19-20020a056638053300b0032ad418b77bmr3731100jar.237.1652482675539; Fri, 13
+ May 2022 15:57:55 -0700 (PDT)
 MIME-Version: 1.0
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Sat, 14 May 2022 08:56:01 +1000
-Message-ID: <CAPM=9txpYhzyZtd60LEuBYYN+AVyeEQ8=h43bK=ZY8QCQpY5mg@mail.gmail.com>
-Subject: [git pull] drm fixes for 5.18-rc7 (follow up)
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220513004117.364577-1-yosryahmed@google.com>
+In-Reply-To: <20220513004117.364577-1-yosryahmed@google.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 13 May 2022 15:57:44 -0700
+Message-ID: <CAEf4BzYiuBaCBcF6T9JRJ=fB=PWtDb9p-5CJAi164F4_h5fQPw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: fix building bpf selftests statically
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -63,137 +73,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Linus,
+On Thu, May 12, 2022 at 5:41 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+> bpf selftests can no longer be built with CFLAGS=-static with
+> liburandom_read.so and its dependent target.
+>
+> Filter out -static for liburandom_read.so and its dependent target.
+>
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> ---
+>  tools/testing/selftests/bpf/Makefile | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 6bbc03161544..4eaefc187d5b 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -168,14 +168,17 @@ $(OUTPUT)/%:%.c
+>         $(call msg,BINARY,,$@)
+>         $(Q)$(LINK.c) $^ $(LDLIBS) -o $@
+>
+> +# If the tests are being built statically, exclude dynamic libraries defined
+> +# in this Makefile and their dependencies.
+> +DYNAMIC_CFLAGS := $(filter-out -static,$(CFLAGS))
 
-Turns out I was right, some fixes hadn't made it to me yet. The vmwgfx
-ones also popped up later, but all seem like bad enough things to fix.
-The dma-buf, vc4 and nouveau ones are all pretty small.
+I don't particularly like yet another CFLAGS global variable, but also
+you are not filtering out -static from LDFLAGS, which would be
+problematic if you try to do
 
-The fbdev fixes are a bit more complicated, a fix to cleanup fbdev
-devices properly, uncovered some use-after-free bugs in existing
-drivers. Then the fix for those bugs wasn't correct. This reverts that
-fix, and puts the proper fixes in place in the drivers to avoid the
-use-after-frees. This has had a fair number of eyes on it at this
-stage, and I'm confident enough that it puts things in the right
-place, and is less dangerous than reverting our way out of the initial
-change at this stage.
+make SAN_FLAGS=-static
 
-Let me know if you want more details, the commit msgs are quite verbose.
+which otherwise would work (and is probably better than overriding all of CFLAGS
 
-Dave.
+How about something like this
 
-drm-fixes-2022-05-14:
-drm fixes for 5.18-rc7 (part two)
+diff --git a/tools/testing/selftests/bpf/Makefile
+b/tools/testing/selftests/bpf/Makefile
+index 6bbc03161544..2e8eddf240af 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -170,11 +170,11 @@ $(OUTPUT)/%:%.c
 
-fbdev:
-- revert NULL deref fix that turned into a use-after-free
-- prevent use-after-free in fbdev
-- efifb/simplefb/vesafb: fix cleanup paths to avoid use-after-frees
+ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c
+        $(call msg,LIB,,$@)
+-       $(Q)$(CC) $(CFLAGS) -fPIC $(LDFLAGS) $^ $(LDLIBS) --shared -o $@
++       $(Q)$(CC) $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $^
+$(LDLIBS) -fPIC -shared -o $@
 
-dma-buf:
-- fix panic in stats setup
+ $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c
+$(OUTPUT)/liburandom_read.so
+        $(call msg,BINARY,,$@)
+-       $(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.c,$^)                        \
++       $(Q)$(CC) $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $(filter %.c,$^)  \
+                  liburandom_read.so $(LDLIBS)                                 \
+                  -Wl,-rpath=. -Wl,--build-id=sha1 -o $@
 
-vc4:
-- fix hdmi build
+?
 
-nouveau:
-- tegra iommu present fix
-- fix leak in backlight name
 
-vmwgfx:
-- Black screen due to fences using FIFO checks on SVGA3
-- Random black screens on boot due to uninitialized drm_mode_fb_cmd2
-- Hangs on SVGA3 due to command buffers being used with gbobjects
-The following changes since commit 5005e9814698f47c5a3698fcc56c9f5e6f1d4644:
+But I also have a question, this leaves urandom_read relying on
+system-wide shared libraries, isn't that still a problem for you? Or
+you intend to just ignore urandom_read-related tests?
 
-  Merge tag 'amd-drm-fixes-5.18-2022-05-11' of
-https://gitlab.freedesktop.org/agd5f/linux into drm-fixes (2022-05-13
-10:40:56 +1000)
 
-are available in the Git repository at:
+$ ldd urandom_read
+        linux-vdso.so.1 (0x00007ffd0d5e5000)
+        liburandom_read.so (0x00007fc7f7d76000)
+        libelf.so.1 => /lib64/libelf.so.1 (0x00007fc7f7937000)
+        libz.so.1 => /lib64/libz.so.1 (0x00007fc7f7720000)
+        librt.so.1 => /lib64/librt.so.1 (0x00007fc7f7518000)
+        libpthread.so.0 => /lib64/libpthread.so.0 (0x00007fc7f72f8000)
+        libc.so.6 => /lib64/libc.so.6 (0x00007fc7f6f33000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007fc7f7b50000)
 
-  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-05-14
 
-for you to fetch changes up to eb7bac3973d209e5227d1783676362ee5a8a7127:
 
-  Merge tag 'drm-misc-fixes-2022-05-13' of
-git://anongit.freedesktop.org/drm/drm-misc into drm-fixes (2022-05-14
-08:34:07 +1000)
 
-----------------------------------------------------------------
-drm fixes for 5.18-rc7 (part two)
-
-fbdev:
-- revert NULL deref fix that turned into a use-after-free
-- prevent use-after-free in fbdev
-- efifb/simplefb/vesafb: fix cleanup paths to avoid use-after-frees
-
-dma-buf:
-- fix panic in stats setup
-
-vc4:
-- fix hdmi build
-
-nouveau:
-- tegra iommu present fix
-- fix leak in backlight name
-
-vmwgfx:
-- Black screen due to fences using FIFO checks on SVGA3
-- Random black screens on boot due to uninitialized drm_mode_fb_cmd2
-- Hangs on SVGA3 due to command buffers being used with gbobjects
-
-----------------------------------------------------------------
-Charan Teja Reddy (1):
-      dma-buf: call dma_buf_stats_setup after dmabuf is in valid list
-
-Christophe JAILLET (1):
-      drm/nouveau: Fix a potential theorical leak in
-nouveau_get_backlight_name()
-
-Daniel Vetter (1):
-      fbdev: Prevent possible use-after-free in fb_release()
-
-Dave Airlie (2):
-      Merge tag 'vmwgfx-drm-fixes-5.18-2022-05-13' of
-https://gitlab.freedesktop.org/zack/vmwgfx into drm-fixes
-      Merge tag 'drm-misc-fixes-2022-05-13' of
-git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
-
-Hui Tang (1):
-      drm/vc4: hdmi: Fix build error for implicit function declaration
-
-Javier Martinez Canillas (5):
-      Revert "fbdev: Make fb_release() return -ENODEV if fbdev was unregistered"
-      fbdev: simplefb: Cleanup fb_info in .fb_destroy rather than .remove
-      fbdev: efifb: Cleanup fb_info in .fb_destroy rather than .remove
-      fbdev: vesafb: Cleanup fb_info in .fb_destroy rather than .remove
-      fbdev: efifb: Fix a use-after-free due early fb_info cleanup
-
-Maarten Lankhorst (1):
-      Merge remote-tracking branch 'drm/drm-fixes' into drm-misc-fixes
-
-Robin Murphy (1):
-      drm/nouveau/tegra: Stop using iommu_present()
-
-Zack Rusin (3):
-      drm/vmwgfx: Fix fencing on SVGAv3
-      drm/vmwgfx: Initialize drm_mode_fb_cmd2
-      drm/vmwgfx: Disable command buffers on svga3 without gbobjects
-
- drivers/dma-buf/dma-buf.c                          |  8 +++----
- drivers/gpu/drm/nouveau/nouveau_backlight.c        |  9 +++----
- drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c |  2 +-
- drivers/gpu/drm/vc4/vc4_hdmi.c                     |  1 +
- drivers/gpu/drm/vmwgfx/vmwgfx_cmd.c                | 13 ++++++----
- drivers/gpu/drm/vmwgfx/vmwgfx_drv.h                |  8 +++++++
- drivers/gpu/drm/vmwgfx/vmwgfx_fb.c                 |  2 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_fence.c              | 28 ++++++++++++++++------
- drivers/gpu/drm/vmwgfx/vmwgfx_irq.c                | 26 +++++++++++++-------
- drivers/gpu/drm/vmwgfx/vmwgfx_kms.c                |  8 ++++---
- drivers/video/fbdev/core/fbmem.c                   |  5 +---
- drivers/video/fbdev/core/fbsysfs.c                 |  4 ++++
- drivers/video/fbdev/efifb.c                        |  9 ++++++-
- drivers/video/fbdev/simplefb.c                     |  8 ++++++-
- drivers/video/fbdev/vesafb.c                       |  8 ++++++-
- 15 files changed, 99 insertions(+), 40 deletions(-)
+>  $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c
+>         $(call msg,LIB,,$@)
+> -       $(Q)$(CC) $(CFLAGS) -fPIC $(LDFLAGS) $^ $(LDLIBS) --shared -o $@
+> +       $(Q)$(CC) $(DYNAMIC_CFLAGS) -fPIC $(LDFLAGS) $^ $(LDLIBS) --shared -o $@
+>
+>  $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_read.so
+>         $(call msg,BINARY,,$@)
+> -       $(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.c,$^)                        \
+> -                 liburandom_read.so $(LDLIBS)                                 \
+> +       $(Q)$(CC) $(DYNAMIC_CFLAGS) $(LDFLAGS) $(filter %.c,$^)                 \
+> +                 liburandom_read.so $(LDLIBS)                                  \
+>                   -Wl,-rpath=. -Wl,--build-id=sha1 -o $@
+>
+>  $(OUTPUT)/bpf_testmod.ko: $(VMLINUX_BTF) $(wildcard bpf_testmod/Makefile bpf_testmod/*.[ch])
+> --
+> 2.36.0.550.gb090851708-goog
+>

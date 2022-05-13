@@ -2,171 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C9F525E14
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 11:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31FF9525E1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 11:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378935AbiEMJLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 05:11:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39824 "EHLO
+        id S1378925AbiEMJMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 05:12:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378907AbiEMJK6 (ORCPT
+        with ESMTP id S231523AbiEMJMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 05:10:58 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 045B9D83;
-        Fri, 13 May 2022 02:10:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9wPbBgfhyB15p9fMVpN0HXj8ubcOCLHwB5quRLaukZI=; b=F/yk5KFtp1tUsX1DuERzFcdod8
-        PAxCxEEXD7MyneyMeUr0otrxqSZbZli18/ximq1SuKtHtciGcHRx0mShVuHSznYW8ykyv73kk+7wP
-        51DWO+9yhPvdmXxyWz4aW0yE1aD8qGRw58BBTFnHh9nb9VJrceA+dZ5TBGMNb00r+ut/6YX3Zi8j2
-        M8qa4Xt0Tqfa4n7imDOQIICgkyEg9oc3AmAKQWO4x7MCRbT56J9AG+Qlx3lTvHQUl5oJQq7jQAQxh
-        8yEvYiuSrlgld5UVo1tB5M13MKTruEaM0OfARARfK/daNjnFwJJ82aaDf7FP2kv3rgGhKQe2ycWmp
-        0k72CeOg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1npRJk-00DkcX-T7; Fri, 13 May 2022 09:10:37 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1A8A6980F9A; Fri, 13 May 2022 11:10:35 +0200 (CEST)
-Date:   Fri, 13 May 2022 11:10:34 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Uros Bizjak <ubizjak@gmail.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Marco Elver <elver@google.com>
-Subject: Re: [PATCH] locking/atomic/x86: Introduce try_cmpxchg64
-Message-ID: <20220513091034.GH76023@worktop.programming.kicks-ass.net>
-References: <20220510154217.5216-1-ubizjak@gmail.com>
+        Fri, 13 May 2022 05:12:09 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7893D484
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 02:12:07 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id j25so9539517wrc.9
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 02:12:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=FgorTPbnFvVixyR8EXfPPsDvCseGItjIY4UCOJ+wbp8=;
+        b=os8I3KHn5Lu7+abAV1auwe2u9XMcOJElEI12ti+iHbGswucuLcHhRoY3UB+gEYtS9C
+         zwREa+Fa0CzA/sSSDTxBHU1x/i+BLMHjolY9XfHp+WYn/hRgdn+gBBX7X/vftjNxeV5s
+         txWsCT6ORZm9Ly8xfbWn8SGPlrAlFlZNiOelarOqArD/LOzXqRPC7I55srgkwIacwPCL
+         YO9NnPFbYmXtomkuUIzZNNQAJ3BZ7HJjBw5BAvz5lBDWiYoMfYc7gcIMmRnbeOE6/Cm+
+         m/Bqqaq7GxMQkIOKlynmX+uRMyFSW52jawwkw0CrVeEGKR4yl7B1KzANfVrh/kzz9Si5
+         90Ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=FgorTPbnFvVixyR8EXfPPsDvCseGItjIY4UCOJ+wbp8=;
+        b=kugKeaLX7ymV8M5azMtyx+c25ckqU6d/RRULM4nUCC03N3zyKvO+o5ANdX4cdi+w2n
+         PYztjfGAasT2CyIJ4I8YohPgmgOJ3p3F3o+vl3G+OiI39r3yrawM17jA+ps4pmT0k3vx
+         fZdRqGgdpKVtLZgaJqzxMi0ZP1/ZwOwL14hhymtOMhuCKbMQw/zsiUJgarvsL85pEMN0
+         Ne95Bw1+T9ftZAdPSDRQ2Nj5Mq6UcSoSHSOo4Bd1UXLVTbnUztWAlLasW2YcM14rl6A9
+         a2tLoEZSdD5YAA6bg8wJ03MLryciLrUDDPXCb4cnUme65E7tVgqzfCsu+6vz11zgFghn
+         zgpQ==
+X-Gm-Message-State: AOAM532JgbAUFJX0n14TK4A2HteErt9jIDEByTYPhypM542B4r718dmh
+        vnretZfGsh+IuJjDD0BhRQiryQ==
+X-Google-Smtp-Source: ABdhPJyW9FzscuEPUGlS7ChUMHGjRxjtug2/EnQzJ/+FjnbBd7cqELKWMnSCuHntRMfk6p2pp72A7g==
+X-Received: by 2002:a05:6000:1d98:b0:20c:c29d:76db with SMTP id bk24-20020a0560001d9800b0020cc29d76dbmr3107683wrb.710.1652433126624;
+        Fri, 13 May 2022 02:12:06 -0700 (PDT)
+Received: from [192.168.0.169] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id z23-20020a1c4c17000000b0039456fb80b3sm4711757wmf.43.2022.05.13.02.12.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 02:12:06 -0700 (PDT)
+Message-ID: <dc1e8f4e-08d5-09a9-95ee-c292a61561b9@linaro.org>
+Date:   Fri, 13 May 2022 11:12:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220510154217.5216-1-ubizjak@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v7 1/3] dt-bindings: marvell: Document the AC5/AC5X
+ compatibles
+Content-Language: en-US
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org, andrew@lunn.ch,
+        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
+        kostap@marvell.com, robert.marko@sartura.hr,
+        vadym.kochan@plvision.eu
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220512042501.3339775-1-chris.packham@alliedtelesis.co.nz>
+ <20220512042501.3339775-2-chris.packham@alliedtelesis.co.nz>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220512042501.3339775-2-chris.packham@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 05:42:17PM +0200, Uros Bizjak wrote:
-
-For the Changelog I would focus on the 64bit improvement and leave 32bit
-as a side-note.
-
-> ---
->  arch/x86/include/asm/cmpxchg_32.h          | 43 ++++++++++++++++++++++
->  arch/x86/include/asm/cmpxchg_64.h          |  6 +++
->  include/linux/atomic/atomic-instrumented.h | 40 +++++++++++++++++++-
->  scripts/atomic/gen-atomic-instrumented.sh  |  2 +-
->  4 files changed, 89 insertions(+), 2 deletions(-)
+On 12/05/2022 06:24, Chris Packham wrote:
+> Describe the compatible properties for the Marvell Alleycat5/5X switches
+> with integrated CPUs.
 > 
-> diff --git a/arch/x86/include/asm/cmpxchg_32.h b/arch/x86/include/asm/cmpxchg_32.h
-> index 0a7fe0321613..e874ff7f7529 100644
-> --- a/arch/x86/include/asm/cmpxchg_32.h
-> +++ b/arch/x86/include/asm/cmpxchg_32.h
-> @@ -42,6 +42,9 @@ static inline void set_64bit(volatile u64 *ptr, u64 value)
->  #define arch_cmpxchg64_local(ptr, o, n)					\
->  	((__typeof__(*(ptr)))__cmpxchg64_local((ptr), (unsigned long long)(o), \
->  					       (unsigned long long)(n)))
-> +#define arch_try_cmpxchg64(ptr, po, n)					\
-> +	((__typeof__(*(ptr)))__try_cmpxchg64((ptr), (unsigned long long *)(po), \
-> +					     (unsigned long long)(n)))
->  #endif
->  
->  static inline u64 __cmpxchg64(volatile u64 *ptr, u64 old, u64 new)
-> @@ -70,6 +73,25 @@ static inline u64 __cmpxchg64_local(volatile u64 *ptr, u64 old, u64 new)
->  	return prev;
->  }
->  
-> +static inline bool __try_cmpxchg64(volatile u64 *ptr, u64 *pold, u64 new)
-> +{
-> +	bool success;
-> +	u64 prev;
-> +	asm volatile(LOCK_PREFIX "cmpxchg8b %2"
-> +		     CC_SET(z)
-> +		     : CC_OUT(z) (success),
-> +		       "=A" (prev),
-> +		       "+m" (*ptr)
-> +		     : "b" ((u32)new),
-> +		       "c" ((u32)(new >> 32)),
-> +		       "1" (*pold)
-> +		     : "memory");
-> +
-> +	if (unlikely(!success))
-> +		*pold = prev;
 
-I would prefer this be more like the existing try_cmpxchg code,
-perhaps:
 
-	u64 old = *pold;
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-	asm volatile (LOCK_PREFIX "cmpxchg8b %[ptr]"
-		      CC_SET(z)
-		      : CC_OUT(z) (success),
-		        [ptr] "+m" (*ptr)
-		        "+A" (old)
-		      : "b" ((u32)new)
-		        "c" ((u32)(new >> 32))
-		      : "memory");
 
-	if (unlikely(!success))
-		*pold = old;
-
-The existing 32bit cmpxchg code is a 'bit' crusty.
-
-> +	return success;
-> +}
-> +
->  #ifndef CONFIG_X86_CMPXCHG64
->  /*
->   * Building a kernel capable running on 80386 and 80486. It may be necessary
-> @@ -108,6 +130,27 @@ static inline u64 __cmpxchg64_local(volatile u64 *ptr, u64 old, u64 new)
->  		       : "memory");				\
->  	__ret; })
->  
-> +#define arch_try_cmpxchg64(ptr, po, n)				\
-> +({								\
-> +	bool success;						\
-> +	__typeof__(*(ptr)) __prev;				\
-> +	__typeof__(ptr) _old = (__typeof__(ptr))(po);		\
-> +	__typeof__(*(ptr)) __old = *_old;			\
-> +	__typeof__(*(ptr)) __new = (n);				\
-> +	alternative_io(LOCK_PREFIX_HERE				\
-> +			"call cmpxchg8b_emu",			\
-> +			"lock; cmpxchg8b (%%esi)" ,		\
-> +		       X86_FEATURE_CX8,				\
-> +		       "=A" (__prev),				\
-> +		       "S" ((ptr)), "0" (__old),		\
-> +		       "b" ((unsigned int)__new),		\
-> +		       "c" ((unsigned int)(__new>>32))		\
-> +		       : "memory");				\
-> +	success = (__prev == __old);				\
-> +	if (unlikely(!success))					\
-> +		*_old = __prev;					\
-> +	likely(success);					\
-> +})
-
-Wouldn't this be better written like the normal fallback wrapper?
-
-static __always_inline bool
-arch_try_cmpxchg64(u64 *v, u64 *old, u64 new)
-{
-	u64 r, o = *old;
-	r = arch_cmpxchg64(v, o, new);
-	if (unlikely(r != o))
-		*old = r;
-	return likely(r == o);
-}
-
-Less magical, same exact code.
+Best regards,
+Krzysztof

@@ -2,57 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B72526CEB
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 00:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C008C526CF6
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 00:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbiEMW03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 18:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
+        id S233007AbiEMWgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 18:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231667AbiEMW01 (ORCPT
+        with ESMTP id S232157AbiEMWgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 18:26:27 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8465A12E31B;
-        Fri, 13 May 2022 15:26:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A78B1CE3359;
-        Fri, 13 May 2022 22:26:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBC76C34100;
-        Fri, 13 May 2022 22:26:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652480779;
-        bh=h1HTNw2Wpup2HXDg0STypuPKhlCojdqCFc87Br5/zEY=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=nd1cVxdwL8kFHWoZXr56OleIH1jaZKxdPeImgQT+USELFTCBpg83BO9aNa8MI9jMo
-         1e9jn7UVBPnjgJA006yrm/4U878MZNkqrZPhZvXBIpTQNP3HYABUkGWTn6qSKVZ1EF
-         ktVc1PgJGegp3ekxLNepp7KlyIGqcIf9fZnZX94t7c81mpwn69q6e+VCBY5rdImDMT
-         vYWPvpUfKoNvQVoOTt9pHAtLY33U7gdoJwsW88BPxqfmJjHY9dtoSidqQUywCERlW9
-         Neb15I+XBqcXig3MHyfAwkwv60kNgaThLPW3sy7NJRP7/1ia86rL97qHAfvfK7kvSl
-         2p2aUt4fQAVhQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 6E4735C04FD; Fri, 13 May 2022 15:26:19 -0700 (PDT)
-Date:   Fri, 13 May 2022 15:26:19 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     "frederic@kernel.org" <frederic@kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] rcu: Remove debug_object_active_state() from
- debug_rcu_head_queue/unqueue()
-Message-ID: <20220513222619.GP1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220510030748.1814004-1-qiang1.zhang@intel.com>
- <20220513004955.GC1790663@paulmck-ThinkPad-P17-Gen-1>
- <PH0PR11MB58804FA659B1FF7F82C37485DACA9@PH0PR11MB5880.namprd11.prod.outlook.com>
+        Fri, 13 May 2022 18:36:33 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1C938194
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 15:36:29 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id g184so8749399pgc.1
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 15:36:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:user-agent:in-reply-to:references
+         :message-id:mime-version:content-transfer-encoding;
+        bh=5gA/z5w3iSZBhMGL4NGMxYvM+06CCYMA733n8qghoV8=;
+        b=Kp5u4/CM0YQ2KQq5OsxAXepvwvZdx5O2/gLoWa1K/zJm+KgMoVemmr6ZO5ms2bBWxB
+         MFhshJjvZob1rJ6M1wEFqyuGQscI3Rer4cVoAwHloLdE4OLC2RsqxoJUDUsoAMQbdkeN
+         kktH9Ey9YNW+hpYreY7t4FSY2x9qp4cORAKl4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
+         :references:message-id:mime-version:content-transfer-encoding;
+        bh=5gA/z5w3iSZBhMGL4NGMxYvM+06CCYMA733n8qghoV8=;
+        b=U1vkBh7sGLI28fMzCIMXzw4EJ23Bi0i22t4jEdqJ7GHNMY8LkP980kgQUObCQkdSWS
+         IMa3QUsjtBmUfIh8WsnL9jqNGvR37A31FXYPFiUw9YUcxeKY3YHaqtUfIjbkfNb55b9w
+         UmekXsULCYrtVeZnH9axidXtGTy3Ni4/f+l4XnrK8s8bkSBsio0jnXSP0F4ptJTv+WFs
+         PmQI5Un+KXIqz3aFytSjShhXW/b0lHXTNdT7+imXAVtruBgx+XDP11R4wRHAG5Hm51Q2
+         90N4rTf2xBEOSvAkO/Q09sur7iwwcgC3jYg2E8hRimN12u+tOYBumroLYKahkAqAFegR
+         JQ8w==
+X-Gm-Message-State: AOAM530hrAEQNMK8a9MkIEnBbkinzsSFAoCV1PKcdBlifT2+9vFd5xAC
+        H9nS9xi4fPVzaLo6JCA9jdE8CQ==
+X-Google-Smtp-Source: ABdhPJxBG6e3E9oNiJFfeBHLppZK7vFJX4UY0lZeJxSrEESj5nfl/PMVKHRcA3ds9aAvC7+znYeatA==
+X-Received: by 2002:a05:6a00:10cc:b0:4fe:3f1c:2d1 with SMTP id d12-20020a056a0010cc00b004fe3f1c02d1mr6472165pfu.0.1652481388955;
+        Fri, 13 May 2022 15:36:28 -0700 (PDT)
+Received: from ?IPv6:::1? ([2607:fb90:3322:7d68:6474:9b3c:2c42:56f1])
+        by smtp.gmail.com with ESMTPSA id r15-20020a17090a940f00b001cd8e9ea22asm4025665pjo.52.2022.05.13.15.36.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 15:36:28 -0700 (PDT)
+Date:   Fri, 13 May 2022 15:36:26 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+CC:     dm-devel@redhat.com, linux-kernel@vger.kernel.org,
+        linux-raid@vger.kernel.org, Song Liu <song@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-security-module@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v3_2/3=5D_LoadPin=3A_Enable_l?= =?US-ASCII?Q?oading_from_trusted_dm-verity_devices?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20220504125404.v3.2.I01c67af41d2f6525c6d023101671d7339a9bc8b5@changeid>
+References: <20220504195419.1143099-1-mka@chromium.org> <20220504125404.v3.2.I01c67af41d2f6525c6d023101671d7339a9bc8b5@changeid>
+Message-ID: <B7FB2BE6-DF1C-414A-B4C2-0C15FD1CBF75@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR11MB58804FA659B1FF7F82C37485DACA9@PH0PR11MB5880.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,202 +75,414 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 01:03:19AM +0000, Zhang, Qiang1 wrote:
-> On Tue, May 10, 2022 at 11:07:48AM +0800, Zqiang wrote:
-> > Currently, the double call_rcu() detected only need call
-> > debug_object_activate() to check whether the rcu head object is 
-> > activated, the rcu head object usage state check is not necessary and 
-> > when call rcu_test_debug_objects() the debug_object_active_state() 
-> > will output same callstack as debug_object_activate(). so remove
-> > debug_object_active_state() to reduce the output of repeated callstack.
-> > 
-> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> >
-> >Could you please post the output of the dmesg output of a failed check with your change?
-> >
-> 
-> Original output:
-> 
-> [    0.818279] ODEBUG: activate active (active state 1) object type: rcu_head hint: 0x0
-> [    0.818296] WARNING: CPU: 1 PID: 1 at lib/debugobjects.c:505 debug_print_object+0xd8/0xf0
-> [    0.818301] Modules linked in:
-> [    0.818304] CPU: 1 PID: 1 Comm: swapper/0 Tainted: G        W         5.18.0-rc6-next-20220511-yoctodev-standard+ #75
-> [    0.818306] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-> [    0.818308] RIP: 0010:debug_print_object+0xd8/0xf0
-> [    0.818311] Code: dd 40 9e 03 9d e8 48 62 a2 ff 4d 89 f9 4d 89 e8 44 89 e1 48 8b 14 dd 40 9e 03 9d 4c 89 f6 48 c7 c7 c0 93 03 9d e8 f6 1a b1 00 <0f> f
-> [    0.818313] RSP: 0000:ffff88810033fad0 EFLAGS: 00010082
-> [    0.818315] RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
-> [    0.818317] RDX: 0000000000000002 RSI: 0000000000000004 RDI: ffffed1020067f4c
-> [    0.818319] RBP: ffff88810033fb00 R08: ffffffff9b50d898 R09: fffffbfff3bf5c6d
-> [    0.818320] R10: 0000000000000003 R11: fffffbfff3bf5c6c R12: 0000000000000001
-> [    0.818322] R13: ffffffff9ce769a0 R14: ffffffff9d039a80 R15: 0000000000000000
-> [    0.818324] FS:  0000000000000000(0000) GS:ffff888158880000(0000) knlGS:0000000000000000
-> [    0.818327] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    0.818329] CR2: 0000000000000000 CR3: 000000017600e000 CR4: 00000000001506e0
-> [    0.818330] Call Trace:
-> [    0.818331]  <TASK>
-> [    0.818333]  debug_object_activate+0x2b8/0x300
-> [    0.818336]  ? debug_object_assert_init+0x220/0x220
-> [    0.818340]  ? __kasan_check_write+0x14/0x20
-> [    0.818343]  call_rcu+0x98/0x1110
-> [    0.818347]  ? vprintk+0x4c/0x60
-> [    0.818350]  ? rcu_torture_fwd_cb_hist.cold+0xe9/0xe9
-> [    0.818354]  ? strict_work_handler+0x70/0x70
-> [    0.818357]  rcu_torture_init+0x18be/0x199e
-> [    0.818361]  ? srcu_init+0x133/0x133
-> [    0.818364]  ? __mutex_unlock_slowpath.isra.0+0x270/0x270
-> [    0.818368]  ? rcu_torture_barrier1cb+0x40/0x40
-> [    0.818371]  ? rcu_torture_barrier1cb+0x40/0x40
-> [    0.818374]  ? srcu_init+0x133/0x133
-> [    0.818377]  do_one_initcall+0xb3/0x300
-> [    0.818380]  ? initcall_blacklisted+0x150/0x150
-> [    0.818382]  ? parameq+0x70/0x90
-> [    0.818385]  ? __kasan_check_read+0x11/0x20
-> [    0.818389]  kernel_init_freeable+0x2b2/0x310
-> [    0.818392]  ? rest_init+0xf0/0xf0
-> [    0.818396]  kernel_init+0x1e/0x140
-> [    0.818399]  ret_from_fork+0x22/0x30
-> [    0.818402]  </TASK>
-> [    0.818403] ---[ end trace 0000000000000000 ]---
-> [    0.818405] ------------[ cut here ]------------
-> [    0.818405] ODEBUG: active_state active (active state 1) object type: rcu_head hint: 0x0
-> [    0.818421] WARNING: CPU: 1 PID: 1 at lib/debugobjects.c:505 debug_print_object+0xd8/0xf0
-> [    0.818424] Modules linked in:
-> [    0.818426] CPU: 1 PID: 1 Comm: swapper/0 Tainted: G        W         5.18.0-rc6-next-20220511-yoctodev-standard+ #75
-> [    0.818428] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-> [    0.818430] RIP: 0010:debug_print_object+0xd8/0xf0
-> [    0.818432] Code: dd 40 9e 03 9d e8 48 62 a2 ff 4d 89 f9 4d 89 e8 44 89 e1 48 8b 14 dd 40 9e 03 9d 4c 89 f6 48 c7 c7 c0 93 03 9d e8 f6 1a b1 00 <0f> f
-> [    0.818435] RSP: 0000:ffff88810033fac0 EFLAGS: 00010086
-> [    0.818437] RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
-> [    0.818438] RDX: 0000000000000002 RSI: 0000000000000004 RDI: ffffed1020067f4a
-> [    0.818440] RBP: ffff88810033faf0 R08: ffffffff9b50d898 R09: fffffbfff3bf5c6d
-> [    0.818441] R10: 0000000000000003 R11: fffffbfff3bf5c6c R12: 0000000000000001
-> [    0.818443] R13: ffffffff9ce769a0 R14: ffffffff9d039820 R15: 0000000000000000
-> [    0.818445] FS:  0000000000000000(0000) GS:ffff888158880000(0000) knlGS:0000000000000000
-> [    0.818448] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    0.818449] CR2: 0000000000000000 CR3: 000000017600e000 CR4: 00000000001506e0
-> [    0.818451] Call Trace:
-> [    0.818452]  <TASK>
-> [    0.818453]  debug_object_active_state+0x1d6/0x210
-> [    0.818456]  ? debug_object_deactivate+0x210/0x210
-> [    0.818460]  ? __kasan_check_write+0x14/0x20
-> [    0.818464]  call_rcu+0xb7/0x1110
-> [    0.818466]  ? vprintk+0x4c/0x60
-> [    0.818469]  ? rcu_torture_fwd_cb_hist.cold+0xe9/0xe9
-> [    0.818472]  ? strict_work_handler+0x70/0x70
-> [    0.818476]  rcu_torture_init+0x18be/0x199e
-> [    0.818479]  ? srcu_init+0x133/0x133
-> [    0.818482]  ? __mutex_unlock_slowpath.isra.0+0x270/0x270
-> [    0.818486]  ? rcu_torture_barrier1cb+0x40/0x40
-> [    0.818489]  ? rcu_torture_barrier1cb+0x40/0x40
-> [    0.818492]  ? srcu_init+0x133/0x133
-> [    0.818495]  do_one_initcall+0xb3/0x300
-> [    0.818497]  ? initcall_blacklisted+0x150/0x150
-> [    0.818500]  ? parameq+0x70/0x90
-> [    0.818503]  ? __kasan_check_read+0x11/0x20
-> [    0.818507]  kernel_init_freeable+0x2b2/0x310
-> [    0.818510]  ? rest_init+0xf0/0xf0
-> [    0.818513]  kernel_init+0x1e/0x140
-> [    0.818515]  ret_from_fork+0x22/0x30
-> [    0.818519]  </TASK>
-> [    0.818520] ---[ end trace 0000000000000000 ]---
-> [    0.818521] rcu: call_rcu(): Double-freed CB 00000000e2817fcb->rcu_torture_leak_cb+0x0/0x10()!!!   non-slab/vmalloc memory
-> 
-> 
-> After apply this patch:
-> 
-> [    0.647048] ODEBUG: activate active (active state 0) object type: rcu_head hint: 0x0
-> [    0.647068] WARNING: CPU: 1 PID: 1 at lib/debugobjects.c:505 debug_print_object+0xd8/0xf0
-> [    0.647073] Modules linked in:
-> [    0.647075] CPU: 1 PID: 1 Comm: swapper/0 Tainted: G        W         5.18.0-rc6-next-20220511-yoctodev-standard+ #77
-> [    0.647078] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-> [    0.647080] RIP: 0010:debug_print_object+0xd8/0xf0
-> [    0.647083] Code: dd 80 9d 43 a2 e8 38 62 a2 ff 4d 89 f9 4d 89 e8 44 89 e1 48 8b 14 dd 80 9d 43 a2 4c 89 f6 48 c7 c7 00 93 43 a2 e8 f6 1a b1 00 <0f> 0b 83 05 7b 62f
-> [    0.647085] RSP: 0000:ffff88810033fad0 EFLAGS: 00010082
-> [    0.647088] RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
-> [    0.647090] RDX: 0000000000000002 RSI: 0000000000000004 RDI: ffffed1020067f4c
-> [    0.647091] RBP: ffff88810033fb00 R08: ffffffffa090d898 R09: fffffbfff467586d
-> [    0.647093] R10: 0000000000000003 R11: fffffbfff467586c R12: 0000000000000000
-> [    0.647095] R13: ffffffffa22769a0 R14: ffffffffa24399c0 R15: 0000000000000000
-> [    0.647097] FS:  0000000000000000(0000) GS:ffff88815b880000(0000) knlGS:0000000000000000
-> [    0.647100] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    0.647102] CR2: 0000000000000000 CR3: 000000002f20e000 CR4: 00000000001506e0
-> [    0.647104] Call Trace:
-> [    0.647104]  <TASK>
-> [    0.647106]  debug_object_activate+0x2b8/0x300
-> [    0.647110]  ? debug_object_assert_init+0x220/0x220
-> [    0.647114]  ? __kasan_check_write+0x14/0x20
-> [    0.647118]  call_rcu+0x98/0x1100
-> [    0.647121]  ? vprintk+0x4c/0x60
-> [    0.647125]  ? rcu_torture_fwd_cb_hist.cold+0xe9/0xe9
-> [    0.647129]  ? strict_work_handler+0x50/0x50
-> [    0.647133]  rcu_torture_init+0x18be/0x199e
-> [    0.647136]  ? srcu_init+0x133/0x133
-> [    0.647140]  ? __mutex_unlock_slowpath.isra.0+0x270/0x270
-> [    0.647144]  ? rcu_torture_barrier1cb+0x40/0x40
-> [    0.647148]  ? rcu_torture_barrier1cb+0x40/0x40
-> [    0.647151]  ? srcu_init+0x133/0x133
-> [    0.647155]  do_one_initcall+0xb3/0x300
-> [    0.647157]  ? initcall_blacklisted+0x150/0x150
-> [    0.647160]  ? parameq+0x70/0x90
-> [    0.647164]  ? __kasan_check_read+0x11/0x20
-> [    0.647167]  kernel_init_freeable+0x2b2/0x310
-> [    0.647171]  ? rest_init+0xf0/0xf0
-> [    0.647174]  kernel_init+0x1e/0x140
-> [    0.647177]  ret_from_fork+0x22/0x30
-> [    0.647181]  </TASK>
-> [    0.647182] ---[ end trace 0000000000000000 ]---
-> [    0.647184] rcu: call_rcu(): Double-freed CB 000000009a684b70->rcu_torture_leak_cb+0x0/0x10()!!!   non-slab/vmalloc memory
 
-Very good, and thank you!
 
-Now suppose that someone passes a pointer to call_rcu(), but then
-invokes kfree() on that same object before the grace period ends.
-Is the offending kfree() flagged?
+On May 4, 2022 12:54:18 PM PDT, Matthias Kaehlcke <mka@chromium=2Eorg> wro=
+te:
+>Extend LoadPin to allow loading of kernel files from trusted dm-verity [1=
+]
+>devices=2E
+>
+>This change adds the concept of trusted verity devices to LoadPin=2E Load=
+Pin
+>maintains a list of root digests of verity devices it considers trusted=
+=2E
+>Userspace can populate this list through an ioctl on the new LoadPin
+>securityfs entry 'dm-verity'=2E The ioctl receives a file descriptor of
+>a file with verity digests as parameter=2E Verity reads the digests from
+>this file after confirming that the file is located on the pinned root=2E
+>The list of trusted digests can only be set up once, which is typically
+>done at boot time=2E
+>
+>When a kernel file is read LoadPin first checks (as usual) whether the fi=
+le
+>is located on the pinned root, if so the file can be loaded=2E Otherwise,=
+ if
+>the verity extension is enabled, LoadPin determines whether the file is
+>located on a verity backed device and whether the root digest of that
 
-							Thanx, Paul
+I think this should be "=2E=2E=2E on an already trusted device =2E=2E=2E"
 
-> Thanks,
-> Zqiang
-> 
-> 
-> 
-> >							Thanx, Paul
-> >
-> > ---
-> >  kernel/rcu/rcu.h | 13 +------------
-> >  1 file changed, 1 insertion(+), 12 deletions(-)
-> > 
-> > diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h index 
-> > 15b96f990774..0604ecd16627 100644
-> > --- a/kernel/rcu/rcu.h
-> > +++ b/kernel/rcu/rcu.h
-> > @@ -179,27 +179,16 @@ static inline unsigned long rcu_seq_diff(unsigned long new, unsigned long old)
-> >   */
-> >  
-> >  #ifdef CONFIG_DEBUG_OBJECTS_RCU_HEAD
-> > -# define STATE_RCU_HEAD_READY	0
-> > -# define STATE_RCU_HEAD_QUEUED	1
-> >  
-> >  extern const struct debug_obj_descr rcuhead_debug_descr;
-> >  
-> >  static inline int debug_rcu_head_queue(struct rcu_head *head)  {
-> > -	int r1;
-> > -
-> > -	r1 = debug_object_activate(head, &rcuhead_debug_descr);
-> > -	debug_object_active_state(head, &rcuhead_debug_descr,
-> > -				  STATE_RCU_HEAD_READY,
-> > -				  STATE_RCU_HEAD_QUEUED);
-> > -	return r1;
-> > +	return debug_object_activate(head, &rcuhead_debug_descr);
-> >  }
-> >  
-> >  static inline void debug_rcu_head_unqueue(struct rcu_head *head)  {
-> > -	debug_object_active_state(head, &rcuhead_debug_descr,
-> > -				  STATE_RCU_HEAD_QUEUED,
-> > -				  STATE_RCU_HEAD_READY);
-> >  	debug_object_deactivate(head, &rcuhead_debug_descr);  }
-> >  #else	/* !CONFIG_DEBUG_OBJECTS_RCU_HEAD */
-> > --
-> > 2.25.1
-> > 
+>device is in the list of trusted digests=2E The file can be loaded if the
+>verity device has a trusted root digest=2E
+>
+>Background:
+>
+>As of now LoadPin restricts loading of kernel files to a single pinned
+>filesystem, typically the rootfs=2E This works for many systems, however =
+it
+>can result in a bloated rootfs (and OTA updates) on platforms where
+>multiple boards with different hardware configurations use the same rootf=
+s
+>image=2E Especially when 'optional' files are large it may be preferable =
+to
+>download/install them only when they are actually needed by a given board=
+=2E
+>Chrome OS uses Downloadable Content (DLC) [2] to deploy certain 'packages=
+'
+>at runtime=2E As an example a DLC package could contain firmware for a
+>peripheral that is not present on all boards=2E DLCs use dm-verity to ver=
+ify
+>the integrity of the DLC content=2E
+>
+>[1] https://www=2Ekernel=2Eorg/doc/html/latest/admin-guide/device-mapper/=
+verity=2Ehtml
+>[2] https://chromium=2Egooglesource=2Ecom/chromiumos/platform2/+/HEAD/dlc=
+service/docs/developer=2Emd
+>
+>Signed-off-by: Matthias Kaehlcke <mka@chromium=2Eorg>
+>---
+>
+>Changes in v3:
+>- added securityfs for LoadPin (currently only populated when
+>  CONFIG_SECURITY_LOADPIN_VERITY=3Dy)
+>- added uapi include for LoadPin
+>- changed the interface for setting up the list of trusted
+>  digests from sysctl to ioctl on securityfs entry
+>- added stub for loadpin_is_fs_trusted() to be used
+>  CONFIG_SECURITY_LOADPIN_VERITY is not select
+>- depend on CONFIG_SECURITYFS instead of CONFIG_SYSTCL
+>- updated Kconfig help
+>- minor changes in read_trusted_verity_root_digests()
+>- updated commit message
+>
+>Changes in v2:
+>- userspace now passes the path of the file with the verity digests
+>  via systcl, instead of the digests themselves
+>- renamed sysctl file to 'trusted_verity_root_digests_path'
+>- have CONFIG_SECURITY_LOADPIN_VERITY depend on CONFIG_SYSCTL
+>- updated Kconfig doc
+>- updated commit message
+>
+> include/uapi/linux/loadpin=2Eh |  19 ++++
+> security/loadpin/Kconfig     |  16 +++
+> security/loadpin/loadpin=2Ec   | 184 ++++++++++++++++++++++++++++++++++-
+> 3 files changed, 218 insertions(+), 1 deletion(-)
+> create mode 100644 include/uapi/linux/loadpin=2Eh
+>
+>diff --git a/include/uapi/linux/loadpin=2Eh b/include/uapi/linux/loadpin=
+=2Eh
+>new file mode 100644
+>index 000000000000=2E=2Ed303a582209b
+>--- /dev/null
+>+++ b/include/uapi/linux/loadpin=2Eh
+>@@ -0,0 +1,19 @@
+>+/* SPDX-License-Identifier: GPL-2=2E0 WITH Linux-syscall-note */
+>+/*
+>+ * Copyright (c) 2022, Google LLC
+>+ */
+>+
+>+#ifndef _UAPI_LINUX_LOOP_LOADPIN_H
+>+#define _UAPI_LINUX_LOOP_LOADPIN_H
+>+
+>+#define LOADPIN_IOC_MAGIC	'L'
+>+
+>+/**
+>+ * LOADPIN_IOC_SET_TRUSTED_VERITY_DIGESTS - Set up the root digests of v=
+erity devices
+>+ *                                          that loadpin should trust=2E
+>+ *
+>+ * Takes a file descriptor from which to read the root digests of truste=
+d verity devices=2E
+
+Maybe add to the comment the securityfs node path here as a helpful hint t=
+o the reader, and mention the format (comma separated?)
+
+>+ */
+>+#define LOADPIN_IOC_SET_TRUSTED_VERITY_DIGESTS _IOW(LOADPIN_IOC_MAGIC, 0=
+x00, unsigned int)
+>+
+>+#endif /* _UAPI_LINUX_LOOP_LOADPIN_H */
+>diff --git a/security/loadpin/Kconfig b/security/loadpin/Kconfig
+>index 91be65dec2ab=2E=2Ee319ca8e3f3d 100644
+>--- a/security/loadpin/Kconfig
+>+++ b/security/loadpin/Kconfig
+>@@ -18,3 +18,19 @@ config SECURITY_LOADPIN_ENFORCE
+> 	  If selected, LoadPin will enforce pinning at boot=2E If not
+> 	  selected, it can be enabled at boot with the kernel parameter
+> 	  "loadpin=2Eenforce=3D1"=2E
+>+
+>+config SECURITY_LOADPIN_VERITY
+>+	bool "Allow reading files from certain other filesystems that use dm-ve=
+rity"
+>+	depends on DM_VERITY=3Dy && SECURITYFS
+>+	help
+>+	  If selected LoadPin can allow reading files from filesystems
+>+	  that use dm-verity=2E LoadPin maintains a list of verity root
+>+	  digests it considers trusted=2E A verity backed filesystem is
+>+	  considered trusted if its root digest is found in the list
+>+	  of trusted digests=2E
+>+
+>+	  The list of trusted verity can be populated through an ioctl
+>+	  on the LoadPin securityfs entry 'dm-verity'=2E The ioctl
+>+	  expects a file descriptor of a file with verity digests as
+>+	  parameter=2E The file must be located on the pinned root and
+>+	  contain a comma separated list of digests=2E
+>diff --git a/security/loadpin/loadpin=2Ec b/security/loadpin/loadpin=2Ec
+>index b12f7d986b1e=2E=2Ec29ce562a366 100644
+>--- a/security/loadpin/loadpin=2Ec
+>+++ b/security/loadpin/loadpin=2Ec
+>@@ -18,6 +18,9 @@
+> #include <linux/path=2Eh>
+> #include <linux/sched=2Eh>	/* current */
+> #include <linux/string_helpers=2Eh>
+>+#include <linux/device-mapper=2Eh>
+>+#include <linux/dm-verity-loadpin=2Eh>
+>+#include <uapi/linux/loadpin=2Eh>
+>=20
+> static void report_load(const char *origin, struct file *file, char *ope=
+ration)
+> {
+>@@ -43,6 +46,9 @@ static char *exclude_read_files[READING_MAX_ID];
+> static int ignore_read_file_id[READING_MAX_ID] __ro_after_init;
+> static struct super_block *pinned_root;
+> static DEFINE_SPINLOCK(pinned_root_spinlock);
+>+#ifdef CONFIG_SECURITY_LOADPIN_VERITY
+>+static LIST_HEAD(trusted_verity_root_digests);
+>+#endif
+>=20
+> #ifdef CONFIG_SYSCTL
+>=20
+>@@ -118,6 +124,24 @@ static void loadpin_sb_free_security(struct super_bl=
+ock *mnt_sb)
+> 	}
+> }
+>=20
+>+#ifdef CONFIG_SECURITY_LOADPIN_VERITY
+>+static bool loadpin_is_fs_trusted(struct super_block *sb)
+>+{
+>+	struct mapped_device *md =3D dm_get_md(sb->s_bdev->bd_dev);
+>+	bool trusted;
+>+
+>+	if (!md)
+>+		return false;
+>+
+>+	trusted =3D dm_verity_loadpin_is_md_trusted(md);
+>+	dm_put(md);
+>+
+>+	return trusted;
+>+}
+>+#else
+>+static inline bool loadpin_is_fs_trusted(struct super_block *sb) { retur=
+n false; };
+>+#endif
+>+
+> static int loadpin_read_file(struct file *file, enum kernel_read_file_id=
+ id,
+> 			     bool contents)
+> {
+>@@ -174,7 +198,8 @@ static int loadpin_read_file(struct file *file, enum =
+kernel_read_file_id id,
+> 		spin_unlock(&pinned_root_spinlock);
+> 	}
+>=20
+>-	if (IS_ERR_OR_NULL(pinned_root) || load_root !=3D pinned_root) {
+>+	if (IS_ERR_OR_NULL(pinned_root) ||
+>+	    ((load_root !=3D pinned_root) && !loadpin_is_fs_trusted(load_root))=
+) {
+> 		if (unlikely(!enforce)) {
+> 			report_load(origin, file, "pinning-ignored");
+> 			return 0;
+>@@ -240,6 +265,7 @@ static int __init loadpin_init(void)
+> 		enforce ? "" : "not ");
+> 	parse_exclude();
+> 	security_add_hooks(loadpin_hooks, ARRAY_SIZE(loadpin_hooks), "loadpin")=
+;
+>+
+> 	return 0;
+> }
+>=20
+>@@ -248,6 +274,162 @@ DEFINE_LSM(loadpin) =3D {
+> 	=2Einit =3D loadpin_init,
+> };
+>=20
+>+#ifdef CONFIG_SECURITY_LOADPIN_VERITY
+>+
+>+enum loadpin_securityfs_interface_index {
+>+	LOADPIN_DM_VERITY,
+>+};
+>+
+>+static int read_trusted_verity_root_digests(unsigned int fd)
+>+{
+>+	struct fd f;
+>+	void *data;
+
+Probably easier if this is u8 *?
+
+>+	int rc;
+>+	char *p, *d;
+>+
+>+	/* The list of trusted root digests can only be set up once */
+>+	if (!list_empty(&trusted_verity_root_digests))
+>+		return -EPERM;
+>+
+>+	f =3D fdget(fd);
+>+	if (!f=2Efile)
+>+		return -EINVAL;
+>+
+>+	data =3D kzalloc(SZ_4K, GFP_KERNEL);
+>+	if (!data) {
+>+		rc =3D -ENOMEM;
+>+		goto err;
+>+	}
+>+
+>+	rc =3D kernel_read_file(f=2Efile, 0, &data, SZ_4K - 1, NULL, READING_PO=
+LICY);
+>+	if (rc < 0)
+>+		goto err;
+>+
+>+	((char *)data)[rc] =3D '\0';
+>+
+>+	p =3D strim(data);
+>+	while ((d =3D strsep(&p, ",")) !=3D NULL) {
+
+Maybe be flexible and add newline as a separator too?
+
+>+		int len =3D strlen(d);
+>+		struct trusted_root_digest *trd;
+>+
+>+		if (len % 2) {
+>+			rc =3D -EPROTO;
+>+			goto err;
+>+		}
+>+
+>+		len /=3D 2;
+>+
+>+		trd =3D kzalloc(sizeof(*trd), GFP_KERNEL);
+
+With the struct change, this could be:
+
+kzalloc(struct_size(trd, data, len), =2E=2E=2E)
+
+>+		if (!trd) {
+>+			rc =3D -ENOMEM;
+>+			goto err;
+>+		}
+>+
+>+		trd->data =3D kzalloc(len, GFP_KERNEL);
+>+		if (!trd->data) {
+>+			kfree(trd);
+>+			rc =3D -ENOMEM;
+>+			goto err;
+>+		}
+>+
+>+		if (hex2bin(trd->data, d, len)) {
+>+			kfree(trd);
+>+			kfree(trd->data);
+>+			rc =3D -EPROTO;
+>+			goto err;
+>+		}
+>+
+>+		trd->len =3D len;
+>+
+>+		list_add_tail(&trd->node, &trusted_verity_root_digests);
+>+	}
+>+
+>+	kfree(data);
+>+	fdput(f);
+>+
+>+	if (!list_empty(&trusted_verity_root_digests))
+>+		dm_verity_loadpin_set_trusted_root_digests(&trusted_verity_root_digest=
+s);
+>+
+>+	return 0;
+>+
+>+err:
+>+	kfree(data);
+>+
+
+Maybe add a comment that any load failure will invalidate the entire list?
+
+>+	{
+>+		struct trusted_root_digest *trd, *tmp;
+>+
+>+		list_for_each_entry_safe(trd, tmp, &trusted_verity_root_digests, node)=
+ {
+>+			kfree(trd->data);
+>+			list_del(&trd->node);
+>+			kfree(trd);
+>+		}
+>+	}
+>+
+>+	fdput(f);
+>+
+>+	return rc;
+>+}
+>+
+>+/******************************** securityfs ***************************=
+*****/
+>+
+>+static long dm_verity_ioctl(struct file *filp, unsigned int cmd, unsigne=
+d long arg)
+>+{
+>+	void __user *uarg =3D (void __user *)arg;
+>+	unsigned int fd;
+>+	int rc;
+>+
+>+	switch (cmd) {
+>+	case LOADPIN_IOC_SET_TRUSTED_VERITY_DIGESTS:
+>+		rc =3D copy_from_user(&fd, uarg, sizeof(fd));
+>+		if (rc)
+>+			return rc;
+>+
+>+		return read_trusted_verity_root_digests(fd);
+>+
+>+	default:
+>+		return -EINVAL;
+>+	}
+>+}
+>+
+>+static const struct file_operations loadpin_dm_verity_ops =3D {
+>+	=2Eunlocked_ioctl =3D dm_verity_ioctl,
+>+	=2Ecompat_ioctl =3D compat_ptr_ioctl,
+>+};
+>+
+>+/**
+>+ * init_loadpin_securityfs - create the securityfs directory for LoadPin
+>+ *
+>+ * We can not put this method normally under the loadpin_init() code pat=
+h since
+>+ * the security subsystem gets initialized before the vfs caches=2E
+>+ *
+>+ * Returns 0 if the securityfs directory creation was successful=2E
+>+ */
+>+static int __init init_loadpin_securityfs(void)
+>+{
+>+	struct dentry *loadpin_dir, *dentry;
+>+
+>+	loadpin_dir =3D securityfs_create_dir("loadpin", NULL);
+>+	if (IS_ERR(loadpin_dir)) {
+>+		pr_err("LoadPin: could not create securityfs dir: %d\n",
+>+		       PTR_ERR(loadpin_dir));
+>+		return PTR_ERR(loadpin_dir);
+>+	}
+>+
+>+	dentry =3D securityfs_create_file("dm-verity", 0600, loadpin_dir,
+>+					(void *)LOADPIN_DM_VERITY, &loadpin_dm_verity_ops);
+>+	if (IS_ERR(dentry)) {
+>+		pr_err("LoadPin: could not create securityfs entry 'dm-verity': %d\n",
+>+		       PTR_ERR(dentry));
+>+		return PTR_ERR(dentry);
+>+	}
+>+
+>+	return 0;
+>+}
+>+
+>+fs_initcall(init_loadpin_securityfs);
+>+
+>+#endif /* CONFIG_SECURITY_LOADPIN_VERITY */
+>+
+> /* Should not be mutable after boot, so not listed in sysfs (perm =3D=3D=
+ 0)=2E */
+> module_param(enforce, int, 0);
+> MODULE_PARM_DESC(enforce, "Enforce module/firmware pinning");
+
+Otherwise looks good! The only other thing I can think of is pondering mor=
+e about more carefully failing closed=2E E=2Eg=2E instead of just throwing =
+away all the other hashes on a file load failure, maybe lock out future att=
+empts to set it too? I'm not sure this is actually useful, though=2E :P it =
+shouldn't be possible to corrupt the file, etc=2E But in the universe where=
+ things like DirtyCOW happens, I've gotten even more paranoid=2E ;)
+
+--=20
+Kees Cook

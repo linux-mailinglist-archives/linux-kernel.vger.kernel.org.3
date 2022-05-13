@@ -2,54 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C9C5263CD
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 292B55263D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242869AbiEMOSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:18:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49276 "EHLO
+        id S1349341AbiEMOWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbiEMOSj (ORCPT
+        with ESMTP id S1354225AbiEMOVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:18:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832BA126C1C
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:18:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0C969B82DA6
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 14:18:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C929FC34100;
-        Fri, 13 May 2022 14:18:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652451515;
-        bh=bPee+Q4p/Adpv/jCFE9NBmqXW9Io963RGq+Y1h7pM3M=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=nVdYSwGAqGR4lwv42+wVWds4EUJm8Cs6rwPUItZWOEY+1YvUwyAtYtYRSXlttZSjY
-         Ftrk3WPoTSetkPlpzHTx15jM6NNQpiChubGccktKD4uPkg4Byl2u06f7JoQBW5TPVe
-         YxY6CG7CnAF/xfsxzXHVAOnzgawK6zsS+yhKWbfdRY6PlQeYjMoCQxA0mK9oSCMNjY
-         5egDr87xOigJzHmx+9h7BdwrLL3ypBxV4bhX3Bg1kQX7eAHsiFojfCc8kLYKncLhxG
-         2ClVQZHbDoQPG18rZ2fPSlswmgvW1mmXmhQ5Oo62HxQCAmmWTsVsWnddMVvkRm80Og
-         2c4KRprKP1GeQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 6DF395C0342; Fri, 13 May 2022 07:18:35 -0700 (PDT)
-Date:   Fri, 13 May 2022 07:18:35 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     linux-kernel@vger.kernel.org, frederic@kernel.org
-Subject: Re: [paulmck-rcu:context-tracking.2022.05.03a] BUILD REGRESSION
- 9527c561aed6424e77fd2a8827c37f1103c89177
-Message-ID: <20220513141835.GG1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <627e565c.pdEDbqVrzEta7Scf%lkp@intel.com>
+        Fri, 13 May 2022 10:21:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 93D1F393
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:21:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652451710;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=XNGqTrEW6BLwV+eAEiNN6NXB1twRXEux4iCiLYrUS7c=;
+        b=ZFlvgaiyVSX9M30eM3d3qMzU6b/C2IlXcWX38jev38E+pkt9Yya+FUOI54lKIROov0fkJv
+        VUVluxNpD3SNCpFHxf1KmpFeVYQZ5e+GvctP2CFlPps8XY9q7pJTaCyIy01EQ0/hNiWOYe
+        2zOWE1BRWgJkCER0yH5JSjGMcuTIQBQ=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-623-dBK5W3pFMfKJZdhPZrv0cw-1; Fri, 13 May 2022 10:21:49 -0400
+X-MC-Unique: dBK5W3pFMfKJZdhPZrv0cw-1
+Received: by mail-wr1-f69.google.com with SMTP id j21-20020adfa555000000b0020adb9ac14fso2984449wrb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:21:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding;
+        bh=XNGqTrEW6BLwV+eAEiNN6NXB1twRXEux4iCiLYrUS7c=;
+        b=fkcE7EQmBbLCJnH3w9p8SgCbc2s48ed63filg/Wy9RHkoc9SMl96UdE5q77YB4i4rn
+         lNqhLMYwfoVx2fWyI8HSxLgg9XuIJDR7K7nTaV5ERTw/TBoNZZv1PZLl0C3MLbvukTj1
+         Ol7r787vXa36uopQOTurLEHP0cbG6f86cLLAYgWU2+LKUdxpHY0yirYoxL1ByVVHL9yA
+         g/2Exq/8KHM0pnz5hKGTVErZNP+MB5nNA+0WHdTFgdaMyonzK65mf0QMfoAw9IIv4YKB
+         mR/w98mM2cWY8EBF2kGG5uEgNfnw+VQW1Lx9wxKDz2PkIudt9qqSukm534RzX+NPhdWm
+         ty6g==
+X-Gm-Message-State: AOAM530kCt9sU133Vd06LELTBbN1gZPKpPEy3aLolQFcmJ0XcdnZOpdW
+        C96nCgfjSBvqUeS1KwUb6nKZdqT2JkWgP2qMPiEPYgVdSfs1tsIZBhNVLenUNikzB9t+jVTH2yX
+        F7fcvQKpvVTwuE7TvYlMHD+XaiGfKHs/5+M8rfSFTD0ZBt3z+6GEn0e4NNro6kkygWsvO/ipNNF
+        upqds=
+X-Received: by 2002:a05:600c:1d88:b0:394:97e8:8afd with SMTP id p8-20020a05600c1d8800b0039497e88afdmr15051935wms.203.1652451708239;
+        Fri, 13 May 2022 07:21:48 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzr5VFZH30/lfTJ9dNeorX/0AaIiOWhyUFQ3gk8X42NkB3NYxI3noNgyxmYUJ1ht48ikh0DyA==
+X-Received: by 2002:a05:600c:1d88:b0:394:97e8:8afd with SMTP id p8-20020a05600c1d8800b0039497e88afdmr15051868wms.203.1652451707881;
+        Fri, 13 May 2022 07:21:47 -0700 (PDT)
+Received: from localhost.localdomain ([151.29.63.116])
+        by smtp.gmail.com with ESMTPSA id y25-20020a1c4b19000000b0039489e1bbd6sm5284325wma.47.2022.05.13.07.21.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 07:21:47 -0700 (PDT)
+Date:   Fri, 13 May 2022 16:21:43 +0200
+From:   Juri Lelli <juri.lelli@redhat.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Phil Auld <pauld@redhat.com>,
+        "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Quentin Perret <qperret@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Luca Abeni <luca.abeni@santannapisa.it>,
+        Morten Rasmussen <Morten.Rasmussen@arm.com>,
+        Dhaval Giani <dhaval.giani@oracle.com>,
+        Chris Hyser <chris.hyser@oracle.com>,
+        Waiman Long <longman@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mike Galbraith <efault@gmx.de>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Ben Segall <bsegall@google.com>, Will Deacon <will@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        patrick.bellasi@matbug.net,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rik van Riel <riel@surriel.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Paul Turner <pjt@google.com>,
+        Dario Faggioli <raistlin@linux.it>,
+        Andi Kleen <ak@linux.intel.com>, Scott Wood <swood@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        Daniel Wagner <wagi@monom.org>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Karl Rister <krister@redhat.com>,
+        Andrew Theurer <atheurer@redhat.com>
+Subject: [ANNOUNCE] CFP: CPU Isolation Microconference - Linux Plumbers
+ Conference 2022
+Message-ID: <Yn5pd/yB5TLmOZ3x@localhost.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <627e565c.pdEDbqVrzEta7Scf%lkp@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,258 +116,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 09:00:12PM +0800, kernel test robot wrote:
-> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git context-tracking.2022.05.03a
-> branch HEAD: 9527c561aed6424e77fd2a8827c37f1103c89177  rcu/context_tracking: Merge dynticks counter and context tracking states
-> 
-> Error/Warning reports:
-> 
-> https://lore.kernel.org/llvm/202205060346.y3d1cOFv-lkp@intel.com
-> 
-> Error/Warning: (recently discovered and may have been fixed)
-> 
-> kernel/context_tracking.c:360:4: error: call to undeclared function 'rcu_irq_work_resched'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-> kernel/context_tracking.c:91:4: error: call to undeclared function 'rcu_irq_work_resched'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+CPU Isolation can be considered as an holistic functionality that stems
+from a close combination of several kernel and userspace components
+working together to shield workloads with extreme latency or performance
+requirements from interruptions (also known as Operating System noise).
+An example of such type of workloads are DPDK (Data Plane Development
+Kit) use cases (Telco/5G) where even the shortest interruption (e.g., a
+few microseconds to service an IPI) can cause packet losses, eventually
+leading to exceeding QoS requirements.
 
-Adding Frederic on CC.
+Despite considerable improvements in the last few years towards
+implementing full CPU Isolation (nohz_full, rcu_nocb, isolcpus, etc.), a
+certain amount of issues remain to be addressed, as it is still
+relatively simple to highlight sources of OS noise just by running
+synthetic workloads mimicking polling (always running) type of
+application similar to the ones mentioned above.
 
-(These are in any case experimental commits.)
+Recently, improvements and discussions about CPU isolation features have
+been made and discussed in LKML [1,2,3], and tools such as osnoise
+tracer and rtla osnoise [4,5] improved the CPU isolation analysis.
+Nevertheless, this is an ongoing process, and discussions are needed to
+speed up solutions for existing discussions and improve the existing
+tools and methods.
 
-							Thanx, Paul
+With this microconference we thus want to get together to discuss open
+problems, most notably: how to improve the identification of OS noise
+sources (expanding runtime tracing and/or code inspection tools), how to
+track them publicly (repo/DB) and how to tackle the sources of noise
+that have already been identified (e.g, [1,2,3]).
 
-> Error/Warning ids grouped by kconfigs:
-> 
-> clang_recent_errors
-> |-- arm-randconfig-r013-20220505
-> |   `-- kernel-context_tracking.c:error:call-to-undeclared-function-rcu_irq_work_resched-ISO-C99-and-later-do-not-support-implicit-function-declarations
-> |-- riscv-randconfig-c006-20220505
-> |   `-- kernel-context_tracking.c:error:call-to-undeclared-function-rcu_irq_work_resched-ISO-C99-and-later-do-not-support-implicit-function-declarations
-> `-- x86_64-randconfig-a001
->     `-- kernel-context_tracking.c:error:call-to-undeclared-function-rcu_irq_work_resched-ISO-C99-and-later-do-not-support-implicit-function-declarations
-> 
-> elapsed time: 14089m
-> 
-> configs tested: 211
-> configs skipped: 3
-> 
-> gcc tested configs:
-> arm64                               defconfig
-> arm64                            allyesconfig
-> arm                              allmodconfig
-> arm                                 defconfig
-> arm                              allyesconfig
-> i386                          randconfig-c001
-> m68k                       m5475evb_defconfig
-> arm                           corgi_defconfig
-> powerpc                     ep8248e_defconfig
-> nios2                            allyesconfig
-> arm                      footbridge_defconfig
-> powerpc                      ppc6xx_defconfig
-> powerpc                     pq2fads_defconfig
-> mips                         cobalt_defconfig
-> powerpc                 canyonlands_defconfig
-> m68k                        m5272c3_defconfig
-> mips                         bigsur_defconfig
-> arm                            pleb_defconfig
-> powerpc                   currituck_defconfig
-> openrisc                 simple_smp_defconfig
-> arc                        nsimosci_defconfig
-> m68k                        mvme147_defconfig
-> powerpc                     tqm8555_defconfig
-> sh                               allmodconfig
-> ia64                         bigsur_defconfig
-> powerpc                     asp8347_defconfig
-> arm                      integrator_defconfig
-> microblaze                          defconfig
-> arm                         lpc18xx_defconfig
-> parisc64                            defconfig
-> powerpc                    klondike_defconfig
-> sh                         ap325rxa_defconfig
-> sparc64                             defconfig
-> arm                           sunxi_defconfig
-> powerpc                       maple_defconfig
-> m68k                       m5249evb_defconfig
-> mips                           ip32_defconfig
-> i386                                defconfig
-> sh                 kfr2r09-romimage_defconfig
-> powerpc                      cm5200_defconfig
-> arm                         nhk8815_defconfig
-> i386                             alldefconfig
-> mips                  maltasmvp_eva_defconfig
-> sh                         microdev_defconfig
-> arc                          axs101_defconfig
-> nios2                         3c120_defconfig
-> arm                         vf610m4_defconfig
-> m68k                        stmark2_defconfig
-> powerpc                      pcm030_defconfig
-> powerpc                        cell_defconfig
-> arc                     haps_hs_smp_defconfig
-> sh                          rsk7269_defconfig
-> xtensa                    xip_kc705_defconfig
-> sh                        apsh4ad0a_defconfig
-> powerpc                     sequoia_defconfig
-> powerpc                     mpc83xx_defconfig
-> mips                         rt305x_defconfig
-> m68k                         apollo_defconfig
-> mips                           jazz_defconfig
-> m68k                             alldefconfig
-> parisc                generic-32bit_defconfig
-> xtensa                  audio_kc705_defconfig
-> m68k                            q40_defconfig
-> arc                 nsimosci_hs_smp_defconfig
-> powerpc                 mpc85xx_cds_defconfig
-> arm                            xcep_defconfig
-> arm                        oxnas_v6_defconfig
-> arm64                            alldefconfig
-> powerpc                 linkstation_defconfig
-> m68k                            mac_defconfig
-> arm                            lart_defconfig
-> powerpc                      ppc40x_defconfig
-> powerpc                      arches_defconfig
-> riscv             nommu_k210_sdcard_defconfig
-> sh                                  defconfig
-> powerpc                mpc7448_hpc2_defconfig
-> arm                         at91_dt_defconfig
-> sh                   secureedge5410_defconfig
-> um                                  defconfig
-> xtensa                    smp_lx200_defconfig
-> um                             i386_defconfig
-> sh                          polaris_defconfig
-> arm                        mini2440_defconfig
-> m68k                             allyesconfig
-> microblaze                      mmu_defconfig
-> arc                            hsdk_defconfig
-> sh                             sh03_defconfig
-> powerpc64                           defconfig
-> sh                               j2_defconfig
-> x86_64                        randconfig-c001
-> arm                  randconfig-c002-20220501
-> arm                  randconfig-c002-20220505
-> arm                  randconfig-c002-20220506
-> ia64                                defconfig
-> ia64                             allmodconfig
-> ia64                             allyesconfig
-> m68k                             allmodconfig
-> m68k                                defconfig
-> nios2                               defconfig
-> arc                              allyesconfig
-> csky                                defconfig
-> alpha                               defconfig
-> alpha                            allyesconfig
-> h8300                            allyesconfig
-> arc                                 defconfig
-> xtensa                           allyesconfig
-> s390                                defconfig
-> s390                             allmodconfig
-> parisc                              defconfig
-> parisc                           allyesconfig
-> s390                             allyesconfig
-> sparc                               defconfig
-> i386                             allyesconfig
-> sparc                            allyesconfig
-> i386                   debian-10.3-kselftests
-> i386                              debian-10.3
-> mips                             allyesconfig
-> mips                             allmodconfig
-> powerpc                          allyesconfig
-> powerpc                           allnoconfig
-> powerpc                          allmodconfig
-> x86_64                        randconfig-a006
-> x86_64                        randconfig-a004
-> x86_64                        randconfig-a002
-> i386                 randconfig-a004-20220502
-> i386                 randconfig-a006-20220502
-> i386                 randconfig-a002-20220502
-> i386                 randconfig-a003-20220502
-> i386                 randconfig-a001-20220502
-> i386                          randconfig-a001
-> i386                          randconfig-a003
-> i386                          randconfig-a005
-> i386                 randconfig-a005-20220502
-> x86_64                        randconfig-a011
-> x86_64                        randconfig-a013
-> x86_64                        randconfig-a015
-> i386                          randconfig-a014
-> i386                          randconfig-a012
-> i386                          randconfig-a016
-> riscv                randconfig-r042-20220501
-> arc                  randconfig-r043-20220502
-> arc                  randconfig-r043-20220501
-> s390                 randconfig-r044-20220501
-> arc                  randconfig-r043-20220505
-> s390                 randconfig-r044-20220505
-> riscv                randconfig-r042-20220505
-> riscv                               defconfig
-> riscv                    nommu_virt_defconfig
-> riscv                          rv32_defconfig
-> riscv                    nommu_k210_defconfig
-> riscv                             allnoconfig
-> riscv                            allmodconfig
-> riscv                            allyesconfig
-> x86_64                    rhel-8.3-kselftests
-> um                           x86_64_defconfig
-> x86_64                          rhel-8.3-func
-> x86_64                           rhel-8.3-syz
-> x86_64                                  kexec
-> x86_64                              defconfig
-> x86_64                         rhel-8.3-kunit
-> x86_64                               rhel-8.3
-> x86_64                           allyesconfig
-> 
-> clang tested configs:
-> x86_64                        randconfig-c007
-> i386                          randconfig-c001
-> powerpc              randconfig-c003-20220501
-> riscv                randconfig-c006-20220501
-> mips                 randconfig-c004-20220501
-> arm                  randconfig-c002-20220501
-> powerpc              randconfig-c003-20220505
-> riscv                randconfig-c006-20220505
-> arm                  randconfig-c002-20220505
-> powerpc                      katmai_defconfig
-> powerpc                          g5_defconfig
-> arm                          ep93xx_defconfig
-> mips                      maltaaprp_defconfig
-> arm                           sama7_defconfig
-> hexagon                          alldefconfig
-> arm                         s3c2410_defconfig
-> mips                        workpad_defconfig
-> mips                           rs90_defconfig
-> arm                       mainstone_defconfig
-> powerpc                 mpc832x_rdb_defconfig
-> arm                         s5pv210_defconfig
-> mips                malta_qemu_32r6_defconfig
-> i386                          randconfig-a002
-> i386                          randconfig-a004
-> i386                          randconfig-a006
-> x86_64               randconfig-a011-20220502
-> x86_64               randconfig-a012-20220502
-> x86_64               randconfig-a013-20220502
-> x86_64               randconfig-a016-20220502
-> x86_64               randconfig-a014-20220502
-> x86_64               randconfig-a015-20220502
-> x86_64                        randconfig-a012
-> x86_64                        randconfig-a014
-> x86_64                        randconfig-a016
-> i386                          randconfig-a013
-> i386                          randconfig-a011
-> i386                          randconfig-a015
-> i386                 randconfig-a011-20220502
-> i386                 randconfig-a013-20220502
-> i386                 randconfig-a016-20220502
-> i386                 randconfig-a015-20220502
-> i386                 randconfig-a014-20220502
-> i386                 randconfig-a012-20220502
-> x86_64                        randconfig-a005
-> x86_64                        randconfig-a003
-> x86_64                        randconfig-a001
-> hexagon              randconfig-r045-20220502
-> hexagon              randconfig-r045-20220501
-> hexagon              randconfig-r041-20220501
-> s390                 randconfig-r044-20220502
-> riscv                randconfig-r042-20220502
-> hexagon              randconfig-r041-20220502
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+A non exhaustive list of potential topics is:
+
+- OS noise profiling (format and public DB for the community)
+- Tracing to detect OS noise: the rtla osnoise tracer and what it’s
+  missing TLB/icache flush deferral [1]
+- Extend cpuset v2 cpu partition feature to replace isolcpus kernel
+  cmdline
+- rt-trace-bpf tool
+- Task isolation
+- smp_call_function API improvements
+
+If you are interested in participating in this microconference and have
+topics to propose, please use the LPC CfP process [6], and select "CPU
+Isolation MC" for the "Track".
+
+The submission deadline is June 30.
+
+Come and join us in the discussion, we hope to see you there!
+
+In case of doubts, feel free to contact the MC Leads:
+
+Juri Lelli <juri.lelli@redhat.com>
+Daniel Bristot de Oliveira <bristot@redhat.com>
+
+refs.
+1 - https://lore.kernel.org/all/20210929151723.162004989@infradead.org/
+2 - https://lore.kernel.org/lkml/20220315153132.717153751@fedora.localdomain/
+3 - https://lore.kernel.org/lkml/20211103170512.2745765-1-nsaenzju@redhat.com/
+4 - https://www.kernel.org/doc/html/latest/trace/osnoise-tracer.html
+5 - https://www.kernel.org/doc/html/latest/tools/rtla/rtla-osnoise.html
+6 - https://lpc.events/event/16/abstracts/
+

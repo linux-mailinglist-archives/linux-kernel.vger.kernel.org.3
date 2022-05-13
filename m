@@ -2,247 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 082905264CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:39:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD0A5264B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:38:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381930AbiEMOgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33568 "EHLO
+        id S1382004AbiEMOgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381307AbiEMOea (ORCPT
+        with ESMTP id S1381354AbiEMOei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:34:30 -0400
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84D31C194A;
-        Fri, 13 May 2022 07:29:55 -0700 (PDT)
-Received: by mail-qk1-f175.google.com with SMTP id a22so7168519qkl.5;
-        Fri, 13 May 2022 07:29:55 -0700 (PDT)
+        Fri, 13 May 2022 10:34:38 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252CC1C9AC1
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:30:08 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id o130so65408ybc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:30:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6NP6EhM0X5mD3UzK4e4exb5R0VTq4XniyN4C07WX/Go=;
+        b=cZi6hWJvOF2VZMnh6yPQoLDh4Dnlxa0Jbaglle0oh+f3CygyxrXYwW2adM1URgVwUb
+         Dz6klL6PoSomeo+wpCmo1A87bU+2JBKQY4jsd98vpSB9JBBHsya+W+NOd/N6kw7b7eT8
+         j+kqQihDkvuu4dCw2TaNoVgRJDNaBnB4pPD0Koih2C7atkA3wpdGBi9HKOHLueXVSc7l
+         d6LNFaMBCDoT3jUJALI9YOee20+5FnI48jXivTcRUEW3H4JE38/vW2o0Mo91LS32pNJV
+         nOFLGaAWgXJJIzWpMPK4Nsdz+pHgWTR9L2trFmb8zBDQTMds2jsmX9bl7kj2/6bd2fO9
+         Dg5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=kCqc8sV483lUEyV7vQbAV+jRc+iGrWAeuA3SV0zpnxo=;
-        b=ZBDElzojxrywJOK2wFVK6Z3KpjIePkIp+3HupR5fD2b6CFhCb39uqaI0PXXfj8qs8L
-         xSvDDFD7eHIBb6S1AYAt5KFMd1Ncl8KxdFpQELf1/LdExqW/mLR1AB8G9q+rS+E8QsfK
-         rzUpEj/7BInGdFukMU4zGOWgyuY6lIuugmdC5TQDzepBI4EpBF7MNAEbm69QcLGLSxhe
-         ISOLEuxeNZSlu1fztmdz0e5wcS8J69dAXIiPLvQcslGSrKDvn4Zv6GGQgW1dZABXSc83
-         /A5nCKjevRFFN8Th/qJ031SNO2m9Skj4cwe1HJJvRkhIrliN6J9jQOgCY7u9sWpQRbWR
-         ttEg==
-X-Gm-Message-State: AOAM531Ey0+/8ZOBU/zOHhBYA11+0tRkMMGnsNNtDcDLI8j8tztH8vHV
-        +bEjKakNw7kTCH2d2X2x/pwWRRnyVWZ1Wg==
-X-Google-Smtp-Source: ABdhPJzswxu/81gxECvhYo3qCOz0H6swOQZwmj1eFMMj6QTQZuHkp3bZKsy+oaZJ4lGmSpDWfSjpAQ==
-X-Received: by 2002:a37:f518:0:b0:680:a811:1ef7 with SMTP id l24-20020a37f518000000b00680a8111ef7mr3716825qkk.765.1652452194727;
-        Fri, 13 May 2022 07:29:54 -0700 (PDT)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id m6-20020ac86886000000b002f39b99f6bcsm1455857qtq.86.2022.05.13.07.29.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 07:29:53 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2f16645872fso92004917b3.4;
-        Fri, 13 May 2022 07:29:53 -0700 (PDT)
-X-Received: by 2002:a81:913:0:b0:2f7:c833:f304 with SMTP id
- 19-20020a810913000000b002f7c833f304mr6026190ywj.283.1652452193243; Fri, 13
- May 2022 07:29:53 -0700 (PDT)
+        bh=6NP6EhM0X5mD3UzK4e4exb5R0VTq4XniyN4C07WX/Go=;
+        b=ydN4AQF/I82IDufhImUXc/iWSI2ANU4Ol7MkQ2J3G6W73d7Hup5TwHZhNBKpgcbsiy
+         1zn1P/GIrj6EJ73uqRVk84VZD7bV4SuaHVSxi25y+wL8xQ5L8CNIixR0DYn/Rftx5zmE
+         ln0Em5vn9zVuy0oUFhxEuY2pzaBDGlIz5QqWNuD34sjqfNNYGNPOyLDRbpAqQDrVWNf0
+         e6nX8YT2c7d1K/7gWkAShVUveLaqPkxc91Ef5ULblftk5/0rOwRtWhhJa1cYZOKD+WIH
+         hfYhjkQp7AHoXknapTMP78+j+BKPEl8IEWa1Nt+3NqWXIdoFhMde91+WK0gg5ydqV2E2
+         ANEw==
+X-Gm-Message-State: AOAM532XvXVwJz1Jd3iFS+iwZe3GbgySpDXjhVAWouHKB+T8QZeWiGvd
+        mn6cclub9Wj0GcUE6oYMYLgajMgnBN7u/6hRdxk5aw==
+X-Google-Smtp-Source: ABdhPJyTJudNGJtkAW4NctmhORicAlKAnvJLdlDZ50xVK9tE6EjXyHMGuV9guzIlFTcKi31JInQBAtKqDQCEK0XVIHA=
+X-Received: by 2002:a25:d3cd:0:b0:648:6a92:80f9 with SMTP id
+ e196-20020a25d3cd000000b006486a9280f9mr5051460ybf.300.1652452207184; Fri, 13
+ May 2022 07:30:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220511183210.5248-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220511183210.5248-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdXDQ+eECWwvAGOb-MaN16H17qm_v_1baZ7PdT8qx9McSw@mail.gmail.com>
- <CA+V-a8tNrJQtAQYoUKVwH9w4QOyA9JUWNjiYDPUPsj6UuJ4vaA@mail.gmail.com>
- <CAMuHMdVazy9y_U6Nva+B-3vuX1Ersq+QirXDDgSh28pj8s=EJA@mail.gmail.com> <CA+V-a8s2Gf22MPLoZMJS_5uDwzOboJ2i8rZ3KdRFy7a7wv8pGg@mail.gmail.com>
-In-Reply-To: <CA+V-a8s2Gf22MPLoZMJS_5uDwzOboJ2i8rZ3KdRFy7a7wv8pGg@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 13 May 2022 16:29:41 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXHJ385isGd-x8u4sFm1w=rxOC89SUryYbSd34bijkb0g@mail.gmail.com>
-Message-ID: <CAMuHMdXHJ385isGd-x8u4sFm1w=rxOC89SUryYbSd34bijkb0g@mail.gmail.com>
-Subject: Re: [PATCH v3 5/5] pinctrl: renesas: pinctrl-rzg2l: Add IRQ domain to
- handle GPIO interrupt
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220512163534.2572-1-vincent.guittot@linaro.org> <86066641739c4897b0001153e598a261@AcuMS.aculab.com>
+In-Reply-To: <86066641739c4897b0001153e598a261@AcuMS.aculab.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Fri, 13 May 2022 16:29:55 +0200
+Message-ID: <CAKfTPtDUCodxyyBmTsJ_jHPCxvBgGTALaMO8r3UvrBA6ZWks6w@mail.gmail.com>
+Subject: Re: [PATCH v2 0/7] Add latency_nice priority
+To:     David Laight <David.Laight@aculab.com>
+Cc:     "mingo@redhat.com" <mingo@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
+        "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "bsegall@google.com" <bsegall@google.com>,
+        "mgorman@suse.de" <mgorman@suse.de>,
+        "bristot@redhat.com" <bristot@redhat.com>,
+        "vschneid@redhat.com" <vschneid@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "parth@linux.ibm.com" <parth@linux.ibm.com>,
+        "qais.yousef@arm.com" <qais.yousef@arm.com>,
+        "chris.hyser@oracle.com" <chris.hyser@oracle.com>,
+        "valentin.schneider@arm.com" <valentin.schneider@arm.com>,
+        "patrick.bellasi@matbug.net" <patrick.bellasi@matbug.net>,
+        "pjt@google.com" <pjt@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "tj@kernel.org" <tj@kernel.org>,
+        "qperret@google.com" <qperret@google.com>,
+        "tim.c.chen@linux.intel.com" <tim.c.chen@linux.intel.com>,
+        "joshdon@google.com" <joshdon@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
-
-On Fri, May 13, 2022 at 3:56 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
-> On Fri, May 13, 2022 at 7:53 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Thu, May 12, 2022 at 7:36 PM Lad, Prabhakar
-> > <prabhakar.csengg@gmail.com> wrote:
-> > > On Thu, May 12, 2022 at 8:39 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > > On Wed, May 11, 2022 at 8:32 PM Lad Prabhakar
-> > > > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > > > > Add IRQ domian to RZ/G2L pinctrl driver to handle GPIO interrupt.
-> > > > > GPIO0-GPIO122 pins can be used as IRQ lines but only 32 pins can be
-> > > > > used as IRQ lines at given time. Selection of pins as IRQ lines
-> > > > > is handled by IA55 (which is the IRQC block) which sits in between the
-> > > > > GPIO and GIC.
-> > > > >
-> > > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > >
-> > > > Thanks for your patch!
-> > > >
-> > > > > --- a/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-> > > > > +++ b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-> > > >
-> > > > >  static int rzg2l_gpio_register(struct rzg2l_pinctrl *pctrl)
-> > > > >  {
-> > > > >         struct device_node *np = pctrl->dev->of_node;
-> > > > >         struct gpio_chip *chip = &pctrl->gpio_chip;
-> > > > >         const char *name = dev_name(pctrl->dev);
-> > > > > +       struct irq_domain *parent_domain;
-> > > > >         struct of_phandle_args of_args;
-> > > > > +       struct device_node *parent_np;
-> > > > > +       struct gpio_irq_chip *girq;
-> > > > >         int ret;
-> > > > >
-> > > > > +       parent_np = of_irq_find_parent(np);
-> > > > > +       if (!parent_np)
-> > > > > +               return -ENXIO;
-> > > > > +
-> > > > > +       parent_domain = irq_find_host(parent_np);
-> > > > > +       of_node_put(parent_np);
-> > > > > +       if (!parent_domain)
-> > > > > +               return -EPROBE_DEFER;
-> > > > > +
-> > > > >         ret = of_parse_phandle_with_fixed_args(np, "gpio-ranges", 3, 0, &of_args);
-> > > > >         if (ret) {
-> > > > >                 dev_err(pctrl->dev, "Unable to parse gpio-ranges\n");
-> > > > > @@ -1138,6 +1330,15 @@ static int rzg2l_gpio_register(struct rzg2l_pinctrl *pctrl)
-> > > > >         chip->base = -1;
-> > > > >         chip->ngpio = of_args.args[2];
-> > > > >
-> > > > > +       girq = &chip->irq;
-> > > > > +       girq->chip = &rzg2l_gpio_irqchip;
-> > > > > +       girq->fwnode = of_node_to_fwnode(np);
-> > > > > +       girq->parent_domain = parent_domain;
-> > > > > +       girq->child_to_parent_hwirq = rzg2l_gpio_child_to_parent_hwirq;
-> > > > > +       girq->populate_parent_alloc_arg = rzg2l_gpio_populate_parent_fwspec;
-> > > > > +       girq->child_irq_domain_ops.free = rzg2l_gpio_irq_domain_free;
-> > > > > +       girq->ngirq = RZG2L_TINT_MAX_INTERRUPT;
-> > > > > +
-> > > >
-> > > > I think you need to provide a .init_valid_mask() callback, as
-> > > > gpiochip_irqchip_remove() relies on that for destroying interrupts.
-> > > Are you suggesting  the callback to avoid looping through all the GPIO pins?
-> >
-> > gpiochip_irqchip_remove() does:
-> >
-> >         /* Remove all IRQ mappings and delete the domain */
-> >         if (gc->irq.domain) {
-> >                 unsigned int irq;
-> >
-> >                 for (offset = 0; offset < gc->ngpio; offset++) {
-> >                        if (!gpiochip_irqchip_irq_valid(gc, offset))
-> >                                 continue;
-> >
-> >                         irq = irq_find_mapping(gc->irq.domain, offset);
-> >                         irq_dispose_mapping(irq);
-> >                 }
-> >
-> >                 irq_domain_remove(gc->irq.domain);
-> >
-> >         }
-> >
-> > The main thing is not about avoiding to loop through all GPIO pins,
-> > but to avoid irq_{find,dispose}_mapping() doing the wrong thing.
-> So in our case if we don't implement valid masks, that would mean all
-> the pins are valid. irq_find_mapping() would return 0 if no mapping is
-> found to the corresponding offset and irq_dispose_mapping() would
-> simply return back without doing anything if virq == 0.(In this patch
-> rzg2l_gpio_free() does call irq_{find,dispose}_mapping())
-
-But "offset" is a number from the GPIO offset space (0-122), while
-irq_find_mapping() expects a number from the domain's IRQ space,
-which is only 0-31?
-
-> > The loop is over all GPIO offsets, while not all of them are mapped
-> > to valid interrupts. Does the above work correctly?
-> >
-> I haven't tested unloading the pinctrl driver which should call
-> gpiochip_irqchip_remove() (we don't have remove call back for pinctrl
-> driver)
+On Fri, 13 May 2022 at 09:13, David Laight <David.Laight@aculab.com> wrote:
 >
-> > > > However, the mask will need to be dynamic, as GPIO interrupts can be
-> > > > mapped and unmapped to one of the 32 available interrupts dynamically,
-> > > > right?
-> > > Yep that's correct.
-> > >
-> > > > I'm not sure if that can be done easily: if gpiochip_irqchip_irq_valid()
-> > > > is ever called too early, before the mapping is done, it would fail.
-> > > >
-> > > The mask initialization is a one time process and that is during
-> > > adding the GPIO chip. At this stage we won't be knowing what will be
-> > > the valid GPIO pins used as interrupts. Maybe the core needs to
-> > > implement a callback which lands in the GPIO controller driver to tell
-> > > if the gpio irq line is valid. This way we can handle dynamic
-> > > interrupts.
+> From: Vincent Guittot
+> > Sent: 12 May 2022 17:35
 > >
-> > Upon closer look, I think the mask is a red herring, and we don't
-> > need it.
-> Agreed.
+> > This patchset restarts the work about adding a latency nice priority to
+> > describe the latency tolerance of cfs tasks.
+> >
+> > The patches [1-4] have been done by Parth:
+> > https://lore.kernel.org/lkml/20200228090755.22829-1-parth@linux.ibm.com/
+> >
+> > I have just rebased and moved the set of latency priority outside the
+> > priority update. I have removed the reviewed tag because the patches
+> > are 2 years old.
+> >
+> > The patches [5-7] use latency nice priority to decide if a cfs task can
+> > preempt the current running task. Patch 5 gives some tests results with
+> > cyclictests and hackbench to highlight the benefit of latency nice
+> > priority for short interactive task or long intensive tasks.
 >
-> > But we do need to handle the (possible) mismatch between GPIO
-> > offset (index) and IRQ offset in the above code.
-> >
-> Agreed, do you see any possibility of the mismatch I have missed?
+> I'd have thought the best way to reduce latency would be to look
+> harder for an idle cpu before trying to preempt the current task.
 
-gpiochip_to_irq():
+Although it's a good policy, this is not always true:
+- The wakeup latency of an idle CPU can be significant for deep idle
+state (several ms)
+- The cost of looking for an idle CPU can be higher than preempting
+current thread
 
-        if (irq_domain_is_hierarchy(domain)) {
-                struct irq_fwspec spec;
+>
+> By far the worst case latency for a cfs task is waking it from an
+> rt task.
+> AFAICT the cpu selection algorithm is something like:
+> 1) if the cpu it last ran on is idle, schedule it there.
+> 2) if one of a small subset of cpu is idle run it there.
 
-                spec.fwnode = domain->fwnode;
-                spec.param_count = 2;
-                spec.param[0] = gc->irq.child_offset_to_irq(gc, offset);
-                spec.param[1] = IRQ_TYPE_NONE;
+yes the LLC
 
-                return irq_create_fwspec_mapping(&spec);
-        }
+> 3) schedule on the current cpu after the rt thread exits.
 
-Same here: in the absence of a child_offset_to_irq() callback,
-the default gpiochip_child_offset_to_irq_noop() will be used,
-assuming an identity mapping between GPIO numbers and IRQ
-numbers.
+when prev and current cpu are differents, we start to select which one
+will be the starting point for looking for an idle cpu
 
-So perhaps
-  1. you need to provide a child_offset_to_irq() callback,
-  2. gpiochip_irqchip_remove() needs to apply the child_offset_to_irq()
-    mapping too?
-  3. you do need the mask, or let child_offset_to_irq() an error code,
-     to avoid irq_{find,dispose}_mapping() handling non-existent irqs?
+>
+> Then there is the additional behaviour:
+> An rt thread (almost) always starts on the cpu it ran on last,
+> any running cfs thread is put on the q for that cpu.
 
-Or am I missing something?
+and might even have to wait for other cfs threads to run 1st which is
+where this patch want to improve in priority
 
-I guess this is easy to verify by adding some debug prints to the code.
+>
+> This makes it very difficult to start a background cfs thread
+> from an active rt thread.
+> Quite often it won't migrate to an idle cpu until the timer
+> tick scheduler rebalance happens.
 
-Gr{oetje,eeting}s,
+so you are speaking about idle cpu out of the LLC
+But then, this cfs task should try to wakeup 1st on the new cpu and
+not on the RT one
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>
+> I think the search for an idle cpu is also limited when woken
+> by a cfs thread.
+>
+>         David
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
+>

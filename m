@@ -2,197 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3DBF526EFF
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:15:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A00FD526EA9
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbiENDAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 23:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
+        id S229712AbiENByY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 21:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231802AbiENC7k (ORCPT
+        with ESMTP id S229628AbiENByW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 22:59:40 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67FE638DEA1
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 18:25:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652491518; x=1684027518;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=xtuyyn9xLqSLhEAjM5Z6SocixCUJlyRK0sexUOcsrYM=;
-  b=bdt302b4EfanRB6XA8tChKQ/23b1jBNuZ48nPUe4yY0NS6e90hLIszzD
-   nT8Dil2ntkb1l/CN78M+Vb/VvGLjI+H980fxAyp/h3wNAIr19NRNcdC4q
-   MNtiz4gImQCsaHH7lCgHw87xH6mUXeexxobyDqHG4SHCTG0WFPuvQbB7r
-   4L/b0HONuUwBc9ziFhp6CgIK25tcifbRlXbOiaBnkA4H2J6BFpTKA5xAX
-   5K8cBgyWCZF9p+K3FQ96psZwdzwQczc3G6zA1UNOJzFgSwQ8E5F2j/hzB
-   dnKMfklYqKa9DaeHZkTiHbdNu8f4X7GCE6Wob3iLKEO4171OAWhVSfvnT
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="270569565"
-X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="270569565"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 16:50:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="573212209"
-Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
-  by fmsmga007.fm.intel.com with ESMTP; 13 May 2022 16:50:07 -0700
-Received: from orsmsx606.amr.corp.intel.com (10.22.229.19) by
- ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 13 May 2022 16:50:07 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Fri, 13 May 2022 16:50:07 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.106)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Fri, 13 May 2022 16:50:06 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jZCf12lvZOKyejQUlrdWuo2+LirhSTjPVeSD6zj42mO82Vgjv1MPcCWQRF/6tEf7YiehVCopcRyI0v9LP5Wohwz69PvUESHvdckDiPs14Xz3aqIeIgDIa5dih9GNvUKOuJ9e7tr5iD5y9uTKOQtRUdB/Fkyezn6NTB97ZcN6yzu+B+eeCSc54scDK8t5auvVGgP9tmfPbjiizLnqLI0OgeGcsgO+Tcp3wVASQfPn8u//UuUbd2rHzNkO7cYr9WUzKgnWH0najku2AgVr/5f0JRneT/xWeQIq2xp+b9Zcr+ZgtNIy81tew1S4W9SE87XVWYRjrH9RMVAPX6m+2WwDag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xtuyyn9xLqSLhEAjM5Z6SocixCUJlyRK0sexUOcsrYM=;
- b=n0rXa4UvhsU5DkqDiaWuzxMcJo8UpCOORheu04WRwjxkYTzp+BRQdZGb986l7rFMxO2QRewqB2bm1W9y4AGnkf3h9tQQNu44PdMCcCsuOlgrRgro+yzwtOTptEacOD6CwUl90UPYrHLRzPC9Qir9xl62bDYt6sUW6X8TeDEezSqKgwVCA3hIIzidf+yPXHR7beX4TYt06TtqT3zfV5Bm4PTdAxi5Qye8fB4kBMRaaxcEPcCf36x76s2dfX/g3Mqk5kA6yh02G3snsj30ERshQpJ2lZmkPl1B3vrCEb5QdicnRHFqh1hDwzEMTWPsEUlHbo9S4qTVvoMLYaETu3KATA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by PH0PR11MB5926.namprd11.prod.outlook.com (2603:10b6:510:14d::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13; Fri, 13 May
- 2022 23:50:03 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::34f6:8e1d:ac6b:6e03]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::34f6:8e1d:ac6b:6e03%12]) with mapi id 15.20.5250.016; Fri, 13 May
- 2022 23:50:03 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "aryabinin@virtuozzo.com" <aryabinin@virtuozzo.com>,
-        "dvyukov@google.com" <dvyukov@google.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "glider@google.com" <glider@google.com>
-Subject: Re: [RFCv2 03/10] x86: Introduce userspace API to handle per-thread
- features
-Thread-Topic: [RFCv2 03/10] x86: Introduce userspace API to handle per-thread
- features
-Thread-Index: AQHYZOBkvB2PlILtfUOVczGp43rrrq0c3EGAgAA5TwCAAF3QAIAACzIA
-Date:   Fri, 13 May 2022 23:50:03 +0000
-Message-ID: <543eb3ff98f624c6cfa1d450ac3e9ae8934c7c38.camel@intel.com>
-References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
-         <20220511022751.65540-5-kirill.shutemov@linux.intel.com>
-         <CAG_fn=V8k3hiviv3htV6wWZ6fUBri=MORfXGJ+Kz7GdRDZvesA@mail.gmail.com>
-         <da0f438bb459050e5a586a17382e961259449761.camel@intel.com>
-         <20220513230958.dbxp6m3y3lnq74qb@black.fi.intel.com>
-In-Reply-To: <20220513230958.dbxp6m3y3lnq74qb@black.fi.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 99603b00-577b-4e0b-0acc-08da353b4cca
-x-ms-traffictypediagnostic: PH0PR11MB5926:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <PH0PR11MB5926F2ED32A273E41522D02BC9CA9@PH0PR11MB5926.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 78iUAX2iSjSr8cme1xgeqEB6p458nciEn21piACBCDfJndZlO0tDiSP9LLEfgjkLiHbenDo7NYwRSWhpdDnIgZr3R9wAHDWEonJ1ohwOzQaw9jZW5wL7d0/nI6wXnwwL5SkQ6UxfPHuVDiOOGG2huLq97Y0eBN91bFsSoxHdGzBttduIVKlcv0TVcc0ecoFw9OpASn5BA3kRfP6fzbrkD7hXQtAwkV3cT7uNu9q0pdMFWiaW4l5uKCP3p32v/z0nNS1PzPCI1YT4jMTe+L3Xcry6nzKL7y5Vf+GcpkF3emB3eeUN0wgEuURcFO+jK62AGe3Ta2uGJ23DeaLIku8ZubgjB+HnNZ837bBFsEKl8DcwfwRiTAw8JaH65HFEQS+TwWEmddarlxS7sOUcSJdQLt/bxh3WsxkHPhBvACh+5XSvV8lrWTVSmDkMdn7Ds+LnDsEjKXUN4zdTHtbshBej2QKmD3G5AQ4KfSNTNy31h8Y5IlXVFEL6BIQoNi2Xi+Fpl9ww5whLsirQBDvYWEF/BSBsx5nRzGPQIJz/V94SD+Cb7QFFkew4StAGYzJxAs2xer0Pktp3oloRmeDq/IThg44W6XPUra+xB26TQH4Hf8aIrwxUpbjVKRceHg1b0bOOIPQ1Z14H3EJL6mZP4IyXOqYza+AvNRor6G4Vl0WLLxdTiM+rWj0ARQJ4THKxgV5i3sGCmOkpwh9+R6ZHvUpkLTxNT7QyVPk6TMFVZvoxVV0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(316002)(64756008)(76116006)(26005)(36756003)(2906002)(66946007)(66556008)(66446008)(66476007)(8676002)(4326008)(38100700002)(38070700005)(71200400001)(54906003)(6916009)(91956017)(122000001)(82960400001)(5660300002)(186003)(7416002)(6506007)(6486002)(86362001)(8936002)(508600001)(4744005)(2616005)(6512007)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OEJ1UHo1Y1huZmlEMUZkZk55Yndmc3JjamhPOTduaTVXZFJtL2wycTJjQzNs?=
- =?utf-8?B?UGRDaDFDOWdEbHM5OVY2TkVia3hYTU1TTzNobnBuU0p2eDdHNVJqYnhPMXRn?=
- =?utf-8?B?eW1DNWZUMjk2c0tTR2MzcHlCbGR2cUdyc0k1NWFwTmVNYWh6dkRzaGlkVHoy?=
- =?utf-8?B?blFjUkl5NU8xVzk3RkdZc2dlZ0k3VjlOaEJQUVY0alNhMzN4bzM4anVsR3h0?=
- =?utf-8?B?VXQ5YUxtMFVFNjd2U2VkUlYvWkdsV1VHOGxIcWhIN2tRTEFodkNYNFJJMU9p?=
- =?utf-8?B?VXllaGVkRXUyRGJQMS9sV1BXbDQxZWNLWkZmTThZUithYnVRTVJlUngyd0sw?=
- =?utf-8?B?SzBEYTVGYnQyZ0x1SCtDYlNEd2dDWjJGWUF3KzhVQmtab0xNUHZ6Qm1ZeUdB?=
- =?utf-8?B?c3dKeVNGc21Fa2I4ZVNFeTQ5RmtTdHlIclNqMzVIanVZdVNleVFET04rRVN4?=
- =?utf-8?B?b3M2T1VWUmhTam9xS2RaWmF5T0FkYUhLck5xcVN0THg1YkhOT3EzaUdCVlVu?=
- =?utf-8?B?TlRCTm5vc1JPRU93OHc3cWpDYkVzYklXbmRGaHN2WmxqWk5RdklRUzlTaHFG?=
- =?utf-8?B?UnQ1OEZzRHF5VFdHbWR1YU5kWjNxRnhJWFlJWThzcVcycWttYUNxc0g1NkpK?=
- =?utf-8?B?L0k1NnpydC9QUWRnTWozV0c4ZVp4Z01pcUhGNmlKQ0NVa0srZXFSZmUrV0ho?=
- =?utf-8?B?NlBqdUxab3BabXBucU9tWDBmeHhIRmxkYVRtWkRYUThoSExPcFE0ZUdYYzZH?=
- =?utf-8?B?eTlMRG1TK0loQUFRdTFLNDh4VFA0Q3IzNnkwd1dDUmlaanpkdzFZWktIVzVW?=
- =?utf-8?B?OHF0YTlrV2wwZmhwaHQ4MzVIMEprRFN5R2FqYW1Hdm1vVFcyRVNnU3JzR1pi?=
- =?utf-8?B?QzRjQ3RoMkF4eXJNajVYNXhzKzdhckhTN2FmTmg4eCthenZSOE84TVVkSUk0?=
- =?utf-8?B?WGE5Rk10MVd3elJMTytzbVh1VldueTduS0kyWVE1c3JJb0RabWRzVDJlRk5M?=
- =?utf-8?B?ZkpuS05yUXo1aktDajR3TEZOcUFEaGx1UGIxYWZxWndTQ29PL243enVxelRo?=
- =?utf-8?B?aTBMeE5nNjBrUFowNjMxSEJVNURmY3hBZVRsMCtqcGh0Q3p5UWZGa3lIRnND?=
- =?utf-8?B?VzNWTEZCcisvNjc0NEJGQmZiYUFyOFNWTE9HdmlnOVNwelJKYlI1TUJQaVQy?=
- =?utf-8?B?N2Y0V2JTM05CSVFMQzFORmpqTXF5VlFicUcvKzRSM1NwL0xwZU9ya05uTTRr?=
- =?utf-8?B?c2g0VEM1NVgyK05LYWtOMWZIaUxDMHpEQlpmQ05TSmhpZVJQT2IyUkZvam4w?=
- =?utf-8?B?N3dadDRQQ1pNMDNROUlwY2cxbTJYYVRPNmxqcXBrUUw5UU8xT2FYc0NpeExD?=
- =?utf-8?B?SlE5ajdHdnA4WVhLdi9BYnMrYjBLdkdCYUErRTRMQW1FUHFNNlZFNEJyY09M?=
- =?utf-8?B?MzBoQjlEcituNGxYY0l1eDVZOFN4NFdnKzBqWWNDQW9Ua2tGcm5QYjFLSVFs?=
- =?utf-8?B?dE9US3hjdWVSMWlkSGh2YUZSbTRBY1VVemRBNERXRTErTHkzM0J3ZWdMaE4x?=
- =?utf-8?B?d24rSWpoRFU1L3JrS09SbkgwT1FHQXlicHBsVFF4MHVNQkIyR2pHQkloSmZP?=
- =?utf-8?B?VVZzaUg5SXQyOTJhWFd3RVk3Yy9FK3BXYjhuUld6ZVVZWVBpUjRUYmIxQWJ2?=
- =?utf-8?B?TnRhZ1J3R0xLYytGb2wvVWc3WFRadFBwVTk0YTBkWEZRUzJRQ21xSFJneDMx?=
- =?utf-8?B?YUNSL2dPdStTc0Z0bGN4TGpMV2kxY2p3RTErUkk0VXNWVlJ4aVk2YS95d0Vo?=
- =?utf-8?B?THRRdW1HQk43dDR1Y2xadEs4S2RDTFo3VThDbkVQYUZHTVUxUk9CeFhxQjRX?=
- =?utf-8?B?dHVXakErTXhjOUM1MXRZSXNhTnVjQm45a3RYWVNQeUpNamU0OFFrbVpFWXBM?=
- =?utf-8?B?aW9ManM4aUZXTUxBUnJkWjhjc2c4Wjg0S3ZYTDZEeHlmMlc0VDM5WlF5NjF6?=
- =?utf-8?B?SHl6MHVMa1lMR1VkS3pFRFZreDhrT0dkTFNaRGhFM010VXFNaDY5T2VkZHAz?=
- =?utf-8?B?QlpJSG5uSWFlMldhWlFYcURCVzNXMXIwRTFlck5NWXVSNytBNHVxM3BpMDcy?=
- =?utf-8?B?Y2tkbGt1RGloem1qdkFEd2pMZDRaZ2ZEaU5PNzkzQy9LT29wemh3MTh6YTFI?=
- =?utf-8?B?bEdRUjZJNDhTQ0l4Z2tVNTQxeWxDVGJtV09MUGd0RzcyQ0hQTmR3TUtHemJR?=
- =?utf-8?B?TXhMSXN1T0JnejNMa1pBaCtGWXRsNjVwR1F4NnVKc1dBMzFUVmNFc0EyMEto?=
- =?utf-8?B?b3VVTnY2ZWx4dFhsUmlENjQ0cDNlem5EUkh4d0YrbVJia292NE5RbzE1Sktn?=
- =?utf-8?Q?D3Bni/qZGkRtJrb8AbwYj1jrdqvnb4XVulE/7?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <817C06F412DAAB4BAE974DACFF7BA3AE@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Fri, 13 May 2022 21:54:22 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1523E9DD4
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 16:56:25 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id i1so9363591plg.7
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 16:56:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=YqXCGyPsp5ArB5dqL4pL5ev2vTjEI3622aS8uMXTUU8=;
+        b=DwM4B8SfDuhyFXUnZbAL/ZY/DcRWWDHSvQn+FjKOPeOJaj4vRugCoD4Q6EyH8ejoNp
+         c5GkcuheJ6uVTHxI1r/k46H944JxYU2cO8FvvYHaov0k/7zKxkRLm2uii1ka82lbkE8y
+         kkXQkFIqfcn7EHZE9r+UQEnd7O8o/kzC45WvCZlcvIZwJlt2aFz0IOCOkx/EStnddHfo
+         YbwZRpt1F/PeXQg5dgEPIDUOlrpBwRxdVdVZ9YtmBNphMaKKFfk/yqyGyQCTBbmZ69gL
+         awkai/OcYtvaBdC4OJtVvUdk/yevN6l6nrdMuf+6SZD+pFqf3pm9Fq6lnjFqIUKmiTlx
+         L6KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=YqXCGyPsp5ArB5dqL4pL5ev2vTjEI3622aS8uMXTUU8=;
+        b=GIcSQHET03X1tWggkCGJrd4Fp+lMtJIrv1NQkzfhSeLqb53auOw//gcSpnagi+emJR
+         ++AvqVtspSTOIj5Rqti6HA0CuKZmR3nlW8dMvwo1vY0KMaioZg9keeZ4tY215D/Gc37E
+         6CZYRz4b0WVDQKOcTOhdFxp2kQg84/b+okMCrrIqkw9A65hL1gx6vbRBFgy0Wib3B34E
+         /anvDjpSitIeFsZ3dMqnvA2YVVvruo3ZMnIp60FRj2I8Lev0hkgMnbFODTBu+LEqMXTc
+         vbdOgvbq+j8t6ivBs7vRemvcEk/FJmjFXV65G8RZ/llQaVW/9goQ5DAEb58DEILPMCLB
+         zfHg==
+X-Gm-Message-State: AOAM533CtLxXHGfP9WkB6SvYDExnOUhXezE9Sx14NSQjRS4aWZuB/82/
+        fCUgxqP3X+4sZOuY09i5Fe4=
+X-Google-Smtp-Source: ABdhPJz+2AgJW+UNcOEnQyMmoDiDLnajAAFPWMpiflOrjAp91f9dxcR/08AkhNhPCCw2na7Tk8dLFQ==
+X-Received: by 2002:a17:903:246:b0:153:87f0:a93e with SMTP id j6-20020a170903024600b0015387f0a93emr7165067plh.171.1652486048731;
+        Fri, 13 May 2022 16:54:08 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:1969:9b8a:5056:897b])
+        by smtp.gmail.com with ESMTPSA id z25-20020a62d119000000b0050dc762816fsm2326286pfg.73.2022.05.13.16.54.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 16:54:08 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Fri, 13 May 2022 16:54:06 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        syzbot <syzbot+acf65ca584991f3cc447@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com,
+        Matthew Wilcox <willy@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        John Hubbard <jhubbard@nvidia.com>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [syzbot] WARNING in follow_hugetlb_page
+Message-ID: <Yn7vnpXwX50J3K+7@google.com>
+References: <000000000000ef451a05dee0f2b1@google.com>
+ <00000000000077377c05dee75f63@google.com>
+ <20220513102617.c464c4f566052838e911a3ec@linux-foundation.org>
+ <75f09063-d184-7d44-17a1-ed04be5eb953@oracle.com>
+ <a7fd0c3f-921e-19b3-2f67-a231dede28f9@oracle.com>
+ <20220513161910.d1b73583cdb2e33562aa86e5@linux-foundation.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 99603b00-577b-4e0b-0acc-08da353b4cca
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 May 2022 23:50:03.3842
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Snj6/bq6AxPqVw6cEFHyEZA2HMIolPgIX2KTSv1eqEl7oRKTzJEqO0VmK3I4yowNQ8Jw4UT6kTF9U9AXIILe5EGt6fXe8ZHSIOw/s+BPYno=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5926
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220513161910.d1b73583cdb2e33562aa86e5@linux-foundation.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gU2F0LCAyMDIyLTA1LTE0IGF0IDAyOjA5ICswMzAwLCBLaXJpbGwgQS4gU2h1dGVtb3Ygd3Jv
-dGU6DQo+IE9uIEZyaSwgTWF5IDEzLCAyMDIyIGF0IDA1OjM0OjEyUE0gKzAwMDAsIEVkZ2Vjb21i
-ZSwgUmljayBQIHdyb3RlOg0KPiA+IE9uIEZyaSwgMjAyMi0wNS0xMyBhdCAxNjowOSArMDIwMCwg
-QWxleGFuZGVyIFBvdGFwZW5rbyB3cm90ZToNCj4gPiA+ID4gKw0KPiA+ID4gPiArICAgICAgIC8q
-IEhhbmRsZSBBUkNIX1RIUkVBRF9GRUFUVVJFX0VOQUJMRSAqLw0KPiA+ID4gPiArDQo+ID4gPiA+
-ICsgICAgICAgdGFzay0+dGhyZWFkLmZlYXR1cmVzIHw9IGZlYXR1cmVzOw0KPiA+ID4gPiArb3V0
-Og0KPiA+ID4gPiArICAgICAgIHJldHVybiB0YXNrLT50aHJlYWQuZmVhdHVyZXM7DQo+ID4gPiAN
-Cj4gPiA+IElzbid0IGFyY2hfcHJjdGwoKSBzdXBwb3NlZCB0byByZXR1cm4gMCBvbiBzdWNjZXNz
-Pw0KPiA+IA0KPiA+IEhtbSwgZ29vZCBwb2ludC4gTWF5YmUgd2UnbGwgbmVlZCBhIHN0cnVjdCB0
-byBwYXNzIGluZm8gaW4gYW5kIG91dC4NCj4gDQo+IEJ1dCB2YWx1ZXMgPjAgYXJlIHVudXNlZC4g
-SSBkb24ndCBzZWUgd2h5IGNhbid0IHdlIHVzZSB0aGVtLg0KDQpIbW0sIEkgZG9uJ3Qga25vdyB3
-aGF0IGl0IHdvdWxkIGJyZWFrIHNpbmNlIGl0IGlzIGEgbmV3ICJjb2RlIg0KYXJndW1lbnQuIEJ1
-dCB0aGUgbWFuIHBhZ2Ugc2F5czoNCiJPbiBzdWNjZXNzLCBhcmNoX3ByY3RsKCkgcmV0dXJucyAw
-OyBvbiBlcnJvciwgLTEgaXMgcmV0dXJuZWQsIGFuZA0KZXJybm8gaXMgc2V0IHRvIGluZGljYXRl
-IHRoZSBlcnJvci4iDQoNClNvIGp1c3QgY2hhbmdlIHRoZSBtYW4gcGFnZXM/DQoiT24gc3VjY2Vz
-cywgYXJjaF9wcmN0bCgpIHJldHVybnMgcG9zaXRpdmUgdmFsdWVzOyBvbiBlcnJvciwgLTEgaXMN
-CnJldHVybmVkLCBhbmQgZXJybm8gaXMgc2V0IHRvIGluZGljYXRlIHRoZSBlcnJvci4iDQoNCg0K
+On Fri, May 13, 2022 at 04:19:10PM -0700, Andrew Morton wrote:
+> On Fri, 13 May 2022 15:48:15 -0700 Mike Kravetz <mike.kravetz@oracle.com> wrote:
+> 
+> > On 5/13/22 11:09, Mike Kravetz wrote:
+> > > On 5/13/22 10:26, Andrew Morton wrote:
+> > >> On Fri, 13 May 2022 09:43:24 -0700 syzbot <syzbot+acf65ca584991f3cc447@syzkaller.appspotmail.com> wrote:
+> > >>
+> > >>> syzbot has found a reproducer for the following issue on:
+> > >>
+> > >> Thanks.
+> > >>
+> > >>> HEAD commit:    1e1b28b936ae Add linux-next specific files for 20220513
+> > >>> git tree:       linux-next
+> > >>> console+strace: https://syzkaller.appspot.com/x/log.txt?x=174ae715f00000
+> > >>> kernel config:  https://syzkaller.appspot.com/x/.config?x=e4eb3c0c4b289571
+> > >>> dashboard link: https://syzkaller.appspot.com/bug?extid=acf65ca584991f3cc447
+> > >>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > >>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11531766f00000
+> > >>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ce5a9ef00000
+> > >>>
+> > >>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > >>> Reported-by: syzbot+acf65ca584991f3cc447@syzkaller.appspotmail.com
+> > >>>
+> > >>> ------------[ cut here ]------------
+> > >>> WARNING: CPU: 1 PID: 3611 at mm/hugetlb.c:6250 follow_hugetlb_page+0x1326/0x1c80 mm/hugetlb.c:6250
+> > >>
+> > >> The try_grab_folio() added by 822951d84684d ("mm/hugetlb: Use
+> > >> try_grab_folio() instead of try_grab_compound_head()").  That commit
+> > >> has been there over a month so I guess it's something else.  Does
+> > >> someone have the time to bisect?
+> > > 
+> > > I can recreate in my 'easy to debug' environment, so I can bisect in
+> > > parallel with other things I need to do today.
+> > > 
+> > 
+> > I isolated this to Minchan Kim's "mm: fix is_pinnable_page against on cma
+> > page".  Yes, the fat finger fix is in next-20220513.
+> > 
+> > I don't have time to analyze right now, but can confirm that in the
+> > reproducer is_pinnable_page is returning false after this change when it
+> > previously returned true.
+> 
+> OK, thanks, I dropped mm-fix-is_pinnable_page-against-on-cma-page.patch
+
+Seems like bug of the patch v5 due to change of this
+
+    if (mt & (MIGRATE_CMA | MIGRATE_ISOLATE))
+
+The migration type is not bit type so it shold be 
+
+if (mt == MIGRATE_CMA || mt == MIGRATE_ISOLATE)
+
+Ccing just in case if I miss other thing for HugeTLB

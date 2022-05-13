@@ -2,89 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5BFD5259E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 05:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A909D5259FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 05:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376681AbiEMDHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 23:07:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54968 "EHLO
+        id S1358713AbiEMDOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 23:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356735AbiEMDHD (ORCPT
+        with ESMTP id S232946AbiEMDOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 23:07:03 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9FE45AC7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 20:07:02 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id p12-20020a9d4e0c000000b00606b40860a3so4086878otf.11
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 20:07:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=297SZhnbfakt9y0BHFgnqzkCZLJUke1XogmQGvDK8R4=;
-        b=m9HMjtn3t15regA8x1GltDY08DyPBuI2H0RawHwVfEekwc56tea1CeNnXrDCzfMSsr
-         T6LDfkOGVAxHlFZ5blEteba7l8cHTjFwQsUqaL6bexFl3C14r2qGMsjZsHwnYnSgSU/l
-         YMC1c6z2iZHeQDptFxo+AJbSFYLWexKpQLb0QbGWGws60uTswZkLayRv4fx9VDHM4LoT
-         jpWYlcF+Lkq6g3rCH49AYvRHONXLVW/9OnDDxHw0N461nY+PU4Bdzg+F+HJEETHXBI+V
-         jpXhR7PTGYzYIxiM6kBPMM2W64m5Uh6TgfeVIPR8WRv0Rsk9kpCzIIgej+KltjAUZptZ
-         N/kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=297SZhnbfakt9y0BHFgnqzkCZLJUke1XogmQGvDK8R4=;
-        b=Xs9ZL/pcaPMkf12pVFkIgmGVB5CyW6Y6v/aI4jlqscsPTedPq4BOeO0xVFkYyiDyIe
-         P91YvaQkVFDnNkYOTyHAoObA/+WwM9m6Aex2pU4WrCRpnyh1Kv3LRH6r4bD/lWqHxP3A
-         wOx9DF+F0IziWSyxTVCCRlgv+04Vvb+jExbkyDx4TcPrnkTprLOKE0VESd26jRGq4NQf
-         EixLMnzwTzRLeVouzSP8C/ROlNZia39GxF2XjTvKAnw8hfreOczuAYet5Zele/nXOlEL
-         jR3DblgQO7Y33Qvp6LC/Ejg/uVgGhgN9TkCQg9gCqozzlTk8ZSC+FmXMLU6j4f2QGJi8
-         BKTg==
-X-Gm-Message-State: AOAM533hSKFw9oXBTqhBvISRy7PILL2aZ5tY9x3ChCt1CV6V8EWTjqpV
-        lExiaLA3NTQoih96ECTTWth34EYx1y92m1KXlNKbCQ==
-X-Google-Smtp-Source: ABdhPJyAHsbwyCL+EjpEVDEWDEyvsYMPlp0+rwoKbTCFj5OxYrQ77Dt4TinjMnxcKF4zxhJZi4KxoVhSgYkgN+dsYak=
-X-Received: by 2002:a05:6830:280e:b0:606:ae45:6110 with SMTP id
- w14-20020a056830280e00b00606ae456110mr1143445otu.14.1652411221187; Thu, 12
- May 2022 20:07:01 -0700 (PDT)
+        Thu, 12 May 2022 23:14:11 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB5828F1FA
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 20:14:09 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KztyT6fKjzgZ0Y;
+        Fri, 13 May 2022 11:13:37 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 13 May 2022 11:14:07 +0800
+Subject: Re: [PATCH v3 1/3] mm/swapfile: unuse_pte can map random data if swap
+ read fails
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBICjloIDlj6Mg55u05LmfKQ==?= 
+        <naoya.horiguchi@nec.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "neilb@suse.de" <neilb@suse.de>,
+        "david@redhat.com" <david@redhat.com>,
+        "apopple@nvidia.com" <apopple@nvidia.com>,
+        "surenb@google.com" <surenb@google.com>,
+        "minchan@kernel.org" <minchan@kernel.org>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220424091105.48374-1-linmiaohe@huawei.com>
+ <20220424091105.48374-2-linmiaohe@huawei.com>
+ <20220510061712.GA162496@hori.linux.bs1.fc.nec.co.jp>
+ <2a95aebe-3a00-4699-12d4-fc5d934dde2c@huawei.com>
+ <20220512174247.c4e178334879fb6b10134c2c@linux-foundation.org>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <d091a455-bab0-4094-d0dd-7e194c487d30@huawei.com>
+Date:   Fri, 13 May 2022 11:14:06 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-References: <20220512184514.15742-1-jon@nutanix.com> <Yn1fjAqFoszWz500@google.com>
- <Yn1hdHgMVuni/GEx@google.com> <07BEC8B1-469C-4E36-AE92-90BFDF93B2C4@nutanix.com>
- <Yn1o9ZfsQutXXdQS@google.com> <CALMp9eRQv6owjfyf+UO=96Q1dkeSrJWy0i4O-=RPSaQwz0bjTQ@mail.gmail.com>
- <C39CD5E4-3705-4D1A-A67D-43CBB7D1950B@nutanix.com> <CALMp9eRXmWvrQ1i0V3G738ndZOZ4YezQ=BqXe-BF2b4GNo1m3Q@mail.gmail.com>
- <DEF8066B-E691-4C85-A19A-9F5222D1683D@nutanix.com>
-In-Reply-To: <DEF8066B-E691-4C85-A19A-9F5222D1683D@nutanix.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Thu, 12 May 2022 20:06:49 -0700
-Message-ID: <CALMp9eTwH9WVD=EuTXeu1KYAkAUuXdnmA+k9dti7OM+u=kLKHQ@mail.gmail.com>
-Subject: Re: [PATCH v4] x86/speculation, KVM: remove IBPB on vCPU load
-To:     Jon Kohler <jon@nutanix.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ashok Raj <ashok.raj@intel.com>,
-        KarimAllah Ahmed <karahmed@amazon.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "kvm @ vger . kernel . org" <kvm@vger.kernel.org>,
-        Waiman Long <longman@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+In-Reply-To: <20220512174247.c4e178334879fb6b10134c2c@linux-foundation.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,32 +67,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 5:50 PM Jon Kohler <jon@nutanix.com> wrote:
+On 2022/5/13 8:42, Andrew Morton wrote:
+> On Tue, 10 May 2022 14:58:05 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
+> 
+>>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>>> Acked-by: David Hildenbrand <david@redhat.com>
+>>>
+>>> When I reproduced the issue (generated read error with dm-dust), I saw
+>>> infinite loop in the while loop in shmem_unuse_inode() (and this happens
+>>> even with this patch). I confirmed that shmem_swapin_page() returns -EIO,
+>>> but shmem_unuse_swap_entries() does not return the error to the callers,
+>>> so the while loop in shmem_unuse_inode() seems not break.
+>>>
+>>
+>> Many thanks for your report! I didn't test the shmem case because I saw -EIO
+>> is returned. So I just focus on the normal page case. Sorry about it. :(
+>>
+>>> So maybe you need more code around shmem_unuse_inode() to handle the error?
+>>
+>> I will try to reproduce it and come up a fixup patch asap! And if you like, you
+>> can kindly solve this issue too. ;)
+> 
+> Seems that this patch didn't cause the infinite loop, so as far as I
+> can tell it is good to be merged up.  But the problem it solves isn't
+> urgent and fixing that infinite loop might impact this change so I
+> think I'll drop this version.
 
-> You mentioned if someone was concerned about performance, are you
-> saying they also critically care about performance, such that they are
-> willing to *not* use IBPB at all, and instead just use taskset and hope
-> nothing ever gets scheduled on there, and then hope that the hypervisor
-> does the job for them?
+I will update and resend the corresponding patch series when I fix this infinite loop.
 
-I am saying that IBPB is not the only viable mitigation for
-cross-process indirect branch steering. Proper scheduling can also
-solve the problem, without the overhead of IBPB. Say that you have two
-security domains: trusted and untrusted. If you have a two-socket
-system, and you always run trusted workloads on socket#0 and untrusted
-workloads on socket#1, IBPB is completely superfluous. However, if the
-hypervisor chooses to schedule a vCPU thread from virtual socket#0
-after a vCPU thread from virtual socket#1 on the same logical
-processor, then it *must* execute an IBPB between those two vCPU
-threads. Otherwise, it has introduced a non-architectural
-vulnerability that the guest can't possibly be aware of.
+Thanks!
 
-If you can't trust your OS to schedule tasks where you tell it to
-schedule them, can you really trust it to provide you with any kind of
-inter-process security?
+> .
+> 
 
-> Would this be the expectation of just KVM? Or all hypervisors on the
-> market?
-
-Any hypervisor that doesn't do this is broken, but that won't keep it
-off the market. :-)

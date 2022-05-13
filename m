@@ -2,148 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6103352618A
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 14:04:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9CC52618B
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 14:05:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380123AbiEMMEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 08:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60646 "EHLO
+        id S1380133AbiEMMFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 08:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350905AbiEMMEs (ORCPT
+        with ESMTP id S1380127AbiEMMFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 08:04:48 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B25D29449B
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 05:04:47 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 12504143D;
-        Fri, 13 May 2022 05:04:47 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A32223F5A1;
-        Fri, 13 May 2022 05:04:45 -0700 (PDT)
-Message-ID: <634a4b8c-84d2-51a9-ef54-33b81683c849@arm.com>
-Date:   Fri, 13 May 2022 14:04:29 +0200
+        Fri, 13 May 2022 08:05:09 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32492944BA
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 05:05:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652443507; x=1683979507;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BNeavGT6SI5dxe+h9jv+bBWNm/028mOdGjs8qZE3aXk=;
+  b=jyAwoLHjoPOIS6manIVwEuXjlEpHHFzfEBa/HaHd56tZZ0qxxNabZuei
+   65rFLccKUucwVyjpi7NKH+oh3cN144BW6ah7gltMgP+Nwi6syivdsctLq
+   QmRBQh01rmzUFvaWdMSzh3ioJ2w5K4l0iHViNoohypIeU0pp1rNnVNACq
+   hvIQQkdFdgS7Ar2/vGuj4nbYFbkMraS9vIOqAUrdWsa6LgjQEpw6Q9KHr
+   KkOVTluKOUwUTn+5rys32Igv313dKHui6gkYex5i5PgVMSsVkHjIBCASp
+   sufbxS8xbc5OxZLRRyYSGRkKkFxRliTzlRMDbdvyQV3B6GOlxaJA+5ZGr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="333324125"
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="333324125"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 05:05:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="698463920"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 13 May 2022 05:04:41 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1npU2B-000Lic-Bz;
+        Fri, 13 May 2022 12:04:39 +0000
+Date:   Fri, 13 May 2022 20:04:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jagan Teki <jagan@amarulasolutions.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: [mszyprow:v5.18-next-20220511-dsi-rework 14/35] ERROR: modpost:
+ "dsi_driver" [drivers/gpu/drm/exynos/exynosdrm.ko] undefined!
+Message-ID: <202205131932.PAaaeVrI-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [RFC PATCH] arch_topology: Use llc_id instead of package_id
-Content-Language: en-US
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Qing Wang <wangqing@vivo.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        linux-kernel@vger.kernel.org
-References: <20220513083400.343706-1-dietmar.eggemann@arm.com>
- <20220513090330.z25fwthekn4rjkwq@bogus>
- <afafbb0c-5279-bee8-1ef4-434733e2a552@arm.com>
- <20220513110312.wy6g5avs7ngkmhfu@bogus>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20220513110312.wy6g5avs7ngkmhfu@bogus>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/05/2022 13:03, Sudeep Holla wrote:
-> On Fri, May 13, 2022 at 12:42:00PM +0200, Dietmar Eggemann wrote:
->> On 13/05/2022 11:03, Sudeep Holla wrote:
->>> On Fri, May 13, 2022 at 10:34:00AM +0200, Dietmar Eggemann wrote:
->>
->> [...]
->>
->>>> @@ -527,7 +528,8 @@ static int __init parse_core(struct device_node *core, int package_id,
->>>>  			return -EINVAL;
->>>>  		}
->>>>
->>>> -		cpu_topology[cpu].package_id = package_id;
->>>> +		cpu_topology[cpu].package_id = 0;
->>>
->>> While the above looks good and matches with what I am attempting to do
->>> as well ...
->>>
->>>> +		cpu_topology[cpu].llc_id = llc_id;
->>>
->>> This looks wrong for simple reason that this is derived incorrectly from
->>> the cpu-map while there is no guarantee that it matches the last level
->>> cache ID on the system as we didn't parse the cache topology for this.
->>> So I disagree with this change as it might conflict with the actual and
->>> correct llc_id.
->>
->> It might not match the LLC, that's true. Something we have already today
->> in Android for DynamIQ clusters with big/Little. People using 1. level
->> clusters to group CPUs according to uArch.
-> 
-> Not sure if that is the correct representation of h/w cluster on those
-> platforms, but if they want to misguide OS with the f/w(DT in this case)
-> well that's their choice.
-> 
-> The main point is we need to get the exact h/w topology information and
-> then we can decide how to present the below masks as required by the
-> scheduler for its sched domains.
-> 
->> My point is we manage to get:
->>
->> SMT - cpu_smt_mask()
->> CLS - cpu_clustergroup_mask()
->> MC  - cpu_coregroup_mask()
->> DIE - cpu_cpu_mask()
->>
->> covered in ACPI with the cpu_topology[] structure and if we want CLS on
->> DT we have to save cluster_id for the 2. level (DT) cluster.
->>
-> 
-> I am not sure on the above point. Even with ACPI PPTT we are just setting
-> cluster_id based on first or leaf level of the clusters ignoring the
+tree:   https://github.com/mszyprow/linux.git v5.18-next-20220511-dsi-rework
+head:   65cb4959430021041f1e68ef98a6ec541d5891aa
+commit: 395cab08cbac6e4028dafce068414ea43244a592 [14/35] drm: bridge: Add Samsung DSIM bridge driver
+config: mips-allmodconfig (https://download.01.org/0day-ci/archive/20220513/202205131932.PAaaeVrI-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/mszyprow/linux/commit/395cab08cbac6e4028dafce068414ea43244a592
+        git remote add mszyprow https://github.com/mszyprow/linux.git
+        git fetch --no-tags mszyprow v5.18-next-20220511-dsi-rework
+        git checkout 395cab08cbac6e4028dafce068414ea43244a592
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-Not sure about this. cluster_id was introduced last year into ACPI PPTT
-commit c5e22feffdd7 ("topology: Represent clusters of CPUs within a
-die") to cover L3-tag (4 CPUs) within L3 (24 CPUs) on Kunpeng920 for
-instance.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-cat /sys/kernel/debug/sched/domains/cpu0/domain*/name
-CLS
-MC
-... I skip the NUMA levels
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-# cat /proc/schedstat | awk '{print $1 " " $2 }' | grep ^[cd] | head -5
-cpu0 0
-domain0 00000000,00000000,0000000f <--  4 CPUs <-- cluster_id
-domain1 00000000,00000000,00ffffff <-- 24 CPUs
+>> ERROR: modpost: "dsi_driver" [drivers/gpu/drm/exynos/exynosdrm.ko] undefined!
 
-If you use cluster_id for 1. level cluster then you cover MC's 24 CPUs
-
-> nesting ATM. And that's exactly what I am trying to get with this series[1]
-> 
-> 
->> And that's why I proposed to (ab)use llc_id to form the MC mask.
->>
-> 
-> Sure, it is already supported IIUC by cpu_coregroup_mask in arch_topology.c
-> We just need to make sure llc_id is set correctly in case of DT. Now if
-> you are saying llc_sibling is not what you need but something else, then
-> we may need to add that new mask and update cpu_coregroup_mask to choose
-> that based on certain condition which I believe is bit complicated.
-> 
->> I'm not currently aware of another solution to get CLS somehow elegantly
->> into a DT system.
-> 
-> Will grouping of CPUs into cluster they belong not good enough for CLS ?
-
-No, IMHO then you'll cover MC and it's cpu_coregroup_mask() and you get
-MC.                                        ^^^^
-
-> I thought that should suffice based on what we have in cpu_clustergroup_mask
-> (i.e. cluster sibling mask)
-
-For one level (MC) yes, but not for 2 (MC and CLS). And cluster_id was
-introduces for the 2. level.
-
-cpu_clustergroup_mask() is 0f, cpu_coregroup_mask() is 00ffffff.
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,166 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FB7C5259C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 04:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3F35259CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 04:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376570AbiEMCng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 22:43:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58486 "EHLO
+        id S1376539AbiEMCxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 22:53:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376539AbiEMCnc (ORCPT
+        with ESMTP id S232487AbiEMCxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 22:43:32 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C270E52B0B
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 19:43:30 -0700 (PDT)
+        Thu, 12 May 2022 22:53:19 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4486C0EB
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 19:53:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652409810; x=1683945810;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+cUtYQK4Km2C++rGq/ah79HG9mDpGf2y1yRstGxDmSo=;
-  b=FwEJtlF+S7TN5FFzpbJjdgpGGPkoL/l3VZTOzV1FZx5AR8JlNAxOMJnR
-   Y/eogD/Xk+wTMKdLBY+GzmUoIQDEDXCkoTQL6PrR9A2aHq+X18qk8edG0
-   1qQu3Kd/Ohv3tjEDQQ4W17KwBczWEkOKcTPKQC8Z6d1zeRad877TrovVJ
-   WlMpSnxh5uizFHtSfFKVdCugG/916eH4cAcjEZ9vkheB32rlCqxpCZEaZ
-   GDCxBzdI+jtuOTVlVvNTRQeymTSMBJmiv+iOP4KG48Xz0uWI2vMN8U28K
-   l5GO152vkhfpRHdbow2p6cLh8CEXJpiilpXkNZGK964EzaFNYZ5A6ufI2
+  t=1652410397; x=1683946397;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=JPC6dlUogmhAYLUiSLbX/tviFaxYHSUYu+d6BDiKwJg=;
+  b=n4PO/GeGq9E+yLm7iwLMxnuJm7XQSaIbkGlPJBtsDwyZpQNw+0mUWBuf
+   SS+bSEaUAFkhLtJWiWRiQAjDpSMSf845iQGaqiAO3RbYjR73nPmrEmkXq
+   BCnMqnmaqdAf02ecFHEw5PKRRO3LpKcpydXMEDT5wZitX+ToN4la9R7zg
+   5CSdoYKE/fUZhiXBH9qDblErBNstRH6gBEn1JEwN3yYSUBlvm3SwbOCCI
+   KDtGOMq+Lma0XfU/1yRsmIUZMB2dYkzm77XsZa0MoOD/6ZIdWo9teWplm
+   5G2J+V29Zp4DF74LGd4MrCOvEobCPwGbq6loAbuaj2NXApblCyiWHgSEr
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="333230777"
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="257742566"
 X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="333230777"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 19:43:30 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="257742566"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 19:53:05 -0700
 X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="566987110"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 12 May 2022 19:43:26 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1npLH3-000LCz-Bl;
-        Fri, 13 May 2022 02:43:25 +0000
-Date:   Fri, 13 May 2022 10:43:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     yf.wang@mediatek.com, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Isaac J. Manjarres" <isaacm@codeaurora.org>,
-        Georgi Djakov <quic_c_gdjako@quicinc.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        "moderated list:ARM SMMU DRIVERS" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Cc:     kbuild-all@lists.01.org, wsd_upstream@mediatek.com,
-        Libo Kang <Libo.Kang@mediatek.com>,
-        Yong Wu <Yong.Wu@mediatek.com>, Ning Li <ning.li@mediatek.com>
-Subject: Re: [PATCH v3 1/2] iommu/io-pgtable-arm-v7s: Add a quirk to allow
- pgtable PA up to 35bit
-Message-ID: <202205131021.3GskEbg2-lkp@intel.com>
-References: <20220512144557.18025-2-yf.wang@mediatek.com>
+   d="scan'208";a="594997869"
+Received: from jliu69-mobl.ccr.corp.intel.com ([10.254.212.158])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 19:53:00 -0700
+Message-ID: <f36273d9a2fa09342972cd49e31bf2fe91e7c9e4.camel@intel.com>
+Subject: Re: RFC: Memory Tiering Kernel Interfaces (v2)
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     Wei Xu <weixugc@google.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Hesham Almatary <hesham.almatary@huawei.com>
+Date:   Fri, 13 May 2022 10:52:58 +0800
+In-Reply-To: <c8f253839505adec4d68cd2aa3f3769866915ad3.camel@intel.com>
+References: <CAAPL-u-DGLcKRVDnChN9ZhxPkfxQvz9Sb93kVoX_4J2oiJSkUw@mail.gmail.com>
+         <56b41ce6922ed5f640d9bd46a603fa27576532a9.camel@intel.com>
+         <c5d55131-76ff-7354-2954-7cfac365a9a5@linux.ibm.com>
+         <CAAPL-u-g86QqHaHGGtVJMER8ENC2dpekK+2qOkxoRFmC0F_80g@mail.gmail.com>
+         <87y1z7jj85.fsf@linux.ibm.com>
+         <CAAPL-u90Gzrepbsdpc62FGRBYOx1LAVwZWHg1E7UyVD_CmcROw@mail.gmail.com>
+         <c8f253839505adec4d68cd2aa3f3769866915ad3.camel@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220512144557.18025-2-yf.wang@mediatek.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, 2022-05-12 at 16:37 +0800, ying.huang@intel.com wrote:
+> On Thu, 2022-05-12 at 01:15 -0700, Wei Xu wrote:
+> > On Thu, May 12, 2022 at 12:36 AM Aneesh Kumar K.V
+> > <aneesh.kumar@linux.ibm.com> wrote:
+> > > 
+> > > Wei Xu <weixugc@google.com> writes:
+> > > 
+> > > > On Thu, May 12, 2022 at 12:12 AM Aneesh Kumar K V
+> > > > <aneesh.kumar@linux.ibm.com> wrote:
+> > > > > 
+> > > > > On 5/12/22 12:33 PM, ying.huang@intel.com wrote:
+> > > > > > On Wed, 2022-05-11 at 23:22 -0700, Wei Xu wrote:
+> > > > > > > Sysfs Interfaces
+> > > > > > > ================
+> > > > > > > 
+> > > > > > > * /sys/devices/system/memtier/memtierN/nodelist
+> > > > > > > 
+> > > > > > >    where N = 0, 1, 2 (the kernel supports only 3 tiers for now).
+> > > > > > > 
+> > > > > > >    Format: node_list
+> > > > > > > 
+> > > > > > >    Read-only.  When read, list the memory nodes in the specified tier.
+> > > > > > > 
+> > > > > > >    Tier 0 is the highest tier, while tier 2 is the lowest tier.
+> > > > > > > 
+> > > > > > >    The absolute value of a tier id number has no specific meaning.
+> > > > > > >    What matters is the relative order of the tier id numbers.
+> > > > > > > 
+> > > > > > >    When a memory tier has no nodes, the kernel can hide its memtier
+> > > > > > >    sysfs files.
+> > > > > > > 
+> > > > > > > * /sys/devices/system/node/nodeN/memtier
+> > > > > > > 
+> > > > > > >    where N = 0, 1, ...
+> > > > > > > 
+> > > > > > >    Format: int or empty
+> > > > > > > 
+> > > > > > >    When read, list the memory tier that the node belongs to.  Its value
+> > > > > > >    is empty for a CPU-only NUMA node.
+> > > > > > > 
+> > > > > > >    When written, the kernel moves the node into the specified memory
+> > > > > > >    tier if the move is allowed.  The tier assignment of all other nodes
+> > > > > > >    are not affected.
+> > > > > > > 
+> > > > > > >    Initially, we can make this interface read-only.
+> > > > > > 
+> > > > > > It seems that "/sys/devices/system/node/nodeN/memtier" has all
+> > > > > > information we needed.  Do we really need
+> > > > > > "/sys/devices/system/memtier/memtierN/nodelist"?
+> > > > > > 
+> > > > > > That can be gotten via a simple shell command line,
+> > > > > > 
+> > > > > > $ grep . /sys/devices/system/node/nodeN/memtier | sort -n -k 2 -t ':'
+> > > > > > 
+> > > > > 
+> > > > > It will be really useful to fetch the memory tier node list in an easy
+> > > > > fashion rather than reading multiple sysfs directories. If we don't have
+> > > > > other attributes for memorytier, we could keep
+> > > > > "/sys/devices/system/memtier/memtierN" a NUMA node list there by
+> > > > > avoiding /sys/devices/system/memtier/memtierN/nodelist
+> > > > > 
+> > > > > -aneesh
+> > > > 
+> > > > It is harder to implement memtierN as just a file and doesn't follow
+> > > > the existing sysfs pattern, either.  Besides, it is extensible to have
+> > > > memtierN as a directory.
+> > > 
+> > > diff --git a/drivers/base/node.c b/drivers/base/node.c
+> > > index 6248326f944d..251f38ec3816 100644
+> > > --- a/drivers/base/node.c
+> > > +++ b/drivers/base/node.c
+> > > @@ -1097,12 +1097,49 @@ static struct attribute *node_state_attrs[] = {
+> > >         NULL
+> > >  };
+> > > 
+> > > +#define MAX_TIER 3
+> > > +nodemask_t memory_tier[MAX_TIER];
+> > > +
+> > > +#define _TIER_ATTR_RO(name, tier_index)                                        \
+> > > +       { __ATTR(name, 0444, show_tier, NULL), tier_index, NULL }
+> > > +
+> > > +struct memory_tier_attr {
+> > > +       struct device_attribute attr;
+> > > +       int tier_index;
+> > > +       int (*write)(nodemask_t nodes);
+> > > +};
+> > > +
+> > > +static ssize_t show_tier(struct device *dev,
+> > > +                        struct device_attribute *attr, char *buf)
+> > > +{
+> > > +       struct memory_tier_attr *mt = container_of(attr, struct memory_tier_attr, attr);
+> > > +
+> > > +       return sysfs_emit(buf, "%*pbl\n",
+> > > +                         nodemask_pr_args(&memory_tier[mt->tier_index]));
+> > > +}
+> > > +
+> > >  static const struct attribute_group memory_root_attr_group = {
+> > >         .attrs = node_state_attrs,
+> > >  };
+> > > 
+> > > +
+> > > +#define TOP_TIER 0
+> > > +static struct memory_tier_attr memory_tiers[] = {
+> > > +       [0] = _TIER_ATTR_RO(memory_top_tier, TOP_TIER),
+> > > +};
+> > > +
+> > > +static struct attribute *memory_tier_attrs[] = {
+> > > +       &memory_tiers[0].attr.attr,
+> > > +       NULL
+> > > +};
+> > > +
+> > > +static const struct attribute_group memory_tier_attr_group = {
+> > > +       .attrs = memory_tier_attrs,
+> > > +};
+> > > +
+> > >  static const struct attribute_group *cpu_root_attr_groups[] = {
+> > >         &memory_root_attr_group,
+> > > +       &memory_tier_attr_group,
+> > >         NULL,
+> > >  };
+> > > 
+> > > 
+> > > As long as we have the ability to see the nodelist, I am good with the
+> > > proposal.
+> > > 
+> > > -aneesh
+> > 
+> > I am OK with moving back the memory tier nodelist into node/.  When
+> > there are more memory tier attributes needed, we can then create the
+> > memory tier subtree and replace the tier nodelist in node/ with
+> > symlinks.
+> 
+> What attributes do you imagine that we may put in memory_tierX/ sysfs
+> directory?  If we have good candidates in mind, we may just do that. 
+> What I can imagine now is "demote", like "memory_reclaim" in nodeX/ or
+> node/ directory you proposed before.  Is it necessary to show something
+> like "meminfo", "vmstat" there?
 
-Thank you for the patch! Perhaps something to improve:
+My words may be confusing, so let me say it in another way.
 
-[auto build test WARNING on arm-perf/for-next/perf]
-[also build test WARNING on linus/master v5.18-rc6]
-[cannot apply to joro-iommu/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Just for brainstorm, if we have
 
-url:    https://github.com/intel-lab-lkp/linux/commits/yf-wang-mediatek-com/iommu-io-pgtable-arm-v7s-Add-a-quirk-to-allow-pgtable-PA-up-to-35bit/20220512-234603
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git for-next/perf
-config: arm-qcom_defconfig (https://download.01.org/0day-ci/archive/20220513/202205131021.3GskEbg2-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/916a5fc41cbb8ddfe343193598f250d06b09e3fa
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review yf-wang-mediatek-com/iommu-io-pgtable-arm-v7s-Add-a-quirk-to-allow-pgtable-PA-up-to-35bit/20220512-234603
-        git checkout 916a5fc41cbb8ddfe343193598f250d06b09e3fa
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/iommu/
+  /sys/devices/system/memtier/memtierN/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+What can we put in it in addition to "nodelist" or links to the nodes? 
+For example,
 
-All warnings (new ones prefixed by >>):
+  /sys/devices/system/memtier/memtierN/demote
 
-   In file included from include/linux/ratelimit_types.h:5,
-                    from include/linux/ratelimit.h:5,
-                    from include/linux/dev_printk.h:16,
-                    from include/linux/device.h:15,
-                    from include/linux/dma-mapping.h:7,
-                    from drivers/iommu/io-pgtable-arm-v7s.c:25:
-   drivers/iommu/io-pgtable-arm-v7s.c: In function 'arm_v7s_alloc_pgtable':
-   include/linux/bits.h:35:29: warning: left shift count >= width of type [-Wshift-count-overflow]
-      35 |         (((~UL(0)) - (UL(1) << (l)) + 1) & \
-         |                             ^~
-   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
-      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-         |                                      ^~~~~~~~~
-   drivers/iommu/io-pgtable-arm-v7s.c:154:46: note: in expansion of macro 'GENMASK'
-     154 |         ((ttbr & ((u32)(~0U << 3))) | ((pa & GENMASK(34, 32)) >> 32))
-         |                                              ^~~~~~~
-   drivers/iommu/io-pgtable-arm-v7s.c:886:25: note: in expansion of macro 'ARM_V7S_TTBR_35BIT_PA'
-     886 |                         ARM_V7S_TTBR_35BIT_PA(cfg->arm_v7s_cfg.ttbr, paddr);
-         |                         ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/bits.h:36:18: warning: right shift count is negative [-Wshift-count-negative]
-      36 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
-         |                  ^~
-   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
-      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-         |                                      ^~~~~~~~~
-   drivers/iommu/io-pgtable-arm-v7s.c:154:46: note: in expansion of macro 'GENMASK'
-     154 |         ((ttbr & ((u32)(~0U << 3))) | ((pa & GENMASK(34, 32)) >> 32))
-         |                                              ^~~~~~~
-   drivers/iommu/io-pgtable-arm-v7s.c:886:25: note: in expansion of macro 'ARM_V7S_TTBR_35BIT_PA'
-     886 |                         ARM_V7S_TTBR_35BIT_PA(cfg->arm_v7s_cfg.ttbr, paddr);
-         |                         ^~~~~~~~~~~~~~~~~~~~~
->> drivers/iommu/io-pgtable-arm-v7s.c:154:63: warning: right shift count >= width of type [-Wshift-count-overflow]
-     154 |         ((ttbr & ((u32)(~0U << 3))) | ((pa & GENMASK(34, 32)) >> 32))
-         |                                                               ^~
-   drivers/iommu/io-pgtable-arm-v7s.c:886:25: note: in expansion of macro 'ARM_V7S_TTBR_35BIT_PA'
-     886 |                         ARM_V7S_TTBR_35BIT_PA(cfg->arm_v7s_cfg.ttbr, paddr);
-         |                         ^~~~~~~~~~~~~~~~~~~~~
+When write a page number to it, the specified number of pages will be
+demoted from memtierN to memtierN+1, like the
+/sys/devices/system/node/memory_reclaim interface you proposed before. 
+Or, is it necessary to add
+
+  /sys/devices/system/memtier/memtierN/meminfo
+  /sys/devices/system/memtier/memtierN/vmstat
+
+I don't mean to propose these.  Just want to know whether there's
+requirement for these kind of stuff?  And what else may be required.
+
+Best Regards,
+Huang, Ying
+
+> > 
+> > So the revised sysfs interfaces are:
+> > 
+> > * /sys/devices/system/node/memory_tierN (read-only)
+> > 
+> >   where N = 0, 1, 2
+> > 
+> >   Format: node_list
+> > 
+> > * /sys/devices/system/node/nodeN/memory_tier (read/write)
+> > 
+> >   where N = 0, 1, ...
+> > 
+> >   Format: int or empty
+> 
 
 
-vim +154 drivers/iommu/io-pgtable-arm-v7s.c
-
-   145	
-   146	#define ARM_V7S_TTBR_S			BIT(1)
-   147	#define ARM_V7S_TTBR_NOS		BIT(5)
-   148	#define ARM_V7S_TTBR_ORGN_ATTR(attr)	(((attr) & 0x3) << 3)
-   149	#define ARM_V7S_TTBR_IRGN_ATTR(attr)					\
-   150		((((attr) & 0x1) << 6) | (((attr) & 0x2) >> 1))
-   151	
-   152	/* Mediatek extend ttbr bits[2:0] for PA bits[34:32] */
-   153	#define ARM_V7S_TTBR_35BIT_PA(ttbr, pa)					\
- > 154		((ttbr & ((u32)(~0U << 3))) | ((pa & GENMASK(34, 32)) >> 32))
-   155	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

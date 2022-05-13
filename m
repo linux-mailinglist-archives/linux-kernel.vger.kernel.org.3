@@ -2,61 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B40D752659F
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D4F5265A2
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381674AbiEMPGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 11:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41094 "EHLO
+        id S1381722AbiEMPGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 11:06:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380167AbiEMPF7 (ORCPT
+        with ESMTP id S1381695AbiEMPGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 11:05:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654A957104;
-        Fri, 13 May 2022 08:05:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 022A66227D;
-        Fri, 13 May 2022 15:05:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54CECC34116;
-        Fri, 13 May 2022 15:05:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652454357;
-        bh=RNc8u9ThJH7emKt6pvxyKswC95AUnEUd1+i+cdRt+pc=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=LXryLq0rlIPlE+j+5fFMCNgWqos+FgCVpvHSaLcuAOHapYooy0Ovdual4ULDHcv1u
-         hJFvCB/ETnvlUtqZJ51+Yr9nogmPiTzAkSOWdLhosbicR+dl/3nB7Ix7Ckaxf7BHIG
-         ACY9LPH6EyAhOviHsa6n2yGqsLY8qTRRIgzcuGeYlLIbdiApYKD/PHZofIe/qUfUOl
-         ChhQoLbRK5xU1gWNFfK7pgOODYEddkGI6iPftKP2vth8WrSysv5t82wqjIz3WCy20F
-         8fCbUSjRduO1b0YQjAlFXvgLgdq7ehIX2zosZSyocaBHyDj4Xl0bGoXgAHTzY3jD12
-         UEoyNYwPWluvw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id D5F315C034D; Fri, 13 May 2022 08:05:56 -0700 (PDT)
-Date:   Fri, 13 May 2022 08:05:56 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcu/nocb: Delete local variable 'need_rcu_nocb_mask' in
- rcu_init_nohz()
-Message-ID: <20220513150556.GH1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220426073626.967-1-thunder.leizhen@huawei.com>
+        Fri, 13 May 2022 11:06:40 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDA12D1C9;
+        Fri, 13 May 2022 08:06:40 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 5B1CF1F461FA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652454399;
+        bh=YD87vGLOcYs5Cnj6glBqy1KYk+EcyTbz4Vdd5DCZtF0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ABXvbdc1EPfvdc3uC2FTKBH5UgOctQqdvJD28zkm8dXyJg2hYVCj89bv5pW8d1ev7
+         F4hEAZQ856ZOeDvEoqkq5MIA47GQ5UwnXn6KISmHiiDczgo9BbeYhfMrqWlx3ohCv9
+         OL0IkCIe4XgjI0zBIXOAtOgUEwh8PdlArdEP1VtKlHhFY4yIr+LrBhaWnTGh+C/q9q
+         OMscRXH3EYYsgqe+xymBJIijnCqBcSYoflW6JVDvk/Jplepj8otSLGk0VXXA38fueG
+         b8+7TA6h8b+8GVFeHrxdxRA0lMRaOBzRtoSGInTXrDFyrSpUt0r/XpfFnVpRMuajOA
+         GiUB+Cg7kYgag==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     yong.wu@mediatek.com
+Cc:     krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
+        matthias.bgg@gmail.com, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, konrad.dybcio@somainline.org,
+        marijn.suijten@somainline.org, martin.botka@somainline.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        paul.bouchara@somainline.org, kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 0/2] MediaTek Helio X10 MT6795 - SMI Support
+Date:   Fri, 13 May 2022 17:06:31 +0200
+Message-Id: <20220513150633.387200-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426073626.967-1-thunder.leizhen@huawei.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,61 +56,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 03:36:26PM +0800, Zhen Lei wrote:
-> The local variable 'need_rcu_nocb_mask' is true only if CONFIG_NO_HZ_FULL
-> is defined. So branch "if (need_rcu_nocb_mask)" can be moved within the
-> scope of "#if defined(CONFIG_NO_HZ_FULL)". At this point, using variable
-> 'need_rcu_nocb_mask' is not necessary, so delete it.
-> 
-> No functional changes, but the code looks a little more concise.
-> 
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+In an effort to give some love to the apparently forgotten MT6795 SoC,
+I am upstreaming more components that are necessary to support platforms
+powered by this one apart from a simple boot to serial console.
 
-First, please accept my apologies for the late reply and for the
-overly active spam filters.
+This series introduces support for the SMI common and LARBs, found in
+this SoC.
 
-One question below.
+Tested on a MT6795 Sony Xperia M5 (codename "Holly") smartphone.
 
-							Thanx, Paul
+Changes in v2:
+ - Added forgotten new definitions
 
-> ---
->  kernel/rcu/tree_nocb.h | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> index 636d0546a4e932e..1e334e217f0afb7 100644
-> --- a/kernel/rcu/tree_nocb.h
-> +++ b/kernel/rcu/tree_nocb.h
-> @@ -1165,15 +1165,10 @@ EXPORT_SYMBOL_GPL(rcu_nocb_cpu_offload);
->  void __init rcu_init_nohz(void)
->  {
->  	int cpu;
-> -	bool need_rcu_nocb_mask = false;
->  	struct rcu_data *rdp;
->  
->  #if defined(CONFIG_NO_HZ_FULL)
-> -	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask))
-> -		need_rcu_nocb_mask = true;
-> -#endif /* #if defined(CONFIG_NO_HZ_FULL) */
-> -
-> -	if (need_rcu_nocb_mask) {
+AngeloGioacchino Del Regno (2):
+  dt-bindings: memory: mtk-smi: Add MT6795 Helio X10 bindings
+  memory: mtk-smi: Add support for MT6795 Helio X10
 
-Could you please test this on a kernel built with CONFIG_NO_HZ_FULL=n
-and CONFIG_RCU_NOCB_CPU=y?  If that works, please add an explanation
-of why it works to the commit log above and repost the patch.
+ .../memory-controllers/mediatek,smi-common.yaml |  1 +
+ .../memory-controllers/mediatek,smi-larb.yaml   |  1 +
+ drivers/memory/mtk-smi.c                        | 17 +++++++++++++++++
+ 3 files changed, 19 insertions(+)
 
-> +	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask)) {
->  		if (!cpumask_available(rcu_nocb_mask)) {
->  			if (!zalloc_cpumask_var(&rcu_nocb_mask, GFP_KERNEL)) {
->  				pr_info("rcu_nocb_mask allocation failed, callback offloading disabled.\n");
-> @@ -1182,6 +1177,7 @@ void __init rcu_init_nohz(void)
->  		}
->  		rcu_nocb_is_setup = true;
->  	}
-> +#endif /* #if defined(CONFIG_NO_HZ_FULL) */
->  
->  	if (!rcu_nocb_is_setup)
->  		return;
-> -- 
-> 2.26.0.106.g9fadedd
-> 
+-- 
+2.35.1
+

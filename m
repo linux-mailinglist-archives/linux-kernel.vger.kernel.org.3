@@ -2,140 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49ED0525F62
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA6A525F84
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379231AbiEMJ4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 05:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379247AbiEMJ4S (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1379239AbiEMJ4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 13 May 2022 05:56:18 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 541DA1BE94
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 02:56:17 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2DD231477;
-        Fri, 13 May 2022 02:56:17 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CF6F63F5A1;
-        Fri, 13 May 2022 02:56:15 -0700 (PDT)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Atish Patra <atishp@atishpatra.org>,
-        Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Qing Wang <wangqing@vivo.com>
-Subject: [PATCH 4/4] arch_topology: Add support for parsing sockets in /cpu-map
-Date:   Fri, 13 May 2022 10:55:59 +0100
-Message-Id: <20220513095559.1034633-5-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220513095559.1034633-1-sudeep.holla@arm.com>
-References: <20220513095559.1034633-1-sudeep.holla@arm.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355353AbiEMJ4O (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 13 May 2022 05:56:14 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D5C1402C;
+        Fri, 13 May 2022 02:56:12 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C6FDC1EC069A;
+        Fri, 13 May 2022 11:56:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1652435766;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=qZU+VowKBrdGf3U5Q1GiT7jwO9RXiaZ1Fk4oM0FeUKk=;
+        b=WlWppcm86nod9C3ir0FTP3z78QRW/KpU7UHINYTa+cp6idwyvSqu4+vvcCY1i6q3etuV/8
+        zVAS2BbTXLELLnPrtM5wXQ5+CSYrfiAXG3e0wck2uSb9gCg88OyZhHdX0ItNXV3eGk3n3D
+        QkY9X5XWzlKLKtDDjAAWN/1aM6ZPD80=
+Date:   Fri, 13 May 2022 11:56:08 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Smita.KoralahalliChannabasappa@amd.com, muralidhara.mk@amd.com,
+        naveenkrishna.chatradhi@amd.com
+Subject: Re: [PATCH 04/18] EDAC/amd64: Remove PCI Function 0
+Message-ID: <Yn4rOD9CS9LFxzhx@zn.tnic>
+References: <20220509145534.44912-1-yazen.ghannam@amd.com>
+ <20220509145534.44912-5-yazen.ghannam@amd.com>
+ <YnuRUsAcnzT4Advm@zn.tnic>
+ <Yn0a9T9xqAkWnPWt@yaz-fattaah>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yn0a9T9xqAkWnPWt@yaz-fattaah>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Finally let us add support for socket nodes in /cpu-map in the device
-tree. Since this may not be present in all the old platforms and even
-most of the existing platforms, we need to assume absence of the socket
-node indicates that it is a single socket system and handle appropriately.
+On Thu, May 12, 2022 at 02:34:29PM +0000, Yazen Ghannam wrote:
+> Also, there are five function pointers that are created in this patchset and
+> called from hw_info_get(). I think those pointers can be dropped and the
+> helper functions called from hw_info_get(). So I think it'd be good to make
+> hw_info_get() into a function pointer which gets set to a functoin that calls
+> the right collection of legacy, modern, and GPU helper functions. How does
+> that sound?
 
-Also it is likely that most single socket systems skip to as the node
-since it is optional.
+Makes sense.
 
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
----
- drivers/base/arch_topology.c | 37 +++++++++++++++++++++++++++++++-----
- 1 file changed, 32 insertions(+), 5 deletions(-)
+Thx.
 
-diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index 46420db5a836..ae61af84c161 100644
---- a/drivers/base/arch_topology.c
-+++ b/drivers/base/arch_topology.c
-@@ -539,8 +539,8 @@ static int __init parse_core(struct device_node *core, int package_id,
- 	return 0;
- }
- 
--static int __init
--parse_cluster(struct device_node *cluster, int cluster_id, int depth)
-+static int __init parse_cluster(struct device_node *cluster, int package_id,
-+				int cluster_id, int depth)
- {
- 	char name[20];
- 	bool leaf = true;
-@@ -560,7 +560,7 @@ parse_cluster(struct device_node *cluster, int cluster_id, int depth)
- 		c = of_get_child_by_name(cluster, name);
- 		if (c) {
- 			leaf = false;
--			ret = parse_cluster(c, i, depth + 1);
-+			ret = parse_cluster(c, package_id, i, depth + 1);
- 			of_node_put(c);
- 			if (ret != 0)
- 				return ret;
-@@ -584,7 +584,8 @@ parse_cluster(struct device_node *cluster, int cluster_id, int depth)
- 			}
- 
- 			if (leaf) {
--				ret = parse_core(c, 0, cluster_id, core_id++);
-+				ret = parse_core(c, package_id, cluster_id,
-+						 core_id++);
- 			} else {
- 				pr_err("%pOF: Non-leaf cluster with core %s\n",
- 				       cluster, name);
-@@ -604,6 +605,32 @@ parse_cluster(struct device_node *cluster, int cluster_id, int depth)
- 	return 0;
- }
- 
-+static int __init parse_socket(struct device_node *socket)
-+{
-+	char name[20];
-+	struct device_node *c;
-+	bool has_socket = false;
-+	int package_id = 0, ret;
-+
-+	do {
-+		snprintf(name, sizeof(name), "socket%d", package_id);
-+		c = of_get_child_by_name(socket, name);
-+		if (c) {
-+			has_socket = true;
-+			ret = parse_cluster(c, package_id, -1, 0);
-+			of_node_put(c);
-+			if (ret != 0)
-+				return ret;
-+		}
-+		package_id++;
-+	} while (c);
-+
-+	if (!has_socket)
-+		ret = parse_cluster(socket, 0, -1, 0);
-+
-+	return ret;
-+}
-+
- static int __init parse_dt_topology(void)
- {
- 	struct device_node *cn, *map;
-@@ -624,7 +651,7 @@ static int __init parse_dt_topology(void)
- 	if (!map)
- 		goto out;
- 
--	ret = parse_cluster(map, -1, 0);
-+	ret = parse_socket(map);
- 	if (ret != 0)
- 		goto out_map;
- 
 -- 
-2.36.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

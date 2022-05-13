@@ -2,130 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C4152651F
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1648E526524
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:47:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381318AbiEMOqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58940 "EHLO
+        id S1353788AbiEMOqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:46:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381450AbiEMOp6 (ORCPT
+        with ESMTP id S1381622AbiEMOqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:45:58 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB093C4B7;
-        Fri, 13 May 2022 07:45:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=A7LCydQD5IYNzaoDGyfG1KKM7tCxGhr7TuWULSo03X0=;
-        t=1652453114; x=1653662714; b=LYs2Kri0cw+/UGCEdaklFX6++OP3d6XjJhLcC02jkMM6M13
-        enCTtLPVnFDCrQRFLX819G3cOwVdjYiBSa9JccmqbQblnXISEdyq/7i5O4aMDV5xAFeJh8X61XWYA
-        3hNxcWPO6okKyPbXVAhEt6WHQ/sVkV0gcWR0C3dCeQWocdHTJKZWVZ25I4x63uWgmbhevhAje3sRQ
-        ynAaFSpM6xFAePbWKVwYY4aWUVh0Ju93mi2MceapTMkNIryb6lt7v4/iXwdFQzg89Tz18COaji5Fq
-        iSqUu6mUSMMlAVO2Bcj32MYDMrCOrP4TWkawclAlZw9o6WbW7KIcYMOBD7zR8fsA==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1npWX2-00AdYm-Tp;
-        Fri, 13 May 2022 16:44:41 +0200
-Message-ID: <1760d499824f9ef053af7a8dac04b48ab7d7fd3d.camel@sipsolutions.net>
-Subject: Re: [PATCH 11/30] um: Improve panic notifiers consistency and
- ordering
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Richard Weinberger <richard@nod.at>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org
-Date:   Fri, 13 May 2022 16:44:36 +0200
-In-Reply-To: <4b003501-f5c3-cd66-d222-88d98c93e141@igalia.com>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
-         <20220427224924.592546-12-gpiccoli@igalia.com> <Ynp2hRodh04K3pzK@alley>
-         <4b003501-f5c3-cd66-d222-88d98c93e141@igalia.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Fri, 13 May 2022 10:46:06 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ACC33E0F5;
+        Fri, 13 May 2022 07:45:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652453124; x=1683989124;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oe4RvQVrbAkDL0kypbBx+ih7yeuE1vnJ1rTohZdq0BI=;
+  b=aeIK4GQyl51l9WEglCrUXCqlgKyawavRKr1XeSU3LUbnfmqOx0QnJHzA
+   KNQ9Jx9KoAEm0Nu7aCMCs7Pw85YpTPshzqbLE8zFAFgTE9omsFhPDMtXM
+   rRunCiYkGQ5IUOOk+ywPQJjmFpHay/yoC2f7+hT0MnSBDaEmawz3N+R49
+   enkUsxac8a9osGJbhVWycOqS4Y8wjrY1EVobtyu+kJCwcylB0dOtwcW7s
+   ZQEPurG0EJ9hqW5hel6JmS/Zatn1GqnWMKpOJQC6Zltiz1kWGgDL56x0K
+   1eZizkGAiHyqnRz5C0BqqyV+XN/XKMol38cixySgKtiBcz/Ofgp+T0tnh
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="356747503"
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="356747503"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:45:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="603862328"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 13 May 2022 07:45:15 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 2FF2D147; Fri, 13 May 2022 17:45:15 +0300 (EEST)
+Date:   Fri, 13 May 2022 17:45:15 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Borislav Petkov <bp@suse.de>, Min Xu <min.m.xu@intel.com>,
+        Jiaqi Gao <jiaqi.gao@intel.com>
+Cc:     Dionna Amalie Glaze <dionnaglaze@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv5 06/12] x86/boot/compressed: Handle unaccepted memory
+Message-ID: <20220513144515.fx2cvo3rjued3vy5@black.fi.intel.com>
+References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
+ <20220425033934.68551-7-kirill.shutemov@linux.intel.com>
+ <YnE4ZzzVrxUnr3Uv@zn.tnic>
+ <20220506153013.e6v4q2qhuhqumfiu@box.shutemov.name>
+ <YnpGnMoviGoK4Ucq@zn.tnic>
+ <CAAH4kHYRxgUNnGRUO473q02q3akLzgiTvbA2qKEP5jq6jFV-uA@mail.gmail.com>
+ <Yn4ed1gupKmNz2jn@zn.tnic>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yn4ed1gupKmNz2jn@zn.tnic>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-05-11 at 17:22 -0300, Guilherme G. Piccoli wrote:
-> On 10/05/2022 11:28, Petr Mladek wrote:
-> > [...]
-> > It is not clear to me why user mode linux should not care about
-> > the other notifiers. It might be because I do not know much
-> > about the user mode linux.
-> > 
-> > Is the because they always create core dump or are never running
-> > in a hypervisor or ...?
-> > 
-> > AFAIK, the notifiers do many different things. For example, there
-> > is a notifier that disables RCU watchdog, print some extra
-> > information. Why none of them make sense here?
-> > 
+On Fri, May 13, 2022 at 11:01:43AM +0200, Borislav Petkov wrote:
+> + mroth
+> - brijesh
 > 
-> Hi Petr, my understanding is that UML is a form of running Linux as a
-> regular userspace process for testing purposes.
+> On Thu, May 12, 2022 at 10:34:02PM -0700, Dionna Amalie Glaze wrote:
+> > Kirill, I've been tracking these changes to see if we can handle the
+> > unaccepted memory type for SEV-SNP, but testing has been an issue. The
+> > proposed patch in Ovmf to introduce unaccepted memory seems to have
+> > stalled out last September
+> > (https://www.mail-archive.com/devel@edk2.groups.io/msg35842.html) and
+> > is particularly difficult to adapt to SEV-SNP since it doesn't follow
+> > the TDVF way of initializing all memory. Is there a different
+> > development I might have missed so that we might test these cases?
+> > Without the UEFI introducing EFI_UNACCEPTED_MEMORY type, any kernel
+> > uses are essentially dead code.
 
-Correct.
++ Min, Jiaqi.
 
-> With that said, as soon
-> as we exit in the error path, less "pollution" would happen, so users
-> can use GDB to debug the core dump for example.
-> 
-> In later patches of this series (when we split the panic notifiers in 3
-> lists) these UML notifiers run in the pre-reboot list, so they run after
-> the informational notifiers for example (in the default level).
-> But without the list split we cannot order properly, so my gut feeling
-> is that makes sense to run them rather earlier than later in the panic
-> process...
-> 
-> Maybe Anton / Johannes / Richard could give their opinions - appreciate
-> that, I'm not attached to the priority here, it's more about users'
-> common usage of UML I can think of...
+I don't follow firmware development. Min, Jiaqi, could you comment?
 
-It's hard to say ... In a sense I'm not sure it matters?
-
-OTOH something like the ftrace dump notifier (kernel/trace/trace.c)
-might still be useful to run before the mconsole and coredump ones, even
-if you could probably use gdb to figure out the information.
-
-Personally, I don't have a scenario where I'd care about the trace
-buffers though, and most of the others I found would seem irrelevant
-(drivers that aren't even compiled, hung tasks won't really happen since
-we exit immediately, and similar.)
-
-johannes
+-- 
+ Kirill A. Shutemov

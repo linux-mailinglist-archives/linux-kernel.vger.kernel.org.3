@@ -2,93 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31FF9525E1F
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 11:19:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20300525E10
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 11:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378925AbiEMJMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 05:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44182 "EHLO
+        id S1378947AbiEMJPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 05:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231523AbiEMJMJ (ORCPT
+        with ESMTP id S1378923AbiEMJPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 05:12:09 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7893D484
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 02:12:07 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id j25so9539517wrc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 02:12:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=FgorTPbnFvVixyR8EXfPPsDvCseGItjIY4UCOJ+wbp8=;
-        b=os8I3KHn5Lu7+abAV1auwe2u9XMcOJElEI12ti+iHbGswucuLcHhRoY3UB+gEYtS9C
-         zwREa+Fa0CzA/sSSDTxBHU1x/i+BLMHjolY9XfHp+WYn/hRgdn+gBBX7X/vftjNxeV5s
-         txWsCT6ORZm9Ly8xfbWn8SGPlrAlFlZNiOelarOqArD/LOzXqRPC7I55srgkwIacwPCL
-         YO9NnPFbYmXtomkuUIzZNNQAJ3BZ7HJjBw5BAvz5lBDWiYoMfYc7gcIMmRnbeOE6/Cm+
-         m/Bqqaq7GxMQkIOKlynmX+uRMyFSW52jawwkw0CrVeEGKR4yl7B1KzANfVrh/kzz9Si5
-         90Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=FgorTPbnFvVixyR8EXfPPsDvCseGItjIY4UCOJ+wbp8=;
-        b=kugKeaLX7ymV8M5azMtyx+c25ckqU6d/RRULM4nUCC03N3zyKvO+o5ANdX4cdi+w2n
-         PYztjfGAasT2CyIJ4I8YohPgmgOJ3p3F3o+vl3G+OiI39r3yrawM17jA+ps4pmT0k3vx
-         fZdRqGgdpKVtLZgaJqzxMi0ZP1/ZwOwL14hhymtOMhuCKbMQw/zsiUJgarvsL85pEMN0
-         Ne95Bw1+T9ftZAdPSDRQ2Nj5Mq6UcSoSHSOo4Bd1UXLVTbnUztWAlLasW2YcM14rl6A9
-         a2tLoEZSdD5YAA6bg8wJ03MLryciLrUDDPXCb4cnUme65E7tVgqzfCsu+6vz11zgFghn
-         zgpQ==
-X-Gm-Message-State: AOAM532JgbAUFJX0n14TK4A2HteErt9jIDEByTYPhypM542B4r718dmh
-        vnretZfGsh+IuJjDD0BhRQiryQ==
-X-Google-Smtp-Source: ABdhPJyW9FzscuEPUGlS7ChUMHGjRxjtug2/EnQzJ/+FjnbBd7cqELKWMnSCuHntRMfk6p2pp72A7g==
-X-Received: by 2002:a05:6000:1d98:b0:20c:c29d:76db with SMTP id bk24-20020a0560001d9800b0020cc29d76dbmr3107683wrb.710.1652433126624;
-        Fri, 13 May 2022 02:12:06 -0700 (PDT)
-Received: from [192.168.0.169] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id z23-20020a1c4c17000000b0039456fb80b3sm4711757wmf.43.2022.05.13.02.12.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 02:12:06 -0700 (PDT)
-Message-ID: <dc1e8f4e-08d5-09a9-95ee-c292a61561b9@linaro.org>
-Date:   Fri, 13 May 2022 11:12:05 +0200
+        Fri, 13 May 2022 05:15:03 -0400
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14CA1882BE;
+        Fri, 13 May 2022 02:15:01 -0700 (PDT)
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 24D9ERqI026893;
+        Fri, 13 May 2022 18:14:27 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 24D9ERqI026893
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1652433267;
+        bh=MNi8P0TIeSQvF6fTUb5WzkP1pBowEJarOeoYmEQnwsE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=zQE0jkQj4fxQFUd6EbU1MkOTv9AjSliQKbEYBJXTgTx2rJBxDleE2nvQ/vRYuDOt+
+         rtvl/5syIfBWq5aIlK6JpH3Oc8J9TVWI9VlTxC4F6ZhVK/eT5QNl3rRKfy6cBNZG/W
+         YSWeW5/F1QziK+y/hcyLjnYPXAHZB0DxYe7oo35sTqz95bXkbru8Vdc+XOgJDmGu1P
+         74d5eHnIYfVbRlNvhQfMP83Z4Omt0xC4Gs7gezEsXNTS0XFbTDOh7Z9evuVCMmDUi/
+         cK6edwCc4+3NxaTiVY8dP3U5aHg2mF6cHODuFrfN1RXuF7ftUugQQTBklwCnB9NEut
+         z8nLjcV9QphUw==
+X-Nifty-SrcIP: [209.85.214.181]
+Received: by mail-pl1-f181.google.com with SMTP id i1so7371870plg.7;
+        Fri, 13 May 2022 02:14:27 -0700 (PDT)
+X-Gm-Message-State: AOAM531X4EpGk32h/PLldDUkd1buIOwhyIOCziwNAqPQuLZkI/tkNR2Y
+        k1VbUYlDJP4CJSckkcRV61JlDObsP7fs/vpaJeY=
+X-Google-Smtp-Source: ABdhPJygABMRI0O9lGJUpfjyuPvMB+Gl4wNhupLUDv7TQImq96vVJ5o7/bbbI9PWKpzKzpd4U892qwF9cIRI4g1/SLs=
+X-Received: by 2002:a17:903:1205:b0:15e:8cbc:fd2b with SMTP id
+ l5-20020a170903120500b0015e8cbcfd2bmr3956625plh.99.1652433266603; Fri, 13 May
+ 2022 02:14:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v7 1/3] dt-bindings: marvell: Document the AC5/AC5X
- compatibles
-Content-Language: en-US
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        catalin.marinas@arm.com, will@kernel.org, andrew@lunn.ch,
-        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
-        kostap@marvell.com, robert.marko@sartura.hr,
-        vadym.kochan@plvision.eu
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220512042501.3339775-1-chris.packham@alliedtelesis.co.nz>
- <20220512042501.3339775-2-chris.packham@alliedtelesis.co.nz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220512042501.3339775-2-chris.packham@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220404061948.2111820-1-masahiroy@kernel.org>
+ <CAK8P3a3RWypZ2H6zRTdEWMvg608VFVAoNAQZbUM4GbW7uAWk8A@mail.gmail.com>
+ <CAK7LNASxCvbqTLaUmVmmp_cKFNCj8hfVUA2kzEBYRf+u45Y3TQ@mail.gmail.com> <CAK8P3a3GbHJOk5MyKL9TnUXdpEoaUM4_XfzXyc=Xi6c_84cZ=w@mail.gmail.com>
+In-Reply-To: <CAK8P3a3GbHJOk5MyKL9TnUXdpEoaUM4_XfzXyc=Xi6c_84cZ=w@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 13 May 2022 18:13:12 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT86MTKnN0b1bXkojHR4n9tTXVw__cL3QCbUrtMAQ1N1A@mail.gmail.com>
+Message-ID: <CAK7LNAT86MTKnN0b1bXkojHR4n9tTXVw__cL3QCbUrtMAQ1N1A@mail.gmail.com>
+Subject: Re: [PATCH 0/8] UAPI: make more exported headers self-contained, and
+ put them into test coverage
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2022 06:24, Chris Packham wrote:
-> Describe the compatible properties for the Marvell Alleycat5/5X switches
-> with integrated CPUs.
-> 
+On Fri, May 13, 2022 at 6:01 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Fri, May 13, 2022 at 10:43 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > Hi Arnd,
+> >
+> > On Mon, Apr 4, 2022 at 4:35 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > >
+> > > On Mon, Apr 4, 2022 at 8:19 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > > >
+> > > >
+> > > > Here are more efforts to put more headers to UAPI compile testing
+> > > > (CONFIG_UAPI_HEADER_TEST).
+> > > >
+> > > > I am sending this series to Arnd because he has deep knowledge for the
+> > > > kernel APIs and manages asm-generic pull requests.
+> > >
+> > > These all look good to me, I can apply them for 5.19 but would wait
+> > > a few days for others to comment.
+> >
+> > Can you apply 01-06 for the next MW?
+> >
+> > I got a 0-day bot report for 07, but
+> > I may not have time to come back to it
+> > in this development cycle.
+>
+> Ok, done now. What about patch 8? I left it out for now, but could
+> include it as well
+> if you want.
+>
+>         Arnd
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+No.
+
+08 depends on 07.
+
+We do not have __kernel_uintptr_t  yet.
 
 
-Best regards,
-Krzysztof
+
+
+-- 
+Best Regards
+Masahiro Yamada

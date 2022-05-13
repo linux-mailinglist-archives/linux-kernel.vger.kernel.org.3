@@ -2,134 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0CAF525BE5
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42547525C2B
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:19:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377658AbiEMHFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 03:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60296 "EHLO
+        id S1377663AbiEMHIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 03:08:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377655AbiEMHFe (ORCPT
+        with ESMTP id S1353010AbiEMHIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 03:05:34 -0400
-Received: from out199-12.us.a.mail.aliyun.com (out199-12.us.a.mail.aliyun.com [47.90.199.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8413429BC6D
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 00:05:32 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=dtcccc@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VD24UDT_1652425525;
-Received: from 30.30.111.38(mailfrom:dtcccc@linux.alibaba.com fp:SMTPD_---0VD24UDT_1652425525)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 13 May 2022 15:05:27 +0800
-Message-ID: <b470a016-3b5d-4edf-2a54-9e70f9849bc2@linux.alibaba.com>
-Date:   Fri, 13 May 2022 15:05:24 +0800
+        Fri, 13 May 2022 03:08:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6D5223871;
+        Fri, 13 May 2022 00:08:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 149C661ED9;
+        Fri, 13 May 2022 07:08:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B20DC34100;
+        Fri, 13 May 2022 07:07:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652425679;
+        bh=9y6I+zGmd3GgMAr3xMYF8f/9wN8gZjKyrU/pked7eeI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qtUGhM+tgX4cVprBvh+OaGIZuEEJA14BC4ou4Dvi/uCvgmJ2T36OwMc75kl0YvcQ2
+         l75ILJatDJWEmy0N3dlsyJH6oaW4qRGOGSjEyATxdqGhfg6MSpYTwcAVEmm9Eri3/M
+         IfGYr3Oy4s03eMDXp5ws4S5N29j/B2pAfE5ZLdTKWuwbjSd2GSkNH3dQfc8VlY6Gme
+         WUctwRHZQN6FR7vVprQGsRBWa9+gGjVBH22G54xD+F4RxDjKimC/jfnWrb2oa7oG/F
+         pQWvWlaus3R5HkP2dRzUZ/DT8EV2j2ECEQca1AOZ+Br0bWlN7e95wX1l/KT+34peJo
+         ZPmk0PV24iAMw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1npPP1-0006dr-1W; Fri, 13 May 2022 09:07:55 +0200
+Date:   Fri, 13 May 2022 09:07:55 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/5] tty/termbits: remove #ifdef BOTHER that is always
+ defined
+Message-ID: <Yn4DyxIUBsEQxj+t@hovoldconsulting.com>
+References: <20220511101139.5306-1-ilpo.jarvinen@linux.intel.com>
+ <20220511101139.5306-3-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [RFC PATCH] sched: Queue task on wakelist in the same llc if the
- wakee cpu is idle
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-kernel@vger.kernel.org
-References: <20220513062427.2375743-1-dtcccc@linux.alibaba.com>
- <20220513063729.GF76023@worktop.programming.kicks-ass.net>
-From:   Tianchen Ding <dtcccc@linux.alibaba.com>
-In-Reply-To: <20220513063729.GF76023@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220511101139.5306-3-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/13 14:37, Peter Zijlstra wrote:
-> On Fri, May 13, 2022 at 02:24:27PM +0800, Tianchen Ding wrote:
->> We notice the commit 518cd6234178 ("sched: Only queue remote wakeups
->> when crossing cache boundaries") disabled queuing tasks on wakelist when
->> the cpus share llc. This is because, at that time, the scheduler must
->> send IPIs to do ttwu_queue_wakelist.
-> 
-> No; this was because of cache bouncing.
+On Wed, May 11, 2022 at 01:11:36PM +0300, Ilpo Järvinen wrote:
+> BOTHER is defined by all architectures.
 
-As I understand, avoiding cache bouncing is the reason to do 
-queue_wakelist accross llc. This can be the same reason why we try to do 
-queue_wakelist within the same llc now. It should be better for the 
-wakee cpu handling its own rq. Will there be some other side effects?
+This changed quite recently so please mention the commit in question.
 
-> 
->> Nowadays, ttwu_queue_wakelist also
->> supports TIF_POLLING, so this is not a problem now when the wakee cpu is
->> in idle polling.
->>
->> Benefits:
->>    Queuing the task on idle cpu can help improving performance on waker cpu
->>    and utilization on wakee cpu, and further improve locality because
->>    the wakee cpu can handle its own rq. This patch helps improving rt on
->>    our real java workloads where wakeup happens frequently.
->>
->> Does this patch bring IPI flooding?
->>    For archs with TIF_POLLING_NRFLAG (e.g., x86), there will be no
->>    difference if the wakee cpu is idle polling. If the wakee cpu is idle
->>    but not polling, the later check_preempt_curr() will send IPI too.
->>
->>    For archs without TIF_POLLING_NRFLAG (e.g., arm64), the IPI is
->>    unavoidable, since the later check_preempt_curr() will send IPI when
->>    wakee cpu is idle.
->>
->> Benchmark:
->> running schbench -m 2 -t 8 on 8269CY:
->>
->> without patch:
->> Latency percentiles (usec)
->>          50.0000th: 10
->>          75.0000th: 14
->>          90.0000th: 16
->>          95.0000th: 16
->>          *99.0000th: 17
->>          99.5000th: 20
->>          99.9000th: 23
->>          min=0, max=28
->>
->> with patch:
->> Latency percentiles (usec)
->>          50.0000th: 6
->>          75.0000th: 8
->>          90.0000th: 9
->>          95.0000th: 9
->>          *99.0000th: 10
->>          99.5000th: 10
->>          99.9000th: 14
->>          min=0, max=16
->>
->> We've also tested unixbench and see about 10% improvement on Pipe-based
->> Context Switching, and no performance regression on other test cases.
->>
->> For arm64, we've tested schbench and unixbench on Kunpeng920, the
->> results show that,
-> 
-> What is a kunpeng and how does it's topology look?
+No need for the verbose Subject here either.
 
-It's an arm64 processor produced by Huawei. It's topology has NUMA and 
-cluster. See the commit log of c5e22feffdd7 ("topology: Represent 
-clusters of CPUs within a die") for detail.
-In fact I also tried to test on Ampere. But there maybe sth wrong on my 
-machine and the kernel only get upto l2 cache info. (Which means each 
-cpu has a different sd_llc_id so the patch will take no effect.) :-(
-
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>  drivers/tty/mxser.c        |  2 --
+>  drivers/tty/tty_baudrate.c | 20 +++++---------------
+>  drivers/tty/tty_ioctl.c    |  2 --
+>  3 files changed, 5 insertions(+), 19 deletions(-)
 > 
->> the improvement is not as obvious as on x86, and
->> there's no performance regression.
-> 
-> x86 is wide and varied; what x86 did you test?
+> diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
+> index 6ebd3e4ed859..9ea7bd059d0f 100644
+> --- a/drivers/tty/mxser.c
+> +++ b/drivers/tty/mxser.c
+> @@ -528,7 +528,6 @@ static int mxser_set_baud(struct tty_struct *tty, speed_t newspd)
+>  	outb(quot >> 8, info->ioaddr + UART_DLM);	/* MS of divisor */
+>  	outb(cval, info->ioaddr + UART_LCR);	/* reset DLAB */
+>  
+> -#ifdef BOTHER
+>  	if (C_BAUD(tty) == BOTHER) {
+>  		quot = MXSER_BAUD_BASE % newspd;
+>  		quot *= 8;
+> @@ -540,7 +539,6 @@ static int mxser_set_baud(struct tty_struct *tty, speed_t newspd)
+>  
+>  		mxser_set_must_enum_value(info->ioaddr, quot);
+>  	} else
+> -#endif
+>  		mxser_set_must_enum_value(info->ioaddr, 0);
 
-I've tested on Intel(R) Xeon(R) Platinum 8269CY CPU @ 2.50GHz. Do you 
-need more info on other machines?
+When removing the ifdef, please add the missing bracket to the else
+branch as per the coding standard.
+
+Johan

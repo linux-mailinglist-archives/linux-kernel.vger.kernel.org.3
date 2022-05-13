@@ -2,77 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC1E525A0D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 05:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A97525A0F
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 05:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376726AbiEMDZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 23:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50160 "EHLO
+        id S1376736AbiEMDZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 23:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376671AbiEMDZF (ORCPT
+        with ESMTP id S1376596AbiEMDZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 23:25:05 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AFD28FE9E;
-        Thu, 12 May 2022 20:25:03 -0700 (PDT)
-X-UUID: e0b939beb29a47cf9303ec2e25af5571-20220513
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:e194aacb-28e5-483b-aaf1-8934bbe63ff2,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:-15
-X-CID-META: VersionHash:faefae9,CLOUDID:ec5224a7-eab7-4b74-a74d-5359964535a9,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: e0b939beb29a47cf9303ec2e25af5571-20220513
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1995915734; Fri, 13 May 2022 11:24:56 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 13 May 2022 11:24:56 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 13 May 2022 11:24:55 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 13 May 2022 11:24:54 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [RESEND, v4] media: mediatek: vcodec: Fix v4l2 compliance decoder cmd test fail
-Date:   Fri, 13 May 2022 11:24:53 +0800
-Message-ID: <20220513032453.4997-1-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 12 May 2022 23:25:43 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E9C1009
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 20:25:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652412341; x=1683948341;
+  h=message-id:subject:from:to:date:in-reply-to:references:
+   mime-version:content-transfer-encoding;
+  bh=6JbJ7g7D2Yn2WY7qd9fnqK8G+aJNQ1BIcCplhlKlw6I=;
+  b=JhID5sbcsn3Fla1qE+f555PVnMbIaXCaokLl56bliE4uY4G7LAvICCTX
+   3AdtpWgI6HxCdpBH0zWYSjcvQtcG7eh2TIOGEK5ophymfqCxG9M/sf1un
+   uqOw3r4GKulb1qhgOtJWF4FXyW+4m2fjDYwvCGrHG3vTGg6cC71niLOVF
+   Z79lzFc4Qyy3l/j5vbCV0Y4fm8J28dpixKVUpAD9vuyOGNlyV9keafoO7
+   kfOuSHI7gFhIfg9hDjFQPUoxBxdoz7Rvah2I33Ozp5UhseLSCafuoom9N
+   bsGGYVZlf/jmElifeeF9PX5hXAGjNA1yulUmWytjQk2T0W80vh+E5psvE
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="330802694"
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="330802694"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 20:25:41 -0700
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="566997853"
+Received: from jliu69-mobl.ccr.corp.intel.com ([10.254.212.158])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 20:25:36 -0700
+Message-ID: <69f2d063a15f8c4afb4688af7b7890f32af55391.camel@intel.com>
+Subject: Re: RFC: Memory Tiering Kernel Interfaces (v2)
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     Wei Xu <weixugc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Thelen <gthelen@google.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Hesham Almatary <hesham.almatary@huawei.com>
+Date:   Fri, 13 May 2022 11:25:34 +0800
+In-Reply-To: <CAAPL-u-DGLcKRVDnChN9ZhxPkfxQvz9Sb93kVoX_4J2oiJSkUw@mail.gmail.com>
+References: <CAAPL-u-DGLcKRVDnChN9ZhxPkfxQvz9Sb93kVoX_4J2oiJSkUw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,72 +77,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Will return -EINVAL using standard framework api when test stateless
-decoder with cmd VIDIOC_(TRY)DECODER_CMD. Disable them to adjust v4l2
-compliance test for user driver(GStreamer/Chrome) won't use decoder cmd.
+On Wed, 2022-05-11 at 23:22 -0700, Wei Xu wrote:
+> 
+> Memory Allocation for Demotion
+> ==============================
+> 
+> To allocate a new page as the demotion target for a page, the kernel
+> calls the allocation function (__alloc_pages_nodemask) with the
+> source page node as the preferred node and the union of all lower
+> tier nodes as the allowed nodemask.  The actual target node selection
+> then follows the allocation fallback order that the kernel has
+> already defined.
+> 
+> The pseudo code looks like:
+> 
+>     targets = NODE_MASK_NONE;
+>     src_nid = page_to_nid(page);
+>     src_tier = node_tier_map[src_nid];
+>     for (i = src_tier + 1; i < MAX_MEMORY_TIERS; i++)
+>             nodes_or(targets, targets, memory_tiers[i]);
+>     new_page = __alloc_pages_nodemask(gfp, order, src_nid, targets);
+> 
+> The memopolicy of cpuset, vma and owner task of the source page can
+> be set to refine the demotion target nodemask, e.g. to prevent
+> demotion or select a particular allowed node as the demotion target.
 
-Fixes: 8cdc3794b2e3 ("media: mtk-vcodec: vdec: support stateless API")
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
-resend v4:
-- add Reviewed-by tag for patch v4.
-changes compared with v3:
-- using v4l2_disable_ioctl to replace return -ENOTTY
-changes compared with v2:
-- add reviewed-by tag
-changes compared with v1:
-- add Fixes: tag
----
- .../media/platform/mediatek/vcodec/mtk_vcodec_dec.c | 13 +------------
- .../platform/mediatek/vcodec/mtk_vcodec_dec_drv.c   |  3 +++
- 2 files changed, 4 insertions(+), 12 deletions(-)
+Consider a system with 3 tiers, if we want to demote some pages from
+tier 0, the desired behavior is,
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-index 3859e4c651c6..52e5d36aa912 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-@@ -47,14 +47,7 @@ static struct mtk_q_data *mtk_vdec_get_q_data(struct mtk_vcodec_ctx *ctx,
- static int vidioc_try_decoder_cmd(struct file *file, void *priv,
- 				struct v4l2_decoder_cmd *cmd)
- {
--	struct mtk_vcodec_ctx *ctx = fh_to_ctx(priv);
--
--	/* Use M2M stateless helper if relevant */
--	if (ctx->dev->vdec_pdata->uses_stateless_api)
--		return v4l2_m2m_ioctl_stateless_try_decoder_cmd(file, priv,
--								cmd);
--	else
--		return v4l2_m2m_ioctl_try_decoder_cmd(file, priv, cmd);
-+	return v4l2_m2m_ioctl_try_decoder_cmd(file, priv, cmd);
- }
- 
- 
-@@ -69,10 +62,6 @@ static int vidioc_decoder_cmd(struct file *file, void *priv,
- 	if (ret)
- 		return ret;
- 
--	/* Use M2M stateless helper if relevant */
--	if (ctx->dev->vdec_pdata->uses_stateless_api)
--		return v4l2_m2m_ioctl_stateless_decoder_cmd(file, priv, cmd);
--
- 	mtk_v4l2_debug(1, "decoder cmd=%u", cmd->cmd);
- 	dst_vq = v4l2_m2m_get_vq(ctx->m2m_ctx,
- 				V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-index b417a6ab2176..995e6e2fb1ab 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-@@ -395,6 +395,9 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 	}
- 
- 	if (dev->vdec_pdata->uses_stateless_api) {
-+		v4l2_disable_ioctl(vfd_dec, VIDIOC_DECODER_CMD);
-+		v4l2_disable_ioctl(vfd_dec, VIDIOC_TRY_DECODER_CMD);
-+
- 		dev->mdev_dec.dev = &pdev->dev;
- 		strscpy(dev->mdev_dec.model, MTK_VCODEC_DEC_NAME,
- 			sizeof(dev->mdev_dec.model));
--- 
-2.18.0
+- Allocate pages from tier 1
+- If there's no enough free pages in tier 1, wakeup kswapd of tier 1 so
+demote some pages from tier 1 to tier 2
+- If there's still no enough free pages in tier 1, allocate pages from
+tier 2.
+
+In this way, tier 0 will have the hottest pages, while tier 1 will have
+the coldest pages.
+
+With your proposed method, the demoting from tier 0 behavior is,
+
+- Allocate pages from tier 1
+- If there's no enough free pages in tier 1, allocate pages in tier 2
+
+The kswapd of tier 1 will not be waken up until there's no enough free
+pages in tier 2.  In quite long time, there's no much hot/cold
+differentiation between tier 1 and tier 2.
+
+This isn't hard to be fixed, just call __alloc_pages_nodemask() for each
+tier one by one considering page allocation fallback order.
+
+Best Regards,
+Huang, Ying
+
 

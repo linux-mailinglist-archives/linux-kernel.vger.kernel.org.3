@@ -2,79 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 757AC525CCD
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 10:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A367525CDD
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 10:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378018AbiEMIGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 04:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38812 "EHLO
+        id S1378050AbiEMIGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 04:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378046AbiEMIGh (ORCPT
+        with ESMTP id S1378045AbiEMIGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 13 May 2022 04:06:37 -0400
-Received: from hfcrelay.icp-osb-irony-out7.external.iinet.net.au (hfcrelay.icp-osb-irony-out7.external.iinet.net.au [203.59.1.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 450644ECF9
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:06:28 -0700 (PDT)
-IronPort-SDR: D0mxgqfBkzwthw1rq1YT6+Hvkyo/XBJ20prte7Ulu6WV4HNlD4XUshzSfBtZM4WXmk/xc8KSZn
- YTiB5HJe+pHmCSS5MNzN7KY3ARQNCgjt5jJRFd7vGmPxo1AFp+/IC7rnZr4LVNNtNa5Mcl+saS
- 7YoA4YCw8OmFdsjpC4hd6cqt6RSbttsp9ZvrKIX6MLed7LuWD3PDkgPo3S/wrQ0INiu/Ya2jpj
- nQ5O09/oHy+LgR6oxJrTBsf5aZ+3LGKGyLfwf2hdOBPdold6ieZaLeUQ43wj7vOFu1oCapb1pl
- duo=
-X-SMTP-MATCH: 0
-X-IPAS-Result: =?us-ascii?q?A2DxAgCmEH5i/0gv8TwNTR4BAQsSDEAJhjyETpELA4skh?=
- =?us-ascii?q?HeCB4w+CwEBAQEBAQEBAUsEAQGCDoJ0AoU/JjgTAQIEAQEBAQMCAwEBBwEBA?=
- =?us-ascii?q?QUBAQEBAQEGAwGBHIUvhwgBAQEBAgEjFUEFCwsSBgICJgICSQ4GDQYCAQGCe?=
- =?us-ascii?q?YJ0q2B6gTGBAYgZgWWBECyOYEN9gRCBPAyCdz6EC4QPgmUEgWeTcygEDwMdO?=
- =?us-ascii?q?IEGEoEhcQEKBgMDBwoFMgYCDBgUBAIVEVMeAhMFBwocDhQcJBkMDwMSAxEBB?=
- =?us-ascii?q?wILEggVLAgDAgMIAwIDIwsCAxgJBwoDHQgKHBIQFAIEEx8LCAMaHy0JAgQOA?=
- =?us-ascii?q?0UICwoDEQQDExgLFggQBAYDCS8NKAsDFA8BBgMGAgUFAQMgAxQDBScHAyEHC?=
- =?us-ascii?q?yYNDQQcBx0DAwUmAwICGwcCAgMCBhcGAgJyCigNCAQIBBweJRMFAgcxBQQvA?=
- =?us-ascii?q?h4EBQYRCQIWAgYEBQIEBBYCAhIIAggnGwcWGR0ZAQVeBgsJIxwKIg0GBQYWA?=
- =?us-ascii?q?yc4BiIBGwJSlwp7E0OBGRVaHgsvoVmfDINWn3UGEy2oV5ZmqR2BfjMaCCgIg?=
- =?us-ascii?q?yNRKJ0CYzsCBgsBAQMJikyCSAEB?=
-IronPort-Data: A9a23:rJX336qjbTCx4/raZAvpQhUg14JeBmJoZBIvgKrLsJaIsI4StFCzt
- garIBmFbvuMa2b9fN4gYdy28E5SucDWnN42SAI4rSljH3tAp8PIXInJcR6rZXPLcZPKHUg8s
- 5tPNYGQIJw+ESPVqkv9buGx/HJx/J/TS+unAoYoGMzRqSyI6csFoUg+8wLsqtcw2bBVO+4M0
- D/Li5W31GWNglaYCUpJrfPawP9TlK6q4mlA4wVlPakjUGL2zhH5MrpOfcldEFOlGuG4LsbiL
- woU5Ojklo9x105F5uKNyt4XQGVTKlLhFVHmZk5tZkSXqkMqShrec0oMHKF0hU9/011llvgtk
- 48V7cTYpQ0BZsUgk8xFO/VUO30lZ/UeoNcrLFDn2fF/wXEqfFPR6eh+D2UqbLFH0f1uDGNC8
- PtIGRY0O0Xra+KemNpXS8Ff35V5apC1bMVH/Cs6+Fk1D954GdaZH/yMuYAeg21YasNmRJ4yY
- +IWZCBgRAnLZxxJJ0dRD4gx9AutriKuKGME9A3M+sLb5UDdz1Bu+rTBFeDEc9HQXNx3smSdu
- U3ZqjGR7hYycYb3JSC+2n2hi/XTtSf6Xp8CUbjmpv0sh0ecrkQXCRsLRR6+/6m6okq/QM5Eb
- UgV/Dc+6K1spE/tScPyNzW8oXiZrlsfVsBWHukS9g6A0OzX7hyfC2xCSSROAPQit9ceRDo22
- 1vPlNTsbQGDq5XLETfHqu7R8Wz3ZnJTMXcNZGkPSg5D6sSLTJwPsy8jh+1LSMad5uAZ0xmpq
- 9xWhEDSX4kusPM=
-IronPort-HdrOrdr: A9a23:wqL0Ka3xIsf2jR9rUfpH2wqjBG4kLtp133Aq2lEZdPU1SL3iqy
- nKpp8mPHDP5gr5NEtMpTnCAtjlfZqkz/9ICNAqXYtKPzOW2ldATrsSlbcKqgeIc0fDH4hmpM
- JdmsNFZ+EYY2IXsS+02njeLz+M+qjgzIm4wc3l5zNGSwVybqFp6A10TjycDlZ9SGB9dPkE/d
- 6nl7N6mwY=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-AV: E=Sophos;i="5.91,221,1647273600"; 
-   d="scan'208";a="393644717"
-Received: from 60-241-47-72.tpgi.com.au (HELO [192.168.0.22]) ([60.241.47.72])
-  by icp-osb-irony-out7.iinet.net.au with ESMTP; 13 May 2022 16:06:23 +0800
-Message-ID: <042eaca3-5007-d1cf-4fc4-ef02d1ecb255@uclinux.org>
-Date:   Fri, 13 May 2022 18:06:21 +1000
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455844ECFC;
+        Fri, 13 May 2022 01:06:31 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 35F7D1F45D41
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652429190;
+        bh=ZI6wzdoqnJpZaI9O6789OwrBHqpXwo3joMPdEwRzXpE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ACtYtZm3nPrQX/Loy48UlYk9vfJa6ETK0abgly3cu3X1tgHT4OAB6CB5d/CRTQpt9
+         amrdAsrm1WJYGlgpG8/QXPiOAjouDNqPgaHb59GExHJF59kKCNgEq+lvOmHyxdDmn7
+         GHYK9+YR+WLcrEGAVRO9nb8GVAY804GUvcmp97D/+aAGvZsb2MJJzef27r1xgWwSPT
+         5DGPxF+xTZzMKyEjhIGAQG0oslLH3OWuaxcLOl9WD8Q413A7HQT52wNJSDZG0fxPM4
+         OYmbKoUAV3eksDMqPfUJ/1Jif8l5KxMuoa8WwThc2ilHAhip097IVnqOGpE2p8JkdA
+         wztwinkpeFDGQ==
+Message-ID: <d015e667-f7a6-d635-a2ea-c0638881af10@collabora.com>
+Date:   Fri, 13 May 2022 10:06:26 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] m68k: math-emu: Fix dependencies of math emulation
- support
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v4] pwrap: mediatek: fix FSM timeout issue
 Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-References: <e0a9cf982a80f14efbf01cdc38e31128a9f41999.1652262437.git.geert@linux-m68k.org>
- <CAMuHMdW3BsuJOx6r1TmUJJYhqn_v5iDznTw0gnbayQAjBp2OYA@mail.gmail.com>
- <db869491-142f-4360-0f3c-e4395563088b@uclinux.org>
- <CAMuHMdUb=c5WYviGqJXSVtWe4rob28oOQsPE2V==V3P7hDWwyg@mail.gmail.com>
-From:   Greg Ungerer <gerg@uclinux.org>
-In-Reply-To: <CAMuHMdUb=c5WYviGqJXSVtWe4rob28oOQsPE2V==V3P7hDWwyg@mail.gmail.com>
+To:     Zhiyong Tao <zhiyong.tao@mediatek.com>, lee.jones@linaro.org,
+        robh+dt@kernel.org, matthias.bgg@gmail.com, lgirdwood@gmail.com,
+        broonie@kernel.org, eddie.huang@mediatek.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, fshao@chromium.org
+Cc:     srv_heupstream@mediatek.com, hui.liu@mediatek.com,
+        tinghan.shen@mediatek.com, hsin-hsiung.wang@mediatek.com,
+        sean.wang@mediatek.com, macpaul.lin@mediatek.com,
+        wen.su@mediatek.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220513034356.5268-1-zhiyong.tao@mediatek.com>
+ <20220513034356.5268-2-zhiyong.tao@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220513034356.5268-2-zhiyong.tao@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_FAIL,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,97 +64,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+Il 13/05/22 05:43, Zhiyong Tao ha scritto:
+> From: "Zhiyong.Tao" <zhiyong.tao@mediatek.com>
+> 
+> Fix pwrap FSM timeout issue which leads the system crash on GFX VSRAM
+> power on.
+> The crash log:
+> [ 3986.543401] mediatek-drm-dp 1c500000.edp_tx: drm_helper_hpd_irq_event
+> [ 3986.670756] vsram_others: is_enabled() failed: -ETIMEDOUT
+> [ 3986.670765] mali 13000000.mali: Power on reg 1 failed error = -110
+> [ 3986.670768] ------------[ cut here ]------------
+> [ 3986.670770] unbalanced disables for vsram_others
+> [ 3986.670783] WARNING: CPU: 7 PID: 4125 at drivers/regulator/core.c:2761 _regulator_disable+0x194/0x1a0
+> [ 3986.670785] Modules linked in: rfcomm algif_hash algif_skcipher af_alg veth uinput btusb btmtk btintel btbcm btrtl xt_cgroup bluetooth uvcvideo videobuf2_vmalloc ecdh_generic ecc mtk_vcodec_dec mtk_vcodec_enc mtk_mdp3 v4l2_h264 mtk_vcodec_common videobuf2_dma_contig mtk_vpu videobuf2_memops v4l2_mem2mem xt_MASQUERADE videobuf2_v4l2 videobuf2_common cros_ec_rpmsg mtk_scp mtk_rpmsg rpmsg_core mtk_scp_ipi ip6table_nat fuse 8021q iio_trig_sysfs cros_ec_sensors cros_ec_lid_angle cros_ec_sensors_core industrialio_triggered_buffer kfifo_buf cros_ec_sensorhub mt7921e mt7921_common mt76_connac_lib lzo_rle mt76 lzo_compress mac80211 cfg80211 zram r8152 mii joydev
+> [ 3986.670830] CPU: 7 PID: 4125 Comm: mali-cmar-backe Not tainted 5.10.78-CL2781499-v287 #1 b899b40a63da40d4767c6c0e96b6700d2f3eb242
+> [ 3986.670832] Hardware name: MediaTek Tomato board (DT)
+> [ 3986.670835] pstate: 60400009 (nZCv daif +PAN -UAO -TCO BTYPE=--)
+> [ 3986.670838] pc : _regulator_disable+0x194/0x1a0
+> [ 3986.670840] lr : _regulator_disable+0x194/0x1a0
+> [ 3986.670842] sp : ffffffc016203a10
+> [ 3986.670843] x29: ffffffc016203a10 x28: ffffffb7c3186b28
+> [ 3986.670846] x27: 0000000000000002 x26: fffffffffffffdc8
+> [ 3986.670848] x25: ffffffc017225000 x24: ffffffb7c0e94880
+> [ 3986.670851] x23: ffffffb7c31840f0 x22: ffffffd6b4f3e275
+> [ 3986.670853] x21: ffffffb7c3181a00 x20: ffffffb7c27e7800
+> [ 3986.670855] x19: ffffffb7c27e7800 x18: 00000000ffff0a10
+> [ 3986.670857] x17: 0000000000000020 x16: 00000000000000ec
+> [ 3986.670860] x15: ffffffd6b44fa17c x14: 0000000000000003
+> [ 3986.670862] x13: 0000000000000004 x12: 0000000000fd8318
+> [ 3986.670864] x11: c000000100029ccd x10: 00000000ffffffff
+> [ 3986.670866] x9 : 7dd6d080afd6f400 x8 : 7dd6d080afd6f400
+> [ 3986.670868] x7 : 0000000000000000 x6 : ffffffd6b5459f0c
+> [ 3986.670871] x5 : ffffffc016203a58 x4 : 0000000000000000
+> [ 3986.670873] x3 : ffffffc016203668 x2 : ffffffc016203670
+> [ 3986.670875] x1 : 0000000100029ccd x0 : 0000000000000024
+> [ 3986.670878] Call trace:
+> [ 3986.670880]  _regulator_disable+0x194/0x1a0
+> [ 3986.670883]  regulator_disable+0x4c/0x8c
+> 
+> Add a usleep delay to avoid busy read for the H/W status.
+> If (time_after()) be turn first, it maybe cause the system behavior
+> crash problem like above. so we change it after sleep delay.
+> 
+> Fixes: 1f022d84bd19 ("soc: mediatek: Add PMIC wrapper for MT8135 and
+> MT8173 SoCs")
+> 
+> Signed-off-by: Zhiyong.Tao <zhiyong.tao@mediatek.com>
+> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
 
-On 13/5/22 16:56, Geert Uytterhoeven wrote:
-> Hi Greg,
-> 
-> On Fri, May 13, 2022 at 1:23 AM Greg Ungerer <gerg@uclinux.org> wrote:
->> On 11/5/22 22:54, Geert Uytterhoeven wrote:
->>> On Wed, May 11, 2022 at 11:48 AM Geert Uytterhoeven
->>> <geert@linux-m68k.org> wrote:
->>>> If CONFIG_M54xx=y, CONFIG_MMU=y, and CONFIG_M68KFPU_EMU=y:
->>>>
->>>>       {standard input}:272: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `sub.b %d1,%d3' ignored
->>>>       {standard input}:609: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu 4(%a1){%d0,#8},%d0' ignored
->>>>       {standard input}:752: Error: operands mismatch -- statement `mulu.l 4(%a0),%d3:%d0' ignored
->>>>       {standard input}:1155: Error: operands mismatch -- statement `divu.l %d0,%d3:%d7' ignored
->>>>
->>>> The math emulation support code is intended for 68020 and higher, and
->>>> uses several instructions or instruction modes not available on coldfire
->>>> or 68000.
->>>>
->>>> Originally, the dependency of M68KFPU_EMU on MMU was fine, as MMU
->>>> support was only available on 68020 or higher.  But this assumption
->>>> was broken by the introduction of MMU support for M547x and M548x.
->>>>
->>>> Drop the dependency on MMU, as the code should work fine on 68020 and up
->>>> without MMU (which are not yet supported by Linux, though).
->>>> Add dependencies on M68K_CLASSIC (to rule out Coldfire) and FPU (to rule
->>>> out 68xxx below 68020).
->>>>
->>>> Fixes: 1f7034b9616e6f14 ("m68k: allow ColdFire 547x and 548x CPUs to be built with MMU enabled")
->>>> Reported-by: kernel test robot <lkp@intel.com>
->>>> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
->>>> ---
->>>> To be queued in the m68k for-v5.19 branch.
->>>>
->>>>    arch/m68k/Kconfig.cpu | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/arch/m68k/Kconfig.cpu b/arch/m68k/Kconfig.cpu
->>>> index 16ea9a67723c09dc..9abddbbee819f1d3 100644
->>>> --- a/arch/m68k/Kconfig.cpu
->>>> +++ b/arch/m68k/Kconfig.cpu
->>>> @@ -327,7 +327,7 @@ comment "Processor Specific Options"
->>>>
->>>>    config M68KFPU_EMU
->>>>           bool "Math emulation support"
->>>> -       depends on MMU
->>>> +       depends on M68K_CLASSIC && FPU
->>>                         ^^^^^^^^^^^^
->>> Whoops, that's a silly typo...
->>
->> Are you going to resend, or are you thinking of changing the way this is done?
-> 
-> I was going to resend, with the above fixed, and an improved patch
-> description w.r.t. the dependency on FPU.
-> 
->> I had thought that CONFIG_FPU enabled meant you had some type of
->> floating point support in the kernel - be it hardware or software emulated.
->> So I don't have a problem with this "as is".
-> 
-> That matches my understanding, too.
-> 
-> BTW, I'm not familiar with Coldfire FPU support. Does it rely on any
-> emulation (e.g. for transcendental functions, like '040/'060)?
-> Would there be any point in making the math emulation code
-> Coldfire-proof?
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-I have never really looked closely at it either. The FPU is optionally
-present only in the v4 cores. But the operations looks like just the
-basic set to me, so I expect it will need emulations for transcendentals.
-
-Section 4.4.3 of the CF4e Core User Manual gives some guidance on the differences
-between the traditional m68k FPU and the ColdFire FPU.
-
-It would be nice if the code could deal with ColdFire FPU as well.
-For the most part it looks possible, but might end up a little ugly.
-
-Regards
-Greg
-
-
-
-> Thanks!
-> 
-> Gr{oetje,eeting}s,
-> 
->                          Geert
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                  -- Linus Torvalds

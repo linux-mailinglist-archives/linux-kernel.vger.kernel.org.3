@@ -2,102 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 067F25259CF
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 04:59:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B93A55259ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 05:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376605AbiEMC62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 22:58:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51222 "EHLO
+        id S1359621AbiEMDEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 23:04:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376599AbiEMC60 (ORCPT
+        with ESMTP id S241045AbiEMDEt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 22:58:26 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDDA6CA8D
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 19:58:25 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id n18so6698657plg.5
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 19:58:25 -0700 (PDT)
+        Thu, 12 May 2022 23:04:49 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C28284908;
+        Thu, 12 May 2022 20:04:47 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id i24so6522085pfa.7;
+        Thu, 12 May 2022 20:04:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BK1oXvJ5GIf2FU1suHezHNi/7qFAZl9bZMaNM3PZnw8=;
-        b=gJmlP/0ESop7ZFumzjbllZ6BZQMA4/bSTF6CHpTcfj+y8XGiHzA31xniLi7L0bjEuG
-         FBptfolfc1RU582mUDpnJ7Cy8qKSZ2RjkgLE3N1q85guO/NngmE9BW5KsAS9HR7hlrsK
-         nTQmVjYQ0qMJGi0e+YdBBQ0zHq0NRb8hNEfUX1uiEeOlVudljDPcJHZTnOpVDuDdr/Hk
-         2kC71/YnZ5r+aZBWNf1muN32gywzDNdf86TRIeWeVPBsVbkSFNiSctxYi7blBRlHfZKK
-         Y/PBWZSdNYbqSl3AZ2zVXHHe80x+jzCWUKDXQUWcyRmnVVKbO661KF2ykr1Z7zMlb1V8
-         ZTUA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uPSFu801nJLOJ3tr69DHbRmzXfaEVytzaqlwAPFRnHk=;
+        b=nNiPTY5mblZ5YqZ1sZfMMPoRuMg5shnmDsD7NRx9W/P6CHsSdPnJpTQSoQGg5hMuSO
+         fu6i4rmb+Kydzp5buZ+lmhOEbcCDcFzDE6d1L2dHmhcXkohBkq54KW6p/TttreU2Ai2A
+         KphHZ1r9p8iq7CxOtnMUEu8HDWsvRZKrK7H7Uk3MaT9MToG4bX4t5Lkde4qDmaDwN4Ud
+         2wKG6eY0Uk6lQT6r5umtlXtGH/Xgk/+OjtPXok7yUDX25/G8GN0a5Y5HMotffo1Os4SL
+         EgpCokHlKWB4R6EC9sgtS388o8gvPmc5CkgfkZneIUi5KWExqZsUg1XIpICZknn3jb7B
+         Pzlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=BK1oXvJ5GIf2FU1suHezHNi/7qFAZl9bZMaNM3PZnw8=;
-        b=XdFNhwaeAW/UUYRTfhPHr/dwyfHzRsyBmoMdqgkVQUlwpV0edckXaBrdoCqGs21wFw
-         RSmCHBtvdOz04DxYIsQ2ZsK0U0R2K7e1/73ipHigL+CtrUTNv/GmxLw1DedAkTb6K/Sv
-         MCcZLqQ7o17lIeExmHvDF9rWiCcngje6xiVPrdxrUhserPm8ZOa89X1jUHa1tiXO46oN
-         NK2GtdqKN1ERsiisW7kI4re94AD7yPpuCYxDWmblZN8XH2/g236U9gb5y49m7a00Vvi4
-         a3sVcZuuI7JE3lZ4GqaFpyH1bKdeEivJszZFTAur8eemsRIwLSK6keaZ7i1hCpG9Cm9J
-         vtvg==
-X-Gm-Message-State: AOAM531cDzbHlHeeGjK3dByAzN1ebcqhgue61aTwrnUEbxZ6VRxuNPxP
-        0OoGLphUhGmtMYTGV2gu1qQ=
-X-Google-Smtp-Source: ABdhPJxR/b2tOctSPYtdjnc1KCCHEU3LGIz7N5tLVUtkzZSR8i4GsI9cp5zeMXoMd7M6kXeKo/gioA==
-X-Received: by 2002:a17:902:7783:b0:15f:21f8:a1d6 with SMTP id o3-20020a170902778300b0015f21f8a1d6mr2846282pll.66.1652410704709;
-        Thu, 12 May 2022 19:58:24 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::4:6c64])
-        by smtp.gmail.com with ESMTPSA id b9-20020a170902650900b0015e8d4eb263sm599117plk.173.2022.05.12.19.58.23
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uPSFu801nJLOJ3tr69DHbRmzXfaEVytzaqlwAPFRnHk=;
+        b=ExJPa3LpEzjsgBmFoiaIWZq19PgxKkztAUUwu+UFq+/WVi3m3KkTXQXpcYa46lUXmN
+         NKKvveGTY6mdZIiAvKa4m+GF3IcZqtpCZMWwUmxgAhDr5kUpTowbXuXgzqudJ5pMNU76
+         CIuKYxLN6TspXx6LOuuosFyoV0LjbOtLX4ZlyH7UhXmHr7iIMspkPDRTlau7yMjkAsL2
+         u+R60/HUR1WpAJQRGm6jwHLAQ0bSJdgHj3x7sW2vVFANnVaHa2cRkav1YB5xg/SkPK1r
+         HbfsNSIquOlrrHeaXPwH5o39Iz2j7u0akMlSmrowHUbvNkIXFYsUNcTcXdxXa2Qg+LsS
+         wezg==
+X-Gm-Message-State: AOAM531hnDkYbNxClr14VXPluABiIbZT5r6xKGcS6X9sESchE9roKumP
+        rmTJmO6VSYJW+zuuRJz9J+/mbGi1TMXZfw==
+X-Google-Smtp-Source: ABdhPJz8qHb+faOKxdenJux2cqWQpavB4i0RYAJaNPdSueMShNJ/cZqCUt75KhJtd2VZ74JuMvlO8Q==
+X-Received: by 2002:a05:6a00:23ce:b0:50d:823f:981 with SMTP id g14-20020a056a0023ce00b0050d823f0981mr2631761pfc.10.1652411087207;
+        Thu, 12 May 2022 20:04:47 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.26])
+        by smtp.gmail.com with ESMTPSA id b7-20020a170903228700b0015e8d4eb1f8sm638693plh.66.2022.05.12.20.04.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 19:58:23 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 12 May 2022 16:58:22 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Josh Don <joshdon@google.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Cruz Zhao <CruzZhao@linux.alibaba.com>
-Subject: Re: [PATCH] sched/core: add forced idle accounting for cgroups
-Message-ID: <Yn3JTpXhWRTeahyG@slm.duckdns.org>
-References: <20220513005427.2507335-1-joshdon@google.com>
+        Thu, 12 May 2022 20:04:46 -0700 (PDT)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     kuba@kernel.org
+Cc:     nhorman@tuxdriver.com, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        imagedong@tencent.com, kafai@fb.com, talalahmad@google.com,
+        keescook@chromium.org, asml.silence@gmail.com, willemb@google.com,
+        vasily.averin@linux.dev, ilias.apalodimas@linaro.org,
+        luiz.von.dentz@intel.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH net-next v3 0/4] net: skb: check the boundrary of skb drop reason
+Date:   Fri, 13 May 2022 11:03:35 +0800
+Message-Id: <20220513030339.336580-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220513005427.2507335-1-joshdon@google.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 05:54:27PM -0700, Josh Don wrote:
-> 4feee7d1260 previously added per-task forced idle accounting. This patch
-> extends this to also include cgroups.
-> 
-> rstat is used for cgroup accounting, except for the root, which uses
-> kcpustat in order to bypass the need for doing an rstat flush when
-> reading root stats.
-> 
-> Only cgroup v2 is supported. Similar to the task accounting, the cgroup
-> accounting requires that schedstats is enabled.
+From: Menglong Dong <imagedong@tencent.com>
 
-We've been collecting scheduler stats in cgroup core so that we always have
-them available whether cpu controller is enabled or not. There's nothing
-actually specific to cpu controller, right? Would it make sense to collect
-the cpu core stats the same way as the rest of scheduler stats?
+In the commit 1330b6ef3313 ("skb: make drop reason booleanable"),
+SKB_NOT_DROPPED_YET is added to the enum skb_drop_reason, which makes
+the invalid drop reason SKB_NOT_DROPPED_YET can leak to the kfree_skb
+tracepoint. Once this happen (it happened, as 4th patch says), it can
+cause NULL pointer in drop monitor and result in kernel panic.
 
-Thanks.
+Therefore, check the boundrary of drop reason in both kfree_skb_reason
+(2th patch) and drop monitor (1th patch) to prevent such case happens
+again.
+
+Meanwhile, fix the invalid drop reason passed to kfree_skb_reason() in
+tcp_v4_rcv() and tcp_v6_rcv().
+
+Changes since v2:
+1/4 - don't reset the reason and print the debug warning only (Jakub
+      Kicinski)
+4/4 - remove new lines between tags
+
+Changes since v1:
+- consider tcp_v6_rcv() in the 4th patch
+
+
+Menglong Dong (4):
+  net: dm: check the boundary of skb drop reasons
+  net: skb: check the boundrary of drop reason in kfree_skb_reason()
+  net: skb: change the definition SKB_DR_SET()
+  net: tcp: reset 'drop_reason' to NOT_SPCIFIED in tcp_v{4,6}_rcv()
+
+ include/linux/skbuff.h  | 3 ++-
+ net/core/drop_monitor.c | 2 +-
+ net/core/skbuff.c       | 2 ++
+ net/ipv4/tcp_ipv4.c     | 1 +
+ net/ipv6/tcp_ipv6.c     | 1 +
+ 5 files changed, 7 insertions(+), 2 deletions(-)
 
 -- 
-tejun
+2.36.1
+

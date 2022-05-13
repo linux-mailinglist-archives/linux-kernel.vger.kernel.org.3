@@ -2,91 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CDC8526D65
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 01:14:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A388526D60
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 01:13:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234463AbiEMXOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 19:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
+        id S229620AbiEMXNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 19:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiEMXOg (ORCPT
+        with ESMTP id S234885AbiEMXNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 19:14:36 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C016D3211D1
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 16:14:22 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id e12so17669482ybc.11
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 16:14:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uJjCKmIV0+PUlw1yN8LzGGtdpY7JQRJT83F9A+chaFQ=;
-        b=THiP8XlKeuATd+sFBtOcYrkM4vfQtgO4vnzZ0czrpsdPkpjchMTT4P/obyYS2u/Ph0
-         +d4NGAg/jxClzjL8HVJs1YAUDTNGgJWRecVdDws5TTDi+gv0iwTmpz+MkqCaUpeAV5AA
-         yF3lhT3KSxCLDQJ9FmJNtviqrwf/aWE8xllwdNkP73HSFcu2JxZfzQwraA3ZMJaktL2/
-         OkzTNpuZEQcIWaejl7sk/YJRrshWH/IN8sd7qW08KjeWOtRqJdYH5DbIBGNlQDidczW+
-         6kEBBpSeOhUtIg4JxlmhyKAglB0MmRs+oQnBntEgiBPniHirdlTfg443BTKKz6xnZr/V
-         JO8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uJjCKmIV0+PUlw1yN8LzGGtdpY7JQRJT83F9A+chaFQ=;
-        b=13ZeXUy47Vx5YHYM5y7zFje5K2yafsmjcOrYYvosCjXUTdYiRtdluo4C9d2yihgk6M
-         DjVS1NkJnhOwP7Y3K+arFywG5Ayk4Xxvd+e+UVWTVapA79R+YIBuW4bobIuQ3u41KDq7
-         7wFFpgE135CGBcocKnWNXzXwC5vcviY4d8w6Eog+2jPQaOroaLt45zAQDowTYNPBTotv
-         gxOC6QM0I6A8+Pl+09slutlNRYTCzK5q7z+4zD6Xgj/arKcF6dMfhDdlS6wMAQB/a38X
-         qYy2d+WESjzxCUabUaW4DIYlo4fnY5Jr+mE1aygtBTG1HzLR/1OX/RiCoeorSu67f22f
-         PluQ==
-X-Gm-Message-State: AOAM5321QWKaaCi7Am8ulAmtXjT9S5M1F8dKU5xR6ZfMFOUP4Uqt1Boc
-        mmhz1juf0yHwbPJ37tGFUHI//lPLFeM8Necj4tI0+w==
-X-Google-Smtp-Source: ABdhPJyqJOHYby5B4zPz7I69RNcSghbBdax44/7CJOKXFMx9IaAQOi+fUTHLPntFEHAMZ9z/gSOi5OooYyzthLTILkw=
-X-Received: by 2002:a25:aa94:0:b0:648:62f2:ef4e with SMTP id
- t20-20020a25aa94000000b0064862f2ef4emr6931589ybi.626.1652483661584; Fri, 13
- May 2022 16:14:21 -0700 (PDT)
+        Fri, 13 May 2022 19:13:20 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F072E307DB7
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 16:13:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652483586; x=1684019586;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RwN3h2frQEmuTLpALiwJVKiux9iit8+Y3qd7tVOSlJg=;
+  b=fxmXik6QJGG2xgOwrO8vrWaONEC4D1f4qqzWNqk3NVF7ODugy+oGqFeW
+   cgRGxbXUsqSGRWNXerAlwzB0c9SF9L+Ph07ZBCpy1e5XIOWYMA3qnrse5
+   6qNC0bOsapAunq70VxYaUDbyn6N2+BibB0Hwr1TssmEyxwCVhhxb0gLQO
+   pK5Bz9Dt3emKEUfHElK7cEPy0w0vdL7mFNgDWWc0iV3BpgGq27KOWXkDT
+   SiHT0qMqZVuaUX/YweI2qXkpAfU0j87v3Lw007ak+f5r8mcrl0NP22VyO
+   /UqMJizdvnyYDkMYKJL1mzjmiC65RSc6T363Q44OAq/BJY9zFqjLff9A8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="252479209"
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="252479209"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 16:13:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="573202350"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga007.fm.intel.com with ESMTP; 13 May 2022 16:13:04 -0700
+Date:   Fri, 13 May 2022 16:16:40 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        Andi Kleen <ak@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Stephane Eranian <eranian@google.com>,
+        iommu@lists.linux-foundation.org, Joerg Roedel <joro@8bytes.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
+        Tony Luck <tony.luck@intel.com>
+Subject: Re: [PATCH v6 20/29] init/main: Delay initialization of the lockup
+ detector after smp_init()
+Message-ID: <20220513231640.GA9074@ranerica-svr.sc.intel.com>
+References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
+ <20220506000008.30892-21-ricardo.neri-calderon@linux.intel.com>
+ <1652178524.7j2o02lrl8.astroid@bobo.none>
 MIME-Version: 1.0
-References: <20220507102257.26414-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220507102257.26414-1-andriy.shevchenko@linux.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 14 May 2022 01:14:10 +0200
-Message-ID: <CACRpkdYjmAKPb9sHvC+Y0goDBmGXDthJDmgbG2CZ6VO_Y1zEmQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] pinctrl: stm32: Unshadow np variable in stm32_pctl_probe()
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        linux-gpio@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1652178524.7j2o02lrl8.astroid@bobo.none>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 7, 2022 at 12:23 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On Tue, May 10, 2022 at 08:38:22PM +1000, Nicholas Piggin wrote:
+> Excerpts from Ricardo Neri's message of May 6, 2022 9:59 am:
+> > Certain implementations of the hardlockup detector require support for
+> > Inter-Processor Interrupt shorthands. On x86, support for these can only
+> > be determined after all the possible CPUs have booted once (in
+> > smp_init()). Other architectures may not need such check.
+> > 
+> > lockup_detector_init() only performs the initializations of data
+> > structures of the lockup detector. Hence, there are no dependencies on
+> > smp_init().
+> 
 
-> The np variable is used globally for stm32_pctl_probe() and in one of
-> its code branches. cppcheck is not happy with that:
->
->   pinctrl-stm32.c:1530:23: warning: Local variable 'np' shadows outer variable [shadowVariable]
->
-> Instead of simply renaming one of the variables convert some code to
-> use a device pointer directly.
->
-> Fixes: bb949ed9b16b ("pinctrl: stm32: Switch to use for_each_gpiochip_node() helper")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Thank you for your feedback Nicholas!
 
-Patch applied!
+> I think this is the only real thing which affects other watchdog types?
 
-Yours,
-Linus Walleij
+Also patches 18 and 19 that decouple the NMI watchdog functionality from
+perf.
+
+> 
+> Not sure if it's a big problem, the secondary CPUs coming up won't
+> have their watchdog active until quite late, and the primary could
+> implement its own timeout in __cpu_up for secondary coming up, and
+> IPI it to get traces if necessary which is probably more robust.
+
+Indeed that could work. Another alternative I have been pondering is to boot
+the system with the perf-based NMI watchdog enabled. Once all CPUs are up
+and running, switch to the HPET-based NMI watchdog and free the PMU counters.
+
+> 
+> Acked-by: Nicholas Piggin <npiggin@gmail.com>
+
+Thank you!
+
+BR,
+Ricardo

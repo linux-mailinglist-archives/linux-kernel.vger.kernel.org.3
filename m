@@ -2,76 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F06525982
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 03:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C9FC525985
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 03:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376398AbiEMBtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 21:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60886 "EHLO
+        id S1376401AbiEMBtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 21:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376393AbiEMBtN (ORCPT
+        with ESMTP id S1376393AbiEMBtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 21:49:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873E727F12F
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 18:49:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 38952B828B3
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:49:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90F9AC34114;
-        Fri, 13 May 2022 01:49:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1652406549;
-        bh=KrxWD2CuSg9dzECF9702XBUPnwyF2cUFYN6lqGyJS4M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OI7tWbNycPGvskqqqe1hAO6VTJf2so+OQ4ixn9hlGBABsyXshcWqUcbYMRi2Cuakg
-         fgEposrmOERKAGqLqH+QMcxX4DIRDN+SuKu+voWrchvd4vr1SPmBD9AukaVQwDIJPu
-         b9R2vSe5t0sVsEA3/kQIjLEikOZz70tS4Vzi7aQQ=
-Date:   Thu, 12 May 2022 18:49:08 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     maobibo <maobibo@loongson.cn>
-Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Yang Shi <shy828301@gmail.com>
-Subject: Re: [PATCH v3] mm/khugepaged: sched to numa node when collapse huge
- page
-Message-Id: <20220512184908.0852e1efcb6fd78aea52b557@linux-foundation.org>
-In-Reply-To: <69c4f018-2012-8af5-569b-289d2a8a80f5@loongson.cn>
-References: <20220317065024.2635069-1-maobibo@loongson.cn>
-        <3a441789-b3e4-236e-2e44-e7a1c7258a94@redhat.com>
-        <YmrB/7ehG2kj2RMn@xz-m1.local>
-        <20220512173620.2f5175c7a321e6ccea6e58e9@linux-foundation.org>
-        <8c1fc6d4-7d3a-85dd-ebd9-fc8e221f1878@loongson.cn>
-        <69c4f018-2012-8af5-569b-289d2a8a80f5@loongson.cn>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 12 May 2022 21:49:49 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BCE27F137
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 18:49:47 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id fv2so6773338pjb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 18:49:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=DXT5U5/unhwYiHaEsAheDw/cqhHfh/fCCJoi5qtw7ns=;
+        b=F0xYx6bDiiXb757drwnmvVm4vISBgBumZL6FskV7MtQj1vP0JwDMILNchBUwbt6M8W
+         cldW/RGJ0hISLHrMhg+WiQ4FP0zYC8tWYVR1lE4raT8Dvv4M7iC3rZNKCszHHl54Zy8o
+         9e7E3PR9Q+AXiA8bqEgamCoQit5nt/aWXj12lD3IR73KpkkTSyppLGCRoSF1NuegfRVq
+         hcTLvmRlwQj5uu4CTMseDFfeoy2juBicUaDtU9m6FQRKOBMIHdLtidwWk0hz4/8TZ2Ip
+         6kMDM+IOMbfsMGuOYexffaRVdgk39EnO0p8nfYEA98H7zZMfCucCcfVuiOEVCd397duD
+         WOkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=DXT5U5/unhwYiHaEsAheDw/cqhHfh/fCCJoi5qtw7ns=;
+        b=ih0PVNFOdhSP8/xIvk6P4uUNdQYji2ztM1lgOUDOhgZVNtv8TCk+Bh4JpWfqlU4E/U
+         C1JX+nC77rjZx9uxuNamv7vvJEOyt7vexoKTo+H+2kOIdC5Lmxd4E+nJEvLCLrLSDVf8
+         BbaWw5iSgAvJ887wUlsWecCcWXj+bS8RTYxdg0cZ8PTXWQI2M76EBSRg4VVUnT5xgWQh
+         tKDTsfCxF89FToUklnLkabtwFDsBkxFeUI2icyjkTk4ETWl+JC+VR9sIRzCATlFUDr38
+         RsDvg/FvTcYhNM0caNRCmXRHGlRDmrpJ3Sq+kkGJB0d2LWVUaAamopGp8m/AU1VaN8ea
+         B/OQ==
+X-Gm-Message-State: AOAM533KjIKc4Pso+CttZ86DX4udJGJb92pWpGuZoAzHQG83Wn+Ui7v0
+        kPZX4fyOAMSc3Yl/Y1zBew8K71t8Hvtx3fYo
+X-Google-Smtp-Source: ABdhPJxr6xeF/KoMq1f+Qiv40Ek4BJVeeBVBOz6+/nwI6/JQb0fsp9K+rbBOmAsjP2TKfswr1gsffg==
+X-Received: by 2002:a17:90a:c797:b0:1d9:2764:a83b with SMTP id gn23-20020a17090ac79700b001d92764a83bmr13438928pjb.5.1652406587193;
+        Thu, 12 May 2022 18:49:47 -0700 (PDT)
+Received: from [10.71.57.194] ([139.177.225.225])
+        by smtp.gmail.com with ESMTPSA id i1-20020a056a00224100b0050dc7628142sm474474pfu.28.2022.05.12.18.49.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 18:49:46 -0700 (PDT)
+Message-ID: <2e331f2e-c481-df3b-f810-5bb867c5c3df@bytedance.com>
+Date:   Fri, 13 May 2022 09:49:37 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+Subject: Re: [External] Re: [PATCH bpf-next v2 2/2] selftests/bpf: add test
+ case for bpf_map_lookup_percpu_elem
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joanne Koong <joannekoong@fb.com>,
+        Geliang Tang <geliang.tang@suse.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        duanxiongchun@bytedance.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        Dongdong Wang <wangdongdong.6@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        zhouchengming@bytedance.com, yosryahmed@google.com
+References: <20220511093854.411-1-zhoufeng.zf@bytedance.com>
+ <20220511093854.411-3-zhoufeng.zf@bytedance.com>
+ <CAEf4BzZL85C7KUwKv9i5cdLSDzM175cLjiW4EDjOqNfcxbLO+A@mail.gmail.com>
+ <731c281a-9911-fa86-fec2-a3c1a3954461@bytedance.com>
+ <CAEf4BzY5HmNVgUH_bmoXfCubgosmmJ3N1gip_vrLGQEo=XV8gg@mail.gmail.com>
+From:   Feng Zhou <zhoufeng.zf@bytedance.com>
+In-Reply-To: <CAEf4BzY5HmNVgUH_bmoXfCubgosmmJ3N1gip_vrLGQEo=XV8gg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 May 2022 09:29:07 +0800 maobibo <maobibo@loongson.cn> wrote:
+在 2022/5/13 上午12:43, Andrii Nakryiko 写道:
+> On Wed, May 11, 2022 at 8:58 PM Feng Zhou <zhoufeng.zf@bytedance.com> wrote:
+>> 在 2022/5/12 上午11:34, Andrii Nakryiko 写道:
+>>> On Wed, May 11, 2022 at 2:39 AM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
+>>>> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+>>>>
+>>>> test_progs:
+>>>> Tests new ebpf helpers bpf_map_lookup_percpu_elem.
+>>>>
+>>>> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+>>>> ---
+>>>>    .../bpf/prog_tests/map_lookup_percpu_elem.c   | 46 ++++++++++++++++
+>>>>    .../bpf/progs/test_map_lookup_percpu_elem.c   | 54 +++++++++++++++++++
+>>>>    2 files changed, 100 insertions(+)
+>>>>    create mode 100644 tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
+>>>>    create mode 100644 tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
+>>>>
+>>>> diff --git a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
+>>>> new file mode 100644
+>>>> index 000000000000..58b24c2112b0
+>>>> --- /dev/null
+>>>> +++ b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
+>>>> @@ -0,0 +1,46 @@
+>>>> +// SPDX-License-Identifier: GPL-2.0
+>>>> +// Copyright (c) 2022 Bytedance
+>>> /* */ instead of //
+>> Ok, I will do. Thanks.
+>>
+>>
+>>>> +
+>>>> +#include <test_progs.h>
+>>>> +
+>>>> +#include "test_map_lookup_percpu_elem.skel.h"
+>>>> +
+>>>> +#define TEST_VALUE  1
+>>>> +
+>>>> +void test_map_lookup_percpu_elem(void)
+>>>> +{
+>>>> +       struct test_map_lookup_percpu_elem *skel;
+>>>> +       int key = 0, ret;
+>>>> +       int nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
+>>> I think this is actually wrong and will break selftests on systems
+>>> with offline CPUs. Please use libbpf_num_possible_cpus() instead.
+>>
+>> Ok, I will do. Thanks.
+>>
+>>
+>>>> +       int *buf;
+>>>> +
+>>>> +       buf = (int *)malloc(nr_cpus*sizeof(int));
+>>>> +       if (!ASSERT_OK_PTR(buf, "malloc"))
+>>>> +               return;
+>>>> +       memset(buf, 0, nr_cpus*sizeof(int));
+>>> this is wrong, kernel expects to have roundup(sz, 8) per each CPU,
+>>> while you have just 4 bytes per each element
+>>>
+>>> please also have spaces around multiplication operator here and above
+>>
+>> Ok, I will use 8 bytes for key and val. Thanks.
+>>
+>>
+>>>> +       buf[0] = TEST_VALUE;
+>>>> +
+>>>> +       skel = test_map_lookup_percpu_elem__open_and_load();
+>>>> +       if (!ASSERT_OK_PTR(skel, "test_map_lookup_percpu_elem__open_and_load"))
+>>>> +               return;
+>>> buf leaking here
+>>
+>> Yes, sorry for my negligence.
+>>
+>>
+>>>> +       ret = test_map_lookup_percpu_elem__attach(skel);
+>>>> +       ASSERT_OK(ret, "test_map_lookup_percpu_elem__attach");
+>>>> +
+>>>> +       ret = bpf_map_update_elem(bpf_map__fd(skel->maps.percpu_array_map), &key, buf, 0);
+>>>> +       ASSERT_OK(ret, "percpu_array_map update");
+>>>> +
+>>>> +       ret = bpf_map_update_elem(bpf_map__fd(skel->maps.percpu_hash_map), &key, buf, 0);
+>>>> +       ASSERT_OK(ret, "percpu_hash_map update");
+>>>> +
+>>>> +       ret = bpf_map_update_elem(bpf_map__fd(skel->maps.percpu_lru_hash_map), &key, buf, 0);
+>>>> +       ASSERT_OK(ret, "percpu_lru_hash_map update");
+>>>> +
+>>>> +       syscall(__NR_getuid);
+>>>> +
+>>>> +       ret = skel->bss->percpu_array_elem_val == TEST_VALUE &&
+>>>> +             skel->bss->percpu_hash_elem_val == TEST_VALUE &&
+>>>> +             skel->bss->percpu_lru_hash_elem_val == TEST_VALUE;
+>>>> +       ASSERT_OK(!ret, "bpf_map_lookup_percpu_elem success");
+>>> this would be better done as three separate ASSERT_EQ(), combining
+>>> into opaque true/false isn't helpful if something breaks
+>>
+>> Good suggestion.
+>>
+>>
+>>>> +
+>>>> +       test_map_lookup_percpu_elem__destroy(skel);
+>>>> +}
+>>>> diff --git a/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c b/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
+>>>> new file mode 100644
+>>>> index 000000000000..5d4ef86cbf48
+>>>> --- /dev/null
+>>>> +++ b/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
+>>>> @@ -0,0 +1,54 @@
+>>>> +// SPDX-License-Identifier: GPL-2.0
+>>>> +// Copyright (c) 2022 Bytedance
+>>> /* */ instead of //
+>>
+>> Ok, I will do. Thanks.
+>>
+>>
+>>>> +
+>>>> +#include "vmlinux.h"
+>>>> +#include <bpf/bpf_helpers.h>
+>>>> +
+>>>> +int percpu_array_elem_val = 0;
+>>>> +int percpu_hash_elem_val = 0;
+>>>> +int percpu_lru_hash_elem_val = 0;
+>>>> +
+>>>> +struct {
+>>>> +       __uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
+>>>> +       __uint(max_entries, 1);
+>>>> +       __type(key, __u32);
+>>>> +       __type(value, __u32);
+>>>> +} percpu_array_map SEC(".maps");
+>>>> +
+>>>> +struct {
+>>>> +       __uint(type, BPF_MAP_TYPE_PERCPU_HASH);
+>>>> +       __uint(max_entries, 1);
+>>>> +       __type(key, __u32);
+>>>> +       __type(value, __u32);
+>>>> +} percpu_hash_map SEC(".maps");
+>>>> +
+>>>> +struct {
+>>>> +       __uint(type, BPF_MAP_TYPE_LRU_PERCPU_HASH);
+>>>> +       __uint(max_entries, 1);
+>>>> +       __type(key, __u32);
+>>>> +       __type(value, __u32);
+>>>> +} percpu_lru_hash_map SEC(".maps");
+>>>> +
+>>>> +SEC("tp/syscalls/sys_enter_getuid")
+>>>> +int sysenter_getuid(const void *ctx)
+>>>> +{
+>>>> +       __u32 key = 0;
+>>>> +       __u32 cpu = 0;
+>>>> +       __u32 *value;
+>>>> +
+>>>> +       value = bpf_map_lookup_percpu_elem(&percpu_array_map, &key, cpu);
+>>>> +       if (value)
+>>>> +               percpu_array_elem_val = *value;
+>>>> +
+>>>> +       value = bpf_map_lookup_percpu_elem(&percpu_hash_map, &key, cpu);
+>>>> +       if (value)
+>>>> +               percpu_hash_elem_val = *value;
+>>>> +
+>>>> +       value = bpf_map_lookup_percpu_elem(&percpu_lru_hash_map, &key, cpu);
+>>>> +       if (value)
+>>>> +               percpu_lru_hash_elem_val = *value;
+>>>> +
+>>> if the test happens to run on CPU 0 then the test doesn't really test
+>>> much. It would be more interesting to have a bpf_loop() iteration that
+>>> would fetch values on each possible CPU instead and do something with
+>>> it.
+>>
+>> Good suggestion. I check the code and find no bpf helper function to get
+>> possible CPU nums.
+>>
+>> I think for the test function, read cpu0 elem value correctly should be
+>> considered to be no problem.
+>>
+>> Or is it necessary to add a new helper function to get num_possible_cpus ?
+>>
+>>
+> You can pass number of CPUs from user-space to BPF program through
+> read-only variable (search for `const volatile` under progs/ for
+> examples)
+>
+Ok, will do. Thanks.
 
-> 
-> 
-> >> and/or changelogging.
-> > Sorry for the late response, the mail is filtered and I did not notice that. The result is not so obvious after bandwidth is improved between nodes, it is only about 1% improvement for specint2006 for 32 core on my box.
-> > 
-> > Now I do not see negative effective about this patch unless user wants to keep some cores separated from khugepaged daemon process.
-> 
-> Can we provide an extra parameter to let khugepaged daemon scheduling binded to node or freely? If can, I will provide updated patch.
 
-It has always surprised me that we have a single khugepaged thread.  If
-we had a thread per node, you'd be all fixed up, yes?
-
-Ditto ksmd.
+>>>> +       return 0;
+>>>> +}
+>>>> +
+>>>> +char _license[] SEC("license") = "GPL";
+>>>> --
+>>>> 2.20.1
+>>>>
 

@@ -2,149 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7D852661C
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEEA526604
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:26:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382073AbiEMP2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 11:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
+        id S1381171AbiEMP03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 11:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382012AbiEMP1K (ORCPT
+        with ESMTP id S233504AbiEMP0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 11:27:10 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44666248DD;
-        Fri, 13 May 2022 08:26:58 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id z2so16958770ejj.3;
-        Fri, 13 May 2022 08:26:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ojlGOBCpkisLhdBLZc5xu5fbD3iLbV6lB886LLnQg1w=;
-        b=FxnvipMwHXfyVVeiBLqbMdLNV5U4F0yr5igQCC7dsfDdEcL35Nh+CKGbHkSA2RRujI
-         qRtj6fP0onfppiUtnZFstFQyer4u9ERWj8xeNVoyiRQr4kOhm8FRiv2uo4rxrBv/eT3W
-         WyrDkp5sddZ+j4YnzAWpV7Yoo9XgnO+vIHqAik5b03AtuSM36WxAnnalkp+W2Uot+61/
-         gh+cqGZoYUFujdSW4ZN3DzbNUK4BLV7hOVZRStVIe9MkXNtnUhAcIPeEIYeshloz5bwu
-         IANF26vuHPdCB+o/XARjfVwKTAHTvrvmcH41BfbW7ZdV68InWVMq68x5z3mls5qKHjaa
-         YlLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ojlGOBCpkisLhdBLZc5xu5fbD3iLbV6lB886LLnQg1w=;
-        b=Tj/v412+JPjDGboqsIb0odOZzmi07O8F+WKSNVQe3v1UcCKN3/Gi2rP6NW2IL0FUJ7
-         59oMRoiWUCX1dTGdlXjjn18wsnVDuSJgm+RZsbjPWXaiSAjETDasfazIfICiT2u6nCMP
-         qavYfFPYs7VzdyJDIbXxpEwhorGqBD2uVrGXUO0hn0sGaW5LEmX53mjJHkAwEAlV+BHt
-         lWqsgsFHs1otjHDnstSXnykxz6Z+nRPZf0bdu/k0nifDv0Ro95yStAWRSybiOVkk8PKA
-         C+ZJq743X4bcfOe0Tu7ZHFax5dmC5nj2MuzxSrbC2hCH29CxPXJ0LP6WajmY705449CW
-         58BA==
-X-Gm-Message-State: AOAM532Fc6PJtldvPIXkeexZMCPnUFsNo8ijToyO57Wrlmp5C/5WEQOU
-        BbYa2FqdqS3R5asX5H746B/EHwh5hSs=
-X-Google-Smtp-Source: ABdhPJwwrP/iB1n7B9SUctoDqawFOEMzLHfDXlG7K8RA7Xk3mMBBmsfD0iJsfYwuW2CGYhvrNWG+xA==
-X-Received: by 2002:a17:906:24db:b0:6f3:a29f:95dc with SMTP id f27-20020a17090624db00b006f3a29f95dcmr4979024ejb.520.1652455617555;
-        Fri, 13 May 2022 08:26:57 -0700 (PDT)
-Received: from 127.0.0.1localhost ([185.69.144.161])
-        by smtp.gmail.com with ESMTPSA id j13-20020a508a8d000000b0042617ba63cbsm1015351edj.85.2022.05.13.08.26.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 08:26:57 -0700 (PDT)
-From:   Pavel Begunkov <asml.silence@gmail.com>
-To:     netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-kernel@vger.kernel.org,
-        Pavel Begunkov <asml.silence@gmail.com>
-Subject: [PATCH net-next v3 10/10] ipv6: clean up ip6_setup_cork
-Date:   Fri, 13 May 2022 16:26:15 +0100
-Message-Id: <b1847becb141a0c57ca9d8267fab88a41895273b.1652368648.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <cover.1652368648.git.asml.silence@gmail.com>
-References: <cover.1652368648.git.asml.silence@gmail.com>
+        Fri, 13 May 2022 11:26:23 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6807215803
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:26:22 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0AB9A113E;
+        Fri, 13 May 2022 08:26:22 -0700 (PDT)
+Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3D19A3F73D;
+        Fri, 13 May 2022 08:26:19 -0700 (PDT)
+Date:   Fri, 13 May 2022 16:26:16 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Tong Tiangen <tongtiangen@huawei.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Xie XiuQi <xiexiuqi@huawei.com>,
+        Guohanjun <guohanjun@huawei.com>
+Subject: Re: [PATCH -next v4 3/7] arm64: add support for machine check error
+ safe
+Message-ID: <Yn54mA7KnlAs1dER@lakrids>
+References: <20220420030418.3189040-1-tongtiangen@huawei.com>
+ <20220420030418.3189040-4-tongtiangen@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220420030418.3189040-4-tongtiangen@huawei.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Do a bit of refactoring for ip6_setup_cork(). Cache a xfrm_dst_path()
-result to not call it twice, reshuffle ifs to not repeat some parts
-twice and so.
+On Wed, Apr 20, 2022 at 03:04:14AM +0000, Tong Tiangen wrote:
+> During the processing of arm64 kernel hardware memory errors(do_sea()), if
+> the errors is consumed in the kernel, the current processing is panic.
+> However, it is not optimal.
+> 
+> Take uaccess for example, if the uaccess operation fails due to memory
+> error, only the user process will be affected, kill the user process
+> and isolate the user page with hardware memory errors is a better choice.
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- net/ipv6/ip6_output.c | 30 +++++++++++++-----------------
- 1 file changed, 13 insertions(+), 17 deletions(-)
+Conceptually, I'm fine with the idea of constraining what we do for a
+true uaccess, but I don't like the implementation of this at all, and I
+think we first need to clean up the arm64 extable usage to clearly
+distinguish a uaccess from another access.
 
-diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
-index 6ee44c509485..61dfe3eca773 100644
---- a/net/ipv6/ip6_output.c
-+++ b/net/ipv6/ip6_output.c
-@@ -1359,15 +1359,13 @@ static int ip6_setup_cork(struct sock *sk, struct inet_cork_full *cork,
- 	struct ipv6_pinfo *np = inet6_sk(sk);
- 	unsigned int mtu;
- 	struct ipv6_txoptions *nopt, *opt = ipc6->opt;
-+	struct dst_entry *xrfm_dst;
- 
- 	/* callers pass dst together with a reference, set it first so
- 	 * ip6_cork_release() can put it down even in case of an error.
- 	 */
- 	cork->base.dst = &rt->dst;
- 
--	/*
--	 * setup for corking
--	 */
- 	if (opt) {
- 		if (WARN_ON(v6_cork->opt))
- 			return -EINVAL;
-@@ -1400,28 +1398,26 @@ static int ip6_setup_cork(struct sock *sk, struct inet_cork_full *cork,
- 	}
- 	v6_cork->hop_limit = ipc6->hlimit;
- 	v6_cork->tclass = ipc6->tclass;
--	if (rt->dst.flags & DST_XFRM_TUNNEL)
--		mtu = np->pmtudisc >= IPV6_PMTUDISC_PROBE ?
--		      READ_ONCE(rt->dst.dev->mtu) : dst_mtu(&rt->dst);
-+
-+	xrfm_dst = xfrm_dst_path(&rt->dst);
-+	if (dst_allfrag(xrfm_dst))
-+		cork->base.flags |= IPCORK_ALLFRAG;
-+
-+	if (np->pmtudisc < IPV6_PMTUDISC_PROBE)
-+		mtu = dst_mtu(rt->dst.flags & DST_XFRM_TUNNEL ? &rt->dst : xrfm_dst);
- 	else
--		mtu = np->pmtudisc >= IPV6_PMTUDISC_PROBE ?
--			READ_ONCE(rt->dst.dev->mtu) : dst_mtu(xfrm_dst_path(&rt->dst));
--	if (np->frag_size < mtu) {
--		if (np->frag_size)
--			mtu = np->frag_size;
--	}
-+		mtu = READ_ONCE(rt->dst.dev->mtu);
-+
-+	if (np->frag_size < mtu && np->frag_size)
-+		mtu = np->frag_size;
-+
- 	cork->base.fragsize = mtu;
- 	cork->base.gso_size = ipc6->gso_size;
- 	cork->base.tx_flags = 0;
- 	cork->base.mark = ipc6->sockc.mark;
- 	sock_tx_timestamp(sk, ipc6->sockc.tsflags, &cork->base.tx_flags);
--
--	if (dst_allfrag(xfrm_dst_path(&rt->dst)))
--		cork->base.flags |= IPCORK_ALLFRAG;
- 	cork->base.length = 0;
--
- 	cork->base.transmit_time = ipc6->sockc.transmit_time;
--
- 	return 0;
- }
- 
--- 
-2.36.0
+> This patch only enable machine error check framework, it add exception
+> fixup before kernel panic in do_sea() and only limit the consumption of
+> hardware memory errors in kernel mode triggered by user mode processes.
+> If fixup successful, panic can be avoided.
+> 
+> Consistent with PPC/x86, it is implemented by CONFIG_ARCH_HAS_COPY_MC.
+> 
+> Also add copy_mc_to_user() in include/linux/uaccess.h, this helper is
+> called when CONFIG_ARCH_HAS_COPOY_MC is open.
+> 
+> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
+> ---
+>  arch/arm64/Kconfig               |  1 +
+>  arch/arm64/include/asm/extable.h |  1 +
+>  arch/arm64/mm/extable.c          | 17 +++++++++++++++++
+>  arch/arm64/mm/fault.c            | 27 ++++++++++++++++++++++++++-
+>  include/linux/uaccess.h          |  9 +++++++++
+>  5 files changed, 54 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index d9325dd95eba..012e38309955 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -19,6 +19,7 @@ config ARM64
+>  	select ARCH_ENABLE_SPLIT_PMD_PTLOCK if PGTABLE_LEVELS > 2
+>  	select ARCH_ENABLE_THP_MIGRATION if TRANSPARENT_HUGEPAGE
+>  	select ARCH_HAS_CACHE_LINE_SIZE
+> +	select ARCH_HAS_COPY_MC if ACPI_APEI_GHES
+>  	select ARCH_HAS_CURRENT_STACK_POINTER
+>  	select ARCH_HAS_DEBUG_VIRTUAL
+>  	select ARCH_HAS_DEBUG_VM_PGTABLE
+> diff --git a/arch/arm64/include/asm/extable.h b/arch/arm64/include/asm/extable.h
+> index 72b0e71cc3de..f80ebd0addfd 100644
+> --- a/arch/arm64/include/asm/extable.h
+> +++ b/arch/arm64/include/asm/extable.h
+> @@ -46,4 +46,5 @@ bool ex_handler_bpf(const struct exception_table_entry *ex,
+>  #endif /* !CONFIG_BPF_JIT */
+>  
+>  bool fixup_exception(struct pt_regs *regs);
+> +bool fixup_exception_mc(struct pt_regs *regs);
+>  #endif
+> diff --git a/arch/arm64/mm/extable.c b/arch/arm64/mm/extable.c
+> index 489455309695..4f0083a550d4 100644
+> --- a/arch/arm64/mm/extable.c
+> +++ b/arch/arm64/mm/extable.c
+> @@ -9,6 +9,7 @@
+>  
+>  #include <asm/asm-extable.h>
+>  #include <asm/ptrace.h>
+> +#include <asm/esr.h>
+>  
+>  static inline unsigned long
+>  get_ex_fixup(const struct exception_table_entry *ex)
+> @@ -84,3 +85,19 @@ bool fixup_exception(struct pt_regs *regs)
+>  
+>  	BUG();
+>  }
+> +
+> +bool fixup_exception_mc(struct pt_regs *regs)
+> +{
+> +	const struct exception_table_entry *ex;
+> +
+> +	ex = search_exception_tables(instruction_pointer(regs));
+> +	if (!ex)
+> +		return false;
+> +
+> +	/*
+> +	 * This is not complete, More Machine check safe extable type can
+> +	 * be processed here.
+> +	 */
+> +
+> +	return false;
+> +}
 
+This is at best misnamed; It doesn't actually apply the fixup, it just
+searches for one.
+
+> diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
+> index 77341b160aca..a9e6fb1999d1 100644
+> --- a/arch/arm64/mm/fault.c
+> +++ b/arch/arm64/mm/fault.c
+> @@ -695,6 +695,29 @@ static int do_bad(unsigned long far, unsigned int esr, struct pt_regs *regs)
+>  	return 1; /* "fault" */
+>  }
+>  
+> +static bool arm64_do_kernel_sea(unsigned long addr, unsigned int esr,
+> +				     struct pt_regs *regs, int sig, int code)
+> +{
+> +	if (!IS_ENABLED(CONFIG_ARCH_HAS_COPY_MC))
+> +		return false;
+> +
+> +	if (user_mode(regs) || !current->mm)
+> +		return false;
+> +
+> +	if (apei_claim_sea(regs) < 0)
+> +		return false;
+> +
+> +	if (!fixup_exception_mc(regs))
+> +		return false;
+> +
+> +	set_thread_esr(0, esr);
+> +
+> +	arm64_force_sig_fault(sig, code, addr,
+> +		"Uncorrected hardware memory error in kernel-access\n");
+> +
+> +	return true;
+> +}
+> +
+>  static int do_sea(unsigned long far, unsigned int esr, struct pt_regs *regs)
+>  {
+>  	const struct fault_info *inf;
+> @@ -720,7 +743,9 @@ static int do_sea(unsigned long far, unsigned int esr, struct pt_regs *regs)
+>  		 */
+>  		siaddr  = untagged_addr(far);
+>  	}
+> -	arm64_notify_die(inf->name, regs, inf->sig, inf->code, siaddr, esr);
+> +
+> +	if (!arm64_do_kernel_sea(siaddr, esr, regs, inf->sig, inf->code))
+> +		arm64_notify_die(inf->name, regs, inf->sig, inf->code, siaddr, esr);
+>  
+>  	return 0;
+>  }
+> diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
+> index 546179418ffa..884661b29c17 100644
+> --- a/include/linux/uaccess.h
+> +++ b/include/linux/uaccess.h
+> @@ -174,6 +174,15 @@ copy_mc_to_kernel(void *dst, const void *src, size_t cnt)
+>  }
+>  #endif
+>  
+> +#ifndef copy_mc_to_user
+> +static inline unsigned long __must_check
+> +copy_mc_to_user(void *dst, const void *src, size_t cnt)
+> +{
+> +	check_object_size(src, cnt, true);
+> +	return raw_copy_to_user(dst, src, cnt);
+> +}
+> +#endif
+
+Why do we need a special copy_mc_to_user() ?
+
+Why are we not making *every* true uaccess recoverable? That way the
+regular copy_to_user() would just work.
+
+Thanks,
+Mark.

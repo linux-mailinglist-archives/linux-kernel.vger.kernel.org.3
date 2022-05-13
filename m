@@ -2,109 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65047525D4D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 10:24:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F02525D1E
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 10:24:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378142AbiEMIRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 04:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42940 "EHLO
+        id S1378087AbiEMITa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 04:19:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378134AbiEMIRC (ORCPT
+        with ESMTP id S236562AbiEMIT1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 04:17:02 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77563A1A1
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:17:00 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id m1so10355249wrb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:17:00 -0700 (PDT)
+        Fri, 13 May 2022 04:19:27 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C587124A3AE;
+        Fri, 13 May 2022 01:19:26 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id x12so6850932pgj.7;
+        Fri, 13 May 2022 01:19:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=E7D8l5bVzLOBk8glw4ZVZyTSYXIEv02i6LMHubHx3+c=;
-        b=BMpOYKIbjITGMPDLK4+XF/wtpBD5jNYwfjCRy8yHy1ozHKyeuJbU6kQvZAAKu6hj8z
-         oMegYQIy+i7PSLhuuzBlE+38Gsw/tsu6NkGhyJI3s7Ye0V+5JeOZsr9rFylGqQsD1/ro
-         lWuv+SjRLWQQvrMCMsD520k7jjNKqdAuzrhlYyGXDMLEZ9abzF8IL6IGLArUiarQBuSq
-         dKQ797Q696/3udZ6UZnXmKBhwjzV3tO+n3LiT7MnHzp6HY+61h1nktKZ6V7Heq1H80xI
-         hAmMMoB6QBLBzHh7QM4j9bUtFceOPR9O3mLB1Wmk+9VZEq85peGrrzc9lUEgec3TKFsO
-         VbRw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RaQ5jvW6YG9/p/J8NZH/KLIdrjG8pPYolCrBm6XpevI=;
+        b=D/nTX6BNaeFx4jDxa+jNPvYO7SKQvXMsFZZNBS3EAMvaavNn6X5x4UnUTzaJTOdh7U
+         J39kqYUSjyRtRBntoLQRrxZDPvimQKikfF2WY8PA0k8WpyhBTXcCcFyrRlKVdAyoiQhg
+         tzc64Qcp4uVC59ep+dN7ZeAuPqaa5GK8dHUBeVNGhKzi7CrLMvcumknYRP6AJa1yEJYn
+         RaHBs05HFVR38tbGRxyj9i8Sk9TOogu0VSnWLvS2KjrLtu6ygx/pZpenl8taoNLiltEh
+         pzU5nL6wo7+JnbTkgM5QaNWKhdPsJeF53xGwLms4dJ8qLcvx9+k1kSJce6rukWeww0f6
+         wqRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=E7D8l5bVzLOBk8glw4ZVZyTSYXIEv02i6LMHubHx3+c=;
-        b=RDUO+NB6K4jUpmEIaV0IJR2D7TKVdeATarAsOPDfBtAU66w49E3B7rmYCCzYxfd60h
-         fsE2RLrcvcm35VbDvUOLdmIIXzuGppRc83UatAQKWb+JWwBDp23gsp0qXtV5mwOLnhgg
-         jtGUByhcGLg8PQiqVCoI8dinaB14fuyW4xGAVe0qzH1y8wasNADb26yI+nMFIuS/O5Kf
-         GSLsJ0YyizHKEHmotx4QuysZfvk9ldlAtIEXAMIH3tRL4KEzvbsyWMhawcEP1pyU/RAO
-         aDHY1URPNARgMCSACuRIcHaBAE3Xu/dXOUQSXT6WM2pVMAat4YmHsyAr7afVZBx6oT1Z
-         Xemw==
-X-Gm-Message-State: AOAM532SOc7vIXdyLqRtgxUeIx4r7BX5RjAdSpugeM4gjQYJahYiGTvH
-        fb6oTPL/nkXHdAvJ84u4NUCjXK8Xfya9ELBA
-X-Google-Smtp-Source: ABdhPJzRH+K5Zq0s4HK/uVoQ35ZSyLWacT5PSl/3qhGFUDklo2MdHx4nnrs5uXgifP6P4+MOjKc4ug==
-X-Received: by 2002:a5d:45d0:0:b0:20c:b378:c492 with SMTP id b16-20020a5d45d0000000b0020cb378c492mr2960743wrs.188.1652429819296;
-        Fri, 13 May 2022 01:16:59 -0700 (PDT)
-Received: from [192.168.0.168] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id bh8-20020a05600c3d0800b003942a244f45sm5084637wmb.30.2022.05.13.01.16.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 01:16:58 -0700 (PDT)
-Message-ID: <dce77726-460d-1b85-0c96-e8148751e261@linaro.org>
-Date:   Fri, 13 May 2022 10:16:57 +0200
+        bh=RaQ5jvW6YG9/p/J8NZH/KLIdrjG8pPYolCrBm6XpevI=;
+        b=4ViOYdPRMMb7MABouPTAbWsMY7mvRrTPnpiFa1aisTtbeZYa8bIzHZtXVJZeN/WRHI
+         zkOt55a1/8xLzrY4sZdlCCTAIpb/BEVxWn6FrXeANQkzE0wMOp9+bwwFJqpBtytJmgmy
+         uNs+O0rZ/Z5HOasTbzBlcyaZTT5j88jzkKEeqFiHNZzP73l8p9um8ZECmRHQxG8mIFf3
+         GhbLQ4jtFZl7/mUioO+LtOYHJXNLBbl/QDhbDo16Kzbwm1+8ggCC1c/43l9liXVb0Zux
+         vaitisN4L4djFlXUl2lv4JaZMtbmXDtR0e+sQ+q0PKJdR4ZOuRC1rZf1vITNTT8QjkAH
+         bpkg==
+X-Gm-Message-State: AOAM532BUs/6b+yVuGLsdEH2RrGUF2DvA7H5p/giRwYpEG+zqUvfVogo
+        H2/U6Ie9az4CKKBwJFFacTrhJ6Korhc=
+X-Google-Smtp-Source: ABdhPJwDSuH4iMDTVlh0jdDJhW+bqQYFnu5TU3kd6VVMvfF1+37+b3Ka/UjqUMMwG+t5Ow/wf1+ciw==
+X-Received: by 2002:a05:6a00:228c:b0:50e:17ba:9f84 with SMTP id f12-20020a056a00228c00b0050e17ba9f84mr3329378pfe.62.1652429966304;
+        Fri, 13 May 2022 01:19:26 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id o22-20020a17090ac09600b001d9acbc3b4esm1020312pjs.47.2022.05.13.01.19.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 01:19:26 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     sgoutham@marvell.com
+Cc:     gakula@marvell.com, sbhatta@marvell.com, hkelam@marvell.com,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] octeontx2-pf: Remove unnecessary synchronize_irq() before free_irq()
+Date:   Fri, 13 May 2022 08:19:18 +0000
+Message-Id: <20220513081918.1631351-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 1/5] dt-bindings: proximity: vl53l0x: Document optional
- supply and GPIO properties
-Content-Language: en-US
-To:     Markuss Broks <markuss.broks@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Song Qiang <songqiang1304521@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20220511214718.50879-1-markuss.broks@gmail.com>
- <20220511214718.50879-2-markuss.broks@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220511214718.50879-2-markuss.broks@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/05/2022 23:47, Markuss Broks wrote:
-> This patch adds the optional properties for the VL53L0X ToF sensor to the
-> device-tree binding.
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-No "this patch":
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+Calling synchronize_irq() right before free_irq() is quite useless. On one
+hand the IRQ can easily fire again before free_irq() is entered, on the
+other hand free_irq() itself calls synchronize_irq() internally (in a race
+condition free way), before any state associated with the IRQ is freed.
 
-> 
-> Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
-> ---
->  .../devicetree/bindings/iio/proximity/st,vl53l0x.yaml        | 5 +++++
->  1 file changed, 5 insertions(+)
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+index 2b204c1c23de..4fad951b94df 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+@@ -1718,7 +1718,6 @@ int otx2_open(struct net_device *netdev)
+ 	vec = pci_irq_vector(pf->pdev,
+ 			     pf->hw.nix_msixoff + NIX_LF_QINT_VEC_START);
+ 	otx2_write64(pf, NIX_LF_QINTX_ENA_W1C(0), BIT_ULL(0));
+-	synchronize_irq(vec);
+ 	free_irq(vec, pf);
+ err_disable_napi:
+ 	otx2_disable_napi(pf);
+@@ -1762,7 +1761,6 @@ int otx2_stop(struct net_device *netdev)
+ 	vec = pci_irq_vector(pf->pdev,
+ 			     pf->hw.nix_msixoff + NIX_LF_QINT_VEC_START);
+ 	otx2_write64(pf, NIX_LF_QINTX_ENA_W1C(0), BIT_ULL(0));
+-	synchronize_irq(vec);
+ 	free_irq(vec, pf);
+ 
+ 	/* Cleanup CQ NAPI and IRQ */
+--
+2.25.1
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof

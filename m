@@ -2,84 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5F0526273
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 14:58:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E2D526279
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 14:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380488AbiEMM6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 08:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46700 "EHLO
+        id S1380493AbiEMM7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 08:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380481AbiEMM6B (ORCPT
+        with ESMTP id S1350313AbiEMM7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 08:58:01 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9369B19F
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 05:57:58 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id d5so11357848wrb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 05:57:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=cU4ZtNl2vEtEVH/Lak30VWKkW5zSu+7jhI7ooziHVxo=;
-        b=hY7RshcVZtZ0WoJs33dta6NDd8NbGGJgoY7ZVCt1MeX0kX/Xj3Lur613Or1JybyFNm
-         1HZ68gzAyuZJ8HOhwzUYP2bCfyxQ3UjhIhkwG50UoTionya9gp2Lp4+3JXKF5s9OXTad
-         rtkkhgzPeqz0KXuiSklUoKWKV7iFh885UjegJnXpUGHMq0GfXN1SzZwNVOCpUZQvmUAl
-         wZVv/mwulIFZpoVx+IaJq/yTsvsiD6UHDTj6qw8PTVLML5IPn0FdBM9nRLhQC9e2aKAB
-         /u01OAXzCFlE6Lf25zxbalQ7Q0ZuFUrf1H9RfwLN2zlEoQ/ShPfPWcIgEmgvSF9B8Pws
-         Vwrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cU4ZtNl2vEtEVH/Lak30VWKkW5zSu+7jhI7ooziHVxo=;
-        b=cLc6+gKetmvhTIwI3TILpMJurYp8kT4vJ53eXSM5wtwhe3UuFhcRQBZs5UND3suwFt
-         ioYiceSqNGyZnBikAIkC8pVRrUkLSruD+UKfEMocVSVPbHdHZgcLKRZlYsNZvcwkS9zh
-         OIdX1ZHSxLanANmuQ4jK3Q8LczQSzxQffBikZOirDbsFZaeLos+kEkb9ro0dUResIBkl
-         W3my14AJeqrdA7zHQ6VvtsHcpv69FrDFwkuLGdcf22K1aZ9vqQB9cYk3qvnRwVBMs1fq
-         z6q342/2CKS/AY27CmHNlkrnLPiuPetFky4GwuMs209XSE0M4VVO2lmbX3LG+qGGi9rg
-         2Vew==
-X-Gm-Message-State: AOAM5300FiLixP/FeOlBVOZH466/nWkDgGZmF+2nqPqeSuOdUCA3E/nd
-        uq4EMTraW42rjNAiVD+Lu5VzXw==
-X-Google-Smtp-Source: ABdhPJzDRMdFOUy5RI8IXI6VfHQuWSfZtMpfsZMkCc8yuVYUOfKov2JEFDGTvRzp8Wcd+aX5lCvZjQ==
-X-Received: by 2002:a5d:5012:0:b0:20a:d9a9:44dc with SMTP id e18-20020a5d5012000000b0020ad9a944dcmr3858584wrt.627.1652446677102;
-        Fri, 13 May 2022 05:57:57 -0700 (PDT)
-Received: from [192.168.0.172] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id d11-20020adfa34b000000b0020c86a9f33bsm2731239wrb.18.2022.05.13.05.57.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 05:57:56 -0700 (PDT)
-Message-ID: <8f0d4127-7e66-cf50-21c9-99680f737e30@linaro.org>
-Date:   Fri, 13 May 2022 14:57:55 +0200
+        Fri, 13 May 2022 08:59:45 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8AB9B1A0;
+        Fri, 13 May 2022 05:59:44 -0700 (PDT)
+Received: from mail-yw1-f176.google.com ([209.85.128.176]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MOzGc-1nQ7LG255Y-00PO9u; Fri, 13 May 2022 14:59:42 +0200
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2f83983782fso89329807b3.6;
+        Fri, 13 May 2022 05:59:42 -0700 (PDT)
+X-Gm-Message-State: AOAM533ugw1vXDnFh1qGExbIEyR+Jg9QOQXm8TfspTOepPSqmivxzwtU
+        VHrOLwMlrf7XfQ89Th6o8BCa6uETB3KQ6XXqfTo=
+X-Google-Smtp-Source: ABdhPJwYgUxxwmOQBskkgrSY98ay2sDS+relT7TQw7BSt1pRcJYA5LmibAoQ6URJ51h0bdNcPeYCvyzSc/JJjPUle9M=
+X-Received: by 2002:a0d:cd06:0:b0:2f8:f39c:4cfc with SMTP id
+ p6-20020a0dcd06000000b002f8f39c4cfcmr5470076ywd.495.1652446781234; Fri, 13
+ May 2022 05:59:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 2/3] dt-bindings: usb: atmel: Add Microchip LAN966x
- compatible string
-Content-Language: en-US
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20220513105850.310375-1-herve.codina@bootlin.com>
- <20220513105850.310375-3-herve.codina@bootlin.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220513105850.310375-3-herve.codina@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220513064952.3610672-1-gerg@linux-m68k.org> <CAMuHMdVWRM7U9_SxbtDUE0a-sB5_PDiO2009Cu3QKMP3wNc=yw@mail.gmail.com>
+ <2532419a-812b-c2de-ef56-849ec7dc16bc@linux-m68k.org>
+In-Reply-To: <2532419a-812b-c2de-ef56-849ec7dc16bc@linux-m68k.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 13 May 2022 14:59:24 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3RuOTidFpW7diHekJ6POV20SBb5PhSF943Ju1xAtOxNw@mail.gmail.com>
+Message-ID: <CAK8P3a3RuOTidFpW7diHekJ6POV20SBb5PhSF943Ju1xAtOxNw@mail.gmail.com>
+Subject: Re: [PATCH] m68knommu: fix undefined reference to `mach_get_rtc_pll'
+To:     Greg Ungerer <gerg@linux-m68k.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Linux/m68k" <linux-m68k@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:ojNKheXrGo0PVLfpCW4RkjBA3RA0otnmOfR40UZjp6IBeVMQBY7
+ 0yA8w4l9Xp444yabuT9q2lQzgTFEJyG9Egyu8mmthskbOgMqnTAt+9xyg4LVSwes7a+oTC5
+ wxKuySmqKy84b2GoVnzauhNblpPNNbRX495Jl/EPP22Biz9weDpuJpx5O6BSnghUgdPJYxZ
+ I9EdSONgYMwmTaPgl7NKQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:dn9NnXkhSC0=:rDLp5BdeTdajLI0gsH49Pn
+ VeeoyZM4/KwPdFzXfvfzUl2qh2ppKD/RaWXkbYDcePZBC2cUFlfmqcq+NZ/t1bK27sudnh/0d
+ ZKK+kWh9Ye042b9mq5IbEdcNzfVL6mZih5EMolx9qQceibZ3+y75JA6CcjriOXSTsS5Ze6ftb
+ T3cJU687MpiLHqSLc2+T+y1WzD8upPuzK210OVeySo1btrL7nHPc8oYmxKtdFeVLTJAY1ztlT
+ aCgP0UlN1eC8Xm/PFrK8p4kHMND16eUZGm755/ekwKnhsLrqHlMhCy4yMVzMhucT2MwKGof8Q
+ zhoPxmFtfrSzkWtjH+DwC8VbTOzBGFBgBmcGVH8ebiaidwBa05VPVzwHr6y5BfbexqIGRKqaS
+ yxHWCo4E3TVNRlFadnaANKJBtoz6eMPW8NLLy9J5gcgI9Euz3x7ha7BOyIbT2s8CaynF70Tg+
+ oqOegRm/VUUdwm+GBtygoJDnTrsP0FyFryWjOSsGzhNB38WRITxgG/Lj2Hu/F9mHOe8UOLlkU
+ gpXXAQNjdnTdGihlnkhrDHF6ejIVJj18RSh70hCu04srPecovLe8wL4s/hVvJF5iN3v7DcKX7
+ 4gEqWZmFeyYG+z8pmeb+CdjAAsk1PA9IpGWYE2qLFIH9yLox912Rstwa21+bqDXdGTkX+eJSP
+ FXI0I02tsKlJ6du5g1WTGZ50W0lqqDGnHqf3JnvYARegU9Ocf8XJIeXOG3uqt6Wm0/7Q=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,31 +66,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/05/2022 12:58, Herve Codina wrote:
-> The USB device controller available in the Microchip LAN966x SOC
-> is the same IP as the one present in the SAMA5D3 SOC.
-> 
-> Add the LAN966x compatible string and set the SAMA5D3 compatible
-> string as a fallback for the LAN966x.
-> 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> ---
->  Documentation/devicetree/bindings/usb/atmel-usb.txt | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/atmel-usb.txt b/Documentation/devicetree/bindings/usb/atmel-usb.txt
-> index f512f0290728..a6fab7d63f37 100644
-> --- a/Documentation/devicetree/bindings/usb/atmel-usb.txt
-> +++ b/Documentation/devicetree/bindings/usb/atmel-usb.txt
-> @@ -87,6 +87,9 @@ Required properties:
->  	       "atmel,at91sam9g45-udc"
->  	       "atmel,sama5d3-udc"
->  	       "microchip,sam9x60-udc"
-> +	       "microchip,lan996x-udc"
+On Fri, May 13, 2022 at 2:25 PM Greg Ungerer <gerg@linux-m68k.org> wrote:
+> On 13/5/22 17:12, Geert Uytterhoeven wrote:
+> > read_persistent_clock64() uses mach_hwclk(), which is provided by
+> > both setup_mm.c and setup_no.c, so it's always available?> Albeit not populated by coldfire or nommu platform code, so I see
+> > the point in depending on MMU (no nommu Amiga support yet ;-).
+>
+> Yes, exactly. And even worse is that on ColdFire platforms it
+> is never set, so will be the startup value of NULL. It is called
+> without checking for NULL in both of rtc_generic_get_time() and
+> rtc_generic_set_time().
 
-No wildcards please, especially that it closely fits previous wildcard
-(lan996x includes lan9960 which looks a lot like sam9x60...)
+I think that's ok because rtc_generic_{get,set}_time is only called
+from the rtc_generic driver, but that is not registered when mach_hwclk()
+is NULL.
 
+With your patch to add the CONFIG_MMU check, you can actually
+remove the mach_hwclk() symbol from setup_no.c, and move the
+remaining RTC related symbols from setup_mm.c into the #ifdef.
 
-Best regards,
-Krzysztof
+       Arnd

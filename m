@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D057F526692
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9EDB526694
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382273AbiEMPwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 11:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51482 "EHLO
+        id S1382289AbiEMPwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 11:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382265AbiEMPwQ (ORCPT
+        with ESMTP id S1382286AbiEMPwa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 11:52:16 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD59F1E15D6
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:52:15 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id m23so10819030ljc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:52:15 -0700 (PDT)
+        Fri, 13 May 2022 11:52:30 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37BE1F0183
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:52:23 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id t25so10784700ljd.6
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:52:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=openvz-org.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:from:subject:to:cc
          :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=EoRCzFgdqymU94vAV2iJ0vqJH+w1nYNzWrX56BJFK5A=;
-        b=PQ1JGa4uyb8yMkUdsAm4Nt9mj9ncphlDfrDvRbPZYFDeH2DUMyZv3Nlv4C2VVX83CM
-         2gEOM/vV0TlfADwx2QvGxXWHr9C/RM/onavTakiX8tERXNg9OdVBey51Na0iQnlbbstt
-         AoEaInLDNa2zgzydNcT5Sdn/QuQ5Qfdd6ibSZqOTOBpF+lKkDe0TwZp/wBz1z5HcLO5c
-         8zgAjxrQyB052eIvSU4BbLlZySBZrPpr932JWX+fT5bxyXWGAXGu9nx7mcdq6IqCF+VQ
-         TTBR8HK8sInoUF0IAVdMjhfQ9x5pXUm7gMllPun0H9v7ux2hEofCG7my4kvmA6sKYKGc
-         5EhQ==
+        bh=B97ovzBTCo6Rpt8pan1l5/t89Mv44hmEDRujwkHt9Ic=;
+        b=Gn8g+5fjv7e1DNvpLJ5tu50Zc48R9MGuaEXQSp7RNvhogmOV11JQQefjUfc1WAIjlK
+         dJ/Lin0vXk+AFC5NAEVYN2uyQ/gVoUsQbdGSNQXxKRCPgLwfFI/l9Bdy731b3hcb9sZ0
+         M9Y0mpjbO9Uy/K1xvNR9RdgPtgC2prB26Xi8anmhW3UIQ1yx1q2nGP5nymZuPcIO4zAl
+         d9HNvFH9D6xBd+fZ9EhSkrrOJCdp0ME9jdlh24Az1mJ3jeZXcyBhCoUXZDDqEuirAx5s
+         UJSJC4S+K2fYuUMqxdXQJbU8gdSPCbignrbxY+XB/Xjch9vQJ0hN6qZ0RIGgOcOB1QxS
+         TuPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:from
          :subject:to:cc:references:content-language:in-reply-to
          :content-transfer-encoding;
-        bh=EoRCzFgdqymU94vAV2iJ0vqJH+w1nYNzWrX56BJFK5A=;
-        b=JRDY8Iz0zUjF4x275A32jGNEQ4bCdWK/wC8Y8kjDA6ftuHLVQGjyMzUNvhaS2EEThY
-         vJ3Ezkh7o8OJcjMdorm9iKhkHUy6DSZZM468dc4ID1IB8X/O/K2KfuHEJy3h4xSgl1wS
-         65fY9o2md05G3wla5Yb8+lR9pCXzR3Zery90gKwFtcwf8dZxhXckZEM3oX96CNQ1ATGI
-         +6eJz2NGxN14R6v6kdyfc25oFZnE3VgLzNVoqRv/gZ75l9PlMN7YLvQirHo/NpD8z/Qj
-         LFS79/65jRyDFfrDGhODiu+RriPq+VQlAc/ATbJsnIpcDtUwHOokLkJ64O3BK6SZpxzg
-         vrUQ==
-X-Gm-Message-State: AOAM531hSwbWHgZKZem9sNGon08/EQv6A1C/5vucT7ih6DxyhEOnE+pM
-        8znjifIbGLNhMY7Az8kcT5ASOQ==
-X-Google-Smtp-Source: ABdhPJwsfGujpSQqtlAqQ86j3Dk+tCX7/tncyCU1pG/8MjVQ1z8dNsl8CEYDE9gBsEQQi6S/8WGTtw==
-X-Received: by 2002:a05:651c:1058:b0:250:d064:53d5 with SMTP id x24-20020a05651c105800b00250d06453d5mr3397509ljm.29.1652457133993;
-        Fri, 13 May 2022 08:52:13 -0700 (PDT)
+        bh=B97ovzBTCo6Rpt8pan1l5/t89Mv44hmEDRujwkHt9Ic=;
+        b=sTJNVh4rjv6gRTvAd4Cdvg6t8/99bk6ZWvqUnhxp+mfbhGuiofYpD4Dj5wtOiL0CTr
+         nTwOWHLvVhrHu+xNn84J+HPAJ3LUPA2nRoHLF1YzB47aCXEXvCI+BxcTnFWAy0lxmbP1
+         1hLYk0oX8N5ntoGSrzWZVFqNrhNLswLZSlE7MQgTLOcuAlKWtX4sE7kzOiqyk/0EtS9u
+         11FL9S47JusneJ9Q5uNKi+tG6ZkcAaR+mQuSz0vni7ezNIgCrbdbTD9fxQ3a/hT95z8Z
+         QS+tPKo1ndW0UOQUu65fs5xiv/p/65RXJSoVaDulZjEFV99HBC0CRR7UJ2aZvjWuGaL0
+         vbgg==
+X-Gm-Message-State: AOAM531+TFPgHOfXLjKO96OcbKq1T1LQ2UGniGSRcZgGxak73YP/OUU7
+        YxVKMpbjCdeWTqXu6qNkBRECog==
+X-Google-Smtp-Source: ABdhPJyBUY+emFFcq7o19hSvSlbPeDw+klHuHk2REYp1lLwANVqC7PgqaSFoQ9tA4IAQP6U1Mlbbeg==
+X-Received: by 2002:a2e:3217:0:b0:250:896d:f894 with SMTP id y23-20020a2e3217000000b00250896df894mr3436894ljy.283.1652457141899;
+        Fri, 13 May 2022 08:52:21 -0700 (PDT)
 Received: from [192.168.1.65] ([46.188.121.177])
-        by smtp.gmail.com with ESMTPSA id p15-20020a05651238cf00b0047255d2112csm419874lft.91.2022.05.13.08.52.13
+        by smtp.gmail.com with ESMTPSA id j17-20020a056512345100b0047255d21152sm418647lfr.129.2022.05.13.08.52.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 08:52:13 -0700 (PDT)
-Message-ID: <a17be77f-dc3b-d69a-16e2-f7309959c525@openvz.org>
-Date:   Fri, 13 May 2022 18:52:12 +0300
+        Fri, 13 May 2022 08:52:21 -0700 (PDT)
+Message-ID: <30f5b95a-db87-3924-6ad0-4c302c924ff0@openvz.org>
+Date:   Fri, 13 May 2022 18:52:20 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
 From:   Vasily Averin <vvs@openvz.org>
-Subject: [PATCH 3/4] memcg: enable accounting for struct cgroup
+Subject: [PATCH 4/4] memcg: enable accounting for allocations in
+ alloc_fair_sched_group
 To:     Roman Gushchin <roman.gushchin@linux.dev>,
         Shakeel Butt <shakeelb@google.com>,
         =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
@@ -77,30 +78,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Creating each new cgroup allocates 4Kb for struct cgroup. This is the
-largest memory allocation in this scenario and is epecially important
-for small VMs with 1-2 CPUs.
+Creating of each new cpu cgroup allocates two 512-bytes kernel objects
+per CPU. This is especially important for cgroups shared parent memory
+cgroup. In this scenario, on nodes with multiple processors, these
+allocations become one of the main memory consumers.
 
-Accounting of this memory helps to avoid misuse inside memcg-limited
-containers.
+Accounting for this memory helps to avoid misuse inside memcg-limited
+contianers.
 
 Signed-off-by: Vasily Averin <vvs@openvz.org>
 ---
- kernel/cgroup/cgroup.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/sched/fair.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index adb820e98f24..7595127c5b3a 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -5353,7 +5353,7 @@ static struct cgroup *cgroup_create(struct cgroup *parent, const char *name,
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index a68482d66535..46e66acf7475 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -11529,12 +11529,12 @@ int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
  
- 	/* allocate the cgroup and its ID, 0 is reserved for the root */
- 	cgrp = kzalloc(struct_size(cgrp, ancestor_ids, (level + 1)),
--		       GFP_KERNEL);
-+		       GFP_KERNEL_ACCOUNT);
- 	if (!cgrp)
- 		return ERR_PTR(-ENOMEM);
+ 	for_each_possible_cpu(i) {
+ 		cfs_rq = kzalloc_node(sizeof(struct cfs_rq),
+-				      GFP_KERNEL, cpu_to_node(i));
++				      GFP_KERNEL_ACCOUNT, cpu_to_node(i));
+ 		if (!cfs_rq)
+ 			goto err;
+ 
+ 		se = kzalloc_node(sizeof(struct sched_entity_stats),
+-				  GFP_KERNEL, cpu_to_node(i));
++				  GFP_KERNEL_ACCOUNT, cpu_to_node(i));
+ 		if (!se)
+ 			goto err_free_rq;
  
 -- 
 2.31.1

@@ -2,82 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1967A5259C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 04:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C833C5259C8
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 04:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376557AbiEMCli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 22:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49266 "EHLO
+        id S1376535AbiEMCnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 22:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376539AbiEMCl2 (ORCPT
+        with ESMTP id S1355770AbiEMCn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 22:41:28 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D6762BF8
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 19:41:26 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1652409684;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=4jjnk+QDL8cNXK+XlAhyOlRkhsLJfwm4AuVjS6SIBdU=;
-        b=s7h2HIaBh8pyCxOmw32WC4p867WDpAAzQVoO9w/UuKwaNvcveu357EU+wRJIrqXhGFRfkD
-        6GZBQcB2uVsqV/M0wkoVlZSErHbNuVu3AUx9vFAEDTbZLc9m0x30RBalLucoydCbO7aspp
-        VaGEUMPEvfqtbNDRMKPdTJ0gQsqox14=
-From:   Yajun Deng <yajun.deng@linux.dev>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org, Yajun Deng <yajun.deng@linux.dev>
-Subject: [PATCH] sched/deadline: Use proc_douintvec_minmax() limit minimum value
-Date:   Fri, 13 May 2022 10:41:09 +0800
-Message-Id: <20220513024109.648471-1-yajun.deng@linux.dev>
+        Thu, 12 May 2022 22:43:28 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0285A4EA2B
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 19:43:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652409807; x=1683945807;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=l3BCk6lW9ybCyFfKvlLTHJ6W4VLheEvqw3Z+jvigiF4=;
+  b=O+dvmgYNzL1fn7wMYPuIB8Y/Qjj96qJq7K83nE4WbD9fuexMeG1d4tvF
+   xn7L5aM965ktikCvLWfLx27P32l5audgduZIh/QdrmgarrYhUq2Qt4bVb
+   00PxiOrCVubqvdT0x16/cxi104w86/b9SZIsTu4xkliHrQJsp+kw6kwB5
+   KD+oBrcBGTtMgBogLyXZcETrCMOJJaO1oOWo3SfVNFv/H7h+T7KDpt5yx
+   UyKZ+pvJDWsGorgvIykrznaiQuVn8FiNj82KLkptmMmEDu0X7fS+S/xUD
+   h+E8z9fsfyrChuwsVdaRMAsswuFgn1wEcqJmlLGp2Ja4Ho6qgtmNXc0S3
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="270329513"
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="270329513"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 19:43:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="739975544"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 12 May 2022 19:43:25 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1npLH3-000LCu-9n;
+        Fri, 13 May 2022 02:43:25 +0000
+Date:   Fri, 13 May 2022 10:42:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nick Terrell <terrelln@fb.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: ERROR: modpost: "__st_r13_to_r18" [lib/zstd/zstd_decompress.ko]
+ undefined!
+Message-ID: <202205131059.nbXxnXaV-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-proc_dointvec() is not applicable for unsigned integer, use
-proc_douintvec_minmax() limit minimum value.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f3f19f939c11925dadd3f4776f99f8c278a7017b
+commit: 7416cdc9b9c10968c57b1f73be5d48b3ecdaf3c8 lib: zstd: Don't add -O3 to cflags
+date:   6 months ago
+config: arc-randconfig-r015-20220512 (https://download.01.org/0day-ci/archive/20220513/202205131059.nbXxnXaV-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7416cdc9b9c10968c57b1f73be5d48b3ecdaf3c8
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 7416cdc9b9c10968c57b1f73be5d48b3ecdaf3c8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
 
-Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
----
- kernel/sched/deadline.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index 85cd62e0dddd..4d2a780c6f73 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -30,14 +30,16 @@ static struct ctl_table sched_dl_sysctls[] = {
- 		.data           = &sysctl_sched_dl_period_max,
- 		.maxlen         = sizeof(unsigned int),
- 		.mode           = 0644,
--		.proc_handler   = proc_dointvec,
-+		.proc_handler   = proc_douintvec_minmax,
-+		.extra1         = (void *)&sysctl_sched_dl_period_min,
- 	},
- 	{
- 		.procname       = "sched_deadline_period_min_us",
- 		.data           = &sysctl_sched_dl_period_min,
- 		.maxlen         = sizeof(unsigned int),
- 		.mode           = 0644,
--		.proc_handler   = proc_dointvec,
-+		.proc_handler   = proc_douintvec_minmax,
-+		.extra2         = (void *)&sysctl_sched_dl_period_max,
- 	},
- 	{}
- };
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "__st_r13_to_r18" [lib/zstd/zstd_decompress.ko] undefined!
+>> ERROR: modpost: "__ld_r13_to_r18_ret" [lib/zstd/zstd_decompress.ko] undefined!
+>> ERROR: modpost: "__ld_r13_to_r24_ret" [lib/zstd/zstd_decompress.ko] undefined!
+>> ERROR: modpost: "__st_r13_to_r23" [lib/zstd/zstd_decompress.ko] undefined!
+>> ERROR: modpost: "__st_r13_to_r19" [lib/zstd/zstd_decompress.ko] undefined!
+>> ERROR: modpost: "__st_r13_to_r21" [lib/zstd/zstd_decompress.ko] undefined!
+>> ERROR: modpost: "__ld_r13_to_r17_ret" [lib/zstd/zstd_decompress.ko] undefined!
+>> ERROR: modpost: "__st_r13_to_r24" [lib/zstd/zstd_decompress.ko] undefined!
+ERROR: modpost: "__ld_r13_to_r19_ret" [lib/zstd/zstd_decompress.ko] undefined!
+>> ERROR: modpost: "__ld_r13_to_r21_ret" [lib/zstd/zstd_decompress.ko] undefined!
+WARNING: modpost: suppressed 2 unresolved symbol warnings because there were too many)
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

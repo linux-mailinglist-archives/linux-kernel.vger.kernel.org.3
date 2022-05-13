@@ -2,98 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2878C526700
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 18:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1221526771
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 18:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235440AbiEMQ0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 12:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
+        id S1382525AbiEMQuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 12:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235278AbiEMQ0h (ORCPT
+        with ESMTP id S1382499AbiEMQtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 12:26:37 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883DE95DC4;
-        Fri, 13 May 2022 09:26:36 -0700 (PDT)
-Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4L0DRm6bFTz689PV;
-        Sat, 14 May 2022 00:21:40 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 13 May 2022 18:26:34 +0200
-Received: from [10.47.25.226] (10.47.25.226) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 13 May
- 2022 17:26:33 +0100
-Message-ID: <b6e28614-e348-b490-bf33-af5810a60722@huawei.com>
-Date:   Fri, 13 May 2022 17:26:32 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 1/7] perf test: Skip reason for suites with 1 test
-To:     Ian Rogers <irogers@google.com>
-CC:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        "Namhyung Kim" <namhyung@kernel.org>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        "Sohaib Mohamed" <sohaib.amhmd@gmail.com>,
-        Carsten Haitzler <carsten.haitzler@arm.com>,
-        Marco Elver <elver@google.com>,
-        Michael Petlan <mpetlan@redhat.com>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>
-References: <20220513040519.1499333-1-irogers@google.com>
- <20220513040519.1499333-2-irogers@google.com>
- <6341384c-b3e6-fbe5-f29f-e0db114bd439@huawei.com>
- <CAP-5=fX+PfnyHRc=-sQMo1_mGLzCJ77pSfzXXHVUEOHtVFGwxA@mail.gmail.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <CAP-5=fX+PfnyHRc=-sQMo1_mGLzCJ77pSfzXXHVUEOHtVFGwxA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.25.226]
-X-ClientProxiedBy: lhreml748-chm.china.huawei.com (10.201.108.198) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        Fri, 13 May 2022 12:49:53 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D06F5253A;
+        Fri, 13 May 2022 09:49:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding;
+        bh=NvCnMoD1VRS7KuR1s8XjboWJmw16uDZZVShusd+cRvw=;
+        b=A6bNnd7DopDwizhUApfm3TqJ9SGswU5VVAdJj6n46JxYRGWtW8SPpo8fHGcdRYJ9+0nEl/XCpqA2k
+         yOrUNZzJeCckREiqeUrXmQ6Fs8uhOhbuL6Cx20Zjf/DjXSqOLLOrGoFxAb+j1bUvVF3VKRyfevUPx0
+         bepKtuh8aJy22VwW+VWyvFxtfIEGLwzznpWPvcNJfmH++NJjbgRduijgafZTiqwkmB4LuEHL3e1q/W
+         45y5LqIFpYz9xeBT0rUsgHS/pZMoDO83OA6p85gmjXGfNtEKSE1IpP6D0jN4ZeP/gfL6MC5n0AUpiW
+         S9Lt0yBdNlC3fwVI6V4m5z0Klv4TOkg==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000010,0.012140)], BW: [Enabled, t: (0.000014,0.000001)], RTDA: [Enabled, t: (0.068126), Hit: No, Details: v2.39.0; Id: 15.52k864.1g2v56gbd.36lgh; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from localhost.localdomain ([178.70.36.174])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Fri, 13 May 2022 19:49:27 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, Conor.Dooley@microchip.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        system@metrotek.ru, Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Subject: [PATCH v12 0/3] Microchip Polarfire FPGA manager
+Date:   Fri, 13 May 2022 19:27:52 +0300
+Message-Id: <20220513162755.16201-1-i.bornyakov@metrotek.ru>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/05/2022 16:42, Ian Rogers wrote:
->> I was not sure which suite has a single tastcase, so I experimented for
->> libpfm4 by deleting a testcase so it has only 1x remaining, I get:
->>
->> before your change:
->> john@localhost:~/acme/tools/perf> sudo ./perf test 63
->> 63: Test libpfm4 support : Skip
->>
->> after:
->>
->> john@localhost:~/acme/tools/perf> sudo ./perf test 63
->> 63: Test libpfm4 support : Skip (not compiled in)
->>
->> Although it is odd to have a single sub-test, is there a reason for
->> which we don't print its name? We print the name when there are multiple
->> sub-tests.
-> The reason was to replicate the existing "perf test" behavior before
-> the kunit style transition. The main place we get tests with a single
-> sub-test is from the DEFINE_SUITE macro:
-> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/tests/tests.h?h=perf/core#n67
-> I agree it looks kind of weird and was inheriting the data structures
-> from kunit and the format of the output from perf test.
+Add support to the FPGA manager for programming Microchip Polarfire
+FPGAs over slave SPI interface with .dat formatted bitsream image.
 
-Out of curiosity, which suite is this that you find only has a single 
-subtest? Does it possibly only have a single subtest as some others may 
-be compiled out?
+Changelog:
+  v1 -> v2: fix printk formating
+  v2 -> v3:
+   * replace "microsemi" with "microchip"
+   * replace prefix "microsemi_fpga_" with "mpf_"
+   * more sensible .compatible and .name strings
+   * remove unused defines STATUS_SPI_VIOLATION and STATUS_SPI_ERROR
+  v3 -> v4: fix unused variable warning
+    Put 'mpf_of_ids' definition under conditional compilation, so it
+    would not hang unused if CONFIG_OF is not enabled.
+  v4 -> v5:
+   * prefix defines with MPF_
+   * mdelay() -> usleep_range()
+   * formatting fixes
+   * add DT bindings doc
+   * rework fpga_manager_ops.write() to fpga_manager_ops.write_sg()
+     We can't parse image header in write_init() because image header
+     size is not known beforehand. Thus parsing need to be done in
+     fpga_manager_ops.write() callback, but fpga_manager_ops.write()
+     also need to be reenterable. On the other hand,
+     fpga_manager_ops.write_sg() is called once. Thus, rework usage of
+     write() callback to write_sg().
+  v5 -> v6: fix patch applying
+     I forgot to clean up unrelated local changes which lead to error on
+     patch 0001-fpga-microchip-spi-add-Microchip-MPF-FPGA-manager.patch
+     applying on vanilla kernel.
+  v6 -> v7: fix binding doc to pass dt_binding_check
+  v7 -> v8: another fix for dt_binding_check warning
+  v8 -> v9:
+   * add another patch to support bitstream offset in FPGA image buffer
+   * rework fpga_manager_ops.write_sg() back to fpga_manager_ops.write()
+   * move image header parsing from write() to write_init()
+  v9 -> v10:
+   * add parse_header() callback to fpga_manager_ops
+   * adjust fpga_mgr_write_init[_buf|_sg]() for parse_header() usage
+   * implement parse_header() in microchip-spi driver
+  v10 -> v11: include missing unaligned.h to microchip-spi
+     fix error: implicit declaration of function 'get_unaligned_le[16|32]'
+  v11 -> v12:
+   * microchip-spi: double read hw status, ignore first read, because it
+     can be unreliable.
+   * microchip-spi: remove sleep between status readings in
+     poll_status_not_busy() to save a few seconds. Status is polled on
+     every 16 byte writes - that is quite often, therefore
+     usleep_range() accumulate to a considerable number of seconds.
 
-Thanks,
-John
+Ivan Bornyakov (3):
+  fpga: fpga-mgr: support bitstream offset in image buffer
+  fpga: microchip-spi: add Microchip MPF FPGA manager
+  dt-bindings: fpga: add binding doc for microchip-spi fpga mgr
+
+ .../fpga/microchip,mpf-spi-fpga-mgr.yaml      |  44 +++
+ drivers/fpga/Kconfig                          |   9 +
+ drivers/fpga/Makefile                         |   1 +
+ drivers/fpga/fpga-mgr.c                       | 150 +++++--
+ drivers/fpga/microchip-spi.c                  | 371 ++++++++++++++++++
+ include/linux/fpga/fpga-mgr.h                 |  13 +-
+ 6 files changed, 552 insertions(+), 36 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+ create mode 100644 drivers/fpga/microchip-spi.c
+
+-- 
+2.35.1
+
+

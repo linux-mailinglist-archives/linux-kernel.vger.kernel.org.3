@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9285263E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 309FE526483
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376452AbiEMOYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:24:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38626 "EHLO
+        id S1381464AbiEMOb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358971AbiEMOYm (ORCPT
+        with ESMTP id S1380706AbiEMOZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:24:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE995E168;
-        Fri, 13 May 2022 07:24:34 -0700 (PDT)
+        Fri, 13 May 2022 10:25:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033B369724;
+        Fri, 13 May 2022 07:25:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CA4D62153;
-        Fri, 13 May 2022 14:24:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E621C34100;
-        Fri, 13 May 2022 14:24:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6EE4B83069;
+        Fri, 13 May 2022 14:25:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08F93C34115;
+        Fri, 13 May 2022 14:25:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652451872;
+        s=korg; t=1652451912;
         bh=QF88le2UwZdYFdKhakOikXNGtWetoJ79BBE9pUZFl9c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e6iB7bEktaQM5DqEAPMQ3Ex63pBzsKL5IDrHLYwj32tJU1MlW1RTdIZCNkpGbZm74
-         GtRBEYOm31C5wdQxAAky+tOFYF4tlHCf4SmCtqJzXP3QdJCekXkwvWdOHEHuYL5LAR
-         r1K2RqWt32UePPcGl/JH3j9hN6WU+WzBpxRC/pY8=
+        b=EIJaJNoxswNQXKnL11196r67pDXb7+JgRhCeJRqIlHeSz/sQfQSsEgjS6l7vmB/Qo
+         1uJjn5EREW92NM46AoYQJUd2CcKQf5swGnYjH7LRfwXY1t1mshAtry7vQW2Ftjfn0d
+         CewbncTbaKc9ZTvShOnsEEB3c3eb1TseGahSqofo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Andreas Larsson <andreas@gaisler.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 4.9 4/7] can: grcan: only use the NAPI poll budget for RX
-Date:   Fri, 13 May 2022 16:23:19 +0200
-Message-Id: <20220513142226.041910821@linuxfoundation.org>
+Subject: [PATCH 4.14 04/14] can: grcan: only use the NAPI poll budget for RX
+Date:   Fri, 13 May 2022 16:23:20 +0200
+Message-Id: <20220513142227.512055684@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220513142225.909697091@linuxfoundation.org>
-References: <20220513142225.909697091@linuxfoundation.org>
+In-Reply-To: <20220513142227.381154244@linuxfoundation.org>
+References: <20220513142227.381154244@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8

@@ -2,72 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FECA526CD6
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 00:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87938526CDA
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 00:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbiEMWNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 18:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55488 "EHLO
+        id S230268AbiEMWN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 18:13:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiEMWND (ORCPT
+        with ESMTP id S230330AbiEMWNW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 18:13:03 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E320C6EB1A
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 15:13:00 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id r1so17540350ybo.7
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 15:13:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hPXr8pV9dZF9B1BXNKQfXMsYbL4rZ6nKjrUwBZQ0KMo=;
-        b=DHMa15fitu2r/PPB1WyddaTAumAftS6vsCOF9zBC7o5tUDhku++ZAFZdAjLZqkR/4O
-         KX9pgu0nhyXarktf2F7egfxAdIkEjn1nrLIaAu1dscNjoQdsOaEbg9rlVjOSSR/9U+W7
-         fF9/0uIVsF1CKnclqxUFYK03LSRWHwMpuJQWV03jnnNCj8HLOTb8XQOC03TzlHXrd11e
-         Pvk0073QqoqJT4IY6nBATQGIfOg66LqbvK0hQ3wY6V9R2LkXW3Z7VSxjgZhcZbgicNTf
-         /YHRakDlnlyqJTFdMZcjl4omUdTi+VyA/ZkrWY28MxiBc5wnvSeUXOgDzGII6NX6XYlh
-         iOjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hPXr8pV9dZF9B1BXNKQfXMsYbL4rZ6nKjrUwBZQ0KMo=;
-        b=mEm1BeI9OLoErusn95byrr4+JyT89l+qCNG5Zo9/VOE5Ui5ikx3AUcMQvWxt9j70ee
-         udnEBHiVQGEWtGiYTW2XX6HZYfjBRPXFIH2AZCm7hdhgVp6O7iItSMcrOqqeV/4D/tg4
-         3pcdKFTqLOX++V+yREIwN/JJfG6G5jZqVuL+ow+RYyxWRDMYoJXIafp2mlTv1UYtV+9Z
-         XuQ7RxbobvRrXukAr2I7m1cxwcIoe1v4bekVCgdVFznP5FUzSZog9uii5o+EzjJPDI8r
-         1GkyQQtnMSf1pB5ptpNdEvmsk4EoA4VmhGypxeov8n2yYPZIV9bYt91u1+9kcv4EE/P1
-         e8kw==
-X-Gm-Message-State: AOAM533GCbzU/DyMj2vhVq53tlsHCWhKyOIT+xdhFLx3CW4EEJw0Lo0b
-        ldbaupDBd7PJ4TINPtj/uB7HmhZBJB2h6pOHkB6J7g==
-X-Google-Smtp-Source: ABdhPJwdDBtD5whluJHsM54nTP7gGqxuqR862sxqevyBOecVN1RSRe8qZZNMWPlXtgaeaFPIGj9+/FwhHzKHQLS55y0=
-X-Received: by 2002:a5b:302:0:b0:64b:a20a:fcd9 with SMTP id
- j2-20020a5b0302000000b0064ba20afcd9mr4121428ybp.492.1652479980153; Fri, 13
- May 2022 15:13:00 -0700 (PDT)
+        Fri, 13 May 2022 18:13:22 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6848587A3A
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 15:13:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652480001; x=1684016001;
+  h=subject:from:to:cc:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=tp29QKBC0TkkWxqN6GFsZPZItezTnUJxKUUuesmJmVE=;
+  b=nGpXkwV0OlfTT0ZpLuIrqROGanol54PsPM4vJbSL3VtP+hC0w4QVIZ37
+   bjTw5YV+wYErWEZZbKfQUXisFIISSuWp8+leG6/TFbFz35lkYFO0hSIT1
+   XF3PDcHbSHzSgQTtIZUnRf+QHzSld9sN5ij3kd/7INq9XGs38sg/djRPu
+   aiAwSsNQbLhN2Ts8MM2vKV7v8qCR+eQyBq14+TiTIEdYJdr5rbjPQeARc
+   x/uSfiSBgPe/EZHzaD/TPjp7e5MZaPIpyPpVMQh4KbdxgNEdp2Z6Y6hgV
+   VWDQKjQUln/k7J7hb2rF5TVu2ETef7HiE16lGP8T+Zn+uiSCq4dMJVHYc
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="250949612"
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="250949612"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 15:13:21 -0700
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="659299630"
+Received: from dwillia2-desk3.jf.intel.com (HELO dwillia2-desk3.amr.corp.intel.com) ([10.54.39.25])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 15:13:20 -0700
+Subject: [PATCH v10 7/7] pmem: implement pmem_recovery_write()
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jane Chu <jane.chu@oracle.com>, Christoph Hellwig <hch@lst.de>,
+        nvdimm@lists.linux.dev
+Date:   Fri, 13 May 2022 15:13:20 -0700
+Message-ID: <165247997655.53156.8381418704988035976.stgit@dwillia2-desk3.amr.corp.intel.com>
+In-Reply-To: <20220422224508.440670-8-jane.chu@oracle.com>
+References: <20220422224508.440670-8-jane.chu@oracle.com>
+User-Agent: StGit/0.18-3-g996c
 MIME-Version: 1.0
-References: <20220509050953.11005-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220509050953.11005-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220509050953.11005-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 14 May 2022 00:12:48 +0200
-Message-ID: <CACRpkdafrkyQjmyoa4CAJXJ8JdT3owapq10=yBQLyPp0EwO6AQ@mail.gmail.com>
-Subject: Re: [PATCH v2 4/5] gpio: gpiolib: Add ngirq member to struct gpio_irq_chip
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,21 +60,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 9, 2022 at 7:10 AM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+From: Jane Chu <jane.chu@oracle.com>
 
-> Supported GPIO IRQs by the chip is not always equal to the number of GPIO
-> pins. For example on Renesas RZ/G2L SoC where it has GPIO0-122 pins but at
-> a give point a maximum of only 32 GPIO pins can be used as IRQ lines in
-> the IRQC domain.
->
-> This patch adds ngirq member to struct gpio_irq_chip and passes this as a
-> size to irq_domain_create_hierarchy()/irq_domain_create_simple() if it is
-> being set in the driver otherwise fallbacks to using ngpio.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+The recovery write thread started out as a normal pwrite thread and
+when the filesystem was told about potential media error in the
+range, filesystem turns the normal pwrite to a dax_recovery_write.
 
-As mentioned in some other patch, try to use .valid_mask for this instead.
+The recovery write consists of clearing media poison, clearing page
+HWPoison bit, reenable page-wide read-write permission, flush the
+caches and finally write.  A competing pread thread will be held
+off during the recovery process since data read back might not be
+valid, and this is achieved by clearing the badblock records after
+the recovery write is complete. Competing recovery write threads
+are already serialized by writer lock held by dax_iomap_rw().
 
-Yours,
-Linus Walleij
+Signed-off-by: Jane Chu <jane.chu@oracle.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+---
+Changes since v9:
+- Fixup compile warnings in debug messages
+
+ drivers/nvdimm/pmem.c |   87 ++++++++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 79 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
+index 0961625dfa05..6b24ecada695 100644
+--- a/drivers/nvdimm/pmem.c
++++ b/drivers/nvdimm/pmem.c
+@@ -266,21 +266,43 @@ __weak long __pmem_direct_access(struct pmem_device *pmem, pgoff_t pgoff,
+ 		pfn_t *pfn)
+ {
+ 	resource_size_t offset = PFN_PHYS(pgoff) + pmem->data_offset;
+-
+-	if (unlikely(is_bad_pmem(&pmem->bb, PFN_PHYS(pgoff) / 512,
+-					PFN_PHYS(nr_pages))))
+-		return -EIO;
++	sector_t sector = PFN_PHYS(pgoff) >> SECTOR_SHIFT;
++	unsigned int num = PFN_PHYS(nr_pages) >> SECTOR_SHIFT;
++	struct badblocks *bb = &pmem->bb;
++	sector_t first_bad;
++	int num_bad;
+ 
+ 	if (kaddr)
+ 		*kaddr = pmem->virt_addr + offset;
+ 	if (pfn)
+ 		*pfn = phys_to_pfn_t(pmem->phys_addr + offset, pmem->pfn_flags);
+ 
++	if (bb->count &&
++	    badblocks_check(bb, sector, num, &first_bad, &num_bad)) {
++		long actual_nr;
++
++		if (mode != DAX_RECOVERY_WRITE)
++			return -EIO;
++
++		/*
++		 * Set the recovery stride is set to kernel page size because
++		 * the underlying driver and firmware clear poison functions
++		 * don't appear to handle large chunk(such as 2MiB) reliably.
++		 */
++		actual_nr = PHYS_PFN(
++			PAGE_ALIGN((first_bad - sector) << SECTOR_SHIFT));
++		dev_dbg(pmem->bb.dev, "start sector(%llu), nr_pages(%ld), first_bad(%llu), actual_nr(%ld)\n",
++				sector, nr_pages, first_bad, actual_nr);
++		if (actual_nr)
++			return actual_nr;
++		return 1;
++	}
++
+ 	/*
+-	 * If badblocks are present, limit known good range to the
+-	 * requested range.
++	 * If badblocks are present but not in the range, limit known good range
++	 * to the requested range.
+ 	 */
+-	if (unlikely(pmem->bb.count))
++	if (bb->count)
+ 		return nr_pages;
+ 	return PHYS_PFN(pmem->size - pmem->pfn_pad - offset);
+ }
+@@ -310,10 +332,59 @@ static long pmem_dax_direct_access(struct dax_device *dax_dev,
+ 	return __pmem_direct_access(pmem, pgoff, nr_pages, mode, kaddr, pfn);
+ }
+ 
++/*
++ * The recovery write thread started out as a normal pwrite thread and
++ * when the filesystem was told about potential media error in the
++ * range, filesystem turns the normal pwrite to a dax_recovery_write.
++ *
++ * The recovery write consists of clearing media poison, clearing page
++ * HWPoison bit, reenable page-wide read-write permission, flush the
++ * caches and finally write.  A competing pread thread will be held
++ * off during the recovery process since data read back might not be
++ * valid, and this is achieved by clearing the badblock records after
++ * the recovery write is complete. Competing recovery write threads
++ * are already serialized by writer lock held by dax_iomap_rw().
++ */
+ static size_t pmem_recovery_write(struct dax_device *dax_dev, pgoff_t pgoff,
+ 		void *addr, size_t bytes, struct iov_iter *i)
+ {
+-	return 0;
++	struct pmem_device *pmem = dax_get_private(dax_dev);
++	size_t olen, len, off;
++	phys_addr_t pmem_off;
++	struct device *dev = pmem->bb.dev;
++	long cleared;
++
++	off = offset_in_page(addr);
++	len = PFN_PHYS(PFN_UP(off + bytes));
++	if (!is_bad_pmem(&pmem->bb, PFN_PHYS(pgoff) >> SECTOR_SHIFT, len))
++		return _copy_from_iter_flushcache(addr, bytes, i);
++
++	/*
++	 * Not page-aligned range cannot be recovered. This should not
++	 * happen unless something else went wrong.
++	 */
++	if (off || !PAGE_ALIGNED(bytes)) {
++		dev_dbg(dev, "Found poison, but addr(%p) or bytes(%#zx) not page aligned\n",
++			addr, bytes);
++		return 0;
++	}
++
++	pmem_off = PFN_PHYS(pgoff) + pmem->data_offset;
++	cleared = __pmem_clear_poison(pmem, pmem_off, len);
++	if (cleared > 0 && cleared < len) {
++		dev_dbg(dev, "poison cleared only %ld out of %zu bytes\n",
++			cleared, len);
++		return 0;
++	}
++	if (cleared < 0) {
++		dev_dbg(dev, "poison clear failed: %ld\n", cleared);
++		return 0;
++	}
++
++	olen = _copy_from_iter_flushcache(addr, bytes, i);
++	pmem_clear_bb(pmem, to_sect(pmem, pmem_off), cleared >> SECTOR_SHIFT);
++
++	return olen;
+ }
+ 
+ static const struct dax_operations pmem_dax_ops = {
+

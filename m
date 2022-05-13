@@ -2,94 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 117715259EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 05:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5BFD5259E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 05:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376706AbiEMDF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 23:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49908 "EHLO
+        id S1376681AbiEMDHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 23:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376669AbiEMDFt (ORCPT
+        with ESMTP id S1356735AbiEMDHD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 23:05:49 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9E95FE7;
-        Thu, 12 May 2022 20:05:42 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KztnF5GpFz4xR7;
-        Fri, 13 May 2022 13:05:37 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1652411138;
-        bh=fC2GGkZ6i1/eN+A/UO95n84TneECFcVdKhwj/auxTZY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=qw7Q0Cqcx1/V91zdI8RMOi066QNsHEmIm/HkytZtdFLlJiZS0bty8HG2DknIg2KS2
-         bHAixUSeOjosvQtCQcFczSNbz47Xdrkd6A3ky+O1VBL+uqCXriZ1ObHk+1DaUGAuJD
-         AIVYtmLDi6fvIwFaU5mfbQYg5gj2dBlKc5KhhVlowKVaR/ogRLkvE62CPYKtCdUhpc
-         5xY7/Wfpty5Q/N1GbClkBwlxz9x/eWytE4g6oDudmm0W54UREbC3VzBjLtGrkzDPVN
-         Z/51MUN26hOvXoSMLyZtv0ifr38DtuhcBFi0i62RYOtchm3Fw3lYoTVP7fTY9OxUG/
-         zafJQ7igNgE+w==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com,
-        davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
-Subject: Re: [PATCH] lib/atomic64_test.c: convert to use KUnit
-In-Reply-To: <20220502192327.81153-1-dlatypov@google.com>
-References: <20220502192327.81153-1-dlatypov@google.com>
-Date:   Fri, 13 May 2022 13:05:31 +1000
-Message-ID: <87ilqa6sjo.fsf@mpe.ellerman.id.au>
+        Thu, 12 May 2022 23:07:03 -0400
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9FE45AC7
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 20:07:02 -0700 (PDT)
+Received: by mail-ot1-x331.google.com with SMTP id p12-20020a9d4e0c000000b00606b40860a3so4086878otf.11
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 20:07:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=297SZhnbfakt9y0BHFgnqzkCZLJUke1XogmQGvDK8R4=;
+        b=m9HMjtn3t15regA8x1GltDY08DyPBuI2H0RawHwVfEekwc56tea1CeNnXrDCzfMSsr
+         T6LDfkOGVAxHlFZ5blEteba7l8cHTjFwQsUqaL6bexFl3C14r2qGMsjZsHwnYnSgSU/l
+         YMC1c6z2iZHeQDptFxo+AJbSFYLWexKpQLb0QbGWGws60uTswZkLayRv4fx9VDHM4LoT
+         jpWYlcF+Lkq6g3rCH49AYvRHONXLVW/9OnDDxHw0N461nY+PU4Bdzg+F+HJEETHXBI+V
+         jpXhR7PTGYzYIxiM6kBPMM2W64m5Uh6TgfeVIPR8WRv0Rsk9kpCzIIgej+KltjAUZptZ
+         N/kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=297SZhnbfakt9y0BHFgnqzkCZLJUke1XogmQGvDK8R4=;
+        b=Xs9ZL/pcaPMkf12pVFkIgmGVB5CyW6Y6v/aI4jlqscsPTedPq4BOeO0xVFkYyiDyIe
+         P91YvaQkVFDnNkYOTyHAoObA/+WwM9m6Aex2pU4WrCRpnyh1Kv3LRH6r4bD/lWqHxP3A
+         wOx9DF+F0IziWSyxTVCCRlgv+04Vvb+jExbkyDx4TcPrnkTprLOKE0VESd26jRGq4NQf
+         EixLMnzwTzRLeVouzSP8C/ROlNZia39GxF2XjTvKAnw8hfreOczuAYet5Zele/nXOlEL
+         jR3DblgQO7Y33Qvp6LC/Ejg/uVgGhgN9TkCQg9gCqozzlTk8ZSC+FmXMLU6j4f2QGJi8
+         BKTg==
+X-Gm-Message-State: AOAM533hSKFw9oXBTqhBvISRy7PILL2aZ5tY9x3ChCt1CV6V8EWTjqpV
+        lExiaLA3NTQoih96ECTTWth34EYx1y92m1KXlNKbCQ==
+X-Google-Smtp-Source: ABdhPJyAHsbwyCL+EjpEVDEWDEyvsYMPlp0+rwoKbTCFj5OxYrQ77Dt4TinjMnxcKF4zxhJZi4KxoVhSgYkgN+dsYak=
+X-Received: by 2002:a05:6830:280e:b0:606:ae45:6110 with SMTP id
+ w14-20020a056830280e00b00606ae456110mr1143445otu.14.1652411221187; Thu, 12
+ May 2022 20:07:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220512184514.15742-1-jon@nutanix.com> <Yn1fjAqFoszWz500@google.com>
+ <Yn1hdHgMVuni/GEx@google.com> <07BEC8B1-469C-4E36-AE92-90BFDF93B2C4@nutanix.com>
+ <Yn1o9ZfsQutXXdQS@google.com> <CALMp9eRQv6owjfyf+UO=96Q1dkeSrJWy0i4O-=RPSaQwz0bjTQ@mail.gmail.com>
+ <C39CD5E4-3705-4D1A-A67D-43CBB7D1950B@nutanix.com> <CALMp9eRXmWvrQ1i0V3G738ndZOZ4YezQ=BqXe-BF2b4GNo1m3Q@mail.gmail.com>
+ <DEF8066B-E691-4C85-A19A-9F5222D1683D@nutanix.com>
+In-Reply-To: <DEF8066B-E691-4C85-A19A-9F5222D1683D@nutanix.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Thu, 12 May 2022 20:06:49 -0700
+Message-ID: <CALMp9eTwH9WVD=EuTXeu1KYAkAUuXdnmA+k9dti7OM+u=kLKHQ@mail.gmail.com>
+Subject: Re: [PATCH v4] x86/speculation, KVM: remove IBPB on vCPU load
+To:     Jon Kohler <jon@nutanix.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ashok Raj <ashok.raj@intel.com>,
+        KarimAllah Ahmed <karahmed@amazon.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "kvm @ vger . kernel . org" <kvm@vger.kernel.org>,
+        Waiman Long <longman@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Daniel Latypov <dlatypov@google.com> writes:
-> The test currently is a bunch of checks (implemented using BUG_ON())
-> that can be built into the kernel or as a module.
->
-> Convert it to a KUnit test, which can also run in both modes.
-> From a user's perspective, this change adds a CONFIG_KUNIT=y dep and
-> changes the output format of the test [1]. The test itself is the same.
-...
+On Thu, May 12, 2022 at 5:50 PM Jon Kohler <jon@nutanix.com> wrote:
 
-I don't know why I got Cc'ed on this :), but I gave it a quick test anyway.
+> You mentioned if someone was concerned about performance, are you
+> saying they also critically care about performance, such that they are
+> willing to *not* use IBPB at all, and instead just use taskset and hope
+> nothing ever gets scheduled on there, and then hope that the hypervisor
+> does the job for them?
 
-Seems to work fine on a Power9.
-I also flipped some of the conditionals to make sure failure is detected
-correctly.
+I am saying that IBPB is not the only viable mitigation for
+cross-process indirect branch steering. Proper scheduling can also
+solve the problem, without the overhead of IBPB. Say that you have two
+security domains: trusted and untrusted. If you have a two-socket
+system, and you always run trusted workloads on socket#0 and untrusted
+workloads on socket#1, IBPB is completely superfluous. However, if the
+hypervisor chooses to schedule a vCPU thread from virtual socket#0
+after a vCPU thread from virtual socket#1 on the same logical
+processor, then it *must* execute an IBPB between those two vCPU
+threads. Otherwise, it has introduced a non-architectural
+vulnerability that the guest can't possibly be aware of.
 
-Tested-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+If you can't trust your OS to schedule tasks where you tell it to
+schedule them, can you really trust it to provide you with any kind of
+inter-process security?
 
+> Would this be the expectation of just KVM? Or all hypervisors on the
+> market?
 
-> Meta:
-> 1. this patch applies on top of the kunit branch,
-> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/?h=kunit
->
-> 2. checkpatch complains about aligning with parens, but it wants me to
-> indent the `#ifdef CONFIG_X86_64` which seems inappropriate in context.
->
-> 3. this file doesn't seem to have a clear maintainer, so I assume this
-> conversion is fine to go through the kunit branch.
-
-I think you want to at least Cc the atomic folks:
-
-ATOMIC INFRASTRUCTURE
-M:	Will Deacon <will@kernel.org>
-M:	Peter Zijlstra <peterz@infradead.org>
-R:	Boqun Feng <boqun.feng@gmail.com>
-R:	Mark Rutland <mark.rutland@arm.com>
-L:	linux-kernel@vger.kernel.org
-S:	Maintained
-
-
-cheers
+Any hypervisor that doesn't do this is broken, but that won't keep it
+off the market. :-)

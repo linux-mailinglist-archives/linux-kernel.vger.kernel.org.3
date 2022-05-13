@@ -2,131 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A97525A0F
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 05:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAFAE525A12
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 05:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376736AbiEMDZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 23:25:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50832 "EHLO
+        id S1376716AbiEMD2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 23:28:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376596AbiEMDZn (ORCPT
+        with ESMTP id S229869AbiEMD2j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 23:25:43 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E9C1009
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 20:25:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652412341; x=1683948341;
-  h=message-id:subject:from:to:date:in-reply-to:references:
-   mime-version:content-transfer-encoding;
-  bh=6JbJ7g7D2Yn2WY7qd9fnqK8G+aJNQ1BIcCplhlKlw6I=;
-  b=JhID5sbcsn3Fla1qE+f555PVnMbIaXCaokLl56bliE4uY4G7LAvICCTX
-   3AdtpWgI6HxCdpBH0zWYSjcvQtcG7eh2TIOGEK5ophymfqCxG9M/sf1un
-   uqOw3r4GKulb1qhgOtJWF4FXyW+4m2fjDYwvCGrHG3vTGg6cC71niLOVF
-   Z79lzFc4Qyy3l/j5vbCV0Y4fm8J28dpixKVUpAD9vuyOGNlyV9keafoO7
-   kfOuSHI7gFhIfg9hDjFQPUoxBxdoz7Rvah2I33Ozp5UhseLSCafuoom9N
-   bsGGYVZlf/jmElifeeF9PX5hXAGjNA1yulUmWytjQk2T0W80vh+E5psvE
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="330802694"
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="330802694"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 20:25:41 -0700
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="566997853"
-Received: from jliu69-mobl.ccr.corp.intel.com ([10.254.212.158])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 20:25:36 -0700
-Message-ID: <69f2d063a15f8c4afb4688af7b7890f32af55391.camel@intel.com>
-Subject: Re: RFC: Memory Tiering Kernel Interfaces (v2)
-From:   "ying.huang@intel.com" <ying.huang@intel.com>
-To:     Wei Xu <weixugc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Thelen <gthelen@google.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Hesham Almatary <hesham.almatary@huawei.com>
-Date:   Fri, 13 May 2022 11:25:34 +0800
-In-Reply-To: <CAAPL-u-DGLcKRVDnChN9ZhxPkfxQvz9Sb93kVoX_4J2oiJSkUw@mail.gmail.com>
-References: <CAAPL-u-DGLcKRVDnChN9ZhxPkfxQvz9Sb93kVoX_4J2oiJSkUw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Thu, 12 May 2022 23:28:39 -0400
+X-Greylist: delayed 84415 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 May 2022 20:28:37 PDT
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8DEC20D4FF;
+        Thu, 12 May 2022 20:28:37 -0700 (PDT)
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 24D3SIfW022474;
+        Fri, 13 May 2022 12:28:19 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 24D3SIfW022474
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1652412499;
+        bh=65QpWywYEXx5+t0AoIjLCVLNZism0JO9jsEsk1X5rL0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=SyKTwlmTxfu1Y1ir0NCfsHzyPDGcbZhqIfZefxZ6HKFMYCTFfOyVnoj60fRFHIQBe
+         /jhidJEWUXZz5XvuAZphhKIINyXDPp3tBuAAw4iZXTXbOpd7j3DX/jcmJyAOh9vdVt
+         /6aK1L8HryxRblq+4zxcANMP/9KHxOx2x+80QQ7GyfwgEdS1pZ09o9kwNoQUt/pUoU
+         3e5FLuHSmopNe62oB3dOvzffLEFA22IOmbNu3sSzQC3sZhIWLkOrvEmnIcbJP38DnA
+         9pKlktiY+q74fz8zTvB/+F+48OqXDzI5HgxaTnHxsb6h4aI4VXg92ONAubEfdjkB/I
+         Mogwpb3/pUmww==
+X-Nifty-SrcIP: [209.85.216.53]
+Received: by mail-pj1-f53.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so6623584pjq.2;
+        Thu, 12 May 2022 20:28:19 -0700 (PDT)
+X-Gm-Message-State: AOAM532RbVNPcLXsIvhzbhhM7wfJhwFriq1C62PlfHWgqtYHa7Z2RPIT
+        ocl9gaLFlBSPlmgjur/ZykUm8WR5NocmSiasLTo=
+X-Google-Smtp-Source: ABdhPJwJjTqMt2DGeBaDODDkT2N4FmDiIUvsLpRMmpQBl0z2UKRm78ObMJY2W9UT93lqKp+DXe1aSPgWadVHu5ZiMN0=
+X-Received: by 2002:a17:902:7891:b0:15e:cae9:7620 with SMTP id
+ q17-20020a170902789100b0015ecae97620mr2921294pll.136.1652412498411; Thu, 12
+ May 2022 20:28:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220512035903.2779287-1-masahiroy@kernel.org> <20220512035903.2779287-4-masahiroy@kernel.org>
+In-Reply-To: <20220512035903.2779287-4-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 13 May 2022 12:27:04 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASsrr_birFp=1MO6fVauogU1uiqSytQNgzFxBiOuLVw1w@mail.gmail.com>
+Message-ID: <CAK7LNASsrr_birFp=1MO6fVauogU1uiqSytQNgzFxBiOuLVw1w@mail.gmail.com>
+Subject: Re: [PATCH 4/4] cskly: move $(core-y) into arch/csky/Kbuild
+To:     Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-05-11 at 23:22 -0700, Wei Xu wrote:
-> 
-> Memory Allocation for Demotion
-> ==============================
-> 
-> To allocate a new page as the demotion target for a page, the kernel
-> calls the allocation function (__alloc_pages_nodemask) with the
-> source page node as the preferred node and the union of all lower
-> tier nodes as the allowed nodemask.  The actual target node selection
-> then follows the allocation fallback order that the kernel has
-> already defined.
-> 
-> The pseudo code looks like:
-> 
->     targets = NODE_MASK_NONE;
->     src_nid = page_to_nid(page);
->     src_tier = node_tier_map[src_nid];
->     for (i = src_tier + 1; i < MAX_MEMORY_TIERS; i++)
->             nodes_or(targets, targets, memory_tiers[i]);
->     new_page = __alloc_pages_nodemask(gfp, order, src_nid, targets);
-> 
-> The memopolicy of cpuset, vma and owner task of the source page can
-> be set to refine the demotion target nodemask, e.g. to prevent
-> demotion or select a particular allowed node as the demotion target.
+On Thu, May 12, 2022 at 1:01 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Use the standard obj-y form to specify the sub-directories under
+> arch/csky/. No functional change intended.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
 
-Consider a system with 3 tiers, if we want to demote some pages from
-tier 0, the desired behavior is,
+I am not sending v2 just for typo "cskly:"
 
-- Allocate pages from tier 1
-- If there's no enough free pages in tier 1, wakeup kswapd of tier 1 so
-demote some pages from tier 1 to tier 2
-- If there's still no enough free pages in tier 1, allocate pages from
-tier 2.
-
-In this way, tier 0 will have the hottest pages, while tier 1 will have
-the coldest pages.
-
-With your proposed method, the demoting from tier 0 behavior is,
-
-- Allocate pages from tier 1
-- If there's no enough free pages in tier 1, allocate pages in tier 2
-
-The kswapd of tier 1 will not be waken up until there's no enough free
-pages in tier 2.  In quite long time, there's no much hot/cold
-differentiation between tier 1 and tier 2.
-
-This isn't hard to be fixed, just call __alloc_pages_nodemask() for each
-tier one by one considering page allocation fallback order.
-
-Best Regards,
-Huang, Ying
+I hope the maintainer can fix it.
 
 
+
+
+>  arch/csky/Kbuild   | 4 ++++
+>  arch/csky/Makefile | 4 ----
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/csky/Kbuild b/arch/csky/Kbuild
+> index 4e39f7abdeb6..3015be1afd59 100644
+> --- a/arch/csky/Kbuild
+> +++ b/arch/csky/Kbuild
+> @@ -1,4 +1,8 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>
+> +obj-y += kernel/ mm/
+> +obj-$(CONFIG_CPU_ABI_V1) += abiv1/
+> +obj-$(CONFIG_CPU_ABI_V2) += abiv2/
+> +
+>  # for cleaning
+>  subdir- += boot
+> diff --git a/arch/csky/Makefile b/arch/csky/Makefile
+> index 2b30525f39e1..51150abd2831 100644
+> --- a/arch/csky/Makefile
+> +++ b/arch/csky/Makefile
+> @@ -63,10 +63,6 @@ KBUILD_AFLAGS += $(KBUILD_CFLAGS)
+>
+>  head-y := arch/csky/kernel/head.o
+>
+> -core-y += arch/csky/kernel/
+> -core-y += arch/csky/mm/
+> -core-y += arch/csky/$(CSKYABI)/
+> -
+>  libs-y += arch/csky/lib/ \
+>         $(shell $(CC) $(KBUILD_CFLAGS) $(KCFLAGS) -print-libgcc-file-name)
+>
+> --
+> 2.32.0
+>
+
+
+-- 
+Best Regards
+Masahiro Yamada

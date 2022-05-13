@@ -2,59 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0309526367
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6856B52636E
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232822AbiEMOEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:04:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55186 "EHLO
+        id S233117AbiEMOHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiEMOEG (ORCPT
+        with ESMTP id S229788AbiEMOH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:04:06 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B598369D2
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:04:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652450644; x=1683986644;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=IV4iYGo7pIxZHj+iT+8akiALKJwO+kZUW0gEutIT5x0=;
-  b=RqXVIC/6m50q4XtXxaPlNCxBqbyd8hxHfECXIYABB/nazsA7aXvZ9xT1
-   ZnHydgXvvepitKkKMSsa7nzAwS+1Hv+5ab/9+0yUyvdDRuG8qtLIAt8Iv
-   wQe333UZNQWui6/qQsLoP+NnW3Trk+qSh8s3hIIpGGRlfuGdFGlaavDVj
-   o=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 13 May 2022 07:04:04 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:04:03 -0700
-Received: from [10.216.62.117] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.47.97.222) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 13 May
- 2022 07:04:00 -0700
-Message-ID: <f251bc8f-7e72-cfd9-5eca-179c91880a1a@quicinc.com>
-Date:   Fri, 13 May 2022 19:33:56 +0530
+        Fri, 13 May 2022 10:07:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F32450B0E;
+        Fri, 13 May 2022 07:07:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF4DF6203F;
+        Fri, 13 May 2022 14:07:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7CE8C34100;
+        Fri, 13 May 2022 14:07:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652450845;
+        bh=JHGmg8HELW1l/NvkzMwcz7ZBqd9Xb6Lnpfs7ZKtiCY4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Zrk377rYFyGd1DKEgPcrB9U2j9iCZcIVPSjX3G4yXLEfiYpGZy5dx2KMZOtOZ0yNr
+         NCoJXvvNbST2JWJjySL0hS2bH2g4g0XE7V+Gm1NKCEdd9QvmqMast/6QrQI/KEDfMi
+         WorsvflMykUMERYcoyJYSOpC8+l5LMCOzs2YBBRmSJoUTzGKf0scl5FddkBQWOaIhT
+         GwnqFB1VZwZplQZt3NTcK3a/KMcSRjIo0CKbfTxNhXSfdEwnYuPerD7pwFFJGJFJA3
+         hyQLhJjridnveTZ/DfiPT9rpVPxjE9kNvIpfOa4uQeptvK60qVAzKlySyll0t2HMRY
+         5It/PFzyhHP4Q==
+Date:   Fri, 13 May 2022 09:07:23 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-s390@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH RESEND v5 1/4] PCI: Clean up pci_scan_slot()
+Message-ID: <20220513140723.GA947754@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [RESEND PATCH v4] devcoredump : Serialize devcd_del work
-Content-Language: en-US
-To:     <linux-kernel@vger.kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <tglx@linutronix.de>,
-        <sboyd@kernel.org>, <rafael@kernel.org>,
-        <johannes@sipsolutions.net>, <keescook@chromium.org>
-References: <1651558074-9620-1-git-send-email-quic_mojha@quicinc.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <1651558074-9620-1-git-send-email-quic_mojha@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.47.97.222)
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f34130034637278c9999cf6d430be558cb0c2318.camel@linux.ibm.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,217 +58,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gentle reminder!
+On Thu, May 12, 2022 at 04:56:42PM +0200, Niklas Schnelle wrote:
+> On Thu, 2022-05-05 at 10:38 +0200, Niklas Schnelle wrote:
+> > While determining the next PCI function is factored out of
+> > pci_scan_slot() into next_fn() the former still handles the first
+> > function as a special case. This duplicates the code from the scan loop.
+> > 
+> > Furthermore the non ARI branch of next_fn() is generally hard to
+> > understand and especially the check for multifunction devices is hidden
+> > in the handling of NULL devices for non-contiguous multifunction. It
+> > also signals that no further functions need to be scanned by returning
+> > 0 via wraparound and this is a valid function number.
+> > 
+> > Improve upon this by transforming the conditions in next_fn() to be
+> > easier to understand.
+> > 
+> > By changing next_fn() to return -ENODEV instead of 0 when there is no
+> > next function we can then handle the initial function inside the loop
+> > and deduplicate the shared handling. This also makes it more explicit
+> > that only function 0 must exist.
+> > 
+> > No functional change is intended.
+> > 
+> > Cc: Jan Kiszka <jan.kiszka@siemens.com>
+> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > ---
+> 
+> Friendly ping :-)
 
-Thanks,
--Mukesh
-On 5/3/2022 11:37 AM, Mukesh Ojha wrote:
-> In following scenario(diagram), when one thread X running dev_coredumpm()
-> adds devcd device to the framework which sends uevent notification to
-> userspace and another thread Y reads this uevent and call to
-> devcd_data_write() which eventually try to delete the queued timer that
-> is not initialized/queued yet.
-> 
-> So, debug object reports some warning and in the meantime, timer is
-> initialized and queued from X path. and from Y path, it gets reinitialized
-> again and timer->entry.pprev=NULL and try_to_grab_pending() stucks.
-> 
-> To fix this, introduce mutex and a boolean flag to serialize the behaviour.
-> 
->   	cpu0(X)			                cpu1(Y)
-> 
->      dev_coredump() uevent sent to user space
->      device_add()  ======================> user space process Y reads the
->                                            uevents writes to devcd fd
->                                            which results into writes to
-> 
->                                           devcd_data_write()
->                                             mod_delayed_work()
->                                               try_to_grab_pending()
->                                                 del_timer()
->                                                   debug_assert_init()
->     INIT_DELAYED_WORK()
->     schedule_delayed_work()
->                                                     debug_object_fixup()
->                                                       timer_fixup_assert_init()
->                                                         timer_setup()
->                                                           do_init_timer()
->                                                         /*
->                                                          Above call reinitializes
->                                                          the timer to
->                                                          timer->entry.pprev=NULL
->                                                          and this will be checked
->                                                          later in timer_pending() call.
->                                                         */
->                                                   timer_pending()
->                                                    !hlist_unhashed_lockless(&timer->entry)
->                                                      !h->pprev
->                                                  /*
->                                                    del_timer() checks h->pprev and finds
->                                                    it to be NULL due to which
->                                                    try_to_grab_pending() stucks.
->                                                  */
-> 
-> Link: https://lore.kernel.org/lkml/2e1f81e2-428c-f11f-ce92-eb11048cb271@quicinc.com/
-> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> ---
-> v3->v4:
->   - flg variable renamed to delete_work.
-> 
-> v2->v3:
->   Addressed comments from gregkh
->   - Wrapped the commit text and corrected the alignment.
->   - Described the reason to introduce new variables.
->   - Restored the blank line.
->   - rename the del_wk_queued to flg.
->   Addressed comments from tglx
->   - Added a comment which explains the race which looks obvious however
->     would not occur between disabled_store and devcd_del work.
-> 
-> 
-> v1->v2:
->   - Added del_wk_queued flag to serialize the race between devcd_data_write()
->     and disabled_store() => devcd_free().
->   drivers/base/devcoredump.c | 83 ++++++++++++++++++++++++++++++++++++++++++++--
->   1 file changed, 81 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/base/devcoredump.c b/drivers/base/devcoredump.c
-> index f4d794d..1c06781 100644
-> --- a/drivers/base/devcoredump.c
-> +++ b/drivers/base/devcoredump.c
-> @@ -25,6 +25,47 @@ struct devcd_entry {
->   	struct device devcd_dev;
->   	void *data;
->   	size_t datalen;
-> +	/*
-> +	 * Here, mutex is required to serialize the calls to del_wk work between
-> +	 * user/kernel space which happens when devcd is added with device_add()
-> +	 * and that sends uevent to user space. User space reads the uevents,
-> +	 * and calls to devcd_data_write() which try to modify the work which is
-> +	 * not even initialized/queued from devcoredump.
-> +	 *
-> +	 *
-> +	 *
-> +	 *        cpu0(X)                                 cpu1(Y)
-> +	 *
-> +	 *        dev_coredump() uevent sent to user space
-> +	 *        device_add()  ======================> user space process Y reads the
-> +	 *                                              uevents writes to devcd fd
-> +	 *                                              which results into writes to
-> +	 *
-> +	 *                                             devcd_data_write()
-> +	 *                                               mod_delayed_work()
-> +	 *                                                 try_to_grab_pending()
-> +	 *                                                   del_timer()
-> +	 *                                                     debug_assert_init()
-> +	 *       INIT_DELAYED_WORK()
-> +	 *       schedule_delayed_work()
-> +	 *
-> +	 *
-> +	 * Also, mutex alone would not be enough to avoid scheduling of
-> +	 * del_wk work after it get flush from a call to devcd_free()
-> +	 * mentioned as below.
-> +	 *
-> +	 *	disabled_store()
-> +	 *        devcd_free()
-> +	 *          mutex_lock()             devcd_data_write()
-> +	 *          flush_delayed_work()
-> +	 *          mutex_unlock()
-> +	 *                                   mutex_lock()
-> +	 *                                   mod_delayed_work()
-> +	 *                                   mutex_unlock()
-> +	 * So, delete_work flag is required.
-> +	 */
-> +	struct mutex mutex;
-> +	bool delete_work;
->   	struct module *owner;
->   	ssize_t (*read)(char *buffer, loff_t offset, size_t count,
->   			void *data, size_t datalen);
-> @@ -84,7 +125,12 @@ static ssize_t devcd_data_write(struct file *filp, struct kobject *kobj,
->   	struct device *dev = kobj_to_dev(kobj);
->   	struct devcd_entry *devcd = dev_to_devcd(dev);
->   
-> -	mod_delayed_work(system_wq, &devcd->del_wk, 0);
-> +	mutex_lock(&devcd->mutex);
-> +	if (!devcd->delete_work) {
-> +		devcd->delete_work = true;
-> +		mod_delayed_work(system_wq, &devcd->del_wk, 0);
-> +	}
-> +	mutex_unlock(&devcd->mutex);
->   
->   	return count;
->   }
-> @@ -112,7 +158,12 @@ static int devcd_free(struct device *dev, void *data)
->   {
->   	struct devcd_entry *devcd = dev_to_devcd(dev);
->   
-> +	mutex_lock(&devcd->mutex);
-> +	if (!devcd->delete_work)
-> +		devcd->delete_work = true;
-> +
->   	flush_delayed_work(&devcd->del_wk);
-> +	mutex_unlock(&devcd->mutex);
->   	return 0;
->   }
->   
-> @@ -122,6 +173,30 @@ static ssize_t disabled_show(struct class *class, struct class_attribute *attr,
->   	return sysfs_emit(buf, "%d\n", devcd_disabled);
->   }
->   
-> +/*
-> + *
-> + *	disabled_store()                                	worker()
-> + *	 class_for_each_device(&devcd_class,
-> + *		NULL, NULL, devcd_free)
-> + *         ...
-> + *         ...
-> + *	   while ((dev = class_dev_iter_next(&iter))
-> + *                                                             devcd_del()
-> + *                                                               device_del()
-> + *                                                                 put_device() <- last reference
-> + *             error = fn(dev, data)                           devcd_dev_release()
-> + *             devcd_free(dev, data)                           kfree(devcd)
-> + *             mutex_lock(&devcd->mutex);
-> + *
-> + *
-> + * In the above diagram, It looks like disabled_store() would be racing with parallely
-> + * running devcd_del() and result in memory abort while acquiring devcd->mutex which
-> + * is called after kfree of devcd memory  after dropping its last reference with
-> + * put_device(). However, this will not happens as fn(dev, data) runs
-> + * with its own reference to device via klist_node so it is not its last reference.
-> + * so, above situation would not occur.
-> + */
-> +
->   static ssize_t disabled_store(struct class *class, struct class_attribute *attr,
->   			      const char *buf, size_t count)
->   {
-> @@ -278,13 +353,16 @@ void dev_coredumpm(struct device *dev, struct module *owner,
->   	devcd->read = read;
->   	devcd->free = free;
->   	devcd->failing_dev = get_device(dev);
-> +	devcd->delete_work = false;
->   
-> +	mutex_init(&devcd->mutex);
->   	device_initialize(&devcd->devcd_dev);
->   
->   	dev_set_name(&devcd->devcd_dev, "devcd%d",
->   		     atomic_inc_return(&devcd_count));
->   	devcd->devcd_dev.class = &devcd_class;
->   
-> +	mutex_lock(&devcd->mutex);
->   	if (device_add(&devcd->devcd_dev))
->   		goto put_device;
->   
-> @@ -301,10 +379,11 @@ void dev_coredumpm(struct device *dev, struct module *owner,
->   
->   	INIT_DELAYED_WORK(&devcd->del_wk, devcd_del);
->   	schedule_delayed_work(&devcd->del_wk, DEVCD_TIMEOUT);
-> -
-> +	mutex_unlock(&devcd->mutex);
->   	return;
->    put_device:
->   	put_device(&devcd->devcd_dev);
-> +	mutex_unlock(&devcd->mutex);
->    put_module:
->   	module_put(owner);
->    free:
+Thanks and sorry for the delay.  I'm off today for my daughter's
+wedding reception but will get back to it next week.  Just to expose
+some of my thought process (and not to request more work from you!)
+I've been wondering whether b1bd58e448f2 ("PCI: Consolidate
+"next-function" functions") is really causing us more trouble than
+it's worth.  In some ways that makes the single next-function harder
+to read.  But I guess the hypervisor special case is not exactly a
+"next-function" thing -- it's a "keep scanning even if there's no fn
+0" thing.
+
+Bjorn

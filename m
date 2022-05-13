@@ -2,127 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B296526B99
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F5EA526BA3
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384499AbiEMUdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 16:33:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
+        id S1384139AbiEMUfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 16:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384479AbiEMUdM (ORCPT
+        with ESMTP id S1353047AbiEMUff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 16:33:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141D56D1AD;
-        Fri, 13 May 2022 13:32:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 948C8B831C4;
-        Fri, 13 May 2022 20:32:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA1DAC34100;
-        Fri, 13 May 2022 20:32:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1652473931;
-        bh=gmC5AwVMGEU2yYbKfPpZCKlEafrDstnH7NSBfxHTE8s=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GnVFoZiTL3uqj38AiZl1Vz7AxQAjGSbWngWz20DyGxSP0DgtxFcsxMN9FvY1MqChm
-         1P+o4f+nAG2ZqVKZEYsQSnUTWeH2EC3JvmBHa4LQ0TD4oxpD7+6Za6gESm2+KpQLN/
-         MxbE+y77lmCFjQXNV3L9gXUYmz/10kBHSZ3Gd8d4=
-Date:   Fri, 13 May 2022 13:32:10 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Oleksandr Natalenko <oleksandr@natalenko.name>
-Cc:     cgel.zte@gmail.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, corbet@lwn.net,
-        xu xin <xu.xin16@zte.com.cn>,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        wangyong <wang.yong12@zte.com.cn>,
-        Yunkai Zhang <zhang.yunkai@zte.com.cn>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH v6] mm/ksm: introduce ksm_force for each process
-Message-Id: <20220513133210.9dd0a4216bd8baaa1047562c@linux-foundation.org>
-In-Reply-To: <1835064.A2aMcgg3dW@natalenko.name>
-References: <20220510122242.1380536-1-xu.xin16@zte.com.cn>
-        <5820954.lOV4Wx5bFT@natalenko.name>
-        <20220512153753.6f999fa8f5519753d43b8fd5@linux-foundation.org>
-        <1835064.A2aMcgg3dW@natalenko.name>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 13 May 2022 16:35:35 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B45B1155
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:35:34 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id z18so9949255iob.5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:35:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=0FWkbZlVZ8+ZAk9MOWvn/sjCHmkOQjoLdvsS2FrREQQ=;
+        b=Ay3nmlQmcTyckFsXET+z9Glc/oA3PwKjsbpGufKNaP6Oyahzz4QdwE1Pu9uPuKY+eZ
+         VrgtHDs5X4wwGxdsWGV64Zq3xw/L4Qwq1oiPitnjsfWlKnATomrKRRMG/Ad/MO+KOR/S
+         fVZ6UiDKq1wfHiSDPWf+tU64lhaOg9pFmfiLQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0FWkbZlVZ8+ZAk9MOWvn/sjCHmkOQjoLdvsS2FrREQQ=;
+        b=qYi8N0+WrSxmEhLq8uJ03zTWXrC5Ci0y8bRLBH1XOOYaTB2Y0BSsjolgOOBrjZVYRc
+         SkYbny0Dc49L3KqbTJWBsecx50i21cLiWq6QJ91R3fm69VXUSD2YF4BRMwLHVdlCzdgl
+         YsnM/radjaJaveOKq0FZDGtccWgOp2HKQPCNvMKXr6oArjX+vO+3AdCrj9GcF/PHTICL
+         mTu+NGO8HW5KCpwcONs7VGBlme4ckaPM1A+GgQS6ukOmfhqySBHCf6AxlmZLlkKMSa/Q
+         3UOg/1HOlryL4B7D/XpdVnBIC/J/s/hxs6FrTy0dpMWODSswIQpCU3v9TNcGDWz6McVP
+         9M4w==
+X-Gm-Message-State: AOAM533Q29j28R5vygmOUew+zdO9sqAceb5bn5aitkN1BCXNNHRXDemj
+        p8KBdH6nF9HTPKrHs3R42RkCdQ==
+X-Google-Smtp-Source: ABdhPJyOzuutlyP4RjHe4KUSOwomzY6geZDQX2GVk58T0PTagNM6Q5VWE+Ecc5U7ne/cNCPeGiAGRA==
+X-Received: by 2002:a02:cead:0:b0:32a:ff4f:99b6 with SMTP id z13-20020a02cead000000b0032aff4f99b6mr3608230jaq.173.1652474133485;
+        Fri, 13 May 2022 13:35:33 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id cx8-20020a056638490800b0032b3a781782sm923180jab.70.2022.05.13.13.35.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 13:35:33 -0700 (PDT)
+Subject: Re: [PATCH 5.17 00/12] 5.17.8-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220513142228.651822943@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <c024e984-656a-a49d-e1ea-dd46eb00682f@linuxfoundation.org>
+Date:   Fri, 13 May 2022 14:35:29 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <20220513142228.651822943@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 May 2022 11:51:53 +0200 Oleksandr Natalenko <oleksandr@natalenko.name> wrote:
-
-> Hello.
+On 5/13/22 8:24 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.17.8 release.
+> There are 12 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> On pátek 13. května 2022 0:37:53 CEST Andrew Morton wrote:
-> > On Tue, 10 May 2022 15:30:36 +0200 Oleksandr Natalenko <oleksandr@natalenko.name> wrote:
-> > 
-> > > > If ksm_force is set to 1, force all anonymous and 'qualified' VMAs
-> > > > of this mm to be involved in KSM scanning without explicitly calling
-> > > > madvise to mark VMA as MADV_MERGEABLE. But It is effective only when
-> > > > the klob of /sys/kernel/mm/ksm/run is set as 1.
-> > > > 
-> > > > If ksm_force is set to 0, cancel the feature of ksm_force of this
-> > > > process (fallback to the default state) and unmerge those merged pages
-> > > > belonging to VMAs which is not madvised as MADV_MERGEABLE of this process,
-> > > > but still leave MADV_MERGEABLE areas merged.
-> > > 
-> > > To my best knowledge, last time a forcible KSM was discussed (see threads [1], [2], [3] and probably others) it was concluded that a) procfs was a horrible interface for things like this one; and b) process_madvise() syscall was among the best suggested places to implement this (which would require a more tricky handling from userspace, but still).
-> > > 
-> > > So, what changed since that discussion?
-> > > 
-> > > P.S. For now I do it via dedicated syscall, but I'm not trying to upstream this approach.
-> > 
-> > Why are you patching the kernel with a new syscall rather than using
-> > process_madvise()?
+> Responses should be made by Sun, 15 May 2022 14:22:19 +0000.
+> Anything received after that time might be too late.
 > 
-> Because I'm not sure how to use `process_madvise()` to achieve $subj properly.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.8-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> and the diffstat can be found below.
 > 
-> The objective is to mark all the eligible VMAs of the target task for KSM to consider them for merging.
+> thanks,
 > 
-> For that, all the eligible VMAs have to be traversed.
-> 
-> Given `process_madvise()` has got an iovec API, this means the process that will call `process_madvise()` has to know the list of VMAs of the target process. In order to traverse them in a race-free manner the target task has to be SIGSTOP'ped or frozen, then the list of VMAs has to be obtained, then `process_madvise()` has to be called, and the the target task can continue. This is:
-> 
-> a) superfluous (the kernel already knows the list of VMAs of the target tasks, why proxy it through the userspace then?); and
-> b) may induce more latency than needed because the target task has to be stopped to avoid races.
-
-OK.  And what happens to new vmas that the target process creates after
-the process_madvise()?
-
-> OTOH, IIUC, even if `MADV_MERGEABLE` is allowed for `process_madvise()`,
-
-Is it not?
-
-> I cannot just call it like this:
-> 
-> ```
-> iovec.iov_base = 0;
-> iovec.iov_len = ~0ULL;
-> process_madvise(pidfd, &iovec, 1, MADV_MERGEABLE, 0);
-> ```
-> 
-> to cover the whole address space because iovec expects total size to be under ssize_t.
-> 
-> Or maybe there's no need to cover the whole address space, only the lower half of it?
-
-Call process_madvise() twice, once for each half?
-
-> Or maybe there's another way of doing things, and I just look stupid and do not understand how this is supposed to work?..
-> 
-> I'm more than happy to read your comments on this.
+> greg k-h
 > 
 
-I see the problem.  I do like the simplicity of the ksm_force concept. 
-Are there alternative ideas?
+Compiled and booted on my test system. No dmesg regressions.
+
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah
+
+
+

@@ -2,112 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B835C5264A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7637152648C
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:34:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354674AbiEMObt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45158 "EHLO
+        id S1381201AbiEMOdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379420AbiEMO1G (ORCPT
+        with ESMTP id S1380925AbiEMO3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:27:06 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 96D0E5E74F
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:26:57 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-315-W4fZ4W5BNf20LvCgPbIqkA-1; Fri, 13 May 2022 15:26:54 +0100
-X-MC-Unique: W4fZ4W5BNf20LvCgPbIqkA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Fri, 13 May 2022 15:26:54 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Fri, 13 May 2022 15:26:53 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Alexander Potapenko' <glider@google.com>
-CC:     Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        "Andi Kleen" <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: RE: [RFCv2 00/10] Linear Address Masking enabling
-Thread-Topic: [RFCv2 00/10] Linear Address Masking enabling
-Thread-Index: AQHYZrnErY7g4wB/gUe/NECu92+S/a0cqjCAgAAA34CAADGTYA==
-Date:   Fri, 13 May 2022 14:26:53 +0000
-Message-ID: <ea7faf6e961141c7848e7587d5e369eb@AcuMS.aculab.com>
-References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
- <20220511064943.GR76023@worktop.programming.kicks-ass.net>
- <20bada85-9203-57f4-2502-57a6fd11f3ea@intel.com> <875ymav8ul.ffs@tglx>
- <55176b79-90af-4a47-dc06-9f5f2f2c123d@intel.com>
- <CAG_fn=URUve59ZPWRawW+BN-bUy7U3QmFsfOz_7L8ndsL4kQFQ@mail.gmail.com>
- <8a47d0ee50b44520a6f26177e6fe7ec5@AcuMS.aculab.com>
- <CAG_fn=XUqzBWzuU0cmjUoSfHTv6pN=LCqGh7Ns8kgR6L169bPw@mail.gmail.com>
-In-Reply-To: <CAG_fn=XUqzBWzuU0cmjUoSfHTv6pN=LCqGh7Ns8kgR6L169bPw@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 13 May 2022 10:29:39 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F479941B2
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:28:01 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d22so8086977plr.9
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:28:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+QQdCynx9R6U6w/GBf0MKxMrNELH2gn+H5u0wn8VzXI=;
+        b=qV51SP4bOcD0/cAU86xbrh+y3FdrsrCiQ/Bqp4lxWyyZjye8rk5+XElov551PASVRY
+         D4ESwLtpEly+3JTdCMw99va5kEsNbH50qP3PhuThC3W4qFU0FjfCbTZ2jEd/xkEvfhzd
+         xTe4pmEvx2R/9j+wbCJXDI9d3THSMLg2xlWA4VsLGVxhRr2uRRDbL3kPvt0dAU9WT5Iu
+         JuiVzhfSCWcytG3zd7br6Gob8cSnaJyInz/2DsEMmzzcsE/P+2uhWz6w/ZD8JjGB+9w2
+         CCJo6kPnJSaLlVja/gYUUe7C9pYOKQoZAHtTb4vdtf5wfpNhYFESthNKiO+pc1yb80Br
+         7vdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+QQdCynx9R6U6w/GBf0MKxMrNELH2gn+H5u0wn8VzXI=;
+        b=36KHjdDU4T5GEgBwz1Bo9dCYAINrtr59cEEeXHclg2eSa7DUwrVw3Ooj5/x768HlvL
+         PWR/qghSASGy6kVUmYIflA85psWCmTf46jwzvGoTh41sOtAxws3+18Zov/JwMamQeEtO
+         Ecng6rJunM5FXoWnOfvHw1dyzZfJWTaOGgxTXLkefC25GrnhJnBm2LQl2RmOsqrxay1+
+         uGYC+HyLQ10L/SqGhjNHCzQEaTTkpuhNpBkrWVUCTKEsR8EjyuqKUN3YVs4AndjxP981
+         M/677UjSgXmTCL4qtngWBVzMQDRIJQjXCdzXZPbi1SZNGuxMfmJdYdNCnWfRfn3deRCw
+         w55A==
+X-Gm-Message-State: AOAM533qb502a2WD/d7kSRlQt7QvgbMIfxlxIinHdgyvEB6kndypldDb
+        5sssD31oY326V487J1cY7Y6OMQu/XeCIGQ==
+X-Google-Smtp-Source: ABdhPJyUkw0Dot81TbFysPPUNr3WVmg1+FbhuOz8hiv6Yq1uHVvAQecgrf+in/8vjWiDz1CBG7OujQ==
+X-Received: by 2002:a17:902:aa85:b0:155:ceb9:3710 with SMTP id d5-20020a170902aa8500b00155ceb93710mr4874209plr.59.1652452080864;
+        Fri, 13 May 2022 07:28:00 -0700 (PDT)
+Received: from localhost ([139.177.225.250])
+        by smtp.gmail.com with ESMTPSA id j16-20020a634a50000000b003c14af50639sm1650442pgl.81.2022.05.13.07.27.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 07:28:00 -0700 (PDT)
+Date:   Fri, 13 May 2022 22:27:47 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     'Andrew Morton' <akpm@linux-foundation.org>,
+        liqiong <liqiong@nfschina.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mm: change "char *bdi_unknown_name" to "char
+ bdi_unknown_name[]"
+Message-ID: <Yn5q43kblRPTvpDD@FVFYT0MHHV2J.usts.net>
+References: <20220512082637.24649-1-liqiong@nfschina.com>
+ <20220512130051.94a0c53e5d1498292473975d@linux-foundation.org>
+ <4b21dec7e98243b89daea96286c33434@AcuMS.aculab.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4b21dec7e98243b89daea96286c33434@AcuMS.aculab.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQWxleGFuZGVyIFBvdGFwZW5rbw0KPiBTZW50OiAxMyBNYXkgMjAyMiAxMzoyNg0KPiAN
-Cj4gT24gRnJpLCBNYXkgMTMsIDIwMjIgYXQgMToyOCBQTSBEYXZpZCBMYWlnaHQgPERhdmlkLkxh
-aWdodEBhY3VsYWIuY29tPiB3cm90ZToNCj4gPg0KPiA+IC4uLg0KPiA+ID4gT25jZSB3ZSBoYXZl
-IHRoZSBwb3NzaWJpbGl0eSB0byBzdG9yZSB0YWdzIGluIHRoZSBwb2ludGVycywgd2UgZG9uJ3QN
-Cj4gPiA+IG5lZWQgcmVkem9uZXMgZm9yIGhlYXAvc3RhY2sgb2JqZWN0cyBhbnltb3JlLCB3aGlj
-aCBzYXZlcyBxdWl0ZSBhIGJpdA0KPiA+ID4gb2YgbWVtb3J5Lg0KPiA+DQo+ID4gWW91IHN0aWxs
-IG5lZWQgcmVkem9uZXMuDQo+ID4gVGhlIGhpZ2ggYml0cyBhcmUgaWdub3JlZCBmb3IgYWN0dWFs
-IG1lbW9yeSBhY2Nlc3Nlcy4NCj4gPg0KPiA+IFRvIGRvIG90aGVyd2lzZSB5b3UnZCBuZWVkIHRo
-ZSBoaWdoIGJpdHMgdG8gYmUgaW4gdGhlIFBURSwNCj4gPiBjb3BpZWQgdG8gdGhlIFRMQiBhbmQg
-ZmluYWxseSBnZXQgaW50byB0aGUgY2FjaGUgdGFnLg0KPiA+DQo+ID4gVGhlbiB5b3UnZCBoYXZl
-IHRvIHVzZSB0aGUgY29ycmVjdCB0YWdzIGZvciBlYWNoIHBhZ2UuDQo+IA0KPiBTb3JyeSwgSSBk
-b24ndCB1bmRlcnN0YW5kIGhvdyB0aGlzIGlzIHJlbGV2YW50IHRvIEhXQVNhbiBpbiB0aGUgdXNl
-cnNwYWNlLg0KPiBMaWtlIGluIEFTYW4sIHdlIGhhdmUgYSBjdXN0b20gYWxsb2NhdG9yIHRoYXQg
-YXNzaWducyB0YWdzIHRvIGhlYXANCj4gb2JqZWN0cy4gVGhlIGFzc2lnbmVkIHRhZyBpcyBzdG9y
-ZWQgaW4gYm90aCB0aGUgc2hhZG93IG1lbW9yeSBmb3IgdGhlDQo+IG9iamVjdCBhbmQgdGhlIHBv
-aW50ZXIgcmV0dXJuZWQgYnkgdGhlIGFsbG9jYXRvci4NCj4gSW5zdHJ1bWVudGF0aW9uIGluc2Vy
-dGVkIGJ5IHRoZSBjb21waWxlciBjaGVja3MgdGhlIHBvaW50ZXIgYmVmb3JlDQo+IGV2ZXJ5IG1l
-bW9yeSBhY2Nlc3MgYW5kIGVuc3VyZXMgdGhhdCBpdHMgdGFnIG1hdGNoZXMgdGhlIHRhZyBvZiB0
-aGUNCj4gb2JqZWN0IGluIHRoZSBzaGFkb3cgbWVtb3J5Lg0KDQpEb2Vzbid0IHRoYXQgYWRkIHNv
-IG11Y2ggb3ZlcmhlYWQgdGhhdCB0aGUgc3lzdGVtIHJ1bnMgbGlrZSBhIHNpY2sgcGlnPw0KSSBk
-b24ndCBzZWUgYW55IHBvaW50IGFkZGluZyBvdmVyaGVhZCB0byBhIGdlbmVyaWMga2VybmVsIHRv
-IHN1cHBvcnQNCnN1Y2ggb3BlcmF0aW9uLg0KDQo+IEEgdGFnIG1pc21hdGNoIGlzIHJlcG9ydGVk
-IGFzIGFuIG91dC1vZi1ib3VuZHMgb3IgYSB1c2UtYWZ0ZXItZnJlZSwNCj4gZGVwZW5kaW5nIG9u
-IHdoZXRoZXIgdGhlIGFjY2Vzc2VkIG1lbW9yeSBpcyBzdGlsbCBjb25zaWRlcmVkDQo+IGFsbG9j
-YXRlZC4NCj4gQmVjYXVzZSBvYmplY3RzIHdpdGggZGlmZmVyZW50IHRhZ3MgZm9sbG93IGVhY2gg
-b3RoZXIsIHRoZXJlIGlzIG5vDQo+IG5lZWQgdG8gYWRkIGV4dHJhIHJlZHpvbmVzIHRvIHRoZSBv
-YmplY3RzIHRvIGRldGVjdCBidWZmZXIgb3ZlcmZsb3dzLg0KPiAoV2UgbWlnaHQgbmVlZCB0byBp
-bmNyZWFzZSB0aGUgb2JqZWN0IGFsaWdubWVudCB0aG91Z2gsIGJ1dCB0aGF0J3MgYQ0KPiBkaWZm
-ZXJlbnQgc3RvcnkpLg0KDQpIb3cgZG9lcyBhbGwgdGhhdCBoZWxwIGlmIGEgc3lzdGVtIGNhbGwg
-KGVnIHJlYWQoKSkgaXMgZ2l2ZW4NCmFuIGludmFsaWQgbGVuZ3RoLg0KSWYgdGhhdCBsZW5ndGgg
-aXMgY2hlY2tlZCB0aGVuIHRoZSAndW5tYXNrZWQnIGFkZHJlc3MgY2FuIGJlDQpwYXNzZWQgdG8g
-dGhlIGtlcm5lbC4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwg
-QnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVn
-aXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+On Fri, May 13, 2022 at 11:06:23AM +0000, David Laight wrote:
+> From: Andrew Morton
+> > Sent: 12 May 2022 21:01
+> > 
+> > On Thu, 12 May 2022 16:26:37 +0800 liqiong <liqiong@nfschina.com> wrote:
+> > 
+> > > "char bdi_unknown_nam[]" string form declares a single variable.
+> > > It is better then "char *bdi_unknown_name" which creates two
+> > > variables.
+> > >
+> > > ...
+> > >
+> > > --- a/mm/backing-dev.c
+> > > +++ b/mm/backing-dev.c
+> > > @@ -20,7 +20,7 @@ struct backing_dev_info noop_backing_dev_info;
+> > >  EXPORT_SYMBOL_GPL(noop_backing_dev_info);
+> > >
+> > >  static struct class *bdi_class;
+> > > -static const char *bdi_unknown_name = "(unknown)";
+> > > +static const char bdi_unknown_name[] = "(unknown)";
+> > >
+> > 
+> > heh, fun patch.  We actually do this quite a lot.
+> > 
+> > 	grep -r "^[a-z].*char \*[a-z].*= \"" .
+> > 
+> > is a pathetic pattern which catches a lot of them.
+> > 
+> > 
+> > However.  I expected your patch to shrink the kernel a bit, but it has
+> > the opposite effect:
+> > 
+> > hp2:/usr/src/25> size mm/backing-dev.o
+> >    text	   data	    bss	    dec	    hex	filename
+> >   21288	   9396	   3808	  34492	   86bc	mm/backing-dev.o-before
+> >   21300	   9428	   3808	  34536	   86e8	mm/backing-dev.o-after
+> > 
+> > Even .data became larger.  I didn't investigate why.
+> 
+> The linker can merge replicated strings
+> (ie data in .rodata.str1.n sections)
+> but I don't think the compiler puts variables into that section.
+> 
+> So if you have:
+> static const char *const foo_xxx = "foo";
+> in multiple source/object files you get lots of pointers
+> but only one string.
+> OTOH with:
+> static const char foo_xxx[] = "foo";
+> you get lots of copies of the string.
+> Which is smaller depends on the number of variables and the length
+> of the string.
+>
 
+Good point. I have searched the whole code.  There are 19 places
+where use the string "(unknown)".  Seems it is better to drop
+this change.
+
+arch/mips/alchemy/devboards/db1xxx.c:48:                return "(unknown)";
+drivers/acpi/device_pm.c:44:            return "(unknown)";
+drivers/base/component.c:101:                      component ? dev_name(component->dev) : "(unknown)",
+drivers/block/rbd.c:5137:                           spec->image_id, spec->image_name ?: "(unknown)",
+drivers/gpu/drm/i915/display/intel_dsi_vbt.c:570:               return "(unknown)";
+drivers/i3c/master/mipi-i3c-hci/ext_caps.c:50:          "(unknown)", "master only", "target only",
+drivers/net/wireless/broadcom/brcm80211/brcmfmac/fwil.c:85:             return "(unknown)";
+drivers/platform/x86/thinkpad_acpi.c:7506:                      thinkpad_id.ec_version_str : "(unknown)");
+drivers/usb/gadget/udc/omap_udc.c:2800:         type = "(unknown)";
+fs/cifs/cifs_swn.c:653:                 seq_puts(m, "(unknown)");
+fs/cifs/cifsfs.c:434:           seq_puts(s, "(unknown)");
+fs/ext4/super.c:835:                    path = "(unknown)";
+include/drm/drm_mode_object.h:118:              return "(unknown)";                             \
+lib/error-inject.c:187:         return "(unknown)";
+mm/backing-dev.c:23:static const char *bdi_unknown_name = "(unknown)";
+mm/filemap.c:3664:                      path = "(unknown)";
+net/ipv4/cipso_ipv4.c:444:                      type_str = "(unknown)";
+net/ipv6/calipso.c:384:                 type_str = "(unknown)";
+sound/firewire/dice/dice-proc.c:35:     return "(unknown)";
+
+
+Thanks.

@@ -2,128 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C0B526C3F
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 23:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D59FE526C2C
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 23:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384646AbiEMVS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 17:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
+        id S1384638AbiEMVQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 17:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240772AbiEMVSY (ORCPT
+        with ESMTP id S232910AbiEMVQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 17:18:24 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1792B522E5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 14:18:23 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id x18so9107158plg.6
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 14:18:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=o0kVmjdcMUKYVM5DrVqgurkhzcUKhblSSgNmYbuiRRg=;
-        b=CcTeCWOYH5IP5w44cu7dNo2TnZ/9Jx/DeJm8b0kUpZgsy3l9UnRTVQ62bBl7e+LpPY
-         uTdOP+qtH8CxKFdV2hEA9fdjzPRETXryPhxAhm2mbvT25s0H8e5hfRE9HbHgjjFvBC1e
-         3BemwWOw7u583NKe+1Yuls4TqwcQRtR0N9ZLSR/motIt3kq9nTk4lxphNAvqQkzq43aw
-         HhEA8WBEupPU7Uu95wWDZaGYEYzVGLa/9rBljxZ6OaVeYVZsD9/dsJHcR949/J/TWQTE
-         eAdD0/JMKMNyAUIfnZ0iKXk3F4e/fiGixPeE9DWiMjcAxji6GevP3vM2aTiyzhHwPM9K
-         bVfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=o0kVmjdcMUKYVM5DrVqgurkhzcUKhblSSgNmYbuiRRg=;
-        b=xQHfSbBCcKHZcKHSbYjPotzLMTU2iMUDCW8L8EDURtFuqfnIv9WiIgw6op10slYsIb
-         Vyx0mgmUeNEUt2CMVPPzEmZpaqzL7NMVDltYwxws/oqNxdvDhd3E1zCDutnRemaSXCQ4
-         K/N2D5FxpCLJYpMH73gaFXDAq7DHU0HywiO7cQwCTuf43wZ/0Bel4qIwSi8SN0Uw+on9
-         3ICcqJ2CKi4o5GUBbjdBfBl0joIE34KN7BUlWNNTxSMxBdr1k9uZCEY+FRolBnV5iU7E
-         MyTUbizGBbo97o5PsuHrUUAn9Pmw78oMNpnw/18AQHnY4ANPuGwNWtQU9B4Iac1KxRtF
-         85hw==
-X-Gm-Message-State: AOAM531evYVrnaoldloXjZ9cspkp3MBMPsQ4vNf80gtUIsSyRTbpzfRo
-        CO70BmGLV3AMGp6Ko8XzF/Lxcl0UFpA=
-X-Google-Smtp-Source: ABdhPJylH80zUax/Bff44bHOHv24DhDjZB72DDduOGylPZmRgW3vOHvN+YkNJC2dl5gyEI0/w2z6vw==
-X-Received: by 2002:a17:90b:1291:b0:1db:eab7:f165 with SMTP id fw17-20020a17090b129100b001dbeab7f165mr18071902pjb.74.1652476702383;
-        Fri, 13 May 2022 14:18:22 -0700 (PDT)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id v8-20020a1709028d8800b0015e8d4eb1f3sm2304845plo.61.2022.05.13.14.18.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 14:18:21 -0700 (PDT)
-Date:   Sat, 14 May 2022 06:18:19 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH] init: call time_init() before rand_initialize()
-Message-ID: <Yn7LG3zlcKPaOXkp@antec>
-References: <20220505003114.177552-1-Jason@zx2c4.com>
+        Fri, 13 May 2022 17:16:17 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6FD27FE3
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 14:16:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652476576; x=1684012576;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9Gskyxl5a38unKZlQosOqjGR7Ihzv9T1bkSU8Qq82ZE=;
+  b=iuqSWemR6QTtifoX0Bmz+wmhZFx5045APKimXuGW5I85UtOzgGmSPW3f
+   OV8vAqZbCYIetn/kN8hd0s4NF09FEctds3LzknOxrjxvm4QdqmA4t5+xp
+   /nVTv2NVOrMn+2Jk2oVH+Xmfg65h3q4M6rP0awtxjNG6u28VL7jEJMMmc
+   hV2d+2zUa/OzmGD5YwCVCOVlXfpmuRKgZjulN6NvBxtgpN9Owmn3DT3v7
+   /40fhOAlLWdByhCHmmRMkuTY59L9N2s5tNTiMue/zg9yJLKZYpMvVa4n9
+   GHnF2mhgWUwgNBk8f+6Yr7rdW3aTbVaHp0kd/ke3XqR0Lew5LMfdPrLrg
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="250940431"
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="250940431"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 14:16:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="595421000"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga008.jf.intel.com with ESMTP; 13 May 2022 14:16:09 -0700
+Date:   Fri, 13 May 2022 14:19:44 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     x86@kernel.org, Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Stephane Eranian <eranian@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 15/29] x86/hpet: Add helper function
+ hpet_set_comparator_periodic()
+Message-ID: <20220513211944.GE22683@ranerica-svr.sc.intel.com>
+References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
+ <20220506000008.30892-16-ricardo.neri-calderon@linux.intel.com>
+ <87mtfufifa.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220505003114.177552-1-Jason@zx2c4.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87mtfufifa.ffs@tglx>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 02:31:14AM +0200, Jason A. Donenfeld wrote:
-> Currently time_init() is called before rand_initialize(), but
-> rand_initialize() makes use of the timer on various platforms, and
-> sometimes this timer needs to be initialized by time_init() first. In
-> order to not return zero, reverse the order of these two calls. The
-> block doing random initialization was right before time_init() before,
-> so changing the order shouldn't have any complicated effects.
+On Fri, May 06, 2022 at 11:41:13PM +0200, Thomas Gleixner wrote:
+> On Thu, May 05 2022 at 16:59, Ricardo Neri wrote:
+> > Programming an HPET channel as periodic requires setting the
+> > HPET_TN_SETVAL bit in the channel configuration. Plus, the comparator
+> > register must be written twice (once for the comparator value and once for
+> > the periodic value). Since this programming might be needed in several
+> > places (e.g., the HPET clocksource and the HPET-based hardlockup detector),
+> > add a helper function for this purpose.
+> >
+> > A helper function hpet_set_comparator_oneshot() could also be implemented.
+> > However, such function would only program the comparator register and the
+> > function would be quite small. Hence, it is better to not bloat the code
+> > with such an obvious function.
 > 
-> Cc: Stafford Horne <shorne@gmail.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> This word salad above does not provide a single reason why the periodic
+> programming function is required and better suited for the NMI watchdog
+> case
 
-I was thinking along the same lines when I looked into the OpenRISC issue
-that we fixed discussed here:
+The goal of hpet_set_comparator_periodic() is to avoid code duplication. The
+functions hpet_clkevt_set_state_periodic() and kick_timer() in the HPET NMI
+watchdog need to program a periodic HPET channel when supported.
 
- - https://lore.kernel.org/all/Ym27sFdFZEt5QV0i@antec/
 
-Though, I was not sure as to any dependency issues caused by changing the
-order.  Having it in -next and testing for a while should be able to
-bring out any bug.
+> and then goes on and blurbs about why a function which is not
+> required is not implemented.
 
-As for this patch:
+I can remove this.
 
-Reviewed-by: Stafford Horne <shorne@gmail.com>
+> The argument about not bloating the code
+> with an "obvious???" function which is quite small is slightly beyond my
+> comprehension level.
 
-> ---
-> Andrew - this file has no formal maintainer, but you've signed the most
-> commits, so I'm CC'ing you. This has some interactions with my
-> random.git tree, so unless there are objections, I'll queue it up there.
-> -Jason
-> 
->  init/main.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/init/main.c b/init/main.c
-> index 98182c3c2c4b..e37ec99cf56d 100644
-> --- a/init/main.c
-> +++ b/init/main.c
-> @@ -1035,6 +1035,7 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
->  	softirq_init();
->  	timekeeping_init();
->  	kfence_init();
-> +	time_init();
->  
->  	/*
->  	 * For best initial stack canary entropy, prepare it after:
-> @@ -1049,7 +1050,6 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
->  	add_device_randomness(command_line, strlen(command_line));
->  	boot_init_stack_canary();
->  
-> -	time_init();
->  	perf_event_init();
->  	profile_init();
->  	call_function_init();
-> -- 
-> 2.35.1
-> 
+That obvious function would look like this:
+
+void hpet_set_comparator_one_shot(int channel, u32 delta)
+{
+	u32 count;
+
+	count = hpet_readl(HPET_COUNTER);
+	count += delta;
+	hpet_writel(count, HPET_Tn_CMP(channel));
+}
+
+It involves one register read, one addition and one register write. IMO, this
+code is sufficiently simple and small to allow duplication.
+
+Programming a periodic HPET channel is not as straightforward, IMO. It involves
+handling two different values (period and comparator) written in a specific
+sequence, one configuration bit, and one delay. It also involves three register
+writes and one register read.
+
+Thanks and BR,
+Ricardo

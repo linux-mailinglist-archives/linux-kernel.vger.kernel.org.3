@@ -2,134 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74DE8525BF0
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2EF9525C07
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377588AbiEMG6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 02:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39592 "EHLO
+        id S1377584AbiEMG6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 02:58:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377537AbiEMG55 (ORCPT
+        with ESMTP id S1377535AbiEMG57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 02:57:57 -0400
-Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F316B5DA67
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 23:57:55 -0700 (PDT)
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 24D6iAZK026760;
-        Fri, 13 May 2022 14:44:12 +0800 (GMT-8)
-        (envelope-from neal_liu@aspeedtech.com)
-Received: from localhost.localdomain (192.168.10.10) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 13 May
- 2022 14:57:33 +0800
-From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        "Andrew Jeffery" <andrew@aj.id.au>,
-        Felipe Balbi <balbi@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Li Yang" <leoyang.li@nxp.com>
-CC:     Neal Liu <neal_liu@aspeedtech.com>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>, <BMC-SW@aspeedtech.com>
-Subject: [PATCH 3/3] dt-bindings: usb: add documentation for aspeed udc
-Date:   Fri, 13 May 2022 14:57:28 +0800
-Message-ID: <20220513065728.857722-4-neal_liu@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220513065728.857722-1-neal_liu@aspeedtech.com>
-References: <20220513065728.857722-1-neal_liu@aspeedtech.com>
+        Fri, 13 May 2022 02:57:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9025A606CC;
+        Thu, 12 May 2022 23:57:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 14F4561E67;
+        Fri, 13 May 2022 06:57:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 740DEC34117;
+        Fri, 13 May 2022 06:57:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652425076;
+        bh=bwKLLYkMHR307DmldZhVcAwohNlVK35xlfmJdyEzUzE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=EQkPOKS5dT+OPPkQCzVD/qRRo/zPU9MXcsSE5zyOZfrIAstbXeUo3tWKRXeDo6iur
+         7Gfxy1j+1s+cU6bPKKtH54HkHBhY0P3cTjW36/P9cbjgqUUqP5J0M778UCjB8F5TaD
+         oz69ycCiUCSACkiefS1lJe/JbqYe+T6Z8jWPzN/mYfUQJmFSbUGzxTWjPbZJPsTGek
+         kelwzaLxAmF6NtyFpG6X+ZzjxkAa4foHHthQhDzMQUPug9TGIdsucqy/7uAXVdYOCU
+         KwHIwJwdFJBtM0nthXUyVAgQ+7/3MKj18GeNFUa19KA2uBd3VL5pae3zoBAktKayI6
+         Dj8SBN20yqQyA==
+Received: by mail-vs1-f43.google.com with SMTP id y74so7482741vsy.7;
+        Thu, 12 May 2022 23:57:56 -0700 (PDT)
+X-Gm-Message-State: AOAM533a5w089zITgfQ+ljMJ/ZP+7rQb4oFdx7Y45UKt2aIBApWd/yZ+
+        q4iHj8cG8VvpdGcE6+VRWDYxTj4el0p/P+3Mdx8=
+X-Google-Smtp-Source: ABdhPJw3kQe5yqOihTdRUusUoGJTLVX/iPQ/GrFPrc38Koet00mVv/IXQZ16gw5KAflUROV8E8OuToLWUndXfeSRPxQ=
+X-Received: by 2002:a67:af01:0:b0:32d:3d57:cff with SMTP id
+ v1-20020a67af01000000b0032d3d570cffmr1872881vsl.8.1652425075448; Thu, 12 May
+ 2022 23:57:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.10.10]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 24D6iAZK026760
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220512035903.2779287-1-masahiroy@kernel.org> <20220512035903.2779287-3-masahiroy@kernel.org>
+In-Reply-To: <20220512035903.2779287-3-masahiroy@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 13 May 2022 14:57:44 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTWo2XGsov7HLdjj60YrrSUCVJ3xzW5=g9Xyr7Q8Tsq4A@mail.gmail.com>
+Message-ID: <CAJF2gTTWo2XGsov7HLdjj60YrrSUCVJ3xzW5=g9Xyr7Q8Tsq4A@mail.gmail.com>
+Subject: Re: [PATCH 3/4] csky: introduce CONFIG_CSKY_ABI_V1/2
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-csky@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device tree binding documentation for the Aspeed USB2.0 Device
-Controller.
+On Thu, May 12, 2022 at 12:01 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> This is useful to clean up Makefile.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
+>  arch/csky/Kconfig  | 11 +++++++++++
+>  arch/csky/Makefile | 14 ++++++++------
+>  2 files changed, 19 insertions(+), 6 deletions(-)
+>
+> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+> index 75ef86605d69..da756ecf0f85 100644
+> --- a/arch/csky/Kconfig
+> +++ b/arch/csky/Kconfig
+> @@ -161,6 +161,12 @@ config ARCH_MMAP_RND_BITS_MIN
+>  config ARCH_MMAP_RND_BITS_MAX
+>         default 17
+>
+> +config CSKY_ABI_V1
+> +       bool
+> +
+> +config CSKY_ABI_V2
+> +       bool
+> +
+>  menu "Processor type and features"
+>
+>  choice
+> @@ -172,15 +178,18 @@ config CPU_CK610
+>         select CPU_NEED_TLBSYNC
+>         select CPU_NEED_SOFTALIGN
+>         select CPU_NO_USER_BKPT
+> +       select CSKY_ABI_V1
+>
+>  config CPU_CK810
+>         bool "CSKY CPU ck810"
+>         select CPU_HAS_HILO
+>         select CPU_NEED_TLBSYNC
+> +       select CSKY_ABI_V2
+>
+>  config CPU_CK807
+>         bool "CSKY CPU ck807"
+>         select CPU_HAS_HILO
+> +       select CSKY_ABI_V2
+>
+>  config CPU_CK860
+>         bool "CSKY CPU ck860"
+> @@ -188,6 +197,8 @@ config CPU_CK860
+>         select CPU_HAS_CACHEV2
+>         select CPU_HAS_LDSTEX
+>         select CPU_HAS_FPUV2
+> +       select CSKY_ABI_V2
+> +
+>  endchoice
+>
+>  choice
+> diff --git a/arch/csky/Makefile b/arch/csky/Makefile
+> index 4d72aca4069b..2b30525f39e1 100644
+> --- a/arch/csky/Makefile
+> +++ b/arch/csky/Makefile
+> @@ -16,34 +16,36 @@ endif
+>
+>  ifdef CONFIG_CPU_CK610
+>  CPUTYPE        = ck610
+> -CSKYABI        = abiv1
+>  endif
+>
+>  ifdef CONFIG_CPU_CK810
+>  CPUTYPE = ck810
+> -CSKYABI        = abiv2
+>  endif
+>
+>  ifdef CONFIG_CPU_CK807
+>  CPUTYPE = ck807
+> -CSKYABI        = abiv2
+>  endif
+>
+>  ifdef CONFIG_CPU_CK860
+>  CPUTYPE = ck860
+> +endif
+> +
+> +ifdef CONFIG_CSKY_ABI_V1
+> +CSKYABI        = abiv1
+> +endif
+> +
+> +ifdef CONFIG_CSKY_ABI_V2
+>  CSKYABI        = abiv2
+We still need CSKYABI, so I don't think adding CONFIG_CSKY_ABI_V2 is
+necessary. And ck807 & ck860 have different ABI.
 
-Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
----
- .../devicetree/bindings/usb/aspeed,udc.yaml   | 52 +++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/usb/aspeed,udc.yaml
+>  endif
+>
+> -ifneq ($(CSKYABI),)
+>  MCPU_STR = $(CPUTYPE)$(FPUEXT)$(VDSPEXT)$(TEEEXT)
+>  KBUILD_CFLAGS += -mcpu=$(CPUTYPE) -Wa,-mcpu=$(MCPU_STR)
+>  KBUILD_CFLAGS += -DCSKYCPU_DEF_NAME=\"$(MCPU_STR)\"
+>  KBUILD_CFLAGS += -msoft-float -mdiv
+>  KBUILD_CFLAGS += -fno-tree-vectorize
+> -endif
+>
+>  KBUILD_CFLAGS += -pipe
+> -ifeq ($(CSKYABI),abiv2)
+> +ifdef CONFIG_CSKY_ABI_V2
+>  KBUILD_CFLAGS += -mno-stack-size
+>  endif
+>
+> --
+> 2.32.0
+>
 
-diff --git a/Documentation/devicetree/bindings/usb/aspeed,udc.yaml b/Documentation/devicetree/bindings/usb/aspeed,udc.yaml
-new file mode 100644
-index 000000000000..d1d2f77d1c54
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/aspeed,udc.yaml
-@@ -0,0 +1,52 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright (c) 2020 Facebook Inc.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/aspeed,udc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: ASPEED USB 2.0 Device Controller
-+
-+maintainers:
-+  - Neal Liu <neal_liu@aspeedtech.com>
-+
-+description: |+
-+  The ASPEED USB 2.0 Device Controller implements 1 control endpoint and
-+  4 generic endpoints for AST260x.
-+
-+  Supports independent DMA channel for each generic endpoint.
-+  Supports 32/256 stages descriptor mode for all generic endpoints.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - aspeed,ast2600-udc
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/aspeed-clock.h>
-+    udc: udc@1e6a2000 {
-+            compatible = "aspeed,ast2600-udc";
-+            reg = <0x1e6a2000 0x300>;
-+            interrupts = <9>;
-+            clocks = <&syscon ASPEED_CLK_GATE_USBPORT2CLK>;
-+            pinctrl-names = "default";
-+            pinctrl-0 = <&pinctrl_usb2bd_default>;
-+    };
+
 -- 
-2.25.1
+Best Regards
+ Guo Ren
 
+ML: https://lore.kernel.org/linux-csky/

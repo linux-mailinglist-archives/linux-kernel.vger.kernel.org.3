@@ -2,101 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 696E0525950
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 03:19:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECEBC52595D
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 03:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376319AbiEMBTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 21:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39198 "EHLO
+        id S1376325AbiEMBYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 21:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244317AbiEMBTR (ORCPT
+        with ESMTP id S1352238AbiEMBYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 21:19:17 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8DA12854B9
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 18:19:13 -0700 (PDT)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxGtgMsn1iyoQTAA--.10240S3;
-        Fri, 13 May 2022 09:19:08 +0800 (CST)
-Message-ID: <8c1fc6d4-7d3a-85dd-ebd9-fc8e221f1878@loongson.cn>
-Date:   Fri, 13 May 2022 09:19:08 +0800
+        Thu, 12 May 2022 21:24:21 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E4F5468A;
+        Thu, 12 May 2022 18:24:18 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2f7c57ee6feso75856857b3.2;
+        Thu, 12 May 2022 18:24:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=n6FjrnvCK2Re1ZT/L6LoW1fbg7qWZwjX3yuF4qzb42s=;
+        b=PYszdDos7XwDKhxXFWDOdB2ZNMd0E4WRDf5qZHDiwaGGzkYYhLumNRzbZD6Npdalu1
+         D8FLDcReyqjl4jVsbL4vgyN4GjZuu2S8Et/8eGuExuAJnxk/lwheJ++C4b2KY+az3xRs
+         TurhsS+rym3qtBeJRndX/arJfTqMXSazhvt5fvnYSLEFUHwvLpYf4cV4y4UtkOx2KpoP
+         HyTH0djK8nQTNusKMQbnuraSoAQ3UQrTdobdryiDw5H5gKb2eSh6Quk+aUcZKQZ08d4o
+         RwuMu+Ce1hb8jAGhrp5t7JAiSEAfGzW8BY2eCWuebLXdpbrNSmz6IWxiIqP96ZpE9hVO
+         v2eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=n6FjrnvCK2Re1ZT/L6LoW1fbg7qWZwjX3yuF4qzb42s=;
+        b=vLpS0rKQVAj2ONtBIGpkC/lFva+AQCbyRC2kKCSdperKfQmrgRAEdDzOOaldfHhJwa
+         TXUmNrRo5wcuWjGbj51cuWC3S+i18fV6N8Ct6Eevd+jtNWc+o0luLoq0S+t2bYDcWdye
+         EvgW/oYy7Gd+mZCA5m/ISbdmcQnRErzwLexmefRn3OfE9aIuehWV8R0Gk68gTXLrmn+6
+         ZS1x4/rpo1BqmyVI7mTJn+44QuqLZ8N9RZViATAiGw06ZwFe61iURDMoHtFBI+BETBMg
+         W8ptb5zYLhRTrY95JbGSgSIU1bT8nYyW7JoQIzIlNMDXj+cRweI9eASIVqwPkpZeEz3m
+         HATg==
+X-Gm-Message-State: AOAM5332xoZD2u4fiQo3QmP3E6PvnZbyKNu04X1Pvh5Z2OwyKgHQjCOA
+        719BDMLTP3TAMxklotgkBRlo059RS1WFkWD/TJM=
+X-Google-Smtp-Source: ABdhPJy74fAs696VKs+XfZzSEt2KCMLWfUB9gsmKtVuBSOT4J9RBmZeP8+JWiOG8ISeYZOFvOcC0SteZLL/3jH2DdeA=
+X-Received: by 2002:a81:1948:0:b0:2f7:cf75:2517 with SMTP id
+ 69-20020a811948000000b002f7cf752517mr3146144ywz.392.1652405057311; Thu, 12
+ May 2022 18:24:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v3] mm/khugepaged: sched to numa node when collapse huge
- page
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Peter Xu <peterx@redhat.com>
-Cc:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Yang Shi <shy828301@gmail.com>
-References: <20220317065024.2635069-1-maobibo@loongson.cn>
- <3a441789-b3e4-236e-2e44-e7a1c7258a94@redhat.com>
- <YmrB/7ehG2kj2RMn@xz-m1.local>
- <20220512173620.2f5175c7a321e6ccea6e58e9@linux-foundation.org>
-From:   maobibo <maobibo@loongson.cn>
-In-Reply-To: <20220512173620.2f5175c7a321e6ccea6e58e9@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9AxGtgMsn1iyoQTAA--.10240S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7tFyUAFWDtr1UZr1xXr1fJFb_yoW8XF43pF
-        W8ta1UKF4DJFyrGwn2vw1DZryxt393trWDXw15J347Cr98ZryaqFWfA3yYka9rGrn3GF4q
-        yrWYqF93Aw1avaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvab7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjc
-        xK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
-        64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r
-        1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vI
-        Y487MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
-        026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
-        JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
-        vEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280
-        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyT
-        uYvjxUqEoXUUUUU
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220512135901.1377087-1-srinivas.neeli@xilinx.com>
+In-Reply-To: <20220512135901.1377087-1-srinivas.neeli@xilinx.com>
+From:   Vincent Mailhol <vincent.mailhol@gmail.com>
+Date:   Fri, 13 May 2022 10:24:06 +0900
+Message-ID: <CAMZ6Rq+z69CTY6Ec0n9d0-ri6pcyHtKH917M1eTD6hgkmyvGDQ@mail.gmail.com>
+Subject: Re: [PATCH] can: xilinx_can: Add Transmitter delay compensation (TDC)
+ feature support
+To:     Srinivas Neeli <srinivas.neeli@xilinx.com>
+Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        edumazet@google.com, appana.durga.rao@xilinx.com, sgoud@xilinx.com,
+        michal.simek@xilinx.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        git@xilinx.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri. 13 May 2022 at 07:30, Srinivas Neeli <srinivas.neeli@xilinx.com> wrote:
+> Added Transmitter delay compensation (TDC) feature support.
+> In the case of higher measured loop delay with higher baud rates, observed
+> bit stuff errors.
+> By enabling the TDC feature in a controller, will compensate for
+> the measure loop delay in the receive path.
+> TDC feature requires BRP values can be 1 or 2.
+> The current CAN framework does not limit the brp so while using TDC,
+> have to restrict BRP values.
+> Ex:
+> ip link set can0 type can tq 12 prop-seg 39 phase-seg1 20 phase-seg2 20
+> sjw 20 dtq 12 dprop-seg 5 dphase-seg1 6 dphase-seg2 4 dsjw 4 fd on
+> loopback on tdco 12 tdc-mode auto
 
+Did you experience some cases in which you had BRP > 2 and saw
+transmission errors due to the absence of delay compensation? Could
+you show the calculated values?
+Usually, you start to observe but stuff error at high bitrates (e.g.
+~5MBPS), and for such bitrates, time quanta has to be small which then
+results in a small BRP.
 
-在 2022/5/13 08:36, Andrew Morton 写道:
-> On Thu, 28 Apr 2022 12:34:07 -0400 Peter Xu <peterx@redhat.com> wrote:
-> 
->> On Thu, Apr 28, 2022 at 05:17:07PM +0200, David Hildenbrand wrote:
->>> On 17.03.22 07:50, Bibo Mao wrote:
->>>> collapse huge page will copy huge page from general small pages,
->>>> dest node is calculated from most one of source pages, however
->>>> THP daemon is not scheduled on dest node. The performance may be
->>>> poor since huge page copying across nodes, also cache is not used
->>>> for target node. With this patch, khugepaged daemon switches to
->>>> the same numa node with huge page. It saves copying time and makes
->>>> use of local cache better.
->>>>
->>>> With this patch, specint 2006 base performance is improved with 6%
->>>> on Loongson 3C5000L platform with 32 cores and 8 numa nodes.
->>>
->>> If it helps, that's nice as long as it doesn't hurt other cases.
->>>
-> 
-> Quite a bit of doubtful feedback and we have yet to hear from the
-> author.  I'll drop the patch.
-> 
-> Bibo, please resend at a later time if you feel the patch remains
-> desirable.  Please attempt to address the feedback via code changes
-> and/or changelogging.
-Sorry for the late response, the mail is filtered and I did not notice that. The result is not so obvious after bandwidth is improved between nodes, it is only about 1% improvement for specint2006 for 32 core on my box.
+> Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
+> ---
+>  drivers/net/can/xilinx_can.c | 30 +++++++++++++++++++++++++-----
+>  1 file changed, 25 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
+> index e2b15d29d15e..7af518fbed02 100644
+> --- a/drivers/net/can/xilinx_can.c
+> +++ b/drivers/net/can/xilinx_can.c
+> @@ -1,7 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0-or-later
+>  /* Xilinx CAN device driver
+>   *
+> - * Copyright (C) 2012 - 2014 Xilinx, Inc.
+> + * Copyright (C) 2012 - 2022 Xilinx, Inc.
+>   * Copyright (C) 2009 PetaLogix. All rights reserved.
+>   * Copyright (C) 2017 - 2018 Sandvik Mining and Construction Oy
+>   *
+> @@ -133,6 +133,8 @@ enum xcan_reg {
+>  #define XCAN_DLCR_BRS_MASK             0x04000000 /* BRS Mask in DLC */
+>
+>  /* CAN register bit shift - XCAN_<REG>_<BIT>_SHIFT */
+> +#define XCAN_BRPR_TDCO_SHIFT_CANFD     8  /* Transmitter Delay Compensation Offset */
 
-Now I do not see negative effective about this patch unless user wants to keep some cores separated from khugepaged daemon process.
+Having CANFD in the name is redundant (TDC implies CANFD).
+#define XCAN_BRPR_TDCO_SHIFT 8
 
+> +#define XCAN_BRPR_TDCE_SHIFT_CANFD     16 /* Transmitter Delay Compensation (TDC) Enable */
 
-regards
-bibo,mao
+Why not:
+#define XCAN_BRPR_TDC_ENABLE BIT(16)
 
+>  #define XCAN_BTR_SJW_SHIFT             7  /* Synchronous jump width */
+>  #define XCAN_BTR_TS2_SHIFT             4  /* Time segment 2 */
+>  #define XCAN_BTR_SJW_SHIFT_CANFD       16 /* Synchronous jump width */
+> @@ -259,7 +261,7 @@ static const struct can_bittiming_const xcan_bittiming_const_canfd2 = {
+>         .tseg2_min = 1,
+>         .tseg2_max = 128,
+>         .sjw_max = 128,
+> -       .brp_min = 2,
+> +       .brp_min = 1,
+
+Was there any reason to have brp_min = 2 in the first place?
+I think this change  should be a different patch. If the brp_min = 2
+is just a typo, you might also want to backport it to stable branches.
+
+>         .brp_max = 256,
+>         .brp_inc = 1,
+>  };
+> @@ -272,11 +274,21 @@ static struct can_bittiming_const xcan_data_bittiming_const_canfd2 = {
+>         .tseg2_min = 1,
+>         .tseg2_max = 16,
+>         .sjw_max = 16,
+> -       .brp_min = 2,
+> +       .brp_min = 1,
+>         .brp_max = 256,
+>         .brp_inc = 1,
+>  };
+>
+> +/* Transmission Delay Compensation constants for CANFD2.0 and Versal  */
+> +static const struct can_tdc_const xcan_tdc_const = {
+> +       .tdcv_min = 0,
+> +       .tdcv_max = 0, /* Manual mode not supported. */
+
+Right, had a look at the datasheet and xilinx indeed does not support
+setting TDCV.
+However, xilinx still has a TDCV register to report the measured
+transmission delay.
+
+Socket CAN's TDC framework provides can_priv::do_get_auto_tdcv() to
+report the measured value through the netlink interface:
+https://elixir.bootlin.com/linux/v5.17/source/include/linux/can/dev.h#L87
+
+Can you implement this call back function?
+
+> +       .tdco_min = 0,
+> +       .tdco_max = 64,
+> +       .tdcf_min = 0, /* Filter window not supported */
+> +       .tdcf_max = 0,
+> +};
+> +
+>  /**
+>   * xcan_write_reg_le - Write a value to the device register little endian
+>   * @priv:      Driver private data structure
+> @@ -425,6 +437,11 @@ static int xcan_set_bittiming(struct net_device *ndev)
+>             priv->devtype.cantype == XAXI_CANFD_2_0) {
+>                 /* Setting Baud Rate prescalar value in F_BRPR Register */
+>                 btr0 = dbt->brp - 1;
+> +               if (can_tdc_is_enabled(&priv->can)) {
+> +                       btr0 = btr0 |
+> +                       (priv->can.tdc.tdco) << XCAN_BRPR_TDCO_SHIFT_CANFD |
+> +                       1 << XCAN_BRPR_TDCE_SHIFT_CANFD;
+
+I don't think the parenthesis around (priv->can.tdc.tdco) are needed.
+
+                       btr0 = btr0 |
+                       priv->can.tdc.tdco << XCAN_BRPR_TDCO_SHIFT |
+                      XCAN_BRPR_TDC_ENABLE
+
+(c.f. above for macro names)
+
+> +               }
+>
+>                 /* Setting Time Segment 1 in BTR Register */
+>                 btr1 = dbt->prop_seg + dbt->phase_seg1 - 1;
+> @@ -1747,13 +1764,16 @@ static int xcan_probe(struct platform_device *pdev)
+>                 priv->can.data_bittiming_const =
+>                         &xcan_data_bittiming_const_canfd;
+>
+> -       if (devtype->cantype == XAXI_CANFD_2_0)
+> +       if (devtype->cantype == XAXI_CANFD_2_0) {
+>                 priv->can.data_bittiming_const =
+>                         &xcan_data_bittiming_const_canfd2;
+> +               priv->can.tdc_const = &xcan_tdc_const;
+> +       }
+>
+>         if (devtype->cantype == XAXI_CANFD ||
+>             devtype->cantype == XAXI_CANFD_2_0)
+> -               priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD;
+> +               priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD |
+> +                                               CAN_CTRLMODE_TDC_AUTO;
+>
+>         priv->reg_base = addr;
+>         priv->tx_max = tx_max;
+> --
+> 2.25.1
+>

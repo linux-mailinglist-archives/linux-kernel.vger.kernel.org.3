@@ -2,272 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A1D526C2D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 23:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C0B526C3F
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 23:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384645AbiEMVQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 17:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39430 "EHLO
+        id S1384646AbiEMVS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 17:18:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384652AbiEMVQX (ORCPT
+        with ESMTP id S240772AbiEMVSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 17:16:23 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8A92FFF7
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 14:16:21 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2f7d7e3b5bfso102760637b3.5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 14:16:21 -0700 (PDT)
+        Fri, 13 May 2022 17:18:24 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1792B522E5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 14:18:23 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id x18so9107158plg.6
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 14:18:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=MRtO0/Q9M+/YZltuvI+O6gptQdPEm7Chns62TBTJqlc=;
-        b=XsaKL/zxEjiTu7bLIUanqsf5HUSHvBat2+niQNEEe7sWSGi5nCS81ON4Sk80OIdusO
-         VWOauFKsK+sOP1mBCWVBrLxtnmsVrQntMWn7YwzXpLegvvq+wjPBmDo2CqHQYl/YU//l
-         oOLn20hynM9LECB8QSe/1i1gZ3NilEwPE5KPw=
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=o0kVmjdcMUKYVM5DrVqgurkhzcUKhblSSgNmYbuiRRg=;
+        b=CcTeCWOYH5IP5w44cu7dNo2TnZ/9Jx/DeJm8b0kUpZgsy3l9UnRTVQ62bBl7e+LpPY
+         uTdOP+qtH8CxKFdV2hEA9fdjzPRETXryPhxAhm2mbvT25s0H8e5hfRE9HbHgjjFvBC1e
+         3BemwWOw7u583NKe+1Yuls4TqwcQRtR0N9ZLSR/motIt3kq9nTk4lxphNAvqQkzq43aw
+         HhEA8WBEupPU7Uu95wWDZaGYEYzVGLa/9rBljxZ6OaVeYVZsD9/dsJHcR949/J/TWQTE
+         eAdD0/JMKMNyAUIfnZ0iKXk3F4e/fiGixPeE9DWiMjcAxji6GevP3vM2aTiyzhHwPM9K
+         bVfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=MRtO0/Q9M+/YZltuvI+O6gptQdPEm7Chns62TBTJqlc=;
-        b=t31U6eaZYVXIUPGl9nYis288OsBXj5BPMGr4zEoh2lRQIJgzP+s395u00482XIggPz
-         v9o/BezXRTKLLGJc9aOvzcRhbjknwqiRJXp9WzaEtX403SmhcSt2y6g6mBx70LYz4dus
-         XsiSYIs5rocR2UwMpTg8eBGGSrGSTwptWZjfpFJWRFrxs9oucDEv1kzbPTuftLjqBQCq
-         k/uWEr0Z4x0C/RrEOGeJyZKIcvmZHoZ8d00drUHraHszAtmIzCCudpek7p1jGoiXBvY7
-         rYfiUzpUdPpdey1FC7XNbXt+A1eKQXXRDz/z62gj0ijK7pwkr9wo3I8b24t6LvhyoFY6
-         kJUQ==
-X-Gm-Message-State: AOAM531RqypVSUlL2toMOVgDr0W/9OUXCcyULEEjg6vItVYpDraB7CkW
-        J7sUJXYComWV2ZEUFE8QjdXOPmPbkenCK6P5movk
-X-Google-Smtp-Source: ABdhPJykpwd6++Qrr66Y1B5RF+cba9dVJSWF8myhIJOtMwmcDp+XjSshI91XllrQqxdsxNvOIt02QPk+u9pSluSBgnQ=
-X-Received: by 2002:a81:1196:0:b0:2f8:ccab:8807 with SMTP id
- 144-20020a811196000000b002f8ccab8807mr7766773ywr.58.1652476580686; Fri, 13
- May 2022 14:16:20 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=o0kVmjdcMUKYVM5DrVqgurkhzcUKhblSSgNmYbuiRRg=;
+        b=xQHfSbBCcKHZcKHSbYjPotzLMTU2iMUDCW8L8EDURtFuqfnIv9WiIgw6op10slYsIb
+         Vyx0mgmUeNEUt2CMVPPzEmZpaqzL7NMVDltYwxws/oqNxdvDhd3E1zCDutnRemaSXCQ4
+         K/N2D5FxpCLJYpMH73gaFXDAq7DHU0HywiO7cQwCTuf43wZ/0Bel4qIwSi8SN0Uw+on9
+         3ICcqJ2CKi4o5GUBbjdBfBl0joIE34KN7BUlWNNTxSMxBdr1k9uZCEY+FRolBnV5iU7E
+         MyTUbizGBbo97o5PsuHrUUAn9Pmw78oMNpnw/18AQHnY4ANPuGwNWtQU9B4Iac1KxRtF
+         85hw==
+X-Gm-Message-State: AOAM531evYVrnaoldloXjZ9cspkp3MBMPsQ4vNf80gtUIsSyRTbpzfRo
+        CO70BmGLV3AMGp6Ko8XzF/Lxcl0UFpA=
+X-Google-Smtp-Source: ABdhPJylH80zUax/Bff44bHOHv24DhDjZB72DDduOGylPZmRgW3vOHvN+YkNJC2dl5gyEI0/w2z6vw==
+X-Received: by 2002:a17:90b:1291:b0:1db:eab7:f165 with SMTP id fw17-20020a17090b129100b001dbeab7f165mr18071902pjb.74.1652476702383;
+        Fri, 13 May 2022 14:18:22 -0700 (PDT)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id v8-20020a1709028d8800b0015e8d4eb1f3sm2304845plo.61.2022.05.13.14.18.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 14:18:21 -0700 (PDT)
+Date:   Sat, 14 May 2022 06:18:19 +0900
+From:   Stafford Horne <shorne@gmail.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] init: call time_init() before rand_initialize()
+Message-ID: <Yn7LG3zlcKPaOXkp@antec>
+References: <20220505003114.177552-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-References: <20220512033045.1101909-1-daolu@rivosinc.com> <689ad3c4-0365-bd27-4873-bff8dbe6591b@sholland.org>
- <CAOnJCUJbsrCfjsfBgBMuA5E_h+yhOCjE4rSKYvxv1meQGDwZgA@mail.gmail.com>
-In-Reply-To: <CAOnJCUJbsrCfjsfBgBMuA5E_h+yhOCjE4rSKYvxv1meQGDwZgA@mail.gmail.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Fri, 13 May 2022 14:16:09 -0700
-Message-ID: <CAOnJCUJzFE-QWcGZGw9-BHb6teoXEX_m+H1-p=RY-UFbppcCYA@mail.gmail.com>
-Subject: Re: [PATCH] arch/riscv: Add Zihintpause extension support
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Dao Lu <daolu@rivosinc.com>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220505003114.177552-1-Jason@zx2c4.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 12:09 AM Atish Patra <atishp@atishpatra.org> wrote:
->
-> On Thu, May 12, 2022 at 6:06 PM Samuel Holland <samuel@sholland.org> wrot=
-e:
-> >
-> > On 5/11/22 10:30 PM, Dao Lu wrote:
-> > > This patch:
-> > >   1. Build with _zihintpause if the toolchain has support for it
-> > >   2. Detects if the platform supports the extension
-> >
-> > This instruction is a hint, meaning it is a harmless no-op if the exten=
-sion is
-> > unsupported by the CPU. So we can use it as long as the compiler suppor=
-ts it.
-> > There is no need to probe for it at runtime.
-> >
->
-> Is it guaranteed that the hardware won't throw any error if it sees a
-> fence instruction with
-> (pred=3DW, succ=3D0, fm=3D0, rd=3Dx0, and rs1=3Dx0.) ? I couldn't find an=
-ything
-> specific related to this in the spec.
->
+On Thu, May 05, 2022 at 02:31:14AM +0200, Jason A. Donenfeld wrote:
+> Currently time_init() is called before rand_initialize(), but
+> rand_initialize() makes use of the timer on various platforms, and
+> sometimes this timer needs to be initialized by time_init() first. In
+> order to not return zero, reverse the order of these two calls. The
+> block doing random initialization was right before time_init() before,
+> so changing the order shouldn't have any complicated effects.
+> 
+> Cc: Stafford Horne <shorne@gmail.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-Never mind. I found this
+I was thinking along the same lines when I looked into the OpenRISC issue
+that we fixed discussed here:
 
-"The FENCE encoding currently has nine non-trivial combinations of the
-four bits PR, PW, SR,
-and SW, plus one extra encoding FENCE.TSO which facilitates mapping of
-=E2=80=9Cacquire+release=E2=80=9D or
-RVTSO semantics. The remaining seven combinations have empty
-predecessor and/or successor
-sets and hence are no-ops."
+ - https://lore.kernel.org/all/Ym27sFdFZEt5QV0i@antec/
 
-However, we still need the extension availability check to preserve
-the older platform's behavior.
-Currently, the stall in cpu_relax is caused by the div. Without the
-extension probe, it will just execute
-"nop" which was not the earlier behavior.
+Though, I was not sure as to any dependency issues caused by changing the
+order.  Having it in -next and testing for a while should be able to
+bring out any bug.
 
-> I think using the static key mechanism provides backward compatibility
-> without any runtime impact.
->
-> > Regards,
-> > Samuel
-> >
-> > >   3. Use PAUSE for cpu_relax if both toolchain and the platform suppo=
-rt it
-> > >
-> > > Signed-off-by: Dao Lu <daolu@rivosinc.com>
-> > > ---
-> > >  arch/riscv/Makefile                     |  4 ++++
-> > >  arch/riscv/include/asm/hwcap.h          |  1 +
-> > >  arch/riscv/include/asm/vdso/processor.h | 19 ++++++++++++++++---
-> > >  arch/riscv/kernel/cpu.c                 |  1 +
-> > >  arch/riscv/kernel/cpufeature.c          |  7 +++++++
-> > >  5 files changed, 29 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> > > index 7d81102cffd4..900a8fda1a2d 100644
-> > > --- a/arch/riscv/Makefile
-> > > +++ b/arch/riscv/Makefile
-> > > @@ -56,6 +56,10 @@ riscv-march-$(CONFIG_RISCV_ISA_C)  :=3D $(riscv-ma=
-rch-y)c
-> > >  toolchain-need-zicsr-zifencei :=3D $(call cc-option-yn, -march=3D$(r=
-iscv-march-y)_zicsr_zifencei)
-> > >  riscv-march-$(toolchain-need-zicsr-zifencei) :=3D $(riscv-march-y)_z=
-icsr_zifencei
-> > >
-> > > +# Check if the toolchain supports Zihintpause extension
-> > > +toolchain-supports-zihintpause :=3D $(call cc-option-yn, -march=3D$(=
-riscv-march-y)_zihintpause)
-> > > +riscv-march-$(toolchain-supports-zihintpause) :=3D $(riscv-march-y)_=
-zihintpause
-> > > +
-> > >  KBUILD_CFLAGS +=3D -march=3D$(subst fd,,$(riscv-march-y))
-> > >  KBUILD_AFLAGS +=3D -march=3D$(riscv-march-y)
-> > >
-> > > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/=
-hwcap.h
-> > > index 0734e42f74f2..caa9ee5459b4 100644
-> > > --- a/arch/riscv/include/asm/hwcap.h
-> > > +++ b/arch/riscv/include/asm/hwcap.h
-> > > @@ -52,6 +52,7 @@ extern unsigned long elf_hwcap;
-> > >   */
-> > >  enum riscv_isa_ext_id {
-> > >       RISCV_ISA_EXT_SSCOFPMF =3D RISCV_ISA_EXT_BASE,
-> > > +     RISCV_ISA_EXT_ZIHINTPAUSE,
-> > >       RISCV_ISA_EXT_ID_MAX =3D RISCV_ISA_EXT_MAX,
-> > >  };
-> > >
-> > > diff --git a/arch/riscv/include/asm/vdso/processor.h b/arch/riscv/inc=
-lude/asm/vdso/processor.h
-> > > index 134388cbaaa1..106b35ba8cac 100644
-> > > --- a/arch/riscv/include/asm/vdso/processor.h
-> > > +++ b/arch/riscv/include/asm/vdso/processor.h
-> > > @@ -4,15 +4,28 @@
-> > >
-> > >  #ifndef __ASSEMBLY__
-> > >
-> > > +#include <linux/jump_label.h>
-> > >  #include <asm/barrier.h>
-> > > +#include <asm/hwcap.h>
-> > >
-> > > +extern struct static_key_false riscv_pause_available;
-> > >  static inline void cpu_relax(void)
-> > >  {
-> > > +     if (!static_branch_likely(&riscv_pause_available)) {
-> > >  #ifdef __riscv_muldiv
-> > > -     int dummy;
-> > > -     /* In lieu of a halt instruction, induce a long-latency stall. =
-*/
-> > > -     __asm__ __volatile__ ("div %0, %0, zero" : "=3Dr" (dummy));
-> > > +             int dummy;
-> > > +             /* In lieu of a halt instruction, induce a long-latency=
- stall. */
-> > > +             __asm__ __volatile__ ("div %0, %0, zero" : "=3Dr" (dumm=
-y));
-> > >  #endif
-> > > +     } else {
-> > > +#ifdef __riscv_zihintpause
-> > > +             /*
-> > > +              * Reduce instruction retirement.
-> > > +              * This assumes the PC changes.
-> > > +              */
-> > > +             __asm__ __volatile__ ("pause");
-> > > +#endif
-> > > +     }
-> > >       barrier();
-> > >  }
-> > >
-> > > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> > > index ccb617791e56..89e563e9c4cc 100644
-> > > --- a/arch/riscv/kernel/cpu.c
-> > > +++ b/arch/riscv/kernel/cpu.c
-> > > @@ -88,6 +88,7 @@ int riscv_of_parent_hartid(struct device_node *node=
-)
-> > >   */
-> > >  static struct riscv_isa_ext_data isa_ext_arr[] =3D {
-> > >       __RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
-> > > +     __RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
-> > >       __RISCV_ISA_EXT_DATA("", RISCV_ISA_EXT_MAX),
-> > >  };
-> > >
-> > > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufe=
-ature.c
-> > > index 1b2d42d7f589..327c19507dbb 100644
-> > > --- a/arch/riscv/kernel/cpufeature.c
-> > > +++ b/arch/riscv/kernel/cpufeature.c
-> > > @@ -24,6 +24,8 @@ static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX)=
- __read_mostly;
-> > >  #ifdef CONFIG_FPU
-> > >  __ro_after_init DEFINE_STATIC_KEY_FALSE(cpu_hwcap_fpu);
-> > >  #endif
-> > > +DEFINE_STATIC_KEY_FALSE(riscv_pause_available);
-> > > +EXPORT_SYMBOL_GPL(riscv_pause_available);
-> > >
-> > >  /**
-> > >   * riscv_isa_extension_base() - Get base extension word
-> > > @@ -192,6 +194,7 @@ void __init riscv_fill_hwcap(void)
-> > >                               set_bit(*ext - 'a', this_isa);
-> > >                       } else {
-> > >                               SET_ISA_EXT_MAP("sscofpmf", RISCV_ISA_E=
-XT_SSCOFPMF);
-> > > +                             SET_ISA_EXT_MAP("zihintpause", RISCV_IS=
-A_EXT_ZIHINTPAUSE);
-> > >                       }
-> > >  #undef SET_ISA_EXT_MAP
-> > >               }
-> > > @@ -213,6 +216,10 @@ void __init riscv_fill_hwcap(void)
-> > >
-> > >       }
-> > >
-> > > +     if (__riscv_isa_extension_available(riscv_isa, RISCV_ISA_EXT_ZI=
-HINTPAUSE)) {
-> > > +             static_branch_enable(&riscv_pause_available);
-> > > +     }
-> > > +
-> > >       /* We don't support systems with F but without D, so mask those=
- out
-> > >        * here. */
-> > >       if ((elf_hwcap & COMPAT_HWCAP_ISA_F) && !(elf_hwcap & COMPAT_HW=
-CAP_ISA_D)) {
-> > >
-> >
-> >
-> > _______________________________________________
-> > linux-riscv mailing list
-> > linux-riscv@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-riscv
->
->
->
-> --
-> Regards,
-> Atish
+As for this patch:
 
+Reviewed-by: Stafford Horne <shorne@gmail.com>
 
-
---=20
-Regards,
-Atish
+> ---
+> Andrew - this file has no formal maintainer, but you've signed the most
+> commits, so I'm CC'ing you. This has some interactions with my
+> random.git tree, so unless there are objections, I'll queue it up there.
+> -Jason
+> 
+>  init/main.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/init/main.c b/init/main.c
+> index 98182c3c2c4b..e37ec99cf56d 100644
+> --- a/init/main.c
+> +++ b/init/main.c
+> @@ -1035,6 +1035,7 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+>  	softirq_init();
+>  	timekeeping_init();
+>  	kfence_init();
+> +	time_init();
+>  
+>  	/*
+>  	 * For best initial stack canary entropy, prepare it after:
+> @@ -1049,7 +1050,6 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+>  	add_device_randomness(command_line, strlen(command_line));
+>  	boot_init_stack_canary();
+>  
+> -	time_init();
+>  	perf_event_init();
+>  	profile_init();
+>  	call_function_init();
+> -- 
+> 2.35.1
+> 

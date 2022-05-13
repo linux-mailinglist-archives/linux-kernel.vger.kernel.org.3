@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C70865263DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A0F0526419
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356962AbiEMOYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:24:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38296 "EHLO
+        id S1379964AbiEMO1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356163AbiEMOY3 (ORCPT
+        with ESMTP id S1380756AbiEMOZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:24:29 -0400
+        Fri, 13 May 2022 10:25:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128D050E09;
-        Fri, 13 May 2022 07:24:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CAE460DAF;
+        Fri, 13 May 2022 07:25:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C80662159;
-        Fri, 13 May 2022 14:24:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94300C34100;
-        Fri, 13 May 2022 14:24:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA68062183;
+        Fri, 13 May 2022 14:25:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA5CEC36AE3;
+        Fri, 13 May 2022 14:25:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652451867;
-        bh=ETI53b86DAHqatpudtFy7YPhyal4lKlxeI/cCzB39YI=;
+        s=korg; t=1652451906;
+        bh=1rAX63CmmlAyCcvSdcrn1qcybbMifvjTCNBFWxMoBnI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ooIJZw6xKVCCwyqQvgkNI2RKZBLCLG7Mm8GLQKUh+yyaJKPEvarplgoPXrwptYNXp
-         Ux892aw+DHXDoqiKXePfKGfXnOzEDRJ2RKZncqa2jUtoW5jjRNknM9b7Pg1xB7Q134
-         xs5Dm8s2VWUQC9svHvHydaBMVXaEbYmc6mBrC/Og=
+        b=hkRcUpyEKoLD5+l9czcAZLQ8wwqh0291Hdt0eYzl9OO2Bm2L8yf3bQ3jmE+kjSeId
+         R/jWFPz4KsL0UFFB+xRiQiIf13cAEtFImrrYuu2zXp4qeDL55i4id1oHE2jtjAij9q
+         CeO+Z6tajx+V/sZJQ/qbTR8/xaR1vSAsYttdAT0c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,12 +38,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jens Axboe <axboe@kernel.dk>, drbd-dev@lists.linbit.com,
         linux-block@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
         Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 4.9 2/7] block: drbd: drbd_nl: Make conversion to enum drbd_ret_code explicit
-Date:   Fri, 13 May 2022 16:23:17 +0200
-Message-Id: <20220513142225.984359309@linuxfoundation.org>
+Subject: [PATCH 4.14 02/14] block: drbd: drbd_nl: Make conversion to enum drbd_ret_code explicit
+Date:   Fri, 13 May 2022 16:23:18 +0200
+Message-Id: <20220513142227.454534022@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220513142225.909697091@linuxfoundation.org>
-References: <20220513142225.909697091@linuxfoundation.org>
+In-Reply-To: <20220513142227.381154244@linuxfoundation.org>
+References: <20220513142227.381154244@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -105,7 +105,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  
  	mutex_unlock(&adm_ctx.resource->adm_mutex);
  	genl_lock();
-@@ -1933,7 +1935,7 @@ int drbd_adm_attach(struct sk_buff *skb,
+@@ -1941,7 +1943,7 @@ int drbd_adm_attach(struct sk_buff *skb,
  	drbd_flush_workqueue(&connection->sender_work);
  
  	rv = _drbd_request_state(device, NS(disk, D_ATTACHING), CS_VERBOSE);
@@ -114,7 +114,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	drbd_resume_io(device);
  	if (rv < SS_SUCCESS)
  		goto fail;
-@@ -2684,7 +2686,8 @@ int drbd_adm_connect(struct sk_buff *skb
+@@ -2671,7 +2673,8 @@ int drbd_adm_connect(struct sk_buff *skb
  	}
  	rcu_read_unlock();
  
@@ -124,7 +124,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  
  	conn_reconfig_done(connection);
  	mutex_unlock(&adm_ctx.resource->adm_mutex);
-@@ -2790,7 +2793,7 @@ int drbd_adm_disconnect(struct sk_buff *
+@@ -2777,7 +2780,7 @@ int drbd_adm_disconnect(struct sk_buff *
  	mutex_lock(&adm_ctx.resource->adm_mutex);
  	rv = conn_try_disconnect(connection, parms.force_disconnect);
  	if (rv < SS_SUCCESS)

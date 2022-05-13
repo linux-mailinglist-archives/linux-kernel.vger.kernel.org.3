@@ -2,131 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED6352668D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24803526690
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382256AbiEMPv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 11:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
+        id S1382274AbiEMPwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 11:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236362AbiEMPvy (ORCPT
+        with ESMTP id S1382265AbiEMPwA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 11:51:54 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7200A1D7342
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:51:52 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id cq17-20020a17090af99100b001dc0386cd8fso8125512pjb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:51:52 -0700 (PDT)
+        Fri, 13 May 2022 11:52:00 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B4C1DE562
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:51:59 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id h29so15276023lfj.2
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:51:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=sHac6RyxoRhpwtJ0Nv8blO/l0ElL7UnX1I1rlRcy1vQ=;
-        b=zTSUXmk1gaktLcL7EoedGUZZ3+JuYei0KGwja5b8AMmZ23bufw5yZApn9Gjfo+Ever
-         J/qKEPGT6vntYYa9Ny3H4is70qinItRekWQMLryWRDqePKK6HlMy6kzDC3vDLSAlXSJd
-         FG1NUIBoX2H/rnokj2frqlehsfMHpfxnUH/cFp7AEXCXx+5WoGLovHDfxiNEaE0WI4H2
-         cyX0tkoE7y4JEbdcD5VAdW9i9jXDewoYFjx5P3Oax3FynTL/caSxlzlSM7dtHQh+Rl4v
-         51N3XnmYbV5w0Od00fC5CkIugP7+NT0HQUAufn0+O3hha+SsaopvxyRRCEJRpKEFcKRP
-         Ksbw==
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=xdLDfq+CWT8JDkKJCr5lOfzn0f1CBOYqpqvcgd4oF3I=;
+        b=AOt8diTFiicIrXp0RywXesaFiBTVFqNQpRUmgcob7AdT1m4qVHyAT/nPjfEfourXYu
+         VFFaL/IDpLxzjUSSTYCu5hMuf+OKjYOe/HamJ6cYFtndD5F80Cxs9vngm1uigjcBc6YV
+         McmK5Boa/eUKkqJaZzTZaqNWHiI/9NzMTpCfl0yHN9zl8kJEZnuUvwE/hiAx8v0cXZ7k
+         xQyr4Lsk69dMvKMPJu61svF+KqC73U4AGIa8cXKDNGEkykKhh2PtQC0YkehHHGgigu32
+         U5z6wawLGwA5a18ezUpeVzwNCtOjC6Wxio0XMepLaQpfoVKBQVIkqv61BTkxIPek6ifk
+         u0lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=sHac6RyxoRhpwtJ0Nv8blO/l0ElL7UnX1I1rlRcy1vQ=;
-        b=TEPrmBGSvITiv47nHzQEoEZsHNpxXlickGVyBGb8zoIW+qdpTE+L7f6KqKATWJ34mG
-         0epDm9eWV1EBzThjPxXsh4DYCYKiGNgezVKMmfbnur5hLw1QeNlAHh2cmhmmOXEq+5ZB
-         Hu3XMDdr06woTFctYtt6FKib46+h9XgByuJwxlaUeMOx3D4oZ3aWBfEUT8UW/njr63zj
-         K/ZD6+NMcKPwWXKDXVS6iNX8DgBUJBBGRJfeArl8NJ8fyIc0VdnVFd0cfl/0BELC3bBz
-         ZzW3v1rUSHtPhbL84ECAJHRb7mfEZd/bzNX2f/3vkPKaJUWjnFlWSqLF0YwZ4aVAIlbz
-         J2ew==
-X-Gm-Message-State: AOAM532/VtSf+mh5/G2hLx2DffwS3pIPj9ezFN+2f7/HqsUC2OyZAsUT
-        UdK72dbftUy893yS7tGvkQyr
-X-Google-Smtp-Source: ABdhPJyDdQzIGvs4jHC7YF16jpurc8reFvPJpDAA2Dxk5FqB+bw3piPmlVvxXWei4B2olyNnYodHtw==
-X-Received: by 2002:a17:902:dac2:b0:15e:90b0:d35b with SMTP id q2-20020a170902dac200b0015e90b0d35bmr5374851plx.169.1652457111494;
-        Fri, 13 May 2022 08:51:51 -0700 (PDT)
-Received: from thinkpad ([117.202.184.246])
-        by smtp.gmail.com with ESMTPSA id q11-20020a056a00150b00b0050dc76281d9sm1314551pfu.179.2022.05.13.08.51.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 08:51:50 -0700 (PDT)
-Date:   Fri, 13 May 2022 21:21:41 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v3 1/7] dt-bindings: clock: qcom,gcc-sdm845: add parent
- power domain
-Message-ID: <20220513155141.GA1922@thinkpad>
-References: <20220513061347.46480-1-krzysztof.kozlowski@linaro.org>
- <20220513061347.46480-2-krzysztof.kozlowski@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=xdLDfq+CWT8JDkKJCr5lOfzn0f1CBOYqpqvcgd4oF3I=;
+        b=yRl1z8KPd7xDxmJ1kFNWeUVUeN1eYwA+qz5igwpt9y95YAEKLNx6JyH2pF8rAReq5k
+         PTJjl1wlpq8Hv7tqJmsQUahOXbYHvhwKSQ3ow1jkvkKLoaBHfJwLn7ZoOqZZ72GR98Tz
+         Tk8VtbJXeNqKf+3dMLFlj5FJJf5uZ+++ekswIPgYCCpB9tHSPqaGu/LvF3Q69k2Qn79U
+         RmWmcnST88c3n+PXaSPpU5ZUu62CFk0WGmlbr8rm5bld9vPu5Sjl6x8NlsKjC5cnke32
+         RdjRoCt0qxxlqhH9AYInrswanOzbCSYujqV9RMvdXQH8cmrh7Z57Uh7ORkSvTgC8Z18G
+         3Lnw==
+X-Gm-Message-State: AOAM532t82XVxFRwkcmaUU45XEdXVsyVJG1vRO3S7ewXiTGQgayaca9p
+        CtpedRABYEp+41XMntr35ZC3ng==
+X-Google-Smtp-Source: ABdhPJym7XGGezghwcny0ZJvKb40eiQrd9ujhf41bXkzlGVxcZGs1sS9w9gXzrrcTz+3XxNXw5MX8A==
+X-Received: by 2002:a05:6512:3d86:b0:473:a237:6e09 with SMTP id k6-20020a0565123d8600b00473a2376e09mr3812958lfv.441.1652457117596;
+        Fri, 13 May 2022 08:51:57 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.177])
+        by smtp.gmail.com with ESMTPSA id m13-20020a2e934d000000b0024f3d1daef1sm477359ljh.121.2022.05.13.08.51.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 08:51:57 -0700 (PDT)
+Message-ID: <22ccf325-6aa5-9b55-4729-d03f34125650@openvz.org>
+Date:   Fri, 13 May 2022 18:51:55 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220513061347.46480-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+From:   Vasily Averin <vvs@openvz.org>
+Subject: [PATCH 2/4] memcg: enable accounting for kernfs nodes and iattrs
+To:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org
+References: <Ynv7+VG+T2y9rpdk@carbon>
+Content-Language: en-US
+In-Reply-To: <Ynv7+VG+T2y9rpdk@carbon>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 08:13:41AM +0200, Krzysztof Kozlowski wrote:
-> Allow Qualcomm GCC to register its parent power domain (e.g. RPMHPD) to
-> properly pass performance state from children.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+kernfs nodes are quite small kernel objects, however there are few
+scenarios where it consumes significant piece of all allocated memory:
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+1) creating a new netdevice allocates ~50Kb of memory, where ~10Kb
+   was allocated for 80+ kernfs nodes.
 
-Thanks,
-Mani
+2) cgroupv2 mkdir allocates ~60Kb of memory, ~10Kb of them are kernfs
+   structures.
 
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Acked-by: Rob Herring <robh@kernel.org>
-> 
-> ---
-> 
-> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
-> index d902f137ab17..daf7906ebc40 100644
-> --- a/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
-> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
-> @@ -43,6 +43,9 @@ properties:
->    '#reset-cells':
->      const: 1
->  
-> +  power-domains:
-> +    maxItems: 1
-> +
->    '#power-domain-cells':
->      const: 1
->  
-> -- 
-> 2.32.0
-> 
+3) Shakeel Butt reports that Google has workloads which create 100s
+   of subcontainers and they have observed high system overhead
+   without memcg accounting of kernfs.
 
+It makes sense to enable accounting for kernfs objects, otherwise its
+misuse inside memcg-limited can lead to global memory shortage,
+OOM and random kills of host processes.
+
+Signed-off-by: Vasily Averin <vvs@openvz.org>
+---
+ fs/kernfs/mount.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/fs/kernfs/mount.c b/fs/kernfs/mount.c
+index cfa79715fc1a..40e896c7c86b 100644
+--- a/fs/kernfs/mount.c
++++ b/fs/kernfs/mount.c
+@@ -391,10 +391,12 @@ void __init kernfs_init(void)
+ {
+ 	kernfs_node_cache = kmem_cache_create("kernfs_node_cache",
+ 					      sizeof(struct kernfs_node),
+-					      0, SLAB_PANIC, NULL);
++					      0, SLAB_PANIC | SLAB_ACCOUNT,
++					      NULL);
+ 
+ 	/* Creates slab cache for kernfs inode attributes */
+ 	kernfs_iattrs_cache  = kmem_cache_create("kernfs_iattrs_cache",
+ 					      sizeof(struct kernfs_iattrs),
+-					      0, SLAB_PANIC, NULL);
++					      0, SLAB_PANIC | SLAB_ACCOUNT,
++					      NULL);
+ }
 -- 
-மணிவண்ணன் சதாசிவம்
+2.31.1
+

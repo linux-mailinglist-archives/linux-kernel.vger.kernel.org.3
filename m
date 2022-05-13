@@ -2,93 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126B4526BA8
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 099DA526BAA
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384426AbiEMUhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 16:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52516 "EHLO
+        id S1384207AbiEMUiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 16:38:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233491AbiEMUhF (ORCPT
+        with ESMTP id S233491AbiEMUh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 16:37:05 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0579272E07
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:37:03 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id qe3-20020a17090b4f8300b001dc24e4da73so8541361pjb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:37:03 -0700 (PDT)
+        Fri, 13 May 2022 16:37:58 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B258CCC7
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:37:57 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id l15so6539492ilh.3
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:37:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=phxoZ/ScBfaDhvqeCo8S88ykmND/qvDtWT32Bd3MGQ4=;
-        b=KmeWsNFRi2WfNcJj+LyJPDG0ZIwUbksePvvEX6dgio1W7taujzco64VhWvvZ4xjXD4
-         sFxkWlMO8tlP26K2qUkxs3JrLKtpTyZZ0C2Tii0vi3ufF0uvv0/xFkYt5Oh2YvioqM0Q
-         gyhdCqeCLXCMqdLKF7Chwx8WgbEVEEJyJCSFc=
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=1mAXHhGt2+q3q7YPZbq4GuNPZRmrBrblgr5+4ptqYbM=;
+        b=EZy7RWnf5MrDQtXqqwBK+0gwqiYh9dOfya+dffSVMMKgW84GboRoYWw9FAedvlq8bo
+         fyxpJwLOVHgZiGm7T8akVxkgphOY7Ze7VnYAjaB3X6VqXGgFrsT6hnb9tv82ocCSYmjQ
+         f5Z2Tn/SSMoQQbWyH496y7NdTfkwfVYv6MorU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=phxoZ/ScBfaDhvqeCo8S88ykmND/qvDtWT32Bd3MGQ4=;
-        b=cuPm4gV9FVZwhQ89+8ACJu+NaxXGy1CHyPOLD9xBoe3bYHsnagspI6bLSDIEinddcr
-         2xCZXMCqCC2epIT4392+YI7RJAA1AepsHdIfd99dSU+SY/LQRF8GfogMorjbpiGMN4YB
-         8oLuVkktvjSlQm6MhIaiXvu7n/ix4WrfrjBQSTU8p8nVm66y6ETTNDhPEjh4BZI8Ehr0
-         FoecaVugYmUgqWXemKYeKKnOVEzSmWea30YBuVNNKXVqCp7fAECqIWb/Jtky9+bqZL8Y
-         SPxZy2KKAR7LWuGMofPHSNwuFAb7wlF618cZMC45YmhT1eICQpqNoa9eihiIfDkE2WnX
-         tJXg==
-X-Gm-Message-State: AOAM531Pa8GsZ/FZ+3I99zhQhGGD/owML5MZumphsBLRvS7ElB4zmJ4T
-        m96Ig3v06SNtlpbA/vRIasxVgA==
-X-Google-Smtp-Source: ABdhPJzcSyg5OAJpURTegDQGSF/2vijtHSp1YWjxvfdiE5EqwQCN6uiT77Jz3GpyYZj/E4eMbfHu5A==
-X-Received: by 2002:a17:902:e84d:b0:15e:b0af:477b with SMTP id t13-20020a170902e84d00b0015eb0af477bmr6150046plg.49.1652474222580;
-        Fri, 13 May 2022 13:37:02 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:bc87:9632:bcce:8e17])
-        by smtp.gmail.com with UTF8SMTPSA id n8-20020a635908000000b003c14af50623sm1971494pgb.59.2022.05.13.13.37.01
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=1mAXHhGt2+q3q7YPZbq4GuNPZRmrBrblgr5+4ptqYbM=;
+        b=oaOKZANBj4/QEqDXQP3ZosS9WSGaUKGWq+AU1vbOxfTVEU2VWALFVK7V/8UgRrhWAd
+         0zzmoEMmWlTzKSegcUXoLZTJP8j96uYImAKX3ibkwIuG22hmmLNXWDOcWyQZNezxUlUm
+         15qpRNfs8P3SiSvOZpVgK0RKCPjRDN6vbqXNZ2EKXExfFMqiB8T7vHkdZcnGy9M/lOvO
+         C6OVdIb7X2ZJXx0vDDPpu6s65Tpo0iOpIcfUweOVsh8MULf9On8TwbfEqJOT6nnhnUqk
+         4dGX/3CheJ6NhDYilmkUH6JwNGyS9kTCNTHPx0mXIXJO/rcN3kOKFGyWW3qfkziDPYgK
+         11Bg==
+X-Gm-Message-State: AOAM531aXrgvFDHLT6+Z8oxl9+RrwJzyjD6LObj/My92ogxoifa8BKhv
+        dF+gAEDgLC0Mkt6k2pIZsJBLAg==
+X-Google-Smtp-Source: ABdhPJy7SZYLJKKcWDZAGzigP2fslGeDW0G2dHYT1oJT2sR4TpWOU5nfMgUABtXz6xXJ0FRLrx0FOg==
+X-Received: by 2002:a05:6e02:8ae:b0:2c7:90a5:90b8 with SMTP id a14-20020a056e0208ae00b002c790a590b8mr3670961ilt.19.1652474276560;
+        Fri, 13 May 2022 13:37:56 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id p15-20020a6b8d0f000000b0065a47e16f3fsm944453iod.17.2022.05.13.13.37.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 13:37:02 -0700 (PDT)
-Date:   Fri, 13 May 2022 13:37:00 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Julius Werner <jwerner@chromium.org>,
-        "Joseph S . Barrera III" <joebar@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Fri, 13 May 2022 13:37:56 -0700 (PDT)
+Subject: Re: [PATCH 5.15 00/21] 5.15.40-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] dt-bindings: arm: qcom: Add more sc7180
- Chromebook board bindings
-Message-ID: <Yn7BbNeVXV1aGCsi@google.com>
-References: <20220513095722.v2.1.I71e42c6174f1cec17da3024c9f73ba373263b9b6@changeid>
- <20220513095722.v2.4.Ie8713bc0377672ed8dd71189e66fc0b77226fb85@changeid>
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220513142229.874949670@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <ca76d742-b86e-e50d-a011-1353cd2e095c@linuxfoundation.org>
+Date:   Fri, 13 May 2022 14:37:55 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220513095722.v2.4.Ie8713bc0377672ed8dd71189e66fc0b77226fb85@changeid>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220513142229.874949670@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 09:59:20AM -0700, Douglas Anderson wrote:
-> This adds board bindings for boards that are downstream but not quite
-> upstream yet.
+On 5/13/22 8:23 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.40 release.
+> There are 21 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> Responses should be made by Sun, 15 May 2022 14:22:19 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.40-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-I didn't follow the discussion about the odd sku ids (-sku1537,
--sku1536, -sku1024, ...), but they match what is in the
-downstream tree, so it seems alright :)
+Compiled and booted on my test system. No dmesg regressions.
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 366DE526627
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83CB6526628
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382087AbiEMPbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 11:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37028 "EHLO
+        id S1382099AbiEMPbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 11:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382132AbiEMPbT (ORCPT
+        with ESMTP id S1382052AbiEMPbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 11:31:19 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602F66F4AB
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:31:17 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id ks9so16987750ejb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:31:17 -0700 (PDT)
+        Fri, 13 May 2022 11:31:25 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B23D887A4
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:31:24 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id g23so10337274edy.13
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:31:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=KXuxsvvmzObesTCgGUdp3DjkR6F9yj2J25L79TJ+yVs=;
-        b=aXWfHMALpGfKhmrHrc/L4dv2J+Gp58oc75+F7mRYLtgpTkhkNDsbFFBigLbuyvjJjV
-         IAw8zNjauvMxIqDCXFWAgkCxENedb90d2PKTxvvlaH82wv2drHpkq2BIJWfuWyUFTWTx
-         fF9h3wmDRUEDcp1PNzBueNP1WPRK3an9B3T826qVc6OkkFibUhKaqtqFWtAT3UXDpY4a
-         JG6wovGRwx75OLtX4en6r5HHU1cT59pHu+BKWSSVluKuxxddL3/cHVESAyfylqtSdp1K
-         vohsEbeyS89HBT7UuR1rYoIoOeMLWxGQoC27irR0SsVp/JN6KDbKETR8em9TFXBXxWHb
-         jTEg==
+        bh=FyEVkw0keNZPZ0CrsntkdDzRqQxoY6siytBBtxmPcFY=;
+        b=l/MU78YHN6EV+CLSopMUXdmhfLtEY8/kC7dPg5bnMUl6OkVQ1sGIR3JewU6G4oYr/N
+         BaZIiY/xYy14mNR8EyDdbzl7COT1jCIYdW3X8t8Zbo/fUrje/pJPe/18b6YO8cAEh3D/
+         YHbwxa+KBmUrKf5dClwvwQZ2s6bMiUFqgcwVJcgRhfWR35/b/n3nFViB/gYfoPMrFIUx
+         7McYaFrl5nB4QDkkPoO3nvJAQ7Of3auW0Cw90XJRN4SDm1zvSVUuUtdJMy6OMo7xrfn9
+         HZ/giFLN7ZMKZpHssJa8QF9r0YuG6GaoEC9v/l5K5SONIJXdNcBklwqQBrTAzDJ9EcKy
+         VtVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KXuxsvvmzObesTCgGUdp3DjkR6F9yj2J25L79TJ+yVs=;
-        b=kfcVtE+otw1yPEXQnJ33tr3EV08JV6ikjFJH/hF5gcLsUgJWPCioYkZUlvKtto9fR+
-         +6PZCRIhVgjFzvzh90R/d0uZdJK/efD2Djuo1qrs+QQmvMZtlOJL18mUJhlXDrNwtH0Z
-         jyTQAW9EN8BLgU9n/svM57txTHJcEXstFISPc2hjVhsbE1wqS+/o1fzrBrIQUA8vYFL2
-         igJyeglpGi0l2o66r13tNFquFlbYkG0lPAFwiBT40qlrDEv5uNIINgYy/Qn3AW8Weol4
-         r1RlaGAjyfl78n4a3JIrmFIhGLNDG27ss2t9b1sGRfr8WnqN2hOdcLv9NEP6ZAR9UALs
-         NN7w==
-X-Gm-Message-State: AOAM531GhVQC3dW7W38NfkoCLBcRVuq9210x9ls7yqJaE58XVGG9zjA/
-        fyczZWIQTwIbC5pND/0qrtY=
-X-Google-Smtp-Source: ABdhPJx7eYHdJ0ONJxZKP1JzGM3vzvvj/Gwx5mHue0RCmDN2ejLLc4U4ZxaUUkOBjDrog8CHBPigWA==
-X-Received: by 2002:a17:906:19c6:b0:6ce:98a4:5ee6 with SMTP id h6-20020a17090619c600b006ce98a45ee6mr4757605ejd.567.1652455875913;
-        Fri, 13 May 2022 08:31:15 -0700 (PDT)
+        bh=FyEVkw0keNZPZ0CrsntkdDzRqQxoY6siytBBtxmPcFY=;
+        b=WkShX0OCSDibUQvLrrXzGGFjy8cbqTRKazYCuXwS76HACeG4V+JzYV7HHR7TMI8eyL
+         gDikfeykasfl3EjWU4lYyIWF9+MLZ8R9QiDdRwN+14/nIlpypARj0i5nWLg0oMoRI2HE
+         BfERbxSWj6V7LccXQU60w1dSdmwIHl30aovF4y/Y4TrM6TpnhIBQHc3+XgdP6QHIDAWJ
+         gComNREYKJflZTLv+rlPQIaneH0SI645Nrd6ynUVZkVfRdm/bA1woDK03ZVc+y83k1Oo
+         34Z8kDyLvJD/eqZdMbYWU/Nn3HDHcZBaTY7PfRyJg9dQcOd5fZhF+/7XB8o8Tr3yPgfa
+         nzkA==
+X-Gm-Message-State: AOAM531TEuGiEzCD07+tONA/OsFun3jwqgwX5Fy/VHzushp3oUdjzXGw
+        +yIenyUs+bOzB9PNg/LKItU=
+X-Google-Smtp-Source: ABdhPJyOSgegB1CN8ntV9JWIhiZbe4Pa14PPgrWNg35FGTH9M6c3NM+zjYpf82znFB7KswVzz1uhRA==
+X-Received: by 2002:a05:6402:12cd:b0:426:16f:c135 with SMTP id k13-20020a05640212cd00b00426016fc135mr40702733edx.297.1652455882596;
+        Fri, 13 May 2022 08:31:22 -0700 (PDT)
 Received: from localhost.localdomain (93-103-18-160.static.t-2.net. [93.103.18.160])
-        by smtp.gmail.com with ESMTPSA id h9-20020a50cdc9000000b0042617ba63d5sm1075706edj.95.2022.05.13.08.31.14
+        by smtp.gmail.com with ESMTPSA id h9-20020a50cdc9000000b0042617ba63d5sm1075706edj.95.2022.05.13.08.31.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 08:31:15 -0700 (PDT)
+        Fri, 13 May 2022 08:31:22 -0700 (PDT)
 From:   Uros Bizjak <ubizjak@gmail.com>
 To:     x86@kernel.org, linux-kernel@vger.kernel.org
 Cc:     Uros Bizjak <ubizjak@gmail.com>,
@@ -60,9 +60,9 @@ Cc:     Uros Bizjak <ubizjak@gmail.com>,
         Mark Rutland <mark.rutland@arm.com>,
         "Paul E. McKenney" <paulmck@kernel.org>,
         Marco Elver <elver@google.com>
-Subject: [PATCH v2 1/2] locking/atomic: Add generic try_cmpxchg64 support
-Date:   Fri, 13 May 2022 17:30:08 +0200
-Message-Id: <20220513153009.228282-2-ubizjak@gmail.com>
+Subject: [PATCH v2 2/2] locking/atomic/x86: Introduce arch_try_cmpxchg64
+Date:   Fri, 13 May 2022 17:30:09 +0200
+Message-Id: <20220513153009.228282-3-ubizjak@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220513153009.228282-1-ubizjak@gmail.com>
 References: <20220513153009.228282-1-ubizjak@gmail.com>
@@ -78,8 +78,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add generic support for try_cmpxchg64{,_acquire,_release,_relaxed}
-and their falbacks involving cmpxchg64.
+Introduce arch_try_cmpxchg64 for 64-bit and 32-bit targets to improve
+code using cmpxchg64.  On 64-bit targets, the generated assembly improves
+from:
+
+  ab:	89 c8                	mov    %ecx,%eax
+  ad:	48 89 4c 24 60       	mov    %rcx,0x60(%rsp)
+  b2:	83 e0 fd             	and    $0xfffffffd,%eax
+  b5:	89 54 24 64          	mov    %edx,0x64(%rsp)
+  b9:	88 44 24 60          	mov    %al,0x60(%rsp)
+  bd:	48 89 c8             	mov    %rcx,%rax
+  c0:	c6 44 24 62 f2       	movb   $0xf2,0x62(%rsp)
+  c5:	48 8b 74 24 60       	mov    0x60(%rsp),%rsi
+  ca:	f0 49 0f b1 34 24    	lock cmpxchg %rsi,(%r12)
+  d0:	48 39 c1             	cmp    %rax,%rcx
+  d3:	75 cf                	jne    a4 <t+0xa4>
+
+to:
+
+  b3:	89 c2                	mov    %eax,%edx
+  b5:	48 89 44 24 60       	mov    %rax,0x60(%rsp)
+  ba:	83 e2 fd             	and    $0xfffffffd,%edx
+  bd:	89 4c 24 64          	mov    %ecx,0x64(%rsp)
+  c1:	88 54 24 60          	mov    %dl,0x60(%rsp)
+  c5:	c6 44 24 62 f2       	movb   $0xf2,0x62(%rsp)
+  ca:	48 8b 54 24 60       	mov    0x60(%rsp),%rdx
+  cf:	f0 48 0f b1 13       	lock cmpxchg %rdx,(%rbx)
+  d4:	75 d5                	jne    ab <t+0xab>
+
+where a move and a compare after cmpxchg is saved.  The improvements
+for 32-bit targets are even more noticeable, because dual-word compare
+after cmpxchg8b gets eliminated.
 
 Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
 Cc: Thomas Gleixner <tglx@linutronix.de>
@@ -94,239 +123,66 @@ Cc: Mark Rutland <mark.rutland@arm.com>
 Cc: "Paul E. McKenney" <paulmck@kernel.org>
 Cc: Marco Elver <elver@google.com>
 ---
- include/linux/atomic/atomic-arch-fallback.h | 72 ++++++++++++++++++++-
- include/linux/atomic/atomic-instrumented.h  | 40 +++++++++++-
- scripts/atomic/gen-atomic-fallback.sh       | 31 +++++----
- scripts/atomic/gen-atomic-instrumented.sh   |  2 +-
- 4 files changed, 129 insertions(+), 16 deletions(-)
+ arch/x86/include/asm/cmpxchg_32.h | 21 +++++++++++++++++++++
+ arch/x86/include/asm/cmpxchg_64.h |  6 ++++++
+ 2 files changed, 27 insertions(+)
 
-diff --git a/include/linux/atomic/atomic-arch-fallback.h b/include/linux/atomic/atomic-arch-fallback.h
-index 6db58d180866..77bc5522e61c 100644
---- a/include/linux/atomic/atomic-arch-fallback.h
-+++ b/include/linux/atomic/atomic-arch-fallback.h
-@@ -147,6 +147,76 @@
- 
- #endif /* arch_try_cmpxchg_relaxed */
- 
-+#ifndef arch_try_cmpxchg64_relaxed
-+#ifdef arch_try_cmpxchg64
-+#define arch_try_cmpxchg64_acquire arch_try_cmpxchg64
-+#define arch_try_cmpxchg64_release arch_try_cmpxchg64
-+#define arch_try_cmpxchg64_relaxed arch_try_cmpxchg64
-+#endif /* arch_try_cmpxchg64 */
-+
-+#ifndef arch_try_cmpxchg64
-+#define arch_try_cmpxchg64(_ptr, _oldp, _new) \
-+({ \
-+	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
-+	___r = arch_cmpxchg64((_ptr), ___o, (_new)); \
-+	if (unlikely(___r != ___o)) \
-+		*___op = ___r; \
-+	likely(___r == ___o); \
-+})
-+#endif /* arch_try_cmpxchg64 */
-+
-+#ifndef arch_try_cmpxchg64_acquire
-+#define arch_try_cmpxchg64_acquire(_ptr, _oldp, _new) \
-+({ \
-+	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
-+	___r = arch_cmpxchg64_acquire((_ptr), ___o, (_new)); \
-+	if (unlikely(___r != ___o)) \
-+		*___op = ___r; \
-+	likely(___r == ___o); \
-+})
-+#endif /* arch_try_cmpxchg64_acquire */
-+
-+#ifndef arch_try_cmpxchg64_release
-+#define arch_try_cmpxchg64_release(_ptr, _oldp, _new) \
-+({ \
-+	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
-+	___r = arch_cmpxchg64_release((_ptr), ___o, (_new)); \
-+	if (unlikely(___r != ___o)) \
-+		*___op = ___r; \
-+	likely(___r == ___o); \
-+})
-+#endif /* arch_try_cmpxchg64_release */
-+
-+#ifndef arch_try_cmpxchg64_relaxed
-+#define arch_try_cmpxchg64_relaxed(_ptr, _oldp, _new) \
-+({ \
-+	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
-+	___r = arch_cmpxchg64_relaxed((_ptr), ___o, (_new)); \
-+	if (unlikely(___r != ___o)) \
-+		*___op = ___r; \
-+	likely(___r == ___o); \
-+})
-+#endif /* arch_try_cmpxchg64_relaxed */
-+
-+#else /* arch_try_cmpxchg64_relaxed */
-+
-+#ifndef arch_try_cmpxchg64_acquire
-+#define arch_try_cmpxchg64_acquire(...) \
-+	__atomic_op_acquire(arch_try_cmpxchg64, __VA_ARGS__)
-+#endif
-+
-+#ifndef arch_try_cmpxchg64_release
-+#define arch_try_cmpxchg64_release(...) \
-+	__atomic_op_release(arch_try_cmpxchg64, __VA_ARGS__)
-+#endif
-+
-+#ifndef arch_try_cmpxchg64
-+#define arch_try_cmpxchg64(...) \
-+	__atomic_op_fence(arch_try_cmpxchg64, __VA_ARGS__)
-+#endif
-+
-+#endif /* arch_try_cmpxchg64_relaxed */
-+
- #ifndef arch_atomic_read_acquire
- static __always_inline int
- arch_atomic_read_acquire(const atomic_t *v)
-@@ -2386,4 +2456,4 @@ arch_atomic64_dec_if_positive(atomic64_t *v)
+diff --git a/arch/x86/include/asm/cmpxchg_32.h b/arch/x86/include/asm/cmpxchg_32.h
+index 0a7fe0321613..16a604cf24d4 100644
+--- a/arch/x86/include/asm/cmpxchg_32.h
++++ b/arch/x86/include/asm/cmpxchg_32.h
+@@ -42,6 +42,9 @@ static inline void set_64bit(volatile u64 *ptr, u64 value)
+ #define arch_cmpxchg64_local(ptr, o, n)					\
+ 	((__typeof__(*(ptr)))__cmpxchg64_local((ptr), (unsigned long long)(o), \
+ 					       (unsigned long long)(n)))
++#define arch_try_cmpxchg64(ptr, po, n)					\
++	((__typeof__(*(ptr)))__try_cmpxchg64((ptr), (unsigned long long *)(po), \
++					     (unsigned long long)(n)))
  #endif
  
- #endif /* _LINUX_ATOMIC_FALLBACK_H */
--// 8e2cc06bc0d2c0967d2f8424762bd48555ee40ae
-+// b5e87bdd5ede61470c29f7a7e4de781af3770f09
-diff --git a/include/linux/atomic/atomic-instrumented.h b/include/linux/atomic/atomic-instrumented.h
-index 5d69b143c28e..7a139ec030b0 100644
---- a/include/linux/atomic/atomic-instrumented.h
-+++ b/include/linux/atomic/atomic-instrumented.h
-@@ -2006,6 +2006,44 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- 	arch_try_cmpxchg_relaxed(__ai_ptr, __ai_oldp, __VA_ARGS__); \
- })
- 
-+#define try_cmpxchg64(ptr, oldp, ...) \
-+({ \
-+	typeof(ptr) __ai_ptr = (ptr); \
-+	typeof(oldp) __ai_oldp = (oldp); \
-+	kcsan_mb(); \
-+	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
-+	arch_try_cmpxchg64(__ai_ptr, __ai_oldp, __VA_ARGS__); \
-+})
-+
-+#define try_cmpxchg64_acquire(ptr, oldp, ...) \
-+({ \
-+	typeof(ptr) __ai_ptr = (ptr); \
-+	typeof(oldp) __ai_oldp = (oldp); \
-+	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
-+	arch_try_cmpxchg64_acquire(__ai_ptr, __ai_oldp, __VA_ARGS__); \
-+})
-+
-+#define try_cmpxchg64_release(ptr, oldp, ...) \
-+({ \
-+	typeof(ptr) __ai_ptr = (ptr); \
-+	typeof(oldp) __ai_oldp = (oldp); \
-+	kcsan_release(); \
-+	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
-+	arch_try_cmpxchg64_release(__ai_ptr, __ai_oldp, __VA_ARGS__); \
-+})
-+
-+#define try_cmpxchg64_relaxed(ptr, oldp, ...) \
-+({ \
-+	typeof(ptr) __ai_ptr = (ptr); \
-+	typeof(oldp) __ai_oldp = (oldp); \
-+	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
-+	arch_try_cmpxchg64_relaxed(__ai_ptr, __ai_oldp, __VA_ARGS__); \
-+})
-+
- #define cmpxchg_local(ptr, ...) \
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
-@@ -2045,4 +2083,4 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- })
- 
- #endif /* _LINUX_ATOMIC_INSTRUMENTED_H */
--// 87c974b93032afd42143613434d1a7788fa598f9
-+// 764f741eb77a7ad565dc8d99ce2837d5542e8aee
-diff --git a/scripts/atomic/gen-atomic-fallback.sh b/scripts/atomic/gen-atomic-fallback.sh
-index 8e2da71f1d5f..3a07695e3c89 100755
---- a/scripts/atomic/gen-atomic-fallback.sh
-+++ b/scripts/atomic/gen-atomic-fallback.sh
-@@ -164,41 +164,44 @@ gen_xchg_fallbacks()
- 
- gen_try_cmpxchg_fallback()
- {
-+	local cmpxchg="$1"; shift;
- 	local order="$1"; shift;
- 
- cat <<EOF
--#ifndef arch_try_cmpxchg${order}
--#define arch_try_cmpxchg${order}(_ptr, _oldp, _new) \\
-+#ifndef arch_try_${cmpxchg}${order}
-+#define arch_try_${cmpxchg}${order}(_ptr, _oldp, _new) \\
- ({ \\
- 	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \\
--	___r = arch_cmpxchg${order}((_ptr), ___o, (_new)); \\
-+	___r = arch_${cmpxchg}${order}((_ptr), ___o, (_new)); \\
- 	if (unlikely(___r != ___o)) \\
- 		*___op = ___r; \\
- 	likely(___r == ___o); \\
- })
--#endif /* arch_try_cmpxchg${order} */
-+#endif /* arch_try_${cmpxchg}${order} */
- 
- EOF
+ static inline u64 __cmpxchg64(volatile u64 *ptr, u64 old, u64 new)
+@@ -70,6 +73,24 @@ static inline u64 __cmpxchg64_local(volatile u64 *ptr, u64 old, u64 new)
+ 	return prev;
  }
  
- gen_try_cmpxchg_fallbacks()
- {
--	printf "#ifndef arch_try_cmpxchg_relaxed\n"
--	printf "#ifdef arch_try_cmpxchg\n"
-+	local cmpxchg="$1"; shift;
- 
--	gen_basic_fallbacks "arch_try_cmpxchg"
-+	printf "#ifndef arch_try_${cmpxchg}_relaxed\n"
-+	printf "#ifdef arch_try_${cmpxchg}\n"
- 
--	printf "#endif /* arch_try_cmpxchg */\n\n"
-+	gen_basic_fallbacks "arch_try_${cmpxchg}"
++static inline bool __try_cmpxchg64(volatile u64 *ptr, u64 *pold, u64 new)
++{
++	bool success;
++	u64 old = *pold;
++	asm volatile(LOCK_PREFIX "cmpxchg8b %[ptr]"
++		     CC_SET(z)
++		     : CC_OUT(z) (success),
++		       [ptr] "+m" (*ptr),
++		       "+A" (old)
++		     : "b" ((u32)new),
++		       "c" ((u32)(new >> 32))
++		     : "memory");
 +
-+	printf "#endif /* arch_try_${cmpxchg} */\n\n"
++	if (unlikely(!success))
++		*pold = old;
++	return success;
++}
++
+ #ifndef CONFIG_X86_CMPXCHG64
+ /*
+  * Building a kernel capable running on 80386 and 80486. It may be necessary
+diff --git a/arch/x86/include/asm/cmpxchg_64.h b/arch/x86/include/asm/cmpxchg_64.h
+index 072e5459fe2f..250187ac8248 100644
+--- a/arch/x86/include/asm/cmpxchg_64.h
++++ b/arch/x86/include/asm/cmpxchg_64.h
+@@ -19,6 +19,12 @@ static inline void set_64bit(volatile u64 *ptr, u64 val)
+ 	arch_cmpxchg_local((ptr), (o), (n));				\
+ })
  
- 	for order in "" "_acquire" "_release" "_relaxed"; do
--		gen_try_cmpxchg_fallback "${order}"
-+		gen_try_cmpxchg_fallback "${cmpxchg}" "${order}"
- 	done
++#define arch_try_cmpxchg64(ptr, po, n)					\
++({									\
++	BUILD_BUG_ON(sizeof(*(ptr)) != 8);				\
++	arch_try_cmpxchg((ptr), (po), (n));				\
++})
++
+ #define system_has_cmpxchg_double() boot_cpu_has(X86_FEATURE_CX16)
  
--	printf "#else /* arch_try_cmpxchg_relaxed */\n"
-+	printf "#else /* arch_try_${cmpxchg}_relaxed */\n"
- 
--	gen_order_fallbacks "arch_try_cmpxchg"
-+	gen_order_fallbacks "arch_try_${cmpxchg}"
- 
--	printf "#endif /* arch_try_cmpxchg_relaxed */\n\n"
-+	printf "#endif /* arch_try_${cmpxchg}_relaxed */\n\n"
- }
- 
- cat << EOF
-@@ -218,7 +221,9 @@ for xchg in "arch_xchg" "arch_cmpxchg" "arch_cmpxchg64"; do
- 	gen_xchg_fallbacks "${xchg}"
- done
- 
--gen_try_cmpxchg_fallbacks
-+for cmpxchg in "cmpxchg" "cmpxchg64"; do
-+	gen_try_cmpxchg_fallbacks "${cmpxchg}"
-+done
- 
- grep '^[a-z]' "$1" | while read name meta args; do
- 	gen_proto "${meta}" "${name}" "atomic" "int" ${args}
-diff --git a/scripts/atomic/gen-atomic-instrumented.sh b/scripts/atomic/gen-atomic-instrumented.sh
-index 68f902731d01..77c06526a574 100755
---- a/scripts/atomic/gen-atomic-instrumented.sh
-+++ b/scripts/atomic/gen-atomic-instrumented.sh
-@@ -166,7 +166,7 @@ grep '^[a-z]' "$1" | while read name meta args; do
- done
- 
- 
--for xchg in "xchg" "cmpxchg" "cmpxchg64" "try_cmpxchg"; do
-+for xchg in "xchg" "cmpxchg" "cmpxchg64" "try_cmpxchg" "try_cmpxchg64"; do
- 	for order in "" "_acquire" "_release" "_relaxed"; do
- 		gen_xchg "${xchg}" "${order}" ""
- 		printf "\n"
+ #endif /* _ASM_X86_CMPXCHG_64_H */
 -- 
 2.35.1
 

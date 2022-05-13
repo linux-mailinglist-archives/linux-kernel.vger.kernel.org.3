@@ -2,128 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ACA2526334
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 15:52:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7567952634D
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 15:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233062AbiEMNv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 09:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44930 "EHLO
+        id S232283AbiEMNyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 09:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382077AbiEMNnW (ORCPT
+        with ESMTP id S1347101AbiEMNyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 09:43:22 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E6C26574
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 06:43:19 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id g23so9969380edy.13
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 06:43:19 -0700 (PDT)
+        Fri, 13 May 2022 09:54:18 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98AF05A597;
+        Fri, 13 May 2022 06:53:44 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id u3so11586738wrg.3;
+        Fri, 13 May 2022 06:53:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OWSeXSH3F3SaHIEtdX7R74ohKdWLZ0h8DQhO+Wcow0w=;
-        b=TGvTFxSVVmsEc3R8tVYYfZPGrWW6+ABu75S3UTtbbnTLGRLejRG8DEPWi7HBJDNiRX
-         snrZ57KR/vPmOg0RsTfEskBNf6dAnEjS4bAs+2XyKKaeTs7kCAFs+cWvIE8PKqNdC+vH
-         S+NVgBta+PCEftq5+psO3lOcA4CPcFYtLzer4=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7fZe7ZuhkcHkphV8RgWm+aqXThfc6HEs1D3+w7fnW1E=;
+        b=c8pvij0fZVSEifHuKb4ntHQFJbaoWeF16rwR0TUUzsGtGA4msQL9RdM3IaImMp0HAJ
+         QybhumSZY9ZmpjDfK/fwoZnyzH3wD712NJ8c6u6ePfCDoEDZBz7biWzeFeDbVQFjRqOK
+         izQcfAhhn3OGdfF1r1Z5Y3v1DI5xkS7k7cuUNUBvyTtuqDNSjLeVJNZx4KAZeIvO27cg
+         zHbge6ihXS69wXl3rGwOcBwzz/jumGXO/LNhxp0A1FqdwCenAty2cAih7XJMp2hu4r4Y
+         jocIg7tcpjXOeKeUPLiYGzz78K/M4ZYMC6cDamRbPwOW+Q+NEU7Xt+8lg2+zHdOweNd+
+         RQlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OWSeXSH3F3SaHIEtdX7R74ohKdWLZ0h8DQhO+Wcow0w=;
-        b=zIpDk71SReI+o78HhDvKMfWNGYmkZzUnqxuoHXGvOuYbyjVqPD2TTOXJE89MO8YoQk
-         0TxL54Etuf0/mfIdg+79pGTKT6eAvNrdUOOH0nOw01rOcU/MrORR2kNi0NapipELXnPK
-         mLoO7zsUlPZuqgWwRXsOCRiMSlv+c7c+Z0zbvYLIJl8nglzEjsL9ecW5U3MvAoJkRwbn
-         RrZFwFgbjwlZIkx2doQlGXVENbI4tZKdWMr1hgg+idktF+yn/EtPPrSh+p++yNXAj/jN
-         YRwEadOhl6OAjE0lVz5yiKOxx9oYHlNJ6eMlfMc9lNKikTazVGZqckp3BCSoPTNcELHH
-         EPOA==
-X-Gm-Message-State: AOAM532TYWagPlxo3OcxTC/Qkh1aoUNW++l6raGpcf8Y5prZKlDqsT56
-        El9m1bCa5KoHxLWBQPGKDlaB5qtkkWbcWsPmUtw=
-X-Google-Smtp-Source: ABdhPJykuEA98okdyD52YJM8+xFDg1qSQmO0NdHElHc7/+1TvZoip/yO7KMyjVVQhH+W6ykD0VGh0A==
-X-Received: by 2002:a05:6402:84a:b0:423:fe99:8c53 with SMTP id b10-20020a056402084a00b00423fe998c53mr39978291edz.195.1652449398306;
-        Fri, 13 May 2022 06:43:18 -0700 (PDT)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
-        by smtp.gmail.com with ESMTPSA id h2-20020a0564020e8200b0042617ba63c8sm987659eda.82.2022.05.13.06.43.16
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 06:43:16 -0700 (PDT)
-Received: by mail-wm1-f47.google.com with SMTP id n126-20020a1c2784000000b0038e8af3e788so4790855wmn.1
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 06:43:16 -0700 (PDT)
-X-Received: by 2002:a05:600c:3d8c:b0:394:6097:9994 with SMTP id
- bi12-20020a05600c3d8c00b0039460979994mr15065402wmb.29.1652449395743; Fri, 13
- May 2022 06:43:15 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7fZe7ZuhkcHkphV8RgWm+aqXThfc6HEs1D3+w7fnW1E=;
+        b=5rPQcxDVF79X17qaTh9WBXafluLaVc2u2L7/Va17QdtwfXKeHGM+s6aTP11fNZG7qG
+         PptCoig29tDStvCJthkPd9lw/PEFUhX3eb41UJMTdmuE9lJp+IPlfchJJ3Thgrpcx/KA
+         IwUbafz2o2HRJjYfGFie4eIyxEQ/Hk60d2uDZnEWlvo3vpKXJJ2SkOutEWaGM1oNvRiN
+         rTFJuBZcHFL1PeUcUsqLr87wlzBwUbEGo+ViM0Um0BNZ+DWZ9qLT/FkK6ZAjkf9r6alS
+         qj6aZ+eUmcEjx7FEyXdQIP1EMMZFiswyEEIfSoCuNbD0yA9EIo/l64EGyPRrBW3Nvm2w
+         iNVA==
+X-Gm-Message-State: AOAM5307NLw5eFT+7GbdJvvAwu/YyMo/yXbc0MPMFdIxuBUsb7wfGgCW
+        kHHxnFxaiw2oRmoAXC1lTbo=
+X-Google-Smtp-Source: ABdhPJy+EwUp69L0cz2uBqQcXBfzCCAdTcl2Tk4p9WOhncRmnlPiaIfBKRewmbH8Fj20a+w1hQxW0w==
+X-Received: by 2002:adf:e449:0:b0:20c:d56a:6020 with SMTP id t9-20020adfe449000000b0020cd56a6020mr4067091wrm.425.1652450023108;
+        Fri, 13 May 2022 06:53:43 -0700 (PDT)
+Received: from localhost (245.218.125.91.dyn.plus.net. [91.125.218.245])
+        by smtp.gmail.com with ESMTPSA id l6-20020adfa386000000b0020c5253d903sm2161229wrb.79.2022.05.13.06.53.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 06:53:42 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Sandy Huang <hjc@rock-chips.com>,
+        =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] drm/rockchip: Fix spelling mistake "aligened" -> "aligned"
+Date:   Fri, 13 May 2022 14:53:41 +0100
+Message-Id: <20220513135341.290289-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220512090429.1.I9804fcd5d6c8552ab25f598dd7a3ea71b15b55f0@changeid>
- <20220512090429.2.I1318c1ae2ce55ade1d092fc21df846360b15c560@changeid> <1652445201.115225.85852.nullmailer@robh.at.kernel.org>
-In-Reply-To: <1652445201.115225.85852.nullmailer@robh.at.kernel.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 13 May 2022 06:43:04 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=W1CC8NGFCiUCb-W3i4Z6wYyhmf9JmgbFJ4K+KL6mgvgQ@mail.gmail.com>
-Message-ID: <CAD=FV=W1CC8NGFCiUCb-W3i4Z6wYyhmf9JmgbFJ4K+KL6mgvgQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] dt-bindings: arm: qcom: Add / fix sc7280 board bindings
-To:     Rob Herring <robh@kernel.org>
-Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Julius Werner <jwerner@chromium.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "Joseph S . Barrera III" <joebar@chromium.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        Rob Herring <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+There is a spelling mistake in a drm_err message. Fix it.
 
-On Fri, May 13, 2022 at 5:33 AM Rob Herring <robh@kernel.org> wrote:
->
-> On Thu, 12 May 2022 09:04:46 -0700, Douglas Anderson wrote:
-> > This copy-pastes compatibles from sc7280-based boards from the device
-> > trees to the yaml file. It also fixes the CRD/IDP bindings which had
-> > gotten stale.
-> >
-> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > ---
-> >
-> >  .../devicetree/bindings/arm/qcom.yaml         | 40 +++++++++++++++----
-> >  1 file changed, 33 insertions(+), 7 deletions(-)
-> >
->
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
->
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
->
-> Full log is available here: https://patchwork.ozlabs.org/patch/
->
->
-> /: compatible: 'oneOf' conditional failed, one must be fixed:
-[...]
->         arch/arm64/boot/dts/qcom/sc7280-crd.dtb
->         arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r0.dtb
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/gpu/drm/rockchip/rockchip_drm_vop2.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Looking explicitly at these, since sc7280 boards were supposed to have
-been fixed.
+diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+index 0b49fed16535..04e8e22a8640 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
++++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+@@ -1202,7 +1202,7 @@ static void vop2_plane_atomic_update(struct drm_plane *plane,
+ 		 */
+ 		stride = (fb->pitches[0] << 3) / bpp;
+ 		if ((stride & 0x3f) && (xmirror || rotate_90 || rotate_270))
+-			drm_err(vop2->drm, "vp%d %s stride[%d] not 64 pixel aligened\n",
++			drm_err(vop2->drm, "vp%d %s stride[%d] not 64 pixel aligned\n",
+ 				vp->id, win->data->name, stride);
+ 
+ 		rb_swap = vop2_afbc_rb_swap(fb->format->format);
+-- 
+2.35.1
 
-Ah, I see. herobrine-r0 was removed recently, and the crd compatibles
-were rejiggered. ...so this makes sense. I'll expect that it will be
-resolved when the current Qualcomm tree makes it to mainline.
-
--Doug

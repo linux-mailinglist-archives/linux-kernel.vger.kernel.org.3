@@ -2,75 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2593D526C55
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 23:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA8F526C59
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 23:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384673AbiEMVd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 17:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
+        id S1384684AbiEMVfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 17:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232968AbiEMVdy (ORCPT
+        with ESMTP id S232968AbiEMVf1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 17:33:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3EF8BF42;
-        Fri, 13 May 2022 14:33:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 10E2262328;
-        Fri, 13 May 2022 21:33:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C11FC34100;
-        Fri, 13 May 2022 21:33:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652477631;
-        bh=VSnJXZ8+t+dZhN43aAd+oFkMmOxWgx8f608mCX7Qpxk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=f2y2Ri8QAGC6zXWCiKrh1aKBiD3mWKOFS2UQhb+teqMzdNPZ5p8MxOYPYtszZxcAO
-         LyjGW6Bu61+gEB3FCoJJA8Xb5dPfrS9f6u7cNTc2dhZ0zL1P+ceplnbrOIcg42//px
-         FAuKZEdup/uXNGlU5sKaoyEz7AZanWeCQQgMcxuuX6TGWMFhktE3Fc5MWY564ra+XW
-         j/CAuU9NKKX4/87WURtYAbhIqvKLPMsJtryeOgfT2ZJcW2L7eqYKSmPx9HCHMDFStN
-         TkxBan8ZpJewNDuG//A4WqWGD3CSXjLYp7t9vsjLTaXCZC9LwI0sn+NDXLX2W0ZT4s
-         +8ZwbaOmmHtwg==
-Date:   Fri, 13 May 2022 14:33:49 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Min Li <min.li.xe@renesas.com>
-Cc:     "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH net v5 3/3] ptp: clockmatrix: miscellaneous cosmetic
- change
-Message-ID: <20220513143349.1483fcf8@kernel.org>
-In-Reply-To: <TYCPR01MB6608DC38FC74BB484E2B6079BACA9@TYCPR01MB6608.jpnprd01.prod.outlook.com>
-References: <1652279114-25939-1-git-send-email-min.li.xe@renesas.com>
-        <1652279114-25939-3-git-send-email-min.li.xe@renesas.com>
-        <20220511173732.7988807e@kernel.org>
-        <OS3PR01MB659312F189453925868225B2BACB9@OS3PR01MB6593.jpnprd01.prod.outlook.com>
-        <20220512090300.162e5441@kernel.org>
-        <TYCPR01MB6608DC38FC74BB484E2B6079BACA9@TYCPR01MB6608.jpnprd01.prod.outlook.com>
+        Fri, 13 May 2022 17:35:27 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93422BF42
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 14:35:25 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id z2so18573625ejj.3
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 14:35:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hiVPxXcKKvs645f67vw4fyY/1EsP6WHDPNLF6XpOy5w=;
+        b=HFmcXKKocCOzY3L6xyzBOyni/8lIT2JdWo0u7Ysyy5wAt6MrKm4qeL6DNirn9aeASA
+         ktMiw4dXw+ne9G4D77+hwy/+EGmJ9hzRn/d/z6jmitjPMRfTFg5OMoh3Vd/g97+e1sdo
+         YpPUNQ3kaml6Ku+FRklpuChMSC+3BWxpVaqjE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hiVPxXcKKvs645f67vw4fyY/1EsP6WHDPNLF6XpOy5w=;
+        b=C0EkA3cjhz7q1jYeGeKiUieYOsY8lkU89luRGpQiqgw1ksv71oRJq1ZwCyX625jImE
+         i5xlvrynr2eOJ94mHtilj/V35WvbUUCRuFO6NUkBHTA1drscS5tlhmu+kT65xtew23+D
+         xKiCpnfrGOQw272WF+lS8OCHPhgAODW9j3Fsub2I6o9pnjKurLbjeqt+NxhamMLDYHtE
+         fV2L4zKtq4Ng/vQVXtivoJQaU+3GU2R7aSPXOTyHsqvRereetwpNRSCYodtcXcC1gtce
+         cLaIxHhBilncsCtLPdu8sPsc/8RTwkiDYnE/J39Yxcc/oWaMOFd3bmqlU5IJ7Kq4EH4u
+         GCLg==
+X-Gm-Message-State: AOAM530yCRv2DvULgSim0HU2D8VG2Xc/z/IR0DIn0Xb8KKiBWUxXbM4T
+        z3noOVrKJXUz0lhhW4Dw0sUcnLd3+6+aQDRj
+X-Google-Smtp-Source: ABdhPJxRWuguKSu7S6x9+DNNXAvQ+nRXb7QUcmOSrL9z5X9ERDJ3teMP/KxkwPo3XIHD9RIHTuoXiQ==
+X-Received: by 2002:a17:907:90cf:b0:6f4:346f:f771 with SMTP id gk15-20020a17090790cf00b006f4346ff771mr5926031ejb.574.1652477723951;
+        Fri, 13 May 2022 14:35:23 -0700 (PDT)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
+        by smtp.gmail.com with ESMTPSA id zd21-20020a17090698d500b006f3ef214dd0sm1138486ejb.54.2022.05.13.14.35.23
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 14:35:23 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id p189so5437850wmp.3
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 14:35:23 -0700 (PDT)
+X-Received: by 2002:a7b:c106:0:b0:394:19aa:4f91 with SMTP id
+ w6-20020a7bc106000000b0039419aa4f91mr16898739wmi.68.1652477722759; Fri, 13
+ May 2022 14:35:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220513210710.4124506-1-agruenba@redhat.com>
+In-Reply-To: <20220513210710.4124506-1-agruenba@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 13 May 2022 14:35:06 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjjnfgmUuYBrXSjXD167w+87EZyMT79h_iTH84+__wtbw@mail.gmail.com>
+Message-ID: <CAHk-=wjjnfgmUuYBrXSjXD167w+87EZyMT79h_iTH84+__wtbw@mail.gmail.com>
+Subject: Re: [GIT PULL] gfs2 fixes
+To:     Andreas Gruenbacher <agruenba@redhat.com>
+Cc:     cluster-devel <cluster-devel@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 May 2022 19:57:26 +0000 Min Li wrote:
-> There are multiple places where "no empty line between call and error
-> check" and "return directly" like you pointed out before. Some are
-> related to this change and some are not. Do you prefer to fix only
-> the related ones in this patch or do them all in another patch to
-> net-next
+On Fri, May 13, 2022 at 2:07 PM Andreas Gruenbacher <agruenba@redhat.com> wrote:
+>
+> Would you like to still pull these fixes for v5.18, or should we send them in
+> the next merge window?
 
-Let's forget cleaning up the code not touched by patches 1 and 2.
+I've pulled them. Any filesystem corruption issue sounds scary enough
+that it doesn't sound very sane to delay fixes.
 
-Within the lines of code patches 1 and 2 touch - by which I mean the
-lines listed with a '+' at the start - please make sure there are
-no instances of the formatting issues there.
+            Linus

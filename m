@@ -2,84 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C0C7525B77
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 08:27:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5AC8525C56
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377255AbiEMGUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 02:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44780 "EHLO
+        id S1377783AbiEMHUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 03:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377208AbiEMGU2 (ORCPT
+        with ESMTP id S1356223AbiEMHT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 02:20:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFAAB284912;
-        Thu, 12 May 2022 23:20:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 79056B82C40;
-        Fri, 13 May 2022 06:20:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C95A3C34100;
-        Fri, 13 May 2022 06:20:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652422824;
-        bh=aHkk3J36Z8kJ+ZUFvfd3KyBC3/yaAGpykvfzHN6wCKc=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=aqKE+MHQ+fSAyMhnhSC+cX4cD/jnkTNa0vAXgm7tBAEtkZW+G/DrvhyDVU0PQUBme
-         EJz2oI5oFwO0z78KktKpH1sCnc2+CLbhM5LsiWtGGTlJe/hA8VgDMity1mReG4667D
-         bbXq2OH5QHBf2dYyJP7odXgWoXeUFbml72wE6GK1YQGne4abJIqBgtqPAy1aWmfe4I
-         zqdWtqmEE/PkxZ9vYupmQ6ayR1dRll/5y78BrhlKb0SiE7Fb7gBC9JYt/ggDPEPIeo
-         wk5QfySK/2yhiE75xLnDsZ04x23GeAwqPIsKcx0MS82kLYry9DNBwMInaTtc/me/fl
-         tponHj0EHzETA==
-Content-Type: text/plain; charset="utf-8"
+        Fri, 13 May 2022 03:19:57 -0400
+Received: from nksmu.kylinos.cn (mailgw.kylinos.cn [123.150.8.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12902AACC1
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 00:19:55 -0700 (PDT)
+X-UUID: 43d5697e530f41e095fe965a3f140368-20220513
+X-Spam-Fingerprint: 0
+X-GW-Reason: 11101
+X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HMTDkurrpnIDopoHlrqHmoLg=
+X-Content-Feature: ica/max.line-size 116
+        audit/email.address 1
+        meta/cnt.alert 1
+X-UUID: 43d5697e530f41e095fe965a3f140368-20220513
+Received: from cs2c.com.cn [(172.17.111.24)] by nksmu.kylinos.cn
+        (envelope-from <pengfuyuan@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 482741696; Fri, 13 May 2022 14:24:51 +0800
+X-ns-mid: postfix-627DF8EE-8540214981
+Received: from localhost.localdomain (unknown [172.20.4.120])
+        by cs2c.com.cn (NSMail) with ESMTPA id 87CC6383C640;
+        Fri, 13 May 2022 06:21:34 +0000 (UTC)
+From:   pengfuyuan <pengfuyuan@kylinos.cn>
+To:     Harry Wentland <harry.wentland@amd.com>
+Cc:     Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Xinhui.Pan@amd.com, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        pengfuyuan <pengfuyuan@kylinos.cn>
+Subject: [PATCH] drm/amd/display: Remove macro DC_DEFAULT_LOG_MASK
+Date:   Fri, 13 May 2022 14:20:45 +0800
+Message-Id: <20220513062045.840780-1-pengfuyuan@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [v2] rtlwifi: Use pr_warn instead of WARN_ONCE
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220511014453.1621366-1-dzm91@hust.edu.cn>
-References: <20220511014453.1621366-1-dzm91@hust.edu.cn>
-To:     Dongliang Mu <dzm91@hust.edu.cn>
-Cc:     Ping-Ke Shih <pkshih@realtek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        syzkaller <syzkaller@googlegroups.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <165242279758.13495.9636671855029489659.kvalo@kernel.org>
-Date:   Fri, 13 May 2022 06:20:21 +0000 (UTC)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,UNPARSEABLE_RELAY,
+        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dongliang Mu <dzm91@hust.edu.cn> wrote:
+[Why]
+The DC_DEFAULT_LOG_MASK macro has not been used for a long time, so remove it.
 
-> From: Dongliang Mu <mudongliangabcd@gmail.com>
-> 
-> This memory allocation failure can be triggered by fault injection or
-> high pressure testing, resulting a WARN.
-> 
-> Fix this by replacing WARN with pr_warn.
-> 
-> Reported-by: syzkaller <syzkaller@googlegroups.com>
-> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Signed-off-by: pengfuyuan <pengfuyuan@kylinos.cn>
+---
+ .../drm/amd/display/include/logger_types.h    | 33 -------------------
+ 1 file changed, 33 deletions(-)
 
-Patch applied to wireless-next.git, thanks.
-
-ad732da434a2 rtlwifi: Use pr_warn instead of WARN_ONCE
-
+diff --git a/drivers/gpu/drm/amd/display/include/logger_types.h b/drivers/gpu/drm/amd/display/include/logger_types.h
+index f093b49c5e6e..1b38cfc41718 100644
+--- a/drivers/gpu/drm/amd/display/include/logger_types.h
++++ b/drivers/gpu/drm/amd/display/include/logger_types.h
+@@ -131,37 +131,4 @@ enum dc_log_type {
+ #define DC_MIN_LOG_MASK ((1 << LOG_ERROR) | \
+ 		(1 << LOG_DETECTION_EDID_PARSER))
+ 
+-#define DC_DEFAULT_LOG_MASK ((1ULL << LOG_ERROR) | \
+-		(1ULL << LOG_WARNING) | \
+-		(1ULL << LOG_EVENT_MODE_SET) | \
+-		(1ULL << LOG_EVENT_DETECTION) | \
+-		(1ULL << LOG_EVENT_LINK_TRAINING) | \
+-		(1ULL << LOG_EVENT_LINK_LOSS) | \
+-		(1ULL << LOG_EVENT_UNDERFLOW) | \
+-		(1ULL << LOG_RESOURCE) | \
+-		(1ULL << LOG_FEATURE_OVERRIDE) | \
+-		(1ULL << LOG_DETECTION_EDID_PARSER) | \
+-		(1ULL << LOG_DC) | \
+-		(1ULL << LOG_HW_HOTPLUG) | \
+-		(1ULL << LOG_HW_SET_MODE) | \
+-		(1ULL << LOG_HW_RESUME_S3) | \
+-		(1ULL << LOG_HW_HPD_IRQ) | \
+-		(1ULL << LOG_SYNC) | \
+-		(1ULL << LOG_BANDWIDTH_VALIDATION) | \
+-		(1ULL << LOG_MST) | \
+-		(1ULL << LOG_DETECTION_DP_CAPS) | \
+-		(1ULL << LOG_BACKLIGHT)) | \
+-		(1ULL << LOG_I2C_AUX) | \
+-		(1ULL << LOG_IF_TRACE) | \
+-		(1ULL << LOG_HDMI_FRL) | \
+-		(1ULL << LOG_SCALER) | \
+-		(1ULL << LOG_DTN) /* | \
+-		(1ULL << LOG_DEBUG) | \
+-		(1ULL << LOG_BIOS) | \
+-		(1ULL << LOG_SURFACE) | \
+-		(1ULL << LOG_DML) | \
+-		(1ULL << LOG_HW_LINK_TRAINING) | \
+-		(1ULL << LOG_HW_AUDIO)| \
+-		(1ULL << LOG_BANDWIDTH_CALCS)*/
+-
+ #endif /* __DAL_LOGGER_TYPES_H__ */
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220511014453.1621366-1-dzm91@hust.edu.cn/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+2.25.1
 

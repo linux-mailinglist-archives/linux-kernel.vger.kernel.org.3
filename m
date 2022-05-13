@@ -2,105 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CCFC5259E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 05:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 117715259EE
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 05:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376666AbiEMDFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 23:05:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49790 "EHLO
+        id S1376706AbiEMDF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 23:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376689AbiEMDFm (ORCPT
+        with ESMTP id S1376669AbiEMDFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 23:05:42 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B06297408
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 20:05:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652411128; x=1683947128;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=RKmc/JYK4Flm5C6llb5dgyed83U7HDxdTph4z1wb4ys=;
-  b=JH4CrS7+5FyYahQu73UxUEUJMaV6YQXJWRJOGkSpS+zfPb0GIi2q30hv
-   L3BbjFWga+XjQ9dIvAS5Mj8EUKM5fXXlc6pc/EFrF4z4oyx/Ttqq/iy2+
-   cFdT5rHEgHMtKx99NHsU/TWhI8xg2UQ8It5Lr7DqIGoeqwRiha2ejwIaU
-   V3GH+aP9Tw8+R7TmW4o23FhntSGWWozVEoqRY8hsaI+bEd5BLhiH1RwUe
-   eBpe9ix2ZuJuuwZ0/VefozaH6x1zs3ORCSre3bOuof8IZaNIL/r62qMo1
-   ayioUNFNX4hgD+Q9DmaNEp2VvTuirlJPZ1MLsqJ8EGMLoQbEmTLiUqIfW
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="295457225"
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="295457225"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 20:05:28 -0700
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="572793934"
-Received: from wdwickar-mobl1.amr.corp.intel.com (HELO [10.252.130.245]) ([10.252.130.245])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 20:05:27 -0700
-Message-ID: <ee786113-2173-b78b-774d-9d61d08b069b@intel.com>
-Date:   Thu, 12 May 2022 20:05:26 -0700
+        Thu, 12 May 2022 23:05:49 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9E95FE7;
+        Thu, 12 May 2022 20:05:42 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KztnF5GpFz4xR7;
+        Fri, 13 May 2022 13:05:37 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1652411138;
+        bh=fC2GGkZ6i1/eN+A/UO95n84TneECFcVdKhwj/auxTZY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=qw7Q0Cqcx1/V91zdI8RMOi066QNsHEmIm/HkytZtdFLlJiZS0bty8HG2DknIg2KS2
+         bHAixUSeOjosvQtCQcFczSNbz47Xdrkd6A3ky+O1VBL+uqCXriZ1ObHk+1DaUGAuJD
+         AIVYtmLDi6fvIwFaU5mfbQYg5gj2dBlKc5KhhVlowKVaR/ogRLkvE62CPYKtCdUhpc
+         5xY7/Wfpty5Q/N1GbClkBwlxz9x/eWytE4g6oDudmm0W54UREbC3VzBjLtGrkzDPVN
+         Z/51MUN26hOvXoSMLyZtv0ifr38DtuhcBFi0i62RYOtchm3Fw3lYoTVP7fTY9OxUG/
+         zafJQ7igNgE+w==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com,
+        davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Subject: Re: [PATCH] lib/atomic64_test.c: convert to use KUnit
+In-Reply-To: <20220502192327.81153-1-dlatypov@google.com>
+References: <20220502192327.81153-1-dlatypov@google.com>
+Date:   Fri, 13 May 2022 13:05:31 +1000
+Message-ID: <87ilqa6sjo.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [RFCv2 00/10] Linear Address Masking enabling
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        "H.J. Lu" <hjl.tools@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
- <20220511064943.GR76023@worktop.programming.kicks-ass.net>
- <20bada85-9203-57f4-2502-57a6fd11f3ea@intel.com> <875ymav8ul.ffs@tglx>
- <55176b79-90af-4a47-dc06-9f5f2f2c123d@intel.com>
- <CAMe9rOqb6ZnAZYe4uAWDt-vmhhP=z_+uZwi5fBURqyUWxCX9Cg@mail.gmail.com>
- <87o802tjd7.ffs@tglx>
- <CAMe9rOpXOLEMcir9zMq_UJe08Y-kM+9zok6gDicqAhPySV+3NA@mail.gmail.com>
- <67aef839-0757-37b1-a42d-154c0116cbf5@intel.com> <878rr6te6b.ffs@tglx>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <878rr6te6b.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/12/22 18:27, Thomas Gleixner wrote:
-> On Thu, May 12 2022 at 17:46, Dave Hansen wrote:
->> On 5/12/22 17:08, H.J. Lu wrote:
->> If I had to take a shot at this today, I think I'd opt for:
->>
->> 	mask = sys_enable_masking(bits=6, flags=FUZZY_NR_BITS);
->>
->> although I'm not super confident about the "fuzzy" flag.  I also don't
->> think I'd totally hate the "blind" interface where the kernel just gets
->> to pick unilaterally and takes zero input from userspace.
-> That's the only sane choice and you can make it simple for userspace:
-> 
->        ret = prctl(GET_XXX_MASK, &mask);
-> 
-> and then let it decide based on @ret and @mask whether to use it or not.
-> 
-> But of course nobody thought about this as a generic feature and so we
-> have the ARM64 TBI muck as a precedence.
+Daniel Latypov <dlatypov@google.com> writes:
+> The test currently is a bunch of checks (implemented using BUG_ON())
+> that can be built into the kernel or as a module.
+>
+> Convert it to a KUnit test, which can also run in both modes.
+> From a user's perspective, this change adds a CONFIG_KUNIT=y dep and
+> changes the output format of the test [1]. The test itself is the same.
+...
 
-Well, not quite *nobody*:
+I don't know why I got Cc'ed on this :), but I gave it a quick test anyway.
 
- https://lore.kernel.org/linux-arm-kernel/7a34470c-73f0-26ac-e63d-161191d4b1e4@intel.com/
+Seems to work fine on a Power9.
+I also flipped some of the conditionals to make sure failure is detected
+correctly.
 
+Tested-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+
+
+> Meta:
+> 1. this patch applies on top of the kunit branch,
+> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/?h=kunit
+>
+> 2. checkpatch complains about aligning with parens, but it wants me to
+> indent the `#ifdef CONFIG_X86_64` which seems inappropriate in context.
+>
+> 3. this file doesn't seem to have a clear maintainer, so I assume this
+> conversion is fine to go through the kunit branch.
+
+I think you want to at least Cc the atomic folks:
+
+ATOMIC INFRASTRUCTURE
+M:	Will Deacon <will@kernel.org>
+M:	Peter Zijlstra <peterz@infradead.org>
+R:	Boqun Feng <boqun.feng@gmail.com>
+R:	Mark Rutland <mark.rutland@arm.com>
+L:	linux-kernel@vger.kernel.org
+S:	Maintained
+
+
+cheers

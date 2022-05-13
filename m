@@ -2,273 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 179F6525B0C
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 07:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7225A525B0A
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 07:35:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377098AbiEMFeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 01:34:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42540 "EHLO
+        id S1377093AbiEMFe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 01:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377088AbiEMFdz (ORCPT
+        with ESMTP id S1377097AbiEMFeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 01:33:55 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D690149AB0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 22:33:52 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2D16421AE2;
-        Fri, 13 May 2022 05:33:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652420030; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AaNK9VI92CtlLRufqelHTuZqKOQA/3zBp3OZRQgQ4/A=;
-        b=NGRd1kaTOR9gXF3g5ClJFREszBP4PQdh6s7fgHjNNMGjRtcluLQekZrKNbxw/xnDC3p+jq
-        TuCBukRsHNhwWmix40crh+zQstPofhp/WEzn9EBQG5OwjTBZln9tLxYnQXzc3rTKh5I5ri
-        YsFiMzYlJ/+Wj3ZY/LHzBJ7b/tMRzx0=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CF59E13A84;
-        Fri, 13 May 2022 05:33:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sZhGMb3tfWLIFgAAMHmgww
-        (envelope-from <jgross@suse.com>); Fri, 13 May 2022 05:33:49 +0000
-Message-ID: <d1d61bcf-86f9-68cd-9bd4-a13bf8149b88@suse.com>
-Date:   Fri, 13 May 2022 07:33:49 +0200
+        Fri, 13 May 2022 01:34:14 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC51616A240
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 22:34:13 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2fb9a85a124so75941577b3.13
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 22:34:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MzuLZkvGtBtGQw1pDL6vVc7H+kdQt/J9TPee+0oSim0=;
+        b=aJUNIyh0bt3QZBpNiFdkambzLl3faJNTEzhdur1OgekhYmVwx4JYk0LTXQcg+OFwzx
+         tgWk34RcWG8/Y4/7fPJJ1tzImbyE1MXVgT1f/btb2jmoOI03bWLr3qJsQbJ0poQdQQph
+         eQvRtlvKAdyr82raWhu+JQi2JNaKpAbyuZYMA4jCcoXxv3sHPJpenbeWg2gOCUq8QR7l
+         Id3os4GVb0FoGWuliBiz4c2TXNY1sV5sApK6JdyfvfH2WSD/RIT+54qt4Yd7/Z7Phj20
+         04xEmautD+SZxJB9aakX8kR52XAMIniucHIOgzuPJYUXP/RRj1fxItIHfNvmlh+TXQ0Y
+         dVjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MzuLZkvGtBtGQw1pDL6vVc7H+kdQt/J9TPee+0oSim0=;
+        b=LefA9BGviK9a6uPYihLOQDU1hSrY8qRKF309Cm639upnrsgGf3f8sjRcgOeCaEILUV
+         ZAmgjZk7HEr4MJ+Y7VkcEUhewceU7qaAQsdFY/XLCiOmrL5dLJM2rI9xX673BseDUTyi
+         itGhupaeyMfy7gUn/O1mjCNYZT5QvQnZNQyi92WNDu8FrlsPP1nqFKF0KreuIcYlVprz
+         mWdtPavvULBwcUFhOzIfO2BHdChO0ORsvTxYT0QN0j6w0QaJ/90bDM/mHnCREw0KqbF9
+         2PrWriFjEszawHdQu/5imRlm4Zim+OsYoAHNIDYk/Dtap/6WmHoxFHmJIIv/07TZIkRj
+         hXWA==
+X-Gm-Message-State: AOAM533BlNpmhkVpZwSG/Vc6lDdswe4SrJ9S5VMP/FOPDwBxyuQ48sNZ
+        JOOCvakC/cdrx6qmNWVH6niykP/dQt6xcWwhq1s2xA==
+X-Google-Smtp-Source: ABdhPJzbvJITAyF9pezasvdbf9Ebv/WVdiqeWUMVoaO1Sw2Z4IgmSKbjl1gIk4rgrnQk4UVM1yDalurYFkxnnMGZV0c=
+X-Received: by 2002:a0d:db43:0:b0:2f8:9a:8c1d with SMTP id d64-20020a0ddb43000000b002f8009a8c1dmr3941612ywe.72.1652420052877;
+ Thu, 12 May 2022 22:34:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-US
-To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Oleksandr Tyshchenko <olekstysh@gmail.com>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Stefano Stabellini <sstabellini@kernel.org>,
-        Julien Grall <julien@xen.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>
-References: <1651947548-4055-1-git-send-email-olekstysh@gmail.com>
- <1651947548-4055-3-git-send-email-olekstysh@gmail.com>
- <597125fd-4c85-fde0-9d5b-a9cc13a81ccc@oracle.com>
-From:   Juergen Gross <jgross@suse.com>
-Subject: Re: [PATCH V2 2/7] xen/grants: support allocating consecutive grants
-In-Reply-To: <597125fd-4c85-fde0-9d5b-a9cc13a81ccc@oracle.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------Sr9EeqdIb8iPoFhoY08CFv9r"
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
+ <20220425033934.68551-7-kirill.shutemov@linux.intel.com> <YnE4ZzzVrxUnr3Uv@zn.tnic>
+ <20220506153013.e6v4q2qhuhqumfiu@box.shutemov.name> <YnpGnMoviGoK4Ucq@zn.tnic>
+In-Reply-To: <YnpGnMoviGoK4Ucq@zn.tnic>
+From:   Dionna Amalie Glaze <dionnaglaze@google.com>
+Date:   Thu, 12 May 2022 22:34:02 -0700
+Message-ID: <CAAH4kHYRxgUNnGRUO473q02q3akLzgiTvbA2qKEP5jq6jFV-uA@mail.gmail.com>
+Subject: Re: [PATCHv5 06/12] x86/boot/compressed: Handle unaccepted memory
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------Sr9EeqdIb8iPoFhoY08CFv9r
-Content-Type: multipart/mixed; boundary="------------ss12YByrfgbibODZLOK0ywZB";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Boris Ostrovsky <boris.ostrovsky@oracle.com>,
- Oleksandr Tyshchenko <olekstysh@gmail.com>, xen-devel@lists.xenproject.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc: Stefano Stabellini <sstabellini@kernel.org>, Julien Grall
- <julien@xen.org>, Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
- "Michael S. Tsirkin" <mst@redhat.com>, Christoph Hellwig <hch@infradead.org>
-Message-ID: <d1d61bcf-86f9-68cd-9bd4-a13bf8149b88@suse.com>
-Subject: Re: [PATCH V2 2/7] xen/grants: support allocating consecutive grants
-References: <1651947548-4055-1-git-send-email-olekstysh@gmail.com>
- <1651947548-4055-3-git-send-email-olekstysh@gmail.com>
- <597125fd-4c85-fde0-9d5b-a9cc13a81ccc@oracle.com>
-In-Reply-To: <597125fd-4c85-fde0-9d5b-a9cc13a81ccc@oracle.com>
+Kirill, I've been tracking these changes to see if we can handle the
+unaccepted memory type for SEV-SNP, but testing has been an issue. The
+proposed patch in Ovmf to introduce unaccepted memory seems to have
+stalled out last September
+(https://www.mail-archive.com/devel@edk2.groups.io/msg35842.html) and
+is particularly difficult to adapt to SEV-SNP since it doesn't follow
+the TDVF way of initializing all memory. Is there a different
+development I might have missed so that we might test these cases?
+Without the UEFI introducing EFI_UNACCEPTED_MEMORY type, any kernel
+uses are essentially dead code.
 
---------------ss12YByrfgbibODZLOK0ywZB
-Content-Type: multipart/mixed; boundary="------------FphEvG0f0pwtWW6kWmn04s0b"
+Thanks,
+-Dionna
 
---------------FphEvG0f0pwtWW6kWmn04s0b
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+(apologies for repost in text mode)
 
-T24gMTIuMDUuMjIgMjI6MDEsIEJvcmlzIE9zdHJvdnNreSB3cm90ZToNCj4gDQo+IE9uIDUv
-Ny8yMiAyOjE5IFBNLCBPbGVrc2FuZHIgVHlzaGNoZW5rbyB3cm90ZToNCj4+ICsNCj4+ICsv
-Kg0KPj4gKyAqIEhhbmRsaW5nIG9mIGZyZWUgZ3JhbnRzOg0KPj4gKyAqDQo+PiArICogRnJl
-ZSBncmFudHMgYXJlIGluIGEgc2ltcGxlIGxpc3QgYW5jaG9yZWQgaW4gZ250dGFiX2ZyZWVf
-aGVhZC4gVGhleSBhcmUNCj4+ICsgKiBsaW5rZWQgYnkgZ3JhbnQgcmVmLCB0aGUgbGFzdCBl
-bGVtZW50IGNvbnRhaW5zIEdOVFRBQl9MSVNUX0VORC4gVGhlIG51bWJlcg0KPj4gKyAqIG9m
-IGZyZWUgZW50cmllcyBpcyBzdG9yZWQgaW4gZ250dGFiX2ZyZWVfY291bnQuDQo+PiArICog
-QWRkaXRpb25hbGx5IHRoZXJlIGlzIGEgYml0bWFwIG9mIGZyZWUgZW50cmllcyBhbmNob3Jl
-ZCBpbg0KPj4gKyAqIGdudHRhYl9mcmVlX2JpdG1hcC4gVGhpcyBpcyBiZWluZyB1c2VkIGZv
-ciBzaW1wbGlmeWluZyBhbGxvY2F0aW9uIG9mDQo+PiArICogbXVsdGlwbGUgY29uc2VjdXRp
-dmUgZ3JhbnRzLCB3aGljaCBpcyBuZWVkZWQgZS5nLiBmb3Igc3VwcG9ydCBvZiB2aXJ0aW8u
-DQo+PiArICogZ250dGFiX2xhc3RfZnJlZSBpcyB1c2VkIHRvIGFkZCBmcmVlIGVudHJpZXMg
-b2YgbmV3IGZyYW1lcyBhdCB0aGUgZW5kIG9mDQo+PiArICogdGhlIGZyZWUgbGlzdC4NCj4+
-ICsgKiBnbnR0YWJfZnJlZV90YWlsX3B0ciBzcGVjaWZpZXMgdGhlIHZhcmlhYmxlIHdoaWNo
-IHJlZmVyZW5jZXMgdGhlIHN0YXJ0DQo+IA0KPiANCj4gSWYgdGhpcyByZWZlcmVuY2VzIHRo
-ZSBzdGFydCBvZiB0aGUgZnJlZSBpbnRlcnZhbCwgd2h5IGlzIGl0IGNhbGxlZCANCj4gZ250
-dGFiX2ZyZWVfKnRhaWwqX3B0cj8NCg0KQmVjYXVzZSB0aGlzIGlzIHRoZSB0YWlsIG9mIHRo
-ZSB3aG9sZSBhcmVhIHdoaWNoIGlzIGZyZWUuDQoNCkl0IGNvdWxkIGJlIHJlbmFtZWQgdG8g
-Z250dGFiX2ZyZWVfdGFpbF9zdGFydF9wdHIuIDotKQ0KDQo+IA0KPiANCj4+ICsgKiBvZiBj
-b25zZWN1dGl2ZSBmcmVlIGdyYW50cyBlbmRpbmcgd2l0aCBnbnR0YWJfbGFzdF9mcmVlLiBU
-aGlzIHBvaW50ZXIgaXMNCj4+ICsgKiB1cGRhdGVkIGluIGEgcmF0aGVyIGRlZmVuc2l2ZSB3
-YXksIGluIG9yZGVyIHRvIGF2b2lkIHBlcmZvcm1hbmNlIGhpdHMgaW4NCj4+ICsgKiBob3Qg
-cGF0aHMuDQo+PiArICogQWxsIHRob3NlIHZhcmlhYmxlcyBhcmUgcHJvdGVjdGVkIGJ5IGdu
-dHRhYl9saXN0X2xvY2suDQo+PiArICovDQo+PiDCoCBzdGF0aWMgaW50IGdudHRhYl9mcmVl
-X2NvdW50Ow0KPj4gLXN0YXRpYyBncmFudF9yZWZfdCBnbnR0YWJfZnJlZV9oZWFkOw0KPj4g
-K3N0YXRpYyB1bnNpZ25lZCBpbnQgZ250dGFiX3NpemU7DQo+PiArc3RhdGljIGdyYW50X3Jl
-Zl90IGdudHRhYl9mcmVlX2hlYWQgPSBHTlRUQUJfTElTVF9FTkQ7DQo+PiArc3RhdGljIGdy
-YW50X3JlZl90IGdudHRhYl9sYXN0X2ZyZWUgPSBHTlRUQUJfTElTVF9FTkQ7DQo+PiArc3Rh
-dGljIGdyYW50X3JlZl90ICpnbnR0YWJfZnJlZV90YWlsX3B0cjsNCj4+ICtzdGF0aWMgdW5z
-aWduZWQgbG9uZyAqZ250dGFiX2ZyZWVfYml0bWFwOw0KPj4gwqAgc3RhdGljIERFRklORV9T
-UElOTE9DSyhnbnR0YWJfbGlzdF9sb2NrKTsNCj4+ICsNCj4+IMKgIHN0cnVjdCBncmFudF9m
-cmFtZXMgeGVuX2F1dG9feGxhdF9ncmFudF9mcmFtZXM7DQo+PiDCoCBzdGF0aWMgdW5zaWdu
-ZWQgaW50IHhlbl9nbnR0YWJfdmVyc2lvbjsNCj4+IMKgIG1vZHVsZV9wYXJhbV9uYW1lZCh2
-ZXJzaW9uLCB4ZW5fZ250dGFiX3ZlcnNpb24sIHVpbnQsIDApOw0KPj4gQEAgLTE3MCwxNiAr
-MTk0LDExMSBAQCBzdGF0aWMgaW50IGdldF9mcmVlX2VudHJpZXModW5zaWduZWQgY291bnQp
-DQo+PiDCoMKgwqDCoMKgIHJlZiA9IGhlYWQgPSBnbnR0YWJfZnJlZV9oZWFkOw0KPj4gwqDC
-oMKgwqDCoCBnbnR0YWJfZnJlZV9jb3VudCAtPSBjb3VudDsNCj4+IC3CoMKgwqAgd2hpbGUg
-KGNvdW50LS0gPiAxKQ0KPj4gLcKgwqDCoMKgwqDCoMKgIGhlYWQgPSBnbnR0YWJfZW50cnko
-aGVhZCk7DQo+PiArwqDCoMKgIHdoaWxlIChjb3VudC0tKSB7DQo+PiArwqDCoMKgwqDCoMKg
-wqAgYml0bWFwX2NsZWFyKGdudHRhYl9mcmVlX2JpdG1hcCwgaGVhZCwgMSk7DQo+PiArwqDC
-oMKgwqDCoMKgwqAgaWYgKGdudHRhYl9mcmVlX3RhaWxfcHRyID09IF9fZ250dGFiX2VudHJ5
-KGhlYWQpKQ0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZ250dGFiX2ZyZWVfdGFpbF9w
-dHIgPSAmZ250dGFiX2ZyZWVfaGVhZDsNCj4+ICvCoMKgwqDCoMKgwqDCoCBpZiAoY291bnQp
-DQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBoZWFkID0gZ250dGFiX2VudHJ5KGhlYWQp
-Ow0KPj4gK8KgwqDCoCB9DQo+PiDCoMKgwqDCoMKgIGdudHRhYl9mcmVlX2hlYWQgPSBnbnR0
-YWJfZW50cnkoaGVhZCk7DQo+PiDCoMKgwqDCoMKgIGdudHRhYl9lbnRyeShoZWFkKSA9IEdO
-VFRBQl9MSVNUX0VORDsNCj4+ICvCoMKgwqAgaWYgKCFnbnR0YWJfZnJlZV9jb3VudCkgew0K
-Pj4gK8KgwqDCoMKgwqDCoMKgIGdudHRhYl9sYXN0X2ZyZWUgPSBHTlRUQUJfTElTVF9FTkQ7
-DQo+PiArwqDCoMKgwqDCoMKgwqAgZ250dGFiX2ZyZWVfdGFpbF9wdHIgPSBOVUxMOw0KPj4g
-K8KgwqDCoCB9DQo+PiArDQo+PiDCoMKgwqDCoMKgIHNwaW5fdW5sb2NrX2lycXJlc3RvcmUo
-JmdudHRhYl9saXN0X2xvY2ssIGZsYWdzKTsNCj4+IMKgwqDCoMKgwqAgcmV0dXJuIHJlZjsN
-Cj4+IMKgIH0NCj4+ICtzdGF0aWMgaW50IGdldF9zZXFfZW50cnlfY291bnQodm9pZCkNCj4+
-ICt7DQo+PiArwqDCoMKgIGlmIChnbnR0YWJfbGFzdF9mcmVlID09IEdOVFRBQl9MSVNUX0VO
-RCB8fCAhZ250dGFiX2ZyZWVfdGFpbF9wdHIgfHwNCj4+ICvCoMKgwqDCoMKgwqDCoCAqZ250
-dGFiX2ZyZWVfdGFpbF9wdHIgPT0gR05UVEFCX0xJU1RfRU5EKQ0KPj4gK8KgwqDCoMKgwqDC
-oMKgIHJldHVybiAwOw0KPj4gKw0KPj4gK8KgwqDCoCByZXR1cm4gZ250dGFiX2xhc3RfZnJl
-ZSAtICpnbnR0YWJfZnJlZV90YWlsX3B0ciArIDE7DQo+PiArfQ0KPj4gKw0KPj4gKy8qIFJl
-YnVpbGRzIHRoZSBmcmVlIGdyYW50IGxpc3QgYW5kIHRyaWVzIHRvIGZpbmQgY291bnQgY29u
-c2VjdXRpdmUgZW50cmllcy4gKi8NCj4+ICtzdGF0aWMgaW50IGdldF9mcmVlX3NlcSh1bnNp
-Z25lZCBpbnQgY291bnQpDQo+PiArew0KPj4gK8KgwqDCoCBpbnQgcmV0ID0gLUVOT1NQQzsN
-Cj4+ICvCoMKgwqAgdW5zaWduZWQgaW50IGZyb20sIHRvOw0KPj4gK8KgwqDCoCBncmFudF9y
-ZWZfdCAqbGFzdDsNCj4+ICsNCj4+ICvCoMKgwqAgZ250dGFiX2ZyZWVfdGFpbF9wdHIgPSAm
-Z250dGFiX2ZyZWVfaGVhZDsNCj4+ICvCoMKgwqAgbGFzdCA9ICZnbnR0YWJfZnJlZV9oZWFk
-Ow0KPj4gKw0KPj4gK8KgwqDCoCBmb3IgKGZyb20gPSBmaW5kX2ZpcnN0X2JpdChnbnR0YWJf
-ZnJlZV9iaXRtYXAsIGdudHRhYl9zaXplKTsNCj4+ICvCoMKgwqDCoMKgwqDCoMKgIGZyb20g
-PCBnbnR0YWJfc2l6ZTsNCj4+ICvCoMKgwqDCoMKgwqDCoMKgIGZyb20gPSBmaW5kX25leHRf
-Yml0KGdudHRhYl9mcmVlX2JpdG1hcCwgZ250dGFiX3NpemUsIHRvICsgMSkpIHsNCj4+ICvC
-oMKgwqDCoMKgwqDCoCB0byA9IGZpbmRfbmV4dF96ZXJvX2JpdChnbnR0YWJfZnJlZV9iaXRt
-YXAsIGdudHRhYl9zaXplLA0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgIGZyb20gKyAxKTsNCj4+ICvCoMKgwqDCoMKgwqDCoCBpZiAocmV0IDwgMCAmJiB0
-byAtIGZyb20gPj0gY291bnQpIHsNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJldCA9
-IGZyb207DQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBiaXRtYXBfY2xlYXIoZ250dGFi
-X2ZyZWVfYml0bWFwLCByZXQsIGNvdW50KTsNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-IGZyb20gKz0gY291bnQ7DQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBnbnR0YWJfZnJl
-ZV9jb3VudCAtPSBjb3VudDsNCj4gDQo+IA0KPiBJSVVJQyB3ZSBjYW4gaGF2ZSBtdWx0aXBs
-ZSBwYXNzZXMgb3ZlciB0aGlzLCBtZWFuaW5nIHRoYXQgdGhlIGdudHRhYl9mcmVlX2NvdW50
-IA0KPiBtYXkgYmUgZGVjcmVtZW50ZWQgbW9yZSB0aGFuIG9uY2UuIElzIHRoYXQgaW50ZW50
-aW9uYWw/DQoNCkFmdGVyIHRoZSBmaXJzdCBwYXNzIGRlY3JlbWVudGluZyBnbnR0YWJfZnJl
-ZV9jbnQsIHJldCB3aWxsIG5vDQpsb25nZXIgYmUgbGVzcyB0aGFuIHplcm8sIHNvIHRoaXMg
-Y2FuIGJlIGhpdCBvbmx5IG9uY2UuDQoNCj4gDQo+IA0KPj4gK8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgaWYgKGZyb20gPT0gdG8pDQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIGNvbnRpbnVlOw0KPj4gK8KgwqDCoMKgwqDCoMKgIH0NCj4+ICsNCj4+ICvCoMKgwqDC
-oMKgwqDCoCB3aGlsZSAoZnJvbSA8IHRvKSB7DQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oCAqbGFzdCA9IGZyb207DQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBsYXN0ID0gX19n
-bnR0YWJfZW50cnkoZnJvbSk7DQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBnbnR0YWJf
-bGFzdF9mcmVlID0gZnJvbTsNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGZyb20rKzsN
-Cj4+ICvCoMKgwqDCoMKgwqDCoCB9DQo+IA0KPiANCj4gSSBoYXZlIGJlZW4gbG9va2luZyBh
-dCB0aGlzIGxvb3AgYW5kIEkgY2FuJ3QgdW5kZXJzdGFuZCB3aGF0IGl0IGlzIGRvaW5nIDst
-KCBDYW4gDQo+IHlvdSBlbmxpZ2h0ZW4gbWU/DQoNCkl0IGlzIHJlY3JlYXRpbmcgdGhlIGZy
-ZWUgbGlzdCBpbiBvcmRlciB0byBoYXZlIGl0IHByb3Blcmx5IHNvcnRlZC4NClRoaXMgaXMg
-bmVlZGVkIHRvIG1ha2Ugc3VyZSB0aGF0IHRoZSBmcmVlIHRhaWwgaGFzIHRoZSBtYXhpbXVt
-DQpwb3NzaWJsZSBzaXplICh5b3UgY2FuIHRha2UgdGhlIHRhaWwgb2ZmIHRoZSBsaXN0IHdp
-dGhvdXQgaGF2aW5nDQp0byB3b3JyeSBhYm91dCBicmVha2luZyB0aGUgbGlua2VkIGxpc3Qg
-YmVjYXVzZSBvZiByZWZlcmVuY2VzIGludG8NCnRoZSB0YWlsKS4NCg0KDQpKdWVyZ2VuDQo=
+On Tue, May 10, 2022 at 4:04 AM Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Fri, May 06, 2022 at 06:30:13PM +0300, Kirill A. Shutemov wrote:
+> > I find it harder to follow.
+>
+> If in doubt, always consider using a helper function:
+>
+> ---
+>
+> diff --git a/arch/x86/boot/compressed/efi.h b/arch/x86/boot/compressed/efi.h
+> index 7db2f41b54cd..cf475243b6d5 100644
+> --- a/arch/x86/boot/compressed/efi.h
+> +++ b/arch/x86/boot/compressed/efi.h
+> @@ -32,6 +32,7 @@ typedef       struct {
+>  } efi_table_hdr_t;
+>
+>  #define EFI_CONVENTIONAL_MEMORY                 7
+> +#define EFI_UNACCEPTED_MEMORY          15
+>
+>  #define EFI_MEMORY_MORE_RELIABLE \
+>                                 ((u64)0x0000000000010000ULL)    /* higher reliability */
+> diff --git a/arch/x86/boot/compressed/kaslr.c b/arch/x86/boot/compressed/kaslr.c
+> index 28b91df9d31e..39bb4c319dfc 100644
+> --- a/arch/x86/boot/compressed/kaslr.c
+> +++ b/arch/x86/boot/compressed/kaslr.c
+> @@ -671,6 +671,23 @@ static bool process_mem_region(struct mem_vector *region,
+>  }
+>
+>  #ifdef CONFIG_EFI
+> +
+> +/*
+> + * Only EFI_CONVENTIONAL_MEMORY and EFI_UNACCEPTED_MEMORY (if supported) are guaranteed
+> + * to be free.
+> + */
+> +static inline bool memory_type_is_free(efi_memory_desc_t *md)
+> +{
+> +       if (md->type == EFI_CONVENTIONAL_MEMORY)
+> +               return true;
+> +
+> +       if (IS_ENABLED(CONFIG_UNACCEPTED_MEMORY))
+> +               if (md->type == EFI_UNACCEPTED_MEMORY)
+> +                       return true;
+> +
+> +       return false;
+> +}
+> +
+>  /*
+>   * Returns true if we processed the EFI memmap, which we prefer over the E820
+>   * table if it is available.
+> @@ -723,21 +740,9 @@ process_efi_entries(unsigned long minimum, unsigned long image_size)
+>                  * free memory and thus available to place the kernel image into,
+>                  * but in practice there's firmware where using that memory leads
+>                  * to crashes.
+> -                *
+> -                * Only EFI_CONVENTIONAL_MEMORY and EFI_UNACCEPTED_MEMORY (if
+> -                * supported) are guaranteed to be free.
+>                  */
+> -
+> -               switch (md->type) {
+> -               case EFI_CONVENTIONAL_MEMORY:
+> -                       break;
+> -               case EFI_UNACCEPTED_MEMORY:
+> -                       if (IS_ENABLED(CONFIG_UNACCEPTED_MEMORY))
+> -                               break;
+> +               if (!memory_type_is_free(md))
+>                         continue;
+> -               default:
+> -                       continue;
+> -               }
+>
+>                 if (efi_soft_reserve_enabled() &&
+>                     (md->attribute & EFI_MEMORY_SP))
+> --
+> Regards/Gruss,
+>     Boris.
+>
+> https://people.kernel.org/tglx/notes-about-netiquette
 
---------------FphEvG0f0pwtWW6kWmn04s0b
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
 
------BEGIN PGP PUBLIC KEY BLOCK-----
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------FphEvG0f0pwtWW6kWmn04s0b--
-
---------------ss12YByrfgbibODZLOK0ywZB--
-
---------------Sr9EeqdIb8iPoFhoY08CFv9r
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmJ97b0FAwAAAAAACgkQsN6d1ii/Ey/l
-FQf/WRYZFQzeL2rCU3Bru0qDZto4066JMU0804HHabSJhzePs20dNQpUSPrqiIPkCy3cFlcjs/uQ
-gh8ThS9wdbfxqmSpG6PDqiKVU3ggP9mcz7OUiGXVH5z3mv4Pxa7xRWc6t8NHm2DbfGi4q/nMHKcq
-0CPLvRHfQXugz27DOZWxjx3SmvYQuoNsPyTK7qnuAl8Bq2KwGJEhipNX69aCDrlZLVsCxqWHtBkF
-te7agxLVIRoX/ify9yjnWmGeRo/3Zbbv1UDGCNCUlWzwg/9j92N9/y0PzAbn4219F1pxyDMV4BEV
-nY3AH1mPgUCiM4gUFkjgFAyZsH2F/W16iFMkSoSqEA==
-=Pt1N
------END PGP SIGNATURE-----
-
---------------Sr9EeqdIb8iPoFhoY08CFv9r--
+-- 
+-Dionna Glaze, PhD (she/her)

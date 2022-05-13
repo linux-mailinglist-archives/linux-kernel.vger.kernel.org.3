@@ -2,95 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263AF52653E
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D66526543
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:53:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379083AbiEMOwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:52:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
+        id S1381469AbiEMOxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:53:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234135AbiEMOwH (ORCPT
+        with ESMTP id S1380904AbiEMOxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:52:07 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83367A19C
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:52:06 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24DEg7LT030310;
-        Fri, 13 May 2022 14:51:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : mime-version :
- content-type; s=pp1; bh=LFBzXhvAWhuWz6P/ROhSXAvK1PWLgXpG04D7AZagkOs=;
- b=F09gWwxMGFq1d+3UghvZ1k0QcZ6bHOldrUOL+0EbAHbzcYMrzJA5/HtI5MGJSvxEgpn/
- 9Lilx9S5xwEr0F+zzQalcFGFNF8ZCl0OeW7oYMtXMPOr6qqzk15mEZjY+ngFNDP1UXlI
- ylhIt3/iBqiTGkY90VAlqYR6HemHv6fxoutPlT5mY0AdKV4talv7BrO6W38sxUUFm8k+
- O3ETPIdf1wWqvtI8H3BJr3xQxDuQk398oEaTMKAe5SoEhfZGmR9lsBR1cnQH1LMLS7vL
- fKow/mOuhuEteks8ziLt3GM1+VMeWA/BS9b2TXUdkC1mjwDB4dtIfBRZ74asNh3icRa2 pw== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g1ra81vfr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 May 2022 14:51:50 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24DEhSXL016396;
-        Fri, 13 May 2022 14:51:49 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 3fwgd90tnf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 May 2022 14:51:48 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24DEpknH51839480
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 13 May 2022 14:51:46 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 94C0BAE045;
-        Fri, 13 May 2022 14:51:46 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5DD8CAE04D;
-        Fri, 13 May 2022 14:51:46 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri, 13 May 2022 14:51:46 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc:     Heiko Carstens <hca@linux.ibm.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mapletree-vs-khugepaged
-References: <20220428172040.GA3623323@roeck-us.net> <YmvVkKXJWBoGqWFx@osiris>
-        <yt9dk0apbicu.fsf@linux.ibm.com>
-Date:   Fri, 13 May 2022 16:51:46 +0200
-In-Reply-To: <yt9dk0apbicu.fsf@linux.ibm.com> (Sven Schnelle's message of
-        "Fri, 13 May 2022 16:46:41 +0200")
-Message-ID: <yt9d4k1ta3jx.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+        Fri, 13 May 2022 10:53:09 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA1412AAD
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:53:07 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id g11-20020a056e021a2b00b002cf48b48824so5288512ile.21
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:53:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=7H0qJwccz26dzfND8qlLgtRHfjrbwIU4SUmx+OhmOw0=;
+        b=GN8WPowgUyHkExg816qirJqUTySB7hJiwuXum0CVKmyZ1PzcWOoA512c+MySLihLfi
+         bszJzjVW1y167gKh3L6ZJ3Fd4XNFHxkBDd8sl5Ftgw89t+gLcgX1Ghm0MT15lRUV1Yyk
+         A/i6M1DS0hhTxjagg+7bKvsf713j7LvOoRyPnfF4hpTniwNqGxoONL09h3u/FQMxyjvg
+         JH6x5bCAZyfk2GO0yqWFogMnivWKzX11aAxqUaY5ctZ3RVrXXdTDGyeHze/7VhSob6zT
+         X3qsWIl0fhGRPstc5MAlsdRrHuOzYme+sxB23FKZdRMZIVDUTPlQ7sPQRuui1TpMtRoP
+         lZ7w==
+X-Gm-Message-State: AOAM5324T+MRVBUzCjVZvzKxaHXYyYbHrg/k02SXyYJrQ2fA6apVR4Wq
+        boOs5DIrUqGi+pOBU1YQn0YyvzgKzakEATyWAQvWnL4VD8Cr
+X-Google-Smtp-Source: ABdhPJzfdFoA38oG5zq2whww/w36LTBhTSTIV1Z1pEThUzuc+n5pc4T2YlW1YMJdW1TZDt+s1F6yzrWWxYGaK7O+npk4fYuRP9t8
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 6stgYCUvJ81iOzJjJ31f4oAGsqhd4kUM
-X-Proofpoint-GUID: 6stgYCUvJ81iOzJjJ31f4oAGsqhd4kUM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-13_04,2022-05-13_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- phishscore=0 mlxlogscore=588 clxscore=1015 spamscore=0 mlxscore=0
- lowpriorityscore=0 malwarescore=0 impostorscore=0 adultscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205130064
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:a68d:0:b0:32a:f755:821f with SMTP id
+ j13-20020a02a68d000000b0032af755821fmr2685468jam.185.1652453587275; Fri, 13
+ May 2022 07:53:07 -0700 (PDT)
+Date:   Fri, 13 May 2022 07:53:07 -0700
+In-Reply-To: <20220513142522.6514-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000013e6e505dee5d50d@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in anon_vma_interval_tree_remove
+From:   syzbot <syzbot+dae32a647a56f4d153da@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-Sven Schnelle <svens@linux.ibm.com> writes:
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-> Starting today we're still seeing the same crash with linux-next from
-> (next-20220513):
+Reported-and-tested-by: syzbot+dae32a647a56f4d153da@syzkaller.appspotmail.com
 
-Small correction: This also happened the last two days, so it started
-with next-20220511.
+Tested on:
+
+commit:         187b9ac8 Add linux-next specific files for 20220512
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1dcd4f4a77ca98a9
+dashboard link: https://syzkaller.appspot.com/bug?extid=dae32a647a56f4d153da
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=14a61221f00000
+
+Note: testing is done by a robot and is best-effort only.

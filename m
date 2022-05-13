@@ -2,153 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF4C525E69
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 11:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14A23525E5F
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 11:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348408AbiEMIsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 04:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40420 "EHLO
+        id S1378571AbiEMItp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 04:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378568AbiEMIss (ORCPT
+        with ESMTP id S1378554AbiEMItn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 04:48:48 -0400
+        Fri, 13 May 2022 04:49:43 -0400
 Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A051614C754
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:48:44 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id w24so9151340edx.3
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:48:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB472B0327;
+        Fri, 13 May 2022 01:49:41 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id w24so9154216edx.3;
+        Fri, 13 May 2022 01:49:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gxWA2eI2ibgIIaNeL9BTiWwh7yepFkmtPplmsANljIU=;
-        b=fyAZtNkVRet3CqlJuO3iUCqEInUUV7abCdfI3nC47/p+HyZW30V2Vqrf+fPT60vTKA
-         RIuPeM4ArUI5eLAdjAKZQlwWMpVBe3YHq8m6AFAKoSHbW2UCn/1O45utYv3zKHj99jYH
-         7Vs127/rj4k8sttyEIiDotLztO82wNJUWMXn0JP9Sw8Lz0wTSXkt4vMVhCJQTbHW1e24
-         ggBUS7baKZHkD6jhr+yDbGdUDjhWt2DvJTbc9fknVHrdW7CRUGYKSvyhbwgVe0xdQW6a
-         tWpxs/pQH0PQzsJlKjLbOXBaIxyNC/jpLdLnDPRZsnMXjLyjvjMRm5/2z9xy7gwQDfc3
-         yckA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9J9nqEPTUzM3UXbUgQNWRx8nTjR2V0eEMhLc72bP8hs=;
+        b=qgR/dmfdIujPCPWAkFpKVe8QxZMKagJvm5HlEQSR7kVaDE2IlkWij3Rlhk2I1PGPLK
+         Ot/P5qGY6JEAfS4XDs/in1tzKjtS3KcTrOmbAY6t6QlJS0U1uBSZrUKYEBRlbhDSrrTY
+         ot5txIuAJQz/4s6syqrZRNm7cjloB3VKdDmgQ+ixNI+Yii2rqlZNKZmMRGDOR8Wjw5hu
+         TceO91JccJaaHzndj49YNoSF7l/AoBRgdXrLj1kv7E9LimeXirXfbs1vxg1VxGEVcvzc
+         zB4TbWtHpF9o1THkzIx0miwddlyLl/D09UArzmP2Kv9OsFrPU6f7eFxlF3+WJK4LBhAm
+         Tu/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gxWA2eI2ibgIIaNeL9BTiWwh7yepFkmtPplmsANljIU=;
-        b=yUYrwIsHSwc9WScxlAximJkoxx+/9zGx7CmjdKsWvbrO+4T8Beti/GnvMDgV1O5lgb
-         7lpSTlC4flYvG7XOv7UrjskgGpHZZ2R7yzxeJ7Zne+XwTkh74NNPgV9NSxwLqbg0N3bZ
-         ILNGUJYlEaw795Pt0QcKhRm9s5rdhLm6CtfreDxV0p7hXw8zsQVZla1bwgC0JKJR2vR9
-         7ONkoMDtNT4rSCbRk2h081I15IBx9zhD9i/N00X8N8MGZlDaN8XO4Vwt7wKT5Ydl835/
-         UuMIF1pBXGB03a/J29pDLfSug6kALC1PRmyZpnDNK8/2m4M9U4/D0QGYLPzb7VAeK09i
-         5pSA==
-X-Gm-Message-State: AOAM530gUm7tzkCk5SF2A4sCUWcRT8kE5bEa00JYe4b/26jY+evqqn9K
-        R0Una1u/a+eKjq2g4WQOAhKLHw==
-X-Google-Smtp-Source: ABdhPJwlWwvXgU7aF6Cscno2USHQ0ZXgPfK8ccIxhOVwMYKRXjcKM9wagMsXjaQh8FIahP3a0yeKUw==
-X-Received: by 2002:a05:6402:3490:b0:427:b471:9e1e with SMTP id v16-20020a056402349000b00427b4719e1emr38861806edc.36.1652431723172;
-        Fri, 13 May 2022 01:48:43 -0700 (PDT)
-Received: from [192.168.0.169] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id t20-20020a056402525400b0042617ba63ccsm667368edd.86.2022.05.13.01.48.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 01:48:42 -0700 (PDT)
-Message-ID: <aa090e32-6e6e-b318-f2ef-5f61d0d89da7@linaro.org>
-Date:   Fri, 13 May 2022 10:48:41 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9J9nqEPTUzM3UXbUgQNWRx8nTjR2V0eEMhLc72bP8hs=;
+        b=b0vMLa4o+/OPhH1O4u+lpYehoaWj4X5Q5JmCNgBwcWzRZfx2Sup7aFq45tV8yFk2g2
+         QlLlFWOPPcl00btFVeM7xrjvml+khSHX9jDF/bZWnOFQFP1XBxWKSn49XoJKNyiMiL6r
+         1cI4AsQqflKIVTwHqXpgWz1gygVl2aMEJVE6NLE1Np2YfNTP6cUbhum4Rp3Gpodi3bfx
+         VWsVc5uAPs4xECWaD9qnGWIg8Tk70Fg2+jIoP/+dA6FVfdP0yLVfM+WDAomDwUgWnRQj
+         y8GtKgWVO8lsexPllivQ35+nihQ/e2baUXJg4mDipz0wNu0wcgJB+jsJjQ3c78z4qOCH
+         ilEw==
+X-Gm-Message-State: AOAM530s6OI8owJavjq/IEJMzvC3+sQ8wpCzDTg7nBZ5UMDmYGdnc2Rz
+        GyFQzMN8nuM2UddxL7gtOD9YJZRuPuPYo1grszaz+dTAjoA=
+X-Google-Smtp-Source: ABdhPJx9h2WPhqdcOyVYTzhGVNMvC3tgYr/4d3a3Baya0LLQWQT8z03h6OkQ4fBPsej40f72iDgeizsfao1T5bF2aTE=
+X-Received: by 2002:aa7:d916:0:b0:425:d75f:ae68 with SMTP id
+ a22-20020aa7d916000000b00425d75fae68mr39028168edr.270.1652431780338; Fri, 13
+ May 2022 01:49:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/2] dt-bindings: iio: humidity: Add si7020 bindings
-Content-Language: en-US
-To:     Eddie James <eajames@linux.ibm.com>, linux-iio@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, dbarksdale@uplogix.com
-References: <20220511190835.51046-1-eajames@linux.ibm.com>
- <20220511190835.51046-2-eajames@linux.ibm.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220511190835.51046-2-eajames@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220512160312.3880433-4-Qing-wu.Li@leica-geosystems.com.cn> <202205130756.Q7e8x6jf-lkp@intel.com>
+In-Reply-To: <202205130756.Q7e8x6jf-lkp@intel.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 13 May 2022 10:49:04 +0200
+Message-ID: <CAHp75VdXE4f3j5yfFzpcXwhONhh0GOSGDumMWWzggD_w-voOGg@mail.gmail.com>
+Subject: Re: [PATCH V5 3/5] iio: accel: sca3300: modified to support multi chips
+To:     kernel test robot <lkp@intel.com>
+Cc:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tomas Melin <tomas.melin@vaisala.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kbuild-all@lists.01.org, linux-iio <linux-iio@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/05/2022 21:08, Eddie James wrote:
-> Document the si7020 bindings with a new "silabs,skip-reset" property.
-> 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+On Fri, May 13, 2022 at 2:30 AM kernel test robot <lkp@intel.com> wrote:
+>
+> Hi LI,
+>
+> Thank you for the patch! Perhaps something to improve:
+>
+> [auto build test WARNING on jic23-iio/togreg]
+> [also build test WARNING on v5.18-rc6]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/LI-Qingwu/iio-accel-sca3300-add-compatible-for-scl3300/20220513-000857
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+> config: arm-randconfig-c002-20220512 (https://download.01.org/0day-ci/archive/20220513/202205130756.Q7e8x6jf-lkp@intel.com/config)
+> compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/15579266e58d7cdf4ff8e7ad7a4fa30a0bd3a589
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review LI-Qingwu/iio-accel-sca3300-add-compatible-for-scl3300/20220513-000857
+>         git checkout 15579266e58d7cdf4ff8e7ad7a4fa30a0bd3a589
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/iio/accel/
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+>    drivers/iio/accel/sca3300.c: In function 'sca3300_get_op_mode':
+> >> drivers/iio/accel/sca3300.c:288:58: warning: suggest parentheses around comparison in operand of '&' [-Wparentheses]
+>      288 |                 if (sca_data->chip->avail_modes_table[i] == reg_val&0x03)
+>          |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
 
-Thank you for your patch. There is something to discuss/improve.
+Good catch, LKP!
 
-> ---
->  .../bindings/iio/humidity/silabs,si7020.yaml  | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/humidity/silabs,si7020.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/iio/humidity/silabs,si7020.yaml b/Documentation/devicetree/bindings/iio/humidity/silabs,si7020.yaml
-> new file mode 100644
-> index 000000000000..ab53bb8d9606
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/iio/humidity/silabs,si7020.yaml
-> @@ -0,0 +1,42 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/iio/humidity/silabs,si7020.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: SI7020 humidity + temperature sensor
-> +
-> +maintainers:
-> +  - David Barksdale <dbarksdale@uplogix.com>
-> +
-> +description: |
-> +   The Silicon Labs Si7013/20/21 Relative Humidity and Temperature Sensors
-> +   are i2c devices which have an identical programming interface for
-> +   measuring relative humidity and temperature.
-> +
-> +properties:
-> +  compatible:
-> +    const: silabs,si7020
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  siliabs,skip-reset:
+>    277  static int sca3300_get_op_mode(struct sca3300_data *sca_data, int *index)
+>    278  {
+>    279          int reg_val;
+>    280          int ret;
+>    281          int i;
+>    282
+>    283          ret = sca3300_read_reg(sca_data, SCA3300_REG_MODE, &reg_val);
+>    284          if (ret)
+>    285                  return ret;
+>    286
 
-Do not describe implementation (driver) behavior, but the device hardware.
+Instead, I suggest to split the below, which is invariant to the loop,
+into a line here:
 
-> +    $ref: /schemas/types.yaml#/definitions/flag
+regval &= GENMASK(1, 0);
 
-"type:boolean" is shorter
+>    287          for (i = 0; i < sca_data->chip->num_avail_modes; i++) {
+>  > 288                  if (sca_data->chip->avail_modes_table[i] == reg_val&0x03)
+>    289                          break;
+>    290          }
+>    291
+>    292          if (i >= sca_data->chip->num_avail_modes)
+>    293                  return -EINVAL;
+>    294
+>    295          *index = i;
+>    296          return 0;
+>    297  }
 
-> +    description:
-> +      Disables resetting of the device during probe
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    si7021-a20@40 {
-
-Generic node name, so "sensor"?
-
-> +        silabs,skip-reset;
-> +        compatible = "silabs,si7020";
-> +        reg = <0x40>;
-
-Order the properties: 1. compatible, 2. reg, then the rest.
-
-> +    };
-> +...
-
-
-Best regards,
-Krzysztof
+-- 
+With Best Regards,
+Andy Shevchenko

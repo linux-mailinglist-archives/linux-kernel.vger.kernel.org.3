@@ -2,155 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7637152648C
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:34:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E669F5264DD
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:39:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381201AbiEMOdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
+        id S1381398AbiEMOfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380925AbiEMO3j (ORCPT
+        with ESMTP id S1380980AbiEMObq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:29:39 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F479941B2
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:28:01 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d22so8086977plr.9
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:28:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+QQdCynx9R6U6w/GBf0MKxMrNELH2gn+H5u0wn8VzXI=;
-        b=qV51SP4bOcD0/cAU86xbrh+y3FdrsrCiQ/Bqp4lxWyyZjye8rk5+XElov551PASVRY
-         D4ESwLtpEly+3JTdCMw99va5kEsNbH50qP3PhuThC3W4qFU0FjfCbTZ2jEd/xkEvfhzd
-         xTe4pmEvx2R/9j+wbCJXDI9d3THSMLg2xlWA4VsLGVxhRr2uRRDbL3kPvt0dAU9WT5Iu
-         JuiVzhfSCWcytG3zd7br6Gob8cSnaJyInz/2DsEMmzzcsE/P+2uhWz6w/ZD8JjGB+9w2
-         CCJo6kPnJSaLlVja/gYUUe7C9pYOKQoZAHtTb4vdtf5wfpNhYFESthNKiO+pc1yb80Br
-         7vdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+QQdCynx9R6U6w/GBf0MKxMrNELH2gn+H5u0wn8VzXI=;
-        b=36KHjdDU4T5GEgBwz1Bo9dCYAINrtr59cEEeXHclg2eSa7DUwrVw3Ooj5/x768HlvL
-         PWR/qghSASGy6kVUmYIflA85psWCmTf46jwzvGoTh41sOtAxws3+18Zov/JwMamQeEtO
-         Ecng6rJunM5FXoWnOfvHw1dyzZfJWTaOGgxTXLkefC25GrnhJnBm2LQl2RmOsqrxay1+
-         uGYC+HyLQ10L/SqGhjNHCzQEaTTkpuhNpBkrWVUCTKEsR8EjyuqKUN3YVs4AndjxP981
-         M/677UjSgXmTCL4qtngWBVzMQDRIJQjXCdzXZPbi1SZNGuxMfmJdYdNCnWfRfn3deRCw
-         w55A==
-X-Gm-Message-State: AOAM533qb502a2WD/d7kSRlQt7QvgbMIfxlxIinHdgyvEB6kndypldDb
-        5sssD31oY326V487J1cY7Y6OMQu/XeCIGQ==
-X-Google-Smtp-Source: ABdhPJyUkw0Dot81TbFysPPUNr3WVmg1+FbhuOz8hiv6Yq1uHVvAQecgrf+in/8vjWiDz1CBG7OujQ==
-X-Received: by 2002:a17:902:aa85:b0:155:ceb9:3710 with SMTP id d5-20020a170902aa8500b00155ceb93710mr4874209plr.59.1652452080864;
-        Fri, 13 May 2022 07:28:00 -0700 (PDT)
-Received: from localhost ([139.177.225.250])
-        by smtp.gmail.com with ESMTPSA id j16-20020a634a50000000b003c14af50639sm1650442pgl.81.2022.05.13.07.27.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 07:28:00 -0700 (PDT)
-Date:   Fri, 13 May 2022 22:27:47 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     'Andrew Morton' <akpm@linux-foundation.org>,
-        liqiong <liqiong@nfschina.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mm: change "char *bdi_unknown_name" to "char
- bdi_unknown_name[]"
-Message-ID: <Yn5q43kblRPTvpDD@FVFYT0MHHV2J.usts.net>
-References: <20220512082637.24649-1-liqiong@nfschina.com>
- <20220512130051.94a0c53e5d1498292473975d@linux-foundation.org>
- <4b21dec7e98243b89daea96286c33434@AcuMS.aculab.com>
+        Fri, 13 May 2022 10:31:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887FB1B12CA
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:29:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D01FA621C6
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 14:29:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3453C34116;
+        Fri, 13 May 2022 14:29:13 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="P+KlA1Xu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1652452152;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=DHSCR7JojA9am5Am3S46p3wilJLdjEwEscTFyoAsl74=;
+        b=P+KlA1XufzwcZwfv10Q1G+C2WJU0Hy/bQCdU6bXhwD9ObbPNnlUxuKbzapndMke6AZt/bx
+        C45X+dstpKEvCWsrWFuQsWMrbrkbzZlWZ6M0HcmRXc1db8za0jTLD/crmSblLYeYNzsP3Z
+        5kwvZimxlRlscD6+nZsTGXVa1AnRWxM=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 292509fe (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 13 May 2022 14:29:11 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: [PATCH] random: move initialization functions out of hot pages
+Date:   Fri, 13 May 2022 16:29:08 +0200
+Message-Id: <20220513142908.341220-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4b21dec7e98243b89daea96286c33434@AcuMS.aculab.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 11:06:23AM +0000, David Laight wrote:
-> From: Andrew Morton
-> > Sent: 12 May 2022 21:01
-> > 
-> > On Thu, 12 May 2022 16:26:37 +0800 liqiong <liqiong@nfschina.com> wrote:
-> > 
-> > > "char bdi_unknown_nam[]" string form declares a single variable.
-> > > It is better then "char *bdi_unknown_name" which creates two
-> > > variables.
-> > >
-> > > ...
-> > >
-> > > --- a/mm/backing-dev.c
-> > > +++ b/mm/backing-dev.c
-> > > @@ -20,7 +20,7 @@ struct backing_dev_info noop_backing_dev_info;
-> > >  EXPORT_SYMBOL_GPL(noop_backing_dev_info);
-> > >
-> > >  static struct class *bdi_class;
-> > > -static const char *bdi_unknown_name = "(unknown)";
-> > > +static const char bdi_unknown_name[] = "(unknown)";
-> > >
-> > 
-> > heh, fun patch.  We actually do this quite a lot.
-> > 
-> > 	grep -r "^[a-z].*char \*[a-z].*= \"" .
-> > 
-> > is a pathetic pattern which catches a lot of them.
-> > 
-> > 
-> > However.  I expected your patch to shrink the kernel a bit, but it has
-> > the opposite effect:
-> > 
-> > hp2:/usr/src/25> size mm/backing-dev.o
-> >    text	   data	    bss	    dec	    hex	filename
-> >   21288	   9396	   3808	  34492	   86bc	mm/backing-dev.o-before
-> >   21300	   9428	   3808	  34536	   86e8	mm/backing-dev.o-after
-> > 
-> > Even .data became larger.  I didn't investigate why.
-> 
-> The linker can merge replicated strings
-> (ie data in .rodata.str1.n sections)
-> but I don't think the compiler puts variables into that section.
-> 
-> So if you have:
-> static const char *const foo_xxx = "foo";
-> in multiple source/object files you get lots of pointers
-> but only one string.
-> OTOH with:
-> static const char foo_xxx[] = "foo";
-> you get lots of copies of the string.
-> Which is smaller depends on the number of variables and the length
-> of the string.
->
+Much of random.c is devoted to initializing the rng and accounting for
+when a sufficient amount of entropy has been added. In a perfect world,
+this would all happen during init, and so we could mark these functions
+as __init. But in reality, this isn't the case: sometimes the rng only
+finishes initializing some seconds after system init is finished.
 
-Good point. I have searched the whole code.  There are 19 places
-where use the string "(unknown)".  Seems it is better to drop
-this change.
+For this reason, at the moment, a whole host of functions that are only
+used relatively close to system init and then never again are intermixed
+with functions that are used in hot code all the time. This creates more
+cache misses than necessary.
 
-arch/mips/alchemy/devboards/db1xxx.c:48:                return "(unknown)";
-drivers/acpi/device_pm.c:44:            return "(unknown)";
-drivers/base/component.c:101:                      component ? dev_name(component->dev) : "(unknown)",
-drivers/block/rbd.c:5137:                           spec->image_id, spec->image_name ?: "(unknown)",
-drivers/gpu/drm/i915/display/intel_dsi_vbt.c:570:               return "(unknown)";
-drivers/i3c/master/mipi-i3c-hci/ext_caps.c:50:          "(unknown)", "master only", "target only",
-drivers/net/wireless/broadcom/brcm80211/brcmfmac/fwil.c:85:             return "(unknown)";
-drivers/platform/x86/thinkpad_acpi.c:7506:                      thinkpad_id.ec_version_str : "(unknown)");
-drivers/usb/gadget/udc/omap_udc.c:2800:         type = "(unknown)";
-fs/cifs/cifs_swn.c:653:                 seq_puts(m, "(unknown)");
-fs/cifs/cifsfs.c:434:           seq_puts(s, "(unknown)");
-fs/ext4/super.c:835:                    path = "(unknown)";
-include/drm/drm_mode_object.h:118:              return "(unknown)";                             \
-lib/error-inject.c:187:         return "(unknown)";
-mm/backing-dev.c:23:static const char *bdi_unknown_name = "(unknown)";
-mm/filemap.c:3664:                      path = "(unknown)";
-net/ipv4/cipso_ipv4.c:444:                      type_str = "(unknown)";
-net/ipv6/calipso.c:384:                 type_str = "(unknown)";
-sound/firewire/dice/dice-proc.c:35:     return "(unknown)";
+In order to pack the hot code closer together, this commit moves the
+initialization functions that can't be marked as __init into
+.text.unlikely by way of the __cold attribute.
 
+Of particular note is moving credit_init_bits() into a macro wrapper
+that inlines the crng_ready() static branch check. This avoids a
+function call to a nop+ret, and most notably prevents extra entropy
+arithmetic from being computed in mix_interrupt_randomness().
 
-Thanks.
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/char/random.c | 36 +++++++++++++++++++-----------------
+ 1 file changed, 19 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 5e5f0c51e3b1..812070f4731d 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -110,7 +110,7 @@ bool rng_is_initialized(void)
+ }
+ EXPORT_SYMBOL(rng_is_initialized);
+ 
+-static void crng_set_ready(struct work_struct *work)
++static void __cold crng_set_ready(struct work_struct *work)
+ {
+ 	static_branch_enable(&crng_is_ready);
+ }
+@@ -149,7 +149,7 @@ EXPORT_SYMBOL(wait_for_random_bytes);
+  * returns: 0 if callback is successfully added
+  *	    -EALREADY if pool is already initialised (callback not called)
+  */
+-int register_random_ready_notifier(struct notifier_block *nb)
++int __cold register_random_ready_notifier(struct notifier_block *nb)
+ {
+ 	unsigned long flags;
+ 	int ret = -EALREADY;
+@@ -167,7 +167,7 @@ int register_random_ready_notifier(struct notifier_block *nb)
+ /*
+  * Delete a previously registered readiness callback function.
+  */
+-int unregister_random_ready_notifier(struct notifier_block *nb)
++int __cold unregister_random_ready_notifier(struct notifier_block *nb)
+ {
+ 	unsigned long flags;
+ 	int ret;
+@@ -178,7 +178,7 @@ int unregister_random_ready_notifier(struct notifier_block *nb)
+ 	return ret;
+ }
+ 
+-static void process_random_ready_list(void)
++static void __cold process_random_ready_list(void)
+ {
+ 	unsigned long flags;
+ 
+@@ -190,7 +190,7 @@ static void process_random_ready_list(void)
+ #define warn_unseeded_randomness() \
+ 	_warn_unseeded_randomness(__func__, (void *)_RET_IP_)
+ 
+-static void _warn_unseeded_randomness(const char *func_name, void *caller)
++static void __cold _warn_unseeded_randomness(const char *func_name, void *caller)
+ {
+ 	if (!IS_ENABLED(CONFIG_WARN_ALL_UNSEEDED_RANDOM) || crng_ready())
+ 		return;
+@@ -615,7 +615,7 @@ EXPORT_SYMBOL(get_random_u32);
+  * This function is called when the CPU is coming up, with entry
+  * CPUHP_RANDOM_PREPARE, which comes before CPUHP_WORKQUEUE_PREP.
+  */
+-int random_prepare_cpu(unsigned int cpu)
++int __cold random_prepare_cpu(unsigned int cpu)
+ {
+ 	/*
+ 	 * When the cpu comes back online, immediately invalidate both
+@@ -790,13 +790,15 @@ static void extract_entropy(void *buf, size_t len)
+ 	memzero_explicit(&block, sizeof(block));
+ }
+ 
+-static void credit_init_bits(size_t bits)
++#define credit_init_bits(bits) if (!crng_ready()) _credit_init_bits(bits)
++
++static void __cold _credit_init_bits(size_t bits)
+ {
+ 	static struct execute_work set_ready;
+ 	unsigned int new, orig, add;
+ 	unsigned long flags;
+ 
+-	if (crng_ready() || !bits)
++	if (!bits)
+ 		return;
+ 
+ 	add = min_t(size_t, bits, POOL_BITS);
+@@ -1012,7 +1014,7 @@ EXPORT_SYMBOL_GPL(add_hwgenerator_randomness);
+  * Handle random seed passed by bootloader, and credit it if
+  * CONFIG_RANDOM_TRUST_BOOTLOADER is set.
+  */
+-void add_bootloader_randomness(const void *buf, size_t len)
++void __cold add_bootloader_randomness(const void *buf, size_t len)
+ {
+ 	mix_pool_bytes(buf, len);
+ 	if (trust_bootloader)
+@@ -1028,7 +1030,7 @@ static BLOCKING_NOTIFIER_HEAD(vmfork_chain);
+  * don't credit it, but we do immediately force a reseed after so
+  * that it's used by the crng posthaste.
+  */
+-void add_vmfork_randomness(const void *unique_vm_id, size_t len)
++void __cold add_vmfork_randomness(const void *unique_vm_id, size_t len)
+ {
+ 	add_device_randomness(unique_vm_id, len);
+ 	if (crng_ready()) {
+@@ -1041,13 +1043,13 @@ void add_vmfork_randomness(const void *unique_vm_id, size_t len)
+ EXPORT_SYMBOL_GPL(add_vmfork_randomness);
+ #endif
+ 
+-int register_random_vmfork_notifier(struct notifier_block *nb)
++int __cold register_random_vmfork_notifier(struct notifier_block *nb)
+ {
+ 	return blocking_notifier_chain_register(&vmfork_chain, nb);
+ }
+ EXPORT_SYMBOL_GPL(register_random_vmfork_notifier);
+ 
+-int unregister_random_vmfork_notifier(struct notifier_block *nb)
++int __cold unregister_random_vmfork_notifier(struct notifier_block *nb)
+ {
+ 	return blocking_notifier_chain_unregister(&vmfork_chain, nb);
+ }
+@@ -1092,7 +1094,7 @@ static void fast_mix(unsigned long s[4], unsigned long v1, unsigned long v2)
+  * This function is called when the CPU has just come online, with
+  * entry CPUHP_AP_RANDOM_ONLINE, just after CPUHP_AP_WORKQUEUE_ONLINE.
+  */
+-int random_online_cpu(unsigned int cpu)
++int __cold random_online_cpu(unsigned int cpu)
+ {
+ 	/*
+ 	 * During CPU shutdown and before CPU onlining, add_interrupt_
+@@ -1249,7 +1251,7 @@ static void add_timer_randomness(struct timer_rand_state *state, unsigned int nu
+ 	if (in_hardirq())
+ 		this_cpu_ptr(&irq_randomness)->count += max(1u, bits * 64) - 1;
+ 	else
+-		credit_init_bits(bits);
++		_credit_init_bits(bits);
+ }
+ 
+ void add_input_randomness(unsigned int type, unsigned int code, unsigned int value)
+@@ -1277,7 +1279,7 @@ void add_disk_randomness(struct gendisk *disk)
+ }
+ EXPORT_SYMBOL_GPL(add_disk_randomness);
+ 
+-void rand_initialize_disk(struct gendisk *disk)
++void __cold rand_initialize_disk(struct gendisk *disk)
+ {
+ 	struct timer_rand_state *state;
+ 
+@@ -1312,7 +1314,7 @@ struct entropy_timer_state {
+  *
+  * So the re-arming always happens in the entropy loop itself.
+  */
+-static void entropy_timer(struct timer_list *timer)
++static void __cold entropy_timer(struct timer_list *timer)
+ {
+ 	struct entropy_timer_state *state = container_of(timer, struct entropy_timer_state, timer);
+ 
+@@ -1326,7 +1328,7 @@ static void entropy_timer(struct timer_list *timer)
+  * If we have an actual cycle counter, see if we can
+  * generate enough entropy with timing noise
+  */
+-static void try_to_generate_entropy(void)
++static void __cold try_to_generate_entropy(void)
+ {
+ 	enum { NUM_TRIAL_SAMPLES = 8192, MAX_SAMPLES_PER_BIT = 32 };
+ 	struct entropy_timer_state stack;
+-- 
+2.35.1
+

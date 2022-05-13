@@ -2,117 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 440525263E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C875264A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353017AbiEMOZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39198 "EHLO
+        id S1381134AbiEMOd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359467AbiEMOYs (ORCPT
+        with ESMTP id S1381072AbiEMOak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:24:48 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1AD527D1;
-        Fri, 13 May 2022 07:24:45 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id c11so8064090plg.13;
-        Fri, 13 May 2022 07:24:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=EXVXiPbk+krY68vv3JVFR+K7ANBpW2/j7bjI9Co2KDw=;
-        b=Lily5PBWVzsRsoKTheNp++BxMUwyzfse43IwxdM4KdKiwxr22BTE2kx3Ow2wxjOf+C
-         lH4YXnDCqazomi/ap9qEmHZRTELee86xvEOnQBuPbC8Az508qFAxZGEmkWFu97uiTAZD
-         Q6lTJx4RBjBKMO9cRXZBmzzUdoywVD62Du3xLaMjBYbgESWo9VJZ1XX4GG6o1WF0IzLM
-         6hwHVRGorDIVDB8N7Nn/c5KQO8pCIHWtYUabYbddkqX0UtY+Sl8ux8FjnuGi5vh3CnFU
-         My8cQRNntwUUEpSChBTx6GdqGKcYGwkc3mlOfz2lTrdHx+nCauRiSDnRfL3gYSbgX7YK
-         11cQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=EXVXiPbk+krY68vv3JVFR+K7ANBpW2/j7bjI9Co2KDw=;
-        b=cRoqmhZNvnKkFlkfiEyeBjVxTQ9nZKLrnRU5N+sYwh46qw9nbVr8B0C5Hs6zc9kecQ
-         3zkjAJCQYT2T0PTroKODoudpv6R+fMBGPWeeAZm6qn9td4xNvgp2fGAtbAu1TcN+l9ht
-         cE9/Nc/+ApTgLvSeDg4cuOrV5KfpNFmFfOCBpVOZKnndcLNg7e1qyYg7SlgKakKmvFPs
-         dhq5noQ9WkT5X/+JfNYSybEO6wuHHZv+whkRcKTuSgmfEvzdrwfFyXPLy8qy3XQpaG9Y
-         z68YhfptSMaMQIfKlSb+u2qGAGyvOEwvcq55Bi9xfYl29MeydBcA4sEcqNyYecW3jxZ5
-         OBEg==
-X-Gm-Message-State: AOAM531M0v7egKx92aRkBv9BGtP96QWnkZXC3LTFJ7IJQ4lNs3THYS75
-        dBQWiJM5ERPgfjJGdoMEOj0=
-X-Google-Smtp-Source: ABdhPJwP14hRxwH8tjUgqDpmuXMdXTYtmj77UCtxNmry5UzcQ8PKGLOciYn4wKhQnTKfIIfZgjlOZA==
-X-Received: by 2002:a17:902:f542:b0:15e:b6d2:88d9 with SMTP id h2-20020a170902f54200b0015eb6d288d9mr4934948plf.128.1652451884713;
-        Fri, 13 May 2022 07:24:44 -0700 (PDT)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id jj10-20020a170903048a00b0015e8d4eb2ccsm1684488plb.278.2022.05.13.07.24.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 07:24:44 -0700 (PDT)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Max Staudt <max@enpas.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH 2/2] can: dev: drop tx skb if in listen only mode
-Date:   Fri, 13 May 2022 23:23:55 +0900
-Message-Id: <20220513142355.250389-3-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+        Fri, 13 May 2022 10:30:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8885E980B3;
+        Fri, 13 May 2022 07:28:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 316BBB83069;
+        Fri, 13 May 2022 14:28:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9872DC34100;
+        Fri, 13 May 2022 14:28:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652452094;
+        bh=sDqknvl/Pn++QqE43sj1doJEwJZRrTv0llb3fsN2P1s=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=l69ngyJ0uswT4cum1AyvC8lxGvVezuqypxDI+ooOkvl2OFRbKS17mu0yne+M11Nan
+         XXFYkb225MN6p9IHszpzSshJSLbMlPT2HbyYfi290lA2FTc3IH1mH2hD07cCSEHUoX
+         ox8PsNsnFNrPQj+OGV3dakABxvqSSR0jh1NtdtOo=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, butt3rflyh4ck <butterflyhuangxx@gmail.com>,
+        Jan Kara <jack@suse.cz>
+Subject: [PATCH 5.15 14/21] udf: Avoid using stale lengthOfImpUse
+Date:   Fri, 13 May 2022 16:23:56 +0200
+Message-Id: <20220513142230.289833050@linuxfoundation.org>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220513142229.874949670@linuxfoundation.org>
+References: <20220513142229.874949670@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Frames can be directly injected to a can driver via the packet
-socket. By doing that, it is possible to reach the
-net_device_ops::ndo_start_xmit function even if the driver is
-configure in listen only mode.
+From: Jan Kara <jack@suse.cz>
 
-Add a check in can_dropped_invalid_skb() and to discard the skb if
-CAN_CTRLMODE_LISTENONLY is set.
+commit c1ad35dd0548ce947d97aaf92f7f2f9a202951cf upstream.
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+udf_write_fi() uses lengthOfImpUse of the entry it is writing to.
+However this field has not yet been initialized so it either contains
+completely bogus value or value from last directory entry at that place.
+In either case this is wrong and can lead to filesystem corruption or
+kernel crashes.
+
+Reported-by: butt3rflyh4ck <butterflyhuangxx@gmail.com>
+CC: stable@vger.kernel.org
+Fixes: 979a6e28dd96 ("udf: Get rid of 0-length arrays in struct fileIdentDesc")
+Signed-off-by: Jan Kara <jack@suse.cz>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/can/dev.h | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ fs/udf/namei.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
-index bbe27e22c7a7..c3ed48e54c29 100644
---- a/include/linux/can/dev.h
-+++ b/include/linux/can/dev.h
-@@ -161,6 +161,7 @@ static inline bool can_dropped_invalid_skb(struct net_device *dev,
- 					   struct sk_buff *skb)
- {
- 	const struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
-+	struct can_priv *priv = netdev_priv(dev);
+--- a/fs/udf/namei.c
++++ b/fs/udf/namei.c
+@@ -75,11 +75,11 @@ int udf_write_fi(struct inode *inode, st
  
- 	if (skb->protocol == htons(ETH_P_CAN)) {
- 		if (unlikely(skb->len != CAN_MTU ||
-@@ -174,8 +175,13 @@ static inline bool can_dropped_invalid_skb(struct net_device *dev,
- 		goto inval_skb;
+ 	if (fileident) {
+ 		if (adinicb || (offset + lfi < 0)) {
+-			memcpy(udf_get_fi_ident(sfi), fileident, lfi);
++			memcpy(sfi->impUse + liu, fileident, lfi);
+ 		} else if (offset >= 0) {
+ 			memcpy(fibh->ebh->b_data + offset, fileident, lfi);
+ 		} else {
+-			memcpy(udf_get_fi_ident(sfi), fileident, -offset);
++			memcpy(sfi->impUse + liu, fileident, -offset);
+ 			memcpy(fibh->ebh->b_data, fileident - offset,
+ 				lfi + offset);
+ 		}
+@@ -88,11 +88,11 @@ int udf_write_fi(struct inode *inode, st
+ 	offset += lfi;
+ 
+ 	if (adinicb || (offset + padlen < 0)) {
+-		memset(udf_get_fi_ident(sfi) + lfi, 0x00, padlen);
++		memset(sfi->impUse + liu + lfi, 0x00, padlen);
+ 	} else if (offset >= 0) {
+ 		memset(fibh->ebh->b_data + offset, 0x00, padlen);
+ 	} else {
+-		memset(udf_get_fi_ident(sfi) + lfi, 0x00, -offset);
++		memset(sfi->impUse + liu + lfi, 0x00, -offset);
+ 		memset(fibh->ebh->b_data, 0x00, padlen + offset);
  	}
  
--	if (!can_skb_headroom_valid(dev, skb))
-+	if (!can_skb_headroom_valid(dev, skb)) {
-+		goto inval_skb;
-+	} else if (priv->ctrlmode & CAN_CTRLMODE_LISTENONLY) {
-+		netdev_info_once(dev,
-+				 "interface in listen only mode, dropping skb\n");
- 		goto inval_skb;
-+	}
- 
- 	return false;
- 
--- 
-2.35.1
+
 

@@ -2,108 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB3CC52624B
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 14:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA38F526252
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 14:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380421AbiEMMtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 08:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
+        id S1380444AbiEMMuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 08:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359455AbiEMMtC (ORCPT
+        with ESMTP id S241962AbiEMMuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 08:49:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4593A703;
-        Fri, 13 May 2022 05:49:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E2F161F8C;
-        Fri, 13 May 2022 12:49:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66AD9C34100;
-        Fri, 13 May 2022 12:48:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652446139;
-        bh=N6Gs27VquaPY/jfyx7p+uW0mYzfGY1yrIjK7gsqoh7Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aElnBzI2wZCSK/U/Wnscmm/Sf1R+M1wGzU0SZHNmsLcyeDhrq6q7+ygyC0z9PfHR5
-         N/ajNj3N6eZZfZ+EylMuobL3/Y77JbKMylxyKVAO5DnQMabg8vlXq614hAoTU0zLlP
-         OwxUFo7FINvs9ZH8/v/9RcNsiTStBmfaPbsDNWYzSFyQqCJ8+C/75GEEudBLaGfq4J
-         bnunuVr6Fks8yOQ82W/lBrSSdtVf3jiVDNx4x+cTtr61rJzRf4F5t1QVXaCdkXm3XX
-         ZH1pPSQmTMHTphNJscauUHBAScWkKa5e5mlFYP/mp6JtlmMiYdidrd9ND6ZcmCSi7H
-         WxgHFkTrgee9g==
-Date:   Fri, 13 May 2022 13:48:51 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rob Herring <robh@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, kernel-team@android.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] driver core: Extend deferred probe timeout on driver
- registration
-Message-ID: <Yn5Ts1+56rBip8Mc@sirena.org.uk>
-References: <20220429220933.1350374-1-saravanak@google.com>
+        Fri, 13 May 2022 08:50:06 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C53A4A3C9;
+        Fri, 13 May 2022 05:50:04 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id r188-20020a1c44c5000000b003946c466c17so4231149wma.4;
+        Fri, 13 May 2022 05:50:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=X+Fu1OR5S2PYLzwd+6DYojojG2kI3ta4tOqVsSeXxJU=;
+        b=Q+XQFyWlzXYICNidKTsLmvX9o2iZWVqjo1/bbYEonqDYAeByo5hzqa2I9iuSw2goWP
+         mpkVjiBZTD3lFvF/eTuT8MubKjot116fUsQ+wruG616Y/YL09i0bxOBVHhsQg28WjFaG
+         UsPzNFlkHc5SEa5F0j6w2CWhJro9xnIbpOlc5+/ytdI4CToVZUdHzkfNjJVNxM7WusA0
+         DnBs1ZGYSQu/3yN432j0N7rFXv159EEjPRJgMX1QrH0xodavnAIoitHG8+m2XewPy18U
+         YDRJKR1yYLB+ux+J1ZbbQvKO/bN+EXiUsseI8Qu4N5ybSqfbSaePD8wxEA/nlv92u7C0
+         AY/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to:user-agent;
+        bh=X+Fu1OR5S2PYLzwd+6DYojojG2kI3ta4tOqVsSeXxJU=;
+        b=Bl099rBylrixg39VyyoUnRxaeBBTUWEP6o3P7VuxWrmPDO0LRBxpB77NYFT5OUjovQ
+         idcf43UtWHQ0Is1tx9JDpaJJ0Wyb+ZNzoILWRP4NXOdLtg8qdHEE6Ym94kZl1xQvnW9X
+         9B7t0u9wOgrBt31bkNPL0vv3gBR2CcCbgpheXvirTnJQZdHkSx7+QGbnzoUpGxzpg6Rc
+         D4L1fzYf/XiNrgs91lpCIMmGLLpG3TdCd5Mpwt0EbzoJPwvbx+Wi0D6wF9y0o3VxdeBQ
+         +h2QRg0UVRKhha9HAR5XNxO08B2xSbkoFVubLMCPFZS683x0T1nhJpR6Pqi5+Wqd6Xve
+         ClIA==
+X-Gm-Message-State: AOAM53227xG7NjkvFLFPhmqoBOGMPVJfIzq9Jw2gVEtCp6jVUftB3LAM
+        m48ikCSr/Z9QD5FPwF/A2pI=
+X-Google-Smtp-Source: ABdhPJwzJaRvNoKqgGpnRdUR9AXbWS6S0DLdaWfuhrwazzuavk/j3O24iMEE2ohRc+taV7I43969GQ==
+X-Received: by 2002:a05:600c:a45:b0:346:5e67:cd54 with SMTP id c5-20020a05600c0a4500b003465e67cd54mr15121985wmq.127.1652446203201;
+        Fri, 13 May 2022 05:50:03 -0700 (PDT)
+Received: from gmail.com ([81.168.73.77])
+        by smtp.gmail.com with ESMTPSA id u13-20020adfa18d000000b0020c5253d913sm2030167wru.95.2022.05.13.05.50.02
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 13 May 2022 05:50:02 -0700 (PDT)
+Date:   Fri, 13 May 2022 13:50:00 +0100
+From:   Martin Habets <habetsm.xilinx@gmail.com>
+To:     Ren Zhijie <renzhijie2@huawei.com>
+Cc:     ecree.xilinx@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] sfc: siena: Fix Kconfig dependencies
+Message-ID: <20220513125000.xcc5mce2f3gwzcnw@gmail.com>
+Mail-Followup-To: Ren Zhijie <renzhijie2@huawei.com>,
+        ecree.xilinx@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220513012721.140871-1-renzhijie2@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ZVbyQANSq1izx04U"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220429220933.1350374-1-saravanak@google.com>
-X-Cookie: You have taken yourself too seriously.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220513012721.140871-1-renzhijie2@huawei.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Nit: the subject should have net-next in stead of -next.
 
---ZVbyQANSq1izx04U
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Fri, May 13, 2022 at 09:27:21AM +0800, Ren Zhijie wrote:
+> If CONFIG_PTP_1588_CLOCK=m and CONFIG_SFC_SIENA=y, the siena driver will fail to link:
+> 
+> drivers/net/ethernet/sfc/siena/ptp.o: In function `efx_ptp_remove_channel':
+> ptp.c:(.text+0xa28): undefined reference to `ptp_clock_unregister'
+> drivers/net/ethernet/sfc/siena/ptp.o: In function `efx_ptp_probe_channel':
+> ptp.c:(.text+0x13a0): undefined reference to `ptp_clock_register'
+> ptp.c:(.text+0x1470): undefined reference to `ptp_clock_unregister'
+> drivers/net/ethernet/sfc/siena/ptp.o: In function `efx_ptp_pps_worker':
+> ptp.c:(.text+0x1d29): undefined reference to `ptp_clock_event'
+> drivers/net/ethernet/sfc/siena/ptp.o: In function `efx_siena_ptp_get_ts_info':
+> ptp.c:(.text+0x301b): undefined reference to `ptp_clock_index'
+> 
+> To fix this build error, make SFC_SIENA depends on PTP_1588_CLOCK.
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Fixes: d48523cb88e0("sfc: Copy shared files needed for Siena (part 2)")
+> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
 
-On Fri, Apr 29, 2022 at 03:09:32PM -0700, Saravana Kannan wrote:
-> The deferred probe timer that's used for this currently starts at
-> late_initcall and runs for driver_deferred_probe_timeout seconds. The
-> assumption being that all available drivers would be loaded and
-> registered before the timer expires. This means, the
-> driver_deferred_probe_timeout has to be pretty large for it to cover the
-> worst case. But if we set the default value for it to cover the worst
-> case, it would significantly slow down the average case. For this
-> reason, the default value is set to 0.
+Acked-by: Martin Habets <habetsm.xilinx@gmail.com>
 
-This makes sense to me.
-
-Reviewed-by: Mark Brown <broonie@kernel.org>
-
---ZVbyQANSq1izx04U
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJ+U7MACgkQJNaLcl1U
-h9AJrQf+O34uAf+WJTRmMJA0R5+muU/Q3+PYEKAnTQ3EJ1R3EpYCuFYr1FlCDe3g
-OIg2rZyCYxhlgQ/k1CRFZbdK+R94KNZ5rv47uV1Kt8aC1uY7Rizh+e04jjgYSIOc
-TVn7quNTCXOPaNwuz95cURa8W7X4GFXDkdppjmpcYeMaaNsOU4z3Pw9drORQTArc
-Vb8M63Rn2/hazrGdt7xRTUU+/UvyOu3R63NeqkBcvvVo+tLXgOFaRsciYs+xMI6t
-Lg347Izlc1kBmpHhg5e/tAl5zEj3cZgc6a6gTg69f7i90AnxZw64vwFiv9grHK5S
-HLh2BNII8I1elceOYfqYDh3c1Apcww==
-=vDHz
------END PGP SIGNATURE-----
-
---ZVbyQANSq1izx04U--
+> ---
+>  drivers/net/ethernet/sfc/siena/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/net/ethernet/sfc/siena/Kconfig b/drivers/net/ethernet/sfc/siena/Kconfig
+> index 3d52aee50d5a..3675233e963a 100644
+> --- a/drivers/net/ethernet/sfc/siena/Kconfig
+> +++ b/drivers/net/ethernet/sfc/siena/Kconfig
+> @@ -2,6 +2,7 @@
+>  config SFC_SIENA
+>  	tristate "Solarflare SFC9000 support"
+>  	depends on PCI
+> +	depends on PTP_1588_CLOCK
+>  	select MDIO
+>  	select CRC32
+>  	help
+> -- 
+> 2.17.1

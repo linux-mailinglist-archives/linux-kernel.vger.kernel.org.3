@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC6A3525B80
+	by mail.lfdr.de (Postfix) with ESMTP id 09536525B7F
 	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 08:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377359AbiEMG0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 02:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
+        id S1377304AbiEMG0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 02:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359614AbiEMG0W (ORCPT
+        with ESMTP id S1377305AbiEMG0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 02:26:22 -0400
+        Fri, 13 May 2022 02:26:20 -0400
 Received: from isilmar-4.linta.de (isilmar-4.linta.de [136.243.71.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294E5289A8;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5E1289BD;
         Thu, 12 May 2022 23:26:07 -0700 (PDT)
 X-isilmar-external: YES
 X-isilmar-external: YES
@@ -21,25 +21,52 @@ X-isilmar-external: YES
 X-isilmar-external: YES
 X-isilmar-external: YES
 X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
 Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
-        by isilmar-4.linta.de (Postfix) with ESMTPSA id AD3032013E7;
+        by isilmar-4.linta.de (Postfix) with ESMTPSA id A6A482013B0;
         Fri, 13 May 2022 06:26:05 +0000 (UTC)
 Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
-        id C835E80957; Fri, 13 May 2022 08:18:53 +0200 (CEST)
-Date:   Fri, 13 May 2022 08:18:53 +0200
+        id 03B6B80980; Fri, 13 May 2022 08:19:14 +0200 (CEST)
+Date:   Fri, 13 May 2022 08:19:13 +0200
 From:   Dominik Brodowski <linux@dominikbrodowski.net>
 To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: Re: [PATCH] random32: use real rng for non-deterministic randomness
-Message-ID: <Yn34Tf4CpSaZBlGi@owl.dominikbrodowski.net>
-References: <20220511143257.88442-1-Jason@zx2c4.com>
+Cc:     Thomas Ristenpart <ristenpart@cornell.edu>,
+        Yevgeniy Dodis <dodis@cs.nyu.edu>, tytso <tytso@mit.edu>,
+        Nadia Heninger <nadiah@cs.ucsd.edu>,
+        Noah Stephens-Dawidowitz <noahsd@gmail.com>,
+        Stefano Tessaro <tessaro@cs.washington.edu>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "D. J. Bernstein" <djb@cr.yp.to>,
+        "jeanphilippe.aumasson@gmail.com" <jeanphilippe.aumasson@gmail.com>,
+        "jann@thejh.net" <jann@thejh.net>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Peter Schwabe <peter@cryptojedi.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: is "premature next" a real world rng concern, or just an
+ academic exercise?
+Message-ID: <Yn34YWhH1nSa8O8K@owl.dominikbrodowski.net>
+References: <YmlMGx6+uigkGiZ0@zx2c4.com>
+ <Ym3ZM1P+uYYABtRm@mit.edu>
+ <Ym5sICj5iBMn2w/E@zx2c4.com>
+ <CAMvzKsiA52Si=PzOJXYwGSA1WUz-1S0A8cpgRJWDzpMkfFbX+Q@mail.gmail.com>
+ <CAMvzKsiMY_+8HZqeFqD3tR65a3-JB0LG=+0jBBy1zF4GanrsGA@mail.gmail.com>
+ <7EB51D84-90A4-4C97-9A81-14A8C32990F7@cornell.edu>
+ <YnzzuuLPssc3/tVe@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220511143257.88442-1-Jason@zx2c4.com>
+In-Reply-To: <YnzzuuLPssc3/tVe@zx2c4.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -49,51 +76,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Wed, May 11, 2022 at 04:32:57PM +0200 schrieb Jason A. Donenfeld:
-> random32.c has two RNGs in it: one that is meant to be used
-> deterministically, with some predefined seed, and one that does the same
-> exact thing as random.c, except does it poorly. The first one has some
-> use cases. The second one no longer does and can be replaced with calls
-> to random.c's proper random number generator.
+Am Thu, May 12, 2022 at 01:47:06PM +0200 schrieb Jason A. Donenfeld:
+> But on the other hand, it appears that none of us really thinks that
+> premature next is a real problem worth complicating designs over. So
+> maybe we can just say that it is nice when the silicon in one way or
+> another helps with premature next, but maybe not an explicit must have.
+> So where does that leave us?
 > 
-> The relatively recent siphash-based bad random32.c code was added in
-> response to concerns that the prior random32.c was too deterministic.
-> Out of fears that random.c was (at the time) too slow, this code was
-> anonymously contributed by somebody who was likely reusing the alias of
-> long time anonymous contributor George Spelvin. Then out of that emerged
-> a kind of shadow entropy gathering system, with its own tentacles
-> throughout various net code, added willy nilly.
-> 
-> Stop👏making👏crappy👏bespoke👏random👏number👏generators👏.
-> 
-> Fortunately, recently advances in random.c mean that we can stop playing
-> with this sketchiness, and just use get_random_u32(), which is now fast
-> enough. In micro benchmarks using RDPMC, I'm seeing the same median
-> cycle count between the two functions, with the mean being _slightly_
-> higher due to batches refilling (which we can optimize further need be).
-> However, when doing *real* benchmarks of the net functions that actually
-> use these random numbers, the mean cycles actually *decreased* slightly
-> (with the median still staying the same), likely because the additional
-> prandom code means icache misses and complexity, whereas random.c is
-> generally already being used by something else nearby.
-> 
-> The biggest benefit of this is that there are many users of prandom who
-> probably should be using cryptographically secure random numbers. This
-> makes all of those accidental cases become secure by just flipping a
-> switch. Later on, we can do a tree-wide cleanup to remove the static
-> inline wrapper functions that this commit adds.
-> 
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Theodore Ts'o <tytso@mit.edu>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
-> Jakub - If there are no objections to this plan, I intend on taking this
-> through the random.git tree, which is what this commit is based on, with
-> its recent siphash changes and such. -Jason
+> - Systems with RDSEED/RDRAND don't have premature next, due to the above
+>   KDF salt. This is probably the majority of systems out there these
+>   days. This also applies to the sleep resumption notification (and the
+>   vmgenid one), and I suspect that most systems with S3 or S0ix or
+>   whatever else these days also probably have RDRAND.
 
-Nice! However, wouldn't it be much better to clean up the indirection
-introduced here as well? prandom_u32() as wrapper for get_random_u32() and
-prandom_bytes() as wrapper for get_random_bytes() seems unnecessary...
+... and most of these systems have TPM chips with a RNG, which is (alas)
+usually only used at system startup, as that hw_rng device sets its quality
+to 0 (meaning untrusted). So there's also room for improvement involving
+these hw rng devices.
 
 Thanks,
 	Dominik

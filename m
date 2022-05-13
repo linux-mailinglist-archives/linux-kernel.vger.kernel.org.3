@@ -2,92 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B07525E93
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 11:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D61B1525E45
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 11:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378557AbiEMItP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 04:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
+        id S1378593AbiEMItt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 04:49:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378552AbiEMItM (ORCPT
+        with ESMTP id S1378581AbiEMItp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 04:49:12 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC7817909C
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:49:11 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id j6so14832824ejc.13
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:49:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=AOlngjQgTSn6GmtShBqgjXLfwUmwXKNpLbvwbvRVOyg=;
-        b=JPeKVgdXCRANIchrbjh6Wc29UyghmwZk5Kt/XFpS7q4q2iHfNs5Z1o/sIySdat8FJR
-         LkJdPpsr7QNhLp1aPKNvq9NL7Ndgpp+FIf0TLwgWrqyUnuFOM/sc0+c3m09jA42hu4up
-         UpkSvxcbyTcU7z0aKFEgW3NELq3+p1EM1zI9cKrtChdVmxlI/dRmvlcFN0Urg+Ho4S1L
-         eCaPRw3Ye3/QQXHH6wrEaD8U83r60cXGEhcJLvLOIu3Wui3xGBgyxsRrJhEI6oF1qqMA
-         a8zwkfwvYqML/Q7xeJSyvB3STf8s5ntDEGIQAy2HP1xufVIKKQmy+POoFX529ELFb3ZF
-         baqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AOlngjQgTSn6GmtShBqgjXLfwUmwXKNpLbvwbvRVOyg=;
-        b=bnVPGTnOsScBiCjlvPpQVT2csczXnhYs3K75D6yYMysLnzoTok10elI7mjWhoIzY0I
-         w3V70xeGhCIL84Bl/RyCaWpeMoxfO2fP15xEeM04phD8juV53ONLR+r4PWdxWu1ITi+H
-         s9I1Hx3QJjxTJ6UHXzq4YEV4EMeTGiJa0Uc3/BdH/ZTO+Lo4guCHYGl0INbj1V5sSqEi
-         DtDwNDFyM6t5gy8wb+c+BIB9IrHwkurz8F2rQVRjiz1EsiO7G3PpTRce6jSj/nYjL8Xi
-         caDi2YATxmsxECdR5buWn//FVoi4E/KacmnhE4N43gUScyvA0mxSP4BL67+mje9RKCuT
-         LgSA==
-X-Gm-Message-State: AOAM530c6IaK+dsHFXylSoJFwKHHAe0TAgIWzzo/Hkg6joGivdUlGNrZ
-        luZBZlaK4fj11qBNKJtz+S+aonfRva9pAfKu
-X-Google-Smtp-Source: ABdhPJz82mSV+lPh1KuUi0eEVEITLy7/amJuryJTfQ76xBcpYNPpO+sqBQBrGkKHpCLGVye3So9OFg==
-X-Received: by 2002:a17:907:d0a:b0:6f4:98fb:f407 with SMTP id gn10-20020a1709070d0a00b006f498fbf407mr3208500ejc.219.1652431749926;
-        Fri, 13 May 2022 01:49:09 -0700 (PDT)
-Received: from [192.168.0.169] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id ca26-20020aa7cd7a000000b0042617ba638csm673026edb.22.2022.05.13.01.49.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 01:49:09 -0700 (PDT)
-Message-ID: <75535c21-2890-b5bf-3c8e-62013a7c65b3@linaro.org>
-Date:   Fri, 13 May 2022 10:49:08 +0200
+        Fri, 13 May 2022 04:49:45 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439952B0327;
+        Fri, 13 May 2022 01:49:43 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L02QF6Y0fz4xXS;
+        Fri, 13 May 2022 18:49:41 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1652431782;
+        bh=7vQCyjKCbqzpIcTmFM2G6yNt/XS4nNkQs/JghES7AEo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=o/FY5ZlyHQfJdRRA+yLOQvTHoWn5t0bIfdwFwggI9nDP36BytYG2tDw7y4w2SL6WC
+         W2S91vOd3+6kfTVB9+SLPb26WqztLjz6TyTreNJxWyIYE81p2f+4SH3Aeih7QgyIfk
+         +ISaje4uB+uwGpepA7RjKec8ABNpA0DeGFycu9cKkKe/l6CNE1HSWak/R9ESisX14r
+         3HCk40jS/++JcSviS+h+5TWjbGMUR2rnwRtAtv3Py48DJ0jFlSJv5KvHVJiJXgdjdc
+         jEqJwSEN79QCyu5n86vzkDCaLkF9gz+FaFmXQFvX0yz36vLam+0Zw6bPNl97j4tw5T
+         TRQvEVVbxTZXw==
+Date:   Fri, 13 May 2022 18:49:41 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Miaoqian Lin <linmq006@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the v4l-dvb-next tree
+Message-ID: <20220513184941.37b08b2a@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/2] dt-bindings: iio: humidity: Add si7020 bindings
-Content-Language: en-US
-To:     Eddie James <eajames@linux.ibm.com>, linux-iio@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, dbarksdale@uplogix.com,
-        miltonm@us.ibm.com
-References: <20220511190835.51046-1-eajames@linux.ibm.com>
- <20220511190835.51046-2-eajames@linux.ibm.com>
- <7b4f2991-1dce-77d2-53c2-c4c358cbfe77@linux.ibm.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <7b4f2991-1dce-77d2-53c2-c4c358cbfe77@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/nDcRZLJBkrvo6iVl/Rd1FMj";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2022 00:08, Eddie James wrote:
-> 
-> On 5/11/22 14:08, Eddie James wrote:
->> Document the si7020 bindings with a new "silabs,skip-reset" property.
-> 
-> 
-> I missed the entry in trivial-devices.txt. I can push a v2 or a separate 
-> patch for that.
+--Sig_/nDcRZLJBkrvo6iVl/Rd1FMj
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-In this patch, please. Anyway you need v2.
+Hi all,
 
-Best regards,
-Krzysztof
+In commit
+
+  e62cc3ab0fc7 ("media: atmel: atmel-isc: Fix PM disable depth imbalance in=
+ atmel_isc_probe")
+
+Fixes tag
+
+  Fixes: 0a0e265 ("media: atmel: atmel-isc: split driver into driver base a=
+nd isc")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+
+In commit
+
+  3d18e7e0aa2d ("media: st-delta: Fix PM disable depth imbalance in delta_p=
+robe")
+
+Fixes tag
+
+  Fixes: f386509 ("[media] st-delta: STiH4xx multi-format video decoder v4l=
+2 driver")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+
+This can be fixed for the future by setting core.abbrev to 12 (or
+more) or (for git v2.11 or later) just making sure it is not set
+(or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/nDcRZLJBkrvo6iVl/Rd1FMj
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ+G6UACgkQAVBC80lX
+0Gwqmwf4gpCf/Szo/hIdSdFPke3TomcGIZ1bUM0USULgumOB+BcYHTIp/mqQnUiJ
+9dYXQeVYpv2ChN8eBoLM2+5Aw/AEwPzh9nXIgHiQcpNOiiA/ZTK/9d0zsLdEYYXB
+rZPstVsV9oT/8xIr/hZ0Nh7s0KToEKxnAuaHj0Z25X6XwBvM7DBWKkK6dFGanmXu
+U1cr/7uJAYvSA0q0bkRwH6tJe52dCqK6Cr1JBbpMCwyPVzawqea7qB2unDU6oNd1
+c61tkdy2PoxAVymF6/hMhv5g5g4LmPCQsrwhwILq7d5pNlveU4EuMFCaXUu8BtvF
+q0u0SkNOb4e5JXtyu8kJuADVaiHY
+=+hR/
+-----END PGP SIGNATURE-----
+
+--Sig_/nDcRZLJBkrvo6iVl/Rd1FMj--

@@ -2,72 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA6A525F84
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0109A525F11
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379239AbiEMJ4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 05:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
+        id S1379164AbiEMJ62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 05:58:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355353AbiEMJ4O (ORCPT
+        with ESMTP id S1379240AbiEMJ6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 05:56:14 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D5C1402C;
-        Fri, 13 May 2022 02:56:12 -0700 (PDT)
-Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        Fri, 13 May 2022 05:58:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7EB2A9CCD;
+        Fri, 13 May 2022 02:58:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C6FDC1EC069A;
-        Fri, 13 May 2022 11:56:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1652435766;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=qZU+VowKBrdGf3U5Q1GiT7jwO9RXiaZ1Fk4oM0FeUKk=;
-        b=WlWppcm86nod9C3ir0FTP3z78QRW/KpU7UHINYTa+cp6idwyvSqu4+vvcCY1i6q3etuV/8
-        zVAS2BbTXLELLnPrtM5wXQ5+CSYrfiAXG3e0wck2uSb9gCg88OyZhHdX0ItNXV3eGk3n3D
-        QkY9X5XWzlKLKtDDjAAWN/1aM6ZPD80=
-Date:   Fri, 13 May 2022 11:56:08 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com, muralidhara.mk@amd.com,
-        naveenkrishna.chatradhi@amd.com
-Subject: Re: [PATCH 04/18] EDAC/amd64: Remove PCI Function 0
-Message-ID: <Yn4rOD9CS9LFxzhx@zn.tnic>
-References: <20220509145534.44912-1-yazen.ghannam@amd.com>
- <20220509145534.44912-5-yazen.ghannam@amd.com>
- <YnuRUsAcnzT4Advm@zn.tnic>
- <Yn0a9T9xqAkWnPWt@yaz-fattaah>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0128362212;
+        Fri, 13 May 2022 09:58:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1B15C34100;
+        Fri, 13 May 2022 09:58:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652435902;
+        bh=geXCIWlkv+OlijzBTHXYxcV6pNiY0Up+Vp3bfhyaJJU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aH1Dfntm87x1wiZBLLaTYTEEDS0pFYEPM9XGeAJDbpIGPy93alwWKx0qA7fMShBJ7
+         L6pZ98Pa7wdLEUkiolkgot55ptGmQPqsrAT9VfNbJMTSqRaCJBqN/xRQCMiz/14KXY
+         t+MkFBI+A4ZWYENR+pG9DkF499tfT8YdlkUgN7OsjUnwU+iWfMi2E9ryi4/qg5mm2I
+         tqAe6oD5h3ko1mHVAlrs6oyaTBOW8N/Cq6fcvuCU0nqigE6YOuku9ZDtzjQxTJwU1Q
+         ReGP3jNzoYLV1m5S8WB1tbO+2zzAIx1whsfhojPU13Fc/75kJDGbqO5WFBxqO7rU3y
+         aOFeKr897J43A==
+Date:   Fri, 13 May 2022 11:58:17 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Miklos Szeredi <miklos@szeredi.hu>,
+        Amir Goldstein <amir73il@gmail.com>
+Cc:     Simon Ser <contact@emersion.fr>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
+Subject: Re: procfs: open("/proc/self/fd/...") allows bypassing O_RDONLY
+Message-ID: <20220513095817.622gcrgx3fffwk4h@wittgenstein>
+References: <lGo7a4qQABKb-u_xsz6p-QtLIy2bzciBLTUJ7-ksv7ppK3mRrJhXqFmCFU4AtQf6EyrZUrYuSLDMBHEUMe5st_iT9VcRuyYPMU_jVpSzoWg=@emersion.fr>
+ <03l0hfZIzD9KwSxSntGcmfFhvbIKiK45poGUhXtR7Qi0Av0-ZnqnSBPAP09GGpSrKGZWZNCTvme_Gpiuz0Bcg6ewDIXSH24SBx_tvfyZSWU=@emersion.fr>
+ <CAJfpegs4GVirNVtf4OqunzNwbXQywZVkxpGPtpN=ZonHU2SpiA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Yn0a9T9xqAkWnPWt@yaz-fattaah>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAJfpegs4GVirNVtf4OqunzNwbXQywZVkxpGPtpN=ZonHU2SpiA@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 02:34:29PM +0000, Yazen Ghannam wrote:
-> Also, there are five function pointers that are created in this patchset and
-> called from hw_info_get(). I think those pointers can be dropped and the
-> helper functions called from hw_info_get(). So I think it'd be good to make
-> hw_info_get() into a function pointer which gets set to a functoin that calls
-> the right collection of legacy, modern, and GPU helper functions. How does
-> that sound?
+On Thu, May 12, 2022 at 02:56:22PM +0200, Miklos Szeredi wrote:
+> On Thu, 12 May 2022 at 14:41, Simon Ser <contact@emersion.fr> wrote:
+> >
+> > On Thursday, May 12th, 2022 at 12:37, Simon Ser <contact@emersion.fr> wrote:
+> >
+> > > what would be a good way to share a FD to another
+> > > process without allowing it to write to the underlying file?
+> >
+> > (I'm reminded that memfd + seals exist for this purpose. Still, I'd be
+> > interested to know whether that O_RDONLY/O_RDWR behavior is intended,
+> > because it's pretty surprising. The motivation for using O_RDONLY over
+> > memfd seals is that it isn't Linux-specific.)
+> 
+> Yes, this is intended.   The /proc/$PID/fd/$FD file represents the
+> inode pointed to by $FD.   So the open flags for $FD are irrelevant
+> when operating on the proc fd file.
 
-Makes sense.
+Fwiw, the original openat2() patchset contained upgrade masks which we
+decided to split it out into a separate patchset.
 
-Thx.
+The idea is that struct open_how would be extended with an upgrade mask
+field which allows the opener to specify with which permissions a file
+descriptor is allowed to be re-opened. This has quite a lot of
+use-cases, especially in container runtimes. So one could open an fd and
+restrict it from being re-opened with O_WRONLY. For container runtimes
+this is a huge security win and for userspace in general it would
+provide a backwards compatible way of e.g., making O_PATH fds
+non-upgradable. The plan is to resend the extension at some point in the
+not too distant future.
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Christian

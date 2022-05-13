@@ -2,62 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 089A5526504
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:44:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6C95264FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237552AbiEMOo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:44:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49248 "EHLO
+        id S1381243AbiEMOoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382844AbiEMOnS (ORCPT
+        with ESMTP id S1382845AbiEMOnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 13 May 2022 10:43:18 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9470E1FA42;
-        Fri, 13 May 2022 07:41:49 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 17DB41F461AE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652452908;
-        bh=6Dco2Ss56mOS9SRrFtH4AnkhAjVH1fenM6f9Oc0sjC4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PHwvr64OiJ3wiXjognKoyniZXsfJS2BHOEgLZL81mpS7mTGLmwGwDDrcKBgg8GbG/
-         4qJ+ORQM1R9yn8rG+1Yiubm8Hks8W4EMZcg5PZpL+Us36bUd34Z5cVIfo+f25kLiht
-         7x08AlU5aT2SaTQwfUw4YtKN3TJJ3+eo7JX305Qf2Tu43TN2mkkQ4X4rRAhvcvdgQq
-         Pk7LKnf4O1OEa5wXnnY2zULxJlj21g5J6NJI9fl5oOcM1W14GdtTh8jnlSX0EK27b1
-         QMDw9uNxEV410GPnN0/JRFK0wx0JvD5rM4kg8izQ++IMGCgzIMwxnPSP3JhxYVSUgN
-         Ec2ir55GmrrcQ==
-Message-ID: <41cbfd34-e3e6-e041-2cb6-bbf28782a299@collabora.com>
-Date:   Fri, 13 May 2022 16:41:44 +0200
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9E72127A
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:42:34 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1npWUy-00006s-Jy; Fri, 13 May 2022 16:42:32 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 2CB777DB54;
+        Fri, 13 May 2022 14:42:31 +0000 (UTC)
+Date:   Fri, 13 May 2022 16:42:30 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Max Staudt <max@enpas.org>
+Subject: Re: [PATCH 0/2] can: drop tx skb if the device is in listen only mode
+Message-ID: <20220513144230.upuirv4ufebxvfbq@pengutronix.de>
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 1/2] Bluetooth: btmtksdio: fix the reset takes too long
-Content-Language: en-US
-To:     sean.wang@mediatek.com, marcel@holtmann.org,
-        johan.hedberg@gmail.com
-Cc:     Soul.Huang@mediatek.com, YN.Chen@mediatek.com,
-        Leon.Yen@mediatek.com, Eric-SY.Chang@mediatek.com,
-        Deren.Wu@mediatek.com, km.lin@mediatek.com,
-        robin.chiu@mediatek.com, Eddie.Chen@mediatek.com,
-        ch.yeh@mediatek.com, posh.sun@mediatek.com, ted.huang@mediatek.com,
-        Eric.Liang@mediatek.com, Stella.Chang@mediatek.com,
-        Tom.Chou@mediatek.com, steve.lee@mediatek.com, jsiuda@google.com,
-        frankgor@google.com, abhishekpandit@google.com,
-        michaelfsun@google.com, mcchou@chromium.org, shawnku@google.com,
-        linux-bluetooth@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Yake Yang <yake.yang@mediatek.com>
-References: <e26167a3fcefdeae1151162e8676c9a467a8100d.1652390894.git.objelf@gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <e26167a3fcefdeae1151162e8676c9a467a8100d.1652390894.git.objelf@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gqifvyadwdcbjat7"
+Content-Disposition: inline
+In-Reply-To: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,20 +53,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 12/05/22 23:38, sean.wang@mediatek.com ha scritto:
-> From: Sean Wang <sean.wang@mediatek.com>
-> 
-> Sending WMT command during the reset in progress is invalid and would get
-> no response from firmware until the reset is complete, so we ignore the WMT
-> command here to resolve the issue which causes the whole reset process
-> taking too long.
-> 
-> Fixes: 8fafe702253d ("Bluetooth: mt7921s: support bluetooth reset mechanism")
-> Co-developed-by: Yake Yang <yake.yang@mediatek.com>
-> Signed-off-by: Yake Yang <yake.yang@mediatek.com>
-> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
 
-It may be too late but, in any case, for the entire series:
+--gqifvyadwdcbjat7
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+On 13.05.2022 23:23:53, Vincent Mailhol wrote:
+> In listen only mode, tx CAN frames can still reach the driver if
+> injected via the packet socket. This series add a check toward
+> CAN_CTRLMODE_LISTENONLY in can_dropped_invalid_skb() to discard such
+> skb. The first patch does some preparation work and migrates
+> can_dropped_invalid_skb() from skb.h to dev.h. The second and last
+> patch is the actual change.
 
+Thanks for your quick patch!
+
+What about moving the function to a .c file? The
+can_dropped_invalid_skb() grew a lot over the years, since it was added
+to the header as a static inline function.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--gqifvyadwdcbjat7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJ+blQACgkQrX5LkNig
+012Bigf+OBMnCULTQxKU9B8Mkb6CCPhadQ7XNbJ+RbQVPcOSTdDHr1dK3PslcrGE
+dBtCKgNBXwKAPNyv6Xkv7WgcDcXXlHbik92UexT3q3dm8By1DtymBQ3SoK+jZ6Aa
+CANx8blpS7Pv+GFqS3gl4F/1s9/Uoq6k5oLEhp/ZCbfSuJD9VaQxgMzDFWWU0SRC
+eWoB790kCRAS7SqPUyfuPM1NCrvCSMKVoU0slhCiz2GS78sTWzxVJ4x05K5GqUTt
+yd0+zimmi/LFZ75ou2UqWtzbXtxav/35+N3lOotJMLCDkddyYHd15dOB0T2qULPk
+rCDvBHYOsHzQqXHssnoBmkFoYC55pQ==
+=PMY2
+-----END PGP SIGNATURE-----
+
+--gqifvyadwdcbjat7--

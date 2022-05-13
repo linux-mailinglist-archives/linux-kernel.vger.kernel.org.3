@@ -2,157 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00AC4526AAC
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 21:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A58E526AB3
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 21:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238880AbiEMToz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 15:44:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
+        id S1383910AbiEMTpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 15:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231138AbiEMTov (ORCPT
+        with ESMTP id S239033AbiEMTpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 15:44:51 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCE544A28
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 12:44:50 -0700 (PDT)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24DJgJkF022348;
-        Fri, 13 May 2022 19:44:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=O47frTHQfxW9j3bbLvoV3G6Z4Y1yD1/DbijZ8vEkL0c=;
- b=EzVEGH/58MP81kCs1KXmWDyAEGJyZjG0BbR/wdY4Yboz6QE5ly2C6mO+oJOasal15Thg
- fw9Mg7R+jGnkAgtcnmub1KCwDKDwXSSXUFQCSxZ+8alQugHOUNXgJGEieZbAWNUAhRM/
- Gktcw5g8Zz6FTsTKOz/13OyKxaChassxEqyxt3AXzUDulu8Fm4VjwOdRZiZ07fm1KIKO
- mMMdKFwIbqkYC0aBIIv282hsIC0cdnE4NRqDWePXwyw/3F6AASwbVQeyeqGrK+tDY1Up
- YH/v2HDGlHxYCWKwwOzKFRtyZ1+UEkgvuUEYa2C0aOJ8hys1UMCVQu0RX60LXaHos1qU cQ== 
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g1wqc013k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 May 2022 19:44:30 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24DJbtfq009516;
-        Fri, 13 May 2022 19:44:28 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma04wdc.us.ibm.com with ESMTP id 3fwgdach91-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 May 2022 19:44:28 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24DJiSC130999016
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 13 May 2022 19:44:28 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1F0C0BE053;
-        Fri, 13 May 2022 19:44:28 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B5DB2BE04F;
-        Fri, 13 May 2022 19:44:27 +0000 (GMT)
-Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.163.1.123])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 13 May 2022 19:44:27 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-fsi@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, alistair@popple.id.au,
-        joel@jms.id.au, jk@ozlabs.org, linux@roeck-us.net,
-        Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH v2] fsi: occ: Prevent use after free
-Date:   Fri, 13 May 2022 14:44:24 -0500
-Message-Id: <20220513194424.53468-1-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
+        Fri, 13 May 2022 15:45:21 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18095047D;
+        Fri, 13 May 2022 12:45:19 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24DJiwx4111958;
+        Fri, 13 May 2022 14:44:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1652471098;
+        bh=7zqVF9gee06v9UNFxBmER3A1z4bsxkTiqQMCrtf4vA8=;
+        h=From:To:CC:Subject:Date;
+        b=i7yZ4CQAG+1p12YSx86mkqzScBeve/ZNND5u8TjtA88D2jcies3Xw6cQ/974HlVaK
+         xp3ko11y482haz+ajfYJml80xxk28jOgRUBnws8IPIxGk3LLArpTdfRJDOQwYtJsum
+         VqIGtIKmo0ILWtRxEAO/UUhxPwgx3NEfFWVPH2Nw=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24DJiwiG037671
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 13 May 2022 14:44:58 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 13
+ May 2022 14:44:58 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 13 May 2022 14:44:58 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24DJiws4019326;
+        Fri, 13 May 2022 14:44:58 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Andrew Davis <afd@ti.com>, Nishanth Menon <nm@ti.com>
+Subject: [PATCH V3 0/2] rtc: Introduce rtc-ti-k3
+Date:   Fri, 13 May 2022 14:44:55 -0500
+Message-ID: <20220513194457.25942-1-nm@ti.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: XRHAc22MB7Sv4PkP3GS4e-8Iu_ef3jlw
-X-Proofpoint-GUID: XRHAc22MB7Sv4PkP3GS4e-8Iu_ef3jlw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-13_11,2022-05-13_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 spamscore=0 clxscore=1015 phishscore=0 lowpriorityscore=0
- mlxscore=0 bulkscore=0 malwarescore=0 impostorscore=0 mlxlogscore=945
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205130080
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use get_device and put_device in the open and close functions to
-make sure the device doesn't get freed while a file descriptor is
-open.
-Also, lock around the freeing of the device buffer and check the
-buffer before using it in the submit function.
+Hi Folks,
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
-Changes since v1:
- - Add lock around freeing/nulling the buffer in occ_remove
- - Don't bother checking the buffer in open or in write, only in submit
+Hopefully third time is a charm ;).
 
- drivers/fsi/fsi-occ.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+This series adds support for TI K3 RTC as instantiated on TI's AM625
+SoC.
 
-diff --git a/drivers/fsi/fsi-occ.c b/drivers/fsi/fsi-occ.c
-index c9cc75fbdfb9..28c176d038a2 100644
---- a/drivers/fsi/fsi-occ.c
-+++ b/drivers/fsi/fsi-occ.c
-@@ -94,6 +94,7 @@ static int occ_open(struct inode *inode, struct file *file)
- 	client->occ = occ;
- 	mutex_init(&client->lock);
- 	file->private_data = client;
-+	get_device(occ->dev);
- 
- 	/* We allocate a 1-page buffer, make sure it all fits */
- 	BUILD_BUG_ON((OCC_CMD_DATA_BYTES + 3) > PAGE_SIZE);
-@@ -197,6 +198,7 @@ static int occ_release(struct inode *inode, struct file *file)
- {
- 	struct occ_client *client = file->private_data;
- 
-+	put_device(client->occ->dev);
- 	free_page((unsigned long)client->buffer);
- 	kfree(client);
- 
-@@ -493,12 +495,19 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
- 	for (i = 1; i < req_len - 2; ++i)
- 		checksum += byte_request[i];
- 
--	mutex_lock(&occ->occ_lock);
-+	rc = mutex_lock_interruptible(&occ->occ_lock);
-+	if (rc)
-+		return rc;
- 
- 	occ->client_buffer = response;
- 	occ->client_buffer_size = user_resp_len;
- 	occ->client_response_size = 0;
- 
-+	if (!occ->buffer) {
-+		rc = -ENOENT;
-+		goto done;
-+	}
-+
- 	/*
- 	 * Get a sequence number and update the counter. Avoid a sequence
- 	 * number of 0 which would pass the response check below even if the
-@@ -671,10 +680,13 @@ static int occ_remove(struct platform_device *pdev)
- {
- 	struct occ *occ = platform_get_drvdata(pdev);
- 
--	kvfree(occ->buffer);
--
- 	misc_deregister(&occ->mdev);
- 
-+	mutex_lock(&occ->occ_lock);
-+	kvfree(occ->buffer);
-+	occ->buffer = NULL;
-+	mutex_unlock(&occ->occ_lock);
-+
- 	device_for_each_child(&pdev->dev, NULL, occ_unregister_child);
- 
- 	ida_simple_remove(&occ_ida, occ->idx);
+Documentation in the current early release version of Technical
+Reference Manual is incomplete at the moment, but due to be updated
+later this year.
+https://www.ti.com/lit/pdf/spruiv7
+
+Testing log can be found here (next-20220509 + additional node for dts):
+https://gist.github.com/nmenon/2139c57212605bb38a4624ad0523416f
+
+Changes since V2:
+* bindings updated for review comments
+* Driver updated with fixes for issues caught during system level tests in
+  5.10 backport testing.
+* Picked up Andrew's Acked-by
+
+V2: https://lore.kernel.org/all/20220511002600.27964-1-nm@ti.com/
+V1: https://lore.kernel.org/all/20220412073138.25027-1-nm@ti.com/
+
+Nishanth Menon (2):
+  dt-bindings: rtc: Add TI K3 RTC description
+  rtc: Introduce ti-k3-rtc
+
+ .../devicetree/bindings/rtc/ti,k3-rtc.yaml    |  62 ++
+ drivers/rtc/Kconfig                           |  11 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-ti-k3.c                       | 695 ++++++++++++++++++
+ 4 files changed, 769 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/ti,k3-rtc.yaml
+ create mode 100644 drivers/rtc/rtc-ti-k3.c
+
 -- 
-2.27.0
+2.31.1
 

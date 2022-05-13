@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 364F15265EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 194CA5265EE
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381900AbiEMPVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 11:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41962 "EHLO
+        id S1381918AbiEMPVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 11:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381907AbiEMPVB (ORCPT
+        with ESMTP id S1381926AbiEMPVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 11:21:01 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5D767D34
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:20:59 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id z19so10353315edx.9
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:20:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KDglamaHwWNFsJjMH8n4M899cYov2fck92ehvXsUuIU=;
-        b=bg30amuYU6wYV2P5qNbOJwBy+IHyuJBCdFy8NHgLEKqZRlbttCeGVB6vZTCxzmmzks
-         TI65tZFse17Bg3FTztLPHu1C8djT/1uvA8rpdFOEs5aIVqnyD3DmRbMX/7rUU3ibecKW
-         Ihf3tG7TXQU2aUXnBa5zDS+4psPozMmTmWNO8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KDglamaHwWNFsJjMH8n4M899cYov2fck92ehvXsUuIU=;
-        b=mrsQjooWnax2IJSU40U1OitlW8JFT/JIVFL7flESo6erjSb+jQYRfx1FHrrCtiao2I
-         8MG/iUWa/jxwo8Medp+IW3+Uc02kK2mr5LdGmuO0OCiVb3I5rGdALk7LuA95bggfLVuz
-         Rx0OTG7Q6/pcuaHi06hWJ/I6WxVyb4blGrt31F/q0XGf0qe5opN0SJBuxuOwvXVtsMER
-         Wlki/AuYdI0pZrHiKemxPtzB0HkoMfHtDJiRG2n7rexwDFrUo5xRae7OAAsNrXKLgABq
-         KtZphKpDc2OKOSmHgp2F3RZETYnwPwsksrc2LsDfyjI6TLmqSYfd/ksHlhslkn2p3w0v
-         E/Jg==
-X-Gm-Message-State: AOAM530rrX08Rn6IaHJqarlAQLwISNqsP2f1kzBjzwUPZ7id895Tb/L1
-        w4TT2EuT879Yxp5X4FYqo0E1UQ==
-X-Google-Smtp-Source: ABdhPJz5SIuwEhnGjOo1CpkBxiFz+zWBgcGI917RzqTFj2OLAcaJYHvW9ENjZfahkvxrAN9gCxWmGQ==
-X-Received: by 2002:a05:6402:5190:b0:427:df4a:19d9 with SMTP id q16-20020a056402519000b00427df4a19d9mr41598107edd.384.1652455258470;
-        Fri, 13 May 2022 08:20:58 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-59-245.cust.vodafonedsl.it. [188.217.59.245])
-        by smtp.gmail.com with ESMTPSA id el10-20020a170907284a00b006f3ef214e2csm873386ejc.146.2022.05.13.08.20.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 08:20:58 -0700 (PDT)
-Date:   Fri, 13 May 2022 17:20:55 +0200
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-amarula@amarulasolutions.com, linuxfancy@googlegroups.com,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ASoC: max98088: add support for reg_4a_cfg_bypass reg
-Message-ID: <20220513152055.GI649073@tom-ThinkPad-T14s-Gen-2i>
-References: <20220512074359.446999-1-tommaso.merciai@amarulasolutions.com>
- <YnzdcubW7m+CwnvN@sirena.org.uk>
- <20220512104642.GD649073@tom-ThinkPad-T14s-Gen-2i>
- <YnznExLDOvRpXNVh@sirena.org.uk>
- <20220512110959.GF649073@tom-ThinkPad-T14s-Gen-2i>
- <YnztJxdSFau6SYC5@sirena.org.uk>
+        Fri, 13 May 2022 11:21:07 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7786674D0;
+        Fri, 13 May 2022 08:21:03 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A197D21AAF;
+        Fri, 13 May 2022 15:21:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1652455262; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UV7Y5bgnV0GZ8RZ2emGi8DC2EoYJzONKlh0hnGHwbYI=;
+        b=NctPhhbaRk4tci4H5TFnddICKka+XEN5PYAUWeoQ+FC14pmGBCyL+26nE3lNeDeC+9FcxU
+        9GJmWTpNkfRGNU7P3uFYMTo1Swo3w7W4qAvZWskiC1eFNSNFclKJ+oebMHPtpIJwieMlK5
+        gOYHgn5aGCpZO9o9zuwL01XEqU18O/4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1652455262;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UV7Y5bgnV0GZ8RZ2emGi8DC2EoYJzONKlh0hnGHwbYI=;
+        b=L1aCbi+lyMhWPreNqXVEA0FYIpjkLp5RxH5dMnZ6/z5grC7/vJL35oS7hEfrRcDI64DitU
+        uGJ/fHtlHtNbmWBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6512113446;
+        Fri, 13 May 2022 15:21:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id jsepCl13fmLdIgAAMHmgww
+        (envelope-from <colyli@suse.de>); Fri, 13 May 2022 15:21:01 +0000
+Message-ID: <f80cefa2-e238-9939-5f48-9d84bcc248f3@suse.de>
+Date:   Fri, 13 May 2022 23:20:57 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnztJxdSFau6SYC5@sirena.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [PATCH] bcache: fix wrong BITMASK offset value for
+ BDEV_CACHE_MODE
+Content-Language: en-US
+To:     Lin Feng <linf@wangsu.com>
+Cc:     axboe@kernel.dk, linux-kernel@vger.kernel.org,
+        linux-bcache@vger.kernel.org
+References: <20210720103246.112027-1-linf@wangsu.com>
+From:   Coly Li <colyli@suse.de>
+In-Reply-To: <20210720103246.112027-1-linf@wangsu.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,84 +75,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 12:19:03PM +0100, Mark Brown wrote:
-> On Thu, May 12, 2022 at 01:09:59PM +0200, Tommaso Merciai wrote:
-> > On Thu, May 12, 2022 at 11:53:07AM +0100, Mark Brown wrote:
-> > > On Thu, May 12, 2022 at 12:46:42PM +0200, Tommaso Merciai wrote:
-> > > > On Thu, May 12, 2022 at 11:12:02AM +0100, Mark Brown wrote:
-> 
-> > > > > These look like they should be DAPM controls since they're controlling
-> > > > > audio routing but they're being added as regular controls.
-> 
-> > > > Sorry again. You suggest to create a new structure for these entries,
-> > > > for example:
-> 
-> > > If that's how they fit into the routing for the device, yes - you'd need
-> > > to define the bypass mixer as well and set up appropraite routes.
-> 
-> > I added this reg as regular controls because this reg is pretty generic
-> > as you can see this controll bypass of some output, not all. 
-> > What do you think about?
-> 
-> That sounds exactly like a DAPM control, please make them DAPM controls.
+On 7/20/21 6:32 PM, Lin Feng wrote:
+> Original codes:
+> BITMASK(CACHE_SYNC,			struct cache_sb, flags, 0, 1);
+> BITMASK(CACHE_DISCARD,			struct cache_sb, flags, 1, 1);
+> BITMASK(CACHE_REPLACEMENT,		struct cache_sb, flags, 2, 3);
+> ...
+> BITMASK(BDEV_CACHE_MODE,		struct cache_sb, flags, 0, 4);
+>
+> Should BDEV_CACHE_MODE bits start from bit-nr 5(2+3) else it overlaps
+> with previous defined bit chunks, since we have 4 types of cache modes,
+> BDEV_CACHE_MODE will overwrite CACHE_SYNC and CACHE_DISCARD bits.
 
-Hi Mark,
-Sorry again, but I'm quite new on alsa subsystem. I need an help on figuring out
-on how to implements your solution. From what you suggest I got that I need to create
-a bypass mixer for every switch (4 -> SPK, REC, MIC2, INA):
+The overlap won't happen, previous lines are for cache device, and what 
+you modified is for backing device.
 
-/* Out Mixer SPK */
-static const struct snd_kcontrol_new max98088_output_bypass_spk_mixer_controls[] = {
-       SOC_DAPM_SINGLE("SPK Bypass Switch", M98088_REG_4A_CFG_BYPASS, 0, 1, 0),
-};
-
-/* Out Mixer REC */
-static const struct snd_kcontrol_new max98088_output_bypass_rec_mixer_controls[] = {
-       SOC_DAPM_SINGLE("REC Bypass Switch", M98088_REG_4A_CFG_BYPASS, 1, 1, 0),
-};
-
-/* Out Mixer MIC */
-static const struct snd_kcontrol_new max98088_output_bypass_mic_mixer_controls[] = {
-       SOC_DAPM_SINGLE("MIC2 Bypass Switch", M98088_REG_4A_CFG_BYPASS, 4, 1, 0),
-};
-
-/* Out Mixer INA */
-static const struct snd_kcontrol_new max98088_output_bypass_ina_mixer_controls[] = {
-       SOC_DAPM_SINGLE("INA Bypass Switch", M98088_REG_4A_CFG_BYPASS, 7, 1, 0),
-};
-
-After that, I need to route the new control mixers on the switch:
-
- {"Out Mixer SPK", "SPK Bypass Switch", "RECN"},
- {"Out Mixer REC", "REC Bypass Switch", "RECP"},
- {"Out Mixer MIC", "MIC2 Bypass Switch", "MIC1"},
- {"Out Mixer INA", "INA Bypass Switch", "INA"},
-
-Then route the bypass switch to the new output:
-
- {"SPKL", NULL, "SPK Bypass Switch"},
- {"RECN", NULL, "REC Bypass Switch"},
- {"MIC2", NULL, "MIC2 Bypass Switch"},
- {"MIC1", NULL, "INA Bypass Switch"},
-
-I'm in the right way? What do you think about?
-Can you point me a similar bypass switch into the kernel to take as reference?
-Thanks in advance
-
-Regards,
-Tommmaso
+And your patch changes the on-disk format, which is unacceptable anyway.
 
 
+Coly Li
+
+>
+> This bug stays there since first upstream version of bcache, don't know
+> why it lives so long, or am i missing something, please point me out
+> if I'm wrong, thanks!
+>
+> Signed-off-by: Lin Feng <linf@wangsu.com>
+> ---
+>   include/uapi/linux/bcache.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/uapi/linux/bcache.h b/include/uapi/linux/bcache.h
+> index cf7399f03b71..dccd89756451 100644
+> --- a/include/uapi/linux/bcache.h
+> +++ b/include/uapi/linux/bcache.h
+> @@ -288,7 +288,7 @@ BITMASK(CACHE_REPLACEMENT,		struct cache_sb, flags, 2, 3);
+>   #define CACHE_REPLACEMENT_FIFO		1U
+>   #define CACHE_REPLACEMENT_RANDOM	2U
+>   
+> -BITMASK(BDEV_CACHE_MODE,		struct cache_sb, flags, 0, 4);
+> +BITMASK(BDEV_CACHE_MODE,		struct cache_sb, flags, 5, 4);
+>   #define CACHE_MODE_WRITETHROUGH		0U
+>   #define CACHE_MODE_WRITEBACK		1U
+>   #define CACHE_MODE_WRITEAROUND		2U
 
 
--- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
-
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com

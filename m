@@ -2,152 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A80525A75
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 06:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF04525A7A
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 06:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376920AbiEMD7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 23:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51440 "EHLO
+        id S1376813AbiEMECx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 00:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353234AbiEMD7g (ORCPT
+        with ESMTP id S229614AbiEMECu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 23:59:36 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2057.outbound.protection.outlook.com [40.107.237.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2294012FC37
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 20:59:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LIjsiR/MrdPeyWg6VkRaQT8ruEt3C6RGxHccxNRSuL8dZto9ATyIUcmp8G85NBod/DaWHNe9f75A03unHGlef0B6kzifkcZJlmyWxJc7L7NiXZeMXpXifacNSmm+SAluNY+dQFpHbsBNY/rg42X1gQI7VuQP3ftzW27WqpML1XsQ0cBT0T4CBzKan54cMJpogmC6Kbif5NvlWUXptNzWmNhh4SUO/FIGCdgdCACrUPhQbZY7etOvPCmVCbu25UXWfb3wGT9Dhn2jyKRlg/yRZh7LBnJQt/69HMhWgvC2RHBhZJLexm13oH8WtGL36ygs3FXPWI4HstxhznnsKC+cVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3TzbrdRij8brRYiVqlrFh+4FgBMF+cKMYJexVYxCrUQ=;
- b=I4ktWSemdAgBNiGFkn+KrzJ5biFpM7/hxThhBbBr/8ckCvG/OoRbA0Ds3ipkEr3i8WMvwK9hb8Z2wreY7B3ZjzhpzKF/FGg5crx070CLbuLc+r6oDD8S23Ct85NzBEsmGeyGoU6dulUtIWKeyS3l9iVmkCPuIefo+K6IfFgZp+b/AMTM/mIIAuiYYZPIToWwt/ITKk4YWf+N+sxRMgmhlkx+pKfw5EY/ndcMMkWTT/NsbI3eF6sOZ7KFJg9IX7aW9Kfag9FN9dtI1EvTS2Y8/JNDpDgSVPOpR3s15uHEKqabd/YAL/R3JmmONAvHEc9jeCXchH3r4nkqKM8vhWYFJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.238) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3TzbrdRij8brRYiVqlrFh+4FgBMF+cKMYJexVYxCrUQ=;
- b=QiJKPw6aNO9OU+IPi0QRaRM6kOefA2nJYLBXaO9lIQrN59chFGpdHKwQcZ3wUCHvfxgSx65sqG50n6TrIzWgWiqJli/JHVOiLlzeAPkYjBBOj0neIeH46KaQuxPr3ls2xZakuYFPYnSoyN4sAJtzGBbLfLoF4LhfVlJU6IyFt/dWgiYB+HNRypFDt1b5lq/YcI4FKjRJD7k6Bgpp4wLe7nivf6DEzA/pXWLiWMefsW8XIZ3y9oXpExlpBPOGauT3G+lDb3ea/OgQkiyBnnEXRbcl5l/5mBblFqJUVuUP8nhxjGqJdZaeuwFiBh2eY9ezPvdAbjNixNSu2zfcusK1oQ==
-Received: from MW2PR16CA0071.namprd16.prod.outlook.com (2603:10b6:907:1::48)
- by BY5PR12MB4033.namprd12.prod.outlook.com (2603:10b6:a03:213::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13; Fri, 13 May
- 2022 03:59:32 +0000
-Received: from CO1NAM11FT023.eop-nam11.prod.protection.outlook.com
- (2603:10b6:907:1:cafe::9e) by MW2PR16CA0071.outlook.office365.com
- (2603:10b6:907:1::48) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14 via Frontend
- Transport; Fri, 13 May 2022 03:59:32 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.238; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.238) by
- CO1NAM11FT023.mail.protection.outlook.com (10.13.175.35) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5250.13 via Frontend Transport; Fri, 13 May 2022 03:59:31 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by DRHQMAIL105.nvidia.com
- (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Fri, 13 May
- 2022 03:59:31 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 12 May
- 2022 20:59:30 -0700
-Received: from Asurada-Nvidia (10.127.8.10) by mail.nvidia.com (10.129.68.6)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22 via Frontend
- Transport; Thu, 12 May 2022 20:59:29 -0700
-Date:   Thu, 12 May 2022 20:59:28 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-CC:     <dwmw2@infradead.org>, <joro@8bytes.org>, <will@kernel.org>,
-        <jgg@nvidia.com>, <iommu@lists.linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] iommu/vt-d: Try info->iommu in device_to_iommu()
-Message-ID: <Yn3XoLa0h/IbQMMM@Asurada-Nvidia>
-References: <20220513003233.4442-1-nicolinc@nvidia.com>
- <6da2adf4-6717-b562-5ee3-7e28447aa65b@linux.intel.com>
+        Fri, 13 May 2022 00:02:50 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFB2663FD;
+        Thu, 12 May 2022 21:02:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652414569; x=1683950569;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=ihC/kGV4HKU6REL3VL7GtszKpyGJqOqsYmkrePpw2EE=;
+  b=dvLkUvdEisgiwrQGbLq1YwMTqoow2AtDOe5ay320beQTs0bRGI26XhkJ
+   9MOQw7YtYDX7y1dGhIkRlJ1nqmo4C/pQ/84fpI7Tj++TKip386hvnMntA
+   Ttc+6aiRzu/WvCuXtwzKAxTCfeXpB4LxcLxCFzTo7E5DIoXPHWvBCcGgI
+   TYEa7UuLNdZHrdpKFCCQcuFLEwTbG/pw9Hx5Yev8V0e1X8Rb7iOvj3pXN
+   XZuYh4rT9bjppQWMcodaEh+HeEu/7sggyhOsUywImCuDP84P6rnhNWuBZ
+   jZe2chEqGBO6nZaQ1guF9K3AY/WB/MVDUtjY2MhJBL5EW5nNyYrRfnDn0
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="250739634"
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="250739634"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 21:02:48 -0700
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="567007936"
+Received: from yangweij-mobl.ccr.corp.intel.com (HELO [10.249.168.124]) ([10.249.168.124])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 21:02:38 -0700
+Message-ID: <5f264701-b6d5-8660-55ae-a5039d6a9d3a@intel.com>
+Date:   Fri, 13 May 2022 12:02:24 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <6da2adf4-6717-b562-5ee3-7e28447aa65b@linux.intel.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d155da44-7aeb-45ad-ce7d-08da3494fc51
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4033:EE_
-X-Microsoft-Antispam-PRVS: <BY5PR12MB40338F4C6169DF8E62564CB3ABCA9@BY5PR12MB4033.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8sfNpbBUqNEllMjNCxnMxgVGsnzaKY0ZV8YAyDpMOyKGSadCJWgb+F1ELb3sNfw3W5KjIIe6YMe9x0ecTYbr2apZM7IaDBFYY76j6X32JoLjwWwFOgXdDDyZFnauSvNDW3uPMpuVc2PF8icMUGgLR/RRHnGn6hw6nBiq6swKuOmBw43e4Fsyp8YGHI1aAmmPtV4kSb65O+aLerTJrMk5YpBc33tXY/UiA0M0oRqIiftdMOFxSNARehMBOgRCMGSGs6ZX0eQy/JAiFKn1SmjHbrcNonfd22PpdFbfGdBNpDPhFs8KLMp6QWzRus8PCHrAq6BzXAYPcW2nf41pfBIDYY5vP+48PhIaJf7NkZkTFn3fD9/w9TiA4lCUWtCPWAukRVSag38i1bqgereXmfL1GNAqwj+ZOXslOrPF7FMLceSAW2/SNiXyOKHRp5T2AHQTeK+wwkzZJ9a+TnC06BL1RPSUJE51XHS/YuvCu7wizSoDbfBDofUTUR+jg0MmfxEP7UlJsgrkdCVseSM2ba3hDlIoHmD11/32Qz05efx5OluQIkJ1grhAMFBujrGKVyqb1u+H8oS9MVj9pqxjOkBejqygP2bigVchry9M0F+bQbt277lxTvsS07dHhGLytzc0ZVq9IUMavX6hRP8gVV5NYJVh+6seH8j0cZITDa1+wto3Xanb5TK/xQRGZD9gkqjxxs3YBlLc3oDQKGbQ+3wncw==
-X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(186003)(5660300002)(6916009)(26005)(86362001)(81166007)(4326008)(82310400005)(70206006)(70586007)(53546011)(356005)(316002)(9686003)(47076005)(336012)(426003)(54906003)(83380400001)(55016003)(33716001)(8936002)(8676002)(508600001)(40460700003)(2906002)(36860700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 May 2022 03:59:31.8120
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d155da44-7aeb-45ad-ce7d-08da3494fc51
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT023.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4033
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v11 14/16] KVM: x86/vmx: Flip Arch LBREn bit on guest
+ state change
+Content-Language: en-US
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "kan.liang@linux.intel.com" <kan.liang@linux.intel.com>,
+        "like.xu.linux@gmail.com" <like.xu.linux@gmail.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "Wang, Wei W" <wei.w.wang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220506033305.5135-1-weijiang.yang@intel.com>
+ <20220506033305.5135-15-weijiang.yang@intel.com>
+ <9f19a5eb-3eb0-58a2-e4ee-612f3298ba82@redhat.com>
+ <9e2b5e9f-25a2-b724-c6d7-282dc987aa99@intel.com>
+ <8a15c4b4-cabe-7bc3-bd98-bd669d586616@redhat.com>
+From:   "Yang, Weijiang" <weijiang.yang@intel.com>
+In-Reply-To: <8a15c4b4-cabe-7bc3-bd98-bd669d586616@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 11:32:11AM +0800, Baolu Lu wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> On 2022/5/13 08:32, Nicolin Chen wrote:
-> > Local boot test and VFIO sanity test show that info->iommu can be
-> > used in device_to_iommu() as a fast path. So this patch adds it.
-> > 
-> > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> > ---
-> >   drivers/iommu/intel/iommu.c | 5 +++++
-> >   1 file changed, 5 insertions(+)
-> > 
-> > diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> > index 2990f80c5e08..412fca5ab9cd 100644
-> > --- a/drivers/iommu/intel/iommu.c
-> > +++ b/drivers/iommu/intel/iommu.c
-> > @@ -777,6 +777,7 @@ static bool iommu_is_dummy(struct intel_iommu *iommu, struct device *dev)
-> >   struct intel_iommu *device_to_iommu(struct device *dev, u8 *bus, u8 *devfn)
-> >   {
-> >       struct dmar_drhd_unit *drhd = NULL;
-> > +     struct device_domain_info *info;
-> >       struct pci_dev *pdev = NULL;
-> >       struct intel_iommu *iommu;
-> >       struct device *tmp;
-> > @@ -786,6 +787,10 @@ struct intel_iommu *device_to_iommu(struct device *dev, u8 *bus, u8 *devfn)
-> >       if (!dev)
-> >               return NULL;
-> > 
-> > +     info = dev_iommu_priv_get(dev);
-> > +     if (info)
-> > +             return info->iommu;
-> 
-> device_to_iommu() also returns device source id (@bus, @devfn).
-> 
-> Perhaps, we can make device_to_iommu() only for probe_device() where the
-> per-device info data is not initialized yet. After probe_device(), iommu
-> and sid are retrieved through other helpers by looking up the device
-> info directly?
 
-That should work I think. I was just not sure when the priv
-could be unset. But it seems that you have cleaned up those
-places other than probe/release_device() in recent version :)
+On 5/12/2022 9:18 PM, Paolo Bonzini wrote:
+> On 5/11/22 09:43, Yang, Weijiang wrote:
+>>> Instead of using flip_arch_lbr_ctl, SMM should save the value of the MSR
+>>> in kvm_x86_ops->enter_smm, and restore it in kvm_x86_ops->leave_smm
+>>> (feel free to do it only if guest_cpuid_has(vcpu, X86_FEATURE_LM), i.e.
+>>> the 32-bit case can be ignored).
+>> In the case of migration in SMM, I assume kvm_x86_ops->enter_smm()
+>> called in source side
+>>
+>> and kvm_x86_ops->leave_smm() is called at destination, then should the
+>> saved LBREn be transferred
+>>
+>> to destination too? The destination can rely on the bit to defer setting
+>> LBREn bit in
+> Hi, it's transferred automatically if the MSR is saved in the SMM save
+> state area.  Both enter_smm and leave_smm can access the save state area.
+>
+> The enter_smm callback is called after saving "normal" state, and it has
+> to save the state + clear the bit; likewise, the leave_smm callback is
+> called before saving "normal" state and will restore the old value of
+> the MSR.
 
-Nic
+Hi, I  modified this patch to consolidate your suggestion above, see 
+below patch.
+
+I added more things to ease migration handling in SMM because: 1) qemu 
+checks
+
+LBREn before transfer Arch LBR MSRs. 2)Perf event is created when LBREn 
+is being
+
+set.  Two things are not certain: 1) IA32_LBR_CTL doesn't have 
+corresponding slot in
+
+SMRAM,not sure if we need to rely on it to transfer the MSR. 2) I chose 
+0x7f10 as
+
+the offset(CET takes 0x7f08) for storage, need you double check if it's 
+free or used.
+
+Thanks a lot!
+
+====================================================================
+
+ From ceba1527fd87cdc789b38fce454058fca6582b0a Mon Sep 17 00:00:00 2001
+From: Yang Weijiang <weijiang.yang@intel.com>
+Date: Thu, 5 Aug 2021 20:48:39 +0800
+Subject: [PATCH] KVM: x86/vmx: Flip Arch LBREn bit on guest state change
+
+Per spec:"IA32_LBR_CTL.LBREn is saved and cleared on #SMI, and restored
+on RSM. On a warm reset, all LBR MSRs, including IA32_LBR_DEPTH, have their
+values preserved. However, IA32_LBR_CTL.LBREn is cleared to 0, disabling
+LBRs." Given migration in SMM, use a reserved bit(63) of the MSR to mirror
+LBREn bit, it facilitates Arch LBR specific handling during live migration
+because user space will check LBREn to decide whether it's necessary to
+migrate the Arch LBR related MSRs. When the mirrored bit and LBREn bit are
+both set, it means Arch LBR was active in SMM, so only create perf event
+and defer the LBREn bit restoring to leave_smm callback.
+Also clear LBREn at warm reset.
+
+Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
+---
+  arch/x86/kvm/vmx/pmu_intel.c | 16 +++++++++++++---
+  arch/x86/kvm/vmx/vmx.c       | 29 +++++++++++++++++++++++++++++
+  arch/x86/kvm/vmx/vmx.h       |  1 +
+  3 files changed, 43 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+index 038fdb788ccd..652601ad99ea 100644
+--- a/arch/x86/kvm/vmx/pmu_intel.c
++++ b/arch/x86/kvm/vmx/pmu_intel.c
+@@ -373,6 +373,8 @@ static bool arch_lbr_depth_is_valid(struct kvm_vcpu 
+*vcpu, u64 depth)
+      return (depth == pmu->kvm_arch_lbr_depth);
+  }
+
++#define ARCH_LBR_IN_SMM    BIT(63)
++
+  static bool arch_lbr_ctl_is_valid(struct kvm_vcpu *vcpu, u64 ctl)
+  {
+      struct kvm_cpuid_entry2 *entry;
+@@ -380,7 +382,7 @@ static bool arch_lbr_ctl_is_valid(struct kvm_vcpu 
+*vcpu, u64 ctl)
+      if (!kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
+          return false;
+
+-    if (ctl & ~KVM_ARCH_LBR_CTL_MASK)
++    if (ctl & ~(KVM_ARCH_LBR_CTL_MASK | ARCH_LBR_IN_SMM))
+          goto warn;
+
+      entry = kvm_find_cpuid_entry(vcpu, 0x1c, 0);
+@@ -425,6 +427,10 @@ static int intel_pmu_get_msr(struct kvm_vcpu *vcpu, 
+struct msr_data *msr_info)
+          return 0;
+      case MSR_ARCH_LBR_CTL:
+          msr_info->data = vmcs_read64(GUEST_IA32_LBR_CTL);
++        if (to_vmx(vcpu)->lbr_in_smm) {
++            msr_info->data |= ARCH_LBR_CTL_LBREN;
++            msr_info->data |= ARCH_LBR_IN_SMM;
++        }
+          return 0;
+      default:
+          if ((pmc = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0)) ||
+@@ -501,11 +507,15 @@ static int intel_pmu_set_msr(struct kvm_vcpu 
+*vcpu, struct msr_data *msr_info)
+          if (!arch_lbr_ctl_is_valid(vcpu, data))
+              break;
+
+-        vmcs_write64(GUEST_IA32_LBR_CTL, data);
+-
+          if (intel_pmu_lbr_is_enabled(vcpu) && !lbr_desc->event &&
+              (data & ARCH_LBR_CTL_LBREN))
+              intel_pmu_create_guest_lbr_event(vcpu);
++
++        if (data & ARCH_LBR_IN_SMM) {
++            data &= ~ARCH_LBR_CTL_LBREN;
++            data &= ~ARCH_LBR_IN_SMM;
++        }
++        vmcs_write64(GUEST_IA32_LBR_CTL, data);
+          return 0;
+      default:
+          if ((pmc = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0)) ||
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 6d6ee9cf82f5..f754b9400151 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -4543,6 +4543,7 @@ static void vmx_vcpu_reset(struct kvm_vcpu *vcpu, 
+bool init_event)
+
+      vmx->rmode.vm86_active = 0;
+      vmx->spec_ctrl = 0;
++    vmx->lbr_in_smm = false;
+
+      vmx->msr_ia32_umwait_control = 0;
+
+@@ -4593,6 +4594,8 @@ static void vmx_vcpu_reset(struct kvm_vcpu *vcpu, 
+bool init_event)
+      if (!init_event) {
+          if (static_cpu_has(X86_FEATURE_ARCH_LBR))
+              vmcs_write64(GUEST_IA32_LBR_CTL, 0);
++    } else {
++        flip_arch_lbr_ctl(vcpu, false);
+      }
+  }
+
+@@ -7695,6 +7698,8 @@ static int vmx_smi_allowed(struct kvm_vcpu *vcpu, 
+bool for_injection)
+
+  static int vmx_enter_smm(struct kvm_vcpu *vcpu, char *smstate)
+  {
++    struct lbr_desc *lbr_desc = vcpu_to_lbr_desc(vcpu);
++    struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+      struct vcpu_vmx *vmx = to_vmx(vcpu);
+
+      vmx->nested.smm.guest_mode = is_guest_mode(vcpu);
+@@ -7704,12 +7709,26 @@ static int vmx_enter_smm(struct kvm_vcpu *vcpu, 
+char *smstate)
+      vmx->nested.smm.vmxon = vmx->nested.vmxon;
+      vmx->nested.vmxon = false;
+      vmx_clear_hlt(vcpu);
++
++    if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR) &&
++        test_bit(INTEL_PMC_IDX_FIXED_VLBR, pmu->pmc_in_use) &&
++        lbr_desc->event && guest_cpuid_has(vcpu, X86_FEATURE_LM)) {
++        u64 ctl = vmcs_read64(GUEST_IA32_LBR_CTL);
++
++        put_smstate(u64, smstate, 0x7f10, ctl);
++        vmcs_write64(GUEST_IA32_LBR_CTL, ctl & ~ARCH_LBR_CTL_LBREN);
++        vmx->lbr_in_smm = true;
++    }
++
+      return 0;
+  }
+
+  static int vmx_leave_smm(struct kvm_vcpu *vcpu, const char *smstate)
+  {
++    struct lbr_desc *lbr_desc = vcpu_to_lbr_desc(vcpu);
++    struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+      struct vcpu_vmx *vmx = to_vmx(vcpu);
++
+      int ret;
+
+      if (vmx->nested.smm.vmxon) {
+@@ -7725,6 +7744,16 @@ static int vmx_leave_smm(struct kvm_vcpu *vcpu, 
+const char *smstate)
+          vmx->nested.nested_run_pending = 1;
+          vmx->nested.smm.guest_mode = false;
+      }
++
++    if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR) &&
++        test_bit(INTEL_PMC_IDX_FIXED_VLBR, pmu->pmc_in_use) &&
++        lbr_desc->event && guest_cpuid_has(vcpu, X86_FEATURE_LM)) {
++        u64 ctl = GET_SMSTATE(u64, smstate, 0x7f10);
++
++        vmcs_write64(GUEST_IA32_LBR_CTL, ctl | ARCH_LBR_CTL_LBREN);
++        vmx->lbr_in_smm = false;
++    }
++
+      return 0;
+  }
+
+diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
+index b98c7e96697a..a227fe8bf288 100644
+--- a/arch/x86/kvm/vmx/vmx.h
++++ b/arch/x86/kvm/vmx/vmx.h
+@@ -351,6 +351,7 @@ struct vcpu_vmx {
+
+      struct pt_desc pt_desc;
+      struct lbr_desc lbr_desc;
++    bool lbr_in_smm;
+
+      /* Save desired MSR intercept (read: pass-through) state */
+  #define MAX_POSSIBLE_PASSTHROUGH_MSRS    15
+-- 
+2.27.0
+
+>
+> Thanks,
+>
+> Paolo
+>
+>> VMCS until kvm_x86_ops->leave_smm() is called. is it good? thanks!

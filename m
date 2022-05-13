@@ -2,64 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68899526642
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B83F9526643
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382246AbiEMPhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 11:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
+        id S1381688AbiEMPhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 11:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382203AbiEMPgT (ORCPT
+        with ESMTP id S1382104AbiEMPgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 11:36:19 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9DB101C4;
-        Fri, 13 May 2022 08:36:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Oog80k7GQxM52zTZPMnIGwh2UY76oIYMbMWJ+awWYIA=; b=Bz/zNMH2Ro4SlXFK2FRLN1RZD6
-        APubsATHMDIJ6r0BnhE0ATsv69tLUxefVIzFUjB4dpXKigZXGu4ckLmjI1grPABCWIP+FK3LBFBjR
-        AtMYkwulP5fWXZ2ztb3htxldk/7MliWN+6A6jYZSwAgnINQB8AvVKHGY/ZZOSr0g/1TX7J4m1eqkJ
-        zLQ7EGsMXbGde5+lSrK/8eLcKpClBIswaMYkhulvMkWDfHSAPp8V3OE26ExU78iNUdWiDgm4ZuTLF
-        nj2KOvzhDPEyhJ5VJLFarc830bGDqrk3KWjmQPzOYxgTKCReCaQ0le17SiebKmQno+EMsgttzOVjf
-        Cn+9GtZg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1npXKr-00GixM-Ep; Fri, 13 May 2022 15:36:09 +0000
-Date:   Fri, 13 May 2022 08:36:09 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] kunit: Taint the kernel when KUnit tests are run
-Message-ID: <Yn566YlpyD1UnbY0@bombadil.infradead.org>
-References: <20220429043913.626647-1-davidgow@google.com>
- <20220513083212.3537869-2-davidgow@google.com>
+        Fri, 13 May 2022 11:36:33 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4A511171;
+        Fri, 13 May 2022 08:36:32 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id kl21so6913811qvb.9;
+        Fri, 13 May 2022 08:36:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8h0LmcWAQXb8u9qfucjMgM7lVOGBOAPZEtMIypr4huE=;
+        b=V21K7h6gxr/frfJzGoJpY9QlYPLnqhsegSYLRssEC7uQa/RjRMWeTQ+4WUjJcHX232
+         h/56lswNcxpH6Vj57Os3FdYFI0z7IvVqw+R+x33nbdUR+V/N5zCn4yIOLirOmom9qNgq
+         mMTu36wIUNzYR83MbFr+OBWJmQxUDgemetQKbCOZBp6WKV9WDJDlg5VG7/dDk1vrvJBM
+         uc1OJlwSVtRTMAvlGgf4XDcL25fcAsXHieUREzKgfarztWq935EzYNBFpDLztThMgMAe
+         3U9evL22QIVjxLN2ucQJkCEjR8+1JzzpcSHu6Wpj0+c65oj7Znhdz1B79tMvIiOiu0Up
+         Ei8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8h0LmcWAQXb8u9qfucjMgM7lVOGBOAPZEtMIypr4huE=;
+        b=Q1aBtbzC31HiRtpbKFSlepZvEKb5WeQSNQv1fd7Qr07qIbohZGmR2IXjAv/ND/iGYm
+         S0FR6C+LMVxvEKd2UEGvAkbRe6GeqJD4Ro/+vUklgCmAJ9sdbf++R0ODG/h/7YmAw7ID
+         eXea5RGfHXTWDs4Ibsx/6hubnM+fxW9Dn09fJ5M65XjBOXZBJ3JnIdElEEx7rt6y4t1H
+         pRoW1VevKDglCpd4Co/IlhFCso09lVwGvauvjB1cTR+duazWJ5Zhi/GQJqzqmeAMHb4D
+         konFnwyc2PEw/HxLsX4ZKZ6xWq7CnJMkoUjFvpIc8CnaOkwse8CxAT2Chd/RfEJgK3nb
+         +HsA==
+X-Gm-Message-State: AOAM532htkgrfSK2Ggvzk8p7Sd2+L5gDdIZ8+0342EE0mjAnJttjWgJG
+        7CCpqHSF/r0nW3OjvSXfSTk6tUwTZFjGBawMpto=
+X-Google-Smtp-Source: ABdhPJwqjL1gPdVknYoT/U+0XIneQoJHsxyMbPk309eeSytAsXbtzwplMHbPzQRvE7nw/MpGgYJi4UquFNUEKZc73VA=
+X-Received: by 2002:a05:6214:20e6:b0:45d:403f:7a90 with SMTP id
+ 6-20020a05621420e600b0045d403f7a90mr4745600qvk.1.1652456191435; Fri, 13 May
+ 2022 08:36:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220513083212.3537869-2-davidgow@google.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220510154217.5216-1-ubizjak@gmail.com> <20220513091034.GH76023@worktop.programming.kicks-ass.net>
+ <CAFULd4bAAKc=wo6vFkN6xQqBjaSJhF3L+WmuymSsC6-ec6TuvA@mail.gmail.com>
+In-Reply-To: <CAFULd4bAAKc=wo6vFkN6xQqBjaSJhF3L+WmuymSsC6-ec6TuvA@mail.gmail.com>
+From:   Uros Bizjak <ubizjak@gmail.com>
+Date:   Fri, 13 May 2022 17:36:19 +0200
+Message-ID: <CAFULd4Zck5YRfhoXsg_aPKpFbnkkr_xZ6ejDpmp=ysZemwoQAg@mail.gmail.com>
+Subject: Re: [PATCH] locking/atomic/x86: Introduce try_cmpxchg64
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        kvm@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Marco Elver <elver@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,15 +74,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 04:32:12PM +0800, David Gow wrote:
-> Make KUnit trigger the new TAINT_TEST taint when any KUnit test is run.
-> Due to KUnit tests not being intended to run on production systems, and
-> potentially causing problems (or security issues like leaking kernel
-> addresses), the kernel's state should not be considered safe for
-> production use after KUnit tests are run.
-> 
-> Signed-off-by: David Gow <davidgow@google.com>
+On Fri, May 13, 2022 at 12:20 PM Uros Bizjak <ubizjak@gmail.com> wrote:
 
-Acked-by: Luis Chamberlain <mcgrof@kernel.org>
+> > > +#define arch_try_cmpxchg64(ptr, po, n)                               \
+> > > +({                                                           \
+> > > +     bool success;                                           \
+> > > +     __typeof__(*(ptr)) __prev;                              \
+> > > +     __typeof__(ptr) _old = (__typeof__(ptr))(po);           \
+> > > +     __typeof__(*(ptr)) __old = *_old;                       \
+> > > +     __typeof__(*(ptr)) __new = (n);                         \
+> > > +     alternative_io(LOCK_PREFIX_HERE                         \
+> > > +                     "call cmpxchg8b_emu",                   \
+> > > +                     "lock; cmpxchg8b (%%esi)" ,             \
+> > > +                    X86_FEATURE_CX8,                         \
+> > > +                    "=A" (__prev),                           \
+> > > +                    "S" ((ptr)), "0" (__old),                \
+> > > +                    "b" ((unsigned int)__new),               \
+> > > +                    "c" ((unsigned int)(__new>>32))          \
+> > > +                    : "memory");                             \
+> > > +     success = (__prev == __old);                            \
+> > > +     if (unlikely(!success))                                 \
+> > > +             *_old = __prev;                                 \
+> > > +     likely(success);                                        \
+> > > +})
+> >
+> > Wouldn't this be better written like the normal fallback wrapper?
+> >
+> > static __always_inline bool
+> > arch_try_cmpxchg64(u64 *v, u64 *old, u64 new)
+> > {
+> >         u64 r, o = *old;
+> >         r = arch_cmpxchg64(v, o, new);
+> >         if (unlikely(r != o))
+> >                 *old = r;
+> >         return likely(r == o);
+> > }
+> >
+> > Less magical, same exact code.
+>
+> Also, I tried to follow up the existing #defines. Will improve the
+> code according to your suggestion here.
 
-  Luis
+In the v2 patch, generic fallbacks were introduced, so that
+arch_try_cmpxchg64 can be used when only arch_cmpxchg64 is defined.
+
+Uros.

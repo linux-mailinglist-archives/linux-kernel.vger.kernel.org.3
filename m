@@ -2,34 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 400A3526B8D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:32:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CEA9526B7D
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384465AbiEMUcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 16:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
+        id S1384333AbiEMUcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 16:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384489AbiEMUat (ORCPT
+        with ESMTP id S1384503AbiEMUav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 16:30:49 -0400
+        Fri, 13 May 2022 16:30:51 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01FB7B126;
-        Fri, 13 May 2022 13:30:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1346E81996;
+        Fri, 13 May 2022 13:30:19 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nicolas)
-        with ESMTPSA id 556061F46480
+        with ESMTPSA id 20D1E1F46491
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652473801;
-        bh=97qH9MAwt4IfrnTZaZQXT3dbPZPKSF1LMKpA5X+Ai/k=;
+        s=mail; t=1652473803;
+        bh=alVT6vQf62mKVLIbN1ZQcw7iCvLKw2erGbicRcgWoFw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fAOU94QvsZuULWUCMD5y91dOEGbHjkpuyz4xFLajyvtMqF2+bqnHjaVjUQ6TmsEF1
-         PbOCu26qy7SRC13hkZwUCHq0+1mreVQyQHIJxwGvgvJBrtHtV+Qyw0VbLlyygkNTNh
-         zDkqYi2Rq3Mj9NCP0QZA6tOS7YUK1EMBpXk7DXhwK2BrcDJ88oQbNadoZcMnG7WE+2
-         OCmqL1SknN71gqGccgItegAPjfq2HJRlL7LM6HeNOOjlDv7nsVa7ljQTaF3uI1Rcbm
-         Nye7rk42/XaiF6/9mjjdVW63YpqNH7OKF7FC54UBpzBZnokZq0eivHSGmqFbxBETnL
-         HdZ7HEA+rXMOw==
+        b=f7/OJULvIcqwg6BCOeOzihRiWBBA1N2k0JlV3VV3gUA558pAkZH8uMs+dxR8TK/VU
+         xTGC9GVIWPX0ODnx0xEGeIkXJLKjC2A/97uQDSuJugCBBppKZ7h836g8QkzCynZyvP
+         OZPhu2DMF2q7J/6QVvRsEBR/nOeCZW4D08LnKQDSLbHG4ZwjV/c+VFxTz1a/+y/B0v
+         YsbXrHTOvLjBgHEclouJ/bKS2men49VFmZgjpDh8ACltoaV9xfN6ZKxfohlar+2BCs
+         VjDItssViDl5W3DrGQpLkg8iBaoGzcoLiuWELrzejuOww1qVCOr/nvqsmK1JMfQEhy
+         y3xub2XUcvCEA==
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
 To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     nicolas@ndufresne.ca, linux-media@vger.kernel.org,
@@ -37,9 +38,9 @@ Cc:     nicolas@ndufresne.ca, linux-media@vger.kernel.org,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 16/20] media: rkvdec: Enable capture buffer holding for H264
-Date:   Fri, 13 May 2022 16:29:18 -0400
-Message-Id: <20220513202922.13846-17-nicolas.dufresne@collabora.com>
+Subject: [PATCH v5 17/20] media: hantro: Stop using H.264 parameter pic_num
+Date:   Fri, 13 May 2022 16:29:19 -0400
+Message-Id: <20220513202922.13846-18-nicolas.dufresne@collabora.com>
 X-Mailer: git-send-email 2.34.3
 In-Reply-To: <20220513202922.13846-1-nicolas.dufresne@collabora.com>
 References: <20220513202922.13846-1-nicolas.dufresne@collabora.com>
@@ -55,52 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to support interlaced video decoding, the driver must
-allow holding the capture buffer so that the second field can
-be decoded into it.
+The hardware expects FrameNumWrap or long_term_frame_idx. Picture
+numbers are per field, and are mostly used during the memory
+management process, which is done in userland. This fixes two
+ITU conformance tests:
+
+  - MR6_BT_B
+  - MR8_BT_B
 
 Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/staging/media/rkvdec/rkvdec.c | 4 ++++
- drivers/staging/media/rkvdec/rkvdec.h | 1 +
- 2 files changed, 5 insertions(+)
+ drivers/staging/media/hantro/hantro_h264.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
-index 2bc4b1a40989..7bab7586918c 100644
---- a/drivers/staging/media/rkvdec/rkvdec.c
-+++ b/drivers/staging/media/rkvdec/rkvdec.c
-@@ -127,6 +127,7 @@ static const struct rkvdec_coded_fmt_desc rkvdec_coded_fmts[] = {
- 		.ops = &rkvdec_h264_fmt_ops,
- 		.num_decoded_fmts = ARRAY_SIZE(rkvdec_h264_vp9_decoded_fmts),
- 		.decoded_fmts = rkvdec_h264_vp9_decoded_fmts,
-+		.subsystem_flags = VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF,
- 	},
- 	{
- 		.fourcc = V4L2_PIX_FMT_VP9_FRAME,
-@@ -385,6 +386,9 @@ static int rkvdec_s_output_fmt(struct file *file, void *priv,
- 	cap_fmt->fmt.pix_mp.ycbcr_enc = f->fmt.pix_mp.ycbcr_enc;
- 	cap_fmt->fmt.pix_mp.quantization = f->fmt.pix_mp.quantization;
+diff --git a/drivers/staging/media/hantro/hantro_h264.c b/drivers/staging/media/hantro/hantro_h264.c
+index 0b4d2491be3b..228629fb3cdf 100644
+--- a/drivers/staging/media/hantro/hantro_h264.c
++++ b/drivers/staging/media/hantro/hantro_h264.c
+@@ -354,8 +354,6 @@ u16 hantro_h264_get_ref_nbr(struct hantro_ctx *ctx, unsigned int dpb_idx)
  
-+	/* Enable format specific queue features */
-+	vq->subsystem_flags |= desc->subsystem_flags;
-+
- 	return 0;
+ 	if (!(dpb->flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
+ 		return 0;
+-	if (dpb->flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
+-		return dpb->pic_num;
+ 	return dpb->frame_num;
  }
  
-diff --git a/drivers/staging/media/rkvdec/rkvdec.h b/drivers/staging/media/rkvdec/rkvdec.h
-index 9df0fba799a4..633335ebb9c4 100644
---- a/drivers/staging/media/rkvdec/rkvdec.h
-+++ b/drivers/staging/media/rkvdec/rkvdec.h
-@@ -82,6 +82,7 @@ struct rkvdec_coded_fmt_desc {
- 	const struct rkvdec_coded_fmt_ops *ops;
- 	unsigned int num_decoded_fmts;
- 	const u32 *decoded_fmts;
-+	u32 subsystem_flags;
- };
- 
- struct rkvdec_dev {
 -- 
 2.34.3
 

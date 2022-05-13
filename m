@@ -2,90 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D05C7526B2C
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD4C526B38
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384276AbiEMUYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 16:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
+        id S1380485AbiEMU1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 16:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384164AbiEMUWv (ORCPT
+        with ESMTP id S1355333AbiEMU1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 16:22:51 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE08515EA7D
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:22:50 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f8be9326fcso81334967b3.18
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:22:50 -0700 (PDT)
+        Fri, 13 May 2022 16:27:38 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C031116A
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:27:37 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id e189so11463556oia.8
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:27:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=dlbVbF+zSH65SmcGkXw1HXEqEtfYUZQQn63+I2niGUI=;
-        b=suo26qtPRItoyTwDfbbz3LASboBjKdoSMFI8aXUKdlLp7CvixfOiS0uW8H0gGPFal2
-         ufgd4A/bFbLLb35MHsIFdaYntoAIZwz2uyf3z8bMRt81n9k1SU3nJTLVFvOQgb2SG8Fu
-         bxKBgJRrvLFgiFjcPBc5Ql/tiiDyCHMFHdMWHyl55ksvDj3IxU5xl8BS15jw7IGglpoD
-         rCWQ6dehGYNUVVdSLJleQQBFDeVcxeS2wdMj89py0SHeVj1/phR+9VxOKeAhx/R3o0y3
-         dxmzZBsr6Kb5ReKmsDe4eAPOCfkU7q2HMZmt2/P07pSpGYOWb8T5SJmlzQByOBASF86u
-         WdkQ==
+        bh=99/RQ/TEDrl/cI0bVmdjzMtZB4uNUmEzljOvC28iEz8=;
+        b=bZVS/9dhIQBdgxOQIoWwLltNrxEIHGDAhZIDN3/6OIjPwFdpBvz0iopKN7ya6UOdi5
+         981dYqD4MjZmXZWtlYUYnovgp19XgUSRR6jeR7FqqzmLelkgcKCNd00rVNfF8VD0c0cd
+         nb3hXRs6ATTiffpfG2R/iSJRhZAHBvI3ALIRE+G5oRoBk0lvRjXvFxR8Qv+10AKq/TD9
+         0r2rSrT/PxSlrqYAfX52ZZtoZh22LZzRuNzoOkgwWdl4RKWsVz+iEJuLYn+N2akSv6tB
+         4A5YgWcfF1Gd9SJc48V/3qz4pYZ5XMHRStI9LaOoecPrT8XTr4VHt7J5mR72djfj/sE2
+         lBfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=dlbVbF+zSH65SmcGkXw1HXEqEtfYUZQQn63+I2niGUI=;
-        b=2ehx6WxYpXDm3cbd9J2MC+zUVXXGbnVNsZRaY5GSBvvO3noaDxtcMxcaVeWAlCpP4v
-         cFNp97mKD/JHcUE+pCjB1FARlsiEutCEFZvPM5ci2HDd8bG14pDUF8ZbUf6z9kUDdw6p
-         LauHxcR52MIL1Y3sASWZa9Mr0PJuMTc9Ge6hsdUEFzT2u0lsOrvtaL7b7U3p7FpHy/d1
-         YKM7enJ5+9M/i3NvS5MiEEP4fVp0TIKjyswpJOFz/TJxGSiZpK7sj9DwTPAVlj6TKGTj
-         JSUhLdSQqm0qgOBUhOUMmewI+qHc7MJUCATiXA9HK7qtF3tNye/sgdrneWTVYq4q9XA4
-         71hw==
-X-Gm-Message-State: AOAM531Omun+yuZmToanlcvDJZntQgl1Ieck90K4c+L/wON2XxxdI8yX
-        Mm/MkbFNyaA1saOmnxmslI7CxHNRxYiybGMGaXF15CPbOjnCn7vVWHdKcg89Up9wl6DGa5ndW/Z
-        S2/7/kqYIxPk1DZ87wMfc0gg8dVNvSrKAucsOwFZ4CINRPnLiut9KeQvD/iUF/S5+LFSa6xawTs
-        wzeY+6KTkWgQ==
-X-Google-Smtp-Source: ABdhPJzFM48oKh50rHebCrOHf34tcszegLHZxSEku5WBt1TgwOcHyEAQ0+hAqjBZ97NekznHKYIzAU+Im42Yn+P0SW0=
-X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:e0:c17e:c2dc:13eb])
- (user=samitolvanen job=sendgmr) by 2002:a25:3441:0:b0:64b:dc55:bdd2 with SMTP
- id b62-20020a253441000000b0064bdc55bdd2mr2715370yba.75.1652473369915; Fri, 13
- May 2022 13:22:49 -0700 (PDT)
-Date:   Fri, 13 May 2022 13:21:59 -0700
-In-Reply-To: <20220513202159.1550547-1-samitolvanen@google.com>
-Message-Id: <20220513202159.1550547-22-samitolvanen@google.com>
-Mime-Version: 1.0
-References: <20220513202159.1550547-1-samitolvanen@google.com>
-X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=873; h=from:subject;
- bh=EnKTZWbwTuwhGtVwGe8P9VjRM8gy1nwr12ORzB61S+o=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBifr3mfZ8/2S8lWN4wX+IbgzR7T53VLtyDzI5tt2rz
- WJL+EaaJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYn695gAKCRBMtfaEi7xW7pVmC/
- 9a3zu00Ju5TXxz0xiUJonHs8P0BGs4hr5NmWM2GMbyFjujv8hZeNGa4mbYKHKM5PCQQ5gvZgix8xN7
- pycP7Dh2F7rK9HP2Fk6aH55ONw1ChCEHEzVNMB01KLR5+6/b4c4y7TCE3ZD3mF3h76hXjR8das2Zy8
- /l8yvdEZQEHquOWm1zBiS8yJvQi3QiroJFJv29MfZwGqv77y80QGHlf3OYSNsl1cli2prx6ZgDNeja
- U700rcBs2hsB/3Idgu5rWH2o1LwNQhhLXRSSPCJ+RDTgVj3o3z2qnQbJNcqWpzelCvO9OedQQVoUBc
- ijxVLEzzl1xpeBdNk1MBk5Yt1djJtfSIXAccu2h/e8gme3qYn4dkUdt/4mtjccvvFGzy5KZnCTFIAk
- UTsfhTj2V9f+6fyGCQ3hu/sQOzwh7XJUzd+IyJINOyFAw+0gRm/XHYEstiM2STE6izuoI7QWPXRpM3
- 9+1GAAvAXf8upx6jl7Yk6dH45w3SkswkAp7IP4wLfr7Y4=
-X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [RFC PATCH v2 21/21] init: Drop __nocfi from __init
-From:   Sami Tolvanen <samitolvanen@google.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-hardening@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
-        Sami Tolvanen <samitolvanen@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=99/RQ/TEDrl/cI0bVmdjzMtZB4uNUmEzljOvC28iEz8=;
+        b=H3oA2I7HSw4XuUh6ZHQScXINtdQuoJ03x57ePl93y93RQUWLYt2K8+4rPhlyDzLe30
+         SsJbryvmybeQEMyBt9HFd6RsrsYsboWhbeePVmxffrO4nTwBvsstLPsG90auXPhV52WF
+         2wPYKVo8xGultA48i23A/H1muTTQ5vUKdkyNWTIOcKFc4vo4C7C6ppse2UDizD7BnW1u
+         pkQK5vqvqOwONavDsFf29FSwk+q8om0JWupmAGCTJnS/Rx8jA5/PdIhXa7vCvScgVNKE
+         AD0whZxZosA0X7fUhvghN6NC/1jBWbNgMMRwQRXmSTUKuk7871/gGGEHuRyZeUzXx7f0
+         Ph8A==
+X-Gm-Message-State: AOAM5306AKp3SlcB55mILp3dlpG63NFENOBYEHCbT+fUpJ+TRnNmdacr
+        Qohii6Y6lNj9MUlxLIokBzur4vnt5rQMdK9yNG5Frw==
+X-Google-Smtp-Source: ABdhPJzjkjfXXwZJSABHc+7d9SbZttIFfFJyNa10z9JjsNyAbpCHZoW5BfjYx/hT0G28JwsC7f+aJcbiOHjbFiBKBOg=
+X-Received: by 2002:a05:6808:c2:b0:325:eb71:7266 with SMTP id
+ t2-20020a05680800c200b00325eb717266mr8793970oic.269.1652473656784; Fri, 13
+ May 2022 13:27:36 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220513195000.99371-1-seanjc@google.com> <20220513195000.99371-3-seanjc@google.com>
+In-Reply-To: <20220513195000.99371-3-seanjc@google.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Fri, 13 May 2022 13:27:25 -0700
+Message-ID: <CALMp9eQn+QaK630apzOz-L-btHxGQuXcbEiovO8FLOtMmQp_CQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] KVM: x86/mmu: Comment FNAME(sync_page) to document
+ TLB flushing logic
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,27 +72,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's no longer necessary to disable CFI checking for all __init
-functions. Drop the __nocfi attribute.
-
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
----
- include/linux/init.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/init.h b/include/linux/init.h
-index 76058c9e0399..a0a90cd73ebe 100644
---- a/include/linux/init.h
-+++ b/include/linux/init.h
-@@ -47,7 +47,7 @@
- 
- /* These are for everybody (although not all archs will actually
-    discard it in modules) */
--#define __init		__section(".init.text") __cold  __latent_entropy __noinitretpoline __nocfi
-+#define __init		__section(".init.text") __cold  __latent_entropy __noinitretpoline
- #define __initdata	__section(".init.data")
- #define __initconst	__section(".init.rodata")
- #define __exitdata	__section(".exit.data")
--- 
-2.36.0.550.gb090851708-goog
-
+On Fri, May 13, 2022 at 12:50 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> Add a comment to FNAME(sync_page) to explain why the TLB flushing logic
+> conspiculously doesn't handle the scenario of guest protections being
+> reduced.  Specifically, if synchronizing a SPTE drops execute protections,
+> KVM will not emit a TLB flush, whereas dropping writable or clearing A/D
+> bits does trigger a flush via mmu_spte_update().  Architecturally, until
+> the GPTE is implicitly or explicitly flushed from the guest's perspective,
+> KVM is not required to flush any old, stale translations.
+>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+Reviewed-by: Jim Mattson <jmattson@google.com>

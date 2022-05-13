@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 082255259B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 04:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 355F15259AE
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 04:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376505AbiEMCVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 22:21:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42096 "EHLO
+        id S1376526AbiEMCVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 22:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376510AbiEMCVk (ORCPT
+        with ESMTP id S1376514AbiEMCVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 22:21:40 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A854979384
+        Thu, 12 May 2022 22:21:41 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84E578FF0
         for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 19:21:39 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KzslC5m3JzGpZK;
-        Fri, 13 May 2022 10:18:47 +0800 (CST)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kzsn31tr4zfZs9;
+        Fri, 13 May 2022 10:20:23 +0800 (CST)
 Received: from dggpemm500015.china.huawei.com (7.185.36.181) by
  dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -25,16 +25,18 @@ Received: from dggpemm500015.china.huawei.com (7.185.36.181) by
 Received: from huawei.com (10.175.103.91) by dggpemm500015.china.huawei.com
  (7.185.36.181) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 13 May
- 2022 10:21:36 +0800
+ 2022 10:21:37 +0800
 From:   Wang ShaoBo <bobo.shaobowang@huawei.com>
 CC:     <bobo.shaobowang@huawei.com>, <cj.chengjian@huawei.com>,
         <linux-kernel@vger.kernel.org>, <liwei391@huawei.com>,
         <mhiramat@kernel.org>, <rostedt@goodmis.org>, <acme@redhat.com>,
         <yuehaibing@huawei.com>
-Subject: [PATCH 0/2] tools libtraceevent fixes
-Date:   Fri, 13 May 2022 10:33:06 +0800
-Message-ID: <20220513023308.2400381-1-bobo.shaobowang@huawei.com>
+Subject: [PATCH 1/2] libtraceevent: fix memleak in make_bprint_args()
+Date:   Fri, 13 May 2022 10:33:07 +0800
+Message-ID: <20220513023308.2400381-2-bobo.shaobowang@huawei.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220513023308.2400381-1-bobo.shaobowang@huawei.com>
+References: <20220513023308.2400381-1-bobo.shaobowang@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -52,15 +54,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tools libtraceevent fixes
+Release arg allocated from alloc_arg() when strdup failed in make_bprint_args().
 
-Wang ShaoBo (2):
-  libtraceevent: fix memleak in make_bprint_args()
-  libtraceevent: fix free NULL pointer in parse_arg_add()
+Fixes: a6d2a61ac653 ("tools lib traceevent: Remove some die() calls")
+Signed-off-by: Wang ShaoBo <bobo.shaobowang@huawei.com>
+---
+ tools/lib/traceevent/event-parse.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
- tools/lib/traceevent/event-parse.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
+diff --git a/tools/lib/traceevent/event-parse.c b/tools/lib/traceevent/event-parse.c
+index 8e24c4c78c7f..69e4d5229362 100644
+--- a/tools/lib/traceevent/event-parse.c
++++ b/tools/lib/traceevent/event-parse.c
+@@ -4507,8 +4507,10 @@ static struct tep_print_arg *make_bprint_args(char *fmt, void *data, int size, s
+ 				arg->next = NULL;
+ 				arg->type = TEP_PRINT_BSTRING;
+ 				arg->string.string = strdup(bptr);
+-				if (!arg->string.string)
++				if (!arg->string.string) {
++					free(arg);
+ 					goto out_free;
++				}
+ 				bptr += strlen(bptr) + 1;
+ 				*next = arg;
+ 				next = &arg->next;
 -- 
 2.25.1
 

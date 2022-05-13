@@ -2,133 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81310526AF6
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:08:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 450F2526AF9
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:09:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384057AbiEMUHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 16:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44400 "EHLO
+        id S1382321AbiEMUJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 16:09:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346040AbiEMUHx (ORCPT
+        with ESMTP id S234777AbiEMUJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 16:07:53 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D20CBF48
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:07:51 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id y21so11229898edo.2
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:07:50 -0700 (PDT)
+        Fri, 13 May 2022 16:09:47 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96F45A2EC
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:09:46 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id t25so11523964ljd.6
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:09:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=VjLYKQz9W+b9Ub9U9HIkTaFYWELaFcx+tDToyM0Q0Is=;
-        b=Z8kJgkrl1ICP+BHtwk0Kv0Ik1kTt5soCfHi56pWTcJMzYbpRkqUX6jgW6iVpuM01bP
-         dUCoGTDtoou29KeWoXgevvlN94X1JwMBX+3AxqZRfib5zFYYWhL3QUauNdrp4YwUf081
-         Ei6HAkxKxBgT9UY+3J7C2pJspiT8AMzk0Axq8=
+        bh=pjCREFqJlKd2e4ScgAkDgjCbWBN7JS6DRPvPR2eYjk4=;
+        b=KwRkUDm8dsv90HT32n7Ztq64gzcZF/kbB6tGx1fdQXDKGZjG+GBVpWD5AOzmGAWnd/
+         rerMc/t+Kt10xdfBUlOCSActjob6KhPB4oKiXD392qk8MZ0VHkJPsrHoE62OIQs8WWPS
+         /woEZdsfOwomyd9Fj4W/PAgH+rT6NJIIckIrUocjf2DpBUF59s+U5V1ibDFxwg2y6ov9
+         OeGsICg7lU+vGRU1tPMWBOEoNc1ZjfELi8R4AHlvwpLGgFLOkbyeGW1/JLSvi+nNgZEN
+         /8aIvf0iAOF4sFr9xIkbwN/NITqEFAGVxG54VyVFuxs8n57P2CDyO5IBDUhTTRY2P6aB
+         5vAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=VjLYKQz9W+b9Ub9U9HIkTaFYWELaFcx+tDToyM0Q0Is=;
-        b=b59OZzVjnJHu6HswftjNDwxm3OjfXsPc0/cl2gjfjATOOOBRIzVGtHIFh4pxGWCRFD
-         Y/hYQkY0otK74NX9jHg2pZrHoorjaBbgcCbs8a57TZ+A0ZRCuHaGe5AJxsfkJr8ExYOF
-         DlW6jSugqucT0eVQjkJeUqD3zVlQw9w/LIc237MEQPxEpBhkiCnCZ9LjWGTVBrFQThAZ
-         rG2yolSxjtpQeJL22h7Kfd1I4/c7tnAmHu69St+8J46aGPPdhQrQo3ZVb8vyLxq4qH6b
-         6lJyQnzadgNYZ6ekpXBrTJAAgB1pGqbot9TSbciFyLPPkPXb+XNmjqWDVtNENVlPMy6o
-         Dc9w==
-X-Gm-Message-State: AOAM530VubBpF5WD61cP7ZRJKZfX3arFGc0HVnRZxzgPQyPBlXWOxRSO
-        D2PJotww4vS23fwvPyXuz9hvg54S7w+CKhUkINU=
-X-Google-Smtp-Source: ABdhPJw5xz7vCcwOiT2e8B2HeJiaCJtVM60IjiXmwaZyr+GcGTxQbMq/OGvDVdbekX5tyLxQo+56hA==
-X-Received: by 2002:a05:6402:364:b0:425:f88d:7d4a with SMTP id s4-20020a056402036400b00425f88d7d4amr398837edw.68.1652472469197;
-        Fri, 13 May 2022 13:07:49 -0700 (PDT)
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
-        by smtp.gmail.com with ESMTPSA id i6-20020a50c3c6000000b0042617ba63besm1316587edf.72.2022.05.13.13.07.48
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 13:07:48 -0700 (PDT)
-Received: by mail-wr1-f51.google.com with SMTP id j25so11734996wrc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:07:48 -0700 (PDT)
-X-Received: by 2002:a05:6000:c7:b0:20a:d8c1:d044 with SMTP id
- q7-20020a05600000c700b0020ad8c1d044mr5361193wrx.422.1652472467490; Fri, 13
- May 2022 13:07:47 -0700 (PDT)
+        bh=pjCREFqJlKd2e4ScgAkDgjCbWBN7JS6DRPvPR2eYjk4=;
+        b=ZxYNkGdXf9V57HTUQUrR0iAhriK4t6EWV9m8Td3rVJ0PdbC5q3mJnegPft8g8zerhN
+         qRyNxqotnW/HVZN9zjeTzixN4oZI3bEiuy7iscJCVFz83P6Ucb7QAGo6F0lw9xCpHVub
+         f3x3k666VYLOrLasv8mVq6IprcKlT1J9QMHoZIkvytaEWl+GRsmZ2RqTsgCPSSlUaLx5
+         gL9WooF8vtSc2OzXy/D/8drutxmYsYoSf8M/Hc0tcHS2a1lXzKKVflxSYQ7mINm8ViNT
+         85bS1kAx5CUpRfVfGt+fIOGIT0+gSKKnefi5KFBBBhbybgf8jTaj9n1sJV3oBtnrWyGG
+         RwRQ==
+X-Gm-Message-State: AOAM531YG+nSvPzcXMRZtthCx9Z9TuoYDgbmxzUQ0GDFZsuL3DC9kHtO
+        91wvX9euc484Dabq/b0CSRh8Q3PpNCBnpJI+VNQW6g==
+X-Google-Smtp-Source: ABdhPJyIQ/Fq8kEYsZT3oQ8B+jEEuHoR3rsMsbWkyrcVV8WZYv4O+PyJUttYpqpiFYm2/bU3XvQ8sVx8UJPsHb8eaQ8=
+X-Received: by 2002:a05:651c:1508:b0:250:5b32:55d5 with SMTP id
+ e8-20020a05651c150800b002505b3255d5mr4018224ljf.278.1652472584716; Fri, 13
+ May 2022 13:09:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220510135101.v2.1.I31ec454f8d4ffce51a7708a8092f8a6f9c929092@changeid>
- <db7a2b7f-3c94-d45d-98fd-7fd0b181e6aa@suse.de> <CAD=FV=WoSTcSOB_reDbayNb=q7w00rd7p-zHUDt+evTkSjQ=2g@mail.gmail.com>
-In-Reply-To: <CAD=FV=WoSTcSOB_reDbayNb=q7w00rd7p-zHUDt+evTkSjQ=2g@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 13 May 2022 13:07:35 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VbwkK-z8T-98aPSiybd2c94n8p46oBxY_MtPjV608YRQ@mail.gmail.com>
-Message-ID: <CAD=FV=VbwkK-z8T-98aPSiybd2c94n8p46oBxY_MtPjV608YRQ@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/probe-helper: Default to 640x480 if no EDID
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+References: <20220512202328.2453895-1-Ashish.Kalra@amd.com>
+ <CAMkAt6ogEpWf7J-OhXrPNw8KojwuLxUwfP6B+A7zrRHpNeX3uA@mail.gmail.com>
+ <Yn5wDPPbVUysR4SF@google.com> <51219031-935d-8da4-7d8f-80073a79f794@amd.com>
+In-Reply-To: <51219031-935d-8da4-7d8f-80073a79f794@amd.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Fri, 13 May 2022 16:09:33 -0400
+Message-ID: <CAMkAt6rSXdFzVg6-tk8Yv9uQJEJaHtcvBHTBmWyjMVCs4uq1uw@mail.gmail.com>
+Subject: Re: [PATCH] KVM: SVM: Use kzalloc for sev ioctl interfaces to prevent
+ kernel memory leak.
+To:     Ashish Kalra <ashkalra@amd.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Ashish Kalra <Ashish.Kalra@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        freedreno <freedreno@lists.freedesktop.org>
+        Andy Nguyen <theflow@google.com>,
+        David Rientjes <rientjes@google.com>,
+        John Allen <john.allen@amd.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, May 13, 2022 at 2:11 PM Ashish Kalra <ashkalra@amd.com> wrote:
+>
+> Hello Sean & Peter,
+>
+> On 5/13/22 14:49, Sean Christopherson wrote:
+> > On Fri, May 13, 2022, Peter Gonda wrote:
+> >> On Thu, May 12, 2022 at 4:23 PM Ashish Kalra <Ashish.Kalra@amd.com> wrote:
+> >>> From: Ashish Kalra <ashish.kalra@amd.com>
+> >>>
+> >>> For some sev ioctl interfaces, the length parameter that is passed maybe
+> >>> less than or equal to SEV_FW_BLOB_MAX_SIZE, but larger than the data
+> >>> that PSP firmware returns. In this case, kmalloc will allocate memory
+> >>> that is the size of the input rather than the size of the data.
+> >>> Since PSP firmware doesn't fully overwrite the allocated buffer, these
+> >>> sev ioctl interface may return uninitialized kernel slab memory.
+> >>>
+> >>> Reported-by: Andy Nguyen <theflow@google.com>
+> >>> Suggested-by: David Rientjes <rientjes@google.com>
+> >>> Suggested-by: Peter Gonda <pgonda@google.com>
+> >>> Cc: kvm@vger.kernel.org
+> >>> Cc: linux-kernel@vger.kernel.org
+> >>> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
+> >>> ---
+> >>>   arch/x86/kvm/svm/sev.c | 6 +++---
+> >>>   1 file changed, 3 insertions(+), 3 deletions(-)
+> >>>
+> >> Can we just update all the kmalloc()s that buffers get given to the
+> >> PSP? For instance doesn't sev_send_update_data() have an issue?
+> >> Reading the PSP spec it seems like a user can call this ioctl with a
+> >> large hdr_len and the PSP will only fill out what's actually required
+> >> like in these fixed up cases? This is assuming the PSP is written to
+> >> spec (and just the current version). I'd rather have all of these
+> >> instances updated.
+>
+> Yes, this function is also vulnerable as it allocates the return buffer
+> using kmalloc() and copies back to user the buffer sized as per the user
+> provided length (and not the FW returned length), so it surely needs fixup.
+>
+> I will update all these instances to use kzalloc() instead of kmalloc().
 
-On Wed, May 11, 2022 at 2:32 PM Doug Anderson <dianders@chromium.org> wrote:
->
-> Hi,
->
-> On Wed, May 11, 2022 at 12:14 AM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> >
-> > Hi
-> >
-> > Am 10.05.22 um 22:51 schrieb Douglas Anderson:
-> > > If we're unable to read the EDID for a display because it's corrupt /
-> > > bogus / invalid then we'll add a set of standard modes for the
-> > > display. When userspace looks at these modes it doesn't really have a
-> > > good concept for which mode to pick and it'll likely pick the highest
-> > > resolution one by default. That's probably not ideal because the modes
-> > > were purely guesses on the part of the Linux kernel.
-> >
-> > I'm skeptical. Why does the kernel do a better job than userspace here?
-> > Only the graphics driver could possibly make such a decision.
-> >
-> > Not setting any preferred mode at least gives a clear message to userspace.
->
-> OK, that's a fair point. So I tried to find out what our userspace is
-> doing. I believe it's:
->
-> https://source.chromium.org/chromium/chromium/src/+/main:ui/ozone/platform/drm/common/drm_util.cc;l=529
->
-> Specifically this bit of code:
->
->   // If we still have no preferred mode, then use the first one since it should
->   // be the best mode.
->   if (!*out_native_mode && !modes.empty())
->     *out_native_mode = modes.front().get();
->
-> Do you agree with what our userspace is doing here, or is it wrong?
->
-> If our userspace is doing the right thing, then I guess the problem is
-> the call to "drm_mode_sort(&connector->modes);" at the end of
-> drm_helper_probe_single_connector_modes(). Would you be OK with me
-> _not_ sorting the modes in the "bad EDID" case? That also seems to fix
-> my problem...
+Do we need the alloc_page() in __sev_dbg_encrypt_user() to have __GFP_ZERO too?
 
-I've implemented the "don't mark preferred, but don't sort" as a v3.
-Hopefully it looks good.
 
-https://lore.kernel.org/r/20220513130533.v3.1.I31ec454f8d4ffce51a7708a8092f8a6f9c929092@changeid
-
--Doug
+>
+> > Agreed, the kernel should explicitly initialize any copy_to_user() to source and
+> > never rely on the PSP to fill the entire blob unless there's an ironclad guarantee
+> > the entire struct/blob will be written.  E.g. it's probably ok to skip zeroing
+> > "data" in sev_ioctl_do_platform_status(), but even then it might be wortwhile as
+> > defense-in-depth.
+> >
+> > Looking through other copy_to_user() calls:
+> >
+> >    - "blob" in sev_ioctl_do_pek_csr()
+> >    - "id_blob" in sev_ioctl_do_get_id2()
+> >    - "pdh_blob" and "cert_blob" in sev_ioctl_do_pdh_export()
+>
+> These functions are part of the ccp driver and a fix for them has
+> already been sent upstream to linux-crypto@vger.kernel.org and
+> linux-kernel@vger.kernel.org:
+>
+> [PATCH] crypto: ccp - Use kzalloc for sev ioctl interfaces to prevent
+> kernel memory leak
+>
+> Thanks,
+>
+> Ashish
+>
+> >
+> > The last one is probably fine since the copy length comes from the PSP, but it's
+> > not like these ioctls are performance critical...
+> >
+> >       /* If we query the length, FW responded with expected data. */
+> >       input.cert_chain_len = data.cert_chain_len;
+> >       input.pdh_cert_len = data.pdh_cert_len;

@@ -2,146 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 182AC526D31
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 00:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52CA2526D27
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 00:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384904AbiEMWxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 18:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
+        id S1377091AbiEMWv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 18:51:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233036AbiEMWxL (ORCPT
+        with ESMTP id S232635AbiEMWvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 18:53:11 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CBB179080
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 15:53:11 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id m12so9287581plb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 15:53:11 -0700 (PDT)
+        Fri, 13 May 2022 18:51:23 -0400
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E12175693
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 15:51:21 -0700 (PDT)
+Received: by mail-oo1-xc30.google.com with SMTP id bm18-20020a056820189200b0035f7e56a3dfso2979358oob.8
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 15:51:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GQcrUD+iS10OWB2IhvHVYLyHQumXXSUypBIwcEyZKqA=;
-        b=hmGpvhMrmjZTe82jZGMH34s8ZMK8DhjPEZsAWOIQX9kjLF/JR9LLibbajKK2uSWBAV
-         k7MAl1nQC1idFIml998Iqf/rm2g6m3cQEgWR5E+KPYi2/g0ady2z994cjhEJpIx1iGPR
-         QpLYejtbBl7CTS1JQ0bl8F9YrlzAuGqHis3QNjm7uvX+78r1dB2QgxAxASqWX0gyfQLa
-         qID4GVM+faLlv94xLNqQwFa20TwYQT2zjodjB00qnsZqgczQHzdNKQzpY96X/w4VEOQI
-         hgxRO+mMyd9/kFJmj55nYOkqvt2QpcTsJ77Hyw8yOBRTdD0kKorFtKGmmtnbZD4NW2kc
-         12wQ==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e/NkuoBvgXYvzbAWwDOMbCfFkUOSLZa+w7ZV3Xisx9Q=;
+        b=q6a2UCZsF6tRfpudX73+ygATvEqE3U/hHfuBCYlGVgjWXvCDSW/ooU2SkKFmpaOLS7
+         YPpH0IJZTg6k1W03pYag5iFNAVKNKh4v7OCFnWiYnxn3CaPjUEKIvSM6bxQDufFc6f9/
+         GD6o2mcO0TrehK8pAaOFj0Tg314Q26WSVg9rvleROfG4P43JYbhkvNiJiWGcBrLCW3vc
+         AaetJgKnbR2vO2uUMIKppHQshRWUF8XugOfLyni+kHaagH7WdeNaEF7qmXo1w+oFY1Ov
+         lIngYXjfhjKfXDHnctftngoOo3V11HEGeUk7Fo0gzYlrigRN578xuJc0pfTAIBOIUdn7
+         NJwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GQcrUD+iS10OWB2IhvHVYLyHQumXXSUypBIwcEyZKqA=;
-        b=4B4cpH/X2x6GizZbGt8eWTbg0Zg9cYfPh/rK91Wni7owkoFYEVRudZD9vEnAsAg5Iy
-         JDFoY+2zpw1bFDZouUhf0L3KCSbDz500fox/Wfykq+0t8BbrAlSr0O48ySo7GlM+Cq2I
-         /cHWP5lThl2LrDoN6NZW82T+BVn3VnrKxr4ZCmtGcuvm8zUR6pIuegJT/Egi23Dwis8d
-         6SZovbNLXuHweSc1BMbm9MS+eT4/0LcUaVTssJSm6tZqKHIu+bRlfoIH9PGmT0lC+hK9
-         XVLwj7DXbOUbK4mbYONfwrdM4ozLMFtGQMgrLdF+RffF5+T8WZFmLfSvnmH66XjPeIk4
-         G9rg==
-X-Gm-Message-State: AOAM531HdLZBMOq9DBXht/bzMmWNH9JjZre1tg2JemHqjyMiodeoUp0J
-        qRib7OSTqE2s36ITon4SMdDfWw==
-X-Google-Smtp-Source: ABdhPJxJVbTMNcQuqiRTOOsbpuFUv31e2qxiTCyjhM4qde2iDexBVBq/3c+M5f5uikLi6Un4GqFQvQ==
-X-Received: by 2002:a17:90b:3445:b0:1d6:91a5:29fe with SMTP id lj5-20020a17090b344500b001d691a529femr18230208pjb.138.1652482390246;
-        Fri, 13 May 2022 15:53:10 -0700 (PDT)
-Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
-        by smtp.gmail.com with ESMTPSA id b10-20020a170902650a00b0015e8d4eb269sm2289156plk.179.2022.05.13.15.53.08
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e/NkuoBvgXYvzbAWwDOMbCfFkUOSLZa+w7ZV3Xisx9Q=;
+        b=Zcrf1CoHrUKsOtnxRl60GWA/q9BmIi44m+SqAafydGu5CrtnX4SmhkDUQcefn5CDns
+         V6yuq9m4BSIijRo9XBI80xWKT0IEPzn8/g/xMBsKeWOAjo1rGTWqNsg6BrJFO7izX7DQ
+         snrdt+/7HiAIA1yfXAl31I8Lxuf+yy0NYu87/dsmAdqbN0T3WHNhtxyA1ij4cgIfdwdy
+         smvmLZA6NpcfXfbx0+D4KcoUVYCgDh/7+nQgEdnb7/mw1K0HyBCBenBvnk1cXSZjGvJZ
+         39pF8EXQm+LRyJ8lIubwaVZvgiVrpjxoJIOVJxDix7+Vgt60bgG74o48hIERFnKnxKQc
+         u+nQ==
+X-Gm-Message-State: AOAM531N9t6lW5DtUgS1WxQ9ObwlSZNbiaDbDis7OMSOBGh2LAZUx4DT
+        EG022CzmhYYBVopeiGrpqg87Yw==
+X-Google-Smtp-Source: ABdhPJzMxFG/WXvLdVMsesmbtKJjSkP4lUdqfhD8ANxWOAUX1Kn0kFoSk2IBFcRPKM7kdFvPu67Axw==
+X-Received: by 2002:a4a:a602:0:b0:35f:2658:f34f with SMTP id e2-20020a4aa602000000b0035f2658f34fmr2737335oom.17.1652482280733;
+        Fri, 13 May 2022 15:51:20 -0700 (PDT)
+Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id l9-20020a4ae2c9000000b0035eb4e5a6d4sm1592679oot.42.2022.05.13.15.51.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 15:53:09 -0700 (PDT)
-Date:   Fri, 13 May 2022 22:53:05 +0000
-From:   David Matlack <dmatlack@google.com>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH V2 1/7] KVM: X86/MMU: Add using_special_root_page()
-Message-ID: <Yn7hUe9nyey/CS3J@google.com>
-References: <20220503150735.32723-1-jiangshanlai@gmail.com>
- <20220503150735.32723-2-jiangshanlai@gmail.com>
+        Fri, 13 May 2022 15:51:19 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] phy: qcom-qmp: Add SC8280XP USB3 UNI phy
+Date:   Fri, 13 May 2022 15:53:45 -0700
+Message-Id: <20220513225348.1671639-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220503150735.32723-2-jiangshanlai@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 03, 2022 at 11:07:29PM +0800, Lai Jiangshan wrote:
-> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> 
-> In some case, special roots are used in mmu.  It is often using
-> to_shadow_page(mmu->root.hpa) to check if special roots are used.
-> 
-> Add using_special_root_page() to directly check if special roots are
-> used or needed to be used even mmu->root.hpa is not set.
-> 
-> Prepare for making to_shadow_page(mmu->root.hpa) return non-NULL via
-> using special shadow pages.
-> 
-> Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c | 14 +++++++++++---
->  1 file changed, 11 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 909372762363..7f20796af351 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -1711,6 +1711,14 @@ static void drop_parent_pte(struct kvm_mmu_page *sp,
->  	mmu_spte_clear_no_track(parent_pte);
->  }
->  
-> +static bool using_special_root_page(struct kvm_mmu *mmu)
+The SC8280XP platform has two instances of the 5nm USB3 UNI phy attached
+to the multi-port USB controller, this series adds definitions for this
+PHY.
 
-Could you enumerate all the scenarios that use special roots and which
-roots are the special ones? I think that would help a lot with reviewing
-this series and would be useful to encode in a comment, probably above
-this function here, for future readers.
+Bjorn Andersson (3):
+  dt-bindings: phy: qcom,qmp: Add compatible for SC8280XP USB3 UNI phy
+  phy: qcom-qmp: Add USB3 5NM QMP UNI registers
+  phy: qcom-qmp: Add SC8280XP USB3 UNI phy
 
-Also the term "special" is really vague. Maybe once you enumerate all
-the scenarios a common theme will arise and we can pick a better name,
-unless you have any ideas off the top of your head.
+ .../devicetree/bindings/phy/qcom,qmp-phy.yaml |   1 +
+ drivers/phy/qualcomm/phy-qcom-qmp.c           | 138 ++++
+ .../phy/qualcomm/phy-qcom-usb3-5nm-qmp-uni.h  | 617 ++++++++++++++++++
+ 3 files changed, 756 insertions(+)
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-usb3-5nm-qmp-uni.h
 
-> +{
-> +	if (mmu->root_role.direct)
-> +		return mmu->root_role.level == PT32E_ROOT_LEVEL;
-> +	else
-> +		return mmu->cpu_role.base.level <= PT32E_ROOT_LEVEL;
-> +}
-> +
->  static struct kvm_mmu_page *kvm_mmu_alloc_page(struct kvm_vcpu *vcpu, int direct)
->  {
->  	struct kvm_mmu_page *sp;
-> @@ -4241,10 +4249,10 @@ static bool fast_pgd_switch(struct kvm *kvm, struct kvm_mmu *mmu,
->  {
->  	/*
->  	 * For now, limit the caching to 64-bit hosts+VMs in order to avoid
-> -	 * having to deal with PDPTEs. We may add support for 32-bit hosts/VMs
-> -	 * later if necessary.
-> +	 * having to deal with PDPTEs.  Special roots can not be put into
-> +	 * mmu->prev_roots[].
->  	 */
-> -	if (VALID_PAGE(mmu->root.hpa) && !to_shadow_page(mmu->root.hpa))
-> +	if (VALID_PAGE(mmu->root.hpa) && using_special_root_page(mmu))
->  		kvm_mmu_free_roots(kvm, mmu, KVM_MMU_ROOT_CURRENT);
->  
->  	if (VALID_PAGE(mmu->root.hpa))
-> -- 
-> 2.19.1.6.gb485710b
-> 
+-- 
+2.35.1
+

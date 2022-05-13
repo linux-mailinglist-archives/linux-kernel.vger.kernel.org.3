@@ -2,107 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3483B525FFF
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE38526011
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379318AbiEMKPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 06:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
+        id S1379324AbiEMKQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 06:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344771AbiEMKPU (ORCPT
+        with ESMTP id S1379055AbiEMKQr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 06:15:20 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5B8284938
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 03:15:19 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id f2so3761979wrc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 03:15:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=BCIQd+Nvv3xVMFfMfNqHYk5j+GFIS94051tgo6glueg=;
-        b=DcvXCC1IruS/thP2YGVTyuVrn+bUpineAT+SjckrpAwsT3WpmcSO2qRAySZa2Vh3Sa
-         4caxkK8uBuYhufDIiVbCg1F0CS9PoI2IttAGMS7clK/EI/2td7Qe5alpKuoVEZn6RKh7
-         MiQ837vE47Dt8plyD8K/2QFRFamM7VpzYBmLe0lMSaeCqEaaFx8vlL8IwRvDvBSbT2KF
-         nta+vZDJF90YgKBaNpHZPkWqkRAms8+VtC5Z10514PN+RlTZPnFU0GQXKO9aMRrBVYg8
-         qUrBe/4TqjMByV6IWUnNtefvJo4aG1Dx1uF/UeLONS6+3fhLQkQGgCJ3AqYYpolT2AKo
-         k+fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=BCIQd+Nvv3xVMFfMfNqHYk5j+GFIS94051tgo6glueg=;
-        b=gLn5OM6DgBnG7M+xs6Xbq3d11GFnaQVT2RwxEX0Colv6fs2dtlRt0OiGVJoi0P9ypv
-         tYBGRdJhIvbrv/M9el0UGZtWAJMgU2zmQnq2fNlj/lYjFpq3GGVQx9u4osR9AvyDLZ+o
-         +tp4mAb6r4G8rKRh41l9uoU7VnwvylyrMJ8DoY03EzUe0utNpqGv0TX/NFwg11Hxt9sJ
-         cDyj4QEseeT63o+OZwsgXvDAqXaCOcoUVTKvSGAc318AFCNhARDlwLjPe0BZPrXt0O6E
-         W9PxQe6VROuAfkH3wToKwa4Gl47ppXtMN6tXRFlcId3uoUW0UuZFElkC7V1iT6q53zuZ
-         UjYA==
-X-Gm-Message-State: AOAM532dptM8m08y+VyvjPFcYier4p2vZfcrbRCURAhErqbeRMsJ07oG
-        5eMc4eSQHDteFOHOYs5mDY14EaYdwZOd0I5ykFw=
-X-Google-Smtp-Source: ABdhPJwOj52rKR+SnGSCk5zrakaTEuCph0Vlh9mCPeniuBCEg8LbPAc6/T407ZIJXx81DrLAPZXxwGPcEYKoqBpnfuU=
-X-Received: by 2002:adf:fb05:0:b0:20a:e113:8f3f with SMTP id
- c5-20020adffb05000000b0020ae1138f3fmr3342797wrr.534.1652436917502; Fri, 13
- May 2022 03:15:17 -0700 (PDT)
+        Fri, 13 May 2022 06:16:47 -0400
+Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC73E21265;
+        Fri, 13 May 2022 03:16:45 -0700 (PDT)
+IronPort-Data: =?us-ascii?q?A9a23=3AQNL8NaA205LTVBVW/8Lhw5YqxClBgxIJ4g17XOL?=
+ =?us-ascii?q?fUwHt1j131D0GnDFNWGiPPveKamr3e4xwat+1/EkP7JGAx9UxeLYW3SszFioV8?=
+ =?us-ascii?q?6IpJjg4wn/YZnrUdouaJK5ex512huLocYZkHhcwmj/3auK79SMkjPnRLlbBILW?=
+ =?us-ascii?q?s1h5ZFFYMpBgJ2UoLd94R2uaEsPDha++/kYqaT/73ZDdJ7wVJ3lc8sMpvnv/AU?=
+ =?us-ascii?q?MPa41v0tnRmDRxCUcS3e3M9VPrzLonpR5f0rxU9IwK0ewrD5OnREmLx9BFrBM6?=
+ =?us-ascii?q?nk6rgbwsBRbu60Qqm0yIQAvb9xEMZ4HFaPqUTbZLwbW9GgjOGj5Zz2f1DqJ6xV?=
+ =?us-ascii?q?Rw0eKbLnYzxVjEBSX0kZPYfp+SvzX+X9Jb7I1f9W2fjx+VGCEAwIJEC/eB2ESd?=
+ =?us-ascii?q?C+JQwLT8XaQuYr+a3xq+rDOhqmsknasLsOes3sGlI1izCALAqTPjrR6TM+M8d0?=
+ =?us-ascii?q?DA7rt5BEOyYZMcDbzdrKhPabHVnPlYRFYJ7n+qygHT7WyNXpUjTpqct5WXXigt?=
+ =?us-ascii?q?r39DQ3HD9EjCRbZwN2B/G+SSdpCKkaiz2/ee3kVKtmk9ATMeW9c8jZL8vKQ=3D?=
+ =?us-ascii?q?=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A52oAfqGdTyWl+cNApLqE1MeALOsnbusQ8zAX?=
+ =?us-ascii?q?PiFKOHhom6mj+vxG88506faKslwssR0b+OxoW5PwJE80l6QFgrX5VI3KNGbbUQ?=
+ =?us-ascii?q?CTXeNfBOXZowHIKmnX8+5x8eNaebFiNduYNzNHpPe/zA6mM9tI+rW6zJw=3D?=
+X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
+   d="scan'208";a="124213173"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 13 May 2022 18:16:44 +0800
+Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
+        by cn.fujitsu.com (Postfix) with ESMTP id 0A2454D1716F;
+        Fri, 13 May 2022 18:16:39 +0800 (CST)
+Received: from G08CNEXCHPEKD08.g08.fujitsu.local (10.167.33.83) by
+ G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Fri, 13 May 2022 18:16:39 +0800
+Received: from localhost.localdomain (10.167.215.54) by
+ G08CNEXCHPEKD08.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Fri, 13 May 2022 18:16:38 +0800
+From:   Xiao Yang <yangx.jy@fujitsu.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
+CC:     <mgross@linux.intel.com>, <bp@suse.de>, <tglx@linutronix.de>,
+        Xiao Yang <yangx.jy@fujitsu.com>
+Subject: [PATCH] x86/speculation: Add missing srbds=off in the document of 'mitigations='
+Date:   Fri, 13 May 2022 18:16:37 +0800
+Message-ID: <20220513101637.216487-1-yangx.jy@fujitsu.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Received: by 2002:adf:d1cf:0:0:0:0:0 with HTTP; Fri, 13 May 2022 03:15:16
- -0700 (PDT)
-Reply-To: kellnersamuel5111@gmail.com
-From:   Kellner Samuel <maruscapitalmoney679@gmail.com>
-Date:   Fri, 13 May 2022 11:15:16 +0100
-Message-ID: <CAAyiObXY2Ob5NiLFZYuLTq+MA777aT2VvxxfSksAwvx9GT0c1g@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:42f listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5878]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [maruscapitalmoney679[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [maruscapitalmoney679[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [kellnersamuel5111[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-yoursite-MailScanner-ID: 0A2454D1716F.A79BC
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: yangx.jy@fujitsu.com
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Signed-off-by: Xiao Yang <yangx.jy@fujitsu.com>
+---
+ Documentation/admin-guide/kernel-parameters.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 3f1cc5e317ed..93e9b15f1cf4 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3103,6 +3103,7 @@
+ 					       mds=off [X86]
+ 					       tsx_async_abort=off [X86]
+ 					       kvm.nx_huge_pages=off [X86]
++					       srbds=off [X86,INTEL]
+ 					       no_entry_flush [PPC]
+ 					       no_uaccess_flush [PPC]
+ 
 -- 
-Good day! I am aware that the Internet has become very unsafe, but
-considering the situation I have no option than to seek for foreign
-partnership through this medium. I will not disclose my Identity until
-I am fully convinced you are the right person for this business deal.
-I have access to very vital information that can be used to move a
-huge amount of money to a secured account outside United Kingdom. Full
-details/modalities will be disclosed on your expression of Interest to
-partner with me. I am open for negotiation importantly the funds to be
-transferred have nothing to do with drugs, terrorism or Money
-laundering. Thanks for your anticipated corporation.
-Regards,
+2.21.0
+
+
+

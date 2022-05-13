@@ -2,70 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1EEB525B99
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 08:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1BAA525BA0
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 08:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377323AbiEMGeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 02:34:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
+        id S1377367AbiEMGfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 02:35:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236494AbiEMGeK (ORCPT
+        with ESMTP id S236494AbiEMGfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 02:34:10 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E917A2A1FD0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 23:34:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652423646; x=1683959646;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NCLw1D/Ap7uQdQ5sir8JCYLSzQQo6N/3LNNrH7SbUHg=;
-  b=KFhotyg06aJYa6+apfzKFc7fH1mmLUvw65BerqjNXyu7gIOWYmWqDVVS
-   ofKpCJX7mgXlwFmluJH0Y2cxR2rTHjYmWQtlPVkWqdROAhpAqgKFgd4Zl
-   LMjvODoq0PR+uiIbx6h4HTrD+BdklXN17v4vBKtJ8RsGlmndtBR+uutPU
-   dWVr41ruXs72O3NalXX1hSjloG0xiPvf0NRYh9ruDIv32/A0PHAYF7YKp
-   IeWLMc0FfVbh2vlSfS/E1ebbu9GHdsz8Q0fQgOcLYVQs3cTD2wRH1bf9T
-   CG3Xn6EWzBWnY0a55IUATtq1i0FRrCwqF2JNQy5Eil+p6XDHLRRoD2NRf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="267825472"
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="267825472"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 23:34:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="658969597"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 12 May 2022 23:34:03 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1npOsE-000LQK-S3;
-        Fri, 13 May 2022 06:34:02 +0000
-Date:   Fri, 13 May 2022 14:34:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Josh Don <joshdon@google.com>, Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     kbuild-all@lists.01.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Cruz Zhao <CruzZhao@linux.alibaba.com>,
-        Tejun Heo <tj@kernel.org>, Josh Don <joshdon@google.com>
-Subject: Re: [PATCH] sched/core: add forced idle accounting for cgroups
-Message-ID: <202205131429.4xuc9fjB-lkp@intel.com>
-References: <20220513005427.2507335-1-joshdon@google.com>
+        Fri, 13 May 2022 02:35:02 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFE702A18A8
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 23:35:00 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id E68791E80C96;
+        Fri, 13 May 2022 14:29:17 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Yc2e7FKnwc4q; Fri, 13 May 2022 14:29:15 +0800 (CST)
+Received: from [172.30.21.106] (unknown [180.167.10.98])
+        (Authenticated sender: liqiong@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 5D7C61E80C93;
+        Fri, 13 May 2022 14:29:15 +0800 (CST)
+Subject: Re: [PATCH] mm: change "char *bdi_unknown_name" to "char
+ bdi_unknown_name[]"
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220512082637.24649-1-liqiong@nfschina.com>
+ <20220512130051.94a0c53e5d1498292473975d@linux-foundation.org>
+From:   liqiong <liqiong@nfschina.com>
+Message-ID: <2d698914-befd-0283-71ed-599aa1bf9e3d@nfschina.com>
+Date:   Fri, 13 May 2022 14:34:56 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220513005427.2507335-1-joshdon@google.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220512130051.94a0c53e5d1498292473975d@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RDNS_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,107 +51,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Josh,
+在 2022年05月13日 04:00, Andrew Morton 写道:
+> On Thu, 12 May 2022 16:26:37 +0800 liqiong <liqiong@nfschina.com> wrote:
+>
+>> "char bdi_unknown_nam[]" string form declares a single variable.
+>> It is better then "char *bdi_unknown_name" which creates two
+>> variables.
+>>
+>> ...
+>>
+>> --- a/mm/backing-dev.c
+>> +++ b/mm/backing-dev.c
+>> @@ -20,7 +20,7 @@ struct backing_dev_info noop_backing_dev_info;
+>>  EXPORT_SYMBOL_GPL(noop_backing_dev_info);
+>>  
+>>  static struct class *bdi_class;
+>> -static const char *bdi_unknown_name = "(unknown)";
+>> +static const char bdi_unknown_name[] = "(unknown)";
+>>  
+> heh, fun patch.  We actually do this quite a lot.  
+>
+> 	grep -r "^[a-z].*char \*[a-z].*= \"" .
+>
+> is a pathetic pattern which catches a lot of them.
+>
+>
+> However.  I expected your patch to shrink the kernel a bit, but it has
+> the opposite effect:
+>
+> hp2:/usr/src/25> size mm/backing-dev.o
+>    text	   data	    bss	    dec	    hex	filename
+>   21288	   9396	   3808	  34492	   86bc	mm/backing-dev.o-before
+>   21300	   9428	   3808	  34536	   86e8	mm/backing-dev.o-after
+>
+> Even .data became larger.  I didn't investigate why.
+Hi,
+It seems  the patch creates a new section:
+0000000000000000 l       ___ksymtab_gpl+bdi_dev_name    0000000000000000 __ksymtab_bdi_dev_name
+0000000000000f60 l     O .rodata        000000000000000a bdi_unknown_name
+And  put  "bdi_unknown_name"  at  .rodata.str1.1:
 
-Thank you for the patch! Perhaps something to improve:
+This work was published in "KernelJanitors/Todo". It says:
 
-[auto build test WARNING on tip/sched/core]
-[also build test WARNING on tip/master linux/master linus/master v5.18-rc6 next-20220512]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+"foo []" is better because it declares a single variable,   For variables marked __initdata, the "*foo" form causes
+only the pointer, not the string itself, to be dropped from the kernel image, which is a bug.
+Using the "foo[]" form with regular 'ole local variables also makes the assembly shorter.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Josh-Don/sched-core-add-forced-idle-accounting-for-cgroups/20220513-085621
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 734387ec2f9d77b00276042b1fa7c95f48ee879d
-config: i386-randconfig-m021 (https://download.01.org/0day-ci/archive/20220513/202205131429.4xuc9fjB-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/21dca7763777c1985d6f5ac289e6e0c20d429d05
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Josh-Don/sched-core-add-forced-idle-accounting-for-cgroups/20220513-085621
-        git checkout 21dca7763777c1985d6f5ac289e6e0c20d429d05
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from kernel/sched/build_utility.c:93:
-   kernel/sched/core_sched.c: In function 'sched_core_rstat_flush':
-   kernel/sched/core_sched.c:306:35: error: invalid use of undefined type 'struct task_group'
-     306 |         struct cfs_rq *cfs_rq = tg->cfs_rq[cpu];
-         |                                   ^~
-   kernel/sched/core_sched.c:307:39: error: invalid use of undefined type 'struct task_group'
-     307 |         struct task_group *parent = tg->parent;
-         |                                       ^~
-   kernel/sched/core_sched.c:319:19: error: invalid use of undefined type 'struct task_group'
-     319 |         delta = tg->forceidle_sum_pending;
-         |                   ^~
-   kernel/sched/core_sched.c:321:19: error: invalid use of undefined type 'struct task_group'
-     321 |                 tg->forceidle_sum_pending = 0;
-         |                   ^~
-   kernel/sched/core_sched.c:333:11: error: invalid use of undefined type 'struct task_group'
-     333 |         tg->forceidle_sum += delta;
-         |           ^~
-   kernel/sched/core_sched.c:334:15: error: invalid use of undefined type 'struct task_group'
-     334 |         parent->forceidle_sum_pending += delta;
-         |               ^~
->> kernel/sched/core_sched.c:304:56: warning: parameter 'cpu' set but not used [-Wunused-but-set-parameter]
-     304 | void sched_core_rstat_flush(struct task_group *tg, int cpu)
-         |                                                    ~~~~^~~
-   kernel/sched/core_sched.c: In function 'sched_core_forceidle_sum':
-   kernel/sched/core_sched.c:340:16: error: invalid use of undefined type 'struct task_group'
-     340 |         if (!tg->parent) {
-         |                ^~
-   kernel/sched/core_sched.c:353:26: error: invalid use of undefined type 'struct task_group'
-     353 |                 return tg->forceidle_sum;
-         |                          ^~
-   kernel/sched/core_sched.c:355:1: error: control reaches end of non-void function [-Werror=return-type]
-     355 | }
-         | ^
-   cc1: some warnings being treated as errors
+I thought it make sense,  so i  searched the mm tree by "grep  -nHre char.*\*.*=.*\"",  and checked all the "char *foo"
+string form,  It seems only this one should be fixed.
 
 
-vim +/cpu +304 kernel/sched/core_sched.c
 
-   303	
- > 304	void sched_core_rstat_flush(struct task_group *tg, int cpu)
-   305	{
-   306		struct cfs_rq *cfs_rq = tg->cfs_rq[cpu];
-   307		struct task_group *parent = tg->parent;
-   308		u64 delta, curr_sum;
-   309	
-   310		/* root uses cpustat */
-   311		if (!parent)
-   312			return;
-   313	
-   314		/*
-   315		 * Note: cgroup_rstat_lock protects cfs_rq->forceidle_sum_prev and
-   316		 * tg->{forceidle_sum, forceidle_sum_pending}.
-   317		 */
-   318	
-   319		delta = tg->forceidle_sum_pending;
-   320		if (delta)
- > 321			tg->forceidle_sum_pending = 0;
-   322	
-   323		/* rq lock not held; value may change concurrently */
-   324		curr_sum = READ_ONCE(cfs_rq->forceidle_sum);
-   325		if (curr_sum != cfs_rq->forceidle_sum_prev) {
-   326			delta += curr_sum - cfs_rq->forceidle_sum_prev;
-   327			cfs_rq->forceidle_sum_prev = curr_sum;
-   328		}
-   329	
-   330		if (!delta)
-   331			return;
-   332	
-   333		tg->forceidle_sum += delta;
-   334		parent->forceidle_sum_pending += delta;
-   335	}
-   336	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

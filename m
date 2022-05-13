@@ -2,103 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72AA65261DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 14:29:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A38B85261E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 14:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380258AbiEMM3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 08:29:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43330 "EHLO
+        id S1380263AbiEMMaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 08:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380250AbiEMM3c (ORCPT
+        with ESMTP id S1350172AbiEMMaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 08:29:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9813F5BD2A
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 05:29:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652444970;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Fri, 13 May 2022 08:30:15 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCF14249A;
+        Fri, 13 May 2022 05:30:13 -0700 (PDT)
+Date:   Fri, 13 May 2022 12:30:08 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652445010;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RUx2v8qsPenRXH9JcXLDmo2qkX4LLDjdAwjr1Yz2a/c=;
-        b=ZfHbEc9eH0brNZ7Aoyiv3kHp0y5XZHy37hfLGLfBnxxwiUV0V1Oj13TyHa5Fr6BkPmOOPs
-        QFx1zgBCeSXJoW6CQzwr8DFAJEPMpEzxq1ZQOXpoPV7W29lntHvlS1ZpcU5HFRMQkfe5t0
-        /LoWnOAGKk4vY5sHh4hyulplWfcTuzw=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-498-rL-OIEZLO9m-ZGrtdcm9mw-1; Fri, 13 May 2022 08:29:29 -0400
-X-MC-Unique: rL-OIEZLO9m-ZGrtdcm9mw-1
-Received: by mail-wm1-f69.google.com with SMTP id g3-20020a7bc4c3000000b0039409519611so2869870wmk.9
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 05:29:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RUx2v8qsPenRXH9JcXLDmo2qkX4LLDjdAwjr1Yz2a/c=;
-        b=KwgtDRzTTIv6/THLNB/hMXluTDITmCcDXEQrvx1JYv6TRVHn2yci9+Ivdx05qzioiG
-         n+e+pCpSq2zqnfBXtJJgtrszRBbyLeWTAXYO+aAiBbm9Y3n2Nmy8P2q6vhP9sIkBCrSO
-         yWQ8cbrYQ0pYSnF80RS7itLf7/B1O/cQURnXSdPDlKgCN9XKz+oqS7HQ4GaecYJ8PdzZ
-         nxwHxV4KKN5tAqNKJ/A8SS6O3XPcK5KtdVFIE8HOud/fnjS4/bycweNRvp68Nv0e21C2
-         VMGnBa0ipg08TH5iOFarmcRMf1vhLSLn+aTGuRzBUKRiv9mZsU8bF7II/q7Rm87lSI/r
-         EEmA==
-X-Gm-Message-State: AOAM530pGwiT2aM6o4NT84Bj1iTnNT8OCmupdIR9swI8WicN92rb76VJ
-        U7+wrkQKUp5OMESKamlxWVAWy6UgD8GtWzq2ThgrN7yzqQvApdnLOlP8q4NY26CkvXFhqAZ5eeh
-        1+iw2iQB2TrEe2MRTJSQbyakpDSUnKgqSItDUzW1ovDOHNiOUtAqt/FXsdFoRs7laPyAGYvBHDD
-        c=
-X-Received: by 2002:a05:600c:3ba5:b0:394:6a82:8dbe with SMTP id n37-20020a05600c3ba500b003946a828dbemr4251412wms.185.1652444968370;
-        Fri, 13 May 2022 05:29:28 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwZHiFgsQEc6o9p9wXNxY7rLpgdqYrrRy8dqWoxDl7lbXz2Av9EzL6Uyc1s2ZY/cv0n+100bQ==
-X-Received: by 2002:a05:600c:3ba5:b0:394:6a82:8dbe with SMTP id n37-20020a05600c3ba500b003946a828dbemr4251399wms.185.1652444968161;
-        Fri, 13 May 2022 05:29:28 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id o42-20020a05600c512a00b003942a244f49sm5910754wms.34.2022.05.13.05.29.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 05:29:27 -0700 (PDT)
-Message-ID: <0876d022-f6e2-a0cf-0e16-d6a19aec0a48@redhat.com>
-Date:   Fri, 13 May 2022 14:29:27 +0200
+        bh=VPQ2hW+g443c1/58m1zWtLBd/8L9CEje+od8ufelfyU=;
+        b=O0a1SR3TXVJGd8p4VzQmk7Ee40+s1cji9+p+2ccrqrD3rlr2oEIX8++TzWAKVL0d8rqL41
+        DNTQCQLc8p3j6ORgeK9sX19bPGSalybZEx/l4qVT8uNMU/6x1CmFjC9kOpQkY1GSGPepPW
+        CxRmMPdesVaj5sMLDL6/s5oVd32GapVt2I2CWAGscM9pwUkYEg9Ha6XCQMKSsvjOt6p7ex
+        yhENC+Jc5nqZOtJXW8UawLudY/FZpfES7uRtfLm4PaVyaF6fa1u95PJBiYAYFgUZ+xM2QG
+        IaaN4ldXwWrLBmVpQTNzfp+wbwzqR3xJNO3ZXsmwi5dTkcZetNxu/QAqaaZ87w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652445010;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VPQ2hW+g443c1/58m1zWtLBd/8L9CEje+od8ufelfyU=;
+        b=vFI8vIWzpXYFoeLyW6FvbG9Gg/id3iMpb9pRTxAYVdUSP8NV1+lDBVkygOF9k56Ri60iOL
+        KikmF7MLxRNWI1Cg==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cleanups] x86/prctl: Remove pointless task argument
+Cc:     Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@suse.de>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <87lev7vtxj.ffs@tglx>
+References: <87lev7vtxj.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] fbdev: vesafb: Allow to be built if COMPILE_TEST is
- enabled
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org
-References: <20220505120419.314136-1-javierm@redhat.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20220505120419.314136-1-javierm@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+Message-ID: <165244500878.4207.14888343701387601439.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/5/22 14:04, Javier Martinez Canillas wrote:
-> The driver has runtime but no build time dependency with X86, so it can
-> be built for testing purposes if the COMPILE_TEST option is enabled.
-> 
-> This is useful to have more build coverage and make sure that the driver
-> is not affected by changes that could cause build regressions.
-> 
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> ---
+The following commit has been merged into the x86/cleanups branch of tip:
 
-Pushed this to drm-misc (drm-misc-next) with Thomas a-b tag provided over IRC.
+Commit-ID:     f5c0b4f30416c670408a77be94703d04d22b57df
+Gitweb:        https://git.kernel.org/tip/f5c0b4f30416c670408a77be94703d04d22b57df
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Thu, 12 May 2022 14:04:08 +02:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Fri, 13 May 2022 12:56:28 +02:00
 
--- 
-Best regards,
+x86/prctl: Remove pointless task argument
 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+The functions invoked via do_arch_prctl_common() can only operate on
+the current task and none of these function uses the task argument.
 
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/87lev7vtxj.ffs@tglx
+---
+ arch/x86/include/asm/fpu/api.h |  3 +--
+ arch/x86/include/asm/proto.h   |  3 +--
+ arch/x86/kernel/fpu/xstate.c   |  5 +----
+ arch/x86/kernel/process.c      |  9 ++++-----
+ arch/x86/kernel/process_32.c   |  2 +-
+ arch/x86/kernel/process_64.c   |  4 ++--
+ 6 files changed, 10 insertions(+), 16 deletions(-)
+
+diff --git a/arch/x86/include/asm/fpu/api.h b/arch/x86/include/asm/fpu/api.h
+index c83b302..6b0f31f 100644
+--- a/arch/x86/include/asm/fpu/api.h
++++ b/arch/x86/include/asm/fpu/api.h
+@@ -162,7 +162,6 @@ static inline bool fpstate_is_confidential(struct fpu_guest *gfpu)
+ }
+ 
+ /* prctl */
+-struct task_struct;
+-extern long fpu_xstate_prctl(struct task_struct *tsk, int option, unsigned long arg2);
++extern long fpu_xstate_prctl(int option, unsigned long arg2);
+ 
+ #endif /* _ASM_X86_FPU_API_H */
+diff --git a/arch/x86/include/asm/proto.h b/arch/x86/include/asm/proto.h
+index feed36d..80be803 100644
+--- a/arch/x86/include/asm/proto.h
++++ b/arch/x86/include/asm/proto.h
+@@ -39,7 +39,6 @@ void x86_report_nx(void);
+ 
+ extern int reboot_force;
+ 
+-long do_arch_prctl_common(struct task_struct *task, int option,
+-			  unsigned long arg2);
++long do_arch_prctl_common(int option, unsigned long arg2);
+ 
+ #endif /* _ASM_X86_PROTO_H */
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index 39e1c86..1b016a1 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -1687,16 +1687,13 @@ EXPORT_SYMBOL_GPL(xstate_get_guest_group_perm);
+  * e.g. for AMX which requires XFEATURE_XTILE_CFG(17) and
+  * XFEATURE_XTILE_DATA(18) this would be XFEATURE_XTILE_DATA(18).
+  */
+-long fpu_xstate_prctl(struct task_struct *tsk, int option, unsigned long arg2)
++long fpu_xstate_prctl(int option, unsigned long arg2)
+ {
+ 	u64 __user *uptr = (u64 __user *)arg2;
+ 	u64 permitted, supported;
+ 	unsigned long idx = arg2;
+ 	bool guest = false;
+ 
+-	if (tsk != current)
+-		return -EPERM;
+-
+ 	switch (option) {
+ 	case ARCH_GET_XCOMP_SUPP:
+ 		supported = fpu_user_cfg.max_features |	fpu_user_cfg.legacy_features;
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index b3d2d41..e86d09a 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -334,7 +334,7 @@ static int get_cpuid_mode(void)
+ 	return !test_thread_flag(TIF_NOCPUID);
+ }
+ 
+-static int set_cpuid_mode(struct task_struct *task, unsigned long cpuid_enabled)
++static int set_cpuid_mode(unsigned long cpuid_enabled)
+ {
+ 	if (!boot_cpu_has(X86_FEATURE_CPUID_FAULT))
+ 		return -ENODEV;
+@@ -985,20 +985,19 @@ unsigned long __get_wchan(struct task_struct *p)
+ 	return addr;
+ }
+ 
+-long do_arch_prctl_common(struct task_struct *task, int option,
+-			  unsigned long arg2)
++long do_arch_prctl_common(int option, unsigned long arg2)
+ {
+ 	switch (option) {
+ 	case ARCH_GET_CPUID:
+ 		return get_cpuid_mode();
+ 	case ARCH_SET_CPUID:
+-		return set_cpuid_mode(task, arg2);
++		return set_cpuid_mode(arg2);
+ 	case ARCH_GET_XCOMP_SUPP:
+ 	case ARCH_GET_XCOMP_PERM:
+ 	case ARCH_REQ_XCOMP_PERM:
+ 	case ARCH_GET_XCOMP_GUEST_PERM:
+ 	case ARCH_REQ_XCOMP_GUEST_PERM:
+-		return fpu_xstate_prctl(task, option, arg2);
++		return fpu_xstate_prctl(option, arg2);
+ 	}
+ 
+ 	return -EINVAL;
+diff --git a/arch/x86/kernel/process_32.c b/arch/x86/kernel/process_32.c
+index 26edb1c..0faa5e2 100644
+--- a/arch/x86/kernel/process_32.c
++++ b/arch/x86/kernel/process_32.c
+@@ -222,5 +222,5 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
+ 
+ SYSCALL_DEFINE2(arch_prctl, int, option, unsigned long, arg2)
+ {
+-	return do_arch_prctl_common(current, option, arg2);
++	return do_arch_prctl_common(option, arg2);
+ }
+diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+index e459253..1962008 100644
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -844,7 +844,7 @@ SYSCALL_DEFINE2(arch_prctl, int, option, unsigned long, arg2)
+ 
+ 	ret = do_arch_prctl_64(current, option, arg2);
+ 	if (ret == -EINVAL)
+-		ret = do_arch_prctl_common(current, option, arg2);
++		ret = do_arch_prctl_common(option, arg2);
+ 
+ 	return ret;
+ }
+@@ -852,7 +852,7 @@ SYSCALL_DEFINE2(arch_prctl, int, option, unsigned long, arg2)
+ #ifdef CONFIG_IA32_EMULATION
+ COMPAT_SYSCALL_DEFINE2(arch_prctl, int, option, unsigned long, arg2)
+ {
+-	return do_arch_prctl_common(current, option, arg2);
++	return do_arch_prctl_common(option, arg2);
+ }
+ #endif
+ 

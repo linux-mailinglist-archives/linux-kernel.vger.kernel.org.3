@@ -2,73 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62556525ABD
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 06:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E48FE525AC4
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 06:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353573AbiEME1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 00:27:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59306 "EHLO
+        id S1357836AbiEME3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 00:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbiEME1K (ORCPT
+        with ESMTP id S1348393AbiEME33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 00:27:10 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DE57A817
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 21:27:09 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d22so6829533plr.9
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 21:27:09 -0700 (PDT)
+        Fri, 13 May 2022 00:29:29 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2E9292797
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 21:29:28 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so9745342pju.2
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 21:29:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=F0tmkf1itlBqo51fYCdb6yZYCWOSUa1ToT2tuFC2yd0=;
-        b=Ep/WmXG9qSh6VNzzzdQoPejBG9XngvM7qSIHetwFtAvQ2y0hGhBueGwWug1YXOjaeK
-         WNFSU512/+f0yL1hfou8Tri4nTH2BrrL9WX4MbdXksa6HjMTYh56UFMzmOGia8kkNw3e
-         X/aXdHvFAI0Aczocq0+TBdcrUkf/RmT886cEbd1OviR7gyiEiRQK8m6/DGEHUUMDfNsU
-         12XbhCVdFbHNHnq1/91NuEqbQR+xKQy/EYa1HngIt1MOwFimwWrcr1byurZ6ylmAex0b
-         35Pi7gh1Jwdmqbgo+62qfXzBWR5exoi/6xEJe7rza2DjyV38rSX5Celdq/yc8wH7Ok7l
-         Xujg==
+        bh=kOkWkR9Ocy2CU7QPzBKs2WmW8Yr7OVdgCwKhMEH1vEU=;
+        b=pr9XuWJgiU/uRmmT5fZbBoUYR2ZQfOvIP/fG8IH7DKeqmuojFuDZ5c8c4YUHPmqBmh
+         zXNWMD3IgW8+O/7EHImSmJOMWPbw4I/GwppQwL8wZOPiK6LvvlpuBjNBTHMbMwZqiD8y
+         hXkWpEI31SeVpwZGidBW3OrJdvIc1VSzXbPDMG45/V9kihbRiwTFLZdv3bmc2a9zzgEj
+         yzGnffWVkfmvcPTQeqLwmZIq34n4O5wVfPfXE/Ebg4edrwrZE9reXxaAFO42AqvAMI6V
+         KA6K1ScFTbKuf+vbjXXUv0zz2w8of7sO+JSJwKPDa4ZO9gJlXH+fbjEA1MHINOZ3fxbd
+         EIcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=F0tmkf1itlBqo51fYCdb6yZYCWOSUa1ToT2tuFC2yd0=;
-        b=RzDkXkoPdP55pEnfa9WADk1IB7jO4TOHeuA7bQunuK1f4vKpJ0XMS+mPCxd5MvAVDi
-         nquRlqcAURA192plKAX+WKH66NRuUwKU07p+pyCO8juNCZsla2ZTtzNv6ufGnDYuJAbf
-         U9q0HW8UtvPBKZw+p1exRIoPR/2RLl/15REFz0mqlk2gpMppzbgxsT65dyJZS1fs1lt9
-         2wxMsJWnvx0z9W0g2C7FJOOejBqu3jdpg/EPJ3IeDwPwdsBhA7NQls+/8T1hQ0RZABca
-         pNIMqCp3LiIYhJDF1lDUPTi0drsqHMQ3rlBR1+puE77yJFVwDKKOyjTrj4UQ/Hhau47j
-         lCWQ==
-X-Gm-Message-State: AOAM5302iw7MnJZPYzD68hOgpmEGB2+99juv/wCUDB2y51M8us6cg5kJ
-        Sy2/pkxWq03cHpOgbjswtYpt5vaM2ecRgg==
-X-Google-Smtp-Source: ABdhPJyz14jzxmRB9UbyjskBGTTCLhQhSLs2nCZgHPkHdEWO2qS3cO7tSUVYxJmeogYgn6jbMtIeVA==
-X-Received: by 2002:a17:90b:4c07:b0:1dc:8491:c32f with SMTP id na7-20020a17090b4c0700b001dc8491c32fmr2913713pjb.242.1652416028565;
-        Thu, 12 May 2022 21:27:08 -0700 (PDT)
+        bh=kOkWkR9Ocy2CU7QPzBKs2WmW8Yr7OVdgCwKhMEH1vEU=;
+        b=dlgTdX/5Kuu4hzPaz3ZqoYMi5+qNAo77De9giGVwU3bWbLyZ01Lr9cF/uCa5gf9CGE
+         Q0/y5MawD0/lI2YEfQJLCLX/11zARryS6OOUiKDCRZg2HWDesl/4z77fxHoWMGJ/nxoC
+         vSZIBQsMXDayFeIDgx78fNohF219ZxTllCIs/M4RNk+tkkKQkedpkMoYxncud9zQBimg
+         6xR6ruM7qiDMMaEJA4Iv8siifF+71j9Cb/B3EulfSgjL1l+EHTepMWS9dNj2Wa6Q4sf/
+         kA1vFod4hrloR6xT3bUW/117HOw63bOTRy1DOCHa+wiKxsfu8tpN2yQqbapJu3m1Xxax
+         HZLA==
+X-Gm-Message-State: AOAM531KbrjsXLP/TELkPwe0j4uh9CuqKC8s4qh0fjyliCKrKuSJhl8F
+        9OOh4g4wcPnRrCjSgW2Qkn2m0A==
+X-Google-Smtp-Source: ABdhPJzXX3SKeWx7mB3jrDkUEdCdK+qjACy3ZkK/roOebknMQ5MhRsCd4gkNu9EYHwd4fa4whpthOw==
+X-Received: by 2002:a17:90b:4c85:b0:1dc:5778:5344 with SMTP id my5-20020a17090b4c8500b001dc57785344mr14165956pjb.8.1652416167522;
+        Thu, 12 May 2022 21:29:27 -0700 (PDT)
 Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id d26-20020a634f1a000000b003c619f3d086sm575404pgb.2.2022.05.12.21.27.07
+        by smtp.gmail.com with ESMTPSA id m21-20020a17090aab1500b001cd4989fed4sm2555583pjq.32.2022.05.12.21.29.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 21:27:08 -0700 (PDT)
-Date:   Fri, 13 May 2022 09:57:05 +0530
+        Thu, 12 May 2022 21:29:26 -0700 (PDT)
+Date:   Fri, 13 May 2022 09:59:25 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Schspa Shi <schspa@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v3] cpufreq: fix race on cpufreq online
-Message-ID: <20220513042705.nbnd6vccuiu6lb7a@vireshk-i7>
-References: <20220510035259.5ep52sgahd2a6rie@vireshk-i7>
- <20220510154236.88753-1-schspa@gmail.com>
- <20220511043515.fn2gz6q3kcpdai5p@vireshk-i7>
- <CAMA88TpefB=rnqea2u1zEvNUJNE_kdj4mYito7SGCuMj-o071Q@mail.gmail.com>
- <20220511122114.wccgyur6g3qs6fps@vireshk-i7>
- <CAJZ5v0gN_yDFpvCXRXv8rN-i3TugCi-HKpBKK2z4eWU0Zm1GUg@mail.gmail.com>
- <CAJZ5v0id+7vkqMQEyVRe29oF_dRtzZ0EhoYUn8=yzeENDeABJw@mail.gmail.com>
- <20220512065623.q4aa6y52pst3zpxu@vireshk-i7>
- <CAJZ5v0jeYiZ6esdxnJbOyDztNqOAbjcjxmpca3JTFWRh+cwdBw@mail.gmail.com>
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] cpufreq: make interface functions and lock
+ holding state clear
+Message-ID: <20220513042925.42hvv26ejup6js3h@vireshk-i7>
+References: <20220512135231.10076-1-schspa@gmail.com>
+ <20220512135231.10076-2-schspa@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0jeYiZ6esdxnJbOyDztNqOAbjcjxmpca3JTFWRh+cwdBw@mail.gmail.com>
+In-Reply-To: <20220512135231.10076-2-schspa@gmail.com>
 User-Agent: NeoMutt/20180716-391-311a52
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -80,37 +73,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12-05-22, 12:49, Rafael J. Wysocki wrote:
-> Well, would there be a problem with moving the
-> cpufreq_policy_put_kobj() call to the front of cpufreq_policy_free()?
-
-Emptying cpufreq_cpu_data first is required, else someone else will
-end up doing kobject_get() again.
-
-> If we did that, we'd know that everything could be torn down safely,
-> because nobody would be holding references to the policy any more.
-
-With the way we are progressing now, we will always have policy->cpus
-empty while we reach cpufreq_policy_free(). With that I think we will
-be safe with the current code here. I would also add a BUG_ON() here
-for non empty policy->cpus to be safe.
-
-> > > TBH, I'm not sure why show() doesn't check policy_is_inactive() under the rwsem.
-> >
-> > I agree, both show/store should have it.
-> >
-> > > Moreover, I'm not sure why the locking dance in store() is necessary.
-> >
-> > commit fdd320da84c6 ("cpufreq: Lock CPU online/offline in cpufreq_register_driver()")
+On 12-05-22, 21:52, Schspa Shi wrote:
+> cpufreq_offline() calls offline() and exit() under the policy rwsem
+> But they are called outside the rwsem in cpufreq_online().
 > 
-> I get that, but I'm wondering if locking CPU hotplug from store() is
-> needed at all.  I mean, if we are in store(), we are holding an active
-> reference to the policy kobject, so the policy cannot go away until we
-> are done anyway.  Thus it should be sufficient to use the policy rwsem
-> for synchronization.
+> This patch move the offline(), exit(), online(), init() to be inside
+> of policy rwsem to achieve a clear lock relationship.
+> 
+> All the init() online() implement only initialize policy object without
+> holding this lock and won't call cpufreq APIs need to hold this lock.
+> 
+> Signed-off-by: Schspa Shi <schspa@gmail.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 
-I think after the current patchset is applied and we have the inactive
-policy check in store(), we won't required the dance after all.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
 viresh

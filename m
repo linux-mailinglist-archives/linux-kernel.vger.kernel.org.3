@@ -2,102 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CAD35267E0
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:05:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 613435267DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382755AbiEMRFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 13:05:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
+        id S1382730AbiEMRFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 13:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382738AbiEMRF2 (ORCPT
+        with ESMTP id S1356197AbiEMRFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 13:05:28 -0400
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC285AA4F
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:05:27 -0700 (PDT)
-Received: by mail-vs1-xe35.google.com with SMTP id q2so9045014vsr.5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:05:26 -0700 (PDT)
+        Fri, 13 May 2022 13:05:17 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A555A174
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:05:16 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id l11so8035813pgt.13
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:05:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M20/Mcaj+7CKKvMSlepJXfPmEm2rLWCFBP/Lq2j/vwI=;
-        b=mrL3OYeL4uxYEIpzuHvbQ8/i8o/17RBvCEFupArWRVgPUb0v2h2sd3MAZ89u6YbOfb
-         SYHF27u+q7Vjcoynsn636fdp8UBpxMy2P4WWYTLQQTper1egJVXoBGgeFL+Lzjpg+3ry
-         VQKlRShU9mGvhL3iLVRBTKnyBbYqonZbNL0QuFz9ovT8N3IE+Mi6SDEG1yFF/Z3BuZzH
-         AHqcPSOlauyvDhFQzQdh7UEAs/lGfk0/odQ4A6jMqf8TikGKSz8Ysvu8+gvl9oozFsZw
-         wxKoOINaxLmxVIUv1Wm7vsmzc2M9NaJrO7IMcsXC30MYgeQTcr0oU3JF9Vrj1GcqYSQv
-         c3Zg==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VxUbVIJfDPKovOH85qumbwINB246mdu93fA8EKGD0Q4=;
+        b=r9DxuHYSlxU+T16xfaZ3O/UPZmGzM29cDZT+o/GKLRYX58IeBo5mKJFhPcJ+6+KWLp
+         kvkNJkaYVRprSwjfb8+qiP02Wk3RKfR/H5hjqjvqW3JA+7y3GZS92EQwwN3P8gRXWBXS
+         3Zq0QNUhjQsOag72nAT3p33sJCbeOhnM3BiHpu0FSomwUvLVeUHsqz6Mu0XbdNijm/ap
+         cPyTZWNnlwB+lPMjq8kK2xk7tvK/FtX1MZtWh2AjOFY+CqIfct7ZJxqTsrflvVCvRHY3
+         AuXsDly1u4YGbFr4mMBJ7m1mYdmp2G5zjA+2ilP2tX4daUN1AIht2wNMa/KvruK9krJq
+         LCzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=M20/Mcaj+7CKKvMSlepJXfPmEm2rLWCFBP/Lq2j/vwI=;
-        b=CU49ICwQy+OJKVDyDmNktmhMerz0yGc5ZhUtgObpbTv7BUZJKCiVoidwboWsUecwpf
-         Tpupdr7NDcXsS6VagiGhgJ9QJaXg8yZ+gOKoLbf4/rj+qkWSqt8IoP1+SdbwDebKP8c5
-         ccbckzndF9zn0SokJ9q6qBMHLdL7pWClRfaCdj7NO7iQollYf5mG+ke0fcvdkNnB6wSk
-         aR7FGrCahVZzcNsGYNBIxET2FtxP6o/FaPLQyMWYFACcvk0T7rXrOgPFMsEnStyQxkMj
-         7NSGo8GK6x/ckk4C/YCOMzSga9tRtZg7HY60ubhkFb9Sc0PqAjm+Fot+90JUTXBC/Psz
-         g4PQ==
-X-Gm-Message-State: AOAM532+5S6lX9RdQLZHEM2t6O8SyWmCVsbYypK7qy3erJlCw9oI28Fa
-        9ZvP335OqJYI4Sa+6c09FPrOaiOV2/H7UHg/Vn9Qgg==
-X-Google-Smtp-Source: ABdhPJyuZbLaFtq2n9NyLPjiVytNIDz6eQbCT21SLSfAoOglW4hIWTknPeKi7juMY+f7jD3wwPwXLjo91U6F/WzP/hg=
-X-Received: by 2002:a67:af01:0:b0:32d:3d57:cff with SMTP id
- v1-20020a67af01000000b0032d3d570cffmr2925978vsl.8.1652461525912; Fri, 13 May
- 2022 10:05:25 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VxUbVIJfDPKovOH85qumbwINB246mdu93fA8EKGD0Q4=;
+        b=C0FnLoCG4ufYKjyM1HkBZOrH2ad1IkvITewL1tOYyeH4yacwUZPZY8gbSW1JkC6kx4
+         FvkVrOhIg1CvHy9OzQfRTIZOb9wP0l1N5h39lyxZ1g0CioC4lLsLW5tO4nn7TU93dF8D
+         Pg/iH3WJJMizjJ1qTFcjnlcLC/I/UFOXEoJ2keI9vYp6WWV9nt2BcrWia/RJPvy3/fXW
+         l1ypcXZwcsQ6aaHncCyR3JZ2aEIjN4qB8b/TvRXrGaPm1BdFg2kKPof9UVKGUQx34tLc
+         KFjgTPKBghk5BNAQKseTuh/ldBRYQnrVK7MdFzHz6ttosiZPrfcj5CPrExKyZRh5gucG
+         jR0g==
+X-Gm-Message-State: AOAM530fxWSeyIFOlTONAv/sNMLKJGzP5SrxeIGetAzBid3o8nohEzuf
+        adcyg5pwtE+jIGAnBDG1W76o7Q==
+X-Google-Smtp-Source: ABdhPJwdRXoorZL9b6hOiDqo5sleRd9CEftCksC+uwX4Yxr3B8G/og8vtC/wYi+5Gmu3sUpc0Wb98A==
+X-Received: by 2002:a05:6a00:e8e:b0:4fa:a52f:59cf with SMTP id bo14-20020a056a000e8e00b004faa52f59cfmr5394126pfb.84.1652461515669;
+        Fri, 13 May 2022 10:05:15 -0700 (PDT)
+Received: from p14s.cg.shawcable.net (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id fr2-20020a17090ae2c200b001d94c194a67sm1821748pjb.18.2022.05.13.10.05.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 10:05:14 -0700 (PDT)
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     gregkh@linuxfoundation.org
+Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Suzuki.Poulose@arm.com
+Subject: [GIT PULL] Coresight changes for v5.19
+Date:   Fri, 13 May 2022 11:05:13 -0600
+Message-Id: <20220513170513.3276002-1-mathieu.poirier@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220513040519.1499333-1-irogers@google.com> <20220513040519.1499333-3-irogers@google.com>
- <cd8f8fca-a1e0-e4de-92e4-536dcb2c1f7c@huawei.com>
-In-Reply-To: <cd8f8fca-a1e0-e4de-92e4-536dcb2c1f7c@huawei.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 13 May 2022 10:05:13 -0700
-Message-ID: <CAP-5=fUahv8WVMXWXseCN8hC0qJL4fKBhA+eR9hnydgK-WDHQA@mail.gmail.com>
-Subject: Re: [PATCH 2/7] perf test: Use skip in vmlinux kallsyms
-To:     John Garry <john.garry@huawei.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
-        Carsten Haitzler <carsten.haitzler@arm.com>,
-        Marco Elver <elver@google.com>,
-        Michael Petlan <mpetlan@redhat.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 10:01 AM John Garry <john.garry@huawei.com> wrote:
->
-> On 13/05/2022 05:05, Ian Rogers wrote:
-> > Currently failures in reading vmlinux or kallsyms result in a test
-> > failure. However, the failure is typically permission related.
->
-> If the user requires root priviledges then should we just mention this
-> would be a problem for this test?
+The following changes since commit ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e:
 
-Tbh, it wasn't clear to me and so I didn't add a reason for skipping.
+  Linux 5.18-rc2 (2022-04-10 14:21:36 -1000)
 
-Thanks,
-Ian
+are available in the Git repository at:
 
-> > Prefer to
-> > flag these failures as skip.
-> >
-> > Signed-off-by: Ian Rogers<irogers@google.com>
->
-> Thanks,
-> John
+  git@gitolite.kernel.org:pub/scm/linux/kernel/git/coresight/linux.git tags/coresight-next-v5.19
+
+for you to fetch changes up to 1adff542d67a2ed1120955cb219bfff8a9c53f59:
+
+  coresight: cpu-debug: Replace mutex with mutex_trylock on panic notifier (2022-05-09 16:03:24 +0100)
+
+----------------------------------------------------------------
+Coresight changes for v5.19
+
+Good day Greg,
+
+Please consider those for the the upcoming v5.19 merge window when you have time.
+
+This pull request includes:
+
+- Work to uniformise access to the ETMv4 registers, making it easier to
+look for and change register accesses.
+
+- A correction to a probing failure when looking for links between devices.
+
+- The replacement of a call to mutex_lock() with a mutex_trylock() in the panic
+notifier of the cpu-debug infrastructure to avoid a possible deadlock.
+
+Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+
+----------------------------------------------------------------
+Guilherme G. Piccoli (1):
+      coresight: cpu-debug: Replace mutex with mutex_trylock on panic notifier
+
+James Clark (15):
+      coresight: etm4x: Cleanup TRCIDR0 register accesses
+      coresight: etm4x: Cleanup TRCIDR2 register accesses
+      coresight: etm4x: Cleanup TRCIDR3 register accesses
+      coresight: etm4x: Cleanup TRCIDR4 register accesses
+      coresight: etm4x: Cleanup TRCIDR5 register accesses
+      coresight: etm4x: Cleanup TRCCONFIGR register accesses
+      coresight: etm4x: Cleanup TRCEVENTCTL1R register accesses
+      coresight: etm4x: Cleanup TRCSTALLCTLR register accesses
+      coresight: etm4x: Cleanup TRCVICTLR register accesses
+      coresight: etm3x: Cleanup ETMTECR1 register accesses
+      coresight: etm4x: Cleanup TRCACATRn register accesses
+      coresight: etm4x: Cleanup TRCSSCCRn and TRCSSCSRn register accesses
+      coresight: etm4x: Cleanup TRCSSPCICRn register accesses
+      coresight: etm4x: Cleanup TRCBBCTLR register accesses
+      coresight: etm4x: Cleanup TRCRSCTLRn register accesses
+
+Mao Jinlong (1):
+      coresight: core: Fix coresight device probe failure issue
+
+ drivers/hwtracing/coresight/coresight-core.c       |  33 ++--
+ drivers/hwtracing/coresight/coresight-cpu-debug.c  |   7 +-
+ drivers/hwtracing/coresight/coresight-etm3x-core.c |   2 +-
+ .../hwtracing/coresight/coresight-etm3x-sysfs.c    |   2 +-
+ drivers/hwtracing/coresight/coresight-etm4x-core.c | 136 +++++-----------
+ .../hwtracing/coresight/coresight-etm4x-sysfs.c    | 180 +++++++++++----------
+ drivers/hwtracing/coresight/coresight-etm4x.h      | 120 +++++++++++---
+ 7 files changed, 268 insertions(+), 212 deletions(-)

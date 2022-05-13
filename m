@@ -2,134 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 922E65265C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:14:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A49CE5265C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381837AbiEMPOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 11:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
+        id S1381781AbiEMPPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 11:15:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381760AbiEMPOb (ORCPT
+        with ESMTP id S1381809AbiEMPPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 11:14:31 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148A753A6F;
-        Fri, 13 May 2022 08:14:29 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 509C91F385;
-        Fri, 13 May 2022 15:14:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652454868; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nyTU5ErQmQ0NdqPj7xjplU/5OPBXUdJ8mJObumbOOaE=;
-        b=A6yJ4U9KldExWhFuocfsPhkK8P9HeRgSb8fmB2eY9z7Sp7ko3TqOhgQnKM+TJjvYGD/z3+
-        2Je6BK2N+LYUAG7wici8UElgk0u8iqwoqsJtw8+x2adxjqmD0U06Eg+UegyuFNXj9dyMKC
-        etWrpypIyhItSwwSEGkVmpbAI6xPQ5M=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 13F5513446;
-        Fri, 13 May 2022 15:14:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id OAzmA9R1fmLxHwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Fri, 13 May 2022 15:14:28 +0000
-Date:   Fri, 13 May 2022 17:14:26 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Minchan Kim <minchan@kernel.org>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com
-Subject: Re: [PATCH v2 6/6] zswap: memcg accounting
-Message-ID: <20220513151426.GC16096@blackbody.suse.cz>
-References: <20220510152847.230957-1-hannes@cmpxchg.org>
- <20220510152847.230957-7-hannes@cmpxchg.org>
- <20220511173218.GB31592@blackbody.suse.cz>
- <YnwJUL90fuoHs3YW@cmpxchg.org>
+        Fri, 13 May 2022 11:15:01 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7402656C18;
+        Fri, 13 May 2022 08:14:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652454900; x=1683990900;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=px2gXoFjNpJE9vOVgtdtDq3mf97BJY5Gb4Y2uSDouZw=;
+  b=HWfBYkHhyoEDXP/HX92XHIFqjRjQx9eTA6iwEHu9e6gmIxNGbJOVNEk/
+   H0MspkSI4vk8FALQFMuRBtQ7ZVipp4z2VABUgRTGga6m1wnNN4i0eszbz
+   mZNtA6I4PW4hZlI9HvP1y3KBTmKgfKpB3de+vdfYhR59acxsI3W/0Nfdl
+   O248/ibzZVeP8Wx3NLNnI+g15UNlP8eYKF5btBkoP1E4jf+lKLaYyNsVB
+   XFKWJGSDDfYs4cZw7rt+fACbg+IFtIxYO1qT+B+Ktm2r0dEWMYC2JdnjZ
+   7i1XjKaAi/BOYnSf0G+PNrWRdOQ0sEHkifWXdQzVE1guznxyN7sLL+G7O
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="252373500"
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="252373500"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 08:14:56 -0700
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="595263034"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.36.190])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 08:14:53 -0700
+Message-ID: <df56f04b-cb25-5a47-ffef-b2e2ee0f6b74@intel.com>
+Date:   Fri, 13 May 2022 18:14:49 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnwJUL90fuoHs3YW@cmpxchg.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.8.1
+Subject: Re: [PATCH 6/6] perf intel-pt: Add guest_code support
+Content-Language: en-US
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, Leo Yan <leo.yan@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20220513090237.10444-1-adrian.hunter@intel.com>
+ <20220513090237.10444-7-adrian.hunter@intel.com>
+ <875ym9h4mt.fsf@linux.intel.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <875ym9h4mt.fsf@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 03:06:56PM -0400, Johannes Weiner <hannes@cmpxchg.org> wrote:
-> Correct. After which the uncompressed page is reclaimed and uncharged.
-> So the zswapout process will reduce the charge bottom line.
+On 13/05/22 17:46, Andi Kleen wrote:
+> Adrian Hunter <adrian.hunter@intel.com> writes:
+> 
+>> A common case for KVM test programs is that the guest object code can be
+>> found in the hypervisor process (i.e. the test program running on the
+>> host). To support that, a new option "--guest-code" has been added in
+>> previous patches.
+>>
+>> In this patch, add support also to Intel PT.
+>>
+>> In particular, ensure guest_code thread is set up before attempting to
+>> walk object code or synthesize samples.
+> 
+> Can you make it clear in the documentation what parts runs on the host
+> and what parts on the guest? 
 
-A zswap object falling under memory.current was my first thinking, I was
-confused why it's exported as a separate counter memory.zswap.current
-(which IMO suggests disjoint counting) and it doubles a
-memory.stat:zswap entry.
+That is up to the test program.  All the host thread maps are
+copied, so perf tools doesn't have to know.
 
-Is the separate memory.zswap.current good for anything? (Except maybe
-avoiding global rstat flush on memory.stat read but that'd be an
-undesired precendent.)
+> 
+> I'm still not fully sure how it exactly finds the code on the host,
+> how is the code transferred?
 
-(Ad the eventually reduced footprint, the transitional excursion above
-memcg's (or ancestor's) limit should be limited by number of parallel
-reclaims running (each one at most a page, right?), so it doesn't seem
-necessary to tackle (now).)
+I don't know.  From a quick look at the code in
+tools/testing/selftests/kvm/lib/kvm_util.c it seems to be using
+KVM_SET_USER_MEMORY_REGION IOCTL.
 
-> memory.zswap.* are there to configure zswap policy, within the
-> boundaries of available memory - it's by definition a subset.
-
-I see how the .max works when equal to 0 or "max". The intermediate
-values are more difficult to reason about.
-Also, I can see that on the global level, zswap is configured relatively
-(/sys/module/zswap/parameters/max_pool_percent).
-You wrote that the actual configured value is workload specific, would
-it be simpler to have also relative zswap limit per memcg?
-
-(Relative wrt memory.max, it'd be rather just a convenience with this
-simple ratio, however, it'd correspond to the top level limit. OTOH, the
-relatives would have counter-intuitive hierarchical behavior. I don't
-mean this should be changed, rather wondering why this variant was
-chosen.)
-
-
-> +bool obj_cgroup_may_zswap(struct obj_cgroup *objcg)
-> +{
-> +     struct mem_cgroup *memcg, *original_memcg;
-> +     bool ret = true;
-> +
-> +     original_memcg = get_mem_cgroup_from_objcg(objcg);
-> +     for (memcg = original_memcg; memcg != root_mem_cgroup;
-> +          memcg = parent_mem_cgroup(memcg)) {
-> +             unsigned long max = READ_ONCE(memcg->zswap_max);
-> +             unsigned long pages;
-> +
-> +             if (max == PAGE_COUNTER_MAX)
-> +                     continue;
-> +             if (max == 0) {
-> +                     ret = false;
-> +                     break;
-> +             }
-> +
-> +             cgroup_rstat_flush(memcg->css.cgroup);
-
-Here, I think it'd be better not to bypass mem_cgroup_flush_stats() (the
-mechanism is approximate and you traverse all ancestors anyway), i.e.
-mem_cgroup_flush_stats() before the loop instead of this.
-
-Thanks,
-Michal
+> 
+> Other than that more support for this use case is very useful.
+> 
+> -Andi
 

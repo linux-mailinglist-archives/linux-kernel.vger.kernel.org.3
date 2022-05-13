@@ -2,127 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4DC525C67
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A86525C6B
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377826AbiEMHhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 03:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47876 "EHLO
+        id S1377834AbiEMHjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 03:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377824AbiEMHhE (ORCPT
+        with ESMTP id S243152AbiEMHiz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 03:37:04 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD3649F11
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 00:37:02 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id CE2E11F45F;
-        Fri, 13 May 2022 07:36:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1652427419; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fKInJY+z1MdEACvSvKMPA2hgKgaGT9z3htD+GfUf0Oo=;
-        b=fPI77AxPsrNnCVDAkkAKVd0QiBEuNhi+b0iOmR7+64VvJV6mNMPbVb7kjPCPo0UkXi1yxT
-        IFw0EFCJveuVn1LczcX9U9uupEZ86vONwi6gKZLVzFpE3Aw2XpIdeGkJ2gRtu8uU1npf8Y
-        +KD/VA/p3U+hf/VXgBF1225jtI+KLII=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1652427419;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fKInJY+z1MdEACvSvKMPA2hgKgaGT9z3htD+GfUf0Oo=;
-        b=vTi2324TaszPtIm1ajwe6hJq0Ri9Z3B4faCIjj9vF63MrPTmRxtZr0/38/SL4hsUeWjxst
-        1x/6sF9nohTbfMBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C019D13A84;
-        Fri, 13 May 2022 07:36:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id KtujLpsKfmIsRwAAMHmgww
-        (envelope-from <osalvador@suse.de>); Fri, 13 May 2022 07:36:59 +0000
+        Fri, 13 May 2022 03:38:55 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6DC14B660;
+        Fri, 13 May 2022 00:38:52 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id AA0715C0262;
+        Fri, 13 May 2022 03:38:51 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 13 May 2022 03:38:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1652427531; x=1652513931; bh=KRAvyTFS43
+        NeTMqUA+krLdjjMY0SMM08oC6POjRC5tw=; b=H7MRj1BdzojzgarfxGnFmUE9EJ
+        5GPYHMvfs5ELhY4gxaYlae4gFn58ONndv6Lwcl9wMa04DpAUA0dpfRnMHnM0bKGb
+        YG4btr2ewrrM2ktAE3QqsZKi1l7aPRv77Mfa+iVhy4snG41DV0mPOKbiWl85s4C9
+        ClK+gR2aFc1QYN5+RM9G7PceuZuhx5Luw81WWG1kH0nH4w3Xd6lfhy33v48C5Ueb
+        vAAwWhzAzuUNz4Buejh7/S/0Wuxd65VQYXnm49Ljo11SAM1K5DOIgzifIiIdDc+t
+        1tdubXSlgJh+lYWmL8IaO1+ZPMaKA1Koq3/1LWjjlFBH5UMhdxjunuj7NoWg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1652427531; x=
+        1652513931; bh=KRAvyTFS43NeTMqUA+krLdjjMY0SMM08oC6POjRC5tw=; b=z
+        Zk22c954gzlfH/u3ebLq8E6alYN6onbXCZZGApZVuSr9K0YmgJ/sR4RlkpN6Jkjp
+        TC3VRapOhTomdAiuIMUnNI8f92uwxoYHrqufojwQxKC6n9T92TqhZmCftvWBoeb6
+        C9M/PtD9i62fZxyIcXo/LdQwszXBJwQmTvIrMOmXWDwaC5CPB56k7zknP+A0zFW/
+        z/HrcclFwOlJx7N31AmZ1aBBW8EQywDtbb6VJBwWv7UZDIE90+Fi2WH3luHaxmyC
+        Ap/pHxgMczFZDT4Q4cg+TVbiYKCiI9nop3eo3/l+Ggp55gYrCXoFWwByHIklrgAE
+        PmLAZeLvPna+r9soNvMSA==
+X-ME-Sender: <xms:Cgt-Yv5bqAO52TAaGlqIzAbr7UU0h_qOduojqL8DtnkQv47f7UdLGQ>
+    <xme:Cgt-Yk57cytgvkYWESMirvK-XMZ99xSLstGMXAU1ycXhAcAWgRDusaqMmDCQeYg7L
+    vHy18eIgP5-8ZyPVs8>
+X-ME-Received: <xmr:Cgt-YmfsO4jX5PMSg4w7J6PDHKR3XRx_cLirfdJ1DH6kCZwJdjrOJeu22K_wheXfYryZjY8h9_osb91jMd7QXZbV4-PjxuOMaDeLvRU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgeekgdduvddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
+    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:Cgt-YgKev10iIx9fPlZhrDLC50Gi-j_QCgSfsdQzO2pG1jtSfVcLXQ>
+    <xmx:Cgt-YjLXp7RS8wel7-bYKqRjaDl8yJ1RAbOf4WIn9O2-gTu6JkmxRg>
+    <xmx:Cgt-YpwozPXysW0DgrUjRhmHrNqLWX6j3TTAwm98hitsK2sOoXYVMA>
+    <xmx:Cwt-YkVD4MLVTKIHfjJNAQvzI9dtzjLxPgTic8GXy55IdFS-WDtmDQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 13 May 2022 03:38:50 -0400 (EDT)
+Date:   Fri, 13 May 2022 09:38:49 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     qianfanguijin@163.com
+Cc:     linux-sunxi@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] ARM: dts: sun8i-r40: Add "cpu-supply" node for
+ sun8i-r40 based board
+Message-ID: <20220513073849.cu4jzykefat2sepg@houat>
+References: <20220512071858.10805-1-qianfanguijin@163.com>
+ <20220512071858.10805-2-qianfanguijin@163.com>
 MIME-Version: 1.0
-Date:   Fri, 13 May 2022 09:36:59 +0200
-From:   Oscar Salvador <osalvador@suse.de>
-To:     Adrian-Ken Rueegsegger <ken@codelabs.ch>
-Cc:     dave.hansen@linux.intel.com, david@redhat.com, luto@kernel.org,
-        peterz@infradead.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, hpa@zytor.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/mm: Fix marking of unused sub-pmd ranges
-In-Reply-To: <20220509090637.24152-2-ken@codelabs.ch>
-References: <20220509090637.24152-1-ken@codelabs.ch>
- <20220509090637.24152-2-ken@codelabs.ch>
-User-Agent: Roundcube Webmail
-Message-ID: <396545e80737225ca37c85224d578c1f@suse.de>
-X-Sender: osalvador@suse.de
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zxcrkptjti3zcqyl"
+Content-Disposition: inline
+In-Reply-To: <20220512071858.10805-2-qianfanguijin@163.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-09 11:06, Adrian-Ken Rueegsegger wrote:
-> The unused part precedes the new range spanned by the start, end
-> parameters of vmemmap_use_new_sub_pmd. This means it actually goes from
-> ALIGN_DOWN(start, PMD_SIZE) up to start. Use the correct address when
-> applying the mark using memset.
-> 
-> Fixes: 8d400913c231 ("x86/vmemmap: handle unpopulated sub-pmd ranges")
-> Signed-off-by: Adrian-Ken Rueegsegger <ken@codelabs.ch>
 
-Yes, this was clearly an oversight from my side.
-Thanks for fixing it!
+--zxcrkptjti3zcqyl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Oscar Salvador <osalvador@suse.de>
+Hi,
 
+On Thu, May 12, 2022 at 03:18:58PM +0800, qianfanguijin@163.com wrote:
+> From: qianfan Zhao <qianfanguijin@163.com>
+>=20
+> sun8i-r40 actived cpufreq feature now, let's add "cpu-supply" node on
+> board.
+>=20
+> Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
 > ---
->  arch/x86/mm/init_64.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
-> index 96d34ebb20a9..e2942335d143 100644
-> --- a/arch/x86/mm/init_64.c
-> +++ b/arch/x86/mm/init_64.c
-> @@ -902,6 +902,8 @@ static void __meminit vmemmap_use_sub_pmd(unsigned
-> long start, unsigned long end
-> 
->  static void __meminit vmemmap_use_new_sub_pmd(unsigned long start,
-> unsigned long end)
->  {
-> +	const unsigned long page = ALIGN_DOWN(start, PMD_SIZE);
+>  arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts | 4 ++++
+>  arch/arm/boot/dts/sun8i-r40-feta40i.dtsi          | 4 ++++
+>  arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts          | 4 ++++
+>  arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts | 4 ++++
+>  4 files changed, 16 insertions(+)
+>=20
+> diff --git a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts b/arch/arm=
+/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
+> index a6a1087a0c9b..4f30018ec4a2 100644
+> --- a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
+> +++ b/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
+> @@ -113,6 +113,10 @@ &ahci {
+>  	status =3D "okay";
+>  };
+> =20
+> +&cpu0 {
+> +	cpu-supply =3D <&reg_dcdc2>;
+> +};
 > +
->  	vmemmap_flush_unused_pmd();
-> 
->  	/*
-> @@ -914,8 +916,7 @@ static void __meminit
-> vmemmap_use_new_sub_pmd(unsigned long start, unsigned long
->  	 * Mark with PAGE_UNUSED the unused parts of the new memmap range
->  	 */
->  	if (!IS_ALIGNED(start, PMD_SIZE))
-> -		memset((void *)start, PAGE_UNUSED,
-> -			start - ALIGN_DOWN(start, PMD_SIZE));
-> +		memset((void *)page, PAGE_UNUSED, start - page);
-> 
->  	/*
->  	 * We want to avoid memset(PAGE_UNUSED) when populating the vmemmap 
-> of
 
--- 
-Oscar Salvador
-SUSE Labs
+This will break bisection on those boards. Indeed, you added the OPPs on
+the first patch, and if you only apply that patch, the boards in the
+second patch will be missing their CPU regulator. The kernel will then
+ramp up the frequency to the highest OPP, but will not change the
+voltage, resulting in a crash.
+
+There's a similar issue for all the boards that don't have a regulator
+in the first place.
+
+The way we worked around this for the other SoCs is to have a DTSI with
+the OPPs with a frequency higher than what U-Boot boots with (1008MHz?),
+and only include that DTSI on boards that have a CPU regulator hooked in.
+
+Maxime
+
+--zxcrkptjti3zcqyl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYn4LCQAKCRDj7w1vZxhR
+xUebAP9qYzZ/IfkEzAu15CJHZ6js7mUi6RdbUoNXxKfPggg5ogD+Ni0yIfCamB1z
+NywiFR5KnVB6qmwQCleCMfl/hditBQs=
+=5Se1
+-----END PGP SIGNATURE-----
+
+--zxcrkptjti3zcqyl--

@@ -2,64 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE8A525EA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 11:19:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C85525E44
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 11:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378906AbiEMJKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 05:10:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38048 "EHLO
+        id S1378746AbiEMJKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 05:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378777AbiEMJKd (ORCPT
+        with ESMTP id S1358383AbiEMJJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 05:10:33 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DEB16D12D;
-        Fri, 13 May 2022 02:10:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652433031; x=1683969031;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nuXU/g3coGmPHjkK9kbksU4msj3bxR1yewtKO4WIDNs=;
-  b=KmD8INxtmJCSnGU/1IUizFvuvvzoYFgpkJ+0k/5/N2dpOjX1ftkavRb0
-   vp5mJY7C3yVj2brzuWHOrXGzKw4GJa/WP6X2Fb1qZP5zg+b+/tqlf/Qj3
-   OhrfHXeQYG5adI9WvCGKzSdmNOAY3Ke3zirb2y7N2o4+DIIDLLBPcsSsm
-   BOm+WqqoyKqty6SXoNCMOCg9MGdRVz6YhGDTaHHdNT5RF7H67wGVzQMb9
-   rast8Fsr3DEsWnwbgjatC1ByqpfePyxzKuVhn56ogbQSd7e9v/emPdHan
-   pzYH84oR4ZkPGEbF3U3QqIY8ZdvCV44Qa6k2MKAtuCynjvvFKNfyRABAz
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="295518013"
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="295518013"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 02:10:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="543183693"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 13 May 2022 02:10:28 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1npRJb-000LZW-Ep;
-        Fri, 13 May 2022 09:10:27 +0000
-Date:   Fri, 13 May 2022 17:09:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Marvin Lin <milkfafa@gmail.com>, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, openbmc@lists.ozlabs.org,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        kwliu@nuvoton.com, kflin@nuvoton.com
-Subject: Re: [PATCH v2 5/5] drivers: media: platform: Add NPCM Video
- Capture/Encode Engine driver
-Message-ID: <202205131733.OM8Kr2te-lkp@intel.com>
-References: <20220513033450.7038-6-kflin@nuvoton.com>
+        Fri, 13 May 2022 05:09:58 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1974D16A5F5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 02:09:58 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id y41so7136036pfw.12
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 02:09:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:from
+         :subject:to:cc:content-transfer-encoding;
+        bh=UhwvQh9WtluvABzEKWCvpawdI9sw+xJ4pB8xu8UmCHM=;
+        b=ahZDSOAXXUHUAEG1yC3XfSJqvzeJkvhql07Da/P4vca3HPDsvH8yoaAJcrIkb19Nfj
+         f7ToDRN3UwiVBHK67cZYVC/QE41iyck4/cBxjuYJOXKjfSdxsIUcjyGidBGnv9ycDDtR
+         OFrcEWSBN+xmUgbpG1PiTA5HZ5Xciqp2AEVruTLTcN4JIitJbxSfUWIZVBabym4R/2kQ
+         leexTl0fzpynm7T5VrmH9aLeZwtxCjcQiVB7Hk0KgDSQ9Jp+dp+tcjhkeVfQiow6PyB2
+         DxiSiGiZQXm7svvThPuuoGfPDvYGjaS1ORF1kkyUb/fCKSaj586wHbId8A7WPqXUdcSJ
+         ODvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:from:subject:to:cc:content-transfer-encoding;
+        bh=UhwvQh9WtluvABzEKWCvpawdI9sw+xJ4pB8xu8UmCHM=;
+        b=ab7uiUuYnpMoNU1Qj0cDjps/CAkeaNF4J35AyQ8cXHYEckzQsRW2hih8nQ/g3Vw32H
+         zLyqOiUJV0UiPv2Nt+0r4Hl3DUjq7VqLrwpI0yf+J51dGePRFVSofh0n/zv6Sip/PXYy
+         k/k4kCc3NJZ/o1uikV+h+cqFRykPeXTteujxNYOoVOJJ06KgmfHZIXWrx//74ZXbWhAs
+         D5BoTc0OeELTQ8dBo8+Mp4pxDGZ/dqcCQy0z9V589F9ESjLU/vzzxVcLxhhWNbf1seWd
+         VOzYR+KQ50RaidwyWk0KMMjnBilwq+DIHw/s/4OCt8lWQfI0ytwr+X4UntTnPMJJvv/F
+         oVRA==
+X-Gm-Message-State: AOAM532V8vyAPkQd6jJWLJU2iewJPDYEfHi281xkb7W8cDGZpvGQbXWF
+        rQ7c1CtYS21ChFMxHnzm40DC+rYEw/SBww==
+X-Google-Smtp-Source: ABdhPJw9AmUX6oiOO8GeE5/tKzoNVyh8tN2+HRg3vAflSizCKkzMz00b3asdeORgXBPEDoK5yqgquw==
+X-Received: by 2002:a63:2ad0:0:b0:3c1:5f7e:fd78 with SMTP id q199-20020a632ad0000000b003c15f7efd78mr3272898pgq.56.1652432997452;
+        Fri, 13 May 2022 02:09:57 -0700 (PDT)
+Received: from [172.30.1.37] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id n11-20020a170902f60b00b0015ec71f72d6sm1285022plg.253.2022.05.13.02.09.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 02:09:57 -0700 (PDT)
+Message-ID: <eaab9f4d-06d4-3ddc-3756-69f762bd86e1@gmail.com>
+Date:   Fri, 13 May 2022 18:09:53 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220513033450.7038-6-kflin@nuvoton.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: en-US
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+Subject: [GIT PULL] extcon next for 5.19
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Chanwoo Choi <chanwoo@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,63 +74,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marvin,
+Dear Greg,
 
-Thank you for the patch! Perhaps something to improve:
+This is extcon-next pull request for v5.19. I add detailed description of
+this pull request on below. Please pull extcon with following updates.
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on linux/master linus/master v5.18-rc6]
-[cannot apply to media-tree/master next-20220512]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Best Regards,
+Chanwoo Choi
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Marvin-Lin/Support-Nuvoton-NPCM-Video-Capture-Encode-Engine/20220513-113806
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20220513/202205131733.OM8Kr2te-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/7fa1f7750e7317479ce2c2c043b44fa19c46b1a8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Marvin-Lin/Support-Nuvoton-NPCM-Video-Capture-Encode-Engine/20220513-113806
-        git checkout 7fa1f7750e7317479ce2c2c043b44fa19c46b1a8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash drivers/media/platform/nuvoton/
+The following changes since commit 672c0c5173427e6b3e2a9bbb7be51ceeec78093a:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+  Linux 5.18-rc5 (2022-05-01 13:57:58 -0700)
 
-All warnings (new ones prefixed by >>):
+are available in the Git repository at:
 
-   drivers/media/platform/nuvoton/npcm-video.c: In function 'nuvoton_video_buf_queue':
->> drivers/media/platform/nuvoton/npcm-video.c:1776:13: warning: variable 'empty' set but not used [-Wunused-but-set-variable]
-    1776 |         int empty;
-         |             ^~~~~
+  git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/extcon.git tags/extcon-next-for-5.19
 
+for you to fetch changes up to 5dcc2afe716d69f5112ce035cb14f007461ff189:
 
-vim +/empty +1776 drivers/media/platform/nuvoton/npcm-video.c
+  extcon: Modify extcon device to be created after driver data is set (2022-05-13 17:03:41 +0900)
 
-  1773	
-  1774	static void nuvoton_video_buf_queue(struct vb2_buffer *vb)
-  1775	{
-> 1776		int empty;
-  1777		struct nuvoton_video *video = vb2_get_drv_priv(vb->vb2_queue);
-  1778		struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-  1779		struct nuvoton_video_buffer *nvb = to_nuvoton_video_buffer(vbuf);
-  1780		unsigned long flags;
-  1781	
-  1782		dev_dbg(video->dev, "%s\n", __func__);
-  1783	
-  1784		spin_lock_irqsave(&video->lock, flags);
-  1785		empty = list_empty(&video->buffers);
-  1786		list_add_tail(&nvb->link, &video->buffers);
-  1787		spin_unlock_irqrestore(&video->lock, flags);
-  1788	}
-  1789	
+----------------------------------------------------------------
+Update extcon next for v5.19
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Detailed description for this pull request:
+1. update extcon core driver
+- extcon_get_extcon_dev() has been almost used to get the extcon device
+on booting time. If extcon provider driver is probed at late time,
+the extcon consumer driver get the -EPROBE_DEFER return value.
+It requires the inefficient handling code of -EPROBE_DEFER.
+Instead, extcon_get_extcon_dev() will return -EPROBE_DEFER
+if the required extcon device is none. It makes the extcon consumer driver
+to be simplified when getting extcon device.
+
+- Register device after dev_set_drvdata because of accessing
+the sysfs attributes at timing of between drv_set_data and device_register.
+
+- Fix some kernel-doc comments of extcon functions.
+
+2. update extcon provider driver
+- Update extcon-intel-int3496.c
+: Add support for controlling vbus power via regulator and support
+to the extcon-intel-int3496.c driver to bind to devices without
+an ACPi companion. And fix the minor clean-up.
+
+- Use struct_size() helper on extcon-usbc-cros-ec.c
+
+- Remove the disable irq operation in system sleep for using vbus/id
+gpio as the wakeup source on extcon-usb-gpio.c
+
+- Add support of SM5703 device by using existing extcon-sm5502.c
+and rename i2c_devic_id from sm5703 to sm5703-muic to reduce confusion
+between SM5703 MFD device and extcon device.
+
+- Add usb role class support and add queue work sync before driver release
+on extcon-ptn5150.c
+----------------------------------------------------------------
+
+Bruce Chen (1):
+      extcon: usb-gpio: Remove disable irq operation in system sleep
+
+Dan Carpenter (1):
+      extcon: Fix extcon_get_extcon_dev() error handling
+
+Gustavo A. R. Silva (1):
+      extcon: usbc-cros-ec: Use struct_size() helper in kzalloc()
+
+Hans de Goede (4):
+      extcon: int3496: Make the driver a bit less verbose
+      extcon: int3496: Request non-exclusive access to the ID GPIO
+      extcon: int3496: Add support for binding to plain platform devices
+      extcon: int3496: Add support for controlling Vbus through a regulator
+
+Li Jun (2):
+      extcon: ptn5150: Add queue work sync before driver release
+      extcon: ptn5150: Add usb role class support
+
+Markuss Broks (3):
+      dt-bindings: extcon: bindings for SM5703
+      extcon: sm5502: Add support for SM5703
+      extcon: sm5502: Clarify SM5703's i2c device ID
+
+Yang Li (1):
+      extcon: Fix some kernel-doc comments
+
+bumwoo lee (1):
+      extcon: Modify extcon device to be created after driver data is set
+
+ .../bindings/extcon/siliconmitus,sm5502-muic.yaml  |  5 +-
+ drivers/extcon/Kconfig                             |  3 +-
+ drivers/extcon/extcon-axp288.c                     |  4 +-
+ drivers/extcon/extcon-intel-int3496.c              | 54 ++++++++++++++++++----
+ drivers/extcon/extcon-ptn5150.c                    | 36 +++++++++++++++
+ drivers/extcon/extcon-sm5502.c                     |  2 +
+ drivers/extcon/extcon-usb-gpio.c                   | 15 ------
+ drivers/extcon/extcon-usbc-cros-ec.c               |  2 +-
+ drivers/extcon/extcon.c                            | 37 +++++++++------
+ drivers/power/supply/axp288_charger.c              | 17 ++++---
+ drivers/power/supply/charger-manager.c             |  7 +--
+ drivers/power/supply/max8997_charger.c             |  8 ++--
+ drivers/usb/dwc3/drd.c                             |  9 +---
+ drivers/usb/phy/phy-omap-otg.c                     |  4 +-
+ drivers/usb/typec/tcpm/fusb302.c                   |  4 +-
+ include/linux/extcon.h                             |  2 +-
+ 16 files changed, 139 insertions(+), 70 deletions(-)

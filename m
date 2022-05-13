@@ -2,80 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C495260C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 13:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12EA75260C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 13:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379800AbiEMLLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 07:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45130 "EHLO
+        id S1379811AbiEMLOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 07:14:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379798AbiEMLLS (ORCPT
+        with ESMTP id S1379714AbiEMLOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 07:11:18 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6DE5A5B2
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 04:11:17 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id E8EDB221D4;
-        Fri, 13 May 2022 13:11:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1652440275;
+        Fri, 13 May 2022 07:14:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C7505DE78
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 04:14:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652440475;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9pV4ceZp2jBzmUpp2ZHmANTNVPZNX+S/qtaNuz/v8JU=;
-        b=rDLw+uO7mxnfh6PH1ONHS1YDxUz4UVpEUka9QoM0qVf0lttGaNZJ2nZqi8qa8GBqX+HS2v
-        oihlqaATznXfoDhAwwgXq8eDqu8EHRir1NhFr/lpQM6kXGelXOEpFvY1GsMm7LmAlj/MVT
-        ugKmU5Gl6v/74YvYSorP0qDGsUHxaX8=
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=UtAsxq3Qkf8Wt0Jj3FXIUlE2DcUWlIqSV3K+8PGgj7Y=;
+        b=E4Hd0j4n1QKd04vWBXiJE7QKa3dFcF+QXbACxZpg+y9eiJGxQwoKwDGJ40eHp2Z+3bfMky
+        pPE3bl/msfqZwympYoUSI5Nzg4Ysd2J2jHu5NTSTGK4OhN81fcPvvNtAHtKX8O0Fjx+2qa
+        G6H3xxkxEVmd6Lc8EuBCADq7vqqn61A=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-448-2_uyHM0jMb-lhFwXfuBINw-1; Fri, 13 May 2022 07:14:32 -0400
+X-MC-Unique: 2_uyHM0jMb-lhFwXfuBINw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 40E281C0897F;
+        Fri, 13 May 2022 11:14:31 +0000 (UTC)
+Received: from localhost (unknown [10.22.32.87])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7CF67416148;
+        Fri, 13 May 2022 11:14:30 +0000 (UTC)
+Date:   Fri, 13 May 2022 08:14:29 -0300
+From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        stable-rt <stable-rt@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Pavel Machek <pavel@denx.de>,
+        Jeff Brady <jeffreyjbrady@gmail.com>,
+        Luis Goncalves <lgoncalv@redhat.com>
+Subject: [ANNOUNCE] 5.10.115-rt67
+Message-ID: <Yn49lbCpmpNHazAa@uudg.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 13 May 2022 13:11:14 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Alexander A Sverdlin <alexander.sverdlin@nokia.com>
-Cc:     linux-mtd@lists.infradead.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mtd: spi-nor: Support Dual and Quad Read on Macronix
- mx25u25635f
-In-Reply-To: <20220513094759.44185-1-alexander.sverdlin@nokia.com>
-References: <20220513094759.44185-1-alexander.sverdlin@nokia.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <34eccc66cc75dd0ffbf8a77780b6f8a7@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello RT-list!
 
-Am 2022-05-13 11:47, schrieb Alexander A Sverdlin:
-> From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
-> 
-> According to datasheet both Dual and Quad Read is supported. The read 
-> test
-> shows x3.8 speed gain.
+I'm pleased to announce the 5.10.115-rt67 stable release.
 
-Does it have SFDP? Try adding PARSE_SFDP instead of the
-NO_SFDP_FLAGS.
+You can get this release via the git tree at:
 
-Please post an SFDP dump of this flash [1].
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 
--michael
+  branch: v5.10-rt
+  Head SHA1: 257a02c9ef99f2e39abc79205a481582177ce685
 
-[1] 
-https://lore.kernel.org/linux-mtd/4304e19f3399a0a6e856119d01ccabe0@walle.cc/
+Or to build 5.10.115-rt67 directly, the following patches should be applied:
+
+  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.10.tar.xz
+
+  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.10.115.xz
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/5.10/older/patch-5.10.115-rt67.patch.xz
+
+Signing key fingerprint:
+
+  9354 0649 9972 8D31 D464  D140 F394 A423 F8E6 7C26
+
+All keys used for the above files and repositories can be found on the
+following git repository:
+
+   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
+
+Enjoy!
+Luis
+

@@ -2,175 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 974335263D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFDB25264A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357293AbiEMOYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:24:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37978 "EHLO
+        id S1381066AbiEMOdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355954AbiEMOY0 (ORCPT
+        with ESMTP id S1380886AbiEMOaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:24:26 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF37850E09;
-        Fri, 13 May 2022 07:24:25 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso7973428pjg.0;
-        Fri, 13 May 2022 07:24:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=mTM/kX6SVqsh/584K0OxOVMxJNbBbJojAc06+3q+noc=;
-        b=THHZJjXytAJZclhK0bpp/StN56jpSkHFqNU6fPOgzPAjO/HrVdWtKojjDJYmdwTpqH
-         JedTnC6qF6skZiX1SQBOsq9DcZs0dbUd6u0gAOMGVVTOAdG7o8qKOR6oUjko+P+nX1Bt
-         b7aRDLYP93M4BlUq85TAI4QzsYw01Ediw8szmlSpX/hBmbceGozMkjSUPdmTWaclXWxv
-         yPQuHRleIJU/1MoYGRMfJ00al1+QilC2ZQyR0ZSyzY70fjJ6GAWSZB5t3Xkg4oOWiu/O
-         nIDz8Sfbh5ur/W6wcoyntdbbw3BCMIvuvqagkxKvUGVGGWzqI9SREy2yLm4tn7TurkTc
-         MYbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=mTM/kX6SVqsh/584K0OxOVMxJNbBbJojAc06+3q+noc=;
-        b=iC4CFiGGCJcC5BGi9GRMbMbrR1j+e5w16qzMtIprdqe5+eJ554L0JE3GsSX2Kq2x7E
-         iWeYm+4dYmlVnc9Pm7RygEq6cRN9Z6U1vNxSaqJ1223PRGuBoFOjjBMnRPDqxaC/3yOw
-         C5rJF2cTiOopNrKZdWZco4ZwrLULkF8o7ALy8CaQrlzCFLDsyDmEbh/IxwM6nxf3e2nf
-         85ghl+iS4f/vMLGzUA0hOH1u1otkvhqdtF8bsbMf+QI/V6duzlYmSfZ8YSmlmbs4k4Y3
-         9XYo8Ac4LV7J9Rkd/owI0jqP7kXPXEo0qFMjWt6885RO66HcsOitOhlxInhTpxD5Si8T
-         S6lw==
-X-Gm-Message-State: AOAM531iQe3b6dAK9tZg8pnJgSDk8LGz/kA3rXmZ2iUpJrDGO4Pf9yV3
-        AYu4Cj9p9jl9tRpYe9uAi5E=
-X-Google-Smtp-Source: ABdhPJyX8XhNTJuqpdaLK2CBnxji9ZIZ3WOnDPmRsky4JKsie/lRiYbynXtG+lsWAfSfL6cs76jHHA==
-X-Received: by 2002:a17:902:e811:b0:15e:b27b:92ef with SMTP id u17-20020a170902e81100b0015eb27b92efmr4988168plg.142.1652451865060;
-        Fri, 13 May 2022 07:24:25 -0700 (PDT)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id jj10-20020a170903048a00b0015e8d4eb2ccsm1684488plb.278.2022.05.13.07.24.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 07:24:24 -0700 (PDT)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Max Staudt <max@enpas.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH 1/2] can: move can_dropped_invalid_skb from skb.h to dev.h
-Date:   Fri, 13 May 2022 23:23:54 +0900
-Message-Id: <20220513142355.250389-2-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+        Fri, 13 May 2022 10:30:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D943D972C8;
+        Fri, 13 May 2022 07:28:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72510621A8;
+        Fri, 13 May 2022 14:28:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 768F9C34100;
+        Fri, 13 May 2022 14:28:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652452090;
+        bh=xp+u8NygbVxoi99MAWO9qUlTrei9uqsPK0jfOp9gZ8o=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=rMbTHjYpgUGvq6FvIS1sHPESXthReXnUxOrAVpIUSPTyA9PbNUOPIzCVTTkFnO67e
+         5laoO9bQh+6U/9TQFYbOclXpYX5IZLuYiSk+rwSdWP1QhfJc+sYY9SKEcwOMC8phGJ
+         /FgdGtARZkjsFjqSjntJGdOhZwkMU5ldHFmmJen0=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        "Dmitry V. Levin" <ldv@altlinux.org>,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH 5.15 13/21] rfkill: uapi: fix RFKILL_IOCTL_MAX_SIZE ioctl request definition
+Date:   Fri, 13 May 2022 16:23:55 +0200
+Message-Id: <20220513142230.261338033@linuxfoundation.org>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220513142229.874949670@linuxfoundation.org>
+References: <20220513142229.874949670@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a preparation patch for next change.
+From: Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>
 
-We want to introduce a check towards CAN_CTRLMODE_LISTENONLY in
-can_dopped_invalid_skb(). To do so, we would need to include
-linux/can/dev.h (for struct can_priv) and uapi/linux/can/netlink.h
-(for the definition of CAN_CTRLMODE_LISTEONLY). Instead of adding
-those header and contributing to the include hell, we prever to
-relocate can_dropped_invalid_skb() to linux/can/dev.h where all the
-needed headers are already present.
+commit a36e07dfe6ee71e209383ea9288cd8d1617e14f9 upstream.
 
-While doing so, do a small cleanup: re-indent the second line of the
-function argument and add brackets around the else block.
+The definition of RFKILL_IOCTL_MAX_SIZE introduced by commit
+54f586a91532 ("rfkill: make new event layout opt-in") is unusable
+since it is based on RFKILL_IOC_EXT_SIZE which has not been defined.
+Fix that by replacing the undefined constant with the constant which
+is intended to be used in this definition.
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Fixes: 54f586a91532 ("rfkill: make new event layout opt-in")
+Cc: stable@vger.kernel.org # 5.11+
+Signed-off-by: Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>
+Signed-off-by: Dmitry V. Levin <ldv@altlinux.org>
+Link: https://lore.kernel.org/r/20220506172454.120319-1-glebfm@altlinux.org
+[add commit message provided later by Dmitry]
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/can/dev.h | 29 +++++++++++++++++++++++++++++
- include/linux/can/skb.h | 28 ----------------------------
- 2 files changed, 29 insertions(+), 28 deletions(-)
+ include/uapi/linux/rfkill.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
-index c2ea47f30046..bbe27e22c7a7 100644
---- a/include/linux/can/dev.h
-+++ b/include/linux/can/dev.h
-@@ -156,6 +156,35 @@ static inline u32 can_get_static_ctrlmode(struct can_priv *priv)
- 	return priv->ctrlmode & ~priv->ctrlmode_supported;
- }
+--- a/include/uapi/linux/rfkill.h
++++ b/include/uapi/linux/rfkill.h
+@@ -184,7 +184,7 @@ struct rfkill_event_ext {
+ #define RFKILL_IOC_NOINPUT	1
+ #define RFKILL_IOCTL_NOINPUT	_IO(RFKILL_IOC_MAGIC, RFKILL_IOC_NOINPUT)
+ #define RFKILL_IOC_MAX_SIZE	2
+-#define RFKILL_IOCTL_MAX_SIZE	_IOW(RFKILL_IOC_MAGIC, RFKILL_IOC_EXT_SIZE, __u32)
++#define RFKILL_IOCTL_MAX_SIZE	_IOW(RFKILL_IOC_MAGIC, RFKILL_IOC_MAX_SIZE, __u32)
  
-+/* Drop a given socketbuffer if it does not contain a valid CAN frame. */
-+static inline bool can_dropped_invalid_skb(struct net_device *dev,
-+					   struct sk_buff *skb)
-+{
-+	const struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
-+
-+	if (skb->protocol == htons(ETH_P_CAN)) {
-+		if (unlikely(skb->len != CAN_MTU ||
-+			     cfd->len > CAN_MAX_DLEN))
-+			goto inval_skb;
-+	} else if (skb->protocol == htons(ETH_P_CANFD)) {
-+		if (unlikely(skb->len != CANFD_MTU ||
-+			     cfd->len > CANFD_MAX_DLEN))
-+			goto inval_skb;
-+	} else {
-+		goto inval_skb;
-+	}
-+
-+	if (!can_skb_headroom_valid(dev, skb))
-+		goto inval_skb;
-+
-+	return false;
-+
-+inval_skb:
-+	kfree_skb(skb);
-+	dev->stats.tx_dropped++;
-+	return true;
-+}
-+
- void can_setup(struct net_device *dev);
+ /* and that's all userspace gets */
  
- struct net_device *alloc_candev_mqs(int sizeof_priv, unsigned int echo_skb_max,
-diff --git a/include/linux/can/skb.h b/include/linux/can/skb.h
-index fdb22b00674a..985791c84a8d 100644
---- a/include/linux/can/skb.h
-+++ b/include/linux/can/skb.h
-@@ -126,34 +126,6 @@ static inline bool can_skb_headroom_valid(struct net_device *dev,
- 	return true;
- }
- 
--/* Drop a given socketbuffer if it does not contain a valid CAN frame. */
--static inline bool can_dropped_invalid_skb(struct net_device *dev,
--					  struct sk_buff *skb)
--{
--	const struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
--
--	if (skb->protocol == htons(ETH_P_CAN)) {
--		if (unlikely(skb->len != CAN_MTU ||
--			     cfd->len > CAN_MAX_DLEN))
--			goto inval_skb;
--	} else if (skb->protocol == htons(ETH_P_CANFD)) {
--		if (unlikely(skb->len != CANFD_MTU ||
--			     cfd->len > CANFD_MAX_DLEN))
--			goto inval_skb;
--	} else
--		goto inval_skb;
--
--	if (!can_skb_headroom_valid(dev, skb))
--		goto inval_skb;
--
--	return false;
--
--inval_skb:
--	kfree_skb(skb);
--	dev->stats.tx_dropped++;
--	return true;
--}
--
- static inline bool can_is_canfd_skb(const struct sk_buff *skb)
- {
- 	/* the CAN specific type of skb is identified by its data length */
--- 
-2.35.1
+
 

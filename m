@@ -2,126 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ACB55262F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 15:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4445262FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 15:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380649AbiEMNVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 09:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33382 "EHLO
+        id S1380676AbiEMNZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 09:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346448AbiEMNUu (ORCPT
+        with ESMTP id S1380609AbiEMNZW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 09:20:50 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8209D3915A
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 06:20:49 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id z2so16261514ejj.3
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 06:20:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MD83ziJ2Qho4XkX8bpjsM8c+Xp4pjhuVQvUvmAtS3rE=;
-        b=TUxDegrLBh1U0MnPtFzTADDsXSPEGhcUswvbfcvpQuBefZd31V7+cHEyDPsnW3OZ0f
-         0xdwW8VJYLh1lAHGUVtCZbqKE3H17sxyE8Jej3wrPitNnrv8cKzUf2Do318YNFvMndhn
-         H8HbOgmsH5zA37wRuaZVlGWWTreTM6159bmhDo+zx81D4CWs036ujwfg5IJyWt5IWtLB
-         FDpmj4f6QPts3veFDiEqL0GisQF1dI0ITml4FEAD/dTfGyw5czclB+19WIs8wPTT3wrO
-         DAfLJ0pbzKTBcQ9OMmsNPuFuQhW8ZVMte89ztEky/fSog+/evVqYW+816VRggyGXa2yK
-         Tg2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MD83ziJ2Qho4XkX8bpjsM8c+Xp4pjhuVQvUvmAtS3rE=;
-        b=5P68FvXVnQ4fKscPtHeYOwhxoimRKTKJUDGqhln2hLGPd1ZQLBx7KGpmcFgw+BN4dB
-         e3HeW3YyfYTwV6jf+Cj5ffY4Nu+5yR8M6WqXsc1rzxsjHynQ4UZtHoBDGqVC68TfDLQx
-         rS9GecZEF/EMhyTAp5C0w0Whh8o7PjUFJIlYF5Uim+fTDmOiSBwrOjhcpTa0aOrq/91b
-         xNKvMM7mfhk1Di0egObgpPnIoDS627Xsrgdimm7fU8fitU2lvHlP/BC5w1Jx/ud6lRb7
-         ct2e/RPjVKCtTsmOLlPYamfvZNEfOt2tQclk/KyUvrA5nIUPM0oo5ZzaF5gjsWHgxorT
-         Vn0w==
-X-Gm-Message-State: AOAM5306Q9+Hb5pLvKXG+uOHY2JYiL/WBNSfxfe5XtIkfQDFpN9AlEOp
-        TIdfuEdYK7FEG6oSjdqWYV9yI7ZpdraphsKBTpCbHYHW1MHSOw==
-X-Google-Smtp-Source: ABdhPJyYK4iU2XE2q/feN2S81RszcBQn11ZAXji1miavcqol3at/RK4ph3hAXXaGtPJjcephZQMoRbvwq5nlbjGz3d4=
-X-Received: by 2002:a17:906:58d4:b0:6f4:cebd:c4b with SMTP id
- e20-20020a17090658d400b006f4cebd0c4bmr4222200ejs.492.1652448047829; Fri, 13
- May 2022 06:20:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220513044143.1045728-1-tzungbi@kernel.org> <20220513044143.1045728-8-tzungbi@kernel.org>
-In-Reply-To: <20220513044143.1045728-8-tzungbi@kernel.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Fri, 13 May 2022 06:20:36 -0700
-Message-ID: <CABXOdTft-YJHJNiw2xnigHsySOjJ1dDwFoQwXDiMADN5O2Loog@mail.gmail.com>
-Subject: Re: [PATCH v2 7/7] platform/chrome: cros_ec_spi: drop BUG_ON() if
- `din` isn't large enough
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 13 May 2022 09:25:22 -0400
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8483EC9EC0;
+        Fri, 13 May 2022 06:25:19 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.91,221,1647270000"; 
+   d="scan'208";a="120910964"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie6.idc.renesas.com with ESMTP; 13 May 2022 22:25:18 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id B7D56400854A;
+        Fri, 13 May 2022 22:25:15 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] Input: gpio-keys - Cancel delayed work only in case of GPIO
+Date:   Fri, 13 May 2022 14:25:00 +0100
+Message-Id: <20220513132500.32395-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 9:42 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
->
-> It is overkill to crash the kernel if the `din` buffer is going to full
-> or overflow.
->
-> Drop the BUG_ON() and return -EINVAL instead.
->
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+gpio_keys module can either accept gpios or interrupts. The module
+initializes delayed work in case of gpios only and not for interrupts,
+so make sure cancel_delayed_work_sync() is called only when bdata->gpiod
+is true.
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
+This fixes the issue seen below when the gpio_keys module is unloaded and
+an interrupt pin is used instead of GPIO:
 
-> ---
-> Changes from v1:
-> - Separate from the original 6th patch.
->
->  drivers/platform/chrome/cros_ec_spi.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/platform/chrome/cros_ec_spi.c b/drivers/platform/chrome/cros_ec_spi.c
-> index 5264615f46af..7360b3ff6e4f 100644
-> --- a/drivers/platform/chrome/cros_ec_spi.c
-> +++ b/drivers/platform/chrome/cros_ec_spi.c
-> @@ -160,7 +160,8 @@ static int receive_n_bytes(struct cros_ec_device *ec_dev, u8 *buf, int n)
->         struct spi_message msg;
->         int ret;
->
-> -       BUG_ON(buf - ec_dev->din + n > ec_dev->din_size);
-> +       if (buf - ec_dev->din + n > ec_dev->din_size)
-> +               return -EINVAL;
->
->         memset(&trans, 0, sizeof(trans));
->         trans.cs_change = 1;
-> @@ -197,7 +198,8 @@ static int cros_ec_spi_receive_packet(struct cros_ec_device *ec_dev,
->         unsigned long deadline;
->         int todo;
->
-> -       BUG_ON(ec_dev->din_size < EC_MSG_PREAMBLE_COUNT);
-> +       if (ec_dev->din_size < EC_MSG_PREAMBLE_COUNT)
-> +               return -EINVAL;
->
->         /* Receive data until we see the header byte */
->         deadline = jiffies + msecs_to_jiffies(EC_MSG_DEADLINE_MS);
-> @@ -304,7 +306,8 @@ static int cros_ec_spi_receive_response(struct cros_ec_device *ec_dev,
->         unsigned long deadline;
->         int todo;
->
-> -       BUG_ON(ec_dev->din_size < EC_MSG_PREAMBLE_COUNT);
-> +       if (ec_dev->din_size < EC_MSG_PREAMBLE_COUNT)
-> +               return -EINVAL;
->
->         /* Receive data until we see the header byte */
->         deadline = jiffies + msecs_to_jiffies(EC_MSG_DEADLINE_MS);
-> --
-> 2.36.0.550.gb090851708-goog
->
+[  360.297569] ------------[ cut here ]------------
+[  360.302303] WARNING: CPU: 0 PID: 237 at kernel/workqueue.c:3066 __flush_work+0x414/0x470
+[  360.310531] Modules linked in: gpio_keys(-)
+[  360.314797] CPU: 0 PID: 237 Comm: rmmod Not tainted 5.18.0-rc5-arm64-renesas-00116-g73636105874d-dirty #166
+[  360.324662] Hardware name: Renesas SMARC EVK based on r9a07g054l2 (DT)
+[  360.331270] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  360.338318] pc : __flush_work+0x414/0x470
+[  360.342385] lr : __cancel_work_timer+0x140/0x1b0
+[  360.347065] sp : ffff80000a7fba00
+[  360.350423] x29: ffff80000a7fba00 x28: ffff000012b9c5c0 x27: 0000000000000000
+[  360.357664] x26: ffff80000a7fbb80 x25: ffff80000954d0a8 x24: 0000000000000001
+[  360.364904] x23: ffff800009757000 x22: 0000000000000000 x21: ffff80000919b000
+[  360.372143] x20: ffff00000f5974e0 x19: ffff00000f5974e0 x18: ffff8000097fcf48
+[  360.379382] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000053f40
+[  360.386622] x14: ffff800009850e88 x13: 0000000000000002 x12: 000000000000a60c
+[  360.393861] x11: 000000000000a610 x10: 0000000000000000 x9 : 0000000000000008
+[  360.401100] x8 : 0101010101010101 x7 : 00000000a473c394 x6 : 0080808080808080
+[  360.408339] x5 : 0000000000000001 x4 : 0000000000000000 x3 : ffff80000919b458
+[  360.415578] x2 : ffff8000097577f0 x1 : 0000000000000001 x0 : 0000000000000000
+[  360.422818] Call trace:
+[  360.425299]  __flush_work+0x414/0x470
+[  360.429012]  __cancel_work_timer+0x140/0x1b0
+[  360.433340]  cancel_delayed_work_sync+0x10/0x18
+[  360.437931]  gpio_keys_quiesce_key+0x28/0x58 [gpio_keys]
+[  360.443327]  devm_action_release+0x10/0x18
+[  360.447481]  release_nodes+0x8c/0x1a0
+[  360.451194]  devres_release_all+0x90/0x100
+[  360.455346]  device_unbind_cleanup+0x14/0x60
+[  360.459677]  device_release_driver_internal+0xe8/0x168
+[  360.464883]  driver_detach+0x4c/0x90
+[  360.468509]  bus_remove_driver+0x54/0xb0
+[  360.472485]  driver_unregister+0x2c/0x58
+[  360.476462]  platform_driver_unregister+0x10/0x18
+[  360.481230]  gpio_keys_exit+0x14/0x828 [gpio_keys]
+[  360.486088]  __arm64_sys_delete_module+0x1e0/0x270
+[  360.490945]  invoke_syscall+0x40/0xf8
+[  360.494661]  el0_svc_common.constprop.3+0xf0/0x110
+[  360.499515]  do_el0_svc+0x20/0x78
+[  360.502877]  el0_svc+0x48/0xf8
+[  360.505977]  el0t_64_sync_handler+0x88/0xb0
+[  360.510216]  el0t_64_sync+0x148/0x14c
+[  360.513930] irq event stamp: 4306
+[  360.517288] hardirqs last  enabled at (4305): [<ffff8000080b0300>] __cancel_work_timer+0x130/0x1b0
+[  360.526359] hardirqs last disabled at (4306): [<ffff800008d194fc>] el1_dbg+0x24/0x88
+[  360.534204] softirqs last  enabled at (4278): [<ffff8000080104a0>] _stext+0x4a0/0x5e0
+[  360.542133] softirqs last disabled at (4267): [<ffff8000080932ac>] irq_exit_rcu+0x18c/0x1b0
+[  360.550591] ---[ end trace 0000000000000000 ]---
+
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ drivers/input/keyboard/gpio_keys.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/input/keyboard/gpio_keys.c b/drivers/input/keyboard/gpio_keys.c
+index d75a8b179a8a..ec9d50ddda42 100644
+--- a/drivers/input/keyboard/gpio_keys.c
++++ b/drivers/input/keyboard/gpio_keys.c
+@@ -133,7 +133,7 @@ static void gpio_keys_quiesce_key(void *data)
+ 		hrtimer_cancel(&bdata->release_timer);
+ 	if (bdata->debounce_use_hrtimer)
+ 		hrtimer_cancel(&bdata->debounce_timer);
+-	else
++	else if (bdata->gpiod)
+ 		cancel_delayed_work_sync(&bdata->work);
+ }
+ 
+-- 
+2.17.1
+

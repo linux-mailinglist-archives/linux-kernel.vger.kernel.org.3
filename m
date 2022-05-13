@@ -2,67 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AEE652632F
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 15:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E33F526331
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 15:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381519AbiEMNhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 09:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56458 "EHLO
+        id S1381509AbiEMNhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 09:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381294AbiEMNe2 (ORCPT
+        with ESMTP id S1381284AbiEMNeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 09:34:28 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4BA310F0;
-        Fri, 13 May 2022 06:34:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/2J4OgJGpc1Cb3jgc4qYyZLCbL55xwunzKlfyYoeZdw=; b=H5fwWH/CF298SAz3ALbH2c5z7A
-        ciR7XVfqLP2R9vBz+MM7Tt7mIzVpVGIazQK/SwfeM03Y1CMw+rot1fB6EqfwRCpmMCQQ3db4Og1wr
-        +oAMRjAqnC6qW6GJxg8gPUVzb1RuKngei/SmD1m8Rqcjv8kfpENiIDCoVIBAdx73tJrXHSNVzGJYe
-        LjhjRPpxho7i5tuSUy8poYWdnn32VWijCYNYgtnFyJq/MkMMEIGFvfKSEH/F67s/49q5/+1VpduK1
-        SZhzVCB6wwKCqQzkqPS90HVCD6vA9M4EWHmUrceGEpByaycBWTM6Ct1rX8qPS6FNZTawPPDcnVbGK
-        ZVKrN0DA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1npVQo-00Do81-V4; Fri, 13 May 2022 13:34:11 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B3984981018; Fri, 13 May 2022 15:34:08 +0200 (CEST)
-Date:   Fri, 13 May 2022 15:34:08 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Song Liu <songliubraving@fb.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Rik van Riel <riel@fb.com>,
-        "song@kernel.org" <song@kernel.org>,
-        "joe.lawrence@redhat.com" <joe.lawrence@redhat.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>
-Subject: Re: [RFC] sched,livepatch: call klp_try_switch_task in __cond_resched
-Message-ID: <20220513133408.GI76023@worktop.programming.kicks-ass.net>
-References: <20220510165244.ikfh64ertnvodxb4@treble>
- <1bd15361edfd4db9fc9271d35e7bbe5edad1b87a.camel@fb.com>
- <20220510184213.l3gjweeleyg7obca@treble>
- <47440502-930F-4CBD-B859-3AC9BBFF8FC6@fb.com>
- <20220510230402.e5ymkwt45sg7bd35@treble>
- <D298A3F1-43A5-4FD5-B198-906364BF4B79@fb.com>
- <20220511003331.clfvwfgpmbr5yx6n@treble>
- <20220511092433.GA26047@pathway.suse.cz>
- <78DFED12-571B-489C-A662-DA333555266B@fb.com>
- <Yn5QHpc9YlAbP1li@alley>
+        Fri, 13 May 2022 09:34:17 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E132663B8
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 06:34:15 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id EFA071F904;
+        Fri, 13 May 2022 13:34:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1652448853; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YDJZar56lzTheHzjbbIajAJWdJ4wgWvDaqV7f4rkCRo=;
+        b=D1LJM/ZXh3F36LL08QDC3YgQIfFBisJ9gZ2U+0J2ikeUgkJZFy9jGH4GKV5lh+Gu64DTUb
+        Xm8veebY2ta1jqFwCcPDwNDctUfsGaYw9/HCyvdQ1nd6BH1sUIX6C4Mmm/MoLKOph4WHjx
+        7ZTXMLaeDT6diwP93DStjT0oa/VpKJQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1652448853;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YDJZar56lzTheHzjbbIajAJWdJ4wgWvDaqV7f4rkCRo=;
+        b=goV9CK2QaWzK4JKz/rU94eht9BS6SsmtekY4TQVEW1OqmTZFgE8/4enG7OzsdtOJSraYCP
+        SlP3NYNmw4by8XDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7D80113446;
+        Fri, 13 May 2022 13:34:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id B5/6HFVefmKdcwAAMHmgww
+        (envelope-from <jroedel@suse.de>); Fri, 13 May 2022 13:34:13 +0000
+Date:   Fri, 13 May 2022 15:34:12 +0200
+From:   Joerg Roedel <jroedel@suse.de>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Oleg Nesterov <oleg@redhat.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH V2] x86/sev: Mark the code returning to user space as
+ syscall gap
+Message-ID: <Yn5eVA07T4oTkTLl@suse.de>
+References: <20220412124909.10467-1-jiangshanlai@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Yn5QHpc9YlAbP1li@alley>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220412124909.10467-1-jiangshanlai@gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,18 +80,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 02:33:34PM +0200, Petr Mladek wrote:
+Hi,
 
-> My concern is that klp_try_complete_transition() checks all processes
-> under read_lock(&tasklist_lock). It might create some contention
-> on this lock. I am not sure if this lock is fair. It might slow down
-> block writers (creating/deleting tasks).
+On Tue, Apr 12, 2022 at 08:49:08PM +0800, Lai Jiangshan wrote:
+> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> 
+> When returning to user space, the %rsp is user controlled value.
+> 
+> If it is SNP-guest and the hypervisor decides to mess with the code-page
+> for this path while a CPU is executing it.  This will cause a #VC on
+> that CPU and that could hit in the syscall return path and mislead
+> the #VC handler.
+> 
+> So make ip_within_syscall_gap() return true in this case.
 
-rwlock_t is sorta fair. Is it fair for process contect usage, but
-in-interrupt use will have a reader bias.
+With the SNP guest patches in tip-tree I think it actually becomes
+possible that a #VC exception hits in these parts of the execution
+stream. It requires good timing by the attacker, but it is not
+impossible. Therefore:
 
-That said; contention on tasklist_lock is a real scalability concern.
+Acked-by: Joerg Roedel <jroedel@suse.de>
 
-Can't you use RCU here? With RCU traversal of the tasklist you can miss
-new entry (which should already run the new code) or miss exits (which
-will stop running code).
+-- 
+Jörg Rödel
+jroedel@suse.de
+
+SUSE Software Solutions Germany GmbH
+Maxfeldstr. 5
+90409 Nürnberg
+Germany
+ 
+(HRB 36809, AG Nürnberg)
+Geschäftsführer: Ivo Totev
+

@@ -2,84 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B61095260D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 13:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F5545260D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 13:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379830AbiEMLPl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 13 May 2022 07:15:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56434 "EHLO
+        id S1379836AbiEMLQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 07:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344410AbiEMLPh (ORCPT
+        with ESMTP id S1379849AbiEMLQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 07:15:37 -0400
-Received: from mail.holtmann.org (coyote.holtmann.net [212.227.132.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B95C5DA12;
-        Fri, 13 May 2022 04:15:34 -0700 (PDT)
-Received: from smtpclient.apple (p4ff9f69b.dip0.t-ipconnect.de [79.249.246.155])
-        by mail.holtmann.org (Postfix) with ESMTPSA id 40C18CED39;
-        Fri, 13 May 2022 13:15:33 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [PATCH] Bluetooth: btintel: Correctly declare all module firmware
- files.
-From:   Marcel Holtmann <marcel@holtmann.org>
-In-Reply-To: <20220509163259.1513242-1-dimitri.ledkov@canonical.com>
-Date:   Fri, 13 May 2022 13:15:32 +0200
-Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        BlueZ <linux-bluetooth@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <3EA82A93-D167-482D-AAF4-D781B77A4646@holtmann.org>
-References: <20220509163259.1513242-1-dimitri.ledkov@canonical.com>
-To:     Dimitri John Ledkov <dimitri.ledkov@canonical.com>
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 13 May 2022 07:16:14 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40932497D;
+        Fri, 13 May 2022 04:16:12 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id y63so9721975oia.7;
+        Fri, 13 May 2022 04:16:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vBhBc4igSr5lkTEDPBacehSjxXJjowFEHzx5Vf8m4fc=;
+        b=Y3HANqTF+N/856tejKBCenQuJ0ulUY/RfjPBUwD3eBBkEHkFnYR8KRQrl1vqY7AJRN
+         dciWsFYxtSoy5Rszs1C9tUXo7kcJUzwMsLHVtoe1bbB2hUlZue4gsvGLSiM7hEVfed/W
+         ZVtEHMXHxmcgk/4el0nRixdpwveu4ab8p5bS+XvfPA5IfNgu8sr+1apNsaHscqwSeGcL
+         /8cnEtTva+LSO7DiSRIriIG8Df5OMbL5lCxA5v3RBat2pEBU4HgCpH6mCFthLyEA8cfg
+         OZamTyZhG/33/L5fBA6Dot3n/t3aa8zSHPsmTrplg8eOrV2ulCcvPR05KO5UT0Kncv1u
+         hlFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vBhBc4igSr5lkTEDPBacehSjxXJjowFEHzx5Vf8m4fc=;
+        b=0e0MaZM3najvv560bDKQH3Q+E4wNzD2HBj3vq8P/lY3y9z+5PgJlbFESGGIxKz/dOR
+         vmOo8+4PV0iK1OpiXCmHlVYCEymLs7cuxGLe5EAp2GuMTS/GVpg5POBtm/Y+O0KDoMQ2
+         LDk4oxnwoOUP3jsJhqnlQMYnzo7xDHUfhkGdBUrmAT0yYLK4rshVA0acjgMtPymeiVF0
+         tUkjwgYZzVQmLdVqeMI80Ceh+IHurFlPUWAhoazhhEQOyrWFEkF698ZO40dLCqDs3YC0
+         +Vrx0qsLwuQWAweCwnKbB5Wi+NfkSiJR3EwOIv1Uvv4L1H+cJFZy24kYhQYRqiGnlug0
+         h4Vw==
+X-Gm-Message-State: AOAM533hT5xvr+dbwlrsBb9t8Re54l0EELF24Zqj2nHA1d8eXvPAsw7s
+        eEUMKlp1WSAxmKaJFTIAYjfa2/s6dbblzQRp7oY=
+X-Google-Smtp-Source: ABdhPJz2QtgAfkKunulDO5CncAdA8wyHmU0kqVg93DGCgowosP9LEUAB5IFLOc33MgO2fcqNxfvldw5KwhAe7ViZf2E=
+X-Received: by 2002:a05:6808:690:b0:325:9655:d782 with SMTP id
+ k16-20020a056808069000b003259655d782mr2197475oig.276.1652440572190; Fri, 13
+ May 2022 04:16:12 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220512135231.10076-1-schspa@gmail.com> <20220513041833.mcubozfhl2qd2rps@vireshk-i7>
+ <CAMA88Tpjms4HEos0GJHmQR5YZd4hhdqpgMO7JmxTxVpF0oMUCg@mail.gmail.com> <20220513061343.wndyhjeehoqmfofp@vireshk-i7>
+In-Reply-To: <20220513061343.wndyhjeehoqmfofp@vireshk-i7>
+From:   Schspa Shi <schspa@gmail.com>
+Date:   Fri, 13 May 2022 19:16:01 +0800
+Message-ID: <CAMA88Trc143Zaeua_AEt0ynukACYdPqXMG6R50Zoz-sXmMbX4A@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] cpufreq: fix race on cpufreq online
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dimitri,
+Viresh Kumar <viresh.kumar@linaro.org> writes:
 
-> Correctly declare wildcard of module firmwares to include, as the
-> driver & linux-firmware ship many sfi/ddc files for many different
-> devices which are dynamically calculated and loaded by the driver.
-> 
-> This especially affects environments that only install firmware files
-> declared and referenced by the kernel module. In such environments,
-> only the declared firmware files were copied resulting in most Intel
-> Bluetooth devices not working. I.e. host-only dracut-install initrds,
-> or Ubuntu Core kernel snaps.
-> 
-> BugLink: https://bugs.launchpad.net/bugs/1970819
-> Signed-off-by: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
-> ---
-> drivers/bluetooth/btintel.c | 6 ++----
-> 1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/bluetooth/btintel.c b/drivers/bluetooth/btintel.c
-> index 06514ed66022..9f5fc1ab154d 100644
-> --- a/drivers/bluetooth/btintel.c
-> +++ b/drivers/bluetooth/btintel.c
-> @@ -2654,7 +2654,5 @@ MODULE_AUTHOR("Marcel Holtmann <marcel@holtmann.org>");
-> MODULE_DESCRIPTION("Bluetooth support for Intel devices ver " VERSION);
-> MODULE_VERSION(VERSION);
-> MODULE_LICENSE("GPL");
-> -MODULE_FIRMWARE("intel/ibt-11-5.sfi");
-> -MODULE_FIRMWARE("intel/ibt-11-5.ddc");
-> -MODULE_FIRMWARE("intel/ibt-12-16.sfi");
-> -MODULE_FIRMWARE("intel/ibt-12-16.ddc");
-> +MODULE_FIRMWARE("intel/ibt-*.sfi");
-> +MODULE_FIRMWARE("intel/ibt-*.ddc");
+> On 13-05-22, 14:06, Schspa Shi wrote:
+>> Viresh Kumar <viresh.kumar@linaro.org> writes:
+>> > On 12-05-22, 21:52, Schspa Shi wrote:
+>> >> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+>> >> index 80f535cc8a75..35dffd738580 100644
+>> >> --- a/drivers/cpufreq/cpufreq.c
+>> >> +++ b/drivers/cpufreq/cpufreq.c
+>> >> @@ -953,7 +953,10 @@ static ssize_t show(struct kobject *kobj, struct attribute *attr, char *buf)
+>> >>              return -EIO;
+>> >>
+>> >>      down_read(&policy->rwsem);
+>> >> -    ret = fattr->show(policy, buf);
+>> >> +    if (unlikely(policy_is_inactive(policy)))
+>> >> +            ret = -EBUSY;
+>> >> +    else
+>> >> +            ret = fattr->show(policy, buf);
+>> >
+>> > I like it the way I have done earlier, initialize ret to -EBUSY and
+>> > get rid of the else part and call show/store in if itself. Same for
+>> > below.
+>> >
+>>
+>> I add a unlikely here, to avoid branch prediction failed.
+>
+> I am not asking you to drop it, I also added the unlikely within the
+> implementation of policy_is_inactive() then. It can be written as:
+>
+> if (likely(!policy_is_inactive(policy)))
+>         ret = fattr->show(policy, buf);
+>
+>> And move the
+>> to the fail path to avoid a register assignment to -EBUSY.
+>
+> We don't care about such assignments for performance to be honest.
+> This makes the code smaller by few lines, that's enough.
 
-NAK, we should just declare any missing firmwares. The tables inside the driver are pretty clear on what hardware is marked as supported. It just seems someone forgot to add the firmware files for it.
+OK, I have uploaded a v5 patch for this. Please review it.
 
-Regards
 
-Marcel
-
+--
+Schspa Shi
+BRs

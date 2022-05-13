@@ -2,123 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 639AC52628A
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 15:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C060252628C
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 15:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380532AbiEMNDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 09:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57232 "EHLO
+        id S1380542AbiEMNED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 09:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240402AbiEMNDi (ORCPT
+        with ESMTP id S240402AbiEMND6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 09:03:38 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0664F46143;
-        Fri, 13 May 2022 06:03:38 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id y63so10022429oia.7;
-        Fri, 13 May 2022 06:03:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kvr3Begq22WBEyGxs8maYiCPrh4so4dTPZyog74y3T0=;
-        b=YEwfmmlyZgqYrhuuDmRqATA6c7fMLLPBB8Q4BEMYK9Q6dPk4H60yVoLqKvQ3McY3LX
-         LlnqOlKnORu4h0Su6I99mUzvs2ZzOjbgFH1MIjRAH+bilFShhl3GQpSFIWcSWkaTobQy
-         I17wACj+3C+EPBxzi1oIVp4g1Qid9PZ/DjO0MH0yiIwDpC1sGDKVWeXqcbwIBszoQShc
-         hmH1K9r23wJNvnMbLzDCg4jC+nMP2OumCdld6ZYXg+Ps2JYsiC7LeVuJk1as+ymHuBbo
-         prGUjklpod1UeSBpDe+pYmZ+2lf0gpe7ikxTsKqRwytDeKenJTxGOSmHM+0PTb+Iq1R/
-         C3aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kvr3Begq22WBEyGxs8maYiCPrh4so4dTPZyog74y3T0=;
-        b=DtmyMAmWJ7cCo7NYZb0bYxeF53zJVVi8jzcjqemXzh7nnrN5NCfqO4bgwyHErHKjmJ
-         MNfdlQHf8n7D7cnjRsP4Pe7UXXcrnwwDH6MhcU5S6QJO6MtUQ/M+mGa1I/lwJR/tYens
-         C3vrbmwFUGD/RZJIT1V1UcDqBG+2t6xlVgA0ZbvtphSkWHSpc1+WAblTmvHpCKHAAuDq
-         mQlAMkxk4IAjXRBRclDMyIq2c7FHXcsLPn2HBHJKJSONOg/cYb4qf/n8jjFQiTmMdhJM
-         JkMgCiYfaRrfovdipY6X5D8j0Q+HrWLPJ/ZrFejj8weosWpOhxgJGmM1hxIgP9ltNkKG
-         E+HQ==
-X-Gm-Message-State: AOAM531ESnpn4xIgb0KWB7s4P9VUcQy7HUZeW54GOdG+rV27tHGzrlKy
-        LP+TjSk9U/HH/IWSBtlfAmI=
-X-Google-Smtp-Source: ABdhPJy9SpVg/HP+p2qRJ/JoVGVlKj308DrO7IZ5HYDFdxJU8QkkiAsBKN6uumQtGcsyF34bjicmWQ==
-X-Received: by 2002:a54:4505:0:b0:325:e50c:a71 with SMTP id l5-20020a544505000000b00325e50c0a71mr7274438oil.70.1652447015822;
-        Fri, 13 May 2022 06:03:35 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ep36-20020a056870a9a400b000e686d1387bsm999102oab.21.2022.05.13.06.03.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 06:03:35 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <83c22b32-d3e0-eb85-02b5-0068dcf0412f@roeck-us.net>
-Date:   Fri, 13 May 2022 06:03:33 -0700
+        Fri, 13 May 2022 09:03:58 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EE4624614C;
+        Fri, 13 May 2022 06:03:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A6D44143D;
+        Fri, 13 May 2022 06:03:55 -0700 (PDT)
+Received: from [10.57.5.218] (unknown [10.57.5.218])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6363C3F5A1;
+        Fri, 13 May 2022 06:03:54 -0700 (PDT)
+Message-ID: <95ede14c-8dc2-d285-9f5b-8d6ee6797f00@arm.com>
+Date:   Fri, 13 May 2022 14:03:52 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3 2/2] hwmon: acpi_power_meter: convert to
- hwmon_device_register_with_info
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] perf test arm-spe: Check if perf-record hangs when
+ recording workload with forks
 Content-Language: en-US
-To:     LABBE Corentin <clabbe@baylibre.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>
-References: <20220509063010.3878134-1-clabbe@baylibre.com>
- <20220509063010.3878134-3-clabbe@baylibre.com>
- <e5f6c712-efed-2126-de2b-9a0d09150e7b@roeck-us.net> <Yn4QhhTI7t6Gi+fE@Red>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <Yn4QhhTI7t6Gi+fE@Red>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     German Gomez <german.gomez@arm.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, acme@kernel.org
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>
+References: <20220228165655.3920-1-german.gomez@arm.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <20220228165655.3920-1-german.gomez@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/13/22 01:02, LABBE Corentin wrote:
-> Le Wed, May 11, 2022 at 07:10:29PM -0700, Guenter Roeck a écrit :
->> Corentin,
->>
->> On 5/8/22 23:30, Corentin Labbe wrote:
->>> Booting lead to a hwmon_device_register() is deprecated. Please convert the driver to use hwmon_device_register_with_info().
->>> So let's convert the driver to use hwmon_device_register_with_info().
->>>
->>> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
->>> ---
->> [ ... ]
->>
->>> @@ -836,20 +740,20 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
->>>    		if (res)
->>>    			break;
->>>    
->>> -		remove_attrs(resource);
->>> +		remove_domain_devices(resource);
->>>    		setup_attrs(resource);
->>
->> Zhang Rui found an interesting problem with this code:
->> It needs a call to sysfs_update_groups(hwmon_dev->groups)
->> to update sysfs attribute visibility, probably between
->> remove_domain_devices() and setup_attrs().
->>
->>>    		break;
->>>    	case METER_NOTIFY_TRIP:
->>> -		sysfs_notify(&device->dev.kobj, NULL, POWER_AVERAGE_NAME);
->>> +		hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_average, 0);
->>
->> ... which makes realize: The notification device should be the hwmon device.
->> That would be resource->hwmon_dev, not the acpi device.
->>
-> 
-> Hello
-> 
-> I will fix this, but do you have an example how to test thoses code path easily ?
-> 
 
-No, sorry.
 
-Guenter
+On 28/02/2022 16:56, German Gomez wrote:
+> Add shell test to check if perf-record hangs when recording an arm_spe
+> event with forks.
+> 
+> The test FAILS if the Kernel is not patched with Commit 961c391217 ("perf:
+> Always wake the parent event").
+> 
+> Unpatched Kernel:
+> 
+>   $ perf test -v 90
+>   90: Check Arm SPE doesn't hang when there are forks
+>   --- start ---
+>   test child forked, pid 14232
+>   Recording workload with fork
+>   Log lines = 90 /tmp/__perf_test.stderr.0Nu0U
+>   Log lines after 1 second = 90 /tmp/__perf_test.stderr.0Nu0U
+>   SPE hang test: FAIL
+>   test child finished with -1
+>   ---- end ----
+>   Check Arm SPE trace data in workload with forks: FAILED!
+> 
+> Patched Kernel:
+> 
+>   $ perf test -v 90
+>   90: Check Arm SPE doesn't hang when there are forks
+>   --- start ---
+>   test child forked, pid 2930
+>   Compiling test program...
+>   Recording workload...
+>   Log lines = 478 /tmp/__perf_test.log.026AI
+>   Log lines after 1 second = 557 /tmp/__perf_test.log.026AI
+>   SPE hang test: PASS
+>   Cleaning up files...
+>   test child finished with 0
+>   ---- end ----
+>   Check Arm SPE trace data in workload with forks: Ok
+> 
+> Signed-off-by: German Gomez <german.gomez@arm.com>
+
+Reviewed-by: James Clark <james.clark@arm.com>
+
+> ---
+>  tools/perf/tests/shell/test_arm_spe_fork.sh | 92 +++++++++++++++++++++
+>  1 file changed, 92 insertions(+)
+>  create mode 100755 tools/perf/tests/shell/test_arm_spe_fork.sh
+> 
+> diff --git a/tools/perf/tests/shell/test_arm_spe_fork.sh b/tools/perf/tests/shell/test_arm_spe_fork.sh
+> new file mode 100755
+> index 000000000..c920d3583
+> --- /dev/null
+> +++ b/tools/perf/tests/shell/test_arm_spe_fork.sh
+> @@ -0,0 +1,92 @@
+> +#!/bin/sh
+> +# Check Arm SPE doesn't hang when there are forks
+> +
+> +# SPDX-License-Identifier: GPL-2.0
+> +# German Gomez <german.gomez@arm.com>, 2022
+> +
+> +skip_if_no_arm_spe_event() {
+> +	perf list | egrep -q 'arm_spe_[0-9]+//' && return 0
+> +	return 2
+> +}
+> +
+> +skip_if_no_arm_spe_event || exit 2
+> +
+> +# skip if there's no compiler
+> +if ! [ -x "$(command -v cc)" ]; then
+> +	echo "failed: no compiler, install gcc"
+> +	exit 2
+> +fi
+> +
+> +TEST_PROGRAM_SOURCE=$(mktemp /tmp/__perf_test.program.XXXXX.c)
+> +TEST_PROGRAM=$(mktemp /tmp/__perf_test.program.XXXXX)
+> +PERF_DATA=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
+> +PERF_RECORD_LOG=$(mktemp /tmp/__perf_test.log.XXXXX)
+> +
+> +cleanup_files()
+> +{
+> +	echo "Cleaning up files..."
+> +	rm -f ${PERF_RECORD_LOG}
+> +	rm -f ${PERF_DATA}
+> +	rm -f ${TEST_PROGRAM_SOURCE}
+> +	rm -f ${TEST_PROGRAM}
+> +}
+> +
+> +trap cleanup_files exit term int
+> +
+> +# compile test program
+> +cat << EOF > $TEST_PROGRAM_SOURCE
+> +#include <math.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <unistd.h>
+> +#include <sys/wait.h>
+> +
+> +int workload() {
+> +  while (1)
+> +    sqrt(rand());
+> +  return 0;
+> +}
+> +
+> +int main() {
+> +  switch (fork()) {
+> +    case 0:
+> +      return workload();
+> +    case -1:
+> +      return 1;
+> +    default:
+> +      wait(NULL);
+> +  }
+> +  return 0;
+> +}
+> +EOF
+> +
+> +echo "Compiling test program..."
+> +CFLAGS="-lm"
+> +cc $TEST_PROGRAM_SOURCE $CFLAGS -o $TEST_PROGRAM || exit 1
+> +
+> +echo "Recording workload..."
+> +perf record -o ${PERF_DATA} -e arm_spe/period=65536/ -vvv -- $TEST_PROGRAM > ${PERF_RECORD_LOG} 2>&1 &
+> +PERFPID=$!
+> +
+> +# Check if perf hangs by checking the perf-record logs.
+> +sleep 1
+> +log0=$(wc -l $PERF_RECORD_LOG)
+> +echo Log lines = $log0
+> +sleep 1
+> +log1=$(wc -l $PERF_RECORD_LOG)
+> +echo Log lines after 1 second = $log1
+> +
+> +kill $PERFPID
+> +wait $PERFPID
+> +# test program may leave an orphan process running the workload
+> +killall $(basename $TEST_PROGRAM)
+> +
+> +if [ "$log0" = "$log1" ];
+> +then
+> +        echo "SPE hang test: FAIL"
+> +        exit 1
+> +else
+> +        echo "SPE hang test: PASS"
+> +fi
+> +
+> +exit 0

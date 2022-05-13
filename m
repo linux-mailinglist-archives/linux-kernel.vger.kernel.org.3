@@ -2,143 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 830C25269F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 21:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2807F526A16
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 21:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236202AbiEMTPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 15:15:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51188 "EHLO
+        id S1383734AbiEMTRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 15:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbiEMTPE (ORCPT
+        with ESMTP id S1383749AbiEMTQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 15:15:04 -0400
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD43E71;
-        Fri, 13 May 2022 12:15:03 -0700 (PDT)
-Received: by mail-qv1-f45.google.com with SMTP id kl21so7341874qvb.9;
-        Fri, 13 May 2022 12:15:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=p574xXlGBpc8qZHyt2pwHHSkpjniuBS9UHrRl2xc4Cc=;
-        b=idXlyIH8V9U0AM4IyFAljhg2HkPiQTVJJKEVS3wQaxuy5NKp4lPKxe6yEusPx+ANsF
-         /eiicxDEH16e6f84MVhwFYU0S8qqlYKdtb2eK+DYiy1PrWZmvRRJ36PM37NPmAeDWnsK
-         npbwml71REqHsuWk/y7QDO9NO4IThDq1sWZAblpLh2xk8cfBaX56xVwTnUQtd0MQfqM+
-         5wXFe0zPqvUVhwim+6Kaml9Vv1ZxOn4DMgUk8hLrgeQVFw/SZDDyLhfSCUw1kISIWWSY
-         Sa4dld73fbOejCQv5MFogl18bEFOSMJ6yhCKveLF1/5qCKmwvI9qgLV89Pf8PLLf+yhv
-         cOHA==
-X-Gm-Message-State: AOAM532P40JYp/21hRNsj1U7DNmq5Iu9LhYbNIg16x1HghiwyIzAf33M
-        FI/ttHl3A3LlOxcSfWHAcpc=
-X-Google-Smtp-Source: ABdhPJw5uIPwsI4RjyLfr/Fa/my7GiG+kuUc1zYJNDotGR+vRVn8xO8+UAzQLi7VVzplQLRinRiIZg==
-X-Received: by 2002:a05:6214:21aa:b0:461:b0d9:b265 with SMTP id t10-20020a05621421aa00b00461b0d9b265mr2743723qvc.110.1652469302072;
-        Fri, 13 May 2022 12:15:02 -0700 (PDT)
-Received: from dev0025.ash9.facebook.com (fwdproxy-ash-004.fbsv.net. [2a03:2880:20ff:4::face:b00c])
-        by smtp.gmail.com with ESMTPSA id t11-20020ac8760b000000b002f39b99f694sm1884975qtq.46.2022.05.13.12.15.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 12:15:01 -0700 (PDT)
-Date:   Fri, 13 May 2022 12:14:59 -0700
-From:   David Vernet <void@manifault.com>
-To:     Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-Cc:     akpm@linux-foundation.org, cgroups@vger.kernel.org,
-        hannes@cmpxchg.org, kernel-team@fb.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com,
-        tj@kernel.org, Richard Palethorpe <rpalethorpe@suse.de>
-Subject: Re: [PATCH 4/4] selftests: memcg: Remove protection from top level
- memcg
-Message-ID: <20220513191459.qgnmnu62xgxvhx5z@dev0025.ash9.facebook.com>
-References: <20220512174452.tr34tuh4k5jm6qjs@dev0025.ash9.facebook.com>
- <20220513171811.730-1-mkoutny@suse.com>
- <20220513171811.730-5-mkoutny@suse.com>
+        Fri, 13 May 2022 15:16:57 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E2F637028;
+        Fri, 13 May 2022 12:16:35 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24DIpPcZ017763;
+        Fri, 13 May 2022 19:16:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=Mh0XdhTy1gMy82HydgffAXKq98ceub6pinQLiUE2Al4=;
+ b=JzRyMdJFs/FPkw3a7SpPdBZlR2jkiXCLJi21ri2iUpziQgHhvXaDtCAqXlSx5nQd2rZI
+ LOfflPY2Meiw4vAch+cqQSmiRvmyiCvFm4/UdHhvHNHtkO+cBoI4khtgmC7yfO7+Btle
+ NqGxnzNOYzfeZK7RnAd347Qr4I/3n2fV/jV2beK4ZsnElktjgJN9OcFKavEBnQ+4Wo2G
+ 60t/Oe9jJrbWiUG4Q5UU1mbudHYKg5szoJ45qEJ6lInHFjNFd7CEWtVT13q5QBHSu3JD
+ aum1onuyikkdAZLLatNL3B5zd8n5X5dImlNTTENXD5PTzyRAZ7aar6RdKaXGFS4cehYZ lA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g1vypgdxp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 May 2022 19:16:32 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24DItU5Z030802;
+        Fri, 13 May 2022 19:16:32 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g1vypgdxe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 May 2022 19:16:32 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24DJCPvV005008;
+        Fri, 13 May 2022 19:16:31 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma02dal.us.ibm.com with ESMTP id 3fwgdb7c98-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 May 2022 19:16:31 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24DJGUdS61276454
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 13 May 2022 19:16:30 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 40E0A124054;
+        Fri, 13 May 2022 19:16:30 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3F367124053;
+        Fri, 13 May 2022 19:16:25 +0000 (GMT)
+Received: from li-c92d2ccc-254b-11b2-a85c-a700b5bfb098.ibm.com.com (unknown [9.211.49.28])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri, 13 May 2022 19:16:25 +0000 (GMT)
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+To:     linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
+        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
+        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
+        jgg@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH v7 13/22] KVM: s390: pci: enable host forwarding of Adapter Event Notifications
+Date:   Fri, 13 May 2022 15:15:00 -0400
+Message-Id: <20220513191509.272897-14-mjrosato@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220513191509.272897-1-mjrosato@linux.ibm.com>
+References: <20220513191509.272897-1-mjrosato@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220513171811.730-5-mkoutny@suse.com>
-User-Agent: NeoMutt/20211029
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: fJZnSoL60520bHisLv-5PJWjDak1h8S2
+X-Proofpoint-GUID: KhXiiGNxrJ4eDvLAJq3A2CDrst8qvWH2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-13_11,2022-05-13_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 mlxscore=0 adultscore=0 mlxlogscore=999 suspectscore=0
+ lowpriorityscore=0 phishscore=0 clxscore=1015 spamscore=0
+ priorityscore=1501 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2205130077
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 07:18:11PM +0200, Michal Koutný wrote:
-> The reclaim is triggered by memory limit in a subtree, therefore the
-> testcase does not need configured protection against external reclaim.
-> 
-> Also, correct/deduplicate respective comments
-> 
-> Signed-off-by: Michal Koutný <mkoutny@suse.com>
-> ---
->  tools/testing/selftests/cgroup/test_memcontrol.c | 12 ++++--------
->  1 file changed, 4 insertions(+), 8 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-> index 9ffacf024bbd..9d370aafd799 100644
-> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
-> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-> @@ -247,7 +247,7 @@ static int cg_test_proc_killed(const char *cgroup)
->  
->  /*
->   * First, this test creates the following hierarchy:
-> - * A       memory.min = 50M,  memory.max = 200M
-> + * A       memory.min = 0,    memory.max = 200M
->   * A/B     memory.min = 50M,  memory.current = 50M
->   * A/B/C   memory.min = 75M,  memory.current = 50M
->   * A/B/D   memory.min = 25M,  memory.current = 50M
-> @@ -257,7 +257,7 @@ static int cg_test_proc_killed(const char *cgroup)
->   * Usages are pagecache, but the test keeps a running
->   * process in every leaf cgroup.
->   * Then it creates A/G and creates a significant
-> - * memory pressure in it.
-> + * memory pressure in A.
->   *
->   * A/B    memory.current ~= 50M
->   * A/B/C  memory.current ~= 29M
-> @@ -335,8 +335,6 @@ static int test_memcg_min(const char *root)
->  			      (void *)(long)fd);
->  	}
->  
-> -	if (cg_write(parent[0], "memory.min", "50M"))
-> -		goto cleanup;
->  	if (cg_write(parent[1], "memory.min", "50M"))
->  		goto cleanup;
->  	if (cg_write(children[0], "memory.min", "75M"))
-> @@ -404,8 +402,8 @@ static int test_memcg_min(const char *root)
->  
->  /*
->   * First, this test creates the following hierarchy:
-> - * A       memory.low = 50M,  memory.max = 200M
-> - * A/B     memory.low = 50M,  memory.current = 50M
-> + * A       memory.low = 0,    memory.max = 200M
-> + * A/B     memory.low = 50M,  memory.current = ...
+In cases where interrupts are not forwarded to the guest via firmware,
+KVM is responsible for ensuring delivery.  When an interrupt presents
+with the forwarding bit, we must process the forwarding tables until
+all interrupts are delivered.
 
-Is there a reason that we would adjust this comment but not the A/B comment
-from above in from test_memcg_low()? In both cases, I would just remove the
-memory.current = ... part altogether, as Roman suggested.
+Reviewed-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+Reviewed-by: Pierre Morel <pmorel@linux.ibm.com>
+Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+---
+ arch/s390/include/asm/kvm_host.h |  1 +
+ arch/s390/include/asm/tpi.h      | 13 ++++++
+ arch/s390/kvm/interrupt.c        | 78 +++++++++++++++++++++++++++++++-
+ arch/s390/kvm/kvm-s390.c         |  3 +-
+ arch/s390/kvm/pci.h              | 10 ++++
+ 5 files changed, 103 insertions(+), 2 deletions(-)
 
->   * A/B/C   memory.low = 75M,  memory.current = 50M
->   * A/B/D   memory.low = 25M,  memory.current = 50M
->   * A/B/E   memory.low = 0,    memory.current = 50M
-> @@ -490,8 +488,6 @@ static int test_memcg_low(const char *root)
->  			goto cleanup;
->  	}
->  
-> -	if (cg_write(parent[0], "memory.low", "50M"))
-> -		goto cleanup;
->  	if (cg_write(parent[1], "memory.low", "50M"))
->  		goto cleanup;
->  	if (cg_write(children[0], "memory.low", "75M"))
-> -- 
-> 2.35.3
-> 
+diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
+index 766028d54a3e..c1518a505060 100644
+--- a/arch/s390/include/asm/kvm_host.h
++++ b/arch/s390/include/asm/kvm_host.h
+@@ -759,6 +759,7 @@ struct kvm_vm_stat {
+ 	u64 inject_pfault_done;
+ 	u64 inject_service_signal;
+ 	u64 inject_virtio;
++	u64 aen_forward;
+ };
+ 
+ struct kvm_arch_memory_slot {
+diff --git a/arch/s390/include/asm/tpi.h b/arch/s390/include/asm/tpi.h
+index 1ac538b8cbf5..f76e5fdff23a 100644
+--- a/arch/s390/include/asm/tpi.h
++++ b/arch/s390/include/asm/tpi.h
+@@ -19,6 +19,19 @@ struct tpi_info {
+ 	u32 :12;
+ } __packed __aligned(4);
+ 
++/* I/O-Interruption Code as stored by TPI for an Adapter I/O */
++struct tpi_adapter_info {
++	u32 aism:8;
++	u32 :22;
++	u32 error:1;
++	u32 forward:1;
++	u32 reserved;
++	u32 adapter_IO:1;
++	u32 directed_irq:1;
++	u32 isc:3;
++	u32 :27;
++} __packed __aligned(4);
++
+ #endif /* __ASSEMBLY__ */
+ 
+ #endif /* _ASM_S390_TPI_H */
+diff --git a/arch/s390/kvm/interrupt.c b/arch/s390/kvm/interrupt.c
+index 37ff4358121a..d8e1fce78b7c 100644
+--- a/arch/s390/kvm/interrupt.c
++++ b/arch/s390/kvm/interrupt.c
+@@ -3313,11 +3313,87 @@ int kvm_s390_gisc_unregister(struct kvm *kvm, u32 gisc)
+ }
+ EXPORT_SYMBOL_GPL(kvm_s390_gisc_unregister);
+ 
++static void aen_host_forward(unsigned long si)
++{
++	struct kvm_s390_gisa_interrupt *gi;
++	struct zpci_gaite *gaite;
++	struct kvm *kvm;
++
++	gaite = (struct zpci_gaite *)aift->gait +
++		(si * sizeof(struct zpci_gaite));
++	if (gaite->count == 0)
++		return;
++	if (gaite->aisb != 0)
++		set_bit_inv(gaite->aisbo, (unsigned long *)gaite->aisb);
++
++	kvm = kvm_s390_pci_si_to_kvm(aift, si);
++	if (!kvm)
++		return;
++	gi = &kvm->arch.gisa_int;
++
++	if (!(gi->origin->g1.simm & AIS_MODE_MASK(gaite->gisc)) ||
++	    !(gi->origin->g1.nimm & AIS_MODE_MASK(gaite->gisc))) {
++		gisa_set_ipm_gisc(gi->origin, gaite->gisc);
++		if (hrtimer_active(&gi->timer))
++			hrtimer_cancel(&gi->timer);
++		hrtimer_start(&gi->timer, 0, HRTIMER_MODE_REL);
++		kvm->stat.aen_forward++;
++	}
++}
++
++static void aen_process_gait(u8 isc)
++{
++	bool found = false, first = true;
++	union zpci_sic_iib iib = {{0}};
++	unsigned long si, flags;
++
++	spin_lock_irqsave(&aift->gait_lock, flags);
++
++	if (!aift->gait) {
++		spin_unlock_irqrestore(&aift->gait_lock, flags);
++		return;
++	}
++
++	for (si = 0;;) {
++		/* Scan adapter summary indicator bit vector */
++		si = airq_iv_scan(aift->sbv, si, airq_iv_end(aift->sbv));
++		if (si == -1UL) {
++			if (first || found) {
++				/* Re-enable interrupts. */
++				zpci_set_irq_ctrl(SIC_IRQ_MODE_SINGLE, isc,
++						  &iib);
++				first = found = false;
++			} else {
++				/* Interrupts on and all bits processed */
++				break;
++			}
++			found = false;
++			si = 0;
++			/* Scan again after re-enabling interrupts */
++			continue;
++		}
++		found = true;
++		aen_host_forward(si);
++	}
++
++	spin_unlock_irqrestore(&aift->gait_lock, flags);
++}
++
+ static void gib_alert_irq_handler(struct airq_struct *airq,
+ 				  struct tpi_info *tpi_info)
+ {
++	struct tpi_adapter_info *info = (struct tpi_adapter_info *)tpi_info;
++
+ 	inc_irq_stat(IRQIO_GAL);
+-	process_gib_alert_list();
++
++	if ((info->forward || info->error) &&
++	    IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM)) {
++		aen_process_gait(info->isc);
++		if (info->aism != 0)
++			process_gib_alert_list();
++	} else {
++		process_gib_alert_list();
++	}
+ }
+ 
+ static struct airq_struct gib_alert_irq = {
+diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+index efc0d8e22308..5a0fbfd19c4a 100644
+--- a/arch/s390/kvm/kvm-s390.c
++++ b/arch/s390/kvm/kvm-s390.c
+@@ -64,7 +64,8 @@ const struct _kvm_stats_desc kvm_vm_stats_desc[] = {
+ 	STATS_DESC_COUNTER(VM, inject_float_mchk),
+ 	STATS_DESC_COUNTER(VM, inject_pfault_done),
+ 	STATS_DESC_COUNTER(VM, inject_service_signal),
+-	STATS_DESC_COUNTER(VM, inject_virtio)
++	STATS_DESC_COUNTER(VM, inject_virtio),
++	STATS_DESC_COUNTER(VM, aen_forward)
+ };
+ 
+ const struct kvm_stats_header kvm_vm_stats_header = {
+diff --git a/arch/s390/kvm/pci.h b/arch/s390/kvm/pci.h
+index c357d900f8b0..9f7828d97605 100644
+--- a/arch/s390/kvm/pci.h
++++ b/arch/s390/kvm/pci.h
+@@ -13,6 +13,7 @@
+ #include <linux/kvm_host.h>
+ #include <linux/pci.h>
+ #include <linux/mutex.h>
++#include <linux/kvm_host.h>
+ #include <asm/airq.h>
+ #include <asm/cpu.h>
+ 
+@@ -40,6 +41,15 @@ struct zpci_aift {
+ 
+ extern struct zpci_aift *aift;
+ 
++static inline struct kvm *kvm_s390_pci_si_to_kvm(struct zpci_aift *aift,
++						 unsigned long si)
++{
++	if (!IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM) || aift->kzdev == 0 ||
++	    aift->kzdev[si] == 0)
++		return 0;
++	return aift->kzdev[si]->kvm;
++};
++
+ int kvm_s390_pci_aen_init(u8 nisc);
+ void kvm_s390_pci_aen_exit(void);
+ 
+-- 
+2.27.0
 
-Looks good otherwise.
-
-Reviewed-by: David Vernet <void@manifault.com>

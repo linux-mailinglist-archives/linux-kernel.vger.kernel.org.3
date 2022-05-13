@@ -2,79 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC202526108
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 13:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F0AD52610C
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 13:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379892AbiEMLdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 07:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36806 "EHLO
+        id S1379930AbiEMLdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 07:33:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376806AbiEMLdB (ORCPT
+        with ESMTP id S243824AbiEMLdc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 07:33:01 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2128166D79;
-        Fri, 13 May 2022 04:32:58 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8B6781F938;
-        Fri, 13 May 2022 11:32:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1652441577; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MiDmOs1/H6dqhYoSsVl9AlYWy58YcyCRs35aUMxOAmk=;
-        b=iyQpKgT6MMw5KR0+jUn8wy2p2zhml+IT3FWNBgzqrnI+bTe7jjvfmhFmjvdVzwSbMAkyNr
-        qiTx70JKfRIEF+dPJAKdKa8+FHqZH//GU0KiinAFGrT9++z/7dGmZxRogoI4PMlZL1T2lE
-        l0T8JiBr/iIt1rL0etW1TeiS0RAMdfk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1652441577;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MiDmOs1/H6dqhYoSsVl9AlYWy58YcyCRs35aUMxOAmk=;
-        b=dUuReiObJGHJyunjgGcV3jKOLA10P5dDxluAqyqHphNI3qjbgp/tzpkMqsGQaH3uIb+lsk
-        /h3E33yI2aHg8vCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4474813A84;
-        Fri, 13 May 2022 11:32:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id dxe7D+lBfmKROgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 13 May 2022 11:32:57 +0000
-Message-ID: <026b1c6d-c258-fa88-ed08-d1b5784c95b0@suse.de>
-Date:   Fri, 13 May 2022 13:32:56 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v5 0/7] Fix some races between sysfb device registration
- and drivers probe
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
+        Fri, 13 May 2022 07:33:32 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13DC02B824D;
+        Fri, 13 May 2022 04:33:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652441612; x=1683977612;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=3EBr+y79geP5CztvBOF3MttVzuiXbWczHFziVH9D/uU=;
+  b=LD/Yq+BG1WPshxerKhLcS0pNRfOuX0Agtt4uUs3fU00u6SyX/GLG3JQ7
+   qO1KGAQiEMXMBylWZjblZvlxbTdZXCgFbHPkBANYQaiF/e5zXnxrjVnxi
+   YcKL0Cwn3SyyxF0z3pAj9OMzcnDSe11UnJcsTHAfEouBOZjBqEhc9s8Nk
+   eXI3VrZ7wEMNuEbzifhyHSWeU+syWq3/KKVmMHxmQHWpxm289GiCDFcs9
+   0TqvkPnLZv8xGhoHamRJiIkwTa+qmdu7ESrx8HA6W1Ne0ZdOzJsgBRTaV
+   1bD3hvlFtS6tJ8cWIEzLvVJ8JJDROj2HHZaXUVtvXGuO5qA31iDln4Ab9
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="267878197"
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="267878197"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 04:33:31 -0700
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="595179512"
+Received: from ychen23-mobl.ccr.corp.intel.com ([10.249.171.202])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 04:33:29 -0700
+Message-ID: <b9ee331670fd40e69796dd428a844562842cdff3.camel@intel.com>
+Subject: Re: [PATCH v3 2/2] hwmon: acpi_power_meter: convert to
+ hwmon_device_register_with_info
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     LABBE Corentin <clabbe@baylibre.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Helge Deller <deller@gmx.de>, Jonathan Corbet <corbet@lwn.net>,
-        Peter Jones <pjones@redhat.com>, linux-doc@vger.kernel.org,
-        linux-fbdev@vger.kernel.org
-References: <20220511112438.1251024-1-javierm@redhat.com>
- <f726c96b-1924-841f-0125-9f7ed37de20a@suse.de>
- <cc0d6635-c739-490d-9c8d-7f53da48e61a@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <cc0d6635-c739-490d-9c8d-7f53da48e61a@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------740qThg0O9gjX6BQllYOYoVE"
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Date:   Fri, 13 May 2022 19:33:27 +0800
+In-Reply-To: <Yn4QhhTI7t6Gi+fE@Red>
+References: <20220509063010.3878134-1-clabbe@baylibre.com>
+         <20220509063010.3878134-3-clabbe@baylibre.com>
+         <e5f6c712-efed-2126-de2b-9a0d09150e7b@roeck-us.net> <Yn4QhhTI7t6Gi+fE@Red>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,95 +64,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------740qThg0O9gjX6BQllYOYoVE
-Content-Type: multipart/mixed; boundary="------------RZpES3ql0GSOSsXG7T1LU8ih";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
- Hans de Goede <hdegoede@redhat.com>, Helge Deller <deller@gmx.de>,
- Jonathan Corbet <corbet@lwn.net>, Peter Jones <pjones@redhat.com>,
- linux-doc@vger.kernel.org, linux-fbdev@vger.kernel.org
-Message-ID: <026b1c6d-c258-fa88-ed08-d1b5784c95b0@suse.de>
-Subject: Re: [PATCH v5 0/7] Fix some races between sysfb device registration
- and drivers probe
-References: <20220511112438.1251024-1-javierm@redhat.com>
- <f726c96b-1924-841f-0125-9f7ed37de20a@suse.de>
- <cc0d6635-c739-490d-9c8d-7f53da48e61a@redhat.com>
-In-Reply-To: <cc0d6635-c739-490d-9c8d-7f53da48e61a@redhat.com>
+On Fri, 2022-05-13 at 10:02 +0200, LABBE Corentin wrote:
+> Le Wed, May 11, 2022 at 07:10:29PM -0700, Guenter Roeck a écrit :
+> > Corentin,
+> > 
+> > On 5/8/22 23:30, Corentin Labbe wrote:
+> > > Booting lead to a hwmon_device_register() is deprecated. Please
+> > > convert the driver to use hwmon_device_register_with_info().
+> > > So let's convert the driver to use
+> > > hwmon_device_register_with_info().
+> > > 
+> > > Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> > > ---
+> > 
+> > [ ... ]
+> > 
+> > > @@ -836,20 +740,20 @@ static void acpi_power_meter_notify(struct
+> > > acpi_device *device, u32 event)
+> > >   		if (res)
+> > >   			break;
+> > >   
+> > > -		remove_attrs(resource);
+> > > +		remove_domain_devices(resource);
+> > >   		setup_attrs(resource);
+> > 
+> > Zhang Rui found an interesting problem with this code:
+> > It needs a call to sysfs_update_groups(hwmon_dev->groups)
+> > to update sysfs attribute visibility, probably between
+> > remove_domain_devices() and setup_attrs().
+> > 
+> > >   		break;
+> > >   	case METER_NOTIFY_TRIP:
+> > > -		sysfs_notify(&device->dev.kobj, NULL,
+> > > POWER_AVERAGE_NAME);
+> > > +		hwmon_notify_event(&device->dev, hwmon_power,
+> > > hwmon_power_average, 0);
+> > 
+> > ... which makes realize: The notification device should be the
+> > hwmon device.
+> > That would be resource->hwmon_dev, not the acpi device.
+> > 
+> 
+> Hello
+> 
+> I will fix this, but do you have an example how to test thoses code
+> path easily ?
 
---------------RZpES3ql0GSOSsXG7T1LU8ih
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+No, I don't have one.
 
-SGkgSmF2aWVyDQoNCkFtIDEzLjA1LjIyIHVtIDEzOjEwIHNjaHJpZWIgSmF2aWVyIE1hcnRp
-bmV6IENhbmlsbGFzOg0KLi4uDQo+PiBXZSBhbHJlYWR5IHRyYWNrIHRoZSBtZW1vcnkgcmFu
-Z2VzIGluIGRybSBhcGVydHVyZSBoZWxwZXJzLiBXZSdkIG5lZWQgdG8NCj4+IG1vdmUgdGhl
-IGNvZGUgdG8gYSBtb3JlIHByb21pbmVudCBsb2NhdGlvbiAoZS5nLiwgPGxpbnV4L2FwZXJ0
-dXJlLmg+KQ0KPj4gYW5kIGNoYW5nZSBmYmRldiB0byB1c2UgaXQuIFN5c2ZiIGFuZCBEVCBj
-b2RlIG5lZWRzIHRvIGluc2VydCBwbGF0Zm9ybQ0KPj4gZGV2aWNlcyB1cG9uIGNyZWF0aW9u
-LiBXZSBjYW4gdGhlbiBpbXBsZW1lbnQgdGhlIG1vcmUgZmFuY3kgc3R1ZmYsIHN1Y2gNCj4+
-IGFzIHRyYWNraW5nIG5hdGl2ZS1kZXZpY2UgbWVtb3J5LiAgKEFuZCBpZiB3ZSBldmVyIGdl
-dCB0byBmaXggYWxsIHVzYWdlDQo+PiBvZiBMaW51eCcgcmVxdWVzdC1tZW0tcmVnaW9uLCB3
-ZSBjYW4gZXZlbiBtb3ZlIGFsbCB0aGUgZnVuY3Rpb25hbGl0eSB0aGVyZSkuDQo+Pg0KPiAN
-Cj4gQWdyZWVkLiBBbmQgYXMgbWVudGlvbmVkLCB0aGUgcmFjZSB0aGF0IHRoZXNlIHBhdGNo
-ZXMgYXR0ZW1wdCB0byBmaXggYXJlIGZvcg0KPiB0aGUgbGVzcyBjb21tb24gY2FzZSB3aGVu
-IGEgbmF0aXZlIGRyaXZlciBwcm9iZXMgYnV0IGVpdGhlciBubyBnZW5lcmljIGRyaXZlcg0K
-PiByZWdpc3RlcmVkIGEgZnJhbWVidWZmZXIgeWV0IG9yIHRoZSBwbGF0Zm9ybSBkZXZpY2Ug
-d2Fzbid0IHJlZ2lzdGVyZWQgeWV0Lg0KPiANCj4gQnV0IHRoaXMgY2FuIG9ubHkgaGFwcGVu
-IGlmIGZvciBleGFtcGxlIGEgbmF0aXZlIGRyaXZlciBpcyBidWlsdC1pbiBidXQgdGhlDQo+
-IGdlbmVyaWMgZHJpdmVyIGlzIGJ1aWxkIGFzIGEgbW9kdWxlLCB3aGljaCBpcyBub3QgdGhl
-IGNvbW1vbiBjb25maWd1cmF0aW9uLg0KPiANCj4gV2hhdCBtb3N0IGRpc3Ryb3MgZG8gaXMg
-dGhlIG9wcG9zaXRlLCB0byBoYXZlIHtzaW1wbGUsb2YsZWZpLHZlc2F9ZmIgb3INCj4gc2lt
-cGxlZHJtIGJ1aWx0LWluIGFuZCB0aGUgbmF0aXZlIGRyaXZlcnMgYnVpbHQgYXMgbW9kdWxl
-cy4NCj4gDQo+IFNvIHRoZXJlJ3Mgbm8gcnVzaCB0byBmaXggdGhpcyBieSBwaWxpbmcgbW9y
-ZSBoYWNrcyBvbiB0b3Agb2YgdGhlIG9uZXMgd2UNCj4gYWxyZWFkeSBoYXZlIGFuZCBpbnN0
-ZWFkIHRyeSB0byBmaXggaXQgbW9yZSBwcm9wZXJseSBhcyB5b3Ugc3VnZ2VzdGVkLg0KPiAg
-IA0KDQpBIGZpcnN0IHN0ZXAgd291bGQgYmUgdG8gdXNlIERSTSdzIGFwZXJ0dXJlIGhlbHBl
-cnMgaW4gZmJkZXYuIFRoYXQgd291bGQgDQpiZSBhIGdvb2QgaWRlYSBhbnl3YXksIGFzIGl0
-IHdvdWxkIHNpbXBsaWZ5IGJvdGguIFlvdSBhbHJlYWR5IG1lbnRpb25lZCANCnNvbWUgQVBJ
-IGNoYW5nZXMgdG8gbWFrZSBhcGVydHVyZSBoZWxwZXJzIERSTS1pbmRlcGVuZGVudC4NCg0K
-VGhlIGFmZmVjdGVkIGZiZGV2IGRyaXZlcnMgdXNlIHBsYXRmb3JtIGRldmljZXMsIHNvIHRo
-aXMgc2hvdWxkIGJlIGVhc3kuDQoNCkFwZXJ0dXJlIGhlbHBlcnMgaGF2ZSBzb21ldGhpbmcg
-bGlrZSB0aGUgcmVnaXN0cmF0aW9uX2xvY2suIFsxXSBJIGRvbid0IA0Ka25vdyBpZiB3ZSBu
-ZWVkIHRvIHJlY3JlYXRlIHBhdGNoIDMgZm9yIHRoaXMgYXMgd2VsbC4NCg0KSWYgd2UgYWJz
-b2x1dGVseSBuZWVkIHNvbWUgc3BlY2lhbCBkZXRhY2htZW50IGhhbmRsaW5nIGZvciBmYmRl
-diwgd2UgY2FuIA0KbWFrZSBkZXZtX2FwZXJ0dXJlX2FxdWlyZSgpIGEgcHVibGljIGludGVy
-ZmFjZS4gVGhlIGRldGFjaCBoZWxwZXIgaXMgDQpwcm92aWRlZCBieSB0aGUgY2FsbGVyLg0K
-DQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQoNClsxXSANCmh0dHBzOi8vZWxpeGlyLmJvb3Rs
-aW4uY29tL2xpbnV4L3Y1LjE3LjYvc291cmNlL2RyaXZlcnMvZ3B1L2RybS9kcm1fYXBlcnR1
-cmUuYyNMMjU0DQpbMl0gDQpodHRwczovL2VsaXhpci5ib290bGluLmNvbS9saW51eC92NS4x
-Ny42L3NvdXJjZS9kcml2ZXJzL2dwdS9kcm0vZHJtX2FwZXJ0dXJlLmMjTDE1OQ0KDQotLSAN
-ClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNv
-ZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7D
-vHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0
-c2bDvGhyZXI6IEl2byBUb3Rldg0K
+-rui
 
---------------RZpES3ql0GSOSsXG7T1LU8ih--
-
---------------740qThg0O9gjX6BQllYOYoVE
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJ+QegFAwAAAAAACgkQlh/E3EQov+A2
-sQ/8D7aYwDIgk8L3+1bF/YeMSNhqsgkRqp2BLg+P6/S1AVKfDJVfmx0u3sofTWUL4A1IZgQrhY9G
-A8TeLgAete6GUD3w0Zx7cRNGwznM6lTLkUrIumH53UcEnbSCdMtC301wA3RnKbLOw0Q7EGn6CpMo
-lZw/ufb0z9VR7RjRCa+dcWKt8kVyUr0ijdLC0Xhvv1PWe5IHklz/+HAyOV7ms1NKsVWu5mWuD0Te
-MTjlbq2WzQeiL+XL3j1ZizUzkm8Cnb3yxk4NDqm1Z9BfuUpVk7TppZpj6AyhZNkarRXQB2T+fIbD
-f54mH5Z7gcb4B8kzNgrGPmlsQJbiHgkwZnSgcKmnDaDRx8VEoMLPSc+aeBUbeD/cH84MRl6HPCK/
-f7U8DGqbipB8XfaZWyko7S2cW21ZevZjXETQrME2nmw7LzvUz2RnYuQaOAbvX20QZ8PKgrcTNUli
-bW9ocCXXTBExjFojM+Mn3Xnnlmrb/t7soiQ4lW2wcf7qiYkCx39CeJ14zz3BHA2PKeFB2Zbo43/N
-4L7BF+xCwQFAk6aWJ6bBIhh3SLO16tr0Q7CmFxaxRsEQmo6lQr9puQ6JYuQ57ylxufWJ5HTyzXsQ
-xgMnM8X6qU29lb9qtuug6os2MxNsfMKwolYMISIzWkaDhjl7W+AdEkQ8kxxSySCgH2GU29X7vN3Q
-ov0=
-=0rOq
------END PGP SIGNATURE-----
-
---------------740qThg0O9gjX6BQllYOYoVE--

@@ -2,54 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80657526C0A
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 23:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5A4526C12
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 23:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384575AbiEMVHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 17:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52074 "EHLO
+        id S1384608AbiEMVHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 17:07:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377240AbiEMVHS (ORCPT
+        with ESMTP id S1377240AbiEMVHn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 17:07:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7963F26C5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 14:07:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652476034;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Sh5oKvIJmcZ6Z8sDauzoGErE3sFVtMbnI9oXNJC+aqg=;
-        b=SGgcGj6+4NBltCoRLmEF+RlGdnFc0ZlArfy3WS+PkbtL4KwyTzOAT5q0zvS9THwOiYPj5o
-        rRJ6uQZuNg9B9PEGxtrfGEJIKERqD045VBJI15rM41zmyuuhOQMKy47F9d7uWncYqEULjY
-        UTS/ua8DGitpNn1yng1IsMRtVZNJ5aU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-425-QMnSpe2LOgSym1AGbzKdYQ-1; Fri, 13 May 2022 17:07:13 -0400
-X-MC-Unique: QMnSpe2LOgSym1AGbzKdYQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 13 May 2022 17:07:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421452CDF8;
+        Fri, 13 May 2022 14:07:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B2E6C800882;
-        Fri, 13 May 2022 21:07:12 +0000 (UTC)
-Received: from max.localdomain (unknown [10.40.194.254])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8084C40D2820;
-        Fri, 13 May 2022 21:07:11 +0000 (UTC)
-From:   Andreas Gruenbacher <agruenba@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andreas Gruenbacher <agruenba@redhat.com>,
-        cluster-devel@redhat.com, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] gfs2 fixes
-Date:   Fri, 13 May 2022 23:07:10 +0200
-Message-Id: <20220513210710.4124506-1-agruenba@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B061B831E1;
+        Fri, 13 May 2022 21:07:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2C51C34100;
+        Fri, 13 May 2022 21:07:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652476059;
+        bh=9sFjfKoaAyEC+9HSV3bohlPaCAHVxDSuX+3Bu1rvJ/U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XwXO6+1AhH1Ssg2P+C4fnmG1FpLpTH7pkn4XtaZZmmuz2iqiDooO2Grmn8ALGHHfg
+         Yy5GM9+OK6zHI6zp3jq7iHuhIl3e9Vw4oVw5cAKffgRmFSHV0HfE/g7XXBMjYzfhHU
+         4OFVZT/nSoyHJ02U3li4EpdsnVQE/B3FHhQon7adeKp7S7Cl8hGWf3TsAS6BQKXj/F
+         9t4EM7d1DbJeOcJtJOQFWqLPbv81sq9RiO6KmiKIHEQzVsoup0jAw5/KqYDt5eLx0u
+         BXef3OK0fVFneO0P8OJCP6jlh9Aj9j++iXZddUHX4gJuB9MWBvYr8mCO4PUrbwXfth
+         kMsrjrVMpKwvA==
+Date:   Fri, 13 May 2022 14:07:37 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Ming Yan <yanming@tju.edu.cn>, Chao Yu <chao.yu@oppo.com>
+Subject: Re: [PATCH] f2fs: fix to do sanity check for inline inode
+Message-ID: <Yn7Imax7fgpJ7eY5@google.com>
+References: <20220428024940.12102-1-chao@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220428024940.12102-1-chao@kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,54 +55,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 04/28, Chao Yu wrote:
+> As Yanming reported in bugzilla:
+> 
+> https://bugzilla.kernel.org/show_bug.cgi?id=215895
+> 
+> I have encountered a bug in F2FS file system in kernel v5.17.
+> 
+> The kernel message is shown below:
+> 
+> kernel BUG at fs/inode.c:611!
+> Call Trace:
+>  evict+0x282/0x4e0
+>  __dentry_kill+0x2b2/0x4d0
+>  dput+0x2dd/0x720
+>  do_renameat2+0x596/0x970
+>  __x64_sys_rename+0x78/0x90
+>  do_syscall_64+0x3b/0x90
+> 
+> The root cause is: fuzzed inode has both inline_data flag and encrypted
+> flag, so after it was deleted by rename(), during f2fs_evict_inode(),
+> it will cause inline data conversion due to flags confilction, then
+> page cache will be polluted and trigger panic in clear_inode().
+> 
+> This patch tries to fix the issue by do more sanity checks for inline
+> data inode in sanity_check_inode().
+> 
+> Cc: stable@vger.kernel.org
+> Reported-by: Ming Yan <yanming@tju.edu.cn>
+> Signed-off-by: Chao Yu <chao.yu@oppo.com>
+> ---
+>  fs/f2fs/f2fs.h  | 7 +++++++
+>  fs/f2fs/inode.c | 3 +--
+>  2 files changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index 27aa93caec06..64c511b498cc 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -4173,6 +4173,13 @@ static inline void f2fs_set_encrypted_inode(struct inode *inode)
+>   */
+>  static inline bool f2fs_post_read_required(struct inode *inode)
+>  {
+> +	/*
+> +	 * used by sanity_check_inode(), when disk layout fields has not
+> +	 * been synchronized to inmem fields.
+> +	 */
+> +	if (file_is_encrypt(inode) || file_is_verity(inode) ||
+> +			F2FS_I(inode)->i_flags & F2FS_COMPR_FL)
+> +		return true;
+>  	return f2fs_encrypted_file(inode) || fsverity_active(inode) ||
+>  		f2fs_compressed_file(inode);
+>  }
+> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+> index 83639238a1fe..234b8ed02644 100644
+> --- a/fs/f2fs/inode.c
+> +++ b/fs/f2fs/inode.c
+> @@ -276,8 +276,7 @@ static bool sanity_check_inode(struct inode *inode, struct page *node_page)
+>  		}
+>  	}
+>  
+> -	if (f2fs_has_inline_data(inode) &&
+> -			(!S_ISREG(inode->i_mode) && !S_ISLNK(inode->i_mode))) {
+> +	if (f2fs_has_inline_data(inode) && !f2fs_may_inline_data(inode)) {
 
-we've finally identified commit dc732906c245 ("gfs2: Introduce flag for glock
-holder auto-demotion") to be the other cause of the filesystem corruption we've
-been seeing.  This feature isn't strictly necessary anymore, so we've decided
-to stop using it for now.  With this and the gfs_iomap_end rounding fix you've
-already seen ("gfs2: Fix filesystem block deallocation for short writes" in
-this pull request), we're corruption free again now.
+BTW, why can't we just check the above on-disk fields here only?
 
-Would you like to still pull these fixes for v5.18, or should we send them in
-the next merge window?
-
-Thanks again for all the help you've provided.
-
-Andreas
-
-The following changes since commit 4a2316a1eda4ef3ced18c7f08f7cb3726bcae44b:
-
-  Merge tag 'gfs2-v5.18-rc4-fix2' of git://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2 (2022-04-28 09:50:29 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git tags/gfs2-v5.18-rc4-fix3
-
-for you to fetch changes up to e1fa9ea85ce89207d2ac0316da35a4a7736801f9:
-
-  gfs2: Stop using glock holder auto-demotion for now (2022-05-13 22:32:52 +0200)
-
-----------------------------------------------------------------
-gfs2 fixes
-
-- Fix filesystem block deallocation for short writes.
-- Stop using glock holder auto-demotion for now.
-- Get rid of buffered writes inefficiencies due to page
-  faults being disabled.
-- Minor other cleanups.
-
-----------------------------------------------------------------
-Andreas Gruenbacher (7):
-      gfs2: Fix filesystem block deallocation for short writes
-      gfs2: Variable rename
-      gfs2: Clean up use of fault_in_iov_iter_{read,write}able
-      gfs2: Pull return value test out of should_fault_in_pages
-      gfs2: Align read and write chunks to the page cache
-      gfs2: buffered write prefaulting
-      gfs2: Stop using glock holder auto-demotion for now
-
- fs/gfs2/bmap.c |  11 +++--
- fs/gfs2/file.c | 139 ++++++++++++++++++++++++++-------------------------------
- 2 files changed, 68 insertions(+), 82 deletions(-)
-
+>  		set_sbi_flag(sbi, SBI_NEED_FSCK);
+>  		f2fs_warn(sbi, "%s: inode (ino=%lx, mode=%u) should not have inline_data, run fsck to fix",
+>  			  __func__, inode->i_ino, inode->i_mode);
+> -- 
+> 2.25.1

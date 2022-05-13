@@ -2,180 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2513526D55
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 01:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 461A1526D56
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 01:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240537AbiEMXGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 19:06:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59994 "EHLO
+        id S1344902AbiEMXG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 19:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242450AbiEMXGN (ORCPT
+        with ESMTP id S238831AbiEMXGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 19:06:13 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8AC25559C
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 16:05:41 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id o12-20020a1c4d0c000000b00393fbe2973dso7670217wmh.2
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 16:05:41 -0700 (PDT)
+        Fri, 13 May 2022 19:06:07 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93F426084C
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 16:05:51 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2feb8eac315so26890997b3.3
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 16:05:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=mivRpjYlnos8QyfKIL0ZlkiTUotRjXBDBCX8TH+HQXY=;
-        b=UdpAoUQiU4hPu5EZSLJ8meLqynbM8mfTp+3iZ4wqmp60lDxYlq+Dcw1+Ai9ZPbh8ZX
-         U/Aq0aRqY/wfdxyeVYaddvYyhr6KOlKipGwchEWqzXXtwH+V1D/bwmimJaudRW74KvYi
-         n7BcZtD0heaYjzouHmBVcq80K1BhxMVLRbJJK2vSosuf5Ngif2YKfjFcT51VRnKgunBb
-         erAORUPdaJGYpkIL2cxy+KFLpeguRkmjCXl0VzUbty3RILRMx4FyPrKpl9iLwzRuXPaG
-         9alDHlC1KCZiMq7cx4G0Fojxg9XUTGxfcwoe93D6yJxceY2giRQBLPsIKFOVfUy+0kB4
-         ox2g==
+        bh=20vdP+atjEjZhs5yJgS5YKDTDHHJ9Ifpl/sT0aKWLY4=;
+        b=m+j5i6KqT3vzPFbJFYRsLAjZL1f88dlKxieE3PyBGCRC5fENmJJq5KL2nwLE+r4Usw
+         KFU7MTr/YV0/GCVcSi6w+xvuXb4gnpZ6SXGuf1Ppm5u5OJlH4kX9wKcf6IAB3YynBhim
+         7OuzeTVgvAzbEH9fewdjbBloKzSJ4LgUH4CBq6p3wmNP5GBm7Vt8rmfgdME13K0FXdv/
+         oYbDGxVyEdZB4BhihJn3sDaggnAt6GJrbMySkcjanP2zYDs/y5+SAoTWiq2lwZZI8RzF
+         YQXvOQi8vTjCWZiERQclgs63hI+tBqKjlZQ1xnnIyIe53ADFoMbIielktYi+PZjOPOn4
+         9ZEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mivRpjYlnos8QyfKIL0ZlkiTUotRjXBDBCX8TH+HQXY=;
-        b=Iqm8VZRZEsrm1Z/n2Kxo57xxe6oKsp5b6I3NtBw8ro+8ckH3qTbroBXK/cDsqONvV+
-         DQD/o2Y0rrdsskFiSmjf4QblRX7kubXAdzu62FkuEA024mrNdfWI0lgFGi0PZey4Ai1U
-         Xbpi1R2+74N+ubnYiSEGoDJG4jkAoUHJbsLV4/kRYwo/E6zT/rNRaxi3Q7+o1nybrF8X
-         KCMTVplY8Bqtus/H/rIV3DIjxuQJzznXGZyAUdndT1BEVXIIHGcy9HvdiHOQU9qNKmjO
-         Qd72uHANid1HG+qQi4kfFiYo0uaWu9qjfAjrarcYKPoWbLyCgxUMkc2OhzHh+0bydg2I
-         6ytQ==
-X-Gm-Message-State: AOAM5326Gc3g6vvU78cgO4VyibqCnXM6NWzO2q1OHY/z0wP8C9gUEiiI
-        vTniPJOxrvrDzrrzsgwoDVE3y4K6oCWxcsXeW6tXwg==
-X-Google-Smtp-Source: ABdhPJzikMn1ioZfFD/3RZTSrR9mKVOzqPyMJYhF22HzLQV38UOOS2ThlqrYZYhQ/gQg474rfsrRF934XUb40E0b8gU=
-X-Received: by 2002:a05:600c:4ecc:b0:394:790d:5f69 with SMTP id
- g12-20020a05600c4ecc00b00394790d5f69mr6625363wmq.196.1652483139965; Fri, 13
- May 2022 16:05:39 -0700 (PDT)
+        bh=20vdP+atjEjZhs5yJgS5YKDTDHHJ9Ifpl/sT0aKWLY4=;
+        b=RLRDsrKfLUXXG3ASsbUlZ2Njk9CC8ZZuEhOcav3/GmmC1zUaaWBvPOKwzSetU3dDF4
+         KtS8n3o/xqsDLsi6vqBsFNe2/+NiqX6RcfUk8EoLIUUohR91KVOy73F4HgtsYSqBGSeC
+         GmQoCeNZmtxN5VJX8Q+SdPlQgEV8FSgsPa6giYr343HUIqcTtWwDudKLY7Qzm1eBZafi
+         RBj1Q9jN12avShzrUI491sUEh0B2XjOQS/kEM7LUJ+tRu8xxHEyZjm1xdFiYawCZpBlr
+         HobjNNcHA9AlGZa6fBLrcjwAS+yQXSIFUbqY+nNo3duwzu4X6afl0EIbpdBF0WYsHMga
+         h3PA==
+X-Gm-Message-State: AOAM530NGC9ITfwgii2O4o3qBG1GWCQPTSLXm3S+jHQFT2qJCy6cLg/7
+        IS/onFrW0IIEUOy2TpXTBwkEtwx0k0ytV8wso847fQ==
+X-Google-Smtp-Source: ABdhPJwg1gn4vyXSCAsXn7nzUnuz1q4FEzRjyuG4DMDgINbyOAJx6cpdY0REFXSha0pTwtIuBOdhvRVhGfAgD/v8v0k=
+X-Received: by 2002:a0d:e612:0:b0:2fb:103f:4067 with SMTP id
+ p18-20020a0de612000000b002fb103f4067mr8515792ywe.151.1652483150531; Fri, 13
+ May 2022 16:05:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220513004117.364577-1-yosryahmed@google.com> <CAEf4BzYiuBaCBcF6T9JRJ=fB=PWtDb9p-5CJAi164F4_h5fQPw@mail.gmail.com>
-In-Reply-To: <CAEf4BzYiuBaCBcF6T9JRJ=fB=PWtDb9p-5CJAi164F4_h5fQPw@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Fri, 13 May 2022 16:05:03 -0700
-Message-ID: <CAJD7tkaxHKUrb44-J5Zxm6x1KH-XnPVXDgZyu4+Rc094D7MEhA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: fix building bpf selftests statically
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
+References: <tencent_70C1308DDA794C81CAEF389049055BACEC09@qq.com>
+In-Reply-To: <tencent_70C1308DDA794C81CAEF389049055BACEC09@qq.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 14 May 2022 01:05:39 +0200
+Message-ID: <CACRpkda2AEVf__6neYPOddnjL1=Www=HoHvyNzcBvjua7GeVQg@mail.gmail.com>
+Subject: Re: [PATCH] arm: sunxi: fix f1c100s pinctrl function.
+To:     IotaHydrae <writeforever@foxmail.com>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 3:57 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Thu, May 12, 2022 at 5:41 PM Yosry Ahmed <yosryahmed@google.com> wrote:
-> >
-> > bpf selftests can no longer be built with CFLAGS=-static with
-> > liburandom_read.so and its dependent target.
-> >
-> > Filter out -static for liburandom_read.so and its dependent target.
-> >
-> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> > ---
-> >  tools/testing/selftests/bpf/Makefile | 9 ++++++---
-> >  1 file changed, 6 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> > index 6bbc03161544..4eaefc187d5b 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
-> > @@ -168,14 +168,17 @@ $(OUTPUT)/%:%.c
-> >         $(call msg,BINARY,,$@)
-> >         $(Q)$(LINK.c) $^ $(LDLIBS) -o $@
-> >
-> > +# If the tests are being built statically, exclude dynamic libraries defined
-> > +# in this Makefile and their dependencies.
-> > +DYNAMIC_CFLAGS := $(filter-out -static,$(CFLAGS))
->
-> I don't particularly like yet another CFLAGS global variable, but also
-> you are not filtering out -static from LDFLAGS, which would be
-> problematic if you try to do
->
-> make SAN_FLAGS=-static
->
-> which otherwise would work (and is probably better than overriding all of CFLAGS
->
-> How about something like this
+On Wed, May 4, 2022 at 1:59 PM IotaHydrae <writeforever@foxmail.com> wrote:
 
-Yeah this looks good, thanks for pointing out the problem with LDFLAGS.
+> 1. change suniv f1c100s pinctrl,PD14 multiplexing function lvds1 to uart2
+>
+> When the pin PD13 and PD14 is setting up to uart2 function in dts,
+> there's an error occurred:
+> 1c20800.pinctrl: unsupported function uart2 on pin PD14
+>
+> Because 'uart2' is not any one multiplexing option of PD14,
+> and pinctrl don't know how to configure it.
+>
+> So change the pin PD14 lvds1 function to uart2.
+>
+> Signed-off-by: IotaHydrae <writeforever@foxmail.com>
 
->
-> diff --git a/tools/testing/selftests/bpf/Makefile
-> b/tools/testing/selftests/bpf/Makefile
-> index 6bbc03161544..2e8eddf240af 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -170,11 +170,11 @@ $(OUTPUT)/%:%.c
->
->  $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c
->         $(call msg,LIB,,$@)
-> -       $(Q)$(CC) $(CFLAGS) -fPIC $(LDFLAGS) $^ $(LDLIBS) --shared -o $@
-> +       $(Q)$(CC) $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $^
-> $(LDLIBS) -fPIC -shared -o $@
->
->  $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c
-> $(OUTPUT)/liburandom_read.so
->         $(call msg,BINARY,,$@)
-> -       $(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.c,$^)                        \
-> +       $(Q)$(CC) $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $(filter %.c,$^)  \
->                   liburandom_read.so $(LDLIBS)                                 \
->                   -Wl,-rpath=. -Wl,--build-id=sha1 -o $@
->
-> ?
->
->
-> But I also have a question, this leaves urandom_read relying on
-> system-wide shared libraries, isn't that still a problem for you? Or
-> you intend to just ignore urandom_read-related tests?
->
+Thanks, fixed up the subject as indicated by Andre
+and applied.
 
-I wasn't running those tests, and I thought having most tests compile
-statically is better than nothing. Maybe this can be fixed by defining
-a static target for liburandom_read? I am honestly not sure, I have
-little experience with Makefiles/compilation.
-
->
-> $ ldd urandom_read
->         linux-vdso.so.1 (0x00007ffd0d5e5000)
->         liburandom_read.so (0x00007fc7f7d76000)
->         libelf.so.1 => /lib64/libelf.so.1 (0x00007fc7f7937000)
->         libz.so.1 => /lib64/libz.so.1 (0x00007fc7f7720000)
->         librt.so.1 => /lib64/librt.so.1 (0x00007fc7f7518000)
->         libpthread.so.0 => /lib64/libpthread.so.0 (0x00007fc7f72f8000)
->         libc.so.6 => /lib64/libc.so.6 (0x00007fc7f6f33000)
->         /lib64/ld-linux-x86-64.so.2 (0x00007fc7f7b50000)
->
->
->
->
-> >  $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c
-> >         $(call msg,LIB,,$@)
-> > -       $(Q)$(CC) $(CFLAGS) -fPIC $(LDFLAGS) $^ $(LDLIBS) --shared -o $@
-> > +       $(Q)$(CC) $(DYNAMIC_CFLAGS) -fPIC $(LDFLAGS) $^ $(LDLIBS) --shared -o $@
-> >
-> >  $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_read.so
-> >         $(call msg,BINARY,,$@)
-> > -       $(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.c,$^)                        \
-> > -                 liburandom_read.so $(LDLIBS)                                 \
-> > +       $(Q)$(CC) $(DYNAMIC_CFLAGS) $(LDFLAGS) $(filter %.c,$^)                 \
-> > +                 liburandom_read.so $(LDLIBS)                                  \
-> >                   -Wl,-rpath=. -Wl,--build-id=sha1 -o $@
-> >
-> >  $(OUTPUT)/bpf_testmod.ko: $(VMLINUX_BTF) $(wildcard bpf_testmod/Makefile bpf_testmod/*.[ch])
-> > --
-> > 2.36.0.550.gb090851708-goog
-> >
+Yours,
+Linus Walleij

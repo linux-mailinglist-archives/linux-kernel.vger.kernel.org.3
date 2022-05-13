@@ -2,143 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D41A5264C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11AF7526433
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:28:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351111AbiEMOf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45246 "EHLO
+        id S1380892AbiEMO2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381067AbiEMOby (ORCPT
+        with ESMTP id S1380911AbiEMO0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:31:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088AC1B1743;
-        Fri, 13 May 2022 07:29:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 13 May 2022 10:26:15 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB644506E3;
+        Fri, 13 May 2022 07:25:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652451944; x=1683987944;
+  h=message-id:date:mime-version:from:subject:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=9MO4Cg9SWuQ3cY0TApzliKOPUlU3hZ6Zqzm0n1CSgmQ=;
+  b=jH37YUvTNIG8JhrJm8Z5bHHrMhGG/C7fJaIw75GrtL1ASiVim3V4mbLn
+   BpF3DnCuXgwuskJ4XhVD6zj1RW4Bc6NjJoKL5AN9hzatXhzBkOlKbx2an
+   t4RT5HLnFqrb+23ZNBavV/3aUNrP4p7awv9z5ZXxkHOGvp1reY0WVBrDn
+   oAaESy5EpiTfmvpDowcqWJKwgyplXT9ypGro8QKpZ0ihWDVxaTtQml3y5
+   +j5lDjEH68foidrwCH77ZL47L8NWWPYM/aostHFyyI7hLKZWb+SIH0MFt
+   Uw30eyXx7PtXvSekBMEsB0FPitpZXNlXA7ZIYHDmlaNsObziLrW/jmB4V
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="295575088"
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="295575088"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:25:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="659107033"
+Received: from linux.intel.com ([10.54.29.200])
+  by FMSMGA003.fm.intel.com with ESMTP; 13 May 2022 07:25:43 -0700
+Received: from [10.252.212.211] (kliang2-MOBL.ccr.corp.intel.com [10.252.212.211])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C14561F99;
-        Fri, 13 May 2022 14:29:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D082C34100;
-        Fri, 13 May 2022 14:29:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652452155;
-        bh=jrRvUIKYf1n5UNwFP4Jhq6pBwQ4NWVjBYb4qxpwM3tw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m4jz05N0BCvh+qCzm7BKXDINf3z0FtfnD9C0D8yzX/N9QvyXeySzozj9bhaBB62zA
-         a+njbZTSih15RQA4AMRa2Oj7YFzXBqifAqhymeFaUNEvarvNaC4BnVfSqJlVq9J8IL
-         oz49s2RrRTqBFvft3No8bgPnvqeVVRMwK33+7dBw=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peter Xu <peterx@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Christoph Hellwig <hch@lst.de>, Jan Kara <jack@suse.cz>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        David Hildenbrand <david@redhat.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.17 12/12] mm: fix invalid page pointer returned with FOLL_PIN gups
-Date:   Fri, 13 May 2022 16:24:12 +0200
-Message-Id: <20220513142229.014517006@linuxfoundation.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220513142228.651822943@linuxfoundation.org>
-References: <20220513142228.651822943@linuxfoundation.org>
-User-Agent: quilt/0.66
+        by linux.intel.com (Postfix) with ESMTPS id C7C4C580A88;
+        Fri, 13 May 2022 07:25:40 -0700 (PDT)
+Message-ID: <8ba20985-8116-c7f7-a082-ec30152d9adb@linux.intel.com>
+Date:   Fri, 13 May 2022 10:25:39 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+Subject: Re: [PATCH v2 0/2] Fix topdown event weak grouping
+To:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Andi Kleen <ak@linux.intel.com>,
+        John Garry <john.garry@huawei.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>
+References: <20220512061308.1152233-1-irogers@google.com>
+Content-Language: en-US
+In-Reply-To: <20220512061308.1152233-1-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Xu <peterx@redhat.com>
-
-commit 7196040e19ad634293acd3eff7083149d7669031 upstream.
-
-Patch series "mm/gup: some cleanups", v5.
-
-This patch (of 5):
-
-Alex reported invalid page pointer returned with pin_user_pages_remote()
-from vfio after upstream commit 4b6c33b32296 ("vfio/type1: Prepare for
-batched pinning with struct vfio_batch").
-
-It turns out that it's not the fault of the vfio commit; however after
-vfio switches to a full page buffer to store the page pointers it starts
-to expose the problem easier.
-
-The problem is for VM_PFNMAP vmas we should normally fail with an
--EFAULT then vfio will carry on to handle the MMIO regions.  However
-when the bug triggered, follow_page_mask() returned -EEXIST for such a
-page, which will jump over the current page, leaving that entry in
-**pages untouched.  However the caller is not aware of it, hence the
-caller will reference the page as usual even if the pointer data can be
-anything.
-
-We had that -EEXIST logic since commit 1027e4436b6a ("mm: make GUP
-handle pfn mapping unless FOLL_GET is requested") which seems very
-reasonable.  It could be that when we reworked GUP with FOLL_PIN we
-could have overlooked that special path in commit 3faa52c03f44 ("mm/gup:
-track FOLL_PIN pages"), even if that commit rightfully touched up
-follow_devmap_pud() on checking FOLL_PIN when it needs to return an
--EEXIST.
-
-Attaching the Fixes to the FOLL_PIN rework commit, as it happened later
-than 1027e4436b6a.
-
-[jhubbard@nvidia.com: added some tags, removed a reference to an out of tree module.]
-
-Link: https://lkml.kernel.org/r/20220207062213.235127-1-jhubbard@nvidia.com
-Link: https://lkml.kernel.org/r/20220204020010.68930-1-jhubbard@nvidia.com
-Link: https://lkml.kernel.org/r/20220204020010.68930-2-jhubbard@nvidia.com
-Fixes: 3faa52c03f44 ("mm/gup: track FOLL_PIN pages")
-Signed-off-by: Peter Xu <peterx@redhat.com>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-Reported-by: Alex Williamson <alex.williamson@redhat.com>
-Debugged-by: Alex Williamson <alex.williamson@redhat.com>
-Tested-by: Alex Williamson <alex.williamson@redhat.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
-Cc: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- mm/gup.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -465,7 +465,7 @@ static int follow_pfn_pte(struct vm_area
- 		pte_t *pte, unsigned int flags)
- {
- 	/* No page to get reference */
--	if (flags & FOLL_GET)
-+	if (flags & (FOLL_GET | FOLL_PIN))
- 		return -EFAULT;
- 
- 	if (flags & FOLL_TOUCH) {
 
 
+On 5/12/2022 2:13 AM, Ian Rogers wrote:
+> Keep topdown events within a group when a weak group is broken. This
+> is a requirement as topdown events must form a group.
+> 
+> Add perf stat testing including for required topdown event group
+> behaviors.
+> 
+> Note: as with existing topdown evsel/evlist code topdown events are
+> assumed to be on the PMU "cpu". On Alderlake the PMU "cpu_core" should
+> also be tested. Future changes can fix Alderlake.
+
+I will send a follow-up patch to fix the weak grouping for the hybrid 
+platform shortly.
+
+For the non-hybrid platform, the patch set looks good to me.
+
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+
+Thanks,
+Kan
+
+> 
+> v2. Correct behavior wrt pmu prefixed events and avoid the test using
+>      deprecated events: Suggested-by: Liang, Kan <kan.liang@linux.intel.com>
+> 
+> Ian Rogers (2):
+>    perf evlist: Keep topdown counters in weak group
+>    perf test: Add basic stat and topdown group test
+> 
+>   tools/perf/arch/x86/util/evsel.c | 12 ++++++
+>   tools/perf/tests/shell/stat.sh   | 67 ++++++++++++++++++++++++++++++++
+>   tools/perf/util/evlist.c         | 16 +++++++-
+>   tools/perf/util/evsel.c          | 10 +++++
+>   tools/perf/util/evsel.h          |  3 ++
+>   5 files changed, 106 insertions(+), 2 deletions(-)
+>   create mode 100755 tools/perf/tests/shell/stat.sh
+> 

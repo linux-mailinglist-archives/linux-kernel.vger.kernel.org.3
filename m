@@ -2,67 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 918F6526355
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 15:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB66B52635C
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 15:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231321AbiEMN5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 09:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
+        id S232377AbiEMN6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 09:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbiEMN5f (ORCPT
+        with ESMTP id S229893AbiEMN6a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 09:57:35 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6DA712E9
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 06:57:34 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso7907782pjg.0
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 06:57:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=c38pckiAKbL4R5gHxVgybPN8tZ+xHGcvHTSt+rrxRXI=;
-        b=Aj0zmrOaKti+xYakhuf30LNS9d4gixVrjVffHak/1ybBgigezMf2WbGLhH4zREtA7i
-         UOCRkjtXh4tXDHwTNxDVAbZhvyrT1JU1yZ66a2XAAxW7TQIpnCm6LY8SRCeknr88LLPo
-         SUXgWuDxFtra4m7lNPXmTUuqyfV6H31zK0lHM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=c38pckiAKbL4R5gHxVgybPN8tZ+xHGcvHTSt+rrxRXI=;
-        b=PQTW9L7U2K760N3RW4SOjIQCSma9C5k5KdBv0u8GKLpCO58cd0zeC7WPDlV/3kjqIN
-         LKy+pF6Uu2/Fs8avfdAtg3oIQZEaNj8ptpq7gK4xFOsDXOhXqZ2nSAjahgyI8utM2Qkf
-         pJfOFTHgKvAAy6fbS+KE0yGgdhc1zN1HjEjIRQ5OMJAZI5AyfvnwGlN6MGLUS2N1r2mU
-         xieQ/kiD5kJnsAhepd5AgrECVhF6oYPdUuFSxncypvN1x0ojVuipImZIW3lwCedPse5s
-         lnHY59JX8JZSXYQ0kziBECqdA7l7i1GMwLVkylDCSE4mZlKsO6suABzpKIOmvNVmnhD5
-         jX4g==
-X-Gm-Message-State: AOAM531IgwZwVeoD7qc1v7pyRYhhtWRxOKFS06JOgKM/Q3aAQgDuhrmI
-        eQ0Z9tT9cR3NJmLiv2ego1dIow==
-X-Google-Smtp-Source: ABdhPJypfdJ6x5Kten/v6OEf0RQgmVULwcLl0muJOPJ+GbmUvv32LL9LYZnsjMVnVyL/VoEiVqjEVQ==
-X-Received: by 2002:a17:90a:a82:b0:1da:3763:5cf5 with SMTP id 2-20020a17090a0a8200b001da37635cf5mr5138007pjw.55.1652450253811;
-        Fri, 13 May 2022 06:57:33 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:1ee3:ea22:908:c2b5])
-        by smtp.gmail.com with ESMTPSA id p123-20020a625b81000000b0050dc76281d7sm1843921pfb.177.2022.05.13.06.57.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 06:57:33 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     quic_aravindh@quicinc.com, quic_khsieh@quicinc.com,
-        quic_sbillaka@quicinc.com, Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>, quic_abhinavk@quicinc.com,
-        Douglas Anderson <dianders@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: qcom: sc7280-herobrine: Enable DP
-Date:   Fri, 13 May 2022 06:57:14 -0700
-Message-Id: <20220513065704.1.I9b9b9d4d1a3e0350a89221892261881a1771ad15@changeid>
-X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
+        Fri, 13 May 2022 09:58:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0677A80F;
+        Fri, 13 May 2022 06:58:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 964D9B82EA3;
+        Fri, 13 May 2022 13:58:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50582C3411C;
+        Fri, 13 May 2022 13:58:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652450305;
+        bh=Q9uWqroQBrMhNpZ56AYK8kAafrfYjv57IuXu6ljniEI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=kP2duuHmNgNTr23wQ3jJV4ACqVDoXiHvJmOEfYJk9MtvU/pYg6PV8inmVYuf8+isB
+         OWLyTHjbPFfaEjxgSziDDit9HdhUJhWWhqRm5d2BsSBvMqiC2R4TR7y+3zJ8IjEiVG
+         WabOU9VbStlIep5W1f5eZh/z3GxAg+zdPHTSMXcFiNzrXBt07iC7jTjCXO/cCBD7Tr
+         g5R8OCcieFgvfgNaw51Kue7VWHPY/Pe4dB6Y+VHDOsIT1B/hzKlmblJJQzwBpfQCxE
+         omgpjYXMk/DBrwTM8vOrcZbjODXWEn7uaBq22v744sg/OpLNPSfRbQREn5rP1vkkil
+         WY3HkUDaQCkLg==
+Received: by mail-pj1-f49.google.com with SMTP id x88so8174301pjj.1;
+        Fri, 13 May 2022 06:58:25 -0700 (PDT)
+X-Gm-Message-State: AOAM532qMBz0C3/3yCC9Eejuwc0gZc0NULASTSCFbveL0OENFOX0+gbP
+        PyJrwqk/O1aKsOI44u7gcrbh24YKck375Ui3Iw==
+X-Google-Smtp-Source: ABdhPJzeUi/T2UXmS90oIyfTH4jE3xb7KHEsioE2ug9DOGlHySktMSjKYgLM3J6rQcaXmuC2h+ylwtxmks7pbqNurVU=
+X-Received: by 2002:a17:902:9345:b0:15f:186b:e478 with SMTP id
+ g5-20020a170902934500b0015f186be478mr4834270plp.117.1652450304740; Fri, 13
+ May 2022 06:58:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20220429220933.1350374-1-saravanak@google.com>
+In-Reply-To: <20220429220933.1350374-1-saravanak@google.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 13 May 2022 08:58:11 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+2A7mRVV24XW0YcP8GkFCK_Ri4KDcqvW4e0p3TkQMWVg@mail.gmail.com>
+Message-ID: <CAL_Jsq+2A7mRVV24XW0YcP8GkFCK_Ri4KDcqvW4e0p3TkQMWVg@mail.gmail.com>
+Subject: Re: [PATCH v1] driver core: Extend deferred probe timeout on driver registration
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,34 +79,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This enables DisplayPort for herobrine boards.
+On Fri, Apr 29, 2022 at 5:09 PM Saravana Kannan <saravanak@google.com> wrote:
+>
+> The deferred probe timer that's used for this currently starts at
+> late_initcall and runs for driver_deferred_probe_timeout seconds. The
+> assumption being that all available drivers would be loaded and
+> registered before the timer expires. This means, the
+> driver_deferred_probe_timeout has to be pretty large for it to cover the
+> worst case. But if we set the default value for it to cover the worst
+> case, it would significantly slow down the average case. For this
+> reason, the default value is set to 0.
+>
+> Also, with CONFIG_MODULES=y and the current default values of
+> driver_deferred_probe_timeout=0 and fw_devlink=on, devices with missing
+> drivers will cause their consumer devices to always defer their probes.
+> This is because device links created by fw_devlink defer the probe even
+> before the consumer driver's probe() is called.
+>
+> Instead of a fixed timeout, if we extend an unexpired deferred probe
+> timer on every successful driver registration, with the expectation more
+> modules would be loaded in the near future, then the default value of
+> driver_deferred_probe_timeout only needs to be as long as the worst case
+> time difference between two consecutive module loads.
+>
+> So let's implement that and set the default value to 10 seconds when
+> CONFIG_MODULES=y.
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+We had to revert a non-zero timeout before (issue with NFS root IIRC).
+Does fw_devlink=on somehow fix that?
 
- arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-index 9cb1bc8ed6b5..709b7aa02101 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-@@ -429,6 +429,15 @@ &mdss {
- 	status = "okay";
- };
- 
-+&mdss_dp {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&dp_hot_plug_det>;
-+	data-lanes = <0 1>;
-+	vdda-1p2-supply = <&vdd_a_usbssdp_0_1p2>;
-+	vdda-0p9-supply = <&vdd_a_usbssdp_0_core>;
-+};
-+
- &mdss_mdp {
- 	status = "okay";
- };
--- 
-2.36.0.550.gb090851708-goog
-
+Rob

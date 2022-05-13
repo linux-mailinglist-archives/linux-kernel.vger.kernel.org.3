@@ -2,172 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6681152609D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 13:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B3F526087
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 13:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379713AbiEMLDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 07:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
+        id S1379527AbiEMLCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 07:02:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379714AbiEMLDq (ORCPT
+        with ESMTP id S1350219AbiEMLCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 07:03:46 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682462A2F4A;
-        Fri, 13 May 2022 04:03:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652439824; x=1683975824;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TLKqQ2wymwAEhGiToADns1nYw8QR22hogOXokBFX7Cc=;
-  b=kms9Ifd2mp/sXw2B2Tz8jGDXUSKHu/1lcHqIXUpkOK5Ioxvi/stf2t48
-   VFNtmbp6Wza75nzRYuZKVkHlRh1qkv+qZO8lDyGxcIQ3c0YB6V02Qw0ys
-   G/1+E6sKzwN9tcczv2pxiMVtxFPaV9wBZhh3mikF1qHZWsnVV/YdfN/BR
-   F0/s+f7/F8fv+tFZTotGXdjQHE5ebUQzM9od45WEH3ZxQxquRJ0ShdKxi
-   +Momb0oBJjMCKdQxbFjenFLJ8a7JpoyuiHTItJFHKri7B9HgKlXzC9ZUP
-   RXmH+MaDLbShwGaTz8mPwOxjAs812gRz9bxwk24bJO0KuNFHCwvIMxl20
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="269950743"
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="269950743"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 04:03:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="815340352"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 13 May 2022 04:03:36 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1npT55-000LfU-DL;
-        Fri, 13 May 2022 11:03:35 +0000
-Date:   Fri, 13 May 2022 19:03:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Neal Liu <neal_liu@aspeedtech.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Felipe Balbi <balbi@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Li Yang <leoyang.li@nxp.com>
-Cc:     kbuild-all@lists.01.org, Neal Liu <neal_liu@aspeedtech.com>,
-        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        BMC-SW@aspeedtech.com
-Subject: Re: [PATCH 1/3] usb: gadget: add Aspeed ast2600 udc driver
-Message-ID: <202205131836.QEUySDoN-lkp@intel.com>
-References: <20220513065728.857722-2-neal_liu@aspeedtech.com>
+        Fri, 13 May 2022 07:02:34 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 776D93A71A
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 04:02:32 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3B6A9143D;
+        Fri, 13 May 2022 04:02:32 -0700 (PDT)
+Received: from [10.163.33.229] (unknown [10.163.33.229])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E4AFA3F5A1;
+        Fri, 13 May 2022 04:02:25 -0700 (PDT)
+Message-ID: <15c2d16e-4071-677b-5ca5-3b66e6af59d5@arm.com>
+Date:   Fri, 13 May 2022 16:33:39 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220513065728.857722-2-neal_liu@aspeedtech.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 2/2] arm64/hugetlb: Implement arm64 specific
+ huge_ptep_get()
+Content-Language: en-US
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        catalin.marinas@arm.com, will@kernel.org
+Cc:     mike.kravetz@oracle.com, akpm@linux-foundation.org,
+        songmuchun@bytedance.com, willy@infradead.org,
+        christophe.leroy@csgroup.eu, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <cover.1652411252.git.baolin.wang@linux.alibaba.com>
+ <de60e44dc6fa7991889320a7dfc9ee7ea38f01d8.1652411252.git.baolin.wang@linux.alibaba.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <de60e44dc6fa7991889320a7dfc9ee7ea38f01d8.1652411252.git.baolin.wang@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neal,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on robh/for-next v5.18-rc6 next-20220513]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Neal-Liu/add-Aspeed-udc-driver-for-ast2600/20220513-150314
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20220513/202205131836.QEUySDoN-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/272ae26f9fe89f60d584cf445431d0fa566eb24b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Neal-Liu/add-Aspeed-udc-driver-for-ast2600/20220513-150314
-        git checkout 272ae26f9fe89f60d584cf445431d0fa566eb24b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash drivers/usb/gadget/udc/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/usb/gadget/udc/aspeed_udc.c: In function 'ast_udc_ep0_out':
->> drivers/usb/gadget/udc/aspeed_udc.c:790:13: warning: variable 'buf' set but not used [-Wunused-but-set-variable]
-     790 |         u8 *buf;
-         |             ^~~
-   drivers/usb/gadget/udc/aspeed_udc.c: In function 'ast_udc_ep0_handle_setup':
->> drivers/usb/gadget/udc/aspeed_udc.c:1099:60: warning: suggest braces around empty body in an 'else' statement [-Wempty-body]
-    1099 |                 SETUP_DBG(udc, "No gadget for request !\n");
-         |                                                            ^
->> drivers/usb/gadget/udc/aspeed_udc.c:1034:13: warning: variable 'ep_num' set but not used [-Wunused-but-set-variable]
-    1034 |         u16 ep_num = 0;
-         |             ^~~~~~
 
 
-vim +/buf +790 drivers/usb/gadget/udc/aspeed_udc.c
+On 5/13/22 09:07, Baolin Wang wrote:
+> Now we use huge_ptep_get() to get the pte value of a hugetlb page,
+> however it will only return one specific pte value for the CONT-PTE
+> or CONT-PMD size hugetlb on ARM64 system, which can contain seravel
 
-   783	
-   784	static void ast_udc_ep0_out(struct ast_udc_dev *udc)
-   785	{
-   786		struct device *dev = &udc->pdev->dev;
-   787		struct ast_udc_ep *ep = &udc->ep[0];
-   788		struct ast_udc_request *req;
-   789		u16 rx_len;
- > 790		u8 *buf;
-   791	
-   792		if (list_empty(&ep->queue))
-   793			return;
-   794	
-   795		req = list_entry(ep->queue.next, struct ast_udc_request, queue);
-   796	
-   797		buf = req->req.buf;
-   798		rx_len = EP0_GET_RX_LEN(ast_udc_read(udc, AST_UDC_EP0_CTRL));
-   799		req->req.actual += rx_len;
-   800	
-   801		SETUP_DBG(udc, "req %p (%d/%d)\n", req,
-   802			  req->req.actual, req->req.length);
-   803	
-   804		if ((rx_len < ep->ep.maxpacket) ||
-   805		    (req->req.actual == req->req.length)) {
-   806			ast_udc_ep0_tx(udc);
-   807			if (!ep->dir_in)
-   808				ast_udc_done(ep, req, 0);
-   809	
-   810		} else {
-   811			if (rx_len > req->req.length) {
-   812				// Issue Fix
-   813				dev_warn(dev, "Something wrong (%d/%d)\n",
-   814					 req->req.actual, req->req.length);
-   815				ast_udc_ep0_tx(udc);
-   816				ast_udc_done(ep, req, 0);
-   817				return;
-   818			}
-   819	
-   820			ep->dir_in = 0;
-   821	
-   822			/* More works */
-   823			ast_udc_ep0_queue(ep, req);
-   824		}
-   825	}
-   826	
+A small nit.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+s/seravel/several
+
+> continuous pte or pmd entries with same page table attributes. And it
+> will not take into account the subpages' dirty or young bits of a
+> CONT-PTE/PMD size hugetlb page.
+> 
+> So the huge_ptep_get() is inconsistent with huge_ptep_get_and_clear(),
+> which already takes account the dirty or young bits for any subpages
+> in this CONT-PTE/PMD size hugetlb [1]. Meanwhile we can miss dirty or
+> young flags statistics for hugetlb pages with current huge_ptep_get(),
+> such as the gather_hugetlb_stats() function, and CONT-PTE/PMD hugetlb
+> monitoring with DAMON.
+> 
+> Thus define an ARM64 specific  huge_ptep_get() implementation, that will
+> take into account any subpages' dirty or young bits for CONT-PTE/PMD size
+> hugetlb page, for those functions that want to check the dirty and young
+> flags of a hugetlb page.
+> 
+> [1] https://lore.kernel.org/linux-mm/85bd80b4-b4fd-0d3f-a2e5-149559f2f387@oracle.com/
+
+Might be worth mentioning that arm64 now enables __HAVE_ARCH_HUGE_PTEP_GET.
+
+> 
+> Suggested-by: Muchun Song <songmuchun@bytedance.com>
+> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+> ---
+>  arch/arm64/include/asm/hugetlb.h |  2 ++
+>  arch/arm64/mm/hugetlbpage.c      | 24 ++++++++++++++++++++++++
+>  2 files changed, 26 insertions(+)
+> 
+> diff --git a/arch/arm64/include/asm/hugetlb.h b/arch/arm64/include/asm/hugetlb.h
+> index 616b2ca..1fd2846 100644
+> --- a/arch/arm64/include/asm/hugetlb.h
+> +++ b/arch/arm64/include/asm/hugetlb.h
+> @@ -44,6 +44,8 @@ extern pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
+>  #define __HAVE_ARCH_HUGE_PTE_CLEAR
+>  extern void huge_pte_clear(struct mm_struct *mm, unsigned long addr,
+>  			   pte_t *ptep, unsigned long sz);
+> +#define __HAVE_ARCH_HUGE_PTEP_GET
+> +extern pte_t huge_ptep_get(pte_t *ptep);
+>  extern void set_huge_swap_pte_at(struct mm_struct *mm, unsigned long addr,
+>  				 pte_t *ptep, pte_t pte, unsigned long sz);
+>  #define set_huge_swap_pte_at set_huge_swap_pte_at
+> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
+> index 9553851..9a3f7f1 100644
+> --- a/arch/arm64/mm/hugetlbpage.c
+> +++ b/arch/arm64/mm/hugetlbpage.c
+> @@ -158,6 +158,30 @@ static inline int num_contig_ptes(unsigned long size, size_t *pgsize)
+>  	return contig_ptes;
+>  }
+>  
+> +pte_t huge_ptep_get(pte_t *ptep)
+> +{
+> +	int ncontig, i;
+> +	size_t pgsize;
+> +	pte_t orig_pte = ptep_get(ptep);
+> +
+> +	if (!pte_present(orig_pte) || !pte_cont(orig_pte))
+> +		return orig_pte;
+> +
+> +	ncontig = num_contig_ptes(page_size(pte_page(orig_pte)), &pgsize);
+
+Hmm, I guess there is no better way of deriving page size here.
+
+Please drop the extra line here.
+
+> +
+> +	for (i = 0; i < ncontig; i++, ptep++) {
+> +		pte_t pte = ptep_get(ptep);
+> +
+> +		if (pte_dirty(pte))
+> +			orig_pte = pte_mkdirty(orig_pte);
+> +
+> +		if (pte_young(pte))
+> +			orig_pte = pte_mkyoung(orig_pte);
+> +	}
+
+Please drop the extra line here.
+
+> +
+> +	return orig_pte;
+> +}
+> +
+>  /*
+>   * Changing some bits of contiguous entries requires us to follow a
+>   * Break-Before-Make approach, breaking the whole contiguous set
+Otherwise LGTM.
+
+With those small changes accommodated,
+
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>

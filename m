@@ -2,110 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE2C526AAA
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 21:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00AC4526AAC
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 21:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236723AbiEMTnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 15:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53282 "EHLO
+        id S238880AbiEMToz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 15:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231138AbiEMTnK (ORCPT
+        with ESMTP id S231138AbiEMTov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 15:43:10 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE20A1BA;
-        Fri, 13 May 2022 12:43:09 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id z126so7880369qkb.2;
-        Fri, 13 May 2022 12:43:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kBGZe23og3tuPkyPlZIYCKerjwwMq/7LVdJGiLj5N80=;
-        b=Ly2SkEjsVdSoQYd3sFewyPe6Iyi2XDe1w5f7QAs2D25JvktaDIwyyVof/XTgLGA8oX
-         UhAHMY/kIvlUmoPMTmZrDojbnqEsNaL9fXwJm3osv64ZaxJllE1cnW78kNaAuNfblR5+
-         T1vYUF+rmGIgl0xXlSq0MvAlZPeB3jD13fI/3oReqIFGyTXl/wVeiB0+wYKcsVSboi7M
-         JDhqTPMpnPv3gDGY/i6i9Hvah8ORTw56cj5aGnh/hv2LYwC1LdKJfsCAGrdjrifIHc/X
-         mYJqMzZHn9sL2Xe7Q/6Rp13gICSuct9fiDLMtb0qja3+19z21e2TSJx+Z9c7jYSQG3HD
-         HH6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kBGZe23og3tuPkyPlZIYCKerjwwMq/7LVdJGiLj5N80=;
-        b=Rtbb8LLThN4/1f1xQ6SPayTgH68bLBjgamTDZSJcwm0KSzI2bhNITcpaJSylSL9OPM
-         8qjrWk6fHkImKwFV4AHg7MkMHoL5m/T6EGDv5MtG0KahDYabFTH3DnRfcplOmgake4sD
-         A5Jdx1pIv1xuG2lwsaaabzYhzGNpolZi/J0Gs7jv2uZZlDH63uPJcdUFBKHwIh1gkUbP
-         4Ykl0HxUugGuvQ46ihMWq60I9Kqc/++Yw70K6/ASFFw5d4rmY4Sn1qTBrEcWHlkGo4EO
-         ppl71Ya+/cZNvkkS0h8BHCw8PtvAklLFXdaJtsgNKvroWqTnGHv/Hp6l4ZSYqM50Bpsr
-         JS7A==
-X-Gm-Message-State: AOAM530OfRzNnJ/im+turF5bGpccF8AL+Pr7UHmaG+lHQUDlL5+mAK/M
-        NoIMGNwakZCI5YjjoxBuPrg5uJjaHL06KVYYc/4=
-X-Google-Smtp-Source: ABdhPJzLmcawuvWJrk6aMHK8sUSKopx2Zm89XRfnbv2dWG2Fv/EnsoB6rPxtVBbw66OzKURVpiGU9i/+Ethd0+lj7Ro=
-X-Received: by 2002:a05:620a:28c7:b0:6a0:5de3:e6 with SMTP id
- l7-20020a05620a28c700b006a05de300e6mr5036681qkp.464.1652470988079; Fri, 13
- May 2022 12:43:08 -0700 (PDT)
+        Fri, 13 May 2022 15:44:51 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCE544A28
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 12:44:50 -0700 (PDT)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24DJgJkF022348;
+        Fri, 13 May 2022 19:44:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=O47frTHQfxW9j3bbLvoV3G6Z4Y1yD1/DbijZ8vEkL0c=;
+ b=EzVEGH/58MP81kCs1KXmWDyAEGJyZjG0BbR/wdY4Yboz6QE5ly2C6mO+oJOasal15Thg
+ fw9Mg7R+jGnkAgtcnmub1KCwDKDwXSSXUFQCSxZ+8alQugHOUNXgJGEieZbAWNUAhRM/
+ Gktcw5g8Zz6FTsTKOz/13OyKxaChassxEqyxt3AXzUDulu8Fm4VjwOdRZiZ07fm1KIKO
+ mMMdKFwIbqkYC0aBIIv282hsIC0cdnE4NRqDWePXwyw/3F6AASwbVQeyeqGrK+tDY1Up
+ YH/v2HDGlHxYCWKwwOzKFRtyZ1+UEkgvuUEYa2C0aOJ8hys1UMCVQu0RX60LXaHos1qU cQ== 
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g1wqc013k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 May 2022 19:44:30 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24DJbtfq009516;
+        Fri, 13 May 2022 19:44:28 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma04wdc.us.ibm.com with ESMTP id 3fwgdach91-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 May 2022 19:44:28 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24DJiSC130999016
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 13 May 2022 19:44:28 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1F0C0BE053;
+        Fri, 13 May 2022 19:44:28 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B5DB2BE04F;
+        Fri, 13 May 2022 19:44:27 +0000 (GMT)
+Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.163.1.123])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri, 13 May 2022 19:44:27 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-fsi@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, alistair@popple.id.au,
+        joel@jms.id.au, jk@ozlabs.org, linux@roeck-us.net,
+        Eddie James <eajames@linux.ibm.com>
+Subject: [PATCH v2] fsi: occ: Prevent use after free
+Date:   Fri, 13 May 2022 14:44:24 -0500
+Message-Id: <20220513194424.53468-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20220421140740.459558-1-benjamin.tissoires@redhat.com>
- <20220426040314.ez3cdpv2w45vbgkk@MBP-98dd607d3435.dhcp.thefacebook.com>
- <CAO-hwJLziatB9n5Rut_EYRgfN94t2XX8Zx8B_Zmu2nucTw3k8g@mail.gmail.com>
- <CAADnVQKN==eb3ASQhrJBg4yC8BuRdMQyY-OdRbXhdyv2P8L0-A@mail.gmail.com>
- <CAO-hwJ+HV=jZUgH1LXcPuBFirMzx3OAdSy4zvyyYh7PQhnaduQ@mail.gmail.com>
- <20220512042327.vla3j7rjqrmjporp@MBP-98dd607d3435.dhcp.thefacebook.com> <CAO-hwJLXM6Zf46_PweJ=QTiacX0+siUYkyqPu1hRrx_8fDVUTQ@mail.gmail.com>
-In-Reply-To: <CAO-hwJLXM6Zf46_PweJ=QTiacX0+siUYkyqPu1hRrx_8fDVUTQ@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 13 May 2022 12:42:57 -0700
-Message-ID: <CAADnVQ+BLhpM-VZZ27XJGqqnm2uVTHzDqwtwp-w8U=m7zRqF+w@mail.gmail.com>
-Subject: Re: [RFC bpf-next v4 0/7] Introduce eBPF support for HID devices (new attempt)
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: XRHAc22MB7Sv4PkP3GS4e-8Iu_ef3jlw
+X-Proofpoint-GUID: XRHAc22MB7Sv4PkP3GS4e-8Iu_ef3jlw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-13_11,2022-05-13_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 spamscore=0 clxscore=1015 phishscore=0 lowpriorityscore=0
+ mlxscore=0 bulkscore=0 malwarescore=0 impostorscore=0 mlxlogscore=945
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205130080
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 10:02 AM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
->
-> On Thu, May 12, 2022 at 6:23 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Sat, Apr 30, 2022 at 09:12:09AM +0200, Benjamin Tissoires wrote:
-> > >
-> > > Also, I wonder if we should not have some way to namespace kfuncs.
-> > > Ideally, I would like to prevent the usage of those kfuncs outside of
-> > > some helpers that I define in HID so I don't have to worry too much
-> > > about other trace programs fuzzing and segfaulting the kernel.
-> >
-> > That would be a great feature to have. Other folks expressed the same interest.
-> > Just grouping them by prog type is not flexible enough.
-> > It feels kfuncs could be scoped by (prog_type, attach_btf_id or attach_hook) pair.
-> > What are your thoughts?
-> >
->
-> Scoping by attach_btf_id is very appealing to me (attach_hook less TBH):
-> I have internal functions I do not want normal users to use, and also
-> it would also restrict who can call what in the more general case.
->
-> However, I don't think I'll put that effort in v5. It is a nice to
-> have feature IMO, but not really required ATM.
+Use get_device and put_device in the open and close functions to
+make sure the device doesn't get freed while a file descriptor is
+open.
+Also, lock around the freeing of the device buffer and check the
+buffer before using it in the submit function.
 
-Great. Looking forward to it.
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
+---
+Changes since v1:
+ - Add lock around freeing/nulling the buffer in occ_remove
+ - Don't bother checking the buffer in open or in write, only in submit
+
+ drivers/fsi/fsi-occ.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/fsi/fsi-occ.c b/drivers/fsi/fsi-occ.c
+index c9cc75fbdfb9..28c176d038a2 100644
+--- a/drivers/fsi/fsi-occ.c
++++ b/drivers/fsi/fsi-occ.c
+@@ -94,6 +94,7 @@ static int occ_open(struct inode *inode, struct file *file)
+ 	client->occ = occ;
+ 	mutex_init(&client->lock);
+ 	file->private_data = client;
++	get_device(occ->dev);
+ 
+ 	/* We allocate a 1-page buffer, make sure it all fits */
+ 	BUILD_BUG_ON((OCC_CMD_DATA_BYTES + 3) > PAGE_SIZE);
+@@ -197,6 +198,7 @@ static int occ_release(struct inode *inode, struct file *file)
+ {
+ 	struct occ_client *client = file->private_data;
+ 
++	put_device(client->occ->dev);
+ 	free_page((unsigned long)client->buffer);
+ 	kfree(client);
+ 
+@@ -493,12 +495,19 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
+ 	for (i = 1; i < req_len - 2; ++i)
+ 		checksum += byte_request[i];
+ 
+-	mutex_lock(&occ->occ_lock);
++	rc = mutex_lock_interruptible(&occ->occ_lock);
++	if (rc)
++		return rc;
+ 
+ 	occ->client_buffer = response;
+ 	occ->client_buffer_size = user_resp_len;
+ 	occ->client_response_size = 0;
+ 
++	if (!occ->buffer) {
++		rc = -ENOENT;
++		goto done;
++	}
++
+ 	/*
+ 	 * Get a sequence number and update the counter. Avoid a sequence
+ 	 * number of 0 which would pass the response check below even if the
+@@ -671,10 +680,13 @@ static int occ_remove(struct platform_device *pdev)
+ {
+ 	struct occ *occ = platform_get_drvdata(pdev);
+ 
+-	kvfree(occ->buffer);
+-
+ 	misc_deregister(&occ->mdev);
+ 
++	mutex_lock(&occ->occ_lock);
++	kvfree(occ->buffer);
++	occ->buffer = NULL;
++	mutex_unlock(&occ->occ_lock);
++
+ 	device_for_each_child(&pdev->dev, NULL, occ_unregister_child);
+ 
+ 	ida_simple_remove(&occ_ida, occ->idx);
+-- 
+2.27.0
+

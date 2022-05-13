@@ -2,231 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7FE5259A1
+	by mail.lfdr.de (Postfix) with ESMTP id A46F75259A3
 	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 04:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376464AbiEMCNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 22:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45966 "EHLO
+        id S1376470AbiEMCPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 22:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiEMCNl (ORCPT
+        with ESMTP id S229734AbiEMCPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 22:13:41 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B5DE61F3E85;
-        Thu, 12 May 2022 19:13:39 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id F0AF51E80C82;
-        Fri, 13 May 2022 10:07:58 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 7ipRy1WLhqHg; Fri, 13 May 2022 10:07:56 +0800 (CST)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: kunyu@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id B62C81E80C80;
-        Fri, 13 May 2022 10:07:54 +0800 (CST)
-From:   Li kunyu <kunyu@nfschina.com>
-To:     rostedt@goodmis.org
-Cc:     mingo@redhat.com, linux@armlinux.org.uk, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com, tglx@linutronix.de,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, liqiong@nfschina.com,
-        Li kunyu <kunyu@nfschina.com>
-Subject: [PATCH] kernel: Ftrace seems to have functions to improve performance through optimization  through optimization
-Date:   Fri, 13 May 2022 10:13:14 +0800
-Message-Id: <20220513021314.59480-1-kunyu@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-In-Reply-To: <20220512110725.22e69e3c@gandalf.local.home>
-References: <20220512110725.22e69e3c@gandalf.local.home>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Thu, 12 May 2022 22:15:12 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497322016E2;
+        Thu, 12 May 2022 19:15:11 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id v11so6171368qkf.1;
+        Thu, 12 May 2022 19:15:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ABvjeYMUgeKiiz0vGblNmeh1O4Ojq+8TMF+cDOW591M=;
+        b=hQ/Q1gy0b2X8nW5tb5YpMdScAixDo6Xd3Dk+p6mUSw2AEsq4US2fkEzgdxsYVgXt/L
+         rTULcO5Uj/e7A1nBTXpEjROkZFjqC7xWVYj5PaFHf5ZPLHJUCyG4B2tsF1iu3WPPCDUA
+         GPHvCSGlAI3eEH8qpM/mZd5XbztGm7ry786Z2QCb7OGX2cJ3ZHPyhjUlTAxEI/HNINEM
+         DioCRWSKu+cFmmXiw2J2lXwkhATRAnpx7V6XF4s8Y6c91rWc7//kNFK8T8ToNNh0pbJH
+         Xck91GZOSZ0sDTLIQTvOx7fHL6jUlaY2ocJDXzEw746p9JHLxOqlJ4mHeem80308W36x
+         9lMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ABvjeYMUgeKiiz0vGblNmeh1O4Ojq+8TMF+cDOW591M=;
+        b=PVGPMFDYmUriFZMIF4t3h1AOtx7VlY1XfSh+d6m7KL2sDPTZN8ZXDWdUNUL2uEV9MM
+         qhRmZlVYzlCdExvQe078ouBQU6wjRJETx5NMJMCcBiTHvbKjZnnB2IIgm1q59fBXQDy0
+         gCTvDKCumrWKrlQ45aZLu7GSVncJ/utIoiurVs239aHjwlPQmEdb5/L2HMs4DwviN5Si
+         wk72baN0BDW1W+MK2cvhM3L/Wo5R+ckTlWrXpbMsCbJRSyniGzGf0r4B446JXGrh9ROo
+         YidXTC6d0D3YUouJVF5ZL8lm5fpT/SdUpq+zXoIUW2HeXYjjEvA7ADTSNlOhiT6XtTLU
+         7nuQ==
+X-Gm-Message-State: AOAM532Y6SFWlMGw7OB+3fi/Habaoo2l5CyIzmQlzxqkHS4CRX7vBD0x
+        z6neRw9wEYiICeAWzdMFaDB1sV6wjtq2Xy2CNfEvISl4z0k=
+X-Google-Smtp-Source: ABdhPJxKA/bNaK/LNalC4UHx8MqV68htFhXt1WDC9gdNSs6FKa/Rh5mTTMK9V4mzYiP4DlFghHkZGnkRPbyfHMd9Da4=
+X-Received: by 2002:a05:620a:25d:b0:6a0:dbf3:54d5 with SMTP id
+ q29-20020a05620a025d00b006a0dbf354d5mr2196666qkn.74.1652408110338; Thu, 12
+ May 2022 19:15:10 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220428125610.66647-1-gengcixi@gmail.com> <CADBw62r8eGRNcXH1cAZvYQdKCgBjxUVnxhLsa=Oyzs-uwavRTA@mail.gmail.com>
+ <CAJejCsY+DX0JywDS_dk=1P-fvyjUc4i1e67uM_WW64E3YVvzQg@mail.gmail.com>
+In-Reply-To: <CAJejCsY+DX0JywDS_dk=1P-fvyjUc4i1e67uM_WW64E3YVvzQg@mail.gmail.com>
+From:   Baolin Wang <baolin.wang7@gmail.com>
+Date:   Fri, 13 May 2022 10:15:38 +0800
+Message-ID: <CADBw62rMXU+XDyANaRgjEeBmUMe2nU69S5qU2nuxDben387gpQ@mail.gmail.com>
+Subject: Re: [PATCH v2] power: supply: Add enable the primary charger interface
+To:     =?UTF-8?B?6ZmI5rC45b+X?= <chenyongzhi811@gmail.com>
+Cc:     Cixi Geng <gengcixi@gmail.com>, Sebastian Reichel <sre@kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-such as ftrace_ARCH_code_*, return 0, so the FTRACE_* check is not required
+Hi,
 
-Signed-off-by: Li kunyu <kunyu@nfschina.com>
----
- arch/arm/kernel/ftrace.c   |  6 ++----
- arch/riscv/kernel/ftrace.c |  6 ++----
- arch/s390/kernel/ftrace.c  |  3 +--
- arch/x86/kernel/ftrace.c   |  6 ++----
- include/linux/ftrace.h     |  4 ++--
- kernel/trace/ftrace.c      | 16 ++++------------
- 6 files changed, 13 insertions(+), 28 deletions(-)
+On Thu, May 12, 2022 at 11:22 AM =E9=99=88=E6=B0=B8=E5=BF=97 <chenyongzhi81=
+1@gmail.com> wrote:
+>
+> Baolin Wang <baolin.wang7@gmail.com> =E4=BA=8E2022=E5=B9=B45=E6=9C=883=E6=
+=97=A5=E5=91=A8=E4=BA=8C 12:53=E5=86=99=E9=81=93=EF=BC=9A
+> >
+> > On Thu, Apr 28, 2022 at 8:56 PM Cixi Geng <gengcixi@gmail.com> wrote:
+> > >
+> > > From: Chen Yongzhi <Yongzhi.Chen@unisoc.com>
+> > >
+> > > In the case of charging multiple charging ICs,the primary
+> > > charging IC often needs to be turned off in the fast
+> > > charging stage, and only using the charger pump to charge,
+> > > need to add a new power_supply_property attribute.
+> >
+> > I'm still confused why introducing a new
+> > POWER_SUPPLY_PROP_CHARGE_ENABLED property to control the charging, but
+> > you already controlled the charging by POWER_SUPPLY_PROP_STATUS?
+> >
+> Our purpose is to achieve two different stop charging states:
+> POWER_SUPPLY_PROP_STATUS: The software status stops charging, and the
+> hardware also stops charging=EF=BC=9B
+> POWER_SUPPLY_PROP_CHARGE_ENABLED: The hardware is stopped charging,
+> the software is still charging=EF=BC=9B
 
-diff --git a/arch/arm/kernel/ftrace.c b/arch/arm/kernel/ftrace.c
-index 83cc068586bc..a0b6d1e3812f 100644
---- a/arch/arm/kernel/ftrace.c
-+++ b/arch/arm/kernel/ftrace.c
-@@ -79,16 +79,14 @@ static unsigned long __ref adjust_address(struct dyn_ftrace *rec,
- 	return (unsigned long)&ftrace_regs_caller_from_init;
- }
- 
--int ftrace_arch_code_modify_prepare(void)
-+void ftrace_arch_code_modify_prepare(void)
- {
--	return 0;
- }
- 
--int ftrace_arch_code_modify_post_process(void)
-+void ftrace_arch_code_modify_post_process(void)
- {
- 	/* Make sure any TLB misses during machine stop are cleared. */
- 	flush_tlb_all();
--	return 0;
- }
- 
- static unsigned long ftrace_call_replace(unsigned long pc, unsigned long addr,
-diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
-index 4716f4cdc038..2086f6585773 100644
---- a/arch/riscv/kernel/ftrace.c
-+++ b/arch/riscv/kernel/ftrace.c
-@@ -12,16 +12,14 @@
- #include <asm/patch.h>
- 
- #ifdef CONFIG_DYNAMIC_FTRACE
--int ftrace_arch_code_modify_prepare(void) __acquires(&text_mutex)
-+void ftrace_arch_code_modify_prepare(void) __acquires(&text_mutex)
- {
- 	mutex_lock(&text_mutex);
--	return 0;
- }
- 
--int ftrace_arch_code_modify_post_process(void) __releases(&text_mutex)
-+void ftrace_arch_code_modify_post_process(void) __releases(&text_mutex)
- {
- 	mutex_unlock(&text_mutex);
--	return 0;
- }
- 
- static int ftrace_check_current_call(unsigned long hook_pos,
-diff --git a/arch/s390/kernel/ftrace.c b/arch/s390/kernel/ftrace.c
-index 1852d46babb1..416b5a94353d 100644
---- a/arch/s390/kernel/ftrace.c
-+++ b/arch/s390/kernel/ftrace.c
-@@ -225,14 +225,13 @@ void arch_ftrace_update_code(int command)
- 	ftrace_modify_all_code(command);
- }
- 
--int ftrace_arch_code_modify_post_process(void)
-+void ftrace_arch_code_modify_post_process(void)
- {
- 	/*
- 	 * Flush any pre-fetched instructions on all
- 	 * CPUs to make the new code visible.
- 	 */
- 	text_poke_sync_lock();
--	return 0;
- }
- 
- #ifdef CONFIG_MODULES
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index 1e31c7d21597..73d2719ed12c 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -37,7 +37,7 @@
- 
- static int ftrace_poke_late = 0;
- 
--int ftrace_arch_code_modify_prepare(void)
-+void ftrace_arch_code_modify_prepare(void)
-     __acquires(&text_mutex)
- {
- 	/*
-@@ -47,10 +47,9 @@ int ftrace_arch_code_modify_prepare(void)
- 	 */
- 	mutex_lock(&text_mutex);
- 	ftrace_poke_late = 1;
--	return 0;
- }
- 
--int ftrace_arch_code_modify_post_process(void)
-+void ftrace_arch_code_modify_post_process(void)
-     __releases(&text_mutex)
- {
- 	/*
-@@ -61,7 +60,6 @@ int ftrace_arch_code_modify_post_process(void)
- 	text_poke_finish();
- 	ftrace_poke_late = 0;
- 	mutex_unlock(&text_mutex);
--	return 0;
- }
- 
- static const char *ftrace_nop_replace(void)
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 4816b7e11047..a5f74f6e7e4e 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -449,8 +449,8 @@ static inline void stack_tracer_enable(void) { }
- 
- #ifdef CONFIG_DYNAMIC_FTRACE
- 
--int ftrace_arch_code_modify_prepare(void);
--int ftrace_arch_code_modify_post_process(void);
-+void ftrace_arch_code_modify_prepare(void);
-+void ftrace_arch_code_modify_post_process(void);
- 
- enum ftrace_bug_type {
- 	FTRACE_BUG_UNKNOWN,
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 4f1d2f5e7263..35a899f136fe 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -2707,18 +2707,16 @@ ftrace_nop_initialize(struct module *mod, struct dyn_ftrace *rec)
-  * archs can override this function if they must do something
-  * before the modifying code is performed.
-  */
--int __weak ftrace_arch_code_modify_prepare(void)
-+void __weak ftrace_arch_code_modify_prepare(void)
- {
--	return 0;
- }
- 
- /*
-  * archs can override this function if they must do something
-  * after the modifying code is performed.
-  */
--int __weak ftrace_arch_code_modify_post_process(void)
-+void __weak ftrace_arch_code_modify_post_process(void)
- {
--	return 0;
- }
- 
- void ftrace_modify_all_code(int command)
-@@ -2804,12 +2802,7 @@ void __weak arch_ftrace_update_code(int command)
- 
- static void ftrace_run_update_code(int command)
- {
--	int ret;
--
--	ret = ftrace_arch_code_modify_prepare();
--	FTRACE_WARN_ON(ret);
--	if (ret)
--		return;
-+	ftrace_arch_code_modify_prepare();
- 
- 	/*
- 	 * By default we use stop_machine() to modify the code.
-@@ -2819,8 +2812,7 @@ static void ftrace_run_update_code(int command)
- 	 */
- 	arch_ftrace_update_code(command);
- 
--	ret = ftrace_arch_code_modify_post_process();
--	FTRACE_WARN_ON(ret);
-+	ftrace_arch_code_modify_post_process();
- }
- 
- static void ftrace_run_modify_code(struct ftrace_ops *ops, int command,
--- 
-2.18.2
+Please separate it into two patches, one patch adds charging control
+with POWER_SUPPLY_PROP_STATUS attribute, and describe the use case in
+detail.
 
+The second patch introduces the new POWER_SUPPLY_PROP_CHARGE_ENABLED
+attribute with explicit description why you want a new attribute.
+Cause I'm still confused about what you want, and your commit message
+is useless. If the hardware stopped charging, why does the software
+still need to charge?
+
+>   Our  don't want to change the charge_status switch due to the
+> switching of charging and discharging of the charging IC in the
+> charging scenario of multiple charging ICs, and let the upper layer
+> perceive this switching
+> > >
+
+snip.
+
+--=20
+Baolin Wang

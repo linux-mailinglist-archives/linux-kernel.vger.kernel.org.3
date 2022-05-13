@@ -2,145 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7861525F4A
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0116525EF3
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378967AbiEMJhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 05:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43122 "EHLO
+        id S1348279AbiEMJjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 05:39:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379067AbiEMJhQ (ORCPT
+        with ESMTP id S1346611AbiEMJjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 05:37:16 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9EC28BDF5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 02:37:14 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id w4so10602520wrg.12
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 02:37:14 -0700 (PDT)
+        Fri, 13 May 2022 05:39:02 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488F728ABB3;
+        Fri, 13 May 2022 02:39:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=LPeFc4kVcTNm4urAkRDIpRauCxNaO73GMMKzZ0JovMs=;
-        b=im5D1li6iayjNq5cJbXexWNAdwbevtRT0YNi61YD5Dlb7O+v4d+zj1Uq9SpmE0WpsF
-         zDtgfhR5K4BTl47cxta7rzqmnvmp6bDDI49DV/fmr/PQlV00wYyGEwyt78RGRfLFIKEf
-         tpPiDTrQnqoo6WEuezuxWi6XWtBCDypmq/23Cbso3DdfxfXbijZ8KpRaAVt0n+NXPxvx
-         PAACqWfJA0Djcoze1ircxojt62AINFqj6kyxIWhI5u+ndn33F/1mL2eKAP8GatwVdl9P
-         /GvTgbRwH85LINuDvCYS+4V15Vu2Bfh+l0FrrIFukTKyi+Mab9I5tXcmVkTCdQEAOI0/
-         66Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LPeFc4kVcTNm4urAkRDIpRauCxNaO73GMMKzZ0JovMs=;
-        b=EaSYhxyUp7Yy4peaEN/je+g2Bfa9Oy5lXgCbsZ+56Rr/RWp4GjeC6gWMOfz01WuLqV
-         Sge9RfEKu+0mX3sWNMfBRvGQ1HGZgB91tI7BFLDhZVocPMpM+9ggHYJamqYaFz4rN8/1
-         BBWPkIfiE/H4LV2/kjnBjY9kLH9taTNBpQ30kMxkmVh7m2d2wX3RSi3vgbKEd7u4OOR5
-         z+cxthCAGe3nCmH5iYVxBH66JKhcxP4dVRjE9uTSF6LPVjOjTyomT6hvolRLAm8UG0Mq
-         dwrTNcnk9kwzo9sNm9UdoK0zIzKBLgbK4I+wg1P8nQy+waNmHjn2ynxem+tSdl7w7PYE
-         BuTw==
-X-Gm-Message-State: AOAM530jxLOt9niXMRs7LQt2i9q1xuSC6LgOvoWO9mElwfCkVFOeTU6a
-        ywys0iK9Hj3fspAozADezMGIXg==
-X-Google-Smtp-Source: ABdhPJwW3cU+uyE+Io9UlgPZ79ftGJYHlU0vLFfIIytqKHzkojl5dsNGL+ZhUq/QdL1OwweAvqQPzw==
-X-Received: by 2002:a5d:6088:0:b0:20a:e81e:c76a with SMTP id w8-20020a5d6088000000b0020ae81ec76amr3138108wrt.182.1652434632703;
-        Fri, 13 May 2022 02:37:12 -0700 (PDT)
-Received: from [192.168.0.171] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id g2-20020adfa482000000b0020c5253d8dfsm1728148wrb.43.2022.05.13.02.37.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 02:37:12 -0700 (PDT)
-Message-ID: <5cce491d-c673-d2a6-3aae-79b2e5902a01@linaro.org>
-Date:   Fri, 13 May 2022 11:37:11 +0200
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652434741; x=1683970741;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=Ez+FQiFpOQTlhI+vyJS9Bue8ypwJicksZwlgEN+UBjg=;
+  b=PHVMjXtE7ORS91Vrwn6oLah1vGO8ZAPY5PazCBTI8Jy8aLG4iRDdkjua
+   qgGd++ocslOdZiiSzXyWx+NsbPnCaFO9J17V4XfnJCEZKabbnu49mt6MW
+   BxKwNf6kzNACrwfCO28KVtez+LDX0sxOy6lNuguxfidT2QiP1v1djKxcU
+   8=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 13 May 2022 02:39:00 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 02:39:00 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 13 May 2022 02:38:59 -0700
+Received: from hu-charante-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 13 May 2022 02:38:55 -0700
+From:   Charan Teja Kalla <quic_charante@quicinc.com>
+To:     <christian.koenig@amd.com>, <sumit.semwal@linaro.org>,
+        <gregkh@linuxfoundation.org>, <hridya@google.com>,
+        <daniel.vetter@ffwll.ch>, <tjmercier@google.com>
+CC:     <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linaro-mm-sig@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
+        "Charan Teja Kalla" <quic_charante@quicinc.com>
+Subject: [PATCH V3] dma-buf: ensure unique directory name for dmabuf stats
+Date:   Fri, 13 May 2022 15:08:09 +0530
+Message-ID: <1652434689-6203-1-git-send-email-quic_charante@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 2/7] dt-bindings: pinctrl: qcom-pmic-gpio: Add pm6125
- compatible
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220511220613.1015472-1-marijn.suijten@somainline.org>
- <20220511220613.1015472-3-marijn.suijten@somainline.org>
- <d2507298-00a6-a1cc-0302-f96597fb4127@linaro.org>
- <20220513091734.hivkkbpc6inyb4la@SoMainline.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220513091734.hivkkbpc6inyb4la@SoMainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/05/2022 11:17, Marijn Suijten wrote:
-> On 2022-05-13 10:19:56, Krzysztof Kozlowski wrote:
->> On 12/05/2022 00:06, Marijn Suijten wrote:
->>> The pm6125 comes with 9 GPIOs, without holes.
->>>
->>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
->>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
->>
->> It's the first version, how did the tag appear here?
-> 
-> We are friends and review each-others patches offline before spamming
-> the mailing list with them, to save readers and maintainers here from
-> pointing out glaring mistakes.  I hope this is standard practice in
-> companies too, or do you recommend aganst us doing this?
+The dmabuf file uses get_next_ino()(through dma_buf_getfile() ->
+alloc_anon_inode()) to get an inode number and uses the same as a
+directory name under /sys/kernel/dmabuf/buffers/<ino>. This directory is
+used to collect the dmabuf stats and it is created through
+dma_buf_stats_setup(). At current, failure to create this directory
+entry can make the dma_buf_export() to fail.
 
-I personally recommend against it because I prefer public discussions.
-Especially that such practice in some companies mean that tag is added
-automatically, without actual review. There are some folks, from other
-subsystems and architectures, which never publicly replied to anything
-(so we don't know if they actually exist, what's their credibility,
-knowledge, experience etc) but they appear on hundreds of reviews.
+Now, as the get_next_ino() can definitely give a repetitive inode no
+causing the directory entry creation to fail with -EEXIST. This is a
+problem on the systems where dmabuf stats functionality is enabled on
+the production builds can make the dma_buf_export(), though the dmabuf
+memory is allocated successfully, to fail just because it couldn't
+create stats entry.
 
-Other people don't mind this practice.
+This issue we are able to see on the snapdragon system within 13 days
+where there already exists a directory with inode no "122602" so
+dma_buf_stats_setup() failed with -EEXIST as it is trying to create
+the same directory entry.
 
-Anyway, it's not a stopper from anything, I was wondering.
+To make the dentry name as unique, use the dmabuf fs specific inode
+which is based on the simple atomic variable increment. There is tmpfs
+subsystem too which relies on its own inode generation rather than
+relying on the get_next_ino() for the same reason of avoiding the
+duplicate inodes[1].
 
-> 
->>> ---
->>>  Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml | 2 ++
->>>  1 file changed, 2 insertions(+)
->>
->>
->> This will need fixups or rebasing on my sets of PMIC gpio schema cleanup:
-> 
-> Ack.
-> 
->> https://lore.kernel.org/all/20220507194913.261121-1-krzysztof.kozlowski@linaro.org/
->> https://lore.kernel.org/all/20220508135932.132378-2-krzysztof.kozlowski@linaro.org/
->>
->> Bjorn,
->> let us know preferred order (who should rebase on who).
-> 
-> I prefer yours to be applied first, so that I can retest this
-> patchseries with stricter / more correct dt-bindings introduced by it.
-> My series can also be resent with the notice that it has already been
-> rebased on top of your series, after collecting more reviews.  Where
-> necessary, I can review your series too if that helps getting it in
-> sooner.
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/patch/?id=e809d5f0b5c912fe981dce738f3283b2010665f0
 
-Sounds good. It's in Bjorn's hands now. :)
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
+---
+Changes in V3:
+  -- Used the atomic64 variable to have dmabuf files its own inodes.
+  -- Ensured no UAPI breakage as suggested by Christian.
 
+Changes in V2:
+  -- Used the atomic64_t variable to generate a unique_id to be appended to inode
+     to have an unique directory with name <inode_number-unique_id> -- Suggested by christian
+  -- Updated the ABI documentation -- Identified by Greg.
+  -- Massaged the commit log.
+  -- https://lore.kernel.org/all/1652191562-18700-1-git-send-email-quic_charante@quicinc.com/
 
-Best regards,
-Krzysztof
+Changes in V1:
+  -- Used the inode->i_ctime->tv_secs as an id appended to inode to create the
+     unique directory with name <inode_number-time_in_secs>.
+  -- https://lore.kernel.org/all/1652178212-22383-1-git-send-email-quic_charante@quicinc.com/
+
+ drivers/dma-buf/dma-buf.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+index a6fc96e..0ad5039 100644
+--- a/drivers/dma-buf/dma-buf.c
++++ b/drivers/dma-buf/dma-buf.c
+@@ -407,6 +407,7 @@ static inline int is_dma_buf_file(struct file *file)
+ 
+ static struct file *dma_buf_getfile(struct dma_buf *dmabuf, int flags)
+ {
++	static atomic64_t dmabuf_inode = ATOMIC64_INIT(0);
+ 	struct file *file;
+ 	struct inode *inode = alloc_anon_inode(dma_buf_mnt->mnt_sb);
+ 
+@@ -416,6 +417,13 @@ static struct file *dma_buf_getfile(struct dma_buf *dmabuf, int flags)
+ 	inode->i_size = dmabuf->size;
+ 	inode_set_bytes(inode, dmabuf->size);
+ 
++	/*
++	 * The ->i_ino acquired from get_next_ino() is not unique thus
++	 * not suitable for using it as dentry name by dmabuf stats.
++	 * Override ->i_ino with the unique and dmabuffs specific
++	 * value.
++	 */
++	inode->i_ino = atomic64_add_return(1, &dmabuf_inode);
+ 	file = alloc_file_pseudo(inode, dma_buf_mnt, "dmabuf",
+ 				 flags, &dma_buf_fops);
+ 	if (IS_ERR(file))
+-- 
+2.7.4
+

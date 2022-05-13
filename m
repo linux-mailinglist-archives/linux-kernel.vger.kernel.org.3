@@ -2,115 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66CEA526BD4
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F714526BD8
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384537AbiEMUsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 16:48:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46906 "EHLO
+        id S1379957AbiEMUuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 16:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384521AbiEMUsi (ORCPT
+        with ESMTP id S1356811AbiEMUuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 16:48:38 -0400
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8BB15FE5;
-        Fri, 13 May 2022 13:48:36 -0700 (PDT)
-Received: by mail-oi1-f179.google.com with SMTP id y63so11526616oia.7;
-        Fri, 13 May 2022 13:48:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=X3TQnSjdMn1h88B2hKWq4Vtc4t9dgcXCcu4yQAA388I=;
-        b=Nf6uWUMSC1Assz+k+DNJzTOWooI3GAVf03/KuJ4oYxD4kdNk9rz643Rkl+5XMzAq97
-         Yi6kC4oPvuMbCN4UQ27AClPoDrIoO+T4miEgputgi4tBx2dQJQ5y5DV0WOLIkQQX0Ms5
-         dYVE1Ckxw6j/w9KwC9OvqoeMG/QjwoiYbEUThtj7j/hmmoYWMtG5HSqOVJi3y3bx1WZJ
-         kLmsnmXhiM5x+VMsNXVSR/hYOHea5GBhHdFoYEyK24a/RzPou5cRt/W7bNYJbzt6KVaK
-         DRjGboe9oqy4hq+4UXkY2K1kAMDUGLj0Cvm0vWqmGntm0ZeUXW51kyDtzb2Gz71xUth7
-         4Q2g==
-X-Gm-Message-State: AOAM530z+jAB+bY1ykwY7uQN4Od8u/zic27WqHSUwNydjLXSu4fYBZMn
-        4oYl3Vkjzam+feGgYNe1od37+LrOtw==
-X-Google-Smtp-Source: ABdhPJwP+9t58/HsOC+vMOmnRUgE5YnXus5JIhh/6Mv2y+iU8XBnzrtKM2mxN6osLdIL8Ofj/qN0yw==
-X-Received: by 2002:aca:aa42:0:b0:325:61e3:1726 with SMTP id t63-20020acaaa42000000b0032561e31726mr8474090oie.57.1652474915995;
-        Fri, 13 May 2022 13:48:35 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e2-20020a056870a60200b000e99b1909d4sm1426285oam.25.2022.05.13.13.48.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 13:48:35 -0700 (PDT)
-Received: (nullmailer pid 894559 invoked by uid 1000);
-        Fri, 13 May 2022 20:48:33 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     linux-clk@vger.kernel.org, kernel@collabora.com, ikjn@chromium.org,
-        krzysztof.kozlowski+dt@linaro.org, miles.chen@mediatek.com,
-        sam.shih@mediatek.com, fparent@baylibre.com, wenst@chromium.org,
-        robh+dt@kernel.org, ck.hu@mediatek.com, mturquette@baylibre.com,
-        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
-        martin.botka@somainline.org, linux-mediatek@lists.infradead.org,
-        marijn.suijten@somainline.org, weiyi.lu@mediatek.com,
-        rex-bc.chen@mediatek.com, jason-jh.lin@mediatek.com,
-        y.oudjana@protonmail.com, phone-devel@vger.kernel.org,
-        bgolaszewski@baylibre.com, sboyd@kernel.org,
-        konrad.dybcio@somainline.org, tinghan.shen@mediatek.com,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        paul.bouchara@somainline.org, matthias.bgg@gmail.com,
-        linux-arm-kernel@lists.infradead.org, chun-jie.chen@mediatek.com,
-        devicetree@vger.kernel.org
-In-Reply-To: <20220513165050.500831-5-angelogioacchino.delregno@collabora.com>
-References: <20220513165050.500831-1-angelogioacchino.delregno@collabora.com> <20220513165050.500831-5-angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH 4/5] dt-bindings: arm: mediatek: Add clock driver bindings for MT6795
-Date:   Fri, 13 May 2022 15:48:33 -0500
-Message-Id: <1652474913.760163.894558.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Fri, 13 May 2022 16:50:15 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5966554
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:50:13 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652475010;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zEdz3PBK+OaYEz88/8/oMxcc8qsP3Ut2QqnQHlJZHqE=;
+        b=IL5ps9Pi2NFB4qTc/+l9Q6Ywr61TAXtYWQaoSp7/YbaTcIvSE9C5eLi+t7xEHqEeYjETXy
+        JmzdwkR1BjpqSKaC0i1aIRbhjFDiQDzAY0BCHdHh/4VpIInaO6SaQP3tcK+xed/cxdQc98
+        EeugDl7hMWE7H4HfUhMdKa0BDk7UiwLoggjpg6a0mH4MB8CPpd8kuWCvK2t0KbLmFzAf58
+        alHc5j1TQhITDFdCadertqBxYuofkeeTGIqgwJFHxxMd3hIwPbd+zCucmhhovYvvi35KA7
+        wXRs36ZyRr73nbP/djYS0b302aslX8nO8TU0pWKtw2DfpZnQdl6w3lc/Jb2z7A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652475010;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zEdz3PBK+OaYEz88/8/oMxcc8qsP3Ut2QqnQHlJZHqE=;
+        b=RyMi/A5Po6vaHS9i40z6IeKIq7BgJOWcZ6bfF5+HAQR7bK6hdxFiTaWa09d2O8EN+o2gLw
+        QsH3uYNZXchYGcCw==
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     x86@kernel.org, Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Stephane Eranian <eranian@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 05/29] x86/apic/vector: Do not allocate vectors for NMIs
+In-Reply-To: <20220513180320.GA22683@ranerica-svr.sc.intel.com>
+References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
+ <20220506000008.30892-6-ricardo.neri-calderon@linux.intel.com>
+ <87zgjufjrf.ffs@tglx> <20220513180320.GA22683@ranerica-svr.sc.intel.com>
+Date:   Fri, 13 May 2022 22:50:09 +0200
+Message-ID: <87v8u9rwce.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 May 2022 18:50:49 +0200, AngeloGioacchino Del Regno wrote:
-> Add the bindings for the clock drivers of the MediaTek Helio X10
-> MT6795 SoC.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  .../arm/mediatek/mediatek,mt6795-clock.yaml   | 67 +++++++++++++++++
->  .../mediatek/mediatek,mt6795-sys-clock.yaml   | 73 +++++++++++++++++++
->  2 files changed, 140 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt6795-clock.yaml
->  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt6795-sys-clock.yaml
-> 
+On Fri, May 13 2022 at 11:03, Ricardo Neri wrote:
+> On Fri, May 06, 2022 at 11:12:20PM +0200, Thomas Gleixner wrote:
+>> Why would a NMI ever end up in this code? There is no vector management
+>> required and this find cpu exercise is pointless.
+>
+> But even if the NMI has a fixed vector, it is still necessary to determine
+> which CPU will get the NMI. It is still necessary to determine what to
+> write in the Destination ID field of the MSI message.
+>
+> irq_matrix_find_best_cpu() would find the CPU with the lowest number of
+> managed vectors so that the NMI is directed to that CPU. 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+What's the point to send it to the CPU with the lowest number of
+interrupts. It's not that this NMI happens every 50 microseconds.
+We pick one online CPU and are done.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/arm/mediatek/mediatek,mt6795-clock.yaml:67:1: [warning] too many blank lines (2 > 1) (empty-lines)
+> In today's code, an NMI would end up here because we rely on the existing
+> interrupt management infrastructure... Unless, the check is done the entry
+> points as you propose.
 
-dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/arm/mediatek/mediatek,mt6795-sys-clock.example.dts:35.13-21 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:364: Documentation/devicetree/bindings/arm/mediatek/mediatek,mt6795-sys-clock.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1401: dt_binding_check] Error 2
+Correct. We don't want to call into functions which are not designed for
+NMIs.
+ 
+>> > +
+>> > +	if (apicd->hw_irq_cfg.delivery_mode == APIC_DELIVERY_MODE_NMI) {
+>> > +		cpu = irq_matrix_find_best_cpu_managed(vector_matrix, dest);
+>> > +		apicd->cpu = cpu;
+>> > +		vector = 0;
+>> > +		goto no_vector;
+>> > +	}
+>> 
+>> This code can never be reached for a NMI delivery. If so, then it's a
+>> bug.
+>> 
+>> This all is special purpose for that particular HPET NMI watchdog use
+>> case and we are not exposing this to anything else at all.
+>> 
+>> So why are you sprinkling this NMI nonsense all over the place? Just
+>> because? There are well defined entry points to all of this where this
+>> can be fenced off.
+>
+> I put the NMI checks in these points because assign_vector_locked() and
+> assign_managed_vector() are reached through multiple paths and these are
+> the two places where the allocation of the vector is requested and the
+> destination CPU is determined.
+>
+> I do observe this code being reached for an NMI, but that is because this
+> code still does not know about NMIs... Unless the checks for NMI are put
+> in the entry points as you pointed out.
+>
+> The intent was to refactor the code in a generic manner and not to focus
+> only in the NMI watchdog. That would have looked hacky IMO.
 
-doc reference errors (make refcheckdocs):
+We don't want to have more of this really. Supporting NMIs on x86 in a
+broader way is simply not reasonable because there is only one NMI
+vector and we have no sensible way to get to the cause of the NMI
+without a massive overhead.
 
-See https://patchwork.ozlabs.org/patch/
+Even if we get multiple NMI vectors some shiny day, this will be
+fundamentally different than regular interrupts and certainly not
+exposed broadly. There will be 99.99% fixed vectors for simplicity sake.
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+>> +		if (info->flags & X86_IRQ_ALLOC_AS_NMI) {
+>> +			/*
+>> +			 * NMIs have a fixed vector and need their own
+>> +			 * interrupt chip so nothing can end up in the
+>> +			 * regular local APIC management code except the
+>> +			 * MSI message composing callback.
+>> +			 */
+>> +			irqd->chip = &lapic_nmi_controller;
+>> +			/*
+>> +			 * Don't allow affinity setting attempts for NMIs.
+>> +			 * This cannot work with the regular affinity
+>> +			 * mechanisms and for the intended HPET NMI
+>> +			 * watchdog use case it's not required.
+>
+> But we do need the ability to set affinity, right? As stated above, we need
+> to know what Destination ID to write in the MSI message or in the interrupt
+> remapping table entry.
+>
+> It cannot be any CPU because only one specific CPU is supposed to handle the
+> NMI from the HPET channel.
+>
+> We cannot hard-code a CPU for that because it may go offline (and ignore NMIs)
+> or not be part of the monitored CPUs.
+>
+> Also, if lapic_nmi_controller.irq_set_affinity() is NULL, then irq_chips
+> INTEL-IR, AMD-IR, those using msi_domain_set_affinity() need to check for NULL.
+> They currently unconditionally call the parent irq_chip's irq_set_affinity().
+> I see that there is a irq_chip_set_affinity_parent() function. Perhaps it can
+> be used for this check?
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+Yes, this lacks obviously a NMI specific set_affinity callback and this
+can be very trivial and does not have any of the complexity of interrupt
+affinity assignment. First online CPU in the mask with a fallback to any
+online CPU.
 
-pip3 install dtschema --upgrade
+I did not claim that this is complete. This was for illustration.
 
-Please check and re-submit.
+>> +			 */
+>> +			irqd_set_no_balance(irqd);
+>
+> This code does not set apicd->hw_irq_cfg.delivery_mode as NMI, right?
+> I had to add that to make it work.
 
+I assumed you can figure that out on your own :)
+
+Thanks,
+
+        tglx

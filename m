@@ -2,134 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2DE526ACA
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 21:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43B77526AD3
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383968AbiEMT6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 15:58:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54068 "EHLO
+        id S1383970AbiEMUFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 16:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346904AbiEMT6V (ORCPT
+        with ESMTP id S1346904AbiEMUFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 15:58:21 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23093F136B;
-        Fri, 13 May 2022 12:58:20 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2f16645872fso101088917b3.4;
-        Fri, 13 May 2022 12:58:20 -0700 (PDT)
+        Fri, 13 May 2022 16:05:45 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2523113D46
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:05:43 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id s12-20020a0568301e0c00b00605f30530c2so5677651otr.9
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:05:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pW4fIO1zU8hH5UZQ21Ux1LqBB1/44eCl6uSeUwAZ5aM=;
-        b=ffKMHRTsZAboB6znpNNJk4ZBl4MZCa/2C4jy3u9at1auqT2Nmm6gNWVfsrLZtTjLUM
-         4yVOBJ2Je5sjAFPGP3k8ardglwbqhLXAFhrKR93rOQiORqDG5NMvFvL6GgXNkK5StyNb
-         deBmsqJpn5Hj8FeSqbIvf+4YGvtHUe1Do1OYqCyVB1BDkG8laFMHl2DeQeq+r+ivfn5d
-         MVyK1XJthRCKigc+YZtjq8+MlQ3e4zAAmPDPp9saM9hDgEeynjuUp7hzgpdsQIp4+IbT
-         1u6g9uP8y7qB4JxDRKeT+dGyv8Hl1Koa68marZqIofFV1ozUD/i2KNnrnvG9P90RVlJD
-         bjzA==
+        d=linaro.org; s=google;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Sw0Ty2i6m6ijMnudqcgyBhV3WU+F7zBQ1znaTdumRLw=;
+        b=yN/cY5iqTHXB8k2VpjjflFaePUiVfE7b9NgfkkKpfc1W4BgCgu5HgoxpvBW1nQtNGr
+         Sl8fpm796k1/TqQYr0fLp4PCPoytDblbbdu0gQosjOW9xhEPESQajc20EAkOecNVJ86n
+         AP+CeHEc7lURKHAMx/sSzOErjekz5b2VaY1ZUF+PevEmoar0TChsFKbAXS0Xv2p0p9z+
+         4HY3SUDqolk/MiFgwj9u5OFpun5IeagRB3o5xzl4BqF8v7eeWMPdPwlXW8CofRXmbbXR
+         o01CYhOL+K6jq7wtQFjbTh8nVLqTjIduc5d4vwMUwWLTG0NR+XDFfa5UKLrC6B52XQem
+         zerw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pW4fIO1zU8hH5UZQ21Ux1LqBB1/44eCl6uSeUwAZ5aM=;
-        b=g4j0EpGut1d9VAopyvwKio+gtOCV2nmaEwLU0s0Ib3vOhtpkvGWYaYQWlxs3nlGjhA
-         BW+241Pm+jbOrF5PVtvRTCi0E8debFFBsRcsxfhclKWnlJO/MC0evYpzYSdjeZMcrj9J
-         62P8MBy9Oz2udW8iIYgyv8OYf9E1juvGqmOWaCvdRKDWdtgETC1letqkdxyi8pbEV/Cq
-         tiOxqvuhiKTEbI7+9JGZclkqJ7H0bs9uwddB1XPhSVz8wt89pnvh92KxTziDTy9QwOMc
-         aoBYMj5y+kUtvoffWzSSGFlZVMnn0xwO54o8ZTSrfELeKAi+1bFm3Si7QeS5xxTkhi5N
-         1W5Q==
-X-Gm-Message-State: AOAM530rJPhbzufDBE118Mb7GnQAgHmUrNnIc6QC70QGlxxnFu6Lticr
-        fxMjh1Qrlhak3npg14wazdSuTv1SLlyBUImIQPM=
-X-Google-Smtp-Source: ABdhPJw6+/SwL2KydeAdgLuJYjz/+K1J1IHTLjBhAneWt/AHH+E75vqBLas8PV6tZm9E97+1M504un5gP//4Zp83qc4=
-X-Received: by 2002:a81:70c3:0:b0:2fe:c68c:aa1d with SMTP id
- l186-20020a8170c3000000b002fec68caa1dmr2409691ywc.431.1652471899340; Fri, 13
- May 2022 12:58:19 -0700 (PDT)
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Sw0Ty2i6m6ijMnudqcgyBhV3WU+F7zBQ1znaTdumRLw=;
+        b=KKjTH7ocTeD12oI+m7+DGf++lDD1UjFxu1tExyfyGSYSC+fiLSlSMQ94viBLLfqXS2
+         dVIO/BtIYr5bJcZkBeFf/KhvpQU1/51gzgr5nOYP6kn+nSjsR9X/rbhp5hcDB8AU+rKy
+         4y6mksEVJlbavlVJREBCNmnpcnLG8cIjS+0UVzNiko8VkMZMO2adiSpm2+2lgTwBYs4j
+         OjLK82DsVH7eG6tM7Fp04YpRkrZ3okoZoEmONV2RVELfMU4MwFNdKcOtEDgobUP/g6rs
+         gk7nKV0i90vQ+kbIr6DT4uu2U8mzs25RDwft3jXNHcu5Ogn3Dz4slcIqvGWYaD+uGoq6
+         q+Vg==
+X-Gm-Message-State: AOAM531DRZfUZ5oL8rEadlBw1g+aPLjF+wgEju+02xSkNh2AJu9UfdzL
+        Cn6L7icNekkv1P0P2jiJuq6pBw==
+X-Google-Smtp-Source: ABdhPJzLs77QbT8u4Xwn/WdpDQnnzbI7KkSNrknx8GnCTltAk1TfOI2fdEfQZG9Xt5zFux0GgjGHDw==
+X-Received: by 2002:a9d:6c87:0:b0:606:1000:bf5a with SMTP id c7-20020a9d6c87000000b006061000bf5amr2479769otr.7.1652472342230;
+        Fri, 13 May 2022 13:05:42 -0700 (PDT)
+Received: from localhost.localdomain (cpc78119-cwma10-2-0-cust590.7-3.cable.virginm.net. [81.96.50.79])
+        by smtp.gmail.com with ESMTPSA id a1-20020a9d5c81000000b0060603221240sm1456962oti.16.2022.05.13.13.05.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 13:05:41 -0700 (PDT)
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        phone-devel@vger.kernel.org
+Subject: [PATCH v3 0/6] power: supply: introduce support for the Qualcomm smb2 charger
+Date:   Fri, 13 May 2022 21:05:06 +0100
+Message-Id: <20220513200512.501156-1-caleb.connolly@linaro.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220512001500.16739-1-fletcher0max@gmail.com>
-In-Reply-To: <20220512001500.16739-1-fletcher0max@gmail.com>
-From:   Roderick Colenbrander <thunderbird2k@gmail.com>
-Date:   Fri, 13 May 2022 12:58:08 -0700
-Message-ID: <CAEc3jaBbVT1t1kS_Vvp3EqfheCWr=CAvVgdzw7vkeFyYz9H_7Q@mail.gmail.com>
-Subject: Re: [PATCH 1/2] HID: nintendo: fix face button mappings
-To:     Max Fletcher <fletcher0max@gmail.com>
-Cc:     "Daniel J. Ogorchock" <djogorchock@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input <linux-input@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Max,
+Add a driver for the Qualcomm PMI8998/PM660 Switch-Mode Battery Charger.
+This is the second generation SMB charger, and replaces the previous
+SMBB hardware found in older PMICs.
 
-Thanks for your patch, however I must say the patch is not correct for
-2 reasons.
+This driver provides basic support for initialising the hardware,
+configuring the USB input current limit and reporting information about
+the state of the charger. Features like type-c dual role support and OTG
+switching will be added in future patches.
 
-Over the years different controllers have different layouts. The
-standard which this driver (as well as others such as
-hid-sony/hid-playstation) follow is the Linux gamepad standard (see
-Documentation/input/gamepad.rst). It stays away of the debate what is
-A/B/X/Y. It talks about North/west/.., (yes they are macros which map
-to A/B/X/Y). In case of the Switch it does mean things are flipped,
-but it was not meant to represent an Xbox controller. (Technically one
-could argue that the Xbox controller should be flipped as it was the
-SNES controller back in the days which introduced X/Y and the Switch
-is still consistent with that.)
+This patch series depends on my previous series adding support for
+the Round Robin ADC which is used for reading the USB voltage and
+current, it can be found here:
+https://lore.kernel.org/linux-arm-msm/20220429220904.137297-1-caleb.connolly@linaro.org/
 
-Second, even if the patch was right it would be tricky to merge. The
-problem is that a changed mapping breaks user spaces and in general
-can't do this unless there is a really good reason. It just would
-break existing applications and libraries (often e.g. SDL)
+Changes since v2:
+ * Use devm_delayed_work_autocancel
+ * Minor driver fixes
+ * Pick up Krzysztof's R-b on the DT patch
 
-Thanks,
-Roderick
+Changes since v1:
+ * Rename the driver to pmi8998_charger
+ * Drop unnecessary (and very broken) mutex
+ * Rework the driver based on feedback to v1
+ * Fix some minor bugs and improve Automatic Input Current Limit support
 
-On Wed, May 11, 2022 at 8:12 PM Max Fletcher <fletcher0max@gmail.com> wrote:
->
-> Previously, A and B would match the Xbox layout, but X and Y were incorrectly swapped. This corrects it so that X and Y match the Xbox layout.
->
-> Signed-off-by: Max Fletcher <fletcher0max@gmail.com>
-> ---
->  drivers/hid/hid-nintendo.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/hid/hid-nintendo.c b/drivers/hid/hid-nintendo.c
-> index 2204de889739..7735971ede3f 100644
-> --- a/drivers/hid/hid-nintendo.c
-> +++ b/drivers/hid/hid-nintendo.c
-> @@ -1351,10 +1351,10 @@ static void joycon_parse_report(struct joycon_ctlr *ctlr,
->                 input_report_key(dev, BTN_START, btns & JC_BTN_PLUS);
->                 input_report_key(dev, BTN_THUMBR, btns & JC_BTN_RSTICK);
->                 input_report_key(dev, BTN_MODE, btns & JC_BTN_HOME);
-> -               input_report_key(dev, BTN_WEST, btns & JC_BTN_Y);
-> -               input_report_key(dev, BTN_NORTH, btns & JC_BTN_X);
-> -               input_report_key(dev, BTN_EAST, btns & JC_BTN_A);
-> -               input_report_key(dev, BTN_SOUTH, btns & JC_BTN_B);
-> +               input_report_key(dev, BTN_X, btns & JC_BTN_Y);
-> +               input_report_key(dev, BTN_Y, btns & JC_BTN_X);
-> +               input_report_key(dev, BTN_B, btns & JC_BTN_A);
-> +               input_report_key(dev, BTN_A, btns & JC_BTN_B);
->         }
->
->         input_sync(dev);
-> @@ -1578,7 +1578,7 @@ static const unsigned int joycon_button_inputs_l[] = {
->
->  static const unsigned int joycon_button_inputs_r[] = {
->         BTN_START, BTN_MODE, BTN_THUMBR,
-> -       BTN_SOUTH, BTN_EAST, BTN_NORTH, BTN_WEST,
-> +       BTN_A, BTN_B, BTN_Y, BTN_X,
->         BTN_TR, BTN_TR2,
->         0 /* 0 signals end of array */
->  };
-> --
-> 2.35.3
->
+---
+Caleb Connolly (6):
+  power: supply: add Qualcomm PMI8998 SMB2 Charger driver
+  arm64: dts: qcom: pmi8998: add charger node
+  arm64: dts: sdm845-oneplus: enable pmi8998 charger
+  arm64: dts: qcom: sdm845-db845c: enable pmi8998 charger
+  arm64: dts: qcom: sdm845-xiaomi-beryllium enable pmi8998 charger
+  dt-bindings: power: supply: qcom,pmi8998-charger: add bindings for
+    smb2 driver
+
+ .../power/supply/qcom,pmi8998-charger.yaml    |   82 ++
+ arch/arm64/boot/dts/qcom/pmi8998.dtsi         |   17 +
+ arch/arm64/boot/dts/qcom/sdm845-db845c.dts    |   18 +
+ .../boot/dts/qcom/sdm845-oneplus-common.dtsi  |    4 +
+ .../dts/qcom/sdm845-oneplus-enchilada.dts     |    4 +
+ .../boot/dts/qcom/sdm845-oneplus-fajita.dts   |    4 +
+ .../boot/dts/qcom/sdm845-xiaomi-beryllium.dts |   13 +
+ drivers/power/supply/Kconfig                  |    9 +
+ drivers/power/supply/Makefile                 |    1 +
+ drivers/power/supply/qcom_pmi8998_charger.c   | 1074 +++++++++++++++++
+ 10 files changed, 1226 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml
+ create mode 100644 drivers/power/supply/qcom_pmi8998_charger.c
+
+-- 
+2.36.1
+

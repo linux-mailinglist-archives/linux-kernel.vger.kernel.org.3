@@ -2,42 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 425DB5263E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E37C05263E8
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358857AbiEMOY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:24:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38314 "EHLO
+        id S1380695AbiEMOZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377289AbiEMOYm (ORCPT
+        with ESMTP id S1358971AbiEMOYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:24:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61B75EBD1;
-        Fri, 13 May 2022 07:24:39 -0700 (PDT)
+        Fri, 13 May 2022 10:24:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFBE50E31;
+        Fri, 13 May 2022 07:24:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C2D66215A;
-        Fri, 13 May 2022 14:24:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55273C34100;
-        Fri, 13 May 2022 14:24:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 245C7B83066;
+        Fri, 13 May 2022 14:24:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39E76C34115;
+        Fri, 13 May 2022 14:24:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652451878;
-        bh=WrtSnC9ElmgIEbQerXZBPCxouw+fQ4cO0pntLGU/bfU=;
+        s=korg; t=1652451881;
+        bh=nTYea53HYuP4kedeJer8CmVbpRnWXst8mre0wEVLpSU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QqMy8jOZqY+ho8LNRsXTVylrTIcysg62G28vnu5g1Ycx8B14V+uJJqxAQmAkD0jHO
-         MXyw9JPABkW77q/P2v7zNJE2JMmZqZWuMERKcsw7JO+xTN30k2bzZ5j7HQtVqsfX89
-         78u7dcDUe5VPRRQczO7DqMuDEko0YGmV6LM+Fiqs=
+        b=Fozv3JNeUbkWVCvli9YNcVQs9TZnttpQslj3qXGogFf+nknebaHaXwtfVdhh074df
+         kMkigW/OjSqWxUlMoHju7AVxye+WhU6sm2ehVnt5ZFpqbCVfBARkxesePu7FKqEbYd
+         1QyeFNoQCJhRbjPQOKQNuDXVOpSCaTToZY4tV2jE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ricky Wu <ricky_wu@realtek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Christian Loehle <cloehle@hyperstone.com>
-Subject: [PATCH 4.9 6/7] mmc: rtsx: add 74 Clocks in power on flow
-Date:   Fri, 13 May 2022 16:23:21 +0200
-Message-Id: <20220513142226.100940342@linuxfoundation.org>
+        stable@vger.kernel.org, Muchun Song <songmuchun@bytedance.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Fam Zheng <fam.zheng@bytedance.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Lars Persson <lars.persson@axis.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Peter Xu <peterx@redhat.com>,
+        Xiongchun Duan <duanxiongchun@bytedance.com>,
+        Zi Yan <ziy@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 4.9 7/7] mm: userfaultfd: fix missing cache flush in mcopy_atomic_pte() and __mcopy_atomic()
+Date:   Fri, 13 May 2022 16:23:22 +0200
+Message-Id: <20220513142226.131430745@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220513142225.909697091@linuxfoundation.org>
 References: <20220513142225.909697091@linuxfoundation.org>
@@ -55,112 +64,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ricky WU <ricky_wu@realtek.com>
+From: Muchun Song <songmuchun@bytedance.com>
 
-commit 1f311c94aabdb419c28e3147bcc8ab89269f1a7e upstream.
+commit 7c25a0b89a487878b0691e6524fb5a8827322194 upstream.
 
-SD spec definition:
-"Host provides at least 74 Clocks before issuing first command"
-After 1ms for the voltage stable then start issuing the Clock signals
+userfaultfd calls mcopy_atomic_pte() and __mcopy_atomic() which do not
+do any cache flushing for the target page.  Then the target page will be
+mapped to the user space with a different address (user address), which
+might have an alias issue with the kernel address used to copy the data
+from the user to.  Fix this by insert flush_dcache_page() after
+copy_from_user() succeeds.
 
-if POWER STATE is
-MMC_POWER_OFF to MMC_POWER_UP to issue Clock signal to card
-MMC_POWER_UP to MMC_POWER_ON to stop issuing signal to card
-
-Signed-off-by: Ricky Wu <ricky_wu@realtek.com>
-Link: https://lore.kernel.org/r/1badf10aba764191a1a752edcbf90389@realtek.com
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Ricky Wu <ricky_wu@realtek.com>
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+Link: https://lkml.kernel.org/r/20220210123058.79206-7-songmuchun@bytedance.com
+Fixes: b6ebaedb4cb1 ("userfaultfd: avoid mmap_sem read recursion in mcopy_atomic")
+Fixes: c1a4de99fada ("userfaultfd: mcopy_atomic|mfill_zeropage: UFFDIO_COPY|UFFDIO_ZEROPAGE preparation")
+Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+Cc: Axel Rasmussen <axelrasmussen@google.com>
+Cc: David Rientjes <rientjes@google.com>
+Cc: Fam Zheng <fam.zheng@bytedance.com>
+Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Cc: Lars Persson <lars.persson@axis.com>
+Cc: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Xiongchun Duan <duanxiongchun@bytedance.com>
+Cc: Zi Yan <ziy@nvidia.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mmc/host/rtsx_pci_sdmmc.c |   30 ++++++++++++++++++++----------
- 1 file changed, 20 insertions(+), 10 deletions(-)
+ mm/userfaultfd.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/mmc/host/rtsx_pci_sdmmc.c
-+++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
-@@ -49,10 +49,7 @@ struct realtek_pci_sdmmc {
- 	bool			double_clk;
- 	bool			eject;
- 	bool			initial_mode;
--	int			power_state;
--#define SDMMC_POWER_ON		1
--#define SDMMC_POWER_OFF		0
--
-+	int			prev_power_state;
- 	int			sg_count;
- 	s32			cookie;
- 	int			cookie_sg_count;
-@@ -914,14 +911,21 @@ static int sd_set_bus_width(struct realt
- 	return err;
- }
- 
--static int sd_power_on(struct realtek_pci_sdmmc *host)
-+static int sd_power_on(struct realtek_pci_sdmmc *host, unsigned char power_mode)
- {
- 	struct rtsx_pcr *pcr = host->pcr;
- 	int err;
- 
--	if (host->power_state == SDMMC_POWER_ON)
-+	if (host->prev_power_state == MMC_POWER_ON)
- 		return 0;
- 
-+	if (host->prev_power_state == MMC_POWER_UP) {
-+		rtsx_pci_write_register(pcr, SD_BUS_STAT, SD_CLK_TOGGLE_EN, 0);
-+		goto finish;
-+	}
+--- a/mm/userfaultfd.c
++++ b/mm/userfaultfd.c
+@@ -50,6 +50,8 @@ static int mcopy_atomic_pte(struct mm_st
+ 			/* don't free the page */
+ 			goto out;
+ 		}
 +
-+	msleep(100);
-+
- 	rtsx_pci_init_cmd(pcr);
- 	rtsx_pci_add_cmd(pcr, WRITE_REG_CMD, CARD_SELECT, 0x07, SD_MOD_SEL);
- 	rtsx_pci_add_cmd(pcr, WRITE_REG_CMD, CARD_SHARE_MODE,
-@@ -940,11 +944,17 @@ static int sd_power_on(struct realtek_pc
- 	if (err < 0)
- 		return err;
- 
-+	mdelay(1);
-+
- 	err = rtsx_pci_write_register(pcr, CARD_OE, SD_OUTPUT_EN, SD_OUTPUT_EN);
- 	if (err < 0)
- 		return err;
- 
--	host->power_state = SDMMC_POWER_ON;
-+	/* send at least 74 clocks */
-+	rtsx_pci_write_register(pcr, SD_BUS_STAT, SD_CLK_TOGGLE_EN, SD_CLK_TOGGLE_EN);
-+
-+finish:
-+	host->prev_power_state = power_mode;
- 	return 0;
- }
- 
-@@ -953,7 +963,7 @@ static int sd_power_off(struct realtek_p
- 	struct rtsx_pcr *pcr = host->pcr;
- 	int err;
- 
--	host->power_state = SDMMC_POWER_OFF;
-+	host->prev_power_state = MMC_POWER_OFF;
- 
- 	rtsx_pci_init_cmd(pcr);
- 
-@@ -979,7 +989,7 @@ static int sd_set_power_mode(struct real
- 	if (power_mode == MMC_POWER_OFF)
- 		err = sd_power_off(host);
- 	else
--		err = sd_power_on(host);
-+		err = sd_power_on(host, power_mode);
- 
- 	return err;
- }
-@@ -1417,7 +1427,7 @@ static int rtsx_pci_sdmmc_drv_probe(stru
- 	host->mmc = mmc;
- 	host->pdev = pdev;
- 	host->cookie = -1;
--	host->power_state = SDMMC_POWER_OFF;
-+	host->prev_power_state = MMC_POWER_OFF;
- 	INIT_WORK(&host->work, sd_request);
- 	platform_set_drvdata(pdev, host);
- 	pcr->slots[RTSX_SD_CARD].p_dev = pdev;
++		flush_dcache_page(page);
+ 	} else {
+ 		page = *pagep;
+ 		*pagep = NULL;
+@@ -267,6 +269,7 @@ retry:
+ 				err = -EFAULT;
+ 				goto out;
+ 			}
++			flush_dcache_page(page);
+ 			goto retry;
+ 		} else
+ 			BUG_ON(page);
 
 

@@ -2,189 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 826AD526A79
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 21:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7124B526A7E
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 21:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383804AbiEMThK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 15:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
+        id S1383846AbiEMTiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 15:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383686AbiEMThH (ORCPT
+        with ESMTP id S1346242AbiEMTiL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 15:37:07 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F5954182
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 12:37:05 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id e189so11312586oia.8
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 12:37:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=3RxQPTxtVrqqVoiaHfpMeR5z0m/4z2ervHUzJOsJZ9g=;
-        b=HVDFRvfchpN7PSr7N06wi5d+LNSlIIt5soxH3QJ0+gRBVr/dSg3cRv/Kfvc+wdo32N
-         pibM/02iUEue6Qxq/rOTds4X5rjrw8cvNTSdnZnzhOEgDrBLoUvFjtWAdyj7d2Fx9lmY
-         pLyD/RPmCSmos2YTVv3X/wr2j4M2h77vSHOD01u8pQyumY7R6aOwyYLtD1gUssCgTSP8
-         kU3Tupzqd99Tu0kb6YusiYStRndmJ1gpmeq27VqYWLNqjul+u3ecx0MnP2hZIVnL6x2B
-         28OLuzcm2pIx8EfHUdyyHbuZB0sHYpa7hbo4deW3vh6/bY1itk3QrppPHft2Y5zqdWrU
-         JhBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=3RxQPTxtVrqqVoiaHfpMeR5z0m/4z2ervHUzJOsJZ9g=;
-        b=bOdN3V/1zvqaeiQrzCxx5n2T5snoK3TsYKREcmYH6Ej2OWPoBIfok2JsgBhoTy9B/Y
-         sLJJQvZYZM62dXXYSFXkixnCF9tqgkJ5vqxPKAArZPlLbbLK7GZnJFaKh8PjmhnxI5jf
-         fD4dy2MHpfMwbP1tzIiotzW6VDL0w+mrgDR1OorwFUPnpuSKNpXYmsd75eU/WCDVaD7n
-         jKe1l5lljNTClAJwl2V+2pLk+8qUsLbC7yIYpYC86AFMaaShDhVCrNcHx/tWQ3WOBKw5
-         tlaKefdLXr7DJGTAOeShog4t58ty9QwnzN7Wc8FkhFsh6xCAuaKw/gSDqUvPJhGO9Wq5
-         zZnw==
-X-Gm-Message-State: AOAM533f38q2a94zxPn2wW3jEymeG4c41ub6l9zmQCgfENZY/SWGAeDq
-        fMfKLqEZVhPNYGeoRJVmbBr5NbbeZpDcbxkjVqEvqg==
-X-Google-Smtp-Source: ABdhPJxWTRI3eJZGbOSFy6qinBe+qvnKP338Acxh4EVCUelHqXY2P0KnwIfZ1lbbLdzxg/wN7GyADeKG9zIM/k3ibQM=
-X-Received: by 2002:a05:6808:2125:b0:326:b51f:bbc2 with SMTP id
- r37-20020a056808212500b00326b51fbbc2mr8695466oiw.13.1652470624894; Fri, 13
- May 2022 12:37:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220512184514.15742-1-jon@nutanix.com> <Yn1fjAqFoszWz500@google.com>
- <Yn1hdHgMVuni/GEx@google.com> <07BEC8B1-469C-4E36-AE92-90BFDF93B2C4@nutanix.com>
- <Yn1o9ZfsQutXXdQS@google.com> <CALMp9eRQv6owjfyf+UO=96Q1dkeSrJWy0i4O-=RPSaQwz0bjTQ@mail.gmail.com>
- <C39CD5E4-3705-4D1A-A67D-43CBB7D1950B@nutanix.com> <CALMp9eRXmWvrQ1i0V3G738ndZOZ4YezQ=BqXe-BF2b4GNo1m3Q@mail.gmail.com>
- <DEF8066B-E691-4C85-A19A-9F5222D1683D@nutanix.com> <CALMp9eTwH9WVD=EuTXeu1KYAkAUuXdnmA+k9dti7OM+u=kLKHQ@mail.gmail.com>
- <CD2EB6FA-E17F-45BA-AC70-92CCB12A16C4@nutanix.com> <CALMp9eQAFz_wzC_SMiWD5KqP3=m+VceP=+6=RWEFbN2m7P7d+w@mail.gmail.com>
- <73BC3891-34DC-4EB7-BD1C-5FD312A8F18A@nutanix.com>
-In-Reply-To: <73BC3891-34DC-4EB7-BD1C-5FD312A8F18A@nutanix.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Fri, 13 May 2022 12:36:53 -0700
-Message-ID: <CALMp9eTwih5dyiZkdxR3W9fpaMGQ41YYu1qM42eDZzdhnmBi5A@mail.gmail.com>
-Subject: Re: [PATCH v4] x86/speculation, KVM: remove IBPB on vCPU load
-To:     Jon Kohler <jon@nutanix.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ashok Raj <ashok.raj@intel.com>,
-        KarimAllah Ahmed <karahmed@amazon.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        Fri, 13 May 2022 15:38:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E92C692B2
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 12:38:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CA6D9B83193
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 19:38:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4246CC34100;
+        Fri, 13 May 2022 19:38:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1652470686;
+        bh=ywucsifpeTrhmSlANeerZ/FfD2u6HRZohJjqkLL8LyM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ufFHIQ2sdh+3D/s3koGgMG1J0VYzIzwh/3wfDxSS8hv8MP8XMgO7UbGWZA4Xjfm0N
+         FWHNfY+MImPnQZkDhwpSftx9DKFKxfzYircmMgE2pHkncRCu0b0GsC4D1Z9dTBDGgD
+         uTGYun6Npfbgg3BPhO/Ntn2Llv94H1LWA5GhGw9o=
+Date:   Fri, 13 May 2022 12:38:05 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        "kvm @ vger . kernel . org" <kvm@vger.kernel.org>,
-        Waiman Long <longman@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Linux-MM <linux-mm@kvack.org>
+Subject: Re: [PATCH 0/6] Drain remote per-cpu directly v3
+Message-Id: <20220513123805.41e560392d028c271b36847d@linux-foundation.org>
+In-Reply-To: <20220513142330.GI3441@techsingularity.net>
+References: <20220512085043.5234-1-mgorman@techsingularity.net>
+        <20220512124325.751781bb88ceef5c37ca653e@linux-foundation.org>
+        <20220513142330.GI3441@techsingularity.net>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 8:21 AM Jon Kohler <jon@nutanix.com> wrote:
->
->
->
-> > On May 12, 2022, at 11:50 PM, Jim Mattson <jmattson@google.com> wrote:
-> >
-> > On Thu, May 12, 2022 at 8:19 PM Jon Kohler <jon@nutanix.com> wrote:
-> >>
-> >>
-> >>
-> >>> On May 12, 2022, at 11:06 PM, Jim Mattson <jmattson@google.com> wrote=
-:
-> >>>
-> >>> On Thu, May 12, 2022 at 5:50 PM Jon Kohler <jon@nutanix.com> wrote:
-> >>>
-> >>>> You mentioned if someone was concerned about performance, are you
-> >>>> saying they also critically care about performance, such that they a=
-re
-> >>>> willing to *not* use IBPB at all, and instead just use taskset and h=
-ope
-> >>>> nothing ever gets scheduled on there, and then hope that the hypervi=
-sor
-> >>>> does the job for them?
-> >>>
-> >>> I am saying that IBPB is not the only viable mitigation for
-> >>> cross-process indirect branch steering. Proper scheduling can also
-> >>> solve the problem, without the overhead of IBPB. Say that you have tw=
-o
-> >>> security domains: trusted and untrusted. If you have a two-socket
-> >>> system, and you always run trusted workloads on socket#0 and untruste=
-d
-> >>> workloads on socket#1, IBPB is completely superfluous. However, if th=
-e
-> >>> hypervisor chooses to schedule a vCPU thread from virtual socket#0
-> >>> after a vCPU thread from virtual socket#1 on the same logical
-> >>> processor, then it *must* execute an IBPB between those two vCPU
-> >>> threads. Otherwise, it has introduced a non-architectural
-> >>> vulnerability that the guest can't possibly be aware of.
-> >>>
-> >>> If you can't trust your OS to schedule tasks where you tell it to
-> >>> schedule them, can you really trust it to provide you with any kind o=
-f
-> >>> inter-process security?
-> >>
-> >> Fair enough, so going forward:
-> >> Should this be mandatory in all cases? How this whole effort came
-> >> was that a user could configure their KVM host with conditional
-> >> IBPB, but this particular mitigation is now always on no matter what.
-> >>
-> >> In our previous patch review threads, Sean and I mostly settled on mak=
-ing
-> >> this particular avenue active only when a user configures always_ibpb,=
- such
-> >> that for cases like the one you describe (and others like it that come=
- up in
-> >> the future) can be covered easily, but for cond_ibpb, we can document
-> >> that it doesn=E2=80=99t cover this case.
-> >>
-> >> Would that be acceptable here?
-> >
-> > That would make me unhappy. We use cond_ibpb, and I don't want to
-> > switch to always_ibpb, yet I do want this barrier.
->
-> Ok gotcha, which I think is a good point for cloud providers, since the
-> workload(s) are especially opaque.
->
-> How about this: I could work up a v5 patch here where this was at minimum
-> a system level knob (similar to other mitigation knobs) and documented
-> In more detail. That way folks who might want more control here have the
-> basic ability to do that without recompiling the kernel. Such a =E2=80=9C=
-knob=E2=80=9D would
-> be on by default, such that there is no functional regression here.
->
-> Would that be ok with you as a middle ground?
+On Fri, 13 May 2022 15:23:30 +0100 Mel Gorman <mgorman@techsingularity.net> wrote:
 
-That would be great. Module parameter or sysctl is fine with me.
+> Correct.
+> 
+> > > the draining in non-deterministic.
+> > 
+> > s/n/s/;)
+> > 
+> 
+> Think that one is ok. At least spell check did not complain.
 
-Thanks!
+s/in/si/
 
-> Thanks again,
-> Jon
->
-> >
-> >>>
-> >>>> Would this be the expectation of just KVM? Or all hypervisors on the
-> >>>> market?
-> >>>
-> >>> Any hypervisor that doesn't do this is broken, but that won't keep it
-> >>> off the market. :-)
-> >>
-> >> Very true :)
-> >>
->
+> > > Currently an IRQ-safe local_lock protects the page allocator per-cpu lists.
+> > > The local_lock on its own prevents migration and the IRQ disabling protects
+> > > from corruption due to an interrupt arriving while a page allocation is
+> > > in progress. The locking is inherently unsafe for remote access unless
+> > > the CPU is hot-removed.
+> > 
+> > I don't understand the final sentence here.  Which CPU and why does
+> > hot-removing it make the locking safe?
+> > 
+> 
+> The sentence can be dropped because it adds little and is potentially
+> confusing. The PCP being safe to access remotely is specific to the
+> context of the CPU being hot-removed and there are other special corner
+> cases like zone_pcp_disable that modifies a per-cpu structure remotely
+> but not in a way that causes corruption.
+
+OK.  I pasted in your para from the other email.  Current 0/n blurb:
+
+Some setups, notably NOHZ_FULL CPUs, may be running realtime or
+latency-sensitive applications that cannot tolerate interference due to
+per-cpu drain work queued by __drain_all_pages().  Introduce a new
+mechanism to remotely drain the per-cpu lists.  It is made possible by
+remotely locking 'struct per_cpu_pages' new per-cpu spinlocks.  This has
+two advantages, the time to drain is more predictable and other unrelated
+tasks are not interrupted.
+
+This series has the same intent as Nicolas' series "mm/page_alloc: Remote
+per-cpu lists drain support" -- avoid interference of a high priority task
+due to a workqueue item draining per-cpu page lists.  While many workloads
+can tolerate a brief interruption, it may cause a real-time task running
+on a NOHZ_FULL CPU to miss a deadline and at minimum, the draining is
+non-deterministic.
+
+Currently an IRQ-safe local_lock protects the page allocator per-cpu
+lists.  The local_lock on its own prevents migration and the IRQ disabling
+protects from corruption due to an interrupt arriving while a page
+allocation is in progress.
+
+This series adjusts the locking.  A spinlock is added to struct
+per_cpu_pages to protect the list contents while local_lock_irq continues
+to prevent migration and IRQ reentry.  This allows a remote CPU to safely
+drain a remote per-cpu list.
+
+This series is a partial series.  Follow-on work should allow the
+local_irq_save to be converted to a local_irq to avoid IRQs being
+disabled/enabled in most cases.  Consequently, there are some TODO
+comments highlighting the places that would change if local_irq was used. 
+However, there are enough corner cases that it deserves a series on its
+own separated by one kernel release and the priority right now is to avoid
+interference of high priority tasks.
+
+Patch 1 is a cosmetic patch to clarify when page->lru is storing buddy pages
+	and when it is storing per-cpu pages.
+
+Patch 2 shrinks per_cpu_pages to make room for a spin lock. Strictly speaking
+	this is not necessary but it avoids per_cpu_pages consuming another
+	cache line.
+
+Patch 3 is a preparation patch to avoid code duplication.
+
+Patch 4 is a simple micro-optimisation that improves code flow necessary for
+	a later patch to avoid code duplication.
+
+Patch 5 uses a spin_lock to protect the per_cpu_pages contents while still
+	relying on local_lock to prevent migration, stabilise the pcp
+	lookup and prevent IRQ reentrancy.
+
+Patch 6 remote drains per-cpu pages directly instead of using a workqueue.
+

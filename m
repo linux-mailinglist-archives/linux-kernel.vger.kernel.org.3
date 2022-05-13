@@ -2,123 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9FF452686E
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96682526849
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383068AbiEMR0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 13:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
+        id S1382980AbiEMR02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 13:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382999AbiEMR0b (ORCPT
+        with ESMTP id S232145AbiEMR0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 13:26:31 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F79270907
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:26:29 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2f7d7e3b5bfso97337657b3.5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:26:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yncJ85+SIlrUyfibchlOo3nGcBtZSYvrpkr6At33oFM=;
-        b=tELgWSqPJ2XeK5KWJc0j3Izxo5P0JYNJpS1LDlgAuPlebbh9e6WMDgeVVLegGeIaAG
-         VVkPFzkgs9492PO60P9XWePlc06wmWZFRlwvZJOZcx5xgrMhBpFW0sOXiKbdsVgYAIRK
-         zjP+gEQNqrUKj69da/qFLQkvCuZ4GjCjn29S2q5SXBtTpeqs0++CM4HRgIxA5FD6F1rD
-         PV/soEr2Mv4iexAm30OrWfc/UQepJQ0ZaQQ+CqJ76d1FTyEX4rQxfaOahQA70NByLksO
-         DRAsanWwPBz8CdNJ7IaHIeXq66XPKKcVg1BFmGAU10mdurV7Lixpw2rYJxRhb1PbLjk0
-         QcmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yncJ85+SIlrUyfibchlOo3nGcBtZSYvrpkr6At33oFM=;
-        b=lvGOfySkaCJKUsp6tGknRfQM1NNqP7rvaYr6cw6YEeVFkKUyrQASsiRZ1JeLenFJx/
-         KQkX//i2LYByxhU4c6xDjOehfNJ5yxh64yE04jQbnYiC+4GlG0bayHUeyNnNwjV5yzyc
-         buhZI9cRX10hp+Mg0GK/wviVQ/Pi36qqcWuLqlJyy9PNKKwVffza6gstjIW6uy8w1Bci
-         w1BT3l4gfy7+1qe2rNaSZKfP6f7jjLw3+g6E/AKwIvhp9gVdUxy7FxtIoLJnEzJWD224
-         C5ahWjda8vAsJWuNQnS4ig7kwwl4btdMHU97hVw29J8dc3BOjOx64l9Lmr+yWzSZbqUk
-         QJsw==
-X-Gm-Message-State: AOAM531hN1DcdBrKNM0eFYzyQ+CIa5s9+97nEQWOGY9lhYwUcYEb+xUX
-        OlXH52tDs0/8mu2KBzprfifrScs0MKMrtEOfQCEYrg==
-X-Google-Smtp-Source: ABdhPJwDc39YV2aEhsT7aNk3yasAQxRbPZaXjabeYzrpzhFybpEVGwlpZU8+hsRWlLkM/kxsOCa4BRf6isC84kd7cTg=
-X-Received: by 2002:a81:1e09:0:b0:2fe:c53c:a0aa with SMTP id
- e9-20020a811e09000000b002fec53ca0aamr2051320ywe.455.1652462788378; Fri, 13
- May 2022 10:26:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220429220933.1350374-1-saravanak@google.com> <CAL_Jsq+2A7mRVV24XW0YcP8GkFCK_Ri4KDcqvW4e0p3TkQMWVg@mail.gmail.com>
-In-Reply-To: <CAL_Jsq+2A7mRVV24XW0YcP8GkFCK_Ri4KDcqvW4e0p3TkQMWVg@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 13 May 2022 10:25:52 -0700
-Message-ID: <CAGETcx8=ZX+Pb4ioMVb7LfuF9c3HNP8g1+WMqZR=Pq7-9=DUCA@mail.gmail.com>
-Subject: Re: [PATCH v1] driver core: Extend deferred probe timeout on driver registration
-To:     Rob Herring <robh@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 13 May 2022 13:26:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF3A55213
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:26:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 714CDB83060
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 17:26:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0871C34100;
+        Fri, 13 May 2022 17:26:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1652462779;
+        bh=LEzmtAgjsTTe61c4osagJaZMJYSveHV0AKf0/QCSHB8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=evHJ1KAzE8tCCjh4/BMOkxuTHduH0DHubbfA+ORD0t3FMLazl/06xUe+sQXTCZjb0
+         sMnW1mm/KXgKi27VUPgQdElYmZ9SF9gqQltH7CbFUUOZpLro18CXSfbwsLNNJqxMjb
+         GzIujTzu71pvq9LchiONdzE34OCTpcgsPuAhZxPA=
+Date:   Fri, 13 May 2022 10:26:17 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     syzbot <syzbot+acf65ca584991f3cc447@syzkaller.appspotmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        llvm@lists.linux.dev, mike.kravetz@oracle.com, nathan@kernel.org,
+        ndesaulniers@google.com, syzkaller-bugs@googlegroups.com,
+        trix@redhat.com, Matthew Wilcox <willy@infradead.org>
+Subject: Re: [syzbot] WARNING in follow_hugetlb_page
+Message-Id: <20220513102617.c464c4f566052838e911a3ec@linux-foundation.org>
+In-Reply-To: <00000000000077377c05dee75f63@google.com>
+References: <000000000000ef451a05dee0f2b1@google.com>
+        <00000000000077377c05dee75f63@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 6:58 AM Rob Herring <robh@kernel.org> wrote:
->
-> On Fri, Apr 29, 2022 at 5:09 PM Saravana Kannan <saravanak@google.com> wrote:
-> >
-> > The deferred probe timer that's used for this currently starts at
-> > late_initcall and runs for driver_deferred_probe_timeout seconds. The
-> > assumption being that all available drivers would be loaded and
-> > registered before the timer expires. This means, the
-> > driver_deferred_probe_timeout has to be pretty large for it to cover the
-> > worst case. But if we set the default value for it to cover the worst
-> > case, it would significantly slow down the average case. For this
-> > reason, the default value is set to 0.
-> >
-> > Also, with CONFIG_MODULES=y and the current default values of
-> > driver_deferred_probe_timeout=0 and fw_devlink=on, devices with missing
-> > drivers will cause their consumer devices to always defer their probes.
-> > This is because device links created by fw_devlink defer the probe even
-> > before the consumer driver's probe() is called.
-> >
-> > Instead of a fixed timeout, if we extend an unexpired deferred probe
-> > timer on every successful driver registration, with the expectation more
-> > modules would be loaded in the near future, then the default value of
-> > driver_deferred_probe_timeout only needs to be as long as the worst case
-> > time difference between two consecutive module loads.
-> >
-> > So let's implement that and set the default value to 10 seconds when
-> > CONFIG_MODULES=y.
->
-> We had to revert a non-zero timeout before (issue with NFS root IIRC).
-> Does fw_devlink=on somehow fix that?
+On Fri, 13 May 2022 09:43:24 -0700 syzbot <syzbot+acf65ca584991f3cc447@syzkaller.appspotmail.com> wrote:
 
-If it's the one where ip autoconfig was timing out, then John Stultz
-fixed it by fixing wait_for_device_probe().
-https://lore.kernel.org/all/20200422203245.83244-4-john.stultz@linaro.org/
+> syzbot has found a reproducer for the following issue on:
 
-If you are referring to some other issue, then I'd need more details.
+Thanks.
 
--Saravana
+> HEAD commit:    1e1b28b936ae Add linux-next specific files for 20220513
+> git tree:       linux-next
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=174ae715f00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=e4eb3c0c4b289571
+> dashboard link: https://syzkaller.appspot.com/bug?extid=acf65ca584991f3cc447
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11531766f00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ce5a9ef00000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+acf65ca584991f3cc447@syzkaller.appspotmail.com
+> 
+> ------------[ cut here ]------------
+> WARNING: CPU: 1 PID: 3611 at mm/hugetlb.c:6250 follow_hugetlb_page+0x1326/0x1c80 mm/hugetlb.c:6250
+
+The try_grab_folio() added by 822951d84684d ("mm/hugetlb: Use
+try_grab_folio() instead of try_grab_compound_head()").  That commit
+has been there over a month so I guess it's something else.  Does
+someone have the time to bisect?
+
+> Modules linked in:
+> CPU: 1 PID: 3611 Comm: syz-executor603 Not tainted 5.18.0-rc6-next-20220513-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:follow_hugetlb_page+0x1326/0x1c80 mm/hugetlb.c:6250
+> Code: 89 44 24 70 e8 2b 1d b7 ff 48 8b 44 24 70 48 85 c0 0f 84 f1 07 00 00 e8 88 1a b7 ff 48 83 ed 01 e9 09 fb ff ff e8 7a 1a b7 ff <0f> 0b 48 8b 7c 24 30 bb f4 ff ff ff e8 69 74 b8 07 4c 8b a4 24 b8
+> RSP: 0018:ffffc90002f6f7e0 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: ffff88801bdd4e00 RCX: 0000000000000000
+> RDX: ffff88801e4e3a80 RSI: ffffffff81c38f76 RDI: 0000000000000003
+> RBP: ffffea0001fe8680 R08: 0000000000000000 R09: 0000000000000003
+> R10: ffffffff81b128fb R11: 0000000000000008 R12: 000000000000001a
+> R13: ffff88801bdd4e00 R14: ffff88801bdd5600 R15: 0000000000000019
+> FS:  0000555556ad2300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000000020000458 CR3: 000000001e850000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  __get_user_pages+0x27a/0xfa0 mm/gup.c:1146
+>  __get_user_pages_locked mm/gup.c:1365 [inline]
+>  __gup_longterm_locked+0x1d5/0xfe0 mm/gup.c:1985
+>  pin_user_pages+0x8e/0xe0 mm/gup.c:3118
+>  io_sqe_buffer_register+0x254/0x1710 fs/io_uring.c:10537
+>  io_sqe_buffers_register.cold+0x28e/0x443 fs/io_uring.c:10664
+>  __io_uring_register fs/io_uring.c:12682 [inline]
+>  __do_sys_io_uring_register+0xd21/0x1930 fs/io_uring.c:12816
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> RIP: 0033:0x7f5f42760cc9
+> Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007fffc3407aa8 EFLAGS: 00000246 ORIG_RAX: 00000000000001ab
+> RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007f5f42760cc9
+> RDX: 0000000020000380 RSI: 0000000000000000 RDI: 0000000000000004
+> RBP: 00007f5f42724e70 R08: 0000000010000000 R09: 0000000000000000
+> R10: 0000000000000001 R11: 0000000000000246 R12: 00007f5f42724f00
+> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+>  </TASK>

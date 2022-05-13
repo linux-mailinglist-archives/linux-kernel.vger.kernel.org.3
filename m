@@ -2,174 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E60F525D21
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 10:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9B3525D3C
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 10:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378129AbiEMIQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 04:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40508 "EHLO
+        id S1378144AbiEMIQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 04:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378139AbiEMIQH (ORCPT
+        with ESMTP id S1378015AbiEMIQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 04:16:07 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9203E08D;
-        Fri, 13 May 2022 01:16:01 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id E421B5C00E4;
-        Fri, 13 May 2022 04:15:58 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 13 May 2022 04:15:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1652429758; x=1652516158; bh=iY9shFm2Us
-        jfmpTTWu209xlXSoo1/kSVXTPhcXMt7H8=; b=uin/nZOFrMN1r3HNuWHmdoGaY3
-        c7FRaFuahQzKICW7+sXgp7uFRCf6nfBbRUC6qoTalXEwERQDkdkm7pagYWNswuw7
-        LNxbo+qZaPwNQWQBe4UD/pa0/5IoQLjJGGqHzdPFS//WrmNObBk5kg4UD8dlWr/s
-        CUslx4dgQvclORi4IeQlr3Tm4oc0WaWGVdI2slV/+YF8x6V1eENUEKYA3bRz57tj
-        TfcECEiFUusehtJwjbUxQEZ4QysRJ8QwJKFP7rykSE9QTWUHG3BQnSQp0xzthQHa
-        HIPmKNxHqkJW23T41yni9Mj06EuRNv+7Z9Kp/JMulYcVeI3Hl95cp7JyPpGQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1652429758; x=
-        1652516158; bh=iY9shFm2UsjfmpTTWu209xlXSoo1/kSVXTPhcXMt7H8=; b=O
-        txrF9ODGUXG/fJtjc68Vnrim6/M1IT/RwWsCEySKTH8NljzFVFci1v7iph3xmYtx
-        c7sKXNXwSd++avrklkfvgHcZNGjdwzsi6UcGVq/5CEfgB/2mY4mX9q/2FUv1HWU8
-        Pb+GixFh6C3nstMt8eaYFh3ffM3V2T4jLxtW35M8XlDPYU7qPsgYWl9RDaLIJROa
-        CbYlWFlaw8/ZrrQla1EfOUZExY2A4KQrAqq3W4JsJWCDvYA84nBncpI4P8SG6J4D
-        lHFE5GszS0h4kpy+BqfeY3yggQ3BSfZ+fVOTe+Z+WUjIckkNr+CRhkAj990Z6rVW
-        VmsskET9xHuMYMrQYk3IQ==
-X-ME-Sender: <xms:vhN-YnzcTbiG27OA1P756RmfHM36QMyh2GbPglNVLKRCLCEHu2uq0A>
-    <xme:vhN-YvRkhH9BwLlPOx8QRN7jf92VpTobhpxfQWGAqOcBSJtwVHK1MT-rDutm82D40
-    iZNGMiTEMA8MgLv7vU>
-X-ME-Received: <xmr:vhN-YhWMYt7HzFou5fAtMcaZpPf5vdSCxQSEMqfVhuNH40O3fQ5LAhsP1aa20IbPC-ykUDQY-3BD8K9qeErac540TeJirNVivc5-jpc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgeelgddtudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepjeegieevvedvgffffedtveeuhfehudevjeeifeegjeevuefhteeklefgveet
-    feffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:vhN-YhjvD9iHhT3MCWCWXIOgSYkkmG4VszRZ6srvl6FsfPPn-lFEeQ>
-    <xmx:vhN-YpAh_MXz6ykwmHJo5lKK4dmGhEE0K2HORfkronBnAyiL3aAI0w>
-    <xmx:vhN-YqJGKCQSQn1CNJ2aj9yeVbcZ2iGt7sNu-lIazufNsEwnqS85Iw>
-    <xmx:vhN-YtsF32_EoAfbvgYEHEPNRszMbjIu0XZBBYwB-cSTa1mWk1UzRA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 13 May 2022 04:15:58 -0400 (EDT)
-Date:   Fri, 13 May 2022 10:15:56 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     qianfan <qianfanguijin@163.com>
-Cc:     linux-sunxi@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] ARM: dts: sun8i-r40: Add "cpu-supply" node for
- sun8i-r40 based board
-Message-ID: <20220513081556.knd3tf6pangfblh3@houat>
-References: <20220512071858.10805-1-qianfanguijin@163.com>
- <20220512071858.10805-2-qianfanguijin@163.com>
- <20220513073849.cu4jzykefat2sepg@houat>
- <1352b9d7-5219-af09-948b-6462def39ea5@163.com>
+        Fri, 13 May 2022 04:16:29 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4498E36B58;
+        Fri, 13 May 2022 01:16:27 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id i24so7055026pfa.7;
+        Fri, 13 May 2022 01:16:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EK0O1fYZJFf35pOM+tjzuhmWCmIVAqptbvd0uhls+tc=;
+        b=YomIj+/QU2OBScvBXyVkMa5DWCWubXOsrgbzqj8+tknT8Ds+AiBJ2mmQnQQN63rdZ7
+         fiJQNuLB+5K84N6hrWLgZbr0pIzPW8NNj0GZxtQLoBE3t++PZ5St5ESERQwJ+bpr+dtL
+         ak6iHQjFoGNzV2T8sEWluf0ioCQ9ROEDG0nlNFxtLOBPriysMLUdFbFAih1N6dmQH2kw
+         vn3Z6TDdcvAX4I5DBNvkhsmOFlhhiI6rD0zJFJ46aJ21t8PmeEDm+2NhFmCOsGXK2kxH
+         q+5brmTvArCFQofx0temsKUZKHLEZhnoXY5xk7aykwI5cGpY9utihWZxKM+yTltMhpil
+         VQyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EK0O1fYZJFf35pOM+tjzuhmWCmIVAqptbvd0uhls+tc=;
+        b=U/Gl9P/eOJW4eq6wwL9qdOaEQZeivqJxdaVAPW84NvLX6Yp3NtejCOfB1ofxX4NeMS
+         jTXOO8d1AXUnaNUKMcYlj943zGl7ekExG6nkcHH7JAYDJlqwEBdfPtnoNXfNNo5nSLh9
+         l7CPIah+Fs8N7hnBHM0wK8YCyUbBVn5deWaFZCKgYsSUVFNs/tVaBhI8ud/ugM1mvyZg
+         olb06oJp+P7GSoOIXcH1f7aNz7a/gBRnfGjxBsuXeR7kxBrDJqNZFuRIQL6nuarBrM1n
+         JhNxglh1cSDWdo5VNsn2euvBT5ZukrsPuaAanfQppbcL4VshIwhNUa3TeCSOr/MSY3BA
+         zkVQ==
+X-Gm-Message-State: AOAM532JtVwKGXmHIHy8I0HniH7DodMdMY4kzGVVBVcfwQA5mUKN7L+n
+        3tFvc0wYOg/EJPBxsTns1/quLNAzT9E=
+X-Google-Smtp-Source: ABdhPJyFkI6ahX9P93GxDokV+KAtFn7JmYzSPV8gVmNWusiVN6HOhqLJNi1Ob3CzWYHSNlFgWM0YCA==
+X-Received: by 2002:a05:6a00:c8f:b0:510:60cf:55fa with SMTP id a15-20020a056a000c8f00b0051060cf55famr3384342pfv.37.1652429786741;
+        Fri, 13 May 2022 01:16:26 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id ij14-20020a170902ab4e00b0015e8d4eb1c2sm1220143plb.12.2022.05.13.01.16.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 01:16:26 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     dave.jiang@intel.com
+Cc:     vkoul@kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] dmaengine: idxd: Remove unnecessary synchronize_irq() before free_irq()
+Date:   Fri, 13 May 2022 08:16:22 +0000
+Message-Id: <20220513081622.1631073-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ocbjtkvxhxhj7iii"
-Content-Disposition: inline
-In-Reply-To: <1352b9d7-5219-af09-948b-6462def39ea5@163.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
---ocbjtkvxhxhj7iii
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Calling synchronize_irq() right before free_irq() is quite useless. On one
+hand the IRQ can easily fire again before free_irq() is entered, on the
+other hand free_irq() itself calls synchronize_irq() internally (in a race
+condition free way) before any state associated with the IRQ is freed.
 
-On Fri, May 13, 2022 at 03:48:50PM +0800, qianfan wrote:
->=20
->=20
-> =E5=9C=A8 2022/5/13 15:38, Maxime Ripard =E5=86=99=E9=81=93:
-> > Hi,
-> >=20
-> > On Thu, May 12, 2022 at 03:18:58PM +0800, qianfanguijin@163.com wrote:
-> > > From: qianfan Zhao <qianfanguijin@163.com>
-> > >=20
-> > > sun8i-r40 actived cpufreq feature now, let's add "cpu-supply" node on
-> > > board.
-> > >=20
-> > > Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
-> > > ---
-> > >   arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts | 4 ++++
-> > >   arch/arm/boot/dts/sun8i-r40-feta40i.dtsi          | 4 ++++
-> > >   arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts          | 4 ++++
-> > >   arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts | 4 ++++
-> > >   4 files changed, 16 insertions(+)
-> > >=20
-> > > diff --git a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts b/arch=
-/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
-> > > index a6a1087a0c9b..4f30018ec4a2 100644
-> > > --- a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
-> > > +++ b/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
-> > > @@ -113,6 +113,10 @@ &ahci {
-> > >   	status =3D "okay";
-> > >   };
-> > > +&cpu0 {
-> > > +	cpu-supply =3D <&reg_dcdc2>;
-> > > +};
-> > > +
-> > This will break bisection on those boards. Indeed, you added the OPPs on
-> > the first patch, and if you only apply that patch, the boards in the
-> > second patch will be missing their CPU regulator. The kernel will then
-> > ramp up the frequency to the highest OPP, but will not change the
-> > voltage, resulting in a crash.
->
-> This is a good point and I will merge those two patch.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ drivers/dma/idxd/device.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-That's not what I meant to say. Those two patches are great separated.
-You can invert them though.
+diff --git a/drivers/dma/idxd/device.c b/drivers/dma/idxd/device.c
+index 5363fb9218f2..9dd8e6bb21e6 100644
+--- a/drivers/dma/idxd/device.c
++++ b/drivers/dma/idxd/device.c
+@@ -1179,7 +1179,6 @@ void idxd_wq_free_irq(struct idxd_wq *wq)
+ 	struct idxd_device *idxd = wq->idxd;
+ 	struct idxd_irq_entry *ie = &wq->ie;
+ 
+-	synchronize_irq(ie->vector);
+ 	free_irq(ie->vector, ie);
+ 	idxd_flush_pending_descs(ie);
+ 	if (idxd->request_int_handles)
+--
+2.25.1
 
-> > There's a similar issue for all the boards that don't have a regulator
-> > in the first place.
-> >=20
-> > The way we worked around this for the other SoCs is to have a DTSI with
-> > the OPPs with a frequency higher than what U-Boot boots with (1008MHz?),
-> > and only include that DTSI on boards that have a CPU regulator hooked i=
-n.
->
-> Is this really necessary? It seems like every board based on sun8i-r40
-> have a cpu regulator.
 
-This probably won't be the case whenever someone starts a new design,
-and then they'll face random crashes for no apparent reason, and waste a
-lot of time in the process.
-
-Whereas the alternative is that you would be missing some OPPs,
-something that is fairly easy to figure out.
-
-Maxime
-
---ocbjtkvxhxhj7iii
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYn4TvAAKCRDj7w1vZxhR
-xXVzAQCYS/y6GVik1wq99/10xFtsQVwNbQDTafNgKQRW8bpSxwD+Ohmf/aYmi5JZ
-QfgJA4DF5q5bvX0nina8Y7KiVSMVSQ0=
-=x+9H
------END PGP SIGNATURE-----
-
---ocbjtkvxhxhj7iii--

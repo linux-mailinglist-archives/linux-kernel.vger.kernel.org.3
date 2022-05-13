@@ -2,178 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5012D5268D5
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60CD35268DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383193AbiEMR4r convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 13 May 2022 13:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
+        id S1383207AbiEMR6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 13:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383226AbiEMR4o (ORCPT
+        with ESMTP id S234536AbiEMR6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 13:56:44 -0400
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2DE1356BA;
-        Fri, 13 May 2022 10:56:32 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id x74so3896362ybe.4;
-        Fri, 13 May 2022 10:56:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=6e/oSgyfVARToRdeUYxHVtQ6AaUn4CgE1vbZwPLu6BI=;
-        b=PSBgBNYlfpDf0Z3bbt5FDi4oiBkguaeBh8TF6uDl0kNAZOWFnn0hV50LJzweRs56on
-         NiHrLwNiu72yeUYejQ5bcVoWczMRi1V8H0hHVx2yRkj9wTKR7KLKvw8vVgG9V4fyeJ8q
-         Pn8C9Olr0WfHI59xE3ej+8umpKsiBYY+OIr6Zip4n8wx/LQUYLasYePzE4S89U/Lt1kw
-         D3iVeFHTV3a7tYdPNYo5KTyE6b0HxVZ//Dwbg9demhWt9enVOTGD/ANNFCZ7+89VOGEA
-         t5+XZSFpc/1TGyMoZwh+Jlzi+EJUf8bddp6pb8Wsbcm27aKnwJQ0XGtwqexzTyz/iYWc
-         dNxA==
-X-Gm-Message-State: AOAM5302AoolLwax64CLKlsK73iz1K59Jj2239dlNWtS3gawXG7lrXgX
-        OzVZOwKqmj7vn+c8WBBCbecWWFRmtamz5PmtJq0=
-X-Google-Smtp-Source: ABdhPJyajGmsQ2qElA4nEpdS0uYIgFI8XDIlXxzY7qVC4nr9FiwxJJnbtYuLgK6ynqYgnTaLubbNX2Vu+ze+pD/UFIw=
-X-Received: by 2002:a25:d4f:0:b0:64b:a4b1:2d50 with SMTP id
- 76-20020a250d4f000000b0064ba4b12d50mr2860970ybn.482.1652464590248; Fri, 13
- May 2022 10:56:30 -0700 (PDT)
+        Fri, 13 May 2022 13:58:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5EC522C0
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:58:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C77A961B94
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 17:58:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16779C34100;
+        Fri, 13 May 2022 17:58:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652464730;
+        bh=jGfDN22SNm6l9Olp99VGq49P1EF6SURnNx6xntTGmKI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NWnvrBSRuXQJFRMA36dkLiXexzwyIRUSYSyuPDLc3bWltDfPmrJ3iDtFRxAXByhNs
+         Hs9bMe70Ee/OAkY/+ld5m/tvFFzPnEp8m5XVfoadsHA2zw9aJcMN3zJrM0Z/Tef6O5
+         Qmm2wB22truSuC8WnYQRburiMCPmVT0/n3uS0K2tvOHOwvpGyn+EyxKZqE8iatafjw
+         LPv452tJH6B+ZraHb5zmh5zAmqOj8FJSAYtdYbyIwGG3mbmArJ/Rp0lcgkoHPLx2cG
+         TdlRw6l/IRIdV5Z5qpGHeJzD+U+SkkpV4ZE7pLhOsuaBwc/zSD5xppm/MbX3vxxkTu
+         XRmUyWz4KUNag==
+Date:   Fri, 13 May 2022 10:58:48 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao.yu@oppo.com>
+Subject: Re: [PATCH] f2fs: separate NOCoW and pinfile semantics
+Message-ID: <Yn6cWLC+3kh6aoHM@google.com>
+References: <20220512082116.2991611-1-chao@kernel.org>
+ <Yn2CztiJUY2UAjnd@google.com>
+ <59d77fcb-bc82-c1d2-0a71-eef3b0140506@kernel.org>
 MIME-Version: 1.0
-References: <20220507125443.2766939-1-daniel.lezcano@linexp.org> <63f1c4a0-d2c6-8157-5da0-198c2d8d1013@linaro.org>
-In-Reply-To: <63f1c4a0-d2c6-8157-5da0-198c2d8d1013@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 13 May 2022 19:56:17 +0200
-Message-ID: <CAJZ5v0iexz36LL52rZ0BTtSXCf63UnU0kMJR7w6Qfe7P5ZmHTA@mail.gmail.com>
-Subject: Re: [PATCH v2 00/14] thermal OF rework
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linexp.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <59d77fcb-bc82-c1d2-0a71-eef3b0140506@kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 7:23 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> Hi Rafael,
->
-> if you are ok with this series, I'll pick it up.
->
-> Is that ok ?
+On 05/13, Chao Yu wrote:
+> On 2022/5/13 5:57, Jaegeuk Kim wrote:
+> > On 05/12, Chao Yu wrote:
+> > > Pinning a file is heavy, because skipping pinned files make GC
+> > > running with heavy load or no effect.
+> > > 
+> > > So that this patch proposes to separate nocow and pinfile semantics:
+> > > - NOCoW flag can only be set on regular file.
+> > > - NOCoW file will only trigger IPU at common writeback/flush.
+> > > - NOCow file will do OPU during GC.
+> > > 
+> > > This flag can satisfying the demand of:
+> > > 1) avoiding fragment of file's physical block
+> > > 2) userspace doesn't want to pin file's physical address
+> > > 
+> > > Signed-off-by: Chao Yu <chao.yu@oppo.com>
+> > > ---
+> > >   fs/f2fs/data.c |  3 ++-
+> > >   fs/f2fs/f2fs.h |  1 +
+> > >   fs/f2fs/file.c | 25 ++++++++++++++++++++++++-
+> > >   3 files changed, 27 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+> > > index 54a7a8ad994d..c8eab78f7d89 100644
+> > > --- a/fs/f2fs/data.c
+> > > +++ b/fs/f2fs/data.c
+> > > @@ -2495,7 +2495,8 @@ bool f2fs_should_update_inplace(struct inode *inode, struct f2fs_io_info *fio)
+> > >   	if (is_inode_flag_set(inode, FI_ALIGNED_WRITE))
+> > >   		return false;
+> > > -	if (f2fs_is_pinned_file(inode))
+> > > +	if (f2fs_is_pinned_file(inode) ||
+> > > +			F2FS_I(inode)->i_flags & F2FS_NOCOW_FL)
+> > >   		return true;
+> > >   	/* if this is cold file, we should overwrite to avoid fragmentation */
+> > > diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> > > index 492af5b96de1..e91ece55f5e8 100644
+> > > --- a/fs/f2fs/f2fs.h
+> > > +++ b/fs/f2fs/f2fs.h
+> > > @@ -2916,6 +2916,7 @@ static inline void f2fs_change_bit(unsigned int nr, char *addr)
+> > >   #define F2FS_NOCOMP_FL			0x00000400 /* Don't compress */
+> > >   #define F2FS_INDEX_FL			0x00001000 /* hash-indexed directory */
+> > >   #define F2FS_DIRSYNC_FL			0x00010000 /* dirsync behaviour (directories only) */
+> > > +#define F2FS_NOCOW_FL			0x00800000 /* Do not cow file */
+> > >   #define F2FS_PROJINHERIT_FL		0x20000000 /* Create with parents projid */
+> > >   #define F2FS_CASEFOLD_FL		0x40000000 /* Casefolded file */
+> > > diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> > > index 09287876dbb7..7f92a3a157f7 100644
+> > > --- a/fs/f2fs/file.c
+> > > +++ b/fs/f2fs/file.c
+> > > @@ -1851,6 +1851,20 @@ static int f2fs_setflags_common(struct inode *inode, u32 iflags, u32 mask)
+> > >   	if (IS_NOQUOTA(inode))
+> > >   		return -EPERM;
+> > > +	if ((iflags ^ masked_flags) & F2FS_NOCOW_FL) {
+> > > +		int ret;
+> > > +
+> > > +		if (!S_ISREG(inode->i_mode))
+> > > +			return -EINVAL;
+> > > +		if (f2fs_should_update_outplace(inode, NULL))
+> > > +			return -EINVAL;
+> > > +		if (f2fs_is_pinned_file(inode))
+> > > +			return -EINVAL;
+> > > +		ret = f2fs_convert_inline_inode(inode);
+> > > +		if (ret)
+> > > +			return ret;
+> > > +	}
+> > > +
+> > >   	if ((iflags ^ masked_flags) & F2FS_CASEFOLD_FL) {
+> > >   		if (!f2fs_sb_has_casefold(F2FS_I_SB(inode)))
+> > >   			return -EOPNOTSUPP;
+> > > @@ -1926,6 +1940,7 @@ static const struct {
+> > >   	{ F2FS_NOCOMP_FL,	FS_NOCOMP_FL },
+> > >   	{ F2FS_INDEX_FL,	FS_INDEX_FL },
+> > >   	{ F2FS_DIRSYNC_FL,	FS_DIRSYNC_FL },
+> > > +	{ F2FS_NOCOW_FL,	FS_NOCOW_FL },
+> > >   	{ F2FS_PROJINHERIT_FL,	FS_PROJINHERIT_FL },
+> > >   	{ F2FS_CASEFOLD_FL,	FS_CASEFOLD_FL },
+> > >   };
+> > > @@ -1957,7 +1972,8 @@ static const struct {
+> > >   		FS_NOCOMP_FL |		\
+> > >   		FS_DIRSYNC_FL |		\
+> > >   		FS_PROJINHERIT_FL |	\
+> > > -		FS_CASEFOLD_FL)
+> > > +		FS_CASEFOLD_FL |	\
+> > > +		FS_NOCOW_FL)
+> > >   /* Convert f2fs on-disk i_flags to FS_IOC_{GET,SET}FLAGS flags */
+> > >   static inline u32 f2fs_iflags_to_fsflags(u32 iflags)
+> > > @@ -3081,6 +3097,13 @@ static int f2fs_ioc_set_pin_file(struct file *filp, unsigned long arg)
+> > >   	inode_lock(inode);
+> > > +	if (F2FS_I(inode)->i_flags & F2FS_NOCOW_FL) {
+> > > +		f2fs_info(F2FS_I_SB(inode), "inode (%lu) is already NOCOW one",
+> > > +			inode->i_ino);
+> > > +		ret = -EINVAL;
+> > 
+> > Why rejecting this? We can pin the file to get 2MB-aligned allocation on the
+> > NOCOW file.
+> 
+> I try to separate these two flag completely, but, seems it can't, because after
+> commit 5d539245cb18 ("f2fs: export FS_NOCOW_FL flag to user"), these two flags
+> have already been twined closely....
+> 
+> @@ -1651,6 +1651,8 @@ static int f2fs_ioc_getflags(struct file *filp, unsigned long arg)
+>  		flags |= F2FS_ENCRYPT_FL;
+>  	if (f2fs_has_inline_data(inode) || f2fs_has_inline_dentry(inode))
+>  		flags |= F2FS_INLINE_DATA_FL;
+> +	if (is_inode_flag_set(inode, FI_PIN_FILE))
+> +		flags |= F2FS_NOCOW_FL;
+> 
+> How about:
+> 
+> f2fs_ioc_set_pin_file/f2fs_fileattr_set logic:
+> 		pinfile			nocow
+> set		set pinfile | nocow	set nocow
+> clear		clear pinfile | nocow	clear nocow
+> 
+> Behaviors:
+> w/ pinfile, w/ nocow:		use pinfile semantics
+> w/ pinfile, w/o nocow:		use pinfile semantics
+> w/o pinfile, w/ nocow:		use nocow semantics
+> w/o pinfile, w/o nocow:		no pinfile or nocow semantics
 
-Give me some more time to look at it, please.
+This looks good to me. Thanks,
 
-I'll respond in the first half of next week.
-
-> On 07/05/2022 14:54, Daniel Lezcano wrote:
-> > The thermal framework initialization with the device tree appears to
-> > be complicated and hard to make it to evolve.
-> >
-> > It contains duplication of almost the same thermal generic structures
-> > and has an assymetric initialization making hard any kind of serious
-> > changes for more complex features. One of them is the multiple sensors
-> > support per thermal zone.
-> >
-> > In order to set the scene for the aforementioned feature with generic
-> > code, we need to cleanup and rework the device tree initialization.
-> >
-> > However this rework is not obvious because of the multiple components
-> > entering in the composition of a thermal zone and being initialized at
-> > different moments. For instance, a cooling device can be initialized
-> > before a sensor, so the thermal zones must exist before the cooling
-> > device as well as the sensor. This asynchonous initialization forces
-> > the thermal zone to be created with fake ops because they are
-> > mandotory and build a list of cooling devices which is used to lookup
-> > afterwards when the cooling device driver is registering itself.
-> >
-> > As there could be a large number of changes, this first series provide
-> > some steps forward for a simpler device tree initialization.
-> >
-> > Changelog:
-> >   - V2:
-> >     - Drop patch 1/15 which contains too many changes for a simple
-> >       structure renaming. This could be addressed in a separate series as
-> >       it is not necessary for the OF rework
-> >
-> >     - Fixed of_node_put with gchild not initialized as reported by
-> >       kbuild and Dan Carpenter
-> >
-> >   - V1:
-> >     - Initial post
-> >
-> > Daniel Lezcano (14):
-> >    thermal/core: Change thermal_zone_ops to thermal_sensor_ops
-> >    thermal/core: Add a thermal sensor structure in the thermal zone
-> >    thermal/core: Remove duplicate information when an error occurs
-> >    thermal/of: Replace device node match with device node search
-> >    thermal/of: Remove the device node pointer for thermal_trip
-> >    thermal/of: Move thermal_trip structure to thermal.h
-> >    thermal/core: Remove unneeded EXPORT_SYMBOLS
-> >    thermal/core: Move thermal_set_delay_jiffies to static
-> >    thermal/core: Rename trips to ntrips
-> >    thermal/core: Add thermal_trip in thermal_zone
-> >    thermal/core: Register with the trip points
-> >    thermal/of: Store the trips in the thermal zone
-> >    thermal/of: Use thermal trips stored in the thermal zone
-> >    thermal/of: Initialize trip points separately
-> >
-> >   .../driver-api/thermal/sysfs-api.rst          |   2 +-
-> >   drivers/acpi/thermal.c                        |   6 +-
-> >   .../ethernet/chelsio/cxgb4/cxgb4_thermal.c    |   2 +-
-> >   .../ethernet/mellanox/mlxsw/core_thermal.c    |   6 +-
-> >   drivers/net/wireless/intel/iwlwifi/mvm/tt.c   |   2 +-
-> >   drivers/platform/x86/acerhdf.c                |   2 +-
-> >   drivers/power/supply/power_supply_core.c      |   2 +-
-> >   drivers/thermal/armada_thermal.c              |   2 +-
-> >   drivers/thermal/broadcom/bcm2835_thermal.c    |   2 +-
-> >   drivers/thermal/da9062-thermal.c              |   2 +-
-> >   drivers/thermal/dove_thermal.c                |   2 +-
-> >   drivers/thermal/gov_bang_bang.c               |   6 +-
-> >   drivers/thermal/gov_fair_share.c              |  10 +-
-> >   drivers/thermal/gov_power_allocator.c         |  22 +-
-> >   drivers/thermal/gov_step_wise.c               |   4 +-
-> >   drivers/thermal/imx_thermal.c                 |   2 +-
-> >   .../intel/int340x_thermal/int3400_thermal.c   |   2 +-
-> >   .../int340x_thermal/int340x_thermal_zone.c    |   6 +-
-> >   .../int340x_thermal/int340x_thermal_zone.h    |   4 +-
-> >   .../processor_thermal_device.c                |   4 +-
-> >   .../processor_thermal_device_pci.c            |   2 +-
-> >   drivers/thermal/intel/intel_pch_thermal.c     |   2 +-
-> >   .../thermal/intel/intel_quark_dts_thermal.c   |   2 +-
-> >   drivers/thermal/intel/intel_soc_dts_iosf.c    |   2 +-
-> >   drivers/thermal/intel/x86_pkg_temp_thermal.c  |   2 +-
-> >   drivers/thermal/kirkwood_thermal.c            |   2 +-
-> >   drivers/thermal/rcar_gen3_thermal.c           |   6 +-
-> >   drivers/thermal/rcar_thermal.c                |   4 +-
-> >   drivers/thermal/samsung/exynos_tmu.c          |   6 +-
-> >   drivers/thermal/spear_thermal.c               |   2 +-
-> >   drivers/thermal/st/st_thermal.c               |   2 +-
-> >   drivers/thermal/tegra/soctherm.c              |  10 +-
-> >   drivers/thermal/tegra/tegra30-tsensor.c       |   6 +-
-> >   drivers/thermal/thermal_core.c                | 102 ++++----
-> >   drivers/thermal/thermal_core.h                |  25 +-
-> >   drivers/thermal/thermal_helpers.c             |  35 ++-
-> >   drivers/thermal/thermal_hwmon.c               |   4 +-
-> >   drivers/thermal/thermal_netlink.c             |  10 +-
-> >   drivers/thermal/thermal_of.c                  | 221 ++++++++++--------
-> >   drivers/thermal/thermal_sysfs.c               |  62 ++---
-> >   include/linux/thermal.h                       |  34 ++-
-> >   41 files changed, 341 insertions(+), 290 deletions(-)
-> >
->
->
-> --
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
+> 
+> Thanks,
+> 
+> > 
+> > > +		goto out;
+> > > +	}
+> > > +
+> > >   	if (!pin) {
+> > >   		clear_inode_flag(inode, FI_PIN_FILE);
+> > >   		f2fs_i_gc_failures_write(inode, 0);
+> > > -- 
+> > > 2.25.1

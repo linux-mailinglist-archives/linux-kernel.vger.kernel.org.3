@@ -2,127 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66363525D84
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 10:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F3AD525D9B
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 10:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378336AbiEMIcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 04:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33194 "EHLO
+        id S1378266AbiEMIcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 04:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378317AbiEMIcj (ORCPT
+        with ESMTP id S1378300AbiEMIcd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 04:32:39 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFAC2A8041
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:32:36 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id w133-20020a25c78b000000b0064847b10a22so6716105ybe.18
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:32:36 -0700 (PDT)
+        Fri, 13 May 2022 04:32:33 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA2B62A00
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:32:31 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id i27so14780315ejd.9
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:32:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=hk5uEtV3LYTwsgSEedR4CtG2vms3qpu/B7wOj7VdRzM=;
-        b=kYsNC7Eo1NPKL0cqSlEK8e68ZyQYRtrrD4EnKB7z+KZUKXD6WFKCXPMla4tDAyiQIg
-         R1v92Ef6+EDCeojrvVKCFLPHuTXNldGmrN3nb9HL03DPkjJYrcMFg+FEzjRUKnv41p52
-         DaTPHxS5FuqN17a+jcm7VV3rkWuvNzYSRlAFDZ1WVlmZkoCNSAgwxJJ6kx1/K1dpk8UB
-         oLOfeDKbeXB/4ENa6HPZYZL19N2I5sPvx4Acjap9xrQm9O0s0oit88YP4JxMHjYgoid+
-         UzSwLRjFMOKiGSVr/IAHMiXkp3ltx/Ft57LuU27hwohf3PH9UIVrKDk0ITX5r4ZD9gmV
-         /XZA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=vFW7c8oYKguehFMQb8jYFUEM93d/T6iAFsYnDrwQpGQ=;
+        b=MZXTiXjjOeUYFZgp12vGO1wwFcBLxT3m9XELyPJ3MlS+0y5TcXbfWBAjM7IkQV9Pjd
+         MujmPbzsY0PXgobKZN1WaopA5AOXoNyKVUd70hUAd+XOT+aj/mAGnvt4DD1Y5QW8j6eE
+         7htL9FPCjgRBoykbfiRQA6Jxp2MtRqIcFd0QsBYMLHNjUJTcxlj0GONe8oGiBLusv3Od
+         B2Cx4xGrmGMxGv0RXsnmTU0ssqTTvhDCH21f2LPGQTRLK8Vg0lNl2cmZTp+OwZhZQlXt
+         kaZDnA+z1RTc6e1Qt1m4Th/LKl6p4/LC6zUvUvdvNUQAiH5+yKRlholNX0mPPpqfxnHh
+         JCPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=hk5uEtV3LYTwsgSEedR4CtG2vms3qpu/B7wOj7VdRzM=;
-        b=ajkJ8MlUzraY14otYEwUhwZdddJC8lXGqKAEiQZB9Fu9LqQEnuecMyuD5k7yOUbEc6
-         rtUTm0OTghZgRQ7Y2DangpNTAxFE8oh5PPPiqthzt3EfHk/pu+WzOYDMzmK5O/Ppm3sB
-         JJ0FyUwGYeulrEStBdtopEf95Iscm9xB3QkgvdGfsfeCdXIwHy9fjuAVALE2KPToUPas
-         UAfX9i0RM1Bm95HeO9BcwTqCww369EYHXAfwOc2c1pDBJwrL3GLQQFVzhsOii1NK42Mv
-         Hdye5AZN66SceLddVX1LknShHP2Me+/94mgG/KkssQQvK0uPoP+/NMsHXvNkWMqSVEix
-         UApw==
-X-Gm-Message-State: AOAM530PbSbeYy0QE3DK6wCLj+SN5cPrQBORFYNRIC7txfGRUkJxHwMH
-        dSTzg5z8+WfiMJX+eC5Gb+wG37J2+Gls9Q==
-X-Google-Smtp-Source: ABdhPJw+htFPIH6EdUeS8xrLV26f4EOL11gNUDqQ9wJshw5TbY2Hsc8UJKgk0N0pjRBQIDiAvH1OrXDakVEOHQ==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a25:4902:0:b0:648:d1db:af83 with SMTP id
- w2-20020a254902000000b00648d1dbaf83mr3678022yba.559.1652430756152; Fri, 13
- May 2022 01:32:36 -0700 (PDT)
-Date:   Fri, 13 May 2022 16:32:13 +0800
-In-Reply-To: <20220429043913.626647-1-davidgow@google.com>
-Message-Id: <20220513083212.3537869-3-davidgow@google.com>
-Mime-Version: 1.0
-References: <20220429043913.626647-1-davidgow@google.com>
-X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [PATCH v3 3/3] selftest: Taint kernel when test module loaded
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Cc:     David Gow <davidgow@google.com>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vFW7c8oYKguehFMQb8jYFUEM93d/T6iAFsYnDrwQpGQ=;
+        b=su8gsuoUEht1sLrNdBPhLuot8cIzfh0JOzTyxzLv02vIpdj9fDN908qPXqGu5Zjitd
+         RfNqqWDPlsDLKxp1ILymBFwZ+4fAiIsga+ZavYu6WaWC7CPZXgsLjLroBxZPA8ER6Z0N
+         bnCmykodgdEDpE+YDuO8AgSEvqh/7p3rFoN2DrDZwcqCRwucXDb1ZHjLQ7fsgAhUmbAl
+         6f+iSU60RhABFiV8yTgd/3KLV445GRMWf6kt1SurOouKLFGPa5HH+pA2/i/oqRqFiFbm
+         dvW5CjZ6oSiaqpL+Mo+OztUdJUWbEcwhbBbMtKCYMvElmPRJAo6oGa6T9Zyi4hi+c/iI
+         IekQ==
+X-Gm-Message-State: AOAM532cW/ksew9vInxmn9LiMmdwcJJCNjF9uCtN4aBWAcko08zm08Hh
+        NsycdrzU/QAVI8p4u3hV+DB1cw==
+X-Google-Smtp-Source: ABdhPJxGvgzNmK3qdv64gFjNuTj3KarkSYk6qgd+Z76CVPxOMmJ9ydSWZ7NZmT4bAVz9T7FTfINA4g==
+X-Received: by 2002:a17:907:1c8d:b0:6f2:eb2:1cd6 with SMTP id nb13-20020a1709071c8d00b006f20eb21cd6mr3159377ejc.568.1652430750358;
+        Fri, 13 May 2022 01:32:30 -0700 (PDT)
+Received: from [192.168.0.169] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id b1-20020a05640202c100b00427ae00972dsm687144edx.12.2022.05.13.01.32.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 01:32:29 -0700 (PDT)
+Message-ID: <b8029466-2f6f-4bc9-b910-61577363da73@linaro.org>
+Date:   Fri, 13 May 2022 10:32:28 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 1/2] dt-bindings: Add headers for Tegra234 GPCDMA
+Content-Language: en-US
+To:     Akhil R <akhilrajeev@nvidia.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220512090052.47840-1-akhilrajeev@nvidia.com>
+ <20220512090052.47840-2-akhilrajeev@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220512090052.47840-2-akhilrajeev@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make any kselftest test module (using the kselftest_module framework)
-taint the kernel with TAINT_TEST on module load.
+On 12/05/2022 11:00, Akhil R wrote:
+> Add reset and IOMMU header for Tegra234 GPCDMA
+> 
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
 
-Note that several selftests use kernel modules which are not based on
-the kselftest_module framework, and so will not automatically taint the
-kernel. These modules will have to be manually modified if they should
-taint the kernel this way.
 
-Similarly, selftests which do not load modules into the kernel generally
-should not taint the kernel (or possibly should only do so on failure),
-as it's assumed that testing from user-space should be safe. Regardless,
-they can write to /proc/sys/kernel/tainted if required.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Signed-off-by: David Gow <davidgow@google.com>
----
- tools/testing/selftests/kselftest_module.h | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/kselftest_module.h b/tools/testing/selftests/kselftest_module.h
-index e2ea41de3f35..226e616b82e0 100644
---- a/tools/testing/selftests/kselftest_module.h
-+++ b/tools/testing/selftests/kselftest_module.h
-@@ -3,6 +3,7 @@
- #define __KSELFTEST_MODULE_H
- 
- #include <linux/module.h>
-+#include <linux/panic.h>
- 
- /*
-  * Test framework for writing test modules to be loaded by kselftest.
-@@ -41,6 +42,7 @@ static inline int kstm_report(unsigned int total_tests, unsigned int failed_test
- static int __init __module##_init(void)			\
- {							\
- 	pr_info("loaded.\n");				\
-+	add_taint(TAINT_KUNIT, LOCKDEP_STILL_OK);	\
- 	selftest();					\
- 	return kstm_report(total_tests, failed_tests, skipped_tests);	\
- }							\
--- 
-2.36.0.550.gb090851708-goog
-
+Best regards,
+Krzysztof

@@ -2,67 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74BF5526BF8
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09476526BFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384600AbiEMUzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 16:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59974 "EHLO
+        id S1384331AbiEMU4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 16:56:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384597AbiEMUzA (ORCPT
+        with ESMTP id S232786AbiEMU40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 16:55:00 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4124B33E3E
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:54:58 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2f863469afbso102949837b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:54:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LdknKTFAjuVV6cG3pEPQnMSdfNEMapIBJ9sGtA9Y09c=;
-        b=xmMXBU3NmkyVtivyV63dP3bIvtMkreg3G2vlBW6VC6qDJftpmGZXb7rWsbSDpzwnbO
-         soAf29nXLOaF4fnFpp0VKJ9Q/HJxJkgEfDnG/rcA7YSj5tJN3c/On8k+vdx5e16qGp+I
-         Zn04CLtil4jLFL2MKQePF+OMCd4s3gl/O6i5GgHj7vP4YFxbzBKELPCKAtXGH71AbPdz
-         EBSLGJl1PYdI304Gdwa2ruEvjYy/jZMpZjktq0WgI+RTyY0FGhDPwt9NDO/VT4xleHzS
-         ymzu9R2WwIGGQxE1vO8YJ3I183gySCovNtEw2YJSZTavWsLdKsm3ik6/05PDHbo/5ltW
-         javA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LdknKTFAjuVV6cG3pEPQnMSdfNEMapIBJ9sGtA9Y09c=;
-        b=mKlungbvs1e7svUkLMB0EQZQDlAWz+7t4Y8xiWP05NOVr7ttyyXSJy+yf9t0FrhRgC
-         kkQf0alQfJLpfioseyuiUJakuK/O+AKIQ8OggTb4SmbFn7XkkEbiq5lPjbBXOdoGAbvU
-         bW5plt9gF4baAch5rIxjBlW0EVWioutEbeoURB8Pcq1nh8p9Fe+GFrM1MRr3DFaHf10f
-         smzcv3RlB6HngfmTU3Cn8K6PD1+pRdBdh6dDKCKyZfeTSvN+2RFpYli+06nc3/QneFU8
-         zLgf90xUY9B1ZMhQ6jFZCUgnsg+zoeV8dc9gFq+04N5G/+7BDCxWEhe3bt677g4IUU6N
-         H1qQ==
-X-Gm-Message-State: AOAM530BsbGQR9j7drpOvxq2lHo7iPYaT62Bfo4rH1D160XWbQpCxku6
-        HufTs/3KWgIqz5bRmFfn8uZmUtCPU7S3p8MfMRhdDA==
-X-Google-Smtp-Source: ABdhPJxPYfUJI+pU2KSqKyur2vWFLJAP5xoEG54qiHUWnn0lt/PmPx08z9HTjGpaf9iKB/bRclMaMq2/qf0xUEiybCM=
-X-Received: by 2002:a0d:e5c6:0:b0:2f8:c866:7af9 with SMTP id
- o189-20020a0de5c6000000b002f8c8667af9mr8074972ywe.268.1652475297420; Fri, 13
- May 2022 13:54:57 -0700 (PDT)
+        Fri, 13 May 2022 16:56:26 -0400
+Received: from rcdn-iport-5.cisco.com (rcdn-iport-5.cisco.com [173.37.86.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E314E004;
+        Fri, 13 May 2022 13:56:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=1898; q=dns/txt; s=iport;
+  t=1652475384; x=1653684984;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=M7eUi4rugKzQW5rQyZA2HgaMKOcAHQUfdaskZoW+NRI=;
+  b=N3fAtB1PCcYV/ou31YoQsAMp7BpCT7QbtkyeaDTm/2+C/Ig4tM9nnD3M
+   IV3WjCZNuRI1+WJcwwd8HSgRbbtNPjmn0OPlR6HWKetsYP7IRfRQ1JHP0
+   2Y2onSo/VK5QGZBuAovdSGNlNH5gMELpspCboSnptudc7KIopcUv8QahA
+   Y=;
+X-IronPort-AV: E=Sophos;i="5.91,223,1647302400"; 
+   d="scan'208";a="759696194"
+Received: from rcdn-core-6.cisco.com ([173.37.93.157])
+  by rcdn-iport-5.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 13 May 2022 20:56:23 +0000
+Received: from localhost.cisco.com ([10.193.101.253])
+        (authenticated bits=0)
+        by rcdn-core-6.cisco.com (8.15.2/8.15.2) with ESMTPSA id 24DKu8Pc010787
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 13 May 2022 20:56:20 GMT
+From:   Karan Tilak Kumar <kartilak@cisco.com>
+To:     sebaddel@cisco.com
+Cc:     arulponn@cisco.com, djhawar@cisco.com, gcboffa@cisco.com,
+        satishkh@cisco.com, gvaradar@cisco.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Karan Tilak Kumar <kartilak@cisco.com>
+Subject: [PATCH] scsi: fnic: Replace DMA mask of 64 bits with 47 bits
+Date:   Fri, 13 May 2022 13:56:05 -0700
+Message-Id: <20220513205605.81788-1-kartilak@cisco.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20220512173921.8210-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220512173921.8210-1-andriy.shevchenko@linux.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 13 May 2022 22:54:46 +0200
-Message-ID: <CACRpkdZ50rd7dvZmsx5jTgkVKWHbx_Tsx9W-YY+mAO9RE3RfMw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/5] Documentation: gpio: Fix IRQ mask and unmask examples
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Hans de Goede <hdegoede@redhat.com>,
-        linux-gpio@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Authenticated-User: kartilak@cisco.com
+X-Outbound-SMTP-Client: 10.193.101.253, [10.193.101.253]
+X-Outbound-Node: rcdn-core-6.cisco.com
+X-Spam-Status: No, score=-12.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,17 +61,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 7:52 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+Cisco VIC supports only 47 bits.
+If the host sends DMA addresses that are greater than 47
+bits, it causes work queue (WQ) errors in the VIC.
 
-> After switching to immutable IRQ chips for GPIO drivers the examples become
-> uncompilable due to wrong IRQ API, i.e. irq_desc_get_handler_data() in use.
-> Replace it with proper irq_data_get_irq_chip_data() call where it applies.
->
-> Fixes: 5644b66a9c63 ("Documentation: Update the recommended pattern for GPIO irqchips")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Co-developed-by: Dhanraj Jhawar <djhawar@cisco.com>
+Signed-off-by: Dhanraj Jhawar <djhawar@cisco.com>
+Co-developed-by: Sesidhar Baddela <sebaddel@cisco.com>
+Signed-off-by: Sesidhar Baddela <sebaddel@cisco.com>
+Signed-off-by: Arulprabhu Ponnusamy <arulponn@cisco.com>
+Tested-by: Karan Tilak Kumar <kartilak@cisco.com>
+Signed-off-by: Karan Tilak Kumar <kartilak@cisco.com>
+---
+ drivers/scsi/fnic/fnic.h      | 2 +-
+ drivers/scsi/fnic/fnic_main.c | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+diff --git a/drivers/scsi/fnic/fnic.h b/drivers/scsi/fnic/fnic.h
+index aa07189fb5fb..85ec6163ddab 100644
+--- a/drivers/scsi/fnic/fnic.h
++++ b/drivers/scsi/fnic/fnic.h
+@@ -39,7 +39,7 @@
+ 
+ #define DRV_NAME		"fnic"
+ #define DRV_DESCRIPTION		"Cisco FCoE HBA Driver"
+-#define DRV_VERSION		"1.6.0.53"
++#define DRV_VERSION		"1.6.0.54"
+ #define PFX			DRV_NAME ": "
+ #define DFX                     DRV_NAME "%d: "
+ 
+diff --git a/drivers/scsi/fnic/fnic_main.c b/drivers/scsi/fnic/fnic_main.c
+index 460e03a55096..51e7c344ddc3 100644
+--- a/drivers/scsi/fnic/fnic_main.c
++++ b/drivers/scsi/fnic/fnic_main.c
+@@ -612,10 +612,10 @@ static int fnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	pci_set_master(pdev);
+ 
+ 	/* Query PCI controller on system for DMA addressing
+-	 * limitation for the device.  Try 64-bit first, and
+-	 * fail to 32-bit.
++	 * limitation for the device.  Try 47-bit first, and
++	 * fail to 32-bit. Cisco VIC supports 47 bits only.
+ 	 */
+-	err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
++	err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(47));
+ 	if (err) {
+ 		err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
+ 		if (err) {
+-- 
+2.28.0
 
-Yours,
-Linus Walleij

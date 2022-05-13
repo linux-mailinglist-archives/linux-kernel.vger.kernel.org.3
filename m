@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CFBE526B77
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:30:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD80526B8E
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:32:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384155AbiEMUa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 16:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34802 "EHLO
+        id S1384444AbiEMUaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 16:30:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384339AbiEMUaA (ORCPT
+        with ESMTP id S1384387AbiEMUab (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 16:30:00 -0400
+        Fri, 13 May 2022 16:30:31 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D2378FE3;
-        Fri, 13 May 2022 13:29:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE437A445;
+        Fri, 13 May 2022 13:29:47 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nicolas)
-        with ESMTPSA id 87DCB1F46483
+        with ESMTPSA id 5903B1F46486
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652473779;
-        bh=klo+1mnjtIffOlX4qRd4PUUXiirFqeO06vggz4DyHow=;
+        s=mail; t=1652473781;
+        bh=KVLMxgMMO7m0lqkG6bPooOf8zeVz8lXbczHMDvPoftQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dqHtnL82tfwPBe2S4t+YexEQPyjDQpjNExg5SwRCFZlJ90oQsE1Uhcj9BLKN91MO2
-         jUgG54pRowhTWJnDk3w9Dn/yoI/9Ron2yeS389lUf7FDs9aXT5ZGlek/anCyfX2jhF
-         z2nmQbcjzL228Hdw3DYaEc1rICZTURyENbPcfI91xy0an0hMoC/Kb3DObZcJEjnf1q
-         wgYklu39loZb9ZKWsmaAlLEqAbRrNLh6q0RDKnPvdZReWikGSXI8cHfwzp6QDA1ywQ
-         Mfy/hXIHl/W1p1oNYaEvVNBUqoarwN9mfu6zUNYTzeetpqcLTAJHQYR8MLjf/va9e7
-         lTEHgM2MTQkig==
+        b=IGvPOI3YVHDsb77BjdZ/SPjXymc3YG7ybPvU3YIljIeKpD9Uqo8oy6b49BNHvIiPL
+         hkXhyE2iDrrbznyvMd5JRgOf6A+R0sNLJM+KYeyb1ISR51VrvBaje0Uram2HZ6p40W
+         m4pNAB8Lj136BO4M4/L+m3mTN6DwZlpeCZcjv/ud1KKJllnMCA0QOmn57ZO9utnzJK
+         pv4Si9izQkUPLJ1Oud2yUpJHYJO00Ntj3XMS5Sr483Oc30Rhqv4wELFTQIKIRTrEzr
+         Lodryn29by7Zig4DCUkBQKarSjRXlsC+hFJ5yaeOgneQO2bbYpwsdw+xPl5wHFXfN4
+         hmWcPIjwUrGFQ==
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     nicolas@ndufresne.ca, linux-media@vger.kernel.org,
         Sebastian Fricke <sebastian.fricke@collabora.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 04/20] media: h264: Store all fields into the unordered list
-Date:   Fri, 13 May 2022 16:29:06 -0400
-Message-Id: <20220513202922.13846-5-nicolas.dufresne@collabora.com>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 05/20] media: v4l2: Trace calculated p/b0/b1 initial reflist
+Date:   Fri, 13 May 2022 16:29:07 -0400
+Message-Id: <20220513202922.13846-6-nicolas.dufresne@collabora.com>
 X-Mailer: git-send-email 2.34.3
 In-Reply-To: <20220513202922.13846-1-nicolas.dufresne@collabora.com>
 References: <20220513202922.13846-1-nicolas.dufresne@collabora.com>
@@ -55,168 +52,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the current picture is a field, store each field into the
-unordered_list and preserve both top and bottom picture order
-count.
+Add debug print statements to print the content of P & B reference
+lists, to verify that the ordering of the generated reference lists is
+correct. This is especially important for the field decoding mode,
+where sorting is more complex.
 
 Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Tested-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- .../media/platform/nvidia/tegra-vde/h264.c    |  2 +-
- drivers/media/v4l2-core/v4l2-h264.c           | 65 ++++++++++++++-----
- include/media/v4l2-h264.h                     |  6 +-
- 3 files changed, 52 insertions(+), 21 deletions(-)
+ drivers/media/v4l2-core/v4l2-h264.c | 100 ++++++++++++++++++++++++++++
+ 1 file changed, 100 insertions(+)
 
-diff --git a/drivers/media/platform/nvidia/tegra-vde/h264.c b/drivers/media/platform/nvidia/tegra-vde/h264.c
-index 4fb0aaad16d6..88f81a134ba0 100644
---- a/drivers/media/platform/nvidia/tegra-vde/h264.c
-+++ b/drivers/media/platform/nvidia/tegra-vde/h264.c
-@@ -820,7 +820,7 @@ static int tegra_vde_h264_setup_frames(struct tegra_ctx *ctx,
- 		if (err)
- 			return err;
- 
--		if (b.refs[dpb_idx].pic_order_count < b.cur_pic_order_count)
-+		if (b.refs[dpb_idx].top_field_order_cnt < b.cur_pic_order_count)
- 			h264->dpb_ref_frames_with_earlier_poc_nb++;
- 	}
- 
 diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-core/v4l2-h264.c
-index 58f18bb0afb6..38d8dbda0045 100644
+index 38d8dbda0045..853f54e0fe67 100644
 --- a/drivers/media/v4l2-core/v4l2-h264.c
 +++ b/drivers/media/v4l2-core/v4l2-h264.c
-@@ -47,8 +47,6 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
- 	}
+@@ -12,6 +12,12 @@
  
- 	for (i = 0; i < V4L2_H264_NUM_DPB_ENTRIES; i++) {
--		u32 pic_order_count;
--
- 		if (!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
- 			continue;
+ #include <media/v4l2-h264.h>
  
-@@ -59,8 +57,6 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
- 		/*
- 		 * Handle frame_num wraparound as described in section
- 		 * '8.2.4.1 Decoding process for picture numbers' of the spec.
--		 * TODO: This logic will have to be adjusted when we start
--		 * supporting interlaced content.
- 		 * For long term references, frame_num is set to
- 		 * long_term_frame_idx which requires no wrapping.
- 		 */
-@@ -70,17 +66,33 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
- 		else
- 			b->refs[i].frame_num = dpb[i].frame_num;
- 
--		if (dpb[i].fields == V4L2_H264_FRAME_REF)
--			pic_order_count = min(dpb[i].top_field_order_cnt,
--					      dpb[i].bottom_field_order_cnt);
--		else if (dpb[i].fields & V4L2_H264_BOTTOM_FIELD_REF)
--			pic_order_count = dpb[i].bottom_field_order_cnt;
--		else
--			pic_order_count = dpb[i].top_field_order_cnt;
-+		b->refs[i].top_field_order_cnt = dpb[i].top_field_order_cnt;
-+		b->refs[i].bottom_field_order_cnt = dpb[i].bottom_field_order_cnt;
++/*
++ * Size of the tempory buffer allocated when printing reference lists. The
++ * output will be truncated if the size is too small.
++ */
++static const int tmp_str_size = 1024;
 +
-+		if (b->cur_pic_fields == V4L2_H264_FRAME_REF) {
-+			u8 fields = V4L2_H264_FRAME_REF;
-+
-+			b->unordered_reflist[b->num_valid].index = i;
-+			b->unordered_reflist[b->num_valid].fields = fields;
-+			b->num_valid++;
-+			continue;
-+		}
-+
-+		if (dpb[i].fields & V4L2_H264_TOP_FIELD_REF) {
-+			u8 fields = V4L2_H264_TOP_FIELD_REF;
-+
-+			b->unordered_reflist[b->num_valid].index = i;
-+			b->unordered_reflist[b->num_valid].fields = fields;
-+			b->num_valid++;
-+		}
- 
--		b->refs[i].pic_order_count = pic_order_count;
--		b->unordered_reflist[b->num_valid].index = i;
--		b->num_valid++;
-+		if (dpb[i].fields & V4L2_H264_BOTTOM_FIELD_REF) {
-+			u8 fields = V4L2_H264_BOTTOM_FIELD_REF;
-+
-+			b->unordered_reflist[b->num_valid].index = i;
-+			b->unordered_reflist[b->num_valid].fields = fields;
-+			b->num_valid++;
-+		}
- 	}
- 
- 	for (i = b->num_valid; i < ARRAY_SIZE(b->unordered_reflist); i++)
-@@ -88,6 +100,23 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
+ /**
+  * v4l2_h264_init_reflist_builder() - Initialize a P/B0/B1 reference list
+  *				      builder
+@@ -241,6 +247,95 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
+ 	return poca < pocb ? -1 : 1;
  }
- EXPORT_SYMBOL_GPL(v4l2_h264_init_reflist_builder);
  
-+static s32 v4l2_h264_get_poc(const struct v4l2_h264_reflist_builder *b,
-+			     const struct v4l2_h264_reference *ref)
++static char ref_type_to_char(u8 ref_type)
 +{
-+	switch (ref->fields) {
++	switch (ref_type) {
 +	case V4L2_H264_FRAME_REF:
-+		return min(b->refs[ref->index].top_field_order_cnt,
-+				b->refs[ref->index].bottom_field_order_cnt);
++		return 'f';
 +	case V4L2_H264_TOP_FIELD_REF:
-+		return b->refs[ref->index].top_field_order_cnt;
++		return 't';
 +	case V4L2_H264_BOTTOM_FIELD_REF:
-+		return b->refs[ref->index].bottom_field_order_cnt;
++		return 'b';
 +	}
 +
-+	/* not reached */
-+	return 0;
++	return '?';
 +}
 +
- static int v4l2_h264_p_ref_list_cmp(const void *ptra, const void *ptrb,
- 				    const void *data)
- {
-@@ -150,8 +179,8 @@ static int v4l2_h264_b0_ref_list_cmp(const void *ptra, const void *ptrb,
- 		       builder->refs[idxb].pic_num ?
- 		       -1 : 1;
- 
--	poca = builder->refs[idxa].pic_order_count;
--	pocb = builder->refs[idxb].pic_order_count;
-+	poca = v4l2_h264_get_poc(builder, ptra);
-+	pocb = v4l2_h264_get_poc(builder, ptrb);
- 
- 	/*
- 	 * Short term pics with POC < cur POC first in POC descending order
-@@ -195,8 +224,8 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
- 		       builder->refs[idxb].pic_num ?
- 		       -1 : 1;
- 
--	poca = builder->refs[idxa].pic_order_count;
--	pocb = builder->refs[idxb].pic_order_count;
-+	poca = v4l2_h264_get_poc(builder, ptra);
-+	pocb = v4l2_h264_get_poc(builder, ptrb);
- 
- 	/*
- 	 * Short term pics with POC > cur POC first in POC ascending order
-diff --git a/include/media/v4l2-h264.h b/include/media/v4l2-h264.h
-index e165a54c68fa..4cef717b3f18 100644
---- a/include/media/v4l2-h264.h
-+++ b/include/media/v4l2-h264.h
-@@ -15,7 +15,8 @@
++static const char *format_ref_list_p(const struct v4l2_h264_reflist_builder *builder,
++				     struct v4l2_h264_reference *reflist,
++				     char **out_str)
++{
++	int n = 0, i;
++
++	*out_str = kmalloc(tmp_str_size, GFP_KERNEL);
++
++	n += snprintf(*out_str + n, tmp_str_size - n, "|");
++
++	for (i = 0; i < builder->num_valid; i++) {
++		/* this is pic_num for frame and frame_num (wrapped) for field,
++		 * but for frame pic_num is equal to frame_num (wrapped).
++		 */
++		int frame_num = builder->refs[reflist[i].index].frame_num;
++		bool longterm = builder->refs[reflist[i].index].longterm;
++
++		n += scnprintf(*out_str + n, tmp_str_size - n, "%i%c%c|",
++			       frame_num, longterm ? 'l' : 's',
++			       ref_type_to_char(reflist[i].fields));
++	}
++
++	return *out_str;
++}
++
++static void print_ref_list_p(const struct v4l2_h264_reflist_builder *builder,
++			     struct v4l2_h264_reference *reflist)
++{
++	char *buf = NULL;
++
++	pr_debug("ref_pic_list_p (cur_poc %u%c) %s\n",
++		 builder->cur_pic_order_count,
++		 ref_type_to_char(builder->cur_pic_fields),
++		 format_ref_list_p(builder, reflist, &buf));
++
++	kfree(buf);
++}
++
++static const char *format_ref_list_b(const struct v4l2_h264_reflist_builder *builder,
++				     struct v4l2_h264_reference *reflist,
++				     char **out_str)
++{
++	int n = 0, i;
++
++	*out_str = kmalloc(tmp_str_size, GFP_KERNEL);
++
++	n += snprintf(*out_str + n, tmp_str_size - n, "|");
++
++	for (i = 0; i < builder->num_valid; i++) {
++		int frame_num = builder->refs[reflist[i].index].frame_num;
++		u32 poc = v4l2_h264_get_poc(builder, reflist + i);
++		bool longterm = builder->refs[reflist[i].index].longterm;
++
++		n += scnprintf(*out_str + n, tmp_str_size - n, "%i%c%c|",
++			       longterm ? frame_num : poc,
++			       longterm ? 'l' : 's',
++			       ref_type_to_char(reflist[i].fields));
++	}
++
++	return *out_str;
++}
++
++static void print_ref_list_b(const struct v4l2_h264_reflist_builder *builder,
++			     struct v4l2_h264_reference *reflist, u8 list_num)
++{
++	char *buf = NULL;
++
++	pr_debug("ref_pic_list_b%u (cur_poc %u%c) %s",
++		 list_num, builder->cur_pic_order_count,
++		 ref_type_to_char(builder->cur_pic_fields),
++		 format_ref_list_b(builder, reflist, &buf));
++
++	kfree(buf);
++}
++
  /**
-  * struct v4l2_h264_reflist_builder - Reference list builder object
+  * v4l2_h264_build_p_ref_list() - Build the P reference list
   *
-- * @refs.pic_order_count: reference picture order count
-+ * @refs.top_field_order_cnt: top field order count
-+ * @refs.bottom_field_order_cnt: bottom field order count
-  * @refs.frame_num: reference frame number
-  * @refs.pic_num: reference picture number
-  * @refs.longterm: set to true for a long term reference
-@@ -32,7 +33,8 @@
-  */
- struct v4l2_h264_reflist_builder {
- 	struct {
--		s32 pic_order_count;
-+		s32 top_field_order_cnt;
-+		s32 bottom_field_order_cnt;
- 		int frame_num;
- 		u32 pic_num;
- 		u16 longterm : 1;
+@@ -261,6 +356,8 @@ v4l2_h264_build_p_ref_list(const struct v4l2_h264_reflist_builder *builder,
+ 	       sizeof(builder->unordered_reflist[0]) * builder->num_valid);
+ 	sort_r(reflist, builder->num_valid, sizeof(*reflist),
+ 	       v4l2_h264_p_ref_list_cmp, NULL, builder);
++
++	print_ref_list_p(builder, reflist);
+ }
+ EXPORT_SYMBOL_GPL(v4l2_h264_build_p_ref_list);
+ 
+@@ -296,6 +393,9 @@ v4l2_h264_build_b_ref_lists(const struct v4l2_h264_reflist_builder *builder,
+ 	if (builder->num_valid > 1 &&
+ 	    !memcmp(b1_reflist, b0_reflist, builder->num_valid))
+ 		swap(b1_reflist[0], b1_reflist[1]);
++
++	print_ref_list_b(builder, b0_reflist, 0);
++	print_ref_list_b(builder, b1_reflist, 1);
+ }
+ EXPORT_SYMBOL_GPL(v4l2_h264_build_b_ref_lists);
+ 
 -- 
 2.34.3
 

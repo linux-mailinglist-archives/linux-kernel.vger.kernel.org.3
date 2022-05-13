@@ -2,88 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAE38526011
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:39:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16657525FC8
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379324AbiEMKQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 06:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59414 "EHLO
+        id S1379328AbiEMKSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 06:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379055AbiEMKQr (ORCPT
+        with ESMTP id S1346376AbiEMKSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 06:16:47 -0400
-Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC73E21265;
-        Fri, 13 May 2022 03:16:45 -0700 (PDT)
-IronPort-Data: =?us-ascii?q?A9a23=3AQNL8NaA205LTVBVW/8Lhw5YqxClBgxIJ4g17XOL?=
- =?us-ascii?q?fUwHt1j131D0GnDFNWGiPPveKamr3e4xwat+1/EkP7JGAx9UxeLYW3SszFioV8?=
- =?us-ascii?q?6IpJjg4wn/YZnrUdouaJK5ex512huLocYZkHhcwmj/3auK79SMkjPnRLlbBILW?=
- =?us-ascii?q?s1h5ZFFYMpBgJ2UoLd94R2uaEsPDha++/kYqaT/73ZDdJ7wVJ3lc8sMpvnv/AU?=
- =?us-ascii?q?MPa41v0tnRmDRxCUcS3e3M9VPrzLonpR5f0rxU9IwK0ewrD5OnREmLx9BFrBM6?=
- =?us-ascii?q?nk6rgbwsBRbu60Qqm0yIQAvb9xEMZ4HFaPqUTbZLwbW9GgjOGj5Zz2f1DqJ6xV?=
- =?us-ascii?q?Rw0eKbLnYzxVjEBSX0kZPYfp+SvzX+X9Jb7I1f9W2fjx+VGCEAwIJEC/eB2ESd?=
- =?us-ascii?q?C+JQwLT8XaQuYr+a3xq+rDOhqmsknasLsOes3sGlI1izCALAqTPjrR6TM+M8d0?=
- =?us-ascii?q?DA7rt5BEOyYZMcDbzdrKhPabHVnPlYRFYJ7n+qygHT7WyNXpUjTpqct5WXXigt?=
- =?us-ascii?q?r39DQ3HD9EjCRbZwN2B/G+SSdpCKkaiz2/ee3kVKtmk9ATMeW9c8jZL8vKQ=3D?=
- =?us-ascii?q?=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A52oAfqGdTyWl+cNApLqE1MeALOsnbusQ8zAX?=
- =?us-ascii?q?PiFKOHhom6mj+vxG88506faKslwssR0b+OxoW5PwJE80l6QFgrX5VI3KNGbbUQ?=
- =?us-ascii?q?CTXeNfBOXZowHIKmnX8+5x8eNaebFiNduYNzNHpPe/zA6mM9tI+rW6zJw=3D?=
-X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
-   d="scan'208";a="124213173"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 13 May 2022 18:16:44 +0800
-Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
-        by cn.fujitsu.com (Postfix) with ESMTP id 0A2454D1716F;
-        Fri, 13 May 2022 18:16:39 +0800 (CST)
-Received: from G08CNEXCHPEKD08.g08.fujitsu.local (10.167.33.83) by
- G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Fri, 13 May 2022 18:16:39 +0800
-Received: from localhost.localdomain (10.167.215.54) by
- G08CNEXCHPEKD08.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Fri, 13 May 2022 18:16:38 +0800
-From:   Xiao Yang <yangx.jy@fujitsu.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
-CC:     <mgross@linux.intel.com>, <bp@suse.de>, <tglx@linutronix.de>,
-        Xiao Yang <yangx.jy@fujitsu.com>
-Subject: [PATCH] x86/speculation: Add missing srbds=off in the document of 'mitigations='
-Date:   Fri, 13 May 2022 18:16:37 +0800
-Message-ID: <20220513101637.216487-1-yangx.jy@fujitsu.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 13 May 2022 06:18:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D1520F47;
+        Fri, 13 May 2022 03:18:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B562B82B97;
+        Fri, 13 May 2022 10:18:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73559C34100;
+        Fri, 13 May 2022 10:17:58 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Z6r8D4Ml"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1652437077;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VovRtYSRUSXbGlmxvrCITWEXGUgOyw5jefLauvHrUQk=;
+        b=Z6r8D4MlmeADkeaZA9HvoYqtYuIydFihD0iXPqMxFpofa3kw++3++8SXB9jyjDMptBeZIR
+        Cpjvai7SJRSl0HQF/wFXgYLnDnAY9zzgvXZIkRTKxzZ4/4XjlQSEpIrJtopudGVn05WHW2
+        leLY9BAtNn0kk3Lu3nCK4mrhqzy2PU0=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 1fb61103 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 13 May 2022 10:17:56 +0000 (UTC)
+Date:   Fri, 13 May 2022 12:17:55 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Dominik Brodowski <linux@dominikbrodowski.net>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v3] random: use first 128 bits of input as fast init
+Message-ID: <Yn4wUxYYYm8adCrN@zx2c4.com>
+References: <20220503131204.571547-1-Jason@zx2c4.com>
+ <20220504111644.284927-1-Jason@zx2c4.com>
+ <Yn35LG3pz9BNsSS3@owl.dominikbrodowski.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-yoursite-MailScanner-ID: 0A2454D1716F.A79BC
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: yangx.jy@fujitsu.com
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yn35LG3pz9BNsSS3@owl.dominikbrodowski.net>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Xiao Yang <yangx.jy@fujitsu.com>
----
- Documentation/admin-guide/kernel-parameters.txt | 1 +
- 1 file changed, 1 insertion(+)
+Hi Dominik,
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 3f1cc5e317ed..93e9b15f1cf4 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -3103,6 +3103,7 @@
- 					       mds=off [X86]
- 					       tsx_async_abort=off [X86]
- 					       kvm.nx_huge_pages=off [X86]
-+					       srbds=off [X86,INTEL]
- 					       no_entry_flush [PPC]
- 					       no_uaccess_flush [PPC]
- 
--- 
-2.21.0
+On Fri, May 13, 2022 at 08:22:36AM +0200, Dominik Brodowski wrote:
+> Am Wed, May 04, 2022 at 01:16:44PM +0200 schrieb Jason A. Donenfeld:
+> > Before, the first 64 bytes of input, regardless of how entropic it was,
+> > would be used to mutate the crng base key directly, and none of those
+> > bytes would be credited as having entropy. Then 256 bits of credited
+> > input would be accumulated, and only then would the rng transition from
+> > the earlier "fast init" phase into being actually initialized.
+> > 
+> > The thinking was that by mixing and matching fast init and real init, an
+> > attacker who compromised the fast init state, considered easy to do
+> > given how little entropy might be in those first 64 bytes, would then be
+> > able to bruteforce bits from the actual initialization. By keeping these
+> > separate, bruteforcing became impossible.
+> > 
+> > However, by not crediting potentially creditable bits from those first 64
+> > bytes of input, we delay initialization, and actually make the problem
+> > worse, because it means the user is drawing worse random numbers for a
+> > longer period of time.
+> > 
+> > Instead, we can take the first 128 bits as fast init, and allow them to
+> > be credited, and then hold off on the next 128 bits until they've
+> > accumulated. This is still a wide enough margin to prevent bruteforcing
+> > the rng state, while still initializing much faster.
+> > 
+> > Then, rather than trying to piecemeal inject into the base crng key at
+> > various points, instead just extract from the pool when we need it, for
+> > the crng_init==0 phase. Performance may even be better for the various
+> > inputs here, since there are likely more calls to mix_pool_bytes() then
+> > there are to get_random_bytes() during this phase of system execution.
+> 
+> Have you evaluated this closer, also for systems where it takes ages to
+> reach crng_init = 1? And might it make sense to only call extract_entropy()
+> if there has been new input between two calls to get_random_bytes()?
 
+Yes. On those systems, the extra calls to extract_entropy() are actually
+helping the otherwise abysmal state, because they're adding in some new
+cycle counter values on every call. Performance-wise, it's not really
+that bad. Actually, by *far* the most expensive thing that
+extract_entropy() does is RDSEED/RDRAND, but systems that have those
+instructions don't stay in crng_init==CRNG_EARLY for very long anyway.
+So all and all, it works out quite nicely.
 
-
+Jason

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB37F5265DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A185265DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381818AbiEMPTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 11:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36668 "EHLO
+        id S1381812AbiEMPTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 11:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354697AbiEMPSy (ORCPT
+        with ESMTP id S1377477AbiEMPSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 13 May 2022 11:18:54 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C5C65D21
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:18:51 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id k2so11890596wrd.5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:18:51 -0700 (PDT)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04FDD65D32
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:18:53 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id t6so11890433wra.4
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:18:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aZq4fC2Rak5UWYJ3VIIYdWjnbZR2sPVVIaexZnW1q/I=;
-        b=HQi8r+ZoZeMt4xZoWTa3lRBsVXxOn9iEpiGjsop/qcVb8GtAWT7q4ejCTLXnoYStp+
-         t2MLJ4dQ3KYgeA9XJjgbJZ6szcX/KAygjsrTG6rO2zuz24jEesb7vWndS0NDrUOIRX7y
-         9lYwfTflLqPnC1vPRLYuSB16+3cZCG8xVSj8mRtZOpTtHVTnRutvuuVwvvOe0k9v33ou
-         /zQuGgtcZE8eSGSAFwbrY/m+2xZ6+0UAAF9fflSDvh6BXrguAQ/ZCeb67WFjzyrJ19cp
-         4VsF+OsNbQmSWskXl/8o98wPcjlc0Qv5YQMhvVMsrMFpxDGf16yquD1ruPHIoCkt6PsZ
-         ouCA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ILXr0TJPBJo0r6+Bn2TlxMvdz9hhu2MSRkeWBLg3s/U=;
+        b=HLD6Co9A73LAXEkw7+pf5QazPc69Bm06mHH6jsxZoX0JxGEgEYzaYyu56Alvyu+0Qt
+         7PFQjfMia2V+1HGOLGC56uB3KItocMtPicnNQds8cHaoIxgRl8RxEQM18q7Dnm0PPopw
+         pu9sSSMCdD9d08zK0JXdLDAngru3KaGKK7TXryjBh9EVoGJBv+yPX7GKis6MqNc3Nc9f
+         OUSKwsKg9hGxD/hkmkLK6kxmWAQyN1ujJxUVeCeweirF1euA33h4Uhhif6rWjxM0qE7n
+         1WsnoTM/6xOg67hixrGo+3a7CUqfYPhjHy0GitnM6mu6WGR0Pk6nGNWm+JPibcdI9oJF
+         nJnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aZq4fC2Rak5UWYJ3VIIYdWjnbZR2sPVVIaexZnW1q/I=;
-        b=Lbm+c3fxIjUebPxNVwfV/1a6EW3pIvB6f9G3++Bjvx9o+zg1A6tgft+yr9/sKO9X6L
-         mId9A1B7gMTshp1WQ0aKUZDHQJO6qEF1Lbc1H5J/sIeq6rfcuzyL8O0YvZkUPxaKVPqz
-         IMlsEThehYDhxImEf0/kehp6Qduz7znUAFTCXAnv2u7zkENPKjIeFd1+u29UGpncqsWU
-         bte8t64o7BACxHm9vtZys8UnZWdIHCoGnIHz8IFbqswh9GWBbBZKxkq17kNvggieijCP
-         8VsEwUGUyAvgfy+prhjrVi1P1DpCqyvcEsuYS/rI/F+zcp2A4gKhZH6oiy9v9vhQ1BwQ
-         7SiQ==
-X-Gm-Message-State: AOAM530gAoxfN4pPxmWzKiidpCyU9baomHx/q8Am7ZXoml5Xpd/Ph1yp
-        zKj6Lep9tW8eHnnQgtmdKcQYiw==
-X-Google-Smtp-Source: ABdhPJzA5hibYWer3Lwq832/9i84TeS4ajByZLSB7T1HAQ11tmgx+UjsG7iBBisRg7iuu3/eHnmloQ==
-X-Received: by 2002:a5d:5960:0:b0:20c:5a12:20ed with SMTP id e32-20020a5d5960000000b0020c5a1220edmr4425513wri.303.1652455130320;
-        Fri, 13 May 2022 08:18:50 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ILXr0TJPBJo0r6+Bn2TlxMvdz9hhu2MSRkeWBLg3s/U=;
+        b=JrKSUAZfOAv6Y9QP9+OwG5DF4KEWN9eZ0dNkdwgJAPmTEDzL+1tBrRwqcWts0s4fXv
+         UJUyP/+K65xhbc73RWKnIVo9huZV9V4SaBiRq9D/GaAv9qvxIXmv/Ly9WNddEoMkg3/d
+         5ppvPyo93gKJpuZAFNFnL6LipCMrsT2HoBnIqWusdsVjzORxs/QxStPPMoWMk7LVZSpP
+         C/K+E/YHvk5cvQIhGcdRGSUFRQvizzIGYUbXaXe4HCTvgp74klMjDom9C3iqIyTtFgqu
+         BdZ/jTc1YYi1LCsmKhsj5l1nlONVZlzCRYbRbUtGBDfaqAVAjtOORzC5hy4c3HhghKkS
+         sSZg==
+X-Gm-Message-State: AOAM532BjuHezcpT9/pDkl2Pg+V8wzuQl01W0W7sybtLuttDCQCIq84+
+        5MTk+7iLR0BovKcqKypDr0LxcQ==
+X-Google-Smtp-Source: ABdhPJzKFEfxpnN+vZ4gkOcoP10PztsJZ+L6QlSReHHtgDvmMOwpglZXa0bZZncL5YwfpXGV9OgxEg==
+X-Received: by 2002:adf:e2cb:0:b0:20c:c1bb:9fcb with SMTP id d11-20020adfe2cb000000b0020cc1bb9fcbmr4435589wrj.35.1652455131503;
+        Fri, 13 May 2022 08:18:51 -0700 (PDT)
 Received: from groot.home ([2a01:cb19:85e6:1900:9353:61cb:4e25:b9cd])
-        by smtp.gmail.com with ESMTPSA id b9-20020adfc749000000b0020c6a524fd5sm2800825wrh.99.2022.05.13.08.18.49
+        by smtp.gmail.com with ESMTPSA id b9-20020adfc749000000b0020c6a524fd5sm2800825wrh.99.2022.05.13.08.18.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 08:18:49 -0700 (PDT)
+        Fri, 13 May 2022 08:18:51 -0700 (PDT)
 From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
 To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
@@ -58,10 +58,12 @@ Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
         linux-input@vger.kernel.org, linux-mediatek@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Mattijs Korpershoek <mkorpershoek@baylibre.com>
-Subject: [RESEND PATCH 0/2] Input: mt6779-keypad - fix hw code logic and row/col selection
-Date:   Fri, 13 May 2022 17:18:43 +0200
-Message-Id: <20220513151845.2802795-1-mkorpershoek@baylibre.com>
+Subject: [RESEND PATCH 1/2] Input: mt6779-keypad - fix hardware code mapping
+Date:   Fri, 13 May 2022 17:18:44 +0200
+Message-Id: <20220513151845.2802795-2-mkorpershoek@baylibre.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220513151845.2802795-1-mkorpershoek@baylibre.com>
+References: <20220513151845.2802795-1-mkorpershoek@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,32 +75,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This serie is the first follow-up on the mt6779-keypad in
-order to enable it on the MediaTek mt8183-pumpkin board.
+In mt6779_keypad_irq_handler(), we
+1. Read a hardware code from KPD_MEM1 -> KPD_MEM5
+2. Use that hardware code to compute columns/rows for the standard
+   keyboard matrix.
 
-To fully enable it on mt8183-pumpkin, we still need:
-* double key support
-* dts changes
+According to the (non-public) datasheet, the
+map between the hardware code and the cols/rows is:
 
-To ease up reviewing, I preferred sending this first.
+        |(0)  |(1)  |(2)
+    ----*-----*-----*-----
+        |     |     |
+        |(9)  |(10) |(11)
+    ----*-----*-----*-----
+        |     |     |
+        |(18) |(19) |(20)
+    ----*-----*-----*-----
+        |     |     |
 
-The first patch fixes a logic bug based on the (non-public) datasheet
-I have.
-The second patch configures the keypad correctly in order to not
-report bogus values.
+This brings us to another formula:
+-> row = code / 9;
+-> col = code % 3;
 
-Thank you,
-Mattijs
+Implement this mapping in bitnr_to_col_row() to fetch the
+correct input event from keypad->input_dev->keycode and report that
+back to userspace.
 
-Mattijs Korpershoek (2):
-  Input: mt6779-keypad - fix hardware code mapping
-  Input: mt6779-keypad - implement row/column selection
+Fixes: f28af984e771 ("Input: mt6779-keypad - add MediaTek keypad driver")
+Co-developed-by: Fabien Parent <fparent@baylibre.com>
+Signed-off-by: Fabien Parent <fparent@baylibre.com>
+Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+---
+ drivers/input/keyboard/mt6779-keypad.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
- drivers/input/keyboard/mt6779-keypad.c | 26 ++++++++++++++++++++++++--
- 1 file changed, 24 insertions(+), 2 deletions(-)
-
-
-base-commit: b243018eafeb69bf074ef013c54504632fd161ec
+diff --git a/drivers/input/keyboard/mt6779-keypad.c b/drivers/input/keyboard/mt6779-keypad.c
+index 2e7c9187c10f..23360de20da5 100644
+--- a/drivers/input/keyboard/mt6779-keypad.c
++++ b/drivers/input/keyboard/mt6779-keypad.c
+@@ -36,6 +36,19 @@ static const struct regmap_config mt6779_keypad_regmap_cfg = {
+ 	.max_register = 36,
+ };
+ 
++/*
++ * | hardware key code | col0 | col1 | col2|
++ * | ----------------- | -----| ---- | --- |
++ * | row0              | 0    | 1    | 2   |
++ * | row1              | 9    | 10   | 11  |
++ * | row2              | 18   | 19   | 20  |
++ */
++static void bitnr_to_col_row(int bit_nr, int *col, int *row)
++{
++	*row = bit_nr / 9;
++	*col = bit_nr % 3;
++}
++
+ static irqreturn_t mt6779_keypad_irq_handler(int irq, void *dev_id)
+ {
+ 	struct mt6779_keypad *keypad = dev_id;
+@@ -61,8 +74,7 @@ static irqreturn_t mt6779_keypad_irq_handler(int irq, void *dev_id)
+ 		if (bit_nr % 32 >= 16)
+ 			continue;
+ 
+-		row = bit_nr / 32;
+-		col = bit_nr % 32;
++		bitnr_to_col_row(bit_nr, &col, &row);
+ 		scancode = MATRIX_SCAN_CODE(row, col, row_shift);
+ 		/* 1: not pressed, 0: pressed */
+ 		pressed = !test_bit(bit_nr, new_state);
 -- 
 2.32.0
 

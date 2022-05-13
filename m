@@ -2,214 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E685269E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 21:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDDAE5269E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 21:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383556AbiEMTIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 15:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39712 "EHLO
+        id S1383561AbiEMTJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 15:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383550AbiEMTIr (ORCPT
+        with ESMTP id S1379900AbiEMTJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 15:08:47 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA47F56FB9
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 12:08:45 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id cu23-20020a17090afa9700b001d98d8e53b7so8674192pjb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 12:08:45 -0700 (PDT)
+        Fri, 13 May 2022 15:09:28 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2053BBD8
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 12:09:25 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id c24so6593908lfv.11
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 12:09:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=EzjGRanVFJwRnOyFB5bsr0UVElbIvg6LgT11yCg+N3M=;
-        b=ss5GJYfHPQaNwqrKhr6tbvMUjMLuarNHrQDLGQ8pLgxAb2Nm0f5ncRzjYSI2Jug0pM
-         DpqCDF798MF/A1Wwt0HR7db2DjEAZOLoxepKD7ipJeZ3tbn6RPTjFQrfzoErEAEQtVZr
-         l/sIDk/ToOD+knR2vC0wKg+GaUqhEMTt8sP2QchJB9K8F/4eWK0reiVtsIpW+sXYyE4o
-         K+tiniiA2zDZ16msptDnM2yo2XW3A53IHJiK0f8p+RaaT/RlS5IEoyY2tvpor8AICa0u
-         HPjvwJQnx0SFw5LpdCkMmvd3UZsvyRmjwV8FuvEusT+fWljQFcSslNfdoHryonkZzZ50
-         brKw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rbJzGXtyUp4FkqReU6sYBiDMNKWwFopa4KLMlmGZbuA=;
+        b=GJx1FC6PGj6rP204JhO+MVJD1p9S4B+WG3Wu3TnyVIi0CzstjPqeEwc9SpcYJe1l2R
+         TXfW9mAAliWx/XxYsTGa4JGZi1ldNXUsBVx/1fAKAjk52jHYQR53XvuCTMBvBpn6MgRR
+         nvpW/IRmtZIRvLyMS+gjblxH1h5ebwHsII+gRQJhlnTz2JmCdju6VXzbxiZrzjAU0G8S
+         qEZAkEjFjZm5uCyVG1A9FYdpEJXEIggJw4e8FDvUWWObJAj2ttke1r3VSENsFthwAaHE
+         UD/Jt3UM0xd083pDPRmEB5Y8Wcl8Crk4Yp0PFs+XzKdG15jB7LAq0MZO7OESoHhu2wHG
+         Klkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=EzjGRanVFJwRnOyFB5bsr0UVElbIvg6LgT11yCg+N3M=;
-        b=nXG7DraAhtjMh4I/uL1VTKPjI7YNqNuazhXklFNOTvRKWqA2fhmgOQ3rl0ImjPxg9j
-         tXJFUQm/uyXyhM7OUMdArPuSvbRfH2wGkitamn9CseQZjchN7TTP6zNtXiiMR0r+4JOR
-         JUFkKGGIfaevnrTApn56TFoXUDaqCK7t80f1ZisQbWWF9QWUiAmfnxkW59WbW3/at7B/
-         ScwWbqc/+pGboxnVATsCqmzLnaTzjpHlLZlHP7AG/NdYuNKIXbRmBE997/W3N1OsJdnD
-         IddvZH+tvxcxtezvRCbzDzCvIiKqDeLIHriD3TSscfx+7l1vB7F4I/YnYW3UNXxiYKc1
-         92IQ==
-X-Gm-Message-State: AOAM5338dkp3zg3FhT9rF6YGM0xe5uB44xcgJx2I+p4b0Z2++r6wDSrY
-        LD60u4G1iZp0SleAzPOhdAZWMw==
-X-Google-Smtp-Source: ABdhPJxjT/S/GGJcrjyiN98cpunUOAk8dmuGyazrbmW7Cv3+M62T06kVWsQdFGqdRn6fRzzpgRc3Wg==
-X-Received: by 2002:a17:902:82c7:b0:161:4936:f068 with SMTP id u7-20020a17090282c700b001614936f068mr26519plz.145.1652468925184;
-        Fri, 13 May 2022 12:08:45 -0700 (PDT)
-Received: from localhost.localdomain ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id b5-20020a170902e94500b0015e8d4eb2cfsm2148036pll.281.2022.05.13.12.08.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 12:08:44 -0700 (PDT)
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-To:     andrii.nakryiko@gmail.com
-Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
-        "Alexei Starovoitov" <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        "Andrii Nakryiko" <andrii@kernel.org>,
-        "Martin KaFai Lau" <kafai@fb.com>,
-        "Song Liu" <songliubraving@fb.com>, "Yonghong Song" <yhs@fb.com>,
-        "John Fastabend" <john.fastabend@gmail.com>,
-        "KP Singh" <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+f264bffdfbd5614f3bb2@syzkaller.appspotmail.com
-Subject: [PATCH v3] bpf: Fix KASAN use-after-free Read in compute_effective_progs
-Date:   Fri, 13 May 2022 12:08:21 -0700
-Message-Id: <20220513190821.431762-1-tadeusz.struk@linaro.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <CAEf4Bzah9K7dEa_7sXE4TnkuMTRHypMU9DxiLezgRvLjcqE_YA@mail.gmail.com>
-References: <CAEf4Bzah9K7dEa_7sXE4TnkuMTRHypMU9DxiLezgRvLjcqE_YA@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rbJzGXtyUp4FkqReU6sYBiDMNKWwFopa4KLMlmGZbuA=;
+        b=xOvnr5Ld8Fot0yzhORXSuxMAbFkAMQug4Bv2j+tDlu5NFUGg7cgunbAK9zTmHHdC5h
+         8WyU9p0fciA6kcE6sOwaEoVnnuaA/ksrKJnNEb/iAiP1yW61OinxNESNAv3886+vpN7j
+         JeaDrx5C/72ccMLrVqVN3AL3DgVcHsaQQdovoMcNUxy3f2nxj2nmnAZOMgXT0cJ8sNfk
+         O/LqTe6LodMzZCGOggD4AKCGmCW/DNZQcXok76+J7lldRkmu8tntN6pmb+tucrikWWt9
+         /eCfwt+Aqx3+6pa9Re3dfqEiEFm2GX0PqhBAKv1n5thcL5PEtSamaxXDTTt6H6zEzRv8
+         49Ag==
+X-Gm-Message-State: AOAM5332h1ZUp4BmLYUUHESs2eWaC71b/ZFFi3QGHPEjRmRpYG6MSSSD
+        qvF9+cY1inRMIb60CKHqBJKg22b9alon48TSTBlbdw==
+X-Google-Smtp-Source: ABdhPJw2v+78PG9kRlrr2N0DSVUm9/qtjQv8JgVoDVhvaTi3qjv3ZFLpx/pOXFQCTgDrEl1P0PwYOBSHt4h+KgElKzY=
+X-Received: by 2002:a05:6512:104a:b0:473:d38b:cdf with SMTP id
+ c10-20020a056512104a00b00473d38b0cdfmr4633370lfb.554.1652468963837; Fri, 13
+ May 2022 12:09:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220429043913.626647-1-davidgow@google.com> <20220513083212.3537869-2-davidgow@google.com>
+In-Reply-To: <20220513083212.3537869-2-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Fri, 13 May 2022 12:08:46 -0700
+Message-ID: <CAGS_qxr54nYThsj6UhqX54JO5WnyJXVQURnNF1eCzGB+4GCKLA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] kunit: Taint the kernel when KUnit tests are run
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Joe Fradley <joefradley@google.com>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzbot found a Use After Free bug in compute_effective_progs().
-The reproducer creates a number of BPF links, and causes a fault
-injected alloc to fail, while calling bpf_link_detach on them.
-Link detach triggers the link to be freed by bpf_link_free(),
-which calls __cgroup_bpf_detach() and update_effective_progs().
-If the memory allocation in this function fails, the function restores
-the pointer to the bpf_cgroup_link on the cgroup list, but the memory
-gets freed just after it returns. After this, every subsequent call to
-update_effective_progs() causes this already deallocated pointer to be
-dereferenced in prog_list_length(), and triggers KASAN UAF error.
+On Fri, May 13, 2022 at 1:32 AM David Gow <davidgow@google.com> wrote:
+>
+> Make KUnit trigger the new TAINT_TEST taint when any KUnit test is run.
+> Due to KUnit tests not being intended to run on production systems, and
+> potentially causing problems (or security issues like leaking kernel
+> addresses), the kernel's state should not be considered safe for
+> production use after KUnit tests are run.
+>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-To fix this issue don't preserve the pointer to the prog or link in the
-list, but remove it and replace it with a dummy prog without shrinking
-the table. The subsequent call to __cgroup_bpf_detach() or
-__cgroup_bpf_detach() will correct it.
+Tested-by: Daniel Latypov <dlatypov@google.com>
 
-Cc: "Alexei Starovoitov" <ast@kernel.org>
-Cc: "Daniel Borkmann" <daniel@iogearbox.net>
-Cc: "Andrii Nakryiko" <andrii@kernel.org>
-Cc: "Martin KaFai Lau" <kafai@fb.com>
-Cc: "Song Liu" <songliubraving@fb.com>
-Cc: "Yonghong Song" <yhs@fb.com>
-Cc: "John Fastabend" <john.fastabend@gmail.com>
-Cc: "KP Singh" <kpsingh@kernel.org>
-Cc: <netdev@vger.kernel.org>
-Cc: <bpf@vger.kernel.org>
-Cc: <stable@vger.kernel.org>
-Cc: <linux-kernel@vger.kernel.org>
+Looks good to me.
 
-Link: https://syzkaller.appspot.com/bug?id=8ebf179a95c2a2670f7cf1ba62429ec044369db4
-Fixes: af6eea57437a ("bpf: Implement bpf_link-based cgroup BPF program attachment")
-Reported-by: <syzbot+f264bffdfbd5614f3bb2@syzkaller.appspotmail.com>
-Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
----
-v2: Add a fall back path that removes a prog from the effective progs
-    table in case detach fails to allocate memory in compute_effective_progs().
+There's an edge case where we might have 0 suites or 0 tests and we
+still taint the kernel, but I don't think we need to deal with that.
+At the start of kunit_run_tests() is the cleanest place to do this.
 
-v3: Implement the fallback in a separate function purge_effective_progs
----
- kernel/bpf/cgroup.c | 64 +++++++++++++++++++++++++++++++++++++++------
- 1 file changed, 56 insertions(+), 8 deletions(-)
+I wasn't quite sure where this applied, but I manually applied the changes here.
+Without this patch, this command exits fine:
+$ ./tools/testing/kunit/kunit.py run --kernel_args=panic_on_taint=0x40000
 
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 128028efda64..9d3af4d6c055 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -681,6 +681,57 @@ static struct bpf_prog_list *find_detach_entry(struct list_head *progs,
- 	return ERR_PTR(-ENOENT);
- }
- 
-+/**
-+ * purge_effective_progs() - After compute_effective_progs fails to alloc new
-+ *                           cgrp->bpf.inactive table we can recover by
-+ *                           recomputing the array in place.
-+ *
-+ * @cgrp: The cgroup which descendants to traverse
-+ * @link: A link to detach
-+ * @atype: Type of detach operation
-+ */
-+static void purge_effective_progs(struct cgroup *cgrp, struct bpf_prog *prog,
-+				  enum cgroup_bpf_attach_type atype)
-+{
-+	struct cgroup_subsys_state *css;
-+	struct bpf_prog_array_item *item;
-+	struct bpf_prog *tmp;
-+	struct bpf_prog_array *array;
-+	int index = 0, index_purge = -1;
-+
-+	if (!prog)
-+		return;
-+
-+	/* recompute effective prog array in place */
-+	css_for_each_descendant_pre(css, &cgrp->self) {
-+		struct cgroup *desc = container_of(css, struct cgroup, self);
-+
-+		array = desc->bpf.effective[atype];
-+		item = &array->items[0];
-+
-+		/* Find the index of the prog to purge */
-+		while ((tmp = READ_ONCE(item->prog))) {
-+			if (tmp == prog) {
-+				index_purge = index;
-+				break;
-+			}
-+			item++;
-+			index++;
-+		}
-+
-+		/* Check if we found what's needed for removing the prog */
-+		if (index_purge == -1 || index_purge == index - 1)
-+			continue;
-+
-+		/* Remove the program from the array */
-+		WARN_ONCE(bpf_prog_array_delete_safe_at(array, index_purge),
-+			  "Failed to purge a prog from array at index %d", index_purge);
-+
-+		index = 0;
-+		index_purge = -1;
-+	}
-+}
-+
- /**
-  * __cgroup_bpf_detach() - Detach the program or link from a cgroup, and
-  *                         propagate the change to descendants
-@@ -723,8 +774,11 @@ static int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
- 	pl->link = NULL;
- 
- 	err = update_effective_progs(cgrp, atype);
--	if (err)
--		goto cleanup;
-+	if (err) {
-+		struct bpf_prog *prog_purge = prog ? prog : link->link.prog;
-+
-+		purge_effective_progs(cgrp, prog_purge, atype);
-+	}
- 
- 	/* now can actually delete it from this cgroup list */
- 	list_del(&pl->node);
-@@ -736,12 +790,6 @@ static int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
- 		bpf_prog_put(old_prog);
- 	static_branch_dec(&cgroup_bpf_enabled_key[atype]);
- 	return 0;
--
--cleanup:
--	/* restore back prog or link */
--	pl->prog = old_prog;
--	pl->link = link;
--	return err;
- }
- 
- static int cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
--- 
-2.36.1
+With it, I get
+[12:03:31] Kernel panic - not syncing: panic_on_taint set ...
+[12:03:31] CPU: 0 PID: 1 Comm: swapper Tainted: G                 N
+5.17.0-00001-gea9ee5e7aed8-dirty #60
 
+I'm a bit surprised that it prints 'G' and not 'N', but this does seem
+to be the right mask
+$ python3 -c 'print(hex(1<<18))'
+0x40000
+and it only takes effect when this patch is applied.
+I'll chalk that up to my ignorance of how taint works.

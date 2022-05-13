@@ -2,113 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 292B55263D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:22:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B905263E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349341AbiEMOWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57460 "EHLO
+        id S1380687AbiEMOZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:25:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354225AbiEMOVx (ORCPT
+        with ESMTP id S1359425AbiEMOYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:21:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 93D1F393
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:21:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652451710;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=XNGqTrEW6BLwV+eAEiNN6NXB1twRXEux4iCiLYrUS7c=;
-        b=ZFlvgaiyVSX9M30eM3d3qMzU6b/C2IlXcWX38jev38E+pkt9Yya+FUOI54lKIROov0fkJv
-        VUVluxNpD3SNCpFHxf1KmpFeVYQZ5e+GvctP2CFlPps8XY9q7pJTaCyIy01EQ0/hNiWOYe
-        2zOWE1BRWgJkCER0yH5JSjGMcuTIQBQ=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-623-dBK5W3pFMfKJZdhPZrv0cw-1; Fri, 13 May 2022 10:21:49 -0400
-X-MC-Unique: dBK5W3pFMfKJZdhPZrv0cw-1
-Received: by mail-wr1-f69.google.com with SMTP id j21-20020adfa555000000b0020adb9ac14fso2984449wrb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:21:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=XNGqTrEW6BLwV+eAEiNN6NXB1twRXEux4iCiLYrUS7c=;
-        b=fkcE7EQmBbLCJnH3w9p8SgCbc2s48ed63filg/Wy9RHkoc9SMl96UdE5q77YB4i4rn
-         lNqhLMYwfoVx2fWyI8HSxLgg9XuIJDR7K7nTaV5ERTw/TBoNZZv1PZLl0C3MLbvukTj1
-         Ol7r787vXa36uopQOTurLEHP0cbG6f86cLLAYgWU2+LKUdxpHY0yirYoxL1ByVVHL9yA
-         g/2Exq/8KHM0pnz5hKGTVErZNP+MB5nNA+0WHdTFgdaMyonzK65mf0QMfoAw9IIv4YKB
-         mR/w98mM2cWY8EBF2kGG5uEgNfnw+VQW1Lx9wxKDz2PkIudt9qqSukm534RzX+NPhdWm
-         ty6g==
-X-Gm-Message-State: AOAM530kCt9sU133Vd06LELTBbN1gZPKpPEy3aLolQFcmJ0XcdnZOpdW
-        C96nCgfjSBvqUeS1KwUb6nKZdqT2JkWgP2qMPiEPYgVdSfs1tsIZBhNVLenUNikzB9t+jVTH2yX
-        F7fcvQKpvVTwuE7TvYlMHD+XaiGfKHs/5+M8rfSFTD0ZBt3z+6GEn0e4NNro6kkygWsvO/ipNNF
-        upqds=
-X-Received: by 2002:a05:600c:1d88:b0:394:97e8:8afd with SMTP id p8-20020a05600c1d8800b0039497e88afdmr15051935wms.203.1652451708239;
-        Fri, 13 May 2022 07:21:48 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzr5VFZH30/lfTJ9dNeorX/0AaIiOWhyUFQ3gk8X42NkB3NYxI3noNgyxmYUJ1ht48ikh0DyA==
-X-Received: by 2002:a05:600c:1d88:b0:394:97e8:8afd with SMTP id p8-20020a05600c1d8800b0039497e88afdmr15051868wms.203.1652451707881;
-        Fri, 13 May 2022 07:21:47 -0700 (PDT)
-Received: from localhost.localdomain ([151.29.63.116])
-        by smtp.gmail.com with ESMTPSA id y25-20020a1c4b19000000b0039489e1bbd6sm5284325wma.47.2022.05.13.07.21.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 07:21:47 -0700 (PDT)
-Date:   Fri, 13 May 2022 16:21:43 +0200
-From:   Juri Lelli <juri.lelli@redhat.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Phil Auld <pauld@redhat.com>,
-        "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Quentin Perret <qperret@google.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Luca Abeni <luca.abeni@santannapisa.it>,
-        Morten Rasmussen <Morten.Rasmussen@arm.com>,
-        Dhaval Giani <dhaval.giani@oracle.com>,
-        Chris Hyser <chris.hyser@oracle.com>,
-        Waiman Long <longman@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mike Galbraith <efault@gmx.de>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Ben Segall <bsegall@google.com>, Will Deacon <will@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        patrick.bellasi@matbug.net,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rik van Riel <riel@surriel.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Paul Turner <pjt@google.com>,
-        Dario Faggioli <raistlin@linux.it>,
-        Andi Kleen <ak@linux.intel.com>, Scott Wood <swood@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        Daniel Wagner <wagi@monom.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Karl Rister <krister@redhat.com>,
-        Andrew Theurer <atheurer@redhat.com>
-Subject: [ANNOUNCE] CFP: CPU Isolation Microconference - Linux Plumbers
- Conference 2022
-Message-ID: <Yn5pd/yB5TLmOZ3x@localhost.localdomain>
+        Fri, 13 May 2022 10:24:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE10C51E5D;
+        Fri, 13 May 2022 07:24:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA14C61F99;
+        Fri, 13 May 2022 14:24:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A451C34100;
+        Fri, 13 May 2022 14:24:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652451885;
+        bh=ats/HlYQpYgQ6ICGJ9t9YHpljthNM6r50J6d/zvOAn8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=F91V7vJfsslOiz2t2/AjSgvZEm8GFdW8bw/2tJZHzRK6AcGw0Q7uvmJJ1UY0ccrRd
+         7OrWxswAzlRpiOzrXykcZzyn7L3TOnYkPHTiKoANUmPClBKf6aqepgvBt6Yz6Du5QY
+         IeuDxYWhBuOlQS9SCTbXQO2rTOR8bMheTdJUUImI=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 4.9 0/7] 4.9.314-rc1 review
+Date:   Fri, 13 May 2022 16:23:15 +0200
+Message-Id: <20220513142225.909697091@linuxfoundation.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.314-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-4.9.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 4.9.314-rc1
+X-KernelTest-Deadline: 2022-05-15T14:22+00:00
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -116,64 +62,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CPU Isolation can be considered as an holistic functionality that stems
-from a close combination of several kernel and userspace components
-working together to shield workloads with extreme latency or performance
-requirements from interruptions (also known as Operating System noise).
-An example of such type of workloads are DPDK (Data Plane Development
-Kit) use cases (Telco/5G) where even the shortest interruption (e.g., a
-few microseconds to service an IPI) can cause packet losses, eventually
-leading to exceeding QoS requirements.
+This is the start of the stable review cycle for the 4.9.314 release.
+There are 7 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-Despite considerable improvements in the last few years towards
-implementing full CPU Isolation (nohz_full, rcu_nocb, isolcpus, etc.), a
-certain amount of issues remain to be addressed, as it is still
-relatively simple to highlight sources of OS noise just by running
-synthetic workloads mimicking polling (always running) type of
-application similar to the ones mentioned above.
+Responses should be made by Sun, 15 May 2022 14:22:19 +0000.
+Anything received after that time might be too late.
 
-Recently, improvements and discussions about CPU isolation features have
-been made and discussed in LKML [1,2,3], and tools such as osnoise
-tracer and rtla osnoise [4,5] improved the CPU isolation analysis.
-Nevertheless, this is an ongoing process, and discussions are needed to
-speed up solutions for existing discussions and improve the existing
-tools and methods.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.314-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+and the diffstat can be found below.
 
-With this microconference we thus want to get together to discuss open
-problems, most notably: how to improve the identification of OS noise
-sources (expanding runtime tracing and/or code inspection tools), how to
-track them publicly (repo/DB) and how to tackle the sources of noise
-that have already been identified (e.g, [1,2,3]).
+thanks,
 
-A non exhaustive list of potential topics is:
+greg k-h
 
-- OS noise profiling (format and public DB for the community)
-- Tracing to detect OS noise: the rtla osnoise tracer and what it’s
-  missing TLB/icache flush deferral [1]
-- Extend cpuset v2 cpu partition feature to replace isolcpus kernel
-  cmdline
-- rt-trace-bpf tool
-- Task isolation
-- smp_call_function API improvements
+-------------
+Pseudo-Shortlog of commits:
 
-If you are interested in participating in this microconference and have
-topics to propose, please use the LPC CfP process [6], and select "CPU
-Isolation MC" for the "Track".
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 4.9.314-rc1
 
-The submission deadline is June 30.
+Muchun Song <songmuchun@bytedance.com>
+    mm: userfaultfd: fix missing cache flush in mcopy_atomic_pte() and __mcopy_atomic()
 
-Come and join us in the discussion, we hope to see you there!
+Ricky WU <ricky_wu@realtek.com>
+    mmc: rtsx: add 74 Clocks in power on flow
 
-In case of doubts, feel free to contact the MC Leads:
+Itay Iellin <ieitayie@gmail.com>
+    Bluetooth: Fix the creation of hdev->name
 
-Juri Lelli <juri.lelli@redhat.com>
-Daniel Bristot de Oliveira <bristot@redhat.com>
+Andreas Larsson <andreas@gaisler.com>
+    can: grcan: only use the NAPI poll budget for RX
 
-refs.
-1 - https://lore.kernel.org/all/20210929151723.162004989@infradead.org/
-2 - https://lore.kernel.org/lkml/20220315153132.717153751@fedora.localdomain/
-3 - https://lore.kernel.org/lkml/20211103170512.2745765-1-nsaenzju@redhat.com/
-4 - https://www.kernel.org/doc/html/latest/trace/osnoise-tracer.html
-5 - https://www.kernel.org/doc/html/latest/tools/rtla/rtla-osnoise.html
-6 - https://lpc.events/event/16/abstracts/
+Andreas Larsson <andreas@gaisler.com>
+    can: grcan: grcan_probe(): fix broken system id check for errata workaround needs
+
+Lee Jones <lee.jones@linaro.org>
+    block: drbd: drbd_nl: Make conversion to 'enum drbd_ret_code' explicit
+
+Nathan Chancellor <natechancellor@gmail.com>
+    MIPS: Use address-of operator on section symbols
+
+
+-------------
+
+Diffstat:
+
+ Makefile                          |  4 ++--
+ arch/mips/bmips/setup.c           |  2 +-
+ arch/mips/lantiq/prom.c           |  2 +-
+ arch/mips/pic32/pic32mzda/init.c  |  2 +-
+ drivers/block/drbd/drbd_nl.c      | 13 ++++++++-----
+ drivers/mmc/host/rtsx_pci_sdmmc.c | 30 ++++++++++++++++++++----------
+ drivers/net/can/grcan.c           | 38 ++++++++++++++++++--------------------
+ include/net/bluetooth/hci_core.h  |  3 +++
+ mm/userfaultfd.c                  |  3 +++
+ net/bluetooth/hci_core.c          |  6 +++---
+ 10 files changed, 60 insertions(+), 43 deletions(-)
+
 

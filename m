@@ -2,59 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54AD2526040
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E6D526048
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379599AbiEMKod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 06:44:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50424 "EHLO
+        id S1379606AbiEMKpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 06:45:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379580AbiEMKoa (ORCPT
+        with ESMTP id S1379578AbiEMKpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 06:44:30 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F010C2A0A53;
-        Fri, 13 May 2022 03:44:29 -0700 (PDT)
-Date:   Fri, 13 May 2022 10:44:27 -0000
+        Fri, 13 May 2022 06:45:03 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B305E2A0A53;
+        Fri, 13 May 2022 03:45:00 -0700 (PDT)
+Date:   Fri, 13 May 2022 10:44:57 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652438668;
+        s=2020; t=1652438699;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lCMh6nqjHElj/25pJ4wX9SdSVOW2vHWVXsi1MXUwgTI=;
-        b=IpO9gztm4bTvLaifLDQ9nUY+VI8Ts4oHTGWrseIQBLsbiEl40L9g5zr0KSjwpxcRJgxxVg
-        56BNUwJfQTXwrWiz2LHLnl48m/+o2epdny+cFlmbgwTRveXsrGl6FD2vvYlaP1JFlg5Onj
-        un/QUDr1Fu5yVlZ7AzmyIPVjb9rtgTTmmsc6dzMkKC5IGZ6MTd60T4L/trS2bR4hJkhO8p
-        OJ/Q3AoAoLpHd0aWtCtEFUOlZqPQplL9EPaa+rVU4TC6vg1DKPML6QaLtF9iLutBwH0f9d
-        lTQ08JEm8XuKi3W/U+5asrSCHNzFW9huUftD4pH0PUZOW3sCBxiytBwXkN9QeA==
+        bh=EkUKbhIzdWY6DspgZgLqMzIdvrE6pzQPrbY/UY1c64c=;
+        b=gqealpZhrinicZHEZ+BPg/kD3YKC7UeYXQsYz2q2XwynyzlvEOXSHlRoOsWafLtWmX6pPS
+        PW9PrNqAPIkh0o7SNonXLufZ1ZNAInfQMW39lfpAeIgvcg4Aq80jJweSd0a8JWTjRgATlm
+        iDGwuKK+tKDM2Wmuw1FHlFZJC5fFbbbBmZa87cAbOTH88j0brrp/RTqtKgEmhJ9vWpXCEM
+        mS3nrOKXRN/XE/ES7dx4Eg8b+p/epK4luKYeFpYKESzTjse3mP+tV2z75hKyVkzYz6BGjR
+        69bNqjPsZw9sthnQ2RsHJ/WnKBlZgVxFy5caMbNpYSrQNHa+2UJ2Iqz34u9ugQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652438668;
+        s=2020e; t=1652438699;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lCMh6nqjHElj/25pJ4wX9SdSVOW2vHWVXsi1MXUwgTI=;
-        b=TYx2ABwb3E0Hlny78P2LX4dzQG13JP17gj7fORKMz1FhW5muuIureL9voZSj0nXFrC0VQc
-        ywiYE7OwzlTHhTCw==
-From:   "tip-bot2 for Sebastian Andrzej Siewior" <tip-bot2@linutronix.de>
+        bh=EkUKbhIzdWY6DspgZgLqMzIdvrE6pzQPrbY/UY1c64c=;
+        b=aWflv7Ujn7hIkDlXmn/LVtKU2E8C+Tm/4mKBJl8xl34p8Ojo+3wzvTsN0UQkmC8ydnGmZI
+        SlvceryQKdLXjsCQ==
+From:   "tip-bot2 for Adrian-Ken Rueegsegger" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] futex: Remove a PREEMPT_RT_FULL reference.
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>, andrealmeid@igalia.com,
+Subject: [tip: x86/urgent] x86/mm: Fix marking of unused sub-pmd ranges
+Cc:     "Adrian-Ken Rueegsegger" <ken@codelabs.ch>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Oscar Salvador <osalvador@suse.de>,
+        David Hildenbrand <david@redhat.com>, stable@vger.kernel.org,
         x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <YnvWUvq1vpqCfCU7@linutronix.de>
-References: <YnvWUvq1vpqCfCU7@linutronix.de>
+In-Reply-To: <20220509090637.24152-2-ken@codelabs.ch>
+References: <20220509090637.24152-2-ken@codelabs.ch>
 MIME-Version: 1.0
-Message-ID: <165243866737.4207.3194810680223006844.tip-bot2@tip-bot2>
+Message-ID: <165243869785.4207.350965258098905435.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -65,47 +67,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the locking/core branch of tip:
+The following commit has been merged into the x86/urgent branch of tip:
 
-Commit-ID:     6829061315065c7af394d556a887fbf847e4e708
-Gitweb:        https://git.kernel.org/tip/6829061315065c7af394d556a887fbf847e=
-4e708
-Author:        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-AuthorDate:    Wed, 11 May 2022 17:29:22 +02:00
+Commit-ID:     280abe14b6e0a38de9cc86fe6a019523aadd8f70
+Gitweb:        https://git.kernel.org/tip/280abe14b6e0a38de9cc86fe6a019523aadd8f70
+Author:        Adrian-Ken Rueegsegger <ken@codelabs.ch>
+AuthorDate:    Mon, 09 May 2022 11:06:37 +02:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Fri, 13 May 2022 12:36:51 +02:00
+CommitterDate: Fri, 13 May 2022 12:41:21 +02:00
 
-futex: Remove a PREEMPT_RT_FULL reference.
+x86/mm: Fix marking of unused sub-pmd ranges
 
-Earlier the PREEMPT_RT patch had a PREEMPT_RT_FULL and PREEMPT_RT_BASE
-Kconfig option. The latter was a subset of the functionality that was
-enabled with PREEMPT_RT_FULL and was mainly useful for debugging.
+The unused part precedes the new range spanned by the start, end parameters
+of vmemmap_use_new_sub_pmd(). This means it actually goes from
+ALIGN_DOWN(start, PMD_SIZE) up to start.
 
-During the merging efforts the two Kconfig options were abandoned in the
-v5.4.3-rt1 release and since then there is only PREEMPT_RT which enables
-the full features set (as PREEMPT_RT_FULL did in earlier releases).
+Use the correct address when applying the mark using memset.
 
-Replace the PREEMPT_RT_FULL reference with PREEMPT_RT.
-
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Fixes: 8d400913c231 ("x86/vmemmap: handle unpopulated sub-pmd ranges")
+Signed-off-by: Adrian-Ken Rueegsegger <ken@codelabs.ch>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Andr=C3=A9 Almeida <andrealmeid@igalia.com>
-Link: https://lore.kernel.org/r/YnvWUvq1vpqCfCU7@linutronix.de
-
+Reviewed-by: Oscar Salvador <osalvador@suse.de>
+Reviewed-by: David Hildenbrand <david@redhat.com>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220509090637.24152-2-ken@codelabs.ch
 ---
- kernel/futex/pi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/mm/init_64.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/futex/pi.c b/kernel/futex/pi.c
-index 183b28c..ce2889f 100644
---- a/kernel/futex/pi.c
-+++ b/kernel/futex/pi.c
-@@ -1005,7 +1005,7 @@ retry_private:
- 	rt_mutex_init_waiter(&rt_waiter);
-=20
+diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
+index 96d34eb..e294233 100644
+--- a/arch/x86/mm/init_64.c
++++ b/arch/x86/mm/init_64.c
+@@ -902,6 +902,8 @@ static void __meminit vmemmap_use_sub_pmd(unsigned long start, unsigned long end
+ 
+ static void __meminit vmemmap_use_new_sub_pmd(unsigned long start, unsigned long end)
+ {
++	const unsigned long page = ALIGN_DOWN(start, PMD_SIZE);
++
+ 	vmemmap_flush_unused_pmd();
+ 
  	/*
--	 * On PREEMPT_RT_FULL, when hb->lock becomes an rt_mutex, we must not
-+	 * On PREEMPT_RT, when hb->lock becomes an rt_mutex, we must not
- 	 * hold it while doing rt_mutex_start_proxy(), because then it will
- 	 * include hb->lock in the blocking chain, even through we'll not in
- 	 * fact hold it while blocking. This will lead it to report -EDEADLK
+@@ -914,8 +916,7 @@ static void __meminit vmemmap_use_new_sub_pmd(unsigned long start, unsigned long
+ 	 * Mark with PAGE_UNUSED the unused parts of the new memmap range
+ 	 */
+ 	if (!IS_ALIGNED(start, PMD_SIZE))
+-		memset((void *)start, PAGE_UNUSED,
+-			start - ALIGN_DOWN(start, PMD_SIZE));
++		memset((void *)page, PAGE_UNUSED, start - page);
+ 
+ 	/*
+ 	 * We want to avoid memset(PAGE_UNUSED) when populating the vmemmap of

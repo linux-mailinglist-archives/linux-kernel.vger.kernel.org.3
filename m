@@ -2,320 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839F5526B0E
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7591526B08
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384085AbiEMURK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 16:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33500 "EHLO
+        id S1384000AbiEMUPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 16:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350826AbiEMURI (ORCPT
+        with ESMTP id S1357601AbiEMUPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 16:17:08 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5E813F62;
-        Fri, 13 May 2022 13:17:06 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id a5so8973860wrp.7;
-        Fri, 13 May 2022 13:17:06 -0700 (PDT)
+        Fri, 13 May 2022 16:15:34 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55EF93B576
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:15:33 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id c8so7554181qvh.10
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:15:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=AH3Twv2cDKO4PnwItSWLy467GPyS13DYbuX6H4dtOfk=;
-        b=gZ4GGp7LpiiHosXavOc8gQ/wUPUiQj9fbZZjdwD0cURk3Ze+2P9fWptU9fM9qyJjsg
-         74yfGFR5mW5laQwboTv4At62yatCI0s56djwGszugjJp6wQbwFc9dQoYp/9sKJe45c82
-         yHtV5VT+ajmDOd4S1LNp+9shkEDbvwkz3zYkF7Te7G/58AASlHJhMYFOnda+Vd1tCkF+
-         1E2S5FUVl3My8VlUPVjb8cj1KQHZO6MhP6BatO7j7FIHTL2lQavWBuvAacW7RT2fH5Aw
-         RUbMRN9ibXaufcqynaycNgjsDwASXyoDkvZG7hyDrcGhCMcBih0M2qdcVJBgozv25mp5
-         SBMw==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=z8tyfGIyj4QCjWxzXzO8gJFUZd4JNIC7ZKxyO4yxAcs=;
+        b=F1DwqMbX3C4qM5XgU+UfmsdneLS0XU7rLeNYlh9QwnShg4eBHYTmLougzM4093Zgq3
+         LeVMSUKpnmOp1po+rlLKyEBMh1uhHNo0MYtEYk6jOB8JwVpzjwio/D3C4D745ZFM8i+a
+         hFZ8UKOQKjO+iEj6taXWN4v3Cv+4Jb2LTbD+0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=AH3Twv2cDKO4PnwItSWLy467GPyS13DYbuX6H4dtOfk=;
-        b=WuEXDcG+0xbmROVKaJo6t8DtmT5TK2Jhvh6ML6kbeM820ZlQdfJNsE5bE/+nc0nvnZ
-         /zkyBdK7kjfAEO6a8qc6nawkFzV3CGuGAAOPaVZxrU90A1IhVybcisajkbhsNGIVm2Bk
-         GjdmQE7/rBNLg9zzhmdyHgrQMgyQcy60shl2caIhZ0tIGDF/C0jGboTbYmwnMCnzId46
-         aBYCDvrhHtUIDMyzWq1P+DlgxDvwyG5TPdkKZHheUbT6y1iKCjHGfSxgT8X+N6OmskP8
-         CaNwxo6LPzfzifswd8fUqn5fPWGWp7kIlGdhTmVeUJ2dtK5IvlyDFKUudPqsq4pnMT8M
-         VS0w==
-X-Gm-Message-State: AOAM5317x+YhUcAKKuL/SCXZdjmiz7U5pAoS/0iZHJP0cghW6rQdUpUL
-        sDBN7nB3rqjAtGNH/SLDoz8=
-X-Google-Smtp-Source: ABdhPJyG5Xx+Y28S93TTQKppba6xLMMvszgaMdDm4GqbQvAsQvT2sU2IJ4cKFUTCElb9JxcRPTEg6Q==
-X-Received: by 2002:a05:6000:1e09:b0:20c:dbc7:e391 with SMTP id bj9-20020a0560001e0900b0020cdbc7e391mr5392412wrb.218.1652473025236;
-        Fri, 13 May 2022 13:17:05 -0700 (PDT)
-Received: from localhost.localdomain ([2001:1670:c:db50:2f51:85b4:f668:c64f])
-        by smtp.gmail.com with ESMTPSA id x15-20020adfcc0f000000b0020c5253d923sm3064224wrh.111.2022.05.13.13.17.01
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=z8tyfGIyj4QCjWxzXzO8gJFUZd4JNIC7ZKxyO4yxAcs=;
+        b=st5Tkkncl3Ud8WADI4Eq+sp5gDIh31l3FZjo+thdyOv6IRuz5ujICNgw5yQ05v17zE
+         6DtCu6KzzDyR4EGs5hewdWOPPLqKgCbUajRYCFOR9d49DCDAW/TkQUP5TQ19/0WAYprD
+         AqlTzkm3uwKGovBbaNPF1ED95nM++HAwVkjvq/NB/o8X3rS8gbLE3yrOK10YoR7okMnt
+         PhS8z+RhkigSqYV/UtFlHprzlzbrIbKeBW3psqMs/iLyRgjberQTzIEzfawWUgZXj+Cp
+         arnGdt5n+s/NtDHJV4r40e+BObJg0o7srb3Mg2srguq3cvUfjHfUk6YH6XiaJDdojZCV
+         aduQ==
+X-Gm-Message-State: AOAM531rkjscFd4mnR/OC6QkgzOJmZ+SUW4Vo3V7SVFKyQh4yy8hnNgf
+        xcG2uktENC0/NMb9aa3DziRxaIijSt/E1MX7pKrK6w==
+X-Google-Smtp-Source: ABdhPJzcImkmUNnAnRYKJR4fAAj/PKirufEjVgtKSVv9x3OVOt1fZUvIBWdxj8liHAinYjSiebfazA==
+X-Received: by 2002:a17:902:a981:b0:156:229d:6834 with SMTP id bh1-20020a170902a98100b00156229d6834mr5874937plb.128.1652472921993;
+        Fri, 13 May 2022 13:15:21 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:f334:6f80:82ed:5653])
+        by smtp.gmail.com with ESMTPSA id im2-20020a170902bb0200b0015e8d4eb1bdsm2332362plb.7.2022.05.13.13.15.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 13:17:04 -0700 (PDT)
-From:   Yassine Oudjana <yassine.oudjana@gmail.com>
-X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Yassine Oudjana <yassine.oudjana@gmail.com>,
-        daniel.lezcano@linaro.org, tglx@linutronix.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, konrad.dybcio@somainline.org,
-        marijn.suijten@somainline.org, martin.botka@somainline.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        paul.bouchara@somainline.org
-Subject: Re: [PATCH v2 2/2] clocksource/drivers/timer-mediatek: Implement CPUXGPT timers
-Date:   Sat, 14 May 2022 00:14:42 +0400
-Message-Id: <20220513201442.13569-1-y.oudjana@protonmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220509210741.12020-3-angelogioacchino.delregno@collabora.com>
-References: 
+        Fri, 13 May 2022 13:15:21 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, Sean Paul <sean@poorly.run>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Vinod Koul <vkoul@kernel.org>, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5] drm/msm/dsi: don't powerup at modeset time for parade-ps8640
+Date:   Fri, 13 May 2022 13:15:13 -0700
+Message-Id: <20220513131504.v5.1.Ia196e35ad985059e77b038a41662faae9e26f411@changeid>
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yassine Oudjana <yassine.oudjana@gmail.com>
+Commit 7d8e9a90509f ("drm/msm/dsi: move DSI host powerup to modeset
+time") caused sc7180 Chromebooks that use the parade-ps8640 bridge
+chip to fail to turn the display back on after it turns off.
 
-On Mon,  9 May 2022 23:07:40 +0200, AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> wrote:
-> Some MediaTek platforms with a buggy TrustZone ATF firmware will not
-> initialize the AArch64 System Timer correctly: in these cases, the
-> System Timer address is correctly programmed, as well as the CNTFRQ_EL0
-> register (reading 13MHz, as it should be), but the assigned hardware
-> timers are never started before (or after) booting Linux.
-> 
-> In this condition, any call to function get_cycles() will be returning
-> zero, as CNTVCT_EL0 will always read zero.
+Unfortunately, it doesn't look easy to fix the parade-ps8640 driver to
+handle the new power sequence. The Linux driver has almost nothing in
+it and most of the logic for this bridge chip is in black-box firmware
+that the bridge chip uses.
 
-I spent a lot of time trying to figure out why the arch timer didn't
-work on MT6737T and never got any results. Turns out this is why...
+Also unfortunately, reverting the patch will break "tc358762".
 
-I ended up using the GPT (@ 0x10004000) as a system timer and it
-worked fine.
+The long term solution here is probably Dave Stevenson's series [1]
+that would give more flexibility. However, that is likely not a quick
+fix.
 
-With this patch the arch timer started to work finally. Thanks for
-the fix! See below for one comment on this patch. 
+For the short term, we'll look at the compatible of the next bridge in
+the chain and go back to the old way for the Parade PS8640 bridge
+chip. If it's found that other bridge chips also need this workaround
+then we can add them to the list or consider inverting the
+condition. However, the hope is that the framework will not take too
+much longer to land and we won't have to add anything other than
+ps8640 here.
 
-> One common critical symptom of that is trying to use the udelay()
-> function (calling __delay()), which executes the following loop:
-> 
->             start = get_cycles();
->             while ((get_cycles() - start) < cycles)
->                     cpu_relax();
-> 
-> which, when CNTVCT_EL0 always reads zero, translates to:
-> 
->             while((0 - 0) < 0)  ==> while(0 < 0)
-> 
-> ... generating an infinite loop, even though zero is never less
-> than zero, but always equal to it (this has to be researched,
-> but it's out of the scope of this commit).
-> 
-> To fix this issue on the affected MediaTek platforms, the solution
-> is to simply start the timers that are designed to be System Timer(s).
-> These timers, downstream, are called "CPUXGPT" and there is one
-> timer per CPU core; luckily, it is not necessary to set a start bit
-> on each CPUX General Purpose Timer, but it's conveniently enough to:
->  - Set the clock divider (input = 26MHz, divider = 2, output = 13MHz);
->  - Set the ENABLE bit on a global register (starts all CPUX timers).
-> 
-> The only small hurdle with this setup is that it's all done through
-> the MCUSYS wrapper, where it is needed, for each read or write, to
-> select a register address (by writing it to an index register) and
-> then to perform any R/W on a "CON" register.
-> 
-> For example, writing "0x1" to the CPUXGPT register offset 0x4:
-> - Write 0x4 to mcusys INDEX register
-> - Write 0x1 to mcusys CON register
-> 
-> Reading from CPUXGPT register offset 0x4:
-> - Write 0x4 to mcusys INDEX register
-> - Read mcusys CON register.
-> 
-> Finally, starting this timer makes platforms affected by this issue
-> to work correctly.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/clocksource/timer-mediatek.c | 119 +++++++++++++++++++++++++++
->  1 file changed, 119 insertions(+)
-> 
-> diff --git a/drivers/clocksource/timer-mediatek.c b/drivers/clocksource/timer-mediatek.c
-> index 7bcb4a3f26fb..a3e90047f9ac 100644
-> --- a/drivers/clocksource/timer-mediatek.c
-> +++ b/drivers/clocksource/timer-mediatek.c
-> @@ -22,6 +22,19 @@
->  
->  #define TIMER_SYNC_TICKS        (3)
->  
-> +/* cpux mcusys wrapper */
-> +#define CPUX_CON_REG		0x0
-> +#define CPUX_IDX_REG		0x4
-> +
-> +/* cpux */
-> +#define CPUX_IDX_GLOBAL_CTRL	0x0
-> + #define CPUX_ENABLE		BIT(0)
-> + #define CPUX_CLK_DIV_MASK	GENMASK(10, 8)
-> + #define CPUX_CLK_DIV1		BIT(8)
-> + #define CPUX_CLK_DIV2		BIT(9)
-> + #define CPUX_CLK_DIV4		BIT(10)
-> +#define CPUX_IDX_GLOBAL_IRQ	0x30
-> +
->  /* gpt */
->  #define GPT_IRQ_EN_REG          0x00
->  #define GPT_IRQ_ENABLE(val)     BIT((val) - 1)
-> @@ -72,6 +85,57 @@
->  
->  static void __iomem *gpt_sched_reg __read_mostly;
->  
-> +static u32 mtk_cpux_readl(u32 reg_idx, struct timer_of *to)
-> +{
-> +	writel(reg_idx, timer_of_base(to) + CPUX_IDX_REG);
-> +	return readl(timer_of_base(to) + CPUX_CON_REG);
-> +}
-> +
-> +static void mtk_cpux_writel(u32 val, u32 reg_idx, struct timer_of *to)
-> +{
-> +	writel(reg_idx, timer_of_base(to) + CPUX_IDX_REG);
-> +	writel(val, timer_of_base(to) + CPUX_CON_REG);
-> +}
-> +
-> +static void mtk_cpux_disable_irq(struct timer_of *to)
-> +{
-> +	const unsigned long *irq_mask = cpumask_bits(cpu_possible_mask);
-> +	u32 val;
-> +
-> +	val = mtk_cpux_readl(CPUX_IDX_GLOBAL_IRQ, to);
-> +	val &= ~(*irq_mask);
-> +	mtk_cpux_writel(val, CPUX_IDX_GLOBAL_IRQ, to);
-> +}
-> +
-> +static void mtk_cpux_enable_irq(struct timer_of *to)
-> +{
-> +	const unsigned long *irq_mask = cpumask_bits(cpu_possible_mask);
-> +	u32 val;
-> +
-> +	val = mtk_cpux_readl(CPUX_IDX_GLOBAL_IRQ, to);
-> +	val |= *irq_mask;
-> +	mtk_cpux_writel(val, CPUX_IDX_GLOBAL_IRQ, to);
-> +}
-> +
-> +static int mtk_cpux_clkevt_shutdown(struct clock_event_device *clkevt)
-> +{
-> +	/* Clear any irq */
-> +	mtk_cpux_disable_irq(to_timer_of(clkevt));
-> +
-> +	/*
-> +	 * Disabling CPUXGPT timer will crash the platform, especially
-> +	 * if Trusted Firmware is using it (usually, for sleep states),
-> +	 * so we only mask the IRQ and call it a day.
-> +	 */
-> +	return 0;
-> +}
-> +
-> +static int mtk_cpux_clkevt_resume(struct clock_event_device *clkevt)
-> +{
-> +	mtk_cpux_enable_irq(to_timer_of(clkevt));
-> +	return 0;
-> +}
-> +
->  static void mtk_syst_ack_irq(struct timer_of *to)
->  {
->  	/* Clear and disable interrupt */
-> @@ -281,6 +345,60 @@ static struct timer_of to = {
->  	},
->  };
->  
-> +static int __init mtk_cpux_init(struct device_node *node)
-> +{
-> +	static struct timer_of to_cpux;
-> +	u32 freq, val;
-> +	int ret;
-> +
-> +	/*
-> +	 * There are per-cpu interrupts for the CPUX General Purpose Timer
-> +	 * but since this timer feeds the AArch64 System Timer we can rely
-> +	 * on the CPU timer PPIs as well, so we don't declare TIMER_OF_IRQ.
-> +	 */
-> +	to_cpux.flags = TIMER_OF_BASE | TIMER_OF_CLOCK;
-> +	to_cpux.clkevt.name = "mtk-cpuxgpt";
-> +	to_cpux.clkevt.rating = 10;
-> +	to_cpux.clkevt.cpumask = cpu_possible_mask;
-> +	to_cpux.clkevt.set_state_shutdown = mtk_cpux_clkevt_shutdown;
-> +	to_cpux.clkevt.tick_resume = mtk_cpux_clkevt_resume;
-> +
-> +	/* If this fails, bad things are about to happen... */
-> +	ret = timer_of_init(node, &to_cpux);
-> +	if (ret) {
-> +		WARN(1, "Cannot start CPUX timers.\n");
-> +		return ret;
-> +	}
-> +
-> +	/*
-> +	 * Check if we're given a clock with the right frequency for this
-> +	 * timer, otherwise warn but keep going with the setup anyway, as
-> +	 * that makes it possible to still boot the kernel, even though
-> +	 * it may not work correctly (random lockups, etc).
-> +	 * The reason behind this is that having an early UART may not be
-> +	 * possible for everyone and this gives a chance to retrieve kmsg
-> +	 * for eventual debugging even on consumer devices.
-> +	 */
-> +	freq = timer_of_rate(&to_cpux);
-> +	if (freq > 13000000)
+[1] https://lore.kernel.org/r/cover.1646406653.git.dave.stevenson@raspberrypi.com
 
-Input clock is 26MHz and is then divided by 2 in CPUXGPT, so shouldn't
-this be 26000000 instead? I get a warning here with 26MHz system clock
-supplied:
+Fixes: 7d8e9a90509f ("drm/msm/dsi: move DSI host powerup to modeset time")
+Suggested-by: Rob Clark <robdclark@gmail.com>
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+---
+Note that, unlike `struct device`, `struct drm_bridge` still has a
+`#ifdef` around the `of_node`. The extra stub function in this patch
+is to make sure that we can pass COMPILE_TEST, not because I expect
+that we'll actually run into real users who are running this driver
+without device tree.
 
-clocks {
-	...
-	clk26m: clk26m {
-		compatible = "fixed-clock";
-		clock-frequency = <26000000>;
-		#clock-cells = <0>;
-	};
-	...
-};
-...
-soc {
-	...
-	cpuxgpt: timer@10200670 {
-		compatible = "mediatek,mt6795-systimer";
-		reg = <0 0x10200670 0 0x8>;
-		clocks = <&clk26m>;
-	};
-	...
-};
+Changes in v5:
+- Add a comment saying that this is temporary.
 
-> +		WARN(1, "Requested unsupported timer frequency %u\n", freq);
-> +
-> +	/* Clock input is 26MHz, set DIV2 to achieve 13MHz clock */
-> +	val = mtk_cpux_readl(CPUX_IDX_GLOBAL_CTRL, &to_cpux);
-> +	val &= ~CPUX_CLK_DIV_MASK;
-> +	val |= CPUX_CLK_DIV2;
-> +	mtk_cpux_writel(val, CPUX_IDX_GLOBAL_CTRL, &to_cpux);
-> +
-> +	/* Enable all CPUXGPT timers */
-> +	val = mtk_cpux_readl(CPUX_IDX_GLOBAL_CTRL, &to_cpux);
-> +	mtk_cpux_writel(val | CPUX_ENABLE, CPUX_IDX_GLOBAL_CTRL, &to_cpux);
-> +
-> +	clockevents_config_and_register(&to_cpux.clkevt, timer_of_rate(&to_cpux),
-> +					TIMER_SYNC_TICKS, 0xffffffff);
-> +
-> +	return 0;
-> +}
-> +
->  static int __init mtk_syst_init(struct device_node *node)
->  {
->  	int ret;
-> @@ -339,3 +457,4 @@ static int __init mtk_gpt_init(struct device_node *node)
->  }
->  TIMER_OF_DECLARE(mtk_mt6577, "mediatek,mt6577-timer", mtk_gpt_init);
->  TIMER_OF_DECLARE(mtk_mt6765, "mediatek,mt6765-timer", mtk_syst_init);
-> +TIMER_OF_DECLARE(mtk_mt6795, "mediatek,mt6795-systimer", mtk_cpux_init);
-> -- 
-> 2.35.1
+Changes in v4:
+- Use the compatible string of the next bridge as per Rob.
+
+Changes in v3:
+- No longer a revert; now a module parameter.
+
+Changes in v2:
+- Remove the mud from my face.
+
+ drivers/gpu/drm/msm/dsi/dsi_manager.c | 32 ++++++++++++++++++++++++++-
+ 1 file changed, 31 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/msm/dsi/dsi_manager.c b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+index 50b987658b1f..7fe5eb1dd066 100644
+--- a/drivers/gpu/drm/msm/dsi/dsi_manager.c
++++ b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+@@ -34,6 +34,32 @@ static struct msm_dsi_manager msm_dsim_glb;
+ #define IS_SYNC_NEEDED()	(msm_dsim_glb.is_sync_needed)
+ #define IS_MASTER_DSI_LINK(id)	(msm_dsim_glb.master_dsi_link_id == id)
+ 
++#ifdef CONFIG_OF
++static bool dsi_mgr_power_on_early(struct drm_bridge *bridge)
++{
++	struct drm_bridge *next_bridge = drm_bridge_get_next_bridge(bridge);
++
++	/*
++	 * If the next bridge in the chain is the Parade ps8640 bridge chip
++	 * then don't power on early since it seems to violate the expectations
++	 * of the firmware that the bridge chip is running.
++	 *
++	 * NOTE: this is expected to be a temporary special case. It's expected
++	 * that we'll eventually have a framework that allows the next level
++	 * bridge to indicate whether it needs us to power on before it or
++	 * after it. When that framework is in place then we'll use it and
++	 * remove this special case.
++	 */
++	return !(next_bridge && next_bridge->of_node &&
++		 of_device_is_compatible(next_bridge->of_node, "parade,ps8640"));
++}
++#else
++static inline bool dsi_mgr_power_on_early(struct drm_bridge *bridge)
++{
++	return true;
++}
++#endif
++
+ static inline struct msm_dsi *dsi_mgr_get_dsi(int id)
+ {
+ 	return msm_dsim_glb.dsi[id];
+@@ -389,6 +415,9 @@ static void dsi_mgr_bridge_pre_enable(struct drm_bridge *bridge)
+ 	if (is_bonded_dsi && !IS_MASTER_DSI_LINK(id))
+ 		return;
+ 
++	if (!dsi_mgr_power_on_early(bridge))
++		dsi_mgr_bridge_power_on(bridge);
++
+ 	/* Always call panel functions once, because even for dual panels,
+ 	 * there is only one drm_panel instance.
+ 	 */
+@@ -570,7 +599,8 @@ static void dsi_mgr_bridge_mode_set(struct drm_bridge *bridge,
+ 	if (is_bonded_dsi && other_dsi)
+ 		msm_dsi_host_set_display_mode(other_dsi->host, adjusted_mode);
+ 
+-	dsi_mgr_bridge_power_on(bridge);
++	if (dsi_mgr_power_on_early(bridge))
++		dsi_mgr_bridge_power_on(bridge);
+ }
+ 
+ static enum drm_mode_status dsi_mgr_bridge_mode_valid(struct drm_bridge *bridge,
+-- 
+2.36.0.550.gb090851708-goog
+

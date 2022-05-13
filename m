@@ -2,119 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB4252675F
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 18:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14624526763
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 18:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382472AbiEMQps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 12:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38944 "EHLO
+        id S1382473AbiEMQqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 12:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359461AbiEMQpi (ORCPT
+        with ESMTP id S1353194AbiEMQqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 12:45:38 -0400
+        Fri, 13 May 2022 12:46:50 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19419B870;
-        Fri, 13 May 2022 09:45:37 -0700 (PDT)
-Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4L0Dsj1Zgjz67LLT;
-        Sat, 14 May 2022 00:40:41 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2029517C0;
+        Fri, 13 May 2022 09:46:49 -0700 (PDT)
+Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4L0DxN2RFvz67Dl8;
+        Sat, 14 May 2022 00:43:52 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 13 May 2022 18:45:34 +0200
-Received: from localhost (10.202.226.42) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.24; Fri, 13 May
- 2022 17:45:33 +0100
-Date:   Fri, 13 May 2022 17:45:31 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Eddie James <eajames@linux.ibm.com>
-CC:     <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
-        <lars@metafoo.de>, <jic23@kernel.org>, <miltonm@us.ibm.com>,
-        Peter Rosin <peda@axentia.se>, <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH v2 0/2] iio: humidity: si7020: Check device property for
- skipping reset in probe
-Message-ID: <20220513174531.00007b9b@Huawei.com>
-In-Reply-To: <4fd44316-689e-1b72-d483-2c617d2a455d@linux.ibm.com>
-References: <20220512162020.33450-1-eajames@linux.ibm.com>
-        <20220512174859.000042b6@Huawei.com>
-        <4fd44316-689e-1b72-d483-2c617d2a455d@linux.ibm.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+ 15.1.2375.24; Fri, 13 May 2022 18:46:47 +0200
+Received: from [10.47.25.226] (10.47.25.226) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 13 May
+ 2022 17:46:46 +0100
+Message-ID: <0461c8ea-a872-2581-55ec-0e2ed4912b21@huawei.com>
+Date:   Fri, 13 May 2022 17:46:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 1/7] perf test: Skip reason for suites with 1 test
+To:     Ian Rogers <irogers@google.com>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        "Namhyung Kim" <namhyung@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        "Sohaib Mohamed" <sohaib.amhmd@gmail.com>,
+        Carsten Haitzler <carsten.haitzler@arm.com>,
+        Marco Elver <elver@google.com>,
+        Michael Petlan <mpetlan@redhat.com>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>
+References: <20220513040519.1499333-1-irogers@google.com>
+ <20220513040519.1499333-2-irogers@google.com>
+ <6341384c-b3e6-fbe5-f29f-e0db114bd439@huawei.com>
+ <CAP-5=fX+PfnyHRc=-sQMo1_mGLzCJ77pSfzXXHVUEOHtVFGwxA@mail.gmail.com>
+ <b6e28614-e348-b490-bf33-af5810a60722@huawei.com>
+ <CAP-5=fVA+x_sNuWCOMj9ASBpFanms8DkAvLkbs5URDvcBW1itg@mail.gmail.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <CAP-5=fVA+x_sNuWCOMj9ASBpFanms8DkAvLkbs5URDvcBW1itg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhreml708-chm.china.huawei.com (10.201.108.57) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
+X-Originating-IP: [10.47.25.226]
+X-ClientProxiedBy: lhreml748-chm.china.huawei.com (10.201.108.198) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 May 2022 12:08:07 -0500
-Eddie James <eajames@linux.ibm.com> wrote:
-
-> On 5/12/22 11:48, Jonathan Cameron wrote:
-> > On Thu, 12 May 2022 11:20:18 -0500
-> > Eddie James <eajames@linux.ibm.com> wrote:
-> >  
-> >> I2C commands issued after the SI7020 is starting up or after reset
-> >> can potentially upset the startup sequence. Therefore, the host
-> >> needs to wait for the startup sequence to finish before issuing
-> >> further i2c commands. This is impractical in cases where the SI7020
-> >> is on a shared bus or behind a mux, which may switch channels at
-> >> any time (generating I2C traffic). Therefore, check for a device
-> >> property that indicates that the driver should skip resetting the
-> >> device when probing.  
-> > Why not lock the bus?  It's not ideal, but then not resetting and hence
-> > potentially ending up in an unknown state isn't great either.  
+On 13/05/2022 17:34, Ian Rogers wrote:
+>>>> john@localhost:~/acme/tools/perf> sudo ./perf test 63
+>>>> 63: Test libpfm4 support : Skip (not compiled in)
+>>>>
+>>>> Although it is odd to have a single sub-test, is there a reason for
+>>>> which we don't print its name? We print the name when there are multiple
+>>>> sub-tests.
+>>> The reason was to replicate the existing "perf test" behavior before
+>>> the kunit style transition. The main place we get tests with a single
+>>> sub-test is from the DEFINE_SUITE macro:
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/tests/tests.h?h=perf/core#n67
+>>> I agree it looks kind of weird and was inheriting the data structures
+>>> from kunit and the format of the output from perf test.
+>> Out of curiosity, which suite is this that you find only has a single
+>> subtest? Does it possibly only have a single subtest as some others may
+>> be compiled out?
+> I was getting it when I added a skip message to the openat syscall
+> tests in patch 3:
+> https://lore.kernel.org/lkml/20220513040519.1499333-4-irogers@google.com/
 > 
-> 
-> Agreed, but locking the bus doesn't work in the case where the chip is 
-> behind a mux. The mux core driver deselects the mux immediately after 
-> the transfer to reset the si7020, causing some i2c traffic, breaking the 
-> si7020. So it would also be a requirement to configure the mux to idle 
-> as-is... That's why I went with the optional skipping of the reset. 
-> Maybe I should add the bus lock too?
-> 
+> I didn't see any changes with any existing tests.
 
-+Cc Peter and linux-i2c for advice as we should resolve any potential
-issue with the mux side of things rather than hiding it in the driver
-(if possible!)
+I suppose it works when the suite has the same name as the subtest, so, 
+FWIW:
 
-Jonathan
-
-
-
-
-> 
-> Thanks,
-> 
-> Eddie
-> 
-> 
-> >
-> > Jonathan
-> >  
-> >> Changes since v1:
-> >>   - Fix dt binding document
-> >>
-> >> Eddie James (2):
-> >>    dt-bindings: iio: humidity: Add si7020 bindings
-> >>    iio: humidity: si7020: Check device property for skipping reset in probe
-> >>
-> >>   .../bindings/iio/humidity/silabs,si7020.yaml  | 47 +++++++++++++++++++
-> >>   .../devicetree/bindings/trivial-devices.yaml  |  2 -
-> >>   drivers/iio/humidity/si7020.c                 | 14 +++---
-> >>   3 files changed, 55 insertions(+), 8 deletions(-)
-> >>   create mode 100644 Documentation/devicetree/bindings/iio/humidity/silabs,si7020.yaml
-> >>  
-
+Reviewed-by: John Garry <john.garry@huawei.com>

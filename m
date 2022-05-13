@@ -2,176 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0888C526653
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66085526655
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382155AbiEMPjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 11:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54402 "EHLO
+        id S1382154AbiEMPkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 11:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382158AbiEMPjp (ORCPT
+        with ESMTP id S1382153AbiEMPkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 11:39:45 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A85435DEE
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:39:34 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9CF5B113E;
-        Fri, 13 May 2022 08:39:33 -0700 (PDT)
-Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CC80A3F73D;
-        Fri, 13 May 2022 08:39:30 -0700 (PDT)
-Date:   Fri, 13 May 2022 16:39:28 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Tong Tiangen <tongtiangen@huawei.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Fri, 13 May 2022 11:40:09 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84B0FD0A
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:40:06 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24DEqLoJ038771;
+        Fri, 13 May 2022 15:39:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=VJkNPzPQr/xDpbrda18CXpYkCA7d/rit6Nn2CeVPxyo=;
+ b=PZ86+6+1tOfLwrSK//+kikGRtsfqr1bESKzcMyYD0i1scY4ErzNZPdWMw7SXk0ppvapd
+ pfNAvrY5023dKKNJVw2Eeoqf7lFDKcBXxxzJOoHp0ZuC5xGgyRih4FwngeqxX7IHA/WX
+ CV1ArVNQpnPg5ip9l7TVlg5D/eUHQpsMSIH7nXj5DjuOJNXTrW0N2TRBEpQwXXlakPxd
+ ss6imUz0mnV3s8HpBDRXLb5lVzs776TbkBsmaWEmy1v6df97qOa8lhfbpoUWqM2PNpWn
+ OhzUKlQWwbxqNnRd9i3+jT4+SV73ZJH8Gqi/Z+nYwrYAerSiSDOUdZFH5wB453sAS5dR eA== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g1sfh1365-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 May 2022 15:39:53 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24DFPhuf024078;
+        Fri, 13 May 2022 15:39:51 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 3fwgd90v8k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 May 2022 15:39:50 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24DFQ7c143647434
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 13 May 2022 15:26:07 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B221611C04C;
+        Fri, 13 May 2022 15:39:48 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6A63111C04A;
+        Fri, 13 May 2022 15:39:48 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 13 May 2022 15:39:48 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Jason Gunthorpe <jgg@nvidia.com>,
         Robin Murphy <robin.murphy@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Xie XiuQi <xiexiuqi@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-Subject: Re: [PATCH -next v4 6/7] arm64: add {get, put}_user to machine check
- safe
-Message-ID: <Yn57sGpZPo90EXkE@lakrids>
-References: <20220420030418.3189040-1-tongtiangen@huawei.com>
- <20220420030418.3189040-7-tongtiangen@huawei.com>
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
+Subject: [PATCH] iommu/dma: Fix check for error return from iommu_map_sg_atomic()
+Date:   Fri, 13 May 2022 17:39:48 +0200
+Message-Id: <20220513153948.310119-1-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220420030418.3189040-7-tongtiangen@huawei.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: wu5F4ZrMpZS-T-ZZMSg_cagycVwFvEs6
+X-Proofpoint-ORIG-GUID: wu5F4ZrMpZS-T-ZZMSg_cagycVwFvEs6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-13_04,2022-05-13_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=895
+ priorityscore=1501 mlxscore=0 phishscore=0 clxscore=1011 malwarescore=0
+ spamscore=0 bulkscore=0 adultscore=0 impostorscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205130069
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 03:04:17AM +0000, Tong Tiangen wrote:
-> Add {get, put}_user() to machine check safe.
-> 
-> If get/put fail due to hardware memory error, only the relevant processes
-> are affected, so killing the user process and isolate the user page with
-> hardware memory errors is a more reasonable choice than kernel panic.
-> 
-> Add new extable type EX_TYPE_UACCESS_MC_ERR_ZERO which can be used for
-> uaccess that can be recovered from hardware memory errors. The difference
-> from EX_TYPE_UACCESS_MC is that this type also sets additional two target
-> register which save error code and value needs to be set zero.
+In __iommu_dma_alloc_noncontiguous() the value returned by
+iommu_map_sg_atomic() is checked for being smaller than size. Before
+commit ad8f36e4b6b1 ("iommu: return full error code from
+iommu_map_sg[_atomic]()") this simply checked if the requested size was
+successfully mapped.
 
-Why does this need to be in any way distinct from the existing
-EX_TYPE_UACCESS_ERR_ZERO ?
+After that commit iommu_map_sg_atomic() may also return a negative
+error value. In principle this too would be covered by the existing
+check. There is one problem however, as size is of type size_t while the
+return type of iommu_map_sg_atomic() is now of type ssize_t the latter gets
+converted to size_t and negative error values end up as very large
+positive values making the check succeed. Fix this by making the return
+type visible with a local variable and add an explicit cast to ssize_t.
 
-Other than the case where we currently (ab)use that for
-copy_{to,from}_kernel_nofault(), where do we *not* want to use
-EX_TYPE_UACCESS_ERR_ZERO and *not* recover from a memory error?
+Fixes: ad8f36e4b6b1 ("iommu: return full error code from iommu_map_sg[_atomic]()")
+Cc: stable@vger.kernel.org
+Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+---
+ drivers/iommu/dma-iommu.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Thanks,
-Mark.
+diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+index 09f6e1c0f9c0..b4fcf1d92994 100644
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -776,6 +776,7 @@ static struct page **__iommu_dma_alloc_noncontiguous(struct device *dev,
+ 	unsigned int count, min_size, alloc_sizes = domain->pgsize_bitmap;
+ 	struct page **pages;
+ 	dma_addr_t iova;
++	ssize_t mapped;
+ 
+ 	if (static_branch_unlikely(&iommu_deferred_attach_enabled) &&
+ 	    iommu_deferred_attach(dev, domain))
+@@ -813,8 +814,8 @@ static struct page **__iommu_dma_alloc_noncontiguous(struct device *dev,
+ 			arch_dma_prep_coherent(sg_page(sg), sg->length);
+ 	}
+ 
+-	if (iommu_map_sg_atomic(domain, iova, sgt->sgl, sgt->orig_nents, ioprot)
+-			< size)
++	mapped = iommu_map_sg_atomic(domain, iova, sgt->sgl, sgt->orig_nents, ioprot);
++	if (mapped < (ssize_t)size)
+ 		goto out_free_sg;
+ 
+ 	sgt->sgl->dma_address = iova;
+-- 
+2.32.0
 
-> 
-> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
-> ---
->  arch/arm64/include/asm/asm-extable.h | 14 ++++++++++++++
->  arch/arm64/include/asm/uaccess.h     |  4 ++--
->  arch/arm64/mm/extable.c              |  4 ++++
->  3 files changed, 20 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/asm-extable.h b/arch/arm64/include/asm/asm-extable.h
-> index 75b2c00e9523..80410899a9ad 100644
-> --- a/arch/arm64/include/asm/asm-extable.h
-> +++ b/arch/arm64/include/asm/asm-extable.h
-> @@ -13,6 +13,7 @@
->  
->  /* _MC indicates that can fixup from machine check errors */
->  #define EX_TYPE_UACCESS_MC		5
-> +#define EX_TYPE_UACCESS_MC_ERR_ZERO	6
->  
->  #ifdef __ASSEMBLY__
->  
-> @@ -78,6 +79,15 @@
->  #define EX_DATA_REG(reg, gpr)						\
->  	"((.L__gpr_num_" #gpr ") << " __stringify(EX_DATA_REG_##reg##_SHIFT) ")"
->  
-> +#define _ASM_EXTABLE_UACCESS_MC_ERR_ZERO(insn, fixup, err, zero)		\
-> +	__DEFINE_ASM_GPR_NUMS							\
-> +	__ASM_EXTABLE_RAW(#insn, #fixup,					\
-> +			  __stringify(EX_TYPE_UACCESS_MC_ERR_ZERO),		\
-> +			  "("							\
-> +			    EX_DATA_REG(ERR, err) " | "				\
-> +			    EX_DATA_REG(ZERO, zero)				\
-> +			  ")")
-> +
->  #define _ASM_EXTABLE_UACCESS_ERR_ZERO(insn, fixup, err, zero)		\
->  	__DEFINE_ASM_GPR_NUMS						\
->  	__ASM_EXTABLE_RAW(#insn, #fixup, 				\
-> @@ -90,6 +100,10 @@
->  #define _ASM_EXTABLE_UACCESS_ERR(insn, fixup, err)			\
->  	_ASM_EXTABLE_UACCESS_ERR_ZERO(insn, fixup, err, wzr)
->  
-> +
-> +#define _ASM_EXTABLE_UACCESS_MC_ERR(insn, fixup, err)			\
-> +	_ASM_EXTABLE_UACCESS_MC_ERR_ZERO(insn, fixup, err, wzr)
-> +
->  #define EX_DATA_REG_DATA_SHIFT	0
->  #define EX_DATA_REG_DATA	GENMASK(4, 0)
->  #define EX_DATA_REG_ADDR_SHIFT	5
-> diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
-> index e8dce0cc5eaa..e41b47df48b0 100644
-> --- a/arch/arm64/include/asm/uaccess.h
-> +++ b/arch/arm64/include/asm/uaccess.h
-> @@ -236,7 +236,7 @@ static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
->  	asm volatile(							\
->  	"1:	" load "	" reg "1, [%2]\n"			\
->  	"2:\n"								\
-> -	_ASM_EXTABLE_UACCESS_ERR_ZERO(1b, 2b, %w0, %w1)			\
-> +	_ASM_EXTABLE_UACCESS_MC_ERR_ZERO(1b, 2b, %w0, %w1)		\
->  	: "+r" (err), "=&r" (x)						\
->  	: "r" (addr))
->  
-> @@ -325,7 +325,7 @@ do {									\
->  	asm volatile(							\
->  	"1:	" store "	" reg "1, [%2]\n"			\
->  	"2:\n"								\
-> -	_ASM_EXTABLE_UACCESS_ERR(1b, 2b, %w0)				\
-> +	_ASM_EXTABLE_UACCESS_MC_ERR(1b, 2b, %w0)			\
->  	: "+r" (err)							\
->  	: "r" (x), "r" (addr))
->  
-> diff --git a/arch/arm64/mm/extable.c b/arch/arm64/mm/extable.c
-> index 525876c3ebf4..1023ccdb2f89 100644
-> --- a/arch/arm64/mm/extable.c
-> +++ b/arch/arm64/mm/extable.c
-> @@ -88,6 +88,7 @@ bool fixup_exception(struct pt_regs *regs)
->  	case EX_TYPE_BPF:
->  		return ex_handler_bpf(ex, regs);
->  	case EX_TYPE_UACCESS_ERR_ZERO:
-> +	case EX_TYPE_UACCESS_MC_ERR_ZERO:
->  		return ex_handler_uaccess_err_zero(ex, regs);
->  	case EX_TYPE_LOAD_UNALIGNED_ZEROPAD:
->  		return ex_handler_load_unaligned_zeropad(ex, regs);
-> @@ -107,6 +108,9 @@ bool fixup_exception_mc(struct pt_regs *regs)
->  	switch (ex->type) {
->  	case EX_TYPE_UACCESS_MC:
->  		return ex_handler_uaccess_type(ex, regs, FIXUP_TYPE_MC);
-> +	case EX_TYPE_UACCESS_MC_ERR_ZERO:
-> +		return ex_handler_uaccess_err_zero(ex, regs);
-> +
->  	}
->  
->  	return false;
-> -- 
-> 2.25.1
-> 

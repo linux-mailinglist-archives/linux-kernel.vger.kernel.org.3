@@ -2,373 +2,371 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A92526665
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBFB1526679
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381532AbiEMPoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 11:44:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36018 "EHLO
+        id S1382170AbiEMPq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 11:46:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345252AbiEMPo3 (ORCPT
+        with ESMTP id S1353237AbiEMPqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 11:44:29 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9596E37AB1
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:44:26 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 56633113E;
-        Fri, 13 May 2022 08:44:26 -0700 (PDT)
-Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8AE763F73D;
-        Fri, 13 May 2022 08:44:23 -0700 (PDT)
-Date:   Fri, 13 May 2022 16:44:21 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Tong Tiangen <tongtiangen@huawei.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Xie XiuQi <xiexiuqi@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-Subject: Re: [PATCH -next v4 7/7] arm64: add cow to machine check safe
-Message-ID: <Yn581SnKPGlhbgoU@lakrids>
-References: <20220420030418.3189040-1-tongtiangen@huawei.com>
- <20220420030418.3189040-8-tongtiangen@huawei.com>
+        Fri, 13 May 2022 11:46:53 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4953C4AC
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:46:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652456811; x=1683992811;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=P0YPEKnDRiuyaIphl7qWpWawlnv1dmJCYwyR/BaUjpo=;
+  b=XOmPF0aBjInCvw18ggliMP0T8xXtmwQx0ZfKfajcBF+IqY7okNdhxQOm
+   XiRC2iCHAL6YTPSebytJGz0wWx77B+ngex6lTKVj8iUyrDQv9NPWgHZS1
+   PM5fcpS8aLQQYOJ+5RtAAe4nMZ0ajnGDfQppidjz+eJpVWb6OBTskFDeP
+   BhVnAEN3MzLoQuAgQ+LvbSuzSc/RITcXO2UxLKXhk5ddnX/h6OUPqTry5
+   d2tstq1Q3MFaUFTH3DmD5CSQcrejD0wtTsCsTWRwu5nYdF2otwJ9Y+yNa
+   fDT17YSlJBZlA5zdnDa2IL86LJgJQGPj/mbF8v30S52d/IfuC/tL0UBno
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="257881313"
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="257881313"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 08:46:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="637328578"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga004.fm.intel.com with ESMTP; 13 May 2022 08:46:32 -0700
+Received: from [10.252.212.211] (kliang2-MOBL.ccr.corp.intel.com [10.252.212.211])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id A74185807E7;
+        Fri, 13 May 2022 08:46:30 -0700 (PDT)
+Message-ID: <584b0753-5e69-16b7-014f-7115d6b88683@linux.intel.com>
+Date:   Fri, 13 May 2022 11:46:28 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220420030418.3189040-8-tongtiangen@huawei.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V2 22/23] perf tools: Allow system-wide events to keep
+ their own CPUs
+Content-Language: en-US
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>
+References: <20220506122601.367589-1-adrian.hunter@intel.com>
+ <20220506122601.367589-23-adrian.hunter@intel.com>
+ <CAM9d7cg8JRK2oVUvmWit=F5zhLhpqP=gD6iYBAa8_O-+c=EjPQ@mail.gmail.com>
+ <52f201d4-4fab-c2f4-9c4d-af887900732f@intel.com>
+ <CAM9d7cgDCd2uUJbWcvqmCDGMoPc9kppx--_rcO2OVp_GarLJkg@mail.gmail.com>
+ <f92a7681-30ca-eaf5-6f3e-de54bc19adec@intel.com>
+ <9ae6d64e-a935-94f0-d2a9-cc49a578ba1c@linux.intel.com>
+ <84737c6c-6fc5-57a1-b964-73a4ae8bf4be@intel.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <84737c6c-6fc5-57a1-b964-73a4ae8bf4be@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 03:04:18AM +0000, Tong Tiangen wrote:
-> In the cow(copy on write) processing, the data of the user process is
-> copied, when hardware memory error is encountered during copy, only the
-> relevant processes are affected, so killing the user process and isolate
-> the user page with hardware memory errors is a more reasonable choice than
-> kernel panic.
 
-There are plenty of other places we'll access user pages via a kernel
-alias (e.g. when performing IO), so why is this special?
 
-To be clear, I am not entirely averse to this, but it seems like this is
-being done because it's easy to do rather than necessarily being all
-that useful, and I'm not keen on having to duplicate a bunch of logic
-for this.
+On 5/13/2022 11:21 AM, Adrian Hunter wrote:
+> On 13/05/22 17:12, Liang, Kan wrote:
+>>
+>>
+>> On 5/13/2022 12:48 AM, Adrian Hunter wrote:
+>>> On 12/05/22 21:53, Namhyung Kim wrote:
+>>>> On Thu, May 12, 2022 at 3:35 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>>>>
+>>>>> On 12/05/22 08:27, Namhyung Kim wrote:
+>>>>>> On Fri, May 6, 2022 at 5:27 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>>>>>>
+>>>>>>> Currently, user_requested_cpus supplants system-wide CPUs when the evlist
+>>>>>>> has_user_cpus. Change that so that system-wide events retain their own
+>>>>>>> CPUs and they are added to all_cpus.
+>>>>>>>
+>>>>>>> Acked-by: Ian Rogers <irogers@google.com>
+>>>>>>> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+>>>>>>> ---
+>>>>>>>    tools/lib/perf/evlist.c | 11 +++++------
+>>>>>>>    1 file changed, 5 insertions(+), 6 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
+>>>>>>> index 1c801f8da44f..9a6801b53274 100644
+>>>>>>> --- a/tools/lib/perf/evlist.c
+>>>>>>> +++ b/tools/lib/perf/evlist.c
+>>>>>>> @@ -40,12 +40,11 @@ static void __perf_evlist__propagate_maps(struct perf_evlist *evlist,
+>>>>>>>            * We already have cpus for evsel (via PMU sysfs) so
+>>>>>>>            * keep it, if there's no target cpu list defined.
+>>>>>>>            */
+>>>>>>> -       if (!evsel->own_cpus || evlist->has_user_cpus) {
+>>>>>>> -               perf_cpu_map__put(evsel->cpus);
+>>>>>>> -               evsel->cpus = perf_cpu_map__get(evlist->user_requested_cpus);
+>>>>>>> -       } else if (!evsel->system_wide &&
+>>>>>>> -                  !evsel->requires_cpu &&
+>>>>>>> -                  perf_cpu_map__empty(evlist->user_requested_cpus)) {
+>>>>>>> +       if (!evsel->own_cpus ||
+>>>>>>> +           (!evsel->system_wide && evlist->has_user_cpus) ||
+>>>>>>> +           (!evsel->system_wide &&
+>>>>>>> +            !evsel->requires_cpu &&
+>>>>>>> +            perf_cpu_map__empty(evlist->user_requested_cpus))) {
+>>>>>>
+>>>>>> This is getting hard to understand.  IIUC this propagation basically
+>>>>>> sets user requested cpus to evsel unless it has its own cpus, right?
+>>>>>
+>>>>> I put the conditional logic altogether because that is kernel style but
+>>>>> it does make it practically unreadable.
+>>>>>
+>>>>> If we start with the original logic:
+>>>>>
+>>>>>           if (!evsel->own_cpus || evlist->has_user_cpus) {
+>>>>>                   perf_cpu_map__put(evsel->cpus);
+>>>>>                   evsel->cpus = perf_cpu_map__get(evlist->user_requested_cpus);
+>>>>>           } else if (!evsel->system_wide && perf_cpu_map__empty(evlist->user_requested_cpus)) {
+>>>>>                   perf_cpu_map__put(evsel->cpus);
+>>>>>                   evsel->cpus = perf_cpu_map__get(evlist->user_requested_cpus);
+>>>>>           } else if (evsel->cpus != evsel->own_cpus) {
+>>>>>                   perf_cpu_map__put(evsel->cpus);
+>>>>>                   evsel->cpus = perf_cpu_map__get(evsel->own_cpus);
+>>>>>           }
+>>>>>
+>>>>> Then make it more readable, i.e. same functionality
+>>>>>
+>>>>>           struct perf_cpu_map *cpus;
+>>>>>
+>>>>>           if (!evsel->own_cpus || evlist->has_user_cpus)
+>>>>>                   cpus = evlist->user_requested_cpus;
+>>>>>           else if (!evsel->system_wide && perf_cpu_map__empty(evlist->user_requested_cpus))
+>>>>>                   cpus = evlist->user_requested_cpus;
+>>>>>           else
+>>>>>                   cpus = evsel->own_cpus;
+>>>>>
+>>>>>           if (evsel->cpus != cpus) {
+>>>>>                   perf_cpu_map__put(evsel->cpus);
+>>>>>                   evsel->cpus = perf_cpu_map__get(cpus);
+>>>>>           }
+>>>>>
+>>>>> Then separate out the conditions, i.e. still same functionality
+>>>>>
+>>>>>           if (!evsel->own_cpus)
+>>>>>                   cpus = evlist->user_requested_cpus;
+>>>>>           else if (evlist->has_user_cpus)
+>>>>>                   cpus = evlist->user_requested_cpus;
+>>>>>           else if (evsel->system_wide)
+>>>>>                   cpus = evsel->own_cpus;
+>>>>>           else if (perf_cpu_map__empty(evlist->user_requested_cpus)) /* per-thread */
+>>>>>                   cpus = evlist->user_requested_cpus;
+>>>>>           else
+>>>>>                   cpus = evsel->own_cpus;
+>>>>>
+>>>>> Then add the new requires_cpu flag:
+>>>>>
+>>>>>           if (!evsel->own_cpus)
+>>>>>                   cpus = evlist->user_requested_cpus;
+>>>>>           else if (evlist->has_user_cpus)
+>>>>>                   cpus = evlist->user_requested_cpus;
+>>>>>           else if (evsel->system_wide)
+>>>>>                   cpus = evsel->own_cpus;
+>>>>> -       else if (perf_cpu_map__empty(evlist->user_requested_cpus)) /* per-thread */
+>>>>> +       else if (!evsel->requres_cpu && perf_cpu_map__empty(evlist->user_requested_cpus)) /* per-thread */
+>>>>>                   cpus = evlist->user_requested_cpus;
+>>>>>           else
+>>>>>                   cpus = evsel->own_cpus;
+>>>>>
+>>>>> Then make system_wide keep own_cpus even if has_user_cpus:
+>>>>>
+>>>>>           if (!evsel->own_cpus)
+>>>>>                   cpus = evlist->user_requested_cpus;
+>>>>> +       else if (evsel->system_wide)
+>>>>> +               cpus = evsel->own_cpus;
+>>>>>           else if (evlist->has_user_cpus)
+>>>>>                   cpus = evlist->user_requested_cpus;
+>>>>> -       else if (evsel->system_wide)
+>>>>> -               cpus = evsel->own_cpus;
+>>>>>           else if (!evsel->requres_cpu && perf_cpu_map__empty(evlist->user_requested_cpus)) /* per-thread */
+>>>>>                   cpus = evlist->user_requested_cpus;
+>>>>>           else
+>>>>>                   cpus = evsel->own_cpus;
+>>>>>
+>>>>> Which leaves:
+>>>>>
+>>>>>           if (!evsel->own_cpus)
+>>>>>                   cpus = evlist->user_requested_cpus;
+>>>>>           else if (evsel->system_wide)
+>>>>>                   cpus = evsel->own_cpus;
+>>>>>           else if (evlist->has_user_cpus)
+>>>>>                   cpus = evlist->user_requested_cpus;
+>>>>>           else if (!evsel->requres_cpu && perf_cpu_map__empty(evlist->user_requested_cpus)) /* per-thread */
+>>>>>                   cpus = evlist->user_requested_cpus;
+>>>>>           else
+>>>>>                   cpus = evsel->own_cpus;
+>>>>>
+>>>>> And putting it back together:
+>>>>>
+>>>>>           if (!evsel->own_cpus ||
+>>>>>               (!evsel->system_wide && evlist->has_user_cpus) ||
+>>>>>               (!evsel->system_wide &&
+>>>>>                !evsel->requires_cpu &&
+>>>>>                perf_cpu_map__empty(evlist->user_requested_cpus))) {
+>>>>>                   cpus = evlist->user_requested_cpus;
+>>>>>           else
+>>>>>                   cpus = evsel->own_cpus;
+>>>>>
+>>>>> Perhaps I shouldn't put it together?
+>>>>
+>>>> Cool, thanks a lot for explaining it in detail.
+>>>> I do not oppose your change but little worried about the
+>>>> complexity.  And I think we have some issues with uncore
+>>>> events already.
+>>>
+>>> Yes it is a bit complicated because we are handling
+>>> many different use cases.
+>>>
+>>>>
+>>>> So do you have any idea where evsel->own_cpus
+>>>> doesn't propagate to evsel->cpus?
+>>>
+>>> We let the user's list of CPUs override it i.e. the
+>>> evlist->has_user_cpus case.  Essentially we are expecting
+>>> the user to know what they are doing.
+>>>
+>>>>
+>>>> I think evsel->system_wide and evsel->requires_cpu
+>>>> can be replaced to check evsel->own_cpus instead.
+>>>
+>>> Not at the moment because we let the user override
+>>> own_cpus.
+>>
+>> Do we check whether the user's input is valid (match the PMU's cpumask) before the override?
+>>
+>> I think we know the PMU name. The cpumask of the PMU can be found in the sysfs. So we should have enough information for a sanity check.
+> 
+> For the uncore PMU case, I am not sure what sanity is :-)
+> 
 
-> Add new helper copy_page_mc() which provide a page copy implementation with
-> machine check safe. At present, only used in cow. In future, we can expand
-> more scenes. As long as the consequences of page copy failure are not
-> fatal(eg: only affect user process), we can use this helper.
-> 
-> The copy_page_mc() in copy_page_mc.S is largely borrows from copy_page()
-> in copy_page.S and the main difference is copy_page_mc() add extable entry
-> to every load/store insn to support machine check safe. largely to keep the
-> patch simple. If needed those optimizations can be folded in.
-> 
-> Add new extable type EX_TYPE_COPY_PAGE_MC which used in copy_page_mc().
-> 
-> This type only be processed in fixup_exception_mc(), The reason is that
-> copy_page_mc() is consistent with copy_page() except machine check safe is
-> considered, and copy_page() do not need to consider exception fixup.
-> 
-> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
-> ---
->  arch/arm64/include/asm/asm-extable.h |  5 ++
->  arch/arm64/include/asm/page.h        | 10 ++++
->  arch/arm64/lib/Makefile              |  2 +
->  arch/arm64/lib/copy_page_mc.S        | 86 ++++++++++++++++++++++++++++
->  arch/arm64/mm/copypage.c             | 36 ++++++++++--
->  arch/arm64/mm/extable.c              |  2 +
->  include/linux/highmem.h              |  8 +++
->  mm/memory.c                          |  2 +-
->  8 files changed, 144 insertions(+), 7 deletions(-)
->  create mode 100644 arch/arm64/lib/copy_page_mc.S
-> 
-> diff --git a/arch/arm64/include/asm/asm-extable.h b/arch/arm64/include/asm/asm-extable.h
-> index 80410899a9ad..74c056ddae15 100644
-> --- a/arch/arm64/include/asm/asm-extable.h
-> +++ b/arch/arm64/include/asm/asm-extable.h
-> @@ -14,6 +14,7 @@
->  /* _MC indicates that can fixup from machine check errors */
->  #define EX_TYPE_UACCESS_MC		5
->  #define EX_TYPE_UACCESS_MC_ERR_ZERO	6
-> +#define EX_TYPE_COPY_PAGE_MC		7
->  
->  #ifdef __ASSEMBLY__
->  
-> @@ -42,6 +43,10 @@
->  	__ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_UACCESS_MC, 0)
->  	.endm
->  
-> +	.macro          _asm_extable_copy_page_mc, insn, fixup
-> +	__ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_COPY_PAGE_MC, 0)
-> +	.endm
-> +
->  /*
->   * Create an exception table entry for `insn` if `fixup` is provided. Otherwise
->   * do nothing.
-> diff --git a/arch/arm64/include/asm/page.h b/arch/arm64/include/asm/page.h
-> index 993a27ea6f54..832571a7dddb 100644
-> --- a/arch/arm64/include/asm/page.h
-> +++ b/arch/arm64/include/asm/page.h
-> @@ -29,6 +29,16 @@ void copy_user_highpage(struct page *to, struct page *from,
->  void copy_highpage(struct page *to, struct page *from);
->  #define __HAVE_ARCH_COPY_HIGHPAGE
->  
-> +#ifdef CONFIG_ARCH_HAS_COPY_MC
-> +extern void copy_page_mc(void *to, const void *from);
-> +void copy_highpage_mc(struct page *to, struct page *from);
-> +#define __HAVE_ARCH_COPY_HIGHPAGE_MC
-> +
-> +void copy_user_highpage_mc(struct page *to, struct page *from,
-> +		unsigned long vaddr, struct vm_area_struct *vma);
-> +#define __HAVE_ARCH_COPY_USER_HIGHPAGE_MC
-> +#endif
-> +
->  struct page *alloc_zeroed_user_highpage_movable(struct vm_area_struct *vma,
->  						unsigned long vaddr);
->  #define __HAVE_ARCH_ALLOC_ZEROED_USER_HIGHPAGE_MOVABLE
-> diff --git a/arch/arm64/lib/Makefile b/arch/arm64/lib/Makefile
-> index 29490be2546b..0d9f292ef68a 100644
-> --- a/arch/arm64/lib/Makefile
-> +++ b/arch/arm64/lib/Makefile
-> @@ -15,6 +15,8 @@ endif
->  
->  lib-$(CONFIG_ARCH_HAS_UACCESS_FLUSHCACHE) += uaccess_flushcache.o
->  
-> +lib-$(CONFIG_ARCH_HAS_COPY_MC) += copy_page_mc.o
-> +
->  obj-$(CONFIG_CRC32) += crc32.o
->  
->  obj-$(CONFIG_FUNCTION_ERROR_INJECTION) += error-inject.o
-> diff --git a/arch/arm64/lib/copy_page_mc.S b/arch/arm64/lib/copy_page_mc.S
-> new file mode 100644
-> index 000000000000..655161363dcf
-> --- /dev/null
-> +++ b/arch/arm64/lib/copy_page_mc.S
-> @@ -0,0 +1,86 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (C) 2012 ARM Ltd.
-> + */
-> +
-> +#include <linux/linkage.h>
-> +#include <linux/const.h>
-> +#include <asm/assembler.h>
-> +#include <asm/page.h>
-> +#include <asm/cpufeature.h>
-> +#include <asm/alternative.h>
-> +#include <asm/asm-extable.h>
-> +
-> +#define CPY_MC(l, x...)		\
-> +9999:   x;			\
-> +	_asm_extable_copy_page_mc    9999b, l
-> +
-> +/*
-> + * Copy a page from src to dest (both are page aligned) with machine check
-> + *
-> + * Parameters:
-> + *	x0 - dest
-> + *	x1 - src
-> + */
-> +SYM_FUNC_START(__pi_copy_page_mc)
-> +alternative_if ARM64_HAS_NO_HW_PREFETCH
-> +	// Prefetch three cache lines ahead.
-> +	prfm	pldl1strm, [x1, #128]
-> +	prfm	pldl1strm, [x1, #256]
-> +	prfm	pldl1strm, [x1, #384]
-> +alternative_else_nop_endif
-> +
-> +CPY_MC(9998f, ldp	x2, x3, [x1])
-> +CPY_MC(9998f, ldp	x4, x5, [x1, #16])
-> +CPY_MC(9998f, ldp	x6, x7, [x1, #32])
-> +CPY_MC(9998f, ldp	x8, x9, [x1, #48])
-> +CPY_MC(9998f, ldp	x10, x11, [x1, #64])
-> +CPY_MC(9998f, ldp	x12, x13, [x1, #80])
-> +CPY_MC(9998f, ldp	x14, x15, [x1, #96])
-> +CPY_MC(9998f, ldp	x16, x17, [x1, #112])
-> +
-> +	add	x0, x0, #256
-> +	add	x1, x1, #128
-> +1:
-> +	tst	x0, #(PAGE_SIZE - 1)
-> +
-> +alternative_if ARM64_HAS_NO_HW_PREFETCH
-> +	prfm	pldl1strm, [x1, #384]
-> +alternative_else_nop_endif
-> +
-> +CPY_MC(9998f, stnp	x2, x3, [x0, #-256])
-> +CPY_MC(9998f, ldp	x2, x3, [x1])
-> +CPY_MC(9998f, stnp	x4, x5, [x0, #16 - 256])
-> +CPY_MC(9998f, ldp	x4, x5, [x1, #16])
-> +CPY_MC(9998f, stnp	x6, x7, [x0, #32 - 256])
-> +CPY_MC(9998f, ldp	x6, x7, [x1, #32])
-> +CPY_MC(9998f, stnp	x8, x9, [x0, #48 - 256])
-> +CPY_MC(9998f, ldp	x8, x9, [x1, #48])
-> +CPY_MC(9998f, stnp	x10, x11, [x0, #64 - 256])
-> +CPY_MC(9998f, ldp	x10, x11, [x1, #64])
-> +CPY_MC(9998f, stnp	x12, x13, [x0, #80 - 256])
-> +CPY_MC(9998f, ldp	x12, x13, [x1, #80])
-> +CPY_MC(9998f, stnp	x14, x15, [x0, #96 - 256])
-> +CPY_MC(9998f, ldp	x14, x15, [x1, #96])
-> +CPY_MC(9998f, stnp	x16, x17, [x0, #112 - 256])
-> +CPY_MC(9998f, ldp	x16, x17, [x1, #112])
-> +
-> +	add	x0, x0, #128
-> +	add	x1, x1, #128
-> +
-> +	b.ne	1b
-> +
-> +CPY_MC(9998f, stnp	x2, x3, [x0, #-256])
-> +CPY_MC(9998f, stnp	x4, x5, [x0, #16 - 256])
-> +CPY_MC(9998f, stnp	x6, x7, [x0, #32 - 256])
-> +CPY_MC(9998f, stnp	x8, x9, [x0, #48 - 256])
-> +CPY_MC(9998f, stnp	x10, x11, [x0, #64 - 256])
-> +CPY_MC(9998f, stnp	x12, x13, [x0, #80 - 256])
-> +CPY_MC(9998f, stnp	x14, x15, [x0, #96 - 256])
-> +CPY_MC(9998f, stnp	x16, x17, [x0, #112 - 256])
-> +
-> +9998:	ret
-> +
-> +SYM_FUNC_END(__pi_copy_page_mc)
-> +SYM_FUNC_ALIAS(copy_page_mc, __pi_copy_page_mc)
-> +EXPORT_SYMBOL(copy_page_mc)
-> diff --git a/arch/arm64/mm/copypage.c b/arch/arm64/mm/copypage.c
-> index 0dea80bf6de4..0f28edfcb234 100644
-> --- a/arch/arm64/mm/copypage.c
-> +++ b/arch/arm64/mm/copypage.c
-> @@ -14,13 +14,8 @@
->  #include <asm/cpufeature.h>
->  #include <asm/mte.h>
->  
-> -void copy_highpage(struct page *to, struct page *from)
-> +static void do_mte(struct page *to, struct page *from, void *kto, void *kfrom)
->  {
-> -	void *kto = page_address(to);
-> -	void *kfrom = page_address(from);
-> -
-> -	copy_page(kto, kfrom);
-> -
->  	if (system_supports_mte() && test_bit(PG_mte_tagged, &from->flags)) {
->  		set_bit(PG_mte_tagged, &to->flags);
->  		page_kasan_tag_reset(to);
-> @@ -35,6 +30,15 @@ void copy_highpage(struct page *to, struct page *from)
->  		mte_copy_page_tags(kto, kfrom);
->  	}
->  }
-> +
-> +void copy_highpage(struct page *to, struct page *from)
-> +{
-> +	void *kto = page_address(to);
-> +	void *kfrom = page_address(from);
-> +
-> +	copy_page(kto, kfrom);
-> +	do_mte(to, from, kto, kfrom);
-> +}
->  EXPORT_SYMBOL(copy_highpage);
->  
->  void copy_user_highpage(struct page *to, struct page *from,
-> @@ -44,3 +48,23 @@ void copy_user_highpage(struct page *to, struct page *from,
->  	flush_dcache_page(to);
->  }
->  EXPORT_SYMBOL_GPL(copy_user_highpage);
-> +
-> +#ifdef CONFIG_ARCH_HAS_COPY_MC
-> +void copy_highpage_mc(struct page *to, struct page *from)
-> +{
-> +	void *kto = page_address(to);
-> +	void *kfrom = page_address(from);
-> +
-> +	copy_page_mc(kto, kfrom);
-> +	do_mte(to, from, kto, kfrom);
-> +}
-> +EXPORT_SYMBOL(copy_highpage_mc);
+For a non-core PMU, e.g., uncore, cstate, power and etc. The cpumask is 
+under the /sys/devices/<PMU>/cpumask. It shows the cpumask which kernel 
+supports. If a end user request a different CPU other that the cpumask, 
+I think it's better throw a waning. It should mitigate the confusion 
+which Namhyung mentioned (uncore -C1,2).
 
-IIUC the do_mte() portion won't handle mermoy errors, so this isn't
-actually going to recover safely.
+> I don't know about the hybrid case.  I suspect it doesn't
+> work because it would need to intersect own_cpus with
+> user_requested_cpus if has_user_cpus, wouldn't it?
+
+For the hybrid, the cpumask is named as "cpus" under the sysfs. The name 
+is the same for both X86 and Arm.
+The current kernel will filter out the CPU which is not in the cpumask.
+For the tool, I think we can throw a warning as well if the user 
+requests the unsupported CPU.
+
+Actually, there is already a patch to check and print a warning for the 
+hybrid group. See commit 660e533e87ff ("perf stat: Warn group events 
+from different hybrid PMU"), but it's X86 specific.
+
+Maybe we can introduce a generic way by checking the "cpus" of the core 
+PMU for both X86 and Arm. Then the above patch may be dropped.
 
 Thanks,
-Mark.
+Kan
 
-> +
-> +void copy_user_highpage_mc(struct page *to, struct page *from,
-> +			unsigned long vaddr, struct vm_area_struct *vma)
-> +{
-> +	copy_highpage_mc(to, from);
-> +	flush_dcache_page(to);
-> +}
-> +EXPORT_SYMBOL_GPL(copy_user_highpage_mc);
-> +#endif
-> diff --git a/arch/arm64/mm/extable.c b/arch/arm64/mm/extable.c
-> index 1023ccdb2f89..4c882d36dd64 100644
-> --- a/arch/arm64/mm/extable.c
-> +++ b/arch/arm64/mm/extable.c
-> @@ -110,6 +110,8 @@ bool fixup_exception_mc(struct pt_regs *regs)
->  		return ex_handler_uaccess_type(ex, regs, FIXUP_TYPE_MC);
->  	case EX_TYPE_UACCESS_MC_ERR_ZERO:
->  		return ex_handler_uaccess_err_zero(ex, regs);
-> +	case EX_TYPE_COPY_PAGE_MC:
-> +		return ex_handler_fixup(ex, regs);
->  
->  	}
->  
-> diff --git a/include/linux/highmem.h b/include/linux/highmem.h
-> index 39bb9b47fa9c..a9dbf331b038 100644
-> --- a/include/linux/highmem.h
-> +++ b/include/linux/highmem.h
-> @@ -283,6 +283,10 @@ static inline void copy_user_highpage(struct page *to, struct page *from,
->  
->  #endif
->  
-> +#ifndef __HAVE_ARCH_COPY_USER_HIGHPAGE_MC
-> +#define copy_user_highpage_mc copy_user_highpage
-> +#endif
-> +
->  #ifndef __HAVE_ARCH_COPY_HIGHPAGE
->  
->  static inline void copy_highpage(struct page *to, struct page *from)
-> @@ -298,6 +302,10 @@ static inline void copy_highpage(struct page *to, struct page *from)
->  
->  #endif
->  
-> +#ifndef __HAVE_ARCH_COPY_HIGHPAGE_MC
-> +#define cop_highpage_mc copy_highpage
-> +#endif
-> +
->  static inline void memcpy_page(struct page *dst_page, size_t dst_off,
->  			       struct page *src_page, size_t src_off,
->  			       size_t len)
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 76e3af9639d9..d5f62234152d 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -2767,7 +2767,7 @@ static inline bool cow_user_page(struct page *dst, struct page *src,
->  	unsigned long addr = vmf->address;
->  
->  	if (likely(src)) {
-> -		copy_user_highpage(dst, src, addr, vma);
-> +		copy_user_highpage_mc(dst, src, addr, vma);
->  		return true;
->  	}
->  
-> -- 
-> 2.25.1
+> 
+>>
+>>
+>>>
+>>>>
+>>>> Actually evlist->has_user_cpus is checked first so
+>>>> uncore events' own_cpus might not be used.
+>>>
+>>> Yes
+>>>
+>>>>
+>>>> In my laptop, perf stat -a -A -e imc/data_reads/
+>>>> will use cpu 0 as it's listed in the pmu cpumask.
+>>>> But when I use -C1,2 it'll use the both cpus and
+>>>> returns the similar values each (so the sum is 2x).
+>>>
+>>> We expect the user to understand the uncore PMU they
+>>> are using.  AFAICT an uncore PMU cpu mask with only
+>>> CPU 0 typically means a single PMU that counts events
+>>> that could be indrectly caused by any CPU.  When the
+>>> cpu mask has more than one CPU, it means a PMU for
+>>> each of a group of CPU's (e.g. a core or socket)
+>>>
+>>> So in the example you gave above, there is only 1 PMU
+>>> and reading from any CPU will give it's value.
+>>>
+>>> A user providing a list of CPUs for uncore events
+>>> is useful only in certain cases.  For example when
+>>> each core has an uncore PMU and you only want to get
+>>> values from one core.
+>>>
+>>>>
+>>>> I'm not sure if it's intended.  I expect it runs on
+>>>> cpu 0 or one of the given cpus.  Or it runs on both
+>>>> cpus and returns value in half so that the sum is
+>>>> the same as the original value (from a cpu).
+>>
+>> It runs on CPU0. The kernel will correct the CPU when initializing the event. The uncore is per-die (For the most current platforms, die is the same as socket.). Usually, it runs on the first CPU of a die.
+>> For the -C 1,2 uncore/event/ case, the current tool creates two events. One for each CPU. The kernel will find the die ID of the input CPU first, then correct it to the first CPU of the die, which is 0.
+>> So from the kernel's perspective, the perf command turns to -C0 uncore/event/ -C0 uncore/event/. That's why you see similar values each. (They should not be exactly the same. That's because they are not in a group.)
+>>
+>>
+>>>
+>>> I don't know if there is anything wrong with the way
+>>> we are handling uncore PMUs, except that I don't know
+>>> if it is documented anywhere.
+>>
+>> Right, we are lacking of the document for the cpumask. I guess I can update it in the Documentation/ABI/testing/sysfs-bus-event_source-devices-uncore. But it's only for the developer.
+>>
+>> At the meantime, I think it may be better to show an error/warning if the user inputs are not matched with the cpumask of the requested PMU. That's for the end users.
+>>
+>>>
+>>>>
+>>>>>
+>>>>>>
+>>>>>> But the hybrid pmus make this complex.  Maybe we can move the
+>>>>>> logic in evlist__fix_hybrid_cpus() here and simplify it like below
+>>>>>>
+>>>>>> if (evsel->own_cpus) {
+>>>>>>      if (evsel->pmu->is_hybrid)
+>>>>>>         evsel->cpus = fixup_hybrid_cpus(evsel>own_cpus,
+>>>>>>                                         evlist->user_requested_cpus);  //?
+>>>>>>      else
+>>>>>>         evsel->cpus = evlist->own_cpus;  // put + get
+>>>>>> } else {
+>>>>>>      evsel->cpus = evlist->user_requested_cpus;  // put + get
+>>>>>> }
+>>>>>>
+>>>>>> Then we need to make sure evsel->pmu is set properly.
+>>>>>>
+>>>>>> What do you think?
+>>>>>
+>>>>> Hybrid handling looks complicated.  I would have to spend time
+>>>>> better understanding it.
+>>>>>
+>>>>> So, in the context of this patch set, I don't want to look at
+>>>>> issues with hybrid CPUs, except that there should be no change
+>>>>> to how they are handled.
+>>>>
+>>
+>> I think we should at least run perf test on a hybrid machine. We already have some backlog to handle. It's better not to bring more regression issue.
+>>
+>> Thanks,Kan
+>>
+>>
+>>
 > 

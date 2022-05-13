@@ -2,102 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2290525A62
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 05:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E454C525A66
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 05:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376766AbiEMDvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 23:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50576 "EHLO
+        id S1376904AbiEMDxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 23:53:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376865AbiEMDvk (ORCPT
+        with ESMTP id S1347440AbiEMDxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 23:51:40 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D402F6222A
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 20:51:39 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id m12so6796317plb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 20:51:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4uKAf8ejcZLyRe4KEMEu185lgDsjWpY688BLR8fzfXc=;
-        b=LsEond1U6vi33EbKuOwOhx7v4RzY5FRsuWl7R3lUn2KeUCRTVo9B0e1ciCBQoSh4TR
-         o5NlvaorWNPvqQVAtDLEaB5rH4Tm275nEKtGz07aDeXklfR1fnEgTL2yAKuwv6XAZhkp
-         9sWnXeustkOEebK1MNScQ2Bkpfh6eBYtCmr8XWNrhrdHpYM+YEYF9HAMjRcF7kM20gus
-         EGBr4+gmHepmYArq3awfU6iN3EJ6XHvhT7mHXmPT4NX+sdEb9PQgrS81mZ43Z1UYPS3i
-         PamMOM1x3izF5bP8uUVAo/Hk1e22r1B+I+5ilKgvpgmraBDwtS+LXsdMnz6Jr2mXv1/b
-         AJ6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4uKAf8ejcZLyRe4KEMEu185lgDsjWpY688BLR8fzfXc=;
-        b=57m+qvbx9fMs3eB3dhmbsbTawfwHpCIw4m0opqcTQMB4IyKCy03yZnMbqbYYw4Z8BI
-         VVNTYWc1iYs7Vsvv27kfywwZVX3aaxqo3SCDVtBVQDbki+JpoZCC+J8652TFgMWiXiZq
-         ktMnRNMxbgSayECHFL/xNXxAeKB/6DfrcpHVYeGSZLl8+IDasSedTNhz4Vq9Xfmhzs7G
-         pA/C3cLeZ+N2HlqQYKUjHPuRUON2CVflim28isvgOqAp6/vaoBcoNj6VQiJITV5PFaAs
-         HoESVQl06boF7XG7meVgm5XHRfrTLwpbWO/shqdg7Wu5bFGqVq/TxxESQUch0nqDzhrp
-         gaog==
-X-Gm-Message-State: AOAM530wuRrRZO2K5A2/CQZyuJjVZvm2M+kcS2R3mYdDa0xD7STmzu7b
-        Rg9/H8MY21bBKYHIeobVURS6WivSw4SxKaJEiVw=
-X-Google-Smtp-Source: ABdhPJzvW/r2r2l8V9phphJf4ArMMV9GwadMXGjA44d61oYwwpySzhQGMfIsSV9bl4jXumZRJpnFJXJjGK86C4NShis=
-X-Received: by 2002:a17:90b:1b52:b0:1dc:54ea:ac00 with SMTP id
- nv18-20020a17090b1b5200b001dc54eaac00mr14208518pjb.99.1652413899404; Thu, 12
- May 2022 20:51:39 -0700 (PDT)
+        Thu, 12 May 2022 23:53:41 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B042D663C1;
+        Thu, 12 May 2022 20:53:37 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KzvrZ4rXHz4xXH;
+        Fri, 13 May 2022 13:53:34 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1652414016;
+        bh=n54DZblynk0VLimaT4qwoyLi4hiRgpE+b2L0ESdGaHM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=sLBt/6U8CGhSm31XnTRHMBl1iTWZ8GGU9isT69jNUTFCYKmwfOFTE8YFMvg04484Z
+         T1XE2yj6zofXyCDpRXY0yAG7Fchmey6cZXc2+6++HEJpT94OQN+DbnuiPeZRZX2zLc
+         u699hzn6+42NxpwPifsJmKi1YcP8PXLDg8e0FFsHZWrmZFUU4cLrGqC3/bxTHnSAsb
+         cB3+NgwOfcMNfhPsFFkEk4XklQ1TBPq2905keOywO9iqAbDr0G3B9L/6g5daWy5Edx
+         K8Ho/KbEQ/1InZRzzV+HLUW1DY41RyMVOQ0PBXgXyCXaN5rAOLVbs63NDeKR4OjpQy
+         m1+lJHjKAkMcg==
+Date:   Fri, 13 May 2022 13:53:33 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
+Cc:     Like Xu <like.xu@linux.intel.com>, Like Xu <likexu@tencent.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the kvm tree with Linus' tree
+Message-ID: <20220513135333.7424c1c8@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220512174551.81279-1-shy828301@gmail.com> <20220512174551.81279-2-shy828301@gmail.com>
- <Yn3Q7KIb3FcAPW9j@casper.infradead.org>
-In-Reply-To: <Yn3Q7KIb3FcAPW9j@casper.infradead.org>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Thu, 12 May 2022 20:51:26 -0700
-Message-ID: <CAHbLzkrALZm43JOCwc38pRzcMwX3u0FNqwUEZS3pGi=3eT_V9Q@mail.gmail.com>
-Subject: Re: [PATCH 2/2] mm: pvmw: check possible huge PMD map by transhuge_vma_suitable()
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/CPSWij8og/R7ZeDUpbSdcPj";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 8:30 PM Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Thu, May 12, 2022 at 10:45:51AM -0700, Yang Shi wrote:
-> > IIUC PVMW checks if the vma is possibly huge PMD mapped by
-> > transparent_hugepage_active() and "pvmw->nr_pages >= HPAGE_PMD_NR".
-> >
-> > Actually pvmw->nr_pages is returned by compound_nr() or
-> > folio_nr_pages(), so the page should be THP as long as "pvmw->nr_pages
-> > >= HPAGE_PMD_NR".  And it is guaranteed THP is allocated for valid VMA
-> > in the first place.  But it may be not PMD mapped if the VMA is file
-> > VMA and it is not properly aligned.  The transhuge_vma_suitable()
-> > is used to do such check, so replace transparent_hugepage_active() to
-> > it, which is too heavy and overkilling.
-> >
-> > Fixes: 2aff7a4755be ("mm: Convert page_vma_mapped_walk to work on PFNs")
->
-> I think Fixes is a bit much.  There's no bug being fixed here.  This is
-> just an optimisation.  Is it an important optimisation?  We could put a
+--Sig_/CPSWij8og/R7ZeDUpbSdcPj
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yeah, it is just an optimization, will remove the fix tag.
+Hi all,
 
-I'm trying to do some cleanup for all the transhuge_page_* checks
-suggested by Vlastimil. I should be able to kill
-transparent_hugepage_active() by replacing it with
-transhuge_vma_suitable() here.
+Today's linux-next merge of the kvm tree got a conflict in:
 
-> bool into page_vma_mapped_walk() so we only have to ask the page whether
-> it's PMD-mappable once per walk rather than for each VMA.
+  arch/x86/kvm/pmu.h
 
-The page may be PMD-mappable for one VMA, but not for the other VMA.
+between commit:
 
->
+  75189d1de1b3 ("KVM: x86/pmu: Update AMD PMC sample period to fix guest NM=
+I-watchdog")
+
+from Linus' tree and commits:
+
+  a10cabf6815c ("KVM: x86/pmu: Move pmc_speculative_in_use() to arch/x86/kv=
+m/pmu.h")
+  8eeac7e999e8 ("KVM: x86/pmu: Add kvm_pmu_cap to optimize perf_get_x86_pmu=
+_capability")
+
+from the kvm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/x86/kvm/pmu.h
+index 22992b049d38,dbf4c83519a4..000000000000
+--- a/arch/x86/kvm/pmu.h
++++ b/arch/x86/kvm/pmu.h
+@@@ -138,15 -143,35 +143,44 @@@ static inline u64 get_sample_period(str
+  	return sample_period;
+  }
+ =20
+ +static inline void pmc_update_sample_period(struct kvm_pmc *pmc)
+ +{
+ +	if (!pmc->perf_event || pmc->is_paused)
+ +		return;
+ +
+ +	perf_event_period(pmc->perf_event,
+ +			  get_sample_period(pmc, pmc->counter));
+ +}
+ +
++ static inline bool pmc_speculative_in_use(struct kvm_pmc *pmc)
++ {
++ 	struct kvm_pmu *pmu =3D pmc_to_pmu(pmc);
++=20
++ 	if (pmc_is_fixed(pmc))
++ 		return fixed_ctrl_field(pmu->fixed_ctr_ctrl,
++ 					pmc->idx - INTEL_PMC_IDX_FIXED) & 0x3;
++=20
++ 	return pmc->eventsel & ARCH_PERFMON_EVENTSEL_ENABLE;
++ }
++=20
++ extern struct x86_pmu_capability kvm_pmu_cap;
++=20
++ static inline void kvm_init_pmu_capability(void)
++ {
++ 	perf_get_x86_pmu_capability(&kvm_pmu_cap);
++=20
++ 	/*
++ 	 * Only support guest architectural pmu on
++ 	 * a host with architectural pmu.
++ 	 */
++ 	if (!kvm_pmu_cap.version)
++ 		memset(&kvm_pmu_cap, 0, sizeof(kvm_pmu_cap));
++=20
++ 	kvm_pmu_cap.version =3D min(kvm_pmu_cap.version, 2);
++ 	kvm_pmu_cap.num_counters_fixed =3D min(kvm_pmu_cap.num_counters_fixed,
++ 					     KVM_PMC_MAX_FIXED);
++ }
++=20
+  void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel);
+  void reprogram_fixed_counter(struct kvm_pmc *pmc, u8 ctrl, int fixed_idx);
+  void reprogram_counter(struct kvm_pmu *pmu, int pmc_idx);
+
+--Sig_/CPSWij8og/R7ZeDUpbSdcPj
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ91j0ACgkQAVBC80lX
+0Gzbegf4ofT6xvOHdoukMsxm8dYMjCzLyPKWbtK6K5hwBoa4/JgRWx5EynVkl6ze
+J06LGRnBBDXzds/x3EOi1tDEIB08faMVGVHsF+0K0reROt3UgLXKtyRwS0Drt2iM
+Br9e8bUqh14rdX5hRT8FhLdBxlYfUgAxyXfM1J9GhnNdGoLX1BIcbutBjbXq4+np
+jAOMC/VasQlXT4VaHEueWUIGfdN6I4QqWcAggsrU0qQ+KS9m6NWAsjiI/Rux2iPB
+3xZY4sJs9CXVoIQHqnSfhizcOnA29ZBATetm2CrxSFoxkqsc4e4ivlcjW6SMqjtG
+jnwYAltIwBVGcRibq2BJ/dd4xG9k
+=Z9xG
+-----END PGP SIGNATURE-----
+
+--Sig_/CPSWij8og/R7ZeDUpbSdcPj--

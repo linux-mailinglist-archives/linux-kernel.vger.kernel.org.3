@@ -2,181 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5295B5267E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DACC05267E8
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382757AbiEMRIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 13:08:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59464 "EHLO
+        id S1382763AbiEMRIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 13:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378302AbiEMRIS (ORCPT
+        with ESMTP id S1382762AbiEMRI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 13:08:18 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46DA16128C
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:08:16 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id v14so6139719qtc.3
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:08:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=zXhkDIVf27CV50GWaqhnTSClMrVWORrrk1UTjwHnru8=;
-        b=cnwlzxqBMjsJ+1WY7JYGk0zmaRis0uxKC7n7kcvotpz3nsqvchPQgSX6XYMUfhDe6C
-         zQX+xYwhjdbi9MoF65ZpjqRRK7MJ0XKfxooT6ZqFqqo5RjIKjDa+M6SKyoLVYCac5pnq
-         F/Ub9Xe3njx+6EalimZC+4nsWYG/wjM6ZV3DJI5rfIRoltmydpP3cLFDVWHPmw472OJh
-         wjt3Bfjw86NWL6eyRuQrhiFfaHCEQEWvic5An3l6SAxg8tWA6OZwBS1CE8KjO+VtdCEW
-         IPvb1TfV5UEO/ymbUOlWpPhhEU9+bxxgQMSRElxcmydKAxpio18y2YkuyD7/w+eB4Eo5
-         aUFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=zXhkDIVf27CV50GWaqhnTSClMrVWORrrk1UTjwHnru8=;
-        b=4C/E4EPZvOEWBEylP0fl6m96VPnbylqXadosWYYfGJv7NGp8FuGADxLPvzHc0k1Ieo
-         iN1CwkhTKU4FqTAQy8FIlcsnrFjUcPVR3sZ6O/tUXYsvDHLefcikFVeLSlqDdk39KROm
-         oTv8K/TSJGuHyJBxyAT8AbbotvAx8r6sPvbrViQIbz5z27e5n7d3zZaR0V7raJhroEQc
-         jSbnOH5PjrzexsV0vCK3mHnreJjIUHunxecfoAU/SgRTtYg39fDoy6/pShBKRGIr9JOY
-         aiGMRWcfZ/tvLWjEulRJwduIgCilPecEP1tyNsKIX030LjniWEM2dH8tAket00IRMf/O
-         QoFQ==
-X-Gm-Message-State: AOAM531i9n7/sSJkiDAmr6SxIGHmzCgY9rr6k3kBaYTrA2WLMXMK1HSi
-        R1XA10Lodb6gd3QMZyDMtCi1dA==
-X-Google-Smtp-Source: ABdhPJwyv/gBNDnSk88os8Mohl8nxNU34Bx3dZyO4nXr5WiLiNrjoxWHwBHg3wmq2v0jQwwY7p/mpg==
-X-Received: by 2002:a05:622a:104e:b0:2f3:f7a5:62e6 with SMTP id f14-20020a05622a104e00b002f3f7a562e6mr5423719qte.582.1652461695399;
-        Fri, 13 May 2022 10:08:15 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::1:14fe])
-        by smtp.gmail.com with ESMTPSA id 143-20020a370995000000b0069fc13ce207sm1622277qkj.56.2022.05.13.10.08.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 10:08:14 -0700 (PDT)
-Date:   Fri, 13 May 2022 13:08:13 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Minchan Kim <minchan@kernel.org>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com
-Subject: Re: [PATCH v2 6/6] zswap: memcg accounting
-Message-ID: <Yn6QfdouzkcrygTR@cmpxchg.org>
-References: <20220510152847.230957-1-hannes@cmpxchg.org>
- <20220510152847.230957-7-hannes@cmpxchg.org>
- <20220511173218.GB31592@blackbody.suse.cz>
- <YnwJUL90fuoHs3YW@cmpxchg.org>
- <20220513151426.GC16096@blackbody.suse.cz>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220513151426.GC16096@blackbody.suse.cz>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 13 May 2022 13:08:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213BB6161F;
+        Fri, 13 May 2022 10:08:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B17376201D;
+        Fri, 13 May 2022 17:08:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00530C34100;
+        Fri, 13 May 2022 17:08:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1652461706;
+        bh=yyta1JDBNdTqYBJ7QeiOI5lEnbOq/t1YaTxEBduqntY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Zsl5a0c3oklW3J24GmN19JMzXlCtDk0w0R4CkKkbYTih9+4C3LPSyb2g12acZxvts
+         JGIfBdDRclKn5YGxu4nBR+/Fs4ktdS4lcM7qCbfXGX7xlQzwWL/s6DjZljPfcrhCKa
+         nAHNRzjHPOuiA6RsW7uuu9CdGbIXGAUTUgN4lK/4=
+Date:   Fri, 13 May 2022 10:08:25 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-mm@kvack.org, mm-commits@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hotfixes for 5.18-rc7
+Message-Id: <20220513100825.701c0801de7f18168c4d838c@linux-foundation.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Michal,
+Linus,
 
-On Fri, May 13, 2022 at 05:14:26PM +0200, Michal Koutný wrote:
-> On Wed, May 11, 2022 at 03:06:56PM -0400, Johannes Weiner <hannes@cmpxchg.org> wrote:
-> > Correct. After which the uncompressed page is reclaimed and uncharged.
-> > So the zswapout process will reduce the charge bottom line.
-> 
-> A zswap object falling under memory.current was my first thinking, I was
-> confused why it's exported as a separate counter memory.zswap.current
-> (which IMO suggests disjoint counting) and it doubles a
-> memory.stat:zswap entry.
-> 
-> Is the separate memory.zswap.current good for anything? (Except maybe
-> avoiding global rstat flush on memory.stat read but that'd be an
-> undesired precendent.)
+Please pull a bunch of hotfixes for 5.18-rc7.
 
-Right, it's accounted as a subset rather than fully disjointed. But it
-is a limitable counter of its own, so I exported it as such, with a
-current and a max knob. This is comparable to the kmem counter in v1.
 
-From an API POV it would be quite strange to have max for a counter
-that has no current. Likewise it would be strange for a major memory
-consumer to be missing from memory.stat.
+The following changes since commit 38d741cb70b30741c0e802cbed7bd9cf4fd15fa4:
 
-> (Ad the eventually reduced footprint, the transitional excursion above
-> memcg's (or ancestor's) limit should be limited by number of parallel
-> reclaims running (each one at most a page, right?), so it doesn't seem
-> necessary to tackle (now).)
+  Merge tag 'drm-fixes-2022-04-29' of git://anongit.freedesktop.org/drm/drm (2022-04-28 18:00:34 -0700)
 
-Correct.
+are available in the Git repository at:
 
-> > memory.zswap.* are there to configure zswap policy, within the
-> > boundaries of available memory - it's by definition a subset.
-> 
-> I see how the .max works when equal to 0 or "max". The intermediate
-> values are more difficult to reason about.
+  git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-hotfixes-stable-2022-05-11
 
-It needs to be configured to the workload's access frequency curve,
-which can be done with trial-and-error (reasonable balance between
-zswpins and pswpins) or in a more targeted manner using tools such as
-page_idle, damon etc.
+for you to fetch changes up to 9039b8335276569670caaf23606335946625e764:
 
-> Also, I can see that on the global level, zswap is configured relatively
-> (/sys/module/zswap/parameters/max_pool_percent).
-> You wrote that the actual configured value is workload specific, would
-> it be simpler to have also relative zswap limit per memcg?
->
-> (Relative wrt memory.max, it'd be rather just a convenience with this
-> simple ratio, however, it'd correspond to the top level limit. OTOH, the
-> relatives would have counter-intuitive hierarchical behavior. I don't
-> mean this should be changed, rather wondering why this variant was
-> chosen.)
+  MAINTAINERS: add a mailing list for DAMON development (2022-05-09 17:34:29 -0700)
 
-A percentage isn't a bad way to pick a global default limit for a
-kernel feature. But it would have been preferable if zswap had used
-the percentage internally and made the knob based in bytes (like
-min_free_kbytes for example).
+----------------------------------------------------------------
 
-Because for load tuning, bytes make much more sense. That's how you
-measure the workingset, so a percentage is an awkward indirection. At
-the cgroup level, it makes even less sense: all memcg tunables are in
-bytes, it would be quite weird to introduce a "max" that is 0-100. Add
-the confusion of how percentages would propagate down the hierarchy...
+Seven MM fixes, three of which address issues added in the most recent
+merge window, four of which are cc:stable.
 
-> > +bool obj_cgroup_may_zswap(struct obj_cgroup *objcg)
-> > +{
-> > +     struct mem_cgroup *memcg, *original_memcg;
-> > +     bool ret = true;
-> > +
-> > +     original_memcg = get_mem_cgroup_from_objcg(objcg);
-> > +     for (memcg = original_memcg; memcg != root_mem_cgroup;
-> > +          memcg = parent_mem_cgroup(memcg)) {
-> > +             unsigned long max = READ_ONCE(memcg->zswap_max);
-> > +             unsigned long pages;
-> > +
-> > +             if (max == PAGE_COUNTER_MAX)
-> > +                     continue;
-> > +             if (max == 0) {
-> > +                     ret = false;
-> > +                     break;
-> > +             }
-> > +
-> > +             cgroup_rstat_flush(memcg->css.cgroup);
-> 
-> Here, I think it'd be better not to bypass mem_cgroup_flush_stats() (the
-> mechanism is approximate and you traverse all ancestors anyway), i.e.
-> mem_cgroup_flush_stats() before the loop instead of this.
+Three non-MM fixes, none very serious.
 
-I don't traverse all ancestors, I bail on disabled groups and skip
-unlimited ones. This saves a lot of flushes in practice right now: our
-heaviest swapping cgroups have zswap disabled (max=0) because they're
-lowpri and forced to disk. Likewise, the zswap users have their zswap
-limit several levels down from the root, and I currently don't ever
-flush the higher levels (max=PAGE_COUNTER_MAX).
+----------------------------------------------------------------
+Hyeonggon Yoo (1):
+      mm/kfence: reset PG_slab and memcg_data before freeing __kfence_pool
 
-Flushing unnecessary groups with a ratelimit doesn't sound like an
-improvement to me.
+Joel Savitz (1):
+      selftests: vm: Makefile: rename TARGETS to VMTARGETS
 
-Thanks
+Kalesh Singh (1):
+      procfs: prevent unprivileged processes accessing fdinfo dir
+
+Martyna Szapar-Mudlaw (1):
+      mailmap: add entry for martyna.szapar-mudlaw@intel.com
+
+Mike Rapoport (1):
+      arm[64]/memremap: don't abuse pfn_valid() to ensure presence of linear map
+
+Naoya Horiguchi (1):
+      mm/hwpoison: use pr_err() instead of dump_page() in get_any_page()
+
+Niels Dossche (1):
+      mm: mremap: fix sign for EFAULT error return value
+
+SeongJae Park (1):
+      MAINTAINERS: add a mailing list for DAMON development
+
+Xu Yu (2):
+      Revert "mm/memory-failure.c: skip huge_zero_page in memory_failure()"
+      mm/huge_memory: do not overkill when splitting huge_zero_page
+
+ .mailmap                            |  1 +
+ MAINTAINERS                         |  1 +
+ arch/arm/include/asm/io.h           |  3 +++
+ arch/arm/mm/ioremap.c               |  8 ++++++++
+ arch/arm64/include/asm/io.h         |  4 ++++
+ arch/arm64/mm/ioremap.c             |  8 ++++++++
+ fs/proc/fd.c                        | 23 ++++++++++++++++++++++-
+ mm/huge_memory.c                    |  7 ++++++-
+ mm/kfence/core.c                    | 10 ++++++++++
+ mm/memory-failure.c                 | 15 +--------------
+ mm/mremap.c                         |  2 +-
+ tools/testing/selftests/vm/Makefile | 10 +++++-----
+ 12 files changed, 70 insertions(+), 22 deletions(-)
+

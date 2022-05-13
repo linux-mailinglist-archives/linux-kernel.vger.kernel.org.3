@@ -2,220 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E18965259FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 05:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B425259FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 05:20:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376692AbiEMDUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 23:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35244 "EHLO
+        id S1376700AbiEMDU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 23:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354961AbiEMDUI (ORCPT
+        with ESMTP id S1376701AbiEMDUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 23:20:08 -0400
-Received: from mx0b-002c1b01.pphosted.com (mx0b-002c1b01.pphosted.com [148.163.155.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02AE1EEE28;
-        Thu, 12 May 2022 20:20:03 -0700 (PDT)
-Received: from pps.filterd (m0127843.ppops.net [127.0.0.1])
-        by mx0b-002c1b01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CMtKDC004009;
-        Thu, 12 May 2022 20:19:12 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version;
- s=proofpoint20171006; bh=S0RAPzZ9DywYvN1T9Ao6EsM4yd62fUBLriessxcX0hU=;
- b=jPO/VnHBH3THzsMzvhi2ibtWiAZzImUX5HQPmfKSt5Rn9xAcu6TCtvXx4O3XBcTyCNue
- 0y9fOEVudYL6skchp2nmwe2kqzUhpU3N2eFbFZLTBwNVqQIOM/7GfXVw/m6d69NnQWYd
- eaZi7L/dxDKs87tgxql7wh0ivFFePxACnSPXHtmH6d5j2WfyLgQQ7YpyuepwABR/llNf
- U0VOFbWXlMga6Vx9gcTHsLN9crotZOMrvPwTOXb5o+kaHgFeKGlWcqZYJELZ3RIjFji9
- 7nXIKPOLsK+1N5I0jjy7XwD0gV0d33ACXZmC7cn7MJ8WV18dnwr6I9MdRWmMWe73uaWI OA== 
-Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2048.outbound.protection.outlook.com [104.47.51.48])
-        by mx0b-002c1b01.pphosted.com (PPS) with ESMTPS id 3g08g74urm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 20:19:12 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZxI515bMu7AbB8Nzj/AQKdrNlSB0xo3UJqhY2UpEvWznZKh7W3svjgE6lZseZutUSfNe5zSBig4pG0usLP4j8+y2Wbqe+NnDpbjAQc2kEiP5EkYpiua0q8wP4y+BxS7LvohmdsykwCvyYwiEMTqBBJ6AyDllofF8CWWMIBsYN/Sz+WwAdQiTHx41nVuPvnSIOY59+hYpP12wpLiYoRgUXjwhoTHD176FTYH1yNYdsYFoXmffzCGZtLevlrysllfgIJ2n11f5ruKOd40zx8FAajd6bOvdwMAN64dNU6cbkUuXWVhDX6G3F3NsONmseHyx6POnpU1X0geJjXgvoi4kIg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=S0RAPzZ9DywYvN1T9Ao6EsM4yd62fUBLriessxcX0hU=;
- b=YxIdu3bT32EoUT5Ev1dLFL2wj+HI7qmRR12pBOWkinQoBaXZSz5F42CV3zjduAhctgzwtotRbahZsuxxYbO8dIaTuXEKxJDRZGQ23evFTmbqK5qy0GLSASh2CAeQnqFxgzHIVkH/1eXMtT3h6CK/HBFFVwbYkA5BBGIYAxiVXRL/CikS/D7Uti/W2NEWyOkgFvtEeQM+Q9T70XC+qJq1S9uOo0P2hSM9fmljVnoL7hcuUiR4XyI/COfmDK97ww50c+Dmh/GPVDC+P3m4FvUHPLU7kIGEsKiNII9jROwaEoKJO93aiKF8lgzKg37wE0FXi2zHnnE5iiecbHUFer1d2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nutanix.com; dmarc=pass action=none header.from=nutanix.com;
- dkim=pass header.d=nutanix.com; arc=none
-Received: from BL0PR02MB4579.namprd02.prod.outlook.com (2603:10b6:208:4b::10)
- by BY5PR02MB6676.namprd02.prod.outlook.com (2603:10b6:a03:212::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13; Fri, 13 May
- 2022 03:19:09 +0000
-Received: from BL0PR02MB4579.namprd02.prod.outlook.com
- ([fe80::fd14:ff80:d4d9:c81f]) by BL0PR02MB4579.namprd02.prod.outlook.com
- ([fe80::fd14:ff80:d4d9:c81f%5]) with mapi id 15.20.5227.023; Fri, 13 May 2022
- 03:19:09 +0000
-From:   Jon Kohler <jon@nutanix.com>
-To:     Jim Mattson <jmattson@google.com>
-CC:     Jon Kohler <jon@nutanix.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ashok Raj <ashok.raj@intel.com>,
-        KarimAllah Ahmed <karahmed@amazon.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "kvm @ vger . kernel . org" <kvm@vger.kernel.org>,
-        Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH v4] x86/speculation, KVM: remove IBPB on vCPU load
-Thread-Topic: [PATCH v4] x86/speculation, KVM: remove IBPB on vCPU load
-Thread-Index: AQHYZjCCNu0C0Uz/6UepE20RTbQUAK0boCkAgAACRQCAAARvAIAABIOAgAAFnoCAAAHEAIAAOOoAgAAO2YCAACYTgIAAA2+A
-Date:   Fri, 13 May 2022 03:19:08 +0000
-Message-ID: <CD2EB6FA-E17F-45BA-AC70-92CCB12A16C4@nutanix.com>
-References: <20220512184514.15742-1-jon@nutanix.com>
- <Yn1fjAqFoszWz500@google.com> <Yn1hdHgMVuni/GEx@google.com>
- <07BEC8B1-469C-4E36-AE92-90BFDF93B2C4@nutanix.com>
- <Yn1o9ZfsQutXXdQS@google.com>
- <CALMp9eRQv6owjfyf+UO=96Q1dkeSrJWy0i4O-=RPSaQwz0bjTQ@mail.gmail.com>
- <C39CD5E4-3705-4D1A-A67D-43CBB7D1950B@nutanix.com>
- <CALMp9eRXmWvrQ1i0V3G738ndZOZ4YezQ=BqXe-BF2b4GNo1m3Q@mail.gmail.com>
- <DEF8066B-E691-4C85-A19A-9F5222D1683D@nutanix.com>
- <CALMp9eTwH9WVD=EuTXeu1KYAkAUuXdnmA+k9dti7OM+u=kLKHQ@mail.gmail.com>
-In-Reply-To: <CALMp9eTwH9WVD=EuTXeu1KYAkAUuXdnmA+k9dti7OM+u=kLKHQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3693.40.0.1.81)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ce768b78-e2fb-4d07-071a-08da348f581e
-x-ms-traffictypediagnostic: BY5PR02MB6676:EE_
-x-microsoft-antispam-prvs: <BY5PR02MB66764616019148D15C407385AFCA9@BY5PR02MB6676.namprd02.prod.outlook.com>
-x-proofpoint-crosstenant: true
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ptYmV/FOUxNpLmEx36XBlrmvH4WaVl9GJx6YqAuK4eetQTc0FTtMc4dWhHAU99OvJbG08A8S5Z7TmWsmOoyBicFX/wS999RSbVwF4nF3ANWZ/pyi/DadZNMTiur/tr5ZCdzXTkhrbFN7NsCxzIvKXapr2LlWleUhiEohhLdOwg93A4qXJYeFlN3TMcQtpN7jbvblOAvHakLXiTPvwrZ03qAtLZw0qnTbZcgdQeyKhvPxztPlnZYyixQ1OLSdIDEWv8lF29cOVqmwKGGwnjv3TMKge/Rl7ZYQ5vNZTIiB05Tr2UNzkhEmngLCd/Dny2OctNTlBPIwdOwIao0MQpJZYGrjBXbbzWkwKWRBJppEiZTjGuC6XlSbya81DutsgLRmAaFxlFXLgppFxhVTFDlcE3UfZ2q0jl8UvRQk0yYJuIc00xg3Nj6u2UN8hqq0O4nRbsQ9KEGBcpqWyVipPofglol8dWhVUSP0/G7PqNbFTYIQIfK5hDXSFp53JbBF6RqcTYN+9SLYhvHRThBvFSQ7BuF3QmfrlXmFkrtQJ+8bv5idZoxP+oTQkSpb4N4dkKYhlwRlx/yWp47S0qWxZenYvAfDYdEknQ82xt43TW5GqC3U154FZy3GMdt9m0KJOCplk2UonDgzJ+sJ3O46oUmve3BacFPiIUykKlLDb1pkVrXTeqVrYHgj6h4m43/XpQ1cK+FFtLZaOM2/G47JrM19zUOoUnmne5SaMEjMPcEEeDk=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR02MB4579.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8676002)(66476007)(36756003)(33656002)(64756008)(66946007)(66556008)(5660300002)(66446008)(4326008)(76116006)(91956017)(6486002)(71200400001)(316002)(6916009)(54906003)(2906002)(7416002)(508600001)(122000001)(38070700005)(38100700002)(8936002)(86362001)(6506007)(53546011)(186003)(83380400001)(6512007)(2616005)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 2
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VWdzY1VDN0YveUZzd2R1UlQwTHhDK1Q5bm9EbFZBYjRuUWpJTnNPZnB4eG5y?=
- =?utf-8?B?emtHeFRWZEswSlZpbjVyb3lGcmxCNCt3d1hrRWh6aWxiYmNBTjkwTk9qVjNR?=
- =?utf-8?B?M29qY1Z4c21sdWhMWFppaTg2UWRYL3loUnFIZXNNTTJkREdYSUpMdUtDUDJE?=
- =?utf-8?B?bWN0NW9KNkU3aEFlQUpJY2VYMmtubGYraUlwZWF4Ym1WNzlMdlFTTnU4MXM2?=
- =?utf-8?B?Q1BoSElROThEN29wZ0M1RTRaKy9XMmxMVWVsYVh6RzJhbmxibGdwT1UxOEpi?=
- =?utf-8?B?bHlSME1TQ2pPMVhnSDFWK3h6NlhCR0tNTFNSYnFnZEp2SVY1ZE5zQnBFM2VP?=
- =?utf-8?B?c2hOa0FONnM2YUlsVVdRdm1ZYnlQZWFvVkRPU1VuYXg4VWdFMk5wZVpqRDh4?=
- =?utf-8?B?czJsYjNzU2JsZC9aSVFkWmJ6Vkd3TzJkSk1sV3lNbkE0UnU3bm50U3VPM3F1?=
- =?utf-8?B?bVlrekVJRWswR1l2dzdtR3doc1lMRCs5WlBEVHQrNm1OcGtaY2hFVGhIM0NJ?=
- =?utf-8?B?dTlsemphRDZtNDFXaXdUQkhMeDk2azBsSGRxd3VFS2JENDAvN0xIUk11TFdJ?=
- =?utf-8?B?U0dvS0hZTm9PYktXZENUaGlMSXlrUkVaVWNtZ2JWZ2xmOGFMd3VFYlhhY0Z5?=
- =?utf-8?B?WTU4ZGtUbTMyNHNjWEFpZXNZaG5LdjcrRXlUWU1jM0VUZTlZM0FvRVZ0NlpQ?=
- =?utf-8?B?d014Q2pXSDZEVWpZVCtscHBXZm1PWkVLNTVKMVcvWU9XYWYzTEZoUUpZNGFE?=
- =?utf-8?B?aW14bFBPZGY4a3phdkVUN1ZpSm5nd1o1RnpzWERyWnZUS0s5UFdadWZ0MzJh?=
- =?utf-8?B?T3dGZi9qc3RTZVYxN0QxV2UvQzlhT0pTaTBHUjI5dy9EL0JqZGw3aDBoMjQr?=
- =?utf-8?B?dVpxdzZzblpua3VxQUgwRVY1V1dxWFkrd1FDbHRnWURRQUduaHpROHNMZlUy?=
- =?utf-8?B?TFNDZCt2V25zMUJQckZYZEVwS09zT0hXVzErRkFucTJQV1FiN3NHUlJRMUxP?=
- =?utf-8?B?bEJoS0t1SjdpR0ZKeWZXOXYxREVSNVFsMTd6ZFliM1d3S2NDNzkxVE8yRnFn?=
- =?utf-8?B?RmpiVEFhNi9YMGp3Z2lrWEhxczFidldjay9Cdm5KRHNKWk1lSWRlNXVxV1VP?=
- =?utf-8?B?M1d2d2pWU0lDOHJybDVEZEFIbmFEL1ZpUHVtbFRudkRsZDVyU01yaGVPSExz?=
- =?utf-8?B?dnJxajdTS0o3NUE1ak9RcjUwa0tLd3RPNFJoMncvRkJwbmgwemJhdVl3Wk5Y?=
- =?utf-8?B?ZmswbEZIQ21YUnNycUk1RXlTSGlicFdrVVBKdHdjMmNjRHF0ZHRzbVZ3RDJj?=
- =?utf-8?B?bnZuWFpUdGpSNEZaUCtzUElxMUY0QmxEYy9YZDkzNWY0VDFEdjNtRmR4R2RG?=
- =?utf-8?B?UWhaN201c0lEVUNnKzdoQVVDTW5sSHlSczkyYnBrK0dVOWhOSWRiY2tqRFM3?=
- =?utf-8?B?bWt3V0RiSG9xTG1GU25CanNZYzVLZVhoemRQaXdJa2I0V3I0YmVUTlhEWDlV?=
- =?utf-8?B?OC9BM2U0WjdlVmdIbWFMM0k4cmRrcTA2bUdiaVorcmxLcDI3WTdLTWlvUWdU?=
- =?utf-8?B?UmpEanA1MzBaZGRjYWExbE0xM1JIKzhpMk9tcjVLMHlKcGE1U3hXMHFLam5L?=
- =?utf-8?B?S2hHS1FpRFZ1dFA5NFpmVklZY1U5SGJPUHRveGlOQk0vUlR4TUc1MzBMUkF6?=
- =?utf-8?B?Yjl3d3V1NkJPR1pid2Vjc0hOOHlIKys5L2tOMzRqcVgyaWxmc1crT1A5TEx0?=
- =?utf-8?B?QjFYRXVjN052SDZVak51VUt5cHhBa2QvWnU5cTJHMXAxMVJHWFNXZlRwYTkr?=
- =?utf-8?B?RkpwT3VibzI3cURqUzJkMFpSYXhQRXBKOSsxRnl4enBhKzgxRGV1dEl3anRW?=
- =?utf-8?B?b0dKejhCV2dJT3h5cnpMaFprRFpPSWNnUXRiZGUyTVlFam5IMDhHOUkzQ3l1?=
- =?utf-8?B?eDRhZVVWMHVJRHV0NWh1NWlFei9RWW5ySkY4NXJBV29WMVlaWEVYYWpPL1lz?=
- =?utf-8?B?WlpBN25HMFpKcDluRDlFWHZGQ2kyV0lKcXlTUVF3SGJNOHgvbnBIWkVjbXlP?=
- =?utf-8?B?blFEeU1vZ0p1K1liQ0V6UUorcVdZK0p2SEJ3azdCVnVCaStqN2RGcVdIZ1F5?=
- =?utf-8?B?SEZFc0s0VE1ZMFRiUEpGU1hRdG5GV2hsdTJPODlMalZMWHorS1lubi8rVHNs?=
- =?utf-8?B?TGJENDh0N2ZNRkZCelJGZU5IUmFnOWdWVTE4N0JnKzI1WkNoSkwycWRrSnVH?=
- =?utf-8?B?ZlNmOEJrdG8vQzZwSHg5SDlBUGs1amU0c3lCTnZhTXJCL1ZtQ0x2NmhHRmlx?=
- =?utf-8?B?VnVBYnNpbENkZTVSeXZrbmExMTVtbTB2WDg3UFFlU21yMm9vUm1HZlNaUE9z?=
- =?utf-8?Q?SyFv/Cp1BnF5Acqo947pqIoFs2wzEu1rRWAb4AH0MVR7b?=
-x-ms-exchange-antispam-messagedata-1: tAlSbtXdvVvfBvChHZ48dhxF5TQ1puX+3Bo=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <65F8A253BA444841AFEF92959A498173@namprd02.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Thu, 12 May 2022 23:20:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDE628FE87
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 20:20:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DCB86006F
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 03:20:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE96BC34114;
+        Fri, 13 May 2022 03:20:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652412022;
+        bh=hdMV5sPfTunSBVCwaFuDJWydnVmvnF5pcYL4ULj4sKM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=IuiJthlPFvC30uiUWY5IFhJjePaSVjBThf2n0N7YYPToe3kUTyEZs37sjVkX8OLH8
+         /gVYsRLvPCsHT961rv+kbdkopwtQ28zhMqmeOyCakCoPubmB5UHt6//I+On8zZ0iKA
+         y63aWmAqVxN5LjZ+IhMuNwrYquYRX5R+rW4t8O/HSz7Wg7toVcmYODXm4KavK/R5ta
+         08cY0H038rLW1zvilm1Xu48oqpOf+PmD3y7Eh1mgg1uH8C1pQEgXiTI0UJRYdKMd2n
+         pD4pL8QQO9v/sNAivlgHCedbMEKV86iq2o2P+KeAXegLV+JftuqM7y+3sbXscQfMS3
+         akdb8Q1V3A4rw==
+Message-ID: <59d77fcb-bc82-c1d2-0a71-eef3b0140506@kernel.org>
+Date:   Fri, 13 May 2022 11:20:18 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: nutanix.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR02MB4579.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ce768b78-e2fb-4d07-071a-08da348f581e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 May 2022 03:19:08.9052
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: bb047546-786f-4de1-bd75-24e5b6f79043
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 7hkRJJ2yiX6hIjF8S6bod0zhfwT3PorgORYnr7zHkMkRPeFT1nZxa27iiCwbkRpskBmAbed95/oDmU83fZCJO/zHDY0mJpPJLmi3ybZM3co=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR02MB6676
-X-Proofpoint-ORIG-GUID: wAn5GfmB05iiVMkhKPdYtFcwlr33OUiR
-X-Proofpoint-GUID: wAn5GfmB05iiVMkhKPdYtFcwlr33OUiR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-12_19,2022-05-12_01,2022-02-23_01
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] f2fs: separate NOCoW and pinfile semantics
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao.yu@oppo.com>
+References: <20220512082116.2991611-1-chao@kernel.org>
+ <Yn2CztiJUY2UAjnd@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <Yn2CztiJUY2UAjnd@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gT24gTWF5IDEyLCAyMDIyLCBhdCAxMTowNiBQTSwgSmltIE1hdHRzb24gPGptYXR0c29u
-QGdvb2dsZS5jb20+IHdyb3RlOg0KPiANCj4gT24gVGh1LCBNYXkgMTIsIDIwMjIgYXQgNTo1MCBQ
-TSBKb24gS29obGVyIDxqb25AbnV0YW5peC5jb20+IHdyb3RlOg0KPiANCj4+IFlvdSBtZW50aW9u
-ZWQgaWYgc29tZW9uZSB3YXMgY29uY2VybmVkIGFib3V0IHBlcmZvcm1hbmNlLCBhcmUgeW91DQo+
-PiBzYXlpbmcgdGhleSBhbHNvIGNyaXRpY2FsbHkgY2FyZSBhYm91dCBwZXJmb3JtYW5jZSwgc3Vj
-aCB0aGF0IHRoZXkgYXJlDQo+PiB3aWxsaW5nIHRvICpub3QqIHVzZSBJQlBCIGF0IGFsbCwgYW5k
-IGluc3RlYWQganVzdCB1c2UgdGFza3NldCBhbmQgaG9wZQ0KPj4gbm90aGluZyBldmVyIGdldHMg
-c2NoZWR1bGVkIG9uIHRoZXJlLCBhbmQgdGhlbiBob3BlIHRoYXQgdGhlIGh5cGVydmlzb3INCj4+
-IGRvZXMgdGhlIGpvYiBmb3IgdGhlbT8NCj4gDQo+IEkgYW0gc2F5aW5nIHRoYXQgSUJQQiBpcyBu
-b3QgdGhlIG9ubHkgdmlhYmxlIG1pdGlnYXRpb24gZm9yDQo+IGNyb3NzLXByb2Nlc3MgaW5kaXJl
-Y3QgYnJhbmNoIHN0ZWVyaW5nLiBQcm9wZXIgc2NoZWR1bGluZyBjYW4gYWxzbw0KPiBzb2x2ZSB0
-aGUgcHJvYmxlbSwgd2l0aG91dCB0aGUgb3ZlcmhlYWQgb2YgSUJQQi4gU2F5IHRoYXQgeW91IGhh
-dmUgdHdvDQo+IHNlY3VyaXR5IGRvbWFpbnM6IHRydXN0ZWQgYW5kIHVudHJ1c3RlZC4gSWYgeW91
-IGhhdmUgYSB0d28tc29ja2V0DQo+IHN5c3RlbSwgYW5kIHlvdSBhbHdheXMgcnVuIHRydXN0ZWQg
-d29ya2xvYWRzIG9uIHNvY2tldCMwIGFuZCB1bnRydXN0ZWQNCj4gd29ya2xvYWRzIG9uIHNvY2tl
-dCMxLCBJQlBCIGlzIGNvbXBsZXRlbHkgc3VwZXJmbHVvdXMuIEhvd2V2ZXIsIGlmIHRoZQ0KPiBo
-eXBlcnZpc29yIGNob29zZXMgdG8gc2NoZWR1bGUgYSB2Q1BVIHRocmVhZCBmcm9tIHZpcnR1YWwg
-c29ja2V0IzANCj4gYWZ0ZXIgYSB2Q1BVIHRocmVhZCBmcm9tIHZpcnR1YWwgc29ja2V0IzEgb24g
-dGhlIHNhbWUgbG9naWNhbA0KPiBwcm9jZXNzb3IsIHRoZW4gaXQgKm11c3QqIGV4ZWN1dGUgYW4g
-SUJQQiBiZXR3ZWVuIHRob3NlIHR3byB2Q1BVDQo+IHRocmVhZHMuIE90aGVyd2lzZSwgaXQgaGFz
-IGludHJvZHVjZWQgYSBub24tYXJjaGl0ZWN0dXJhbA0KPiB2dWxuZXJhYmlsaXR5IHRoYXQgdGhl
-IGd1ZXN0IGNhbid0IHBvc3NpYmx5IGJlIGF3YXJlIG9mLg0KPiANCj4gSWYgeW91IGNhbid0IHRy
-dXN0IHlvdXIgT1MgdG8gc2NoZWR1bGUgdGFza3Mgd2hlcmUgeW91IHRlbGwgaXQgdG8NCj4gc2No
-ZWR1bGUgdGhlbSwgY2FuIHlvdSByZWFsbHkgdHJ1c3QgaXQgdG8gcHJvdmlkZSB5b3Ugd2l0aCBh
-bnkga2luZCBvZg0KPiBpbnRlci1wcm9jZXNzIHNlY3VyaXR5Pw0KDQpGYWlyIGVub3VnaCwgc28g
-Z29pbmcgZm9yd2FyZDoNClNob3VsZCB0aGlzIGJlIG1hbmRhdG9yeSBpbiBhbGwgY2FzZXM/IEhv
-dyB0aGlzIHdob2xlIGVmZm9ydCBjYW1lDQp3YXMgdGhhdCBhIHVzZXIgY291bGQgY29uZmlndXJl
-IHRoZWlyIEtWTSBob3N0IHdpdGggY29uZGl0aW9uYWwNCklCUEIsIGJ1dCB0aGlzIHBhcnRpY3Vs
-YXIgbWl0aWdhdGlvbiBpcyBub3cgYWx3YXlzIG9uIG5vIG1hdHRlciB3aGF0Lg0KDQpJbiBvdXIg
-cHJldmlvdXMgcGF0Y2ggcmV2aWV3IHRocmVhZHMsIFNlYW4gYW5kIEkgbW9zdGx5IHNldHRsZWQg
-b24gbWFraW5nDQp0aGlzIHBhcnRpY3VsYXIgYXZlbnVlIGFjdGl2ZSBvbmx5IHdoZW4gYSB1c2Vy
-IGNvbmZpZ3VyZXMgYWx3YXlzX2licGIsIHN1Y2gNCnRoYXQgZm9yIGNhc2VzIGxpa2UgdGhlIG9u
-ZSB5b3UgZGVzY3JpYmUgKGFuZCBvdGhlcnMgbGlrZSBpdCB0aGF0IGNvbWUgdXAgaW4NCnRoZSBm
-dXR1cmUpIGNhbiBiZSBjb3ZlcmVkIGVhc2lseSwgYnV0IGZvciBjb25kX2licGIsIHdlIGNhbiBk
-b2N1bWVudA0KdGhhdCBpdCBkb2VzbuKAmXQgY292ZXIgdGhpcyBjYXNlLiANCg0KV291bGQgdGhh
-dCBiZSBhY2NlcHRhYmxlIGhlcmU/DQoNCj4gDQo+PiBXb3VsZCB0aGlzIGJlIHRoZSBleHBlY3Rh
-dGlvbiBvZiBqdXN0IEtWTT8gT3IgYWxsIGh5cGVydmlzb3JzIG9uIHRoZQ0KPj4gbWFya2V0Pw0K
-PiANCj4gQW55IGh5cGVydmlzb3IgdGhhdCBkb2Vzbid0IGRvIHRoaXMgaXMgYnJva2VuLCBidXQg
-dGhhdCB3b24ndCBrZWVwIGl0DQo+IG9mZiB0aGUgbWFya2V0LiA6LSkNCg0KVmVyeSB0cnVlIDop
-DQoNCg==
+On 2022/5/13 5:57, Jaegeuk Kim wrote:
+> On 05/12, Chao Yu wrote:
+>> Pinning a file is heavy, because skipping pinned files make GC
+>> running with heavy load or no effect.
+>>
+>> So that this patch proposes to separate nocow and pinfile semantics:
+>> - NOCoW flag can only be set on regular file.
+>> - NOCoW file will only trigger IPU at common writeback/flush.
+>> - NOCow file will do OPU during GC.
+>>
+>> This flag can satisfying the demand of:
+>> 1) avoiding fragment of file's physical block
+>> 2) userspace doesn't want to pin file's physical address
+>>
+>> Signed-off-by: Chao Yu <chao.yu@oppo.com>
+>> ---
+>>   fs/f2fs/data.c |  3 ++-
+>>   fs/f2fs/f2fs.h |  1 +
+>>   fs/f2fs/file.c | 25 ++++++++++++++++++++++++-
+>>   3 files changed, 27 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+>> index 54a7a8ad994d..c8eab78f7d89 100644
+>> --- a/fs/f2fs/data.c
+>> +++ b/fs/f2fs/data.c
+>> @@ -2495,7 +2495,8 @@ bool f2fs_should_update_inplace(struct inode *inode, struct f2fs_io_info *fio)
+>>   	if (is_inode_flag_set(inode, FI_ALIGNED_WRITE))
+>>   		return false;
+>>   
+>> -	if (f2fs_is_pinned_file(inode))
+>> +	if (f2fs_is_pinned_file(inode) ||
+>> +			F2FS_I(inode)->i_flags & F2FS_NOCOW_FL)
+>>   		return true;
+>>   
+>>   	/* if this is cold file, we should overwrite to avoid fragmentation */
+>> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+>> index 492af5b96de1..e91ece55f5e8 100644
+>> --- a/fs/f2fs/f2fs.h
+>> +++ b/fs/f2fs/f2fs.h
+>> @@ -2916,6 +2916,7 @@ static inline void f2fs_change_bit(unsigned int nr, char *addr)
+>>   #define F2FS_NOCOMP_FL			0x00000400 /* Don't compress */
+>>   #define F2FS_INDEX_FL			0x00001000 /* hash-indexed directory */
+>>   #define F2FS_DIRSYNC_FL			0x00010000 /* dirsync behaviour (directories only) */
+>> +#define F2FS_NOCOW_FL			0x00800000 /* Do not cow file */
+>>   #define F2FS_PROJINHERIT_FL		0x20000000 /* Create with parents projid */
+>>   #define F2FS_CASEFOLD_FL		0x40000000 /* Casefolded file */
+>>   
+>> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+>> index 09287876dbb7..7f92a3a157f7 100644
+>> --- a/fs/f2fs/file.c
+>> +++ b/fs/f2fs/file.c
+>> @@ -1851,6 +1851,20 @@ static int f2fs_setflags_common(struct inode *inode, u32 iflags, u32 mask)
+>>   	if (IS_NOQUOTA(inode))
+>>   		return -EPERM;
+>>   
+>> +	if ((iflags ^ masked_flags) & F2FS_NOCOW_FL) {
+>> +		int ret;
+>> +
+>> +		if (!S_ISREG(inode->i_mode))
+>> +			return -EINVAL;
+>> +		if (f2fs_should_update_outplace(inode, NULL))
+>> +			return -EINVAL;
+>> +		if (f2fs_is_pinned_file(inode))
+>> +			return -EINVAL;
+>> +		ret = f2fs_convert_inline_inode(inode);
+>> +		if (ret)
+>> +			return ret;
+>> +	}
+>> +
+>>   	if ((iflags ^ masked_flags) & F2FS_CASEFOLD_FL) {
+>>   		if (!f2fs_sb_has_casefold(F2FS_I_SB(inode)))
+>>   			return -EOPNOTSUPP;
+>> @@ -1926,6 +1940,7 @@ static const struct {
+>>   	{ F2FS_NOCOMP_FL,	FS_NOCOMP_FL },
+>>   	{ F2FS_INDEX_FL,	FS_INDEX_FL },
+>>   	{ F2FS_DIRSYNC_FL,	FS_DIRSYNC_FL },
+>> +	{ F2FS_NOCOW_FL,	FS_NOCOW_FL },
+>>   	{ F2FS_PROJINHERIT_FL,	FS_PROJINHERIT_FL },
+>>   	{ F2FS_CASEFOLD_FL,	FS_CASEFOLD_FL },
+>>   };
+>> @@ -1957,7 +1972,8 @@ static const struct {
+>>   		FS_NOCOMP_FL |		\
+>>   		FS_DIRSYNC_FL |		\
+>>   		FS_PROJINHERIT_FL |	\
+>> -		FS_CASEFOLD_FL)
+>> +		FS_CASEFOLD_FL |	\
+>> +		FS_NOCOW_FL)
+>>   
+>>   /* Convert f2fs on-disk i_flags to FS_IOC_{GET,SET}FLAGS flags */
+>>   static inline u32 f2fs_iflags_to_fsflags(u32 iflags)
+>> @@ -3081,6 +3097,13 @@ static int f2fs_ioc_set_pin_file(struct file *filp, unsigned long arg)
+>>   
+>>   	inode_lock(inode);
+>>   
+>> +	if (F2FS_I(inode)->i_flags & F2FS_NOCOW_FL) {
+>> +		f2fs_info(F2FS_I_SB(inode), "inode (%lu) is already NOCOW one",
+>> +			inode->i_ino);
+>> +		ret = -EINVAL;
+> 
+> Why rejecting this? We can pin the file to get 2MB-aligned allocation on the
+> NOCOW file.
+
+I try to separate these two flag completely, but, seems it can't, because after
+commit 5d539245cb18 ("f2fs: export FS_NOCOW_FL flag to user"), these two flags
+have already been twined closely....
+
+@@ -1651,6 +1651,8 @@ static int f2fs_ioc_getflags(struct file *filp, unsigned long arg)
+  		flags |= F2FS_ENCRYPT_FL;
+  	if (f2fs_has_inline_data(inode) || f2fs_has_inline_dentry(inode))
+  		flags |= F2FS_INLINE_DATA_FL;
++	if (is_inode_flag_set(inode, FI_PIN_FILE))
++		flags |= F2FS_NOCOW_FL;
+
+How about:
+
+f2fs_ioc_set_pin_file/f2fs_fileattr_set logic:
+		pinfile			nocow
+set		set pinfile | nocow	set nocow
+clear		clear pinfile | nocow	clear nocow
+
+Behaviors:
+w/ pinfile, w/ nocow:		use pinfile semantics
+w/ pinfile, w/o nocow:		use pinfile semantics
+w/o pinfile, w/ nocow:		use nocow semantics
+w/o pinfile, w/o nocow:		no pinfile or nocow semantics
+
+Thanks,
+
+> 
+>> +		goto out;
+>> +	}
+>> +
+>>   	if (!pin) {
+>>   		clear_inode_flag(inode, FI_PIN_FILE);
+>>   		f2fs_i_gc_failures_write(inode, 0);
+>> -- 
+>> 2.25.1

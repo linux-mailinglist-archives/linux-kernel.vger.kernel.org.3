@@ -2,132 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BBB7525CD5
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 10:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B846E525CF3
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 10:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378100AbiEMIJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 04:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
+        id S1378160AbiEMILa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 04:11:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378089AbiEMIJI (ORCPT
+        with ESMTP id S1378117AbiEMIKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 04:09:08 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2057.outbound.protection.outlook.com [40.107.220.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F5A1D5004;
-        Fri, 13 May 2022 01:09:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oYvTGL2rIz/F+SBosaTfR2+uRn2vT/HKrX1ZhpOpeJ2N/nqUMaUp4pmWeWRPwFdYm1yE+yzGfBPvPActZ500/tq37pN7bxvv99ReprSlAJMqrhlsnFQ2oLzdLFT8I5LFBCRojQ9E2YZb2YjPTecs2bj90ek4ZG4HYWi1OLW5GyaUYjwpKYuXM3Mo/Nus1Y2Tvb6792sztQOYxrBL/XWm4m43i+JGxbWqO/Rph8x5bn4C9BWjVbPgj329lf1R0PHkm9ZoOWiFK+6SenQLnnXi8eNi2warzohPojA3aKLB2WEBDj0fH2PiV9Nz/3qKtX9ipBC/EERyq78kEI5SWnUlRw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/ygycUowgxXD+vPfmC1VGnu+gzuVsKbMoxxpasgil/Q=;
- b=cudvYEp/0k13R/N0XDk313NLHGTykPcznwuGnkwTBHuptOfFdW9t1axufyOpIGMZ0PZSVpxB+cJd+wGlN0BoJ1dQexccrUK08orCHcMWdTVAyQv73pTO6yYEjBhYkmjV3RQZWzOUDPxK/+9u6MpXd4dtP1JAjisYS2/EqnBC/R7Rd/rnEUVXQLrm9q/hbb1KavT7wvtG1+2Gc24Vdv/FeX5+myiFAf/Tnpiu51uX7yK5R32oLOD820NOX56LpFdmvd1in6TgXE20eRPSuAP78jvc6EHuAt14nBurcyAae1vfl6H0svqfgjtPXRolyr1kSG2Fz2TyiPMqN5/KytlI8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.238) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/ygycUowgxXD+vPfmC1VGnu+gzuVsKbMoxxpasgil/Q=;
- b=P4h6UElTTetgMMEKKZHI7+NebwGB+Z1aOCp2I88NVY85b+QcEV6v1hVdrnHbY4dLk2b6TZhGRet9Qi1qXOd+p29sfNjkSKo7NTf0ppTQ9Zf2BhordiA5eG4zcCu6ZBuUUFlA1Q6lan9LZ5+jnwdpxFsz/arJji+DDH4MysOR8rnkb7vjntT5YceLJ6Q5e2GA3EKf0YbNV7j6Y6V7CXHjri6QJp44sYgED/XDTEDh6ejjFZWhkbb3R571KfGYQ+W812HGFKbpxQUOJqUFFcPIaYDTVr+Y6Q+c4CuKP8Q383T/vB3Rspdslw4GPhI/8HT93vWYsJqabVFRUG11JqBN0A==
-Received: from DM6PR13CA0046.namprd13.prod.outlook.com (2603:10b6:5:134::23)
- by PH0PR12MB5449.namprd12.prod.outlook.com (2603:10b6:510:e7::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14; Fri, 13 May
- 2022 08:08:59 +0000
-Received: from DM6NAM11FT068.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:134:cafe::67) by DM6PR13CA0046.outlook.office365.com
- (2603:10b6:5:134::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13 via Frontend
- Transport; Fri, 13 May 2022 08:08:59 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.238; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.238) by
- DM6NAM11FT068.mail.protection.outlook.com (10.13.173.67) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5250.13 via Frontend Transport; Fri, 13 May 2022 08:08:59 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by DRHQMAIL105.nvidia.com
- (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Fri, 13 May
- 2022 08:08:58 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 13 May
- 2022 01:08:57 -0700
-Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.14) by mail.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server id 15.2.986.22 via Frontend
- Transport; Fri, 13 May 2022 01:08:54 -0700
-From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
-To:     <broonie@kernel.org>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <linux-spi@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <ashishsingha@nvidia.com>,
-        <robh+dt@kernel.org>
-CC:     <skomatineni@nvidia.com>, <ldewangan@nvidia.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Krishna Yarlagadda" <kyarlagadda@nvidia.com>
-Subject: [Patch V2 3/3] spi: dt-bindings: Add compatible for Tegra241 QSPI
-Date:   Fri, 13 May 2022 13:38:28 +0530
-Message-ID: <20220513080828.22079-4-kyarlagadda@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220513080828.22079-1-kyarlagadda@nvidia.com>
-References: <20220513080828.22079-1-kyarlagadda@nvidia.com>
-X-NVConfidentiality: public
+        Fri, 13 May 2022 04:10:49 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF7DFD1E
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:10:46 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id ba17so9053114edb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:10:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=91LK4yFc8ncVigJgf60wMV9BYzBPqKD6JcDXCqA6AKs=;
+        b=tLpRxIm5qU+OfHD+5T0hJcfSaEeBrt10JVDh2rpQVRzEeXgQR40/J5Yrx+xg2b1VAH
+         ruXcsFHHpgjj0CGH8N8VE5l0G02et6/RFY2siVJwqEOqFQFvPkFo1RrbThDJwPfdVVfO
+         F6E0kJwX5NtLb5QqBV0qXcBD0pHH9WYK5kpZCrzmN9D46YbU9+maQMZuDMuchfxTr6ic
+         rLN7DiXImOJ8hw5YeA6yO30DnHi8F+WzVhhxxUh+p9Pv2ogMEFgV1+U2zwTwtotH27Yx
+         P32o1zNJIkY+pxZNyuXWm71FVZ9XQQdgBcrl5FJx8xtk/RekTsavNS65e8vBcC7aQq5a
+         0D0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=91LK4yFc8ncVigJgf60wMV9BYzBPqKD6JcDXCqA6AKs=;
+        b=Ekj5nX7s1+ui/3156j6iyzP6MtkqaJA6aFZMa0qjbPEsTssPzMkONcRD+XnEahzap7
+         9Kg3GanIheePjwc5taSSNxbQyS3SBrvEF4BB/0WfLCGuxDyuEKyxJA19D4h3rMQ7+5rM
+         DMiMZacp7RLBJTCS4rRUFz9GJRMpjYtRBCjANbAbbGz5CR1oP7KmK/AcLBM9YP6Mfqys
+         Avd8PQtHmKu+hodozod1rG+4I15VRyXbJcOvgBChzCEmcrjR2xIyKX5fC2Brkm4u8m03
+         ZbbQPoA5IprSLCefkxTgoaKdCMlF+tj06epyiRxmpsU3sR4yqWTu1wGFXBfb8NqvpSHU
+         p2aA==
+X-Gm-Message-State: AOAM531cLe186R0Z/s+vSIElCH1HEYK2an6Ci45psyI98YnAXKSluIaB
+        oFHFDC6Ed9TXQBsSkFyc8gchEg==
+X-Google-Smtp-Source: ABdhPJzCev1jn/thCLLRYL0b61TfsPq3kPVxBQaex4UEh+PCTXDNNirSX5/y85RABqnuVSTp4pRJSg==
+X-Received: by 2002:a05:6402:3485:b0:427:cde4:2097 with SMTP id v5-20020a056402348500b00427cde42097mr38105422edc.264.1652429444815;
+        Fri, 13 May 2022 01:10:44 -0700 (PDT)
+Received: from [192.168.0.168] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id hz15-20020a1709072cef00b006f3ef214e11sm508471ejc.119.2022.05.13.01.10.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 01:10:44 -0700 (PDT)
+Message-ID: <85c40d22-afaa-0f7b-01bd-6de9e592079f@linaro.org>
+Date:   Fri, 13 May 2022 10:10:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 74255f7d-ff17-41bf-9f9d-08da34b7d5b0
-X-MS-TrafficTypeDiagnostic: PH0PR12MB5449:EE_
-X-Microsoft-Antispam-PRVS: <PH0PR12MB544912459339F9FBF335DDCCC3CA9@PH0PR12MB5449.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6kuGQ39hWTbU17/4XwmZC171Le7WxS2Skq1i2U5M1Pw8Jj/m1fI7qARN/LtvW6UJj47op/miJxhNqD/6aLZD/LbqelW9WQw5T2KfxNf4h7Ckm59F4t5woB+HtO4gNKZjCKCOyowb0m+7sHtIKOdBmlFfefdGa+8nsbMht6vV57d3dG4SxkNqRdZz3TCSXFLh92WaW/OsrGARbPm9P6zD0Tk6SHeVo2mhzU+yqTglm8GKJe/QFgyDJs9mmbdnS/4cE9fTgdqpgKHGMKCYbGKfLD+He/2etD5tiWaKw1pyXzdjI1WKzt4nxkPT4IUOzZroF1EJe2AcF1aiKFnPyUW6vVh1qHw02M3QWARMsCNIfh/rGV/T7w4o0Vc+CCyoEZGaAoGnFW8UOE510cb2y7UAoDN35r1EK6fSAcw3/cTwk9QcJMwSwwbQIj8HPV20sD73mg7b+WadXEyz1zTYB2QatHni1CBHK/GQY4aF1/zm/UsfhxcLB8D8rugiKeqcBcxUlRtp0D5A9vtHPJbO1VEc19qpl8uCkeTG5WK9PN8t0FUYizrg1LZswo5oosiZQe9V2Nce2gARtt9944NiyzNr3/MNO9tOF7bBTjfvSWXqGY2Wf4yuySfCgKMXkFPX0S+GEUfmtsnfZ8qp8ZMMaYC6LuTU36DmoMRkdyhEnMuqstFw++tAfY8MsmVi0CLnGR2pEPLG0hiZ0bYEiCOEtx35Qw==
-X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(4744005)(81166007)(82310400005)(7696005)(2906002)(8936002)(26005)(36860700001)(508600001)(36756003)(426003)(47076005)(336012)(186003)(40460700003)(86362001)(5660300002)(110136005)(316002)(54906003)(2616005)(1076003)(70586007)(8676002)(107886003)(356005)(70206006)(4326008)(6666004)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 May 2022 08:08:59.3878
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 74255f7d-ff17-41bf-9f9d-08da34b7d5b0
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT068.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5449
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v15 10/10] ARM: dts: Add Sunplus SP7021-Demo-V3 board
+ device tree
+Content-Language: en-US
+To:     =?UTF-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
+References: <cover.1652329411.git.qinjian@cqplus1.com>
+ <daeccdfb9655e549656af0af955a4697871e3ab0.1652329411.git.qinjian@cqplus1.com>
+ <32c80a79-abd5-3fd2-cbb4-e2ae93c539da@linaro.org>
+ <3a01fe9aa860407694ee77133459a9ab@cqplus1.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <3a01fe9aa860407694ee77133459a9ab@cqplus1.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add new compatible for Tegra241 QSPI controller which has
-multiple chip select lines.
+On 13/05/2022 09:44, qinjian[覃健] wrote:
+>>> diff --git a/arch/arm/boot/dts/sunplus-sp7021-achip.dtsi b/arch/arm/boot/dts/sunplus-sp7021-achip.dtsi
+>>> new file mode 100644
+>>> index 000000000..1560c95d9
+>>> --- /dev/null
+>>> +++ b/arch/arm/boot/dts/sunplus-sp7021-achip.dtsi
+>>> @@ -0,0 +1,85 @@
+>>> +// SPDX-License-Identifier: GPL-2.0
+>>> +/*
+>>> + * Device Tree Source for Sunplus SP7021
+>>> + *
+>>> + * Copyright (C) 2021 Sunplus Technology Co.
+>>> + */
+>>> +
+>>> +#include "sunplus-sp7021.dtsi"
+>>> +
+>>> +/ {
+>>> +	compatible = "sunplus,sp7021-achip";
+>>
+>> This does not match your bindings.
+>>
+> 
+>>> +++ b/arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts
+>>> @@ -0,0 +1,27 @@
+>>> +// SPDX-License-Identifier: GPL-2.0
+>>> +/*
+>>> + * Device Tree Source for Sunplus SP7021 Demo V3 SBC board
+>>> + *
+>>> + * Copyright (C) Sunplus Technology Co.
+>>> + */
+>>> +
+>>> +/dts-v1/;
+>>> +
+>>> +#include "sunplus-sp7021-achip.dtsi"
+>>> +
+>>> +/ {
+>>> +	compatible = "sunplus,sp7021-demo-v3";
+>>
+>> This does not match your bindings.
+>>
+>> Please run make dtbs_check.
+> 
+> I did passed the make dtbs_check.
+> compatible string: "sunplus,sp7021", "sunplus,sp7021-achip", "sunplus,sp7021-demo-v3"
+> all defined @ Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml [1]
 
-Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
----
- Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml | 1 +
- 1 file changed, 1 insertion(+)
+How this can pass the check if it is entirely different compatible and
+does not match schema? The code is not correct. If you test your DTS
+with dtbs_check you will see:
 
-diff --git a/Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml b/Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml
-index 7d60bb1af047..3ba9df4f3a0b 100644
---- a/Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml
-+++ b/Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml
-@@ -20,6 +20,7 @@ properties:
-       - nvidia,tegra186-qspi
-       - nvidia,tegra194-qspi
-       - nvidia,tegra234-qspi
-+      - nvidia,tegra241-qspi
- 
-   interrupts:
-     maxItems: 1
--- 
-2.17.1
+	sunplus-sp7021-demo-v3.dtb: /: compatible: ['sunplus,sp7021-demo-v3']
+is too short
 
+
+Additionally:
+1. Your DTBs do not compile, missing Makefile entry.
+
+2. You have to fix whitespace issues in your patches:
+
+.git/rebase-apply/patch:48: new blank line at EOF.
+
++
+
+warning: 1 line adds whitespace errors.
+
+.git/rebase-apply/patch:97: new blank line at EOF.
+
++
+
+warning: 1
+
+Best regards,
+Krzysztof

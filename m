@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB4F526809
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F44526816
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382824AbiEMRQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 13:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
+        id S1382818AbiEMRQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 13:16:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382779AbiEMRQ1 (ORCPT
+        with ESMTP id S1382780AbiEMRQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 13 May 2022 13:16:27 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DEB463A0;
-        Fri, 13 May 2022 10:16:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E5363FF;
+        Fri, 13 May 2022 10:16:26 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 4B9C61F463B6
+        with ESMTPSA id 3C4F31F463B9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652462184;
-        bh=6b5Fn00QFN3S8pk3LiXp3oowU6+YetKGNFXGTWU1NeQ=;
+        s=mail; t=1652462185;
+        bh=+SNQosugZ3rRLzeC91179/d1xD7fpoErRAwb547pmRM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S5rfzoUU1xMstwvoem9aQMqhyD6+D+l3IzMQ2gv3FhEHZWP3irW9F1hY5Z1u8Ge2b
-         rhu8YwtB/1D5un8uqnNgU7CvrQRvgFRAXXc/LZnuBb3tZ5gEkRa8NRCvd502VTygfH
-         T+b7LhLPTB60WIS2Kfwm62TMUPcYw9tY5p2C4B4seDTSnwiJ8Exy9NymG7b3HV/oM0
-         eQ+UAANxW41CqUsPR8XZRzcw18NyQbGSP7MUpTwtUflaIMwYf/qvJX6gEhASghzPF9
-         ZJyveqBm5OhnjoyeEYmq0/PwID7d9/u7Qm/dkJZFRV0Tg9cvCc1TLZmOiqTrnbRxWr
-         dBldG/nYsyYWA==
+        b=XWKopfN0gCAevdMs64GrFGRQOoXOWOZ5dEbZuDUJ/CfmDvVIP/DIRM49p9aEv0Erv
+         pLkOpeIUHtpk8LLXs0b0zqommLAo6ctdZ5HVztrATXa8QHC5UX1Ig4h3dQwwkgFM+M
+         SrrejUVWOGN6ACEUd17B2N6ov+dEJneNr+JWygg37z9Ntf0VqS1wtJWj72TqiA26v7
+         v7xWklVkDa3B4Bs8dglaW3EV9GFo3cBMe/PAOY72ZF0AEQ7A9V9BVNliog63roMQV3
+         2CGMUCEOd6yiR/hwHKASMEmD1rDPF4epMoLeTIFcuoze2UFxscKK9x4Qey/2mvgBQ6
+         cAnqszV9VLFKw==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     robh+dt@kernel.org
@@ -40,9 +40,9 @@ Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
         kernel@collabora.com,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 2/7] arm64: dts: mediatek: mt6795: Add cpu-map and L2 cache
-Date:   Fri, 13 May 2022 19:16:12 +0200
-Message-Id: <20220513171617.504430-3-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 3/7] arm64: dts: mediatek: mt6795: Add Cortex A53 PMU nodes
+Date:   Fri, 13 May 2022 19:16:13 +0200
+Message-Id: <20220513171617.504430-4-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220513171617.504430-1-angelogioacchino.delregno@collabora.com>
 References: <20220513171617.504430-1-angelogioacchino.delregno@collabora.com>
@@ -58,131 +58,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This SoC is HMP and has two clusters with four Cortex-A53 cores each:
-declare a cpu map and, while at it, also add the next-level-cache
-properties.
+Add the required nodes to enable the PMU on this SoC.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- arch/arm64/boot/dts/mediatek/mt6795.dtsi | 56 ++++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt6795.dtsi | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt6795.dtsi b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
-index 167f90bd991a..1456b9035336 100644
+index 1456b9035336..639104b3f693 100644
 --- a/arch/arm64/boot/dts/mediatek/mt6795.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
-@@ -34,6 +34,7 @@ cpu0: cpu@0 {
- 			compatible = "arm,cortex-a53";
- 			enable-method = "psci";
- 			reg = <0x000>;
-+			next-level-cache = <&l2_0>;
- 		};
- 
- 		cpu1: cpu@1 {
-@@ -41,6 +42,7 @@ cpu1: cpu@1 {
- 			compatible = "arm,cortex-a53";
- 			enable-method = "psci";
- 			reg = <0x001>;
-+			next-level-cache = <&l2_0>;
- 		};
- 
- 		cpu2: cpu@2 {
-@@ -48,6 +50,7 @@ cpu2: cpu@2 {
- 			compatible = "arm,cortex-a53";
- 			enable-method = "psci";
- 			reg = <0x002>;
-+			next-level-cache = <&l2_0>;
- 		};
- 
- 		cpu3: cpu@3 {
-@@ -55,6 +58,7 @@ cpu3: cpu@3 {
- 			compatible = "arm,cortex-a53";
- 			enable-method = "psci";
- 			reg = <0x003>;
-+			next-level-cache = <&l2_0>;
- 		};
- 
- 		cpu4: cpu@100 {
-@@ -62,6 +66,7 @@ cpu4: cpu@100 {
- 			compatible = "arm,cortex-a53";
- 			enable-method = "psci";
- 			reg = <0x100>;
-+			next-level-cache = <&l2_1>;
- 		};
- 
- 		cpu5: cpu@101 {
-@@ -69,6 +74,7 @@ cpu5: cpu@101 {
- 			compatible = "arm,cortex-a53";
- 			enable-method = "psci";
- 			reg = <0x101>;
-+			next-level-cache = <&l2_1>;
- 		};
- 
- 		cpu6: cpu@102 {
-@@ -76,6 +82,7 @@ cpu6: cpu@102 {
- 			compatible = "arm,cortex-a53";
- 			enable-method = "psci";
- 			reg = <0x102>;
-+			next-level-cache = <&l2_1>;
- 		};
- 
- 		cpu7: cpu@103 {
-@@ -83,6 +90,55 @@ cpu7: cpu@103 {
- 			compatible = "arm,cortex-a53";
- 			enable-method = "psci";
- 			reg = <0x103>;
-+			next-level-cache = <&l2_1>;
-+		};
-+
-+		cpu-map {
-+			cluster0 {
-+				core0 {
-+					cpu = <&cpu0>;
-+				};
-+
-+				core1 {
-+					cpu = <&cpu1>;
-+				};
-+
-+				core2 {
-+					cpu = <&cpu2>;
-+				};
-+
-+				core3 {
-+					cpu = <&cpu3>;
-+				};
-+			};
-+
-+			cluster1 {
-+				core0 {
-+					cpu = <&cpu4>;
-+				};
-+
-+				core1 {
-+					cpu = <&cpu5>;
-+				};
-+
-+				core2 {
-+					cpu = <&cpu6>;
-+				};
-+
-+				core3 {
-+					cpu = <&cpu7>;
-+				};
-+			};
-+		};
-+
-+		l2_0: l2-cache0 {
-+			compatible = "cache";
-+			cache-level = <2>;
-+		};
-+
-+		l2_1: l2-cache1 {
-+			compatible = "cache";
-+			cache-level = <2>;
- 		};
+@@ -160,6 +160,15 @@ uart_clk: dummy26m {
+ 		#clock-cells = <0>;
  	};
  
++	pmu {
++		compatible = "arm,cortex-a53-pmu";
++		interrupts = <GIC_SPI  8 IRQ_TYPE_LEVEL_LOW>,
++			     <GIC_SPI  9 IRQ_TYPE_LEVEL_LOW>,
++			     <GIC_SPI 10 IRQ_TYPE_LEVEL_LOW>,
++			     <GIC_SPI 11 IRQ_TYPE_LEVEL_LOW>;
++		interrupt-affinity = <&cpu0>, <&cpu1>, <&cpu2>, <&cpu3>;
++	};
++
+ 	timer {
+ 		compatible = "arm,armv8-timer";
+ 		interrupt-parent = <&gic>;
 -- 
 2.35.1
 

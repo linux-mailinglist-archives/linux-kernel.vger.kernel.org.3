@@ -2,50 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9729525B2E
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 08:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B91525B32
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 08:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377163AbiEMGJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 02:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
+        id S1377169AbiEMGKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 02:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbiEMGJW (ORCPT
+        with ESMTP id S230347AbiEMGKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 02:09:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22415EDFD;
-        Thu, 12 May 2022 23:09:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A88461CF4;
-        Fri, 13 May 2022 06:09:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3FB5C34100;
-        Fri, 13 May 2022 06:09:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652422160;
-        bh=QtiDiI1n46PbHkwlg0EA/tlSMFio0/x0qUiQn8o/2jk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=dfWVXj7qrJzymsDGmgVQHBCqZMtyyc/aYqihi6PPGcm/LBTT4TU0NAqYDSwxrDJZS
-         7kPEB7/gPkRUa/BTfVzvG/8T7DuBWslHmFdHqDet4JWJdtIEqCu77+v+gESnTC83Zk
-         d02jWqx2FXpelGj05dEWICsjr0qSkOwLRcXEGC2QFjsi1nBZyy+q/rmyULc/HvE4HC
-         bxrbcQ6weKyNPgxLaPhKosm9WY2XcV2H+Nue5fsfBYDoMZgmZx54a1qPzLAP3tgfg1
-         /Ahg1TuO2Ev/EcKL18Ec/4LOZEVmwLnkvo1yVtloTYaFGxYAPDiwxFzClLomwjemTb
-         vUi+XqYyAtEng==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1npOUG-00063n-Tq; Fri, 13 May 2022 08:09:16 +0200
-Date:   Fri, 13 May 2022 08:09:16 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] USB-serial fixes for 5.18-rc7
-Message-ID: <Yn32DMmVNRmT0zz2@hovoldconsulting.com>
+        Fri, 13 May 2022 02:10:45 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BAF231;
+        Thu, 12 May 2022 23:10:40 -0700 (PDT)
+Received: from kwepemi100004.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KzysH52l3z1JC1B;
+        Fri, 13 May 2022 14:09:23 +0800 (CST)
+Received: from kwepemm600018.china.huawei.com (7.193.23.140) by
+ kwepemi100004.china.huawei.com (7.221.188.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 13 May 2022 14:10:38 +0800
+Received: from huawei.com (10.174.176.88) by kwepemm600018.china.huawei.com
+ (7.193.23.140) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 13 May
+ 2022 14:10:37 +0800
+From:   gaochao <gaochao49@huawei.com>
+To:     <alexs@kernel.org>, <corbet@lwn.net>
+CC:     <siyanteng01@gmail.com>, <bobwxc@email.cn>, <src.res@email.cn>,
+        <wanjiabing@vivo.com>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] docs/zh_CN: Add dev-tools/gdb-kernel-debugging.rst Chinese translation
+Date:   Fri, 13 May 2022 14:10:35 +0800
+Message-ID: <20220513061035.605-1-gaochao49@huawei.com>
+X-Mailer: git-send-email 2.28.0.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.88]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600018.china.huawei.com (7.193.23.140)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,38 +51,208 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 672c0c5173427e6b3e2a9bbb7be51ceeec78093a:
+Translate dev-tools/gdb-kernel-debugging.rst into Chinese.
 
-  Linux 5.18-rc5 (2022-05-01 13:57:58 -0700)
+Signed-off-by: gaochao <gaochao49@huawei.com>
+---
+ .../zh_CN/dev-tools/gdb-kernel-debugging.rst  | 167 ++++++++++++++++++
+ .../translations/zh_CN/dev-tools/index.rst    |   2 +-
+ 2 files changed, 168 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/translations/zh_CN/dev-tools/gdb-kernel-debugging.rst
 
-are available in the Git repository at:
+diff --git a/Documentation/translations/zh_CN/dev-tools/gdb-kernel-debugging.rst b/Documentation/translations/zh_CN/dev-tools/gdb-kernel-debugging.rst
+new file mode 100644
+index 000000000000..e1293176614a
+--- /dev/null
++++ b/Documentation/translations/zh_CN/dev-tools/gdb-kernel-debugging.rst
+@@ -0,0 +1,167 @@
++.. highlight:: none
++
++.. include:: ../disclaimer-zh_CN.rst
++
++:Original: Documentation/dev-tools/gdb-kernel-debugging.rst
++:Translator: 高超 gao chao <gaochao49@huawei.com>
++
++通过gdb调试内核和模块
++=====================
++
++Kgdb内核调试器、QEMU等虚拟机管理程序或基于JTAG的硬件接口，支持在运行时使用gdb
++调试Linux内核及其模块。Gdb提供了一个强大的python脚本接口，内核也提供了一套
++辅助脚本以简化典型的内核调试步骤。本文档为如何启用和使用这些脚本提供了一个简要的教程。
++此教程基于QEMU/KVM虚拟机，但文中示例也适用于其他gdb stub。
++
++
++环境配置要求
++------------
++
++- gdb 7.2+ (推荐版本: 7.4+) 、使能python (通常发行版上都已支持)
++
++设置
++----
++
++- 创建一个QEMU/KVM的linux虚拟机（详情请参考 www.linux-kvm.org 和 www.qemu.org ）。
++  对于交叉开发，https://landley.net/aboriginal/bin 提供了一些镜像和工具链，
++  可以帮助搭建交叉开发环境。
++
++- 编译内核时使能CONFIG_GDB_SCRIPTS，但关闭CONFIG_DEBUG_INFO_REDUCED。
++  如果架构支持CONFIG_FRAME_POINTER，请保持使能。
++
++- 在guest环境上安装该内核。如有必要，通过在内核command line中添加“nokaslr”来关闭KASLR。
++  此外，QEMU允许通过-kernel、-append、-initrd这些命令行选项直接启动内核。
++  但这通常仅在不依赖内核模块时才有效。有关此模式的更多详细信息，请参阅QEMU文档。
++  在这种情况下，如果架构支持KASLR，应该在禁用CONFIG_RANDOMIZE_BASE的情况下构建内核。
++
++- 启用QEMU/KVM的gdb stub，可以通过如下方式实现
++
++    - 在VM启动时，通过在QEMU命令行中添加“-s”参数
++
++  或
++
++    - 在运行时通过从QEMU监视控制台发送“gdbserver”
++
++- 切换到/path/to/linux-build(内核源码编译)目录
++
++- 启动gdb：gdb vmlinux
++
++  注意：某些发行版可能会将gdb脚本的自动加载限制在已知的安全目录中。
++  如果gdb报告拒绝加载vmlinux-gdb.py（相关命令找不到），请将：
++
++    add-auto-load-safe-path /path/to/linux-build
++
++  添加到~/.gdbinit。更多详细信息，请参阅gdb帮助信息。
++
++- 连接到已启动的guest环境：
++
++    (gdb) target remote :1234
++
++
++使用Linux提供的gdb脚本的示例
++----------------------------
++
++- 加载模块（以及主内核）符号：
++
++    (gdb) lx-symbols
++    loading vmlinux
++    scanning for modules in /home/user/linux/build
++    loading @0xffffffffa0020000: /home/user/linux/build/net/netfilter/xt_tcpudp.ko
++    loading @0xffffffffa0016000: /home/user/linux/build/net/netfilter/xt_pkttype.ko
++    loading @0xffffffffa0002000: /home/user/linux/build/net/netfilter/xt_limit.ko
++    loading @0xffffffffa00ca000: /home/user/linux/build/net/packet/af_packet.ko
++    loading @0xffffffffa003c000: /home/user/linux/build/fs/fuse/fuse.ko
++    ...
++    loading @0xffffffffa0000000: /home/user/linux/build/drivers/ata/ata_generic.ko
++
++- 对一些尚未加载的模块中的函数函数设置断点，例如：
++
++    (gdb) b btrfs_init_sysfs
++    Function "btrfs_init_sysfs" not defined.
++    Make breakpoint pending on future shared library load? (y or [n]) y
++    Breakpoint 1 (btrfs_init_sysfs) pending.
++
++- 继续执行：
++
++    (gdb) c
++
++- 加载模块并且能观察到正在加载的符号以及断点命中：
++
++    loading @0xffffffffa0034000: /home/user/linux/build/lib/libcrc32c.ko
++    loading @0xffffffffa0050000: /home/user/linux/build/lib/lzo/lzo_compress.ko
++    loading @0xffffffffa006e000: /home/user/linux/build/lib/zlib_deflate/zlib_deflate.ko
++    loading @0xffffffffa01b1000: /home/user/linux/build/fs/btrfs/btrfs.ko
++
++    Breakpoint 1, btrfs_init_sysfs () at /home/user/linux/fs/btrfs/sysfs.c:36
++    36              btrfs_kset = kset_create_and_add("btrfs", NULL, fs_kobj);
++
++- 查看内核的日志缓冲区：
++
++    (gdb) lx-dmesg
++    [     0.000000] Initializing cgroup subsys cpuset
++    [     0.000000] Initializing cgroup subsys cpu
++    [     0.000000] Linux version 3.8.0-rc4-dbg+ (...
++    [     0.000000] Command line: root=/dev/sda2 resume=/dev/sda1 vga=0x314
++    [     0.000000] e820: BIOS-provided physical RAM map:
++    [     0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000009fbff] usable
++    [     0.000000] BIOS-e820: [mem 0x000000000009fc00-0x000000000009ffff] reserved
++    ....
++
++- 查看当前task struct结构体的字段（仅x86和arm64支持）
++
++    (gdb) p $lx_current().pid
++    $1 = 4998
++    (gdb) p $lx_current().comm
++    $2 = "modprobe\000\000\000\000\000\000\000"
++
++- 对当前或指定的CPU使用per-cpu函数：
++
++    (gdb) p $lx_per_cpu("runqueues").nr_running
++    $3 = 1
++    (gdb) p $lx_per_cpu("runqueues", 2).nr_running
++    $4 = 0
++
++- 使用container_of查看更多hrtimers信息：
++
++    (gdb) set $next = $lx_per_cpu("hrtimer_bases").clock_base[0].active.next
++    (gdb) p *$container_of($next, "struct hrtimer", "node")
++    $5 = {
++      node = {
++        node = {
++          __rb_parent_color = 18446612133355256072,
++          rb_right = 0x0 <irq_stack_union>,
++          rb_left = 0x0 <irq_stack_union>
++        },
++        expires = {
++          tv64 = 1835268000000
++        }
++      },
++      _softexpires = {
++        tv64 = 1835268000000
++      },
++      function = 0xffffffff81078232 <tick_sched_timer>,
++      base = 0xffff88003fd0d6f0,
++      state = 1,
++      start_pid = 0,
++      start_site = 0xffffffff81055c1f <hrtimer_start_range_ns+20>,
++      start_comm = "swapper/2\000\000\000\000\000\000"
++    }
++
++
++命令和辅助调试功能列表
++----------------------
++
++命令和辅助调试功能可能会随着时间的推移而改进，此文显示的是初始版本的部分示例：
++
++ (gdb) apropos lx
++ function lx_current -- Return current task
++ function lx_module -- Find module by name and return the module variable
++ function lx_per_cpu -- Return per-cpu variable
++ function lx_task_by_pid -- Find Linux task by PID and return the task_struct variable
++ function lx_thread_info -- Calculate Linux thread_info from task variable
++ lx-dmesg -- Print Linux kernel log buffer
++ lx-lsmod -- List currently loaded modules
++ lx-symbols -- (Re-)load symbols of Linux kernel and currently loaded modules
++
++可以通过“help <command-name>”或“help function <function-name>”命令
++获取指定命令或指定调试功能的更多详细信息。
+diff --git a/Documentation/translations/zh_CN/dev-tools/index.rst b/Documentation/translations/zh_CN/dev-tools/index.rst
+index 77a8c44cdf49..02577c379007 100644
+--- a/Documentation/translations/zh_CN/dev-tools/index.rst
++++ b/Documentation/translations/zh_CN/dev-tools/index.rst
+@@ -25,6 +25,7 @@ Documentation/translations/zh_CN/dev-tools/testing-overview.rst
+    sparse
+    gcov
+    kasan
++   gdb-kernel-debugging
+ 
+ Todolist:
+ 
+@@ -34,7 +35,6 @@ Todolist:
+  - kmemleak
+  - kcsan
+  - kfence
+- - gdb-kernel-debugging
+  - kgdb
+  - kselftest
+  - kunit/index
+-- 
+2.17.1
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.18-rc7
-
-for you to fetch changes up to 870b1eee2d844727b06e238c121d260bc5645580:
-
-  USB: serial: qcserial: add support for Sierra Wireless EM7590 (2022-05-05 15:15:15 +0200)
-
-----------------------------------------------------------------
-USB-serial fixes for 5.18-rc7
-
-Here are some new device ids.
-
-All have been in linux-next with no reported issues.
-
-----------------------------------------------------------------
-Ethan Yang (1):
-      USB: serial: qcserial: add support for Sierra Wireless EM7590
-
-Scott Chen (1):
-      USB: serial: pl2303: add device id for HP LM930 Display
-
-Sven Schwermer (2):
-      USB: serial: option: add Fibocom L610 modem
-      USB: serial: option: add Fibocom MA510 modem
-
- drivers/usb/serial/option.c   | 4 ++++
- drivers/usb/serial/pl2303.c   | 1 +
- drivers/usb/serial/pl2303.h   | 1 +
- drivers/usb/serial/qcserial.c | 2 ++
- 4 files changed, 8 insertions(+)

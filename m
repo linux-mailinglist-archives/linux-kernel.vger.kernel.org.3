@@ -2,127 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93CFD5266FE
+	by mail.lfdr.de (Postfix) with ESMTP id 492735266FD
 	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 18:26:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382394AbiEMQZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 12:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
+        id S1382423AbiEMQ0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 12:26:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381875AbiEMQZ1 (ORCPT
+        with ESMTP id S1381875AbiEMQZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 12:25:27 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6284691567
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 09:25:26 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id a21so10601251edb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 09:25:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wYIE3zQpUPgi6v7iFVdQ2/TvPUcauYhfaGvlN50Rhro=;
-        b=iY1k9LtTjSRyhsBlrL/e+liP2aDYDcihjvvw+2UVcBUKOAKoTwNzi39/GXjBIzyfbm
-         6S8rz21bB1xCh/5l10W4z6UeRBLwWakJKIrJ03lk0GtkOzUB4z3uPPp2MOcb83RDD/qE
-         Ilh0kPea9v0B4O5FFuR2RJfdum3iphLZWot1+oBUVpbD4y8ZLpPFYv+ukyRz2dSMnFHn
-         KTfKVA7MLp5K8i2CEYGAmI80pggKs19ZvlcgHZu2+C4I1QtKcPNO/XAyqjFzft3hj0/G
-         AFIXfqilaYIUzXH2z1+p/dm8czDIW5QbTUjjCVwGg0DGp3fyQGtV5HC47X3lpsKW4eZ/
-         pUdw==
+        Fri, 13 May 2022 12:25:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 84E5A91567
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 09:25:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652459153;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ub5KAZihY6DYhd8Dh60sSEVIjle32E0Y+oXuLhLfRmI=;
+        b=aa/HZx4Qz92Wxe7fRBxcFWOQyV8mOEBbp2C5hmJ6znxPelc20P9pLCOz24wKrZdlojwwSY
+        TKd+VP8DcRCzIFWlCzFArVrZwPAG3e9fp+k4Nq5O9UBEjhiwmaayaAIV2KaH/hBKQrz/9y
+        3xr7/n4gfdpcsnJNjNDNwrIiXgOSeFk=
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
+ [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-156-AdNy7p9WM_u57h6jZxUtZQ-1; Fri, 13 May 2022 12:25:52 -0400
+X-MC-Unique: AdNy7p9WM_u57h6jZxUtZQ-1
+Received: by mail-io1-f70.google.com with SMTP id r137-20020a6b2b8f000000b0065dbbc04e94so4263320ior.16
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 09:25:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wYIE3zQpUPgi6v7iFVdQ2/TvPUcauYhfaGvlN50Rhro=;
-        b=EmGHmfOues10bXRvh1xpg9PZKPddfxgF83AOIw2G5KatLoCGHM6ht9utKidKUkICsi
-         RG4qd1C2gcgVK4QponEgpysNKgAslii354fRkUzI4O4whvqvwoW069duJBk0XT9VZ8zN
-         ui1Wtl6IqzsNjw7ddS00e5X6VCvEOtCoRN1FvvF3emXd5lLbrWB3diOunSMFUPYFg3/4
-         XScevdsiTKofhc219wg3OM/Q49vpb4UIgldTJRTrUBgE1byJLXgvmU8DB3Wg5dZexo1g
-         PvcWxbNtdEFsZAuaT38QKDl9kstpaRxNX4/Vu311RHXrdMoSgrAazDAv4OKIhAUsvd9M
-         Czqw==
-X-Gm-Message-State: AOAM533H92PZ0Tx1rVSB4Zg/HrJxVl3ohLA8wSTFgnjHPy3tAoLu+wNZ
-        z+14LblIShoEYHSJm1p11Alg7x+haw3Q3DhEdtUqDw==
-X-Google-Smtp-Source: ABdhPJxcalzPWuWqmf11ZGrcsZTJjFfxrs2j0NUMCf2o8rzmJ3qPfEI4lFkfRh12epJW9zvfRqKiQGKH6kkzvjJydzQ=
-X-Received: by 2002:a05:6402:28b6:b0:425:e137:e31a with SMTP id
- eg54-20020a05640228b600b00425e137e31amr41336129edb.215.1652459124752; Fri, 13
- May 2022 09:25:24 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=Ub5KAZihY6DYhd8Dh60sSEVIjle32E0Y+oXuLhLfRmI=;
+        b=BMyQw+SpSZ5Ec12IZ5uGo420lssQZBR/O07zO1nD9Ubo6V9QzJhqDH7afqTmiCrmTJ
+         lq6AovAVrLhn7V0yjeOCNKok79UXm3ZEKgcRPSmfe3pwR6kKpNEpc8R6kMGk0TFilicY
+         mQ3SIHrUn6ljMnayoyOLHkH+gU9fM19KQFNfDuRi9CiKAFP+AV2Gh9qLC6CVikIET1Qd
+         40WT16O+E1R6TnBOfoXwQLyWd8HGUizJkGMrIs47ZbCWt3CFYipXy0EK1WMcjWCz3I1I
+         nuFAbIbzCiv2Ru8F1GHhCk3jPT3HPjxjqgD2p1hf0I+asmNWK9J3Q2BDyt/VSeNFyDV9
+         it2A==
+X-Gm-Message-State: AOAM533FqAKAAKpsnVy+9nuzNmxr2y4kM6KCuDM1ssawxqbktOAcZN7y
+        BXrQVglUgud1h1nnEKLRkJE9CATfkbdZo4biHnnsXWGUDTDCSNDOf45SLRHhFVcV7sMiGUYFVgb
+        097CrfCp2t4/3Rbhqslmg6a0a
+X-Received: by 2002:a05:6e02:1a86:b0:2cf:5846:29b3 with SMTP id k6-20020a056e021a8600b002cf584629b3mr3006526ilv.232.1652459151802;
+        Fri, 13 May 2022 09:25:51 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy9MjoZwEcYaDWk2gqQCT9hWL1nI3AiMXUTtNXeCu+v5XL13uXOxow6nSkLqXj4afENxZZ8NA==
+X-Received: by 2002:a05:6e02:1a86:b0:2cf:5846:29b3 with SMTP id k6-20020a056e021a8600b002cf584629b3mr3006516ilv.232.1652459151519;
+        Fri, 13 May 2022 09:25:51 -0700 (PDT)
+Received: from redhat.com ([98.55.18.59])
+        by smtp.gmail.com with ESMTPSA id j17-20020a023211000000b0032b3a7817b3sm772601jaa.119.2022.05.13.09.25.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 09:25:51 -0700 (PDT)
+Date:   Fri, 13 May 2022 10:25:48 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Qian Cai <quic_qiancai@quicinc.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
+Subject: Re: [RESEND PATCH v8 00/11] Fix BUG_ON in
+ vfio_iommu_group_notifier()
+Message-ID: <20220513102548.5cf2a3aa.alex.williamson@redhat.com>
+In-Reply-To: <Yn5+GKHlQlX5bszi@8bytes.org>
+References: <20220418005000.897664-1-baolu.lu@linux.intel.com>
+        <20220502161204.GA22@qian>
+        <YnI8Xy54M3XQpS0T@8bytes.org>
+        <20220504102956.0f5b5302.alex.williamson@redhat.com>
+        <Yn5+GKHlQlX5bszi@8bytes.org>
+Organization: Red Hat
 MIME-Version: 1.0
-References: <20220502192327.81153-1-dlatypov@google.com> <87ilqa6sjo.fsf@mpe.ellerman.id.au>
-In-Reply-To: <87ilqa6sjo.fsf@mpe.ellerman.id.au>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 13 May 2022 09:25:13 -0700
-Message-ID: <CAGS_qxq=O_npmyKHMSS_erzbh8O9TojCVYxyf7muEJaHOfDBjg@mail.gmail.com>
-Subject: Re: [PATCH] lib/atomic64_test.c: convert to use KUnit
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     brendanhiggins@google.com, davidgow@google.com,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 8:06 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
->
-> Daniel Latypov <dlatypov@google.com> writes:
-> > The test currently is a bunch of checks (implemented using BUG_ON())
-> > that can be built into the kernel or as a module.
-> >
-> > Convert it to a KUnit test, which can also run in both modes.
-> > From a user's perspective, this change adds a CONFIG_KUNIT=y dep and
-> > changes the output format of the test [1]. The test itself is the same.
-> ...
->
-> I don't know why I got Cc'ed on this :), but I gave it a quick test anyway.
->
-> Seems to work fine on a Power9.
-> I also flipped some of the conditionals to make sure failure is detected
-> correctly.
->
-> Tested-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+On Fri, 13 May 2022 17:49:44 +0200
+Joerg Roedel <joro@8bytes.org> wrote:
 
-Thanks!
+> Hi Alex,
+> 
+> On Wed, May 04, 2022 at 10:29:56AM -0600, Alex Williamson wrote:
+> > Done, and thanks for the heads-up.  Please try to cc me when the
+> > vfio-notifier-fix branch is merged back into your next branch.  Thanks,  
+> 
+> This has happened now, the vfio-notifier-fix branch got the fix and is
+> merged back into my next branch.
 
-You were just the last person to have made a real change to this file [1].
-The people signing off no commits seemed inconsistent and
-get_maintainers didn't give anything back.
+Thanks, Joerg!
 
-commit ffba19ccae8d98beb0a17345a0b1ee9e415b23b8
-Author: Michael Ellerman <mpe@ellerman.id.au>
-Date:   Fri Jul 14 14:49:41 2017 -0700
+Jason, I'll push a merge of this with
 
->
->
-> > Meta:
-> > 1. this patch applies on top of the kunit branch,
-> > https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/?h=kunit
-> >
-> > 2. checkpatch complains about aligning with parens, but it wants me to
-> > indent the `#ifdef CONFIG_X86_64` which seems inappropriate in context.
-> >
-> > 3. this file doesn't seem to have a clear maintainer, so I assume this
-> > conversion is fine to go through the kunit branch.
->
-> I think you want to at least Cc the atomic folks:
->
-> ATOMIC INFRASTRUCTURE
-> M:      Will Deacon <will@kernel.org>
-> M:      Peter Zijlstra <peterz@infradead.org>
-> R:      Boqun Feng <boqun.feng@gmail.com>
-> R:      Mark Rutland <mark.rutland@arm.com>
-> L:      linux-kernel@vger.kernel.org
-> S:      Maintained
+Subject: [PATCH] vfio: Delete container_q
+0-v1-a1e8791d795b+6b-vfio_container_q_jgg@nvidia.com
 
-Ah, thanks for the pointer.
+and
 
-I'll see if I can add
-  F:      lib/atomic64_test.c
-to that entry so this files owners get tracked properly.
+Subject: [PATCH v3 0/8] Remove vfio_group from the struct file facing VFIO API
+0-v3-f7729924a7ea+25e33-vfio_kvm_no_group_jgg@nvidia.com
 
-Daniel
+as soon as my sanity build finishes.  Thanks,
+
+Alex
+

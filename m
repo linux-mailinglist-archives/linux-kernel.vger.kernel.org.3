@@ -2,144 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B676525DE7
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 11:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 241CE525EA1
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 11:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378691AbiEMIwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 04:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53832 "EHLO
+        id S1348514AbiEMIwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 04:52:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348514AbiEMIwA (ORCPT
+        with ESMTP id S1378684AbiEMIwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 04:52:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43D11FE1DB;
-        Fri, 13 May 2022 01:51:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 552E1B82CD3;
-        Fri, 13 May 2022 08:51:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BEE8C34100;
-        Fri, 13 May 2022 08:51:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652431916;
-        bh=Z9GNVgKPYgZkKWB6ukAD87t5wipTy5BqfBoBFI3+5tE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hLLoD0NB9PRvpctpe75eS4G7itCJY3McuHxXJrSO0E2FCQs3vBTR8RbexYLO6/Zst
-         4hNP80cRsC3y9ngKTwTeNhhjyiMXQnjqLKPSDIeEu+NrhLu0bQtxJ0nm0GlUJgGVdA
-         iW/lOBhXMjExq7yhfs5u1rIXd0HVDkIPQ2meN1UOkBcMmV9FH1OLkhCRZX4myQKrgC
-         URfZQTiTtQgJdWFi+lc8wrO+oeDd6VeTMJ32ECNYgAh45nR6/kq3MV8fhaRB0q8lGh
-         MbQ/5Gb6UjO9Bup4Pf7oBUBvpsEfo1Qk1ZqdZgwDT58CZubHJ2bp5Yt34Q0cignsA8
-         HPgv+QbI3lxdA==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1npR1d-00B4kN-9C; Fri, 13 May 2022 09:51:53 +0100
-Date:   Fri, 13 May 2022 09:51:53 +0100
-Message-ID: <87tu9t6cie.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Fri, 13 May 2022 04:52:11 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07AD12380E9;
+        Fri, 13 May 2022 01:52:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652431931; x=1683967931;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uYn+WuPRsWoXZxNkCTtEQjQ5w4bTUeHB9c4uuI66TJ0=;
+  b=SQOg+wZDd8xi1OG39nboR0tZyQbzgwElhMs55bCPnVoVFtmll4ZcxWDS
+   ASoxLZG/33VM0t4surzoQpPfMYi2kTYPuMqQyPOmaYgbcG5h6iBL3SSnr
+   HI1VwPTtp61akQy1eH2HGHzinr6WrjRNpPT3MplWsFBmZW2jIbrOyYVn7
+   2A++btJNDhByq633bZKG+DBRqTFmvXQgjePdi25WtQotEGmuruNLvyCV/
+   IcurnYxJa9H3OeHzFdXsy6FzpAGesNpZuDC02gN1Zqx9Kg1v2ipcg3nKn
+   uwdmQETYDBJxd60Vkp1qZnVyt8wot7uWXM8I7lRvKy47nMO1s6x8myCR1
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="250155988"
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="250155988"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 01:52:08 -0700
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="740078333"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 01:52:04 -0700
+Received: by lahna (sSMTP sendmail emulation); Fri, 13 May 2022 11:52:02 +0300
+Date:   Fri, 13 May 2022 11:52:02 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Hans de Goede <hdegoede@redhat.com>,
+        linux-gpio@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm@vger.kernel.org,
-        Android Kernel Team <kernel-team@android.com>
-Subject: Re: [PATCH v3 00/10] gpiolib: Handle immutable irq_chip structures
-In-Reply-To: <CAHp75VfKMEcr1U=YQFfDRCpU=2LE78c76fSsAOFTWZHaswdiwg@mail.gmail.com>
-References: <20220419141846.598305-1-maz@kernel.org>
-        <Yn0/DIl3+i/heRH6@smile.fi.intel.com>
-        <Yn1Fe4WPp3ZaUERj@smile.fi.intel.com>
-        <87tu9umm3k.wl-maz@kernel.org>
-        <CAHp75VfKMEcr1U=YQFfDRCpU=2LE78c76fSsAOFTWZHaswdiwg@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: andy.shevchenko@gmail.com, linux-kernel@vger.kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, thierry.reding@gmail.com, joey.gouly@arm.com, jonathanh@nvidia.com, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, bjorn.andersson@linaro.org, agross@kernel.org, jeffrey.l.hugo@gmail.com, tglx@linutronix.de, Basavaraj.Natikar@amd.com, Shyam-sundar.S-k@amd.com, linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, kernel-team@android.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Shevchenko <andy@kernel.org>
+Subject: Re: [PATCH v1 4/5] pinctrl: cherryview: make irq_chip immutable
+Message-ID: <Yn4cMhb72IoKi0RA@lahna>
+References: <20220512173921.8210-1-andriy.shevchenko@linux.intel.com>
+ <20220512173921.8210-4-andriy.shevchenko@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220512173921.8210-4-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 May 2022 09:43:29 +0100,
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+On Thu, May 12, 2022 at 08:39:20PM +0300, Andy Shevchenko wrote:
+> Since recently, the kernel is nagging about mutable irq_chips:
 > 
-> On Fri, May 13, 2022 at 12:18 AM Marc Zyngier <maz@kernel.org> wrote:
-> > On Thu, 12 May 2022 18:35:55 +0100,
-> > Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > >
-> > > On Thu, May 12, 2022 at 08:08:28PM +0300, Andy Shevchenko wrote:
-> > > > On Tue, Apr 19, 2022 at 03:18:36PM +0100, Marc Zyngier wrote:
-> > > > > This is a followup from [2].
-> > > > >
-> > > > > I recently realised that the gpiolib play ugly tricks on the
-> > > > > unsuspecting irq_chip structures by patching the callbacks.
-> > > > >
-> > > > > Not only this breaks when an irq_chip structure is made const (which
-> > > > > really should be the default case), but it also forces this structure
-> > > > > to be copied at nauseam for each instance of the GPIO block, which is
-> > > > > a waste of memory.
-> > > >
-> > > > Is this brings us to the issue with IRQ chip name?
-> > > >
-> > > > The use case in my mind is the following:
-> > > > 1) we have two or more GPIO chips that supports IRQ;
-> > > > 2) the user registers two IRQs of the same (by number) pin on different chips;
-> > > > 3) cat /proc/interrupt will show 'my_gpio_chip XX', where XX is the number.
-> > > >
-> > > > So, do I understand correct current state of affairs?
-> > > >
-> > > > If so, we have to fix this to have any kind of ID added to the chip name that
-> > > > we can map /proc/interrupts output correctly.
-> > >
-> > > Hmm... Some drivers are using static names, some -- dynamically
-> > > prepared (one way or another). Either way I think the ID is good to
-> > > have if we still miss it.
-> >
-> > No, this is a terrible idea. /proc/interrupts gives you a hint of
-> > which driver/subsystem deals with the interrupt. This isn't a source
-> > of topological information. /sys/kernel/debug/irq has all the
-> > information you can dream of, and much more. Just make use of it.
+>    "not an immutable chip, please consider fixing it!"
 > 
-> Okay, so IIUC the mapping is that: I got a vIRQ number from
-> /proc/interrupts, but then I have to mount debugfs and look into it
-> for a detailed answer of which chip/domain this vIRQ belongs to.
+> Drop the unneeded copy, flag it as IRQCHIP_IMMUTABLE, add the new
+> helper functions and call the appropriate gpiolib functions.
+> 
+> While at it, switch to use hwirq variable instead of pin for
+> the sake of consistency.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Normal users shouldn't care about irqdomains. If you are developing,
-you already have debugfs enabled and mounted on your system.
-
-> Also /sys/kernel/irq rings a bell, but not sure if it's related.
-
-This is the same thing as /proc/interrupt, just dumped with a
-different format.
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>

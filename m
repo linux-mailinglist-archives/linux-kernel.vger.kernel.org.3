@@ -2,70 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF04525A7A
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 06:02:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 288A8525A7C
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 06:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376813AbiEMECx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 00:02:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
+        id S1376934AbiEMEFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 00:05:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiEMECu (ORCPT
+        with ESMTP id S1376924AbiEMEF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 00:02:50 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFB2663FD;
-        Thu, 12 May 2022 21:02:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652414569; x=1683950569;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=ihC/kGV4HKU6REL3VL7GtszKpyGJqOqsYmkrePpw2EE=;
-  b=dvLkUvdEisgiwrQGbLq1YwMTqoow2AtDOe5ay320beQTs0bRGI26XhkJ
-   9MOQw7YtYDX7y1dGhIkRlJ1nqmo4C/pQ/84fpI7Tj++TKip386hvnMntA
-   Ttc+6aiRzu/WvCuXtwzKAxTCfeXpB4LxcLxCFzTo7E5DIoXPHWvBCcGgI
-   TYEa7UuLNdZHrdpKFCCQcuFLEwTbG/pw9Hx5Yev8V0e1X8Rb7iOvj3pXN
-   XZuYh4rT9bjppQWMcodaEh+HeEu/7sggyhOsUywImCuDP84P6rnhNWuBZ
-   jZe2chEqGBO6nZaQ1guF9K3AY/WB/MVDUtjY2MhJBL5EW5nNyYrRfnDn0
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="250739634"
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="250739634"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 21:02:48 -0700
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="567007936"
-Received: from yangweij-mobl.ccr.corp.intel.com (HELO [10.249.168.124]) ([10.249.168.124])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 21:02:38 -0700
-Message-ID: <5f264701-b6d5-8660-55ae-a5039d6a9d3a@intel.com>
-Date:   Fri, 13 May 2022 12:02:24 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v11 14/16] KVM: x86/vmx: Flip Arch LBREn bit on guest
- state change
-Content-Language: en-US
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "kan.liang@linux.intel.com" <kan.liang@linux.intel.com>,
-        "like.xu.linux@gmail.com" <like.xu.linux@gmail.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220506033305.5135-1-weijiang.yang@intel.com>
- <20220506033305.5135-15-weijiang.yang@intel.com>
- <9f19a5eb-3eb0-58a2-e4ee-612f3298ba82@redhat.com>
- <9e2b5e9f-25a2-b724-c6d7-282dc987aa99@intel.com>
- <8a15c4b4-cabe-7bc3-bd98-bd669d586616@redhat.com>
-From:   "Yang, Weijiang" <weijiang.yang@intel.com>
-In-Reply-To: <8a15c4b4-cabe-7bc3-bd98-bd669d586616@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Fri, 13 May 2022 00:05:27 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806E929B01E
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 21:05:26 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f4e17a5809so62564927b3.2
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 21:05:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=AT5fEYFiJn9Jy20X399vb4DWFUsA86uVN0Y/NmGabp4=;
+        b=YpXQcS5bTswt/iCpkTv5EYf8NbQ15MTR7Xt3cq+CElJxozPM+HirOd52+6OwCLzSCC
+         1I+zfaO/CmNEthc9KIlw/wZKYDkXB2lw3r6WEl3xWKDrGiKzZRK7SK6/E6uvQGEkrLLl
+         /do8wk2CTE+rVLj7171SDsRLovVFfsEYo0IQd5ERYYCNSiMChQmH46MTyXCPpNKJZ8Rr
+         /s6oYwozGhzXW5y7I5+OxXnHoORGS5cXhv+/1m72T7JJCVhMr/jLO3R8FY+AHQW51KcU
+         w6pidlwoFTpnDxXxiR2LAPeNjhHPMBWALKFqJrZ/M3I+OVPG9LYbLCR/RsQ+e98W8qHo
+         CRjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=AT5fEYFiJn9Jy20X399vb4DWFUsA86uVN0Y/NmGabp4=;
+        b=Bbv++9v+1cQeOY3cfKoOo3wMphZ/tTLaICqnMumNdv6rT4xjcBcFS3TmvnYCv49Sn5
+         5qNopjkCnJXujhIFASf0ZHBxeRWbNVIyenzl47nWpzsrUoZdVF62J2o4N6n67FjRmPZy
+         Ff0m99wx5JQcOVxGhbX7OKu1Y2qTwuc686JliUCzNRSZ6PRyS7Lr7QkPjLl92Gew3kUK
+         o60HQGmsKj5QXCsk87cJP2i7bKdN6fB7Iqpj8M1xpBp3rQsNHx322vTe9QFpMdG9oTbX
+         +Ej8CpFy82K1aewR19W32X1l5R+CrDZXsvkWtEea/KzTT/er0+s8MZ5cz5sqR2F4EyIh
+         0JoQ==
+X-Gm-Message-State: AOAM532iJDsPI3Tr1HGq+pEgAhVffUVyIo7cGlIK9c7BZznthWcVQdd9
+        EF0HSEtcOY1ztnfU71rdQpPREuzTToJN
+X-Google-Smtp-Source: ABdhPJyFab55ch05scwSx2EefnFRCnaVxXApk1fXpoFK6eRWmzRWgp6y/KUVI4p7SIp2l4Nb1+yNpJLTFk1H
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:9b61:c91f:ca29:ae54])
+ (user=irogers job=sendgmr) by 2002:a05:6902:102a:b0:649:4564:5407 with SMTP
+ id x10-20020a056902102a00b0064945645407mr3095918ybt.565.1652414725674; Thu,
+ 12 May 2022 21:05:25 -0700 (PDT)
+Date:   Thu, 12 May 2022 21:05:12 -0700
+Message-Id: <20220513040519.1499333-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
+Subject: [PATCH 0/7] Make more tests skip rather than fail
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
+        Carsten Haitzler <carsten.haitzler@arm.com>,
+        Marco Elver <elver@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Michael Petlan <mpetlan@redhat.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,226 +77,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+A long standing niggle has been that tests that cannot pass are marked
+as failing rather than skip.  John Garry mentioned a similar concern
+in [1]. These changes fix this behavior so that as root, or not, at
+least the first 10 tests are passing or skipping.
 
-On 5/12/2022 9:18 PM, Paolo Bonzini wrote:
-> On 5/11/22 09:43, Yang, Weijiang wrote:
->>> Instead of using flip_arch_lbr_ctl, SMM should save the value of the MSR
->>> in kvm_x86_ops->enter_smm, and restore it in kvm_x86_ops->leave_smm
->>> (feel free to do it only if guest_cpuid_has(vcpu, X86_FEATURE_LM), i.e.
->>> the 32-bit case can be ignored).
->> In the case of migration in SMM, I assume kvm_x86_ops->enter_smm()
->> called in source side
->>
->> and kvm_x86_ops->leave_smm() is called at destination, then should the
->> saved LBREn be transferred
->>
->> to destination too? The destination can rely on the bit to defer setting
->> LBREn bit in
-> Hi, it's transferred automatically if the MSR is saved in the SMM save
-> state area.  Both enter_smm and leave_smm can access the save state area.
->
-> The enter_smm callback is called after saving "normal" state, and it has
-> to save the state + clear the bit; likewise, the leave_smm callback is
-> called before saving "normal" state and will restore the old value of
-> the MSR.
+[1] https://lore.kernel.org/lkml/d32376b5-5538-ff00-6620-e74ad4b4abf2@huawei.com/
 
-Hi, I  modified this patch to consolidate your suggestion above, see 
-below patch.
+Ian Rogers (7):
+  perf test: Skip reason for suites with 1 test
+  perf test: Use skip in vmlinux kallsyms
+  perf test: Use skip in openat syscall
+  perf test: Basic mmap use skip
+  perf test: Parse events tidy terms_test
+  perf test: Parse events tidy evlist_test
+  perf test: Parse events break apart tests
 
-I added more things to ease migration handling in SMM because: 1) qemu 
-checks
+ tools/perf/tests/builtin-test.c            |   6 +-
+ tools/perf/tests/mmap-basic.c              |  22 +-
+ tools/perf/tests/openat-syscall-all-cpus.c |  23 +-
+ tools/perf/tests/openat-syscall.c          |  20 +-
+ tools/perf/tests/parse-events.c            | 492 +++++++++++----------
+ tools/perf/tests/vmlinux-kallsyms.c        |  12 +-
+ 6 files changed, 329 insertions(+), 246 deletions(-)
 
-LBREn before transfer Arch LBR MSRs. 2)Perf event is created when LBREn 
-is being
-
-set.  Two things are not certain: 1) IA32_LBR_CTL doesn't have 
-corresponding slot in
-
-SMRAM,not sure if we need to rely on it to transfer the MSR. 2) I chose 
-0x7f10 as
-
-the offset(CET takes 0x7f08) for storage, need you double check if it's 
-free or used.
-
-Thanks a lot!
-
-====================================================================
-
- From ceba1527fd87cdc789b38fce454058fca6582b0a Mon Sep 17 00:00:00 2001
-From: Yang Weijiang <weijiang.yang@intel.com>
-Date: Thu, 5 Aug 2021 20:48:39 +0800
-Subject: [PATCH] KVM: x86/vmx: Flip Arch LBREn bit on guest state change
-
-Per spec:"IA32_LBR_CTL.LBREn is saved and cleared on #SMI, and restored
-on RSM. On a warm reset, all LBR MSRs, including IA32_LBR_DEPTH, have their
-values preserved. However, IA32_LBR_CTL.LBREn is cleared to 0, disabling
-LBRs." Given migration in SMM, use a reserved bit(63) of the MSR to mirror
-LBREn bit, it facilitates Arch LBR specific handling during live migration
-because user space will check LBREn to decide whether it's necessary to
-migrate the Arch LBR related MSRs. When the mirrored bit and LBREn bit are
-both set, it means Arch LBR was active in SMM, so only create perf event
-and defer the LBREn bit restoring to leave_smm callback.
-Also clear LBREn at warm reset.
-
-Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
----
-  arch/x86/kvm/vmx/pmu_intel.c | 16 +++++++++++++---
-  arch/x86/kvm/vmx/vmx.c       | 29 +++++++++++++++++++++++++++++
-  arch/x86/kvm/vmx/vmx.h       |  1 +
-  3 files changed, 43 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-index 038fdb788ccd..652601ad99ea 100644
---- a/arch/x86/kvm/vmx/pmu_intel.c
-+++ b/arch/x86/kvm/vmx/pmu_intel.c
-@@ -373,6 +373,8 @@ static bool arch_lbr_depth_is_valid(struct kvm_vcpu 
-*vcpu, u64 depth)
-      return (depth == pmu->kvm_arch_lbr_depth);
-  }
-
-+#define ARCH_LBR_IN_SMM    BIT(63)
-+
-  static bool arch_lbr_ctl_is_valid(struct kvm_vcpu *vcpu, u64 ctl)
-  {
-      struct kvm_cpuid_entry2 *entry;
-@@ -380,7 +382,7 @@ static bool arch_lbr_ctl_is_valid(struct kvm_vcpu 
-*vcpu, u64 ctl)
-      if (!kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
-          return false;
-
--    if (ctl & ~KVM_ARCH_LBR_CTL_MASK)
-+    if (ctl & ~(KVM_ARCH_LBR_CTL_MASK | ARCH_LBR_IN_SMM))
-          goto warn;
-
-      entry = kvm_find_cpuid_entry(vcpu, 0x1c, 0);
-@@ -425,6 +427,10 @@ static int intel_pmu_get_msr(struct kvm_vcpu *vcpu, 
-struct msr_data *msr_info)
-          return 0;
-      case MSR_ARCH_LBR_CTL:
-          msr_info->data = vmcs_read64(GUEST_IA32_LBR_CTL);
-+        if (to_vmx(vcpu)->lbr_in_smm) {
-+            msr_info->data |= ARCH_LBR_CTL_LBREN;
-+            msr_info->data |= ARCH_LBR_IN_SMM;
-+        }
-          return 0;
-      default:
-          if ((pmc = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0)) ||
-@@ -501,11 +507,15 @@ static int intel_pmu_set_msr(struct kvm_vcpu 
-*vcpu, struct msr_data *msr_info)
-          if (!arch_lbr_ctl_is_valid(vcpu, data))
-              break;
-
--        vmcs_write64(GUEST_IA32_LBR_CTL, data);
--
-          if (intel_pmu_lbr_is_enabled(vcpu) && !lbr_desc->event &&
-              (data & ARCH_LBR_CTL_LBREN))
-              intel_pmu_create_guest_lbr_event(vcpu);
-+
-+        if (data & ARCH_LBR_IN_SMM) {
-+            data &= ~ARCH_LBR_CTL_LBREN;
-+            data &= ~ARCH_LBR_IN_SMM;
-+        }
-+        vmcs_write64(GUEST_IA32_LBR_CTL, data);
-          return 0;
-      default:
-          if ((pmc = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0)) ||
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 6d6ee9cf82f5..f754b9400151 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -4543,6 +4543,7 @@ static void vmx_vcpu_reset(struct kvm_vcpu *vcpu, 
-bool init_event)
-
-      vmx->rmode.vm86_active = 0;
-      vmx->spec_ctrl = 0;
-+    vmx->lbr_in_smm = false;
-
-      vmx->msr_ia32_umwait_control = 0;
-
-@@ -4593,6 +4594,8 @@ static void vmx_vcpu_reset(struct kvm_vcpu *vcpu, 
-bool init_event)
-      if (!init_event) {
-          if (static_cpu_has(X86_FEATURE_ARCH_LBR))
-              vmcs_write64(GUEST_IA32_LBR_CTL, 0);
-+    } else {
-+        flip_arch_lbr_ctl(vcpu, false);
-      }
-  }
-
-@@ -7695,6 +7698,8 @@ static int vmx_smi_allowed(struct kvm_vcpu *vcpu, 
-bool for_injection)
-
-  static int vmx_enter_smm(struct kvm_vcpu *vcpu, char *smstate)
-  {
-+    struct lbr_desc *lbr_desc = vcpu_to_lbr_desc(vcpu);
-+    struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
-      struct vcpu_vmx *vmx = to_vmx(vcpu);
-
-      vmx->nested.smm.guest_mode = is_guest_mode(vcpu);
-@@ -7704,12 +7709,26 @@ static int vmx_enter_smm(struct kvm_vcpu *vcpu, 
-char *smstate)
-      vmx->nested.smm.vmxon = vmx->nested.vmxon;
-      vmx->nested.vmxon = false;
-      vmx_clear_hlt(vcpu);
-+
-+    if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR) &&
-+        test_bit(INTEL_PMC_IDX_FIXED_VLBR, pmu->pmc_in_use) &&
-+        lbr_desc->event && guest_cpuid_has(vcpu, X86_FEATURE_LM)) {
-+        u64 ctl = vmcs_read64(GUEST_IA32_LBR_CTL);
-+
-+        put_smstate(u64, smstate, 0x7f10, ctl);
-+        vmcs_write64(GUEST_IA32_LBR_CTL, ctl & ~ARCH_LBR_CTL_LBREN);
-+        vmx->lbr_in_smm = true;
-+    }
-+
-      return 0;
-  }
-
-  static int vmx_leave_smm(struct kvm_vcpu *vcpu, const char *smstate)
-  {
-+    struct lbr_desc *lbr_desc = vcpu_to_lbr_desc(vcpu);
-+    struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
-      struct vcpu_vmx *vmx = to_vmx(vcpu);
-+
-      int ret;
-
-      if (vmx->nested.smm.vmxon) {
-@@ -7725,6 +7744,16 @@ static int vmx_leave_smm(struct kvm_vcpu *vcpu, 
-const char *smstate)
-          vmx->nested.nested_run_pending = 1;
-          vmx->nested.smm.guest_mode = false;
-      }
-+
-+    if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR) &&
-+        test_bit(INTEL_PMC_IDX_FIXED_VLBR, pmu->pmc_in_use) &&
-+        lbr_desc->event && guest_cpuid_has(vcpu, X86_FEATURE_LM)) {
-+        u64 ctl = GET_SMSTATE(u64, smstate, 0x7f10);
-+
-+        vmcs_write64(GUEST_IA32_LBR_CTL, ctl | ARCH_LBR_CTL_LBREN);
-+        vmx->lbr_in_smm = false;
-+    }
-+
-      return 0;
-  }
-
-diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-index b98c7e96697a..a227fe8bf288 100644
---- a/arch/x86/kvm/vmx/vmx.h
-+++ b/arch/x86/kvm/vmx/vmx.h
-@@ -351,6 +351,7 @@ struct vcpu_vmx {
-
-      struct pt_desc pt_desc;
-      struct lbr_desc lbr_desc;
-+    bool lbr_in_smm;
-
-      /* Save desired MSR intercept (read: pass-through) state */
-  #define MAX_POSSIBLE_PASSTHROUGH_MSRS    15
 -- 
-2.27.0
+2.36.0.550.gb090851708-goog
 
->
-> Thanks,
->
-> Paolo
->
->> VMCS until kvm_x86_ops->leave_smm() is called. is it good? thanks!

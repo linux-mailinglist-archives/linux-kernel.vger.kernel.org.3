@@ -2,150 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9537B526937
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 20:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF2652693D
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 20:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383074AbiEMS0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 14:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42572 "EHLO
+        id S1383307AbiEMS1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 14:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383056AbiEMS0E (ORCPT
+        with ESMTP id S1383306AbiEMS0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 14:26:04 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 575A3BE19
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 11:26:02 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id z126so7679983qkb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 11:26:02 -0700 (PDT)
+        Fri, 13 May 2022 14:26:49 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E441E3DF
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 11:26:47 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id i17so8701508pla.10
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 11:26:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fyTxG3vRPARLhAf2qwVdCK49by1iieFxjF3cm5H3kbg=;
-        b=JN3vj/2/8eGEf9jiKkowI0XVrGpXh8SmRzFgsk3cdXlm6iRbR2zHXSlqm7aVNKj5ip
-         zRDvFrQoFa3ZGfJU/v27uSO46gcedrSzWA1QdKNyP+pqmtkiQHzBwrkMDhpHLZ2Q68nP
-         eZmv53ao/AgNQl4ZAdnFDcyxN1m11o4n0aR+xe7kSH94tVk0bdh1exS8tTa4PEEUDw5P
-         exI6qZJVYSBcNsQdwkmtJkbJN+PL+oWOB+FV+5kvv1zz/Y5spi8/Wesyu+oSFQvk5BmD
-         HU2/HgYUYAaOc5eaYt2uzGw26qXin4klfvORGjmaOgcqpzkhKnKwdiz5Ola03AlxvH34
-         wIMw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:user-agent:in-reply-to:references
+         :message-id:mime-version:content-transfer-encoding;
+        bh=DWr88KXO8yOHtjVU6pqQ0YSnL6a33gTkT/ttelbBfAE=;
+        b=V3SjT18ZDrdF4vkkT3kKufo35FXfHRIbwvhsO5oJmLbV/qmmImWjKHOcxehhAdW2cz
+         dqi6ggxT+QQUqxqQa5vZlqVUlTbvKdEqgvDJ0KlXmrH4/wc+fknVNp6IxdOl1ymG4Rpv
+         MGOklopUKYWTQkbnkNyWseHpDC2FbOBdCQV4w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fyTxG3vRPARLhAf2qwVdCK49by1iieFxjF3cm5H3kbg=;
-        b=DX+GQdR8JRTKgKMrLF7sfp6m11y/gZTrtp40O5WbwSNBbGU1lsZ8AF5BKqJfRIUd+G
-         OPqz8x0Di7+Mz7wCZOd3kzkdPY8QfL2KpqlONi/eMv91ws0ERKqfkwWOr33xAW7ezUMd
-         adUikph5wJKa4sjdfQ8j6N1SeRLw7X2qnsaOMX7R2DTyiUa4qUIwnms73w583lM9lxUf
-         gsmikrF7AWk8Z7AC0ygwFWIo+Wn9ZDrPKv4uIprXjtzVY2GOfc+W7z6mA6h38sTq1zPi
-         UQd1YWsECZVDY7VGfLw7K3PyOsG94DzvhWSZgSTFETOOzDHUr8S054DVA1S+G21v1xeY
-         Abkg==
-X-Gm-Message-State: AOAM53106VdZlgTCEBf0yE3mK6UDzVfeO+Ss5nD/UPj8Ttjbnd0kqNDR
-        PH9OF5zA3kl/be8W1q6WVwvEVw==
-X-Google-Smtp-Source: ABdhPJxq9o8J9pvmIH0vD9Ym3AZUF5jrC76xskqWMwzN/dZ47ai4Ztg03RquxNAO2e6adfckee0zLw==
-X-Received: by 2002:a05:620a:28cd:b0:69f:b40e:4980 with SMTP id l13-20020a05620a28cd00b0069fb40e4980mr4747496qkp.18.1652466361459;
-        Fri, 13 May 2022 11:26:01 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::1:14fe])
-        by smtp.gmail.com with ESMTPSA id c5-20020ac81e85000000b002f39b99f690sm1865743qtm.42.2022.05.13.11.26.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 11:26:00 -0700 (PDT)
-Date:   Fri, 13 May 2022 14:25:59 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
-        Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Cgroups <cgroups@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kernel Team <kernel-team@fb.com>
-Subject: Re: [PATCH v2 6/6] zswap: memcg accounting
-Message-ID: <Yn6it9mBYFA+/lTb@cmpxchg.org>
-References: <20220510152847.230957-1-hannes@cmpxchg.org>
- <20220510152847.230957-7-hannes@cmpxchg.org>
- <CALvZod6kBZZFfD6Y5p_=9TMJr8P-vU_77NTq048wGUDr0wTv0Q@mail.gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
+         :references:message-id:mime-version:content-transfer-encoding;
+        bh=DWr88KXO8yOHtjVU6pqQ0YSnL6a33gTkT/ttelbBfAE=;
+        b=NdLf1mM/W5OG0kf0Jk59/2kX1FIgpNSB69r7PutopCy5Wh+fH5g2GzF7azCAdxC1nj
+         47ewFcNd+kL5myY3HqclK+0PnkNqoootWEVNTj0JqD2kpiPS2F/bxNT2Q/dITQsonGGI
+         2qdKb3h87C4tdTLeCe7S+cuqFVaukJof+/5+YysRv6gJszcfyp0MCK6q0YCpmYJRsAo+
+         rJRXdDPT4BaHHhuk7JQyGbuP4hNpItUVPoJGdUrbKBurM25iTYu+6UQENRjApNlT5LqT
+         erbd8ZhdyYN0kiUjuzX3x6Dgb4xAoFhXYN60q12VmIpENC65DsEH2tCl9nKHggFXx3QA
+         jXVw==
+X-Gm-Message-State: AOAM530oBHSdM6RsYfftjGpGBDSMCONxZZghNz030ocyVnCQHr53y7A0
+        zk8FRjq1kLAWmXvvtVgV2cRvYw==
+X-Google-Smtp-Source: ABdhPJzw+kzrYWctB0MM/hgYN5NeQJBlpaBicGatEKSdKPEQfZwTCnjWNjioRBrl/vmRGrxHaK9SGw==
+X-Received: by 2002:a17:902:ecca:b0:15e:8971:4540 with SMTP id a10-20020a170902ecca00b0015e89714540mr5596247plh.43.1652466407389;
+        Fri, 13 May 2022 11:26:47 -0700 (PDT)
+Received: from ?IPv6:::1? ([2607:fb90:3304:3e0:87ad:1d43:6a6e:afdd])
+        by smtp.gmail.com with ESMTPSA id e16-20020a17090301d000b0015f2d549b46sm2150754plh.237.2022.05.13.11.26.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 11:26:47 -0700 (PDT)
+Date:   Fri, 13 May 2022 11:26:44 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Mike Snitzer <snitzer@redhat.com>,
+        Matthias Kaehlcke <mka@chromium.org>
+CC:     Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-security-module@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v3_2/3=5D_LoadPin=3A_Enable_l?= =?US-ASCII?Q?oading_from_trusted_dm-verity_devices?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <Yn6IDNgG+/ySOdmy@redhat.com>
+References: <20220504195419.1143099-1-mka@chromium.org> <20220504125404.v3.2.I01c67af41d2f6525c6d023101671d7339a9bc8b5@changeid> <Yn6IDNgG+/ySOdmy@redhat.com>
+Message-ID: <56E309F0-C641-4E1C-9C7F-52198C43731E@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALvZod6kBZZFfD6Y5p_=9TMJr8P-vU_77NTq048wGUDr0wTv0Q@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Shakeel,
 
-On Fri, May 13, 2022 at 10:23:36AM -0700, Shakeel Butt wrote:
-> On Tue, May 10, 2022 at 8:29 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
-> >
-> [...]
-> > +void obj_cgroup_charge_zswap(struct obj_cgroup *objcg, size_t size)
-> > +{
-> > +       struct mem_cgroup *memcg;
-> > +
-> > +       VM_WARN_ON_ONCE(!(current->flags & PF_MEMALLOC));
-> > +
-> > +       /* PF_MEMALLOC context, charging must succeed */
-> )
-> Instead of these warnings and comment why not just explicitly use
-> memalloc_noreclaim_[save|restore]() ?
 
-Should the function be called from a non-reclaim context, it should
-warn rather than quietly turn itself into a reclaimer. That's not a
-very likely mistake, but the warning documents the expectations and
-context of this function better.
+On May 13, 2022 9:32:12 AM PDT, Mike Snitzer <snitzer@redhat=2Ecom> wrote:
+>On Wed, May 04 2022 at  3:54P -0400,
+>Matthias Kaehlcke <mka@chromium=2Eorg> wrote:
+>
+>> Extend LoadPin to allow loading of kernel files from trusted dm-verity =
+[1]
+>> devices=2E
+>>=20
+>> This change adds the concept of trusted verity devices to LoadPin=2E Lo=
+adPin
+>> maintains a list of root digests of verity devices it considers trusted=
+=2E
+>> Userspace can populate this list through an ioctl on the new LoadPin
+>> securityfs entry 'dm-verity'=2E The ioctl receives a file descriptor of
+>> a file with verity digests as parameter=2E Verity reads the digests fro=
+m
+>> this file after confirming that the file is located on the pinned root=
+=2E
+>> The list of trusted digests can only be set up once, which is typically
+>> done at boot time=2E
+>>=20
+>> When a kernel file is read LoadPin first checks (as usual) whether the =
+file
+>> is located on the pinned root, if so the file can be loaded=2E Otherwis=
+e, if
+>> the verity extension is enabled, LoadPin determines whether the file is
+>> located on a verity backed device and whether the root digest of that
+>> device is in the list of trusted digests=2E The file can be loaded if t=
+he
+>> verity device has a trusted root digest=2E
+>>=20
+>> Background:
+>>=20
+>> As of now LoadPin restricts loading of kernel files to a single pinned
+>> filesystem, typically the rootfs=2E This works for many systems, howeve=
+r it
+>> can result in a bloated rootfs (and OTA updates) on platforms where
+>> multiple boards with different hardware configurations use the same roo=
+tfs
+>> image=2E Especially when 'optional' files are large it may be preferabl=
+e to
+>> download/install them only when they are actually needed by a given boa=
+rd=2E
+>> Chrome OS uses Downloadable Content (DLC) [2] to deploy certain 'packag=
+es'
+>> at runtime=2E As an example a DLC package could contain firmware for a
+>> peripheral that is not present on all boards=2E DLCs use dm-verity to v=
+erify
+>> the integrity of the DLC content=2E
+>>=20
+>> [1] https://www=2Ekernel=2Eorg/doc/html/latest/admin-guide/device-mappe=
+r/verity=2Ehtml
+>> [2] https://chromium=2Egooglesource=2Ecom/chromiumos/platform2/+/HEAD/d=
+lcservice/docs/developer=2Emd
+>>=20
+>> Signed-off-by: Matthias Kaehlcke <mka@chromium=2Eorg>
+>> ---
+>>=20
+>> Changes in v3:
+>> - added securityfs for LoadPin (currently only populated when
+>>   CONFIG_SECURITY_LOADPIN_VERITY=3Dy)
+>> - added uapi include for LoadPin
+>> - changed the interface for setting up the list of trusted
+>>   digests from sysctl to ioctl on securityfs entry
+>> - added stub for loadpin_is_fs_trusted() to be used
+>>   CONFIG_SECURITY_LOADPIN_VERITY is not select
+>> - depend on CONFIG_SECURITYFS instead of CONFIG_SYSTCL
+>> - updated Kconfig help
+>> - minor changes in read_trusted_verity_root_digests()
+>> - updated commit message
+>>=20
+>> Changes in v2:
+>> - userspace now passes the path of the file with the verity digests
+>>   via systcl, instead of the digests themselves
+>> - renamed sysctl file to 'trusted_verity_root_digests_path'
+>> - have CONFIG_SECURITY_LOADPIN_VERITY depend on CONFIG_SYSCTL
+>> - updated Kconfig doc
+>> - updated commit message
+>>=20
+>>  include/uapi/linux/loadpin=2Eh |  19 ++++
+>>  security/loadpin/Kconfig     |  16 +++
+>>  security/loadpin/loadpin=2Ec   | 184 +++++++++++++++++++++++++++++++++=
++-
+>>  3 files changed, 218 insertions(+), 1 deletion(-)
+>>  create mode 100644 include/uapi/linux/loadpin=2Eh
+>
+>I would certainly need some Reviewed-by:s from security and/or loadpin
+>experts if I were to pick this patch up=2E
 
-> > +       if (obj_cgroup_charge(objcg, GFP_KERNEL, size))
-> 
-> Can we please make this specific charging an opt-in feature or at
-> least provide a way to opt-out? This will impact users/providers where
-> swap is used transparently (in terms of memory usage). Also do you
-> want this change for v1 users as well?
+Alternatively, since it's mostly touching loadpin, I can carry it in my tr=
+ee, as long as you've Acked the dm bits=2E :)
 
-Ah, of course, memsw! Let's opt out of v1, since this is clearly in
-conflict with that way of accounting. I already hadn't added interface
-files for v1, so it's just a matter of bypassing the charging too.
+>Did you see the issues the kernel test robot emailed about?
+>
+>You'd do well to fix those issues up when submitting another revision
+>of this patchset=2E
 
-Signed-of-by: Johannes Weiner <hannes@cmpxchg.org>
----
+Agreed=2E
 
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 350012b93a95..3ab72b8160ee 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -7469,6 +7469,9 @@ bool obj_cgroup_may_zswap(struct obj_cgroup *objcg)
- 	struct mem_cgroup *memcg, *original_memcg;
- 	bool ret = true;
- 
-+	if (!cgroup_subsys_on_dfl(memory_cgrp_subsys))
-+		return true;
-+
- 	original_memcg = get_mem_cgroup_from_objcg(objcg);
- 	for (memcg = original_memcg; memcg != root_mem_cgroup;
- 	     memcg = parent_mem_cgroup(memcg)) {
-@@ -7505,6 +7508,9 @@ void obj_cgroup_charge_zswap(struct obj_cgroup *objcg, size_t size)
- {
- 	struct mem_cgroup *memcg;
- 
-+	if (!cgroup_subsys_on_dfl(memory_cgrp_subsys))
-+		return;
-+
- 	VM_WARN_ON_ONCE(!(current->flags & PF_MEMALLOC));
- 
- 	/* PF_MEMALLOC context, charging must succeed */
-@@ -7529,6 +7535,9 @@ void obj_cgroup_uncharge_zswap(struct obj_cgroup *objcg, size_t size)
- {
- 	struct mem_cgroup *memcg;
- 
-+	if (!cgroup_subsys_on_dfl(memory_cgrp_subsys))
-+		return;
-+
- 	obj_cgroup_uncharge(objcg, size);
- 
- 	rcu_read_lock();
 
+--=20
+Kees Cook

@@ -2,63 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC884526720
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 18:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD25E52672A
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 18:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382408AbiEMQdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 12:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42784 "EHLO
+        id S1381992AbiEMQes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 12:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382401AbiEMQct (ORCPT
+        with ESMTP id S1344683AbiEMQen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 12:32:49 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BCE227159
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 09:32:48 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id h16so11447493wrb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 09:32:48 -0700 (PDT)
+        Fri, 13 May 2022 12:34:43 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29CDBC89
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 09:34:42 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id k126so5096557wme.2
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 09:34:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ImbON6V8wU257CZMiPPax7JLE068/EVToU8GSEhgawc=;
-        b=O243YbdfW0Jg4H1gGwYCZGx0z3CmKLaaqmC5kZpdtydkh22CmMPPj1txC9sqebmXog
-         cin6gCGiXkChH/iixFvUb0MCNs47y3VonDbYdhc19L/LntVohrthJLNcZ0TYAoN57Ckp
-         o09thapGF2/jCB66jv+7j9EjLuOdvTPXyqhvdNYpuEQoQIOpAVzXI5jdfIDLyIia7+mf
-         KGFzzvxHXd0K8fe9u3C4Wtx+1ldskL/AflYjdoxlOOPV6XFg+IHV+9M+FESsy3HQACha
-         +/nR7lhC1a1BcaJO0Ot7JnHtIKzLg38WUO9rf3syo03P2e6aM9DRo3489EJEJmtRYzCf
-         affw==
+        bh=m7MjpCbJuzCaBF33rM7i8bDmdLy/zgFnMvU0NghdjW4=;
+        b=jaOdYnB5sK1d0IiJeXEU3+MLeEOtcluyGAgIYatubr2/3PuE2Q5rXspsbD3tFfqWtw
+         BsVwESYmN5NGeSov+0gBFv+VrOfCMRu+HKXtk2DpfmePB/XAAL4CBbHw4SjT5a4+Ogcs
+         Gq6y2LM818/o4UnXO2ez1x9padxBnu8RvFpZMqMxjmAauSRs6Dt01UuX1GMVrZGNICkq
+         C0XotBSk7si9VKF+nSuO05iUKfmsAzs8WO/B2HrXnPMkwXJ0crJrh+XdUHnEKMWIZl4S
+         Rbylbx0P26flpGN1OSoQiXUGPepf+dfljZH67dSyLToehSUcRnqE475kSpDL8DP8kpIy
+         rBWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ImbON6V8wU257CZMiPPax7JLE068/EVToU8GSEhgawc=;
-        b=KL0BwFZ+xHnjS+bR+CSEpf5nmHidw91v4EStmlVOPJBQLGwe2p1+dTnEPK8JFV7Pog
-         2s0eDcuglRzmwXZIYAgrrr8wExoY+WAlUtkudIjXKtYr/amuxxBamBlBVa4ZMqojil4u
-         cyvQO+i6DZYq2jLWaiHr/mJjn8abNL2AjQFIR/zlKlv880pOXSpJ+nYWkK8+PEW7mfAQ
-         O8BjotGgu2hq0KUZnMj6Hwep0qPWjn2B/O0Ytl3wyZ3WSJqu5czl4blUy8sdkdwXvQD9
-         1M9eOKiaO87wDEWndCwAsdUs1H8U4n8pptzaCDQ2KXYZAY7g/Lt/nvZ6c3fGVlnhnzX3
-         7wfQ==
-X-Gm-Message-State: AOAM5323x7o+Ufkeycord3fX2lQuFPPKmBWCCmXyjuGyJc40Tki4uji5
-        13TvuHtNgRnqoPz5AvQSys7uuewaaambfd+UC/F1+A==
-X-Google-Smtp-Source: ABdhPJzaSBuvg9v5enW5ednG0dsVQhfVdaVjCnZHVnrTU3q3IBGQB458BwmYH6gtv6/MhFwKY5nnfuzEH7IIezYWqZI=
-X-Received: by 2002:a05:6000:1f1b:b0:20c:9ea8:b650 with SMTP id
- bv27-20020a0560001f1b00b0020c9ea8b650mr4752087wrb.300.1652459566460; Fri, 13
- May 2022 09:32:46 -0700 (PDT)
+        bh=m7MjpCbJuzCaBF33rM7i8bDmdLy/zgFnMvU0NghdjW4=;
+        b=rwvaTajcrSruis5eOdEpcDpxRngZ3FHlBkdiLz12BX6IlMBBTPHbwcrl9lUgOu2ZAw
+         R7RnhChfowmyleBh1TR/ARGXT/dOt4tsmZ7USM24gk0hdNCxDrio03jQKtKFLIwrjbcA
+         JIBQ9VSrJlXnY35yDV1wtOfoz3LvhEIvBJcelevyD3QDDrXKBLu7jpnuX/NPhRR9Ba4E
+         KIvNrIJz6pHto55BiX4sw5US+0iVxf+BnI7E+ok8Qk72BClVpKQwkoCe/IT49XqX2orH
+         yGhONErlCf92JrNtEezUv0amjlGdhftTlzaAfHlsdlqmwQMT/QagOumNn/ZmKIcgHB5M
+         KUPQ==
+X-Gm-Message-State: AOAM533jAWJa+ShorZemdmr80E4dQKzHJgBJhWK4XqLwnDv2hDfR+yIJ
+        bsVI4AjKAObVfSzKByFBZihNuh5rpojhKXQPQ1otTw==
+X-Google-Smtp-Source: ABdhPJyShbTqrNF2KQLd+GgcRX1iXNoLZ+oxAq+Bs7myKRFD4NSfMvEmbWYewPWIlFZBpzn4/F8ZvZemUKqCWKjz0aY=
+X-Received: by 2002:a05:600c:2315:b0:394:1f6:f663 with SMTP id
+ 21-20020a05600c231500b0039401f6f663mr15604314wmo.115.1652459681108; Fri, 13
+ May 2022 09:34:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220513151554.1054452-1-kan.liang@linux.intel.com> <20220513151554.1054452-3-kan.liang@linux.intel.com>
-In-Reply-To: <20220513151554.1054452-3-kan.liang@linux.intel.com>
+References: <20220513040519.1499333-1-irogers@google.com> <20220513040519.1499333-2-irogers@google.com>
+ <6341384c-b3e6-fbe5-f29f-e0db114bd439@huawei.com> <CAP-5=fX+PfnyHRc=-sQMo1_mGLzCJ77pSfzXXHVUEOHtVFGwxA@mail.gmail.com>
+ <b6e28614-e348-b490-bf33-af5810a60722@huawei.com>
+In-Reply-To: <b6e28614-e348-b490-bf33-af5810a60722@huawei.com>
 From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 13 May 2022 09:32:33 -0700
-Message-ID: <CAP-5=fVv-f2JpWxOrHUFa73P-6z8JAR-+dcmL8MfYgLhpxe4zA@mail.gmail.com>
-Subject: Re: [PATCH 2/4] perf stat: Always keep perf metrics topdown events in
- a group
-To:     kan.liang@linux.intel.com
-Cc:     acme@kernel.org, mingo@redhat.com, jolsa@kernel.org,
-        namhyung@kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, peterz@infradead.org,
-        zhengjun.xing@linux.intel.com, adrian.hunter@intel.com,
-        ak@linux.intel.com, eranian@google.com
+Date:   Fri, 13 May 2022 09:34:27 -0700
+Message-ID: <CAP-5=fVA+x_sNuWCOMj9ASBpFanms8DkAvLkbs5URDvcBW1itg@mail.gmail.com>
+Subject: Re: [PATCH 1/7] perf test: Skip reason for suites with 1 test
+To:     John Garry <john.garry@huawei.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
+        Carsten Haitzler <carsten.haitzler@arm.com>,
+        Marco Elver <elver@google.com>,
+        Michael Petlan <mpetlan@redhat.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -71,77 +81,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 8:16 AM <kan.liang@linux.intel.com> wrote:
+On Fri, May 13, 2022 at 9:26 AM John Garry <john.garry@huawei.com> wrote:
 >
-> From: Kan Liang <kan.liang@linux.intel.com>
+> On 13/05/2022 16:42, Ian Rogers wrote:
+> >> I was not sure which suite has a single tastcase, so I experimented for
+> >> libpfm4 by deleting a testcase so it has only 1x remaining, I get:
+> >>
+> >> before your change:
+> >> john@localhost:~/acme/tools/perf> sudo ./perf test 63
+> >> 63: Test libpfm4 support : Skip
+> >>
+> >> after:
+> >>
+> >> john@localhost:~/acme/tools/perf> sudo ./perf test 63
+> >> 63: Test libpfm4 support : Skip (not compiled in)
+> >>
+> >> Although it is odd to have a single sub-test, is there a reason for
+> >> which we don't print its name? We print the name when there are multiple
+> >> sub-tests.
+> > The reason was to replicate the existing "perf test" behavior before
+> > the kunit style transition. The main place we get tests with a single
+> > sub-test is from the DEFINE_SUITE macro:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/tests/tests.h?h=perf/core#n67
+> > I agree it looks kind of weird and was inheriting the data structures
+> > from kunit and the format of the output from perf test.
 >
-> If any member in a group has a different cpu mask than the other
-> members, the current perf stat disables group. when the perf metrics
-> topdown events are part of the group, the below <not supported> error
-> will be triggered.
->
-> $ perf stat -e "{slots,topdown-retiring,uncore_imc_free_running_0/dclk/}" -a sleep 1
-> WARNING: grouped events cpus do not match, disabling group:
->   anon group { slots, topdown-retiring, uncore_imc_free_running_0/dclk/ }
->
->  Performance counter stats for 'system wide':
->
->        141,465,174      slots
->    <not supported>      topdown-retiring
->      1,605,330,334      uncore_imc_free_running_0/dclk/
->
-> The perf metrics topdown events must always be grouped with a slots
-> event as leader.
->
-> With the patch, the topdown events aren't broken from the group for the
-> splitting.
->
-> $ perf stat -e "{slots,topdown-retiring,uncore_imc_free_running_0/dclk/}" -a sleep 1
-> WARNING: grouped events cpus do not match, disabling group:
->   anon group { slots, topdown-retiring, uncore_imc_free_running_0/dclk/ }
->
->  Performance counter stats for 'system wide':
->
->        346,110,588      slots
->        124,608,256      topdown-retiring
->      1,606,869,976      uncore_imc_free_running_0/dclk/
->
->        1.003877592 seconds time elapsed
+> Out of curiosity, which suite is this that you find only has a single
+> subtest? Does it possibly only have a single subtest as some others may
+> be compiled out?
 
-Nice! This is based on:
-https://lore.kernel.org/lkml/20220512061308.1152233-2-irogers@google.com/
-You may end up with a group with the leader having a group count of 1
-(itself). I explicitly zeroed that in the change above, but this may
-be unnecessary. Maybe we should move this code to helper functions for
-sharing and consistency on what the leader count should be.
+I was getting it when I added a skip message to the openat syscall
+tests in patch 3:
+https://lore.kernel.org/lkml/20220513040519.1499333-4-irogers@google.com/
+
+I didn't see any changes with any existing tests.
 
 Thanks,
 Ian
 
-> Fixes: a9a1790247bd ("perf stat: Ensure group is defined on top of the same cpu mask")
-> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-> ---
->  tools/perf/builtin-stat.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-> index a96f106dc93a..af2248868a4f 100644
-> --- a/tools/perf/builtin-stat.c
-> +++ b/tools/perf/builtin-stat.c
-> @@ -272,8 +272,11 @@ static void evlist__check_cpu_maps(struct evlist *evlist)
->                 }
->
->                 for_each_group_evsel(pos, leader) {
-> -                       evsel__set_leader(pos, pos);
-> -                       pos->core.nr_members = 0;
-> +                       if (!evsel__must_be_in_group(pos) && pos != leader) {
-> +                               evsel__set_leader(pos, pos);
-> +                               pos->core.nr_members = 0;
-> +                               leader->core.nr_members--;
-> +                       }
->                 }
->                 evsel->core.leader->nr_members = 0;
->         }
-> --
-> 2.35.1
->
+> Thanks,
+> John

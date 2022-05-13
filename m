@@ -2,137 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C84F05261C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 14:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 811995261CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 14:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380226AbiEMMZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 08:25:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33700 "EHLO
+        id S1380227AbiEMM1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 08:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380217AbiEMMZY (ORCPT
+        with ESMTP id S232530AbiEMM04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 08:25:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9DCC2A1FCC;
-        Fri, 13 May 2022 05:25:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 79627B82F6C;
-        Fri, 13 May 2022 12:25:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C57CC34115;
-        Fri, 13 May 2022 12:25:18 +0000 (UTC)
-Message-ID: <2532419a-812b-c2de-ef56-849ec7dc16bc@linux-m68k.org>
-Date:   Fri, 13 May 2022 22:25:16 +1000
+        Fri, 13 May 2022 08:26:56 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3AA5BD2A
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 05:26:52 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id r1so15017888ybo.7
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 05:26:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=CNColVrvzT2paTadmJx7QmfVUH99VFUNC4FwQajaX30=;
+        b=fgZoCr+P0YLHIt9difJEkBctiHZD1TAZ4VGl1Wdxe0wL43HKeppNRKfFFjEBzHoTnK
+         X+MZTjD/NYV3m2WKlRYDIDK4kxl+KQpDnmBj/jy9Dg8Eik7KJSbnbSNAkWfJnCfPiYaE
+         YT6Ub7aOFoQlbMYGV3qFBVQlH3ltkUMH0gg9bamWReNzk4Od8Zs8ONqgWu+RAIgBcEVP
+         ip6TDNYvIzo1zGJJAY6MeVnFjQ01/JDpYdLjBMMmZ3R/2EQyGNHgHPllV7CXm9HiKljk
+         Fd9YqC1JwP3smDlGcgXwmG+aVIBPAw1mOzEQp7jeg7GdE9GId7CWZgnSCciUhAsAC/P3
+         6JpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=CNColVrvzT2paTadmJx7QmfVUH99VFUNC4FwQajaX30=;
+        b=AxoPb+kKK2Bnv2wXnUHuslAjiaIZxPTj7VN5DZW3yX7IdaVuntoPo1amv9iYhygon2
+         OX5WBHvr7lgWnyjKBGoe6DL9sIDZiHIncenEt0s5si4kNuf4uxrW2YjDaEomOeSdIWJV
+         i+oGILr0YBm22oQQmjH7uVKk7WuGhr1VILiz6B0tAiFg2JVwNw1fh6fo2EbJjDamexAp
+         0wcfdkteqxq47gp4bA3bsgT1gTiG3YFpmY84Jbl57r0NYAEFLInrsJIT2ujQHS3LitxE
+         zVPQcyBcx+hwkExc7m24zGJJI7gMI60mSxNFfdomt7H/tFK1wlkti58MJxyLu0zWMsd2
+         gmAA==
+X-Gm-Message-State: AOAM532545KCnkRQoooiurMFSSuzCQAqHOCk/hvJKdGle0vCDrpYb3tH
+        0hXZYli0aJKZVJudRwloS6qlPI/mWGvUHy+vJE05qg==
+X-Google-Smtp-Source: ABdhPJxoTL2jX3zw7FK7Qs22T64RPExXJjGiprH1kOuNLfotTjSS/RWHWRl6vMXtyRXLS4ogUW95JldzIV+mEZZTr6o=
+X-Received: by 2002:a25:8706:0:b0:64b:4657:d2e1 with SMTP id
+ a6-20020a258706000000b0064b4657d2e1mr4492719ybl.147.1652444811517; Fri, 13
+ May 2022 05:26:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] m68knommu: fix undefined reference to `mach_get_rtc_pll'
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux/m68k <linux-m68k@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        kernel test robot <lkp@intel.com>
-References: <20220513064952.3610672-1-gerg@linux-m68k.org>
- <CAMuHMdVWRM7U9_SxbtDUE0a-sB5_PDiO2009Cu3QKMP3wNc=yw@mail.gmail.com>
-From:   Greg Ungerer <gerg@linux-m68k.org>
-In-Reply-To: <CAMuHMdVWRM7U9_SxbtDUE0a-sB5_PDiO2009Cu3QKMP3wNc=yw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
+ <20220511064943.GR76023@worktop.programming.kicks-ass.net>
+ <20bada85-9203-57f4-2502-57a6fd11f3ea@intel.com> <875ymav8ul.ffs@tglx>
+ <55176b79-90af-4a47-dc06-9f5f2f2c123d@intel.com> <CAG_fn=URUve59ZPWRawW+BN-bUy7U3QmFsfOz_7L8ndsL4kQFQ@mail.gmail.com>
+ <8a47d0ee50b44520a6f26177e6fe7ec5@AcuMS.aculab.com>
+In-Reply-To: <8a47d0ee50b44520a6f26177e6fe7ec5@AcuMS.aculab.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Fri, 13 May 2022 14:26:15 +0200
+Message-ID: <CAG_fn=XUqzBWzuU0cmjUoSfHTv6pN=LCqGh7Ns8kgR6L169bPw@mail.gmail.com>
+Subject: Re: [RFCv2 00/10] Linear Address Masking enabling
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On Fri, May 13, 2022 at 1:28 PM David Laight <David.Laight@aculab.com> wrot=
+e:
+>
+> ...
+> > Once we have the possibility to store tags in the pointers, we don't
+> > need redzones for heap/stack objects anymore, which saves quite a bit
+> > of memory.
+>
+> You still need redzones.
+> The high bits are ignored for actual memory accesses.
+>
+> To do otherwise you'd need the high bits to be in the PTE,
+> copied to the TLB and finally get into the cache tag.
+>
+> Then you'd have to use the correct tags for each page.
 
-On 13/5/22 17:12, Geert Uytterhoeven wrote:
-> Hi Greg,
-> 
-> On Fri, May 13, 2022 at 8:50 AM Greg Ungerer <gerg@linux-m68k.org> wrote:
->> Configuring for a nommu classic m68k target and enabling the generic rtc
->> driver (CONFIG_RTC_DRV_GENERIC) will result in the following compile
->> error:
->>
->>     m68k-linux-ld: arch/m68k/kernel/time.o: in function `rtc_ioctl':
->>     time.c:(.text+0x82): undefined reference to `mach_get_rtc_pll'
->>     m68k-linux-ld: time.c:(.text+0xbc): undefined reference to `mach_set_rtc_pll'
->>     m68k-linux-ld: time.c:(.text+0xf4): undefined reference to `mach_set_rtc_pll'
->>
->> "mach_set_rtc_pll" and "mach_get_rtc_pll" are only defined in the common
->> MMU setup code, and are really only implemented in any meaningful way on
->> classic M68K MMU enabled machines. So conditionally limit their use to
-> 
-> And only on Q40/Q60.
-> 
->> MMU enabled classic M68K systems.
->>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
-> 
-> Thanks for your patch!
-> 
->> --- a/arch/m68k/kernel/time.c
->> +++ b/arch/m68k/kernel/time.c
->> @@ -62,7 +62,7 @@ void timer_heartbeat(void)
->>   }
->>   #endif /* CONFIG_HEARTBEAT */
->>
->> -#ifdef CONFIG_M68KCLASSIC
->> +#if defined(CONFIG_M68KCLASSIC) && defined(CONFIG_MMU)
->>   #if !IS_BUILTIN(CONFIG_RTC_DRV_GENERIC)
->>   void read_persistent_clock64(struct timespec64 *ts)
->>   {
-> 
-> read_persistent_clock64() uses mach_hwclk(), which is provided by
-> both setup_mm.c and setup_no.c, so it's always available?> Albeit not populated by coldfire or nommu platform code, so I see
-> the point in depending on MMU (no nommu Amiga support yet ;-).
+Sorry, I don't understand how this is relevant to HWASan in the userspace.
+Like in ASan, we have a custom allocator that assigns tags to heap
+objects. The assigned tag is stored in both the shadow memory for the
+object and the pointer returned by the allocator.
+Instrumentation inserted by the compiler checks the pointer before
+every memory access and ensures that its tag matches the tag of the
+object in the shadow memory.
+A tag mismatch is reported as an out-of-bounds or a use-after-free,
+depending on whether the accessed memory is still considered
+allocated.
+Because objects with different tags follow each other, there is no
+need to add extra redzones to the objects to detect buffer overflows.
+(We might need to increase the object alignment though, but that's a
+different story).
 
-Yes, exactly. And even worse is that on ColdFire platforms it
-is never set, so will be the startup value of NULL. It is called
-without checking for NULL in both of rtc_generic_get_time() and
-rtc_generic_set_time().
-
-I figured if nommu mode is ever supported on any of the classic
-MMU m68k then this could be revisited.
+>
+>         David
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
+ 1PT, UK
+> Registration No: 1397386 (Wales)
 
 
-> Perhaps rtc_ioctl() should depend on CONFIG_Q40?
 
-That is probably reasonable too. Using CONFIG_MMU was a good fit
-for the way mach_set_rtc_pll and mach_get_rtc_pll are currently
-defined - as in setup_mm.c which is CONFIG_MMU only, which is why
-I went that way.
+--=20
+Alexander Potapenko
+Software Engineer
 
-But if you prefer I can re-factor further based on CONFIG_Q40?
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
 
-Regards
-Greg
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
+
+Diese E-Mail ist vertraulich. Falls Sie diese f=C3=A4lschlicherweise
+erhalten haben sollten, leiten Sie diese bitte nicht an jemand anderes
+weiter, l=C3=B6schen Sie alle Kopien und Anh=C3=A4nge davon und lassen Sie =
+mich
+bitte wissen, dass die E-Mail an die falsche Person gesendet wurde.
 
 
->> @@ -140,7 +140,7 @@ static int __init rtc_init(void)
->>
->>   module_init(rtc_init);
->>   #endif /* CONFIG_RTC_DRV_GENERIC */
->> -#endif /* CONFIG M68KCLASSIC */
->> +#endif /* CONFIG M68KCLASSIC && CONFIG_MMU */
->>
->>   void __init time_init(void)
->>   {
-> 
-> Gr{oetje,eeting}s,
-> 
->                          Geert
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                  -- Linus Torvalds
+This e-mail is confidential. If you received this communication by
+mistake, please don't forward it to anyone else, please erase all
+copies and attachments, and please let me know that it has gone to the
+wrong person.

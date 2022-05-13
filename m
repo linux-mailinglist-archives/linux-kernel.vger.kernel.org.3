@@ -2,136 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC06525DB0
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 10:39:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9B5525DBE
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 10:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378438AbiEMIiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 04:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55428 "EHLO
+        id S1350072AbiEMIjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 04:39:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244442AbiEMIiM (ORCPT
+        with ESMTP id S242212AbiEMIjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 04:38:12 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0602631DA;
-        Fri, 13 May 2022 01:38:12 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24D7Unwu006299;
-        Fri, 13 May 2022 08:38:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=4ZXAqI3ht/d3z93NyFe+DB2QetlKzLu8xGrcuay8GlI=;
- b=Pf7B9JU8lwWK9Bryr5RaBEHC888WFaH/fsI9CMm/CGxQj5npMKchr2ijq8xXvHpV+9U0
- DTdoo2dj6IyTni/9N1edATfSB7lVRk7HwOmVdBH/rqP/JCub5GURg/DeTc4rqGQ0M4IA
- 3mIfNO7GZnKhelZuLvJIYpbM0ZsAl8YKKhMJyTXCdx2wCqL0U6GEE20kKdEhEjjwdslu
- rbq68h5dirathgPsL1Zn8C8tIS5Uswf1jl14BwGn7tqmAIzBhEXN0kicYE1o7XcNfzk4
- 78UkNsIMNmOVupDKQThm0z0ysiWHfDdCA+oPdwSMDOt9Ygi1vQ3d4O2K8MbJws8R/CZm LA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g1k0s1804-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 May 2022 08:38:07 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24D7X9VA015934;
-        Fri, 13 May 2022 08:38:06 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g1k0s17ym-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 May 2022 08:38:06 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24D8XTmI002710;
-        Fri, 13 May 2022 08:38:04 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma05fra.de.ibm.com with ESMTP id 3fwgd8xfp4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 May 2022 08:38:04 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24D8c1q645351192
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 13 May 2022 08:38:01 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0A470A4057;
-        Fri, 13 May 2022 08:38:01 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A4D01A4053;
-        Fri, 13 May 2022 08:38:00 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.152.224.40])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 13 May 2022 08:38:00 +0000 (GMT)
-Date:   Fri, 13 May 2022 10:37:58 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Steffen Eiden <seiden@linux.ibm.com>
-Cc:     Greg KH <greg@kroah.com>, Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Nico Boehr <nrb@linux.ibm.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] drivers/s390/char: Add Ultravisor io device
-Message-ID: <20220513103758.5a4baf7c@p-imbrenda>
-In-Reply-To: <80afde93-b9cf-f6c4-da40-3385d7f6741b@linux.ibm.com>
-References: <20220510144724.3321985-1-seiden@linux.ibm.com>
-        <20220510144724.3321985-2-seiden@linux.ibm.com>
-        <20220512163327.2c86cab1@p-imbrenda>
-        <80afde93-b9cf-f6c4-da40-3385d7f6741b@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
+        Fri, 13 May 2022 04:39:02 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BFD2655EB
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:39:01 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id p4so9183522edx.0
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:39:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=5eGnaTrZ5QL37vftbdKCPQxPP9FiPYVF4w7vRXHzsMM=;
+        b=LG1nKsPb416GGdMtYA81IjhMhD/KCV58tHHZskrSiRF15YyXN+VUzIYUALgby/QHon
+         u2xJFOKT5lYsGSdFD05dRm4immZir8XX/Zy+cktKtuCVh4yloZuqff//IsM1QzUOR8kt
+         5Q3MJ2A7NXkZcQHV1f6djfKYOD+HdnbNGRgVkM4Lymq/QRUUa1rs5jXMuuyZhxgiCB3Y
+         dxw7pFt8FzAeB+W5JCOIwLs/6btd+Cdgy3XjgyyhnrWolcYAj8p0AReh/hqCYN3Y+SKL
+         VZPadeqs4afvv8f39xumhbXS0ZG+VrPn6/0A0BdsSWQlH/69yV3/tdMxT8EJU1pNZVH9
+         8SFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5eGnaTrZ5QL37vftbdKCPQxPP9FiPYVF4w7vRXHzsMM=;
+        b=j50BviElM0ZSDEb/z8bolsP6+0fTHSI/3EacNI5cyRN9B267B2Amg4S/ybS0JQxV3/
+         xFr7brU/zS16AZKfGpOJ/5GQSQ9lCZwDp/yoNjz+e29KeoyWMYSnpn3R7mMcnz049tC4
+         ZcnH1u1c+w5qFmZJwrm1Z23wnsR2miEK7UmyzTEmg7GXo2QeyfGmNlDL8ZVfAaiVdXDP
+         T8tI9pBDrhqdDOWNlJGdCDEipCruBwHTCSM+CmJ7vqEFjejKxzYc5bFjeGwcO5Cs/px/
+         xHwXvZZgMKULXYZExpVLPZPLJXyH0jHtAps4/IiErQp1Qaxsj/D/Fjw97DHRHlBsndCs
+         ewHw==
+X-Gm-Message-State: AOAM533GCDQeHF1b6VergyZ/HT4U18TUpY/pbGK07yXOtiS4oGR2KetA
+        GdNzgyBAaaIrJ4Jqzw1NPNAGIw==
+X-Google-Smtp-Source: ABdhPJx1ZUddn9oRkISOeRqNayJCSyiC/ExqIWCAeF8ygLNluQ/SklXUZsGOXJUeCR3R7X8C8EPu3A==
+X-Received: by 2002:a05:6402:5190:b0:427:df4a:19d9 with SMTP id q16-20020a056402519000b00427df4a19d9mr39905569edd.384.1652431139697;
+        Fri, 13 May 2022 01:38:59 -0700 (PDT)
+Received: from [192.168.0.169] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id yl15-20020a17090693ef00b006f3ef214de7sm540660ejb.77.2022.05.13.01.38.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 01:38:59 -0700 (PDT)
+Message-ID: <32aab734-5890-99b2-09c9-8ec7418c7649@linaro.org>
+Date:   Fri, 13 May 2022 10:38:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v3 1/2] dt-bindings: gpio: gpio-mvebu: convert txt binding
+ to YAML
+Content-Language: en-US
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linus.walleij@linaro.org, brgl@bgdev.pl, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        andrew@lunn.ch
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org
+References: <20220512094125.3748197-1-chris.packham@alliedtelesis.co.nz>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220512094125.3748197-1-chris.packham@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: UCcw4Opj_jMSaBwBR3H9HtR2bBbqQRVn
-X-Proofpoint-ORIG-GUID: w7Dfq_Aq1cZIiV7YMuFsgvwTlW8IyuqE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-13_04,2022-05-12_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- priorityscore=1501 suspectscore=0 lowpriorityscore=0 adultscore=0
- spamscore=0 bulkscore=0 clxscore=1015 impostorscore=0 mlxlogscore=999
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205130036
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 May 2022 09:45:39 +0200
-Steffen Eiden <seiden@linux.ibm.com> wrote:
-
-> On 5/12/22 16:33, Claudio Imbrenda wrote:
+On 12/05/2022 11:41, Chris Packham wrote:
+> Convert the existing device tree binding to YAML format.
 > 
-> [snip]
+> The old binding listed the interrupt-controller and related properties
+> as required but there are sufficiently many existing usages without it
+> that the YAML binding does not make the interrupt properties required.
 > 
-> >> +/*
-> >> + * IOCTL entry point for the Ultravisor device.
-> >> + */
-> >> +static long uvio_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
-> >> +{
-> >> +	void __user *argp = (void __user *)arg;
-> >> +	struct uvio_ioctl_cb *uv_ioctl;
-> >> +	long ret;
-> >> +
-> >> +	ret = -ENOMEM;
-> >> +	uv_ioctl = vzalloc(sizeof(*uv_ioctl));  
-> > struct uvio_ioctl_cb is rather small, couldn't you just allocate it on
-> > the stack?
-> >   
-> IIRC it was on stack in some previous version. We then had a discussion
-> earlier about this triggered by the inverse comment and decided to not 
-> use the stack.
-
-ok fair enough
-
-but what's the reason for a vzalloc instead of a kzalloc, when the
-allocation is surely going to be small?
-
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+> ---
 > 
-> [snip]
-> 
+> Notes:
+>     Changes in v3:
+>     - Correct indent in example
+>     - Move offset and marvell,pwm-offset to separate patch
+>     - Correct some documentation cross references
 
+Thank you for your patch. There is something to discuss/improve.
+
+> diff --git a/Documentation/devicetree/bindings/gpio/gpio-mvebu.yaml b/Documentation/devicetree/bindings/gpio/gpio-mvebu.yaml
+> new file mode 100644
+> index 000000000000..2d95ef707f53
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/gpio/gpio-mvebu.yaml
+> @@ -0,0 +1,143 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/gpio/gpio-mvebu.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Marvell EBU GPIO controller
+> +
+> +maintainers:
+> +  - Thierry Reding <thierry.reding@gmail.com>
+> +  - Lee Jones <lee.jones@linaro.org>
+
+These should be rather platform or driver maintainers, not subsystem
+folks. Unless it happens that Thierry and Lee are for platform?
+
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - marvell,armada-8k-gpio
+> +          - marvell,orion-gpio
+> +
+> +      - items:
+> +          - enum:
+> +              - marvell,mv78200-gpio
+> +              - marvell,armada-370-gpio
+> +              - marvell,armadaxp-gpio
+> +          - const: marvell,orion-gpio
+> +
+> +  reg:
+> +    description: |
+> +      Address and length of the register set for the device. Not used for
+> +      marvell,armada-8k-gpio.
+> +
+> +      For the "marvell,armadaxp-gpio" variant a second entry is expected for
+> +      the per-cpu registers. For other variants second entry can be provided,
+> +      for the PWM function using the GPIO Blink Counter on/off registers.
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  reg-names:
+> +    items:
+> +      - const: gpio
+> +      - const: pwm
+> +    minItems: 1
+> +
+> +  interrupts:
+> +    description: |
+> +      The list of interrupts that are used for all the pins managed by this
+> +      GPIO bank. There can be more than one interrupt (example: 1 interrupt
+> +      per 8 pins on Armada XP, which means 4 interrupts per bank of 32
+> +      GPIOs).
+> +    minItems: 1
+> +    maxItems: 4
+> +
+> +  interrupt-controller: true
+> +
+> +  "#interrupt-cells":
+> +    const: 2
+> +
+> +  gpio-controller: true
+> +
+> +  ngpios:
+> +    minimum: 1
+> +    maximum: 32
+> +
+> +  "#gpio-cells":
+> +    const: 2
+> +
+> +  "#pwm-cells":
+> +    description:
+> +      The first cell is the GPIO line number. The second cell is the period
+> +      in nanoseconds.
+> +    const: 2
+> +
+> +  clocks:
+> +    description:
+> +      Clock(s) used for PWM function.
+> +    items:
+> +      - description: Core clock
+> +      - description: AXI bus clock
+> +    minItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: core
+> +      - const: axi
+> +    minItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - gpio-controller
+> +  - ngpios
+> +  - "#gpio-cells"
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: marvell,armada-8k-gpio
+> +    then:
+> +      required:
+> +        - offset
+> +    else:
+> +      required:
+> +        - reg
+
+one blank line please
+
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: marvell,armadaxp-gpio
+
+Original bindings are saying that second reg is optional for
+marvell,armada-370-gpio. What about other cases, e.g. mv78200-gpio? Is
+it also allowed (and optional) there?
+
+> +    then:
+> +      properties:
+> +        reg:
+> +          minItems: 2
+
+Then you also should require two reg-names.
+
+
+Best regards,
+Krzysztof

@@ -2,187 +2,350 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83CB6526628
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54CEB526626
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382099AbiEMPbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 11:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
+        id S1382042AbiEMPbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 11:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382052AbiEMPbZ (ORCPT
+        with ESMTP id S1382133AbiEMPbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 11:31:25 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B23D887A4
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:31:24 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id g23so10337274edy.13
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:31:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=FyEVkw0keNZPZ0CrsntkdDzRqQxoY6siytBBtxmPcFY=;
-        b=l/MU78YHN6EV+CLSopMUXdmhfLtEY8/kC7dPg5bnMUl6OkVQ1sGIR3JewU6G4oYr/N
-         BaZIiY/xYy14mNR8EyDdbzl7COT1jCIYdW3X8t8Zbo/fUrje/pJPe/18b6YO8cAEh3D/
-         YHbwxa+KBmUrKf5dClwvwQZ2s6bMiUFqgcwVJcgRhfWR35/b/n3nFViB/gYfoPMrFIUx
-         7McYaFrl5nB4QDkkPoO3nvJAQ7Of3auW0Cw90XJRN4SDm1zvSVUuUtdJMy6OMo7xrfn9
-         HZ/giFLN7ZMKZpHssJa8QF9r0YuG6GaoEC9v/l5K5SONIJXdNcBklwqQBrTAzDJ9EcKy
-         VtVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FyEVkw0keNZPZ0CrsntkdDzRqQxoY6siytBBtxmPcFY=;
-        b=WkShX0OCSDibUQvLrrXzGGFjy8cbqTRKazYCuXwS76HACeG4V+JzYV7HHR7TMI8eyL
-         gDikfeykasfl3EjWU4lYyIWF9+MLZ8R9QiDdRwN+14/nIlpypARj0i5nWLg0oMoRI2HE
-         BfERbxSWj6V7LccXQU60w1dSdmwIHl30aovF4y/Y4TrM6TpnhIBQHc3+XgdP6QHIDAWJ
-         gComNREYKJflZTLv+rlPQIaneH0SI645Nrd6ynUVZkVfRdm/bA1woDK03ZVc+y83k1Oo
-         34Z8kDyLvJD/eqZdMbYWU/Nn3HDHcZBaTY7PfRyJg9dQcOd5fZhF+/7XB8o8Tr3yPgfa
-         nzkA==
-X-Gm-Message-State: AOAM531TEuGiEzCD07+tONA/OsFun3jwqgwX5Fy/VHzushp3oUdjzXGw
-        +yIenyUs+bOzB9PNg/LKItU=
-X-Google-Smtp-Source: ABdhPJyOSgegB1CN8ntV9JWIhiZbe4Pa14PPgrWNg35FGTH9M6c3NM+zjYpf82znFB7KswVzz1uhRA==
-X-Received: by 2002:a05:6402:12cd:b0:426:16f:c135 with SMTP id k13-20020a05640212cd00b00426016fc135mr40702733edx.297.1652455882596;
-        Fri, 13 May 2022 08:31:22 -0700 (PDT)
-Received: from localhost.localdomain (93-103-18-160.static.t-2.net. [93.103.18.160])
-        by smtp.gmail.com with ESMTPSA id h9-20020a50cdc9000000b0042617ba63d5sm1075706edj.95.2022.05.13.08.31.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 08:31:22 -0700 (PDT)
-From:   Uros Bizjak <ubizjak@gmail.com>
-To:     x86@kernel.org, linux-kernel@vger.kernel.org
-Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        Fri, 13 May 2022 11:31:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F2B77A800
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:31:17 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5BB171424;
+        Fri, 13 May 2022 08:31:17 -0700 (PDT)
+Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8E3743F73D;
+        Fri, 13 May 2022 08:31:14 -0700 (PDT)
+Date:   Fri, 13 May 2022 16:31:07 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Tong Tiangen <tongtiangen@huawei.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Robin Murphy <robin.murphy@arm.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Marco Elver <elver@google.com>
-Subject: [PATCH v2 2/2] locking/atomic/x86: Introduce arch_try_cmpxchg64
-Date:   Fri, 13 May 2022 17:30:09 +0200
-Message-Id: <20220513153009.228282-3-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220513153009.228282-1-ubizjak@gmail.com>
-References: <20220513153009.228282-1-ubizjak@gmail.com>
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Xie XiuQi <xiexiuqi@huawei.com>,
+        Guohanjun <guohanjun@huawei.com>
+Subject: Re: [PATCH -next v4 4/7] arm64: add copy_{to, from}_user to machine
+ check safe
+Message-ID: <Yn55uz52Hn3gF9Xe@lakrids>
+References: <20220420030418.3189040-1-tongtiangen@huawei.com>
+ <20220420030418.3189040-5-tongtiangen@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220420030418.3189040-5-tongtiangen@huawei.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce arch_try_cmpxchg64 for 64-bit and 32-bit targets to improve
-code using cmpxchg64.  On 64-bit targets, the generated assembly improves
-from:
+On Wed, Apr 20, 2022 at 03:04:15AM +0000, Tong Tiangen wrote:
+> Add copy_{to, from}_user() to machine check safe.
+> 
+> If copy fail due to hardware memory error, only the relevant processes are
+> affected, so killing the user process and isolate the user page with
+> hardware memory errors is a more reasonable choice than kernel panic.
+> 
+> Add new extable type EX_TYPE_UACCESS_MC which can be used for uaccess that
+> can be recovered from hardware memory errors.
 
-  ab:	89 c8                	mov    %ecx,%eax
-  ad:	48 89 4c 24 60       	mov    %rcx,0x60(%rsp)
-  b2:	83 e0 fd             	and    $0xfffffffd,%eax
-  b5:	89 54 24 64          	mov    %edx,0x64(%rsp)
-  b9:	88 44 24 60          	mov    %al,0x60(%rsp)
-  bd:	48 89 c8             	mov    %rcx,%rax
-  c0:	c6 44 24 62 f2       	movb   $0xf2,0x62(%rsp)
-  c5:	48 8b 74 24 60       	mov    0x60(%rsp),%rsi
-  ca:	f0 49 0f b1 34 24    	lock cmpxchg %rsi,(%r12)
-  d0:	48 39 c1             	cmp    %rax,%rcx
-  d3:	75 cf                	jne    a4 <t+0xa4>
+I don't understand why we need this.
 
-to:
+If we apply EX_TYPE_UACCESS consistently to *all* user accesses, and
+*only* to user accesses, that would *always* indicate that we can
+recover, and that seems much simpler to deal with.
 
-  b3:	89 c2                	mov    %eax,%edx
-  b5:	48 89 44 24 60       	mov    %rax,0x60(%rsp)
-  ba:	83 e2 fd             	and    $0xfffffffd,%edx
-  bd:	89 4c 24 64          	mov    %ecx,0x64(%rsp)
-  c1:	88 54 24 60          	mov    %dl,0x60(%rsp)
-  c5:	c6 44 24 62 f2       	movb   $0xf2,0x62(%rsp)
-  ca:	48 8b 54 24 60       	mov    0x60(%rsp),%rdx
-  cf:	f0 48 0f b1 13       	lock cmpxchg %rdx,(%rbx)
-  d4:	75 d5                	jne    ab <t+0xab>
+Today we use EX_TYPE_UACCESS_ERR_ZERO for kernel accesses in a couple of
+cases, which we should clean up, and we user EX_TYPE_FIXUP for a couple
+of user accesses, but those could easily be converted over.
 
-where a move and a compare after cmpxchg is saved.  The improvements
-for 32-bit targets are even more noticeable, because dual-word compare
-after cmpxchg8b gets eliminated.
+> The x16 register is used to save the fixup type in copy_xxx_user which
+> used extable type EX_TYPE_UACCESS_MC.
 
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Marco Elver <elver@google.com>
----
- arch/x86/include/asm/cmpxchg_32.h | 21 +++++++++++++++++++++
- arch/x86/include/asm/cmpxchg_64.h |  6 ++++++
- 2 files changed, 27 insertions(+)
+Why x16?
 
-diff --git a/arch/x86/include/asm/cmpxchg_32.h b/arch/x86/include/asm/cmpxchg_32.h
-index 0a7fe0321613..16a604cf24d4 100644
---- a/arch/x86/include/asm/cmpxchg_32.h
-+++ b/arch/x86/include/asm/cmpxchg_32.h
-@@ -42,6 +42,9 @@ static inline void set_64bit(volatile u64 *ptr, u64 value)
- #define arch_cmpxchg64_local(ptr, o, n)					\
- 	((__typeof__(*(ptr)))__cmpxchg64_local((ptr), (unsigned long long)(o), \
- 					       (unsigned long long)(n)))
-+#define arch_try_cmpxchg64(ptr, po, n)					\
-+	((__typeof__(*(ptr)))__try_cmpxchg64((ptr), (unsigned long long *)(po), \
-+					     (unsigned long long)(n)))
- #endif
- 
- static inline u64 __cmpxchg64(volatile u64 *ptr, u64 old, u64 new)
-@@ -70,6 +73,24 @@ static inline u64 __cmpxchg64_local(volatile u64 *ptr, u64 old, u64 new)
- 	return prev;
- }
- 
-+static inline bool __try_cmpxchg64(volatile u64 *ptr, u64 *pold, u64 new)
-+{
-+	bool success;
-+	u64 old = *pold;
-+	asm volatile(LOCK_PREFIX "cmpxchg8b %[ptr]"
-+		     CC_SET(z)
-+		     : CC_OUT(z) (success),
-+		       [ptr] "+m" (*ptr),
-+		       "+A" (old)
-+		     : "b" ((u32)new),
-+		       "c" ((u32)(new >> 32))
-+		     : "memory");
-+
-+	if (unlikely(!success))
-+		*pold = old;
-+	return success;
-+}
-+
- #ifndef CONFIG_X86_CMPXCHG64
- /*
-  * Building a kernel capable running on 80386 and 80486. It may be necessary
-diff --git a/arch/x86/include/asm/cmpxchg_64.h b/arch/x86/include/asm/cmpxchg_64.h
-index 072e5459fe2f..250187ac8248 100644
---- a/arch/x86/include/asm/cmpxchg_64.h
-+++ b/arch/x86/include/asm/cmpxchg_64.h
-@@ -19,6 +19,12 @@ static inline void set_64bit(volatile u64 *ptr, u64 val)
- 	arch_cmpxchg_local((ptr), (o), (n));				\
- })
- 
-+#define arch_try_cmpxchg64(ptr, po, n)					\
-+({									\
-+	BUILD_BUG_ON(sizeof(*(ptr)) != 8);				\
-+	arch_try_cmpxchg((ptr), (po), (n));				\
-+})
-+
- #define system_has_cmpxchg_double() boot_cpu_has(X86_FEATURE_CX16)
- 
- #endif /* _ASM_X86_CMPXCHG_64_H */
--- 
-2.35.1
+How is this intended to be consumed, and why is that behaviour different
+from any *other* fault?
 
+Mark.
+
+> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
+> ---
+>  arch/arm64/include/asm/asm-extable.h | 14 ++++++++++++++
+>  arch/arm64/include/asm/asm-uaccess.h | 15 ++++++++++-----
+>  arch/arm64/lib/copy_from_user.S      | 18 +++++++++++-------
+>  arch/arm64/lib/copy_to_user.S        | 18 +++++++++++-------
+>  arch/arm64/mm/extable.c              | 18 ++++++++++++++----
+>  5 files changed, 60 insertions(+), 23 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/asm-extable.h b/arch/arm64/include/asm/asm-extable.h
+> index c39f2437e08e..75b2c00e9523 100644
+> --- a/arch/arm64/include/asm/asm-extable.h
+> +++ b/arch/arm64/include/asm/asm-extable.h
+> @@ -2,12 +2,18 @@
+>  #ifndef __ASM_ASM_EXTABLE_H
+>  #define __ASM_ASM_EXTABLE_H
+>  
+> +#define FIXUP_TYPE_NORMAL		0
+> +#define FIXUP_TYPE_MC			1
+> +
+>  #define EX_TYPE_NONE			0
+>  #define EX_TYPE_FIXUP			1
+>  #define EX_TYPE_BPF			2
+>  #define EX_TYPE_UACCESS_ERR_ZERO	3
+>  #define EX_TYPE_LOAD_UNALIGNED_ZEROPAD	4
+>  
+> +/* _MC indicates that can fixup from machine check errors */
+> +#define EX_TYPE_UACCESS_MC		5
+> +
+>  #ifdef __ASSEMBLY__
+>  
+>  #define __ASM_EXTABLE_RAW(insn, fixup, type, data)	\
+> @@ -27,6 +33,14 @@
+>  	__ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_FIXUP, 0)
+>  	.endm
+>  
+> +/*
+> + * Create an exception table entry for `insn`, which will branch to `fixup`
+> + * when an unhandled fault(include sea fault) is taken.
+> + */
+> +	.macro          _asm_extable_uaccess_mc, insn, fixup
+> +	__ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_UACCESS_MC, 0)
+> +	.endm
+> +
+>  /*
+>   * Create an exception table entry for `insn` if `fixup` is provided. Otherwise
+>   * do nothing.
+> diff --git a/arch/arm64/include/asm/asm-uaccess.h b/arch/arm64/include/asm/asm-uaccess.h
+> index 0557af834e03..6c23c138e1fc 100644
+> --- a/arch/arm64/include/asm/asm-uaccess.h
+> +++ b/arch/arm64/include/asm/asm-uaccess.h
+> @@ -63,6 +63,11 @@ alternative_else_nop_endif
+>  9999:	x;					\
+>  	_asm_extable	9999b, l
+>  
+> +
+> +#define USER_MC(l, x...)			\
+> +9999:	x;					\
+> +	_asm_extable_uaccess_mc	9999b, l
+> +
+>  /*
+>   * Generate the assembly for LDTR/STTR with exception table entries.
+>   * This is complicated as there is no post-increment or pair versions of the
+> @@ -73,8 +78,8 @@ alternative_else_nop_endif
+>  8889:		ldtr	\reg2, [\addr, #8];
+>  		add	\addr, \addr, \post_inc;
+>  
+> -		_asm_extable	8888b,\l;
+> -		_asm_extable	8889b,\l;
+> +		_asm_extable_uaccess_mc	8888b, \l;
+> +		_asm_extable_uaccess_mc	8889b, \l;
+>  	.endm
+>  
+>  	.macro user_stp l, reg1, reg2, addr, post_inc
+> @@ -82,14 +87,14 @@ alternative_else_nop_endif
+>  8889:		sttr	\reg2, [\addr, #8];
+>  		add	\addr, \addr, \post_inc;
+>  
+> -		_asm_extable	8888b,\l;
+> -		_asm_extable	8889b,\l;
+> +		_asm_extable_uaccess_mc	8888b,\l;
+> +		_asm_extable_uaccess_mc	8889b,\l;
+>  	.endm
+>  
+>  	.macro user_ldst l, inst, reg, addr, post_inc
+>  8888:		\inst		\reg, [\addr];
+>  		add		\addr, \addr, \post_inc;
+>  
+> -		_asm_extable	8888b,\l;
+> +		_asm_extable_uaccess_mc	8888b, \l;
+>  	.endm
+>  #endif
+> diff --git a/arch/arm64/lib/copy_from_user.S b/arch/arm64/lib/copy_from_user.S
+> index 34e317907524..480cc5ac0a8d 100644
+> --- a/arch/arm64/lib/copy_from_user.S
+> +++ b/arch/arm64/lib/copy_from_user.S
+> @@ -25,7 +25,7 @@
+>  	.endm
+>  
+>  	.macro strb1 reg, ptr, val
+> -	strb \reg, [\ptr], \val
+> +	USER_MC(9998f, strb \reg, [\ptr], \val)
+>  	.endm
+>  
+>  	.macro ldrh1 reg, ptr, val
+> @@ -33,7 +33,7 @@
+>  	.endm
+>  
+>  	.macro strh1 reg, ptr, val
+> -	strh \reg, [\ptr], \val
+> +	USER_MC(9998f, strh \reg, [\ptr], \val)
+>  	.endm
+>  
+>  	.macro ldr1 reg, ptr, val
+> @@ -41,7 +41,7 @@
+>  	.endm
+>  
+>  	.macro str1 reg, ptr, val
+> -	str \reg, [\ptr], \val
+> +	USER_MC(9998f, str \reg, [\ptr], \val)
+>  	.endm
+>  
+>  	.macro ldp1 reg1, reg2, ptr, val
+> @@ -49,11 +49,12 @@
+>  	.endm
+>  
+>  	.macro stp1 reg1, reg2, ptr, val
+> -	stp \reg1, \reg2, [\ptr], \val
+> +	USER_MC(9998f, stp \reg1, \reg2, [\ptr], \val)
+>  	.endm
+>  
+> -end	.req	x5
+> -srcin	.req	x15
+> +end		.req	x5
+> +srcin		.req	x15
+> +fixup_type	.req	x16
+>  SYM_FUNC_START(__arch_copy_from_user)
+>  	add	end, x0, x2
+>  	mov	srcin, x1
+> @@ -62,7 +63,10 @@ SYM_FUNC_START(__arch_copy_from_user)
+>  	ret
+>  
+>  	// Exception fixups
+> -9997:	cmp	dst, dstin
+> +	// x16: fixup type written by ex_handler_uaccess_mc
+> +9997:	cmp 	fixup_type, #FIXUP_TYPE_MC
+> +	b.eq	9998f
+> +	cmp	dst, dstin
+>  	b.ne	9998f
+>  	// Before being absolutely sure we couldn't copy anything, try harder
+>  USER(9998f, ldtrb tmp1w, [srcin])
+> diff --git a/arch/arm64/lib/copy_to_user.S b/arch/arm64/lib/copy_to_user.S
+> index 802231772608..021a7d27b3a4 100644
+> --- a/arch/arm64/lib/copy_to_user.S
+> +++ b/arch/arm64/lib/copy_to_user.S
+> @@ -20,7 +20,7 @@
+>   *	x0 - bytes not copied
+>   */
+>  	.macro ldrb1 reg, ptr, val
+> -	ldrb  \reg, [\ptr], \val
+> +	USER_MC(9998f, ldrb  \reg, [\ptr], \val)
+>  	.endm
+>  
+>  	.macro strb1 reg, ptr, val
+> @@ -28,7 +28,7 @@
+>  	.endm
+>  
+>  	.macro ldrh1 reg, ptr, val
+> -	ldrh  \reg, [\ptr], \val
+> +	USER_MC(9998f, ldrh  \reg, [\ptr], \val)
+>  	.endm
+>  
+>  	.macro strh1 reg, ptr, val
+> @@ -36,7 +36,7 @@
+>  	.endm
+>  
+>  	.macro ldr1 reg, ptr, val
+> -	ldr \reg, [\ptr], \val
+> +	USER_MC(9998f, ldr \reg, [\ptr], \val)
+>  	.endm
+>  
+>  	.macro str1 reg, ptr, val
+> @@ -44,15 +44,16 @@
+>  	.endm
+>  
+>  	.macro ldp1 reg1, reg2, ptr, val
+> -	ldp \reg1, \reg2, [\ptr], \val
+> +	USER_MC(9998f, ldp \reg1, \reg2, [\ptr], \val)
+>  	.endm
+>  
+>  	.macro stp1 reg1, reg2, ptr, val
+>  	user_stp 9997f, \reg1, \reg2, \ptr, \val
+>  	.endm
+>  
+> -end	.req	x5
+> -srcin	.req	x15
+> +end		.req	x5
+> +srcin		.req	x15
+> +fixup_type	.req	x16
+>  SYM_FUNC_START(__arch_copy_to_user)
+>  	add	end, x0, x2
+>  	mov	srcin, x1
+> @@ -61,7 +62,10 @@ SYM_FUNC_START(__arch_copy_to_user)
+>  	ret
+>  
+>  	// Exception fixups
+> -9997:	cmp	dst, dstin
+> +	// x16: fixup type written by ex_handler_uaccess_mc
+> +9997:	cmp 	fixup_type, #FIXUP_TYPE_MC
+> +	b.eq	9998f
+> +	cmp	dst, dstin
+>  	b.ne	9998f
+>  	// Before being absolutely sure we couldn't copy anything, try harder
+>  	ldrb	tmp1w, [srcin]
+> diff --git a/arch/arm64/mm/extable.c b/arch/arm64/mm/extable.c
+> index 4f0083a550d4..525876c3ebf4 100644
+> --- a/arch/arm64/mm/extable.c
+> +++ b/arch/arm64/mm/extable.c
+> @@ -24,6 +24,14 @@ static bool ex_handler_fixup(const struct exception_table_entry *ex,
+>  	return true;
+>  }
+>  
+> +static bool ex_handler_uaccess_type(const struct exception_table_entry *ex,
+> +			     struct pt_regs *regs,
+> +			     unsigned long fixup_type)
+> +{
+> +	regs->regs[16] = fixup_type;
+> +	return ex_handler_fixup(ex, regs);
+> +}
+> +
+>  static bool ex_handler_uaccess_err_zero(const struct exception_table_entry *ex,
+>  					struct pt_regs *regs)
+>  {
+> @@ -75,6 +83,8 @@ bool fixup_exception(struct pt_regs *regs)
+>  	switch (ex->type) {
+>  	case EX_TYPE_FIXUP:
+>  		return ex_handler_fixup(ex, regs);
+> +	case EX_TYPE_UACCESS_MC:
+> +		return ex_handler_uaccess_type(ex, regs, FIXUP_TYPE_NORMAL);
+>  	case EX_TYPE_BPF:
+>  		return ex_handler_bpf(ex, regs);
+>  	case EX_TYPE_UACCESS_ERR_ZERO:
+> @@ -94,10 +104,10 @@ bool fixup_exception_mc(struct pt_regs *regs)
+>  	if (!ex)
+>  		return false;
+>  
+> -	/*
+> -	 * This is not complete, More Machine check safe extable type can
+> -	 * be processed here.
+> -	 */
+> +	switch (ex->type) {
+> +	case EX_TYPE_UACCESS_MC:
+> +		return ex_handler_uaccess_type(ex, regs, FIXUP_TYPE_MC);
+> +	}
+>  
+>  	return false;
+>  }
+> -- 
+> 2.25.1
+> 

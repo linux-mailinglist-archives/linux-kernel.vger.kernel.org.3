@@ -2,187 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C17D526365
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:02:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0309526367
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:04:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232471AbiEMOCc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 13 May 2022 10:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
+        id S232822AbiEMOEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiEMOC3 (ORCPT
+        with ESMTP id S229788AbiEMOEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:02:29 -0400
-X-Greylist: delayed 1004 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 13 May 2022 07:02:27 PDT
-Received: from mta8.hihonor.com (mta8.hihonor.com [39.102.176.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461B5FD20
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:02:27 -0700 (PDT)
-Received: from w011.hihonor.com (unknown [10.68.20.122])
-        by mta8.hihonor.com (SkyGuard) with ESMTPS id 4L08tW1P8RzWfnP
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 21:41:07 +0800 (CST)
-Received: from a002.hihonor.com (10.68.31.193) by w011.hihonor.com
- (10.68.20.122) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.858.15; Fri, 13 May
- 2022 21:45:35 +0800
-Received: from a007.hihonor.com (10.68.22.31) by a002.hihonor.com
- (10.68.31.193) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.858.15; Fri, 13 May
- 2022 21:45:34 +0800
-Received: from a007.hihonor.com ([fe80::dd1a:1e50:5c41:e645]) by
- a007.hihonor.com ([fe80::dd1a:1e50:5c41:e645%10]) with mapi id
- 15.02.0858.015; Fri, 13 May 2022 21:45:34 +0800
-From:   liangdongxu 00014050 <liangdongxu@hihonor.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "arve@android.com" <arve@android.com>,
-        "tkjos@android.com" <tkjos@android.com>,
-        "maco@android.com" <maco@android.com>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "christian@brauner.io" <christian@brauner.io>,
-        "hridya@google.com" <hridya@google.com>,
-        "surenb@google.com" <surenb@google.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "longman@redhat.com" <longman@redhat.com>,
-        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "sangmoon.kim@samsung.com" <sangmoon.kim@samsung.com>,
-        "saravanak@google.com" <saravanak@google.com>
-Subject: [PATCH] ANDROID: mutex: Add vendor hook and oem data to the mutex
-Thread-Topic: [PATCH] ANDROID: mutex: Add vendor hook and oem data to the
- mutex
-Thread-Index: Adhmx228HsZdoNCBQ7CkgL48RSZzgw==
-Date:   Fri, 13 May 2022 13:45:34 +0000
-Message-ID: <c5b5bd5f3bea4a17a66b115a16a628d5@hihonor.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.163.18.227]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Fri, 13 May 2022 10:04:06 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B598369D2
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:04:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652450644; x=1683986644;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=IV4iYGo7pIxZHj+iT+8akiALKJwO+kZUW0gEutIT5x0=;
+  b=RqXVIC/6m50q4XtXxaPlNCxBqbyd8hxHfECXIYABB/nazsA7aXvZ9xT1
+   ZnHydgXvvepitKkKMSsa7nzAwS+1Hv+5ab/9+0yUyvdDRuG8qtLIAt8Iv
+   wQe333UZNQWui6/qQsLoP+NnW3Trk+qSh8s3hIIpGGRlfuGdFGlaavDVj
+   o=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 13 May 2022 07:04:04 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:04:03 -0700
+Received: from [10.216.62.117] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.47.97.222) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 13 May
+ 2022 07:04:00 -0700
+Message-ID: <f251bc8f-7e72-cfd9-5eca-179c91880a1a@quicinc.com>
+Date:   Fri, 13 May 2022 19:33:56 +0530
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [RESEND PATCH v4] devcoredump : Serialize devcd_del work
+Content-Language: en-US
+To:     <linux-kernel@vger.kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <tglx@linutronix.de>,
+        <sboyd@kernel.org>, <rafael@kernel.org>,
+        <johannes@sipsolutions.net>, <keescook@chromium.org>
+References: <1651558074-9620-1-git-send-email-quic_mojha@quicinc.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <1651558074-9620-1-git-send-email-quic_mojha@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.47.97.222)
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Gentle reminder!
 
-Add hooks and oem data to apply oem's optimization of mutex.
-
-Signed-off-by: Dezhi Huang <huangdezhi@hihonor.com>
----
-
-diff --git a/drivers/android/vendor_hooks.c b/drivers/android/vendor_hooks.c
-index 8ffa2fb..db972d1 100644
---- a/drivers/android/vendor_hooks.c
-+++ b/drivers/android/vendor_hooks.c
-@@ -91,6 +91,10 @@
- EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_alter_futex_plist_add);
- EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_mutex_wait_start);
- EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_mutex_wait_finish);
-+EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_mutex_waiter_list_add);
-+EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_mutex_unlock_slowpath);
-+EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_mutex_waiting);
-+EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_mutex_init);
- EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_rtmutex_wait_start);
- EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_rtmutex_wait_finish);
- EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_rwsem_read_wait_start);
-diff --git a/include/linux/mutex.h b/include/linux/mutex.h
-index 8f226d4..93a5bf0 100644
---- a/include/linux/mutex.h
-+++ b/include/linux/mutex.h
-@@ -19,6 +19,7 @@
- #include <asm/processor.h>
- #include <linux/osq_lock.h>
- #include <linux/debug_locks.h>
-+#include <linux/android_vendor.h>
- 
- #ifdef CONFIG_DEBUG_LOCK_ALLOC
- # define __DEP_MAP_MUTEX_INITIALIZER(lockname)			\
-@@ -73,6 +74,7 @@
- #ifdef CONFIG_DEBUG_LOCK_ALLOC
- 	struct lockdep_map	dep_map;
- #endif
-+	ANDROID_OEM_DATA(1);
- };
- 
- #ifdef CONFIG_DEBUG_MUTEXES
-diff --git a/include/trace/hooks/dtask.h b/include/trace/hooks/dtask.h
-index 6f005d4..3c4277f 100644
---- a/include/trace/hooks/dtask.h
-+++ b/include/trace/hooks/dtask.h
-@@ -11,12 +11,28 @@
-  * mechanism for vendor modules to hook and extend functionality
-  */
- struct mutex;
-+struct mutex_waiter;
- DECLARE_HOOK(android_vh_mutex_wait_start,
- 	TP_PROTO(struct mutex *lock),
- 	TP_ARGS(lock));
- DECLARE_HOOK(android_vh_mutex_wait_finish,
- 	TP_PROTO(struct mutex *lock),
- 	TP_ARGS(lock));
-+DECLARE_HOOK(android_vh_mutex_waiter_list_add,
-+		TP_PROTO(struct mutex *lock,
-+			struct mutex_waiter *waiter,
-+			struct list_head *list,
-+			bool *add_finish),
-+		TP_ARGS(lock, waiter, list, add_finish));
-+DECLARE_HOOK(android_vh_mutex_unlock_slowpath,
-+		TP_PROTO(struct mutex *lock),
-+		TP_ARGS(lock));
-+DECLARE_HOOK(android_vh_mutex_waiting,
-+	TP_PROTO(struct mutex *lock),
-+	TP_ARGS(lock));
-+DECLARE_HOOK(android_vh_mutex_init,
-+	TP_PROTO(struct mutex *lock),
-+	TP_ARGS(lock));
- 
- struct rt_mutex_base;
- DECLARE_HOOK(android_vh_rtmutex_wait_start,
-diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
-index 77fa3dc..37f6316 100644
---- a/kernel/locking/mutex.c
-+++ b/kernel/locking/mutex.c
-@@ -51,6 +51,7 @@
- 	osq_lock_init(&lock->osq);
- #endif
- 
-+	trace_android_vh_mutex_init(lock);
- 	debug_mutex_init(lock, name, key);
- }
- EXPORT_SYMBOL(__mutex_init);
-@@ -201,9 +202,12 @@
- __mutex_add_waiter(struct mutex *lock, struct mutex_waiter *waiter,
- 		   struct list_head *list)
- {
-+	bool add_finish = false;
- 	debug_mutex_add_waiter(lock, waiter, current);
- 
--	list_add_tail(&waiter->list, list);
-+	trace_android_vh_mutex_waiter_list_add(lock, waiter, list, &add_finish);
-+	if (!add_finish)
-+		list_add_tail(&waiter->list, list);
- 	if (__mutex_waiter_is_first(lock, waiter))
- 		__mutex_set_flag(lock, MUTEX_FLAG_WAITERS);
- }
-@@ -668,6 +672,7 @@
- 				goto err;
- 		}
- 
-+		trace_android_vh_mutex_waiting(lock);
- 		raw_spin_unlock(&lock->wait_lock);
- 		schedule_preempt_disabled();
- 
-@@ -895,6 +900,7 @@
- 	if (owner & MUTEX_FLAG_HANDOFF)
- 		__mutex_handoff(lock, next);
- 
-+	trace_android_vh_mutex_unlock_slowpath(lock);
- 	raw_spin_unlock(&lock->wait_lock);
- 
- 	wake_up_q(&wake_q);
+Thanks,
+-Mukesh
+On 5/3/2022 11:37 AM, Mukesh Ojha wrote:
+> In following scenario(diagram), when one thread X running dev_coredumpm()
+> adds devcd device to the framework which sends uevent notification to
+> userspace and another thread Y reads this uevent and call to
+> devcd_data_write() which eventually try to delete the queued timer that
+> is not initialized/queued yet.
+> 
+> So, debug object reports some warning and in the meantime, timer is
+> initialized and queued from X path. and from Y path, it gets reinitialized
+> again and timer->entry.pprev=NULL and try_to_grab_pending() stucks.
+> 
+> To fix this, introduce mutex and a boolean flag to serialize the behaviour.
+> 
+>   	cpu0(X)			                cpu1(Y)
+> 
+>      dev_coredump() uevent sent to user space
+>      device_add()  ======================> user space process Y reads the
+>                                            uevents writes to devcd fd
+>                                            which results into writes to
+> 
+>                                           devcd_data_write()
+>                                             mod_delayed_work()
+>                                               try_to_grab_pending()
+>                                                 del_timer()
+>                                                   debug_assert_init()
+>     INIT_DELAYED_WORK()
+>     schedule_delayed_work()
+>                                                     debug_object_fixup()
+>                                                       timer_fixup_assert_init()
+>                                                         timer_setup()
+>                                                           do_init_timer()
+>                                                         /*
+>                                                          Above call reinitializes
+>                                                          the timer to
+>                                                          timer->entry.pprev=NULL
+>                                                          and this will be checked
+>                                                          later in timer_pending() call.
+>                                                         */
+>                                                   timer_pending()
+>                                                    !hlist_unhashed_lockless(&timer->entry)
+>                                                      !h->pprev
+>                                                  /*
+>                                                    del_timer() checks h->pprev and finds
+>                                                    it to be NULL due to which
+>                                                    try_to_grab_pending() stucks.
+>                                                  */
+> 
+> Link: https://lore.kernel.org/lkml/2e1f81e2-428c-f11f-ce92-eb11048cb271@quicinc.com/
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> ---
+> v3->v4:
+>   - flg variable renamed to delete_work.
+> 
+> v2->v3:
+>   Addressed comments from gregkh
+>   - Wrapped the commit text and corrected the alignment.
+>   - Described the reason to introduce new variables.
+>   - Restored the blank line.
+>   - rename the del_wk_queued to flg.
+>   Addressed comments from tglx
+>   - Added a comment which explains the race which looks obvious however
+>     would not occur between disabled_store and devcd_del work.
+> 
+> 
+> v1->v2:
+>   - Added del_wk_queued flag to serialize the race between devcd_data_write()
+>     and disabled_store() => devcd_free().
+>   drivers/base/devcoredump.c | 83 ++++++++++++++++++++++++++++++++++++++++++++--
+>   1 file changed, 81 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/base/devcoredump.c b/drivers/base/devcoredump.c
+> index f4d794d..1c06781 100644
+> --- a/drivers/base/devcoredump.c
+> +++ b/drivers/base/devcoredump.c
+> @@ -25,6 +25,47 @@ struct devcd_entry {
+>   	struct device devcd_dev;
+>   	void *data;
+>   	size_t datalen;
+> +	/*
+> +	 * Here, mutex is required to serialize the calls to del_wk work between
+> +	 * user/kernel space which happens when devcd is added with device_add()
+> +	 * and that sends uevent to user space. User space reads the uevents,
+> +	 * and calls to devcd_data_write() which try to modify the work which is
+> +	 * not even initialized/queued from devcoredump.
+> +	 *
+> +	 *
+> +	 *
+> +	 *        cpu0(X)                                 cpu1(Y)
+> +	 *
+> +	 *        dev_coredump() uevent sent to user space
+> +	 *        device_add()  ======================> user space process Y reads the
+> +	 *                                              uevents writes to devcd fd
+> +	 *                                              which results into writes to
+> +	 *
+> +	 *                                             devcd_data_write()
+> +	 *                                               mod_delayed_work()
+> +	 *                                                 try_to_grab_pending()
+> +	 *                                                   del_timer()
+> +	 *                                                     debug_assert_init()
+> +	 *       INIT_DELAYED_WORK()
+> +	 *       schedule_delayed_work()
+> +	 *
+> +	 *
+> +	 * Also, mutex alone would not be enough to avoid scheduling of
+> +	 * del_wk work after it get flush from a call to devcd_free()
+> +	 * mentioned as below.
+> +	 *
+> +	 *	disabled_store()
+> +	 *        devcd_free()
+> +	 *          mutex_lock()             devcd_data_write()
+> +	 *          flush_delayed_work()
+> +	 *          mutex_unlock()
+> +	 *                                   mutex_lock()
+> +	 *                                   mod_delayed_work()
+> +	 *                                   mutex_unlock()
+> +	 * So, delete_work flag is required.
+> +	 */
+> +	struct mutex mutex;
+> +	bool delete_work;
+>   	struct module *owner;
+>   	ssize_t (*read)(char *buffer, loff_t offset, size_t count,
+>   			void *data, size_t datalen);
+> @@ -84,7 +125,12 @@ static ssize_t devcd_data_write(struct file *filp, struct kobject *kobj,
+>   	struct device *dev = kobj_to_dev(kobj);
+>   	struct devcd_entry *devcd = dev_to_devcd(dev);
+>   
+> -	mod_delayed_work(system_wq, &devcd->del_wk, 0);
+> +	mutex_lock(&devcd->mutex);
+> +	if (!devcd->delete_work) {
+> +		devcd->delete_work = true;
+> +		mod_delayed_work(system_wq, &devcd->del_wk, 0);
+> +	}
+> +	mutex_unlock(&devcd->mutex);
+>   
+>   	return count;
+>   }
+> @@ -112,7 +158,12 @@ static int devcd_free(struct device *dev, void *data)
+>   {
+>   	struct devcd_entry *devcd = dev_to_devcd(dev);
+>   
+> +	mutex_lock(&devcd->mutex);
+> +	if (!devcd->delete_work)
+> +		devcd->delete_work = true;
+> +
+>   	flush_delayed_work(&devcd->del_wk);
+> +	mutex_unlock(&devcd->mutex);
+>   	return 0;
+>   }
+>   
+> @@ -122,6 +173,30 @@ static ssize_t disabled_show(struct class *class, struct class_attribute *attr,
+>   	return sysfs_emit(buf, "%d\n", devcd_disabled);
+>   }
+>   
+> +/*
+> + *
+> + *	disabled_store()                                	worker()
+> + *	 class_for_each_device(&devcd_class,
+> + *		NULL, NULL, devcd_free)
+> + *         ...
+> + *         ...
+> + *	   while ((dev = class_dev_iter_next(&iter))
+> + *                                                             devcd_del()
+> + *                                                               device_del()
+> + *                                                                 put_device() <- last reference
+> + *             error = fn(dev, data)                           devcd_dev_release()
+> + *             devcd_free(dev, data)                           kfree(devcd)
+> + *             mutex_lock(&devcd->mutex);
+> + *
+> + *
+> + * In the above diagram, It looks like disabled_store() would be racing with parallely
+> + * running devcd_del() and result in memory abort while acquiring devcd->mutex which
+> + * is called after kfree of devcd memory  after dropping its last reference with
+> + * put_device(). However, this will not happens as fn(dev, data) runs
+> + * with its own reference to device via klist_node so it is not its last reference.
+> + * so, above situation would not occur.
+> + */
+> +
+>   static ssize_t disabled_store(struct class *class, struct class_attribute *attr,
+>   			      const char *buf, size_t count)
+>   {
+> @@ -278,13 +353,16 @@ void dev_coredumpm(struct device *dev, struct module *owner,
+>   	devcd->read = read;
+>   	devcd->free = free;
+>   	devcd->failing_dev = get_device(dev);
+> +	devcd->delete_work = false;
+>   
+> +	mutex_init(&devcd->mutex);
+>   	device_initialize(&devcd->devcd_dev);
+>   
+>   	dev_set_name(&devcd->devcd_dev, "devcd%d",
+>   		     atomic_inc_return(&devcd_count));
+>   	devcd->devcd_dev.class = &devcd_class;
+>   
+> +	mutex_lock(&devcd->mutex);
+>   	if (device_add(&devcd->devcd_dev))
+>   		goto put_device;
+>   
+> @@ -301,10 +379,11 @@ void dev_coredumpm(struct device *dev, struct module *owner,
+>   
+>   	INIT_DELAYED_WORK(&devcd->del_wk, devcd_del);
+>   	schedule_delayed_work(&devcd->del_wk, DEVCD_TIMEOUT);
+> -
+> +	mutex_unlock(&devcd->mutex);
+>   	return;
+>    put_device:
+>   	put_device(&devcd->devcd_dev);
+> +	mutex_unlock(&devcd->mutex);
+>    put_module:
+>   	module_put(owner);
+>    free:

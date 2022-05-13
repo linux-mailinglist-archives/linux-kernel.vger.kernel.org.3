@@ -2,103 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C83285267E1
+	by mail.lfdr.de (Postfix) with ESMTP id 7CAD35267E0
 	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382713AbiEMREB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 13:04:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51308 "EHLO
+        id S1382755AbiEMRFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 13:05:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354115AbiEMRD7 (ORCPT
+        with ESMTP id S1382738AbiEMRF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 13:03:59 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEFA4969F;
-        Fri, 13 May 2022 10:03:58 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 940361F41739
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652461437;
-        bh=Wh5LQZ8ySmvO8IXpMu/GG9iqNwxWpEjWpdkHdKriJ+Q=;
-        h=From:To:Cc:Subject:Date:From;
-        b=R+V3I2Jh5vL98BYzEHGYtDZrsY0+WfwU5DEvBB6aM6vpV3PqRCu4oWmkkDdVf1Je1
-         0i+HP0hGqGAW/tRKgjCP/Fw37ogEjErmonDLuPT3oA8u2xQJAhWjNNKxiQFHHxeNNe
-         XXxMOUp46bTVcN7ZAthwmwzEqeTAC3xi1BsenusTQhnjYzQTO3HOS6/ZjXyv8Vy0Ok
-         m5gB3atNx5oZ100UtNxr/MF8hWVDzsj9C9CST5TBFvrp8jOIpfyjTtlK/QaJHD8lqp
-         m0XKj5aKTMN7e83r6itASd2qoHl/aaRdzIJRJKCEE/jZgIkT1EI9bNVreAr1DXoiUM
-         Zjp7PGebW2gCQ==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     matthias.bgg@gmail.com
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, paul.bouchara@somainline.org,
-        kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH] soc: mediatek: mtk-mmsys: Add support for MT6795 Helio X10
-Date:   Fri, 13 May 2022 19:03:50 +0200
-Message-Id: <20220513170350.502501-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.35.1
+        Fri, 13 May 2022 13:05:28 -0400
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC285AA4F
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:05:27 -0700 (PDT)
+Received: by mail-vs1-xe35.google.com with SMTP id q2so9045014vsr.5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:05:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M20/Mcaj+7CKKvMSlepJXfPmEm2rLWCFBP/Lq2j/vwI=;
+        b=mrL3OYeL4uxYEIpzuHvbQ8/i8o/17RBvCEFupArWRVgPUb0v2h2sd3MAZ89u6YbOfb
+         SYHF27u+q7Vjcoynsn636fdp8UBpxMy2P4WWYTLQQTper1egJVXoBGgeFL+Lzjpg+3ry
+         VQKlRShU9mGvhL3iLVRBTKnyBbYqonZbNL0QuFz9ovT8N3IE+Mi6SDEG1yFF/Z3BuZzH
+         AHqcPSOlauyvDhFQzQdh7UEAs/lGfk0/odQ4A6jMqf8TikGKSz8Ysvu8+gvl9oozFsZw
+         wxKoOINaxLmxVIUv1Wm7vsmzc2M9NaJrO7IMcsXC30MYgeQTcr0oU3JF9Vrj1GcqYSQv
+         c3Zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M20/Mcaj+7CKKvMSlepJXfPmEm2rLWCFBP/Lq2j/vwI=;
+        b=CU49ICwQy+OJKVDyDmNktmhMerz0yGc5ZhUtgObpbTv7BUZJKCiVoidwboWsUecwpf
+         Tpupdr7NDcXsS6VagiGhgJ9QJaXg8yZ+gOKoLbf4/rj+qkWSqt8IoP1+SdbwDebKP8c5
+         ccbckzndF9zn0SokJ9q6qBMHLdL7pWClRfaCdj7NO7iQollYf5mG+ke0fcvdkNnB6wSk
+         aR7FGrCahVZzcNsGYNBIxET2FtxP6o/FaPLQyMWYFACcvk0T7rXrOgPFMsEnStyQxkMj
+         7NSGo8GK6x/ckk4C/YCOMzSga9tRtZg7HY60ubhkFb9Sc0PqAjm+Fot+90JUTXBC/Psz
+         g4PQ==
+X-Gm-Message-State: AOAM532+5S6lX9RdQLZHEM2t6O8SyWmCVsbYypK7qy3erJlCw9oI28Fa
+        9ZvP335OqJYI4Sa+6c09FPrOaiOV2/H7UHg/Vn9Qgg==
+X-Google-Smtp-Source: ABdhPJyuZbLaFtq2n9NyLPjiVytNIDz6eQbCT21SLSfAoOglW4hIWTknPeKi7juMY+f7jD3wwPwXLjo91U6F/WzP/hg=
+X-Received: by 2002:a67:af01:0:b0:32d:3d57:cff with SMTP id
+ v1-20020a67af01000000b0032d3d570cffmr2925978vsl.8.1652461525912; Fri, 13 May
+ 2022 10:05:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220513040519.1499333-1-irogers@google.com> <20220513040519.1499333-3-irogers@google.com>
+ <cd8f8fca-a1e0-e4de-92e4-536dcb2c1f7c@huawei.com>
+In-Reply-To: <cd8f8fca-a1e0-e4de-92e4-536dcb2c1f7c@huawei.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Fri, 13 May 2022 10:05:13 -0700
+Message-ID: <CAP-5=fUahv8WVMXWXseCN8hC0qJL4fKBhA+eR9hnydgK-WDHQA@mail.gmail.com>
+Subject: Re: [PATCH 2/7] perf test: Use skip in vmlinux kallsyms
+To:     John Garry <john.garry@huawei.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
+        Carsten Haitzler <carsten.haitzler@arm.com>,
+        Marco Elver <elver@google.com>,
+        Michael Petlan <mpetlan@redhat.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add MM support for the MT6795 SoC, using the mmsys default routing
-table.
+On Fri, May 13, 2022 at 10:01 AM John Garry <john.garry@huawei.com> wrote:
+>
+> On 13/05/2022 05:05, Ian Rogers wrote:
+> > Currently failures in reading vmlinux or kallsyms result in a test
+> > failure. However, the failure is typically permission related.
+>
+> If the user requires root priviledges then should we just mention this
+> would be a problem for this test?
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
+Tbh, it wasn't clear to me and so I didn't add a reason for skipping.
 
-In order for this patch to have any meaning and functionality, it is
-required to also have in-tree the [1] MT6795 clocks series, even
-though that's not required to actually compile this code.
+Thanks,
+Ian
 
-[1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=641493
-
- drivers/soc/mediatek/mtk-mmsys.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
-index 06d8e83a2cb5..38b36b881a3b 100644
---- a/drivers/soc/mediatek/mtk-mmsys.c
-+++ b/drivers/soc/mediatek/mtk-mmsys.c
-@@ -57,6 +57,13 @@ static const struct mtk_mmsys_match_data mt6779_mmsys_match_data = {
- 	},
- };
- 
-+static const struct mtk_mmsys_driver_data mt6795_mmsys_driver_data = {
-+	.clk_driver = "clk-mt6795-mm",
-+	.routes = mmsys_default_routing_table,
-+	.num_routes = ARRAY_SIZE(mmsys_default_routing_table),
-+	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
-+};
-+
- static const struct mtk_mmsys_driver_data mt6797_mmsys_driver_data = {
- 	.clk_driver = "clk-mt6797-mm",
- };
-@@ -363,6 +370,10 @@ static const struct of_device_id of_match_mtk_mmsys[] = {
- 		.compatible = "mediatek,mt6779-mmsys",
- 		.data = &mt6779_mmsys_match_data,
- 	},
-+	{
-+		.compatible = "mediatek,mt6795-mmsys",
-+		.data = &mt6795_mmsys_driver_data,
-+	},
- 	{
- 		.compatible = "mediatek,mt6797-mmsys",
- 		.data = &mt6797_mmsys_match_data,
--- 
-2.35.1
-
+> > Prefer to
+> > flag these failures as skip.
+> >
+> > Signed-off-by: Ian Rogers<irogers@google.com>
+>
+> Thanks,
+> John

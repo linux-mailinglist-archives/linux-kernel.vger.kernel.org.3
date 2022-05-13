@@ -2,119 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C70526004
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:39:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D49526007
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379337AbiEMKSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 06:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39196 "EHLO
+        id S1379340AbiEMKUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 06:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379330AbiEMKSc (ORCPT
+        with ESMTP id S233183AbiEMKUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 06:18:32 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B2B23150;
-        Fri, 13 May 2022 03:18:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652437111; x=1683973111;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=iywQtXelYTHo32D1tr1Is1mkpMiEf3de8gjUGnLQUz0=;
-  b=t0axkAn3ZVa6uFP4hdCBjFR1lqsephLI0CAtzUDWdiJnrsCJuo2Aja46
-   ntHaVyxIioSMiTPSgDV1wjzVWi/nF7IObk8wuoVPtql8K5rYYucFHF82P
-   APN1auImrgcgcaETkgy4jv80botnbAY0MHM2jIcqcerSWW9DaTp+QaKsa
-   s=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 13 May 2022 03:18:31 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 03:18:30 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 13 May 2022 03:18:29 -0700
-Received: from [10.214.30.67] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 13 May
- 2022 03:18:26 -0700
-Message-ID: <2a45f1e1-39d5-76b3-8fd3-c1f8b288afac@quicinc.com>
-Date:   Fri, 13 May 2022 15:48:23 +0530
+        Fri, 13 May 2022 06:20:41 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4997633A16;
+        Fri, 13 May 2022 03:20:40 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1134)
+        id EEB4B20ECB9D; Fri, 13 May 2022 03:20:39 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EEB4B20ECB9D
+Date:   Fri, 13 May 2022 03:20:39 -0700
+From:   Shradha Gupta <shradhagupta@microsoft.com>
+To:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org
+Subject: [PATCH] hv_balloon: Fix balloon_probe() and balloon_remove() error
+ handling
+Message-ID: <20220513102039.GA20318@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V3] dma-buf: ensure unique directory name for dmabuf stats
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <christian.koenig@amd.com>, <sumit.semwal@linaro.org>,
-        <hridya@google.com>, <daniel.vetter@ffwll.ch>,
-        <tjmercier@google.com>, <linux-media@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>, <linux-kernel@vger.kernel.org>
-References: <1652434689-6203-1-git-send-email-quic_charante@quicinc.com>
- <Yn4u0AG8iC33S3jO@kroah.com>
-From:   Charan Teja Kalla <quic_charante@quicinc.com>
-In-Reply-To: <Yn4u0AG8iC33S3jO@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-11.7 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+<haiyangz@microsoft.com>, Stephen Hemminger <sthemmin@microsoft.com>,
+Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>
 
-On 5/13/2022 3:41 PM, Greg KH wrote:
->> Reported-by: kernel test robot <lkp@intel.com>
-> The trest robot did not say that the dmabuf stat name was being
-> duplicated, did it?
->
+Add missing cleanup in balloon_probe() if the call to
+balloon_connect_vsp() fails.  Also correctly handle cleanup in
+balloon_remove() when dm_state is DM_INIT_ERROR because
+balloon_resume() failed.
 
-It reported a printk warning on V2[1]. Should we remove this on V3?
+Signed-off-by: Shradha Gupta <shradhagupta@microsoft.com>
+---
+ drivers/hv/hv_balloon.c | 21 ++++++++++++++++-----
+ 1 file changed, 16 insertions(+), 5 deletions(-)
 
-@Christian: Could you please drop this tag while merging?
+diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
+index eee7402cfc02..98fcfb516bbc 100644
+--- a/drivers/hv/hv_balloon.c
++++ b/drivers/hv/hv_balloon.c
+@@ -1842,7 +1842,7 @@ static int balloon_probe(struct hv_device *dev,
+ 
+ 	ret = balloon_connect_vsp(dev);
+ 	if (ret != 0)
+-		return ret;
++		goto connect_error;
+ 
+ 	enable_page_reporting();
+ 	dm_device.state = DM_INITIALIZED;
+@@ -1861,6 +1861,7 @@ static int balloon_probe(struct hv_device *dev,
+ 	dm_device.thread  = NULL;
+ 	disable_page_reporting();
+ 	vmbus_close(dev->channel);
++connect_error:
+ #ifdef CONFIG_MEMORY_HOTPLUG
+ 	unregister_memory_notifier(&hv_memory_nb);
+ 	restore_online_page_callback(&hv_online_page);
+@@ -1882,12 +1883,21 @@ static int balloon_remove(struct hv_device *dev)
+ 	cancel_work_sync(&dm->ha_wrk.wrk);
+ 
+ 	kthread_stop(dm->thread);
+-	disable_page_reporting();
+-	vmbus_close(dev->channel);
++
++	/*
++	 * This is to handle the case when balloon_resume()
++	 * call has failed and some cleanup has been done as
++	 * a part of the error handling.
++	 */
++	if (dm_device.state != DM_INIT_ERROR) {
++		disable_page_reporting();
++		vmbus_close(dev->channel);
+ #ifdef CONFIG_MEMORY_HOTPLUG
+-	unregister_memory_notifier(&hv_memory_nb);
+-	restore_online_page_callback(&hv_online_page);
++		unregister_memory_notifier(&hv_memory_nb);
++		restore_online_page_callback(&hv_online_page);
+ #endif
++	}
++
+ 	spin_lock_irqsave(&dm_device.ha_lock, flags);
+ 	list_for_each_entry_safe(has, tmp, &dm->ha_region_list, list) {
+ 		list_for_each_entry_safe(gap, tmp_gap, &has->gap_list, list) {
+@@ -1948,6 +1958,7 @@ static int balloon_resume(struct hv_device *dev)
+ 	vmbus_close(dev->channel);
+ out:
+ 	dm_device.state = DM_INIT_ERROR;
++	disable_page_reporting();
+ #ifdef CONFIG_MEMORY_HOTPLUG
+ 	unregister_memory_notifier(&hv_memory_nb);
+ 	restore_online_page_callback(&hv_online_page);
+-- 
+2.17.1
 
-[1] https://lore.kernel.org/all/202205110511.E0d8TXXC-lkp@intel.com/
-
-
->> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
->> index a6fc96e..0ad5039 100644
->> --- a/drivers/dma-buf/dma-buf.c
->> +++ b/drivers/dma-buf/dma-buf.c
->> @@ -407,6 +407,7 @@ static inline int is_dma_buf_file(struct file *file)
->>  
->>  static struct file *dma_buf_getfile(struct dma_buf *dmabuf, int flags)
->>  {
->> +	static atomic64_t dmabuf_inode = ATOMIC64_INIT(0);
->>  	struct file *file;
->>  	struct inode *inode = alloc_anon_inode(dma_buf_mnt->mnt_sb);
->>  
->> @@ -416,6 +417,13 @@ static struct file *dma_buf_getfile(struct dma_buf *dmabuf, int flags)
->>  	inode->i_size = dmabuf->size;
->>  	inode_set_bytes(inode, dmabuf->size);
->>  
->> +	/*
->> +	 * The ->i_ino acquired from get_next_ino() is not unique thus
->> +	 * not suitable for using it as dentry name by dmabuf stats.
->> +	 * Override ->i_ino with the unique and dmabuffs specific
->> +	 * value.
->> +	 */
->> +	inode->i_ino = atomic64_add_return(1, &dmabuf_inode);
->>  	file = alloc_file_pseudo(inode, dma_buf_mnt, "dmabuf",
->>  				 flags, &dma_buf_fops);
->>  	if (IS_ERR(file))
->> -- 
->> 2.7.4
->>
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-Thanks for the ACK.
-
---Charan

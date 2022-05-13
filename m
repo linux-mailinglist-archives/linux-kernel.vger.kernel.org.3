@@ -2,213 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F26BB525C51
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:30:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D29A4525C4E
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377817AbiEMHVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 03:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49712 "EHLO
+        id S1377797AbiEMHXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 03:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352114AbiEMHVb (ORCPT
+        with ESMTP id S1352114AbiEMHXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 03:21:31 -0400
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB825D64A
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 00:21:28 -0700 (PDT)
-Received: by mail-ua1-x92f.google.com with SMTP id f13so2875731uax.11
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 00:21:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=levpsNNmZJAQ194UQtXw36sKWWPGKf4XBoSDPW1A4rU=;
-        b=X+OzpWOlucNuJtW2aSC+sNkp1W0s/P/VScZDZkLnsl+WE2GHjzJSjggDyBi8Fo0Qsf
-         1LBlrItXwa0AOyeedGWigL8fyMjbEmIQ9wC1L9Yx7OFbpH1+8Ak23zJx1ZmfUTMp9Rtn
-         Mil56LuNQyzMuas70KC4xMcZnkSh1wA/0h2UStMkiRK2F+zwIAISx1jdbO+qYLMH+ysi
-         Tad8tbq3z7y+xhzK9VqyYU7TUHu+HcFTqMFd6xLOoAZ3bAqPxCW5eaZoianznF+Rq7kS
-         SfhRZiZvtNfKrEVkOMSQXUVcGud58XLmS6AzJ+mRbF4OnMz30qUasZHVGlv20ptbztNg
-         MTRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=levpsNNmZJAQ194UQtXw36sKWWPGKf4XBoSDPW1A4rU=;
-        b=u+ehyqiWHN8oeVGeLW5pRWo3K+KSZWggO6eK7LC9SOYNBREP/HOxIMEm3WNqcPM6Fl
-         WeyNrHhukYH3RKibQzKJImysnsePlk278XnuNxrBRAa3weHPG9302z2IyYdhhvRkXB+d
-         IVGlmQwSSE+GoMv+/OHVWW1qBmELaMnmjGJZAT6HEcIfRXjZClxLqXDTZTkn0371O9QS
-         39XcafVkP/YaVIni5eIMyeW7t7LY28kDE2HmC5n0OTZYFh+hjUmX1KroTSa++pBSQ2S5
-         /KgchhpXX2xvE4YlhVQqszZKxE4junJE4Fa4PillBqi4ARtKLlX4wZCe6p+6J/RorQTr
-         28YA==
-X-Gm-Message-State: AOAM533xfw8Dcyf0cH60wvVPRr9VEd41dvA3jL9xs1sFlOgmBsNpmrbz
-        +q2Pk4q4qZApcq+UfmbkG6MdFogRkz9dYJ85T/NxzA==
-X-Google-Smtp-Source: ABdhPJx4lmaa+gXwCK5sj/EmTxVRnJW282wOjQX/NgYoja9RlgMjz6OGWlAllhaqg5zZgeJ0rcPVkgvzu2J84yvJuk4=
-X-Received: by 2002:ab0:7643:0:b0:362:833d:5bfb with SMTP id
- s3-20020ab07643000000b00362833d5bfbmr1817401uaq.4.1652426487413; Fri, 13 May
- 2022 00:21:27 -0700 (PDT)
+        Fri, 13 May 2022 03:23:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2767D64BCA;
+        Fri, 13 May 2022 00:23:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CCF3CB82C44;
+        Fri, 13 May 2022 07:23:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F2FFC34100;
+        Fri, 13 May 2022 07:23:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652426624;
+        bh=4j63qxQv6bBPt6Zh+ZWZmN70Zaw28P37OyeOwv5c/Oc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VFyf0r+jwlAxjvj7Sk8arQc3WwE7ti3QUVyvSibylKDucSVUrODGUnSLKNQU60Vea
+         c0G2o8jiMF8I0ZkSoXo7Aq4+OITclZIgF7H45q/xOlUt1AijIJ3J3DD3I3dl6oxQ3J
+         O6OQ/RaPdkDgwGO1BEPhtOA6MsMEpBiivgBKIryG1TT8AQrhl9BX4TOdsBIuCTHVsm
+         d/AiIF+dT5pLk+suc058p7yFuk11dBe5TARH8/T4ZIz2li8IVKn3fOmnRrFZGpuHRr
+         qjnO8Q9jfnpObbgM3HM4BbgOakBoXlXKW3jfDj6gthTSGRyXxYwQi5olgS4bYfMq0Q
+         Ja4H52FoTl9ZA==
+Date:   Fri, 13 May 2022 09:23:39 +0200
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Miles Chen <miles.chen@mediatek.com>
+Cc:     <lukas.bulwahn@gmail.com>, <bin.liu@mediatek.com>,
+        <kernel-janitors@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        Rick Chang <rick.chang@mediatek.com>
+Subject: Re: [PATCH RFC] MAINTAINERS: drop unreachable contact for MEDIATEK
+ JPEG DRIVER
+Message-ID: <20220513092339.60f9eedc@coco.lan>
+In-Reply-To: <20220309030431.31247-1-miles.chen@mediatek.com>
+References: <20220308114300.12502-1-lukas.bulwahn@gmail.com>
+        <20220309030431.31247-1-miles.chen@mediatek.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <CAAPL-u-DGLcKRVDnChN9ZhxPkfxQvz9Sb93kVoX_4J2oiJSkUw@mail.gmail.com>
- <69f2d063a15f8c4afb4688af7b7890f32af55391.camel@intel.com>
- <CAAPL-u9endrWf_aOnPENDPdvT-2-YhCAeJ7ONGckGnXErTLOfQ@mail.gmail.com> <a3296507be17d99e60d4c1118699aa01268dd7b8.camel@intel.com>
-In-Reply-To: <a3296507be17d99e60d4c1118699aa01268dd7b8.camel@intel.com>
-From:   Wei Xu <weixugc@google.com>
-Date:   Fri, 13 May 2022 00:21:16 -0700
-Message-ID: <CAAPL-u89gri+R-5zQRF3HLMX98TBhfdD2pH=yc6cJVX3mwmGcA@mail.gmail.com>
-Subject: Re: RFC: Memory Tiering Kernel Interfaces (v2)
-To:     "ying.huang@intel.com" <ying.huang@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Greg Thelen <gthelen@google.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Hesham Almatary <hesham.almatary@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 12:04 AM ying.huang@intel.com
-<ying.huang@intel.com> wrote:
->
-> On Thu, 2022-05-12 at 23:36 -0700, Wei Xu wrote:
-> > On Thu, May 12, 2022 at 8:25 PM ying.huang@intel.com
-> > <ying.huang@intel.com> wrote:
-> > >
-> > > On Wed, 2022-05-11 at 23:22 -0700, Wei Xu wrote:
-> > > >
-> > > > Memory Allocation for Demotion
-> > > > ==============================
-> > > >
-> > > > To allocate a new page as the demotion target for a page, the kernel
-> > > > calls the allocation function (__alloc_pages_nodemask) with the
-> > > > source page node as the preferred node and the union of all lower
-> > > > tier nodes as the allowed nodemask.  The actual target node selection
-> > > > then follows the allocation fallback order that the kernel has
-> > > > already defined.
-> > > >
-> > > > The pseudo code looks like:
-> > > >
-> > > >     targets = NODE_MASK_NONE;
-> > > >     src_nid = page_to_nid(page);
-> > > >     src_tier = node_tier_map[src_nid];
-> > > >     for (i = src_tier + 1; i < MAX_MEMORY_TIERS; i++)
-> > > >             nodes_or(targets, targets, memory_tiers[i]);
-> > > >     new_page = __alloc_pages_nodemask(gfp, order, src_nid, targets);
-> > > >
-> > > > The memopolicy of cpuset, vma and owner task of the source page can
-> > > > be set to refine the demotion target nodemask, e.g. to prevent
-> > > > demotion or select a particular allowed node as the demotion target.
-> > >
-> > > Consider a system with 3 tiers, if we want to demote some pages from
-> > > tier 0, the desired behavior is,
-> > >
-> > > - Allocate pages from tier 1
-> > > - If there's no enough free pages in tier 1, wakeup kswapd of tier 1 so
-> > > demote some pages from tier 1 to tier 2
-> > > - If there's still no enough free pages in tier 1, allocate pages from
-> > > tier 2.
-> > >
-> > > In this way, tier 0 will have the hottest pages, while tier 1 will have
-> > > the coldest pages.
-> >
-> > When we are already in the allocation path for the demotion of a page
-> > from tier 0, I think we'd better not block this allocation to wait for
-> > kswapd to demote pages from tier 1 to tier 2. Instead, we should
-> > directly allocate from tier 2.  Meanwhile, this demotion can wakeup
-> > kswapd to demote from tier 1 to tier 2 in the background.
->
-> Yes.  That's what I want too.  My original words may be misleading.
->
-> > > With your proposed method, the demoting from tier 0 behavior is,
-> > >
-> > > - Allocate pages from tier 1
-> > > - If there's no enough free pages in tier 1, allocate pages in tier 2
-> > >
-> > > The kswapd of tier 1 will not be waken up until there's no enough free
-> > > pages in tier 2.  In quite long time, there's no much hot/cold
-> > > differentiation between tier 1 and tier 2.
-> >
-> > This is true with the current allocation code. But I think we can make
-> > some changes for demotion allocations. For example, we can add a
-> > GFP_DEMOTE flag and update the allocation function to wake up kswapd
-> > when this flag is set and we need to fall back to another node.
-> >
-> > > This isn't hard to be fixed, just call __alloc_pages_nodemask() for each
-> > > tier one by one considering page allocation fallback order.
-> >
-> > That would have worked, except that there is an example earlier, in
-> > which it is actually preferred for some nodes to demote to their tier
-> > + 2, not tier +1.
-> >
-> > More specifically, the example is:
-> >
-> >                  20
-> >    Node 0 (DRAM) -- Node 1 (DRAM)
-> >     |   |           |    |
-> >     |   | 30    120 |    |
-> >     |   v           v    | 100
-> > 100 |  Node 2 (PMEM)     |
-> >     |    |               |
-> >     |    | 100           |
-> >      \   v               v
-> >       -> Node 3 (Large Mem)
-> >
-> > Node distances:
-> > node   0    1    2    3
-> >    0  10   20   30  100
-> >    1  20   10  120  100
-> >    2  30  120   10  100
-> >    3 100  100  100   10
-> >
-> > 3 memory tiers are defined:
-> > tier 0: 0-1
-> > tier 1: 2
-> > tier 2: 3
-> >
-> > The demotion fallback order is:
-> > node 0: 2, 3
-> > node 1: 3, 2
-> > node 2: 3
-> > node 3: empty
-> >
-> > Note that even though node 3 is in tier 2 and node 2 is in tier 1,
-> > node 1 (tier 0) still prefers node 3 as its first demotion target, not
-> > node 2.
->
-> Yes.  I understand that we need to support this use case.  We can use
-> the tier order in allocation fallback list instead of from small to
-> large.  That is, for node 1, the tier order for demotion is tier 2, tier
-> 1.
+Em Wed, 9 Mar 2022 11:04:31 +0800
+Miles Chen <miles.chen@mediatek.com> escreveu:
 
-That could work, too, though I feel it might be simpler and more
-efficient (no repeated calls to __alloc_pages for the same allocation)
-to modify __alloc_pages() itself.
+> Hi Lukas,
+> 
+> > After sending a patch to Rick Chang, the mediatek mail server responded:
+> > 
+> >   ** Message not delivered **
+> > 
+> >   Your message couldn't be delivered to rick.chang@mediatek.com because
+> >   the remote server is misconfigured. See technical details below for more
+> >   information.
+> > 
+> >   The response from the remote server was:
+> >   550 Relaying mail to rick.chang@mediatek.com is not allowed
+> > 
+> > So, drop Rick Chang from the MEDIATEK JPEG DRIVER section.
 
-Anyway, we can discuss more on this when it comes to the
-implementation of this demotion allocation function.  I believe this
-should not affect the general memory tiering interfaces proposed here.
+Funny... I did a quick test here, and the e-mail to Rick was not rejected:
 
-> Best Regards,
-> Huang, Ying
->
->
->
+Connecting to smtp.kernel.org [35.85.114.177]:587 ...  TFO mode sendto, no data: EINPROGRESS
+ connected
+  SMTP<< 220 smtp.kernel.org ESMTP Postfix
+  SMTP>> EHLO mail.kernel.org
+  SMTP<< 250-smtp.kernel.org
+         250-PIPELINING
+         250-SIZE 30720000
+         250-VRFY
+         250-ETRN
+         250-STARTTLS
+         250-ENHANCEDSTATUSCODES
+         250-8BITMIME
+         250-DSN
+         250 CHUNKING
+  SMTP>> STARTTLS
+  SMTP<< 220 2.0.0 Ready to start TLS
+  SMTP>> EHLO mail.kernel.org
+  SMTP<< 250-smtp.kernel.org
+         250-PIPELINING
+         250-SIZE 30720000
+         250-VRFY
+         250-ETRN
+         250-AUTH PLAIN LOGIN
+         250-ENHANCEDSTATUSCODES
+         250-8BITMIME
+         250-DSN
+         250 CHUNKING
+  SMTP>> AUTH PLAIN ************************************
+  SMTP<< 235 2.7.0 Authentication successful
+  SMTP|> MAIL FROM:<mchehab@kernel.org> SIZE=1361 AUTH=mchehab@kernel.org
+  SMTP|> RCPT TO:<rick.chang@mediatek.com>
+         will write message using CHUNKING
+  SMTP+> BDAT 338 LAST
+  SMTP>> QUIT
+  SMTP<< 250 2.1.0 Ok
+  SMTP<< 250 2.1.5 Ok
+  SMTP<< 250 2.0.0 Ok: 338 bytes queued as 8DCF4C34100
+  SMTP<< 221 2.0.0 Bye
+  SMTP(close)>>
+LOG: MAIN
+  => rick.chang@mediatek.com R=smarthost T=remote_msa H=smtp.kernel.org [35.85.114.177] X=TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256 CV=yes A=client_auth_plain K C="250 2.0.0 Ok: 338 bytes queued as 8DCF4C34100"
+LOG: MAIN
+  Completed
+
+> > 
+> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>  
+> 
+> I confirmed that Rick Chang has left Mediatek, so it is ok to remove his name.
+
+Ok, I'll apply the patch.
+
+> 
+> Reviewed-by: Miles Chen <miles.chen@mediatek.com>
+> 
+> Thanks,
+> Miles
+
+Thanks,
+Mauro

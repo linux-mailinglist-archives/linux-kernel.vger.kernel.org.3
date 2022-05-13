@@ -2,109 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 188D95264A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0946C5263D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381179AbiEMOdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46700 "EHLO
+        id S1355530AbiEMOYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381008AbiEMO3g (ORCPT
+        with ESMTP id S1355218AbiEMOYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:29:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10EA8B0AE;
-        Fri, 13 May 2022 07:27:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7085F61F99;
-        Fri, 13 May 2022 14:27:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 510BDC34115;
-        Fri, 13 May 2022 14:27:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652452071;
-        bh=zHoUYD+o1GnIl9sG0xD2eHVGS+koYvFKCsVWQJC2l7s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jXjfWVQoCJySeSFDoPiZp3cmu8Z521Gmd7ebPdEtf3iE6fOfrrtcO3p5w2sLWARjc
-         QyIzc6AaHC4ObgorM+XWKBthqAjhBI1En/ZhwcxsLMdaYCmIAK6SUhVoSfIJc+InA3
-         vdRSxyVNycAmtvUpAKvAlkkbKCZYfGSK2gJXx5Lo=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Muchun Song <songmuchun@bytedance.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Fam Zheng <fam.zheng@bytedance.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Lars Persson <lars.persson@axis.com>,
-        Peter Xu <peterx@redhat.com>,
-        Xiongchun Duan <duanxiongchun@bytedance.com>,
-        Zi Yan <ziy@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.10 09/10] mm: hugetlb: fix missing cache flush in copy_huge_page_from_user()
-Date:   Fri, 13 May 2022 16:23:53 +0200
-Message-Id: <20220513142228.581883501@linuxfoundation.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220513142228.303546319@linuxfoundation.org>
-References: <20220513142228.303546319@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Fri, 13 May 2022 10:24:20 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62EE55047F;
+        Fri, 13 May 2022 07:24:19 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id x8so4222242pgr.4;
+        Fri, 13 May 2022 07:24:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DSFVvtb25vaSMEJHnBVUCbV3FpLzvNN+SMPfTZx1ihA=;
+        b=qp2pxaTyYctTFWdpw9JQdQ3QXnRJeCkCFg4wEMX0q9mrELp8Q3U2hFOfksh/v2G6wv
+         L66zZ/6JenJwKeyBZn/ABvCbA4ej2zaBfz0H3eBuxdjpd7+F3B60Rf9j9MkH8Xjbxqty
+         iwteSrHoYBgFuOR2x+p0JVGRrLt2aOnzaLRt8lNMgzOaRDRnvWlKBi29ys9x8r3Mgekh
+         QBUfqpaZ6poYs3K6Shk41nqil7NRlYV2t0b5CpjIKAOf6hwTWTb0BTZVWAYTQukEFB7u
+         o69keVEw3T6yXdtOZspZh4R05hxFVO8kL58fvMviqKGsFD/qFjJhDIf8+ikjO22KR61u
+         e1QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=DSFVvtb25vaSMEJHnBVUCbV3FpLzvNN+SMPfTZx1ihA=;
+        b=vkJx9XJtokCFz3MTSsBACOGDOJOkL964N3XqqwqerhotNqAapkm6Azjv2pU3UfBTU8
+         utL65RfEaWBxDNK2hrg5ZWeK9P9lIVGEJ/j4gFDct0PPFHtwsSQRQr3xiYhhmVb6ZHG8
+         dcAGMr6CUn/OzrE99gYaLtyUjYdwnARV9OedyH1lbVUXt8uDcFPh29/BJHNSfoJ3FMK9
+         bjoT1FCeAkGKOLcAPRT9yfJxRIBhDWnOUXsoUq8p9C4Ewa2sxzji1Y0nXsQR/3MWXbDQ
+         XCj+WTr6O0DJWwjDDTTzY4STx4HaE5yfpem7BGUQW45Jubd+aY+NAhjTfSBpkLstEqaa
+         gFnA==
+X-Gm-Message-State: AOAM533dBdpMeCMUg++M0D9wWFBtPhEO//7XtdvDb8kOqrXYNv/IbQJv
+        Z6bwoXibBkx7/Rj1mCEtVpQ=
+X-Google-Smtp-Source: ABdhPJwkNv+XJvGA6KBWMfFKv4SevAuYmOvl9B58tgbnkLWWoNlY5QyFiEGBww3BZg8owQA4lxkLbQ==
+X-Received: by 2002:a63:6c8a:0:b0:3ab:8c07:4d93 with SMTP id h132-20020a636c8a000000b003ab8c074d93mr4259567pgc.431.1652451858778;
+        Fri, 13 May 2022 07:24:18 -0700 (PDT)
+Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
+        by smtp.gmail.com with ESMTPSA id jj10-20020a170903048a00b0015e8d4eb2ccsm1684488plb.278.2022.05.13.07.24.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 07:24:18 -0700 (PDT)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Max Staudt <max@enpas.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH 0/2] can: drop tx skb if the device is in listen only mode
+Date:   Fri, 13 May 2022 23:23:53 +0900
+Message-Id: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Muchun Song <songmuchun@bytedance.com>
+In listen only mode, tx CAN frames can still reach the driver if
+injected via the packet socket. This series add a check toward
+CAN_CTRLMODE_LISTENONLY in can_dropped_invalid_skb() to discard such
+skb. The first patch does some preparation work and migrates
+can_dropped_invalid_skb() from skb.h to dev.h. The second and last
+patch is the actual change.
 
-commit e763243cc6cb1fcc720ec58cfd6e7c35ae90a479 upstream.
+Vincent Mailhol (2):
+  can: move can_dropped_invalid_skb from skb.h to dev.h
+  can: dev: drop tx skb if in listen only mode
 
-userfaultfd calls copy_huge_page_from_user() which does not do any cache
-flushing for the target page.  Then the target page will be mapped to
-the user space with a different address (user address), which might have
-an alias issue with the kernel address used to copy the data from the
-user to.
+ include/linux/can/dev.h | 35 +++++++++++++++++++++++++++++++++++
+ include/linux/can/skb.h | 28 ----------------------------
+ 2 files changed, 35 insertions(+), 28 deletions(-)
 
-Fix this issue by flushing dcache in copy_huge_page_from_user().
-
-Link: https://lkml.kernel.org/r/20220210123058.79206-4-songmuchun@bytedance.com
-Fixes: fa4d75c1de13 ("userfaultfd: hugetlbfs: add copy_huge_page_from_user for hugetlb userfaultfd support")
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Axel Rasmussen <axelrasmussen@google.com>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Fam Zheng <fam.zheng@bytedance.com>
-Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Cc: Lars Persson <lars.persson@axis.com>
-Cc: Peter Xu <peterx@redhat.com>
-Cc: Xiongchun Duan <duanxiongchun@bytedance.com>
-Cc: Zi Yan <ziy@nvidia.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- mm/memory.c |    2 ++
- 1 file changed, 2 insertions(+)
-
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -5295,6 +5295,8 @@ long copy_huge_page_from_user(struct pag
- 		if (rc)
- 			break;
- 
-+		flush_dcache_page(subpage);
-+
- 		cond_resched();
- 	}
- 	return ret_val;
-
+-- 
+2.35.1
 

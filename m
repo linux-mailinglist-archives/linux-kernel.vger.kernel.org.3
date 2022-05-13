@@ -2,52 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5A4526C12
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 23:07:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 441E0526C1E
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 23:09:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384608AbiEMVHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 17:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52914 "EHLO
+        id S1384616AbiEMVJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 17:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377240AbiEMVHn (ORCPT
+        with ESMTP id S1384609AbiEMVJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 17:07:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421452CDF8;
-        Fri, 13 May 2022 14:07:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B061B831E1;
-        Fri, 13 May 2022 21:07:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2C51C34100;
-        Fri, 13 May 2022 21:07:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652476059;
-        bh=9sFjfKoaAyEC+9HSV3bohlPaCAHVxDSuX+3Bu1rvJ/U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XwXO6+1AhH1Ssg2P+C4fnmG1FpLpTH7pkn4XtaZZmmuz2iqiDooO2Grmn8ALGHHfg
-         Yy5GM9+OK6zHI6zp3jq7iHuhIl3e9Vw4oVw5cAKffgRmFSHV0HfE/g7XXBMjYzfhHU
-         4OFVZT/nSoyHJ02U3li4EpdsnVQE/B3FHhQon7adeKp7S7Cl8hGWf3TsAS6BQKXj/F
-         9t4EM7d1DbJeOcJtJOQFWqLPbv81sq9RiO6KmiKIHEQzVsoup0jAw5/KqYDt5eLx0u
-         BXef3OK0fVFneO0P8OJCP6jlh9Aj9j++iXZddUHX4gJuB9MWBvYr8mCO4PUrbwXfth
-         kMsrjrVMpKwvA==
-Date:   Fri, 13 May 2022 14:07:37 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Ming Yan <yanming@tju.edu.cn>, Chao Yu <chao.yu@oppo.com>
-Subject: Re: [PATCH] f2fs: fix to do sanity check for inline inode
-Message-ID: <Yn7Imax7fgpJ7eY5@google.com>
-References: <20220428024940.12102-1-chao@kernel.org>
+        Fri, 13 May 2022 17:09:40 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A065F84
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 14:09:38 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2ef5380669cso102543657b3.9
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 14:09:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ikL0/gwIaUWXfMtkCpW673auiv9e8rY9L7j8kbUCodE=;
+        b=vnm5P9psR0k0g/RGFnw+D3DgIlgSFzdTxdgBIGsyCdmrlWc3ziSI1keco4oQEKCXby
+         oswqgtNO/SfqRjShMbKhvJ1Kd6BVsK5PH0LnU//aAlk+aGxF0J3aLSRL5OrC0hyx9Qb5
+         0z3jvLqFW4xz7nYE6J3u91Ku0t24ytF0jIlNEDxDI8sPRurCTQKet9UwSndD2qN4T0KO
+         BFZXSct77T9J5LCsCDeYWjyBrc3TdNvg5kQj+iHGT+h550kmr86zJaYQBeuPgq8Ah+3z
+         28pMm0GRY4lZf6P2UX0coGvPbP+PtkT6Grr2Vt7r0MhPky3t0Od0Z34C/gLNtoBiM83N
+         EQVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ikL0/gwIaUWXfMtkCpW673auiv9e8rY9L7j8kbUCodE=;
+        b=2wUi9yZBpBArV4OMxaBvJzbdJvHs6L/9kl+6oY0o4ZNWMRJk1Cz36t2TJYvj4lYr+g
+         MMTb9j82uBcpAFWWZ6j4WE9kl785+1MOi6NR36hvv9whzoJjJ01zv1nZKai4KLMAhn6N
+         kb+0hLgldNZIodsCUoxZHrc852U/gO+xKoB/5jijZtAo66H5AXcM4fGCohlGUit4rjZE
+         WWhBdjpzUnKSTGCh5luN8ItLT/EgBreDPPAbtICi80H6ARAK10h93BEIIuvNi9bugxhU
+         VwWTO/iheFz9LSk8NIS3mxfS4BNX9Sw3qC+rIiJjn9I92UhuDCjw6tHZxx7MG+n7N3ID
+         071w==
+X-Gm-Message-State: AOAM530XEit/STfYtJN9l5MxW7YEQGW0QzXjiFOc/FvuoVRIYAutcl56
+        fdOTbRPJMGIzqFnRHzmumyYYdBMtG2jNxWUa8Yx7zQ==
+X-Google-Smtp-Source: ABdhPJyZhSGsZyH7SCsSN/Tf1gdlPJvallUvmRrCHX9UTyZ+zCvIzg6tvp2h34sx39n1RCDeM63EkvOGZpI/ej/L83s=
+X-Received: by 2002:a81:6d4f:0:b0:2fe:b911:fb6d with SMTP id
+ i76-20020a816d4f000000b002feb911fb6dmr4488107ywc.140.1652476177376; Fri, 13
+ May 2022 14:09:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220428024940.12102-1-chao@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220511220613.1015472-1-marijn.suijten@somainline.org>
+ <20220511220613.1015472-3-marijn.suijten@somainline.org> <d2507298-00a6-a1cc-0302-f96597fb4127@linaro.org>
+ <20220513091734.hivkkbpc6inyb4la@SoMainline.org> <5cce491d-c673-d2a6-3aae-79b2e5902a01@linaro.org>
+In-Reply-To: <5cce491d-c673-d2a6-3aae-79b2e5902a01@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 13 May 2022 23:09:26 +0200
+Message-ID: <CACRpkdbyVScvnn-99XQ526B=64fQp34PKjot1CJ2Wfm0PKmZgg@mail.gmail.com>
+Subject: Re: [PATCH 2/7] dt-bindings: pinctrl: qcom-pmic-gpio: Add pm6125 compatible
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,74 +80,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/28, Chao Yu wrote:
-> As Yanming reported in bugzilla:
-> 
-> https://bugzilla.kernel.org/show_bug.cgi?id=215895
-> 
-> I have encountered a bug in F2FS file system in kernel v5.17.
-> 
-> The kernel message is shown below:
-> 
-> kernel BUG at fs/inode.c:611!
-> Call Trace:
->  evict+0x282/0x4e0
->  __dentry_kill+0x2b2/0x4d0
->  dput+0x2dd/0x720
->  do_renameat2+0x596/0x970
->  __x64_sys_rename+0x78/0x90
->  do_syscall_64+0x3b/0x90
-> 
-> The root cause is: fuzzed inode has both inline_data flag and encrypted
-> flag, so after it was deleted by rename(), during f2fs_evict_inode(),
-> it will cause inline data conversion due to flags confilction, then
-> page cache will be polluted and trigger panic in clear_inode().
-> 
-> This patch tries to fix the issue by do more sanity checks for inline
-> data inode in sanity_check_inode().
-> 
-> Cc: stable@vger.kernel.org
-> Reported-by: Ming Yan <yanming@tju.edu.cn>
-> Signed-off-by: Chao Yu <chao.yu@oppo.com>
-> ---
->  fs/f2fs/f2fs.h  | 7 +++++++
->  fs/f2fs/inode.c | 3 +--
->  2 files changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> index 27aa93caec06..64c511b498cc 100644
-> --- a/fs/f2fs/f2fs.h
-> +++ b/fs/f2fs/f2fs.h
-> @@ -4173,6 +4173,13 @@ static inline void f2fs_set_encrypted_inode(struct inode *inode)
->   */
->  static inline bool f2fs_post_read_required(struct inode *inode)
->  {
-> +	/*
-> +	 * used by sanity_check_inode(), when disk layout fields has not
-> +	 * been synchronized to inmem fields.
-> +	 */
-> +	if (file_is_encrypt(inode) || file_is_verity(inode) ||
-> +			F2FS_I(inode)->i_flags & F2FS_COMPR_FL)
-> +		return true;
->  	return f2fs_encrypted_file(inode) || fsverity_active(inode) ||
->  		f2fs_compressed_file(inode);
->  }
-> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
-> index 83639238a1fe..234b8ed02644 100644
-> --- a/fs/f2fs/inode.c
-> +++ b/fs/f2fs/inode.c
-> @@ -276,8 +276,7 @@ static bool sanity_check_inode(struct inode *inode, struct page *node_page)
->  		}
->  	}
->  
-> -	if (f2fs_has_inline_data(inode) &&
-> -			(!S_ISREG(inode->i_mode) && !S_ISLNK(inode->i_mode))) {
-> +	if (f2fs_has_inline_data(inode) && !f2fs_may_inline_data(inode)) {
+On Fri, May 13, 2022 at 11:37 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 
-BTW, why can't we just check the above on-disk fields here only?
+> >> This will need fixups or rebasing on my sets of PMIC gpio schema cleanup:
+> >
+> > Ack.
+> >
+> >> https://lore.kernel.org/all/20220507194913.261121-1-krzysztof.kozlowski@linaro.org/
+> >> https://lore.kernel.org/all/20220508135932.132378-2-krzysztof.kozlowski@linaro.org/
+> >>
+> >> Bjorn,
+> >> let us know preferred order (who should rebase on who).
+> >
+> > I prefer yours to be applied first, so that I can retest this
+> > patchseries with stricter / more correct dt-bindings introduced by it.
+> > My series can also be resent with the notice that it has already been
+> > rebased on top of your series, after collecting more reviews.  Where
+> > necessary, I can review your series too if that helps getting it in
+> > sooner.
+>
+> Sounds good. It's in Bjorn's hands now. :)
 
->  		set_sbi_flag(sbi, SBI_NEED_FSCK);
->  		f2fs_warn(sbi, "%s: inode (ino=%lx, mode=%u) should not have inline_data, run fsck to fix",
->  			  __func__, inode->i_ino, inode->i_mode);
-> -- 
-> 2.25.1
+Ugh can I get that with a pull request? Maybe Krzysztof can provide?
+
+BTW I have high confidence in you Krzysztof after all your work on the
+Samsung pin controllers, can you and Bjorn
+discuss maybe adding you as comaintainer for Qualcomm pin controllers,
+it's not like Bjorn has too little to do.
+
+Yours,
+Linus Walleij

@@ -2,107 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F4079525D2B
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 10:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C93E525D46
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 10:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378169AbiEMIXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 04:23:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37988 "EHLO
+        id S1378176AbiEMIX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 04:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378091AbiEMIXt (ORCPT
+        with ESMTP id S1378173AbiEMIX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 04:23:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05B025B076;
-        Fri, 13 May 2022 01:23:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7ED1562010;
-        Fri, 13 May 2022 08:23:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7369C34114;
-        Fri, 13 May 2022 08:23:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652430226;
-        bh=VdFOgS93MTxgXl8MYQIAwcaYqU9bLXsKmrW93/ntJg4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PfQaWywtP3MmwhELVywMZUOkmEL1ASj8IdxGcQw4A2AK8y9PTl2RpYUycHBziE6oZ
-         cfkbD35954X0w5scVzxeuNVU1Rr/4C1Qe9uFsQfSmcvBEJIuRk8mPRpHaQIJMLTqFu
-         5PCYI3bam5smrDfPvBAjEN0zYO3IyeYQPaR1Blco1qIoBjRZDME7+NyYPBK1ckpyGZ
-         Z2tjR6wNNnsVyJTMzOI31w4Sz2l8+yhRHqOYOzBWL1g2qqDLP4G3pW9Gb3RRDKmObm
-         PNW2e2G+67QipmYeuIZKfOh1qikOHSFLcwR09yvtIG0MaUtlL6lxODo20wuyNhDdeL
-         nW68QlqAnl4Qg==
-Received: from mchehab by mail.kernel.org with local (Exim 4.95)
-        (envelope-from <mchehab@kernel.org>)
-        id 1npQaO-003DpF-F4;
-        Fri, 13 May 2022 10:23:44 +0200
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH] media: atomisp: don't pass a pointer to a local variable
-Date:   Fri, 13 May 2022 10:23:43 +0200
-Message-Id: <671749e03ec7b4d7adf044745c0c55acf1a02358.1652430219.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.36.1
+        Fri, 13 May 2022 04:23:56 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F3C25B076
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:23:54 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id t6so10404821wra.4
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:23:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=smile-fr.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=PyfNVqLhUzNkjpgQ9UuI9hC10iZbU2Sy8hokDDhjW1c=;
+        b=uyE+J/VPE/aqnTrkoYawPZOjwR8W2AJEH4pjIBgBN6s4uE4Bqneq0UBCTPQvgJuLD7
+         3i6I0bk+Ghzkd/Y0OApLv3XSvNbT/xBD+kMrarqJI5g0rIl6ksKsbQNluc2Dd36By0Tg
+         UCdNwxIQS0qIUVp4hoQEKzDXqaHggpNJJlY9kN5tDiz2XfxARp5CfoJYMpAh1eghcQqv
+         GMvyZhrtGvnyRi0ph7vstzMyjOljzqS7+2FUY9tnVndlgLBmxRk7fRk7tpZmH7liTXtG
+         TjSI3zmV02BNZY/8QwjnW9Vxfsn3i8GtFksGO0C6ePN4ebs8nq6LA67UlGJWWn4OVffB
+         8EnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=PyfNVqLhUzNkjpgQ9UuI9hC10iZbU2Sy8hokDDhjW1c=;
+        b=Jjptmz8DA59sORBT2HENxnc2U8kmkkmpq776xiYfFje5J5+F41YcbZORtOvA2Aqsgd
+         Gf90ZOnJB4HK9Fu+m8wTFpu6cmGaT9TMQA+tzj8x0Upg02D975uqwqDAu0lS4vXiu/rR
+         OHeEecaKGSDWgrzK/17FBBQMI4j5hl6I8uH0llt/pj1c/st4siDXfyHRaBxlCt/Orwrf
+         aEgy1c1SkSBehAMmbkr8OzTBFq06MKFQRPGy+/5WHFZowT02VCkdEbqYsragiNadhdsJ
+         EQybqDiQ4NF8dD8dxtWGmp2AbNUrhPs05kYl5R+ckUVit/TEd6STq32COvYwYbud9F/8
+         crTw==
+X-Gm-Message-State: AOAM533FiiBY5G5bpDsO/2Lt3LJqhgdB/NEVYKbuZpeKniqVAuwBYc6q
+        CRVOIU40duvrMtDeZI5ZHKDrPQ==
+X-Google-Smtp-Source: ABdhPJwdSWww2/id9LJNLs8/PG8ZeQp1Wg5I7GKKT8WISSKYbRD4qonFi6DvwWNJo/zk+LodMt0USA==
+X-Received: by 2002:a5d:6643:0:b0:20a:f3a1:2d07 with SMTP id f3-20020a5d6643000000b0020af3a12d07mr2956737wrw.159.1652430232520;
+        Fri, 13 May 2022 01:23:52 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f? (2a01cb058f8a18001c97b8d1b477d53f.ipv6.abo.wanadoo.fr. [2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f])
+        by smtp.gmail.com with ESMTPSA id z18-20020a7bc152000000b003958af7d0c8sm1656105wmi.45.2022.05.13.01.23.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 01:23:52 -0700 (PDT)
+Message-ID: <3102213a-1b84-6559-9aa1-d35365be18b5@smile.fr>
+Date:   Fri, 13 May 2022 10:23:51 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] bus: ti-sysc: Fix warnings for unbind for serial
+Content-Language: en-US
+To:     Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org
+Cc:     Dave Gerlach <d-gerlach@ti.com>, Faiz Abbas <faiz_abbas@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Keerthy <j-keerthy@ti.com>, Kevin Hilman <khilman@baylibre.com>,
+        Nishanth Menon <nm@ti.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220512053021.61650-1-tony@atomide.com>
+From:   Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <20220512053021.61650-1-tony@atomide.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As warned by gcc 12.1:
+Hello,
 
-	drivers/staging/media/atomisp/pci/runtime/rmgr/src/rmgr_vbuf.c: In function 'ia_css_rmgr_acq_vbuf':
-	drivers/staging/media/atomisp/pci/runtime/rmgr/src/rmgr_vbuf.c:275:33: error: storing the address of local variable 'h' in '*handle' [-Werror=dangling-pointer=]
-	  275 |                         *handle = &h;
-	      |                         ~~~~~~~~^~~~
-	drivers/staging/media/atomisp/pci/runtime/rmgr/src/rmgr_vbuf.c:257:40: note: 'h' declared here
-	  257 |         struct ia_css_rmgr_vbuf_handle h;
-	      |                                        ^
-	drivers/staging/media/atomisp/pci/runtime/rmgr/src/rmgr_vbuf.c:257:40: note: 'handle' declared here
-	cc1: all warnings being treated as errors
+Le 12/05/2022 à 07:30, Tony Lindgren a écrit :
+> We can get "failed to disable" clock_unprepare warnings on unbind at least
+> for the serial console device if the unbind is done before the device has
+> been idled.
+> 
+> As some devices are using deferred idle, we must check the status for
+> pending idle work to idle the device.
 
-The logic uses a temporary struct to update the handler, but,
-instead of copying the value to the pointer sent by the caller, it
-replaces it with the content with a local variable. That's wrong, and
-may lead the caller to use a weird value.
+I didn't noticed the "failed to disable" warning so far (kernel 5.10.106 from
+ti-linux-kernel repository) but I applied this patch as suggested [1] while
+investigating another issue "tty serial 8250 omap driver crash".
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
----
- .../staging/media/atomisp/pci/runtime/rmgr/src/rmgr_vbuf.c    | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
 
-diff --git a/drivers/staging/media/atomisp/pci/runtime/rmgr/src/rmgr_vbuf.c b/drivers/staging/media/atomisp/pci/runtime/rmgr/src/rmgr_vbuf.c
-index d96aaa4bc75d..39604752785b 100644
---- a/drivers/staging/media/atomisp/pci/runtime/rmgr/src/rmgr_vbuf.c
-+++ b/drivers/staging/media/atomisp/pci/runtime/rmgr/src/rmgr_vbuf.c
-@@ -254,7 +254,7 @@ void rmgr_pop_handle(struct ia_css_rmgr_vbuf_pool *pool,
- void ia_css_rmgr_acq_vbuf(struct ia_css_rmgr_vbuf_pool *pool,
- 			  struct ia_css_rmgr_vbuf_handle **handle)
- {
--	struct ia_css_rmgr_vbuf_handle h;
-+	struct ia_css_rmgr_vbuf_handle h = { 0 };
- 
- 	if ((!pool) || (!handle) || (!*handle)) {
- 		IA_CSS_LOG("Invalid inputs");
-@@ -272,7 +272,7 @@ void ia_css_rmgr_acq_vbuf(struct ia_css_rmgr_vbuf_pool *pool,
- 			h.size = (*handle)->size;
- 			/* release ref to current buffer */
- 			ia_css_rmgr_refcount_release_vbuf(handle);
--			*handle = &h;
-+			**handle = h;
- 		}
- 		/* get new buffer for needed size */
- 		if ((*handle)->vptr == 0x0) {
--- 
-2.36.1
+[1] https://marc.info/?l=linux-omap&m=164484408319083&w=2
+
+Best regards,
+Romain
+
+
+> 
+> Cc: Romain Naour <romain.naour@smile.fr>
+> Fixes: 76f0f772e469 ("bus: ti-sysc: Improve handling for no-reset-on-init and no-idle-on-init")
+> Signed-off-by: Tony Lindgren <tony@atomide.com>
+> ---
+>  drivers/bus/ti-sysc.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/bus/ti-sysc.c b/drivers/bus/ti-sysc.c
+> --- a/drivers/bus/ti-sysc.c
+> +++ b/drivers/bus/ti-sysc.c
+> @@ -3395,7 +3395,9 @@ static int sysc_remove(struct platform_device *pdev)
+>  	struct sysc *ddata = platform_get_drvdata(pdev);
+>  	int error;
+>  
+> -	cancel_delayed_work_sync(&ddata->idle_work);
+> +	/* Device can still be enabled, see deferred idle quirk in probe */
+> +	if (cancel_delayed_work_sync(&ddata->idle_work))
+> +		ti_sysc_idle(&ddata->idle_work.work);
+>  
+>  	error = pm_runtime_resume_and_get(ddata->dev);
+>  	if (error < 0) {
 

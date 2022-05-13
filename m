@@ -2,73 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C20F2525F8C
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:08:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F064F525EFD
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379272AbiEMKIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 06:08:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53268 "EHLO
+        id S1378844AbiEMJ46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 05:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359219AbiEMKHz (ORCPT
+        with ESMTP id S242977AbiEMJ44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 06:07:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23E66AA46;
-        Fri, 13 May 2022 03:07:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 636066222D;
-        Fri, 13 May 2022 10:07:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D07AC34100;
-        Fri, 13 May 2022 10:07:53 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="LwDOuIuH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1652436471;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7N1zyXIi+oMbfwTrQnEnFevk7qISh3+9W8x85t6Q8bY=;
-        b=LwDOuIuHymjucObEZc6dI/e+wZ50PeYNASM60HYX9wYpZsJIZvBVBqAtCFcZsR844wLYPa
-        rCG3RtG3UnuMYyVc6ym4HNSTqGtQD7PeAmohnOeVmGeqSWOj+uHuBU/DUldfXPFlyIREl7
-        S5KBsIdtQEDxVpxILA3yK/51DIhVYMY=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ae4f983b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 13 May 2022 10:07:51 +0000 (UTC)
-Date:   Fri, 13 May 2022 12:07:49 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Dominik Brodowski <linux@dominikbrodowski.net>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: Re: [PATCH] random32: use real rng for non-deterministic randomness
-Message-ID: <Yn4t9S71LhI8W0ek@zx2c4.com>
-References: <20220511143257.88442-1-Jason@zx2c4.com>
- <Yn34Tf4CpSaZBlGi@owl.dominikbrodowski.net>
+        Fri, 13 May 2022 05:56:56 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306E725599;
+        Fri, 13 May 2022 02:56:55 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L03tz2sr9zhZ2n;
+        Fri, 13 May 2022 17:56:11 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 13 May 2022 17:56:53 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 13 May
+ 2022 17:56:52 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>
+CC:     <matthias.bgg@gmail.com>, <sr@denx.de>, <wsa@the-dreams.de>
+Subject: [PATCH -next 1/2] i2c: mt7621: fix missing clk_disable_unprepare() on error in mtk_i2c_probe()
+Date:   Fri, 13 May 2022 18:08:18 +0800
+Message-ID: <20220513100819.2711845-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yn34Tf4CpSaZBlGi@owl.dominikbrodowski.net>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dominik,
+Fix the missing clk_disable_unprepare() before return
+from mtk_i2c_probe() in the error handling case.
 
-On Fri, May 13, 2022 at 08:18:53AM +0200, Dominik Brodowski wrote:
-> Nice! However, wouldn't it be much better to clean up the indirection
-> introduced here as well? prandom_u32() as wrapper for get_random_u32() and
-> prandom_bytes() as wrapper for get_random_bytes() seems unnecessary...
+Fixes: d04913ec5f89 ("i2c: mt7621: Add MediaTek MT7621/7628/7688 I2C driver")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/i2c/busses/i2c-mt7621.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Yes; we can look at tree-wide changes for 5.20. The first step in making
-tree-wide changes is filling in the old function with an inline wrapper,
-which then gets removed as part of the last step after all the other
-patches have landed. That's a huge process, so this is just step one.
+diff --git a/drivers/i2c/busses/i2c-mt7621.c b/drivers/i2c/busses/i2c-mt7621.c
+index 45fe4a7fe0c0..f117c3d9ca19 100644
+--- a/drivers/i2c/busses/i2c-mt7621.c
++++ b/drivers/i2c/busses/i2c-mt7621.c
+@@ -304,7 +304,8 @@ static int mtk_i2c_probe(struct platform_device *pdev)
+ 
+ 	if (i2c->bus_freq == 0) {
+ 		dev_warn(i2c->dev, "clock-frequency 0 not supported\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto err_disable_clk;
+ 	}
+ 
+ 	adap = &i2c->adap;
+@@ -322,10 +323,13 @@ static int mtk_i2c_probe(struct platform_device *pdev)
+ 
+ 	ret = i2c_add_adapter(adap);
+ 	if (ret < 0)
+-		return ret;
++		goto err_disable_clk;
+ 
+ 	dev_info(&pdev->dev, "clock %u kHz\n", i2c->bus_freq / 1000);
+ 
++err_disable_clk:
++	clk_disable_unprepare(i2c->clk);
++
+ 	return ret;
+ }
+ 
+-- 
+2.25.1
 
-Jason

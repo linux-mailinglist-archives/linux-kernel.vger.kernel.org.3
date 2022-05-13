@@ -2,122 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 186F65261D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 14:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 991F95261DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 14:29:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380244AbiEMM2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 08:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40610 "EHLO
+        id S1380248AbiEMM3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 08:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354888AbiEMM23 (ORCPT
+        with ESMTP id S1380245AbiEMM31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 08:28:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FD7E5BD2A
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 05:28:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652444907;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NAK0Gk2w3i58gSPmmVvLPauf3+gDSOWurZVw4Vf2rDQ=;
-        b=R7/5lG15vZs5wuZ7uyacVY3tVz+xl58Ix873Ps6Tx3GPAQ/UPW/n8POPgWdpCM98LFSFi6
-        pm9EbBfineHdwYJJlDMgY75uJ0TtV2UzRP1pORJntnNpIGd3+x3UdULq2CxyB8ixnGd2K3
-        eyc3HWvpQodeURxarlkzIPu7YwpTO6k=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-454-DU5eib6SPGyzDwU0V-3Y_w-1; Fri, 13 May 2022 08:28:26 -0400
-X-MC-Unique: DU5eib6SPGyzDwU0V-3Y_w-1
-Received: by mail-wr1-f71.google.com with SMTP id u26-20020adfb21a000000b0020ac48a9aa4so2895251wra.5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 05:28:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=NAK0Gk2w3i58gSPmmVvLPauf3+gDSOWurZVw4Vf2rDQ=;
-        b=rQN4z7paEn64qDNE7iWkxGNAWx1ymdXSZodonNHk92+WZCdekDNazcDTusnK28l84/
-         gmm0Q5qpseTs5Dk6al/qRgKTq1kYxGchtQcn4Fkud6mS8gmCqF2+NSxHIkf/oV+OEXSf
-         ezS+TcSv6t8P1eeKyAGuxqT4M9Bl8kN8mFI2rrMIdlmtikMGO1jYlQ2bhvyR7nIk6SH4
-         DFFBKjY0vtHlHXeApMY1yl8MLCevRCcyL7QTN5ZNjXJC6Hxgzi0JOfK7Y1Y8jE8qSJXY
-         zI+cu5AnSMVA99/+iVV4DU+LOhsZlaixXmAME1XF5CMdG1x0Asp3Ow6zhHa9cO7szsrv
-         McAQ==
-X-Gm-Message-State: AOAM530lP9QAg/mRG2O8qVBIwePJvl2hqRD0OisLlgu7vrpbtauqhA9p
-        BKBOeIry86GXcKQAcp9u2kTMfXL4opK1lVEKn5K9k/1TnYtEXxAlbPOyf6kVawTVWPc9LDvTJ2h
-        x8PcjxbPJnQ3sslUSjQb8hwdEWu8b5zqAK8XV4HKiqddxyhTDKtm4TNsRvAKymAhN+sOYDHpI1F
-        A=
-X-Received: by 2002:a05:6000:156b:b0:20c:6ffb:9588 with SMTP id 11-20020a056000156b00b0020c6ffb9588mr3865398wrz.49.1652444905007;
-        Fri, 13 May 2022 05:28:25 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwwLT41J/yG1HkvUQOhV5KnK8fNGtzGb6CsJVszlDX5dbsHh8Cxbhd7a4okhWnFPei5mAdPOg==
-X-Received: by 2002:a05:6000:156b:b0:20c:6ffb:9588 with SMTP id 11-20020a056000156b00b0020c6ffb9588mr3865368wrz.49.1652444904693;
-        Fri, 13 May 2022 05:28:24 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id bd19-20020a05600c1f1300b00395f15d993fsm1637910wmb.5.2022.05.13.05.28.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 05:28:24 -0700 (PDT)
-Message-ID: <41e91473-bd0b-c0e4-85db-d92dd38d28bd@redhat.com>
-Date:   Fri, 13 May 2022 14:28:23 +0200
+        Fri, 13 May 2022 08:29:27 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976EF4249A;
+        Fri, 13 May 2022 05:29:26 -0700 (PDT)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24DAkdj2005157;
+        Fri, 13 May 2022 12:29:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=IzPP9L+REaBixKO9Nlnb2NfMZQ3wq0sMMzgLB4g7Sr0=;
+ b=o8wSAD8QmpO/wu3Oyd6Pu+ZKNqDqasBph5Zmdtd4HZE3+FEv7RYY7gyk9Wt+enIHTrzu
+ 6nd7JjzKBKrfC/ri5afU/YOxu0M6KGePH08tuKb0ljjl6Pqme0CtOEyguY/nbikmo8aL
+ fsHoLZ4sTjNZiw4k3ekeoYTIA4xdhAfykJ0m9VFRf/Oi5gUSdCNIYVv1wimwyPh8pn2d
+ vaJaxfvtOwbk/ub9ASU22Omnmg8j8bSIAucmOlw2YhznCm93fxlWm7iuBBzXOpNCARJV
+ vvJPQSj+SLqsH2XG82AC9uaBAytCLBxbEXv41uNKJxNIXS5FNsugDN8eIOIYEGpU21tJ 1Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g1nvjsvpw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 May 2022 12:29:17 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24DCSMOV000747;
+        Fri, 13 May 2022 12:29:17 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g1nvjsvpb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 May 2022 12:29:17 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24DCMmVX006302;
+        Fri, 13 May 2022 12:29:15 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 3fwgd90ngn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 May 2022 12:29:15 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24DCTAEx17170758
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 13 May 2022 12:29:10 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D0E2F42042;
+        Fri, 13 May 2022 12:29:10 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 60AB74203F;
+        Fri, 13 May 2022 12:29:10 +0000 (GMT)
+Received: from osiris (unknown [9.145.14.167])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Fri, 13 May 2022 12:29:10 +0000 (GMT)
+Date:   Fri, 13 May 2022 14:29:09 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Nathan Chancellor <natechancellor@gmail.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Jonas Paulsson <paulsson@linux.vnet.ibm.com>,
+        Ulrich Weigand <ulrich.weigand@de.ibm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andreas Krebbel <krebbel@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH 3/8] s390/entry: shorten OUTSIDE macro
+Message-ID: <Yn5PFSoZGuuUFvy7@osiris>
+References: <20220511120532.2228616-1-hca@linux.ibm.com>
+ <20220511120532.2228616-4-hca@linux.ibm.com>
+ <Yn1CLcsu9I0M8IEM@osiris>
+ <CAKwvOdmSBNsA7C2ZCGDEmuxCituSQ=HPJx=9+AsBAOYfkSZRPA@mail.gmail.com>
+ <Yn1ctPDjPaU2wsor@osiris>
+ <CAKwvOdkwamvuCFkj-uFA_uT+gLNr8-v-zuGYLYb-pV8TOTxDSw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v5 3/7] fbdev: Restart conflicting fb removal loop when
- unregistering devices
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Helge Deller <deller@gmx.de>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20220511112438.1251024-1-javierm@redhat.com>
- <20220511113039.1252432-1-javierm@redhat.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20220511113039.1252432-1-javierm@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdkwamvuCFkj-uFA_uT+gLNr8-v-zuGYLYb-pV8TOTxDSw@mail.gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: uVKBI8XRbtrImnTJvnNQoMwtJn-wntEi
+X-Proofpoint-GUID: L8HiSV1-QsCZ_KGTRTroToBL6eEqhUom
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-13_04,2022-05-13_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 malwarescore=0 suspectscore=0 clxscore=1015 bulkscore=0
+ mlxscore=0 adultscore=0 mlxlogscore=999 spamscore=0 phishscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205130054
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/11/22 13:30, Javier Martinez Canillas wrote:
-> Drivers that want to remove registered conflicting framebuffers prior to
-> register their own framebuffer, calls remove_conflicting_framebuffers().
-> 
-> This function takes the registration_lock mutex, to prevent a races when
-> drivers register framebuffer devices. But if a conflicting framebuffer
-> device is found, the underlaying platform device is unregistered and this
-> will lead to the platform driver .remove callback to be called, which in
-> turn will call to the unregister_framebuffer() that takes the same lock.
-> 
-> To prevent this, a struct fb_info.forced_out field was used as indication
-> to unregister_framebuffer() whether the mutex has to be grabbed or not.
-> 
-> A cleaner solution is to drop the lock before platform_device_unregister()
-> so unregister_framebuffer() can take it when called from the fbdev driver,
-> and just grab the lock again after the device has been registered and do
-> a removal loop restart.
-> 
-> Since the framebuffer devices will already be removed, the loop would just
-> finish when no more conflicting framebuffers are found.
-> 
-> Suggested-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-> ---
-Pushed this to drm-misc (drm-misc-next). Thanks all!
+On Thu, May 12, 2022 at 12:25:01PM -0700, Nick Desaulniers wrote:
+> Interesting! Thanks for the links.
+> I'm guessing in our CI that we should probably pursue testing some of
+> the newer revisions. Wasn't defconfig updated from z10 to z12 not too
+> long ago?
 
--- 
-Best regards,
+Yes, that was 1.5 years ago (commit ac94a2911e84 ("s390: update defconfigs")).
 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+> So probably
+> CONFIG_MARCH_Z13
+> CONFIG_MARCH_Z14
+> CONFIG_MARCH_Z15
+> CONFIG_MARCH_Z16
+> 
+> All look like they're still "supported" (and I'm guessing
+> CONFIG_MARCH_Z10 and CONFIG_MARCH_Z196 are not too much burden to
+> continue to maintain kernel support for), with a higher emphasis
+> perhaps on z15+z16?
 
+That makes sense. However for the kernel it doesn't make a difference
+if compiled for z15 or z16 - there were no general instructions added
+with z16 that would make any difference for the kernel.
+All new instructions that came with z16 are either only relevant for
+user space, or used via .insn notation in the kernel, and only used if
+some hardware feature is present.

@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7DD85265D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F9F05265CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381832AbiEMPQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 11:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59420 "EHLO
+        id S1381841AbiEMPQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 11:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381173AbiEMPQH (ORCPT
+        with ESMTP id S1381225AbiEMPQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 11:16:07 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC2C5A141;
-        Fri, 13 May 2022 08:16:06 -0700 (PDT)
+        Fri, 13 May 2022 11:16:06 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B46358E74;
+        Fri, 13 May 2022 08:16:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652454966; x=1683990966;
+  t=1652454964; x=1683990964;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=WaaPZTGXGvvrIUYYvLuGheNzDThV1e0SRqk9uhMThso=;
-  b=XHLubT2k7LVqpMqjG5th6UYYjvI7PXog8AEIZp3dqYCTJ4qugsFLh2BG
-   EcQzBqPnPV41rmFK2TgRv9Mr9a0yYAWg6aOVWxi2lF6A38cpWIP3PfauP
-   NJclxEdsgo0FALOFRSbmqFWVAZiTjoKU6liYjdxBSqiXN80fo3UykobBK
-   x9z/QnnTUb+YT4vnClpxsrYCeaEK7VMONMwhSPRqLwBbpgaL8dhgV7YaY
-   pWgD7g0s8VsRFKYBiE2vvvNOy1+piFNAmgFpAEf9Mr/Q53iUEnU754Cvy
-   fBZV9Bip2RiF5naH8t1ui2WWZCFG7ztdOyROmPcEos9+Gog0TfUTvt/I3
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="269160154"
+  bh=cwPKNv7wzL/0rUqY/ySsyGakmxNjz3VMfdoNwADaX60=;
+  b=IBCDMPNAYPXEUBzNxFmAarfy0b2UHJcq5gNyplvJoW9dXU2KgXzOxMxm
+   vIEzAHR1izgjGEf5gEVyoX7pWFWNA+Ze4euIMwPCNPUSiW80iK5P2QuyI
+   CTsQDnzQlk6LFBHmFQZpZdiWcPVPSu9xonGEPCCzvQNhLBSVHR3SfxmUg
+   PdE6zKHGOabhL3jNaLw89eLu4sKyUML304yvXlBTNG+dsN+ZfCQKJrCVF
+   gAkusxg+5F36oR778FswfPTTfeqrUsaFA2Fb9RlBycJIRGwCpiAqwClmh
+   fV5OnfD6/EWwodv4UN08oi3f05MnjoGd6e9nnZECry3Slrsn/N9q1su4h
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="330924529"
 X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="269160154"
+   d="scan'208";a="330924529"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 08:16:03 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 08:16:03 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="698518059"
+   d="scan'208";a="698518062"
 Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
   by orsmga004.jf.intel.com with ESMTP; 13 May 2022 08:16:02 -0700
 From:   kan.liang@linux.intel.com
@@ -45,9 +45,9 @@ To:     acme@kernel.org, mingo@redhat.com, irogers@google.com,
 Cc:     peterz@infradead.org, zhengjun.xing@linux.intel.com,
         adrian.hunter@intel.com, ak@linux.intel.com, eranian@google.com,
         Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH 3/4] perf parse-events: Support different format of the topdown event name
-Date:   Fri, 13 May 2022 08:15:53 -0700
-Message-Id: <20220513151554.1054452-4-kan.liang@linux.intel.com>
+Subject: [PATCH 4/4] perf parse-events: Move slots event for the hybrid platform too
+Date:   Fri, 13 May 2022 08:15:54 -0700
+Message-Id: <20220513151554.1054452-5-kan.liang@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220513151554.1054452-1-kan.liang@linux.intel.com>
 References: <20220513151554.1054452-1-kan.liang@linux.intel.com>
@@ -65,63 +65,118 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kan Liang <kan.liang@linux.intel.com>
 
-The evsel->name may have a different format for a topdown event, a pure
-topdown name (e.g., topdown-fe-bound), or a PMU name + a topdown name
-(e.g., cpu/topdown-fe-bound/). The cpu/topdown-fe-bound/ kind format
-isn't supported by the arch_evlist__leader(). This format is a very
-common format for a hybrid platform, which requires specifying the PMU
-name for each event.
+The commit 94dbfd6781a0 ("perf parse-events: Architecture specific
+leader override") introduced a feature to reorder the slots event to
+fulfill the restriction of the perf metrics topdown group. But the
+feature doesn't work on the hybrid machine.
 
-Without the patch,
-
-$perf stat -e '{instructions,slots,cpu/topdown-fe-bound/}' -a sleep 1
+$perf stat -e "{cpu_core/instructions/,cpu_core/slots/,cpu_core/topdown-retiring/}" -a sleep 1
 
  Performance counter stats for 'system wide':
 
-     <not counted>      instructions
-     <not counted>      slots
-   <not supported>      cpu/topdown-fe-bound/
+     <not counted>      cpu_core/instructions/
+     <not counted>      cpu_core/slots/
+   <not supported>      cpu_core/topdown-retiring/
 
-       1.003482041 seconds time elapsed
+       1.002871801 seconds time elapsed
 
-Some events weren't counted. Try disabling the NMI watchdog:
-        echo 0 > /proc/sys/kernel/nmi_watchdog
-        perf stat ...
-        echo 1 > /proc/sys/kernel/nmi_watchdog
-The events in group usually have to be from the same PMU. Try reorganizing the group.
+A hybrid platform has a different PMU name for the core PMUs, while
+current perf hard code the PMU name "cpu".
 
+Introduce a new function to check whether the system supports the perf
+metrics feature. The result is cached for the future usage.
+
+For X86, the core PMU name always has "cpu" prefix.
 
 With the patch,
 
-perf stat -e '{instructions,slots,cpu/topdown-fe-bound/}' -a sleep 1
+$perf stat -e "{cpu_core/instructions/,cpu_core/slots/,cpu_core/topdown-retiring/}" -a sleep 1
 
  Performance counter stats for 'system wide':
 
-       157,383,996      slots
-        25,011,711      instructions
-        27,441,686      cpu/topdown-fe-bound/
+        76,337,010      cpu_core/slots/
+        10,416,809      cpu_core/instructions/
+        11,692,372      cpu_core/topdown-retiring/
 
-       1.003530890 seconds time elapsed
+       1.002805453 seconds time elapsed
 
-Fixes: bc355822f0d9 ("perf parse-events: Move slots only with topdown")
 Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
 ---
- tools/perf/arch/x86/util/evlist.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/perf/arch/x86/util/evlist.c  |  5 +++--
+ tools/perf/arch/x86/util/topdown.c | 18 ++++++++++++++++++
+ tools/perf/arch/x86/util/topdown.h |  7 +++++++
+ 3 files changed, 28 insertions(+), 2 deletions(-)
+ create mode 100644 tools/perf/arch/x86/util/topdown.h
 
 diff --git a/tools/perf/arch/x86/util/evlist.c b/tools/perf/arch/x86/util/evlist.c
-index cfc208d71f00..75564a7df15b 100644
+index 75564a7df15b..68f681ad54c1 100644
 --- a/tools/perf/arch/x86/util/evlist.c
 +++ b/tools/perf/arch/x86/util/evlist.c
-@@ -36,7 +36,7 @@ struct evsel *arch_evlist__leader(struct list_head *list)
+@@ -3,6 +3,7 @@
+ #include "util/pmu.h"
+ #include "util/evlist.h"
+ #include "util/parse-events.h"
++#include "topdown.h"
+ 
+ #define TOPDOWN_L1_EVENTS	"{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound}"
+ #define TOPDOWN_L2_EVENTS	"{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound,topdown-heavy-ops,topdown-br-mispredict,topdown-fetch-lat,topdown-mem-bound}"
+@@ -25,12 +26,12 @@ struct evsel *arch_evlist__leader(struct list_head *list)
+ 
+ 	first = list_first_entry(list, struct evsel, core.node);
+ 
+-	if (!pmu_have_event("cpu", "slots"))
++	if (!topdown_sys_has_perf_metrics())
+ 		return first;
+ 
+ 	/* If there is a slots event and a topdown event then the slots event comes first. */
+ 	__evlist__for_each_entry(list, evsel) {
+-		if (evsel->pmu_name && !strcmp(evsel->pmu_name, "cpu") && evsel->name) {
++		if (evsel->pmu_name && !strncmp(evsel->pmu_name, "cpu", 3) && evsel->name) {
+ 			if (strcasestr(evsel->name, "slots")) {
+ 				slots = evsel;
  				if (slots == first)
- 					return first;
- 			}
--			if (!strncasecmp(evsel->name, "topdown", 7))
-+			if (strcasestr(evsel->name, "topdown"))
- 				has_topdown = true;
- 			if (slots && has_topdown)
- 				return slots;
+diff --git a/tools/perf/arch/x86/util/topdown.c b/tools/perf/arch/x86/util/topdown.c
+index 2f3d96aa92a5..95b9fdef59ab 100644
+--- a/tools/perf/arch/x86/util/topdown.c
++++ b/tools/perf/arch/x86/util/topdown.c
+@@ -3,6 +3,24 @@
+ #include "api/fs/fs.h"
+ #include "util/pmu.h"
+ #include "util/topdown.h"
++#include "topdown.h"
++
++bool topdown_sys_has_perf_metrics(void)
++{
++	static bool has_perf_metrics;
++	static bool cached;
++	struct perf_pmu *pmu;
++
++	if (cached)
++		return has_perf_metrics;
++
++	pmu = perf_pmu__find_by_type(PERF_TYPE_RAW);
++	if (pmu && pmu_have_event(pmu->name, "slots"))
++		has_perf_metrics = true;
++
++	cached = true;
++	return has_perf_metrics;
++}
+ 
+ /*
+  * Check whether we can use a group for top down.
+diff --git a/tools/perf/arch/x86/util/topdown.h b/tools/perf/arch/x86/util/topdown.h
+new file mode 100644
+index 000000000000..46bf9273e572
+--- /dev/null
++++ b/tools/perf/arch/x86/util/topdown.h
+@@ -0,0 +1,7 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _TOPDOWN_H
++#define _TOPDOWN_H 1
++
++bool topdown_sys_has_perf_metrics(void);
++
++#endif
 -- 
 2.35.1
 

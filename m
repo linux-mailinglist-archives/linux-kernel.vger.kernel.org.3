@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 597DC526448
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:29:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F1A526450
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:30:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380944AbiEMO3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
+        id S1381021AbiEMOaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381060AbiEMO03 (ORCPT
+        with ESMTP id S1381073AbiEMO03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 13 May 2022 10:26:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA95060AB2;
-        Fri, 13 May 2022 07:26:09 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3143E6898F;
+        Fri, 13 May 2022 07:26:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 954D5B83068;
-        Fri, 13 May 2022 14:26:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0E62C34117;
-        Fri, 13 May 2022 14:26:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BDF2FB8306F;
+        Fri, 13 May 2022 14:26:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF768C34100;
+        Fri, 13 May 2022 14:26:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652451967;
-        bh=QF88le2UwZdYFdKhakOikXNGtWetoJ79BBE9pUZFl9c=;
+        s=korg; t=1652451970;
+        bh=f05s6427RKo5ppnzx5FO337pJ1V8YbFwt+jAzh5Z8/Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gUNMzpalOt5WUmBxrykZjzFIl8hjiH/ZJi3uTyVG1Q/x2EM007d1OCJEDD+1fleoW
-         Ji7rO1b8AP3n8RM6WrgkI6+6dshidjZWRb9MhMQ/A3zsrLSqhBhCF6iWCj+20Zbg47
-         fJisTTBIJuYpvgSREsNfRw8EzjsVGp9nPaHp+hm8=
+        b=yB8hWljuWTZYYWwLKWTIDw49lm9PgIIYX0k2LF5UrCJQzzDv/VYXN/wvGdzU7ppm4
+         6OESHhpfNs0CyVk3dxNkvS96ikQgb64A9k7LzUrR02CyPz+NzwZMtOtHpJPSRxgi6/
+         6/8YT7zvyieGP7g0HXUOh8xKpzFvqeVe8oCUsmK4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andreas Larsson <andreas@gaisler.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 4.19 06/15] can: grcan: only use the NAPI poll budget for RX
-Date:   Fri, 13 May 2022 16:23:28 +0200
-Message-Id: <20220513142228.083549373@linuxfoundation.org>
+        stable@vger.kernel.org, Itay Iellin <ieitayie@gmail.com>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Subject: [PATCH 4.19 07/15] Bluetooth: Fix the creation of hdev->name
+Date:   Fri, 13 May 2022 16:23:29 +0200
+Message-Id: <20220513142228.113538429@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220513142227.897535454@linuxfoundation.org>
 References: <20220513142227.897535454@linuxfoundation.org>
@@ -54,87 +54,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andreas Larsson <andreas@gaisler.com>
+From: Itay Iellin <ieitayie@gmail.com>
 
-commit 2873d4d52f7c52d60b316ba6c47bd7122b5a9861 upstream.
+commit 103a2f3255a95991252f8f13375c3a96a75011cd upstream.
 
-The previous split budget between TX and RX made it return not using
-the entire budget but at the same time not having calling called
-napi_complete. This sometimes led to the poll to not be called, and at
-the same time having TX and RX interrupts disabled resulting in the
-driver getting stuck.
+Set a size limit of 8 bytes of the written buffer to "hdev->name"
+including the terminating null byte, as the size of "hdev->name" is 8
+bytes. If an id value which is greater than 9999 is allocated,
+then the "snprintf(hdev->name, sizeof(hdev->name), "hci%d", id)"
+function call would lead to a truncation of the id value in decimal
+notation.
 
-Fixes: 6cec9b07fe6a ("can: grcan: Add device driver for GRCAN and GRHCAN cores")
-Link: https://lore.kernel.org/all/20220429084656.29788-4-andreas@gaisler.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Andreas Larsson <andreas@gaisler.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Set an explicit maximum id parameter in the id allocation function call.
+The id allocation function defines the maximum allocated id value as the
+maximum id parameter value minus one. Therefore, HCI_MAX_ID is defined
+as 10000.
+
+Signed-off-by: Itay Iellin <ieitayie@gmail.com>
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/grcan.c |   22 +++++++---------------
- 1 file changed, 7 insertions(+), 15 deletions(-)
+ include/net/bluetooth/hci_core.h |    3 +++
+ net/bluetooth/hci_core.c         |    6 +++---
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
---- a/drivers/net/can/grcan.c
-+++ b/drivers/net/can/grcan.c
-@@ -1141,7 +1141,7 @@ static int grcan_close(struct net_device
- 	return 0;
- }
+--- a/include/net/bluetooth/hci_core.h
++++ b/include/net/bluetooth/hci_core.h
+@@ -34,6 +34,9 @@
+ /* HCI priority */
+ #define HCI_PRIO_MAX	7
  
--static int grcan_transmit_catch_up(struct net_device *dev, int budget)
-+static void grcan_transmit_catch_up(struct net_device *dev)
- {
- 	struct grcan_priv *priv = netdev_priv(dev);
- 	unsigned long flags;
-@@ -1149,7 +1149,7 @@ static int grcan_transmit_catch_up(struc
++/* HCI maximum id value */
++#define HCI_MAX_ID 10000
++
+ /* HCI Core structures */
+ struct inquiry_data {
+ 	bdaddr_t	bdaddr;
+--- a/net/bluetooth/hci_core.c
++++ b/net/bluetooth/hci_core.c
+@@ -3180,10 +3180,10 @@ int hci_register_dev(struct hci_dev *hde
+ 	 */
+ 	switch (hdev->dev_type) {
+ 	case HCI_PRIMARY:
+-		id = ida_simple_get(&hci_index_ida, 0, 0, GFP_KERNEL);
++		id = ida_simple_get(&hci_index_ida, 0, HCI_MAX_ID, GFP_KERNEL);
+ 		break;
+ 	case HCI_AMP:
+-		id = ida_simple_get(&hci_index_ida, 1, 0, GFP_KERNEL);
++		id = ida_simple_get(&hci_index_ida, 1, HCI_MAX_ID, GFP_KERNEL);
+ 		break;
+ 	default:
+ 		return -EINVAL;
+@@ -3192,7 +3192,7 @@ int hci_register_dev(struct hci_dev *hde
+ 	if (id < 0)
+ 		return id;
  
- 	spin_lock_irqsave(&priv->lock, flags);
+-	sprintf(hdev->name, "hci%d", id);
++	snprintf(hdev->name, sizeof(hdev->name), "hci%d", id);
+ 	hdev->id = id;
  
--	work_done = catch_up_echo_skb(dev, budget, true);
-+	work_done = catch_up_echo_skb(dev, -1, true);
- 	if (work_done) {
- 		if (!priv->resetting && !priv->closing &&
- 		    !(priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY))
-@@ -1163,8 +1163,6 @@ static int grcan_transmit_catch_up(struc
- 	}
- 
- 	spin_unlock_irqrestore(&priv->lock, flags);
--
--	return work_done;
- }
- 
- static int grcan_receive(struct net_device *dev, int budget)
-@@ -1246,19 +1244,13 @@ static int grcan_poll(struct napi_struct
- 	struct net_device *dev = priv->dev;
- 	struct grcan_registers __iomem *regs = priv->regs;
- 	unsigned long flags;
--	int tx_work_done, rx_work_done;
--	int rx_budget = budget / 2;
--	int tx_budget = budget - rx_budget;
-+	int work_done;
- 
--	/* Half of the budget for receiveing messages */
--	rx_work_done = grcan_receive(dev, rx_budget);
-+	work_done = grcan_receive(dev, budget);
- 
--	/* Half of the budget for transmitting messages as that can trigger echo
--	 * frames being received
--	 */
--	tx_work_done = grcan_transmit_catch_up(dev, tx_budget);
-+	grcan_transmit_catch_up(dev);
- 
--	if (rx_work_done < rx_budget && tx_work_done < tx_budget) {
-+	if (work_done < budget) {
- 		napi_complete(napi);
- 
- 		/* Guarantee no interference with a running reset that otherwise
-@@ -1275,7 +1267,7 @@ static int grcan_poll(struct napi_struct
- 		spin_unlock_irqrestore(&priv->lock, flags);
- 	}
- 
--	return rx_work_done + tx_work_done;
-+	return work_done;
- }
- 
- /* Work tx bug by waiting while for the risky situation to clear. If that fails,
+ 	BT_DBG("%p name %s bus %d", hdev, hdev->name, hdev->bus);
 
 

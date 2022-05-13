@@ -2,57 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D29A4525C4E
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5D2525C20
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377797AbiEMHXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 03:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59056 "EHLO
+        id S1377702AbiEMHMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 03:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352114AbiEMHXs (ORCPT
+        with ESMTP id S1377700AbiEMHL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 03:23:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2767D64BCA;
-        Fri, 13 May 2022 00:23:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CCF3CB82C44;
-        Fri, 13 May 2022 07:23:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F2FFC34100;
-        Fri, 13 May 2022 07:23:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652426624;
-        bh=4j63qxQv6bBPt6Zh+ZWZmN70Zaw28P37OyeOwv5c/Oc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VFyf0r+jwlAxjvj7Sk8arQc3WwE7ti3QUVyvSibylKDucSVUrODGUnSLKNQU60Vea
-         c0G2o8jiMF8I0ZkSoXo7Aq4+OITclZIgF7H45q/xOlUt1AijIJ3J3DD3I3dl6oxQ3J
-         O6OQ/RaPdkDgwGO1BEPhtOA6MsMEpBiivgBKIryG1TT8AQrhl9BX4TOdsBIuCTHVsm
-         d/AiIF+dT5pLk+suc058p7yFuk11dBe5TARH8/T4ZIz2li8IVKn3fOmnRrFZGpuHRr
-         qjnO8Q9jfnpObbgM3HM4BbgOakBoXlXKW3jfDj6gthTSGRyXxYwQi5olgS4bYfMq0Q
-         Ja4H52FoTl9ZA==
-Date:   Fri, 13 May 2022 09:23:39 +0200
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Miles Chen <miles.chen@mediatek.com>
-Cc:     <lukas.bulwahn@gmail.com>, <bin.liu@mediatek.com>,
-        <kernel-janitors@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        Rick Chang <rick.chang@mediatek.com>
-Subject: Re: [PATCH RFC] MAINTAINERS: drop unreachable contact for MEDIATEK
- JPEG DRIVER
-Message-ID: <20220513092339.60f9eedc@coco.lan>
-In-Reply-To: <20220309030431.31247-1-miles.chen@mediatek.com>
-References: <20220308114300.12502-1-lukas.bulwahn@gmail.com>
-        <20220309030431.31247-1-miles.chen@mediatek.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
+        Fri, 13 May 2022 03:11:56 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE293A199;
+        Fri, 13 May 2022 00:11:51 -0700 (PDT)
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L00Ct4pc9z1JBmB;
+        Fri, 13 May 2022 15:10:34 +0800 (CST)
+Received: from container.huawei.com (10.175.104.82) by
+ canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 13 May 2022 15:11:48 +0800
+From:   Ziyang Xuan <william.xuanziyang@huawei.com>
+To:     <vburru@marvell.com>, <aayarekar@marvell.com>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH net-next] octeon_ep: delete unnecessary NULL check
+Date:   Fri, 13 May 2022 15:29:28 +0800
+Message-ID: <20220513072928.3713739-1-william.xuanziyang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.104.82]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500006.china.huawei.com (7.192.105.130)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,82 +47,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, 9 Mar 2022 11:04:31 +0800
-Miles Chen <miles.chen@mediatek.com> escreveu:
+vfree(NULL) is safe. NULL check before vfree() is not needed.
+Delete them to simplify the code.
 
-> Hi Lukas,
-> 
-> > After sending a patch to Rick Chang, the mediatek mail server responded:
-> > 
-> >   ** Message not delivered **
-> > 
-> >   Your message couldn't be delivered to rick.chang@mediatek.com because
-> >   the remote server is misconfigured. See technical details below for more
-> >   information.
-> > 
-> >   The response from the remote server was:
-> >   550 Relaying mail to rick.chang@mediatek.com is not allowed
-> > 
-> > So, drop Rick Chang from the MEDIATEK JPEG DRIVER section.
+Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+---
+ drivers/net/ethernet/marvell/octeon_ep/octep_main.c | 3 +--
+ drivers/net/ethernet/marvell/octeon_ep/octep_rx.c   | 3 +--
+ drivers/net/ethernet/marvell/octeon_ep/octep_tx.c   | 3 +--
+ 3 files changed, 3 insertions(+), 6 deletions(-)
 
-Funny... I did a quick test here, and the e-mail to Rick was not rejected:
+diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
+index e020c81f3455..7e590c572d58 100644
+--- a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
++++ b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
+@@ -980,8 +980,7 @@ static void octep_device_cleanup(struct octep_device *oct)
+ 	dev_info(&oct->pdev->dev, "Cleaning up Octeon Device ...\n");
+ 
+ 	for (i = 0; i < OCTEP_MAX_VF; i++) {
+-		if (oct->mbox[i])
+-			vfree(oct->mbox[i]);
++		vfree(oct->mbox[i]);
+ 		oct->mbox[i] = NULL;
+ 	}
+ 
+diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
+index 945947ec7723..d9ae0937d17a 100644
+--- a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
++++ b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
+@@ -230,8 +230,7 @@ static int octep_free_oq(struct octep_oq *oq)
+ 
+ 	octep_oq_free_ring_buffers(oq);
+ 
+-	if (oq->buff_info)
+-		vfree(oq->buff_info);
++	vfree(oq->buff_info);
+ 
+ 	if (oq->desc_ring)
+ 		dma_free_coherent(oq->dev,
+diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_tx.c b/drivers/net/ethernet/marvell/octeon_ep/octep_tx.c
+index 511552bc3e87..5a520d37bea0 100644
+--- a/drivers/net/ethernet/marvell/octeon_ep/octep_tx.c
++++ b/drivers/net/ethernet/marvell/octeon_ep/octep_tx.c
+@@ -270,8 +270,7 @@ static void octep_free_iq(struct octep_iq *iq)
+ 
+ 	desc_ring_size = OCTEP_IQ_DESC_SIZE * CFG_GET_IQ_NUM_DESC(oct->conf);
+ 
+-	if (iq->buff_info)
+-		vfree(iq->buff_info);
++	vfree(iq->buff_info);
+ 
+ 	if (iq->desc_ring)
+ 		dma_free_coherent(iq->dev, desc_ring_size,
+-- 
+2.25.1
 
-Connecting to smtp.kernel.org [35.85.114.177]:587 ...  TFO mode sendto, no data: EINPROGRESS
- connected
-  SMTP<< 220 smtp.kernel.org ESMTP Postfix
-  SMTP>> EHLO mail.kernel.org
-  SMTP<< 250-smtp.kernel.org
-         250-PIPELINING
-         250-SIZE 30720000
-         250-VRFY
-         250-ETRN
-         250-STARTTLS
-         250-ENHANCEDSTATUSCODES
-         250-8BITMIME
-         250-DSN
-         250 CHUNKING
-  SMTP>> STARTTLS
-  SMTP<< 220 2.0.0 Ready to start TLS
-  SMTP>> EHLO mail.kernel.org
-  SMTP<< 250-smtp.kernel.org
-         250-PIPELINING
-         250-SIZE 30720000
-         250-VRFY
-         250-ETRN
-         250-AUTH PLAIN LOGIN
-         250-ENHANCEDSTATUSCODES
-         250-8BITMIME
-         250-DSN
-         250 CHUNKING
-  SMTP>> AUTH PLAIN ************************************
-  SMTP<< 235 2.7.0 Authentication successful
-  SMTP|> MAIL FROM:<mchehab@kernel.org> SIZE=1361 AUTH=mchehab@kernel.org
-  SMTP|> RCPT TO:<rick.chang@mediatek.com>
-         will write message using CHUNKING
-  SMTP+> BDAT 338 LAST
-  SMTP>> QUIT
-  SMTP<< 250 2.1.0 Ok
-  SMTP<< 250 2.1.5 Ok
-  SMTP<< 250 2.0.0 Ok: 338 bytes queued as 8DCF4C34100
-  SMTP<< 221 2.0.0 Bye
-  SMTP(close)>>
-LOG: MAIN
-  => rick.chang@mediatek.com R=smarthost T=remote_msa H=smtp.kernel.org [35.85.114.177] X=TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256 CV=yes A=client_auth_plain K C="250 2.0.0 Ok: 338 bytes queued as 8DCF4C34100"
-LOG: MAIN
-  Completed
-
-> > 
-> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>  
-> 
-> I confirmed that Rick Chang has left Mediatek, so it is ok to remove his name.
-
-Ok, I'll apply the patch.
-
-> 
-> Reviewed-by: Miles Chen <miles.chen@mediatek.com>
-> 
-> Thanks,
-> Miles
-
-Thanks,
-Mauro

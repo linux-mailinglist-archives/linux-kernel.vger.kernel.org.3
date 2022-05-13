@@ -2,100 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94562525EDF
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:07:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7861525F4A
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378969AbiEMJhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 05:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41986 "EHLO
+        id S1378967AbiEMJhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 05:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379190AbiEMJg6 (ORCPT
+        with ESMTP id S1379067AbiEMJhQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 05:36:58 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFFC289BEA;
-        Fri, 13 May 2022 02:36:56 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id c1so6628104qkf.13;
-        Fri, 13 May 2022 02:36:56 -0700 (PDT)
+        Fri, 13 May 2022 05:37:16 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9EC28BDF5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 02:37:14 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id w4so10602520wrg.12
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 02:37:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5/QaHzIsDx+VUbkQpyJdrmhr5ZThzTeQgKRfTCqVyP0=;
-        b=LoECVbfRBi4FDUjlO+TsWlNINlegPwvqwXrR2czl8byOnVKt85YnYW+sZhWjopmjyD
-         cCBo/gmgUyl1Biu+wqDU2ZebY8KSUmnucMeRaz94Yxx9B2Qz8iwL8B6tIT3khC3iHhHH
-         duozL9qSrIk2DZgTbNl9tXtu/aJhdNvROLmAVZ633A3MQ+mv9SoBoGjMUB1z8pgb+H6n
-         g6NlEsKczLjIweg2IucLK3xCkZ6FivZse6yZ0kl2TWG6XO1oMwyKU/6W+lAEB8lhZib2
-         jvi+Yi9Jncwfl+APhDRIi7emZekDCYv5Ivd76x37C6N1or6FIPK3ElJk2Uri1gtt+HXD
-         yAHQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=LPeFc4kVcTNm4urAkRDIpRauCxNaO73GMMKzZ0JovMs=;
+        b=im5D1li6iayjNq5cJbXexWNAdwbevtRT0YNi61YD5Dlb7O+v4d+zj1Uq9SpmE0WpsF
+         zDtgfhR5K4BTl47cxta7rzqmnvmp6bDDI49DV/fmr/PQlV00wYyGEwyt78RGRfLFIKEf
+         tpPiDTrQnqoo6WEuezuxWi6XWtBCDypmq/23Cbso3DdfxfXbijZ8KpRaAVt0n+NXPxvx
+         PAACqWfJA0Djcoze1ircxojt62AINFqj6kyxIWhI5u+ndn33F/1mL2eKAP8GatwVdl9P
+         /GvTgbRwH85LINuDvCYS+4V15Vu2Bfh+l0FrrIFukTKyi+Mab9I5tXcmVkTCdQEAOI0/
+         66Sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5/QaHzIsDx+VUbkQpyJdrmhr5ZThzTeQgKRfTCqVyP0=;
-        b=0xQiaiAyLPFhNwWod9uS9GcVopo3bu/fNzILPMkMdmc2xB7ezEofeicQPBXGPsaeZp
-         SdZE36ZVM7NAzoIKVF+4EgWVdzSj990pQGg4u3UJiaBo13WBjOsHCWh1RnGqKi4kQz9y
-         cgTa45r/4elFT74DlzEe+RUSCYVNU9bSGScDi3Rsuc3LU4urKt+6l3RRojrwlX6M7rIK
-         6lTFNF6FkQo8flVsbidkDir8lfWBJRx1fv1sQN1a1LTCD1J70esnYx0oQylPoKdGggSP
-         QOLE1yGaiIU7sf7fAQhTBVoh+6gkJ3B4B5OL5DwW0gwNOPHTLHCy9pAI0AvYS4wrft48
-         ZOdg==
-X-Gm-Message-State: AOAM532M6LJaN8M/hzB3uYB4xcWypQmYgy8PYyADscfsnIPXeMC2MARL
-        X+DWH0JMv7qKgEpTOYMbFnM6RG0USe7sLIQvtIs7h+fUdy4=
-X-Google-Smtp-Source: ABdhPJwTAuDj69E8va6LLbGC/UtsCBaq2ghW54E2TbfuYUPG9cPdUfAUsJnmuH17yXT67cbhf9mGJImwDlL8l1MabHc=
-X-Received: by 2002:a05:620a:1aa0:b0:6a0:a34:15e0 with SMTP id
- bl32-20020a05620a1aa000b006a00a3415e0mr2940089qkb.19.1652434615582; Fri, 13
- May 2022 02:36:55 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LPeFc4kVcTNm4urAkRDIpRauCxNaO73GMMKzZ0JovMs=;
+        b=EaSYhxyUp7Yy4peaEN/je+g2Bfa9Oy5lXgCbsZ+56Rr/RWp4GjeC6gWMOfz01WuLqV
+         Sge9RfEKu+0mX3sWNMfBRvGQ1HGZgB91tI7BFLDhZVocPMpM+9ggHYJamqYaFz4rN8/1
+         BBWPkIfiE/H4LV2/kjnBjY9kLH9taTNBpQ30kMxkmVh7m2d2wX3RSi3vgbKEd7u4OOR5
+         z+cxthCAGe3nCmH5iYVxBH66JKhcxP4dVRjE9uTSF6LPVjOjTyomT6hvolRLAm8UG0Mq
+         dwrTNcnk9kwzo9sNm9UdoK0zIzKBLgbK4I+wg1P8nQy+waNmHjn2ynxem+tSdl7w7PYE
+         BuTw==
+X-Gm-Message-State: AOAM530jxLOt9niXMRs7LQt2i9q1xuSC6LgOvoWO9mElwfCkVFOeTU6a
+        ywys0iK9Hj3fspAozADezMGIXg==
+X-Google-Smtp-Source: ABdhPJwW3cU+uyE+Io9UlgPZ79ftGJYHlU0vLFfIIytqKHzkojl5dsNGL+ZhUq/QdL1OwweAvqQPzw==
+X-Received: by 2002:a5d:6088:0:b0:20a:e81e:c76a with SMTP id w8-20020a5d6088000000b0020ae81ec76amr3138108wrt.182.1652434632703;
+        Fri, 13 May 2022 02:37:12 -0700 (PDT)
+Received: from [192.168.0.171] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id g2-20020adfa482000000b0020c5253d8dfsm1728148wrb.43.2022.05.13.02.37.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 02:37:12 -0700 (PDT)
+Message-ID: <5cce491d-c673-d2a6-3aae-79b2e5902a01@linaro.org>
+Date:   Fri, 13 May 2022 11:37:11 +0200
 MIME-Version: 1.0
-References: <lGo7a4qQABKb-u_xsz6p-QtLIy2bzciBLTUJ7-ksv7ppK3mRrJhXqFmCFU4AtQf6EyrZUrYuSLDMBHEUMe5st_iT9VcRuyYPMU_jVpSzoWg=@emersion.fr>
- <CAOQ4uxjOOe0aouDYNdkVyk7Mu1jQ-eY-6XoW=FrVRtKyBd2KFg@mail.gmail.com> <Uc-5mYLV3EgTlSFyEEzmpLvNdXKVJSL9pOSCiNylGIONHoljlV9kKizN2bz6lHsTDPDR_4ugSxLYNCO7xjdSeF3daahq8_kvxWhpIvXcuHA=@emersion.fr>
-In-Reply-To: <Uc-5mYLV3EgTlSFyEEzmpLvNdXKVJSL9pOSCiNylGIONHoljlV9kKizN2bz6lHsTDPDR_4ugSxLYNCO7xjdSeF3daahq8_kvxWhpIvXcuHA=@emersion.fr>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Fri, 13 May 2022 12:36:44 +0300
-Message-ID: <CAOQ4uxiw0gaa+=afk=Avnr+8+DiyP9CRgUNUDK6NYZbo+Z7dOQ@mail.gmail.com>
-Subject: Re: procfs: open("/proc/self/fd/...") allows bypassing O_RDONLY
-To:     Simon Ser <contact@emersion.fr>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 2/7] dt-bindings: pinctrl: qcom-pmic-gpio: Add pm6125
+ compatible
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220511220613.1015472-1-marijn.suijten@somainline.org>
+ <20220511220613.1015472-3-marijn.suijten@somainline.org>
+ <d2507298-00a6-a1cc-0302-f96597fb4127@linaro.org>
+ <20220513091734.hivkkbpc6inyb4la@SoMainline.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220513091734.hivkkbpc6inyb4la@SoMainline.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 3:38 PM Simon Ser <contact@emersion.fr> wrote:
->
-> On Thursday, May 12th, 2022 at 14:30, Amir Goldstein <amir73il@gmail.com> wrote:
->
-> > Clients can also readlink("/proc/self/fd/<fd>") to get the path of the file
-> > and open it from its path (if path is accessible in their mount namespace).
->
-> What the compositor does is:
->
-> - shm_open with O_RDWR
-> - Write the kyeboard keymap
-> - shm_open again the same file with O_RDONLY
-> - shm_unlink
-> - Send the O_RDONLY FD to clients
->
-> Thus, the file doesn't exist anymore when clients get the FD.
+On 13/05/2022 11:17, Marijn Suijten wrote:
+> On 2022-05-13 10:19:56, Krzysztof Kozlowski wrote:
+>> On 12/05/2022 00:06, Marijn Suijten wrote:
+>>> The pm6125 comes with 9 GPIOs, without holes.
+>>>
+>>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+>>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+>>
+>> It's the first version, how did the tag appear here?
+> 
+> We are friends and review each-others patches offline before spamming
+> the mailing list with them, to save readers and maintainers here from
+> pointing out glaring mistakes.  I hope this is standard practice in
+> companies too, or do you recommend aganst us doing this?
 
-From system POV, a readonly bind mount of /dev/shm
-could be created (e.g. at /dev/shm-ro) and then wayland could open
-the shm rdonly file from that path.
+I personally recommend against it because I prefer public discussions.
+Especially that such practice in some companies mean that tag is added
+automatically, without actual review. There are some folks, from other
+subsystems and architectures, which never publicly replied to anything
+(so we don't know if they actually exist, what's their credibility,
+knowledge, experience etc) but they appear on hundreds of reviews.
 
-If wayland cannot rely on system to create the bind mount for it,
-it could also clone its own mount namespace and create the
-bind mount in its own namespace for opening the rdonly file.
+Other people don't mind this practice.
 
-But that implementation would be Linux specific an Linux has many
-other APIs that were suggested on the linked gitlab issue.
-You did not mention them in your question and did not say why
-those solutions are not a good enough for your needs.
+Anyway, it's not a stopper from anything, I was wondering.
 
-Thanks,
-Amir.
+> 
+>>> ---
+>>>  Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml | 2 ++
+>>>  1 file changed, 2 insertions(+)
+>>
+>>
+>> This will need fixups or rebasing on my sets of PMIC gpio schema cleanup:
+> 
+> Ack.
+> 
+>> https://lore.kernel.org/all/20220507194913.261121-1-krzysztof.kozlowski@linaro.org/
+>> https://lore.kernel.org/all/20220508135932.132378-2-krzysztof.kozlowski@linaro.org/
+>>
+>> Bjorn,
+>> let us know preferred order (who should rebase on who).
+> 
+> I prefer yours to be applied first, so that I can retest this
+> patchseries with stricter / more correct dt-bindings introduced by it.
+> My series can also be resent with the notice that it has already been
+> rebased on top of your series, after collecting more reviews.  Where
+> necessary, I can review your series too if that helps getting it in
+> sooner.
+
+Sounds good. It's in Bjorn's hands now. :)
+
+
+Best regards,
+Krzysztof

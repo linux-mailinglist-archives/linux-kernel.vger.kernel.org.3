@@ -2,144 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE23D526219
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 14:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72EB052622B
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 14:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380403AbiEMMfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 08:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
+        id S1380370AbiEMMl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 08:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380421AbiEMMfN (ORCPT
+        with ESMTP id S230340AbiEMMlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 08:35:13 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3661F68FAB;
-        Fri, 13 May 2022 05:35:12 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24DABgZr016716;
-        Fri, 13 May 2022 12:35:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=gmS+Ius9bVpzAeKtBw6cRfpCwfOcAkz4Sl8pe/HmEzY=;
- b=V8N4Jxk3YLYCPI77TY9hO2yyW64qG69XlRnoxSbuZwZ6XVA4h41VfQJuRhGVhTPgBz3j
- E2KkMusH++GTSUZgR0jK90h2erykgblWol9T0mOugKoF8OJTUs+TW6IePA7/PcuxkUST
- YolMb3bCNAIPwOUm319O0mS9QEvPH+UOPjubBIi5vBUuY/si/YC8UkhIz8RMson11HbJ
- puMAl2fHEeb1+LgJlLPFkXkN3KppkywT2k80LLltaLl+fNxJdhhcJrJ+lCEJTdyDaoz1
- km3LYE9PvBhbbjAYWMZFDzq5r3qs7Yk6Kg4C7uBbD42sQBkmCbl817k9qMYuGzJVTtnw kQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g1mxr31gq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 May 2022 12:35:07 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24DCEmjm018706;
-        Fri, 13 May 2022 12:35:06 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g1mxr31fx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 May 2022 12:35:06 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24DCWNvH005938;
-        Fri, 13 May 2022 12:35:04 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06ams.nl.ibm.com with ESMTP id 3fyrkk4hgh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 May 2022 12:35:04 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24DCZ1ON24576452
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 13 May 2022 12:35:01 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5A665A405F;
-        Fri, 13 May 2022 12:35:01 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E2EA3A4054;
-        Fri, 13 May 2022 12:35:00 +0000 (GMT)
-Received: from [9.145.187.154] (unknown [9.145.187.154])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 13 May 2022 12:35:00 +0000 (GMT)
-Message-ID: <5674a855-456f-d9b8-661f-49908aad2025@linux.ibm.com>
-Date:   Fri, 13 May 2022 14:35:00 +0200
+        Fri, 13 May 2022 08:41:46 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150122.outbound.protection.outlook.com [40.107.15.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6449536317;
+        Fri, 13 May 2022 05:41:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Jo4Jc3ITjKHHf9EsJj43U9BNqcN0zWz6Z5G8La9zJtPsKx4ADvuLoZd3ULWxV8P2yHUeF/90RnFmDOGM4qkaMiHg24wJUvqHpj6YkifNkLlKbVhETYxINYd58YrTAJZBPIlP4Kub4FvImAfqcLTcIBx9pVwwUmcYw1wS5+qhFN7PSl//0vbspFbgZpHLGE9yIMfa18DBRTTZvk9p8vmlTxTd3GJwwGdv8bIskwqGHrL0CSYBc7Nia+hhqhbB5zS4CW3Glsb+K5DLCtQH9w1KjyrGucpPHPQvHgslrMYfqppaOrbJrn5sPdETh7BfMR8J9AsU5YHxVFKs6QNGlEwLpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ELU1WXMI2cudFkUdRUNXSRoO0+8T5o07hwjHqKh4/r8=;
+ b=NTkCdB7XGpF06cCnvPgxblBWtYdF45JXY+8zIs3L5xNf/cZvnnZWMo9nlyWNg0rLAvG1JZ2H69FpFOVVFPrGrLKSWBTxVcXUHyT6nSBwnqt8ZYTeMkT6U5iWVioxc6q9xbFrqFdyYI+aJ3PJhS4C/RFkEZv56vVZSkKSNCnGAJSuAfZTtv9oFQqTrhLbIx1OktskfT2wtlWxGm19OoSahv0QDv+cumYh6YPg3qvwuG9fjWqEs0MjxGhcAy7xdVhZ1IOAawBLaSmejJhgKGNWgL3AIGqA82kJzfCp2n/+0Q2L9IokyvcsQ6GKp/6oUBK/YYs7BOX6Jp9tbQn9iktFZg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 193.8.40.94) smtp.rcpttodomain=kernel.org
+ smtp.mailfrom=leica-geosystems.com.cn; dmarc=pass (p=quarantine sp=quarantine
+ pct=100) action=none header.from=leica-geosystems.com.cn; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=leica-geosystems.com.cn; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ELU1WXMI2cudFkUdRUNXSRoO0+8T5o07hwjHqKh4/r8=;
+ b=bhT3B+kvFAvYN9xae3tcD+c7XzxyPnqVrSPMlnFSjE8hRgJDnBzQTrlIO6rEaMmMvjzp86vR0kJZYv8t8C4d53fye02a+THVVEBsyt6VBSru4H+0MtYsyTPErQGMFKEi6JykszcfWeQPZQ2NHNCeuRazqU/0QI6FesHYGRLhUqw=
+Received: from AM6P194CA0100.EURP194.PROD.OUTLOOK.COM (2603:10a6:209:8f::41)
+ by PR3PR06MB6890.eurprd06.prod.outlook.com (2603:10a6:102:88::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14; Fri, 13 May
+ 2022 12:41:38 +0000
+Received: from VE1EUR02FT036.eop-EUR02.prod.protection.outlook.com
+ (2603:10a6:209:8f:cafe::1d) by AM6P194CA0100.outlook.office365.com
+ (2603:10a6:209:8f::41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13 via Frontend
+ Transport; Fri, 13 May 2022 12:41:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 193.8.40.94)
+ smtp.mailfrom=leica-geosystems.com.cn; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=leica-geosystems.com.cn;
+Received-SPF: Pass (protection.outlook.com: domain of leica-geosystems.com.cn
+ designates 193.8.40.94 as permitted sender) receiver=protection.outlook.com;
+ client-ip=193.8.40.94; helo=aherlnxbspsrv01.lgs-net.com;
+Received: from aherlnxbspsrv01.lgs-net.com (193.8.40.94) by
+ VE1EUR02FT036.mail.protection.outlook.com (10.152.13.197) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5250.13 via Frontend Transport; Fri, 13 May 2022 12:41:37 +0000
+From:   LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+To:     jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
+        tomas.melin@vaisala.com, andy.shevchenko@gmail.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Qing-wu.Li@leica-geosystems.com.cn
+Cc:     linux-iio@vger.kernel.org
+Subject: [PATCH V6 0/5] iio: accel: sca3300: add compatible for scl3300
+Date:   Fri, 13 May 2022 12:41:30 +0000
+Message-Id: <20220513124135.1295822-1-Qing-wu.Li@leica-geosystems.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v4 1/2] drivers/s390/char: Add Ultravisor io device
-Content-Language: en-US
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     Greg KH <greg@kroah.com>, Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Nico Boehr <nrb@linux.ibm.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
-References: <20220510144724.3321985-1-seiden@linux.ibm.com>
- <20220510144724.3321985-2-seiden@linux.ibm.com>
- <20220512163327.2c86cab1@p-imbrenda>
- <80afde93-b9cf-f6c4-da40-3385d7f6741b@linux.ibm.com>
- <20220513103758.5a4baf7c@p-imbrenda>
-From:   Steffen Eiden <seiden@linux.ibm.com>
-Organization: IBM
-In-Reply-To: <20220513103758.5a4baf7c@p-imbrenda>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 1Ps0IppIsUVJPjeL2BzjY9q0C5X9STDY
-X-Proofpoint-ORIG-GUID: ab9qKxzQRR1a_i9e-MIGdEuf_P1BVu95
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-13_04,2022-05-13_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
- suspectscore=0 spamscore=0 bulkscore=0 impostorscore=0 clxscore=1015
- adultscore=0 malwarescore=0 lowpriorityscore=0 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205130055
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: d02795fb-835c-4970-0994-08da34ddec36
+X-MS-TrafficTypeDiagnostic: PR3PR06MB6890:EE_
+X-Microsoft-Antispam-PRVS: <PR3PR06MB689052EC5D1537298A9A1801D7CA9@PR3PR06MB6890.eurprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GOo4L5eZR3RgE4MY9Ll7iOtI5tseK7yVlBPWjYMU4S6aH1HbaLTvE8jYi7wtcgcKtPzQWBT/tXI7z+gBEqURuRFWsdaH6XcI9CfPHjKWOpOhIuWDmUpSCVjcU/kyKgkixdNWN2P7gsRynWrrrWC+AYAauRrjJw30nXk+R6ReK4H4Q+MW5ZDUYq2gCLM11FpBRwL96S9+WPD4Y6XKvYkNn11yp+tO2lEzQCbRFegS4K0zLyK2M7UqfYvI2J4HxgENV16gC8sKMIwP9wETTcFFliCoTgpsnn9cM5EotnQNXxKTdnlDAu1tLlUuwWpnaM+dhJfax4lcCO2R87eBWG2SCLD5Z4liZoREW9VR8tWIm9E9l2LhLfAZaPU2WMv0qJtDBSZw0Hz4e5Z4jnqS8q00UhkGJyIlzzGCPMcdXHzwRzqpnPEeji4weot5XlmysdZWVn9vIykMPRPzDH00joXS6KbtQN0lCcW9KJvkGf0IigJag2lzK6xbWZdi344aJaPlmUmsPVbB/gPkDwW5403UdvCg01n2FKnTJkczTkwT2j6eK7Hvb1eYKP5X2hOHtY8nO739xX5fbB/Hfd99WzfxkFuFON9vO88FkvmEBgzRI/PHjTBjPh2+Y+zoAXDIEKhLfd0NCg0+IcTVSwWn8lZunehbC9/Hpt78WJP5Ecf9OfQ1Fo9ESMtxSLQy6GiVo5Ic
+X-Forefront-Antispam-Report: CIP:193.8.40.94;CTRY:CH;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:aherlnxbspsrv01.lgs-net.com;PTR:ahersrvdom50.leica-geosystems.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(316002)(6506007)(82310400005)(2906002)(36736006)(336012)(47076005)(86362001)(6666004)(36756003)(4744005)(6512007)(1076003)(83380400001)(5660300002)(26005)(40460700003)(186003)(81166007)(356005)(118246002)(508600001)(8936002)(36860700001)(70586007)(6486002)(4326008)(70206006)(2616005)(956004)(8676002);DIR:OUT;SFP:1102;
+X-OriginatorOrg: leica-geosystems.com.cn
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 May 2022 12:41:37.9540
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d02795fb-835c-4970-0994-08da34ddec36
+X-MS-Exchange-CrossTenant-Id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a;Ip=[193.8.40.94];Helo=[aherlnxbspsrv01.lgs-net.com]
+X-MS-Exchange-CrossTenant-AuthSource: VE1EUR02FT036.eop-EUR02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR06MB6890
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The current driver support sca3300 only, modified to support SCL3300.
+Verified with SCL3300 on IMX8MM.
+
+SCL3300 is a three-axis accelerometer sensor with angle output, 
+the change adds the support of scl3300 and inclination data output.
 
 
-On 5/13/22 10:37, Claudio Imbrenda wrote:
-> On Fri, 13 May 2022 09:45:39 +0200
-> Steffen Eiden <seiden@linux.ibm.com> wrote:
-> 
->> On 5/12/22 16:33, Claudio Imbrenda wrote:
->>
->> [snip]
->>
->>>> +/*
->>>> + * IOCTL entry point for the Ultravisor device.
->>>> + */
->>>> +static long uvio_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
->>>> +{
->>>> +	void __user *argp = (void __user *)arg;
->>>> +	struct uvio_ioctl_cb *uv_ioctl;
->>>> +	long ret;
->>>> +
->>>> +	ret = -ENOMEM;
->>>> +	uv_ioctl = vzalloc(sizeof(*uv_ioctl));
->>> struct uvio_ioctl_cb is rather small, couldn't you just allocate it on
->>> the stack?
->>>    
->> IIRC it was on stack in some previous version. We then had a discussion
->> earlier about this triggered by the inverse comment and decided to not
->> use the stack.
-> 
-> ok fair enough
-> 
-> but what's the reason for a vzalloc instead of a kzalloc, when the
-> allocation is surely going to be small?
-> 
-We had no strong reasons against or for vzalloc/kzalloc.
-If you want me to change it to kzalloc I can do it. I still
-have no strong opinion on that.
+Changes in v6: 
+  - Fix the warning of precedence issue,
+    Reported-by: kernel test robot <lkp@intel.com>
+  - Modify the commit message.
+  - Fix the check of the for-loop issue,
+    delete the blank line, and change ">=" to "==".
 
->> [snip]
+LI Qingwu (5):
+  dt-bindings: iio: accel: sca3300: Document murata,scl3300
+  iio: accel: sca3300: add define for temp channel for reuse.
+  iio: accel: sca3300: modified to support multi chips
+  iio: accel: sca3300: Add support for SCL3300
+  iio: accel: sca3300: Add inclination channels
+
+ .../bindings/iio/accel/murata,sca3300.yaml    |   1 +
+ drivers/iio/accel/sca3300.c                   | 312 +++++++++++++++---
+ 2 files changed, 260 insertions(+), 53 deletions(-)
+
+-- 
+2.25.1
+

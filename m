@@ -2,72 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6FD05260CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 13:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2655260CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 13:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379827AbiEMLPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 07:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54034 "EHLO
+        id S1379714AbiEMLOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 07:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379830AbiEMLOs (ORCPT
+        with ESMTP id S1379809AbiEMLOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 07:14:48 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C292A7C3F
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 04:14:44 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id p4so6504048qtq.12
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 04:14:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=0x0f.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SBDxVj1nmh6VS/RoV7L/XKPJo0ILCXguhigrIdGmn5Y=;
-        b=ReHu/FYiQyhCdCYpDITJ2vI12co9Ze9xTJ8Y6j7h1wRL4O8jCdd2fk0ap0lr4Km73u
-         x36a84TaLEqQH+IqYFAlkjO0bWmIPlcjQUgpA9S8C/0kBCKR7tnUZ/43A2TYdQNf6U1l
-         itduEnqhN/tf0aEL7nzJl7dHutmcykroGXgqY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SBDxVj1nmh6VS/RoV7L/XKPJo0ILCXguhigrIdGmn5Y=;
-        b=fjNgDKYM6DckUlWwvWLlvE3FEGKopeXTJ3rIxMLym+EyfhIpcKuIpoT73Fs69cOvPy
-         gyRChl8Wt9v5Yf88H0QI9cmKj/GlzzhZk7Z5wqX4WgSuYuGh2ipSNV3x9wyJxIgvCV5B
-         0Svy4TGULqxkjtelTSU0ws3ZTsUhskUdzijOvsco+Gb7+LuAvg88zafAbso5DBA05uE1
-         R5shPu8k94i/L2sV5By3rKzFSKFcfBKonD63nTdSYXwZm9LcdylOkmF5WkGc1Cv6UHR0
-         W6bmZD4iqOMg85ubOi/1QJUNlHiPYxBYzVqWJP792//+FuiIL56JDaJH4WyIsMpit0kV
-         iANQ==
-X-Gm-Message-State: AOAM532QD9PVEgFegfdprF6zAPDJexQFtkx1HumUbIdYIRhwQoyhtZ/i
-        nV/doB9001nAMOBfgvhp9y6vG1UdAizE9VmgvVK4eQ==
-X-Google-Smtp-Source: ABdhPJwxVPEVNydnGVwXBgBU30xlh2RgrKVjgnTyhbuMIC9o6thUsWItM63n+TIVfXCyNgrZRKLSTLJqKzFK9pcAaoU=
-X-Received: by 2002:a05:622a:18a7:b0:2f3:c715:caf1 with SMTP id
- v39-20020a05622a18a700b002f3c715caf1mr3904348qtc.226.1652440482977; Fri, 13
- May 2022 04:14:42 -0700 (PDT)
+        Fri, 13 May 2022 07:14:39 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8FBFC5DE78
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 04:14:38 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-181-0C1zEWiPPjqMic9fvV5MTA-1; Fri, 13 May 2022 12:14:35 +0100
+X-MC-Unique: 0C1zEWiPPjqMic9fvV5MTA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Fri, 13 May 2022 12:14:34 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Fri, 13 May 2022 12:14:34 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Daniel Borkmann' <daniel@iogearbox.net>,
+        liqiong <liqiong@nfschina.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "Martin KaFai Lau" <kafai@fb.com>, Song Liu <songliubraving@fb.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hukun@nfschina.com" <hukun@nfschina.com>,
+        "qixu@nfschina.com" <qixu@nfschina.com>,
+        "yuzhe@nfschina.com" <yuzhe@nfschina.com>,
+        "renyu@nfschina.com" <renyu@nfschina.com>
+Subject: RE: [PATCH 1/2] kernel/bpf: change "char *" string form to "char []"
+Thread-Topic: [PATCH 1/2] kernel/bpf: change "char *" string form to "char []"
+Thread-Index: AQHYZkM1stWiUR1QcEWMGKEEx9wika0cp5sg
+Date:   Fri, 13 May 2022 11:14:34 +0000
+Message-ID: <017900c07229451085f82ae1e71cd825@AcuMS.aculab.com>
+References: <20220512142814.26705-1-liqiong@nfschina.com>
+ <bd3d4379-e4aa-79c7-85b8-cc930a04f267@fb.com>
+ <223f19c0-70a7-3b1f-6166-22d494b62b6e@nfschina.com>
+ <92cc4844-5815-c3b0-63be-2e54dc36e1d9@iogearbox.net>
+In-Reply-To: <92cc4844-5815-c3b0-63be-2e54dc36e1d9@iogearbox.net>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20220512162320.2213488-1-maz@kernel.org>
-In-Reply-To: <20220512162320.2213488-1-maz@kernel.org>
-From:   Daniel Palmer <daniel@0x0f.com>
-Date:   Fri, 13 May 2022 20:14:32 +0900
-Message-ID: <CAFr9PXnDqbgd4AebPQepWe5RF2utPcp2PJGoVhVNwX3ZZzsc-g@mail.gmail.com>
-Subject: Re: [PATCH] gpio: Remove dynamic allocation from populate_parent_alloc_arg()
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        kernel-team@android.com, Daniel Palmer <daniel@thingy.jp>,
-        Romain Perier <romain.perier@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Robert Richter <rric@kernel.org>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,46 +73,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi March,
+RnJvbTogRGFuaWVsIEJvcmttYW5uDQo+IFNlbnQ6IDEyIE1heSAyMDIyIDIyOjAwDQo+IA0KPiBP
+biA1LzEyLzIyIDc6MDggUE0sIGxpcWlvbmcgd3JvdGU6DQo+ID4g5ZyoIDIwMjLlubQwNeaciDEy
+5pelIDIzOjE2LCBZb25naG9uZyBTb25nIOWGmemBkzoNCj4gPj4NCj4gPj4gT24gNS8xMi8yMiA3
+OjI4IEFNLCBsaXFpb25nIHdyb3RlOg0KPiA+Pj4gVGhlIHN0cmluZyBmb3JtIG9mICJjaGFyIFtd
+IiBkZWNsYXJlcyBhIHNpbmdsZSB2YXJpYWJsZS4gSXQgaXMgYmV0dGVyDQo+ID4+PiB0aGFuICJj
+aGFyICoiIHdoaWNoIGNyZWF0ZXMgdHdvIHZhcmlhYmxlcy4NCj4gPj4NCj4gPj4gQ291bGQgeW91
+IGV4cGxhaW4gaW4gZGV0YWlscyBhYm91dCB3aHkgaXQgaXMgYmV0dGVyIGluIGdlbmVyYXRlZCBj
+b2Rlcz8NCj4gPj4gSXQgaXMgbm90IGNsZWFyIHRvIG1lIHdoeSB5b3VyIHBhdGNoIGlzIGJldHRl
+ciB0aGFuIHRoZSBvcmlnaW5hbCBjb2RlLg0KPiA+DQo+ID4gVGhlICBzdHJpbmcgZm9ybSBvZiAi
+Y2hhciAqIiBjcmVhdGVzIHR3byB2YXJpYWJsZXMgaW4gdGhlIGZpbmFsIGFzc2VtYmx5IG91dHB1
+dCwNCj4gPiBhIHN0YXRpYyBzdHJpbmcsIGFuZCBhIGNoYXIgcG9pbnRlciB0byB0aGUgc3RhdGlj
+IHN0cmluZy4gIFVzZSAgIm9iamR1bXAgLVMgLUQgICoubyIsDQo+ID4gY2FuIGZpbmQgb3V0IHRo
+ZSBzdGF0aWMgc3RyaW5nICBvY2N1cnJpbmcgIGF0ICJDb250ZW50cyBvZiBzZWN0aW9uIC5yb2Rh
+dGEiLg0KPiANCj4gVGhlcmUgYXJlIH4zNjAgaW5zdGFuY2VzIG9mIHRoaXMgdHlwZSBpbiB0aGUg
+dHJlZSBmcm9tIGEgcXVpY2sgZ3JlcCwgZG8geW91DQo+IHBsYW4gdG8gY29udmVydCBhbGwgdGhl
+bSA/DQoNClRoZXJlIGFyZSBhbHNvIGFsbCB0aGUgcGxhY2VzIHdpdGggY29uc3QgY2hhciAqbmFt
+ZXNbXSA9IC4uLjsNCndoZXJlIHRoZSBhY3R1YWwgbmFtZXMgYXJlIGFsbCBzaW1pbGFyIGxlbmd0
+aCBzbyByZXBsYWNpbmcgd2l0aA0KY29uc3QgY2hhciBuYW1lc1tdW25dIHNhdmVzIHNwYWNlLg0K
+DQpBbHRob3VnaCB0aGF0IHRyYW5zZm9ybWF0aW9uIGhhcyBhIGJpZ2dlciBlZmZlY3Qgb24gc2hh
+cmVkIGxpYnMuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJy
+YW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lz
+dHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
-On Fri, 13 May 2022 at 01:23, Marc Zyngier <maz@kernel.org> wrote:
-> diff --git a/drivers/gpio/gpio-msc313.c b/drivers/gpio/gpio-msc313.c
-> index b2c90bdd39d0..52d7b8d99170 100644
-> --- a/drivers/gpio/gpio-msc313.c
-> +++ b/drivers/gpio/gpio-msc313.c
-> @@ -550,15 +550,12 @@ static struct irq_chip msc313_gpio_irqchip = {
->   * so we need to provide the fwspec. Essentially gpiochip_populate_parent_fwspec_twocell
->   * that puts GIC_SPI into the first cell.
->   */
-> -static void *msc313_gpio_populate_parent_fwspec(struct gpio_chip *gc,
-> -                                            unsigned int parent_hwirq,
-> -                                            unsigned int parent_type)
-> +static int msc313_gpio_populate_parent_fwspec(struct gpio_chip *gc,
-> +                                             union gpio_irq_fwspec *gfwspec,
-> +                                             unsigned int parent_hwirq,
-> +                                             unsigned int parent_type)
->  {
-> -       struct irq_fwspec *fwspec;
-> -
-> -       fwspec = kmalloc(sizeof(*fwspec), GFP_KERNEL);
-> -       if (!fwspec)
-> -               return NULL;
-> +       struct irq_fwspec *fwspec = &gfwspec->fwspec;
->
->         fwspec->fwnode = gc->irq.parent_domain->fwnode;
->         fwspec->param_count = 3;
-> @@ -566,7 +563,7 @@ static void *msc313_gpio_populate_parent_fwspec(struct gpio_chip *gc,
->         fwspec->param[1] = parent_hwirq;
->         fwspec->param[2] = parent_type;
->
-> -       return fwspec;
-> +       return 0;
->  }
->
->  static int msc313e_gpio_child_to_parent_hwirq(struct gpio_chip *chip,
-
-This bit looks fine to me. I will test it over the weekend.
-
-Cheers,
-
-Daniel

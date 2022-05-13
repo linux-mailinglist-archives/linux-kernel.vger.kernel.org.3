@@ -2,105 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71500525E12
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 11:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3597525DFE
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 11:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378762AbiEMI46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 04:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44852 "EHLO
+        id S1378667AbiEMI5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 04:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378750AbiEMI4y (ORCPT
+        with ESMTP id S243338AbiEMI5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 04:56:54 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808CF5F8C5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:56:53 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id j25so9484160wrc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:56:53 -0700 (PDT)
+        Fri, 13 May 2022 04:57:47 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A6267D10;
+        Fri, 13 May 2022 01:57:46 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 137so6934765pgb.5;
+        Fri, 13 May 2022 01:57:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=9LZPjNhuvRomocP2/C/cikB/ZwgE3e5tXIGq6A9Dd3U=;
-        b=qHMJFfDHWXgRe9cj8rwpJ9r0DdwUvJDrktJiIrvLfjKRutQVzpGaNRC1lIzLXlNUkS
-         IQqFJaVM8oVcsmyvdf75GewbHOgM9ZrrQMCC0wg9lt5ak7htqw6/3J8eibSD+KB/yk64
-         k1OJWvR1yYc2xYDMUvPAmuRjbeZn+aH2H94NPlCDh8Ghm0mnHbJzoXWiaiowbDxZH1J2
-         nqwKSEEwwzrT1ZSbxaZC1pt1IhxrzJwrCqolbfhc2mMee4g9FHZme78zR21Np7JIAG++
-         4M1AI+65hU/SvWfS7OjJgBTM0fpaMd7s+yLJmOdwEEGnVkoxX3+RpLeaVYcGFmsP+VBF
-         tY7g==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=im9OFuvNv+HlaoOnPCMf8xlooNiaI5y8YCFk0vG3dWQ=;
+        b=BiJjDkjU/rZgKg+Fw7ejRnhRwSKkVYFgPgtGPL7re+qhT3CCcsvlW7tAMtxBg4XXqK
+         DM2UpKH9ckkPjnx7PenzCvBOuO7eq3Dwh73tOAURfvtvhuJU6MsCH756IxLuU9R6ubHk
+         nbKBVkxmY4uJDcBrckB6ahaXf0VBLNZLPIWTtmkSIScX/nAO681oIzHtRWVBjykHw+ca
+         lcAxG4QLmvWnC7G+RwyHdOmXENw/SOxpiDnapJanqXc51rKUptGqdlXgVG4kQZ3S3SC5
+         1p8QXyqzH9BNqX0GFYUuyi6uS5STgy+adukkJYZG2XSLxY/vFBN/o8ChA2T/zD49rcC0
+         vAVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=9LZPjNhuvRomocP2/C/cikB/ZwgE3e5tXIGq6A9Dd3U=;
-        b=OJhoP4k+IvUWDxnxGbCoJTMxEIoh59tZDKmuFsNrzQnhZDiK/jYhlRrMe03q7QZYDD
-         0tnGNv7Dkbyu5KjSngM0CKV6kwX9XrtT1eLv3fwvcv/kj29hminrlGVlAsPlXxQ0qo+9
-         +jVzGlhrhGhQy6QEAvLhpNfqgdqGlfWy+62sM6hK9krYPpQ5QGmZnLketlat4xt0iQz2
-         dIgtlAireEvsygjiy4F2W+J+2TtPaWfwCufzJPXRihu90oWQoF+CKs8u9EcbjoJOH05z
-         qWwC7j2gYfKsJMaLiV6xthJUNQcFhW6na0PNLaNDpHaDsrbYxEsvGc1Vs28kV7/Qg8eZ
-         hcNw==
-X-Gm-Message-State: AOAM532FOoFQjjos8/iKEHk30VWDnMKNS0/5NKe+acilKnpPiG6hJ0ct
-        1XoBpApdih/iQOv8hUxpzCJKBQ==
-X-Google-Smtp-Source: ABdhPJzMCmIw70cxsQMEoBTBP7pBJdUhXTnr3+T1ukoLP9UrfKIWuPKOQ/eCTJs6c499Mm4I0cCJ+g==
-X-Received: by 2002:adf:ecc7:0:b0:20a:dba3:a516 with SMTP id s7-20020adfecc7000000b0020adba3a516mr2989066wro.143.1652432212121;
-        Fri, 13 May 2022 01:56:52 -0700 (PDT)
-Received: from [192.168.0.169] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id l12-20020adfbd8c000000b0020c547f75easm1527915wrh.101.2022.05.13.01.56.50
+        bh=im9OFuvNv+HlaoOnPCMf8xlooNiaI5y8YCFk0vG3dWQ=;
+        b=yotW82zkkxv/QjnEjso8+iM3QrLe4KdvcR0hDfVhgHj4VHSQa0qmNHduvTSNqT1v/3
+         HgsEo6OUl1t3qfpmDQuJ44lZYnG08KRtQd9NRNr4/96/nlEaCilp8s0NuJWdaiW94x0n
+         hDkoE/AdOBZTFb3ocKRuwx+Zb5gJeCgYq4nY0t4/L3AVZx7e2QZPABhKAeAsuj4MKI6s
+         m+GGnRfhN7YF6Zv5KDX1FDVLwz7YmcVCJEyGFBWeD5ComqNAUxQ2jLENl+JpWmXoIJJO
+         ygoXL1lnuMioAK7MscCbI8Dg8+9Q28FA9IUrfDfb4vpOrzuQYm1I5cGq9wgGkxSiiipz
+         lytg==
+X-Gm-Message-State: AOAM533Rft12ahx2raSieovljao9rfg/XvBnmq0bdu531pXRffiMW7/+
+        D20FW0fBm+IxWXw5eYtL63zd2+BnKdaqqw==
+X-Google-Smtp-Source: ABdhPJzPaTK64rA1aVx5Ti4Wwv8WzvA8sn4JHJpxWwWhX/LZnpPtKz8z1OBPdYqYQNW01uPN4Gp1zw==
+X-Received: by 2002:a05:6a00:1492:b0:50e:11ae:f62f with SMTP id v18-20020a056a00149200b0050e11aef62fmr3736424pfu.43.1652432265870;
+        Fri, 13 May 2022 01:57:45 -0700 (PDT)
+Received: from [192.168.255.10] ([203.205.141.25])
+        by smtp.gmail.com with ESMTPSA id im9-20020a170902bb0900b0015e8d4eb1c6sm1313739plb.16.2022.05.13.01.57.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 01:56:51 -0700 (PDT)
-Message-ID: <f5ec4fd9-b9d7-10fa-1c27-2f268466274f@linaro.org>
-Date:   Fri, 13 May 2022 10:56:50 +0200
+        Fri, 13 May 2022 01:57:45 -0700 (PDT)
+Message-ID: <ab59943e-4a92-41ff-fed7-c0e7f916fa82@gmail.com>
+Date:   Fri, 13 May 2022 16:57:41 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v4 1/5] dt-bindings: proximity: vl53l0x: Document optional
- supply and GPIO properties
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [PATCH RESEND v12 09/17] KVM: x86/pmu: Adjust precise_ip to
+ emulate Ice Lake guest PDIR counter
 Content-Language: en-US
-To:     Markuss Broks <markuss.broks@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Song Qiang <songqiang1304521@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20220512191334.61804-1-markuss.broks@gmail.com>
- <20220512191334.61804-2-markuss.broks@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220512191334.61804-2-markuss.broks@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From:   Like Xu <like.xu.linux@gmail.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>
+References: <20220411101946.20262-1-likexu@tencent.com>
+ <20220411101946.20262-10-likexu@tencent.com>
+In-Reply-To: <20220411101946.20262-10-likexu@tencent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2022 21:13, Markuss Broks wrote:
-> This patch adds the optional properties for the VL53L0X ToF sensor to the
-> device-tree binding.
-> 
-> Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
+On 11/4/2022 6:19 pm, Like Xu wrote:
 
-Wait, two days and three versions? Please give some time before
-resending entire patchset.
+> +++ b/arch/x86/kvm/pmu.h
+> @@ -4,6 +4,8 @@
+>   
+>   #include <linux/nospec.h>
+>   
+> +#include <asm/cpu_device_id.h>
+> +
+>   #define vcpu_to_pmu(vcpu) (&(vcpu)->arch.pmu)
+>   #define pmu_to_vcpu(pmu)  (container_of((pmu), struct kvm_vcpu, arch.pmu))
+>   #define pmc_to_pmu(pmc)   (&(pmc)->vcpu->arch.pmu)
+> @@ -15,6 +17,12 @@
+>   #define VMWARE_BACKDOOR_PMC_REAL_TIME		0x10001
+>   #define VMWARE_BACKDOOR_PMC_APPARENT_TIME	0x10002
+>   
+> +static const struct x86_cpu_id vmx_icl_pebs_cpu[] = {
+> +	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D, NULL),
+> +	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X, NULL),
+> +	{}
+> +};
+The gcc [-Wunused-const-variable] flag would complain about
+not moving vmx_icl_pebs_cpu[] from pmu.h to pmu.c:
 
-Same comments apply as for v2 and v3...
+diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+index b5d0c36b869b..17c9bfc2527d 100644
+--- a/arch/x86/kvm/pmu.c
++++ b/arch/x86/kvm/pmu.c
+@@ -27,6 +27,12 @@
+  struct x86_pmu_capability __read_mostly kvm_pmu_cap;
+  EXPORT_SYMBOL_GPL(kvm_pmu_cap);
+
++static const struct x86_cpu_id vmx_icl_pebs_cpu[] = {
++    X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D, NULL),
++    X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X, NULL),
++    {}
++};
++
+  /* NOTE:
+   * - Each perf counter is defined as "struct kvm_pmc";
+   * - There are two types of perf counters: general purpose (gp) and fixed.
+diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+index dbf4c83519a4..8064d074f3be 100644
+--- a/arch/x86/kvm/pmu.h
++++ b/arch/x86/kvm/pmu.h
+@@ -17,12 +17,6 @@
+  #define VMWARE_BACKDOOR_PMC_REAL_TIME        0x10001
+  #define VMWARE_BACKDOOR_PMC_APPARENT_TIME    0x10002
+
+-static const struct x86_cpu_id vmx_icl_pebs_cpu[] = {
+-    X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D, NULL),
+-    X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X, NULL),
+-    {}
+-};
+-
+  struct kvm_event_hw_type_mapping {
+      u8 eventsel;
+      u8 unit_mask;
 
 
-Best regards,
-Krzysztof
+

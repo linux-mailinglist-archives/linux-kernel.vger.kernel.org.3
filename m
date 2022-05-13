@@ -2,81 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 100415260B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 13:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A72B5260BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 13:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379760AbiEMLI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 07:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37958 "EHLO
+        id S1379780AbiEMLKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 07:10:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245323AbiEMLI4 (ORCPT
+        with ESMTP id S1379733AbiEMLKL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 07:08:56 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 468EA134E36
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 04:08:55 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-40-9SbU5vY1PJqweIlksZC4vw-1; Fri, 13 May 2022 12:08:52 +0100
-X-MC-Unique: 9SbU5vY1PJqweIlksZC4vw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Fri, 13 May 2022 12:08:51 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Fri, 13 May 2022 12:08:51 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Eric Dumazet' <edumazet@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-CC:     Marco Elver <elver@google.com>, Liu Jian <liujian56@huawei.com>,
-        "Dmitry Vyukov" <dvyukov@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "David Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        Neal Cardwell <ncardwell@google.com>,
-        netdev <netdev@vger.kernel.org>
-Subject: RE: [PATCH net] tcp: Add READ_ONCE() to read tcp_orphan_count
-Thread-Topic: [PATCH net] tcp: Add READ_ONCE() to read tcp_orphan_count
-Thread-Index: AQHYZloamBVkYEnoB0GrcOa4F+j2Ra0cpszQ
-Date:   Fri, 13 May 2022 11:08:51 +0000
-Message-ID: <61020a29e421414b8ddf723641b150da@AcuMS.aculab.com>
-References: <20220512103322.380405-1-liujian56@huawei.com>
- <CANn89iJ7Lo7NNi4TrpKsaxzFrcVXdgbyopqTRQEveSzsDL7CFA@mail.gmail.com>
- <CANpmjNPRB-4f3tUZjycpFVsDBAK_GEW-vxDbTZti+gtJaEx2iw@mail.gmail.com>
- <CANn89iKJ+9=ug79V_bd8LSsLaSu0VLtzZdDLC87rcvQ6UYieHQ@mail.gmail.com>
- <20220512231031.GT1790663@paulmck-ThinkPad-P17-Gen-1>
- <CANn89iKiTiGwMvV6K+Zbr_9+knaR-x1N3tOeMX+2No2=4zn6pA@mail.gmail.com>
-In-Reply-To: <CANn89iKiTiGwMvV6K+Zbr_9+knaR-x1N3tOeMX+2No2=4zn6pA@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 13 May 2022 07:10:11 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9DA2A5E9D
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 04:10:08 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652440207;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=D8KLHqVQtCIkBNwToZ5fdFqQrvPlxGtB7EqGxkiaVLg=;
+        b=C3YN/lpNIatUZ1jSSajMzf8gAKJjdczxnx1vlBtduen8gZaEhL29kev4HdGFUyDDvmj2SQ
+        OPPtRtr5bGyQQhMdvgQSYFoniI5Lvka974v9oieFM1oeVonF8VAT/KsZcJoVWltQy+E3qR
+        vxx8khx/ECbgI+gtIJPilEx2lPigvSjqklAiKc6Crj0ywjx0GN3l0AyMx5LG5b5/8w9CeT
+        HrBkK6m45vUChJ1JeBEMEmOvd4AQ4Y8jlJ0pS7CQ41NB6ozQUkYATZ252ShRuckKokICIn
+        TY4zP1UjhDrU7qyxDg48KFFyo9S1NsZhj3IzBFNkS3Pj50OhQXltGQRx8SxFAw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652440207;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=D8KLHqVQtCIkBNwToZ5fdFqQrvPlxGtB7EqGxkiaVLg=;
+        b=8/Q5H2F71NRtRscbCKIedtWvnXfCIPftVKtCvXBUsGHfV2qlGD9eajiPVRiVlkskqt83v8
+        8mQ7GrqQHWBjcDAg==
+To:     Sean Christopherson <seanjc@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: [PATCH] x86/nmi: Make register_nmi_handler() more robust
+In-Reply-To: <20220511234332.3654455-1-seanjc@google.com>
+References: <20220511234332.3654455-1-seanjc@google.com>
+Date:   Fri, 13 May 2022 13:10:06 +0200
+Message-ID: <87zgjlsn75.ffs@tglx>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBTdGF0aXN0aWNzIGFyZSBzdXBwb3NlZCB0byBiZSBtb25vdG9uaWNhbGx5IGluY3JlYXNpbmcg
-OykNCj4gDQo+IFNvbWUgU05NUCBhZ2VudHMgd291bGQgYmUgdmVyeSBjb25mdXNlZCBpZiB0aGV5
-IGNvdWxkIG9ic2VydmUgJ2dhcmJhZ2UnIHRoZXJlLg0KDQpEb24ndCBsb29rIGluc2lkZSB0ZzMg
-Oi0pDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkg
-Um9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlv
-biBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+register_nmi_handler() has no sanity check whether a handler has been
+registered already. Such an unintended double-add leads to list corruption
+and hard to diagnose problems during the next NMI handling.
 
+Init the list head in the static nmi action struct and check it for being
+empty in register_nmi_handler().
+
+Reported-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+---
+ arch/x86/include/asm/nmi.h |    1 +
+ arch/x86/kernel/nmi.c      |   10 +++++++---
+ 2 files changed, 8 insertions(+), 3 deletions(-)
+
+--- a/arch/x86/include/asm/nmi.h
++++ b/arch/x86/include/asm/nmi.h
+@@ -47,6 +47,7 @@ struct nmiaction {
+ #define register_nmi_handler(t, fn, fg, n, init...)	\
+ ({							\
+ 	static struct nmiaction init fn##_na = {	\
++		.list = LIST_HEAD_INIT(fn##_na.list),	\
+ 		.handler = (fn),			\
+ 		.name = (n),				\
+ 		.flags = (fg),				\
+--- a/arch/x86/kernel/nmi.c
++++ b/arch/x86/kernel/nmi.c
+@@ -157,7 +157,7 @@ int __register_nmi_handler(unsigned int
+ 	struct nmi_desc *desc = nmi_to_desc(type);
+ 	unsigned long flags;
+ 
+-	if (!action->handler)
++	if (WARN_ON_ONCE(action->handler || !list_empty(&action->list)))
+ 		return -EINVAL;
+ 
+ 	raw_spin_lock_irqsave(&desc->lock, flags);
+@@ -186,7 +186,7 @@ EXPORT_SYMBOL(__register_nmi_handler);
+ void unregister_nmi_handler(unsigned int type, const char *name)
+ {
+ 	struct nmi_desc *desc = nmi_to_desc(type);
+-	struct nmiaction *n;
++	struct nmiaction *n, *found = NULL;
+ 	unsigned long flags;
+ 
+ 	raw_spin_lock_irqsave(&desc->lock, flags);
+@@ -200,12 +200,16 @@ void unregister_nmi_handler(unsigned int
+ 			WARN(in_nmi(),
+ 				"Trying to free NMI (%s) from NMI context!\n", n->name);
+ 			list_del_rcu(&n->list);
++			found = n;
+ 			break;
+ 		}
+ 	}
+ 
+ 	raw_spin_unlock_irqrestore(&desc->lock, flags);
+-	synchronize_rcu();
++	if (found) {
++		synchronize_rcu();
++		INIT_LIST_HEAD(found);
++	}
+ }
+ EXPORT_SYMBOL_GPL(unregister_nmi_handler);
+ 

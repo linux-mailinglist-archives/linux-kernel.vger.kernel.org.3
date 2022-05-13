@@ -2,54 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576DC52620A
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 14:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD29526207
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 14:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350725AbiEMMeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 08:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53406 "EHLO
+        id S1355985AbiEMMeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 08:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380345AbiEMMeI (ORCPT
+        with ESMTP id S1380327AbiEMMdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 08:34:08 -0400
-X-Greylist: delayed 197 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 13 May 2022 05:33:55 PDT
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C51689B3
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 05:33:54 -0700 (PDT)
-Received: (Authenticated sender: gregory.clement@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 237F61C000D;
-        Fri, 13 May 2022 12:33:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1652445226;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Fri, 13 May 2022 08:33:40 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A2E674C2;
+        Fri, 13 May 2022 05:33:39 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id A42C721A28;
+        Fri, 13 May 2022 12:33:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652445217; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=VGLFeC+5BzmiDZEW3DjfaujlaliK0W2DIOOdDmyOjmU=;
-        b=ayJAIYFCIs4K+zLWtMOGYFfS0jF5V3F5W6ET8B3w8Hcqeg1M680b8gvQZHpqXwxwySxTEE
-        0nBXPdKA3NlOCr5+XFw8XMREmhEhlWzk49gPxN3MJTeW9n8hJXxU3EapuueKKcr4jB8fTh
-        22piFVrSNNtWu02dwAl4sajQ5k0pEKZrMdRYIwbH7PZ5Ca3BYfCPZlJk4M1Pel5J3mEs1A
-        rmHUf7l1rO2XXrazZAxlaCwmQ+Jhnc399/CgllsBJ4Y/SnDESojDbYeKf+QAOJQuhoi7xr
-        b+6L8wSYqqj0/VQxfFd7mmLO/MLNiON2I4Tql7w/65/Qvi3JFfYFcI4u1xNlQw==
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: dts: turris-omnia: Add atsha204a node
-In-Reply-To: <20220512095939.8595-1-pali@kernel.org>
-References: <20220512095939.8595-1-pali@kernel.org>
-Date:   Fri, 13 May 2022 14:33:28 +0200
-Message-ID: <87tu9tr4rr.fsf@BL-laptop>
+        bh=Djcq6OteRPEfJn//KjLPsXwBBDlJy1Icla/0iyhv198=;
+        b=RtoFWSjaH5iSe8BXb79GYjey9O/UmVHeoV/3jkOlbZvLgsgUSLUBe16bayG8d7VxDxL8qT
+        d25mAxBYg6g2M0NdK5e1HU3ETaY5+Zhn6efOh+Obifua/+CIYSmnJaFdHuayfDBka/ehfD
+        cwQ+3BvUI8+lQ25c5+spYKDD+d6sGsg=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 7DC822C141;
+        Fri, 13 May 2022 12:33:37 +0000 (UTC)
+Date:   Fri, 13 May 2022 14:33:34 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, Rik van Riel <riel@fb.com>,
+        "song@kernel.org" <song@kernel.org>,
+        "joe.lawrence@redhat.com" <joe.lawrence@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        Kernel Team <Kernel-team@fb.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>
+Subject: Re: [RFC] sched,livepatch: call klp_try_switch_task in __cond_resched
+Message-ID: <Yn5QHpc9YlAbP1li@alley>
+References: <6bf85ff908377508a5f5bcc7c4e75d598b96f388.camel@fb.com>
+ <20220510165244.ikfh64ertnvodxb4@treble>
+ <1bd15361edfd4db9fc9271d35e7bbe5edad1b87a.camel@fb.com>
+ <20220510184213.l3gjweeleyg7obca@treble>
+ <47440502-930F-4CBD-B859-3AC9BBFF8FC6@fb.com>
+ <20220510230402.e5ymkwt45sg7bd35@treble>
+ <D298A3F1-43A5-4FD5-B198-906364BF4B79@fb.com>
+ <20220511003331.clfvwfgpmbr5yx6n@treble>
+ <20220511092433.GA26047@pathway.suse.cz>
+ <78DFED12-571B-489C-A662-DA333555266B@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <78DFED12-571B-489C-A662-DA333555266B@fb.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,47 +70,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pali Roh=C3=A1r <pali@kernel.org> writes:
+On Wed 2022-05-11 16:33:57, Song Liu wrote:
+> 
+> 
+> > On May 11, 2022, at 2:24 AM, Petr Mladek <pmladek@suse.com> wrote:
+> > 
+> > On Tue 2022-05-10 17:33:31, Josh Poimboeuf wrote:
+> >> On Tue, May 10, 2022 at 11:57:04PM +0000, Song Liu wrote:
+> >>>> If it's a real bug, we should fix it everywhere, not just for Facebook.
+> >>>> Otherwise CONFIG_PREEMPT and/or non-x86 arches become second-class
+> >>>> citizens.
+> >>> 
+> >>> I think "is it a real bug?" is the top question for me. So maybe we 
+> >>> should take a step back.
+> >>> 
+> >>> The behavior we see is: A busy kernel thread blocks klp transition 
+> >>> for more than a minute. But the transition eventually succeeded after 
+> >>> < 10 retries on most systems. The kernel thread is well-behaved, as 
+> >>> it calls cond_resched() at a reasonable frequency, so this is not a 
+> >>> deadlock. 
+> >>> 
+> >>> If I understand Petr correctly, this behavior is expected, and thus 
+> >>> is not a bug or issue for the livepatch subsystem. This is different
+> >>> to our original expectation, but if this is what we agree on, we 
+> >>> will look into ways to incorporate long wait time for patch 
+> >>> transition in our automations. 
+> >> 
+> >> That's how we've traditionally looked at it, though apparently Red Hat
+> >> and SUSE have implemented different ideas of what a long wait time is.
+> >> 
+> >> In practice, one minute has always been enough for all of kpatch's users
+> >> -- AFAIK, everybody except SUSE -- up until now.
+> > 
+> > I am actually surprised that nobody met the problem yet. There are
+> > "only" 60 attempts to transition the pending tasks.
+> 
+> Maybe we should consider increase the frequency we try? Say to 10 times
+> per second? I guess this will solve most of the failures we are seeing
+> in current case. 
 
-> Crypto module atsha204a is available at i2c address 0x64. Module is used
-> for symmetric cryptography and provides also hardware random number
-> generator and OTP storage for device serial number and MAC addresses.
->
-> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
+My concern is that klp_try_complete_transition() checks all processes
+under read_lock(&tasklist_lock). It might create some contention
+on this lock. I am not sure if this lock is fair. It might slow down
+block writers (creating/deleting tasks).
 
-Applied on mvebu/dt
-
-Thanks,
-
-Gregory
-
-> ---
->  arch/arm/boot/dts/armada-385-turris-omnia.dts | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/arm/boot/dts/armada-385-turris-omnia.dts b/arch/arm/boo=
-t/dts/armada-385-turris-omnia.dts
-> index bc778ab8618a..f4eb6898aa6b 100644
-> --- a/arch/arm/boot/dts/armada-385-turris-omnia.dts
-> +++ b/arch/arm/boot/dts/armada-385-turris-omnia.dts
-> @@ -349,7 +349,11 @@
->  			#size-cells =3D <0>;
->  			reg =3D <5>;
->=20=20
-> -			/* ATSHA204A at address 0x64 */
-> +			/* ATSHA204A-MAHDA-T crypto module */
-> +			crypto@64 {
-> +				compatible =3D "atmel,atsha204a";
-> +				reg =3D <0x64>;
-> +			};
->  		};
->=20=20
->  		i2c@6 {
-> --=20
-> 2.20.1
->
-
---=20
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+Best Regards,
+Petr

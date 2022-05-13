@@ -2,125 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11AF7526433
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B835C5264A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380892AbiEMO2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:28:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41802 "EHLO
+        id S1354674AbiEMObt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:31:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380911AbiEMO0P (ORCPT
+        with ESMTP id S1379420AbiEMO1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:26:15 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB644506E3;
-        Fri, 13 May 2022 07:25:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652451944; x=1683987944;
-  h=message-id:date:mime-version:from:subject:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=9MO4Cg9SWuQ3cY0TApzliKOPUlU3hZ6Zqzm0n1CSgmQ=;
-  b=jH37YUvTNIG8JhrJm8Z5bHHrMhGG/C7fJaIw75GrtL1ASiVim3V4mbLn
-   BpF3DnCuXgwuskJ4XhVD6zj1RW4Bc6NjJoKL5AN9hzatXhzBkOlKbx2an
-   t4RT5HLnFqrb+23ZNBavV/3aUNrP4p7awv9z5ZXxkHOGvp1reY0WVBrDn
-   oAaESy5EpiTfmvpDowcqWJKwgyplXT9ypGro8QKpZ0ihWDVxaTtQml3y5
-   +j5lDjEH68foidrwCH77ZL47L8NWWPYM/aostHFyyI7hLKZWb+SIH0MFt
-   Uw30eyXx7PtXvSekBMEsB0FPitpZXNlXA7ZIYHDmlaNsObziLrW/jmB4V
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="295575088"
-X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="295575088"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:25:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="659107033"
-Received: from linux.intel.com ([10.54.29.200])
-  by FMSMGA003.fm.intel.com with ESMTP; 13 May 2022 07:25:43 -0700
-Received: from [10.252.212.211] (kliang2-MOBL.ccr.corp.intel.com [10.252.212.211])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id C7C4C580A88;
-        Fri, 13 May 2022 07:25:40 -0700 (PDT)
-Message-ID: <8ba20985-8116-c7f7-a082-ec30152d9adb@linux.intel.com>
-Date:   Fri, 13 May 2022 10:25:39 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-Subject: Re: [PATCH v2 0/2] Fix topdown event weak grouping
-To:     Ian Rogers <irogers@google.com>,
+        Fri, 13 May 2022 10:27:06 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 96D0E5E74F
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:26:57 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-315-W4fZ4W5BNf20LvCgPbIqkA-1; Fri, 13 May 2022 15:26:54 +0100
+X-MC-Unique: W4fZ4W5BNf20LvCgPbIqkA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Fri, 13 May 2022 15:26:54 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Fri, 13 May 2022 15:26:53 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Alexander Potapenko' <glider@google.com>
+CC:     Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Andi Kleen <ak@linux.intel.com>,
-        John Garry <john.garry@huawei.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>
-References: <20220512061308.1152233-1-irogers@google.com>
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        "Andi Kleen" <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: RE: [RFCv2 00/10] Linear Address Masking enabling
+Thread-Topic: [RFCv2 00/10] Linear Address Masking enabling
+Thread-Index: AQHYZrnErY7g4wB/gUe/NECu92+S/a0cqjCAgAAA34CAADGTYA==
+Date:   Fri, 13 May 2022 14:26:53 +0000
+Message-ID: <ea7faf6e961141c7848e7587d5e369eb@AcuMS.aculab.com>
+References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
+ <20220511064943.GR76023@worktop.programming.kicks-ass.net>
+ <20bada85-9203-57f4-2502-57a6fd11f3ea@intel.com> <875ymav8ul.ffs@tglx>
+ <55176b79-90af-4a47-dc06-9f5f2f2c123d@intel.com>
+ <CAG_fn=URUve59ZPWRawW+BN-bUy7U3QmFsfOz_7L8ndsL4kQFQ@mail.gmail.com>
+ <8a47d0ee50b44520a6f26177e6fe7ec5@AcuMS.aculab.com>
+ <CAG_fn=XUqzBWzuU0cmjUoSfHTv6pN=LCqGh7Ns8kgR6L169bPw@mail.gmail.com>
+In-Reply-To: <CAG_fn=XUqzBWzuU0cmjUoSfHTv6pN=LCqGh7Ns8kgR6L169bPw@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-In-Reply-To: <20220512061308.1152233-1-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+RnJvbTogQWxleGFuZGVyIFBvdGFwZW5rbw0KPiBTZW50OiAxMyBNYXkgMjAyMiAxMzoyNg0KPiAN
+Cj4gT24gRnJpLCBNYXkgMTMsIDIwMjIgYXQgMToyOCBQTSBEYXZpZCBMYWlnaHQgPERhdmlkLkxh
+aWdodEBhY3VsYWIuY29tPiB3cm90ZToNCj4gPg0KPiA+IC4uLg0KPiA+ID4gT25jZSB3ZSBoYXZl
+IHRoZSBwb3NzaWJpbGl0eSB0byBzdG9yZSB0YWdzIGluIHRoZSBwb2ludGVycywgd2UgZG9uJ3QN
+Cj4gPiA+IG5lZWQgcmVkem9uZXMgZm9yIGhlYXAvc3RhY2sgb2JqZWN0cyBhbnltb3JlLCB3aGlj
+aCBzYXZlcyBxdWl0ZSBhIGJpdA0KPiA+ID4gb2YgbWVtb3J5Lg0KPiA+DQo+ID4gWW91IHN0aWxs
+IG5lZWQgcmVkem9uZXMuDQo+ID4gVGhlIGhpZ2ggYml0cyBhcmUgaWdub3JlZCBmb3IgYWN0dWFs
+IG1lbW9yeSBhY2Nlc3Nlcy4NCj4gPg0KPiA+IFRvIGRvIG90aGVyd2lzZSB5b3UnZCBuZWVkIHRo
+ZSBoaWdoIGJpdHMgdG8gYmUgaW4gdGhlIFBURSwNCj4gPiBjb3BpZWQgdG8gdGhlIFRMQiBhbmQg
+ZmluYWxseSBnZXQgaW50byB0aGUgY2FjaGUgdGFnLg0KPiA+DQo+ID4gVGhlbiB5b3UnZCBoYXZl
+IHRvIHVzZSB0aGUgY29ycmVjdCB0YWdzIGZvciBlYWNoIHBhZ2UuDQo+IA0KPiBTb3JyeSwgSSBk
+b24ndCB1bmRlcnN0YW5kIGhvdyB0aGlzIGlzIHJlbGV2YW50IHRvIEhXQVNhbiBpbiB0aGUgdXNl
+cnNwYWNlLg0KPiBMaWtlIGluIEFTYW4sIHdlIGhhdmUgYSBjdXN0b20gYWxsb2NhdG9yIHRoYXQg
+YXNzaWducyB0YWdzIHRvIGhlYXANCj4gb2JqZWN0cy4gVGhlIGFzc2lnbmVkIHRhZyBpcyBzdG9y
+ZWQgaW4gYm90aCB0aGUgc2hhZG93IG1lbW9yeSBmb3IgdGhlDQo+IG9iamVjdCBhbmQgdGhlIHBv
+aW50ZXIgcmV0dXJuZWQgYnkgdGhlIGFsbG9jYXRvci4NCj4gSW5zdHJ1bWVudGF0aW9uIGluc2Vy
+dGVkIGJ5IHRoZSBjb21waWxlciBjaGVja3MgdGhlIHBvaW50ZXIgYmVmb3JlDQo+IGV2ZXJ5IG1l
+bW9yeSBhY2Nlc3MgYW5kIGVuc3VyZXMgdGhhdCBpdHMgdGFnIG1hdGNoZXMgdGhlIHRhZyBvZiB0
+aGUNCj4gb2JqZWN0IGluIHRoZSBzaGFkb3cgbWVtb3J5Lg0KDQpEb2Vzbid0IHRoYXQgYWRkIHNv
+IG11Y2ggb3ZlcmhlYWQgdGhhdCB0aGUgc3lzdGVtIHJ1bnMgbGlrZSBhIHNpY2sgcGlnPw0KSSBk
+b24ndCBzZWUgYW55IHBvaW50IGFkZGluZyBvdmVyaGVhZCB0byBhIGdlbmVyaWMga2VybmVsIHRv
+IHN1cHBvcnQNCnN1Y2ggb3BlcmF0aW9uLg0KDQo+IEEgdGFnIG1pc21hdGNoIGlzIHJlcG9ydGVk
+IGFzIGFuIG91dC1vZi1ib3VuZHMgb3IgYSB1c2UtYWZ0ZXItZnJlZSwNCj4gZGVwZW5kaW5nIG9u
+IHdoZXRoZXIgdGhlIGFjY2Vzc2VkIG1lbW9yeSBpcyBzdGlsbCBjb25zaWRlcmVkDQo+IGFsbG9j
+YXRlZC4NCj4gQmVjYXVzZSBvYmplY3RzIHdpdGggZGlmZmVyZW50IHRhZ3MgZm9sbG93IGVhY2gg
+b3RoZXIsIHRoZXJlIGlzIG5vDQo+IG5lZWQgdG8gYWRkIGV4dHJhIHJlZHpvbmVzIHRvIHRoZSBv
+YmplY3RzIHRvIGRldGVjdCBidWZmZXIgb3ZlcmZsb3dzLg0KPiAoV2UgbWlnaHQgbmVlZCB0byBp
+bmNyZWFzZSB0aGUgb2JqZWN0IGFsaWdubWVudCB0aG91Z2gsIGJ1dCB0aGF0J3MgYQ0KPiBkaWZm
+ZXJlbnQgc3RvcnkpLg0KDQpIb3cgZG9lcyBhbGwgdGhhdCBoZWxwIGlmIGEgc3lzdGVtIGNhbGwg
+KGVnIHJlYWQoKSkgaXMgZ2l2ZW4NCmFuIGludmFsaWQgbGVuZ3RoLg0KSWYgdGhhdCBsZW5ndGgg
+aXMgY2hlY2tlZCB0aGVuIHRoZSAndW5tYXNrZWQnIGFkZHJlc3MgY2FuIGJlDQpwYXNzZWQgdG8g
+dGhlIGtlcm5lbC4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwg
+QnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVn
+aXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
-
-On 5/12/2022 2:13 AM, Ian Rogers wrote:
-> Keep topdown events within a group when a weak group is broken. This
-> is a requirement as topdown events must form a group.
-> 
-> Add perf stat testing including for required topdown event group
-> behaviors.
-> 
-> Note: as with existing topdown evsel/evlist code topdown events are
-> assumed to be on the PMU "cpu". On Alderlake the PMU "cpu_core" should
-> also be tested. Future changes can fix Alderlake.
-
-I will send a follow-up patch to fix the weak grouping for the hybrid 
-platform shortly.
-
-For the non-hybrid platform, the patch set looks good to me.
-
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-
-Thanks,
-Kan
-
-> 
-> v2. Correct behavior wrt pmu prefixed events and avoid the test using
->      deprecated events: Suggested-by: Liang, Kan <kan.liang@linux.intel.com>
-> 
-> Ian Rogers (2):
->    perf evlist: Keep topdown counters in weak group
->    perf test: Add basic stat and topdown group test
-> 
->   tools/perf/arch/x86/util/evsel.c | 12 ++++++
->   tools/perf/tests/shell/stat.sh   | 67 ++++++++++++++++++++++++++++++++
->   tools/perf/util/evlist.c         | 16 +++++++-
->   tools/perf/util/evsel.c          | 10 +++++
->   tools/perf/util/evsel.h          |  3 ++
->   5 files changed, 106 insertions(+), 2 deletions(-)
->   create mode 100755 tools/perf/tests/shell/stat.sh
-> 

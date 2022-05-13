@@ -2,74 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11393525F5C
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE3A8525F55
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379216AbiEMJwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 05:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58242 "EHLO
+        id S1378941AbiEMKEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 06:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379214AbiEMJwD (ORCPT
+        with ESMTP id S229458AbiEMKEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 05:52:03 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B615E172
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 02:51:59 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L03mg0k7pzfbMc;
-        Fri, 13 May 2022 17:50:43 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 13 May 2022 17:51:58 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 13 May
- 2022 17:51:57 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-mtd@lists.infradead.org>
-CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>
-Subject: [PATCH -next] mtd: st_spi_fsm: add missing clk_disable_unprepare() stfsm_remove()
-Date:   Fri, 13 May 2022 18:03:22 +0800
-Message-ID: <20220513100322.2664431-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 13 May 2022 06:04:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC865DA31
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 03:04:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 906FFB82D69
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:04:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5B1EC34113;
+        Fri, 13 May 2022 10:04:28 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="o456yJyb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1652436267;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7N6xB4W6thqhcdDfV4PV2FXKnzYMTtVOVwyux6OehkY=;
+        b=o456yJybAwDr76wPvhcATttE/rOtmbhc00u1hq6MoEYo621wVNvBnLGFk0nVszOj9xU/7j
+        qJcHRUOOQJoUpsQgtwImiiLmtbEwjvaGUHp+83yDazhqftj+B6FsIr+NRk3vWPJM+IY1Qv
+        RlYr0KTDrQGNqzf+xyg+FBfBoDyAkIo=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b32beb18 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 13 May 2022 10:04:26 +0000 (UTC)
+Date:   Fri, 13 May 2022 12:04:24 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Dominik Brodowski <linux@dominikbrodowski.net>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] random: handle latent entropy and command line from
+ random_init()
+Message-ID: <Yn4tKA3VqJVeV9KH@zx2c4.com>
+References: <20220512124839.20755-1-Jason@zx2c4.com>
+ <Yn34RROzSQtHP/rZ@owl.dominikbrodowski.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yn34RROzSQtHP/rZ@owl.dominikbrodowski.net>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clock source is prepared and enabled by clk_prepare_enable()
-in probe function, but no disable or unprepare in remove function.
+On Fri, May 13, 2022 at 08:18:45AM +0200, Dominik Brodowski wrote:
+> > -static inline void add_latent_entropy(void) {}
+> > +static inline void add_latent_entropy(void) { }
+> 
+> Stray change here, which doesn't seem necessary...
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/mtd/devices/st_spi_fsm.c | 2 ++
- 1 file changed, 2 insertions(+)
+Will remove from this commit. I plan to cleanup random.h anyway and
+might change it back then.
 
-diff --git a/drivers/mtd/devices/st_spi_fsm.c b/drivers/mtd/devices/st_spi_fsm.c
-index 983999c020d6..d3377b10fc0f 100644
---- a/drivers/mtd/devices/st_spi_fsm.c
-+++ b/drivers/mtd/devices/st_spi_fsm.c
-@@ -2126,6 +2126,8 @@ static int stfsm_remove(struct platform_device *pdev)
- {
- 	struct stfsm *fsm = platform_get_drvdata(pdev);
- 
-+	clk_disable_unprepare(fsm->clk);
-+
- 	return mtd_device_unregister(&fsm->mtd);
- }
- 
--- 
-2.25.1
-
+Jason

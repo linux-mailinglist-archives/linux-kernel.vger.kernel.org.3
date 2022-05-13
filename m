@@ -2,82 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 261185258FD
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 02:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F793525905
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 02:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357041AbiEMAgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 20:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
+        id S1359745AbiEMAl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 20:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiEMAgZ (ORCPT
+        with ESMTP id S232196AbiEMAlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 20:36:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425642497D
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 17:36:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E9D48B82B61
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 00:36:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AECDC385B8;
-        Fri, 13 May 2022 00:36:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1652402181;
-        bh=YamEZ3xW3F+5L2aoDDsxvt+p4+fp1TcaW7VG7lie2EA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DlXLjpB7tjOcsoABHj2WqvpbCi0VJ4jfI7RsczkeARZrYrD3y/p6FOFOwCSQH04bw
-         xX4J4DwetmBpMrV9MwEV2vwVbVGI4TDgYKWamlclDiLGHkkfbfeqR25GeHLd+19qin
-         50jvhr221UvJad6SIV8AlGnzvwkeMeYzSvH+xRCw=
-Date:   Thu, 12 May 2022 17:36:20 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Bibo Mao <maobibo@loongson.cn>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Yang Shi <shy828301@gmail.com>
-Subject: Re: [PATCH v3] mm/khugepaged: sched to numa node when collapse huge
- page
-Message-Id: <20220512173620.2f5175c7a321e6ccea6e58e9@linux-foundation.org>
-In-Reply-To: <YmrB/7ehG2kj2RMn@xz-m1.local>
-References: <20220317065024.2635069-1-maobibo@loongson.cn>
-        <3a441789-b3e4-236e-2e44-e7a1c7258a94@redhat.com>
-        <YmrB/7ehG2kj2RMn@xz-m1.local>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        Thu, 12 May 2022 20:41:23 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4E85FF07
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 17:41:21 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id ij27-20020a170902ab5b00b0015d41282214so3508310plb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 17:41:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=PLHfkBps8/NN/F93wiTb1I9xCzDthCPlSjntIH72rDE=;
+        b=I8afDsMFlizjC2WkKw9nEOj2vMJgklTATaw1Hsa/SWTOmJqlD7HHRMFbRFXtiK5hKb
+         eWR68srOtf34zMu8hRlFofRBQy/Kzvf9bIK5KmrMoPCtMhuNUIreuIDMCS0+HR7A97qA
+         4norc+7XY3Ry8c2YsW8H6ig1JhvGZVoetaN6esBwKE9GsFTgHy0aQb6TWGqWqT5+iagi
+         u0NOcqhn2xj8lDeq6QVIGMfypdzYQUXj/zwLC7cAmZdjvcQbS1bZDx2o2Swcm1uJ7M+H
+         MVP3texpB2djiZrBiw8E2Hcwgk3Wb3yQENmoEoJRD1eEtwku11QHqpbk9WVB9zxfdH3a
+         fmmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=PLHfkBps8/NN/F93wiTb1I9xCzDthCPlSjntIH72rDE=;
+        b=58WDPXfm/a6dZXXAlR51CTc68PDBDF3a4gzsPunzxRHDAxezLeZSWW+5UiZN7zAAGD
+         38FCs/sico348mXkcehZ/cmVFXp3SKPnDCnZOwDnMesz+xIbs4aTuaKXM5WuTAV/AXS+
+         n0wigJxjrHkfKciQyRKY88gq9V6Fw5a88RBvv0L4RR7tLLZqJzi4Tgw6B6AXaDTNbbWv
+         jBCUU5rkMZm0jMH/Oe6ZnbAq484FZXBxjmo4VagoQKD15Od4jHRdMAz829ZaRzirwaT7
+         IOqurS+V1ruoL5m45baYoGf58a0rOMZeEjMUHlHwWvW8KiqpUB3viM3JpemUO/8gFqw3
+         9vhg==
+X-Gm-Message-State: AOAM531u2y1SD8NcXhGUemUrTvyLvmMqXrf/2S544u3A8VnOFhibVrfB
+        /3x5nSWVtxpVimXtIdNqDnPtqDVn1qWFldXe
+X-Google-Smtp-Source: ABdhPJyNqg86E2DPDFz9cP8m9RIs4OnDIdJI8SHawkmDOi6DsBWOzE4x5CksBx4CuyRBczY8XM/fFtpwNsdQ7jWf
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a17:90b:4b42:b0:1dc:15f8:821b with SMTP
+ id mi2-20020a17090b4b4200b001dc15f8821bmr13529101pjb.131.1652402480734; Thu,
+ 12 May 2022 17:41:20 -0700 (PDT)
+Date:   Fri, 13 May 2022 00:41:17 +0000
+Message-Id: <20220513004117.364577-1-yosryahmed@google.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
+Subject: [PATCH bpf-next] selftests/bpf: fix building bpf selftests statically
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>
+Cc:     John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Apr 2022 12:34:07 -0400 Peter Xu <peterx@redhat.com> wrote:
+bpf selftests can no longer be built with CFLAGS=-static with
+liburandom_read.so and its dependent target.
 
-> On Thu, Apr 28, 2022 at 05:17:07PM +0200, David Hildenbrand wrote:
-> > On 17.03.22 07:50, Bibo Mao wrote:
-> > > collapse huge page will copy huge page from general small pages,
-> > > dest node is calculated from most one of source pages, however
-> > > THP daemon is not scheduled on dest node. The performance may be
-> > > poor since huge page copying across nodes, also cache is not used
-> > > for target node. With this patch, khugepaged daemon switches to
-> > > the same numa node with huge page. It saves copying time and makes
-> > > use of local cache better.
-> > > 
-> > > With this patch, specint 2006 base performance is improved with 6%
-> > > on Loongson 3C5000L platform with 32 cores and 8 numa nodes.
-> > 
-> > If it helps, that's nice as long as it doesn't hurt other cases.
-> > 
+Filter out -static for liburandom_read.so and its dependent target.
 
-Quite a bit of doubtful feedback and we have yet to hear from the
-author.  I'll drop the patch.
+Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+---
+ tools/testing/selftests/bpf/Makefile | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-Bibo, please resend at a later time if you feel the patch remains
-desirable.  Please attempt to address the feedback via code changes
-and/or changelogging.
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 6bbc03161544..4eaefc187d5b 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -168,14 +168,17 @@ $(OUTPUT)/%:%.c
+ 	$(call msg,BINARY,,$@)
+ 	$(Q)$(LINK.c) $^ $(LDLIBS) -o $@
+ 
++# If the tests are being built statically, exclude dynamic libraries defined
++# in this Makefile and their dependencies.
++DYNAMIC_CFLAGS := $(filter-out -static,$(CFLAGS))
+ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c
+ 	$(call msg,LIB,,$@)
+-	$(Q)$(CC) $(CFLAGS) -fPIC $(LDFLAGS) $^ $(LDLIBS) --shared -o $@
++	$(Q)$(CC) $(DYNAMIC_CFLAGS) -fPIC $(LDFLAGS) $^ $(LDLIBS) --shared -o $@
+ 
+ $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_read.so
+ 	$(call msg,BINARY,,$@)
+-	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.c,$^)			       \
+-		  liburandom_read.so $(LDLIBS)	       			       \
++	$(Q)$(CC) $(DYNAMIC_CFLAGS) $(LDFLAGS) $(filter %.c,$^)			\
++		  liburandom_read.so $(LDLIBS)					\
+ 		  -Wl,-rpath=. -Wl,--build-id=sha1 -o $@
+ 
+ $(OUTPUT)/bpf_testmod.ko: $(VMLINUX_BTF) $(wildcard bpf_testmod/Makefile bpf_testmod/*.[ch])
+-- 
+2.36.0.550.gb090851708-goog
 

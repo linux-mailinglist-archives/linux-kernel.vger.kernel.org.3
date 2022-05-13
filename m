@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43D4F5265A2
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B135265A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381722AbiEMPGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 11:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42290 "EHLO
+        id S1381740AbiEMPGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 11:06:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381695AbiEMPGk (ORCPT
+        with ESMTP id S1381706AbiEMPGm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 11:06:40 -0400
+        Fri, 13 May 2022 11:06:42 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDA12D1C9;
-        Fri, 13 May 2022 08:06:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708DA2E095;
+        Fri, 13 May 2022 08:06:41 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 5B1CF1F461FA
+        with ESMTPSA id 644E11F461FD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652454399;
-        bh=YD87vGLOcYs5Cnj6glBqy1KYk+EcyTbz4Vdd5DCZtF0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ABXvbdc1EPfvdc3uC2FTKBH5UgOctQqdvJD28zkm8dXyJg2hYVCj89bv5pW8d1ev7
-         F4hEAZQ856ZOeDvEoqkq5MIA47GQ5UwnXn6KISmHiiDczgo9BbeYhfMrqWlx3ohCv9
-         OL0IkCIe4XgjI0zBIXOAtOgUEwh8PdlArdEP1VtKlHhFY4yIr+LrBhaWnTGh+C/q9q
-         OMscRXH3EYYsgqe+xymBJIijnCqBcSYoflW6JVDvk/Jplepj8otSLGk0VXXA38fueG
-         b8+7TA6h8b+8GVFeHrxdxRA0lMRaOBzRtoSGInTXrDFyrSpUt0r/XpfFnVpRMuajOA
-         GiUB+Cg7kYgag==
+        s=mail; t=1652454400;
+        bh=67EnZKy5K5mDCLThDhmr9nLxfLMQyeNafBIln7pk/sI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=C9XxoQiP4LWE/ZR+dGAf0IplgjAdDcsT97XBoakzOryHvYx+fdFJ16H0jtUQfqk+T
+         AjpiAlzS1csQZKT++F+ffrLCiVsk/veP/inAwIox2p0kKwZqkRY1HpDguYk2xmIqyb
+         cLZi7A6Ke2oRq/yYShrehuJveuy3a4Je7zJmJxPvko7X8hKBgSqjb4qSRVMWO3F+Sj
+         G9wOG9AZn3aRweBddmLeSWx2AW404I0Fi5SyWc1W2E2qoSzw1zZouNlc5MIJXnCQvY
+         a4lADtFKw4eC+nFgBCtDh9rq4dnfJ8sCy+D9oaZGUMoppYfLDA/UDNkXvJB3WZNrXN
+         TsDwCcuEAgyrg==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     yong.wu@mediatek.com
@@ -40,10 +40,12 @@ Cc:     krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
         paul.bouchara@somainline.org, kernel@collabora.com,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2 0/2] MediaTek Helio X10 MT6795 - SMI Support
-Date:   Fri, 13 May 2022 17:06:31 +0200
-Message-Id: <20220513150633.387200-1-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 1/2] dt-bindings: memory: mtk-smi: Add MT6795 Helio X10 bindings
+Date:   Fri, 13 May 2022 17:06:32 +0200
+Message-Id: <20220513150633.387200-2-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220513150633.387200-1-angelogioacchino.delregno@collabora.com>
+References: <20220513150633.387200-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -56,27 +58,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In an effort to give some love to the apparently forgotten MT6795 SoC,
-I am upstreaming more components that are necessary to support platforms
-powered by this one apart from a simple boot to serial console.
+Add SMI bindings for the MediaTek Helio X10 (MT6795) SoC
 
-This series introduces support for the SMI common and LARBs, found in
-this SoC.
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ .../bindings/memory-controllers/mediatek,smi-common.yaml         | 1 +
+ .../bindings/memory-controllers/mediatek,smi-larb.yaml           | 1 +
+ 2 files changed, 2 insertions(+)
 
-Tested on a MT6795 Sony Xperia M5 (codename "Holly") smartphone.
-
-Changes in v2:
- - Added forgotten new definitions
-
-AngeloGioacchino Del Regno (2):
-  dt-bindings: memory: mtk-smi: Add MT6795 Helio X10 bindings
-  memory: mtk-smi: Add support for MT6795 Helio X10
-
- .../memory-controllers/mediatek,smi-common.yaml |  1 +
- .../memory-controllers/mediatek,smi-larb.yaml   |  1 +
- drivers/memory/mtk-smi.c                        | 17 +++++++++++++++++
- 3 files changed, 19 insertions(+)
-
+diff --git a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
+index a98b359bf909..71bc5cefb49c 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
+@@ -32,6 +32,7 @@ properties:
+           - mediatek,mt2701-smi-common
+           - mediatek,mt2712-smi-common
+           - mediatek,mt6779-smi-common
++          - mediatek,mt6795-smi-common
+           - mediatek,mt8167-smi-common
+           - mediatek,mt8173-smi-common
+           - mediatek,mt8183-smi-common
+diff --git a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
+index c886681f62a7..59dcd163668f 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
+@@ -20,6 +20,7 @@ properties:
+           - mediatek,mt2701-smi-larb
+           - mediatek,mt2712-smi-larb
+           - mediatek,mt6779-smi-larb
++          - mediatek,mt6795-smi-larb
+           - mediatek,mt8167-smi-larb
+           - mediatek,mt8173-smi-larb
+           - mediatek,mt8183-smi-larb
 -- 
 2.35.1
 

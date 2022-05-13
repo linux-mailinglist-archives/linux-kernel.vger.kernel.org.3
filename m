@@ -2,42 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0564B525DF0
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 11:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71500525E12
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 11:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378723AbiEMI4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 04:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
+        id S1378762AbiEMI46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 04:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378300AbiEMI4e (ORCPT
+        with ESMTP id S1378750AbiEMI4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 04:56:34 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5F9965DA7E
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:56:32 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 35DFC113E;
-        Fri, 13 May 2022 01:56:32 -0700 (PDT)
-Received: from bogus (unknown [10.57.65.38])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DB4993F73D;
-        Fri, 13 May 2022 01:56:30 -0700 (PDT)
-Date:   Fri, 13 May 2022 09:56:24 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Qing Wang <wangqing@vivo.com>, Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] arch_topology: support parsing cluster_id from DT
-Message-ID: <20220513085624.wnawifzi3nqhbuh3@bogus>
-References: <1652262776-3056-1-git-send-email-wangqing@vivo.com>
- <Yn0XE3szFk9f2VyL@bogus>
- <4b124aa9-ed26-a40b-8e74-81043d051247@arm.com>
+        Fri, 13 May 2022 04:56:54 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808CF5F8C5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:56:53 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id j25so9484160wrc.9
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:56:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9LZPjNhuvRomocP2/C/cikB/ZwgE3e5tXIGq6A9Dd3U=;
+        b=qHMJFfDHWXgRe9cj8rwpJ9r0DdwUvJDrktJiIrvLfjKRutQVzpGaNRC1lIzLXlNUkS
+         IQqFJaVM8oVcsmyvdf75GewbHOgM9ZrrQMCC0wg9lt5ak7htqw6/3J8eibSD+KB/yk64
+         k1OJWvR1yYc2xYDMUvPAmuRjbeZn+aH2H94NPlCDh8Ghm0mnHbJzoXWiaiowbDxZH1J2
+         nqwKSEEwwzrT1ZSbxaZC1pt1IhxrzJwrCqolbfhc2mMee4g9FHZme78zR21Np7JIAG++
+         4M1AI+65hU/SvWfS7OjJgBTM0fpaMd7s+yLJmOdwEEGnVkoxX3+RpLeaVYcGFmsP+VBF
+         tY7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9LZPjNhuvRomocP2/C/cikB/ZwgE3e5tXIGq6A9Dd3U=;
+        b=OJhoP4k+IvUWDxnxGbCoJTMxEIoh59tZDKmuFsNrzQnhZDiK/jYhlRrMe03q7QZYDD
+         0tnGNv7Dkbyu5KjSngM0CKV6kwX9XrtT1eLv3fwvcv/kj29hminrlGVlAsPlXxQ0qo+9
+         +jVzGlhrhGhQy6QEAvLhpNfqgdqGlfWy+62sM6hK9krYPpQ5QGmZnLketlat4xt0iQz2
+         dIgtlAireEvsygjiy4F2W+J+2TtPaWfwCufzJPXRihu90oWQoF+CKs8u9EcbjoJOH05z
+         qWwC7j2gYfKsJMaLiV6xthJUNQcFhW6na0PNLaNDpHaDsrbYxEsvGc1Vs28kV7/Qg8eZ
+         hcNw==
+X-Gm-Message-State: AOAM532FOoFQjjos8/iKEHk30VWDnMKNS0/5NKe+acilKnpPiG6hJ0ct
+        1XoBpApdih/iQOv8hUxpzCJKBQ==
+X-Google-Smtp-Source: ABdhPJzMCmIw70cxsQMEoBTBP7pBJdUhXTnr3+T1ukoLP9UrfKIWuPKOQ/eCTJs6c499Mm4I0cCJ+g==
+X-Received: by 2002:adf:ecc7:0:b0:20a:dba3:a516 with SMTP id s7-20020adfecc7000000b0020adba3a516mr2989066wro.143.1652432212121;
+        Fri, 13 May 2022 01:56:52 -0700 (PDT)
+Received: from [192.168.0.169] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id l12-20020adfbd8c000000b0020c547f75easm1527915wrh.101.2022.05.13.01.56.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 01:56:51 -0700 (PDT)
+Message-ID: <f5ec4fd9-b9d7-10fa-1c27-2f268466274f@linaro.org>
+Date:   Fri, 13 May 2022 10:56:50 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4b124aa9-ed26-a40b-8e74-81043d051247@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v4 1/5] dt-bindings: proximity: vl53l0x: Document optional
+ supply and GPIO properties
+Content-Language: en-US
+To:     Markuss Broks <markuss.broks@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Song Qiang <songqiang1304521@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20220512191334.61804-1-markuss.broks@gmail.com>
+ <20220512191334.61804-2-markuss.broks@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220512191334.61804-2-markuss.broks@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -46,53 +90,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 10:36:26AM +0200, Dietmar Eggemann wrote:
-> On 12/05/2022 16:17, Sudeep Holla wrote:
-> > On Wed, May 11, 2022 at 02:52:56AM -0700, Qing Wang wrote:
-> >> From: Wang Qing <wangqing@vivo.com>
-> >>
-> >> Use nested cluster structures in DT to support describing multi-level
-> >> cluster topologies and increase the parsing of nested cluster.
-> >>
-> >> Notice: the clusters describing in DT currently are not physical
-> >> boundaries, since changing "cluster" to "socket" is too involved and error
-> >> prone, this patch will not have any effect on one-level cluster topo, but
-> >> can support the mutil-level cluster topo to support CLUSTER_SCHED.
-> > 
-> > Sorry the socket/package_id is broken. If we are playing with cluster_id
-> > which is now wrongly presented as package_id, you are forced to fix that
-> > too. We don't want to break that in a different way or leave that as is
-> > since the cluster_id and package ids now show up as same now. Earlier the
-> > cluster_id was -1.
+On 12/05/2022 21:13, Markuss Broks wrote:
+> This patch adds the optional properties for the VL53L0X ToF sensor to the
+> device-tree binding.
 > 
-> We can leave package_id=0 (and maybe add socket parsing later) and use
-> llc_id instead. Like some Arm server do via ACPI. This will leave
-> cluster_id for Armv9 L2 sharing. cluster_id is also used in servers for
-> 2. level "clustering", e.g. Kunpeng920 L3-tags or Ampere Altra's SCU
-> boundaries.
->
+> Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
 
-OK I need to brush up my knowledge there. IIUC, the cluster id and llc_id are
-different and I don't believe you can mix them. There are platforms with
-system-wide(meaning including all the clusters) last level cache. This
-may break on those platforms.
+Wait, two days and three versions? Please give some time before
+resending entire patchset.
 
-Also IIRC ACPI PPTT has both find_cpu_cluster and find_last_level_cache
-(names may differ as I haven't looked at the code) which are entirely
-different. They may be same on some platforms but the information source
-is definitely different.
+Same comments apply as for v2 and v3...
 
-> This way we can achieve both. (1) not use package_id for cluster and (2)
-> have cluster_id available for 2. level cluster.
-> 
-> I just send out a lightly tested RFC:
-> 
-> https://lkml.kernel.org/r/20220513083400.343706-1-dietmar.eggemann@arm.com
-> 
 
-OK, I will take a look, but llc_id and cluster_id are fundamentally different.
-Let me see what you have done in the patch exactly and comment there.
-
--- 
-Regards,
-Sudeep
+Best regards,
+Krzysztof

@@ -2,49 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D94A85267AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 18:56:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4AD65267A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 18:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382586AbiEMQym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 12:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54632 "EHLO
+        id S1382549AbiEMQyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 12:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376866AbiEMQyL (ORCPT
+        with ESMTP id S1382704AbiEMQyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 12:54:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78195677D
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 09:52:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3CA07B80D3E
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 16:52:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8104C34100;
-        Fri, 13 May 2022 16:52:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652460760;
-        bh=9+uLG6DacTmT7ZHwIV8mCWTe/BIRO1BxcapPZy6v4h0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=mI+7RmCYSuJY3Mph3/sGxsm9laPe+0mCazl4YiIgEh3EkFQLpIKYqF29IBeAMFtup
-         UGAyZP8Bip0kWab+Kk3nQhYvLhyBsFZZLo8XRs/GR/h0L2JEFhNa8eR3iwTor8AMdp
-         7DQx+DXF0xLbKVs/NEoBC8/gBlhOEkYE1VZIO1LKn61gSqglRwBow+F3WsJ9hTA9Dx
-         IiX6Xd3+5/tCzvFuegNRcy9ttSNbcw7PSAsfEJ/EUy+kYFUakFWogTV5PM0h32Hoda
-         nvEary/1E08u4yZ4Pr73OkfChbCqjY09WiHNwqaev9/zzwl4M9DTuydb1z9kBsHSdu
-         hVBA9H65vDi7A==
-Date:   Fri, 13 May 2022 17:52:35 +0100
-From:   Will Deacon <will@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: [GIT PULL] arm64 fixes for -rc7
-Message-ID: <20220513165233.GA32168@willie-the-truck>
+        Fri, 13 May 2022 12:54:20 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7000E56C2E
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 09:53:06 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id x8so4604500pgr.4
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 09:53:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AUV1xEazjWXY63tfW7HNmR3TtmSUkdVdBcreZvOq/Dw=;
+        b=SU1Y5UeYFEIiSvMSa7oSYvsdj5jyUJnf3NY38OUjCQASpT4Z3aAcq4PZ7LFqBQnkRB
+         CbpHiDuaHHvIYSCP0vwq6hA/6Qed4I0YURCe/v7MGM8BQsLY3GvqZVKXKPjQZojDMPYO
+         GkPZFbbIrrnEWxUlgs3VrCrFMozz6U62PUshY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AUV1xEazjWXY63tfW7HNmR3TtmSUkdVdBcreZvOq/Dw=;
+        b=bPbg9IXLVor/ygIHRQ+QrmEcG9lswfoiTrlt27Y2SpQXPclIAsehXS1DHTwtXMZY6U
+         Qtywj1FEa6x+YsmKWBXkptltTsdmyLI2LOD+MlnHXqcbZHnnNchewOIR0UmEDzkUU35e
+         1Szl7doKKXrpRH7ekoXTOiZeyP8hLUdFA+X/sfXhh3tYU8orzo4yVCSWqTut3jQArdy9
+         EvG72CJVQ/QvcqLDR3AtXiAqU5Cj2lgIW3VVEemgntirgJAFp/KosLT9tEf5sd5g0AFp
+         r0VvoxE/fwEmqWhgtaUzIRDWzEEwEs2r4S1gtgJKQPD6bv5NAHXz9yej9cEfVXQ4/Ia/
+         VpZg==
+X-Gm-Message-State: AOAM533zFJG0qm4FLEAa87hJ1nQ/6uLmIc6nixh1YqRnooMb/WHmihvn
+        OJ9KUCpaK8hXpFYNGDAntGwpKQ==
+X-Google-Smtp-Source: ABdhPJzNdBdAfqwQ5UdhSPodIDV1E0fccuYbI5UfXF8BRC6dSRC9hAykOcqhvA29DbkdaPcpIwrsyQ==
+X-Received: by 2002:a63:5513:0:b0:3c3:7bfa:c3ea with SMTP id j19-20020a635513000000b003c37bfac3eamr4648709pgb.243.1652460786017;
+        Fri, 13 May 2022 09:53:06 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:bc87:9632:bcce:8e17])
+        by smtp.gmail.com with UTF8SMTPSA id u14-20020a170902714e00b00160c970eeb7sm1861475plm.234.2022.05.13.09.53.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 09:53:05 -0700 (PDT)
+Date:   Fri, 13 May 2022 09:53:04 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Mike Snitzer <snitzer@redhat.com>
+Cc:     Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] dm: Add verity helpers for LoadPin
+Message-ID: <Yn6M8J1lfBpH8rW0@google.com>
+References: <20220504195419.1143099-1-mka@chromium.org>
+ <20220504125404.v3.1.I3e928575a23481121e73286874c4c2bdb403355d@changeid>
+ <YnwioaRiVmYevo8i@google.com>
+ <Yn1BkO4t+CXR0nzk@redhat.com>
+ <Yn1xyVmPJGQz31lN@google.com>
+ <Yn6HaVbfBxmmWkvI@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <Yn6HaVbfBxmmWkvI@redhat.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,52 +79,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, May 13, 2022 at 12:29:29PM -0400, Mike Snitzer wrote:
+> On Thu, May 12 2022 at  4:44P -0400,
+> Matthias Kaehlcke <mka@chromium.org> wrote:
+> 
+> > On Thu, May 12, 2022 at 01:19:12PM -0400, Mike Snitzer wrote:
+> > > On Wed, May 11 2022 at  4:54P -0400,
+> > > Matthias Kaehlcke <mka@chromium.org> wrote:
+> > > 
+> > > > Alasdar/Mike, I'd be interested in your take on adding these functions
+> > > > to verity/DM, to get an idea whether this series has a path forward to
+> > > > landing upstream.
+> > > 
+> > > I'll be reviewing your patchset now. Comments inlined below.
+> > > 
+> > > > On Wed, May 04, 2022 at 12:54:17PM -0700, Matthias Kaehlcke wrote:
+> > > > > LoadPin limits loading of kernel modules, firmware and certain
+> > > > > other files to a 'pinned' file system (typically a read-only
+> > > > > rootfs). To provide more flexibility LoadPin is being extended
+> > > > > to also allow loading these files from trusted dm-verity
+> > > > > devices. For that purpose LoadPin can be provided with a list
+> > > > > of verity root digests that it should consider as trusted.
+> > > > > 
+> > > > > Add a bunch of helpers to allow LoadPin to check whether a DM
+> > > > > device is a trusted verity device. The new functions broadly
+> > > > > fall in two categories: those that need access to verity
+> > > > > internals (like the root digest), and the 'glue' between
+> > > > > LoadPin and verity. The new file dm-verity-loadpin.c contains
+> > > > > the glue functions.
+> > > > > 
+> > > > > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > > > > ---
+> > > > > 
+> > > > > Changes in v3:
+> > > > > - none
+> > > > > 
+> > > > > Changes in v2:
+> > > > > - none
+> > > > > 
+> > > > >  drivers/md/Makefile               |  6 +++
+> > > > >  drivers/md/dm-verity-loadpin.c    | 80 +++++++++++++++++++++++++++++++
+> > > > >  drivers/md/dm-verity-target.c     | 33 +++++++++++++
+> > > > >  drivers/md/dm-verity.h            |  4 ++
+> > > > >  include/linux/dm-verity-loadpin.h | 27 +++++++++++
+> > > > >  5 files changed, 150 insertions(+)
+> > > > >  create mode 100644 drivers/md/dm-verity-loadpin.c
+> > > > >  create mode 100644 include/linux/dm-verity-loadpin.h
+> > > > > 
+> > > > > diff --git a/drivers/md/Makefile b/drivers/md/Makefile
+> > > > > index 0454b0885b01..e12cd004d375 100644
+> > > > > --- a/drivers/md/Makefile
+> > > > > +++ b/drivers/md/Makefile
+> > > > > @@ -100,6 +100,12 @@ ifeq ($(CONFIG_IMA),y)
+> > > > >  dm-mod-objs			+= dm-ima.o
+> > > > >  endif
+> > > > >  
+> > > > > +ifeq ($(CONFIG_DM_VERITY),y)
+> > > > > +ifeq ($(CONFIG_SECURITY_LOADPIN),y)
+> > > > > +dm-mod-objs			+= dm-verity-loadpin.o
+> > > > > +endif
+> > > > > +endif
+> > > > > +
+> > > 
+> > > Why are you extending dm-mod-objs?  Why not dm-verity-objs?
+> > 
+> > Sorry, I missed to address this comment in my earlier reply.
+> > 
+> > I don't recall why I chose dm-mod-objs initially, agreed that
+> > dm-verity-objs seems a better fit.
+> 
+> Yes, should be fixed even though the 3rd patch removes this change.
 
-Please pull these three arm64 fixes for -rc7. The summary is in the tag
-but it's all pretty straightforward.
+Sure
 
-Thanks,
+> BTW, looking at the 2nd patch's loadpin_is_fs_trusted().  Seems to me
+> you'd do well to pass a 'struct block_device *' to a DM helper rather
+> than force security/loadpin/loadpin.c to mess around with DM device
+> refcounting, etc.
 
-Will
-
---->8
-
-The following changes since commit c35fe2a68f29a0bda15ae994154cacaae5f69791:
-
-  elf: Fix the arm64 MTE ELF segment name and value (2022-04-28 11:37:06 +0100)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git tags/arm64-fixes
-
-for you to fetch changes up to 51f559d66527e238f9a5f82027bff499784d4eac:
-
-  arm64: Enable repeat tlbi workaround on KRYO4XX gold CPUs (2022-05-12 13:15:38 +0100)
-
-----------------------------------------------------------------
-arm64 fixes for -rc7
-
-- TLB invalidation workaround for Qualcomm Kryo-4xx "gold" CPUs
-
-- Fix broken dependency in the vDSO Makefile
-
-- Fix pointer authentication overrides in ISAR2 ID register
-
-----------------------------------------------------------------
-Joey Gouly (1):
-      arm64: vdso: fix makefile dependency on vdso.so
-
-Kristina Martsenko (1):
-      arm64: cpufeature: remove duplicate ID_AA64ISAR2_EL1 entry
-
-Shreyas K K (1):
-      arm64: Enable repeat tlbi workaround on KRYO4XX gold CPUs
-
- Documentation/arm64/silicon-errata.rst | 3 +++
- arch/arm64/kernel/Makefile             | 4 ++++
- arch/arm64/kernel/cpu_errata.c         | 2 ++
- arch/arm64/kernel/cpufeature.c         | 3 +--
- arch/arm64/kernel/vdso/Makefile        | 3 ---
- arch/arm64/kernel/vdso32/Makefile      | 3 ---
- 6 files changed, 10 insertions(+), 8 deletions(-)
+Sounds good to me. Thanks for the suggestion!

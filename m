@@ -2,138 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 860EB525E37
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 11:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB067525DEC
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 11:18:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378717AbiEMI6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 04:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51876 "EHLO
+        id S1378719AbiEMJAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 05:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243338AbiEMI63 (ORCPT
+        with ESMTP id S1347155AbiEMJAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 04:58:29 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6769D104C90
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:58:28 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id m25so9424735oih.2
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:58:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NpSINpDETSbqQ8kuCYB8/3th0pcSa+77c/avszgXaYU=;
-        b=oVgumAXJ+VQc7CQO3qYv73vAoQnhh0vFgw3BxSBiCr2EYIifreB+9BrI6ZNmnhIKBx
-         92Uc0Gpwu1ET19ShHNwi4x3AsOWl3s7NSQILJ0J+IdAnhwortPYFAoDGWIRmg+5GxQHw
-         2xxGUqcIotThN96zCVpp7grCwO6X/NIohPfQZEYmiX21UMcniP4hAHvp/fEubjP1cfh/
-         cEEmCGT4ja2naAQGleImvN0huyjfCQlzr2P1MYg8bRfn95MALtdvPMIOB+AJGoqCgL/5
-         Rd6mUvUB7QhIyHuZHfBebJqxyN7wksjrjF02Ah/+0OZQWJlSi1wyYqvQqtHkJ//4fAdb
-         lFwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NpSINpDETSbqQ8kuCYB8/3th0pcSa+77c/avszgXaYU=;
-        b=Kd5sXqPJS3wj6ZRNSaMhcAYXuhFWAp5kQpZfsb38gyOk3TADq961WWGJ18cesXjRss
-         0cFp0KvNeXL6yR0t90229wHwqqqeqhllhZdrKAelvB4duPR3oM69qnl4jQWCgLLr5Xvk
-         O3QpVmEq+Ipmpt23Lkt92vTrXgh+jITMmE40JFFviXqgbrrAR5L/cnF60g5GyfhzcOVN
-         yU7fZi1Owi9ESaJovOq0hgqQs39bCIdd75JToGBE3uO5htpd8O0pHNdtX3hl4nED5uSO
-         wk2MWzgLhiwfMN+hS2Yn2rx8WWUs3Hke5TatOytlNIjxmeIRCVtQvtqKzprANQnIFK4G
-         0zNw==
-X-Gm-Message-State: AOAM533Q4+74mNbKMLuJ8R0gVHhHxwq9cx77N5IcLzKpbBd+Fc8QgQrw
-        PaaJmiFuyzW2/8MYHR2mkB7ilZ89I265exwIwQ2X7C9Yz6F5lHyc
-X-Google-Smtp-Source: ABdhPJwiCK0EUi1xGHK6lBz/6ilajF8YcQlrhGJneXXIEE1Iymq3Olk69LvLfn6/mYieWW2CC7eBLTUy7riubBnnF+U=
-X-Received: by 2002:a05:6808:114d:b0:328:aaa2:10c9 with SMTP id
- u13-20020a056808114d00b00328aaa210c9mr1828896oiu.217.1652432307735; Fri, 13
- May 2022 01:58:27 -0700 (PDT)
+        Fri, 13 May 2022 05:00:30 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED8D2B24CF
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 02:00:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652432430; x=1683968430;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=UZNkG4uYXbLPDXpnWT/lY5jCnuirKRlehwcMQwjEFIg=;
+  b=CPT034C5Qvge/vqP4na/bj3PeTOPG1BCl72cprDGxeXefgVayzmVvgll
+   gbf5po+emdhJZDgkdvwMPlrhxR93vhbRsGthfME9fGTahr3sdCle7MhiU
+   Xl0B4nyHSFHJBjyFq8FZigkh/31TIiOXFLKzZG9CUhNUsoX3+ETSra+oV
+   xA2hCkwT62grpntFjGWwA3/ZWxSKdqeUcCUHwK4GHS7VUYZzTo7isEJtw
+   4aNwSGLpwE7I1+ARlf91yiIRAtJq8mQA05aBAlFL/ztfcHsoBsjxF6vRd
+   uPNAhdPhnmye+M90pJRUUDmQOuyyqGU0ap+WJfJGIZv/VcbUdhDViL0mp
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="257803076"
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="257803076"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 02:00:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="637219581"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 13 May 2022 02:00:27 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1npR9v-000LZ8-4m;
+        Fri, 13 May 2022 09:00:27 +0000
+Date:   Fri, 13 May 2022 16:59:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/rxrpc-ringless 35/35]
+ net/rxrpc/recvmsg.c:311:25: sparse: sparse: cast from restricted __be16
+Message-ID: <202205131657.SjbSnATI-lkp@intel.com>
 MIME-Version: 1.0
-References: <1698297.NAKyZzlH2u@archbook> <YnOEwuuyO2/h7c1G@e120937-lin>
- <CAN5uoS_MgBiTVZCRSZyYCH4cnUZD_bHj2+mZu661bFV8TKWScw@mail.gmail.com>
- <6587375.6lpfYT6tjA@archbook> <Yn0a9nSD7Yu6aOkt@bogus>
-In-Reply-To: <Yn0a9nSD7Yu6aOkt@bogus>
-From:   Etienne Carriere <etienne.carriere@linaro.org>
-Date:   Fri, 13 May 2022 10:58:17 +0200
-Message-ID: <CAN5uoS8KXJZS52eys-ko0e_UpQCwiTvg42h-hJ3=ZAbvit99Qg@mail.gmail.com>
-Subject: Re: [BUG] New arm scmi check in linux-next causing rk3568 not to boot
- due to firmware bug
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Liang Chen <cl@rock-chips.com>, linux-kernel@vger.kernel.org,
-        Kever Yang <kever.yang@rock-chips.com>,
-        Jeffy Chen <jeffy.chen@rock-chips.com>,
-        Peter Geis <pgwipeout@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello all,
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/rxrpc-ringless
+head:   36075641f704b02b4bcaee01d904a06676b32199
+commit: 36075641f704b02b4bcaee01d904a06676b32199 [35/35] rxrpc: Don't split up received jumbo packets
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220513/202205131657.SjbSnATI-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/36075641f704b02b4bcaee01d904a06676b32199
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/rxrpc-ringless
+        git checkout 36075641f704b02b4bcaee01d904a06676b32199
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sh SHELL=/bin/bash net/rxrpc/
 
-On Thu, 12 May 2022 at 16:34, Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Thu, May 12, 2022 at 01:11:22PM +0200, Nicolas Frattaroli wrote:
-> > Hello,
-> >
-> > sorry for the late reply, completely missed that there was a question
-> > for me in this mail.
-> >
-> > On Donnerstag, 5. Mai 2022 11:40:09 CEST Etienne Carriere wrote:
-> > > Hello Nicolas, Cristian,
-> > > [...]
-> > >
-> > > Indeed the firmware implementation is wrong in TF-A.
-> > > And also in OP-TEE by the way:
-> > > https://github.com/OP-TEE/optee_os/blob/3.17.0/core/drivers/scmi-msg/base.c#L163-L166
-> > >
-> > > @Nicoals, do you want to send a patch to TF-A, or do you want me to do it?
-> >
-> > I have no experience with TF-A, so I'd prefer if you could do it.
-> >
-> > In good news, Rockchip has confirmed they're preparing to release RK356x
-> > TF-A sources, so I'll be able to port the patch over to their sources once
-> > they are released, if they don't already apply it themselves.
-> >
->
-> So, there is no way to get a blob release with the patch applied ?
-> We know it is a bug in TF-A and if Rockchip is using that codebase, it
-> will be the same bug there too causing this issue. Waiting until the
-> code is released and the proper TF-A port is done may not be acceptable
-> for many developers. So someone from the rockchip doing these tf-a blob
-> release must get involved here, understand the situation and get the fixed.
->
-> We can workaround, but I want to hear that it will be fixed instead of
-> getting ignored until proper port is available.
->
-> Etienne, are you not the author for the related TF-A code ? How can we
-> get that fixed in the TF-A code base. If you are not, then I will try to
-> get my repo login credentials sorted so that I can only push TF-A change.
-
-Yes, I'm the author of the code.
-I have created a gerrit change in TF-A to fix the issue:
-https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/15196
-
-OP-TEE implementation also embeds the same scmi-msg drivers and have
-the same issue.
-I should be fixed by P-R: https://github.com/OP-TEE/optee_os/pull/5334
-I will ask TF-A if this specific change can hit TF-A release v2.7 tag,
-if posisble.
-
-Feedbacks are welcome on these 2 forums.
-
-Regards,
-etienne
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
 
->
-> --
-> Regards,
-> Sudeep
+sparse warnings: (new ones prefixed by >>)
+>> net/rxrpc/recvmsg.c:311:25: sparse: sparse: cast from restricted __be16
+>> net/rxrpc/recvmsg.c:311:25: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] val @@     got restricted __be16 [addressable] [usertype] cksum @@
+   net/rxrpc/recvmsg.c:311:25: sparse:     expected unsigned short [usertype] val
+   net/rxrpc/recvmsg.c:311:25: sparse:     got restricted __be16 [addressable] [usertype] cksum
+>> net/rxrpc/recvmsg.c:311:25: sparse: sparse: cast from restricted __be16
+>> net/rxrpc/recvmsg.c:311:25: sparse: sparse: cast from restricted __be16
+>> net/rxrpc/recvmsg.c:311:23: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned short [usertype] cksum @@     got restricted __be16 [usertype] @@
+   net/rxrpc/recvmsg.c:311:23: sparse:     expected unsigned short [usertype] cksum
+   net/rxrpc/recvmsg.c:311:23: sparse:     got restricted __be16 [usertype]
+
+vim +311 net/rxrpc/recvmsg.c
+
+   275	
+   276	/*
+   277	 * Set up a data location table for a jumbo DATA packet then verify
+   278	 * and decrypt all the subpackets and locate the data for each.  We
+   279	 * also need to skip over any duplicate subpackets.
+   280	 */
+   281	static int rxrpc_verify_data(struct rxrpc_call *call, struct sk_buff *skb)
+   282	{
+   283		struct rxrpc_jumbo_header jhdr;
+   284		struct rxrpc_skb_subpacket *subs;
+   285		struct rxrpc_skb_priv *sp = rxrpc_skb(skb);
+   286		unsigned int offset = sizeof(struct rxrpc_wire_header);
+   287		unsigned int len = skb->len - sizeof(struct rxrpc_wire_header);
+   288		rxrpc_seq_t seq = sp->hdr.seq;
+   289		int nr_subs = sp->nr_subpackets - 1, i = 0, j;
+   290		u16 cksum = sp->hdr.cksum;
+   291	
+   292		subs = kcalloc(sp->nr_subpackets, sizeof(*sp->subs), GFP_KERNEL);
+   293		if (!subs)
+   294			return -ENOMEM;
+   295		sp->subs = subs;
+   296	
+   297		for (; j < nr_subs; j++, seq++) {
+   298			if (after(seq, call->rx_consumed)) {
+   299				subs[i].offset	= offset;
+   300				subs[i].len	= RXRPC_JUMBO_DATALEN;
+   301				subs[i].cksum	= cksum;
+   302				i++;
+   303			} else {
+   304				sp->hdr.seq++;
+   305				sp->nr_subpackets--;
+   306			}
+   307			offset += RXRPC_JUMBO_DATALEN;
+   308			if (skb_copy_bits(skb, offset, &jhdr.cksum, 2) < 0)
+   309				return -EPROTO;
+   310			offset += sizeof(jhdr);
+ > 311			cksum = htons(jhdr.cksum);
+   312			len -= RXRPC_JUMBO_SUBPKTLEN;
+   313		}
+   314	
+   315		subs[i].offset	= offset;
+   316		subs[i].len	= len;
+   317		subs[i].cksum	= cksum;
+   318		return call->security->verify_packet(call, skb);
+   319	}
+   320	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,113 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 492735266FD
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 18:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2878C526700
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 18:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382423AbiEMQ0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 12:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57952 "EHLO
+        id S235440AbiEMQ0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 12:26:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381875AbiEMQZ4 (ORCPT
+        with ESMTP id S235278AbiEMQ0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 12:25:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 84E5A91567
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 09:25:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652459153;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ub5KAZihY6DYhd8Dh60sSEVIjle32E0Y+oXuLhLfRmI=;
-        b=aa/HZx4Qz92Wxe7fRBxcFWOQyV8mOEBbp2C5hmJ6znxPelc20P9pLCOz24wKrZdlojwwSY
-        TKd+VP8DcRCzIFWlCzFArVrZwPAG3e9fp+k4Nq5O9UBEjhiwmaayaAIV2KaH/hBKQrz/9y
-        3xr7/n4gfdpcsnJNjNDNwrIiXgOSeFk=
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
- [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-156-AdNy7p9WM_u57h6jZxUtZQ-1; Fri, 13 May 2022 12:25:52 -0400
-X-MC-Unique: AdNy7p9WM_u57h6jZxUtZQ-1
-Received: by mail-io1-f70.google.com with SMTP id r137-20020a6b2b8f000000b0065dbbc04e94so4263320ior.16
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 09:25:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=Ub5KAZihY6DYhd8Dh60sSEVIjle32E0Y+oXuLhLfRmI=;
-        b=BMyQw+SpSZ5Ec12IZ5uGo420lssQZBR/O07zO1nD9Ubo6V9QzJhqDH7afqTmiCrmTJ
-         lq6AovAVrLhn7V0yjeOCNKok79UXm3ZEKgcRPSmfe3pwR6kKpNEpc8R6kMGk0TFilicY
-         mQ3SIHrUn6ljMnayoyOLHkH+gU9fM19KQFNfDuRi9CiKAFP+AV2Gh9qLC6CVikIET1Qd
-         40WT16O+E1R6TnBOfoXwQLyWd8HGUizJkGMrIs47ZbCWt3CFYipXy0EK1WMcjWCz3I1I
-         nuFAbIbzCiv2Ru8F1GHhCk3jPT3HPjxjqgD2p1hf0I+asmNWK9J3Q2BDyt/VSeNFyDV9
-         it2A==
-X-Gm-Message-State: AOAM533FqAKAAKpsnVy+9nuzNmxr2y4kM6KCuDM1ssawxqbktOAcZN7y
-        BXrQVglUgud1h1nnEKLRkJE9CATfkbdZo4biHnnsXWGUDTDCSNDOf45SLRHhFVcV7sMiGUYFVgb
-        097CrfCp2t4/3Rbhqslmg6a0a
-X-Received: by 2002:a05:6e02:1a86:b0:2cf:5846:29b3 with SMTP id k6-20020a056e021a8600b002cf584629b3mr3006526ilv.232.1652459151802;
-        Fri, 13 May 2022 09:25:51 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy9MjoZwEcYaDWk2gqQCT9hWL1nI3AiMXUTtNXeCu+v5XL13uXOxow6nSkLqXj4afENxZZ8NA==
-X-Received: by 2002:a05:6e02:1a86:b0:2cf:5846:29b3 with SMTP id k6-20020a056e021a8600b002cf584629b3mr3006516ilv.232.1652459151519;
-        Fri, 13 May 2022 09:25:51 -0700 (PDT)
-Received: from redhat.com ([98.55.18.59])
-        by smtp.gmail.com with ESMTPSA id j17-20020a023211000000b0032b3a7817b3sm772601jaa.119.2022.05.13.09.25.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 09:25:51 -0700 (PDT)
-Date:   Fri, 13 May 2022 10:25:48 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Qian Cai <quic_qiancai@quicinc.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
-Subject: Re: [RESEND PATCH v8 00/11] Fix BUG_ON in
- vfio_iommu_group_notifier()
-Message-ID: <20220513102548.5cf2a3aa.alex.williamson@redhat.com>
-In-Reply-To: <Yn5+GKHlQlX5bszi@8bytes.org>
-References: <20220418005000.897664-1-baolu.lu@linux.intel.com>
-        <20220502161204.GA22@qian>
-        <YnI8Xy54M3XQpS0T@8bytes.org>
-        <20220504102956.0f5b5302.alex.williamson@redhat.com>
-        <Yn5+GKHlQlX5bszi@8bytes.org>
-Organization: Red Hat
+        Fri, 13 May 2022 12:26:37 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883DE95DC4;
+        Fri, 13 May 2022 09:26:36 -0700 (PDT)
+Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4L0DRm6bFTz689PV;
+        Sat, 14 May 2022 00:21:40 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 13 May 2022 18:26:34 +0200
+Received: from [10.47.25.226] (10.47.25.226) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 13 May
+ 2022 17:26:33 +0100
+Message-ID: <b6e28614-e348-b490-bf33-af5810a60722@huawei.com>
+Date:   Fri, 13 May 2022 17:26:32 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 1/7] perf test: Skip reason for suites with 1 test
+To:     Ian Rogers <irogers@google.com>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        "Namhyung Kim" <namhyung@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        "Sohaib Mohamed" <sohaib.amhmd@gmail.com>,
+        Carsten Haitzler <carsten.haitzler@arm.com>,
+        Marco Elver <elver@google.com>,
+        Michael Petlan <mpetlan@redhat.com>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>
+References: <20220513040519.1499333-1-irogers@google.com>
+ <20220513040519.1499333-2-irogers@google.com>
+ <6341384c-b3e6-fbe5-f29f-e0db114bd439@huawei.com>
+ <CAP-5=fX+PfnyHRc=-sQMo1_mGLzCJ77pSfzXXHVUEOHtVFGwxA@mail.gmail.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <CAP-5=fX+PfnyHRc=-sQMo1_mGLzCJ77pSfzXXHVUEOHtVFGwxA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [10.47.25.226]
+X-ClientProxiedBy: lhreml748-chm.china.huawei.com (10.201.108.198) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 May 2022 17:49:44 +0200
-Joerg Roedel <joro@8bytes.org> wrote:
+On 13/05/2022 16:42, Ian Rogers wrote:
+>> I was not sure which suite has a single tastcase, so I experimented for
+>> libpfm4 by deleting a testcase so it has only 1x remaining, I get:
+>>
+>> before your change:
+>> john@localhost:~/acme/tools/perf> sudo ./perf test 63
+>> 63: Test libpfm4 support : Skip
+>>
+>> after:
+>>
+>> john@localhost:~/acme/tools/perf> sudo ./perf test 63
+>> 63: Test libpfm4 support : Skip (not compiled in)
+>>
+>> Although it is odd to have a single sub-test, is there a reason for
+>> which we don't print its name? We print the name when there are multiple
+>> sub-tests.
+> The reason was to replicate the existing "perf test" behavior before
+> the kunit style transition. The main place we get tests with a single
+> sub-test is from the DEFINE_SUITE macro:
+> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/tests/tests.h?h=perf/core#n67
+> I agree it looks kind of weird and was inheriting the data structures
+> from kunit and the format of the output from perf test.
 
-> Hi Alex,
-> 
-> On Wed, May 04, 2022 at 10:29:56AM -0600, Alex Williamson wrote:
-> > Done, and thanks for the heads-up.  Please try to cc me when the
-> > vfio-notifier-fix branch is merged back into your next branch.  Thanks,  
-> 
-> This has happened now, the vfio-notifier-fix branch got the fix and is
-> merged back into my next branch.
+Out of curiosity, which suite is this that you find only has a single 
+subtest? Does it possibly only have a single subtest as some others may 
+be compiled out?
 
-Thanks, Joerg!
-
-Jason, I'll push a merge of this with
-
-Subject: [PATCH] vfio: Delete container_q
-0-v1-a1e8791d795b+6b-vfio_container_q_jgg@nvidia.com
-
-and
-
-Subject: [PATCH v3 0/8] Remove vfio_group from the struct file facing VFIO API
-0-v3-f7729924a7ea+25e33-vfio_kvm_no_group_jgg@nvidia.com
-
-as soon as my sanity build finishes.  Thanks,
-
-Alex
-
+Thanks,
+John

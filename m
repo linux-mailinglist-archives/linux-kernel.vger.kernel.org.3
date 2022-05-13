@@ -2,98 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6856B52636E
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A035526370
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233117AbiEMOHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59984 "EHLO
+        id S233431AbiEMOIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiEMOH2 (ORCPT
+        with ESMTP id S229788AbiEMOIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:07:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F32450B0E;
-        Fri, 13 May 2022 07:07:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF4DF6203F;
-        Fri, 13 May 2022 14:07:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7CE8C34100;
-        Fri, 13 May 2022 14:07:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652450845;
-        bh=JHGmg8HELW1l/NvkzMwcz7ZBqd9Xb6Lnpfs7ZKtiCY4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Zrk377rYFyGd1DKEgPcrB9U2j9iCZcIVPSjX3G4yXLEfiYpGZy5dx2KMZOtOZ0yNr
-         NCoJXvvNbST2JWJjySL0hS2bH2g4g0XE7V+Gm1NKCEdd9QvmqMast/6QrQI/KEDfMi
-         WorsvflMykUMERYcoyJYSOpC8+l5LMCOzs2YBBRmSJoUTzGKf0scl5FddkBQWOaIhT
-         GwnqFB1VZwZplQZt3NTcK3a/KMcSRjIo0CKbfTxNhXSfdEwnYuPerD7pwFFJGJFJA3
-         hyQLhJjridnveTZ/DfiPT9rpVPxjE9kNvIpfOa4uQeptvK60qVAzKlySyll0t2HMRY
-         5It/PFzyhHP4Q==
-Date:   Fri, 13 May 2022 09:07:23 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-s390@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH RESEND v5 1/4] PCI: Clean up pci_scan_slot()
-Message-ID: <20220513140723.GA947754@bhelgaas>
+        Fri, 13 May 2022 10:08:11 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19AE462CEB;
+        Fri, 13 May 2022 07:08:10 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id e24so8191723pjt.2;
+        Fri, 13 May 2022 07:08:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=TWXXrbAm4PpaLqldYWgYCPhU0WPhNfiQs7deWJmTcog=;
+        b=AFqSFrObrsA8pWWGIrBdouSjPKruwQEb+IPH6K4vtZV37Er00YDCWOAeTiZlUkRCmn
+         DRRBUx5Ad83gRyF8U/pFy1OnLyXPSASRlgf4b1n3cv3T+FbZ4r9X4bHXS53k4ahkvr6v
+         E6+LP/EjxS9mNAoLLmtpaFI5FMiN/RS73/LnGMa3Ic3ZSQOVmLLKcfEDMonogRh2WhGT
+         jTJFHninjF5gTkX0YrZYJh4cwZ2PEtP6QoS3WXlhcBZF6X11RCqBcQkFxSRM7A1eZP46
+         GY6bfwewM7IwnQJCV+PNqFLQSRjMMFQyBV0Ul7lhrpspP0y4mnHr8vxpd4te8evzw1DP
+         ywvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=TWXXrbAm4PpaLqldYWgYCPhU0WPhNfiQs7deWJmTcog=;
+        b=n8EeNo5fCz3n2TQM8UyEP3t996U1xIH1cokwsuGgrZGpKeqhvgyGAHbGVKMZSTh1ad
+         dej1oXttGaCF3sj+8YbB6zQDyDgKfu9TCfFqd21gjRaTR04Blh+k2feqhjDEtbY88JQd
+         szjxySipTgH/iaFwFWWBqDtLM9UKkhK+KJbSpIT/+wLbg1UPTg+YMnxrUu2ZnUcwpFH2
+         dIC12f00C0Zhu/l5LGcGKuoD1GQAnRDbghhJoEq1nOPEfLOJZb/njwjJjfeqJjKb7tGJ
+         +noB1cuYtj/i3dN3r4/uA6wg6RhwPgGoQJJ/kuE/jB0DdY/m6Y69dZVNXRAZH6dKeCCo
+         IhcQ==
+X-Gm-Message-State: AOAM530x2ILiX45WGxDZ7HbtqyBz/7rtBZ1CmOc/DvMqC+6FZp3/bbcu
+        Ka7XH/zxktwQnffn18P3boPQvpk0wVrTjHk=
+X-Google-Smtp-Source: ABdhPJyzWYb/pCkLBPu5qAWPUietF1DSuOxx/ffN0+H7t5MC1tJkCsrSkUv7+jXZE1CzwwRnkMqYjA==
+X-Received: by 2002:a17:902:7144:b0:15f:3d88:d79 with SMTP id u4-20020a170902714400b0015f3d880d79mr4793763plm.86.1652450889516;
+        Fri, 13 May 2022 07:08:09 -0700 (PDT)
+Received: from localhost.localdomain ([144.202.91.207])
+        by smtp.gmail.com with ESMTPSA id q24-20020a17090a2e1800b001dc7623950csm3657458pjd.11.2022.05.13.07.08.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 07:08:09 -0700 (PDT)
+From:   Zheyu Ma <zheyuma97@gmail.com>
+To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com
+Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zheyu Ma <zheyuma97@gmail.com>
+Subject: [PATCH v2] Bluetooth: bfusb: Check the endpoint type at probe
+Date:   Fri, 13 May 2022 22:07:59 +0800
+Message-Id: <20220513140759.2196755-1-zheyuma97@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220513124303.2192981-1-zheyuma97@gmail.com>
+References: <20220513124303.2192981-1-zheyuma97@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f34130034637278c9999cf6d430be558cb0c2318.camel@linux.ibm.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 04:56:42PM +0200, Niklas Schnelle wrote:
-> On Thu, 2022-05-05 at 10:38 +0200, Niklas Schnelle wrote:
-> > While determining the next PCI function is factored out of
-> > pci_scan_slot() into next_fn() the former still handles the first
-> > function as a special case. This duplicates the code from the scan loop.
-> > 
-> > Furthermore the non ARI branch of next_fn() is generally hard to
-> > understand and especially the check for multifunction devices is hidden
-> > in the handling of NULL devices for non-contiguous multifunction. It
-> > also signals that no further functions need to be scanned by returning
-> > 0 via wraparound and this is a valid function number.
-> > 
-> > Improve upon this by transforming the conditions in next_fn() to be
-> > easier to understand.
-> > 
-> > By changing next_fn() to return -ENODEV instead of 0 when there is no
-> > next function we can then handle the initial function inside the loop
-> > and deduplicate the shared handling. This also makes it more explicit
-> > that only function 0 must exist.
-> > 
-> > No functional change is intended.
-> > 
-> > Cc: Jan Kiszka <jan.kiszka@siemens.com>
-> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> > ---
-> 
-> Friendly ping :-)
+The driver reported an warning in usb_submit_urb() which is caused by
+wrong endpoint type.
 
-Thanks and sorry for the delay.  I'm off today for my daughter's
-wedding reception but will get back to it next week.  Just to expose
-some of my thought process (and not to request more work from you!)
-I've been wondering whether b1bd58e448f2 ("PCI: Consolidate
-"next-function" functions") is really causing us more trouble than
-it's worth.  In some ways that makes the single next-function harder
-to read.  But I guess the hypervisor special case is not exactly a
-"next-function" thing -- it's a "keep scanning even if there's no fn
-0" thing.
+usb 1-1: BOGUS urb xfer, pipe 3 != type 1
+WARNING: at drivers/usb/core/urb.c:503 usb_submit_urb+0xcd9/0x18b0
+RIP: 0010:usb_submit_urb+0xcd9/0x18b0
+Call Trace:
+ <TASK>
+ bfusb_rx_submit+0x24e/0x390 [bfusb]
+ bfusb_open+0x50/0x90 [bfusb]
 
-Bjorn
+Fix this by checking the endpoint type at first.
+
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+---
+Changes in v2:
+    - Format the commit message
+---
+ drivers/bluetooth/bfusb.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/bluetooth/bfusb.c b/drivers/bluetooth/bfusb.c
+index cab93935cc7f..447b6876c552 100644
+--- a/drivers/bluetooth/bfusb.c
++++ b/drivers/bluetooth/bfusb.c
+@@ -613,7 +613,9 @@ static int bfusb_probe(struct usb_interface *intf, const struct usb_device_id *i
+ 	bulk_out_ep = &intf->cur_altsetting->endpoint[0];
+ 	bulk_in_ep  = &intf->cur_altsetting->endpoint[1];
+ 
+-	if (!bulk_out_ep || !bulk_in_ep) {
++	if (!bulk_out_ep || !bulk_in_ep ||
++		!usb_endpoint_is_bulk_out(&bulk_out_ep->desc) ||
++		!usb_endpoint_is_bulk_in(&bulk_in_ep->desc)) {
+ 		BT_ERR("Bulk endpoints not found");
+ 		goto done;
+ 	}
+-- 
+2.25.1
+

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B889526447
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:29:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F2152640D
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380938AbiEMO27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40356 "EHLO
+        id S1378855AbiEMOZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381051AbiEMO02 (ORCPT
+        with ESMTP id S1357671AbiEMOZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:26:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE778B0A8;
-        Fri, 13 May 2022 07:26:05 -0700 (PDT)
+        Fri, 13 May 2022 10:25:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3865F25F;
+        Fri, 13 May 2022 07:24:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB8DE62122;
-        Fri, 13 May 2022 14:26:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0954C34100;
-        Fri, 13 May 2022 14:26:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC920B83069;
+        Fri, 13 May 2022 14:24:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37832C34100;
+        Fri, 13 May 2022 14:24:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652451964;
-        bh=Uc2tIDHiFzBQONuh97aDBwrWdOkXOiTES2GizRPUqH8=;
+        s=korg; t=1652451894;
+        bh=EA01oe04kv1Z6xi6cYSG2V8+qEH9/h6Pd1RFkA0jMpM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rx+8XR/BoRBengrxMXOQgj7gnKgGY4mdnpjqBcXzzGydiF9ZRI/fh1yHMSzEwl01y
-         enWTzkkvVVLqYFT3F6cH8MBzn87JLf4vmPk5UeFQYgDQjTJy4em1mgRx/MK/wP7c45
-         slc7U5GcIPlBx87CQ/xnohTLJyNlgsJ2Z67PsaVE=
+        b=HmE05c9/cbCJBBLjnEkGqtMGQMOAu5bgpQRuxNTmR0KgiFQKUVfLuTS4EA0L0QelJ
+         PkdzcEGLhGAA5W65BuOY8Zm6cWFhbMUWUAoymajtMxI9OwWEhzvbYsXzMpMyC/+GkP
+         isurt9jKNtWOJfrud+79uFcIYlKvasmqHma/tmEQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andreas Larsson <andreas@gaisler.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 4.19 05/15] can: grcan: grcan_probe(): fix broken system id check for errata workaround needs
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.de>,
+        Ovidiu Panait <ovidiu.panait@windriver.com>
+Subject: [PATCH 4.14 11/14] ALSA: pcm: Fix races among concurrent prepare and hw_params/hw_free calls
 Date:   Fri, 13 May 2022 16:23:27 +0200
-Message-Id: <20220513142228.055226183@linuxfoundation.org>
+Message-Id: <20220513142227.717010807@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220513142227.897535454@linuxfoundation.org>
-References: <20220513142227.897535454@linuxfoundation.org>
+In-Reply-To: <20220513142227.381154244@linuxfoundation.org>
+References: <20220513142227.381154244@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,61 +54,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andreas Larsson <andreas@gaisler.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 1e93ed26acf03fe6c97c6d573a10178596aadd43 upstream.
+commit 3c3201f8c7bb77eb53b08a3ca8d9a4ddc500b4c0 upstream.
 
-The systemid property was checked for in the wrong place of the device
-tree and compared to the wrong value.
+Like the previous fixes to hw_params and hw_free ioctl races, we need
+to paper over the concurrent prepare ioctl calls against hw_params and
+hw_free, too.
 
-Fixes: 6cec9b07fe6a ("can: grcan: Add device driver for GRCAN and GRHCAN cores")
-Link: https://lore.kernel.org/all/20220429084656.29788-3-andreas@gaisler.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Andreas Larsson <andreas@gaisler.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+This patch implements the locking with the existing
+runtime->buffer_mutex for prepare ioctls.  Unlike the previous case
+for snd_pcm_hw_hw_params() and snd_pcm_hw_free(), snd_pcm_prepare() is
+performed to the linked streams, hence the lock can't be applied
+simply on the top.  For tracking the lock in each linked substream, we
+modify snd_pcm_action_group() slightly and apply the buffer_mutex for
+the case stream_lock=false (formerly there was no lock applied)
+there.
+
+Cc: <stable@vger.kernel.org>
+Reviewed-by: Jaroslav Kysela <perex@perex.cz>
+Link: https://lore.kernel.org/r/20220322170720.3529-4-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+[OP: backport to 4.14: adjusted context]
+Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/grcan.c |   16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+ sound/core/pcm_native.c |   32 ++++++++++++++++++--------------
+ 1 file changed, 18 insertions(+), 14 deletions(-)
 
---- a/drivers/net/can/grcan.c
-+++ b/drivers/net/can/grcan.c
-@@ -245,7 +245,7 @@ struct grcan_device_config {
- 		.rxsize		= GRCAN_DEFAULT_BUFFER_SIZE,	\
- 		}
- 
--#define GRCAN_TXBUG_SAFE_GRLIB_VERSION	0x4100
-+#define GRCAN_TXBUG_SAFE_GRLIB_VERSION	4100
- #define GRLIB_VERSION_MASK		0xffff
- 
- /* GRCAN private data structure */
-@@ -1660,6 +1660,7 @@ exit_free_candev:
- static int grcan_probe(struct platform_device *ofdev)
+--- a/sound/core/pcm_native.c
++++ b/sound/core/pcm_native.c
+@@ -1046,15 +1046,17 @@ struct action_ops {
+  */
+ static int snd_pcm_action_group(const struct action_ops *ops,
+ 				struct snd_pcm_substream *substream,
+-				int state, int do_lock)
++				int state, int stream_lock)
  {
- 	struct device_node *np = ofdev->dev.of_node;
-+	struct device_node *sysid_parent;
- 	struct resource *res;
- 	u32 sysid, ambafreq;
- 	int irq, err;
-@@ -1669,10 +1670,15 @@ static int grcan_probe(struct platform_d
- 	/* Compare GRLIB version number with the first that does not
- 	 * have the tx bug (see start_xmit)
- 	 */
--	err = of_property_read_u32(np, "systemid", &sysid);
--	if (!err && ((sysid & GRLIB_VERSION_MASK)
--		     >= GRCAN_TXBUG_SAFE_GRLIB_VERSION))
--		txbug = false;
-+	sysid_parent = of_find_node_by_path("/ambapp0");
-+	if (sysid_parent) {
-+		of_node_get(sysid_parent);
-+		err = of_property_read_u32(sysid_parent, "systemid", &sysid);
-+		if (!err && ((sysid & GRLIB_VERSION_MASK) >=
-+			     GRCAN_TXBUG_SAFE_GRLIB_VERSION))
-+			txbug = false;
-+		of_node_put(sysid_parent);
-+	}
+ 	struct snd_pcm_substream *s = NULL;
+ 	struct snd_pcm_substream *s1;
+ 	int res = 0, depth = 1;
  
- 	err = of_property_read_u32(np, "freq", &ambafreq);
- 	if (err) {
+ 	snd_pcm_group_for_each_entry(s, substream) {
+-		if (do_lock && s != substream) {
+-			if (s->pcm->nonatomic)
++		if (s != substream) {
++			if (!stream_lock)
++				mutex_lock_nested(&s->runtime->buffer_mutex, depth);
++			else if (s->pcm->nonatomic)
+ 				mutex_lock_nested(&s->self_group.mutex, depth);
+ 			else
+ 				spin_lock_nested(&s->self_group.lock, depth);
+@@ -1082,18 +1084,18 @@ static int snd_pcm_action_group(const st
+ 		ops->post_action(s, state);
+ 	}
+  _unlock:
+-	if (do_lock) {
+-		/* unlock streams */
+-		snd_pcm_group_for_each_entry(s1, substream) {
+-			if (s1 != substream) {
+-				if (s1->pcm->nonatomic)
+-					mutex_unlock(&s1->self_group.mutex);
+-				else
+-					spin_unlock(&s1->self_group.lock);
+-			}
+-			if (s1 == s)	/* end */
+-				break;
++	/* unlock streams */
++	snd_pcm_group_for_each_entry(s1, substream) {
++		if (s1 != substream) {
++			if (!stream_lock)
++				mutex_unlock(&s1->runtime->buffer_mutex);
++			else if (s1->pcm->nonatomic)
++				mutex_unlock(&s1->self_group.mutex);
++			else
++				spin_unlock(&s1->self_group.lock);
+ 		}
++		if (s1 == s)	/* end */
++			break;
+ 	}
+ 	return res;
+ }
+@@ -1174,10 +1176,12 @@ static int snd_pcm_action_nonatomic(cons
+ 	int res;
+ 
+ 	down_read(&snd_pcm_link_rwsem);
++	mutex_lock(&substream->runtime->buffer_mutex);
+ 	if (snd_pcm_stream_linked(substream))
+ 		res = snd_pcm_action_group(ops, substream, state, 0);
+ 	else
+ 		res = snd_pcm_action_single(ops, substream, state);
++	mutex_unlock(&substream->runtime->buffer_mutex);
+ 	up_read(&snd_pcm_link_rwsem);
+ 	return res;
+ }
 
 

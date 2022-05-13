@@ -2,134 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 483E3525D27
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 10:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E60F525D21
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 10:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378120AbiEMIQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 04:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40132 "EHLO
+        id S1378129AbiEMIQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 04:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357717AbiEMIP4 (ORCPT
+        with ESMTP id S1378139AbiEMIQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 04:15:56 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E90FDFDB
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:15:54 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id j25so9346805wrc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:15:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=mTQPBz30cCLuWgIJk7/NZCaC5miWia1gCjLQnZteLLo=;
-        b=y/nWzJG4Fbw8/7Hr2WEQpFWbOnZphvs3gwZ72nPwxDPJfy7dy0gJY7R2lFYGrleewa
-         UvN7q6TursJjqMpYGLwvl54QyuMBBG279rXkcLYs8J8YGa9ZZh2XDKFqqevEAFoqYQ8N
-         LI8AYCHjsqeJqRXdo95z9Gy5PyyEsRgzj2Hdg+VIhyTudoCxR35KZDtptDp2IZ+MQVpc
-         txgGTwv9RJDpztlhSVPQRLtfIoWcXWhQ6ZkBHBOEgBUCbjl7nrhdTIGb0qpz3NDQR/8M
-         eV2XuSjmdcXb+EHRGJTaJwOlpIQPvr2Uy5+yffzx+6X9wTEypxD84XizeuvKb1LDBxdJ
-         N5dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mTQPBz30cCLuWgIJk7/NZCaC5miWia1gCjLQnZteLLo=;
-        b=7ZrofZZV2ARTl4aBmZIq//nzgPvfsS2d41Fdk9u2a624TyhK/I9/Wl8jhvrh2wyivy
-         0GGxPlhDZcAW0/KcF3YcLjJVZv822vj2gU3BaPXJ/Dfw7Sy6LZrr6Pl233gkh+kVZvuS
-         SgatMUjA2dQXijs9DhM/6OrztFmTGeHtAfmTZs9+yJRDxh1zp4ISr+zIu9KYTw51rwUv
-         RWcavDhrX7wLpxVCSManQ+nZLzv3lP1UIXnmEKd4HKQoPZ0yfgEfeySebTHOH6Fwmowo
-         2i7NeCo1KFalOJz2Fbbg/pNAuKMYYRIpYYmEvTkLFp6OkikQfPalxLMFetck7DGk2t+S
-         k7Ow==
-X-Gm-Message-State: AOAM531JjYL1TzmQEudHgdaeHYQPxz1L/o6ze3dAnUVLw63K0VaQ2pEv
-        7GvvK/+Tdeej4Za9Tk1+xXMwRA==
-X-Google-Smtp-Source: ABdhPJwXd3TWdB6hMve0fv2uJKyMa4NDpLkzRHAgkIR+esBN7x+bTCEeukkPdDda8xWohPhizuEaAw==
-X-Received: by 2002:a5d:624c:0:b0:20c:d8f3:71b8 with SMTP id m12-20020a5d624c000000b0020cd8f371b8mr2897239wrv.670.1652429752615;
-        Fri, 13 May 2022 01:15:52 -0700 (PDT)
-Received: from [192.168.0.168] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id o19-20020a1c7513000000b003942a244f57sm4708291wmc.48.2022.05.13.01.15.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 01:15:52 -0700 (PDT)
-Message-ID: <30978e5a-18ef-3ea2-8df3-3ced50f44bfc@linaro.org>
-Date:   Fri, 13 May 2022 10:15:51 +0200
+        Fri, 13 May 2022 04:16:07 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9203E08D;
+        Fri, 13 May 2022 01:16:01 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id E421B5C00E4;
+        Fri, 13 May 2022 04:15:58 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Fri, 13 May 2022 04:15:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1652429758; x=1652516158; bh=iY9shFm2Us
+        jfmpTTWu209xlXSoo1/kSVXTPhcXMt7H8=; b=uin/nZOFrMN1r3HNuWHmdoGaY3
+        c7FRaFuahQzKICW7+sXgp7uFRCf6nfBbRUC6qoTalXEwERQDkdkm7pagYWNswuw7
+        LNxbo+qZaPwNQWQBe4UD/pa0/5IoQLjJGGqHzdPFS//WrmNObBk5kg4UD8dlWr/s
+        CUslx4dgQvclORi4IeQlr3Tm4oc0WaWGVdI2slV/+YF8x6V1eENUEKYA3bRz57tj
+        TfcECEiFUusehtJwjbUxQEZ4QysRJ8QwJKFP7rykSE9QTWUHG3BQnSQp0xzthQHa
+        HIPmKNxHqkJW23T41yni9Mj06EuRNv+7Z9Kp/JMulYcVeI3Hl95cp7JyPpGQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1652429758; x=
+        1652516158; bh=iY9shFm2UsjfmpTTWu209xlXSoo1/kSVXTPhcXMt7H8=; b=O
+        txrF9ODGUXG/fJtjc68Vnrim6/M1IT/RwWsCEySKTH8NljzFVFci1v7iph3xmYtx
+        c7sKXNXwSd++avrklkfvgHcZNGjdwzsi6UcGVq/5CEfgB/2mY4mX9q/2FUv1HWU8
+        Pb+GixFh6C3nstMt8eaYFh3ffM3V2T4jLxtW35M8XlDPYU7qPsgYWl9RDaLIJROa
+        CbYlWFlaw8/ZrrQla1EfOUZExY2A4KQrAqq3W4JsJWCDvYA84nBncpI4P8SG6J4D
+        lHFE5GszS0h4kpy+BqfeY3yggQ3BSfZ+fVOTe+Z+WUjIckkNr+CRhkAj990Z6rVW
+        VmsskET9xHuMYMrQYk3IQ==
+X-ME-Sender: <xms:vhN-YnzcTbiG27OA1P756RmfHM36QMyh2GbPglNVLKRCLCEHu2uq0A>
+    <xme:vhN-YvRkhH9BwLlPOx8QRN7jf92VpTobhpxfQWGAqOcBSJtwVHK1MT-rDutm82D40
+    iZNGMiTEMA8MgLv7vU>
+X-ME-Received: <xmr:vhN-YhWMYt7HzFou5fAtMcaZpPf5vdSCxQSEMqfVhuNH40O3fQ5LAhsP1aa20IbPC-ykUDQY-3BD8K9qeErac540TeJirNVivc5-jpc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgeelgddtudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepjeegieevvedvgffffedtveeuhfehudevjeeifeegjeevuefhteeklefgveet
+    feffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:vhN-YhjvD9iHhT3MCWCWXIOgSYkkmG4VszRZ6srvl6FsfPPn-lFEeQ>
+    <xmx:vhN-YpAh_MXz6ykwmHJo5lKK4dmGhEE0K2HORfkronBnAyiL3aAI0w>
+    <xmx:vhN-YqJGKCQSQn1CNJ2aj9yeVbcZ2iGt7sNu-lIazufNsEwnqS85Iw>
+    <xmx:vhN-YtsF32_EoAfbvgYEHEPNRszMbjIu0XZBBYwB-cSTa1mWk1UzRA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 13 May 2022 04:15:58 -0400 (EDT)
+Date:   Fri, 13 May 2022 10:15:56 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     qianfan <qianfanguijin@163.com>
+Cc:     linux-sunxi@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] ARM: dts: sun8i-r40: Add "cpu-supply" node for
+ sun8i-r40 based board
+Message-ID: <20220513081556.knd3tf6pangfblh3@houat>
+References: <20220512071858.10805-1-qianfanguijin@163.com>
+ <20220512071858.10805-2-qianfanguijin@163.com>
+ <20220513073849.cu4jzykefat2sepg@houat>
+ <1352b9d7-5219-af09-948b-6462def39ea5@163.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v5 1/2] dt-bindings: remoteproc: mediatek: Make l1tcm reg
- exclusive to mt819x
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Tzung-Bi Shih <tzungbi@google.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org
-References: <20220511195452.871897-1-nfraprado@collabora.com>
- <20220511195452.871897-2-nfraprado@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220511195452.871897-2-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ocbjtkvxhxhj7iii"
+Content-Disposition: inline
+In-Reply-To: <1352b9d7-5219-af09-948b-6462def39ea5@163.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/05/2022 21:54, Nícolas F. R. A. Prado wrote:
 
-Thank you for your patch. There is something to discuss/improve.
+--ocbjtkvxhxhj7iii
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->  
-> -if:
-> -  properties:
-> -    compatible:
-> -      enum:
-> -        - mediatek,mt8183-scp
-> -        - mediatek,mt8192-scp
-> -then:
-> -  required:
-> -    - clocks
-> -    - clock-names
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - mediatek,mt8183-scp
-> +            - mediatek,mt8192-scp
-> +    then:
-> +      required:
-> +        - clocks
-> +        - clock-names
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - mediatek,mt8183-scp
-> +            - mediatek,mt8186-scp
-> +    then:
-> +      properties:
-> +        reg:
-> +          maxItems: 2
-> +        reg-names:
-> +          maxItems: 2
+On Fri, May 13, 2022 at 03:48:50PM +0800, qianfan wrote:
+>=20
+>=20
+> =E5=9C=A8 2022/5/13 15:38, Maxime Ripard =E5=86=99=E9=81=93:
+> > Hi,
+> >=20
+> > On Thu, May 12, 2022 at 03:18:58PM +0800, qianfanguijin@163.com wrote:
+> > > From: qianfan Zhao <qianfanguijin@163.com>
+> > >=20
+> > > sun8i-r40 actived cpufreq feature now, let's add "cpu-supply" node on
+> > > board.
+> > >=20
+> > > Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
+> > > ---
+> > >   arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts | 4 ++++
+> > >   arch/arm/boot/dts/sun8i-r40-feta40i.dtsi          | 4 ++++
+> > >   arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts          | 4 ++++
+> > >   arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts | 4 ++++
+> > >   4 files changed, 16 insertions(+)
+> > >=20
+> > > diff --git a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts b/arch=
+/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
+> > > index a6a1087a0c9b..4f30018ec4a2 100644
+> > > --- a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
+> > > +++ b/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
+> > > @@ -113,6 +113,10 @@ &ahci {
+> > >   	status =3D "okay";
+> > >   };
+> > > +&cpu0 {
+> > > +	cpu-supply =3D <&reg_dcdc2>;
+> > > +};
+> > > +
+> > This will break bisection on those boards. Indeed, you added the OPPs on
+> > the first patch, and if you only apply that patch, the boards in the
+> > second patch will be missing their CPU regulator. The kernel will then
+> > ramp up the frequency to the highest OPP, but will not change the
+> > voltage, resulting in a crash.
+>
+> This is a good point and I will merge those two patch.
 
-Isn't l1tcm required on mt819x? Now it is left optional.
+That's not what I meant to say. Those two patches are great separated.
+You can invert them though.
 
+> > There's a similar issue for all the boards that don't have a regulator
+> > in the first place.
+> >=20
+> > The way we worked around this for the other SoCs is to have a DTSI with
+> > the OPPs with a frequency higher than what U-Boot boots with (1008MHz?),
+> > and only include that DTSI on boards that have a CPU regulator hooked i=
+n.
+>
+> Is this really necessary? It seems like every board based on sun8i-r40
+> have a cpu regulator.
 
-Best regards,
-Krzysztof
+This probably won't be the case whenever someone starts a new design,
+and then they'll face random crashes for no apparent reason, and waste a
+lot of time in the process.
+
+Whereas the alternative is that you would be missing some OPPs,
+something that is fairly easy to figure out.
+
+Maxime
+
+--ocbjtkvxhxhj7iii
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYn4TvAAKCRDj7w1vZxhR
+xXVzAQCYS/y6GVik1wq99/10xFtsQVwNbQDTafNgKQRW8bpSxwD+Ohmf/aYmi5JZ
+QfgJA4DF5q5bvX0nina8Y7KiVSMVSQ0=
+=x+9H
+-----END PGP SIGNATURE-----
+
+--ocbjtkvxhxhj7iii--

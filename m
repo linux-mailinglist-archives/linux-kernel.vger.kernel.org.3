@@ -2,161 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D41A55268F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 20:06:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 954185268F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 20:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383232AbiEMSGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 14:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35076 "EHLO
+        id S1383226AbiEMSEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 14:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347598AbiEMSGr (ORCPT
+        with ESMTP id S244159AbiEMSEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 14:06:47 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A816E275D6
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 11:06:45 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id v11so7642148qkf.1
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 11:06:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Jl3uQ/qIvTlTsjRN/rhZlGLpkaQPanJfn4mpvTQX1aA=;
-        b=Urn0R2WklZCf3R62oBx1CQsalCjvGHDvD/O9/HF/VUFW0+gOzwIZI3XYzPSPID/YWi
-         hLkv2CkD9HEdwrIgzAHJrlJOlYID+QbP8LlDudWBPeZGcYN9uiNf3hZaO9vcx69AxDvj
-         atVIw0LFaZB12fWgOJZhhfjhneMRFBU2sg2l0ASskga3lltY+nfH+vCeMg0x3Ac4nYIp
-         Y05eQwv+w4KgMMsVfxGgFG6SCmI9DlAWUjABIcZZA88pPAWTAThRtOfarCvUMkMSy6Vj
-         6DJfDReE7lhik4L7w7L6KgvgDLirRR6kvxJaEbZVo7A1gbc2q7iMFf/HGhj8AeyWekUg
-         mvZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Jl3uQ/qIvTlTsjRN/rhZlGLpkaQPanJfn4mpvTQX1aA=;
-        b=o0/Ub036uXA8b0qORX4Tb9dvUyXvBUDWGKBXauOqNgLmkJoEs0SzoGpUgf0KLJipBu
-         RsbWBnRJ4eRHR2ajIB0xRJva7eqaG/uphk0s70JqZBG4VMEbdVJcBF+eRRa1ahiTOYsi
-         +GUmUTUjKVuLTCvtJoA8rC7+AIL2TAqqXbRNKY/LSh5rBKtsra5ZCQ1qYS02CLG4hzyc
-         ZvZO0sajkIYuCVh+ivAzt0/Rs+g1v+NeSEq68UAnvbybt9ra8YlqflUBzT17VE69jTQJ
-         051EopRLcwrhAqG7lWXjF4X/6bkGk+pjGWanMwLMXK3GzByr//oXnFZtksCFNzQov+mL
-         C/IQ==
-X-Gm-Message-State: AOAM530L2JFypxuT8TeaEAcJW+EbUgwd9l5rOKic2vpkBoDtP4H7Se6t
-        yXGlFLeZpdbLHFqCtYZOjE95UT+xczqrifQJxUWSxg==
-X-Google-Smtp-Source: ABdhPJwtsAlxvwtRTL2sVCKEEyqbYHcmIz2b5TB4ajdk6SJjT5nsmSELiLCdfSvVImbTESf1u6t5Tv42uT3m5FZ415M=
-X-Received: by 2002:a37:f508:0:b0:69b:ed2f:e56 with SMTP id
- l8-20020a37f508000000b0069bed2f0e56mr4645661qkk.384.1652465204516; Fri, 13
- May 2022 11:06:44 -0700 (PDT)
+        Fri, 13 May 2022 14:04:10 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661D62CE3C
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 11:04:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652465049; x=1684001049;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mmVeSLOWGrrJNNPaH5sVqOAPJshfUhndaLU/q/Ct39k=;
+  b=kzxU0mtXugMta8L+yVKIbg3yCQHXcn+0eSnjE5ghEPwncSPMrBR6VBZa
+   TOmwzMcYQef5L5a+cGRpEV/RJc/hUKkYLmXBhHNbnukqrRJ9suWIRT8Xm
+   OCK/9XmVhB+HhmcsHHGwzzjPpVpipVBxPZ0V/dxqsp0wtNq7ovh6uoy3+
+   X+dnTe4UUSJQ0Zbl8mhVtwdrDCGUrzX50rX94uhQPfM0JNlcv3y2wvzux
+   UXQbZlpMts2+JdTXuNCuK0MFnzi4LDNVJ7169QKWVLGlVZ7aYSzkPVpTR
+   a+yKQqbNPzcWR1YoSpPaI8gbEovfUV6Voht0Gxeh0d876DAb3KWc1uUrY
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="269214206"
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="269214206"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 11:04:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="624962791"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga008.fm.intel.com with ESMTP; 13 May 2022 11:04:09 -0700
+Date:   Fri, 13 May 2022 11:07:44 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     x86@kernel.org, Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Stephane Eranian <eranian@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 10/29] iommu/vt-d: Implement minor tweaks for NMI irqs
+Message-ID: <20220513180744.GB22683@ranerica-svr.sc.intel.com>
+References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
+ <20220506000008.30892-11-ricardo.neri-calderon@linux.intel.com>
+ <87wneyfj90.ffs@tglx>
 MIME-Version: 1.0
-References: <CACGdZYLMW2KHVebfyJZVn9G=15N+Jt4+8oF5gq3wdDTOcXbk9A@mail.gmail.com>
- <20220513174030.1307720-1-khazhy@google.com>
-In-Reply-To: <20220513174030.1307720-1-khazhy@google.com>
-From:   Khazhy Kumykov <khazhy@google.com>
-Date:   Fri, 13 May 2022 11:06:33 -0700
-Message-ID: <CACGdZYJAm4kwXB_76qT6PZmPO66Kt2NFSQ0+KNT=S+Tgu6SmoA@mail.gmail.com>
-Subject: Re: [RESEND][RFC PATCH] blkcg: rewind seq_file if no stats
-To:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000008d08af05dee889d1"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87wneyfj90.ffs@tglx>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000008d08af05dee889d1
-Content-Type: text/plain; charset="UTF-8"
+On Fri, May 06, 2022 at 11:23:23PM +0200, Thomas Gleixner wrote:
+> On Thu, May 05 2022 at 16:59, Ricardo Neri wrote:
+> > The Intel IOMMU interrupt remapping driver already programs correctly the
+> > delivery mode of individual irqs as per their irq_data. Improve handling
+> > of NMIs. Allow only one irq per NMI. Also, it is not necessary to cleanup
+> > irq vectors after updating affinity.
+> 
+> Structuring a changelog in paragraphs might make it readable. New lines
+> exist for a reason.
 
-On Fri, May 13, 2022 at 10:40 AM Khazhismel Kumykov <khazhy@google.com> wrote:
-> +void seq_restore(struct seq_file *m, int count)
-(Yes, this and elsewhere should be size_t to match m->count)
-> +{
-> +       if (WARN_ON_ONCE(count > m->count || count > m->size))
-> +               return;
-> +       m->count = count;
+Sure, I can structure this in paragraphps.
+> 
+> > NMIs do not have associated vectors.
+> 
+> Again. NMI has an vector associated, but it is not subject to dynamic
+> vector management.
 
---0000000000008d08af05dee889d1
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Indeed, it is clear to me now.
 
-MIIPmwYJKoZIhvcNAQcCoIIPjDCCD4gCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz1MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-h3dPtFviTyG11HYwTAYDVR0gBEUwQzBBBgkrBgEEAaAyASgwNDAyBggrBgEFBQcCARYmaHR0cHM6
-Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wDAYDVR0TAQH/BAIwADCBmgYIKwYBBQUH
-AQEEgY0wgYowPgYIKwYBBQUHMAGGMmh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2NhL2dzYXRs
-YXNyM3NtaW1lY2EyMDIwMEgGCCsGAQUFBzAChjxodHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29t
-L2NhY2VydC9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcnQwHwYDVR0jBBgwFoAUfMwKaNei6x4schvR
-zV2Vb4378mMwRgYDVR0fBD8wPTA7oDmgN4Y1aHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMC5jcmwwDQYJKoZIhvcNAQELBQADggEBAE0ANr7NUOqEcZce4KYP
-SjzlrshSC8sgJ8dKDDbe35PL86vDuMIrytVjiV10p/YUofun9GeHBY6r5kTyh4be5FgftiiNtWzn
-U1W5cxLYMT1hKYxXxnM2sWMQGFl4TkxxbRoVZa3ou/NxFdAZeiQSwGnzk5oIDTBZQc8q3wMa1svm
-A5Rd4MVaIUt+hyk6seAldN6k4/O34O1l2V6D+/BwagyzLWvOeMEM9hClVF+F6a20yy4dcDsprFZZ
-Sk9JzUy9F6FM7L1wT2ndjTNDja4Y2tixf31KuisZLGKmDZsW/fXF1GgWDaM0DbYJwtE3kHylWnMk
-CN4PfYgIa15C5A9lXhExggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9i
-YWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIzIFNNSU1FIENBIDIwMjAC
-EAFEftjde/YEIFcjUXqhcBUwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBoOLZS/
-wLUixiZ06eOojFIVPl5zuHue3WyR5PbSC06QMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJ
-KoZIhvcNAQkFMQ8XDTIyMDUxMzE4MDY0NVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASow
-CwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZI
-hvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCVIpxkVlm3Bw2DBD8dQ8S2/WGh
-4gwmhTJ72vF0m/CjOWWwB772p6VpjNOj439230F0eR8R7nnH45ArXh8oOq4UKnaQQIstMyKkNZ4s
-0zBkEq2wsNJAzZlaSwOqGR3fNjJNgEJC9IRf21IWfnuhmCnsLZPa+kZCBPsJuCn5FH3ZCa5naRrg
-2OORPTNYgFzP9PL7zsxUUnf9qz+za7rPXqx+uya/UXn3BMNdbmOs8FLu+1srbX7Ua3gDjB327+P/
-TH1MIAjfWUW42lJN2rbUMUe4cBPM+wTYDhf+Zc4ft9BY4e1wH7LpXfiZPemcUM6Xih5eZX0J5MRp
-PnLuBQq6HD05
---0000000000008d08af05dee889d1--
+> 
+> > diff --git a/drivers/iommu/intel/irq_remapping.c b/drivers/iommu/intel/irq_remapping.c
+> > index fb2d71bea98d..791a9331e257 100644
+> > --- a/drivers/iommu/intel/irq_remapping.c
+> > +++ b/drivers/iommu/intel/irq_remapping.c
+> > @@ -1198,8 +1198,12 @@ intel_ir_set_affinity(struct irq_data *data, const struct cpumask *mask,
+> >  	 * After this point, all the interrupts will start arriving
+> >  	 * at the new destination. So, time to cleanup the previous
+> >  	 * vector allocation.
+> > +	 *
+> > +	 * Do it only for non-NMI irqs. NMIs don't have associated
+> > +	 * vectors.
+> 
+> See above.
+
+Sure.
+
+> 
+> >  	 */
+> > -	send_cleanup_vector(cfg);
+> > +	if (cfg->delivery_mode != APIC_DELIVERY_MODE_NMI)
+> > +		send_cleanup_vector(cfg);
+> 
+> So this needs to be replicated for all invocations of
+> send_cleanup_vector(), right? Why can't you put it into that function?
+
+Certainly, it can be done inside the function.
+
+>   
+> >  	return IRQ_SET_MASK_OK_DONE;
+> >  }
+> > @@ -1352,6 +1356,9 @@ static int intel_irq_remapping_alloc(struct irq_domain *domain,
+> >  	if (info->type == X86_IRQ_ALLOC_TYPE_PCI_MSI)
+> >  		info->flags &= ~X86_IRQ_ALLOC_CONTIGUOUS_VECTORS;
+> >  
+> > +	if ((info->flags & X86_IRQ_ALLOC_AS_NMI) && nr_irqs != 1)
+> > +		return -EINVAL;
+> 
+> This cannot be reached when the vector allocation domain already
+> rejected it, but copy & pasta is wonderful and increases the line count.
+
+Yes, this is not needed.
+
+Thanks and BR,
+Ricardo
+> 
+> Thanks,
+> 
+>         tglx
+> 
+> 

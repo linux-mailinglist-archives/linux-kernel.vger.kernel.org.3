@@ -2,148 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F0BC5259D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 04:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD1A5259D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 04:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376617AbiEMC4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 22:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
+        id S1376636AbiEMC4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 22:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376611AbiEMC4f (ORCPT
+        with ESMTP id S1376619AbiEMC4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 22:56:35 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3FE2497D
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 19:56:33 -0700 (PDT)
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2DFB33F940
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 02:56:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1652410591;
-        bh=rF63nrgHe2cIWk7sqY1Jv0XZG3knafOJHCDaTqNMlvM=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=U7KowGIG4s7z5FG0WOqTY/eK9wmuEnpsB2PFxDxPPyr4e1M1zHDP8JSrCwLUBaCYP
-         j5on83bV4UEsnsf1EbLFjQU6SdJeWrLPidvoyCYeLbJ7hGJl7kYUDhuFwvgC2GKqIT
-         eUs5UEle2gslIGlADDUVXA3zidIc4eXk0qF+oehgS2WdSPLwroyY7nMYoP1pu/FWOF
-         xsEtWAYZUZ5mAMnzDVwyLU5kKi5UiqNrQTzj188ZiGLJn0TeAJ5mxjjyIh9JxdTSX9
-         d7CzkUGB6irM976tohb6FQl2YuU+DDx5areRZ56ElOrVMjb/PCJv6f/WzWHiQ9KYXI
-         R/tK/GNLgXWhA==
-Received: by mail-pg1-f197.google.com with SMTP id d125-20020a636883000000b003db5e24db27so2064281pgc.13
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 19:56:31 -0700 (PDT)
+        Thu, 12 May 2022 22:56:48 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7097E36142
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 19:56:47 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id jt15so5800838qvb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 19:56:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=toxicpanda-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:subject:message-id:mime-version:content-disposition
+         :content-transfer-encoding;
+        bh=YfSyf8u/NtA/eLp0tCJ7Xe0+tnTmVim4H2pL0vEsIiU=;
+        b=0mtoDTP0h+78pMTFKFTp5W2xjK1hcv0lNhcN1E0ldAU+KruS88+d+eKT2j8jX6aaTf
+         xAxUnsQAhUijY/zcRao1hzMIrncEkUQ7nqKG5CKm/fhS0lLzQPWv03XD05t+jSF3w6Fp
+         n4j1+9tNGrnptsTapwM26mibHHeRH17d1wRomMrwpfe2j7TM/ooGkiFYVV+0K/umc9wB
+         iESWL4SXlQ0yjffaoKRY7NnCK6mRZdwVxtpBjlzXR2ZLXnLe8Y0U7R78A/K8FtX1L+vo
+         fD8Dz1+4qi03W5jcPkFTNU5uJuLkxQcOfBS2F1Axp3kuB4kReBr4cLOPA+EUDC4RKVV0
+         25kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rF63nrgHe2cIWk7sqY1Jv0XZG3knafOJHCDaTqNMlvM=;
-        b=Ext0jT8rp5FnPEetD2ZsYag7/2zLhPDWVV2QDEWm7WGUMCow2+qA6/tZ2Ot05UExKq
-         ZRLkzL9u90nUHkG71WEYCUUQRb13tL8JX+l68gGh2wWXLUK30cbRDFRACHYx/MuD6inK
-         43LRDzuZeR+qFSmV5Zo66sNgV5Xk4oo2bprHGJ3l7nAibYVk9NryXG9D60knHcfTjDRp
-         gx5V+M3LV5/xD49y2SLusitftA0TpQ1NBFsu8uWzwiBvf8TomSmS4+f+ujklrXKWyTpP
-         mBl28lBuGb4Vjns5Hzd4ij1fCUxZO9R/CmfYfgCBmpKlHhY7yziFlvLtz2iAJIWR1mGe
-         dyKg==
-X-Gm-Message-State: AOAM5319Hkv1r/hwi6JYLUb7JJtciEHJTyAUxOogjZ8KUr+LZQmgD1oX
-        16U+Zks23u52s+bOXh2dUjGP3oE/EVSsuXqDusU7b7Y7Saa9clvSAsK5tLPL6jR7znGuARLVTVS
-        sJ+/zYuk3p2fmfmvbfcMbMv/4u5dIoFIvaxytoFXBudQl856pXflH18HVnw==
-X-Received: by 2002:a05:6a00:14ce:b0:50f:ac00:2a8b with SMTP id w14-20020a056a0014ce00b0050fac002a8bmr2515921pfu.36.1652410589569;
-        Thu, 12 May 2022 19:56:29 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzF07aqxQuyHQBnn1dyRbK0T+OdhcKZA2/h0j3IrKXjFeE5mXIWYnicu3Vjp1wRI+BJrCi2u/Pe5db7SXi1Biw=
-X-Received: by 2002:a05:6a00:14ce:b0:50f:ac00:2a8b with SMTP id
- w14-20020a056a0014ce00b0050fac002a8bmr2515909pfu.36.1652410589312; Thu, 12
- May 2022 19:56:29 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding;
+        bh=YfSyf8u/NtA/eLp0tCJ7Xe0+tnTmVim4H2pL0vEsIiU=;
+        b=NXrsbIvp5Jg9QNjUVgVR8GpkOfSs++IQvaOmymN/CqI+lhJXURLbfEAP+HYg7CGGTT
+         WE7gtwpE4s1gh0Qyr8UnCFbJepJ93is+eih0ctIQBiAIBWF/M53rxAOld4BwO9qoJe9u
+         4jKMvGcKSrGEVdUovoFeIA73ZucQOLIhUS3ZGkeuUE7hqKMLvj7mtzWPQFr1785/qDmt
+         +gGduwoArMKAy+0fPXTZAVu+G5aPHFBsIC0ilCDvG3xpp7ASpkKgxMAy1sYtNKx6SWII
+         QjmdjF80gV7rjZmGOd6u+Id8n5W8riRTkeTHvTatRB0KHssnaRqxPpz8iux41+HX4Wix
+         G0gw==
+X-Gm-Message-State: AOAM530VnaiiOL9+Xa/5qYTbamXNTLcl9n6b/wCoJggbEHYv+1Wwx/9A
+        SIgmvd7684eJB94eeGGc1n/t6g==
+X-Google-Smtp-Source: ABdhPJwEkF4mdxyhyJw1VUq1yi0cunHOiqDqtKhsTWuDuqm6cZSOXpnjZ7qhYCMJiPw/3cavmMdKaw==
+X-Received: by 2002:a05:6214:2aae:b0:45b:3d6e:e6e6 with SMTP id js14-20020a0562142aae00b0045b3d6ee6e6mr2865442qvb.111.1652410606448;
+        Thu, 12 May 2022 19:56:46 -0700 (PDT)
+Received: from localhost (cpe-174-109-172-136.nc.res.rr.com. [174.109.172.136])
+        by smtp.gmail.com with ESMTPSA id e1-20020a05620a208100b0069fc13ce205sm686031qka.54.2022.05.12.19.56.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 19:56:45 -0700 (PDT)
+Date:   Thu, 12 May 2022 22:56:44 -0400
+From:   Josef Bacik <josef@toxicpanda.com>
+To:     linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-block@vger.kernel.org, bpf@vger.kernel.org,
+        lsf-pc@lists.linuxfoundation.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: LSF/MM/BPF 2022: Slides and thanks!
+Message-ID: <Yn3I7KZeuJQqVFHi@localhost.localdomain>
 MIME-Version: 1.0
-References: <20220422054224.19527-1-matthew.ruffell@canonical.com>
- <CAEzrpqe=LD3DQcEeLXmmFuq7cX_dAQ6DOCuJYWBoZWKKTmoTzA@mail.gmail.com> <CAKAwkKt3yMOOW3NXcE91WkGr+8xj050CYP2pLoQVHt_2wXq=-w@mail.gmail.com>
-In-Reply-To: <CAKAwkKt3yMOOW3NXcE91WkGr+8xj050CYP2pLoQVHt_2wXq=-w@mail.gmail.com>
-From:   Matthew Ruffell <matthew.ruffell@canonical.com>
-Date:   Fri, 13 May 2022 14:56:18 +1200
-Message-ID: <CAKAwkKvfFn18RjupuqGpx4QeAiMYKSq7QUTd3wEL=pkZ+BENpQ@mail.gmail.com>
-Subject: Re: [PROBLEM] nbd requests become stuck when devices watched by
- inotify emit udev uevent changes
-To:     Josef Bacik <josef@toxicpanda.com>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        linux-block <linux-block@vger.kernel.org>,
-        nbd <nbd@other.debian.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>, yukuai3@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Josef,
+Hello,
 
-Just a friendly ping, I am more than happy to test a patch, if you send it
-inline in the email, since the pastebin you used expired after 1 day, and I
-couldn't access it.
+Thank all of the participants of this years LSF/MM/BPF! It was great to finally
+get together as a community, both in person and virtually.
 
-I came across and tested Yu Kuai's patches [1][2] which are for the same issue,
-and they indeed fix the hang. Thank you Yu.
+If you presented this year and had slides please email the slides to
+lsf-pc@lists.linuxfoundation.org so we can attach it to the videos when the
+recordings are uploaded to YouTube. We will also forward these along to the
+staff at LWN.
 
-[1] nbd: don't clear 'NBD_CMD_INFLIGHT' flag if request is not completed
-https://lists.debian.org/nbd/2022/04/msg00212.html
+If any of you have objections to your sessions being posted on YouTube please
+email the lsf-pc list so we can make sure to exclude those videos.  We already
+have a couple of requests, so if you've already made one you don't need to let
+us know, we already have it marked down.
 
-[2] nbd: fix io hung while disconnecting device
-https://lists.debian.org/nbd/2022/04/msg00207.html
+Thanks again for a great conference!
 
-I am also happy to test any patches to fix the I/O errors.
+        Josef Bacik (Filesystems)
+        Amir Goldstein (Filesystems)
+        Martin K. Petersen (Storage)
+        Omar Sandoval (Storage)
+        Michal Hocko (MM)
+        Dan Williams (MM)
+        Alexei Starovoitov (BPF)
+        Daniel Borkmann (BPF)
 
-Thanks,
-Matthew
-
-On Tue, Apr 26, 2022 at 9:47 AM Matthew Ruffell
-<matthew.ruffell@canonical.com> wrote:
->
-> Hi Josef,
->
-> The pastebin has expired the link, and I can't access your patch.
-> Seems to default to 1 day deletion.
->
-> Could you please create a new paste or send the patch inline in this
-> email thread?
->
-> I am more than happy to try the patch out.
->
-> Thank you for your analysis.
-> Matthew
->
-> On Sat, Apr 23, 2022 at 3:24 AM Josef Bacik <josef@toxicpanda.com> wrote:
-> >
-> > On Fri, Apr 22, 2022 at 1:42 AM Matthew Ruffell
-> > <matthew.ruffell@canonical.com> wrote:
-> > >
-> > > Dear maintainers of the nbd subsystem,
-> > >
-> > > A user has come across an issue which causes the nbd module to hang after a
-> > > disconnect where a write has been made to a qemu qcow image file, with qemu-nbd
-> > > being the server.
-> > >
-> >
-> > Ok there's two problems here, but I want to make sure I have the right
-> > fix for the hang first.  Can you apply this patch
-> >
-> > https://paste.centos.org/view/b1a2d01a
-> >
-> > and make sure the hang goes away?  Once that part is fixed I'll fix
-> > the IO errors, this is just us racing with systemd while we teardown
-> > the device and then we're triggering a partition read while the device
-> > is going down and it's complaining loudly.  Before we would
-> > set_capacity to 0 whenever we disconnected, but that causes problems
-> > with file systems that may still have the device open.  However now we
-> > only do this if the server does the CLEAR_SOCK ioctl, which clearly
-> > can race with systemd poking the device, so I need to make it
-> > set_capacity(0) when the last opener closes the device to prevent this
-> > style of race.
-> >
-> > Let me know if that patch fixes the hang, and then I'll work up
-> > something for the capacity problem.  Thanks,
-> >
-> > Josef

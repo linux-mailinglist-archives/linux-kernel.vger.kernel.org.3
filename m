@@ -2,112 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 441E0526C1E
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 23:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B29A526C25
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 23:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384616AbiEMVJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 17:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56186 "EHLO
+        id S1384620AbiEMVON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 17:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384609AbiEMVJk (ORCPT
+        with ESMTP id S1343722AbiEMVOK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 17:09:40 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A065F84
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 14:09:38 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2ef5380669cso102543657b3.9
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 14:09:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ikL0/gwIaUWXfMtkCpW673auiv9e8rY9L7j8kbUCodE=;
-        b=vnm5P9psR0k0g/RGFnw+D3DgIlgSFzdTxdgBIGsyCdmrlWc3ziSI1keco4oQEKCXby
-         oswqgtNO/SfqRjShMbKhvJ1Kd6BVsK5PH0LnU//aAlk+aGxF0J3aLSRL5OrC0hyx9Qb5
-         0z3jvLqFW4xz7nYE6J3u91Ku0t24ytF0jIlNEDxDI8sPRurCTQKet9UwSndD2qN4T0KO
-         BFZXSct77T9J5LCsCDeYWjyBrc3TdNvg5kQj+iHGT+h550kmr86zJaYQBeuPgq8Ah+3z
-         28pMm0GRY4lZf6P2UX0coGvPbP+PtkT6Grr2Vt7r0MhPky3t0Od0Z34C/gLNtoBiM83N
-         EQVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ikL0/gwIaUWXfMtkCpW673auiv9e8rY9L7j8kbUCodE=;
-        b=2wUi9yZBpBArV4OMxaBvJzbdJvHs6L/9kl+6oY0o4ZNWMRJk1Cz36t2TJYvj4lYr+g
-         MMTb9j82uBcpAFWWZ6j4WE9kl785+1MOi6NR36hvv9whzoJjJ01zv1nZKai4KLMAhn6N
-         kb+0hLgldNZIodsCUoxZHrc852U/gO+xKoB/5jijZtAo66H5AXcM4fGCohlGUit4rjZE
-         WWhBdjpzUnKSTGCh5luN8ItLT/EgBreDPPAbtICi80H6ARAK10h93BEIIuvNi9bugxhU
-         VwWTO/iheFz9LSk8NIS3mxfS4BNX9Sw3qC+rIiJjn9I92UhuDCjw6tHZxx7MG+n7N3ID
-         071w==
-X-Gm-Message-State: AOAM530XEit/STfYtJN9l5MxW7YEQGW0QzXjiFOc/FvuoVRIYAutcl56
-        fdOTbRPJMGIzqFnRHzmumyYYdBMtG2jNxWUa8Yx7zQ==
-X-Google-Smtp-Source: ABdhPJyZhSGsZyH7SCsSN/Tf1gdlPJvallUvmRrCHX9UTyZ+zCvIzg6tvp2h34sx39n1RCDeM63EkvOGZpI/ej/L83s=
-X-Received: by 2002:a81:6d4f:0:b0:2fe:b911:fb6d with SMTP id
- i76-20020a816d4f000000b002feb911fb6dmr4488107ywc.140.1652476177376; Fri, 13
- May 2022 14:09:37 -0700 (PDT)
+        Fri, 13 May 2022 17:14:10 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D2982DAB2;
+        Fri, 13 May 2022 14:14:09 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 24DLDlZ2027436
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 May 2022 17:13:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1652476430; bh=ropMu2WEN5X5W82exC3OHUgNE5nAZ7EaJ+Bk99azWIo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=CgrkpEmqlyKsx5/ONDKMENj/HFmhb71mdUz0+egEViCp4RLRw7f4KPCkwf/EJnZ7f
+         VYebxlGTZrw4tIHpu4n9y/M1JKObWFPvzh8WrcIOPylt4pg1Zge76h6K4ghesEASzO
+         +SKKGmzv5H6MCYW41RW6uQyvwCqjw5vbHV7SDXxv3uxAmO3LtFNgNj094Zm1q3POzF
+         nW2S2ieMJGMfqEt2Yc4pErHSazSFZLLQmpx+mp/+W+iId/PGSyYHAaCx7FfR3aNaiy
+         i9LPAAbqL/ptYNLnKwYlMioI/XCCo4BsL7Y81SlY5jLmIyVHE173NqtH8Kw+GcWokD
+         3x/O8mdV9Ip9A==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id A864115C3F2A; Fri, 13 May 2022 17:13:47 -0400 (EDT)
+Date:   Fri, 13 May 2022 17:13:47 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Ye Bin <yebin10@huawei.com>
+Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jack@suse.cz, lczerner@redhat.com
+Subject: Re: [PATCH -next] ext4: fix use-after-free in ext4_rename_dir_prepare
+Message-ID: <Yn7KC6k/1Ncp6/Tl@mit.edu>
+References: <20220414025223.4113128-1-yebin10@huawei.com>
 MIME-Version: 1.0
-References: <20220511220613.1015472-1-marijn.suijten@somainline.org>
- <20220511220613.1015472-3-marijn.suijten@somainline.org> <d2507298-00a6-a1cc-0302-f96597fb4127@linaro.org>
- <20220513091734.hivkkbpc6inyb4la@SoMainline.org> <5cce491d-c673-d2a6-3aae-79b2e5902a01@linaro.org>
-In-Reply-To: <5cce491d-c673-d2a6-3aae-79b2e5902a01@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 13 May 2022 23:09:26 +0200
-Message-ID: <CACRpkdbyVScvnn-99XQ526B=64fQp34PKjot1CJ2Wfm0PKmZgg@mail.gmail.com>
-Subject: Re: [PATCH 2/7] dt-bindings: pinctrl: qcom-pmic-gpio: Add pm6125 compatible
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220414025223.4113128-1-yebin10@huawei.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 11:37 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On Thu, Apr 14, 2022 at 10:52:23AM +0800, Ye Bin wrote:
+> We got issue as follows:
+> EXT4-fs (loop0): mounted filesystem without journal. Opts: ,errors=continue
+> ext4_get_first_dir_block: bh->b_data=0xffff88810bee6000 len=34478
+> ext4_get_first_dir_block: *parent_de=0xffff88810beee6ae bh->b_data=0xffff88810bee6000
+> ext4_rename_dir_prepare: [1] parent_de=0xffff88810beee6ae
+> ==================================================================
+> BUG: KASAN: use-after-free in ext4_rename_dir_prepare+0x152/0x220
+> Read of size 4 at addr ffff88810beee6ae by task rep/1895
+> 
+> diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
+> index e37da8d5cd0c..2f78544b1d47 100644
+> --- a/fs/ext4/namei.c
+> +++ b/fs/ext4/namei.c
+> @@ -3463,9 +3466,28 @@ static struct buffer_head *ext4_get_first_dir_block(handle_t *handle,
+>  			*retval = PTR_ERR(bh);
+>  			return NULL;
+>  		}
+> -		*parent_de = ext4_next_entry(
+> -					(struct ext4_dir_entry_2 *)bh->b_data,
+> -					inode->i_sb->s_blocksize);
+> +
+> +		de = (struct ext4_dir_entry_2 *) bh->b_data;
+> +		if (ext4_check_dir_entry(inode, NULL, de, bh, bh->b_data,
+> +					 bh->b_size, 0) ||
+> +		    le32_to_cpu(de->inode) != inode->i_ino ||
+> +		    strcmp(".", de->name)) {
+> +			ext4_warning_inode(inode, "directory missing '.'");
 
-> >> This will need fixups or rebasing on my sets of PMIC gpio schema cleanup:
-> >
-> > Ack.
-> >
-> >> https://lore.kernel.org/all/20220507194913.261121-1-krzysztof.kozlowski@linaro.org/
-> >> https://lore.kernel.org/all/20220508135932.132378-2-krzysztof.kozlowski@linaro.org/
-> >>
-> >> Bjorn,
-> >> let us know preferred order (who should rebase on who).
-> >
-> > I prefer yours to be applied first, so that I can retest this
-> > patchseries with stricter / more correct dt-bindings introduced by it.
-> > My series can also be resent with the notice that it has already been
-> > rebased on top of your series, after collecting more reviews.  Where
-> > necessary, I can review your series too if that helps getting it in
-> > sooner.
->
-> Sounds good. It's in Bjorn's hands now. :)
+I think we should be calling ext4_error_inode()?  If the directory is
+missing '.' or '..' below, the file system is corrupt, so we probably
+should mark the file system as inconsistent, so that e2fsck can fix
+the file system.
 
-Ugh can I get that with a pull request? Maybe Krzysztof can provide?
-
-BTW I have high confidence in you Krzysztof after all your work on the
-Samsung pin controllers, can you and Bjorn
-discuss maybe adding you as comaintainer for Qualcomm pin controllers,
-it's not like Bjorn has too little to do.
-
-Yours,
-Linus Walleij
+					- Ted

@@ -2,90 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D06526A75
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 21:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 826AD526A79
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 21:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383786AbiEMTgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 15:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40736 "EHLO
+        id S1383804AbiEMThK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 15:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383692AbiEMTgn (ORCPT
+        with ESMTP id S1383686AbiEMThH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 15:36:43 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D17E271A
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 12:36:42 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id i24so8519302pfa.7
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 12:36:42 -0700 (PDT)
+        Fri, 13 May 2022 15:37:07 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F5954182
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 12:37:05 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id e189so11312586oia.8
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 12:37:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MVy7iZsksoOMOAm3NNokxlKH1OgviSGLirV/jH2bp6g=;
-        b=oT5OvAp1Zz7AUlM0aKl+8ZIvs1C599gkbilzsnIpz1AO0oVZtegSofmqZGgF3owSwx
-         e8aeEmF7v4n8qZXGa+DBCVXRNsxBwn4zoGlpEV6qhQ787uUrQWaSqVnM7yebGfhktUlW
-         vTbi4mb7fLQDubyl82mTHh+SczIl1wnGaEF44=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=3RxQPTxtVrqqVoiaHfpMeR5z0m/4z2ervHUzJOsJZ9g=;
+        b=HVDFRvfchpN7PSr7N06wi5d+LNSlIIt5soxH3QJ0+gRBVr/dSg3cRv/Kfvc+wdo32N
+         pibM/02iUEue6Qxq/rOTds4X5rjrw8cvNTSdnZnzhOEgDrBLoUvFjtWAdyj7d2Fx9lmY
+         pLyD/RPmCSmos2YTVv3X/wr2j4M2h77vSHOD01u8pQyumY7R6aOwyYLtD1gUssCgTSP8
+         kU3Tupzqd99Tu0kb6YusiYStRndmJ1gpmeq27VqYWLNqjul+u3ecx0MnP2hZIVnL6x2B
+         28OLuzcm2pIx8EfHUdyyHbuZB0sHYpa7hbo4deW3vh6/bY1itk3QrppPHft2Y5zqdWrU
+         JhBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MVy7iZsksoOMOAm3NNokxlKH1OgviSGLirV/jH2bp6g=;
-        b=YNRFmNOFtxSRxEgp3T0s8JaE1EHZaXkYAOwFI/3kTSXANBnQ/vT9whe7Uzonu2n076
-         SOF5g/P3UXnogwoaw8wZbB66GTtMS1/XzUG11Wk8aNSCwWO1kvvcOs3L/D9g0XMN6IQL
-         8jfPyZzRZrD34AXQIKA5Q3Hozfvru2jiRDnsEsXm7qxA3gJNJlgq2vy2kq0EsdS8zXgf
-         YAwFZPHsIk/QecAFpRpJOKYu1siqlZsC4ftEkPNaEOgr8is9gHANA+tQRakY6UYh4p9t
-         EGLtzK1Vij3jMQILMOYwm98J2oAX4bDkXlytWa5cpxf9lwrl9ooDubbdeJU6mdMCASdS
-         pgVw==
-X-Gm-Message-State: AOAM533nmaqsWNKSAj2hNRgJ32nwy7Mo2cfGWmZp8xNXjLsBQ489wPot
-        W2KlJLF+m2ewq9HtTf8+wrfNKA==
-X-Google-Smtp-Source: ABdhPJxGphb+a3j/4IMs2jeADD8wkkmOnIgagtQf5njkuMbaHesyMm7dlmo28dn15Im4KjxHYXi02A==
-X-Received: by 2002:a63:605:0:b0:3db:a8bc:fb71 with SMTP id 5-20020a630605000000b003dba8bcfb71mr2548020pgg.125.1652470601682;
-        Fri, 13 May 2022 12:36:41 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:bc87:9632:bcce:8e17])
-        by smtp.gmail.com with UTF8SMTPSA id l17-20020a629111000000b0050dc7628186sm2181056pfe.96.2022.05.13.12.36.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 12:36:41 -0700 (PDT)
-Date:   Fri, 13 May 2022 12:36:39 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Julius Werner <jwerner@chromium.org>,
-        "Joseph S . Barrera III" <joebar@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] dt-bindings: arm: qcom: Add / fix sc7280 board
- bindings
-Message-ID: <Yn6zR5k5EwP+qFBr@google.com>
-References: <20220513095722.v2.1.I71e42c6174f1cec17da3024c9f73ba373263b9b6@changeid>
- <20220513095722.v2.3.I1318c1ae2ce55ade1d092fc21df846360b15c560@changeid>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=3RxQPTxtVrqqVoiaHfpMeR5z0m/4z2ervHUzJOsJZ9g=;
+        b=bOdN3V/1zvqaeiQrzCxx5n2T5snoK3TsYKREcmYH6Ej2OWPoBIfok2JsgBhoTy9B/Y
+         sLJJQvZYZM62dXXYSFXkixnCF9tqgkJ5vqxPKAArZPlLbbLK7GZnJFaKh8PjmhnxI5jf
+         fD4dy2MHpfMwbP1tzIiotzW6VDL0w+mrgDR1OorwFUPnpuSKNpXYmsd75eU/WCDVaD7n
+         jKe1l5lljNTClAJwl2V+2pLk+8qUsLbC7yIYpYC86AFMaaShDhVCrNcHx/tWQ3WOBKw5
+         tlaKefdLXr7DJGTAOeShog4t58ty9QwnzN7Wc8FkhFsh6xCAuaKw/gSDqUvPJhGO9Wq5
+         zZnw==
+X-Gm-Message-State: AOAM533f38q2a94zxPn2wW3jEymeG4c41ub6l9zmQCgfENZY/SWGAeDq
+        fMfKLqEZVhPNYGeoRJVmbBr5NbbeZpDcbxkjVqEvqg==
+X-Google-Smtp-Source: ABdhPJxWTRI3eJZGbOSFy6qinBe+qvnKP338Acxh4EVCUelHqXY2P0KnwIfZ1lbbLdzxg/wN7GyADeKG9zIM/k3ibQM=
+X-Received: by 2002:a05:6808:2125:b0:326:b51f:bbc2 with SMTP id
+ r37-20020a056808212500b00326b51fbbc2mr8695466oiw.13.1652470624894; Fri, 13
+ May 2022 12:37:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220513095722.v2.3.I1318c1ae2ce55ade1d092fc21df846360b15c560@changeid>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220512184514.15742-1-jon@nutanix.com> <Yn1fjAqFoszWz500@google.com>
+ <Yn1hdHgMVuni/GEx@google.com> <07BEC8B1-469C-4E36-AE92-90BFDF93B2C4@nutanix.com>
+ <Yn1o9ZfsQutXXdQS@google.com> <CALMp9eRQv6owjfyf+UO=96Q1dkeSrJWy0i4O-=RPSaQwz0bjTQ@mail.gmail.com>
+ <C39CD5E4-3705-4D1A-A67D-43CBB7D1950B@nutanix.com> <CALMp9eRXmWvrQ1i0V3G738ndZOZ4YezQ=BqXe-BF2b4GNo1m3Q@mail.gmail.com>
+ <DEF8066B-E691-4C85-A19A-9F5222D1683D@nutanix.com> <CALMp9eTwH9WVD=EuTXeu1KYAkAUuXdnmA+k9dti7OM+u=kLKHQ@mail.gmail.com>
+ <CD2EB6FA-E17F-45BA-AC70-92CCB12A16C4@nutanix.com> <CALMp9eQAFz_wzC_SMiWD5KqP3=m+VceP=+6=RWEFbN2m7P7d+w@mail.gmail.com>
+ <73BC3891-34DC-4EB7-BD1C-5FD312A8F18A@nutanix.com>
+In-Reply-To: <73BC3891-34DC-4EB7-BD1C-5FD312A8F18A@nutanix.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Fri, 13 May 2022 12:36:53 -0700
+Message-ID: <CALMp9eTwih5dyiZkdxR3W9fpaMGQ41YYu1qM42eDZzdhnmBi5A@mail.gmail.com>
+Subject: Re: [PATCH v4] x86/speculation, KVM: remove IBPB on vCPU load
+To:     Jon Kohler <jon@nutanix.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ashok Raj <ashok.raj@intel.com>,
+        KarimAllah Ahmed <karahmed@amazon.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "kvm @ vger . kernel . org" <kvm@vger.kernel.org>,
+        Waiman Long <longman@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 09:59:19AM -0700, Douglas Anderson wrote:
-> This copy-pastes compatibles from sc7280-based boards from the device
-> trees to the yaml file. It also fixes the CRD/IDP bindings which had
-> gotten stale.
-> 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+On Fri, May 13, 2022 at 8:21 AM Jon Kohler <jon@nutanix.com> wrote:
+>
+>
+>
+> > On May 12, 2022, at 11:50 PM, Jim Mattson <jmattson@google.com> wrote:
+> >
+> > On Thu, May 12, 2022 at 8:19 PM Jon Kohler <jon@nutanix.com> wrote:
+> >>
+> >>
+> >>
+> >>> On May 12, 2022, at 11:06 PM, Jim Mattson <jmattson@google.com> wrote=
+:
+> >>>
+> >>> On Thu, May 12, 2022 at 5:50 PM Jon Kohler <jon@nutanix.com> wrote:
+> >>>
+> >>>> You mentioned if someone was concerned about performance, are you
+> >>>> saying they also critically care about performance, such that they a=
+re
+> >>>> willing to *not* use IBPB at all, and instead just use taskset and h=
+ope
+> >>>> nothing ever gets scheduled on there, and then hope that the hypervi=
+sor
+> >>>> does the job for them?
+> >>>
+> >>> I am saying that IBPB is not the only viable mitigation for
+> >>> cross-process indirect branch steering. Proper scheduling can also
+> >>> solve the problem, without the overhead of IBPB. Say that you have tw=
+o
+> >>> security domains: trusted and untrusted. If you have a two-socket
+> >>> system, and you always run trusted workloads on socket#0 and untruste=
+d
+> >>> workloads on socket#1, IBPB is completely superfluous. However, if th=
+e
+> >>> hypervisor chooses to schedule a vCPU thread from virtual socket#0
+> >>> after a vCPU thread from virtual socket#1 on the same logical
+> >>> processor, then it *must* execute an IBPB between those two vCPU
+> >>> threads. Otherwise, it has introduced a non-architectural
+> >>> vulnerability that the guest can't possibly be aware of.
+> >>>
+> >>> If you can't trust your OS to schedule tasks where you tell it to
+> >>> schedule them, can you really trust it to provide you with any kind o=
+f
+> >>> inter-process security?
+> >>
+> >> Fair enough, so going forward:
+> >> Should this be mandatory in all cases? How this whole effort came
+> >> was that a user could configure their KVM host with conditional
+> >> IBPB, but this particular mitigation is now always on no matter what.
+> >>
+> >> In our previous patch review threads, Sean and I mostly settled on mak=
+ing
+> >> this particular avenue active only when a user configures always_ibpb,=
+ such
+> >> that for cases like the one you describe (and others like it that come=
+ up in
+> >> the future) can be covered easily, but for cond_ibpb, we can document
+> >> that it doesn=E2=80=99t cover this case.
+> >>
+> >> Would that be acceptable here?
+> >
+> > That would make me unhappy. We use cond_ibpb, and I don't want to
+> > switch to always_ibpb, yet I do want this barrier.
+>
+> Ok gotcha, which I think is a good point for cloud providers, since the
+> workload(s) are especially opaque.
+>
+> How about this: I could work up a v5 patch here where this was at minimum
+> a system level knob (similar to other mitigation knobs) and documented
+> In more detail. That way folks who might want more control here have the
+> basic ability to do that without recompiling the kernel. Such a =E2=80=9C=
+knob=E2=80=9D would
+> be on by default, such that there is no functional regression here.
+>
+> Would that be ok with you as a middle ground?
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+That would be great. Module parameter or sysctl is fine with me.
+
+Thanks!
+
+> Thanks again,
+> Jon
+>
+> >
+> >>>
+> >>>> Would this be the expectation of just KVM? Or all hypervisors on the
+> >>>> market?
+> >>>
+> >>> Any hypervisor that doesn't do this is broken, but that won't keep it
+> >>> off the market. :-)
+> >>
+> >> Very true :)
+> >>
+>

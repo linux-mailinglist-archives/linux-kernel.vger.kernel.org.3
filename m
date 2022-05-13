@@ -2,166 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87835525AC6
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 06:36:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98F52525AC3
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 06:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376932AbiEMEbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 00:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40306 "EHLO
+        id S1376980AbiEMEcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 00:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346255AbiEMEa6 (ORCPT
+        with ESMTP id S242215AbiEMEcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 00:30:58 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA062BB3D;
-        Thu, 12 May 2022 21:30:51 -0700 (PDT)
-X-UUID: 6aa3c49978d0498489f77b9ed50246db-20220513
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:01a3c9d9-087f-46fb-b109-acc0c979a54a,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:673e11f2-ab23-4aed-a67b-f96514452486,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 6aa3c49978d0498489f77b9ed50246db-20220513
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 123668449; Fri, 13 May 2022 12:30:48 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 13 May 2022 12:30:47 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Fri, 13 May 2022 12:30:47 +0800
-Message-ID: <e70280d5bbc42a7d31602e68e98f3d33e24836ac.camel@mediatek.com>
-Subject: Re: [PATCH v4] pwrap: mediatek: fix FSM timeout issue
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Zhiyong Tao <zhiyong.tao@mediatek.com>, <lee.jones@linaro.org>,
-        <robh+dt@kernel.org>, <matthias.bgg@gmail.com>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>,
-        <eddie.huang@mediatek.com>, <a.zummo@towertech.it>,
-        <alexandre.belloni@bootlin.com>, <fshao@chromium.org>
-CC:     <srv_heupstream@mediatek.com>, <hui.liu@mediatek.com>,
-        <tinghan.shen@mediatek.com>, <hsin-hsiung.wang@mediatek.com>,
-        <sean.wang@mediatek.com>, <macpaul.lin@mediatek.com>,
-        <wen.su@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Fri, 13 May 2022 12:30:47 +0800
-In-Reply-To: <20220513034356.5268-2-zhiyong.tao@mediatek.com>
-References: <20220513034356.5268-1-zhiyong.tao@mediatek.com>
-         <20220513034356.5268-2-zhiyong.tao@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 13 May 2022 00:32:21 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBF41D89F9
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 21:32:20 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id a11so6682953pff.1
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 21:32:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=HShJID9SqbORjKsKMFhNTMZdx7Euq0wSFpHbpoh/p8E=;
+        b=pyflYZLnJd+TZS8OrfmBaXS9hI/hX+d9y64Q082UwkUp882amhwooOOKljd6H5VGCF
+         IeHqqezKJW45s+vdIQCzquZ/pvh/ctrxpsVoKo4QCo5ksigH+qTZeudsS6ghIHOQ9y9I
+         EUzIOUO2IcEUisWxZx73dpUy0V7H+AnIS5vXvkyFOzm6C8gKHrBdpfCNIAbtmYAU5hj2
+         7aO7IL8YdHNx4WCY9yjSmYMoGHpIaAtqo+7wAElEqKtQr80LbnqvoMfU22P2sc82lwVm
+         gTY8ZSaom9eGjYz2W6Roy2RUDxUesLW2kUh+BFt8FCsCaTCjURnewOyltInm5Gt/xdZW
+         G5wA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HShJID9SqbORjKsKMFhNTMZdx7Euq0wSFpHbpoh/p8E=;
+        b=N3vyS+11um1a0sPSZkISgkdGI9ZI4HMAgNv5tGP8wnPBqVr/beeWuwQlgM8HC2LFss
+         XgAVZimeRjuL2zr/ucIxHfGCGQl34xKKD5l1f7aJcaRamN2YsSKhO4E0tbtrESGEsPgq
+         Nz7jHDinlynyOzo3bPPPL3wrkhCgXMcyRxgymnSEPO0ur7dSs+guEDpLBgZav13GhQEx
+         PtbzKAmF8SHeITUbeW4k2sfTCDLJZn7un10IbPtXq3iYmw0kiIC2ErY29X6yke8kBxAA
+         7aoZbdHoD2APeyWiCKwsaxT/vOyTuf77b/wbCszTjiUExVigrCJZv8idflzLQ5FUZ1Af
+         Z+rw==
+X-Gm-Message-State: AOAM533AtwRcxawTslLSHIrXTxjbP0AFbz/RvijN/xThqS5zusRaKhDX
+        7d7wHwHv5Q6xtjGtuhos7BMy8A==
+X-Google-Smtp-Source: ABdhPJwUlE2YJklG9KyMkHwQVoD24UcRWZAcciox7ibVxuO1J9FjGzjMEBl65PiMueQ8HyObuVcNwg==
+X-Received: by 2002:a62:1547:0:b0:50e:d9b:ddf with SMTP id 68-20020a621547000000b0050e0d9b0ddfmr2852690pfv.46.1652416339530;
+        Thu, 12 May 2022 21:32:19 -0700 (PDT)
+Received: from [10.254.192.101] ([139.177.225.224])
+        by smtp.gmail.com with ESMTPSA id em11-20020a17090b014b00b001d952b8f728sm2603320pjb.2.2022.05.12.21.32.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 21:32:18 -0700 (PDT)
+Message-ID: <26fe8e8f-a7d7-02d9-f8e3-2448c25f1f5d@bytedance.com>
+Date:   Fri, 13 May 2022 12:32:11 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [External] Re: [PATCH] sched/fair: optimize and simplify rq
+ leaf_cfs_rq_list
+Content-Language: en-US
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com,
+        zhengqi.arch@bytedance.com
+References: <20220427160544.40309-1-zhouchengming@bytedance.com>
+ <4f04f101-53c1-0ac8-c7e8-ff2999ed35ba@bytedance.com>
+ <CAKfTPtDpqECw_mo1+iPN8OPb3cBf7ppJsLSTAJwPRLr-N3auqg@mail.gmail.com>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <CAKfTPtDpqECw_mo1+iPN8OPb3cBf7ppJsLSTAJwPRLr-N3auqg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-05-13 at 11:43 +0800, Zhiyong Tao wrote:
-> From: "Zhiyong.Tao" <zhiyong.tao@mediatek.com>
+On 2022/5/12 22:02, Vincent Guittot wrote:
+> Hi Chengming,
 > 
-> Fix pwrap FSM timeout issue which leads the system crash on GFX VSRAM
-> power on.
-> The crash log:
-> [ 3986.543401] mediatek-drm-dp 1c500000.edp_tx:
-> drm_helper_hpd_irq_event
-> [ 3986.670756] vsram_others: is_enabled() failed: -ETIMEDOUT
-> [ 3986.670765] mali 13000000.mali: Power on reg 1 failed error = -110
-> [ 3986.670768] ------------[ cut here ]------------
-> [ 3986.670770] unbalanced disables for vsram_others
-> [ 3986.670783] WARNING: CPU: 7 PID: 4125 at
-> drivers/regulator/core.c:2761 _regulator_disable+0x194/0x1a0
-> [ 3986.670785] Modules linked in: rfcomm algif_hash algif_skcipher
-> af_alg veth uinput btusb btmtk btintel btbcm btrtl xt_cgroup
-> bluetooth uvcvideo videobuf2_vmalloc ecdh_generic ecc mtk_vcodec_dec
-> mtk_vcodec_enc mtk_mdp3 v4l2_h264 mtk_vcodec_common
-> videobuf2_dma_contig mtk_vpu videobuf2_memops v4l2_mem2mem
-> xt_MASQUERADE videobuf2_v4l2 videobuf2_common cros_ec_rpmsg mtk_scp
-> mtk_rpmsg rpmsg_core mtk_scp_ipi ip6table_nat fuse 8021q
-> iio_trig_sysfs cros_ec_sensors cros_ec_lid_angle cros_ec_sensors_core
-> industrialio_triggered_buffer kfifo_buf cros_ec_sensorhub mt7921e
-> mt7921_common mt76_connac_lib lzo_rle mt76 lzo_compress mac80211
-> cfg80211 zram r8152 mii joydev
-> [ 3986.670830] CPU: 7 PID: 4125 Comm: mali-cmar-backe Not tainted
-> 5.10.78-CL2781499-v287 #1 b899b40a63da40d4767c6c0e96b6700d2f3eb242
-> [ 3986.670832] Hardware name: MediaTek Tomato board (DT)
-> [ 3986.670835] pstate: 60400009 (nZCv daif +PAN -UAO -TCO BTYPE=--)
-> [ 3986.670838] pc : _regulator_disable+0x194/0x1a0
-> [ 3986.670840] lr : _regulator_disable+0x194/0x1a0
-> [ 3986.670842] sp : ffffffc016203a10
-> [ 3986.670843] x29: ffffffc016203a10 x28: ffffffb7c3186b28
-> [ 3986.670846] x27: 0000000000000002 x26: fffffffffffffdc8
-> [ 3986.670848] x25: ffffffc017225000 x24: ffffffb7c0e94880
-> [ 3986.670851] x23: ffffffb7c31840f0 x22: ffffffd6b4f3e275
-> [ 3986.670853] x21: ffffffb7c3181a00 x20: ffffffb7c27e7800
-> [ 3986.670855] x19: ffffffb7c27e7800 x18: 00000000ffff0a10
-> [ 3986.670857] x17: 0000000000000020 x16: 00000000000000ec
-> [ 3986.670860] x15: ffffffd6b44fa17c x14: 0000000000000003
-> [ 3986.670862] x13: 0000000000000004 x12: 0000000000fd8318
-> [ 3986.670864] x11: c000000100029ccd x10: 00000000ffffffff
-> [ 3986.670866] x9 : 7dd6d080afd6f400 x8 : 7dd6d080afd6f400
-> [ 3986.670868] x7 : 0000000000000000 x6 : ffffffd6b5459f0c
-> [ 3986.670871] x5 : ffffffc016203a58 x4 : 0000000000000000
-> [ 3986.670873] x3 : ffffffc016203668 x2 : ffffffc016203670
-> [ 3986.670875] x1 : 0000000100029ccd x0 : 0000000000000024
-> [ 3986.670878] Call trace:
-> [ 3986.670880]  _regulator_disable+0x194/0x1a0
-> [ 3986.670883]  regulator_disable+0x4c/0x8c
+> Your patch is on my list but I have been busy on other stuff and we
+> had enough warnings and problems with this part that I want to
+> carefully review that all the cases are covered. I will review it soon
 > 
-> Add a usleep delay to avoid busy read for the H/W status.
-> If (time_after()) be turn first, it maybe cause the system behavior
-> crash problem like above. so we change it after sleep delay.
-> 
-> Fixes: 1f022d84bd19 ("soc: mediatek: Add PMIC wrapper for MT8135 and
-> MT8173 SoCs")
-> 
-> Signed-off-by: Zhiyong.Tao <zhiyong.tao@mediatek.com>
-> ---
->  drivers/soc/mediatek/mtk-pmic-wrap.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c
-> b/drivers/soc/mediatek/mtk-pmic-wrap.c
-> index 952bc554f443..f9e7c2f35157 100644
-> --- a/drivers/soc/mediatek/mtk-pmic-wrap.c
-> +++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
-> @@ -4,6 +4,7 @@
->   * Author: Flora Fu, MediaTek
->   */
->  #include <linux/clk.h>
-> +#include <linux/delay.h>
->  #include <linux/interrupt.h>
->  #include <linux/io.h>
->  #include <linux/kernel.h>
-> @@ -1197,10 +1198,13 @@ static int pwrap_wait_for_state(struct
-> pmic_wrapper *wrp,
->  	timeout = jiffies + usecs_to_jiffies(10000);
->  
->  	do {
-> -		if (time_after(jiffies, timeout))
-> -			return fp(wrp) ? 0 : -ETIMEDOUT;
->  		if (fp(wrp))
->  			return 0;
-> +
-> +		usleep_range(10, 11);
-> +
-> +		if (time_after(jiffies, timeout))
-> +			return fp(wrp) ? 0 : -ETIMEDOUT;
->  	} while (1);
->  }
->  
 
-Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+Hi Vincent,
 
+Thanks for your reply. There's no rush, just take your time. I agree
+that we should be very careful with this part due to previous problems.
+
+Thanks.
+
+> Vincent
+> 
+> On Wed, 11 May 2022 at 14:05, Chengming Zhou
+> <zhouchengming@bytedance.com> wrote:
+>>
+>> Hello, friendly ping...
+>>
+>>
+>> On 2022/4/28 00:05, Chengming Zhou wrote:
+>>> We notice the rq leaf_cfs_rq_list has two problems when do bugfix
+>>> backports and some test profiling.
+>>>
+>>> 1. cfs_rqs under throttled subtree could be added to the list, and
+>>>    make their fully decayed ancestors on the list, even though not needed.
+>>>
+>>> 2. #1 also make the leaf_cfs_rq_list management complex and error prone,
+>>>    this is the list of related bugfix so far:
+>>>
+>>>    commit 31bc6aeaab1d ("sched/fair: Optimize update_blocked_averages()")
+>>>    commit fe61468b2cbc ("sched/fair: Fix enqueue_task_fair warning")
+>>>    commit b34cb07dde7c ("sched/fair: Fix enqueue_task_fair() warning some more")
+>>>    commit 39f23ce07b93 ("sched/fair: Fix unthrottle_cfs_rq() for leaf_cfs_rq list")
+>>>    commit 0258bdfaff5b ("sched/fair: Fix unfairness caused by missing load decay")
+>>>    commit a7b359fc6a37 ("sched/fair: Correctly insert cfs_rq's to list on unthrottle")
+>>>    commit fdaba61ef8a2 ("sched/fair: Ensure that the CFS parent is added after unthrottling")
+>>>    commit 2630cde26711 ("sched/fair: Add ancestors of unthrottled undecayed cfs_rq")
+>>>
+>>> commit 31bc6aeaab1d ("sched/fair: Optimize update_blocked_averages()")
+>>> delete every cfs_rq under throttled subtree from rq->leaf_cfs_rq_list,
+>>> and delete the throttled_hierarchy() test in update_blocked_averages(),
+>>> which optimized update_blocked_averages().
+>>>
+>>> But those later bugfix add cfs_rqs under throttled subtree back to
+>>> rq->leaf_cfs_rq_list again, with their fully decayed ancestors, for
+>>> the integrity of rq->leaf_cfs_rq_list.
+>>>
+>>> This patch takes another method, skip all cfs_rqs under throttled
+>>> hierarchy when list_add_leaf_cfs_rq(), to completely make cfs_rqs
+>>> under throttled subtree off the leaf_cfs_rq_list.
+>>>
+>>> So we don't need to consider throttled related things in
+>>> enqueue_entity(), unthrottle_cfs_rq() and enqueue_task_fair(),
+>>> which simplify the code a lot. Also optimize update_blocked_averages()
+>>> since cfs_rqs under throttled hierarchy and their ancestors
+>>> won't be on the leaf_cfs_rq_list.
+>>>
+>>> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+>>> ---
+>>>  kernel/sched/fair.c | 72 ++++++++++-----------------------------------
+>>>  1 file changed, 16 insertions(+), 56 deletions(-)
+>>>
+>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+>>> index 1ad18b5cc1b8..083c3d32c899 100644
+>>> --- a/kernel/sched/fair.c
+>>> +++ b/kernel/sched/fair.c
+>>> @@ -309,6 +309,8 @@ const struct sched_class fair_sched_class;
+>>>
+>>>  #ifdef CONFIG_FAIR_GROUP_SCHED
+>>>
+>>> +static inline int throttled_hierarchy(struct cfs_rq *cfs_rq);
+>>> +
+>>>  /* Walk up scheduling entities hierarchy */
+>>>  #define for_each_sched_entity(se) \
+>>>               for (; se; se = se->parent)
+>>> @@ -331,7 +333,7 @@ static inline bool list_add_leaf_cfs_rq(struct cfs_rq *cfs_rq)
+>>>       struct rq *rq = rq_of(cfs_rq);
+>>>       int cpu = cpu_of(rq);
+>>>
+>>> -     if (cfs_rq->on_list)
+>>> +     if (cfs_rq->on_list || throttled_hierarchy(cfs_rq))
+>>>               return rq->tmp_alone_branch == &rq->leaf_cfs_rq_list;
+>>>
+>>>       cfs_rq->on_list = 1;
+>>> @@ -3242,8 +3244,6 @@ static long calc_group_shares(struct cfs_rq *cfs_rq)
+>>>  }
+>>>  #endif /* CONFIG_SMP */
+>>>
+>>> -static inline int throttled_hierarchy(struct cfs_rq *cfs_rq);
+>>> -
+>>>  /*
+>>>   * Recomputes the group entity based on the current state of its group
+>>>   * runqueue.
+>>> @@ -4356,16 +4356,10 @@ enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+>>>               __enqueue_entity(cfs_rq, se);
+>>>       se->on_rq = 1;
+>>>
+>>> -     /*
+>>> -      * When bandwidth control is enabled, cfs might have been removed
+>>> -      * because of a parent been throttled but cfs->nr_running > 1. Try to
+>>> -      * add it unconditionally.
+>>> -      */
+>>> -     if (cfs_rq->nr_running == 1 || cfs_bandwidth_used())
+>>> +     if (cfs_rq->nr_running == 1) {
+>>>               list_add_leaf_cfs_rq(cfs_rq);
+>>> -
+>>> -     if (cfs_rq->nr_running == 1)
+>>>               check_enqueue_throttle(cfs_rq);
+>>> +     }
+>>>  }
+>>>
+>>>  static void __clear_buddies_last(struct sched_entity *se)
+>>> @@ -4980,11 +4974,18 @@ void unthrottle_cfs_rq(struct cfs_rq *cfs_rq)
+>>>       /* update hierarchical throttle state */
+>>>       walk_tg_tree_from(cfs_rq->tg, tg_nop, tg_unthrottle_up, (void *)rq);
+>>>
+>>> -     /* Nothing to run but something to decay (on_list)? Complete the branch */
+>>>       if (!cfs_rq->load.weight) {
+>>> -             if (cfs_rq->on_list)
+>>> -                     goto unthrottle_throttle;
+>>> -             return;
+>>> +             if (!cfs_rq->on_list)
+>>> +                     return;
+>>> +             /*
+>>> +              * Nothing to run but something to decay (on_list)?
+>>> +              * Complete the branch.
+>>> +              */
+>>> +             for_each_sched_entity(se) {
+>>> +                     if (list_add_leaf_cfs_rq(cfs_rq_of(se)))
+>>> +                             break;
+>>> +             }
+>>> +             goto unthrottle_throttle;
+>>>       }
+>>>
+>>>       task_delta = cfs_rq->h_nr_running;
+>>> @@ -5022,31 +5023,12 @@ void unthrottle_cfs_rq(struct cfs_rq *cfs_rq)
+>>>               /* end evaluation on encountering a throttled cfs_rq */
+>>>               if (cfs_rq_throttled(qcfs_rq))
+>>>                       goto unthrottle_throttle;
+>>> -
+>>> -             /*
+>>> -              * One parent has been throttled and cfs_rq removed from the
+>>> -              * list. Add it back to not break the leaf list.
+>>> -              */
+>>> -             if (throttled_hierarchy(qcfs_rq))
+>>> -                     list_add_leaf_cfs_rq(qcfs_rq);
+>>>       }
+>>>
+>>>       /* At this point se is NULL and we are at root level*/
+>>>       add_nr_running(rq, task_delta);
+>>>
+>>>  unthrottle_throttle:
+>>> -     /*
+>>> -      * The cfs_rq_throttled() breaks in the above iteration can result in
+>>> -      * incomplete leaf list maintenance, resulting in triggering the
+>>> -      * assertion below.
+>>> -      */
+>>> -     for_each_sched_entity(se) {
+>>> -             struct cfs_rq *qcfs_rq = cfs_rq_of(se);
+>>> -
+>>> -             if (list_add_leaf_cfs_rq(qcfs_rq))
+>>> -                     break;
+>>> -     }
+>>> -
+>>>       assert_list_leaf_cfs_rq(rq);
+>>>
+>>>       /* Determine whether we need to wake up potentially idle CPU: */
+>>> @@ -5701,13 +5683,6 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
+>>>               /* end evaluation on encountering a throttled cfs_rq */
+>>>               if (cfs_rq_throttled(cfs_rq))
+>>>                       goto enqueue_throttle;
+>>> -
+>>> -               /*
+>>> -                * One parent has been throttled and cfs_rq removed from the
+>>> -                * list. Add it back to not break the leaf list.
+>>> -                */
+>>> -               if (throttled_hierarchy(cfs_rq))
+>>> -                       list_add_leaf_cfs_rq(cfs_rq);
+>>>       }
+>>>
+>>>       /* At this point se is NULL and we are at root level*/
+>>> @@ -5731,21 +5706,6 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
+>>>               update_overutilized_status(rq);
+>>>
+>>>  enqueue_throttle:
+>>> -     if (cfs_bandwidth_used()) {
+>>> -             /*
+>>> -              * When bandwidth control is enabled; the cfs_rq_throttled()
+>>> -              * breaks in the above iteration can result in incomplete
+>>> -              * leaf list maintenance, resulting in triggering the assertion
+>>> -              * below.
+>>> -              */
+>>> -             for_each_sched_entity(se) {
+>>> -                     cfs_rq = cfs_rq_of(se);
+>>> -
+>>> -                     if (list_add_leaf_cfs_rq(cfs_rq))
+>>> -                             break;
+>>> -             }
+>>> -     }
+>>> -
+>>>       assert_list_leaf_cfs_rq(rq);
+>>>
+>>>       hrtick_update(rq);

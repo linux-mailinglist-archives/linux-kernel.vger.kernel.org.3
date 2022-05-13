@@ -2,86 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD4C526B38
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 556B9526B3A
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:28:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380485AbiEMU1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 16:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56130 "EHLO
+        id S1384175AbiEMU2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 16:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355333AbiEMU1i (ORCPT
+        with ESMTP id S1384179AbiEMU14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 16:27:38 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C031116A
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:27:37 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id e189so11463556oia.8
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:27:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=99/RQ/TEDrl/cI0bVmdjzMtZB4uNUmEzljOvC28iEz8=;
-        b=bZVS/9dhIQBdgxOQIoWwLltNrxEIHGDAhZIDN3/6OIjPwFdpBvz0iopKN7ya6UOdi5
-         981dYqD4MjZmXZWtlYUYnovgp19XgUSRR6jeR7FqqzmLelkgcKCNd00rVNfF8VD0c0cd
-         nb3hXRs6ATTiffpfG2R/iSJRhZAHBvI3ALIRE+G5oRoBk0lvRjXvFxR8Qv+10AKq/TD9
-         0r2rSrT/PxSlrqYAfX52ZZtoZh22LZzRuNzoOkgwWdl4RKWsVz+iEJuLYn+N2akSv6tB
-         4A5YgWcfF1Gd9SJc48V/3qz4pYZ5XMHRStI9LaOoecPrT8XTr4VHt7J5mR72djfj/sE2
-         lBfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=99/RQ/TEDrl/cI0bVmdjzMtZB4uNUmEzljOvC28iEz8=;
-        b=H3oA2I7HSw4XuUh6ZHQScXINtdQuoJ03x57ePl93y93RQUWLYt2K8+4rPhlyDzLe30
-         SsJbryvmybeQEMyBt9HFd6RsrsYsboWhbeePVmxffrO4nTwBvsstLPsG90auXPhV52WF
-         2wPYKVo8xGultA48i23A/H1muTTQ5vUKdkyNWTIOcKFc4vo4C7C6ppse2UDizD7BnW1u
-         pkQK5vqvqOwONavDsFf29FSwk+q8om0JWupmAGCTJnS/Rx8jA5/PdIhXa7vCvScgVNKE
-         AD0whZxZosA0X7fUhvghN6NC/1jBWbNgMMRwQRXmSTUKuk7871/gGGEHuRyZeUzXx7f0
-         Ph8A==
-X-Gm-Message-State: AOAM5306AKp3SlcB55mILp3dlpG63NFENOBYEHCbT+fUpJ+TRnNmdacr
-        Qohii6Y6lNj9MUlxLIokBzur4vnt5rQMdK9yNG5Frw==
-X-Google-Smtp-Source: ABdhPJzjkjfXXwZJSABHc+7d9SbZttIFfFJyNa10z9JjsNyAbpCHZoW5BfjYx/hT0G28JwsC7f+aJcbiOHjbFiBKBOg=
-X-Received: by 2002:a05:6808:c2:b0:325:eb71:7266 with SMTP id
- t2-20020a05680800c200b00325eb717266mr8793970oic.269.1652473656784; Fri, 13
- May 2022 13:27:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220513195000.99371-1-seanjc@google.com> <20220513195000.99371-3-seanjc@google.com>
-In-Reply-To: <20220513195000.99371-3-seanjc@google.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Fri, 13 May 2022 13:27:25 -0700
-Message-ID: <CALMp9eQn+QaK630apzOz-L-btHxGQuXcbEiovO8FLOtMmQp_CQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] KVM: x86/mmu: Comment FNAME(sync_page) to document
- TLB flushing logic
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 13 May 2022 16:27:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A101116A;
+        Fri, 13 May 2022 13:27:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 567A7B831C3;
+        Fri, 13 May 2022 20:27:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1C84FC34100;
+        Fri, 13 May 2022 20:27:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652473672;
+        bh=B7YkBURDF1+FnxVQEIccEngvzMw5jb+93dTOUbcW/zE=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=AdcAtW2Fcnr9I82BB3eSckwgiHUNb7nOjXzeVxvPYtmq4ag3K5hgaFLwztuDLuJ5J
+         j82HevKqAztt4aqcRmU0CDFGWt8cB1P6j1vAiwchb8QX24R/XkAm5AUbYq+r18BhEj
+         BuNQVKW2bmtMOBhN/yh/NzQQiOIWs595cz/MZ30CiZh9jIjsi2f8UjMWxZyG5mf4ZH
+         QY1sUJuPEHm10lDAfjGUvJKjn3fHx550OsPzQnoXAx/uAUqaQPbCTmYhFXAtm3RmSK
+         12H8bIv9wEIkVTyzik7+54SDdiPYpJNUySPECkaprw6ijYp7jZFxyqHhJlSxIIZckq
+         C6LMkOy1WJrZw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 08CF8F0389D;
+        Fri, 13 May 2022 20:27:52 +0000 (UTC)
+Subject: Re: [GIT PULL] SCSI fixes for 5.18-rc6
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <892647cabbe1e3b2134f4667c3edadd853d51602.camel@HansenPartnership.com>
+References: <892647cabbe1e3b2134f4667c3edadd853d51602.camel@HansenPartnership.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <892647cabbe1e3b2134f4667c3edadd853d51602.camel@HansenPartnership.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+X-PR-Tracked-Commit-Id: 7752662071053adcdb6b6e7853834205dd60e1c0
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f2dd007445b1d4c0581d0292f85fdd5b47387776
+Message-Id: <165247367202.7375.5766271969428521513.pr-tracker-bot@kernel.org>
+Date:   Fri, 13 May 2022 20:27:52 +0000
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 12:50 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> Add a comment to FNAME(sync_page) to explain why the TLB flushing logic
-> conspiculously doesn't handle the scenario of guest protections being
-> reduced.  Specifically, if synchronizing a SPTE drops execute protections,
-> KVM will not emit a TLB flush, whereas dropping writable or clearing A/D
-> bits does trigger a flush via mmu_spte_update().  Architecturally, until
-> the GPTE is implicitly or explicitly flushed from the guest's perspective,
-> KVM is not required to flush any old, stale translations.
->
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
-Reviewed-by: Jim Mattson <jmattson@google.com>
+The pull request you sent on Fri, 13 May 2022 14:58:20 -0400:
+
+> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f2dd007445b1d4c0581d0292f85fdd5b47387776
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

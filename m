@@ -2,140 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7DDB52690A
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 20:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8EFB526911
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 20:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383252AbiEMSLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 14:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43632 "EHLO
+        id S232992AbiEMSOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 14:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355221AbiEMSLW (ORCPT
+        with ESMTP id S1382940AbiEMSN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 14:11:22 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2079.outbound.protection.outlook.com [40.107.223.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B88D562DD;
-        Fri, 13 May 2022 11:11:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZnSKQNVqqIT0A2LbHecyb7ORgYy1XeRHDt7JMEux6Dwk7Wo0j2/zbJpMl5N6RfVknkyGvTSndrHelm50VIwjnVPJhoAH85vNuuIQTegiYskomkXKuQ/BR9pNcoAxIyfZmQQvTZBt10eL7tWHnYf0NDBIidCjDTjt3lGSzL7l+lsEY5q2gZCBuxVNaZjEnz3HTiUwT8XuwlfuyzUnrbGxH8uxgijg0cLFszUdj91TFxljexZ5QbPfEVWMcEhQyVmozLTxQlqabRqTou8bHeIkQ3s+rCQfbKFbe/UXkZsUiplHOw4Byf5ZI1hzQJQHXVQ90O/rKJ2K1lUgGtJkiuVwQA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nGFc1BjDvP8R2BfhH/V4ktNlbfCN+rCz/8g4EMejUzA=;
- b=Z+ICtuVzkIjn2VQeVnavvvRm9p33zxYjQFRiCHJFiz4V2IF1flvW1Jl9rKbf9bXJ2y6XK/WoMDOBS21fo/Oa1SL3LamhWs+wX5oDDYBfksK/y/A92A81kAYKN/MxaDlPjThV6bNDdx7stzrRfKjNo2rU1a1t0oD7AKteHrAYJD9tPKn5/lB02ugtml2TKsGiQuI4D42ersxjHL5ya44bdPFW575U6k2H9RCYifxJEVlUXC8P61a0aBMYAYTFmtoes8iS7lC1Q3k2wAPesXCUZspTq8IeXn+HWnl5Ap4nlojVu0FewsaRqMjE9xmx+vMaShurKwCgsD+7h4GHqQnSbw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nGFc1BjDvP8R2BfhH/V4ktNlbfCN+rCz/8g4EMejUzA=;
- b=AIninimO97HQQIu/IvmcA9x1mgrzZvQf9dFofPt1gtqijjMXMPLowm2QSU8cfCOW/Xy+c0Vbwfa2IzHoKyY0IyiH8e9617XwVQ81iMUwuXNXWb57UEb+fdwMe6HZINzDY+mEaeyqzpvXsubB2LPwUfvu1CVX2+bIV/4/33g44/o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com (2603:10b6:805:75::23)
- by DM4PR12MB6302.namprd12.prod.outlook.com (2603:10b6:8:a4::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14; Fri, 13 May
- 2022 18:11:18 +0000
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::25d7:1ecc:64f2:f9c0]) by SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::25d7:1ecc:64f2:f9c0%6]) with mapi id 15.20.5250.015; Fri, 13 May 2022
- 18:11:18 +0000
-Message-ID: <51219031-935d-8da4-7d8f-80073a79f794@amd.com>
-Date:   Fri, 13 May 2022 18:11:15 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] KVM: SVM: Use kzalloc for sev ioctl interfaces to prevent
- kernel memory leak.
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Peter Gonda <pgonda@google.com>
-Cc:     Ashish Kalra <Ashish.Kalra@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Nguyen <theflow@google.com>,
-        David Rientjes <rientjes@google.com>,
-        John Allen <john.allen@amd.com>
-References: <20220512202328.2453895-1-Ashish.Kalra@amd.com>
- <CAMkAt6ogEpWf7J-OhXrPNw8KojwuLxUwfP6B+A7zrRHpNeX3uA@mail.gmail.com>
- <Yn5wDPPbVUysR4SF@google.com>
-From:   Ashish Kalra <ashkalra@amd.com>
-In-Reply-To: <Yn5wDPPbVUysR4SF@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0PR03CA0236.namprd03.prod.outlook.com
- (2603:10b6:610:e7::31) To SN6PR12MB2767.namprd12.prod.outlook.com
- (2603:10b6:805:75::23)
+        Fri, 13 May 2022 14:13:59 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792B91A4095;
+        Fri, 13 May 2022 11:13:57 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id r11so16644712ybg.6;
+        Fri, 13 May 2022 11:13:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=afx4AehawcU53cvWkjRY/XZQhZ6b42W2IQ/KydnVvwE=;
+        b=lzR5+nflHuD8VjXcDFz2xvcrWBvRb81Labwhox35YVwzarez8x/CmSaxe+ZgNu0LNa
+         oVhax3UdNVSiQ+J1wxzZVeLFGtcNu2kcPXGV7zv24axEeBY38ZztpdUIw73aHOtkPbi1
+         9Wo3GPaQEt1TghE1iQjvNzP7yfjnfZKmOVa6LjafjDB3Q5MJLB8IkKBESX5CuHCBcjn4
+         c4YMweHPNhp1BASRR0RfitJ90ntkqkNJbxA35KET9CSUfX+HvL5BO8mMju8uRODITRTH
+         sBnQHZ0U87W3MHNnp3XxwxUUpsxmFtQlWhC2FLSiLxI+dQSblTixvCO3OnkiwjVn/+qS
+         x/Qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=afx4AehawcU53cvWkjRY/XZQhZ6b42W2IQ/KydnVvwE=;
+        b=y2WpwQtwpUjlBSSXZ/GynuSkUPeqEpasmBR1JnXeoh+3s9K1Np/nY/hyIl+2509Rll
+         a6PjiBKKvOxPVkGdo8gxArHCyl0QRvCQmbe3wZpv/6q2rmF4r9R2QtxVj8ka1DESdf+z
+         W1Ey+I7wmjQBI1LszEqDoQ73l1T3aUJjwj5sOyGKljTbLPwnYzwPd0rY5arWusKM1lSE
+         QTe5IrwFT93zvRcpEtVv/JBiUDESV4T1IJQOpA0XyE7kFTBGdHBNLMHHH20b7JUo8W9A
+         SVavHHxaTphOqwIZnhPdofXIS73YCX8MgfDsWl7QDf2znBtugTiqZUoGS3LmTVqX90hY
+         ZqBA==
+X-Gm-Message-State: AOAM532NScymxudN4BZraj5r+EKSVyWzhf21nfhG6lrqcY4BtmbPeLUW
+        MDZ1IxV5eibie4/ELYaQNlB+5sLRDAp9TfmpooY=
+X-Google-Smtp-Source: ABdhPJyUY9acIYVu8V132wJGMXCf4p5KKBh5KfOt0X2WQApAtAAISHRaHPzSHlmNsv2hIP0JSGydxhioIeAi5JEboK4=
+X-Received: by 2002:a25:83d1:0:b0:648:725c:6a05 with SMTP id
+ v17-20020a2583d1000000b00648725c6a05mr6083963ybm.218.1652465636605; Fri, 13
+ May 2022 11:13:56 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: de4e8831-48c1-4822-0e0a-08da350bfa0b
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6302:EE_
-X-Microsoft-Antispam-PRVS: <DM4PR12MB6302D7A47AF7681FC00E88328ECA9@DM4PR12MB6302.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /wesFWCOsHFP0zKq2sZUyTS6TIh9NY0JiqBs4qMPbOz49KTqNDFYJorS6OwgJAB2r9bHdXClkrdceKcKlw4pzq9Hbsp+39IeTstIGN5WxQplGviJNd8BowP0Pp7pvb42p/xWbrrdImejYd4eZq/8tFhC1tFFUWUWaWyrkpsAK4kcCYxpM6qbEKsJgSeaG44uFZFvjDA9aIv4TnOfppMmb0LG6YT5QWqcmWSQcXl580YD8uVPSdYs9X94APCcC+jFo059LdsffipGM6STHUKdsFsymr4IMZarAhSL14A4XdmTCKBvrevH6ZEchV4SLL4BzziNeZsT9MLZipYsMupiVTIr4UhVYUsWLOhyixdP3hLbxyOsRLM734cwl3on62/cEtJ13GJI9XPTzIIe8osHFp4bZdizYz2V5miHfF1EGkX4ibBxnS8xXzGRPLnR1XEjWqJQ8iXdyDo/P/bXC42PH0RBG9a1Hmbcgx9JnIHE7VF+/UEaFSiGn3lRnibaUHXqu8M2g6Sq2QedCnDiELxFRztq0tLTanpJSoWGjpzTPup5tLNE8l4ixkozqoz0QBIJ/QzJ8Hfy9LLmnl4Aqx9u0tBob4a8yyMu2cIzpcQGzjmpYQJRz1rK0FFC42kXj7ztSjmV128cAYKEysLq1tiHN5ckGnCCBStEqCk5CR/5SVLd0L7cJlwM6WLDNLpe8neVx2xKvX6yXDyaDyywQlIE8nKWZtkH9irgqO67Jxk545g=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2767.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(38100700002)(2616005)(7416002)(8936002)(186003)(508600001)(31696002)(4326008)(83380400001)(8676002)(66946007)(66556008)(66476007)(6506007)(53546011)(36756003)(31686004)(6666004)(6486002)(26005)(6512007)(54906003)(110136005)(316002)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cTBIU0ZIUVE4VTZDSlduUmFLbHQremJQQnVSUnl4UVhWT1lnZ0JFRWZMNyt4?=
- =?utf-8?B?VDBDMTRwUHEwbWh3eFNlb1diOFVqQnArNm5VMFdsYVFsZ01qZFQ4ekUrQlJ2?=
- =?utf-8?B?bDRkcE9GLzdzaGJ6TTMvZDFWdy9RbjlLTFpWdWVRcFYvd1Y2ZWdnZjRoZW8r?=
- =?utf-8?B?U0JTOHdyZkQ2a2JEUW4xbWNLRXFYL09RTnVEcWFPSXZWL0xBNnlhK05CZVV1?=
- =?utf-8?B?SzBwbU5sbnFITmlIeEpvdlcxQlpyR0JkYUNjU2lLRUZnVTlITHJJV00vZTZ4?=
- =?utf-8?B?TlY4bUF4TE4xVCtlM0x0TzdNN0pveUhzdVVWL2twVHdBWkFjR3R4Njh0ZWZG?=
- =?utf-8?B?d3RaU01EZEtvRm9HcXQrbDNLZm9KMUJoTWQ0Q3VUQ0lvSWQzekw0TDg4S3Ji?=
- =?utf-8?B?eHQ1ZjFqRzRuekpQNEo1cndsWUxyTXRxdzNjVmxrYlZ3N0NFWHRraXBXS1Vv?=
- =?utf-8?B?T29ENWlnNUJXeVRTMXVFUEZFY2dLeG9uazVnUTdmL3AyNnBOcGZXNGtMWjQ4?=
- =?utf-8?B?U0RGT2hCNExKaC9jZXdoaDVQZ0U5TjZtNUFJT200RUJHdk9DdUNhSnhNdUcz?=
- =?utf-8?B?ajVucXBqNXY1bEM2dTF5RFEwcHg0Z1V6VVBtSmQwOGsxY1dNYU1PcFliS0JH?=
- =?utf-8?B?SHpqdmhGWjFqUzNERk1tNEZna0dEY2dNU0s3SkU1TGF3ZTZueTJicGRTQUY3?=
- =?utf-8?B?WlBZVDk3azhKQkVkWlpyLytrTUtlYnlOWkFnT3Rmb3hUN0RkRnBPQTBrdEpL?=
- =?utf-8?B?OWEvVm9SQTBwNzltWFpUM3Era2JLdEt5OXlPQnFXem9wZTVJeTRSeXF1ZXBa?=
- =?utf-8?B?RGJzcHVtVlAxOXVNUVZpQkJqdm5kbzJZQVVhWTdVMlQ1d3ExQXQzUXlET25h?=
- =?utf-8?B?Tll3dE95VnNtZSs5MzRmUUpSY0FnRklhUHFpcnlDMHFDbUc5eE9BMis4TWtN?=
- =?utf-8?B?WWFmZHZ1WHBFeG9ZckVDRnBkdFkxQkt5YmQ2M2dZVWtFYklGYk1pVkxqMnVy?=
- =?utf-8?B?RjB0Tkppalc1YWNSbXlzYWNJa2RsREE5dFpLV0dmWTQwamE4MDk2M0pFT0Jq?=
- =?utf-8?B?TVYwajFQdkFERnZXalJHQmNUcjcwaTVPeU53eGU0QkZEMmUvUEZyV29aTVBy?=
- =?utf-8?B?NGdhcHk5bEx5b0E0aTdIUEMwOVJqSk0wMVpPbDdhaTZBRHJTOGlWbTNkZUVP?=
- =?utf-8?B?NTk4TEJNei9TUlFjTVVPMnhQYmFqTkZnMHJaRXR4cy81UmtRZVgzQTN4Rmdl?=
- =?utf-8?B?VU10cDJ0N2lBbUo5V2NVODcxSkpOYllxaHVMMUxNQnQxY05hV2VOWGd5ZmRv?=
- =?utf-8?B?Y0Y4Z2pJTFlsUXhYUEFqVlZ0b2JlKzZsTWJ1dVpwN1VINk91eVIvakVnaWti?=
- =?utf-8?B?Ukh1dHhxNFN6US9BOWV1NE5JOFdxUEI4YmFWakd0QTFYam1rdmY5dWU4b1FS?=
- =?utf-8?B?KzN5SXlZU2Z5SzlXcytjVHAvRDc1R1BQZ2FPendZbEU2Y2xCblI3OVM0MkxW?=
- =?utf-8?B?WWgyOUZuekVndlVPK25mS3o4SGhKNlhXNGFSdTJPcGJDbGlqblgzTGcrdDlE?=
- =?utf-8?B?ODZNcDdmVVNDR2IrKzFqVDdodjdwc2VFTXJZZ3gvQ0RMbVlmeUhrQzg4ZEV0?=
- =?utf-8?B?RC9OM3pqdHRLZGhveXBWYzJpSTRTSzlWUDJSU0NwaFJKQkpyT0V6NzB5TmpJ?=
- =?utf-8?B?MzJpQXRGRVZrZ0NPaWRGVWVlcC9wenYwVStzVFpjRzdnMjVqamV2ZFFNN2NG?=
- =?utf-8?B?KzdKWVNPWlV1UTdwSXJjTUVTb3VlVEhzY1VwM2Z2YVpYcUQyLzN1dlZRVEtn?=
- =?utf-8?B?MzF4bVNNYjJOZ0FqSmJqNlI3eHp2eGExUmNBeVhndVJaMEM3dEVFNkR1NTB4?=
- =?utf-8?B?OE5OMXpsYy9SckpMcmQ1cUVuOXk2Tk9od2RPS3RyZC9DNmF0SjkzOWl0RVJm?=
- =?utf-8?B?dGxxQ3I2NEMwT0N2dmlnTUQ3MGhmeGtqSTNqTUQ0VDVPZllKSVV2VWVITjU3?=
- =?utf-8?B?V2JWdjZyWXUzWm1Qcm5GaHNrMjZWcEIvdFBXY29GalpRekpBSzh2Sm41cW1r?=
- =?utf-8?B?MnV1SS9VUXp2eEF1bnhlMjI5djFDWFFoWGNVV3FHa3BOY0RnRVFYaGVEK1I1?=
- =?utf-8?B?VWcrRWVNZ2lZaVY3Zmd1cUtQVGllYzB1eXIxcHNpQVdvR0hsSzhURUpJNUtK?=
- =?utf-8?B?ZFoxN1pwaHlJRlNGNXZEeGttNXgwME1vVmVZbVROTGpNd2tzK0xtb3dJOG9l?=
- =?utf-8?B?M1c5bUpvVGJTVTdhOFY1OHZWQ0VxcnV1ZlRGMFVqcXptOUsyQThOd0k3N3R1?=
- =?utf-8?B?dG5hRmNEdzhGbUdqVkk4VGJGaGkwVGUyOElqV281aTBpdWl1TlRNQT09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: de4e8831-48c1-4822-0e0a-08da350bfa0b
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2767.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 May 2022 18:11:18.4318
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /C8bfhU2JVMBNVVfP2IJYb2gEfZzYro60rG/wC4yEMnLMqoHs0u9LeFcXPvVB4McCHKjPvkCxYtuUm4nuXPIiw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6302
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220511183210.5248-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220511183210.5248-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdXDQ+eECWwvAGOb-MaN16H17qm_v_1baZ7PdT8qx9McSw@mail.gmail.com>
+ <CA+V-a8tNrJQtAQYoUKVwH9w4QOyA9JUWNjiYDPUPsj6UuJ4vaA@mail.gmail.com>
+ <CAMuHMdVazy9y_U6Nva+B-3vuX1Ersq+QirXDDgSh28pj8s=EJA@mail.gmail.com>
+ <CA+V-a8s2Gf22MPLoZMJS_5uDwzOboJ2i8rZ3KdRFy7a7wv8pGg@mail.gmail.com> <CAMuHMdXHJ385isGd-x8u4sFm1w=rxOC89SUryYbSd34bijkb0g@mail.gmail.com>
+In-Reply-To: <CAMuHMdXHJ385isGd-x8u4sFm1w=rxOC89SUryYbSd34bijkb0g@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Fri, 13 May 2022 19:13:29 +0100
+Message-ID: <CA+V-a8uXakF45TLvpsfeAY_EZKDGHr-wfgqLR_LTz1ZAo8FYmg@mail.gmail.com>
+Subject: Re: [PATCH v3 5/5] pinctrl: renesas: pinctrl-rzg2l: Add IRQ domain to
+ handle GPIO interrupt
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -143,71 +85,388 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Sean & Peter,
+Hi Geert
 
-On 5/13/22 14:49, Sean Christopherson wrote:
-> On Fri, May 13, 2022, Peter Gonda wrote:
->> On Thu, May 12, 2022 at 4:23 PM Ashish Kalra <Ashish.Kalra@amd.com> wrote:
->>> From: Ashish Kalra <ashish.kalra@amd.com>
->>>
->>> For some sev ioctl interfaces, the length parameter that is passed maybe
->>> less than or equal to SEV_FW_BLOB_MAX_SIZE, but larger than the data
->>> that PSP firmware returns. In this case, kmalloc will allocate memory
->>> that is the size of the input rather than the size of the data.
->>> Since PSP firmware doesn't fully overwrite the allocated buffer, these
->>> sev ioctl interface may return uninitialized kernel slab memory.
->>>
->>> Reported-by: Andy Nguyen <theflow@google.com>
->>> Suggested-by: David Rientjes <rientjes@google.com>
->>> Suggested-by: Peter Gonda <pgonda@google.com>
->>> Cc: kvm@vger.kernel.org
->>> Cc: linux-kernel@vger.kernel.org
->>> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
->>> ---
->>>   arch/x86/kvm/svm/sev.c | 6 +++---
->>>   1 file changed, 3 insertions(+), 3 deletions(-)
->>>
->> Can we just update all the kmalloc()s that buffers get given to the
->> PSP? For instance doesn't sev_send_update_data() have an issue?
->> Reading the PSP spec it seems like a user can call this ioctl with a
->> large hdr_len and the PSP will only fill out what's actually required
->> like in these fixed up cases? This is assuming the PSP is written to
->> spec (and just the current version). I'd rather have all of these
->> instances updated.
-
-Yes, this function is also vulnerable as it allocates the return buffer 
-using kmalloc() and copies back to user the buffer sized as per the user 
-provided length (and not the FW returned length), so it surely needs fixup.
-
-I will update all these instances to use kzalloc() instead of kmalloc().
-
-> Agreed, the kernel should explicitly initialize any copy_to_user() to source and
-> never rely on the PSP to fill the entire blob unless there's an ironclad guarantee
-> the entire struct/blob will be written.  E.g. it's probably ok to skip zeroing
-> "data" in sev_ioctl_do_platform_status(), but even then it might be wortwhile as
-> defense-in-depth.
+On Fri, May 13, 2022 at 3:29 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 >
-> Looking through other copy_to_user() calls:
+> Hi Prabhakar,
 >
->    - "blob" in sev_ioctl_do_pek_csr()
->    - "id_blob" in sev_ioctl_do_get_id2()
->    - "pdh_blob" and "cert_blob" in sev_ioctl_do_pdh_export()
-
-These functions are part of the ccp driver and a fix for them has 
-already been sent upstream to linux-crypto@vger.kernel.org and 
-linux-kernel@vger.kernel.org:
-
-[PATCH] crypto: ccp - Use kzalloc for sev ioctl interfaces to prevent 
-kernel memory leak
-
-Thanks,
-
-Ashish
-
+> On Fri, May 13, 2022 at 3:56 PM Lad, Prabhakar
+> <prabhakar.csengg@gmail.com> wrote:
+> > On Fri, May 13, 2022 at 7:53 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > On Thu, May 12, 2022 at 7:36 PM Lad, Prabhakar
+> > > <prabhakar.csengg@gmail.com> wrote:
+> > > > On Thu, May 12, 2022 at 8:39 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > > > On Wed, May 11, 2022 at 8:32 PM Lad Prabhakar
+> > > > > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > > > > > Add IRQ domian to RZ/G2L pinctrl driver to handle GPIO interrupt.
+> > > > > > GPIO0-GPIO122 pins can be used as IRQ lines but only 32 pins can be
+> > > > > > used as IRQ lines at given time. Selection of pins as IRQ lines
+> > > > > > is handled by IA55 (which is the IRQC block) which sits in between the
+> > > > > > GPIO and GIC.
+> > > > > >
+> > > > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > >
+> > > > > Thanks for your patch!
+> > > > >
+> > > > > > --- a/drivers/pinctrl/renesas/pinctrl-rzg2l.c
+> > > > > > +++ b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
+> > > > >
+> > > > > >  static int rzg2l_gpio_register(struct rzg2l_pinctrl *pctrl)
+> > > > > >  {
+> > > > > >         struct device_node *np = pctrl->dev->of_node;
+> > > > > >         struct gpio_chip *chip = &pctrl->gpio_chip;
+> > > > > >         const char *name = dev_name(pctrl->dev);
+> > > > > > +       struct irq_domain *parent_domain;
+> > > > > >         struct of_phandle_args of_args;
+> > > > > > +       struct device_node *parent_np;
+> > > > > > +       struct gpio_irq_chip *girq;
+> > > > > >         int ret;
+> > > > > >
+> > > > > > +       parent_np = of_irq_find_parent(np);
+> > > > > > +       if (!parent_np)
+> > > > > > +               return -ENXIO;
+> > > > > > +
+> > > > > > +       parent_domain = irq_find_host(parent_np);
+> > > > > > +       of_node_put(parent_np);
+> > > > > > +       if (!parent_domain)
+> > > > > > +               return -EPROBE_DEFER;
+> > > > > > +
+> > > > > >         ret = of_parse_phandle_with_fixed_args(np, "gpio-ranges", 3, 0, &of_args);
+> > > > > >         if (ret) {
+> > > > > >                 dev_err(pctrl->dev, "Unable to parse gpio-ranges\n");
+> > > > > > @@ -1138,6 +1330,15 @@ static int rzg2l_gpio_register(struct rzg2l_pinctrl *pctrl)
+> > > > > >         chip->base = -1;
+> > > > > >         chip->ngpio = of_args.args[2];
+> > > > > >
+> > > > > > +       girq = &chip->irq;
+> > > > > > +       girq->chip = &rzg2l_gpio_irqchip;
+> > > > > > +       girq->fwnode = of_node_to_fwnode(np);
+> > > > > > +       girq->parent_domain = parent_domain;
+> > > > > > +       girq->child_to_parent_hwirq = rzg2l_gpio_child_to_parent_hwirq;
+> > > > > > +       girq->populate_parent_alloc_arg = rzg2l_gpio_populate_parent_fwspec;
+> > > > > > +       girq->child_irq_domain_ops.free = rzg2l_gpio_irq_domain_free;
+> > > > > > +       girq->ngirq = RZG2L_TINT_MAX_INTERRUPT;
+> > > > > > +
+> > > > >
+> > > > > I think you need to provide a .init_valid_mask() callback, as
+> > > > > gpiochip_irqchip_remove() relies on that for destroying interrupts.
+> > > > Are you suggesting  the callback to avoid looping through all the GPIO pins?
+> > >
+> > > gpiochip_irqchip_remove() does:
+> > >
+> > >         /* Remove all IRQ mappings and delete the domain */
+> > >         if (gc->irq.domain) {
+> > >                 unsigned int irq;
+> > >
+> > >                 for (offset = 0; offset < gc->ngpio; offset++) {
+> > >                        if (!gpiochip_irqchip_irq_valid(gc, offset))
+> > >                                 continue;
+> > >
+> > >                         irq = irq_find_mapping(gc->irq.domain, offset);
+> > >                         irq_dispose_mapping(irq);
+> > >                 }
+> > >
+> > >                 irq_domain_remove(gc->irq.domain);
+> > >
+> > >         }
+> > >
+> > > The main thing is not about avoiding to loop through all GPIO pins,
+> > > but to avoid irq_{find,dispose}_mapping() doing the wrong thing.
+> > So in our case if we don't implement valid masks, that would mean all
+> > the pins are valid. irq_find_mapping() would return 0 if no mapping is
+> > found to the corresponding offset and irq_dispose_mapping() would
+> > simply return back without doing anything if virq == 0.(In this patch
+> > rzg2l_gpio_free() does call irq_{find,dispose}_mapping())
 >
-> The last one is probably fine since the copy length comes from the PSP, but it's
-> not like these ioctls are performance critical...
+> But "offset" is a number from the GPIO offset space (0-122), while
+
+The "offset" reported by kernel is 120-511:
+
+root@smarc-rzg2l:~# cat /sys/kernel/debug/gpio
+gpiochip0: GPIOs 120-511, parent: platform/11030000.pinctrl, 11030000.pinctrl:
+ gpio-120 (P0_0                )
+ gpio-121 (P0_1                )
+ gpio-122 (P0_2                )
+ gpio-123 (P0_3                )
+ gpio-124 (P0_4                )
+.....
+ gpio-507 (P48_3               )
+ gpio-508 (P48_4               )
+ gpio-509 (P48_5               )
+ gpio-510 (P48_6               )
+ gpio-511 (P48_7               )
+
+> irq_find_mapping() expects a number from the domain's IRQ space,
+> which is only 0-31?
 >
-> 	/* If we query the length, FW responded with expected data. */
-> 	input.cert_chain_len = data.cert_chain_len;
-> 	input.pdh_cert_len = data.pdh_cert_len;
+Nope, let me demonstrate with an example, I have configured the gpio
+pins as GPIO keys in DTS:
+
++       keyboard {
++               compatible = "gpio-keys";
++               status = "okay";
++
++               key-1 {
++                       gpios = <&pinctrl RZG2L_GPIO(43, 0) GPIO_ACTIVE_HIGH>;
++                       linux,code = <KEY_1>;
++                       linux,input-type = <EV_KEY>;
++                       wakeup-source;
++                       label = "SW1";
++               };
++
++               key-2 {
++                       gpios = <&pinctrl RZG2L_GPIO(41, 0) GPIO_ACTIVE_HIGH>;
++                       linux,code = <KEY_2>;
++                       linux,input-type = <EV_KEY>;
++                       wakeup-source;
++                       label = "SW2";
++               };
++
++               key-3 {
++                       gpios = <&pinctrl RZG2L_GPIO(43, 1) GPIO_ACTIVE_HIGH>;
++                       linux,code = <KEY_3>;
++                       linux,input-type = <EV_KEY>;
++                       wakeup-source;
++                       label = "SW3";
++               };
++       };
+
+root@smarc-rzg2l:~# cat /proc/interrupts | grep SW
+root@smarc-rzg2l:~#
+root@smarc-rzg2l:~# insmod gpio_keys.ko
+[  925.002720] input: keyboard as /devices/platform/keyboard/input/input3
+root@smarc-rzg2l:~# cat /proc/interrupts | grep SW
+ 82:          0          0 11030000.pinctrl 344 Edge      SW1
+ 83:          0          0 11030000.pinctrl 328 Edge      SW2
+ 84:          0          0 11030000.pinctrl 345 Edge      SW3
+root@smarc-rzg2l:~#
+
+In here 82/83/84 are virq and 344/328/345 are hwirq, which can be
+confirmed from sysfs file:
+
+root@smarc-rzg2l:~# cat /sys/kernel/debug/irq/irqs/82
+handler:  handle_fasteoi_irq
+device:   (null)
+status:   0x00000001
+istate:   0x00000000
+ddepth:   0
+wdepth:   0
+dstate:   0x13400201
+            IRQ_TYPE_EDGE_RISING
+            IRQD_ACTIVATED
+            IRQD_IRQ_STARTED
+            IRQD_SINGLE_TARGET
+            IRQD_DEFAULT_TRIGGER_SET
+            IRQD_HANDLE_ENFORCE_IRQCTX
+node:     0
+affinity: 0-1
+effectiv:
+domain:  :soc:pinctrl@11030000
+ hwirq:   0x158
+ chip:    11030000.pinctrl
+  flags:   0x800
+             IRQCHIP_IMMUTABLE
+ parent:
+    domain:  :soc:interrupt-controller@110a0000
+     hwirq:   0x9
+     chip:    rzg2l-irqc
+      flags:   0x15
+                 IRQCHIP_SET_TYPE_MASKED
+                 IRQCHIP_MASK_ON_SUSPEND
+                 IRQCHIP_SKIP_SET_WAKE
+     parent:
+        domain:  :soc:interrupt-controller@11900000-1
+         hwirq:   0x1dc
+         chip:    GICv3
+          flags:   0x15
+                     IRQCHIP_SET_TYPE_MASKED
+                     IRQCHIP_MASK_ON_SUSPEND
+                     IRQCHIP_SKIP_SET_WAKE
+root@smarc-rzg2l:~#
+root@smarc-rzg2l:~#
+root@smarc-rzg2l:~# cat /sys/kernel/debug/irq/irqs/83
+handler:  handle_fasteoi_irq
+device:   (null)
+status:   0x00000001
+istate:   0x00000000
+ddepth:   0
+wdepth:   0
+dstate:   0x13400201
+            IRQ_TYPE_EDGE_RISING
+            IRQD_ACTIVATED
+            IRQD_IRQ_STARTED
+            IRQD_SINGLE_TARGET
+            IRQD_DEFAULT_TRIGGER_SET
+            IRQD_HANDLE_ENFORCE_IRQCTX
+node:     0
+affinity: 0-1
+effectiv:
+domain:  :soc:pinctrl@11030000
+ hwirq:   0x148
+ chip:    11030000.pinctrl
+  flags:   0x800
+             IRQCHIP_IMMUTABLE
+ parent:
+    domain:  :soc:interrupt-controller@110a0000
+     hwirq:   0xa
+     chip:    rzg2l-irqc
+      flags:   0x15
+                 IRQCHIP_SET_TYPE_MASKED
+                 IRQCHIP_MASK_ON_SUSPEND
+                 IRQCHIP_SKIP_SET_WAKE
+     parent:
+        domain:  :soc:interrupt-controller@11900000-1
+         hwirq:   0x1dd
+         chip:    GICv3
+          flags:   0x15
+                     IRQCHIP_SET_TYPE_MASKED
+                     IRQCHIP_MASK_ON_SUSPEND
+                     IRQCHIP_SKIP_SET_WAKE
+root@smarc-rzg2l:~#
+root@smarc-rzg2l:~# cat /sys/kernel/debug/irq/irqs/84
+handler:  handle_fasteoi_irq
+device:   (null)
+status:   0x00000001
+istate:   0x00000000
+ddepth:   0
+wdepth:   0
+dstate:   0x13400201
+            IRQ_TYPE_EDGE_RISING
+            IRQD_ACTIVATED
+            IRQD_IRQ_STARTED
+            IRQD_SINGLE_TARGET
+            IRQD_DEFAULT_TRIGGER_SET
+            IRQD_HANDLE_ENFORCE_IRQCTX
+node:     0
+affinity: 0-1
+effectiv:
+domain:  :soc:pinctrl@11030000
+ hwirq:   0x159
+ chip:    11030000.pinctrl
+  flags:   0x800
+             IRQCHIP_IMMUTABLE
+ parent:
+    domain:  :soc:interrupt-controller@110a0000
+     hwirq:   0xb
+     chip:    rzg2l-irqc
+      flags:   0x15
+                 IRQCHIP_SET_TYPE_MASKED
+                 IRQCHIP_MASK_ON_SUSPEND
+                 IRQCHIP_SKIP_SET_WAKE
+     parent:
+        domain:  :soc:interrupt-controller@11900000-1
+         hwirq:   0x1de
+         chip:    GICv3
+          flags:   0x15
+                     IRQCHIP_SET_TYPE_MASKED
+                     IRQCHIP_MASK_ON_SUSPEND
+                     IRQCHIP_SKIP_SET_WAKE
+root@smarc-rzg2l:~#
+root@smarc-rzg2l:~#
+root@smarc-rzg2l:~#
+
+root@smarc-rzg2l:~# rmmod gpio_keys.ko
+[ 1143.037314] rzg2l_gpio_free offset:345 virq:84
+[ 1143.042488] rzg2l_gpio_free offset:328 virq:83
+[ 1143.048700] rzg2l_gpio_free offset:344 virq:82
+root@smarc-rzg2l:~#
+root@smarc-rzg2l:~#
+
+I have added print in gpio_free callback where
+irq_{find,dispose}_mapping()) prints the correct value above.
+
+
+> > > The loop is over all GPIO offsets, while not all of them are mapped
+> > > to valid interrupts. Does the above work correctly?
+> > >
+> > I haven't tested unloading the pinctrl driver which should call
+> > gpiochip_irqchip_remove() (we don't have remove call back for pinctrl
+> > driver)
+> >
+> > > > > However, the mask will need to be dynamic, as GPIO interrupts can be
+> > > > > mapped and unmapped to one of the 32 available interrupts dynamically,
+> > > > > right?
+> > > > Yep that's correct.
+> > > >
+> > > > > I'm not sure if that can be done easily: if gpiochip_irqchip_irq_valid()
+> > > > > is ever called too early, before the mapping is done, it would fail.
+> > > > >
+> > > > The mask initialization is a one time process and that is during
+> > > > adding the GPIO chip. At this stage we won't be knowing what will be
+> > > > the valid GPIO pins used as interrupts. Maybe the core needs to
+> > > > implement a callback which lands in the GPIO controller driver to tell
+> > > > if the gpio irq line is valid. This way we can handle dynamic
+> > > > interrupts.
+> > >
+> > > Upon closer look, I think the mask is a red herring, and we don't
+> > > need it.
+> > Agreed.
+> >
+> > > But we do need to handle the (possible) mismatch between GPIO
+> > > offset (index) and IRQ offset in the above code.
+> > >
+> > Agreed, do you see any possibility of the mismatch I have missed?
+>
+> gpiochip_to_irq():
+>
+>         if (irq_domain_is_hierarchy(domain)) {
+>                 struct irq_fwspec spec;
+>
+>                 spec.fwnode = domain->fwnode;
+>                 spec.param_count = 2;
+>                 spec.param[0] = gc->irq.child_offset_to_irq(gc, offset);
+>                 spec.param[1] = IRQ_TYPE_NONE;
+>
+>                 return irq_create_fwspec_mapping(&spec);
+>         }
+>
+> Same here: in the absence of a child_offset_to_irq() callback,
+> the default gpiochip_child_offset_to_irq_noop() will be used,
+> assuming an identity mapping between GPIO numbers and IRQ
+> numbers.
+>
+Agreed, gpiochip_child_offset_to_irq_noop will return the "offset",
+but irq_create_fwspec_mapping() in gpiochip_to_irq() will return the
+virq number which will not be equal to the offset.
+
+I added the below change in gpio_keys.c where it calls gpiod_to_irq()
+-> to_irq()  and the below is the log:
+--- a/drivers/input/keyboard/gpio_keys.c
++++ b/drivers/input/keyboard/gpio_keys.c
+@@ -589,6 +589,8 @@ static int gpio_keys_setup_key(struct platform_device *pdev,
+                                        button->gpio, error);
+                                return error;
+                        }
++                       dev_err(dev,"%s gpiod_to_irq() = (irq) %d\n",
+__func__, irq);
++
+                        bdata->irq = irq;
+                }
+
+root@smarc-rzg2l:~# insmod gpio_keys.ko
+[   54.288678] gpio-keys keyboard: gpio_keys_setup_key gpiod_to_irq() = (irq) 82
+[   54.297230] gpio-keys keyboard: gpio_keys_setup_key gpiod_to_irq() = (irq) 83
+[   54.311256] gpio-keys keyboard: gpio_keys_setup_key gpiod_to_irq() = (irq) 84
+[   54.332560] input: keyboard as /devices/platform/keyboard/input/input0
+root@smarc-rzg2l:~#
+
+> So perhaps
+>   1. you need to provide a child_offset_to_irq() callback,
+>   2. gpiochip_irqchip_remove() needs to apply the child_offset_to_irq()
+>     mapping too?
+>   3. you do need the mask, or let child_offset_to_irq() an error code,
+>      to avoid irq_{find,dispose}_mapping() handling non-existent irqs?
+>
+From the above logs, I don't think this is needed. Please correct me
+if I am wrong.
+
+
+> Or am I missing something?
+>
+> I guess this is easy to verify by adding some debug prints to the code.
+>
+Let me know if you want me to add debug prints at specific places.
+
+Cheers,
+Prabhakar

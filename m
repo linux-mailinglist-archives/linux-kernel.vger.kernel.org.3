@@ -2,84 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3965C525C39
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05DB6525C24
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:19:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377737AbiEMHON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 03:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57818 "EHLO
+        id S1377743AbiEMHQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 03:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377601AbiEMHOJ (ORCPT
+        with ESMTP id S234175AbiEMHQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 03:14:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E312A9CC1;
-        Fri, 13 May 2022 00:14:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3D720B82C59;
-        Fri, 13 May 2022 07:14:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA3B3C34100;
-        Fri, 13 May 2022 07:14:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652426045;
-        bh=EI+ONcSQlBGpFM7hWPN3KFhdRCNRtS+UuJKEdNX2cKk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iyUzOxPoCXk/U39lYWWofaNcupx3ZpjG8s4P8PBre07niqseBsVwFDMlCeHAjirBc
-         epCFDDoIsfyWe2lEFUVt3LKBcH4oWPVTJzDa9wn1galtcAnS0VgOv9JExeH9Wjjlo3
-         LBxLO5OgCz4sV1WZxNGefIgioS1LR05+Jlne7rZ0M8jcdIZo+aCixgtd7Z6CBZahlN
-         fduxPbc5basXUPEMh1d5AbykGJAr630CKZ67bBG0jp1gR81EbARB8Gp+n87g6JPGpa
-         UK2M42McOiHtnfdcTiMEEmi+gH7iyJ0AHC/40jWXDcmAkeBdJiKjPfVu0IsOBW33Fm
-         1+IemRICEdHlQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1npPUw-0006gm-B4; Fri, 13 May 2022 09:14:02 +0200
-Date:   Fri, 13 May 2022 09:14:02 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] serial: jsm: Use B0 instead of 0
-Message-ID: <Yn4FOofAvoqdaY9D@hovoldconsulting.com>
-References: <20220511101139.5306-1-ilpo.jarvinen@linux.intel.com>
- <20220511101139.5306-6-ilpo.jarvinen@linux.intel.com>
+        Fri, 13 May 2022 03:16:07 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A903AA63;
+        Fri, 13 May 2022 00:16:02 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=guangguan.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VD2I.iE_1652426158;
+Received: from localhost.localdomain(mailfrom:guangguan.wang@linux.alibaba.com fp:SMTPD_---0VD2I.iE_1652426158)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 13 May 2022 15:15:59 +0800
+From:   Guangguan Wang <guangguan.wang@linux.alibaba.com>
+To:     kgraul@linux.ibm.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 0/2] net/smc: send and write inline optimization for smc
+Date:   Fri, 13 May 2022 15:15:49 +0800
+Message-Id: <20220513071551.22065-1-guangguan.wang@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220511101139.5306-6-ilpo.jarvinen@linux.intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 01:11:39PM +0300, Ilpo Järvinen wrote:
-> Use B0 to check zero baudrate rather than literal 0.
-> 
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> ---
->  drivers/tty/serial/jsm/jsm_cls.c | 2 +-
->  drivers/tty/serial/jsm/jsm_neo.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/jsm/jsm_cls.c b/drivers/tty/serial/jsm/jsm_cls.c
-> index 046b624e5f71..ca05e84a7c90 100644
-> --- a/drivers/tty/serial/jsm/jsm_cls.c
-> +++ b/drivers/tty/serial/jsm/jsm_cls.c
-> @@ -689,7 +689,7 @@ static void cls_param(struct jsm_channel *ch)
->  	/*
->  	 * If baud rate is zero, flush queues, and set mval to drop DTR.
->  	 */
-> -	if ((ch->ch_c_cflag & (CBAUD)) == 0) {
-> +	if ((ch->ch_c_cflag & (CBAUD)) == B0) {
+Send cdc msgs and write data inline if qp has sufficent inline
+space, helps latency reducing. 
 
-Sure, why not. How about dropping the unnecessary parenthesis around
-CBAUD while at it?
+In my test environment, which are 2 VMs running on the same
+physical host and whose NICs(ConnectX-4Lx) are working on
+SR-IOV mode, qperf shows 0.4us-1.3us improvement in latency.
 
-Johan
+Test command:
+server: smc_run taskset -c 1 qperf
+client: smc_run taskset -c 1 qperf <server ip> -oo \
+		msg_size:1:2K:*2 -t 30 -vu tcp_lat
+
+The results shown below:
+msgsize     before       after
+1B          11.9 us      10.6 us (-1.3 us)
+2B          11.7 us      10.7 us (-1.0 us)
+4B          11.7 us      10.7 us (-1.0 us)
+8B          11.6 us      10.6 us (-1.0 us)
+16B         11.7 us      10.7 us (-1.0 us)
+32B         11.7 us      10.6 us (-1.1 us)
+64B         11.7 us      11.2 us (-0.5 us)
+128B        11.6 us      11.2 us (-0.4 us)
+256B        11.8 us      11.2 us (-0.6 us)
+512B        11.8 us      11.3 us (-0.5 us)
+1KB         11.9 us      11.5 us (-0.4 us)
+2KB         12.1 us      11.5 us (-0.6 us)
+
+
+Guangguan Wang (2):
+  net/smc: send cdc msg inline if qp has sufficient inline space
+  net/smc: rdma write inline if qp has sufficient inline space
+
+ net/smc/smc_ib.c |  1 +
+ net/smc/smc_tx.c | 17 ++++++++++++-----
+ net/smc/smc_wr.c |  5 ++++-
+ 3 files changed, 17 insertions(+), 6 deletions(-)
+
+-- 
+2.24.3 (Apple Git-128)
+

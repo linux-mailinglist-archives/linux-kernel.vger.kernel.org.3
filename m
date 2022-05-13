@@ -2,41 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C010152698D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 20:47:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F97526997
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 20:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383407AbiEMSrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 14:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55070 "EHLO
+        id S1383409AbiEMSxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 14:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383308AbiEMSqy (ORCPT
+        with ESMTP id S238703AbiEMSxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 14:46:54 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A738938D83;
-        Fri, 13 May 2022 11:46:53 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 750D21C0B92; Fri, 13 May 2022 20:46:52 +0200 (CEST)
-Date:   Fri, 13 May 2022 20:46:52 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 00/10] 5.10.116-rc1 review
-Message-ID: <20220513184652.GC28582@duo.ucw.cz>
-References: <20220513142228.303546319@linuxfoundation.org>
+        Fri, 13 May 2022 14:53:03 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2B465D29;
+        Fri, 13 May 2022 11:53:01 -0700 (PDT)
+Date:   Fri, 13 May 2022 11:52:52 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1652467979;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=c9TRybVbhOQgUFxoQemhb4nS3icLR/En8Zxu0EkRFzs=;
+        b=UKCdjVRdCBUCF0VJzs6bgU0WyPR3VyI60/PJnQpwECHSSCbZD9gieB07JA0/lDp7vEtGX3
+        tbsyD/Nsy4xjtX15B1/yCq3rz1O6uKYdhfoaXVv9QiXwEeGX2ny9G0ZntrBO0/ppJPLtN/
+        YA0km8jz4BreLxE7GMpTSF1HMy7iv/Y=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     void@manifault.com, akpm@linux-foundation.org,
+        cgroups@vger.kernel.org, hannes@cmpxchg.org, kernel-team@fb.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        mhocko@kernel.org, shakeelb@google.com, tj@kernel.org,
+        Richard Palethorpe <rpalethorpe@suse.de>
+Subject: Re: [PATCH 3/4] selftests: memcg: Adjust expected reclaim values of
+ protected cgroups
+Message-ID: <Yn6pBPq+lAXm9NG8@carbon>
+References: <20220512174452.tr34tuh4k5jm6qjs@dev0025.ash9.facebook.com>
+ <20220513171811.730-1-mkoutny@suse.com>
+ <20220513171811.730-4-mkoutny@suse.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="qjNfmADvan18RZcF"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220513142228.303546319@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+In-Reply-To: <20220513171811.730-4-mkoutny@suse.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,40 +55,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, May 13, 2022 at 07:18:10PM +0200, Michal Koutny wrote:
+> The numbers are not easy to derive in a closed form (certainly mere
+> protections ratios do not apply), therefore use a simulation to obtain
+> expected numbers.
+> 
+> The new values make the protection tests succeed more precisely.
+> 
+> 	% run as: octave-cli script
+> 	%
+> 	% Input configurations
+> 	% -------------------
+> 	% E parent effective protection
+> 	% n nominal protection of siblings set at the givel level
+> 	% c current consumption -,,-
+> 
+> 	% example from testcase (values in GB)
+> 	E = 50 / 1024;
+> 	n = [75 25 0 500 ] / 1024;
+> 	c = [50 50 50 0] / 1024;
+> 
+> 	% Reclaim parameters
+> 	% ------------------
+> 
+> 	% Minimal reclaim amount (GB)
+> 	cluster = 32*4 / 2**20;
+> 
+> 	% Reclaim coefficient (think as 0.5^sc->priority)
+> 	alpha = .1
+> 
+> 	% Simulation parameters
+> 	% ---------------------
+> 	epsilon = 1e-7;
+> 	timeout = 1000;
+> 
+> 	% Simulation loop
+> 	% ---------------------
+> 	% Simulation assumes siblings consumed the initial amount of memory (w/out
+> 	% reclaim) and then the reclaim starts, all memory is reclaimable, i.e. treated
+> 	% same. It simulates only non-low reclaim and assumes all memory.min = 0.
+> 
+> 	ch = [];
+> 	eh = [];
+> 	rh = [];
+> 
+> 	for t = 1:timeout
+> 		% low_usage
+> 		u = min(c, n);
+> 		siblings = sum(u);
+> 
+> 		% effective_protection()
+> 		protected = min(n, c);                % start with nominal
+> 		e = protected * min(1, E / siblings); % normalize overcommit
+> 
+> 		% recursive protection
+> 		unclaimed = max(0, E - siblings);
+> 		parent_overuse = sum(c) - siblings;
+> 		if (unclaimed > 0 && parent_overuse > 0)
+> 			overuse = max(0, c - protected);
+> 			e += unclaimed * (overuse / parent_overuse);
+> 		endif
+> 
+> 		% get_scan_count()
+> 		r = alpha * c;             % assume all memory is in a single LRU list
+> 
+> 		% commit 1bc63fb1272b ("mm, memcg: make scan aggression always exclude protection")
+> 		sz = max(e, c);
+> 		r .*= (1 - (e+epsilon) ./ (sz+epsilon));
+> 
+> 		% uncomment to debug prints
+> 		% e, c, r
+> 
+> 		% nothing to reclaim, reached equilibrium
+> 		if max(r) < epsilon
+> 			break;
+> 		endif
+> 
+> 		% SWAP_CLUSTER_MAX
+> 		r = max(r, (r > epsilon) .* cluster);
+> 		% XXX here I do parallel reclaim of all siblings
+> 		% in reality reclaim is serialized and each sibling recalculates own residual
+> 		c = max(c - r, 0);
+> 
+> 		ch = [ch ; c];
+> 		eh = [eh ; e];
+> 		rh = [rh ; r];
+> 	endfor
+> 
+> 	t
+> 	c, e
 
---qjNfmADvan18RZcF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is a cool stuff!
 
-Hi!
+How about to place it into a separate file and add a comment into the code
+with a reference?
 
-> This is the start of the stable review cycle for the 5.10.116 release.
-> There are 10 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-
-CIP testing did not find any problems here:
-
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
-5.10.y
-
-Tested-by: Pavel Machek (CIP) <pavel@denx.de>
-
-Best regards,
-                                                                Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---qjNfmADvan18RZcF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYn6nnAAKCRAw5/Bqldv6
-8jqIAJ0WwfBYE8sKxIHNkKf97c8d+H6KpwCeMmBk+KhY9f+QltEOUVr9OyHHwk4=
-=Yq+c
------END PGP SIGNATURE-----
-
---qjNfmADvan18RZcF--
+Thanks!

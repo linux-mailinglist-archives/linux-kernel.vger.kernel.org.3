@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A11B4526421
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A1EB526436
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380856AbiEMO1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
+        id S1380825AbiEMO2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380701AbiEMOZ6 (ORCPT
+        with ESMTP id S1380859AbiEMO0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:25:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241F66B659;
-        Fri, 13 May 2022 07:25:21 -0700 (PDT)
+        Fri, 13 May 2022 10:26:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEED95E742;
+        Fri, 13 May 2022 07:25:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C8D5BB83068;
-        Fri, 13 May 2022 14:25:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E688C34100;
-        Fri, 13 May 2022 14:25:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 87A5462154;
+        Fri, 13 May 2022 14:25:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 960EBC3411C;
+        Fri, 13 May 2022 14:25:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652451918;
-        bh=CiGNaB9PdFEDjJaiY6qic2eYiJtF5CwjFMm9j/i3FFo=;
+        s=korg; t=1652451932;
+        bh=Ct0LLrtbw4fIcwNuzzkdy83wmUH3W9eNG0B4y6zLjog=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gjXd8tyISen/rl/lMkBxTLUre+54S3BhBDpytA+lhI2s9X4u+T75Sa7xf8U/W2/jd
-         YL84r0GV8RmGAJJ5+jnptjCHiJ9l3tjOZFVbzs5YwVAcNzbbE2R2K/Zx8DZvmP64Wl
-         2uiZMEh0SFUcJHOsT5CZR4/isRNxgR4ALQ102U7Q=
+        b=TH5LiA43KGtbDo///OflzwbPsF7jksSewgj+tYDxx7S9vASlDctk3ucYQqJeVBQd1
+         Buscp6lM6cW80l5DM3jYw4Rui3T0im1/vJjsMowQdfmNOJE/158yTDTpgPwB6I4Uqc
+         fwOXve1QqTIJQ/sGzob8YBPouWZ9cSUb2zj030Bg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ricky Wu <ricky_wu@realtek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Christian Loehle <cloehle@hyperstone.com>
-Subject: [PATCH 4.14 06/14] mmc: rtsx: add 74 Clocks in power on flow
-Date:   Fri, 13 May 2022 16:23:22 +0200
-Message-Id: <20220513142227.571293193@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Subject: [PATCH 4.19 01/15] MIPS: Use address-of operator on section symbols
+Date:   Fri, 13 May 2022 16:23:23 +0200
+Message-Id: <20220513142227.941595011@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220513142227.381154244@linuxfoundation.org>
-References: <20220513142227.381154244@linuxfoundation.org>
+In-Reply-To: <20220513142227.897535454@linuxfoundation.org>
+References: <20220513142227.897535454@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -55,112 +59,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ricky WU <ricky_wu@realtek.com>
+From: Nathan Chancellor <natechancellor@gmail.com>
 
-commit 1f311c94aabdb419c28e3147bcc8ab89269f1a7e upstream.
+commit d422c6c0644bccbb1ebeefffa51f35cec3019517 upstream.
 
-SD spec definition:
-"Host provides at least 74 Clocks before issuing first command"
-After 1ms for the voltage stable then start issuing the Clock signals
+When building xway_defconfig with clang:
 
-if POWER STATE is
-MMC_POWER_OFF to MMC_POWER_UP to issue Clock signal to card
-MMC_POWER_UP to MMC_POWER_ON to stop issuing signal to card
+arch/mips/lantiq/prom.c:82:23: error: array comparison always evaluates
+to true [-Werror,-Wtautological-compare]
+        else if (__dtb_start != __dtb_end)
+                             ^
+1 error generated.
 
-Signed-off-by: Ricky Wu <ricky_wu@realtek.com>
-Link: https://lore.kernel.org/r/1badf10aba764191a1a752edcbf90389@realtek.com
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Ricky Wu <ricky_wu@realtek.com>
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+These are not true arrays, they are linker defined symbols, which are
+just addresses. Using the address of operator silences the warning
+and does not change the resulting assembly with either clang/ld.lld
+or gcc/ld (tested with diff + objdump -Dr). Do the same thing across
+the entire MIPS subsystem to ensure there are no more warnings around
+this type of comparison.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/1232
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mmc/host/rtsx_pci_sdmmc.c |   30 ++++++++++++++++++++----------
- 1 file changed, 20 insertions(+), 10 deletions(-)
+ arch/mips/bmips/setup.c          |    2 +-
+ arch/mips/lantiq/prom.c          |    2 +-
+ arch/mips/pic32/pic32mzda/init.c |    2 +-
+ arch/mips/ralink/of.c            |    2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
---- a/drivers/mmc/host/rtsx_pci_sdmmc.c
-+++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
-@@ -49,10 +49,7 @@ struct realtek_pci_sdmmc {
- 	bool			double_clk;
- 	bool			eject;
- 	bool			initial_mode;
--	int			power_state;
--#define SDMMC_POWER_ON		1
--#define SDMMC_POWER_OFF		0
--
-+	int			prev_power_state;
- 	int			sg_count;
- 	s32			cookie;
- 	int			cookie_sg_count;
-@@ -913,14 +910,21 @@ static int sd_set_bus_width(struct realt
- 	return err;
- }
- 
--static int sd_power_on(struct realtek_pci_sdmmc *host)
-+static int sd_power_on(struct realtek_pci_sdmmc *host, unsigned char power_mode)
- {
- 	struct rtsx_pcr *pcr = host->pcr;
- 	int err;
- 
--	if (host->power_state == SDMMC_POWER_ON)
-+	if (host->prev_power_state == MMC_POWER_ON)
- 		return 0;
- 
-+	if (host->prev_power_state == MMC_POWER_UP) {
-+		rtsx_pci_write_register(pcr, SD_BUS_STAT, SD_CLK_TOGGLE_EN, 0);
-+		goto finish;
-+	}
-+
-+	msleep(100);
-+
- 	rtsx_pci_init_cmd(pcr);
- 	rtsx_pci_add_cmd(pcr, WRITE_REG_CMD, CARD_SELECT, 0x07, SD_MOD_SEL);
- 	rtsx_pci_add_cmd(pcr, WRITE_REG_CMD, CARD_SHARE_MODE,
-@@ -939,11 +943,17 @@ static int sd_power_on(struct realtek_pc
- 	if (err < 0)
- 		return err;
- 
-+	mdelay(1);
-+
- 	err = rtsx_pci_write_register(pcr, CARD_OE, SD_OUTPUT_EN, SD_OUTPUT_EN);
- 	if (err < 0)
- 		return err;
- 
--	host->power_state = SDMMC_POWER_ON;
-+	/* send at least 74 clocks */
-+	rtsx_pci_write_register(pcr, SD_BUS_STAT, SD_CLK_TOGGLE_EN, SD_CLK_TOGGLE_EN);
-+
-+finish:
-+	host->prev_power_state = power_mode;
- 	return 0;
- }
- 
-@@ -952,7 +962,7 @@ static int sd_power_off(struct realtek_p
- 	struct rtsx_pcr *pcr = host->pcr;
- 	int err;
- 
--	host->power_state = SDMMC_POWER_OFF;
-+	host->prev_power_state = MMC_POWER_OFF;
- 
- 	rtsx_pci_init_cmd(pcr);
- 
-@@ -978,7 +988,7 @@ static int sd_set_power_mode(struct real
- 	if (power_mode == MMC_POWER_OFF)
- 		err = sd_power_off(host);
+--- a/arch/mips/bmips/setup.c
++++ b/arch/mips/bmips/setup.c
+@@ -174,7 +174,7 @@ void __init plat_mem_setup(void)
+ 		dtb = phys_to_virt(fw_arg2);
+ 	else if (fw_passed_dtb) /* UHI interface */
+ 		dtb = (void *)fw_passed_dtb;
+-	else if (__dtb_start != __dtb_end)
++	else if (&__dtb_start != &__dtb_end)
+ 		dtb = (void *)__dtb_start;
  	else
--		err = sd_power_on(host);
-+		err = sd_power_on(host, power_mode);
+ 		panic("no dtb found");
+--- a/arch/mips/lantiq/prom.c
++++ b/arch/mips/lantiq/prom.c
+@@ -81,7 +81,7 @@ void __init plat_mem_setup(void)
  
- 	return err;
- }
-@@ -1416,7 +1426,7 @@ static int rtsx_pci_sdmmc_drv_probe(stru
- 	host->mmc = mmc;
- 	host->pdev = pdev;
- 	host->cookie = -1;
--	host->power_state = SDMMC_POWER_OFF;
-+	host->prev_power_state = MMC_POWER_OFF;
- 	INIT_WORK(&host->work, sd_request);
- 	platform_set_drvdata(pdev, host);
- 	pcr->slots[RTSX_SD_CARD].p_dev = pdev;
+ 	if (fw_passed_dtb) /* UHI interface */
+ 		dtb = (void *)fw_passed_dtb;
+-	else if (__dtb_start != __dtb_end)
++	else if (&__dtb_start != &__dtb_end)
+ 		dtb = (void *)__dtb_start;
+ 	else
+ 		panic("no dtb found");
+--- a/arch/mips/pic32/pic32mzda/init.c
++++ b/arch/mips/pic32/pic32mzda/init.c
+@@ -36,7 +36,7 @@ static ulong get_fdtaddr(void)
+ 	if (fw_passed_dtb && !fw_arg2 && !fw_arg3)
+ 		return (ulong)fw_passed_dtb;
+ 
+-	if (__dtb_start < __dtb_end)
++	if (&__dtb_start < &__dtb_end)
+ 		ftaddr = (ulong)__dtb_start;
+ 
+ 	return ftaddr;
+--- a/arch/mips/ralink/of.c
++++ b/arch/mips/ralink/of.c
+@@ -79,7 +79,7 @@ void __init plat_mem_setup(void)
+ 	 */
+ 	if (fw_passed_dtb)
+ 		dtb = (void *)fw_passed_dtb;
+-	else if (__dtb_start != __dtb_end)
++	else if (&__dtb_start != &__dtb_end)
+ 		dtb = (void *)__dtb_start;
+ 
+ 	__dt_setup_arch(dtb);
 
 

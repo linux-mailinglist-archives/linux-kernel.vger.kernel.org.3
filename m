@@ -2,117 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7474A525B82
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 08:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E3A525B7E
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 08:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377371AbiEMG0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 02:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
+        id S1377353AbiEMG0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 02:26:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377307AbiEMG0Y (ORCPT
+        with ESMTP id S1377292AbiEMG0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 02:26:24 -0400
-Received: from isilmar-4.linta.de (isilmar-4.linta.de [136.243.71.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC322A711;
-        Thu, 12 May 2022 23:26:21 -0700 (PDT)
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
-        by isilmar-4.linta.de (Postfix) with ESMTPSA id E5D2B2013F8;
-        Fri, 13 May 2022 06:26:05 +0000 (UTC)
-Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
-        id D23B680A2A; Fri, 13 May 2022 08:25:12 +0200 (CEST)
-Date:   Fri, 13 May 2022 08:25:12 +0200
-From:   Dominik Brodowski <linux@dominikbrodowski.net>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: Re: [PATCH] random: mix in timestamps and reseed on system restore
-Message-ID: <Yn35yGyVYT7gwGEq@owl.dominikbrodowski.net>
-References: <20220501123849.3858-1-Jason@zx2c4.com>
+        Fri, 13 May 2022 02:26:22 -0400
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2925427FDA;
+        Thu, 12 May 2022 23:26:01 -0700 (PDT)
+Received: from NTHCCAS04.nuvoton.com (NTHCCAS04.nuvoton.com [10.1.8.29])
+        by maillog.nuvoton.com (Postfix) with ESMTP id 5B9611C80D8E;
+        Fri, 13 May 2022 14:25:59 +0800 (CST)
+Received: from NTHCCAS04.nuvoton.com (10.1.8.29) by NTHCCAS04.nuvoton.com
+ (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 13
+ May 2022 14:25:58 +0800
+Received: from [172.19.1.47] (172.19.1.47) by NTHCCAS04.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
+ Transport; Fri, 13 May 2022 14:25:58 +0800
+Message-ID: <2786221c-d0a5-9bce-70d3-385dc419591a@nuvoton.com>
+Date:   Fri, 13 May 2022 14:25:59 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220501123849.3858-1-Jason@zx2c4.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V4 2/5] dt-bindings: clock: Document MA35D1 clock
+ controller bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <ychuang570808@gmail.com>
+CC:     <robh+dt@kernel.org>, <sboyd@kernel.org>, <krzk+dt@kernel.org>,
+        <arnd@arndb.de>, <olof@lixom.net>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <soc@kernel.org>, <cfli0@nuvoton.com>
+References: <20220510032558.10304-1-ychuang3@nuvoton.com>
+ <20220510032558.10304-3-ychuang3@nuvoton.com>
+ <f0969769-9f24-7e48-6a60-adeea94404e1@linaro.org>
+From:   Jacky Huang <ychuang3@nuvoton.com>
+In-Reply-To: <f0969769-9f24-7e48-6a60-adeea94404e1@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Sun, May 01, 2022 at 02:38:49PM +0200 schrieb Jason A. Donenfeld:
-> Since the RNG loses freshness system suspend/hibernation, when we
-> resume, immediately reseed using whatever data we can, which for this
-> particular case is the various timestamps regarding system suspend time,
-> in addition to more generally the RDSEED/RDRAND/RDTSC values that happen
-> whenever the crng reseeds.
-> 
-> On systems that suspend and resume automatically all the time -- such as
-> Android -- we skip the reseeding on suspend resumption, since that could
-> wind up being far too busy. This is the same trade-off made in
-> WireGuard.
-> 
-> In addition to reseeding upon resumption always mix into the pool these
-> various stamps on every power notification event.
-> 
-> Cc: Theodore Ts'o <tytso@mit.edu>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  drivers/char/random.c | 34 ++++++++++++++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
-> 
-> diff --git a/drivers/char/random.c b/drivers/char/random.c
-> index 0935a140795e..48eac27214ea 100644
-> --- a/drivers/char/random.c
-> +++ b/drivers/char/random.c
-> @@ -53,6 +53,7 @@
->  #include <linux/completion.h>
->  #include <linux/uuid.h>
->  #include <linux/uaccess.h>
-> +#include <linux/suspend.h>
->  #include <crypto/chacha.h>
->  #include <crypto/blake2s.h>
->  #include <asm/processor.h>
-> @@ -966,6 +967,37 @@ static int __init parse_trust_bootloader(char *arg)
->  early_param("random.trust_cpu", parse_trust_cpu);
->  early_param("random.trust_bootloader", parse_trust_bootloader);
->  
-> +static int random_pm_notification(struct notifier_block *nb, unsigned long action, void *data)
-> +{
-> +	unsigned long flags, entropy = random_get_entropy();
-> +
-> +	/*
-> +	 * Encode a representation of how long the system has been suspended,
-> +	 * in a way that is distinct from prior system suspends.
-> +	 */
-> +	ktime_t stamps[] = {
-> +		ktime_get(),
-> +		ktime_get_boottime(),
-> +		ktime_get_real()
-> +	};
-> +
-> +	spin_lock_irqsave(&input_pool.lock, flags);
-> +	_mix_pool_bytes(&action, sizeof(action));
-> +	_mix_pool_bytes(stamps, sizeof(stamps));
-> +	_mix_pool_bytes(&entropy, sizeof(entropy));
-> +	spin_unlock_irqrestore(&input_pool.lock, flags);
-> +
-> +	if (action == PM_RESTORE_PREPARE ||
-> +	    (action == PM_POST_SUSPEND &&
-> +	     !IS_ENABLED(CONFIG_PM_AUTOSLEEP) && !IS_ENABLED(CONFIG_ANDROID))) {
-> +		crng_reseed(true);
-> +		pr_notice("crng reseeded on system resumption\n");
-> +	}
-> +	return 0;
-> +}
 
-Should this also wake up any thread waiting in add_hwgenerator_randomness()
-/ "use" the input already in store there?
 
-Thanks,
-	Dominik
+On 2022/5/12 下午 10:04, Krzysztof Kozlowski wrote:
+> On 10/05/2022 05:25, Jacky Huang wrote:
+>> Add documentation to describe Nuvoton MA35D1 clock driver bindings.
+>>
+>> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/clock/nuvoton,ma35d1-clk.h>
+>> +
+>> +    clk: clock-controller@40460200 {
+>> +        compatible = "nuvoton,ma35d1-clk";
+>> +        reg = <0x0 0x40460200 0x0 0x100>;
+> I don't think you tested your bindings. This fails.
+>
+> clock-names below as well. Please do not send untested code.
+>
+> Testing is explained here:
+> https://apc01.safelinks.protection.outlook.com/?url=https%3A%2F%2Felixir.bootlin.com%2Flinux%2Fv5.18-rc6%2Fsource%2FDocumentation%2Fdevicetree%2Fbindings%2Fwriting-schema.rst%23L111&amp;data=05%7C01%7Cychuang3%40nuvoton.com%7C7f9b081f94a642e8b40b08da34204e53%7Ca3f24931d4034b4a94f17d83ac638e07%7C0%7C0%7C637879610603173566%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=kqInjscLvZpOSWtsN%2BPW3s%2BPeaK5KCD1weTH2JiHqxg%3D&amp;reserved=0
+>
+> Best regards,
+> Krzysztof
+
+I run the test  make DT_CHECKER_FLAGS=-m dt_binding_check, but not run 
+dtbs_check.
+I will fix it. Thank you.
+
+Sincerely,
+Jacky Huang
+
+
+
+
+
+

@@ -2,90 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5095E5268D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5012D5268D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:56:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382699AbiEMR42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 13:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43312 "EHLO
+        id S1383193AbiEMR4r convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 13 May 2022 13:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbiEMR40 (ORCPT
+        with ESMTP id S1383226AbiEMR4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 13:56:26 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7178131298
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:56:25 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id a21so10862275edb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:56:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eWc83us6iMjMu47b13RkKYsUekDxzLK2yhJp62YG0VE=;
-        b=q7PrcJNIn0gW+0mdIBE3Lb2D4x8Zs/S5YjdL0E1Dn5ksSTT7QVqsVTvcjGPk8xd0/6
-         /VVIfqBrssRPjaJfhigS2Mh7TvJLp8WF7UtMeywSD+yz5YDwLaiBf2ZCto7RcTO3+LvC
-         WvlmIqg+8iw7x517MnsRhr7CGR00/zNi0eZTab2War8/IPEFeHu8SLbs8qyy2Drp5d2c
-         ceMsF3S7rfl/HCD0pnof6kzrawMB5e1sNK7wcQmKIGCHHnP7GlbCW5q0kiNojmRmJzLF
-         /1XiSwLX6j1cAi+odeyRPbqgTtpxEeS57itFCHzX0TU6mZNxDs0Ohs6o4IFx3+u6O7+4
-         MMKw==
+        Fri, 13 May 2022 13:56:44 -0400
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2DE1356BA;
+        Fri, 13 May 2022 10:56:32 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id x74so3896362ybe.4;
+        Fri, 13 May 2022 10:56:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eWc83us6iMjMu47b13RkKYsUekDxzLK2yhJp62YG0VE=;
-        b=SPI4AQZLpiS3R1X5Vya2KvxSVQ9nRODnzaSmBLe3GpV6xHtugehFgRyYgBQy4fg5Kk
-         Y3s/zEUKxmIcLCl1ZFtiyixR2l7Jc4e2xPZBi9hSVkpgVarUT7Y0C3YqYihtoIvsUNgx
-         EQECeSzBzU+7jVoXG87bPOS22H6l8eOOPyfC2oudRHEBLxIC4DQeqv77QrnyWk77KVFG
-         yAFSdm80fmnK/VIHNpyyj9Vhmco65rL0G1S6vEoLI0wfaCCAMLb3lK+59Rw8qVBGkAI/
-         gJm1tqrmGygCYxc14mIkU1GJCfzv2UOZJPCGFkTiHtRQaX/aMus/KzwYFqD1pHiFC3j9
-         DqPw==
-X-Gm-Message-State: AOAM5303SK+P7TZWDvRZbATuyHa2vgkErlkwXy48i4WIZnbAuptCMfLe
-        BqjkJcI/hhCqSbSGcczts/c9eKXAF1y7Ozh7NrXkMg==
-X-Google-Smtp-Source: ABdhPJztcxFof6vQQCUrj255nWqwJp/jUycfRknzGjGqz8uMM6QrL9A3Sa3lnknkdyMfuxc1tTl6qn42rJ5GZa1y/AI=
-X-Received: by 2002:a05:6402:190e:b0:427:bb26:7337 with SMTP id
- e14-20020a056402190e00b00427bb267337mr41640906edz.294.1652464584134; Fri, 13
- May 2022 10:56:24 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=6e/oSgyfVARToRdeUYxHVtQ6AaUn4CgE1vbZwPLu6BI=;
+        b=PSBgBNYlfpDf0Z3bbt5FDi4oiBkguaeBh8TF6uDl0kNAZOWFnn0hV50LJzweRs56on
+         NiHrLwNiu72yeUYejQ5bcVoWczMRi1V8H0hHVx2yRkj9wTKR7KLKvw8vVgG9V4fyeJ8q
+         Pn8C9Olr0WfHI59xE3ej+8umpKsiBYY+OIr6Zip4n8wx/LQUYLasYePzE4S89U/Lt1kw
+         D3iVeFHTV3a7tYdPNYo5KTyE6b0HxVZ//Dwbg9demhWt9enVOTGD/ANNFCZ7+89VOGEA
+         t5+XZSFpc/1TGyMoZwh+Jlzi+EJUf8bddp6pb8Wsbcm27aKnwJQ0XGtwqexzTyz/iYWc
+         dNxA==
+X-Gm-Message-State: AOAM5302AoolLwax64CLKlsK73iz1K59Jj2239dlNWtS3gawXG7lrXgX
+        OzVZOwKqmj7vn+c8WBBCbecWWFRmtamz5PmtJq0=
+X-Google-Smtp-Source: ABdhPJyajGmsQ2qElA4nEpdS0uYIgFI8XDIlXxzY7qVC4nr9FiwxJJnbtYuLgK6ynqYgnTaLubbNX2Vu+ze+pD/UFIw=
+X-Received: by 2002:a25:d4f:0:b0:64b:a4b1:2d50 with SMTP id
+ 76-20020a250d4f000000b0064ba4b12d50mr2860970ybn.482.1652464590248; Fri, 13
+ May 2022 10:56:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220513085108.3567310-1-davidgow@google.com>
-In-Reply-To: <20220513085108.3567310-1-davidgow@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 13 May 2022 10:56:12 -0700
-Message-ID: <CAGS_qxpZBd_ViGvWQxmhnThQ1YBb3k1DhmkHcmENzW9SY9hS4w@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: Use qemu-system-i386 for i386 runs
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20220507125443.2766939-1-daniel.lezcano@linexp.org> <63f1c4a0-d2c6-8157-5da0-198c2d8d1013@linaro.org>
+In-Reply-To: <63f1c4a0-d2c6-8157-5da0-198c2d8d1013@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 13 May 2022 19:56:17 +0200
+Message-ID: <CAJZ5v0iexz36LL52rZ0BTtSXCf63UnU0kMJR7w6Qfe7P5ZmHTA@mail.gmail.com>
+Subject: Re: [PATCH v2 00/14] thermal OF rework
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linexp.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 1:51 AM David Gow <davidgow@google.com> wrote:
+On Fri, May 13, 2022 at 7:23 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> We're currently using the x86_64 qemu for i386 builds. While this is not
-> incorrect, it's probably more sensible to use the i386 one, which will
-> at least fail properly if we accidentally were to build a 64-bit kernel.
 >
-> Signed-off-by: David Gow <davidgow@google.com>
+> Hi Rafael,
+>
+> if you are ok with this series, I'll pick it up.
+>
+> Is that ok ?
 
-Tested-by: Daniel Latypov <dlatypov@google.com>
+Give me some more time to look at it, please.
 
-Works for me:
-[10:55:58] Testing complete. Ran 201 tests: passed: 165, skipped: 36
-[10:55:58] Elapsed time: 21.268s total, 0.003s configuring, 4.009s
-building, 16.967s running
+I'll respond in the first half of next week.
 
-Side note:
-I ran into an unrelated bug where running on QEMU in general seems to
-hang when you try to filter to a test suite that doesn't exist.
-I've confirmed it happens on i386 before this patch, and it at least
-also happens on x86_64.
+> On 07/05/2022 14:54, Daniel Lezcano wrote:
+> > The thermal framework initialization with the device tree appears to
+> > be complicated and hard to make it to evolve.
+> >
+> > It contains duplication of almost the same thermal generic structures
+> > and has an assymetric initialization making hard any kind of serious
+> > changes for more complex features. One of them is the multiple sensors
+> > support per thermal zone.
+> >
+> > In order to set the scene for the aforementioned feature with generic
+> > code, we need to cleanup and rework the device tree initialization.
+> >
+> > However this rework is not obvious because of the multiple components
+> > entering in the composition of a thermal zone and being initialized at
+> > different moments. For instance, a cooling device can be initialized
+> > before a sensor, so the thermal zones must exist before the cooling
+> > device as well as the sensor. This asynchonous initialization forces
+> > the thermal zone to be created with fake ops because they are
+> > mandotory and build a list of cooling devices which is used to lookup
+> > afterwards when the cooling device driver is registering itself.
+> >
+> > As there could be a large number of changes, this first series provide
+> > some steps forward for a simpler device tree initialization.
+> >
+> > Changelog:
+> >   - V2:
+> >     - Drop patch 1/15 which contains too many changes for a simple
+> >       structure renaming. This could be addressed in a separate series as
+> >       it is not necessary for the OF rework
+> >
+> >     - Fixed of_node_put with gchild not initialized as reported by
+> >       kbuild and Dan Carpenter
+> >
+> >   - V1:
+> >     - Initial post
+> >
+> > Daniel Lezcano (14):
+> >    thermal/core: Change thermal_zone_ops to thermal_sensor_ops
+> >    thermal/core: Add a thermal sensor structure in the thermal zone
+> >    thermal/core: Remove duplicate information when an error occurs
+> >    thermal/of: Replace device node match with device node search
+> >    thermal/of: Remove the device node pointer for thermal_trip
+> >    thermal/of: Move thermal_trip structure to thermal.h
+> >    thermal/core: Remove unneeded EXPORT_SYMBOLS
+> >    thermal/core: Move thermal_set_delay_jiffies to static
+> >    thermal/core: Rename trips to ntrips
+> >    thermal/core: Add thermal_trip in thermal_zone
+> >    thermal/core: Register with the trip points
+> >    thermal/of: Store the trips in the thermal zone
+> >    thermal/of: Use thermal trips stored in the thermal zone
+> >    thermal/of: Initialize trip points separately
+> >
+> >   .../driver-api/thermal/sysfs-api.rst          |   2 +-
+> >   drivers/acpi/thermal.c                        |   6 +-
+> >   .../ethernet/chelsio/cxgb4/cxgb4_thermal.c    |   2 +-
+> >   .../ethernet/mellanox/mlxsw/core_thermal.c    |   6 +-
+> >   drivers/net/wireless/intel/iwlwifi/mvm/tt.c   |   2 +-
+> >   drivers/platform/x86/acerhdf.c                |   2 +-
+> >   drivers/power/supply/power_supply_core.c      |   2 +-
+> >   drivers/thermal/armada_thermal.c              |   2 +-
+> >   drivers/thermal/broadcom/bcm2835_thermal.c    |   2 +-
+> >   drivers/thermal/da9062-thermal.c              |   2 +-
+> >   drivers/thermal/dove_thermal.c                |   2 +-
+> >   drivers/thermal/gov_bang_bang.c               |   6 +-
+> >   drivers/thermal/gov_fair_share.c              |  10 +-
+> >   drivers/thermal/gov_power_allocator.c         |  22 +-
+> >   drivers/thermal/gov_step_wise.c               |   4 +-
+> >   drivers/thermal/imx_thermal.c                 |   2 +-
+> >   .../intel/int340x_thermal/int3400_thermal.c   |   2 +-
+> >   .../int340x_thermal/int340x_thermal_zone.c    |   6 +-
+> >   .../int340x_thermal/int340x_thermal_zone.h    |   4 +-
+> >   .../processor_thermal_device.c                |   4 +-
+> >   .../processor_thermal_device_pci.c            |   2 +-
+> >   drivers/thermal/intel/intel_pch_thermal.c     |   2 +-
+> >   .../thermal/intel/intel_quark_dts_thermal.c   |   2 +-
+> >   drivers/thermal/intel/intel_soc_dts_iosf.c    |   2 +-
+> >   drivers/thermal/intel/x86_pkg_temp_thermal.c  |   2 +-
+> >   drivers/thermal/kirkwood_thermal.c            |   2 +-
+> >   drivers/thermal/rcar_gen3_thermal.c           |   6 +-
+> >   drivers/thermal/rcar_thermal.c                |   4 +-
+> >   drivers/thermal/samsung/exynos_tmu.c          |   6 +-
+> >   drivers/thermal/spear_thermal.c               |   2 +-
+> >   drivers/thermal/st/st_thermal.c               |   2 +-
+> >   drivers/thermal/tegra/soctherm.c              |  10 +-
+> >   drivers/thermal/tegra/tegra30-tsensor.c       |   6 +-
+> >   drivers/thermal/thermal_core.c                | 102 ++++----
+> >   drivers/thermal/thermal_core.h                |  25 +-
+> >   drivers/thermal/thermal_helpers.c             |  35 ++-
+> >   drivers/thermal/thermal_hwmon.c               |   4 +-
+> >   drivers/thermal/thermal_netlink.c             |  10 +-
+> >   drivers/thermal/thermal_of.c                  | 221 ++++++++++--------
+> >   drivers/thermal/thermal_sysfs.c               |  62 ++---
+> >   include/linux/thermal.h                       |  34 ++-
+> >   41 files changed, 341 insertions(+), 290 deletions(-)
+> >
+>
+>
+> --
+> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog

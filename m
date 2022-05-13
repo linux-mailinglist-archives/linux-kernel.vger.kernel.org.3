@@ -2,124 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A6D526836
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4AA8526841
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:24:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382918AbiEMRW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 13:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33144 "EHLO
+        id S1382954AbiEMRXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 13:23:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376461AbiEMRWy (ORCPT
+        with ESMTP id S1376461AbiEMRXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 13:22:54 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0327353A60;
-        Fri, 13 May 2022 10:22:53 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id e29so2655276wrc.11;
-        Fri, 13 May 2022 10:22:52 -0700 (PDT)
+        Fri, 13 May 2022 13:23:48 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0906D53A7A
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:23:48 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d22so8564092plr.9
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:23:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=+LOWkoJXSytHTfBQnWN914FgUImEgUUdPt98UH8jYVc=;
-        b=TYrRoZ6F+jkhXKlmjdbTwmztBTA/BFE85DaZyQILoWeh1pVuk/tfDBaYhBRMxIC6kn
-         PV24CaC+3tNZQvyNooVT/RK0DdHpS3lHQx2YJ3I0swnAwvtVsZc0eZzfjG7igJ4PSSPV
-         +RoRQEUDC8Ktiz5ifSYMrUjcwAtjIKVis0Nu/pk2OUdrTmdnaDvjfSsLXXUQx21eW3KL
-         I7loTsAIad68xXLDbAz+wG8EmEyHWeii4q30Nk6eo98Cw+63nHPKyLLJ8bGjBdHHySCM
-         P8VjluXHLPQxxkQ6Lsb9RpnzSjJTpa4grmFRUSdkc4EZiUzi2AFNQVWb+F/Apd+1T40L
-         6efg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pUiCnPMeV2tewEXDSR1Opfl8CW/W1nTXt/fBcyuE7po=;
+        b=hcbrT8LB9KtUyOFhJcjNGDoACadQCvR45e8T6zhTyidWst7gm9QCPlPUMus2qyKZO5
+         F5DqklOOcurOuJJoDyNyaahuz9kll92/JgnSl7AlqgPH+K3Sn2fBXIsuvf7m/+R6yAVS
+         fsGK3TwUuxHbSqM+peiMHJozwxnh0TRDv3ZGQTeyAIlOMdMVBvwteTZ4PytPmR9t47Gg
+         pqGrxwTsmpv7IbPbGbuf/rmrhjr8qRe8wpa4F75swNWUD2SfEYFj+qQV2DV/gexKRIvo
+         8snEpImCqQT57ffaUneyHTR7IkLcLcdzbaRzu3MoseaxEL7zq3AKDZum93Mv0C+hXL9+
+         x1Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+LOWkoJXSytHTfBQnWN914FgUImEgUUdPt98UH8jYVc=;
-        b=Cpxn1t9ZJwasGg1P/NmmA8WIsjGqseGsdfriFqfahYE3jV4b9E9ntr8QEWy2GKJTP4
-         6tKtc6+rjRO1IM/5WoNQyRay33SrHlL0Q5lIcK3RkdjcQTeXdk5FkKQTCjRK//q4ZyNp
-         cfE3RwTFQPPd6FywcrgrksNRs7LGXZZXIw5MKCKR7dGTnehWAbYiyU5u0wnmBy9jRM6p
-         oELFwG36IhEFVUJlta3QQtcvRGR4jnhmyynQhaoyktW+uToyU5bSTNpjnAtl9Fj9cf8Q
-         TTbJIh9YVWa+rThil48OvbOAu6CUt0lZbYKoU2pu+rXo4eoTaHRE6K4Aw7BZvXx5CW1o
-         nUBg==
-X-Gm-Message-State: AOAM5330Stm1DpN6cSEpws0wjUl5wciS9rdE1jUlTKCK4y3rOBG00r1X
-        8MIAfWAY2i2lwT5NnjXHopn12LP3i/XPhg==
-X-Google-Smtp-Source: ABdhPJyeSM6QpjOuCSfyx8huX8cogZ8hpvudnty2twMOAxHtdbt/WUN6N3Yn+o04S8AxuSQHWI/Vbg==
-X-Received: by 2002:a5d:504e:0:b0:20a:dba2:6fb3 with SMTP id h14-20020a5d504e000000b0020adba26fb3mr4884727wrt.541.1652462571640;
-        Fri, 13 May 2022 10:22:51 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:6d40:29d:ba85:78f8:3d80:548? ([2a02:810d:6d40:29d:ba85:78f8:3d80:548])
-        by smtp.gmail.com with ESMTPSA id e15-20020adfa74f000000b0020c5253d8e5sm2571722wrd.49.2022.05.13.10.22.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 10:22:51 -0700 (PDT)
-Message-ID: <ebb6d627-4974-beed-1dc6-60634ab2f034@gmail.com>
-Date:   Fri, 13 May 2022 19:22:49 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pUiCnPMeV2tewEXDSR1Opfl8CW/W1nTXt/fBcyuE7po=;
+        b=Wc0TgOOVylb07zIYvqo/t6aUWYH9Ip2h/fZ7OfneHkjRDIOBGkAQOJBRuE+0qIMA+x
+         v37m/0vu8iipDmvjoZulWLDyZgtVmhZ+TEFfVI3aqw2YQsYm5RT5qn9FJB4kPYgYLQEl
+         I+Rl/0p9gKaaa4IoGx/3BrdKTL14Y32maKjI++5ifXYFkdiyKR1SqPeCTSpfEDChXgni
+         3nw++S4hmtHEDvOnlYx4Od3u5/4cBLm47J9m4P/nktFmbyLhDLZS2D+tOPSbdogPoQiz
+         Z+26iRZ6zyvZiFo3ah3ocPANHPi/gt7F49M9+XTBa+AL9ndnus77Zuq4fMbFqSbobpuz
+         KMMA==
+X-Gm-Message-State: AOAM5300zrbtQ/i5VeBMWTYk/q7QqJUInK7bK/S4NqhESVmJFogWte52
+        uqbVnDEl7qAKltoAQzhhJ78qlgMe7iSrxHsUA+bPYw==
+X-Google-Smtp-Source: ABdhPJz4VHbNlIGbH/16c9aEUEopLMQoK6LkB7d36n7lf29oYijqqNLTzk2YOn+i0DI+nxCAjpyhWmReuAOUVN9lSMM=
+X-Received: by 2002:a17:902:b094:b0:15c:dee8:74c8 with SMTP id
+ p20-20020a170902b09400b0015cdee874c8mr5479352plr.6.1652462627392; Fri, 13 May
+ 2022 10:23:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: Status on hid xppen patch
-Content-Language: en-US
-To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com, spbnick@gmail.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <941a793a-d2f7-9c2c-59be-b3930e1acfec@gmail.com>
- <20220423172330.32585-1-jose.exposito89@gmail.com>
- <95576534-1f5e-c2e3-4f73-c1b0a8300b56@gmail.com>
- <20220424093239.GA4380@elementary> <20220512205952.GA8936@elementary>
-From:   Stefan Berzl <stefanberzl@gmail.com>
-In-Reply-To: <20220512205952.GA8936@elementary>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220510152847.230957-1-hannes@cmpxchg.org> <20220510152847.230957-7-hannes@cmpxchg.org>
+In-Reply-To: <20220510152847.230957-7-hannes@cmpxchg.org>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Fri, 13 May 2022 10:23:36 -0700
+Message-ID: <CALvZod6kBZZFfD6Y5p_=9TMJr8P-vU_77NTq048wGUDr0wTv0Q@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] zswap: memcg accounting
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Cgroups <cgroups@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello José,
+On Tue, May 10, 2022 at 8:29 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+>
+[...]
+> +void obj_cgroup_charge_zswap(struct obj_cgroup *objcg, size_t size)
+> +{
+> +       struct mem_cgroup *memcg;
+> +
+> +       VM_WARN_ON_ONCE(!(current->flags & PF_MEMALLOC));
+> +
+> +       /* PF_MEMALLOC context, charging must succeed */
+)
+Instead of these warnings and comment why not just explicitly use
+memalloc_noreclaim_[save|restore]() ?
 
-> The tablets are the Deco Mini 4 and the Deco L, both of them are UGEE
-> tablets. I already had a UGEE Parblo A610 Pro tablet and after having a
-> look to the Windows driver traffic, I found out that after sending a
-> chunk of magic data to enable the tablet, it requests a string
-> descriptor ("uclogic_params_get_str_desc" can be used here) and the
-> tablets respond with their parameters.
-> 
-> The information is encoded, in bytes, as:
-> 
->  02 + 03 - UCLOGIC_RDESC_PEN_PH_ID_X_LM
->  04 + 05 - UCLOGIC_RDESC_PEN_PH_ID_Y_LM
->  06      - Number of buttons
->  07      - Dial present or not
->  08 + 09 - UCLOGIC_RDESC_PEN_PH_ID_PRESSURE_LM
->  10 + 11 - Resolution
-> 
-> Bytes 12 and 13 are present but set to 0, probably indicating my
-> tablets are lacking some feature.
-> 
-> Could you confirm that your tablet returns similar information, please?
+> +       if (obj_cgroup_charge(objcg, GFP_KERNEL, size))
 
-yes, you can haz string descriptor:
-0e 03 0b 8b cb 56 08 00 ff 1f d8 13
+Can we please make this specific charging an opt-in feature or at
+least provide a way to opt-out? This will impact users/providers where
+swap is used transparently (in terms of memory usage). Also do you
+want this change for v1 users as well?
 
-Byte 12 are 13 are set and zero, as in your case.
-
-> In case you want to have a look to the implementation, I'm working on
-> this branch:
-> https://github.com/JoseExposito/linux/commits/patch-xppen-deco-l
-> 
-> I had to introduce new functionalities to the templating system of the
-> driver, that's the reason for the KUnit tests.
-> The last patch is work in progress (hopefully I'll have time to finish
-> it this weekend), only the HID descriptors are missing.
-
-I hope you make it, but otherwise you can always use mine, as it's quite
-the same as yours. Only the logical minimum and maximum are -60 and 60.
-
-> I'll cc you when in the patchset so you can add your IDs :)
-
-Is that all you want me to do?
-
-Kind regards,
-Stefan Berzl
+> +               VM_WARN_ON_ONCE(1);
+> +
+> +       rcu_read_lock();
+> +       memcg = obj_cgroup_memcg(objcg);
+> +       mod_memcg_state(memcg, MEMCG_ZSWAP_B, size);
+> +       mod_memcg_state(memcg, MEMCG_ZSWAPPED, 1);
+> +       rcu_read_unlock();
+> +}
+> +

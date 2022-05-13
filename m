@@ -2,424 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F40526343
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 15:52:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC91F52631A
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 15:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381020AbiEMNjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 09:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35632 "EHLO
+        id S238647AbiEMNuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 09:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381640AbiEMNix (ORCPT
+        with ESMTP id S1381766AbiEMNkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 09:38:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3110365A4;
-        Fri, 13 May 2022 06:38:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9C66B8302B;
-        Fri, 13 May 2022 13:38:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5177BC36AEC;
-        Fri, 13 May 2022 13:38:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652449126;
-        bh=r9PmVNd6Xnk8/rSY8uOm78ASlLb6vOPRZNuIP7avU6E=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HnMQM2GxrVqye11NA40NEXZEcEv8tSZHF2peR1LexkD7q2IPNUYbPEoHQk40z365l
-         j/jUXwq3DbRBWb3S2d9IMufzAfpM8OwSNZlZ2fWKI1L8XiAXEavixQWMEQIvklOyXW
-         qxczS3nsyBD+O5UbKFyrb+0BsdHAbLOnvG+VG+QPwIHXHVnzCzZHmgsX3OserGIuZa
-         m1iU4OuGMGebWZ/jsh3PDueT745cbJu8TVTKA/ZTxtYkeyjNxUivPpvCeTmQN/wxSJ
-         u07UgH7/Pbfno6Yxj/LXFNdkOWCACZGJMYhlr/H810Z7nk1F/Nv96igvL5I+GCmO5Q
-         Qdaoec2QWjddw==
-Received: by mail-vk1-f173.google.com with SMTP id e144so4218349vke.9;
-        Fri, 13 May 2022 06:38:46 -0700 (PDT)
-X-Gm-Message-State: AOAM5328010VNaWx3EHC6wOSnQ1okUxfSjMtjc9fQK5m7wj31nv2x1BN
-        a5XpQUsz7EZitPZS2hSTEaq4jT6WUBdHncQ/epk=
-X-Google-Smtp-Source: ABdhPJxZMrege554eIIwgpSz2JaIN2X2uxgd4Rxqs+KIs2Hz3q+ywVFUmOLZg/+gVO1gdykuJctt1bGwwl38Gdxnpy4=
-X-Received: by 2002:a1f:9fc4:0:b0:345:5848:4f44 with SMTP id
- i187-20020a1f9fc4000000b0034558484f44mr2244788vke.2.1652449125146; Fri, 13
- May 2022 06:38:45 -0700 (PDT)
+        Fri, 13 May 2022 09:40:00 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B3A1208B
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 06:39:46 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (85-76-5-213-nat.elisa-mobile.fi [85.76.5.213])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C78C959D;
+        Fri, 13 May 2022 15:39:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1652449184;
+        bh=8/jJDujU6QyrSi/47Vo1bf+z4+ljqIkNHAMhhxf4vkY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i1nSdsuqrEcfUCKfR5DGq4mA9vssQVDeApG7aBRalDAmZPZU1YgztKy/6mmHPnhdi
+         56KF0ozHPcm8Iy+dDcxFh9LnFZe9bIX08TivUaD6hS18hYnlQ6YqwrQi7wqEwhQgSc
+         WJmKpJs5ivJMWhYwmnJ3/OTzIkiNMwkXtIbrBPvA=
+Date:   Fri, 13 May 2022 16:39:25 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Venkateshwar Rao Gannavarapu 
+        <venkateshwar.rao.gannavarapu@xilinx.com>
+Cc:     dri-devel@lists.freedesktop.org, airlied@linux.ie, daniel@ffwll.ch,
+        linux-kernel@vger.kernel.org, vgannava@xilinx.com
+Subject: Re: [LINUX PATCH 1/2] dt-bindings: display: xlnx: Add DSI 2.0 Tx
+ subsystem documentation
+Message-ID: <Yn5fjds2ATeK0J9b@pendragon.ideasonboard.com>
+References: <1652363593-45799-1-git-send-email-venkateshwar.rao.gannavarapu@xilinx.com>
+ <1652363593-45799-2-git-send-email-venkateshwar.rao.gannavarapu@xilinx.com>
 MIME-Version: 1.0
-References: <20220511214132.2281431-1-heiko@sntech.de> <20220511214132.2281431-3-heiko@sntech.de>
- <CAAhSdy2ry=EeedBnYVXeKov9p2DFr2aOG-M8nF91hoUH5qPyPA@mail.gmail.com>
-In-Reply-To: <CAAhSdy2ry=EeedBnYVXeKov9p2DFr2aOG-M8nF91hoUH5qPyPA@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 13 May 2022 21:38:34 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRjrV2fw7pXoBctd0mvpAAAbGGx4b3mBSNLWHGgLnGszQ@mail.gmail.com>
-Message-ID: <CAJF2gTRjrV2fw7pXoBctd0mvpAAAbGGx4b3mBSNLWHGgLnGszQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] riscv: Implement Zicbom-based cache management operations
-To:     Anup Patel <anup@brainfault.org>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Wei Fu <wefu@redhat.com>, Atish Patra <atishp@atishpatra.org>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Samuel Holland <samuel@sholland.org>,
-        Christoph Muellner <cmuellner@linux.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Rob Herring <robh+dt@kernel.org>, krzk+dt@kernel.org,
-        DTML <devicetree@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Atish Patra <atish.patra@wdc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1652363593-45799-2-git-send-email-venkateshwar.rao.gannavarapu@xilinx.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Guo Ren <guoren@kernel.org>
+Hi GVRao,
 
-On Thu, May 12, 2022 at 12:19 PM Anup Patel <anup@brainfault.org> wrote:
->
-> On Thu, May 12, 2022 at 3:11 AM Heiko Stuebner <heiko@sntech.de> wrote:
-> >
-> > The Zicbom ISA-extension was ratified in november 2021
-> > and introduces instructions for dcache invalidate, clean
-> > and flush operations.
-> >
-> > Implement cache management operations based on them.
-> >
-> > Of course not all cores will support this, so implement an
-> > alternative-based mechanism that replaces empty instructions
-> > with ones done around Zicbom instructions.
-> >
-> > We're using prebuild instructions for the Zicbom instructions
-> > for now, to not require a bleeding-edge compiler (gcc-12)
-> > for these somewhat simple instructions.
-> >
-> > Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-> > Cc: Christoph Hellwig <hch@lst.de>
-> > Cc: Atish Patra <atish.patra@wdc.com>
-> > Cc: Guo Ren <guoren@kernel.org>
->
-> Looks good to me.
->
-> Reviewed-by: Anup Patel <anup@brainfault.org>
->
-> Regards,
-> Anup
->
-> > ---
-> >  arch/riscv/Kconfig                   | 15 +++++
-> >  arch/riscv/include/asm/cacheflush.h  |  6 ++
-> >  arch/riscv/include/asm/errata_list.h | 39 +++++++++++-
-> >  arch/riscv/include/asm/hwcap.h       |  1 +
-> >  arch/riscv/kernel/cpu.c              |  1 +
-> >  arch/riscv/kernel/cpufeature.c       | 17 +++++
-> >  arch/riscv/kernel/setup.c            |  2 +
-> >  arch/riscv/mm/Makefile               |  1 +
-> >  arch/riscv/mm/dma-noncoherent.c      | 92 ++++++++++++++++++++++++++++
-> >  9 files changed, 173 insertions(+), 1 deletion(-)
-> >  create mode 100644 arch/riscv/mm/dma-noncoherent.c
-> >
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index 65285b980134..532db45367a7 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -363,6 +363,21 @@ config RISCV_ISA_SVPBMT
-> >
-> >            If you don't know what to do here, say Y.
-> >
-> > +config RISCV_ISA_ZICBOM
-> > +       bool "Zicbom extension support for non-coherent dma operation"
-> > +       select ARCH_HAS_DMA_PREP_COHERENT
-> > +       select ARCH_HAS_SYNC_DMA_FOR_DEVICE
-> > +       select ARCH_HAS_SYNC_DMA_FOR_CPU
-> > +       select ARCH_HAS_SETUP_DMA_OPS
-> > +       select DMA_DIRECT_REMAP
-> > +       select RISCV_ALTERNATIVE
-> > +       default y
-> > +       help
-> > +          Adds support to dynamically detect the presence of the ZICBOM extension
-> > +          (Cache Block Management Operations) and enable its usage.
-> > +
-> > +          If you don't know what to do here, say Y.
-> > +
-> >  config FPU
-> >         bool "FPU support"
-> >         default y
-> > diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/asm/cacheflush.h
-> > index 23ff70350992..eb12d014b158 100644
-> > --- a/arch/riscv/include/asm/cacheflush.h
-> > +++ b/arch/riscv/include/asm/cacheflush.h
-> > @@ -42,6 +42,12 @@ void flush_icache_mm(struct mm_struct *mm, bool local);
-> >
-> >  #endif /* CONFIG_SMP */
-> >
-> > +#ifdef CONFIG_RISCV_ISA_ZICBOM
-> > +void riscv_init_cbom_blocksize(void);
-> > +#else
-> > +static inline void riscv_init_cbom_blocksize(void) { }
-> > +#endif
-> > +
-> >  /*
-> >   * Bits in sys_riscv_flush_icache()'s flags argument.
-> >   */
-> > diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
-> > index 9e2888dbb5b1..eebcd4415049 100644
-> > --- a/arch/riscv/include/asm/errata_list.h
-> > +++ b/arch/riscv/include/asm/errata_list.h
-> > @@ -20,7 +20,8 @@
-> >  #endif
-> >
-> >  #define        CPUFEATURE_SVPBMT 0
-> > -#define        CPUFEATURE_NUMBER 1
-> > +#define        CPUFEATURE_CMO 1
-> > +#define        CPUFEATURE_NUMBER 2
-> >
-> >  #ifdef __ASSEMBLY__
-> >
-> > @@ -93,6 +94,42 @@ asm volatile(ALTERNATIVE(                                            \
-> >  #define ALT_THEAD_PMA(_val)
-> >  #endif
-> >
-> > +/*
-> > + * cbo.clean rs1
-> > + * | 31 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
-> > + *    0...01     rs1       010      00000  0001111
-> > + *
-> > + * cbo.flush rs1
-> > + * | 31 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
-> > + *    0...10     rs1       010      00000  0001111
-> > + *
-> > + * cbo.inval rs1
-> > + * | 31 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
-> > + *    0...00     rs1       010      00000  0001111
-> > + */
-> > +#define CBO_INVAL_A0   ".long 0x15200F"
-> > +#define CBO_CLEAN_A0   ".long 0x25200F"
-> > +#define CBO_FLUSH_A0   ".long 0x05200F"
-> > +
-> > +#define ALT_CMO_OP(_op, _start, _size, _cachesize)                     \
-> > +asm volatile(ALTERNATIVE(                                              \
-> > +       "nop\n\t"                                                       \
-> > +       "nop\n\t"                                                       \
-> > +       "nop\n\t"                                                       \
-> > +       "nop\n\t"                                                       \
-> > +       "nop",                                                          \
-> > +       "mv a0, %1\n\t"                                                 \
-> > +       "j 2f\n\t"                                                      \
-> > +       "3:\n\t"                                                        \
-> > +       CBO_##_op##_A0 "\n\t"                                           \
-> > +       "add a0, a0, %0\n\t"                                            \
-> > +       "2:\n\t"                                                        \
-> > +       "bltu a0, %2, 3b\n\t", 0,                                       \
-> > +               CPUFEATURE_CMO, CONFIG_RISCV_ISA_ZICBOM)                \
-> > +       : : "r"(_cachesize),                                            \
-> > +           "r"(ALIGN((_start), (_cachesize))),                         \
-> > +           "r"(ALIGN((_start) + (_size), (_cachesize))))
-> > +
-> >  #endif /* __ASSEMBLY__ */
-> >
-> >  #endif
-> > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-> > index 4e2486881840..6044e402003d 100644
-> > --- a/arch/riscv/include/asm/hwcap.h
-> > +++ b/arch/riscv/include/asm/hwcap.h
-> > @@ -53,6 +53,7 @@ extern unsigned long elf_hwcap;
-> >  enum riscv_isa_ext_id {
-> >         RISCV_ISA_EXT_SSCOFPMF = RISCV_ISA_EXT_BASE,
-> >         RISCV_ISA_EXT_SVPBMT,
-> > +       RISCV_ISA_EXT_ZICBOM,
-> >         RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
-> >  };
-> >
-> > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> > index 40c8776aec12..8f6fc15baa8e 100644
-> > --- a/arch/riscv/kernel/cpu.c
-> > +++ b/arch/riscv/kernel/cpu.c
-> > @@ -89,6 +89,7 @@ int riscv_of_parent_hartid(struct device_node *node)
-> >  static struct riscv_isa_ext_data isa_ext_arr[] = {
-> >         __RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
-> >         __RISCV_ISA_EXT_DATA(svpbmt, RISCV_ISA_EXT_SVPBMT),
-> > +       __RISCV_ISA_EXT_DATA(zicbom, RISCV_ISA_EXT_ZICBOM),
-> >         __RISCV_ISA_EXT_DATA("", RISCV_ISA_EXT_MAX),
-> >  };
-> >
-> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> > index dea3ea19deee..db3c02409a4a 100644
-> > --- a/arch/riscv/kernel/cpufeature.c
-> > +++ b/arch/riscv/kernel/cpufeature.c
-> > @@ -199,6 +199,7 @@ void __init riscv_fill_hwcap(void)
-> >                         } else {
-> >                                 SET_ISA_EXT_MAP("sscofpmf", RISCV_ISA_EXT_SSCOFPMF);
-> >                                 SET_ISA_EXT_MAP("svpbmt", RISCV_ISA_EXT_SVPBMT);
-> > +                               SET_ISA_EXT_MAP("zicbom", RISCV_ISA_EXT_ZICBOM);
-> >                         }
-> >  #undef SET_ISA_EXT_MAP
-> >                 }
-> > @@ -265,12 +266,28 @@ static bool __init_or_module cpufeature_svpbmt_check_func(unsigned int stage)
-> >         return false;
-> >  }
-> >
-> > +static bool __init_or_module cpufeature_cmo_check_func(unsigned int stage)
-> > +{
-> > +       switch (stage) {
-> > +       case RISCV_ALTERNATIVES_EARLY_BOOT:
-> > +               return false;
-> > +       default:
-> > +               return riscv_isa_extension_available(NULL, ZICBOM);
-> > +       }
-> > +
-> > +       return false;
-> > +}
-> > +
-> >  static const struct cpufeature_info __initdata_or_module
-> >  cpufeature_list[CPUFEATURE_NUMBER] = {
-> >         {
-> >                 .name = "svpbmt",
-> >                 .check_func = cpufeature_svpbmt_check_func
-> >         },
-> > +       {
-> > +               .name = "cmo",
-> > +               .check_func = cpufeature_cmo_check_func
-> > +       },
-> >  };
-> >
-> >  static u32 __init_or_module cpufeature_probe(unsigned int stage)
-> > diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> > index 9162e9a824d2..cc5bfeba499a 100644
-> > --- a/arch/riscv/kernel/setup.c
-> > +++ b/arch/riscv/kernel/setup.c
-> > @@ -22,6 +22,7 @@
-> >  #include <linux/crash_dump.h>
-> >
-> >  #include <asm/alternative.h>
-> > +#include <asm/cacheflush.h>
-> >  #include <asm/cpu_ops.h>
-> >  #include <asm/early_ioremap.h>
-> >  #include <asm/pgtable.h>
-> > @@ -296,6 +297,7 @@ void __init setup_arch(char **cmdline_p)
-> >  #endif
-> >
-> >         riscv_fill_hwcap();
-> > +       riscv_init_cbom_blocksize();
-> >         apply_boot_alternatives();
-> >  }
-> >
-> > diff --git a/arch/riscv/mm/Makefile b/arch/riscv/mm/Makefile
-> > index ac7a25298a04..548f2f3c00e9 100644
-> > --- a/arch/riscv/mm/Makefile
-> > +++ b/arch/riscv/mm/Makefile
-> > @@ -30,3 +30,4 @@ endif
-> >  endif
-> >
-> >  obj-$(CONFIG_DEBUG_VIRTUAL) += physaddr.o
-> > +obj-$(CONFIG_RISCV_ISA_ZICBOM) += dma-noncoherent.o
-> > diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoherent.c
-> > new file mode 100644
-> > index 000000000000..99decaa25324
-> > --- /dev/null
-> > +++ b/arch/riscv/mm/dma-noncoherent.c
-> > @@ -0,0 +1,92 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * RISC-V specific functions to support DMA for non-coherent devices
-> > + *
-> > + * Copyright (c) 2021 Western Digital Corporation or its affiliates.
-> > + */
-> > +
-> > +#include <linux/dma-direct.h>
-> > +#include <linux/dma-map-ops.h>
-> > +#include <linux/init.h>
-> > +#include <linux/io.h>
-> > +#include <linux/libfdt.h>
-> > +#include <linux/mm.h>
-> > +#include <linux/of.h>
-> > +#include <linux/of_device.h>
-> > +
-> > +static unsigned int riscv_cbom_block_size = L1_CACHE_BYTES;
-> > +
-> > +void arch_sync_dma_for_device(phys_addr_t paddr, size_t size, enum dma_data_direction dir)
-> > +{
-> > +       switch (dir) {
-> > +       case DMA_TO_DEVICE:
-> > +               ALT_CMO_OP(CLEAN, (unsigned long)phys_to_virt(paddr), size, riscv_cbom_block_size);
-> > +               break;
-> > +       case DMA_FROM_DEVICE:
-> > +               ALT_CMO_OP(INVAL, (unsigned long)phys_to_virt(paddr), size, riscv_cbom_block_size);
-> > +               break;
-> > +       case DMA_BIDIRECTIONAL:
-> > +               ALT_CMO_OP(FLUSH, (unsigned long)phys_to_virt(paddr), size, riscv_cbom_block_size);
-> > +               break;
-> > +       default:
-> > +               break;
-> > +       }
-> > +}
-> > +
-> > +void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size, enum dma_data_direction dir)
-> > +{
-> > +       switch (dir) {
-> > +       case DMA_TO_DEVICE:
-> > +               break;
-> > +       case DMA_FROM_DEVICE:
-> > +       case DMA_BIDIRECTIONAL:
-> > +               ALT_CMO_OP(INVAL, (unsigned long)phys_to_virt(paddr), size, riscv_cbom_block_size);
-> > +               break;
-> > +       default:
-> > +               break;
-> > +       }
-> > +}
-> > +
-> > +void arch_dma_prep_coherent(struct page *page, size_t size)
-> > +{
-> > +       void *flush_addr = page_address(page);
-> > +
-> > +       memset(flush_addr, 0, size);
-> > +       ALT_CMO_OP(FLUSH, (unsigned long)flush_addr, size, riscv_cbom_block_size);
-> > +}
-> > +
-> > +void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
-> > +               const struct iommu_ops *iommu, bool coherent)
-> > +{
-> > +       /* If a specific device is dma-coherent, set it here */
-> > +       dev->dma_coherent = coherent;
-> > +}
-> > +
-> > +void riscv_init_cbom_blocksize(void)
-> > +{
-> > +       struct device_node *node;
-> > +       int ret;
-> > +       u32 val;
-> > +
-> > +       for_each_of_cpu_node(node) {
-> > +               int hartid = riscv_of_processor_hartid(node);
-> > +               int cbom_hartid;
-> > +
-> > +               if (hartid < 0)
-> > +                       continue;
-> > +
-> > +               /* set block-size for cbom extension if available */
-> > +               ret = of_property_read_u32(node, "riscv,cbom-block-size", &val);
-> > +               if (ret)
-> > +                       continue;
-> > +
-> > +               if (!riscv_cbom_block_size) {
-> > +                       riscv_cbom_block_size = val;
-> > +                       cbom_hartid = hartid;
-> > +               } else {
-> > +                       if (riscv_cbom_block_size != val)
-> > +                               pr_warn("cbom-block-size mismatched between harts %d and %d\n",
-> > +                                       cbom_hartid, hartid);
-> > +               }
-> > +       }
-> > +}
-> > --
-> > 2.35.1
-> >
+Thank you for the patch.
 
+On Thu, May 12, 2022 at 07:23:12PM +0530, Venkateshwar Rao Gannavarapu wrote:
+> This patch adds dt binding for Xilinx DSI TX subsystem.
+> 
+> The Xilinx MIPI DSI (Display serial interface) Transmitter Subsystem
+> implements the Mobile Industry Processor Interface (MIPI) based display
+> interface. It supports the interface with the programmable logic (FPGA).
+> 
+> Signed-off-by: Venkateshwar Rao Gannavarapu <venkateshwar.rao.gannavarapu@xilinx.com>
+> ---
+>  .../bindings/display/xlnx/xlnx,dsi-tx.yaml         | 105 +++++++++++++++++++++
+>  1 file changed, 105 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/xlnx/xlnx,dsi-tx.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/display/xlnx/xlnx,dsi-tx.yaml b/Documentation/devicetree/bindings/display/xlnx/xlnx,dsi-tx.yaml
+> new file mode 100644
+> index 0000000..8e23cf5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/xlnx/xlnx,dsi-tx.yaml
+> @@ -0,0 +1,105 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/xlnx/xlnx,dsi-tx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Xilinx DSI Transmitter subsystem
+> +
+> +maintainers:
+> +  - Venkateshwar Rao Gannavarapu <venkateshwar.rao.gannavarapu@xilinx.com>
+> +
+> +description: |
+> +  The Xilinx DSI Transmitter Subsystem implements the Mobile Industry
+> +  Processor Interface based display interface. It supports the interface
+> +  with the programmable logic (FPGA).
+> +
+> +  For more details refer to PG238 Xilinx MIPI DSI-V2.0 Tx Subsystem.
+> +
+> +properties:
+> +  compatible:
+> +    const: xlnx,dsi-tx-v2.0
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description: List of clock specifiers
 
+You can drop the description, clocks is always a list of clock
+specifiers.
+
+> +    items:
+> +      - description: AXI Lite CPU clock
+> +      - description: D-phy clock
+
+s/D-phy/D-PHY/
+
+> +
+> +  clock-names:
+> +    items:
+> +      - const: s_axis_aclk
+> +      - const: dphy_clk_200M
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        description:
+> +          Input port node to receive pixel data from the
+> +          display controller. Exactly one endpoint must be
+> +          specified.
+> +        properties:
+> +          endpoint:
+> +            $ref: /schemas/graph.yaml#/properties/endpoint
+> +            description: sub-node describing the input from CRTC
+
+"CRTC" is a DRM term, and DT bindings should document the hardware, not
+the driver. I'd drop the endpoint description as I don't think it brings
+much, and use /schemas/graph.yaml#/properties/port instead of port-base.
+
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description:
+> +          DSI output port node to the panel or the next bridge
+> +          in the chain
+
+Same ere about "bridge". Maybe just
+
+        description:
+          Output port node to DSI device.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - ports
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    dsi_tx@80020000 {
+> +        compatible = "xlnx,dsi-tx-v2.0";
+> +        reg = <0x80020000 0x20000>;
+> +        clock-names = "s_axi_aclk", "dphy_clk_200M";
+
+Wrong clock name.
+
+> +        clocks = <&misc_clk_0>, <&misc_clk_1>;
+
+You need #address-cells = <1> and #size-cells = <0> here to specify an
+address for the panel.
+
+This should have been caught by the schema validation. Please see
+Documentation/devicetree/bindings/writing-schema.rst for instructions on
+how to validate bindings.
+
+> +
+> +        panel@0 {
+
+This will also fail to validate. You need to reference
+dsi-controller.yaml. You can check the other bindings for DSI controller
+for examples.
+
+> +                compatible = "auo,b101uan01";
+> +                reg = <0>;
+> +                port {
+> +                        panel_in: endpoint {
+> +                                remote-endpoint = <&mipi_dsi_out>;
+> +                        };
+> +                };
+> +        };
+> +
+> +        ports {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+> +                port@0 {
+> +                        #size-cells = <0>;
+> +                        #address-cells = <1>;
+> +                        reg = <0>;
+> +                        mipi_dsi_in: endpoint@0 {
+> +                                reg = <0>;
+
+With a single endpoint you can drop the reg as well as the @0, and the
+size and address cells in the parent.
+
+> +                                remote-endpoint = <&pl_disp_crtc>;
+> +                        };
+> +                };
+> +                port@1 {
+> +                        reg = <1>;
+> +                        mipi_dsi_out: endpoint {
+> +                                remote-endpoint = <&panel_in>;
+> +                        };
+> +                };
+> +        };
+> +    };
 
 -- 
-Best Regards
- Guo Ren
+Regards,
 
-ML: https://lore.kernel.org/linux-csky/
+Laurent Pinchart

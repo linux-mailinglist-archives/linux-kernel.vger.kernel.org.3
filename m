@@ -2,104 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55CFC526056
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9545C5260AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 13:06:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379631AbiEMKxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 06:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47838 "EHLO
+        id S1379742AbiEMLGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 07:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233550AbiEMKxg (ORCPT
+        with ESMTP id S1379732AbiEMLF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 06:53:36 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5712181CD;
-        Fri, 13 May 2022 03:53:35 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id j6so15435594ejc.13;
-        Fri, 13 May 2022 03:53:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lWVJvwsGE3WVOqhfUYTwQYp/p0p+hpGDNsU5mTlsoz0=;
-        b=MLv3S9QPgRCNHi/TxXZ/rHDfMviz7puR61CX7fRdin2cicZ2/4x7Fx4OWqDIuDHwoF
-         j8yvRUV6rdpDRs3x2tz5mmsOXgy/hbZjbNMBQ3GiSayTtehYim3PRp4HjcUvACO+xMmR
-         K0K2AI+zM9lETZylp6+XPI4vKY8/ur3hif157+Y3QF7nlqLHS/KEEUksNuvPW7rqEWZR
-         mOenM72TWH+B6RCE/n6Qo86mL3Nq6dWtpqx1K9jNgNSFJHJCH4dYP+Xd7jmVaQl/TK6C
-         amBTj6ceJBR0zYHdWAwI46Pnguv1DmUzhFywqEecuO95XpsZnpPgJvEh8ci3ecTO/tPA
-         HiqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lWVJvwsGE3WVOqhfUYTwQYp/p0p+hpGDNsU5mTlsoz0=;
-        b=bV/c2MADLHZC738H5a7Wjy77P8mGIX0SC+lOLmHR6bJf0hzwHoZp6jO9Hd9urCkCJM
-         YaG1f/CpNN57knxXwSrj2OTZTCFQu6Goci+ePy5fzObAYuwXoT+GaRtkRtBKBq6265Ng
-         8bcGYbqMDyWhr6jaXe0BkY0BhVv90brueLnKg8bFbO0ORJzAKqpnn8JFXjXg8zPelan2
-         NjmY8LS3elF0DaRy2i2tXBJmYucsn9JaSaYcew3pSA9+9df2e0v8vMb+1uLK8VA/WChE
-         syeYGlaGuFF+BqY+EzdXItiP4MQOqB6TsH1OFOZFwxbMO8XQJmDpDm6FqaWbB1YfT6zg
-         foxQ==
-X-Gm-Message-State: AOAM533DmYyf+lokiaVh2w+hzmJVxPfciQNuRHqyLOTK99rFNAU6bePX
-        PoGCT6AiLvLW49u/FVwoqdaSGnBMR/4FGzQ8i/A=
-X-Google-Smtp-Source: ABdhPJyFZ03+m/z56osQbJPTI/j/4uVvS1oPcoZQF85rOa88+OzqgS/IG7zeMEE6Do1nkJbhtQyUlzddci4G3cyBdB8=
-X-Received: by 2002:a17:906:c14b:b0:6f8:e6bb:f8d5 with SMTP id
- dp11-20020a170906c14b00b006f8e6bbf8d5mr3690483ejc.4.1652439213746; Fri, 13
- May 2022 03:53:33 -0700 (PDT)
+        Fri, 13 May 2022 07:05:57 -0400
+X-Greylist: delayed 503 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 13 May 2022 04:05:53 PDT
+Received: from smtp6.goneo.de (smtp6.goneo.de [85.220.129.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE33DEF1
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 04:05:50 -0700 (PDT)
+Received: from hub1.goneo.de (hub1.goneo.de [IPv6:2001:1640:5::8:52])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by smtp6.goneo.de (Postfix) with ESMTPS id E2CB010A3329;
+        Fri, 13 May 2022 12:57:22 +0200 (CEST)
+Received: from hub1.goneo.de (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by hub1.goneo.de (Postfix) with ESMTPS id 49F2210A1E8A;
+        Fri, 13 May 2022 12:57:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=georgemail.eu;
+        s=DKIM001; t=1652439441;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/OaoAYNGeTkjqRpT9BXELSpZRhtmoluGTZks7oz+u3I=;
+        b=oyxTOcNnpA7wvYA8hX8Kszx8M5qhGFlS0q2v+c+mbP1hL4iebb0Aw3naz2QHlLrSSDHDI5
+        5cwCBrorgj0DfHRxeKyivLA8u50MrxEDKpJ0AaiOpZQe2WbODIRS96oLCms8Ua5rzunQGg
+        tBdaqtXuaRDkiaYafkplVbPI6WEYCgZtB7wFFPqPoWpNGFNVlJChQEYDoQ0ml4586W2JK7
+        BvoFbA3EgCxvsm0byojsoxx8S9tgMytvTAhJXqlE8s3JTsol1zDb78bilbrg+o2ZU0zOGV
+        iDBgy+zQFEab5S7ZF/06gXO7An4vPTXL13/A8U5jA0TEf8vGIH1t9cRhExMdHQ==
+Received: from brot.fritz.box (unknown [IPv6:2a02:908:2a43:3560:cb6d:eb1d:27ff:405a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hub1.goneo.de (Postfix) with ESMTPSA id 0469110A1E87;
+        Fri, 13 May 2022 12:57:20 +0200 (CEST)
+From:   "Leon M. George" <leon@georgemail.eu>
+To:     Phillip Lougher <phillip@squashfs.org.uk>
+Cc:     "Leon M. George" <leon@georgemail.eu>, linux-kernel@vger.kernel.org
+Subject: [PATCH] squashfs: free page if bio_add_page fails
+Date:   Fri, 13 May 2022 12:57:09 +0200
+Message-Id: <20220513105709.2209247-1-leon@georgemail.eu>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220513102616.48040-1-max.oss.09@gmail.com> <20220513102616.48040-4-max.oss.09@gmail.com>
-In-Reply-To: <20220513102616.48040-4-max.oss.09@gmail.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Fri, 13 May 2022 07:53:23 -0300
-Message-ID: <CAOMZO5Au5_=0enWpfQBOK6_62r_5iL4m-pd93Px-NUO9dXb5-w@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] ARM: dts: imx6qdl-colibri: backlight pwm: Simplify
- inverted backlight
-To:     Max Krummenacher <max.oss.09@gmail.com>
-Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Rspamd-UID: b6ee6c
+X-Rspamd-UID: 4a24b1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Max,
+In squashfs_bio_read, the page recently allocated for use with
+bio_add_page isn't freed when the call fails.
 
-On Fri, May 13, 2022 at 7:27 AM Max Krummenacher <max.oss.09@gmail.com> wrote:
->
-> From: Max Krummenacher <max.krummenacher@toradex.com>
->
-> Set #pwm-cells to the default 3 to gain access to the parameter
-> which allows inverting the PWM signal. This is useful to specify
-> a backlight which has its highest brightness at 0.
->
-> With the change to use the PWM with inverted polarity the PWM signal
-> is inverted to how it was before this patch.
-> This changes the meaning of the values in the brightness-levels
-> property. I.e. the duty-cycle changes from x/255 to (255-x)/255.
-> Keeping the brightness-levels will then have a big brightness
-> jump from 0 to 127 duty cycle, the other 6 steps will then be
-> barely noticeable.
->
-> Change the brightness-levels to provide the same brightness-levels
-> as before.
->
-> Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+This patch adds a call to __free_page.
 
-Thanks for the rework:
+Signed-off-by: Leon M. George <leon@georgemail.eu>
+---
+ fs/squashfs/block.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+diff --git a/fs/squashfs/block.c b/fs/squashfs/block.c
+index 622c844f6d11..5ca1c9caef7d 100644
+--- a/fs/squashfs/block.c
++++ b/fs/squashfs/block.c
+@@ -110,6 +110,7 @@ static int squashfs_bio_read(struct super_block *sb, u64 index, int length,
+ 		}
+ 		if (!bio_add_page(bio, page, len, offset)) {
+ 			error = -EIO;
++			__free_page(page);
+ 			goto out_free_bio;
+ 		}
+ 		offset = 0;
+-- 
+2.35.1
+

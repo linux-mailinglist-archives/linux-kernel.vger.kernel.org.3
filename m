@@ -2,137 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E43EB5267AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 18:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 356FE5267B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 18:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376866AbiEMQze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 12:55:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
+        id S1381661AbiEMQ5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 12:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234848AbiEMQz1 (ORCPT
+        with ESMTP id S234848AbiEMQ5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 12:55:27 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16A663DE
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 09:55:26 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id r1so10822839oie.4
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 09:55:26 -0700 (PDT)
+        Fri, 13 May 2022 12:57:44 -0400
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3AF1408E
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 09:57:43 -0700 (PDT)
+Received: by mail-ot1-x333.google.com with SMTP id m6-20020a05683023a600b0060612720715so5348210ots.10
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 09:57:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=TK9SPkHUxrXz76RcXOz5GQr5aMMZCUKY9fHznaMvUFc=;
-        b=Y2kHX9BRB/slIAcQK8ffXtZq1gzumLjI6eAUx7m/JtKnUVA3Aq5xTbcS/nRhfTc8o3
-         MEtDoDeIw1jDZHD0Ay9d2KhEZXDEdc8b9DZS+91ESMH0xfvp7Ouj8CaMvT++ur1M6u+p
-         4bWWFBtPivMjtbDqupJVe1YLlJ7/j4nP3+wWyH34maheV7Rlu6bKuMptMAWpKKBdNqOw
-         Qw2DQg7eGrh1pNWSxemuoe3n88sHpoK6mEDWEmHIRoe1x4B4OyPdqTRSwFpuOrVvH1rD
-         McS1Vr4w7xeXgFg6h9MRccvTVroorSomHTeXERGqxoWnrX2GMLzKMnmC7UbP9KZ4lA2Q
-         TxkQ==
+        bh=e7inaUSclrf0VoHqtvyXb/+X2/367hf5aKqzQDTPP0w=;
+        b=dmrJnjeUII3S5RbtkSzGhvHYK+zHcs0jNahICu8kyZal4PwidiPCR8MXTLSss19D9e
+         xaSsvyZmh9pAVCzBKCjqPupfbsCBVc4oD8fiZIY78PAdar7S2x1o6H2dQN/PHuS4/+Ge
+         mFf/j+mmuCNN776nELbHkivXdWsaqtFw5q8tbEST9hUvoOyEawC1CHHbtFCwOFetptVl
+         nsOJviRovcwSWCHChEFQDxCGlhU67YZ8JQgbUhkEovWbK0Ddj2tTMyBXE6VH/NXsjPil
+         28y376u5hCKOEkhz4pdKFUgpTomLaMmumQF9GVYcwQ+IJkp6nH+CJzIXNgWLODambtnD
+         oWlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=TK9SPkHUxrXz76RcXOz5GQr5aMMZCUKY9fHznaMvUFc=;
-        b=uqbX7aYYunoO+URuIMaI1xwGV+Z83pj0I3AlL/2KuLU6J161mWNepy03k2c2RY36ia
-         aEPoq2ZfoqzBg85k2nsBg2w6z9cOke0Avbk6HAVwtBV/jnt49EtGQLfwvbidqNz0kvW0
-         bK2lqWeTAofJ4yb6d+wK9N1yGEuDI9HoW2yEGHZ4rUVYtKqKTpWShSjwfxME/qHPAoxZ
-         QylmwHlZws6qGW5IMK3rnbCfayA1sV2fVZIngiT5H79VJtTMRmpLTc1gNqdTGXDAwniY
-         TOZtLAcmYKwDEetW+jv4t6B2gxC8Iw2rGdUX0dlQ4WxCldEynjlCCxh5vNcYnNr3kmrO
-         2inw==
-X-Gm-Message-State: AOAM5305hiLY5nzY1g7IcQ3zNvz1fSKO4JPmkWat3AwvdZN13Jr6G5sH
-        7cp68x+M3kjtD3cbk10t/Gqdu7a7BiRi3kLfrjlV3OmMPMc=
-X-Google-Smtp-Source: ABdhPJzqrHzphKSCdlocUZx8Aj+3sq2G1MgCZf/YS6GgPR1SQGjwjL113lRcVEJYHPOdnzBt5x19EnbXGJFnXfjYx1Y=
-X-Received: by 2002:a05:6808:f8e:b0:328:a601:a425 with SMTP id
- o14-20020a0568080f8e00b00328a601a425mr2898988oiw.253.1652460926174; Fri, 13
- May 2022 09:55:26 -0700 (PDT)
+        bh=e7inaUSclrf0VoHqtvyXb/+X2/367hf5aKqzQDTPP0w=;
+        b=RoZAFazF5Z6ag0ZqXuisDfeNfKvCsGmR14iky6UGx8hk8X9IYdW1nvGJzw0lTEZK0b
+         FPspXiFRBiR9JfK7ExASSv+FXclFUaktbBcXcvwxsgxjiJHjTuGuMB4HKV+GANv/dWz0
+         AKJFzr7wonP+16WXkUzNGanIjWtCESIY9kJRiKwCeEuP2mCyOnjUGKBE44UI01zexjSe
+         x1dUG4LX5/0tOQi/ooYT39C+M2l+5UpX7en6pVthHXJsVxtAxHst8iAnqXQmK5ped3hp
+         96zN/dEc0EXnjLksoupC7qAyKBknff/FUbcctNXGfPGKwvUcrzcQZGa/FMlDevwGiUTl
+         ikdQ==
+X-Gm-Message-State: AOAM530DRNUQyN7+BFe7xk3fBnQmmK+4f4MXK5iaGIfxaqCzwJ2J0bEi
+        FCXSICN+p8zuUd13eTveweEFNyTALkxf3o2PBi8=
+X-Google-Smtp-Source: ABdhPJyS8xlu00GejRMagYrsXXjuTB9+4YR4559CIPKjUVksi4LMvOtB1f54GGhUBnv4wW2Tf1tGLa/KctH0vmH00ek=
+X-Received: by 2002:a9d:195:0:b0:605:eb43:5b84 with SMTP id
+ e21-20020a9d0195000000b00605eb435b84mr2216769ote.357.1652461062958; Fri, 13
+ May 2022 09:57:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220513062045.840780-1-pengfuyuan@kylinos.cn>
-In-Reply-To: <20220513062045.840780-1-pengfuyuan@kylinos.cn>
+References: <20220512071934.119922-1-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20220512071934.119922-1-jiapeng.chong@linux.alibaba.com>
 From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 13 May 2022 12:55:15 -0400
-Message-ID: <CADnq5_P+ibMk_z69CxH_Q60YL259US9f7uv3MDnMgU7pX47MuQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: Remove macro DC_DEFAULT_LOG_MASK
-To:     pengfuyuan <pengfuyuan@kylinos.cn>
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>, xinhui pan <Xinhui.Pan@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+Date:   Fri, 13 May 2022 12:57:31 -0400
+Message-ID: <CADnq5_PvrX_C96=PDk-+hk_BzqtLZ8LvUqWtLKb0gm30Y-s8Fw@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/display: clean up some inconsistent indenting
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     "Deucher, Alexander" <alexander.deucher@amd.com>,
+        Dave Airlie <airlied@linux.ie>,
+        xinhui pan <Xinhui.Pan@amd.com>,
+        Abaci Robot <abaci@linux.alibaba.com>,
         LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        David Airlie <airlied@linux.ie>,
         Maling list - DRI developers 
         <dri-devel@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Christian Koenig <christian.koenig@amd.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 3:20 AM pengfuyuan <pengfuyuan@kylinos.cn> wrote:
->
-> [Why]
-> The DC_DEFAULT_LOG_MASK macro has not been used for a long time, so remove it.
-
-I'm sure there are lots of macros in the driver that are not used at
-the moment.  Any particular reason to remove it?  DC_MIN_LOG_MASK
-doesn't appear to be used at the moment either.
+Applied.  Thanks!
 
 Alex
 
+On Thu, May 12, 2022 at 3:19 AM Jiapeng Chong
+<jiapeng.chong@linux.alibaba.com> wrote:
 >
-> Signed-off-by: pengfuyuan <pengfuyuan@kylinos.cn>
+> Eliminate the follow smatch warning:
+>
+> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:9687
+> amdgpu_dm_atomic_commit_tail() warn: inconsistent indenting.
+>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 > ---
->  .../drm/amd/display/include/logger_types.h    | 33 -------------------
->  1 file changed, 33 deletions(-)
+>  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 >
-> diff --git a/drivers/gpu/drm/amd/display/include/logger_types.h b/drivers/gpu/drm/amd/display/include/logger_types.h
-> index f093b49c5e6e..1b38cfc41718 100644
-> --- a/drivers/gpu/drm/amd/display/include/logger_types.h
-> +++ b/drivers/gpu/drm/amd/display/include/logger_types.h
-> @@ -131,37 +131,4 @@ enum dc_log_type {
->  #define DC_MIN_LOG_MASK ((1 << LOG_ERROR) | \
->                 (1 << LOG_DETECTION_EDID_PARSER))
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> index e2b57cf6506c..a92cfb055c15 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> @@ -9681,9 +9681,10 @@ static void amdgpu_dm_atomic_commit_tail(struct drm_atomic_state *state)
+>                 dm_enable_per_frame_crtc_master_sync(dc_state);
+>                 mutex_lock(&dm->dc_lock);
+>                 WARN_ON(!dc_commit_state(dm->dc, dc_state));
+> -               /* Allow idle optimization when vblank count is 0 for display off */
+> -               if (dm->active_vblank_irq_count == 0)
+> -                   dc_allow_idle_optimizations(dm->dc,true);
+> +
+> +               /* Allow idle optimization when vblank count is 0 for display off */
+> +               if (dm->active_vblank_irq_count == 0)
+> +                       dc_allow_idle_optimizations(dm->dc, true);
+>                 mutex_unlock(&dm->dc_lock);
+>         }
 >
-> -#define DC_DEFAULT_LOG_MASK ((1ULL << LOG_ERROR) | \
-> -               (1ULL << LOG_WARNING) | \
-> -               (1ULL << LOG_EVENT_MODE_SET) | \
-> -               (1ULL << LOG_EVENT_DETECTION) | \
-> -               (1ULL << LOG_EVENT_LINK_TRAINING) | \
-> -               (1ULL << LOG_EVENT_LINK_LOSS) | \
-> -               (1ULL << LOG_EVENT_UNDERFLOW) | \
-> -               (1ULL << LOG_RESOURCE) | \
-> -               (1ULL << LOG_FEATURE_OVERRIDE) | \
-> -               (1ULL << LOG_DETECTION_EDID_PARSER) | \
-> -               (1ULL << LOG_DC) | \
-> -               (1ULL << LOG_HW_HOTPLUG) | \
-> -               (1ULL << LOG_HW_SET_MODE) | \
-> -               (1ULL << LOG_HW_RESUME_S3) | \
-> -               (1ULL << LOG_HW_HPD_IRQ) | \
-> -               (1ULL << LOG_SYNC) | \
-> -               (1ULL << LOG_BANDWIDTH_VALIDATION) | \
-> -               (1ULL << LOG_MST) | \
-> -               (1ULL << LOG_DETECTION_DP_CAPS) | \
-> -               (1ULL << LOG_BACKLIGHT)) | \
-> -               (1ULL << LOG_I2C_AUX) | \
-> -               (1ULL << LOG_IF_TRACE) | \
-> -               (1ULL << LOG_HDMI_FRL) | \
-> -               (1ULL << LOG_SCALER) | \
-> -               (1ULL << LOG_DTN) /* | \
-> -               (1ULL << LOG_DEBUG) | \
-> -               (1ULL << LOG_BIOS) | \
-> -               (1ULL << LOG_SURFACE) | \
-> -               (1ULL << LOG_DML) | \
-> -               (1ULL << LOG_HW_LINK_TRAINING) | \
-> -               (1ULL << LOG_HW_AUDIO)| \
-> -               (1ULL << LOG_BANDWIDTH_CALCS)*/
-> -
->  #endif /* __DAL_LOGGER_TYPES_H__ */
 > --
-> 2.25.1
+> 2.20.1.7.g153144c
 >

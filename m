@@ -2,64 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DAD45267F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C6ED5267FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382788AbiEMRNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 13:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
+        id S1382796AbiEMROM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 13:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382776AbiEMRNO (ORCPT
+        with ESMTP id S1382780AbiEMROI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 13:13:14 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846664A3FF;
-        Fri, 13 May 2022 10:13:13 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id l18so17445930ejc.7;
-        Fri, 13 May 2022 10:13:13 -0700 (PDT)
+        Fri, 13 May 2022 13:14:08 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFB835DEE
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:14:07 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id a11so8235544pff.1
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:14:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JbY4j1EuGlbNZ3UpU6/RsHBbYoZXAqWvVtwc53vMS0M=;
-        b=G4rENm+LNXceQFCrHGXlXV9L4f624fQ/c8LFZt/OwW10ZBarnGJ1Nj/Pkf+EIsZHv+
-         8t2AWEso96oYtmUizhkTePfxxqjqGRcRIPRIHsPp9kFseG1HeFagCD9ztBNYIP1i/EV6
-         P+CHAv+ltYVEr5Xs5t0D7P7hmq/h70+uV7iPMK48IHJhRTKikLHv3tYrC1CaXgzlk8Mu
-         oFedWbq2NSWBSuWPMwkXRxEcFM3ttR2bIhXN5TRCxlrdXuap/lOsJ5WOX8RzJuQXvsi8
-         LNPbTEnzrUuy+CIGsi+OPsdo8X/gs92CMSEzQNvMdkLowgEdwnLtPBkvjiYJBab5QbiH
-         W/Ew==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VM6L7CzHZq+DP15ACyDCNeBcnTiw96jhTORnn16Mcn8=;
+        b=m7gQomUnSLOq+9pE4q9ffHGKLb3L3GE/tyqnZaMpqmJHNyG5wt5m5mpVnrt/R5fltk
+         yK5RyYuw70QdsT3xpjionXDVduKVwIkENV/Mv5F0EHktzxJsXpmHkKAWfcOwy5gVtQvt
+         Jb9aF197MUvc/8VfJWEKOA0A5W6r7Y5jyFAxdXtd+z7v8GihBIgqkMzUgDgmRLDEQBOl
+         8CqLPCu3zlaWk59USw4+jqNDxNbSsUsyKPMu7PWzekJIARr0BRZnv82P4+e07sbtFdHd
+         l7nGCtA297XhzYezBsDN16APQINq+JlpmHHYdQbrAp93SyhwC2tFFlzq6Ax51hV8P071
+         YexA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JbY4j1EuGlbNZ3UpU6/RsHBbYoZXAqWvVtwc53vMS0M=;
-        b=W9c/cRcHCD41aAeMALimFSTCHar7rVL7PNWuIkOHhq2lSmrjP9+CIfpiYzeAJCK7ep
-         aiv7QILm+7tFTMrBGBuOeAIyv7TohYNFlAw682uGdfBbBniF1desPrfLHsqiJVJJaDyJ
-         xyIcjOUW1bKLowrWoBKBuYAeRICfrFUq5+DhDYJ8BcVRW/E5sjE776uCJlqxw7aoswh7
-         Kf+1kTAUhNC+YGMdrJAO6XafS2TcWvAM4/Ol/SF7VtIwa+mu2ObY1E17fOxr2WBBuITF
-         1Tt1Tc99iAZg8pqFmwY9F8af/5io9QRD3x3dIPHBm1lzzoC9WYViAJ8IZ37X1h1DIPPP
-         F5fQ==
-X-Gm-Message-State: AOAM533EQfipxVlS4TQ6mvjsjwetcq6RQnzJ6tJcvNIN/rJr0vmd/mku
-        vi2a+nbooS2u2BrLbtBGFLFlD/3StVZYhA==
-X-Google-Smtp-Source: ABdhPJwSUdwQwSpPAytXdDwbMLLBE33ehb1xconZN/4kV671WY4xwP2n2b/UJPP6fZW+76Tdakm1BQ==
-X-Received: by 2002:a17:907:972a:b0:6f4:f456:50a7 with SMTP id jg42-20020a170907972a00b006f4f45650a7mr5067382ejc.431.1652461992003;
-        Fri, 13 May 2022 10:13:12 -0700 (PDT)
-Received: from kwango.local (ip-89-102-68-162.net.upcbroadband.cz. [89.102.68.162])
-        by smtp.gmail.com with ESMTPSA id yl16-20020a17090693f000b006f4c82c2b12sm981043ejb.19.2022.05.13.10.13.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 10:13:11 -0700 (PDT)
-From:   Ilya Dryomov <idryomov@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Ceph fixes for 5.18-rc7
-Date:   Fri, 13 May 2022 19:12:59 +0200
-Message-Id: <20220513171259.30821-1-idryomov@gmail.com>
-X-Mailer: git-send-email 2.19.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VM6L7CzHZq+DP15ACyDCNeBcnTiw96jhTORnn16Mcn8=;
+        b=IoWVnzLFvAlqon0iJFAMyDxCR0GVnOqKs5yuo4K2vx4l5ZjaByUaStUR+ru8AHGWnk
+         F6+KSdDVHq+BJce96rIiSn9gLGmfs8fD7CWQLpcBmuCFGEHacIni2JskqENDS0FoDVpw
+         yBPFVFKgwKyKgJWvDSodW3qRxUa8j8khl/NvXc1ux4pJ8kUqjpI9w2+VWydCj8lnPoSy
+         nGULYhT51FmWZuMhgiZcbESsn+VDN3401al/lvh3DclD24fP+GjuX+Mf2M+zTXfhnuKa
+         E6aoAsx9pOKVPAE+ymP9NlNVph+1Od7YfzDuJw+L/IIu1rokYdbqmSZynXmDZx6tzJnV
+         9S8g==
+X-Gm-Message-State: AOAM532o0yHGPDVfKn2zs1r9vXymj6Grq1ATg+5VSf91AjgDayXrSqkr
+        nMCjEAlibq1+ln2sN46ZvL1/Qzc0qQFACQBm83lUdQ==
+X-Google-Smtp-Source: ABdhPJzzJRHomgqXTbd3lMoRoFV7vbrkO5L/UrOYsIgvGq7U/iV65DcmY+1YVfkRJDcWOE7WzBlet9mYxMGwLWQyyE4=
+X-Received: by 2002:a63:1866:0:b0:3db:4b04:9f56 with SMTP id
+ 38-20020a631866000000b003db4b049f56mr4750300pgy.509.1652462046391; Fri, 13
+ May 2022 10:14:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220429201131.3397875-1-yosryahmed@google.com>
+ <20220429201131.3397875-2-yosryahmed@google.com> <87ilqoi77b.wl-maz@kernel.org>
+ <CAJD7tkY7JF25XXUFq2mGroetMkfo-2zGOaQC94pjZE3D42+oaw@mail.gmail.com>
+ <Yn2TGJ4vZ/fst+CY@cmpxchg.org> <Yn2YYl98Vhh/UL0w@google.com>
+ <Yn5+OtZSSUZZgTQj@cmpxchg.org> <Yn6DeEGLyR4Q0cDp@google.com>
+In-Reply-To: <Yn6DeEGLyR4Q0cDp@google.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Fri, 13 May 2022 10:13:54 -0700
+Message-ID: <CALvZod6nERq4j=L0V+pc-rd5+QKi4yb_23tWV-1MF53xL5KE6Q@mail.gmail.com>
+Subject: Re: [PATCH v4 1/4] mm: add NR_SECONDARY_PAGETABLE to count secondary
+ page table uses.
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Marc Zyngier <maz@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Oliver Upton <oupton@google.com>,
+        Cgroups <cgroups@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, Linux-MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,33 +90,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, May 13, 2022 at 9:12 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+[...]
+>
+> It was mostly an honest question, I too am trying to understand what userspace
+> wants to do with this information.  I was/am also trying to understand the benefits
+> of doing the tracking through page_state and not a dedicated KVM stat.  E.g. KVM
+> already has specific stats for the number of leaf pages mapped into a VM, why not
+> do the same for non-leaf pages?
 
-The following changes since commit c5eb0a61238dd6faf37f58c9ce61c9980aaffd7a:
+Let me answer why a more general stat is useful and the potential
+userspace reaction:
 
-  Linux 5.18-rc6 (2022-05-08 13:54:17 -0700)
+For a memory type which is significant enough, it is useful to expose
+it in the general interfaces, so that the general data/stat collection
+infra can collect them instead of having workload dependent stat
+collectors. In addition, not necessarily that stat has to have a
+userspace reaction in an online fashion. We do collect stats for
+offline analysis which greatly influence the priority order of
+optimization workitems.
 
-are available in the Git repository at:
-
-  https://github.com/ceph/ceph-client.git tags/ceph-for-5.18-rc7
-
-for you to fetch changes up to 642d51fb0775a41dd6bb3d99b5a40c24df131c20:
-
-  ceph: check folio PG_private bit instead of folio->private (2022-05-10 09:48:31 +0200)
-
-----------------------------------------------------------------
-Two fixes to properly maintain xattrs on async creates and thus
-preserve SELinux context on newly created files and to avoid improper
-usage of folio->private field which triggered BUG_ONs, both marked for
-stable.
-
-----------------------------------------------------------------
-Jeff Layton (1):
-      ceph: fix setting of xattrs on async created inodes
-
-Xiubo Li (1):
-      ceph: check folio PG_private bit instead of folio->private
-
- fs/ceph/addr.c | 11 +++++++----
- fs/ceph/file.c | 16 +++++++++++++---
- 2 files changed, 20 insertions(+), 7 deletions(-)
+Next the question is do we really need a separate stat item
+(secondary_pagetable instead of just plain pagetable) exposed in the
+stable API? To me secondary_pagetable is general (not kvm specific)
+enough and can be significant, so having a separate dedicated stat
+should be ok. Though I am ok with lump it with pagetable stat for now
+but we do want it to be accounted somewhere.

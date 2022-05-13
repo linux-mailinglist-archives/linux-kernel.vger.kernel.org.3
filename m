@@ -2,123 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49E4452658D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:02:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7110252658B
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:02:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381765AbiEMPCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 11:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60756 "EHLO
+        id S1381693AbiEMPCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 11:02:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381674AbiEMPBe (ORCPT
+        with ESMTP id S1381684AbiEMPBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 11:01:34 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25243E0C7;
-        Fri, 13 May 2022 08:01:27 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id B06F21F461F5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652454086;
-        bh=C7g/YIivTlj7b7ruogy140NNk2zb7ocp/cZGcwMvQPM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ToKv7QqmuybEpU4Q/8BcWQJ1htrcZ1cf5GC+WcaVCDFMps+VCS2c/pQi4RJBKoI4i
-         DaB4qcTtOU7Zg9zxWBOvKyitV8Dqlb//9QOMOoIYinF8YZ2eVckhKii6PF8ZGiX+25
-         YEdgTBaXI0qYohi4ed2+eKkuI4DEx0XLJDrx2ljDoYELybv1GtiPNzyheDQQtVFF+V
-         I7O0Ym2Q6yXAeXS5LnkDt5tB5yz6NxJhslj8PztsAwF9N8nI2Yo0xyEj5iDP8+BiKN
-         sboUctM9Ku7c1tfcDvfYCbpPOT7/JPySr2DrbvzeRBRHWbMH2jeFFTZlN/TvsqcDnr
-         ffXbiozBGc8Qg==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     yong.wu@mediatek.com
-Cc:     krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
-        matthias.bgg@gmail.com, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, konrad.dybcio@somainline.org,
-        marijn.suijten@somainline.org, martin.botka@somainline.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        paul.bouchara@somainline.org, kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 2/2] memory: mtk-smi: Add support for MT6795 Helio X10
-Date:   Fri, 13 May 2022 17:01:16 +0200
-Message-Id: <20220513150116.349744-3-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220513150116.349744-1-angelogioacchino.delregno@collabora.com>
-References: <20220513150116.349744-1-angelogioacchino.delregno@collabora.com>
+        Fri, 13 May 2022 11:01:49 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160523ED17;
+        Fri, 13 May 2022 08:01:43 -0700 (PDT)
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1npWnL-000Cqj-Rq; Fri, 13 May 2022 17:01:31 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1npWnL-0006OI-At; Fri, 13 May 2022 17:01:31 +0200
+Subject: Re: [PATCH bpf-next v3 0/2] Introduce access remote cpu elem support
+ in BPF percpu map
+To:     Feng zhou <zhoufeng.zf@bytedance.com>, ast@kernel.org,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, jolsa@kernel.org, davemarchevsky@fb.com,
+        joannekoong@fb.com, geliang.tang@suse.com
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        songmuchun@bytedance.com, wangdongdong.6@bytedance.com,
+        cong.wang@bytedance.com, zhouchengming@bytedance.com,
+        yosryahmed@google.com
+References: <20220513063952.41794-1-zhoufeng.zf@bytedance.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <d8447eee-31d0-f730-bc31-7e55c76135f4@iogearbox.net>
+Date:   Fri, 13 May 2022 17:01:30 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220513063952.41794-1-zhoufeng.zf@bytedance.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26540/Fri May 13 10:03:59 2022)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MediaTek Helio X10 (MT6795) SoC has 5 LARBs and one common SMI
-instance without any sub-common and without GALS.
+On 5/13/22 8:39 AM, Feng zhou wrote:
+[...]
+> Changelog:
+> ----------
+> v2->v3: Addressed comments from Andrii Nakryiko.
+> - use /* */ instead of //
+> - use libbpf_num_possible_cpus() instead of sysconf(_SC_NPROCESSORS_ONLN)
+> - use 8 bytes for value size
+> - fix memory leak
+> - use ASSERT_EQ instead of ASSERT_OK
+> - add bpf_loop to fetch values on each possible CPU
+> some details in here:
+> https://lore.kernel.org/lkml/20220511093854.411-1-zhoufeng.zf@bytedance.com/T/
 
-While the smi-common configuration is specific to this SoC, on the
-LARB side, this is similar to MT8173, in the sense that it doesn't
-need the port in LARB, and the register layout is also compatible
-with that one, which makes us able to fully reuse the smi-larb
-platform data struct that was introduced for MT8173.
+The v2 of your series is already in bpf-next tree, please just send a relative diff for
+the selftest patch.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/memory/mtk-smi.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+https://lore.kernel.org/lkml/165231901346.29050.11394051230756915389.git-patchwork-notify@kernel.org/
 
-diff --git a/drivers/memory/mtk-smi.c b/drivers/memory/mtk-smi.c
-index 86a3d34f418e..5c6d6ef36572 100644
---- a/drivers/memory/mtk-smi.c
-+++ b/drivers/memory/mtk-smi.c
-@@ -360,6 +360,7 @@ static const struct of_device_id mtk_smi_larb_of_ids[] = {
- 	{.compatible = "mediatek,mt2701-smi-larb", .data = &mtk_smi_larb_mt2701},
- 	{.compatible = "mediatek,mt2712-smi-larb", .data = &mtk_smi_larb_mt2712},
- 	{.compatible = "mediatek,mt6779-smi-larb", .data = &mtk_smi_larb_mt6779},
-+	{.compatible = "mediatek,mt6795-smi-larb", .data = &mtk_smi_larb_mt8173},
- 	{.compatible = "mediatek,mt8167-smi-larb", .data = &mtk_smi_larb_mt8167},
- 	{.compatible = "mediatek,mt8173-smi-larb", .data = &mtk_smi_larb_mt8173},
- 	{.compatible = "mediatek,mt8183-smi-larb", .data = &mtk_smi_larb_mt8183},
-@@ -541,6 +542,13 @@ static struct platform_driver mtk_smi_larb_driver = {
- 	}
- };
- 
-+static const struct mtk_smi_reg_pair mtk_smi_common_mt6795_init[SMI_COMMON_INIT_REGS_NR] = {
-+	{SMI_L1_ARB, 0x1b},
-+	{SMI_M4U_TH, 0xce810c85},
-+	{SMI_FIFO_TH1, 0x43214c8},
-+	{SMI_FIFO_TH0, 0x191f},
-+};
-+
- static const struct mtk_smi_reg_pair mtk_smi_common_mt8195_init[SMI_COMMON_INIT_REGS_NR] = {
- 	{SMI_L1LEN, 0xb},
- 	{SMI_M4U_TH, 0xe100e10},
-@@ -565,6 +573,12 @@ static const struct mtk_smi_common_plat mtk_smi_common_mt6779 = {
- 		    F_MMU1_LARB(5) | F_MMU1_LARB(6) | F_MMU1_LARB(7),
- };
- 
-+static const struct mtk_smi_common_plat mtk_smi_common_mt6795 = {
-+	.type	  = MTK_SMI_GEN2,
-+	.bus_sel  = BIT(0),
-+	.init     = mtk_smi_common_mt6795_init,
-+};
-+
- static const struct mtk_smi_common_plat mtk_smi_common_mt8183 = {
- 	.type     = MTK_SMI_GEN2,
- 	.has_gals = true,
-@@ -609,6 +623,7 @@ static const struct of_device_id mtk_smi_common_of_ids[] = {
- 	{.compatible = "mediatek,mt2701-smi-common", .data = &mtk_smi_common_gen1},
- 	{.compatible = "mediatek,mt2712-smi-common", .data = &mtk_smi_common_gen2},
- 	{.compatible = "mediatek,mt6779-smi-common", .data = &mtk_smi_common_mt6779},
-+	{.compatible = "mediatek,mt6795-smi-common", .data = &mtk_smi_common_mt6795},
- 	{.compatible = "mediatek,mt8167-smi-common", .data = &mtk_smi_common_gen2},
- 	{.compatible = "mediatek,mt8173-smi-common", .data = &mtk_smi_common_gen2},
- 	{.compatible = "mediatek,mt8183-smi-common", .data = &mtk_smi_common_mt8183},
--- 
-2.35.1
-
+Thanks,
+Daniel

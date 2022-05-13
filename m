@@ -2,119 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D08C525C96
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5573525C95
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377903AbiEMHus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 03:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
+        id S1377922AbiEMHvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 03:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352984AbiEMHur (ORCPT
+        with ESMTP id S1377915AbiEMHvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 03:50:47 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2716328
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 00:50:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1652428242; x=1683964242;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=CGPxjaomcbXxm6GZzv2LtN8DWBzi8Alu8nAqq4wgI8Y=;
-  b=tWNn9y2ksYWBRTZbB4tGjg/QSR4uFx3YIuULhRO2js21M3SuuJgypAAh
-   cQrDvtNYAk3GJUubMolySVSm9AnSwq+ViZ36GUL+9FFXUyg/1ioq9EsuA
-   FTHKEj/9wSkRmy/ElGPkknDGgs7oJdlLQ/BDphzWrFGpWH2sGbsgtyBe/
-   qEmYB2HAMqp3Dj1+QwyIz7KJyE1183hrdBl/0boLdBCifH4sVYHOXGFWE
-   g1MAWhueIKesTVvDOuS3DQsm8bArsWLD0QFK+F5gSaBmUp6lQIG7G0PLm
-   aq3pC92OV9k05M45iIkYWHUZMTaYqaM1cT5k0xcRkpnDIBOUQZyuiCkuf
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="95653875"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 May 2022 00:50:41 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 13 May 2022 00:50:41 -0700
-Received: from kavya-HP-Compaq-6000-Pro-SFF-PC.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Fri, 13 May 2022 00:50:37 -0700
-From:   Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-To:     <linux@armlinux.org.uk>, <linus.walleij@linaro.org>,
-        <alexandre.belloni@bootlin.com>, <michael@walle.cc>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <UNGLinuxDriver@microchip.com>,
-        <Kavyasree.Kotagiri@microchip.com>, <Manohar.Puri@microchip.com>
-Subject: [PATCH v3] ARM: at91: debug: add lan966 support
-Date:   Fri, 13 May 2022 13:20:35 +0530
-Message-ID: <20220513075035.18663-1-kavyasree.kotagiri@microchip.com>
+        Fri, 13 May 2022 03:51:41 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78CB2655E
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 00:51:40 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso7122681pjg.0
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 00:51:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=QrqaDOovabmDJIWbQp5jwa4H/wrRF/tDldOr21QOUG4=;
+        b=JZDuLkdBTFDQ7KWBfaXar4nccamEVRPV8aYGT+jAlBqgUy7xAE50b6PfTPWkSpBSUJ
+         RfFaWL13Ii0HXejxG2THMOhsk9sCuc+TPRKm8lT7Eq2TNzG6iLB6b2PdXtWhZ4i0vPm/
+         FxVPUhzwel0M2NDefl0HXRj6j3TjEPQ7WydboFnFx7mTbhYLuzjLrt6dLnFYonvS6i95
+         hciohckIA9Xho+Z63+dFvOYwOdFz4q2aRdcnfbOJgdEEvjwBxk3apgJ801Ps03VkbtZP
+         TyKAi20gCp1duBtVxmFmw9lP0GoUsN/xNgpzECLb91m/k7apWSG+dBS8wHADLmnAOwla
+         Tl7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=QrqaDOovabmDJIWbQp5jwa4H/wrRF/tDldOr21QOUG4=;
+        b=PDA2OIz0X31iK5V37waXNUgQVaK5Tr0Q6YOyQECzDS3UnJs4+4i5stpzchhE0F0mk0
+         EalgMaXJEywWXnrdw9vPDzYjBnp8IA82+f3B+y3ci1ofdPkQEfndKYe+48qG6hK+1292
+         a8AuzJP3pboVI2JqspagUR+TlEqGrd4cCW2wpwYTxQJJnUV/m/UJYL18x2hcW5wDOJqK
+         IYeAQuchQjN1VhZHDEjGLj/FoJ6MFgxmAbTuZZDRKtMjLTVgJ7/cUr6TOhK7wlzlxwuc
+         yxm4YNWW2IWiCRvW+EWnX3ODfn7B44MYplm09PLxt8HiaAfV0NQg6x5jZYL+BGwpXbW+
+         RwGA==
+X-Gm-Message-State: AOAM531uZMZsKCF9UodpEKrdC3uvowtvW4q+Qhp7y2QCGp0lfHQv9td8
+        4AuijiO3jso85FgOlKm/lgVjyFyykfeJmw==
+X-Google-Smtp-Source: ABdhPJyWmgoWTR40oS2xAUiT/lGyMb4AB8dUzXDLfA22y1IuOAspj8AvdRVmVI6ODS+SgiFp0oniyw==
+X-Received: by 2002:a17:903:1252:b0:154:ca85:59a0 with SMTP id u18-20020a170903125200b00154ca8559a0mr3689431plh.169.1652428299951;
+        Fri, 13 May 2022 00:51:39 -0700 (PDT)
+Received: from Negi ([207.151.52.3])
+        by smtp.gmail.com with ESMTPSA id w18-20020a62c712000000b0050dc7628166sm1099898pfg.64.2022.05.13.00.51.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 00:51:39 -0700 (PDT)
+From:   Soumya Negi <soumya.negi97@gmail.com>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Soumya Negi <soumya.negi97@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: r8188eu: Fix block comment format
+Date:   Fri, 13 May 2022 00:51:07 -0700
+Message-Id: <20220513075107.23285-1-soumya.negi97@gmail.com>
 X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for low-level debugging on FLEXCOM USART of
-LAN966 SoC.
+Adhere to Linux coding style. Fix the below checkpatch warning:
+ WARNING: Block comments should align the * on each line
 
-Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+Signed-off-by: Soumya Negi <soumya.negi97@gmail.com>
 ---
- arch/arm/Kconfig.debug | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ drivers/staging/r8188eu/core/rtw_xmit.c | 60 ++++++++++++-------------
+ 1 file changed, 28 insertions(+), 32 deletions(-)
 
-diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
-index 0c9497d549e3..b8a2364df9c1 100644
---- a/arch/arm/Kconfig.debug
-+++ b/arch/arm/Kconfig.debug
-@@ -210,6 +210,26 @@ choice
- 		  Say Y here if you want kernel low-level debugging support
- 		  on the FLEXCOM3 port of SAMA7G5.
+diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
+index d086812f8c0e..806e24743ecc 100644
+--- a/drivers/staging/r8188eu/core/rtw_xmit.c
++++ b/drivers/staging/r8188eu/core/rtw_xmit.c
+@@ -52,8 +52,8 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 	sema_init(&pxmitpriv->terminate_xmitthread_sema, 0);
  
-+	config DEBUG_AT91_LAN966_FLEXCOM
-+		bool "Kernel low-level debugging on LAN966 FLEXCOM USART"
-+		select DEBUG_AT91_UART
-+		depends on SOC_LAN966x
-+		help
-+		Say Y here if you want kernel low-level debugging support
-+		on the FLEXCOM port of LAN966.
-+
-+		DEBUG_UART_PHYS | DEBUG_UART_VIRT
-+
-+		0xe0040200      | 0xfd040200     | FLEXCOM0
-+		0xe0044200      | 0xfd044200     | FLEXCOM1
-+		0xe0060200      | 0xfd060200     | FLEXCOM2
-+		0xe0064200      | 0xfd064200     | FLEXCOM3
-+		0xe0070200      | 0xfd070200     | FLEXCOM4
-+
-+		By default, enabling FLEXCOM3 port. Based on requirement, use
-+		DEBUG_UART_PHYS and DEBUG_UART_VIRT configurations from above
-+		table.
-+
- 	config DEBUG_BCM2835
- 		bool "Kernel low-level debugging on BCM2835 PL011 UART"
- 		depends on ARCH_BCM2835 && ARCH_MULTI_V6
-@@ -1685,6 +1705,7 @@ config DEBUG_UART_PHYS
- 	default 0xd4017000 if DEBUG_MMP_UART2
- 	default 0xd4018000 if DEBUG_MMP_UART3
- 	default 0xe0000000 if DEBUG_SPEAR13XX
-+	default 0xe0064200 if DEBUG_AT91_LAN966_FLEXCOM
- 	default 0xe1824200 if DEBUG_AT91_SAMA7G5_FLEXCOM3
- 	default 0xe4007000 if DEBUG_HIP04_UART
- 	default 0xe6c40000 if DEBUG_RMOBILE_SCIFA0
-@@ -1805,6 +1826,7 @@ config DEBUG_UART_VIRT
- 	default 0xfb10c000 if DEBUG_REALVIEW_PB1176_PORT
- 	default 0xfcfe8600 if DEBUG_BCM63XX_UART
- 	default 0xfd000000 if DEBUG_SPEAR3XX || DEBUG_SPEAR13XX
-+	default 0xfd064200 if DEBUG_AT91_LAN966_FLEXCOM
- 	default 0xfd531000 if DEBUG_STIH41X_SBC_ASC1
- 	default 0xfd883000 if DEBUG_ALPINE_UART0
- 	default 0xfdd32000 if DEBUG_STIH41X_ASC2
+ 	/*
+-	Please insert all the queue initializaiton using rtw_init_queue below
+-	*/
++	 * Please insert all the queue initializaiton using rtw_init_queue below
++	 */
+ 
+ 	pxmitpriv->adapter = padapter;
+ 
+@@ -66,10 +66,10 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 	rtw_init_queue(&pxmitpriv->free_xmit_queue);
+ 
+ 	/*
+-	Please allocate memory with the sz = (struct xmit_frame) * NR_XMITFRAME,
+-	and initialize free_xmit_frame below.
+-	Please also apply  free_txobj to link_up all the xmit_frames...
+-	*/
++	 * Please allocate memory with the sz = (struct xmit_frame) * NR_XMITFRAME,
++	 * and initialize free_xmit_frame below.
++	 * Please also apply  free_txobj to link_up all the xmit_frames...
++	 */
+ 
+ 	pxmitpriv->pallocated_frame_buf = vzalloc(NR_XMITFRAME * sizeof(struct xmit_frame) + 4);
+ 
+@@ -853,17 +853,15 @@ s32 rtw_txframes_sta_ac_pending(struct adapter *padapter, struct pkt_attrib *pat
+ }
+ 
+ /*
+-
+-This sub-routine will perform all the following:
+-
+-1. remove 802.3 header.
+-2. create wlan_header, based on the info in pxmitframe
+-3. append sta's iv/ext-iv
+-4. append LLC
+-5. move frag chunk from pframe to pxmitframe->mem
+-6. apply sw-encrypt, if necessary.
+-
+-*/
++ * This sub-routine will perform all the following:
++ *
++ * 1. remove 802.3 header.
++ * 2. create wlan_header, based on the info in pxmitframe
++ * 3. append sta's iv/ext-iv
++ * 4. append LLC
++ * 5. move frag chunk from pframe to pxmitframe->mem
++ * 6. apply sw-encrypt, if necessary.
++ */
+ s32 rtw_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, struct xmit_frame *pxmitframe)
+ {
+ 	struct pkt_file pktfile;
+@@ -1207,24 +1205,22 @@ s32 rtw_free_xmitbuf(struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
+ }
+ 
+ /*
+-Calling context:
+-1. OS_TXENTRY
+-2. RXENTRY (rx_thread or RX_ISR/RX_CallBack)
+-
+-If we turn on USE_RXTHREAD, then, no need for critical section.
+-Otherwise, we must use _enter/_exit critical to protect free_xmit_queue...
+-
+-Must be very very cautious...
+-
+-*/
+-
++ * Calling context:
++ * 1. OS_TXENTRY
++ * 2. RXENTRY (rx_thread or RX_ISR/RX_CallBack)
++ *
++ * If we turn on USE_RXTHREAD, then, no need for critical section.
++ * Otherwise, we must use _enter/_exit critical to protect free_xmit_queue...
++ *
++ * Must be very very cautious...
++ */
+ struct xmit_frame *rtw_alloc_xmitframe(struct xmit_priv *pxmitpriv)/* _queue *pfree_xmit_queue) */
+ {
+ 	/*
+-		Please remember to use all the osdep_service api,
+-		and lock/unlock or _enter/_exit critical to protect
+-		pfree_xmit_queue
+-	*/
++	 * Please remember to use all the osdep_service api,
++	 * and lock/unlock or _enter/_exit critical to protect
++	 * pfree_xmit_queue
++	 */
+ 
+ 	struct xmit_frame *pxframe = NULL;
+ 	struct list_head *plist, *phead;
 -- 
 2.17.1
 

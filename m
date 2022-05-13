@@ -2,121 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62FCC5268A8
+	by mail.lfdr.de (Postfix) with ESMTP id 33E275268A7
 	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383151AbiEMRlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 13:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
+        id S1383156AbiEMRmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 13:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378054AbiEMRlX (ORCPT
+        with ESMTP id S1349689AbiEMRmQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 13:41:23 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46CA37016;
-        Fri, 13 May 2022 10:41:22 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24DFoNNJ029518;
-        Fri, 13 May 2022 17:41:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=A3XnZQ6YpqtO40TftLuafxyiFzB/TUNuZXRH/RS1lUA=;
- b=aOOfdG8AoetdKnbZYcbjpcNC8Kn5L1qGs2fU2/qt06OfJwEoK3yhf7DIcfFYNvP8BJ9e
- Jwlr6DNc3WdLTa61chZsWcuj8OCbAy+cVdF+xoHtoRiTNSCTmJcjez0f2vFKb8yZjHQV
- O+ZDgluG19oCx4VpXEUCSjAMMqxw3+GwzlV143xtA8O8romhCFxC2h6CMmJFsSejm5KE
- iiujvw9ecT8L2itRcsQ1HOzGvidVVVwqDMzWUEnj87vSQ/eunJMQ8tWz6fk3T6dkmB4v
- WGgVGcgAEU+ZoD6Nqmla+dYOT9z4KZVWl7Chw1h6dxdy4lfAcNN420rCBKl9izvPcZpN 4A== 
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g1tay21a8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 May 2022 17:41:22 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24DHI1VG021464;
-        Fri, 13 May 2022 17:41:21 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma04dal.us.ibm.com with ESMTP id 3fwgdaxrvh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 May 2022 17:41:21 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24DHfKKM53674246
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 13 May 2022 17:41:20 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9867E28068;
-        Fri, 13 May 2022 17:41:20 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 81C742805C;
-        Fri, 13 May 2022 17:41:20 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri, 13 May 2022 17:41:20 +0000 (GMT)
-From:   Stefan Berger <stefanb@linux.ibm.com>
-To:     zohar@linux.ibm.com, linux-integrity@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH] evm: Clean up some variables
-Date:   Fri, 13 May 2022 13:41:05 -0400
-Message-Id: <20220513174105.3684229-1-stefanb@linux.ibm.com>
-X-Mailer: git-send-email 2.35.1
+        Fri, 13 May 2022 13:42:16 -0400
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8336E3B3DA;
+        Fri, 13 May 2022 10:42:14 -0700 (PDT)
+Received: by mail-qk1-f175.google.com with SMTP id z126so7594503qkb.2;
+        Fri, 13 May 2022 10:42:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=97E4heSYwRBKYVRwXdi6vqHrNTq98nZhg9phqwxgAhQ=;
+        b=19BtCJIHeXx6YnUtlZG+Xsgl/V3sPmmrZWTw0FpiVXE+B6xMY+rECSSIqaDxW0cYfz
+         Gbab6THd8K47ALkttdapGVg0d1VdEqV/zdHHYz4cqHWgpoC5fcy4vNhxJtfa+tZ6cf/F
+         rR/uUQLg3LeaQVbvIotNP7sDefxBf546BqQC24ztr951gbp2gB6MZ3+EPXCAKjYSAKUy
+         i+dkPS3sG7p1PRa0SFArPoI4oG6j8LjJLwxeUqIP9+A4bW4UNiil0Sv2X7nsM9cddBSY
+         ojzQmLJXpdIFUU9urBATpokDnlP/f/DqrF5mVffkYjEON7ClNA6nma2mOU8/tkHqxtUa
+         oUeQ==
+X-Gm-Message-State: AOAM532LD8kAvA3Z0Rx2opu8xGKzAdLOe21FEVclr65wP3pi/iW9L/dG
+        va1KYWQOJ4K7yabojlGv76A=
+X-Google-Smtp-Source: ABdhPJw/SDz0dQHBIutw7pRAimO1JpJHMkuofuWyT/cEabDgF7Kn0Vimv3OrPdeEdfry+uEXmlkDpA==
+X-Received: by 2002:a37:98c4:0:b0:69a:e14:16a2 with SMTP id a187-20020a3798c4000000b0069a0e1416a2mr4538933qke.610.1652463733017;
+        Fri, 13 May 2022 10:42:13 -0700 (PDT)
+Received: from dev0025.ash9.facebook.com (fwdproxy-ash-014.fbsv.net. [2a03:2880:20ff:e::face:b00c])
+        by smtp.gmail.com with ESMTPSA id u123-20020ae9d881000000b006a0462eb091sm1634970qkf.80.2022.05.13.10.42.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 10:42:12 -0700 (PDT)
+Date:   Fri, 13 May 2022 10:42:11 -0700
+From:   David Vernet <void@manifault.com>
+To:     Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+Cc:     akpm@linux-foundation.org, cgroups@vger.kernel.org,
+        hannes@cmpxchg.org, kernel-team@fb.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com,
+        tj@kernel.org, Richard Palethorpe <rpalethorpe@suse.de>
+Subject: Re: [PATCH 2/4] selftests: memcg: Expect no low events in
+ unprotected sibling
+Message-ID: <20220513174211.uv5yxzt5sochmwal@dev0025.ash9.facebook.com>
+References: <20220512174452.tr34tuh4k5jm6qjs@dev0025.ash9.facebook.com>
+ <20220513171811.730-1-mkoutny@suse.com>
+ <20220513171811.730-3-mkoutny@suse.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: L6-_QRwc0t-i2i1oIRntaZXFSyDdfc3Z
-X-Proofpoint-GUID: L6-_QRwc0t-i2i1oIRntaZXFSyDdfc3Z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-13_09,2022-05-13_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 mlxscore=0 mlxlogscore=999 lowpriorityscore=0
- spamscore=0 malwarescore=0 phishscore=0 impostorscore=0 clxscore=1015
- suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2202240000 definitions=main-2205130074
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220513171811.730-3-mkoutny@suse.com>
+User-Agent: NeoMutt/20211029
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make hmac_tfm static since it's not used anywhere else besides the file
-it is in.
+On Fri, May 13, 2022 at 07:18:09PM +0200, Michal Koutný wrote:
+> This is effectively a revert of commit cdc69458a5f3 ("cgroup: account
+> for memory_recursiveprot in test_memcg_low()"). The case test_memcg_low
+> will fail with memory_recursiveprot until resolved in reclaim
+> code.
+> However, this patch preserves the existing helpers and variables for
+> later uses.
+> 
+> Signed-off-by: Michal Koutný <mkoutny@suse.com>
+> ---
+>  tools/testing/selftests/cgroup/test_memcontrol.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+> index 4958b42201a9..eba252fa64ac 100644
+> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
+> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+> @@ -528,7 +528,7 @@ static int test_memcg_low(const char *root)
+>  	}
+>  
+>  	for (i = 0; i < ARRAY_SIZE(children); i++) {
+> -		int no_low_events_index = has_recursiveprot ? 2 : 1;
+> +		int no_low_events_index = 1;
+>  
+>  		oom = cg_read_key_long(children[i], "memory.events", "oom ");
+>  		low = cg_read_key_long(children[i], "memory.events", "low ");
+> -- 
+> 2.35.3
+> 
 
-Remove declaration of hash_tfm since it doesn't exist.
-
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
----
- security/integrity/evm/evm.h        | 3 ---
- security/integrity/evm/evm_crypto.c | 2 +-
- 2 files changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/security/integrity/evm/evm.h b/security/integrity/evm/evm.h
-index 0d44f41d16f8..f8b8c5004fc7 100644
---- a/security/integrity/evm/evm.h
-+++ b/security/integrity/evm/evm.h
-@@ -38,9 +38,6 @@ extern int evm_initialized;
- 
- extern int evm_hmac_attrs;
- 
--extern struct crypto_shash *hmac_tfm;
--extern struct crypto_shash *hash_tfm;
--
- /* List of EVM protected security xattrs */
- extern struct list_head evm_config_xattrnames;
- 
-diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
-index 0450d79afdc8..a733aff02006 100644
---- a/security/integrity/evm/evm_crypto.c
-+++ b/security/integrity/evm/evm_crypto.c
-@@ -26,7 +26,7 @@
- static unsigned char evmkey[MAX_KEY_SIZE];
- static const int evmkey_len = MAX_KEY_SIZE;
- 
--struct crypto_shash *hmac_tfm;
-+static struct crypto_shash *hmac_tfm;
- static struct crypto_shash *evm_tfm[HASH_ALGO__LAST];
- 
- static DEFINE_MUTEX(mutex);
--- 
-2.35.1
-
+Reviewed-by: David Vernet <void@manifault.com>

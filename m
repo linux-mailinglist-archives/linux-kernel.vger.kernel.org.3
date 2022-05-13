@@ -2,103 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A673E525D7D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 10:38:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C7F5525DAD
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 10:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378238AbiEMI0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 04:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42628 "EHLO
+        id S1378178AbiEMI2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 04:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378178AbiEMI0k (ORCPT
+        with ESMTP id S1347092AbiEMI2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 04:26:40 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33494554BE
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:26:39 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id a5so6595348wrp.7
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:26:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=CQr2lQ0BpUyS5Xt/rcO0Hz/zPT6SpMUvVDsgFdPucec=;
-        b=eLnuN3jNL3QgB2V+cJ3V/G4OpU/pgWfizVirVqV0Oam+vkkNjZOd1+XDUluTqmQUr2
-         nFfa7Elk6SFH8fdejP159rN0L+94dapRY2yJFGUlTA+gNWJgIoXqaTLCrykZ9VLBWXrz
-         Un0loP/tFxsQ9AyPSE+mGNxKEoL5LC4xSIvGOnNQU9pjKaH31UI0TK3sDZuJYfGrcoF4
-         DACps+IKzYXwcBe8cr/IND7haLi27NF9H5NQ1dTjdLlVR8kPajGqvCfj9lki9cQLjPfw
-         53rk94pNEOsCLd6SlMA9uF8Ac+OntXVhnss/nX0DA6c83idarEPBAmp8iylcyV3GQJr+
-         5uGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CQr2lQ0BpUyS5Xt/rcO0Hz/zPT6SpMUvVDsgFdPucec=;
-        b=Szs+H5VQjikWRTtSRfFuMGxHyHTzCbypTV5XlgA8BrkEJeluzV3WbrMr1ZSgysSKIe
-         Fb6yDLqX1c2yjA/cDLemPewoVBKic5odjfhmbsN3H6wwXGU/StnLQ20pG+ROAnqLumD/
-         8MpLT2ZjxvFIKlk9MYS87tFY5W4fvw389CrCPI8tcli6sUaY/LE4Fuh2mmiDIoboEwYm
-         LwhXl8N9e9DLEpVV0dKiZmdw3jyDmKxEvIfIEWVq0bi/m2fqYI3dJABZOh8SWHqtqfvx
-         2vkvQ5DjqnIIW9jXXjqBK0AOm2kr8AqtjeuTgK8AJU6NCR4IxIWqYb9wkRGzewDsAioJ
-         ONcg==
-X-Gm-Message-State: AOAM530UzMdWMv12Sqcn9wpahr6QWwu5dof+U+21p7dpqzYWX2wlGEir
-        at/EMZk6wfwwRUgMTh4jl8XQYA==
-X-Google-Smtp-Source: ABdhPJxAC3dbIQI8wH8Zl2izEVgbPOPuifQewNKMTJhApNX+1K22FesBmNzvIBwX1HcTbWqhc015kQ==
-X-Received: by 2002:adf:9dcc:0:b0:20a:ed44:fd48 with SMTP id q12-20020adf9dcc000000b0020aed44fd48mr2930024wre.120.1652430397773;
-        Fri, 13 May 2022 01:26:37 -0700 (PDT)
-Received: from [192.168.0.169] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id q4-20020a05600c040400b003942a244f2esm4705631wmb.7.2022.05.13.01.26.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 01:26:37 -0700 (PDT)
-Message-ID: <4928005a-d5a6-9107-02ce-5556ade126f5@linaro.org>
-Date:   Fri, 13 May 2022 10:26:36 +0200
+        Fri, 13 May 2022 04:28:36 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662C65F27F
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:28:34 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652430512;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=n7avP9kQVE0MWtOQvN65Uv2IDjaisxjzLPFA4LnZXoE=;
+        b=cdUDCSQRLQffppm8ZF6ZF1WA7yW+Swl/SYpZ9kiy/4AhT8lN5StoZZa/EoaE62Mhzhajjo
+        HUsq0BiYFpWvr6kJV488ml8O35G7Woweu/2RBaEx8IE/fY1zaB4PwIcF2d/Kvbi1AeJDTu
+        +fxktLsUvuk2ITMbcWp0RQOioO4q7qipwiyR3NGcGwQ68g3XRxPHUxs4aC2bSJSnFpZMHR
+        /ukfHmvwhS9DM8PGXGlh2yXzo7uzFFsUaIGqwVLTLASsZElLwgo3IXet63LK5iZsfVP6+Q
+        zlDEWU3MbLGBwytDaNcjg3TVmmKm8jD9r9kcLY/FY/meD6qAcLukJ8riStELkA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652430512;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=n7avP9kQVE0MWtOQvN65Uv2IDjaisxjzLPFA4LnZXoE=;
+        b=hWvzcLujdLspE9h0n+Lla1LSNSBaq0PRD+NI1vhmkbZrGHZcq/aa1QvGgiAQWJOjXJMzPm
+        Sh51ecK3LMC/WzBQ==
+To:     Dave Hansen <dave.hansen@intel.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [RFCv2 00/10] Linear Address Masking enabling
+In-Reply-To: <ee786113-2173-b78b-774d-9d61d08b069b@intel.com>
+References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
+ <20220511064943.GR76023@worktop.programming.kicks-ass.net>
+ <20bada85-9203-57f4-2502-57a6fd11f3ea@intel.com> <875ymav8ul.ffs@tglx>
+ <55176b79-90af-4a47-dc06-9f5f2f2c123d@intel.com>
+ <CAMe9rOqb6ZnAZYe4uAWDt-vmhhP=z_+uZwi5fBURqyUWxCX9Cg@mail.gmail.com>
+ <87o802tjd7.ffs@tglx>
+ <CAMe9rOpXOLEMcir9zMq_UJe08Y-kM+9zok6gDicqAhPySV+3NA@mail.gmail.com>
+ <67aef839-0757-37b1-a42d-154c0116cbf5@intel.com> <878rr6te6b.ffs@tglx>
+ <ee786113-2173-b78b-774d-9d61d08b069b@intel.com>
+Date:   Fri, 13 May 2022 10:28:31 +0200
+Message-ID: <875ym9u98w.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v4 1/9] dt-bindings: i2c: npcm: support NPCM845
-Content-Language: en-US
-To:     Tyrone Ting <warp5tw@gmail.com>, Rob Herring <robh@kernel.org>
-Cc:     sven@svenpeter.dev, JJLIU0@nuvoton.com,
-        linux-kernel@vger.kernel.org, olof@lixom.net,
-        lukas.bulwahn@gmail.com, jarkko.nikula@linux.intel.com,
-        yuenn@google.com, arnd@arndb.de, tali.perry1@gmail.com,
-        openbmc@lists.ozlabs.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-i2c@vger.kernel.org,
-        tmaimon77@gmail.com, benjaminfair@google.com,
-        tomer.maimon@nuvoton.com, kfting@nuvoton.com,
-        semen.protsenko@linaro.org, Avi.Fishman@nuvoton.com,
-        jsd@semihalf.com, wsa@kernel.org, devicetree@vger.kernel.org,
-        andriy.shevchenko@linux.intel.com, KWLIU@nuvoton.com,
-        tali.perry@nuvoton.com, avifishman70@gmail.com, venture@google.com
-References: <20220510091654.8498-1-warp5tw@gmail.com>
- <20220510091654.8498-2-warp5tw@gmail.com>
- <20220511152422.GA339769-robh@kernel.org>
- <CACD3sJbiPYcckyLncXcVR-TFBo_-3XwSDYbmid4qwnoHX-JtUw@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CACD3sJbiPYcckyLncXcVR-TFBo_-3XwSDYbmid4qwnoHX-JtUw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2022 03:31, Tyrone Ting wrote:
-> Hi Rob:
-> 
-> Thank you for your review. I would like to apply Krzysztof's comment
-> from the link https://www.spinics.net/lists/linux-i2c/msg56795.html
-> and remove the
-> quotes of the statement "$ref: "/schemas/types.yaml#/definitions/phandle"".
-> 
-> If it's okay with you, I'll come up with a new patch with
-> "Reviewed-by" from you and Krzysztof.
+On Thu, May 12 2022 at 20:05, Dave Hansen wrote:
 
-Go ahead and keep the review-tags in new patch.
+> On 5/12/22 18:27, Thomas Gleixner wrote:
+>> On Thu, May 12 2022 at 17:46, Dave Hansen wrote:
+>>> On 5/12/22 17:08, H.J. Lu wrote:
+>>> If I had to take a shot at this today, I think I'd opt for:
+>>>
+>>> 	mask = sys_enable_masking(bits=6, flags=FUZZY_NR_BITS);
+>>>
+>>> although I'm not super confident about the "fuzzy" flag.  I also don't
+>>> think I'd totally hate the "blind" interface where the kernel just gets
+>>> to pick unilaterally and takes zero input from userspace.
+>> That's the only sane choice and you can make it simple for userspace:
+>> 
+>>        ret = prctl(GET_XXX_MASK, &mask);
+>> 
+>> and then let it decide based on @ret and @mask whether to use it or not.
+>> 
+>> But of course nobody thought about this as a generic feature and so we
+>> have the ARM64 TBI muck as a precedence.
+>
+> Well, not quite *nobody*:
+>
+>  https://lore.kernel.org/linux-arm-kernel/7a34470c-73f0-26ac-e63d-161191d4b1e4@intel.com/
 
-Best regards,
-Krzysztof
+Sigh....

@@ -2,60 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43B44526B10
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B38D7526B1D
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384095AbiEMURQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 16:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33692 "EHLO
+        id S1384101AbiEMUVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 16:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384089AbiEMURN (ORCPT
+        with ESMTP id S1384091AbiEMUVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 16:17:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5537333EA5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:17:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652473031;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1LW72Jjy9MKnDZ4qBo9AkKccKnp0hdNYiyWQhDRqlzQ=;
-        b=ETyUQBhRqyv9RDw7fYS2GW7OEYukWf0sLCGrphOO9AcQFWG/u8vN/XTRWNvb034660erDX
-        78PvnkHlFQR3MSY0bVSybRLN9YzaL5TrZWOeZBset9hHdKEsx0fpTUgFB1hOygORG8td2T
-        vGe6xSaR4oyheXqHXR9CO4zYNsau/no=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-461-Vp2BTxdoPM2uN1KrJHTUzw-1; Fri, 13 May 2022 16:17:06 -0400
-X-MC-Unique: Vp2BTxdoPM2uN1KrJHTUzw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8F1AC101A52C;
-        Fri, 13 May 2022 20:17:05 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.16.240])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4902940D2820;
-        Fri, 13 May 2022 20:17:05 +0000 (UTC)
-Date:   Fri, 13 May 2022 16:17:03 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Subject: Re: [PATCH] kseltest/cgroup: Make test_stress.sh work if run
- interactively
-Message-ID: <Yn68vzyMIy4upGtq@lorien.usersys.redhat.com>
-References: <20220513190928.676841-1-longman@redhat.com>
+        Fri, 13 May 2022 16:21:35 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC33E6AA52
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:21:32 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2f7d7e3b5bfso101636947b3.5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 13:21:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rygsWmKSy8v7SEtOWG4PJRDSZuRNzXpM81fgoaPK2JM=;
+        b=BnkYjLDAcO5Pqlbmze4sAm0WCYWmd+hL9sP7BPo4UgwEVwwWi3S3HI3bpjrHe5hP+f
+         97DVPKUp3QauiCKBkgEC0NUV5wZRSwnne9lEk5/zIC760sa6HT9gLBFdJbzHE5FVKMxx
+         TjgDtHWP55q5goQNKT7PgdHIYFvvBcVbHxMjntD/Mym/aRPKxUCx8PrlnhaAXVL4VNbP
+         A20eYLQFBauNs7WnCZb1XO5Akwr0aYWSTEVvq6YzMJX5GS+fOKK6GI9hJyJy25vcZO/p
+         xTAX5hYECYsGT5/ju+RN0dP/V7JnhvD/aWe0ghfNeeWu+CtU7U5O1MwMjy0M3RgVj9Z0
+         uT+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rygsWmKSy8v7SEtOWG4PJRDSZuRNzXpM81fgoaPK2JM=;
+        b=Mj4bkEAVJGsPKutqdqS82a5Vtkk034P0xbg6XsFsUfUThzynxEf6x9CxW4sVqDsPM+
+         UHiw8m9eRuHeCYrCZ12HHneLEaDFe/JhxyE3r9WKGCBGrJJkwREbuT20Rg9d+qmWAUPQ
+         GegIqUhA44Gr1Yiab0e4iEGukn+3IZu3shZ4cZAg0xPF89u9kkB1X4PFy8VPwVQ767LR
+         iZWF3WlWufdTUPhrEjuSR7gWyEJD1r9E1v+Yz7cg+FhpnaOuWHjQC8+vAhNYXksgBFs0
+         ZWHfjdKbIB+G+MEocPCtLV0KTT8onPvdSE0olNVD6tOIU3cWBimS4t5IukD/JD0BIquS
+         LC7Q==
+X-Gm-Message-State: AOAM531rtpTzOxxa07pRLUe4Lg5gyCFgeTerUr+iV9IhSf0SOYnw1INp
+        X7o1MAaBdh5u0jFHf3fWwnunEJvnGDsxi+T6zKWxjg==
+X-Google-Smtp-Source: ABdhPJzl9Z5mG3VyfgLa795+ift0OsfF+5pqe2FKsOHgiI/5CJmP/gnDwwLCrySn55AqpNT4y0qQWjxPDFE89r73of0=
+X-Received: by 2002:a0d:c4c2:0:b0:2f1:6c00:9eb4 with SMTP id
+ g185-20020a0dc4c2000000b002f16c009eb4mr8133277ywd.448.1652473291809; Fri, 13
+ May 2022 13:21:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220513190928.676841-1-longman@redhat.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <cover.1652201921.git.william.gray@linaro.org>
+In-Reply-To: <cover.1652201921.git.william.gray@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 13 May 2022 22:21:20 +0200
+Message-ID: <CACRpkdZjNt8fbAXF6_+RhDHGJKOmMBD9E7fVZPQFwCbNi918Qg@mail.gmail.com>
+Subject: Re: [PATCH 0/8] Utilize iomap interface for PC104 and friends
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, schnelle@linux.ibm.com,
+        David.Laight@aculab.com, macro@orcam.me.uk,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,37 +70,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 03:09:28PM -0400 Waiman Long wrote:
-> Commit 54de76c01239 ("kselftest/cgroup: fix test_stress.sh to use OUTPUT
-> dir") changes the test_core command path from . to $OUTPUT. However,
-> variable OUTPUT may not be defined if the command is run interactively.
-> Fix that by using ${OUTPUT:-.} to cover both cases.
-> 
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->  tools/testing/selftests/cgroup/test_stress.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/cgroup/test_stress.sh b/tools/testing/selftests/cgroup/test_stress.sh
-> index 109c044f715f..3c9c4554d5f6 100755
-> --- a/tools/testing/selftests/cgroup/test_stress.sh
-> +++ b/tools/testing/selftests/cgroup/test_stress.sh
-> @@ -1,4 +1,4 @@
->  #!/bin/bash
->  # SPDX-License-Identifier: GPL-2.0
->  
-> -./with_stress.sh -s subsys -s fork ${OUTPUT}/test_core
-> +./with_stress.sh -s subsys -s fork ${OUTPUT:-.}/test_core
-> -- 
-> 2.27.0
-> 
+On Tue, May 10, 2022 at 7:31 PM William Breathitt Gray
+<william.gray@linaro.org> wrote:
 
+> PC104 cards and similar devices do not need to access I/O ports directly
+> via inb()/outb() and can instead use the more typical I/O memory
+> ioread8()/iowrite8() accessor calls by first calling ioport_map(). This
+> patchset converts the relevant PC104/ISA card drivers to do such. With
+> these drivers now utilizing I/O memory accessor calls, work can be done
+> to consolidate some similar devices (e.g. 104-idio-16, pci-idio-16,
+> etc.) into a unified driver in a future patchset.
+>
+> This patchset spawned from a suggestion made in another thread titled
+> "gpio: add HAS_IOPORT dependencies":
+> https://lore.kernel.org/all/c3a3cdd99d4645e2bbbe082808cbb2a5@AcuMS.aculab.com/
 
-Thanks Waiman!  I did not think to try manually running it.
+The series:
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-
-Cheers,
-Phil
-
--- 
-
+Yours,
+Linus Walleij

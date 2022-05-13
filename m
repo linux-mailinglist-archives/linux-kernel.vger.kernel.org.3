@@ -2,183 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E76526021
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC49526010
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379439AbiEMKbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 06:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60182 "EHLO
+        id S1379458AbiEMKdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 06:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355585AbiEMKbf (ORCPT
+        with ESMTP id S1379445AbiEMKc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 06:31:35 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5B8590BC;
-        Fri, 13 May 2022 03:31:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652437894; x=1683973894;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ficTo4G11TLusKxmT+h3TM35Qpeg9CrvwxCZMgmXqDI=;
-  b=La10BoM/egYwtYX0cTojzvpjwJEyu988ZHp4WnnjDbOBDhKEkgNhieM1
-   W4sBcxA8m5opCi641wDoGk8nwOLcRcbvDno7TJXKkyCs6OOWDczLLWpIv
-   rGHWUobVL5rmTMGvtN8I/sqIv4anxkUdAVfs0btxyr39TPGM9lE/N2dhh
-   gXEzIzkPpFp18Gg32WOotOxKprBvLHyAm/6o1Rxy7iYCKps9HyZYqeo6z
-   ry/VJ4G6lJDSeUB3uDqFlmYyJkS9U+cL1USLLYTWvIhFvipp24Zz+7IQx
-   Ejx7RikB3Q0iVB3GzPoSvN4zDsSvGMhN+MbW8jPzmSZgk8XRofwkqed78
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="252320748"
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="252320748"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 03:31:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="595161151"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 13 May 2022 03:31:31 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1npSa2-000Ld6-EH;
-        Fri, 13 May 2022 10:31:30 +0000
-Date:   Fri, 13 May 2022 18:30:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Marvin Lin <milkfafa@gmail.com>, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, openbmc@lists.ozlabs.org,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        kwliu@nuvoton.com, kflin@nuvoton.com
-Subject: Re: [PATCH v2 5/5] drivers: media: platform: Add NPCM Video
- Capture/Encode Engine driver
-Message-ID: <202205131804.AMALhZXJ-lkp@intel.com>
-References: <20220513033450.7038-6-kflin@nuvoton.com>
+        Fri, 13 May 2022 06:32:58 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D18C9ED8
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 03:32:55 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id p4so9512279edx.0
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 03:32:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=O6FiHPs6TyRR3hcZC36X6uXYX5doF+6brHiz72Bmp3Y=;
+        b=ESeWu6hBSMOQJBwvo98owd3dc9xTpa8qMO8//YKXHXjKIGYKVo1JsZBsr6njl8ehSu
+         7E1K+hGXZtM2f9CE3cbGjof/WV4EeK9S3SwF2jFtH+1afXmrnnCG/m/TFRosldC1dzWE
+         WedDyoMKeks19xDflSrq+4Lb4tbSwRJlFibN7/nxnKkcAJs/8FxuNqxnE4XRZU9pHnJ7
+         JM4np+n5LBPtvfY53RW7yyQA3Hi75fahXxsFnjbTUtIIxFXYgF2S2PMu2mvZ8Ge0cXwj
+         50/0sMzC+4ZHJQmdQHlZTZmbnp6vvML/MgMuPyLPXdtR6IwLZ8ydrhWtTncdxn5sLF0y
+         a9sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=O6FiHPs6TyRR3hcZC36X6uXYX5doF+6brHiz72Bmp3Y=;
+        b=Zswxb+hl2Tuh47CQNl7CfRtROnHQWVSCQE3iLAcS3ZZZeNQbnb7G5MqEY8ORvI2k7D
+         vbi9ej67AWaoGa3IFNfGBQ/BDgS5rUVlF+/zrAF8hpcjbTP5MclPUU8NYxiasgSomAkL
+         CBzulllKTNhUmwAPWWhWqEl23/a6Tfr7MdWbwTO61gn5KKr3QuTAMbRMsAJmaXoBL1qe
+         TDVrjjVoRRL4k9Jagf3FnGqjh5/C3/4Y33cKLjNm7K/13hLaORPINPkU1rIdWJwtuc/y
+         msfR1McFwbHRh/bV7dhf8sGOn3l2EBrM9pKl6pXacgEEDE08jcQRRkDaGri+1YxiPcFx
+         4Wjg==
+X-Gm-Message-State: AOAM531QeUhmMYfHGH7zUuGcAlxEjoIEEdrNbX36W1Dd6qi3KY8HhT7j
+        Q6QtWGDqMu4Tujp5UcSr7FQfbg==
+X-Google-Smtp-Source: ABdhPJxnxBRqoRRtonBw76pxckczcwui8tR3W20OfcDi/UUxotwJDJc16TYmbr5VAXgcERSaecmHyQ==
+X-Received: by 2002:aa7:ca0d:0:b0:428:90ee:322c with SMTP id y13-20020aa7ca0d000000b0042890ee322cmr30383575eds.100.1652437973639;
+        Fri, 13 May 2022 03:32:53 -0700 (PDT)
+Received: from [192.168.0.171] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id gv2-20020a1709072bc200b006f3ef214df5sm636959ejc.91.2022.05.13.03.32.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 03:32:53 -0700 (PDT)
+Message-ID: <5f7dfcba-7e65-4f54-8699-e44ce11e216e@linaro.org>
+Date:   Fri, 13 May 2022 12:32:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220513033450.7038-6-kflin@nuvoton.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [v4 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
+ override params bindings
+Content-Language: en-US
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+References: <1652282793-5580-1-git-send-email-quic_kriskura@quicinc.com>
+ <1652282793-5580-2-git-send-email-quic_kriskura@quicinc.com>
+ <d296720d-ccbe-27f0-8ba1-9653af25dd52@linaro.org>
+ <3abbb26f-9396-d024-67f6-f24f7db3408d@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <3abbb26f-9396-d024-67f6-f24f7db3408d@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marvin,
+On 13/05/2022 09:33, Krishna Kurapati PSSNV wrote:
+> 
+> On 5/11/2022 11:49 PM, Krzysztof Kozlowski wrote:
+>> On 11/05/2022 17:26, Krishna Kurapati wrote:
+>>> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>>>
+>>> Add device tree bindings for SNPS phy tuning parameters.
+>>>
+>>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>>> ---
+>>>   .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 87 ++++++++++++++++++++++
+>>>   1 file changed, 87 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+>>> index 1ce251d..70efffe 100644
+>>> --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+>>> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+>>> @@ -53,6 +53,93 @@ properties:
+>>>     vdda33-supply:
+>>>       description: phandle to the regulator 3.3V supply node.
+>>>   
+>>> +  qcom,hs-disconnect-bps:
+>>> +    $ref: /schemas/types.yaml#/definitions/int32
+>>> +    description:
+>>> +      This adjusts the voltage level for the threshold used to
+>>> +      detect a disconnect event at the host. Possible values are.
+>>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>> This means there is some minimum and maximum (100%)?
+>>
+>>> +      The hardware accepts only discrete values. The value closest to the
+>>> +      provided input will be chosen as the override value for this param.
+>>> +
+>>> +  qcom,squelch-detector-bps:
+>>> +    $ref: /schemas/types.yaml#/definitions/int32
+>>> +    description:
+>>> +      This adjusts the voltage level for the threshold used to
+>>> +      detect valid high-speed data.
+>>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>>> +      The hardware accepts only discrete values. The value closest to the
+>>> +      provided input will be chosen as the override value for this param.
+>>> +
+>>> +  qcom,hs-amplitude-bps:
+>>> +    $ref: /schemas/types.yaml#/definitions/int32
+>>> +    description:
+>>> +      This adjusts the high-speed DC level voltage.
+>>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>>> +      The hardware accepts only discrete values. The value closest to the
+>>> +      provided input will be chosen as the override value for this param.
+>>> +
+>>> +  qcom,pre-emphasis-duration-bps:
+>>> +    $ref: /schemas/types.yaml#/definitions/int32
+>>> +    description:
+>>> +      This signal controls the duration for which the
+>>> +      HS pre-emphasis current is sourced onto DP<#> or DM<#>.
+>>> +      The HS Transmitter pre-emphasis duration is defined in terms of
+>>> +      unit amounts. One unit of pre-emphasis duration is approximately
+>>> +      650 ps and is defined as 1X pre-emphasis duration.
+>>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>>> +      The hardware accepts only discrete values. The value closest to the
+>>> +      provided input will be chosen as the override value for this param.
+>>> +
+>>> +  qcom,pre-emphasis-amplitude-bps:
+>>> +    $ref: /schemas/types.yaml#/definitions/int32
+>>> +    description:
+>>> +      This signal controls the amount of current sourced to
+>>> +      DP<#> and DM<#> after a J-to-K or K-to-J transition.
+>>> +      The HS Transmitter pre-emphasis current is defined in terms of unit
+>>> +      amounts. One unit amount is approximately 2 mA and is defined as
+>>> +      1X pre-emphasis current.
+>>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>>> +      The hardware accepts only discrete values. The value closest to the
+>>> +      provided input will be chosen as the override value for this param.
+>>> +
+>>> +  qcom,hs-rise-fall-time-bps:
+>>> +    $ref: /schemas/types.yaml#/definitions/int32
+>>> +    description:
+>>> +      This adjusts the rise/fall times of the high-speed waveform.
+>>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>>> +      The hardware accepts only discrete values. The value closest to the
+>>> +      provided input will be chosen as the override value for this param.
+>>> +
+>>> +  qcom,hs-crossover-voltage-mv:
+>>> +    $ref: /schemas/types.yaml#/definitions/int32
+>>> +    description:
+>>> +      This adjusts the voltage at which the DP<#> and DM<#>
+>>> +      signals cross while transmitting in HS mode.
+>>> +      The values defined are in milli volts. The hardware accepts only
+>>> +      discrete values. The value closest to the provided input will be
+>>> +      chosen as the override value for this param.
+>>> +
+>>> +  qcom,hs-output-impedance-mohm:
+>>> +    $ref: /schemas/types.yaml#/definitions/int32
+>> Here and in other places, please use standard units. See
+>> dtschema/schemas/property-units.yaml in dtschema repo.
+>>
+>>
+>> Best regards,
+>> Krzysztof
+> 
+> Hi Krzystof, thanks for the input.
+> 
+> I see there are microvolt and microohm units present in 
+> schemas/property-units.yaml
+> 
+> Would it be possible to add bps (basis point) to the list of standard 
+> units if it makes sense to use it ?
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linux/master linus/master v5.18-rc6]
-[cannot apply to media-tree/master next-20220512]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Marvin-Lin/Support-Nuvoton-NPCM-Video-Capture-Encode-Engine/20220513-113806
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220513/202205131804.AMALhZXJ-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/7fa1f7750e7317479ce2c2c043b44fa19c46b1a8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Marvin-Lin/Support-Nuvoton-NPCM-Video-Capture-Encode-Engine/20220513-113806
-        git checkout 7fa1f7750e7317479ce2c2c043b44fa19c46b1a8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/media/platform/nuvoton/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/media/platform/nuvoton/npcm-video.c: In function 'nuvoton_video_buf_queue':
-   drivers/media/platform/nuvoton/npcm-video.c:1776:13: warning: variable 'empty' set but not used [-Wunused-but-set-variable]
-    1776 |         int empty;
-         |             ^~~~~
-   drivers/media/platform/nuvoton/npcm-video.c: At top level:
->> drivers/media/platform/nuvoton/npcm-video.c:2060:1: error: expected ',' or ';' before 'static'
-    2060 | static struct platform_driver nuvoton_video_driver = {
-         | ^~~~~~
-   In file included from drivers/media/platform/nuvoton/npcm-video.c:24:
-   drivers/media/platform/nuvoton/npcm-video.c: In function 'nuvoton_video_driver_init':
->> drivers/media/platform/nuvoton/npcm-video.c:2069:24: error: 'nuvoton_video_driver' undeclared (first use in this function); did you mean 'nuvoton_video_probe'?
-    2069 | module_platform_driver(nuvoton_video_driver);
-         |                        ^~~~~~~~~~~~~~~~~~~~
-   include/linux/platform_device.h:222:36: note: in definition of macro 'platform_driver_register'
-     222 |         __platform_driver_register(drv, THIS_MODULE)
-         |                                    ^~~
-   include/linux/platform_device.h:252:9: note: in expansion of macro 'module_driver'
-     252 |         module_driver(__platform_driver, platform_driver_register, \
-         |         ^~~~~~~~~~~~~
-   drivers/media/platform/nuvoton/npcm-video.c:2069:1: note: in expansion of macro 'module_platform_driver'
-    2069 | module_platform_driver(nuvoton_video_driver);
-         | ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/platform/nuvoton/npcm-video.c:2069:24: note: each undeclared identifier is reported only once for each function it appears in
-    2069 | module_platform_driver(nuvoton_video_driver);
-         |                        ^~~~~~~~~~~~~~~~~~~~
-   include/linux/platform_device.h:222:36: note: in definition of macro 'platform_driver_register'
-     222 |         __platform_driver_register(drv, THIS_MODULE)
-         |                                    ^~~
-   include/linux/platform_device.h:252:9: note: in expansion of macro 'module_driver'
-     252 |         module_driver(__platform_driver, platform_driver_register, \
-         |         ^~~~~~~~~~~~~
-   drivers/media/platform/nuvoton/npcm-video.c:2069:1: note: in expansion of macro 'module_platform_driver'
-    2069 | module_platform_driver(nuvoton_video_driver);
-         | ^~~~~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/device.h:32,
-                    from drivers/media/platform/nuvoton/npcm-video.c:14:
-   drivers/media/platform/nuvoton/npcm-video.c: In function 'nuvoton_video_driver_exit':
->> drivers/media/platform/nuvoton/npcm-video.c:2069:24: error: 'nuvoton_video_driver' undeclared (first use in this function); did you mean 'nuvoton_video_probe'?
-    2069 | module_platform_driver(nuvoton_video_driver);
-         |                        ^~~~~~~~~~~~~~~~~~~~
-   include/linux/device/driver.h:267:24: note: in definition of macro 'module_driver'
-     267 |         __unregister(&(__driver) , ##__VA_ARGS__); \
-         |                        ^~~~~~~~
-   drivers/media/platform/nuvoton/npcm-video.c:2069:1: note: in expansion of macro 'module_platform_driver'
-    2069 | module_platform_driver(nuvoton_video_driver);
-         | ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/platform/nuvoton/npcm-video.c: In function 'nuvoton_video_driver_init':
-   include/linux/device/driver.h:263:1: error: control reaches end of non-void function [-Werror=return-type]
-     263 | } \
-         | ^
-   include/linux/platform_device.h:252:9: note: in expansion of macro 'module_driver'
-     252 |         module_driver(__platform_driver, platform_driver_register, \
-         |         ^~~~~~~~~~~~~
-   drivers/media/platform/nuvoton/npcm-video.c:2069:1: note: in expansion of macro 'module_platform_driver'
-    2069 | module_platform_driver(nuvoton_video_driver);
-         | ^~~~~~~~~~~~~~~~~~~~~~
-   At top level:
-   drivers/media/platform/nuvoton/npcm-video.c:2030:12: warning: 'nuvoton_video_remove' defined but not used [-Wunused-function]
-    2030 | static int nuvoton_video_remove(struct platform_device *pdev)
-         |            ^~~~~~~~~~~~~~~~~~~~
-   drivers/media/platform/nuvoton/npcm-video.c:1954:12: warning: 'nuvoton_video_probe' defined but not used [-Wunused-function]
-    1954 | static int nuvoton_video_probe(struct platform_device *pdev)
-         |            ^~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+There is already 'percent' so 'bp' could be as well, makes sense to me.
+I can send a patch for it and we'll see what Rob says.
 
 
-vim +2060 drivers/media/platform/nuvoton/npcm-video.c
-
-  2059	
-> 2060	static struct platform_driver nuvoton_video_driver = {
-  2061		.driver = {
-  2062			.name = DEVICE_NAME,
-  2063			.of_match_table = nuvoton_video_match,
-  2064		},
-  2065		.probe = nuvoton_video_probe,
-  2066		.remove = nuvoton_video_remove,
-  2067	};
-  2068	
-> 2069	module_platform_driver(nuvoton_video_driver);
-  2070	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Krzysztof

@@ -2,95 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93471525FFD
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C262526003
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379295AbiEMKOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 06:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48760 "EHLO
+        id S1379296AbiEMKOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 06:14:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379289AbiEMKN7 (ORCPT
+        with ESMTP id S229822AbiEMKNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 06:13:59 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E2C73558;
-        Fri, 13 May 2022 03:13:56 -0700 (PDT)
-Received: from mail-yw1-f173.google.com ([209.85.128.173]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1McXwD-1oLkit3Rc5-00d1qr; Fri, 13 May 2022 12:13:55 +0200
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2ebf4b91212so85086017b3.8;
+        Fri, 13 May 2022 06:13:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B8F72E28;
         Fri, 13 May 2022 03:13:54 -0700 (PDT)
-X-Gm-Message-State: AOAM531e/C9z589683ylCZmLM5jmLPzhh1custAobbsiq+3+K/2bIoRs
-        coKUZTCOm6gSRwhXWD9T3rh3V9sytvwDp13XSmM=
-X-Google-Smtp-Source: ABdhPJyHEUP1cRPCzvCwXdPdUSFS+Voh0iZfVi5t4LZi15vwg6YIdcUM0F8JfOUB45yvtXzHOEpnm/S+mdBFUW/UN8c=
-X-Received: by 2002:a0d:cd06:0:b0:2f8:f39c:4cfc with SMTP id
- p6-20020a0dcd06000000b002f8f39c4cfcmr4713890ywd.495.1652436833571; Fri, 13
- May 2022 03:13:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BC3DDB82C43;
+        Fri, 13 May 2022 10:13:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00980C34100;
+        Fri, 13 May 2022 10:13:50 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="bHDhDcUv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1652436829;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zZ6BudfxP76D6plnuX/SQddqB1tD+iQ/1Sw2mOoHt7Q=;
+        b=bHDhDcUvUqsDaev+SziIU0FvvNWTLWVEz+ZGeCiBp+5hV89f/RSmaOtsj0881Dv17mpO/P
+        Kuf8N/iQPqFJs4ONZIfnZEWZImWZrJ4vG8lz9Pc90Qe3J6tRkzacgMD0iAKDcApQc5EHGu
+        UDztwNZ9dlC6P7k/AOhbbOAykkvvFQg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d28befee (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 13 May 2022 10:13:49 +0000 (UTC)
+Date:   Fri, 13 May 2022 12:13:47 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Dominik Brodowski <linux@dominikbrodowski.net>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+Subject: Re: [PATCH] random: credit architectural init the exact amount
+Message-ID: <Yn4vW1kvHIfUbl2g@zx2c4.com>
+References: <20220512133835.102028-1-Jason@zx2c4.com>
+ <Yn34NiJUnZOgK99X@owl.dominikbrodowski.net>
 MIME-Version: 1.0
-References: <20220511062113.2645747-1-hasegawa-hitomi@fujitsu.com>
- <20220511062113.2645747-2-hasegawa-hitomi@fujitsu.com> <Yntcn4esjJRS50Am@kroah.com>
-In-Reply-To: <Yntcn4esjJRS50Am@kroah.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 13 May 2022 12:13:36 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3rF7Y27UiGyk34b0KTfvU30rkuoN5GyuNuwcA-V61_-w@mail.gmail.com>
-Message-ID: <CAK8P3a3rF7Y27UiGyk34b0KTfvU30rkuoN5GyuNuwcA-V61_-w@mail.gmail.com>
-Subject: Re: [PATCH v4 1/1] soc: fujitsu: Add A64FX diagnostic interrupt driver
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        SoC Team <soc@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kgdb-bugreport@lists.sourceforge.net,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:bu9JyNKneSWzrsddBhuHB16iJ1Y2zAOiNp0tzUZEDeaqBuZbgFg
- LLSPmXrTH9T7fL+uOu7RDTzLzyBHkJ7fbEcTfFctS0FmjVimyARkSsNHwKaE7r2lRq5rHwI
- MyhQWKD2pXckztgfWwIxj0Qo1poTFh1Uv9zaclT+oOpv7bDIJwtYjLJqguvdT9uuFn3/Egf
- CPw6bj8t8gurCzs4q0JhQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:eMDiuowy8GM=:1ABPjuWJbY1AZDHcaaDzBn
- ZQr3ie3w/mZIInn8K+wR/mTuzzMI1ks478YUGpCZ+nF8ndWBvkZY5eqL+/Ugt4v3RmQowcflp
- +lrom/WMMOzEeJm3k5YfYRG5kwOn7ij9Lif/0+1fBWV6feJqt42DmwmoKFCyDTRC93T/ihP/0
- cVryLVbR6rujllFpmAjTHfeQHncppRiZ3ZxZu4BpL68WbR2vE4K/sVG51uxh3ifsogK6vgouE
- ibNtypS+MhuI8eAKwvUjAZqqfDoPJMQLJNvZYdXRnQle6AGUuvhkPjanZbru+8luvBJfCthDt
- G9hac32tw2cPfqZZWDp604cQs+ogEp8ubq4/9ddceNZJh596mSHY1dhQjaRVscMZuPT1l/3Pi
- YMMhfpV6ZdFuySjk8TjzQLkw6fuBlmL3xPL5KTAeaR8rVKfZEvjKZDl31TxQHstDchqWgqgAu
- bUZM8CsTmVWry0uCl4L2HJmxSlKb0ZasP0j6dorpVN4g3rl/B4eb3FDexsno2defe5c7s4/aO
- YFxPeXQzfuKORMi2i7lS9lRery4Z/krEvzEtG/5fvfNCwDCsZNhREe6TdDvI9+woxrbhp92GZ
- GQ33gxTZjgV84Dnb5NLEmIc/r7OHcrEWxH3AueWp0lnJqolgV3LyvzJtt2cUDF9BM1zK9q7Zu
- 3l/8jyeFAHMamrseS7Yocs+XGaQc3fztl52eZRk6mtlejSisZZleVy+jv0KA0gAJFWYQkdjHn
- HR5QEjYfPPbTOnAROQ9IAOad+QGs8/jzBN3JMuq9D6cZH8SgbbMG96Cl07iZpn+LfS4exPYEp
- IRsYLWoe331mfF1RAoIOnxahDF2vdjpkFFM8ssOew5LTgXko7w=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yn34NiJUnZOgK99X@owl.dominikbrodowski.net>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 8:50 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > --- a/drivers/soc/Makefile
-> > +++ b/drivers/soc/Makefile
-> > @@ -12,6 +12,7 @@ obj-$(CONFIG_SOC_CANAAN)    += canaan/
-> >  obj-$(CONFIG_ARCH_DOVE)              += dove/
-> >  obj-$(CONFIG_MACH_DOVE)              += dove/
-> >  obj-y                                += fsl/
-> > +obj-y                                += fujitsu/
->
-> Why a sub directory for just one .c file?
+Hi Dominik,
 
-All the other drivers/soc/ contents are in subdirectories, so I think
-I'd keep it like this.
-There are also other drivers that have been proposed for fujitsu a64fx.
+On Fri, May 13, 2022 at 08:18:30AM +0200, Dominik Brodowski wrote:
+> > -	bool arch_init = true;
+> > +	unsigned int i, arch_init;
+> 
+> Maybe s/arch_init/arch_init_cnt/g to clarify that this is now used as a
+> counter?
 
-        Arnd
+Good idea. I'll call it arch_bytes, which will make the `* 8` lower down
+more obviously doing bytes->bits.
+
+Jason

@@ -2,387 +2,373 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E27BB526661
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62A92526665
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382017AbiEMPmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 11:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60166 "EHLO
+        id S1381532AbiEMPoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 11:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382185AbiEMPmb (ORCPT
+        with ESMTP id S1345252AbiEMPo3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 11:42:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E226A2FFCC
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:42:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652456549;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qt51KmMEp2p5kZHKW2/GzlR6XIOdTGRJtza/WZphhNw=;
-        b=BCyCKR/BKaTTr/3Ki48uFAVrZ7bwJG1t66mH9L6PVf1twHubYyGPi/xMExh9RZICGoyQ/S
-        D+Cr7TiOftJ5VAxarIExvCeQJNVICIuhxxOC1ahOecXPlFoFQwttoT/UuiqE1DypbKt8HW
-        nf19vdqB9q1vYcQhcdWimMDEwUXg9hg=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-640-cUZIJt-LNnKvbw2c55tldg-1; Fri, 13 May 2022 11:42:27 -0400
-X-MC-Unique: cUZIJt-LNnKvbw2c55tldg-1
-Received: by mail-qv1-f71.google.com with SMTP id kl11-20020a056214518b00b0045a9af67efbso7095947qvb.18
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:42:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Qt51KmMEp2p5kZHKW2/GzlR6XIOdTGRJtza/WZphhNw=;
-        b=q+mBES75K1+862G/Al9AZOMy0iogusOZHj7Zx+J5JerNOfNTFgot2n163UWdE2Wgvp
-         BSWcbM5sajcGL5PQ/wL/GvKNFnpghkohBEP9TnHtHlRlYSHBE93nqJYRbDSE5mYtLerF
-         8UKRZ2ogVnmjQY0HJf8yk5lrY/mKcrhTnJv1bg+J6Pxg8WoercsFeqQUwIFaI170sQcz
-         /HuAXJKGmoVv9rP8JdQ1QCAdGK8ybZENrZ6HP+Ex2uRAMM8PxtZFSp/d0MMbliVt2A1y
-         w0DXDhNma0dIbksxL8ioMgPMEGd0a1nh0NEb7GTUS8G5Ce0EIOYLM93qL9JOXlgF0sYf
-         bZDw==
-X-Gm-Message-State: AOAM531BRazrmMpAyboembMiBpi59YKq4eSClxXXhfDFBiU02kd7Qp8O
-        K8WmTxdV03L8SEkdKRtmCNN8ViJyEunrtbZ55qaP8m8JiFNcPnH2NDWtjNmmupE5YR1OaZgEV9D
-        hMM3vUdhc0mhZrt6Xs87qKmYC
-X-Received: by 2002:ac8:5e0c:0:b0:2f3:adfd:bd30 with SMTP id h12-20020ac85e0c000000b002f3adfdbd30mr5067552qtx.277.1652456547228;
-        Fri, 13 May 2022 08:42:27 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyKaXPR/x6m9eRtDhITZ/mgkh3K8v85o3GPEiQQ767o63X5SoQJyaXZc+UC5jRKP4V4ZeURSA==
-X-Received: by 2002:ac8:5e0c:0:b0:2f3:adfd:bd30 with SMTP id h12-20020ac85e0c000000b002f3adfdbd30mr5067495qtx.277.1652456546522;
-        Fri, 13 May 2022 08:42:26 -0700 (PDT)
-Received: from [192.168.98.18] ([107.15.110.69])
-        by smtp.gmail.com with ESMTPSA id f10-20020ac8498a000000b002f39b99f6b9sm1599192qtq.83.2022.05.13.08.42.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 08:42:25 -0700 (PDT)
-Message-ID: <d2696dab-2490-feb5-ccb2-96906fc652f0@redhat.com>
-Date:   Fri, 13 May 2022 11:42:24 -0400
+        Fri, 13 May 2022 11:44:29 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9596E37AB1
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:44:26 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 56633113E;
+        Fri, 13 May 2022 08:44:26 -0700 (PDT)
+Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8AE763F73D;
+        Fri, 13 May 2022 08:44:23 -0700 (PDT)
+Date:   Fri, 13 May 2022 16:44:21 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Tong Tiangen <tongtiangen@huawei.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Xie XiuQi <xiexiuqi@huawei.com>,
+        Guohanjun <guohanjun@huawei.com>
+Subject: Re: [PATCH -next v4 7/7] arm64: add cow to machine check safe
+Message-ID: <Yn581SnKPGlhbgoU@lakrids>
+References: <20220420030418.3189040-1-tongtiangen@huawei.com>
+ <20220420030418.3189040-8-tongtiangen@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH net-next v2] bond: add mac filter option for balance-xor
-Content-Language: en-US
-To:     Nikolay Aleksandrov <razor@blackwall.org>, netdev@vger.kernel.org
-Cc:     Long Xin <lxin@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>
-References: <6227427ef3b57d7de6d4d95e9dd7c9b222a37bf6.1651689665.git.jtoppins@redhat.com>
- <f85a0a66-d3b8-9d20-9abb-fc9fa5e84eab@blackwall.org>
-From:   Jonathan Toppins <jtoppins@redhat.com>
-In-Reply-To: <f85a0a66-d3b8-9d20-9abb-fc9fa5e84eab@blackwall.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220420030418.3189040-8-tongtiangen@huawei.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nik, thanks for the review. Responses below.
+On Wed, Apr 20, 2022 at 03:04:18AM +0000, Tong Tiangen wrote:
+> In the cow(copy on write) processing, the data of the user process is
+> copied, when hardware memory error is encountered during copy, only the
+> relevant processes are affected, so killing the user process and isolate
+> the user page with hardware memory errors is a more reasonable choice than
+> kernel panic.
 
-On 5/5/22 08:14, Nikolay Aleksandrov wrote:
-> On 04/05/2022 21:47, Jonathan Toppins wrote:
->> Implement a MAC filter that prevents duplicate frame delivery when
->> handling BUM traffic. This attempts to partially replicate OvS SLB
->> Bonding[1] like functionality without requiring significant change
->> in the Linux bridging code.
->>
->> A typical network setup for this feature would be:
->>
->>              .--------------------------------------------.
->>              |         .--------------------.             |
->>              |         |                    |             |
->>         .-------------------.               |             |
->>         |    | Bond 0  |    |               |             |
->>         | .--'---. .---'--. |               |             |
->>    .----|-| eth0 |-| eth1 |-|----.    .-----+----.   .----+------.
->>    |    | '------' '------' |    |    | Switch 1 |   | Switch 2  |
->>    |    '---,---------------'    |    |          +---+           |
->>    |       /                     |    '----+-----'   '----+------'
->>    |  .---'---.    .------.      |         |              |
->>    |  |  br0  |----| VM 1 |      |      ~~~~~~~~~~~~~~~~~~~~~
->>    |  '-------'    '------'      |     (                     )
->>    |      |        .------.      |     ( Rest of Network     )
->>    |      '--------| VM # |      |     (_____________________)
->>    |               '------'      |
->>    |  Host 1                     |
->>    '-----------------------------'
->>
->> Where 'VM1' and 'VM#' are hosts connected to a Linux bridge, br0, with
->> bond0 and its associated links, eth0 & eth1, provide ingress/egress. One
->> can assume bond0, br1, and hosts VM1 to VM# are all contained in a
->> single box, as depicted. Interfaces eth0 and eth1 provide redundant
->> connections to the data center with the requirement to use all bandwidth
->> when the system is functioning normally. Switch 1 and Switch 2 are
->> physical switches that do not implement any advanced L2 management
->> features such as MLAG, Cisco's VPC, or LACP.
->>
->> Combining this feature with vlan+srcmac hash policy allows a user to
->> create an access network without the need to use expensive switches that
->> support features like Cisco's VCP.
->>
->> [1] https://docs.openvswitch.org/en/latest/topics/bonding/#slb-bonding
->>
->> Co-developed-by: Long Xin <lxin@redhat.com>
->> Signed-off-by: Long Xin <lxin@redhat.com>
->> Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
->> ---
->>
->> Notes:
->>      v2:
->>       * dropped needless abstraction functions and put code in module init
->>       * renamed variable "rc" to "ret" to stay consistent with most of the
->>         code
->>       * fixed parameter setting management, when arp-monitor is turned on
->>         this feature will be turned off similar to how miimon and arp-monitor
->>         interact
->>       * renamed bond_xor_recv to bond_mac_filter_recv for a little more
->>         clarity
->>       * it appears the implied default return code for any bonding recv probe
->>         must be `RX_HANDLER_ANOTHER`. Changed the default return code of
->>         bond_mac_filter_recv to use this return value to not break skb
->>         processing when the skb dev is switched to the bond dev:
->>           `skb->dev = bond->dev`
->>
->>   Documentation/networking/bonding.rst  |  19 +++
->>   drivers/net/bonding/Makefile          |   2 +-
->>   drivers/net/bonding/bond_mac_filter.c | 201 ++++++++++++++++++++++++++
->>   drivers/net/bonding/bond_mac_filter.h |  39 +++++
->>   drivers/net/bonding/bond_main.c       |  27 ++++
->>   drivers/net/bonding/bond_netlink.c    |  13 ++
->>   drivers/net/bonding/bond_options.c    |  86 ++++++++++-
->>   drivers/net/bonding/bonding_priv.h    |   1 +
->>   include/net/bond_options.h            |   1 +
->>   include/net/bonding.h                 |   3 +
->>   include/uapi/linux/if_link.h          |   1 +
->>   11 files changed, 390 insertions(+), 3 deletions(-)
->>   create mode 100644 drivers/net/bonding/bond_mac_filter.c
->>   create mode 100644 drivers/net/bonding/bond_mac_filter.h
->>
+There are plenty of other places we'll access user pages via a kernel
+alias (e.g. when performing IO), so why is this special?
+
+To be clear, I am not entirely averse to this, but it seems like this is
+being done because it's easy to do rather than necessarily being all
+that useful, and I'm not keen on having to duplicate a bunch of logic
+for this.
+
+> Add new helper copy_page_mc() which provide a page copy implementation with
+> machine check safe. At present, only used in cow. In future, we can expand
+> more scenes. As long as the consequences of page copy failure are not
+> fatal(eg: only affect user process), we can use this helper.
 > 
-> Hi Jonathan,
-> I must mention that this is easily solvable with two very simple ebpf programs, one on egress
-> to track source macs and one on ingress to filter them, it can also easily be solved by a
-> user-space agent that adds macs for filtering in many different ways, after all these VMs
-> run on the host and you don't need bond-specific knowledge to do this. Also you have no visibility
-> into what is currently being filtered, so it will be difficult to debug. With the above solutions
-> you already have that. I don't think the bond should be doing any learning or filtering, this is
-> deviating a lot from its purpose and adds unnecessary complexity.
-> That being said, if you decide to continue with the set, comments are below...
-
-This is an excellent observation, it does appear this could likely be 
-done with eBPF. However, the delivery of such a solution to a user would 
-be the difficult part. There appears to be no standard way for attaching 
-a program to an interface, it still seems customary to write your own 
-custom loader. Where would the user run this loader? In Debian likely in 
-a post up hook with ifupdown, in Fedora one would have to write a 
-locally custom dispatcher script (assuming Network Manager) that only 
-ran the loader for a given interface. In short I do not see a reasonably 
-appropriate way to deploy an eBPF program to users with the current 
-infrastructure. Also, I am not aware of the bpf syscall supporting 
-signed program loading. Signing kernel modules seems popular with some 
-distros to identify limits of support and authentication of an 
-unmodified system. I suspect similar bpf support might be needed to 
-identify support and authentication for deployed programs.
-
-[...]
-
->> diff --git a/drivers/net/bonding/bond_mac_filter.c b/drivers/net/bonding/bond_mac_filter.c
->> new file mode 100644
->> index 000000000000..e86b2b475df3
->> --- /dev/null
->> +++ b/drivers/net/bonding/bond_mac_filter.c
->> @@ -0,0 +1,201 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Filter received frames based on MAC addresses "behind" the bond.
->> + */
->> +
->> +#include "bonding_priv.h"
->> +
->> +static const struct rhashtable_params bond_rht_params = {
->> +	.head_offset         = offsetof(struct bond_mac_cache_entry, rhnode),
->> +	.key_offset          = offsetof(struct bond_mac_cache_entry, key),
->> +	.key_len             = sizeof(struct mac_addr),
->> +	.automatic_shrinking = true,
->> +};
->> +
->> +static inline unsigned long hold_time(const struct bonding *bond)
+> The copy_page_mc() in copy_page_mc.S is largely borrows from copy_page()
+> in copy_page.S and the main difference is copy_page_mc() add extable entry
+> to every load/store insn to support machine check safe. largely to keep the
+> patch simple. If needed those optimizations can be folded in.
 > 
-> no inlines in .c files, let the compiler do its job
+> Add new extable type EX_TYPE_COPY_PAGE_MC which used in copy_page_mc().
 > 
->> +{
->> +	return msecs_to_jiffies(5000);
->> +}
->> +
->> +static bool has_expired(const struct bonding *bond,
->> +			struct bond_mac_cache_entry *mac)
->> +{
->> +	return time_before_eq(mac->used + hold_time(bond), jiffies);
->> +}
->> +
->> +static void mac_delete_rcu(struct callback_head *head)
->> +{
->> +	kmem_cache_free(bond_mac_cache,
->> +			container_of(head, struct bond_mac_cache_entry, rcu));
->> +}
->> +
->> +static int mac_delete(struct bonding *bond,
->> +		      struct bond_mac_cache_entry *entry)
->> +{
->> +	int ret;
->> +
->> +	ret = rhashtable_remove_fast(bond->mac_filter_tbl,
->> +				     &entry->rhnode,
->> +				     bond->mac_filter_tbl->p);
->> +	set_bit(BOND_MAC_DEAD, &entry->flags);
+> This type only be processed in fixup_exception_mc(), The reason is that
+> copy_page_mc() is consistent with copy_page() except machine check safe is
+> considered, and copy_page() do not need to consider exception fixup.
 > 
-> you don't need the atomic bitops, these flags are all modified and checked
-> under the entry lock
-
-I need to keep the atomic set_bit if I remove the [use-after-free] 
-idiomatic issue later in the file.
-
+> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
+> ---
+>  arch/arm64/include/asm/asm-extable.h |  5 ++
+>  arch/arm64/include/asm/page.h        | 10 ++++
+>  arch/arm64/lib/Makefile              |  2 +
+>  arch/arm64/lib/copy_page_mc.S        | 86 ++++++++++++++++++++++++++++
+>  arch/arm64/mm/copypage.c             | 36 ++++++++++--
+>  arch/arm64/mm/extable.c              |  2 +
+>  include/linux/highmem.h              |  8 +++
+>  mm/memory.c                          |  2 +-
+>  8 files changed, 144 insertions(+), 7 deletions(-)
+>  create mode 100644 arch/arm64/lib/copy_page_mc.S
 > 
->> +	call_rcu(&entry->rcu, mac_delete_rcu);
-> 
-> all of these entries are queued to be freed, what happens if we unload the bonding
-> driver before that?
+> diff --git a/arch/arm64/include/asm/asm-extable.h b/arch/arm64/include/asm/asm-extable.h
+> index 80410899a9ad..74c056ddae15 100644
+> --- a/arch/arm64/include/asm/asm-extable.h
+> +++ b/arch/arm64/include/asm/asm-extable.h
+> @@ -14,6 +14,7 @@
+>  /* _MC indicates that can fixup from machine check errors */
+>  #define EX_TYPE_UACCESS_MC		5
+>  #define EX_TYPE_UACCESS_MC_ERR_ZERO	6
+> +#define EX_TYPE_COPY_PAGE_MC		7
+>  
+>  #ifdef __ASSEMBLY__
+>  
+> @@ -42,6 +43,10 @@
+>  	__ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_UACCESS_MC, 0)
+>  	.endm
+>  
+> +	.macro          _asm_extable_copy_page_mc, insn, fixup
+> +	__ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_COPY_PAGE_MC, 0)
+> +	.endm
+> +
+>  /*
+>   * Create an exception table entry for `insn` if `fixup` is provided. Otherwise
+>   * do nothing.
+> diff --git a/arch/arm64/include/asm/page.h b/arch/arm64/include/asm/page.h
+> index 993a27ea6f54..832571a7dddb 100644
+> --- a/arch/arm64/include/asm/page.h
+> +++ b/arch/arm64/include/asm/page.h
+> @@ -29,6 +29,16 @@ void copy_user_highpage(struct page *to, struct page *from,
+>  void copy_highpage(struct page *to, struct page *from);
+>  #define __HAVE_ARCH_COPY_HIGHPAGE
+>  
+> +#ifdef CONFIG_ARCH_HAS_COPY_MC
+> +extern void copy_page_mc(void *to, const void *from);
+> +void copy_highpage_mc(struct page *to, struct page *from);
+> +#define __HAVE_ARCH_COPY_HIGHPAGE_MC
+> +
+> +void copy_user_highpage_mc(struct page *to, struct page *from,
+> +		unsigned long vaddr, struct vm_area_struct *vma);
+> +#define __HAVE_ARCH_COPY_USER_HIGHPAGE_MC
+> +#endif
+> +
+>  struct page *alloc_zeroed_user_highpage_movable(struct vm_area_struct *vma,
+>  						unsigned long vaddr);
+>  #define __HAVE_ARCH_ALLOC_ZEROED_USER_HIGHPAGE_MOVABLE
+> diff --git a/arch/arm64/lib/Makefile b/arch/arm64/lib/Makefile
+> index 29490be2546b..0d9f292ef68a 100644
+> --- a/arch/arm64/lib/Makefile
+> +++ b/arch/arm64/lib/Makefile
+> @@ -15,6 +15,8 @@ endif
+>  
+>  lib-$(CONFIG_ARCH_HAS_UACCESS_FLUSHCACHE) += uaccess_flushcache.o
+>  
+> +lib-$(CONFIG_ARCH_HAS_COPY_MC) += copy_page_mc.o
+> +
+>  obj-$(CONFIG_CRC32) += crc32.o
+>  
+>  obj-$(CONFIG_FUNCTION_ERROR_INJECTION) += error-inject.o
+> diff --git a/arch/arm64/lib/copy_page_mc.S b/arch/arm64/lib/copy_page_mc.S
+> new file mode 100644
+> index 000000000000..655161363dcf
+> --- /dev/null
+> +++ b/arch/arm64/lib/copy_page_mc.S
+> @@ -0,0 +1,86 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (C) 2012 ARM Ltd.
+> + */
+> +
+> +#include <linux/linkage.h>
+> +#include <linux/const.h>
+> +#include <asm/assembler.h>
+> +#include <asm/page.h>
+> +#include <asm/cpufeature.h>
+> +#include <asm/alternative.h>
+> +#include <asm/asm-extable.h>
+> +
+> +#define CPY_MC(l, x...)		\
+> +9999:   x;			\
+> +	_asm_extable_copy_page_mc    9999b, l
+> +
+> +/*
+> + * Copy a page from src to dest (both are page aligned) with machine check
+> + *
+> + * Parameters:
+> + *	x0 - dest
+> + *	x1 - src
+> + */
+> +SYM_FUNC_START(__pi_copy_page_mc)
+> +alternative_if ARM64_HAS_NO_HW_PREFETCH
+> +	// Prefetch three cache lines ahead.
+> +	prfm	pldl1strm, [x1, #128]
+> +	prfm	pldl1strm, [x1, #256]
+> +	prfm	pldl1strm, [x1, #384]
+> +alternative_else_nop_endif
+> +
+> +CPY_MC(9998f, ldp	x2, x3, [x1])
+> +CPY_MC(9998f, ldp	x4, x5, [x1, #16])
+> +CPY_MC(9998f, ldp	x6, x7, [x1, #32])
+> +CPY_MC(9998f, ldp	x8, x9, [x1, #48])
+> +CPY_MC(9998f, ldp	x10, x11, [x1, #64])
+> +CPY_MC(9998f, ldp	x12, x13, [x1, #80])
+> +CPY_MC(9998f, ldp	x14, x15, [x1, #96])
+> +CPY_MC(9998f, ldp	x16, x17, [x1, #112])
+> +
+> +	add	x0, x0, #256
+> +	add	x1, x1, #128
+> +1:
+> +	tst	x0, #(PAGE_SIZE - 1)
+> +
+> +alternative_if ARM64_HAS_NO_HW_PREFETCH
+> +	prfm	pldl1strm, [x1, #384]
+> +alternative_else_nop_endif
+> +
+> +CPY_MC(9998f, stnp	x2, x3, [x0, #-256])
+> +CPY_MC(9998f, ldp	x2, x3, [x1])
+> +CPY_MC(9998f, stnp	x4, x5, [x0, #16 - 256])
+> +CPY_MC(9998f, ldp	x4, x5, [x1, #16])
+> +CPY_MC(9998f, stnp	x6, x7, [x0, #32 - 256])
+> +CPY_MC(9998f, ldp	x6, x7, [x1, #32])
+> +CPY_MC(9998f, stnp	x8, x9, [x0, #48 - 256])
+> +CPY_MC(9998f, ldp	x8, x9, [x1, #48])
+> +CPY_MC(9998f, stnp	x10, x11, [x0, #64 - 256])
+> +CPY_MC(9998f, ldp	x10, x11, [x1, #64])
+> +CPY_MC(9998f, stnp	x12, x13, [x0, #80 - 256])
+> +CPY_MC(9998f, ldp	x12, x13, [x1, #80])
+> +CPY_MC(9998f, stnp	x14, x15, [x0, #96 - 256])
+> +CPY_MC(9998f, ldp	x14, x15, [x1, #96])
+> +CPY_MC(9998f, stnp	x16, x17, [x0, #112 - 256])
+> +CPY_MC(9998f, ldp	x16, x17, [x1, #112])
+> +
+> +	add	x0, x0, #128
+> +	add	x1, x1, #128
+> +
+> +	b.ne	1b
+> +
+> +CPY_MC(9998f, stnp	x2, x3, [x0, #-256])
+> +CPY_MC(9998f, stnp	x4, x5, [x0, #16 - 256])
+> +CPY_MC(9998f, stnp	x6, x7, [x0, #32 - 256])
+> +CPY_MC(9998f, stnp	x8, x9, [x0, #48 - 256])
+> +CPY_MC(9998f, stnp	x10, x11, [x0, #64 - 256])
+> +CPY_MC(9998f, stnp	x12, x13, [x0, #80 - 256])
+> +CPY_MC(9998f, stnp	x14, x15, [x0, #96 - 256])
+> +CPY_MC(9998f, stnp	x16, x17, [x0, #112 - 256])
+> +
+> +9998:	ret
+> +
+> +SYM_FUNC_END(__pi_copy_page_mc)
+> +SYM_FUNC_ALIAS(copy_page_mc, __pi_copy_page_mc)
+> +EXPORT_SYMBOL(copy_page_mc)
+> diff --git a/arch/arm64/mm/copypage.c b/arch/arm64/mm/copypage.c
+> index 0dea80bf6de4..0f28edfcb234 100644
+> --- a/arch/arm64/mm/copypage.c
+> +++ b/arch/arm64/mm/copypage.c
+> @@ -14,13 +14,8 @@
+>  #include <asm/cpufeature.h>
+>  #include <asm/mte.h>
+>  
+> -void copy_highpage(struct page *to, struct page *from)
+> +static void do_mte(struct page *to, struct page *from, void *kto, void *kfrom)
+>  {
+> -	void *kto = page_address(to);
+> -	void *kfrom = page_address(from);
+> -
+> -	copy_page(kto, kfrom);
+> -
+>  	if (system_supports_mte() && test_bit(PG_mte_tagged, &from->flags)) {
+>  		set_bit(PG_mte_tagged, &to->flags);
+>  		page_kasan_tag_reset(to);
+> @@ -35,6 +30,15 @@ void copy_highpage(struct page *to, struct page *from)
+>  		mte_copy_page_tags(kto, kfrom);
+>  	}
+>  }
+> +
+> +void copy_highpage(struct page *to, struct page *from)
+> +{
+> +	void *kto = page_address(to);
+> +	void *kfrom = page_address(from);
+> +
+> +	copy_page(kto, kfrom);
+> +	do_mte(to, from, kto, kfrom);
+> +}
+>  EXPORT_SYMBOL(copy_highpage);
+>  
+>  void copy_user_highpage(struct page *to, struct page *from,
+> @@ -44,3 +48,23 @@ void copy_user_highpage(struct page *to, struct page *from,
+>  	flush_dcache_page(to);
+>  }
+>  EXPORT_SYMBOL_GPL(copy_user_highpage);
+> +
+> +#ifdef CONFIG_ARCH_HAS_COPY_MC
+> +void copy_highpage_mc(struct page *to, struct page *from)
+> +{
+> +	void *kto = page_address(to);
+> +	void *kfrom = page_address(from);
+> +
+> +	copy_page_mc(kto, kfrom);
+> +	do_mte(to, from, kto, kfrom);
+> +}
+> +EXPORT_SYMBOL(copy_highpage_mc);
 
-[...]
-
-> 
->> +
->> +	rhashtable_walk_enter(bond->mac_filter_tbl, &iter);
->> +	rhashtable_walk_start(&iter);
->> +	while ((entry = rhashtable_walk_next(&iter)) != NULL) {
->> +		if (IS_ERR(entry))
->> +			continue;
->> +
->> +		spin_lock_irqsave(&entry->lock, flags);
->> +		if (has_expired(bond, entry))
->> +			mac_delete(bond, entry);
->> +		spin_unlock_irqrestore(&entry->lock, flags);
-> 
-> deleting entries while holding their own lock is not very idiomatic
-
-[use-after-free] To fix this I made has_expired take the lock, making 
-has_expired atomic. Now there is no need to have the critical section 
-above and mac_delete can be outside the critical section. This also 
-removed the use-after-free bug that would appear if the code were not 
-using RCU and cache malloc.
-
-> 
->> +	bond->mac_filter_tbl = kzalloc(sizeof(*bond->mac_filter_tbl),
->> +				       GFP_KERNEL);
->> +	if (!bond->mac_filter_tbl)
->> +		return -ENOMEM;
->> +
->> +	ret = rhashtable_init(bond->mac_filter_tbl, &bond_rht_params);
->> +	if (ret)
->> +		kfree(bond->mac_filter_tbl);
-> 
-> on error this is freed, but the pointer is stale and on bond destruction
-> will be accessed and potentially freed again
-
-set to NULL.
-
-[...]
-
->> +static int mac_create(struct bonding *bond, const u8 *addr)
->> +{
->> +	struct bond_mac_cache_entry *entry;
->> +	int ret;
->> +
->> +	entry = kmem_cache_alloc(bond_mac_cache, GFP_ATOMIC);
->> +	if (!entry)
->> +		return -ENOMEM;
->> +	spin_lock_init(&entry->lock);
->> +	memcpy(&entry->key, addr, sizeof(entry->key));
->> +	entry->used = jiffies;
-> 
-> you must zero the old fields, otherwise you can find stale values from old
-> structs which were freed
-
-good point, have done.
-
-[...]
-
->> diff --git a/drivers/net/bonding/bond_mac_filter.h b/drivers/net/bonding/bond_mac_filter.h
->> new file mode 100644
->> index 000000000000..7c968d41b456
->> --- /dev/null
->> +++ b/drivers/net/bonding/bond_mac_filter.h
->> @@ -0,0 +1,39 @@
->> +/* SPDX-License-Identifier: GPL-2.0-only
->> + *
->> + * Filter received frames based on MAC addresses "behind" the bond.
->> + */
->> +
->> +#ifndef _BOND_MAC_FILTER_H
->> +#define _BOND_MAC_FILTER_H
->> +#include <net/bonding.h>
->> +#include <linux/spinlock.h>
->> +#include <linux/rhashtable.h>
->> +
->> +enum {
->> +	BOND_MAC_DEAD,
->> +	BOND_MAC_LOCKED,
->> +	BOND_MAC_STATIC,
-> 
-> What are BOND_MAC_LOCKED or STATIC ? I didn't see them used anywhere.
-
-Stale, was going to use them to allow the user to manually add entries 
-but never got around to it. Removed.
-
-[...]
-
->> diff --git a/drivers/net/bonding/bond_options.c b/drivers/net/bonding/bond_options.c
->> index 64f7db2627ce..d295903a525b 100644
->> --- a/drivers/net/bonding/bond_options.c
->> +++ b/drivers/net/bonding/bond_options.c
-
-[...]
-
->> @@ -1035,6 +1075,44 @@ static int bond_option_use_carrier_set(struct bonding *bond,
->>   	return 0;
->>   }
->>   
->> +static int bond_option_mac_filter_set(struct bonding *bond,
->> +				      const struct bond_opt_value *newval)
->> +{
->> +	int rc = 0;
->> +	u8 prev = bond->params.mac_filter;
-> 
-> reverse xmas tree
-> 
->> +
->> +	if (newval->value && bond->params.arp_interval) {
-> 
-> what happens if we set arp_interval after enabling this, the table will be
-> freed while the bond is up and is using it, also the queued work is still enabled
-
-This is a good observation. To simplify the option setting I moved the 
-init/destroy of the hash table to bond_open/close respectively. This 
-allowed me to simply set the value of mac_filter. The only catch is in 
-bond_option_arp_interval_set() if mac_filter is set and the interface is 
-up, the user will receive an -EBUSY. This was the minimal amount of 
-configuration behavioral change I could think of.
+IIUC the do_mte() portion won't handle mermoy errors, so this isn't
+actually going to recover safely.
 
 Thanks,
--Jon
+Mark.
 
+> +
+> +void copy_user_highpage_mc(struct page *to, struct page *from,
+> +			unsigned long vaddr, struct vm_area_struct *vma)
+> +{
+> +	copy_highpage_mc(to, from);
+> +	flush_dcache_page(to);
+> +}
+> +EXPORT_SYMBOL_GPL(copy_user_highpage_mc);
+> +#endif
+> diff --git a/arch/arm64/mm/extable.c b/arch/arm64/mm/extable.c
+> index 1023ccdb2f89..4c882d36dd64 100644
+> --- a/arch/arm64/mm/extable.c
+> +++ b/arch/arm64/mm/extable.c
+> @@ -110,6 +110,8 @@ bool fixup_exception_mc(struct pt_regs *regs)
+>  		return ex_handler_uaccess_type(ex, regs, FIXUP_TYPE_MC);
+>  	case EX_TYPE_UACCESS_MC_ERR_ZERO:
+>  		return ex_handler_uaccess_err_zero(ex, regs);
+> +	case EX_TYPE_COPY_PAGE_MC:
+> +		return ex_handler_fixup(ex, regs);
+>  
+>  	}
+>  
+> diff --git a/include/linux/highmem.h b/include/linux/highmem.h
+> index 39bb9b47fa9c..a9dbf331b038 100644
+> --- a/include/linux/highmem.h
+> +++ b/include/linux/highmem.h
+> @@ -283,6 +283,10 @@ static inline void copy_user_highpage(struct page *to, struct page *from,
+>  
+>  #endif
+>  
+> +#ifndef __HAVE_ARCH_COPY_USER_HIGHPAGE_MC
+> +#define copy_user_highpage_mc copy_user_highpage
+> +#endif
+> +
+>  #ifndef __HAVE_ARCH_COPY_HIGHPAGE
+>  
+>  static inline void copy_highpage(struct page *to, struct page *from)
+> @@ -298,6 +302,10 @@ static inline void copy_highpage(struct page *to, struct page *from)
+>  
+>  #endif
+>  
+> +#ifndef __HAVE_ARCH_COPY_HIGHPAGE_MC
+> +#define cop_highpage_mc copy_highpage
+> +#endif
+> +
+>  static inline void memcpy_page(struct page *dst_page, size_t dst_off,
+>  			       struct page *src_page, size_t src_off,
+>  			       size_t len)
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 76e3af9639d9..d5f62234152d 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -2767,7 +2767,7 @@ static inline bool cow_user_page(struct page *dst, struct page *src,
+>  	unsigned long addr = vmf->address;
+>  
+>  	if (likely(src)) {
+> -		copy_user_highpage(dst, src, addr, vma);
+> +		copy_user_highpage_mc(dst, src, addr, vma);
+>  		return true;
+>  	}
+>  
+> -- 
+> 2.25.1
+> 

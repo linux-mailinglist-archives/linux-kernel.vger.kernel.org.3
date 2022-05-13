@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A72A526036
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6411B52604E
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:58:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379582AbiEMKka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 06:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36076 "EHLO
+        id S1379568AbiEMKkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 06:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379541AbiEMKkS (ORCPT
+        with ESMTP id S1379549AbiEMKkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 13 May 2022 06:40:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B7A28B854;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 542012992FA;
         Fri, 13 May 2022 03:40:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D9F46614FB;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E17926153C;
         Fri, 13 May 2022 10:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 30924C34114;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 47F95C34119;
         Fri, 13 May 2022 10:40:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1652438416;
-        bh=t+j2oa0sybV7dpErO/Q6VSoSiLVS3Ad1s7QqbLdvJL0=;
+        bh=zTvTiCTVxbvSW+PS+KKIL6/4dwDy6vvmSFDisj1b1rs=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=pIsWii6X8QcgtsWvhRaP2wkzZeRLhz3bPxkC69fjDD9eES9nD5Ew55L3Q4tB7MbrQ
-         uqJwZqLk1yoDq908WDPmOTQeKrXVMqVoGh6cAfjVLMZTKlou90wHU7hVex8yZ6UCkd
-         TeKAxRH7S98faImX2dF6Hi5Gqf8utzxW+Oor8bRTPqBhKeXpgXABp35kFYFTTvuEAh
-         j3dDhxuDq4/02sDCorIQIErwxbMxLCaU3nVk9FHYqsdO+NNnJ8bCqpx+wGuu7gEdtg
-         Q5MVCpHFj8e0l8uEVgRHHg+ynWSqwnc9xWLHdSIfG0zjkICiDJinAasxAIZaQqV//a
-         dCsqElYURR/8Q==
+        b=OdmEg7jyVFt1B6nyojJY4nORTfp1ZJ7uj+56TSh9q1DQrlVz54hVn8B1xmaCkpJl+
+         TvhiUvWG91RyFUFt33Gf9UON7tsB41TDOW1JJAi5I/UevEMOMOnQms9tT7YSuRJ0Ci
+         v3FUAFGGOEhg1uJJHgSo/4ioQxgDSujU6GRgDFCmZW8ztYxInhkLZdMEQJ+b0MY80b
+         Pm6/WDTDPGE7YtNIEVsGFx11SsvvOdD5oxmE0oR23oHZNnNjW3i9DPzhHzLobFJq3K
+         daoof2bgKQ2468WGXles9Nqm1JuTet+EdmibBwmGpgnSTZOHobgJ05olyydGmNuyEi
+         fD/3lMKuQVHPQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 17DF7F03937;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 24D04F03935;
         Fri, 13 May 2022 10:40:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH -next] net: ethernet: fix platform_no_drv_owner.cocci warning
+Subject: Re: [PATCH net-next] net: page_pool: add page allocation stats for two
+ fast page allocate path
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165243841609.19214.3757815327753045737.git-patchwork-notify@kernel.org>
+Message-Id: <165243841613.19214.9273427764376965858.git-patchwork-notify@kernel.org>
 Date:   Fri, 13 May 2022 10:40:16 +0000
-References: <20220512080357.44357-1-yang.lee@linux.alibaba.com>
-In-Reply-To: <20220512080357.44357-1-yang.lee@linux.alibaba.com>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     wellslutw@gmail.com, edumazet@google.com, pabeni@redhat.com,
-        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, abaci@linux.alibaba.com
+References: <20220512065631.33673-1-huangguangbin2@huawei.com>
+In-Reply-To: <20220512065631.33673-1-huangguangbin2@huawei.com>
+To:     Guangbin Huang <huangguangbin2@huawei.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
+        pabeni@redhat.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lipeng321@huawei.com,
+        chenhao288@hisilicon.com
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,19 +65,20 @@ Hello:
 This patch was applied to netdev/net-next.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Thu, 12 May 2022 16:03:57 +0800 you wrote:
-> Remove .owner field if calls are used which set it automatically.
-> ./drivers/net/ethernet/sunplus/spl2sw_driver.c:569:3-8: No need to set
-> .owner here. The core will do it.
+On Thu, 12 May 2022 14:56:31 +0800 you wrote:
+> From: Jie Wang <wangjie125@huawei.com>
 > 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> Currently If use page pool allocation stats to analysis a RX performance
+> degradation problem. These stats only count for pages allocate from
+> page_pool_alloc_pages. But nic drivers such as hns3 use
+> page_pool_dev_alloc_frag to allocate pages, so page stats in this API
+> should also be counted.
 > 
 > [...]
 
 Here is the summary with links:
-  - [-next] net: ethernet: fix platform_no_drv_owner.cocci warning
-    https://git.kernel.org/netdev/net-next/c/7b8b82224c26
+  - [net-next] net: page_pool: add page allocation stats for two fast page allocate path
+    https://git.kernel.org/netdev/net-next/c/0f6deac3a079
 
 You are awesome, thank you!
 -- 

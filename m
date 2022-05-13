@@ -2,145 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 954185268F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 20:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 329655268FC
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 20:10:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383226AbiEMSEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 14:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58634 "EHLO
+        id S1382888AbiEMSKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 14:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244159AbiEMSEK (ORCPT
+        with ESMTP id S244159AbiEMSKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 14:04:10 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661D62CE3C
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 11:04:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652465049; x=1684001049;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mmVeSLOWGrrJNNPaH5sVqOAPJshfUhndaLU/q/Ct39k=;
-  b=kzxU0mtXugMta8L+yVKIbg3yCQHXcn+0eSnjE5ghEPwncSPMrBR6VBZa
-   TOmwzMcYQef5L5a+cGRpEV/RJc/hUKkYLmXBhHNbnukqrRJ9suWIRT8Xm
-   OCK/9XmVhB+HhmcsHHGwzzjPpVpipVBxPZ0V/dxqsp0wtNq7ovh6uoy3+
-   X+dnTe4UUSJQ0Zbl8mhVtwdrDCGUrzX50rX94uhQPfM0JNlcv3y2wvzux
-   UXQbZlpMts2+JdTXuNCuK0MFnzi4LDNVJ7169QKWVLGlVZ7aYSzkPVpTR
-   a+yKQqbNPzcWR1YoSpPaI8gbEovfUV6Voht0Gxeh0d876DAb3KWc1uUrY
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="269214206"
-X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="269214206"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 11:04:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="624962791"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga008.fm.intel.com with ESMTP; 13 May 2022 11:04:09 -0700
-Date:   Fri, 13 May 2022 11:07:44 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     x86@kernel.org, Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Stephane Eranian <eranian@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 10/29] iommu/vt-d: Implement minor tweaks for NMI irqs
-Message-ID: <20220513180744.GB22683@ranerica-svr.sc.intel.com>
-References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
- <20220506000008.30892-11-ricardo.neri-calderon@linux.intel.com>
- <87wneyfj90.ffs@tglx>
+        Fri, 13 May 2022 14:10:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B325253D;
+        Fri, 13 May 2022 11:10:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6DB17B83029;
+        Fri, 13 May 2022 18:10:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E4F1C34100;
+        Fri, 13 May 2022 18:10:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652465418;
+        bh=QVFRHciwVHsT/StrKZNZPPyBLNp0Pv3TiO/oD8UrSLo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O3D+iKn1wRG3Mgt93Dx8a0sfe8hCyc4kqJHi25y9xPg88/MH4jTk1xPdjsZywacre
+         ly7tUzk0m7KNEpK9Fu460QX4M6OoSKHbnQw1zz1dAl6lhmdGzSgmzQOYpy2L5kczqp
+         akHofx0s9JBZs/rJkPGqlz9MRNFezD2tRvxj5z1cemyP/y2ytFsdrRHrrl4ZoaACia
+         9l0jCg8Rjjego6i1/espF8Dy4n4pnw9GqpAuSPtQ2pxt8A732G7c/AXVJt+qMyQwDg
+         vBtDNXLwwkpQKIER6eqFbfSJam6qdBCM43entSW918d5wJ1LlfQIgWuz6MiUMdcddk
+         G9pzrRPVEaMDg==
+Date:   Fri, 13 May 2022 21:08:48 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lukas@wunner.de,
+        p.rosenberger@kunbus.com, Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Subject: Re: [PATCH v4 1/6] tpm, tpm_tis_spi: Request threaded irq
+Message-ID: <Yn6esMyUl+QhECq+@kernel.org>
+References: <20220509080559.4381-1-LinoSanfilippo@gmx.de>
+ <20220509080559.4381-2-LinoSanfilippo@gmx.de>
+ <YnucgDH3I87RI8PN@kernel.org>
+ <486cec01-ec02-3f11-0b81-037e0700c503@gmx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87wneyfj90.ffs@tglx>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <486cec01-ec02-3f11-0b81-037e0700c503@gmx.de>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 06, 2022 at 11:23:23PM +0200, Thomas Gleixner wrote:
-> On Thu, May 05 2022 at 16:59, Ricardo Neri wrote:
-> > The Intel IOMMU interrupt remapping driver already programs correctly the
-> > delivery mode of individual irqs as per their irq_data. Improve handling
-> > of NMIs. Allow only one irq per NMI. Also, it is not necessary to cleanup
-> > irq vectors after updating affinity.
+On Wed, May 11, 2022 at 09:18:39PM +0200, Lino Sanfilippo wrote:
+> Hi,
 > 
-> Structuring a changelog in paragraphs might make it readable. New lines
-> exist for a reason.
+> On 11.05.22 at 13:22, Jarkko Sakkinen wrote:
+> > On Mon, May 09, 2022 at 10:05:54AM +0200, Lino Sanfilippo wrote:
+> >> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> >>
+> >> Interrupt handling at least includes reading and writing the interrupt
+> >> status register within the interrupt routine. Since accesses over the SPI
+> >> bus are synchronized by a mutex, request a threaded interrupt handler to
+> >> ensure a sleepable context during interrupt processing.
+> >>
+> >> Fixes: 1a339b658d9d ("tpm_tis_spi: Pass the SPI IRQ down to the driver")
+> >> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> >
+> > When you state that it needs a sleepable context, you should bring a
+> > context why it needs it. This not to disregard the code change overally but
+> > you cannot make even the most obvious claim without backing data.
+> >
+> 
+> so what kind of backing data do you have in mind? Would it help to emphasize more
+> that the irq handler is running in hard irq context in the current code and thus
+> must not access registers over SPI since SPI uses a mutex (I consider it as basic
+> knowledge that a mutex must not be taken in hard irq context)?
 
-Sure, I can structure this in paragraphps.
-> 
-> > NMIs do not have associated vectors.
-> 
-> Again. NMI has an vector associated, but it is not subject to dynamic
-> vector management.
+There's zero mention about specific lock you are talking about. Providing
+the basic knowledge what you are trying to do is the whole point of the
+commit message in the first place. I'd presume this patch is related to the
+use bus_lock_mutex but it is fully ingored here.
 
-Indeed, it is clear to me now.
-
-> 
-> > diff --git a/drivers/iommu/intel/irq_remapping.c b/drivers/iommu/intel/irq_remapping.c
-> > index fb2d71bea98d..791a9331e257 100644
-> > --- a/drivers/iommu/intel/irq_remapping.c
-> > +++ b/drivers/iommu/intel/irq_remapping.c
-> > @@ -1198,8 +1198,12 @@ intel_ir_set_affinity(struct irq_data *data, const struct cpumask *mask,
-> >  	 * After this point, all the interrupts will start arriving
-> >  	 * at the new destination. So, time to cleanup the previous
-> >  	 * vector allocation.
-> > +	 *
-> > +	 * Do it only for non-NMI irqs. NMIs don't have associated
-> > +	 * vectors.
-> 
-> See above.
-
-Sure.
-
-> 
-> >  	 */
-> > -	send_cleanup_vector(cfg);
-> > +	if (cfg->delivery_mode != APIC_DELIVERY_MODE_NMI)
-> > +		send_cleanup_vector(cfg);
-> 
-> So this needs to be replicated for all invocations of
-> send_cleanup_vector(), right? Why can't you put it into that function?
-
-Certainly, it can be done inside the function.
-
->   
-> >  	return IRQ_SET_MASK_OK_DONE;
-> >  }
-> > @@ -1352,6 +1356,9 @@ static int intel_irq_remapping_alloc(struct irq_domain *domain,
-> >  	if (info->type == X86_IRQ_ALLOC_TYPE_PCI_MSI)
-> >  		info->flags &= ~X86_IRQ_ALLOC_CONTIGUOUS_VECTORS;
-> >  
-> > +	if ((info->flags & X86_IRQ_ALLOC_AS_NMI) && nr_irqs != 1)
-> > +		return -EINVAL;
-> 
-> This cannot be reached when the vector allocation domain already
-> rejected it, but copy & pasta is wonderful and increases the line count.
-
-Yes, this is not needed.
-
-Thanks and BR,
-Ricardo
-> 
-> Thanks,
-> 
->         tglx
-> 
-> 
+BR, Jarkko

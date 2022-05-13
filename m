@@ -2,282 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C9FC525985
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 03:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E49D52598D
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 03:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376401AbiEMBtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 21:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33122 "EHLO
+        id S1376451AbiEMBz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 21:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376393AbiEMBtt (ORCPT
+        with ESMTP id S1376439AbiEMBzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 21:49:49 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BCE27F137
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 18:49:47 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id fv2so6773338pjb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 18:49:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=DXT5U5/unhwYiHaEsAheDw/cqhHfh/fCCJoi5qtw7ns=;
-        b=F0xYx6bDiiXb757drwnmvVm4vISBgBumZL6FskV7MtQj1vP0JwDMILNchBUwbt6M8W
-         cldW/RGJ0hISLHrMhg+WiQ4FP0zYC8tWYVR1lE4raT8Dvv4M7iC3rZNKCszHHl54Zy8o
-         9e7E3PR9Q+AXiA8bqEgamCoQit5nt/aWXj12lD3IR73KpkkTSyppLGCRoSF1NuegfRVq
-         hcTLvmRlwQj5uu4CTMseDFfeoy2juBicUaDtU9m6FQRKOBMIHdLtidwWk0hz4/8TZ2Ip
-         6kMDM+IOMbfsMGuOYexffaRVdgk39EnO0p8nfYEA98H7zZMfCucCcfVuiOEVCd397duD
-         WOkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=DXT5U5/unhwYiHaEsAheDw/cqhHfh/fCCJoi5qtw7ns=;
-        b=ih0PVNFOdhSP8/xIvk6P4uUNdQYji2ztM1lgOUDOhgZVNtv8TCk+Bh4JpWfqlU4E/U
-         C1JX+nC77rjZx9uxuNamv7vvJEOyt7vexoKTo+H+2kOIdC5Lmxd4E+nJEvLCLrLSDVf8
-         BbaWw5iSgAvJ887wUlsWecCcWXj+bS8RTYxdg0cZ8PTXWQI2M76EBSRg4VVUnT5xgWQh
-         tKDTsfCxF89FToUklnLkabtwFDsBkxFeUI2icyjkTk4ETWl+JC+VR9sIRzCATlFUDr38
-         RsDvg/FvTcYhNM0caNRCmXRHGlRDmrpJ3Sq+kkGJB0d2LWVUaAamopGp8m/AU1VaN8ea
-         B/OQ==
-X-Gm-Message-State: AOAM533KjIKc4Pso+CttZ86DX4udJGJb92pWpGuZoAzHQG83Wn+Ui7v0
-        kPZX4fyOAMSc3Yl/Y1zBew8K71t8Hvtx3fYo
-X-Google-Smtp-Source: ABdhPJxr6xeF/KoMq1f+Qiv40Ek4BJVeeBVBOz6+/nwI6/JQb0fsp9K+rbBOmAsjP2TKfswr1gsffg==
-X-Received: by 2002:a17:90a:c797:b0:1d9:2764:a83b with SMTP id gn23-20020a17090ac79700b001d92764a83bmr13438928pjb.5.1652406587193;
-        Thu, 12 May 2022 18:49:47 -0700 (PDT)
-Received: from [10.71.57.194] ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id i1-20020a056a00224100b0050dc7628142sm474474pfu.28.2022.05.12.18.49.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 18:49:46 -0700 (PDT)
-Message-ID: <2e331f2e-c481-df3b-f810-5bb867c5c3df@bytedance.com>
-Date:   Fri, 13 May 2022 09:49:37 +0800
+        Thu, 12 May 2022 21:55:54 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58F2DF50
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 18:55:53 -0700 (PDT)
+Received: from canpemm500005.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KzsCK1wGYzfbLX;
+        Fri, 13 May 2022 09:54:37 +0800 (CST)
+Received: from huawei.com (10.67.174.96) by canpemm500005.china.huawei.com
+ (7.192.104.229) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 13 May
+ 2022 09:55:51 +0800
+From:   Zhang Jianhua <chris.zjh@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
+        <chris.zjh@huawei.com>
+CC:     <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next v2] vt: defkeymap.c_shipped remove unused variables
+Date:   Fri, 13 May 2022 09:54:27 +0800
+Message-ID: <20220513015427.569539-1-chris.zjh@huawei.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [External] Re: [PATCH bpf-next v2 2/2] selftests/bpf: add test
- case for bpf_map_lookup_percpu_elem
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joanne Koong <joannekoong@fb.com>,
-        Geliang Tang <geliang.tang@suse.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        duanxiongchun@bytedance.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        Dongdong Wang <wangdongdong.6@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        zhouchengming@bytedance.com, yosryahmed@google.com
-References: <20220511093854.411-1-zhoufeng.zf@bytedance.com>
- <20220511093854.411-3-zhoufeng.zf@bytedance.com>
- <CAEf4BzZL85C7KUwKv9i5cdLSDzM175cLjiW4EDjOqNfcxbLO+A@mail.gmail.com>
- <731c281a-9911-fa86-fec2-a3c1a3954461@bytedance.com>
- <CAEf4BzY5HmNVgUH_bmoXfCubgosmmJ3N1gip_vrLGQEo=XV8gg@mail.gmail.com>
-From:   Feng Zhou <zhoufeng.zf@bytedance.com>
-In-Reply-To: <CAEf4BzY5HmNVgUH_bmoXfCubgosmmJ3N1gip_vrLGQEo=XV8gg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.96]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500005.china.huawei.com (7.192.104.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/5/13 上午12:43, Andrii Nakryiko 写道:
-> On Wed, May 11, 2022 at 8:58 PM Feng Zhou <zhoufeng.zf@bytedance.com> wrote:
->> 在 2022/5/12 上午11:34, Andrii Nakryiko 写道:
->>> On Wed, May 11, 2022 at 2:39 AM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
->>>> From: Feng Zhou <zhoufeng.zf@bytedance.com>
->>>>
->>>> test_progs:
->>>> Tests new ebpf helpers bpf_map_lookup_percpu_elem.
->>>>
->>>> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
->>>> ---
->>>>    .../bpf/prog_tests/map_lookup_percpu_elem.c   | 46 ++++++++++++++++
->>>>    .../bpf/progs/test_map_lookup_percpu_elem.c   | 54 +++++++++++++++++++
->>>>    2 files changed, 100 insertions(+)
->>>>    create mode 100644 tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
->>>>    create mode 100644 tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
->>>>
->>>> diff --git a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
->>>> new file mode 100644
->>>> index 000000000000..58b24c2112b0
->>>> --- /dev/null
->>>> +++ b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
->>>> @@ -0,0 +1,46 @@
->>>> +// SPDX-License-Identifier: GPL-2.0
->>>> +// Copyright (c) 2022 Bytedance
->>> /* */ instead of //
->> Ok, I will do. Thanks.
->>
->>
->>>> +
->>>> +#include <test_progs.h>
->>>> +
->>>> +#include "test_map_lookup_percpu_elem.skel.h"
->>>> +
->>>> +#define TEST_VALUE  1
->>>> +
->>>> +void test_map_lookup_percpu_elem(void)
->>>> +{
->>>> +       struct test_map_lookup_percpu_elem *skel;
->>>> +       int key = 0, ret;
->>>> +       int nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
->>> I think this is actually wrong and will break selftests on systems
->>> with offline CPUs. Please use libbpf_num_possible_cpus() instead.
->>
->> Ok, I will do. Thanks.
->>
->>
->>>> +       int *buf;
->>>> +
->>>> +       buf = (int *)malloc(nr_cpus*sizeof(int));
->>>> +       if (!ASSERT_OK_PTR(buf, "malloc"))
->>>> +               return;
->>>> +       memset(buf, 0, nr_cpus*sizeof(int));
->>> this is wrong, kernel expects to have roundup(sz, 8) per each CPU,
->>> while you have just 4 bytes per each element
->>>
->>> please also have spaces around multiplication operator here and above
->>
->> Ok, I will use 8 bytes for key and val. Thanks.
->>
->>
->>>> +       buf[0] = TEST_VALUE;
->>>> +
->>>> +       skel = test_map_lookup_percpu_elem__open_and_load();
->>>> +       if (!ASSERT_OK_PTR(skel, "test_map_lookup_percpu_elem__open_and_load"))
->>>> +               return;
->>> buf leaking here
->>
->> Yes, sorry for my negligence.
->>
->>
->>>> +       ret = test_map_lookup_percpu_elem__attach(skel);
->>>> +       ASSERT_OK(ret, "test_map_lookup_percpu_elem__attach");
->>>> +
->>>> +       ret = bpf_map_update_elem(bpf_map__fd(skel->maps.percpu_array_map), &key, buf, 0);
->>>> +       ASSERT_OK(ret, "percpu_array_map update");
->>>> +
->>>> +       ret = bpf_map_update_elem(bpf_map__fd(skel->maps.percpu_hash_map), &key, buf, 0);
->>>> +       ASSERT_OK(ret, "percpu_hash_map update");
->>>> +
->>>> +       ret = bpf_map_update_elem(bpf_map__fd(skel->maps.percpu_lru_hash_map), &key, buf, 0);
->>>> +       ASSERT_OK(ret, "percpu_lru_hash_map update");
->>>> +
->>>> +       syscall(__NR_getuid);
->>>> +
->>>> +       ret = skel->bss->percpu_array_elem_val == TEST_VALUE &&
->>>> +             skel->bss->percpu_hash_elem_val == TEST_VALUE &&
->>>> +             skel->bss->percpu_lru_hash_elem_val == TEST_VALUE;
->>>> +       ASSERT_OK(!ret, "bpf_map_lookup_percpu_elem success");
->>> this would be better done as three separate ASSERT_EQ(), combining
->>> into opaque true/false isn't helpful if something breaks
->>
->> Good suggestion.
->>
->>
->>>> +
->>>> +       test_map_lookup_percpu_elem__destroy(skel);
->>>> +}
->>>> diff --git a/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c b/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
->>>> new file mode 100644
->>>> index 000000000000..5d4ef86cbf48
->>>> --- /dev/null
->>>> +++ b/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
->>>> @@ -0,0 +1,54 @@
->>>> +// SPDX-License-Identifier: GPL-2.0
->>>> +// Copyright (c) 2022 Bytedance
->>> /* */ instead of //
->>
->> Ok, I will do. Thanks.
->>
->>
->>>> +
->>>> +#include "vmlinux.h"
->>>> +#include <bpf/bpf_helpers.h>
->>>> +
->>>> +int percpu_array_elem_val = 0;
->>>> +int percpu_hash_elem_val = 0;
->>>> +int percpu_lru_hash_elem_val = 0;
->>>> +
->>>> +struct {
->>>> +       __uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
->>>> +       __uint(max_entries, 1);
->>>> +       __type(key, __u32);
->>>> +       __type(value, __u32);
->>>> +} percpu_array_map SEC(".maps");
->>>> +
->>>> +struct {
->>>> +       __uint(type, BPF_MAP_TYPE_PERCPU_HASH);
->>>> +       __uint(max_entries, 1);
->>>> +       __type(key, __u32);
->>>> +       __type(value, __u32);
->>>> +} percpu_hash_map SEC(".maps");
->>>> +
->>>> +struct {
->>>> +       __uint(type, BPF_MAP_TYPE_LRU_PERCPU_HASH);
->>>> +       __uint(max_entries, 1);
->>>> +       __type(key, __u32);
->>>> +       __type(value, __u32);
->>>> +} percpu_lru_hash_map SEC(".maps");
->>>> +
->>>> +SEC("tp/syscalls/sys_enter_getuid")
->>>> +int sysenter_getuid(const void *ctx)
->>>> +{
->>>> +       __u32 key = 0;
->>>> +       __u32 cpu = 0;
->>>> +       __u32 *value;
->>>> +
->>>> +       value = bpf_map_lookup_percpu_elem(&percpu_array_map, &key, cpu);
->>>> +       if (value)
->>>> +               percpu_array_elem_val = *value;
->>>> +
->>>> +       value = bpf_map_lookup_percpu_elem(&percpu_hash_map, &key, cpu);
->>>> +       if (value)
->>>> +               percpu_hash_elem_val = *value;
->>>> +
->>>> +       value = bpf_map_lookup_percpu_elem(&percpu_lru_hash_map, &key, cpu);
->>>> +       if (value)
->>>> +               percpu_lru_hash_elem_val = *value;
->>>> +
->>> if the test happens to run on CPU 0 then the test doesn't really test
->>> much. It would be more interesting to have a bpf_loop() iteration that
->>> would fetch values on each possible CPU instead and do something with
->>> it.
->>
->> Good suggestion. I check the code and find no bpf helper function to get
->> possible CPU nums.
->>
->> I think for the test function, read cpu0 elem value correctly should be
->> considered to be no problem.
->>
->> Or is it necessary to add a new helper function to get num_possible_cpus ?
->>
->>
-> You can pass number of CPUs from user-space to BPF program through
-> read-only variable (search for `const volatile` under progs/ for
-> examples)
->
-Ok, will do. Thanks.
+The global variables 'funcbufptr' 'funcbufsize' and 'funcbufleft' have
+been initialized but not used, they are redundant and remove them.
 
+Signed-off-by: Zhang Jianhua <chris.zjh@huawei.com>
 
->>>> +       return 0;
->>>> +}
->>>> +
->>>> +char _license[] SEC("license") = "GPL";
->>>> --
->>>> 2.20.1
->>>>
+---
+No code changes since v1, only remove the redundant line "--------" in
+v1 commit message.
+---
+ drivers/tty/vt/defkeymap.c_shipped | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/drivers/tty/vt/defkeymap.c_shipped b/drivers/tty/vt/defkeymap.c_shipped
+index 094d95bf0005..80dee50bcb7a 100644
+--- a/drivers/tty/vt/defkeymap.c_shipped
++++ b/drivers/tty/vt/defkeymap.c_shipped
+@@ -185,10 +185,6 @@ char func_buf[] = {
+ 	'\033', '[', 'P', 0, 
+ };
+ 
+-char *funcbufptr = func_buf;
+-int funcbufsize = sizeof(func_buf);
+-int funcbufleft = 0;          /* space left */
+-
+ char *func_table[MAX_NR_FUNC] = {
+ 	func_buf + 0,
+ 	func_buf + 5,
+-- 
+2.31.0
 

@@ -2,88 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C474525965
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 03:29:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1E6F52595F
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 03:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376355AbiEMB2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 21:28:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43192 "EHLO
+        id S1376343AbiEMB1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 21:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376345AbiEMB2h (ORCPT
+        with ESMTP id S1352238AbiEMB13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 21:28:37 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E5728ED19;
-        Thu, 12 May 2022 18:28:36 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KzrWj1srjzCsg1;
-        Fri, 13 May 2022 09:23:45 +0800 (CST)
-Received: from dggpeml500008.china.huawei.com (7.185.36.147) by
- dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 13 May 2022 09:28:34 +0800
-Received: from huawei.com (10.67.175.34) by dggpeml500008.china.huawei.com
- (7.185.36.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 13 May
- 2022 09:28:34 +0800
-From:   Ren Zhijie <renzhijie2@huawei.com>
-To:     <ecree.xilinx@gmail.com>, <habetsm.xilinx@gmail.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Ren Zhijie <renzhijie2@huawei.com>
-Subject: [PATCH -next] sfc: siena: Fix Kconfig dependencies
-Date:   Fri, 13 May 2022 09:27:21 +0800
-Message-ID: <20220513012721.140871-1-renzhijie2@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 12 May 2022 21:27:29 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E454E5F8D5
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 18:27:26 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652405244;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LTKi6sAW5Wnn5JxzuBjnHsq9FW1AedE2Tm2sMJNjbuM=;
+        b=cP2hgRZZ9plq+O0IDo1vTL/H0jE/EJ1Y2NZBsQDfMBpPMcjzlwqJOyRJJvBgduC4fhn4It
+        s82N19W5bKEdOjAASaYozJhL3Yy54FttXUYFHjIaLCmYqao4kp5NCUxbPkeZvpbwFev8Wz
+        wR5cect9useyVtBbWtuvYdBA34RBti4i4y+E66g8qHBWlrNKErBx6YQ4KRF9YeizazgtpA
+        Kld6uymOt/7hkujS8+A4E466kc71OJyQwaVqefmpLVnU79r4sC4SytznDmTFfaPIKNdxfp
+        /VMc6SefkJ0NvzKaFk9ySGgB9zS/c/nRae732sg83j0iVsiUqRo97CpM3xJdcQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652405244;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LTKi6sAW5Wnn5JxzuBjnHsq9FW1AedE2Tm2sMJNjbuM=;
+        b=BOPHxlmulNJXw0lNYAY/ujR+fw7MmSFJ73d3UhTHWAB6nTWKOeF/L5ioXz0e9rVPzWTBj1
+        gyY8akMvERY14IAg==
+To:     Dave Hansen <dave.hansen@intel.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [RFCv2 00/10] Linear Address Masking enabling
+In-Reply-To: <67aef839-0757-37b1-a42d-154c0116cbf5@intel.com>
+References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
+ <20220511064943.GR76023@worktop.programming.kicks-ass.net>
+ <20bada85-9203-57f4-2502-57a6fd11f3ea@intel.com> <875ymav8ul.ffs@tglx>
+ <55176b79-90af-4a47-dc06-9f5f2f2c123d@intel.com>
+ <CAMe9rOqb6ZnAZYe4uAWDt-vmhhP=z_+uZwi5fBURqyUWxCX9Cg@mail.gmail.com>
+ <87o802tjd7.ffs@tglx>
+ <CAMe9rOpXOLEMcir9zMq_UJe08Y-kM+9zok6gDicqAhPySV+3NA@mail.gmail.com>
+ <67aef839-0757-37b1-a42d-154c0116cbf5@intel.com>
+Date:   Fri, 13 May 2022 03:27:24 +0200
+Message-ID: <878rr6te6b.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.67.175.34]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500008.china.huawei.com (7.185.36.147)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If CONFIG_PTP_1588_CLOCK=m and CONFIG_SFC_SIENA=y, the siena driver will fail to link:
+On Thu, May 12 2022 at 17:46, Dave Hansen wrote:
+> On 5/12/22 17:08, H.J. Lu wrote:
+> If I had to take a shot at this today, I think I'd opt for:
+>
+> 	mask = sys_enable_masking(bits=6, flags=FUZZY_NR_BITS);
+>
+> although I'm not super confident about the "fuzzy" flag.  I also don't
+> think I'd totally hate the "blind" interface where the kernel just gets
+> to pick unilaterally and takes zero input from userspace.
 
-drivers/net/ethernet/sfc/siena/ptp.o: In function `efx_ptp_remove_channel':
-ptp.c:(.text+0xa28): undefined reference to `ptp_clock_unregister'
-drivers/net/ethernet/sfc/siena/ptp.o: In function `efx_ptp_probe_channel':
-ptp.c:(.text+0x13a0): undefined reference to `ptp_clock_register'
-ptp.c:(.text+0x1470): undefined reference to `ptp_clock_unregister'
-drivers/net/ethernet/sfc/siena/ptp.o: In function `efx_ptp_pps_worker':
-ptp.c:(.text+0x1d29): undefined reference to `ptp_clock_event'
-drivers/net/ethernet/sfc/siena/ptp.o: In function `efx_siena_ptp_get_ts_info':
-ptp.c:(.text+0x301b): undefined reference to `ptp_clock_index'
+That's the only sane choice and you can make it simple for userspace:
 
-To fix this build error, make SFC_SIENA depends on PTP_1588_CLOCK.
+       ret = prctl(GET_XXX_MASK, &mask);
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Fixes: d48523cb88e0("sfc: Copy shared files needed for Siena (part 2)")
-Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
----
- drivers/net/ethernet/sfc/siena/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+and then let it decide based on @ret and @mask whether to use it or not.
 
-diff --git a/drivers/net/ethernet/sfc/siena/Kconfig b/drivers/net/ethernet/sfc/siena/Kconfig
-index 3d52aee50d5a..3675233e963a 100644
---- a/drivers/net/ethernet/sfc/siena/Kconfig
-+++ b/drivers/net/ethernet/sfc/siena/Kconfig
-@@ -2,6 +2,7 @@
- config SFC_SIENA
- 	tristate "Solarflare SFC9000 support"
- 	depends on PCI
-+	depends on PTP_1588_CLOCK
- 	select MDIO
- 	select CRC32
- 	help
--- 
-2.17.1
+But of course nobody thought about this as a generic feature and so we
+have the ARM64 TBI muck as a precedence.
+
+So much for coordination and portability...
+
+I'm so tired of this short sighted 'cram my feature in' approach of
+_all_ involved parties.
+
+Thanks,
+
+        tglx
+
 

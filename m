@@ -2,156 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD0A5264B8
+	by mail.lfdr.de (Postfix) with ESMTP id E7FEC5264B9
 	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:38:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382004AbiEMOgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:36:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
+        id S1353589AbiEMOh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381354AbiEMOei (ORCPT
+        with ESMTP id S1381582AbiEMOgR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:34:38 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252CC1C9AC1
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:30:08 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id o130so65408ybc.8
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:30:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6NP6EhM0X5mD3UzK4e4exb5R0VTq4XniyN4C07WX/Go=;
-        b=cZi6hWJvOF2VZMnh6yPQoLDh4Dnlxa0Jbaglle0oh+f3CygyxrXYwW2adM1URgVwUb
-         Dz6klL6PoSomeo+wpCmo1A87bU+2JBKQY4jsd98vpSB9JBBHsya+W+NOd/N6kw7b7eT8
-         j+kqQihDkvuu4dCw2TaNoVgRJDNaBnB4pPD0Koih2C7atkA3wpdGBi9HKOHLueXVSc7l
-         d6LNFaMBCDoT3jUJALI9YOee20+5FnI48jXivTcRUEW3H4JE38/vW2o0Mo91LS32pNJV
-         nOFLGaAWgXJJIzWpMPK4Nsdz+pHgWTR9L2trFmb8zBDQTMds2jsmX9bl7kj2/6bd2fO9
-         Dg5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6NP6EhM0X5mD3UzK4e4exb5R0VTq4XniyN4C07WX/Go=;
-        b=ydN4AQF/I82IDufhImUXc/iWSI2ANU4Ol7MkQ2J3G6W73d7Hup5TwHZhNBKpgcbsiy
-         1zn1P/GIrj6EJ73uqRVk84VZD7bV4SuaHVSxi25y+wL8xQ5L8CNIixR0DYn/Rftx5zmE
-         ln0Em5vn9zVuy0oUFhxEuY2pzaBDGlIz5QqWNuD34sjqfNNYGNPOyLDRbpAqQDrVWNf0
-         e6nX8YT2c7d1K/7gWkAShVUveLaqPkxc91Ef5ULblftk5/0rOwRtWhhJa1cYZOKD+WIH
-         hfYhjkQp7AHoXknapTMP78+j+BKPEl8IEWa1Nt+3NqWXIdoFhMde91+WK0gg5ydqV2E2
-         ANEw==
-X-Gm-Message-State: AOAM532XvXVwJz1Jd3iFS+iwZe3GbgySpDXjhVAWouHKB+T8QZeWiGvd
-        mn6cclub9Wj0GcUE6oYMYLgajMgnBN7u/6hRdxk5aw==
-X-Google-Smtp-Source: ABdhPJyTJudNGJtkAW4NctmhORicAlKAnvJLdlDZ50xVK9tE6EjXyHMGuV9guzIlFTcKi31JInQBAtKqDQCEK0XVIHA=
-X-Received: by 2002:a25:d3cd:0:b0:648:6a92:80f9 with SMTP id
- e196-20020a25d3cd000000b006486a9280f9mr5051460ybf.300.1652452207184; Fri, 13
- May 2022 07:30:07 -0700 (PDT)
+        Fri, 13 May 2022 10:36:17 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B7C1D7356;
+        Fri, 13 May 2022 07:30:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652452236; x=1683988236;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1IiINc6RVJg7cdsH+DvfTtXS4rj6TawHCbsFN/TV4tA=;
+  b=N6ex+VjK35BCLO7+kI6OsibjiOGUZSOOHMPCr8cn09OdfIV/kMLb2QP0
+   fb/x4VJMlIOWMKRNMZGwrc/qALAh4OsRHH0ZxCEi1yj2oxSmCAChs4MDQ
+   YxHYclH5OideTnjMDe2oGLKdqcYKU6pQzKlP2B+YpYEd+JQoOH0HKpdo6
+   DYRkkMMJfTiahoMpF8/dWUCv18oeSva+L3TmWVBjVKSIWEUXYARJuEoKP
+   gxSKH8a2t0Cvt059GVWK8l4JXVEVDJwoI+pk8XdEL5CRQ/4tpxCX7/0iJ
+   EcaEBQrxuJpReHaqRlZMwynWZ8tcqbUwCCE4WPk5xwjWXO93bs0hy4Id3
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="295576148"
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="295576148"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:30:35 -0700
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="815397629"
+Received: from djiang5-mobl1.amr.corp.intel.com (HELO [10.213.170.28]) ([10.213.170.28])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:30:35 -0700
+Message-ID: <2470523a-3508-e788-8407-d6142487b355@intel.com>
+Date:   Fri, 13 May 2022 07:30:35 -0700
 MIME-Version: 1.0
-References: <20220512163534.2572-1-vincent.guittot@linaro.org> <86066641739c4897b0001153e598a261@AcuMS.aculab.com>
-In-Reply-To: <86066641739c4897b0001153e598a261@AcuMS.aculab.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Fri, 13 May 2022 16:29:55 +0200
-Message-ID: <CAKfTPtDUCodxyyBmTsJ_jHPCxvBgGTALaMO8r3UvrBA6ZWks6w@mail.gmail.com>
-Subject: Re: [PATCH v2 0/7] Add latency_nice priority
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
-        "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "bsegall@google.com" <bsegall@google.com>,
-        "mgorman@suse.de" <mgorman@suse.de>,
-        "bristot@redhat.com" <bristot@redhat.com>,
-        "vschneid@redhat.com" <vschneid@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "parth@linux.ibm.com" <parth@linux.ibm.com>,
-        "qais.yousef@arm.com" <qais.yousef@arm.com>,
-        "chris.hyser@oracle.com" <chris.hyser@oracle.com>,
-        "valentin.schneider@arm.com" <valentin.schneider@arm.com>,
-        "patrick.bellasi@matbug.net" <patrick.bellasi@matbug.net>,
-        "pjt@google.com" <pjt@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "qperret@google.com" <qperret@google.com>,
-        "tim.c.chen@linux.intel.com" <tim.c.chen@linux.intel.com>,
-        "joshdon@google.com" <joshdon@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] dmaengine: idxd: Remove unnecessary synchronize_irq()
+ before free_irq()
+Content-Language: en-US
+To:     cgel.zte@gmail.com
+Cc:     vkoul@kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20220513081622.1631073-1-chi.minghao@zte.com.cn>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20220513081622.1631073-1-chi.minghao@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 May 2022 at 09:13, David Laight <David.Laight@aculab.com> wrote:
->
-> From: Vincent Guittot
-> > Sent: 12 May 2022 17:35
-> >
-> > This patchset restarts the work about adding a latency nice priority to
-> > describe the latency tolerance of cfs tasks.
-> >
-> > The patches [1-4] have been done by Parth:
-> > https://lore.kernel.org/lkml/20200228090755.22829-1-parth@linux.ibm.com/
-> >
-> > I have just rebased and moved the set of latency priority outside the
-> > priority update. I have removed the reviewed tag because the patches
-> > are 2 years old.
-> >
-> > The patches [5-7] use latency nice priority to decide if a cfs task can
-> > preempt the current running task. Patch 5 gives some tests results with
-> > cyclictests and hackbench to highlight the benefit of latency nice
-> > priority for short interactive task or long intensive tasks.
->
-> I'd have thought the best way to reduce latency would be to look
-> harder for an idle cpu before trying to preempt the current task.
 
-Although it's a good policy, this is not always true:
-- The wakeup latency of an idle CPU can be significant for deep idle
-state (several ms)
-- The cost of looking for an idle CPU can be higher than preempting
-current thread
+On 5/13/2022 1:16 AM, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+>
+> Calling synchronize_irq() right before free_irq() is quite useless. On one
+> hand the IRQ can easily fire again before free_irq() is entered, on the
+> other hand free_irq() itself calls synchronize_irq() internally (in a race
+> condition free way) before any state associated with the IRQ is freed.
+
+Fair enough. Thanks.
+
+Acked-by: Dave Jiang <dave.jiang@intel.com>
+
 
 >
-> By far the worst case latency for a cfs task is waking it from an
-> rt task.
-> AFAICT the cpu selection algorithm is something like:
-> 1) if the cpu it last ran on is idle, schedule it there.
-> 2) if one of a small subset of cpu is idle run it there.
-
-yes the LLC
-
-> 3) schedule on the current cpu after the rt thread exits.
-
-when prev and current cpu are differents, we start to select which one
-will be the starting point for looking for an idle cpu
-
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> ---
+>   drivers/dma/idxd/device.c | 1 -
+>   1 file changed, 1 deletion(-)
 >
-> Then there is the additional behaviour:
-> An rt thread (almost) always starts on the cpu it ran on last,
-> any running cfs thread is put on the q for that cpu.
-
-and might even have to wait for other cfs threads to run 1st which is
-where this patch want to improve in priority
-
+> diff --git a/drivers/dma/idxd/device.c b/drivers/dma/idxd/device.c
+> index 5363fb9218f2..9dd8e6bb21e6 100644
+> --- a/drivers/dma/idxd/device.c
+> +++ b/drivers/dma/idxd/device.c
+> @@ -1179,7 +1179,6 @@ void idxd_wq_free_irq(struct idxd_wq *wq)
+>   	struct idxd_device *idxd = wq->idxd;
+>   	struct idxd_irq_entry *ie = &wq->ie;
+>   
+> -	synchronize_irq(ie->vector);
+>   	free_irq(ie->vector, ie);
+>   	idxd_flush_pending_descs(ie);
+>   	if (idxd->request_int_handles)
+> --
+> 2.25.1
 >
-> This makes it very difficult to start a background cfs thread
-> from an active rt thread.
-> Quite often it won't migrate to an idle cpu until the timer
-> tick scheduler rebalance happens.
-
-so you are speaking about idle cpu out of the LLC
-But then, this cfs task should try to wakeup 1st on the new cpu and
-not on the RT one
-
->
-> I think the search for an idle cpu is also limited when woken
-> by a cfs thread.
->
->         David
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
 >

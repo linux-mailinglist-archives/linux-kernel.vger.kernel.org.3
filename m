@@ -2,80 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 811995261CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 14:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 186F65261D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 14:28:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380227AbiEMM1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 08:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36406 "EHLO
+        id S1380244AbiEMM2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 08:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232530AbiEMM04 (ORCPT
+        with ESMTP id S1354888AbiEMM23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 08:26:56 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3AA5BD2A
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 05:26:52 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id r1so15017888ybo.7
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 05:26:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=CNColVrvzT2paTadmJx7QmfVUH99VFUNC4FwQajaX30=;
-        b=fgZoCr+P0YLHIt9difJEkBctiHZD1TAZ4VGl1Wdxe0wL43HKeppNRKfFFjEBzHoTnK
-         X+MZTjD/NYV3m2WKlRYDIDK4kxl+KQpDnmBj/jy9Dg8Eik7KJSbnbSNAkWfJnCfPiYaE
-         YT6Ub7aOFoQlbMYGV3qFBVQlH3ltkUMH0gg9bamWReNzk4Od8Zs8ONqgWu+RAIgBcEVP
-         ip6TDNYvIzo1zGJJAY6MeVnFjQ01/JDpYdLjBMMmZ3R/2EQyGNHgHPllV7CXm9HiKljk
-         Fd9YqC1JwP3smDlGcgXwmG+aVIBPAw1mOzEQp7jeg7GdE9GId7CWZgnSCciUhAsAC/P3
-         6JpA==
+        Fri, 13 May 2022 08:28:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FD7E5BD2A
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 05:28:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652444907;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NAK0Gk2w3i58gSPmmVvLPauf3+gDSOWurZVw4Vf2rDQ=;
+        b=R7/5lG15vZs5wuZ7uyacVY3tVz+xl58Ix873Ps6Tx3GPAQ/UPW/n8POPgWdpCM98LFSFi6
+        pm9EbBfineHdwYJJlDMgY75uJ0TtV2UzRP1pORJntnNpIGd3+x3UdULq2CxyB8ixnGd2K3
+        eyc3HWvpQodeURxarlkzIPu7YwpTO6k=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-454-DU5eib6SPGyzDwU0V-3Y_w-1; Fri, 13 May 2022 08:28:26 -0400
+X-MC-Unique: DU5eib6SPGyzDwU0V-3Y_w-1
+Received: by mail-wr1-f71.google.com with SMTP id u26-20020adfb21a000000b0020ac48a9aa4so2895251wra.5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 05:28:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=CNColVrvzT2paTadmJx7QmfVUH99VFUNC4FwQajaX30=;
-        b=AxoPb+kKK2Bnv2wXnUHuslAjiaIZxPTj7VN5DZW3yX7IdaVuntoPo1amv9iYhygon2
-         OX5WBHvr7lgWnyjKBGoe6DL9sIDZiHIncenEt0s5si4kNuf4uxrW2YjDaEomOeSdIWJV
-         i+oGILr0YBm22oQQmjH7uVKk7WuGhr1VILiz6B0tAiFg2JVwNw1fh6fo2EbJjDamexAp
-         0wcfdkteqxq47gp4bA3bsgT1gTiG3YFpmY84Jbl57r0NYAEFLInrsJIT2ujQHS3LitxE
-         zVPQcyBcx+hwkExc7m24zGJJI7gMI60mSxNFfdomt7H/tFK1wlkti58MJxyLu0zWMsd2
-         gmAA==
-X-Gm-Message-State: AOAM532545KCnkRQoooiurMFSSuzCQAqHOCk/hvJKdGle0vCDrpYb3tH
-        0hXZYli0aJKZVJudRwloS6qlPI/mWGvUHy+vJE05qg==
-X-Google-Smtp-Source: ABdhPJxoTL2jX3zw7FK7Qs22T64RPExXJjGiprH1kOuNLfotTjSS/RWHWRl6vMXtyRXLS4ogUW95JldzIV+mEZZTr6o=
-X-Received: by 2002:a25:8706:0:b0:64b:4657:d2e1 with SMTP id
- a6-20020a258706000000b0064b4657d2e1mr4492719ybl.147.1652444811517; Fri, 13
- May 2022 05:26:51 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=NAK0Gk2w3i58gSPmmVvLPauf3+gDSOWurZVw4Vf2rDQ=;
+        b=rQN4z7paEn64qDNE7iWkxGNAWx1ymdXSZodonNHk92+WZCdekDNazcDTusnK28l84/
+         gmm0Q5qpseTs5Dk6al/qRgKTq1kYxGchtQcn4Fkud6mS8gmCqF2+NSxHIkf/oV+OEXSf
+         ezS+TcSv6t8P1eeKyAGuxqT4M9Bl8kN8mFI2rrMIdlmtikMGO1jYlQ2bhvyR7nIk6SH4
+         DFFBKjY0vtHlHXeApMY1yl8MLCevRCcyL7QTN5ZNjXJC6Hxgzi0JOfK7Y1Y8jE8qSJXY
+         zI+cu5AnSMVA99/+iVV4DU+LOhsZlaixXmAME1XF5CMdG1x0Asp3Ow6zhHa9cO7szsrv
+         McAQ==
+X-Gm-Message-State: AOAM530lP9QAg/mRG2O8qVBIwePJvl2hqRD0OisLlgu7vrpbtauqhA9p
+        BKBOeIry86GXcKQAcp9u2kTMfXL4opK1lVEKn5K9k/1TnYtEXxAlbPOyf6kVawTVWPc9LDvTJ2h
+        x8PcjxbPJnQ3sslUSjQb8hwdEWu8b5zqAK8XV4HKiqddxyhTDKtm4TNsRvAKymAhN+sOYDHpI1F
+        A=
+X-Received: by 2002:a05:6000:156b:b0:20c:6ffb:9588 with SMTP id 11-20020a056000156b00b0020c6ffb9588mr3865398wrz.49.1652444905007;
+        Fri, 13 May 2022 05:28:25 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwwLT41J/yG1HkvUQOhV5KnK8fNGtzGb6CsJVszlDX5dbsHh8Cxbhd7a4okhWnFPei5mAdPOg==
+X-Received: by 2002:a05:6000:156b:b0:20c:6ffb:9588 with SMTP id 11-20020a056000156b00b0020c6ffb9588mr3865368wrz.49.1652444904693;
+        Fri, 13 May 2022 05:28:24 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id bd19-20020a05600c1f1300b00395f15d993fsm1637910wmb.5.2022.05.13.05.28.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 05:28:24 -0700 (PDT)
+Message-ID: <41e91473-bd0b-c0e4-85db-d92dd38d28bd@redhat.com>
+Date:   Fri, 13 May 2022 14:28:23 +0200
 MIME-Version: 1.0
-References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
- <20220511064943.GR76023@worktop.programming.kicks-ass.net>
- <20bada85-9203-57f4-2502-57a6fd11f3ea@intel.com> <875ymav8ul.ffs@tglx>
- <55176b79-90af-4a47-dc06-9f5f2f2c123d@intel.com> <CAG_fn=URUve59ZPWRawW+BN-bUy7U3QmFsfOz_7L8ndsL4kQFQ@mail.gmail.com>
- <8a47d0ee50b44520a6f26177e6fe7ec5@AcuMS.aculab.com>
-In-Reply-To: <8a47d0ee50b44520a6f26177e6fe7ec5@AcuMS.aculab.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Fri, 13 May 2022 14:26:15 +0200
-Message-ID: <CAG_fn=XUqzBWzuU0cmjUoSfHTv6pN=LCqGh7Ns8kgR6L169bPw@mail.gmail.com>
-Subject: Re: [RFCv2 00/10] Linear Address Masking enabling
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v5 3/7] fbdev: Restart conflicting fb removal loop when
+ unregistering devices
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Helge Deller <deller@gmx.de>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20220511112438.1251024-1-javierm@redhat.com>
+ <20220511113039.1252432-1-javierm@redhat.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20220511113039.1252432-1-javierm@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,67 +87,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 1:28 PM David Laight <David.Laight@aculab.com> wrot=
-e:
->
-> ...
-> > Once we have the possibility to store tags in the pointers, we don't
-> > need redzones for heap/stack objects anymore, which saves quite a bit
-> > of memory.
->
-> You still need redzones.
-> The high bits are ignored for actual memory accesses.
->
-> To do otherwise you'd need the high bits to be in the PTE,
-> copied to the TLB and finally get into the cache tag.
->
-> Then you'd have to use the correct tags for each page.
+On 5/11/22 13:30, Javier Martinez Canillas wrote:
+> Drivers that want to remove registered conflicting framebuffers prior to
+> register their own framebuffer, calls remove_conflicting_framebuffers().
+> 
+> This function takes the registration_lock mutex, to prevent a races when
+> drivers register framebuffer devices. But if a conflicting framebuffer
+> device is found, the underlaying platform device is unregistered and this
+> will lead to the platform driver .remove callback to be called, which in
+> turn will call to the unregister_framebuffer() that takes the same lock.
+> 
+> To prevent this, a struct fb_info.forced_out field was used as indication
+> to unregister_framebuffer() whether the mutex has to be grabbed or not.
+> 
+> A cleaner solution is to drop the lock before platform_device_unregister()
+> so unregister_framebuffer() can take it when called from the fbdev driver,
+> and just grab the lock again after the device has been registered and do
+> a removal loop restart.
+> 
+> Since the framebuffer devices will already be removed, the loop would just
+> finish when no more conflicting framebuffers are found.
+> 
+> Suggested-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+> ---
+Pushed this to drm-misc (drm-misc-next). Thanks all!
 
-Sorry, I don't understand how this is relevant to HWASan in the userspace.
-Like in ASan, we have a custom allocator that assigns tags to heap
-objects. The assigned tag is stored in both the shadow memory for the
-object and the pointer returned by the allocator.
-Instrumentation inserted by the compiler checks the pointer before
-every memory access and ensures that its tag matches the tag of the
-object in the shadow memory.
-A tag mismatch is reported as an out-of-bounds or a use-after-free,
-depending on whether the accessed memory is still considered
-allocated.
-Because objects with different tags follow each other, there is no
-need to add extra redzones to the objects to detect buffer overflows.
-(We might need to increase the object alignment though, but that's a
-different story).
+-- 
+Best regards,
 
->
->         David
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
- 1PT, UK
-> Registration No: 1397386 (Wales)
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 
-
-
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
-
-Diese E-Mail ist vertraulich. Falls Sie diese f=C3=A4lschlicherweise
-erhalten haben sollten, leiten Sie diese bitte nicht an jemand anderes
-weiter, l=C3=B6schen Sie alle Kopien und Anh=C3=A4nge davon und lassen Sie =
-mich
-bitte wissen, dass die E-Mail an die falsche Person gesendet wurde.
-
-
-This e-mail is confidential. If you received this communication by
-mistake, please don't forward it to anyone else, please erase all
-copies and attachments, and please let me know that it has gone to the
-wrong person.

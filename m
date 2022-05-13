@@ -2,201 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A9D52665E
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7CF526663
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:42:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382161AbiEMPmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 11:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59216 "EHLO
+        id S1382182AbiEMPmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 11:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234876AbiEMPmH (ORCPT
+        with ESMTP id S234876AbiEMPm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 11:42:07 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C25BE21
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:42:06 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id i19so16970163eja.11
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:42:06 -0700 (PDT)
+        Fri, 13 May 2022 11:42:29 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D849F3121C
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:42:18 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id t6so11975026wra.4
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:42:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=BOG74POVeYOfQY9afdarMF3mc0mDpcOp33/SYa9z2g4=;
-        b=UvtK+9uXFFbJiEIXAG4TxrUr8xm6F/cK4VWAl7OwyGrIi1ROBFy+N+sMHRhWqU/+0l
-         yF+0TlTr+37pRHCV1GZfzzUwxINR5QbfWpRTmdts4Wgy8shHcK9FbhtJ1RzR3iVucSL0
-         n6V8aw+UkKpK9BTfh8StIyAROhsejouLG5tZtjr+OfJC9lJXuNnR/5b/tL15D5ILZ3rx
-         DpOj28rwvrg5UAm22hgOu9DkHyY2Pg+P52OccmCs7q5rEOepc/VC8jGSliAbWwRkXvSB
-         LyY3ZVscMyXr0i8VCorGvS1ygKBxlEjWNE4pws1Cex+q8oq3Fg6Z2wQJjX/dGzKEQIKk
-         B+ug==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=v5/uoQI8/5f91IWn7HyX+VbvfqchZrWzzvoEosENEnw=;
+        b=TMh1gbWYvFcu4PyqxycGL+5ZJihf+935oScy1aDp44PO6uDK/f1Mcbp8ELoJO5Q+2z
+         NO/bvDwGsdVCEl3u8pioB/pVA/sZIoVbSwmZD/PQ2Z/Nov73hYo4/irGTpE26R+kJY/e
+         6sNnSTAIGfmCuaqwkyGAKf969LrASgS+BUXts1SUyh4TYdWscvLAS9iNChlMyYm3ZYmO
+         S7dQL3Qnhhb/Jk/eABywE17OMn7/mRXAdKwJ6Fnh2IetHkCSBTnsanXGTfjbhbYtpwBS
+         yFZ13bcNTCWq/lg5sxvMUnHmf7h5B9qKFcX0ZbA9EUOhbOvHTEDWsy95cMJWzSzEgt79
+         PEMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=BOG74POVeYOfQY9afdarMF3mc0mDpcOp33/SYa9z2g4=;
-        b=oxPP3Q+zIUN00saHNQolQ7O2U4cWMpr8kSO5DjZlEb/hYPK8SCAwoM9yQTEIrbmrYc
-         1PyUbHcyikXbyP07jteVJFPKO5wdDVYsRdcdMVSR2yphrdK6NKd/yXnPGXawaMEdO6ai
-         pgMeWlciznNYM4RBuNe4fwOkrYMDFlOQRxFp9xWYncFT6nIkUnM/5CdWYtG8JmO8vu0g
-         mxLzI2tiK9+K2LH17df3cZRRKGdP25wiUQLQcqsPabrUUQo/ys07qxDwvaeeR0ZeNIQd
-         abY5ul55S4NoDEhqarObIpTKHC1/l1p48wwWV8z4XhlCwEJo+a1UemqgNKIQZdPuvTYV
-         bZeQ==
-X-Gm-Message-State: AOAM532hGmPyEosK+9ru4bqULcXbNbvRQmuu7rkv0WBzyTNCMsagmMic
-        WWqUj+E7YrAJtLQTsqUqoj0=
-X-Google-Smtp-Source: ABdhPJxAwjcDm4BtYfBQSGIif62BWIgQHDEoMLu0Ig7Opo7ZT8E5W9XSJ198+zmltv+r4FP2nkilfQ==
-X-Received: by 2002:a17:906:4884:b0:6f3:a042:c1c6 with SMTP id v4-20020a170906488400b006f3a042c1c6mr4706002ejq.363.1652456523354;
-        Fri, 13 May 2022 08:42:03 -0700 (PDT)
-Received: from octofox.metropolis ([178.134.103.46])
-        by smtp.gmail.com with ESMTPSA id h16-20020a1709066d9000b006f3ef214e73sm848313ejt.217.2022.05.13.08.42.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 08:42:03 -0700 (PDT)
-From:   Max Filippov <jcmvbkbc@gmail.com>
-To:     linux-xtensa@linux-xtensa.org
-Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
-        Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH 2/2] xtensa: support artificial division by 0 exception
-Date:   Fri, 13 May 2022 08:41:51 -0700
-Message-Id: <20220513154151.4135905-3-jcmvbkbc@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220513154151.4135905-1-jcmvbkbc@gmail.com>
-References: <20220513154151.4135905-1-jcmvbkbc@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=v5/uoQI8/5f91IWn7HyX+VbvfqchZrWzzvoEosENEnw=;
+        b=g4glcm17cFn1nu3cxkvS4nsUSp9uMP+eiZ7AlRnijLeMWZTrI5XyB95/hXhPtvamTZ
+         BzLHIiIcHqh2yWeM9EOmpFxBrEC8K2y+U3o8HP3NC3K4YYekXY97jRwh5oU9eJY1pOdU
+         KxybeVn+HPJHvUUe0RE2kJ1dqCPIrYvCFGRouy9l0cnb6j5CHlUMe2zt2iXPx8tXxaRl
+         XJnkC35D2QRR52qYbT4cmXsytUp/a3c6C3HPgPcGovmVJSntLByMhUHjCZxbAseXKX4b
+         XFAEIey5ZUgEUReb/BM9SACheD4XQtRMJznHdWr6o1o7XfqkspKkLlelthibM9Fd2LFC
+         J2Jg==
+X-Gm-Message-State: AOAM532KajRMIMRUkoyHeXf0D1AluK1BK35QSilse37rpH70hWDqD0Eg
+        dlSw5kLfNwa02aYQbsjx9sigjGM1Dc5GQeoCNcBS4g==
+X-Google-Smtp-Source: ABdhPJzszfA1XvQWtTBZcFgsXr9ZUTHASL4KfmRbzxaiIZmS0P3iO9wEA7gsX7fBDbKX/UcnyuA06xQ129+Br36Q9+w=
+X-Received: by 2002:adf:dd0e:0:b0:20a:c689:f44a with SMTP id
+ a14-20020adfdd0e000000b0020ac689f44amr4538143wrm.40.1652456537266; Fri, 13
+ May 2022 08:42:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220513040519.1499333-1-irogers@google.com> <20220513040519.1499333-2-irogers@google.com>
+ <6341384c-b3e6-fbe5-f29f-e0db114bd439@huawei.com>
+In-Reply-To: <6341384c-b3e6-fbe5-f29f-e0db114bd439@huawei.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Fri, 13 May 2022 08:42:04 -0700
+Message-ID: <CAP-5=fX+PfnyHRc=-sQMo1_mGLzCJ77pSfzXXHVUEOHtVFGwxA@mail.gmail.com>
+Subject: Re: [PATCH 1/7] perf test: Skip reason for suites with 1 test
+To:     John Garry <john.garry@huawei.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
+        Carsten Haitzler <carsten.haitzler@arm.com>,
+        Marco Elver <elver@google.com>,
+        Michael Petlan <mpetlan@redhat.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On xtensa cores wihout hardware division option division support
-functions from libgcc react to division by 0 attempt by executing
-illegal instruction followed by the characters 'DIV0'. Recognize this
-pattern in illegal instruction exception handler and convert it to
-division by 0.
-When call0 userspace ABI support by probing is enabled instructions that
-cause illegal instruction exception when PS.WOE is clear are retried
-with PS.WOE set before calling c-level exception handler. Record user pc
-where PS.WOE was set in the fast exception handler and clear PS.WOE in
-the c-level exception handler if it was due to artificial division by 0.
+On Fri, May 13, 2022 at 8:29 AM John Garry <john.garry@huawei.com> wrote:
+>
+> On 13/05/2022 05:05, Ian Rogers wrote:
+> > When a suite has just 1 subtest, the subtest number is given as -1 to
+> > avoid indented printing. When this subtest number is seen for the skip
+> > reason, use the reason of the first test.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >   tools/perf/tests/builtin-test.c | 6 +++---
+> >   1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
+> > index fac3717d9ba1..33fcafa0fa79 100644
+> > --- a/tools/perf/tests/builtin-test.c
+> > +++ b/tools/perf/tests/builtin-test.c
+> > @@ -137,10 +137,10 @@ static bool has_subtests(const struct test_suite *t)
+> >
+> >   static const char *skip_reason(const struct test_suite *t, int subtest)
+> >   {
+> > -     if (t->test_cases && subtest >= 0)
+> > -             return t->test_cases[subtest].skip_reason;
+> > +     if (!t->test_cases)
+> > +             return NULL;
+> >
+> > -     return NULL;
+> > +     return t->test_cases[subtest >= 0 ? subtest : 0].skip_reason;
+> >   }
+>
+> I was not sure which suite has a single tastcase, so I experimented for
+> libpfm4 by deleting a testcase so it has only 1x remaining, I get:
+>
+> before your change:
+> john@localhost:~/acme/tools/perf> sudo ./perf test 63
+> 63: Test libpfm4 support : Skip
+>
+> after:
+>
+> john@localhost:~/acme/tools/perf> sudo ./perf test 63
+> 63: Test libpfm4 support : Skip (not compiled in)
+>
+> Although it is odd to have a single sub-test, is there a reason for
+> which we don't print its name? We print the name when there are multiple
+> sub-tests.
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- arch/xtensa/include/asm/thread_info.h |  4 +++
- arch/xtensa/kernel/asm-offsets.c      |  3 ++
- arch/xtensa/kernel/entry.S            |  5 +++
- arch/xtensa/kernel/traps.c            | 45 +++++++++++++++++++++++++++
- 4 files changed, 57 insertions(+)
+The reason was to replicate the existing "perf test" behavior before
+the kunit style transition. The main place we get tests with a single
+sub-test is from the DEFINE_SUITE macro:
+https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/tests/tests.h?h=perf/core#n67
+I agree it looks kind of weird and was inheriting the data structures
+from kunit and the format of the output from perf test.
 
-diff --git a/arch/xtensa/include/asm/thread_info.h b/arch/xtensa/include/asm/thread_info.h
-index 52974317a6b6..326db1c1d5d8 100644
---- a/arch/xtensa/include/asm/thread_info.h
-+++ b/arch/xtensa/include/asm/thread_info.h
-@@ -56,6 +56,10 @@ struct thread_info {
- 	/* result of the most recent exclusive store */
- 	unsigned long		atomctl8;
- #endif
-+#ifdef CONFIG_USER_ABI_CALL0_PROBE
-+	/* Address where PS.WOE was enabled by the ABI probing code */
-+	unsigned long		ps_woe_fix_addr;
-+#endif
- 
- 	/*
- 	 * If i-th bit is set then coprocessor state is loaded into the
-diff --git a/arch/xtensa/kernel/asm-offsets.c b/arch/xtensa/kernel/asm-offsets.c
-index 9a1db6ffcbf4..da38de20ae59 100644
---- a/arch/xtensa/kernel/asm-offsets.c
-+++ b/arch/xtensa/kernel/asm-offsets.c
-@@ -88,6 +88,9 @@ int main(void)
- 	OFFSET(TI_STSTUS, thread_info, status);
- 	OFFSET(TI_CPU, thread_info, cpu);
- 	OFFSET(TI_PRE_COUNT, thread_info, preempt_count);
-+#ifdef CONFIG_USER_ABI_CALL0_PROBE
-+	OFFSET(TI_PS_WOE_FIX_ADDR, thread_info, ps_woe_fix_addr);
-+#endif
- 
- 	/* struct thread_info (offset from start_struct) */
- 	DEFINE(THREAD_RA, offsetof (struct task_struct, thread.ra));
-diff --git a/arch/xtensa/kernel/entry.S b/arch/xtensa/kernel/entry.S
-index 3224b4ceca34..e3eae648ba2e 100644
---- a/arch/xtensa/kernel/entry.S
-+++ b/arch/xtensa/kernel/entry.S
-@@ -1056,6 +1056,11 @@ ENTRY(fast_illegal_instruction_user)
- 	movi	a3, PS_WOE_MASK
- 	or	a0, a0, a3
- 	wsr	a0, ps
-+#ifdef CONFIG_USER_ABI_CALL0_PROBE
-+	GET_THREAD_INFO(a3, a2)
-+	rsr	a0, epc1
-+	s32i	a0, a3, TI_PS_WOE_FIX_ADDR
-+#endif
- 	l32i	a3, a2, PT_AREG3
- 	l32i	a0, a2, PT_AREG0
- 	rsr	a2, depc
-diff --git a/arch/xtensa/kernel/traps.c b/arch/xtensa/kernel/traps.c
-index 7c7c4c7b33bb..d45dfa10be73 100644
---- a/arch/xtensa/kernel/traps.c
-+++ b/arch/xtensa/kernel/traps.c
-@@ -293,12 +293,57 @@ static void do_interrupt(struct pt_regs *regs)
- 	set_irq_regs(old_regs);
- }
- 
-+static int check_div0(struct pt_regs *regs)
-+{
-+#if !XCHAL_HAVE_DIV32
-+	u8 buf[7];
-+	void *p;
-+	static const u8 pattern1[] = {0, 0, 0, 'D', 'I', 'V', '0'};
-+#if defined(__XTENSA_EB__)
-+	static const u8 pattern2[] = {0xd6, 0x0f, 'D', 'I', 'V', '0'};
-+#elif defined(__XTENSA_EL__)
-+	static const u8 pattern2[] = {0x6d, 0xf0, 'D', 'I', 'V', '0'};
-+#else
-+#error Unsupported Xtensa endianness
-+#endif
-+
-+	if (user_mode(regs)) {
-+		if (copy_from_user(buf, (void __user *)regs->pc, 7))
-+			return 0;
-+		p = buf;
-+	} else {
-+		p = (void *)regs->pc;
-+	}
-+
-+	return memcmp(p, pattern1, sizeof(pattern1)) == 0 ||
-+		memcmp(p, pattern2, sizeof(pattern2)) == 0;
-+#else
-+	return 0;
-+#endif
-+}
-+
- /*
-  * Illegal instruction. Fatal if in kernel space.
-  */
- 
- static void do_illegal_instruction(struct pt_regs *regs)
- {
-+	if (check_div0(regs)) {
-+#ifdef CONFIG_USER_ABI_CALL0_PROBE
-+		/*
-+		 * When call0 application generates artificial division by 0
-+		 * exception fast illegal instruction exception handler will
-+		 * attempt to set PS.WOE and retry failing instruction.
-+		 * We know that that illegal instruction was not related to
-+		 * windowed option so we clear PS.WOE here.
-+		 */
-+		if (regs->pc == current_thread_info()->ps_woe_fix_addr)
-+			regs->ps &= ~PS_WOE_MASK;
-+#endif
-+		do_div0(regs);
-+		return;
-+	}
-+
- 	__die_if_kernel("Illegal instruction in kernel", regs, SIGKILL);
- 
- 	/* If in user mode, send SIGILL signal to current process. */
--- 
-2.30.2
+Thanks,
+Ian
 
+> Thanks,
+> John

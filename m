@@ -2,160 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE4C2525C79
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:44:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D28B9525C9C
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbiEMHm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 03:42:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39238 "EHLO
+        id S1377924AbiEMHvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 03:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351043AbiEMHmk (ORCPT
+        with ESMTP id S1377910AbiEMHvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 03:42:40 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486F45DE7B;
-        Fri, 13 May 2022 00:42:39 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id w4so10213683wrg.12;
-        Fri, 13 May 2022 00:42:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=h4Eoh4lUanKYZL6m5WR756e9/uQNhRUTKgBep3AgcuQ=;
-        b=OogmQrJbyJkdkJDDl0/KVR6lUqZEjYU6qz49Nd7B50AXo1s3Y3Ogp48dsrFTRT54lB
-         Jvmh6yAJui5uS6wKlEoMFwli7jhmuAOaBwB2Osmu0J5OS76JN580XKcwsbjdzS1Q4AMq
-         1Gv/m9z+3ogePGRnEelhXr6BD3XlyU7DjFRU7Mm2ZzIvky5mXWcZFIyglTEUHB7wZQNS
-         gf8UZY+xlp2VmontV7mWk3qm/SnxQQmWmlKzbx8YEkO5a3/g65SY4cCIE3Spvz5VsSSp
-         vy++TZhpgNaShJNffmWSgbtS6mFkEgGUoqXcWmQPfqCwUznvgpQMK7ZvlPTuVIZDbGGD
-         e04g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=h4Eoh4lUanKYZL6m5WR756e9/uQNhRUTKgBep3AgcuQ=;
-        b=7LkGYbjlnQyVKVj2qqScGuSs8gheDi2Z+nZei4ar7n70t1nGfiy1vE8iNrlnuyXGvU
-         hUKBYlbIM+kU5Zy5iXX4Ieletj47BPQeynoMd4Rk10nse48mrvFZ4G4bBXS3EejiKMA7
-         Wa3cmlhiroFhexgkqPEuLnLXspnh2WeteavZg2i3Pg9W8evyaUe1RK3z7r0PDEut1xLS
-         3pICbvl7SROkNz38neRCavRZDJa3t0P7u8o4vLPo2MPo/bowGEaDVe5k46AiP5jzBQlY
-         1i3FZNoAUGRVRtn2aVOXtgyQIduRb8eAhgW3iiguU3jsH2TRiDD6x0vxRT/vaOomLhbY
-         IcdQ==
-X-Gm-Message-State: AOAM5304oqViGKb2FA5pyn6qY32cO/V2QP+j68PT/Smdk0njiG1VxuYw
-        Uc+0TlNQ9VNc+6+WX47alpkpbW7DiEWyLA==
-X-Google-Smtp-Source: ABdhPJwwCL/Pxk8fkx+VxRZaxLIQFVPV/lfg/6rnAxvVEHihbxXjNAETy7pfrcZgSH4t7ZBGhpeDVQ==
-X-Received: by 2002:a05:6000:18a4:b0:20c:5603:c0bf with SMTP id b4-20020a05600018a400b0020c5603c0bfmr2695184wri.145.1652427757703;
-        Fri, 13 May 2022 00:42:37 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id t1-20020adfa2c1000000b0020c5253d8d2sm1462382wra.30.2022.05.13.00.42.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 00:42:36 -0700 (PDT)
-Message-ID: <623fb170-b59a-84a0-3826-4b78968924bc@gmail.com>
-Date:   Fri, 13 May 2022 09:42:34 +0200
+        Fri, 13 May 2022 03:51:04 -0400
+Received: from mx1.cqplus1.com (unknown [113.204.237.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A77136401
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 00:50:41 -0700 (PDT)
+X-MailGates: (flag:1,DYNAMIC,RELAY,NOHOST,LAN:PASS)(compute_score:DELIVE
+        R,40,3)
+Received: from 172.27.96.203
+        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(7682:0:AUTH_RELAY)
+        (envelope-from <qinjian@cqplus1.com>); Fri, 13 May 2022 15:44:27 +0800 (CST)
+Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
+ CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.6; Fri, 13 May 2022 15:44:24 +0800
+Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
+ ([::1]) with mapi id 15.01.2507.006; Fri, 13 May 2022 15:44:24 +0800
+From:   =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
+Subject: RE: [PATCH v15 10/10] ARM: dts: Add Sunplus SP7021-Demo-V3 board
+ device tree
+Thread-Topic: [PATCH v15 10/10] ARM: dts: Add Sunplus SP7021-Demo-V3 board
+ device tree
+Thread-Index: AQHYZcsUOdNmnhD0gkKqn75ry15Nq60ahDUAgAHng+A=
+Date:   Fri, 13 May 2022 07:44:24 +0000
+Message-ID: <3a01fe9aa860407694ee77133459a9ab@cqplus1.com>
+References: <cover.1652329411.git.qinjian@cqplus1.com>
+ <daeccdfb9655e549656af0af955a4697871e3ab0.1652329411.git.qinjian@cqplus1.com>
+ <32c80a79-abd5-3fd2-cbb4-e2ae93c539da@linaro.org>
+In-Reply-To: <32c80a79-abd5-3fd2-cbb4-e2ae93c539da@linaro.org>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.28.110.18]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v20 8/8] soc: mediatek: remove DDP_DOMPONENT_DITHER from
- enum
-Content-Language: en-US
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     "jason-jh.lin" <jason-jh.lin@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        CK Hu <ck.hu@mediatek.com>, Nancy Lin <nancy.lin@mediatek.com>,
-        Singo Chang <singo.chang@mediatek.com>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-References: <20220419094143.9561-1-jason-jh.lin@mediatek.com>
- <20220419094143.9561-9-jason-jh.lin@mediatek.com>
- <402f0e60-8d3c-850d-84ff-af5424b72b73@gmail.com>
- <CAAOTY_-jiX_BhaZ5+skRu4RSZLjcHJerVtwH34fz4N6_jbVK0w@mail.gmail.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <CAAOTY_-jiX_BhaZ5+skRu4RSZLjcHJerVtwH34fz4N6_jbVK0w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chun-Kuang,
-
-On 02/05/2022 00:54, Chun-Kuang Hu wrote:
-> Hi, Matthias:
-> 
-> Matthias Brugger <matthias.bgg@gmail.com> 於 2022年4月22日 週五 下午8:42寫道：
->>
->>
->>
->> On 19/04/2022 11:41, jason-jh.lin wrote:
->>> After mmsys and drm change DITHER enum to DDP_COMPONENT_DITHER0,
->>> mmsys header can remove the useless DDP_COMPONENT_DITHER enum.
->>>
->>> Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
->>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->>
->> Acked-by: Matthias Brugger <matthias.bgg@gmail.com>
->>
->> Chun-Kuang, I think it would make sense to take that through your tree as it
->> depends on the previous patches.
->>
->> I provide you a stable tag so that you can take it:
->> v5.18-next-vdso0-stable-tag
-> 
-> After I take this tag, I find one checkpatch warning:
-> 
-> WARNING: DT compatible string "mediatek,mt8195-mmsys" appears
-> un-documented -- check ./Documentation/devicetree/bindings/
-> #670: FILE: drivers/soc/mediatek/mtk-mmsys.c:390:
-> +               .compatible = "mediatek,mt8195-mmsys",
-> 
-> I think this tag lost one binding patch, it's better that this tag has
-> no this warning.
-> 
-
-Sorry for the late reply I was sick.
-The warning is, because the stable branch misses commit:
-https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.18-next/soc&id=81c5a41d10b968ea89d5f44fe1e5c2fc70289209
-
-So it's not a real issue and will go away once our branches land in upstream.
-Is it OK for you to ignore the issue?
-
-Regards,
-Matthias
-
-> Regards,
-> Chun-Kuang.
-> 
->>
->> Regards,
->> Matthias
->>
->>> ---
->>>    include/linux/soc/mediatek/mtk-mmsys.h | 3 +--
->>>    1 file changed, 1 insertion(+), 2 deletions(-)
->>>
->>> diff --git a/include/linux/soc/mediatek/mtk-mmsys.h b/include/linux/soc/mediatek/mtk-mmsys.h
->>> index 59117d970daf..fb719fd1281c 100644
->>> --- a/include/linux/soc/mediatek/mtk-mmsys.h
->>> +++ b/include/linux/soc/mediatek/mtk-mmsys.h
->>> @@ -16,8 +16,7 @@ enum mtk_ddp_comp_id {
->>>        DDP_COMPONENT_CCORR,
->>>        DDP_COMPONENT_COLOR0,
->>>        DDP_COMPONENT_COLOR1,
->>> -     DDP_COMPONENT_DITHER,
->>> -     DDP_COMPONENT_DITHER0 = DDP_COMPONENT_DITHER,
->>> +     DDP_COMPONENT_DITHER0,
->>>        DDP_COMPONENT_DITHER1,
->>>        DDP_COMPONENT_DP_INTF0,
->>>        DDP_COMPONENT_DP_INTF1,
+PiA+IGRpZmYgLS1naXQgYS9hcmNoL2FybS9ib290L2R0cy9zdW5wbHVzLXNwNzAyMS1hY2hpcC5k
+dHNpIGIvYXJjaC9hcm0vYm9vdC9kdHMvc3VucGx1cy1zcDcwMjEtYWNoaXAuZHRzaQ0KPiA+IG5l
+dyBmaWxlIG1vZGUgMTAwNjQ0DQo+ID4gaW5kZXggMDAwMDAwMDAwLi4xNTYwYzk1ZDkNCj4gPiAt
+LS0gL2Rldi9udWxsDQo+ID4gKysrIGIvYXJjaC9hcm0vYm9vdC9kdHMvc3VucGx1cy1zcDcwMjEt
+YWNoaXAuZHRzaQ0KPiA+IEBAIC0wLDAgKzEsODUgQEANCj4gPiArLy8gU1BEWC1MaWNlbnNlLUlk
+ZW50aWZpZXI6IEdQTC0yLjANCj4gPiArLyoNCj4gPiArICogRGV2aWNlIFRyZWUgU291cmNlIGZv
+ciBTdW5wbHVzIFNQNzAyMQ0KPiA+ICsgKg0KPiA+ICsgKiBDb3B5cmlnaHQgKEMpIDIwMjEgU3Vu
+cGx1cyBUZWNobm9sb2d5IENvLg0KPiA+ICsgKi8NCj4gPiArDQo+ID4gKyNpbmNsdWRlICJzdW5w
+bHVzLXNwNzAyMS5kdHNpIg0KPiA+ICsNCj4gPiArLyB7DQo+ID4gKwljb21wYXRpYmxlID0gInN1
+bnBsdXMsc3A3MDIxLWFjaGlwIjsNCj4gDQo+IFRoaXMgZG9lcyBub3QgbWF0Y2ggeW91ciBiaW5k
+aW5ncy4NCj4gDQoNCj4gPiArKysgYi9hcmNoL2FybS9ib290L2R0cy9zdW5wbHVzLXNwNzAyMS1k
+ZW1vLXYzLmR0cw0KPiA+IEBAIC0wLDAgKzEsMjcgQEANCj4gPiArLy8gU1BEWC1MaWNlbnNlLUlk
+ZW50aWZpZXI6IEdQTC0yLjANCj4gPiArLyoNCj4gPiArICogRGV2aWNlIFRyZWUgU291cmNlIGZv
+ciBTdW5wbHVzIFNQNzAyMSBEZW1vIFYzIFNCQyBib2FyZA0KPiA+ICsgKg0KPiA+ICsgKiBDb3B5
+cmlnaHQgKEMpIFN1bnBsdXMgVGVjaG5vbG9neSBDby4NCj4gPiArICovDQo+ID4gKw0KPiA+ICsv
+ZHRzLXYxLzsNCj4gPiArDQo+ID4gKyNpbmNsdWRlICJzdW5wbHVzLXNwNzAyMS1hY2hpcC5kdHNp
+Ig0KPiA+ICsNCj4gPiArLyB7DQo+ID4gKwljb21wYXRpYmxlID0gInN1bnBsdXMsc3A3MDIxLWRl
+bW8tdjMiOw0KPiANCj4gVGhpcyBkb2VzIG5vdCBtYXRjaCB5b3VyIGJpbmRpbmdzLg0KPiANCj4g
+UGxlYXNlIHJ1biBtYWtlIGR0YnNfY2hlY2suDQoNCkkgZGlkIHBhc3NlZCB0aGUgbWFrZSBkdGJz
+X2NoZWNrLg0KY29tcGF0aWJsZSBzdHJpbmc6ICJzdW5wbHVzLHNwNzAyMSIsICJzdW5wbHVzLHNw
+NzAyMS1hY2hpcCIsICJzdW5wbHVzLHNwNzAyMS1kZW1vLXYzIg0KYWxsIGRlZmluZWQgQCBEb2N1
+bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvYXJtL3N1bnBsdXMsc3A3MDIxLnlhbWwgWzFd
+DQoNClsxXSBodHRwczovL2xvcmUua2VybmVsLm9yZy9sa21sLzYxMDdhNjgwMDhmMmQ3MWQyYzc4
+NjhkNGQ5NGNiNjZjNWI1ZmMxMzQuMTY1MjMyOTQxMS5naXQucWluamlhbkBjcXBsdXMxLmNvbS8N
+CiANCg0K

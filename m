@@ -2,130 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D9F525EF7
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D16A525F1B
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379032AbiEMJ2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 05:28:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
+        id S1354119AbiEMJ1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 05:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379089AbiEMJ0V (ORCPT
+        with ESMTP id S1379063AbiEMJ1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 05:26:21 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3D415721;
-        Fri, 13 May 2022 02:26:16 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id q4so7379103plr.11;
-        Fri, 13 May 2022 02:26:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=4Fl9YRg3lybj0A+SLC/IEMp8cNpVOztdbgPj51TjJ/Q=;
-        b=XWsCnrQq+wuM/Qpf4MrQ49slj4Eh/XVkfg106+runlYDDvdUOq9/6T+3Gf6w1v+Vr9
-         D6wT5wYqzsvJUvvieqzuvt8Tenuhr483rOXsYHlZS33c6+V9Z2JrLonax4vay4bmY6MS
-         dkjohi0fqLRJPJBVlCiEzmKLtxHZ+5aHNAaBzrvxnBWnucyxZDL42JvzIp34GMps7iYh
-         vUUg97R+awEhMLhDRtwOh4O9ZiFtO/m347mqyE2Q9gLFOgoVfXMvU04o5CEkLyyl0fM4
-         R0gMOk3UnfaS6nrn6MC/j1HxC46ePPFgfKdX+ZjD/Ii7T4YfKg515EbzkKobklEHXrPi
-         3puw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4Fl9YRg3lybj0A+SLC/IEMp8cNpVOztdbgPj51TjJ/Q=;
-        b=kFZbDT5BvBzSVmnejb8DBhpwHqMuFWejecabXbnLf9TW1pxf2W2zXSdxbZSpFnbvem
-         XzMSMvC/iPZIq1OT7VD1JHA3vWcqVoqLdSkb/jSozm0yVV6pnQ5+YW2vhhxJ6XLbqEQ/
-         PHINHosHK4SPl/r+KIKHUXt0waQgMXV+t1IkC8mxBeQzHlam4fQQnC8XdQs7CgHL/A/J
-         bhxcaMbhx5zhIX5+/6Yr5TcvOQiFAnBkz793tIYW21uJbQ/a9vWT0N5HkrA/Fu8cDWIT
-         fv15JZLw2gdRic8rBiVqwAdo+1Bj2hX0rxG9hHkn9rgAPUZlo7bDm37LRhL+/TGxyffD
-         VStA==
-X-Gm-Message-State: AOAM530YUVI9TFJIzhUP++zDGvrSkmJkrOrBKJ6If3KL0AZHkpYL99jE
-        d3NMhcmNhoftJ/EMb24VoDg=
-X-Google-Smtp-Source: ABdhPJwaYjXq+z83/qwDwoXkJhd6TjzfMoI4iuLA8jsCmvicv/kOa2lB82NC0kJ6OvIBM6ju8sz43A==
-X-Received: by 2002:a17:902:ea0e:b0:15e:c0e4:cf15 with SMTP id s14-20020a170902ea0e00b0015ec0e4cf15mr4034800plg.63.1652433976446;
-        Fri, 13 May 2022 02:26:16 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.22])
-        by smtp.gmail.com with ESMTPSA id m13-20020a170902f64d00b0015e8d4eb299sm1331558plg.227.2022.05.13.02.26.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 02:26:16 -0700 (PDT)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     pbonzini@redhat.com
-Cc:     jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, seanjc@google.com,
-        vkuznets@redhat.com, wanpengli@tencent.com
-Subject: [PATCH v13 09/17] KVM: x86/pmu: Adjust precise_ip to emulate Ice Lake guest PDIR counter
-Date:   Fri, 13 May 2022 17:26:11 +0800
-Message-Id: <20220513092611.13291-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220411101946.20262-10-likexu@tencent.com>
-References: <20220411101946.20262-10-likexu@tencent.com>
+        Fri, 13 May 2022 05:27:12 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC7820131C
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 02:27:01 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652434020;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Php+ZJ83A5DPq79iQSx2r7Rgggl0xBFSJkKdjRMuVAM=;
+        b=n2+cKQf7QtlEHZ7/6xhAPT21fnqoei1jVHC0efwy9KrOEHxm5OdXniXQw50LIbgdP/Dand
+        APAQ89v6fLyYpX8/V2/Gy2C6g/ucOPN9VgDCh52bk86cuNYe9Zanbs9lK3dQLVdUxbX78J
+        VeMuaPIiA54X8qwtVZ7on71eG9tNSjUIHNG++AwSRh2YtcF4y/9u4pgzC8oJlY5HRDsgkP
+        XtDwGrBbU7w9Ia+jwyOqW/EoiPZMWG+vXUBuvgrkL02inXUULsy0r+eJFzbyCRdafAaWCg
+        55xL/+MbIoOvNozNrh8SBX82QoOISv888VkvPcHVn5TrExo/mBZmIma8NZwFAA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652434020;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Php+ZJ83A5DPq79iQSx2r7Rgggl0xBFSJkKdjRMuVAM=;
+        b=qLTgxfdko9IOD+Xt5izjeOXBMTbSyXbQH8RnIupuq5f+bqLQWqrtMgG6AsGgk021/VxvDJ
+        ETem9/Ks5+HTOLAA==
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [RFCv2 00/10] Linear Address Masking enabling
+In-Reply-To: <Yn4hYSVSHvWGZCOo@arm.com>
+References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
+ <20220511064943.GR76023@worktop.programming.kicks-ass.net>
+ <20bada85-9203-57f4-2502-57a6fd11f3ea@intel.com> <875ymav8ul.ffs@tglx>
+ <55176b79-90af-4a47-dc06-9f5f2f2c123d@intel.com>
+ <CAMe9rOqb6ZnAZYe4uAWDt-vmhhP=z_+uZwi5fBURqyUWxCX9Cg@mail.gmail.com>
+ <87o802tjd7.ffs@tglx>
+ <CAMe9rOpXOLEMcir9zMq_UJe08Y-kM+9zok6gDicqAhPySV+3NA@mail.gmail.com>
+ <67aef839-0757-37b1-a42d-154c0116cbf5@intel.com> <878rr6te6b.ffs@tglx>
+ <Yn4hYSVSHvWGZCOo@arm.com>
+Date:   Fri, 13 May 2022 11:26:59 +0200
+Message-ID: <8735hdu6jg.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+On Fri, May 13 2022 at 10:14, Catalin Marinas wrote:
+> On Fri, May 13, 2022 at 03:27:24AM +0200, Thomas Gleixner wrote:
+>> On Thu, May 12 2022 at 17:46, Dave Hansen wrote:
+>> > On 5/12/22 17:08, H.J. Lu wrote:
+>> > If I had to take a shot at this today, I think I'd opt for:
+>> >
+>> > 	mask = sys_enable_masking(bits=6, flags=FUZZY_NR_BITS);
+>> >
+>> > although I'm not super confident about the "fuzzy" flag.  I also don't
+>> > think I'd totally hate the "blind" interface where the kernel just gets
+>> > to pick unilaterally and takes zero input from userspace.
+>> 
+>> That's the only sane choice and you can make it simple for userspace:
+>> 
+>>        ret = prctl(GET_XXX_MASK, &mask);
+>> 
+>> and then let it decide based on @ret and @mask whether to use it or not.
+>
+> Getting the mask would work for arm64 as well (it's always 0xffUL << 56,
+> top-byte-ignore). Setting the mask from user space won't be of any use
+> to us, it's baked in hardware.
 
-The PEBS-PDIR facility on Ice Lake server is supported on IA31_FIXED0 only.
-If the guest configures counter 32 and PEBS is enabled, the PEBS-PDIR
-facility is supposed to be used, in which case KVM adjusts attr.precise_ip
-to 3 and request host perf to assign the exactly requested counter or fail.
+Sure.
 
-The CPU model check is also required since some platforms may place the
-PEBS-PDIR facility in another counter index.
+> Dave indeed mentioned passing a mask to allow a more flexible control
+> but, as already mentioned in the old thread, for arm64 the feature was
+> already on, so it didn't make much sense, it seemed more like
+> over-engineering. Had we known that Intel is pursing something similar,
+> maybe we'd have designed the interface differently (we didn't get the
+> hint).
 
-Signed-off-by: Like Xu <likexu@tencent.com>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
-v12 -> v13 Changelog:
-- Move vmx_icl_pebs_cpu[] from pmu.h to pmu.c;
-- Drop unrelated change about arch/x86/events/intel/core.c;
+Fair enough
 
- arch/x86/kvm/pmu.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+> Intel's LAM has more flexibility but I don't see the arm64 TBI getting
+> in the way. Just don't use it as an example because they evolved in
+> different ways. I'm happy for arm64 to adopt a more flexible interface
+> while keeping the current one around for backwards compatibility). But
+> on arm64 we can't control the masking, not even disable it per process
+> since it has always been on.
 
-diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-index 36487088f72c..0b8fc86839ba 100644
---- a/arch/x86/kvm/pmu.c
-+++ b/arch/x86/kvm/pmu.c
-@@ -16,6 +16,7 @@
- #include <linux/bsearch.h>
- #include <linux/sort.h>
- #include <asm/perf_event.h>
-+#include <asm/cpu_device_id.h>
- #include "x86.h"
- #include "cpuid.h"
- #include "lapic.h"
-@@ -24,6 +25,12 @@
- /* This is enough to filter the vast majority of currently defined events. */
- #define KVM_PMU_EVENT_FILTER_MAX_EVENTS 300
- 
-+static const struct x86_cpu_id vmx_icl_pebs_cpu[] = {
-+	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D, NULL),
-+	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X, NULL),
-+	{}
-+};
-+
- /* NOTE:
-  * - Each perf counter is defined as "struct kvm_pmc";
-  * - There are two types of perf counters: general purpose (gp) and fixed.
-@@ -175,6 +182,8 @@ static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
- 		 * could possibly care here is unsupported and needs changes.
- 		 */
- 		attr.precise_ip = 1;
-+		if (x86_match_cpu(vmx_icl_pebs_cpu) && pmc->idx == 32)
-+			attr.precise_ip = 3;
- 	}
- 
- 	event = perf_event_create_kernel_counter(&attr, -1, current,
--- 
-2.36.1
+That's fine. The point is that we want uniform interfaces for the same
+functionality. It's obviously hardware specific which subset of the
+interface is supported.
 
+>> I'm so tired of this short sighted 'cram my feature in' approach of
+>> _all_ involved parties.
+>
+> Unfortunately it happens occasionally, especially when developers can't
+> disclose that their companies work on similar features (resctrl is a
+> good example where arm64 would have benefited from a more generic
+> approach but at the time MPAM was not public).
+
+Yeah. It's a constant pain.
+
+Thanks,
+
+        tglx

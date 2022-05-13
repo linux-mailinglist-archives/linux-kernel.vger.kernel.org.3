@@ -2,103 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5D2525C20
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79655525C55
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377702AbiEMHMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 03:12:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48520 "EHLO
+        id S1377796AbiEMH3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 03:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377700AbiEMHL4 (ORCPT
+        with ESMTP id S229562AbiEMH3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 03:11:56 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE293A199;
-        Fri, 13 May 2022 00:11:51 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L00Ct4pc9z1JBmB;
-        Fri, 13 May 2022 15:10:34 +0800 (CST)
-Received: from container.huawei.com (10.175.104.82) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 13 May 2022 15:11:48 +0800
-From:   Ziyang Xuan <william.xuanziyang@huawei.com>
-To:     <vburru@marvell.com>, <aayarekar@marvell.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH net-next] octeon_ep: delete unnecessary NULL check
-Date:   Fri, 13 May 2022 15:29:28 +0800
-Message-ID: <20220513072928.3713739-1-william.xuanziyang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 13 May 2022 03:29:39 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C7A2A1535;
+        Fri, 13 May 2022 00:29:37 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L00dq2NV6z4xLb;
+        Fri, 13 May 2022 17:29:35 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1652426976;
+        bh=amBoUhAchuiKZLMpzSpOqMbdV/DoM2H/tnnKlO0EPgk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e+PZmhjqeVy35zXpWfpmXn6hzAvj9cBX3QihjtQlY9Pf4p9SqK+Nju1zzbXfhBJ91
+         zNS/CZh7xWm/+NImbNnSfGXWkKpCIlUv6zKlIVIjEuS7VUF23c25DUNsC0K5vOC86D
+         1PA0LWE1e1m107qbphn0ozs0Yw/0yJOC4YFj7hgWiBaC9KfnqAjuswFcol8eVEZpmx
+         2WNpkPlCf/1ScdCMshxe547kbFyBU+5z98pPTz6393e4FZWkd0+YFYUx4x/h3uNjo1
+         Tta3ALV6dCuWNV5eJCU7wu8EzHwFVsjUT0YThRHunnq0hsoxfhxkaEruqr9hAxSlD7
+         q14lz+HXS0AFg==
+Date:   Fri, 13 May 2022 17:29:33 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the arm-soc tree
+Message-ID: <20220513172933.5dbf4ffb@canb.auug.org.au>
+In-Reply-To: <20220506085815.5a3cfa83@canb.auug.org.au>
+References: <20220506085815.5a3cfa83@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/+oID1gv3YK/8R5EMEQLZBIi";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vfree(NULL) is safe. NULL check before vfree() is not needed.
-Delete them to simplify the code.
+--Sig_/+oID1gv3YK/8R5EMEQLZBIi
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
----
- drivers/net/ethernet/marvell/octeon_ep/octep_main.c | 3 +--
- drivers/net/ethernet/marvell/octeon_ep/octep_rx.c   | 3 +--
- drivers/net/ethernet/marvell/octeon_ep/octep_tx.c   | 3 +--
- 3 files changed, 3 insertions(+), 6 deletions(-)
+Hi all,
 
-diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-index e020c81f3455..7e590c572d58 100644
---- a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-+++ b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-@@ -980,8 +980,7 @@ static void octep_device_cleanup(struct octep_device *oct)
- 	dev_info(&oct->pdev->dev, "Cleaning up Octeon Device ...\n");
- 
- 	for (i = 0; i < OCTEP_MAX_VF; i++) {
--		if (oct->mbox[i])
--			vfree(oct->mbox[i]);
-+		vfree(oct->mbox[i]);
- 		oct->mbox[i] = NULL;
- 	}
- 
-diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
-index 945947ec7723..d9ae0937d17a 100644
---- a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
-+++ b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
-@@ -230,8 +230,7 @@ static int octep_free_oq(struct octep_oq *oq)
- 
- 	octep_oq_free_ring_buffers(oq);
- 
--	if (oq->buff_info)
--		vfree(oq->buff_info);
-+	vfree(oq->buff_info);
- 
- 	if (oq->desc_ring)
- 		dma_free_coherent(oq->dev,
-diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_tx.c b/drivers/net/ethernet/marvell/octeon_ep/octep_tx.c
-index 511552bc3e87..5a520d37bea0 100644
---- a/drivers/net/ethernet/marvell/octeon_ep/octep_tx.c
-+++ b/drivers/net/ethernet/marvell/octeon_ep/octep_tx.c
-@@ -270,8 +270,7 @@ static void octep_free_iq(struct octep_iq *iq)
- 
- 	desc_ring_size = OCTEP_IQ_DESC_SIZE * CFG_GET_IQ_NUM_DESC(oct->conf);
- 
--	if (iq->buff_info)
--		vfree(iq->buff_info);
-+	vfree(iq->buff_info);
- 
- 	if (iq->desc_ring)
- 		dma_free_coherent(iq->dev, desc_ring_size,
--- 
-2.25.1
+On Fri, 6 May 2022 08:58:15 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> After merging the arm-soc tree, today's linux-next build (arm
+> multi_v7_defconfig) produced these warnings:
+>=20
+> arch/arm/boot/dts/bcm953012hr.dts:57.3-33: Warning (reg_format): /nand-co=
+ntroller@18028000/nand@0/partition@0:reg: property has invalid length (8 by=
+tes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+> arch/arm/boot/dts/bcm953012hr.dts:62.3-33: Warning (reg_format): /nand-co=
+ntroller@18028000/nand@0/partition@200000:reg: property has invalid length =
+(8 bytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+> arch/arm/boot/dts/bcm953012hr.dts:66.3-33: Warning (reg_format): /nand-co=
+ntroller@18028000/nand@0/partition@600000:reg: property has invalid length =
+(8 bytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+> arch/arm/boot/dts/bcm953012hr.dts:70.3-33: Warning (reg_format): /nand-co=
+ntroller@18028000/nand@0/partition@1000000:reg: property has invalid length=
+ (8 bytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+> arch/arm/boot/dts/bcm953012hr.dtb: Warning (pci_device_reg): Failed prere=
+quisite 'reg_format'
+> arch/arm/boot/dts/bcm953012hr.dtb: Warning (pci_device_bus_num): Failed p=
+rerequisite 'reg_format'
+> arch/arm/boot/dts/bcm953012hr.dtb: Warning (i2c_bus_reg): Failed prerequi=
+site 'reg_format'
+> arch/arm/boot/dts/bcm953012hr.dtb: Warning (spi_bus_reg): Failed prerequi=
+site 'reg_format'
+> arch/arm/boot/dts/bcm953012hr.dts:55.14-59.4: Warning (avoid_default_addr=
+_size): /nand-controller@18028000/nand@0/partition@0: Relying on default #a=
+ddress-cells value
+> arch/arm/boot/dts/bcm953012hr.dts:55.14-59.4: Warning (avoid_default_addr=
+_size): /nand-controller@18028000/nand@0/partition@0: Relying on default #s=
+ize-cells value
+> arch/arm/boot/dts/bcm953012hr.dts:60.19-63.4: Warning (avoid_default_addr=
+_size): /nand-controller@18028000/nand@0/partition@200000: Relying on defau=
+lt #address-cells value
+> arch/arm/boot/dts/bcm953012hr.dts:60.19-63.4: Warning (avoid_default_addr=
+_size): /nand-controller@18028000/nand@0/partition@200000: Relying on defau=
+lt #size-cells value
+> arch/arm/boot/dts/bcm953012hr.dts:64.19-67.4: Warning (avoid_default_addr=
+_size): /nand-controller@18028000/nand@0/partition@600000: Relying on defau=
+lt #address-cells value
+> arch/arm/boot/dts/bcm953012hr.dts:64.19-67.4: Warning (avoid_default_addr=
+_size): /nand-controller@18028000/nand@0/partition@600000: Relying on defau=
+lt #size-cells value
+> arch/arm/boot/dts/bcm953012hr.dts:68.20-71.4: Warning (avoid_default_addr=
+_size): /nand-controller@18028000/nand@0/partition@1000000: Relying on defa=
+ult #address-cells value
+> arch/arm/boot/dts/bcm953012hr.dts:68.20-71.4: Warning (avoid_default_addr=
+_size): /nand-controller@18028000/nand@0/partition@1000000: Relying on defa=
+ult #size-cells value
+>=20
+> I don't know what caused this now.
 
+I am still getting these warnings.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/+oID1gv3YK/8R5EMEQLZBIi
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ+CN4ACgkQAVBC80lX
+0GxWawf/aR3e1ZdCSDAIxLd4A7nYxaIkdZ+29L+cGnukIOLND+soF1SwQi5P29o4
+yRx9xzaOJWri9mDYuJvkT5wvkL8k3Fy3kyQbevhGGe4WcjnA81M9h/E9Zc3BYwK3
+tpXCR5zvMHbfPJH9uYO8aIsgabhsQBobKPf734vh4up2cme+0pNZhKXE3sCm8Edg
+e4pBHoYDoQJKUVb+Sfck5Vkt23dfvjLoPH+TYlZFlqs+0NxeLER8XoYsb0t+hGNf
+SLs0zwcVVGL3WEeRS1YiRuBLCDHILzYHvlHm2RHH36XgKRli1Uos3Y3ZyT3QcMEF
+1MDafRhQPoQOQLG9ece4SHR4zJqC7g==
+=TPsA
+-----END PGP SIGNATURE-----
+
+--Sig_/+oID1gv3YK/8R5EMEQLZBIi--

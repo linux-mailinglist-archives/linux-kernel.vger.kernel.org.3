@@ -2,197 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C20145267E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5295B5267E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:08:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382737AbiEMRH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 13:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58612 "EHLO
+        id S1382757AbiEMRIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 13:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356224AbiEMRHz (ORCPT
+        with ESMTP id S1378302AbiEMRIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 13:07:55 -0400
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 130E661294
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:07:52 -0700 (PDT)
-Received: by mail-ua1-x932.google.com with SMTP id ay15so3412396uab.9
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:07:52 -0700 (PDT)
+        Fri, 13 May 2022 13:08:18 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46DA16128C
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:08:16 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id v14so6139719qtc.3
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:08:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SO6cZ4vcFdH6Gw26Rsfe2kTJJS3GLmvIu7jUCMoqB/c=;
-        b=tEwwqEf/QAgZncrVrgI1PvCqCEVehtgalfmgsWRT4PqAixI+ItZ5QYDRJpav5HHIJ9
-         cXOftSG5RIM+jYbU4H7IYYvM2O+tHSiu8S4J9hV7tr2ZT9tzf6reIf9IUtXz0myUFmot
-         cElfczSxUQilGQgTbatodWYMDYHplQjDCW42vrcFSaCImCcPcHc9Zsm5M+NFqPIZr96z
-         6XhxP2RNLl6+epuZKn1Sk2latVMfA7D/BkMo65zjP9/GMCU61+EIRcFOfLFM0qSiCrT7
-         zieWnrn+8idxl91BE8ZF5GGnvYvQs5h8hhsBb4FBwgOOkgP+HX/fjmA+4wkLZo6pTL9q
-         AvDg==
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=zXhkDIVf27CV50GWaqhnTSClMrVWORrrk1UTjwHnru8=;
+        b=cnwlzxqBMjsJ+1WY7JYGk0zmaRis0uxKC7n7kcvotpz3nsqvchPQgSX6XYMUfhDe6C
+         zQX+xYwhjdbi9MoF65ZpjqRRK7MJ0XKfxooT6ZqFqqo5RjIKjDa+M6SKyoLVYCac5pnq
+         F/Ub9Xe3njx+6EalimZC+4nsWYG/wjM6ZV3DJI5rfIRoltmydpP3cLFDVWHPmw472OJh
+         wjt3Bfjw86NWL6eyRuQrhiFfaHCEQEWvic5An3l6SAxg8tWA6OZwBS1CE8KjO+VtdCEW
+         IPvb1TfV5UEO/ymbUOlWpPhhEU9+bxxgQMSRElxcmydKAxpio18y2YkuyD7/w+eB4Eo5
+         aUFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SO6cZ4vcFdH6Gw26Rsfe2kTJJS3GLmvIu7jUCMoqB/c=;
-        b=1wqSA6jOLV2y1F1x5dSQYDcOK6JWDo8Gdb5+o6Moj/95hVfzIxxQIgi3XlYmkWkRDO
-         dEe6CKIVd9vkbzg3c6PvY8/oIqr/UjBOq5gNbJ3ppA0N2qJkHVVqSBMCjKnoJhZGb+mx
-         XxNNsZjyXgy1y3I1b5zqNunwIWOQdyVd6QmwFSX+BLo90FYNrcnK8niDSwEHfT2RjEre
-         Izknaoe8s4uDv4PI2LYC8Ds0DNjpkMjwj4S3TIuiRCwqINR4zgFLj3Nn2edlm9D4OSb7
-         LArDnUB3EbqHTnO3Xt0NqYuOb2qJLN9Gr/uEANY+3cd6n7NWugg6DVs2NHatOTHTJZ3H
-         /u1Q==
-X-Gm-Message-State: AOAM5301BIlZ0GpYbp84x7GO+Adv+T/E4tAtanDDDavT12rv+pD78m65
-        NsVH4JoflOCev7Q8EI7UMq5r4frr6BQ35xt9kfsuBErfiDApyA==
-X-Google-Smtp-Source: ABdhPJxpH83FSHQPHQczwK/rOF+Gbj+oCuJ9KL9UX9oGm665pOLLR/ZVftQEO8pC79yumKEkXBXmgL3qcw0OP7CcI1w=
-X-Received: by 2002:ab0:240a:0:b0:360:7c96:2f8c with SMTP id
- f10-20020ab0240a000000b003607c962f8cmr2718694uan.48.1652461671005; Fri, 13
- May 2022 10:07:51 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=zXhkDIVf27CV50GWaqhnTSClMrVWORrrk1UTjwHnru8=;
+        b=4C/E4EPZvOEWBEylP0fl6m96VPnbylqXadosWYYfGJv7NGp8FuGADxLPvzHc0k1Ieo
+         iN1CwkhTKU4FqTAQy8FIlcsnrFjUcPVR3sZ6O/tUXYsvDHLefcikFVeLSlqDdk39KROm
+         oTv8K/TSJGuHyJBxyAT8AbbotvAx8r6sPvbrViQIbz5z27e5n7d3zZaR0V7raJhroEQc
+         jSbnOH5PjrzexsV0vCK3mHnreJjIUHunxecfoAU/SgRTtYg39fDoy6/pShBKRGIr9JOY
+         aiGMRWcfZ/tvLWjEulRJwduIgCilPecEP1tyNsKIX030LjniWEM2dH8tAket00IRMf/O
+         QoFQ==
+X-Gm-Message-State: AOAM531i9n7/sSJkiDAmr6SxIGHmzCgY9rr6k3kBaYTrA2WLMXMK1HSi
+        R1XA10Lodb6gd3QMZyDMtCi1dA==
+X-Google-Smtp-Source: ABdhPJwyv/gBNDnSk88os8Mohl8nxNU34Bx3dZyO4nXr5WiLiNrjoxWHwBHg3wmq2v0jQwwY7p/mpg==
+X-Received: by 2002:a05:622a:104e:b0:2f3:f7a5:62e6 with SMTP id f14-20020a05622a104e00b002f3f7a562e6mr5423719qte.582.1652461695399;
+        Fri, 13 May 2022 10:08:15 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::1:14fe])
+        by smtp.gmail.com with ESMTPSA id 143-20020a370995000000b0069fc13ce207sm1622277qkj.56.2022.05.13.10.08.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 10:08:14 -0700 (PDT)
+Date:   Fri, 13 May 2022 13:08:13 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Minchan Kim <minchan@kernel.org>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com
+Subject: Re: [PATCH v2 6/6] zswap: memcg accounting
+Message-ID: <Yn6QfdouzkcrygTR@cmpxchg.org>
+References: <20220510152847.230957-1-hannes@cmpxchg.org>
+ <20220510152847.230957-7-hannes@cmpxchg.org>
+ <20220511173218.GB31592@blackbody.suse.cz>
+ <YnwJUL90fuoHs3YW@cmpxchg.org>
+ <20220513151426.GC16096@blackbody.suse.cz>
 MIME-Version: 1.0
-References: <20220513151554.1054452-1-kan.liang@linux.intel.com> <20220513151554.1054452-5-kan.liang@linux.intel.com>
-In-Reply-To: <20220513151554.1054452-5-kan.liang@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 13 May 2022 10:07:39 -0700
-Message-ID: <CAP-5=fUv1LRnMg7PvfvtN1rhc5BXfv_W181LovXe4nptDmwLmQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] perf parse-events: Move slots event for the hybrid
- platform too
-To:     kan.liang@linux.intel.com
-Cc:     acme@kernel.org, mingo@redhat.com, jolsa@kernel.org,
-        namhyung@kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, peterz@infradead.org,
-        zhengjun.xing@linux.intel.com, adrian.hunter@intel.com,
-        ak@linux.intel.com, eranian@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220513151426.GC16096@blackbody.suse.cz>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 8:16 AM <kan.liang@linux.intel.com> wrote:
->
-> From: Kan Liang <kan.liang@linux.intel.com>
->
-> The commit 94dbfd6781a0 ("perf parse-events: Architecture specific
-> leader override") introduced a feature to reorder the slots event to
-> fulfill the restriction of the perf metrics topdown group. But the
-> feature doesn't work on the hybrid machine.
->
-> $perf stat -e "{cpu_core/instructions/,cpu_core/slots/,cpu_core/topdown-retiring/}" -a sleep 1
->
->  Performance counter stats for 'system wide':
->
->      <not counted>      cpu_core/instructions/
->      <not counted>      cpu_core/slots/
->    <not supported>      cpu_core/topdown-retiring/
->
->        1.002871801 seconds time elapsed
->
-> A hybrid platform has a different PMU name for the core PMUs, while
-> current perf hard code the PMU name "cpu".
->
-> Introduce a new function to check whether the system supports the perf
-> metrics feature. The result is cached for the future usage.
->
-> For X86, the core PMU name always has "cpu" prefix.
->
-> With the patch,
->
-> $perf stat -e "{cpu_core/instructions/,cpu_core/slots/,cpu_core/topdown-retiring/}" -a sleep 1
->
->  Performance counter stats for 'system wide':
->
->         76,337,010      cpu_core/slots/
->         10,416,809      cpu_core/instructions/
->         11,692,372      cpu_core/topdown-retiring/
->
->        1.002805453 seconds time elapsed
->
-> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-> ---
->  tools/perf/arch/x86/util/evlist.c  |  5 +++--
->  tools/perf/arch/x86/util/topdown.c | 18 ++++++++++++++++++
->  tools/perf/arch/x86/util/topdown.h |  7 +++++++
->  3 files changed, 28 insertions(+), 2 deletions(-)
->  create mode 100644 tools/perf/arch/x86/util/topdown.h
->
-> diff --git a/tools/perf/arch/x86/util/evlist.c b/tools/perf/arch/x86/util/evlist.c
-> index 75564a7df15b..68f681ad54c1 100644
-> --- a/tools/perf/arch/x86/util/evlist.c
-> +++ b/tools/perf/arch/x86/util/evlist.c
-> @@ -3,6 +3,7 @@
->  #include "util/pmu.h"
->  #include "util/evlist.h"
->  #include "util/parse-events.h"
-> +#include "topdown.h"
->
->  #define TOPDOWN_L1_EVENTS      "{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound}"
->  #define TOPDOWN_L2_EVENTS      "{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound,topdown-heavy-ops,topdown-br-mispredict,topdown-fetch-lat,topdown-mem-bound}"
-> @@ -25,12 +26,12 @@ struct evsel *arch_evlist__leader(struct list_head *list)
->
->         first = list_first_entry(list, struct evsel, core.node);
->
-> -       if (!pmu_have_event("cpu", "slots"))
-> +       if (!topdown_sys_has_perf_metrics())
->                 return first;
->
->         /* If there is a slots event and a topdown event then the slots event comes first. */
->         __evlist__for_each_entry(list, evsel) {
-> -               if (evsel->pmu_name && !strcmp(evsel->pmu_name, "cpu") && evsel->name) {
-> +               if (evsel->pmu_name && !strncmp(evsel->pmu_name, "cpu", 3) && evsel->name) {
->                         if (strcasestr(evsel->name, "slots")) {
->                                 slots = evsel;
->                                 if (slots == first)
-> diff --git a/tools/perf/arch/x86/util/topdown.c b/tools/perf/arch/x86/util/topdown.c
-> index 2f3d96aa92a5..95b9fdef59ab 100644
-> --- a/tools/perf/arch/x86/util/topdown.c
-> +++ b/tools/perf/arch/x86/util/topdown.c
-> @@ -3,6 +3,24 @@
->  #include "api/fs/fs.h"
->  #include "util/pmu.h"
->  #include "util/topdown.h"
-> +#include "topdown.h"
-> +
-> +bool topdown_sys_has_perf_metrics(void)
-> +{
-> +       static bool has_perf_metrics;
-> +       static bool cached;
-> +       struct perf_pmu *pmu;
-> +
-> +       if (cached)
-> +               return has_perf_metrics;
-> +
+Hello Michal,
 
-Worth a comment here for the meaning of looking up PERF_TYPE_RAW.
+On Fri, May 13, 2022 at 05:14:26PM +0200, Michal Koutný wrote:
+> On Wed, May 11, 2022 at 03:06:56PM -0400, Johannes Weiner <hannes@cmpxchg.org> wrote:
+> > Correct. After which the uncompressed page is reclaimed and uncharged.
+> > So the zswapout process will reduce the charge bottom line.
+> 
+> A zswap object falling under memory.current was my first thinking, I was
+> confused why it's exported as a separate counter memory.zswap.current
+> (which IMO suggests disjoint counting) and it doubles a
+> memory.stat:zswap entry.
+> 
+> Is the separate memory.zswap.current good for anything? (Except maybe
+> avoiding global rstat flush on memory.stat read but that'd be an
+> undesired precendent.)
 
-Thanks,
-Ian
+Right, it's accounted as a subset rather than fully disjointed. But it
+is a limitable counter of its own, so I exported it as such, with a
+current and a max knob. This is comparable to the kmem counter in v1.
 
-> +       pmu = perf_pmu__find_by_type(PERF_TYPE_RAW);
-> +       if (pmu && pmu_have_event(pmu->name, "slots"))
-> +               has_perf_metrics = true;
-> +
-> +       cached = true;
-> +       return has_perf_metrics;
-> +}
+From an API POV it would be quite strange to have max for a counter
+that has no current. Likewise it would be strange for a major memory
+consumer to be missing from memory.stat.
+
+> (Ad the eventually reduced footprint, the transitional excursion above
+> memcg's (or ancestor's) limit should be limited by number of parallel
+> reclaims running (each one at most a page, right?), so it doesn't seem
+> necessary to tackle (now).)
+
+Correct.
+
+> > memory.zswap.* are there to configure zswap policy, within the
+> > boundaries of available memory - it's by definition a subset.
+> 
+> I see how the .max works when equal to 0 or "max". The intermediate
+> values are more difficult to reason about.
+
+It needs to be configured to the workload's access frequency curve,
+which can be done with trial-and-error (reasonable balance between
+zswpins and pswpins) or in a more targeted manner using tools such as
+page_idle, damon etc.
+
+> Also, I can see that on the global level, zswap is configured relatively
+> (/sys/module/zswap/parameters/max_pool_percent).
+> You wrote that the actual configured value is workload specific, would
+> it be simpler to have also relative zswap limit per memcg?
 >
->  /*
->   * Check whether we can use a group for top down.
-> diff --git a/tools/perf/arch/x86/util/topdown.h b/tools/perf/arch/x86/util/topdown.h
-> new file mode 100644
-> index 000000000000..46bf9273e572
-> --- /dev/null
-> +++ b/tools/perf/arch/x86/util/topdown.h
-> @@ -0,0 +1,7 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _TOPDOWN_H
-> +#define _TOPDOWN_H 1
-> +
-> +bool topdown_sys_has_perf_metrics(void);
-> +
-> +#endif
-> --
-> 2.35.1
->
+> (Relative wrt memory.max, it'd be rather just a convenience with this
+> simple ratio, however, it'd correspond to the top level limit. OTOH, the
+> relatives would have counter-intuitive hierarchical behavior. I don't
+> mean this should be changed, rather wondering why this variant was
+> chosen.)
+
+A percentage isn't a bad way to pick a global default limit for a
+kernel feature. But it would have been preferable if zswap had used
+the percentage internally and made the knob based in bytes (like
+min_free_kbytes for example).
+
+Because for load tuning, bytes make much more sense. That's how you
+measure the workingset, so a percentage is an awkward indirection. At
+the cgroup level, it makes even less sense: all memcg tunables are in
+bytes, it would be quite weird to introduce a "max" that is 0-100. Add
+the confusion of how percentages would propagate down the hierarchy...
+
+> > +bool obj_cgroup_may_zswap(struct obj_cgroup *objcg)
+> > +{
+> > +     struct mem_cgroup *memcg, *original_memcg;
+> > +     bool ret = true;
+> > +
+> > +     original_memcg = get_mem_cgroup_from_objcg(objcg);
+> > +     for (memcg = original_memcg; memcg != root_mem_cgroup;
+> > +          memcg = parent_mem_cgroup(memcg)) {
+> > +             unsigned long max = READ_ONCE(memcg->zswap_max);
+> > +             unsigned long pages;
+> > +
+> > +             if (max == PAGE_COUNTER_MAX)
+> > +                     continue;
+> > +             if (max == 0) {
+> > +                     ret = false;
+> > +                     break;
+> > +             }
+> > +
+> > +             cgroup_rstat_flush(memcg->css.cgroup);
+> 
+> Here, I think it'd be better not to bypass mem_cgroup_flush_stats() (the
+> mechanism is approximate and you traverse all ancestors anyway), i.e.
+> mem_cgroup_flush_stats() before the loop instead of this.
+
+I don't traverse all ancestors, I bail on disabled groups and skip
+unlimited ones. This saves a lot of flushes in practice right now: our
+heaviest swapping cgroups have zswap disabled (max=0) because they're
+lowpri and forced to disk. Likewise, the zswap users have their zswap
+limit several levels down from the root, and I currently don't ever
+flush the higher levels (max=PAGE_COUNTER_MAX).
+
+Flushing unnecessary groups with a ratelimit doesn't sound like an
+improvement to me.
+
+Thanks

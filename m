@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9DE525A81
+	by mail.lfdr.de (Postfix) with ESMTP id 52467525A80
 	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 06:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376966AbiEMEFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 00:05:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42556 "EHLO
+        id S1376985AbiEMEF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 00:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376937AbiEMEFe (ORCPT
+        with ESMTP id S1376942AbiEMEFg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 00:05:34 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB22A29B01D
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 21:05:32 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2f7dbceab08so62002517b3.10
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 21:05:32 -0700 (PDT)
+        Fri, 13 May 2022 00:05:36 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E043929B03F
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 21:05:34 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id m136-20020a25268e000000b0064b233e03d1so6254267ybm.14
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 21:05:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=y38KhyrUQduygK/6m8o41nq8hRxktYPzYp+6Ci4BGNw=;
-        b=MMHzHE5AMRTEoZKQFFOfqBhipa0tAahXZSq1c17O/neM2QN1ModjUO/jbdK6Kw2kNY
-         XAwaVpLcNBHz8ffWDBGML2zsdZh7hDjDxOM7IggAREf/9kYMdCr0iFv7L5Bc4nVocTwK
-         GbLpnxkZDn2fI7Fyb/H42XKOIvz99ML+Q24efTp/FGRSpcQHW+ApbIMFeBDUXS5DMYPQ
-         vofSGI4ADilMBy2jW2pqTKcx37E5SpBfKupJbhAb4F1kKD69URsN8mWn8nWSlYp7kM5Z
-         2+eKrp2jQ230Q1m59eBshd7XHRquqbozN9lxSWtGS/kCYCadC3NGoSCNqm1G9wDret1b
-         U1EQ==
+        bh=YnV5trOl0KkVtbfV7+spiE3dNbfJVrO/n7Q27X48qls=;
+        b=KAfbU78oWArs3iQP9D8et6l1CENXxZLiD9Xik6r+YK9/Y+/IH5m66bvk4kXon9QT6U
+         iwTuHDJFwZl26xdQGjsV1ZaiDEs+NYnJYEp8Q3nmgQNFhHbSkPy4zTtUcjzfBtPyNfqa
+         lK8jKjh0H/ufSKjJZsrNC7RTrTXILvWs0vWq2vHWeJrF8hOjWgv0n6GK7kIRb6lgFGWP
+         DyRCxS9NBPZvXyz5NwQcWajq7bgxRjYEAZO6T/BV1h0aCCiVjsWl9ltuLGs2IGCC1Fss
+         4LCysmf+P+eo/W2hlrke/e+IL2kRaSZ0ozPYYuQizhGpO5j0i+alxiq/l+3ADDmy5gfi
+         nqmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=y38KhyrUQduygK/6m8o41nq8hRxktYPzYp+6Ci4BGNw=;
-        b=Q0ygbsN3TTkdTzIOB6m44GF8sIhVKc07bwNYs8Vwr5EHwwX2PgGNLyijxRaF1/GXjI
-         UdJOHJ9hCpVxq7igoYCS/5L2IrBa+XSgUn+xsTu1fTlIcOPlZ283EzJjArt9d2eIyE6J
-         WKcsmSzUWGvKGkNsu2+oZsQRIhtwp1kQnnP8Meu/XNOdnTmHKiKrYxR1m66akQjilEZk
-         8399o0bEiMTxh9+xmrW2vnpZ83Ncy61Ogw12QhFkJ0Lr4mQS+wtucXJsJljNNk6+K0rC
-         vpgj9CcgzljpqfkVqfWx4yFPHhSgaS7SSJuBUpKatQsrfvHK9nY2ZisRL1s4lB6N7PDs
-         qT3Q==
-X-Gm-Message-State: AOAM532MTwHvJvroV9BvfK8Ui6UHinqFfey+OZ5G5XprI7lyLrAx2tIp
-        kRM/4khS8D29PLL+VjBYcI1cQhFwO60M
-X-Google-Smtp-Source: ABdhPJxPLWUbZ2LL8m5tupWWnw1bCuSxMt1M1UDnB9MkClL6TMY0wMhL+HZqu1MVhozBcWXPsjPxUKELk+4r
+        bh=YnV5trOl0KkVtbfV7+spiE3dNbfJVrO/n7Q27X48qls=;
+        b=11xIuTrOXRYYo2TMA83kWZ3vHh4bGCyU0rHaD7cWKbvRFYDBojNn9TztOMETqqsVWU
+         Ylk6dAawCiIFBjj60J1Vvg1Jh96X3JvOF8niSUDC5pRYwN7J8XOxSLnr0xfXvyP37lXd
+         uz01xRosaZAuK3g+VR/8wNviPE1FzjTgxkZkiMiYABc1DoGKhoNG20pTOImfXAe81bFy
+         E8LepFIjUwO73JYaNWIhOuqBZaWSYrFuvz7NmvM2kOruHI8dKpfNsnQWExrdpqmV/7wO
+         KKomTnoCwm8QSCA9b9LrB23C3AYqOFgy/x/UrXEq9COltWnvZLeQ6kuBNxpNlWKc29fg
+         zFNw==
+X-Gm-Message-State: AOAM533mrjfLUvVTDU27f6kap6xX+GC89I9Rw6hjl4dFRYudHXPQjxKx
+        KmVWb/A6sjFsoaYugiJeSRSY4t0uonaG
+X-Google-Smtp-Source: ABdhPJwQBA1Wj8Te1Bc3ceC61d+MP096QHfl+4mpcj4AdvZwLGmUgP2gIQyb1UNvQW9zY/RiSQ98mZ49Df3J
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:9b61:c91f:ca29:ae54])
- (user=irogers job=sendgmr) by 2002:a25:d90c:0:b0:648:dbec:5391 with SMTP id
- q12-20020a25d90c000000b00648dbec5391mr3078089ybg.309.1652414731949; Thu, 12
- May 2022 21:05:31 -0700 (PDT)
-Date:   Thu, 12 May 2022 21:05:15 -0700
+ (user=irogers job=sendgmr) by 2002:a25:e606:0:b0:648:402e:598a with SMTP id
+ d6-20020a25e606000000b00648402e598amr2974368ybh.170.1652414733975; Thu, 12
+ May 2022 21:05:33 -0700 (PDT)
+Date:   Thu, 12 May 2022 21:05:16 -0700
 In-Reply-To: <20220513040519.1499333-1-irogers@google.com>
-Message-Id: <20220513040519.1499333-4-irogers@google.com>
+Message-Id: <20220513040519.1499333-5-irogers@google.com>
 Mime-Version: 1.0
 References: <20220513040519.1499333-1-irogers@google.com>
 X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [PATCH 3/7] perf test: Use skip in openat syscall
+Subject: [PATCH 4/7] perf test: Basic mmap use skip
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -81,150 +81,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Failures to open the tracepoint cause this test to fail, however,
-typically such failures are permission related. Lower the failure to
-just skipping the test in those cases and add a skip reason.
+If opening the first event fails for basic mmap it is more likely
+permission related that a true error. Mark the test as skip in this
+case and add a skip reason.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/tests/openat-syscall-all-cpus.c | 23 +++++++++++++++++-----
- tools/perf/tests/openat-syscall.c          | 20 +++++++++++++++----
- 2 files changed, 34 insertions(+), 9 deletions(-)
+ tools/perf/tests/mmap-basic.c | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/tests/openat-syscall-all-cpus.c b/tools/perf/tests/openat-syscall-all-cpus.c
-index 1ab362323d25..90828ae03ef5 100644
---- a/tools/perf/tests/openat-syscall-all-cpus.c
-+++ b/tools/perf/tests/openat-syscall-all-cpus.c
-@@ -22,7 +22,7 @@
- static int test__openat_syscall_event_on_all_cpus(struct test_suite *test __maybe_unused,
- 						  int subtest __maybe_unused)
+diff --git a/tools/perf/tests/mmap-basic.c b/tools/perf/tests/mmap-basic.c
+index c3c17600f29c..32f0a63fa157 100644
+--- a/tools/perf/tests/mmap-basic.c
++++ b/tools/perf/tests/mmap-basic.c
+@@ -31,7 +31,7 @@
+  */
+ static int test__basic_mmap(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
  {
--	int err = -1, fd, idx;
-+	int err = TEST_FAIL, fd, idx;
- 	struct perf_cpu cpu;
+-	int err = -1;
++	int err = TEST_FAIL;
+ 	union perf_event *event;
+ 	struct perf_thread_map *threads;
  	struct perf_cpu_map *cpus;
- 	struct evsel *evsel;
-@@ -49,6 +49,7 @@ static int test__openat_syscall_event_on_all_cpus(struct test_suite *test __mayb
- 	if (IS_ERR(evsel)) {
- 		tracing_path__strerror_open_tp(errno, errbuf, sizeof(errbuf), "syscalls", "sys_enter_openat");
- 		pr_debug("%s\n", errbuf);
-+		err = TEST_SKIP;
- 		goto out_cpu_map_delete;
- 	}
- 
-@@ -56,6 +57,7 @@ static int test__openat_syscall_event_on_all_cpus(struct test_suite *test __mayb
- 		pr_debug("failed to open counter: %s, "
- 			 "tweak /proc/sys/kernel/perf_event_paranoid?\n",
- 			 str_error_r(errno, sbuf, sizeof(sbuf)));
-+		err = TEST_SKIP;
- 		goto out_evsel_delete;
- 	}
- 
-@@ -88,7 +90,7 @@ static int test__openat_syscall_event_on_all_cpus(struct test_suite *test __mayb
- 
- 	evsel->core.cpus = perf_cpu_map__get(cpus);
- 
--	err = 0;
-+	err = TEST_OK;
- 
- 	perf_cpu_map__for_each_cpu(cpu, idx, cpus) {
- 		unsigned int expected;
-@@ -98,7 +100,7 @@ static int test__openat_syscall_event_on_all_cpus(struct test_suite *test __mayb
- 
- 		if (evsel__read_on_cpu(evsel, idx, 0) < 0) {
- 			pr_debug("evsel__read_on_cpu\n");
--			err = -1;
-+			err = TEST_FAIL;
- 			break;
+@@ -83,6 +83,14 @@ static int test__basic_mmap(struct test_suite *test __maybe_unused, int subtest
+ 		evsels[i] = evsel__newtp("syscalls", name);
+ 		if (IS_ERR(evsels[i])) {
+ 			pr_debug("evsel__new(%s)\n", name);
++			if (i == 0) {
++				/*
++				 * Failure to open first event is more likely
++				 * related to permissions so flag the failure as
++				 * a skip.
++				 */
++				err = TEST_SKIP;
++			}
+ 			goto out_delete_evlist;
  		}
  
-@@ -106,7 +108,7 @@ static int test__openat_syscall_event_on_all_cpus(struct test_suite *test __mayb
- 		if (perf_counts(evsel->counts, idx, 0)->val != expected) {
- 			pr_debug("evsel__read_on_cpu: expected to intercept %d calls on cpu %d, got %" PRIu64 "\n",
- 				 expected, cpu.cpu, perf_counts(evsel->counts, idx, 0)->val);
--			err = -1;
-+			err = TEST_FAIL;
- 		}
- 	}
- 
-@@ -122,4 +124,15 @@ static int test__openat_syscall_event_on_all_cpus(struct test_suite *test __mayb
+@@ -166,4 +174,14 @@ static int test__basic_mmap(struct test_suite *test __maybe_unused, int subtest
  	return err;
  }
  
--DEFINE_SUITE("Detect openat syscall event on all cpus", openat_syscall_event_on_all_cpus);
-+
-+static struct test_case tests__openat_syscall_event_on_all_cpus[] = {
-+	TEST_CASE_REASON("Detect openat syscall event on all cpus",
-+			 openat_syscall_event_on_all_cpus,
+-DEFINE_SUITE("Read samples using the mmap interface", basic_mmap);
++static struct test_case tests__basic_mmap[] = {
++	TEST_CASE_REASON("Read samples using the mmap interface",
++			 basic_mmap,
 +			 "permissions"),
 +	{	.name = NULL, }
 +};
 +
-+struct test_suite suite__openat_syscall_event_on_all_cpus = {
-+	.desc = "Detect openat syscall event on all cpus",
-+	.test_cases = tests__openat_syscall_event_on_all_cpus,
-+};
-diff --git a/tools/perf/tests/openat-syscall.c b/tools/perf/tests/openat-syscall.c
-index 7f4c13c4b14d..7e05b8b5cc95 100644
---- a/tools/perf/tests/openat-syscall.c
-+++ b/tools/perf/tests/openat-syscall.c
-@@ -16,7 +16,7 @@
- static int test__openat_syscall_event(struct test_suite *test __maybe_unused,
- 				      int subtest __maybe_unused)
- {
--	int err = -1, fd;
-+	int err = TEST_FAIL, fd;
- 	struct evsel *evsel;
- 	unsigned int nr_openat_calls = 111, i;
- 	struct perf_thread_map *threads = thread_map__new(-1, getpid(), UINT_MAX);
-@@ -25,13 +25,14 @@ static int test__openat_syscall_event(struct test_suite *test __maybe_unused,
- 
- 	if (threads == NULL) {
- 		pr_debug("thread_map__new\n");
--		return -1;
-+		return TEST_FAIL;
- 	}
- 
- 	evsel = evsel__newtp("syscalls", "sys_enter_openat");
- 	if (IS_ERR(evsel)) {
- 		tracing_path__strerror_open_tp(errno, errbuf, sizeof(errbuf), "syscalls", "sys_enter_openat");
- 		pr_debug("%s\n", errbuf);
-+		err = TEST_SKIP;
- 		goto out_thread_map_delete;
- 	}
- 
-@@ -39,6 +40,7 @@ static int test__openat_syscall_event(struct test_suite *test __maybe_unused,
- 		pr_debug("failed to open counter: %s, "
- 			 "tweak /proc/sys/kernel/perf_event_paranoid?\n",
- 			 str_error_r(errno, sbuf, sizeof(sbuf)));
-+		err = TEST_SKIP;
- 		goto out_evsel_delete;
- 	}
- 
-@@ -58,7 +60,7 @@ static int test__openat_syscall_event(struct test_suite *test __maybe_unused,
- 		goto out_close_fd;
- 	}
- 
--	err = 0;
-+	err = TEST_OK;
- out_close_fd:
- 	perf_evsel__close_fd(&evsel->core);
- out_evsel_delete:
-@@ -68,4 +70,14 @@ static int test__openat_syscall_event(struct test_suite *test __maybe_unused,
- 	return err;
- }
- 
--DEFINE_SUITE("Detect openat syscall event", openat_syscall_event);
-+static struct test_case tests__openat_syscall_event[] = {
-+	TEST_CASE_REASON("Detect openat syscall event",
-+			 openat_syscall_event,
-+			 "permissions"),
-+	{	.name = NULL, }
-+};
-+
-+struct test_suite suite__openat_syscall_event = {
-+	.desc = "Detect openat syscall event",
-+	.test_cases = tests__openat_syscall_event,
++struct test_suite suite__basic_mmap = {
++	.desc = "Read samples using the mmap interface",
++	.test_cases = tests__basic_mmap,
 +};
 -- 
 2.36.0.550.gb090851708-goog

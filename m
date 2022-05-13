@@ -2,211 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA85A526C5D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 23:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7296E526C5F
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 23:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384694AbiEMVfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 17:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43808 "EHLO
+        id S1384685AbiEMVhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 17:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384685AbiEMVfe (ORCPT
+        with ESMTP id S232968AbiEMVhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 17:35:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5B8AFAE3;
-        Fri, 13 May 2022 14:35:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 67653B831D8;
-        Fri, 13 May 2022 21:35:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7C8BC34100;
-        Fri, 13 May 2022 21:35:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652477729;
-        bh=sx2bwmhNQlNyoUz+xU1PiTmPAEPmRqJTm0P57WXd3+o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DJ9MRcVyk0DuC8ZEgJ/NpeHw9e2dfL9j7bLUpRS1LLbEm/I5c+hXTtHAQ/EZMTWKn
-         XId61mKMQlh0URGFmFeFUYuIAKSsD1jLmlK8sPvKSe+w35h38P2K6Gg56gGY5JDnoi
-         8A3T+w3butCj41O3C8K+d0J1sLzR0DrtXlfKzSO2ueLSJbIgndgAwSSCMZbmOLaU5e
-         YVO/8kdv7w3wa1T6OxirBN1ZzgvAjikJXDplosn4RgFx7CMB3djzqQ5A0eJgpRHlHs
-         ZagQAv83xFg3dHGdn6yVECLElFseCGH1fiZBRFlZkklBgJ5+AYFRDKaWr+ZcsxiAuv
-         udiF8nclKlF3A==
-Date:   Fri, 13 May 2022 14:35:27 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     Ming Yan <yanming@tju.edu.cn>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [f2fs-dev] [PATCH] f2fs: fix to do sanity check for inline inode
-Message-ID: <Yn7PH6BDBSDtiaZV@google.com>
-References: <20220428024940.12102-1-chao@kernel.org>
- <YnLwDx1smguDQ6qC@google.com>
- <173c51c2-eff3-8d76-7041-e9c58024a97e@kernel.org>
- <YnNFCEdSpyVSaTZq@google.com>
- <142acf95-c940-8d4a-7f00-08f1bb816c49@kernel.org>
- <c717cdc3-bb6f-d437-f039-d05418c9dd88@kernel.org>
- <YnlH929igOSi+Iv3@google.com>
+        Fri, 13 May 2022 17:37:14 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C72369E9
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 14:37:12 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id s12-20020a0568301e0c00b00605f30530c2so5828072otr.9
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 14:37:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=odMsEww+gcaMdcA958G3F7Vsds3bvFaYB9MyoQSM89g=;
+        b=hDrLOeuKJsipyQfKzX0TM2aae1nYNUC4HRb6tKjp5Ct9l+ZXhWbZlmkHO9Q8GIYVTZ
+         D8hBW/ziW2y770TZHT98H5DhRVrA8W84gYf9enyaCdDz1EkovnxGxKx9F+Ubinw/PtIC
+         WEnge1ODNw1LEojdC1iKQV4TRzfWqbzZlllR1gwnZ4YEpoGwRXd8FLhCZhkwHWvGWiJ+
+         068djzefY27daZcfb3I8fFxtP3qh5nkwH1unumsWpcGcXhCXl0qTy0m76dytl5fT5Qdo
+         pbRGy1yYhvkbKroC14R3hIq4uDgTR2pnie2x77hxripS2k302a5Ny1r24z81R1/ge9jT
+         3hww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=odMsEww+gcaMdcA958G3F7Vsds3bvFaYB9MyoQSM89g=;
+        b=6S0VvxmJ3iIZxMlqqnxu15rRROWKrOGrXrZ/Gw3iWcPop6U0ucHdbjOEec+bxcaBvw
+         81/U8oYpZxd19PqqSLbTP0/WeM6mRCzxOUYwluR0zRfHebK1tB066m/V7C401/VuMntE
+         ydZTAKNj8O4p09HkXJEiMd4mKnynuu2HOu2wnCS0sngJtPpa2UceoZ7Qn4oqQT+WzK+Q
+         uk6BJMDpSiFGLcXI0bxJbuFo5a4rclRmYEQH2y3wPzTNb3Oi6eSF7FykOEl2cP+aSSii
+         afFYN85j4II2v66yHh3xvBsb9ZWAwb+1ajAGrjBiO4l+jZVtkW7uqqN78uH6/pk61VP1
+         qz0g==
+X-Gm-Message-State: AOAM532b91ddIuaTjDjD/kAzNo7+DalCX169lRz9wND/nWb7SQsNgxSL
+        PkJYEirQK5f2YezOhAgtExE=
+X-Google-Smtp-Source: ABdhPJxBSPVaGm+LQsqJ72mxcKOZ82dDOs0t5KZgJ/LFG6IaNs7KN7FgxDyDVRa9C1lXYQcLSHtUnA==
+X-Received: by 2002:a9d:4549:0:b0:605:f4c5:1af5 with SMTP id p9-20020a9d4549000000b00605f4c51af5mr2504772oti.140.1652477832289;
+        Fri, 13 May 2022 14:37:12 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q14-20020a4a6c0e000000b00333301670dcsm1557602ooc.2.2022.05.13.14.37.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 14:37:11 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <01fd17bd-fd4e-b40a-5a1d-619a7d2c5faa@roeck-us.net>
+Date:   Fri, 13 May 2022 14:37:08 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnlH929igOSi+Iv3@google.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2] fsi: occ: Prevent use after free
+Content-Language: en-US
+To:     Eddie James <eajames@linux.ibm.com>, linux-fsi@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, alistair@popple.id.au,
+        joel@jms.id.au, jk@ozlabs.org
+References: <20220513194424.53468-1-eajames@linux.ibm.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220513194424.53468-1-eajames@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/09, Jaegeuk Kim wrote:
-> On 05/08, Chao Yu wrote:
-> > Ping,
+On 5/13/22 12:44, Eddie James wrote:
+> Use get_device and put_device in the open and close functions to
+> make sure the device doesn't get freed while a file descriptor is
+> open.
+> Also, lock around the freeing of the device buffer and check the
+> buffer before using it in the submit function.
 > 
-> This is in my TODO list, but will take some time. Sorry.
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
 
-Got this.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-sanity_check_inode: inode (ino=1125d, mode=41471) reason(0, 98, 3452, 4, 0, 0) should not have inline_data, run fsck to fix
-
-Ok, this is a symlink, which was encrypted having inline_data.
-
+> ---
+> Changes since v1:
+>   - Add lock around freeing/nulling the buffer in occ_remove
+>   - Don't bother checking the buffer in open or in write, only in submit
 > 
-> > 
-> > On 2022/5/5 22:33, Chao Yu wrote:
-> > > On 2022/5/5 11:31, Jaegeuk Kim wrote:
-> > > > On 05/05, Chao Yu wrote:
-> > > > > On 2022/5/5 5:28, Jaegeuk Kim wrote:
-> > > > > > On 04/28, Chao Yu wrote:
-> > > > > > > As Yanming reported in bugzilla:
-> > > > > > > 
-> > > > > > > https://bugzilla.kernel.org/show_bug.cgi?id=215895
-> > > > > > > 
-> > > > > > > I have encountered a bug in F2FS file system in kernel v5.17.
-> > > > > > > 
-> > > > > > > The kernel message is shown below:
-> > > > > > > 
-> > > > > > > kernel BUG at fs/inode.c:611!
-> > > > > > > Call Trace:
-> > > > > > >     evict+0x282/0x4e0
-> > > > > > >     __dentry_kill+0x2b2/0x4d0
-> > > > > > >     dput+0x2dd/0x720
-> > > > > > >     do_renameat2+0x596/0x970
-> > > > > > >     __x64_sys_rename+0x78/0x90
-> > > > > > >     do_syscall_64+0x3b/0x90
-> > > > > > > 
-> > > > > > > The root cause is: fuzzed inode has both inline_data flag and encrypted
-> > > > > > > flag, so after it was deleted by rename(), during f2fs_evict_inode(),
-> > > > > > > it will cause inline data conversion due to flags confilction, then
-> > > > > > > page cache will be polluted and trigger panic in clear_inode().
-> > > > > > > 
-> > > > > > > This patch tries to fix the issue by do more sanity checks for inline
-> > > > > > > data inode in sanity_check_inode().
-> > > > > > > 
-> > > > > > > Cc: stable@vger.kernel.org
-> > > > > > > Reported-by: Ming Yan <yanming@tju.edu.cn>
-> > > > > > > Signed-off-by: Chao Yu <chao.yu@oppo.com>
-> > > > > > > ---
-> > > > > > >     fs/f2fs/f2fs.h  | 7 +++++++
-> > > > > > >     fs/f2fs/inode.c | 3 +--
-> > > > > > >     2 files changed, 8 insertions(+), 2 deletions(-)
-> > > > > > > 
-> > > > > > > diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> > > > > > > index 27aa93caec06..64c511b498cc 100644
-> > > > > > > --- a/fs/f2fs/f2fs.h
-> > > > > > > +++ b/fs/f2fs/f2fs.h
-> > > > > > > @@ -4173,6 +4173,13 @@ static inline void f2fs_set_encrypted_inode(struct inode *inode)
-> > > > > > >      */
-> > > > > > >     static inline bool f2fs_post_read_required(struct inode *inode)
-> > > > > > >     {
-> > > > > > > +	/*
-> > > > > > > +	 * used by sanity_check_inode(), when disk layout fields has not
-> > > > > > > +	 * been synchronized to inmem fields.
-> > > > > > > +	 */
-> > > > > > > +	if (file_is_encrypt(inode) || file_is_verity(inode) ||
-> > > > > > > +			F2FS_I(inode)->i_flags & F2FS_COMPR_FL)
-> > > > > > > +		return true;
-> > > > > > >     	return f2fs_encrypted_file(inode) || fsverity_active(inode) ||
-> > > > > > >     		f2fs_compressed_file(inode);
-> > > > > > >     }
-> > > > > > > diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
-> > > > > > > index 83639238a1fe..234b8ed02644 100644
-> > > > > > > --- a/fs/f2fs/inode.c
-> > > > > > > +++ b/fs/f2fs/inode.c
-> > > > > > > @@ -276,8 +276,7 @@ static bool sanity_check_inode(struct inode *inode, struct page *node_page)
-> > > > > > >     		}
-> > > > > > >     	}
-> > > > > > > -	if (f2fs_has_inline_data(inode) &&
-> > > > > > > -			(!S_ISREG(inode->i_mode) && !S_ISLNK(inode->i_mode))) {
-> > > > > > > +	if (f2fs_has_inline_data(inode) && !f2fs_may_inline_data(inode)) {
-> > > > > > 
-> > > > > > It seems f2fs_may_inline_data() is breaking the atomic write case. Please fix.
-> > > > > 
-> > > > > sanity_check_inode() change only affect f2fs_iget(), during inode initialization,
-> > > > > file should not be set as atomic one, right?
-> > > > > 
-> > > > > I didn't see any failure during 'f2fs_io write atomic_write' testcase... could you
-> > > > > please provide me detail of the testcase?
-> > > > 
-> > > > I just applied this into my device and was getting lots of the below error
-> > > > messages resulting in open failures of database files.
-> > > 
-> > > Could you please help to apply below patch and dump the log?
-> > > 
-> > > From: Chao Yu <chao@kernel.org>
-> > > Subject: [PATCH] f2fs: fix to do sanity check for inline inode
-> > > 
-> > > Signed-off-by: Chao Yu <chao.yu@oppo.com>
-> > > ---
-> > >    fs/f2fs/f2fs.h  |  7 +++++++
-> > >    fs/f2fs/inode.c | 11 +++++++----
-> > >    2 files changed, 14 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> > > index 0f8c426aed50..13a9212d6cb6 100644
-> > > --- a/fs/f2fs/f2fs.h
-> > > +++ b/fs/f2fs/f2fs.h
-> > > @@ -4159,6 +4159,13 @@ static inline void f2fs_set_encrypted_inode(struct inode *inode)
-> > >     */
-> > >    static inline bool f2fs_post_read_required(struct inode *inode)
-> > >    {
-> > > +	/*
-> > > +	 * used by sanity_check_inode(), when disk layout fields has not
-> > > +	 * been synchronized to inmem fields.
-> > > +	 */
-> > > +	if (file_is_encrypt(inode) || file_is_verity(inode) ||
-> > > +			F2FS_I(inode)->i_flags & F2FS_COMPR_FL)
-> > > +		return true;
-> > >    	return f2fs_encrypted_file(inode) || fsverity_active(inode) ||
-> > >    		f2fs_compressed_file(inode);
-> > >    }
-> > > diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
-> > > index 02630c17da93..a98614a24ad0 100644
-> > > --- a/fs/f2fs/inode.c
-> > > +++ b/fs/f2fs/inode.c
-> > > @@ -276,11 +276,14 @@ static bool sanity_check_inode(struct inode *inode, struct page *node_page)
-> > >    		}
-> > >    	}
-> > > 
-> > > -	if (f2fs_has_inline_data(inode) &&
-> > > -			(!S_ISREG(inode->i_mode) && !S_ISLNK(inode->i_mode))) {
-> > > +	if (f2fs_has_inline_data(inode) && !f2fs_may_inline_data(inode)) {
-> > >    		set_sbi_flag(sbi, SBI_NEED_FSCK);
-> > > -		f2fs_warn(sbi, "%s: inode (ino=%lx, mode=%u) should not have inline_data, run fsck to fix",
-> > > -			  __func__, inode->i_ino, inode->i_mode);
-> > > +		f2fs_warn(sbi, "%s: inode (ino=%lx, mode=%u) reason(%d, %llu, %ld, %d, %d, %lu) should not have inline_data, run fsck to fix",
-> > > +			  __func__, inode->i_ino, inode->i_mode,
-> > > +			  f2fs_is_atomic_file(inode),
-> > > +			  i_size_read(inode), MAX_INLINE_DATA(inode),
-> > > +			  file_is_encrypt(inode), file_is_verity(inode),
-> > > +			  F2FS_I(inode)->i_flags & F2FS_COMPR_FL);
-> > >    		return false;
-> > >    	}
-> > > 
+>   drivers/fsi/fsi-occ.c | 18 +++++++++++++++---
+>   1 file changed, 15 insertions(+), 3 deletions(-)
 > 
-> 
-> _______________________________________________
-> Linux-f2fs-devel mailing list
-> Linux-f2fs-devel@lists.sourceforge.net
-> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+> diff --git a/drivers/fsi/fsi-occ.c b/drivers/fsi/fsi-occ.c
+> index c9cc75fbdfb9..28c176d038a2 100644
+> --- a/drivers/fsi/fsi-occ.c
+> +++ b/drivers/fsi/fsi-occ.c
+> @@ -94,6 +94,7 @@ static int occ_open(struct inode *inode, struct file *file)
+>   	client->occ = occ;
+>   	mutex_init(&client->lock);
+>   	file->private_data = client;
+> +	get_device(occ->dev);
+>   
+>   	/* We allocate a 1-page buffer, make sure it all fits */
+>   	BUILD_BUG_ON((OCC_CMD_DATA_BYTES + 3) > PAGE_SIZE);
+> @@ -197,6 +198,7 @@ static int occ_release(struct inode *inode, struct file *file)
+>   {
+>   	struct occ_client *client = file->private_data;
+>   
+> +	put_device(client->occ->dev);
+>   	free_page((unsigned long)client->buffer);
+>   	kfree(client);
+>   
+> @@ -493,12 +495,19 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
+>   	for (i = 1; i < req_len - 2; ++i)
+>   		checksum += byte_request[i];
+>   
+> -	mutex_lock(&occ->occ_lock);
+> +	rc = mutex_lock_interruptible(&occ->occ_lock);
+> +	if (rc)
+> +		return rc;
+>   
+>   	occ->client_buffer = response;
+>   	occ->client_buffer_size = user_resp_len;
+>   	occ->client_response_size = 0;
+>   
+> +	if (!occ->buffer) {
+> +		rc = -ENOENT;
+> +		goto done;
+> +	}
+> +
+>   	/*
+>   	 * Get a sequence number and update the counter. Avoid a sequence
+>   	 * number of 0 which would pass the response check below even if the
+> @@ -671,10 +680,13 @@ static int occ_remove(struct platform_device *pdev)
+>   {
+>   	struct occ *occ = platform_get_drvdata(pdev);
+>   
+> -	kvfree(occ->buffer);
+> -
+>   	misc_deregister(&occ->mdev);
+>   
+> +	mutex_lock(&occ->occ_lock);
+> +	kvfree(occ->buffer);
+> +	occ->buffer = NULL;
+> +	mutex_unlock(&occ->occ_lock);
+> +
+>   	device_for_each_child(&pdev->dev, NULL, occ_unregister_child);
+>   
+>   	ida_simple_remove(&occ_ida, occ->idx);
+

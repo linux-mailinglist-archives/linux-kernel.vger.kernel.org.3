@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D316D52647E
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6924C52649C
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381374AbiEMObV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45270 "EHLO
+        id S1381418AbiEMObY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380787AbiEMO13 (ORCPT
+        with ESMTP id S1380799AbiEMO13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 13 May 2022 10:27:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E065EDF7;
-        Fri, 13 May 2022 07:27:03 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3199B39828;
+        Fri, 13 May 2022 07:27:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 840BFB82C9D;
-        Fri, 13 May 2022 14:27:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E15C3C34100;
-        Fri, 13 May 2022 14:27:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78DAAB8305B;
+        Fri, 13 May 2022 14:27:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0543C34117;
+        Fri, 13 May 2022 14:27:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652452021;
-        bh=l0wXDFVrQkp+DaaqJRFPdaUiGUGaqXl4hB6va4+NAQs=;
+        s=korg; t=1652452024;
+        bh=HFF/gg0eDw4LZavuZrPdCCTBbCiwwglPcIcU81h9Ij0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g8Q6EwHj5Bccg8R0DrI5FZqaaia1g7N1V4m45nM7/G0PqF1pmjlo0lZndcWGUbYzt
-         UaO1OlYRgknAUDkwMgms9V8dRx6pvRiSW9Yp54iHtUV1ZD/DoB5jWR+14Qa1PA/ODb
-         raWVE3wWARIqqpkZ1W7UWhmbRiXrYth6W1WRSw3A=
+        b=QgOU5oPx2BFbGY9OAJXKYpzJ/HzlQqVUDlei1NiCveRgYCSzcHFqKwTYZGiJGzeW3
+         2s2qxbg/62tavyob6MKIhSpnaw6c7ghRo1Uk7us4ggpQetq0NzoC3I/UciaUIAqrTE
+         egoTy0Sx3aOpG7H6zRkWw4je7JBRLShacuB9vA2Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.4 05/18] nfp: bpf: silence bitwise vs. logical OR warning
-Date:   Fri, 13 May 2022 16:23:31 +0200
-Message-Id: <20220513142229.310212274@linuxfoundation.org>
+        stable@vger.kernel.org, Andreas Larsson <andreas@gaisler.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 5.4 06/18] can: grcan: grcan_probe(): fix broken system id check for errata workaround needs
+Date:   Fri, 13 May 2022 16:23:32 +0200
+Message-Id: <20220513142229.343286299@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220513142229.153291230@linuxfoundation.org>
 References: <20220513142229.153291230@linuxfoundation.org>
@@ -55,61 +54,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Andreas Larsson <andreas@gaisler.com>
 
-commit 8a64ef042eab8a6cec04a6c79d44d1af79b628ca upstream.
+commit 1e93ed26acf03fe6c97c6d573a10178596aadd43 upstream.
 
-A new warning in clang points out two places in this driver where
-boolean expressions are being used with a bitwise OR instead of a
-logical one:
+The systemid property was checked for in the wrong place of the device
+tree and compared to the wrong value.
 
-drivers/net/ethernet/netronome/nfp/nfp_asm.c:199:20: error: use of bitwise '|' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
-        reg->src_lmextn = swreg_lmextn(lreg) | swreg_lmextn(rreg);
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                             ||
-drivers/net/ethernet/netronome/nfp/nfp_asm.c:199:20: note: cast one or both operands to int to silence this warning
-drivers/net/ethernet/netronome/nfp/nfp_asm.c:280:20: error: use of bitwise '|' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
-        reg->src_lmextn = swreg_lmextn(lreg) | swreg_lmextn(rreg);
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                             ||
-drivers/net/ethernet/netronome/nfp/nfp_asm.c:280:20: note: cast one or both operands to int to silence this warning
-2 errors generated.
-
-The motivation for the warning is that logical operations short circuit
-while bitwise operations do not. In this case, it does not seem like
-short circuiting is harmful so implement the suggested fix of changing
-to a logical operation to fix the warning.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1479
-Reported-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Link: https://lore.kernel.org/r/20211018193101.2340261-1-nathan@kernel.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 6cec9b07fe6a ("can: grcan: Add device driver for GRCAN and GRHCAN cores")
+Link: https://lore.kernel.org/all/20220429084656.29788-3-andreas@gaisler.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Andreas Larsson <andreas@gaisler.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/netronome/nfp/nfp_asm.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/can/grcan.c |   16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
---- a/drivers/net/ethernet/netronome/nfp/nfp_asm.c
-+++ b/drivers/net/ethernet/netronome/nfp/nfp_asm.c
-@@ -196,7 +196,7 @@ int swreg_to_unrestricted(swreg dst, swr
- 	}
+--- a/drivers/net/can/grcan.c
++++ b/drivers/net/can/grcan.c
+@@ -241,7 +241,7 @@ struct grcan_device_config {
+ 		.rxsize		= GRCAN_DEFAULT_BUFFER_SIZE,	\
+ 		}
  
- 	reg->dst_lmextn = swreg_lmextn(dst);
--	reg->src_lmextn = swreg_lmextn(lreg) | swreg_lmextn(rreg);
-+	reg->src_lmextn = swreg_lmextn(lreg) || swreg_lmextn(rreg);
+-#define GRCAN_TXBUG_SAFE_GRLIB_VERSION	0x4100
++#define GRCAN_TXBUG_SAFE_GRLIB_VERSION	4100
+ #define GRLIB_VERSION_MASK		0xffff
  
- 	return 0;
- }
-@@ -277,7 +277,7 @@ int swreg_to_restricted(swreg dst, swreg
- 	}
+ /* GRCAN private data structure */
+@@ -1656,6 +1656,7 @@ exit_free_candev:
+ static int grcan_probe(struct platform_device *ofdev)
+ {
+ 	struct device_node *np = ofdev->dev.of_node;
++	struct device_node *sysid_parent;
+ 	struct resource *res;
+ 	u32 sysid, ambafreq;
+ 	int irq, err;
+@@ -1665,10 +1666,15 @@ static int grcan_probe(struct platform_d
+ 	/* Compare GRLIB version number with the first that does not
+ 	 * have the tx bug (see start_xmit)
+ 	 */
+-	err = of_property_read_u32(np, "systemid", &sysid);
+-	if (!err && ((sysid & GRLIB_VERSION_MASK)
+-		     >= GRCAN_TXBUG_SAFE_GRLIB_VERSION))
+-		txbug = false;
++	sysid_parent = of_find_node_by_path("/ambapp0");
++	if (sysid_parent) {
++		of_node_get(sysid_parent);
++		err = of_property_read_u32(sysid_parent, "systemid", &sysid);
++		if (!err && ((sysid & GRLIB_VERSION_MASK) >=
++			     GRCAN_TXBUG_SAFE_GRLIB_VERSION))
++			txbug = false;
++		of_node_put(sysid_parent);
++	}
  
- 	reg->dst_lmextn = swreg_lmextn(dst);
--	reg->src_lmextn = swreg_lmextn(lreg) | swreg_lmextn(rreg);
-+	reg->src_lmextn = swreg_lmextn(lreg) || swreg_lmextn(rreg);
- 
- 	return 0;
- }
+ 	err = of_property_read_u32(np, "freq", &ambafreq);
+ 	if (err) {
 
 

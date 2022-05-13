@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1061F52680D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:17:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFB4F526809
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382839AbiEMRQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 13:16:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46276 "EHLO
+        id S1382824AbiEMRQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 13:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382380AbiEMRQ0 (ORCPT
+        with ESMTP id S1382779AbiEMRQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 13:16:26 -0400
+        Fri, 13 May 2022 13:16:27 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572E5DE96;
-        Fri, 13 May 2022 10:16:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DEB463A0;
+        Fri, 13 May 2022 10:16:25 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 5AB5E1F463B2
+        with ESMTPSA id 4B9C61F463B6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652462183;
-        bh=BzU2sp5uWjhJVZc+Pbqb4F7Rd9WBetm2NBJji/SvJBY=;
+        s=mail; t=1652462184;
+        bh=6b5Fn00QFN3S8pk3LiXp3oowU6+YetKGNFXGTWU1NeQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OJc97YFlkTW3xxg3GtC7OakusKIMZYM+wuXAKWighauBw2uJyGzcfsqcZsz5VqAFV
-         RWishoAgfjZz2c6TXEZNMSIdNs+CdyUZq4pOwkTSmAWDwR7mlPxF06Ms0g4FvKVO2f
-         vufJLWmDKnassIyseehNSh9pnQItHF4Ey6NLn0MpTqGGDMdX1PZviBrxkfrwOiDQAz
-         gg76nc47QF79upQAdOhoce2wBekySwSMBh1LptMzI5CT/bV1vtJDymEgo78rIZZsYS
-         r2q4xDGBHHNcTGYr2AwhPET+H9AeuKw80Ff/tt8gh7iZ/s+HG81g5spjKk/fCsUB7J
-         sJ/QYWoHK2ijg==
+        b=S5rfzoUU1xMstwvoem9aQMqhyD6+D+l3IzMQ2gv3FhEHZWP3irW9F1hY5Z1u8Ge2b
+         rhu8YwtB/1D5un8uqnNgU7CvrQRvgFRAXXc/LZnuBb3tZ5gEkRa8NRCvd502VTygfH
+         T+b7LhLPTB60WIS2Kfwm62TMUPcYw9tY5p2C4B4seDTSnwiJ8Exy9NymG7b3HV/oM0
+         eQ+UAANxW41CqUsPR8XZRzcw18NyQbGSP7MUpTwtUflaIMwYf/qvJX6gEhASghzPF9
+         ZJyveqBm5OhnjoyeEYmq0/PwID7d9/u7Qm/dkJZFRV0Tg9cvCc1TLZmOiqTrnbRxWr
+         dBldG/nYsyYWA==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     robh+dt@kernel.org
@@ -40,9 +40,9 @@ Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
         kernel@collabora.com,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 1/7] arm64: dts: mediatek: mt6795: Create soc bus node and move mmio devices
-Date:   Fri, 13 May 2022 19:16:11 +0200
-Message-Id: <20220513171617.504430-2-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 2/7] arm64: dts: mediatek: mt6795: Add cpu-map and L2 cache
+Date:   Fri, 13 May 2022 19:16:12 +0200
+Message-Id: <20220513171617.504430-3-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220513171617.504430-1-angelogioacchino.delregno@collabora.com>
 References: <20220513171617.504430-1-angelogioacchino.delregno@collabora.com>
@@ -58,136 +58,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MMIO devices should be inside of a soc bus node, as it's done for the
-vast majority of ARM64 devicetrees, and for almost all MTK devicetrees.
-Create a simple-bus soc node and move all devices with a MMIO address
-space in there.
+This SoC is HMP and has two clusters with four Cortex-A53 cores each:
+declare a cpu map and, while at it, also add the next-level-cache
+properties.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- arch/arm64/boot/dts/mediatek/mt6795.dtsi | 105 ++++++++++++-----------
- 1 file changed, 56 insertions(+), 49 deletions(-)
+ arch/arm64/boot/dts/mediatek/mt6795.dtsi | 56 ++++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt6795.dtsi b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
-index c85659d0ff5d..167f90bd991a 100644
+index 167f90bd991a..1456b9035336 100644
 --- a/arch/arm64/boot/dts/mediatek/mt6795.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
-@@ -117,59 +117,66 @@ timer {
- 			     (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
- 	};
+@@ -34,6 +34,7 @@ cpu0: cpu@0 {
+ 			compatible = "arm,cortex-a53";
+ 			enable-method = "psci";
+ 			reg = <0x000>;
++			next-level-cache = <&l2_0>;
+ 		};
  
--	sysirq: intpol-controller@10200620 {
--		compatible = "mediatek,mt6795-sysirq",
--			     "mediatek,mt6577-sysirq";
--		interrupt-controller;
--		#interrupt-cells = <3>;
--		interrupt-parent = <&gic>;
--		reg = <0 0x10200620 0 0x20>;
--	};
-+	soc {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		compatible = "simple-bus";
-+		ranges;
+ 		cpu1: cpu@1 {
+@@ -41,6 +42,7 @@ cpu1: cpu@1 {
+ 			compatible = "arm,cortex-a53";
+ 			enable-method = "psci";
+ 			reg = <0x001>;
++			next-level-cache = <&l2_0>;
+ 		};
+ 
+ 		cpu2: cpu@2 {
+@@ -48,6 +50,7 @@ cpu2: cpu@2 {
+ 			compatible = "arm,cortex-a53";
+ 			enable-method = "psci";
+ 			reg = <0x002>;
++			next-level-cache = <&l2_0>;
+ 		};
+ 
+ 		cpu3: cpu@3 {
+@@ -55,6 +58,7 @@ cpu3: cpu@3 {
+ 			compatible = "arm,cortex-a53";
+ 			enable-method = "psci";
+ 			reg = <0x003>;
++			next-level-cache = <&l2_0>;
+ 		};
+ 
+ 		cpu4: cpu@100 {
+@@ -62,6 +66,7 @@ cpu4: cpu@100 {
+ 			compatible = "arm,cortex-a53";
+ 			enable-method = "psci";
+ 			reg = <0x100>;
++			next-level-cache = <&l2_1>;
+ 		};
+ 
+ 		cpu5: cpu@101 {
+@@ -69,6 +74,7 @@ cpu5: cpu@101 {
+ 			compatible = "arm,cortex-a53";
+ 			enable-method = "psci";
+ 			reg = <0x101>;
++			next-level-cache = <&l2_1>;
+ 		};
+ 
+ 		cpu6: cpu@102 {
+@@ -76,6 +82,7 @@ cpu6: cpu@102 {
+ 			compatible = "arm,cortex-a53";
+ 			enable-method = "psci";
+ 			reg = <0x102>;
++			next-level-cache = <&l2_1>;
+ 		};
+ 
+ 		cpu7: cpu@103 {
+@@ -83,6 +90,55 @@ cpu7: cpu@103 {
+ 			compatible = "arm,cortex-a53";
+ 			enable-method = "psci";
+ 			reg = <0x103>;
++			next-level-cache = <&l2_1>;
++		};
 +
-+		sysirq: intpol-controller@10200620 {
-+			compatible = "mediatek,mt6795-sysirq",
-+				     "mediatek,mt6577-sysirq";
-+			interrupt-controller;
-+			#interrupt-cells = <3>;
-+			interrupt-parent = <&gic>;
-+			reg = <0 0x10200620 0 0x20>;
++		cpu-map {
++			cluster0 {
++				core0 {
++					cpu = <&cpu0>;
++				};
++
++				core1 {
++					cpu = <&cpu1>;
++				};
++
++				core2 {
++					cpu = <&cpu2>;
++				};
++
++				core3 {
++					cpu = <&cpu3>;
++				};
++			};
++
++			cluster1 {
++				core0 {
++					cpu = <&cpu4>;
++				};
++
++				core1 {
++					cpu = <&cpu5>;
++				};
++
++				core2 {
++					cpu = <&cpu6>;
++				};
++
++				core3 {
++					cpu = <&cpu7>;
++				};
++			};
 +		};
- 
--	gic: interrupt-controller@10221000 {
--		compatible = "arm,gic-400";
--		#interrupt-cells = <3>;
--		interrupt-parent = <&gic>;
--		interrupt-controller;
--		reg = <0 0x10221000 0 0x1000>,
--		      <0 0x10222000 0 0x2000>,
--		      <0 0x10224000 0 0x2000>,
--		      <0 0x10226000 0 0x2000>;
--	};
-+		gic: interrupt-controller@10221000 {
-+			compatible = "arm,gic-400";
-+			#interrupt-cells = <3>;
-+			interrupt-parent = <&gic>;
-+			interrupt-controller;
-+			reg = <0 0x10221000 0 0x1000>,
-+			      <0 0x10222000 0 0x2000>,
-+			      <0 0x10224000 0 0x2000>,
-+			      <0 0x10226000 0 0x2000>;
++
++		l2_0: l2-cache0 {
++			compatible = "cache";
++			cache-level = <2>;
 +		};
- 
--	uart0: serial@11002000 {
--		compatible = "mediatek,mt6795-uart",
--			     "mediatek,mt6577-uart";
--		reg = <0 0x11002000 0 0x400>;
--		interrupts = <GIC_SPI 91 IRQ_TYPE_LEVEL_LOW>;
--		clocks = <&uart_clk>;
--		status = "disabled";
--	};
-+		uart0: serial@11002000 {
-+			compatible = "mediatek,mt6795-uart",
-+				     "mediatek,mt6577-uart";
-+			reg = <0 0x11002000 0 0x400>;
-+			interrupts = <GIC_SPI 91 IRQ_TYPE_LEVEL_LOW>;
-+			clocks = <&uart_clk>;
-+			status = "disabled";
-+		};
- 
--	uart1: serial@11003000 {
--		compatible = "mediatek,mt6795-uart",
--			     "mediatek,mt6577-uart";
--		reg = <0 0x11003000 0 0x400>;
--		interrupts = <GIC_SPI 92 IRQ_TYPE_LEVEL_LOW>;
--		clocks = <&uart_clk>;
--		status = "disabled";
--	};
-+		uart1: serial@11003000 {
-+			compatible = "mediatek,mt6795-uart",
-+				     "mediatek,mt6577-uart";
-+			reg = <0 0x11003000 0 0x400>;
-+			interrupts = <GIC_SPI 92 IRQ_TYPE_LEVEL_LOW>;
-+			clocks = <&uart_clk>;
-+			status = "disabled";
-+		};
- 
--	uart2: serial@11004000 {
--		compatible = "mediatek,mt6795-uart",
--			     "mediatek,mt6577-uart";
--		reg = <0 0x11004000 0 0x400>;
--		interrupts = <GIC_SPI 93 IRQ_TYPE_LEVEL_LOW>;
--		clocks = <&uart_clk>;
--		status = "disabled";
--	};
-+		uart2: serial@11004000 {
-+			compatible = "mediatek,mt6795-uart",
-+				     "mediatek,mt6577-uart";
-+			reg = <0 0x11004000 0 0x400>;
-+			interrupts = <GIC_SPI 93 IRQ_TYPE_LEVEL_LOW>;
-+			clocks = <&uart_clk>;
-+			status = "disabled";
-+		};
- 
--	uart3: serial@11005000 {
--		compatible = "mediatek,mt6795-uart",
--			     "mediatek,mt6577-uart";
--		reg = <0 0x11005000 0 0x400>;
--		interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_LOW>;
--		clocks = <&uart_clk>;
--		status = "disabled";
-+		uart3: serial@11005000 {
-+			compatible = "mediatek,mt6795-uart",
-+				     "mediatek,mt6577-uart";
-+			reg = <0 0x11005000 0 0x400>;
-+			interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_LOW>;
-+			clocks = <&uart_clk>;
-+			status = "disabled";
-+		};
++
++		l2_1: l2-cache1 {
++			compatible = "cache";
++			cache-level = <2>;
+ 		};
  	};
- };
+ 
 -- 
 2.35.1
 

@@ -2,87 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6411B52604E
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD6D526043
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:58:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379568AbiEMKkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 06:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36078 "EHLO
+        id S1379572AbiEMKmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 06:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379549AbiEMKkS (ORCPT
+        with ESMTP id S1355554AbiEMKmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 06:40:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 542012992FA;
-        Fri, 13 May 2022 03:40:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E17926153C;
-        Fri, 13 May 2022 10:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 47F95C34119;
-        Fri, 13 May 2022 10:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652438416;
-        bh=zTvTiCTVxbvSW+PS+KKIL6/4dwDy6vvmSFDisj1b1rs=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=OdmEg7jyVFt1B6nyojJY4nORTfp1ZJ7uj+56TSh9q1DQrlVz54hVn8B1xmaCkpJl+
-         TvhiUvWG91RyFUFt33Gf9UON7tsB41TDOW1JJAi5I/UevEMOMOnQms9tT7YSuRJ0Ci
-         v3FUAFGGOEhg1uJJHgSo/4ioQxgDSujU6GRgDFCmZW8ztYxInhkLZdMEQJ+b0MY80b
-         Pm6/WDTDPGE7YtNIEVsGFx11SsvvOdD5oxmE0oR23oHZNnNjW3i9DPzhHzLobFJq3K
-         daoof2bgKQ2468WGXles9Nqm1JuTet+EdmibBwmGpgnSTZOHobgJ05olyydGmNuyEi
-         fD/3lMKuQVHPQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 24D04F03935;
-        Fri, 13 May 2022 10:40:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 13 May 2022 06:42:14 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF39B66CA7
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 03:42:13 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 38320143D;
+        Fri, 13 May 2022 03:42:13 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DD6253F5A1;
+        Fri, 13 May 2022 03:42:11 -0700 (PDT)
+Message-ID: <afafbb0c-5279-bee8-1ef4-434733e2a552@arm.com>
+Date:   Fri, 13 May 2022 12:42:00 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: page_pool: add page allocation stats for two
- fast page allocate path
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165243841613.19214.9273427764376965858.git-patchwork-notify@kernel.org>
-Date:   Fri, 13 May 2022 10:40:16 +0000
-References: <20220512065631.33673-1-huangguangbin2@huawei.com>
-In-Reply-To: <20220512065631.33673-1-huangguangbin2@huawei.com>
-To:     Guangbin Huang <huangguangbin2@huawei.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
-        pabeni@redhat.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lipeng321@huawei.com,
-        chenhao288@hisilicon.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [RFC PATCH] arch_topology: Use llc_id instead of package_id
+Content-Language: en-US
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Qing Wang <wangqing@vivo.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        linux-kernel@vger.kernel.org
+References: <20220513083400.343706-1-dietmar.eggemann@arm.com>
+ <20220513090330.z25fwthekn4rjkwq@bogus>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20220513090330.z25fwthekn4rjkwq@bogus>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On 13/05/2022 11:03, Sudeep Holla wrote:
+> On Fri, May 13, 2022 at 10:34:00AM +0200, Dietmar Eggemann wrote:
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+[...]
 
-On Thu, 12 May 2022 14:56:31 +0800 you wrote:
-> From: Jie Wang <wangjie125@huawei.com>
+>> @@ -527,7 +528,8 @@ static int __init parse_core(struct device_node *core, int package_id,
+>>  			return -EINVAL;
+>>  		}
+>>  
+>> -		cpu_topology[cpu].package_id = package_id;
+>> +		cpu_topology[cpu].package_id = 0;
 > 
-> Currently If use page pool allocation stats to analysis a RX performance
-> degradation problem. These stats only count for pages allocate from
-> page_pool_alloc_pages. But nic drivers such as hns3 use
-> page_pool_dev_alloc_frag to allocate pages, so page stats in this API
-> should also be counted.
+> While the above looks good and matches with what I am attempting to do
+> as well ...
 > 
-> [...]
+>> +		cpu_topology[cpu].llc_id = llc_id;
+> 
+> This looks wrong for simple reason that this is derived incorrectly from
+> the cpu-map while there is no guarantee that it matches the last level
+> cache ID on the system as we didn't parse the cache topology for this.
+> So I disagree with this change as it might conflict with the actual and
+> correct llc_id.
 
-Here is the summary with links:
-  - [net-next] net: page_pool: add page allocation stats for two fast page allocate path
-    https://git.kernel.org/netdev/net-next/c/0f6deac3a079
+It might not match the LLC, that's true. Something we have already today
+in Android for DynamIQ clusters with big/Little. People using 1. level
+clusters to group CPUs according to uArch.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+My point is we manage to get:
 
+SMT - cpu_smt_mask()
+CLS - cpu_clustergroup_mask()
+MC  - cpu_coregroup_mask()
+DIE - cpu_cpu_mask()
 
+covered in ACPI with the cpu_topology[] structure and if we want CLS on
+DT we have to save cluster_id for the 2. level (DT) cluster.
+
+And that's why I proposed to (ab)use llc_id to form the MC mask.
+
+I'm not currently aware of another solution to get CLS somehow elegantly
+into a DT system.

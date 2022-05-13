@@ -2,239 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E669F5264DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 082905264CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381398AbiEMOfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:35:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46584 "EHLO
+        id S1381930AbiEMOgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380980AbiEMObq (ORCPT
+        with ESMTP id S1381307AbiEMOea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:31:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887FB1B12CA
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:29:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D01FA621C6
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 14:29:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3453C34116;
-        Fri, 13 May 2022 14:29:13 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="P+KlA1Xu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1652452152;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=DHSCR7JojA9am5Am3S46p3wilJLdjEwEscTFyoAsl74=;
-        b=P+KlA1XufzwcZwfv10Q1G+C2WJU0Hy/bQCdU6bXhwD9ObbPNnlUxuKbzapndMke6AZt/bx
-        C45X+dstpKEvCWsrWFuQsWMrbrkbzZlWZ6M0HcmRXc1db8za0jTLD/crmSblLYeYNzsP3Z
-        5kwvZimxlRlscD6+nZsTGXVa1AnRWxM=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 292509fe (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 13 May 2022 14:29:11 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: [PATCH] random: move initialization functions out of hot pages
-Date:   Fri, 13 May 2022 16:29:08 +0200
-Message-Id: <20220513142908.341220-1-Jason@zx2c4.com>
+        Fri, 13 May 2022 10:34:30 -0400
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84D31C194A;
+        Fri, 13 May 2022 07:29:55 -0700 (PDT)
+Received: by mail-qk1-f175.google.com with SMTP id a22so7168519qkl.5;
+        Fri, 13 May 2022 07:29:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kCqc8sV483lUEyV7vQbAV+jRc+iGrWAeuA3SV0zpnxo=;
+        b=ZBDElzojxrywJOK2wFVK6Z3KpjIePkIp+3HupR5fD2b6CFhCb39uqaI0PXXfj8qs8L
+         xSvDDFD7eHIBb6S1AYAt5KFMd1Ncl8KxdFpQELf1/LdExqW/mLR1AB8G9q+rS+E8QsfK
+         rzUpEj/7BInGdFukMU4zGOWgyuY6lIuugmdC5TQDzepBI4EpBF7MNAEbm69QcLGLSxhe
+         ISOLEuxeNZSlu1fztmdz0e5wcS8J69dAXIiPLvQcslGSrKDvn4Zv6GGQgW1dZABXSc83
+         /A5nCKjevRFFN8Th/qJ031SNO2m9Skj4cwe1HJJvRkhIrliN6J9jQOgCY7u9sWpQRbWR
+         ttEg==
+X-Gm-Message-State: AOAM531Ey0+/8ZOBU/zOHhBYA11+0tRkMMGnsNNtDcDLI8j8tztH8vHV
+        +bEjKakNw7kTCH2d2X2x/pwWRRnyVWZ1Wg==
+X-Google-Smtp-Source: ABdhPJzswxu/81gxECvhYo3qCOz0H6swOQZwmj1eFMMj6QTQZuHkp3bZKsy+oaZJ4lGmSpDWfSjpAQ==
+X-Received: by 2002:a37:f518:0:b0:680:a811:1ef7 with SMTP id l24-20020a37f518000000b00680a8111ef7mr3716825qkk.765.1652452194727;
+        Fri, 13 May 2022 07:29:54 -0700 (PDT)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id m6-20020ac86886000000b002f39b99f6bcsm1455857qtq.86.2022.05.13.07.29.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 07:29:53 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2f16645872fso92004917b3.4;
+        Fri, 13 May 2022 07:29:53 -0700 (PDT)
+X-Received: by 2002:a81:913:0:b0:2f7:c833:f304 with SMTP id
+ 19-20020a810913000000b002f7c833f304mr6026190ywj.283.1652452193243; Fri, 13
+ May 2022 07:29:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220511183210.5248-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220511183210.5248-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdXDQ+eECWwvAGOb-MaN16H17qm_v_1baZ7PdT8qx9McSw@mail.gmail.com>
+ <CA+V-a8tNrJQtAQYoUKVwH9w4QOyA9JUWNjiYDPUPsj6UuJ4vaA@mail.gmail.com>
+ <CAMuHMdVazy9y_U6Nva+B-3vuX1Ersq+QirXDDgSh28pj8s=EJA@mail.gmail.com> <CA+V-a8s2Gf22MPLoZMJS_5uDwzOboJ2i8rZ3KdRFy7a7wv8pGg@mail.gmail.com>
+In-Reply-To: <CA+V-a8s2Gf22MPLoZMJS_5uDwzOboJ2i8rZ3KdRFy7a7wv8pGg@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 13 May 2022 16:29:41 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXHJ385isGd-x8u4sFm1w=rxOC89SUryYbSd34bijkb0g@mail.gmail.com>
+Message-ID: <CAMuHMdXHJ385isGd-x8u4sFm1w=rxOC89SUryYbSd34bijkb0g@mail.gmail.com>
+Subject: Re: [PATCH v3 5/5] pinctrl: renesas: pinctrl-rzg2l: Add IRQ domain to
+ handle GPIO interrupt
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Much of random.c is devoted to initializing the rng and accounting for
-when a sufficient amount of entropy has been added. In a perfect world,
-this would all happen during init, and so we could mark these functions
-as __init. But in reality, this isn't the case: sometimes the rng only
-finishes initializing some seconds after system init is finished.
+Hi Prabhakar,
 
-For this reason, at the moment, a whole host of functions that are only
-used relatively close to system init and then never again are intermixed
-with functions that are used in hot code all the time. This creates more
-cache misses than necessary.
+On Fri, May 13, 2022 at 3:56 PM Lad, Prabhakar
+<prabhakar.csengg@gmail.com> wrote:
+> On Fri, May 13, 2022 at 7:53 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > On Thu, May 12, 2022 at 7:36 PM Lad, Prabhakar
+> > <prabhakar.csengg@gmail.com> wrote:
+> > > On Thu, May 12, 2022 at 8:39 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > > On Wed, May 11, 2022 at 8:32 PM Lad Prabhakar
+> > > > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > > > > Add IRQ domian to RZ/G2L pinctrl driver to handle GPIO interrupt.
+> > > > > GPIO0-GPIO122 pins can be used as IRQ lines but only 32 pins can be
+> > > > > used as IRQ lines at given time. Selection of pins as IRQ lines
+> > > > > is handled by IA55 (which is the IRQC block) which sits in between the
+> > > > > GPIO and GIC.
+> > > > >
+> > > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > >
+> > > > Thanks for your patch!
+> > > >
+> > > > > --- a/drivers/pinctrl/renesas/pinctrl-rzg2l.c
+> > > > > +++ b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
+> > > >
+> > > > >  static int rzg2l_gpio_register(struct rzg2l_pinctrl *pctrl)
+> > > > >  {
+> > > > >         struct device_node *np = pctrl->dev->of_node;
+> > > > >         struct gpio_chip *chip = &pctrl->gpio_chip;
+> > > > >         const char *name = dev_name(pctrl->dev);
+> > > > > +       struct irq_domain *parent_domain;
+> > > > >         struct of_phandle_args of_args;
+> > > > > +       struct device_node *parent_np;
+> > > > > +       struct gpio_irq_chip *girq;
+> > > > >         int ret;
+> > > > >
+> > > > > +       parent_np = of_irq_find_parent(np);
+> > > > > +       if (!parent_np)
+> > > > > +               return -ENXIO;
+> > > > > +
+> > > > > +       parent_domain = irq_find_host(parent_np);
+> > > > > +       of_node_put(parent_np);
+> > > > > +       if (!parent_domain)
+> > > > > +               return -EPROBE_DEFER;
+> > > > > +
+> > > > >         ret = of_parse_phandle_with_fixed_args(np, "gpio-ranges", 3, 0, &of_args);
+> > > > >         if (ret) {
+> > > > >                 dev_err(pctrl->dev, "Unable to parse gpio-ranges\n");
+> > > > > @@ -1138,6 +1330,15 @@ static int rzg2l_gpio_register(struct rzg2l_pinctrl *pctrl)
+> > > > >         chip->base = -1;
+> > > > >         chip->ngpio = of_args.args[2];
+> > > > >
+> > > > > +       girq = &chip->irq;
+> > > > > +       girq->chip = &rzg2l_gpio_irqchip;
+> > > > > +       girq->fwnode = of_node_to_fwnode(np);
+> > > > > +       girq->parent_domain = parent_domain;
+> > > > > +       girq->child_to_parent_hwirq = rzg2l_gpio_child_to_parent_hwirq;
+> > > > > +       girq->populate_parent_alloc_arg = rzg2l_gpio_populate_parent_fwspec;
+> > > > > +       girq->child_irq_domain_ops.free = rzg2l_gpio_irq_domain_free;
+> > > > > +       girq->ngirq = RZG2L_TINT_MAX_INTERRUPT;
+> > > > > +
+> > > >
+> > > > I think you need to provide a .init_valid_mask() callback, as
+> > > > gpiochip_irqchip_remove() relies on that for destroying interrupts.
+> > > Are you suggesting  the callback to avoid looping through all the GPIO pins?
+> >
+> > gpiochip_irqchip_remove() does:
+> >
+> >         /* Remove all IRQ mappings and delete the domain */
+> >         if (gc->irq.domain) {
+> >                 unsigned int irq;
+> >
+> >                 for (offset = 0; offset < gc->ngpio; offset++) {
+> >                        if (!gpiochip_irqchip_irq_valid(gc, offset))
+> >                                 continue;
+> >
+> >                         irq = irq_find_mapping(gc->irq.domain, offset);
+> >                         irq_dispose_mapping(irq);
+> >                 }
+> >
+> >                 irq_domain_remove(gc->irq.domain);
+> >
+> >         }
+> >
+> > The main thing is not about avoiding to loop through all GPIO pins,
+> > but to avoid irq_{find,dispose}_mapping() doing the wrong thing.
+> So in our case if we don't implement valid masks, that would mean all
+> the pins are valid. irq_find_mapping() would return 0 if no mapping is
+> found to the corresponding offset and irq_dispose_mapping() would
+> simply return back without doing anything if virq == 0.(In this patch
+> rzg2l_gpio_free() does call irq_{find,dispose}_mapping())
 
-In order to pack the hot code closer together, this commit moves the
-initialization functions that can't be marked as __init into
-.text.unlikely by way of the __cold attribute.
+But "offset" is a number from the GPIO offset space (0-122), while
+irq_find_mapping() expects a number from the domain's IRQ space,
+which is only 0-31?
 
-Of particular note is moving credit_init_bits() into a macro wrapper
-that inlines the crng_ready() static branch check. This avoids a
-function call to a nop+ret, and most notably prevents extra entropy
-arithmetic from being computed in mix_interrupt_randomness().
+> > The loop is over all GPIO offsets, while not all of them are mapped
+> > to valid interrupts. Does the above work correctly?
+> >
+> I haven't tested unloading the pinctrl driver which should call
+> gpiochip_irqchip_remove() (we don't have remove call back for pinctrl
+> driver)
+>
+> > > > However, the mask will need to be dynamic, as GPIO interrupts can be
+> > > > mapped and unmapped to one of the 32 available interrupts dynamically,
+> > > > right?
+> > > Yep that's correct.
+> > >
+> > > > I'm not sure if that can be done easily: if gpiochip_irqchip_irq_valid()
+> > > > is ever called too early, before the mapping is done, it would fail.
+> > > >
+> > > The mask initialization is a one time process and that is during
+> > > adding the GPIO chip. At this stage we won't be knowing what will be
+> > > the valid GPIO pins used as interrupts. Maybe the core needs to
+> > > implement a callback which lands in the GPIO controller driver to tell
+> > > if the gpio irq line is valid. This way we can handle dynamic
+> > > interrupts.
+> >
+> > Upon closer look, I think the mask is a red herring, and we don't
+> > need it.
+> Agreed.
+>
+> > But we do need to handle the (possible) mismatch between GPIO
+> > offset (index) and IRQ offset in the above code.
+> >
+> Agreed, do you see any possibility of the mismatch I have missed?
 
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c | 36 +++++++++++++++++++-----------------
- 1 file changed, 19 insertions(+), 17 deletions(-)
+gpiochip_to_irq():
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 5e5f0c51e3b1..812070f4731d 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -110,7 +110,7 @@ bool rng_is_initialized(void)
- }
- EXPORT_SYMBOL(rng_is_initialized);
- 
--static void crng_set_ready(struct work_struct *work)
-+static void __cold crng_set_ready(struct work_struct *work)
- {
- 	static_branch_enable(&crng_is_ready);
- }
-@@ -149,7 +149,7 @@ EXPORT_SYMBOL(wait_for_random_bytes);
-  * returns: 0 if callback is successfully added
-  *	    -EALREADY if pool is already initialised (callback not called)
-  */
--int register_random_ready_notifier(struct notifier_block *nb)
-+int __cold register_random_ready_notifier(struct notifier_block *nb)
- {
- 	unsigned long flags;
- 	int ret = -EALREADY;
-@@ -167,7 +167,7 @@ int register_random_ready_notifier(struct notifier_block *nb)
- /*
-  * Delete a previously registered readiness callback function.
-  */
--int unregister_random_ready_notifier(struct notifier_block *nb)
-+int __cold unregister_random_ready_notifier(struct notifier_block *nb)
- {
- 	unsigned long flags;
- 	int ret;
-@@ -178,7 +178,7 @@ int unregister_random_ready_notifier(struct notifier_block *nb)
- 	return ret;
- }
- 
--static void process_random_ready_list(void)
-+static void __cold process_random_ready_list(void)
- {
- 	unsigned long flags;
- 
-@@ -190,7 +190,7 @@ static void process_random_ready_list(void)
- #define warn_unseeded_randomness() \
- 	_warn_unseeded_randomness(__func__, (void *)_RET_IP_)
- 
--static void _warn_unseeded_randomness(const char *func_name, void *caller)
-+static void __cold _warn_unseeded_randomness(const char *func_name, void *caller)
- {
- 	if (!IS_ENABLED(CONFIG_WARN_ALL_UNSEEDED_RANDOM) || crng_ready())
- 		return;
-@@ -615,7 +615,7 @@ EXPORT_SYMBOL(get_random_u32);
-  * This function is called when the CPU is coming up, with entry
-  * CPUHP_RANDOM_PREPARE, which comes before CPUHP_WORKQUEUE_PREP.
-  */
--int random_prepare_cpu(unsigned int cpu)
-+int __cold random_prepare_cpu(unsigned int cpu)
- {
- 	/*
- 	 * When the cpu comes back online, immediately invalidate both
-@@ -790,13 +790,15 @@ static void extract_entropy(void *buf, size_t len)
- 	memzero_explicit(&block, sizeof(block));
- }
- 
--static void credit_init_bits(size_t bits)
-+#define credit_init_bits(bits) if (!crng_ready()) _credit_init_bits(bits)
-+
-+static void __cold _credit_init_bits(size_t bits)
- {
- 	static struct execute_work set_ready;
- 	unsigned int new, orig, add;
- 	unsigned long flags;
- 
--	if (crng_ready() || !bits)
-+	if (!bits)
- 		return;
- 
- 	add = min_t(size_t, bits, POOL_BITS);
-@@ -1012,7 +1014,7 @@ EXPORT_SYMBOL_GPL(add_hwgenerator_randomness);
-  * Handle random seed passed by bootloader, and credit it if
-  * CONFIG_RANDOM_TRUST_BOOTLOADER is set.
-  */
--void add_bootloader_randomness(const void *buf, size_t len)
-+void __cold add_bootloader_randomness(const void *buf, size_t len)
- {
- 	mix_pool_bytes(buf, len);
- 	if (trust_bootloader)
-@@ -1028,7 +1030,7 @@ static BLOCKING_NOTIFIER_HEAD(vmfork_chain);
-  * don't credit it, but we do immediately force a reseed after so
-  * that it's used by the crng posthaste.
-  */
--void add_vmfork_randomness(const void *unique_vm_id, size_t len)
-+void __cold add_vmfork_randomness(const void *unique_vm_id, size_t len)
- {
- 	add_device_randomness(unique_vm_id, len);
- 	if (crng_ready()) {
-@@ -1041,13 +1043,13 @@ void add_vmfork_randomness(const void *unique_vm_id, size_t len)
- EXPORT_SYMBOL_GPL(add_vmfork_randomness);
- #endif
- 
--int register_random_vmfork_notifier(struct notifier_block *nb)
-+int __cold register_random_vmfork_notifier(struct notifier_block *nb)
- {
- 	return blocking_notifier_chain_register(&vmfork_chain, nb);
- }
- EXPORT_SYMBOL_GPL(register_random_vmfork_notifier);
- 
--int unregister_random_vmfork_notifier(struct notifier_block *nb)
-+int __cold unregister_random_vmfork_notifier(struct notifier_block *nb)
- {
- 	return blocking_notifier_chain_unregister(&vmfork_chain, nb);
- }
-@@ -1092,7 +1094,7 @@ static void fast_mix(unsigned long s[4], unsigned long v1, unsigned long v2)
-  * This function is called when the CPU has just come online, with
-  * entry CPUHP_AP_RANDOM_ONLINE, just after CPUHP_AP_WORKQUEUE_ONLINE.
-  */
--int random_online_cpu(unsigned int cpu)
-+int __cold random_online_cpu(unsigned int cpu)
- {
- 	/*
- 	 * During CPU shutdown and before CPU onlining, add_interrupt_
-@@ -1249,7 +1251,7 @@ static void add_timer_randomness(struct timer_rand_state *state, unsigned int nu
- 	if (in_hardirq())
- 		this_cpu_ptr(&irq_randomness)->count += max(1u, bits * 64) - 1;
- 	else
--		credit_init_bits(bits);
-+		_credit_init_bits(bits);
- }
- 
- void add_input_randomness(unsigned int type, unsigned int code, unsigned int value)
-@@ -1277,7 +1279,7 @@ void add_disk_randomness(struct gendisk *disk)
- }
- EXPORT_SYMBOL_GPL(add_disk_randomness);
- 
--void rand_initialize_disk(struct gendisk *disk)
-+void __cold rand_initialize_disk(struct gendisk *disk)
- {
- 	struct timer_rand_state *state;
- 
-@@ -1312,7 +1314,7 @@ struct entropy_timer_state {
-  *
-  * So the re-arming always happens in the entropy loop itself.
-  */
--static void entropy_timer(struct timer_list *timer)
-+static void __cold entropy_timer(struct timer_list *timer)
- {
- 	struct entropy_timer_state *state = container_of(timer, struct entropy_timer_state, timer);
- 
-@@ -1326,7 +1328,7 @@ static void entropy_timer(struct timer_list *timer)
-  * If we have an actual cycle counter, see if we can
-  * generate enough entropy with timing noise
-  */
--static void try_to_generate_entropy(void)
-+static void __cold try_to_generate_entropy(void)
- {
- 	enum { NUM_TRIAL_SAMPLES = 8192, MAX_SAMPLES_PER_BIT = 32 };
- 	struct entropy_timer_state stack;
--- 
-2.35.1
+        if (irq_domain_is_hierarchy(domain)) {
+                struct irq_fwspec spec;
 
+                spec.fwnode = domain->fwnode;
+                spec.param_count = 2;
+                spec.param[0] = gc->irq.child_offset_to_irq(gc, offset);
+                spec.param[1] = IRQ_TYPE_NONE;
+
+                return irq_create_fwspec_mapping(&spec);
+        }
+
+Same here: in the absence of a child_offset_to_irq() callback,
+the default gpiochip_child_offset_to_irq_noop() will be used,
+assuming an identity mapping between GPIO numbers and IRQ
+numbers.
+
+So perhaps
+  1. you need to provide a child_offset_to_irq() callback,
+  2. gpiochip_irqchip_remove() needs to apply the child_offset_to_irq()
+    mapping too?
+  3. you do need the mask, or let child_offset_to_irq() an error code,
+     to avoid irq_{find,dispose}_mapping() handling non-existent irqs?
+
+Or am I missing something?
+
+I guess this is easy to verify by adding some debug prints to the code.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

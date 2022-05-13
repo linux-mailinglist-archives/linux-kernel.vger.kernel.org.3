@@ -2,119 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F200525E89
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 11:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0409525EA5
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 11:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378966AbiEMJSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 05:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39454 "EHLO
+        id S1378975AbiEMJSk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 13 May 2022 05:18:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378968AbiEMJS0 (ORCPT
+        with ESMTP id S1378971AbiEMJSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 05:18:26 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFB85E74C;
-        Fri, 13 May 2022 02:18:22 -0700 (PDT)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24D9AHxC004372;
-        Fri, 13 May 2022 09:18:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=0G0uc882R6uqOeN60gm10guVSqUxvSgekLWSAu5MDwo=;
- b=NNzJZYG1uibOabBA8Mp4TpKgo4vPIe0woBkCl/IQoZ5r8dpkA+ZvcPeiIrtg/lWjsnd8
- QoF9/4s4KNnjwggIn0Cn5PNUVgzKGPFnTWPSPdiQyHWTJ/s/Z86YLRfoAiElLopF8qrR
- YZ3fTpGr6Lqd1OMm9thd8i9ze0MsrQ0aU1NUi0bbgPPeO1hmBVpG37GDPEP+T67RvLWh
- CumS/RxK6PsxlELbKJpG+BFIQD3X8HFDAcsakOwh1pYiYLnD2qNU3zqw+iqLbLkYsqjc
- 3Qf8XNfbGmWCfOulK58vEB2pcoTjV/dKVrPS8Ai+dEB5OV2kZHzTfRBupf0VspAkh3fU bA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g1jstj3g6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 May 2022 09:18:18 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24D9EuAh024657;
-        Fri, 13 May 2022 09:18:18 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g1jstj3fq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 May 2022 09:18:18 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24D98jov008221;
-        Fri, 13 May 2022 09:18:16 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3fwgd90b0m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 May 2022 09:18:16 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24D9Hlhn33030436
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 13 May 2022 09:17:47 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0DF17A4054;
-        Fri, 13 May 2022 09:18:11 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E5B9FA405B;
-        Fri, 13 May 2022 09:18:09 +0000 (GMT)
-Received: from localhost (unknown [9.171.34.99])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri, 13 May 2022 09:18:09 +0000 (GMT)
-Date:   Fri, 13 May 2022 11:18:08 +0200
-From:   Vasily Gorbik <gor@linux.ibm.com>
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jonas Paulsson <paulsson@linux.vnet.ibm.com>,
-        Ulrich Weigand <ulrich.weigand@de.ibm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andreas Krebbel <krebbel@linux.ibm.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH 2/8] s390/alternatives: remove padding generation code
-Message-ID: <your-ad-here.call-01652433488-ext-2779@work.hours>
-References: <20220511120532.2228616-1-hca@linux.ibm.com>
- <20220511120532.2228616-3-hca@linux.ibm.com>
+        Fri, 13 May 2022 05:18:33 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5A15E74C;
+        Fri, 13 May 2022 02:18:29 -0700 (PDT)
+Received: from mail-yb1-f180.google.com ([209.85.219.180]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MmyzH-1oEZVb0Kt5-00kAoY; Fri, 13 May 2022 11:18:28 +0200
+Received: by mail-yb1-f180.google.com with SMTP id y76so14329357ybe.1;
+        Fri, 13 May 2022 02:18:27 -0700 (PDT)
+X-Gm-Message-State: AOAM5303CDn8ppRYW2dEw2sBsvsw96NIHrE3XqPvmxdto69Pb3zIC8ij
+        GYbSIhFCjvqKG2XEbMD9CMzf37dK4572NFyJ3ps=
+X-Google-Smtp-Source: ABdhPJzWhKU1AHupx7S1zjfD+kxbZoybdLGRgPZF8fYtv0ubcCFBrL+uhzTP2ciCWXA+iR8431cs7DZFsZ/UlHLEmLQ=
+X-Received: by 2002:a25:d3c2:0:b0:645:74df:f43d with SMTP id
+ e185-20020a25d3c2000000b0064574dff43dmr3753633ybf.394.1652433506801; Fri, 13
+ May 2022 02:18:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220511120532.2228616-3-hca@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: knGTXHCeSMSjOP2SSu-bjWmoVSFGewq7
-X-Proofpoint-GUID: QFLqUoIdtflvWUTF2tgMhuvq0wpsk0RO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-13_04,2022-05-12_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 bulkscore=0 mlxlogscore=637 phishscore=0 malwarescore=0
- lowpriorityscore=0 spamscore=0 suspectscore=0 impostorscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205130040
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220506085815.5a3cfa83@canb.auug.org.au> <20220513172933.5dbf4ffb@canb.auug.org.au>
+In-Reply-To: <20220513172933.5dbf4ffb@canb.auug.org.au>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 13 May 2022 11:18:10 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a27bPttwrOBKPwNZ=B1zGZqKV=Js-zWcO7ofnqc=xyHQA@mail.gmail.com>
+Message-ID: <CAK8P3a27bPttwrOBKPwNZ=B1zGZqKV=Js-zWcO7ofnqc=xyHQA@mail.gmail.com>
+Subject: Re: linux-next: build warnings after merge of the arm-soc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:zuEH0IY2nkJkL6fmf+tietaTulDelKeKaN5PE7gswSn1OztESPM
+ 6CqUWeuUmdwwZ/v9FqSrFc0zXi4ZDMqo2nO3SO+P2d/VYes0PXmQFvgVSwTOgUoMHMY/Kag
+ Ckr5PAzdHsTdBTtqiW4Dz7+uWOU0RP03I8FoPOM0anCLksdHh7sXA0SpZD+2pkLGs4EmxdC
+ sY7T7IWYhUSpZ2vyjZcVA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:y8OJOJ7JzrY=:abGRqrY3e5I0Yy8UHJho2a
+ sj+po0ZXPwpwLW23O2U5kd/uiEMrchOOxrPTvR/A7SZvnqB2MRUer3BHs1ZCVKh2ghzk/B2oM
+ 6V5J8US+T5qh7vIO5quN07zj4ZHsMGZWZnLfYJ3GmTELuh5mdHLqN6QhAdO+Ng145g//VGehg
+ ZtoPiPf5precRtI2Hi28ykK0ydx8JYUKGRpGhREEF5zz0StwgLJFrI/9oRJyuDypLsKNqgc+O
+ ySTG0DmTlX+DpnT0LbjiuNGurxq5aweWbTF5Vzj/LDN8lZA596Vo3gcZLLKCE0fGGv0lCdUrt
+ dxO0LFm1TW4jOyPZmpJkMnbGX9RHa/W7ei8NO7AB3jxw+itW2/6/5iMvvDdXfAr6+XeZ5K/EE
+ j4qmN4JyQRqC1dzKeFtY3w+dOU1cpWhbms6gt9dXciDIew3m5W6iPH0F00XvYzLcWQESWjByl
+ VnhYq9cRGHzRSxXyX/iuR0nv5hSdACNN4gStsO0tYDSnLee+rf8ZVvg9ILTHcfvtIq/ZDxV3y
+ XTy3Vdy4IGuGZs64dLu/T8d/tBjoOgduvx1m0Nk1niWNkXDXq5xYxbcFYA7ZhqTRyia3Ej6ub
+ 2QoGKIG2SgbASNY2Fq4a+qzzQn5ZUjIJUiIfmwv6qC8+b0IfoL1K75XomHUlZEiYusUlrtoPq
+ aTtvemFeMaGnKS1fvgK6/qugJLykyDH6xgR7hOOdbtBjoBeWwu7nh+o1fzFvDZ//WButbSu19
+ TmsU4SeFYOw185t/Z2OcjcoeyJ6hP1lx05aRvyQ0S3P3vH9EX/MKEIIQ440IY1u2d6mfMq3FH
+ xaPS/rdFAuWXT/Etchh4PTj9Irnv66UHtzZ+cxAuyWYIfQCmhk=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 02:05:26PM +0200, Heiko Carstens wrote:
-> clang fails to handle ".if" statements in inline assembly which are heavily
-> used in the alternatives code.
-> 
-> To work around this remove this code, and enforce that users of
-> alternatives must specify original and alternative instruction sequences
-> which have identical sizes. Add a compile time check with two ".org"
-> statements similar to arm64.
-> 
-> In result not only clang can handle this, but also quite a lot of code can
-> be removed.
-> 
-> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-> ---
->  arch/s390/include/asm/alternative-asm.h | 76 +++-----------------
->  arch/s390/include/asm/alternative.h     | 93 ++++++-------------------
->  arch/s390/kernel/alternative.c          | 61 +---------------
->  3 files changed, 31 insertions(+), 199 deletions(-)
+On Fri, May 13, 2022 at 9:29 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> On Fri, 6 May 2022 08:58:15 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > After merging the arm-soc tree, today's linux-next build (arm
+> > multi_v7_defconfig) produced these warnings:
+> >
+> > arch/arm/boot/dts/bcm953012hr.dts:57.3-33: Warning (reg_format): /nand-controller@18028000/nand@0/partition@0:reg: property has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+> > arch/arm/boot/dts/bcm953012hr.dts:62.3-33: Warning (reg_format): /nand-controller@18028000/nand@0/partition@200000:reg: property has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+> > arch/arm/boot/dts/bcm953012hr.dts:66.3-33: Warning (reg_format): /nand-controller@18028000/nand@0/partition@600000:reg: property has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+> > arch/arm/boot/dts/bcm953012hr.dts:70.3-33: Warning (reg_format): /nand-controller@18028000/nand@0/partition@1000000:reg: property has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+> > arch/arm/boot/dts/bcm953012hr.dtb: Warning (pci_device_reg): Failed prerequisite 'reg_format'
+> > arch/arm/boot/dts/bcm953012hr.dtb: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
+> > arch/arm/boot/dts/bcm953012hr.dtb: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
+> > arch/arm/boot/dts/bcm953012hr.dtb: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
+> > arch/arm/boot/dts/bcm953012hr.dts:55.14-59.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@0: Relying on default #address-cells value
+> > arch/arm/boot/dts/bcm953012hr.dts:55.14-59.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@0: Relying on default #size-cells value
+> > arch/arm/boot/dts/bcm953012hr.dts:60.19-63.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@200000: Relying on default #address-cells value
+> > arch/arm/boot/dts/bcm953012hr.dts:60.19-63.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@200000: Relying on default #size-cells value
+> > arch/arm/boot/dts/bcm953012hr.dts:64.19-67.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@600000: Relying on default #address-cells value
+> > arch/arm/boot/dts/bcm953012hr.dts:64.19-67.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@600000: Relying on default #size-cells value
+> > arch/arm/boot/dts/bcm953012hr.dts:68.20-71.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@1000000: Relying on default #address-cells value
+> > arch/arm/boot/dts/bcm953012hr.dts:68.20-71.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@1000000: Relying on default #size-cells value
+> >
+> > I don't know what caused this now.
+>
+> I am still getting these warnings.
 
-Acked-by: Vasily Gorbik <gor@linux.ibm.com>
+Thank you for the reminder, I have now reverted commit 90103611d573 ("ARM: dts:
+BCM5301X: Fix DTC warning for NAND node"), which caused the problem.
+
+The patch was meant to fix a different warning
+
+Warning (avoid_unnecessary_addr_size):
+/nand-controller@18028000/nand@0: unnecessary
+#address-cells/#size-cells without "ranges" or child "reg" property
+
+but I don't see that here, so I don't know if it was actually required.
+
+Arınç, Rafał, Florian: if the original problem comes back now, please
+send a follow-up patch
+that addresses all the warnings.
+
+      Arnd

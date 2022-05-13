@@ -2,168 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD045259D5
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 04:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F0BC5259D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 04:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376595AbiEMC4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 22:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42136 "EHLO
+        id S1376617AbiEMC4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 22:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376610AbiEMC42 (ORCPT
+        with ESMTP id S1376611AbiEMC4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 22:56:28 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6404423162
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 19:56:27 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id r71so5945060pgr.0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 19:56:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=OGgDMvpY/n5VX5vYctev+tzQH6piKUfUzgYoN8lHPK8=;
-        b=OUR7fAJxJRCdgVA79xpMHkngYG/aXvMdppYHbPGcaOU99EAuvmPd1kShMCPzLUUVcu
-         GiX3Zsu33E//VV1DnOeopUCtD+bc1iG87XLMvc4vF0bmjbLMSBUOXm766o9CZey5UaWy
-         wxuioIw1csCRj9SZRD3ItoLE5LscG6tOFMdMyP14Fs/GxeFOaiQWKcVnXTMaBuqyRsL0
-         G6DUkVEALRHFSvDpR2YYsGd9jfMtOlTGRL0zMfmFp9hJkfD3P1cKqgZFOqap4lx5jJsT
-         ECzwby0l8NXYomdcbDee8Ce9otXjhcccz89br1sNsj8Nb9yVBg5PVn3GNdgStyCODGF2
-         C6DQ==
+        Thu, 12 May 2022 22:56:35 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3FE2497D
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 19:56:33 -0700 (PDT)
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2DFB33F940
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 02:56:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1652410591;
+        bh=rF63nrgHe2cIWk7sqY1Jv0XZG3knafOJHCDaTqNMlvM=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=U7KowGIG4s7z5FG0WOqTY/eK9wmuEnpsB2PFxDxPPyr4e1M1zHDP8JSrCwLUBaCYP
+         j5on83bV4UEsnsf1EbLFjQU6SdJeWrLPidvoyCYeLbJ7hGJl7kYUDhuFwvgC2GKqIT
+         eUs5UEle2gslIGlADDUVXA3zidIc4eXk0qF+oehgS2WdSPLwroyY7nMYoP1pu/FWOF
+         xsEtWAYZUZ5mAMnzDVwyLU5kKi5UiqNrQTzj188ZiGLJn0TeAJ5mxjjyIh9JxdTSX9
+         d7CzkUGB6irM976tohb6FQl2YuU+DDx5areRZ56ElOrVMjb/PCJv6f/WzWHiQ9KYXI
+         R/tK/GNLgXWhA==
+Received: by mail-pg1-f197.google.com with SMTP id d125-20020a636883000000b003db5e24db27so2064281pgc.13
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 19:56:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=OGgDMvpY/n5VX5vYctev+tzQH6piKUfUzgYoN8lHPK8=;
-        b=ZNxigZY8Iqk1ABYZaTBgd4f5vBOf+1iTZP40kvUqg7Ao1baW8DWky4IozGztD6qnfx
-         WP67BlN8+SpZQWB1xibuiDASiAJLOD2iCZ3K7yAc2Mpmn8Cej3De9BK+vFKU9ao2r4Gf
-         CIFdayHFMl/LZ+QiocEgalpLvGO/8uv6uciVo0yZZfr+57mTOU6NW77DrsOoQV5+RQQ4
-         wOKwERyezqtbU5s/BrPVPvP3wX2yW4OsQtnv/tM/pMWSGubuBWCVJhXbyTJF+ru3Z7dQ
-         7skX8lBLxjtqzmqBOD2EYFnC19+68mtuxOHB0dUwlUbd7E+jFwdZ29cqxx3ut62Y7xmX
-         pdvQ==
-X-Gm-Message-State: AOAM532KiSeYgtQr46cnohisOEDViEpi+B1ldF8FUT80SbKmmDTZzzQ4
-        cz8o67ivvfrJoguVp2lrIThlk0fyUAcu4Q==
-X-Google-Smtp-Source: ABdhPJw0m4Ce6/qaZpm58tHclY9RoVfekRzhloooOMpO4pVQGqAEPgLhzdE6QQPpFBtECoNJc9BytQ==
-X-Received: by 2002:a63:e108:0:b0:3db:11bb:7345 with SMTP id z8-20020a63e108000000b003db11bb7345mr2153825pgh.502.1652410586489;
-        Thu, 12 May 2022 19:56:26 -0700 (PDT)
-Received: from Negi ([207.151.52.3])
-        by smtp.gmail.com with ESMTPSA id y4-20020a17090ad0c400b001d95cdb62d4sm2449444pjw.33.2022.05.12.19.56.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 19:56:25 -0700 (PDT)
-From:   Soumya Negi <soumya.negi97@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Soumya Negi <soumya.negi97@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: rtl8723bs: Fix alignment to match open parenthesis
-Date:   Thu, 12 May 2022 19:55:53 -0700
-Message-Id: <20220513025553.13634-1-soumya.negi97@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rF63nrgHe2cIWk7sqY1Jv0XZG3knafOJHCDaTqNMlvM=;
+        b=Ext0jT8rp5FnPEetD2ZsYag7/2zLhPDWVV2QDEWm7WGUMCow2+qA6/tZ2Ot05UExKq
+         ZRLkzL9u90nUHkG71WEYCUUQRb13tL8JX+l68gGh2wWXLUK30cbRDFRACHYx/MuD6inK
+         43LRDzuZeR+qFSmV5Zo66sNgV5Xk4oo2bprHGJ3l7nAibYVk9NryXG9D60knHcfTjDRp
+         gx5V+M3LV5/xD49y2SLusitftA0TpQ1NBFsu8uWzwiBvf8TomSmS4+f+ujklrXKWyTpP
+         mBl28lBuGb4Vjns5Hzd4ij1fCUxZO9R/CmfYfgCBmpKlHhY7yziFlvLtz2iAJIWR1mGe
+         dyKg==
+X-Gm-Message-State: AOAM5319Hkv1r/hwi6JYLUb7JJtciEHJTyAUxOogjZ8KUr+LZQmgD1oX
+        16U+Zks23u52s+bOXh2dUjGP3oE/EVSsuXqDusU7b7Y7Saa9clvSAsK5tLPL6jR7znGuARLVTVS
+        sJ+/zYuk3p2fmfmvbfcMbMv/4u5dIoFIvaxytoFXBudQl856pXflH18HVnw==
+X-Received: by 2002:a05:6a00:14ce:b0:50f:ac00:2a8b with SMTP id w14-20020a056a0014ce00b0050fac002a8bmr2515921pfu.36.1652410589569;
+        Thu, 12 May 2022 19:56:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzF07aqxQuyHQBnn1dyRbK0T+OdhcKZA2/h0j3IrKXjFeE5mXIWYnicu3Vjp1wRI+BJrCi2u/Pe5db7SXi1Biw=
+X-Received: by 2002:a05:6a00:14ce:b0:50f:ac00:2a8b with SMTP id
+ w14-20020a056a0014ce00b0050fac002a8bmr2515909pfu.36.1652410589312; Thu, 12
+ May 2022 19:56:29 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220422054224.19527-1-matthew.ruffell@canonical.com>
+ <CAEzrpqe=LD3DQcEeLXmmFuq7cX_dAQ6DOCuJYWBoZWKKTmoTzA@mail.gmail.com> <CAKAwkKt3yMOOW3NXcE91WkGr+8xj050CYP2pLoQVHt_2wXq=-w@mail.gmail.com>
+In-Reply-To: <CAKAwkKt3yMOOW3NXcE91WkGr+8xj050CYP2pLoQVHt_2wXq=-w@mail.gmail.com>
+From:   Matthew Ruffell <matthew.ruffell@canonical.com>
+Date:   Fri, 13 May 2022 14:56:18 +1200
+Message-ID: <CAKAwkKvfFn18RjupuqGpx4QeAiMYKSq7QUTd3wEL=pkZ+BENpQ@mail.gmail.com>
+Subject: Re: [PROBLEM] nbd requests become stuck when devices watched by
+ inotify emit udev uevent changes
+To:     Josef Bacik <josef@toxicpanda.com>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        linux-block <linux-block@vger.kernel.org>,
+        nbd <nbd@other.debian.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>, yukuai3@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adhere to Linux coding style. Fixes checkpatch warnings:
-CHECK: Alignment should match open parenthesis
-CHECK: line length of 101 exceeds 100 columns
+Hi Josef,
 
-Signed-off-by: Soumya Negi <soumya.negi97@gmail.com>
----
- drivers/staging/rtl8723bs/core/rtw_ap.c | 24 +++++++++++++-----------
- 1 file changed, 13 insertions(+), 11 deletions(-)
+Just a friendly ping, I am more than happy to test a patch, if you send it
+inline in the email, since the pastebin you used expired after 1 day, and I
+couldn't access it.
 
-diff --git a/drivers/staging/rtl8723bs/core/rtw_ap.c b/drivers/staging/rtl8723bs/core/rtw_ap.c
-index 5478188be991..d30d6e6bcd07 100644
---- a/drivers/staging/rtl8723bs/core/rtw_ap.c
-+++ b/drivers/staging/rtl8723bs/core/rtw_ap.c
-@@ -520,12 +520,12 @@ void update_sta_info_apmode(struct adapter *padapter, struct sta_info *psta)
- 
- 		/*  B0 Config LDPC Coding Capability */
- 		if (TEST_FLAG(phtpriv_ap->ldpc_cap, LDPC_HT_ENABLE_TX) &&
--			      GET_HT_CAPABILITY_ELE_LDPC_CAP((u8 *)(&phtpriv_sta->ht_cap)))
-+		    GET_HT_CAPABILITY_ELE_LDPC_CAP((u8 *)(&phtpriv_sta->ht_cap)))
- 			SET_FLAG(cur_ldpc_cap, (LDPC_HT_ENABLE_TX | LDPC_HT_CAP_TX));
- 
- 		/*  B7 B8 B9 Config STBC setting */
- 		if (TEST_FLAG(phtpriv_ap->stbc_cap, STBC_HT_ENABLE_TX) &&
--			      GET_HT_CAPABILITY_ELE_RX_STBC((u8 *)(&phtpriv_sta->ht_cap)))
-+		    GET_HT_CAPABILITY_ELE_RX_STBC((u8 *)(&phtpriv_sta->ht_cap)))
- 			SET_FLAG(cur_stbc_cap, (STBC_HT_ENABLE_TX | STBC_HT_CAP_TX));
- 	} else {
- 		phtpriv_sta->ampdu_enable = false;
-@@ -1065,10 +1065,12 @@ int rtw_check_beacon_data(struct adapter *padapter, u8 *pbuf,  int len)
- 		);
- 
- 		if ((psecuritypriv->wpa_pairwise_cipher & WPA_CIPHER_CCMP) ||
--		     (psecuritypriv->wpa2_pairwise_cipher & WPA_CIPHER_CCMP)) {
--			pht_cap->ampdu_params_info |= (IEEE80211_HT_CAP_AMPDU_DENSITY & (0x07 << 2));
-+		    (psecuritypriv->wpa2_pairwise_cipher & WPA_CIPHER_CCMP)) {
-+			pht_cap->ampdu_params_info |= (IEEE80211_HT_CAP_AMPDU_DENSITY &
-+						       (0x07 << 2));
- 		} else {
--			pht_cap->ampdu_params_info |= (IEEE80211_HT_CAP_AMPDU_DENSITY & 0x00);
-+			pht_cap->ampdu_params_info |= (IEEE80211_HT_CAP_AMPDU_DENSITY &
-+						       0x00);
- 		}
- 
- 		rtw_hal_get_def_var(
-@@ -1116,7 +1118,7 @@ int rtw_check_beacon_data(struct adapter *padapter, u8 *pbuf,  int len)
- 	pmlmepriv->htpriv.ht_option = false;
- 
- 	if ((psecuritypriv->wpa2_pairwise_cipher & WPA_CIPHER_TKIP) ||
--	     (psecuritypriv->wpa_pairwise_cipher & WPA_CIPHER_TKIP)) {
-+	    (psecuritypriv->wpa_pairwise_cipher & WPA_CIPHER_TKIP)) {
- 		/* todo: */
- 		/* ht_cap = false; */
- 	}
-@@ -1725,7 +1727,7 @@ void bss_cap_update_on_sta_join(struct adapter *padapter, struct sta_info *psta)
- 			pmlmepriv->num_sta_no_short_preamble--;
- 
- 			if ((pmlmeext->cur_wireless_mode > WIRELESS_11B) &&
--				(pmlmepriv->num_sta_no_short_preamble == 0)) {
-+			    (pmlmepriv->num_sta_no_short_preamble == 0)) {
- 				beacon_updated = true;
- 				update_beacon(padapter, 0xFF, NULL, true);
- 			}
-@@ -1763,7 +1765,7 @@ void bss_cap_update_on_sta_join(struct adapter *padapter, struct sta_info *psta)
- 			pmlmepriv->num_sta_no_short_slot_time++;
- 
- 			if ((pmlmeext->cur_wireless_mode > WIRELESS_11B) &&
--				 (pmlmepriv->num_sta_no_short_slot_time == 1)) {
-+			    (pmlmepriv->num_sta_no_short_slot_time == 1)) {
- 				beacon_updated = true;
- 				update_beacon(padapter, 0xFF, NULL, true);
- 			}
-@@ -1775,7 +1777,7 @@ void bss_cap_update_on_sta_join(struct adapter *padapter, struct sta_info *psta)
- 			pmlmepriv->num_sta_no_short_slot_time--;
- 
- 			if ((pmlmeext->cur_wireless_mode > WIRELESS_11B) &&
--				 (pmlmepriv->num_sta_no_short_slot_time == 0)) {
-+			    (pmlmepriv->num_sta_no_short_slot_time == 0)) {
- 				beacon_updated = true;
- 				update_beacon(padapter, 0xFF, NULL, true);
- 			}
-@@ -2024,7 +2026,7 @@ void rtw_ap_restore_network(struct adapter *padapter)
- 	start_bss_network(padapter);
- 
- 	if ((padapter->securitypriv.dot11PrivacyAlgrthm == _TKIP_) ||
--		(padapter->securitypriv.dot11PrivacyAlgrthm == _AES_)) {
-+	    (padapter->securitypriv.dot11PrivacyAlgrthm == _AES_)) {
- 		/* restore group key, WEP keys is restored in ips_leave() */
- 		rtw_set_key(
- 			padapter,
-@@ -2062,7 +2064,7 @@ void rtw_ap_restore_network(struct adapter *padapter)
- 			/* pairwise key */
- 			/* per sta pairwise key and settings */
- 			if ((psecuritypriv->dot11PrivacyAlgrthm == _TKIP_) ||
--				(psecuritypriv->dot11PrivacyAlgrthm == _AES_)) {
-+			    (psecuritypriv->dot11PrivacyAlgrthm == _AES_)) {
- 				rtw_setstakey_cmd(padapter, psta, true, false);
- 			}
- 		}
--- 
-2.17.1
+I came across and tested Yu Kuai's patches [1][2] which are for the same issue,
+and they indeed fix the hang. Thank you Yu.
 
+[1] nbd: don't clear 'NBD_CMD_INFLIGHT' flag if request is not completed
+https://lists.debian.org/nbd/2022/04/msg00212.html
+
+[2] nbd: fix io hung while disconnecting device
+https://lists.debian.org/nbd/2022/04/msg00207.html
+
+I am also happy to test any patches to fix the I/O errors.
+
+Thanks,
+Matthew
+
+On Tue, Apr 26, 2022 at 9:47 AM Matthew Ruffell
+<matthew.ruffell@canonical.com> wrote:
+>
+> Hi Josef,
+>
+> The pastebin has expired the link, and I can't access your patch.
+> Seems to default to 1 day deletion.
+>
+> Could you please create a new paste or send the patch inline in this
+> email thread?
+>
+> I am more than happy to try the patch out.
+>
+> Thank you for your analysis.
+> Matthew
+>
+> On Sat, Apr 23, 2022 at 3:24 AM Josef Bacik <josef@toxicpanda.com> wrote:
+> >
+> > On Fri, Apr 22, 2022 at 1:42 AM Matthew Ruffell
+> > <matthew.ruffell@canonical.com> wrote:
+> > >
+> > > Dear maintainers of the nbd subsystem,
+> > >
+> > > A user has come across an issue which causes the nbd module to hang after a
+> > > disconnect where a write has been made to a qemu qcow image file, with qemu-nbd
+> > > being the server.
+> > >
+> >
+> > Ok there's two problems here, but I want to make sure I have the right
+> > fix for the hang first.  Can you apply this patch
+> >
+> > https://paste.centos.org/view/b1a2d01a
+> >
+> > and make sure the hang goes away?  Once that part is fixed I'll fix
+> > the IO errors, this is just us racing with systemd while we teardown
+> > the device and then we're triggering a partition read while the device
+> > is going down and it's complaining loudly.  Before we would
+> > set_capacity to 0 whenever we disconnected, but that causes problems
+> > with file systems that may still have the device open.  However now we
+> > only do this if the server does the CLEAR_SOCK ioctl, which clearly
+> > can race with systemd poking the device, so I need to make it
+> > set_capacity(0) when the last opener closes the device to prevent this
+> > style of race.
+> >
+> > Let me know if that patch fixes the hang, and then I'll work up
+> > something for the capacity problem.  Thanks,
+> >
+> > Josef

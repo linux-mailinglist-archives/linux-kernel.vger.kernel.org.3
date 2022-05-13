@@ -2,207 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D7C252661E
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:29:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E6552661F
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382026AbiEMP3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 11:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57938 "EHLO
+        id S1382046AbiEMP3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 11:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382042AbiEMP3A (ORCPT
+        with ESMTP id S1382012AbiEMP3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 11:29:00 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1A062A14
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:28:49 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id e12so15839736ybc.11
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:28:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=qHkbDcmIgfu+PdFtLJ6QK27CjcqHMlIDYaRd7PVknp4=;
-        b=AIYIk3dQe6uIwNjIx0OXaaI8vUlWzLlvm9qrR2Wqb4c3GkB/uYpPy6XUoTmIH+EUMZ
-         ql9fShPHLXrNNzvr1TBHBrsXWJygTJf9onlKDfQDrjRvhjAxXGH3u2VSUEOLr7oiiTyU
-         jj/dQg5E3yqsATm0AQR+lRdHuPmhg5ydY3edvzxmDiZspHVJMaVaXy56FDAAaIwAiiqA
-         YTWBaaZrYp7rmqJHc4Vbau0jHXNsDfKD7Rd8E13iRnDtpdr1ACtXDt2cxQ/bFxxZB17B
-         7QR8DBkyH6BHdY+MgH5uodm7KT65RUGSWKioSmGyqBq+S91ISBZw8rXGuCASjRyAzSfR
-         PC+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=qHkbDcmIgfu+PdFtLJ6QK27CjcqHMlIDYaRd7PVknp4=;
-        b=EpMNXrwKpcSYpZLDssNY0GzSPQvzger7Mlv4TolAM35mUIYRBMn0Kc6y/H/au2qkXw
-         HZnsAeXxxhVbG+hz2B1S3Fdukn5/m1XUMSA1q7Ve1lNjgC243kwl7+6nr3Y/Ph141OlI
-         ior8IL3ye5+SUhcd6fetLiwA9SI1qex4wgDV61Dm90Nhy7XF4tZiYpjOJLEKGB2YyUVz
-         7oRvJqyhk+kdN4BUET6A5LhQdQDxjsJPJCX2i+yD4YPqhPH6kV9SxPBcjjIePtV46mhD
-         IZzqRCxHJS9gU90eXsjhc/wf78vnvDrHwK1MJLeG3181kYKenejljMErLil13stsLPXh
-         ivbQ==
-X-Gm-Message-State: AOAM533IkDoE/ZQzQOpmV81PL+TygZWH4wcCIg6qvLNvuUBSWvPjoZeJ
-        nSKR6u+H0jAlo/FGZDBxq/4Aib/em8MQpnKFChw94w==
-X-Google-Smtp-Source: ABdhPJx3VhVGgZYu2bUk/YBm7CeVVJ+1f7Fyqquyp4xWb52htCkyiut92oml18xPBAcuBtHq7ZXV6TzLPo9RyCyNumQ=
-X-Received: by 2002:a25:d44e:0:b0:648:3d5b:fbd5 with SMTP id
- m75-20020a25d44e000000b006483d5bfbd5mr5516615ybf.363.1652455728952; Fri, 13
- May 2022 08:28:48 -0700 (PDT)
+        Fri, 13 May 2022 11:29:13 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03C76A009;
+        Fri, 13 May 2022 08:29:10 -0700 (PDT)
+Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4L0C9V3WMHz6H6vZ;
+        Fri, 13 May 2022 23:24:14 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 13 May 2022 17:29:07 +0200
+Received: from [10.47.25.226] (10.47.25.226) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 13 May
+ 2022 16:29:06 +0100
+Message-ID: <6341384c-b3e6-fbe5-f29f-e0db114bd439@huawei.com>
+Date:   Fri, 13 May 2022 16:29:03 +0100
 MIME-Version: 1.0
-References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
- <20220511064943.GR76023@worktop.programming.kicks-ass.net>
- <20bada85-9203-57f4-2502-57a6fd11f3ea@intel.com> <875ymav8ul.ffs@tglx>
- <55176b79-90af-4a47-dc06-9f5f2f2c123d@intel.com> <CAG_fn=URUve59ZPWRawW+BN-bUy7U3QmFsfOz_7L8ndsL4kQFQ@mail.gmail.com>
- <8a47d0ee50b44520a6f26177e6fe7ec5@AcuMS.aculab.com> <CAG_fn=XUqzBWzuU0cmjUoSfHTv6pN=LCqGh7Ns8kgR6L169bPw@mail.gmail.com>
- <ea7faf6e961141c7848e7587d5e369eb@AcuMS.aculab.com>
-In-Reply-To: <ea7faf6e961141c7848e7587d5e369eb@AcuMS.aculab.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Fri, 13 May 2022 17:28:12 +0200
-Message-ID: <CAG_fn=URz4SFfsrMY=Gsfra5_7-2FQYLEqE7mkg7Q3BVXeM=Yg@mail.gmail.com>
-Subject: Re: [RFCv2 00/10] Linear Address Masking enabling
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 1/7] perf test: Skip reason for suites with 1 test
+To:     Ian Rogers <irogers@google.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        "Namhyung Kim" <namhyung@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        "Sohaib Mohamed" <sohaib.amhmd@gmail.com>,
+        Carsten Haitzler <carsten.haitzler@arm.com>,
+        Marco Elver <elver@google.com>,
+        Michael Petlan <mpetlan@redhat.com>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Stephane Eranian <eranian@google.com>
+References: <20220513040519.1499333-1-irogers@google.com>
+ <20220513040519.1499333-2-irogers@google.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <20220513040519.1499333-2-irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.25.226]
+X-ClientProxiedBy: lhreml748-chm.china.huawei.com (10.201.108.198) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 4:26 PM David Laight <David.Laight@aculab.com> wrot=
-e:
->
-> From: Alexander Potapenko
-> > Sent: 13 May 2022 13:26
-> >
-> > On Fri, May 13, 2022 at 1:28 PM David Laight <David.Laight@aculab.com> =
-wrote:
-> > >
-> > > ...
-> > > > Once we have the possibility to store tags in the pointers, we don'=
-t
-> > > > need redzones for heap/stack objects anymore, which saves quite a b=
-it
-> > > > of memory.
-> > >
-> > > You still need redzones.
-> > > The high bits are ignored for actual memory accesses.
-> > >
-> > > To do otherwise you'd need the high bits to be in the PTE,
-> > > copied to the TLB and finally get into the cache tag.
-> > >
-> > > Then you'd have to use the correct tags for each page.
-> >
-> > Sorry, I don't understand how this is relevant to HWASan in the userspa=
-ce.
-> > Like in ASan, we have a custom allocator that assigns tags to heap
-> > objects. The assigned tag is stored in both the shadow memory for the
-> > object and the pointer returned by the allocator.
-> > Instrumentation inserted by the compiler checks the pointer before
-> > every memory access and ensures that its tag matches the tag of the
-> > object in the shadow memory.
->
-> Doesn't that add so much overhead that the system runs like a sick pig?
-> I don't see any point adding overhead to a generic kernel to support
-> such operation.
-Let me ensure we are on the same page here. Right now we are talking
-about LAM support for userspace addresses.
-At this point nobody is going to add instrumentation to a generic
-kernel - just a prctl (let aside how exactly it works) that makes the
-CPU ignore certain address bits in a particular userspace process.
-The whole system is not supposed to run slower because of that - even
-if one or many processes choose to enable LAM.
+On 13/05/2022 05:05, Ian Rogers wrote:
+> When a suite has just 1 subtest, the subtest number is given as -1 to
+> avoid indented printing. When this subtest number is seen for the skip
+> reason, use the reason of the first test.
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>   tools/perf/tests/builtin-test.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
+> index fac3717d9ba1..33fcafa0fa79 100644
+> --- a/tools/perf/tests/builtin-test.c
+> +++ b/tools/perf/tests/builtin-test.c
+> @@ -137,10 +137,10 @@ static bool has_subtests(const struct test_suite *t)
+>   
+>   static const char *skip_reason(const struct test_suite *t, int subtest)
+>   {
+> -	if (t->test_cases && subtest >= 0)
+> -		return t->test_cases[subtest].skip_reason;
+> +	if (!t->test_cases)
+> +		return NULL;
+>   
+> -	return NULL;
+> +	return t->test_cases[subtest >= 0 ? subtest : 0].skip_reason;
+>   }
 
-Now let's consider ASan (https://clang.llvm.org/docs/AddressSanitizer.html)=
-.
-It is a powerful detector of memory corruptions in the userspace, but
-it comes with a cost:
- - compiler instrumentation bloats the code (by roughly 50%) and slows
-down the execution (by up to 2x);
- - redzones around stack and heap objects, memory quarantine and
-shadow memory increase the memory consumption (by up to 4x).
-In short, for each 8 bytes of app memory ASan stores one byte of the
-metadata (shadow memory) indicating the addressability of those 8
-bytes.
-It then uses compiler instrumentation to verify that every memory
-access in the program accesses only addressable memory.
-ASan is widely used for testing and to some extent can be used in
-production, but for big server-side apps the RAM overhead becomes
-critical.
+I was not sure which suite has a single tastcase, so I experimented for 
+libpfm4 by deleting a testcase so it has only 1x remaining, I get:
 
-This is where HWASan
-(https://clang.llvm.org/docs/HardwareAssistedAddressSanitizerDesign.html)
-comes to the rescue.
-Instead of storing addressability info in the shadow memory, it stores
-a 1-byte tag for every 16 bytes of app memory (see
-https://arxiv.org/pdf/1802.09517.pdf for other options).
-As I mentioned before, the custom userspace memory allocator assigns
-the tags to memory chunks and returns tagged pointers.
-Like ASan, HWASan uses compiler instrumentation to verify that every
-memory access is touching valid memory, but in this case it must
-ensure that the pointer tag matches the tag stored in the shadow
-memory.
-Because of instrumentation, HWASan still has comparable code size and
-execution overheads, but it uses way less memory (10-35% of the
-original app memory consumption).
-This lets us test beefy applications, e.g. feeding real-world queries
-to production services. Even smaller applications benefit from it,
-e.g. because of reduced cache pressure.
-HWASan has been available for Android for a while now, and proved itself us=
-eful.
+before your change:
+john@localhost:~/acme/tools/perf> sudo ./perf test 63
+63: Test libpfm4 support : Skip
 
-> > A tag mismatch is reported as an out-of-bounds or a use-after-free,
-> > depending on whether the accessed memory is still considered
-> > allocated.
-> > Because objects with different tags follow each other, there is no
-> > need to add extra redzones to the objects to detect buffer overflows.
-> > (We might need to increase the object alignment though, but that's a
-> > different story).
->
-> How does all that help if a system call (eg read()) is given
-> an invalid length.
-Neither ASan nor HWASan care about what happens in the kernel.
-Instead, they wrap system calls (along with some important libc
-functions) and check their arguments to ensure there are no buffer
-overflows.
+after:
 
-HTH,
-Alex
---
-Alexander Potapenko
-Software Engineer
+john@localhost:~/acme/tools/perf> sudo ./perf test 63
+63: Test libpfm4 support : Skip (not compiled in)
 
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
+Although it is odd to have a single sub-test, is there a reason for 
+which we don't print its name? We print the name when there are multiple 
+sub-tests.
 
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
-
-Diese E-Mail ist vertraulich. Falls Sie diese f=C3=A4lschlicherweise
-erhalten haben sollten, leiten Sie diese bitte nicht an jemand anderes
-weiter, l=C3=B6schen Sie alle Kopien und Anh=C3=A4nge davon und lassen Sie =
-mich
-bitte wissen, dass die E-Mail an die falsche Person gesendet wurde.
-
-
-This e-mail is confidential. If you received this communication by
-mistake, please don't forward it to anyone else, please erase all
-copies and attachments, and please let me know that it has gone to the
-wrong person.
+Thanks,
+John

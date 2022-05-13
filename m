@@ -2,109 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3887D52672D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 18:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC861526730
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 18:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382414AbiEMQfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 12:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
+        id S1382416AbiEMQgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 12:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344683AbiEMQfd (ORCPT
+        with ESMTP id S1344683AbiEMQgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 12:35:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 240A52646
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 09:35:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652459731;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dQfd09AP/gq8POaUyhiUEVQH1+5iVG2OnErFJHZMVgI=;
-        b=BkyhyCbYUIcYUifYf7KpHE0bh6s/2+c9OCrvEvs8ZxgRQUsB3WUcwSi1UwiyuiBeBBpINl
-        9Ef5spV/yF4fzkOqC8THUY3xIJlo55srwDkxCHMXWQd1FvaW3zDu2He6KS7lT153kAYQYg
-        Q72dx7Lyw34O8FH1RC7+EJ5f0EKoZ4c=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-487-qhYgxGdEOtiIYiu1OcJd6w-1; Fri, 13 May 2022 12:35:26 -0400
-X-MC-Unique: qhYgxGdEOtiIYiu1OcJd6w-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 63FE2382ECDC;
-        Fri, 13 May 2022 16:35:25 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.16.240])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2FE8340D2820;
-        Fri, 13 May 2022 16:35:25 +0000 (UTC)
-Date:   Fri, 13 May 2022 12:35:23 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, mkoutny@suse.com, tj@kernel.org
-Subject: Re: [PATCH] kselftest/cgroup: fix test_stress.sh to use OUTPUT dir
-Message-ID: <Yn6Iy6btkZlviqEj@lorien.usersys.redhat.com>
-References: <20220512143439.26104-1-pauld@redhat.com>
- <f819f288-7f67-77d1-5d92-f0a5545c1c48@redhat.com>
- <Yn6ICiu58nllccYx@lorien.usersys.redhat.com>
+        Fri, 13 May 2022 12:36:35 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21EF44A17;
+        Fri, 13 May 2022 09:36:33 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id g23so10546125edy.13;
+        Fri, 13 May 2022 09:36:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=3cBFD5kdFALSZmKX9KchzCHehvA180EgcT2tz16vaRo=;
+        b=GnZYb5Eu1phxRNnKCJsb7GM7lv4wPRJ0aUB2f+TwmxuPplkZiCEm3UQGqjt/C6vrhL
+         e/S1e67jLzEhLoqJwPFZ0BJopCDKWFEM1iTYwWw3K5atAgViYkReBt1pl1dZqOI+lCki
+         cTk4fvLnVEZ1XhWnvuTp6tU/8SDuGk51E/SYkHBGhTv9CyNekZ/w6Yz2hO821eS0Bx6F
+         j07nxeTU5Y7eWH+mU2oSNn6/HBDwF7uK55wPrfHtee+jmMFKyk/A7gfb9hNjqVSi6W80
+         SkPqS99URF/5W1BxEqf5kGaHmRLHiAYQ44n8hTyPeaPkpKtRCqO1iK0V9f3TfEo7ku2W
+         lWrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=3cBFD5kdFALSZmKX9KchzCHehvA180EgcT2tz16vaRo=;
+        b=AelKrLA0gCHQRFgAXAATI2NdeQtdyJZXIWxqBqx+RhUtZ2TZBp5oXYD+UFFle2U6w/
+         x/ml0yX42sMBLyV1WRlxcN0JxtPgQqYUv4eTtHxw/0RXk1tsJrS9kBwumzjGyU6OEXp5
+         ElB/EwPFggw2zXykBlHUfTrjhRdYac5VJivXDqnmF7us5GITtTYFgC8dubiVlw8PkEg+
+         EjxjgOhZ3sKyU7nRbcxtJHL27ztS18fRQWfp0O7DP9PQEMVlgWwxn4PzZtZm7tNc/IGy
+         DMazObQTJOXku10tDNWV+jycsbQdefkIPTlDEj9O0DwHE6HVfSTRZRrpt5qggeNdyqb4
+         aLkA==
+X-Gm-Message-State: AOAM531eawzeEkfPpDT5PobqoqaD1gcabHB3IHEuqGUtEYjRE2a1m7rD
+        A2WglrQndaiLyD4jsWEfZd39rE/90VWCmg==
+X-Google-Smtp-Source: ABdhPJzViOpa8TCGaT8IZEo4DTneEvijoN5YV2tng0kmzjGaAg1J/rbzBFhZjbERyS6WEg5GBGkkkA==
+X-Received: by 2002:a50:cd08:0:b0:426:1d9b:4b13 with SMTP id z8-20020a50cd08000000b004261d9b4b13mr41233120edi.360.1652459792345;
+        Fri, 13 May 2022 09:36:32 -0700 (PDT)
+Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
+        by smtp.gmail.com with ESMTPSA id b21-20020aa7cd15000000b0042a2e5e1a7dsm1136810edw.37.2022.05.13.09.36.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 09:36:31 -0700 (PDT)
+From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 3/3] arm64: dts: rockchip: Add Hantro encoder node to rk356x
+Date:   Fri, 13 May 2022 18:36:30 +0200
+Message-ID: <42373378.kc9IRrpb2S@archbook>
+In-Reply-To: <20220513152358.GA334264-robh@kernel.org>
+References: <20220508202544.501981-1-frattaroli.nicolas@gmail.com> <CAAEAJfDMG9ykJQHUf6oB5gjV_J0M+eycCqiUvDv2WjpC3g8dKQ@mail.gmail.com> <20220513152358.GA334264-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yn6ICiu58nllccYx@lorien.usersys.redhat.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 12:32:15PM -0400 Phil Auld wrote:
-> On Fri, May 13, 2022 at 12:19:24PM -0400 Waiman Long wrote:
+Hi Rob,
+
+On Freitag, 13. Mai 2022 17:23:58 CEST Rob Herring wrote:
+> On Fri, May 13, 2022 at 10:07:51AM -0300, Ezequiel Garcia wrote:
+> > [...]
 > > 
-> > On 5/12/22 10:34, Phil Auld wrote:
-> > > Running cgroup kselftest with O= fails to run the with_stress test due
-> > > to hardcoded ./test_core. Find test_core binary using the OUTPUT directory.
-> > > 
-> > > Fixes: 1a99fcc035fb ("selftests: cgroup: Run test_core under interfering stress")
-> > > Signed-off-by: Phil Auld <pauld@redhat.com>
-> > > ---
-> > >   tools/testing/selftests/cgroup/test_stress.sh | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/tools/testing/selftests/cgroup/test_stress.sh b/tools/testing/selftests/cgroup/test_stress.sh
-> > > index 15d9d5896394..109c044f715f 100755
-> > > --- a/tools/testing/selftests/cgroup/test_stress.sh
-> > > +++ b/tools/testing/selftests/cgroup/test_stress.sh
-> > > @@ -1,4 +1,4 @@
-> > >   #!/bin/bash
-> > >   # SPDX-License-Identifier: GPL-2.0
-> > > -./with_stress.sh -s subsys -s fork ./test_core
-> > > +./with_stress.sh -s subsys -s fork ${OUTPUT}/test_core
+> > I didn't ignore it, I just didn't reply to it. You think this is about
+> > changing a dt-binding, but you are actually introducing a new dt-binding
+> > since you are adding a new compatible string.
 > > 
+> > You are doing so by extending an existing dt-binding.
 > > 
-> > I would suggest using "${OUTPUT:-.}" as the variable OUTPUT may not be
-> > defined if test_stress.sh is run interactively.
-> >
+> > I am explaining you the _existing_ dt-binding models the (incorrect) idea
+> > of a combined decoder and encoder. Since your device is encoder-only
+> > and has a single interrupt line, you should omit the interrupt-names,
+> > because it doesn't not add anything.
 > 
-> I worked both ways as is.
+> While in general I agree on single entries don't need -names, given just 
+> 'vdpu' is already allowed I would go with symmetry here and allow it for 
+> the encoder.
 > 
->
-
-But I'm not sure why :)  Yours is probably better.
-
-
-Cheers,
-Phil
-
-
-> > Cheers,
-> > Longman
-> > 
+> If you wanted to mark 'vdpu' alone as deprecated, then that would be 
+> fine too. No need for an if/then schema to disallow interrupt-names 
+> either. Eventually, I plan to (optionally) remove deprecated schemas 
+> from validation and that would have the effect of requiring 
+> interrupt-names to have 2 entries here.
 > 
-> -- 
+> Rob
 
--- 
+After some discussion in the #linux-media IRC channel on OFTC, we've
+come to the conclusion that moving forward with a separate binding for
+encoder-only instances would probably be a wise move, as the VPU binding
+assumes we'll always have a decoder, and breaking this assumption will
+just make it more complex the longer we go on not separating these.
+
+While I was writing such a separate binding for v4 of my series, I
+discovered that this makes things quite a bit simpler. Especially
+looking into the near future, there will be between one to two
+additional compatibles that will be added to this binding for the
+RK3588, as it has no less than 5 instances capable of encoding
+JPEG, and I believe at least one of them is capable of other
+formats as well.
+
+Regards,
+Nicolas Frattaroli
+
 

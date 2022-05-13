@@ -2,165 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C42525BE7
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:07:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76041525C06
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377582AbiEMG6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 02:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
+        id S1352731AbiEMHAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 03:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377575AbiEMG55 (ORCPT
+        with ESMTP id S1377607AbiEMHAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 02:57:57 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3324668FBE
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 23:57:56 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso6408582wma.0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 23:57:55 -0700 (PDT)
+        Fri, 13 May 2022 03:00:19 -0400
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774651EEE3B
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 00:00:17 -0700 (PDT)
+Received: by mail-vk1-xa2b.google.com with SMTP id q136so3762823vke.10
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 00:00:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hASHPxv83GRvBq/XPbZdnxvQhLbD/eQRxLrZ3SHe3bA=;
-        b=MxmcUOjEGFiLSngN/s+THREtdHFypFyRomxXgORGuf0OBSoSVonN4PCD4g7HVyqhrs
-         aUMhRTId2H4bGCNg3lxU7geHZwdf3zQhDaEk9gGuJ+kwmjP4rylWr3uHxYCy6j9Srs3b
-         YIOsXtxuWYHiTthFqmj2O7fVJK4diCiepDOKDd2ZPqK6qRCuHkwuV38Wt8Nzl3pqnSUp
-         baiss945RrZk/SvxyAamevYckSxYsUaBTu7/qGTF9yCtqr5wMLgRBK3e/SbwtmWcDanw
-         nAmbV/BasVDgoSft8nk4Wisg1DiWST27z3CsjvO8kbdpqoUuU2ABCWzbPfuq5Sxr27MO
-         pwlQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zSQtsKCtwMYCMAV1h8dxEmMkmLjgLgdq8u/If5PWyoo=;
+        b=ghMK2HcrDTMpFO6IVO2QFoxB3sSruYjPWtgLSUU0nZAzAVWbjZR/I92Jcca5YBBd02
+         r6WXn2DlpPBcjtfKLYUsM3rJbujVUZpo9B+6oBmlT6fTD2ebulJNtpFWY0KI9ozq+F+H
+         tjqsFvAMfaFSO6urR6ZsPMcHj49NE/SdB4lobuQ2ep22BNmxralwTYHKlx7bXPanzpna
+         rFnsjjSsyw6fwfG58NPn/7xSS5p/Xt8qy5LUi1chzrJd1x6Bjw/ycI4X5FJBShd6dkhq
+         ugGKY6arD6j3N9GJRI4szNel9G+zRyCErU6lq5vEMiWan5DjnrIJrDOaIzZ+taTMG6wL
+         Id3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hASHPxv83GRvBq/XPbZdnxvQhLbD/eQRxLrZ3SHe3bA=;
-        b=C3qx/NrHzmSsPwzi629kZcHQPPdT6RJq47NC/QbnAnDYt1rNOQcqubqcl2unORFmp5
-         qqwozzFZKc6zZE5cNkbZed6axJmbShtt7QbwxDL5LZS0YhySwxeb5o6Pi8kqLZksR7nX
-         It+ij/xvL3P+hdNUA1yP4kcf7ISfiSVJV5nNZl6Z9M3PClzTx3ee/S3JocVafT413DMv
-         7prc25Jtw7/zyNy019rlhAtIu7cMy23ynzPHyMQUjtJ9WkGEi16imZh5MXaXaROMkGri
-         sylxrNIYtLvqBnd2Wv6f/Qdt/2WhWq/Y9UesTMRfsb69H5nQbldG8+C/gzxQsGeLWLTy
-         aOow==
-X-Gm-Message-State: AOAM530SYxrQAMbqui/s/TjiXtWEdzDRRuYu+voFhqIjsyONhS1thms7
-        JG3FCTRXbqcX7UO3T8NpSi4pnQ==
-X-Google-Smtp-Source: ABdhPJyGGZfF70Iywd0l6jNDT8xauodRFr/j9UDsyWKsA2dt9sva3CTS66dFHS1xmiPJjzdkhpf4GQ==
-X-Received: by 2002:a05:600c:6021:b0:394:56be:18e with SMTP id az33-20020a05600c602100b0039456be018emr3038733wmb.86.1652425074641;
-        Thu, 12 May 2022 23:57:54 -0700 (PDT)
-Received: from [192.168.0.167] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id e15-20020adfa74f000000b0020c5253d8e5sm1301475wrd.49.2022.05.12.23.57.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 23:57:54 -0700 (PDT)
-Message-ID: <0e72e176-d7b0-ed10-08f3-ba7d4729a931@linaro.org>
-Date:   Fri, 13 May 2022 08:57:52 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zSQtsKCtwMYCMAV1h8dxEmMkmLjgLgdq8u/If5PWyoo=;
+        b=AM06CnMoTpGqohfybf7kZ3R/ivel8I/5KAJWl7jDhIs4si46kM479gOMOQrMUR6EK4
+         oEG0mNsXKF7PsywMkY4dY1XV8pedAe29Z3RYSrQ1wE+OwH3yZkGj6LYM7L+5x7LSoo/M
+         xgRqf/eP+S76NLyoXp/3PIgRHl2PtNCaLv1YmIvB1adrqBLzKzl/IB1HsgWUPqsMRC/d
+         +zLsJtLO2d0unY8H4Yajd5U3tMPcNWxBcfh50e7492cWIgteSJfh1NOPLNGp3KkzpzV0
+         eyFsfx0sep/FHCTSbHuT6S13PfPqsPBVYI9UXtCOdhqXhXZYQUtlR/mD2HPVTEqm/e2/
+         1xqg==
+X-Gm-Message-State: AOAM531QZVW89CPJFxFhfbx0ZVBSPcQ9RceifN2h6wPHRuPZKsDhTWEs
+        +Nq6icplRsQZFGy0jJZn2cp2QfQ0/prWGSeEkRGZpw==
+X-Google-Smtp-Source: ABdhPJyLkJEi/QkxDrR4cj9GzGNh4STOHakEoAIWSXBYUyEbDuYdxNMvlEFO7t6AjmE67KVluFtpr9ivOtYKtnvQ2XI=
+X-Received: by 2002:a1f:9b85:0:b0:32d:4d56:cf64 with SMTP id
+ d127-20020a1f9b85000000b0032d4d56cf64mr1480204vke.31.1652425216408; Fri, 13
+ May 2022 00:00:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH V4 3/5] arm64: dts: nuvoton: Add initial support for
- MA35D1
-Content-Language: en-US
-To:     Jacky Huang <ychuang3@nuvoton.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, ychuang570808@gmail.com
-Cc:     robh+dt@kernel.org, sboyd@kernel.org, krzk+dt@kernel.org,
-        arnd@arndb.de, olof@lixom.net, catalin.marinas@arm.com,
-        will@kernel.org, soc@kernel.org, cfli0@nuvoton.com
-References: <20220510032558.10304-1-ychuang3@nuvoton.com>
- <20220510032558.10304-4-ychuang3@nuvoton.com>
- <03ac0a67-bd1f-12ca-74f7-8d5b05857ea7@linaro.org>
- <46a55b01-ee9f-604f-72c9-916bc2f02a09@nuvoton.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <46a55b01-ee9f-604f-72c9-916bc2f02a09@nuvoton.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <CAAPL-u-DGLcKRVDnChN9ZhxPkfxQvz9Sb93kVoX_4J2oiJSkUw@mail.gmail.com>
+ <56b41ce6922ed5f640d9bd46a603fa27576532a9.camel@intel.com>
+ <c5d55131-76ff-7354-2954-7cfac365a9a5@linux.ibm.com> <CAAPL-u-g86QqHaHGGtVJMER8ENC2dpekK+2qOkxoRFmC0F_80g@mail.gmail.com>
+ <87y1z7jj85.fsf@linux.ibm.com> <CAAPL-u90Gzrepbsdpc62FGRBYOx1LAVwZWHg1E7UyVD_CmcROw@mail.gmail.com>
+ <c8f253839505adec4d68cd2aa3f3769866915ad3.camel@intel.com> <f36273d9a2fa09342972cd49e31bf2fe91e7c9e4.camel@intel.com>
+In-Reply-To: <f36273d9a2fa09342972cd49e31bf2fe91e7c9e4.camel@intel.com>
+From:   Wei Xu <weixugc@google.com>
+Date:   Fri, 13 May 2022 00:00:05 -0700
+Message-ID: <CAAPL-u-vPgCKVYOLqiScYu5Q_jApPsoHZnNGNfN+k2YuFFR_nw@mail.gmail.com>
+Subject: Re: RFC: Memory Tiering Kernel Interfaces (v2)
+To:     "ying.huang@intel.com" <ying.huang@intel.com>
+Cc:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Hesham Almatary <hesham.almatary@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/05/2022 08:48, Jacky Huang wrote:
->>> +
->>> +	hxt_24m: hxt_24mhz {
->> No underscores in node name. Generic node names, so "clock-X" or
->> "clock-some-suffix"
-> 
-> OK, I will modify it as
->   hxt-24m: hxt-24mhz
+On Thu, May 12, 2022 at 7:53 PM ying.huang@intel.com
+<ying.huang@intel.com> wrote:
+>
+> On Thu, 2022-05-12 at 16:37 +0800, ying.huang@intel.com wrote:
+> > On Thu, 2022-05-12 at 01:15 -0700, Wei Xu wrote:
+> > > On Thu, May 12, 2022 at 12:36 AM Aneesh Kumar K.V
+> > > <aneesh.kumar@linux.ibm.com> wrote:
+> > > >
+> > > > Wei Xu <weixugc@google.com> writes:
+> > > >
+> > > > > On Thu, May 12, 2022 at 12:12 AM Aneesh Kumar K V
+> > > > > <aneesh.kumar@linux.ibm.com> wrote:
+> > > > > >
+> > > > > > On 5/12/22 12:33 PM, ying.huang@intel.com wrote:
+> > > > > > > On Wed, 2022-05-11 at 23:22 -0700, Wei Xu wrote:
+> > > > > > > > Sysfs Interfaces
+> > > > > > > > ================
+> > > > > > > >
+> > > > > > > > * /sys/devices/system/memtier/memtierN/nodelist
+> > > > > > > >
+> > > > > > > >    where N = 0, 1, 2 (the kernel supports only 3 tiers for now).
+> > > > > > > >
+> > > > > > > >    Format: node_list
+> > > > > > > >
+> > > > > > > >    Read-only.  When read, list the memory nodes in the specified tier.
+> > > > > > > >
+> > > > > > > >    Tier 0 is the highest tier, while tier 2 is the lowest tier.
+> > > > > > > >
+> > > > > > > >    The absolute value of a tier id number has no specific meaning.
+> > > > > > > >    What matters is the relative order of the tier id numbers.
+> > > > > > > >
+> > > > > > > >    When a memory tier has no nodes, the kernel can hide its memtier
+> > > > > > > >    sysfs files.
+> > > > > > > >
+> > > > > > > > * /sys/devices/system/node/nodeN/memtier
+> > > > > > > >
+> > > > > > > >    where N = 0, 1, ...
+> > > > > > > >
+> > > > > > > >    Format: int or empty
+> > > > > > > >
+> > > > > > > >    When read, list the memory tier that the node belongs to.  Its value
+> > > > > > > >    is empty for a CPU-only NUMA node.
+> > > > > > > >
+> > > > > > > >    When written, the kernel moves the node into the specified memory
+> > > > > > > >    tier if the move is allowed.  The tier assignment of all other nodes
+> > > > > > > >    are not affected.
+> > > > > > > >
+> > > > > > > >    Initially, we can make this interface read-only.
+> > > > > > >
+> > > > > > > It seems that "/sys/devices/system/node/nodeN/memtier" has all
+> > > > > > > information we needed.  Do we really need
+> > > > > > > "/sys/devices/system/memtier/memtierN/nodelist"?
+> > > > > > >
+> > > > > > > That can be gotten via a simple shell command line,
+> > > > > > >
+> > > > > > > $ grep . /sys/devices/system/node/nodeN/memtier | sort -n -k 2 -t ':'
+> > > > > > >
+> > > > > >
+> > > > > > It will be really useful to fetch the memory tier node list in an easy
+> > > > > > fashion rather than reading multiple sysfs directories. If we don't have
+> > > > > > other attributes for memorytier, we could keep
+> > > > > > "/sys/devices/system/memtier/memtierN" a NUMA node list there by
+> > > > > > avoiding /sys/devices/system/memtier/memtierN/nodelist
+> > > > > >
+> > > > > > -aneesh
+> > > > >
+> > > > > It is harder to implement memtierN as just a file and doesn't follow
+> > > > > the existing sysfs pattern, either.  Besides, it is extensible to have
+> > > > > memtierN as a directory.
+> > > >
+> > > > diff --git a/drivers/base/node.c b/drivers/base/node.c
+> > > > index 6248326f944d..251f38ec3816 100644
+> > > > --- a/drivers/base/node.c
+> > > > +++ b/drivers/base/node.c
+> > > > @@ -1097,12 +1097,49 @@ static struct attribute *node_state_attrs[] = {
+> > > >         NULL
+> > > >  };
+> > > >
+> > > > +#define MAX_TIER 3
+> > > > +nodemask_t memory_tier[MAX_TIER];
+> > > > +
+> > > > +#define _TIER_ATTR_RO(name, tier_index)                                        \
+> > > > +       { __ATTR(name, 0444, show_tier, NULL), tier_index, NULL }
+> > > > +
+> > > > +struct memory_tier_attr {
+> > > > +       struct device_attribute attr;
+> > > > +       int tier_index;
+> > > > +       int (*write)(nodemask_t nodes);
+> > > > +};
+> > > > +
+> > > > +static ssize_t show_tier(struct device *dev,
+> > > > +                        struct device_attribute *attr, char *buf)
+> > > > +{
+> > > > +       struct memory_tier_attr *mt = container_of(attr, struct memory_tier_attr, attr);
+> > > > +
+> > > > +       return sysfs_emit(buf, "%*pbl\n",
+> > > > +                         nodemask_pr_args(&memory_tier[mt->tier_index]));
+> > > > +}
+> > > > +
+> > > >  static const struct attribute_group memory_root_attr_group = {
+> > > >         .attrs = node_state_attrs,
+> > > >  };
+> > > >
+> > > > +
+> > > > +#define TOP_TIER 0
+> > > > +static struct memory_tier_attr memory_tiers[] = {
+> > > > +       [0] = _TIER_ATTR_RO(memory_top_tier, TOP_TIER),
+> > > > +};
+> > > > +
+> > > > +static struct attribute *memory_tier_attrs[] = {
+> > > > +       &memory_tiers[0].attr.attr,
+> > > > +       NULL
+> > > > +};
+> > > > +
+> > > > +static const struct attribute_group memory_tier_attr_group = {
+> > > > +       .attrs = memory_tier_attrs,
+> > > > +};
+> > > > +
+> > > >  static const struct attribute_group *cpu_root_attr_groups[] = {
+> > > >         &memory_root_attr_group,
+> > > > +       &memory_tier_attr_group,
+> > > >         NULL,
+> > > >  };
+> > > >
+> > > >
+> > > > As long as we have the ability to see the nodelist, I am good with the
+> > > > proposal.
+> > > >
+> > > > -aneesh
+> > >
+> > > I am OK with moving back the memory tier nodelist into node/.  When
+> > > there are more memory tier attributes needed, we can then create the
+> > > memory tier subtree and replace the tier nodelist in node/ with
+> > > symlinks.
+> >
+> > What attributes do you imagine that we may put in memory_tierX/ sysfs
+> > directory?  If we have good candidates in mind, we may just do that.
+> > What I can imagine now is "demote", like "memory_reclaim" in nodeX/ or
+> > node/ directory you proposed before.  Is it necessary to show something
+> > like "meminfo", "vmstat" there?
+>
+> My words may be confusing, so let me say it in another way.
 
-No, it is not a generic node name. Please read my reply again.
+I can understand. :)
 
-> 
->>> +		compatible = "fixed-clock";
->>> +		#clock-cells = <0>;
->>> +		clock-frequency = <24000000>;
->> This does not look like property of SoC. Where is this clock defined? In
->> the SoC or on the board?
-> 
-> It's an external crystal on the board.
-> I add this node, because it's the clock source of clock controller.
-> It always present on all ma35d1 boards.
-> 
->      clk: clock-controller@40460200 {
->          compatible = "nuvoton,ma35d1-clk";
->          reg = <0x0 0x40460200 0x0 0x100>;
->          #clock-cells = <1>;
->          clocks = <&hxt_24m>;
->          clock-names = "HXT_24MHz";
-> ...
-> 
->>> +		clock-output-names = "HXT_24MHz";
->>> +	};
->>> +
->>> +	timer {
->>> +		compatible = "arm,armv8-timer";
->>> +		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) |
->>> +					  IRQ_TYPE_LEVEL_LOW)>,
->>> +			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) |
->>> +					  IRQ_TYPE_LEVEL_LOW)>,
->>> +			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) |
->>> +					  IRQ_TYPE_LEVEL_LOW)>,
->>> +			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) |
->>> +					  IRQ_TYPE_LEVEL_LOW)>;
->>> +		clock-frequency = <12000000>;
->>> +	};
->>> +
->>> +	sys: system-controller@40460000 {
->>> +		compatible = "nuvoton,ma35d1-sys", "syscon", "simple-mfd";
->> Why is this a simple-mfd if there are no children here? What do you want
->> to instantiate here?
-> 
-> It's not a device, but a set of registers for system level control.
-> I want to provide a register base mapping for other devices to access 
-> system control registers.
+> Just for brainstorm, if we have
+>
+>   /sys/devices/system/memtier/memtierN/
+>
+> What can we put in it in addition to "nodelist" or links to the nodes?
+> For example,
+>
+>   /sys/devices/system/memtier/memtierN/demote
+>
+> When write a page number to it, the specified number of pages will be
+> demoted from memtierN to memtierN+1, like the
+> /sys/devices/system/node/memory_reclaim interface you proposed before.
 
-This does not explain why you need simple-mfd. simple-mfd is not for
-providing a register base mapping for other devices.
+"demote" might be fine to add there.  Just to clarify, we (Google)
+currently don't yet have the need for an interface to do system-wide
+demotion from one tier to another.  What we need is memory.demote
+(similar to memory.reclaim) for memory cgroup based demotions.
 
-> 
->> Where is the nuvoton,ma35d1-sys compatible documented?
-> 
-> OK, I will add the compatible document in next version.
-> 
-> 
->>> +		reg = <0x0 0x40460000 0x0 0x400>;
->>> +	};
->>> +
->>> +	reset: reset-controller {
->>> +		compatible = "nuvoton,ma35d1-reset";
->> Also not documented.
-> 
-> I will also add the document for it.
+Other things that might be added include tier-specific properties
+(e.g. expected latency and bandwidth when available) and tier-specific
+stats.
 
-All of these should fail on checkpatch which points that you either did
-not run it or ignored the result.
+Under /sys/devices/system/memtier/, we may add global properties about
+memory tiers, e.g. max number of tiers, min/max tier ids (which might
+be useful if we hide unpopulated memory tiers).
 
-Please run checkpatch on all your submissions to Linux kernel and be
-sure that there is no warning or error.
+> Or, is it necessary to add
+>
+>   /sys/devices/system/memtier/memtierN/meminfo
+>   /sys/devices/system/memtier/memtierN/vmstat
 
+The userspace can aggregate such data from node/nodeN/{meminfo,
+vmstat} based on the memory tier nodelist. But I am not against adding
+these files to memtierN/ for user convenience.
 
+> I don't mean to propose these.  Just want to know whether there's
+> requirement for these kind of stuff?  And what else may be required.
 
-Best regards,
-Krzysztof
+This sounds good.  I think a memtier directory may eventually become a
+necessity, though I don't feel too strongly about adding it right now.
+
+> Best Regards,
+> Huang, Ying
+>
+> > >
+> > > So the revised sysfs interfaces are:
+> > >
+> > > * /sys/devices/system/node/memory_tierN (read-only)
+> > >
+> > >   where N = 0, 1, 2
+> > >
+> > >   Format: node_list
+> > >
+> > > * /sys/devices/system/node/nodeN/memory_tier (read/write)
+> > >
+> > >   where N = 0, 1, ...
+> > >
+> > >   Format: int or empty
+> >
+>
+>
+>

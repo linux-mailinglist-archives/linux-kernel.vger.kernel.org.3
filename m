@@ -2,120 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4250526973
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 20:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE454526978
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 20:39:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383225AbiEMShY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 14:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36968 "EHLO
+        id S1383375AbiEMSio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 14:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380747AbiEMShP (ORCPT
+        with ESMTP id S1383344AbiEMSig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 14:37:15 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944C038D9D
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 11:37:14 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id g26-20020a25b11a000000b0064984a4ffb7so7973773ybj.7
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 11:37:14 -0700 (PDT)
+        Fri, 13 May 2022 14:38:36 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED79F20F66
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 11:38:30 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id qe3-20020a17090b4f8300b001dc24e4da73so8368253pjb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 11:38:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Yh02o9GYLH67/1J+arp7aJNm9pyvUfcX4BFMxpKB/6c=;
-        b=BPHC+p80idgijUzxQ2VgogEPiKtlEMS/46dRxh2t9y5Y/UARSIl3q9actVsOvKFJ0J
-         /WcX25xDa+31PPOC9Mf2p0iD5qY7Gu+zlcrhSh3GpfXQFigfgmL/6dA9Xykqb6Amvozz
-         9sB+BlETpycuVV9XDxqRECrs/kJRIZ8mDmray0apCcOLybXwFia+fwpFh2/p65d0j1Ls
-         NLJaqXoIQaWmHoRzy3sqcY5VN9sLUq4c0o9kaeRzgACju5q6qg1QzQyxV6HXvDsjSPVY
-         tJFqFBf1WOya5+8R0MTm22eBRpb5lI9G9qfRtn/Xlb1PelJoF8jAibjz2p6JWlIDzCzY
-         ISGg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=bUll9EZdTqdsVM4QKgbt5mHzhJZWttOT3qxL7FR14WM=;
+        b=oKXAjDiycQ+Xl95nE6rgB+ktCMLwY/tqptAt8RwtI8tWNNEmOCh/ZaJgnE979uldkv
+         rNRtLb0SW/+4xgBwxY7PFzfR4D4LiTLFcFPA8Pzxz9hnHbvkH8lYtl3+bUs+Q6OiYPlp
+         IDClf8QTqyaEN+EMugVck5CVl3s2uTfqm9hsW+KJFXExijs3Nw/NDixOg9IMaexAVDHl
+         V1IcWfH8C2ZQ79ZDHVuMexe4s0lqM0VwhJXCYK0eSE2RXYFPpyNtWwxSsuZLD/fNf3OF
+         fzu37XqCqgPjxzfC90EHvluJZDe304JJBjcm32hiGpB8H7KUjJ3e3tP5TNGG8ItWH10n
+         w4kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Yh02o9GYLH67/1J+arp7aJNm9pyvUfcX4BFMxpKB/6c=;
-        b=5VY6qL7r/LSpKr1nYGwR/I68RSxHdhw9KDX7fhOgDitt7OYYWpnGJCl2A7gkHadaBu
-         zeDSjUn6vv04q7q0pY1iqWDpUXGIqW3PEAJuVZ/rrQk1opDn4D5fEG21KYMnRzck6FqM
-         J1R85hT7io07ImL7sNO/fqsG4pFLbZ7bmY0WXPMUYfYzjvB2ZGwmPSFBrtaNrVbiFCbx
-         3VSSbTCuNhN2ireNCf4TghiEWmuK1YqyDy97EtlVtS7CtcwNP/yC4W5ZdeIF0NGpZLQ5
-         QAgI9NU8W4eBC3EPWt2ZYAx3ayvHnhFryJdD+m0K7BVAd2IHWYlEbNGwrfV2g2ChvhQv
-         BNoQ==
-X-Gm-Message-State: AOAM532j1och9jZctup6GiYh/VcYin/Pci35tTBBTcNFTjjk8HR346fS
-        ppRa2ppj9+W4Dil4in3TU4DbvdHTJEizLA==
-X-Google-Smtp-Source: ABdhPJzj3OKj/mMfqU4Tu32K5Oey/kBX4W+CQMnnrMy9VhjWUWKoHrW2v5gOmfYJu1VAF5KdHf1a6mFy3Iizew==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:577a:4fdf:13a8:670])
- (user=dlatypov job=sendgmr) by 2002:a0d:d4d4:0:b0:2fe:bb8d:43a1 with SMTP id
- w203-20020a0dd4d4000000b002febb8d43a1mr3636186ywd.324.1652467033850; Fri, 13
- May 2022 11:37:13 -0700 (PDT)
-Date:   Fri, 13 May 2022 11:37:07 -0700
-Message-Id: <20220513183707.97290-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [PATCH] kunit: fix executor OOM error handling logic on non-UML
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=bUll9EZdTqdsVM4QKgbt5mHzhJZWttOT3qxL7FR14WM=;
+        b=RywBmwM8/tIjSwf46qkXHCJ1/M/7vaWiWAHQsaL0uytG7wywGlmuAPjIqInouUFVn2
+         I8X+GS8UuC0ToSz60bxVwWvceCkve4u0y1yaLjYSagQYMpsJbRlB7lU0pK14Gv1W8qlB
+         GgApF/P0iNbWMaQdN5mzs/sNd8DKuvTkDiGk2Feep5cTH+Vw3feBTuRqUu49InZW4PF3
+         NDXqNA/aSVoZ5WpB30jaIe5UeUfEtXocUZzBQtO0w3wU8Z8ZeNjrVx7TQAwLWPPTPk3o
+         fpGrWuvAbeqV/7i3KvEIWX3L8wAjgY+iM6Hcnx4y3SdvnQd8WVRxSI4wJG/vm+Okc7WZ
+         AlCA==
+X-Gm-Message-State: AOAM533jtgQ8pOVf/WVvGX3eIpXEislJrBzEn17tJLIqGUwCowxkb7Wl
+        b+V3J1ysaMJHyzOZqLeeHaTUnQ==
+X-Google-Smtp-Source: ABdhPJygXvdM77Qs1Phfsnv0IQN/lWgaQlWeL3omu1KKDpZJfEDXiWrvXt+LWmuScYehHcRKS2rR2g==
+X-Received: by 2002:a17:902:f684:b0:15e:8c4a:c54b with SMTP id l4-20020a170902f68400b0015e8c4ac54bmr5986060plg.21.1652467110296;
+        Fri, 13 May 2022 11:38:30 -0700 (PDT)
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id a9-20020a62bd09000000b0050dc762818csm2092022pff.102.2022.05.13.11.38.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 11:38:29 -0700 (PDT)
+Message-ID: <49f0ab7d-def2-811a-d414-37369faf882e@linaro.org>
+Date:   Fri, 13 May 2022 11:38:28 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux- stable <stable@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        syzbot+f264bffdfbd5614f3bb2@syzkaller.appspotmail.com
+References: <CAEf4BzbiVeQfhxEu908w2mU4d8+5kKeMknuvhzCXuxM9pJ1jmQ@mail.gmail.com>
+ <20220415141355.4329-1-tadeusz.struk@linaro.org>
+ <CAEf4Bzah9K7dEa_7sXE4TnkuMTRHypMU9DxiLezgRvLjcqE_YA@mail.gmail.com>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: Re: [PATCH v2] bpf: Fix KASAN use-after-free Read in
+ compute_effective_progs
+In-Reply-To: <CAEf4Bzah9K7dEa_7sXE4TnkuMTRHypMU9DxiLezgRvLjcqE_YA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The existing logic happens to work fine on UML, but is not correct when
-running on other arches.
+Hi Andrii,
+On 4/20/22 10:07, Andrii Nakryiko wrote:
+>> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+>> index 128028efda64..5a64cece09f3 100644
+>> --- a/kernel/bpf/cgroup.c
+>> +++ b/kernel/bpf/cgroup.c
+>> @@ -723,10 +723,8 @@ static int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
+>>          pl->link = NULL;
+>>
+>>          err = update_effective_progs(cgrp, atype);
+>> -       if (err)
+>> -               goto cleanup;
+>>
+>> -       /* now can actually delete it from this cgroup list */
+>> +       /* now can delete it from this cgroup list */
+>>          list_del(&pl->node);
+>>          kfree(pl);
+>>          if (list_empty(progs))
+>> @@ -735,12 +733,55 @@ static int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
+>>          if (old_prog)
+>>                  bpf_prog_put(old_prog);
+>>          static_branch_dec(&cgroup_bpf_enabled_key[atype]);
+>> -       return 0;
+>> +
+>> +       if (!err)
+>> +               return 0;
+>>
+>>   cleanup:
+>> -       /* restore back prog or link */
+>> -       pl->prog = old_prog;
+>> -       pl->link = link;
+>> +       /*
+>> +        * If compute_effective_progs failed with -ENOMEM, i.e. alloc for
+>> +        * cgrp->bpf.inactive table failed, we can recover by removing
+>> +        * the detached prog from effective table and rearranging it.
+>> +        */
+>> +       if (err == -ENOMEM) {
+>> +               struct bpf_prog_array_item *item;
+>> +               struct bpf_prog *prog_tmp, *prog_detach, *prog_last;
+>> +               struct bpf_prog_array *array;
+>> +               int index = 0, index_detach = -1;
+>> +
+>> +               array = cgrp->bpf.effective[atype];
+>> +               item = &array->items[0];
+>> +
+>> +               if (prog)
+>> +                       prog_detach = prog;
+>> +               else
+>> +                       prog_detach = link->link.prog;
+>> +
+>> +               if (!prog_detach)
+>> +                       return -EINVAL;
+>> +
+>> +               while ((prog_tmp = READ_ONCE(item->prog))) {
+>> +                       if (prog_tmp == prog_detach)
+>> +                               index_detach = index;
+>> +                       item++;
+>> +                       index++;
+>> +                       prog_last = prog_tmp;
+>> +               }
+>> +
+>> +               /* Check if we found what's needed for removing the prog */
+>> +               if (index_detach == -1 || index_detach == index-1)
+>> +                       return -EINVAL;
+>> +
+>> +               /* Remove the last program in the array */
+>> +               if (bpf_prog_array_delete_safe_at(array, index-1))
+>> +                       return -EINVAL;
+>> +
+>> +               /* and update the detached with the last just removed */
+>> +               if (bpf_prog_array_update_at(array, index_detach, prog_last))
+>> +                       return -EINVAL;
+>> +
+>> +               err = 0;
+>> +       }
 
-1. We didn't initialize `int err`, and kunit_filter_suites() doesn't
-   explicitly set it to 0 on success. So we had false "failures".
-   Note: it doesn't happen on UML, causing this to get overlooked.
-2. If we error out, we do not call kunit_handle_shutdown().
-   This makes kunit.py timeout when using a non-UML arch, since the QEMU
-   process doesn't ever exit.
+Thanks for feedback, and sorry for delay. I got pulled into something else.
 
-Fixes: a02353f49162 ("kunit: bail out of test filtering logic quicker if OOM")
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- lib/kunit/executor.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+> There are a bunch of problems with this implementation.
+> 
+> 1. We should do this fallback right after update_effective_progs()
+> returns error, before we get to list_del(&pl->node) and subsequent
+> code that does some additional things (like clearing flags and stuff).
+> This additional code needs to run even if update_effective_progs()
+> fails. So I suggest to extract the logic of removing program from
+> effective prog arrays into a helper function and doing
+> 
+> err = update_effective_progs(...);
+> if (err)
+>      purge_effective_progs();
+> 
+> where purge_effective_progs() will be the logic you are adding. And it
+> will be void function because it can't fail.
 
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index 2f73a6a35a7e..96f96e42ce06 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -247,13 +247,13 @@ int kunit_run_all_tests(void)
- 		.start = __kunit_suites_start,
- 		.end = __kunit_suites_end,
- 	};
--	int err;
-+	int err = 0;
- 
- 	if (filter_glob_param) {
- 		suite_set = kunit_filter_suites(&suite_set, filter_glob_param, &err);
- 		if (err) {
- 			pr_err("kunit executor: error filtering suites: %d\n", err);
--			return err;
-+			goto out;
- 		}
- 	}
- 
-@@ -268,9 +268,10 @@ int kunit_run_all_tests(void)
- 		kunit_free_suite_set(suite_set);
- 	}
- 
--	kunit_handle_shutdown();
- 
--	return 0;
-+out:
-+	kunit_handle_shutdown();
-+	return err;
- }
- 
- #if IS_BUILTIN(CONFIG_KUNIT_TEST)
+I have implemented that in v3, will send that out soon.
 
-base-commit: 9660209d9418f2295d31fea0d32e313e9b2c1200
+> 
+> 2. We have to update not just cgrp->bpf.effective array, but all the
+> descendants' lists as well. See what update_effective_progs() is
+> doing, it has css_for_each_descendant_pre() iteration. You need to do
+> it here as well. But instead of doing compute_effective_progs() which
+> allocates a new copy of an array we'll need to update existing array
+> in place.
+> 
+> 3. Not clear why you need to do both bpf_prog_array_delete_safe_at()
+> and bpf_prog_array_update_at(), isn't delete_safe_at() enought?
+
+I thought that we need to reshuffle the table and move the progs around,
+but your are right, delete_safe_at() is enough.
+
 -- 
-2.36.0.550.gb090851708-goog
-
+Thanks,
+Tadeusz

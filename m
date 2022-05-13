@@ -2,126 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4019525A35
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 05:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F78525A45
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 05:41:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376861AbiEMDiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 23:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60986 "EHLO
+        id S1376887AbiEMDl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 23:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349800AbiEMDhz (ORCPT
+        with ESMTP id S1350532AbiEMDlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 23:37:55 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6AB65F4D
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 20:37:53 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VD1LyNa_1652413069;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VD1LyNa_1652413069)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 13 May 2022 11:37:49 +0800
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-To:     catalin.marinas@arm.com, will@kernel.org
-Cc:     mike.kravetz@oracle.com, akpm@linux-foundation.org,
-        songmuchun@bytedance.com, willy@infradead.org,
-        anshuman.khandual@arm.com, christophe.leroy@csgroup.eu,
-        baolin.wang@linux.alibaba.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH v2 2/2] arm64/hugetlb: Implement arm64 specific huge_ptep_get()
-Date:   Fri, 13 May 2022 11:37:35 +0800
-Message-Id: <de60e44dc6fa7991889320a7dfc9ee7ea38f01d8.1652411252.git.baolin.wang@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <cover.1652411252.git.baolin.wang@linux.alibaba.com>
-References: <cover.1652411252.git.baolin.wang@linux.alibaba.com>
-In-Reply-To: <cover.1652411252.git.baolin.wang@linux.alibaba.com>
-References: <cover.1652411252.git.baolin.wang@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 12 May 2022 23:41:22 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308212A26B
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 20:41:21 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d25so6566031pfo.10
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 20:41:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JaD/7HsV0lHA07q8V2RCBkaHsJJjfnySNbAofgOVR+s=;
+        b=c5Kb2dLIuZWvdFJVbRc2JEjzw2B2Dzf6Pnk5QeLzsmOpoGIwIXrpk2u4HDZxZATVcb
+         RQCZB7AVQpilRtH7j3HgXELDOxJYJ9AKnOiXcozN38K+eOYCpZP4eAlTuzhX/IbcCHuF
+         fD3vymdbg+d0WJZH2mnnTf1n84ziyZHJdMP43IJNspQjPgKbCRjFPWCi0TXAHs+tLuGU
+         urDfcdgnspQ7g4DGHkyU07WM4OnHipWnDR8hHhzB2+jand1Ci74ZFyKlmSFQx8u+ZRJl
+         /fHf7uqFlvRKRzQk/sbZFyLyxR/TYYupQSVu7Zpa7xukHKA19d6/I9LAJEHLHh9NSCHf
+         9I6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JaD/7HsV0lHA07q8V2RCBkaHsJJjfnySNbAofgOVR+s=;
+        b=Gb3bcBW5mfhJndwqV5rB+tCzmZvcyKRAiSVaCAIsW4FDyuK0LuJU6X26LDm6XkZ6P9
+         155Aut6yzT11LykiHzXVrHFtnn+VVHh5aljqTe7IXkUMX0+INkB37H0VhVMlDIgMyN59
+         25ALzfHky6uIpecn2PtLs4uRRZXCH/elGIoPh0wlcINLKADauP0+zvDLO+CJhNrrj3ri
+         RnueB58YMBJMGeAfUEJc3PN4EzJ9NGE/VVIzdTzKLgu3p1mGoGnc7VdPeaT0BWzVw/tr
+         KXHhCl6QC9Hosl07adwu9NdiF12gTPwrsUt6e2JHNUgdlQvfW5UUrg6SV0sb+FXugzk/
+         QxEA==
+X-Gm-Message-State: AOAM530V9xwIYtaRrR/WsjxRdl9Szq+0E5aJJgklJIAWzizqe6DU9fn9
+        1Rugq6Gr/09J/n0jrzK6q8Wcf2fb9nijNHLsQG391A==
+X-Google-Smtp-Source: ABdhPJztXj3NI4LlWRYrTyoHNrGuFPmTDU30zBctcBdUbZiL2txSy8W/riK1TBgLzTUumv2yr+YHO2k/aNd90/TW10s=
+X-Received: by 2002:a63:1117:0:b0:399:2df0:7fb9 with SMTP id
+ g23-20020a631117000000b003992df07fb9mr2395090pgl.40.1652413280701; Thu, 12
+ May 2022 20:41:20 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220422224508.440670-1-jane.chu@oracle.com> <20220422224508.440670-4-jane.chu@oracle.com>
+ <CAPcyv4i7xi=5O=HSeBEzvoLvsmBB_GdEncbasMmYKf3vATNy0A@mail.gmail.com>
+ <CAPcyv4id8AbTFpO7ED_DAPren=eJQHwcdY8Mjx18LhW+u4MdNQ@mail.gmail.com>
+ <Ynt3WlpcJwuqffDX@zn.tnic> <5aa1c9aacc5a4086a904440641062669@intel.com>
+In-Reply-To: <5aa1c9aacc5a4086a904440641062669@intel.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Thu, 12 May 2022 20:41:09 -0700
+Message-ID: <CAPcyv4hOD--eFPX9v4U0iowzQZVfOX2KgNYQU7Cb+WSnZmWpiw@mail.gmail.com>
+Subject: Re: [PATCH v9 3/7] mce: fix set_mce_nospec to always unmap the whole page
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     Borislav Petkov <bp@alien8.de>, "chu, jane" <jane.chu@oracle.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Lutomirski, Andy" <luto@kernel.org>, david <david@fromorbit.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        X86 ML <x86@kernel.org>,
+        "Verma, Vishal L" <vishal.l.verma@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>,
+        device-mapper development <dm-devel@redhat.com>,
+        "Weiny, Ira" <ira.weiny@intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vivek Goyal <vgoyal@redhat.com>, "Wang, Jue" <juew@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now we use huge_ptep_get() to get the pte value of a hugetlb page,
-however it will only return one specific pte value for the CONT-PTE
-or CONT-PMD size hugetlb on ARM64 system, which can contain seravel
-continuous pte or pmd entries with same page table attributes. And it
-will not take into account the subpages' dirty or young bits of a
-CONT-PTE/PMD size hugetlb page.
+On Wed, May 11, 2022 at 10:17 AM Luck, Tony <tony.luck@intel.com> wrote:
+>
+> > I - just like you - am waiting for Tony to say whether he still needs
+> > this whole_page() thing. I already suggested removing it so I'm fine
+> > with this patch.
+>
+> IIRC this new patch effectively reverts back to the original behavior that
+> I implemented back at the dawn of time. I.e. just always mark the whole
+> page "not present" and don't try to mess with UC mappings to allow
+> partial (but non-speculative) access to the not-poisoned parts of the
+> page.
+>
+> If that is the case ... then Acked-by: Tony Luck <tony.luck@intel.com>
+>
+> If I've misunderstood ... then please explain what it is doing.
 
-So the huge_ptep_get() is inconsistent with huge_ptep_get_and_clear(),
-which already takes account the dirty or young bits for any subpages
-in this CONT-PTE/PMD size hugetlb [1]. Meanwhile we can miss dirty or
-young flags statistics for hugetlb pages with current huge_ptep_get(),
-such as the gather_hugetlb_stats() function, and CONT-PTE/PMD hugetlb
-monitoring with DAMON.
+You are correct. The page is always marked not present as far as the
+page-offlining code is concerned, back to the way it always was.
 
-Thus define an ARM64 specific  huge_ptep_get() implementation, that will
-take into account any subpages' dirty or young bits for CONT-PTE/PMD size
-hugetlb page, for those functions that want to check the dirty and young
-flags of a hugetlb page.
+The code in the pmem driver that repairs the page now knows that the
+page is to be kept "not present" until the poison is cleared and
+clear_mce_nospec() returns the mapping to typical write-back caching.
 
-[1] https://lore.kernel.org/linux-mm/85bd80b4-b4fd-0d3f-a2e5-149559f2f387@oracle.com/
-
-Suggested-by: Muchun Song <songmuchun@bytedance.com>
-Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
----
- arch/arm64/include/asm/hugetlb.h |  2 ++
- arch/arm64/mm/hugetlbpage.c      | 24 ++++++++++++++++++++++++
- 2 files changed, 26 insertions(+)
-
-diff --git a/arch/arm64/include/asm/hugetlb.h b/arch/arm64/include/asm/hugetlb.h
-index 616b2ca..1fd2846 100644
---- a/arch/arm64/include/asm/hugetlb.h
-+++ b/arch/arm64/include/asm/hugetlb.h
-@@ -44,6 +44,8 @@ extern pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
- #define __HAVE_ARCH_HUGE_PTE_CLEAR
- extern void huge_pte_clear(struct mm_struct *mm, unsigned long addr,
- 			   pte_t *ptep, unsigned long sz);
-+#define __HAVE_ARCH_HUGE_PTEP_GET
-+extern pte_t huge_ptep_get(pte_t *ptep);
- extern void set_huge_swap_pte_at(struct mm_struct *mm, unsigned long addr,
- 				 pte_t *ptep, pte_t pte, unsigned long sz);
- #define set_huge_swap_pte_at set_huge_swap_pte_at
-diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
-index 9553851..9a3f7f1 100644
---- a/arch/arm64/mm/hugetlbpage.c
-+++ b/arch/arm64/mm/hugetlbpage.c
-@@ -158,6 +158,30 @@ static inline int num_contig_ptes(unsigned long size, size_t *pgsize)
- 	return contig_ptes;
- }
- 
-+pte_t huge_ptep_get(pte_t *ptep)
-+{
-+	int ncontig, i;
-+	size_t pgsize;
-+	pte_t orig_pte = ptep_get(ptep);
-+
-+	if (!pte_present(orig_pte) || !pte_cont(orig_pte))
-+		return orig_pte;
-+
-+	ncontig = num_contig_ptes(page_size(pte_page(orig_pte)), &pgsize);
-+
-+	for (i = 0; i < ncontig; i++, ptep++) {
-+		pte_t pte = ptep_get(ptep);
-+
-+		if (pte_dirty(pte))
-+			orig_pte = pte_mkdirty(orig_pte);
-+
-+		if (pte_young(pte))
-+			orig_pte = pte_mkyoung(orig_pte);
-+	}
-+
-+	return orig_pte;
-+}
-+
- /*
-  * Changing some bits of contiguous entries requires us to follow a
-  * Break-Before-Make approach, breaking the whole contiguous set
--- 
-1.8.3.1
-
+There is no support for what the UC case previously allowed which was
+reading the good lines around the one bad line, just handle overwrites
+to clear poison and restore access.

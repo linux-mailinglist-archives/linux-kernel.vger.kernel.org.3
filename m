@@ -2,169 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E33AA52592F
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 03:05:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E92525937
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 03:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376260AbiEMBDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 21:03:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44392 "EHLO
+        id S1376265AbiEMBFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 21:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359861AbiEMBD3 (ORCPT
+        with ESMTP id S229523AbiEMBFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 21:03:29 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2BF40A1A
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 18:03:28 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id a191so6105715pge.2
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 18:03:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yhdX1EL/sWCz5vJoug+D2WrNzRnzdgksXTuD2mvaEPE=;
-        b=VDI9xOkNKnEokzk8xUh4JyQX+Yo006IxdyOCXuWDTE0qkS6LZ/bo2zcSHasiEdI1U2
-         c7qHNu2EXwJkXha5TxAgbRCpy7iFg0MSX9FUACYYgIm4l+d5zkSECCApXjn1Q4Xks/ME
-         hekKe9IZ/YzFZUnKHkSLZfqeVzia4h/B3HHlw9LyOYgRceHjA0QTFuok0EAiyievqFry
-         GQV63bihxwfmUxM88kHArPmj6FIjbVk1S6BEiadN6tyiasy5SQP2yhqi8Ln4VECCPuto
-         Wap2+ixLdbE07JfNNqGouV7cQNosdDRuTM1Vu1vMSkJicY9+brKkqSIkxDFlPWlyijAB
-         J4sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yhdX1EL/sWCz5vJoug+D2WrNzRnzdgksXTuD2mvaEPE=;
-        b=0J7rtZ9JoLIVI0LGldhNww6FeFIM9EZzMk8U32zMyH14zmt2JHQQZSOhUKddk0vdR/
-         jLdnYejl8ACboAoRewDJDDY8mrQkWpgHxUMQLZLJl2ocm9EKNm3+9fycAtRQI5qUSrBg
-         wo5YNZoTVYaWyx/MbegAYtLPjl3q+8HP8w3QI0rRnxOMS/hjOjUNysWalV7vl7sGO6gD
-         28iCVOK2Wc0IuN9X5eYp+suBgCJHnRCLz7Xfbd8yh41g13JSY/P1/5XcA8rAhrYhhVON
-         X3iVJOxv1HDLfE4oWjSHRPgSOd7rpU6MAriJo8B70rqLrb7H+ura89rBIgI/UA+9zGju
-         obbg==
-X-Gm-Message-State: AOAM530EwYvT7KFKV18KnN+xXRY0ZZ2SQAUdVSf71b/tgyzWOoheTXCU
-        Ky2Vo4O+WQYlO2tFMR9xldY1GA==
-X-Google-Smtp-Source: ABdhPJzP8QtZ6ZkiVz6FrHZg1aCTdDrF4Bg9uDZaDvtm2YaM/rA3cvXwo4MwPuEgNfYvb3txDVILbA==
-X-Received: by 2002:aa7:84d1:0:b0:510:8796:4f38 with SMTP id x17-20020aa784d1000000b0051087964f38mr2017729pfn.8.1652403807512;
-        Thu, 12 May 2022 18:03:27 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id b2-20020a170902650200b0015e8d4eb264sm491423plk.174.2022.05.12.18.03.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 18:03:27 -0700 (PDT)
-Date:   Fri, 13 May 2022 01:03:23 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Zeng Guang <guang.zeng@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>,
-        Gao Chao <chao.gao@intel.com>
-Subject: Re: [PATCH v2] kvm: selftests: Add KVM_CAP_MAX_VCPU_ID cap test
-Message-ID: <Yn2uW0C+48fnDgfj@google.com>
-References: <20220503064037.10822-1-guang.zeng@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220503064037.10822-1-guang.zeng@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 12 May 2022 21:05:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EDF7B45
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 18:05:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DDEE3B82C27
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:05:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41568C385B8;
+        Fri, 13 May 2022 01:05:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1652403938;
+        bh=o0tVkqCw52XZn3wbMhXVh+A4KnIKErQWAa2HDHJy+6Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cNubmoTk7cUdXBCDVnxyxhmzbCjeLlbPJuWm4t0rbcnmJkYe5x+EblRrO1hpM1Ufm
+         ogL/bSUcde84QbgsfvHNjOV1A+0gsacBuVPRWn5ZC8IaUDlarmIIGqG1j3ii5r4AAd
+         irggWkLWD8OKlHbfZzyp5aMS7peS0YAkhhZMj9Hg=
+Date:   Thu, 12 May 2022 18:05:37 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jagdish Gediya <jvgediya@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Jonathan.Cameron@huawei.com, adobriyan@gmail.com,
+        rf@opensource.cirrus.com, pmladek@suse.com, ying.huang@intel.com,
+        dave.hansen@intel.com
+Subject: Re: [PATCH v2 2/2] mm: Covert sysfs input to bool using
+ kstrtobool()
+Message-Id: <20220512180537.5296f39b27c3488080ff67cf@linux-foundation.org>
+In-Reply-To: <YmleidxlL2/d859f@smile.fi.intel.com>
+References: <20220426170040.65487-1-jvgediya@linux.ibm.com>
+        <20220426170040.65487-2-jvgediya@linux.ibm.com>
+        <YmleidxlL2/d859f@smile.fi.intel.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 03, 2022, Zeng Guang wrote:
-> +int main(int argc, char *argv[])
-> +{
-> +	struct kvm_vm *vm;
-> +	struct kvm_enable_cap cap = { 0 };
-> +	int ret;
-> +
-> +	vm = vm_create(VM_MODE_DEFAULT, 0, O_RDWR);
-> +
-> +	/* Get KVM_CAP_MAX_VCPU_ID cap supported in KVM */
-> +	ret = vm_check_cap(vm, KVM_CAP_MAX_VCPU_ID);
+On Wed, 27 Apr 2022 18:17:29 +0300 Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-Because it's trivial to do so, and will avoid a hardcoded "max", what about looping
-over all possible values?  And then some arbitrary number of the max?
+> On Tue, Apr 26, 2022 at 10:30:40PM +0530, Jagdish Gediya wrote:
+> > Sysfs input conversion to corrosponding bool value e.g. "false" or "0"
+> > to false, "true" or "1" to true are currently handled through strncmp
+> > at multiple places. Use kstrtobool() to convert sysfs input to bool
+> > value.
+> 
+> ...
+> 
+> > +	if (kstrtobool(buf, &numa_demotion_enabled))
+> >  		return -EINVAL;
+> 
+> Hmm... The commit message doesn't explain what's wrong with the error codes
+> returned by kstrtobool(). Can't it be
+> 
+> 	ret = kstrtobool();
+> 	if (ret)
+> 		return ret;
+> 
+> ?
 
-	max_nr_vcpus = vm_check_cap(vm, KVM_CAP_MAX_VCPU_ID);
-	TEST_ASSERT(max_nr_vcpus > ???, ...)
+Jagdish fell asleep.
 
-	for (i = 0; i < max_nr_vcpus; i++) 
-		vm = vm_create(VM_MODE_DEFAULT, 0, O_RDWR);
+Yes, I agree.  It has no practical difference at present because
+kstrtobool() can only return 0 or -EINVAL.  I did this:
 
-		vm_set_max_nr_vcpus(vm, 0);
-		vm_create_invalid_vcpu(vm, 0);
+--- a/mm/migrate.c~mm-convert-sysfs-input-to-bool-using-kstrtobool-fix
++++ a/mm/migrate.c
+@@ -2523,8 +2523,10 @@ static ssize_t numa_demotion_enabled_sto
+ 					   struct kobj_attribute *attr,
+ 					   const char *buf, size_t count)
+ {
+-	if (kstrtobool(buf, &numa_demotion_enabled))
+-		return -EINVAL;
++	ssize_t ret;
++
++	ret = kstrtobool(buf, &numa_demotion_enabled);
++		return ret;
+ 
+ 	return count;
+ }
+--- a/mm/swap_state.c~mm-convert-sysfs-input-to-bool-using-kstrtobool-fix
++++ a/mm/swap_state.c
+@@ -874,8 +874,11 @@ static ssize_t vma_ra_enabled_store(stru
+ 				      struct kobj_attribute *attr,
+ 				      const char *buf, size_t count)
+ {
+-	if (kstrtobool(buf, &enable_vma_readahead))
+-		return -EINVAL;
++	ssize_t ret;
++
++	ret = kstrtobool(buf, &enable_vma_readahead);
++	if (ret)
++		return ret;
+ 
+ 	return count;
+ }
+_
 
-		vm_set_max_nr_vcpus(vm, i);
-		vm_set_max_nr_vcpus(vm, i);
-		vm_create_invalid_vcpu(vm, i);
-		vm_create_invalid_vcpu(vm, i + 1);
-
-		vm_set_invalid_max_nr_vcpus(vm, 0);
-		vm_set_invalid_max_nr_vcpus(vm, i + 1);
-		vm_set_invalid_max_nr_vcpus(vm, i - 1);
-		vm_set_invalid_max_nr_vcpus(vm, max_nr_vcpus);
-
-		close(vm->fd);
-	}
-
-	for ( ; i < max_nr_vcpus + 100; i++) {
-		vm = vm_create(VM_MODE_DEFAULT, 0, O_RDWR);
-
-		vm_set_invalid_max_nr_vcpus(vm, i);
-
-		close(vm->fd);
-	}
-> +
-> +	/* Check failure if set KVM_CAP_MAX_VCPU_ID beyond KVM cap */
-> +	cap.cap = KVM_CAP_MAX_VCPU_ID;
-> +	cap.args[0] = ret + 1;
-> +	ret = ioctl(vm->fd, KVM_ENABLE_CAP, &cap);
-
-A helper or two to set the cap would be, uh, helpful :-)  See above for ideas.
-
-> +	TEST_ASSERT(ret < 0,
-> +		    "Unexpected success to enable KVM_CAP_MAX_VCPU_ID"
-> +		    "beyond KVM cap!\n");
-
-Please don't wrap quoted strings.  Shorten the string and/or let the line run long.
-For the string/message, prioritize information that the user _can't_ get from looking
-at the code, and info that is highly relevant to the expectations.  E.g. print the
-the return value, the errno, and the allegedly bad value.
-
-It's definitely helpful to provide context too (KVM Unit Tests drive me bonkers for
-their terse messages), but for cases like this, it's redundant.  "Unexpected success"
-is redundant because the "ret < 0" conveys that failure was expected, and hopefully
-most people will intuit that the test was trying "to enable" KVM_CAP_MAX_VCPU_ID.
-If not, a quick glance at the code (file and line provided) will give them that info.
-
-E.g. assuming this ends up in a helper, something like
-
-	TEST_ASSERT(ret == -1 && errno == EINVAL,
-		    "KVM_CAP_MAX_VCPU_ID bug, max ID = %d, ret = %d, errno = %d (%s),
-		    max_id, errno, strerror(errno));
-
-IMO it's worth checking errno to reduce the probability of false pass, e.g. if the
-ioctl() is rejected for some other reason due to a test bug.
-
-> +
-> +	/* Check success if set KVM_CAP_MAX_VCPU_ID */
-> +	cap.args[0] = MAX_VCPU_ID;
-> +	ret = ioctl(vm->fd, KVM_ENABLE_CAP, &cap);
-> +	TEST_ASSERT(ret == 0,
-> +		    "Unexpected failure to enable KVM_CAP_MAX_VCPU_ID!\n");

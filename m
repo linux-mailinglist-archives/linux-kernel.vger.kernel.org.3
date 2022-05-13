@@ -2,262 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8AB8526F2A
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:15:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 105A1526E89
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbiENBhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 21:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
+        id S229589AbiENBhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 21:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiENBhw (ORCPT
+        with ESMTP id S229543AbiENBg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 21:37:52 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4FF39A41C
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 16:43:12 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id x18so9347864plg.6
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 16:43:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=essDsTkBV8vjGqQ6Frct4rt8ISkB+0L+64Ci6wS9ufg=;
-        b=YQhNNLQi6sqEDmxiuUNid6aedpmGgrbaoKfJRQlPBgTyDPBb6d27SBlDPTbNtlZm+3
-         P5SbM0ywRUIaScz3fruCVg5GKaBlFgLlY+iquz0SabSbvnW4fD/o70OvV7CILEdsicPq
-         bk3OufDc4XxsdVU0syLN9ZmX86fGLxAq7BsnB7tROWbsbHPVwGLI9X4MwrFCO5ue3NeO
-         axar0Q1xigjUw5OoaIbmzQvZaD3kAd3dpU5CXpX8dodSk/jX4g1RBQn3siS0E4CE3I5e
-         IzminO93ZFW0jjiq2PdhAmTWYxY2ixrg2oKees12hSD04yINMzHqFMXyMw5Fm0XvucSe
-         0XIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=essDsTkBV8vjGqQ6Frct4rt8ISkB+0L+64Ci6wS9ufg=;
-        b=uhq29i7KWKywqzd8xJQHhbjWlvIgVbGDAmHcJ9mJBsALcnG/YOSaJGRsKafC9xBGpE
-         lNTGzmelJEDOtZ0IkvGaZek8Q1waNtKl3YqKuuzJX7Z6iC3oUthSlucsdqmFwaUmWcHi
-         8ltSv0HcQLwcuosEZGz0PzdmoNKz3MIfS9kq6ztuQ/+hJqYUxTK2AgN8mlUSLPFGeeCf
-         XyYWC5Hsl+3J8vGOZULN2Wv/08Pu9WcG5Vn6CyKoP1i/cV5CFcMZvLHwBkMEPJdSfQd8
-         Smy95zUzNWqRwvxPnGmI8uj252Xah5Eh3fusdJcLLs0/Sm3fm+eajSRd0bCmae6h4XQX
-         W/ow==
-X-Gm-Message-State: AOAM531G0WCAhP+ory1yUQbNotk+hbSwbPwKpm7RK3Hs9R7eesnKyZdl
-        IrhCf8nx51/6BGkLUVdEIghk7A==
-X-Google-Smtp-Source: ABdhPJy0ryoieUUDdepG0hylKM8E0TjinL0m3Vq4dq5N5IQAMVizkYlZbsGn8Ckj/FUGFaGKkPILdg==
-X-Received: by 2002:a17:90a:eb93:b0:1d9:a003:3f93 with SMTP id o19-20020a17090aeb9300b001d9a0033f93mr7220522pjy.50.1652485390989;
-        Fri, 13 May 2022 16:43:10 -0700 (PDT)
-Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
-        by smtp.gmail.com with ESMTPSA id 132-20020a62168a000000b0050dc7628175sm2416626pfw.79.2022.05.13.16.43.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 16:43:10 -0700 (PDT)
-Date:   Fri, 13 May 2022 23:43:06 +0000
-From:   David Matlack <dmatlack@google.com>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
+        Fri, 13 May 2022 21:36:58 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651F5392C6A
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 16:42:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652485329; x=1684021329;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=l9BUQ0IAZJ5rrqEJ/wlo5FNsSwI6FBi8qNsQPZI+Uzg=;
+  b=IFSYuQ3wf3SEAmJHoDbxOlLKhd53IR+Mm9X2k0hJODGxn0OlgkQNEAAm
+   7QPI+ZZewMBK2zA2cvRTHqjuoAfY76MLISyu8yabsmSaAjfSQn7eaS/2I
+   c0HieeaPi1RrR4Ys5OX4NP9Yr3DMnjTs4blYsSpiLLew2vNSkAmg5CU5F
+   Y9ZllPvL/GUvJektQtGIIfozP/CvN9fJwbSegn2GwiZTmWxhdkla1Q4bJ
+   Phb0TMY0xJf7cHTBuq/LFQ/2WDVxbMu6BprINymapJiy/uIwxf85NNw2d
+   rMLQY7GQ/4b8TTf3/Y3e8Pt/3jpE8r/qbUfy2RO1tfBvbyeQb4zWfa419
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="270371653"
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="270371653"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 16:42:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="625093273"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga008.fm.intel.com with ESMTP; 13 May 2022 16:42:06 -0700
+Date:   Fri, 13 May 2022 16:45:42 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     x86@kernel.org, Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Stephane Eranian <eranian@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH V2 2/7] KVM: X86/MMU: Add special shadow pages
-Message-ID: <Yn7tCpt9s8qf3Rn/@google.com>
-References: <20220503150735.32723-1-jiangshanlai@gmail.com>
- <20220503150735.32723-3-jiangshanlai@gmail.com>
+        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 05/29] x86/apic/vector: Do not allocate vectors for
+ NMIs
+Message-ID: <20220513234542.GC9074@ranerica-svr.sc.intel.com>
+References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
+ <20220506000008.30892-6-ricardo.neri-calderon@linux.intel.com>
+ <87zgjufjrf.ffs@tglx>
+ <20220513180320.GA22683@ranerica-svr.sc.intel.com>
+ <87v8u9rwce.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220503150735.32723-3-jiangshanlai@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <87v8u9rwce.ffs@tglx>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 03, 2022 at 11:07:30PM +0800, Lai Jiangshan wrote:
-> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+On Fri, May 13, 2022 at 10:50:09PM +0200, Thomas Gleixner wrote:
+> On Fri, May 13 2022 at 11:03, Ricardo Neri wrote:
+> > On Fri, May 06, 2022 at 11:12:20PM +0200, Thomas Gleixner wrote:
+> >> Why would a NMI ever end up in this code? There is no vector management
+> >> required and this find cpu exercise is pointless.
+> >
+> > But even if the NMI has a fixed vector, it is still necessary to determine
+> > which CPU will get the NMI. It is still necessary to determine what to
+> > write in the Destination ID field of the MSI message.
+> >
+> > irq_matrix_find_best_cpu() would find the CPU with the lowest number of
+> > managed vectors so that the NMI is directed to that CPU. 
 > 
-> Special pages are pages to hold PDPTEs for 32bit guest or higher
-> level pages linked to special page when shadowing NPT.
+> What's the point to send it to the CPU with the lowest number of
+> interrupts. It's not that this NMI happens every 50 microseconds.
+> We pick one online CPU and are done.
+
+Indeed, that is sensible.
+
 > 
-> Current code use mmu->pae_root, mmu->pml4_root, and mmu->pml5_root to
-> setup special root.  The initialization code is complex and the roots
-> are not associated with struct kvm_mmu_page which causes the code more
-> complex.
+> > In today's code, an NMI would end up here because we rely on the existing
+> > interrupt management infrastructure... Unless, the check is done the entry
+> > points as you propose.
 > 
-> Add kvm_mmu_alloc_special_page() and mmu_free_special_root_page() to
-> allocate and free special shadow pages and prepare for using special
-> shadow pages to replace current logic and share the most logic with
-> normal shadow pages.
-> 
-> The code is not activated since using_special_root_page() is false in
-> the place where it is inserted.
-> 
-> Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c | 91 +++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 90 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 7f20796af351..126f0cd07f98 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -1719,6 +1719,58 @@ static bool using_special_root_page(struct kvm_mmu *mmu)
->  		return mmu->cpu_role.base.level <= PT32E_ROOT_LEVEL;
->  }
+> Correct. We don't want to call into functions which are not designed for
+> NMIs.
+
+Agreed.
+
 >  
-> +/*
-> + * Special pages are pages to hold PAE PDPTEs for 32bit guest or higher level
-> + * pages linked to special page when shadowing NPT.
-> + *
-> + * Special pages are specially allocated.  If sp->spt needs to be 32bit, it
-
-I'm not sure what you mean by "If sp->spt needs to be 32bit". Do you mean
-"If sp shadows a 32-bit PAE page table"?
-
-> + * will use the preallocated mmu->pae_root.
-> + *
-> + * Special pages are only visible to local VCPU except through rmap from their
-> + * children, so they are not in the kvm->arch.active_mmu_pages nor in the hash.
-> + *
-> + * And they are either accounted nor write-protected since they don't has gfn
-> + * associated.
-
-Instead of "has gfn associated", how about "shadow a guest page table"?
-
-> + *
-> + * Because of above, special pages can not be freed nor zapped like normal
-> + * shadow pages.  They are freed directly when the special root is freed, see
-> + * mmu_free_special_root_page().
-> + *
-> + * Special root page can not be put on mmu->prev_roots because the comparison
-> + * must use PDPTEs instead of CR3 and mmu->pae_root can not be shared for multi
-> + * root pages.
-> + *
-> + * Except above limitations, all the other abilities are the same as other
-> + * shadow page, like link, parent rmap, sync, unsync etc.
-> + *
-> + * Special pages can be obsoleted but might be possibly reused later.  When
-> + * the obsoleting process is done, all the obsoleted shadow pages are unlinked
-> + * from the special pages by the help of the parent rmap of the children and
-> + * the special pages become theoretically valid again.  If there is no other
-> + * event to cause a VCPU to free the root and the VCPU is being preempted by
-> + * the host during two obsoleting processes, the VCPU can reuse its special
-> + * pages when it is back.
-
-Sorry I am having a lot of trouble parsing this paragraph.
-
-> + */
-
-This comment (and more broadly, this series) mixes "special page",
-"special root", "special root page", and "special shadow page". Can you
-be more consistent with the terminology?
-
-> +static struct kvm_mmu_page *kvm_mmu_alloc_special_page(struct kvm_vcpu *vcpu,
-> +		union kvm_mmu_page_role role)
-> +{
-> +	struct kvm_mmu_page *sp;
-> +
-> +	sp = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_page_header_cache);
-> +	sp->gfn = 0;
-> +	sp->role = role;
-> +	if (role.level == PT32E_ROOT_LEVEL &&
-> +	    vcpu->arch.mmu->root_role.level == PT32E_ROOT_LEVEL)
-> +		sp->spt = vcpu->arch.mmu->pae_root;
-
-Why use pae_root here instead of allocating from the cache?
-
-> +	else
-> +		sp->spt = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_shadow_page_cache);
-> +	/* sp->gfns is not used for special shadow page */
-> +	set_page_private(virt_to_page(sp->spt), (unsigned long)sp);
-> +	sp->mmu_valid_gen = vcpu->kvm->arch.mmu_valid_gen;
-> +
-> +	return sp;
-> +}
-> +
->  static struct kvm_mmu_page *kvm_mmu_alloc_page(struct kvm_vcpu *vcpu, int direct)
->  {
->  	struct kvm_mmu_page *sp;
-> @@ -2076,6 +2128,9 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu,
->  	if (level <= vcpu->arch.mmu->cpu_role.base.level)
->  		role.passthrough = 0;
->  
-> +	if (unlikely(level >= PT32E_ROOT_LEVEL && using_special_root_page(vcpu->arch.mmu)))
-> +		return kvm_mmu_alloc_special_page(vcpu, role);
-> +
->  	sp_list = &vcpu->kvm->arch.mmu_page_hash[kvm_page_table_hashfn(gfn)];
->  	for_each_valid_sp(vcpu->kvm, sp, sp_list) {
->  		if (sp->gfn != gfn) {
-> @@ -3290,6 +3345,37 @@ static void mmu_free_root_page(struct kvm *kvm, hpa_t *root_hpa,
->  	*root_hpa = INVALID_PAGE;
->  }
->  
-> +static void mmu_free_special_root_page(struct kvm *kvm, struct kvm_mmu *mmu)
-> +{
-> +	u64 spte = mmu->root.hpa;
-> +	struct kvm_mmu_page *sp = to_shadow_page(spte & PT64_BASE_ADDR_MASK);
-> +	int i;
-> +
-> +	/* Free level 5 or 4 roots for shadow NPT for 32 bit L1 */
-> +	while (sp->role.level > PT32E_ROOT_LEVEL)
-> +	{
-> +		spte = sp->spt[0];
-> +		mmu_page_zap_pte(kvm, sp, sp->spt + 0, NULL);
-
-Instead of using mmu_page_zap_pte(..., NULL) what about creating a new
-helper that just does drop_parent_pte(), since that's all you really
-want?
-
-> +		free_page((unsigned long)sp->spt);
-> +		kmem_cache_free(mmu_page_header_cache, sp);
-> +		if (!is_shadow_present_pte(spte))
-> +			return;
-> +		sp = to_shadow_page(spte & PT64_BASE_ADDR_MASK);
-> +	}
-> +
-> +	if (WARN_ON_ONCE(sp->role.level != PT32E_ROOT_LEVEL))
-> +		return;
-> +
-> +	/* Free PAE roots */
-
-nit: This loop does not do any freeing, it just disconnets the PAE root
-table from the 4 PAE page directories. So how about:
-
-/* Disconnect PAE root from the 4 PAE page directories */
-
-> +	for (i = 0; i < 4; i++)
-> +		mmu_page_zap_pte(kvm, sp, sp->spt + i, NULL);
-> +
-> +	if (sp->spt != mmu->pae_root)
-> +		free_page((unsigned long)sp->spt);
-> +
-> +	kmem_cache_free(mmu_page_header_cache, sp);
-> +}
-> +
->  /* roots_to_free must be some combination of the KVM_MMU_ROOT_* flags */
->  void kvm_mmu_free_roots(struct kvm *kvm, struct kvm_mmu *mmu,
->  			ulong roots_to_free)
-> @@ -3323,7 +3409,10 @@ void kvm_mmu_free_roots(struct kvm *kvm, struct kvm_mmu *mmu,
->  
->  	if (free_active_root) {
->  		if (to_shadow_page(mmu->root.hpa)) {
-> -			mmu_free_root_page(kvm, &mmu->root.hpa, &invalid_list);
-> +			if (using_special_root_page(mmu))
-> +				mmu_free_special_root_page(kvm, mmu);
-> +			else
-> +				mmu_free_root_page(kvm, &mmu->root.hpa, &invalid_list);
->  		} else if (mmu->pae_root) {
->  			for (i = 0; i < 4; ++i) {
->  				if (!IS_VALID_PAE_ROOT(mmu->pae_root[i]))
-> -- 
-> 2.19.1.6.gb485710b
+> >> > +
+> >> > +	if (apicd->hw_irq_cfg.delivery_mode == APIC_DELIVERY_MODE_NMI) {
+> >> > +		cpu = irq_matrix_find_best_cpu_managed(vector_matrix, dest);
+> >> > +		apicd->cpu = cpu;
+> >> > +		vector = 0;
+> >> > +		goto no_vector;
+> >> > +	}
+> >> 
+> >> This code can never be reached for a NMI delivery. If so, then it's a
+> >> bug.
+> >> 
+> >> This all is special purpose for that particular HPET NMI watchdog use
+> >> case and we are not exposing this to anything else at all.
+> >> 
+> >> So why are you sprinkling this NMI nonsense all over the place? Just
+> >> because? There are well defined entry points to all of this where this
+> >> can be fenced off.
+> >
+> > I put the NMI checks in these points because assign_vector_locked() and
+> > assign_managed_vector() are reached through multiple paths and these are
+> > the two places where the allocation of the vector is requested and the
+> > destination CPU is determined.
+> >
+> > I do observe this code being reached for an NMI, but that is because this
+> > code still does not know about NMIs... Unless the checks for NMI are put
+> > in the entry points as you pointed out.
+> >
+> > The intent was to refactor the code in a generic manner and not to focus
+> > only in the NMI watchdog. That would have looked hacky IMO.
 > 
+> We don't want to have more of this really. Supporting NMIs on x86 in a
+> broader way is simply not reasonable because there is only one NMI
+> vector and we have no sensible way to get to the cause of the NMI
+> without a massive overhead.
+> 
+> Even if we get multiple NMI vectors some shiny day, this will be
+> fundamentally different than regular interrupts and certainly not
+> exposed broadly. There will be 99.99% fixed vectors for simplicity sake.
+
+Understood.
+
+> 
+> >> +		if (info->flags & X86_IRQ_ALLOC_AS_NMI) {
+> >> +			/*
+> >> +			 * NMIs have a fixed vector and need their own
+> >> +			 * interrupt chip so nothing can end up in the
+> >> +			 * regular local APIC management code except the
+> >> +			 * MSI message composing callback.
+> >> +			 */
+> >> +			irqd->chip = &lapic_nmi_controller;
+> >> +			/*
+> >> +			 * Don't allow affinity setting attempts for NMIs.
+> >> +			 * This cannot work with the regular affinity
+> >> +			 * mechanisms and for the intended HPET NMI
+> >> +			 * watchdog use case it's not required.
+> >
+> > But we do need the ability to set affinity, right? As stated above, we need
+> > to know what Destination ID to write in the MSI message or in the interrupt
+> > remapping table entry.
+> >
+> > It cannot be any CPU because only one specific CPU is supposed to handle the
+> > NMI from the HPET channel.
+> >
+> > We cannot hard-code a CPU for that because it may go offline (and ignore NMIs)
+> > or not be part of the monitored CPUs.
+> >
+> > Also, if lapic_nmi_controller.irq_set_affinity() is NULL, then irq_chips
+> > INTEL-IR, AMD-IR, those using msi_domain_set_affinity() need to check for NULL.
+> > They currently unconditionally call the parent irq_chip's irq_set_affinity().
+> > I see that there is a irq_chip_set_affinity_parent() function. Perhaps it can
+> > be used for this check?
+> 
+> Yes, this lacks obviously a NMI specific set_affinity callback and this
+> can be very trivial and does not have any of the complexity of interrupt
+> affinity assignment. First online CPU in the mask with a fallback to any
+> online CPU.
+
+Why would we need a fallback to any online CPU? Shouldn't it fail if it cannot
+find an online CPU in the mask?
+
+> 
+> I did not claim that this is complete. This was for illustration.
+
+In the reworked patch, may I add a Co-developed-by with your name and your SOB?
+
+> 
+> >> +			 */
+> >> +			irqd_set_no_balance(irqd);
+> >
+> > This code does not set apicd->hw_irq_cfg.delivery_mode as NMI, right?
+> > I had to add that to make it work.
+> 
+> I assumed you can figure that out on your own :)
+
+:)
+
+Thanks and BR,
+Ricardo

@@ -2,132 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 613435267DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C20145267E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 19:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382730AbiEMRFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 13:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
+        id S1382737AbiEMRH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 13:07:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356197AbiEMRFR (ORCPT
+        with ESMTP id S1356224AbiEMRHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 13:05:17 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A555A174
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:05:16 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id l11so8035813pgt.13
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:05:16 -0700 (PDT)
+        Fri, 13 May 2022 13:07:55 -0400
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 130E661294
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:07:52 -0700 (PDT)
+Received: by mail-ua1-x932.google.com with SMTP id ay15so3412396uab.9
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 10:07:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VxUbVIJfDPKovOH85qumbwINB246mdu93fA8EKGD0Q4=;
-        b=r9DxuHYSlxU+T16xfaZ3O/UPZmGzM29cDZT+o/GKLRYX58IeBo5mKJFhPcJ+6+KWLp
-         kvkNJkaYVRprSwjfb8+qiP02Wk3RKfR/H5hjqjvqW3JA+7y3GZS92EQwwN3P8gRXWBXS
-         3Zq0QNUhjQsOag72nAT3p33sJCbeOhnM3BiHpu0FSomwUvLVeUHsqz6Mu0XbdNijm/ap
-         cPyTZWNnlwB+lPMjq8kK2xk7tvK/FtX1MZtWh2AjOFY+CqIfct7ZJxqTsrflvVCvRHY3
-         AuXsDly1u4YGbFr4mMBJ7m1mYdmp2G5zjA+2ilP2tX4daUN1AIht2wNMa/KvruK9krJq
-         LCzA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SO6cZ4vcFdH6Gw26Rsfe2kTJJS3GLmvIu7jUCMoqB/c=;
+        b=tEwwqEf/QAgZncrVrgI1PvCqCEVehtgalfmgsWRT4PqAixI+ItZ5QYDRJpav5HHIJ9
+         cXOftSG5RIM+jYbU4H7IYYvM2O+tHSiu8S4J9hV7tr2ZT9tzf6reIf9IUtXz0myUFmot
+         cElfczSxUQilGQgTbatodWYMDYHplQjDCW42vrcFSaCImCcPcHc9Zsm5M+NFqPIZr96z
+         6XhxP2RNLl6+epuZKn1Sk2latVMfA7D/BkMo65zjP9/GMCU61+EIRcFOfLFM0qSiCrT7
+         zieWnrn+8idxl91BE8ZF5GGnvYvQs5h8hhsBb4FBwgOOkgP+HX/fjmA+4wkLZo6pTL9q
+         AvDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VxUbVIJfDPKovOH85qumbwINB246mdu93fA8EKGD0Q4=;
-        b=C0FnLoCG4ufYKjyM1HkBZOrH2ad1IkvITewL1tOYyeH4yacwUZPZY8gbSW1JkC6kx4
-         FvkVrOhIg1CvHy9OzQfRTIZOb9wP0l1N5h39lyxZ1g0CioC4lLsLW5tO4nn7TU93dF8D
-         Pg/iH3WJJMizjJ1qTFcjnlcLC/I/UFOXEoJ2keI9vYp6WWV9nt2BcrWia/RJPvy3/fXW
-         l1ypcXZwcsQ6aaHncCyR3JZ2aEIjN4qB8b/TvRXrGaPm1BdFg2kKPof9UVKGUQx34tLc
-         KFjgTPKBghk5BNAQKseTuh/ldBRYQnrVK7MdFzHz6ttosiZPrfcj5CPrExKyZRh5gucG
-         jR0g==
-X-Gm-Message-State: AOAM530fxWSeyIFOlTONAv/sNMLKJGzP5SrxeIGetAzBid3o8nohEzuf
-        adcyg5pwtE+jIGAnBDG1W76o7Q==
-X-Google-Smtp-Source: ABdhPJwdRXoorZL9b6hOiDqo5sleRd9CEftCksC+uwX4Yxr3B8G/og8vtC/wYi+5Gmu3sUpc0Wb98A==
-X-Received: by 2002:a05:6a00:e8e:b0:4fa:a52f:59cf with SMTP id bo14-20020a056a000e8e00b004faa52f59cfmr5394126pfb.84.1652461515669;
-        Fri, 13 May 2022 10:05:15 -0700 (PDT)
-Received: from p14s.cg.shawcable.net (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id fr2-20020a17090ae2c200b001d94c194a67sm1821748pjb.18.2022.05.13.10.05.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 10:05:14 -0700 (PDT)
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     gregkh@linuxfoundation.org
-Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Suzuki.Poulose@arm.com
-Subject: [GIT PULL] Coresight changes for v5.19
-Date:   Fri, 13 May 2022 11:05:13 -0600
-Message-Id: <20220513170513.3276002-1-mathieu.poirier@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SO6cZ4vcFdH6Gw26Rsfe2kTJJS3GLmvIu7jUCMoqB/c=;
+        b=1wqSA6jOLV2y1F1x5dSQYDcOK6JWDo8Gdb5+o6Moj/95hVfzIxxQIgi3XlYmkWkRDO
+         dEe6CKIVd9vkbzg3c6PvY8/oIqr/UjBOq5gNbJ3ppA0N2qJkHVVqSBMCjKnoJhZGb+mx
+         XxNNsZjyXgy1y3I1b5zqNunwIWOQdyVd6QmwFSX+BLo90FYNrcnK8niDSwEHfT2RjEre
+         Izknaoe8s4uDv4PI2LYC8Ds0DNjpkMjwj4S3TIuiRCwqINR4zgFLj3Nn2edlm9D4OSb7
+         LArDnUB3EbqHTnO3Xt0NqYuOb2qJLN9Gr/uEANY+3cd6n7NWugg6DVs2NHatOTHTJZ3H
+         /u1Q==
+X-Gm-Message-State: AOAM5301BIlZ0GpYbp84x7GO+Adv+T/E4tAtanDDDavT12rv+pD78m65
+        NsVH4JoflOCev7Q8EI7UMq5r4frr6BQ35xt9kfsuBErfiDApyA==
+X-Google-Smtp-Source: ABdhPJxpH83FSHQPHQczwK/rOF+Gbj+oCuJ9KL9UX9oGm665pOLLR/ZVftQEO8pC79yumKEkXBXmgL3qcw0OP7CcI1w=
+X-Received: by 2002:ab0:240a:0:b0:360:7c96:2f8c with SMTP id
+ f10-20020ab0240a000000b003607c962f8cmr2718694uan.48.1652461671005; Fri, 13
+ May 2022 10:07:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220513151554.1054452-1-kan.liang@linux.intel.com> <20220513151554.1054452-5-kan.liang@linux.intel.com>
+In-Reply-To: <20220513151554.1054452-5-kan.liang@linux.intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Fri, 13 May 2022 10:07:39 -0700
+Message-ID: <CAP-5=fUv1LRnMg7PvfvtN1rhc5BXfv_W181LovXe4nptDmwLmQ@mail.gmail.com>
+Subject: Re: [PATCH 4/4] perf parse-events: Move slots event for the hybrid
+ platform too
+To:     kan.liang@linux.intel.com
+Cc:     acme@kernel.org, mingo@redhat.com, jolsa@kernel.org,
+        namhyung@kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, peterz@infradead.org,
+        zhengjun.xing@linux.intel.com, adrian.hunter@intel.com,
+        ak@linux.intel.com, eranian@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e:
+On Fri, May 13, 2022 at 8:16 AM <kan.liang@linux.intel.com> wrote:
+>
+> From: Kan Liang <kan.liang@linux.intel.com>
+>
+> The commit 94dbfd6781a0 ("perf parse-events: Architecture specific
+> leader override") introduced a feature to reorder the slots event to
+> fulfill the restriction of the perf metrics topdown group. But the
+> feature doesn't work on the hybrid machine.
+>
+> $perf stat -e "{cpu_core/instructions/,cpu_core/slots/,cpu_core/topdown-retiring/}" -a sleep 1
+>
+>  Performance counter stats for 'system wide':
+>
+>      <not counted>      cpu_core/instructions/
+>      <not counted>      cpu_core/slots/
+>    <not supported>      cpu_core/topdown-retiring/
+>
+>        1.002871801 seconds time elapsed
+>
+> A hybrid platform has a different PMU name for the core PMUs, while
+> current perf hard code the PMU name "cpu".
+>
+> Introduce a new function to check whether the system supports the perf
+> metrics feature. The result is cached for the future usage.
+>
+> For X86, the core PMU name always has "cpu" prefix.
+>
+> With the patch,
+>
+> $perf stat -e "{cpu_core/instructions/,cpu_core/slots/,cpu_core/topdown-retiring/}" -a sleep 1
+>
+>  Performance counter stats for 'system wide':
+>
+>         76,337,010      cpu_core/slots/
+>         10,416,809      cpu_core/instructions/
+>         11,692,372      cpu_core/topdown-retiring/
+>
+>        1.002805453 seconds time elapsed
+>
+> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+> ---
+>  tools/perf/arch/x86/util/evlist.c  |  5 +++--
+>  tools/perf/arch/x86/util/topdown.c | 18 ++++++++++++++++++
+>  tools/perf/arch/x86/util/topdown.h |  7 +++++++
+>  3 files changed, 28 insertions(+), 2 deletions(-)
+>  create mode 100644 tools/perf/arch/x86/util/topdown.h
+>
+> diff --git a/tools/perf/arch/x86/util/evlist.c b/tools/perf/arch/x86/util/evlist.c
+> index 75564a7df15b..68f681ad54c1 100644
+> --- a/tools/perf/arch/x86/util/evlist.c
+> +++ b/tools/perf/arch/x86/util/evlist.c
+> @@ -3,6 +3,7 @@
+>  #include "util/pmu.h"
+>  #include "util/evlist.h"
+>  #include "util/parse-events.h"
+> +#include "topdown.h"
+>
+>  #define TOPDOWN_L1_EVENTS      "{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound}"
+>  #define TOPDOWN_L2_EVENTS      "{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound,topdown-heavy-ops,topdown-br-mispredict,topdown-fetch-lat,topdown-mem-bound}"
+> @@ -25,12 +26,12 @@ struct evsel *arch_evlist__leader(struct list_head *list)
+>
+>         first = list_first_entry(list, struct evsel, core.node);
+>
+> -       if (!pmu_have_event("cpu", "slots"))
+> +       if (!topdown_sys_has_perf_metrics())
+>                 return first;
+>
+>         /* If there is a slots event and a topdown event then the slots event comes first. */
+>         __evlist__for_each_entry(list, evsel) {
+> -               if (evsel->pmu_name && !strcmp(evsel->pmu_name, "cpu") && evsel->name) {
+> +               if (evsel->pmu_name && !strncmp(evsel->pmu_name, "cpu", 3) && evsel->name) {
+>                         if (strcasestr(evsel->name, "slots")) {
+>                                 slots = evsel;
+>                                 if (slots == first)
+> diff --git a/tools/perf/arch/x86/util/topdown.c b/tools/perf/arch/x86/util/topdown.c
+> index 2f3d96aa92a5..95b9fdef59ab 100644
+> --- a/tools/perf/arch/x86/util/topdown.c
+> +++ b/tools/perf/arch/x86/util/topdown.c
+> @@ -3,6 +3,24 @@
+>  #include "api/fs/fs.h"
+>  #include "util/pmu.h"
+>  #include "util/topdown.h"
+> +#include "topdown.h"
+> +
+> +bool topdown_sys_has_perf_metrics(void)
+> +{
+> +       static bool has_perf_metrics;
+> +       static bool cached;
+> +       struct perf_pmu *pmu;
+> +
+> +       if (cached)
+> +               return has_perf_metrics;
+> +
 
-  Linux 5.18-rc2 (2022-04-10 14:21:36 -1000)
+Worth a comment here for the meaning of looking up PERF_TYPE_RAW.
 
-are available in the Git repository at:
+Thanks,
+Ian
 
-  git@gitolite.kernel.org:pub/scm/linux/kernel/git/coresight/linux.git tags/coresight-next-v5.19
-
-for you to fetch changes up to 1adff542d67a2ed1120955cb219bfff8a9c53f59:
-
-  coresight: cpu-debug: Replace mutex with mutex_trylock on panic notifier (2022-05-09 16:03:24 +0100)
-
-----------------------------------------------------------------
-Coresight changes for v5.19
-
-Good day Greg,
-
-Please consider those for the the upcoming v5.19 merge window when you have time.
-
-This pull request includes:
-
-- Work to uniformise access to the ETMv4 registers, making it easier to
-look for and change register accesses.
-
-- A correction to a probing failure when looking for links between devices.
-
-- The replacement of a call to mutex_lock() with a mutex_trylock() in the panic
-notifier of the cpu-debug infrastructure to avoid a possible deadlock.
-
-Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-
-----------------------------------------------------------------
-Guilherme G. Piccoli (1):
-      coresight: cpu-debug: Replace mutex with mutex_trylock on panic notifier
-
-James Clark (15):
-      coresight: etm4x: Cleanup TRCIDR0 register accesses
-      coresight: etm4x: Cleanup TRCIDR2 register accesses
-      coresight: etm4x: Cleanup TRCIDR3 register accesses
-      coresight: etm4x: Cleanup TRCIDR4 register accesses
-      coresight: etm4x: Cleanup TRCIDR5 register accesses
-      coresight: etm4x: Cleanup TRCCONFIGR register accesses
-      coresight: etm4x: Cleanup TRCEVENTCTL1R register accesses
-      coresight: etm4x: Cleanup TRCSTALLCTLR register accesses
-      coresight: etm4x: Cleanup TRCVICTLR register accesses
-      coresight: etm3x: Cleanup ETMTECR1 register accesses
-      coresight: etm4x: Cleanup TRCACATRn register accesses
-      coresight: etm4x: Cleanup TRCSSCCRn and TRCSSCSRn register accesses
-      coresight: etm4x: Cleanup TRCSSPCICRn register accesses
-      coresight: etm4x: Cleanup TRCBBCTLR register accesses
-      coresight: etm4x: Cleanup TRCRSCTLRn register accesses
-
-Mao Jinlong (1):
-      coresight: core: Fix coresight device probe failure issue
-
- drivers/hwtracing/coresight/coresight-core.c       |  33 ++--
- drivers/hwtracing/coresight/coresight-cpu-debug.c  |   7 +-
- drivers/hwtracing/coresight/coresight-etm3x-core.c |   2 +-
- .../hwtracing/coresight/coresight-etm3x-sysfs.c    |   2 +-
- drivers/hwtracing/coresight/coresight-etm4x-core.c | 136 +++++-----------
- .../hwtracing/coresight/coresight-etm4x-sysfs.c    | 180 +++++++++++----------
- drivers/hwtracing/coresight/coresight-etm4x.h      | 120 +++++++++++---
- 7 files changed, 268 insertions(+), 212 deletions(-)
+> +       pmu = perf_pmu__find_by_type(PERF_TYPE_RAW);
+> +       if (pmu && pmu_have_event(pmu->name, "slots"))
+> +               has_perf_metrics = true;
+> +
+> +       cached = true;
+> +       return has_perf_metrics;
+> +}
+>
+>  /*
+>   * Check whether we can use a group for top down.
+> diff --git a/tools/perf/arch/x86/util/topdown.h b/tools/perf/arch/x86/util/topdown.h
+> new file mode 100644
+> index 000000000000..46bf9273e572
+> --- /dev/null
+> +++ b/tools/perf/arch/x86/util/topdown.h
+> @@ -0,0 +1,7 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _TOPDOWN_H
+> +#define _TOPDOWN_H 1
+> +
+> +bool topdown_sys_has_perf_metrics(void);
+> +
+> +#endif
+> --
+> 2.35.1
+>

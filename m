@@ -2,88 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E335262AF
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 15:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 407B65262B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 15:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380565AbiEMNMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 09:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45236 "EHLO
+        id S1380598AbiEMNNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 09:13:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232625AbiEMNML (ORCPT
+        with ESMTP id S232625AbiEMNNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 09:12:11 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B03387B3
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 06:12:06 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id w4so11363126wrg.12
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 06:12:06 -0700 (PDT)
+        Fri, 13 May 2022 09:13:41 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E0750B1F
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 06:13:38 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id fu47so6753417qtb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 06:13:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=LGxOhx8g+uzMEucXSgcWuDgXr4IlXAOmT59wc9xxNUQ=;
-        b=wRQl3HzxSMdYo3oAFiLxfCpRXx68CvABA7PTFHJ4KoYFsSKoKYI2o0kck84GVkrBPy
-         Ydmi/opjnQr49lORQ2aUaZSPE+/GVtznPLLirTIhAGKxyF9K+8SkFklnqG8THPvEnIl9
-         4OnyFli6+XLHcvlwPFcd/Lruz0Fk2j8qyZ0QhBnKLJzDsnJjuHoUuslW66qfhOHUDICf
-         FYaXMNNqGc7u+UnZbaWj8jLEL35mH0fsJEnNRtrBKIZ1clKfzNQhhoetCB5ScLqSg8/J
-         idGnNG0BGzsGtIvpg4JMSLaF5jqun0MxhJPpGU0TfZaAvlaDKAHhqGaxavFd2yb+/dB2
-         vveQ==
+        d=toxicpanda-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6+gNOUaWkd0Bt/JIZ8SDZDMjw5UUXZsqOvLbfnJqY8g=;
+        b=XQFCZfhm7ewTc4XGGTXLDs4ORqJoIOmN58pp/aiyNiZn+4KQD1n6GurSxpZnIeHGle
+         BHgljDzcb8IocKVAna6UfJsdoy3zR4xntjetc9xE+ggJfXqHnFMAtZZ2uXcUAwnJpXM4
+         z71gIN4Kf3+6Mn/A63t1Hqxn3h5n4ioP20D9p71dlE7v5cFGM4zcQkOi7DROx9Wfe2AN
+         L9qYy/9ImbchcWiAdMnPMP1D3jFrgOf98pEoGnR7dsYj8g90ZIRsjjl42tE0GcZLl37n
+         db9DftV4Q3/mGZbH/epzsq/QZAHrmL6njW81VxjaZZ2AakSkhIjFmysB8xqF/PjD1wvi
+         bqOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=LGxOhx8g+uzMEucXSgcWuDgXr4IlXAOmT59wc9xxNUQ=;
-        b=7EZfEbn5B7Uz9y1cXrnuoJfIokv18LxWhikQ9xjkjqdHfYj4z8eh5njrw8XQIiSfOk
-         TC4VSeCsMCpysaTRdkNgJi/uDp43agEGQNKiUXOY8CJ/OTqqVYSWpe1IJn0uYxcfil90
-         aHY7ew5jn0ThNop3uE8IoWPvNLGWGvsRNj4mm/ZEGANUjBBFXUqb+NvDpqJ9zwzSGaMj
-         8skpCvL4Vp66De/sQQvOAYLsP9ugT1ggPBtCDcw8LZTBNPQE8ZxTpFBLFQ8TDL1gYFPL
-         XN6nOKT6lQyjK7jaghz9KP4Rql5sjGYP75t1djbuoNSQHhdA1OgLTwP1RBwZo9k068v4
-         iZew==
-X-Gm-Message-State: AOAM531MR5JlMzpFQOrdbqU9qMYj5UhrIIFVYTXQe3wN9jQ11L8ZelF6
-        vcCuinihCt35TjF0XaH0Nsvvsz3HAuFGQEeO
-X-Google-Smtp-Source: ABdhPJzqtxMi8tXdBozGwPO/lz7/uf3fxfcq7tdNkmA+KiH+k9aO4jgE0qPxI3t/ZmZJHJs6tODIAw==
-X-Received: by 2002:adf:cc83:0:b0:20a:ca0c:ca1 with SMTP id p3-20020adfcc83000000b0020aca0c0ca1mr3817869wrj.553.1652447524944;
-        Fri, 13 May 2022 06:12:04 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:7639:a43b:f4c1:258d? ([2001:861:44c0:66c0:7639:a43b:f4c1:258d])
-        by smtp.gmail.com with ESMTPSA id m10-20020a05600c460a00b003947e11c3ecsm2204392wmo.17.2022.05.13.06.12.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 06:12:04 -0700 (PDT)
-Message-ID: <d0730221-537c-ba0e-378b-388a37a2a736@baylibre.com>
-Date:   Fri, 13 May 2022 15:12:02 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6+gNOUaWkd0Bt/JIZ8SDZDMjw5UUXZsqOvLbfnJqY8g=;
+        b=J46UvqMLx12Vrn204q7P9BeU1eiwrNXhu1ipJDZOZxUyBtGsYZcN021hMsYjyci6O/
+         xIFQrjUyNcilyXzGIJ6WAkCPrp4C8Ib3D5+amcMFeywJSoslqeILzywZn2M9Lzr3X4nD
+         VxSBbZv9VTmMWHTcUN32fhVuc1xpyeOBzvPEf2qR+DCWGPX6Isbzjsu+TXfiUzeGs3bn
+         sDzjJfxOhuGxTScbQOgg6N9suGjFJUtLwmY+qz9urgh6orBt7aszpBPyvj/cq9B9LKuf
+         Ef3kmjIp5dRpsorqhZ2LosOs2kvyPUedTcD/UInz10vvsZYri6sou3ulW3mmh02clELp
+         z3XQ==
+X-Gm-Message-State: AOAM5312KC4wLX1RPpOAcwENI3QJPR/2JjM6QjEgJJHYEhqxLsr1OGZI
+        tYlH4P6vki0Fq3VeiWos1zxbsw==
+X-Google-Smtp-Source: ABdhPJwxT4heqZ/ZkYzHC2358zLSs+/kN7c2zraegXVpNi+Urh+gSE1Rj4PwtEzzhr8yWY34ktzoUA==
+X-Received: by 2002:ac8:7f0d:0:b0:2f3:cd9e:c2ea with SMTP id f13-20020ac87f0d000000b002f3cd9ec2eamr4447513qtk.590.1652447617290;
+        Fri, 13 May 2022 06:13:37 -0700 (PDT)
+Received: from localhost (cpe-174-109-172-136.nc.res.rr.com. [174.109.172.136])
+        by smtp.gmail.com with ESMTPSA id q19-20020ac87353000000b002f39b99f67esm1445845qtp.24.2022.05.13.06.13.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 06:13:36 -0700 (PDT)
+Date:   Fri, 13 May 2022 09:13:35 -0400
+From:   Josef Bacik <josef@toxicpanda.com>
+To:     Matthew Ruffell <matthew.ruffell@canonical.com>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        linux-block <linux-block@vger.kernel.org>,
+        nbd <nbd@other.debian.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>, yukuai3@huawei.com
+Subject: Re: [PROBLEM] nbd requests become stuck when devices watched by
+ inotify emit udev uevent changes
+Message-ID: <Yn5Zf6lONff1AoOA@localhost.localdomain>
+References: <20220422054224.19527-1-matthew.ruffell@canonical.com>
+ <CAEzrpqe=LD3DQcEeLXmmFuq7cX_dAQ6DOCuJYWBoZWKKTmoTzA@mail.gmail.com>
+ <CAKAwkKt3yMOOW3NXcE91WkGr+8xj050CYP2pLoQVHt_2wXq=-w@mail.gmail.com>
+ <CAKAwkKvfFn18RjupuqGpx4QeAiMYKSq7QUTd3wEL=pkZ+BENpQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v5 3/4] mtd: rawnand: meson: refine resource getting in
- probe
-Content-Language: en-US
-To:     Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-mtd@lists.infradead.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        XianWei Zhao <xianwei.zhao@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        BiChao Zheng <bichao.zheng@amlogic.com>,
-        YongHui Yu <yonghui.yu@amlogic.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220513123404.48513-1-liang.yang@amlogic.com>
- <20220513123404.48513-4-liang.yang@amlogic.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220513123404.48513-4-liang.yang@amlogic.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKAwkKvfFn18RjupuqGpx4QeAiMYKSq7QUTd3wEL=pkZ+BENpQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,33 +75,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/05/2022 14:34, Liang Yang wrote:
-> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
-> ---
->   drivers/mtd/nand/raw/meson_nand.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
+On Fri, May 13, 2022 at 02:56:18PM +1200, Matthew Ruffell wrote:
+> Hi Josef,
 > 
-> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
-> index cc93667a1e7f..6e50387475bb 100644
-> --- a/drivers/mtd/nand/raw/meson_nand.c
-> +++ b/drivers/mtd/nand/raw/meson_nand.c
-> @@ -1378,7 +1378,6 @@ static int meson_nfc_probe(struct platform_device *pdev)
->   {
->   	struct device *dev = &pdev->dev;
->   	struct meson_nfc *nfc;
-> -	struct resource *res;
->   	int ret, irq;
->   
->   	nfc = devm_kzalloc(dev, sizeof(*nfc), GFP_KERNEL);
-> @@ -1395,8 +1394,7 @@ static int meson_nfc_probe(struct platform_device *pdev)
->   
->   	nfc->dev = dev;
->   
-> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	nfc->reg_base = devm_ioremap_resource(dev, res);
-> +	nfc->reg_base = devm_platform_ioremap_resource_byname(pdev, "nfc");
->   	if (IS_ERR(nfc->reg_base))
->   		return PTR_ERR(nfc->reg_base);
->   
+> Just a friendly ping, I am more than happy to test a patch, if you send it
+> inline in the email, since the pastebin you used expired after 1 day, and I
+> couldn't access it.
+> 
+> I came across and tested Yu Kuai's patches [1][2] which are for the same issue,
+> and they indeed fix the hang. Thank you Yu.
+> 
+> [1] nbd: don't clear 'NBD_CMD_INFLIGHT' flag if request is not completed
+> https://lists.debian.org/nbd/2022/04/msg00212.html
+> 
+> [2] nbd: fix io hung while disconnecting device
+> https://lists.debian.org/nbd/2022/04/msg00207.html
+> 
+> I am also happy to test any patches to fix the I/O errors.
+>
 
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Sorry, you caught me on vacation before and I forgot to reply.  Here's part one
+of the patch I wanted you to try which fixes the io hung part.  Thanks,
+
+Josef
+
+ 
+From 0a6123520380cb84de8ccefcccc5f112bce5efb6 Mon Sep 17 00:00:00 2001
+Message-Id: <0a6123520380cb84de8ccefcccc5f112bce5efb6.1652447517.git.josef@toxicpanda.com>
+From: Josef Bacik <josef@toxicpanda.com>
+Date: Sat, 23 Apr 2022 23:51:23 -0400
+Subject: [PATCH] timeout thing
+
+---
+ drivers/block/nbd.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+index 526389351784..ab365c0e9c04 100644
+--- a/drivers/block/nbd.c
++++ b/drivers/block/nbd.c
+@@ -1314,7 +1314,10 @@ static void nbd_config_put(struct nbd_device *nbd)
+ 		kfree(nbd->config);
+ 		nbd->config = NULL;
+ 
+-		nbd->tag_set.timeout = 0;
++		/* Reset our timeout to something sane. */
++		nbd->tag_set.timeout = 30 * HZ;
++		blk_queue_rq_timeout(nbd->disk->queue, 30 * HZ);
++
+ 		nbd->disk->queue->limits.discard_granularity = 0;
+ 		nbd->disk->queue->limits.discard_alignment = 0;
+ 		blk_queue_max_discard_sectors(nbd->disk->queue, 0);
+-- 
+2.26.3
+

@@ -2,100 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 096905259C5
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 04:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1967A5259C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 04:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376558AbiEMCl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 22:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
+        id S1376557AbiEMCli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 22:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376539AbiEMClX (ORCPT
+        with ESMTP id S1376539AbiEMCl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 22:41:23 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A20A606CA;
-        Thu, 12 May 2022 19:41:21 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id y21so8404144edo.2;
-        Thu, 12 May 2022 19:41:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NFB9cQ9noOBFGIiidp4HQrjNUAJsYZTV+Y0JhKPaQuQ=;
-        b=RMHAZmSwXMmQK1OKkebepMMW329Xe+xv39LCPOg3gCwk5r5yEAjBSBHAYjJOqC9ODP
-         vDKQtsCGzDSbBSPxE6xcCLaeYrCl5qQWPCHbxN8GmAsDrGbHI81mLzpd2KwkaIse2lAo
-         ApfsdhcRvqU1S2U/grRDGw4tRJel8Ta0iAYI6GZvV0J4UjJW9O4t3G4Zv3B9z51KVJLg
-         MPuYRmQVzkUUteThkJPsXnHR9sRDLIw5U9ozJcpDOqp29Py2MithQfhgrphJVFJrDYRP
-         tOiB0OUdxgicvdvkgs0ASQ5i6S3EWJJx7JsfOFn6eKRKGijvdnCy/tCgyKsKw+f2kSeu
-         F7CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NFB9cQ9noOBFGIiidp4HQrjNUAJsYZTV+Y0JhKPaQuQ=;
-        b=QmD5hrjer3vHe8kYMie2uA+WaB7XNYRYWpNjstKnIPUp4JJa6VjZtgscB3fozSoUqO
-         ZnrF627RFlClTIIsyOkzLwbeTGMgziIj5vvnQTWWJ3TawWcy9iZfhHXdUiq1X4C9e5Uy
-         QM8ZkSfPr4fompKO7r4F3mdCFUGyiif8XQI+gvW8lNmsbyTdI5QvDa5MyRip8q12lzUD
-         enLD2WLSzBfssByxPW6LQvOm+LjOoio4Ph47EX2h8fAsZ4i9pmFAVDCozPPx+ci9SKGz
-         /jQiaWHMsFxUZI+RmZuclyObMyuHMdKNv+IfhKPujCtjBrjtYGna5NSt3n+8y9QJZo0W
-         FtaQ==
-X-Gm-Message-State: AOAM531ezt3ggw94NuZwoITxkNohOCH1GaBTDWL+6lEcNG462Oqx0P97
-        AVe2W2h47w3i2IxcVJDlmi04YhafLw+9/E8FKRI=
-X-Google-Smtp-Source: ABdhPJy+Ap6FzuUc3ioF762KIikeMnVImUI65GhwXhz3xdwyQIfZmsfrhbZk74wuellKGjJMgpj2ASE5uIf/p/D7wCo=
-X-Received: by 2002:a05:6402:3326:b0:426:4883:60a with SMTP id
- e38-20020a056402332600b004264883060amr37299196eda.310.1652409679662; Thu, 12
- May 2022 19:41:19 -0700 (PDT)
+        Thu, 12 May 2022 22:41:28 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D6762BF8
+        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 19:41:26 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1652409684;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4jjnk+QDL8cNXK+XlAhyOlRkhsLJfwm4AuVjS6SIBdU=;
+        b=s7h2HIaBh8pyCxOmw32WC4p867WDpAAzQVoO9w/UuKwaNvcveu357EU+wRJIrqXhGFRfkD
+        6GZBQcB2uVsqV/M0wkoVlZSErHbNuVu3AUx9vFAEDTbZLc9m0x30RBalLucoydCbO7aspp
+        VaGEUMPEvfqtbNDRMKPdTJ0gQsqox14=
+From:   Yajun Deng <yajun.deng@linux.dev>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org, Yajun Deng <yajun.deng@linux.dev>
+Subject: [PATCH] sched/deadline: Use proc_douintvec_minmax() limit minimum value
+Date:   Fri, 13 May 2022 10:41:09 +0800
+Message-Id: <20220513024109.648471-1-yajun.deng@linux.dev>
 MIME-Version: 1.0
-References: <20220512123313.218063-1-imagedong@tencent.com>
- <20220512123313.218063-3-imagedong@tencent.com> <20220512091558.350899ff@kernel.org>
-In-Reply-To: <20220512091558.350899ff@kernel.org>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Fri, 13 May 2022 10:41:08 +0800
-Message-ID: <CADxym3auygXR_p5xW1F81wX04SwKHAPPHiu_P94gT-w5vdi9Uw@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 2/4] net: skb: check the boundrary of drop
- reason in kfree_skb_reason()
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Neil Horman <nhorman@tuxdriver.com>,
-        David Miller <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Menglong Dong <imagedong@tencent.com>,
-        Martin Lau <kafai@fb.com>, Talal Ahmad <talalahmad@google.com>,
-        Kees Cook <keescook@chromium.org>, asml.silence@gmail.com,
-        Willem de Bruijn <willemb@google.com>,
-        vasily.averin@linux.dev,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 12:16 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Thu, 12 May 2022 20:33:11 +0800 menglong8.dong@gmail.com wrote:
-> > +     if (unlikely(reason <= 0 || reason >= SKB_DROP_REASON_MAX)) {
-> > +             DEBUG_NET_WARN_ON_ONCE(1);
-> > +             reason = SKB_DROP_REASON_NOT_SPECIFIED;
-> > +     }
->
-> With drop_monitor fixes sending an invalid reason to the tracepoint
-> should be a minor bug, right?
->
-> Can we just have a:
->
->         DEBUG_NET_WARN_ON_ONCE(reason <= 0 || reason >= SKB_DROP_REASON_MAX);
->
-> and avoid having this branch on non-debug builds?
+proc_dointvec() is not applicable for unsigned integer, use
+proc_douintvec_minmax() limit minimum value.
 
-Yeah, it seems this way is more logical. I'll change it in the V3.
+Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+---
+ kernel/sched/deadline.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index 85cd62e0dddd..4d2a780c6f73 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -30,14 +30,16 @@ static struct ctl_table sched_dl_sysctls[] = {
+ 		.data           = &sysctl_sched_dl_period_max,
+ 		.maxlen         = sizeof(unsigned int),
+ 		.mode           = 0644,
+-		.proc_handler   = proc_dointvec,
++		.proc_handler   = proc_douintvec_minmax,
++		.extra1         = (void *)&sysctl_sched_dl_period_min,
+ 	},
+ 	{
+ 		.procname       = "sched_deadline_period_min_us",
+ 		.data           = &sysctl_sched_dl_period_min,
+ 		.maxlen         = sizeof(unsigned int),
+ 		.mode           = 0644,
+-		.proc_handler   = proc_dointvec,
++		.proc_handler   = proc_douintvec_minmax,
++		.extra2         = (void *)&sysctl_sched_dl_period_max,
+ 	},
+ 	{}
+ };
+-- 
+2.25.1
+

@@ -2,99 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1B4525DB8
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 10:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86AFC525D9E
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 10:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350833AbiEMIbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 04:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57958 "EHLO
+        id S1378324AbiEMIcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 04:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378277AbiEMIbo (ORCPT
+        with ESMTP id S1378277AbiEMIcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 04:31:44 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34432A7C36
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:31:41 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id gh6so14905784ejb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:31:41 -0700 (PDT)
+        Fri, 13 May 2022 04:32:31 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB606352A
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:32:27 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2eb7d137101so66739147b3.12
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:32:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TNsY3qFCwXQblJPsVdG0LCyrHmw8JZ3ev2jxwT+LE+k=;
-        b=UmoVPN2ActdAg0q/sV9x+QJ52g/PRzhZYttsOVqZVE9TDTLQCLgWe93efuunDeoxjT
-         JKwn69yqazKwiIaopRnbqE/8GHCsx9Kv3ntH8qnhKygS8mJ14jDjtAMFSBOuwvQoa9Ct
-         YaPjpGSl6DdFPek+/OyRhTvuFBMcBwG4+Yk2cQpAKzZkUcphG0Vf2zGx0nVsw0faKeTK
-         +BbguEHyFGfTnEpGH1atu8e3E0LvKRJDWkjkwgUEPXC1VGmuX+j9/BJpwEneLkcWH5D/
-         wgq8A4ncwnOA/+xOuHfLxxt9VhVLX9oUdfWFMKIV0b8g1C4gBIBClbHFabaBUYNMiIvg
-         7C3w==
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=hUQluwx+IeHDQbtP0fjL9XDhdITsEoJIWpp8L9h5giw=;
+        b=F/cDv7XyzfAhrhFHas6iEitptBabeLxs7JYySMnnIYCMoVWQlm1aMRtE+/SqhaEDNm
+         CUtVY8Whw9qTUb+f6i/9SrNwUqK//hLviYObbOgELsaAp+e5PQTys3VZGSOL11haUR2h
+         JXi3PzXSBFhTXTg6T1Af2lQ5jg98qlb1DqYvd/5im6SSwHSqg3+18b/zRgwbpeniHh5w
+         dFaHx//RRMeVVvYwkpThQ2ynlPG4D3Z6TPN9+uRk3fk2kHCiIjA3uT5TTFvKie7Uwrfj
+         xvGnEU8+v1psGFcZQC5sVKJwY5jyAB/aWooaKwolISkK6dLklWtYlS3y29i6SEb8U5+M
+         i2xA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TNsY3qFCwXQblJPsVdG0LCyrHmw8JZ3ev2jxwT+LE+k=;
-        b=RxUbHASqY7Sdnq/yFBUoIugtle2druF+sZHY8hMhQtGzCocqIN4Gbv7VhCWI5hcaav
-         v3Fa+EcYO3P485BlIIxFP5BQOH33vdd/luWVn33Myr+9J3Bq8n688Fw/XFJE4DffdYPs
-         NqwhRMdomOECsK2pKKP5eYaSeXcqh8QmYtRqm7LIKnY7YGFS5qv4yYlFKBG5FHoXa5St
-         N7xgBrdqRct3U+siRyTb1xIrfH1fl+n5wZC4okUrJiIpQZnbWoCHIquA/zHcR/CpDra8
-         n6yTJypqvpbSKwsQYlSk4s3+UoHEYjVY1op74X8oG5ushPYV2AA53aDz+QgqQO5xlVEe
-         CA5Q==
-X-Gm-Message-State: AOAM5304lN7Nizo5ZkFWQKUgQASSK72ymeW7ECzsQF7maqHZPAvjvOcJ
-        gIKkAorcw1vWfTZPc4Jm25mg8Q==
-X-Google-Smtp-Source: ABdhPJxqCWpvbuwp3Q2VpbEQTmfvZ/vEwaSon3Dgg8K2eunwuY85dxL2dgA71OmAhW/k9YjTGKOZCA==
-X-Received: by 2002:a17:907:3e94:b0:6f4:64ad:1e2 with SMTP id hs20-20020a1709073e9400b006f464ad01e2mr3241417ejc.464.1652430700338;
-        Fri, 13 May 2022 01:31:40 -0700 (PDT)
-Received: from [192.168.0.169] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id eb22-20020a170907281600b006f3ef214e51sm511129ejc.183.2022.05.13.01.31.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 01:31:39 -0700 (PDT)
-Message-ID: <cded90e2-b060-d144-b20c-cb8fdfcd4a7d@linaro.org>
-Date:   Fri, 13 May 2022 10:31:38 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3 3/3] dt-bindings: mediatek: add ethdr definition for
- mt8195
-Content-Language: en-US
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de
-Cc:     airlied@linux.ie, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, jason-jh.lin@mediatek.com,
-        nancy.lin@mediatek.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220512080523.25082-1-rex-bc.chen@mediatek.com>
- <20220512080523.25082-4-rex-bc.chen@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220512080523.25082-4-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=hUQluwx+IeHDQbtP0fjL9XDhdITsEoJIWpp8L9h5giw=;
+        b=GuO8SK3D/KkVHsDh9kGEBLF0wX0fomowdt0OQrWtvJXlOOz+8Q32VV0fzjR0Jb6FOj
+         sjAcSt6TaUguretk3YSSuk0q0p9cEB+jr7YLEtT4lRPbwxsGUyedgmvSTxFxokHT78PE
+         Lm6w5ONNHbzzmJxGvvKVic8suazPZYWlshv3vQHvNzFItjw5HW8nR/QLP1CamhCVvQFk
+         LyFFt+WORTq4YNC29jTFFaKAVdlOR03BHWKBJvClhEC75UIi3wifvkQIZHt+yR7YgCxE
+         74uMGf14XPHjMhnnY6FdpN+z1q6i08lxWgHQFk3UkeJla4I1ecIfBe6+Gl57lM7c/fRy
+         rTGw==
+X-Gm-Message-State: AOAM5318z6Psw2ZoTiOVQBxnSF7mnzmv7sTGSOJJKmsMy1rkWO4vKr0I
+        6fSaYsYkyommLwA8BTmY3GNmrpYtl88fpg==
+X-Google-Smtp-Source: ABdhPJz63iUUnCr3zTam4iVPENkFDo9Hk9l7LA5hxnjO3aj6X2c1blool5DQ+WglykBzpsoKBGog87zoHV/MCQ==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a0d:d689:0:b0:2fb:9a57:8517 with SMTP id
+ y131-20020a0dd689000000b002fb9a578517mr4235720ywd.502.1652430747159; Fri, 13
+ May 2022 01:32:27 -0700 (PDT)
+Date:   Fri, 13 May 2022 16:32:11 +0800
+In-Reply-To: <20220429043913.626647-1-davidgow@google.com>
+Message-Id: <20220513083212.3537869-1-davidgow@google.com>
+Mime-Version: 1.0
+References: <20220429043913.626647-1-davidgow@google.com>
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
+Subject: [PATCH v3 1/3] panic: Taint kernel if tests are run
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Cc:     David Gow <davidgow@google.com>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Joe Fradley <joefradley@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2022 10:05, Rex-BC Chen wrote:
-> From: "Nancy.Lin" <nancy.lin@mediatek.com>
-> 
-> Add vdosys1 ETHDR definition.
-> 
-> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Most in-kernel tests (such as KUnit tests) are not supposed to run on
+production systems: they may do deliberately illegal things to trigger
+errors, and have security implications (for example, KUnit assertions
+will often deliberately leak kernel addresses).
 
+Add a new taint type, TAINT_TEST to signal that a test has been run.
+This will be printed as 'N' (originally for kuNit, as every other
+sensible letter was taken.)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+This should discourage people from running these tests on production
+systems, and to make it easier to tell if tests have been run
+accidentally (by loading the wrong configuration, etc.)
 
+Signed-off-by: David Gow <davidgow@google.com>
+---
 
-Best regards,
-Krzysztof
+Updated this to handle the most common case of selftest modules, in
+addition to KUnit tests. There's room for other tests or test frameworks
+to use this as well, either with a call to add_taint() from within the
+kernel, or by writing to /proc/sys/kernel/tainted.
+
+The 'N' character for the taint is even less useful now that it's no
+longer short for kuNit, but all the letters in TEST are taken. :-(
+
+Changes since v2:
+https://lore.kernel.org/linux-kselftest/20220430030019.803481-1-davidgow@google.com/
+- Rename TAINT_KUNIT -> TAINT_TEST.
+- Split into separate patches for adding the taint, and triggering it.
+- Taint on a kselftest_module being loaded (patch 3/3)
+
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20220429043913.626647-1-davidgow@google.com/
+- Make the taint per-module, to handle the case when tests are in
+  (longer lasting) modules. (Thanks Greg KH).
+
+Note that this still has checkpatch.pl warnings around bracket
+placement, which are intentional as part of matching the surrounding
+code.
+
+---
+ Documentation/admin-guide/tainted-kernels.rst | 1 +
+ include/linux/panic.h                         | 3 ++-
+ kernel/panic.c                                | 1 +
+ 3 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/admin-guide/tainted-kernels.rst b/Documentation/admin-guide/tainted-kernels.rst
+index ceeed7b0798d..546f3071940d 100644
+--- a/Documentation/admin-guide/tainted-kernels.rst
++++ b/Documentation/admin-guide/tainted-kernels.rst
+@@ -100,6 +100,7 @@ Bit  Log  Number  Reason that got the kernel tainted
+  15  _/K   32768  kernel has been live patched
+  16  _/X   65536  auxiliary taint, defined for and used by distros
+  17  _/T  131072  kernel was built with the struct randomization plugin
++ 18  _/N  262144  an in-kernel test (such as a KUnit test) has been run
+ ===  ===  ======  ========================================================
+ 
+ Note: The character ``_`` is representing a blank in this table to make reading
+diff --git a/include/linux/panic.h b/include/linux/panic.h
+index f5844908a089..2f5f2a9ecaf7 100644
+--- a/include/linux/panic.h
++++ b/include/linux/panic.h
+@@ -74,7 +74,8 @@ static inline void set_arch_panic_timeout(int timeout, int arch_default_timeout)
+ #define TAINT_LIVEPATCH			15
+ #define TAINT_AUX			16
+ #define TAINT_RANDSTRUCT		17
+-#define TAINT_FLAGS_COUNT		18
++#define TAINT_TEST			18
++#define TAINT_FLAGS_COUNT		19
+ #define TAINT_FLAGS_MAX			((1UL << TAINT_FLAGS_COUNT) - 1)
+ 
+ struct taint_flag {
+diff --git a/kernel/panic.c b/kernel/panic.c
+index eb4dfb932c85..1cf707e3bacd 100644
+--- a/kernel/panic.c
++++ b/kernel/panic.c
+@@ -404,6 +404,7 @@ const struct taint_flag taint_flags[TAINT_FLAGS_COUNT] = {
+ 	[ TAINT_LIVEPATCH ]		= { 'K', ' ', true },
+ 	[ TAINT_AUX ]			= { 'X', ' ', true },
+ 	[ TAINT_RANDSTRUCT ]		= { 'T', ' ', true },
++	[ TAINT_TEST ]			= { 'N', ' ', true },
+ };
+ 
+ /**
+-- 
+2.36.0.550.gb090851708-goog
+

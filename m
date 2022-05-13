@@ -2,41 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D5E526B86
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8442526B89
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 22:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384188AbiEMUbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 16:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36402 "EHLO
+        id S1384453AbiEMUbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 16:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384378AbiEMUab (ORCPT
+        with ESMTP id S1384338AbiEMUaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 16:30:31 -0400
+        Fri, 13 May 2022 16:30:46 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16ED777F2A;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931FE77F3B;
         Fri, 13 May 2022 13:29:54 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nicolas)
-        with ESMTPSA id 3BABA1F46487
+        with ESMTPSA id A58E51F46488
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652473784;
-        bh=Vra7LsHrOdEcIBqrM9/POp0obwO6NMVDgAU9FK3KQ+M=;
+        s=mail; t=1652473786;
+        bh=1LAjnriWsrClpu2BgpAHhARrkeNr44Bjsa5xlaJTDIY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gmo23fQjBPdo8JI2PkxYjwweogzgLdG9a6DK5ZGB7V0mALSFfrt6uM7yGvSvWQN+Q
-         wKLB4aEsWy8x+sa0pHUzht0n0LKknstj8zHIpLKVjQ+4RUwm7PYUUHrLLSBxIUa/Ej
-         1Osb0d5oxmLWR+FNXMuK620GHgPilmibWDp1bBOPZKU2JYYDMXK+VGl5J/3GBXgokd
-         CbT49FvIEIIvU6D1rUquPOfLAXPBremmRGaIBDF9V8mo5H1/XBYoxcPZIYdqbeIp61
-         eaMNmj3+eMp+NHCRLdF9PUIBgbAkukPwo3WYXTZfVBbYlKKqlTlDPSm5kYK0mKqG+T
-         yBnN7/oW1yq2Q==
+        b=S9GVx/CinlhOPZTJhlPPqc9iQ3pJ3w1oZzG7vPL/qiObuNyYBcK7jqoDSiHOmgEMv
+         X4tKhkxSloNyDOnCwVSQcb2c47QQAMKo3K3PTTc/2Vqn/gCZty4Aj0dUkPP9P27YFB
+         4Lymgjfmjflj16uU7bzI1HCoCi5SWlpMaFsmExGaCwd8sRANSke7ugB521OvZcdKi8
+         +6K95qbX7G6Msxfan7hcIuxdSf/sD4JEw/5MO8sRcTkOPUaiYZ3IdV8MOOWhcFFQBT
+         IsOp/nSI/alhfJu0uxQI1v2zK0gORVX4IqlRn1A0p0ZgFUYUX2wiixlUI0UEG7DMsE
+         6u9EGtMgdFemg==
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Boris Brezillon <boris.brezillon@collabora.com>
 Cc:     nicolas@ndufresne.ca, linux-media@vger.kernel.org,
         Sebastian Fricke <sebastian.fricke@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 07/20] media: v4l2: Reorder field reflist
-Date:   Fri, 13 May 2022 16:29:09 -0400
-Message-Id: <20220513202922.13846-8-nicolas.dufresne@collabora.com>
+Subject: [PATCH v5 08/20] media: rkvdec: Stop overclocking the decoder
+Date:   Fri, 13 May 2022 16:29:10 -0400
+Message-Id: <20220513202922.13846-9-nicolas.dufresne@collabora.com>
 X-Mailer: git-send-email 2.34.3
 In-Reply-To: <20220513202922.13846-1-nicolas.dufresne@collabora.com>
 References: <20220513202922.13846-1-nicolas.dufresne@collabora.com>
@@ -52,87 +57,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As per spec, the field reflist requires interleaving top and bottom
-field in a specific way that does not fit inside the sort operation.
-The process consist of alternating references parity, starting with
-a reference of the same parity as the current picture. This
-processs is done twice, once for short term references and a second
-time for the long term references.
+While this overclock hack seems to work on some implementations
+(some ChromeBooks, RockPi4) it also causes instability on other
+implementations (notably LibreComputer Renegade, but there were more
+reports in the LibreELEC project, where this has been removed). While
+performance is indeed affected (tested with GStreamer), 4K playback
+still works as long as you don't operate in lock step and keep at
+least 1 frame ahead of time in the decode queue.
 
+After discussion with ChromeOS members, it would seem that their
+implementation indeed used to synchronously decode each frame, so
+this hack was simply compensating for their code being less
+efficient. In my opinion, this hack should not have been included
+upstream.
+
+Fixes: cd33c830448ba ("media: rkvdec: Add the rkvdec driver")
 Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/v4l2-core/v4l2-h264.c | 42 +++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ drivers/staging/media/rkvdec/rkvdec.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-core/v4l2-h264.c
-index fe215035d9e8..72bd64f65198 100644
---- a/drivers/media/v4l2-core/v4l2-h264.c
-+++ b/drivers/media/v4l2-core/v4l2-h264.c
-@@ -250,6 +250,40 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
- 	return poca < pocb ? -1 : 1;
- }
+diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+index c0cf3488f970..2df8cf4883e2 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.c
++++ b/drivers/staging/media/rkvdec/rkvdec.c
+@@ -1027,12 +1027,6 @@ static int rkvdec_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
  
-+/*
-+ * The references need to be reordered so that references are alternating
-+ * between top and bottom field references starting with the current picture
-+ * parity. This has to be done for short term and long term references
-+ * separately.
-+ */
-+static void reorder_field_reflist(const struct v4l2_h264_reflist_builder *b,
-+				  struct v4l2_h264_reference *reflist)
-+{
-+	struct v4l2_h264_reference tmplist[V4L2_H264_REF_LIST_LEN];
-+	u8 lt, i = 0, j = 0, k = 0;
-+
-+	memcpy(tmplist, reflist, sizeof(tmplist[0]) * b->num_valid);
-+
-+	for (lt = 0; lt <= 1; lt++) {
-+		do {
-+			for (; i < b->num_valid && b->refs[tmplist[i].index].longterm == lt; i++) {
-+				if (tmplist[i].fields == b->cur_pic_fields) {
-+					reflist[k++] = tmplist[i++];
-+					break;
-+				}
-+			}
-+
-+			for (; j < b->num_valid && b->refs[tmplist[j].index].longterm == lt; j++) {
-+				if (tmplist[j].fields != b->cur_pic_fields) {
-+					reflist[k++] = tmplist[j++];
-+					break;
-+				}
-+			}
-+		} while ((i < b->num_valid && b->refs[tmplist[i].index].longterm == lt) ||
-+			 (j < b->num_valid && b->refs[tmplist[j].index].longterm == lt));
-+	}
-+}
-+
- static char ref_type_to_char(u8 ref_type)
- {
- 	switch (ref_type) {
-@@ -360,6 +394,9 @@ v4l2_h264_build_p_ref_list(const struct v4l2_h264_reflist_builder *builder,
- 	sort_r(reflist, builder->num_valid, sizeof(*reflist),
- 	       v4l2_h264_p_ref_list_cmp, NULL, builder);
- 
-+	if (builder->cur_pic_fields != V4L2_H264_FRAME_REF)
-+		reorder_field_reflist(builder, reflist);
-+
- 	print_ref_list_p(builder, reflist);
- }
- EXPORT_SYMBOL_GPL(v4l2_h264_build_p_ref_list);
-@@ -393,6 +430,11 @@ v4l2_h264_build_b_ref_lists(const struct v4l2_h264_reflist_builder *builder,
- 	sort_r(b1_reflist, builder->num_valid, sizeof(*b1_reflist),
- 	       v4l2_h264_b1_ref_list_cmp, NULL, builder);
- 
-+	if (builder->cur_pic_fields != V4L2_H264_FRAME_REF) {
-+		reorder_field_reflist(builder, b0_reflist);
-+		reorder_field_reflist(builder, b1_reflist);
-+	}
-+
- 	if (builder->num_valid > 1 &&
- 	    !memcmp(b1_reflist, b0_reflist, builder->num_valid))
- 		swap(b1_reflist[0], b1_reflist[1]);
+-	/*
+-	 * Bump ACLK to max. possible freq. (500 MHz) to improve performance
+-	 * When 4k video playback.
+-	 */
+-	clk_set_rate(rkvdec->clocks[0].clk, 500 * 1000 * 1000);
+-
+ 	rkvdec->regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(rkvdec->regs))
+ 		return PTR_ERR(rkvdec->regs);
 -- 
 2.34.3
 

@@ -2,120 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83F9526643
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D06526644
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381688AbiEMPhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 11:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46778 "EHLO
+        id S1382138AbiEMPhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 11:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382104AbiEMPgd (ORCPT
+        with ESMTP id S1382238AbiEMPhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 11:36:33 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4A511171;
-        Fri, 13 May 2022 08:36:32 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id kl21so6913811qvb.9;
-        Fri, 13 May 2022 08:36:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8h0LmcWAQXb8u9qfucjMgM7lVOGBOAPZEtMIypr4huE=;
-        b=V21K7h6gxr/frfJzGoJpY9QlYPLnqhsegSYLRssEC7uQa/RjRMWeTQ+4WUjJcHX232
-         h/56lswNcxpH6Vj57Os3FdYFI0z7IvVqw+R+x33nbdUR+V/N5zCn4yIOLirOmom9qNgq
-         mMTu36wIUNzYR83MbFr+OBWJmQxUDgemetQKbCOZBp6WKV9WDJDlg5VG7/dDk1vrvJBM
-         uc1OJlwSVtRTMAvlGgf4XDcL25fcAsXHieUREzKgfarztWq935EzYNBFpDLztThMgMAe
-         3U9evL22QIVjxLN2ucQJkCEjR8+1JzzpcSHu6Wpj0+c65oj7Znhdz1B79tMvIiOiu0Up
-         Ei8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8h0LmcWAQXb8u9qfucjMgM7lVOGBOAPZEtMIypr4huE=;
-        b=Q1aBtbzC31HiRtpbKFSlepZvEKb5WeQSNQv1fd7Qr07qIbohZGmR2IXjAv/ND/iGYm
-         S0FR6C+LMVxvEKd2UEGvAkbRe6GeqJD4Ro/+vUklgCmAJ9sdbf++R0ODG/h/7YmAw7ID
-         eXea5RGfHXTWDs4Ibsx/6hubnM+fxW9Dn09fJ5M65XjBOXZBJ3JnIdElEEx7rt6y4t1H
-         pRoW1VevKDglCpd4Co/IlhFCso09lVwGvauvjB1cTR+duazWJ5Zhi/GQJqzqmeAMHb4D
-         konFnwyc2PEw/HxLsX4ZKZ6xWq7CnJMkoUjFvpIc8CnaOkwse8CxAT2Chd/RfEJgK3nb
-         +HsA==
-X-Gm-Message-State: AOAM532htkgrfSK2Ggvzk8p7Sd2+L5gDdIZ8+0342EE0mjAnJttjWgJG
-        7CCpqHSF/r0nW3OjvSXfSTk6tUwTZFjGBawMpto=
-X-Google-Smtp-Source: ABdhPJwqjL1gPdVknYoT/U+0XIneQoJHsxyMbPk309eeSytAsXbtzwplMHbPzQRvE7nw/MpGgYJi4UquFNUEKZc73VA=
-X-Received: by 2002:a05:6214:20e6:b0:45d:403f:7a90 with SMTP id
- 6-20020a05621420e600b0045d403f7a90mr4745600qvk.1.1652456191435; Fri, 13 May
- 2022 08:36:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220510154217.5216-1-ubizjak@gmail.com> <20220513091034.GH76023@worktop.programming.kicks-ass.net>
- <CAFULd4bAAKc=wo6vFkN6xQqBjaSJhF3L+WmuymSsC6-ec6TuvA@mail.gmail.com>
-In-Reply-To: <CAFULd4bAAKc=wo6vFkN6xQqBjaSJhF3L+WmuymSsC6-ec6TuvA@mail.gmail.com>
-From:   Uros Bizjak <ubizjak@gmail.com>
-Date:   Fri, 13 May 2022 17:36:19 +0200
-Message-ID: <CAFULd4Zck5YRfhoXsg_aPKpFbnkkr_xZ6ejDpmp=ysZemwoQAg@mail.gmail.com>
-Subject: Re: [PATCH] locking/atomic/x86: Introduce try_cmpxchg64
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        kvm@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Fri, 13 May 2022 11:37:23 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C089092D2A
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:36:58 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7A06B113E;
+        Fri, 13 May 2022 08:36:58 -0700 (PDT)
+Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AE3C83F73D;
+        Fri, 13 May 2022 08:36:55 -0700 (PDT)
+Date:   Fri, 13 May 2022 16:36:53 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Tong Tiangen <tongtiangen@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Robin Murphy <robin.murphy@arm.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Marco Elver <elver@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Xie XiuQi <xiexiuqi@huawei.com>,
+        Guohanjun <guohanjun@huawei.com>
+Subject: Re: [PATCH -next v4 5/7] arm64: mte: Clean up user tag accessors
+Message-ID: <Yn57FT9k2XoU3MT+@lakrids>
+References: <20220420030418.3189040-1-tongtiangen@huawei.com>
+ <20220420030418.3189040-6-tongtiangen@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220420030418.3189040-6-tongtiangen@huawei.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 12:20 PM Uros Bizjak <ubizjak@gmail.com> wrote:
+On Wed, Apr 20, 2022 at 03:04:16AM +0000, Tong Tiangen wrote:
+> From: Robin Murphy <robin.murphy@arm.com>
+> 
+> Invoking user_ldst to explicitly add a post-increment of 0 is silly.
+> Just use a normal USER() annotation and save the redundant instruction.
+> 
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> Reviewed-by: Tong Tiangen <tongtiangen@huawei.com>
 
-> > > +#define arch_try_cmpxchg64(ptr, po, n)                               \
-> > > +({                                                           \
-> > > +     bool success;                                           \
-> > > +     __typeof__(*(ptr)) __prev;                              \
-> > > +     __typeof__(ptr) _old = (__typeof__(ptr))(po);           \
-> > > +     __typeof__(*(ptr)) __old = *_old;                       \
-> > > +     __typeof__(*(ptr)) __new = (n);                         \
-> > > +     alternative_io(LOCK_PREFIX_HERE                         \
-> > > +                     "call cmpxchg8b_emu",                   \
-> > > +                     "lock; cmpxchg8b (%%esi)" ,             \
-> > > +                    X86_FEATURE_CX8,                         \
-> > > +                    "=A" (__prev),                           \
-> > > +                    "S" ((ptr)), "0" (__old),                \
-> > > +                    "b" ((unsigned int)__new),               \
-> > > +                    "c" ((unsigned int)(__new>>32))          \
-> > > +                    : "memory");                             \
-> > > +     success = (__prev == __old);                            \
-> > > +     if (unlikely(!success))                                 \
-> > > +             *_old = __prev;                                 \
-> > > +     likely(success);                                        \
-> > > +})
-> >
-> > Wouldn't this be better written like the normal fallback wrapper?
-> >
-> > static __always_inline bool
-> > arch_try_cmpxchg64(u64 *v, u64 *old, u64 new)
-> > {
-> >         u64 r, o = *old;
-> >         r = arch_cmpxchg64(v, o, new);
-> >         if (unlikely(r != o))
-> >                 *old = r;
-> >         return likely(r == o);
-> > }
-> >
-> > Less magical, same exact code.
->
-> Also, I tried to follow up the existing #defines. Will improve the
-> code according to your suggestion here.
+When posting someone else's patch, you need to add your own
+Signed-off-by tag. Please see:
 
-In the v2 patch, generic fallbacks were introduced, so that
-arch_try_cmpxchg64 can be used when only arch_cmpxchg64 is defined.
+  https://www.kernel.org/doc/html/latest/process/submitting-patches.html#sign-your-work-the-developer-s-certificate-of-origin
 
-Uros.
+That said, the patch itself looks sane, and matches its original posting
+at:
+
+  https://lore.kernel.org/linux-arm-kernel/38c6d4b5-a3db-5c3e-02e7-39875edb3476@arm.com/
+
+So:
+
+  Acked-by: Mark Rutland <mark.rutland@arm.com>
+
+Catalin, are you happy to pick up this patch as a cleanup?
+
+Thanks,
+Mark.
+
+> ---
+>  arch/arm64/lib/mte.S | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/lib/mte.S b/arch/arm64/lib/mte.S
+> index 8590af3c98c0..eeb9e45bcce8 100644
+> --- a/arch/arm64/lib/mte.S
+> +++ b/arch/arm64/lib/mte.S
+> @@ -93,7 +93,7 @@ SYM_FUNC_START(mte_copy_tags_from_user)
+>  	mov	x3, x1
+>  	cbz	x2, 2f
+>  1:
+> -	user_ldst 2f, ldtrb, w4, x1, 0
+> +USER(2f, ldtrb	w4, [x1])
+>  	lsl	x4, x4, #MTE_TAG_SHIFT
+>  	stg	x4, [x0], #MTE_GRANULE_SIZE
+>  	add	x1, x1, #1
+> @@ -120,7 +120,7 @@ SYM_FUNC_START(mte_copy_tags_to_user)
+>  1:
+>  	ldg	x4, [x1]
+>  	ubfx	x4, x4, #MTE_TAG_SHIFT, #MTE_TAG_SIZE
+> -	user_ldst 2f, sttrb, w4, x0, 0
+> +USER(2f, sttrb	w4, [x0])
+>  	add	x0, x0, #1
+>  	add	x1, x1, #MTE_GRANULE_SIZE
+>  	subs	x2, x2, #1
+> -- 
+> 2.25.1
+> 

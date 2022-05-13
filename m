@@ -2,57 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87938526CDA
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 00:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B529526CDE
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 00:16:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbiEMWN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 18:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56254 "EHLO
+        id S231259AbiEMWQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 18:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbiEMWNW (ORCPT
+        with ESMTP id S230343AbiEMWP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 18:13:22 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6848587A3A
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 15:13:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652480001; x=1684016001;
-  h=subject:from:to:cc:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=tp29QKBC0TkkWxqN6GFsZPZItezTnUJxKUUuesmJmVE=;
-  b=nGpXkwV0OlfTT0ZpLuIrqROGanol54PsPM4vJbSL3VtP+hC0w4QVIZ37
-   bjTw5YV+wYErWEZZbKfQUXisFIISSuWp8+leG6/TFbFz35lkYFO0hSIT1
-   XF3PDcHbSHzSgQTtIZUnRf+QHzSld9sN5ij3kd/7INq9XGs38sg/djRPu
-   aiAwSsNQbLhN2Ts8MM2vKV7v8qCR+eQyBq14+TiTIEdYJdr5rbjPQeARc
-   x/uSfiSBgPe/EZHzaD/TPjp7e5MZaPIpyPpVMQh4KbdxgNEdp2Z6Y6hgV
-   VWDQKjQUln/k7J7hb2rF5TVu2ETef7HiE16lGP8T+Zn+uiSCq4dMJVHYc
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="250949612"
-X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="250949612"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 15:13:21 -0700
-X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="659299630"
-Received: from dwillia2-desk3.jf.intel.com (HELO dwillia2-desk3.amr.corp.intel.com) ([10.54.39.25])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 15:13:20 -0700
-Subject: [PATCH v10 7/7] pmem: implement pmem_recovery_write()
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jane Chu <jane.chu@oracle.com>, Christoph Hellwig <hch@lst.de>,
-        nvdimm@lists.linux.dev
-Date:   Fri, 13 May 2022 15:13:20 -0700
-Message-ID: <165247997655.53156.8381418704988035976.stgit@dwillia2-desk3.amr.corp.intel.com>
-In-Reply-To: <20220422224508.440670-8-jane.chu@oracle.com>
-References: <20220422224508.440670-8-jane.chu@oracle.com>
-User-Agent: StGit/0.18-3-g996c
+        Fri, 13 May 2022 18:15:58 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB84366A7
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 15:15:57 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id n10so9195557pjh.5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 15:15:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:user-agent:in-reply-to:references
+         :message-id:mime-version:content-transfer-encoding;
+        bh=8evsmsRgEXU9i1Zu7hcfNtENF1tNp6TzzC6MYoPKnsk=;
+        b=ACiA+mJBn1zPkljWby6aEhgTay+D3sOEiKQYtAHhue81w6Mofhw5GJfsjdGVg4wLWC
+         e7V6Nl5BDTq2NVbU34qCbPQaDHCMnvRzc0p8L+vFcNgWQ8+sPAOvdgi5GrecqEBC+HFZ
+         OD4FyT5oSwe4F2LKRi5nerYkcLX2G8Up11jYc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
+         :references:message-id:mime-version:content-transfer-encoding;
+        bh=8evsmsRgEXU9i1Zu7hcfNtENF1tNp6TzzC6MYoPKnsk=;
+        b=jrFYx/XPtsEP46bcrD7kaDByZQF1+n92prpoWXsoEKlBiViSWZ9yUxxyboUm4FJkMs
+         uCMePZkZyaGlQVUPpkbpicVqO5kmSAqt4Vj7HPHBjkZyKkS9lsspVgVlLHHltxe+85Ot
+         aYNHUZIksgezF6YGA2JcWr4+g2x6WXzENTcfDgZwmA6HFssW9pN8FvYXSOM91yuQ81qi
+         qROYOQs62b7teVTN0Jp7cQvhE3fRn9VeiSlbnQ+XVRzN7pkKE9i+/ol7DHGFGwkRRKqq
+         6xCb3X0hRp31qN1u1h+q2ZUnSWE9MysdIfGZSF0aprxnQtbfhOD426HY+sZW5KrWGQfN
+         ps4A==
+X-Gm-Message-State: AOAM532mXyEmio9nGg/f2FMPjYrTBXUXzodH2HDU0k9JcsBsFTxYFTdF
+        iBfeMuIXVA9bezaiYNQV2g87jg==
+X-Google-Smtp-Source: ABdhPJzSxU8Q1LxQ0CmSrYrip2cEiTE+YGFGKC8YEWo6YSG9RKpU6dCkHklOK9FqXRrmHa5BpMjYhA==
+X-Received: by 2002:a17:90a:b78d:b0:1d9:4f4f:bc2a with SMTP id m13-20020a17090ab78d00b001d94f4fbc2amr18247100pjr.155.1652480156857;
+        Fri, 13 May 2022 15:15:56 -0700 (PDT)
+Received: from ?IPv6:::1? ([2607:fb90:3322:7d68:6474:9b3c:2c42:56f1])
+        by smtp.gmail.com with ESMTPSA id o12-20020a170902d4cc00b0015ebb3bf277sm2375659plg.238.2022.05.13.15.15.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 15:15:56 -0700 (PDT)
+Date:   Fri, 13 May 2022 15:15:53 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+CC:     dm-devel@redhat.com, linux-kernel@vger.kernel.org,
+        linux-raid@vger.kernel.org, Song Liu <song@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] dm: Add verity helpers for LoadPin
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20220504125404.v3.1.I3e928575a23481121e73286874c4c2bdb403355d@changeid>
+References: <20220504195419.1143099-1-mka@chromium.org> <20220504125404.v3.1.I3e928575a23481121e73286874c4c2bdb403355d@changeid>
+Message-ID: <02028CEA-5704-4A51-8CAD-BEE53CEF7CCA@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,144 +75,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jane Chu <jane.chu@oracle.com>
 
-The recovery write thread started out as a normal pwrite thread and
-when the filesystem was told about potential media error in the
-range, filesystem turns the normal pwrite to a dax_recovery_write.
 
-The recovery write consists of clearing media poison, clearing page
-HWPoison bit, reenable page-wide read-write permission, flush the
-caches and finally write.  A competing pread thread will be held
-off during the recovery process since data read back might not be
-valid, and this is achieved by clearing the badblock records after
-the recovery write is complete. Competing recovery write threads
-are already serialized by writer lock held by dax_iomap_rw().
+On May 4, 2022 12:54:17 PM PDT, Matthias Kaehlcke <mka@chromium=2Eorg> wro=
+te:
+>LoadPin limits loading of kernel modules, firmware and certain
+>other files to a 'pinned' file system (typically a read-only
+>rootfs)=2E To provide more flexibility LoadPin is being extended
+>to also allow loading these files from trusted dm-verity
+>devices=2E For that purpose LoadPin can be provided with a list
+>of verity root digests that it should consider as trusted=2E
+>
+>Add a bunch of helpers to allow LoadPin to check whether a DM
+>device is a trusted verity device=2E The new functions broadly
+>fall in two categories: those that need access to verity
+>internals (like the root digest), and the 'glue' between
+>LoadPin and verity=2E The new file dm-verity-loadpin=2Ec contains
+>the glue functions=2E
+>
+>Signed-off-by: Matthias Kaehlcke <mka@chromium=2Eorg>
+> [=2E=2E=2E]
+>diff --git a/drivers/md/dm-verity-loadpin=2Ec b/drivers/md/dm-verity-load=
+pin=2Ec
+>new file mode 100644
+>index 000000000000=2E=2E972ca93a2231
+>--- /dev/null
+>+++ b/drivers/md/dm-verity-loadpin=2Ec
+>@@ -0,0 +1,80 @@
+>+// SPDX-License-Identifier: GPL-2=2E0-only
+>+
+>+#include <linux/list=2Eh>
+>+#include <linux/kernel=2Eh>
+>+#include <linux/dm-verity-loadpin=2Eh>
+>+
+>+#include "dm=2Eh"
+>+#include "dm-verity=2Eh"
+>+
+>+static struct list_head *trusted_root_digests;
 
-Signed-off-by: Jane Chu <jane.chu@oracle.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Dan Williams <dan.j.williams@intel.com>
----
-Changes since v9:
-- Fixup compile warnings in debug messages
+Does this need to exist in two places? (i=2Ee=2E why can't dm and loadpin =
+share this instead of needing dm_verity_loadpin_set_trusted_digests()?)
 
- drivers/nvdimm/pmem.c |   87 ++++++++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 79 insertions(+), 8 deletions(-)
+>+
+>+/*
+>+ * Sets the root digests of verity devices which LoadPin considers as tr=
+usted=2E
+>+ *
+>+ * This function must only be called once=2E
+>+ */
+>+void dm_verity_loadpin_set_trusted_root_digests(struct list_head *digest=
+s)
+>+{
+>+	if (!trusted_root_digests)
+>+		trusted_root_digests =3D digests;
+>+	else
+>+		pr_warn("verity root digests trusted by LoadPin are already set!!!\n")=
+;
+>+}
+>+
+>+static bool is_trusted_verity_target(struct dm_target *ti)
+>+{
+>+	u8 *root_digest;
+>+	unsigned int digest_size;
+>+	struct trusted_root_digest *trd;
+>+	bool trusted =3D false;
+>+
+>+	if (!dm_is_verity_target(ti))
+>+		return false;
+>+
+>+	if (dm_verity_get_root_digest(ti, &root_digest, &digest_size))
+>+		return false;
+>+
+>+	list_for_each_entry(trd, trusted_root_digests, node) {
+>+		if ((trd->len =3D=3D digest_size) &&
+>+		    !memcmp(trd->data, root_digest, digest_size)) {
+>+			trusted =3D true;
+>+			break;
+>+		}
+>+	}
+>+
+>+	kfree(root_digest);
+>+
+>+	return trusted;
+>+}
+>+
+>+/*
+>+ * Determines whether a mapped device is a verity device that is trusted
+>+ * by LoadPin=2E
+>+ */
+>+bool dm_verity_loadpin_is_md_trusted(struct mapped_device *md)
+>+{
+>+	int srcu_idx;
+>+	struct dm_table *table;
+>+	unsigned int num_targets;
+>+	bool trusted =3D false;
+>+	int i;
+>+
+>+	if (!trusted_root_digests || list_empty(trusted_root_digests))
+>+		return false;
+>+
+>+	table =3D dm_get_live_table(md, &srcu_idx);
+>+	num_targets =3D dm_table_get_num_targets(table);
+>+	for (i =3D 0; i < num_targets; i++) {
+>+		struct dm_target *ti =3D dm_table_get_target(table, i);
+>+
+>+		if (is_trusted_verity_target(ti)) {
+>+			trusted =3D true;
+>+			break;
+>+		}
+>+	}
 
-diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
-index 0961625dfa05..6b24ecada695 100644
---- a/drivers/nvdimm/pmem.c
-+++ b/drivers/nvdimm/pmem.c
-@@ -266,21 +266,43 @@ __weak long __pmem_direct_access(struct pmem_device *pmem, pgoff_t pgoff,
- 		pfn_t *pfn)
- {
- 	resource_size_t offset = PFN_PHYS(pgoff) + pmem->data_offset;
--
--	if (unlikely(is_bad_pmem(&pmem->bb, PFN_PHYS(pgoff) / 512,
--					PFN_PHYS(nr_pages))))
--		return -EIO;
-+	sector_t sector = PFN_PHYS(pgoff) >> SECTOR_SHIFT;
-+	unsigned int num = PFN_PHYS(nr_pages) >> SECTOR_SHIFT;
-+	struct badblocks *bb = &pmem->bb;
-+	sector_t first_bad;
-+	int num_bad;
- 
- 	if (kaddr)
- 		*kaddr = pmem->virt_addr + offset;
- 	if (pfn)
- 		*pfn = phys_to_pfn_t(pmem->phys_addr + offset, pmem->pfn_flags);
- 
-+	if (bb->count &&
-+	    badblocks_check(bb, sector, num, &first_bad, &num_bad)) {
-+		long actual_nr;
-+
-+		if (mode != DAX_RECOVERY_WRITE)
-+			return -EIO;
-+
-+		/*
-+		 * Set the recovery stride is set to kernel page size because
-+		 * the underlying driver and firmware clear poison functions
-+		 * don't appear to handle large chunk(such as 2MiB) reliably.
-+		 */
-+		actual_nr = PHYS_PFN(
-+			PAGE_ALIGN((first_bad - sector) << SECTOR_SHIFT));
-+		dev_dbg(pmem->bb.dev, "start sector(%llu), nr_pages(%ld), first_bad(%llu), actual_nr(%ld)\n",
-+				sector, nr_pages, first_bad, actual_nr);
-+		if (actual_nr)
-+			return actual_nr;
-+		return 1;
-+	}
-+
- 	/*
--	 * If badblocks are present, limit known good range to the
--	 * requested range.
-+	 * If badblocks are present but not in the range, limit known good range
-+	 * to the requested range.
- 	 */
--	if (unlikely(pmem->bb.count))
-+	if (bb->count)
- 		return nr_pages;
- 	return PHYS_PFN(pmem->size - pmem->pfn_pad - offset);
- }
-@@ -310,10 +332,59 @@ static long pmem_dax_direct_access(struct dax_device *dax_dev,
- 	return __pmem_direct_access(pmem, pgoff, nr_pages, mode, kaddr, pfn);
- }
- 
-+/*
-+ * The recovery write thread started out as a normal pwrite thread and
-+ * when the filesystem was told about potential media error in the
-+ * range, filesystem turns the normal pwrite to a dax_recovery_write.
-+ *
-+ * The recovery write consists of clearing media poison, clearing page
-+ * HWPoison bit, reenable page-wide read-write permission, flush the
-+ * caches and finally write.  A competing pread thread will be held
-+ * off during the recovery process since data read back might not be
-+ * valid, and this is achieved by clearing the badblock records after
-+ * the recovery write is complete. Competing recovery write threads
-+ * are already serialized by writer lock held by dax_iomap_rw().
-+ */
- static size_t pmem_recovery_write(struct dax_device *dax_dev, pgoff_t pgoff,
- 		void *addr, size_t bytes, struct iov_iter *i)
- {
--	return 0;
-+	struct pmem_device *pmem = dax_get_private(dax_dev);
-+	size_t olen, len, off;
-+	phys_addr_t pmem_off;
-+	struct device *dev = pmem->bb.dev;
-+	long cleared;
-+
-+	off = offset_in_page(addr);
-+	len = PFN_PHYS(PFN_UP(off + bytes));
-+	if (!is_bad_pmem(&pmem->bb, PFN_PHYS(pgoff) >> SECTOR_SHIFT, len))
-+		return _copy_from_iter_flushcache(addr, bytes, i);
-+
-+	/*
-+	 * Not page-aligned range cannot be recovered. This should not
-+	 * happen unless something else went wrong.
-+	 */
-+	if (off || !PAGE_ALIGNED(bytes)) {
-+		dev_dbg(dev, "Found poison, but addr(%p) or bytes(%#zx) not page aligned\n",
-+			addr, bytes);
-+		return 0;
-+	}
-+
-+	pmem_off = PFN_PHYS(pgoff) + pmem->data_offset;
-+	cleared = __pmem_clear_poison(pmem, pmem_off, len);
-+	if (cleared > 0 && cleared < len) {
-+		dev_dbg(dev, "poison cleared only %ld out of %zu bytes\n",
-+			cleared, len);
-+		return 0;
-+	}
-+	if (cleared < 0) {
-+		dev_dbg(dev, "poison clear failed: %ld\n", cleared);
-+		return 0;
-+	}
-+
-+	olen = _copy_from_iter_flushcache(addr, bytes, i);
-+	pmem_clear_bb(pmem, to_sect(pmem, pmem_off), cleared >> SECTOR_SHIFT);
-+
-+	return olen;
- }
- 
- static const struct dax_operations pmem_dax_ops = {
+Pardon my lack of dm vocabulary, but what is "target" vs "table" here? I w=
+as only thinking of "whole device", so I must not understand what this is e=
+xamining=2E
 
+> [=2E=2E=2E]
+>diff --git a/include/linux/dm-verity-loadpin=2Eh b/include/linux/dm-verit=
+y-loadpin=2Eh
+>new file mode 100644
+>index 000000000000=2E=2E12a86911d05a
+>--- /dev/null
+>+++ b/include/linux/dm-verity-loadpin=2Eh
+>@@ -0,0 +1,27 @@
+>+/* SPDX-License-Identifier: GPL-2=2E0 */
+>+
+>+#ifndef __LINUX_DM_VERITY_LOADPIN_H
+>+#define __LINUX_DM_VERITY_LOADPIN_H
+>+
+>+#include <linux/list=2Eh>
+>+
+>+struct mapped_device;
+>+
+>+struct trusted_root_digest {
+>+	u8 *data;
+>+	unsigned int len;
+>+	struct list_head node;
+>+};
+
+To avoid the double-alloc in patch 2 (and save 1 pointer size of memory), =
+this could just be:
+
+struct trusted_root_digest {
+	struct list_head node;
+	unsigned int len;
+	u8 data[];
+};
+
+Otherwise, looks good to me!
+
+--=20
+Kees Cook

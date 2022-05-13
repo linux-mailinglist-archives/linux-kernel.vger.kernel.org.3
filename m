@@ -2,50 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5A18525BBF
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 08:48:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B40F525BC2
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 08:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377468AbiEMGq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 02:46:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52122 "EHLO
+        id S1377443AbiEMGs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 02:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377440AbiEMGqW (ORCPT
+        with ESMTP id S1359479AbiEMGs4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 02:46:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665F46B08E;
-        Thu, 12 May 2022 23:46:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 20F15B82C43;
-        Fri, 13 May 2022 06:46:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C6CBC34100;
-        Fri, 13 May 2022 06:46:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652424377;
-        bh=ze0b0axWCDrVgya6nRBYliB5ZrXVYoNcVjtMjvzuq8E=;
-        h=From:To:Cc:Subject:Date:From;
-        b=f8IWyg8FQh3kZSmrrxrzlwSmp1GMK5WNmq/IEYt1IEIPXXGAhriXNlvzbC1kRx/WH
-         tWafWc4ehm4MQNYWsYtzBCZNXUCX8QQ5GY4pCLhKHJfACK1XI5J0qW1sbLQbZLh3Ff
-         LnDwSPCNVtijQGfsX9TKH5lSu0fhHQibmWDgjSf1y5q64HWfEZI5jZ2xme3Om0K/Hn
-         tglPQlB/TKb4Tz8wTRSaRgVw6y5Xxu9ugvRH7JKDqp6ZpB1tVIsi0GZyP1rHWZ+K3M
-         sytzi4C9czTWTzgIIR8s7dfNK1FWkz0IqgEO4WfVwy8HSueKQs3Oc2P8/m6C5BuIQd
-         weJ/5LiUf4S2Q==
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        John Kacur <jkacur@redhat.com>, Tao Zhou <tao.zhou@linux.dev>,
-        Daniel Wagner <dwagner@suse.de>
-Subject: [PATCH V4] rtla: Remove procps-ng dependency
-Date:   Fri, 13 May 2022 08:45:53 +0200
-Message-Id: <e8276e122ee9eb2c5a0ba8e673fb6488b924b825.1652423574.git.bristot@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Fri, 13 May 2022 02:48:56 -0400
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0961C18A696;
+        Thu, 12 May 2022 23:48:54 -0700 (PDT)
+Received: from NTHCCAS04.nuvoton.com (NTHCCAS04.nuvoton.com [10.1.8.29])
+        by maillog.nuvoton.com (Postfix) with ESMTP id 406721C80DD3;
+        Fri, 13 May 2022 14:48:54 +0800 (CST)
+Received: from NTHCCAS04.nuvoton.com (10.1.8.29) by NTHCCAS04.nuvoton.com
+ (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 13
+ May 2022 14:48:53 +0800
+Received: from [172.19.1.47] (172.19.1.47) by NTHCCAS04.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
+ Transport; Fri, 13 May 2022 14:48:53 +0800
+Message-ID: <46a55b01-ee9f-604f-72c9-916bc2f02a09@nuvoton.com>
+Date:   Fri, 13 May 2022 14:48:54 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V4 3/5] arm64: dts: nuvoton: Add initial support for
+ MA35D1
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <ychuang570808@gmail.com>
+CC:     <robh+dt@kernel.org>, <sboyd@kernel.org>, <krzk+dt@kernel.org>,
+        <arnd@arndb.de>, <olof@lixom.net>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <soc@kernel.org>, <cfli0@nuvoton.com>
+References: <20220510032558.10304-1-ychuang3@nuvoton.com>
+ <20220510032558.10304-4-ychuang3@nuvoton.com>
+ <03ac0a67-bd1f-12ca-74f7-8d5b05857ea7@linaro.org>
+From:   Jacky Huang <ychuang3@nuvoton.com>
+In-Reply-To: <03ac0a67-bd1f-12ca-74f7-8d5b05857ea7@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,235 +56,234 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Daniel Wagner reported to me that readproc.h got deprecated. Also,
-while the procps-ng library was available on Fedora, it was not available
-on RHEL, which is a piece of evidence that it was not that used.
 
-rtla uses procps-ng only to find the PID of the tracers' workload.
 
-I used the procps-ng library to avoid reinventing the wheel. But in this
-case, reinventing the wheel took me less time than the time we already
-took trying to work around problems.
+On 2022/5/12 下午 10:10, Krzysztof Kozlowski wrote:
+> On 10/05/2022 05:25, Jacky Huang wrote:
+>> Add the initial device tree files for Nuvoton MA35D1 Soc.
+>>
+>> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+>> ---
+>>   arch/arm64/boot/dts/Makefile               |   1 +
+>>   arch/arm64/boot/dts/nuvoton/Makefile       |   2 +
+>>   arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts |  24 +++++
+>>   arch/arm64/boot/dts/nuvoton/ma35d1.dtsi    | 120 +++++++++++++++++++++
+>>   4 files changed, 147 insertions(+)
+>>   create mode 100644 arch/arm64/boot/dts/nuvoton/Makefile
+>>   create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts
+>>   create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
+>>
+>> diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
+>> index 1ba04e31a438..7b107fa7414b 100644
+>> --- a/arch/arm64/boot/dts/Makefile
+>> +++ b/arch/arm64/boot/dts/Makefile
+>> @@ -19,6 +19,7 @@ subdir-y += lg
+>>   subdir-y += marvell
+>>   subdir-y += mediatek
+>>   subdir-y += microchip
+>> +subdir-y += nuvoton
+>>   subdir-y += nvidia
+>>   subdir-y += qcom
+>>   subdir-y += realtek
+>> diff --git a/arch/arm64/boot/dts/nuvoton/Makefile b/arch/arm64/boot/dts/nuvoton/Makefile
+>> new file mode 100644
+>> index 000000000000..e1e0c466bf5e
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/nuvoton/Makefile
+>> @@ -0,0 +1,2 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +dtb-$(CONFIG_ARCH_NUVOTON) += ma35d1-evb.dtb
+>> diff --git a/arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts b/arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts
+>> new file mode 100644
+>> index 000000000000..95f0facb0476
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts
+>> @@ -0,0 +1,24 @@
+>> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +/*
+>> + * Device Tree Source for MA35D1 Evaluation Board (EVB)
+>> + *
+>> + * Copyright (C) 2022 Nuvoton Technology Corp.
+>> + */
+>> +
+>> +/dts-v1/;
+>> +#include "ma35d1.dtsi"
+>> +
+>> +/ {
+>> +	model = "Nuvoton MA35D1-EVB";
+>> +	compatible = "nuvoton,ma35d1-evb", "nuvoton,ma35d1";
+>> +
+>> +	chosen {
+>> +		stdout-path = "serial0:115200n8";
+>> +	};
+>> +
+>> +	memory@80000000 {
+>> +		device_type = "memory";
+>> +		reg = <0x0 0x80000000 0x0 0x10000000>;
+>> +	};
+>> +};
+>> +
+>
+> .git/rebase-apply/patch:60: new blank line at EOF.
+>
+> +
+>
+> warning: 1 line adds whitespace errors.
+>
 
-Implement a function that reads /proc/ entries, checking if:
-	- the entry is a directory
-	- the directory name is composed only of digits (PID)
-	- the directory contains the comm file
-	- the comm file contains a comm that matches the tracers'
-	  workload prefix.
-	- then return true; otherwise, return false.
+I will fix it.
 
-And use it instead of procps-ng.
+>
+>> diff --git a/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi b/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
+>> new file mode 100644
+>> index 000000000000..7212f8de6906
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
+>> @@ -0,0 +1,120 @@
+>> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +/*
+>> + * Copyright (c) 2022 Nuvoton Technology Corp.
+>> + */
+>> +
+>> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+>> +#include <dt-bindings/input/input.h>
+>> +#include <dt-bindings/gpio/gpio.h>
+>> +#include <dt-bindings/clock/nuvoton,ma35d1-clk.h>
+>> +
+>> +/ {
+>> +	compatible = "nuvoton,ma35d1";
+>> +	interrupt-parent = <&gic>;
+>> +	#address-cells = <2>;
+>> +	#size-cells = <2>;
+>> +
+>> +	cpus {
+>> +		#address-cells = <1>;
+>> +		#size-cells = <0>;
+>> +		cpu-map {
+>> +			cluster0 {
+>> +				core0 {
+>> +					cpu = <&cpu0>;
+>> +				};
+>> +				core1 {
+>> +					cpu = <&cpu1>;
+>> +				};
+>> +			};
+>> +		};
+>> +
+>> +		cpu0: cpu@0 {
+>> +			device_type = "cpu";
+>> +			compatible = "arm,cortex-a35";
+>> +			reg = <0x0>;
+>> +			enable-method = "psci";
+>> +			next-level-cache = <&L2_0>;
+>> +		};
+>> +
+>> +		cpu1: cpu@1 {
+>> +			device_type = "cpu";
+>> +			compatible = "arm,cortex-a35";
+>> +			reg = <0x1>;
+>> +			enable-method = "psci";
+>> +			next-level-cache = <&L2_0>;
+>> +		};
+>> +
+>> +		L2_0: l2-cache0 {
+>> +			compatible = "cache";
+>> +			cache-level = <2>;
+>> +		};
+>> +	};
+>> +
+>> +	psci {
+>> +		compatible = "arm,psci-0.2";
+>> +		method = "smc";
+>> +	};
+>> +
+>> +	hxt_24m: hxt_24mhz {
+> No underscores in node name. Generic node names, so "clock-X" or
+> "clock-some-suffix"
 
-Cc: John Kacur <jkacur@redhat.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Tao Zhou <tao.zhou@linux.dev>
-Fixes: b1696371d865 ("rtla: Helper functions for rtla")
-Reported-by: Daniel Wagner <dwagner@suse.de>
-Reviewed-by: Daniel Wagner <dwagner@suse.de>
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
----
-Changes from V3:
-  - check opendir() for NULL 
-Changes from V2: 
-  - Add a space in char *t_name;
-  - s/procps/procfs/ in set_comm_sched_attr() comment
-Changes from V1:
-  - Use a single buffer for comm and comm_path
-  - Cause an error in case of a too long command prefix
-  - Do a close_dir()
-  - Improve log messages
+OK, I will modify it as
+  hxt-24m: hxt-24mhz
 
- tools/tracing/rtla/Makefile    |   2 +-
- tools/tracing/rtla/README.txt  |   1 -
- tools/tracing/rtla/src/utils.c | 106 ++++++++++++++++++++++++++-------
- tools/tracing/rtla/src/utils.h |   3 +-
- 4 files changed, 88 insertions(+), 24 deletions(-)
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +		clock-frequency = <24000000>;
+> This does not look like property of SoC. Where is this clock defined? In
+> the SoC or on the board?
 
-diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
-index 5a3226e436ef..523f0a8c38c2 100644
---- a/tools/tracing/rtla/Makefile
-+++ b/tools/tracing/rtla/Makefile
-@@ -32,7 +32,7 @@ TRACEFS_HEADERS	:= $$($(PKG_CONFIG) --cflags libtracefs)
- 
- CFLAGS	:=	-O -g -DVERSION=\"$(VERSION)\" $(FOPTS) $(MOPTS) $(WOPTS) $(TRACEFS_HEADERS)
- LDFLAGS	:=	-ggdb
--LIBS	:=	$$($(PKG_CONFIG) --libs libtracefs) -lprocps
-+LIBS	:=	$$($(PKG_CONFIG) --libs libtracefs)
- 
- SRC	:=	$(wildcard src/*.c)
- HDR	:=	$(wildcard src/*.h)
-diff --git a/tools/tracing/rtla/README.txt b/tools/tracing/rtla/README.txt
-index 0fbad2640b8c..4af3fd40f171 100644
---- a/tools/tracing/rtla/README.txt
-+++ b/tools/tracing/rtla/README.txt
-@@ -11,7 +11,6 @@ RTLA depends on the following libraries and tools:
- 
-  - libtracefs
-  - libtraceevent
-- - procps
- 
- It also depends on python3-docutils to compile man pages.
- 
-diff --git a/tools/tracing/rtla/src/utils.c b/tools/tracing/rtla/src/utils.c
-index 3bd6f64780cf..5352167a1e75 100644
---- a/tools/tracing/rtla/src/utils.c
-+++ b/tools/tracing/rtla/src/utils.c
-@@ -3,7 +3,7 @@
-  * Copyright (C) 2021 Red Hat Inc, Daniel Bristot de Oliveira <bristot@kernel.org>
-  */
- 
--#include <proc/readproc.h>
-+#include <dirent.h>
- #include <stdarg.h>
- #include <stdlib.h>
- #include <string.h>
-@@ -262,43 +262,107 @@ int __set_sched_attr(int pid, struct sched_attr *attr)
- 
- 	return 0;
- }
-+
-+/*
-+ * procfs_is_workload_pid - check if a procfs entry contains a comm_prefix* comm
-+ *
-+ * Check if the procfs entry is a directory of a process, and then check if the
-+ * process has a comm with the prefix set in char *comm_prefix. As the
-+ * current users of this function only check for kernel threads, there is no
-+ * need to check for the threads for the process.
-+ *
-+ * Return: True if the proc_entry contains a comm file with comm_prefix*.
-+ * Otherwise returns false.
-+ */
-+static int procfs_is_workload_pid(const char *comm_prefix, struct dirent *proc_entry)
-+{
-+	char buffer[MAX_PATH];
-+	int comm_fd, retval;
-+	char *t_name;
-+
-+	if (proc_entry->d_type != DT_DIR)
-+		return 0;
-+
-+	if (*proc_entry->d_name == '.')
-+		return 0;
-+
-+	/* check if the string is a pid */
-+	for (t_name = proc_entry->d_name; t_name; t_name++) {
-+		if (!isdigit(*t_name))
-+			break;
-+	}
-+
-+	if (*t_name != '\0')
-+		return 0;
-+
-+	snprintf(buffer, MAX_PATH, "/proc/%s/comm", proc_entry->d_name);
-+	comm_fd = open(buffer, O_RDONLY);
-+	if (comm_fd < 0)
-+		return 0;
-+
-+	memset(buffer, 0, MAX_PATH);
-+	retval = read(comm_fd, buffer, MAX_PATH);
-+
-+	close(comm_fd);
-+
-+	if (retval <= 0)
-+		return 0;
-+
-+	retval = strncmp(comm_prefix, buffer, strlen(comm_prefix));
-+	if (retval)
-+		return 0;
-+
-+	/* comm already have \n */
-+	debug_msg("Found workload pid:%s comm:%s", proc_entry->d_name, buffer);
-+
-+	return 1;
-+}
-+
- /*
-- * set_comm_sched_attr - set sched params to threads starting with char *comm
-+ * set_comm_sched_attr - set sched params to threads starting with char *comm_prefix
-  *
-- * This function uses procps to list the currently running threads and then
-- * set the sched_attr *attr to the threads that start with char *comm. It is
-+ * This function uses procfs to list the currently running threads and then set the
-+ * sched_attr *attr to the threads that start with char *comm_prefix. It is
-  * mainly used to set the priority to the kernel threads created by the
-  * tracers.
-  */
--int set_comm_sched_attr(const char *comm, struct sched_attr *attr)
-+int set_comm_sched_attr(const char *comm_prefix, struct sched_attr *attr)
- {
--	int flags = PROC_FILLCOM | PROC_FILLSTAT;
--	PROCTAB *ptp;
--	proc_t task;
-+	struct dirent *proc_entry;
-+	DIR *procfs;
- 	int retval;
- 
--	ptp = openproc(flags);
--	if (!ptp) {
--		err_msg("error openproc()\n");
--		return -ENOENT;
-+	if (strlen(comm_prefix) >= MAX_PATH) {
-+		err_msg("Command prefix is too long: %d < strlen(%s)\n",
-+			MAX_PATH, comm_prefix);
-+		return 1;
- 	}
- 
--	memset(&task, 0, sizeof(task));
-+	procfs = opendir("/proc");
-+	if (!procfs) {
-+		err_msg("Could not open procfs\n");
-+		return 1;
-+	}
- 
--	while (readproc(ptp, &task)) {
--		retval = strncmp(comm, task.cmd, strlen(comm));
--		if (retval)
-+	while ((proc_entry = readdir(procfs))) {
-+
-+		retval = procfs_is_workload_pid(comm_prefix, proc_entry);
-+		if (!retval)
- 			continue;
--		retval = __set_sched_attr(task.tid, attr);
--		if (retval)
-+
-+		/* procfs_is_workload_pid confirmed it is a pid */
-+		retval = __set_sched_attr(atoi(proc_entry->d_name), attr);
-+		if (retval) {
-+			err_msg("Error setting sched attributes for pid:%s\n", proc_entry->d_name);
- 			goto out_err;
--	}
-+		}
- 
--	closeproc(ptp);
-+		debug_msg("Set sched attributes for pid:%s\n", proc_entry->d_name);
-+	}
- 	return 0;
- 
- out_err:
--	closeproc(ptp);
-+	closedir(procfs);
- 	return 1;
- }
- 
-diff --git a/tools/tracing/rtla/src/utils.h b/tools/tracing/rtla/src/utils.h
-index fa08e374870a..5571afd3b549 100644
---- a/tools/tracing/rtla/src/utils.h
-+++ b/tools/tracing/rtla/src/utils.h
-@@ -6,6 +6,7 @@
-  * '18446744073709551615\0'
-  */
- #define BUFF_U64_STR_SIZE	24
-+#define MAX_PATH		1024
- 
- #define container_of(ptr, type, member)({			\
- 	const typeof(((type *)0)->member) *__mptr = (ptr);	\
-@@ -53,5 +54,5 @@ struct sched_attr {
- };
- 
- int parse_prio(char *arg, struct sched_attr *sched_param);
--int set_comm_sched_attr(const char *comm, struct sched_attr *attr);
-+int set_comm_sched_attr(const char *comm_prefix, struct sched_attr *attr);
- int set_cpu_dma_latency(int32_t latency);
--- 
-2.32.0
+It's an external crystal on the board.
+I add this node, because it's the clock source of clock controller.
+It always present on all ma35d1 boards.
+
+     clk: clock-controller@40460200 {
+         compatible = "nuvoton,ma35d1-clk";
+         reg = <0x0 0x40460200 0x0 0x100>;
+         #clock-cells = <1>;
+         clocks = <&hxt_24m>;
+         clock-names = "HXT_24MHz";
+...
+
+>> +		clock-output-names = "HXT_24MHz";
+>> +	};
+>> +
+>> +	timer {
+>> +		compatible = "arm,armv8-timer";
+>> +		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) |
+>> +					  IRQ_TYPE_LEVEL_LOW)>,
+>> +			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) |
+>> +					  IRQ_TYPE_LEVEL_LOW)>,
+>> +			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) |
+>> +					  IRQ_TYPE_LEVEL_LOW)>,
+>> +			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) |
+>> +					  IRQ_TYPE_LEVEL_LOW)>;
+>> +		clock-frequency = <12000000>;
+>> +	};
+>> +
+>> +	sys: system-controller@40460000 {
+>> +		compatible = "nuvoton,ma35d1-sys", "syscon", "simple-mfd";
+> Why is this a simple-mfd if there are no children here? What do you want
+> to instantiate here?
+
+It's not a device, but a set of registers for system level control.
+I want to provide a register base mapping for other devices to access 
+system control registers.
+
+> Where is the nuvoton,ma35d1-sys compatible documented?
+
+OK, I will add the compatible document in next version.
+
+
+>> +		reg = <0x0 0x40460000 0x0 0x400>;
+>> +	};
+>> +
+>> +	reset: reset-controller {
+>> +		compatible = "nuvoton,ma35d1-reset";
+> Also not documented.
+
+I will also add the document for it.
+
+>
+>> +		nuvoton,ma35d1-sys = <&sys>;
+>> +		#reset-cells = <1>;
+>> +	};
+>> +
+>> +	clk: clock-controller@40460200 {
+>> +		compatible = "nuvoton,ma35d1-clk";
+>> +		reg = <0x0 0x40460200 0x0 0x100>;
+>> +		#clock-cells = <1>;
+>> +		clocks = <&hxt_24m>;
+>> +		clock-names = "HXT_24MHz";
+> Please test your DTS with make dtbs_check.
+>
+> Don't send DTS which does not pass the checks. It is unnecessary use of
+> reviewers time when the same job can be done by automated tools.
+>
+> Best regards,
+> Krzysztof
+
+Yes, I read the "writing-schema.rst" and know how to do now.
+Thank you.
+
+Sincerely,
+Jacky Huang
+
+

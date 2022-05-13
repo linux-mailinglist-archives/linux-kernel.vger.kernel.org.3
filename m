@@ -2,98 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D272D52697D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 20:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0633E526981
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 20:43:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383319AbiEMSmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 14:42:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45996 "EHLO
+        id S1383378AbiEMSmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 14:42:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348518AbiEMSmE (ORCPT
+        with ESMTP id S1348518AbiEMSmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 14:42:04 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C459FBE0B
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 11:42:03 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id g6so17916037ejw.1
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 11:42:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OAQeIBf4PvlO0it5TTCjNPqNomKKAaQVUSfYda6ECZw=;
-        b=VC/H6f/7g19TaXnE96fTaD/G7yxQezCnJRFTTuVSlm2tUwzE2nEqWXrhMjxQzFpmks
-         eq/SLEbaoFDjS0ArsYXvLXJkPJMBaeCOccMhJdKvsy6UiRJLQWqFo0dxGIntj49n4Xim
-         kQHjjezNuUP0xKkwVaAY72dA9uAA1uwTb1ApvYiiDhgO8lx3QjguokP85uLOekK63gGc
-         13TnV2fQ27lrj45aGYYwAlFfYoK25BVIRwl6Ndayr8fRK5Vy4UwTtKoiTFXjN4Nc8p35
-         CsolvBbY2P1QT6l3VafV6M3tnqqgZbNr6vPxz7/46iy6Z4TrOoNwqf/UzvCx3UcAyiM2
-         sYHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OAQeIBf4PvlO0it5TTCjNPqNomKKAaQVUSfYda6ECZw=;
-        b=Ns67iEZVWBLNDozIX+vYkes1LcXn/9wlLug49e63VgOtFohLn1NtG4JLPeYWuh8vvf
-         Ej9b5jtwZsMbiTceZQZKQ1Nuf8ePmKbhds6lO2HPFQY13FHOqRZ0OW7z7s6HJHS4Kqpz
-         qHac1giilMkGMdExvxSYvnZ8ZjIZ7LIO4Ogf5NvR/BYHJTRa0mHhB3J4Id9dpDsORGvM
-         mmX1W0b5j4u/5JT7kCjAxWpEzaZN3hYAjFu7DvJZkpAdfHmYDCcy2KqHhTrivdfjJh0Y
-         zuodw7TRgKiveo9/XaFOHK4gZ5NExfuy0bFC3R3uaDy35UreH2PR25xR1NopUZY0vVGE
-         mg8A==
-X-Gm-Message-State: AOAM533iJgHAyLHbT2WffRu6rrt92SgoO7VjoTDGTcIDGTZ7qJKHTcKJ
-        U/od4q/EPkkwpZGMEABI0LqM8JEKkdTfY0pSjmTb4w==
-X-Google-Smtp-Source: ABdhPJzcAnNGF5kTV7YNJbqjKzLHe+3AjZK0R519qbPTPUqCf/7lfPt8UJfkm/fKrWAuqWzncPeZbfaDoSgxdJNPKlw=
-X-Received: by 2002:a17:906:7309:b0:6f5:ea1:afa with SMTP id
- di9-20020a170906730900b006f50ea10afamr5382431ejc.170.1652467322175; Fri, 13
- May 2022 11:42:02 -0700 (PDT)
+        Fri, 13 May 2022 14:42:47 -0400
+Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2085.outbound.protection.outlook.com [40.92.103.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F82BE0B;
+        Fri, 13 May 2022 11:42:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lbTN6sOaPVFx79bMqFMJeImYxbLZi5Vr/vuMMhkNFG4hSRAc9s7GuAtJ48zd5mDPm8MHUPq0yNflgyTwWXjUUQv9bf8QZioP000gFIjItV7AhyRZjJJ5C6Q8iWvkKMgk4Cz5dkKjJa/N5HKsfeh9iFuGBaA/dONJqY1jaosEVeWUMauBxK7VTWwCnhiE93W16n6WFGuq6CHgCyuExx6HFx/Ie8FO5lCtNozPcmHhBCjBFBOqU+YeHISSk084T0fS0OBuBMNxv5DealoDWsmCLbwIelNysXKlI2sMiksStMD47+u9ErqNq2nlTgK78tAkNMWJxf1EahcPaIIRStmvNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1mF8aTcZQd/8S8CC8mOSx3C0tXDgJc2YfYKQlVJ6nn0=;
+ b=ZmOrOwHvjSQzcj2faLbXDwRmXVl/FqzIeE1RhYpqgd1bW2dO8MBbuVDUvW7uz/SqRSHTQqvUzW3jH+qJwaD0qkxIC09Fb7kBrXRLtpc6nd1QBteaGo4vKU8mtxWoNdmOrsabrxoEklqlIQLnqvyhggw8Bmi/YuAIqSehnd1YbsGh2zJMqt+aEjh++QfcO4ob6A1hb2BQXf/CveJ3zEN3aXqb4UoNlzXU2BRnMUWidoHYRowHE7KIdqhxA5Qx1rwvkn0syg5DSRFMrNvMjGwyDyGWt4EHh5n88fq8jSmnTLiPhQeSnRRidXndnwE3iUWzchkiQ9WbUZVS7AU1bLUjwA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1mF8aTcZQd/8S8CC8mOSx3C0tXDgJc2YfYKQlVJ6nn0=;
+ b=clUgWsax1GOt/DuUyDa+WGa0fULhfyYKOfK405ny9JsP1sCV8m/mezVDklXi01Ht5FNHZjEtbss/9Z1VnDGdZS5rGv6K/KI71+Fs2IuKkR14VrAmBRL8GzTCHnuxnDXYxcZBHXLWHka+N2y/6RR0YgDD8AmHQLCphA1tnKvTmQgxgqNUB7d84Ppehwr4pZ57wOc6af6kgZL5uslDBirZ4AXPH91I/HNXeRR5xc10qgv5y0e8g9TK9n8KFeE0/M16JqFjFtLRTUlA1VGLYwgAZRhRTPYAlU+A3DhTuMHvda87nX5/5sp6rKUS49xq35H3DR/uhdofDHoZX8dDUoGPcA==
+Received: from MA1PR01MB2699.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:3f::13)
+ by BMXPR01MB4870.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b01:17::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24; Fri, 13 May
+ 2022 18:42:40 +0000
+Received: from MA1PR01MB2699.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::5d49:a134:d234:58f2]) by MA1PR01MB2699.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::5d49:a134:d234:58f2%4]) with mapi id 15.20.5227.024; Fri, 13 May 2022
+ 18:42:40 +0000
+From:   Srinivasan R <srinir@outlook.com>
+Cc:     Srinivasan R <srinir@outlook.com>, Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org (open list:NETWORKING DRIVERS (WIRELESS)),
+        netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] wireless: Fix Makefile to be in alphabetical order
+Date:   Fri, 13 May 2022 19:42:20 +0100
+Message-ID: <MA1PR01MB26992E104B006B340C3C3A84C1CA9@MA1PR01MB2699.INDPRD01.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN:  [eJfLUKHqTDCs7xOpCVGMpU9avnVwk4u2]
+X-ClientProxiedBy: LO2P265CA0120.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:c::36) To MA1PR01MB2699.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:3f::13)
+X-Microsoft-Original-Message-ID: <20220513184220.15086-1-srinir@outlook.com>
 MIME-Version: 1.0
-References: <20220513085108.3567310-1-davidgow@google.com> <CAGS_qxpZBd_ViGvWQxmhnThQ1YBb3k1DhmkHcmENzW9SY9hS4w@mail.gmail.com>
-In-Reply-To: <CAGS_qxpZBd_ViGvWQxmhnThQ1YBb3k1DhmkHcmENzW9SY9hS4w@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 13 May 2022 11:41:51 -0700
-Message-ID: <CAGS_qxp7YrsdMrvpqr0Xy3F8z5HCjt=6Lm2CDTAtqSEOBBO6Tg@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: Use qemu-system-i386 for i386 runs
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3241f213-f080-409e-7485-08da35105bc9
+X-MS-Exchange-SLBlob-MailProps: mBRmoEB1kyL0YvOEiR9yBstXttwQywY+o0uPrARMIdrSWdLN3OwdPgZ2Cvxdyz0jQmI/a9o/Ode5v9KHSFi8gHsmPuAwRdauDJ9j7+LfSOwEyURTayyCdHhf85zdOnPIF9xsebjYnT/ebSBAAZY+vKuxKc6ybscgq3ns1SgDPgDXbpAMdjdoaWBx1uyUfhWTdLtmOG5Gw2IqLj6e4fFH7DLqhXV8QZmjuc6Jm3Fo9AobgWG2LOjDHtsf+2aHM1K4LHarEjmG2fcJlkgSfus5tG4Xlpfv8EGYxejQ3cXVvY4Kv1txAsr/lVVkRrtjzYtly38JxOPLSxtvR80g4hVDXAWkQiloyJ4WLEOlITLzyaX7tlMvBUKzoJMH7a+/f5n1OowaZ1DvbH7PWOzRC3QT1tvj5iu9yTli3XJfkY7Jol3B3kvejO3hcGwSHseqt3gUtyTYpc1jVMMDvDZaAcSHi1fGBrv0XXyNhiMg/EaHSXN0UYBSGmPBO0M351j4PYotl/LxX04xNOvkvr9ekSSyMv6Ql+7Xbn5fbTD2MBcle0lQttdHnv0ouCiMLsH4qVCP2Fz7VG7qWPa8gRiB+N4mOtVKOJ01coGnkNd8v+Q1vQo4SVTfiT1dfz5r509HKqjvYWvvfCf60qhUifv/pIx15PIZQXOkup9uJdt473ARTvBm61E0d+Ez0ePqcpJIP5FdlN1WpyAmmyheneQiV9vfOtfVmJLmnAkx1+rM1hgHgn55WGxqS/ikOvHok3EtmWJrAM/mFMHojAw=
+X-MS-TrafficTypeDiagnostic: BMXPR01MB4870:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /hH8J1DP/4lKn3N5wQ4ZuDcUkHfihqtMl28+nk3wojNPL27J5I7xXiEUQK5Du3RUR2I1ePGhh47SQ2vCUasPSIkBzRsMp5KEjkUMp0QSuint6bXbas0Zh8PMQHW2GWtk1XeqrJd3KGjQCpaLuiRsGXFg9uzG8nzb8lCx6ki/0FmCglIEFQp087yJEc8Ooo5wgSo+N87Nrqyl3cphEGmXVg/8h+QKU3ddHqseJAf6aHvcpa3y23TXzcWoYu0YEWx4U0HRSX9mYp0rOrGJvhfxBAikimta63UBXtcPOkvtsM9shuvd8ik84zSJDYrZqfz8P7TIzhGuA7VPHuX1jtlxSu2I/hlB8Z2Wve2dwwA3JHnuLJ2/7nCIta2soWoXFe3ImL7UA9VObn8M4/ccyRgNOhgXQvDkSK2b/AHk/Pe7QMhG0zp+J3n1MktsTGHVHZ2A7Hg7CKHTsNjfxARVPBTCQaZmYFiQENhJK+IL3tSj9cQYRxw2d4VBUUVcn5nmuGTN4gVb2I3Atm/jeAaCvsrv501i0fAwntC1fAlOjs/VxqHf0ntVrep+oHaEZDZgV96YNkN1rCSX1g+ul6qjDS7i5Q==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GV/Q0VXuApsqWxm5ByhZ15yaf9T4Dhsubgl4JXbHH27vpgxrDuUqiEmTqxb6?=
+ =?us-ascii?Q?D/fr5zxIMqjAg77TMEOxVFHm4g59wy9EbBWgk0Q0eF8zCOGkdCh+5iJ2EX1p?=
+ =?us-ascii?Q?nn8rCltFeSsx3HhmuFenP8P805k1dlP/HBqPKIR6Ie2VCggWEopb3DYxFbx5?=
+ =?us-ascii?Q?MMQeudsenKOOc1a3qNC9swa++jgM+RJVDZhNS53hf+FPTMHkmTmxu5TLds9X?=
+ =?us-ascii?Q?WEJtMawDfHwcb9jO/mFItiS0SzC/Ph/0vGkr8fQOiq7WDtb0pcyXmO77tGDn?=
+ =?us-ascii?Q?5VWGuHC0UV+AobKYRj/NNhIGNCAKi0e/D5bJteg0ykmAAWfTu06zG9xw524n?=
+ =?us-ascii?Q?QRBE06zCXLGNGZN5pM0YlbFCvXIG7H3PuxJhjs/lff2SM8KBn/J7fNlaYyzZ?=
+ =?us-ascii?Q?HWtDU5miK9HjZ+Q2qLRYxcM2zDJDeQe7KS7orrxuDFa6Big37o4RkHXJJT9+?=
+ =?us-ascii?Q?ufJEXNPE087BQWt+FfC4dVGk5ef+XjLI0svnodGG113RgmuHFfp+pNBWgtlZ?=
+ =?us-ascii?Q?aAxqjE5B3HJTH1ZQd32UojfjgW5/6kzUpD0N9EdPwWr+Z5fMqYbkouWBTNnP?=
+ =?us-ascii?Q?XP198vSBafSU6PuUFoIdK8IUdneRHaSGcgc/c6Hzf9r7MdE82lrl1KXsbqJu?=
+ =?us-ascii?Q?7O0/g/pgOKnHfDXO1STg6KXBJZLe7efdirSEV4vFt7Lax7TBZ20lXHQaTud8?=
+ =?us-ascii?Q?fdTYI4p/mGZ9keiMNAJ5TDplIUi7SLAXsGIi2bEw2oAwubF2LgwhkLuze5Nz?=
+ =?us-ascii?Q?fwSgMeQ9RvZ+Tw66zMSuP575F4jJjd7mpbUyrUduW77i5+X0Z6TrSCiVNAe+?=
+ =?us-ascii?Q?KUoc/BvIgOQhmxzUlR4S0e0CA4t4ZLLfpc1n5+605ZTzGL5dEWFBz83Pl8ed?=
+ =?us-ascii?Q?boh09XVUVt9VnzZ54hKw/tWEfJlKIXDB3t9BfhK/Z9csQ1biwC2meZ3n1D/F?=
+ =?us-ascii?Q?ZweG/xHcv1ZGVHgM8Wx4/OfrzS3/QLXbZLCNEutPUVOm8+4wwK7PLL3sQDk9?=
+ =?us-ascii?Q?BlR/44B25Hk/UgIww11K401YfCj8wJVW5UdfFdGzCHPVdwYv1a7Hpqw6nEvv?=
+ =?us-ascii?Q?KyY9TCO04PntOW+abw3Kug0er2X3dWyi7m0+Bi7sBDUBU3k535dsRz9Raeyn?=
+ =?us-ascii?Q?wTIw6UteMFYVA6biKgFmXb+oLd8PAioay0PdrLqhA5kDBkAs6tGam+/YeAFU?=
+ =?us-ascii?Q?f7fdOje9IrcYxzudG4ym2vZDbmASIGG2uuOCcp+2L0ly36ze/WQ7lr6/duam?=
+ =?us-ascii?Q?aWCeMu8O0fIzlDulWaBLtqD+eCru51P1IpNX4H0JMNzvFqm6Rz2Axfyk5VIw?=
+ =?us-ascii?Q?Hagj1mGE05G2uBVBQfC6Q0COqTbKAyaK9es3qyuqQxdFL2qaDOh+dehq9e23?=
+ =?us-ascii?Q?/Xl0FisHKWap1SdvclHOw5ygdSaNysi07iErBzqKQXxQn8Fdn1b2CQNJJbfH?=
+ =?us-ascii?Q?BSl7tQq/gdw=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3241f213-f080-409e-7485-08da35105bc9
+X-MS-Exchange-CrossTenant-AuthSource: MA1PR01MB2699.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 May 2022 18:42:40.7961
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BMXPR01MB4870
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 10:56 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> On Fri, May 13, 2022 at 1:51 AM David Gow <davidgow@google.com> wrote:
-> >
-> > We're currently using the x86_64 qemu for i386 builds. While this is not
-> > incorrect, it's probably more sensible to use the i386 one, which will
-> > at least fail properly if we accidentally were to build a 64-bit kernel.
-> >
-> > Signed-off-by: David Gow <davidgow@google.com>
->
-> Tested-by: Daniel Latypov <dlatypov@google.com>
->
-> Works for me:
-> [10:55:58] Testing complete. Ran 201 tests: passed: 165, skipped: 36
-> [10:55:58] Elapsed time: 21.268s total, 0.003s configuring, 4.009s
-> building, 16.967s running
->
-> Side note:
-> I ran into an unrelated bug where running on QEMU in general seems to
-> hang when you try to filter to a test suite that doesn't exist.
-> I've confirmed it happens on i386 before this patch, and it at least
-> also happens on x86_64.
+Fix quantenna to be in the right order
 
-Ah, this "unrelated bug" is my fault, specifically commit a02353f49162
-("kunit: bail out of test filtering logic quicker if OOM").
-The use of _any_ filter glob is broken on kunit.py + QEMU.
+Signed-off-by: Srinivasan R <srinir@outlook.com>
+---
+ drivers/net/wireless/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Fix is https://lore.kernel.org/linux-kselftest/20220513183707.97290-1-dlatypov@google.com/
+diff --git a/drivers/net/wireless/Makefile b/drivers/net/wireless/Makefile
+index abf3e5c87ca7..a61cf6c90343 100644
+--- a/drivers/net/wireless/Makefile
++++ b/drivers/net/wireless/Makefile
+@@ -14,6 +14,7 @@ obj-$(CONFIG_WLAN_VENDOR_MARVELL) += marvell/
+ obj-$(CONFIG_WLAN_VENDOR_MEDIATEK) += mediatek/
+ obj-$(CONFIG_WLAN_VENDOR_MICROCHIP) += microchip/
+ obj-$(CONFIG_WLAN_VENDOR_PURELIFI) += purelifi/
++obj-$(CONFIG_WLAN_VENDOR_QUANTENNA) += quantenna/
+ obj-$(CONFIG_WLAN_VENDOR_RALINK) += ralink/
+ obj-$(CONFIG_WLAN_VENDOR_REALTEK) += realtek/
+ obj-$(CONFIG_WLAN_VENDOR_RSI) += rsi/
+@@ -21,7 +22,6 @@ obj-$(CONFIG_WLAN_VENDOR_SILABS) += silabs/
+ obj-$(CONFIG_WLAN_VENDOR_ST) += st/
+ obj-$(CONFIG_WLAN_VENDOR_TI) += ti/
+ obj-$(CONFIG_WLAN_VENDOR_ZYDAS) += zydas/
+-obj-$(CONFIG_WLAN_VENDOR_QUANTENNA) += quantenna/
+ 
+ # 16-bit wireless PCMCIA client drivers
+ obj-$(CONFIG_PCMCIA_RAYCS)	+= ray_cs.o
+-- 
+2.25.1
+

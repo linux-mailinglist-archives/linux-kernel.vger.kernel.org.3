@@ -2,83 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2EB6525F61
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:08:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0A2F525F07
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379145AbiEMJtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 05:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47178 "EHLO
+        id S1379211AbiEMJwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 05:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379143AbiEMJsw (ORCPT
+        with ESMTP id S1357204AbiEMJwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 05:48:52 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9C42268EB5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 02:48:50 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9C7DE143D;
-        Fri, 13 May 2022 02:48:50 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 891E83F73D;
-        Fri, 13 May 2022 02:48:49 -0700 (PDT)
-Message-ID: <39be28ea-1645-30c3-316e-87a43b8738a8@arm.com>
-Date:   Fri, 13 May 2022 11:48:35 +0200
+        Fri, 13 May 2022 05:52:03 -0400
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3825E5838F;
+        Fri, 13 May 2022 02:51:58 -0700 (PDT)
+Received: from spock.localnet (unknown [83.148.33.151])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id 3FFFDEDD9FA;
+        Fri, 13 May 2022 11:51:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1652435515;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dkS9jvsDAiR8QpYW2hSmRXL0ArdVBFFpuCQ+UOIi0zo=;
+        b=JNG1vX/JZGDat+hBg4RxgIOTkjMrrdHKEGECZLNdlYv93vX/MpIK3+mMLWPspBhy6Un/l0
+        DDUuOUceOlCdvUPYDbD9pF8OXMN9HudeeGnLGvY+k0nJIcRSbRD5YPRC0fUV+kEp6/CpA3
+        sp5NEs+lJTJh9CysOsWP3IrNXHcBGMg=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     cgel.zte@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, corbet@lwn.net,
+        xu xin <xu.xin16@zte.com.cn>,
+        Yang Yang <yang.yang29@zte.com.cn>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        wangyong <wang.yong12@zte.com.cn>,
+        Yunkai Zhang <zhang.yunkai@zte.com.cn>,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [PATCH v6] mm/ksm: introduce ksm_force for each process
+Date:   Fri, 13 May 2022 11:51:53 +0200
+Message-ID: <1835064.A2aMcgg3dW@natalenko.name>
+In-Reply-To: <20220512153753.6f999fa8f5519753d43b8fd5@linux-foundation.org>
+References: <20220510122242.1380536-1-xu.xin16@zte.com.cn> <5820954.lOV4Wx5bFT@natalenko.name> <20220512153753.6f999fa8f5519753d43b8fd5@linux-foundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] topology: Remove unused cpu_cluster_mask()
-Content-Language: en-US
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>
-Cc:     linux-kernel@vger.kernel.org
-References: <20220513093433.425163-1-dietmar.eggemann@arm.com>
-In-Reply-To: <20220513093433.425163-1-dietmar.eggemann@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-- Barry Song <song.bao.hua@hisilicon.com> bounced
-+ Barry Song <21cnbao@gmail.com>
+Hello.
 
-On 13/05/2022 11:34, Dietmar Eggemann wrote:
-> default_topology[] uses cpu_clustergroup_mask() for the CLS level
-> (guarded by CONFIG_SCHED_CLUSTER) which is currently provided by x86
-> (arch/x86/kernel/smpboot.c) and arm64 (drivers/base/arch_topology.c).
-> 
-> Fixes: 778c558f49a2c ("sched: Add cluster scheduler level in core and
-> related Kconfig for ARM64")
-> 
-> Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> ---
->  include/linux/topology.h | 7 -------
->  1 file changed, 7 deletions(-)
-> 
-> diff --git a/include/linux/topology.h b/include/linux/topology.h
-> index f19bc3626297..4564faafd0e1 100644
-> --- a/include/linux/topology.h
-> +++ b/include/linux/topology.h
-> @@ -240,13 +240,6 @@ static inline const struct cpumask *cpu_smt_mask(int cpu)
->  }
->  #endif
->  
-> -#if defined(CONFIG_SCHED_CLUSTER) && !defined(cpu_cluster_mask)
-> -static inline const struct cpumask *cpu_cluster_mask(int cpu)
-> -{
-> -	return topology_cluster_cpumask(cpu);
-> -}
-> -#endif
-> -
->  static inline const struct cpumask *cpu_cpu_mask(int cpu)
->  {
->  	return cpumask_of_node(cpu_to_node(cpu));
+On p=C3=A1tek 13. kv=C4=9Btna 2022 0:37:53 CEST Andrew Morton wrote:
+> On Tue, 10 May 2022 15:30:36 +0200 Oleksandr Natalenko <oleksandr@natalen=
+ko.name> wrote:
+>=20
+> > > If ksm_force is set to 1, force all anonymous and 'qualified' VMAs
+> > > of this mm to be involved in KSM scanning without explicitly calling
+> > > madvise to mark VMA as MADV_MERGEABLE. But It is effective only when
+> > > the klob of /sys/kernel/mm/ksm/run is set as 1.
+> > >=20
+> > > If ksm_force is set to 0, cancel the feature of ksm_force of this
+> > > process (fallback to the default state) and unmerge those merged pages
+> > > belonging to VMAs which is not madvised as MADV_MERGEABLE of this pro=
+cess,
+> > > but still leave MADV_MERGEABLE areas merged.
+> >=20
+> > To my best knowledge, last time a forcible KSM was discussed (see threa=
+ds [1], [2], [3] and probably others) it was concluded that a) procfs was a=
+ horrible interface for things like this one; and b) process_madvise() sysc=
+all was among the best suggested places to implement this (which would requ=
+ire a more tricky handling from userspace, but still).
+> >=20
+> > So, what changed since that discussion?
+> >=20
+> > P.S. For now I do it via dedicated syscall, but I'm not trying to upstr=
+eam this approach.
+>=20
+> Why are you patching the kernel with a new syscall rather than using
+> process_madvise()?
+
+Because I'm not sure how to use `process_madvise()` to achieve $subj proper=
+ly.
+
+The objective is to mark all the eligible VMAs of the target task for KSM t=
+o consider them for merging.
+
+=46or that, all the eligible VMAs have to be traversed.
+
+Given `process_madvise()` has got an iovec API, this means the process that=
+ will call `process_madvise()` has to know the list of VMAs of the target p=
+rocess. In order to traverse them in a race-free manner the target task has=
+ to be SIGSTOP'ped or frozen, then the list of VMAs has to be obtained, the=
+n `process_madvise()` has to be called, and the the target task can continu=
+e. This is:
+
+a) superfluous (the kernel already knows the list of VMAs of the target tas=
+ks, why proxy it through the userspace then?); and
+b) may induce more latency than needed because the target task has to be st=
+opped to avoid races.
+
+OTOH, IIUC, even if `MADV_MERGEABLE` is allowed for `process_madvise()`, I =
+cannot just call it like this:
+
+```
+iovec.iov_base =3D 0;
+iovec.iov_len =3D ~0ULL;
+process_madvise(pidfd, &iovec, 1, MADV_MERGEABLE, 0);
+```
+
+to cover the whole address space because iovec expects total size to be und=
+er ssize_t.
+
+Or maybe there's no need to cover the whole address space, only the lower h=
+alf of it?
+
+Or maybe there's another way of doing things, and I just look stupid and do=
+ not understand how this is supposed to work?..
+
+I'm more than happy to read your comments on this.
+
+Thanks.
+
+=2D-=20
+Oleksandr Natalenko (post-factum)
+
 

@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02F8526686
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8969E526688
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 17:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352309AbiEMPvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 11:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
+        id S1382258AbiEMPvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 11:51:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382236AbiEMPvf (ORCPT
+        with ESMTP id S1382241AbiEMPvp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 11:51:35 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7076D1C194A
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:51:33 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id t25so10782228ljd.6
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:51:33 -0700 (PDT)
+        Fri, 13 May 2022 11:51:45 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF13F1CA37D
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:51:43 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id v4so10753395ljd.10
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 08:51:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=openvz-org.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:from:subject:to:cc
          :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=IP/MtSVvzJ/bhLb4+LDG0mt6t+bR404YNxnNxB9WXdQ=;
-        b=ZTvGUxx+bqs7G43Y9J4k2N8IGv8khnio1qYn73SlayvQ/r5mHllE/Sy5bWspDy75+V
-         0lkyLZxZH6SBi0h1QvAuKgIQwbzRZYg7U2FVccpAuIqUudZREn6QZm9qKhGvKCTbDUf7
-         o+LcxzmL6UhIhpU0wy8Z7zr5GGP7jDjXXaWZAng491tXujgLFJlXtI+UKliaXD/7qT3Q
-         sUwNYuZYH0uydXxiSLJ877S6Nwbe4nykxICtiszOZjT8cjeNN6gaI7vYHXGYANxUUwjm
-         17TK1DSD8svCjMszKVJBHJdLdSf7cOJAJ6drnnILi4L3kYZ2r+XG2CIWf/6Z3njSOQ5Q
-         nwSg==
+        bh=BfP2QbXgT8q1zmWgkJaryOzl/XyZ6at33g2N+Nc7zPk=;
+        b=6txlcoWsI7zISUGe8NDPxDUvF4kxC8y2X+5UrIZhcNoNC4JYSC+cvbM3sadqCcowD5
+         tBTAsgj2kyaKHkYS2MQXT3BnB/qshrnISvYN79+/iIGWgJJaJLjCM2zBwRoMUbxdcKbd
+         YWtfJwqfhXXwkR+uTIjD8TZ0BDxmWa6rVDorB1nAFEXWNk6CeK2E6IW0ZLeYf8NgNPxX
+         N+hEFX8HsYeMR9oALprdTIkHW+6sTaM1Z3Nrh/FOYbCU7ZQImBQ3NZRUPUoW7zp3Nvi6
+         kb1HHi3tcQxLNSCyEGuVbibNfAS2WKstPOQgXJCqc5rLtsuiUof/D2Us/qfbG4/ITDwG
+         oEhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:from
          :subject:to:cc:references:content-language:in-reply-to
          :content-transfer-encoding;
-        bh=IP/MtSVvzJ/bhLb4+LDG0mt6t+bR404YNxnNxB9WXdQ=;
-        b=2TfYqlcRhsRH+yY2dSvZZYKcgGhwuKHHTDrotPwN+f8sb7pZBLukq1LMgYabbLdRSv
-         FcI6hceWqpbUSTchfaMCLSJ9nahrFbVuFXdums5dE+PGNvEJunRQ6oKH/qRUv6aMqPZX
-         ABWaFvEal7vzVf4PRQSlajtY1yF1Ndqkgfv+IuV6H3JoVS5qFxMf4Sxs30wImY9JNDsw
-         unXfpuyoqjBwTNiSHcVFBdVJope33rBvGfQdLUvsWVhoQm7c47V+fxG+YXuPXdd6kXvX
-         47Ltt0Mzf4YkUJio6OoC+pcldxF6KdDfNCHRGHyYAKcQDgLs+GK8DX/ShufY7+N6HHb9
-         XVpQ==
-X-Gm-Message-State: AOAM5313qPTFOYx97THunKqsJik9zdc7oDynWjsC1f99QSbWgLv1K8xf
-        U2ZtQ29+Dbrh+uzOb74v7CuPOw==
-X-Google-Smtp-Source: ABdhPJwrvykw6QdUYYMuVpIWH5OvKCp0SSrH1ihEFC1j+7Pas6+1y0I6URHagNnY+VYb4mVCWaYihA==
-X-Received: by 2002:a2e:b5d1:0:b0:24f:331d:f9b6 with SMTP id g17-20020a2eb5d1000000b0024f331df9b6mr3416060ljn.302.1652457091718;
-        Fri, 13 May 2022 08:51:31 -0700 (PDT)
+        bh=BfP2QbXgT8q1zmWgkJaryOzl/XyZ6at33g2N+Nc7zPk=;
+        b=de5ZIBdYoJ7oXwTEt5ZVj7dHB0pxQ3LlBhxJ2MKiYNJtLuaC4LT10lZ3MwV+4OkpGR
+         Oxn1cQusqDrCUYXS/hdB7PSvxHirS3ct8JpL5/0HXM30Ar6xECEYMA6mk+JwjZG+FboM
+         r3rFtv6VM6IMSseJ7FYAA94TzHNjV+PIXjYFa7Imrw2gdRPDfOMqbq0kv/T3HQgvdySx
+         bu9zHupaDrKPr+76ecKDCxeQiizYKWcZviXyPKlDy71KUX8CqtFempvvYmBoXls52eVy
+         MM5MA2B7MCUakwMkD3kZd6x4krSDmvZct4ng/fm+UJvGE6o8wH8xHXZ06IC3oNscieZJ
+         K8LA==
+X-Gm-Message-State: AOAM531WwfTZ0pejQziKY0RP7su5zC38kBHWrxWjdQhi+JPPg3rT9bZy
+        lAxQLcJo64/L1000BJ8H47yZ5g==
+X-Google-Smtp-Source: ABdhPJxkmSE+IMS3ldUTKxPxE84CStz6Z6YAfSmdh4HrV4fjZiG7ldrJshdJ+SjCwTqbfEpNHmlVSQ==
+X-Received: by 2002:a05:651c:887:b0:247:f630:d069 with SMTP id d7-20020a05651c088700b00247f630d069mr3526936ljq.514.1652457102115;
+        Fri, 13 May 2022 08:51:42 -0700 (PDT)
 Received: from [192.168.1.65] ([46.188.121.177])
-        by smtp.gmail.com with ESMTPSA id g1-20020a19ac01000000b0047255d211f4sm412119lfc.291.2022.05.13.08.51.30
+        by smtp.gmail.com with ESMTPSA id b2-20020ac25e82000000b0047255d211dasm413459lfq.265.2022.05.13.08.51.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 08:51:31 -0700 (PDT)
-Message-ID: <1c14dce9-1981-2690-0e35-58e2d9fbc0da@openvz.org>
-Date:   Fri, 13 May 2022 18:51:30 +0300
+        Fri, 13 May 2022 08:51:41 -0700 (PDT)
+Message-ID: <212f1b74-7d4e-29f2-9e92-2a1820beff61@openvz.org>
+Date:   Fri, 13 May 2022 18:51:41 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
 From:   Vasily Averin <vvs@openvz.org>
-Subject: [PATCH 0/4] memcg: accounting for objects allocated by mkdir cgroup
+Subject: [PATCH 1/4] memcg: enable accounting for large allocations in
+ mem_cgroup_css_alloc
 To:     Roman Gushchin <roman.gushchin@linux.dev>,
         Shakeel Butt <shakeelb@google.com>,
         =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
@@ -69,92 +70,70 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Below is tracing results of mkdir /sys/fs/cgroup/vvs.test on 
-4cpu VM with Fedora and self-complied upstream kernel. The calculations
-are not precise, it depends on kernel config options, number of cpus,
-enabled controllers, ignores possible page allocations etc.
-However this is enough to clarify the general situation:
-- Total sum of accounted memory is ~60Kb.
-- Accounted only 2 huge percpu allocation marked '=', ~18Kb.
-  (and can be 0 without memory controller)
-- kernfs nodes and iattrs are among the main memory consumers.
-   they are marked '+' to be accounted.
-- cgroup_mkdir always allocates 4Kb,
-   so I think it should be accounted first too.
-- mem_cgroup_css_alloc allocations consumes 10K,
-   it's enough to be accounted, especially for VMs with 1-2 CPUs
-- Almost all other allocations are quite small and can be ignored.
-  Exceptions are percpu allocations in alloc_fair_sched_group(),
-   this can consume a significant amount of memory on nodes
-   with multiple processors.
-- kernfs nodes consumes ~6Kb memory inside simple_xattr_set() 
-   and simple_xattr_alloc(). This is quite high numbers,
-   but is not critical, and I think we can ignore it at the moment.
-- If all proposed memory will be accounted it gives us ~47Kb, 
-   or ~75% of all allocated memory.
+cgroup mkdir can be misused inside memcg limited container. It can allocate
+a lot of host memory without memcg accounting, cause global memory shortage
+and force OOM to kill random host process.
+
+Below [1] is result of mkdir /sys/fs/cgroup/test tracing on VM with 4 cpus
 
 number	bytes	$1*$2	sum	note	call_site
 of	alloc
 allocs
 ------------------------------------------------------------
 1       14448   14448   14448   =       percpu_alloc_percpu:
-1       8192    8192    22640   +       (mem_cgroup_css_alloc+0x54)
-49      128     6272    28912   +       (__kernfs_new_node+0x4e)
-49      96      4704    33616   ?       (simple_xattr_alloc+0x2c)
-49      88      4312    37928   +       (__kernfs_iattrs+0x56)
-1       4096    4096    42024   +       (cgroup_mkdir+0xc7)
+1       8192    8192    22640           (mem_cgroup_css_alloc+0x54)
+49      128     6272    28912           (__kernfs_new_node+0x4e)
+49      96      4704    33616           (simple_xattr_alloc+0x2c)
+49      88      4312    37928           (__kernfs_iattrs+0x56)
+1       4096    4096    42024           (cgroup_mkdir+0xc7)
 1       3840    3840    45864   =       percpu_alloc_percpu:
-4       512     2048    47912   +       (alloc_fair_sched_group+0x166)
-4       512     2048    49960   +       (alloc_fair_sched_group+0x139)
-1       2048    2048    52008   +       (mem_cgroup_css_alloc+0x109)
-49      32      1568    53576   ?       (simple_xattr_set+0x5b)
-2       584     1168    54744		(radix_tree_node_alloc.constprop.0+0x8d)
-1       1024    1024    55768           (cpuset_css_alloc+0x30)
-1       1024    1024    56792           (alloc_shrinker_info+0x79)
-1       768     768     57560           percpu_alloc_percpu:
-1       640     640     58200           (sched_create_group+0x1c)
-33      16      528     58728           (__kernfs_new_node+0x31)
-1       512     512     59240           (pids_css_alloc+0x1b)
-1       512     512     59752           (blkcg_css_alloc+0x39)
-9       48      432     60184           percpu_alloc_percpu:
-13      32      416     60600           (__kernfs_new_node+0x31)
-1       384     384     60984           percpu_alloc_percpu:
-1       256     256     61240           (perf_cgroup_css_alloc+0x1c)
-1       192     192     61432           percpu_alloc_percpu:
-1       64      64      61496           (mem_cgroup_css_alloc+0x363)
-1       32      32      61528           (ioprio_alloc_cpd+0x39)
-1       32      32      61560           (ioc_cpd_alloc+0x39)
-1       32      32      61592           (blkcg_css_alloc+0x6b)
-1       32      32      61624           (alloc_fair_sched_group+0x52)
-1       32      32      61656           (alloc_fair_sched_group+0x2e)
-3       8       24      61680           (__kernfs_new_node+0x31)
-3       8       24      61704           (alloc_cpumask_var_node+0x1b)
-1       24      24      61728           percpu_alloc_percpu:
+4       512     2048    47912           (alloc_fair_sched_group+0x166)
+4       512     2048    49960           (alloc_fair_sched_group+0x139)
+1       2048    2048    52008           (mem_cgroup_css_alloc+0x109)
+	[smaller objects skipped]
+---
+Total			61728
 
-This patch-set enables accounting for required resources.
-I would like to discuss the patches with cgroup developers and maintainers,
-then I'm going re-send approved patches to subsystem maintainers.
+'=' --  accounted allocations
 
-Vasily Averin (4):
-  memcg: enable accounting for large allocations in mem_cgroup_css_alloc
-  memcg: enable accounting for kernfs nodes and iattrs
-  memcg: enable accounting for struct cgroup
-  memcg: enable accounting for allocations in alloc_fair_sched_group
+This patch enabled accounting for one of the main memory hogs in this
+experiment: allocation which are called inside mem_cgroup_css_alloc()
 
- fs/kernfs/mount.c      | 6 ++++--
- kernel/cgroup/cgroup.c | 2 +-
- kernel/sched/fair.c    | 4 ++--
- mm/memcontrol.c        | 4 ++--
- 4 files changed, 9 insertions(+), 7 deletions(-)
+Signed-off-by: Vasily Averin <vvs@openvz.org>
+Link: [1] https://lore.kernel.org/all/1aa4cd22-fcb6-0e8d-a1c6-23661d618864@openvz.org/
+---
+ mm/memcontrol.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 598fece89e2b..52c6163ba6dc 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -5031,7 +5031,7 @@ static int alloc_mem_cgroup_per_node_info(struct mem_cgroup *memcg, int node)
+ {
+ 	struct mem_cgroup_per_node *pn;
+ 
+-	pn = kzalloc_node(sizeof(*pn), GFP_KERNEL, node);
++	pn = kzalloc_node(sizeof(*pn), GFP_KERNEL_ACCOUNT, node);
+ 	if (!pn)
+ 		return 1;
+ 
+@@ -5083,7 +5083,7 @@ static struct mem_cgroup *mem_cgroup_alloc(void)
+ 	int __maybe_unused i;
+ 	long error = -ENOMEM;
+ 
+-	memcg = kzalloc(struct_size(memcg, nodeinfo, nr_node_ids), GFP_KERNEL);
++	memcg = kzalloc(struct_size(memcg, nodeinfo, nr_node_ids), GFP_KERNEL_ACCOUNT);
+ 	if (!memcg)
+ 		return ERR_PTR(error);
+ 
 -- 
 2.31.1
 

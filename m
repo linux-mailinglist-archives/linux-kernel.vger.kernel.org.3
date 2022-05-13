@@ -2,114 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C199525C84
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D677525C87
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377875AbiEMHtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 03:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35582 "EHLO
+        id S1377866AbiEMHtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 03:49:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377872AbiEMHtg (ORCPT
+        with ESMTP id S1351043AbiEMHtP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 03:49:36 -0400
-Received: from m12-18.163.com (m12-18.163.com [220.181.12.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 41B51134E1D;
-        Fri, 13 May 2022 00:49:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Message-ID:Date:MIME-Version:Subject:From; bh=I1PW+
-        UgrxtpOrGKAmIK6mKmMXNBZW3K0uImlgxDg5uk=; b=LomQvD4CK/f2fzw6gLHeW
-        9p3/uY6i69F9rBDSzSdN0wmUuQC5KcOIG+B8yEJtJnxOblL4sgXEghC7MLiUzA2F
-        CaIdcukEgvSzMC0bin2E1nzvRZ2cJFhonh51eyS5wC3KqjjKQ6HVvBxFZraZCjey
-        8QXsvnC3KnjlkrCrYxbGso=
-Received: from [192.168.3.102] (unknown [218.201.129.19])
-        by smtp14 (Coremail) with SMTP id EsCowABnVAViDX5iXlrTCA--.56204S2;
-        Fri, 13 May 2022 15:48:50 +0800 (CST)
-Message-ID: <1352b9d7-5219-af09-948b-6462def39ea5@163.com>
-Date:   Fri, 13 May 2022 15:48:50 +0800
+        Fri, 13 May 2022 03:49:15 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C3B134E22
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 00:49:13 -0700 (PDT)
+Received: from mail-yw1-f171.google.com ([209.85.128.171]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N8VkX-1nuLnd05OD-014TRP; Fri, 13 May 2022 09:49:12 +0200
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2f7bb893309so81570147b3.12;
+        Fri, 13 May 2022 00:49:11 -0700 (PDT)
+X-Gm-Message-State: AOAM5316YKf+gP57DY3fAo5OEgITAsx+0IwWF02SZuKIGMIIjT8bqDqU
+        NYer9JQ+OJO09tRRq1cbPmXRu1jv9452qZ/UMY0=
+X-Google-Smtp-Source: ABdhPJxFlTtlbVt8Bapilb2mz1n3siKTHBGzN+uJGcJLbo3/z08lYLAGD7AIepRl493ydddcUOdI8OAt4TkJKfkDI/0=
+X-Received: by 2002:a81:54e:0:b0:2fe:c027:1ca7 with SMTP id
+ 75-20020a81054e000000b002fec0271ca7mr118018ywf.249.1652428150734; Fri, 13 May
+ 2022 00:49:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v3 2/2] ARM: dts: sun8i-r40: Add "cpu-supply" node for
- sun8i-r40 based board
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     linux-sunxi@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20220512071858.10805-1-qianfanguijin@163.com>
- <20220512071858.10805-2-qianfanguijin@163.com>
- <20220513073849.cu4jzykefat2sepg@houat>
-From:   qianfan <qianfanguijin@163.com>
-In-Reply-To: <20220513073849.cu4jzykefat2sepg@houat>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: EsCowABnVAViDX5iXlrTCA--.56204S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJr1DZF13AF45KrykXr4Utwb_yoW8Cr4rp3
-        yxuF4DCrs7WF1rKry2grWUJry7AFyrWr4jqF15Gw1rJrn8XF9rtrn3KwnakrZ8Xr4fGw40
-        vrW8ur97Ww4DZa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UGQ6XUUUUU=
-X-Originating-IP: [218.201.129.19]
-X-CM-SenderInfo: htld0w5dqj3xxmlqqiywtou0bp/xtbB2AIA7WBHKY57KgAAsm
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220513064952.3610672-1-gerg@linux-m68k.org> <CAMuHMdVWRM7U9_SxbtDUE0a-sB5_PDiO2009Cu3QKMP3wNc=yw@mail.gmail.com>
+In-Reply-To: <CAMuHMdVWRM7U9_SxbtDUE0a-sB5_PDiO2009Cu3QKMP3wNc=yw@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 13 May 2022 09:48:54 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2HpzBEy8F5CyJp0EbKcEmZdPivjjBmHQgh+mOAq3YvpA@mail.gmail.com>
+Message-ID: <CAK8P3a2HpzBEy8F5CyJp0EbKcEmZdPivjjBmHQgh+mOAq3YvpA@mail.gmail.com>
+Subject: Re: [PATCH] m68knommu: fix undefined reference to `mach_get_rtc_pll'
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Greg Ungerer <gerg@linux-m68k.org>,
+        "Linux/m68k" <linux-m68k@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:wSTf2c8yDJ/USo5n23QI1JUIkHDbjZEBjCvnLQ+YpEbzdzjeIMU
+ v1lOFjbxQXUdakvLzd/Pdm2aK7avDXmLQCFZFIzi31kpuxej02x984xF9AGSEy0GVP8PEmp
+ WpFEkny1/+xIFNDtznAtok4wy173XsZi+Vrhc8fZOEHXJotAIk2UuSFmHU1+XAwTxo4QS06
+ lAwhrCBoRUPO0nlmv/BGQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:XhwSw5P9egY=:7MoH35VSskeSdERSbMUy6J
+ UToL1lUzY8WifIkC7qNYlijg7Iip9CL1lxmtUBaREYiKjk+ZijjMP0Zv/tkLVijqiRXy5jw1Z
+ DTnZxQ8QXPEpvjJEFsrB1K/foqclpr03KKKTtx2xf0/MNz8rmmIMm+EXg0561Ao/3VY3Spmce
+ sKKNBB0Mpk6tYNBqy4bAPHryR8VjaqcTsssDkyR9c4/a4oBRE9f62hxtFNSDl/GFs9+SKsa/F
+ DoqH/NBUL4vWjXcm8YIQ7tVYNwdQa2o5zTFdHXt67FHRpE1OluyXKz49a/QYcv/O9Ur7fNPsj
+ Qj9tLYj8Qi3il4nFxmUH8IMRnOf1J104aXphNF7Q5+GP47Xa/Sjgt+sC2VVe6yhMZjlsM73qF
+ 936Bz9YaJMhnp3dw2garKAthFh3B/BXVH/AN+/BuF5397IIjHrLOr/kM44x5PTKdmO1Q4Dese
+ Vj38Gle9YlYORU/j273b8lVv0XPG/7Y5WcY1X6M4INWTAvMdGuk0j/eoklsuFa0QE2ymYdydt
+ qlttV9QwOb8+H7O2A6Z4V6Fs3MQwlB1FjieSVYrF1AfP5qHrwP5eLoq9RxzZ32+OCxQrJUBgl
+ o3sAJAhJy6fN6JZXnQBX7Oqc46snz1luVeyZxHw5KeMRQUTiTJ+KePBRaQ0ry4/AryKKBefqC
+ uYMUxuX5RSLvyhSD677or6idQoW42c+Poci8ytIjNk+JDrFDMabMgNQFIz04QGRgIH4k=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, May 13, 2022 at 9:12 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> >
+> > -#ifdef CONFIG_M68KCLASSIC
+> > +#if defined(CONFIG_M68KCLASSIC) && defined(CONFIG_MMU)
+> >  #if !IS_BUILTIN(CONFIG_RTC_DRV_GENERIC)
+> >  void read_persistent_clock64(struct timespec64 *ts)
+> >  {
+>
+> read_persistent_clock64() uses mach_hwclk(), which is provided by
+> both setup_mm.c and setup_no.c, so it's always available?
+> Albeit not populated by coldfire or nommu platform code, so I see
+> the point in depending on MMU (no nommu Amiga support yet ;-).
+>
+> Perhaps rtc_ioctl() should depend on CONFIG_Q40?
 
+I think the best cleanup would be to turn the q40 rtc support into a
+standalone driver using rtc_register_device(), and completely
+detaching it from the rtc_generic support in arch/m68k/kernel/time.c.
 
-在 2022/5/13 15:38, Maxime Ripard 写道:
-> Hi,
->
-> On Thu, May 12, 2022 at 03:18:58PM +0800, qianfanguijin@163.com wrote:
->> From: qianfan Zhao <qianfanguijin@163.com>
->>
->> sun8i-r40 actived cpufreq feature now, let's add "cpu-supply" node on
->> board.
->>
->> Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
->> ---
->>   arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts | 4 ++++
->>   arch/arm/boot/dts/sun8i-r40-feta40i.dtsi          | 4 ++++
->>   arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts          | 4 ++++
->>   arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts | 4 ++++
->>   4 files changed, 16 insertions(+)
->>
->> diff --git a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts b/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
->> index a6a1087a0c9b..4f30018ec4a2 100644
->> --- a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
->> +++ b/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
->> @@ -113,6 +113,10 @@ &ahci {
->>   	status = "okay";
->>   };
->>   
->> +&cpu0 {
->> +	cpu-supply = <&reg_dcdc2>;
->> +};
->> +
-> This will break bisection on those boards. Indeed, you added the OPPs on
-> the first patch, and if you only apply that patch, the boards in the
-> second patch will be missing their CPU regulator. The kernel will then
-> ramp up the frequency to the highest OPP, but will not change the
-> voltage, resulting in a crash.
-This is a good point and I will merge those two patch.
->
-> There's a similar issue for all the boards that don't have a regulator
-> in the first place.
->
-> The way we worked around this for the other SoCs is to have a DTSI with
-> the OPPs with a frequency higher than what U-Boot boots with (1008MHz?),
-> and only include that DTSI on boards that have a CPU regulator hooked in.
-Is this really necessary? It seems like every board based on sun8i-r40
-have a cpu regulator.
->
-> Maxime
-
+        Arnd

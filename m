@@ -2,270 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38005525C73
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4C2525C79
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 09:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377839AbiEMHmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 03:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38732 "EHLO
+        id S229865AbiEMHm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 03:42:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbiEMHmb (ORCPT
+        with ESMTP id S1351043AbiEMHmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 03:42:31 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73125DE7B
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 00:42:29 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id i24-20020a056e021d1800b002cf0541f514so4739663ila.13
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 00:42:29 -0700 (PDT)
+        Fri, 13 May 2022 03:42:40 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486F45DE7B;
+        Fri, 13 May 2022 00:42:39 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id w4so10213683wrg.12;
+        Fri, 13 May 2022 00:42:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=h4Eoh4lUanKYZL6m5WR756e9/uQNhRUTKgBep3AgcuQ=;
+        b=OogmQrJbyJkdkJDDl0/KVR6lUqZEjYU6qz49Nd7B50AXo1s3Y3Ogp48dsrFTRT54lB
+         Jvmh6yAJui5uS6wKlEoMFwli7jhmuAOaBwB2Osmu0J5OS76JN580XKcwsbjdzS1Q4AMq
+         1Gv/m9z+3ogePGRnEelhXr6BD3XlyU7DjFRU7Mm2ZzIvky5mXWcZFIyglTEUHB7wZQNS
+         gf8UZY+xlp2VmontV7mWk3qm/SnxQQmWmlKzbx8YEkO5a3/g65SY4cCIE3Spvz5VsSSp
+         vy++TZhpgNaShJNffmWSgbtS6mFkEgGUoqXcWmQPfqCwUznvgpQMK7ZvlPTuVIZDbGGD
+         e04g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=Gn+fz0Waz2RVUfgIrDWbZMgTEoVlXBuD6vpvtSt5yaI=;
-        b=reswhoj1PfAUqpEXc9Hfzc2UN3gvFiALgCOhDBTdI/HbZzY/urSM9SH19l2GbN1ftE
-         4COG3ocNrLUre4pb3eZXpnoG1Aj9ORteDsTtV1WjVUrMcMtOR5oBRBg0nTtJdrWSEsfv
-         rKeJLWCqHKHV4M2FzilfesWyqH+5wL/XlmrIE1b7XlJVdsJBDKoDSX5jew5XMdpxUzcf
-         LXOqI5jYFEyBpSxBpsZkOcmdsEXYr0cCGjUjeQES6kh7ZVI8MBCNdhGbI1OYu6nD88z6
-         bhv6jBaS1hfJ6rcLiVQx8V3CtmvfEAxTk7Hu054iSbaK5w2924FbzG7bX1ZZ/lYAPKFS
-         NJyg==
-X-Gm-Message-State: AOAM530HgfeyAeJzqxzbt1OXkhxXeqPcJ9bJlvwMX8LWfcAyich3YlE3
-        EqQzPc+wg7liLik21cfI+JgzHymlbF54P+rvx08SVExbgKHE
-X-Google-Smtp-Source: ABdhPJy+mKCBnLubH9TOMT11RlSSppsrrsFyleuBrVBnM4gzsk9VxaZXEwdW4GRPYBSfejgnXTeGsY3APeHUJJkEwd3tekvvKOkk
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=h4Eoh4lUanKYZL6m5WR756e9/uQNhRUTKgBep3AgcuQ=;
+        b=7LkGYbjlnQyVKVj2qqScGuSs8gheDi2Z+nZei4ar7n70t1nGfiy1vE8iNrlnuyXGvU
+         hUKBYlbIM+kU5Zy5iXX4Ieletj47BPQeynoMd4Rk10nse48mrvFZ4G4bBXS3EejiKMA7
+         Wa3cmlhiroFhexgkqPEuLnLXspnh2WeteavZg2i3Pg9W8evyaUe1RK3z7r0PDEut1xLS
+         3pICbvl7SROkNz38neRCavRZDJa3t0P7u8o4vLPo2MPo/bowGEaDVe5k46AiP5jzBQlY
+         1i3FZNoAUGRVRtn2aVOXtgyQIduRb8eAhgW3iiguU3jsH2TRiDD6x0vxRT/vaOomLhbY
+         IcdQ==
+X-Gm-Message-State: AOAM5304oqViGKb2FA5pyn6qY32cO/V2QP+j68PT/Smdk0njiG1VxuYw
+        Uc+0TlNQ9VNc+6+WX47alpkpbW7DiEWyLA==
+X-Google-Smtp-Source: ABdhPJwwCL/Pxk8fkx+VxRZaxLIQFVPV/lfg/6rnAxvVEHihbxXjNAETy7pfrcZgSH4t7ZBGhpeDVQ==
+X-Received: by 2002:a05:6000:18a4:b0:20c:5603:c0bf with SMTP id b4-20020a05600018a400b0020c5603c0bfmr2695184wri.145.1652427757703;
+        Fri, 13 May 2022 00:42:37 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id t1-20020adfa2c1000000b0020c5253d8d2sm1462382wra.30.2022.05.13.00.42.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 00:42:36 -0700 (PDT)
+Message-ID: <623fb170-b59a-84a0-3826-4b78968924bc@gmail.com>
+Date:   Fri, 13 May 2022 09:42:34 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:34a4:b0:32b:e72f:8f8f with SMTP id
- t36-20020a05663834a400b0032be72f8f8fmr1809781jal.202.1652427749290; Fri, 13
- May 2022 00:42:29 -0700 (PDT)
-Date:   Fri, 13 May 2022 00:42:29 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000003785905dedfd18b@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in anon_vma_interval_tree_remove
-From:   syzbot <syzbot+dae32a647a56f4d153da@syzkaller.appspotmail.com>
-To:     Liam.Howlett@Oracle.com, akpm@linux-foundation.org,
-        ardb@kernel.org, arnd@arndb.de, bp@alien8.de, ccross@google.com,
-        dave.hansen@linux.intel.com, david@redhat.com,
-        ebiederm@xmission.com, hpa@zytor.com, liam.howlett@oracle.com,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, mingo@redhat.com, ning.sun@intel.com,
-        syzkaller-bugs@googlegroups.com, tboot-devel@lists.sourceforge.net,
-        tglx@linutronix.de, vbabka@suse.cz, willy@infradead.org,
-        x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v20 8/8] soc: mediatek: remove DDP_DOMPONENT_DITHER from
+ enum
+Content-Language: en-US
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     "jason-jh.lin" <jason-jh.lin@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        CK Hu <ck.hu@mediatek.com>, Nancy Lin <nancy.lin@mediatek.com>,
+        Singo Chang <singo.chang@mediatek.com>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+References: <20220419094143.9561-1-jason-jh.lin@mediatek.com>
+ <20220419094143.9561-9-jason-jh.lin@mediatek.com>
+ <402f0e60-8d3c-850d-84ff-af5424b72b73@gmail.com>
+ <CAAOTY_-jiX_BhaZ5+skRu4RSZLjcHJerVtwH34fz4N6_jbVK0w@mail.gmail.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <CAAOTY_-jiX_BhaZ5+skRu4RSZLjcHJerVtwH34fz4N6_jbVK0w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Chun-Kuang,
 
-syzbot found the following issue on:
+On 02/05/2022 00:54, Chun-Kuang Hu wrote:
+> Hi, Matthias:
+> 
+> Matthias Brugger <matthias.bgg@gmail.com> 於 2022年4月22日 週五 下午8:42寫道：
+>>
+>>
+>>
+>> On 19/04/2022 11:41, jason-jh.lin wrote:
+>>> After mmsys and drm change DITHER enum to DDP_COMPONENT_DITHER0,
+>>> mmsys header can remove the useless DDP_COMPONENT_DITHER enum.
+>>>
+>>> Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
+>>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>
+>> Acked-by: Matthias Brugger <matthias.bgg@gmail.com>
+>>
+>> Chun-Kuang, I think it would make sense to take that through your tree as it
+>> depends on the previous patches.
+>>
+>> I provide you a stable tag so that you can take it:
+>> v5.18-next-vdso0-stable-tag
+> 
+> After I take this tag, I find one checkpatch warning:
+> 
+> WARNING: DT compatible string "mediatek,mt8195-mmsys" appears
+> un-documented -- check ./Documentation/devicetree/bindings/
+> #670: FILE: drivers/soc/mediatek/mtk-mmsys.c:390:
+> +               .compatible = "mediatek,mt8195-mmsys",
+> 
+> I think this tag lost one binding patch, it's better that this tag has
+> no this warning.
+> 
 
-HEAD commit:    187b9ac8c348 Add linux-next specific files for 20220512
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1299ce1af00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1dcd4f4a77ca98a9
-dashboard link: https://syzkaller.appspot.com/bug?extid=dae32a647a56f4d153da
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1748d2c9f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=130db7faf00000
+Sorry for the late reply I was sick.
+The warning is, because the stable branch misses commit:
+https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.18-next/soc&id=81c5a41d10b968ea89d5f44fe1e5c2fc70289209
 
-The issue was bisected to:
+So it's not a real issue and will go away once our branches land in upstream.
+Is it OK for you to ignore the issue?
 
-commit ff59d518bcac98f97fb365666eb3649320a3af93
-Author: Liam R. Howlett <Liam.Howlett@Oracle.com>
-Date:   Thu May 12 01:12:46 2022 +0000
+Regards,
+Matthias
 
-    mm: remove rb tree.
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10abf0aef00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=12abf0aef00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=14abf0aef00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+dae32a647a56f4d153da@syzkaller.appspotmail.com
-Fixes: ff59d518bcac ("mm: remove rb tree.")
-
-==================================================================
-==================================================================
-BUG: KASAN: use-after-free in vma_last_pgoff mm/interval_tree.c:20 [inline]
-BUG: KASAN: use-after-free in avc_last_pgoff mm/interval_tree.c:68 [inline]
-BUG: KASAN: use-after-free in __anon_vma_interval_tree_augment_compute_max mm/interval_tree.c:71 [inline]
-BUG: KASAN: use-after-free in __anon_vma_interval_tree_augment_propagate mm/interval_tree.c:71 [inline]
-BUG: KASAN: use-after-free in __rb_erase_augmented include/linux/rbtree_augmented.h:295 [inline]
-BUG: KASAN: use-after-free in rb_erase_augmented include/linux/rbtree_augmented.h:303 [inline]
-BUG: KASAN: use-after-free in rb_erase_augmented_cached include/linux/rbtree_augmented.h:314 [inline]
-BUG: KASAN: use-after-free in __anon_vma_interval_tree_remove mm/interval_tree.c:71 [inline]
-BUG: KASAN: use-after-free in anon_vma_interval_tree_remove+0xc7d/0xf30 mm/interval_tree.c:88
-Read of size 8 at addr ffff8880237dbb60 by task syz-executor150/3681
-
-CPU: 1 PID: 3681 Comm: syz-executor150 Not tainted 5.18.0-rc6-next-20220512-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
- print_report mm/kasan/report.c:429 [inline]
- kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- vma_last_pgoff mm/interval_tree.c:20 [inline]
- avc_last_pgoff mm/interval_tree.c:68 [inline]
- __anon_vma_interval_tree_augment_compute_max mm/interval_tree.c:71 [inline]
- __anon_vma_interval_tree_augment_propagate mm/interval_tree.c:71 [inline]
- __rb_erase_augmented include/linux/rbtree_augmented.h:295 [inline]
- rb_erase_augmented include/linux/rbtree_augmented.h:303 [inline]
- rb_erase_augmented_cached include/linux/rbtree_augmented.h:314 [inline]
- __anon_vma_interval_tree_remove mm/interval_tree.c:71 [inline]
- anon_vma_interval_tree_remove+0xc7d/0xf30 mm/interval_tree.c:88
- unlink_anon_vmas+0x218/0x840 mm/rmap.c:406
- free_pgtables+0x24d/0x420 mm/memory.c:439
- exit_mmap+0x1ff/0x740 mm/mmap.c:3217
- __mmput+0x128/0x4c0 kernel/fork.c:1180
- mmput+0x5c/0x70 kernel/fork.c:1201
- exit_mm kernel/exit.c:510 [inline]
- do_exit+0xa18/0x2a00 kernel/exit.c:782
- do_group_exit+0xd2/0x2f0 kernel/exit.c:925
- __do_sys_exit_group kernel/exit.c:936 [inline]
- __se_sys_exit_group kernel/exit.c:934 [inline]
- __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:934
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f9b5c196129
-Code: Unable to access opcode bytes at RIP 0x7f9b5c1960ff.
-RSP: 002b:00007fffb9cf1b58 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007f9b5c2023d0 RCX: 00007f9b5c196129
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 00007f9b5c003031
-R10: 0000000000000003 R11: 0000000000000246 R12: 00007f9b5c2023d0
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
- </TASK>
-
-Allocated by task 3681:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:436 [inline]
- __kasan_slab_alloc+0x90/0xc0 mm/kasan/common.c:469
- kasan_slab_alloc include/linux/kasan.h:224 [inline]
- slab_post_alloc_hook mm/slab.h:750 [inline]
- slab_alloc_node mm/slub.c:3214 [inline]
- slab_alloc mm/slub.c:3222 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3229 [inline]
- kmem_cache_alloc+0x204/0x3b0 mm/slub.c:3239
- vm_area_dup+0x81/0x380 kernel/fork.c:466
- copy_vma+0x36f/0x890 mm/mmap.c:3332
- move_vma+0x449/0xf60 mm/mremap.c:624
- mremap_to mm/mremap.c:859 [inline]
- __do_sys_mremap+0xe68/0x1540 mm/mremap.c:970
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-Freed by task 3681:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:366 [inline]
- ____kasan_slab_free+0x166/0x1a0 mm/kasan/common.c:328
- kasan_slab_free include/linux/kasan.h:200 [inline]
- slab_free_hook mm/slub.c:1727 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1753
- slab_free mm/slub.c:3507 [inline]
- kmem_cache_free+0xdd/0x5a0 mm/slub.c:3524
- copy_vma+0x6ac/0x890 mm/mmap.c:3359
- move_vma+0x449/0xf60 mm/mremap.c:624
- mremap_to mm/mremap.c:859 [inline]
- __do_sys_mremap+0xe68/0x1540 mm/mremap.c:970
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-The buggy address belongs to the object at ffff8880237dbaf8
- which belongs to the cache vm_area_struct of size 152
-The buggy address is located 104 bytes inside of
- 152-byte region [ffff8880237dbaf8, ffff8880237dbb90)
-
-The buggy address belongs to the physical page:
-page:ffffea00008df6c0 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x237db
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 dead000000000100 dead000000000122 ffff888140006b40
-raw: 0000000000000000 0000000080120012 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 3388, tgid 3388 (cmp), ts 30666718744, free_ts 30663321169
- prep_new_page mm/page_alloc.c:2431 [inline]
- get_page_from_freelist+0x129e/0x3dd0 mm/page_alloc.c:4176
- __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5396
- alloc_pages+0x1aa/0x310 mm/mempolicy.c:2280
- alloc_slab_page mm/slub.c:1797 [inline]
- allocate_slab+0x26c/0x3c0 mm/slub.c:1942
- new_slab mm/slub.c:2002 [inline]
- ___slab_alloc+0x985/0xd90 mm/slub.c:3002
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3089
- slab_alloc_node mm/slub.c:3180 [inline]
- slab_alloc mm/slub.c:3222 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3229 [inline]
- kmem_cache_alloc+0x360/0x3b0 mm/slub.c:3239
- vm_area_dup+0x81/0x380 kernel/fork.c:466
- __split_vma+0x9f/0x530 mm/mmap.c:2283
- do_mas_align_munmap+0x553/0xed0 mm/mmap.c:2430
- do_mas_munmap+0x202/0x2c0 mm/mmap.c:2564
- mmap_region+0x219/0x1bf0 mm/mmap.c:2612
- do_mmap+0x825/0xf60 mm/mmap.c:1493
- vm_mmap_pgoff+0x1b7/0x290 mm/util.c:488
- ksys_mmap_pgoff+0x40d/0x5a0 mm/mmap.c:1539
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1346 [inline]
- free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1396
- free_unref_page_prepare mm/page_alloc.c:3318 [inline]
- free_unref_page_list+0x16f/0xf80 mm/page_alloc.c:3450
- release_pages+0xff1/0x2290 mm/swap.c:980
- tlb_batch_pages_flush+0xa8/0x1a0 mm/mmu_gather.c:58
- tlb_flush_mmu_free mm/mmu_gather.c:255 [inline]
- tlb_flush_mmu mm/mmu_gather.c:262 [inline]
- tlb_finish_mmu+0x147/0x7e0 mm/mmu_gather.c:353
- exit_mmap+0x211/0x740 mm/mmap.c:3218
- __mmput+0x128/0x4c0 kernel/fork.c:1180
- mmput+0x5c/0x70 kernel/fork.c:1201
- exec_mmap fs/exec.c:1038 [inline]
- begin_new_exec+0xfbd/0x2e50 fs/exec.c:1297
- load_elf_binary+0x15a3/0x4ec0 fs/binfmt_elf.c:1002
- search_binary_handler fs/exec.c:1728 [inline]
- exec_binprm fs/exec.c:1769 [inline]
- bprm_execve fs/exec.c:1838 [inline]
- bprm_execve+0x7ef/0x1970 fs/exec.c:1800
- do_execveat_common+0x727/0x890 fs/exec.c:1943
- do_execve fs/exec.c:2017 [inline]
- __do_sys_execve fs/exec.c:2093 [inline]
- __se_sys_execve fs/exec.c:2088 [inline]
- __x64_sys_execve+0x8f/0xc0 fs/exec.c:2088
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-Memory state around the buggy address:
- ffff8880237dba00: fc fc fc fc 00 00 00 00 00 00 00 00 00 00 00 00
- ffff8880237dba80: 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fa
->ffff8880237dbb00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                                       ^
- ffff8880237dbb80: fb fb fc fc fc fc fc fc fc fc fb fb fb fb fb fb
- ffff8880237dbc00: fb fb fb fb fb fb fb fb fb fb fb fb fb fc fc fc
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> Regards,
+> Chun-Kuang.
+> 
+>>
+>> Regards,
+>> Matthias
+>>
+>>> ---
+>>>    include/linux/soc/mediatek/mtk-mmsys.h | 3 +--
+>>>    1 file changed, 1 insertion(+), 2 deletions(-)
+>>>
+>>> diff --git a/include/linux/soc/mediatek/mtk-mmsys.h b/include/linux/soc/mediatek/mtk-mmsys.h
+>>> index 59117d970daf..fb719fd1281c 100644
+>>> --- a/include/linux/soc/mediatek/mtk-mmsys.h
+>>> +++ b/include/linux/soc/mediatek/mtk-mmsys.h
+>>> @@ -16,8 +16,7 @@ enum mtk_ddp_comp_id {
+>>>        DDP_COMPONENT_CCORR,
+>>>        DDP_COMPONENT_COLOR0,
+>>>        DDP_COMPONENT_COLOR1,
+>>> -     DDP_COMPONENT_DITHER,
+>>> -     DDP_COMPONENT_DITHER0 = DDP_COMPONENT_DITHER,
+>>> +     DDP_COMPONENT_DITHER0,
+>>>        DDP_COMPONENT_DITHER1,
+>>>        DDP_COMPONENT_DP_INTF0,
+>>>        DDP_COMPONENT_DP_INTF1,

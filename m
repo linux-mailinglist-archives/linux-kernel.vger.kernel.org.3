@@ -2,93 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E48FE525AC4
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 06:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87835525AC6
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 06:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357836AbiEME3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 00:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38816 "EHLO
+        id S1376932AbiEMEbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 00:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348393AbiEME33 (ORCPT
+        with ESMTP id S1346255AbiEMEa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 00:29:29 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2E9292797
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 21:29:28 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so9745342pju.2
-        for <linux-kernel@vger.kernel.org>; Thu, 12 May 2022 21:29:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=kOkWkR9Ocy2CU7QPzBKs2WmW8Yr7OVdgCwKhMEH1vEU=;
-        b=pr9XuWJgiU/uRmmT5fZbBoUYR2ZQfOvIP/fG8IH7DKeqmuojFuDZ5c8c4YUHPmqBmh
-         zXNWMD3IgW8+O/7EHImSmJOMWPbw4I/GwppQwL8wZOPiK6LvvlpuBjNBTHMbMwZqiD8y
-         hXkWpEI31SeVpwZGidBW3OrJdvIc1VSzXbPDMG45/V9kihbRiwTFLZdv3bmc2a9zzgEj
-         yzGnffWVkfmvcPTQeqLwmZIq34n4O5wVfPfXE/Ebg4edrwrZE9reXxaAFO42AqvAMI6V
-         KA6K1ScFTbKuf+vbjXXUv0zz2w8of7sO+JSJwKPDa4ZO9gJlXH+fbjEA1MHINOZ3fxbd
-         EIcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kOkWkR9Ocy2CU7QPzBKs2WmW8Yr7OVdgCwKhMEH1vEU=;
-        b=dlgTdX/5Kuu4hzPaz3ZqoYMi5+qNAo77De9giGVwU3bWbLyZ01Lr9cF/uCa5gf9CGE
-         Q0/y5MawD0/lI2YEfQJLCLX/11zARryS6OOUiKDCRZg2HWDesl/4z77fxHoWMGJ/nxoC
-         vSZIBQsMXDayFeIDgx78fNohF219ZxTllCIs/M4RNk+tkkKQkedpkMoYxncud9zQBimg
-         6xR6ruM7qiDMMaEJA4Iv8siifF+71j9Cb/B3EulfSgjL1l+EHTepMWS9dNj2Wa6Q4sf/
-         kA1vFod4hrloR6xT3bUW/117HOw63bOTRy1DOCHa+wiKxsfu8tpN2yQqbapJu3m1Xxax
-         HZLA==
-X-Gm-Message-State: AOAM531KbrjsXLP/TELkPwe0j4uh9CuqKC8s4qh0fjyliCKrKuSJhl8F
-        9OOh4g4wcPnRrCjSgW2Qkn2m0A==
-X-Google-Smtp-Source: ABdhPJzXX3SKeWx7mB3jrDkUEdCdK+qjACy3ZkK/roOebknMQ5MhRsCd4gkNu9EYHwd4fa4whpthOw==
-X-Received: by 2002:a17:90b:4c85:b0:1dc:5778:5344 with SMTP id my5-20020a17090b4c8500b001dc57785344mr14165956pjb.8.1652416167522;
-        Thu, 12 May 2022 21:29:27 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id m21-20020a17090aab1500b001cd4989fed4sm2555583pjq.32.2022.05.12.21.29.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 21:29:26 -0700 (PDT)
-Date:   Fri, 13 May 2022 09:59:25 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Schspa Shi <schspa@gmail.com>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] cpufreq: make interface functions and lock
- holding state clear
-Message-ID: <20220513042925.42hvv26ejup6js3h@vireshk-i7>
-References: <20220512135231.10076-1-schspa@gmail.com>
- <20220512135231.10076-2-schspa@gmail.com>
+        Fri, 13 May 2022 00:30:58 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA062BB3D;
+        Thu, 12 May 2022 21:30:51 -0700 (PDT)
+X-UUID: 6aa3c49978d0498489f77b9ed50246db-20220513
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:01a3c9d9-087f-46fb-b109-acc0c979a54a,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:673e11f2-ab23-4aed-a67b-f96514452486,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 6aa3c49978d0498489f77b9ed50246db-20220513
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 123668449; Fri, 13 May 2022 12:30:48 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 13 May 2022 12:30:47 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Fri, 13 May 2022 12:30:47 +0800
+Message-ID: <e70280d5bbc42a7d31602e68e98f3d33e24836ac.camel@mediatek.com>
+Subject: Re: [PATCH v4] pwrap: mediatek: fix FSM timeout issue
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Zhiyong Tao <zhiyong.tao@mediatek.com>, <lee.jones@linaro.org>,
+        <robh+dt@kernel.org>, <matthias.bgg@gmail.com>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>,
+        <eddie.huang@mediatek.com>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>, <fshao@chromium.org>
+CC:     <srv_heupstream@mediatek.com>, <hui.liu@mediatek.com>,
+        <tinghan.shen@mediatek.com>, <hsin-hsiung.wang@mediatek.com>,
+        <sean.wang@mediatek.com>, <macpaul.lin@mediatek.com>,
+        <wen.su@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Fri, 13 May 2022 12:30:47 +0800
+In-Reply-To: <20220513034356.5268-2-zhiyong.tao@mediatek.com>
+References: <20220513034356.5268-1-zhiyong.tao@mediatek.com>
+         <20220513034356.5268-2-zhiyong.tao@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220512135231.10076-2-schspa@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12-05-22, 21:52, Schspa Shi wrote:
-> cpufreq_offline() calls offline() and exit() under the policy rwsem
-> But they are called outside the rwsem in cpufreq_online().
+On Fri, 2022-05-13 at 11:43 +0800, Zhiyong Tao wrote:
+> From: "Zhiyong.Tao" <zhiyong.tao@mediatek.com>
 > 
-> This patch move the offline(), exit(), online(), init() to be inside
-> of policy rwsem to achieve a clear lock relationship.
+> Fix pwrap FSM timeout issue which leads the system crash on GFX VSRAM
+> power on.
+> The crash log:
+> [ 3986.543401] mediatek-drm-dp 1c500000.edp_tx:
+> drm_helper_hpd_irq_event
+> [ 3986.670756] vsram_others: is_enabled() failed: -ETIMEDOUT
+> [ 3986.670765] mali 13000000.mali: Power on reg 1 failed error = -110
+> [ 3986.670768] ------------[ cut here ]------------
+> [ 3986.670770] unbalanced disables for vsram_others
+> [ 3986.670783] WARNING: CPU: 7 PID: 4125 at
+> drivers/regulator/core.c:2761 _regulator_disable+0x194/0x1a0
+> [ 3986.670785] Modules linked in: rfcomm algif_hash algif_skcipher
+> af_alg veth uinput btusb btmtk btintel btbcm btrtl xt_cgroup
+> bluetooth uvcvideo videobuf2_vmalloc ecdh_generic ecc mtk_vcodec_dec
+> mtk_vcodec_enc mtk_mdp3 v4l2_h264 mtk_vcodec_common
+> videobuf2_dma_contig mtk_vpu videobuf2_memops v4l2_mem2mem
+> xt_MASQUERADE videobuf2_v4l2 videobuf2_common cros_ec_rpmsg mtk_scp
+> mtk_rpmsg rpmsg_core mtk_scp_ipi ip6table_nat fuse 8021q
+> iio_trig_sysfs cros_ec_sensors cros_ec_lid_angle cros_ec_sensors_core
+> industrialio_triggered_buffer kfifo_buf cros_ec_sensorhub mt7921e
+> mt7921_common mt76_connac_lib lzo_rle mt76 lzo_compress mac80211
+> cfg80211 zram r8152 mii joydev
+> [ 3986.670830] CPU: 7 PID: 4125 Comm: mali-cmar-backe Not tainted
+> 5.10.78-CL2781499-v287 #1 b899b40a63da40d4767c6c0e96b6700d2f3eb242
+> [ 3986.670832] Hardware name: MediaTek Tomato board (DT)
+> [ 3986.670835] pstate: 60400009 (nZCv daif +PAN -UAO -TCO BTYPE=--)
+> [ 3986.670838] pc : _regulator_disable+0x194/0x1a0
+> [ 3986.670840] lr : _regulator_disable+0x194/0x1a0
+> [ 3986.670842] sp : ffffffc016203a10
+> [ 3986.670843] x29: ffffffc016203a10 x28: ffffffb7c3186b28
+> [ 3986.670846] x27: 0000000000000002 x26: fffffffffffffdc8
+> [ 3986.670848] x25: ffffffc017225000 x24: ffffffb7c0e94880
+> [ 3986.670851] x23: ffffffb7c31840f0 x22: ffffffd6b4f3e275
+> [ 3986.670853] x21: ffffffb7c3181a00 x20: ffffffb7c27e7800
+> [ 3986.670855] x19: ffffffb7c27e7800 x18: 00000000ffff0a10
+> [ 3986.670857] x17: 0000000000000020 x16: 00000000000000ec
+> [ 3986.670860] x15: ffffffd6b44fa17c x14: 0000000000000003
+> [ 3986.670862] x13: 0000000000000004 x12: 0000000000fd8318
+> [ 3986.670864] x11: c000000100029ccd x10: 00000000ffffffff
+> [ 3986.670866] x9 : 7dd6d080afd6f400 x8 : 7dd6d080afd6f400
+> [ 3986.670868] x7 : 0000000000000000 x6 : ffffffd6b5459f0c
+> [ 3986.670871] x5 : ffffffc016203a58 x4 : 0000000000000000
+> [ 3986.670873] x3 : ffffffc016203668 x2 : ffffffc016203670
+> [ 3986.670875] x1 : 0000000100029ccd x0 : 0000000000000024
+> [ 3986.670878] Call trace:
+> [ 3986.670880]  _regulator_disable+0x194/0x1a0
+> [ 3986.670883]  regulator_disable+0x4c/0x8c
 > 
-> All the init() online() implement only initialize policy object without
-> holding this lock and won't call cpufreq APIs need to hold this lock.
+> Add a usleep delay to avoid busy read for the H/W status.
+> If (time_after()) be turn first, it maybe cause the system behavior
+> crash problem like above. so we change it after sleep delay.
 > 
-> Signed-off-by: Schspa Shi <schspa@gmail.com>
+> Fixes: 1f022d84bd19 ("soc: mediatek: Add PMIC wrapper for MT8135 and
+> MT8173 SoCs")
+> 
+> Signed-off-by: Zhiyong.Tao <zhiyong.tao@mediatek.com>
 > ---
->  drivers/cpufreq/cpufreq.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+>  drivers/soc/mediatek/mtk-pmic-wrap.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c
+> b/drivers/soc/mediatek/mtk-pmic-wrap.c
+> index 952bc554f443..f9e7c2f35157 100644
+> --- a/drivers/soc/mediatek/mtk-pmic-wrap.c
+> +++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
+> @@ -4,6 +4,7 @@
+>   * Author: Flora Fu, MediaTek
+>   */
+>  #include <linux/clk.h>
+> +#include <linux/delay.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/io.h>
+>  #include <linux/kernel.h>
+> @@ -1197,10 +1198,13 @@ static int pwrap_wait_for_state(struct
+> pmic_wrapper *wrp,
+>  	timeout = jiffies + usecs_to_jiffies(10000);
+>  
+>  	do {
+> -		if (time_after(jiffies, timeout))
+> -			return fp(wrp) ? 0 : -ETIMEDOUT;
+>  		if (fp(wrp))
+>  			return 0;
+> +
+> +		usleep_range(10, 11);
+> +
+> +		if (time_after(jiffies, timeout))
+> +			return fp(wrp) ? 0 : -ETIMEDOUT;
+>  	} while (1);
+>  }
+>  
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
 
--- 
-viresh

@@ -2,130 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 407B65262B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 15:13:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 280FD5262B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 15:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380598AbiEMNNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 09:13:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
+        id S1380603AbiEMNO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 09:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232625AbiEMNNl (ORCPT
+        with ESMTP id S232625AbiEMNOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 09:13:41 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E0750B1F
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 06:13:38 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id fu47so6753417qtb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 06:13:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6+gNOUaWkd0Bt/JIZ8SDZDMjw5UUXZsqOvLbfnJqY8g=;
-        b=XQFCZfhm7ewTc4XGGTXLDs4ORqJoIOmN58pp/aiyNiZn+4KQD1n6GurSxpZnIeHGle
-         BHgljDzcb8IocKVAna6UfJsdoy3zR4xntjetc9xE+ggJfXqHnFMAtZZ2uXcUAwnJpXM4
-         z71gIN4Kf3+6Mn/A63t1Hqxn3h5n4ioP20D9p71dlE7v5cFGM4zcQkOi7DROx9Wfe2AN
-         L9qYy/9ImbchcWiAdMnPMP1D3jFrgOf98pEoGnR7dsYj8g90ZIRsjjl42tE0GcZLl37n
-         db9DftV4Q3/mGZbH/epzsq/QZAHrmL6njW81VxjaZZ2AakSkhIjFmysB8xqF/PjD1wvi
-         bqOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6+gNOUaWkd0Bt/JIZ8SDZDMjw5UUXZsqOvLbfnJqY8g=;
-        b=J46UvqMLx12Vrn204q7P9BeU1eiwrNXhu1ipJDZOZxUyBtGsYZcN021hMsYjyci6O/
-         xIFQrjUyNcilyXzGIJ6WAkCPrp4C8Ib3D5+amcMFeywJSoslqeILzywZn2M9Lzr3X4nD
-         VxSBbZv9VTmMWHTcUN32fhVuc1xpyeOBzvPEf2qR+DCWGPX6Isbzjsu+TXfiUzeGs3bn
-         sDzjJfxOhuGxTScbQOgg6N9suGjFJUtLwmY+qz9urgh6orBt7aszpBPyvj/cq9B9LKuf
-         Ef3kmjIp5dRpsorqhZ2LosOs2kvyPUedTcD/UInz10vvsZYri6sou3ulW3mmh02clELp
-         z3XQ==
-X-Gm-Message-State: AOAM5312KC4wLX1RPpOAcwENI3QJPR/2JjM6QjEgJJHYEhqxLsr1OGZI
-        tYlH4P6vki0Fq3VeiWos1zxbsw==
-X-Google-Smtp-Source: ABdhPJwxT4heqZ/ZkYzHC2358zLSs+/kN7c2zraegXVpNi+Urh+gSE1Rj4PwtEzzhr8yWY34ktzoUA==
-X-Received: by 2002:ac8:7f0d:0:b0:2f3:cd9e:c2ea with SMTP id f13-20020ac87f0d000000b002f3cd9ec2eamr4447513qtk.590.1652447617290;
-        Fri, 13 May 2022 06:13:37 -0700 (PDT)
-Received: from localhost (cpe-174-109-172-136.nc.res.rr.com. [174.109.172.136])
-        by smtp.gmail.com with ESMTPSA id q19-20020ac87353000000b002f39b99f67esm1445845qtp.24.2022.05.13.06.13.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 06:13:36 -0700 (PDT)
-Date:   Fri, 13 May 2022 09:13:35 -0400
-From:   Josef Bacik <josef@toxicpanda.com>
-To:     Matthew Ruffell <matthew.ruffell@canonical.com>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        linux-block <linux-block@vger.kernel.org>,
-        nbd <nbd@other.debian.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>, yukuai3@huawei.com
-Subject: Re: [PROBLEM] nbd requests become stuck when devices watched by
- inotify emit udev uevent changes
-Message-ID: <Yn5Zf6lONff1AoOA@localhost.localdomain>
-References: <20220422054224.19527-1-matthew.ruffell@canonical.com>
- <CAEzrpqe=LD3DQcEeLXmmFuq7cX_dAQ6DOCuJYWBoZWKKTmoTzA@mail.gmail.com>
- <CAKAwkKt3yMOOW3NXcE91WkGr+8xj050CYP2pLoQVHt_2wXq=-w@mail.gmail.com>
- <CAKAwkKvfFn18RjupuqGpx4QeAiMYKSq7QUTd3wEL=pkZ+BENpQ@mail.gmail.com>
+        Fri, 13 May 2022 09:14:24 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9576E56767;
+        Fri, 13 May 2022 06:14:23 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24D9bGVa024730;
+        Fri, 13 May 2022 15:13:56 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=IzNl3ypvVSCffY9EMumhPtUXRrFQRfuRQsI8WhiD7Bs=;
+ b=R9br9S/jj1VNI29zac5haQIXRO7ozP7dOi0w7TqvuXYAN1GirwpWnpRiRnZyEObZdkZy
+ eatXHagoKmbDH9F7cOuBvO2R60dtcRAuyyxUdBkx073bI7Eu5tqKUNHGND2+xJQtLSfn
+ hVL+fqNg0atIWAeAl9fjmDIDJfq7v38RpD4OdAIwOW09tUF1dCuqRC8KbYm9oCg59XxO
+ a3YDRIX6DwZQfe69c8QlI0vWrPd+9v75OPbQRyHcM8CuS+LjZXyAY69Q3euG7oUDCJLi
+ uG+T+QGc3OoFGmd5TlM17AF2H2RK3jJ0G/WCkwBb96i0vWSp+cma2ZX3rotUKF+XBobv Lg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3g1mv1s9xu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 May 2022 15:13:56 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id ED03210002A;
+        Fri, 13 May 2022 15:13:54 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E59E421ED55;
+        Fri, 13 May 2022 15:13:54 +0200 (CEST)
+Received: from [10.252.23.200] (10.75.127.47) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 13 May
+ 2022 15:13:53 +0200
+Message-ID: <32a7849b-c631-f80d-b29c-2a790ac641ec@foss.st.com>
+Date:   Fri, 13 May 2022 15:13:53 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKAwkKvfFn18RjupuqGpx4QeAiMYKSq7QUTd3wEL=pkZ+BENpQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 2/2] iio: adc: stm32: Fix check for spurious IRQs on
+ STM32F4
+Content-Language: en-US
+To:     Yannick Brosseau <yannick.brosseau@gmail.com>, <jic23@kernel.org>,
+        <lars@metafoo.de>, <mcoquelin.stm32@gmail.com>,
+        <alexandre.torgue@foss.st.com>, <olivier.moysan@foss.st.com>
+CC:     <paul@crapouillou.net>, <linux-iio@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220506225617.1774604-1-yannick.brosseau@gmail.com>
+ <20220506225617.1774604-3-yannick.brosseau@gmail.com>
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+In-Reply-To: <20220506225617.1774604-3-yannick.brosseau@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-13_04,2022-05-13_01,2022-02-23_01
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 02:56:18PM +1200, Matthew Ruffell wrote:
-> Hi Josef,
+On 5/7/22 00:56, Yannick Brosseau wrote:
+> The check for spurious IRQs introduced in 695e2f5c289bb assumed that the bits
+> in the control and status registers are aligned. This is true for the H7 and MP1
+> version, but not the F4.
 > 
-> Just a friendly ping, I am more than happy to test a patch, if you send it
-> inline in the email, since the pastebin you used expired after 1 day, and I
-> couldn't access it.
+> Instead of comparing both registers bitwise, we check the bit in the status and control
+> for each interrupt we are interested in.
 > 
-> I came across and tested Yu Kuai's patches [1][2] which are for the same issue,
-> and they indeed fix the hang. Thank you Yu.
+
+Hi Yannick,
+
+I propose a different approach, see here after.
+
+Same as for patch one,
+Fixes: 695e2f5c289b ("iio: adc: stm32-adc: fix a regression when using
+dma and irq")
+
+> Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
+> ---
+>  drivers/iio/adc/stm32-adc.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
 > 
-> [1] nbd: don't clear 'NBD_CMD_INFLIGHT' flag if request is not completed
-> https://lists.debian.org/nbd/2022/04/msg00212.html
-> 
-> [2] nbd: fix io hung while disconnecting device
-> https://lists.debian.org/nbd/2022/04/msg00207.html
-> 
-> I am also happy to test any patches to fix the I/O errors.
->
+> diff --git a/drivers/iio/adc/stm32-adc.c b/drivers/iio/adc/stm32-adc.c
+> index a68ecbda6480..5b0f138333ee 100644
+> --- a/drivers/iio/adc/stm32-adc.c
+> +++ b/drivers/iio/adc/stm32-adc.c
+> @@ -1422,9 +1422,10 @@ static irqreturn_t stm32_adc_threaded_isr(int irq, void *data)
+>  		return IRQ_HANDLED;
+>  	}
+>  
+> -	if (!(status & mask))
+> +	if(!((status & regs->isr_eoc.mask) && (mask & regs->ier_eoc.mask)) ||
+> +           ((status & regs->isr_ovr.mask) && (mask & regs->ier_ovr.mask)))
+>  		dev_err_ratelimited(&indio_dev->dev,
+> -				    "Unexpected IRQ: IER=0x%08x, ISR=0x%08x\n",
+> +				    "Unexpected IRQ: CR1/IER=0x%08x, SR/ISR=0x%08x\n",
+>  				    mask, status);
 
-Sorry, you caught me on vacation before and I forgot to reply.  Here's part one
-of the patch I wanted you to try which fixes the io hung part.  Thanks,
 
-Josef
+Here, a slightly different approach could be used... There's a long
+pending discussion, where Olivier or I should push further patches to
+support threadirqs (hopefully soon).
+In this discussion with Jonathan [1], he exposed the need to remove this
+message. Words from Jonathan:
+"This seems 'unusual'.  If this is a spurious interrupt we should be
+returning IRQ_NONE and letting the spurious interrupt protection
+stuff kick in."
 
- 
-From 0a6123520380cb84de8ccefcccc5f112bce5efb6 Mon Sep 17 00:00:00 2001
-Message-Id: <0a6123520380cb84de8ccefcccc5f112bce5efb6.1652447517.git.josef@toxicpanda.com>
-From: Josef Bacik <josef@toxicpanda.com>
-Date: Sat, 23 Apr 2022 23:51:23 -0400
-Subject: [PATCH] timeout thing
+[1]
+https://lore.kernel.org/linux-arm-kernel/20210116175333.4d8684c5@archlinux/
 
----
- drivers/block/nbd.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+So basically, I suggest to completely get rid of this message:
 
-diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-index 526389351784..ab365c0e9c04 100644
---- a/drivers/block/nbd.c
-+++ b/drivers/block/nbd.c
-@@ -1314,7 +1314,10 @@ static void nbd_config_put(struct nbd_device *nbd)
- 		kfree(nbd->config);
- 		nbd->config = NULL;
- 
--		nbd->tag_set.timeout = 0;
-+		/* Reset our timeout to something sane. */
-+		nbd->tag_set.timeout = 30 * HZ;
-+		blk_queue_rq_timeout(nbd->disk->queue, 30 * HZ);
-+
- 		nbd->disk->queue->limits.discard_granularity = 0;
- 		nbd->disk->queue->limits.discard_alignment = 0;
- 		blk_queue_max_discard_sectors(nbd->disk->queue, 0);
--- 
-2.26.3
+-	if (!(status & mask))
+-		dev_err_ratelimited(&indio_dev->dev,
+-				    "Unexpected IRQ: IER=0x%08x, ISR=0x%08x\n",
+-				    mask, status);
 
+>  
+>  	return IRQ_NONE;
+> @@ -1438,7 +1439,9 @@ static irqreturn_t stm32_adc_isr(int irq, void *data)
+>  	u32 status = stm32_adc_readl(adc, regs->isr_eoc.reg);
+>  	u32 mask = stm32_adc_readl(adc, regs->ier_eoc.reg);
+>  
+> -	if (!(status & mask))
+> +	/* Check that we have the interrupt we care about are enabled and active */
+> +        if(!((status & regs->isr_eoc.mask) && (mask & regs->ier_eoc.mask)) ||
+> +           ((status & regs->isr_ovr.mask) && (mask & regs->ier_ovr.mask)))
+>  		return IRQ_WAKE_THREAD;
+
+Here the statement becomes useless, so it could be removed:
+-	u32 mask = stm32_adc_readl(adc, regs->ier_eoc.reg);
+-
+-	if (!(status & mask))
+-		return IRQ_WAKE_THREAD;
+
+This would avoid some complexity here (and so headaches or regressions
+like the one you've hit).
+
+This also should serve the two purposes:
+- fall into kernel generic handler for spurious IRQs (by returning
+IRQ_NONE below)
+- by the way fix current issue in stm32f4
+
+
+I Hope this is still inline with Jonathan's words earlier ;-)
+
+Best Regards,
+Fabrice
+
+>  
+>  	if (status & regs->isr_ovr.mask) {

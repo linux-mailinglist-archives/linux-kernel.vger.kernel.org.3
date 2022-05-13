@@ -2,84 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04BC0525909
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 02:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DED852590D
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 02:45:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359772AbiEMAnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 May 2022 20:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39686 "EHLO
+        id S1359771AbiEMApK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 May 2022 20:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359748AbiEMAmy (ORCPT
+        with ESMTP id S243156AbiEMApI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 May 2022 20:42:54 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B3E606CF;
-        Thu, 12 May 2022 17:42:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652402573; x=1683938573;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=f0Bj2hl1ZLW1ooL5JR+fXxS9kZj/CvEAmF8lk44pGEQ=;
-  b=S9gJlVHB46R2JI1Y+nFNIH02KeCvJev2v8WvrGtasSsvoie/ZtKBp2yB
-   igye8QY/9naEvhMbRZZLN1+FS66SPNJ5Cqp5kQDmN8vBPIcbiOW87Gu9l
-   0mvoq+eSdSY//2sBEXr577RibuEhPlcwmQzknDK5KxuBR4DoDDyUMLwGB
-   2xyDebH6CVmUIz0n2hZp1M88G7mrmkqvZ+XINPYYcygwrpgcXA60pGWfV
-   ysF0KPOXSEyBpkOMKXNt2YFEI6szbe9xag964efYiFFM103JFu0gvxpY2
-   sUaq5cLmx3DFgCFrk/vxWnl/uSUAVydjvBsN5lxLvxeqUzLYRJWTmK+09
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="250707258"
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="250707258"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 17:42:52 -0700
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="594954182"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 17:42:50 -0700
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] rcu: Direct boosting gp_tasks for strict grace periods
-Date:   Fri, 13 May 2022 08:42:55 +0800
-Message-Id: <20220513004256.465233-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 12 May 2022 20:45:08 -0400
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51AF28B69A;
+        Thu, 12 May 2022 17:45:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=jJfkC5Ggl9PBSX8dbtET+FNDoEEEikJyMuvYPYbye6c=; b=OvNNgZ0/ROFK3Q4PvFu625p3nm
+        9fKSysyDUF+Y5nlb1vJz2fWZJDBEkccJWNiPHKu5IEgAvg/dyxhy161XDrM1rTbxmR1dptd9IJIwM
+        yUA+GFBbkL3lZ/5cMuoKZqGJJ1EwZZVvzJ8KzX2DkApp0DFEEVJXDUZBdAtLcaeZWFgvv2u+tMfoj
+        L+iNt1GOVWrLYL7dlN9hgjE7+XwqaZ60A3rtXoA/K5HZGUEGKFz/HSyT1EcSTYjno+suprdK03k4/
+        oqtRrlt8q27FiysVwrpRNqtKhRX1bj6jtL52B6WCo/eoCpavpVYK6dJokI+fW5gfAcXbh8O2vLRTd
+        nMrQiGFA==;
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1npJQX-00ERhN-RB; Fri, 13 May 2022 00:45:05 +0000
+Date:   Fri, 13 May 2022 00:45:05 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Gou Hao <gouhao@uniontech.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jiaofenfang@uniontech.com, willy@infradead.org
+Subject: Re: [PATCH V2] fs: remove fget_many and fput_many interface
+Message-ID: <Yn2qEej5rjnVKw5i@zeniv-ca.linux.org.uk>
+References: <20211102024648.14578-1-gouhao@uniontech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211102024648.14578-1-gouhao@uniontech.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the CONFIG_RCU_STRICT_GRACE_PERIOD option is enabled, the normal grace
-period will be treated as expedited grace period, the gp_tasks that block
-current grace period needs to be boosted unconditionally, therefore this
-commit adds Kconfig check in rcu_initiate_boost().
+On Tue, Nov 02, 2021 at 10:46:48AM +0800, Gou Hao wrote:
+> These two interface were added in 091141a42 commit,
+> but now there is no place to call them.
+> 
+> The only user of fput/fget_many() was removed in commit
+> 62906e89e63b ("io_uring: remove file batch-get optimisation").
+> 
+> A user of get_file_rcu_many() were removed in commit 
+> f073531070d2 ("init: add an init_dup helper").
+> 
+> And replace atomic_long_sub/add to atomic_long_dec/inc
+> can improve performance.
+> 
+> Here are the test results of unixbench:
+> 
+> Cmd: ./Run -c 64 context1
+> 
+> Without patch:
+> System Benchmarks Partial Index              BASELINE       RESULT    INDEX
+> Pipe-based Context Switching                   4000.0    2798407.0   6996.0
+>                                                                    ========
+> System Benchmarks Index Score (Partial Only)                         6996.0
+> 
+> With patch:
+> System Benchmarks Partial Index              BASELINE       RESULT    INDEX
+> Pipe-based Context Switching                   4000.0    3486268.8   8715.7
+>                                                                    ========
+> System Benchmarks Index Score (Partial Only)                         8715.7
+> 
+> Signed-off-by: Gou Hao <gouhao@uniontech.com>
 
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- kernel/rcu/tree_plugin.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-index 99cde4c94769..a60f2edf8e59 100644
---- a/kernel/rcu/tree_plugin.h
-+++ b/kernel/rcu/tree_plugin.h
-@@ -1159,7 +1159,8 @@ static void rcu_initiate_boost(struct rcu_node *rnp, unsigned long flags)
- 	    (rnp->gp_tasks != NULL &&
- 	     rnp->boost_tasks == NULL &&
- 	     rnp->qsmask == 0 &&
--	     (!time_after(rnp->boost_time, jiffies) || rcu_state.cbovld))) {
-+	     (!time_after(rnp->boost_time, jiffies) || rcu_state.cbovld ||
-+			IS_ENABLED(CONFIG_RCU_STRICT_GRACE_PERIOD)))) {
- 		if (rnp->exp_tasks == NULL)
- 			WRITE_ONCE(rnp->boost_tasks, rnp->gp_tasks);
- 		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
--- 
-2.25.1
-
+Rebased and applied, with deep apologies for having it fall through cracks
+back in November.

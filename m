@@ -2,59 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A95526C62
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 23:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6EB7526C68
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 23:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384703AbiEMVjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 17:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
+        id S1383692AbiEMVlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 17:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384692AbiEMVjC (ORCPT
+        with ESMTP id S1384713AbiEMVl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 17:39:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2653454BED
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 14:39:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C3782B831E4
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 21:38:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 79519C34100;
-        Fri, 13 May 2022 21:38:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652477938;
-        bh=uls0Cs7a/Pq03jujmH7qyme26hYYsttE4InpYcX4XM8=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=bCw9L/nHBxvmBN+gCwdn57XC9erRsWoyPAI+934a4w7QPRsPpKyFNzBCi/gIMWd1F
-         B/VBeD4H2iHZzL7CIcozQgdDce0Wwv9cULFlLHRCp9xf7HAgirUoMxe0kBqzsfJmtW
-         5elWLR4sMDsXkLh4w8nCpc2vSMqKL18fhpqI+5MpfIuL8poFqCsJWz+5Kwvnd7D/KW
-         u5o2D44BNtgumu0jwDH+EmOazsRqVDogpemUaYbAXQpZpchD5R46uvxu0h8sr1EqLq
-         ao1/2/UJaK6YPwj1cwAoZXzllcMjTgtqZTSbdb1puytGI8dgPDr8eip1a6wpCPb+hV
-         KdNuUdegD8mOw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 64A72F0389D;
-        Fri, 13 May 2022 21:38:58 +0000 (UTC)
-Subject: Re: [GIT PULL] gfs2 fixes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220513210710.4124506-1-agruenba@redhat.com>
-References: <20220513210710.4124506-1-agruenba@redhat.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220513210710.4124506-1-agruenba@redhat.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git tags/gfs2-v5.18-rc4-fix3
-X-PR-Tracked-Commit-Id: e1fa9ea85ce89207d2ac0316da35a4a7736801f9
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d928e8f3af38abc8d2d56d9329a8280f7af5f10e
-Message-Id: <165247793840.10019.8065611897082120198.pr-tracker-bot@kernel.org>
-Date:   Fri, 13 May 2022 21:38:58 +0000
-To:     Andreas Gruenbacher <agruenba@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        cluster-devel@redhat.com, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Fri, 13 May 2022 17:41:28 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECB92E08A
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 14:41:25 -0700 (PDT)
+Received: from p508fd4ce.dip0.t-ipconnect.de ([80.143.212.206] helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1npd26-0003Vy-OT; Fri, 13 May 2022 23:41:10 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wefu@redhat.com, liush@allwinnertech.com, guoren@kernel.org,
+        atishp@atishpatra.org, anup@brainfault.org, drew@beagleboard.org,
+        Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>,
+        wens@csie.org, maxime@cerno.tech, gfavor@ventanamicro.com,
+        andrea.mondelli@huawei.com, behrensj@mit.edu, xinhaoqu@huawei.com,
+        mick@ics.forth.gr, allen.baum@esperantotech.com,
+        jscheid@ventanamicro.com, rtrauben@gmail.com, samuel@sholland.org,
+        cmuellner@linux.com, philipp.tomsich@vrull.eu
+Subject: Re: [PATCH v10 00/12] riscv: support for Svpbmt and D1 memory types
+Date:   Fri, 13 May 2022 23:41:09 +0200
+Message-ID: <8248008.lOV4Wx5bFT@phil>
+In-Reply-To: <mhng-471ef84f-9ac4-44c9-ae85-0492d2a1ad99@palmer-ri-x1c9>
+References: <mhng-471ef84f-9ac4-44c9-ae85-0492d2a1ad99@palmer-ri-x1c9>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,15 +49,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 13 May 2022 23:07:10 +0200:
+Am Freitag, 13. Mai 2022, 05:32:49 CEST schrieb Palmer Dabbelt:
+> On Wed, 11 May 2022 12:29:09 PDT (-0700), heiko@sntech.de wrote:
+> > Svpbmt is an extension defining "Supervisor-mode: page-based memory types"
+> > for things like non-cacheable pages or I/O memory pages.
+> >
+> >
+> > So this is my 2nd try at implementing Svpbmt (and the diverging D1 memory
+> > types) using the alternatives framework.
+> >
+> > This includes a number of changes to the alternatives mechanism itself.
+> > The biggest one being the move to a more central location, as I expect
+> > in the future, nearly every chip needing some sort of patching, be it
+> > either for erratas or for optional features (svpbmt or others).
+> >
+> > Detection of the svpbmt functionality is done via Atish's isa extension
+> > handling series [0] and thus does not need any dt-parsing of its own
+> > anymore.
+> >
+> > The series also introduces support for the memory types of the D1
+> > which are implemented differently to svpbmt. But when patching anyway
+> > it's pretty clean to add the D1 variant via ALTERNATIVE_2 to the same
+> > location.
+> >
+> > The only slightly bigger difference is that the "normal" type is not 0
+> > as with svpbmt, so kernel patches for this PMA type need to be applied
+> > even before the MMU is brought up, so the series introduces a separate
+> > stage for that.
+> >
+> >
+> > In theory this series is 2 parts:
+> > - alternatives improvements
+> > - svpbmt+d1
+> >
+> > I picked the recipient list from the previous versions, hopefully
+> > I didn't forget anybody.
+> >
+> > I tested the series on:
+> > - qemu-rv32 + buildroot rootfs
+> > - qemu-rv64 + debian roots
+> > - Allwinner D1-Nezha
+> > - BeagleV - it at least reached the same point as without the series
+> 
+> IMO that's fine, it's also broken due to issues around non-coherence but 
+> it has an entirely different way of handling things than.
+> 
+> > I also ran Palmers CI environment on 5.18-rc6 + this series and
+> > it passed with all testcases now.
+> 
+> Thanks, I know that's a bit of a mess.  If I ever get some time I'll try 
+> and clean it up, but it keeps finding issues so I'm sort of stuck with 
+> it for now.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git tags/gfs2-v5.18-rc4-fix3
+No worries, once I got it to run, it was easy to use, though needs
+quite a bit of time to build everything.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d928e8f3af38abc8d2d56d9329a8280f7af5f10e
+But now that I made it to run, I'll try to use in the future as well :-) .
 
-Thank you!
+> As expected it now passes locally, so I've put this on 
+> for-next.  I hadn't noticed your testing was on rc6, I put this on top 
+> of rc1 -- that's what I usually do for merge window stuff, but if 
+> there's something specific between rc1 and rc6 this depends on then LMK 
+> and I'll sort it out.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+In the past I also had it run on -rc1 without any issues.
+Just after refreshing with with your recent changes, it was back at
+5.17-something and then I went to 5.18-rc6 as base.
+
+So there wasn't any real reason for -rc6 except was the most current
+release :-)
+
+Heiko
+
+> > changes in v10:
+> > - add received review-tags
+> > - put early patching behind a kconfig symbol
+> > - adapt compiler flags of sources in use by early patching
+> >   similar to other riscv arch-parts.
+> >   This fixes the medlow cmodel issue on rv32 and also issues
+> >   with Kasan.
+> >
+> > changes in v9:
+> > - rebase onto 5.18-rc1
+> > - drop the sbi null-ptr patch
+> >   While I still think this to be non-ideal as is, it isn't really
+> >   necessary for svpbmt support anymore
+> > - merge cpufeature + svpbmt patch, as otherwise some empty shells
+> >   cause build warnings when a bisection stops between these two
+> >   patches
+> > - address review comments from Christoph Hellwig:
+> >   - keep alternatives optional, they now get selected by its
+> >     users (erratas and also the newly introduced svpbmt kconfig)
+> >   - wrap long lines and keep things below 80 characters
+> >   - restyle svpbmt + thead errata assembly
+> >   - introduce a helper for the repeated calls to
+> >     (val & _PAGE_PFN_MASK) >> _PAGE_PFN_SHIFT
+> >
+> > changes in v8:
+> > - rebase onto 5.17-final + isa extension series
+> >   We're halfway through the merge-window, so this series
+> >   should be merge after that
+> > - adapt to fix limiting alternatives to non-xip-kernels
+> > - add .norelax option for alternatives
+> > - fix unused cpu_apply_errata in thead errata
+> > - don't use static globals to store cpu-manufacturer data
+> >   as it makes machines hang if done too early
+> >
+> > changes in v7:
+> > - fix typo in patch1 (Atish)
+> > - moved to Atish's isa-extension framework
+> > - and therefore move regular boot-alternatives directly behind fill_hwcaps
+> > - change T-Head errata Kconfig text (Atish)
+> >
+> > changes in v6:
+> > - rebase onto 5.17-rc1
+> > - handle sbi null-ptr differently
+> > - improve commit messages
+> > - use riscv,mmu as property name
+> >
+> > changes in v5:
+> > - move to use alternatives for runtime-patching
+> > - add D1 variant
+> >
+> >
+> > [0] https://lore.kernel.org/r/20220222204811.2281949-2-atishp@rivosinc.com
+> >
+> > Heiko Stuebner (12):
+> >   riscv: integrate alternatives better into the main architecture
+> >   riscv: allow different stages with alternatives
+> >   riscv: implement module alternatives
+> >   riscv: implement ALTERNATIVE_2 macro
+> >   riscv: extend concatenated alternatives-lines to the same length
+> >   riscv: prevent compressed instructions in alternatives
+> >   riscv: move boot alternatives to after fill_hwcap
+> >   riscv: Fix accessing pfn bits in PTEs for non-32bit variants
+> >   riscv: add RISC-V Svpbmt extension support
+> >   riscv: remove FIXMAP_PAGE_IO and fall back to its default value
+> >   riscv: don't use global static vars to store alternative data
+> >   riscv: add memory-type errata for T-Head
+> >
+> >  arch/riscv/Kconfig                          |  28 +++++
+> >  arch/riscv/Kconfig.erratas                  |  34 ++++--
+> >  arch/riscv/Kconfig.socs                     |   1 -
+> >  arch/riscv/Makefile                         |   2 +-
+> >  arch/riscv/errata/Makefile                  |   2 +-
+> >  arch/riscv/errata/alternative.c             |  75 ------------
+> >  arch/riscv/errata/sifive/errata.c           |  20 ++-
+> >  arch/riscv/errata/thead/Makefile            |  11 ++
+> >  arch/riscv/errata/thead/errata.c            |  82 +++++++++++++
+> >  arch/riscv/include/asm/alternative-macros.h | 129 +++++++++++++++-----
+> >  arch/riscv/include/asm/alternative.h        |  25 +++-
+> >  arch/riscv/include/asm/errata_list.h        |  59 +++++++++
+> >  arch/riscv/include/asm/fixmap.h             |   2 -
+> >  arch/riscv/include/asm/hwcap.h              |   1 +
+> >  arch/riscv/include/asm/pgtable-32.h         |  17 +++
+> >  arch/riscv/include/asm/pgtable-64.h         |  79 +++++++++++-
+> >  arch/riscv/include/asm/pgtable-bits.h       |  10 --
+> >  arch/riscv/include/asm/pgtable.h            |  55 +++++++--
+> >  arch/riscv/include/asm/vendorid_list.h      |   1 +
+> >  arch/riscv/kernel/Makefile                  |  15 +++
+> >  arch/riscv/kernel/alternative.c             | 118 ++++++++++++++++++
+> >  arch/riscv/kernel/cpu.c                     |   1 +
+> >  arch/riscv/kernel/cpufeature.c              |  80 +++++++++++-
+> >  arch/riscv/kernel/module.c                  |  29 +++++
+> >  arch/riscv/kernel/setup.c                   |   2 +
+> >  arch/riscv/kernel/smpboot.c                 |   4 -
+> >  arch/riscv/kernel/traps.c                   |   2 +-
+> >  arch/riscv/mm/init.c                        |   1 +
+> >  28 files changed, 724 insertions(+), 161 deletions(-)
+> >  delete mode 100644 arch/riscv/errata/alternative.c
+> >  create mode 100644 arch/riscv/errata/thead/Makefile
+> >  create mode 100644 arch/riscv/errata/thead/errata.c
+> >  create mode 100644 arch/riscv/kernel/alternative.c
+> 
+
+
+
+

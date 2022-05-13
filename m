@@ -2,115 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0409525EA5
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 11:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF02525EFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 12:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378975AbiEMJSk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 13 May 2022 05:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
+        id S1355257AbiEMJov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 05:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378971AbiEMJSd (ORCPT
+        with ESMTP id S232842AbiEMJoq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 05:18:33 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5A15E74C;
-        Fri, 13 May 2022 02:18:29 -0700 (PDT)
-Received: from mail-yb1-f180.google.com ([209.85.219.180]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MmyzH-1oEZVb0Kt5-00kAoY; Fri, 13 May 2022 11:18:28 +0200
-Received: by mail-yb1-f180.google.com with SMTP id y76so14329357ybe.1;
-        Fri, 13 May 2022 02:18:27 -0700 (PDT)
-X-Gm-Message-State: AOAM5303CDn8ppRYW2dEw2sBsvsw96NIHrE3XqPvmxdto69Pb3zIC8ij
-        GYbSIhFCjvqKG2XEbMD9CMzf37dK4572NFyJ3ps=
-X-Google-Smtp-Source: ABdhPJzWhKU1AHupx7S1zjfD+kxbZoybdLGRgPZF8fYtv0ubcCFBrL+uhzTP2ciCWXA+iR8431cs7DZFsZ/UlHLEmLQ=
-X-Received: by 2002:a25:d3c2:0:b0:645:74df:f43d with SMTP id
- e185-20020a25d3c2000000b0064574dff43dmr3753633ybf.394.1652433506801; Fri, 13
- May 2022 02:18:26 -0700 (PDT)
+        Fri, 13 May 2022 05:44:46 -0400
+X-Greylist: delayed 3611 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 13 May 2022 02:44:45 PDT
+Received: from mail-m17655.qiye.163.com (mail-m17655.qiye.163.com [59.111.176.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FBC51E2510
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 02:44:45 -0700 (PDT)
+Received: from [172.16.12.93] (unknown [58.22.7.114])
+        by mail-m17655.qiye.163.com (Hmail) with ESMTPA id 2E4D94003D;
+        Fri, 13 May 2022 16:44:32 +0800 (CST)
+Message-ID: <94bf30a2-9dcf-07b2-ccb6-3c4aa5cf6a00@rock-chips.com>
+Date:   Fri, 13 May 2022 16:44:31 +0800
 MIME-Version: 1.0
-References: <20220506085815.5a3cfa83@canb.auug.org.au> <20220513172933.5dbf4ffb@canb.auug.org.au>
-In-Reply-To: <20220513172933.5dbf4ffb@canb.auug.org.au>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 13 May 2022 11:18:10 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a27bPttwrOBKPwNZ=B1zGZqKV=Js-zWcO7ofnqc=xyHQA@mail.gmail.com>
-Message-ID: <CAK8P3a27bPttwrOBKPwNZ=B1zGZqKV=Js-zWcO7ofnqc=xyHQA@mail.gmail.com>
-Subject: Re: linux-next: build warnings after merge of the arm-soc tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:zuEH0IY2nkJkL6fmf+tietaTulDelKeKaN5PE7gswSn1OztESPM
- 6CqUWeuUmdwwZ/v9FqSrFc0zXi4ZDMqo2nO3SO+P2d/VYes0PXmQFvgVSwTOgUoMHMY/Kag
- Ckr5PAzdHsTdBTtqiW4Dz7+uWOU0RP03I8FoPOM0anCLksdHh7sXA0SpZD+2pkLGs4EmxdC
- sY7T7IWYhUSpZ2vyjZcVA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:y8OJOJ7JzrY=:abGRqrY3e5I0Yy8UHJho2a
- sj+po0ZXPwpwLW23O2U5kd/uiEMrchOOxrPTvR/A7SZvnqB2MRUer3BHs1ZCVKh2ghzk/B2oM
- 6V5J8US+T5qh7vIO5quN07zj4ZHsMGZWZnLfYJ3GmTELuh5mdHLqN6QhAdO+Ng145g//VGehg
- ZtoPiPf5precRtI2Hi28ykK0ydx8JYUKGRpGhREEF5zz0StwgLJFrI/9oRJyuDypLsKNqgc+O
- ySTG0DmTlX+DpnT0LbjiuNGurxq5aweWbTF5Vzj/LDN8lZA596Vo3gcZLLKCE0fGGv0lCdUrt
- dxO0LFm1TW4jOyPZmpJkMnbGX9RHa/W7ei8NO7AB3jxw+itW2/6/5iMvvDdXfAr6+XeZ5K/EE
- j4qmN4JyQRqC1dzKeFtY3w+dOU1cpWhbms6gt9dXciDIew3m5W6iPH0F00XvYzLcWQESWjByl
- VnhYq9cRGHzRSxXyX/iuR0nv5hSdACNN4gStsO0tYDSnLee+rf8ZVvg9ILTHcfvtIq/ZDxV3y
- XTy3Vdy4IGuGZs64dLu/T8d/tBjoOgduvx1m0Nk1niWNkXDXq5xYxbcFYA7ZhqTRyia3Ej6ub
- 2QoGKIG2SgbASNY2Fq4a+qzzQn5ZUjIJUiIfmwv6qC8+b0IfoL1K75XomHUlZEiYusUlrtoPq
- aTtvemFeMaGnKS1fvgK6/qugJLykyDH6xgR7hOOdbtBjoBeWwu7nh+o1fzFvDZ//WButbSu19
- TmsU4SeFYOw185t/Z2OcjcoeyJ6hP1lx05aRvyQ0S3P3vH9EX/MKEIIQ440IY1u2d6mfMq3FH
- xaPS/rdFAuWXT/Etchh4PTj9Irnv66UHtzZ+cxAuyWYIfQCmhk=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [BUG] New arm scmi check in linux-next causing rk3568 not to boot
+ due to firmware bug
+Content-Language: en-US
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Cc:     Cristian Marussi <cristian.marussi@arm.com>,
+        Etienne Carriere <etienne.carriere@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liang Chen <cl@rock-chips.com>, linux-kernel@vger.kernel.org,
+        Jeffy Chen <jeffy.chen@rock-chips.com>,
+        Peter Geis <pgwipeout@gmail.com>
+References: <1698297.NAKyZzlH2u@archbook> <YnOEwuuyO2/h7c1G@e120937-lin>
+ <CAN5uoS_MgBiTVZCRSZyYCH4cnUZD_bHj2+mZu661bFV8TKWScw@mail.gmail.com>
+ <6587375.6lpfYT6tjA@archbook> <Yn0a9nSD7Yu6aOkt@bogus>
+From:   Kever Yang <kever.yang@rock-chips.com>
+In-Reply-To: <Yn0a9nSD7Yu6aOkt@bogus>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
+        kWDxoPAgseWUFZKDYvK1lXWShZQUlKS0tKN1dZLVlBSVdZDwkaFQgSH1lBWRpPQklWGkMfSkhMSx
+        5LTExKVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWU9LSFVKSktITUpVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6ODI6Nzo*ND0*SU8tTigDOQsh
+        AzdPCRVVSlVKTU5JT0hKT0xJQ0tPVTMWGhIXVRAeDR4JVQIaFRw7CRQYEFYYExILCFUYFBZFWVdZ
+        EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFIQkNMNwY+
+X-HM-Tid: 0a80bc974751da01kuws2e4d94003d
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 9:29 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> On Fri, 6 May 2022 08:58:15 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > After merging the arm-soc tree, today's linux-next build (arm
-> > multi_v7_defconfig) produced these warnings:
-> >
-> > arch/arm/boot/dts/bcm953012hr.dts:57.3-33: Warning (reg_format): /nand-controller@18028000/nand@0/partition@0:reg: property has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
-> > arch/arm/boot/dts/bcm953012hr.dts:62.3-33: Warning (reg_format): /nand-controller@18028000/nand@0/partition@200000:reg: property has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
-> > arch/arm/boot/dts/bcm953012hr.dts:66.3-33: Warning (reg_format): /nand-controller@18028000/nand@0/partition@600000:reg: property has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
-> > arch/arm/boot/dts/bcm953012hr.dts:70.3-33: Warning (reg_format): /nand-controller@18028000/nand@0/partition@1000000:reg: property has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
-> > arch/arm/boot/dts/bcm953012hr.dtb: Warning (pci_device_reg): Failed prerequisite 'reg_format'
-> > arch/arm/boot/dts/bcm953012hr.dtb: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
-> > arch/arm/boot/dts/bcm953012hr.dtb: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
-> > arch/arm/boot/dts/bcm953012hr.dtb: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
-> > arch/arm/boot/dts/bcm953012hr.dts:55.14-59.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@0: Relying on default #address-cells value
-> > arch/arm/boot/dts/bcm953012hr.dts:55.14-59.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@0: Relying on default #size-cells value
-> > arch/arm/boot/dts/bcm953012hr.dts:60.19-63.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@200000: Relying on default #address-cells value
-> > arch/arm/boot/dts/bcm953012hr.dts:60.19-63.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@200000: Relying on default #size-cells value
-> > arch/arm/boot/dts/bcm953012hr.dts:64.19-67.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@600000: Relying on default #address-cells value
-> > arch/arm/boot/dts/bcm953012hr.dts:64.19-67.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@600000: Relying on default #size-cells value
-> > arch/arm/boot/dts/bcm953012hr.dts:68.20-71.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@1000000: Relying on default #address-cells value
-> > arch/arm/boot/dts/bcm953012hr.dts:68.20-71.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@1000000: Relying on default #size-cells value
-> >
-> > I don't know what caused this now.
+Hi Sudeep,
+
+     Rockchip has notice this issue, we will check how to fix this issue 
+in our ATF release.
+
+
+Thanks,
+- Kever
+On 2022/5/12 22:34, Sudeep Holla wrote:
+> On Thu, May 12, 2022 at 01:11:22PM +0200, Nicolas Frattaroli wrote:
+>> Hello,
+>>
+>> sorry for the late reply, completely missed that there was a question
+>> for me in this mail.
+>>
+>> On Donnerstag, 5. Mai 2022 11:40:09 CEST Etienne Carriere wrote:
+>>> Hello Nicolas, Cristian,
+>>> [...]
+>>>
+>>> Indeed the firmware implementation is wrong in TF-A.
+>>> And also in OP-TEE by the way:
+>>> https://github.com/OP-TEE/optee_os/blob/3.17.0/core/drivers/scmi-msg/base.c#L163-L166
+>>>
+>>> @Nicoals, do you want to send a patch to TF-A, or do you want me to do it?
+>> I have no experience with TF-A, so I'd prefer if you could do it.
+>>
+>> In good news, Rockchip has confirmed they're preparing to release RK356x
+>> TF-A sources, so I'll be able to port the patch over to their sources once
+>> they are released, if they don't already apply it themselves.
+>>
+> So, there is no way to get a blob release with the patch applied ?
+> We know it is a bug in TF-A and if Rockchip is using that codebase, it
+> will be the same bug there too causing this issue. Waiting until the
+> code is released and the proper TF-A port is done may not be acceptable
+> for many developers. So someone from the rockchip doing these tf-a blob
+> release must get involved here, understand the situation and get the fixed.
 >
-> I am still getting these warnings.
-
-Thank you for the reminder, I have now reverted commit 90103611d573 ("ARM: dts:
-BCM5301X: Fix DTC warning for NAND node"), which caused the problem.
-
-The patch was meant to fix a different warning
-
-Warning (avoid_unnecessary_addr_size):
-/nand-controller@18028000/nand@0: unnecessary
-#address-cells/#size-cells without "ranges" or child "reg" property
-
-but I don't see that here, so I don't know if it was actually required.
-
-Arınç, Rafał, Florian: if the original problem comes back now, please
-send a follow-up patch
-that addresses all the warnings.
-
-      Arnd
+> We can workaround, but I want to hear that it will be fixed instead of
+> getting ignored until proper port is available.
+>
+> Etienne, are you not the author for the related TF-A code ? How can we
+> get that fixed in the TF-A code base. If you are not, then I will try to
+> get my repo login credentials sorted so that I can only push TF-A change.
+>

@@ -2,123 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C93E525D46
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 10:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05E52525D42
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 10:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378176AbiEMIX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 04:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38614 "EHLO
+        id S1378191AbiEMIYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 04:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378173AbiEMIX4 (ORCPT
+        with ESMTP id S1378177AbiEMIYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 04:23:56 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F3C25B076
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:23:54 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id t6so10404821wra.4
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:23:53 -0700 (PDT)
+        Fri, 13 May 2022 04:24:09 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF2B2A5E9D
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:24:07 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id a5so6586906wrp.7
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 01:24:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=smile-fr.20210112.gappssmtp.com; s=20210112;
+        d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=PyfNVqLhUzNkjpgQ9UuI9hC10iZbU2Sy8hokDDhjW1c=;
-        b=uyE+J/VPE/aqnTrkoYawPZOjwR8W2AJEH4pjIBgBN6s4uE4Bqneq0UBCTPQvgJuLD7
-         3i6I0bk+Ghzkd/Y0OApLv3XSvNbT/xBD+kMrarqJI5g0rIl6ksKsbQNluc2Dd36By0Tg
-         UCdNwxIQS0qIUVp4hoQEKzDXqaHggpNJJlY9kN5tDiz2XfxARp5CfoJYMpAh1eghcQqv
-         GMvyZhrtGvnyRi0ph7vstzMyjOljzqS7+2FUY9tnVndlgLBmxRk7fRk7tpZmH7liTXtG
-         TjSI3zmV02BNZY/8QwjnW9Vxfsn3i8GtFksGO0C6ePN4ebs8nq6LA67UlGJWWn4OVffB
-         8EnA==
+        bh=M1lYVcvZGeJMDFjAhYStiELCM++HSwims5YjxbNozwg=;
+        b=VbF5QVMtyN7wrrr73XL/TWaz7LGSC4fqPP/OtRmnRtZadMHQ6Cu4VKhLauJZphD/8P
+         vD5LrRJlwxmsuT2CnGS5mQQKXg9S3i+1oa4Nf6sHTE1JJqkIWplJptcJsypElUyhJfdJ
+         qlTQFyIhixS+fM0ASMshTHF8S2UFoSsTgOFG92BCWZmv3WZAJtxE4wtU6onXh2xlQQ5k
+         yRSXdTTBzO0ubkXC23EXSMRh830kqZUgHGNBGaNawxdFNq50CUJw+o2k7tODZKYWzkuS
+         x9ExpYkx25FzZdiFZ87M1czwbZEz7OA4k2xlQuX3xpv++wEFFqdwg3WM90Onyh2xeLYl
+         pjHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=PyfNVqLhUzNkjpgQ9UuI9hC10iZbU2Sy8hokDDhjW1c=;
-        b=Jjptmz8DA59sORBT2HENxnc2U8kmkkmpq776xiYfFje5J5+F41YcbZORtOvA2Aqsgd
-         Gf90ZOnJB4HK9Fu+m8wTFpu6cmGaT9TMQA+tzj8x0Upg02D975uqwqDAu0lS4vXiu/rR
-         OHeEecaKGSDWgrzK/17FBBQMI4j5hl6I8uH0llt/pj1c/st4siDXfyHRaBxlCt/Orwrf
-         aEgy1c1SkSBehAMmbkr8OzTBFq06MKFQRPGy+/5WHFZowT02VCkdEbqYsragiNadhdsJ
-         EQybqDiQ4NF8dD8dxtWGmp2AbNUrhPs05kYl5R+ckUVit/TEd6STq32COvYwYbud9F/8
-         crTw==
-X-Gm-Message-State: AOAM533FiiBY5G5bpDsO/2Lt3LJqhgdB/NEVYKbuZpeKniqVAuwBYc6q
-        CRVOIU40duvrMtDeZI5ZHKDrPQ==
-X-Google-Smtp-Source: ABdhPJwdSWww2/id9LJNLs8/PG8ZeQp1Wg5I7GKKT8WISSKYbRD4qonFi6DvwWNJo/zk+LodMt0USA==
-X-Received: by 2002:a5d:6643:0:b0:20a:f3a1:2d07 with SMTP id f3-20020a5d6643000000b0020af3a12d07mr2956737wrw.159.1652430232520;
-        Fri, 13 May 2022 01:23:52 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f? (2a01cb058f8a18001c97b8d1b477d53f.ipv6.abo.wanadoo.fr. [2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f])
-        by smtp.gmail.com with ESMTPSA id z18-20020a7bc152000000b003958af7d0c8sm1656105wmi.45.2022.05.13.01.23.51
+        bh=M1lYVcvZGeJMDFjAhYStiELCM++HSwims5YjxbNozwg=;
+        b=Cycq/dbHFp8fK5kFrVX5Q4iPlVATUG5nTfXaceIv6AJK4vjkbYmp4HwbMTkuYpOob1
+         81tY0HAGQB4ANSnJh5rpLM2/qYHTrNdcop50kvbhChrGztA8R2gXUymu3oEEJiHIvxYS
+         QiVnSORdHud/awZgcMDy2TF4U1zen9zjB7cYD3SyIEgmPeTRDV+ZBclZjTRVNet6xg+e
+         06Dh9bCmkpb3iHDfS1Zxo7YK19e2LrwRAoRr/98WKnAmV2B3b73XWrN1g6zs2Fp6ZI70
+         eSDekolQKLdN9ESpE0FpIczUvPGGdf82jyGEqZSMqJGGqLxVztsEBRx62znQ1mK09ow4
+         Cb5g==
+X-Gm-Message-State: AOAM532uNpWFP2aaSOFQIje6nt+nNlR5p8PhursSP66/DLsWfuBYB+0F
+        vywurseBIFauDYC9A0/h6UK3Cw==
+X-Google-Smtp-Source: ABdhPJyfbJrwOl2LNY/n2Drgyva6rd+YJJxS539TxEvjRvHrgJmkirgEPK6yG1Emcsy4it1ih0jbmg==
+X-Received: by 2002:a5d:58e5:0:b0:20a:e022:3f8c with SMTP id f5-20020a5d58e5000000b0020ae0223f8cmr2764714wrd.667.1652430246346;
+        Fri, 13 May 2022 01:24:06 -0700 (PDT)
+Received: from [192.168.0.169] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id p26-20020adfa21a000000b0020c61af5e1fsm1495820wra.51.2022.05.13.01.24.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 01:23:52 -0700 (PDT)
-Message-ID: <3102213a-1b84-6559-9aa1-d35365be18b5@smile.fr>
-Date:   Fri, 13 May 2022 10:23:51 +0200
+        Fri, 13 May 2022 01:24:05 -0700 (PDT)
+Message-ID: <7c7f7036-e3ad-c9db-2c31-749e2d01e83d@linaro.org>
+Date:   Fri, 13 May 2022 10:24:04 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] bus: ti-sysc: Fix warnings for unbind for serial
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 5/7] arm64: dts: qcom: Add PM6125 PMIC
 Content-Language: en-US
-To:     Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org
-Cc:     Dave Gerlach <d-gerlach@ti.com>, Faiz Abbas <faiz_abbas@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Keerthy <j-keerthy@ti.com>, Kevin Hilman <khilman@baylibre.com>,
-        Nishanth Menon <nm@ti.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220512053021.61650-1-tony@atomide.com>
-From:   Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <20220512053021.61650-1-tony@atomide.com>
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220511220613.1015472-1-marijn.suijten@somainline.org>
+ <20220511220613.1015472-6-marijn.suijten@somainline.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220511220613.1015472-6-marijn.suijten@somainline.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-Le 12/05/2022 à 07:30, Tony Lindgren a écrit :
-> We can get "failed to disable" clock_unprepare warnings on unbind at least
-> for the serial console device if the unbind is done before the device has
-> been idled.
+On 12/05/2022 00:06, Marijn Suijten wrote:
+> This PMIC is commonly used on boards with an SM6125 SoC and looks very
+> similar in layout to the PM6150.
 > 
-> As some devices are using deferred idle, we must check the status for
-> pending idle work to idle the device.
+> Downstream declares more nodes to be available, but these have been
+> omitted from this patch: the pwm/lpg block is unused on my reference
+> device making it impossible to test/validate, and the spmi-clkdiv does
+> not have a single device-tree binding using this driver yet, hence
+> inclusion is better postponed until ie. audio which uses these clocks is
+> brought up.
+> 
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 
-I didn't noticed the "failed to disable" warning so far (kernel 5.10.106 from
-ti-linux-kernel repository) but I applied this patch as suggested [1] while
-investigating another issue "tty serial 8250 omap driver crash".
+Two reviews on first patch... :)
 
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
+> +
+> +	pmic@1 {
+> +		compatible = "qcom,pm6125", "qcom,spmi-pmic";
+> +		reg = <0x1 SPMI_USID>;
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
 
-[1] https://marc.info/?l=linux-omap&m=164484408319083&w=2
+No children, so this should not be needed, I think.
+
+> +	};
+> +};
+
 
 Best regards,
-Romain
-
-
-> 
-> Cc: Romain Naour <romain.naour@smile.fr>
-> Fixes: 76f0f772e469 ("bus: ti-sysc: Improve handling for no-reset-on-init and no-idle-on-init")
-> Signed-off-by: Tony Lindgren <tony@atomide.com>
-> ---
->  drivers/bus/ti-sysc.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/bus/ti-sysc.c b/drivers/bus/ti-sysc.c
-> --- a/drivers/bus/ti-sysc.c
-> +++ b/drivers/bus/ti-sysc.c
-> @@ -3395,7 +3395,9 @@ static int sysc_remove(struct platform_device *pdev)
->  	struct sysc *ddata = platform_get_drvdata(pdev);
->  	int error;
->  
-> -	cancel_delayed_work_sync(&ddata->idle_work);
-> +	/* Device can still be enabled, see deferred idle quirk in probe */
-> +	if (cancel_delayed_work_sync(&ddata->idle_work))
-> +		ti_sysc_idle(&ddata->idle_work.work);
->  
->  	error = pm_runtime_resume_and_get(ddata->dev);
->  	if (error < 0) {
-
+Krzysztof

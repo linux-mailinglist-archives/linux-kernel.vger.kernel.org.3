@@ -2,52 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3916526379
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D38A652637D
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233651AbiEMOMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38528 "EHLO
+        id S235718AbiEMOM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232248AbiEMOMO (ORCPT
+        with ESMTP id S233786AbiEMOM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:12:14 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 313221116C5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:12:13 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id u18-20020a5d8712000000b0064c7a7c497aso4827083iom.18
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:12:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=fCzxRYRPf/Ri+Vt5cERuJd1IcLNFN38IjoPDg1Jl8Sk=;
-        b=lRIwVWklsItUOtNDvP6FCCojiVyQsEgqnLzyh3ael8UVqM4Sim3Kq0b3IhkCKnAGy6
-         ZmljrbbMsLT5tgrLuGghxysgCvIyt5NqR5wGy5TI6gx5rNuYWwXG54ErCF65hnqlUPPV
-         At0SWkxBp3nCoxYfDCxWwsz4iEkbp6R6r5gJkeN8RSkLDsqkiHkJwfghLlWx2yLTrXAr
-         zjzdEfDJEDLD73PWIhE7KJIO07wAzsxfVp1negvWDfS+yh4MIigQQCepxDbcmbdMSR9Q
-         6omMmkDU14pwI8fzsxmPnQC7DURSbNADymiuvssFCKB3vXf04rPBns3FYa1fGcrQVMSc
-         GcSw==
-X-Gm-Message-State: AOAM530c6ma+wC8+k2zIk8saAS2n13aeGS0jyoRwd2G+zjJm9Z61/Q8p
-        ylQqc3A9Z0q0YMHEVxn6EAyqZItht6zGVUOegqiHxzmaSF+E
-X-Google-Smtp-Source: ABdhPJz1EsGxF27pxk4TYEADGgdBCoy1rh68Qx4f0NzGa3tOUZqptqsoI5eTFbmeN/RhR9GufLNgV2R90iZcfQKe0iNBOSPZgel1
+        Fri, 13 May 2022 10:12:57 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E79118006
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 07:12:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652451175; x=1683987175;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=9RB8YEFemfc9Ft2Syyd/ar9wHxstk0TYERrFHLIB7ZA=;
+  b=MW7xHxS6fLIa1H0QusYvrcKYYtL3pcDU8eLKgqMj9ONwyJYb4xy1/WUd
+   ghXFvtGUpzYwzVxv9zXWvqM/AHRGu6ZSntdDrZoDxPl/0yyomRDIV209Z
+   /ZsS3kLs0A57r1e+ntRw1OE70gGHFkEzs6RGHC3+a+FLgBoVC2AWgfDZy
+   BBzq5irDRO51papagmlU3UrwqgoX2x3m3D3ywz6FcOLaSb3KwI7aQ85sQ
+   5qjMCIN+Rls6div3tBmbbNlUDXGmH/7k08ss3qfh9L0oEbF9DJtxuZ+GR
+   eP2vpEr0JIP3chIg5PFxbSA929vJc27egtoAo6JhrZqp/XhjGLTg+1QBR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="250843817"
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="250843817"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:12:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="624877720"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga008.fm.intel.com with ESMTP; 13 May 2022 07:12:53 -0700
+Received: from [10.252.212.211] (kliang2-MOBL.ccr.corp.intel.com [10.252.212.211])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id B38F25807E7;
+        Fri, 13 May 2022 07:12:51 -0700 (PDT)
+Message-ID: <9ae6d64e-a935-94f0-d2a9-cc49a578ba1c@linux.intel.com>
+Date:   Fri, 13 May 2022 10:12:50 -0400
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:170d:b0:2cf:b51b:c934 with SMTP id
- u13-20020a056e02170d00b002cfb51bc934mr2509774ill.285.1652451132588; Fri, 13
- May 2022 07:12:12 -0700 (PDT)
-Date:   Fri, 13 May 2022 07:12:12 -0700
-In-Reply-To: <20220513134852.6446-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c44a0a05dee54278@google.com>
-Subject: Re: [syzbot] WARNING in mntput_no_expire (3)
-From:   syzbot <syzbot+5b1e53987f858500ec00@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V2 22/23] perf tools: Allow system-wide events to keep
+ their own CPUs
+Content-Language: en-US
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>
+References: <20220506122601.367589-1-adrian.hunter@intel.com>
+ <20220506122601.367589-23-adrian.hunter@intel.com>
+ <CAM9d7cg8JRK2oVUvmWit=F5zhLhpqP=gD6iYBAa8_O-+c=EjPQ@mail.gmail.com>
+ <52f201d4-4fab-c2f4-9c4d-af887900732f@intel.com>
+ <CAM9d7cgDCd2uUJbWcvqmCDGMoPc9kppx--_rcO2OVp_GarLJkg@mail.gmail.com>
+ <f92a7681-30ca-eaf5-6f3e-de54bc19adec@intel.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <f92a7681-30ca-eaf5-6f3e-de54bc19adec@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,59 +79,271 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-WARNING in mntput_no_expire
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 4363 at fs/namespace.c:1229 mntput_no_expire+0x979/0xfe0 fs/namespace.c:1229
-Modules linked in:
-CPU: 0 PID: 4363 Comm: syz-executor.3 Not tainted 5.18.0-rc6-syzkaller-00009-gfeb9c5e19e91-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:mntput_no_expire+0x979/0xfe0 fs/namespace.c:1229
-Code: 04 00 00 48 8b 35 ff a4 dd 0b b9 01 00 00 00 bf 08 00 00 00 48 c7 c2 20 fe f0 8b e8 b1 0e 72 ff e9 01 f9 ff ff e8 a7 c0 9d ff <0f> 0b e9 b6 f8 ff ff e8 9b c0 9d ff 0f 0b e9 aa f8 ff ff e8 8f c0
-RSP: 0018:ffffc90003c2fd78 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff8880243f9d80 RSI: ffffffff81db8039 RDI: 0000000000000003
-RBP: 0000000000000008 R08: 0000000000000000 R09: 0000000000000001
-R10: ffffffff81db78d8 R11: 0000000000000000 R12: 0000000000000002
-R13: ffff888022f03800 R14: dffffc0000000000 R15: ffffed10045e070a
-FS:  0000555556ec8400(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055555662a848 CR3: 000000006e4e0000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- mntput+0x67/0x90 fs/namespace.c:1292
- __fput+0x3ba/0x9d0 fs/file_table.c:333
- task_work_run+0xdd/0x1a0 kernel/task_work.c:164
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
- exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f5ac9e3bd2b
-Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
-RSP: 002b:00007ffd32b26f80 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
-RAX: 0000000000000000 RBX: 0000000000000004 RCX: 00007f5ac9e3bd2b
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000003
-RBP: 00007f5ac9f9d960 R08: 0000000000000000 R09: 00007ffd32bcf080
-R10: 0000000000000000 R11: 0000000000000293 R12: 000000000001705f
-R13: 00007ffd32b27080 R14: 00007ffd32b270a0 R15: 0000000000000032
- </TASK>
 
 
-Tested on:
+On 5/13/2022 12:48 AM, Adrian Hunter wrote:
+> On 12/05/22 21:53, Namhyung Kim wrote:
+>> On Thu, May 12, 2022 at 3:35 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>>
+>>> On 12/05/22 08:27, Namhyung Kim wrote:
+>>>> On Fri, May 6, 2022 at 5:27 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>>>>
+>>>>> Currently, user_requested_cpus supplants system-wide CPUs when the evlist
+>>>>> has_user_cpus. Change that so that system-wide events retain their own
+>>>>> CPUs and they are added to all_cpus.
+>>>>>
+>>>>> Acked-by: Ian Rogers <irogers@google.com>
+>>>>> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+>>>>> ---
+>>>>>   tools/lib/perf/evlist.c | 11 +++++------
+>>>>>   1 file changed, 5 insertions(+), 6 deletions(-)
+>>>>>
+>>>>> diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
+>>>>> index 1c801f8da44f..9a6801b53274 100644
+>>>>> --- a/tools/lib/perf/evlist.c
+>>>>> +++ b/tools/lib/perf/evlist.c
+>>>>> @@ -40,12 +40,11 @@ static void __perf_evlist__propagate_maps(struct perf_evlist *evlist,
+>>>>>           * We already have cpus for evsel (via PMU sysfs) so
+>>>>>           * keep it, if there's no target cpu list defined.
+>>>>>           */
+>>>>> -       if (!evsel->own_cpus || evlist->has_user_cpus) {
+>>>>> -               perf_cpu_map__put(evsel->cpus);
+>>>>> -               evsel->cpus = perf_cpu_map__get(evlist->user_requested_cpus);
+>>>>> -       } else if (!evsel->system_wide &&
+>>>>> -                  !evsel->requires_cpu &&
+>>>>> -                  perf_cpu_map__empty(evlist->user_requested_cpus)) {
+>>>>> +       if (!evsel->own_cpus ||
+>>>>> +           (!evsel->system_wide && evlist->has_user_cpus) ||
+>>>>> +           (!evsel->system_wide &&
+>>>>> +            !evsel->requires_cpu &&
+>>>>> +            perf_cpu_map__empty(evlist->user_requested_cpus))) {
+>>>>
+>>>> This is getting hard to understand.  IIUC this propagation basically
+>>>> sets user requested cpus to evsel unless it has its own cpus, right?
+>>>
+>>> I put the conditional logic altogether because that is kernel style but
+>>> it does make it practically unreadable.
+>>>
+>>> If we start with the original logic:
+>>>
+>>>          if (!evsel->own_cpus || evlist->has_user_cpus) {
+>>>                  perf_cpu_map__put(evsel->cpus);
+>>>                  evsel->cpus = perf_cpu_map__get(evlist->user_requested_cpus);
+>>>          } else if (!evsel->system_wide && perf_cpu_map__empty(evlist->user_requested_cpus)) {
+>>>                  perf_cpu_map__put(evsel->cpus);
+>>>                  evsel->cpus = perf_cpu_map__get(evlist->user_requested_cpus);
+>>>          } else if (evsel->cpus != evsel->own_cpus) {
+>>>                  perf_cpu_map__put(evsel->cpus);
+>>>                  evsel->cpus = perf_cpu_map__get(evsel->own_cpus);
+>>>          }
+>>>
+>>> Then make it more readable, i.e. same functionality
+>>>
+>>>          struct perf_cpu_map *cpus;
+>>>
+>>>          if (!evsel->own_cpus || evlist->has_user_cpus)
+>>>                  cpus = evlist->user_requested_cpus;
+>>>          else if (!evsel->system_wide && perf_cpu_map__empty(evlist->user_requested_cpus))
+>>>                  cpus = evlist->user_requested_cpus;
+>>>          else
+>>>                  cpus = evsel->own_cpus;
+>>>
+>>>          if (evsel->cpus != cpus) {
+>>>                  perf_cpu_map__put(evsel->cpus);
+>>>                  evsel->cpus = perf_cpu_map__get(cpus);
+>>>          }
+>>>
+>>> Then separate out the conditions, i.e. still same functionality
+>>>
+>>>          if (!evsel->own_cpus)
+>>>                  cpus = evlist->user_requested_cpus;
+>>>          else if (evlist->has_user_cpus)
+>>>                  cpus = evlist->user_requested_cpus;
+>>>          else if (evsel->system_wide)
+>>>                  cpus = evsel->own_cpus;
+>>>          else if (perf_cpu_map__empty(evlist->user_requested_cpus)) /* per-thread */
+>>>                  cpus = evlist->user_requested_cpus;
+>>>          else
+>>>                  cpus = evsel->own_cpus;
+>>>
+>>> Then add the new requires_cpu flag:
+>>>
+>>>          if (!evsel->own_cpus)
+>>>                  cpus = evlist->user_requested_cpus;
+>>>          else if (evlist->has_user_cpus)
+>>>                  cpus = evlist->user_requested_cpus;
+>>>          else if (evsel->system_wide)
+>>>                  cpus = evsel->own_cpus;
+>>> -       else if (perf_cpu_map__empty(evlist->user_requested_cpus)) /* per-thread */
+>>> +       else if (!evsel->requres_cpu && perf_cpu_map__empty(evlist->user_requested_cpus)) /* per-thread */
+>>>                  cpus = evlist->user_requested_cpus;
+>>>          else
+>>>                  cpus = evsel->own_cpus;
+>>>
+>>> Then make system_wide keep own_cpus even if has_user_cpus:
+>>>
+>>>          if (!evsel->own_cpus)
+>>>                  cpus = evlist->user_requested_cpus;
+>>> +       else if (evsel->system_wide)
+>>> +               cpus = evsel->own_cpus;
+>>>          else if (evlist->has_user_cpus)
+>>>                  cpus = evlist->user_requested_cpus;
+>>> -       else if (evsel->system_wide)
+>>> -               cpus = evsel->own_cpus;
+>>>          else if (!evsel->requres_cpu && perf_cpu_map__empty(evlist->user_requested_cpus)) /* per-thread */
+>>>                  cpus = evlist->user_requested_cpus;
+>>>          else
+>>>                  cpus = evsel->own_cpus;
+>>>
+>>> Which leaves:
+>>>
+>>>          if (!evsel->own_cpus)
+>>>                  cpus = evlist->user_requested_cpus;
+>>>          else if (evsel->system_wide)
+>>>                  cpus = evsel->own_cpus;
+>>>          else if (evlist->has_user_cpus)
+>>>                  cpus = evlist->user_requested_cpus;
+>>>          else if (!evsel->requres_cpu && perf_cpu_map__empty(evlist->user_requested_cpus)) /* per-thread */
+>>>                  cpus = evlist->user_requested_cpus;
+>>>          else
+>>>                  cpus = evsel->own_cpus;
+>>>
+>>> And putting it back together:
+>>>
+>>>          if (!evsel->own_cpus ||
+>>>              (!evsel->system_wide && evlist->has_user_cpus) ||
+>>>              (!evsel->system_wide &&
+>>>               !evsel->requires_cpu &&
+>>>               perf_cpu_map__empty(evlist->user_requested_cpus))) {
+>>>                  cpus = evlist->user_requested_cpus;
+>>>          else
+>>>                  cpus = evsel->own_cpus;
+>>>
+>>> Perhaps I shouldn't put it together?
+>>
+>> Cool, thanks a lot for explaining it in detail.
+>> I do not oppose your change but little worried about the
+>> complexity.  And I think we have some issues with uncore
+>> events already.
+> 
+> Yes it is a bit complicated because we are handling
+> many different use cases.
+> 
+>>
+>> So do you have any idea where evsel->own_cpus
+>> doesn't propagate to evsel->cpus?
+> 
+> We let the user's list of CPUs override it i.e. the
+> evlist->has_user_cpus case.  Essentially we are expecting
+> the user to know what they are doing.
+> 
+>>
+>> I think evsel->system_wide and evsel->requires_cpu
+>> can be replaced to check evsel->own_cpus instead.
+> 
+> Not at the moment because we let the user override
+> own_cpus.
 
-commit:         feb9c5e1 Merge tag 'for_linus' of git://git.kernel.org..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-console output: https://syzkaller.appspot.com/x/log.txt?x=126c6aa5f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=79caa0035f59d385
-dashboard link: https://syzkaller.appspot.com/bug?extid=5b1e53987f858500ec00
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=10935b21f00000
+Do we check whether the user's input is valid (match the PMU's cpumask) 
+before the override?
+
+I think we know the PMU name. The cpumask of the PMU can be found in the 
+sysfs. So we should have enough information for a sanity check.
+
+
+> 
+>>
+>> Actually evlist->has_user_cpus is checked first so
+>> uncore events' own_cpus might not be used.
+> 
+> Yes
+> 
+>>
+>> In my laptop, perf stat -a -A -e imc/data_reads/
+>> will use cpu 0 as it's listed in the pmu cpumask.
+>> But when I use -C1,2 it'll use the both cpus and
+>> returns the similar values each (so the sum is 2x).
+> 
+> We expect the user to understand the uncore PMU they
+> are using.  AFAICT an uncore PMU cpu mask with only
+> CPU 0 typically means a single PMU that counts events
+> that could be indrectly caused by any CPU.  When the
+> cpu mask has more than one CPU, it means a PMU for
+> each of a group of CPU's (e.g. a core or socket)
+> 
+> So in the example you gave above, there is only 1 PMU
+> and reading from any CPU will give it's value.
+> 
+> A user providing a list of CPUs for uncore events
+> is useful only in certain cases.  For example when
+> each core has an uncore PMU and you only want to get
+> values from one core.
+>
+>>
+>> I'm not sure if it's intended.  I expect it runs on
+>> cpu 0 or one of the given cpus.  Or it runs on both
+>> cpus and returns value in half so that the sum is
+>> the same as the original value (from a cpu).
+
+It runs on CPU0. The kernel will correct the CPU when initializing the 
+event. The uncore is per-die (For the most current platforms, die is the 
+same as socket.). Usually, it runs on the first CPU of a die.
+For the -C 1,2 uncore/event/ case, the current tool creates two events. 
+One for each CPU. The kernel will find the die ID of the input CPU 
+first, then correct it to the first CPU of the die, which is 0.
+So from the kernel's perspective, the perf command turns to -C0 
+uncore/event/ -C0 uncore/event/. That's why you see similar values each. 
+(They should not be exactly the same. That's because they are not in a 
+group.)
+
+
+> 
+> I don't know if there is anything wrong with the way
+> we are handling uncore PMUs, except that I don't know
+> if it is documented anywhere.
+
+Right, we are lacking of the document for the cpumask. I guess I can 
+update it in the 
+Documentation/ABI/testing/sysfs-bus-event_source-devices-uncore. But 
+it's only for the developer.
+
+At the meantime, I think it may be better to show an error/warning if 
+the user inputs are not matched with the cpumask of the requested PMU. 
+That's for the end users.
+
+> 
+>>
+>>>
+>>>>
+>>>> But the hybrid pmus make this complex.  Maybe we can move the
+>>>> logic in evlist__fix_hybrid_cpus() here and simplify it like below
+>>>>
+>>>> if (evsel->own_cpus) {
+>>>>     if (evsel->pmu->is_hybrid)
+>>>>        evsel->cpus = fixup_hybrid_cpus(evsel>own_cpus,
+>>>>                                        evlist->user_requested_cpus);  //?
+>>>>     else
+>>>>        evsel->cpus = evlist->own_cpus;  // put + get
+>>>> } else {
+>>>>     evsel->cpus = evlist->user_requested_cpus;  // put + get
+>>>> }
+>>>>
+>>>> Then we need to make sure evsel->pmu is set properly.
+>>>>
+>>>> What do you think?
+>>>
+>>> Hybrid handling looks complicated.  I would have to spend time
+>>> better understanding it.
+>>>
+>>> So, in the context of this patch set, I don't want to look at
+>>> issues with hybrid CPUs, except that there should be no change
+>>> to how they are handled.
+>>
+
+I think we should at least run perf test on a hybrid machine. We already 
+have some backlog to handle. It's better not to bring more regression issue.
+
+Thanks,Kan
+
+
 

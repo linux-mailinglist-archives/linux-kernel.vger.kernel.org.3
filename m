@@ -2,92 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFDB25264A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:34:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 440525263E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 16:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381066AbiEMOdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 10:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45224 "EHLO
+        id S1353017AbiEMOZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 10:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380886AbiEMOaS (ORCPT
+        with ESMTP id S1359467AbiEMOYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 10:30:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D943D972C8;
-        Fri, 13 May 2022 07:28:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 72510621A8;
-        Fri, 13 May 2022 14:28:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 768F9C34100;
-        Fri, 13 May 2022 14:28:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652452090;
-        bh=xp+u8NygbVxoi99MAWO9qUlTrei9uqsPK0jfOp9gZ8o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rMbTHjYpgUGvq6FvIS1sHPESXthReXnUxOrAVpIUSPTyA9PbNUOPIzCVTTkFnO67e
-         5laoO9bQh+6U/9TQFYbOclXpYX5IZLuYiSk+rwSdWP1QhfJc+sYY9SKEcwOMC8phGJ
-         /FgdGtARZkjsFjqSjntJGdOhZwkMU5ldHFmmJen0=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        "Dmitry V. Levin" <ldv@altlinux.org>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 5.15 13/21] rfkill: uapi: fix RFKILL_IOCTL_MAX_SIZE ioctl request definition
-Date:   Fri, 13 May 2022 16:23:55 +0200
-Message-Id: <20220513142230.261338033@linuxfoundation.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220513142229.874949670@linuxfoundation.org>
-References: <20220513142229.874949670@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Fri, 13 May 2022 10:24:48 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1AD527D1;
+        Fri, 13 May 2022 07:24:45 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id c11so8064090plg.13;
+        Fri, 13 May 2022 07:24:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=EXVXiPbk+krY68vv3JVFR+K7ANBpW2/j7bjI9Co2KDw=;
+        b=Lily5PBWVzsRsoKTheNp++BxMUwyzfse43IwxdM4KdKiwxr22BTE2kx3Ow2wxjOf+C
+         lH4YXnDCqazomi/ap9qEmHZRTELee86xvEOnQBuPbC8Az508qFAxZGEmkWFu97uiTAZD
+         Q6lTJx4RBjBKMO9cRXZBmzzUdoywVD62Du3xLaMjBYbgESWo9VJZ1XX4GG6o1WF0IzLM
+         6hwHVRGorDIVDB8N7Nn/c5KQO8pCIHWtYUabYbddkqX0UtY+Sl8ux8FjnuGi5vh3CnFU
+         My8cQRNntwUUEpSChBTx6GdqGKcYGwkc3mlOfz2lTrdHx+nCauRiSDnRfL3gYSbgX7YK
+         11cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=EXVXiPbk+krY68vv3JVFR+K7ANBpW2/j7bjI9Co2KDw=;
+        b=cRoqmhZNvnKkFlkfiEyeBjVxTQ9nZKLrnRU5N+sYwh46qw9nbVr8B0C5Hs6zc9kecQ
+         3zkjAJCQYT2T0PTroKODoudpv6R+fMBGPWeeAZm6qn9td4xNvgp2fGAtbAu1TcN+l9ht
+         cE9/Nc/+ApTgLvSeDg4cuOrV5KfpNFmFfOCBpVOZKnndcLNg7e1qyYg7SlgKakKmvFPs
+         dhq5noQ9WkT5X/+JfNYSybEO6wuHHZv+whkRcKTuSgmfEvzdrwfFyXPLy8qy3XQpaG9Y
+         z68YhfptSMaMQIfKlSb+u2qGAGyvOEwvcq55Bi9xfYl29MeydBcA4sEcqNyYecW3jxZ5
+         OBEg==
+X-Gm-Message-State: AOAM531M0v7egKx92aRkBv9BGtP96QWnkZXC3LTFJ7IJQ4lNs3THYS75
+        dBQWiJM5ERPgfjJGdoMEOj0=
+X-Google-Smtp-Source: ABdhPJwP14hRxwH8tjUgqDpmuXMdXTYtmj77UCtxNmry5UzcQ8PKGLOciYn4wKhQnTKfIIfZgjlOZA==
+X-Received: by 2002:a17:902:f542:b0:15e:b6d2:88d9 with SMTP id h2-20020a170902f54200b0015eb6d288d9mr4934948plf.128.1652451884713;
+        Fri, 13 May 2022 07:24:44 -0700 (PDT)
+Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
+        by smtp.gmail.com with ESMTPSA id jj10-20020a170903048a00b0015e8d4eb2ccsm1684488plb.278.2022.05.13.07.24.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 07:24:44 -0700 (PDT)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Max Staudt <max@enpas.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH 2/2] can: dev: drop tx skb if in listen only mode
+Date:   Fri, 13 May 2022 23:23:55 +0900
+Message-Id: <20220513142355.250389-3-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>
+Frames can be directly injected to a can driver via the packet
+socket. By doing that, it is possible to reach the
+net_device_ops::ndo_start_xmit function even if the driver is
+configure in listen only mode.
 
-commit a36e07dfe6ee71e209383ea9288cd8d1617e14f9 upstream.
+Add a check in can_dropped_invalid_skb() and to discard the skb if
+CAN_CTRLMODE_LISTENONLY is set.
 
-The definition of RFKILL_IOCTL_MAX_SIZE introduced by commit
-54f586a91532 ("rfkill: make new event layout opt-in") is unusable
-since it is based on RFKILL_IOC_EXT_SIZE which has not been defined.
-Fix that by replacing the undefined constant with the constant which
-is intended to be used in this definition.
-
-Fixes: 54f586a91532 ("rfkill: make new event layout opt-in")
-Cc: stable@vger.kernel.org # 5.11+
-Signed-off-by: Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>
-Signed-off-by: Dmitry V. Levin <ldv@altlinux.org>
-Link: https://lore.kernel.org/r/20220506172454.120319-1-glebfm@altlinux.org
-[add commit message provided later by Dmitry]
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
- include/uapi/linux/rfkill.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/can/dev.h | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
---- a/include/uapi/linux/rfkill.h
-+++ b/include/uapi/linux/rfkill.h
-@@ -184,7 +184,7 @@ struct rfkill_event_ext {
- #define RFKILL_IOC_NOINPUT	1
- #define RFKILL_IOCTL_NOINPUT	_IO(RFKILL_IOC_MAGIC, RFKILL_IOC_NOINPUT)
- #define RFKILL_IOC_MAX_SIZE	2
--#define RFKILL_IOCTL_MAX_SIZE	_IOW(RFKILL_IOC_MAGIC, RFKILL_IOC_EXT_SIZE, __u32)
-+#define RFKILL_IOCTL_MAX_SIZE	_IOW(RFKILL_IOC_MAGIC, RFKILL_IOC_MAX_SIZE, __u32)
+diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
+index bbe27e22c7a7..c3ed48e54c29 100644
+--- a/include/linux/can/dev.h
++++ b/include/linux/can/dev.h
+@@ -161,6 +161,7 @@ static inline bool can_dropped_invalid_skb(struct net_device *dev,
+ 					   struct sk_buff *skb)
+ {
+ 	const struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
++	struct can_priv *priv = netdev_priv(dev);
  
- /* and that's all userspace gets */
+ 	if (skb->protocol == htons(ETH_P_CAN)) {
+ 		if (unlikely(skb->len != CAN_MTU ||
+@@ -174,8 +175,13 @@ static inline bool can_dropped_invalid_skb(struct net_device *dev,
+ 		goto inval_skb;
+ 	}
  
-
+-	if (!can_skb_headroom_valid(dev, skb))
++	if (!can_skb_headroom_valid(dev, skb)) {
++		goto inval_skb;
++	} else if (priv->ctrlmode & CAN_CTRLMODE_LISTENONLY) {
++		netdev_info_once(dev,
++				 "interface in listen only mode, dropping skb\n");
+ 		goto inval_skb;
++	}
+ 
+ 	return false;
+ 
+-- 
+2.35.1
 

@@ -2,113 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9D0526AC2
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 21:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D67F526AC4
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 May 2022 21:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383950AbiEMTxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 15:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44196 "EHLO
+        id S1383959AbiEMT4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 15:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378150AbiEMTxJ (ORCPT
+        with ESMTP id S1383958AbiEMT4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 15:53:09 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0BA3B545
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 12:53:08 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id gh6so18272084ejb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 12:53:08 -0700 (PDT)
+        Fri, 13 May 2022 15:56:08 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3568030F7F
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 12:56:07 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id y41so8541913pfw.12
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 12:56:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SlGl2MaiMBLQI/aO0f7foJ6mZ+PTk9tDqFdYEd8IR2Y=;
-        b=oRLlClpAh71GWZTw7oLrDvn+314x3USElC9/aOKcJVhrExVADHaj9ty/lC7N0Vny7n
-         TUnDUmGSLZ2BjDH8zLZoquQ7HoZlkkGe/J3gIR5GQt2D7vRnUzXQjFPkG1XH1/2SSYGY
-         j+U7YuicTRidxaHCBDWALTEfifSamsYGbTkQgavfIifCnqJCBdWfZrG6fryaf2t5ZiXI
-         kcoXuvy++jbnV9kABQ/5FuxUWjpdfAvIMDeaW7pG/+Ac50gZHWOSvG/igleL/1sw8GK5
-         dDO/t4uYafKtnXz3/b0dgOt62D2SsdUSOjHCfs1K3KGRs9t52z+vMXLJ4oYvhbkKDTBD
-         Xljg==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iuo7gXVWTj6TmRuI7XRm6SFteZRKqvV099wooRzLD/8=;
+        b=EYv5HC9LkFEq/NZojuo2wu55KVQPtFmnGqq5cZz9W4Q0R08EZl97jy1wkAgbn6/UZu
+         6d1yVwUZsI09he4XDAjC0TqMYEeBQOBYB4+j5lHDvVRe8V9cA80k5qYPX46dDdJT3MGV
+         w0VsAW0MBS7KyHTEMG7GhQK09vdoYuP1Tydz5AMnmWVs+h3A9qbwK/qRr5uZ59qN2rmt
+         3TN3F0OmnG7cZn5XZtSAlJrqOg6BcBw761xuv7IaWSV+Ae+9D8GZfVxTfztjn73WVEme
+         hL2zubNUlhSZetS1sSxsXpVJ8b2q08rBF1QNllPPp0TCxJLRbPXESAdUwgIBJj/ROtvQ
+         +nyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SlGl2MaiMBLQI/aO0f7foJ6mZ+PTk9tDqFdYEd8IR2Y=;
-        b=spNQhJIuNGgDC11B3tuimyx139mRuMCzbPvcxR245bHxXwUNWbS0P4Zr8oUhaAu+5a
-         g+dVl67l1OUTwwK6PHncTYoyI665o0f+4yEFJ2IyDPYAulajvRHkRCqwCY+YIpTIXkTv
-         F1Py9bJrcFR3+I5157dSf+AHfydXC7E1zOaRDvOPiRIC2D6cvxoc5LMeP0M1IGKy/qMz
-         fUSzGOPSKac0y1N5SKQcb18eWozy1qN7iBdb4IzglYIhz0JnilqJUV41M/NH+Z27wqrm
-         upr7+WOkttTSVZM5ZBk0diU+QcoHr8tNPED71GSaUMw7VXPiWh8P5zbdrqXgmezR4YWY
-         WsnA==
-X-Gm-Message-State: AOAM531l9RxRza89s2BGDn4J7B1186S0dKBZeHJXC3gPaTRMOB5KlIY8
-        tW2SGF2lbh10cSLl2SytHudJiqegTuVG06NIk0yeUA==
-X-Google-Smtp-Source: ABdhPJwRhgKX7mUP6+PQkVOOeZ1xXmDZn3EGxcsqrYJdO18wHGsLKvyb68Uujw+msD4VNJbpMnV00GCR7LQv5g6WxwU=
-X-Received: by 2002:a17:907:6d8b:b0:6fe:874:25bf with SMTP id
- sb11-20020a1709076d8b00b006fe087425bfmr3441172ejc.734.1652471586839; Fri, 13
- May 2022 12:53:06 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iuo7gXVWTj6TmRuI7XRm6SFteZRKqvV099wooRzLD/8=;
+        b=gCBQ0iZDy/KUnCVjWtKIOTDbEu6+sFUCTvyMiNjDQgdzwxdvXfssmDj2RaBJQP0bIE
+         UHM7IifwVPALk+KaRqygeYhuG0+VcDIIg1edbJ5QYqhe3jYSVy0s5XBzgExaV8zM2LiO
+         c0qhvqoPKhBP5RwPpMzZq/ZlBfLS22YtqoGF0xngMdQN65s3LpIqK8DEansANquqJvAh
+         JqYvkFwmYuqapFAOpL+X+kskovnu/A9CLLJceeE8ZM6u1ptofroVQ6ow5UgDZpDztcLP
+         MZhkwKgZIsSupvP4VQTjv3R83IqbLAU4Yf5yfUCAbDs2RTajoYJCmHUrWSqBaQMVjkmN
+         Azog==
+X-Gm-Message-State: AOAM530yNKJljHix1jA1oyPqHw1D8TeouQwmzYPVZYKUHE0ZnhqFtZ2F
+        /tghWrKW6aKVmvG1o5S2Jdcj9A==
+X-Google-Smtp-Source: ABdhPJyk/YDaLHecr1/pCrfGYKJch3c5Y5smUoo6VryRlSLcl63aP8XbErGCCK17H7d7Bcdh1zZoeA==
+X-Received: by 2002:a63:1d26:0:b0:3c1:eb3f:9daf with SMTP id d38-20020a631d26000000b003c1eb3f9dafmr5220746pgd.284.1652471766565;
+        Fri, 13 May 2022 12:56:06 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id x5-20020a63cc05000000b003dafd8f0760sm2011593pgf.28.2022.05.13.12.56.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 12:56:05 -0700 (PDT)
+Date:   Fri, 13 May 2022 19:56:01 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ashish Kalra <ashkalra@amd.com>
+Cc:     Peter Gonda <pgonda@google.com>,
+        Ashish Kalra <Ashish.Kalra@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        Borislav Petkov <bp@alien8.de>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Nguyen <theflow@google.com>,
+        David Rientjes <rientjes@google.com>,
+        John Allen <john.allen@amd.com>
+Subject: Re: [PATCH] KVM: SVM: Use kzalloc for sev ioctl interfaces to
+ prevent kernel memory leak.
+Message-ID: <Yn630RFKQiiMRnnf@google.com>
+References: <20220512202328.2453895-1-Ashish.Kalra@amd.com>
+ <CAMkAt6ogEpWf7J-OhXrPNw8KojwuLxUwfP6B+A7zrRHpNeX3uA@mail.gmail.com>
+ <Yn5wDPPbVUysR4SF@google.com>
+ <51219031-935d-8da4-7d8f-80073a79f794@amd.com>
 MIME-Version: 1.0
-References: <1652235304-4617-1-git-send-email-haibo.chen@nxp.com>
-In-Reply-To: <1652235304-4617-1-git-send-email-haibo.chen@nxp.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 13 May 2022 21:52:56 +0200
-Message-ID: <CAMRc=Mf_fc9h-8TokbYapVV=mer8b3MQumO=Y9QLgjbKnNh6Cw@mail.gmail.com>
-Subject: Re: [PATCH v2] gpio: gpio-vf610: do not touch other bits when set the
- target bit
-To:     haibo.chen@nxp.com
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <51219031-935d-8da4-7d8f-80073a79f794@amd.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 4:27 AM <haibo.chen@nxp.com> wrote:
->
-> From: Haibo Chen <haibo.chen@nxp.com>
->
-> For gpio controller contain register PDDR, when set one target bit,
-> current logic will clear all other bits, this is wrong. Use operator
-> '|=' to fix it.
->
-> Fixes: 659d8a62311f ("gpio: vf610: add imx7ulp support")
-> Reviewed-by: Peng Fan <peng.fan@nxp.com>
-> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-> ---
->  drivers/gpio/gpio-vf610.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-vf610.c b/drivers/gpio/gpio-vf610.c
-> index 20780c35da1b..23cddb265a0d 100644
-> --- a/drivers/gpio/gpio-vf610.c
-> +++ b/drivers/gpio/gpio-vf610.c
-> @@ -125,9 +125,13 @@ static int vf610_gpio_direction_output(struct gpio_chip *chip, unsigned gpio,
->  {
->         struct vf610_gpio_port *port = gpiochip_get_data(chip);
->         unsigned long mask = BIT(gpio);
-> +       u32 val;
->
-> -       if (port->sdata && port->sdata->have_paddr)
-> -               vf610_gpio_writel(mask, port->gpio_base + GPIO_PDDR);
-> +       if (port->sdata && port->sdata->have_paddr) {
-> +               val = vf610_gpio_readl(port->gpio_base + GPIO_PDDR);
-> +               val |= mask;
-> +               vf610_gpio_writel(val, port->gpio_base + GPIO_PDDR);
-> +       }
->
->         vf610_gpio_set(chip, gpio, value);
->
-> --
-> 2.25.1
->
+On Fri, May 13, 2022, Ashish Kalra wrote:
+> Hello Sean & Peter,
+> > Looking through other copy_to_user() calls:
+> > 
+> >    - "blob" in sev_ioctl_do_pek_csr()
+> >    - "id_blob" in sev_ioctl_do_get_id2()
+> >    - "pdh_blob" and "cert_blob" in sev_ioctl_do_pdh_export()
+> 
+> These functions are part of the ccp driver and a fix for them has already
+> been sent upstream to linux-crypto@vger.kernel.org and
+> linux-kernel@vger.kernel.org:
+> 
+> [PATCH] crypto: ccp - Use kzalloc for sev ioctl interfaces to prevent kernel
+> memory leak
 
-Applied, thanks!
-
-Bart
+Ha, that's why I was getting a bit of deja vu.  I saw that fly by and then got it
+confused with this patch.

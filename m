@@ -2,77 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8805274AB
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 01:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FA055274B4
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 01:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232274AbiENX3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 19:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55832 "EHLO
+        id S233238AbiENXzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 19:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232154AbiENX2z (ORCPT
+        with ESMTP id S233028AbiENXzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 19:28:55 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE7F19C09
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 16:28:54 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id l11so10777949pgt.13
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 16:28:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=4v0YPRxZRUqp3NNpkxj89sPCZef5hbwabjVcawRtmwk=;
-        b=ZZRE2SIj1ORCz5T3YT6EwjD8TsEbfxieZl0YdjPTFCaUzcWTrXPi4ruqYJWJOYXPxU
-         K+G4iOUbHblfezhUawJ6swXVUX8I78ZJ0pun7Ig+gOCTWxCop8BPCj7WxSnltwvSjxQK
-         cuw5EbWgULDIQ9mud8NEu86zpBWbjIU7CvjMc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=4v0YPRxZRUqp3NNpkxj89sPCZef5hbwabjVcawRtmwk=;
-        b=yZeBeva8vIWoMg8g8VgTd07lpD3H1bGVuCCrFqk11vxu9rKBjUVGWO1GRW8zU2AGI7
-         INSpUV0VvhjPBLerco0z4Usi+Oy5yxLfTECwW/AxIERkOclxG0QU5k5Se/DTCyaOBvVm
-         G6QP2DegvPpSDJW/U8zsi63fvcrITSKH3h7b4CMWvNAlvxEQzrxfp6SCFcMZ4jQGWUtb
-         rjJozK2BgqMeJ/1RV0p5ow5MHsztMTLs28VOhy2R58fyyJIu+Bv6r4FUoGJ+jIzkaqN/
-         dKnEJBOxwJv5xbI9nmA54cv2FqJyIW+iDQbGj1UBttf6MDvudECWL+7sACUCr6OeZC8p
-         0kMA==
-X-Gm-Message-State: AOAM531N+uvONdnLoaKVD7T6nvH4FDIp5cMOs9bghrhLXyR2FaICndI+
-        zqyIcOIEb6ec+fQB6h3wfc1oWQ==
-X-Google-Smtp-Source: ABdhPJyfdgpwHMpgOAP5KwCDtrWMsvcNrYWIi78txjz8hyyAHzKsyzRR43SY68IAMCIOT/ZU8QOQVg==
-X-Received: by 2002:a63:fa41:0:b0:3c2:1941:5894 with SMTP id g1-20020a63fa41000000b003c219415894mr9528571pgk.296.1652570933621;
-        Sat, 14 May 2022 16:28:53 -0700 (PDT)
-Received: from T3500-3.dhcp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id k9-20020a170902d58900b0015e8d4eb2b8sm4165087plh.258.2022.05.14.16.28.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 May 2022 16:28:52 -0700 (PDT)
-From:   William Zhang <william.zhang@broadcom.com>
-To:     Linux ARM List <linux-arm-kernel@lists.infradead.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
-Cc:     kursad.oney@broadcom.com, florian.fainelli@broadcom.com,
-        joel.peshkin@broadcom.com, tomer.yacoby@broadcom.com,
-        samyon.furman@broadcom.com, philippe.reynes@softathome.com,
-        anand.gore@broadcom.com, dan.beygelman@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH 5/5] arm64: defconfig: enable bcmbca soc support
-Date:   Sat, 14 May 2022 16:28:00 -0700
-Message-Id: <20220514232800.24653-6-william.zhang@broadcom.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220514232800.24653-1-william.zhang@broadcom.com>
-References: <20220514232800.24653-1-william.zhang@broadcom.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000007b5c3e05df012711"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        MIME_HEADER_CTYPE_ONLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_TVD_MIME_NO_HEADERS autolearn=ham
+        Sat, 14 May 2022 19:55:18 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C858D13E05
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 16:55:16 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5232C23A;
+        Sat, 14 May 2022 16:55:16 -0700 (PDT)
+Received: from airbuntu (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8FC1C3F73D;
+        Sat, 14 May 2022 16:55:14 -0700 (PDT)
+Date:   Sun, 15 May 2022 00:55:13 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Xuewen Yan <xuewen.yan94@gmail.com>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>,
+        Xuewen Yan <xuewen.yan@unisoc.com>, dietmar.eggemann@arm.com,
+        rafael@kernel.org, viresh.kumar@linaro.org, mingo@redhat.com,
+        peterz@infradead.org, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, linux-kernel@vger.kernel.org,
+        di.shen@unisoc.com,
+        =?utf-8?B?546L56eRIChLZSBXYW5nKQ==?= <Ke.Wang@unisoc.com>
+Subject: Re: [PATCH] sched: Take thermal pressure into account when determine
+ rt fits capacity
+Message-ID: <20220514235513.jm7ul2y6uddj6eh2@airbuntu>
+References: <CAB8ipk_tM8WhZOLwURkqyi5XDSNJ=twOg1Zub=dsTB_b9N9BRg@mail.gmail.com>
+ <20220427105844.otru4yohja4s23ye@wubuntu>
+ <CAB8ipk-QAE2_J_kpUVRcq-4KJ0cSGc1JT2oQhdzvrjDu25HsRQ@mail.gmail.com>
+ <20220503144352.lxduzhl6jq6xdhw2@airbuntu>
+ <CAB8ipk--Y8HxetcmUhBmtWq6Mmd726QmDbcbibGLERJw_PUqkQ@mail.gmail.com>
+ <20220510145625.t5py7atlhgojsfyf@wubuntu>
+ <37357c86-bab7-d0c7-88d0-ace63ccdb6c8@arm.com>
+ <20220510184436.fdgzzcfqqevinx5p@wubuntu>
+ <0505936e-3746-4623-a967-103a0158bfbd@arm.com>
+ <CAB8ipk8RUsxYs6JdeMeUPADQRNqT=Jqz15ecwbzbf0RHUDqOXg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAB8ipk8RUsxYs6JdeMeUPADQRNqT=Jqz15ecwbzbf0RHUDqOXg@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,113 +57,440 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000007b5c3e05df012711
+On 05/14/22 23:01, Xuewen Yan wrote:
+> On Wed, May 11, 2022 at 6:03 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
 
-Enable CONFIG_ARCH_BCMBCA in defconfig. This config can be used to build
-a basic kernel for arm64 based Broadcom Broadband SoC booting to
-console.
+[...]
 
-Signed-off-by: William Zhang <william.zhang@broadcom.com>
+> > True, but this is a CFS 'world' and the update path is part of load
+> > balance. Your proposed code which sets the new
+> > 'rq->cpu_capacity_inverted' is run there, which might have some
+> > delays.
+> 
+> Yes, that's exactly what I'm worried about.
 
+Hmm. In Android world, where we are concerned here, CFS is a first class
+citizen. If we have issues in updating capacities there, this might be hurting
+other non-RT related use cases too. So something to ponder in general.
+
+Anyways. It's a very valid concern and I agree with it too. We can do better.
+See below.
+
+[...]
+
+> > Capacity of other CPU might also be reduced and capacity_orig is not
+> > reflecting that. My gut feeling tells me that this capacity_orig
+> > assumption might be too optimistic for some platforms.
+> 
+> In unisoc platform with 3 clusters(little/mid/big), there are cases
+> that middle core and big core are throttled at the same time.
+
+Okay. I might have misunderstood you before, but I thought medium cores don't
+suffer any meaningful thermal pressure.
+
+[...]
+
+> Okay, I could push patch v2 later. Maybe we can continue to discuss
+> this topic based on v2.
+
+Please do.
+
+I have scratched my head and played around implementing the generic solution
+using additional cpumasks. If you fancy testing it, that'd be great! I have
+tested it very lightly only. If you like it and no one shouts it's terrible, we
+can shape it further.
+
+--->8---
+
+From 625209b09bd0eb0eff07fba109e80102c5983c48 Mon Sep 17 00:00:00 2001
+From: Qais Yousef <qais.yousef@arm.com>
+Date: Fri, 13 May 2022 12:01:15 +0100
+Subject: [PATCH] sched/rt: Support multi-criterion fitness search for
+ lowest_rq
+
+We have multiple criterion that need to be taken into account when
+searching for best fitting lowest_irq.
+
+On big.LITTLE systems, when uclamp is used, we use
+rt_task_fits_capacity() to enforce going to a larger CPU if the task's
+uclamp_min requested that. But we still would have fallen back to
+priority based search if no fitting CPU was found.
+
+There are reports now that severe thermal pressure could make the big
+CPUs throttled to the point where they are less performant than the
+mediums (capacity inversion).
+
+To cater for that, we need to take into account thermal pressure
+reducing the capacity of the CPU in the fitness search.
+
+Note that this could introduce another set of problems if not careful.
+
+For instance if an RT task has uclamp_min = 1024, a small amount of
+thermal pressure could mean no CPU will fit this task; which means the
+hint will become less effective. The big CPU still provides the max
+performance level (which is what uclamp_min=1024 is asking for) so we
+still better place it there even if thermal conditions mean we lost some
+performance.
+
+This corner case can happen at any boundary conditions for littles,
+mediums or bigs. For example if an RT task has uclamp_min
+= capacity_orig_of(medium_cpu), then any small thermal pressure will
+prevent placing it there and force it to big CPUs instead. Which is not
+the desired outcome if no big CPU is available. We should still fallback
+to the medium CPU in this case.
+
+This dictates a more complex search method to enable multi-level
+fallback.
+
+That is:
+
+	1. If rt_task_fits_capacity_thermal() returns true, we should
+	   pick this lowest_mask.
+	2. If (1) failed for all priorities, we should fallback to
+	   rt_task_fits_capacity() lowest_mask if it found any.
+	3. If (1) and (2) failed, we should fallback to the lowest_mask
+	   based on lowest priority rq as usual.
+
+We teach cpupri_find_fitness() to do a multi-level search in a single
+loop. This is at the cost of allocating more cpumasks for each fitness
+criteria/level.
+
+At the moment, the only users are heterogeneous systems which have low
+CPU count and this should not lead to a big waste of memory.
+
+The priority of fitness_fn is highest starting from 0.
+
+Signed-off-by: Qais Yousef <qais.yousef@arm.com>
 ---
+ kernel/sched/cpupri.c | 118 ++++++++++++++++++++++++++++++++----------
+ kernel/sched/cpupri.h |  14 +++--
+ kernel/sched/rt.c     |  66 ++++++++++++++++++++---
+ 3 files changed, 162 insertions(+), 36 deletions(-)
 
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 7d1105343bc2..7cf31913bcdf 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -36,6 +36,7 @@ CONFIG_ARCH_ALPINE=y
- CONFIG_ARCH_APPLE=y
- CONFIG_ARCH_BCM2835=y
- CONFIG_ARCH_BCM4908=y
-+CONFIG_ARCH_BCMBCA=y
- CONFIG_ARCH_BCM_IPROC=y
- CONFIG_ARCH_BERLIN=y
- CONFIG_ARCH_BRCMSTB=y
+diff --git a/kernel/sched/cpupri.c b/kernel/sched/cpupri.c
+index fa9ce9d83683..cfe56bd4e555 100644
+--- a/kernel/sched/cpupri.c
++++ b/kernel/sched/cpupri.c
+@@ -120,7 +120,7 @@ static inline int __cpupri_find(struct cpupri *cp, struct task_struct *p,
+ int cpupri_find(struct cpupri *cp, struct task_struct *p,
+ 		struct cpumask *lowest_mask)
+ {
+-	return cpupri_find_fitness(cp, p, lowest_mask, NULL);
++	return cpupri_find_fitness(cp, p, lowest_mask, NULL, NULL);
+ }
+ 
+ /**
+@@ -142,13 +142,24 @@ int cpupri_find(struct cpupri *cp, struct task_struct *p,
+  */
+ int cpupri_find_fitness(struct cpupri *cp, struct task_struct *p,
+ 		struct cpumask *lowest_mask,
+-		bool (*fitness_fn)(struct task_struct *p, int cpu))
++		cpumask_var_t fitness_mask[], fitness_fn_t fitness_fn[])
+ {
+ 	int task_pri = convert_prio(p->prio);
+-	int idx, cpu;
++	bool fallback_found[NUM_FITNESS_FN];
++	int idx, cpu, fn_idx;
+ 
+ 	BUG_ON(task_pri >= CPUPRI_NR_PRIORITIES);
+ 
++	if (NUM_FITNESS_FN && fitness_fn) {
++		/*
++		 * Clear the masks so that we can save a fallback hit in them
++		 */
++		for (fn_idx = 0; fn_idx < NUM_FITNESS_FN; fn_idx++) {
++			cpumask_clear(fitness_mask[fn_idx]);
++			fallback_found[fn_idx] = false;
++		}
++	}
++
+ 	for (idx = 0; idx < task_pri; idx++) {
+ 
+ 		if (!__cpupri_find(cp, p, lowest_mask, idx))
+@@ -157,41 +168,94 @@ int cpupri_find_fitness(struct cpupri *cp, struct task_struct *p,
+ 		if (!lowest_mask || !fitness_fn)
+ 			return 1;
+ 
+-		/* Ensure the capacity of the CPUs fit the task */
++		/*
++		 * We got a hit, save in our fallback masks that are empty.
++		 *
++		 * Note that we use fitness_mask[0] to save the fallback for
++		 * when all fitness_fns fail to find a suitable CPU.
++		 *
++		 * We use lowest_mask to store the results of fitness_fn[0]
++		 * directly.
++		 */
++		if (!fallback_found[0]) {
++				cpumask_copy(fitness_mask[0], lowest_mask);
++				fallback_found[0] = true;
++		}
++		for (fn_idx = 1; fn_idx < NUM_FITNESS_FN; fn_idx++) {
++
++			/*
++			 * We just need one valid fallback at highest level
++			 * (smallest fn_idx). We don't care about checking for
++			 * fallback beyond this once we found one.
++			 */
++			if (fallback_found[fn_idx])
++				break;
++
++			cpumask_copy(fitness_mask[fn_idx], lowest_mask);
++		}
++
++		/*
++		 * fintness_fn[0] hit always terminates the search immediately,
++		 * so do that first.
++		 */
+ 		for_each_cpu(cpu, lowest_mask) {
+-			if (!fitness_fn(p, cpu))
++			if (!fitness_fn[0](p, cpu))
+ 				cpumask_clear_cpu(cpu, lowest_mask);
+ 		}
+ 
+ 		/*
+-		 * If no CPU at the current priority can fit the task
+-		 * continue looking
++		 * Stop searching as soon as fitness_fn[0] is happy with the
++		 * results.
+ 		 */
+-		if (cpumask_empty(lowest_mask))
+-			continue;
++		if (!cpumask_empty(lowest_mask))
++			return 1;
+ 
+-		return 1;
++		/*
++		 * Find a fallback CPU for the other fitness_fns.
++		 *
++		 * Only do this once. As soon as we get a valid fallback mask,
++		 * we'll remember it so that when fitness_fn[0] fails for all
++		 * priorities, we'll return this fallback mask.
++		 *
++		 * Remember that we use fitnss_mask[0] to store our fallback
++		 * results for when all fitness_fns fail.
++		 */
++		for (fn_idx = 1; fn_idx < NUM_FITNESS_FN; fn_idx++) {
++
++			/*
++			 * We just need one valid fallback at highest level
++			 * (smallest fn_idx). We don't care about checking for
++			 * fallback beyond this once we found one.
++			 */
++			if (fallback_found[fn_idx])
++				break;
++
++			for_each_cpu(cpu, fitness_mask[fn_idx]) {
++				if (!fitness_fn[fn_idx](p, cpu))
++					cpumask_clear_cpu(cpu, fitness_mask[fn_idx]);
++			}
++
++			if (!cpumask_empty(fitness_mask[fn_idx]))
++				fallback_found[fn_idx] = true;
++		}
++	}
++
++	for (fn_idx = 1; fn_idx < NUM_FITNESS_FN; fn_idx++) {
++		if (fallback_found[fn_idx]) {
++			cpumask_copy(lowest_mask, fitness_mask[fn_idx]);
++			return 1;
++		}
+ 	}
+ 
+ 	/*
+-	 * If we failed to find a fitting lowest_mask, kick off a new search
+-	 * but without taking into account any fitness criteria this time.
+-	 *
+-	 * This rule favours honouring priority over fitting the task in the
+-	 * correct CPU (Capacity Awareness being the only user now).
+-	 * The idea is that if a higher priority task can run, then it should
+-	 * run even if this ends up being on unfitting CPU.
+-	 *
+-	 * The cost of this trade-off is not entirely clear and will probably
+-	 * be good for some workloads and bad for others.
+-	 *
+-	 * The main idea here is that if some CPUs were over-committed, we try
+-	 * to spread which is what the scheduler traditionally did. Sys admins
+-	 * must do proper RT planning to avoid overloading the system if they
+-	 * really care.
++	 * No fallback from any of the fitness_fns, fallback to priority based
++	 * lowest_mask which we store at fitness_mask[0].
+ 	 */
+-	if (fitness_fn)
+-		return cpupri_find(cp, p, lowest_mask);
++
++	if (fallback_found[0]) {
++		cpumask_copy(lowest_mask, fitness_mask[0]);
++		return 1;
++	}
+ 
+ 	return 0;
+ }
+diff --git a/kernel/sched/cpupri.h b/kernel/sched/cpupri.h
+index d6cba0020064..1feb6324cf24 100644
+--- a/kernel/sched/cpupri.h
++++ b/kernel/sched/cpupri.h
+@@ -17,12 +17,20 @@ struct cpupri {
+ 	int			*cpu_to_pri;
+ };
+ 
++#ifdef CONFIG_UCLAMP_TASK
++#define NUM_FITNESS_FN	2
++#else
++#define NUM_FITNESS_FN	0
++#endif
++
++typedef bool (*fitness_fn_t)(struct task_struct *p, int cpu);
++
+ #ifdef CONFIG_SMP
+ int  cpupri_find(struct cpupri *cp, struct task_struct *p,
+ 		 struct cpumask *lowest_mask);
+-int  cpupri_find_fitness(struct cpupri *cp, struct task_struct *p,
+-			 struct cpumask *lowest_mask,
+-			 bool (*fitness_fn)(struct task_struct *p, int cpu));
++int cpupri_find_fitness(struct cpupri *cp, struct task_struct *p,
++		struct cpumask *lowest_mask,
++		cpumask_var_t fitness_mask[], fitness_fn_t fitness_fn[]);
+ void cpupri_set(struct cpupri *cp, int cpu, int pri);
+ int  cpupri_init(struct cpupri *cp);
+ void cpupri_cleanup(struct cpupri *cp);
+diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+index a32c46889af8..125b9d360aab 100644
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -452,7 +452,8 @@ static inline int on_rt_rq(struct sched_rt_entity *rt_se)
+  * Note that uclamp_min will be clamped to uclamp_max if uclamp_min
+  * > uclamp_max.
+  */
+-static inline bool rt_task_fits_capacity(struct task_struct *p, int cpu)
++static inline bool __rt_task_fits_capacity(struct task_struct *p, int cpu,
++					   bool thermal)
+ {
+ 	unsigned int min_cap;
+ 	unsigned int max_cap;
+@@ -467,10 +468,39 @@ static inline bool rt_task_fits_capacity(struct task_struct *p, int cpu)
+ 
+ 	cpu_cap = capacity_orig_of(cpu);
+ 
++	if (thermal)
++		cpu_cap -= arch_scale_thermal_pressure(cpu);
++
+ 	return cpu_cap >= min(min_cap, max_cap);
+ }
+-#else
++
++static inline bool rt_task_fits_capacity_thermal(struct task_struct *p, int cpu)
++{
++	return __rt_task_fits_capacity(p, cpu, true);
++}
++
+ static inline bool rt_task_fits_capacity(struct task_struct *p, int cpu)
++{
++	return __rt_task_fits_capacity(p, cpu, false);
++}
++
++fitness_fn_t fitness_fn[NUM_FITNESS_FN] = {
++	rt_task_fits_capacity_thermal,
++	rt_task_fits_capacity
++};
++
++static inline bool rt_task_fits_cpu(struct task_struct *p, int cpu)
++{
++	/*
++	 * fitness_fn[0] is the ultimate best choice. If it fails, we should
++	 * assume we need to try again/harder to meet this criteria.
++	 */
++	return fitness_fn[0](p, cpu);
++}
++
++#else
++fitness_fn_t *fitness_fn = NULL;
++static inline bool rt_task_fits_cpu(struct task_struct *p, int cpu)
+ {
+ 	return true;
+ }
+@@ -1591,14 +1621,14 @@ select_task_rq_rt(struct task_struct *p, int cpu, int flags)
+ 	       unlikely(rt_task(curr)) &&
+ 	       (curr->nr_cpus_allowed < 2 || curr->prio <= p->prio);
+ 
+-	if (test || !rt_task_fits_capacity(p, cpu)) {
++	if (test || !rt_task_fits_cpu(p, cpu)) {
+ 		int target = find_lowest_rq(p);
+ 
+ 		/*
+ 		 * Bail out if we were forcing a migration to find a better
+ 		 * fitting CPU but our search failed.
+ 		 */
+-		if (!test && target != -1 && !rt_task_fits_capacity(p, target))
++		if (!test && target != -1 && !rt_task_fits_cpu(p, target))
+ 			goto out_unlock;
+ 
+ 		/*
+@@ -1823,6 +1853,7 @@ static struct task_struct *pick_highest_pushable_task(struct rq *rq, int cpu)
+ }
+ 
+ static DEFINE_PER_CPU(cpumask_var_t, local_cpu_mask);
++static DEFINE_PER_CPU(cpumask_var_t *, local_cpu_fitness_mask);
+ 
+ static int find_lowest_rq(struct task_struct *task)
+ {
+@@ -1843,11 +1874,12 @@ static int find_lowest_rq(struct task_struct *task)
+ 	 * If we're on asym system ensure we consider the different capacities
+ 	 * of the CPUs when searching for the lowest_mask.
+ 	 */
+-	if (static_branch_unlikely(&sched_asym_cpucapacity)) {
++	if (static_branch_unlikely(&sched_asym_cpucapacity) && NUM_FITNESS_FN) {
+ 
++		cpumask_var_t *fitness_mask = __this_cpu_read(local_cpu_fitness_mask);
+ 		ret = cpupri_find_fitness(&task_rq(task)->rd->cpupri,
+ 					  task, lowest_mask,
+-					  rt_task_fits_capacity);
++					  fitness_mask, fitness_fn);
+ 	} else {
+ 
+ 		ret = cpupri_find(&task_rq(task)->rd->cpupri,
+@@ -2460,6 +2492,25 @@ static void switched_from_rt(struct rq *rq, struct task_struct *p)
+ 	rt_queue_pull_task(rq);
+ }
+ 
++void __init init_sched_rt_fitness_mask(int cpu)
++{
++	cpumask_var_t *fitness_mask_array;
++	unsigned int i;
++
++	if (!NUM_FITNESS_FN)
++		return;
++
++	fitness_mask_array = kcalloc_node(NUM_FITNESS_FN, sizeof(cpumask_var_t),
++					  GFP_KERNEL, cpu_to_node(cpu));
++
++	per_cpu(local_cpu_fitness_mask, cpu) = fitness_mask_array;
++
++	for (i = 0; i < NUM_FITNESS_FN; i++) {
++		zalloc_cpumask_var_node(&fitness_mask_array[i], GFP_KERNEL,
++					cpu_to_node(cpu));
++	}
++}
++
+ void __init init_sched_rt_class(void)
+ {
+ 	unsigned int i;
+@@ -2467,6 +2518,9 @@ void __init init_sched_rt_class(void)
+ 	for_each_possible_cpu(i) {
+ 		zalloc_cpumask_var_node(&per_cpu(local_cpu_mask, i),
+ 					GFP_KERNEL, cpu_to_node(i));
++
++		if (static_branch_unlikely(&sched_asym_cpucapacity))
++			init_sched_rt_fitness_mask(i);
+ 	}
+ }
+ #endif /* CONFIG_SMP */
 -- 
-2.17.1
+2.25.1
 
+--->8---
 
---0000000000007b5c3e05df012711
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Thanks both!
 
-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
-TltlrAeBKRJ1M9O/DY5v7L1Yrs//7XIRg/d2ZPAOSGBQzFYjYTFWwNBiR1s1zP0m2y56DPbS5gwj
-fqAN/I4PJHIvTh3zUgHXNKadYoYRiPHXfaTWO9UhzysOpQIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUohM5GmNlGWe5wpzDxzIy
-+EgzbRswDQYJKoZIhvcNAQELBQADggEBACKu9JSQAYTlmC+JTniO/C/UcXGonATI/muBjWTxtkHc
-abZtz0uwzzrRrpV+mbHLGVFFeRbXSLvcEzqHp8VomXifEZlfsE9LajSehzaqhd+np+tmUPz1RlI/
-ibZ7vW+1VF18lfoL+wHs2H0fsG6JfoqZldEWYXASXnUrs0iTLgXxvwaQj69cSMuzfFm1X5kWqWCP
-W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
-1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
-SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILHtj9eHDFqNUMgj/5wkJ9ctPskf
-9pbp1GBpW8mroBf4MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDUxNDIzMjg1M1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQCvJkQNYFJ9AODujiqHp4lQ4NOfVxWCsXCJkSeCAZAf+r+N
-lT8vvvGOBWJt5TC8enICijMKBSapeQaDkt9m2OrhQds4q6W4BmK5bz/p1aYZ1Usbm9U+x8EJkIf/
-jYQ2HfuVtosCT8AU008fUubDhHAskIFXN+UMaaXqTpe+pzNxPNrGyWD5EYMH4udmiinwSS/fxyCz
-KK+xWytjbhrCcnm1EBasYKuptPgvnk1wmN7HqiXrv51prMyjx9dRPGumB5vLegOV3KUoFsN0mbod
-ipJJGHLYLG3sAvdH2tb3XGo1SCUsiB0Q7MGTyPumDhF8sjolLNaigbSdFx1C0c7cQaHb
---0000000000007b5c3e05df012711--
+--
+Qais Yousef

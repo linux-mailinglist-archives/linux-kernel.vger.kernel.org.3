@@ -2,128 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D0905271DA
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 16:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 397D4527196
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 16:10:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232346AbiENOSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 10:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
+        id S232918AbiENOKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 10:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233188AbiENOR4 (ORCPT
+        with ESMTP id S231211AbiENOK0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 10:17:56 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37E0DFE9;
-        Sat, 14 May 2022 07:17:42 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id b12so1138365pju.3;
-        Sat, 14 May 2022 07:17:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ZEhSGoMoojYAD36SANNLcism31dWp4f4Nf5+aItJuTY=;
-        b=jbklFPhslW+4+HkKyrtVXePxSFmMiySYB9NlkM82qwUxV8msgdLqyTMXdM5J1D4Sj3
-         ee47pqFiYwtIU5YThhtubn4Xepiuv3+7H1I83C3XZV6H1nFWvUm3RnPZ5TNjUj+hfoq9
-         G4W+V62LmFEBFcc8Qkn2M8/ai4vSycDl7R/rfvkYvg359NOM7aUrW7kYA6QVM8vebaH8
-         0c2kVrNGpB5WMhFGulffw2N8wwhSTwgZpJYTsgVVKocnLBinHyXR4PLcc1lc6rvbY+gp
-         kc9tWTnBCojyNcT41fq6r6eRMfexRZ9Bqf+WdfcICVefWdyxaVwJNOis3qhjbbxMltva
-         BN2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=ZEhSGoMoojYAD36SANNLcism31dWp4f4Nf5+aItJuTY=;
-        b=PRZAyr4lvlZ9TTPN6qoNbCAL0dz9enMw0R7T9V2qzBi1ZVZJJDglZkBBaJKmz4KMQ7
-         fclA4oEbIAI/qfQ3E/CrE76TgazbaP7DbbXT649b5El/QaFXJ334S4ET1psw+EvkbKiv
-         ujSR6mTykx55WoPCCQxnpLddK4NiZ+vvvssX9OrVyjkhbMsr/FijPAxRyZVP/prVZ38d
-         Q4r6Z+gTSjZ7aiEWxqMjcRPAJyF5NXaBVtVsWpm4UxfcKPRbMxBbbRn3OUgfBcsMvMK/
-         G9YPtNZfVhUUXAI/HmcrF6JdWmJyNdJoNk0MRwfvfgGgrleDXZ1HWiSc7NRLqmCSctrR
-         GmQQ==
-X-Gm-Message-State: AOAM531NPEa234VDX+YOWkNWHZbeOlGUHYYHm/vxFaMJKmiAVB2dEaO7
-        1KIfwNactg+GYttW5om0lGE=
-X-Google-Smtp-Source: ABdhPJzUSRBGx8S6BfJhi0bU2llugcyFbguZzUWUlbDGCnMW6DC9OHT0oX2pZFcdesE+mCKW/C6CxA==
-X-Received: by 2002:a17:90b:4a4a:b0:1dc:4731:31a4 with SMTP id lb10-20020a17090b4a4a00b001dc473131a4mr10171413pjb.19.1652537862493;
-        Sat, 14 May 2022 07:17:42 -0700 (PDT)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id x8-20020a17090a530800b001cd4989feccsm5298541pjh.24.2022.05.14.07.17.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 May 2022 07:17:42 -0700 (PDT)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Max Staudt <max@enpas.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        netdev@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v3 4/4] can: dev: drop tx skb if in listen only mode
-Date:   Sat, 14 May 2022 23:16:50 +0900
-Message-Id: <20220514141650.1109542-5-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220514141650.1109542-1-mailhol.vincent@wanadoo.fr>
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220514141650.1109542-1-mailhol.vincent@wanadoo.fr>
+        Sat, 14 May 2022 10:10:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DB412AAB;
+        Sat, 14 May 2022 07:10:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B87660EDA;
+        Sat, 14 May 2022 14:10:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92CA2C340EE;
+        Sat, 14 May 2022 14:10:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652537424;
+        bh=b4Yqu2wA3dN7+oULR9UAd9cblXScNS6iqAVMaDg7EZE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LLwLyTCUREjf9+Z+WNGHiSAxcNJocRVUeO5DWnio4BFZPQrrEJ6MOIEfcMI7OKIh+
+         XYntVv8ore/SgqMGkY9jFvD3lWDhLjjOf8XOlfGSiohPUocmHu5L5rr102cwaJwJvS
+         mHKXAs4pFU3/vuO0AxHrb15rGc0zSHwG2bYYd2PvVe+iA3B94WPO1rhFya0yPY7Oak
+         9MmfivXBU79Np45ScUmdDwtWXtQM+3LgLMpofJHAyU7MhK1h9NqHx1Doyjik84eNj0
+         ovChgZ3nN3Goior9c69A90zSerh/BxXuGPOIepf882iro2kQGAzuph5L9y0bVJXi0U
+         yq3G+OLeMILwg==
+Date:   Sat, 14 May 2022 15:18:59 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     William Breathitt Gray <william.gray@linaro.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        schnelle@linux.ibm.com, David Laight <David.Laight@aculab.com>,
+        macro@orcam.me.uk, Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH 0/8] Utilize iomap interface for PC104 and friends
+Message-ID: <20220514151859.692928dc@jic23-huawei>
+In-Reply-To: <CAMRc=McAe28ZwcGknzrju-PQTEZ7x2XAfoRyfLFMWpgGB8DVLw@mail.gmail.com>
+References: <cover.1652201921.git.william.gray@linaro.org>
+        <CAMRc=McAe28ZwcGknzrju-PQTEZ7x2XAfoRyfLFMWpgGB8DVLw@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Frames can be directly injected to a can driver via the packet
-socket. By doing that, it is possible to reach the
-net_device_ops::ndo_start_xmit function even if the driver is
-configured in listen only mode.
+On Sat, 14 May 2022 14:57:49 +0200
+Bartosz Golaszewski <brgl@bgdev.pl> wrote:
 
-Add a check in can_dropped_invalid_skb() to discard the skb if
-CAN_CTRLMODE_LISTENONLY is set.
+> On Tue, May 10, 2022 at 7:31 PM William Breathitt Gray
+> <william.gray@linaro.org> wrote:
+> >
+> > PC104 cards and similar devices do not need to access I/O ports directly
+> > via inb()/outb() and can instead use the more typical I/O memory
+> > ioread8()/iowrite8() accessor calls by first calling ioport_map(). This
+> > patchset converts the relevant PC104/ISA card drivers to do such. With
+> > these drivers now utilizing I/O memory accessor calls, work can be done
+> > to consolidate some similar devices (e.g. 104-idio-16, pci-idio-16,
+> > etc.) into a unified driver in a future patchset.
+> >
+> > This patchset spawned from a suggestion made in another thread titled
+> > "gpio: add HAS_IOPORT dependencies":
+> > https://lore.kernel.org/all/c3a3cdd99d4645e2bbbe082808cbb2a5@AcuMS.aculab.com/
+> >
+> > William Breathitt Gray (8):
+> >   counter: 104-quad-8: Utilize iomap interface
+> >   gpio: 104-dio-48e: Utilize iomap interface
+> >   gpio: 104-idi-48: Utilize iomap interface
+> >   gpio: 104-idio-16: Utilize iomap interface
+> >   gpio: gpio-mm: Utilize iomap interface
+> >   gpio: ws16c48: Utilize iomap interface
+> >   iio: adc: stx104: Utilize iomap interface
+> >   iio: dac: cio-dac: Utilize iomap interface
+> >
+> >  drivers/counter/104-quad-8.c    | 169 +++++++++++++++++---------------
+> >  drivers/gpio/gpio-104-dio-48e.c |  63 ++++++------
+> >  drivers/gpio/gpio-104-idi-48.c  |  27 ++---
+> >  drivers/gpio/gpio-104-idio-16.c |  33 ++++---
+> >  drivers/gpio/gpio-gpio-mm.c     |  43 ++++----
+> >  drivers/gpio/gpio-ws16c48.c     |  65 ++++++------
+> >  drivers/iio/adc/stx104.c        |  56 ++++++-----
+> >  drivers/iio/dac/cio-dac.c       |  14 +--
+> >  8 files changed, 248 insertions(+), 222 deletions(-)
+> >
+> >
+> > base-commit: ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e
+> > --
+> > 2.35.3
+> >  
+> 
+> I don't see any dependencies so applied the GPIO part.
+Likewise, I've applied the IIO ones. Initially pushed out as testing
+to see if 0-day finds any issues. Given timing, we may well be looking
+at next merge window now though.
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- drivers/net/can/dev/skb.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+Thanks,
 
-diff --git a/drivers/net/can/dev/skb.c b/drivers/net/can/dev/skb.c
-index 8b1991130de5..f7420fc43b99 100644
---- a/drivers/net/can/dev/skb.c
-+++ b/drivers/net/can/dev/skb.c
-@@ -5,6 +5,7 @@
-  */
- 
- #include <linux/can/dev.h>
-+#include <linux/can/netlink.h>
- 
- /* Local echo of CAN messages
-  *
-@@ -286,6 +287,7 @@ static bool can_skb_headroom_valid(struct net_device *dev, struct sk_buff *skb)
- bool can_dropped_invalid_skb(struct net_device *dev, struct sk_buff *skb)
- {
- 	const struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
-+	struct can_priv *priv = netdev_priv(dev);
- 
- 	if (skb->protocol == htons(ETH_P_CAN)) {
- 		if (unlikely(skb->len != CAN_MTU ||
-@@ -299,8 +301,13 @@ bool can_dropped_invalid_skb(struct net_device *dev, struct sk_buff *skb)
- 		goto inval_skb;
- 	}
- 
--	if (!can_skb_headroom_valid(dev, skb))
-+	if (!can_skb_headroom_valid(dev, skb)) {
-+		goto inval_skb;
-+	} else if (priv->ctrlmode & CAN_CTRLMODE_LISTENONLY) {
-+		netdev_info_once(dev,
-+				 "interface in listen only mode, dropping skb\n");
- 		goto inval_skb;
-+	}
- 
- 	return false;
- 
--- 
-2.35.1
+Jonathan
+
+> 
+> Bart
 

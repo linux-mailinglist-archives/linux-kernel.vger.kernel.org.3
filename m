@@ -2,238 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E3E526EA4
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30135526F79
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbiENCzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 22:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55714 "EHLO
+        id S229852AbiENCwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 22:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbiENCyc (ORCPT
+        with ESMTP id S229848AbiENCwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 22:54:32 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A8936C37F
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 18:04:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652490262; x=1684026262;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ULzszqX1AXkde7fpKYLu/jWGI0tajP0JKeZsmGZAFVA=;
-  b=e2UChilFKrZJq6Sg6enGIx+xV0fbQMvDseA5UwZ2GOr+0ZCqz3linDiU
-   2H/zfLsYQiwjfJfBIps3Rm+Yk4JGqqAreHaH6N9ME9F06+Gw2aK15evqT
-   RJzhg0Z97Dlcv/ZsldPUzmWRCo42HVBUx/QzNshsRRyF2ipXqeW2xA0Le
-   Xm/sssk7c/KtV2Cag4XrKCqnU7c4yEnWbXFNmc7SHf78QY3nuMGGg3z26
-   C1AHetv4YZIHAVyKpIC+m7Uhe9a81qQ4pzz8iCMLhMaGWy1FNh7w6ZFVl
-   icWnwRg9g7NX9gZqhiWr8tu7QfkcRRwWYaT9PE80n4Z53/u+hlu92l7yn
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="252494423"
-X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="252494423"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 17:39:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="698716209"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 13 May 2022 17:39:26 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1npfoc-000MFy-5E;
-        Sat, 14 May 2022 00:39:26 +0000
-Date:   Sat, 14 May 2022 08:38:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/urgent] BUILD SUCCESS
- 280abe14b6e0a38de9cc86fe6a019523aadd8f70
-Message-ID: <627efa18.fyCErxysS+KqcJOb%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 13 May 2022 22:52:21 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07164A0DF5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 17:53:26 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id e12so17926039ybc.11
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 17:53:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Gh7lyMR/wwSZPN8VM7Gm13nBDOjOCSeBHsdtAIxkzG8=;
+        b=V/0/Z8mBX//e4K3r0ItRdb+QOez5W2XQln5EnRm9IolusnHAblUXo5tTq1gXrjgaOQ
+         h2uOoGmdQlAWavWoSg7h1u45GIg701NSi5498nSXOq4rOpruJ/GAKqNcnk1nUGSwdlUH
+         KF/Jd1j27FhvkKRcNt+VDQDHFUXXZrlRDIyEPE51WCxWNi4RlSDQBmEsIkT8VjxxBV0b
+         bDPbYNoTE5Wm/8XlRiWLjhfWSbYoG/1p+MWkOJdk68z8KRjORJleBHix1Qr33jg0oxdF
+         eFtoXAqEfV7XKe02t4strhNLtYX/5/rc/0uVvjb2X05Tuys7X0VuVPMAtMSbS1+/HUec
+         eX7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Gh7lyMR/wwSZPN8VM7Gm13nBDOjOCSeBHsdtAIxkzG8=;
+        b=fF/Pg3ZXBAWCdeQ4e0EaJruRkrBuL3VJ+6HaZ+MVqV8HsOVSO4HYuLG/JaTfwIaDcR
+         vUgwojNsAwrO0AW0owVymjRFDFUjJQHeJ4uOxE+MstF1OlZUYjqE/7Z4zQV/sOMRJdAS
+         BHEARAyLtluN2s40nNg6oqfoWxH2uSpru1hSaniLcpHal7JlCrJK/bb6Z/arG7RBlx0i
+         N8rduC4LvQ5hpLb3BgqPzrN7zQGnW5RlakGvj/VfTXUSPFWaiCYBkXKkCsokK341ghMy
+         umK8xBbDylzazITwIySW1pdGHOVKA4o7iQG322j/rJX8gFMu2tOMlJHt1bGQ6MxbKxqX
+         Q/Vg==
+X-Gm-Message-State: AOAM531Ecz+/dBVHwgy1drRLrTXWMo1wHEV/UCxKdYMpx09pIGqKTOuk
+        BRCMBxDIAKmJ/AbJEHhXxgN4OInJriDjfAgalmUWLHLKv8o=
+X-Google-Smtp-Source: ABdhPJzCWv0a5whfDvG5f1fLXqD8nN3mfB3Ex3KVjsax4u4aVTZ/7ict9ABMT/pHleIA0/+WB0eCT0OjzJ1BqwVO5x8=
+X-Received: by 2002:a25:504c:0:b0:64b:979c:1bae with SMTP id
+ e73-20020a25504c000000b0064b979c1baemr5408913ybb.563.1652488799877; Fri, 13
+ May 2022 17:39:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220513233640.2518337-1-vladimir.oltean@nxp.com>
+In-Reply-To: <20220513233640.2518337-1-vladimir.oltean@nxp.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Fri, 13 May 2022 17:39:24 -0700
+Message-ID: <CAGETcx9Q-yXpdai+Ujg+-gMGyHbSO=ws+e7ejqDSmJs5tQRLNQ@mail.gmail.com>
+Subject: Re: [RFC PATCH net 0/2] Make phylink and DSA wait for PHY driver that
+ defers probe
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        John Stultz <jstultz@google.com>,
+        =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
-branch HEAD: 280abe14b6e0a38de9cc86fe6a019523aadd8f70  x86/mm: Fix marking of unused sub-pmd ranges
+On Fri, May 13, 2022 at 4:37 PM Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
+>
+> This patch set completes the picture described by
+> '[RFC,devicetree] of: property: mark "interrupts" as optional for fw_devlink'
+> https://patchwork.kernel.org/project/netdevbpf/patch/20220513201243.2381133-1-vladimir.oltean@nxp.com/
 
-elapsed time: 763m
+I replied to that patch. I don't think we can pull that in.
 
-configs tested: 150
-configs skipped: 75
+> I've CCed non-networking maintainers just in case they want to gain a
+> better understanding. If not, apologies and please ignore the rest.
+>
+>
+>
+> My use case is to migrate a PHY driver from poll mode to interrupt mode
+> without breaking compatibility between new device trees and old kernels
+> which did not have a driver for that IRQ parent, and therefore (for
+> things to work) did not even have that interrupt listed in the "vintage
+> correct" DT blobs. Note that current kernels as of today are also
+> "old kernels" in this description.
+>
+> Creating some degree of compatibility has multiple components.
+>
+> 1. A PHY driver must eventually give up waiting for an IRQ provider,
+>    since the dependency is optional and it can fall back to poll mode.
+>    This is currently supported thanks to commit 74befa447e68 ("net:
+>    mdio: don't defer probe forever if PHY IRQ provider is missing").
+>
+> 2. Before it finally gives up, the PHY driver has a transient phase of
+>    returning -EPROBE_DEFER. That transient phase causes some breakage
+>    which is handled by this patch set, details below.
+>
+> 3. PHY device probing and Ethernet controller finding it and connecting
+>    to it are async events. When both happen during probing, the problem
+>    is that finding the PHY fails if the PHY defers probe, which results
+>    in a missing PHY rather than waiting for it. Unfortunately there is
+>    no universal way to address this problem, because the majority of
+>    Ethernet drivers do not connect to the PHY during probe. So the
+>    problem is fixed only for the driver that is of interest to me in
+>    this context, DSA, and with special API exported by phylink
+>    specifically for this purpose, to limit the impact on other drivers.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I'll take a closer look at this later this week, but once we add
+phy-handle support to fw_devlink (the device_bind_driver() is making
+it hard to add support), I think we can address most/all of these
+problems automatically. So hopefully we can work towards that?
+Actually this patch might already fix this for you:
+https://lore.kernel.org/lkml/20220429220933.1350374-1-saravanak@google.com/
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-arm                           stm32_defconfig
-csky                                defconfig
-riscv             nommu_k210_sdcard_defconfig
-powerpc                     tqm8555_defconfig
-arm                          simpad_defconfig
-arm                        cerfcube_defconfig
-sh                          r7785rp_defconfig
-sh                          urquell_defconfig
-xtensa                  audio_kc705_defconfig
-xtensa                           alldefconfig
-m68k                       m5275evb_defconfig
-ia64                      gensparse_defconfig
-xtensa                    xip_kc705_defconfig
-h8300                     edosk2674_defconfig
-arm                            hisi_defconfig
-mips                        bcm47xx_defconfig
-sh                              ul2_defconfig
-sh                      rts7751r2d1_defconfig
-sh                           se7712_defconfig
-mips                             allyesconfig
-mips                         tb0226_defconfig
-sh                   secureedge5410_defconfig
-ia64                          tiger_defconfig
-m68k                           sun3_defconfig
-powerpc                       eiger_defconfig
-openrisc                            defconfig
-powerpc                     stx_gp3_defconfig
-arm64                            alldefconfig
-m68k                          sun3x_defconfig
-nios2                         3c120_defconfig
-m68k                       bvme6000_defconfig
-i386                             alldefconfig
-ia64                         bigsur_defconfig
-m68k                        mvme147_defconfig
-sh                         ecovec24_defconfig
-powerpc                     taishan_defconfig
-sparc                       sparc32_defconfig
-arm                             ezx_defconfig
-sh                          lboxre2_defconfig
-sh                        sh7763rdp_defconfig
-powerpc                           allnoconfig
-powerpc                 mpc837x_mds_defconfig
-xtensa                  cadence_csp_defconfig
-arm                        oxnas_v6_defconfig
-arm                        clps711x_defconfig
-riscv                               defconfig
-powerpc                      pcm030_defconfig
-sparc                       sparc64_defconfig
-arc                     nsimosci_hs_defconfig
-powerpc                    amigaone_defconfig
-sh                          landisk_defconfig
-sh                          rsk7264_defconfig
-sh                           se7751_defconfig
-parisc                generic-32bit_defconfig
-sh                            hp6xx_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220512
-ia64                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-s390                 randconfig-r044-20220512
-riscv                randconfig-r042-20220512
-arc                  randconfig-r043-20220512
-arc                  randconfig-r043-20220513
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
+Before fw_devlink, we'd give up on waiting on all suppliers, whether
+they had a driver (but hadn't yet probed for a multitude of reasons)
+or not. fw_devlink is smart about allowing consumers to probe without
+their suppliers only if the supplier has no driver or the driver fails
+(I'll send a patch for this). The deferred_probe_timeout is what's
+used to decide when to give up waiting for drivers.
 
-clang tested configs:
-powerpc              randconfig-c003-20220512
-x86_64                        randconfig-c007
-riscv                randconfig-c006-20220512
-mips                 randconfig-c004-20220512
-i386                          randconfig-c001
-arm                  randconfig-c002-20220512
-powerpc                     tqm5200_defconfig
-powerpc                          allyesconfig
-arm                      pxa255-idp_defconfig
-arm                  colibri_pxa270_defconfig
-arm                        magician_defconfig
-arm                       netwinder_defconfig
-riscv                    nommu_virt_defconfig
-arm                           spitz_defconfig
-mips                  cavium_octeon_defconfig
-powerpc                     tqm8540_defconfig
-riscv                             allnoconfig
-arm                        mvebu_v5_defconfig
-powerpc                 mpc8315_rdb_defconfig
-arm                          moxart_defconfig
-powerpc                   lite5200b_defconfig
-mips                   sb1250_swarm_defconfig
-powerpc                      ppc44x_defconfig
-powerpc                   bluestone_defconfig
-x86_64                           allyesconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-hexagon              randconfig-r045-20220512
-hexagon              randconfig-r041-20220512
+-Saravana
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> Note that drivers that connect to the PHY at ndo_open are superficially
+> "fixed" by the patch at step 1 alone, and therefore don't need the
+> mechanism introduced in phylink here. This is because of the larger span
+> of time between PHY probe and opening the network interface (typically
+> initiated by user space). But this is the catch, nfsroot and other
+> in-kernel networking users can also open the net device, and this will
+> still expose the EPROBE_DEFER as a hard error for this second kind of
+> drivers. I don't know how to fix that. From this POV, it's better to do
+> what DSA does (connect to the PHY on probe).
+>
+> Vladimir Oltean (2):
+>   net: phylink: allow PHY driver to defer probe when connecting via OF
+>     node
+>   net: dsa: wait for PHY to defer probe
+>
+>  drivers/net/phy/phylink.c | 73 ++++++++++++++++++++++++++++++---------
+>  include/linux/phylink.h   |  2 ++
+>  net/dsa/dsa2.c            |  2 ++
+>  net/dsa/port.c            |  6 ++--
+>  net/dsa/slave.c           | 10 +++---
+>  5 files changed, 70 insertions(+), 23 deletions(-)
+>
+> --
+> 2.25.1
+>

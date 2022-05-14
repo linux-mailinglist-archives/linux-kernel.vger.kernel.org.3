@@ -2,130 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91785527102
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 14:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26F2A527106
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 14:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232279AbiENMOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 08:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55248 "EHLO
+        id S232298AbiENMTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 08:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232229AbiENMOp (ORCPT
+        with ESMTP id S230393AbiENMS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 08:14:45 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D249624F28;
-        Sat, 14 May 2022 05:14:42 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id c14so9969115pfn.2;
-        Sat, 14 May 2022 05:14:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1aSGY0h+9mFG07V/uGzLZko6mgSx1gaXsXLrsGCI9XA=;
-        b=N7Hmhn5Lg9cczfQn3yUsdZ/KhteBfYV4DxaXQX1ynP/EGQpy1xkmF+CaY3zyG4wE7z
-         cJ5wLDs/g7UBXXQkfGMJ8cdc+nIeq5VDRakjMfmf4n4SP4dSmd5SG8w9C6VtIo06SwSf
-         4lEgvYhUn3Zd4IMaaO8OgKlt3xGvuIJkWg7lotceD53JQnQjtDMtC5wdVR7iNgs+Vmj7
-         1lKDKT31aU+zjUBFGCHqZED2HctANq+UrVqRDEYt3qJgS0SBtQZ0+i/4c/jOKHdw9+Fw
-         Rzu9HiEH2oBuEkMwL3WMSWQmXUDqwrx8bWn9srrM994bF3ygOWrd0SMSe97JYeFOpqBZ
-         7vKQ==
+        Sat, 14 May 2022 08:18:58 -0400
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6CD2E6AE;
+        Sat, 14 May 2022 05:18:56 -0700 (PDT)
+Received: by mail-qt1-f180.google.com with SMTP id v14so7941123qtc.3;
+        Sat, 14 May 2022 05:18:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1aSGY0h+9mFG07V/uGzLZko6mgSx1gaXsXLrsGCI9XA=;
-        b=nl9WQ65ePSo9U2BxajpmaAMTVkbSG+l9/DBrG9Nivob23aanF46LQ+h3YFyFTeC8Ui
-         SOggAUCT247uUur95kNjYXEmjK6oew0J3i8V8QJtRzOZt2L8l4wQt9X42wVLyRDRxAlb
-         TXh9Rg9Udr7bec6QAFKV7eFzsXoDAIrc7jQzyOymQyFlZL+E4mCso5/ILCa18Z1lcpvG
-         MeGT01qDJ2FoNqYWR7OCX+W+BEDWdLZZEv6Uw/4Qt2yzBDFWIsh4yfd4GdSJwSYwyU1C
-         p6CZ4QVe8FFPnYQ8Is2VsBzvRK/kcSMt/SQu5y5ccG0I5DauoFrfV28N7lu2QwF2ey46
-         dTmw==
-X-Gm-Message-State: AOAM531tAd0twcHLYo79NRd1PgqEC7f82OG3sHAnr7PJ4uW0FgScQF43
-        AhEiocrjHd7Rizp13SlWQkA=
-X-Google-Smtp-Source: ABdhPJyvXfa3aO808JTEoNWi/aJttupdVwqAH0ymCcC/qYyTZhZFgrfYarrbc+e6gIxYXNXz2KeiyQ==
-X-Received: by 2002:a63:1e1d:0:b0:3c6:a36f:7b13 with SMTP id e29-20020a631e1d000000b003c6a36f7b13mr7785413pge.447.1652530482317;
-        Sat, 14 May 2022 05:14:42 -0700 (PDT)
-Received: from localhost (subs09a-223-255-225-65.three.co.id. [223.255.225.65])
-        by smtp.gmail.com with ESMTPSA id j24-20020a62b618000000b0050dc76281b1sm3430254pff.139.2022.05.14.05.14.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 May 2022 05:14:41 -0700 (PDT)
-Date:   Sat, 14 May 2022 19:14:38 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Chao Yu <chao@kernel.org>
-Cc:     jaegeuk@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Ming Yan <yanming@tju.edu.cn>, Chao Yu <chao.yu@oppo.com>
-Subject: Re: [PATCH v2] f2fs: fix to do sanity check for inline inode
-Message-ID: <Yn+dLtxsy6LwVIBQ@debian.me>
-References: <20220514080102.2246-1-chao@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OtoP2XbqVMyoMGXah/2mkYSD35yqmPo/cBhku3xFzP8=;
+        b=dDoUCxoVB91HP8rjM3y9vKkAVXI71Hzusm4JT3B8XVhJHC8Y5qvqqFIuKaC9zJZwK4
+         J5E6MFM1rBnDnto+aFEoglwUVg70Etgdf07cTwl+01BYXi6+pOL0R+NcxnpdBU2BgU/3
+         +h0thQe7+EEr/tcPm88Z8X4jQ7nTtYf7PRGDe8QXL6mNal+v19Fg9PHpLWeT7dYBRjqh
+         hRoIV5BboMQXtqHluR+Iq5GSI1HQDXEK++Jjyd+N4TOUJLB0PxE0Jx74fONgeKHsklX4
+         XVCY7ygtU4V0tsS91dsbSQWEtnNm6gwu0xtukDyDth7gLBuQKyLlbGCi5ugfBIveq2qY
+         VWWA==
+X-Gm-Message-State: AOAM530r7wRRy7DlLsWfNlcCsiLMUzZXsnZ94d3KseJ/h8ohyVC7xPCZ
+        E8gq1ZImkxeh2Tr6xhhmh18Iaqrrm5Y/3g==
+X-Google-Smtp-Source: ABdhPJyeZdGcJmVSNkAb91nuRYEwXfcci56J/ko9f7+OUaksIFENv580G7vBccCaMq9j6Wth7xtZOQ==
+X-Received: by 2002:ac8:5e47:0:b0:2f3:cb77:9046 with SMTP id i7-20020ac85e47000000b002f3cb779046mr8122594qtx.221.1652530735638;
+        Sat, 14 May 2022 05:18:55 -0700 (PDT)
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
+        by smtp.gmail.com with ESMTPSA id u26-20020ac8751a000000b002f39b99f6absm2844694qtq.69.2022.05.14.05.18.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 14 May 2022 05:18:55 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2f16645872fso113543387b3.4;
+        Sat, 14 May 2022 05:18:55 -0700 (PDT)
+X-Received: by 2002:a81:7383:0:b0:2fe:c9e4:cac with SMTP id
+ o125-20020a817383000000b002fec9e40cacmr3999688ywc.383.1652530734763; Sat, 14
+ May 2022 05:18:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220514080102.2246-1-chao@kernel.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220503172926.08215c77@canb.auug.org.au> <3f94c9a8-c927-5cc0-7d67-4b21c3d9dbaf@microchip.com>
+ <9a424be9-380f-f99c-4126-25a00eba0271@microchip.com> <20220509141122.GA14555@lst.de>
+ <dd946220-eaf6-773a-06b4-307cda466c9c@microchip.com> <505d41d1-1bc8-c8bc-5ebb-8a2b7934f3de@microchip.com>
+ <20220511062232.GA32524@lst.de> <102578f2-5c10-e9c2-c1ef-e76ba90d011e@microchip.com>
+ <20220511064832.GA761@lst.de> <2c0e2fbe-4e45-4acc-c2a7-4f4dcf9161a3@microchip.com>
+In-Reply-To: <2c0e2fbe-4e45-4acc-c2a7-4f4dcf9161a3@microchip.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sat, 14 May 2022 14:18:43 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVJuErxg16jFQEJhMwTgAt2AcHOGck1REZY6j0OpWwH+w@mail.gmail.com>
+Message-ID: <CAMuHMdVJuErxg16jFQEJhMwTgAt2AcHOGck1REZY6j0OpWwH+w@mail.gmail.com>
+Subject: Re: linux-next: Tree for May 3
+To:     Conor Dooley <Conor.Dooley@microchip.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux-Next <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 14, 2022 at 04:01:02PM +0800, Chao Yu wrote:
-> As Yanming reported in bugzilla:
-> 
-> https://bugzilla.kernel.org/show_bug.cgi?id=215895
-> 
-> I have encountered a bug in F2FS file system in kernel v5.17.
-> 
-> The kernel message is shown below:
-> 
-> kernel BUG at fs/inode.c:611!
-> Call Trace:
->  evict+0x282/0x4e0
->  __dentry_kill+0x2b2/0x4d0
->  dput+0x2dd/0x720
->  do_renameat2+0x596/0x970
->  __x64_sys_rename+0x78/0x90
->  do_syscall_64+0x3b/0x90
-> 
-> The root cause is: fuzzed inode has both inline_data flag and encrypted
-> flag, so after it was deleted by rename(), during f2fs_evict_inode(),
-> it will cause inline data conversion due to flags confilction, then
-> page cache will be polluted and trigger panic in clear_inode().
-> 
-> This patch tries to fix the issue by do more sanity checks for inline
-> data inode in sanity_check_inode().
-> 
-> Cc: stable@vger.kernel.org
-> Reported-by: Ming Yan <yanming@tju.edu.cn>
-> Signed-off-by: Chao Yu <chao.yu@oppo.com>
+Hi Conor,
 
-Hi Chao,
+On Wed, May 11, 2022 at 12:13 PM <Conor.Dooley@microchip.com> wrote:
+> [    0.000000] Kernel command line: earlycon=sbi debug
 
-I think the patch message can be reworked , like below:
+That should work without the "=sbi" part.
 
-Yanming reported a kernel bug in Bugzilla kernel, which can be reproduced.
-The bug message is:
+I've used "earlycon" and "earlycon keep_bootcon" successfully on
+icicle before.
 
-kernel BUG at fs/inode.c:611!
-Call Trace:
- evict+0x282/0x4e0
- __dentry_kill+0x2b2/0x4d0
- dput+0x2dd/0x720
- do_renameat2+0x596/0x970
- __x64_sys_rename+0x78/0x90
- do_syscall_64+0x3b/0x90
+Gr{oetje,eeting}s,
 
-The bug is due to fuzzed inode has both inline_data and encrypted flags.
-During f2fs_evict_inode(), after the inode was deleted by rename(), it
-will cause inline data conversion due to conflicting flags. The page
-cache will be polluted and the panic will be triggered in clear_inode().
+                        Geert
 
-Try fixing the bug by doing more sanity checks for inline data inode in
-sanity_check_inode().
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Thanks.
-
--- 
-An old man doll... just what I always wanted! - Clara
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,127 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1967527357
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 19:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76D4352735B
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 19:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234542AbiENRev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 13:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54930 "EHLO
+        id S234609AbiENRyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 13:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbiENRet (ORCPT
+        with ESMTP id S229709AbiENRyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 13:34:49 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE65C27FFB;
-        Sat, 14 May 2022 10:34:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=J/CYoEWYN0//tJ7oLMZ9W2zbhdNH0QLc8IorvQFz8u0=; b=bKKkcu+uIoefITmMXktqtV/uHz
-        6gopskH+sNJd3F0FI4e5OUQ8JCSUfcLPLs5clfSg/ekSn5tcqRaikq30Yoo+YQVQn0VCex5GeZ9y/
-        vNG9PRXjINC8Z5Hk8LqtXAd6i4PvNkma3RqikSXntwp1KtCG/oNGKze5sxkldIl1lHcpynNMI4yBd
-        iLWoIrnPC6DNnXh5YGf9fWY+qaJnO+OESmIQkq8LL1pEGAPnHV7Dx65g+M7qa6pzSbIMSMfhJ6ELC
-        FSzRmHRzg4125i77nzWmu26Fpa8gpnKecz/xj/s0w4bomRyqmJmu5Yj56ZYA3ACB9qCfbzKKtXvq8
-        9ZTqbvog==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1npvf1-008NBP-Br; Sat, 14 May 2022 17:34:35 +0000
-Date:   Sat, 14 May 2022 18:34:35 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     Dan Williams <dan.j.williams@intel.com>, Jan Kara <jack@suse.cz>,
-        Alexander Viro <viro@zeniv.linux.org.uk>, kernel@openvz.org,
-        linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH] sparse: use force attribute for vm_fault_t casts
-Message-ID: <Yn/oKz6v5GkReeA3@casper.infradead.org>
-References: <cf47f8c3-c4f3-7f80-ce17-ed9fbc7fe424@openvz.org>
+        Sat, 14 May 2022 13:54:50 -0400
+Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F582EA15
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 10:54:48 -0700 (PDT)
+Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay12.hostedemail.com (Postfix) with ESMTP id 90D7412094E;
+        Sat, 14 May 2022 17:54:47 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf14.hostedemail.com (Postfix) with ESMTPA id 2F51D2D;
+        Sat, 14 May 2022 17:54:46 +0000 (UTC)
+Message-ID: <b69cd7d3f0e3b62c5ef12cd1b98eac45f56022a4.camel@perches.com>
+Subject: Re: [PATCH 4/7] staging: r8188eu: replace if with ternary operator
+From:   Joe Perches <joe@perches.com>
+To:     Martin Kaiser <martin@kaiser.cx>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Date:   Sat, 14 May 2022 10:54:45 -0700
+In-Reply-To: <20220514164740.282552-5-martin@kaiser.cx>
+References: <20220514164740.282552-1-martin@kaiser.cx>
+         <20220514164740.282552-5-martin@kaiser.cx>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cf47f8c3-c4f3-7f80-ce17-ed9fbc7fe424@openvz.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: of6njk9kz39zwsw47omzsej8oneyxy4w
+X-Rspamd-Server: rspamout06
+X-Rspamd-Queue-Id: 2F51D2D
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        KHOP_HELO_FCRDNS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/9dge58uXWeAVx2Yd3Zdw4G+hZcBv5j64=
+X-HE-Tag: 1652550886-835860
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 14, 2022 at 05:26:21PM +0300, Vasily Averin wrote:
-> Fixes sparse warnings:
-> ./include/trace/events/fs_dax.h:10:1: sparse:
->     got restricted vm_fault_t
-> ./include/trace/events/fs_dax.h:153:1: sparse:
->     got restricted vm_fault_t
-> fs/dax.c:563:39: sparse:    got restricted vm_fault_t
-> fs/dax.c:565:39: sparse:    got restricted vm_fault_t
-> fs/dax.c:569:31: sparse:    got restricted vm_fault_t
-> fs/dax.c:1055:41: sparse:
->     got restricted vm_fault_t [assigned] [usertype] ret
-> fs/dax.c:1461:46: sparse:    got restricted vm_fault_t [usertype] ret
-> fs/dax.c:1477:21: sparse:
->     expected restricted vm_fault_t [assigned] [usertype] ret
-> fs/dax.c:1518:51: sparse:
->     got restricted vm_fault_t [assigned] [usertype] ret
-> fs/dax.c:1599:21: sparse:
->     expected restricted vm_fault_t [assigned] [usertype] ret
-> fs/dax.c:1633:62: sparse:
->     got restricted vm_fault_t [assigned] [usertype] ret
-> fs/dax.c:1696:55: sparse:    got restricted vm_fault_t
-> fs/dax.c:1711:58: sparse:
->     got restricted vm_fault_t [assigned] [usertype] ret
-> 
-> vm_fault_t type is bitwise and requires __force attribute for any casts.
-
-Well, this patch is all kinds of messy.  I would rather we had better
-abstractions.  For example ...
-
-> @@ -560,13 +560,13 @@ static void *grab_mapping_entry(struct xa_state *xas,
->  	if (xas_nomem(xas, mapping_gfp_mask(mapping) & ~__GFP_HIGHMEM))
->  		goto retry;
->  	if (xas->xa_node == XA_ERROR(-ENOMEM))
-> -		return xa_mk_internal(VM_FAULT_OOM);
-> +		return xa_mk_internal((__force unsigned long)VM_FAULT_OOM);
->  	if (xas_error(xas))
-> -		return xa_mk_internal(VM_FAULT_SIGBUS);
-> +		return xa_mk_internal((__force unsigned long)VM_FAULT_SIGBUS);
->  	return entry;
->  fallback:
->  	xas_unlock_irq(xas);
-> -	return xa_mk_internal(VM_FAULT_FALLBACK);
-> +	return xa_mk_internal((__force unsigned long)VM_FAULT_FALLBACK);
->  }
-
-	return vm_fault_encode(VM_FAULT_xxx);
-
->  /**
-> @@ -1052,7 +1052,7 @@ static vm_fault_t dax_load_hole(struct xa_state *xas,
->  			DAX_ZERO_PAGE, false);
+On Sat, 2022-05-14 at 18:47 +0200, Martin Kaiser wrote:
+> Replace an if statement with a ternary operator, making the code a tiny
+> bit shorter.
+[]
+> diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+[]
+> @@ -1503,10 +1503,8 @@ unsigned int OnAction_back(struct adapter *padapter, struct recv_frame *precv_fr
+>  		preorder_ctrl->indicate_seq = 0xffff;
+>  		preorder_ctrl->enable = pmlmeinfo->bAcceptAddbaReq;
 >  
->  	ret = vmf_insert_mixed(vmf->vma, vaddr, pfn);
-> -	trace_dax_load_hole(inode, vmf, ret);
-> +	trace_dax_load_hole(inode, vmf, (__force int)ret);
+> -		if (pmlmeinfo->bAcceptAddbaReq)
+> -			issue_action_BA(padapter, mgmt->sa, WLAN_ACTION_ADDBA_RESP, 0);
+> -		else
+> -			issue_action_BA(padapter, mgmt->sa, WLAN_ACTION_ADDBA_RESP, 37);/* reject ADDBA Req */
+> +		issue_action_BA(padapter, mgmt->sa, WLAN_ACTION_ADDBA_RESP,
+> +				pmlmeinfo->bAcceptAddbaReq ? 0 : 37);
 
-Seems like trace_dax_load_hole() should take a vm_fault_t?
+Seems like magic numbers.  Maybe add/use defines?
 
-> -	trace_dax_pte_fault(iter.inode, vmf, ret);
-> +	trace_dax_pte_fault(iter.inode, vmf, (__force int)ret);
 
-Ditto.
-
-> @@ -1474,7 +1474,7 @@ static vm_fault_t dax_iomap_pte_fault(struct vm_fault *vmf, pfn_t *pfnp,
->  
->  	entry = grab_mapping_entry(&xas, mapping, 0);
->  	if (xa_is_internal(entry)) {
-> -		ret = xa_to_internal(entry);
-> +		ret = (__force vm_fault_t)xa_to_internal(entry);
-
-vm_fault_decode(entry)?
-
-... the others seem like more of the same.  So I'm in favour of what
-you're doing, but would rather it were done differently.  Generally
-seeing __force casts in the body of a function is a sign that things are
-wrong; it's better to have them hidden in abstractions.

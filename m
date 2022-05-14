@@ -2,52 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2FA5273E8
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 22:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C6045273EF
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 22:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235057AbiENUSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 16:18:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
+        id S235085AbiENUWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 16:22:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbiENUS2 (ORCPT
+        with ESMTP id S235072AbiENUWC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 16:18:28 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E573411A09
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 13:18:26 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id ay38-20020a5d9da6000000b0065adc1f932bso7351938iob.11
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 13:18:26 -0700 (PDT)
+        Sat, 14 May 2022 16:22:02 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1376126AF0
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 13:22:00 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id m23so13997289ljc.0
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 13:21:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Y5VRY1Vg5U7FZOYxaP3jhw1GgftqMUz+kaXgWZO/zzo=;
+        b=a9IbvRUaYC8Wc0vyxgFwHAxgU9mSVnhYPrySypKYv+QMWSeS0lIY4wxVjb/+x54LWq
+         Ldc1cXpfGj905mcwbZhrOB2SdRWkkkJTcN8XmsLxZM3o1iVoUToVGPQqNwOLRWQqNkFV
+         hvbA4emBw/8q79PftXEPsH+kSyqRfafhujdgE+P8fJGteGOcK7xMkyuufwBAw8bIrRFa
+         gJuSbkhJHloXm+OQ9D+IZ7DsfUCXfPkNBD+eHfglA2cDMFd0vT8MnG+Zmj8mMlPJwnb4
+         yTLeFaHM+EYpglB82UoRIxyn6Isw1Z9/jYS70nsrx3FRo+XYLmINHoUjvQQkh8OJSE4S
+         gzNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=SlqYaScAHL+BXeFb8+78VzRrEWZWHNhIDc0JRNroU6k=;
-        b=Jxd8jEbjnLtNUNYcxBIxHi7mdwoOebCsZy+Uk3IKY9wnmaRHCFXt2oRnAqAysBLsJC
-         1woqs2+mn0NO+Rn1GrahtKvgpQ4tKOuAabeSULcI2g1N/aDjfvcwfgFf7G6Zi/XTvVk3
-         ySSCvPQP1SJlCCeq8GpRom0UyXCGMC4EVSGaEHhTYJ7xJZ7CUsxx6ITMDipDxUStEE26
-         fUFqCK0/ZeYLCLvVp4lY6++sCwVxo/o9x+H7Gb7/SrnTlOf1qKApnwmIcX8wlTQDh/iZ
-         R35LVDuXmrZPeAotklveyXuzCT7kcoVdhEgGhsfUmBOsdNjZgz9r11Nk6PAU16xWVP77
-         yC7w==
-X-Gm-Message-State: AOAM531zISq6jnagAG0v46NmuZb0yfoskAjviWIVQne9dX8XJpLbFiyd
-        cMxJxVjqb3tvtr02Y78tRh9nAG/xeT/fr27pIyM6mI/jTkpX
-X-Google-Smtp-Source: ABdhPJxveewxAlZ8yHCHhDCvV2y5AQ6QZL37DucftXHfDBJERj5ltPSWWOLLHo82rwOobFynbSGuaxUvgUSmYAnfx3ioljgsa7yX
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Y5VRY1Vg5U7FZOYxaP3jhw1GgftqMUz+kaXgWZO/zzo=;
+        b=sm/awREErambxP6alztDmoak3vPsfp7gkj59pdgxdtN//Pz3/QfpH4nWR4BerlyUJB
+         JopxGVRpx3h1dyCYlw5D41cGh2bju0yKYXH8C5hmiUNVUeJ5w+uls/+Z3jkAQ4AaP8MV
+         h0OtlEWB3/fX4AgogClVFpKQcZCVb9LQ1uVNjuPLSH0dWBXzGsb3iSTzhJx/eggcPVAx
+         wJJVB7QZn5LOGj5jaUlxp+Jtimgky45xthNBwstpPIMwo4XSeBqxuv6FtH8b6iMfKIml
+         tt6yBsHT0alVtXF4BspLN7hukg50+cM8imFkPWgvefp041zFaRmLhvqaJ4H72FWavSRM
+         NbDw==
+X-Gm-Message-State: AOAM531/DVgpthOwtTXaf0rsV2p0hzx56KxYWuLyQIKCWdy+3horVviF
+        LJ84tQU4YyQI+2ZM9C7J79/Tag==
+X-Google-Smtp-Source: ABdhPJzLyuqdkaQnJF2ClXg0Jx1DgHwKnG2ziP/ISkfSmc674JtqB4hc3nDy/CLvL1Xr59yD6peNiw==
+X-Received: by 2002:a05:651c:98d:b0:250:976b:4a0e with SMTP id b13-20020a05651c098d00b00250976b4a0emr6642090ljq.494.1652559718267;
+        Sat, 14 May 2022 13:21:58 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id z2-20020a2e9b82000000b0024f3d1daeaesm942625lji.54.2022.05.14.13.21.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 14 May 2022 13:21:57 -0700 (PDT)
+Message-ID: <567d135b-3d40-9958-e000-1357020b5650@linaro.org>
+Date:   Sat, 14 May 2022 22:21:56 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a92:3f0a:0:b0:2cf:7745:d38 with SMTP id
- m10-20020a923f0a000000b002cf77450d38mr5387965ila.289.1652559506295; Sat, 14
- May 2022 13:18:26 -0700 (PDT)
-Date:   Sat, 14 May 2022 13:18:26 -0700
-In-Reply-To: <0000000000007f31db05de0638f0@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000057d2f405defe7e00@google.com>
-Subject: Re: [syzbot] general protection fault in vma_interval_tree_remove
-From:   syzbot <syzbot+ee1fdd8dcc770a3a169a@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 3/3] dt-bindings: usb: add documentation for aspeed udc
+Content-Language: en-US
+To:     Neal Liu <neal_liu@aspeedtech.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Felipe Balbi <balbi@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Li Yang <leoyang.li@nxp.com>
+Cc:     "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
+        BMC-SW <BMC-SW@aspeedtech.com>
+References: <20220513065728.857722-1-neal_liu@aspeedtech.com>
+ <20220513065728.857722-4-neal_liu@aspeedtech.com>
+ <da78aaf6-c9ae-d591-fdc4-723f097ace2c@linaro.org>
+ <HK0PR06MB3202679A7FABAF7D0D045F0880CA9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <HK0PR06MB3202679A7FABAF7D0D045F0880CA9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,100 +95,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On 13/05/2022 17:39, Neal Liu wrote:
+>> -----Original Message-----
+>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Sent: Friday, May 13, 2022 5:07 PM
+>> To: Neal Liu <neal_liu@aspeedtech.com>; Greg Kroah-Hartman
+>> <gregkh@linuxfoundation.org>; Rob Herring <robh+dt@kernel.org>;
+>> Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>; Joel Stanley
+>> <joel@jms.id.au>; Andrew Jeffery <andrew@aj.id.au>; Felipe Balbi
+>> <balbi@kernel.org>; Sumit Semwal <sumit.semwal@linaro.org>; Christian
+>> König <christian.koenig@amd.com>; Geert Uytterhoeven <geert@linux-
+>> m68k.org>; Li Yang <leoyang.li@nxp.com>
+>> Cc: linux-aspeed@lists.ozlabs.org; linux-usb@vger.kernel.org;
+>> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+>> kernel@vger.kernel.org; linux-media@vger.kernel.org; dri-
+>> devel@lists.freedesktop.org; linaro-mm-sig@lists.linaro.org; BMC-SW <BMC-
+>> SW@aspeedtech.com>
+>> Subject: Re: [PATCH 3/3] dt-bindings: usb: add documentation for aspeed
+>> udc
+>>
+>> On 13/05/2022 08:57, Neal Liu wrote:
+>>> Add device tree binding documentation for the Aspeed USB2.0 Device
+>>> Controller.
+>>>
+>>> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+>>> ---
+>>>  .../devicetree/bindings/usb/aspeed,udc.yaml   | 52
+>> +++++++++++++++++++
+>>>  1 file changed, 52 insertions(+)
+>>>  create mode 100644
+>>> Documentation/devicetree/bindings/usb/aspeed,udc.yaml
+>>
+>> Please name the file as first compatible, so "aspeed,ast2600-udc.yaml"
+> 
+> Okay, I could rename it for next patch if you preferred.
+> But there are lots of yaml files which are not named as first compatible.
 
-HEAD commit:    1e1b28b936ae Add linux-next specific files for 20220513
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=11da21b9f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e4eb3c0c4b289571
-dashboard link: https://syzkaller.appspot.com/bug?extid=ee1fdd8dcc770a3a169a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=142757f1f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17cf0966f00000
+Yes, I know, I quite likely I also produced such bindings, but a
+specific name is rather preferred. Otherwise you will have a difficult
+naming choice when your next Aspeed UDC requires new bindings file
+because of some differences (not yet known now).
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ee1fdd8dcc770a3a169a@syzkaller.appspotmail.com
+> 
+>>
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/usb/aspeed,udc.yaml
+>>> b/Documentation/devicetree/bindings/usb/aspeed,udc.yaml
+>>> new file mode 100644
+>>> index 000000000000..d1d2f77d1c54
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/usb/aspeed,udc.yaml
+>>> @@ -0,0 +1,52 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) # Copyright
+>>> +(c) 2020 Facebook Inc.
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/usb/aspeed,udc.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: ASPEED USB 2.0 Device Controller
+>>> +
+>>> +maintainers:
+>>> +  - Neal Liu <neal_liu@aspeedtech.com>
+>>> +
+>>> +description: |+
+>>> +  The ASPEED USB 2.0 Device Controller implements 1 control endpoint
+>>> +and
+>>> +  4 generic endpoints for AST260x.
+>>> +
+>>> +  Supports independent DMA channel for each generic endpoint.
+>>> +  Supports 32/256 stages descriptor mode for all generic endpoints.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - aspeed,ast2600-udc
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  clocks:
+>>> +    maxItems: 1
+>>> +
+>>> +  interrupts:
+>>> +    maxItems: 1
+>>
+>> No child properties? No ports or any other devices? No usb-hcd.yaml?
+> 
+> Aspeed udc only has 1 port, no need extra properties for now.
 
-general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-CPU: 1 PID: 3612 Comm: syz-executor255 Not tainted 5.18.0-rc6-next-20220513-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:____rb_erase_color lib/rbtree.c:354 [inline]
-RIP: 0010:__rb_erase_color+0x159/0xdb0 lib/rbtree.c:413
-Code: 89 ed 48 89 c5 e9 f5 fe ff ff 4c 8d 45 10 4c 89 c0 48 c1 e8 03 80 3c 18 00 0f 85 3a 08 00 00 4c 8b 65 10 4c 89 e0 48 c1 e8 03 <80> 3c 18 00 0f 85 6a 08 00 00 49 8b 04 24 49 8d 7c 24 08 48 89 f9
-RSP: 0018:ffffc90002e877a8 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
-RDX: ffffed100e8d3aed RSI: ffff88807469d768 RDI: ffff8880202132b0
-RBP: ffff8880202132b0 R08: ffff8880202132c0 R09: ffff88807469d75f
-R10: ffffffff81b02518 R11: 0000000000000001 R12: 0000000000000000
-R13: 0000000000000000 R14: ffff88807469d768 R15: ffffffff81b01300
-FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffe92002ff8 CR3: 00000000764a0000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- rb_erase_augmented include/linux/rbtree_augmented.h:305 [inline]
- rb_erase_augmented_cached include/linux/rbtree_augmented.h:314 [inline]
- vma_interval_tree_remove+0x694/0xed0 mm/interval_tree.c:23
- __remove_shared_vm_struct mm/mmap.c:160 [inline]
- unlink_file_vma+0xbd/0x110 mm/mmap.c:175
- free_pgtables+0x255/0x420 mm/memory.c:440
- exit_mmap+0x1ff/0x740 mm/mmap.c:3219
- __mmput+0x128/0x4c0 kernel/fork.c:1180
- mmput+0x5c/0x70 kernel/fork.c:1201
- exit_mm kernel/exit.c:510 [inline]
- do_exit+0xa18/0x2a00 kernel/exit.c:782
- do_group_exit+0xd2/0x2f0 kernel/exit.c:925
- get_signal+0x2542/0x2600 kernel/signal.c:2857
- arch_do_signal_or_restart+0x82/0x20f0 arch/x86/kernel/signal.c:869
- exit_to_user_mode_loop kernel/entry/common.c:166 [inline]
- exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:201
- irqentry_exit_to_user_mode+0x5/0x30 kernel/entry/common.c:307
- exc_page_fault+0xc6/0x180 arch/x86/mm/fault.c:1543
- asm_exc_page_fault+0x27/0x30 arch/x86/include/asm/idtentry.h:570
-RIP: 0033:0x7f1771dc98cf
-Code: Unable to access opcode bytes at RIP 0x7f1771dc98a5.
-RSP: 002b:00007ffe920035a0 EFLAGS: 00010206
-RAX: 0000000000000001 RBX: 00007f1771e78138 RCX: 0000000000000001
-RDX: 0000000000000001 RSI: 00007f1771e78138 RDI: 000000000000000b
-RBP: 000000000000000b R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000008011 R11: 0000000000000206 R12: 0000000000000000
-R13: 0000000000000001 R14: 00000000000c3ec0 R15: 0000000000000001
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:____rb_erase_color lib/rbtree.c:354 [inline]
-RIP: 0010:__rb_erase_color+0x159/0xdb0 lib/rbtree.c:413
-Code: 89 ed 48 89 c5 e9 f5 fe ff ff 4c 8d 45 10 4c 89 c0 48 c1 e8 03 80 3c 18 00 0f 85 3a 08 00 00 4c 8b 65 10 4c 89 e0 48 c1 e8 03 <80> 3c 18 00 0f 85 6a 08 00 00 49 8b 04 24 49 8d 7c 24 08 48 89 f9
-RSP: 0018:ffffc90002e877a8 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
-RDX: ffffed100e8d3aed RSI: ffff88807469d768 RDI: ffff8880202132b0
-RBP: ffff8880202132b0 R08: ffff8880202132c0 R09: ffff88807469d75f
-R10: ffffffff81b02518 R11: 0000000000000001 R12: 0000000000000000
-R13: 0000000000000000 R14: ffff88807469d768 R15: ffffffff81b01300
-FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000000c3ec8 CR3: 0000000023516000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	89 ed                	mov    %ebp,%ebp
-   2:	48 89 c5             	mov    %rax,%rbp
-   5:	e9 f5 fe ff ff       	jmpq   0xfffffeff
-   a:	4c 8d 45 10          	lea    0x10(%rbp),%r8
-   e:	4c 89 c0             	mov    %r8,%rax
-  11:	48 c1 e8 03          	shr    $0x3,%rax
-  15:	80 3c 18 00          	cmpb   $0x0,(%rax,%rbx,1)
-  19:	0f 85 3a 08 00 00    	jne    0x859
-  1f:	4c 8b 65 10          	mov    0x10(%rbp),%r12
-  23:	4c 89 e0             	mov    %r12,%rax
-  26:	48 c1 e8 03          	shr    $0x3,%rax
-* 2a:	80 3c 18 00          	cmpb   $0x0,(%rax,%rbx,1) <-- trapping instruction
-  2e:	0f 85 6a 08 00 00    	jne    0x89e
-  34:	49 8b 04 24          	mov    (%r12),%rax
-  38:	49 8d 7c 24 08       	lea    0x8(%r12),%rdi
-  3d:	48 89 f9             	mov    %rdi,%rcx
+OK
 
+> 
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>> +  - clocks
+>>> +  - interrupts
+>>> +
+>>> +additionalProperties: false
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    #include <dt-bindings/clock/aspeed-clock.h>
+>>> +    udc: udc@1e6a2000 {
+>>
+>> Node name: usb
+>  
+> "udc" is more recognizable than "usb" I think. "usb" is too general, can be various like host or device.
+
+It's still required by schema for most of USB host controllers. Existing
+USB device controllers use usb as well (except Atmel mentioning gadget)
+Generic name is also expected by Devicetree spec and "udc" is not on a
+list of examples of generic names (usb is).
+
+
+Best regards,
+Krzysztof

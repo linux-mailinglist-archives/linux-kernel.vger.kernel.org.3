@@ -2,107 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 186365271E8
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 16:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC2E35271FD
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 16:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233196AbiENOVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 10:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34628 "EHLO
+        id S233317AbiENOa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 10:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233383AbiENOVL (ORCPT
+        with ESMTP id S232498AbiENOaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 10:21:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0720A1B1;
-        Sat, 14 May 2022 07:21:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8537360F2A;
-        Sat, 14 May 2022 14:21:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8425FC340EE;
-        Sat, 14 May 2022 14:21:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652538067;
-        bh=fBJG7A+XsQUdGt9z4Q/dgnY9axRvsRVkKDu5cKbiVRQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=pQqTcVRNOWdlHHOXC+4ME/GCYRzZnE8N7ttD47TT9CnJrMLVmTkjbLeWKpJQfeDhv
-         B2s6QGQXfNzXSAyTatQdpt8RwvlURF0V0iC1OVvNyb6mfs8iQcydgDnUBQeAjQfUFG
-         wRp1M52PJ3Y3DsWNx6TGCG1DposlLQ5GRCfW37nVU+4GUaHW2BoAvfJEle4Z6tLi5M
-         EkaXY4LY3LdzMDOg+ZDkxoilOA2mt8cAc4rljnfawj23clTnGXYhUBuBWSXk1unGLk
-         MUBg0K5zcwc22Hpg7igxdPA0VcDyMnHKMP2BmRVEHuc9RJp0a8cAIXywbAeagz6gSZ
-         vR9sGgUex9UPw==
-Date:   Sat, 14 May 2022 15:29:40 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Markuss Broks <markuss.broks@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Song Qiang <songqiang1304521@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v4 1/5] dt-bindings: proximity: vl53l0x: Document
- optional supply and GPIO properties
-Message-ID: <20220514152940.1a212c7f@jic23-huawei>
-In-Reply-To: <f5ec4fd9-b9d7-10fa-1c27-2f268466274f@linaro.org>
-References: <20220512191334.61804-1-markuss.broks@gmail.com>
-        <20220512191334.61804-2-markuss.broks@gmail.com>
-        <f5ec4fd9-b9d7-10fa-1c27-2f268466274f@linaro.org>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
+        Sat, 14 May 2022 10:30:21 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0247C1758D
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 07:30:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652538620; x=1684074620;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=l8Umuf3SuqvhyBt8dkzAa4QPJtRZJLLyK5CjOFYtC5g=;
+  b=Hsj/88MVdEoV8EiuH5JLt2E658ntq/WjSqYWs2YoVOb1yDry58Cz2EpL
+   uxW9AweF5DUmKVmChmSi1qK83QB1b+VgAYwJkdU3FgxThCDt236xECKCr
+   5Xst1Ii5rmtvdeOX4zKDMcjZUWezfcHkDCE6hJ5uSfoNLTn3TLHCHydKQ
+   iBytLZxPLLrku6wT7G88unNcCVcc+sL3Zk1SGB42nJeixio/lQZXVffjw
+   PaM9HT1iZDfNwwfAAJ0s6kCkE2LZlx29M2ImuJWDSX7KsKz08ccJNF9ac
+   RiyGWauWIeIWeOnir2SoEG3qCbOo0Wwif9yloYtcVD4UoKCsSVE4UU6st
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10347"; a="252574080"
+X-IronPort-AV: E=Sophos;i="5.91,226,1647327600"; 
+   d="scan'208";a="252574080"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2022 07:30:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,226,1647327600"; 
+   d="scan'208";a="740569057"
+Received: from lkp-server01.sh.intel.com (HELO d1462bc4b09b) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 14 May 2022 07:30:17 -0700
+Received: from kbuild by d1462bc4b09b with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1npsme-0000jx-Bs;
+        Sat, 14 May 2022 14:30:16 +0000
+Date:   Sat, 14 May 2022 22:30:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [nsaenz-rpi:ct-work-defer-wip 25/25]
+ arch/x86/mm/pat/set_memory.c:351:26: error: use of undeclared identifier
+ 'CONTEXT_WORK_CACHEI'
+Message-ID: <202205142203.hnkoIxTp-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 May 2022 10:56:50 +0200
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git ct-work-defer-wip
+head:   ed63029652239a6befad96dd473b16332913f889
+commit: ed63029652239a6befad96dd473b16332913f889 [25/25] context_tracking,x86: Fix Kernel cachei vs NOHZ_FULL
+config: i386-allnoconfig (https://download.01.org/0day-ci/archive/20220514/202205142203.hnkoIxTp-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 38189438b69ca27b4c6ce707c52dbd217583d046)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git/commit/?id=ed63029652239a6befad96dd473b16332913f889
+        git remote add nsaenz-rpi https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git
+        git fetch --no-tags nsaenz-rpi ct-work-defer-wip
+        git checkout ed63029652239a6befad96dd473b16332913f889
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-> On 12/05/2022 21:13, Markuss Broks wrote:
-> > This patch adds the optional properties for the VL53L0X ToF sensor to the
-> > device-tree binding.
-> > 
-> > Signed-off-by: Markuss Broks <markuss.broks@gmail.com>  
-> 
-> Wait, two days and three versions? Please give some time before
-> resending entire patchset.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Yeah, several instances of this on the IIO list this week. Please
-let things sit for at least a few days between versions even if
-the requested changes are fairly minor.
+All errors (new ones prefixed by >>):
 
-> 
-> Same comments apply as for v2 and v3...
->
-I 'could' fix this up, but given you've not responded to Krzysztof
-I think I'd prefer you send a v5 in the second half of next week or
-later (to give time for other review) with the patch description
-change Krzysztof suggested made.
-
-Code wise the series looks fine to me.
-
-Jonathan
+   arch/x86/mm/pat/set_memory.c:351:6: error: use of undeclared identifier 'CONTEXT_WORK_TLBI'
+                                           CONTEXT_WORK_TLBI | CONTEXT_WORK_CACHEI);
+                                           ^
+>> arch/x86/mm/pat/set_memory.c:351:26: error: use of undeclared identifier 'CONTEXT_WORK_CACHEI'
+                                           CONTEXT_WORK_TLBI | CONTEXT_WORK_CACHEI);
+                                                               ^
+   arch/x86/mm/pat/set_memory.c:373:12: error: use of undeclared identifier 'CONTEXT_WORK_TLBI'
+                                                 CONTEXT_WORK_TLBI);
+                                                 ^
+   3 errors generated.
 
 
+vim +/CONTEXT_WORK_CACHEI +351 arch/x86/mm/pat/set_memory.c
 
-> 
-> Best regards,
-> Krzysztof
+   347	
+   348	static bool __cpa_flush_all_cond(int cpu, void *info)
+   349	{
+   350		return !context_tracking_set_cpu_work(cpu, CONTEXT_USER | CONTEXT_GUEST,
+ > 351						CONTEXT_WORK_TLBI | CONTEXT_WORK_CACHEI);
+   352	}
+   353	
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

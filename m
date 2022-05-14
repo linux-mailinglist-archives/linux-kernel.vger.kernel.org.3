@@ -2,66 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA17527471
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 00:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ECC4527472
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 00:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbiENWBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 18:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58750 "EHLO
+        id S231263AbiENWDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 18:03:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbiENWB3 (ORCPT
+        with ESMTP id S230398AbiENWC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 18:01:29 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F114E193DD
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 15:01:27 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so13911002pju.2
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 15:01:27 -0700 (PDT)
+        Sat, 14 May 2022 18:02:58 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC1E193DD
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 15:02:57 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id k16so3990751pff.5
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 15:02:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oToXy3xTNS1Xrlo3K8Yhkv5IIUrt6R7QFCfNOmXO068=;
-        b=hjeD0JtTu9HCloDomo5gifGQAVoohwAocHqR920GXizM89MPN9ge1mJE8jU+9rZ2GB
-         M/hpqIq23MiIafYD/YfrA7Cs+1+gMvxYqNXaWAsh3ePiJ0HW6KK53y2j2hTHcSbxGlwy
-         f7FM1Eh0r3czgCMRBCznkQgi2epcSmx9EePLr5z0r6yOCMyFoegq39iK9srq6FJLULkX
-         YJQwgK2ptpud+kC/DDVypZNvOOeQhhHcBtNTcjF8fL0fKbx0k0tlfgj/37nnXvJSYE71
-         nk0o9xurlIVtqyo13z4/v9z5WPVbCRLRv3CNqbCy0WHLU1xa22SWVYXXkr0wBztSyKH3
-         79Yw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=zzwdQrYIZGbhuKxn6txtvucH/uZdk818++RBQ6GUaIw=;
+        b=PxaWEdjbiW3JJXRUQ37LWZGFGOX28YHe5IpymM9E99ZFyLMgSvUA3NBHsZObvhXgFf
+         2rSt5fPeIJL4ESJKx0qQpcgg/M9mCP/rqQ0EpVAzLrP45fXGzYzDvoJcilx+iH6k2PKL
+         O9RY0oKUBzUCas2uurOWQcA3eKgqRAdDanq50=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oToXy3xTNS1Xrlo3K8Yhkv5IIUrt6R7QFCfNOmXO068=;
-        b=LvoGXq2Eg3z9t8d9tgbRMhmqH+GlbVxknAr02EKP8bbY0/YlwRgH5rvWUNPGmns6DG
-         ezcMFSAhbqAMb58ln6/1NAHT280XY4zsxeTsQYoH8xBEFwi+p50QapieWZV9iofF7t/p
-         qfN/LCyNJkezyzB4KF9JE/AU7RVcYDCfeWktecF5DMbDKgDYXEqe4upVwzyqgfXzoF/m
-         T6pQKlDS1WmO+MaXRTvGimRiBditQ+881GKGWVr/thZ4DraJ41GMemRYqIZWUUSsTo4m
-         i1xjggYgY9zBtptE7/4+kUGOEIBXx0IvjlZ+IIjtbtXBCZZpYMiRJ3pGXNf9Am61ffSA
-         G40Q==
-X-Gm-Message-State: AOAM532hjPvCjGPvwg1F07OQdRf++wi+mHPWiEC6mPfJdb4VdSeb70Xi
-        hGZkIAy9AHhB2JDiOL28d4lNmg==
-X-Google-Smtp-Source: ABdhPJwMzMsk5EaUHlAcCFYDsjNMwZ0Yrz6icmcDXUfxRWu8x/NjA52gzS/Diw9yGGEC4NqDW1LSfA==
-X-Received: by 2002:a17:903:182:b0:15e:8de0:2859 with SMTP id z2-20020a170903018200b0015e8de02859mr11081752plg.124.1652565687467;
-        Sat, 14 May 2022 15:01:27 -0700 (PDT)
-Received: from localhost.localdomain ([2401:4900:1c60:931c:dd30:fa99:963:d0be])
-        by smtp.gmail.com with ESMTPSA id x27-20020aa79a5b000000b00512eb1de5c6sm3257303pfj.194.2022.05.14.15.01.23
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=zzwdQrYIZGbhuKxn6txtvucH/uZdk818++RBQ6GUaIw=;
+        b=GV1QZDlc4TmIdewa3LeFe2QHwUHOsVVkm21PwvGP8f94tZJHe4Q2pUHKIXawTXnTGY
+         P/ZWyLer56idMiYQofb4FPeMwp2td+CGeNyLpkDP8UlXWltVzC1BvE6PdHZDuFEL6kTt
+         cfAc/ks4aPb7VVzzGGB6grPbNXSWieaU7VYQlctaDQDD0ihP2zW5uNZHQXZNO9AR5qld
+         7k+nqoTctNx83mUAjVGrkOn5hjlitspoXcFxK1qNgH58q3toleMZHwSPsyEQfoWIG/+N
+         yUWjsbqpnDDqv6IxlX35H5jJHowt7NdysVn4ZiEa7hkAHV11ujX+psaMQCc5UgCiu8Es
+         wrNw==
+X-Gm-Message-State: AOAM5300BWDzgE+B2nuL3pF+JM/wO4OC6jCBVO8GGff3ntd1j1zxfkXb
+        xK+gd7vxgR/ktJFlBdrRKr2w2g==
+X-Google-Smtp-Source: ABdhPJyVRydg9q5jS2e39x/pb7g7MLyUIeUrS1+CgeSiKUxdoQuQFP8o17cuLiwbXArXOMToLiZy9A==
+X-Received: by 2002:a63:561c:0:b0:3c1:42fb:cd81 with SMTP id k28-20020a63561c000000b003c142fbcd81mr9701649pgb.104.1652565777327;
+        Sat, 14 May 2022 15:02:57 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id p25-20020a62b819000000b0050dc7628182sm4169865pfe.92.2022.05.14.15.02.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 May 2022 15:01:27 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-mmc@vger.kernel.org
-Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
-        agross@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robh@kernel.org,
-        bjorn.andersson@linaro.org, ulf.hansson@linaro.org
-Subject: [PATCH 1/1] dt-bindings: mmc: sdhci-msm: Fix issues in yaml bindings
-Date:   Sun, 15 May 2022 03:31:16 +0530
-Message-Id: <20220514220116.1008254-1-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.35.3
+        Sat, 14 May 2022 15:02:57 -0700 (PDT)
+Date:   Sat, 14 May 2022 15:02:56 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-hardening@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
+Message-ID: <202205141501.92A22264B4@keescook>
+References: <20220513202159.1550547-1-samitolvanen@google.com>
+ <20220513202159.1550547-21-samitolvanen@google.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20220513202159.1550547-21-samitolvanen@google.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,132 +80,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rob pointed some remaining issues in the sdhci-msm yaml
-bindings (via [1]).
+On Fri, May 13, 2022 at 01:21:58PM -0700, Sami Tolvanen wrote:
+> With CONFIG_CFI_CLANG, the compiler injects a type preamble
+> immediately before each function and a check to validate the target
+> function type before indirect calls:
+> 
+>   ; type preamble
+>   __cfi_function:
+>     int3
+>     int3
+>     mov <id>, %eax
+>     int3
+>     int3
+>   function:
+>     ...
+>   ; indirect call check
+>     cmpl    <id>, -6(%r11)
+>     je      .Ltmp1
+>     ud2
+>   .Ltmp1:
+>     call    __x86_indirect_thunk_r11
+> 
+> Define the __CFI_TYPE helper macro for manual type annotations in
+> assembly code, add error handling for the CFI ud2 traps, and allow
+> CONFIG_CFI_CLANG to be selected on x86_64.
+> 
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> ---
+>  arch/x86/Kconfig               |  2 ++
+>  arch/x86/include/asm/linkage.h | 12 +++++++
+>  arch/x86/kernel/traps.c        | 60 +++++++++++++++++++++++++++++++++-
+>  3 files changed, 73 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 4bed3abf444d..2e73d0792d48 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -108,6 +108,8 @@ config X86
+>  	select ARCH_SUPPORTS_PAGE_TABLE_CHECK	if X86_64
+>  	select ARCH_SUPPORTS_NUMA_BALANCING	if X86_64
+>  	select ARCH_SUPPORTS_KMAP_LOCAL_FORCE_MAP	if NR_CPUS <= 4096
+> +	select ARCH_SUPPORTS_CFI_CLANG		if X86_64
+> +	select ARCH_USES_CFI_TRAPS		if X86_64 && CFI_CLANG
+>  	select ARCH_SUPPORTS_LTO_CLANG
+>  	select ARCH_SUPPORTS_LTO_CLANG_THIN
+>  	select ARCH_USE_BUILTIN_BSWAP
+> diff --git a/arch/x86/include/asm/linkage.h b/arch/x86/include/asm/linkage.h
+> index 85865f1645bd..0ee4a0af3974 100644
+> --- a/arch/x86/include/asm/linkage.h
+> +++ b/arch/x86/include/asm/linkage.h
+> @@ -25,6 +25,18 @@
+>  #define RET	ret
+>  #endif
+>  
+> +#ifdef CONFIG_CFI_CLANG
+> +#define __CFI_TYPE(name)					\
+> +	.fill 7, 1, 0xCC ASM_NL					\
+> +	SYM_START(__cfi_##name, SYM_L_LOCAL, SYM_A_NONE)	\
+> +	int3 ASM_NL						\
+> +	int3 ASM_NL						\
+> +	mov __kcfi_typeid_##name, %eax ASM_NL			\
+> +	int3 ASM_NL						\
+> +	int3 ASM_NL						\
+> +	SYM_FUNC_END(__cfi_##name)
+> +#endif
+> +
+>  #else /* __ASSEMBLY__ */
+>  
+>  #ifdef CONFIG_SLS
+> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+> index 1563fb995005..320e257eb4be 100644
+> --- a/arch/x86/kernel/traps.c
+> +++ b/arch/x86/kernel/traps.c
+> @@ -40,6 +40,7 @@
+>  #include <linux/hardirq.h>
+>  #include <linux/atomic.h>
+>  #include <linux/ioasid.h>
+> +#include <linux/cfi.h>
+>  
+>  #include <asm/stacktrace.h>
+>  #include <asm/processor.h>
+> @@ -295,6 +296,62 @@ static inline void handle_invalid_op(struct pt_regs *regs)
+>  		      ILL_ILLOPN, error_get_trap_addr(regs));
+>  }
+>  
+> +#ifdef CONFIG_CFI_CLANG
+> +static void decode_cfi_insn(struct pt_regs *regs, unsigned long *target,
+> +			    unsigned long *type)
+> +{
+> +	char buffer[MAX_INSN_SIZE];
+> +	struct insn insn;
+> +	int offset;
+> +
+> +	*target = *type = 0;
 
-Fix the same by first using the 'mmc-controller.yaml' as
-'ref' and thereafter also fix the issues reported by
-'make dtbs_check' check.
+Should report_cfi_failure() have some additional hinting for the case
+where target/type are zero? Like, "hey, got an inexplicable CFI failure
+here, but preamble decode failed. Yikes!"
 
-[1]. https://lore.kernel.org/linux-arm-msm/YnLmNCwNfoqZln12@robh.at.kernel.org/
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Fixes: a45537723f4b ("dt-bindings: mmc: sdhci-msm: Convert bindings to yaml")
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Rob Herring <robh@kernel.org>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
--> This patch uses the dts changes sent (here: https://lore.kernel.org/linux-arm-msm/20220514215424.1007718-1-bhupesh.sharma@linaro.org/), for fixing the dtbs_check errors.
--> This patch is rebased on 'linux-next/master'
-
- .../devicetree/bindings/mmc/sdhci-msm.yaml    | 52 ++++++++++++++++---
- 1 file changed, 44 insertions(+), 8 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
-index e4236334e748..31a3ce208e1a 100644
---- a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
-+++ b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
-@@ -17,6 +17,9 @@ description:
- properties:
-   compatible:
-     oneOf:
-+      - enum:
-+          - qcom,sdhci-msm-v4
-+        deprecated: true
-       - items:
-           - enum:
-               - qcom,apq8084-sdhci
-@@ -27,6 +30,9 @@ properties:
-               - qcom,msm8992-sdhci
-               - qcom,msm8994-sdhci
-               - qcom,msm8996-sdhci
-+          - const: qcom,sdhci-msm-v4 # for sdcc versions less than 5.0
-+      - items:
-+          - enum:
-               - qcom,qcs404-sdhci
-               - qcom,sc7180-sdhci
-               - qcom,sc7280-sdhci
-@@ -38,12 +44,7 @@ properties:
-               - qcom,sm6350-sdhci
-               - qcom,sm8150-sdhci
-               - qcom,sm8250-sdhci
--          - enum:
--              - qcom,sdhci-msm-v4 # for sdcc versions less than 5.0
--              - qcom,sdhci-msm-v5 # for sdcc version 5.0
--      - items:
--          - const: qcom,sdhci-msm-v4 # Deprecated (only for backward compatibility)
--                                     # for sdcc versions less than 5.0
-+          - const: qcom,sdhci-msm-v5 # for sdcc version 5.0
- 
-   reg:
-     minItems: 1
-@@ -53,6 +54,28 @@ properties:
-       - description: CQE register map
-       - description: Inline Crypto Engine register map
- 
-+  reg-names:
-+    minItems: 1
-+    maxItems: 4
-+    oneOf:
-+      - items:
-+          - const: hc_mem
-+      - items:
-+          - const: hc_mem
-+          - const: core_mem
-+      - items:
-+          - const: hc_mem
-+          - const: cqe_mem
-+      - items:
-+          - const: hc_mem
-+          - const: cqe_mem
-+          - const: ice_mem
-+      - items:
-+          - const: hc_mem
-+          - const: core_mem
-+          - const: cqe_mem
-+          - const: ice_mem
-+
-   clocks:
-     minItems: 3
-     items:
-@@ -121,6 +144,16 @@ properties:
-     description: A phandle to sdhci power domain node
-     maxItems: 1
- 
-+  mmc-ddr-1_8v: true
-+
-+  mmc-hs200-1_8v: true
-+
-+  mmc-hs400-1_8v: true
-+
-+  bus-width: true
-+
-+  max-frequency: true
-+
- patternProperties:
-   '^opp-table(-[a-z0-9]+)?$':
-     if:
-@@ -140,7 +173,10 @@ required:
-   - clock-names
-   - interrupts
- 
--additionalProperties: true
-+allOf:
-+  - $ref: mmc-controller.yaml#
-+
-+unevaluatedProperties: false
- 
- examples:
-   - |
-@@ -149,7 +185,7 @@ examples:
-     #include <dt-bindings/clock/qcom,rpmh.h>
-     #include <dt-bindings/power/qcom-rpmpd.h>
- 
--    sdhc_2: sdhci@8804000 {
-+    sdhc_2: mmc@8804000 {
-       compatible = "qcom,sm8250-sdhci", "qcom,sdhci-msm-v5";
-       reg = <0 0x08804000 0 0x1000>;
- 
 -- 
-2.35.3
-
+Kees Cook

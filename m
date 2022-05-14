@@ -2,269 +2,434 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8966527254
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 17:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90832527243
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 16:53:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233603AbiENPBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 11:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59784 "EHLO
+        id S233567AbiENOxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 10:53:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbiENPBy (ORCPT
+        with ESMTP id S233555AbiENOx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 11:01:54 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9F0E019
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 08:01:52 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id j4so19055228lfh.8
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 08:01:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Bi6j1EXanPLhNZwXHrGruvDQ+R40+gfo7OxS0yLniSw=;
-        b=pmqVFp12jW1k3iKntI3IH27uvASxquB/yNjcl59LXNjw46TmfNDsG77uANB2Hbp0mq
-         fZPci3li7Xmptw2hG3uKIuokD4fdwwGcYzS9lvRZDevYIlSDsZ4wtbRGtwG+Je89BLt3
-         QXwX/3ogb7LndjrhzENOkGp8McwX/OpLFeygXQPGRWEYKnDWaDrSKOlk0tW2LvjwtMlz
-         6KkISl1YEIIHajvXSchC7n47lSXS3o8DLyohWwIXqqHG7eYG3e68kw7WxQ3nzTnjxnuP
-         K9SaKHLwiGtD6cRBpxGeY8oBQo4+qFzR/8wgEAe6UCBbC0JxWoGU7tgV9/yFnT5nUz6t
-         W7JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Bi6j1EXanPLhNZwXHrGruvDQ+R40+gfo7OxS0yLniSw=;
-        b=H4f3ZiqcHkXqlT0VWP7qPgmMNieOKdktwjT+k+U9J2nvQZjneUACD6RUforxGmm8Il
-         LhmFt7a31kkWqZ13IWl7zyA+nhp49ywVntrpLwH1oV+APHbbcuT9CW+29GtQgfwgLtjY
-         4pYatA2HGX5FzxJ9eX15Wh3aRuaVTC0DEGv4ukZ22k0MPZBHtJ5lfevRrHQVy238C4+O
-         dsVvtQH5waO9yAltRa5d6TnOjW1YYYkkYfcGQZQVUELnfJ/zQhrg5CH8pCru92xxiNUw
-         +YeLnzw+LzASdGwYqWjMcD1NXuC5w+LQ8iV+eL50M/kdd4W7fBug7NovYyY4F6ocL35p
-         1ltQ==
-X-Gm-Message-State: AOAM531CcWaSIB4TzGg5B7ZpUxge0nk4Ti2rU7Ns9DW7EcsK45dcmdbM
-        QAtmnpophy2pp16vYSnFktgS2G6R5h+u/ewOSQI=
-X-Google-Smtp-Source: ABdhPJwwIpAzLtT9281HzsDEl6jKU66/UznSYMj17Wtedg1uixvP701kXCVuP5POvB1s7NHmCNtd8QQC92FTLo/PTI8=
-X-Received: by 2002:a05:6512:13a1:b0:448:887e:da38 with SMTP id
- p33-20020a05651213a100b00448887eda38mr7075720lfa.298.1652540510844; Sat, 14
- May 2022 08:01:50 -0700 (PDT)
+        Sat, 14 May 2022 10:53:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C142D26E1;
+        Sat, 14 May 2022 07:53:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33E34B8075F;
+        Sat, 14 May 2022 14:53:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94FF1C340EE;
+        Sat, 14 May 2022 14:53:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652540004;
+        bh=bpAnSgbKbpEuUOV+tfGFIueXUqhCgoUh4Jsix+lUMh8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BeSTDOZ4g7BCrmn7Ii4QuWE7xIvg0eXaIIvdYNl7fs+92AGyqoOkUpMABOWbwLyZT
+         CnwJvpxY56r3KyzWmWm4gkfex5l4XmJVMkHnQPsR/mfHcIk1Ge2fN3t2eLcrY7zoIN
+         bSv+72xFPPyV0PhawW5dE3Otxtb00eOe9Dnw+YxwI4xuLxXlMGOD6go+b5quHLCs8l
+         kF81rjF2/QJ0OgEqBUFFoif2g229GXRLhaI3f8okfeZwYI5Y836sNwDe0ED5lMGTZf
+         BvvGPiwjYjmExfLMW7Pcojk+c1fehU8mk4ZtM/t/4j8g/L4htg7aYcIPprUUGe/W+3
+         fYNVzMgucUqjw==
+Date:   Sat, 14 May 2022 16:02:00 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lars@metafoo.de, joel@jms.id.au
+Subject: Re: [PATCH] iio: pressure: dps310: Reset chip if MEAS_CFG is
+ corrupt
+Message-ID: <20220514160200.091d40ca@jic23-huawei>
+In-Reply-To: <20220511192724.51845-1-eajames@linux.ibm.com>
+References: <20220511192724.51845-1-eajames@linux.ibm.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220425161209.ydugtrs3b7gyy3kk@airbuntu> <CAB8ipk9hZXDcTV3hakRV+dE5dwKtg-Ka93WZ60ds0=4ErN1-0w@mail.gmail.com>
- <20220426092142.lppfj5eqgt3d24nb@airbuntu> <CAB8ipk_tM8WhZOLwURkqyi5XDSNJ=twOg1Zub=dsTB_b9N9BRg@mail.gmail.com>
- <20220427105844.otru4yohja4s23ye@wubuntu> <CAB8ipk-QAE2_J_kpUVRcq-4KJ0cSGc1JT2oQhdzvrjDu25HsRQ@mail.gmail.com>
- <20220503144352.lxduzhl6jq6xdhw2@airbuntu> <CAB8ipk--Y8HxetcmUhBmtWq6Mmd726QmDbcbibGLERJw_PUqkQ@mail.gmail.com>
- <20220510145625.t5py7atlhgojsfyf@wubuntu> <37357c86-bab7-d0c7-88d0-ace63ccdb6c8@arm.com>
- <20220510184436.fdgzzcfqqevinx5p@wubuntu> <0505936e-3746-4623-a967-103a0158bfbd@arm.com>
-In-Reply-To: <0505936e-3746-4623-a967-103a0158bfbd@arm.com>
-From:   Xuewen Yan <xuewen.yan94@gmail.com>
-Date:   Sat, 14 May 2022 23:01:39 +0800
-Message-ID: <CAB8ipk8RUsxYs6JdeMeUPADQRNqT=Jqz15ecwbzbf0RHUDqOXg@mail.gmail.com>
-Subject: Re: [PATCH] sched: Take thermal pressure into account when determine
- rt fits capacity
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Qais Yousef <qais.yousef@arm.com>,
-        Xuewen Yan <xuewen.yan@unisoc.com>, dietmar.eggemann@arm.com,
-        rafael@kernel.org, viresh.kumar@linaro.org, mingo@redhat.com,
-        peterz@infradead.org, vincent.guittot@linaro.org,
-        rostedt@goodmis.org, linux-kernel@vger.kernel.org,
-        di.shen@unisoc.com,
-        =?UTF-8?B?546L56eRIChLZSBXYW5nKQ==?= <Ke.Wang@unisoc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 6:03 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->
->
->
-> On 5/10/22 19:44, Qais Yousef wrote:
-> > On 05/10/22 18:44, Lukasz Luba wrote:
-> >
-> > [...]
-> >
-> >> To properly answer this question we probably have to analyze the timings
-> >> and this update path - how often it is actually called. Keep in mind
-> >> we are going to solve CPU capacity inversion for RT class, which
-> >> contains latency sensitive tasks. In this approach the information
-> >
-> > This was an attempt for a generic inversion detection. We update
-> > rq->cpu_capacity which is used by capacity_of() in the same path.
->
-> True, but this is a CFS 'world' and the update path is part of load
-> balance. Your proposed code which sets the new
-> 'rq->cpu_capacity_inverted' is run there, which might have some
-> delays.
+On Wed, 11 May 2022 14:27:24 -0500
+Eddie James <eajames@linux.ibm.com> wrote:
 
-Yes, that's exactly what I'm worried about.
+> Corruption of the MEAS_CFG register has been observed soon after
+> system boot. In order to recover this scenario, check MEAS_CFG if
+> measurement isn't ready, and if it's incorrect, reset the DPS310
+> and write all the necessary registers.
+> 
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+It's a large patch, so not an ideal 'fix' to backport, but
+if we need to for platforms to work we should do so.
 
->
-> >
-> > I didn't feel brave to write a quick patch in the topology code, but we can
-> > certainly do the detection there in topology_update_thermal_pressure().
->
-> Looks better, since that code path is called when we get instantaneous
-> information about CPU freq reduction. I'm afraid that again this
-> approach might be blocked due to 'khz' calling ratio of that code and we
-> 'must not' use this.
->
-> >
-> >> about HW status is coming from this CFS load balance path.
-> >> What if that load balance is not called that often as RT might require?
-> >> What if there is a light load on CPUs, but GPU caused them to throttle,
-> >> reducing capacity by a decent chunk e.g. 50%?
-> >> That would translate to some RT periodic task which takes 2ms every
-> >> 8ms to take 4ms, while maybe on other less power hungry CPU it could
-> >> take 3ms.
-> >>
-> >> The usage of thermal_load_avg() in the scale_rt_capacity() looks OK
-> >> for the CFS, but might not be from the RT class point of view.
-> >> The RT class might want to realize faster that CPUs have changed the
-> >> capacity.
-> >> Maybe it's OK with that patch [1] and boot config shifter=-5, but in
-> >> default boot config for shifter=0 we can suffer for hundreds of ms
-> >> running on lower capacity cpu (which is quite high number of frames
-> >> nowadays).
-> >>
-> >> Without a research and experiments data I'm afraid this is too
-> >> big step to make, with this CFS load balance path.
-> >
-> > I think Xuewen didn't want to use thermal_load_avg(), and that's the question
-> > I deferred.
->
-> Your code snipped might have similar penalty, since you populate
-> information about that CPU inversion at 'some point in time'.
-> My point is: that 'point in time' is not well defined, since it's
-> CFS load balance. I'm afraid that RT class deserves something better
-> defined (predictable, repeatable, reliable, short, etc.)
->
-> >
-> >>
-> >>>
-> >>>>
-> >>>>> +
-> >>>>> +               rq->cpu_capacity_inverted = 0;
-> >>>>> +
-> >>>>> +               for_each_possible_cpu(cpu) {
-> >>>>> +                       unsigned long cap = arch_scale_cpu_capacity(cpu);
-> >>>>> +
-> >>>>> +                       if (capacity_orig <= cap)
-> >>>>> +                               continue;
-> >>
-> >> The search loop here assumes that other CPUs (fortunately not in the
-> >> same freq domain) don't suffer due to reduced capacity. This might be
-> >> not true - when we have ~1 Watt budget for all CPUs in the system and
-> >> single big core can use 3-4W at max or single mid core ~1.2W.
->
-> s/1.2W/1-2W
->
-> >
-> > I defined capacity inversion against capacity_orig. IMHO that's the sensible
-> > definition to make.
-> >
-> > Would be good to hear more/other suggestions.
->
-> Capacity of other CPU might also be reduced and capacity_orig is not
-> reflecting that. My gut feeling tells me that this capacity_orig
-> assumption might be too optimistic for some platforms.
+Hence, please add a Fixes tag (which I'm guessing will be the driver
+being added in the first place).
 
-In unisoc platform with 3 clusters(little/mid/big), there are cases
-that middle core and big core are throttled at the same time.
+Whilst tidying up might be nice, we shouldn't do refactoring that's not
+strictly necessary in a fix patch.  Hence I'd prefer this as a two patch
+series. Refactor with no functional changes, then the actual change.
 
->
-> It's the same old question: how good the model should be.
-> We want to 'model' the reality (CPUs slows down), how good the
-> model should be in this RT world use case - I don't know w/o
-> experiments.
->
-> I don't even know how often this new variable
-> 'rq->cpu_capacity_inverted' gets updated and what is the time diff to
-> the last update of the raw thermal pressure variable. You said that code
-> is 'completely untested'. So it's unknown delay for now - but belongs to
-> similar class as thermal_load_avg(), but the 2nd is known. I have
-> shared plots with raw signal vs. PELT-like delays. We at least know
-> the delays, e.g. ~200ms to reach raw value, but how that impacts RT
-> world - I have no experiment results from real apps (i.e. w/ audio or
-> display threads).
->
-> >
-> >>
-> >>>>> +
-> >>>>> +                       if (cap > inv_cap) {
-> >>>>> +                               rq->cpu_capacity_inverted = inv_cap;
-> >>>>> +                               break;
-> >>>>> +                       }
-> >>>>> +               }
-> >>>>> +
-> >>>>> +       }
-> >>>>>
-> >>>>>           sdg->sgc->capacity = capacity;
-> >>>>>           sdg->sgc->min_capacity = capacity;
-> >>>>> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> >>>>> index 8dccb34eb190..bfe84c870bf9 100644
-> >>>>> --- a/kernel/sched/sched.h
-> >>>>> +++ b/kernel/sched/sched.h
-> >>>>> @@ -992,6 +992,7 @@ struct rq {
-> >>>>>
-> >>>>>           unsigned long           cpu_capacity;
-> >>>>>           unsigned long           cpu_capacity_orig;
-> >>>>> +       unsigned long           cpu_capacity_inverted;
-> >>>>>
-> >>>>>           struct callback_head    *balance_callback;
-> >>>>>
-> >>>>> @@ -2807,6 +2808,11 @@ static inline unsigned long capacity_orig_of(int cpu)
-> >>>>>           return cpu_rq(cpu)->cpu_capacity_orig;
-> >>>>>    }
-> >>>>>
-> >>>>> +static inline unsigned long cpu_in_capacity_inversion(int cpu)
-> >>>>> +{
-> >>>>> +       return cpu_rq(cpu)->cpu_capacity_inverted;
-> >>>>> +}
-> >>>>> +
-> >>>>>    /**
-> >>>>>     * enum cpu_util_type - CPU utilization type
-> >>>>>     * @FREQUENCY_UTIL:    Utilization used to select frequency
-> >>>>>
-> >>>>>
-> >>>>> --->8---
-> >>>>
-> >>>> The patch is amazing for me, and the complexity is not too high. Would
-> >>>> you please push the patch?
-> >>>> I think the idea is yours, I don't want to use it as my patch v2.
-> >>>
-> >>> I'd be happy to add a commit message so that you can include it in your v2.
-> >>>
-> >>> First, I'd like to hear from Vincent and Lukasz they're happy with this
-> >>> approach.
-> >>>
-> >>> I've been trying to think how we can do this generically but can't find an
-> >>> alternative to the extra loop or additional fallback_cpu_mask. Maybe the mask
-> >>> is okay if we protect it with sched_asymmetric_cpucapacity static key..
-> >>>
-> >>
-> >> I'm sorry Qais, I see that you are trying to bring this
-> >> real-CPU-capacity information into RT, but the source and quality of
-> >> this information IMO might matter. I cannot help you w/o experiment
-> >> results of your proposed approach.
-> >
-> > The question I was posing here is whether to handle thermal only in inversion
-> > case as I was suggesting or do better. We are still trickling through the
-> > details, but first, I wanted to make sure there's no objection to this
-> > direction (detect inversion and bail out in rt_task_fits_capacity() for cpus in
-> > capacity inversion).
->
-> IMO how you detect that inversion and at which point in time is part of
-> the scope.
->
-> I would vote for using that thermal update code path + compare other
-> CPUs real capacity not capacity_orig to detect inversion.
+A couple of minor queries inline,
 
-Okay, I could push patch v2 later. Maybe we can continue to discuss
-this topic based on v2.
+Thanks,
 
-Thanks!
----
-xuewen.yan
+Jonathan
+
+
+
+> ---
+>  drivers/iio/pressure/dps310.c | 280 +++++++++++++++++++++-------------
+>  1 file changed, 173 insertions(+), 107 deletions(-)
+> 
+> diff --git a/drivers/iio/pressure/dps310.c b/drivers/iio/pressure/dps310.c
+> index 36fb7ae0d0a9..39f84614f44e 100644
+> --- a/drivers/iio/pressure/dps310.c
+> +++ b/drivers/iio/pressure/dps310.c
+> @@ -159,6 +159,106 @@ static int dps310_get_coefs(struct dps310_data *data)
+>  	return 0;
+>  }
+>  
+> +/*
+> + * Some verions of chip will read temperatures in the ~60C range when
+> + * its actually ~20C. This is the manufacturer recommended workaround
+> + * to correct the issue. The registers used below are undocumented.
+> + */
+> +static int dps310_temp_workaround(struct dps310_data *data)
+> +{
+> +	int rc;
+> +	int reg;
+> +
+> +	rc = regmap_read(data->regmap, 0x32, &reg);
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	/*
+> +	 * If bit 1 is set then the device is okay, and the workaround does not
+> +	 * need to be applied
+> +	 */
+> +	if (reg & BIT(1))
+> +		return 0;
+> +
+> +	rc = regmap_write(data->regmap, 0x0e, 0xA5);
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	rc = regmap_write(data->regmap, 0x0f, 0x96);
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	rc = regmap_write(data->regmap, 0x62, 0x02);
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	rc = regmap_write(data->regmap, 0x0e, 0x00);
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	return regmap_write(data->regmap, 0x0f, 0x00);
+> +}
+> +
+> +static int dps310_startup(struct dps310_data *data)
+> +{
+> +	int rc;
+> +	int ready;
+> +
+> +	/*
+> +	 * Set up pressure sensor in single sample, one measurement per second
+> +	 * mode
+> +	 */
+> +	rc = regmap_write(data->regmap, DPS310_PRS_CFG, 0);
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	/*
+> +	 * Set up external (MEMS) temperature sensor in single sample, one
+> +	 * measurement per second mode
+> +	 */
+> +	rc = regmap_write(data->regmap, DPS310_TMP_CFG, DPS310_TMP_EXT);
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	/* Temp and pressure shifts are disabled when PRC <= 8 */
+> +	rc = regmap_write_bits(data->regmap, DPS310_CFG_REG,
+> +			       DPS310_PRS_SHIFT_EN | DPS310_TMP_SHIFT_EN, 0);
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	/* MEAS_CFG doesn't update correctly unless first written with 0 */
+> +	rc = regmap_write_bits(data->regmap, DPS310_MEAS_CFG,
+> +			       DPS310_MEAS_CTRL_BITS, 0);
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	/* Turn on temperature and pressure measurement in the background */
+> +	rc = regmap_write_bits(data->regmap, DPS310_MEAS_CFG,
+> +			       DPS310_MEAS_CTRL_BITS, DPS310_PRS_EN |
+> +			       DPS310_TEMP_EN | DPS310_BACKGROUND);
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	/*
+> +	 * Calibration coefficients required for reporting temperature.
+> +	 * They are available 40ms after the device has started
+> +	 */
+> +	rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG, ready,
+> +				      ready & DPS310_COEF_RDY, 10000, 40000);
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	rc = dps310_get_coefs(data);
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	rc = dps310_temp_workaround(data);
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	return 0;
+> +}
+> +
+>  static int dps310_get_pres_precision(struct dps310_data *data)
+>  {
+>  	int rc;
+> @@ -297,6 +397,38 @@ static int dps310_get_temp_k(struct dps310_data *data)
+>  	return scale_factors[ilog2(rc)];
+>  }
+>  
+> +/* Called with lock held */
+> +static int dps310_verify_meas_cfg(struct dps310_data *data, int ready_bit)
+
+Hmm. I'm not immediately coming up with a better name, but it does
+seem odd that a verify function would do a reset.
+
+> +{
+> +	int en = DPS310_PRS_EN | DPS310_TEMP_EN | DPS310_BACKGROUND;
+> +	int meas_cfg;
+> +	int rc = regmap_read(data->regmap, DPS310_MEAS_CFG, &meas_cfg);
+> +
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	if (meas_cfg & ready_bit)
+> +		return 0;
+> +
+> +	if ((meas_cfg & en) != en) {
+> +		/* DPS310 register state corrupt, better start from scratch */
+> +		rc = regmap_write(data->regmap, DPS310_RESET, DPS310_RESET_MAGIC);
+> +		if (rc < 0)
+> +			return rc;
+> +
+> +		/* Wait for device chip access: 2.5ms in specification */
+> +		usleep_range(2500, 12000);
+> +		rc = dps310_startup(data);
+> +		if (rc)
+> +			return rc;
+> +
+> +		dev_info(&data->client->dev,
+> +			 "recovered from corrupted MEAS_CFG=%02x\n", meas_cfg);
+> +	}
+> +
+> +	return 1;
+> +}
+> +
+>  static int dps310_read_pres_raw(struct dps310_data *data)
+>  {
+>  	int rc;
+> @@ -309,15 +441,25 @@ static int dps310_read_pres_raw(struct dps310_data *data)
+>  	if (mutex_lock_interruptible(&data->lock))
+>  		return -EINTR;
+>  
+> -	rate = dps310_get_pres_samp_freq(data);
+> -	timeout = DPS310_POLL_TIMEOUT_US(rate);
+> -
+> -	/* Poll for sensor readiness; base the timeout upon the sample rate. */
+> -	rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG, ready,
+> -				      ready & DPS310_PRS_RDY,
+> -				      DPS310_POLL_SLEEP_US(timeout), timeout);
+> -	if (rc)
+> -		goto done;
+> +	rc = dps310_verify_meas_cfg(data, DPS310_PRS_RDY);
+> +	if (rc) {
+
+So at this point we potentially reset. Is there a race condition against
+the device register state corrupting again?  If so I guess we are relying
+on the timeout and userspace trying again.  Maybe worth adding a comment
+if that is the case.
+
+> +		if (rc < 0)
+> +			goto done;
+> +
+> +		rate = dps310_get_pres_samp_freq(data);
+> +		timeout = DPS310_POLL_TIMEOUT_US(rate);
+> +
+> +		/*
+> +		 * Poll for sensor readiness; base the timeout upon the sample
+> +		 * rate.
+> +		 */
+> +		rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG,
+> +					      ready, ready & DPS310_PRS_RDY,
+> +					      DPS310_POLL_SLEEP_US(timeout),
+> +					      timeout);
+> +		if (rc)
+> +			goto done;
+> +	}
+>  
+>  	rc = regmap_bulk_read(data->regmap, DPS310_PRS_BASE, val, sizeof(val));
+>  	if (rc < 0)
+> @@ -358,15 +500,25 @@ static int dps310_read_temp_raw(struct dps310_data *data)
+>  	if (mutex_lock_interruptible(&data->lock))
+>  		return -EINTR;
+>  
+> -	rate = dps310_get_temp_samp_freq(data);
+> -	timeout = DPS310_POLL_TIMEOUT_US(rate);
+> -
+> -	/* Poll for sensor readiness; base the timeout upon the sample rate. */
+> -	rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG, ready,
+> -				      ready & DPS310_TMP_RDY,
+> -				      DPS310_POLL_SLEEP_US(timeout), timeout);
+> -	if (rc < 0)
+> -		goto done;
+> +	rc = dps310_verify_meas_cfg(data, DPS310_TMP_RDY);
+> +	if (rc) {
+> +		if (rc < 0)
+> +			goto done;
+> +
+> +		rate = dps310_get_temp_samp_freq(data);
+> +		timeout = DPS310_POLL_TIMEOUT_US(rate);
+> +
+> +		/*
+> +		 * Poll for sensor readiness; base the timeout upon the sample
+> +		 * rate.
+> +		 */
+> +		rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG,
+> +					      ready, ready & DPS310_TMP_RDY,
+> +					      DPS310_POLL_SLEEP_US(timeout),
+> +					      timeout);
+> +		if (rc < 0)
+> +			goto done;
+> +	}
+>  
+>  	rc = dps310_read_temp_ready(data);
+>  
+> @@ -677,52 +829,12 @@ static const struct iio_info dps310_info = {
+>  	.write_raw = dps310_write_raw,
+>  };
+>  
+> -/*
+> - * Some verions of chip will read temperatures in the ~60C range when
+> - * its actually ~20C. This is the manufacturer recommended workaround
+> - * to correct the issue. The registers used below are undocumented.
+> - */
+> -static int dps310_temp_workaround(struct dps310_data *data)
+> -{
+> -	int rc;
+> -	int reg;
+> -
+> -	rc = regmap_read(data->regmap, 0x32, &reg);
+> -	if (rc < 0)
+> -		return rc;
+> -
+> -	/*
+> -	 * If bit 1 is set then the device is okay, and the workaround does not
+> -	 * need to be applied
+> -	 */
+> -	if (reg & BIT(1))
+> -		return 0;
+> -
+> -	rc = regmap_write(data->regmap, 0x0e, 0xA5);
+> -	if (rc < 0)
+> -		return rc;
+> -
+> -	rc = regmap_write(data->regmap, 0x0f, 0x96);
+> -	if (rc < 0)
+> -		return rc;
+> -
+> -	rc = regmap_write(data->regmap, 0x62, 0x02);
+> -	if (rc < 0)
+> -		return rc;
+> -
+> -	rc = regmap_write(data->regmap, 0x0e, 0x00);
+> -	if (rc < 0)
+> -		return rc;
+> -
+> -	return regmap_write(data->regmap, 0x0f, 0x00);
+> -}
+> -
+>  static int dps310_probe(struct i2c_client *client,
+>  			const struct i2c_device_id *id)
+>  {
+>  	struct dps310_data *data;
+>  	struct iio_dev *iio;
+> -	int rc, ready;
+> +	int rc;
+>  
+>  	iio = devm_iio_device_alloc(&client->dev,  sizeof(*data));
+>  	if (!iio)
+> @@ -747,54 +859,8 @@ static int dps310_probe(struct i2c_client *client,
+>  	if (rc)
+>  		return rc;
+>  
+> -	/*
+> -	 * Set up pressure sensor in single sample, one measurement per second
+> -	 * mode
+> -	 */
+> -	rc = regmap_write(data->regmap, DPS310_PRS_CFG, 0);
+
+Lack of error checking in original code is odd. Deliberate or not is the
+question... (probably not deliberate as rc = is there).
+
+> -
+> -	/*
+> -	 * Set up external (MEMS) temperature sensor in single sample, one
+> -	 * measurement per second mode
+> -	 */
+> -	rc = regmap_write(data->regmap, DPS310_TMP_CFG, DPS310_TMP_EXT);
+> -	if (rc < 0)
+> -		return rc;
+> -
+> -	/* Temp and pressure shifts are disabled when PRC <= 8 */
+> -	rc = regmap_write_bits(data->regmap, DPS310_CFG_REG,
+> -			       DPS310_PRS_SHIFT_EN | DPS310_TMP_SHIFT_EN, 0);
+> -	if (rc < 0)
+> -		return rc;
+> -
+> -	/* MEAS_CFG doesn't update correctly unless first written with 0 */
+> -	rc = regmap_write_bits(data->regmap, DPS310_MEAS_CFG,
+> -			       DPS310_MEAS_CTRL_BITS, 0);
+> -	if (rc < 0)
+> -		return rc;
+> -
+> -	/* Turn on temperature and pressure measurement in the background */
+> -	rc = regmap_write_bits(data->regmap, DPS310_MEAS_CFG,
+> -			       DPS310_MEAS_CTRL_BITS, DPS310_PRS_EN |
+> -			       DPS310_TEMP_EN | DPS310_BACKGROUND);
+> -	if (rc < 0)
+> -		return rc;
+> -
+> -	/*
+> -	 * Calibration coefficients required for reporting temperature.
+> -	 * They are available 40ms after the device has started
+> -	 */
+> -	rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG, ready,
+> -				      ready & DPS310_COEF_RDY, 10000, 40000);
+> -	if (rc < 0)
+> -		return rc;
+> -
+> -	rc = dps310_get_coefs(data);
+> -	if (rc < 0)
+> -		return rc;
+> -
+> -	rc = dps310_temp_workaround(data);
+> -	if (rc < 0)
+> +	rc = dps310_startup(data);
+> +	if (rc)
+>  		return rc;
+>  
+>  	rc = devm_iio_device_register(&client->dev, iio);
+

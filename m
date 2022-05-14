@@ -2,112 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 445305271F2
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 16:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28DEA5271F3
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 16:27:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233241AbiENO0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 10:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42550 "EHLO
+        id S233259AbiENO0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 10:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233050AbiENO0Z (ORCPT
+        with ESMTP id S233223AbiENO01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 10:26:25 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA7EDF48;
-        Sat, 14 May 2022 07:26:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C600CCE0ABA;
-        Sat, 14 May 2022 14:26:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 452CCC340EE;
-        Sat, 14 May 2022 14:26:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652538381;
-        bh=ToD809RuY6hiXX+oncfqN67gVFXAQVrADjiQjJV3dEI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i65GwFOC0zB83eUL9/lR2auEhM9UrNTQT2dN75bb0bl90eK/Bx5DTmmt2nDK4dsRP
-         b3SvvU9TskXzHzbOUK1e/oIuaVJhJwBQT3Yy7EIRL+7OBjFafG5TKHpAv8oWKGOvP4
-         E4a84GMXmT2I8LRhA04FSdNw2JJBf7ocBTB7JbLPHyY0Czp6APaLGtIVpEXia65z9C
-         Ha2Q1sAr6UNntams5ZDpedtIzbVH11PbMLdtMqxyh8BCokqvSaWZnu5t0tMIN/gTpi
-         bNXTG/LUOGL/hg02MAlq401zTCLeqF76C68zt3W7L4MESAVjfZnB8FnQSFh9Wh9w99
-         qxfVnJoruzCuw==
-Date:   Sat, 14 May 2022 16:26:16 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     kernel@axis.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, krzk+dt@kernel.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: add property to avoid device
- detection
-Message-ID: <Yn+8CJ3j2SY2+Mq+@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>, kernel@axis.com,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        krzk+dt@kernel.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220412085046.1110127-1-vincent.whitchurch@axis.com>
- <20220412085046.1110127-2-vincent.whitchurch@axis.com>
+        Sat, 14 May 2022 10:26:27 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7763ADF84
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 07:26:24 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id b18so18941895lfv.9
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 07:26:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :content-language:content-transfer-encoding;
+        bh=Li6/tQDXHzv8kZiOpKUQD1TPJCVlsntTcNVJC7DZIzE=;
+        b=Kotfmd59T2vwKoH6qJP7H7l9uJqBl4fvklMdaJmEksj2Hc2/NE0Q/bFCFcQRipTg50
+         gWoPxS8tp+9YBXdLbEdFKp4dNu3+ECSYOiv3E63hYcBSm4oEHOtgE1TIAjkYkXu4c0zV
+         QFoLt5LtKLO/qBTEJ0e566ZyqeuGymbwkbwq1HnmkuMnOzDvFvrJRKmYmhD5tD1gwleZ
+         KBvcKVuZZlEFwkqsdsTIzRn9ByRm81I5XWGw0FrSFGjv25l1dzLHqhMwD+XSV3hTE6lQ
+         ssPP6XT1mDkzEUND+/7zc84awYm1BczkR73aLT5GUdQHzSsgP2RYrAJiTAODHffOGiz9
+         Ytzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:content-language:content-transfer-encoding;
+        bh=Li6/tQDXHzv8kZiOpKUQD1TPJCVlsntTcNVJC7DZIzE=;
+        b=2HlqaMZRFi5NoImDnrwKRBF+INrkO+yOr7N/Kv6z6pBT7I5ZfWt/Gh19Szjl8bcLrd
+         a0kjWbrpu4z2sLNvCoKtuHj8fwKx/8X9NXgWk/yYNbBAWanpMSPBPynoLbgmypf8m0Dl
+         AUuYbwqgn9S2S0OmGiMA0ETAsPmQiA7qc/p4L+re/MN6fiHPURsh3moSOFFyJXiJWJBS
+         Ugux+pKo9fp1uAJ9sAdQa5YuSTVvcoY+Qu0nHpEE317w+rd6A08UPrwIUX96EX5nQvLH
+         L8f8edBEOL4yxcFazpRottHElGyCtN+i67A6BnM9VMFhSOqNLMoAcomyOjjBmIx5lI/z
+         AiLQ==
+X-Gm-Message-State: AOAM531rReKn+MGtJ7sCawEFBbh7j4nfPty1QyH0fDI9nk7UKeayk6OL
+        3VkQLP4bFvCR7ktQnSUnv77FwQ==
+X-Google-Smtp-Source: ABdhPJx20/rdz5gh/QUmWaR3qdzEbffKnh5fGQECoYVJthQjwM0Qnnpm5/Eygnyzr8pA3B6MQmmy/A==
+X-Received: by 2002:a05:6512:a92:b0:45c:6b70:c892 with SMTP id m18-20020a0565120a9200b0045c6b70c892mr1034464lfu.124.1652538382834;
+        Sat, 14 May 2022 07:26:22 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.177])
+        by smtp.gmail.com with ESMTPSA id d15-20020ac25ecf000000b0047255d210f7sm727847lfq.38.2022.05.14.07.26.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 14 May 2022 07:26:22 -0700 (PDT)
+Message-ID: <cf47f8c3-c4f3-7f80-ce17-ed9fbc7fe424@openvz.org>
+Date:   Sat, 14 May 2022 17:26:21 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="NL3Sz6YKj32sHoBj"
-Content-Disposition: inline
-In-Reply-To: <20220412085046.1110127-2-vincent.whitchurch@axis.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+From:   Vasily Averin <vvs@openvz.org>
+Subject: [PATCH] sparse: use force attribute for vm_fault_t casts
+To:     Dan Williams <dan.j.williams@intel.com>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fixes sparse warnings:
+./include/trace/events/fs_dax.h:10:1: sparse:
+    got restricted vm_fault_t
+./include/trace/events/fs_dax.h:153:1: sparse:
+    got restricted vm_fault_t
+fs/dax.c:563:39: sparse:    got restricted vm_fault_t
+fs/dax.c:565:39: sparse:    got restricted vm_fault_t
+fs/dax.c:569:31: sparse:    got restricted vm_fault_t
+fs/dax.c:1055:41: sparse:
+    got restricted vm_fault_t [assigned] [usertype] ret
+fs/dax.c:1461:46: sparse:    got restricted vm_fault_t [usertype] ret
+fs/dax.c:1477:21: sparse:
+    expected restricted vm_fault_t [assigned] [usertype] ret
+fs/dax.c:1518:51: sparse:
+    got restricted vm_fault_t [assigned] [usertype] ret
+fs/dax.c:1599:21: sparse:
+    expected restricted vm_fault_t [assigned] [usertype] ret
+fs/dax.c:1633:62: sparse:
+    got restricted vm_fault_t [assigned] [usertype] ret
+fs/dax.c:1696:55: sparse:    got restricted vm_fault_t
+fs/dax.c:1711:58: sparse:
+    got restricted vm_fault_t [assigned] [usertype] ret
 
---NL3Sz6YKj32sHoBj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+vm_fault_t type is bitwise and requires __force attribute for any casts.
 
-On Tue, Apr 12, 2022 at 10:50:45AM +0200, Vincent Whitchurch wrote:
-> When drivers with ->detect callbacks are loaded, the I2C core does a
-> bunch of transactions to try to probe for these devices, regardless of
-> whether they are specified in the devicetree or not.  (This only happens
-> on I2C controllers whose drivers enable the I2C_CLASS* flags, but this
-> is the case for generic drivers like i2c-gpio.)
->=20
-> These kinds of transactions are unnecessary on systems where the
-> devicetree specifies all the devices on the I2C bus, so add a property
-> to indicate that the devicetree description of the hardware is complete
-> and thus allow this discovery to be disabled.
+Signed-off-by: Vasily Averin <vvs@openvz.org>
+---
+ fs/dax.c                 | 22 +++++++++++-----------
+ include/linux/mm_types.h | 30 ++++++++++++++++--------------
+ 2 files changed, 27 insertions(+), 25 deletions(-)
 
-Hmm, I don't think the name is fitting. "no-detect" is the desired
-behaviour but a proper description is more like "bus-complete" or
-something?
+diff --git a/fs/dax.c b/fs/dax.c
+index 67a08a32fccb..eb1a1808f719 100644
+--- a/fs/dax.c
++++ b/fs/dax.c
+@@ -560,13 +560,13 @@ static void *grab_mapping_entry(struct xa_state *xas,
+ 	if (xas_nomem(xas, mapping_gfp_mask(mapping) & ~__GFP_HIGHMEM))
+ 		goto retry;
+ 	if (xas->xa_node == XA_ERROR(-ENOMEM))
+-		return xa_mk_internal(VM_FAULT_OOM);
++		return xa_mk_internal((__force unsigned long)VM_FAULT_OOM);
+ 	if (xas_error(xas))
+-		return xa_mk_internal(VM_FAULT_SIGBUS);
++		return xa_mk_internal((__force unsigned long)VM_FAULT_SIGBUS);
+ 	return entry;
+ fallback:
+ 	xas_unlock_irq(xas);
+-	return xa_mk_internal(VM_FAULT_FALLBACK);
++	return xa_mk_internal((__force unsigned long)VM_FAULT_FALLBACK);
+ }
+ 
+ /**
+@@ -1052,7 +1052,7 @@ static vm_fault_t dax_load_hole(struct xa_state *xas,
+ 			DAX_ZERO_PAGE, false);
+ 
+ 	ret = vmf_insert_mixed(vmf->vma, vaddr, pfn);
+-	trace_dax_load_hole(inode, vmf, ret);
++	trace_dax_load_hole(inode, vmf, (__force int)ret);
+ 	return ret;
+ }
+ 
+@@ -1458,7 +1458,7 @@ static vm_fault_t dax_iomap_pte_fault(struct vm_fault *vmf, pfn_t *pfnp,
+ 	void *entry;
+ 	int error;
+ 
+-	trace_dax_pte_fault(iter.inode, vmf, ret);
++	trace_dax_pte_fault(iter.inode, vmf, (__force int)ret);
+ 	/*
+ 	 * Check whether offset isn't beyond end of file now. Caller is supposed
+ 	 * to hold locks serializing us with truncate / punch hole so this is
+@@ -1474,7 +1474,7 @@ static vm_fault_t dax_iomap_pte_fault(struct vm_fault *vmf, pfn_t *pfnp,
+ 
+ 	entry = grab_mapping_entry(&xas, mapping, 0);
+ 	if (xa_is_internal(entry)) {
+-		ret = xa_to_internal(entry);
++		ret = (__force vm_fault_t)xa_to_internal(entry);
+ 		goto out;
+ 	}
+ 
+@@ -1515,7 +1515,7 @@ static vm_fault_t dax_iomap_pte_fault(struct vm_fault *vmf, pfn_t *pfnp,
+ unlock_entry:
+ 	dax_unlock_entry(&xas, entry);
+ out:
+-	trace_dax_pte_fault_done(iter.inode, vmf, ret);
++	trace_dax_pte_fault_done(iter.inode, vmf, (__force int)ret);
+ 	return ret;
+ }
+ 
+@@ -1596,7 +1596,7 @@ static vm_fault_t dax_iomap_pmd_fault(struct vm_fault *vmf, pfn_t *pfnp,
+ 	 */
+ 	entry = grab_mapping_entry(&xas, mapping, PMD_ORDER);
+ 	if (xa_is_internal(entry)) {
+-		ret = xa_to_internal(entry);
++		ret = (__force vm_fault_t)xa_to_internal(entry);
+ 		goto fallback;
+ 	}
+ 
+@@ -1630,7 +1630,7 @@ static vm_fault_t dax_iomap_pmd_fault(struct vm_fault *vmf, pfn_t *pfnp,
+ 		count_vm_event(THP_FAULT_FALLBACK);
+ 	}
+ out:
+-	trace_dax_pmd_fault_done(iter.inode, vmf, max_pgoff, ret);
++	trace_dax_pmd_fault_done(iter.inode, vmf, max_pgoff, (__force int)ret);
+ 	return ret;
+ }
+ #else
+@@ -1693,7 +1693,7 @@ dax_insert_pfn_mkwrite(struct vm_fault *vmf, pfn_t pfn, unsigned int order)
+ 		put_unlocked_entry(&xas, entry, WAKE_NEXT);
+ 		xas_unlock_irq(&xas);
+ 		trace_dax_insert_pfn_mkwrite_no_entry(mapping->host, vmf,
+-						      VM_FAULT_NOPAGE);
++						      (__force int)VM_FAULT_NOPAGE);
+ 		return VM_FAULT_NOPAGE;
+ 	}
+ 	xas_set_mark(&xas, PAGECACHE_TAG_DIRTY);
+@@ -1708,7 +1708,7 @@ dax_insert_pfn_mkwrite(struct vm_fault *vmf, pfn_t pfn, unsigned int order)
+ 	else
+ 		ret = VM_FAULT_FALLBACK;
+ 	dax_unlock_entry(&xas, entry);
+-	trace_dax_insert_pfn_mkwrite(mapping->host, vmf, ret);
++	trace_dax_insert_pfn_mkwrite(mapping->host, vmf, (__force int)ret);
+ 	return ret;
+ }
+ 
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 8834e38c06a4..57cc4918b1b1 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -745,20 +745,22 @@ enum vm_fault_reason {
+ 			VM_FAULT_SIGSEGV | VM_FAULT_HWPOISON |	\
+ 			VM_FAULT_HWPOISON_LARGE | VM_FAULT_FALLBACK)
+ 
+-#define VM_FAULT_RESULT_TRACE \
+-	{ VM_FAULT_OOM,                 "OOM" },	\
+-	{ VM_FAULT_SIGBUS,              "SIGBUS" },	\
+-	{ VM_FAULT_MAJOR,               "MAJOR" },	\
+-	{ VM_FAULT_WRITE,               "WRITE" },	\
+-	{ VM_FAULT_HWPOISON,            "HWPOISON" },	\
+-	{ VM_FAULT_HWPOISON_LARGE,      "HWPOISON_LARGE" },	\
+-	{ VM_FAULT_SIGSEGV,             "SIGSEGV" },	\
+-	{ VM_FAULT_NOPAGE,              "NOPAGE" },	\
+-	{ VM_FAULT_LOCKED,              "LOCKED" },	\
+-	{ VM_FAULT_RETRY,               "RETRY" },	\
+-	{ VM_FAULT_FALLBACK,            "FALLBACK" },	\
+-	{ VM_FAULT_DONE_COW,            "DONE_COW" },	\
+-	{ VM_FAULT_NEEDDSYNC,           "NEEDDSYNC" }
++#define faultflag_string(flag) {(__force unsigned long)VM_FAULT_##flag, #flag}
++
++#define VM_FAULT_RESULT_TRACE			\
++	faultflag_string(OOM),			\
++	faultflag_string(SIGBUS),		\
++	faultflag_string(MAJOR),		\
++	faultflag_string(WRITE),		\
++	faultflag_string(HWPOISON),		\
++	faultflag_string(HWPOISON_LARGE),	\
++	faultflag_string(SIGSEGV),		\
++	faultflag_string(NOPAGE),		\
++	faultflag_string(LOCKED),		\
++	faultflag_string(RETRY),		\
++	faultflag_string(FALLBACK),		\
++	faultflag_string(DONE_COW),		\
++	faultflag_string(NEEDDSYNC)
+ 
+ struct vm_special_mapping {
+ 	const char *name;	/* The name, e.g. "[vdso]". */
+-- 
+2.31.1
 
-That aside, I am not sure we should handle this at DT level. Maybe we
-should better change the GPIO driver to not populate a class if we have
-a firmware node?
-
-
---NL3Sz6YKj32sHoBj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJ/vAQACgkQFA3kzBSg
-KbbFog/9Gv3IJ+MHl6N3qQ0ieQcG5+wD+BO8/McbKQuR+2LqOOd8LVx5TV1+5czC
-+Ef69jO9ch6vV5T9WVrnErF4h1wtGiK5HF/1AnMjagTXtNNIaxbyEOBvowY4hVUM
-E58vzkrlZNIKY+147vnatDWw670DOTAP6GvvKg4cfGSK0ZXxRGkuXzWreYM9seJD
-V1L9EpBDEZ80Y6RYJbWzExPyslGja8avFLzOqy5Q4dvsHnB8P7Mq6jrQXB6bqNWQ
-hakv42huhY+WzplBlqNpfUiqGOC/5C71s17g8NKQ5BZfjV+HSO9L1ueHgFsOpWS7
-6PEj8o2t+GJagce4TZJ2ofi7YrJNRNemxK9uLNwmdmmcLFZCTBxn/3/rZQotCPzu
-VM9HDgnNQhdavit/Sqw9Vq89oeAq9QGbj/FWCTIELbmToVE0d3ufuWaLnDPctLW9
-TzWV2C/B/zjDtglZmg1fjJI5nr38l7qpWbhd95rzxO1vsYSXTwYRYfOIGukgDNlj
-gURWV+df7I89Rc6DL9ZSM5qu0h7iqmZLbE3RAnqrYjdr7AVXVqq2rmu0r0VjkzYw
-6rzr4BN6oWPrthHLWOCsz4uCIeO802Vj5hkXqKRf8SrhkyoQFTv1H3RrSQ/F/qmV
-diN/c0v5IqmndTctQau7yl+AuCgj9wJ8M32Zb6N+ZZuyXQr+EEU=
-=AA2G
------END PGP SIGNATURE-----
-
---NL3Sz6YKj32sHoBj--

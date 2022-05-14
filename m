@@ -2,121 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E179352704B
+	by mail.lfdr.de (Postfix) with ESMTP id 9581E52704A
 	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 11:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231424AbiENJbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 05:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
+        id S231368AbiENJbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 05:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbiENJbf (ORCPT
+        with ESMTP id S231211AbiENJba (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 05:31:35 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A4FE006
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 02:31:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652520694; x=1684056694;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dFGar8ng++sNwcK1YrUGfJrMFTXpQxROjMhA13xwAaQ=;
-  b=lJoUXDAG6GyRK+fWDL5LxdgwUGFonNUE26YMnOYUGrBTuqrtmirDbF1p
-   VStlkHYlsUlkyiSn3mERtUVInhlrKVqVvqhbzME4ZwTPq82i3vqVnIeW6
-   R2APzfFROQY+EKh7pu8HExVmgTOsW6YoHpVkUXBk79PuEKA7IZjzTeaMw
-   PC27vuUQ4lSlZR8Iybf/fRd8PBfufYkuegTblIfHCGysj1OAF6HMC2qg2
-   bJp2soQtCuugRkl06Si3k7EAsFOFrH6YbEeqm9bNTTSPnwiZTUivc1CzX
-   yD8cWGAAUDFOCxTSVMCssiVPW+GVRgWZlE+QLjMB0z/7fIy9cxTQ9O7xQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="270168237"
-X-IronPort-AV: E=Sophos;i="5.91,225,1647327600"; 
-   d="scan'208";a="270168237"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2022 02:31:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,225,1647327600"; 
-   d="scan'208";a="896551702"
-Received: from lkp-server01.sh.intel.com (HELO d1462bc4b09b) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 14 May 2022 02:31:31 -0700
-Received: from kbuild by d1462bc4b09b with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1npo7W-0000Qw-LY;
-        Sat, 14 May 2022 09:31:30 +0000
-Date:   Sat, 14 May 2022 17:30:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Venkata Lakshmi Narayana Gubba <gubbaven@codeaurora.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Marcel Holtmann <marcel@holtmann.org>
-Subject: drivers/bluetooth/hci_qca.c:1860:37: warning: 'qca_soc_data_wcn6750'
- defined but not used
-Message-ID: <202205141707.C0PnkKx4-lkp@intel.com>
+        Sat, 14 May 2022 05:31:30 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C3ADFF0
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 02:31:28 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id kj8so8629818qvb.6
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 02:31:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hBK9297vnNgTKNgzNQdSDNoUsAxJ9WLW7oIgz8DQcSQ=;
+        b=L9FHvU+n7zduTDdwW6sM3XmD/9wzi3G1eROUAAADWvcagmlZrosiIxmoFVhCc++wU/
+         G/wn3evuB/SaKze24We7GHRT7s7kOBwhOHTaRj9kUCXVdLXuS/QurwYLEBa6F4WcrXp/
+         Rb8xMq+QS5lpHE6GI3XofD8jMk6/aKXjwxOo2gfrAyCSVNrdOGXw609tXzmBADIIIOGz
+         usd1MAxow1mTHq0VcsmTK3MR7S91hOrc9PKPyVEWc2RgKGqYR2h7Ydl2huag//mXLbXW
+         rEZ81TtGqh6eAhes1JQX/S1w+SVIZ0/36QcTl3wm5hwb0lIlva7baMAVV2cTYNIg/vLV
+         aJYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hBK9297vnNgTKNgzNQdSDNoUsAxJ9WLW7oIgz8DQcSQ=;
+        b=Csx5sxQspAPc1YQ/g/6BtRz4UNVEbGBb2iixv6AywfFOixApDI6c1RWmBMYebrSUrg
+         P6QFWjO8OlrKR5PREBuRPRxmGqsykgaeaBzgMl6yAVxyJsJtx7SE3g3n+giEfUW8PK4Y
+         ymk2otqbzqFBCo2FLo5wvtNPsod6QrDTOSxPreVEY/5Xob4U6Sy5YDfTOPlNA9h2mMiV
+         uW+pLL/d8Bqwtgwtp4Jm4cv8L2DdDyMrthJeukQXu0cYc9ynJJi1eGTkFk4ntLzgqOq3
+         UcoW2eRadvLRi6oAvw/YwwlDg2dAF3CpWQXvrzvtOnUdgQ3MKAz8J8gbe6UkcBEbx9yW
+         pmtQ==
+X-Gm-Message-State: AOAM5334qOKXsr/6OfAegrnejw4Xw9h5AU1K1R0TdOxZ6AivYhcgmkqN
+        hVLTZ/0PHyk/Izbfw3z+Ktn4G4e85SnsTTzOww8=
+X-Google-Smtp-Source: ABdhPJx3uoXlvhDURRNtcVVvWbJdG3SZWqCUBgZGLGvb9vz8AnZpK9r1uFYdFUjTH6egnoJKdsUzQp2dujaVwKuhf9k=
+X-Received: by 2002:a05:6214:5189:b0:45d:d051:ea06 with SMTP id
+ kl9-20020a056214518900b0045dd051ea06mr7616646qvb.2.1652520687896; Sat, 14 May
+ 2022 02:31:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220513153009.228282-1-ubizjak@gmail.com> <20220513153009.228282-3-ubizjak@gmail.com>
+ <20220513221820.GK76023@worktop.programming.kicks-ass.net>
+In-Reply-To: <20220513221820.GK76023@worktop.programming.kicks-ass.net>
+From:   Uros Bizjak <ubizjak@gmail.com>
+Date:   Sat, 14 May 2022 11:31:38 +0200
+Message-ID: <CAFULd4Z2AAvGkfdvG9RexfZRaMgWdU6HJG1jRD4E052vd35ySA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] locking/atomic/x86: Introduce arch_try_cmpxchg64
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Marco Elver <elver@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ec7f49619d8ee13e108740c82f942cd401b989e9
-commit: d8f97da1b92d2fe89d51c673ecf80c4016119e5c Bluetooth: hci_qca: Add support for QTI Bluetooth chip wcn6750
-date:   11 months ago
-config: i386-randconfig-a014-20211210 (https://download.01.org/0day-ci/archive/20220514/202205141707.C0PnkKx4-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d8f97da1b92d2fe89d51c673ecf80c4016119e5c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d8f97da1b92d2fe89d51c673ecf80c4016119e5c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/bluetooth/
+On Sat, May 14, 2022 at 12:18 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Fri, May 13, 2022 at 05:30:09PM +0200, Uros Bizjak wrote:
+>
+>
+> > +#define arch_try_cmpxchg64(ptr, po, n)                                       \
+> > +     ((__typeof__(*(ptr)))__try_cmpxchg64((ptr), (unsigned long long *)(po), \
+> > +                                          (unsigned long long)(n)))
+>
+> That doesn't look right (unless it's so late I really can't read
+> anymore, in which case ignore me and I'll try again on monday). But the
+> return value of try_cmpxchg is bool, not typeof(*ptr).
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+No, you are right, I was too eager when copying the code from the
+above arch_cmpxchg64 definition. Unfortunately, although the cast is
+benign and the compiler figures out that the cast is unnecessary, it
+doesn't warn here...
 
-All warnings (new ones prefixed by >>):
+Actually, since __try_cmpxchg64 is already bool, we don't need any
+cast here, and the definition can be substantially simplified.
 
->> drivers/bluetooth/hci_qca.c:1860:37: warning: 'qca_soc_data_wcn6750' defined but not used [-Wunused-const-variable=]
-    1860 | static const struct qca_device_data qca_soc_data_wcn6750 = {
-         |                                     ^~~~~~~~~~~~~~~~~~~~
-   drivers/bluetooth/hci_qca.c:1844:37: warning: 'qca_soc_data_wcn3998' defined but not used [-Wunused-const-variable=]
-    1844 | static const struct qca_device_data qca_soc_data_wcn3998 = {
-         |                                     ^~~~~~~~~~~~~~~~~~~~
-   drivers/bluetooth/hci_qca.c:1832:37: warning: 'qca_soc_data_wcn3991' defined but not used [-Wunused-const-variable=]
-    1832 | static const struct qca_device_data qca_soc_data_wcn3991 = {
-         |                                     ^~~~~~~~~~~~~~~~~~~~
-   drivers/bluetooth/hci_qca.c:1821:37: warning: 'qca_soc_data_wcn3990' defined but not used [-Wunused-const-variable=]
-    1821 | static const struct qca_device_data qca_soc_data_wcn3990 = {
-         |                                     ^~~~~~~~~~~~~~~~~~~~
+Thank you for another pair of eyes - I did eyeball this code
+extensively, but the issue slipped through somehow.
 
+Patch v3 is in the works.
 
-vim +/qca_soc_data_wcn6750 +1860 drivers/bluetooth/hci_qca.c
-
-  1859	
-> 1860	static const struct qca_device_data qca_soc_data_wcn6750 = {
-  1861		.soc_type = QCA_WCN6750,
-  1862		.vregs = (struct qca_vreg []) {
-  1863			{ "vddio", 5000 },
-  1864			{ "vddaon", 26000 },
-  1865			{ "vddbtcxmx", 126000 },
-  1866			{ "vddrfacmn", 12500 },
-  1867			{ "vddrfa0p8", 102000 },
-  1868			{ "vddrfa1p7", 302000 },
-  1869			{ "vddrfa1p2", 257000 },
-  1870			{ "vddrfa2p2", 1700000 },
-  1871			{ "vddasd", 200 },
-  1872		},
-  1873		.num_vregs = 9,
-  1874		.capabilities = QCA_CAP_WIDEBAND_SPEECH | QCA_CAP_VALID_LE_STATES,
-  1875	};
-  1876	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Uros.

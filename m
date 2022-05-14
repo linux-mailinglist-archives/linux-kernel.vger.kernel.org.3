@@ -2,54 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7198C52713E
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 15:32:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ED95527162
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 15:42:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232500AbiENNcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 09:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44190 "EHLO
+        id S230024AbiENNmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 09:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbiENNcB (ORCPT
+        with ESMTP id S232692AbiENNmR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 09:32:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF10167ED;
-        Sat, 14 May 2022 06:31:59 -0700 (PDT)
+        Sat, 14 May 2022 09:42:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAB31D0C8;
+        Sat, 14 May 2022 06:42:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 136D9B80759;
-        Sat, 14 May 2022 13:31:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A530C340EE;
-        Sat, 14 May 2022 13:31:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 838E860EA8;
+        Sat, 14 May 2022 13:42:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 257E9C340EE;
+        Sat, 14 May 2022 13:42:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652535115;
-        bh=TExNkCJIyi7sDz+kd0um9+TpmBxdCc8saAXZNsfA+Jo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NTYaemDyM2EcpaBTJbdwga+I34SCsAkZ43SzvYi2A/h9HXiFUqi6fQWUc+afC8sKD
-         aDeorUuiE2Wy4pfaEM9+KVfnH/dIglvw+dHdI0mexse6ssIC/jUkC1stFGoWvjhhrl
-         fh8CwBLQTA2FTj59soeJcdLvtfcoWNSxBMbtrUlVNW+1M7Rjt0vIzrmADN7pkizh9+
-         GvGssv6P5m/QIGjO9itQlWhUQ5pBos1CZsxtZWQq6BgjJ2I049t5YAS2ExJn5mUB0C
-         5HBvTQZVHQQ3L0xLIh2HCtH9kE0UGz1/HwoiHCJszvi5tmsFRwsvaxjzMBUR/BEAO0
-         OC0wsubNWhVWA==
-Date:   Sat, 14 May 2022 14:40:30 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, lars@metafoo.de, miltonm@us.ibm.com
-Subject: Re: [PATCH v2 0/2] iio: humidity: si7020: Check device property for
- skipping reset in probe
-Message-ID: <20220514144030.7a57da70@jic23-huawei>
-In-Reply-To: <c2f7b09d-e046-409e-b65e-153157f84b03@linux.ibm.com>
-References: <20220512162020.33450-1-eajames@linux.ibm.com>
-        <20220512174859.000042b6@Huawei.com>
-        <c2f7b09d-e046-409e-b65e-153157f84b03@linux.ibm.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
+        s=k20201202; t=1652535735;
+        bh=lc8FNAHPs8PxV63QLAnbUlmnFyHQVfR9JmDEpWwz4lI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T/iMzL+CCIm9x7+Jl4noxSph+mudNjl8X2sOVQkvn5FyBHl96k51cU66l5vpRLnIU
+         UeXp7rlbynzHSGZZcTyIh7D68IvTdOcCELtP7okrfGpAfTTZV2+PLqB/bHIvoz9r6j
+         4WppvK1cWa2QxbpLtKDKxStnqEQ0DtLPq/cWjw8lfIU/f9SoUarB0mAjtmI0mZ1TRY
+         Cm5EWCHLiQLH46AlJ1ZhSlNgixjQ4tfsAj17pqAJK/tm/nx2CY3sqlhNeTIDJqTsV5
+         AkF19anc9HKM2siOhJT2yYPj4QAAxbMRUazRnC10fdvQ9TIbWf81zm2jWoGTJ1gSeg
+         T4ds3E7wT+Zrw==
+Date:   Sat, 14 May 2022 15:42:08 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Walle <michael@walle.cc>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] i2c: at91: Initialize dma_buf in at91_twi_xfer()
+Message-ID: <Yn+xsNqFyRMTu+5X@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Walle <michael@walle.cc>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+References: <20220505152738.1440249-1-nathan@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="VjAemlvi6p7tG2no"
+Content-Disposition: inline
+In-Reply-To: <20220505152738.1440249-1-nathan@kernel.org>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,52 +73,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 May 2022 14:11:06 -0500
-Eddie James <eajames@linux.ibm.com> wrote:
 
-> On 5/12/22 11:48, Jonathan Cameron wrote:
-> > On Thu, 12 May 2022 11:20:18 -0500
-> > Eddie James <eajames@linux.ibm.com> wrote:
-> >  
-> >> I2C commands issued after the SI7020 is starting up or after reset
-> >> can potentially upset the startup sequence. Therefore, the host
-> >> needs to wait for the startup sequence to finish before issuing
-> >> further i2c commands. This is impractical in cases where the SI7020
-> >> is on a shared bus or behind a mux, which may switch channels at
-> >> any time (generating I2C traffic). Therefore, check for a device
-> >> property that indicates that the driver should skip resetting the
-> >> device when probing.  
-> > Why not lock the bus?  It's not ideal, but then not resetting and hence
-> > potentially ending up in an unknown state isn't great either.  
-> 
-> 
-> Also, I should mention that in our case we can rely on the power on 
-> reset, so the device should be in a known state.
+--VjAemlvi6p7tG2no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Until someone unbinds and rebinds the driver...
-It's very hard to have any guarantees once users are involved :)
+On Thu, May 05, 2022 at 08:27:38AM -0700, Nathan Chancellor wrote:
+> Clang warns:
+>=20
+>   drivers/i2c/busses/i2c-at91-master.c:707:6: warning: variable 'dma_buf'=
+ is used uninitialized whenever 'if' condition is false [-Wsometimes-uninit=
+ialized]
+>           if (dev->use_dma) {
+>               ^~~~~~~~~~~~
+>   drivers/i2c/busses/i2c-at91-master.c:717:27: note: uninitialized use oc=
+curs here
+>           i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
+>                                    ^~~~~~~
+>=20
+> Initialize dma_buf to NULL, as i2c_put_dma_safe_msg_buf() is a no-op
+> when the first argument is NULL, which will work for the !dev->use_dma
+> case.
+>=20
+> Fixes: 03fbb903c8bf ("i2c: at91: use dma safe buffers")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1629
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Jonathan
+Applied to for-next, thanks!
 
 
-> 
-> Eddie
-> 
-> 
-> >
-> > Jonathan
-> >  
-> >> Changes since v1:
-> >>   - Fix dt binding document
-> >>
-> >> Eddie James (2):
-> >>    dt-bindings: iio: humidity: Add si7020 bindings
-> >>    iio: humidity: si7020: Check device property for skipping reset in probe
-> >>
-> >>   .../bindings/iio/humidity/silabs,si7020.yaml  | 47 +++++++++++++++++++
-> >>   .../devicetree/bindings/trivial-devices.yaml  |  2 -
-> >>   drivers/iio/humidity/si7020.c                 | 14 +++---
-> >>   3 files changed, 55 insertions(+), 8 deletions(-)
-> >>   create mode 100644 Documentation/devicetree/bindings/iio/humidity/silabs,si7020.yaml
-> >>  
+--VjAemlvi6p7tG2no
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJ/sawACgkQFA3kzBSg
+KbaJ9xAAkyq+RHZZN08/YGayyvwrJU1NXYylBVY92QwWcNK4qyUjdNLIz2YJn4kC
+SPBPTdyWbeG46f609FHc8aCAJE8P695jSZh9yOPQZ1HUZWx2MXsraYXcGtdAzwKv
+Qwt3O7Mal47TcqyI5iwWcsKlsKKiQCjN7QeQ7EiTBTrVB3DL/K6E+5urM1ew837c
+6Eht4geOYLc/GMc9usSaG4SDXXnEBsFMvzIa9qCImZ6NBeZmeD3fCZA6ylw2ztlr
+Fd8/nx4tVigiE8TGxcZiduBt4BuYbAUMOUeOHcNAkMNu1HdzkA05UXGbRvkW+0yT
+jGg32HRrEWr45OVmAX2jCpKAW8hC8rFbtR5DPwMW/1ZmShkq0w+3BV3AmsFpu44P
+gssSPLLktq+n8rRT/ze7Zht80LebklQ3mI57+kP2/ZjnyGHyMLmXY8GSCUEv5+AZ
+FPeUMOcbi8CqZDnIOmRk7RN7uX7p1BJotYOh2pHnFEvpIB8coVTd1yn6SV/+mIqi
+j5bW2CzRRZg1MBUDI+LGyczHDH47mUOtYjEVKRMNdiVwmNcSsO7QneGoJo+MUr7z
+RRX0kOy3JAp6VuPhmDY/fK22+q1qZQeCWaBFldsSYDTWz1fFxwqWUOEV020DS20v
+1zhMYk9WipGr7ymzVgTGG7s/5IMXs6qdlG3+7lAciaOPU8RRaHc=
+=GQAz
+-----END PGP SIGNATURE-----
+
+--VjAemlvi6p7tG2no--

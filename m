@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BFEC526ED5
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:14:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A97526F75
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231363AbiENC6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 22:58:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33006 "EHLO
+        id S231312AbiENC6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 22:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbiENC5B (ORCPT
+        with ESMTP id S231614AbiENC5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 13 May 2022 22:57:01 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FD52FB3C1
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 18:46:53 -0700 (PDT)
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598EF2FCF32
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 18:46:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652492813; x=1684028813;
+  t=1652492819; x=1684028819;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=GVIFpAO5j7ORaurQGDRjDYzb8qL8hcHPBhy8miD32r0=;
-  b=hznMXTRvVcBO+iuQ7uN6+XOIPcAcVvBZZWFOKBGzlbcOtKbyM/aWx7KH
-   UZOqIY4i3xNf4FF98ZZkPSkUJqmtbyfZjBdOHM5Z9WaopG+wh6ngnBz70
-   aIY/kthA5+b2UfFH1BZfCX8k/sxI6fH8UUKhWiLxyLhF98tckFWaOw8bO
-   yH25B+An0cE/mcw/QVhZ7qXLHMzhZSEs2T8/H0A+SuJsfk6LYJV0flG1R
-   vHAoYdEjWxMPdbwIUagWWvl+gi2d+MMgyzYSLF/OG0ieXkNNL/9CBdB7B
-   F2HwXdzHKFXZVq/SgV/tA4r0PKS7Kd/f2zDf1yIU3K37GfhWUlcY2YAU6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="250358171"
+  bh=KozZnrzYJ+0UFKmzjAu1U8Z4jZPTgTst8scozy/7ge4=;
+  b=TmghDWk5tOHj020pqWxmaQ6uZU3iYV6Hd521KYNRC5XUaDY+R2AjxQ2Q
+   jiA/h0WWzlHiM++m82pNel9w95az0D4+hf8EPv45K1gjXT83PMijxIdYP
+   n2uJ1BY4cwYnK3Jl73dRBU1mOpKeGiBqjG1zx2AvgdoO8Ey294zlh0Tt+
+   NW3xswwxvphR5gFzT9A8WLY5uhvDwqt5ZVuo9IAA2wzby9vmpHVu1tJXb
+   vO6dpKEcocCkH1PHvOaEPrq0G4m674Xpmz9VFHAx9DkgogwfllvxD1yUp
+   L9bhrcB/lLX9lmYVTg65KBVYxl55owLbrMSjl36/pkJizOO47UgzVYoZy
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="270126964"
 X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="250358171"
+   d="scan'208";a="270126964"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 18:46:53 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 18:46:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="712630795"
+   d="scan'208";a="712630801"
 Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by fmsmga001.fm.intel.com with ESMTP; 13 May 2022 18:46:47 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 13 May 2022 18:46:53 -0700
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -60,69 +60,70 @@ Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
         Steve Wahl <steve.wahl@hpe.com>,
         iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
         Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH 3/7] iommu/vt-d: Remove unnecessary exported symbol
-Date:   Sat, 14 May 2022 09:43:18 +0800
-Message-Id: <20220514014322.2927339-4-baolu.lu@linux.intel.com>
+Subject: [PATCH 4/7] drm/i915: Remove unnecessary include
+Date:   Sat, 14 May 2022 09:43:19 +0800
+Message-Id: <20220514014322.2927339-5-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220514014322.2927339-1-baolu.lu@linux.intel.com>
 References: <20220514014322.2927339-1-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The exported symbol intel_iommu_gfx_mapped is not used anywhere in the
-tree. Remove it to avoid dead code.
+intel-iommu.h is not needed in drm/i915 anymore. Remove its include.
 
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- include/linux/intel-iommu.h | 1 -
- drivers/iommu/intel/iommu.c | 6 ------
- 2 files changed, 7 deletions(-)
+ drivers/gpu/drm/i915/i915_drv.h                | 1 -
+ drivers/gpu/drm/i915/display/intel_display.c   | 1 -
+ drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c | 1 -
+ 3 files changed, 3 deletions(-)
 
-diff --git a/include/linux/intel-iommu.h b/include/linux/intel-iommu.h
-index 4f29139bbfc3..0f9df5a19ef7 100644
---- a/include/linux/intel-iommu.h
-+++ b/include/linux/intel-iommu.h
-@@ -790,7 +790,6 @@ extern int iommu_calculate_agaw(struct intel_iommu *iommu);
- extern int iommu_calculate_max_sagaw(struct intel_iommu *iommu);
- extern int dmar_disabled;
- extern int intel_iommu_enabled;
--extern int intel_iommu_gfx_mapped;
- #else
- static inline int iommu_calculate_agaw(struct intel_iommu *iommu)
- {
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index e56b3a4b6998..744af407d0da 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -314,9 +314,6 @@ static int iommu_skip_te_disable;
- #define IDENTMAP_GFX		2
- #define IDENTMAP_AZALIA		4
+diff --git a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_drv.h
+index fa14da84362e..f2a6982c3bef 100644
+--- a/drivers/gpu/drm/i915/i915_drv.h
++++ b/drivers/gpu/drm/i915/i915_drv.h
+@@ -36,7 +36,6 @@
  
--int intel_iommu_gfx_mapped;
--EXPORT_SYMBOL_GPL(intel_iommu_gfx_mapped);
--
- DEFINE_SPINLOCK(device_domain_lock);
- static LIST_HEAD(device_domain_list);
+ #include <linux/i2c.h>
+ #include <linux/i2c-algo-bit.h>
+-#include <linux/intel-iommu.h>
+ #include <linux/pm_qos.h>
  
-@@ -4117,9 +4114,6 @@ int __init intel_iommu_init(void)
- 	if (list_empty(&dmar_satc_units))
- 		pr_info("No SATC found\n");
+ #include <drm/drm_connector.h>
+diff --git a/drivers/gpu/drm/i915/display/intel_display.c b/drivers/gpu/drm/i915/display/intel_display.c
+index 7dfeb458aa65..686ddbeebadc 100644
+--- a/drivers/gpu/drm/i915/display/intel_display.c
++++ b/drivers/gpu/drm/i915/display/intel_display.c
+@@ -27,7 +27,6 @@
+ #include <acpi/video.h>
+ #include <linux/i2c.h>
+ #include <linux/input.h>
+-#include <linux/intel-iommu.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/dma-resv.h>
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c b/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
+index d42f437149c9..c9823528ea94 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
+@@ -4,7 +4,6 @@
+  * Copyright © 2008,2010 Intel Corporation
+  */
  
--	if (dmar_map_gfx)
--		intel_iommu_gfx_mapped = 1;
--
- 	init_no_remapping_devices();
- 
- 	ret = init_dmars();
+-#include <linux/intel-iommu.h>
+ #include <linux/dma-resv.h>
+ #include <linux/sync_file.h>
+ #include <linux/uaccess.h>
 -- 
 2.25.1
 

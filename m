@@ -2,55 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E05526F47
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75DD0526F1A
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232049AbiENGYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 02:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54512 "EHLO
+        id S232053AbiENGiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 02:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231989AbiENGYa (ORCPT
+        with ESMTP id S231653AbiENGiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 02:24:30 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53AFB5F5B
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 23:24:28 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id g1-20020a92cda1000000b002cf30d49956so6114258ild.18
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 23:24:28 -0700 (PDT)
+        Sat, 14 May 2022 02:38:13 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3442DB26
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 23:38:12 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id q12-20020a0566022f0c00b0065af7776ee7so6180432iow.17
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 23:38:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
          :from:to;
-        bh=A9wNDjXdGRpuh2KPLSQl2FaHhAdF0vre7xDYlmgpQ0s=;
-        b=uAx24QsdcWA/vjzFLSMG0Ee+qXW1ptMRB5XMoe9eY3ddC3tLqVqYF2n/q8TjvPknAN
-         kuYPO7iNoDEzQFhqnvR0ngV40FKksefh8EYyLdZvgbH9ykA+KTrRICmzgg+5c7uds+US
-         lrTxu5v9DG6yrlvjaanpS8pwU2gygas4UvZGRVcshMwi2/Wa5aIBca3iIz0qKGYEgCvC
-         S0eW2lXR1P27ZOAJChel1CIJvw6sjJao+cp9LAj1H/4obbtR/0k0l6vvBgyiSeSf0lPh
-         rL35kNF/V5yru4ddQQ7iUTjuvOEMK3FkfCeW0wo7VnbP8VZIqIvo/FJ0U2maEajcCooi
-         eO5A==
-X-Gm-Message-State: AOAM531OZH+Gqca11qzw2yaxLPUGf3/14X7FNm3tXkZd6ZKDOW8U5Yyv
-        RYnqIPA3vDzeg0qJOQb6ovHNjFem74WdpEG1jfy6Qjbxut54
-X-Google-Smtp-Source: ABdhPJwE2FF9dllSoYddXbWPp1Fqh0/9KXiffw/RfZZ4B00tS+llhCe3VPiQFzEfGwGGgXETJ8Tmnab7hPH+8QuLI9zoNtR5/Cpe
+        bh=jYmum4HCvuL1c6O6BLUBowV3gEl8fh++LJx49We21AM=;
+        b=n4LF8CZKBSXQJXbhWEkwQdyzkstvwDHitSikOTmdMENJmqbtASxl9nUN2YhuLDkvU/
+         7ukiCj98evN7cHCAJQ80nz4Zb4s1422LsF+/AHPZw5C+sUhFBNGZ8/HCbXguE7JseC+g
+         qvKB7m1to/DuVld44DdxsHF9Fp+QJAFDfTqAzJPvunLUZ7edDSaveKbTmTl5t/hIH2S0
+         GjggeDReL5tAUeESHk7fvGTVZ8uqY5AKPK6RkYA/PsOUQrUmATTMe3FjPjQm8gGe5/TO
+         wnrFdfMMrzF03h/T468s8qPTRRbwG3xLaIDZJ9oWFiAeuOE+bYOil4iCvtbVlxT/xmVx
+         286g==
+X-Gm-Message-State: AOAM533xNTHQPUp4xfwwx6qYABwqJtZ+qeFzzTR5sn5WCTggnqAjF2jR
+        UN+w2osjaKYo20u0JVrqSrGLCfoNf0VV7j8efD6PvW7uWGlJ
+X-Google-Smtp-Source: ABdhPJz+hNyBcYmlrsrr0jvtcrYbxywtFbUXM/9RZ3Dzx2Iy/slYBgZ0OClUJPYGKcX/gTgg1zerPKX4f4WDziMuum1u5w5T0+Ly
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a06:b0:2cf:d11d:d419 with SMTP id
- s6-20020a056e021a0600b002cfd11dd419mr4200244ild.309.1652509467675; Fri, 13
- May 2022 23:24:27 -0700 (PDT)
-Date:   Fri, 13 May 2022 23:24:27 -0700
-In-Reply-To: <00000000000062b6fd057d4b7dc2@google.com>
+X-Received: by 2002:a05:6638:4705:b0:32b:5e0b:b58f with SMTP id
+ cs5-20020a056638470500b0032b5e0bb58fmr4603060jab.34.1652510288574; Fri, 13
+ May 2022 23:38:08 -0700 (PDT)
+Date:   Fri, 13 May 2022 23:38:08 -0700
+In-Reply-To: <20220514062752.900-1-hdanton@sina.com>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cf146c05def2d7ab@google.com>
-Subject: Re: [syzbot] KMSAN: uninit-value in __tipc_nl_bearer_enable
-From:   syzbot <syzbot+e820fdc8ce362f2dea51@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, glider@google.com, jmaloy@redhat.com,
-        jon.maloy@ericsson.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
-        tipc-discussion@lists.sourceforge.net, ying.xue@windriver.com
+Message-ID: <000000000000bcfbd705def30863@google.com>
+Subject: Re: [syzbot] WARNING in mntput_no_expire (3)
+From:   syzbot <syzbot+5b1e53987f858500ec00@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,77 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Hello,
 
-HEAD commit:    d6e2c8c7eb40 x86: kmsan: enable KMSAN builds for x86
-git tree:       https://github.com/google/kmsan.git master
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=115c49b1f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=65d9eb7bfd2865c9
-dashboard link: https://syzkaller.appspot.com/bug?extid=e820fdc8ce362f2dea51
-compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14b563faf00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1310ee59f00000
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+WARNING in mntput_no_expire
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e820fdc8ce362f2dea51@syzkaller.appspotmail.com
-
-netlink: 20 bytes leftover after parsing attributes in process `syz-executor377'.
-=====================================================
-BUG: KMSAN: uninit-value in string_nocheck lib/vsprintf.c:644 [inline]
-BUG: KMSAN: uninit-value in string+0x4f9/0x6f0 lib/vsprintf.c:725
- string_nocheck lib/vsprintf.c:644 [inline]
- string+0x4f9/0x6f0 lib/vsprintf.c:725
- vsnprintf+0x2222/0x3650 lib/vsprintf.c:2806
- vprintk_store+0x537/0x2150 kernel/printk/printk.c:2158
- vprintk_emit+0x28b/0xab0 kernel/printk/printk.c:2256
- vprintk_default+0x86/0xa0 kernel/printk/printk.c:2283
- vprintk+0x15f/0x180 kernel/printk/printk_safe.c:50
- _printk+0x18d/0x1cf kernel/printk/printk.c:2293
- tipc_enable_bearer net/tipc/bearer.c:371 [inline]
- __tipc_nl_bearer_enable+0x2022/0x22a0 net/tipc/bearer.c:1033
- tipc_nl_bearer_enable+0x6c/0xb0 net/tipc/bearer.c:1042
- genl_family_rcv_msg_doit net/netlink/genetlink.c:731 [inline]
- genl_family_rcv_msg net/netlink/genetlink.c:775 [inline]
- genl_rcv_msg+0x157f/0x1660 net/netlink/genetlink.c:792
- netlink_rcv_skb+0x40c/0x7e0 net/netlink/af_netlink.c:2503
- genl_rcv+0x63/0x80 net/netlink/genetlink.c:803
- netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
- netlink_unicast+0x109c/0x1370 net/netlink/af_netlink.c:1345
- netlink_sendmsg+0x14dc/0x1720 net/netlink/af_netlink.c:1921
- sock_sendmsg_nosec net/socket.c:705 [inline]
- sock_sendmsg net/socket.c:725 [inline]
- ____sys_sendmsg+0xe11/0x12c0 net/socket.c:2413
- ___sys_sendmsg net/socket.c:2467 [inline]
- __sys_sendmsg+0x704/0x840 net/socket.c:2496
- __do_sys_sendmsg net/socket.c:2505 [inline]
- __se_sys_sendmsg net/socket.c:2503 [inline]
- __x64_sys_sendmsg+0xe2/0x120 net/socket.c:2503
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_64+0x51/0xa0 arch/x86/entry/common.c:81
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Uninit was created at:
- slab_post_alloc_hook mm/slab.h:754 [inline]
- slab_alloc_node mm/slub.c:3231 [inline]
- __kmalloc_node_track_caller+0xde3/0x14f0 mm/slub.c:4962
- kmalloc_reserve net/core/skbuff.c:354 [inline]
- __alloc_skb+0x545/0xf90 net/core/skbuff.c:426
- alloc_skb include/linux/skbuff.h:1300 [inline]
- netlink_alloc_large_skb net/netlink/af_netlink.c:1191 [inline]
- netlink_sendmsg+0xde3/0x1720 net/netlink/af_netlink.c:1896
- sock_sendmsg_nosec net/socket.c:705 [inline]
- sock_sendmsg net/socket.c:725 [inline]
- ____sys_sendmsg+0xe11/0x12c0 net/socket.c:2413
- ___sys_sendmsg net/socket.c:2467 [inline]
- __sys_sendmsg+0x704/0x840 net/socket.c:2496
- __do_sys_sendmsg net/socket.c:2505 [inline]
- __se_sys_sendmsg net/socket.c:2503 [inline]
- __x64_sys_sendmsg+0xe2/0x120 net/socket.c:2503
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_64+0x51/0xa0 arch/x86/entry/common.c:81
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-CPU: 0 PID: 3475 Comm: syz-executor377 Not tainted 5.18.0-rc4-syzkaller #0
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 4281 at fs/namespace.c:1225 mntput_no_expire+0x979/0xfe0 fs/namespace.c:1225
+Modules linked in:
+CPU: 1 PID: 4281 Comm: syz-executor.3 Not tainted 5.18.0-rc6-syzkaller-00009-gfeb9c5e19e91-dirty #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-=====================================================
+RIP: 0010:mntput_no_expire+0x979/0xfe0 fs/namespace.c:1225
+Code: 04 00 00 48 8b 35 0f a4 dd 0b b9 01 00 00 00 bf 08 00 00 00 48 c7 c2 60 fe f0 8b e8 41 0d 72 ff e9 01 f9 ff ff e8 37 bf 9d ff <0f> 0b e9 b6 f8 ff ff e8 2b bf 9d ff 0f 0b e9 aa f8 ff ff e8 1f bf
+RSP: 0018:ffffc9000388fd78 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888015df8000 RSI: ffffffff81db81a9 RDI: 0000000000000003
+RBP: 0000000000000008 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffffff81db7a48 R11: 0000000000000000 R12: 0000000000000002
+R13: ffff888019de1380 R14: dffffc0000000000 R15: ffffed10033bc27a
+FS:  00005555555f0400(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00005555563e6848 CR3: 000000007f64c000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ mntput+0x67/0x90 fs/namespace.c:1288
+ __fput+0x3ba/0x9d0 fs/file_table.c:333
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
+ exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:201
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:294
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f8b4ea3bd2b
+Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
+RSP: 002b:00007fffd543b3b0 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 0000000000000004 RCX: 00007f8b4ea3bd2b
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000003
+RBP: 00007f8b4eb9d960 R08: 0000000000000000 R09: 00007fffd547d080
+R10: 0000000000000000 R11: 0000000000000293 R12: 00000000000169e6
+R13: 00007fffd543b4b0 R14: 00007fffd543b4d0 R15: 0000000000000032
+ </TASK>
+
+
+Tested on:
+
+commit:         feb9c5e1 Merge tag 'for_linus' of git://git.kernel.org..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+console output: https://syzkaller.appspot.com/x/log.txt?x=11d1bd99f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=79caa0035f59d385
+dashboard link: https://syzkaller.appspot.com/bug?extid=5b1e53987f858500ec00
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=14c96d96f00000
 

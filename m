@@ -2,427 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD2C4526ECA
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:14:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE1A6526EDC
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbiENC5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 22:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33004 "EHLO
+        id S229954AbiENCwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 22:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230527AbiENC4r (ORCPT
+        with ESMTP id S229917AbiENCw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 22:56:47 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F039B3227BB;
-        Fri, 13 May 2022 18:52:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652493163; x=1684029163;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=1TX3aV7OgWIzBfqnwLt/7E5cVLJehPW6Q2wBybOPg1s=;
-  b=jwGLJl6wd2r6hki2NdfNSNY7Uq0EL0SGaKvoMk/3BjR9sRwL9HoEHk4Z
-   /M3OESq/Go+Q7EqlZBxa4V5v7rQMJB4K776nu7btkUdi6Mk9HkbKsDPnl
-   Bo2ssb9Q48jJV0nG0R/yDL+sBmXPvJqG2nfYopltjoZGZBD88EZf6Mlk2
-   PiyZ5wzZqLR31WFPQZ5C0kBT6klfonJ/4RLg+IQpcRkuopKS3FW9jmo0r
-   kH/upMbr+54AmfjWmjIPVms/ltzeDO7bptu/FO+pcbkpHw20r1z5+S7oP
-   PYMmCXMJ2sD/55ZES/XLri/wbb33JpinYRMPOftO/fwqzpukB3eof1rrN
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="295702627"
-X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="295702627"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 17:02:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="521627058"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga003.jf.intel.com with ESMTP; 13 May 2022 17:02:45 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 13 May 2022 17:02:44 -0700
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 13 May 2022 17:02:44 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Fri, 13 May 2022 17:02:44 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Fri, 13 May 2022 17:02:43 -0700
+        Fri, 13 May 2022 22:52:26 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on20600.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaa::600])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52DA308848
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 17:56:17 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N31T7WTy+Onj85lYuaA9gUr39iAZG7iDriYHOakbNv1LieUtdlehs+cST4ePLpP8dH/8xzYIZvzSFzXtqo9O4MAI35D7cO2p5PaVoLVEM/B2g3JqkyWP4av0Md8PN26RUrV6IQ0ImsLCZ9zNj0nvlNO0myMb4BlKwuxA11rdPkcfucu498lpmQSWSkzwnyazOOnUrKcnK4ysmjM7QHcWyi7WRKGx8OcCjn6XuTgB0reoiQp+ZIoFC8bY+WPX20N3remnVh/XHirrrtJFP7UpEls9NFo+tlfMLBU/aiAzS6EcrHPs6czYDA74Lx8IckZgzV92/XQSztu9kF50CnidAg==
+ b=dMprto5NmYnedloCzTWSvlX/wyYUX7cdfJvBiWbe1aDvdtUF4/JqRLGuW4OEBmpovBN2Pjw2hGsL6VVw9IrkLnckgyFoOqr0VpyhKBlj37cRECMSj87xjWu4dBFNk1r/A5UZTlOKRNhQiyh9wYwge8joxt/UfZe5pCzKSGCyGj6lDmhlW3Bi42SOfuHapBAQUDr9NnTN/56Stl2alUHoP9ZlFwyKktTp10u6NfiVQtBHSWMvXEZbT2nnVryq5i4u+oD6PMZM13aVdzabwtvmu5fUZ/l6hln6inUlfh2bGR3p+tDBtcaXew+rqFQLvjdY8Lq6CyqSTsckgrTR0eVZVQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3w6IPbLaY9SH7x5OcIUS1l90rTgLLdDUtXS1WC2uMX0=;
- b=HgO55s1iH/2dFJXBTGPDqA3+tYTawdQik37Gzxzc7A+v5N5rrnRmiWr5gVNtGOziIARJQ5zui8w7u4eEPozyo2GStTBQFYP+9XbrId6qxiilpLWl4vMovNbOcwZBrWUf4DbeH+YxmsfA5Nvo8eNnmiNRBq1H6xHdduzqT6KKaqza8tARaxW/QGhVIS7ueXNqk9esrSJkbm5teAAO+UELmwrBfY8sI6spTbGPwcTy60cFV63yYTtpFsGQB5Z9J84pvebLLWuK73bu98hegSOnS4PrD1sQxLcUgjr2gYmO2fKyxep9y5ahzhgYNENfHUNHIkhfiR+beoYrEyOyObPMCg==
+ bh=6cHWJfEK8IBKczUOvQrmy0By4XYGXoFqcXhSN8RBdX4=;
+ b=itfiJsp+9WLRnBfI0QzSOixdtu/dyKpnBmrVCoB8SGtjrNDIDTJPPyBiziTU5ujY2VFq4ECwkKwTUqcdK78ZUNjPrxD9XPQRvNdgsmdERUxdp5yfvURz92rP0K0SX5BwvT8s+OgGJd1Blzr9lnkvkSmsi0NGljONDg2aHgwHEmM0Of+RpxF4DIWHyYnxeFmjpr/uqU8RP2x89C+eRnb+xJUdZ+YOK/MGeGTw6YbtlykMIrS+kjm0ue45ikO8xVZOtUnQ0fRsV85YbCgs9gIi5b8w+kb7GRhK4LLXdgTFnsglIuSdQlTvCCbEUEGEw/1qeEemUuz9pindL3t2oGmuwg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from PH0PR11MB5880.namprd11.prod.outlook.com (2603:10b6:510:143::14)
- by DM8PR11MB5751.namprd11.prod.outlook.com (2603:10b6:8:12::16) with
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6cHWJfEK8IBKczUOvQrmy0By4XYGXoFqcXhSN8RBdX4=;
+ b=k8Nf7HQjyTISiAOF/bwS86qzUpHHD7ttvPNpCJ6J7jofqNzs4m+j2z+Qa3p4gImee8LHIAxzc3EKvkKh7U9wkDJA9tVPRYooBreRkKnzJguC+v2PnWOSKVGi+crqmmtHyP1IpX9oC1tRhptHLnaHZ2osWxFTzlcaQ6MFVuCtmE0zY2Dsg4lWAttfd5uHDiwOZvNzz8M/b8GlUUJt8uoxLsIaqnv7BUIXq4mCJIu/ZJkY53tbGEZiPQ1yR1iYlksbo6TbrpBFG+RD6K/fkVNzztO7WTM/LwUgAPF7VmCkLXRZl76vstdFs5Se2wG3CZsofvoqc4nhOnpV4DRh8SP/oA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by MWHPR12MB1549.namprd12.prod.outlook.com (2603:10b6:301:10::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14; Sat, 14 May
- 2022 00:02:37 +0000
-Received: from PH0PR11MB5880.namprd11.prod.outlook.com
- ([fe80::a4a9:b58f:8246:5f72]) by PH0PR11MB5880.namprd11.prod.outlook.com
- ([fe80::a4a9:b58f:8246:5f72%6]) with mapi id 15.20.5250.013; Sat, 14 May 2022
- 00:02:36 +0000
-From:   "Zhang, Qiang1" <qiang1.zhang@intel.com>
-To:     "paulmck@kernel.org" <paulmck@kernel.org>
-CC:     "frederic@kernel.org" <frederic@kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] rcu: Remove debug_object_active_state() from
- debug_rcu_head_queue/unqueue()
-Thread-Topic: [PATCH] rcu: Remove debug_object_active_state() from
- debug_rcu_head_queue/unqueue()
-Thread-Index: AQHYZBspeMDe3A1Muk2pGu69iofBM60b/oOAgAACsSCAAWeEgIAAFeAw
-Date:   Sat, 14 May 2022 00:02:36 +0000
-Message-ID: <PH0PR11MB588067B25F6F6AE96303055FDACD9@PH0PR11MB5880.namprd11.prod.outlook.com>
-References: <20220510030748.1814004-1-qiang1.zhang@intel.com>
- <20220513004955.GC1790663@paulmck-ThinkPad-P17-Gen-1>
- <PH0PR11MB58804FA659B1FF7F82C37485DACA9@PH0PR11MB5880.namprd11.prod.outlook.com>
- <20220513222619.GP1790663@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20220513222619.GP1790663@paulmck-ThinkPad-P17-Gen-1>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.23; Sat, 14 May
+ 2022 00:09:14 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::15e3:d746:57e8:4de0]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::15e3:d746:57e8:4de0%7]) with mapi id 15.20.5250.017; Sat, 14 May 2022
+ 00:09:14 +0000
+Message-ID: <4809b134-a37a-50b8-4c25-44548bc1048f@nvidia.com>
+Date:   Fri, 13 May 2022 17:09:11 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [syzbot] WARNING in follow_hugetlb_page
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.6.401.20
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2dac49ff-40a3-40f4-a93d-08da353d0dd0
-x-ms-traffictypediagnostic: DM8PR11MB5751:EE_
-x-microsoft-antispam-prvs: <DM8PR11MB575185D17609C0F0B530DFEADACD9@DM8PR11MB5751.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: WZAotKw+9Egx8da7AleRD6wRy0AtswrS2/n5kQcGoYGOtNfLJ/wgoxp4tfXlq4i1XPajWPbsdN4fU+unWB8YwhDnuSf8g+ekp9fCkXjUD1wsFqfAlDj6X7uWLyNMU25LDmLPbPM7e3B0i6VilHDRuFKfwbqMiv6VqCTyfFwAbawmqgUazX8k5FTDQve4Q2VrCRmhPueB1c+ISuY8jfpOpq+/hJZ540sdDwxwSp8Lwd/0dtXsG+opJcqg6ujksKRYlZ8rceUOqiDOFDM4dTrAhvgr5loIvdSu94rrtgNGxPvBMJk2RRw6dmps73uOgmbbK+/Jwe1eO7kktNHQ2qo3rHKNFSo+r5Nti3NW+DgfjRLBX6bnYY+pzlin2jp7H1MeYcLIXcIFPp7mmCqrkjPI0fWsXXWqn8AL4Z619FQtrdrjGSo7TV6G835XYAppvgrFolv6xOVC3qEutBAz+K5V+4GOdDSgxvg8p1fA90WQdxMuW8FKmiMMafilJepJNX5pK0oDIT3o0Tkxlw8QnazrWgUVsNzgMDCUm2wzR6lipY3iApZ6zKmN3nCF9yW9Cx8W0IYFo53eSP1oxz/6Ghf1Q8P/lhM7IesQRoaW3qBorwMczQJb+TF0AIvYxXt9ameGrffSd2v2o39ajxa9HQ3bJX2bJ2zZqbaPQwrgHshYGwfzUQUm7c7O8i4STfMlJmudUWCrwofYI/Zk0kPBAROrJQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5880.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(52536014)(6506007)(76116006)(38070700005)(508600001)(7696005)(30864003)(45080400002)(55016003)(6916009)(54906003)(66476007)(38100700002)(66556008)(9686003)(66946007)(26005)(66446008)(8676002)(4326008)(316002)(82960400001)(83380400001)(186003)(71200400001)(2906002)(33656002)(8936002)(86362001)(122000001)(64756008)(5660300002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?wyB4UC/6nk8FyApTq7XsqOuATPrHPCc05sPt/GbTmjnirlWoJNWEknRTiWMk?=
- =?us-ascii?Q?eRcqq5GkZ9SvVMjJnEN8CuPMviB0Q3ng2I8+O+xhY2KkL8Rnb7/5/13MuO9P?=
- =?us-ascii?Q?eCIl1BFTATAI2PTg6u/HuI25//kmeC9xPvrnVzu5rjLTDhqjM3OsUXJcy1qy?=
- =?us-ascii?Q?fdx9EyaYlSsi2lTggNcCm+jMY4/EE8/ca+ay9aWtWqBkd9RxPQhUY/BgX6aQ?=
- =?us-ascii?Q?ydhaoEGl9HGU+131QTK3d8kx+wHIw1bdbDRXZrUU3OCasWVP8/hyt/I2dYZR?=
- =?us-ascii?Q?gQQC4/VWGNctw0AXjDrDbzLFjniWqnzX91ke/ugOSBTgAWell1f4LC9RVL/b?=
- =?us-ascii?Q?Nksoj+beO30zoow8pi6VJyp+rzEv1IsBZYXUao+2cldbO6pld7zjaYyM9PPD?=
- =?us-ascii?Q?WW3uKjNZ29AKQpSrpj7xt82eIOXB0lGoUjkKnZJR2csJ5T+ZMNPWmGEoEuFi?=
- =?us-ascii?Q?H+Yc9C3qKj5sHpWouvVRsXdH9XNgLg5gGs8/esULGHWW4PPNxZlywL+gWhBX?=
- =?us-ascii?Q?YZabQuFMw9ZnXQUsI4x4dNjAjBMfuBOgG74vu2go3h2N8WIV5X+y9xVpkXjL?=
- =?us-ascii?Q?kfHoZXbl0C40Aw3XIC/pfYAH/Jn8J2SwTOJCiP85ekuV54jkioY7jJ4jtuww?=
- =?us-ascii?Q?4uQdpN6T26KTOrI7sXlqp67DCQ/FWSEIy7G5o7N52UMG1gmvFWmIeb8vDmGL?=
- =?us-ascii?Q?tnsbOyZA5SPhJvGpfZ7Ly52+zssu10sZObNTvBr8EjeQiJwXSG83uKHAhKeb?=
- =?us-ascii?Q?jaxQdFs+z76xcofD5f8o/+0gWpFAf0jLMWUlvgf3+UBgbJo4f46y5ie0adMh?=
- =?us-ascii?Q?7tb8O68mbMmM0GyPxwy8ldpuaqtY+sw8ykVRgDJ5oWgE7aRaagMblHK+mtJX?=
- =?us-ascii?Q?BWp7OyqZElrFiNu271bxlYeV/v1PxE5egpPj71uw2mGcBnSY0+5JMS4xKwMS?=
- =?us-ascii?Q?5eQK+TUkeYZNhQSyR9CtxbkLyp8HDq0gXW4iJAzWFCgqGJaQBwMk5Z/q1VF8?=
- =?us-ascii?Q?CRi0c1azBbuKOmNtssxeHj4u0fvL5iL6T2WG79z9itPuURP1MTnopfdBpFnE?=
- =?us-ascii?Q?GDWpirmSoBbhVXaDal8FC53asWYPCME0xPfiwVi6e4AhqaPb2Iq+9NKoo1Dp?=
- =?us-ascii?Q?RD4Ke+YvvnQ8qRRuuNDxKgCglEFgXGn00Yx6ZiaKBYChlArcjqsq5lGoA7D2?=
- =?us-ascii?Q?xkDKsG7ZvozqmrhLEtHzHU3Mf57PExiAehq8ukP4DqDUgEvJYjrBOeHYbN6f?=
- =?us-ascii?Q?5IwNB8hlxg3Ou73msyx4E9ktmTYWQVVGktwAUlCyiS1PdLCtFPiJuzVCRJpG?=
- =?us-ascii?Q?ltq4dPyCpaylgU2N3qu2e/LumYXMVPhNerAfk7jDuYd1RWddshdBICzdB2MA?=
- =?us-ascii?Q?TcMjNigkkWP6J4Lgfrj/G5S9+rNzJRcdv+aS/9MJDG0F7exFiwSWobV6qnM+?=
- =?us-ascii?Q?05YrO4FK+SvfV8eth6DzHB2kk/So+PnyzGN8WsVKNvEWnrCpg56ABUDky7vD?=
- =?us-ascii?Q?F2+/JdLifaxm18Gq2LUvQCAl2OiW7qEy6AojMFw6KysBQNNg0g6yUWLl6gTk?=
- =?us-ascii?Q?G0YHIpQ064pry3vps8e9zXASMBIDxtQN/YCnSiHXDUZANYrS8h78clWzPbPP?=
- =?us-ascii?Q?3cEL1cDYNrI3wmFDagJ/4vcul8KVc3J3E0paS3lNyx/wyh1WW0dc66rC9pCK?=
- =?us-ascii?Q?12eSV+yQCS0XqnLR+yhdJQKcbx2PKqWcaJOFhReCCQ0FV7e9iWjtDFYms9QW?=
- =?us-ascii?Q?KTdMnplzgg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+To:     Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        syzbot <syzbot+acf65ca584991f3cc447@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com,
+        Matthew Wilcox <willy@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Hildenbrand <david@redhat.com>
+References: <000000000000ef451a05dee0f2b1@google.com>
+ <00000000000077377c05dee75f63@google.com>
+ <20220513102617.c464c4f566052838e911a3ec@linux-foundation.org>
+ <75f09063-d184-7d44-17a1-ed04be5eb953@oracle.com>
+ <a7fd0c3f-921e-19b3-2f67-a231dede28f9@oracle.com>
+ <20220513161910.d1b73583cdb2e33562aa86e5@linux-foundation.org>
+ <Yn7vnpXwX50J3K+7@google.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <Yn7vnpXwX50J3K+7@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR07CA0052.namprd07.prod.outlook.com
+ (2603:10b6:a03:60::29) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 13fd6ab8-d7b7-4ac1-e72b-08da353dfaa6
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1549:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR12MB1549185700EAB793CE2C15FEA8CD9@MWHPR12MB1549.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: L2b0cUVv3vLH8E+ZqaNLp0nChgQJvOdfid6wSQNQmTiFR0G/0hG4uZAN/146bc9avK0dSrefwB/S29kNLpJRYOjU/8Ry+bf7eM1whQnXCOFx61yTUeaWfH9NI8sI0wQ4zLEWUGHitPb61AIGDcAEH+eavPCU+NTGWYl2+TChYmNakOYiatk8Kou+gSpBCPM85Vkc/w5gm4ntfJM0Gm81RS36hPOmYzJfJoBMNZelpkJpQtF7l5v6H1MQVb9aRHeBDNKfpNqi/Ig96i2HCfl5HchKDntfKFhtSgm8wt4e/DanfTN3fQMHfK5ZyT+WaGt/Ib+qPhhVRntXgmgOGlyqj3b1j4ZpQ0RmgqkhHcoGbfi8SKV9gfqv3Q/n62xjEYbpQ72Wm6MnR6wmHpuyryPyJ1Rvsrtx1ua8XgbRksnoQ1V4rPsKBxY1BB3TvQ8z+2puZfzAVjdjbhLv9k878nZIE+UZ7EtiSluacITMoBTIgru8/WcBBgKwbMuvzEX7NUQHue+ttkMQUVKXMspkGOr+zt/EYU15uB76c1oq35IdUwqBIQg2TSvm4EPLujBT0Gf232Glj1R7vqh/8+XKp04/+ZYZDvqk7Po6bnG/wfo3Rb6WM6pA37gZ7ucNHQpYkejOjc4HPhX757Y2Xg98mz6fXDo13hwuFKHYv1MX4sp3Om/6biHmd2bmkIgG06kbd3QI3MC2K51gdn4YQ1H6WmmqgNBWFi2HVpHf/aF6gEONSBw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(2616005)(6512007)(26005)(186003)(66556008)(8676002)(66476007)(4326008)(66946007)(4744005)(316002)(36756003)(7416002)(2906002)(5660300002)(110136005)(54906003)(6486002)(508600001)(38100700002)(6506007)(31696002)(6666004)(86362001)(31686004)(53546011)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U0w1U3BMQ2E4N0dsaHl0RjBYWmJGL1k4MVhrRHh0UGhtRlA2Y2VnMlZSODJ6?=
+ =?utf-8?B?S2x0NmEyYmhjcDhsdnIxWDJyQmpHbjYvTVZkTFpZVXpSdS9LcFJZbHVocUJi?=
+ =?utf-8?B?aFkwKy9Yd2V1azlwbXlaRFpEZE5tWC9MVHhLUW1tZDgyM29wVEcxTlNUeTFp?=
+ =?utf-8?B?bk5ISU5oZ1d5T2NpTlRVdHFGTEhkRnFjUWxLOEhab0U0TDFrT2tFSkE3M0g5?=
+ =?utf-8?B?K3hZMS8zUDZjeE05TzN1b3prZTczaEJNSXk3SEJVN0dLR05jb2ZlU3BmM3JH?=
+ =?utf-8?B?THIxWGZVclpCUlhOdW9VdXA1Z05pTFJ3MVhGVGR5M2Q1b3JqYmEyRk5OTVph?=
+ =?utf-8?B?OUVkTzd6WmJhWFpCV1NnT0FHTWkwSXVZTEJvaG5ENjRzOFRZT1ZpZk5kdGFB?=
+ =?utf-8?B?a21rWDJLSXdkanArdG1xazEyV0VXV2Uvb3Y4dkNqMS9oMVhwWjRMcnZMYjNO?=
+ =?utf-8?B?OE93OSsrMmhFeExJZHVwTDNUZVhjR1dRd2gzMGdtQnZOZ2FwVkxrc0phd1VM?=
+ =?utf-8?B?dlFsR3BkcE52UDJ5TGR0K3A2Uyt5eXZkN2R1Z0pROEVkNjhnVTdiaXFTbmR0?=
+ =?utf-8?B?S1lqdTFicFJkbGYrN2lSNzJTWkZaNEQwWERVbi9RN0JETCs0RHRIbXd6ZnJq?=
+ =?utf-8?B?cEw4bnltcDJnYklmYXBGdnpVSW1CaXZ6U2pya0x6Z1FzdDdjS2puWjM2a2lT?=
+ =?utf-8?B?dm5UV25QeXo1V3ozaXg0YW85T0dMSEI4R2ZFaUtGM1dkL3JhOTJzM0ZZaGYv?=
+ =?utf-8?B?WE4zTWJ6RWdGRDlJclFKaE04bUJqR2ZiNDZ2bENHcUR6RUxmVmxOMzNUdlh3?=
+ =?utf-8?B?cUwwQTZiZkFJdkV3V09aZUFPS2JGLzAwN0hObjZPMnVOTzZiR1VPK1RSUFFu?=
+ =?utf-8?B?Yy91SEpnT3pQeUx4SHA4N0ZxQ0YwVlMxNWY2SG8xZ3o5L0ZpcGd2L2JnQ2ww?=
+ =?utf-8?B?ZnhBc2tvZkRSYzRmcjlSeFdoYXhhRnhyUURUTlV2WEN5Qit5YjI4c2Flb2FC?=
+ =?utf-8?B?ZUh1MXJSV1hYL3BNdUo1NklQZ0hMeUlPeGg2NkZnME5WTVBzdFhMRjBGN0xQ?=
+ =?utf-8?B?ZGFJZTBRWjNaUUdWdU40WXM0TDlqSkRld0gzelZ3VkJQZFE1R1RiTEJNWlpO?=
+ =?utf-8?B?aXgyVUhudHN0bWxXeXdTVk5wd2lEejg3cG1NSi8yUmRWQTJNeDl5R2k0U3Ew?=
+ =?utf-8?B?am9pN2ZFcVRyWmtwenBYeUI1N3dMS2xxdUloeUVlSzdPWW14ZU0wNlpzV3Fy?=
+ =?utf-8?B?Nmp2dHh3U3RTS2FkR2RMT1l0SUw5WWtydk5jYWZWdXhMd25hcUo1UVppQlRt?=
+ =?utf-8?B?MmtlQzFxYWdVTlFVZXBRRTM0SUh1N29LWjJ4dGQ0Q1E2eG9TeVU1NHY3ZTV4?=
+ =?utf-8?B?SWc4azRXQlBWSFJJWkVhTHc3ZkVjUzgxVUtRQ2NiSFFxWG9RU213K1VsN3BN?=
+ =?utf-8?B?Q2xNSThoeHRzTWZFNGg2aXVjT0w5NXovMlpzNk5hbitBU3plcFFBWXFlWWJM?=
+ =?utf-8?B?UnVFc1VGV0IyNVZSTWovemc5NXZOMjZJTGg2NG9ZZVpsV3ZZNkZjUGN3WVFo?=
+ =?utf-8?B?dUxaVDVBSEFRNTFleENSM1hJVy94RnhiNUhza1J5cFhuTkVlZC84NGVmY2s2?=
+ =?utf-8?B?ZW1hSjBKN3l3TUpseE5pSGhvc0pMK0NFUjRybzl3TXdCMVlJaU42MkFYMXVi?=
+ =?utf-8?B?K211cllURUVGU0crZHI1cHdaaGlsYllrSlpEc0Q1YXFvZkRyVG8rYy9XQ2Ey?=
+ =?utf-8?B?TEdHOXFGYlhxS2gwVmFLSWdHRnlkRE9KUFB5U3lCc09vMk1SK0tRSWxmaVdj?=
+ =?utf-8?B?R0hkZ05pVUJRYjlJT0lIQjhneXlJNDVmR0tENGdVblYrWUVLNkFhd1p0T3JS?=
+ =?utf-8?B?bzZEVHFUdXlxQjZyeTJ2K0NIbVEvSHRLa1c0OXpNVmxoemdrRDdqdUE3U01j?=
+ =?utf-8?B?QnJiTGFEUHlpTWVpVDhzVVNNUC95a2ZNR2k3Vkc0b09mLzVOaHNUUW05Z09m?=
+ =?utf-8?B?U25Fc2w5azY2eFVRQjlmQUJ2ZzhJWDFFMmRKYWRrVExRZ3NyV3hKTHVkcGVT?=
+ =?utf-8?B?ZUtXZ3JtQWtJZmJXUStiQllyaTh5OEo0bDNtaWRYTjVPVDFWWFBDeERXZHlu?=
+ =?utf-8?B?ZnpqV3hBL0owekhDeTh0U0xNako2OTU4YWxQUUQ3UVZVSUQ2b3VtdVhnbjc2?=
+ =?utf-8?B?OWhnczU4TitnMWJvbS8vN00relNYRjJJRXJsVkgyWHVtSG05UEY2Sk5ZYXA2?=
+ =?utf-8?B?aTBjSXhtQUgxeVBRbXlCcU5hYmtPallmRVlYRkVkdmZaWWFUTmN4N092a3o4?=
+ =?utf-8?B?NVdvU05zNjUvVVBQWWFQaWE0dHFOb3hHY1BlVGdPRHUvWG9RODdqREF6Nmox?=
+ =?utf-8?Q?3z0tf6U8/haIsZng=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 13fd6ab8-d7b7-4ac1-e72b-08da353dfaa6
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5880.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2dac49ff-40a3-40f4-a93d-08da353d0dd0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 May 2022 00:02:36.6933
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 May 2022 00:09:14.2583
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: whX1xcKPypn2RhkQbjTcBNaEPMVeWSoD+m7jtAmBoA5coKyEdQsyhrfZeNTjUCSMPLhhrte7Vfyc8IWsmDNrXg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR11MB5751
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 35NB1oK1AwiG0fvv5Y2+gc92jA2XMk5OhV3h79jtznM3gNIn486dzHFAqbMVxKcbO6m7w8TAONwgpQ6qqR4g3A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1549
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 01:03:19AM +0000, Zhang, Qiang1 wrote:
-> On Tue, May 10, 2022 at 11:07:48AM +0800, Zqiang wrote:
-> > Currently, the double call_rcu() detected only need call
-> > debug_object_activate() to check whether the rcu head object is=20
-> > activated, the rcu head object usage state check is not necessary=20
-> > and when call rcu_test_debug_objects() the=20
-> > debug_object_active_state() will output same callstack as=20
-> > debug_object_activate(). so remove
-> > debug_object_active_state() to reduce the output of repeated callstack.
-> >=20
-> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> >
-> >Could you please post the output of the dmesg output of a failed check w=
-ith your change?
-> >
->=20
-> Original output:
->=20
-> [    0.818279] ODEBUG: activate active (active state 1) object type: rcu_=
-head hint: 0x0
-> [    0.818296] WARNING: CPU: 1 PID: 1 at lib/debugobjects.c:505 debug_pri=
-nt_object+0xd8/0xf0
-> [    0.818301] Modules linked in:
-> [    0.818304] CPU: 1 PID: 1 Comm: swapper/0 Tainted: G        W         =
-5.18.0-rc6-next-20220511-yoctodev-standard+ #75
-> [    0.818306] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS r=
-el-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-> [    0.818308] RIP: 0010:debug_print_object+0xd8/0xf0
-> [    0.818311] Code: dd 40 9e 03 9d e8 48 62 a2 ff 4d 89 f9 4d 89 e8 44 8=
-9 e1 48 8b 14 dd 40 9e 03 9d 4c 89 f6 48 c7 c7 c0 93 03 9d e8 f6 1a b1 00 <=
-0f> f
-> [    0.818313] RSP: 0000:ffff88810033fad0 EFLAGS: 00010082
-> [    0.818315] RAX: 0000000000000000 RBX: 0000000000000003 RCX: 000000000=
-0000000
-> [    0.818317] RDX: 0000000000000002 RSI: 0000000000000004 RDI: ffffed102=
-0067f4c
-> [    0.818319] RBP: ffff88810033fb00 R08: ffffffff9b50d898 R09: fffffbfff=
-3bf5c6d
-> [    0.818320] R10: 0000000000000003 R11: fffffbfff3bf5c6c R12: 000000000=
-0000001
-> [    0.818322] R13: ffffffff9ce769a0 R14: ffffffff9d039a80 R15: 000000000=
-0000000
-> [    0.818324] FS:  0000000000000000(0000) GS:ffff888158880000(0000) knlG=
-S:0000000000000000
-> [    0.818327] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    0.818329] CR2: 0000000000000000 CR3: 000000017600e000 CR4: 000000000=
-01506e0
-> [    0.818330] Call Trace:
-> [    0.818331]  <TASK>
-> [    0.818333]  debug_object_activate+0x2b8/0x300
-> [    0.818336]  ? debug_object_assert_init+0x220/0x220
-> [    0.818340]  ? __kasan_check_write+0x14/0x20
-> [    0.818343]  call_rcu+0x98/0x1110
-> [    0.818347]  ? vprintk+0x4c/0x60
-> [    0.818350]  ? rcu_torture_fwd_cb_hist.cold+0xe9/0xe9
-> [    0.818354]  ? strict_work_handler+0x70/0x70
-> [    0.818357]  rcu_torture_init+0x18be/0x199e
-> [    0.818361]  ? srcu_init+0x133/0x133
-> [    0.818364]  ? __mutex_unlock_slowpath.isra.0+0x270/0x270
-> [    0.818368]  ? rcu_torture_barrier1cb+0x40/0x40
-> [    0.818371]  ? rcu_torture_barrier1cb+0x40/0x40
-> [    0.818374]  ? srcu_init+0x133/0x133
-> [    0.818377]  do_one_initcall+0xb3/0x300
-> [    0.818380]  ? initcall_blacklisted+0x150/0x150
-> [    0.818382]  ? parameq+0x70/0x90
-> [    0.818385]  ? __kasan_check_read+0x11/0x20
-> [    0.818389]  kernel_init_freeable+0x2b2/0x310
-> [    0.818392]  ? rest_init+0xf0/0xf0
-> [    0.818396]  kernel_init+0x1e/0x140
-> [    0.818399]  ret_from_fork+0x22/0x30
-> [    0.818402]  </TASK>
-> [    0.818403] ---[ end trace 0000000000000000 ]---
-> [    0.818405] ------------[ cut here ]------------
-> [    0.818405] ODEBUG: active_state active (active state 1) object type: =
-rcu_head hint: 0x0
-> [    0.818421] WARNING: CPU: 1 PID: 1 at lib/debugobjects.c:505 debug_pri=
-nt_object+0xd8/0xf0
-> [    0.818424] Modules linked in:
-> [    0.818426] CPU: 1 PID: 1 Comm: swapper/0 Tainted: G        W         =
-5.18.0-rc6-next-20220511-yoctodev-standard+ #75
-> [    0.818428] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS r=
-el-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-> [    0.818430] RIP: 0010:debug_print_object+0xd8/0xf0
-> [    0.818432] Code: dd 40 9e 03 9d e8 48 62 a2 ff 4d 89 f9 4d 89 e8 44 8=
-9 e1 48 8b 14 dd 40 9e 03 9d 4c 89 f6 48 c7 c7 c0 93 03 9d e8 f6 1a b1 00 <=
-0f> f
-> [    0.818435] RSP: 0000:ffff88810033fac0 EFLAGS: 00010086
-> [    0.818437] RAX: 0000000000000000 RBX: 0000000000000003 RCX: 000000000=
-0000000
-> [    0.818438] RDX: 0000000000000002 RSI: 0000000000000004 RDI: ffffed102=
-0067f4a
-> [    0.818440] RBP: ffff88810033faf0 R08: ffffffff9b50d898 R09: fffffbfff=
-3bf5c6d
-> [    0.818441] R10: 0000000000000003 R11: fffffbfff3bf5c6c R12: 000000000=
-0000001
-> [    0.818443] R13: ffffffff9ce769a0 R14: ffffffff9d039820 R15: 000000000=
-0000000
-> [    0.818445] FS:  0000000000000000(0000) GS:ffff888158880000(0000) knlG=
-S:0000000000000000
-> [    0.818448] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    0.818449] CR2: 0000000000000000 CR3: 000000017600e000 CR4: 000000000=
-01506e0
-> [    0.818451] Call Trace:
-> [    0.818452]  <TASK>
-> [    0.818453]  debug_object_active_state+0x1d6/0x210
-> [    0.818456]  ? debug_object_deactivate+0x210/0x210
-> [    0.818460]  ? __kasan_check_write+0x14/0x20
-> [    0.818464]  call_rcu+0xb7/0x1110
-> [    0.818466]  ? vprintk+0x4c/0x60
-> [    0.818469]  ? rcu_torture_fwd_cb_hist.cold+0xe9/0xe9
-> [    0.818472]  ? strict_work_handler+0x70/0x70
-> [    0.818476]  rcu_torture_init+0x18be/0x199e
-> [    0.818479]  ? srcu_init+0x133/0x133
-> [    0.818482]  ? __mutex_unlock_slowpath.isra.0+0x270/0x270
-> [    0.818486]  ? rcu_torture_barrier1cb+0x40/0x40
-> [    0.818489]  ? rcu_torture_barrier1cb+0x40/0x40
-> [    0.818492]  ? srcu_init+0x133/0x133
-> [    0.818495]  do_one_initcall+0xb3/0x300
-> [    0.818497]  ? initcall_blacklisted+0x150/0x150
-> [    0.818500]  ? parameq+0x70/0x90
-> [    0.818503]  ? __kasan_check_read+0x11/0x20
-> [    0.818507]  kernel_init_freeable+0x2b2/0x310
-> [    0.818510]  ? rest_init+0xf0/0xf0
-> [    0.818513]  kernel_init+0x1e/0x140
-> [    0.818515]  ret_from_fork+0x22/0x30
-> [    0.818519]  </TASK>
-> [    0.818520] ---[ end trace 0000000000000000 ]---
-> [    0.818521] rcu: call_rcu(): Double-freed CB 00000000e2817fcb->rcu_tor=
-ture_leak_cb+0x0/0x10()!!!   non-slab/vmalloc memory
->=20
->=20
-> After apply this patch:
->=20
-> [    0.647048] ODEBUG: activate active (active state 0) object type: rcu_=
-head hint: 0x0
-> [    0.647068] WARNING: CPU: 1 PID: 1 at lib/debugobjects.c:505 debug_pri=
-nt_object+0xd8/0xf0
-> [    0.647073] Modules linked in:
-> [    0.647075] CPU: 1 PID: 1 Comm: swapper/0 Tainted: G        W         =
-5.18.0-rc6-next-20220511-yoctodev-standard+ #77
-> [    0.647078] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS r=
-el-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-> [    0.647080] RIP: 0010:debug_print_object+0xd8/0xf0
-> [    0.647083] Code: dd 80 9d 43 a2 e8 38 62 a2 ff 4d 89 f9 4d 89 e8 44 8=
-9 e1 48 8b 14 dd 80 9d 43 a2 4c 89 f6 48 c7 c7 00 93 43 a2 e8 f6 1a b1 00 <=
-0f> 0b 83 05 7b 62f
-> [    0.647085] RSP: 0000:ffff88810033fad0 EFLAGS: 00010082
-> [    0.647088] RAX: 0000000000000000 RBX: 0000000000000003 RCX: 000000000=
-0000000
-> [    0.647090] RDX: 0000000000000002 RSI: 0000000000000004 RDI: ffffed102=
-0067f4c
-> [    0.647091] RBP: ffff88810033fb00 R08: ffffffffa090d898 R09: fffffbfff=
-467586d
-> [    0.647093] R10: 0000000000000003 R11: fffffbfff467586c R12: 000000000=
-0000000
-> [    0.647095] R13: ffffffffa22769a0 R14: ffffffffa24399c0 R15: 000000000=
-0000000
-> [    0.647097] FS:  0000000000000000(0000) GS:ffff88815b880000(0000) knlG=
-S:0000000000000000
-> [    0.647100] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    0.647102] CR2: 0000000000000000 CR3: 000000002f20e000 CR4: 000000000=
-01506e0
-> [    0.647104] Call Trace:
-> [    0.647104]  <TASK>
-> [    0.647106]  debug_object_activate+0x2b8/0x300
-> [    0.647110]  ? debug_object_assert_init+0x220/0x220
-> [    0.647114]  ? __kasan_check_write+0x14/0x20
-> [    0.647118]  call_rcu+0x98/0x1100
-> [    0.647121]  ? vprintk+0x4c/0x60
-> [    0.647125]  ? rcu_torture_fwd_cb_hist.cold+0xe9/0xe9
-> [    0.647129]  ? strict_work_handler+0x50/0x50
-> [    0.647133]  rcu_torture_init+0x18be/0x199e
-> [    0.647136]  ? srcu_init+0x133/0x133
-> [    0.647140]  ? __mutex_unlock_slowpath.isra.0+0x270/0x270
-> [    0.647144]  ? rcu_torture_barrier1cb+0x40/0x40
-> [    0.647148]  ? rcu_torture_barrier1cb+0x40/0x40
-> [    0.647151]  ? srcu_init+0x133/0x133
-> [    0.647155]  do_one_initcall+0xb3/0x300
-> [    0.647157]  ? initcall_blacklisted+0x150/0x150
-> [    0.647160]  ? parameq+0x70/0x90
-> [    0.647164]  ? __kasan_check_read+0x11/0x20
-> [    0.647167]  kernel_init_freeable+0x2b2/0x310
-> [    0.647171]  ? rest_init+0xf0/0xf0
-> [    0.647174]  kernel_init+0x1e/0x140
-> [    0.647177]  ret_from_fork+0x22/0x30
-> [    0.647181]  </TASK>
-> [    0.647182] ---[ end trace 0000000000000000 ]---
-> [    0.647184] rcu: call_rcu(): Double-freed CB 000000009a684b70->rcu_tor=
-ture_leak_cb+0x0/0x10()!!!   non-slab/vmalloc memory
+On 5/13/22 16:54, Minchan Kim wrote:
+>>> I isolated this to Minchan Kim's "mm: fix is_pinnable_page against on cma
+>>> page".  Yes, the fat finger fix is in next-20220513.
+>>>
+>>> I don't have time to analyze right now, but can confirm that in the
+>>> reproducer is_pinnable_page is returning false after this change when it
+>>> previously returned true.
+>>
+>> OK, thanks, I dropped mm-fix-is_pinnable_page-against-on-cma-page.patch
+> 
+> Seems like bug of the patch v5 due to change of this
+> 
+>      if (mt & (MIGRATE_CMA | MIGRATE_ISOLATE))
+> 
+> The migration type is not bit type so it shold be
+> 
+> if (mt == MIGRATE_CMA || mt == MIGRATE_ISOLATE)
+> 
 
->Very good, and thank you!
->
->Now suppose that someone passes a pointer to call_rcu(), but then invokes =
-kfree() on that same object before the grace period ends.
->Is the offending kfree() flagged?
+Sorry for leading you astray by recommending the bitwise OR, Minchan.
+I overlooked that point even though it was right in front of me.
 
-If the CONFIG_DEBUG_OBJECTS_FREE is enabled, the debug_check_no_obj_freed()=
- will check wether the object is activated in kfree()
-If is activated, also output callstack.
 
-__debug_check_no_obj_freed()=20
-{........
-	switch (obj->state) {
-	case ODEBUG_STATE_ACTIVE:
-	 	descr =3D obj->descr;
-		state =3D obj->state;
-		_spin_unlock_irqrestore(&db->lock, flags);
-		debug_print_object(obj, "free");
-	}
-.........
-}
+thanks,
+-- 
+John Hubbard
+NVIDIA
 
-Thanks,
-Zqiang
-
->
->							Thanx, Paul
-
-> Thanks,
-> Zqiang
->=20
->=20
->=20
-> >							Thanx, Paul
-> >
-> > ---
-> >  kernel/rcu/rcu.h | 13 +------------
-> >  1 file changed, 1 insertion(+), 12 deletions(-)
-> >=20
-> > diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h index
-> > 15b96f990774..0604ecd16627 100644
-> > --- a/kernel/rcu/rcu.h
-> > +++ b/kernel/rcu/rcu.h
-> > @@ -179,27 +179,16 @@ static inline unsigned long rcu_seq_diff(unsigned=
- long new, unsigned long old)
-> >   */
-> > =20
-> >  #ifdef CONFIG_DEBUG_OBJECTS_RCU_HEAD
-> > -# define STATE_RCU_HEAD_READY	0
-> > -# define STATE_RCU_HEAD_QUEUED	1
-> > =20
-> >  extern const struct debug_obj_descr rcuhead_debug_descr;
-> > =20
-> >  static inline int debug_rcu_head_queue(struct rcu_head *head)  {
-> > -	int r1;
-> > -
-> > -	r1 =3D debug_object_activate(head, &rcuhead_debug_descr);
-> > -	debug_object_active_state(head, &rcuhead_debug_descr,
-> > -				  STATE_RCU_HEAD_READY,
-> > -				  STATE_RCU_HEAD_QUEUED);
-> > -	return r1;
-> > +	return debug_object_activate(head, &rcuhead_debug_descr);
-> >  }
-> > =20
-> >  static inline void debug_rcu_head_unqueue(struct rcu_head *head)  {
-> > -	debug_object_active_state(head, &rcuhead_debug_descr,
-> > -				  STATE_RCU_HEAD_QUEUED,
-> > -				  STATE_RCU_HEAD_READY);
-> >  	debug_object_deactivate(head, &rcuhead_debug_descr);  }
-> >  #else	/* !CONFIG_DEBUG_OBJECTS_RCU_HEAD */
-> > --
-> > 2.25.1
-> >=20

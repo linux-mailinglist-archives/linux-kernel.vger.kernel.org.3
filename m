@@ -2,98 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D335272D0
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 18:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA0485272CC
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 18:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234147AbiENQJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 12:09:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52588 "EHLO
+        id S234105AbiENQHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 12:07:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234125AbiENQJJ (ORCPT
+        with ESMTP id S229965AbiENQHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 12:09:09 -0400
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B327F0C
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 09:09:07 -0700 (PDT)
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 24EG8hOe024205
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 01:08:44 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 24EG8hOe024205
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1652544524;
-        bh=sz2XzzgYNDJvTzd0PRzJk/pGT+oU5urGUxAfMIxIabo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=oK5kf/bmCwIhV8nViceFmeVwRbq1DrZSJBIUViYf9LR4AaRR/Z7usZPDa+/XqKchv
-         cF9T1oPfW03F0239yTbOJpOKSVKrkXBG3BUOsu/hZkmGknhqnrSh7hIKQVC0uFxRS6
-         nEKNTBG4Pz2mBi3b9frg6J1p063PDwMkknpZy15aO8DspLvg0iroORyG7UANtJR6oy
-         BnyAS5SOqhorOTefxGQrMWqRTg/YFUD4z22+gIwOMsSTgFzB6q/6GuYplcBeb6Jr28
-         Z4tDmF6cmkuvLJ0wMHxazle7YTTtOGoKYEfJt2CUc2FsVLPtwtNhYtA8MXhLrn2k1H
-         AZqRufwQzqKmw==
-X-Nifty-SrcIP: [209.85.215.179]
-Received: by mail-pg1-f179.google.com with SMTP id v10so10193785pgl.11
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 09:08:44 -0700 (PDT)
-X-Gm-Message-State: AOAM53197xEUqBXhiovtY9NEPeEpad09FmDKfQgx2Wl0ykM+9FSi4YuV
-        fZ2fxbfMnUILOzwnHdrsIenVApSsREf9xdVahfU=
-X-Google-Smtp-Source: ABdhPJz+MjOpLsj7WYejiogsvPh1TNXDi5ermnU5gurzP0umx5V8HeXIbwByRv6NY7Wf0+x/a7c9xeSWVDpt3+FAz1o=
-X-Received: by 2002:a05:6a00:234f:b0:4fa:f52b:46a1 with SMTP id
- j15-20020a056a00234f00b004faf52b46a1mr9648452pfj.32.1652544523203; Sat, 14
- May 2022 09:08:43 -0700 (PDT)
+        Sat, 14 May 2022 12:07:49 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6363E1EEDE
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 09:07:48 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id j2so20341872ybu.0
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 09:07:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=G0eVXpYcKIK/j+1zkeKD2oL9HRdqUSTcmLP8+WyBRnI=;
+        b=mitoN4cP0mKoaRMcv0pC3eEe5T4q/qafs9KxPyHMtuA6LYPQO94M+G/3Fa/F7ZHm+U
+         fb0418Hoe0L1b+P1B+L4Pak37aj0RkRppIBZREZMj3ydsRP9+QRjcY9Qkk8qGJ3KNFx3
+         bmFxHltw2ztm5gRVU+l3rn+GtmJXxTx+Jxp3fKGtkNxSMtZziMS1l4rtP8kOB4XniRJc
+         FgxktOyyjhHlbWqDt9torTmvDc1Y9W84drvWyaBf78pQ+8bfooFGvSz0bh5ihzwJ7KW3
+         acMG9hRK4HuQDWG5RAXho4+OVJscYD/yZ10mrnfcIQNx4ePwSzEhQO2pa7H0dCkMPF6B
+         oT7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=G0eVXpYcKIK/j+1zkeKD2oL9HRdqUSTcmLP8+WyBRnI=;
+        b=C0zbQeL5TcbarwVLkmP0ocicPuI8mNBfckJR5mflvspTek6Mp1D1mKu+5gcHal1c4W
+         Hvn09n2Ep+JaEINqN1azJPzZAfLZFCjlAuIXzc0N6S2/Rh/IYZIMmCBnBEuOwKUdGdou
+         32LJ+TNL1r1BIgo4m+5CIywKN1h3zqiSmY04WdLXIu4hxehd8VzUuH212tGsVKHGNgpv
+         i/LIkJwcKJQNkx4Xh5nbSWIGqlzlNm2avHrsy1DXkcThwqtj3aqcfqBOagajsQc3lqkl
+         7N5AoxZLj+OcqJZ/9NJTU0zHbZXwAcuDbS8twput0mVKgBVJy+7EwUWyQ9aHdMHaJrjg
+         H9eQ==
+X-Gm-Message-State: AOAM532UWhFMSJkVCeQUTRhI/l3wlftVPaEzPQYMn6GbjS4xaNN0vTG6
+        q9Z8juM+uH6EfO+5TK92n19EIOcJ/OJUJD3Ev/OkZwf2R/w=
+X-Google-Smtp-Source: ABdhPJyUtjvnYjzV22I3GFuVWb7pyCbaVQJl7iU8WoUjoa3cZ0nnQZyV/pbJmSDtNWnCL5ncOGZllksGRzmzFAXnLqY=
+X-Received: by 2002:a25:ab72:0:b0:64b:9be4:d8b9 with SMTP id
+ u105-20020a25ab72000000b0064b9be4d8b9mr7286471ybi.128.1652544467479; Sat, 14
+ May 2022 09:07:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220426155229.436681-1-mailhol.vincent@wanadoo.fr>
- <20220507131146.834810-1-mailhol.vincent@wanadoo.fr> <20220507131146.834810-3-mailhol.vincent@wanadoo.fr>
- <CAK7LNATuvQhiZZ8A9+RcLYKmbugi6S61Aw5CStc3xbfGM-L34Q@mail.gmail.com> <20220514131448.GL76023@worktop.programming.kicks-ass.net>
-In-Reply-To: <20220514131448.GL76023@worktop.programming.kicks-ass.net>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 15 May 2022 01:07:27 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATUMfyqiWeZeZJCVO74XtQ1Bw-MN7bcaTZ1pgQy8H2Ehg@mail.gmail.com>
-Message-ID: <CAK7LNATUMfyqiWeZeZJCVO74XtQ1Bw-MN7bcaTZ1pgQy8H2Ehg@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 2/2] kbuild: call check-atomics.sh only if
- prerequisites change
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Will Deacon <will@kernel.org>
+References: <20220513142227.381154244@linuxfoundation.org>
+In-Reply-To: <20220513142227.381154244@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 14 May 2022 21:37:36 +0530
+Message-ID: <CA+G9fYsmH6P2TQuXH6WOH0mwY66QejAc15kS9v52m3cSTZvRaw@mail.gmail.com>
+Subject: Re: [PATCH 4.14 00/14] 4.14.279-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 14, 2022 at 10:15 PM Peter Zijlstra <peterz@infradead.org> wrote:
+On Fri, 13 May 2022 at 19:55, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> On Sat, May 14, 2022 at 04:01:18AM +0900, Masahiro Yamada wrote:
-> > I wrote a different patch.
-> > https://lore.kernel.org/lkml/20220513185340.239753-1-masahiroy@kernel.org/T/#u
+> This is the start of the stable review cycle for the 4.14.279 release.
+> There are 14 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> I'm not seeing that in my inbox :-(
+> Responses should be made by Sun, 15 May 2022 14:22:19 +0000.
+> Anything received after that time might be too late.
 >
-> AFAICT this way 'make tags' will not find and index the files, which is
-> a total no-go.
-
-Not only these, we have more generated files.
-Why are these bad?
-
-Also, "make tags" picks up headers in include/generated/
-
-
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.14.279-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.14.y
+> and the diffstat can be found below.
 >
-> NAK
+> thanks,
+>
+> greg k-h
 
-I consider NAK as "I do not like it".
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 4.14.279-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.14.y
+* git commit: 4477341b2b1996b745937de9d99ff53095c7a679
+* git describe: v4.14.278-15-g4477341b2b19
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
+.278-15-g4477341b2b19
 
--- 
-Best Regards
-Masahiro Yamada
+## Test Regressions (compared to v4.14.278)
+No test regressions found.
+
+## Metric Regressions (compared to v4.14.278)
+No metric regressions found.
+
+## Test Fixes (compared to v4.14.278)
+No test fixes found.
+
+## Metric Fixes (compared to v4.14.278)
+No metric fixes found.
+
+## Test result summary
+total: 67829, pass: 54211, fail: 882, skip: 11056, xfail: 1680
+
+## Build Summary
+* arm: 270 total, 270 passed, 0 failed
+* arm64: 35 total, 35 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 19 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 22 total, 22 passed, 0 failed
+* powerpc: 16 total, 16 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 34 total, 34 passed, 0 failed
+
+## Test suites summary
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

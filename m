@@ -2,65 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E98527154
+	by mail.lfdr.de (Postfix) with ESMTP id A0FE3527156
 	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 15:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232685AbiENNhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 09:37:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52360 "EHLO
+        id S232728AbiENNhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 09:37:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232667AbiENNg5 (ORCPT
+        with ESMTP id S232712AbiENNhJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 09:36:57 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A953422B01;
-        Sat, 14 May 2022 06:36:55 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id c12so12992499edv.10;
-        Sat, 14 May 2022 06:36:55 -0700 (PDT)
+        Sat, 14 May 2022 09:37:09 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E006F22BDD;
+        Sat, 14 May 2022 06:37:03 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id fd25so444066edb.3;
+        Sat, 14 May 2022 06:37:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=fWumciIhP+oFBoIFbUXRMlzycA/gM0riZhiqo5gNScU=;
-        b=V3ukrmo1UeLvhuLRQplrZ9DIj98TdIzk1/sq4otyZfc0INqVtkaSqdln+UYidsqJyy
-         dPCMjq1+6XjKslck4xtsaIs2N2W2nnx/hXs/z0YGTPmPiNkB3lz9D+q0vlWSWxNU8LRL
-         MHxVzkMIc00XFQm78Z97YHgA2c5EVUFWvLRgB9p4oMR+YJ4fb9tZRde7SSsjlb26li2g
-         7w9UO67aufDizFWDU6WZjdvybkhtpTYDx6w+cWVPcY3zKfOaHU4eEBLWwJBenhvFu7C9
-         kCIgc4Hl5dbQasSFP9GABY8O5sroUn1bdXtjAuNdupA0w3GUm8w9HLOoOBVKp25uEvy1
-         3epQ==
+        bh=toXlyjRqxPOMu7FU0IW8LcSR73wz0FAFwkKHEk9OfQg=;
+        b=mF0fvJmaxcPEJXwm3QYVF49GBdsbPWOj4de02PwDIcByndRXk4h4m06jv73pa0pSme
+         2N2z/KsA3+HjyKj/TcHeWYFR54jRG+Hi7JuCuU5QLpIZlXTFIMttfIl9PQ9uZUhKYmaV
+         tVIA5a3GN0/FUA1Vj+m+mcARIuiNLdN+633pa1cT7gXQ+XYCnGwbVy1IB5yO7eaC3cvI
+         8pn4LKgtnupFAwjzNlYsh2u9B9A4rcjy8FuDyhfE7YjGW7xxhv0eBGyNx/oa7ACQ+HBE
+         yDB3dTIOmazon6wB7+se0uhHtLlSzBumYL8BMnYndo89GFwO/jsmGx+Jq/Wh8fOTIpAc
+         gdVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fWumciIhP+oFBoIFbUXRMlzycA/gM0riZhiqo5gNScU=;
-        b=4GbfhivGiWEs+KQhh/+P5TDDRfmHPUqYwPVI3LJ64UNGuy4pVYPiO2jvUdlm+Hlm/Y
-         kn9LNnGR5UbeR0uWxmlvd5tlYV43Ios39VsnYQ5LCMPq+k3Nv3luCtNJjT8EILYcFnnr
-         Wsl2Phv8Rmhh/QQWzPipToRPVaW8TrZctmp4aomkWeYgv3hhcMjjPTD182goyyYFEqXt
-         VwOlEnRCMjksWckdasin1KpvikT4BRkc9F0bRGYgcYLbW2Z9ssVOc7iety2YyvupgscA
-         6ehBXtF4zBf2JjgW2W93mmLlXyPOj52GXjEX9YdSZiiXym71akKbi2/Q1CJBSoHFzZI4
-         9Erw==
-X-Gm-Message-State: AOAM531QcOQPIkLvNEMco9dVJdrQ6501DD9KUmq59OS7wORJPOLMLiME
-        My6pmtrLeVenKBJgLYOG3iA=
-X-Google-Smtp-Source: ABdhPJyD0WYz9/D9X12wXHaejif0/1Ip2LueFcJDATsZp1cXy8onWFmfrxR+gjZLn4/sKxCh+pc4Zw==
-X-Received: by 2002:a05:6402:3214:b0:428:9d92:e5c5 with SMTP id g20-20020a056402321400b004289d92e5c5mr3819742eda.108.1652535414308;
-        Sat, 14 May 2022 06:36:54 -0700 (PDT)
+        bh=toXlyjRqxPOMu7FU0IW8LcSR73wz0FAFwkKHEk9OfQg=;
+        b=O/eb0Gp1atkITlV9zxq6209jGBJJGHh6GO0zUcitmjphM2JQcdLdZmYMkOeBj0UUB0
+         skGbNAKUgZ1pyITzfeQ4RdMIHelLhi57BD99QJM/GadIj3NxdvblOm6Xhs2LtmRlk7BF
+         7+mnZMmk+89lPpk+SGiqKtcDq2vgYClpcB+LuhKDqFgg4ihLzM+VdJXFT323xvTaeYqA
+         fBKqJ1PHDncSjkMqpc3QH+lzgMizN3lfzosFCBTWNbnl0BL6srIfE185paXOP31XtapL
+         a412U0/SFth3kR8oIds0UrX+sPBcIPm9+RM5M6tOoqL8gNXhVvS+16c6wZttdjFA3rZY
+         cHaQ==
+X-Gm-Message-State: AOAM533+oQX7VTJmBPqMWn6vZG97ihUdbi8yuXxjWqRx93pvVKY+8RZx
+        b+KJt6vELjQImmNT/iLkDOw=
+X-Google-Smtp-Source: ABdhPJwWj2/+V8JJuLG/en/GhFUmBSvLuOfOdP0FDOK6FKh3Z6r87dGQpB9uw240uYeEwToco2nhzA==
+X-Received: by 2002:a50:fe1a:0:b0:425:e276:5adf with SMTP id f26-20020a50fe1a000000b00425e2765adfmr3840879edt.284.1652535422140;
+        Sat, 14 May 2022 06:37:02 -0700 (PDT)
 Received: from localhost.localdomain (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id ci18-20020a170907267200b006f3ef214e49sm1736739ejc.175.2022.05.14.06.36.53
+        by smtp.gmail.com with ESMTPSA id ci18-20020a170907267200b006f3ef214e49sm1736739ejc.175.2022.05.14.06.37.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 May 2022 06:36:53 -0700 (PDT)
+        Sat, 14 May 2022 06:37:01 -0700 (PDT)
 From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Heiko Stuebner <heiko@sntech.de>
 Cc:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v4 2/3] media: hantro: Add support for RK356x encoder
-Date:   Sat, 14 May 2022 15:36:03 +0200
-Message-Id: <20220514133604.174905-3-frattaroli.nicolas@gmail.com>
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 3/3] arm64: dts: rockchip: Add Hantro encoder node to rk356x
+Date:   Sat, 14 May 2022 15:36:04 +0200
+Message-Id: <20220514133604.174905-4-frattaroli.nicolas@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220514133604.174905-1-frattaroli.nicolas@gmail.com>
 References: <20220514133604.174905-1-frattaroli.nicolas@gmail.com>
@@ -76,100 +73,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The RK3566 and RK3568 SoCs come with a small Hantro instance which is
-solely dedicated to encoding. This patch adds the necessary structs to
-the Hantro driver to allow the JPEG encoder of it to function.
-
-Through some sleuthing through the vendor's MPP source code and after
-closer inspection of the TRM, it was determined that the hardware likely
-supports VP8 and H.264 as well.
-
-Tested with the following GStreamer command:
-
-gst-launch-1.0 videotestsrc ! v4l2jpegenc ! matroskamux ! \
-               filesink location=foo.mkv
+The RK3566 and RK3568 come with a dedicated Hantro instance solely for
+encoding. This patch adds a node for this to the device tree, along with
+a node for its MMU.
 
 Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
 ---
- drivers/staging/media/hantro/hantro_drv.c     |  1 +
- drivers/staging/media/hantro/hantro_hw.h      |  1 +
- .../staging/media/hantro/rockchip_vpu_hw.c    | 25 +++++++++++++++++++
- 3 files changed, 27 insertions(+)
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-index ac232b5f7825..1112e8d0c821 100644
---- a/drivers/staging/media/hantro/hantro_drv.c
-+++ b/drivers/staging/media/hantro/hantro_drv.c
-@@ -638,6 +638,7 @@ static const struct of_device_id of_hantro_match[] = {
- 	{ .compatible = "rockchip,rk3288-vpu", .data = &rk3288_vpu_variant, },
- 	{ .compatible = "rockchip,rk3328-vpu", .data = &rk3328_vpu_variant, },
- 	{ .compatible = "rockchip,rk3399-vpu", .data = &rk3399_vpu_variant, },
-+	{ .compatible = "rockchip,rk3568-vepu", .data = &rk3568_vepu_variant, },
- 	{ .compatible = "rockchip,rk3568-vpu", .data = &rk3568_vpu_variant, },
- #endif
- #ifdef CONFIG_VIDEO_HANTRO_IMX8M
-diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-index c5dc77125fb7..38988be04d39 100644
---- a/drivers/staging/media/hantro/hantro_hw.h
-+++ b/drivers/staging/media/hantro/hantro_hw.h
-@@ -300,6 +300,7 @@ extern const struct hantro_variant rk3066_vpu_variant;
- extern const struct hantro_variant rk3288_vpu_variant;
- extern const struct hantro_variant rk3328_vpu_variant;
- extern const struct hantro_variant rk3399_vpu_variant;
-+extern const struct hantro_variant rk3568_vepu_variant;
- extern const struct hantro_variant rk3568_vpu_variant;
- extern const struct hantro_variant sama5d4_vdec_variant;
- extern const struct hantro_variant sunxi_vpu_variant;
-diff --git a/drivers/staging/media/hantro/rockchip_vpu_hw.c b/drivers/staging/media/hantro/rockchip_vpu_hw.c
-index fc96501f3bc8..b39813d53e57 100644
---- a/drivers/staging/media/hantro/rockchip_vpu_hw.c
-+++ b/drivers/staging/media/hantro/rockchip_vpu_hw.c
-@@ -417,6 +417,14 @@ static const struct hantro_codec_ops rk3399_vpu_codec_ops[] = {
- 	},
- };
+diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+index 1042e68602de..9b4bed7a8a44 100644
+--- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+@@ -569,6 +569,26 @@ gpu: gpu@fde60000 {
+ 		status = "disabled";
+ 	};
  
-+static const struct hantro_codec_ops rk3568_vepu_codec_ops[] = {
-+	[HANTRO_MODE_JPEG_ENC] = {
-+		.run = rockchip_vpu2_jpeg_enc_run,
-+		.reset = rockchip_vpu2_enc_reset,
-+		.done = rockchip_vpu2_jpeg_enc_done,
-+	},
-+};
++	vepu: video-codec@fdee0000 {
++		compatible = "rockchip,rk3568-vepu";
++		reg = <0x0 0xfdee0000 0x0 0x800>;
++		interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&cru ACLK_JENC>, <&cru HCLK_JENC>;
++		clock-names = "aclk", "hclk";
++		iommus = <&vepu_mmu>;
++		power-domains = <&power RK3568_PD_RGA>;
++	};
 +
- /*
-  * VPU variant.
-  */
-@@ -439,6 +447,10 @@ static const struct hantro_irq rockchip_vpu2_irqs[] = {
- 	{ "vdpu", rockchip_vpu2_vdpu_irq },
- };
- 
-+static const struct hantro_irq rk3568_vepu_irqs[] = {
-+	{ "vepu", rockchip_vpu2_vepu_irq },
-+};
++	vepu_mmu: iommu@fdee0800 {
++		compatible = "rockchip,rk3568-iommu";
++		reg = <0x0 0xfdee0800 0x0 0x40>;
++		interrupts = <GIC_SPI 63 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&cru ACLK_JENC>, <&cru HCLK_JENC>;
++		clock-names = "aclk", "iface";
++		power-domains = <&power RK3568_PD_RGA>;
++		#iommu-cells = <0>;
++	};
 +
- static const char * const rk3066_vpu_clk_names[] = {
- 	"aclk_vdpu", "hclk_vdpu",
- 	"aclk_vepu", "hclk_vepu"
-@@ -545,6 +557,19 @@ const struct hantro_variant rk3399_vpu_variant = {
- 	.num_clocks = ARRAY_SIZE(rockchip_vpu_clk_names)
- };
- 
-+const struct hantro_variant rk3568_vepu_variant = {
-+	.enc_offset = 0x0,
-+	.enc_fmts = rockchip_vpu_enc_fmts,
-+	.num_enc_fmts = ARRAY_SIZE(rockchip_vpu_enc_fmts),
-+	.codec = HANTRO_JPEG_ENCODER,
-+	.codec_ops = rk3568_vepu_codec_ops,
-+	.irqs = rk3568_vepu_irqs,
-+	.num_irqs = ARRAY_SIZE(rk3568_vepu_irqs),
-+	.init = rockchip_vpu_hw_init,
-+	.clk_names = rockchip_vpu_clk_names,
-+	.num_clocks = ARRAY_SIZE(rockchip_vpu_clk_names)
-+};
-+
- const struct hantro_variant rk3568_vpu_variant = {
- 	.dec_offset = 0x400,
- 	.dec_fmts = rk3399_vpu_dec_fmts,
+ 	sdmmc2: mmc@fe000000 {
+ 		compatible = "rockchip,rk3568-dw-mshc", "rockchip,rk3288-dw-mshc";
+ 		reg = <0x0 0xfe000000 0x0 0x4000>;
 -- 
 2.36.1
 

@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EBC526E85
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A30C1526F68
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231510AbiENDfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 23:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54326 "EHLO
+        id S231523AbiENDfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 23:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231383AbiENDe5 (ORCPT
+        with ESMTP id S231440AbiENDe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 23:34:57 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC58C93458
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 20:34:55 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id w4so13546446wrg.12
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 20:34:55 -0700 (PDT)
+        Fri, 13 May 2022 23:34:58 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EED9941B2
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 20:34:57 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso7841563wme.5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 20:34:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=LbqWA0ma3Gj0jvWCSxtRNJBD3Bf6tu8RmToQD/S/1tA=;
-        b=gtq9z1Gj/PCfH+6jFgOvMnLRXGDONoKZuJaDEtvtAB+Pm/dztH9DvgrU6IAK4GHSvx
-         2QVOEMjMwI/eT5uc3gxko0aNgtLwRLxBEXKz950r/3llvBuFiuS54qlX3ymMogGVyUaC
-         6wcgTEom4pnkmhKZ39vK8KU1a7C/3oSZ4r8M61A05BaJLLEILmITjPQaOLc7nFsuywfr
-         cuzbLh8GYTS9+50CUcFm/f953Evh84EpYvwInJlyRBVsB8/U1l2Vz/rrjsh2OlCKsIN+
-         YLiFJcUe7wVFO5O93J41chW+UnzT8KscgSDdJ5bLFAjA2toRqCggSV8FKgzHoQGfLv/+
-         9EhQ==
+        bh=F29OH6asB34VWoRlm7WLSnKtmcCuH6sg3zO/EYEp6Og=;
+        b=PnY1JknhQyIvblKgS7FrBkhnOIrw+KP7j+q/299tAR9IJU7WR7v2oKP2ZBIUMWw04H
+         6IcYcpQ+IMl8BRMszHkVkewWJDbnJXNWIiLUDGX0FwDQlH8ewYDvgqiNzBANnxUDwBYA
+         GKcACdjZVVm8UPiRjzKqp9ML7b6I7Ar2DpCyzhFtKdHga3SEQDloJIEQB2Sd6CH1CaDs
+         JfN/Wvwaz9f/tJznk30sllAUnGLXYd95jwJpeiHt21HdsinY5uaru4U8oKM18SCCRmQx
+         r75Glqv2ScLPEoI2uLoAhcls5C6haG5rdQxaTg0Nv5+SDh3TBFmzt0bDFRUPDdUTOQBb
+         WYeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=LbqWA0ma3Gj0jvWCSxtRNJBD3Bf6tu8RmToQD/S/1tA=;
-        b=jU99lYWMoK+iAGHVe0kNieJffxzYeVMML/SDvlguVoc1n82UWl8LAtz3lGUPh2enSt
-         M5XYZfVWAKTUJse9zGRLURzQxtEDMTPIupmhZSxx+zMt41xcdP/ZswaSLt0jcnXyXSwk
-         TeJLXygHUqSzlZqL8YqoKVs4fw+pRAjF3HPvfn4H/wZWTbfMSecp204nRKO+dWTWEBEZ
-         TK3lqOGM/qbnmpD8AY8H2MgP/1ZWXnqSY8lXvUVXuxI23vB4iqQEYe6qwB+Fqm8bZQhl
-         18tQWMEEvHRQiRs+M8YRBpDKbreFbzHy+DpwaxXalIZ3qK35a/k2r1JphsggBreC5v3c
-         diJg==
-X-Gm-Message-State: AOAM532y2bwJY73WBpoFJHnjkRXNHuMphOXKeXgDJVElYmvAwANILdF0
-        nKroQ8iA1hlUik3LUuTI6er5MlBT8xGsAQ==
-X-Google-Smtp-Source: ABdhPJwb0OdUi32hRVoqlssaZ0HnR6jJ93O92ZO68kKEPXG+siOvohkKiv+j+dUCZ71ZdIGSCqzcfQ==
-X-Received: by 2002:adf:f691:0:b0:20c:d5a4:79f1 with SMTP id v17-20020adff691000000b0020cd5a479f1mr6368906wrp.380.1652499294508;
-        Fri, 13 May 2022 20:34:54 -0700 (PDT)
+        bh=F29OH6asB34VWoRlm7WLSnKtmcCuH6sg3zO/EYEp6Og=;
+        b=H8Yel5+F4l0MFhsH57VHPnTu2qDcMC0WYk5lpuyannaj8/v1Kkf5EY7QI4HZKBlvVd
+         OLu4hVbh3bdSLKUoOCBJWyIiwsIS7DmDFnQoHgNJdn/h/M+N5Cw+4WV99wLcbKuCybPk
+         SFh/PPy0js91hdge8Cj6Pl6MEvpjsQVDM9HwK7hRNLbLdEf2boFOrMRZnPl61aKiAGvX
+         uluZuiE/RxzFvQe36F1BCvLgtLdfhmXhNmlOUXg3itzFOXbw9BMNNvMdZ0i8czcPbxdZ
+         N1LlfF+h+9g5ndkORZk0YCIDB33uHubx9mtOAkEShMwSRP7lwEYf5i8foD7u0cFEGQ0q
+         rF8g==
+X-Gm-Message-State: AOAM5315j4HepWGWGRJg+tElTOVgygaPX8VGFwmYPBVmVnsxZHIcs2qW
+        kWnE7Z8HNzRgF8xR5yoRKuw=
+X-Google-Smtp-Source: ABdhPJwSLfre31yJDnmspUtYnPK3meECsPoudta3nkrbepu5i498WfpC83okFqD0CUbXxea4HxQTSw==
+X-Received: by 2002:a05:600c:3b11:b0:394:57eb:c58b with SMTP id m17-20020a05600c3b1100b0039457ebc58bmr17454288wms.3.1652499295767;
+        Fri, 13 May 2022 20:34:55 -0700 (PDT)
 Received: from octofox.metropolis ([178.134.103.46])
-        by smtp.gmail.com with ESMTPSA id h1-20020adfaa81000000b0020c66310845sm3542638wrc.55.2022.05.13.20.34.53
+        by smtp.gmail.com with ESMTPSA id h1-20020adfaa81000000b0020c66310845sm3542638wrc.55.2022.05.13.20.34.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 20:34:54 -0700 (PDT)
+        Fri, 13 May 2022 20:34:55 -0700 (PDT)
 From:   Max Filippov <jcmvbkbc@gmail.com>
 To:     linux-xtensa@linux-xtensa.org
 Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
         Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH v2 1/3] xtensa: add trap handler for division by zero
-Date:   Fri, 13 May 2022 20:34:35 -0700
-Message-Id: <20220514033437.4182899-2-jcmvbkbc@gmail.com>
+Subject: [PATCH v2 2/3] xtensa: support artificial division by 0 exception
+Date:   Fri, 13 May 2022 20:34:36 -0700
+Message-Id: <20220514033437.4182899-3-jcmvbkbc@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220514033437.4182899-1-jcmvbkbc@gmail.com>
 References: <20220514033437.4182899-1-jcmvbkbc@gmail.com>
@@ -71,47 +71,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add c-level handler for the division by zero exception and kill the task
-if it was thrown from the kernel space or send SIGFPE otherwise.
+On xtensa cores wihout hardware division option division support
+functions from libgcc react to division by 0 attempt by executing
+illegal instruction followed by the characters 'DIV0'. Recognize this
+pattern in illegal instruction exception handler and convert it to
+division by 0.
 
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
- arch/xtensa/kernel/traps.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Changes v1->v2:
+
+- split ABI probing improvement from the artificial division by 0
+- don't limit artificial division by 0 pattern detection to
+  configurations without HW division opcodes, do it always
+
+ arch/xtensa/kernel/traps.c | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
 diff --git a/arch/xtensa/kernel/traps.c b/arch/xtensa/kernel/traps.c
-index 138a86fbe9d7..24d11b44fa57 100644
+index 24d11b44fa57..47445b2d4217 100644
 --- a/arch/xtensa/kernel/traps.c
 +++ b/arch/xtensa/kernel/traps.c
-@@ -49,6 +49,7 @@
-  */
- 
- static void do_illegal_instruction(struct pt_regs *regs);
-+static void do_div0(struct pt_regs *regs);
- static void do_interrupt(struct pt_regs *regs);
- #if XTENSA_FAKE_NMI
- static void do_nmi(struct pt_regs *regs);
-@@ -95,7 +96,7 @@ static dispatch_init_table_t __initdata dispatch_init_table[] = {
- #ifdef SUPPORT_WINDOWED
- { EXCCAUSE_ALLOCA,		USER|KRNL, fast_alloca },
- #endif
--/* EXCCAUSE_INTEGER_DIVIDE_BY_ZERO unhandled */
-+{ EXCCAUSE_INTEGER_DIVIDE_BY_ZERO, 0,	   do_div0 },
- /* EXCCAUSE_PRIVILEGED unhandled */
- #if XCHAL_UNALIGNED_LOAD_EXCEPTION || XCHAL_UNALIGNED_STORE_EXCEPTION
- #ifdef CONFIG_XTENSA_UNALIGNED_USER
-@@ -307,6 +308,11 @@ static void do_illegal_instruction(struct pt_regs *regs)
- 	force_sig(SIGILL);
+@@ -293,12 +293,42 @@ static void do_interrupt(struct pt_regs *regs)
+ 	set_irq_regs(old_regs);
  }
  
-+static void do_div0(struct pt_regs *regs)
++static int check_div0(struct pt_regs *regs)
 +{
-+	__die_if_kernel("Unhandled division by 0 in kernel", regs, SIGKILL);
-+	force_sig_fault(SIGFPE, FPE_INTDIV, (void __user *)regs->pc);
++	u8 buf[7];
++	void *p;
++	static const u8 pattern1[] = {0, 0, 0, 'D', 'I', 'V', '0'};
++#if defined(__XTENSA_EB__)
++	static const u8 pattern2[] = {0xd6, 0x0f, 'D', 'I', 'V', '0'};
++#elif defined(__XTENSA_EL__)
++	static const u8 pattern2[] = {0x6d, 0xf0, 'D', 'I', 'V', '0'};
++#else
++#error Unsupported Xtensa endianness
++#endif
++
++	if (user_mode(regs)) {
++		if (copy_from_user(buf, (void __user *)regs->pc, 7))
++			return 0;
++		p = buf;
++	} else {
++		p = (void *)regs->pc;
++	}
++
++	return memcmp(p, pattern1, sizeof(pattern1)) == 0 ||
++		memcmp(p, pattern2, sizeof(pattern2)) == 0;
 +}
- 
++
  /*
-  * Handle unaligned memory accesses from user space. Kill task.
+  * Illegal instruction. Fatal if in kernel space.
+  */
+ 
+ static void do_illegal_instruction(struct pt_regs *regs)
+ {
++	if (check_div0(regs)) {
++		do_div0(regs);
++		return;
++	}
++
+ 	__die_if_kernel("Illegal instruction in kernel", regs, SIGKILL);
+ 
+ 	/* If in user mode, send SIGILL signal to current process. */
 -- 
 2.30.2
 

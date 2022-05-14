@@ -2,78 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D8E952741B
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 22:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B772352741E
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 23:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235203AbiENUzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 16:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
+        id S229710AbiENVF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 17:05:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiENUzN (ORCPT
+        with ESMTP id S229557AbiENVFW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 16:55:13 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C1D403DB;
-        Sat, 14 May 2022 13:55:10 -0700 (PDT)
-Received: from mail-yw1-f175.google.com ([209.85.128.175]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MZCOl-1oL8aj1fSD-00V5zn; Sat, 14 May 2022 22:55:08 +0200
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-2fb965b34easo120183737b3.1;
-        Sat, 14 May 2022 13:55:08 -0700 (PDT)
-X-Gm-Message-State: AOAM530C4aEcGR9rEbOUJJhmVsVLUXfab0msFJB2+Am9qS2xQPDsnrGo
-        3AAkZulzSV3nll1YZciRxigy1lgCZRA9viLUH9o=
-X-Google-Smtp-Source: ABdhPJzpLGyXsVrNJlvP7WL6o5iccD8hLd/+gg4Ia1m634qB7o2qs/9CBGsnf3lGCXzpz3Yzv4xbyGW7DIkrBKCLkYg=
-X-Received: by 2002:a81:456:0:b0:2fe:dee5:fbbc with SMTP id
- 83-20020a810456000000b002fedee5fbbcmr1569021ywe.249.1652561707006; Sat, 14
- May 2022 13:55:07 -0700 (PDT)
+        Sat, 14 May 2022 17:05:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEEAF63;
+        Sat, 14 May 2022 14:05:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2254860B34;
+        Sat, 14 May 2022 21:05:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7481C340EE;
+        Sat, 14 May 2022 21:05:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652562320;
+        bh=H4zV3SBaznHA7Gdb4PBmPjf9JcyfMUIYCazARaIDVOg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ebIcyrPZt/TJ8NSlY+gTJpB/aNg2HmLj0D7DlaDZDF0UCrUPAN1429AIfiVA7TS0z
+         y2AjGz+ruz2LFa4AbuOvca6cEzCCJlwMVJ9K+ugwdAQV+KgoQHGkrk1Bm56cYqTte9
+         AJNVPW9RHdgiVKayWFwWGZoerc6FpLLaaqWLdW1iZhj2v0ZUe7lYGxiNvyqE45gJVM
+         2C+WyV+52h0Hj6YFCvKe+NoSF5xtA0MT5wzD8+ElZOOkNXxNvnN8BX6C41ZSLSL5n7
+         F11lwFclnd0GpqwrHxHwLybo5NhxGl7Wx69ePMpX2GO+bdJWKz++75Uyh18Fn/Le9s
+         /uRKh0N6NkqTA==
+Date:   Sat, 14 May 2022 14:05:18 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Walle <michael@walle.cc>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] i2c: at91: Initialize dma_buf in at91_twi_xfer()
+Message-ID: <YoAZjpzAEugCiv/Q@dev-arch.thelio-3990X>
+References: <20220505152738.1440249-1-nathan@kernel.org>
+ <Yn+xsNqFyRMTu+5X@shikoro>
 MIME-Version: 1.0
-References: <20220514080402.2650181-1-chenhuacai@loongson.cn>
-In-Reply-To: <20220514080402.2650181-1-chenhuacai@loongson.cn>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 14 May 2022 22:54:50 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2Xu79zzJ=c3WJJEXAmcL2RT6NBZy-dd7s-Kz3Yk4yJzw@mail.gmail.com>
-Message-ID: <CAK8P3a2Xu79zzJ=c3WJJEXAmcL2RT6NBZy-dd7s-Kz3Yk4yJzw@mail.gmail.com>
-Subject: Re: [PATCH V10 00/22] arch: Add basic LoongArch support
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:RLYdBQMRfs0VRj5YvnHzqR4SnCvb0gHg6NTSCuHKS9abTBY9hIR
- 58Uou5At376gsaqKdwPLbXCruy8o3YAznEIwam+m4xLDQ0YZuPborKftLL+rOEbZlwmqFoD
- LrWsqauIcg9QWP4OZi/9PagjESYz9ttVTG2O9YrVrYmdieN087fAyBBtLGnIJ4IJN354TdG
- XUChB7hhKme9GFNBQWbzw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:x5w9uFk6R6Y=:pBWg+zbZvsCoPRzXDDv9ZI
- 4E/87Pq6on7G0qjNejfd+N4bmWxGAqylE2uCD13SfV+MHRUroa14oujr3P72qaGHC9/O4PDir
- UMbE9tNqsOiSBwkFFL2oTHYTpixbf2UThwjHR0UFLClGZ+PXg+SezzABTtW/08wzNYhmZccgo
- BprPq+EdMN48KQ75z1UOYXa3JyyuQ1RKMBc57CNGWAmNFNi8P8T5Rj8/VEtG4CciKQglDaxTG
- yV8wUc5gDNC1Q19GP3D2my8SbgGWtd4yjhGV2TPmUQG5CCnW38uR9MhT05fadlsdgsT6ak+El
- DZIyC4nM5W4dHbALWvSiuy7yKmGOlyU8hEXe7fwpv0Tksd4h8KJGdhEeRkyjSVKjxte2puwhc
- sgCebLD/ze/vV7Ypt53sLoFnazLOdGOgXjk41rgRZ5iRuwNVdq7BA49GdWHABSXtXVtglFdo9
- FRcj82xsQsD8/xf45XT+vWreF0OSv7/wqPo7pAvntZ7WoJ4IhsD4h52qwkISknNCg/nbrSu0U
- SZahSILzY5P1tHCxz7+6XKxlaeijBJjSUiMIjcC1viqno1tCPA7gP+6RXenCpzYkbRPjUHE+1
- ZgJd3a5V3ts5wqG0LJjzABD9yxYKMPjOBouAA6ZrrgLzqPI8rdiwA+1VSAtnnzcTPug8i8PJn
- 7a6P2qRj9RjVzGRTDh2AGuVBS12bYLJo6xxHuqrMv856xrbUydJ63+Wc/rqO04mzQWmyQVbc4
- 7BIz/GhpFZmysUeL3HH3vNHGLiSK+A8P813mxILRnOyDNVwO3+FuXQiSZ8sbc7oU958OAbhGM
- m3GKZZo5lJwxufH+5wsRAPAtQ7VcO9IMy//TfYib2nXocWIOiPa4deYyIjNFh8A0sm3Cn5r+W
- aID1LsnKSlp7HhuCV8lg==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yn+xsNqFyRMTu+5X@shikoro>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,37 +62,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 14, 2022 at 10:03 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> Cross-compile tool chain to build kernel:
-> https://github.com/loongson/build-tools/releases/download/2021.12.21/loongarch64-clfs-2022-03-03-cross-tools-gcc-glibc.tar.xz
+On Sat, May 14, 2022 at 03:42:08PM +0200, Wolfram Sang wrote:
+> On Thu, May 05, 2022 at 08:27:38AM -0700, Nathan Chancellor wrote:
+> > Clang warns:
+> > 
+> >   drivers/i2c/busses/i2c-at91-master.c:707:6: warning: variable 'dma_buf' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+> >           if (dev->use_dma) {
+> >               ^~~~~~~~~~~~
+> >   drivers/i2c/busses/i2c-at91-master.c:717:27: note: uninitialized use occurs here
+> >           i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
+> >                                    ^~~~~~~
+> > 
+> > Initialize dma_buf to NULL, as i2c_put_dma_safe_msg_buf() is a no-op
+> > when the first argument is NULL, which will work for the !dev->use_dma
+> > case.
+> > 
+> > Fixes: 03fbb903c8bf ("i2c: at91: use dma safe buffers")
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1629
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> 
+> Applied to for-next, thanks!
+> 
 
-I also uploaded a clean build of gcc-12.1 with loongarch64 in the
-https://mirrors.edge.kernel.org/pub/tools/crosstool/ builds.
-I have not tried it yet.
+Thank you!
 
-> This patchset is adding basic LoongArch support in mainline kernel, we
-> can see a complete snapshot here:
-> https://github.com/loongson/linux/tree/loongarch-next
-
-Note: I have pulled in the generic ticket lock series into the asm-generic tree.
-Please rebase your series on top of
-git://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux
-generic-ticket-spinlocks-v6
-to avoid duplicating the commits. As long as you are based on top of the
-9282d0996936 commit, that should be fine.
-
-> V9 -> V10:
-> 1, Rebased on 5.18-rc6;
-> 2, Use generic efi stub;
-> 3, Use generic string library;
-> 4, Use generic ticket spinlock;
-> 5, Use more meaningful macro naming;
-> 6, Remove the zboot patch;
-> 7, Fix commit message and documentations;
-> 8, Some other minor fixes and improvements.
-
-I think with this you have addressed the comments that I had in the past.
-Xuerui Wang and some others had additional comments that of course
-need to be addressed, but this is looking good to me.
-
-       Arnd
+Cheers,
+Nathan

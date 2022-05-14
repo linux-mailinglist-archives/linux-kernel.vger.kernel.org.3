@@ -2,95 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE971527340
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 19:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FEDD527343
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 19:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234566AbiENRLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 13:11:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39858 "EHLO
+        id S234567AbiENRNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 13:13:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234616AbiENRLU (ORCPT
+        with ESMTP id S229901AbiENRM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 13:11:20 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9771CFCB;
-        Sat, 14 May 2022 10:11:18 -0700 (PDT)
-X-UUID: 3bbd8b7fea674d01a3c3640ed1c74eb8-20220515
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:34efa526-a302-4a28-b136-fd5d520cb01b,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:07914da7-eab7-4b74-a74d-5359964535a9,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:-5,EDM:-3,IP:nil,URL:0,File:ni
-        l,QS:0,BEC:nil
-X-UUID: 3bbd8b7fea674d01a3c3640ed1c74eb8-20220515
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1597973636; Sun, 15 May 2022 01:11:14 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Sun, 15 May 2022 01:11:13 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Sun, 15 May 2022 01:11:13 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     <angelogioacchino.delregno@collabora.com>
-CC:     <chun-jie.chen@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        <miles.chen@mediatek.com>, <mturquette@baylibre.com>,
-        <rex-bc.chen@mediatek.com>, <sboyd@kernel.org>,
-        <wenst@chromium.org>
-Subject: Re: [PATCH v2 00/11] clk: mediatek: Move to struct clk_hw provider APIs
-Date:   Sun, 15 May 2022 01:11:13 +0800
-Message-ID: <20220514171113.32747-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <18fee6fe-2378-391e-993d-425c887ba40a@collabora.com>
-References: <18fee6fe-2378-391e-993d-425c887ba40a@collabora.com>
+        Sat, 14 May 2022 13:12:56 -0400
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC63B205CE;
+        Sat, 14 May 2022 10:12:55 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2f7c57ee6feso117799137b3.2;
+        Sat, 14 May 2022 10:12:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ARYo/f15fkpOFA40ZR3JDA70StrlLOsPpijtOSDAnu4=;
+        b=JgGFlhCBhWy1uxHZr5QyECyS6ISGBWIu4qDAtz8iyllWA1QaiVxCK3MltYbj50h2du
+         PoyUpztoF8Oia89Co0EIfbN+wGWqkQYyUjTg4Dtg8OPFTLKfybJV+6M0JLLUypiwY+jB
+         31w54WH8Vspss0nR172hgP/2Q+/57VC22SMcsR9HryHjsI6OcQH6N4CH38OBE8zVqEkY
+         cX82TuC3H0H247Jx4BbcnuyvHx35SqQHcnNFY9WdAiajFr7L6W1OqxrO0/QYGyqK1A1u
+         tYW59ReUxmjQKKHghBWA9qiY02UpZVrkr5numv58Pi1h/83LiredqdCciaBxgVOuefOx
+         xkQQ==
+X-Gm-Message-State: AOAM530H89O4YSStgEZbEks4c5GSK8VjH5+1HQgVJkT2be6EBYZEkTbI
+        ZZblFvNmCcER9J2xzv/9usyhlJGXpYknFyL4AfE=
+X-Google-Smtp-Source: ABdhPJxgI42R2wt7RchmcTdowww+/QM/FvFuk1vjbPOi5zZORwRnAbtLw578zenvitEYjUex3PE+sDT5f7rJhZ/YhUQ=
+X-Received: by 2002:a0d:ddce:0:b0:2f8:c9f7:8f7c with SMTP id
+ g197-20020a0dddce000000b002f8c9f78f7cmr11916578ywe.301.1652548374869; Sat, 14
+ May 2022 10:12:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+References: <CAJZ5v0g_p+Yb-VLo8b6-SYU17=GQOqZh2E5-52dkq-3rzU=57A@mail.gmail.com>
+ <20220512183540.GA859016@bhelgaas> <SJ0PR11MB5070B095B8A28634B43A231F9ECA9@SJ0PR11MB5070.namprd11.prod.outlook.com>
+In-Reply-To: <SJ0PR11MB5070B095B8A28634B43A231F9ECA9@SJ0PR11MB5070.namprd11.prod.outlook.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sat, 14 May 2022 19:12:43 +0200
+Message-ID: <CAJZ5v0gPKHDpCuM98UgRFXhxaZxvx1NkzrLArvxhuZ3a-iso=Q@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
+To:     "Jingar, Rajvi" <rajvi.jingar@intel.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        David Box <david.e.box@linux.intel.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Hi everyone,
-> 
-> This is v2 of part 2 of my proposed MediaTek clk driver cleanup work [1].
-> 
-> Changes since v1:
-> - Rebased and added coverage of new MT8186 clk drivers
-> - Split patch "clk: mediatek: Replace 'struct clk' with 'struct clk_hw'"
->    into arbitrary pieces so that they don't bounce from the mailing lists
-> 
-> This was tested on MT8183 Juniper. Apppreciate any help testing on non-
-> ChromeOS devices.
+On Sat, May 14, 2022 at 12:01 AM Jingar, Rajvi <rajvi.jingar@intel.com> wrote:
 >
+>
+> > -----Original Message-----
+> > From: Bjorn Helgaas <helgaas@kernel.org>
+> > Sent: Thursday, May 12, 2022 11:36 AM
+> > To: Rafael J. Wysocki <rafael@kernel.org>
+> > Cc: Jingar, Rajvi <rajvi.jingar@intel.com>; Wysocki, Rafael J
+> > <rafael.j.wysocki@intel.com>; Bjorn Helgaas <bhelgaas@google.com>; David Box
+> > <david.e.box@linux.intel.com>; Linux PCI <linux-pci@vger.kernel.org>; Linux
+> > Kernel Mailing List <linux-kernel@vger.kernel.org>; Linux PM <linux-
+> > pm@vger.kernel.org>
+> > Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
+> >
+> > On Thu, May 12, 2022 at 07:52:36PM +0200, Rafael J. Wysocki wrote:
+> > > On Thu, May 12, 2022 at 7:42 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > On Thu, May 12, 2022 at 03:49:18PM +0200, Rafael J. Wysocki wrote:
+> >
+> > > > > Something like this should suffice IMV:
+> > > > >
+> > > > > if (!dev_state_saved || pci_dev->current_state != PCI_D3cold)
+> > > > >
+> > > > >         pci_disable_ptm(pci_dev);
+> > > >
+> > > > It makes sense to me that we needn't disable PTM if the device is in
+> > > > D3cold.  But the "!dev_state_saved" condition depends on what the
+> > > > driver did.  Why is that important?  Why should we not do the
+> > > > following?
+> > > >
+> > > >   if (pci_dev->current_state != PCI_D3cold)
+> > > >     pci_disable_ptm(pci_dev);
+> > >
+> > > We can do this too.  I thought we could skip the power state check if
+> > > dev_state_saved was unset, because then we would know that the power
+> > > state was not D3cold.  It probably isn't worth the hassle though.
+> >
+>
+> We see issue with certain platforms where only checking if device power
+> state in D3Cold is not enough and the !dev_state_saved check is needed
+> when disabling PTM. Device like nvme is relying on ASPM, it stays in D0 but
+> state is saved. Touching the config space wakes up the device which
+> prevents the system from entering into low power state.
+>
+> Following would fix the issue:
+>
+>  if (!pci_dev->state_save) {
+>                 pci_save_state(pci_dev);
+>
+>                pci_disable_ptm(pci_dev);
+>
+>                 if (!pci_dev->skip_bus_pm && pci_power_manageable(pci_dev))
+>                         pci_prepare_to_sleep(pci_dev);
+> }
 
-> For the entire series:
-> 
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> 
-> ...and this entire series was tested on:
-> MT8173/92/95 and MT6795 (Sony Xperia M5 smartphone, clock drivers not sent
-> upstream yet), so you also get my:
-> 
-> Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Well, the point is to also disable PTM for devices that were put into
+D3 by their drivers.
 
-Tested on: MT6779
+In addition to D3cold, the check could cover D0 too, that is
 
-Tested-by: Miles Chen <miles.chen@mediatek.com> 
+if (pci_dev->current_state > D0 && pci_dev->current_state < PCI_D3cold)
+         pci_disable_ptm(pci_dev);
 
-> 
-> ...and last, but not least:
-> 
-> Thank you! :-)
-
+> > Ah, thanks.  IMHO it's easier to analyze for correctness if we only
+> > check the power state.
+> >
+> > Bjorn

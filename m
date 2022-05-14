@@ -2,53 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 147515272B1
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 17:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20A525272B8
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 17:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234022AbiENPlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 11:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54022 "EHLO
+        id S234034AbiENPom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 11:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234011AbiENPlA (ORCPT
+        with ESMTP id S231569AbiENPoj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 11:41:00 -0400
+        Sat, 14 May 2022 11:44:39 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9DBCDC;
-        Sat, 14 May 2022 08:40:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D72BFC5;
+        Sat, 14 May 2022 08:44:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFB4060FC5;
-        Sat, 14 May 2022 15:40:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0AFEC340EE;
-        Sat, 14 May 2022 15:40:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E4E3960FDF;
+        Sat, 14 May 2022 15:44:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7AF1C340EE;
+        Sat, 14 May 2022 15:44:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652542858;
-        bh=Hvx8z7gxwiLOsB3ma/sekJorZo96PjW6zdwnK9wQID4=;
+        s=k20201202; t=1652543076;
+        bh=mv7fBW28LBGQjB6TNE8qE4Q+PHMJWnlAXHOAlsOBxTA=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tAwQ/ZugvwWvz9PwvgrN/dcexR4VZfLghLOGOD/LMdBSUFOKX/c915hJNUu1GUxoF
-         bBIydCl3v/x42Ne86PVisrj8cAByfI+mNXCGdlWdR1WVzby31YeXhb4dsAByu9GHgh
-         vFbBHPA2cUzPMXzHzpeNz7iI22daHUjtckmiu3sCGA1DNamn5K4k8yGVXXN2HKKPrX
-         WrMtcE2/1kNY19Jk3SgVeMYpSpw4tnyG4j6E7kGMwBEzYoh66O2xOFcECaHuVKxksr
-         FAhVyqBJvqZpwSWPYX/TgOPQo6DrM8bSKMt+fLgpftqhY1L32GYQdJBYnGRJ6Tgh4D
-         S3A7e96sSzyIA==
-Date:   Sat, 14 May 2022 16:49:33 +0100
+        b=eXDIqw7HUdccXhBDLlUkU/FepEM2ogrz6qKGSgzjLWwIVZJohm5OmR8eo46hvCrK+
+         PDEf0q1Q8/0dqExDB7LZk0eCrHu2vEDUDVGE0uhGtgCGqs6AYj5wiSjDTd4/kEOJ30
+         uP8Tzqy7n4+5p2nBkpOIWP08Ml8g6OCEQI0dHcx148Ea21NGm1zlwRIN0uFg6R/Pao
+         k5PZ1Ai4oMTv2TlsIdmgGUy0z3OteoqDV+aS+lXrExXuIs51q8S/SsOXn287J+1brE
+         xxMkqI9XRqyAnh+JfuiapPrEd2NkbQ/5Tk+BufxeDnRF6ejvxczZdzH+x53wPbvYcZ
+         JYxLfNVsUfTqA==
+Date:   Sat, 14 May 2022 16:53:09 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Alexandru Ardelean <ardeleanalex@gmail.com>
-Cc:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        mchehab+huawei@kernel.org, linux-iio <linux-iio@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mike Looijmans <mike.looijmans@topic.nl>,
-        devicetree <devicetree@vger.kernel.org>
-Subject: Re: [PATCH V2 6/6] dt-bindings: iio: accel: Add bmi085 and bmi090l
- bindings
-Message-ID: <20220514164933.4edbc459@jic23-huawei>
-In-Reply-To: <CA+U=DspAtKrDdgrzAyELDULQVjj6eFgMhsZjFCOXXYrxFAW6YQ@mail.gmail.com>
-References: <20220510141753.3878390-1-Qing-wu.Li@leica-geosystems.com.cn>
-        <20220510141753.3878390-7-Qing-wu.Li@leica-geosystems.com.cn>
-        <CA+U=DspAtKrDdgrzAyELDULQVjj6eFgMhsZjFCOXXYrxFAW6YQ@mail.gmail.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joe Perches <joe@perches.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Nicolas Palix <nicolas.palix@imag.fr>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        linux-kernel@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        linux-iio@vger.kernel.org
+Subject: Re: [PATCH 05/22] iio: replace bitmap_weight with
+ bitmap_weitght_{eq,le} where appropriate
+Message-ID: <20220514165309.7445c767@jic23-huawei>
+In-Reply-To: <20220510154750.212913-6-yury.norov@gmail.com>
+References: <20220510154750.212913-1-yury.norov@gmail.com>
+        <20220510154750.212913-6-yury.norov@gmail.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -63,57 +69,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 May 2022 10:32:55 +0300
-Alexandru Ardelean <ardeleanalex@gmail.com> wrote:
+On Tue, 10 May 2022 08:47:33 -0700
+Yury Norov <yury.norov@gmail.com> wrote:
 
-> On Tue, May 10, 2022 at 5:18 PM LI Qingwu
-> <Qing-wu.Li@leica-geosystems.com.cn> wrote:
-> >
-> > Adds the device-tree bindings for the Bosch
-> > BMI085 and BMI090L IMU, the accelerometer part.
-> >  
+> bitmap_weight_{eq,le} is better than bitmap_weight because it
+> may return earlier.
 > 
-> I think some datasheet links could be added to this file for the new devices.
-> 
-> The BMI088 has a link to its datasheet.
-> 
-> > Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-> > ---
-> >  Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml b/Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml
-> > index 911a1ae9c83f..4290f5f88a8f 100644
-> > --- a/Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml
-> > +++ b/Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml
-> > @@ -18,6 +18,8 @@ properties:
-> >    compatible:
-> >      enum:
-> >        - bosch,bmi088-accel
-> > +      - bosch,bmi085-accel
-> > +      - bosch,bmi090l-accel
+> CC: Jonathan Cameron <jic23@kernel.org>
+> CC: Lars-Peter Clausen <lars@metafoo.de>
+> CC: Michael Hennerich <Michael.Hennerich@analog.com>
+> CC: linux-iio@vger.kernel.org
+> CC: linux-kernel@vger.kernel.org
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+without being cc'd on the cover letter, there is no obvious way for
+me to know this is reliant in some series to be found in next.
 
-Alphabetical /numeric order preferred. Also, fun question of compatible
-fallbacks as per the previous email.  Other than ID you state the bmi080l
-has same scales etc as the bmi088 so that one should definitely have
-a fallback to bmi088.
+Please call out the exact dependency and whilst it's a long list,
+it is good to cc all people cc'd on individual patches also
+on the cover letter so they have that background information.
 
-The bmi085 is a little less obvious.  We can detect the difference by
-the chip id though so a fallback compatible probably makes sense for
-that one as well.  DT maintainers - I'll go with whatever you recommend
-on that front.
-
-Also, driver doesn't currently have an of_id_table so relies on the fallback
-handling of the spi core. Please add an explicit table to the driver.
-
-Thanks,
+Change seems fine, but I've no idea when/if to pick it up because of
+that lack of information.
 
 Jonathan
 
-> >
-> >    reg:
-> >      maxItems: 1
-> > --
-> > 2.25.1
-> >  
+> ---
+>  drivers/iio/adc/ad_sigma_delta.c  | 2 +-
+>  drivers/iio/industrialio-buffer.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/ad_sigma_delta.c b/drivers/iio/adc/ad_sigma_delta.c
+> index 261a9a6b45e1..6445b591f071 100644
+> --- a/drivers/iio/adc/ad_sigma_delta.c
+> +++ b/drivers/iio/adc/ad_sigma_delta.c
+> @@ -525,7 +525,7 @@ static bool ad_sd_validate_scan_mask(struct iio_dev *indio_dev, const unsigned l
+>  {
+>  	struct ad_sigma_delta *sigma_delta = iio_device_get_drvdata(indio_dev);
+>  
+> -	return bitmap_weight(mask, indio_dev->masklength) <= sigma_delta->num_slots;
+> +	return bitmap_weight_le(mask, indio_dev->masklength, sigma_delta->num_slots);
+>  }
+>  
+>  static const struct iio_buffer_setup_ops ad_sd_buffer_setup_ops = {
+> diff --git a/drivers/iio/industrialio-buffer.c b/drivers/iio/industrialio-buffer.c
+> index 06141ca27e1f..18d3d756aee1 100644
+> --- a/drivers/iio/industrialio-buffer.c
+> +++ b/drivers/iio/industrialio-buffer.c
+> @@ -1824,7 +1824,7 @@ void iio_buffers_free_sysfs_and_mask(struct iio_dev *indio_dev)
+>  bool iio_validate_scan_mask_onehot(struct iio_dev *indio_dev,
+>  	const unsigned long *mask)
+>  {
+> -	return bitmap_weight(mask, indio_dev->masklength) == 1;
+> +	return bitmap_weight_eq(mask, indio_dev->masklength, 1);
+>  }
+>  EXPORT_SYMBOL_GPL(iio_validate_scan_mask_onehot);
+>  
 

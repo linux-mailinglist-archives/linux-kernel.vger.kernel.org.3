@@ -2,108 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1336452715D
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 15:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B46B352715C
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 15:40:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232729AbiENNkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 09:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
+        id S232706AbiENNkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 09:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232718AbiENNkU (ORCPT
+        with ESMTP id S231604AbiENNkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 09:40:20 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BB623153
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 06:40:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652535618; x=1684071618;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ATOwkom89fRH40zG0QcAYWcTUk7vSqR49LMlHjMCims=;
-  b=GzGc8M/ZajOhvnAwBMYs+tu0QxypdwSKs8+LXYwVCgob8JOmV04CiYmr
-   ANzy0gC/KJ+dxzAsRcm7oBDaDp0DnIzD9YA+Cf64YFzy2Q8b5TOmVgHim
-   ihYB0WQ0vcA+s6Vo4jMeMnrRpgMQbM+8HX48dsU9T/nP0vJpfKOfGrHt2
-   BDTxT5gieQhUfOUCteHuqJkdwMhaBkj28s2xnzmHB96Tdgq+yegGICsvc
-   tW8XXp+PN1PeFVS6LWqvBWuWAuZt/F0TvacxIZpzDkkcZFWCamjKuWmOT
-   Q8WcDf+o+ggR4TUgCRHUv7UcmbbE8bX+WTG9Y4SCnAt3U7u8/6OeKnp0H
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10347"; a="258069513"
-X-IronPort-AV: E=Sophos;i="5.91,226,1647327600"; 
-   d="scan'208";a="258069513"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2022 06:40:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,226,1647327600"; 
-   d="scan'208";a="521793037"
-Received: from lkp-server01.sh.intel.com (HELO d1462bc4b09b) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 14 May 2022 06:40:15 -0700
-Received: from kbuild by d1462bc4b09b with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nps0E-0000h3-Ij;
-        Sat, 14 May 2022 13:40:14 +0000
-Date:   Sat, 14 May 2022 21:39:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [nsaenz-rpi:ct-work-defer-wip 24/25] arch/x86/mm/tlb.c:1010:12:
- error: use of undeclared identifier 'CONTEXT_WORK_TLBI'
-Message-ID: <202205142105.ZgamkxvX-lkp@intel.com>
+        Sat, 14 May 2022 09:40:09 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5581C22517
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 06:40:08 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id k14-20020a0566022a4e00b0065ae0c238aeso6850245iov.1
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 06:40:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=INdvROdDh/6zEjEhZ8TMAIUkIHaBkIrSGppOJMwXt/k=;
+        b=jNCTbMzbw8pWqwxI+jZPsBTGaJq57ebgv8oNqBL0xwVsE0tNgaWC1E9qT7cr3pmIsU
+         cR8fNsroIphLzHgII24WtgiiLxY3zRv2hxoMOeKgFJ6RyEFYJEWJ06cT7epz/mJFv+tc
+         BybhX2S8Bi/y+viu7Jf3+QkZFuJZ4VNDNchGK10hpj6J9jCDg2YeoG56InO9vUEVhDw4
+         LrzoGe6GJ9hzob+5JifJVwxgGCmySRz0WL30DbMs/jCwg8ZkDaWgj8DN/N6LvuaViXOF
+         t3C+sm4jG0F12F0Zi+blnFt69hQQoeqJVPf1QK283fwmQBZngLyxhuauZUBYai25S4cr
+         rjOA==
+X-Gm-Message-State: AOAM530uJuygDyVWbWb7VvpELZLFD8HdjJRUDb7mUH6MiGvkemUl8igA
+        iXsFPY6Jai2sBhb3mgaqVJoOt5epRH+T/OS8iP0AzThUVG10
+X-Google-Smtp-Source: ABdhPJxL4EnCKoIrzsJYoSv4QnUHHbWGupM9x+McF0L0ELkiNhzxiJRLyyLf4Bjim/s0gcJVxJWF4AAmhI+kJD2lkuOUwiCwmHhu
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c7ce:0:b0:2cd:5ffd:9f5e with SMTP id
+ g14-20020a92c7ce000000b002cd5ffd9f5emr5113471ilk.34.1652535607775; Sat, 14
+ May 2022 06:40:07 -0700 (PDT)
+Date:   Sat, 14 May 2022 06:40:07 -0700
+In-Reply-To: <20220514132858.1322-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e15b2705def8ed12@google.com>
+Subject: Re: [syzbot] WARNING in mntput_no_expire (3)
+From:   syzbot <syzbot+5b1e53987f858500ec00@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git ct-work-defer-wip
-head:   ed63029652239a6befad96dd473b16332913f889
-commit: ac6fd7356ff9f2e0f040ef337d3eb731454ce49f [24/25] context_tracking,x86: Fix Kernel TLBi vs NOHZ_FULL
-config: i386-allnoconfig (https://download.01.org/0day-ci/archive/20220514/202205142105.ZgamkxvX-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 38189438b69ca27b4c6ce707c52dbd217583d046)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git/commit/?id=ac6fd7356ff9f2e0f040ef337d3eb731454ce49f
-        git remote add nsaenz-rpi https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git
-        git fetch --no-tags nsaenz-rpi ct-work-defer-wip
-        git checkout ac6fd7356ff9f2e0f040ef337d3eb731454ce49f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Hello,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+WARNING in mntput_no_expire
 
-All errors (new ones prefixed by >>):
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 4205 at fs/namespace.c:1226 mntput_no_expire+0x979/0xfe0 fs/namespace.c:1226
+Modules linked in:
+CPU: 1 PID: 4205 Comm: syz-executor.2 Not tainted 5.18.0-rc6-syzkaller-00009-gfeb9c5e19e91-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:mntput_no_expire+0x979/0xfe0 fs/namespace.c:1226
+Code: 04 00 00 48 8b 35 ef 77 dd 0b b9 01 00 00 00 bf 08 00 00 00 48 c7 c2 60 fe f0 8b e8 21 e1 71 ff e9 01 f9 ff ff e8 17 93 9d ff <0f> 0b e9 b6 f8 ff ff e8 0b 93 9d ff 0f 0b e9 aa f8 ff ff e8 ff 92
+RSP: 0018:ffffc9000374fd78 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff88802467bb00 RSI: ffffffff81dbadc9 RDI: 0000000000000003
+RBP: 0000000000000008 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffffff81dba668 R11: 0000000000000000 R12: 0000000000000002
+R13: ffff888079fad500 R14: dffffc0000000000 R15: ffffed100f3f5aaa
+FS:  0000555556994400(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00005555572e8848 CR3: 000000006a5f1000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ mntput+0x67/0x90 fs/namespace.c:1289
+ __fput+0x3ba/0x9d0 fs/file_table.c:333
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
+ exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:201
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:294
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f3c1a63bd2b
+Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
+RSP: 002b:00007ffd7174ab10 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 0000000000000004 RCX: 00007f3c1a63bd2b
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000003
+RBP: 00007f3c1a79d960 R08: 0000000000000000 R09: 00007ffd71751080
+R10: 0000000000000000 R11: 0000000000000293 R12: 00000000000142ec
+R13: 00007ffd7174ac10 R14: 00007ffd7174ac30 R15: 0000000000000032
+ </TASK>
 
->> arch/x86/mm/tlb.c:1010:12: error: use of undeclared identifier 'CONTEXT_WORK_TLBI'
-                                                 CONTEXT_WORK_TLBI);
-                                                 ^
-   1 error generated.
---
->> arch/x86/mm/pat/set_memory.c:367:12: error: use of undeclared identifier 'CONTEXT_WORK_TLBI'
-                                                 CONTEXT_WORK_TLBI);
-                                                 ^
-   1 error generated.
 
+Tested on:
 
-vim +/CONTEXT_WORK_TLBI +1010 arch/x86/mm/tlb.c
+commit:         feb9c5e1 Merge tag 'for_linus' of git://git.kernel.org..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+console output: https://syzkaller.appspot.com/x/log.txt?x=124eef66f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=79caa0035f59d385
+dashboard link: https://syzkaller.appspot.com/bug?extid=5b1e53987f858500ec00
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=123ae715f00000
 
-  1006	
-  1007	static bool do_kernel_flush_cond(int cpu, void *info)
-  1008	{
-  1009		return !context_tracking_set_cpu_work(cpu, CONTEXT_USER | CONTEXT_GUEST,
-> 1010						      CONTEXT_WORK_TLBI);
-  1011	}
-  1012	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

@@ -2,121 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2954527214
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 16:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96C6C5271F7
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 16:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233389AbiENOg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 10:36:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
+        id S233295AbiENO14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 10:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233357AbiENOgH (ORCPT
+        with ESMTP id S233155AbiENO1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 10:36:07 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F1220F67;
-        Sat, 14 May 2022 07:35:56 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id r71so9736098pgr.0;
-        Sat, 14 May 2022 07:35:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LH2DY0hZRjZwSZkfIfm9MKqf607rYpniX8kvWvJ5SrQ=;
-        b=mw06+rVjOxYyMVI9ZYHSM7zutkN/daoJ+ZPCLOPb+TLfw8lg6K8BuiR8uzrcVROl09
-         AsNQc+iPKPirvKtWpjTT/sRNBrcdsJUZy7XpZZbaeOqMTfWEYKQvfXlWH0ygoDCRZk0R
-         73C7NWBRYR/VrhJTuuy5zdK3q5r0raNIjRA3LpFOJcsWCwmeSWAhDZi4fH8FKY/bcKj8
-         18cqNVN3mKEO6DhnlqmvSALKyzBcN99OdKViA8U6WUK0y4u6SdUAKQLArpmZPtbfG/7d
-         PXP4NkaDJv2KYo48mP5IDxZSOu56qdB1PlUBTxwwhhQm0Ad5c/Dm/kNHOFPpcLqLWdBS
-         2LLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LH2DY0hZRjZwSZkfIfm9MKqf607rYpniX8kvWvJ5SrQ=;
-        b=4bncuKi6bZ8i94TsFDBJ1cvV510COx1K/FIKkXWDv4yElTIX5kmQfhLfDQgAlOlClI
-         oVQvIrll0EHQ9kRHpZAQxuxHGr6aIztSRw5Vzg7MC6Iqzm+RXD9SWy+fjEqs6qXlXTPw
-         xTgfD2I5MjKTahCx32tsIk8oWT3TD6q0Y1bkESlUp3w2pSUQAf0n8sQgkmMJ4u8BPIMN
-         qs6DZwZvJ8aWcBicv9ppldjZ+I/CugBsMZzXP/Db/alFg1XZQtqvJDgU3fX8cku0RVZ0
-         oaEEGrchy7RzZ1OdK6SxmKsg8Ndgh23xVAI/7FBu54p7tLQ93aySpVKOyVdmr5JptZ35
-         V8wA==
-X-Gm-Message-State: AOAM5303iusnw6U8fYFXR6Jo9/eY8wqzp91hXs5Moj6YlM3qZX+4YkoC
-        eu4c/wMswqNlUC0Vr/aYQ64TrwHv93sIjsTbWOg=
-X-Google-Smtp-Source: ABdhPJw39KpoHqB64KBC1ErT7ywfn8ZQK5im1sJJlXNIo+GgE31vYY8bNkRUc0UNVycNarWC+7aHPw==
-X-Received: by 2002:a63:89c8:0:b0:3db:9da:797e with SMTP id v191-20020a6389c8000000b003db09da797emr8041421pgd.358.1652538955947;
-        Sat, 14 May 2022 07:35:55 -0700 (PDT)
-Received: from localhost.localdomain ([49.37.196.1])
-        by smtp.gmail.com with ESMTPSA id ay4-20020a17090b030400b001df263f30e8sm595645pjb.3.2022.05.14.07.35.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 May 2022 07:35:55 -0700 (PDT)
-From:   Saranya Panjarathina <plsaranya@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        g_balaji1@dell.com, Saranya_Panjarathina@dell.com,
-        linux-kernel@vger.kernel.org, Saranya_PL <plsaranya@gmail.com>
-Subject: [patch netdev] net: PIM register decapsulation and Forwarding.
-Date:   Sat, 14 May 2022 07:33:42 -0700
-Message-Id: <20220514143342.2600-1-plsaranya@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220512070138.19170-1-plsaranya@gmail.com>
-References: <20220512070138.19170-1-plsaranya@gmail.com>
+        Sat, 14 May 2022 10:27:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C366B2BA;
+        Sat, 14 May 2022 07:27:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A6B660F02;
+        Sat, 14 May 2022 14:27:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECE01C340EE;
+        Sat, 14 May 2022 14:27:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652538469;
+        bh=PyuhuQtevyldQ5YwVAm3vJo7rj0yjNlAxJbFhH2D4C4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=eVAwtu8PXM9fahwFSHqkHOj5ZFBQ+9liG8tanBNARTgdq+iJWR7qyOt+0fI/JeFaK
+         5MPZ2jUb7hFhtdtBtkkmpEg8i9vXBxzEeReWBJJzD6/JT9671kbBejiZntgB9tMTeS
+         /PgUfaDzSyV8jE3aQWPo3oVBem0QZkScIF6fNZSoJ60QrXKotJegzm95zSPb3rBbJl
+         vGyP58iZYx1MtWwgiu025yLX+Dct4fRXtfFjXVG3j2v/fDmbfwBqv6Bg4/iKCoII4u
+         +mVCcjCihgYvyvg8whmSDMV4B4vqrwdu6omqYjde6ZTT29CW0tx2F6ABnml+Wp8NtK
+         pPsLYahlvaYXA==
+Date:   Sat, 14 May 2022 15:36:25 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Zheyu Ma <zheyuma97@gmail.com>
+Cc:     lars@metafoo.de, andriy.shevchenko@linux.intel.com,
+        sean@geanix.com, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iio: imu: bmi160: Fix the error handling at
+ bmi160_chip_init()
+Message-ID: <20220514153625.18c4d9f8@jic23-huawei>
+In-Reply-To: <20220513143513.2284425-1-zheyuma97@gmail.com>
+References: <20220513143513.2284425-1-zheyuma97@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Saranya_PL <plsaranya@gmail.com>
+On Fri, 13 May 2022 22:35:13 +0800
+Zheyu Ma <zheyuma97@gmail.com> wrote:
 
-PIM register packet is decapsulated but not forwarded in RP
+> When the driver fails in bmi160_chip_init(), it should disable the
+> regulator.
+> 
+> The following log shows it:
+> 
+> [   18.709662] WARNING: CPU: 0 PID: 294 at drivers/regulator/core.c:2257 _regulator_put+0x3ec/0x4e0
+> [   18.712069] RIP: 0010:_regulator_put+0x3ec/0x4e0
+> [   18.716395] Call Trace:
+> [   18.716522]  <TASK>
+> [   18.716636]  regulator_bulk_free+0x82/0xe0
+> [   18.717077]  i2c_device_probe+0x6f0/0x800
+> 
+> Fixes: 5dea3fb066f0 ("iio: imu: bmi160: added regulator support")
+> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
 
-__pim_rcv decapsulates the PIM register packet and reinjects for forwarding
-after replacing the skb->dev to reg_dev (vif with VIFF_Register)
+Hi,
 
-Ideally the incoming device should be same as skb->dev where the
-original PIM register packet is received. mcache would not have
-reg_vif as IIF. Decapsulated packet forwarding is failing
-because of IIF mismatch. In RP for this S,G RPF interface would be
-skb->dev vif only, so that would be IIF for the cache entry.
+Good find, but Tong Zhang got their first and the resulting patch
+fixes an additional issue missed in this fix. See below.
 
-Signed-off-by: Saranya Panjarathina <plsaranya@gmail.com>
----
- net/ipv4/ipmr.c  | 2 +-
- net/ipv6/ip6mr.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Jonathan
 
-diff --git a/net/ipv4/ipmr.c b/net/ipv4/ipmr.c
-index 13e6329784fb..7b9586335fb7 100644
---- a/net/ipv4/ipmr.c
-+++ b/net/ipv4/ipmr.c
-@@ -598,7 +598,7 @@ static int __pim_rcv(struct mr_table *mrt, struct sk_buff *skb,
- 	skb->protocol = htons(ETH_P_IP);
- 	skb->ip_summed = CHECKSUM_NONE;
- 
--	skb_tunnel_rx(skb, reg_dev, dev_net(reg_dev));
-+	skb_tunnel_rx(skb, skb->dev, dev_net(skb->dev));
- 
- 	netif_rx(skb);
- 
-diff --git a/net/ipv6/ip6mr.c b/net/ipv6/ip6mr.c
-index 4e74bc61a3db..147e29a818ca 100644
---- a/net/ipv6/ip6mr.c
-+++ b/net/ipv6/ip6mr.c
-@@ -566,7 +566,7 @@ static int pim6_rcv(struct sk_buff *skb)
- 	skb->protocol = htons(ETH_P_IPV6);
- 	skb->ip_summed = CHECKSUM_NONE;
- 
--	skb_tunnel_rx(skb, reg_dev, dev_net(reg_dev));
-+	skb_tunnel_rx(skb, skb->dev, net);
- 
- 	netif_rx(skb);
- 
--- 
-2.20.1
+> ---
+>  drivers/iio/imu/bmi160/bmi160_core.c | 17 +++++++++++------
+>  1 file changed, 11 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/iio/imu/bmi160/bmi160_core.c b/drivers/iio/imu/bmi160/bmi160_core.c
+> index 824b5124a5f5..33abfc2bbd7c 100644
+> --- a/drivers/iio/imu/bmi160/bmi160_core.c
+> +++ b/drivers/iio/imu/bmi160/bmi160_core.c
+> @@ -730,7 +730,7 @@ static int bmi160_chip_init(struct bmi160_data *data, bool use_spi)
+>  
+>  	ret = regmap_write(data->regmap, BMI160_REG_CMD, BMI160_CMD_SOFTRESET);
+>  	if (ret)
+> -		return ret;
+> +		goto err_regulator_disable;
+>  
+>  	usleep_range(BMI160_SOFTRESET_USLEEP, BMI160_SOFTRESET_USLEEP + 1);
+>  
+> @@ -741,29 +741,34 @@ static int bmi160_chip_init(struct bmi160_data *data, bool use_spi)
+>  	if (use_spi) {
+>  		ret = regmap_read(data->regmap, BMI160_REG_DUMMY, &val);
+>  		if (ret)
+> -			return ret;
+> +			goto err_regulator_disable;
+>  	}
+>  
+>  	ret = regmap_read(data->regmap, BMI160_REG_CHIP_ID, &val);
+>  	if (ret) {
+>  		dev_err(dev, "Error reading chip id\n");
+> -		return ret;
+> +		goto err_regulator_disable;
+>  	}
+>  	if (val != BMI160_CHIP_ID_VAL) {
+>  		dev_err(dev, "Wrong chip id, got %x expected %x\n",
+>  			val, BMI160_CHIP_ID_VAL);
+> -		return -ENODEV;
+> +		ret = -ENODEV;
+> +		goto err_regulator_disable;
+>  	}
+>  
+>  	ret = bmi160_set_mode(data, BMI160_ACCEL, true);
+>  	if (ret)
+> -		return ret;
+> +		goto err_regulator_disable;
+>  
+>  	ret = bmi160_set_mode(data, BMI160_GYRO, true);
+>  	if (ret)
+
+A failure here does not disable the accelerometer (which is done
+in the uninit() function which we we never end
+up running.
+
+
+> -		return ret;
+> +		goto err_regulator_disable;
+>  
+>  	return 0;
+> +
+> +err_regulator_disable:
+> +	regulator_bulk_disable(ARRAY_SIZE(data->supplies), data->supplies);
+> +	return ret;
+>  }
+>  
+>  static int bmi160_data_rdy_trigger_set_state(struct iio_trigger *trig,
 

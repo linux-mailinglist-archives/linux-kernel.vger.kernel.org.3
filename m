@@ -2,144 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576BB52736C
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 20:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A41527370
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 20:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234635AbiENSJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 14:09:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33882 "EHLO
+        id S234650AbiENSUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 14:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231892AbiENSJQ (ORCPT
+        with ESMTP id S230459AbiENSUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 14:09:16 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09B8E024
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 11:09:14 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id q10so13916791oia.9
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 11:09:14 -0700 (PDT)
+        Sat, 14 May 2022 14:20:33 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB7338197;
+        Sat, 14 May 2022 11:20:32 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id i19so21694289eja.11;
+        Sat, 14 May 2022 11:20:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=9VxSQhrcxP+Zxiex+/IGfZgunbN+QMPUuJtoX8ADJq0=;
-        b=gwi8wGZKaAhyEL2N8U2FdTZRADeWgto+anF1Hh8tRJwSSQjeEhaDwQcYwrSGkxXZ0W
-         BCnI9tOAs0bAF5kUYusrUQSQ0N5RSoYQ3/USaCh27tau0QhOVZfZuHOhEDaS7aLc+8HU
-         dnKwj/A8/ag0Bg+w26MOFg3Sej3B3TuZ/jPyZHQMU3KUEXOu07NXmArf+6PcFmy7olm0
-         vbJ5cYaHQt6BfVv3iaGLTcz2U1ovsCpDQleUmuoPAW9taQVe1uBMhabIY1Twl1gBjcLw
-         6rGUvCe89RNNnWV+75sAC5j4pzGeBBWu97+HuM7nEEnWLTSnqUukEukd9a1Lk7nzb96O
-         Mcyw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pUYpeImbAqOBUb0UBcRbQZgfeNt+9zMkDd+UbinLleA=;
+        b=TmlrIscHfjet5fM7ny4Eh6Xbh+mWdtBBO7ss6zTRY1omVxhzjs04O8WPMU5hxry2Lj
+         4wLQNRkn5tWDQ6U2bMnFTlG9Yciuby5/x43us+M437SrnYenHrxv0o7IQ66KL/XSK8x7
+         P38gYkW8mK/6nmU3IluX9s1pPZKYDNP76WJGe0xgJk0DEtDOIxV8MbPXSEuAv+TmH8KZ
+         aaVaD3txz5gQkcDAxO+mwfBTU+gj12bfJh6FSZzR7ABn94OZJSxxVjBUlBRyisgs5jiE
+         MOQb3g/tYywGZbsm9IrvoL1Igo1dG+c0ZCcQARsbgCy90SHfpCenBOBAyQ9UaRJ9n9NS
+         U2aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=9VxSQhrcxP+Zxiex+/IGfZgunbN+QMPUuJtoX8ADJq0=;
-        b=CRKmMWfOjt0/bJx/l54Jntd5io6RmKTf5ZnHNJTdrwTLag0BOcl5O6KbuGEvIFbpcu
-         MhpoDbPosMda1m3ESD/VYUaEoRIQXtOkzxMhXT4FAIcc42aW64YnW/x97pc5+wFGEK91
-         A5X1ATsqEi/bgP1LxSWlxIgHqcvmIqFWIeF8NwHM+A456ICTyc/Z/7x7akMs9+ca4VLe
-         hlPw5Lc214bSH5Dxw3ZFWilzeQCOjLfWkixZUnFSETwR5NLbTXGTTwRp47z/f9+5KLb7
-         veBSmX5sb6dACDzNK0W856C+AxkdYJjbiGHqrVLo9cDrva9PBs4sIEseIQ8NBNjaz5Mo
-         dThA==
-X-Gm-Message-State: AOAM533dHEbl6mV4kDkxpz3GT6aG7+2SU2/OJUuSfTtuNNJDSep0LT2e
-        CznqQ0hNZTz4ckAH9zPTAzej3A==
-X-Google-Smtp-Source: ABdhPJwrvgAl50ASW9OPusxZQgrhHauO8CR+M14xcbBoh7KOYWtJ47rV3oDIQEF/CrNs8vca+izgNw==
-X-Received: by 2002:a05:6808:98f:b0:325:d44d:62d6 with SMTP id a15-20020a056808098f00b00325d44d62d6mr10052930oic.145.1652551754058;
-        Sat, 14 May 2022 11:09:14 -0700 (PDT)
-Received: from [192.168.11.16] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
-        by smtp.gmail.com with ESMTPSA id y127-20020aca3285000000b00328e70cae5csm774163oiy.43.2022.05.14.11.09.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 May 2022 11:09:13 -0700 (PDT)
-Message-ID: <3bf28d29-f841-81f7-68f8-3fb7f9c274bf@kali.org>
-Date:   Sat, 14 May 2022 13:09:11 -0500
+        bh=pUYpeImbAqOBUb0UBcRbQZgfeNt+9zMkDd+UbinLleA=;
+        b=DMuxZg8Zmpolcq0BWChysPfxHGvZrjX0xhy6EJzLvcW7xGwkMN24walxDQqMn6voKU
+         zcprHbcQ7hSFD0TQt/jEpR/wxnZjp+lplMaEChz8VQDfsNMHwDSKSk7ygqyNQvmmwtFn
+         012fqzOxvEfGgU/7/OmRCPAuN+0sokPGdDcndZkDDL0TiclGlvX88YxNcXZBYI15OeI8
+         NTEkkhQJtWpwx5XIdhloYeHwwpV+qyRikJXgSVHYaFZKdb4RIJijSB66+UWegYXlQoyx
+         jMmb2spdlZG4BK4khd9kFc37dD2jT5XEyxe2RFe3DW12XO5RuBO379t06q+SYnuBY206
+         hScw==
+X-Gm-Message-State: AOAM532I+6RFq3p7WlcGp0VjR8pr8uSQ9cMNMnnssC/wFPAN4dUfQq8O
+        bSNevr+gWpnvNH4o91vlDNs=
+X-Google-Smtp-Source: ABdhPJz//1N2TaHTmvRE+BqJmQ7ek/bMQ69s5SkVHYV2UoKUWLD6Ru7aV5G+UnzvM+K9lKwg9DL7Dw==
+X-Received: by 2002:a17:906:b48:b0:6f5:132c:1a17 with SMTP id v8-20020a1709060b4800b006f5132c1a17mr9127666ejg.748.1652552430577;
+        Sat, 14 May 2022 11:20:30 -0700 (PDT)
+Received: from demon-pc.localdomain ([188.24.86.218])
+        by smtp.gmail.com with ESMTPSA id jz25-20020a17090775f900b006fa6a51459asm1925898ejc.96.2022.05.14.11.20.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 May 2022 11:20:30 -0700 (PDT)
+From:   Cosmin Tanislav <demonsingur@gmail.com>
+X-Google-Original-From: Cosmin Tanislav <cosmin.tanislav@analog.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>
+Subject: [PATCH] iio: accel: adxl367: do not update FIFO watermark on scan mode update
+Date:   Sat, 14 May 2022 21:20:10 +0300
+Message-Id: <20220514182010.152784-1-cosmin.tanislav@analog.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH] ath10k: do not enforce interrupt trigger type
-Content-Language: en-US
-From:   Steev Klimaszewski <steev@kali.org>
-To:     Kalle Valo <kvalo@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Govind Singh <govinds@codeaurora.org>,
-        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-References: <20220513151516.357549-1-krzysztof.kozlowski@linaro.org>
- <87zgjl4e8t.fsf@kernel.org> <3d856d44-a2d6-b5b8-ec78-ce19a3686986@kali.org>
-In-Reply-To: <3d856d44-a2d6-b5b8-ec78-ce19a3686986@kali.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Currently, the driver updates the FIFO watermark inside both
+update_scan_mode() and hwfifo_set_watermark(). Inside the IIO core,
+hwfifo_set_watermark() is called immediately after update_scan_mode(),
+making the first call to set_fifo_samples() redundant.
 
-On 5/14/22 12:05 AM, Steev Klimaszewski wrote:
->
-> On 5/13/22 10:57 AM, Kalle Valo wrote:
->> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
->>
->>> Interrupt line can be configured on different hardware in different 
->>> way,
->>> even inverted.  Therefore driver should not enforce specific trigger
->>> type - edge rising - but instead rely on Devicetree to configure it.
->>>
->>> All Qualcomm DTSI with WCN3990 define the interrupt type as level high,
->>> so the mismatch between DTSI and driver causes rebind issues:
->>>
->>>    $ echo 18800000.wifi > /sys/bus/platform/drivers/ath10k_snoc/unbind
->>>    $ echo 18800000.wifi > /sys/bus/platform/drivers/ath10k_snoc/bind
->>>    [   44.763114] irq: type mismatch, failed to map hwirq-446 for 
->>> interrupt-controller@17a00000!
->>>    [   44.763130] ath10k_snoc 18800000.wifi: error -ENXIO: IRQ index 
->>> 0 not found
->>>    [   44.763140] ath10k_snoc 18800000.wifi: failed to initialize 
->>> resource: -6
->> So you tested on WCN3990? On what firmware version? I can add the
->> Tested-on tag if you provide that.
->>
-> Hello Krzystof, Kalle,
->
-> I have seen this issue as well on a Lenovo Flex 5G, which has a WCN3990:
->
-> wcn3990 hw1.0 target 0x00000008 chip_id 0x00000000 sub 0000:0000
-> kconfig debug 0 debugfs 0 tracing 0 dfs 0 testmode 0
-> firmware ver  api 5 features wowlan,mgmt-tx-by-reference,non-bmi crc32 
-> b3d4b790
-> htt-ver 3.86 wmi-op 4 htt-op 3 cal file max-sta 32 raw 0 hwcrypto 1
->
-> With this patch applied, I no longer see the error message in the 
-> commit message, when I unbind/bind when wifi stops working.
->
-> Tested-by: Steev Klimaszewski <steev@kali.org>
->
-> -- Steev
->
-Apologies for the second email - I've tested this now on both the Lenovo 
-Flex 5G, as I have seen the issue on it as well, as well as on the 
-Lenovo Yoga C630, where I did not but I did have issues with attempting 
-to rebind the device, prior to this patch.
+Remove the first call to set_fifo_samples(), and merge the
+set_fifo_samples() function into the set_fifo_watermark()
+function. Also, since fifo_set_size is always set inside of
+update_scan_mode(), and it cannot be set to 0, remove the
+zero check from set_fifo_samples().
 
-Firmware version for the Flex 5G is
+Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+---
+ drivers/iio/accel/adxl367.c | 46 ++++++++-----------------------------
+ 1 file changed, 9 insertions(+), 37 deletions(-)
 
-qmi chip_id 0x30224 chip_family 0x4001 board_id 0xff soc_id 0x40060000
-qmi fw_version 0x32080009 fw_build_timestamp 2020-11-16 14:44 
-fw_build_id 
-QC_IMAGE_VERSION_STRING=WLAN.HL.3.2.0.c8-00009-QCAHLSWSC8180XMTPLZ-1
-
-Firmware version on the Yoga C630 is
-
-qmi chip_id 0x30214 chip_family 0x4001 board_id 0xff soc_id 0x40030001
-qmi fw_version 0x2009856b fw_build_timestamp 2018-07-19 12:28 
-fw_build_id QC_IMAGE_VERSION_STRING=WLAN.HL.2.0-01387-QCAHLSWMTPLZ-1
+diff --git a/drivers/iio/accel/adxl367.c b/drivers/iio/accel/adxl367.c
+index 0289ed8cf2c6..72a8c3fb27b9 100644
+--- a/drivers/iio/accel/adxl367.c
++++ b/drivers/iio/accel/adxl367.c
+@@ -447,21 +447,17 @@ static int adxl367_set_fifo_format(struct adxl367_state *st,
+ 					     fifo_format));
+ }
+ 
+-static int adxl367_set_fifo_samples(struct adxl367_state *st,
+-				    unsigned int fifo_watermark,
+-				    unsigned int fifo_set_size)
++static int adxl367_set_fifo_watermark(struct adxl367_state *st,
++				      unsigned int fifo_watermark)
+ {
+-	unsigned int fifo_samples = fifo_watermark * fifo_set_size;
++	unsigned int fifo_samples = fifo_watermark * st->fifo_set_size;
+ 	unsigned int fifo_samples_h, fifo_samples_l;
+ 	int ret;
+ 
+ 	if (fifo_samples > ADXL367_FIFO_MAX_WATERMARK)
+ 		fifo_samples = ADXL367_FIFO_MAX_WATERMARK;
+ 
+-	if (fifo_set_size == 0)
+-		return 0;
+-
+-	fifo_samples /= fifo_set_size;
++	fifo_samples /= st->fifo_set_size;
+ 
+ 	fifo_samples_h = FIELD_PREP(ADXL367_SAMPLES_H_MASK,
+ 				    FIELD_GET(ADXL367_SAMPLES_VAL_H_MASK,
+@@ -475,30 +471,8 @@ static int adxl367_set_fifo_samples(struct adxl367_state *st,
+ 	if (ret)
+ 		return ret;
+ 
+-	return regmap_update_bits(st->regmap, ADXL367_REG_FIFO_SAMPLES,
+-				  ADXL367_SAMPLES_L_MASK, fifo_samples_l);
+-}
+-
+-static int adxl367_set_fifo_set_size(struct adxl367_state *st,
+-				     unsigned int fifo_set_size)
+-{
+-	int ret;
+-
+-	ret = adxl367_set_fifo_samples(st, st->fifo_watermark, fifo_set_size);
+-	if (ret)
+-		return ret;
+-
+-	st->fifo_set_size = fifo_set_size;
+-
+-	return 0;
+-}
+-
+-static int adxl367_set_fifo_watermark(struct adxl367_state *st,
+-				      unsigned int fifo_watermark)
+-{
+-	int ret;
+-
+-	ret = adxl367_set_fifo_samples(st, fifo_watermark, st->fifo_set_size);
++	ret = regmap_update_bits(st->regmap, ADXL367_REG_FIFO_SAMPLES,
++				 ADXL367_SAMPLES_L_MASK, fifo_samples_l);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -1276,14 +1250,11 @@ static int adxl367_update_scan_mode(struct iio_dev *indio_dev,
+ {
+ 	struct adxl367_state *st  = iio_priv(indio_dev);
+ 	enum adxl367_fifo_format fifo_format;
+-	unsigned int fifo_set_size;
+ 	int ret;
+ 
+ 	if (!adxl367_find_mask_fifo_format(active_scan_mask, &fifo_format))
+ 		return -EINVAL;
+ 
+-	fifo_set_size = bitmap_weight(active_scan_mask, indio_dev->masklength);
+-
+ 	mutex_lock(&st->lock);
+ 
+ 	ret = adxl367_set_measure_en(st, false);
+@@ -1294,11 +1265,12 @@ static int adxl367_update_scan_mode(struct iio_dev *indio_dev,
+ 	if (ret)
+ 		goto out;
+ 
+-	ret = adxl367_set_fifo_set_size(st, fifo_set_size);
++	ret = adxl367_set_measure_en(st, true);
+ 	if (ret)
+ 		goto out;
+ 
+-	ret = adxl367_set_measure_en(st, true);
++	st->fifo_set_size = bitmap_weight(active_scan_mask,
++					  indio_dev->masklength);
+ 
+ out:
+ 	mutex_unlock(&st->lock);
+-- 
+2.35.3
 

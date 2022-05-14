@@ -2,117 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6227527200
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 16:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2954527214
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 16:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233329AbiENObi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 10:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
+        id S233389AbiENOg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 10:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232498AbiENObg (ORCPT
+        with ESMTP id S233357AbiENOgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 10:31:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0179719014;
-        Sat, 14 May 2022 07:31:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A335FB808D2;
-        Sat, 14 May 2022 14:31:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9849FC340EE;
-        Sat, 14 May 2022 14:31:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652538692;
-        bh=KLDGJ+XUhBPXixy1Zg7PlcK9TVzkkUVTXCexNedRPdw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sbzioa5hOPlt9gboLS22zB5omo907tZtRH6IInLQ1CrfnwkK2NfOpZOJ1gEhi6Fmz
-         wJ889Mle+VD6igOIw2INvZpDAuHTEx9HKZdwk3ubcTh4BQLZq4OK+6Bv+FOUWtkAce
-         OP2GafNWUcvJeVMModmVglfT7SsB1J/BwC2DR5vUxADkW4qDlDdXQseDx66NhqUybk
-         sjRD7kqKoUxNbKI5Ll1jiuVmWjkX9OaAGWSdbfhlkOD5TYPKXSSJ6OzxdOP2VOjQvp
-         q51Wk+roELj09l29LBs1MdWGOaWS9AHtfMKaEaj9GLEWTXV5dUnvfPmumqCI7qHjh4
-         KpqruflA0jFgQ==
-Date:   Sat, 14 May 2022 16:31:28 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Quan Nguyen <quan@os.amperecomputing.com>
-Cc:     Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        openipmi-developer@lists.sourceforge.net,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: Re: [PATCH v7 3/3] i2c: aspeed: Assert NAK when slave is busy
-Message-ID: <Yn+9QBoPdH8fMm/m@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Quan Nguyen <quan@os.amperecomputing.com>,
-        Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        openipmi-developer@lists.sourceforge.net,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-References: <20220422040803.2524940-1-quan@os.amperecomputing.com>
- <20220422040803.2524940-4-quan@os.amperecomputing.com>
+        Sat, 14 May 2022 10:36:07 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F1220F67;
+        Sat, 14 May 2022 07:35:56 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id r71so9736098pgr.0;
+        Sat, 14 May 2022 07:35:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=LH2DY0hZRjZwSZkfIfm9MKqf607rYpniX8kvWvJ5SrQ=;
+        b=mw06+rVjOxYyMVI9ZYHSM7zutkN/daoJ+ZPCLOPb+TLfw8lg6K8BuiR8uzrcVROl09
+         AsNQc+iPKPirvKtWpjTT/sRNBrcdsJUZy7XpZZbaeOqMTfWEYKQvfXlWH0ygoDCRZk0R
+         73C7NWBRYR/VrhJTuuy5zdK3q5r0raNIjRA3LpFOJcsWCwmeSWAhDZi4fH8FKY/bcKj8
+         18cqNVN3mKEO6DhnlqmvSALKyzBcN99OdKViA8U6WUK0y4u6SdUAKQLArpmZPtbfG/7d
+         PXP4NkaDJv2KYo48mP5IDxZSOu56qdB1PlUBTxwwhhQm0Ad5c/Dm/kNHOFPpcLqLWdBS
+         2LLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=LH2DY0hZRjZwSZkfIfm9MKqf607rYpniX8kvWvJ5SrQ=;
+        b=4bncuKi6bZ8i94TsFDBJ1cvV510COx1K/FIKkXWDv4yElTIX5kmQfhLfDQgAlOlClI
+         oVQvIrll0EHQ9kRHpZAQxuxHGr6aIztSRw5Vzg7MC6Iqzm+RXD9SWy+fjEqs6qXlXTPw
+         xTgfD2I5MjKTahCx32tsIk8oWT3TD6q0Y1bkESlUp3w2pSUQAf0n8sQgkmMJ4u8BPIMN
+         qs6DZwZvJ8aWcBicv9ppldjZ+I/CugBsMZzXP/Db/alFg1XZQtqvJDgU3fX8cku0RVZ0
+         oaEEGrchy7RzZ1OdK6SxmKsg8Ndgh23xVAI/7FBu54p7tLQ93aySpVKOyVdmr5JptZ35
+         V8wA==
+X-Gm-Message-State: AOAM5303iusnw6U8fYFXR6Jo9/eY8wqzp91hXs5Moj6YlM3qZX+4YkoC
+        eu4c/wMswqNlUC0Vr/aYQ64TrwHv93sIjsTbWOg=
+X-Google-Smtp-Source: ABdhPJw39KpoHqB64KBC1ErT7ywfn8ZQK5im1sJJlXNIo+GgE31vYY8bNkRUc0UNVycNarWC+7aHPw==
+X-Received: by 2002:a63:89c8:0:b0:3db:9da:797e with SMTP id v191-20020a6389c8000000b003db09da797emr8041421pgd.358.1652538955947;
+        Sat, 14 May 2022 07:35:55 -0700 (PDT)
+Received: from localhost.localdomain ([49.37.196.1])
+        by smtp.gmail.com with ESMTPSA id ay4-20020a17090b030400b001df263f30e8sm595645pjb.3.2022.05.14.07.35.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 May 2022 07:35:55 -0700 (PDT)
+From:   Saranya Panjarathina <plsaranya@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        g_balaji1@dell.com, Saranya_Panjarathina@dell.com,
+        linux-kernel@vger.kernel.org, Saranya_PL <plsaranya@gmail.com>
+Subject: [patch netdev] net: PIM register decapsulation and Forwarding.
+Date:   Sat, 14 May 2022 07:33:42 -0700
+Message-Id: <20220514143342.2600-1-plsaranya@gmail.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220512070138.19170-1-plsaranya@gmail.com>
+References: <20220512070138.19170-1-plsaranya@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="/Jcb04ZVbWq3W2FY"
-Content-Disposition: inline
-In-Reply-To: <20220422040803.2524940-4-quan@os.amperecomputing.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Saranya_PL <plsaranya@gmail.com>
 
---/Jcb04ZVbWq3W2FY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+PIM register packet is decapsulated but not forwarded in RP
 
-On Fri, Apr 22, 2022 at 11:08:03AM +0700, Quan Nguyen wrote:
-> When processing I2C_SLAVE_WRITE_REQUESTED event, if slave returns
-> -EBUSY, i2c controller should issue RxCmdLast command to assert NAK
-> on the bus.
+__pim_rcv decapsulates the PIM register packet and reinjects for forwarding
+after replacing the skb->dev to reg_dev (vif with VIFF_Register)
 
-That should be I2C_SLAVE_WRITE_RECEIVED and it should be NAKed on all
-errnos. Have you tested it?
+Ideally the incoming device should be same as skb->dev where the
+original PIM register packet is received. mcache would not have
+reg_vif as IIF. Decapsulated packet forwarding is failing
+because of IIF mismatch. In RP for this S,G RPF interface would be
+skb->dev vif only, so that would be IIF for the cache entry.
 
+Signed-off-by: Saranya Panjarathina <plsaranya@gmail.com>
+---
+ net/ipv4/ipmr.c  | 2 +-
+ net/ipv6/ip6mr.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---/Jcb04ZVbWq3W2FY
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/net/ipv4/ipmr.c b/net/ipv4/ipmr.c
+index 13e6329784fb..7b9586335fb7 100644
+--- a/net/ipv4/ipmr.c
++++ b/net/ipv4/ipmr.c
+@@ -598,7 +598,7 @@ static int __pim_rcv(struct mr_table *mrt, struct sk_buff *skb,
+ 	skb->protocol = htons(ETH_P_IP);
+ 	skb->ip_summed = CHECKSUM_NONE;
+ 
+-	skb_tunnel_rx(skb, reg_dev, dev_net(reg_dev));
++	skb_tunnel_rx(skb, skb->dev, dev_net(skb->dev));
+ 
+ 	netif_rx(skb);
+ 
+diff --git a/net/ipv6/ip6mr.c b/net/ipv6/ip6mr.c
+index 4e74bc61a3db..147e29a818ca 100644
+--- a/net/ipv6/ip6mr.c
++++ b/net/ipv6/ip6mr.c
+@@ -566,7 +566,7 @@ static int pim6_rcv(struct sk_buff *skb)
+ 	skb->protocol = htons(ETH_P_IPV6);
+ 	skb->ip_summed = CHECKSUM_NONE;
+ 
+-	skb_tunnel_rx(skb, reg_dev, dev_net(reg_dev));
++	skb_tunnel_rx(skb, skb->dev, net);
+ 
+ 	netif_rx(skb);
+ 
+-- 
+2.20.1
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJ/vT8ACgkQFA3kzBSg
-KbYtRxAAnwySTv44cgVvd57fhPZJ4l4tcBSK97yFdMtZ2UNRFfyFclUiH9skwsuO
-KOmHb1UatGOYAoMyxrPIkiOXkeIeL/vlIkgI0d4CjL0pWKNrNIqqSncRdnpsDO8u
-4efBzlk9D2iNkA7y9OAuBxHwONT41qUX5fgOymGpF56b/X/4sHJjV20pcFewfb/0
-3ykk9Y5QJDq+h5va+IXp0O2ED6u8nZxn+/RAy+JiJFX+ynFzf6MYMrsFEJ4uVB20
-T8/0HKkL0I+TMOMwdu62Blkbo324e3mxvilD6D9buGzpclYxAQb5pw1TRKxkiBxu
-hGrjg3J66VECV7Segwb9gO/JoV1u+jinAXD2xWmQoR29jfb4n9IW/WGy1/meEe43
-GJ9tVo9DGxPUT+nwnpV14oZFQxmrRdZaHzwf4cFpnuVbZZspgSBMM2mjJzpHv3Qq
-9pABXmjzY8LdzVQAAnCpk2062gS2r0hnVnCs7WdgAsAHqzZ/ioYBFyD7Qo5RChe5
-ilimRgUz2brUuVf7K9VxR3JBCBMJ+C7O5Hc1Ii33pIw09mzI1395q6FbzfPz8oWJ
-yXiOivGAf0xBdw8N3J2rQ6e/7lEBWH88KO/bttKAr1CJChuotX3enJH5gvDakGNb
-7gPDMh7sDqcTC5a6vBSuhWF76dZlfgYFA6NYuCn2iNTL8LyBATs=
-=xB1Q
------END PGP SIGNATURE-----
-
---/Jcb04ZVbWq3W2FY--

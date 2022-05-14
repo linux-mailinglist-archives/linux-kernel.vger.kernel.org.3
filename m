@@ -2,80 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5BEB526F4A
+	by mail.lfdr.de (Postfix) with ESMTP id 02E05526F47
 	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:15:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232041AbiENGYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 02:24:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54774 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232052AbiENGYh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232049AbiENGYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Sat, 14 May 2022 02:24:37 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27C95F7C;
-        Fri, 13 May 2022 23:24:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652509475; x=1684045475;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=CTPKV5/3XbPVVsmMfjikShM7ViVrOedVu3KK+AOri88=;
-  b=WOhoiUbJORohS/GZKozszJzqGqKc13KzcLtHzoK+6AmBJnabt48skTNe
-   wkSRFvC2H9GzfYS9sw2JCrmEjM63fOXc4kOcN4z4vzNQGUpKOwEWftJ/7
-   HMR3JYOTPhVvUh2vUsxq5CgNhyFbgOJhpKOp54CTtHB5kBDfMLWTfRFZP
-   w=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 May 2022 23:24:35 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 23:24:34 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 13 May 2022 23:24:34 -0700
-Received: from [10.216.22.253] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 13 May
- 2022 23:24:27 -0700
-Message-ID: <972ac516-efac-54d6-febc-1b180ec36d4b@quicinc.com>
-Date:   Sat, 14 May 2022 11:54:22 +0530
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54512 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231989AbiENGYa (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 14 May 2022 02:24:30 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53AFB5F5B
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 23:24:28 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id g1-20020a92cda1000000b002cf30d49956so6114258ild.18
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 23:24:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=A9wNDjXdGRpuh2KPLSQl2FaHhAdF0vre7xDYlmgpQ0s=;
+        b=uAx24QsdcWA/vjzFLSMG0Ee+qXW1ptMRB5XMoe9eY3ddC3tLqVqYF2n/q8TjvPknAN
+         kuYPO7iNoDEzQFhqnvR0ngV40FKksefh8EYyLdZvgbH9ykA+KTrRICmzgg+5c7uds+US
+         lrTxu5v9DG6yrlvjaanpS8pwU2gygas4UvZGRVcshMwi2/Wa5aIBca3iIz0qKGYEgCvC
+         S0eW2lXR1P27ZOAJChel1CIJvw6sjJao+cp9LAj1H/4obbtR/0k0l6vvBgyiSeSf0lPh
+         rL35kNF/V5yru4ddQQ7iUTjuvOEMK3FkfCeW0wo7VnbP8VZIqIvo/FJ0U2maEajcCooi
+         eO5A==
+X-Gm-Message-State: AOAM531OZH+Gqca11qzw2yaxLPUGf3/14X7FNm3tXkZd6ZKDOW8U5Yyv
+        RYnqIPA3vDzeg0qJOQb6ovHNjFem74WdpEG1jfy6Qjbxut54
+X-Google-Smtp-Source: ABdhPJwE2FF9dllSoYddXbWPp1Fqh0/9KXiffw/RfZZ4B00tS+llhCe3VPiQFzEfGwGGgXETJ8Tmnab7hPH+8QuLI9zoNtR5/Cpe
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [v4 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
- override params bindings
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        "Vinod Koul" <vkoul@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>
-References: <1652282793-5580-1-git-send-email-quic_kriskura@quicinc.com>
- <1652282793-5580-2-git-send-email-quic_kriskura@quicinc.com>
- <d296720d-ccbe-27f0-8ba1-9653af25dd52@linaro.org>
- <9644d608-4ab9-ed0d-50fb-0016e4331361@quicinc.com>
- <5b32cecf-873a-6367-df87-1b8d45e63cec@linaro.org>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <5b32cecf-873a-6367-df87-1b8d45e63cec@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6e02:1a06:b0:2cf:d11d:d419 with SMTP id
+ s6-20020a056e021a0600b002cfd11dd419mr4200244ild.309.1652509467675; Fri, 13
+ May 2022 23:24:27 -0700 (PDT)
+Date:   Fri, 13 May 2022 23:24:27 -0700
+In-Reply-To: <00000000000062b6fd057d4b7dc2@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cf146c05def2d7ab@google.com>
+Subject: Re: [syzbot] KMSAN: uninit-value in __tipc_nl_bearer_enable
+From:   syzbot <syzbot+e820fdc8ce362f2dea51@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, glider@google.com, jmaloy@redhat.com,
+        jon.maloy@ericsson.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
+        tipc-discussion@lists.sourceforge.net, ying.xue@windriver.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,100 +58,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+syzbot has found a reproducer for the following issue on:
 
-On 5/12/2022 4:00 PM, Krzysztof Kozlowski wrote:
-> On 12/05/2022 07:57, Krishna Kurapati PSSNV wrote:
->> On 5/11/2022 11:49 PM, Krzysztof Kozlowski wrote:
->>> On 11/05/2022 17:26, Krishna Kurapati wrote:
->>>> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
->>>>
->>>> Add device tree bindings for SNPS phy tuning parameters.
->>>>
->>>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
->>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->>>> ---
->>>>    .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 87 ++++++++++++++++++++++
->>>>    1 file changed, 87 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
->>>> index 1ce251d..70efffe 100644
->>>> --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
->>>> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
->>>> @@ -53,6 +53,93 @@ properties:
->>>>      vdda33-supply:
->>>>        description: phandle to the regulator 3.3V supply node.
->>>>    
->>>> +  qcom,hs-disconnect-bps:
->>>> +    $ref: /schemas/types.yaml#/definitions/int32
->>>> +    description:
->>>> +      This adjusts the voltage level for the threshold used to
->>>> +      detect a disconnect event at the host. Possible values are.
->>>> +      The values defined are in multiples of basis points (1bp = 0.01%).
->>> This means there is some minimum and maximum (100%)?
->> Hi Krzystof,
->>
->> Yes there are max and min for each parameter (not necessarily 0%/100%)
->>
->> As an example if we take squelch detector threshold, the register value
->> vs actual percentage changer as per data book is as follows :
->>
->> % change in voltage    |     corresponding reg value
->>
->>    -20.90%                        |    7
->>    -15.60%                        |    6
->> -10.30%                         |    5
->> -5.30%                           |    4
->> 0%                                  |    3
->> 5.30%                            |    2
->> 10.60%                          |    1
->> 15.90%                          |    0
->>
->> Here the min and max are 15.9% to -20.9%
->>
->> The min and max differ for each parameter and might not be necessarily
->> 0% and 100%
-> Then it seems possible to define minimum and maximum values - please add
-> them ("minimum: xxxx").
->
->
-> Best regards,
-> Krzysztof
+HEAD commit:    d6e2c8c7eb40 x86: kmsan: enable KMSAN builds for x86
+git tree:       https://github.com/google/kmsan.git master
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=115c49b1f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=65d9eb7bfd2865c9
+dashboard link: https://syzkaller.appspot.com/bug?extid=e820fdc8ce362f2dea51
+compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14b563faf00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1310ee59f00000
 
-Hi Krzysztof,
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e820fdc8ce362f2dea51@syzkaller.appspotmail.com
 
-  Sorry for the late reply, missed this mail.
+netlink: 20 bytes leftover after parsing attributes in process `syz-executor377'.
+=====================================================
+BUG: KMSAN: uninit-value in string_nocheck lib/vsprintf.c:644 [inline]
+BUG: KMSAN: uninit-value in string+0x4f9/0x6f0 lib/vsprintf.c:725
+ string_nocheck lib/vsprintf.c:644 [inline]
+ string+0x4f9/0x6f0 lib/vsprintf.c:725
+ vsnprintf+0x2222/0x3650 lib/vsprintf.c:2806
+ vprintk_store+0x537/0x2150 kernel/printk/printk.c:2158
+ vprintk_emit+0x28b/0xab0 kernel/printk/printk.c:2256
+ vprintk_default+0x86/0xa0 kernel/printk/printk.c:2283
+ vprintk+0x15f/0x180 kernel/printk/printk_safe.c:50
+ _printk+0x18d/0x1cf kernel/printk/printk.c:2293
+ tipc_enable_bearer net/tipc/bearer.c:371 [inline]
+ __tipc_nl_bearer_enable+0x2022/0x22a0 net/tipc/bearer.c:1033
+ tipc_nl_bearer_enable+0x6c/0xb0 net/tipc/bearer.c:1042
+ genl_family_rcv_msg_doit net/netlink/genetlink.c:731 [inline]
+ genl_family_rcv_msg net/netlink/genetlink.c:775 [inline]
+ genl_rcv_msg+0x157f/0x1660 net/netlink/genetlink.c:792
+ netlink_rcv_skb+0x40c/0x7e0 net/netlink/af_netlink.c:2503
+ genl_rcv+0x63/0x80 net/netlink/genetlink.c:803
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x109c/0x1370 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x14dc/0x1720 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:705 [inline]
+ sock_sendmsg net/socket.c:725 [inline]
+ ____sys_sendmsg+0xe11/0x12c0 net/socket.c:2413
+ ___sys_sendmsg net/socket.c:2467 [inline]
+ __sys_sendmsg+0x704/0x840 net/socket.c:2496
+ __do_sys_sendmsg net/socket.c:2505 [inline]
+ __se_sys_sendmsg net/socket.c:2503 [inline]
+ __x64_sys_sendmsg+0xe2/0x120 net/socket.c:2503
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x51/0xa0 arch/x86/entry/common.c:81
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Currently, these values have a fixed maximum and minimum. But if these 
-limits change in the
+Uninit was created at:
+ slab_post_alloc_hook mm/slab.h:754 [inline]
+ slab_alloc_node mm/slub.c:3231 [inline]
+ __kmalloc_node_track_caller+0xde3/0x14f0 mm/slub.c:4962
+ kmalloc_reserve net/core/skbuff.c:354 [inline]
+ __alloc_skb+0x545/0xf90 net/core/skbuff.c:426
+ alloc_skb include/linux/skbuff.h:1300 [inline]
+ netlink_alloc_large_skb net/netlink/af_netlink.c:1191 [inline]
+ netlink_sendmsg+0xde3/0x1720 net/netlink/af_netlink.c:1896
+ sock_sendmsg_nosec net/socket.c:705 [inline]
+ sock_sendmsg net/socket.c:725 [inline]
+ ____sys_sendmsg+0xe11/0x12c0 net/socket.c:2413
+ ___sys_sendmsg net/socket.c:2467 [inline]
+ __sys_sendmsg+0x704/0x840 net/socket.c:2496
+ __do_sys_sendmsg net/socket.c:2505 [inline]
+ __se_sys_sendmsg net/socket.c:2503 [inline]
+ __x64_sys_sendmsg+0xe2/0x120 net/socket.c:2503
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x51/0xa0 arch/x86/entry/common.c:81
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-future (say on a per target basis) , would it be appropriate to add them 
-here in bindings file ?
-
-Also in the driver file for sc7280 target, we have added parameter 
-mapping : (map b/w register value
-
-and bps passed from device tree). For squelch detector, it is as follows:
-
-+static struct override_param squelch_det_threshold_sc7280[] = {
-+	OVERRIDE_PARAM(-2090, 7),
-+	OVERRIDE_PARAM(-1560, 6),
-+	OVERRIDE_PARAM(-1030, 5),
-+	OVERRIDE_PARAM(-530, 4),
-+	OVERRIDE_PARAM(0, 3),
-+	OVERRIDE_PARAM(530, 2),
-+	OVERRIDE_PARAM(1060, 1),
-+	OVERRIDE_PARAM(1590, 0),
-+};
-
-And the code is written such that if we give a bps value in dt greater than max value in
-table, we would automatically choose max value. And if we provide bps value lesser than
-minimum value, we would choose the min value.
-
-So, would it be appropriate to add the min and max in dt-bindings when there is a
-slight chance of them changing in the future ?
-
-Would like to know your thoughts on this,
-
-Thanks,
-Krishna,
+CPU: 0 PID: 3475 Comm: syz-executor377 Not tainted 5.18.0-rc4-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+=====================================================
 

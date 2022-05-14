@@ -2,116 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6AA526F01
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1257C526F53
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbiENCxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 22:53:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53338 "EHLO
+        id S229815AbiENChy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 22:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbiENCx2 (ORCPT
+        with ESMTP id S229481AbiENChw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 22:53:28 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCE835B1F7;
-        Fri, 13 May 2022 17:59:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=qyZsoJknrWOVDvtpNszTIIAof3pgi3xfB+EMxclimb4=; b=YUKlqPWGIDZvhXATbELAlppcVk
-        92/7Q/rIwsA0xahE9uRHrV3gPbUEYEv1caC2w8u4thxI4DZV33oa7K1SUXBsSPdiaPrKdyPix/5QH
-        oYl1lWBxbSzo2oFcsrRYadLQzEMPbCWhroO2ghC15gjxxUxR5c16PCzSrzvjpeagk87c=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1npfZX-002hd6-UG; Sat, 14 May 2022 02:23:51 +0200
-Date:   Sat, 14 May 2022 02:23:51 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Saravana Kannan <saravanak@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        John Stultz <jstultz@google.com>,
-        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [RFC PATCH net 0/2] Make phylink and DSA wait for PHY driver
- that defers probe
-Message-ID: <Yn72l3O6yI7YstMf@lunn.ch>
-References: <20220513233640.2518337-1-vladimir.oltean@nxp.com>
+        Fri, 13 May 2022 22:37:52 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB2B34ACB5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 17:39:24 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-d39f741ba0so12427536fac.13
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 17:39:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=y+n1fPZT1zdS+lAHwbtnaHu3tkmXjTbbjBa7vPYlABo=;
+        b=O6V92x54nhsbw+iIsi5VHLqlpU/25LrFdzgZySWoN2Jrfjv/G3KftonhcTmUy8+al1
+         WFE6Q+tE0l2iBl25sRgpQbo9qhWdx+7LQtZft6V5k/h/7WOZNGlG35S3sPrBgkgQs9hp
+         3tvilCQ/lgFTZeOe6BIxP5p34eS2/nfLcGGBAlSpH5WKPoPzQueO4EBtjraJShnZ0Puj
+         JNLJIYxMRvMTsSMvBtIVlwZO5+dGqyE0RJY+fJ51cHSBbBgakP4QrXQDkjvt2Ofq5IbP
+         6iFY+2AcNfxSZg9S+opPYsWSgCUOx9dixE2DVScTOtJ1u5b9h9LKzZ0w8nUmMAEI9TQQ
+         QhnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=y+n1fPZT1zdS+lAHwbtnaHu3tkmXjTbbjBa7vPYlABo=;
+        b=xfkaIIHc8bVbl/JDsKscJ/cLfqWY5ysvBFhWCqr9MG6k1OAYLWPI82t1hrlGORASnp
+         ZAdxS8WnhZryCE4Lh9vKHsl88qfolrFCkqws360qOKsT9/wbm2Al5LKec7ODFURXnUEm
+         /M6r/1U5jI0qclW25cHKTBrz+4l2UCGg9bFJu/TVGkR4LN5t9PRxuMmL3OJnuFQ0f3wH
+         NS5DOaXhHNNdnFt9GDb4GTXObBbP8Zf8QCBj5aYs5c/zdIJLmL3TF86rHjr0RwGmhM9H
+         Zuf1cRfd0R1w+jB9h3aZtr+gcR4cTrEPZAQ12S6ND7IsmcMT1BonnsNfOXxvJvBuLlD4
+         xp/Q==
+X-Gm-Message-State: AOAM5327V/WhxLl7uNaWFs5gIIhjPvE3lagJfpvutNRDaWxRqIE1cuIy
+        AmyhqmIHG+uhHcD1mFCmhbY6aPAu7nw=
+X-Google-Smtp-Source: ABdhPJyOeXl2fFGTzg0iG/6FpetLkDcmdjOHsoeI13uUcbQHA6nOkjFHKMo1BhP97JPHpR+hLyq8fg==
+X-Received: by 2002:a17:90b:3e8a:b0:1dc:9d7e:1e12 with SMTP id rj10-20020a17090b3e8a00b001dc9d7e1e12mr7400387pjb.58.1652487969532;
+        Fri, 13 May 2022 17:26:09 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:1969:9b8a:5056:897b])
+        by smtp.gmail.com with ESMTPSA id n16-20020a6563d0000000b003c14af50607sm2160677pgv.31.2022.05.13.17.26.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 17:26:09 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Fri, 13 May 2022 17:26:07 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        syzbot <syzbot+acf65ca584991f3cc447@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com,
+        Matthew Wilcox <willy@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [syzbot] WARNING in follow_hugetlb_page
+Message-ID: <Yn73Hz7LkSUv7ycw@google.com>
+References: <000000000000ef451a05dee0f2b1@google.com>
+ <00000000000077377c05dee75f63@google.com>
+ <20220513102617.c464c4f566052838e911a3ec@linux-foundation.org>
+ <75f09063-d184-7d44-17a1-ed04be5eb953@oracle.com>
+ <a7fd0c3f-921e-19b3-2f67-a231dede28f9@oracle.com>
+ <20220513161910.d1b73583cdb2e33562aa86e5@linux-foundation.org>
+ <Yn7vnpXwX50J3K+7@google.com>
+ <4809b134-a37a-50b8-4c25-44548bc1048f@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220513233640.2518337-1-vladimir.oltean@nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <4809b134-a37a-50b8-4c25-44548bc1048f@nvidia.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 14, 2022 at 02:36:38AM +0300, Vladimir Oltean wrote:
-> This patch set completes the picture described by
-> '[RFC,devicetree] of: property: mark "interrupts" as optional for fw_devlink'
-> https://patchwork.kernel.org/project/netdevbpf/patch/20220513201243.2381133-1-vladimir.oltean@nxp.com/
+On Fri, May 13, 2022 at 05:09:11PM -0700, John Hubbard wrote:
+> On 5/13/22 16:54, Minchan Kim wrote:
+> > > > I isolated this to Minchan Kim's "mm: fix is_pinnable_page against on cma
+> > > > page".  Yes, the fat finger fix is in next-20220513.
+> > > > 
+> > > > I don't have time to analyze right now, but can confirm that in the
+> > > > reproducer is_pinnable_page is returning false after this change when it
+> > > > previously returned true.
+> > > 
+> > > OK, thanks, I dropped mm-fix-is_pinnable_page-against-on-cma-page.patch
+> > 
+> > Seems like bug of the patch v5 due to change of this
+> > 
+> >      if (mt & (MIGRATE_CMA | MIGRATE_ISOLATE))
+> > 
+> > The migration type is not bit type so it shold be
+> > 
+> > if (mt == MIGRATE_CMA || mt == MIGRATE_ISOLATE)
+> > 
 > 
-> I've CCed non-networking maintainers just in case they want to gain a
-> better understanding. If not, apologies and please ignore the rest.
-> 
-> 
-> 
-> My use case is to migrate a PHY driver from poll mode to interrupt mode
-> without breaking compatibility between new device trees and old kernels
-> which did not have a driver for that IRQ parent, and therefore (for
-> things to work) did not even have that interrupt listed in the "vintage
-> correct" DT blobs. Note that current kernels as of today are also
-> "old kernels" in this description.
-> 
-> Creating some degree of compatibility has multiple components.
-> 
-> 1. A PHY driver must eventually give up waiting for an IRQ provider,
->    since the dependency is optional and it can fall back to poll mode.
->    This is currently supported thanks to commit 74befa447e68 ("net:
->    mdio: don't defer probe forever if PHY IRQ provider is missing").
-> 
-> 2. Before it finally gives up, the PHY driver has a transient phase of
->    returning -EPROBE_DEFER. That transient phase causes some breakage
->    which is handled by this patch set, details below.
-> 
-> 3. PHY device probing and Ethernet controller finding it and connecting
->    to it are async events. When both happen during probing, the problem
->    is that finding the PHY fails if the PHY defers probe, which results
->    in a missing PHY rather than waiting for it. Unfortunately there is
->    no universal way to address this problem, because the majority of
->    Ethernet drivers do not connect to the PHY during probe. So the
->    problem is fixed only for the driver that is of interest to me in
->    this context, DSA, and with special API exported by phylink
->    specifically for this purpose, to limit the impact on other drivers.
+> Sorry for leading you astray by recommending the bitwise OR, Minchan.
+> I overlooked that point even though it was right in front of me.
 
-There is a very different approach, which might be simpler.
+No worry, John.
 
-We know polling will always work. And it should be possible to
-transition between polling and interrupt at any point, so long as the
-phylock is held. So if you get -EPROBE_DEFFER during probe, mark some
-state in phydev that there should be an irq, but it is not around yet.
-When the phy is started, and phylib starts polling, look for the state
-and try getting the IRQ again. If successful, swap to interrupts, if
-not, keep polling. Maybe after 60 seconds of polling and trying, give
-up trying to find the irq and stick with polling.
+Anything else further can we get insight from the warning?
 
-     Andrew
+For example, pin_user_pages going on against a hugetlb page
+which are concurrently running alloc_contig_range(it's
+exported function so anyone can call randomly) so
+alloc_contig_range changes pageblock type as MIGRATE_ISOLATE
+under us so the hit at the warning?

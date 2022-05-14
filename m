@@ -2,47 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B5DE527098
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 12:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4852A52709C
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 12:14:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231766AbiENKLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 06:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34506 "EHLO
+        id S231839AbiENKOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 06:14:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231669AbiENKLo (ORCPT
+        with ESMTP id S230233AbiENKN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 06:11:44 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69F4F5C;
-        Sat, 14 May 2022 03:11:41 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L0hBK240xz4xYD;
-        Sat, 14 May 2022 20:11:37 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1652523097;
-        bh=XBYloNUWpqX8XDCbghXfajfbb2etABKA+WNqERyxi6k=;
-        h=Date:From:To:Cc:Subject:From;
-        b=hDG5HdI6k8kd3i7Ko9E4jvFutGawMbMPxHHcFGe7OuNlae5repCoPpVyVqG9QBhoZ
-         NaZZ//UR5EZuDGZmHY9wI1ZAhinKVBTDGxViXYyk9pecxLd2XIuTsJyvxz5hlfwMJg
-         DOMbv8iEMrMNfYtMKKlobvLsYXjAiN696E1GVeT6oXbadKZ/+CVZzsj16jcj7nTdV3
-         Zzwdk1Z0ck/8z/YNYDDmY+V79Fa6Uya0oMzz+YklN5yGUHqfxWE+d53KD7AWhPZ8Du
-         VakvRlguxsDqGmHPJZ1ExC45h85NNi8JpVjYQiCfhDJB2CCLo06Id8nzHwGptnkkgq
-         1H+ur4aD5qiEA==
-Date:   Sat, 14 May 2022 20:11:35 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the amdgpu tree
-Message-ID: <20220514201135.3844f8d4@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/32Fm/U+lQXLswfMcc1K_VJQ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Sat, 14 May 2022 06:13:58 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95D03BF;
+        Sat, 14 May 2022 03:13:57 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id v11so9119017qkf.1;
+        Sat, 14 May 2022 03:13:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=O2k3CxYQ0rfRbsvdbusSGajTyuBodyEoE5/3tvshlIs=;
+        b=IvTNI894TPDgcvJRbse04Az38GCR5R5XuJ7gF6OhsSMZFBjuU53+7o8SuSJ3UeEDXt
+         YznwLlEMdhLmq9tao9wkatdbNxwE/5BzNOnWfl09oRd39pd3MDTQN9HfdCC0XBJL5Ur2
+         5iuMMAMZgVIT71slP6+LWsv9SXhmGtfnU321+xrHzT4g4TC/AlQd9FU3ZyYilgKm0B1Z
+         6TKWcjaPPVarmKM0i3qbv4rGNsfTz353HiO/j0pcCvEixa9aOfx1LU/YaZiUrxtwhkmc
+         Q2D2hoR2J/zo7sVAhxvGtd3UFPKJrMyhmvUqezX8tPaOFwTmT0mj6NUPbhtbI8fCyTjl
+         LHvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=O2k3CxYQ0rfRbsvdbusSGajTyuBodyEoE5/3tvshlIs=;
+        b=LlfTwyeZTFYlRsc0p2GwPU6Bc2eDDyyYm3dX4RQzYYSN5500oCnxdp/3v/HPJ3i19i
+         vt9cfNcA9/7vjrjngAVOrO+SmUCmbeNaxD6lqXI8rXHhknK709iTn93iuOhAEt5u0JLU
+         oSRK50do6eRTkyB8gFhf9Z6dsE0VlltzH05bABplSN5vH0tGlXnIwX/P2kCmLxKDdROg
+         979v2x4I552pU+icnsfy3TiVutq8iZmKiHqcX7j6EmoL+0JbusYrm+eAPrDGvyFQpoKN
+         4dq02Z1pR4x1Om1gthEX/ql2BYmFIGuZU6XA2uHVkCF376tYmz0BIXQk1DHGKS1Vrye6
+         KkoA==
+X-Gm-Message-State: AOAM532eW1OTniLVBjDmBt6P6T27D4wykFBkLXgQ+hXPsAEQveCbQNvE
+        RiayckjgnOWwrVQTl/vUCnERaaLNSFH8qXALsnY=
+X-Google-Smtp-Source: ABdhPJwLVYVZTMLDWOj/rvxn3OwaEGiAug8uZAoIm3BhI2aZnM1YWgYaraNOSsG0IJI2qL3qGdv2/Q==
+X-Received: by 2002:a05:620a:4448:b0:6a0:68da:20bb with SMTP id w8-20020a05620a444800b006a068da20bbmr6426260qkp.693.1652523236426;
+        Sat, 14 May 2022 03:13:56 -0700 (PDT)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id e8-20020ac84b48000000b002f39b99f69dsm3031925qts.55.2022.05.14.03.13.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 May 2022 03:13:55 -0700 (PDT)
+Message-ID: <627f80e3.1c69fb81.37c5e.1708@mx.google.com>
+Date:   Sat, 14 May 2022 03:13:55 -0700 (PDT)
+X-Google-Original-Date: Sat, 14 May 2022 10:13:53 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220513142228.303546319@linuxfoundation.org>
+Subject: RE: [PATCH 5.10 00/10] 5.10.116-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,37 +73,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/32Fm/U+lQXLswfMcc1K_VJQ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, 13 May 2022 16:23:44 +0200, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.10.116 release.
+> There are 10 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 15 May 2022 14:22:19 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.116-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Hi all,
+5.10.116-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-Commit
-
-  7d8896a222b6 ("drm/amd/pm: add smu pp_feature_mask callback for smu_v13_0=
-_7")
-
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/32Fm/U+lQXLswfMcc1K_VJQ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ/gFcACgkQAVBC80lX
-0Gz54QgAnpQX6FmqQW4SIg4b68OLDFLVxltSzLIW/E0/4W9flPnd4TYdrf8IoSWa
-8lSIvya5aYGLVLpK0qEiIg5lvLtD9sCCS9gbfacI4ZLep1ZqOrH68JsN3NiOKqFR
-AyQXPJeAHAxRywRtrPAGSNN3e7KIuKK5qiYGS+vcg3mfSnC//gbtyLK4pE01kWJ0
-LmHfmSpdIAmll67diCOmlKD4XiRyi7QHtQObpV1kI3c2YbO5St9W+zXHmXspqn0I
-+meiM43IB7oJbCBthh7GKPy+gk7Jtm/vWD5i8ALMj+eoxoFvnM2Df640sFZ6ekVv
-/wh/gsNo1W7uJ8PhYwpyz81pEahIPQ==
-=nD3n
------END PGP SIGNATURE-----
-
---Sig_/32Fm/U+lQXLswfMcc1K_VJQ--

@@ -2,98 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4852A52709C
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 12:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 269C95270A2
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 12:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231839AbiENKOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 06:14:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
+        id S231811AbiENKWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 06:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbiENKN6 (ORCPT
+        with ESMTP id S231748AbiENKWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 06:13:58 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95D03BF;
-        Sat, 14 May 2022 03:13:57 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id v11so9119017qkf.1;
-        Sat, 14 May 2022 03:13:57 -0700 (PDT)
+        Sat, 14 May 2022 06:22:33 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763BC3153D
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 03:22:31 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id t25so18317284lfg.7
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 03:22:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=O2k3CxYQ0rfRbsvdbusSGajTyuBodyEoE5/3tvshlIs=;
-        b=IvTNI894TPDgcvJRbse04Az38GCR5R5XuJ7gF6OhsSMZFBjuU53+7o8SuSJ3UeEDXt
-         YznwLlEMdhLmq9tao9wkatdbNxwE/5BzNOnWfl09oRd39pd3MDTQN9HfdCC0XBJL5Ur2
-         5iuMMAMZgVIT71slP6+LWsv9SXhmGtfnU321+xrHzT4g4TC/AlQd9FU3ZyYilgKm0B1Z
-         6TKWcjaPPVarmKM0i3qbv4rGNsfTz353HiO/j0pcCvEixa9aOfx1LU/YaZiUrxtwhkmc
-         Q2D2hoR2J/zo7sVAhxvGtd3UFPKJrMyhmvUqezX8tPaOFwTmT0mj6NUPbhtbI8fCyTjl
-         LHvQ==
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :content-language:content-transfer-encoding;
+        bh=71mBNyH9B09u2q3LU3Ju59I/HS2yC5xAPDJGFqnY1VY=;
+        b=aDNslnbKSGb4N2xm1Lxo4JxC4fAdYDbFa2mX+wCqkePx5mKCMbOD5iCq1sfQ4987Ly
+         pknma9OKnD55wK9708N0oBvqAdYOUcm5Az6rId19fcg02Ws62hKcfzOhMqR3M/o8PrLT
+         gj6GmVJmadt1Q6ikgZmpoha1PxC2zu9pP27midOTTvFra8OJt0emu5vd+7PT0uiq6Y9d
+         12DQijP7/V04zHpW/6n8kdepYQ97ZFhJf+PtwkCHdsOBLtENyltKd4LGYu1SWRWsvYA+
+         nFL4NUStGXtMLH9yefk27zuXk9ipvER/7g6r1EYIOYlifhm6zULorvCMq4FGU1drfKW2
+         iMng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=O2k3CxYQ0rfRbsvdbusSGajTyuBodyEoE5/3tvshlIs=;
-        b=LlfTwyeZTFYlRsc0p2GwPU6Bc2eDDyyYm3dX4RQzYYSN5500oCnxdp/3v/HPJ3i19i
-         vt9cfNcA9/7vjrjngAVOrO+SmUCmbeNaxD6lqXI8rXHhknK709iTn93iuOhAEt5u0JLU
-         oSRK50do6eRTkyB8gFhf9Z6dsE0VlltzH05bABplSN5vH0tGlXnIwX/P2kCmLxKDdROg
-         979v2x4I552pU+icnsfy3TiVutq8iZmKiHqcX7j6EmoL+0JbusYrm+eAPrDGvyFQpoKN
-         4dq02Z1pR4x1Om1gthEX/ql2BYmFIGuZU6XA2uHVkCF376tYmz0BIXQk1DHGKS1Vrye6
-         KkoA==
-X-Gm-Message-State: AOAM532eW1OTniLVBjDmBt6P6T27D4wykFBkLXgQ+hXPsAEQveCbQNvE
-        RiayckjgnOWwrVQTl/vUCnERaaLNSFH8qXALsnY=
-X-Google-Smtp-Source: ABdhPJwLVYVZTMLDWOj/rvxn3OwaEGiAug8uZAoIm3BhI2aZnM1YWgYaraNOSsG0IJI2qL3qGdv2/Q==
-X-Received: by 2002:a05:620a:4448:b0:6a0:68da:20bb with SMTP id w8-20020a05620a444800b006a068da20bbmr6426260qkp.693.1652523236426;
-        Sat, 14 May 2022 03:13:56 -0700 (PDT)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
-        by smtp.gmail.com with ESMTPSA id e8-20020ac84b48000000b002f39b99f69dsm3031925qts.55.2022.05.14.03.13.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 May 2022 03:13:55 -0700 (PDT)
-Message-ID: <627f80e3.1c69fb81.37c5e.1708@mx.google.com>
-Date:   Sat, 14 May 2022 03:13:55 -0700 (PDT)
-X-Google-Original-Date: Sat, 14 May 2022 10:13:53 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220513142228.303546319@linuxfoundation.org>
-Subject: RE: [PATCH 5.10 00/10] 5.10.116-rc1 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Fox Chen <foxhlchen@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:content-language:content-transfer-encoding;
+        bh=71mBNyH9B09u2q3LU3Ju59I/HS2yC5xAPDJGFqnY1VY=;
+        b=Mf1IF8J3pf80XhOcHHifOx/agQt2w+uYQRydyrsgpX/jFjPmCPFrGU1ELqTHFs3LAq
+         6FXKa69XUSEOGweFXRAFA/PK9twhXY5S3Lk9wFNKMtT0BQwAsQcY0ZND+oZos4QNyCHb
+         KXyu3FydxEH0yxIXaUwx0HLXv70yVOWjtLVOQDISHtr3McoKXdk1XLlWeq5Jglo1ozQn
+         a93G2JszRhDMfnOWa4PtHWzKrjN5Ung5PmVZXEDQdVpZ+YNTZ0one1qzp5K+rldVew54
+         Nvhxm8m+tf7gQ8ULjKAmGRPfiCZeWdUdpZNYeyaMethsg4Zpj8Ft/W+OgwA4P8DjOLwb
+         JcUw==
+X-Gm-Message-State: AOAM530iBfmGCq9Ecvac6ykH1MCHu4GchLZ+bL91fpCnISoW+gfdk5vm
+        OAxAyBC+cn6UnYN5d/3bsacECEUb4Axs4A==
+X-Google-Smtp-Source: ABdhPJwZxMpGHEZgzMQNdvGnPixwwGWS54tSUBK+DTtqe6KWoYW3KsgiSQ5njS8i16pr3UdHcaKJ5A==
+X-Received: by 2002:a05:6512:39c1:b0:471:b37e:fe5a with SMTP id k1-20020a05651239c100b00471b37efe5amr6108692lfu.527.1652523749833;
+        Sat, 14 May 2022 03:22:29 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.177])
+        by smtp.gmail.com with ESMTPSA id m22-20020a195216000000b0047255d21149sm665060lfb.120.2022.05.14.03.22.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 14 May 2022 03:22:29 -0700 (PDT)
+Message-ID: <1eb3b298-4f7e-32ad-74ae-12044ed637ed@openvz.org>
+Date:   Sat, 14 May 2022 13:22:28 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+From:   Vasily Averin <vvs@openvz.org>
+Subject: [PATCH] sparse: use force attribute for fmode_t casts
+To:     Jan Kara <jack@suse.cz>, Alexander Viro <viro@zeniv.linux.org.uk>
+Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
+        Amir Goldstein <amir73il@gmail.com>,
+        Matthew Bobrowski <repnop@google.com>,
+        linux-fsdevel@vger.kernel.org
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 May 2022 16:23:44 +0200, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.10.116 release.
-> There are 10 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 15 May 2022 14:22:19 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.116-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+Fixes sparce warnings:
+fs/notify/fanotify/fanotify_user.c:267:63: sparse:
+ warning: restricted fmode_t degrades to integer
+fs/notify/fanotify/fanotify_user.c:1351:28: sparse:
+ warning: restricted fmode_t degrades to integer
+fs/proc/base.c:2240:25: sparse: warning: cast to restricted fmode_t
+fs/proc/base.c:2297:42: sparse: warning: cast from restricted fmode_t
+fs/proc/base.c:2394:48: sparse: warning: cast from restricted fmode_t
+fs/open.c:1024:21: sparse: warning: restricted fmode_t degrades to integer
 
-5.10.116-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
+Signed-off-by: Vasily Averin <vvs@openvz.org>
+---
+ fs/notify/fanotify/fanotify_user.c | 4 ++--
+ fs/open.c                          | 2 +-
+ fs/proc/base.c                     | 6 +++---
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/fs/notify/fanotify/fanotify_user.c b/fs/notify/fanotify/fanotify_user.c
+index 9b32b76a9c30..6b058828e412 100644
+--- a/fs/notify/fanotify/fanotify_user.c
++++ b/fs/notify/fanotify/fanotify_user.c
+@@ -264,7 +264,7 @@ static int create_fd(struct fsnotify_group *group, struct path *path,
+ 	 * originally opened O_WRONLY.
+ 	 */
+ 	new_file = dentry_open(path,
+-			       group->fanotify_data.f_flags | FMODE_NONOTIFY,
++			       group->fanotify_data.f_flags | (__force int)FMODE_NONOTIFY,
+ 			       current_cred());
+ 	if (IS_ERR(new_file)) {
+ 		/*
+@@ -1348,7 +1348,7 @@ SYSCALL_DEFINE2(fanotify_init, unsigned int, flags, unsigned int, event_f_flags)
+ 	    (!(fid_mode & FAN_REPORT_NAME) || !(fid_mode & FAN_REPORT_FID)))
+ 		return -EINVAL;
+ 
+-	f_flags = O_RDWR | FMODE_NONOTIFY;
++	f_flags = O_RDWR | (__force int)FMODE_NONOTIFY;
+ 	if (flags & FAN_CLOEXEC)
+ 		f_flags |= O_CLOEXEC;
+ 	if (flags & FAN_NONBLOCK)
+diff --git a/fs/open.c b/fs/open.c
+index 1315253e0247..b5ff39ccebfd 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -1021,7 +1021,7 @@ inline struct open_how build_open_how(int flags, umode_t mode)
+ inline int build_open_flags(const struct open_how *how, struct open_flags *op)
+ {
+ 	u64 flags = how->flags;
+-	u64 strip = FMODE_NONOTIFY | O_CLOEXEC;
++	u64 strip = (__force u64)FMODE_NONOTIFY | O_CLOEXEC;
+ 	int lookup_flags = 0;
+ 	int acc_mode = ACC_MODE(flags);
+ 
+diff --git a/fs/proc/base.c b/fs/proc/base.c
+index c1031843cc6a..194b5ac069e7 100644
+--- a/fs/proc/base.c
++++ b/fs/proc/base.c
+@@ -2237,7 +2237,7 @@ static struct dentry *
+ proc_map_files_instantiate(struct dentry *dentry,
+ 			   struct task_struct *task, const void *ptr)
+ {
+-	fmode_t mode = (fmode_t)(unsigned long)ptr;
++	fmode_t mode = (__force fmode_t)(unsigned long)ptr;
+ 	struct proc_inode *ei;
+ 	struct inode *inode;
+ 
+@@ -2294,7 +2294,7 @@ static struct dentry *proc_map_files_lookup(struct inode *dir,
+ 
+ 	if (vma->vm_file)
+ 		result = proc_map_files_instantiate(dentry, task,
+-				(void *)(unsigned long)vma->vm_file->f_mode);
++				(void *)(__force unsigned long)vma->vm_file->f_mode);
+ 
+ out_no_vma:
+ 	mmap_read_unlock(mm);
+@@ -2391,7 +2391,7 @@ proc_map_files_readdir(struct file *file, struct dir_context *ctx)
+ 				      buf, len,
+ 				      proc_map_files_instantiate,
+ 				      task,
+-				      (void *)(unsigned long)p->mode))
++				      (void *)(__force unsigned long)p->mode))
+ 			break;
+ 		ctx->pos++;
+ 	}
+-- 
+2.31.1
 

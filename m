@@ -2,57 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CBE85273BA
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 21:29:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C433A5273BD
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 21:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234876AbiENT3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 15:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59440 "EHLO
+        id S234911AbiENTcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 15:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234727AbiENT3e (ORCPT
+        with ESMTP id S229934AbiENTcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 15:29:34 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BACF219018
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 12:29:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652556571; x=1684092571;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mZ8ZArrRWt0oA0jiuE9tcZA7by6X9dx+CekkEmMIdMg=;
-  b=XAHno2DnLeJ8YUhhNLvJpRo5IsNaO0ku3AHXOjeOAIIkctbov4YN5DJY
-   mgck1hZCTYpDhwtNd39hKbHhnJ0bAcCHLjVlT8WED/JZvNrXzna3c4KAN
-   U8LCg132tdNhDrnaGVsF/13VE7pzUMbBP+LSRBZro2+24HmsdEKOR6JMs
-   NTbhJp2KRCulp1Xs1M08pW+jh/PQmDxr/pzUT5y5gQDElcsX8ySyISm3W
-   1c23fAt6cDevX/1lg+/0kzzunc4cY4fxgQjQoEaMRfKl9kf3fejLKXjx4
-   F4g9NwBfvITFeCqkXE0oIEiuPgwNR0ZxIkvSdL7Z9FC1pfKGadVQMttwy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10347"; a="270678837"
-X-IronPort-AV: E=Sophos;i="5.91,226,1647327600"; 
-   d="scan'208";a="270678837"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2022 12:29:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,226,1647327600"; 
-   d="scan'208";a="740637908"
-Received: from lkp-server01.sh.intel.com (HELO d1462bc4b09b) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 14 May 2022 12:29:30 -0700
-Received: from kbuild by d1462bc4b09b with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1npxSD-0000yD-IG;
-        Sat, 14 May 2022 19:29:29 +0000
-Date:   Sun, 15 May 2022 03:28:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [drm-misc:drm-misc-next 2/2] undefined reference to `screen_info'
-Message-ID: <202205150326.ps3FiIYo-lkp@intel.com>
+        Sat, 14 May 2022 15:32:12 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55771B79C
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 12:32:10 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id h29so19765478lfj.2
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 12:32:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fXzV1fpic6FIBZFtsxUjhfRXDG+va5qpRFfngHIik8E=;
+        b=WMwBL9u+A7cVFaSFpoSvfQhotjddSY3EEfSStc/go3iWLy7T4NqDaod58gnHU1T6tR
+         wCYfEEHhQ5L1xTZcF8uiyLWh2mJET+ibN/8dtyMkATHs1Y+W/rIhs+qVls6IG+J1Qnyf
+         0wRGdwZhCF3ZFyfePovHpgZYVssiFt1X4SnGLnQkPv6o9t+0fWEUzT05nVparICioHLg
+         FWsIDfC7Ta3IiKHQS81GQyErMdey8NdrKvgB3l4VDgqAS8V9XoOSMI7dCIbBcuRMHP0V
+         OkWnBgClT2qMSjiFN4LPWsNPbZAiwo+XJJ6Qd2muplhM2Mqi3MCQECnKH13Cx5WN6Ib6
+         PQkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fXzV1fpic6FIBZFtsxUjhfRXDG+va5qpRFfngHIik8E=;
+        b=2JXHWv5cm2URCadKh6UHIla6DYlBkghsSQR2KbTrAI7xS+lu3yvha3JZzPuBVTb7FC
+         iZYQIlnafCkgkLAVAmUzFJSHcwRcMDrNVxQ2JF1B5jqPojngfikvEAFDfQ8oHztrh0t6
+         OtWJPyUB6CfK2oZdlwX/IDK6xWSKDQhsoFCapu8zGROSGQ6KxnvF4EKLXixrPv45zEGM
+         D3nPWg7ynFP+cdXK9w9bkdO8ov/yWgb1gWt3LI4tBkZb4/KwlUk98U42s7frK/HOJr9Q
+         0uhBKuLtcFS+Y9L80nEiqCf+3Horypt4B+gaWrDFrDh/rCTuf9LVQYAZttF8Cle0Hfui
+         wAOQ==
+X-Gm-Message-State: AOAM531iNCE2n3LeTfu+nl0iJcGrSbOoj8gg3XIsaudQNFX72gyv7SI8
+        V3+QKRxzMLoJvldPW8vZEPEGWg==
+X-Google-Smtp-Source: ABdhPJwe5i88awrmyIJNqgBJD6YgpXCrsim3T+efhyaQX+lVYDbU3HXxwumOjap7znAZcwsvxAG5iA==
+X-Received: by 2002:a05:6512:3f8c:b0:45d:cb2a:8779 with SMTP id x12-20020a0565123f8c00b0045dcb2a8779mr7745769lfa.499.1652556729330;
+        Sat, 14 May 2022 12:32:09 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id f13-20020a2eb5ad000000b0024f3d1daedfsm896630ljn.103.2022.05.14.12.32.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 14 May 2022 12:32:08 -0700 (PDT)
+Message-ID: <93181c1d-16a7-697e-976c-190b1c99f2c2@linaro.org>
+Date:   Sat, 14 May 2022 21:32:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] ath10k: do not enforce interrupt trigger type
+Content-Language: en-US
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Govind Singh <govinds@codeaurora.org>,
+        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+References: <20220513151516.357549-1-krzysztof.kozlowski@linaro.org>
+ <87zgjl4e8t.fsf@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <87zgjl4e8t.fsf@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,34 +82,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-head:   d0edd3c1a7e859a5899c26e2906e80f4ac798fa9
-commit: fa0e256450f27a7d85f65c63f05e6897954a1d53 [2/2] fbdev: vesafb: Allow to be built if COMPILE_TEST is enabled
-config: parisc-allyesconfig (https://download.01.org/0day-ci/archive/20220515/202205150326.ps3FiIYo-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add drm-misc git://anongit.freedesktop.org/drm/drm-misc
-        git fetch --no-tags drm-misc drm-misc-next
-        git checkout fa0e256450f27a7d85f65c63f05e6897954a1d53
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash
+On 13/05/2022 17:57, Kalle Valo wrote:
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
+> 
+>> Interrupt line can be configured on different hardware in different way,
+>> even inverted.  Therefore driver should not enforce specific trigger
+>> type - edge rising - but instead rely on Devicetree to configure it.
+>>
+>> All Qualcomm DTSI with WCN3990 define the interrupt type as level high,
+>> so the mismatch between DTSI and driver causes rebind issues:
+>>
+>>   $ echo 18800000.wifi > /sys/bus/platform/drivers/ath10k_snoc/unbind
+>>   $ echo 18800000.wifi > /sys/bus/platform/drivers/ath10k_snoc/bind
+>>   [   44.763114] irq: type mismatch, failed to map hwirq-446 for interrupt-controller@17a00000!
+>>   [   44.763130] ath10k_snoc 18800000.wifi: error -ENXIO: IRQ index 0 not found
+>>   [   44.763140] ath10k_snoc 18800000.wifi: failed to initialize resource: -6
+> 
+> So you tested on WCN3990? On what firmware version?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+I run it on a Qualcomm RB3 board with Qualcomm SDM845 and WCN3990.
+However on that kernel I did not manage to WiFi actually work -
+regardless of that patch - so I would no count it yet as fully tested.
 
-   hppa-linux-ld: drivers/video/fbdev/vesafb.o: in function `vesafb_probe':
->> (.text+0x738): undefined reference to `screen_info'
->> hppa-linux-ld: (.text+0x73c): undefined reference to `screen_info'
-   hppa-linux-ld: drivers/firmware/sysfb.o: in function `sysfb_init':
->> (.init.text+0x28): undefined reference to `screen_info'
->> hppa-linux-ld: (.init.text+0x30): undefined reference to `screen_info'
-   hppa-linux-ld: (.init.text+0x78): undefined reference to `screen_info'
+It would be great if someone would provide some tests. I saw Steev's
+replies - thanks!
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Krzysztof

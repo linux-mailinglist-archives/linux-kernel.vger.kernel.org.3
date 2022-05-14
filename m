@@ -2,66 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A525272B8
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 17:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9505272BD
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 17:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234034AbiENPom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 11:44:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
+        id S234062AbiENPxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 11:53:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231569AbiENPoj (ORCPT
+        with ESMTP id S231569AbiENPx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 11:44:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D72BFC5;
-        Sat, 14 May 2022 08:44:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4E3960FDF;
-        Sat, 14 May 2022 15:44:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7AF1C340EE;
-        Sat, 14 May 2022 15:44:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652543076;
-        bh=mv7fBW28LBGQjB6TNE8qE4Q+PHMJWnlAXHOAlsOBxTA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eXDIqw7HUdccXhBDLlUkU/FepEM2ogrz6qKGSgzjLWwIVZJohm5OmR8eo46hvCrK+
-         PDEf0q1Q8/0dqExDB7LZk0eCrHu2vEDUDVGE0uhGtgCGqs6AYj5wiSjDTd4/kEOJ30
-         uP8Tzqy7n4+5p2nBkpOIWP08Ml8g6OCEQI0dHcx148Ea21NGm1zlwRIN0uFg6R/Pao
-         k5PZ1Ai4oMTv2TlsIdmgGUy0z3OteoqDV+aS+lXrExXuIs51q8S/SsOXn287J+1brE
-         xxMkqI9XRqyAnh+JfuiapPrEd2NkbQ/5Tk+BufxeDnRF6ejvxczZdzH+x53wPbvYcZ
-         JYxLfNVsUfTqA==
-Date:   Sat, 14 May 2022 16:53:09 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joe Perches <joe@perches.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Nicolas Palix <nicolas.palix@imag.fr>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        linux-kernel@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        linux-iio@vger.kernel.org
-Subject: Re: [PATCH 05/22] iio: replace bitmap_weight with
- bitmap_weitght_{eq,le} where appropriate
-Message-ID: <20220514165309.7445c767@jic23-huawei>
-In-Reply-To: <20220510154750.212913-6-yury.norov@gmail.com>
-References: <20220510154750.212913-1-yury.norov@gmail.com>
-        <20220510154750.212913-6-yury.norov@gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
+        Sat, 14 May 2022 11:53:26 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90B32644
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 08:53:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652543603; x=1684079603;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/hGFrcfZXRmX0ubZwELNVdeYZ1G+P3iKylys426w3Ec=;
+  b=Qb/7kEDNszt7FQaifWNsH9WPgNFgbYRV3eUsZvtgN60tVZsCY2zNE5Oj
+   +/3ah5/pyKvK18grxsbv7VmKVpy0gJAEDtzh7DrBo21w4sGTcx8Vb1Mhq
+   NVHEIEZg+hx6lPqUSANQ0/IXVn/iDa4NuGWzJF9R1/qgzgXFwJWZNCMF9
+   Yqc9ZBz/KyaOSJzMumLFrSrm57UZUcZ971DGM/lWjzmFeeZA0fZthW1OG
+   Fs7UUjb5ZV4zR+7zsKWCKFtieJPOBmsMOD45PSD4QMBXBMpaKk/T+0ck5
+   QQO7prWoo040UadJZQ8odMhaJntw5pjEh9s6DyRs5vRyj6Wz7cPYpv3qo
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10347"; a="333569258"
+X-IronPort-AV: E=Sophos;i="5.91,226,1647327600"; 
+   d="scan'208";a="333569258"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2022 08:53:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,226,1647327600"; 
+   d="scan'208";a="543692066"
+Received: from lkp-server01.sh.intel.com (HELO d1462bc4b09b) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 14 May 2022 08:53:20 -0700
+Received: from kbuild by d1462bc4b09b with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1npu51-0000nN-VW;
+        Sat, 14 May 2022 15:53:19 +0000
+Date:   Sat, 14 May 2022 23:53:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [nsaenz-rpi:ct-work-defer-wip 25/25]
+ arch/x86/mm/pat/set_memory.c:351:61: error: 'CONTEXT_WORK_CACHEI' undeclared
+Message-ID: <202205142340.HRC7ItUJ-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,59 +61,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 May 2022 08:47:33 -0700
-Yury Norov <yury.norov@gmail.com> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git ct-work-defer-wip
+head:   ed63029652239a6befad96dd473b16332913f889
+commit: ed63029652239a6befad96dd473b16332913f889 [25/25] context_tracking,x86: Fix Kernel cachei vs NOHZ_FULL
+config: i386-randconfig-a001 (https://download.01.org/0day-ci/archive/20220514/202205142340.HRC7ItUJ-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git/commit/?id=ed63029652239a6befad96dd473b16332913f889
+        git remote add nsaenz-rpi https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git
+        git fetch --no-tags nsaenz-rpi ct-work-defer-wip
+        git checkout ed63029652239a6befad96dd473b16332913f889
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-> bitmap_weight_{eq,le} is better than bitmap_weight because it
-> may return earlier.
-> 
-> CC: Jonathan Cameron <jic23@kernel.org>
-> CC: Lars-Peter Clausen <lars@metafoo.de>
-> CC: Michael Hennerich <Michael.Hennerich@analog.com>
-> CC: linux-iio@vger.kernel.org
-> CC: linux-kernel@vger.kernel.org
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-without being cc'd on the cover letter, there is no obvious way for
-me to know this is reliant in some series to be found in next.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Please call out the exact dependency and whilst it's a long list,
-it is good to cc all people cc'd on individual patches also
-on the cover letter so they have that background information.
+All errors (new ones prefixed by >>):
 
-Change seems fine, but I've no idea when/if to pick it up because of
-that lack of information.
+   arch/x86/mm/pat/set_memory.c: In function '__cpa_flush_all_cond':
+   arch/x86/mm/pat/set_memory.c:351:41: error: 'CONTEXT_WORK_TLBI' undeclared (first use in this function)
+     351 |                                         CONTEXT_WORK_TLBI | CONTEXT_WORK_CACHEI);
+         |                                         ^~~~~~~~~~~~~~~~~
+   arch/x86/mm/pat/set_memory.c:351:41: note: each undeclared identifier is reported only once for each function it appears in
+>> arch/x86/mm/pat/set_memory.c:351:61: error: 'CONTEXT_WORK_CACHEI' undeclared (first use in this function)
+     351 |                                         CONTEXT_WORK_TLBI | CONTEXT_WORK_CACHEI);
+         |                                                             ^~~~~~~~~~~~~~~~~~~
+   arch/x86/mm/pat/set_memory.c: In function '__cpa_flush_tlb_cond':
+   arch/x86/mm/pat/set_memory.c:373:47: error: 'CONTEXT_WORK_TLBI' undeclared (first use in this function)
+     373 |                                               CONTEXT_WORK_TLBI);
+         |                                               ^~~~~~~~~~~~~~~~~
+   arch/x86/mm/pat/set_memory.c: In function '__cpa_flush_all_cond':
+   arch/x86/mm/pat/set_memory.c:352:1: error: control reaches end of non-void function [-Werror=return-type]
+     352 | }
+         | ^
+   arch/x86/mm/pat/set_memory.c: In function '__cpa_flush_tlb_cond':
+   arch/x86/mm/pat/set_memory.c:374:1: error: control reaches end of non-void function [-Werror=return-type]
+     374 | }
+         | ^
+   cc1: some warnings being treated as errors
 
-Jonathan
 
-> ---
->  drivers/iio/adc/ad_sigma_delta.c  | 2 +-
->  drivers/iio/industrialio-buffer.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/iio/adc/ad_sigma_delta.c b/drivers/iio/adc/ad_sigma_delta.c
-> index 261a9a6b45e1..6445b591f071 100644
-> --- a/drivers/iio/adc/ad_sigma_delta.c
-> +++ b/drivers/iio/adc/ad_sigma_delta.c
-> @@ -525,7 +525,7 @@ static bool ad_sd_validate_scan_mask(struct iio_dev *indio_dev, const unsigned l
->  {
->  	struct ad_sigma_delta *sigma_delta = iio_device_get_drvdata(indio_dev);
->  
-> -	return bitmap_weight(mask, indio_dev->masklength) <= sigma_delta->num_slots;
-> +	return bitmap_weight_le(mask, indio_dev->masklength, sigma_delta->num_slots);
->  }
->  
->  static const struct iio_buffer_setup_ops ad_sd_buffer_setup_ops = {
-> diff --git a/drivers/iio/industrialio-buffer.c b/drivers/iio/industrialio-buffer.c
-> index 06141ca27e1f..18d3d756aee1 100644
-> --- a/drivers/iio/industrialio-buffer.c
-> +++ b/drivers/iio/industrialio-buffer.c
-> @@ -1824,7 +1824,7 @@ void iio_buffers_free_sysfs_and_mask(struct iio_dev *indio_dev)
->  bool iio_validate_scan_mask_onehot(struct iio_dev *indio_dev,
->  	const unsigned long *mask)
->  {
-> -	return bitmap_weight(mask, indio_dev->masklength) == 1;
-> +	return bitmap_weight_eq(mask, indio_dev->masklength, 1);
->  }
->  EXPORT_SYMBOL_GPL(iio_validate_scan_mask_onehot);
->  
+vim +/CONTEXT_WORK_CACHEI +351 arch/x86/mm/pat/set_memory.c
 
+   347	
+   348	static bool __cpa_flush_all_cond(int cpu, void *info)
+   349	{
+   350		return !context_tracking_set_cpu_work(cpu, CONTEXT_USER | CONTEXT_GUEST,
+ > 351						CONTEXT_WORK_TLBI | CONTEXT_WORK_CACHEI);
+   352	}
+   353	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

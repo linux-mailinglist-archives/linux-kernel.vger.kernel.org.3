@@ -2,183 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A41527370
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 20:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B81E3527372
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 20:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234650AbiENSUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 14:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
+        id S234672AbiENSVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 14:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230459AbiENSUd (ORCPT
+        with ESMTP id S229539AbiENSVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 14:20:33 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB7338197;
-        Sat, 14 May 2022 11:20:32 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id i19so21694289eja.11;
-        Sat, 14 May 2022 11:20:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pUYpeImbAqOBUb0UBcRbQZgfeNt+9zMkDd+UbinLleA=;
-        b=TmlrIscHfjet5fM7ny4Eh6Xbh+mWdtBBO7ss6zTRY1omVxhzjs04O8WPMU5hxry2Lj
-         4wLQNRkn5tWDQ6U2bMnFTlG9Yciuby5/x43us+M437SrnYenHrxv0o7IQ66KL/XSK8x7
-         P38gYkW8mK/6nmU3IluX9s1pPZKYDNP76WJGe0xgJk0DEtDOIxV8MbPXSEuAv+TmH8KZ
-         aaVaD3txz5gQkcDAxO+mwfBTU+gj12bfJh6FSZzR7ABn94OZJSxxVjBUlBRyisgs5jiE
-         MOQb3g/tYywGZbsm9IrvoL1Igo1dG+c0ZCcQARsbgCy90SHfpCenBOBAyQ9UaRJ9n9NS
-         U2aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pUYpeImbAqOBUb0UBcRbQZgfeNt+9zMkDd+UbinLleA=;
-        b=DMuxZg8Zmpolcq0BWChysPfxHGvZrjX0xhy6EJzLvcW7xGwkMN24walxDQqMn6voKU
-         zcprHbcQ7hSFD0TQt/jEpR/wxnZjp+lplMaEChz8VQDfsNMHwDSKSk7ygqyNQvmmwtFn
-         012fqzOxvEfGgU/7/OmRCPAuN+0sokPGdDcndZkDDL0TiclGlvX88YxNcXZBYI15OeI8
-         NTEkkhQJtWpwx5XIdhloYeHwwpV+qyRikJXgSVHYaFZKdb4RIJijSB66+UWegYXlQoyx
-         jMmb2spdlZG4BK4khd9kFc37dD2jT5XEyxe2RFe3DW12XO5RuBO379t06q+SYnuBY206
-         hScw==
-X-Gm-Message-State: AOAM532I+6RFq3p7WlcGp0VjR8pr8uSQ9cMNMnnssC/wFPAN4dUfQq8O
-        bSNevr+gWpnvNH4o91vlDNs=
-X-Google-Smtp-Source: ABdhPJz//1N2TaHTmvRE+BqJmQ7ek/bMQ69s5SkVHYV2UoKUWLD6Ru7aV5G+UnzvM+K9lKwg9DL7Dw==
-X-Received: by 2002:a17:906:b48:b0:6f5:132c:1a17 with SMTP id v8-20020a1709060b4800b006f5132c1a17mr9127666ejg.748.1652552430577;
-        Sat, 14 May 2022 11:20:30 -0700 (PDT)
-Received: from demon-pc.localdomain ([188.24.86.218])
-        by smtp.gmail.com with ESMTPSA id jz25-20020a17090775f900b006fa6a51459asm1925898ejc.96.2022.05.14.11.20.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 May 2022 11:20:30 -0700 (PDT)
-From:   Cosmin Tanislav <demonsingur@gmail.com>
-X-Google-Original-From: Cosmin Tanislav <cosmin.tanislav@analog.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>
-Subject: [PATCH] iio: accel: adxl367: do not update FIFO watermark on scan mode update
-Date:   Sat, 14 May 2022 21:20:10 +0300
-Message-Id: <20220514182010.152784-1-cosmin.tanislav@analog.com>
-X-Mailer: git-send-email 2.35.3
+        Sat, 14 May 2022 14:21:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5991ADB2;
+        Sat, 14 May 2022 11:21:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD4AA610E8;
+        Sat, 14 May 2022 18:21:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8D4DC340EE;
+        Sat, 14 May 2022 18:21:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652552489;
+        bh=mhZUEmcVGHggSu08CnP5R9D+9RHg+gv8VjpGnK24Or0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Q232022pTxOsc+aC9hRt59VvKDvEsy4iTzSMaRi7LDl64kW+ap/gWp/E0W8zmv/oG
+         VYLkCUFNKd6hx6s6WduZdkMObTB3XGyYkMC3wTodjPDcMfBZdDdoZ2Pamo8OOR2fca
+         hYHZiJB4J25Qg7jevEHf/JOJRSpe2bIN4CCNH8c0S8b4JG3cnRbrsh997rQ0RAPQJ1
+         Mh2B+q9ZvWveiWPywyN2SN6YYDM78zHTjiRmTTSdt7oSefnozscWL8B2ZVe/n1B++c
+         miW6818NB+XVQBMUxoDD+00Sdn3TzwaAC1Iidfd9/E/xN7vY7mmWNz/d5uxlHrSj4A
+         PV6HH61pN+25Q==
+Received: by pali.im (Postfix)
+        id AB56E2B57; Sat, 14 May 2022 20:21:25 +0200 (CEST)
+Date:   Sat, 14 May 2022 20:21:25 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Russell King <linux@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] ARM: Marvell: Update PCIe fixup
+Message-ID: <20220514182125.xfvnw7yj2rmxpi7l@pali>
+References: <20211101150405.14618-1-pali@kernel.org>
+ <20211102171259.9590-1-pali@kernel.org>
+ <20211109225332.kqyfm4h4kwcnhhhl@pali>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20211109225332.kqyfm4h4kwcnhhhl@pali>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the driver updates the FIFO watermark inside both
-update_scan_mode() and hwfifo_set_watermark(). Inside the IIO core,
-hwfifo_set_watermark() is called immediately after update_scan_mode(),
-making the first call to set_fifo_samples() redundant.
+On Tuesday 09 November 2021 23:53:32 Pali Rohár wrote:
+> On Tuesday 02 November 2021 18:12:58 Pali Rohár wrote:
+> > - The code relies on rc_pci_fixup being called, which only happens
+> >   when CONFIG_PCI_QUIRKS is enabled, so add that to Kconfig. Omitting
+> >   this causes a booting failure with a non-obvious cause.
+> > - Update rc_pci_fixup to set the class properly, copying the
+> >   more modern style from other places
+> > - Correct the rc_pci_fixup comment
+> > 
+> > This patch just re-applies commit 1dc831bf53fd ("ARM: Kirkwood: Update
+> > PCI-E fixup") for all other Marvell ARM platforms which have same buggy
+> > PCIe controller and do not use pci-mvebu.c controller driver yet.
+> > 
+> > Long-term goal for these Marvell ARM platforms should be conversion to
+> > pci-mvebu.c controller driver and removal of these fixups in arch code.
+> > 
+> > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > Cc: Jason Gunthorpe <jgg@nvidia.com>
+> > Cc: stable@vger.kernel.org
+> 
+> Hello! Patch 2/2 was already applied into mips-next. Could you review
+> also this patch 1/2?
 
-Remove the first call to set_fifo_samples(), and merge the
-set_fifo_samples() function into the set_fifo_watermark()
-function. Also, since fifo_set_size is always set inside of
-update_scan_mode(), and it cannot be set to 0, remove the
-zero check from set_fifo_samples().
+PING?
 
-Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
----
- drivers/iio/accel/adxl367.c | 46 ++++++++-----------------------------
- 1 file changed, 9 insertions(+), 37 deletions(-)
-
-diff --git a/drivers/iio/accel/adxl367.c b/drivers/iio/accel/adxl367.c
-index 0289ed8cf2c6..72a8c3fb27b9 100644
---- a/drivers/iio/accel/adxl367.c
-+++ b/drivers/iio/accel/adxl367.c
-@@ -447,21 +447,17 @@ static int adxl367_set_fifo_format(struct adxl367_state *st,
- 					     fifo_format));
- }
- 
--static int adxl367_set_fifo_samples(struct adxl367_state *st,
--				    unsigned int fifo_watermark,
--				    unsigned int fifo_set_size)
-+static int adxl367_set_fifo_watermark(struct adxl367_state *st,
-+				      unsigned int fifo_watermark)
- {
--	unsigned int fifo_samples = fifo_watermark * fifo_set_size;
-+	unsigned int fifo_samples = fifo_watermark * st->fifo_set_size;
- 	unsigned int fifo_samples_h, fifo_samples_l;
- 	int ret;
- 
- 	if (fifo_samples > ADXL367_FIFO_MAX_WATERMARK)
- 		fifo_samples = ADXL367_FIFO_MAX_WATERMARK;
- 
--	if (fifo_set_size == 0)
--		return 0;
--
--	fifo_samples /= fifo_set_size;
-+	fifo_samples /= st->fifo_set_size;
- 
- 	fifo_samples_h = FIELD_PREP(ADXL367_SAMPLES_H_MASK,
- 				    FIELD_GET(ADXL367_SAMPLES_VAL_H_MASK,
-@@ -475,30 +471,8 @@ static int adxl367_set_fifo_samples(struct adxl367_state *st,
- 	if (ret)
- 		return ret;
- 
--	return regmap_update_bits(st->regmap, ADXL367_REG_FIFO_SAMPLES,
--				  ADXL367_SAMPLES_L_MASK, fifo_samples_l);
--}
--
--static int adxl367_set_fifo_set_size(struct adxl367_state *st,
--				     unsigned int fifo_set_size)
--{
--	int ret;
--
--	ret = adxl367_set_fifo_samples(st, st->fifo_watermark, fifo_set_size);
--	if (ret)
--		return ret;
--
--	st->fifo_set_size = fifo_set_size;
--
--	return 0;
--}
--
--static int adxl367_set_fifo_watermark(struct adxl367_state *st,
--				      unsigned int fifo_watermark)
--{
--	int ret;
--
--	ret = adxl367_set_fifo_samples(st, fifo_watermark, st->fifo_set_size);
-+	ret = regmap_update_bits(st->regmap, ADXL367_REG_FIFO_SAMPLES,
-+				 ADXL367_SAMPLES_L_MASK, fifo_samples_l);
- 	if (ret)
- 		return ret;
- 
-@@ -1276,14 +1250,11 @@ static int adxl367_update_scan_mode(struct iio_dev *indio_dev,
- {
- 	struct adxl367_state *st  = iio_priv(indio_dev);
- 	enum adxl367_fifo_format fifo_format;
--	unsigned int fifo_set_size;
- 	int ret;
- 
- 	if (!adxl367_find_mask_fifo_format(active_scan_mask, &fifo_format))
- 		return -EINVAL;
- 
--	fifo_set_size = bitmap_weight(active_scan_mask, indio_dev->masklength);
--
- 	mutex_lock(&st->lock);
- 
- 	ret = adxl367_set_measure_en(st, false);
-@@ -1294,11 +1265,12 @@ static int adxl367_update_scan_mode(struct iio_dev *indio_dev,
- 	if (ret)
- 		goto out;
- 
--	ret = adxl367_set_fifo_set_size(st, fifo_set_size);
-+	ret = adxl367_set_measure_en(st, true);
- 	if (ret)
- 		goto out;
- 
--	ret = adxl367_set_measure_en(st, true);
-+	st->fifo_set_size = bitmap_weight(active_scan_mask,
-+					  indio_dev->masklength);
- 
- out:
- 	mutex_unlock(&st->lock);
--- 
-2.35.3
-
+> > 
+> > ---
+> > Changes in v2:
+> > * Move MIPS change into separate patch
+> > * Add information that this patch is for platforms which do not use pci-mvebu.c
+> > ---
+> >  arch/arm/Kconfig              |  1 +
+> >  arch/arm/mach-dove/pcie.c     | 11 ++++++++---
+> >  arch/arm/mach-mv78xx0/pcie.c  | 11 ++++++++---
+> >  arch/arm/mach-orion5x/Kconfig |  1 +
+> >  arch/arm/mach-orion5x/pci.c   | 12 +++++++++---
+> >  5 files changed, 27 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+> > index fc196421b2ce..9f157e973555 100644
+> > --- a/arch/arm/Kconfig
+> > +++ b/arch/arm/Kconfig
+> > @@ -400,6 +400,7 @@ config ARCH_DOVE
+> >  	select GENERIC_IRQ_MULTI_HANDLER
+> >  	select GPIOLIB
+> >  	select HAVE_PCI
+> > +	select PCI_QUIRKS if PCI
+> >  	select MVEBU_MBUS
+> >  	select PINCTRL
+> >  	select PINCTRL_DOVE
+> > diff --git a/arch/arm/mach-dove/pcie.c b/arch/arm/mach-dove/pcie.c
+> > index ee91ac6b5ebf..ecf057a0f5ba 100644
+> > --- a/arch/arm/mach-dove/pcie.c
+> > +++ b/arch/arm/mach-dove/pcie.c
+> > @@ -135,14 +135,19 @@ static struct pci_ops pcie_ops = {
+> >  	.write = pcie_wr_conf,
+> >  };
+> >  
+> > +/*
+> > + * The root complex has a hardwired class of PCI_CLASS_MEMORY_OTHER, when it
+> > + * is operating as a root complex this needs to be switched to
+> > + * PCI_CLASS_BRIDGE_HOST or Linux will errantly try to process the BAR's on
+> > + * the device. Decoding setup is handled by the orion code.
+> > + */
+> >  static void rc_pci_fixup(struct pci_dev *dev)
+> >  {
+> > -	/*
+> > -	 * Prevent enumeration of root complex.
+> > -	 */
+> >  	if (dev->bus->parent == NULL && dev->devfn == 0) {
+> >  		int i;
+> >  
+> > +		dev->class &= 0xff;
+> > +		dev->class |= PCI_CLASS_BRIDGE_HOST << 8;
+> >  		for (i = 0; i < DEVICE_COUNT_RESOURCE; i++) {
+> >  			dev->resource[i].start = 0;
+> >  			dev->resource[i].end   = 0;
+> > diff --git a/arch/arm/mach-mv78xx0/pcie.c b/arch/arm/mach-mv78xx0/pcie.c
+> > index 636d84b40466..9362b5fc116f 100644
+> > --- a/arch/arm/mach-mv78xx0/pcie.c
+> > +++ b/arch/arm/mach-mv78xx0/pcie.c
+> > @@ -177,14 +177,19 @@ static struct pci_ops pcie_ops = {
+> >  	.write = pcie_wr_conf,
+> >  };
+> >  
+> > +/*
+> > + * The root complex has a hardwired class of PCI_CLASS_MEMORY_OTHER, when it
+> > + * is operating as a root complex this needs to be switched to
+> > + * PCI_CLASS_BRIDGE_HOST or Linux will errantly try to process the BAR's on
+> > + * the device. Decoding setup is handled by the orion code.
+> > + */
+> >  static void rc_pci_fixup(struct pci_dev *dev)
+> >  {
+> > -	/*
+> > -	 * Prevent enumeration of root complex.
+> > -	 */
+> >  	if (dev->bus->parent == NULL && dev->devfn == 0) {
+> >  		int i;
+> >  
+> > +		dev->class &= 0xff;
+> > +		dev->class |= PCI_CLASS_BRIDGE_HOST << 8;
+> >  		for (i = 0; i < DEVICE_COUNT_RESOURCE; i++) {
+> >  			dev->resource[i].start = 0;
+> >  			dev->resource[i].end   = 0;
+> > diff --git a/arch/arm/mach-orion5x/Kconfig b/arch/arm/mach-orion5x/Kconfig
+> > index e94a61901ffd..7189a5b1ec46 100644
+> > --- a/arch/arm/mach-orion5x/Kconfig
+> > +++ b/arch/arm/mach-orion5x/Kconfig
+> > @@ -6,6 +6,7 @@ menuconfig ARCH_ORION5X
+> >  	select GPIOLIB
+> >  	select MVEBU_MBUS
+> >  	select FORCE_PCI
+> > +	select PCI_QUIRKS
+> >  	select PHYLIB if NETDEVICES
+> >  	select PLAT_ORION_LEGACY
+> >  	help
+> > diff --git a/arch/arm/mach-orion5x/pci.c b/arch/arm/mach-orion5x/pci.c
+> > index 76951bfbacf5..5145fe89702e 100644
+> > --- a/arch/arm/mach-orion5x/pci.c
+> > +++ b/arch/arm/mach-orion5x/pci.c
+> > @@ -509,14 +509,20 @@ static int __init pci_setup(struct pci_sys_data *sys)
+> >  /*****************************************************************************
+> >   * General PCIe + PCI
+> >   ****************************************************************************/
+> > +
+> > +/*
+> > + * The root complex has a hardwired class of PCI_CLASS_MEMORY_OTHER, when it
+> > + * is operating as a root complex this needs to be switched to
+> > + * PCI_CLASS_BRIDGE_HOST or Linux will errantly try to process the BAR's on
+> > + * the device. Decoding setup is handled by the orion code.
+> > + */
+> >  static void rc_pci_fixup(struct pci_dev *dev)
+> >  {
+> > -	/*
+> > -	 * Prevent enumeration of root complex.
+> > -	 */
+> >  	if (dev->bus->parent == NULL && dev->devfn == 0) {
+> >  		int i;
+> >  
+> > +		dev->class &= 0xff;
+> > +		dev->class |= PCI_CLASS_BRIDGE_HOST << 8;
+> >  		for (i = 0; i < DEVICE_COUNT_RESOURCE; i++) {
+> >  			dev->resource[i].start = 0;
+> >  			dev->resource[i].end   = 0;
+> > -- 
+> > 2.20.1
+> > 

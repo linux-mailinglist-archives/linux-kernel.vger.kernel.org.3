@@ -2,84 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C26D5272F0
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 18:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D23495272F3
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 18:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234213AbiENQd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 12:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40622 "EHLO
+        id S232499AbiENQdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 12:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234262AbiENQdZ (ORCPT
+        with ESMTP id S234241AbiENQds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 12:33:25 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E108DBC90;
-        Sat, 14 May 2022 09:33:17 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id q23so15078128wra.1;
-        Sat, 14 May 2022 09:33:17 -0700 (PDT)
+        Sat, 14 May 2022 12:33:48 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB21BC90;
+        Sat, 14 May 2022 09:33:47 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id v11so10327144pff.6;
+        Sat, 14 May 2022 09:33:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HBKA+WQkXWZ1I3M6pl42jHxqJFwGouJWtzUfEFdf0+g=;
-        b=WD6ukIW4K4lBCtxb//51iee1HzWMXQBB1vRuiI4YRFTpfFCktN8Miki8o2INlirdoB
-         lbwk/bx53kCnRUXMde0JdWR9gbTFm5GBioAFCeLw4Duutj3m3rTuM5daMy2Z+A6E4vCF
-         2c6W+qyBjoXNcqeR48AZcVUaEyjrUSOwWxPClaiPDxiO0sUeXPJIR7S+4l9qUqw+3AYi
-         qesTlPX0SXP/dxzjj+k2kT6L9B+d4+Oh+a3lt5F02/5mbetxgnmpU8uAQhoSC/tkS0uY
-         OhgzUOg8BEbREbKVxgktgTwgj6MMmExvJTS8X/7+p+hjGEswkVGB3pLJbqMyhyujkyV8
-         stRg==
+        bh=V1R62bJzWYYQOyH9ypmfWz92vQWZ2G8Gt1CdGMt6pyI=;
+        b=IA3wCNOxbM4DDXutzc2nj3RvHsn3yOch4q9x6R3AAh8wiHzcDCs2+YCUr1MWJz+XEY
+         pX3CaVQ0R+84H5SQC2CiFwkXm8m/6Xherdnzhx0feusrJ6OR3Y5PS7vN7eQGXP/wG/8/
+         SLtw5Lg08P5gj1CtDPAqQo5Q2i7LfhfqbjJ6AXsVRrYYN3llnejZCO7CRvFa1KcI0PjU
+         5Aw0Yp6/MrJCLEVcWZuqjhcQCdKiit+nGVMbBLnFCM4OdVo56QOC+DrINc4PPmuwteFq
+         Awx3bZqlhxsDCEQSCWbHQWXSifTsvuqPsofDGvxd7HELQYZhcp7jv76/W+aFPmIMgmjQ
+         K75Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=HBKA+WQkXWZ1I3M6pl42jHxqJFwGouJWtzUfEFdf0+g=;
-        b=0GcorM04xEc1+ZnMftLZ31p1gVHez2CVn+AL1Jqxgf8asf0lZ/B0jpQI7OZn6wsEus
-         jQGMAf7IFw6O65fOeapCA6THu+jgwyKPLPFBX6jac/HsK5Zbn4HFyeH8P9ktsJkQnePW
-         G5a9eW2J8R8DZdvRHwwg5YkVPagmkRG9yOrLAaLCxlXHa/hItZoABEHcDI4KHwg4TMvN
-         4u9LTVYexlhXGnyCYqyyaMGC+K9AXkdD3LBROC/FPkRlrOP6BAWwVAWXGA3FqkmKgg8x
-         oLqWvVAcJcdQiHkCS5yCAt/bbTNQAFTrm/RT7aCG5VHxMb2/1gzLyr4iR88ApdfM158W
-         LugA==
-X-Gm-Message-State: AOAM531RwgoZx4/61vo6NuyBjhLfkRo6O9X3OaO3dhYVyR1c748kKM1g
-        1pdUyHnluAVUXyZg32pk6zgm9AWItzaG9Q==
-X-Google-Smtp-Source: ABdhPJxhNlOF1OhdQWFqzov1nKY/StqGiLhQBCuYeSCsvuIxu4oMC7BoGZW/ze1a/4OUk4/ziT0F2w==
-X-Received: by 2002:a05:6000:1889:b0:20c:617a:b087 with SMTP id a9-20020a056000188900b0020c617ab087mr8142515wri.102.1652545995603;
-        Sat, 14 May 2022 09:33:15 -0700 (PDT)
-Received: from [192.168.35.91] ([194.39.226.133])
-        by smtp.gmail.com with ESMTPSA id u21-20020a7bc055000000b00394586f696dsm8581841wmc.11.2022.05.14.09.33.12
+        bh=V1R62bJzWYYQOyH9ypmfWz92vQWZ2G8Gt1CdGMt6pyI=;
+        b=2rWLtsdNDQcf/9hacDwgc8LfvtisUsXZQPN0bERvPSfla2qjHVgGTlS2W86qp6CDmC
+         Qa6t3tHxhxUHaHItNaXiCUZuMd0T+tp7MWbYj1MRujX+adVNlVuDQSMOtyf/wh4OLUQR
+         LfwqGzFaQbxlusQ/YyWIB4O22yLxHmuwJ5Mh9NJv7neKPU0mhjZefsUUwDD3VesPBqNP
+         S+lprtQzeeYBJEyuCHhAiyLLpUb0JX2u4jHAdGECcz32PbhzTFqNwNRigIzc9q8wh0wo
+         df7dz8VISNeX8WNE2S1c3Hvp4mhSh5uOANKE4pT2uxiIf3Dp8oiAVxr/5p8ZcnVHpEti
+         PY+A==
+X-Gm-Message-State: AOAM5307H3u7mNXsyjdK8TthB8HhvQW2Rt6PafhinqHaLHlWwFpOl6XW
+        Yr3mdTONNYmS4nP/4JV9Ui4=
+X-Google-Smtp-Source: ABdhPJx+/nVQqImVzhjjEqbhk1/X1BCON81UbyDvV2TgT4Ve+nS/lmETRq/iGiBiQdtF5c8RCAuoTQ==
+X-Received: by 2002:a63:b24a:0:b0:3db:b454:b5a with SMTP id t10-20020a63b24a000000b003dbb4540b5amr4237667pgo.312.1652546026823;
+        Sat, 14 May 2022 09:33:46 -0700 (PDT)
+Received: from ?IPV6:2600:8802:b00:4a48:cd14:4041:168c:7257? ([2600:8802:b00:4a48:cd14:4041:168c:7257])
+        by smtp.gmail.com with ESMTPSA id d2-20020a170902b70200b0015f032ec665sm3876448pls.255.2022.05.14.09.33.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 May 2022 09:33:15 -0700 (PDT)
-Message-ID: <fad8e87d-20f9-d01d-e92b-2c7b9a751287@gmail.com>
-Date:   Sat, 14 May 2022 19:33:12 +0300
+        Sat, 14 May 2022 09:33:46 -0700 (PDT)
+Message-ID: <89c52305-71da-843e-b6c5-77648fb2f4d3@gmail.com>
+Date:   Sat, 14 May 2022 09:33:44 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
-Subject: Re: [PATCH v4 1/5] dt-bindings: proximity: vl53l0x: Document optional
- supply and GPIO properties
+Subject: Re: [PATCH net-next v2 2/5] net: dsa: add out-of-band tagging
+ protocol
 Content-Language: en-US
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Song Qiang <songqiang1304521@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20220512191334.61804-1-markuss.broks@gmail.com>
- <20220512191334.61804-2-markuss.broks@gmail.com>
- <f5ec4fd9-b9d7-10fa-1c27-2f268466274f@linaro.org>
- <20220514152940.1a212c7f@jic23-huawei>
-From:   Markuss Broks <markuss.broks@gmail.com>
-In-Reply-To: <20220514152940.1a212c7f@jic23-huawei>
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        davem@davemloft.net, Rob Herring <robh+dt@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+References: <20220514150656.122108-1-maxime.chevallier@bootlin.com>
+ <20220514150656.122108-3-maxime.chevallier@bootlin.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220514150656.122108-3-maxime.chevallier@bootlin.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -92,38 +84,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonathan,
+Hi Maxime,
 
-On 5/14/22 17:29, Jonathan Cameron wrote:
-> On Fri, 13 May 2022 10:56:50 +0200
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
->
->> On 12/05/2022 21:13, Markuss Broks wrote:
->>> This patch adds the optional properties for the VL53L0X ToF sensor to the
->>> device-tree binding.
->>>
->>> Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
->> Wait, two days and three versions? Please give some time before
->> resending entire patchset.
-> Yeah, several instances of this on the IIO list this week. Please
-> let things sit for at least a few days between versions even if
-> the requested changes are fairly minor.
->
->> Same comments apply as for v2 and v3...
->>
-> I 'could' fix this up, but given you've not responded to Krzysztof
-> I think I'd prefer you send a v5 in the second half of next week or
-> later (to give time for other review) with the patch description
-> change Krzysztof suggested made.
-OK, good. I will give this version some time to settle and send a 
-version with those fixes some time next week.
->
-> Code wise the series looks fine to me.
->
-> Jonathan
->
->
->
->> Best regards,
->> Krzysztof
-- Markuss
+On 5/14/2022 8:06 AM, Maxime Chevallier wrote:
+> This tagging protocol is designed for the situation where the link
+> between the MAC and the Switch is designed such that the Destination
+> Port, which is usually embedded in some part of the Ethernet Header, is
+> sent out-of-band, and isn't present at all in the Ethernet frame.
+> 
+> This can happen when the MAC and Switch are tightly integrated on an
+> SoC, as is the case with the Qualcomm IPQ4019 for example, where the DSA
+> tag is inserted directly into the DMA descriptors. In that case,
+> the MAC driver is responsible for sending the tag to the switch using
+> the out-of-band medium. To do so, the MAC driver needs to have the
+> information of the destination port for that skb.
+> 
+> This out-of-band tagging protocol is using the very beggining of the skb
+> headroom to store the tag. The drawback of this approch is that the
+> headroom isn't initialized upon allocating it, therefore we have a
+> chance that the garbage data that lies there at allocation time actually
+> ressembles a valid oob tag. This is only problematic if we are
+> sending/receiving traffic on the master port, which isn't a valid DSA
+> use-case from the beggining. When dealing from traffic to/from a slave
+> port, then the oob tag will be initialized properly by the tagger or the
+> mac driver through the use of the dsa_oob_tag_push() call.
+
+What I like about your approach is that you have aligned the way an out 
+of band switch tag is communicated to the networking stack the same way 
+that an "in-band" switch tag would be communicated. I think this is a 
+good way forward to provide the out of band tag and I don't think it 
+creates a performance problem because the Ethernet frame is hot in the 
+cache (dma_unmap_single()) and we already have an "expensive" read of 
+the DMA descriptor in coherent memory anyway.
+
+You could possibly optimize the data flow a bit to limit the amount of 
+sk_buff data movement by asking your Ethernet controller to DMA into the 
+data buffer N bytes into the beginning of the data buffer. That way, if 
+you have reserved say, 2 bytes at the front data buffer you can deposit 
+the QCA tag there and you do not need to push, process the tag, then pop 
+it, just process and pop. Consider using the 2byte stuffing that the 
+Ethernet controller might be adding to the beginning of the Ethernet 
+frame to align the IP header on a 4-byte boundary to provide the tag in 
+there?
+
+If we want to have a generic out of band tagger like you propose, it 
+seems to me that we will need to invent a synthetic DSA tagging format 
+which is the largest common denominator of the out of band tags that we 
+want to support. We could imagine being more compact in the 
+representation for instance by using an u8 for storing a bitmask of 
+ports (works for both RX and TX then) and another u8 for various packet 
+forwarding reasons.
+
+Then we would request the various Ethernet MAC drivers to marshall their 
+proprietary tag into the DSA synthetic one on receive, and unmarshall it 
+on transmit.
+
+Another approach IMHO which maybe helps the maintainability of the code 
+moving forward as well as ensuring that all Ethernet switch tagging code 
+lives in one place, is to teach each tagger driver how to optimize their 
+data paths to minimize the amount of data movements and checksum 
+re-calculations, this is what I had in mind a few years ago:
+
+https://lore.kernel.org/lkml/1438322920.20182.144.camel@edumazet-glaptop2.roam.corp.google.com/T/
+
+This might scale a little less well, and maybe this makes too many 
+assumptions as to where and how the checksums are calculated on the 
+packet contents, but at least, you don't have logic processing the same 
+type of switch tag scattered between the Ethernet MAC drivers (beyond 
+copying/pushing) and DSA switch taggers.
+
+I would like to hear other's opinion on this.
+-- 
+Florian

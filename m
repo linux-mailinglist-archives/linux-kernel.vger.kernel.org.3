@@ -2,106 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E36525271F0
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 16:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 445305271F2
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 16:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233231AbiENO03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 10:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41834 "EHLO
+        id S233241AbiENO0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 10:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233258AbiENO0H (ORCPT
+        with ESMTP id S233050AbiENO0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 10:26:07 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF1E13F7A;
-        Sat, 14 May 2022 07:26:06 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id k126-20020a1ca184000000b003943fd07180so6171976wme.3;
-        Sat, 14 May 2022 07:26:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1Ibwgo9kMXrq789T7CgEdIWGaZoChbTv3X0i3RzzY0A=;
-        b=GwAsvosKirzfXhuEHcBFQMZ3atTXd1/1/hqGmMFtlGXhr/rpWRqI/nKkA4KJ4iN22L
-         YkozfJ0A2oqf0SkcPAKLgsOKESo3Mn5tZesvWIYs0lUAwBxjpSEUzEysG1TFtS43bqic
-         xoeOM1yMYa8vv46jH2yfG/CGweU7B1469OXuHazQl3xo8sz4ROIcR3INaNkbJoVgTyua
-         NUlvpSWCTeKJlQIpGDZjWErEMGxawlXyibVpTgG9fv3+GIAErFWlqSLxuxJpf5lmu1X0
-         GvIDnOSlh72ByaMW04CTEgOZUdkTJcIRbetuXncS9pUfUJ+POdIf2jvolD8hcFuQzElr
-         KZ7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1Ibwgo9kMXrq789T7CgEdIWGaZoChbTv3X0i3RzzY0A=;
-        b=k/GZ5Lq1l4cI+YxKZxDjbVr9N1X7h9BjY0RvI43VmNr66iUgyk26iylDE/6Qv8O+Hp
-         sYtL0Pnc8p6RhFALcjQ90vG6SC5CQgFtpdTK1vPTb0LJhMf058CkOzoqXO1c3dCWGgdj
-         IVHgdwned/lyetKzXujRGbVlZtox0vONw7Ix+bWQYUU3LBLgvQJUqEiowbmY5B8QnkfF
-         mtj5yvWuKuh+sz/IYC6iQsLI0JI/seCiHSPwPAvM5SKxPSwhe10IAW21biDcUuNSSm9W
-         8jR0rYN5dOURbbxUPpjrS1V4qnkX5FsKBStgrVEttZNKGp74RffKyP4dCkYt8FmWIJEe
-         Uhmw==
-X-Gm-Message-State: AOAM5326C6U7ntYjNOP2Tq279usIMNcYC/4a1FpjFmI/80l9dlOOLD7E
-        f3ntwYiylRyHEP8YNqrIFghDZhOX/io=
-X-Google-Smtp-Source: ABdhPJx8IjQ/FJJIxJShcuKSm1vQZ7XP2Ftv2kaJqcHmyZpJ3Ia8eWdiUii5tE5bSGK9bzV8nk4NfQ==
-X-Received: by 2002:a05:600c:1d18:b0:394:6469:abec with SMTP id l24-20020a05600c1d1800b003946469abecmr9108599wms.89.1652538365208;
-        Sat, 14 May 2022 07:26:05 -0700 (PDT)
-Received: from debian (host-2-98-37-191.as13285.net. [2.98.37.191])
-        by smtp.gmail.com with ESMTPSA id i8-20020a05600c354800b003945cdd0d55sm5740858wmq.26.2022.05.14.07.26.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 May 2022 07:26:04 -0700 (PDT)
-Date:   Sat, 14 May 2022 15:26:03 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 00/21] 5.15.40-rc1 review
-Message-ID: <Yn+7+6j428/KQFbN@debian>
-References: <20220513142229.874949670@linuxfoundation.org>
+        Sat, 14 May 2022 10:26:25 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA7EDF48;
+        Sat, 14 May 2022 07:26:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C600CCE0ABA;
+        Sat, 14 May 2022 14:26:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 452CCC340EE;
+        Sat, 14 May 2022 14:26:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652538381;
+        bh=ToD809RuY6hiXX+oncfqN67gVFXAQVrADjiQjJV3dEI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i65GwFOC0zB83eUL9/lR2auEhM9UrNTQT2dN75bb0bl90eK/Bx5DTmmt2nDK4dsRP
+         b3SvvU9TskXzHzbOUK1e/oIuaVJhJwBQT3Yy7EIRL+7OBjFafG5TKHpAv8oWKGOvP4
+         E4a84GMXmT2I8LRhA04FSdNw2JJBf7ocBTB7JbLPHyY0Czp6APaLGtIVpEXia65z9C
+         Ha2Q1sAr6UNntams5ZDpedtIzbVH11PbMLdtMqxyh8BCokqvSaWZnu5t0tMIN/gTpi
+         bNXTG/LUOGL/hg02MAlq401zTCLeqF76C68zt3W7L4MESAVjfZnB8FnQSFh9Wh9w99
+         qxfVnJoruzCuw==
+Date:   Sat, 14 May 2022 16:26:16 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     kernel@axis.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, krzk+dt@kernel.org, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: add property to avoid device
+ detection
+Message-ID: <Yn+8CJ3j2SY2+Mq+@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>, kernel@axis.com,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        krzk+dt@kernel.org, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220412085046.1110127-1-vincent.whitchurch@axis.com>
+ <20220412085046.1110127-2-vincent.whitchurch@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NL3Sz6YKj32sHoBj"
 Content-Disposition: inline
-In-Reply-To: <20220513142229.874949670@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220412085046.1110127-2-vincent.whitchurch@axis.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
 
-On Fri, May 13, 2022 at 04:23:42PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.40 release.
-> There are 21 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 15 May 2022 14:22:19 +0000.
-> Anything received after that time might be too late.
+--NL3Sz6YKj32sHoBj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Build test:
-mips (gcc version 11.2.1 20220408): 62 configs -> no failure
-arm (gcc version 11.2.1 20220408): 100 configs -> no new failure
-arm64 (gcc version 11.2.1 20220408): 3 configs -> no failure
-x86_64 (gcc version 11.2.1 20220408): 4 configs -> no failure
+On Tue, Apr 12, 2022 at 10:50:45AM +0200, Vincent Whitchurch wrote:
+> When drivers with ->detect callbacks are loaded, the I2C core does a
+> bunch of transactions to try to probe for these devices, regardless of
+> whether they are specified in the devicetree or not.  (This only happens
+> on I2C controllers whose drivers enable the I2C_CLASS* flags, but this
+> is the case for generic drivers like i2c-gpio.)
+>=20
+> These kinds of transactions are unnecessary on systems where the
+> devicetree specifies all the devices on the I2C bus, so add a property
+> to indicate that the devicetree description of the hardware is complete
+> and thus allow this discovery to be disabled.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
+Hmm, I don't think the name is fitting. "no-detect" is the desired
+behaviour but a proper description is more like "bus-complete" or
+something?
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1141
-[2]. https://openqa.qa.codethink.co.uk/tests/1145
-[3]. https://openqa.qa.codethink.co.uk/tests/1142
+That aside, I am not sure we should handle this at DT level. Maybe we
+should better change the GPIO driver to not populate a class if we have
+a firmware node?
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
---
-Regards
-Sudip
+--NL3Sz6YKj32sHoBj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJ/vAQACgkQFA3kzBSg
+KbbFog/9Gv3IJ+MHl6N3qQ0ieQcG5+wD+BO8/McbKQuR+2LqOOd8LVx5TV1+5czC
++Ef69jO9ch6vV5T9WVrnErF4h1wtGiK5HF/1AnMjagTXtNNIaxbyEOBvowY4hVUM
+E58vzkrlZNIKY+147vnatDWw670DOTAP6GvvKg4cfGSK0ZXxRGkuXzWreYM9seJD
+V1L9EpBDEZ80Y6RYJbWzExPyslGja8avFLzOqy5Q4dvsHnB8P7Mq6jrQXB6bqNWQ
+hakv42huhY+WzplBlqNpfUiqGOC/5C71s17g8NKQ5BZfjV+HSO9L1ueHgFsOpWS7
+6PEj8o2t+GJagce4TZJ2ofi7YrJNRNemxK9uLNwmdmmcLFZCTBxn/3/rZQotCPzu
+VM9HDgnNQhdavit/Sqw9Vq89oeAq9QGbj/FWCTIELbmToVE0d3ufuWaLnDPctLW9
+TzWV2C/B/zjDtglZmg1fjJI5nr38l7qpWbhd95rzxO1vsYSXTwYRYfOIGukgDNlj
+gURWV+df7I89Rc6DL9ZSM5qu0h7iqmZLbE3RAnqrYjdr7AVXVqq2rmu0r0VjkzYw
+6rzr4BN6oWPrthHLWOCsz4uCIeO802Vj5hkXqKRf8SrhkyoQFTv1H3RrSQ/F/qmV
+diN/c0v5IqmndTctQau7yl+AuCgj9wJ8M32Zb6N+ZZuyXQr+EEU=
+=AA2G
+-----END PGP SIGNATURE-----
+
+--NL3Sz6YKj32sHoBj--

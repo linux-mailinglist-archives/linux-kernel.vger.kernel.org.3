@@ -2,92 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6045273EF
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 22:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 106AA5273F6
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 22:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235085AbiENUWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 16:22:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45960 "EHLO
+        id S235101AbiENU2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 16:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235072AbiENUWC (ORCPT
+        with ESMTP id S229618AbiENU2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 16:22:02 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1376126AF0
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 13:22:00 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id m23so13997289ljc.0
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 13:21:59 -0700 (PDT)
+        Sat, 14 May 2022 16:28:16 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA4A28715
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 13:28:15 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id bu29so19943437lfb.0
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 13:28:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Y5VRY1Vg5U7FZOYxaP3jhw1GgftqMUz+kaXgWZO/zzo=;
-        b=a9IbvRUaYC8Wc0vyxgFwHAxgU9mSVnhYPrySypKYv+QMWSeS0lIY4wxVjb/+x54LWq
-         Ldc1cXpfGj905mcwbZhrOB2SdRWkkkJTcN8XmsLxZM3o1iVoUToVGPQqNwOLRWQqNkFV
-         hvbA4emBw/8q79PftXEPsH+kSyqRfafhujdgE+P8fJGteGOcK7xMkyuufwBAw8bIrRFa
-         gJuSbkhJHloXm+OQ9D+IZ7DsfUCXfPkNBD+eHfglA2cDMFd0vT8MnG+Zmj8mMlPJwnb4
-         yTLeFaHM+EYpglB82UoRIxyn6Isw1Z9/jYS70nsrx3FRo+XYLmINHoUjvQQkh8OJSE4S
-         gzNQ==
+        bh=oU8cEi9RGKI5PeHOuabBwBx8PODfLAO6JbRmPjOYsQc=;
+        b=UE5bV8SixnycPe242NT4unpuYuLs0IT3V/Lvwh7LTJhOmbejnDYbrPIsKrgTWgGAlW
+         9BLRS6VcSfONQ6/rP4mfhrEkpk3M11Nzl4YlCHiqI9cP1IglVd6S6Vfjo7pX45msSqrV
+         S3Ww5hQZYqN4ES4N6A9n3aHSoKDPdaFfygzW14Q1yqmqPoVXqt/CgEhctUEdRGOCNwY2
+         +ceKeyMdqX8RECrqnCcKBgMYKBYSjppskrTD6M2+AZDhAG6iEPF9L3d3HZDnOWnVRvBc
+         yjg64VPwRi5vYGloOWg7EAN1RW4JFkrYN5KrB097+QCrK/PQTD7HyDTz+futzCkZXbin
+         reng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=Y5VRY1Vg5U7FZOYxaP3jhw1GgftqMUz+kaXgWZO/zzo=;
-        b=sm/awREErambxP6alztDmoak3vPsfp7gkj59pdgxdtN//Pz3/QfpH4nWR4BerlyUJB
-         JopxGVRpx3h1dyCYlw5D41cGh2bju0yKYXH8C5hmiUNVUeJ5w+uls/+Z3jkAQ4AaP8MV
-         h0OtlEWB3/fX4AgogClVFpKQcZCVb9LQ1uVNjuPLSH0dWBXzGsb3iSTzhJx/eggcPVAx
-         wJJVB7QZn5LOGj5jaUlxp+Jtimgky45xthNBwstpPIMwo4XSeBqxuv6FtH8b6iMfKIml
-         tt6yBsHT0alVtXF4BspLN7hukg50+cM8imFkPWgvefp041zFaRmLhvqaJ4H72FWavSRM
-         NbDw==
-X-Gm-Message-State: AOAM531/DVgpthOwtTXaf0rsV2p0hzx56KxYWuLyQIKCWdy+3horVviF
-        LJ84tQU4YyQI+2ZM9C7J79/Tag==
-X-Google-Smtp-Source: ABdhPJzLyuqdkaQnJF2ClXg0Jx1DgHwKnG2ziP/ISkfSmc674JtqB4hc3nDy/CLvL1Xr59yD6peNiw==
-X-Received: by 2002:a05:651c:98d:b0:250:976b:4a0e with SMTP id b13-20020a05651c098d00b00250976b4a0emr6642090ljq.494.1652559718267;
-        Sat, 14 May 2022 13:21:58 -0700 (PDT)
+        bh=oU8cEi9RGKI5PeHOuabBwBx8PODfLAO6JbRmPjOYsQc=;
+        b=Nw05G5FN1CHClHpBrvCK4yozciT4qymK5/qmkBV/RYb4Ux4plnFPdpyOBi7LHjlcuD
+         9FjutobJ2oouqkvi93WJzc72T+i0v2FqpnvT0Dhgu3EobHWubs7E6FWln3dBDvviXw7v
+         5BsBAON2WpVU8Bbp9NF3tqqz+zSx7Ww0JxPR88Q611jEp8RLVBG4oqiR3CTRL+KqXdQK
+         PY2SeXedZJXft5iVAaNs/1c9nCFVz4ISbEulfCQPsO+jNdXzugt4bvaRfpjTLzfCC6vO
+         PSGL6cpEX6JHZub3tY1x4HU4T7LPKch2TwWBGNI5oe2fHzBzG/cwSL8qqBSxVZh/6gVb
+         uGPQ==
+X-Gm-Message-State: AOAM531LryY+Ie4pUQ2ixnZH8MbkDL/8J9IcmYPzj3dYGZsGmwrF1J1Y
+        5+SGP7wn12SNHPOyLba+sOd7XA==
+X-Google-Smtp-Source: ABdhPJx00h31Y+JHjm9zszBh0Ce/1DU3I4eUQBWnozuMVemJIxolb+XGt/gBmwRvE9PJp3/pDzhWpQ==
+X-Received: by 2002:a05:6512:3a84:b0:472:6384:4de0 with SMTP id q4-20020a0565123a8400b0047263844de0mr7685091lfu.456.1652560093711;
+        Sat, 14 May 2022 13:28:13 -0700 (PDT)
 Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id z2-20020a2e9b82000000b0024f3d1daeaesm942625lji.54.2022.05.14.13.21.56
+        by smtp.gmail.com with ESMTPSA id f19-20020a19ae13000000b0047255d211b4sm799894lfc.227.2022.05.14.13.28.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 May 2022 13:21:57 -0700 (PDT)
-Message-ID: <567d135b-3d40-9958-e000-1357020b5650@linaro.org>
-Date:   Sat, 14 May 2022 22:21:56 +0200
+        Sat, 14 May 2022 13:28:13 -0700 (PDT)
+Message-ID: <4714c388-47ec-776a-7a50-362b258ffc25@linaro.org>
+Date:   Sat, 14 May 2022 22:28:12 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH 3/3] dt-bindings: usb: add documentation for aspeed udc
+Subject: Re: [PATCH v3 1/2] dt-bindings: gpio: gpio-mvebu: convert txt binding
+ to YAML
 Content-Language: en-US
-To:     Neal Liu <neal_liu@aspeedtech.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Felipe Balbi <balbi@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Li Yang <leoyang.li@nxp.com>
-Cc:     "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "brgl@bgdev.pl" <brgl@bgdev.pl>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "andrew@lunn.ch" <andrew@lunn.ch>,
+        Vadym Kochan <vadym.kochan@plvision.eu>,
+        "enachman@marvell.com" <enachman@marvell.com>
+Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>
-References: <20220513065728.857722-1-neal_liu@aspeedtech.com>
- <20220513065728.857722-4-neal_liu@aspeedtech.com>
- <da78aaf6-c9ae-d591-fdc4-723f097ace2c@linaro.org>
- <HK0PR06MB3202679A7FABAF7D0D045F0880CA9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>
+References: <20220512094125.3748197-1-chris.packham@alliedtelesis.co.nz>
+ <32aab734-5890-99b2-09c9-8ec7418c7649@linaro.org>
+ <e87482cb-20b1-fe09-7233-d56786d5eda6@alliedtelesis.co.nz>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <HK0PR06MB3202679A7FABAF7D0D045F0880CA9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+In-Reply-To: <e87482cb-20b1-fe09-7233-d56786d5eda6@alliedtelesis.co.nz>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,120 +90,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/05/2022 17:39, Neal Liu wrote:
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Sent: Friday, May 13, 2022 5:07 PM
->> To: Neal Liu <neal_liu@aspeedtech.com>; Greg Kroah-Hartman
->> <gregkh@linuxfoundation.org>; Rob Herring <robh+dt@kernel.org>;
->> Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>; Joel Stanley
->> <joel@jms.id.au>; Andrew Jeffery <andrew@aj.id.au>; Felipe Balbi
->> <balbi@kernel.org>; Sumit Semwal <sumit.semwal@linaro.org>; Christian
->> König <christian.koenig@amd.com>; Geert Uytterhoeven <geert@linux-
->> m68k.org>; Li Yang <leoyang.li@nxp.com>
->> Cc: linux-aspeed@lists.ozlabs.org; linux-usb@vger.kernel.org;
->> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
->> kernel@vger.kernel.org; linux-media@vger.kernel.org; dri-
->> devel@lists.freedesktop.org; linaro-mm-sig@lists.linaro.org; BMC-SW <BMC-
->> SW@aspeedtech.com>
->> Subject: Re: [PATCH 3/3] dt-bindings: usb: add documentation for aspeed
->> udc
->>
->> On 13/05/2022 08:57, Neal Liu wrote:
->>> Add device tree binding documentation for the Aspeed USB2.0 Device
->>> Controller.
->>>
->>> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
->>> ---
->>>  .../devicetree/bindings/usb/aspeed,udc.yaml   | 52
->> +++++++++++++++++++
->>>  1 file changed, 52 insertions(+)
->>>  create mode 100644
->>> Documentation/devicetree/bindings/usb/aspeed,udc.yaml
->>
->> Please name the file as first compatible, so "aspeed,ast2600-udc.yaml"
-> 
-> Okay, I could rename it for next patch if you preferred.
-> But there are lots of yaml files which are not named as first compatible.
-
-Yes, I know, I quite likely I also produced such bindings, but a
-specific name is rather preferred. Otherwise you will have a difficult
-naming choice when your next Aspeed UDC requires new bindings file
-because of some differences (not yet known now).
-
-> 
->>
->>>
->>> diff --git a/Documentation/devicetree/bindings/usb/aspeed,udc.yaml
->>> b/Documentation/devicetree/bindings/usb/aspeed,udc.yaml
->>> new file mode 100644
->>> index 000000000000..d1d2f77d1c54
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/usb/aspeed,udc.yaml
->>> @@ -0,0 +1,52 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) # Copyright
->>> +(c) 2020 Facebook Inc.
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/usb/aspeed,udc.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: ASPEED USB 2.0 Device Controller
->>> +
->>> +maintainers:
->>> +  - Neal Liu <neal_liu@aspeedtech.com>
->>> +
->>> +description: |+
->>> +  The ASPEED USB 2.0 Device Controller implements 1 control endpoint
->>> +and
->>> +  4 generic endpoints for AST260x.
->>> +
->>> +  Supports independent DMA channel for each generic endpoint.
->>> +  Supports 32/256 stages descriptor mode for all generic endpoints.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    enum:
->>> +      - aspeed,ast2600-udc
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +  clocks:
->>> +    maxItems: 1
->>> +
->>> +  interrupts:
->>> +    maxItems: 1
->>
->> No child properties? No ports or any other devices? No usb-hcd.yaml?
-> 
-> Aspeed udc only has 1 port, no need extra properties for now.
-
-OK
-
+On 14/05/2022 04:20, Chris Packham wrote:
 > 
 >>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +  - clocks
->>> +  - interrupts
->>> +
->>> +additionalProperties: false
->>> +
->>> +examples:
->>> +  - |
->>> +    #include <dt-bindings/clock/aspeed-clock.h>
->>> +    udc: udc@1e6a2000 {
+>>> +allOf:
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            const: marvell,armada-8k-gpio
+>>> +    then:
+>>> +      required:
+>>> +        - offset
+>>> +    else:
+>>> +      required:
+>>> +        - reg
+>> one blank line please
 >>
->> Node name: usb
->  
-> "udc" is more recognizable than "usb" I think. "usb" is too general, can be various like host or device.
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            const: marvell,armadaxp-gpio
+>> Original bindings are saying that second reg is optional for
+>> marvell,armada-370-gpio. What about other cases, e.g. mv78200-gpio? Is
+>> it also allowed (and optional) there?
+> This is where things get interesting. The armadaxp (and only the 
+> armadaxp) requires a second register value for some per-cpu registers. 
+> All of the other SoCs can have an optional 2nd register value if they 
+> want to use the PWM function. I guess that implies that the armadaxp 
+> can't do PWM.
+>>> +    then:
+>>> +      properties:
+>>> +        reg:
+>>> +          minItems: 2
+>> Then you also should require two reg-names.
+> 
+> Simple enough to add. But currently we've said that the reg-names are 
+> "gpio" and "pwm" but on the armadaxp the 2nd one is not "pwm" but 
+> something else ("per-cpu" perhaps?)
 
-It's still required by schema for most of USB host controllers. Existing
-USB device controllers use usb as well (except Atmel mentioning gadget)
-Generic name is also expected by Devicetree spec and "udc" is not on a
-list of examples of generic names (usb is).
+In such case they would be failing with current bindings, because they
+expect "pwm" as second name, right?
+
+> 
+> On the other hand this is all completely moot because the 
+> armada-xp-mv78*.dtsi actually use the "marvell,armada-370-gpio" 
+> compatible so this appears to be documenting something that is no longer 
+> used. Indeed it appears that the armadaxp specific usage was remove in 
+> 5f79c651e81e ("arm: mvebu: use global interrupts for GPIOs on Armada XP").
+> 
+> So perhaps the best course of action is to drop marvell,armadaxp-gpio 
+> from the new binding (noting that we've done so in the commit message).
+
+
+That's fine, maybe in a separate patch (2nd one)?
 
 
 Best regards,

@@ -2,109 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEEDD526E6D
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6AA526F01
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:15:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229455AbiENA6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 20:58:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46874 "EHLO
+        id S230002AbiENCxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 22:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiENA6S (ORCPT
+        with ESMTP id S229882AbiENCx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 20:58:18 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FC232FA00
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 17:34:44 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id fy8-20020a17090b020800b001d8de2118ccso4637843pjb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 17:34:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=CleGR40pCscZ7DX+JE9UL8AwIhXuuwyZAmYy00HxsZE=;
-        b=GKcrB79yedOhvremqRqfx2EEtubE/eyN0JrwxnHMy1Nx5PykTiyD7nKel0Omg5vymk
-         6XX1h8zMRXwXQMbT9RWJmwqZWKb0uZhG8k4UUQ0NijUkhOsxW4JoBuv4+kVdbrVWp1Y6
-         ANGUeQs7HysTo/cvIGwnNRxClRcgw8YP9fFPN/zE24iVnz/Wp1Lu0Blha36/yfJcIYkk
-         DUhmk0ld4NSUFFuYCRhJCBYugyyQrSl8xSR4hdwGCx8z1keAmANLb5uj3zhIC262iZ8D
-         sPvVId0WqsDtgIV3143I4tddKV9UtH9vVwku4d47YnGCiWKoYt0K2kmN7CiP63D/Bvtw
-         o/CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=CleGR40pCscZ7DX+JE9UL8AwIhXuuwyZAmYy00HxsZE=;
-        b=xmYykoCHdhHv4LmyL0EG6OXoH9laxtzgxZCEowk192BJzeaiYR80aUEddgsLgCoQDA
-         fxfhdXeJv3APVao6KCIwRuWQ/V4uj7Su1J1GcmLgaRpmsnaeJ3NrVvSn2vFM2WxKvXfy
-         dIQGNBrPomseOn8H3A1M6zZvMZ/uVxZ50bnX9MYqnpT54O+06OrVXc+5eaTeES0UOnzc
-         K5cvcjRcK8xaom+AYNjDvjM6NKsgeI+fYno/FQzSdm4TlHrd/ndzGZdrtii3GoOL+phK
-         jWWFatInqWH+6yJDI0sszBTMyhftxCWoWRqzWfRgASjnO0FhEyDBABOSTNYqUbPBgVww
-         hFxA==
-X-Gm-Message-State: AOAM532NOBLPW4IS7xDvZTvDThmQtbyetyUY1+tCD3aWpvCawn69bF2V
-        mxJ4KdKulH5lB3tAur2koj5X/OLbHiSSFHav
-X-Google-Smtp-Source: ABdhPJxywSRLaodpDSsq62D/NbDNNlbxqYbHUFeNFrs/LghHREk6Ui4Slhk+CDu0AZbxFPQdBk8KqU7Oq8cMJvKD
-X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a05:6a00:1d8f:b0:510:9397:65b with SMTP
- id z15-20020a056a001d8f00b005109397065bmr6927932pfw.57.1652487684383; Fri, 13
- May 2022 17:21:24 -0700 (PDT)
-Date:   Sat, 14 May 2022 00:21:15 +0000
-Message-Id: <20220514002115.1376033-1-yosryahmed@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [PATCH bpf-next v2] selftests/bpf: fix building bpf selftests statically
-From:   Yosry Ahmed <yosryahmed@google.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>
-Cc:     John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yosry Ahmed <yosryahmed@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 13 May 2022 22:53:28 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCE835B1F7;
+        Fri, 13 May 2022 17:59:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=qyZsoJknrWOVDvtpNszTIIAof3pgi3xfB+EMxclimb4=; b=YUKlqPWGIDZvhXATbELAlppcVk
+        92/7Q/rIwsA0xahE9uRHrV3gPbUEYEv1caC2w8u4thxI4DZV33oa7K1SUXBsSPdiaPrKdyPix/5QH
+        oYl1lWBxbSzo2oFcsrRYadLQzEMPbCWhroO2ghC15gjxxUxR5c16PCzSrzvjpeagk87c=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1npfZX-002hd6-UG; Sat, 14 May 2022 02:23:51 +0200
+Date:   Sat, 14 May 2022 02:23:51 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Saravana Kannan <saravanak@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        John Stultz <jstultz@google.com>,
+        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [RFC PATCH net 0/2] Make phylink and DSA wait for PHY driver
+ that defers probe
+Message-ID: <Yn72l3O6yI7YstMf@lunn.ch>
+References: <20220513233640.2518337-1-vladimir.oltean@nxp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220513233640.2518337-1-vladimir.oltean@nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bpf selftests can no longer be built with CFLAGS=-static with
-liburandom_read.so and its dependent target.
+On Sat, May 14, 2022 at 02:36:38AM +0300, Vladimir Oltean wrote:
+> This patch set completes the picture described by
+> '[RFC,devicetree] of: property: mark "interrupts" as optional for fw_devlink'
+> https://patchwork.kernel.org/project/netdevbpf/patch/20220513201243.2381133-1-vladimir.oltean@nxp.com/
+> 
+> I've CCed non-networking maintainers just in case they want to gain a
+> better understanding. If not, apologies and please ignore the rest.
+> 
+> 
+> 
+> My use case is to migrate a PHY driver from poll mode to interrupt mode
+> without breaking compatibility between new device trees and old kernels
+> which did not have a driver for that IRQ parent, and therefore (for
+> things to work) did not even have that interrupt listed in the "vintage
+> correct" DT blobs. Note that current kernels as of today are also
+> "old kernels" in this description.
+> 
+> Creating some degree of compatibility has multiple components.
+> 
+> 1. A PHY driver must eventually give up waiting for an IRQ provider,
+>    since the dependency is optional and it can fall back to poll mode.
+>    This is currently supported thanks to commit 74befa447e68 ("net:
+>    mdio: don't defer probe forever if PHY IRQ provider is missing").
+> 
+> 2. Before it finally gives up, the PHY driver has a transient phase of
+>    returning -EPROBE_DEFER. That transient phase causes some breakage
+>    which is handled by this patch set, details below.
+> 
+> 3. PHY device probing and Ethernet controller finding it and connecting
+>    to it are async events. When both happen during probing, the problem
+>    is that finding the PHY fails if the PHY defers probe, which results
+>    in a missing PHY rather than waiting for it. Unfortunately there is
+>    no universal way to address this problem, because the majority of
+>    Ethernet drivers do not connect to the PHY during probe. So the
+>    problem is fixed only for the driver that is of interest to me in
+>    this context, DSA, and with special API exported by phylink
+>    specifically for this purpose, to limit the impact on other drivers.
 
-Filter out -static for liburandom_read.so and its dependent target.
+There is a very different approach, which might be simpler.
 
-When building statically, this leaves urandom_read relying on
-system-wide shared libraries.
+We know polling will always work. And it should be possible to
+transition between polling and interrupt at any point, so long as the
+phylock is held. So if you get -EPROBE_DEFFER during probe, mark some
+state in phydev that there should be an irq, but it is not around yet.
+When the phy is started, and phylib starts polling, look for the state
+and try getting the IRQ again. If successful, swap to interrupts, if
+not, keep polling. Maybe after 60 seconds of polling and trying, give
+up trying to find the irq and stick with polling.
 
-Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
----
- tools/testing/selftests/bpf/Makefile | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 6bbc03161544..4030dd6cbc34 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -168,13 +168,15 @@ $(OUTPUT)/%:%.c
- 	$(call msg,BINARY,,$@)
- 	$(Q)$(LINK.c) $^ $(LDLIBS) -o $@
- 
-+# Filter out -static for liburandom_read.so and its dependent targets so that static builds
-+# do not fail. Static builds leave urandom_read relying on system-wide shared libraries.
- $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c
- 	$(call msg,LIB,,$@)
--	$(Q)$(CC) $(CFLAGS) -fPIC $(LDFLAGS) $^ $(LDLIBS) --shared -o $@
-+	$(Q)$(CC) $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $^ $(LDLIBS) -fPIC -shared -o $@
- 
- $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_read.so
- 	$(call msg,BINARY,,$@)
--	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.c,$^)			       \
-+	$(Q)$(CC) $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $(filter %.c,$^)  \
- 		  liburandom_read.so $(LDLIBS)	       			       \
- 		  -Wl,-rpath=. -Wl,--build-id=sha1 -o $@
- 
--- 
-2.36.0.550.gb090851708-goog
-
+     Andrew

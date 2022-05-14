@@ -2,93 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9A8526FFA
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 10:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 799E9527000
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 10:26:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbiENIRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 04:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
+        id S229628AbiENI0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 04:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiENIRm (ORCPT
+        with ESMTP id S230031AbiENI02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 04:17:42 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E879A
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 01:17:40 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652516259;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ptxkYIfclqy5O/gMkPytM7FecBAPXApyhBHx/s6t5+k=;
-        b=cHjQpeFhBi4mMqPWUFdjjdKbCNxSUbeCTq7e9TuG54QoSwZllWwAyWn/VA2bxfbp8FS79W
-        lpKpONGN1xhSlu8/eUzJRYbZ8z2/7An4yFUXSfE69IHtfw3wF6lHivRNX1/x1EP43Mxg+m
-        2YzOH1KhXwKXiNv80jZNKNSgxmxnjKjeDjsWmZo7PZev0MONnAMymFNV4PW0L08JGwT5Dg
-        XeCV5Hvab1ALlurGE9Sq5nyeVvDP0baDIxSjf5ud747JWKgjVTe0VrA/BAmffaTatkL5Fl
-        PsToyX+G9Z4WITvp+Bj9egqL+hjA9Kgbm3/OPtSDBuAAsUQm8y4Dgg3PUukvnA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652516259;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ptxkYIfclqy5O/gMkPytM7FecBAPXApyhBHx/s6t5+k=;
-        b=4QyQkuDjHvg4QNWDVHeMxsVLfTUC/+wKMBTajewFUyM/io2iH9gFUIPw+ugISd8SAFk2b1
-        J7VmY4C7MwqIN+Bg==
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     x86@kernel.org, Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Stephane Eranian <eranian@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 15/29] x86/hpet: Add helper function
- hpet_set_comparator_periodic()
-In-Reply-To: <20220513211944.GE22683@ranerica-svr.sc.intel.com>
-References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
- <20220506000008.30892-16-ricardo.neri-calderon@linux.intel.com>
- <87mtfufifa.ffs@tglx> <20220513211944.GE22683@ranerica-svr.sc.intel.com>
-Date:   Sat, 14 May 2022 10:17:38 +0200
-Message-ID: <87pmkgsf31.ffs@tglx>
+        Sat, 14 May 2022 04:26:28 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6749A
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 01:26:26 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id m1so14076651wrb.8
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 01:26:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fGSNjX7FWQgS0zAf5uzD98exN773UqLJMyTQST6/uq8=;
+        b=kr+ZoQoZymx9R0c+QUc/iRMK7yM5RJMiYBaDp29vkbzqN7JsQvW7P8dRIHD0OC0Sgb
+         9h/gegiLUJbI2vnd3FLgX/zT8QIDEDZvJUA5QItCnKwonX2DhnCre7aNN6WHzCDzmyt9
+         I43ecBElIP+jlg58xhiDXPtcOBYbhytGBFnZvjsNIMRdASSJKRAZTUQGh0isW83j8WGg
+         Sgo3kHAinNsrc10w18UGp+2+V3MWOlL6bdQIvB21UOUXeuHPZi5B9FJke2Ga09IJAWOf
+         idRiJm/YgtYOTc9+JCdRb0RTl+6EiIAhcysqwgchztbk2NwBxnCWA8lFPS2WLVfqKrqn
+         2JqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fGSNjX7FWQgS0zAf5uzD98exN773UqLJMyTQST6/uq8=;
+        b=UFPACYg7fjHSeRPmGFPbUF8nQw+i+1ygQFqrTOiLNPKmdgreK40daZB6Q2siDJ9wby
+         p9nEKWwkWTHSuMjAaOMMLyV/giGraMTJKrqvApz57e03s7n4UBw0xDdCIkj9OGg8E/SO
+         ufkIgUwTIsVlKjZcd7vuH5eELzKlv/PwObyM2nmE968kkFTBzZ0AyX9ba77fVPANKdM4
+         kmFeadab8g2/MwX/P6X/c7b+cGz7nwRTb94IsDFYCg4TQOs6eY27xEKP3IrnAeE65qFO
+         xWtczhclSpM4nz26btHmUDjGgJUs5/6hxEoWO2mE4ns9L+/uvLMi7EVOBQhY6mikptiV
+         sriw==
+X-Gm-Message-State: AOAM532X3h1ZBNlaBqB8B91dihtGIyMk+iSx0Pc6TnE0MCAYm2Bu7p/R
+        jHUcnCKdYljrwI3S0TsNo2tp06SRFSZLXy9AebeSPw==
+X-Google-Smtp-Source: ABdhPJxd2yAOrMDx1kyKIycTBHNDuUPoF3izxQpqfG9Ebu0UFmB15wKbKgzL/O8DbbD6u5O1U1bgna6lzZ1eJnpLVQs=
+X-Received: by 2002:a5d:6651:0:b0:20a:df2f:8027 with SMTP id
+ f17-20020a5d6651000000b0020adf2f8027mr6968835wrw.269.1652516785016; Sat, 14
+ May 2022 01:26:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <bc6e9ed7-d98b-c4da-2a59-ee0915c18f10@gmail.com>
+ <5ca35c47-6145-4ec1-6c05-3c46f436cb4d@gmail.com> <CAGS_qxpE9qGsS1LqaobVGFKFgV6TwvwNLR4e9PG5zsfPACSf_Q@mail.gmail.com>
+ <5b2783a2-76bf-ce6f-89b1-d0fe05b80b82@gmail.com>
+In-Reply-To: <5b2783a2-76bf-ce6f-89b1-d0fe05b80b82@gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 14 May 2022 16:26:13 +0800
+Message-ID: <CABVgOS=XcaheGrJ+n2DPUuE=MrJwDn5UWYcdQmfhZfHx2MDazg@mail.gmail.com>
+Subject: Re: [RFC] KTAP spec v2: prefix to KTAP data
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Bird, Tim" <Tim.Bird@sony.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Jonathan Corbet <corbet@lwn.net>, Rae Moar <rmr167@gmail.com>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        kernelci@groups.io, KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13 2022 at 14:19, Ricardo Neri wrote:
-> On Fri, May 06, 2022 at 11:41:13PM +0200, Thomas Gleixner wrote:
->> The argument about not bloating the code
->> with an "obvious???" function which is quite small is slightly beyond my
->> comprehension level.
+On Fri, May 13, 2022 at 1:26 AM Frank Rowand <frowand.list@gmail.com> wrote:
 >
-> That obvious function would look like this:
+> On 5/12/22 10:25, Daniel Latypov wrote:
+> > On Wed, May 11, 2022 at 11:01 PM Frank Rowand <frowand.list@gmail.com> wrote:
+> >> ================================================================================
+> >> #### discussion notes:
+> >>
+> >> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+> >> PRO: minimally invasive to specification.
+> >>
+> >> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+> >> CON:
+> >>
+> >> KTAP does not include any mechanism to describe the value of <prefix string>
+> >> to test harnesses and test output processing programs.  The test output
+> >> processing programs must infer the value of <prefix string> by detecting
+> >> the <prefix string> in the "Version lines".
+> >>
+> >> The detection of a "Version lines" might be a match of the regex:
+> >>
+> >>    "^.*KTAP version 2$"
+> >>
+> >> This risks falsely detecting a "Version lines", but the risk is small???
+> >
+> > Agree this is a risk and also think it's probably small, but it's hard to say.
+> > I think the $ anchoring the regex is probably safe enough.
+> >
+> > As noted earlier, this tracks with what kunit.py already does.
+> > That was necessitated by dynamic prefixes such as timestamps, etc.f
 >
-> void hpet_set_comparator_one_shot(int channel, u32 delta)
-> {
-> 	u32 count;
+> That is a good observation.  I nearly always have the prefix timestamp
+> on my console output, and thus remove the timestamp with a regex when
+> processing the data.
 >
-> 	count = hpet_readl(HPET_COUNTER);
-> 	count += delta;
-> 	hpet_writel(count, HPET_Tn_CMP(channel));
-> }
 
-This function only works reliably when the delta is large. See
-hpet_clkevt_set_next_event().
+Yeah: the use of a prefix length for timestamps (and similar 'dynamic
+prefixes') works really well as a way to automatically find KTAP
+output in the kernel log.
+It's definitely less useful as a way of disambiguating several
+(potentially interleaved) KTAP streams, though.
 
-Thanks,
+Personally, my conception of KTAP is that the prefix is not a part of
+the format, but a way (possibly one we should recommend in the spec)
+to isolate KTAP output from (e.g.) the kernel log.
+So, in theory, the processing pipeline for log -> result is:
+[dmesg] ---<remove prefix>--> [KTAP] ---<parse>---> [results]
 
-        tglx
+I wouldn't object to having the prefix be a part of KTAP if it were
+particularly useful to anyone, though, and definitely agree we should
+note ways to do it.
+
+Either way, we do end up with two (slightly conflicting) uses of prefixes:
+a) To isolate tests from a log.
+b) To allow multiple concurrent tests.
+
+For a), Alternative 1 seems obviously correct to me, since whatever
+module is being used might not know what random prefixes are being
+added to its log lines.
+For b), either would work, but we do potentially get conflicts with a)
+if we're trying to do both. So maybe alternative 2 makes sense for
+that.
+
+>
+> > So I think this is probably a fine risk to take.
+> >
+> > I imagine we could add constraints of prefix string, e.g. must have []
+> > around it, etc. if we want to try and minimize this risk.
+> > But I don't know if it's necessarily worth it, given what we know right now.
+> >
+> > Along those lines, I think I like this approach (Alternative 1) more
+> > than Alternative 2/2b.
+
+I agree, though note that we might need both if we want two separate
+types of prefix as mentioned above.
+
+> > I'm not sure we need a structured way to specify metadata in KTAP yet?
+> > The prefix seems like a reasonable candidate, but do others have ideas
+> > of other bits of metadata we'd want to be able to declare?
+> >
+
+That's the important takeaway from Alternative 2: some generic way of
+having metadata could be quite handy. (Of them, Alternative 2b feels a
+little more like a hack than I'd prefer, albeit a clever one. I'd
+prefer a cleaner "configuration info line" personally, though if
+reusing the test results for test 0 makes parsing significantly easier
+for others, it may nevertheless be worth doing.)
+
+As for other pieces of metadata, there are all sorts of useful
+information about the test which could be useful to store alongside
+the results (what tool generated it, kernel version, etc), though
+those might be more useful when saving results elsewhere than embedded
+into the kernel output.
+
+Equally, if we extended these configuration/info lines to individual
+test/subtests, things like test size, originating module, etc could
+potentially be stored. Suite/test init functions could potentially add
+useful metadata, too (e.g., number of cores/threads for kcsan, etc).
+
+None of those are, I think, quite compelling enough individually to
+add a config system, though. If we already had one for the prefix, and
+other things which are necessary for parsing, maybe...
+
+-- David

@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35463527044
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 11:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE51527046
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 11:29:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbiENJ3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 05:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
+        id S231324AbiENJ3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 05:29:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbiENJ3O (ORCPT
+        with ESMTP id S231211AbiENJ3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 05:29:14 -0400
+        Sat, 14 May 2022 05:29:45 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DCEBC0B;
-        Sat, 14 May 2022 02:29:12 -0700 (PDT)
-Received: from kwepemi100019.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L0gB41FW6zGpZj;
-        Sat, 14 May 2022 17:26:20 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7472DF16;
+        Sat, 14 May 2022 02:29:42 -0700 (PDT)
+Received: from kwepemi100018.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L0gF560DRzhYq6;
+        Sat, 14 May 2022 17:28:57 +0800 (CST)
 Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100019.china.huawei.com (7.221.188.189) with Microsoft SMTP Server
+ kwepemi100018.china.huawei.com (7.221.188.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 14 May 2022 17:29:11 +0800
+ 15.1.2375.24; Sat, 14 May 2022 17:29:41 +0800
 Received: from [10.174.176.73] (10.174.176.73) by
  kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 14 May 2022 17:29:10 +0800
-Subject: Re: [PATCH -next v5 0/3] support concurrent sync io for bfq on a
- specail occasion
-From:   "yukuai (C)" <yukuai3@huawei.com>
-To:     <paolo.valente@linaro.org>, <axboe@kernel.dk>
-CC:     <jack@suse.cz>, <tj@kernel.org>, <linux-block@vger.kernel.org>,
-        <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ 15.1.2375.24; Sat, 14 May 2022 17:29:40 +0800
+Subject: Re: [PATCH] blk-mq: don't queue 'hctx->run_work' if the queue is dead
+To:     <axboe@kernel.dk>
+CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <yi.zhang@huawei.com>
-References: <20220428120837.3737765-1-yukuai3@huawei.com>
- <d50df657-d859-79cf-c292-412eaa383d2c@huawei.com>
-Message-ID: <61b67d5e-829c-8130-7bda-81615d654829@huawei.com>
-Date:   Sat, 14 May 2022 17:29:09 +0800
+References: <20220510112302.1215092-1-yukuai3@huawei.com>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <0ca49455-4fde-c930-9305-f22d6a9cd91a@huawei.com>
+Date:   Sat, 14 May 2022 17:29:40 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <d50df657-d859-79cf-c292-412eaa383d2c@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+In-Reply-To: <20220510112302.1215092-1-yukuai3@huawei.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Originating-IP: [10.174.176.73]
 X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
@@ -56,141 +53,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/05/05 9:00, yukuai (C) 写道:
-> Hi, Paolo
-> 
-> Can you take a look at this patchset? It has been quite a long time
-> since we spotted this problem...
-> 
-
 friendly ping ...
-> Thanks,
-> Kuai
+
+�� 2022/05/10 19:23, Yu Kuai д��:
+> Our test report a following crash:
 > 
-> 在 2022/04/28 20:08, Yu Kuai 写道:
->> Changes in v5:
->>   - rename bfq_add_busy_queues() to bfq_inc_busy_queues() in patch 1
->>   - fix wrong definition in patch 1
->>   - fix spelling mistake in patch 2: leaset -> least
->>   - update comments in patch 3
->>   - add reviewed-by tag in patch 2,3
->>
->> Changes in v4:
->>   - split bfq_update_busy_queues() to bfq_add/dec_busy_queues(),
->>     suggested by Jan Kara.
->>   - remove unused 'in_groups_with_pending_reqs',
->>
->> Changes in v3:
->>   - remove the cleanup patch that is irrelevant now(I'll post it
->>     separately).
->>   - instead of hacking wr queues and using weights tree 
->> insertion/removal,
->>     using bfq_add/del_bfqq_busy() to count the number of groups
->>     (suggested by Jan Kara).
->>
->> Changes in v2:
->>   - Use a different approch to count root group, which is much simple.
->>
->> Currently, bfq can't handle sync io concurrently as long as they
->> are not issued from root group. This is because
->> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
->> bfq_asymmetric_scenario().
->>
->> The way that bfqg is counted into 'num_groups_with_pending_reqs':
->>
->> Before this patchset:
->>   1) root group will never be counted.
->>   2) Count if bfqg or it's child bfqgs have pending requests.
->>   3) Don't count if bfqg and it's child bfqgs complete all the requests.
->>
->> After this patchset:
->>   1) root group is counted.
->>   2) Count if bfqg have at least one bfqq that is marked busy.
->>   3) Don't count if bfqg doesn't have any busy bfqqs.
->>
->> The main reason to use busy state of bfqq instead of 'pending requests'
->> is that bfqq can stay busy after dispatching the last request if idling
->> is needed for service guarantees.
->>
->> With the above changes, concurrent sync io can be supported if only
->> one group is activated.
->>
->> fio test script(startdelay is used to avoid queue merging):
->> [global]
->> filename=/dev/nvme0n1
->> allow_mounted_write=0
->> ioengine=psync
->> direct=1
->> ioscheduler=bfq
->> offset_increment=10g
->> group_reporting
->> rw=randwrite
->> bs=4k
->>
->> [test1]
->> numjobs=1
->>
->> [test2]
->> startdelay=1
->> numjobs=1
->>
->> [test3]
->> startdelay=2
->> numjobs=1
->>
->> [test4]
->> startdelay=3
->> numjobs=1
->>
->> [test5]
->> startdelay=4
->> numjobs=1
->>
->> [test6]
->> startdelay=5
->> numjobs=1
->>
->> [test7]
->> startdelay=6
->> numjobs=1
->>
->> [test8]
->> startdelay=7
->> numjobs=1
->>
->> test result:
->> running fio on root cgroup
->> v5.18-rc1:       550 Mib/s
->> v5.18-rc1-patched: 550 Mib/s
->>
->> running fio on non-root cgroup
->> v5.18-rc1:       349 Mib/s
->> v5.18-rc1-patched: 550 Mib/s
->>
->> Note that I also test null_blk with "irqmode=2
->> completion_nsec=100000000(100ms) hw_queue_depth=1", and tests show
->> that service guarantees are still preserved.
->>
->> Previous versions:
->> RFC: 
->> https://lore.kernel.org/all/20211127101132.486806-1-yukuai3@huawei.com/
->> v1: 
->> https://lore.kernel.org/all/20220305091205.4188398-1-yukuai3@huawei.com/
->> v2: 
->> https://lore.kernel.org/all/20220416093753.3054696-1-yukuai3@huawei.com/
->> v3: 
->> https://lore.kernel.org/all/20220427124722.48465-1-yukuai3@huawei.com/
->> v4: 
->> https://lore.kernel.org/all/20220428111907.3635820-1-yukuai3@huawei.com/
->>
->> Yu Kuai (3):
->>    block, bfq: record how many queues are busy in bfq_group
->>    block, bfq: refactor the counting of 'num_groups_with_pending_reqs'
->>    block, bfq: do not idle if only one group is activated
->>
->>   block/bfq-cgroup.c  |  1 +
->>   block/bfq-iosched.c | 48 +++-----------------------------------
->>   block/bfq-iosched.h | 57 +++++++--------------------------------------
->>   block/bfq-wf2q.c    | 35 +++++++++++++++++-----------
->>   4 files changed, 35 insertions(+), 106 deletions(-)
->>
+> BUG: kernel NULL pointer dereference, address: 0000000000000018
+> PGD 0 P4D 0
+> Oops: 0000 [#1] SMP NOPTI
+> CPU: 6 PID: 265 Comm: kworker/6:1H Kdump: loaded Tainted: G           O      5.10.0-60.17.0.h43.eulerosv2r11.x86_64 #1
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.12.1-0-ga5cab58-20220320_160524-szxrtosci10000 04/01/2014
+> Workqueue: kblockd blk_mq_run_work_fn
+> RIP: 0010:blk_mq_delay_run_hw_queues+0xb6/0xe0
+> RSP: 0018:ffffacc6803d3d88 EFLAGS: 00010246
+> RAX: 0000000000000006 RBX: ffff99e2c3d25008 RCX: 00000000ffffffff
+> RDX: 0000000000000000 RSI: 0000000000000003 RDI: ffff99e2c911ae18
+> RBP: ffffacc6803d3dd8 R08: 0000000000000000 R09: ffff99e2c0901f6c
+> R10: 0000000000000018 R11: 0000000000000018 R12: ffff99e2c911ae18
+> R13: 0000000000000000 R14: 0000000000000003 R15: ffff99e2c911ae18
+> FS:  0000000000000000(0000) GS:ffff99e6bbf00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000000000000018 CR3: 000000007460a006 CR4: 00000000003706e0
+> Call Trace:
+>   __blk_mq_do_dispatch_sched+0x2a7/0x2c0
+>   ? newidle_balance+0x23e/0x2f0
+>   __blk_mq_sched_dispatch_requests+0x13f/0x190
+>   blk_mq_sched_dispatch_requests+0x30/0x60
+>   __blk_mq_run_hw_queue+0x47/0xd0
+>   process_one_work+0x1b0/0x350
+>   worker_thread+0x49/0x300
+>   ? rescuer_thread+0x3a0/0x3a0
+>   kthread+0xfe/0x140
+>   ? kthread_park+0x90/0x90
+>   ret_from_fork+0x22/0x30
+> 
+> After digging from vmcore, I found that the queue is cleaned
+> up(blk_cleanup_queue() is done) and tag set is
+> freed(blk_mq_free_tag_set() is done).
+> 
+> There are two problems here:
+> 
+> 1) blk_mq_delay_run_hw_queues() will only be called from
+> __blk_mq_do_dispatch_sched() if e->type->ops.has_work() return true.
+> This seems impossible because blk_cleanup_queue() is done, and there
+> should be no io. However, bfq_has_work() can return true even if no
+> io is queued. This is because bfq_has_work() is using busy queues, and
+> bfq_queue can stay busy after dispatching all the requests.
+> 
+> 2) 'hctx->run_work' still exists after blk_cleanup_queue().
+> blk_mq_cancel_work_sync() is called from blk_cleanup_queue() to cancel
+> all the 'run_work'. However, there is no guarantee that new 'run_work'
+> won't be queued after that(and before blk_mq_exit_queue() is done).
+> 
+> The first problem is not the root cause, this patch just fix the second
+> problem by checking the 'QUEUE_FLAG_DEAD' before queuing 'hctx->run_work',
+> and using 'queue_lock' to synchronize queuing new work and cacelling the
+> old work.
+> 
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
+>   block/blk-core.c |  3 +++
+>   block/blk-mq.c   | 10 ++++++++--
+>   2 files changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/block/blk-core.c b/block/blk-core.c
+> index c3f1e46ddd43..2609805861be 100644
+> --- a/block/blk-core.c
+> +++ b/block/blk-core.c
+> @@ -318,7 +318,10 @@ void blk_cleanup_queue(struct request_queue *q)
+>   	/* cleanup rq qos structures for queue without disk */
+>   	rq_qos_exit(q);
+>   
+> +	/* New 'hctx->run_work' can't be queued after setting the dead flag */
+> +	spin_lock_irq(&q->queue_lock);
+>   	blk_queue_flag_set(QUEUE_FLAG_DEAD, q);
+> +	spin_unlock_irq(&q->queue_lock);
+>   
+>   	blk_sync_queue(q);
+>   	if (queue_is_mq(q)) {
+> diff --git a/block/blk-mq.c b/block/blk-mq.c
+> index 2cf011b57cf9..34b4914204dd 100644
+> --- a/block/blk-mq.c
+> +++ b/block/blk-mq.c
+> @@ -2042,6 +2042,8 @@ static int blk_mq_hctx_next_cpu(struct blk_mq_hw_ctx *hctx)
+>   static void __blk_mq_delay_run_hw_queue(struct blk_mq_hw_ctx *hctx, bool async,
+>   					unsigned long msecs)
+>   {
+> +	unsigned long flag;
+> +
+>   	if (unlikely(blk_mq_hctx_stopped(hctx)))
+>   		return;
+>   
+> @@ -2056,8 +2058,12 @@ static void __blk_mq_delay_run_hw_queue(struct blk_mq_hw_ctx *hctx, bool async,
+>   		put_cpu();
+>   	}
+>   
+> -	kblockd_mod_delayed_work_on(blk_mq_hctx_next_cpu(hctx), &hctx->run_work,
+> -				    msecs_to_jiffies(msecs));
+> +	spin_lock_irqsave(&hctx->queue->queue_lock, flag);
+> +	if (!blk_queue_dead(hctx->queue))
+> +		kblockd_mod_delayed_work_on(blk_mq_hctx_next_cpu(hctx),
+> +					    &hctx->run_work,
+> +					    msecs_to_jiffies(msecs));
+> +	spin_unlock_irqrestore(&hctx->queue->queue_lock, flag);
+>   }
+>   
+>   /**
+> 

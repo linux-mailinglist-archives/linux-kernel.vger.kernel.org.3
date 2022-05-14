@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30C1526F68
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4572A526E84
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231523AbiENDfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 23:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54372 "EHLO
+        id S231504AbiENDfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 23:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231440AbiENDe6 (ORCPT
+        with ESMTP id S231463AbiENDe7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 23:34:58 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EED9941B2
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 20:34:57 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso7841563wme.5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 20:34:57 -0700 (PDT)
+        Fri, 13 May 2022 23:34:59 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5389B95DCE
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 20:34:58 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id a5so9786411wrp.7
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 20:34:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=F29OH6asB34VWoRlm7WLSnKtmcCuH6sg3zO/EYEp6Og=;
-        b=PnY1JknhQyIvblKgS7FrBkhnOIrw+KP7j+q/299tAR9IJU7WR7v2oKP2ZBIUMWw04H
-         6IcYcpQ+IMl8BRMszHkVkewWJDbnJXNWIiLUDGX0FwDQlH8ewYDvgqiNzBANnxUDwBYA
-         GKcACdjZVVm8UPiRjzKqp9ML7b6I7Ar2DpCyzhFtKdHga3SEQDloJIEQB2Sd6CH1CaDs
-         JfN/Wvwaz9f/tJznk30sllAUnGLXYd95jwJpeiHt21HdsinY5uaru4U8oKM18SCCRmQx
-         r75Glqv2ScLPEoI2uLoAhcls5C6haG5rdQxaTg0Nv5+SDh3TBFmzt0bDFRUPDdUTOQBb
-         WYeA==
+        bh=AvxCAVhEBFSALzFW5QU4eqtsfJ+K74cWo1IjNe8gKhU=;
+        b=hhjaEh4q933w6AuKifPXLtD2S7TfCNdCj8QpH8AO9IxW5szpex5NDjVkBj7Rnfup8Y
+         kPiGnYL2/ahfl9LkZjZc2Scb28RQpXCFJjj9hcSbwaEoV3xlvXxPDdnzC91OTJbsBmmX
+         eYuJqs2MR2qvuvb84xdzKd0tWp51YGkHRcCsAtiX7DBDg5WjIEwlQBLZc5f8cBRDXcdP
+         jG+nLWhoeNXCrZ/xcYN/BMPl8kB5NPX+vy78YnAfiSZhQbXG9LvLdI+N1TBEQGvW00Q5
+         6PmOcdeC8zQ0PWsQ78nCQA11C1oy6OXj+mLTgE4oVQz+CjxwbcKnglv3TzQu4kynXVfE
+         JQbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=F29OH6asB34VWoRlm7WLSnKtmcCuH6sg3zO/EYEp6Og=;
-        b=H8Yel5+F4l0MFhsH57VHPnTu2qDcMC0WYk5lpuyannaj8/v1Kkf5EY7QI4HZKBlvVd
-         OLu4hVbh3bdSLKUoOCBJWyIiwsIS7DmDFnQoHgNJdn/h/M+N5Cw+4WV99wLcbKuCybPk
-         SFh/PPy0js91hdge8Cj6Pl6MEvpjsQVDM9HwK7hRNLbLdEf2boFOrMRZnPl61aKiAGvX
-         uluZuiE/RxzFvQe36F1BCvLgtLdfhmXhNmlOUXg3itzFOXbw9BMNNvMdZ0i8czcPbxdZ
-         N1LlfF+h+9g5ndkORZk0YCIDB33uHubx9mtOAkEShMwSRP7lwEYf5i8foD7u0cFEGQ0q
-         rF8g==
-X-Gm-Message-State: AOAM5315j4HepWGWGRJg+tElTOVgygaPX8VGFwmYPBVmVnsxZHIcs2qW
-        kWnE7Z8HNzRgF8xR5yoRKuw=
-X-Google-Smtp-Source: ABdhPJwSLfre31yJDnmspUtYnPK3meECsPoudta3nkrbepu5i498WfpC83okFqD0CUbXxea4HxQTSw==
-X-Received: by 2002:a05:600c:3b11:b0:394:57eb:c58b with SMTP id m17-20020a05600c3b1100b0039457ebc58bmr17454288wms.3.1652499295767;
-        Fri, 13 May 2022 20:34:55 -0700 (PDT)
+        bh=AvxCAVhEBFSALzFW5QU4eqtsfJ+K74cWo1IjNe8gKhU=;
+        b=JPeAooJRCNWYwMOKAUA3Ko7wVM3hY6hvi1qsKfJ2qM6owH27wFynwV75SmG4Zoakp2
+         x6+O4h3aP9Jdz4MLcg3b0rnTpwjmUOz//VVhCM0hOoxDceFjZ3PKBIYMMFz/OzhGnixQ
+         rQ9oaROui13JeFB3E2G1jFpjm4jB29LPCRXwX/CUqTaAUM0684IK0TDx77TqVsvuwu5E
+         jzbe2qQF4Jnsag5Dr8XRdSUG3hV8wID1Ui6pdOMZOLb5+BrCGKblEMGV19vYUFjtp57x
+         SenLGfRGxLwsUHDhnV7ur74IjtOqpRKA6e4auGPu9mtxzfjB//qo8IxbZWpSdhjGMDh0
+         IQ5w==
+X-Gm-Message-State: AOAM532rKCyPznUwvdrwiDdxnUwB/QdaCpCB1Z9loqxN26mEOP0rIkAA
+        uLz7C87D38kBykfh2TfM1K4=
+X-Google-Smtp-Source: ABdhPJwfMSYLdMz16J88+j7WK3C7LzuI8Xgae1g0LeGemd94qEf2RxkJ/dd5rCMRDloHLwtJFZjppg==
+X-Received: by 2002:a05:6000:81c:b0:20c:d4e7:400d with SMTP id bt28-20020a056000081c00b0020cd4e7400dmr6032737wrb.459.1652499296894;
+        Fri, 13 May 2022 20:34:56 -0700 (PDT)
 Received: from octofox.metropolis ([178.134.103.46])
-        by smtp.gmail.com with ESMTPSA id h1-20020adfaa81000000b0020c66310845sm3542638wrc.55.2022.05.13.20.34.54
+        by smtp.gmail.com with ESMTPSA id h1-20020adfaa81000000b0020c66310845sm3542638wrc.55.2022.05.13.20.34.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 20:34:55 -0700 (PDT)
+        Fri, 13 May 2022 20:34:56 -0700 (PDT)
 From:   Max Filippov <jcmvbkbc@gmail.com>
 To:     linux-xtensa@linux-xtensa.org
 Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
         Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH v2 2/3] xtensa: support artificial division by 0 exception
-Date:   Fri, 13 May 2022 20:34:36 -0700
-Message-Id: <20220514033437.4182899-3-jcmvbkbc@gmail.com>
+Subject: [PATCH v2 3/3] xtensa: improve call0 ABI probing
+Date:   Fri, 13 May 2022 20:34:37 -0700
+Message-Id: <20220514033437.4182899-4-jcmvbkbc@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220514033437.4182899-1-jcmvbkbc@gmail.com>
 References: <20220514033437.4182899-1-jcmvbkbc@gmail.com>
@@ -71,70 +71,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On xtensa cores wihout hardware division option division support
-functions from libgcc react to division by 0 attempt by executing
-illegal instruction followed by the characters 'DIV0'. Recognize this
-pattern in illegal instruction exception handler and convert it to
-division by 0.
+When call0 userspace ABI support by probing is enabled instructions that
+cause illegal instruction exception when PS.WOE is clear are retried
+with PS.WOE set before calling c-level exception handler. Record user pc
+at which PS.WOE was set in the fast exception handler and clear PS.WOE
+in the c-level exception handler if we get there from the same address.
 
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
 Changes v1->v2:
 
 - split ABI probing improvement from the artificial division by 0
-- don't limit artificial division by 0 pattern detection to
-  configurations without HW division opcodes, do it always
 
- arch/xtensa/kernel/traps.c | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ arch/xtensa/include/asm/thread_info.h |  4 ++++
+ arch/xtensa/kernel/asm-offsets.c      |  3 +++
+ arch/xtensa/kernel/entry.S            |  5 +++++
+ arch/xtensa/kernel/traps.c            | 12 ++++++++++++
+ 4 files changed, 24 insertions(+)
 
+diff --git a/arch/xtensa/include/asm/thread_info.h b/arch/xtensa/include/asm/thread_info.h
+index 52974317a6b6..326db1c1d5d8 100644
+--- a/arch/xtensa/include/asm/thread_info.h
++++ b/arch/xtensa/include/asm/thread_info.h
+@@ -56,6 +56,10 @@ struct thread_info {
+ 	/* result of the most recent exclusive store */
+ 	unsigned long		atomctl8;
+ #endif
++#ifdef CONFIG_USER_ABI_CALL0_PROBE
++	/* Address where PS.WOE was enabled by the ABI probing code */
++	unsigned long		ps_woe_fix_addr;
++#endif
+ 
+ 	/*
+ 	 * If i-th bit is set then coprocessor state is loaded into the
+diff --git a/arch/xtensa/kernel/asm-offsets.c b/arch/xtensa/kernel/asm-offsets.c
+index 9a1db6ffcbf4..da38de20ae59 100644
+--- a/arch/xtensa/kernel/asm-offsets.c
++++ b/arch/xtensa/kernel/asm-offsets.c
+@@ -88,6 +88,9 @@ int main(void)
+ 	OFFSET(TI_STSTUS, thread_info, status);
+ 	OFFSET(TI_CPU, thread_info, cpu);
+ 	OFFSET(TI_PRE_COUNT, thread_info, preempt_count);
++#ifdef CONFIG_USER_ABI_CALL0_PROBE
++	OFFSET(TI_PS_WOE_FIX_ADDR, thread_info, ps_woe_fix_addr);
++#endif
+ 
+ 	/* struct thread_info (offset from start_struct) */
+ 	DEFINE(THREAD_RA, offsetof (struct task_struct, thread.ra));
+diff --git a/arch/xtensa/kernel/entry.S b/arch/xtensa/kernel/entry.S
+index 3224b4ceca34..e3eae648ba2e 100644
+--- a/arch/xtensa/kernel/entry.S
++++ b/arch/xtensa/kernel/entry.S
+@@ -1056,6 +1056,11 @@ ENTRY(fast_illegal_instruction_user)
+ 	movi	a3, PS_WOE_MASK
+ 	or	a0, a0, a3
+ 	wsr	a0, ps
++#ifdef CONFIG_USER_ABI_CALL0_PROBE
++	GET_THREAD_INFO(a3, a2)
++	rsr	a0, epc1
++	s32i	a0, a3, TI_PS_WOE_FIX_ADDR
++#endif
+ 	l32i	a3, a2, PT_AREG3
+ 	l32i	a0, a2, PT_AREG0
+ 	rsr	a2, depc
 diff --git a/arch/xtensa/kernel/traps.c b/arch/xtensa/kernel/traps.c
-index 24d11b44fa57..47445b2d4217 100644
+index 47445b2d4217..21c2c30baf69 100644
 --- a/arch/xtensa/kernel/traps.c
 +++ b/arch/xtensa/kernel/traps.c
-@@ -293,12 +293,42 @@ static void do_interrupt(struct pt_regs *regs)
- 	set_irq_regs(old_regs);
- }
- 
-+static int check_div0(struct pt_regs *regs)
-+{
-+	u8 buf[7];
-+	void *p;
-+	static const u8 pattern1[] = {0, 0, 0, 'D', 'I', 'V', '0'};
-+#if defined(__XTENSA_EB__)
-+	static const u8 pattern2[] = {0xd6, 0x0f, 'D', 'I', 'V', '0'};
-+#elif defined(__XTENSA_EL__)
-+	static const u8 pattern2[] = {0x6d, 0xf0, 'D', 'I', 'V', '0'};
-+#else
-+#error Unsupported Xtensa endianness
-+#endif
-+
-+	if (user_mode(regs)) {
-+		if (copy_from_user(buf, (void __user *)regs->pc, 7))
-+			return 0;
-+		p = buf;
-+	} else {
-+		p = (void *)regs->pc;
-+	}
-+
-+	return memcmp(p, pattern1, sizeof(pattern1)) == 0 ||
-+		memcmp(p, pattern2, sizeof(pattern2)) == 0;
-+}
-+
- /*
-  * Illegal instruction. Fatal if in kernel space.
-  */
+@@ -324,6 +324,18 @@ static int check_div0(struct pt_regs *regs)
  
  static void do_illegal_instruction(struct pt_regs *regs)
  {
-+	if (check_div0(regs)) {
-+		do_div0(regs);
-+		return;
-+	}
-+
- 	__die_if_kernel("Illegal instruction in kernel", regs, SIGKILL);
- 
- 	/* If in user mode, send SIGILL signal to current process. */
++#ifdef CONFIG_USER_ABI_CALL0_PROBE
++	/*
++	 * When call0 application encounters an illegal instruction fast
++	 * exception handler will attempt to set PS.WOE and retry failing
++	 * instruction.
++	 * If we get here we know that that instruction is also illegal
++	 * with PS.WOE set, so it's not related to the windowed option
++	 * hence PS.WOE may be cleared.
++	 */
++	if (regs->pc == current_thread_info()->ps_woe_fix_addr)
++		regs->ps &= ~PS_WOE_MASK;
++#endif
+ 	if (check_div0(regs)) {
+ 		do_div0(regs);
+ 		return;
 -- 
 2.30.2
 

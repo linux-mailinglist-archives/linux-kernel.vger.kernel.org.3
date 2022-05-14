@@ -2,150 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41591526FEF
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 10:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12471526FF2
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 10:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbiENIMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 04:12:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54598 "EHLO
+        id S230057AbiENIPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 04:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231440AbiENIMB (ORCPT
+        with ESMTP id S229687AbiENIP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 04:12:01 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D31248E6F
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 01:08:21 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id j4-20020a92c204000000b002caad37af3fso6134567ilo.22
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 01:08:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=J6JFQq6mil3YIkYftoI8kQRDl+RyVeEFs1MZE/tezIc=;
-        b=XahMd8TP4bOBn3ozo5KXsZwe5AcSd09DFzKcRWlF1ptxxeZeyPv2SFMA2bPg6U6owW
-         VUmKDZpwiGDO6FVPQQZh6+KkESVrPB69UbiM8s46YG1ei0GB7fVoAtOCLlJwx5IbUKU5
-         SZrU6z05gPyq/6/M8cXzSkWRxwytcoXpF3rvEgqQ4UOkkAgqXTqIkRowVUmvRLbXrDeR
-         fuy58zmEkgLgJMAHNSVOM5cCGN50fbVO2NThwq3+1GZc9osDRNQ5yV3+oizPw0zIkTGU
-         KE2tixfgU6zK124QZBf08+PZ/tPbla8RA4XwObZwUrkgxLBS/XVNEFF3/fG94fmOTXbn
-         jwpQ==
-X-Gm-Message-State: AOAM530pjHcUydIg6WqxpsXBgbcWTzhdcmyWu24N296YIMdoIxK1E1xy
-        9bQV/TMtXwB0LQWyk9yoTXreCKCMRl5wF+V1VxlfBq8RtI15
-X-Google-Smtp-Source: ABdhPJxkRk3DcDw0kS90ilV3lM0tf8iFU+RgXJK622aFFqugfyLpp2tucwJV2xxNGIMCsG7ewb55/L3WB71gQtNWzEYFPCNG4y+C
+        Sat, 14 May 2022 04:15:29 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A608297
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 01:15:27 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652516125;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UHF9WVJF89fHPJq0+8oiweP3wjgNVxTMSM/vRu60nYc=;
+        b=Tm0Wc2HrL4EoLv6k4cC472VP8Biprl05MvetpUZPEzW0ctnc4AfNAc9GzrCaDwbUR7asay
+        k9meZSHbxU07Wx7caJes3ehRYibTz13rBlObuMSuFk7ZgN3LUGwEFHSwzQDAbs76ml91Iv
+        TfrRfjYmgQ6VlChzQQtCqbE57X4yHCjEY/nFJ+u//Q0QW7b86PnnHZ0bks5Z5KNxstDgFB
+        8ieqdzZXwb8nQd54BAROxS5Y0qPLEeda5doQcCE+EFzABk7gxmFkNcD+FzEZp8aT5/YOg/
+        zBTpa9/aRp4PQD0V/GvzjQhFx5s/3qzmVoPUo4/nyL1Yd+fdRZVYofcuJu1UWQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652516125;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UHF9WVJF89fHPJq0+8oiweP3wjgNVxTMSM/vRu60nYc=;
+        b=DQ1ba3l4HOXe/g0FH1Hxfxmq/Jov5eLSl+952ajCcfZuyexUDsvo3a6HGCEtaOgGvBGZVv
+        W7XCCMG7O6GU1PCg==
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     x86@kernel.org, Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Stephane Eranian <eranian@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 05/29] x86/apic/vector: Do not allocate vectors for NMIs
+In-Reply-To: <20220513234542.GC9074@ranerica-svr.sc.intel.com>
+References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
+ <20220506000008.30892-6-ricardo.neri-calderon@linux.intel.com>
+ <87zgjufjrf.ffs@tglx> <20220513180320.GA22683@ranerica-svr.sc.intel.com>
+ <87v8u9rwce.ffs@tglx> <20220513234542.GC9074@ranerica-svr.sc.intel.com>
+Date:   Sat, 14 May 2022 10:15:24 +0200
+Message-ID: <87sfpcsf6r.ffs@tglx>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1485:b0:2cd:fa3d:72b9 with SMTP id
- n5-20020a056e02148500b002cdfa3d72b9mr4451373ilk.247.1652515700692; Sat, 14
- May 2022 01:08:20 -0700 (PDT)
-Date:   Sat, 14 May 2022 01:08:20 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000053626005def44bec@google.com>
-Subject: [syzbot] WARNING in drm_atomic_helper_wait_for_vblanks (2)
-From:   syzbot <syzbot+f95421e61338eb84132a@syzkaller.appspotmail.com>
-To:     airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, syzkaller-bugs@googlegroups.com,
-        tzimmermann@suse.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, May 13 2022 at 16:45, Ricardo Neri wrote:
+> On Fri, May 13, 2022 at 10:50:09PM +0200, Thomas Gleixner wrote:
+>> > Also, if lapic_nmi_controller.irq_set_affinity() is NULL, then irq_chips
+>> > INTEL-IR, AMD-IR, those using msi_domain_set_affinity() need to check for NULL.
+>> > They currently unconditionally call the parent irq_chip's irq_set_affinity().
+>> > I see that there is a irq_chip_set_affinity_parent() function. Perhaps it can
+>> > be used for this check?
+>> 
+>> Yes, this lacks obviously a NMI specific set_affinity callback and this
+>> can be very trivial and does not have any of the complexity of interrupt
+>> affinity assignment. First online CPU in the mask with a fallback to any
+>> online CPU.
+>
+> Why would we need a fallback to any online CPU? Shouldn't it fail if it cannot
+> find an online CPU in the mask?
 
-syzbot found the following issue on:
+Might as well fail. Let me think about it.
 
-HEAD commit:    9be9ed2612b5 Merge tag 'platform-drivers-x86-v5.18-4' of g..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=12dc2e49f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6ab029f8aaef5349
-dashboard link: https://syzkaller.appspot.com/bug?extid=f95421e61338eb84132a
-compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm
+>> I did not claim that this is complete. This was for illustration.
+>
+> In the reworked patch, may I add a Co-developed-by with your name and your SOB?
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Suggested-by is good enough.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f95421e61338eb84132a@syzkaller.appspotmail.com
+Thanks,
 
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 11618 at drivers/gpu/drm/drm_atomic_helper.c:1529 drm_atomic_helper_wait_for_vblanks.part.0+0x2ac/0x2b8 drivers/gpu/drm/drm_atomic_helper.c:1529
-[CRTC:33:crtc-0] vblank wait timed out
-Modules linked in:
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 1 PID: 11618 Comm: syz-executor.0 Not tainted 5.18.0-rc6-syzkaller #0
-Hardware name: ARM-Versatile Express
-Backtrace: 
-[<816dadf0>] (dump_backtrace) from [<816db120>] (show_stack+0x18/0x1c arch/arm/kernel/traps.c:253)
- r7:81d665f4 r6:82222b64 r5:60000093 r4:81d73dd4
-[<816db108>] (show_stack) from [<816e3a20>] (__dump_stack lib/dump_stack.c:88 [inline])
-[<816db108>] (show_stack) from [<816e3a20>] (dump_stack_lvl+0x48/0x54 lib/dump_stack.c:106)
-[<816e39d8>] (dump_stack_lvl) from [<816e3a44>] (dump_stack+0x18/0x1c lib/dump_stack.c:113)
- r5:00000000 r4:82442d14
-[<816e3a2c>] (dump_stack) from [<816dbcbc>] (panic+0x11c/0x360 kernel/panic.c:250)
-[<816dbba0>] (panic) from [<80242928>] (__warn+0x98/0x198 kernel/panic.c:599)
- r3:00000001 r2:00000000 r1:00000000 r0:81d665f4
- r7:80913100
-[<80242890>] (__warn) from [<816dbf9c>] (warn_slowpath_fmt+0x9c/0xd4 kernel/panic.c:629)
- r8:00000009 r7:80913100 r6:000005f9 r5:81dd6170 r4:81dd677c
-[<816dbf04>] (warn_slowpath_fmt) from [<80913100>] (drm_atomic_helper_wait_for_vblanks.part.0+0x2ac/0x2b8 drivers/gpu/drm/drm_atomic_helper.c:1529)
- r8:0000649a r7:00000000 r6:82a1d000 r5:829e0050 r4:00000000
-[<80912e54>] (drm_atomic_helper_wait_for_vblanks.part.0) from [<80914620>] (drm_atomic_helper_wait_for_vblanks drivers/gpu/drm/drm_atomic_helper.c:1505 [inline])
-[<80912e54>] (drm_atomic_helper_wait_for_vblanks.part.0) from [<80914620>] (drm_atomic_helper_commit_tail+0x84/0x94 drivers/gpu/drm/drm_atomic_helper.c:1605)
- r10:8425185c r9:83f0e800 r8:00000000 r7:00000136 r6:739d46c0 r5:83f0e800
- r4:82a1d000
-[<8091459c>] (drm_atomic_helper_commit_tail) from [<80915170>] (commit_tail+0x164/0x18c drivers/gpu/drm/drm_atomic_helper.c:1682)
- r5:00000000 r4:82a1d000
-[<8091500c>] (commit_tail) from [<80915d3c>] (drm_atomic_helper_commit drivers/gpu/drm/drm_atomic_helper.c:1900 [inline])
-[<8091500c>] (commit_tail) from [<80915d3c>] (drm_atomic_helper_commit+0x14c/0x170 drivers/gpu/drm/drm_atomic_helper.c:1833)
- r9:83f0e800 r8:82a1d02c r7:00000000 r6:83f0e800 r5:00000000 r4:82a1d000
-[<80915bf0>] (drm_atomic_helper_commit) from [<80934bb4>] (drm_atomic_commit+0x58/0x5c drivers/gpu/drm/drm_atomic.c:1434)
- r9:83f0e800 r8:829e0340 r7:00000001 r6:00000001 r5:83f0e800 r4:82a1d000
-[<80934b5c>] (drm_atomic_commit) from [<8094c7bc>] (drm_client_modeset_commit_atomic+0x200/0x248 drivers/gpu/drm/drm_client_modeset.c:1044)
- r5:83f0e9ac r4:82a1d000
-[<8094c5bc>] (drm_client_modeset_commit_atomic) from [<8094c8dc>] (drm_client_modeset_commit_locked+0x64/0x18c drivers/gpu/drm/drm_client_modeset.c:1147)
- r10:5ac3c35a r9:83f0e894 r8:81ddde34 r7:8417ea18 r6:8417ea00 r5:83f0e800
- r4:83f0e800
-[<8094c878>] (drm_client_modeset_commit_locked) from [<8094ca30>] (drm_client_modeset_commit+0x2c/0x48 drivers/gpu/drm/drm_client_modeset.c:1173)
- r9:83f0e894 r8:81ddde34 r7:8417eab4 r6:00000000 r5:83f0e800 r4:8417ea00
-[<8094ca04>] (drm_client_modeset_commit) from [<8091db08>] (__drm_fb_helper_restore_fbdev_mode_unlocked drivers/gpu/drm/drm_fb_helper.c:252 [inline])
-[<8094ca04>] (drm_client_modeset_commit) from [<8091db08>] (__drm_fb_helper_restore_fbdev_mode_unlocked drivers/gpu/drm/drm_fb_helper.c:231 [inline])
-[<8094ca04>] (drm_client_modeset_commit) from [<8091db08>] (drm_fb_helper_restore_fbdev_mode_unlocked drivers/gpu/drm/drm_fb_helper.c:279 [inline])
-[<8094ca04>] (drm_client_modeset_commit) from [<8091db08>] (drm_fb_helper_lastclose drivers/gpu/drm/drm_fb_helper.c:2035 [inline])
-[<8094ca04>] (drm_client_modeset_commit) from [<8091db08>] (drm_fbdev_client_restore+0x5c/0x98 drivers/gpu/drm/drm_fb_helper.c:2445)
- r5:82349ecc r4:8417ea00
-[<8091daac>] (drm_fbdev_client_restore) from [<8094c210>] (drm_client_dev_restore+0x7c/0xc8 drivers/gpu/drm/drm_client.c:226)
- r7:83f0e8a8 r6:83f0e800 r5:83f0e86c r4:8417ea00
-[<8094c194>] (drm_client_dev_restore) from [<8091fd30>] (drm_lastclose drivers/gpu/drm/drm_file.c:467 [inline])
-[<8094c194>] (drm_client_dev_restore) from [<8091fd30>] (drm_release+0x130/0x150 drivers/gpu/drm/drm_file.c:498)
- r9:7efffd08 r8:8429a010 r7:8424d6c0 r6:850e0cc0 r5:83f0e86c r4:83f0e800
-[<8091fc00>] (drm_release) from [<80492948>] (__fput+0x84/0x258 fs/file_table.c:317)
- r7:82c14440 r6:82969008 r5:000a201d r4:850e0cc0
-[<804928c4>] (__fput) from [<80492b98>] (____fput+0x10/0x14 fs/file_table.c:350)
- r9:7efffd08 r8:841c0854 r7:824435dc r6:841c0000 r5:841c0824 r4:00000000
-[<80492b88>] (____fput) from [<80267280>] (task_work_run+0x8c/0xb8 kernel/task_work.c:164)
-[<802671f4>] (task_work_run) from [<8020c030>] (resume_user_mode_work include/linux/resume_user_mode.h:49 [inline])
-[<802671f4>] (task_work_run) from [<8020c030>] (do_work_pending+0x430/0x51c arch/arm/kernel/signal.c:630)
- r9:7efffd08 r8:802002a4 r7:fffffe30 r6:802002a4 r5:ea685fb0 r4:841c0000
-[<8020bc00>] (do_work_pending) from [<80200088>] (slow_work_pending+0xc/0x20)
-Exception stack(0xea685fb0 to 0xea685ff8)
-5fa0:                                     00000000 00000002 00000000 00000003
-5fc0: 00000004 023d04c0 0012bf9c 00000006 00000000 0012bf90 001369f8 00000000
-5fe0: 2f260000 7ed95348 000293ac 00029868 80000010 00000003
- r10:00000006 r9:841c0000 r8:802002a4 r7:00000006 r6:0012bf9c r5:023d04c0
- r4:00000004
-SMP: failed to stop secondary CPUs
-Rebooting in 86400 seconds..
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+        tglx

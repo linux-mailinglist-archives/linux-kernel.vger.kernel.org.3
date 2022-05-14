@@ -2,102 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1382A526FA2
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E04CC526FA6
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 10:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbiENHxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 03:53:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45880 "EHLO
+        id S229577AbiENIBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 04:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiENHwv (ORCPT
+        with ESMTP id S229493AbiENIBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 03:52:51 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36866A1B1
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 00:52:36 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id c1-20020a17090a558100b001dca2694f23so9758678pji.3
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 00:52:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=9kAA0uCEYwZFDz59hPllk4M4/jt+7xzfL8ut7F5jG6Q=;
-        b=i8f3tAxBvaDfFYiDPd/kfXBTvmRLxSQjGJwGgd5Lla/1qNwGm2bvlqEn8+j5k4OyEY
-         Ys0QQQ+aUww+WnvB3a4WEcH/rBiotPA6kXy4PZnHQbuvi8QNQ6EophHw03VlSHuqfYYT
-         RL9314D8x5C5lBSGjf+JJ1XrJ+WzLviQuzh7jvANHHGJH9Tu6Ep4/mJ6JD54Oiv4jMun
-         Fwv+HC5Vo/D9pV+8xZg6/FAsQCaqVLKpTIPcdX1lKLPBeFz44pd1FlRq9dmThQBcFVvc
-         /Gr3DVI/RrZ8xWlEKVI86S7SFzIrjkJ9R9nQLFYlQ5lYBsRLIMVw/p0t0NKNuETI6Dxp
-         85xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=9kAA0uCEYwZFDz59hPllk4M4/jt+7xzfL8ut7F5jG6Q=;
-        b=SHORAHIocXtGkLQLNRaKDddOlC0DVVvtDdgjfqV91czyFWQsjx7flSDKtQHCGrBnDY
-         Y4sG0W0SJB6P1bu28a7MimnATcJijRjgYKOBUXNj7fqiDg3PGjT5D7SR/F2jjiNomX5m
-         o71d1JvJMd8Ebo/qJPL9g6olxkzNpxiRxfH/i07uBc0RsR+uvk8Ec096sJIRD7F45xeh
-         N0RyEnbrFqJvR8TMbpDcu7AwWehgRzdCMisbSWjKxHag8oCp/Krc7woV8fW1C3rcVZ1B
-         iMNarQ5Hh0WCPMf14S8Kvygy+iDeFX8XxfSLbr+1i044Trt4Cn6dT95aJp7vfApepaVI
-         xwiQ==
-X-Gm-Message-State: AOAM533t2yNFEzde4WTkjOneHNCe7QAGDMpvATNfm5hHg+IVif063XDT
-        /r0VfhUyppt+hSXJSyYIwtM=
-X-Google-Smtp-Source: ABdhPJwALc97+Ztc4kOjUbmkvfnjzktBbydfixTh093DwDApZfPo7PIKJ5gqQv7GyZie3g2/VhqGLA==
-X-Received: by 2002:a17:90b:350d:b0:1dc:6680:6f1d with SMTP id ls13-20020a17090b350d00b001dc66806f1dmr19966890pjb.27.1652514755798;
-        Sat, 14 May 2022 00:52:35 -0700 (PDT)
-Received: from pc ([199.15.76.19])
-        by smtp.gmail.com with ESMTPSA id ij16-20020a170902ab5000b0015e8d4eb209sm3104746plb.83.2022.05.14.00.52.33
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 14 May 2022 00:52:34 -0700 (PDT)
-Date:   Sat, 14 May 2022 15:52:28 +0800
-From:   Zhaoyu Liu <zackary.liu.pro@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mm/oom_kill: break evaluation when a task has been selected
-Message-ID: <20220514075223.GA11384@pc>
+        Sat, 14 May 2022 04:01:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADDA24947;
+        Sat, 14 May 2022 01:01:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 74F3E60B52;
+        Sat, 14 May 2022 08:01:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 964F8C340EE;
+        Sat, 14 May 2022 08:01:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652515271;
+        bh=YhvEOsX3XXWBxDsdjMMPb9LQ+FGAbn6utxGTDet/7z8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=g4gfvHHzrI/XEI/TVVaDfwKxbP4jxPVifnLbo9ieqQThuEaTZDPhPL02TiRCGR9NI
+         51ulFZP3GA0fOAfWLGB64DaiOaJocrSReLT9rkM43X9s+pBq6aomqnX5N2FFtMx+2j
+         91coYV9xIrRHU0SOj24ddsw4xsmsoGvctyAIB/eLxwg2xsoTUXuHzv17Ev0GohmVWG
+         jbHnOf/pI+l/fQJwRj3XFlTh2bdlV8T9PXubDg8dq/0BrdIoBPW7zVxOG0N6+inViN
+         0KcMer1j04QVIYI7sGsH7W+0mkMV+BRT6EUmoa/R1g6tk4iip8MGBRc9ecd3fsBtBH
+         YVlxLQqvxHHxw==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        stable@vger.kernel.org, Ming Yan <yanming@tju.edu.cn>,
+        Chao Yu <chao.yu@oppo.com>
+Subject: [PATCH v2] f2fs: fix to do sanity check for inline inode
+Date:   Sat, 14 May 2022 16:01:02 +0800
+Message-Id: <20220514080102.2246-1-chao@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-oom points no longer need to be calculated if a task is oom_task_origin(),
-so return 1 to stop the oom_evaluate_task().
+As Yanming reported in bugzilla:
 
-Signed-off-by: Zhaoyu Liu <zackary.liu.pro@gmail.com>
+https://bugzilla.kernel.org/show_bug.cgi?id=215895
+
+I have encountered a bug in F2FS file system in kernel v5.17.
+
+The kernel message is shown below:
+
+kernel BUG at fs/inode.c:611!
+Call Trace:
+ evict+0x282/0x4e0
+ __dentry_kill+0x2b2/0x4d0
+ dput+0x2dd/0x720
+ do_renameat2+0x596/0x970
+ __x64_sys_rename+0x78/0x90
+ do_syscall_64+0x3b/0x90
+
+The root cause is: fuzzed inode has both inline_data flag and encrypted
+flag, so after it was deleted by rename(), during f2fs_evict_inode(),
+it will cause inline data conversion due to flags confilction, then
+page cache will be polluted and trigger panic in clear_inode().
+
+This patch tries to fix the issue by do more sanity checks for inline
+data inode in sanity_check_inode().
+
+Cc: stable@vger.kernel.org
+Reported-by: Ming Yan <yanming@tju.edu.cn>
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
 ---
- mm/oom_kill.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+v2:
+- fix to check inode type in f2fs_post_read_required()
+ fs/f2fs/f2fs.h  | 8 ++++++++
+ fs/f2fs/inode.c | 3 +--
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-index 3996301450e8..b407fba21d19 100644
---- a/mm/oom_kill.c
-+++ b/mm/oom_kill.c
-@@ -308,7 +308,7 @@ static enum oom_constraint constrained_alloc(struct oom_control *oc)
- static int oom_evaluate_task(struct task_struct *task, void *arg)
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 492af5b96de1..0dc2461ef02c 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -4126,6 +4126,14 @@ static inline void f2fs_set_encrypted_inode(struct inode *inode)
+  */
+ static inline bool f2fs_post_read_required(struct inode *inode)
  {
- 	struct oom_control *oc = arg;
--	long points;
-+	long points = 0;
++	/*
++	 * used by sanity_check_inode(), when disk layout fields has not
++	 * been synchronized to inmem fields.
++	 */
++	if (S_ISREG(inode->i_mode) && (file_is_encrypt(inode) ||
++		F2FS_I(inode)->i_flags & F2FS_COMPR_FL ||
++		file_is_verity(inode)))
++		return true;
+ 	return f2fs_encrypted_file(inode) || fsverity_active(inode) ||
+ 		f2fs_compressed_file(inode);
+ }
+diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+index 2fce8fa0dac8..5e494c98e3c2 100644
+--- a/fs/f2fs/inode.c
++++ b/fs/f2fs/inode.c
+@@ -276,8 +276,7 @@ static bool sanity_check_inode(struct inode *inode, struct page *node_page)
+ 		}
+ 	}
  
- 	if (oom_unkillable_task(task))
- 		goto next;
-@@ -349,7 +349,7 @@ static int oom_evaluate_task(struct task_struct *task, void *arg)
- 	oc->chosen = task;
- 	oc->chosen_points = points;
- next:
--	return 0;
-+	return points == LONG_MAX;
- abort:
- 	if (oc->chosen)
- 		put_task_struct(oc->chosen);
+-	if (f2fs_has_inline_data(inode) &&
+-			(!S_ISREG(inode->i_mode) && !S_ISLNK(inode->i_mode))) {
++	if (f2fs_has_inline_data(inode) && !f2fs_may_inline_data(inode)) {
+ 		set_sbi_flag(sbi, SBI_NEED_FSCK);
+ 		f2fs_warn(sbi, "%s: inode (ino=%lx, mode=%u) should not have inline_data, run fsck to fix",
+ 			  __func__, inode->i_ino, inode->i_mode);
 -- 
-2.17.1
+2.32.0
 

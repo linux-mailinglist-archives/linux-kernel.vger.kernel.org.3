@@ -2,278 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 524A05273D8
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 21:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2FA5273E8
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 22:18:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235088AbiENT41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 15:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
+        id S235057AbiENUSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 16:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235108AbiENT4J (ORCPT
+        with ESMTP id S229759AbiENUS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 15:56:09 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583E2377E9
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 12:56:07 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id t25so19769127lfg.7
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 12:56:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=qhIwL70+KCmzinVsgrDQxz7iH+cV5EAnmSLiPmog6bk=;
-        b=W7LcPPKA69zm0JKypsiX/tlFouEAX9Kj2LdW1B2m9kp15ovkq6UaCEhF6m2tLy9YGC
-         buApEBEF9wLvPY8KRxB38WjYyTbKleDFEbPROKAHNOYG2deQVy2t9Ik2HiYNDSWdsr/x
-         fLD5PyNCIHr3bLcW18m39IX8PFmeNm/268Ey3g1FzT0e0+QvQMZkjxoeoClN11EpUOXX
-         Ly5CIifTGwzTnh6ZtMY2cgVYD7ik483yB10ExDDPgTf7ZH4U9oqVAQlPcdqn/9L8M926
-         jjF01cf/IegadZMaQP+GOc4PEAFwmGaclKQXMvehgrvua74j57iqa2lZ26Ej4l2bQVbH
-         Oq0Q==
+        Sat, 14 May 2022 16:18:28 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E573411A09
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 13:18:26 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id ay38-20020a5d9da6000000b0065adc1f932bso7351938iob.11
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 13:18:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=qhIwL70+KCmzinVsgrDQxz7iH+cV5EAnmSLiPmog6bk=;
-        b=hqeFtRAp4iXYzbZBmytTOhR/TRgXBgGa/dwn2jEc+n1xE5wJzGi8xH07dMrJpbYtyQ
-         0zY1iKpfqgui8txczGvRNmgggRrxpv2DgiW3nXqerxHbhzkYepZHK1/f68BNfGXViVTD
-         BP1gWv4ViinZleJ0+UPH9fo7DbYQfusBcIzWDkxZE3zuwsyV2qkXZkAl4jfw+7avJJ1H
-         b1MCbx5ZkwzrvvvFU8cU0vEO/9SOoplOwPEpnGQf6jR0zzGr3gAbVX73Yf6MIf90FPr7
-         7JRV2r53Ix1NAMu9/Zkfe1zDGgOiQnLitsJ2mGm0lcbLDR5yaQF5xoHPeKrq0ab1HtSI
-         zCQw==
-X-Gm-Message-State: AOAM532dzLxeVxXSbhaJ2nW9Zba8ir5TfmfxxGm1PeaUCQ0ECitDDuQU
-        6Ydsq2NYIJGX2XlXP3BkzpOTkw==
-X-Google-Smtp-Source: ABdhPJwAWJ1Da2LGWi3dGCVwVi7S18jA4itXrji7BJHFQGD86OBSsWLywRigbK4g3sWFp9TWGILQbQ==
-X-Received: by 2002:a05:6512:3e13:b0:471:f6a9:85d3 with SMTP id i19-20020a0565123e1300b00471f6a985d3mr7756339lfv.120.1652558165603;
-        Sat, 14 May 2022 12:56:05 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.177])
-        by smtp.gmail.com with ESMTPSA id j17-20020ac25511000000b0047255d21144sm802640lfk.115.2022.05.14.12.56.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 May 2022 12:56:05 -0700 (PDT)
-Message-ID: <66e8e17a-73c2-2e50-cdc2-ed924d6bfb2a@openvz.org>
-Date:   Sat, 14 May 2022 22:56:04 +0300
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=SlqYaScAHL+BXeFb8+78VzRrEWZWHNhIDc0JRNroU6k=;
+        b=Jxd8jEbjnLtNUNYcxBIxHi7mdwoOebCsZy+Uk3IKY9wnmaRHCFXt2oRnAqAysBLsJC
+         1woqs2+mn0NO+Rn1GrahtKvgpQ4tKOuAabeSULcI2g1N/aDjfvcwfgFf7G6Zi/XTvVk3
+         ySSCvPQP1SJlCCeq8GpRom0UyXCGMC4EVSGaEHhTYJ7xJZ7CUsxx6ITMDipDxUStEE26
+         fUFqCK0/ZeYLCLvVp4lY6++sCwVxo/o9x+H7Gb7/SrnTlOf1qKApnwmIcX8wlTQDh/iZ
+         R35LVDuXmrZPeAotklveyXuzCT7kcoVdhEgGhsfUmBOsdNjZgz9r11Nk6PAU16xWVP77
+         yC7w==
+X-Gm-Message-State: AOAM531zISq6jnagAG0v46NmuZb0yfoskAjviWIVQne9dX8XJpLbFiyd
+        cMxJxVjqb3tvtr02Y78tRh9nAG/xeT/fr27pIyM6mI/jTkpX
+X-Google-Smtp-Source: ABdhPJxveewxAlZ8yHCHhDCvV2y5AQ6QZL37DucftXHfDBJERj5ltPSWWOLLHo82rwOobFynbSGuaxUvgUSmYAnfx3ioljgsa7yX
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-From:   Vasily Averin <vvs@openvz.org>
-Subject: [PATCH v2] sparse: use force attribute for vm_fault_t casts
-To:     Dan Williams <dan.j.williams@intel.com>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
-        nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org
-References: <Yn/oKz6v5GkReeA3@casper.infradead.org>
-Content-Language: en-US
-In-Reply-To: <Yn/oKz6v5GkReeA3@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:3f0a:0:b0:2cf:7745:d38 with SMTP id
+ m10-20020a923f0a000000b002cf77450d38mr5387965ila.289.1652559506295; Sat, 14
+ May 2022 13:18:26 -0700 (PDT)
+Date:   Sat, 14 May 2022 13:18:26 -0700
+In-Reply-To: <0000000000007f31db05de0638f0@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000057d2f405defe7e00@google.com>
+Subject: Re: [syzbot] general protection fault in vma_interval_tree_remove
+From:   syzbot <syzbot+ee1fdd8dcc770a3a169a@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes sparse warnings:
-./include/trace/events/fs_dax.h:10:1: sparse:
-    got restricted vm_fault_t
-./include/trace/events/fs_dax.h:153:1: sparse:
-    got restricted vm_fault_t
-fs/dax.c:563:39: sparse:    got restricted vm_fault_t
-fs/dax.c:565:39: sparse:    got restricted vm_fault_t
-fs/dax.c:569:31: sparse:    got restricted vm_fault_t
-fs/dax.c:1055:41: sparse:
-    got restricted vm_fault_t [assigned] [usertype] ret
-fs/dax.c:1461:46: sparse:    got restricted vm_fault_t [usertype] ret
-fs/dax.c:1477:21: sparse:
-    expected restricted vm_fault_t [assigned] [usertype] ret
-fs/dax.c:1518:51: sparse:
-    got restricted vm_fault_t [assigned] [usertype] ret
-fs/dax.c:1599:21: sparse:
-    expected restricted vm_fault_t [assigned] [usertype] ret
-fs/dax.c:1633:62: sparse:
-    got restricted vm_fault_t [assigned] [usertype] ret
-fs/dax.c:1696:55: sparse:    got restricted vm_fault_t
-fs/dax.c:1711:58: sparse:
-    got restricted vm_fault_t [assigned] [usertype] ret
+syzbot has found a reproducer for the following issue on:
 
-vm_fault_t type is bitwise and requires __force attribute for any casts.
+HEAD commit:    1e1b28b936ae Add linux-next specific files for 20220513
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=11da21b9f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e4eb3c0c4b289571
+dashboard link: https://syzkaller.appspot.com/bug?extid=ee1fdd8dcc770a3a169a
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=142757f1f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17cf0966f00000
 
-Signed-off-by: Vasily Averin <vvs@openvz.org>
----
-v2: improved according to the recommendations of Matthew Wilcox:
-   - __force cast moved into internal functions
-   - introduced new abstractions dax_vm_fault_[en|de]code()
----
- fs/dax.c                      | 21 +++++++++++++++------
- include/linux/mm_types.h      | 30 ++++++++++++++++--------------
- include/trace/events/fs_dax.h | 12 ++++++------
- 3 files changed, 37 insertions(+), 26 deletions(-)
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ee1fdd8dcc770a3a169a@syzkaller.appspotmail.com
 
-diff --git a/fs/dax.c b/fs/dax.c
-index 67a08a32fccb..c27c8782007f 100644
---- a/fs/dax.c
-+++ b/fs/dax.c
-@@ -121,6 +121,15 @@ static int dax_is_empty_entry(void *entry)
- 	return xa_to_value(entry) & DAX_EMPTY;
- }
- 
-+static void *dax_vm_fault_encode(vm_fault_t fault)
-+{
-+	return xa_mk_internal((__force unsigned long)fault);
-+}
-+
-+static vm_fault_t dax_vm_fault_decode(void *entry)
-+{
-+	return (__force vm_fault_t)xa_to_internal(entry);
-+}
- /*
-  * true if the entry that was found is of a smaller order than the entry
-  * we were looking for
-@@ -560,13 +569,13 @@ static void *grab_mapping_entry(struct xa_state *xas,
- 	if (xas_nomem(xas, mapping_gfp_mask(mapping) & ~__GFP_HIGHMEM))
- 		goto retry;
- 	if (xas->xa_node == XA_ERROR(-ENOMEM))
--		return xa_mk_internal(VM_FAULT_OOM);
-+		return dax_vm_fault_encode(VM_FAULT_OOM);
- 	if (xas_error(xas))
--		return xa_mk_internal(VM_FAULT_SIGBUS);
-+		return dax_vm_fault_encode(VM_FAULT_SIGBUS);
- 	return entry;
- fallback:
- 	xas_unlock_irq(xas);
--	return xa_mk_internal(VM_FAULT_FALLBACK);
-+	return dax_vm_fault_encode(VM_FAULT_FALLBACK);
- }
- 
- /**
-@@ -1474,7 +1483,7 @@ static vm_fault_t dax_iomap_pte_fault(struct vm_fault *vmf, pfn_t *pfnp,
- 
- 	entry = grab_mapping_entry(&xas, mapping, 0);
- 	if (xa_is_internal(entry)) {
--		ret = xa_to_internal(entry);
-+		ret = dax_vm_fault_decode(entry);
- 		goto out;
- 	}
- 
-@@ -1578,7 +1587,7 @@ static vm_fault_t dax_iomap_pmd_fault(struct vm_fault *vmf, pfn_t *pfnp,
- 	 */
- 	max_pgoff = DIV_ROUND_UP(i_size_read(iter.inode), PAGE_SIZE);
- 
--	trace_dax_pmd_fault(iter.inode, vmf, max_pgoff, 0);
-+	trace_dax_pmd_fault(iter.inode, vmf, max_pgoff, (vm_fault_t)0);
- 
- 	if (xas.xa_index >= max_pgoff) {
- 		ret = VM_FAULT_SIGBUS;
-@@ -1596,7 +1605,7 @@ static vm_fault_t dax_iomap_pmd_fault(struct vm_fault *vmf, pfn_t *pfnp,
- 	 */
- 	entry = grab_mapping_entry(&xas, mapping, PMD_ORDER);
- 	if (xa_is_internal(entry)) {
--		ret = xa_to_internal(entry);
-+		ret = dax_vm_fault_decode(entry);
- 		goto fallback;
- 	}
- 
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 8834e38c06a4..57cc4918b1b1 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -745,20 +745,22 @@ enum vm_fault_reason {
- 			VM_FAULT_SIGSEGV | VM_FAULT_HWPOISON |	\
- 			VM_FAULT_HWPOISON_LARGE | VM_FAULT_FALLBACK)
- 
--#define VM_FAULT_RESULT_TRACE \
--	{ VM_FAULT_OOM,                 "OOM" },	\
--	{ VM_FAULT_SIGBUS,              "SIGBUS" },	\
--	{ VM_FAULT_MAJOR,               "MAJOR" },	\
--	{ VM_FAULT_WRITE,               "WRITE" },	\
--	{ VM_FAULT_HWPOISON,            "HWPOISON" },	\
--	{ VM_FAULT_HWPOISON_LARGE,      "HWPOISON_LARGE" },	\
--	{ VM_FAULT_SIGSEGV,             "SIGSEGV" },	\
--	{ VM_FAULT_NOPAGE,              "NOPAGE" },	\
--	{ VM_FAULT_LOCKED,              "LOCKED" },	\
--	{ VM_FAULT_RETRY,               "RETRY" },	\
--	{ VM_FAULT_FALLBACK,            "FALLBACK" },	\
--	{ VM_FAULT_DONE_COW,            "DONE_COW" },	\
--	{ VM_FAULT_NEEDDSYNC,           "NEEDDSYNC" }
-+#define faultflag_string(flag) {(__force unsigned long)VM_FAULT_##flag, #flag}
-+
-+#define VM_FAULT_RESULT_TRACE			\
-+	faultflag_string(OOM),			\
-+	faultflag_string(SIGBUS),		\
-+	faultflag_string(MAJOR),		\
-+	faultflag_string(WRITE),		\
-+	faultflag_string(HWPOISON),		\
-+	faultflag_string(HWPOISON_LARGE),	\
-+	faultflag_string(SIGSEGV),		\
-+	faultflag_string(NOPAGE),		\
-+	faultflag_string(LOCKED),		\
-+	faultflag_string(RETRY),		\
-+	faultflag_string(FALLBACK),		\
-+	faultflag_string(DONE_COW),		\
-+	faultflag_string(NEEDDSYNC)
- 
- struct vm_special_mapping {
- 	const char *name;	/* The name, e.g. "[vdso]". */
-diff --git a/include/trace/events/fs_dax.h b/include/trace/events/fs_dax.h
-index 97b09fcf7e52..75908bdc7b2d 100644
---- a/include/trace/events/fs_dax.h
-+++ b/include/trace/events/fs_dax.h
-@@ -9,7 +9,7 @@
- 
- DECLARE_EVENT_CLASS(dax_pmd_fault_class,
- 	TP_PROTO(struct inode *inode, struct vm_fault *vmf,
--		pgoff_t max_pgoff, int result),
-+		pgoff_t max_pgoff, vm_fault_t result),
- 	TP_ARGS(inode, vmf, max_pgoff, result),
- 	TP_STRUCT__entry(
- 		__field(unsigned long, ino)
-@@ -33,7 +33,7 @@ DECLARE_EVENT_CLASS(dax_pmd_fault_class,
- 		__entry->flags = vmf->flags;
- 		__entry->pgoff = vmf->pgoff;
- 		__entry->max_pgoff = max_pgoff;
--		__entry->result = result;
-+		__entry->result = (__force int)result;
- 	),
- 	TP_printk("dev %d:%d ino %#lx %s %s address %#lx vm_start "
- 			"%#lx vm_end %#lx pgoff %#lx max_pgoff %#lx %s",
-@@ -54,7 +54,7 @@ DECLARE_EVENT_CLASS(dax_pmd_fault_class,
- #define DEFINE_PMD_FAULT_EVENT(name) \
- DEFINE_EVENT(dax_pmd_fault_class, name, \
- 	TP_PROTO(struct inode *inode, struct vm_fault *vmf, \
--		pgoff_t max_pgoff, int result), \
-+		pgoff_t max_pgoff, vm_fault_t result), \
- 	TP_ARGS(inode, vmf, max_pgoff, result))
- 
- DEFINE_PMD_FAULT_EVENT(dax_pmd_fault);
-@@ -151,7 +151,7 @@ DEFINE_EVENT(dax_pmd_insert_mapping_class, name, \
- DEFINE_PMD_INSERT_MAPPING_EVENT(dax_pmd_insert_mapping);
- 
- DECLARE_EVENT_CLASS(dax_pte_fault_class,
--	TP_PROTO(struct inode *inode, struct vm_fault *vmf, int result),
-+	TP_PROTO(struct inode *inode, struct vm_fault *vmf, vm_fault_t result),
- 	TP_ARGS(inode, vmf, result),
- 	TP_STRUCT__entry(
- 		__field(unsigned long, ino)
-@@ -169,7 +169,7 @@ DECLARE_EVENT_CLASS(dax_pte_fault_class,
- 		__entry->address = vmf->address;
- 		__entry->flags = vmf->flags;
- 		__entry->pgoff = vmf->pgoff;
--		__entry->result = result;
-+		__entry->result = (__force int)result;
- 	),
- 	TP_printk("dev %d:%d ino %#lx %s %s address %#lx pgoff %#lx %s",
- 		MAJOR(__entry->dev),
-@@ -185,7 +185,7 @@ DECLARE_EVENT_CLASS(dax_pte_fault_class,
- 
- #define DEFINE_PTE_FAULT_EVENT(name) \
- DEFINE_EVENT(dax_pte_fault_class, name, \
--	TP_PROTO(struct inode *inode, struct vm_fault *vmf, int result), \
-+	TP_PROTO(struct inode *inode, struct vm_fault *vmf, vm_fault_t result), \
- 	TP_ARGS(inode, vmf, result))
- 
- DEFINE_PTE_FAULT_EVENT(dax_pte_fault);
--- 
-2.31.1
+general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+CPU: 1 PID: 3612 Comm: syz-executor255 Not tainted 5.18.0-rc6-next-20220513-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:____rb_erase_color lib/rbtree.c:354 [inline]
+RIP: 0010:__rb_erase_color+0x159/0xdb0 lib/rbtree.c:413
+Code: 89 ed 48 89 c5 e9 f5 fe ff ff 4c 8d 45 10 4c 89 c0 48 c1 e8 03 80 3c 18 00 0f 85 3a 08 00 00 4c 8b 65 10 4c 89 e0 48 c1 e8 03 <80> 3c 18 00 0f 85 6a 08 00 00 49 8b 04 24 49 8d 7c 24 08 48 89 f9
+RSP: 0018:ffffc90002e877a8 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
+RDX: ffffed100e8d3aed RSI: ffff88807469d768 RDI: ffff8880202132b0
+RBP: ffff8880202132b0 R08: ffff8880202132c0 R09: ffff88807469d75f
+R10: ffffffff81b02518 R11: 0000000000000001 R12: 0000000000000000
+R13: 0000000000000000 R14: ffff88807469d768 R15: ffffffff81b01300
+FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffe92002ff8 CR3: 00000000764a0000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ rb_erase_augmented include/linux/rbtree_augmented.h:305 [inline]
+ rb_erase_augmented_cached include/linux/rbtree_augmented.h:314 [inline]
+ vma_interval_tree_remove+0x694/0xed0 mm/interval_tree.c:23
+ __remove_shared_vm_struct mm/mmap.c:160 [inline]
+ unlink_file_vma+0xbd/0x110 mm/mmap.c:175
+ free_pgtables+0x255/0x420 mm/memory.c:440
+ exit_mmap+0x1ff/0x740 mm/mmap.c:3219
+ __mmput+0x128/0x4c0 kernel/fork.c:1180
+ mmput+0x5c/0x70 kernel/fork.c:1201
+ exit_mm kernel/exit.c:510 [inline]
+ do_exit+0xa18/0x2a00 kernel/exit.c:782
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:925
+ get_signal+0x2542/0x2600 kernel/signal.c:2857
+ arch_do_signal_or_restart+0x82/0x20f0 arch/x86/kernel/signal.c:869
+ exit_to_user_mode_loop kernel/entry/common.c:166 [inline]
+ exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:201
+ irqentry_exit_to_user_mode+0x5/0x30 kernel/entry/common.c:307
+ exc_page_fault+0xc6/0x180 arch/x86/mm/fault.c:1543
+ asm_exc_page_fault+0x27/0x30 arch/x86/include/asm/idtentry.h:570
+RIP: 0033:0x7f1771dc98cf
+Code: Unable to access opcode bytes at RIP 0x7f1771dc98a5.
+RSP: 002b:00007ffe920035a0 EFLAGS: 00010206
+RAX: 0000000000000001 RBX: 00007f1771e78138 RCX: 0000000000000001
+RDX: 0000000000000001 RSI: 00007f1771e78138 RDI: 000000000000000b
+RBP: 000000000000000b R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000008011 R11: 0000000000000206 R12: 0000000000000000
+R13: 0000000000000001 R14: 00000000000c3ec0 R15: 0000000000000001
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:____rb_erase_color lib/rbtree.c:354 [inline]
+RIP: 0010:__rb_erase_color+0x159/0xdb0 lib/rbtree.c:413
+Code: 89 ed 48 89 c5 e9 f5 fe ff ff 4c 8d 45 10 4c 89 c0 48 c1 e8 03 80 3c 18 00 0f 85 3a 08 00 00 4c 8b 65 10 4c 89 e0 48 c1 e8 03 <80> 3c 18 00 0f 85 6a 08 00 00 49 8b 04 24 49 8d 7c 24 08 48 89 f9
+RSP: 0018:ffffc90002e877a8 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
+RDX: ffffed100e8d3aed RSI: ffff88807469d768 RDI: ffff8880202132b0
+RBP: ffff8880202132b0 R08: ffff8880202132c0 R09: ffff88807469d75f
+R10: ffffffff81b02518 R11: 0000000000000001 R12: 0000000000000000
+R13: 0000000000000000 R14: ffff88807469d768 R15: ffffffff81b01300
+FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000000c3ec8 CR3: 0000000023516000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	89 ed                	mov    %ebp,%ebp
+   2:	48 89 c5             	mov    %rax,%rbp
+   5:	e9 f5 fe ff ff       	jmpq   0xfffffeff
+   a:	4c 8d 45 10          	lea    0x10(%rbp),%r8
+   e:	4c 89 c0             	mov    %r8,%rax
+  11:	48 c1 e8 03          	shr    $0x3,%rax
+  15:	80 3c 18 00          	cmpb   $0x0,(%rax,%rbx,1)
+  19:	0f 85 3a 08 00 00    	jne    0x859
+  1f:	4c 8b 65 10          	mov    0x10(%rbp),%r12
+  23:	4c 89 e0             	mov    %r12,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	80 3c 18 00          	cmpb   $0x0,(%rax,%rbx,1) <-- trapping instruction
+  2e:	0f 85 6a 08 00 00    	jne    0x89e
+  34:	49 8b 04 24          	mov    (%r12),%rax
+  38:	49 8d 7c 24 08       	lea    0x8(%r12),%rdi
+  3d:	48 89 f9             	mov    %rdi,%rcx
 

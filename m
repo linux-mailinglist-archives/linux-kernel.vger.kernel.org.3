@@ -2,58 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57DF85271FC
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 16:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6227527200
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 16:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232930AbiENOaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 10:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48376 "EHLO
+        id S233329AbiENObi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 10:31:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbiENOaV (ORCPT
+        with ESMTP id S232498AbiENObg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 10:30:21 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538DB17589
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 07:30:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652538620; x=1684074620;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yy9zAdqARHq1GeS30HTCDTvvkxEJgRMqeuKZep2jkFA=;
-  b=TNyI4bRqfnOwlc4NQFyUuQ+Rn3LMq+rt9cyelwVND4B2qPFLhSyx1lRv
-   4QKfDUZygOumz7JfPzYoegpmKg5Dia/h1yY2Xb7TGSvJVuJgj4vpzFF8u
-   eY0nRdaVDQm/blizphTrcwBYE23QRqeQdhBMT/Ay/bYc8/1yMhO9mpEPa
-   IuTR4AaVNol/QyNWa7ammahLd5FvT/08AITE8tEO63abetqV/rAVO5FIg
-   /g0pFKQ9hODHQBgYmVLKfvvWa+qhCuW/QAzB1m37jcIW30nrZ9Yb6GOBs
-   ZFtFmFkmSe4zJfSl/86q9KIkqcz2NelP8deX3vd5NLunE2NGYJhjSzIjk
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10347"; a="270456241"
-X-IronPort-AV: E=Sophos;i="5.91,226,1647327600"; 
-   d="scan'208";a="270456241"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2022 07:30:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,226,1647327600"; 
-   d="scan'208";a="604204482"
-Received: from lkp-server01.sh.intel.com (HELO d1462bc4b09b) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 14 May 2022 07:30:17 -0700
-Received: from kbuild by d1462bc4b09b with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1npsme-0000jz-Cs;
-        Sat, 14 May 2022 14:30:16 +0000
-Date:   Sat, 14 May 2022 22:30:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [nsaenz-rpi:ct-work-defer-wip 24/25] arch/x86/mm/tlb.c:1010:47:
- error: 'CONTEXT_WORK_TLBI' undeclared
-Message-ID: <202205142239.1IjyYFdD-lkp@intel.com>
+        Sat, 14 May 2022 10:31:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0179719014;
+        Sat, 14 May 2022 07:31:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A335FB808D2;
+        Sat, 14 May 2022 14:31:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9849FC340EE;
+        Sat, 14 May 2022 14:31:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652538692;
+        bh=KLDGJ+XUhBPXixy1Zg7PlcK9TVzkkUVTXCexNedRPdw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sbzioa5hOPlt9gboLS22zB5omo907tZtRH6IInLQ1CrfnwkK2NfOpZOJ1gEhi6Fmz
+         wJ889Mle+VD6igOIw2INvZpDAuHTEx9HKZdwk3ubcTh4BQLZq4OK+6Bv+FOUWtkAce
+         OP2GafNWUcvJeVMModmVglfT7SsB1J/BwC2DR5vUxADkW4qDlDdXQseDx66NhqUybk
+         sjRD7kqKoUxNbKI5Ll1jiuVmWjkX9OaAGWSdbfhlkOD5TYPKXSSJ6OzxdOP2VOjQvp
+         q51Wk+roELj09l29LBs1MdWGOaWS9AHtfMKaEaj9GLEWTXV5dUnvfPmumqCI7qHjh4
+         KpqruflA0jFgQ==
+Date:   Sat, 14 May 2022 16:31:28 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Quan Nguyen <quan@os.amperecomputing.com>
+Cc:     Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        openipmi-developer@lists.sourceforge.net,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+Subject: Re: [PATCH v7 3/3] i2c: aspeed: Assert NAK when slave is busy
+Message-ID: <Yn+9QBoPdH8fMm/m@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Quan Nguyen <quan@os.amperecomputing.com>,
+        Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        openipmi-developer@lists.sourceforge.net,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+References: <20220422040803.2524940-1-quan@os.amperecomputing.com>
+ <20220422040803.2524940-4-quan@os.amperecomputing.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/Jcb04ZVbWq3W2FY"
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220422040803.2524940-4-quan@os.amperecomputing.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,56 +81,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git ct-work-defer-wip
-head:   ed63029652239a6befad96dd473b16332913f889
-commit: ac6fd7356ff9f2e0f040ef337d3eb731454ce49f [24/25] context_tracking,x86: Fix Kernel TLBi vs NOHZ_FULL
-config: i386-randconfig-a001 (https://download.01.org/0day-ci/archive/20220514/202205142239.1IjyYFdD-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git/commit/?id=ac6fd7356ff9f2e0f040ef337d3eb731454ce49f
-        git remote add nsaenz-rpi https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git
-        git fetch --no-tags nsaenz-rpi ct-work-defer-wip
-        git checkout ac6fd7356ff9f2e0f040ef337d3eb731454ce49f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+--/Jcb04ZVbWq3W2FY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-All errors (new ones prefixed by >>):
+On Fri, Apr 22, 2022 at 11:08:03AM +0700, Quan Nguyen wrote:
+> When processing I2C_SLAVE_WRITE_REQUESTED event, if slave returns
+> -EBUSY, i2c controller should issue RxCmdLast command to assert NAK
+> on the bus.
 
-   arch/x86/mm/tlb.c: In function 'do_kernel_flush_cond':
->> arch/x86/mm/tlb.c:1010:47: error: 'CONTEXT_WORK_TLBI' undeclared (first use in this function)
-    1010 |                                               CONTEXT_WORK_TLBI);
-         |                                               ^~~~~~~~~~~~~~~~~
-   arch/x86/mm/tlb.c:1010:47: note: each undeclared identifier is reported only once for each function it appears in
-   arch/x86/mm/tlb.c:1011:1: error: control reaches end of non-void function [-Werror=return-type]
-    1011 | }
-         | ^
-   cc1: some warnings being treated as errors
---
-   arch/x86/mm/pat/set_memory.c: In function '__cpa_flush_tlb_cond':
->> arch/x86/mm/pat/set_memory.c:367:47: error: 'CONTEXT_WORK_TLBI' undeclared (first use in this function)
-     367 |                                               CONTEXT_WORK_TLBI);
-         |                                               ^~~~~~~~~~~~~~~~~
-   arch/x86/mm/pat/set_memory.c:367:47: note: each undeclared identifier is reported only once for each function it appears in
-   arch/x86/mm/pat/set_memory.c:368:1: error: control reaches end of non-void function [-Werror=return-type]
-     368 | }
-         | ^
-   cc1: some warnings being treated as errors
+That should be I2C_SLAVE_WRITE_RECEIVED and it should be NAKed on all
+errnos. Have you tested it?
 
 
-vim +/CONTEXT_WORK_TLBI +1010 arch/x86/mm/tlb.c
+--/Jcb04ZVbWq3W2FY
+Content-Type: application/pgp-signature; name="signature.asc"
 
-  1006	
-  1007	static bool do_kernel_flush_cond(int cpu, void *info)
-  1008	{
-  1009		return !context_tracking_set_cpu_work(cpu, CONTEXT_USER | CONTEXT_GUEST,
-> 1010						      CONTEXT_WORK_TLBI);
-  1011	}
-  1012	
+-----BEGIN PGP SIGNATURE-----
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJ/vT8ACgkQFA3kzBSg
+KbYtRxAAnwySTv44cgVvd57fhPZJ4l4tcBSK97yFdMtZ2UNRFfyFclUiH9skwsuO
+KOmHb1UatGOYAoMyxrPIkiOXkeIeL/vlIkgI0d4CjL0pWKNrNIqqSncRdnpsDO8u
+4efBzlk9D2iNkA7y9OAuBxHwONT41qUX5fgOymGpF56b/X/4sHJjV20pcFewfb/0
+3ykk9Y5QJDq+h5va+IXp0O2ED6u8nZxn+/RAy+JiJFX+ynFzf6MYMrsFEJ4uVB20
+T8/0HKkL0I+TMOMwdu62Blkbo324e3mxvilD6D9buGzpclYxAQb5pw1TRKxkiBxu
+hGrjg3J66VECV7Segwb9gO/JoV1u+jinAXD2xWmQoR29jfb4n9IW/WGy1/meEe43
+GJ9tVo9DGxPUT+nwnpV14oZFQxmrRdZaHzwf4cFpnuVbZZspgSBMM2mjJzpHv3Qq
+9pABXmjzY8LdzVQAAnCpk2062gS2r0hnVnCs7WdgAsAHqzZ/ioYBFyD7Qo5RChe5
+ilimRgUz2brUuVf7K9VxR3JBCBMJ+C7O5Hc1Ii33pIw09mzI1395q6FbzfPz8oWJ
+yXiOivGAf0xBdw8N3J2rQ6e/7lEBWH88KO/bttKAr1CJChuotX3enJH5gvDakGNb
+7gPDMh7sDqcTC5a6vBSuhWF76dZlfgYFA6NYuCn2iNTL8LyBATs=
+=xB1Q
+-----END PGP SIGNATURE-----
+
+--/Jcb04ZVbWq3W2FY--

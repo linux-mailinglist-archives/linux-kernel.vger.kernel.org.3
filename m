@@ -2,44 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5402527041
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 11:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35463527044
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 11:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbiENJ2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 05:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33826 "EHLO
+        id S231290AbiENJ3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 05:29:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231160AbiENJ2x (ORCPT
+        with ESMTP id S231211AbiENJ3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 05:28:53 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4441C101E;
-        Sat, 14 May 2022 02:28:51 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L0gCT4JxBz1JC5L;
-        Sat, 14 May 2022 17:27:33 +0800 (CST)
-Received: from [10.174.178.185] (10.174.178.185) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+        Sat, 14 May 2022 05:29:14 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DCEBC0B;
+        Sat, 14 May 2022 02:29:12 -0700 (PDT)
+Received: from kwepemi100019.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L0gB41FW6zGpZj;
+        Sat, 14 May 2022 17:26:20 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100019.china.huawei.com (7.221.188.189) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 14 May 2022 17:28:49 +0800
-Subject: Re: [PATCH -next v2] ext4: fix bug_on in ext4_writepages
-To:     Jan Kara <jack@suse.cz>
-References: <20220510100228.1172227-1-yebin10@huawei.com>
- <20220511134710.4ggvxuxg7dwf7tkp@quack3.lan>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
-        <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-From:   yebin <yebin10@huawei.com>
-Message-ID: <627F7651.4040003@huawei.com>
-Date:   Sat, 14 May 2022 17:28:49 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
- Thunderbird/38.1.0
+ 15.1.2375.24; Sat, 14 May 2022 17:29:11 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 14 May 2022 17:29:10 +0800
+Subject: Re: [PATCH -next v5 0/3] support concurrent sync io for bfq on a
+ specail occasion
+From:   "yukuai (C)" <yukuai3@huawei.com>
+To:     <paolo.valente@linaro.org>, <axboe@kernel.dk>
+CC:     <jack@suse.cz>, <tj@kernel.org>, <linux-block@vger.kernel.org>,
+        <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>
+References: <20220428120837.3737765-1-yukuai3@huawei.com>
+ <d50df657-d859-79cf-c292-412eaa383d2c@huawei.com>
+Message-ID: <61b67d5e-829c-8130-7bda-81615d654829@huawei.com>
+Date:   Sat, 14 May 2022 17:29:09 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20220511134710.4ggvxuxg7dwf7tkp@quack3.lan>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
+In-Reply-To: <d50df657-d859-79cf-c292-412eaa383d2c@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.185]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500010.china.huawei.com (7.192.105.118)
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -50,112 +56,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+在 2022/05/05 9:00, yukuai (C) 写道:
+> Hi, Paolo
+> 
+> Can you take a look at this patchset? It has been quite a long time
+> since we spotted this problem...
+> 
 
-
-On 2022/5/11 21:47, Jan Kara wrote:
-> On Tue 10-05-22 18:02:28, Ye Bin wrote:
->> we got issue as follows:
->> EXT4-fs error (device loop0): ext4_mb_generate_buddy:1141: group 0, block bitmap and bg descriptor inconsistent: 25 vs 31513 free cls
->> ------------[ cut here ]------------
->> kernel BUG at fs/ext4/inode.c:2708!
->> invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
->> CPU: 2 PID: 2147 Comm: rep Not tainted 5.18.0-rc2-next-20220413+ #155
->> RIP: 0010:ext4_writepages+0x1977/0x1c10
->> RSP: 0018:ffff88811d3e7880 EFLAGS: 00010246
->> RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffff88811c098000
->> RDX: 0000000000000000 RSI: ffff88811c098000 RDI: 0000000000000002
->> RBP: ffff888128140f50 R08: ffffffffb1ff6387 R09: 0000000000000000
->> R10: 0000000000000007 R11: ffffed10250281ea R12: 0000000000000001
->> R13: 00000000000000a4 R14: ffff88811d3e7bb8 R15: ffff888128141028
->> FS:  00007f443aed9740(0000) GS:ffff8883aef00000(0000) knlGS:0000000000000000
->> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->> CR2: 0000000020007200 CR3: 000000011c2a4000 CR4: 00000000000006e0
->> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->> Call Trace:
->>   <TASK>
->>   do_writepages+0x130/0x3a0
->>   filemap_fdatawrite_wbc+0x83/0xa0
->>   filemap_flush+0xab/0xe0
->>   ext4_alloc_da_blocks+0x51/0x120
->>   __ext4_ioctl+0x1534/0x3210
->>   __x64_sys_ioctl+0x12c/0x170
->>   do_syscall_64+0x3b/0x90
+friendly ping ...
+> Thanks,
+> Kuai
+> 
+> 在 2022/04/28 20:08, Yu Kuai 写道:
+>> Changes in v5:
+>>   - rename bfq_add_busy_queues() to bfq_inc_busy_queues() in patch 1
+>>   - fix wrong definition in patch 1
+>>   - fix spelling mistake in patch 2: leaset -> least
+>>   - update comments in patch 3
+>>   - add reviewed-by tag in patch 2,3
 >>
->> It may happen as follows:
->> 1. write inline_data inode
->> vfs_write
->>    new_sync_write
->>      ext4_file_write_iter
->>        ext4_buffered_write_iter
->>          generic_perform_write
->>            ext4_da_write_begin
->>              ext4_da_write_inline_data_begin -> If inline data size too
->>              small will allocate block to write, then mapping will has
->>              dirty page
->>                  ext4_da_convert_inline_data_to_extent ->clear EXT4_STATE_MAY_INLINE_DATA
->> 2. fallocate
->> do_vfs_ioctl
->>    ioctl_preallocate
->>      vfs_fallocate
->>        ext4_fallocate
->>          ext4_convert_inline_data
->>            ext4_convert_inline_data_nolock
->>              ext4_map_blocks -> fail will goto restore data
->>              ext4_restore_inline_data
->>                ext4_create_inline_data
->>                ext4_write_inline_data
->>                ext4_set_inode_state -> set inode EXT4_STATE_MAY_INLINE_DATA
->> 3. writepages
->> __ext4_ioctl
->>    ext4_alloc_da_blocks
->>      filemap_flush
->>        filemap_fdatawrite_wbc
->>          do_writepages
->>            ext4_writepages
->>              if (ext4_has_inline_data(inode))
->>                BUG_ON(ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA))
+>> Changes in v4:
+>>   - split bfq_update_busy_queues() to bfq_add/dec_busy_queues(),
+>>     suggested by Jan Kara.
+>>   - remove unused 'in_groups_with_pending_reqs',
 >>
->> The root cause of this issue is we destory inline data until call ext4_writepages
->> under delay allocation mode. But there maybe already covert from inline to extent.
->> To solved this issue, we call filemap_flush firstly.
+>> Changes in v3:
+>>   - remove the cleanup patch that is irrelevant now(I'll post it
+>>     separately).
+>>   - instead of hacking wr queues and using weights tree 
+>> insertion/removal,
+>>     using bfq_add/del_bfqq_busy() to count the number of groups
+>>     (suggested by Jan Kara).
 >>
->> Signed-off-by: Ye Bin <yebin10@huawei.com>
->> ---
->>   fs/ext4/inline.c | 8 ++++++++
->>   1 file changed, 8 insertions(+)
+>> Changes in v2:
+>>   - Use a different approch to count root group, which is much simple.
 >>
->> diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
->> index 6d253edebf9f..130ed5d83734 100644
->> --- a/fs/ext4/inline.c
->> +++ b/fs/ext4/inline.c
->> @@ -2002,6 +2002,14 @@ int ext4_convert_inline_data(struct inode *inode)
->>   	if (!ext4_has_inline_data(inode)) {
->>   		ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
->>   		return 0;
->> +	} else if (test_opt(inode->i_sb, DELALLOC) && !S_ISDIR(inode->i_mode)) {
->> +		error = filemap_flush(inode->i_mapping);
-> This is actually an interesting option and I kind of like it but shouldn't
-> we restrict this to the situation when EXT4_STATE_MAY_INLINE_DATA is clear?
-> Otherwise we would be writing out inline data to the inode unnecessarily
-> for each ext4_convert_inline_data() call.
->
-> 								Honza
-Acctually,  this issue only exist in delay allocate mode. Do we need to 
-restrict this to
-�test_opt(inode->i_sb, DELALLOC)� as follows ?
-@@ -2002,6 +2002,13 @@ int ext4_convert_inline_data(struct inode *inode)
-         if (!ext4_has_inline_data(inode)) {
-                 ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
-                 return 0;
-+       } else if (test_opt(inode->i_sb, DELALLOC) &&
-+                  !ext4_test_inode_state(inode, 
-EXT4_STATE_MAY_INLINE_DATA)) {
-+               error = filemap_flush(inode->i_mapping);
-+               if (error)
-+                       return error;
-+               if (!ext4_has_inline_data(inode))
-+                       return 0;
-         }
-
-
+>> Currently, bfq can't handle sync io concurrently as long as they
+>> are not issued from root group. This is because
+>> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
+>> bfq_asymmetric_scenario().
+>>
+>> The way that bfqg is counted into 'num_groups_with_pending_reqs':
+>>
+>> Before this patchset:
+>>   1) root group will never be counted.
+>>   2) Count if bfqg or it's child bfqgs have pending requests.
+>>   3) Don't count if bfqg and it's child bfqgs complete all the requests.
+>>
+>> After this patchset:
+>>   1) root group is counted.
+>>   2) Count if bfqg have at least one bfqq that is marked busy.
+>>   3) Don't count if bfqg doesn't have any busy bfqqs.
+>>
+>> The main reason to use busy state of bfqq instead of 'pending requests'
+>> is that bfqq can stay busy after dispatching the last request if idling
+>> is needed for service guarantees.
+>>
+>> With the above changes, concurrent sync io can be supported if only
+>> one group is activated.
+>>
+>> fio test script(startdelay is used to avoid queue merging):
+>> [global]
+>> filename=/dev/nvme0n1
+>> allow_mounted_write=0
+>> ioengine=psync
+>> direct=1
+>> ioscheduler=bfq
+>> offset_increment=10g
+>> group_reporting
+>> rw=randwrite
+>> bs=4k
+>>
+>> [test1]
+>> numjobs=1
+>>
+>> [test2]
+>> startdelay=1
+>> numjobs=1
+>>
+>> [test3]
+>> startdelay=2
+>> numjobs=1
+>>
+>> [test4]
+>> startdelay=3
+>> numjobs=1
+>>
+>> [test5]
+>> startdelay=4
+>> numjobs=1
+>>
+>> [test6]
+>> startdelay=5
+>> numjobs=1
+>>
+>> [test7]
+>> startdelay=6
+>> numjobs=1
+>>
+>> [test8]
+>> startdelay=7
+>> numjobs=1
+>>
+>> test result:
+>> running fio on root cgroup
+>> v5.18-rc1:       550 Mib/s
+>> v5.18-rc1-patched: 550 Mib/s
+>>
+>> running fio on non-root cgroup
+>> v5.18-rc1:       349 Mib/s
+>> v5.18-rc1-patched: 550 Mib/s
+>>
+>> Note that I also test null_blk with "irqmode=2
+>> completion_nsec=100000000(100ms) hw_queue_depth=1", and tests show
+>> that service guarantees are still preserved.
+>>
+>> Previous versions:
+>> RFC: 
+>> https://lore.kernel.org/all/20211127101132.486806-1-yukuai3@huawei.com/
+>> v1: 
+>> https://lore.kernel.org/all/20220305091205.4188398-1-yukuai3@huawei.com/
+>> v2: 
+>> https://lore.kernel.org/all/20220416093753.3054696-1-yukuai3@huawei.com/
+>> v3: 
+>> https://lore.kernel.org/all/20220427124722.48465-1-yukuai3@huawei.com/
+>> v4: 
+>> https://lore.kernel.org/all/20220428111907.3635820-1-yukuai3@huawei.com/
+>>
+>> Yu Kuai (3):
+>>    block, bfq: record how many queues are busy in bfq_group
+>>    block, bfq: refactor the counting of 'num_groups_with_pending_reqs'
+>>    block, bfq: do not idle if only one group is activated
+>>
+>>   block/bfq-cgroup.c  |  1 +
+>>   block/bfq-iosched.c | 48 +++-----------------------------------
+>>   block/bfq-iosched.h | 57 +++++++--------------------------------------
+>>   block/bfq-wf2q.c    | 35 +++++++++++++++++-----------
+>>   4 files changed, 35 insertions(+), 106 deletions(-)
+>>

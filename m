@@ -2,99 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C4E0526FFD
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 10:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D9A8526FFA
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 10:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbiENISA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 04:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38626 "EHLO
+        id S229864AbiENIRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 04:17:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiENIRp (ORCPT
+        with ESMTP id S229593AbiENIRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 04:17:45 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291BED8;
-        Sat, 14 May 2022 01:17:41 -0700 (PDT)
-Received: from [192.168.1.107] ([37.4.249.94]) by mrelayeu.kundenserver.de
- (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1Mbj3e-1oLHQZ0uJK-00dFtL; Sat, 14 May 2022 10:17:09 +0200
-Message-ID: <d130ce59-1a4b-901c-d038-07515db746ec@i2se.com>
-Date:   Sat, 14 May 2022 10:17:07 +0200
+        Sat, 14 May 2022 04:17:42 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E879A
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 01:17:40 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652516259;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ptxkYIfclqy5O/gMkPytM7FecBAPXApyhBHx/s6t5+k=;
+        b=cHjQpeFhBi4mMqPWUFdjjdKbCNxSUbeCTq7e9TuG54QoSwZllWwAyWn/VA2bxfbp8FS79W
+        lpKpONGN1xhSlu8/eUzJRYbZ8z2/7An4yFUXSfE69IHtfw3wF6lHivRNX1/x1EP43Mxg+m
+        2YzOH1KhXwKXiNv80jZNKNSgxmxnjKjeDjsWmZo7PZev0MONnAMymFNV4PW0L08JGwT5Dg
+        XeCV5Hvab1ALlurGE9Sq5nyeVvDP0baDIxSjf5ud747JWKgjVTe0VrA/BAmffaTatkL5Fl
+        PsToyX+G9Z4WITvp+Bj9egqL+hjA9Kgbm3/OPtSDBuAAsUQm8y4Dgg3PUukvnA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652516259;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ptxkYIfclqy5O/gMkPytM7FecBAPXApyhBHx/s6t5+k=;
+        b=4QyQkuDjHvg4QNWDVHeMxsVLfTUC/+wKMBTajewFUyM/io2iH9gFUIPw+ugISd8SAFk2b1
+        J7VmY4C7MwqIN+Bg==
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     x86@kernel.org, Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Stephane Eranian <eranian@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 15/29] x86/hpet: Add helper function
+ hpet_set_comparator_periodic()
+In-Reply-To: <20220513211944.GE22683@ranerica-svr.sc.intel.com>
+References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
+ <20220506000008.30892-16-ricardo.neri-calderon@linux.intel.com>
+ <87mtfufifa.ffs@tglx> <20220513211944.GE22683@ranerica-svr.sc.intel.com>
+Date:   Sat, 14 May 2022 10:17:38 +0200
+Message-ID: <87pmkgsf31.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] clk: bcm2835: fix bcm2835_clock_choose_div
-Content-Language: en-US
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-clk@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Maxime Ripard <maxime@cerno.tech>, regressions@lists.linux.dev
-References: <20220428183010.1635248-1-stefan.wahren@i2se.com>
- <20220503145804.b2xz4etzc6kpr3fk@houat>
- <ee39ddd1-bfce-012d-5e04-448d779ed995@i2se.com>
- <20220510132756.qmyjca53xu44iwn7@houat>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <20220510132756.qmyjca53xu44iwn7@houat>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:r2U+3GHILFBJRwdN1QPH4ahI0ZnQAgBHx5ON/pp7+M6xKkOOU7B
- cDh3ez2wjRJDVkrRmJyZwqRX20qLK1h0odGOKQA2gTvVdOIshrolMPvO+ltIotrDkCOtZNv
- LiY7PFDCv4rd6871n6rH6mVZPgjfoFEW85IhYK6dJd44NRceaaeueFrXBEdw6B6E6ArK/SB
- c4xfRAYikG3kU9drmxyug==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:OBUcdSwGzvA=:7kGSMmYVHvANedwOjmE35m
- SzdqVBJwDVp9wf95BaSpp3sfWCU4L4eNupi1Kk+MfxmfgsDIrCEsZ8raEt2qcUZGVa2pHV7yy
- fcGYyYA4dRRVjNLSDjx0rEAjq5hba/B6WdJsEoy/lsnaRzUgHjg0gU0lrvxFUM2D+3yNRVABR
- ZGGHtQVu7SGQm1nUgScsxQVFVur89dyT/bSSSzvHqNmocn/6s2wu9NPPcTIz//6DMs4+4avjz
- 3hbnW1KFFA8F1VbVMWDbLBzD38/cQCB37EFv/lODaFi74u2JYDq5vs6Gy8Adqc4Kz0EE9ywBI
- 4pobsDdp7eu/Oe5iT6P0KZaT47dzaNJVGSoYOZcRSKEftQ17Ph/wxaTz6Iajk7/fT2XtgFNLV
- IhFQEjRwHG9jlmgLQ+zz3HJ/piqnqMl092hVk/UB99bmp+mIdkhZDOEOWkdxK88lyFpIblB67
- ui15rI9kZThCBe34+KZVA3KtDdKBLGlYKee2Cxh0NCcShParsWRB6rYWhLKBtOy4YJuqacbeM
- Tceoun7RySowctJv9QYJST8OitRLcbuQwKamXV4gTVABcVCKs6zhfEmzELI82lWPnWufgHtCm
- plNtvNzjQNlMhylKibpNSMsedV+uPonc7BCxL/Rdr490wpCQmc1fc/bpdlyWoSsg+JDKl5dRi
- RP7Oaj0/h3aBtA0HDsX13QMCt6v97jUf7tzCVVySjnRasWRhCNIYnh3NwHdgMqdEc7i14er5N
- RX6jO9XoycglYTeatOVWytW1rkDApoI3Lrn/A1e+QF1eDQAedtgUdJd+ogk=
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, May 13 2022 at 14:19, Ricardo Neri wrote:
+> On Fri, May 06, 2022 at 11:41:13PM +0200, Thomas Gleixner wrote:
+>> The argument about not bloating the code
+>> with an "obvious???" function which is quite small is slightly beyond my
+>> comprehension level.
+>
+> That obvious function would look like this:
+>
+> void hpet_set_comparator_one_shot(int channel, u32 delta)
+> {
+> 	u32 count;
+>
+> 	count = hpet_readl(HPET_COUNTER);
+> 	count += delta;
+> 	hpet_writel(count, HPET_Tn_CMP(channel));
+> }
 
-Am 10.05.22 um 15:27 schrieb Maxime Ripard:
-> On Sat, May 07, 2022 at 11:26:28AM +0200, Stefan Wahren wrote:
->> Am 03.05.22 um 16:58 schrieb Maxime Ripard:
->>> Hi,
->>>
->>> On Thu, Apr 28, 2022 at 08:30:10PM +0200, Stefan Wahren wrote:
->>>> The commit 09e3b18ca5de ("clk: bcm2835: Remove unused variable")
->>>> accidentially breaks the behavior of bcm2835_clock_choose_div() and
->>>> booting of Raspberry Pi. The removed do_div macro call had side effects,
->>>> so we need to restore it.
->>>>
->>>> Fixes: 09e3b18ca5de ("clk: bcm2835: Remove unused variable")
->>>> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
->>> I only found this patch after debugging why the HDMI driver was
->>> returning -EINVAL at probe on -rc5.
->>>
->>> Acked-by: Maxime Ripard <maxime@cerno.tech>
->>> Tested-by: Maxime Ripard <maxime@cerno.tech>
->> Thanks,
->>
->> does this go via clk-fixes?
-> Yep, it should.
->
-> Stephen, could we merge this?
-Is there any chance to get this regression fix into mainline before 5.18 
-is released?
->
-> Maxime
+This function only works reliably when the delta is large. See
+hpet_clkevt_set_next_event().
+
+Thanks,
+
+        tglx

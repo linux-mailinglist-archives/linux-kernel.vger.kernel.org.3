@@ -2,159 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 269C95270A2
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 12:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 309825270A4
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 12:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231811AbiENKWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 06:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
+        id S232128AbiENK2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 06:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231748AbiENKWd (ORCPT
+        with ESMTP id S231826AbiENK16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 06:22:33 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763BC3153D
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 03:22:31 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id t25so18317284lfg.7
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 03:22:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :content-language:content-transfer-encoding;
-        bh=71mBNyH9B09u2q3LU3Ju59I/HS2yC5xAPDJGFqnY1VY=;
-        b=aDNslnbKSGb4N2xm1Lxo4JxC4fAdYDbFa2mX+wCqkePx5mKCMbOD5iCq1sfQ4987Ly
-         pknma9OKnD55wK9708N0oBvqAdYOUcm5Az6rId19fcg02Ws62hKcfzOhMqR3M/o8PrLT
-         gj6GmVJmadt1Q6ikgZmpoha1PxC2zu9pP27midOTTvFra8OJt0emu5vd+7PT0uiq6Y9d
-         12DQijP7/V04zHpW/6n8kdepYQ97ZFhJf+PtwkCHdsOBLtENyltKd4LGYu1SWRWsvYA+
-         nFL4NUStGXtMLH9yefk27zuXk9ipvER/7g6r1EYIOYlifhm6zULorvCMq4FGU1drfKW2
-         iMng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:content-language:content-transfer-encoding;
-        bh=71mBNyH9B09u2q3LU3Ju59I/HS2yC5xAPDJGFqnY1VY=;
-        b=Mf1IF8J3pf80XhOcHHifOx/agQt2w+uYQRydyrsgpX/jFjPmCPFrGU1ELqTHFs3LAq
-         6FXKa69XUSEOGweFXRAFA/PK9twhXY5S3Lk9wFNKMtT0BQwAsQcY0ZND+oZos4QNyCHb
-         KXyu3FydxEH0yxIXaUwx0HLXv70yVOWjtLVOQDISHtr3McoKXdk1XLlWeq5Jglo1ozQn
-         a93G2JszRhDMfnOWa4PtHWzKrjN5Ung5PmVZXEDQdVpZ+YNTZ0one1qzp5K+rldVew54
-         Nvhxm8m+tf7gQ8ULjKAmGRPfiCZeWdUdpZNYeyaMethsg4Zpj8Ft/W+OgwA4P8DjOLwb
-         JcUw==
-X-Gm-Message-State: AOAM530iBfmGCq9Ecvac6ykH1MCHu4GchLZ+bL91fpCnISoW+gfdk5vm
-        OAxAyBC+cn6UnYN5d/3bsacECEUb4Axs4A==
-X-Google-Smtp-Source: ABdhPJwZxMpGHEZgzMQNdvGnPixwwGWS54tSUBK+DTtqe6KWoYW3KsgiSQ5njS8i16pr3UdHcaKJ5A==
-X-Received: by 2002:a05:6512:39c1:b0:471:b37e:fe5a with SMTP id k1-20020a05651239c100b00471b37efe5amr6108692lfu.527.1652523749833;
-        Sat, 14 May 2022 03:22:29 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.177])
-        by smtp.gmail.com with ESMTPSA id m22-20020a195216000000b0047255d21149sm665060lfb.120.2022.05.14.03.22.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 May 2022 03:22:29 -0700 (PDT)
-Message-ID: <1eb3b298-4f7e-32ad-74ae-12044ed637ed@openvz.org>
-Date:   Sat, 14 May 2022 13:22:28 +0300
+        Sat, 14 May 2022 06:27:58 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0117A39144;
+        Sat, 14 May 2022 03:27:55 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=guangguan.wang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VD6nQiA_1652524072;
+Received: from localhost.localdomain(mailfrom:guangguan.wang@linux.alibaba.com fp:SMTPD_---0VD6nQiA_1652524072)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sat, 14 May 2022 18:27:53 +0800
+From:   Guangguan Wang <guangguan.wang@linux.alibaba.com>
+To:     kgraul@linux.ibm.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, leon@kernel.org
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2 0/2] net/smc: send and write inline optimization for smc
+Date:   Sat, 14 May 2022 18:27:37 +0800
+Message-Id: <20220514102739.41252-1-guangguan.wang@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-From:   Vasily Averin <vvs@openvz.org>
-Subject: [PATCH] sparse: use force attribute for fmode_t casts
-To:     Jan Kara <jack@suse.cz>, Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
-        Amir Goldstein <amir73il@gmail.com>,
-        Matthew Bobrowski <repnop@google.com>,
-        linux-fsdevel@vger.kernel.org
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes sparce warnings:
-fs/notify/fanotify/fanotify_user.c:267:63: sparse:
- warning: restricted fmode_t degrades to integer
-fs/notify/fanotify/fanotify_user.c:1351:28: sparse:
- warning: restricted fmode_t degrades to integer
-fs/proc/base.c:2240:25: sparse: warning: cast to restricted fmode_t
-fs/proc/base.c:2297:42: sparse: warning: cast from restricted fmode_t
-fs/proc/base.c:2394:48: sparse: warning: cast from restricted fmode_t
-fs/open.c:1024:21: sparse: warning: restricted fmode_t degrades to integer
+Send cdc msgs and write data inline if qp has sufficent inline
+space, helps latency reducing. 
 
-Signed-off-by: Vasily Averin <vvs@openvz.org>
----
- fs/notify/fanotify/fanotify_user.c | 4 ++--
- fs/open.c                          | 2 +-
- fs/proc/base.c                     | 6 +++---
- 3 files changed, 6 insertions(+), 6 deletions(-)
+In my test environment, which are 2 VMs running on the same
+physical host and whose NICs(ConnectX-4Lx) are working on
+SR-IOV mode, qperf shows 0.4us-1.3us improvement in latency.
 
-diff --git a/fs/notify/fanotify/fanotify_user.c b/fs/notify/fanotify/fanotify_user.c
-index 9b32b76a9c30..6b058828e412 100644
---- a/fs/notify/fanotify/fanotify_user.c
-+++ b/fs/notify/fanotify/fanotify_user.c
-@@ -264,7 +264,7 @@ static int create_fd(struct fsnotify_group *group, struct path *path,
- 	 * originally opened O_WRONLY.
- 	 */
- 	new_file = dentry_open(path,
--			       group->fanotify_data.f_flags | FMODE_NONOTIFY,
-+			       group->fanotify_data.f_flags | (__force int)FMODE_NONOTIFY,
- 			       current_cred());
- 	if (IS_ERR(new_file)) {
- 		/*
-@@ -1348,7 +1348,7 @@ SYSCALL_DEFINE2(fanotify_init, unsigned int, flags, unsigned int, event_f_flags)
- 	    (!(fid_mode & FAN_REPORT_NAME) || !(fid_mode & FAN_REPORT_FID)))
- 		return -EINVAL;
- 
--	f_flags = O_RDWR | FMODE_NONOTIFY;
-+	f_flags = O_RDWR | (__force int)FMODE_NONOTIFY;
- 	if (flags & FAN_CLOEXEC)
- 		f_flags |= O_CLOEXEC;
- 	if (flags & FAN_NONBLOCK)
-diff --git a/fs/open.c b/fs/open.c
-index 1315253e0247..b5ff39ccebfd 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -1021,7 +1021,7 @@ inline struct open_how build_open_how(int flags, umode_t mode)
- inline int build_open_flags(const struct open_how *how, struct open_flags *op)
- {
- 	u64 flags = how->flags;
--	u64 strip = FMODE_NONOTIFY | O_CLOEXEC;
-+	u64 strip = (__force u64)FMODE_NONOTIFY | O_CLOEXEC;
- 	int lookup_flags = 0;
- 	int acc_mode = ACC_MODE(flags);
- 
-diff --git a/fs/proc/base.c b/fs/proc/base.c
-index c1031843cc6a..194b5ac069e7 100644
---- a/fs/proc/base.c
-+++ b/fs/proc/base.c
-@@ -2237,7 +2237,7 @@ static struct dentry *
- proc_map_files_instantiate(struct dentry *dentry,
- 			   struct task_struct *task, const void *ptr)
- {
--	fmode_t mode = (fmode_t)(unsigned long)ptr;
-+	fmode_t mode = (__force fmode_t)(unsigned long)ptr;
- 	struct proc_inode *ei;
- 	struct inode *inode;
- 
-@@ -2294,7 +2294,7 @@ static struct dentry *proc_map_files_lookup(struct inode *dir,
- 
- 	if (vma->vm_file)
- 		result = proc_map_files_instantiate(dentry, task,
--				(void *)(unsigned long)vma->vm_file->f_mode);
-+				(void *)(__force unsigned long)vma->vm_file->f_mode);
- 
- out_no_vma:
- 	mmap_read_unlock(mm);
-@@ -2391,7 +2391,7 @@ proc_map_files_readdir(struct file *file, struct dir_context *ctx)
- 				      buf, len,
- 				      proc_map_files_instantiate,
- 				      task,
--				      (void *)(unsigned long)p->mode))
-+				      (void *)(__force unsigned long)p->mode))
- 			break;
- 		ctx->pos++;
- 	}
+Test command:
+server: smc_run taskset -c 1 qperf
+client: smc_run taskset -c 1 qperf <server ip> -oo \
+		msg_size:1:2K:*2 -t 30 -vu tcp_lat
+
+The results shown below:
+msgsize     before       after
+1B          11.9 us      10.6 us (-1.3 us)
+2B          11.7 us      10.7 us (-1.0 us)
+4B          11.7 us      10.7 us (-1.0 us)
+8B          11.6 us      10.6 us (-1.0 us)
+16B         11.7 us      10.7 us (-1.0 us)
+32B         11.7 us      10.6 us (-1.1 us)
+64B         11.7 us      11.2 us (-0.5 us)
+128B        11.6 us      11.2 us (-0.4 us)
+256B        11.8 us      11.2 us (-0.6 us)
+512B        11.8 us      11.3 us (-0.5 us)
+1KB         11.9 us      11.5 us (-0.4 us)
+2KB         12.1 us      11.5 us (-0.6 us)
+
+Guangguan Wang (2):
+  net/smc: send cdc msg inline if qp has sufficient inline space
+  net/smc: rdma write inline if qp has sufficient inline space
+
+ net/smc/smc_ib.c |  1 +
+ net/smc/smc_tx.c | 17 ++++++++++++-----
+ net/smc/smc_wr.c |  5 ++++-
+ 3 files changed, 17 insertions(+), 6 deletions(-)
+
 -- 
-2.31.1
+2.24.3 (Apple Git-128)
 

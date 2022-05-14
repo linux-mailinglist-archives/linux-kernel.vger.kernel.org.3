@@ -2,61 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 476C7526E6B
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE9F1526F41
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:15:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbiENBET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 21:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
+        id S229843AbiENCr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 22:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiENBEP (ORCPT
+        with ESMTP id S229781AbiENCr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 21:04:15 -0400
+        Fri, 13 May 2022 22:47:57 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2281349108
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 17:39:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139584F6133;
+        Fri, 13 May 2022 17:49:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDB65B8324B
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 00:18:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2731C385AA;
-        Sat, 14 May 2022 00:18:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1652487493;
-        bh=kw3CRHi4r3zW24bJ9aMXizk9Hol6hDRCL5ptaAt/ldM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=pYJQJ1zMoJadGRgSmqDeHSNHpimlTYl8VVS+moIM1ed2Y2BVr7ddCBr/x6nJPh1WF
-         gnNRVqVi0H63lD3X6rthMOfaygHE2kk37joJ20Ti3ySjfeRQ/c6UcQPnHSPxwlEcjQ
-         VZWoBVPghrfFIfz7lTuaElxlzaLLFzeXMKe5/djQ=
-Date:   Fri, 13 May 2022 17:18:11 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        syzbot <syzbot+acf65ca584991f3cc447@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com,
-        Matthew Wilcox <willy@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        John Hubbard <jhubbard@nvidia.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [syzbot] WARNING in follow_hugetlb_page
-Message-Id: <20220513171811.3604fb2da04615100c5ed160@linux-foundation.org>
-In-Reply-To: <Yn7vnpXwX50J3K+7@google.com>
-References: <000000000000ef451a05dee0f2b1@google.com>
-        <00000000000077377c05dee75f63@google.com>
-        <20220513102617.c464c4f566052838e911a3ec@linux-foundation.org>
-        <75f09063-d184-7d44-17a1-ed04be5eb953@oracle.com>
-        <a7fd0c3f-921e-19b3-2f67-a231dede28f9@oracle.com>
-        <20220513161910.d1b73583cdb2e33562aa86e5@linux-foundation.org>
-        <Yn7vnpXwX50J3K+7@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6728AB8324C;
+        Sat, 14 May 2022 00:20:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 258A4C34100;
+        Sat, 14 May 2022 00:20:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652487612;
+        bh=VbH6Eye7rDprrBdwdIeqL7tRQ78t85laQ8YSPwhSV1g=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=I2XyV2+sHI8TA9wcJNxT+5veFxwxzCz6kr4ib/sqAPVTZSnlQJr7LoIULCQwDHawP
+         nZFFYmtBjh6jhN8d8a3gQFpEe0mu1WKaOLZjvCPsnt60zGNwt62C4yp5Yyb8Kpk8IR
+         tqvMOYUH6WNq1Eb97oaJ1SAGayzg9Sw2wRGVdaS6zLTU9y4wrpwXHuU5IR3NGF8SG5
+         ScflNvtOuq3Rw7o0q/Flwqf1kaxoPknVMMI+AFKOmT4u2qIdhNZXU6pL8kLLdZPDSb
+         hWufMt9mInN3DMIbNS5+uzge+JlZOAifYLgZSP2NQHBMU/FpGJkMdu1HbI0Z5My0Q3
+         NEl7oBPrCNWqQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0A830F03934;
+        Sat, 14 May 2022 00:20:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] net: macb: Increment rx bd head after allocating skb and
+ buffer
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165248761203.19970.11604393560078071280.git-patchwork-notify@kernel.org>
+Date:   Sat, 14 May 2022 00:20:12 +0000
+References: <20220512171900.32593-1-harini.katakam@xilinx.com>
+In-Reply-To: <20220512171900.32593-1-harini.katakam@xilinx.com>
+To:     Harini Katakam <harini.katakam@xilinx.com>
+Cc:     nicolas.ferre@microchip.com, davem@davemloft.net,
+        claudiu.beznea@microchip.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        michal.simek@xilinx.com, harinikatakamlinux@gmail.com,
+        radhey.shyam.pandey@xilinx.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,47 +61,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 May 2022 16:54:06 -0700 Minchan Kim <minchan@kernel.org> wrote:
+Hello:
 
-> > > >> has been there over a month so I guess it's something else.  Does
-> > > >> someone have the time to bisect?
-> > > > 
-> > > > I can recreate in my 'easy to debug' environment, so I can bisect in
-> > > > parallel with other things I need to do today.
-> > > > 
-> > > 
-> > > I isolated this to Minchan Kim's "mm: fix is_pinnable_page against on cma
-> > > page".  Yes, the fat finger fix is in next-20220513.
-> > > 
-> > > I don't have time to analyze right now, but can confirm that in the
-> > > reproducer is_pinnable_page is returning false after this change when it
-> > > previously returned true.
-> > 
-> > OK, thanks, I dropped mm-fix-is_pinnable_page-against-on-cma-page.patch
-> 
-> Seems like bug of the patch v5 due to change of this
-> 
->     if (mt & (MIGRATE_CMA | MIGRATE_ISOLATE))
-> 
-> The migration type is not bit type so it shold be 
-> 
-> if (mt == MIGRATE_CMA || mt == MIGRATE_ISOLATE)
-> 
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-argh, I meant to check that change but the grey cell died.
+On Thu, 12 May 2022 22:49:00 +0530 you wrote:
+> In gem_rx_refill rx_prepared_head is incremented at the beginning of
+> the while loop preparing the skb and data buffers. If the skb or data
+> buffer allocation fails, this BD will be unusable BDs until the head
+> loops back to the same BD (and obviously buffer allocation succeeds).
+> In the unlikely event that there's a string of allocation failures,
+> there will be an equal number of unusable BDs and an inconsistent RX
+> BD chain. Hence increment the head at the end of the while loop to be
+> clean.
+> 
+> [...]
 
-I'll bring it back, with
+Here is the summary with links:
+  - [v2] net: macb: Increment rx bd head after allocating skb and buffer
+    https://git.kernel.org/netdev/net/c/9500acc631db
 
---- a/include/linux/mm.h~mm-fix-is_pinnable_page-against-on-cma-page-fix
-+++ a/include/linux/mm.h
-@@ -1635,7 +1635,7 @@ static inline bool is_pinnable_page(stru
- 	int __mt = get_pageblock_migratetype(page);
- 	int mt = __READ_ONCE(__mt);
- 
--	if (mt & (MIGRATE_CMA | MIGRATE_ISOLATE))
-+	if (mt == MIGRATE_CMA || mt == MIGRATE_ISOLATE)
- 		return false;
- #endif
- 
-_
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

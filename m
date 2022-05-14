@@ -2,67 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E61C4526FA1
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1382A526FA2
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:54:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbiENHvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 03:51:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42848 "EHLO
+        id S230008AbiENHxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 03:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiENHvf (ORCPT
+        with ESMTP id S229779AbiENHwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 03:51:35 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A041F7;
-        Sat, 14 May 2022 00:51:34 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id k16so2849954pff.5;
-        Sat, 14 May 2022 00:51:34 -0700 (PDT)
+        Sat, 14 May 2022 03:52:51 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36866A1B1
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 00:52:36 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id c1-20020a17090a558100b001dca2694f23so9758678pji.3
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 00:52:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=n8zKUiqbVDYxbvMgeTQJw/z7kwDYoKEYRpJkVqLfCl0=;
-        b=qkIapbKjGm1MYr7T6YHW6xdb4kT+Pt3WxJ7tTF/Z4laMBY4hYoWdrelAadZhek4KZl
-         Mk+IylB6oV7BBIEhotOBmzTEq7Z/p42GPgqZWwEoJVAWH//L2R7sfuSr12zHToHQjADg
-         7xkX6N+NMHABcVRqC/9jK04DeR/yF8mzT+Pyy38Ur8SQ/oQ6xBzgN2tPdWNDIl1CzFoO
-         yPyzqXMqPoXlN25zTPK5WfC7N0jTSBBJVVFe/nxZmCXJDUmUPAfOmTsCgRWm1RkcW8iV
-         6B9z6tcPoMQ1E3NrQX9lPEXXdyQYpZff88IpcH8SjWssIFQsJstCeTUYBOx0FdvgfKBP
-         wpVA==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=9kAA0uCEYwZFDz59hPllk4M4/jt+7xzfL8ut7F5jG6Q=;
+        b=i8f3tAxBvaDfFYiDPd/kfXBTvmRLxSQjGJwGgd5Lla/1qNwGm2bvlqEn8+j5k4OyEY
+         Ys0QQQ+aUww+WnvB3a4WEcH/rBiotPA6kXy4PZnHQbuvi8QNQ6EophHw03VlSHuqfYYT
+         RL9314D8x5C5lBSGjf+JJ1XrJ+WzLviQuzh7jvANHHGJH9Tu6Ep4/mJ6JD54Oiv4jMun
+         Fwv+HC5Vo/D9pV+8xZg6/FAsQCaqVLKpTIPcdX1lKLPBeFz44pd1FlRq9dmThQBcFVvc
+         /Gr3DVI/RrZ8xWlEKVI86S7SFzIrjkJ9R9nQLFYlQ5lYBsRLIMVw/p0t0NKNuETI6Dxp
+         85xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=n8zKUiqbVDYxbvMgeTQJw/z7kwDYoKEYRpJkVqLfCl0=;
-        b=SKIhnCadYHvoY1hrRe05WN/YKv/UNQOwiW7LpyjuF5q60wGllSbBNqUOZfj3QK3wQT
-         mpNsOI30EuBeyPRNsh3q1OeLQya/N/vBZmLTt7TcjU1Kj8f+qdmtVzQOJYw1uNtT3IeD
-         Yqm0YhpHlK7cJaDYBx90K3DR/TLMDGbIvAZEKBbN1UYd1rJeaSZfBawwqfUHw5lfEU8X
-         VrHianPd6b6kuR565CWJ/Grvkocv0D1NYD2stmcUZQmQP4o13YlxIWvNBHAxQiA7RRgC
-         v47bdoj49oLk4GNdxrcyR9W2dqO3Z9UQTGbbCjEU+Qyyzk8W8ocX7UjIypp2F19TVFMf
-         G4Aw==
-X-Gm-Message-State: AOAM531spvMcm/eQc2Bde1lcHsTjlKX1r4My9qXqGJsPof7o5uCjUK/U
-        WzaV3jVoNKzYBBo61p4I8fJI6MiKWX2JwdhktbY=
-X-Google-Smtp-Source: ABdhPJzJn4Fnur0ovSI2YYP4FxsU1V9nGoiDy06lN/Bp2fKAbKCRVIhy2dSPYRXmx5Bg65ziVVKu/A==
-X-Received: by 2002:a05:6a00:806:b0:50d:dd03:a03a with SMTP id m6-20020a056a00080600b0050ddd03a03amr8248601pfk.57.1652514693584;
-        Sat, 14 May 2022 00:51:33 -0700 (PDT)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [71.19.144.195])
-        by smtp.gmail.com with ESMTPSA id k3-20020a17090ad08300b001d9781de67fsm2727179pju.31.2022.05.14.00.51.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 May 2022 00:51:33 -0700 (PDT)
-Message-ID: <627f5f85.1c69fb81.4b80c.7398@mx.google.com>
-Date:   Sat, 14 May 2022 00:51:33 -0700 (PDT)
-X-Google-Original-Date: Sat, 14 May 2022 07:51:26 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220513142228.651822943@linuxfoundation.org>
-Subject: RE: [PATCH 5.17 00/12] 5.17.8-rc1 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Fox Chen <foxhlchen@gmail.com>
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=9kAA0uCEYwZFDz59hPllk4M4/jt+7xzfL8ut7F5jG6Q=;
+        b=SHORAHIocXtGkLQLNRaKDddOlC0DVVvtDdgjfqV91czyFWQsjx7flSDKtQHCGrBnDY
+         Y4sG0W0SJB6P1bu28a7MimnATcJijRjgYKOBUXNj7fqiDg3PGjT5D7SR/F2jjiNomX5m
+         o71d1JvJMd8Ebo/qJPL9g6olxkzNpxiRxfH/i07uBc0RsR+uvk8Ec096sJIRD7F45xeh
+         N0RyEnbrFqJvR8TMbpDcu7AwWehgRzdCMisbSWjKxHag8oCp/Krc7woV8fW1C3rcVZ1B
+         iMNarQ5Hh0WCPMf14S8Kvygy+iDeFX8XxfSLbr+1i044Trt4Cn6dT95aJp7vfApepaVI
+         xwiQ==
+X-Gm-Message-State: AOAM533t2yNFEzde4WTkjOneHNCe7QAGDMpvATNfm5hHg+IVif063XDT
+        /r0VfhUyppt+hSXJSyYIwtM=
+X-Google-Smtp-Source: ABdhPJwALc97+Ztc4kOjUbmkvfnjzktBbydfixTh093DwDApZfPo7PIKJ5gqQv7GyZie3g2/VhqGLA==
+X-Received: by 2002:a17:90b:350d:b0:1dc:6680:6f1d with SMTP id ls13-20020a17090b350d00b001dc66806f1dmr19966890pjb.27.1652514755798;
+        Sat, 14 May 2022 00:52:35 -0700 (PDT)
+Received: from pc ([199.15.76.19])
+        by smtp.gmail.com with ESMTPSA id ij16-20020a170902ab5000b0015e8d4eb209sm3104746plb.83.2022.05.14.00.52.33
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 14 May 2022 00:52:34 -0700 (PDT)
+Date:   Sat, 14 May 2022 15:52:28 +0800
+From:   Zhaoyu Liu <zackary.liu.pro@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mm/oom_kill: break evaluation when a task has been selected
+Message-ID: <20220514075223.GA11384@pc>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -73,27 +68,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 May 2022 16:24:00 +0200, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.17.8 release.
-> There are 12 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 15 May 2022 14:22:19 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.8-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+oom points no longer need to be calculated if a task is oom_task_origin(),
+so return 1 to stop the oom_evaluate_task().
 
-5.17.8-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
+Signed-off-by: Zhaoyu Liu <zackary.liu.pro@gmail.com>
+---
+ mm/oom_kill.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+index 3996301450e8..b407fba21d19 100644
+--- a/mm/oom_kill.c
++++ b/mm/oom_kill.c
+@@ -308,7 +308,7 @@ static enum oom_constraint constrained_alloc(struct oom_control *oc)
+ static int oom_evaluate_task(struct task_struct *task, void *arg)
+ {
+ 	struct oom_control *oc = arg;
+-	long points;
++	long points = 0;
+ 
+ 	if (oom_unkillable_task(task))
+ 		goto next;
+@@ -349,7 +349,7 @@ static int oom_evaluate_task(struct task_struct *task, void *arg)
+ 	oc->chosen = task;
+ 	oc->chosen_points = points;
+ next:
+-	return 0;
++	return points == LONG_MAX;
+ abort:
+ 	if (oc->chosen)
+ 		put_task_struct(oc->chosen);
+-- 
+2.17.1
 

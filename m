@@ -2,129 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FEDD527343
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 19:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1348A527349
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 19:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234567AbiENRNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 13:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45114 "EHLO
+        id S234583AbiENRSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 13:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbiENRM4 (ORCPT
+        with ESMTP id S229901AbiENRSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 13:12:56 -0400
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC63B205CE;
-        Sat, 14 May 2022 10:12:55 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2f7c57ee6feso117799137b3.2;
-        Sat, 14 May 2022 10:12:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ARYo/f15fkpOFA40ZR3JDA70StrlLOsPpijtOSDAnu4=;
-        b=JgGFlhCBhWy1uxHZr5QyECyS6ISGBWIu4qDAtz8iyllWA1QaiVxCK3MltYbj50h2du
-         PoyUpztoF8Oia89Co0EIfbN+wGWqkQYyUjTg4Dtg8OPFTLKfybJV+6M0JLLUypiwY+jB
-         31w54WH8Vspss0nR172hgP/2Q+/57VC22SMcsR9HryHjsI6OcQH6N4CH38OBE8zVqEkY
-         cX82TuC3H0H247Jx4BbcnuyvHx35SqQHcnNFY9WdAiajFr7L6W1OqxrO0/QYGyqK1A1u
-         tYW59ReUxmjQKKHghBWA9qiY02UpZVrkr5numv58Pi1h/83LiredqdCciaBxgVOuefOx
-         xkQQ==
-X-Gm-Message-State: AOAM530H89O4YSStgEZbEks4c5GSK8VjH5+1HQgVJkT2be6EBYZEkTbI
-        ZZblFvNmCcER9J2xzv/9usyhlJGXpYknFyL4AfE=
-X-Google-Smtp-Source: ABdhPJxgI42R2wt7RchmcTdowww+/QM/FvFuk1vjbPOi5zZORwRnAbtLw578zenvitEYjUex3PE+sDT5f7rJhZ/YhUQ=
-X-Received: by 2002:a0d:ddce:0:b0:2f8:c9f7:8f7c with SMTP id
- g197-20020a0dddce000000b002f8c9f78f7cmr11916578ywe.301.1652548374869; Sat, 14
- May 2022 10:12:54 -0700 (PDT)
+        Sat, 14 May 2022 13:18:30 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A69A1EAFB;
+        Sat, 14 May 2022 10:18:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=dxDs5yrcW45vjplOBhaNnU+S9CSWYkuBCk04Qmhp8xA=; b=wufhlEK7Gr4scKS8+uJ3+7otF9
+        4dZvDvOeDgRPJhf8hbVaqryp7VpnwVW+wz3mrDkhrwl2erXXNwAonQmnqd8JA3kNf4ZhyLRl+OqAV
+        fZ0fEI1GglVjcLN4bV162CUAs1u7Lh7taz9rA2E1np2P7ar6Xtl2vpWq5kurwPRUlom8I04iczXDY
+        5JDzQmPwiSHBSIriZaExmU2b0jRMBPOn6VEmsJzQKE0v38hE6ew7Ugp4MhPCPgYN9cWPUg1k5HMWw
+        mqJAiFH6CQu7TTq+7B5BLASlkZtOyPNeqM+cSfhk15O7O/D5P00eaqT9Vmf8sA8U26yxMwut9USeS
+        g7f7YuXg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60714)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1npvPH-0003sm-OH; Sat, 14 May 2022 18:18:20 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1npvPF-0001iv-1O; Sat, 14 May 2022 18:18:17 +0100
+Date:   Sat, 14 May 2022 18:18:17 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: [PATCH net-next v2 1/5] net: ipqess: introduce the Qualcomm
+ IPQESS driver
+Message-ID: <Yn/kWG7X1YCPk17F@shell.armlinux.org.uk>
+References: <20220514150656.122108-1-maxime.chevallier@bootlin.com>
+ <20220514150656.122108-2-maxime.chevallier@bootlin.com>
 MIME-Version: 1.0
-References: <CAJZ5v0g_p+Yb-VLo8b6-SYU17=GQOqZh2E5-52dkq-3rzU=57A@mail.gmail.com>
- <20220512183540.GA859016@bhelgaas> <SJ0PR11MB5070B095B8A28634B43A231F9ECA9@SJ0PR11MB5070.namprd11.prod.outlook.com>
-In-Reply-To: <SJ0PR11MB5070B095B8A28634B43A231F9ECA9@SJ0PR11MB5070.namprd11.prod.outlook.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 14 May 2022 19:12:43 +0200
-Message-ID: <CAJZ5v0gPKHDpCuM98UgRFXhxaZxvx1NkzrLArvxhuZ3a-iso=Q@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
-To:     "Jingar, Rajvi" <rajvi.jingar@intel.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        David Box <david.e.box@linux.intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220514150656.122108-2-maxime.chevallier@bootlin.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 14, 2022 at 12:01 AM Jingar, Rajvi <rajvi.jingar@intel.com> wrote:
->
->
-> > -----Original Message-----
-> > From: Bjorn Helgaas <helgaas@kernel.org>
-> > Sent: Thursday, May 12, 2022 11:36 AM
-> > To: Rafael J. Wysocki <rafael@kernel.org>
-> > Cc: Jingar, Rajvi <rajvi.jingar@intel.com>; Wysocki, Rafael J
-> > <rafael.j.wysocki@intel.com>; Bjorn Helgaas <bhelgaas@google.com>; David Box
-> > <david.e.box@linux.intel.com>; Linux PCI <linux-pci@vger.kernel.org>; Linux
-> > Kernel Mailing List <linux-kernel@vger.kernel.org>; Linux PM <linux-
-> > pm@vger.kernel.org>
-> > Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
-> >
-> > On Thu, May 12, 2022 at 07:52:36PM +0200, Rafael J. Wysocki wrote:
-> > > On Thu, May 12, 2022 at 7:42 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > On Thu, May 12, 2022 at 03:49:18PM +0200, Rafael J. Wysocki wrote:
-> >
-> > > > > Something like this should suffice IMV:
-> > > > >
-> > > > > if (!dev_state_saved || pci_dev->current_state != PCI_D3cold)
-> > > > >
-> > > > >         pci_disable_ptm(pci_dev);
-> > > >
-> > > > It makes sense to me that we needn't disable PTM if the device is in
-> > > > D3cold.  But the "!dev_state_saved" condition depends on what the
-> > > > driver did.  Why is that important?  Why should we not do the
-> > > > following?
-> > > >
-> > > >   if (pci_dev->current_state != PCI_D3cold)
-> > > >     pci_disable_ptm(pci_dev);
-> > >
-> > > We can do this too.  I thought we could skip the power state check if
-> > > dev_state_saved was unset, because then we would know that the power
-> > > state was not D3cold.  It probably isn't worth the hassle though.
-> >
->
-> We see issue with certain platforms where only checking if device power
-> state in D3Cold is not enough and the !dev_state_saved check is needed
-> when disabling PTM. Device like nvme is relying on ASPM, it stays in D0 but
-> state is saved. Touching the config space wakes up the device which
-> prevents the system from entering into low power state.
->
-> Following would fix the issue:
->
->  if (!pci_dev->state_save) {
->                 pci_save_state(pci_dev);
->
->                pci_disable_ptm(pci_dev);
->
->                 if (!pci_dev->skip_bus_pm && pci_power_manageable(pci_dev))
->                         pci_prepare_to_sleep(pci_dev);
-> }
+On Sat, May 14, 2022 at 05:06:52PM +0200, Maxime Chevallier wrote:
+> +static int ipqess_do_ioctl(struct net_device *netdev, struct ifreq *ifr, int cmd)
+> +{
+> +	struct ipqess *ess = netdev_priv(netdev);
+> +
+> +	switch (cmd) {
+> +	case SIOCGMIIPHY:
+> +	case SIOCGMIIREG:
+> +	case SIOCSMIIREG:
+> +		return phylink_mii_ioctl(ess->phylink, ifr, cmd);
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return -EOPNOTSUPP;
+> +}
 
-Well, the point is to also disable PTM for devices that were put into
-D3 by their drivers.
+Is there a reason this isn't just:
 
-In addition to D3cold, the check could cover D0 too, that is
+	return phylink_mii_ioctl(ess->phylink, ifr, cmd);
 
-if (pci_dev->current_state > D0 && pci_dev->current_state < PCI_D3cold)
-         pci_disable_ptm(pci_dev);
+?
 
-> > Ah, thanks.  IMHO it's easier to analyze for correctness if we only
-> > check the power state.
-> >
-> > Bjorn
+> +static int ipqess_axi_probe(struct platform_device *pdev)
+> +{
+> +	struct device_node *np = pdev->dev.of_node;
+> +	struct net_device *netdev;
+> +	phy_interface_t phy_mode;
+> +	struct resource *res;
+> +	struct ipqess *ess;
+> +	int i, err = 0;
+> +
+> +	netdev = devm_alloc_etherdev_mqs(&pdev->dev, sizeof(struct ipqess),
+> +					 IPQESS_NETDEV_QUEUES,
+> +					 IPQESS_NETDEV_QUEUES);
+> +	if (!netdev)
+> +		return -ENOMEM;
+> +
+> +	ess = netdev_priv(netdev);
+> +	ess->netdev = netdev;
+> +	ess->pdev = pdev;
+> +	spin_lock_init(&ess->stats_lock);
+> +	SET_NETDEV_DEV(netdev, &pdev->dev);
+> +	platform_set_drvdata(pdev, netdev);
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	ess->hw_addr = devm_ioremap_resource(&pdev->dev, res);
+> +	if (IS_ERR(ess->hw_addr))
+> +		return PTR_ERR(ess->hw_addr);
+> +
+> +	err = of_get_phy_mode(np, &phy_mode);
+> +	if (err) {
+> +		dev_err(&pdev->dev, "incorrect phy-mode\n");
+> +		return err;
+> +	}
+> +
+> +	ess->ess_clk = devm_clk_get(&pdev->dev, "ess");
+> +	if (!IS_ERR(ess->ess_clk))
+> +		clk_prepare_enable(ess->ess_clk);
+> +
+> +	ess->ess_rst = devm_reset_control_get(&pdev->dev, "ess");
+> +	if (IS_ERR(ess->ess_rst))
+> +		goto err_clk;
+> +
+> +	ipqess_reset(ess);
+> +
+> +	ess->phylink_config.dev = &netdev->dev;
+> +	ess->phylink_config.type = PHYLINK_NETDEV;
+> +
+> +	__set_bit(PHY_INTERFACE_MODE_INTERNAL,
+> +		  ess->phylink_config.supported_interfaces);
+
+No mac capabilities?
+
+> +
+> +	ess->phylink = phylink_create(&ess->phylink_config,
+> +				      of_fwnode_handle(np), phy_mode,
+> +				      &ipqess_phylink_mac_ops);
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

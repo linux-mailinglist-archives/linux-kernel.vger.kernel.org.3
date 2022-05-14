@@ -2,97 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B088C526EC3
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1224526F8D
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbiENDVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 23:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
+        id S231564AbiEND2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 23:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231151AbiENDVi (ORCPT
+        with ESMTP id S231506AbiEND2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 23:21:38 -0400
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45FF6394
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 20:21:35 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id m128so18328117ybm.5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 20:21:35 -0700 (PDT)
+        Fri, 13 May 2022 23:28:13 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196964ECC3;
+        Fri, 13 May 2022 20:28:12 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id b12so326179pju.3;
+        Fri, 13 May 2022 20:28:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:subject:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2AYMjQ0FPtZrX3yrJlm16kLXC3jsNpv/dpUcXlVmXW8=;
+        b=o4m2kFqfe35zknd+nm4pxEbQkwGchn4189T5GM+ZT99qaHIcTcBMVWhGjt6T/2j1Kp
+         yXemAuRhBStnkDvCP/4Y/L/wFvM7LhxqFN0/2lWHpzTAJZ1LlKfEjTF2E2x8xkL3Cxr1
+         7PdHgKpWzP7Q2u9zeqCynK7flnTNK2S7J/mixUvVpoLeWM46mTtPkTAu0y9DE1GYj+sB
+         IxLjBIxu9kJzlmYccyw5nfruZJw/9VFuLZQGF/3z/nrtgq7LIi+gDW4zX5CApK312Wzx
+         vWq1cAMYUlZ2Lu4MYJa6oT2JGxIChL2gBsDUu8ko0Qt/+RC5TYq1G9FU/rVkZwQA89Lo
+         u3Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kuZ/tZDybeSTawcvTvpI2RevU8flYBPshQ+5iLiR3Zs=;
-        b=3HyREbUctyjj+4zETcpZCbkOwqWi5d2oHqeDX/s9l2k4m/D9uEht6xBYURXsrGFFgu
-         zx6B1LesVKBJX10wRMUvEncov61nsk/UiFZL6BeOpJPOZ2qggq5WHOMEaMaCUxilsB9B
-         qjxAAfZKAkOaOMzSO6WYJaJzKfuzeCP0JMQPRYWVrkqNMh30kdS6S24w4CCTm/Mas8xn
-         dnG/FwkfE50Kf94mMdeI9h0v4GpjMW7oAuMsYWFCbZQpYb/s28URsC2+MqOztlU2oi/Y
-         vUc+FdADGfZOr+4uBa50IM0FtdTyMcA6T+edXmk+FCW65rU+4nSuW5Ps6k52T379m1rw
-         fP+Q==
-X-Gm-Message-State: AOAM531S5XcjwfOV9P9PeFwcl2WvhbOgKwc7Z8rj/CmoaUSRyJ49d/oR
-        Lx9Z2j3uN+4huMMcVZANDIO9RQnmhNBYKZvvtbc=
-X-Google-Smtp-Source: ABdhPJw/iZb6aGqYy+jy1pkWQ3eM5+6OebS7EYxdeOUQ+fM8ZVNz0ofDPbxScDtE3nYeMVvqOaJ1CQ4FCe41R+gjm+A=
-X-Received: by 2002:a25:e705:0:b0:645:781a:f870 with SMTP id
- e5-20020a25e705000000b00645781af870mr7849685ybh.630.1652498494973; Fri, 13
- May 2022 20:21:34 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2AYMjQ0FPtZrX3yrJlm16kLXC3jsNpv/dpUcXlVmXW8=;
+        b=DBGwYYsnoi5uWgFmD0x+eh5fPA/vpUaHvzEg5Ob0ctvz6n0ERn2WLJgQ8L8lgMJDZk
+         aKByqCehBxdSg65JbXbqfXWIt/cr0c+9lsD6rR9A5LOfKiMd54yxrJ6Tm1sMksuQpLdm
+         nHsY4+6yXaLEyABMgCyHzPW43JbWDHZBvP7svl5frNxNHhsl8b1w1VUgrtbFU2B7hfMe
+         VgrPR9cywlm1HzYKcwsEwm7YxPBOfnSLlg47v2XEu1b2+wkrRkXDNx9EMIaFJZsKiMgM
+         dEC8B1gWLOIEXWBKzzhpXl/CePoRwx/dAOMuGdOICoBlbd3ufgS4oCbiMXqDn9SRq2kK
+         GpJw==
+X-Gm-Message-State: AOAM530WasYL8RcetGyqVGDeCh2M8SPPbHHWXqMqjk88P7AARkpWxtte
+        K+x+NAovZz3gn2YfwQmFei+kl+ymNY0lp1E=
+X-Google-Smtp-Source: ABdhPJz/FT3B6Q6HpcRJed2meVLe750dPnJn1O3VXeQ2Hq3kPkL1U0bOr5FOSkWvOiwKA/PcaY27DA==
+X-Received: by 2002:a17:90a:e7d2:b0:1dc:3762:c72d with SMTP id kb18-20020a17090ae7d200b001dc3762c72dmr19426320pjb.243.1652498891618;
+        Fri, 13 May 2022 20:28:11 -0700 (PDT)
+Received: from octoberrain (p0109759-vcngn.kngw.nt.ngn.ppp.ocn.ne.jp. [61.210.74.190])
+        by smtp.gmail.com with ESMTPSA id a8-20020a170902710800b0015f2d625f4bsm2507410pll.274.2022.05.13.20.28.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 20:28:11 -0700 (PDT)
+Date:   Sat, 14 May 2022 12:28:04 +0900
+From:   Robert Eckelmann <longnoserob@gmail.com>
+To:     johan@kernel.org, gregkh@linuxfoundation.org, corbet@lwn.net,
+        linux-usb@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: serial: io_ti: Adding Agilent E5805A support
+Message-ID: <20220514122804.05c69987@octoberrain>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220426155229.436681-1-mailhol.vincent@wanadoo.fr>
- <20220507131146.834810-1-mailhol.vincent@wanadoo.fr> <20220507131146.834810-3-mailhol.vincent@wanadoo.fr>
- <CAK7LNATuvQhiZZ8A9+RcLYKmbugi6S61Aw5CStc3xbfGM-L34Q@mail.gmail.com>
-In-Reply-To: <CAK7LNATuvQhiZZ8A9+RcLYKmbugi6S61Aw5CStc3xbfGM-L34Q@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sat, 14 May 2022 12:21:24 +0900
-Message-ID: <CAMZ6Rq+bUdxhVOc_oxtWiXt+9MFZSDPaOqxHBA0bA7hg=+SBjA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 2/2] kbuild: call check-atomics.sh only if
- prerequisites change
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat. 14 May 2022 at 04:01, Masahiro Yamada <masahiroy@kernel.org> wrote:
-> On Sat, May 7, 2022 at 10:13 PM Vincent Mailhol
-> <mailhol.vincent@wanadoo.fr> wrote:
-> >
-> > check-atomics.sh is executed unconditionally. Most developers will not
-> > modify the files being checked by this script and thus do not need to
-> > execute it again for each iterative make.
-> >
-> > We first add an additional dependency to include/linux/atomic/* to
-> > make sure that the script gets executed again if the headers are
-> > modified. We then use the if_change macro instead of cmd. c.f. [1] and
-> > create the dot file scripts/atomic/.check-atomics which is used for
-> > the target timestamp. Finally, the dot file is added to the
-> > CLEAN_FILES target.
-> >
-> > [1] https://www.kernel.org/doc/html/latest/kbuild/makefiles.html#command-change-detection
-> >
-> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
->
->
-> I do not like this approach.
->
-> I wrote a different patch.
-> https://lore.kernel.org/lkml/20220513185340.239753-1-masahiroy@kernel.org/T/#u
->
-> This naturally works by comparing the timestamp
-> between *_shipped and include/generated/*.
+Hello Johan,
 
-Thank you very much for taking the time to fully rewrite it in order
-to simply discard the check-atomics.sh. I like the idea.
+Below is a small patch regarding the io_ti driver.
+This patch enables the use of the Agilent E5805A USB-RS232(x4) adapter.
+It is a relabeled Inside Out Networks Edgeport with OEM USB-ID.
+
+
+
+Signed-off-by: Robert Eckelmann <longnoserob@gmail.com>
+---
+ Documentation/usb/usb-serial.rst | 4 ++++
+ drivers/usb/serial/io_ti.c       | 2 ++
+ drivers/usb/serial/io_usbvend.h  | 2 +-
+ 3 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/usb/usb-serial.rst b/Documentation/usb/usb-serial.rst
+index 69586aeb60bb..d9cfb6cb2d07 100644
+--- a/Documentation/usb/usb-serial.rst
++++ b/Documentation/usb/usb-serial.rst
+@@ -412,6 +412,10 @@ Inside Out Networks Edgeport Driver
+        - Edgeport/4 DIN
+        - Edgeport/16 Dual
+
++  This dirver now also includes the Agilent E5805A usb-to-RS232 adapter device,
++  as this is a rebranded Edgeport device.
++
++
+   For any questions or problems with this driver, please contact Greg
+   Kroah-Hartman at greg@kroah.com
+
+diff --git a/drivers/usb/serial/io_ti.c b/drivers/usb/serial/io_ti.c
+index a7b3c15957ba..2810cefa628d 100644
+--- a/drivers/usb/serial/io_ti.c
++++ b/drivers/usb/serial/io_ti.c
+@@ -166,6 +166,7 @@ static const struct usb_device_id edgeport_2port_id_table[] = {
+	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_8S) },
+	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416) },
+	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416B) },
++	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_E5805A)},
+	{ }
+ };
+
+@@ -204,6 +205,7 @@ static const struct usb_device_id id_table_combined[] = {
+	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_8S) },
+	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416) },
+	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416B) },
++	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_E5805A)},
+	{ }
+ };
+
+diff --git a/drivers/usb/serial/io_usbvend.h b/drivers/usb/serial/io_usbvend.h
+index 52cbc353051f..3be6bce15d97 100644
+--- a/drivers/usb/serial/io_usbvend.h
++++ b/drivers/usb/serial/io_usbvend.h
+@@ -212,7 +212,7 @@
+ //
+ // Definitions for other product IDs
+ #define ION_DEVICE_ID_MT4X56USB			0x1403	// OEM device
+-
++#define ION_DEVICE_ID_E5805A			0x1A01  // OEM device (internals based on Edgeport/4?)
+
+ #define	GENERATION_ID_FROM_USB_PRODUCT_ID(ProductId)				\
+			((__u16) ((ProductId >> 8) & (ION_GENERATION_MASK)))
+--
+2.36.0

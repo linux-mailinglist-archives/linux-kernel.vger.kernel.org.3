@@ -2,39 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1E485270CA
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 13:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8779C5270CE
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 13:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbiENLLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 07:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
+        id S230318AbiENLRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 07:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiENLLq (ORCPT
+        with ESMTP id S229449AbiENLRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 07:11:46 -0400
-Received: from mail.enpas.org (zhong.enpas.org [46.38.239.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 441C7167EC;
-        Sat, 14 May 2022 04:11:44 -0700 (PDT)
+        Sat, 14 May 2022 07:17:32 -0400
+Received: from mail.enpas.org (zhong.enpas.org [IPv6:2a03:4000:2:537::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27E7D21AD;
+        Sat, 14 May 2022 04:17:30 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-        by mail.enpas.org (Postfix) with ESMTPSA id E7A8EFF959;
-        Sat, 14 May 2022 11:11:43 +0000 (UTC)
-Date:   Sat, 14 May 2022 13:11:40 +0200
+        by mail.enpas.org (Postfix) with ESMTPSA id A8421FF959;
+        Sat, 14 May 2022 11:17:29 +0000 (UTC)
+Date:   Sat, 14 May 2022 13:17:26 +0200
 From:   Max Staudt <max@enpas.org>
-To:     Vincent Mailhol <vincent.mailhol@gmail.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6] can, tty: can327 CAN/ldisc driver for ELM327 based
- OBD-II adapters
-Message-ID: <20220514131128.5e647fb8.max@enpas.org>
-In-Reply-To: <CAMZ6RqLj2eLX2UWMvGc9rH2SP6HNuqBAXnwJ6q6qvk+7QWE8pA@mail.gmail.com>
-References: <20220512182921.193462-1-max@enpas.org>
- <CAMZ6Rq+BwL1NPTLtC5sQAd4z1Kc1TFJPPoW-i+0RZ5dnFaWYiw@mail.gmail.com>
- <CAMZ6RqKjGJyOPCQvS95ZUc6UrgaFzjunRhU=10biAAWYT_V_ZQ@mail.gmail.com>
- <20220513205907.6d5473ff.max@enpas.org>
- <CAMZ6RqLj2eLX2UWMvGc9rH2SP6HNuqBAXnwJ6q6qvk+7QWE8pA@mail.gmail.com>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     kernel test robot <lkp@intel.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] can: skb:: move can_dropped_invalid_skb and
+ can_skb_headroom_valid to skb.c
+Message-ID: <20220514131726.55fbbcdb.max@enpas.org>
+In-Reply-To: <CAMZ6RqLU-Wg0Cau3cM=QsU-t-7Lyzmo1nJ_VAA4Mbw3u0jnNtw@mail.gmail.com>
+References: <20220513153606.302464-2-mailhol.vincent@wanadoo.fr>
+        <202205141221.H0aZXRak-lkp@intel.com>
+        <CAMZ6RqLU-Wg0Cau3cM=QsU-t-7Lyzmo1nJ_VAA4Mbw3u0jnNtw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
@@ -47,32 +44,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 14 May 2022 12:14:24 +0900
-Vincent Mailhol <vincent.mailhol@gmail.com> wrote:
+On Sat, 14 May 2022 14:16:09 +0900
+Vincent MAILHOL <mailhol.vincent@wanadoo.fr> wrote:
 
-> But I still think it is possible to do pointer arithmetic.
+> OK, so the issue is that VCAN and VXCAN are users of
+> can_dropped_invalid_skb() but do not depend on CAN_DEV. Above error
+> will appear if CONFIG_CAN_DEV is not set (or if CONFIG_V{,X}CAN is set
+> to "yes" and CAN_DEV is set to "module").
+> I see three choices here:
+>   1. move can_dropped_invalid_skb() outside of drivers/net/can (i.e.
+> move it somewhere in net/can).
+>   2. split CAN_DEV into one additional sub module: CAN_SKB and add a
+> dependency to it in VCAN and VXCAN.
+>   3. Add a dependency to CAN_DEV in VCAN and VXCAN
 > 
-> len = strnchr(elm->rxbuf, elm->rxfill, '\r') - elm->rxbuf;
-> (I let you check that I did not do an off by one mistake).
-> 
-> The above should also work with memchr(). Although the C standard
-> doesn't allow pointer arithmetic on void *, GNU C adds an extension
-> for that: https://gcc.gnu.org/onlinedocs/gcc/Pointer-Arith.html
-> 
-> As I said before, your for loop is not fundamentally wrong, this is
-> just not my prefered approach. You have my suggestion, choose what you
-> prefer.
+> 1. is I think the worse, 2. the best, 3. is the laziest option and is
+> kind of acceptable.
+> @Marc (and anyone else), what are your thoughts?
 
-Yeah, this is the arithmetic that I'd like to avoid here. In my
-opinion, it is clearer with indices.
+I think that having v(x)can depend on can-dev isn't half bad - for the
+user, they are CAN devices, anyway, and modprobe does the dependency
+resolution magic.
 
-If I were searching through a UTF-8 string (i.e. with variable width
-chars), that'd be another matter entirely IMHO, and I'd rely on C
-library functions that know more about UTF that I do. But it's really
-just naked ASCII bytes this time.
-
-
-...unless memchr() may be faster than the loop? Could this happen?
+Splitting into too many modules is something I'd avoid because of the
+overhead involved.
 
 
 

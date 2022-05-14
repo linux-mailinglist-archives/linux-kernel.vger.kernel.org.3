@@ -2,70 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9581E52704A
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 11:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45FBF527050
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 11:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbiENJbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 05:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40836 "EHLO
+        id S231461AbiENJgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 05:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbiENJba (ORCPT
+        with ESMTP id S231454AbiENJf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 05:31:30 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C3ADFF0
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 02:31:28 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id kj8so8629818qvb.6
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 02:31:28 -0700 (PDT)
+        Sat, 14 May 2022 05:35:56 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA72E90;
+        Sat, 14 May 2022 02:35:55 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id u23so18238652lfc.1;
+        Sat, 14 May 2022 02:35:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hBK9297vnNgTKNgzNQdSDNoUsAxJ9WLW7oIgz8DQcSQ=;
-        b=L9FHvU+n7zduTDdwW6sM3XmD/9wzi3G1eROUAAADWvcagmlZrosiIxmoFVhCc++wU/
-         G/wn3evuB/SaKze24We7GHRT7s7kOBwhOHTaRj9kUCXVdLXuS/QurwYLEBa6F4WcrXp/
-         Rb8xMq+QS5lpHE6GI3XofD8jMk6/aKXjwxOo2gfrAyCSVNrdOGXw609tXzmBADIIIOGz
-         usd1MAxow1mTHq0VcsmTK3MR7S91hOrc9PKPyVEWc2RgKGqYR2h7Ydl2huag//mXLbXW
-         rEZ81TtGqh6eAhes1JQX/S1w+SVIZ0/36QcTl3wm5hwb0lIlva7baMAVV2cTYNIg/vLV
-         aJYA==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=9bON5I8dBLTli09gYDVRZAOvbSHuOcYBnAT6sWpt8v0=;
+        b=KEkFaNttl7V7FEihDHHSSuU636QWKiLfXshYdyn8lq3aLqum/xm8JVHSrRKzlldw+R
+         o1rc5KRqfjJmzpQ2qBSVLqiSS+GqOPBRZbkSQxgxj05gQ9IarKQ9Mxq2ZYXs1+ZWrTcw
+         dpTqeVpKBTEoaV8pGCb4wcDUpMSmZ6lZW99/KANy++8jxAIOZYLhw0it/iS0HyhIpQ++
+         my6QM9lPKl4QjQHj3/w3Kz00KfMnrqFwSd41CqYQR0K5ZUYijiX5hZ4gPjJ7zWu+O1we
+         kxm+cqzQjSAyoqZo43ZzSRa3hQfHN4m1EAsGD7rKtYx3saxCQLXsKlSDnF/MjHuvSEl5
+         u16A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hBK9297vnNgTKNgzNQdSDNoUsAxJ9WLW7oIgz8DQcSQ=;
-        b=Csx5sxQspAPc1YQ/g/6BtRz4UNVEbGBb2iixv6AywfFOixApDI6c1RWmBMYebrSUrg
-         P6QFWjO8OlrKR5PREBuRPRxmGqsykgaeaBzgMl6yAVxyJsJtx7SE3g3n+giEfUW8PK4Y
-         ymk2otqbzqFBCo2FLo5wvtNPsod6QrDTOSxPreVEY/5Xob4U6Sy5YDfTOPlNA9h2mMiV
-         uW+pLL/d8Bqwtgwtp4Jm4cv8L2DdDyMrthJeukQXu0cYc9ynJJi1eGTkFk4ntLzgqOq3
-         UcoW2eRadvLRi6oAvw/YwwlDg2dAF3CpWQXvrzvtOnUdgQ3MKAz8J8gbe6UkcBEbx9yW
-         pmtQ==
-X-Gm-Message-State: AOAM5334qOKXsr/6OfAegrnejw4Xw9h5AU1K1R0TdOxZ6AivYhcgmkqN
-        hVLTZ/0PHyk/Izbfw3z+Ktn4G4e85SnsTTzOww8=
-X-Google-Smtp-Source: ABdhPJx3uoXlvhDURRNtcVVvWbJdG3SZWqCUBgZGLGvb9vz8AnZpK9r1uFYdFUjTH6egnoJKdsUzQp2dujaVwKuhf9k=
-X-Received: by 2002:a05:6214:5189:b0:45d:d051:ea06 with SMTP id
- kl9-20020a056214518900b0045dd051ea06mr7616646qvb.2.1652520687896; Sat, 14 May
- 2022 02:31:27 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=9bON5I8dBLTli09gYDVRZAOvbSHuOcYBnAT6sWpt8v0=;
+        b=vUSuOUv60FTX3fPNao1p7oqL1DkBRKbcgfm6yiV6+IAH4jEcBTp2JNoulMZjJO64db
+         BqC2AsBXsXMQNasDHXRcus9CgOFkOYdcYQB1DP89+3afZyg4Jr789rXDd9JccalJJz+Z
+         1WNlE0UvbHjOdjuHHFRYxBty9Va4cZXcoU8BrhySHPhBd8ozWJDTrezTfI28mgnfCSUS
+         bSf74qWVGWP9KJaPZbZ19MWQSdaPDOgx1fST29FFcSEq5O0HnqGyAC4CsxREZAa4NxPt
+         eV889Ma7JnLaapQWtszF94zj3vSkJ3W8/Rb8Gc4MvEHNwpUUzSYIpCixO2LNjLzSy9kH
+         +VXA==
+X-Gm-Message-State: AOAM533UfHL9cM+P3oWmcxmUzl9c3JqJzaCRaPyviUFsGhXZtnM/u1DJ
+        4GTIYEM7EfflVfxxhir1f5znSLfIvbvzpw==
+X-Google-Smtp-Source: ABdhPJzu4j4jzb+I5ffVkHkC1IPaeSod8S923nLoNM+nFx0WOGl7Zp1ZdW9e7Xi3pO/Vc2LsRQ9uNg==
+X-Received: by 2002:ac2:48a4:0:b0:471:fc7f:b54d with SMTP id u4-20020ac248a4000000b00471fc7fb54dmr6376200lfg.538.1652520953758;
+        Sat, 14 May 2022 02:35:53 -0700 (PDT)
+Received: from [192.168.1.103] ([31.173.80.11])
+        by smtp.gmail.com with ESMTPSA id d7-20020a05651221c700b0047255d210f0sm660466lft.31.2022.05.14.02.35.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 14 May 2022 02:35:52 -0700 (PDT)
+Subject: Re: [PATCH 3/3] ARM: dts: lan966x: Add UDPHS support
+To:     Herve Codina <herve.codina@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20220513105850.310375-1-herve.codina@bootlin.com>
+ <20220513105850.310375-4-herve.codina@bootlin.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <4436479e-c0ef-4962-7ad3-2b8b80e1643a@gmail.com>
+Date:   Sat, 14 May 2022 12:35:51 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20220513153009.228282-1-ubizjak@gmail.com> <20220513153009.228282-3-ubizjak@gmail.com>
- <20220513221820.GK76023@worktop.programming.kicks-ass.net>
-In-Reply-To: <20220513221820.GK76023@worktop.programming.kicks-ass.net>
-From:   Uros Bizjak <ubizjak@gmail.com>
-Date:   Sat, 14 May 2022 11:31:38 +0200
-Message-ID: <CAFULd4Z2AAvGkfdvG9RexfZRaMgWdU6HJG1jRD4E052vd35ySA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] locking/atomic/x86: Introduce arch_try_cmpxchg64
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Marco Elver <elver@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+In-Reply-To: <20220513105850.310375-4-herve.codina@bootlin.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,31 +86,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 14, 2022 at 12:18 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Fri, May 13, 2022 at 05:30:09PM +0200, Uros Bizjak wrote:
->
->
-> > +#define arch_try_cmpxchg64(ptr, po, n)                                       \
-> > +     ((__typeof__(*(ptr)))__try_cmpxchg64((ptr), (unsigned long long *)(po), \
-> > +                                          (unsigned long long)(n)))
->
-> That doesn't look right (unless it's so late I really can't read
-> anymore, in which case ignore me and I'll try again on monday). But the
-> return value of try_cmpxchg is bool, not typeof(*ptr).
+Hello!
 
-No, you are right, I was too eager when copying the code from the
-above arch_cmpxchg64 definition. Unfortunately, although the cast is
-benign and the compiler figures out that the cast is unnecessary, it
-doesn't warn here...
+On 5/13/22 1:58 PM, Herve Codina wrote:
 
-Actually, since __try_cmpxchg64 is already bool, we don't need any
-cast here, and the definition can be substantially simplified.
+> Add UDPHS (the USB High Speed Device Port controller) support.
+> The UDPHS IP present in the lan966x SOC is the same as the one
+> present in the SAMA5D3 SOC
+> 
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> ---
+>  arch/arm/boot/dts/lan966x.dtsi | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
+> index 7d2869648050..4c09f3166d27 100644
+> --- a/arch/arm/boot/dts/lan966x.dtsi
+> +++ b/arch/arm/boot/dts/lan966x.dtsi
+> @@ -211,6 +211,17 @@ can0: can@e081c000 {
+>  			status = "disabled";
+>  		};
+>  
+> +		udc: udphs@e0808000 {
 
-Thank you for another pair of eyes - I did eyeball this code
-extensively, but the issue slipped through somehow.
+   Shouldn't it be:
 
-Patch v3 is in the works.
+		udphs: udc@e0808000 {
 
-Thanks,
-Uros.
+(as the node names should be generic)?
+
+[...]
+
+MBR, Sergey

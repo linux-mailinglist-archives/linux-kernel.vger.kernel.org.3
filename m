@@ -2,653 +2,307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F8FB527146
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 15:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E29DF52714D
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 15:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232608AbiENNcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 09:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
+        id S232622AbiENNfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 09:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232564AbiENNcv (ORCPT
+        with ESMTP id S232176AbiENNfm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 09:32:51 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3CB2252B;
-        Sat, 14 May 2022 06:32:49 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 125-20020a1c1983000000b003941f354c62so6145545wmz.0;
-        Sat, 14 May 2022 06:32:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qPn0AyXrv0mkB3H4MxGJoFOey3zOFFGmiul7y7OB4dk=;
-        b=awzUXjFGs+oGT7IvDM/mVCHWq+XL9cFdAlkvU8g9CXeRO84LYlelEJHpyu6Y6W8QAy
-         SOfzrhkXStfTOGjBVrmcmJsyhKil585piVNBDgMlkDPtFZ1DpmjOHUehBQAtftR4gdA0
-         cwBWew22N7bGcJZcwC4UK1Eaj/ehN1OEIBB4TNyRup5nNyLsVok7kmjUPpdBYtZGuLrN
-         sdm62/pX3fsEZ0ER3rC4wvH5ZR3nf4ygWuScxlcLiEXQFKXl96ke/C6ysF/46N6j+XG0
-         8WweOiKaERlRLVjZp2nxDKo8SrHY2mY0zuw+aZzpaLIIGpjaYF0pSe08nG7c/lfXOuPx
-         YgUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qPn0AyXrv0mkB3H4MxGJoFOey3zOFFGmiul7y7OB4dk=;
-        b=dSDP2hyYmpA8745ESmjb0FvSnGPqvVSJU+2yJCh8i5bm6EHiBQjuyWS8I2M0X9oYWM
-         A2kiO8uvUKfIaHt5Ow/R+qKdBAV5RT+Y/k3kc7yM/Odlk7s0K+ihDugmoOLAdBbZ0qWc
-         D2Fpp6LY+EtPAlr9NApqczhruZZaPAyvcHzHPWk7ZloWPYOD+/2O/ftCYkHRz1CdR3aV
-         3+x7cxnmkqiBoHJEO/33OKMceFO9AJ7AEYRSHk7fa8fw24fMVW2KR3tkNxq3ZP82ZZaU
-         yoDPyEAOE/32JUo1Y5nvKjG305n1gmQXXjgaRvaE9v2GWpZEw99IeXiCVXDBkvqYKjVS
-         lbbQ==
-X-Gm-Message-State: AOAM531NpyfhVD1MTN8WdpQl00Z/QDndl9DplTa5yy12prGCdjOPQgOR
-        OS1BukeKF3tN+p2QT+cBB4rkSFmtf9S0zA==
-X-Google-Smtp-Source: ABdhPJxA0Mt8ibeJbbpIbUDzqUXBgPZp8CWMjugkXJZBZFHOfO7fXePHZmUz/nbdW1cEoUOYnj32RQ==
-X-Received: by 2002:a7b:cbc2:0:b0:388:faec:2036 with SMTP id n2-20020a7bcbc2000000b00388faec2036mr9200621wmi.190.1652535167478;
-        Sat, 14 May 2022 06:32:47 -0700 (PDT)
-Received: from localhost.localdomain ([197.156.190.247])
-        by smtp.gmail.com with ESMTPSA id e14-20020a05600c4e4e00b003942a244f3asm8255028wmq.19.2022.05.14.06.32.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 May 2022 06:32:47 -0700 (PDT)
-From:   David Kahurani <k.kahurani@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com,
-        davem@davemloft.net, jgg@ziepe.ca, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        phil@philpotter.co.uk, syzkaller-bugs@googlegroups.com,
-        arnd@arndb.de, dan.carpenter@oracle.com,
-        David Kahurani <k.kahurani@gmail.com>
-Subject: [PATCH] net: ax88179: add proper error handling of usb read errors
-Date:   Sat, 14 May 2022 16:32:34 +0300
-Message-Id: <20220514133234.33796-1-k.kahurani@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 14 May 2022 09:35:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38CED22538
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 06:35:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 620B660EE3
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 13:35:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71E46C340EE;
+        Sat, 14 May 2022 13:35:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652535337;
+        bh=qr2nHQBaMDVmjWfGNRQXv0gHRvT0ASlWyfL40/Z974I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Be6DtmKu1X/pNPogb7DItA0TEpgUEKk4pBR01ZeMbKvS89jf8ahbsL2qFikKoCk5D
+         0v0OOgQLpyTVOuasZjLSvhRVNurN67jiW4quwHz6Jvk+aH6Y73bH0pXCyBPGPSsrsJ
+         FmMThnZfYtg5D8WWohRK3Xrs0q63Jf4n+z2JyJQm6nlYRHwyXs9oqutd1dQmnHlD/p
+         6CiYIzS36PVnN/TO+j5Cv0FV9uyU7napMyjHxAOULU9wX5s7EfxiogzSogLvRLY2dz
+         QJRTwV60DYAUTQS2eKMpJLStCHHXi890n8sc7btHMpmbsfz2Q8RRRfEQimZKm3hZWx
+         C3rwAGMsAwyiA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 8DA07400B1; Sat, 14 May 2022 10:35:34 -0300 (-03)
+Date:   Sat, 14 May 2022 10:35:34 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@redhat.com>,
+        Ian Rogers <irogers@google.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Kan Liang <kan.liang@linux.intel.com>
+Subject: Re: [PATCH V2 22/23] perf tools: Allow system-wide events to keep
+ their own CPUs
+Message-ID: <Yn+wJlzymeAaHHcI@kernel.org>
+References: <20220506122601.367589-1-adrian.hunter@intel.com>
+ <20220506122601.367589-23-adrian.hunter@intel.com>
+ <CAM9d7cg8JRK2oVUvmWit=F5zhLhpqP=gD6iYBAa8_O-+c=EjPQ@mail.gmail.com>
+ <52f201d4-4fab-c2f4-9c4d-af887900732f@intel.com>
+ <CAM9d7cgDCd2uUJbWcvqmCDGMoPc9kppx--_rcO2OVp_GarLJkg@mail.gmail.com>
+ <f92a7681-30ca-eaf5-6f3e-de54bc19adec@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f92a7681-30ca-eaf5-6f3e-de54bc19adec@intel.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reads that are lesser than the requested size lead to uninit-value bugs.
-In this particular case a variable which was supposed to be initialized
-after a read is left uninitialized after a partial read.
+Em Fri, May 13, 2022 at 07:48:40AM +0300, Adrian Hunter escreveu:
+> On 12/05/22 21:53, Namhyung Kim wrote:
+> > On Thu, May 12, 2022 at 3:35 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+> >>
+> >> On 12/05/22 08:27, Namhyung Kim wrote:
+> >>> On Fri, May 6, 2022 at 5:27 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+> >>>>
+> >>>> Currently, user_requested_cpus supplants system-wide CPUs when the evlist
+> >>>> has_user_cpus. Change that so that system-wide events retain their own
+> >>>> CPUs and they are added to all_cpus.
+> >>>>
+> >>>> Acked-by: Ian Rogers <irogers@google.com>
+> >>>> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> >>>> ---
+> >>>>  tools/lib/perf/evlist.c | 11 +++++------
+> >>>>  1 file changed, 5 insertions(+), 6 deletions(-)
+> >>>>
+> >>>> diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
+> >>>> index 1c801f8da44f..9a6801b53274 100644
+> >>>> --- a/tools/lib/perf/evlist.c
+> >>>> +++ b/tools/lib/perf/evlist.c
+> >>>> @@ -40,12 +40,11 @@ static void __perf_evlist__propagate_maps(struct perf_evlist *evlist,
+> >>>>          * We already have cpus for evsel (via PMU sysfs) so
+> >>>>          * keep it, if there's no target cpu list defined.
+> >>>>          */
+> >>>> -       if (!evsel->own_cpus || evlist->has_user_cpus) {
+> >>>> -               perf_cpu_map__put(evsel->cpus);
+> >>>> -               evsel->cpus = perf_cpu_map__get(evlist->user_requested_cpus);
+> >>>> -       } else if (!evsel->system_wide &&
+> >>>> -                  !evsel->requires_cpu &&
+> >>>> -                  perf_cpu_map__empty(evlist->user_requested_cpus)) {
+> >>>> +       if (!evsel->own_cpus ||
+> >>>> +           (!evsel->system_wide && evlist->has_user_cpus) ||
+> >>>> +           (!evsel->system_wide &&
+> >>>> +            !evsel->requires_cpu &&
+> >>>> +            perf_cpu_map__empty(evlist->user_requested_cpus))) {
+> >>>
+> >>> This is getting hard to understand.  IIUC this propagation basically
+> >>> sets user requested cpus to evsel unless it has its own cpus, right?
+> >>
+> >> I put the conditional logic altogether because that is kernel style but
+> >> it does make it practically unreadable.
+> >>
+> >> If we start with the original logic:
+> >>
+> >>         if (!evsel->own_cpus || evlist->has_user_cpus) {
+> >>                 perf_cpu_map__put(evsel->cpus);
+> >>                 evsel->cpus = perf_cpu_map__get(evlist->user_requested_cpus);
+> >>         } else if (!evsel->system_wide && perf_cpu_map__empty(evlist->user_requested_cpus)) {
+> >>                 perf_cpu_map__put(evsel->cpus);
+> >>                 evsel->cpus = perf_cpu_map__get(evlist->user_requested_cpus);
+> >>         } else if (evsel->cpus != evsel->own_cpus) {
+> >>                 perf_cpu_map__put(evsel->cpus);
+> >>                 evsel->cpus = perf_cpu_map__get(evsel->own_cpus);
+> >>         }
+> >>
+> >> Then make it more readable, i.e. same functionality
+> >>
+> >>         struct perf_cpu_map *cpus;
+> >>
+> >>         if (!evsel->own_cpus || evlist->has_user_cpus)
+> >>                 cpus = evlist->user_requested_cpus;
+> >>         else if (!evsel->system_wide && perf_cpu_map__empty(evlist->user_requested_cpus))
+> >>                 cpus = evlist->user_requested_cpus;
+> >>         else
+> >>                 cpus = evsel->own_cpus;
+> >>
+> >>         if (evsel->cpus != cpus) {
+> >>                 perf_cpu_map__put(evsel->cpus);
+> >>                 evsel->cpus = perf_cpu_map__get(cpus);
+> >>         }
+> >>
+> >> Then separate out the conditions, i.e. still same functionality
+> >>
+> >>         if (!evsel->own_cpus)
+> >>                 cpus = evlist->user_requested_cpus;
+> >>         else if (evlist->has_user_cpus)
+> >>                 cpus = evlist->user_requested_cpus;
+> >>         else if (evsel->system_wide)
+> >>                 cpus = evsel->own_cpus;
+> >>         else if (perf_cpu_map__empty(evlist->user_requested_cpus)) /* per-thread */
+> >>                 cpus = evlist->user_requested_cpus;
+> >>         else
+> >>                 cpus = evsel->own_cpus;
+> >>
+> >> Then add the new requires_cpu flag:
+> >>
+> >>         if (!evsel->own_cpus)
+> >>                 cpus = evlist->user_requested_cpus;
+> >>         else if (evlist->has_user_cpus)
+> >>                 cpus = evlist->user_requested_cpus;
+> >>         else if (evsel->system_wide)
+> >>                 cpus = evsel->own_cpus;
+> >> -       else if (perf_cpu_map__empty(evlist->user_requested_cpus)) /* per-thread */
+> >> +       else if (!evsel->requres_cpu && perf_cpu_map__empty(evlist->user_requested_cpus)) /* per-thread */
+> >>                 cpus = evlist->user_requested_cpus;
+> >>         else
+> >>                 cpus = evsel->own_cpus;
+> >>
+> >> Then make system_wide keep own_cpus even if has_user_cpus:
+> >>
+> >>         if (!evsel->own_cpus)
+> >>                 cpus = evlist->user_requested_cpus;
+> >> +       else if (evsel->system_wide)
+> >> +               cpus = evsel->own_cpus;
+> >>         else if (evlist->has_user_cpus)
+> >>                 cpus = evlist->user_requested_cpus;
+> >> -       else if (evsel->system_wide)
+> >> -               cpus = evsel->own_cpus;
+> >>         else if (!evsel->requres_cpu && perf_cpu_map__empty(evlist->user_requested_cpus)) /* per-thread */
+> >>                 cpus = evlist->user_requested_cpus;
+> >>         else
+> >>                 cpus = evsel->own_cpus;
+> >>
+> >> Which leaves:
+> >>
+> >>         if (!evsel->own_cpus)
+> >>                 cpus = evlist->user_requested_cpus;
+> >>         else if (evsel->system_wide)
+> >>                 cpus = evsel->own_cpus;
+> >>         else if (evlist->has_user_cpus)
+> >>                 cpus = evlist->user_requested_cpus;
+> >>         else if (!evsel->requres_cpu && perf_cpu_map__empty(evlist->user_requested_cpus)) /* per-thread */
+> >>                 cpus = evlist->user_requested_cpus;
+> >>         else
+> >>                 cpus = evsel->own_cpus;
+> >>
+> >> And putting it back together:
+> >>
+> >>         if (!evsel->own_cpus ||
+> >>             (!evsel->system_wide && evlist->has_user_cpus) ||
+> >>             (!evsel->system_wide &&
+> >>              !evsel->requires_cpu &&
+> >>              perf_cpu_map__empty(evlist->user_requested_cpus))) {
+> >>                 cpus = evlist->user_requested_cpus;
+> >>         else
+> >>                 cpus = evsel->own_cpus;
+> >>
+> >> Perhaps I shouldn't put it together?
+> > 
+> > Cool, thanks a lot for explaining it in detail.
+> > I do not oppose your change but little worried about the
+> > complexity.  And I think we have some issues with uncore
+> > events already.
+> 
+> Yes it is a bit complicated because we are handling
+> many different use cases.
+> 
+> > 
+> > So do you have any idea where evsel->own_cpus
+> > doesn't propagate to evsel->cpus?
+> 
+> We let the user's list of CPUs override it i.e. the
+> evlist->has_user_cpus case.  Essentially we are expecting
+> the user to know what they are doing.
+> 
+> > 
+> > I think evsel->system_wide and evsel->requires_cpu
+> > can be replaced to check evsel->own_cpus instead.
+> 
+> Not at the moment because we let the user override
+> own_cpus.
+> 
+> > 
+> > Actually evlist->has_user_cpus is checked first so
+> > uncore events' own_cpus might not be used.
+> 
+> Yes
+> 
+> > 
+> > In my laptop, perf stat -a -A -e imc/data_reads/
+> > will use cpu 0 as it's listed in the pmu cpumask.
+> > But when I use -C1,2 it'll use the both cpus and
+> > returns the similar values each (so the sum is 2x).
+> 
+> We expect the user to understand the uncore PMU they
+> are using.  AFAICT an uncore PMU cpu mask with only
+> CPU 0 typically means a single PMU that counts events
+> that could be indrectly caused by any CPU.  When the
+> cpu mask has more than one CPU, it means a PMU for
+> each of a group of CPU's (e.g. a core or socket)
+> 
+> So in the example you gave above, there is only 1 PMU
+> and reading from any CPU will give it's value.
+> 
+> A user providing a list of CPUs for uncore events
+> is useful only in certain cases.  For example when
+> each core has an uncore PMU and you only want to get
+> values from one core.
+> 
+> > 
+> > I'm not sure if it's intended.  I expect it runs on
+> > cpu 0 or one of the given cpus.  Or it runs on both
+> > cpus and returns value in half so that the sum is
+> > the same as the original value (from a cpu).
+> 
+> I don't know if there is anything wrong with the way
+> we are handling uncore PMUs, except that I don't know
+> if it is documented anywhere.
 
-Qualify such reads as errors and handle them correctly and while at it
-convert the reader functions to return zero on success for easier error
-handling.
+Good thing about this conversation is that it will result in
+documentation :-)
 
-Fixes: e2ca90c276e1 ("ax88179_178a: ASIX AX88179_178A USB 3.0/2.0 to gigabit ethernet adapter driver")
-Signed-off-by: David Kahurani <k.kahurani@gmail.com>
-Reported-and-tested-by: syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com
----
- drivers/net/usb/ax88179_178a.c | 281 ++++++++++++++++++++++++++-------
- 1 file changed, 227 insertions(+), 54 deletions(-)
+Thank you guys for having it and detailing it so nicely.
 
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index e2fa56b92..ae6fa10ff 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -185,8 +185,9 @@ static const struct {
- 	{7, 0xcc, 0x4c, 0x18, 8},
- };
+- Arnaldo
  
--static int __ax88179_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
--			      u16 size, void *data, int in_pm)
-+static int __must_check __ax88179_read_cmd(struct usbnet *dev, u8 cmd,
-+					   u16 value, u16 index, u16 size,
-+					   void *data, int in_pm)
- {
- 	int ret;
- 	int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
-@@ -201,11 +202,15 @@ static int __ax88179_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
- 	ret = fn(dev, cmd, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
- 		 value, index, data, size);
- 
--	if (unlikely(ret < 0))
-+	if (unlikely(ret < size)) {
-+		ret = ret < 0 ? ret : -ENODATA;
-+
- 		netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
- 			    index, ret);
-+		return ret;
-+	}
- 
--	return ret;
-+	return 0;
- }
- 
- static int __ax88179_write_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
-@@ -249,26 +254,33 @@ static void ax88179_write_cmd_async(struct usbnet *dev, u8 cmd, u16 value,
- 	}
- }
- 
--static int ax88179_read_cmd_nopm(struct usbnet *dev, u8 cmd, u16 value,
--				 u16 index, u16 size, void *data)
-+static int __must_check ax88179_read_cmd_nopm(struct usbnet *dev, u8 cmd,
-+					      u16 value, u16 index, u16 size,
-+					      void *data)
- {
- 	int ret;
- 
- 	if (2 == size) {
- 		u16 buf;
- 		ret = __ax88179_read_cmd(dev, cmd, value, index, size, &buf, 1);
-+		if (ret)
-+			return ret;
- 		le16_to_cpus(&buf);
- 		*((u16 *)data) = buf;
- 	} else if (4 == size) {
- 		u32 buf;
- 		ret = __ax88179_read_cmd(dev, cmd, value, index, size, &buf, 1);
-+		if (ret)
-+			return ret;
- 		le32_to_cpus(&buf);
- 		*((u32 *)data) = buf;
- 	} else {
- 		ret = __ax88179_read_cmd(dev, cmd, value, index, size, data, 1);
-+		if (ret)
-+			return ret;
- 	}
- 
--	return ret;
-+	return 0;
- }
- 
- static int ax88179_write_cmd_nopm(struct usbnet *dev, u8 cmd, u16 value,
-@@ -290,26 +302,32 @@ static int ax88179_write_cmd_nopm(struct usbnet *dev, u8 cmd, u16 value,
- 	return ret;
- }
- 
--static int ax88179_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
--			    u16 size, void *data)
-+static int __must_check ax88179_read_cmd(struct usbnet *dev, u8 cmd, u16 value,
-+					 u16 index, u16 size, void *data)
- {
- 	int ret;
- 
- 	if (2 == size) {
- 		u16 buf = 0;
- 		ret = __ax88179_read_cmd(dev, cmd, value, index, size, &buf, 0);
-+		if (ret)
-+			return ret;
- 		le16_to_cpus(&buf);
- 		*((u16 *)data) = buf;
- 	} else if (4 == size) {
- 		u32 buf = 0;
- 		ret = __ax88179_read_cmd(dev, cmd, value, index, size, &buf, 0);
-+		if (ret)
-+			return ret;
- 		le32_to_cpus(&buf);
- 		*((u32 *)data) = buf;
- 	} else {
- 		ret = __ax88179_read_cmd(dev, cmd, value, index, size, data, 0);
-+		if (ret)
-+			return ret;
- 	}
- 
--	return ret;
-+	return 0;
- }
- 
- static int ax88179_write_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
-@@ -354,8 +372,15 @@ static int ax88179_mdio_read(struct net_device *netdev, int phy_id, int loc)
- {
- 	struct usbnet *dev = netdev_priv(netdev);
- 	u16 res;
-+	int ret;
-+
-+	ret = ax88179_read_cmd(dev, AX_ACCESS_PHY, phy_id, (__u16)loc, 2, &res);
-+
-+	if (ret) {
-+		netdev_dbg(dev->net, "Failed to read PHY_ID: %d\n", ret);
-+		return ret;
-+	}
- 
--	ax88179_read_cmd(dev, AX_ACCESS_PHY, phy_id, (__u16)loc, 2, &res);
- 	return res;
- }
- 
-@@ -427,19 +452,31 @@ static int ax88179_suspend(struct usb_interface *intf, pm_message_t message)
- 	struct usbnet *dev = usb_get_intfdata(intf);
- 	u16 tmp16;
- 	u8 tmp8;
-+	int ret;
- 
- 	usbnet_suspend(intf, message);
- 
- 	/* Disable RX path */
--	ax88179_read_cmd_nopm(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
--			      2, 2, &tmp16);
-+	ret = ax88179_read_cmd_nopm(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
-+				    2, 2, &tmp16);
-+
-+	if (ret) {
-+		netdev_dbg(dev->net, "Failed to read MEDIUM_STATUS_MODE: %d\n",
-+			   ret);
-+		return ret;
-+	}
-+
- 	tmp16 &= ~AX_MEDIUM_RECEIVE_EN;
- 	ax88179_write_cmd_nopm(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
- 			       2, 2, &tmp16);
- 
- 	/* Force bulk-in zero length */
--	ax88179_read_cmd_nopm(dev, AX_ACCESS_MAC, AX_PHYPWR_RSTCTL,
--			      2, 2, &tmp16);
-+	ret = ax88179_read_cmd_nopm(dev, AX_ACCESS_MAC, AX_PHYPWR_RSTCTL,
-+				    2, 2, &tmp16);
-+	if (ret) {
-+		netdev_dbg(dev->net, "Failed to read PHYPWR_RSTCTL: %d\n", ret);
-+		return ret;
-+	}
- 
- 	tmp16 |= AX_PHYPWR_RSTCTL_BZ | AX_PHYPWR_RSTCTL_IPRL;
- 	ax88179_write_cmd_nopm(dev, AX_ACCESS_MAC, AX_PHYPWR_RSTCTL,
-@@ -462,6 +499,7 @@ static int ax88179_auto_detach(struct usbnet *dev, int in_pm)
- {
- 	u16 tmp16;
- 	u8 tmp8;
-+	int ret;
- 	int (*fnr)(struct usbnet *, u8, u16, u16, u16, void *);
- 	int (*fnw)(struct usbnet *, u8, u16, u16, u16, const void *);
- 
-@@ -481,11 +519,19 @@ static int ax88179_auto_detach(struct usbnet *dev, int in_pm)
- 
- 	/* Enable Auto Detach bit */
- 	tmp8 = 0;
--	fnr(dev, AX_ACCESS_MAC, AX_CLK_SELECT, 1, 1, &tmp8);
-+	ret = fnr(dev, AX_ACCESS_MAC, AX_CLK_SELECT, 1, 1, &tmp8);
-+	if (ret) {
-+		netdev_dbg(dev->net, "Failed to read CLK_SELECT: %d", ret);
-+		return ret;
-+	}
- 	tmp8 |= AX_CLK_SELECT_ULR;
- 	fnw(dev, AX_ACCESS_MAC, AX_CLK_SELECT, 1, 1, &tmp8);
- 
--	fnr(dev, AX_ACCESS_MAC, AX_PHYPWR_RSTCTL, 2, 2, &tmp16);
-+	ret = fnr(dev, AX_ACCESS_MAC, AX_PHYPWR_RSTCTL, 2, 2, &tmp16);
-+	if (ret) {
-+		netdev_dbg(dev->net, "Failed to read PHYPWR_RSTCTL: %d", ret);
-+		return ret;
-+	}
- 	tmp16 |= AX_PHYPWR_RSTCTL_AT;
- 	fnw(dev, AX_ACCESS_MAC, AX_PHYPWR_RSTCTL, 2, 2, &tmp16);
- 
-@@ -497,6 +543,7 @@ static int ax88179_resume(struct usb_interface *intf)
- 	struct usbnet *dev = usb_get_intfdata(intf);
- 	u16 tmp16;
- 	u8 tmp8;
-+	int ret;
- 
- 	usbnet_link_change(dev, 0, 0);
- 
-@@ -515,7 +562,14 @@ static int ax88179_resume(struct usb_interface *intf)
- 	ax88179_auto_detach(dev, 1);
- 
- 	/* Enable clock */
--	ax88179_read_cmd_nopm(dev, AX_ACCESS_MAC,  AX_CLK_SELECT, 1, 1, &tmp8);
-+	ret = ax88179_read_cmd_nopm(dev, AX_ACCESS_MAC,  AX_CLK_SELECT, 1, 1, &tmp8);
-+
-+	if (ret) {
-+		netdev_dbg(dev->net, "Failed to read CLK_SELECT %d\n", ret);
-+
-+		return ret;
-+	}
-+
- 	tmp8 |= AX_CLK_SELECT_ACS | AX_CLK_SELECT_BCS;
- 	ax88179_write_cmd_nopm(dev, AX_ACCESS_MAC, AX_CLK_SELECT, 1, 1, &tmp8);
- 	msleep(100);
-@@ -601,7 +655,7 @@ ax88179_get_eeprom(struct net_device *net, struct ethtool_eeprom *eeprom,
- 		ret = __ax88179_read_cmd(dev, AX_ACCESS_EEPROM, i, 1, 2,
- 					 &eeprom_buff[i - first_word],
- 					 0);
--		if (ret < 0) {
-+		if (ret) {
- 			kfree(eeprom_buff);
- 			return -EIO;
- 		}
-@@ -645,7 +699,7 @@ ax88179_set_eeprom(struct net_device *net, struct ethtool_eeprom *eeprom,
- 	if (eeprom->offset & 1) {
- 		ret = ax88179_read_cmd(dev, AX_ACCESS_EEPROM, first_word, 1, 2,
- 				       &eeprom_buff[0]);
--		if (ret < 0) {
-+		if (ret) {
- 			netdev_err(net, "Failed to read EEPROM at offset 0x%02x.\n", first_word);
- 			goto free;
- 		}
-@@ -654,7 +708,7 @@ ax88179_set_eeprom(struct net_device *net, struct ethtool_eeprom *eeprom,
- 	if ((eeprom->offset + eeprom->len) & 1) {
- 		ret = ax88179_read_cmd(dev, AX_ACCESS_EEPROM, last_word, 1, 2,
- 				       &eeprom_buff[last_word - first_word]);
--		if (ret < 0) {
-+		if (ret) {
- 			netdev_err(net, "Failed to read EEPROM at offset 0x%02x.\n", last_word);
- 			goto free;
- 		}
-@@ -951,23 +1005,45 @@ static int
- ax88179_set_features(struct net_device *net, netdev_features_t features)
- {
- 	u8 tmp;
-+	int ret;
- 	struct usbnet *dev = netdev_priv(net);
- 	netdev_features_t changed = net->features ^ features;
- 
- 	if (changed & NETIF_F_IP_CSUM) {
--		ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_TXCOE_CTL, 1, 1, &tmp);
-+		ret = ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_TXCOE_CTL,
-+				       1, 1, &tmp);
-+		if (ret) {
-+			netdev_dbg(dev->net, "Failed to read TXCOE_CTL: %d\n",
-+				   ret);
-+			return ret;
-+		}
-+
- 		tmp ^= AX_TXCOE_TCP | AX_TXCOE_UDP;
- 		ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_TXCOE_CTL, 1, 1, &tmp);
- 	}
- 
- 	if (changed & NETIF_F_IPV6_CSUM) {
--		ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_TXCOE_CTL, 1, 1, &tmp);
-+		ret = ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_TXCOE_CTL,
-+				       1, 1, &tmp);
-+		if (ret) {
-+			netdev_dbg(dev->net, "Failed to read TXCOE_CTL: %d\n",
-+				   ret);
-+			return ret;
-+		}
-+
- 		tmp ^= AX_TXCOE_TCPV6 | AX_TXCOE_UDPV6;
- 		ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_TXCOE_CTL, 1, 1, &tmp);
- 	}
- 
- 	if (changed & NETIF_F_RXCSUM) {
--		ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_RXCOE_CTL, 1, 1, &tmp);
-+		ret = ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_RXCOE_CTL,
-+				       1, 1, &tmp);
-+		if (ret) {
-+			netdev_dbg(dev->net, "Failed to read TXCOE_CTL: %d\n",
-+				   ret);
-+			return ret;
-+		}
-+
- 		tmp ^= AX_RXCOE_IP | AX_RXCOE_TCP | AX_RXCOE_UDP |
- 		       AX_RXCOE_TCPV6 | AX_RXCOE_UDPV6;
- 		ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_RXCOE_CTL, 1, 1, &tmp);
-@@ -980,19 +1056,36 @@ static int ax88179_change_mtu(struct net_device *net, int new_mtu)
- {
- 	struct usbnet *dev = netdev_priv(net);
- 	u16 tmp16;
-+	int ret;
- 
- 	net->mtu = new_mtu;
- 	dev->hard_mtu = net->mtu + net->hard_header_len;
- 
- 	if (net->mtu > 1500) {
--		ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
--				 2, 2, &tmp16);
-+		ret = ax88179_read_cmd(dev, AX_ACCESS_MAC,
-+				       AX_MEDIUM_STATUS_MODE,
-+				       2, 2, &tmp16);
-+		if (ret) {
-+			netdev_dbg(dev->net,
-+				   "Failed to read MEDIUM_STATUS_MODE %d\n",
-+				   ret);
-+			return ret;
-+		}
-+
- 		tmp16 |= AX_MEDIUM_JUMBO_EN;
- 		ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
- 				  2, 2, &tmp16);
- 	} else {
--		ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
--				 2, 2, &tmp16);
-+		ret = ax88179_read_cmd(dev, AX_ACCESS_MAC,
-+				       AX_MEDIUM_STATUS_MODE,
-+				       2, 2, &tmp16);
-+		if (ret) {
-+			netdev_dbg(dev->net,
-+				   "Failed to read MEDIUM_STATUS_MODE %d\n",
-+				   ret);
-+			return ret;
-+		}
-+
- 		tmp16 &= ~AX_MEDIUM_JUMBO_EN;
- 		ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
- 				  2, 2, &tmp16);
-@@ -1045,6 +1138,7 @@ static int ax88179_check_eeprom(struct usbnet *dev)
- 	u8 i, buf, eeprom[20];
- 	u16 csum, delay = HZ / 10;
- 	unsigned long jtimeout;
-+	int ret;
- 
- 	/* Read EEPROM content */
- 	for (i = 0; i < 6; i++) {
-@@ -1060,16 +1154,29 @@ static int ax88179_check_eeprom(struct usbnet *dev)
- 
- 		jtimeout = jiffies + delay;
- 		do {
--			ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_SROM_CMD,
--					 1, 1, &buf);
-+			ret = ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_SROM_CMD,
-+					       1, 1, &buf);
-+			if (ret) {
-+				netdev_dbg(dev->net,
-+					   "Failed to read SROM_CMD: %d\n",
-+					   ret);
-+				return ret;
-+			}
- 
- 			if (time_after(jiffies, jtimeout))
- 				return -EINVAL;
- 
- 		} while (buf & EEP_BUSY);
- 
--		__ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_SROM_DATA_LOW,
--				   2, 2, &eeprom[i * 2], 0);
-+		ret = __ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_SROM_DATA_LOW,
-+					 2, 2, &eeprom[i * 2], 0);
-+
-+		if (ret) {
-+			netdev_dbg(dev->net,
-+				   "Failed to read SROM_DATA_LOW: %d\n",
-+				   ret);
-+			return ret;
-+		}
- 
- 		if ((i == 0) && (eeprom[0] == 0xFF))
- 			return -EINVAL;
-@@ -1149,12 +1256,20 @@ static int ax88179_convert_old_led(struct usbnet *dev, u16 *ledvalue)
- 
- static int ax88179_led_setting(struct usbnet *dev)
- {
-+	int ret;
- 	u8 ledfd, value = 0;
- 	u16 tmp, ledact, ledlink, ledvalue = 0, delay = HZ / 10;
- 	unsigned long jtimeout;
- 
- 	/* Check AX88179 version. UA1 or UA2*/
--	ax88179_read_cmd(dev, AX_ACCESS_MAC, GENERAL_STATUS, 1, 1, &value);
-+	ret = ax88179_read_cmd(dev, AX_ACCESS_MAC, GENERAL_STATUS, 1, 1,
-+			       &value);
-+
-+	if (ret) {
-+		netdev_dbg(dev->net, "Failed to read GENERAL_STATUS: %d\n",
-+			   ret);
-+		return ret;
-+	}
- 
- 	if (!(value & AX_SECLD)) {	/* UA1 */
- 		value = AX_GPIO_CTRL_GPIO3EN | AX_GPIO_CTRL_GPIO2EN |
-@@ -1178,20 +1293,39 @@ static int ax88179_led_setting(struct usbnet *dev)
- 
- 		jtimeout = jiffies + delay;
- 		do {
--			ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_SROM_CMD,
--					 1, 1, &value);
-+			ret = ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_SROM_CMD,
-+					       1, 1, &value);
-+			if (ret) {
-+				netdev_dbg(dev->net,
-+					   "Failed to read SROM_CMD: %d\n",
-+					   ret);
-+				return ret;
-+			}
- 
- 			if (time_after(jiffies, jtimeout))
- 				return -EINVAL;
- 
- 		} while (value & EEP_BUSY);
- 
--		ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_SROM_DATA_HIGH,
--				 1, 1, &value);
-+		ret = ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_SROM_DATA_HIGH,
-+				       1, 1, &value);
-+		if (ret) {
-+			netdev_dbg(dev->net, "Failed to read SROM_DATA_HIGH: %d\n",
-+				   ret);
-+			return ret;
-+		}
-+
- 		ledvalue = (value << 8);
- 
--		ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_SROM_DATA_LOW,
--				 1, 1, &value);
-+		ret = ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_SROM_DATA_LOW,
-+				       1, 1, &value);
-+
-+		if (ret) {
-+			netdev_dbg(dev->net, "Failed to read SROM_DATA_LOW: %d",
-+				   ret);
-+			return ret;
-+		}
-+
- 		ledvalue |= value;
- 
- 		/* load internal ROM for defaule setting */
-@@ -1213,11 +1347,21 @@ static int ax88179_led_setting(struct usbnet *dev)
- 	ax88179_write_cmd(dev, AX_ACCESS_PHY, AX88179_PHY_ID,
- 			  GMII_PHYPAGE, 2, &tmp);
- 
--	ax88179_read_cmd(dev, AX_ACCESS_PHY, AX88179_PHY_ID,
--			 GMII_LED_ACT, 2, &ledact);
-+	ret = ax88179_read_cmd(dev, AX_ACCESS_PHY, AX88179_PHY_ID,
-+			       GMII_LED_ACT, 2, &ledact);
- 
--	ax88179_read_cmd(dev, AX_ACCESS_PHY, AX88179_PHY_ID,
--			 GMII_LED_LINK, 2, &ledlink);
-+	if (ret) {
-+		netdev_dbg(dev->net, "Failed to read PHY_ID: %d", ret);
-+		return ret;
-+	}
-+
-+	ret = ax88179_read_cmd(dev, AX_ACCESS_PHY, AX88179_PHY_ID,
-+			       GMII_LED_LINK, 2, &ledlink);
-+
-+	if (ret) {
-+		netdev_dbg(dev->net, "Failed to read PHY_ID: %d", ret);
-+		return ret;
-+	}
- 
- 	ledact &= GMII_LED_ACTIVE_MASK;
- 	ledlink &= GMII_LED_LINK_MASK;
-@@ -1295,6 +1439,7 @@ static int ax88179_led_setting(struct usbnet *dev)
- static void ax88179_get_mac_addr(struct usbnet *dev)
- {
- 	u8 mac[ETH_ALEN];
-+	int ret;
- 
- 	memset(mac, 0, sizeof(mac));
- 
-@@ -1303,10 +1448,14 @@ static void ax88179_get_mac_addr(struct usbnet *dev)
- 		netif_dbg(dev, ifup, dev->net,
- 			  "MAC address read from device tree");
- 	} else {
--		ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_NODE_ID, ETH_ALEN,
--				 ETH_ALEN, mac);
--		netif_dbg(dev, ifup, dev->net,
--			  "MAC address read from ASIX chip");
-+		ret = ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_NODE_ID, ETH_ALEN,
-+				       ETH_ALEN, mac);
-+
-+		if (ret)
-+			netdev_dbg(dev->net, "Failed to read NODE_ID: %d", ret);
-+		else
-+			netif_dbg(dev, ifup, dev->net,
-+				  "MAC address read from ASIX chip");
- 	}
- 
- 	if (is_valid_ether_addr(mac)) {
-@@ -1572,6 +1721,7 @@ static int ax88179_link_reset(struct usbnet *dev)
- 	u16 mode, tmp16, delay = HZ / 10;
- 	u32 tmp32 = 0x40000000;
- 	unsigned long jtimeout;
-+	int ret;
- 
- 	jtimeout = jiffies + delay;
- 	while (tmp32 & 0x40000000) {
-@@ -1581,7 +1731,13 @@ static int ax88179_link_reset(struct usbnet *dev)
- 				  &ax179_data->rxctl);
- 
- 		/*link up, check the usb device control TX FIFO full or empty*/
--		ax88179_read_cmd(dev, 0x81, 0x8c, 0, 4, &tmp32);
-+		ret = ax88179_read_cmd(dev, 0x81, 0x8c, 0, 4, &tmp32);
-+
-+		if (ret) {
-+			netdev_dbg(dev->net, "Failed to read TX FIFO: %d\n",
-+				   ret);
-+			return ret;
-+		}
- 
- 		if (time_after(jiffies, jtimeout))
- 			return 0;
-@@ -1590,11 +1746,21 @@ static int ax88179_link_reset(struct usbnet *dev)
- 	mode = AX_MEDIUM_RECEIVE_EN | AX_MEDIUM_TXFLOW_CTRLEN |
- 	       AX_MEDIUM_RXFLOW_CTRLEN;
- 
--	ax88179_read_cmd(dev, AX_ACCESS_MAC, PHYSICAL_LINK_STATUS,
--			 1, 1, &link_sts);
-+	ret = ax88179_read_cmd(dev, AX_ACCESS_MAC, PHYSICAL_LINK_STATUS,
-+			       1, 1, &link_sts);
-+
-+	if (ret) {
-+		netdev_dbg(dev->net, "Failed to read LINK_STATUS: %d", ret);
-+		return ret;
-+	}
-+
-+	ret = ax88179_read_cmd(dev, AX_ACCESS_PHY, AX88179_PHY_ID,
-+			       GMII_PHY_PHYSR, 2, &tmp16);
- 
--	ax88179_read_cmd(dev, AX_ACCESS_PHY, AX88179_PHY_ID,
--			 GMII_PHY_PHYSR, 2, &tmp16);
-+	if (ret) {
-+		netdev_dbg(dev->net, "Failed to read PHY_ID: %d\n", ret);
-+		return ret;
-+	}
- 
- 	if (!(tmp16 & GMII_PHY_PHYSR_LINK)) {
- 		return 0;
-@@ -1732,9 +1898,16 @@ static int ax88179_reset(struct usbnet *dev)
- static int ax88179_stop(struct usbnet *dev)
- {
- 	u16 tmp16;
-+	int ret;
-+
-+	ret = ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
-+			       2, 2, &tmp16);
-+
-+	if (ret) {
-+		netdev_dbg(dev->net, "Failed to read STATUS_MODE: %d\n", ret);
-+		return ret;
-+	}
- 
--	ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
--			 2, 2, &tmp16);
- 	tmp16 &= ~AX_MEDIUM_RECEIVE_EN;
- 	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
- 			  2, 2, &tmp16);
--- 
-2.25.1
-
+> > 
+> >>
+> >>>
+> >>> But the hybrid pmus make this complex.  Maybe we can move the
+> >>> logic in evlist__fix_hybrid_cpus() here and simplify it like below
+> >>>
+> >>> if (evsel->own_cpus) {
+> >>>    if (evsel->pmu->is_hybrid)
+> >>>       evsel->cpus = fixup_hybrid_cpus(evsel>own_cpus,
+> >>>                                       evlist->user_requested_cpus);  //?
+> >>>    else
+> >>>       evsel->cpus = evlist->own_cpus;  // put + get
+> >>> } else {
+> >>>    evsel->cpus = evlist->user_requested_cpus;  // put + get
+> >>> }
+> >>>
+> >>> Then we need to make sure evsel->pmu is set properly.
+> >>>
+> >>> What do you think?
+> >>
+> >> Hybrid handling looks complicated.  I would have to spend time
+> >> better understanding it.
+> >>
+> >> So, in the context of this patch set, I don't want to look at
+> >> issues with hybrid CPUs, except that there should be no change
+> >> to how they are handled.
+> > 
+> > Fair enough.  But I think we have to look at it again soon.
+> > 
+> > Thanks,
+> > Namhyung

@@ -2,92 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BAC35270D6
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 13:38:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 390275270D7
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 13:40:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231620AbiENLiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 07:38:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33714 "EHLO
+        id S231950AbiENLkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 07:40:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231415AbiENLiS (ORCPT
+        with ESMTP id S231640AbiENLkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 07:38:18 -0400
-Received: from qproxy2-pub.mail.unifiedlayer.com (qproxy2-pub.mail.unifiedlayer.com [69.89.16.161])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9841D333
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 04:38:15 -0700 (PDT)
-Received: from outbound-ss-820.bluehost.com (outbound-ss-820.bluehost.com [69.89.24.241])
-        by qproxy2.mail.unifiedlayer.com (Postfix) with ESMTP id 12A7F8049180
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 11:38:15 +0000 (UTC)
-Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
-        by progateway2.mail.pro1.eigbox.com (Postfix) with ESMTP id 4C8BA10047D9B
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 11:38:14 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id pq69ndGQJY8ycpq6AnBeAh; Sat, 14 May 2022 11:38:14 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=df5FYVbe c=1 sm=1 tr=0 ts=627f94a6
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=oZkIemNP1mAA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=BtR1emdZ4Ixv5CQlUojAwakLy8A35x7sCtZx6NmHPaI=; b=Y3+SRIIIDNb2V6aWy4DQTiOXov
-        hpGwOXujyCKEvaXtLe2FsvuoqiwOUd/KXbo+QUvcQFTHttxqHrNBRfxlFqGpSmKNNnvQOT9uzmTt3
-        Gon1SAn5PfiUjqhnjet9kVm5q0GJ9xdcyPPPW76neZX5b6PasSv9qUfbf+tH7+VFDpfd3F8BDVXCv
-        CFl3XRkSR6y5P0mXSPsStZ+LsMarvivG2YzzC3Iz6g33yDuE46aF71s4whj0B1Wg7EcvlZA+youcs
-        3Klvu6LZMfoZdu0bOJad4ftoo4sqflnQmd/9GV8WRuTnA3JSKcuHrGz0fTqDqg1In2N15LkYqjQq5
-        kOENS5xA==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:50900 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1npq68-000Eqp-O8; Sat, 14 May 2022 05:38:12 -0600
-Subject: Re: [PATCH 5.15 00/21] 5.15.40-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220513142229.874949670@linuxfoundation.org>
-In-Reply-To: <20220513142229.874949670@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <7f274719-a7d6-5ec3-3b75-71571b04c84c@w6rz.net>
-Date:   Sat, 14 May 2022 04:38:10 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Sat, 14 May 2022 07:40:14 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11FEF13D50
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 04:40:12 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id q12-20020a0566022f0c00b0065af7776ee7so6623438iow.17
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 04:40:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=tyXZJZh4UYHJVfVmZGxNnSbUIJkAshWJ1F9kA8aW0M0=;
+        b=kuEvzFLN68IFGEBhbpShx/QyhSdrtllUECpSPeFLPyYyKZjSl8GcAD0cKpF518Tg+S
+         Poz95MIjwanm0ZZ0ksBVra5yVybWRD+hOTh1ed1ITZnmNG5lifdXV0hSy3B4IDFIBkUx
+         N+BmA8o1CJL0WMA39tL3HsWUHHrlyAo/WDRw6tTFJ6UKyUP9zYk29v14H59ozVRrxzRd
+         EShUs42FBkzRpEY+x7N4sl1FxkZWjo4XpElGrOmGyDS4usqsnRCCvBo0s0LRQ5/sUhik
+         xZrBBUQHCf//5OZEboyFbCPYs4zLVyTNGhYJuVpRsLrDQd5biGovf0TbI/7rFeAprJnl
+         fKIg==
+X-Gm-Message-State: AOAM530b7PF3+c+kSjxOOyItDGcoVxpQ/m1avUyCo0d3k9YTNLQH6MEf
+        Bh43kW3Ok10RhK1ulSykAHzTFyoeRwlz/0iwzInAfQnTXy/D
+X-Google-Smtp-Source: ABdhPJyepYGIyDxe2jpilOgVOcUFBD7b6zywiZxgwYO34aUKuiBM3UTMklEb/qjVb/rLVKR+2Iquyfr6xyENZOO/CNgmpHtSwv19
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1npq68-000Eqp-O8
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:50900
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6602:3d2:b0:65d:c151:f29f with SMTP id
+ g18-20020a05660203d200b0065dc151f29fmr4231052iov.28.1652528411979; Sat, 14
+ May 2022 04:40:11 -0700 (PDT)
+Date:   Sat, 14 May 2022 04:40:11 -0700
+In-Reply-To: <20220514110016.1193-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fa340405def74011@google.com>
+Subject: Re: [syzbot] INFO: task hung in hci_dev_do_open (2)
+From:   syzbot <syzbot+e68a3899a8927b14f863@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,26 +55,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/13/22 7:23 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.40 release.
-> There are 21 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 15 May 2022 14:22:19 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.40-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hello,
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Tested-by: Ron Economos <re@w6rz.net>
+Reported-and-tested-by: syzbot+e68a3899a8927b14f863@syzkaller.appspotmail.com
 
+Tested on:
+
+commit:         38a288f5 Add linux-next specific files for 20220506
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6f4fbf50aa82985b
+dashboard link: https://syzkaller.appspot.com/bug?extid=e68a3899a8927b14f863
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=10eefe69f00000
+
+Note: testing is done by a robot and is best-effort only.

@@ -2,103 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D56526F0A
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A5F526F14
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230486AbiENDDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 May 2022 23:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52734 "EHLO
+        id S230141AbiENDEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 May 2022 23:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbiENDCv (ORCPT
+        with ESMTP id S230232AbiENDEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 May 2022 23:02:51 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A951821266;
-        Fri, 13 May 2022 20:02:16 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id cx11-20020a17090afd8b00b001d9fe5965b3so12397761pjb.3;
-        Fri, 13 May 2022 20:02:16 -0700 (PDT)
+        Fri, 13 May 2022 23:04:45 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AEF2E180B
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 20:04:40 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id n6-20020a05600c3b8600b0039492b44ce7so5628282wms.5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 20:04:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=r995hMsKjxPDOPWj7IefzfQ4dcnkbqPB7PakkBYcRE8=;
-        b=dkj4eutwlFRAm9F9U/EV2d09kF/rGK6RlnhcFpDsqJoj8P/F9iLuj5AlK02V880VTn
-         VpenBLTyavq9vflC0QVJ3lHED/wvC0GEeiRFenFx9ZJAX7KX0obE2w0pYsGALK0NP3Z3
-         CWtmiuzcXXI4YqJXNqsPImfWydZKDL+oB2JepAoMjQERy13OZteMxEuqSbyEAdZKYLRO
-         idJ4DE9KJkk5/6vBEGRS+fv0+h6yFbO++FOgU2scHZChLhWO0lVuBr5TG7paFwprkIaZ
-         +/9gB0b1DGaWM8nYMXx5UhHu7CaINXTiwGHNR8sQZzqSluxgbElznUMGDyqe83r09FJe
-         E2fQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UoAT8pjpOFcRyIaX+ZhbsdRFzNEAyY56dcHcgCnxySo=;
+        b=edjiyqrDP2iLrGQci5HqJboHVDFmTJ/F0cVt2hEhqmcmZ1Bk3naqPevsH50aZD4bgL
+         uBgAhlV9Rj0RBJ56NenEvJKuGc6772MbvBrXXNbzVOP+EC1sBTEu+10lN8/8axj7fG1N
+         vk97VTRaDsfr5aMeV0pBT5JNUKtnKH5L6QaFyXYcbvuHq5NHIerSyN4yyEtubLhbHgUj
+         IIBX/JBXVmbeHvA8pLO/5tUmzYZ2pkRoQwfskzITXr4dHOmkfxhcL42inxRIGVbqhEe7
+         iQc1vYNPhvt+x0PWly/ZBGnxlxc2VJ/wpp56ADg9gnyrloSquEsApgEvgYEUFNnORcv/
+         Ll4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=r995hMsKjxPDOPWj7IefzfQ4dcnkbqPB7PakkBYcRE8=;
-        b=5bkzF2C0B+xaguacmiByixMUhBimftb6k1gMQBQ+RgAsLqPnNlaDGsto3c4Zqmrky6
-         wBOiVh9XU1oajMRkllwwOyKOgbhrsmt6iOFhgSxZ+ooS/aHrdxAIdxU4RSExIjZBTFNJ
-         Fl6iI3YAwkOWgo7VkqIaDv37l1R0JZ473i240QcMbzUsqgwR2WBPcjbkT0ZfLR9h7NTN
-         wYnrIgTRG0pN/bBKjNXn9zT9Rr3bK26Hsbrl6BV0uccXfa/44aGmYjHU57VVf4abosgf
-         bwMtcgvorLIP4YIYa7BWusskiDBB9JDkN9tiUgtEA2oO9Hh2krQMSABcixlZ7178Uobs
-         7F5Q==
-X-Gm-Message-State: AOAM531Z63+KMYppoQwDu6rIVLSyU3akcCtIxmjL1uA1QN/kWJvv88nP
-        FvaQ5RwIr9AOgyiyXuOhsOk=
-X-Google-Smtp-Source: ABdhPJyDziaw1rn2TFpbrCp1jGg5kmpdnZQIe2oIJRnAepUxSTRLIZr0MwEo9Z6yVBisvunq3ZteGA==
-X-Received: by 2002:a17:903:2481:b0:15f:249c:2006 with SMTP id p1-20020a170903248100b0015f249c2006mr7650578plw.31.1652497336141;
-        Fri, 13 May 2022 20:02:16 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id f125-20020a62db83000000b0050dc762812csm2498303pfg.6.2022.05.13.20.02.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 20:02:15 -0700 (PDT)
-Message-ID: <a7d29ef5-4f4e-d8d7-34bb-652b0b33978f@gmail.com>
-Date:   Fri, 13 May 2022 20:02:13 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UoAT8pjpOFcRyIaX+ZhbsdRFzNEAyY56dcHcgCnxySo=;
+        b=nS9HGinzjD1RKwclVwieqvwQvZREp3aiC0bh6YX345UCCiJAtC8EoShdboVxR/PNL6
+         V28xvSf3OxL/sT6L1dcqK4Cgn96Hb3ZDt01ERr3YMHsEtF5cX62dJTzRpe36Y2hB8yDh
+         Q3uodOstDga+puLiOI4JBgz6aP4WQrcVTbOLzZ3hPXoUOd0AiAvvh7GdMpmOQebIwpNr
+         AYxhD3eYC3SGKOyfXOLjtV9JA+BWrto7HP6qKwEg08p9f/ISKhlGaGcCY4KTsrN0KGga
+         LVoHrm8tAvXtcUeCN0y37RGLgzdMyLXD+XOuYtf7voMm7JUY6cLbAaH98ESCF4In0I2e
+         aSQA==
+X-Gm-Message-State: AOAM533nJBTTPlkikqL6qJ8rh5kQCoznXEO4jCr3Si/ETR0acViVUqJP
+        mrm6zjO7R2twbWboMEHxcxHWqT/kw3ogvOGCopEL2A==
+X-Google-Smtp-Source: ABdhPJyqMTuCvPq2xupVijryWNy90M9KW5CbLPjYdKU/0lgqe+OXIfvdq3TgEH84h6n59TOZr0qbmIWNpw3XU3CMz+w=
+X-Received: by 2002:a05:600c:264e:b0:394:2c56:eeb5 with SMTP id
+ 14-20020a05600c264e00b003942c56eeb5mr7208280wmy.6.1652497479045; Fri, 13 May
+ 2022 20:04:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH 5.10 00/10] 5.10.116-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220513142228.303546319@linuxfoundation.org>
-Content-Language: en-US
-In-Reply-To: <20220513142228.303546319@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220429043913.626647-1-davidgow@google.com> <20220513083212.3537869-2-davidgow@google.com>
+ <CAGS_qxr54nYThsj6UhqX54JO5WnyJXVQURnNF1eCzGB+4GCKLA@mail.gmail.com>
+In-Reply-To: <CAGS_qxr54nYThsj6UhqX54JO5WnyJXVQURnNF1eCzGB+4GCKLA@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 14 May 2022 11:04:27 +0800
+Message-ID: <CABVgOS=gTznLFBTZbmNH7AFDnr7O70mWR9v4q6sDA7q04fKT=Q@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] kunit: Taint the kernel when KUnit tests are run
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Joe Fradley <joefradley@google.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/13/22 07:23, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.116 release.
-> There are 10 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 15 May 2022 14:22:19 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.116-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Sat, May 14, 2022 at 3:09 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> On Fri, May 13, 2022 at 1:32 AM David Gow <davidgow@google.com> wrote:
+> >
+> > Make KUnit trigger the new TAINT_TEST taint when any KUnit test is run.
+> > Due to KUnit tests not being intended to run on production systems, and
+> > potentially causing problems (or security issues like leaking kernel
+> > addresses), the kernel's state should not be considered safe for
+> > production use after KUnit tests are run.
+> >
+> > Signed-off-by: David Gow <davidgow@google.com>
+>
+> Tested-by: Daniel Latypov <dlatypov@google.com>
+>
+> Looks good to me.
+>
+> There's an edge case where we might have 0 suites or 0 tests and we
+> still taint the kernel, but I don't think we need to deal with that.
+> At the start of kunit_run_tests() is the cleanest place to do this.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+Hmm... thinking about it, I think it might be worth not tainting if 0
+suites run, but tainting if 0 tests run.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+If we taint even if there are no suites present, that'll make things
+awkward for the "build KUnit in, but not any tests" case: the kernel
+would be tainted regardless. Given Android might be having the KUnit
+execution stuff built-in (but using modules for tests), it's probably
+worth not tainting there. (Though I think they have a separate way of
+disabling KUnit as well, so it's probably not a complete
+deal-breaker).
+
+The case of having suites but no tests should still taint the kernel,
+as suite_init functions could still run.
+
+Assuming that seems sensible, I'll send out a v4 with that changed.
+
+> I wasn't quite sure where this applied, but I manually applied the changes here.
+> Without this patch, this command exits fine:
+> $ ./tools/testing/kunit/kunit.py run --kernel_args=panic_on_taint=0x40000
+>
+> With it, I get
+> [12:03:31] Kernel panic - not syncing: panic_on_taint set ...
+> [12:03:31] CPU: 0 PID: 1 Comm: swapper Tainted: G                 N
+
+This is showing both 'G' and 'N' ('G' being the character for GPL --
+i.e. the kernel is not tainted by proprietary modules: 'P').
+
+Jani did suggest a better way of printing these in the v1 discussion
+(printing the actual names of taints present), which I might do in a
+follow-up.
+
+> 5.17.0-00001-gea9ee5e7aed8-dirty #60
+>
+> I'm a bit surprised that it prints 'G' and not 'N', but this does seem
+> to be the right mask
+> $ python3 -c 'print(hex(1<<18))'
+> 0x40000
+> and it only takes effect when this patch is applied.
+> I'll chalk that up to my ignorance of how taint works.
+
+-- David

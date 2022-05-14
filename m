@@ -2,74 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D6E527455
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 23:55:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AAD552745E
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 23:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233223AbiENVzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 17:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
+        id S235760AbiENVzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 17:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235550AbiENVyt (ORCPT
+        with ESMTP id S235590AbiENVzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 17:54:49 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF812DABD
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 14:54:48 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 137so10682100pgb.5
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 14:54:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=t2yObVrbf/L9Jq6+JbbAXZHKIfGO1DeBECBvtcKWJrQ=;
-        b=a2vCFtT3tXCJFlaBwLlox/cAPNUXQljxjpojw0pEncSqcq0/+C10zLDNqQyY4H4MZd
-         kD7/dRMNsR6kSF64Nx5WKF94/fOyf5uHx7flzonMY2TVUorztqn2oJepkCTboXILUDhF
-         ufEifGfG/qIMCjWxrANBavsxx++WXTI1Q3Clc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=t2yObVrbf/L9Jq6+JbbAXZHKIfGO1DeBECBvtcKWJrQ=;
-        b=JtbwmVBk8BPrMNgD8KXucWgdmLXjxH1jh2aJQhotl6IENJb6NWhmCdDa4rAsqYPc0E
-         woFjYQhUwH6EZa9wnTXLMgiczaZuC4ogEhIi5Zf24W9pkICJ0JE0klEGc1cLHHMYfQxr
-         7rqQ1gK4TXCK8xKPtDq3e2AUuQEeJAwKCOobL8axN5OaQBRHgCGG6JWZJ/RGT1FHkSe8
-         i8RPgh2bznOp0cA0/5dCIhzcMG7xXN2sQeOvKBkQ/wxqMhTgUCQxVo7pOSXo3v4wqQcy
-         SA2Iccl+YNuNU/+wxjNpLB7sQuBr8xng43LU7kA6pC35uguT1i7Jd19CMLdhrRImV8NG
-         BBHQ==
-X-Gm-Message-State: AOAM531mUvLMlWhwCJBaYVx0A5s1xWHAvt3qVGGiTBkwvUAr8hFqjnVc
-        cSamFR4wuRLdDVKh5QXIg6im8g==
-X-Google-Smtp-Source: ABdhPJzEbT+xSq2G7nTj/6I7DpbTkFKAAE5DIrDPZRYeOTIN7iK2Q3o6lSrZl7RpCs6ZWKyW4Fzjtg==
-X-Received: by 2002:a63:381e:0:b0:3c6:d5e4:fed9 with SMTP id f30-20020a63381e000000b003c6d5e4fed9mr9243439pga.553.1652565287615;
-        Sat, 14 May 2022 14:54:47 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u23-20020a1709026e1700b0015e8d4eb1ffsm4184143plk.73.2022.05.14.14.54.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 May 2022 14:54:47 -0700 (PDT)
-Date:   Sat, 14 May 2022 14:54:46 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-hardening@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH v2 13/21] treewide: Drop WARN_ON_FUNCTION_MISMATCH
-Message-ID: <202205141454.12B573ABC@keescook>
-References: <20220513202159.1550547-1-samitolvanen@google.com>
- <20220513202159.1550547-14-samitolvanen@google.com>
+        Sat, 14 May 2022 17:55:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19AF12E0BB
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 14:54:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C9C9FB80B26
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 21:54:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32777C340EE;
+        Sat, 14 May 2022 21:54:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652565296;
+        bh=gMJSb4CxmhTgLpKS0+r2BvvEYboNlZJAypNpnjTCGXs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Eq401OiH3ESQoLBSj2mq35okhw4v0nh2XeeTyW/KIO1UQD2JbyBKGxJKZQXOiv9GH
+         fk3z+28GiD6Z2wpSMUPVcLUHUvSUQmr52pifXcAIPyUSlwaRk0AM+BcGfIqLH4jMNg
+         YwP4oR+x+CddChWL9KaTNNVq+gphnNwq/XgE1ths=
+Date:   Sat, 14 May 2022 23:54:53 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Shreenidhi Shedi <yesshedi@gmail.com>
+Cc:     arnd@arndb.de, paul@paul-moore.com, eparis@redhat.com,
+        linux-kernel@vger.kernel.org, linux-audit@redhat.com,
+        Shreenidhi Shedi <sshedi@vmware.com>
+Subject: Re: [PATCH 4/5] audit: remove redundant data_len check
+Message-ID: <YoAlLeo5dCua/+ua@kroah.com>
+References: <20220514211455.284782-1-sshedi@vmware.com>
+ <20220514211455.284782-4-sshedi@vmware.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220513202159.1550547-14-samitolvanen@google.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20220514211455.284782-4-sshedi@vmware.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,16 +53,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 01:21:51PM -0700, Sami Tolvanen wrote:
-> CONFIG_CFI_CLANG no longer breaks cross-module function address
-> equality, which makes WARN_ON_FUNCTION_MISMATCH unnecessary. Remove
-> the definition and switch back to WARN_ON_ONCE.
+On Sun, May 15, 2022 at 02:44:54AM +0530, Shreenidhi Shedi wrote:
+> Signed-off-by: Shreenidhi Shedi <sshedi@vmware.com>
+> ---
+>  kernel/audit.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> diff --git a/kernel/audit.c b/kernel/audit.c
+> index 7690c29d4ee4..0749211d5552 100644
+> --- a/kernel/audit.c
+> +++ b/kernel/audit.c
+> @@ -1390,7 +1390,7 @@ static int audit_receive_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
+>  						 str);
+>  			} else {
+>  				audit_log_format(ab, " data=");
+> -				if (data_len > 0 && str[data_len - 1] == '\0')
+> +				if (str[data_len - 1] == '\0')
+>  					data_len--;
+>  				audit_log_n_untrustedstring(ab, str, data_len);
+>  			}
+> -- 
+> 2.36.1
+> 
 
-This one always felt like a trade-off, so I'm happy to see it go. :)
+Hi,
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
--- 
-Kees Cook
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/SubmittingPatches for what is needed in order to
+  properly describe the change.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot

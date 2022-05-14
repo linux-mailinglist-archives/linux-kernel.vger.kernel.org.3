@@ -2,242 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5BA2527261
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 17:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3E652726A
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 17:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233719AbiENPHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 11:07:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
+        id S233768AbiENPHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 11:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiENPHA (ORCPT
+        with ESMTP id S229727AbiENPHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 11:07:00 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78E010F
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 08:06:57 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id d137so929182ybc.13
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 08:06:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=8bgbRvm58+qrdPjIs9kk4ClZICHs5MASc7rQ6VCmXcs=;
-        b=lTZs+suBBLjkYFQ4cCx3P3HeR86S0Y2RhD0U6jQQQItDfTbLpeIaGvjLpNWdMzIm3Q
-         0NTaaJz3CPU1mp5ITGf9+sgHIX9pRXZHeS0BLd3Ad7twZceqYksJv+VLhOckxFdEoNZ8
-         q8uqiV71r2/NxWAWq8ZyjjLner1NWqiFvRCzN2drfE8xFqlsXo38Xdt5osJvWZp/sOLQ
-         XabsDFPqBfVez+mZs5N6aTrQH5nKI4x0mtqzbt2K+hEaVal/zHWOzWlBgyts0LxxSkYP
-         nyBtj5ycG2gEAMy/aCGhjmgstPBsd4bjq9xyRaJibFfvmjxy+EiRR08Cm+doQ1v7Vy3U
-         z75Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=8bgbRvm58+qrdPjIs9kk4ClZICHs5MASc7rQ6VCmXcs=;
-        b=luwoJmtCuGjI61d+BddwmRM4BRahAcX4uZ4L7fKFr91FhsBaekWXW6mTzzLfA88yyP
-         zb1I9C/RNb7mYOE1xuz4zYOMN2yscLOgb8OlkBOXsFkIPJRvoSsV8pR6ALZrTji6/H3W
-         8s8VnSAm5O5Mlse5rKsseFgdGMELkwQ5sNrwZ7qA9o/tI1Tl+jvxUaAjfYF5aL2QFuK4
-         z44kx8Mki0M3sUE2zTQXUtW0ajHs2NoU56u15NH3gfgk1VuSAum7L4LffSVkpjOAVQm4
-         PRNE83Wjdi6LmGvmGrs/p5z8R90qwdhXqo7jf00ZV/C1OYs3OikMyrLDT65zC9+ByqqN
-         xuYA==
-X-Gm-Message-State: AOAM532IlGIzl3mbfg8BmG5viTF9HmV3BwgEwx6hCJ05cuFNHLyZXExw
-        OvEy2Bgv+frrBGqiw9+U5mXdH2TZS0v6FarDYcItGw==
-X-Google-Smtp-Source: ABdhPJzmR95yLZDUNsPxVkwvA1a1rWFjuGCzjE6DA7sNhY4KC0mUAIhHUi9jNbLbIdJi6AQxGrJGIW4vq1r/DA7U+fQ=
-X-Received: by 2002:a25:d187:0:b0:64d:7735:cda2 with SMTP id
- i129-20020a25d187000000b0064d7735cda2mr848452ybg.474.1652540816855; Sat, 14
- May 2022 08:06:56 -0700 (PDT)
+        Sat, 14 May 2022 11:07:05 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADD2BE23;
+        Sat, 14 May 2022 08:07:03 -0700 (PDT)
+Received: (Authenticated sender: maxime.chevallier@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id CFE90C0006;
+        Sat, 14 May 2022 15:06:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1652540821;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=QmF0ttkdEbbZTVa3vz08turW96svvMVbroFkxXDDwK4=;
+        b=QfKEvRGqvZZOr3RWNave0cM7j3PDClxpummHGwj90TH0gDuTWygzEX1LDdSfhj7T2Xo/3E
+        n1AgWVRnGdGADSklWGQGC/ODZNBqWplmRguprOw1TNekV6HgvHTFh+yOGzk7vGw3xP+XDR
+        MTrvn3n5uV2DAaY3tkmb3MBzMHuGSqJ+Q9oaMlEleAVJE5AleoErIcueRtTzYMOVZA2OOh
+        oGjpnL68Z8J1fWnFS7kZyTcx6D4xhtEBl/O8GhGv/fvwQJbTT5GcdP3r3o6hGScjHdRlfK
+        kqDOs7xz/ZJr600EEIhxBkcn1S78CFfeMt6D/jmCyXnGVpacRwu5Laf+7t3bHw==
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
+To:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>
+Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: [PATCH net-next v2 0/5] net: ipqess: introduce Qualcomm IPQESS driver
+Date:   Sat, 14 May 2022 17:06:51 +0200
+Message-Id: <20220514150656.122108-1-maxime.chevallier@bootlin.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220513142227.897535454@linuxfoundation.org>
-In-Reply-To: <20220513142227.897535454@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 14 May 2022 20:36:45 +0530
-Message-ID: <CA+G9fYuhwLTj=VOQCjh-NuQmtFOvgeTWsCzEp=U0y6qsG=+2bw@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/15] 4.19.243-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 May 2022 at 19:56, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.19.243 release.
-> There are 15 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 15 May 2022 14:22:19 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.19.243-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hello everyone,
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+This is the 2nd iteration of a series that introduces a new driver, for
+the Qualcomm IPQESS Ethernet Controller, found on the IPQ4019.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Notables changes on V2 :
+ - Put the DSA tag in the skb itself instead of using skb->shinfo
+ - Fixed the initialisation sequence based on Andrew's comments
+ - Reworked the error paths in the init sequence
+ - Add support for the clock and reset lines on that controller
+ - Fixed and updated the binding
 
-## Build
-* kernel: 4.19.243-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-4.19.y
-* git commit: a96b764d90b5b33d8b7817d4e0da1ea730cc208d
-* git describe: v4.19.242-16-ga96b764d90b5
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
-.242-16-ga96b764d90b5
+The driver itself is pretty straightforward, but has lived out-of-tree
+for a while. I've done my best to clean-up some outdated API calls, but
+some might remain.
 
-## Test Regressions (compared to v4.19.241-79-ge28b1117a7ab)
-No test regressions found.
+This controller is somewhat special, since it's part of the IPQ4019 SoC
+which also includes an QCA8K switch, and uses the IPQESS controller for
+the CPU port. The switch is so tightly intergrated with the MAC that it
+is connected to the MAC using an internal link (hence the fact that we
+only support PHY_INTERFACE_MODE_INTERNAL), and this has some
+consequences on the DSA side.
 
-## Metric Regressions (compared to v4.19.241-79-ge28b1117a7ab)
-No metric regressions found.
+The tagging for the switch isn't done inband as most switch do, but
+out-of-band, the DSA tag being included in the DMA descriptor.
 
-## Test Fixes (compared to v4.19.241-79-ge28b1117a7ab)
-No test fixes found.
+This series includes a new out-of-band tagger that uses the skb headroom
+to convey the tag between the tagger and the MAC driver.
 
-## Metric Fixes (compared to v4.19.241-79-ge28b1117a7ab)
-No metric fixes found.
+Thanks to the Sartura folks who worked on a base version of this driver,
+and provided test hardware.
 
-## Test result summary
-total: 84228, pass: 67603, fail: 1113, skip: 13402, xfail: 2110
+Best regards,
 
-## Build Summary
-* arm: 275 total, 275 passed, 0 failed
-* arm64: 39 total, 39 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 19 total, 19 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 27 total, 27 passed, 0 failed
-* powerpc: 55 total, 54 passed, 1 failed
-* s390: 12 total, 12 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 38 total, 38 passed, 0 failed
+Maxime Chevallier
 
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
+Maxime Chevallier (5):
+  net: ipqess: introduce the Qualcomm IPQESS driver
+  net: dsa: add out-of-band tagging protocol
+  net: ipqess: Add out-of-band DSA tagging support
+  net: dt-bindings: Introduce the Qualcomm IPQESS Ethernet controller
+  ARM: dts: qcom: ipq4019: Add description for the IPQESS Ethernet
+    controller
 
---
-Linaro LKFT
-https://lkft.linaro.org
+ .../devicetree/bindings/net/qcom,ipqess.yaml  |  104 ++
+ MAINTAINERS                                   |    6 +
+ arch/arm/boot/dts/qcom-ipq4019.dtsi           |   46 +
+ drivers/net/ethernet/qualcomm/Kconfig         |   12 +
+ drivers/net/ethernet/qualcomm/Makefile        |    2 +
+ drivers/net/ethernet/qualcomm/ipqess/Makefile |    8 +
+ drivers/net/ethernet/qualcomm/ipqess/ipqess.c | 1296 +++++++++++++++++
+ drivers/net/ethernet/qualcomm/ipqess/ipqess.h |  518 +++++++
+ .../ethernet/qualcomm/ipqess/ipqess_ethtool.c |  168 +++
+ include/linux/dsa/oob.h                       |   17 +
+ include/net/dsa.h                             |    2 +
+ net/dsa/Kconfig                               |    7 +
+ net/dsa/Makefile                              |    1 +
+ net/dsa/tag_oob.c                             |   84 ++
+ 14 files changed, 2271 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/qcom,ipqess.yaml
+ create mode 100644 drivers/net/ethernet/qualcomm/ipqess/Makefile
+ create mode 100644 drivers/net/ethernet/qualcomm/ipqess/ipqess.c
+ create mode 100644 drivers/net/ethernet/qualcomm/ipqess/ipqess.h
+ create mode 100644 drivers/net/ethernet/qualcomm/ipqess/ipqess_ethtool.c
+ create mode 100644 include/linux/dsa/oob.h
+ create mode 100644 net/dsa/tag_oob.c
+
+-- 
+2.36.1
+

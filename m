@@ -2,104 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 736125271FA
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 16:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 186365271E8
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 16:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233298AbiENO2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 10:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46526 "EHLO
+        id S233196AbiENOVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 10:21:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233136AbiENO2q (ORCPT
+        with ESMTP id S233383AbiENOVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 10:28:46 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC84C2BA;
-        Sat, 14 May 2022 07:28:44 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id bd25-20020a05600c1f1900b0039485220e16so6391183wmb.0;
-        Sat, 14 May 2022 07:28:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=OWBF7wNMgBnw/1Dr330eDqqa7w483SgU45I//Zy0x+k=;
-        b=e5MBLV+T41NZUb1/+LitSnC7oXj//fBqt4glWDxiLsveSFRuZeLJ1I66lsUMuOg3VG
-         MxHoqHmf9jp7koSILZmjW0jvecEWlOCslfzSsvgnQ5FFjhg2OgEmcXrw7Buszx9MIU1B
-         L0kP3PEqiEN5U1MAshZ9p8H3oXeiezMyYzsqfk1phILHb6N7/KtrwSVPWyn8JEox7KQX
-         Bol1ixsLlqV57a1aHB+bM3csQVoIy9FGYh0bKB9XGl9o85nxIxCocl1pYZGZKtbpATXz
-         BPwVB9nEY93bxxqMHoGnf+O524ZCGBB9IBkTjS2IhNZFLchfAB97jDXN23g5XBGY9NFB
-         Qjbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OWBF7wNMgBnw/1Dr330eDqqa7w483SgU45I//Zy0x+k=;
-        b=ZUhpgedQbc59R7FsFbNWksonGGL30fnifQ1rZZ4epGq9TJ1GbqtfwxZSjkBMY1f6kK
-         xFSYc5oweiywN7UJJxDEvrgw1s2yY55oIqCEjUdmsMUCEQTCzkwEImNsM8Dp4VJS6kTd
-         FnmwtodPbeeSoOVnG8znqBCKlGHftGeaYXEPkHglrwzsU4Ra4YXFrmc/mqS2Q7flqAUw
-         YXK6PxLd48LpSU8Y3sIQFCBJKABelKokO/NydQgxC1aVzfUjNMtyg/Pgz7zfPwMymtnk
-         +AhOI6cA7gJXzMJdvgdG9SAsYLVpoTjC3bDK4Nl83LnClF7Ot8eyhev1+76Qa5cS+JLm
-         B9sQ==
-X-Gm-Message-State: AOAM532N2b5eHk0nejX1VI/pfah7663vgsdHbJo2W7vUYB7Swg5HcbOQ
-        tbTl+lqsB9UG3Tc5Ff/dHcFLGTtk6MA=
-X-Google-Smtp-Source: ABdhPJyi6VCEDGuTnagRLvPlFe+GPrELZ3QSnQZ+cTcauWlHFR3PTmiy8d9hs6NUz2iK6AUwn1IleA==
-X-Received: by 2002:a05:600c:3595:b0:394:8343:a66d with SMTP id p21-20020a05600c359500b003948343a66dmr19715566wmq.49.1652538523340;
-        Sat, 14 May 2022 07:28:43 -0700 (PDT)
-Received: from debian (host-2-98-37-191.as13285.net. [2.98.37.191])
-        by smtp.gmail.com with ESMTPSA id y15-20020a05600c364f00b003945237fea1sm5400156wmq.0.2022.05.14.07.28.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 May 2022 07:28:43 -0700 (PDT)
-Date:   Sat, 14 May 2022 15:28:41 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 4.19 00/15] 4.19.243-rc1 review
-Message-ID: <Yn+8mTKCtT5+MbJm@debian>
-References: <20220513142227.897535454@linuxfoundation.org>
+        Sat, 14 May 2022 10:21:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0720A1B1;
+        Sat, 14 May 2022 07:21:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8537360F2A;
+        Sat, 14 May 2022 14:21:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8425FC340EE;
+        Sat, 14 May 2022 14:21:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652538067;
+        bh=fBJG7A+XsQUdGt9z4Q/dgnY9axRvsRVkKDu5cKbiVRQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pQqTcVRNOWdlHHOXC+4ME/GCYRzZnE8N7ttD47TT9CnJrMLVmTkjbLeWKpJQfeDhv
+         B2s6QGQXfNzXSAyTatQdpt8RwvlURF0V0iC1OVvNyb6mfs8iQcydgDnUBQeAjQfUFG
+         wRp1M52PJ3Y3DsWNx6TGCG1DposlLQ5GRCfW37nVU+4GUaHW2BoAvfJEle4Z6tLi5M
+         EkaXY4LY3LdzMDOg+ZDkxoilOA2mt8cAc4rljnfawj23clTnGXYhUBuBWSXk1unGLk
+         MUBg0K5zcwc22Hpg7igxdPA0VcDyMnHKMP2BmRVEHuc9RJp0a8cAIXywbAeagz6gSZ
+         vR9sGgUex9UPw==
+Date:   Sat, 14 May 2022 15:29:40 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Markuss Broks <markuss.broks@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Song Qiang <songqiang1304521@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v4 1/5] dt-bindings: proximity: vl53l0x: Document
+ optional supply and GPIO properties
+Message-ID: <20220514152940.1a212c7f@jic23-huawei>
+In-Reply-To: <f5ec4fd9-b9d7-10fa-1c27-2f268466274f@linaro.org>
+References: <20220512191334.61804-1-markuss.broks@gmail.com>
+        <20220512191334.61804-2-markuss.broks@gmail.com>
+        <f5ec4fd9-b9d7-10fa-1c27-2f268466274f@linaro.org>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220513142227.897535454@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Fri, 13 May 2022 10:56:50 +0200
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-On Fri, May 13, 2022 at 04:23:22PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.243 release.
-> There are 15 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> On 12/05/2022 21:13, Markuss Broks wrote:
+> > This patch adds the optional properties for the VL53L0X ToF sensor to the
+> > device-tree binding.
+> > 
+> > Signed-off-by: Markuss Broks <markuss.broks@gmail.com>  
 > 
-> Responses should be made by Sun, 15 May 2022 14:22:19 +0000.
-> Anything received after that time might be too late.
+> Wait, two days and three versions? Please give some time before
+> resending entire patchset.
 
-Build test:
-mips (gcc version 12.1.0): 63 configs -> no  failure
-arm (gcc version 12.1.0): 116 configs -> no new failure
-arm64 (gcc version 12.1.0): 2 configs -> no failure
-x86_64 (gcc version 12.1.0): 4 configs -> no failure
+Yeah, several instances of this on the IIO list this week. Please
+let things sit for at least a few days between versions even if
+the requested changes are fairly minor.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
+> 
+> Same comments apply as for v2 and v3...
+>
+I 'could' fix this up, but given you've not responded to Krzysztof
+I think I'd prefer you send a v5 in the second half of next week or
+later (to give time for other review) with the patch description
+change Krzysztof suggested made.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1137
+Code wise the series looks fine to me.
+
+Jonathan
 
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
---
-Regards
-Sudip
+> 
+> Best regards,
+> Krzysztof
 

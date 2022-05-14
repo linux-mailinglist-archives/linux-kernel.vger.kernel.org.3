@@ -2,83 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45FBF527050
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 11:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2259527053
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 11:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231461AbiENJgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 05:36:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49424 "EHLO
+        id S231548AbiENJhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 05:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbiENJf4 (ORCPT
+        with ESMTP id S231331AbiENJhB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 05:35:56 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA72E90;
-        Sat, 14 May 2022 02:35:55 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id u23so18238652lfc.1;
-        Sat, 14 May 2022 02:35:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=9bON5I8dBLTli09gYDVRZAOvbSHuOcYBnAT6sWpt8v0=;
-        b=KEkFaNttl7V7FEihDHHSSuU636QWKiLfXshYdyn8lq3aLqum/xm8JVHSrRKzlldw+R
-         o1rc5KRqfjJmzpQ2qBSVLqiSS+GqOPBRZbkSQxgxj05gQ9IarKQ9Mxq2ZYXs1+ZWrTcw
-         dpTqeVpKBTEoaV8pGCb4wcDUpMSmZ6lZW99/KANy++8jxAIOZYLhw0it/iS0HyhIpQ++
-         my6QM9lPKl4QjQHj3/w3Kz00KfMnrqFwSd41CqYQR0K5ZUYijiX5hZ4gPjJ7zWu+O1we
-         kxm+cqzQjSAyoqZo43ZzSRa3hQfHN4m1EAsGD7rKtYx3saxCQLXsKlSDnF/MjHuvSEl5
-         u16A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=9bON5I8dBLTli09gYDVRZAOvbSHuOcYBnAT6sWpt8v0=;
-        b=vUSuOUv60FTX3fPNao1p7oqL1DkBRKbcgfm6yiV6+IAH4jEcBTp2JNoulMZjJO64db
-         BqC2AsBXsXMQNasDHXRcus9CgOFkOYdcYQB1DP89+3afZyg4Jr789rXDd9JccalJJz+Z
-         1WNlE0UvbHjOdjuHHFRYxBty9Va4cZXcoU8BrhySHPhBd8ozWJDTrezTfI28mgnfCSUS
-         bSf74qWVGWP9KJaPZbZ19MWQSdaPDOgx1fST29FFcSEq5O0HnqGyAC4CsxREZAa4NxPt
-         eV889Ma7JnLaapQWtszF94zj3vSkJ3W8/Rb8Gc4MvEHNwpUUzSYIpCixO2LNjLzSy9kH
-         +VXA==
-X-Gm-Message-State: AOAM533UfHL9cM+P3oWmcxmUzl9c3JqJzaCRaPyviUFsGhXZtnM/u1DJ
-        4GTIYEM7EfflVfxxhir1f5znSLfIvbvzpw==
-X-Google-Smtp-Source: ABdhPJzu4j4jzb+I5ffVkHkC1IPaeSod8S923nLoNM+nFx0WOGl7Zp1ZdW9e7Xi3pO/Vc2LsRQ9uNg==
-X-Received: by 2002:ac2:48a4:0:b0:471:fc7f:b54d with SMTP id u4-20020ac248a4000000b00471fc7fb54dmr6376200lfg.538.1652520953758;
-        Sat, 14 May 2022 02:35:53 -0700 (PDT)
-Received: from [192.168.1.103] ([31.173.80.11])
-        by smtp.gmail.com with ESMTPSA id d7-20020a05651221c700b0047255d210f0sm660466lft.31.2022.05.14.02.35.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 May 2022 02:35:52 -0700 (PDT)
-Subject: Re: [PATCH 3/3] ARM: dts: lan966x: Add UDPHS support
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20220513105850.310375-1-herve.codina@bootlin.com>
- <20220513105850.310375-4-herve.codina@bootlin.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <4436479e-c0ef-4962-7ad3-2b8b80e1643a@gmail.com>
-Date:   Sat, 14 May 2022 12:35:51 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Sat, 14 May 2022 05:37:01 -0400
+Received: from out199-17.us.a.mail.aliyun.com (out199-17.us.a.mail.aliyun.com [47.90.199.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6C61B8;
+        Sat, 14 May 2022 02:36:58 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R751e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=guangguan.wang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VD6nEFN_1652521014;
+Received: from 30.15.218.194(mailfrom:guangguan.wang@linux.alibaba.com fp:SMTPD_---0VD6nEFN_1652521014)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sat, 14 May 2022 17:36:55 +0800
+Message-ID: <8a2be07b-acf6-1148-e299-8196c18cfeed@linux.alibaba.com>
+Date:   Sat, 14 May 2022 17:36:53 +0800
 MIME-Version: 1.0
-In-Reply-To: <20220513105850.310375-4-herve.codina@bootlin.com>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.1
+Subject: Re: [PATCH net-next 1/2] net/smc: send cdc msg inline if qp has
+ sufficient inline space
 Content-Language: en-US
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     kgraul@linux.ibm.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-s390@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220513071551.22065-1-guangguan.wang@linux.alibaba.com>
+ <20220513071551.22065-2-guangguan.wang@linux.alibaba.com>
+ <Yn9GB3QwHiY/vtdc@unreal>
+From:   Guangguan Wang <guangguan.wang@linux.alibaba.com>
+In-Reply-To: <Yn9GB3QwHiY/vtdc@unreal>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,35 +48,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
 
-On 5/13/22 1:58 PM, Herve Codina wrote:
 
-> Add UDPHS (the USB High Speed Device Port controller) support.
-> The UDPHS IP present in the lan966x SOC is the same as the one
-> present in the SAMA5D3 SOC
+On 2022/5/14 14:02, Leon Romanovsky wrote:
+>> diff --git a/net/smc/smc_wr.c b/net/smc/smc_wr.c
+>> index 24be1d03fef9..8a2f9a561197 100644
+>> --- a/net/smc/smc_wr.c
+>> +++ b/net/smc/smc_wr.c
+>> @@ -554,10 +554,11 @@ void smc_wr_remember_qp_attr(struct smc_link *lnk)
+>>  static void smc_wr_init_sge(struct smc_link *lnk)
+>>  {
+>>  	int sges_per_buf = (lnk->lgr->smc_version == SMC_V2) ? 2 : 1;
+>> +	bool send_inline = (lnk->qp_attr.cap.max_inline_data >= SMC_WR_TX_SIZE);
 > 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> ---
->  arch/arm/boot/dts/lan966x.dtsi | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+> When will it be false? You are creating QPs with max_inline_data == SMC_WR_TX_SIZE?
 > 
-> diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
-> index 7d2869648050..4c09f3166d27 100644
-> --- a/arch/arm/boot/dts/lan966x.dtsi
-> +++ b/arch/arm/boot/dts/lan966x.dtsi
-> @@ -211,6 +211,17 @@ can0: can@e081c000 {
->  			status = "disabled";
->  		};
->  
-> +		udc: udphs@e0808000 {
+>>  	u32 i;
+>>  
+>>  	for (i = 0; i < lnk->wr_tx_cnt; i++) {
+>> -		lnk->wr_tx_sges[i].addr =
+>> +		lnk->wr_tx_sges[i].addr = send_inline ? (u64)(&lnk->wr_tx_bufs[i]) :
+>>  			lnk->wr_tx_dma_addr + i * SMC_WR_BUF_SIZE;
+>>  		lnk->wr_tx_sges[i].length = SMC_WR_TX_SIZE;
+>>  		lnk->wr_tx_sges[i].lkey = lnk->roce_pd->local_dma_lkey;
+>> @@ -575,6 +576,8 @@ static void smc_wr_init_sge(struct smc_link *lnk)
+>>  		lnk->wr_tx_ibs[i].opcode = IB_WR_SEND;
+>>  		lnk->wr_tx_ibs[i].send_flags =
+>>  			IB_SEND_SIGNALED | IB_SEND_SOLICITED;
+>> +		if (send_inline)
+>> +			lnk->wr_tx_ibs[i].send_flags |= IB_SEND_INLINE;
+> 
+> If you try to transfer data == SMC_WR_TX_SIZE, you will get -ENOMEM error.
+> IB drivers check that length < qp->max_inline_data.
+> 
+> Thanks
+> 
 
-   Shouldn't it be:
+Got it. 
 
-		udphs: udc@e0808000 {
+I should create qps with max_inline_data == 0, and get the actual max_inline_data by query_qp.
+And I should use lnk->qp_attr.cap.max_inline_data > SMC_WR_TX_SIZE to decide whether to send inline or not.
 
-(as the node names should be generic)?
+Thank you.
 
-[...]
 
-MBR, Sergey

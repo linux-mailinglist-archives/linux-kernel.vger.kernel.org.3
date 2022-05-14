@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB79527031
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 10:59:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5FE527030
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 10:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbiENI7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 04:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34892 "EHLO
+        id S231169AbiENI5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 04:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbiENI7a (ORCPT
+        with ESMTP id S231134AbiENI5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 04:59:30 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6408424BF
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 01:59:28 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L0fWl6xgqzGpgT;
-        Sat, 14 May 2022 16:56:35 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+        Sat, 14 May 2022 04:57:08 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662443FDB1;
+        Sat, 14 May 2022 01:57:06 -0700 (PDT)
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L0fWj2gPhzgYhd;
+        Sat, 14 May 2022 16:56:33 +0800 (CST)
+Received: from container.huawei.com (10.175.104.82) by
+ canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 14 May 2022 16:59:27 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 14 May
- 2022 16:59:26 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <alsa-devel@alsa-project.org>
-CC:     <lgirdwood@gmail.com>, <broonie@kernel.org>
-Subject: [PATCH -next] ASoC: wm2000: fix missing clk_disable_unprepare() on error in wm2000_anc_transition()
-Date:   Sat, 14 May 2022 17:10:53 +0800
-Message-ID: <20220514091053.686416-1-yangyingliang@huawei.com>
+ 15.1.2375.24; Sat, 14 May 2022 16:57:04 +0800
+From:   Ziyang Xuan <william.xuanziyang@huawei.com>
+To:     <chandrashekar.devegowda@intel.com>, <linuxwwan@intel.com>,
+        <chiranjeevi.rapolu@linux.intel.com>, <haijun.liu@mediatek.com>,
+        <m.chetan.kumar@linux.intel.com>,
+        <ricardo.martinez@linux.intel.com>, <loic.poulain@linaro.org>,
+        <ryazanov.s.a@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>
+Subject: [PATCH net-next] net: wwan: t7xx: fix GFP_KERNEL usage in spin_lock context
+Date:   Sat, 14 May 2022 17:14:43 +0800
+Message-ID: <20220514091443.4150162-1-william.xuanziyang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500007.china.huawei.com (7.185.36.183)
+X-Originating-IP: [10.175.104.82]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500006.china.huawei.com (7.192.105.130)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -49,44 +51,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the missing clk_disable_unprepare() before return
-from wm2000_anc_transition() in the error handling case.
+t7xx_cldma_clear_rxq() call t7xx_cldma_alloc_and_map_skb() in spin_lock
+context, But __dev_alloc_skb() in t7xx_cldma_alloc_and_map_skb() uses
+GFP_KERNEL, that will introduce scheduling factor in spin_lock context.
 
-Fixes: 514cfd6dd725 ("ASoC: wm2000: Integrate with clock API")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Replace GFP_KERNEL with GFP_ATOMIC to fix it.
+
+Fixes: 39d439047f1d ("net: wwan: t7xx: Add control DMA interface")
+Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
 ---
- sound/soc/codecs/wm2000.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/wwan/t7xx/t7xx_hif_cldma.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/wm2000.c b/sound/soc/codecs/wm2000.c
-index 72e165cc6443..97ece3114b3d 100644
---- a/sound/soc/codecs/wm2000.c
-+++ b/sound/soc/codecs/wm2000.c
-@@ -536,7 +536,7 @@ static int wm2000_anc_transition(struct wm2000_priv *wm2000,
+diff --git a/drivers/net/wwan/t7xx/t7xx_hif_cldma.c b/drivers/net/wwan/t7xx/t7xx_hif_cldma.c
+index 46066dcd2607..54c34639f1a5 100644
+--- a/drivers/net/wwan/t7xx/t7xx_hif_cldma.c
++++ b/drivers/net/wwan/t7xx/t7xx_hif_cldma.c
+@@ -93,7 +93,7 @@ static void t7xx_cldma_gpd_set_next_ptr(struct cldma_gpd *gpd, dma_addr_t next_p
+ static int t7xx_cldma_alloc_and_map_skb(struct cldma_ctrl *md_ctrl, struct cldma_request *req,
+ 					size_t size)
  {
- 	struct i2c_client *i2c = wm2000->i2c;
- 	int i, j;
--	int ret;
-+	int ret = 0;
+-	req->skb = __dev_alloc_skb(size, GFP_KERNEL);
++	req->skb = __dev_alloc_skb(size, GFP_ATOMIC);
+ 	if (!req->skb)
+ 		return -ENOMEM;
  
- 	if (wm2000->anc_mode == mode)
- 		return 0;
-@@ -566,13 +566,13 @@ static int wm2000_anc_transition(struct wm2000_priv *wm2000,
- 		ret = anc_transitions[i].step[j](i2c,
- 						 anc_transitions[i].analogue);
- 		if (ret != 0)
--			return ret;
-+			break;
- 	}
- 
- 	if (anc_transitions[i].dest == ANC_OFF)
- 		clk_disable_unprepare(wm2000->mclk);
- 
--	return 0;
-+	return ret;
- }
- 
- static int wm2000_anc_set_mode(struct wm2000_priv *wm2000)
 -- 
 2.25.1
 

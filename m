@@ -2,52 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 390275270D7
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 13:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E54AE5270D9
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 13:41:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231950AbiENLkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 07:40:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37960 "EHLO
+        id S231970AbiENLll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 07:41:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231640AbiENLkO (ORCPT
+        with ESMTP id S232178AbiENLlg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 07:40:14 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11FEF13D50
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 04:40:12 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id q12-20020a0566022f0c00b0065af7776ee7so6623438iow.17
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 04:40:12 -0700 (PDT)
+        Sat, 14 May 2022 07:41:36 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F162870B
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 04:41:34 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id j84so8656470ybc.3
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 04:41:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=EHv05KE27l43NQcjrxgJ54w04GGkyw/BUuX/axpIOeY=;
+        b=WaF8eWEYqU/YlLHAL2wcgO/2Q7bylXcdzC9VcyXq+uqekDHlIniUbvheruczDZi427
+         sgaWijwlTKCyqMCs8Mol4aIdh4aD1zf4k5DXaX0JjOb4J4QFQFq1jt5WRO7FMZwJ/rj3
+         Zm2vLrJT2CTzFo8LsaxYcP3mPu3XQ1ixOVhpvlOYcctdbkiI0a6rrOSN4we+aozN05kD
+         BAEH+sIEtXz3I/PxD/0c+np+tdGKPX69Adzoz+s4jPAhQRMB1Jw4n9VfVHVeneoOxEa3
+         Zq5rbTtTozvZYpMOqgp9jA94epg2lNhSGNg/UILJjTcYkLVOAFj2dkDe/Q0I1F6aIcsL
+         2L1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=tyXZJZh4UYHJVfVmZGxNnSbUIJkAshWJ1F9kA8aW0M0=;
-        b=kuEvzFLN68IFGEBhbpShx/QyhSdrtllUECpSPeFLPyYyKZjSl8GcAD0cKpF518Tg+S
-         Poz95MIjwanm0ZZ0ksBVra5yVybWRD+hOTh1ed1ITZnmNG5lifdXV0hSy3B4IDFIBkUx
-         N+BmA8o1CJL0WMA39tL3HsWUHHrlyAo/WDRw6tTFJ6UKyUP9zYk29v14H59ozVRrxzRd
-         EShUs42FBkzRpEY+x7N4sl1FxkZWjo4XpElGrOmGyDS4usqsnRCCvBo0s0LRQ5/sUhik
-         xZrBBUQHCf//5OZEboyFbCPYs4zLVyTNGhYJuVpRsLrDQd5biGovf0TbI/7rFeAprJnl
-         fKIg==
-X-Gm-Message-State: AOAM530b7PF3+c+kSjxOOyItDGcoVxpQ/m1avUyCo0d3k9YTNLQH6MEf
-        Bh43kW3Ok10RhK1ulSykAHzTFyoeRwlz/0iwzInAfQnTXy/D
-X-Google-Smtp-Source: ABdhPJyepYGIyDxe2jpilOgVOcUFBD7b6zywiZxgwYO34aUKuiBM3UTMklEb/qjVb/rLVKR+2Iquyfr6xyENZOO/CNgmpHtSwv19
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=EHv05KE27l43NQcjrxgJ54w04GGkyw/BUuX/axpIOeY=;
+        b=AIt89tlJEcP1STFN/icxjt95PRufBVoPp9OqZZWKTMYyI2iLDOc00bv7HQsEC7qCfk
+         iG4Q6i2UIb00DiLVJst35SkQCh9cc5MraqKeQs27QJbkutndyyBxH9frGAaFtPAJys00
+         lUB44WgYxfapRLSkjw6u9ekKaWmFP3PrCL9rnL49RXKiY3O7uW1jjA1Uzvio6o1qAx0l
+         9A/s8VRm+ED8PT+0DVxs2oczvOakoBYM/e7drFTqW7UUVHAgSQKPMRBmM4bI7FFx3Tpi
+         6EA6gSR12ApZbxS1qd2F4Zi7qkvQ7XnChO5yKPUQnTqJwLvbo9ofCYZvVNUDCTyVSYkb
+         ak8g==
+X-Gm-Message-State: AOAM533o1yLCgyREcdDnt8xG3Ysg/a2GrpKQbPvRhOO4eLY7UPLF+n7P
+        kTKCe/H8kLI2tY0HhvYGqLBtLpZ2vj5Z9CSKsqLCDA==
+X-Google-Smtp-Source: ABdhPJx5wtMC+gCyqidE4aFSQaBJiqoHajbJbiQvZu51DxrgpGiFWmDQhS2fbLjqwYZ/p5DZRs27kgykWMj8/EnGaUY=
+X-Received: by 2002:a25:ab72:0:b0:64b:9be4:d8b9 with SMTP id
+ u105-20020a25ab72000000b0064b9be4d8b9mr6326612ybi.128.1652528493979; Sat, 14
+ May 2022 04:41:33 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:3d2:b0:65d:c151:f29f with SMTP id
- g18-20020a05660203d200b0065dc151f29fmr4231052iov.28.1652528411979; Sat, 14
- May 2022 04:40:11 -0700 (PDT)
-Date:   Sat, 14 May 2022 04:40:11 -0700
-In-Reply-To: <20220514110016.1193-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fa340405def74011@google.com>
-Subject: Re: [syzbot] INFO: task hung in hci_dev_do_open (2)
-From:   syzbot <syzbot+e68a3899a8927b14f863@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+References: <20220513142229.874949670@linuxfoundation.org>
+In-Reply-To: <20220513142229.874949670@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 14 May 2022 17:11:22 +0530
+Message-ID: <CA+G9fYtXiDq9Q7scTdNRHazo0vKy8BRGF5Qg58Dz3=N6w=cJsQ@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/21] 5.15.40-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,19 +71,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, 13 May 2022 at 19:58, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.40 release.
+> There are 21 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 15 May 2022 14:22:19 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.40-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Reported-and-tested-by: syzbot+e68a3899a8927b14f863@syzkaller.appspotmail.com
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Tested on:
+## Build
+* kernel: 5.15.40-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: 13b089c28632ad5a051bdbb1951ee189f96b01fd
+* git describe: v5.15.39-22-g13b089c28632
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.39-22-g13b089c28632
 
-commit:         38a288f5 Add linux-next specific files for 20220506
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6f4fbf50aa82985b
-dashboard link: https://syzkaller.appspot.com/bug?extid=e68a3899a8927b14f863
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=10eefe69f00000
+## Test Regressions (compared to v5.15.38-136-g60041d098524)
+No test regressions found.
 
-Note: testing is done by a robot and is best-effort only.
+## Metric Regressions (compared to v5.15.38-136-g60041d098524)
+No metric regressions found.
+
+## Test Fixes (compared to v5.15.38-136-g60041d098524)
+No test fixes found.
+
+## Metric Fixes (compared to v5.15.38-136-g60041d098524)
+No metric fixes found.
+
+## Test result summary
+total: 110223, pass: 92720, fail: 1126, skip: 15100, xfail: 1277
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 296 total, 293 passed, 3 failed
+* arm64: 47 total, 47 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 45 total, 41 passed, 4 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 41 total, 38 passed, 3 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 59 total, 56 passed, 3 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 26 total, 23 passed, 3 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 47 total, 47 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

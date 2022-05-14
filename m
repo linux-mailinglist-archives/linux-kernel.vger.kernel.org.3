@@ -2,183 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 799E9527000
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 10:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC3E2527004
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 10:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiENI0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 04:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54128 "EHLO
+        id S230107AbiENIb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 04:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbiENI02 (ORCPT
+        with ESMTP id S229678AbiENIbR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 04:26:28 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6749A
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 01:26:26 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id m1so14076651wrb.8
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 01:26:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fGSNjX7FWQgS0zAf5uzD98exN773UqLJMyTQST6/uq8=;
-        b=kr+ZoQoZymx9R0c+QUc/iRMK7yM5RJMiYBaDp29vkbzqN7JsQvW7P8dRIHD0OC0Sgb
-         9h/gegiLUJbI2vnd3FLgX/zT8QIDEDZvJUA5QItCnKwonX2DhnCre7aNN6WHzCDzmyt9
-         I43ecBElIP+jlg58xhiDXPtcOBYbhytGBFnZvjsNIMRdASSJKRAZTUQGh0isW83j8WGg
-         Sgo3kHAinNsrc10w18UGp+2+V3MWOlL6bdQIvB21UOUXeuHPZi5B9FJke2Ga09IJAWOf
-         idRiJm/YgtYOTc9+JCdRb0RTl+6EiIAhcysqwgchztbk2NwBxnCWA8lFPS2WLVfqKrqn
-         2JqA==
+        Sat, 14 May 2022 04:31:17 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9438CC
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 01:31:15 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id 204-20020a6b01d5000000b00657bb7a0f33so6364664iob.4
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 01:31:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fGSNjX7FWQgS0zAf5uzD98exN773UqLJMyTQST6/uq8=;
-        b=UFPACYg7fjHSeRPmGFPbUF8nQw+i+1ygQFqrTOiLNPKmdgreK40daZB6Q2siDJ9wby
-         p9nEKWwkWTHSuMjAaOMMLyV/giGraMTJKrqvApz57e03s7n4UBw0xDdCIkj9OGg8E/SO
-         ufkIgUwTIsVlKjZcd7vuH5eELzKlv/PwObyM2nmE968kkFTBzZ0AyX9ba77fVPANKdM4
-         kmFeadab8g2/MwX/P6X/c7b+cGz7nwRTb94IsDFYCg4TQOs6eY27xEKP3IrnAeE65qFO
-         xWtczhclSpM4nz26btHmUDjGgJUs5/6hxEoWO2mE4ns9L+/uvLMi7EVOBQhY6mikptiV
-         sriw==
-X-Gm-Message-State: AOAM532X3h1ZBNlaBqB8B91dihtGIyMk+iSx0Pc6TnE0MCAYm2Bu7p/R
-        jHUcnCKdYljrwI3S0TsNo2tp06SRFSZLXy9AebeSPw==
-X-Google-Smtp-Source: ABdhPJxd2yAOrMDx1kyKIycTBHNDuUPoF3izxQpqfG9Ebu0UFmB15wKbKgzL/O8DbbD6u5O1U1bgna6lzZ1eJnpLVQs=
-X-Received: by 2002:a5d:6651:0:b0:20a:df2f:8027 with SMTP id
- f17-20020a5d6651000000b0020adf2f8027mr6968835wrw.269.1652516785016; Sat, 14
- May 2022 01:26:25 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=9tCWadOds5KZeg4EUVh7CiiBHbT7pxbsfGGetlf/ZqY=;
+        b=4u8sOp1WgcxU65CFLYSsf613cOOoOEtmTHf50IXrvCpVGGm6iq4x1WuJEUFBVKLjjI
+         x471KwOgX0XtpzNyoALfEuRklGOdQjqZbr0VmHQ37jc8Hs9owszmiAyxkYoMvOgswfq5
+         IEvUzUazb82vQjroFvwkSCArOhqyCgiln0VOzQQ88ADzxNUV+Q014L5xJ1I6bqrvHvR/
+         WXsvHf1B+o0Zn4s6ApEBW2nCS0AenkPjUUtlprvORh0cCuxz9iTo6vf6g0WimCX6m4uO
+         y6zcysO9PEmwFAtrAlDUJWFAh9cg3PoxGcqDOhVqpp+vbFO8c8K4IX9z4s7JAHXVnEmE
+         i1VA==
+X-Gm-Message-State: AOAM531JhWhlEO2igF6FukprangFe8nbk6lLKbWf/YUUBvIcgZWC/jRy
+        Ls0jV5hD1mtJxU2y1uPSeWV03CDCMviFNLM3CZiV7cqYhoAv
+X-Google-Smtp-Source: ABdhPJzFKpV8Ssv4TAXsI1xGTFjAFnzyJ1OX5VXxbDuK0OyxCu3ytYHKPGEGLJIEXp7m6beIIKSNSA+UL0XXdOcUoKNX/oiiHQou
 MIME-Version: 1.0
-References: <bc6e9ed7-d98b-c4da-2a59-ee0915c18f10@gmail.com>
- <5ca35c47-6145-4ec1-6c05-3c46f436cb4d@gmail.com> <CAGS_qxpE9qGsS1LqaobVGFKFgV6TwvwNLR4e9PG5zsfPACSf_Q@mail.gmail.com>
- <5b2783a2-76bf-ce6f-89b1-d0fe05b80b82@gmail.com>
-In-Reply-To: <5b2783a2-76bf-ce6f-89b1-d0fe05b80b82@gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 14 May 2022 16:26:13 +0800
-Message-ID: <CABVgOS=XcaheGrJ+n2DPUuE=MrJwDn5UWYcdQmfhZfHx2MDazg@mail.gmail.com>
-Subject: Re: [RFC] KTAP spec v2: prefix to KTAP data
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        "Bird, Tim" <Tim.Bird@sony.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Jonathan Corbet <corbet@lwn.net>, Rae Moar <rmr167@gmail.com>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        kernelci@groups.io, KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Received: by 2002:a05:6e02:1d87:b0:2cf:16dd:6210 with SMTP id
+ h7-20020a056e021d8700b002cf16dd6210mr4595846ila.60.1652517075158; Sat, 14 May
+ 2022 01:31:15 -0700 (PDT)
+Date:   Sat, 14 May 2022 01:31:15 -0700
+In-Reply-To: <20220514081824.1035-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000400c6305def49d7f@google.com>
+Subject: Re: [syzbot] INFO: task hung in hci_dev_do_open (2)
+From:   syzbot <syzbot+e68a3899a8927b14f863@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 1:26 AM Frank Rowand <frowand.list@gmail.com> wrote:
->
-> On 5/12/22 10:25, Daniel Latypov wrote:
-> > On Wed, May 11, 2022 at 11:01 PM Frank Rowand <frowand.list@gmail.com> wrote:
-> >> ================================================================================
-> >> #### discussion notes:
-> >>
-> >> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-> >> PRO: minimally invasive to specification.
-> >>
-> >> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-> >> CON:
-> >>
-> >> KTAP does not include any mechanism to describe the value of <prefix string>
-> >> to test harnesses and test output processing programs.  The test output
-> >> processing programs must infer the value of <prefix string> by detecting
-> >> the <prefix string> in the "Version lines".
-> >>
-> >> The detection of a "Version lines" might be a match of the regex:
-> >>
-> >>    "^.*KTAP version 2$"
-> >>
-> >> This risks falsely detecting a "Version lines", but the risk is small???
-> >
-> > Agree this is a risk and also think it's probably small, but it's hard to say.
-> > I think the $ anchoring the regex is probably safe enough.
-> >
-> > As noted earlier, this tracks with what kunit.py already does.
-> > That was necessitated by dynamic prefixes such as timestamps, etc.f
->
-> That is a good observation.  I nearly always have the prefix timestamp
-> on my console output, and thus remove the timestamp with a regex when
-> processing the data.
->
+Hello,
 
-Yeah: the use of a prefix length for timestamps (and similar 'dynamic
-prefixes') works really well as a way to automatically find KTAP
-output in the kernel log.
-It's definitely less useful as a way of disambiguating several
-(potentially interleaved) KTAP streams, though.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+KASAN: use-after-free Read in hci_cmd_timeout
 
-Personally, my conception of KTAP is that the prefix is not a part of
-the format, but a way (possibly one we should recommend in the spec)
-to isolate KTAP output from (e.g.) the kernel log.
-So, in theory, the processing pipeline for log -> result is:
-[dmesg] ---<remove prefix>--> [KTAP] ---<parse>---> [results]
+==================================================================
+BUG: KASAN: use-after-free in hci_cmd_timeout+0x24b/0x250 net/bluetooth/hci_core.c:1475
+Read of size 2 at addr ffff88807933d408 by task kworker/1:3/145
 
-I wouldn't object to having the prefix be a part of KTAP if it were
-particularly useful to anyone, though, and definitely agree we should
-note ways to do it.
+CPU: 1 PID: 145 Comm: kworker/1:3 Not tainted 5.18.0-rc5-next-20220506-syzkaller-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events hci_cmd_timeout
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
+ print_report mm/kasan/report.c:429 [inline]
+ kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+ hci_cmd_timeout+0x24b/0x250 net/bluetooth/hci_core.c:1475
+ process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+ </TASK>
 
-Either way, we do end up with two (slightly conflicting) uses of prefixes:
-a) To isolate tests from a log.
-b) To allow multiple concurrent tests.
+Allocated by task 3681:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:436 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:515 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:474 [inline]
+ __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:524
+ kmalloc include/linux/slab.h:600 [inline]
+ kzalloc include/linux/slab.h:733 [inline]
+ fib6_info_alloc+0xc1/0x210 net/ipv6/ip6_fib.c:156
+ ip6_route_net_init+0x75/0x8c0 net/ipv6/route.c:6465
+ ops_init+0xaf/0x470 net/core/net_namespace.c:134
+ setup_net+0x5d1/0xc50 net/core/net_namespace.c:325
+ copy_net_ns+0x318/0x760 net/core/net_namespace.c:471
+ create_new_namespaces+0x3f6/0xb20 kernel/nsproxy.c:110
+ unshare_nsproxy_namespaces+0xc1/0x1f0 kernel/nsproxy.c:226
+ ksys_unshare+0x445/0x920 kernel/fork.c:3137
+ __do_sys_unshare kernel/fork.c:3208 [inline]
+ __se_sys_unshare kernel/fork.c:3206 [inline]
+ __x64_sys_unshare+0x2d/0x40 kernel/fork.c:3206
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-For a), Alternative 1 seems obviously correct to me, since whatever
-module is being used might not know what random prefixes are being
-added to its log lines.
-For b), either would work, but we do potentially get conflicts with a)
-if we're trying to do both. So maybe alternative 2 makes sense for
-that.
+Freed by task 48:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:366 [inline]
+ ____kasan_slab_free+0x166/0x1a0 mm/kasan/common.c:328
+ kasan_slab_free include/linux/kasan.h:200 [inline]
+ slab_free_hook mm/slub.c:1727 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1753
+ slab_free mm/slub.c:3507 [inline]
+ kfree+0xd6/0x4d0 mm/slub.c:4555
+ skb_free_head+0xac/0x110 net/core/skbuff.c:654
+ skb_release_data+0x67a/0x810 net/core/skbuff.c:676
+ skb_release_all net/core/skbuff.c:741 [inline]
+ __kfree_skb net/core/skbuff.c:755 [inline]
+ kfree_skb_reason.part.0+0xc3/0x2f0 net/core/skbuff.c:775
+ kfree_skb_reason+0x85/0x110 include/linux/refcount.h:279
+ kfree_skb include/linux/skbuff.h:1275 [inline]
+ hci_dev_open_sync+0xb8c/0x2160 net/bluetooth/hci_sync.c:4053
+ hci_dev_do_open+0x32/0x70 net/bluetooth/hci_core.c:482
+ hci_power_on+0x133/0x630 net/bluetooth/hci_core.c:964
+ process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
 
->
-> > So I think this is probably a fine risk to take.
-> >
-> > I imagine we could add constraints of prefix string, e.g. must have []
-> > around it, etc. if we want to try and minimize this risk.
-> > But I don't know if it's necessarily worth it, given what we know right now.
-> >
-> > Along those lines, I think I like this approach (Alternative 1) more
-> > than Alternative 2/2b.
+The buggy address belongs to the object at ffff88807933d400
+ which belongs to the cache kmalloc-512 of size 512
+The buggy address is located 8 bytes inside of
+ 512-byte region [ffff88807933d400, ffff88807933d600)
 
-I agree, though note that we might need both if we want two separate
-types of prefix as mentioned above.
+The buggy address belongs to the physical page:
+page:ffffea0001e4cf00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7933c
+head:ffffea0001e4cf00 order:2 compound_mapcount:0 compound_pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 ffffea00006b4900 dead000000000002 ffff888010c41c80
+raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 2, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 3049, tgid 3049 (udevadm), ts 15378275467, free_ts 12707670800
+ prep_new_page mm/page_alloc.c:2431 [inline]
+ get_page_from_freelist+0xba2/0x3e00 mm/page_alloc.c:4172
+ __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5393
+ alloc_pages+0x1aa/0x310 mm/mempolicy.c:2272
+ alloc_slab_page mm/slub.c:1797 [inline]
+ allocate_slab+0x26c/0x3c0 mm/slub.c:1942
+ new_slab mm/slub.c:2002 [inline]
+ ___slab_alloc+0x985/0xd90 mm/slub.c:3002
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3089
+ slab_alloc_node mm/slub.c:3180 [inline]
+ __kmalloc_node_track_caller+0x2cb/0x360 mm/slub.c:4950
+ kmalloc_reserve net/core/skbuff.c:353 [inline]
+ __alloc_skb+0xde/0x340 net/core/skbuff.c:425
+ alloc_skb include/linux/skbuff.h:1326 [inline]
+ alloc_uevent_skb+0x7b/0x210 lib/kobject_uevent.c:290
+ uevent_net_broadcast_untagged lib/kobject_uevent.c:326 [inline]
+ kobject_uevent_net_broadcast lib/kobject_uevent.c:409 [inline]
+ kobject_uevent_env+0xc42/0x1660 lib/kobject_uevent.c:593
+ kobject_synth_uevent+0x701/0x850 lib/kobject_uevent.c:208
+ uevent_store+0x42/0x90 drivers/base/bus.c:581
+ drv_attr_store+0x6d/0xa0 drivers/base/bus.c:77
+ sysfs_kf_write+0x110/0x160 fs/sysfs/file.c:136
+ kernfs_fop_write_iter+0x3f8/0x610 fs/kernfs/file.c:290
+ call_write_iter include/linux/fs.h:2045 [inline]
+ new_sync_write+0x38a/0x560 fs/read_write.c:504
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1346 [inline]
+ free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1396
+ free_unref_page_prepare mm/page_alloc.c:3318 [inline]
+ free_unref_page+0x19/0x6a0 mm/page_alloc.c:3413
+ free_contig_range+0xb1/0x180 mm/page_alloc.c:9281
+ destroy_args+0xa8/0x646 mm/debug_vm_pgtable.c:1031
+ debug_vm_pgtable+0x2a08/0x2a99 mm/debug_vm_pgtable.c:1354
+ do_one_initcall+0x103/0x650 init/main.c:1301
+ do_initcall_level init/main.c:1376 [inline]
+ do_initcalls init/main.c:1392 [inline]
+ do_basic_setup init/main.c:1411 [inline]
+ kernel_init_freeable+0x6b1/0x73a init/main.c:1618
+ kernel_init+0x1a/0x1d0 init/main.c:1507
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
 
-> > I'm not sure we need a structured way to specify metadata in KTAP yet?
-> > The prefix seems like a reasonable candidate, but do others have ideas
-> > of other bits of metadata we'd want to be able to declare?
-> >
+Memory state around the buggy address:
+ ffff88807933d300: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff88807933d380: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff88807933d400: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                      ^
+ ffff88807933d480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88807933d500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
-That's the important takeaway from Alternative 2: some generic way of
-having metadata could be quite handy. (Of them, Alternative 2b feels a
-little more like a hack than I'd prefer, albeit a clever one. I'd
-prefer a cleaner "configuration info line" personally, though if
-reusing the test results for test 0 makes parsing significantly easier
-for others, it may nevertheless be worth doing.)
 
-As for other pieces of metadata, there are all sorts of useful
-information about the test which could be useful to store alongside
-the results (what tool generated it, kernel version, etc), though
-those might be more useful when saving results elsewhere than embedded
-into the kernel output.
+Tested on:
 
-Equally, if we extended these configuration/info lines to individual
-test/subtests, things like test size, originating module, etc could
-potentially be stored. Suite/test init functions could potentially add
-useful metadata, too (e.g., number of cores/threads for kcsan, etc).
+commit:         38a288f5 Add linux-next specific files for 20220506
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/
+console output: https://syzkaller.appspot.com/x/log.txt?x=115e78e6f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6f4fbf50aa82985b
+dashboard link: https://syzkaller.appspot.com/bug?extid=e68a3899a8927b14f863
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=165e78e6f00000
 
-None of those are, I think, quite compelling enough individually to
-add a config system, though. If we already had one for the prefix, and
-other things which are necessary for parsing, maybe...
-
--- David

@@ -2,92 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FCC3526F26
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A576F526EFC
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 May 2022 09:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232025AbiENGSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 02:18:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
+        id S232035AbiENGTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 02:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231984AbiENGSc (ORCPT
+        with ESMTP id S230344AbiENGTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 02:18:32 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A912A96
-        for <linux-kernel@vger.kernel.org>; Fri, 13 May 2022 23:18:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652509106; x=1684045106;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EdRQzImy2o4wcEddyVEewQovxY4rx6GTfNfmK/vOC6U=;
-  b=e2AfKAqEtt7/6d8htLc+bYKvsw3z4MfnO5R0svdjaxWig7973jJuMis+
-   IEwo1gtKTAzoPKyQ1RvYxfmMN4U8FJGSnrxIeVzh7IrUk8k6vbBtWVdgP
-   xYFGkWYE2CQlxFssWEenDXWfifjHHHD6b9VmofTVBqIGmyBvZvnrnibVZ
-   aaIBLLllhi/eXISkLzMPmbW5DxqDNrCs1P9zIHmSlWRzgOrIzJsl8T41r
-   omTCNQfe3lkwFzPZDYFe1KLQP1EYja60Whkq87Jk3S5o27kQgkYWmO0Yy
-   GRk6quPeNboRJgbNMe5b7ScAW7UmTqYzvU3qkbygQWx6tAIAsZxY3/o3j
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="252527535"
-X-IronPort-AV: E=Sophos;i="5.91,225,1647327600"; 
-   d="scan'208";a="252527535"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 23:18:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,225,1647327600"; 
-   d="scan'208";a="740472885"
-Received: from lkp-server01.sh.intel.com (HELO d1462bc4b09b) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 13 May 2022 23:18:22 -0700
-Received: from kbuild by d1462bc4b09b with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1npl6b-0000Hl-6i;
-        Sat, 14 May 2022 06:18:21 +0000
-Date:   Sat, 14 May 2022 14:17:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [nsaenz-rpi:ct-work-defer-wip 23/25] alternative.c:undefined
- reference to `context_tracking_set_cpu_work'
-Message-ID: <202205141428.JPESIxLb-lkp@intel.com>
+        Sat, 14 May 2022 02:19:36 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9BCC5B;
+        Fri, 13 May 2022 23:19:33 -0700 (PDT)
+Received: from kwepemi500003.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L0b1v38tHzgYW7;
+        Sat, 14 May 2022 14:18:59 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ kwepemi500003.china.huawei.com (7.221.188.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 14 May 2022 14:19:30 +0800
+Received: from [10.174.178.208] (10.174.178.208) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 14 May 2022 14:19:29 +0800
+Subject: Re: [PATCH 4.19 00/15] 4.19.243-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <stable@vger.kernel.org>, <torvalds@linux-foundation.org>,
+        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
+        <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <slade@sladewatkins.com>
+References: <20220513142227.897535454@linuxfoundation.org>
+From:   Samuel Zou <zou_wei@huawei.com>
+Message-ID: <b1c26f4a-8c2d-fe08-1d13-b635680a179c@huawei.com>
+Date:   Sat, 14 May 2022 14:19:29 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220513142227.897535454@linuxfoundation.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.208]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git ct-work-defer-wip
-head:   ed63029652239a6befad96dd473b16332913f889
-commit: d79e9aa1c1e3f664fff9d4e83500d7884777cad9 [23/25] context_tracking,x86: Fix text_poke_sync() vs NOHZ_FULL
-config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220514/202205141428.JPESIxLb-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git/commit/?id=d79e9aa1c1e3f664fff9d4e83500d7884777cad9
-        git remote add nsaenz-rpi https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git
-        git fetch --no-tags nsaenz-rpi ct-work-defer-wip
-        git checkout d79e9aa1c1e3f664fff9d4e83500d7884777cad9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+On 2022/5/13 22:23, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.243 release.
+> There are 15 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 15 May 2022 14:22:19 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.243-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-   vmlinux.o: warning: objtool: enter_from_user_mode+0x18: call to __kcsan_check_access() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x1d: call to __kcsan_check_access() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x18: call to __kcsan_check_access() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x18: call to __kcsan_check_access() leaves .noinstr.text section
-   ld: arch/x86/kernel/alternative.o: in function `do_sync_core_cond':
->> alternative.c:(.text+0x68e): undefined reference to `context_tracking_set_cpu_work'
+Tested on arm64 and x86 for 4.19.243-rc1,
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Kernel repo:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+Branch: linux-4.19.y
+Version: 4.19.243-rc1
+Commit: a96b764d90b5b33d8b7817d4e0da1ea730cc208d
+Compiler: gcc version 7.3.0 (GCC)
+
+arm64:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 8960
+passed: 8960
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+
+x86:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 8960
+passed: 8960
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+
+Tested-by: Hulk Robot <hulkrobot@huawei.com>

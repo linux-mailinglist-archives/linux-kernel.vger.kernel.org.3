@@ -2,100 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2475279A9
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 21:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ECD65279B1
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 22:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbiEOT5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 15:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35798 "EHLO
+        id S238536AbiEOUB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 16:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiEOT46 (ORCPT
+        with ESMTP id S229623AbiEOUBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 15:56:58 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70AE5389C
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 12:56:55 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id h29so22669122lfj.2
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 12:56:55 -0700 (PDT)
+        Sun, 15 May 2022 16:01:24 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C3C108A
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 13:01:22 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id t25so15939133ljd.6
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 13:01:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=O5ZKIc3Cdpl730oRfob2eckmF/zaDsm2h3/TseHDgmkrgBCRAsrnfEgQY0fW8W8cQK
-         4oraOJQaxbvSHr34hMrhtkg6zOx7e+nkBzCD0YEVn5qUsjwXGZjYEF1cv8mgZxvwfITI
-         bKHjlg+r6NCM9jbLzSv2uT/7Z/kZFtD+0nBXhCmlEfvGNDUAJPgunQLpUJ8DoRaAVsx7
-         150yc3oWZrdgfkxbLDUTjSZuGQP5D4ZZN3ruxRVjpSta7FPW8KtdcpCchLpWjFRxiHnB
-         OTGptZmaN2w+jvnxwGrpOR8dpmg7+NnRnVe4IexV4G8xtMY33NoSiVXFXjg6SO/KbsP8
-         c16w==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Gp1BBNbZ42X2QQArBCdHGs3vRj6i0vfmgJdrQAenEi8=;
+        b=KaYlgWABpd6a3tNDr5IgU145YKsThgKBIjyTd4jrNPrzi2nb1bueC3Xy82RlkV9vQ/
+         yOBRpZnEHtedYLPJ05sfQjJWeWLP2iLHEMC+vqAB16psAn+GkZYuoZVNijh+EmbB87oh
+         KKt8qa++8sziMV5BFeFPUcrISPtqGsonKj4ouLj8xshJgmU2jS3aQagGgK/rUyUqBxEI
+         q7mpIexGUZJ+DsYkDYQvkOxvMmvrxCz3LzxViPIoRZRGejSyIW5WH1BiZQGdbI2DRgQL
+         NwgkQI6o3P+lAn0Pm6t5WghxFjGcSiOHcu6uCll+BpgLq2V57kjcXdwyFEAUV09fw1rz
+         nO9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=Lb6/QJm8WfTEQM4jSY3FYFFigmls8EQzosjN1wbj9PcWXhPEZKSH06B/RXZ/qh+VOh
-         VleZEEgk7i+4A+aJZ6L+l1ZF3nQEpNj/c8AlGusmaYCRFYCN0iDw/MjiXWVRflDYfx//
-         WS+bfx0Rr/CjKHlS6tgylGX0SIUb78R9voGPK74qK/zEIMJkHQXxjmPyp8/7jAFjG6cH
-         Ua43bgWLQSLxx3p84Xhn1OfWjktBX2VKUtp2rYgO08Yd2UB1PfM5e4UBqjTS1oFB2Xh6
-         NpVZSD4Rn3dlVnxnVbger/U8Te8ZYSkHrLFmXL4VSd/xTKuZ2GPibYtqkpEszaUpj6hf
-         CoDw==
-X-Gm-Message-State: AOAM531LJZdBz6HlfSY2Y8NgqWgZP6Lesd5FHbW/xeL5kI88IjqDkdUM
-        6QwwSL+q7sXMmqwsAyD52yq+TypYMTJXePwYj6I=
-X-Google-Smtp-Source: ABdhPJxBH4GXAsPzVsmedM1LGIE15mm+bcw+GGeEyGkU2u8FMo6A0GHo0WCqsaMDrPmI1aDRLk164+amt8n04tomMGQ=
-X-Received: by 2002:ac2:4ac9:0:b0:471:f6da:640d with SMTP id
- m9-20020ac24ac9000000b00471f6da640dmr10644380lfp.286.1652644613581; Sun, 15
- May 2022 12:56:53 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Gp1BBNbZ42X2QQArBCdHGs3vRj6i0vfmgJdrQAenEi8=;
+        b=rWmMwM1S77oTu0mcU9LVacdN/1RL3BXzgPflDFigrUFPBX+5nZ7SIcnRfFQYl/znd7
+         urEMGJoNkY85EmFUXQ0gWkY0JAE4hqIbQdRAwMxbxZr8+zVwXyaBoKaLxODSuG30DyGY
+         qI065ztSCt3e8Ve3kb2wT+9og8aV4a50M1LMYd4n5HIbf1z5iuNxGvIiQJOV60pcHEBY
+         lXRrMfOKxLdwczLK9cj93Pegu90/HpsEb0rF6+7CUd46fdFXJgQ3I3iczFbbFESU0iI9
+         Y5hCcRBXcfZk3FW3AdVAnF18LWYv4LCunUJC71Ng+ZlJL5GPWtxdKBJ3UmZWA69GJPCv
+         QeTw==
+X-Gm-Message-State: AOAM531rfB/Dz+6eYsoJwPL+liZVHPuyQMqHzn5mv54HPpLl4w+4VEW6
+        wGdu5JCqEgAaWToRozmvmTg=
+X-Google-Smtp-Source: ABdhPJwOSzSWFgoL3e9QR6GHMUfWEHBZOf7c/bjyfVeBDKmOZCSFVEDUldjICnUZ5ADXEnxg9cHzCw==
+X-Received: by 2002:a05:651c:1077:b0:24f:10fb:5d80 with SMTP id y23-20020a05651c107700b0024f10fb5d80mr9515287ljm.207.1652644880593;
+        Sun, 15 May 2022 13:01:20 -0700 (PDT)
+Received: from localhost ([178.170.168.3])
+        by smtp.gmail.com with ESMTPSA id b18-20020a056512219200b0047255d210f9sm1099424lft.40.2022.05.15.13.01.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 May 2022 13:01:20 -0700 (PDT)
+From:   Maxim Zhukov <crazycdeveloper@gmail.com>
+X-Google-Original-From: Maxim Zhukov <mussitantesmortem@gmail.com>
+To:     chi.minghao@zte.com.cn, varad.gautam@suse.com, arnd@arndb.de
+Cc:     akpm@linux-foundation.org, shakeelb@google.com,
+        vasily.averin@linux.dev, manfred@colorfullife.com, dbueso@suse.de,
+        linux-kernel@vger.kernel.org,
+        Maxim Zhukov <mussitantesmortem@gmail.com>
+Subject: [RFC PATCH 0/1] Fix handling semctl on x86-32 kernels
+Date:   Sun, 15 May 2022 23:01:02 +0300
+Message-Id: <20220515200103.1408370-1-mussitantesmortem@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Received: by 2002:ac2:44da:0:0:0:0:0 with HTTP; Sun, 15 May 2022 12:56:52
- -0700 (PDT)
-Reply-To: dravasmith27@gmail.com
-From:   Dr Ava Smith <raqsacrx@gmail.com>
-Date:   Sun, 15 May 2022 12:56:52 -0700
-Message-ID: <CAP7=Wk6w5O5fgfAk1tCwUxW2OL277jak+UgW7m0iOVYZiLXDAA@mail.gmail.com>
-Subject: GREETINGS FROM DR AVA SMITH
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:129 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4998]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [dravasmith27[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [raqsacrx[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I'm not sure about this patch. Maybe there is a better way to solve this problem:
+all libc sends with cmd IPC_64 flag[1][2][3], but x86-32 kernel does not have compat
+syscall layer to handle correctly semctl command.
+
+[1]: https://elixir.bootlin.com/uclibc-ng/v1.0.40/source/libc/misc/sysvipc/sem.c#L58
+[2]: https://elixir.bootlin.com/musl/v1.2.3/source/src/ipc/semctl.c#L48 -> https://elixir.bootlin.com/musl/v1.2.3/source/src/ipc/ipc.h#L22
+[3]: https://elixir.bootlin.com/glibc/glibc-2.35/source/sysdeps/unix/sysv/linux/semctl.c#L124
+
+Maxim Zhukov (1):
+  ipc, sem: fix backward compatibility with x86-32 kernels
+
+ ipc/sem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
 -- 
-Hello Dear,
-how are you today?hope you are fine
-My name is Dr Ava Smith ,Am an English and French nationalities.
-I will give you pictures and more details about me as soon as i hear from you
-Thanks
-Ava
+2.36.1
+

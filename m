@@ -2,140 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21728527557
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 06:19:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5809F5275CD
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 07:14:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235428AbiEOETF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 00:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48204 "EHLO
+        id S235577AbiEOFMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 01:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235347AbiEOETD (ORCPT
+        with ESMTP id S234060AbiEOFML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 00:19:03 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE4F93BBED;
-        Sat, 14 May 2022 21:19:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1652588340; bh=h/aaa/CG/4OCUxldGkOvQD+b2Y2kPcFZ7UF3xO706k8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=w7DcE2hNI0XM3PjvNd2zAlQo15Db0AxKojSSbvcaBNaPFscsHag2Xzd1TDWELCb+1
-         VELxgqcNQgdjPhy7J3dx/e5Ga2nzchTKgffuAnVMF/jEUIcAXgdZBLktIvDIi+qlAs
-         WTV0llrf7x50ATs1nr2zkiewCyqzrZUnKPAQDUew=
-Received: from [192.168.9.172] (unknown [101.88.28.48])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Sun, 15 May 2022 01:12:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20DE413F9A
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 22:12:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id D3922600B5;
-        Sun, 15 May 2022 12:18:59 +0800 (CST)
-Message-ID: <9dbdcb6d-90bc-e49c-cbdd-44f33b3f2351@xen0n.name>
-Date:   Sun, 15 May 2022 12:18:59 +0800
+        by ams.source.kernel.org (Postfix) with ESMTPS id AACA2B80AF5
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 05:12:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C031EC385B8;
+        Sun, 15 May 2022 05:12:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652591527;
+        bh=7qrCaB40KpTA4LFePIZNR7GNlq1nhQHQleoNK2FIHSs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WsrdjM7cRFsGywpXdiSL3UiQtSKiF3Jj42RyLkwUD7+xomyVlUsgUQ6WRDTvcr5wZ
+         CiIVsIswGZWpxw9kufLDPu1TclvR9w/ww1bvLYpiLzwEhRISL2lTr6kvwqygbtvUPL
+         bRfJ+6+oyCmPeW3llVDXjVCJymGVQ+jbROfYkbgv3QUXhm1aXZGPBm/eMR0K4aq7Yq
+         0aOcYhXAKOdwa7YogjP6UfOgne/+l2IaxfmN/3zFfnN9qQlPTcyMw52DTTD5G76WLC
+         CKEJaZiTuxKRVrgoikZ1boKoOwQWvUshA2A5hBwx9IY68PWXeFOFHsPNsyfm1ltVTt
+         IF20ByfTxb4fg==
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] riscv: add irq stack support
+Date:   Sun, 15 May 2022 13:03:36 +0800
+Message-Id: <20220515050336.1023-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0a1
-Subject: Re: [PATCH V10 04/22] LoongArch: Add writecombine support for drm
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20220514080402.2650181-1-chenhuacai@loongson.cn>
- <20220514080402.2650181-5-chenhuacai@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20220514080402.2650181-5-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Currently, IRQs are still handled on the kernel stack of the current
+task on riscv platforms. If the task has a deep call stack at the time
+of interrupt, and handling the interrupt also requires a deep stack,
+it's possible to see stack overflow.
 
-On 5/14/22 16:03, Huacai Chen wrote:
-> LoongArch maintains cache coherency in hardware, but its WUC attribute
-> (Weak-ordered UnCached, which is similar to WC) is out of the scope of
-> cache coherency machanism. This means WUC can only used for write-only
-> memory regions.
->
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->   drivers/gpu/drm/drm_vm.c         | 2 +-
->   drivers/gpu/drm/ttm/ttm_module.c | 2 +-
->   include/drm/drm_cache.h          | 8 ++++++++
->   3 files changed, 10 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/drm_vm.c b/drivers/gpu/drm/drm_vm.c
-> index e957d4851dc0..f024dc93939e 100644
-> --- a/drivers/gpu/drm/drm_vm.c
-> +++ b/drivers/gpu/drm/drm_vm.c
-> @@ -69,7 +69,7 @@ static pgprot_t drm_io_prot(struct drm_local_map *map,
->   	pgprot_t tmp = vm_get_page_prot(vma->vm_flags);
->   
->   #if defined(__i386__) || defined(__x86_64__) || defined(__powerpc__) || \
-> -    defined(__mips__)
-> +    defined(__mips__) || defined(__loongarch__)
->   	if (map->type == _DRM_REGISTERS && !(map->flags & _DRM_WRITE_COMBINING))
->   		tmp = pgprot_noncached(tmp);
->   	else
-> diff --git a/drivers/gpu/drm/ttm/ttm_module.c b/drivers/gpu/drm/ttm/ttm_module.c
-> index a3ad7c9736ec..b3fffe7b5062 100644
-> --- a/drivers/gpu/drm/ttm/ttm_module.c
-> +++ b/drivers/gpu/drm/ttm/ttm_module.c
-> @@ -74,7 +74,7 @@ pgprot_t ttm_prot_from_caching(enum ttm_caching caching, pgprot_t tmp)
->   #endif /* CONFIG_UML */
->   #endif /* __i386__ || __x86_64__ */
->   #if defined(__ia64__) || defined(__arm__) || defined(__aarch64__) || \
-> -	defined(__powerpc__) || defined(__mips__)
-> +	defined(__powerpc__) || defined(__mips__) || defined(__loongarch__)
->   	if (caching == ttm_write_combined)
->   		tmp = pgprot_writecombine(tmp);
->   	else
-> diff --git a/include/drm/drm_cache.h b/include/drm/drm_cache.h
-> index 22deb216b59c..08e0e3ffad13 100644
-> --- a/include/drm/drm_cache.h
-> +++ b/include/drm/drm_cache.h
-> @@ -67,6 +67,14 @@ static inline bool drm_arch_can_wc_memory(void)
->   	 * optimization entirely for ARM and arm64.
->   	 */
->   	return false;
-> +#elif defined(CONFIG_LOONGARCH)
-> +	/*
-> +	 * LoongArch maintains cache coherency in hardware, but its WUC attribute
-> +	 * (Weak-ordered UnCached, which is similar to WC) is out of the scope of
-> +	 * cache coherency machanism. This means WUC can only used for write-only
-> +	 * memory regions.
-> +	 */
-> +	return false;
->   #else
->   	return true;
->   #endif
+Before this patch, the stack_max_size of a v5.17-rc1 kernel running on
+a lichee RV board gave:
+~ # cat /sys/kernel/debug/tracing/stack_max_size
+3736
 
-The code changes look reasonable, given the adequate comments, but have 
-the drm people given acks? This seems to exclusively touch drm bits and 
-not directly related to arch bring-up. (You may get scrambled screen 
-output but everything else is working, I'm running my LoongArch devbox 
-headlessly ever since I first set it up last year.)
+After this patch,
+~ # cat /sys/kernel/debug/tracing/stack_max_size
+3176
 
-If anything, IMO you could even take this patch out and still get the 
-arch properly brought up. What do others think?
+We reduce the max kernel stack usage by 560 bytes!
 
-Nevertheless,
+Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+---
+since v2:
+ - rebase on v5.18-rcN
+ - update commit msg, I.E remove the "it's possible to reduce the
+THREAD_SIZE to 8KB for RV64 platforms..."
 
-Reviewed-by: WANG Xuerui <git@xen0n.name>
+since v1:
+ - add __ro_after_init to the irq_stack[] array.
+
+ arch/riscv/include/asm/thread_info.h |  1 +
+ arch/riscv/kernel/asm-offsets.c      |  2 ++
+ arch/riscv/kernel/entry.S            | 33 +++++++++++++++++++++++++---
+ arch/riscv/kernel/irq.c              | 16 ++++++++++++++
+ 4 files changed, 49 insertions(+), 3 deletions(-)
+
+diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
+index 74d888c8d631..98ea73721a0b 100644
+--- a/arch/riscv/include/asm/thread_info.h
++++ b/arch/riscv/include/asm/thread_info.h
+@@ -25,6 +25,7 @@
+ #endif
+ #define THREAD_SIZE		(PAGE_SIZE << THREAD_SIZE_ORDER)
+ 
++#define IRQ_STACK_SIZE		THREAD_SIZE
+ /*
+  * By aligning VMAP'd stacks to 2 * THREAD_SIZE, we can detect overflow by
+  * checking sp & (1 << THREAD_SHIFT), which we can do cheaply in the entry
+diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
+index df9444397908..9e32748af0e8 100644
+--- a/arch/riscv/kernel/asm-offsets.c
++++ b/arch/riscv/kernel/asm-offsets.c
+@@ -37,6 +37,8 @@ void asm_offsets(void)
+ 	OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_count);
+ 	OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
+ 	OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
++	OFFSET(TASK_TI_CPU, task_struct, thread_info.cpu);
++	OFFSET(TASK_STACK, task_struct, stack);
+ 
+ 	OFFSET(TASK_THREAD_F0,  task_struct, thread.fstate.f[0]);
+ 	OFFSET(TASK_THREAD_F1,  task_struct, thread.fstate.f[1]);
+diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+index c8b9ce274b9a..e91cae183ef4 100644
+--- a/arch/riscv/kernel/entry.S
++++ b/arch/riscv/kernel/entry.S
+@@ -126,12 +126,39 @@ skip_context_tracking:
+ 	 */
+ 	bge s4, zero, 1f
+ 
+-	la ra, ret_from_exception
++	/* preserve the sp */
++	move s0, sp
+ 
+-	/* Handle interrupts */
+ 	move a0, sp /* pt_regs */
++
++	/*
++	 * Compare sp with the base of the task stack.
++	 * If the top ~(THREAD_SIZE - 1) bits match, we are on a task stack,
++	 * and should switch to the irq stack.
++	 */
++	REG_L t0, TASK_STACK(tp)
++	xor t0, t0, s0
++	li t1, ~(THREAD_SIZE - 1)
++	and t0, t0, t1
++	bnez t0, 2f
++
++	la t1, irq_stack
++	REG_L t2, TASK_TI_CPU(tp)
++	slli t2, t2, RISCV_LGPTR
++	add t1, t1, t2
++	REG_L t2, 0(t1)
++	li t1, IRQ_STACK_SIZE
++	/* switch to the irq stack */
++	add sp, t2, t1
++
++2:
++	/* Handle interrupts */
+ 	la a1, generic_handle_arch_irq
+-	jr a1
++	jalr a1
++
++	/* Restore sp */
++	move sp, s0
++	j ret_from_exception
+ 1:
+ 	/*
+ 	 * Exceptions run with interrupts enabled or disabled depending on the
+diff --git a/arch/riscv/kernel/irq.c b/arch/riscv/kernel/irq.c
+index 7207fa08d78f..f20cbfd42e82 100644
+--- a/arch/riscv/kernel/irq.c
++++ b/arch/riscv/kernel/irq.c
+@@ -10,6 +10,8 @@
+ #include <linux/seq_file.h>
+ #include <asm/smp.h>
+ 
++void *irq_stack[NR_CPUS] __ro_after_init;
++
+ int arch_show_interrupts(struct seq_file *p, int prec)
+ {
+ 	show_ipi_stats(p, prec);
+@@ -18,7 +20,21 @@ int arch_show_interrupts(struct seq_file *p, int prec)
+ 
+ void __init init_IRQ(void)
+ {
++	int cpu;
++
+ 	irqchip_init();
+ 	if (!handle_arch_irq)
+ 		panic("No interrupt controller found.");
++
++	for_each_possible_cpu(cpu) {
++#ifdef CONFIG_VMAP_STACK
++		void *s = __vmalloc_node(IRQ_STACK_SIZE, THREAD_ALIGN,
++					 THREADINFO_GFP, cpu_to_node(cpu),
++					 __builtin_return_address(0));
++#else
++		void *s = (void *)__get_free_pages(GFP_KERNEL, get_order(IRQ_STACK_SIZE));
++#endif
++
++		irq_stack[cpu] = s;
++	}
+ }
+-- 
+2.34.1
 

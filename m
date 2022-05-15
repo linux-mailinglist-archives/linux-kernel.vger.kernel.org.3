@@ -2,382 +2,589 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C647527AC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 00:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7C0F527AD9
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 01:15:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237399AbiEOWsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 18:48:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45100 "EHLO
+        id S237299AbiEOXK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 19:10:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234031AbiEOWsh (ORCPT
+        with ESMTP id S235829AbiEOXKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 18:48:37 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF83E0EA;
-        Sun, 15 May 2022 15:48:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=93lwEQzS5IXDyIA/NgwVVg/rNYgBX/Ekc2xpjleQYUs=; b=kTFBpmweCVBGzCiXcny/Ei9sEB
-        uLvI0D7aJyCY9gW4MGXg7URDXPxUenVwWXA89vT+j9BRtrs1EQfNeJ4qB6gH1x3WL3JnCBSUAhoXN
-        1INIRQN5V3AcrCr4dPVHFH/5EtxkbxYQW14SNMurRWenslQKNiT8uXf6mSEvQOr2XsmvD7L3cVekK
-        G4ucrnvqt1/qzfQAz5Rre/uP6rIw96QRGg/Ntwc578rmZP+ob6saFKUKA0qaw+P9NiH2QNSqjbmfS
-        xeJNCdUwDvi5QchOtqGvFJPXe/AnKHhlIFK8hoqIAjFEroOQ6KccSYTKVhehD92Fv+lP928LorOpQ
-        iXFJTFmg==;
-Received: from [177.183.162.244] (helo=[192.168.0.5])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nqN22-005kj2-70; Mon, 16 May 2022 00:48:10 +0200
-Message-ID: <d313eec2-96b6-04e3-35cd-981f103d010e@igalia.com>
-Date:   Sun, 15 May 2022 19:47:39 -0300
+        Sun, 15 May 2022 19:10:54 -0400
+X-Greylist: delayed 408 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 15 May 2022 16:10:51 PDT
+Received: from sonata.ens-lyon.org (sonata.ens-lyon.org [140.77.166.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DE563AC
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 16:10:49 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by sonata.ens-lyon.org (Postfix) with ESMTP id B2B0B20116;
+        Mon, 16 May 2022 01:03:59 +0200 (CEST)
+Received: from sonata.ens-lyon.org ([127.0.0.1])
+        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id tef5HEvRTNYS; Mon, 16 May 2022 01:03:59 +0200 (CEST)
+Received: from begin (anantes-655-1-33-15.w83-195.abo.wanadoo.fr [83.195.225.15])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by sonata.ens-lyon.org (Postfix) with ESMTPSA id 2032F2010E;
+        Mon, 16 May 2022 01:03:59 +0200 (CEST)
+Received: from samy by begin with local (Exim 4.95)
+        (envelope-from <samuel.thibault@ens-lyon.org>)
+        id 1nqNHK-00AFGa-OO;
+        Mon, 16 May 2022 01:03:58 +0200
+Date:   Mon, 16 May 2022 01:03:58 +0200
+From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, speakup@linux-speakup.org
+Subject: [PATCHv3] speakup: Generate speakupmap.h automatically
+Message-ID: <20220515230358.ikwt2kspiwvv5cf4@begin>
+Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        speakup@linux-speakup.org
+References: <20220430003934.fkua7vwoz6heigrp@begin>
+ <20220430073321.6b4lvrrt7buzh7dp@begin>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 24/30] panic: Refactor the panic path
-Content-Language: en-US
-To:     Petr Mladek <pmladek@suse.com>,
-        "michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
-        d.hatayama@jp.fujitsu.com
-Cc:     akpm@linux-foundation.org, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, dave.hansen@linux.intel.com, feng.tang@intel.com,
-        gregkh@linuxfoundation.org, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-25-gpiccoli@igalia.com> <Yn0TnsWVxCcdB2yO@alley>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <Yn0TnsWVxCcdB2yO@alley>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220430073321.6b4lvrrt7buzh7dp@begin>
+Organization: I am not organized
+User-Agent: NeoMutt/20170609 (1.8.3)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2022 11:03, Petr Mladek wrote:
-> Hello,
-> 
-> first, I am sorry for stepping into the discussion so late.
-> I was busy with some other stuff and this patchset is far
-> from trivial.
-> 
-> Second, thanks a lot for putting so much effort into it.
-> Most of the changes look pretty good, especially all
-> the fixes of particular notifiers and split into
-> four lists.
-> 
-> Though this patch will need some more love. See below
-> for more details.
+speakupmap.h was not actually intended to be source code, speakupmap.map
+is.
 
-Thanks a lot for your review Petr, it is much appreciated! No need for
-apologies, there is no urgency here =)
+This resurrects the makemapdata.c and genmap.c tools to generate
+speakupmap.h automatically from the input and speakup headers, and the
+speakupmap.map keyboard mapping source file.
 
+Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
 
-> [...] 
-> This talks only about kdump. The reality is much more complicated.
-> The level affect the order of:
-> 
->     + notifiers vs. kdump
->     + notifiers vs. crash_dump
->     + crash_dump vs. kdump
+---
+difference with v2:
+- Stuff utils.c into utils.h
+- Add .gitignore
 
-First of all, I'd like to ask you please to clarify to me *exactly* what
-are the differences between "crash_dump" and "kdump". I'm sorry if
-that's a silly question, I need to be 100% sure I understand the
-concepts the same way you do.
+difference with v1:
+- Add missing dependency between main.c and speakupmap.h
 
+ drivers/accessibility/speakup/.gitignore    |    4 
+ drivers/accessibility/speakup/Makefile      |   28 ++++
+ drivers/accessibility/speakup/genmap.c      |  162 ++++++++++++++++++++++++++++
+ drivers/accessibility/speakup/makemapdata.c |  125 +++++++++++++++++++++
+ drivers/accessibility/speakup/speakupmap.h  |   66 -----------
+ drivers/accessibility/speakup/utils.h       |   99 +++++++++++++++++
+ 6 files changed, 418 insertions(+), 66 deletions(-)
 
-> There might theoretically many variants of the ordering of kdump,
-> crash_dump, and the 4 notifier list. Some variants do not make
-> much sense. You choose 5 variants and tried to select them by
-> a level number.
-> 
-> The question is if we really could easily describe the meaning this
-> way. It is not only about a "level" of notifiers before kdump. It is
-> also about the ordering of crash_dump vs. kdump. IMHO, "level"
-> semantic does not fit there.
-> 
-> Maybe more parameters might be easier to understand the effect.
-> Anyway, we first need to agree on the chosen variants.
-> I am going to discuss it more in the code, see below.
-> 
-> 
-> [...] 
-> Here is the code using the above functions. It helps to discuss
-> the design and logic.
-> 
-> <kernel/panic.c>
-> 	order_panic_notifiers_and_kdump();
-> 
-> 	/* If no level, we should kdump ASAP. */
-> 	if (!panic_notifiers_level)
-> 		__crash_kexec(NULL);
-> 
-> 	crash_smp_send_stop();
-> 	panic_notifier_hypervisor_once(buf);
-> 
-> 	if (panic_notifier_info_once(buf))
-> 		kmsg_dump(KMSG_DUMP_PANIC);
-> 
-> 	panic_notifier_pre_reboot_once(buf);
-> 
-> 	__crash_kexec(NULL);
-> 
-> 	panic_notifier_hypervisor_once(buf);
-> 
-> 	if (panic_notifier_info_once(buf))
-> 		kmsg_dump(KMSG_DUMP_PANIC);
-> 
-> 	panic_notifier_pre_reboot_once(buf);
-> </kernel/panic.c>
-> 
-> I have to say that the logic is very unclear. Almost all
-> functions are called twice:
-> 
->    + __crash_kexec()
->    + kmsg_dump()
->    + panic_notifier_hypervisor_once()
->    + panic_notifier_pre_reboot_once()
->    + panic_notifier_info_once()
-> 
-> It is pretty hard to find what functions are always called in the same
-> order and where the order can be inverted.
-> 
-> The really used code path is defined by order_panic_notifiers_and_kdump()
-> that encodes "level" into "bits". The bits are then flipped in
-> panic_notifier_*_once() calls that either do something or not.
-> kmsg_dump() is called according to the bit flip.
-> 
-> It is an interesting approach. I guess that you wanted to avoid too
-> many if/then/else levels in panic(). But honestly, it looks like
-> a black magic to me.
-> 
-> IMHO, it is always easier to follow if/then/else logic than using
-> a translation table that requires additional bit flips when
-> a value is used more times.
-> 
-> Also I guess that it is good proof that "level" abstraction does
-> not fit here. Normal levels would not need this kind of magic.
-
-Heheh OK, I appreciate your opinion, but I guess we'll need to agree in
-disagree here - I'm much more fond to this kind of code than a bunch of
-if/else blocks that almost give headaches. Encoding such "level" logic
-in the if/else scheme is very convoluted, generates a very big code. And
-the functions aren't so black magic - they map a level in bits, and the
-functions _once() are called...once! Although we switch the position in
-the code, so there are 2 calls, one of them is called and the other not.
-
-But that's totally fine to change - especially if we're moving away from
-the "level" logic. I see below you propose a much simpler approach - if
-we follow that, definitely we won't need the "black magic" approach heheh
-
-
-> 
-> OK, the question is how to make it better. Let's start with
-> a clear picture of the problem:
-> 
-> 1. panic() has basically two funtions:
-> 
->       + show/store debug information (optional ways and amount)
->       + do something with the system (reboot, stay hanged)
-> 
-> 
-> 2. There are 4 ways how to show/store the information:
-> 
->       + tell hypervisor to store what it is interested about
->       + crash_dump
->       + kmsg_dump()
->       + consoles
-> 
->   , where crash_dump and consoles are special:
-> 
->      + crash_dump does not return. Instead it ends up with reboot.
-> 
->      + Consoles work transparently. They just need an extra flush
->        before reboot or staying hanged.
-> 
-> 
-> 3. The various notifiers do things like:
-> 
->      + tell hypervisor about the crash
->      + print more information (also stop watchdogs)
->      + prepare system for reboot (touch some interfaces)
->      + prepare system for staying hanged (blinking)
-> 
->    Note that it pretty nicely matches the 4 notifier lists.
-> 
-
-I really appreciate the summary skill you have, to convert complex
-problems in very clear and concise ideas. Thanks for that, very useful!
-I agree with what was summarized above.
-
-
-> Now, we need to decide about the ordering. The main area is how
-> to store the debug information. Consoles are transparent so
-> the quesition is about:
-> 
->      + hypervisor
->      + crash_dump
->      + kmsg_dump
-> 
-> Some people need none and some people want all. There is a
-> risk that system might hung at any stage. This why people want to
-> make the order configurable.
-> 
-> But crash_dump() does not return when it succeeds. And kmsg_dump()
-> users havn't complained about hypervisor problems yet. So, that
-> two variants might be enough:
-> 
->     + crash_dump (hypervisor, kmsg_dump as fallback)
->     + hypervisor, kmsg_dump, crash_dump
-> 
-> One option "panic_prefer_crash_dump" should be enough.
-> And the code might look like:
-> 
-> void panic()
-> {
-> [...]
-> 	dump_stack();
-> 	kgdb_panic(buf);
-> 
-> 	< ---  here starts the reworked code --- >
-> 
-> 	/* crash dump is enough when enabled and preferred. */
-> 	if (panic_prefer_crash_dump)
-> 		__crash_kexec(NULL);
-> 
-> 	/* Stop other CPUs and focus on handling the panic state. */
-> 	if (has_kexec_crash_image)
-> 		crash_smp_send_stop();
-> 	else
-> 		smp_send_stop()
-> 
-
-Here we have a very important point. Why do we need 2 variants of SMP
-CPU stopping functions? I disagree with that - my understanding of this
-after some study in architectures is that the crash_() variant is
-"stronger", should work in all cases and if not, we should fix that -
-that'd be a bug.
-
-Such variant either maps to smp_send_stop() (in various architectures,
-including XEN/x86) or overrides the basic function with more proper
-handling for panic() case...I don't see why we still need such
-distinction, if you / others have some insight about that, I'd like to
-hear =)
-
-
-> 	/* Notify hypervisor about the system panic. */
-> 	atomic_notifier_call_chain(&panic_hypervisor_list, 0, NULL);
-> 
-> 	/*
-> 	 * No need to risk extra info when there is no kmsg dumper
-> 	 * registered.
-> 	 */
-> 	if (!has_kmsg_dumper())
-> 		__crash_kexec(NULL);
-> 
-> 	/* Add extra info from different subsystems. */
-> 	atomic_notifier_call_chain(&panic_info_list, 0, NULL);
-> 
-> 	kmsg_dump(KMSG_DUMP_PANIC);
-> 	__crash_kexec(NULL);
-> 
-> 	/* Flush console */
-> 	unblank_screen();
-> 	console_unblank();
-> 	debug_locks_off();
-> 	console_flush_on_panic(CONSOLE_FLUSH_PENDING);
-> 
-> 	if (panic_timeout > 0) {
-> 		delay()
-> 	}
-> 
-> 	/*
-> 	 * Prepare system for eventual reboot and allow custom
-> 	 * reboot handling.
-> 	 */
-> 	atomic_notifier_call_chain(&panic_reboot_list, 0, NULL);
-
-You had the order of panic_reboot_list VS. consoles flushing inverted.
-It might make sense, although I didn't do that in V1...
-Are you OK in having a helper for console flushing, as I did in V1? It
-makes code of panic() a bit less polluted / more focused I feel.
-
-
-> 
-> 	if (panic_timeout != 0) {
-> 		reboot();
-> 	}
-> 
-> 	/*
-> 	 * Prepare system for the infinite waiting, for example,
-> 	 * setup blinking.
-> 	 */
-> 	atomic_notifier_call_chain(&panic_loop_list, 0, NULL);
-> 
-> 	infinite_loop();
-> }
-> 
-> 
-> __crash_kexec() is there 3 times but otherwise the code looks
-> quite straight forward.
-> 
-> Note 1: I renamed the two last notifier list. The name 'post-reboot'
-> 	did sound strange from the logical POV ;-)
-> 
-> Note 2: We have to avoid the possibility to call "reboot" list
-> 	before kmsg_dump(). All callbacks providing info
-> 	have to be in the info list. It a callback combines
-> 	info and reboot functionality then it should be split.
-> 
-> 	There must be another way to calm down problematic
-> 	info callbacks. And it has to be solved when such
-> 	a problem is reported. Is there any known issue, please?
-> 
-> It is possible that I have missed something important.
-> But I would really like to make the logic as simple as possible.
-
-OK, I agree with you! It's indeed simpler and if others agree, I can
-happily change the logic to what you proposed. Although...currently the
-"crash_kexec_post_notifiers" allows to call _all_ panic_reboot_list
-callbacks _before kdump_.
-
-We need to mention this change in the commit messages, but I really
-would like to hear the opinions of heavy users of notifiers (as
-Michael/Hyper-V) and the kdump interested parties (like Baoquan / Dave
-Young / Hayatama). If we all agree on such approach, will change that
-for V2 =)
-
-Thanks again Petr, for the time spent in such detailed review!
-Cheers,
-
-
-Guilherme
+--- a/drivers/accessibility/speakup/Makefile
++++ b/drivers/accessibility/speakup/Makefile
+@@ -30,3 +30,31 @@ speakup-y := \
+ 	thread.o \
+ 	varhandlers.o
+ speakup-$(CONFIG_SPEAKUP_SERIALIO) += serialio.o
++
++
++clean-files := mapdata.h speakupmap.h
++
++
++# Generate mapdata.h from headers
++hostprogs += makemapdata
++makemapdata-objs := makemapdata.o
++
++quiet_cmd_mkmap = MKMAP   $@
++      cmd_mkmap = $(obj)/makemapdata > $@
++
++$(obj)/mapdata.h: $(obj)/makemapdata
++	$(call cmd,mkmap)
++
++
++# Generate speakupmap.map from mapdata.h
++hostprogs += genmap
++genmap-objs := genmap.o
++$(obj)/genmap.o: $(obj)/mapdata.h
++
++quiet_cmd_genmap = GENMAP  $@
++      cmd_genmap = $(obj)/genmap $< > $@
++
++$(obj)/speakupmap.h: $(obj)/speakupmap.map $(obj)/genmap
++	$(call cmd,genmap)
++
++$(obj)/main.o: $(obj)/speakupmap.h
+--- /dev/null
++++ b/drivers/accessibility/speakup/genmap.c
+@@ -0,0 +1,162 @@
++// SPDX-License-Identifier: GPL-2.0+
++/* genmap.c
++ * originally written by: Kirk Reiser.
++ *
++ ** Copyright (C) 2002  Kirk Reiser.
++ *  Copyright (C) 2003  David Borowski.
++ */
++
++#include <stdlib.h>
++#include <stdio.h>
++#include <libgen.h>
++#include <string.h>
++#include <linux/version.h>
++#include <ctype.h>
++#include "utils.h"
++
++struct st_key_init {
++	char *name;
++	int value, shift;
++};
++
++static unsigned char key_data[MAXKEYVAL][16], *kp;
++
++#include "mapdata.h"
++
++static const char delims[] = "\t\n ";
++static char *cp;
++static int map_ver = 119; /* an arbitrary number so speakup can check */
++static int shift_table[17];
++static int max_states = 1, flags;
++/* flags reserved for later, maybe for individual console maps */
++
++static int get_shift_value(int state)
++{
++	int i;
++
++	for (i = 0; shift_table[i] != state; i++) {
++		if (shift_table[i] == -1) {
++			if (i >= 16)
++				oops("too many shift states", NULL);
++			shift_table[i] = state;
++			max_states = i+1;
++		break;
++	}
++	}
++	return i;
++}
++
++int
++main(int argc, char *argv[])
++{
++	int value, shift_state, i, spk_val = 0, lock_val = 0;
++	int max_key_used = 0, num_keys_used = 0;
++	struct st_key *this;
++	struct st_key_init *p_init;
++	char buffer[256];
++
++	bzero(key_table, sizeof(key_table));
++	bzero(key_data, sizeof(key_data));
++
++	shift_table[0] = 0;
++	for (i = 1; i <= 16; i++)
++		shift_table[i] = -1;
++
++	if (argc < 2) {
++		fputs("usage: genmap filename\n", stderr);
++		exit(1);
++	}
++
++	for (p_init = init_key_data; p_init->name[0] != '.'; p_init++)
++		add_key(p_init->name, p_init->value, p_init->shift);
++
++	open_input(".", argv[1]);
++	while (fgets(buffer, sizeof(buffer), infile)) {
++		lc++;
++		value = shift_state = 0;
++
++		cp = strtok(buffer, delims);
++		if (*cp == '#')
++			continue;
++
++		while (cp) {
++			if (*cp == '=')
++				break;
++			this = find_key(cp);
++			if (this == NULL)
++				oops("unknown key/modifier", cp);
++			if (this->shift == is_shift) {
++				if (value)
++					oops("modifiers must come first", cp);
++				shift_state += this->value;
++			} else if (this->shift == is_input)
++				value = this->value;
++			else
++				oops("bad modifier or key", cp);
++			cp = strtok(0, delims);
++		}
++		if (!cp)
++			oops("no = found", NULL);
++
++		cp = strtok(0, delims);
++		if (!cp)
++			oops("no speakup function after =", NULL);
++
++		this = find_key(cp);
++		if (this == NULL || this->shift != is_spk)
++			oops("invalid speakup function", cp);
++
++		i = get_shift_value(shift_state);
++		if (key_data[value][i]) {
++			while (--cp > buffer)
++				if (!*cp)
++					*cp = ' ';
++			oops("two functions on same key combination", cp);
++		}
++		key_data[value][i] = (char)this->value;
++		if (value > max_key_used)
++			max_key_used = value;
++	}
++	fclose(infile);
++
++	this = find_key("spk_key");
++	if (this)
++		spk_val = this->value;
++
++	this = find_key("spk_lock");
++	if (this)
++		lock_val = this->value;
++
++	for (lc = 1; lc <= max_key_used; lc++) {
++		kp = key_data[lc];
++		if (!memcmp(key_data[0], kp, 16))
++			continue;
++		num_keys_used++;
++		for (i = 0; i < max_states; i++) {
++			if (kp[i] != spk_val && kp[i] != lock_val)
++				continue;
++			shift_state = shift_table[i];
++			if (shift_state&16)
++				continue;
++			shift_state = get_shift_value(shift_state+16);
++			kp[shift_state] = kp[i];
++			/* fill in so we can process the key up, as spk bit will be set */
++		}
++	}
++
++	printf("\t%d, %d, %d,\n\t", map_ver, num_keys_used, max_states);
++	for (i = 0; i < max_states; i++)
++		printf("%d, ", shift_table[i]);
++	printf("%d,", flags);
++	for (lc = 1; lc <= max_key_used; lc++) {
++		kp = key_data[lc];
++		if (!memcmp(key_data[0], kp, 16))
++			continue;
++		printf("\n\t%d,", lc);
++		for (i = 0; i < max_states; i++)
++			printf(" %d,", (unsigned int)kp[i]);
++	}
++	printf("\n\t0, %d\n", map_ver);
++
++	exit(0);
++}
+--- /dev/null
++++ b/drivers/accessibility/speakup/makemapdata.c
+@@ -0,0 +1,125 @@
++// SPDX-License-Identifier: GPL-2.0+
++/* makemapdata.c
++ * originally written by: Kirk Reiser.
++ *
++ ** Copyright (C) 2002  Kirk Reiser.
++ *  Copyright (C) 2003  David Borowski.
++ */
++
++#include <stdlib.h>
++#include <stdio.h>
++#include <libgen.h>
++#include <string.h>
++#include <linux/version.h>
++#include <ctype.h>
++#include "utils.h"
++
++static char buffer[256];
++
++static int get_define(void)
++{
++	char *c;
++
++	while (fgets(buffer, sizeof(buffer)-1, infile)) {
++		lc++;
++		if (strncmp(buffer, "#define", 7))
++			continue;
++		c = buffer + 7;
++		while (*c == ' ' || *c == '\t')
++			c++;
++		def_name = c;
++		while (*c && *c != ' ' && *c != '\t' && *c != '\n')
++			c++;
++		if (!*c || *c == '\n')
++			continue;
++		*c++ = '\0';
++		while (*c == ' ' || *c == '\t' || *c == '(')
++			c++;
++		def_val = c;
++		while (*c && *c != '\n' && *c != ')')
++			c++;
++		*c++ = '\0';
++		return 1;
++	}
++	fclose(infile);
++	infile = 0;
++	return 0;
++}
++
++int
++main(int argc, char *argv[])
++{
++	int value, i;
++	struct st_key *this;
++	const char *dir_name;
++	char *cp;
++
++	dir_name = getenv("TOPDIR");
++	if (!dir_name)
++		dir_name = ".";
++	bzero(key_table, sizeof(key_table));
++	add_key("shift",	1, is_shift);
++	add_key("altgr",	2, is_shift);
++	add_key("ctrl",	4, is_shift);
++	add_key("alt",	8, is_shift);
++	add_key("spk", 16, is_shift);
++	add_key("double", 32, is_shift);
++
++	open_input(dir_name, "include/linux/input.h");
++	while (get_define()) {
++		if (strncmp(def_name, "KEY_", 4))
++			continue;
++		value = atoi(def_val);
++		if (value > 0 && value < MAXKEYVAL)
++			add_key(def_name, value, is_input);
++	}
++
++	open_input(dir_name, "include/uapi/linux/input-event-codes.h");
++	while (get_define()) {
++		if (strncmp(def_name, "KEY_", 4))
++			continue;
++		value = atoi(def_val);
++		if (value > 0 && value < MAXKEYVAL)
++			add_key(def_name, value, is_input);
++	}
++
++	open_input(dir_name, "drivers/accessibility/speakup/spk_priv_keyinfo.h");
++	while (get_define()) {
++		if (strlen(def_val) > 5) {
++			//if (def_val[0] == '(')
++			//	def_val++;
++			cp = strchr(def_val, '+');
++			if (!cp)
++				continue;
++			if (cp[-1] == ' ')
++				cp[-1] = '\0';
++			*cp++ = '\0';
++			this = find_key(def_val);
++			while (*cp == ' ')
++				cp++;
++			if (!this || *cp < '0' || *cp > '9')
++				continue;
++			value = this->value+atoi(cp);
++		} else if (!strncmp(def_val, "0x", 2))
++			sscanf(def_val+2, "%x", &value);
++		else if (*def_val >= '0' && *def_val <= '9')
++			value = atoi(def_val);
++		else
++			continue;
++		add_key(def_name, value, is_spk);
++	}
++
++	printf("struct st_key_init init_key_data[] = {\n");
++	for (i = 0; i < HASHSIZE; i++) {
++		this = &key_table[i];
++		if (!this->name)
++			continue;
++		do {
++			printf("\t{ \"%s\", %d, %d, },\n", this->name, this->value, this->shift);
++			this = this->next;
++		} while (this);
++	}
++	printf("\t{ \".\", 0, 0 }\n};\n");
++
++	exit(0);
++}
+--- a/drivers/accessibility/speakup/speakupmap.h
++++ /dev/null
+@@ -1,66 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-	119, 62, 6,
+-	0, 16, 20, 17, 32, 48, 0,
+-	2, 0, 78, 0, 0, 0, 0,
+-	3, 0, 79, 0, 0, 0, 0,
+-	4, 0, 76, 0, 0, 0, 0,
+-	5, 0, 77, 0, 0, 0, 0,
+-	6, 0, 74, 0, 0, 0, 0,
+-	7, 0, 75, 0, 0, 0, 0,
+-	9, 0, 5, 46, 0, 0, 0,
+-	10, 0, 4, 0, 0, 0, 0,
+-	11, 0, 0, 1, 0, 0, 0,
+-	12, 0, 27, 0, 33, 0, 0,
+-	19, 0, 47, 0, 0, 0, 0,
+-	21, 0, 29, 17, 0, 0, 0,
+-	22, 0, 15, 0, 0, 0, 0,
+-	23, 0, 14, 0, 0, 0, 28,
+-	24, 0, 16, 0, 0, 0, 0,
+-	25, 0, 30, 18, 0, 0, 0,
+-	28, 0, 3, 26, 0, 0, 0,
+-	35, 0, 31, 0, 0, 0, 0,
+-	36, 0, 12, 0, 0, 0, 0,
+-	37, 0, 11, 0, 0, 0, 22,
+-	38, 0, 13, 0, 0, 0, 0,
+-	39, 0, 32, 7, 0, 0, 0,
+-	40, 0, 23, 0, 0, 0, 0,
+-	44, 0, 44, 0, 0, 0, 0,
+-	49, 0, 24, 0, 0, 0, 0,
+-	50, 0, 9, 19, 6, 0, 0,
+-	51, 0, 8, 0, 0, 0, 36,
+-	52, 0, 10, 20, 0, 0, 0,
+-	53, 0, 25, 0, 0, 0, 0,
+-	55, 46, 1, 0, 0, 0, 0,
+-	58, 128, 128, 0, 0, 0, 0,
+-	59, 0, 45, 0, 0, 0, 0,
+-	60, 0, 40, 0, 0, 0, 0,
+-	61, 0, 41, 0, 0, 0, 0,
+-	62, 0, 42, 0, 0, 0, 0,
+-	63, 0, 34, 0, 0, 0, 0,
+-	64, 0, 35, 0, 0, 0, 0,
+-	65, 0, 37, 0, 0, 0, 0,
+-	66, 0, 38, 0, 0, 0, 0,
+-	67, 0, 66, 0, 39, 0, 0,
+-	68, 0, 67, 0, 0, 0, 0,
+-	71, 15, 19, 0, 0, 0, 0,
+-	72, 14, 29, 0, 0, 28, 0,
+-	73, 16, 17, 0, 0, 0, 0,
+-	74, 27, 33, 0, 0, 0, 0,
+-	75, 12, 31, 0, 0, 0, 0,
+-	76, 11, 21, 0, 0, 22, 0,
+-	77, 13, 32, 0, 0, 0, 0,
+-	78, 23, 43, 0, 0, 0, 0,
+-	79, 9, 20, 0, 0, 0, 0,
+-	80, 8, 30, 0, 0, 36, 0,
+-	81, 10, 18, 0, 0, 0, 0,
+-	82, 128, 128, 0, 0, 0, 0,
+-	83, 24, 25, 0, 0, 0, 0,
+-	87, 0, 68, 0, 0, 0, 0,
+-	88, 0, 69, 0, 0, 0, 0,
+-	96, 3, 26, 0, 0, 0, 0,
+-	98, 4, 5, 0, 0, 0, 0,
+-	99, 2, 0, 0, 0, 0, 0,
+-	104, 0, 6, 0, 0, 0, 0,
+-	109, 0, 7, 0, 0, 0, 0,
+-	125, 128, 128, 0, 0, 0, 0,
+-	0, 119
+--- /dev/null
++++ b/drivers/accessibility/speakup/utils.h
+@@ -0,0 +1,99 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
++/* utils.h
++ * originally written by: Kirk Reiser.
++ *
++ ** Copyright (C) 2002  Kirk Reiser.
++ *  Copyright (C) 2003  David Borowski.
++ */
++
++#include <stdio.h>
++
++#define MAXKEYS 512
++#define MAXKEYVAL 160
++#define HASHSIZE 101
++#define is_shift -3
++#define is_spk -2
++#define is_input -1
++
++struct st_key {
++	char *name;
++	struct st_key *next;
++	int value, shift;
++};
++
++struct st_key key_table[MAXKEYS];
++struct st_key *extra_keys = key_table+HASHSIZE;
++char *def_name, *def_val;
++FILE *infile;
++int lc;
++
++char filename[256];
++
++static inline void open_input(const char *dir_name, const char *name)
++{
++	snprintf(filename, sizeof(filename), "%s/%s", dir_name, name);
++	infile = fopen(filename, "r");
++	if (infile == 0) {
++		fprintf(stderr, "can't open %s\n", filename);
++		exit(1);
++	}
++	lc = 0;
++}
++
++static inline int oops(const char *msg, const char *info)
++{
++	if (info == NULL)
++		info = "";
++	fprintf(stderr, "error: file %s line %d\n", filename, lc);
++	fprintf(stderr, "%s %s\n", msg, info);
++	exit(1);
++}
++
++static inline struct st_key *hash_name(char *name)
++{
++	u_char *pn = (u_char *)name;
++	int hash = 0;
++
++	while (*pn) {
++		hash = (hash * 17) & 0xfffffff;
++		if (isupper(*pn))
++			*pn = tolower(*pn);
++		hash += (int)*pn;
++		pn++;
++	}
++	hash %= HASHSIZE;
++	return &key_table[hash];
++}
++
++static inline struct st_key *find_key(char *name)
++{
++	struct st_key *this = hash_name(name);
++
++	while (this) {
++		if (this->name && !strcmp(name, this->name))
++			return this;
++		this = this->next;
++	}
++	return this;
++}
++
++static inline struct st_key *add_key(char *name, int value, int shift)
++{
++	struct st_key *this = hash_name(name);
++
++	if (extra_keys-key_table >= MAXKEYS)
++		oops("out of key table space, enlarge MAXKEYS", NULL);
++	if (this->name != NULL) {
++		while (this->next) {
++			if (!strcmp(name, this->name))
++				oops("attempt to add duplicate key", name);
++			this = this->next;
++		}
++		this->next = extra_keys++;
++		this = this->next;
++	}
++	this->name = strdup(name);
++	this->value = value;
++	this->shift = shift;
++	return this;
++}
+--- /dev/null
++++ b/drivers/accessibility/speakup/.gitignore
+@@ -0,0 +1,4 @@
++/makemapdata
++/mapdata.h
++/genmap
++/speakupmap.h

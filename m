@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A308D527A42
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 23:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84728527A46
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 23:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238039AbiEOVBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 17:01:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40562 "EHLO
+        id S238796AbiEOVBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 17:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236791AbiEOVA7 (ORCPT
+        with ESMTP id S234471AbiEOVBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 17:00:59 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51D7B7EC;
-        Sun, 15 May 2022 14:00:57 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id en5so1909474edb.1;
-        Sun, 15 May 2022 14:00:57 -0700 (PDT)
+        Sun, 15 May 2022 17:01:01 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52CEBC3A;
+        Sun, 15 May 2022 14:00:58 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id i40so995850eda.7;
+        Sun, 15 May 2022 14:00:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=tS71jE0WRdd742PGPX4S4NYBMalYLsRNuQATyXyB9rQ=;
-        b=MHIz8aAXaKnFCMDAo6pZ92tifX30ncDe6+JJ5nxhXQMRDk/fFbhzy5tukIYRCq+zhy
-         sUH28ulMlPcE8FD3lgnd1gl/omrrnbOteMf/t99NCzd9bykkcl9WeZUFAsX94B/ka46i
-         Q/BVFvA6PdmG0z/c8+CktQ853xx4GCaF4vcg3JhslFkanDdhScIgSse5J872WtNyRBJu
-         CRORsZfBv8gU2iBLUCBGO9ui2tbgWDHqVHs8JNwFItllRpl7qDY+mm10Bh8gTBUAixiX
-         TqGnb01Z8ubeP+H9MtoBrLSNYVE2et5UNoivSfoR+28Ux4PPFdqxi7r/x4CNZaurR9XD
-         AwdA==
+        bh=dzaCsc5NE5smSEagSfvo1JD5ChGYk1foMXMH/Nh5gcI=;
+        b=eTpbzX5AEb89EE1/KYxfriGv7uZdAeDMhxb/5pbmaetRjjV6zWlCQ8WaxcTt4JzZ5Z
+         nYpsZyAPp64m7mQ2ifmCrSIt9kiNj2EYy+NMr8W63x1XvNzDI4CNVPvrMQ1f/dFn+g70
+         xfnvnmsXjIKRH6BUr4ol1bUcHRy4dRSQhtA4biWsu9JKQptbHx4btlA3odMMORpUOZij
+         uWGfA5fLtiN/Q73KLmGHmUYiu6C/jW2QdEJx71agjFJmht6zYhEVc/ORZoZ+cXandlrd
+         FHSwwJD70XgwQl95RbQCAyeyBvJQu7H5Py8719uCK2IhphDux66kuS0+K/wQ3B9zQ/Xd
+         ckpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=tS71jE0WRdd742PGPX4S4NYBMalYLsRNuQATyXyB9rQ=;
-        b=aMe3p3wa0FX3RsUJALVOAxPSP3IfLl9H6XjF64KlPjL1iMn2e7nTLm/pDo7FN/0FTC
-         hvyehf2lzR4H+1kJVXpSboxzfZprl7JMebygmiVp+UywCZPPH7ZX6OfJWnsy3pyA4cQ0
-         dh1OKl/5FF9D3d/WZGqAE8nV91lPuQH5EBmoJUaQ0yJqD5t3V0bcw1ulIk30io3FhSvZ
-         zNsPs5/iPQUhM+E8BWEeXkCWarbqnR2gbRMps61DOvHwXbsSj9yd1OsCK5WsUWFtNbzD
-         yO3qd93MxFoj+qCwMT4F18hPX+m+XAjOP8FWrPtuQqVT7uVbbI7gBuAnE+RyaWs4ckSI
-         2fmA==
-X-Gm-Message-State: AOAM533fSLSZul8jlrKcGoCs05vXB5BsFoZy9JoRqobNmf1HZslzlXkL
-        VVQTDomqL/7ZxOC6LtmhuXc=
-X-Google-Smtp-Source: ABdhPJxFez/HsR9DDAfOesc1EVfyxsuhw1jTY0AN2DAooKGwjY8PEwVOLrdJjMndhBKxfBuv9CL1Xw==
-X-Received: by 2002:a05:6402:1148:b0:413:11e0:1f58 with SMTP id g8-20020a056402114800b0041311e01f58mr9798398edw.113.1652648456228;
-        Sun, 15 May 2022 14:00:56 -0700 (PDT)
+        bh=dzaCsc5NE5smSEagSfvo1JD5ChGYk1foMXMH/Nh5gcI=;
+        b=KccOdG5x8vK1egaQGqNUUzT/SZCOtexO+iyW9S6gxB6v5ACZQQ/byZ2/HVOkP+hxDp
+         yThf5cxnaMoxpOMJXQhpwO5zsaMzcA3l1KokP3GfSsmxSKzEU65+RsP7UzA2PYaDIcLk
+         MdWZieVT/BeL46kJYHCEL28SwmpDhUGlAIDStwSEoFCaxwAKffJgnhVO+e2k9Gcjo9PL
+         45CMJl2vyZc0zylYZzuQsBxmyogpcm1fwqVaET2EY0//eIS9HYZGDszQAXwX/xST8BSZ
+         LkvUab5ZFpn2HskSyQQI65Vv+KOp5TeWk1WX7RX1ZEr3+A2rNXVVRXfW2Ln7RmMIVpll
+         lxSA==
+X-Gm-Message-State: AOAM533HgvuIgdeszf0WGk9p2xMbYjII55CmTRwA0GQJKsrjkJQoU0fL
+        vdpyYTo0Wycyku1jEa+FV6M=
+X-Google-Smtp-Source: ABdhPJzSIWv2Zor2t1kLv6CBRusMdFa/nCk+yvljtF20Luv1POke9hM92t1imgRn0BqfQtQKZLqe4Q==
+X-Received: by 2002:a50:a6c8:0:b0:428:5b3a:6c99 with SMTP id f8-20020a50a6c8000000b004285b3a6c99mr10029635edc.222.1652648457368;
+        Sun, 15 May 2022 14:00:57 -0700 (PDT)
 Received: from fedora.robimarko.hr (dh207-98-105.xnet.hr. [88.207.98.105])
-        by smtp.googlemail.com with ESMTPSA id w12-20020aa7da4c000000b0042ab649183asm28917eds.35.2022.05.15.14.00.55
+        by smtp.googlemail.com with ESMTPSA id w12-20020aa7da4c000000b0042ab649183asm28917eds.35.2022.05.15.14.00.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 May 2022 14:00:55 -0700 (PDT)
+        Sun, 15 May 2022 14:00:56 -0700 (PDT)
 From:   Robert Marko <robimarko@gmail.com>
 To:     bjorn.andersson@linaro.org, agross@kernel.org,
         mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
@@ -56,9 +56,9 @@ To:     bjorn.andersson@linaro.org, agross@kernel.org,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, dmitry.baryshkov@linaro.org
 Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v4 05/11] clk: qcom: ipq8074: add PPE crypto clock
-Date:   Sun, 15 May 2022 23:00:42 +0200
-Message-Id: <20220515210048.483898-5-robimarko@gmail.com>
+Subject: [PATCH v4 06/11] clk: qcom: ipq8074: set BRANCH_HALT_DELAY flag for UBI clocks
+Date:   Sun, 15 May 2022 23:00:43 +0200
+Message-Id: <20220515210048.483898-6-robimarko@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220515210048.483898-1-robimarko@gmail.com>
 References: <20220515210048.483898-1-robimarko@gmail.com>
@@ -74,53 +74,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The built-in PPE engine has a dedicated clock for the EIP-197 crypto
-engine.
+Currently, attempting to enable the UBI clocks will cause the stuck at
+off warning to be printed and clk_enable will fail.
 
-So, since the required clock currently missing add support for it.
+[   14.936694] gcc_ubi1_ahb_clk status stuck at 'off'
 
+Downstream 5.4 QCA kernel has fixed this by seting the BRANCH_HALT_DELAY
+flag on UBI clocks, so lets do the same.
+
+Fixes: 5736294aef83 ("clk: qcom: ipq8074: add NSS clocks")
 Signed-off-by: Robert Marko <robimarko@gmail.com>
 ---
- drivers/clk/qcom/gcc-ipq8074.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/clk/qcom/gcc-ipq8074.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
-index f1017f2e61bd..c964e43ba68a 100644
+index c964e43ba68a..85076c1383c7 100644
 --- a/drivers/clk/qcom/gcc-ipq8074.c
 +++ b/drivers/clk/qcom/gcc-ipq8074.c
-@@ -3182,6 +3182,24 @@ static struct clk_branch gcc_nss_ptp_ref_clk = {
- 	},
- };
+@@ -3372,6 +3372,7 @@ static struct clk_branch gcc_nssnoc_ubi1_ahb_clk = {
  
-+static struct clk_branch gcc_crypto_ppe_clk = {
-+	.halt_reg = 0x68310,
-+	.halt_bit = 31,
-+	.clkr = {
-+		.enable_reg = 0x68310,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "gcc_crypto_ppe_clk",
-+			.parent_names = (const char *[]){
-+				"nss_ppe_clk_src"
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
- static struct clk_branch gcc_nssnoc_ce_apb_clk = {
- 	.halt_reg = 0x6830c,
+ static struct clk_branch gcc_ubi0_ahb_clk = {
+ 	.halt_reg = 0x6820c,
++	.halt_check = BRANCH_HALT_DELAY,
  	.clkr = {
-@@ -4644,6 +4662,7 @@ static struct clk_regmap *gcc_ipq8074_clks[] = {
- 	[GCC_PCIE0_RCHNG_CLK_SRC] = &pcie0_rchng_clk_src.clkr,
- 	[GCC_PCIE0_RCHNG_CLK] = &gcc_pcie0_rchng_clk.clkr,
- 	[GCC_PCIE0_AXI_S_BRIDGE_CLK] = &gcc_pcie0_axi_s_bridge_clk.clkr,
-+	[GCC_CRYPTO_PPE_CLK] = &gcc_crypto_ppe_clk.clkr,
- };
+ 		.enable_reg = 0x6820c,
+ 		.enable_mask = BIT(0),
+@@ -3389,6 +3390,7 @@ static struct clk_branch gcc_ubi0_ahb_clk = {
  
- static const struct qcom_reset_map gcc_ipq8074_resets[] = {
+ static struct clk_branch gcc_ubi0_axi_clk = {
+ 	.halt_reg = 0x68200,
++	.halt_check = BRANCH_HALT_DELAY,
+ 	.clkr = {
+ 		.enable_reg = 0x68200,
+ 		.enable_mask = BIT(0),
+@@ -3406,6 +3408,7 @@ static struct clk_branch gcc_ubi0_axi_clk = {
+ 
+ static struct clk_branch gcc_ubi0_nc_axi_clk = {
+ 	.halt_reg = 0x68204,
++	.halt_check = BRANCH_HALT_DELAY,
+ 	.clkr = {
+ 		.enable_reg = 0x68204,
+ 		.enable_mask = BIT(0),
+@@ -3423,6 +3426,7 @@ static struct clk_branch gcc_ubi0_nc_axi_clk = {
+ 
+ static struct clk_branch gcc_ubi0_core_clk = {
+ 	.halt_reg = 0x68210,
++	.halt_check = BRANCH_HALT_DELAY,
+ 	.clkr = {
+ 		.enable_reg = 0x68210,
+ 		.enable_mask = BIT(0),
+@@ -3440,6 +3444,7 @@ static struct clk_branch gcc_ubi0_core_clk = {
+ 
+ static struct clk_branch gcc_ubi0_mpt_clk = {
+ 	.halt_reg = 0x68208,
++	.halt_check = BRANCH_HALT_DELAY,
+ 	.clkr = {
+ 		.enable_reg = 0x68208,
+ 		.enable_mask = BIT(0),
+@@ -3457,6 +3462,7 @@ static struct clk_branch gcc_ubi0_mpt_clk = {
+ 
+ static struct clk_branch gcc_ubi1_ahb_clk = {
+ 	.halt_reg = 0x6822c,
++	.halt_check = BRANCH_HALT_DELAY,
+ 	.clkr = {
+ 		.enable_reg = 0x6822c,
+ 		.enable_mask = BIT(0),
+@@ -3474,6 +3480,7 @@ static struct clk_branch gcc_ubi1_ahb_clk = {
+ 
+ static struct clk_branch gcc_ubi1_axi_clk = {
+ 	.halt_reg = 0x68220,
++	.halt_check = BRANCH_HALT_DELAY,
+ 	.clkr = {
+ 		.enable_reg = 0x68220,
+ 		.enable_mask = BIT(0),
+@@ -3491,6 +3498,7 @@ static struct clk_branch gcc_ubi1_axi_clk = {
+ 
+ static struct clk_branch gcc_ubi1_nc_axi_clk = {
+ 	.halt_reg = 0x68224,
++	.halt_check = BRANCH_HALT_DELAY,
+ 	.clkr = {
+ 		.enable_reg = 0x68224,
+ 		.enable_mask = BIT(0),
+@@ -3508,6 +3516,7 @@ static struct clk_branch gcc_ubi1_nc_axi_clk = {
+ 
+ static struct clk_branch gcc_ubi1_core_clk = {
+ 	.halt_reg = 0x68230,
++	.halt_check = BRANCH_HALT_DELAY,
+ 	.clkr = {
+ 		.enable_reg = 0x68230,
+ 		.enable_mask = BIT(0),
+@@ -3525,6 +3534,7 @@ static struct clk_branch gcc_ubi1_core_clk = {
+ 
+ static struct clk_branch gcc_ubi1_mpt_clk = {
+ 	.halt_reg = 0x68228,
++	.halt_check = BRANCH_HALT_DELAY,
+ 	.clkr = {
+ 		.enable_reg = 0x68228,
+ 		.enable_mask = BIT(0),
 -- 
 2.36.1
 

@@ -2,148 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C735752798A
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 21:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0324352798B
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 21:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233804AbiEOTgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 15:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54418 "EHLO
+        id S236080AbiEOTiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 15:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230324AbiEOTg3 (ORCPT
+        with ESMTP id S229587AbiEOTiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 15:36:29 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C3CDF71
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 12:36:27 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id e29so8305900wrc.11
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 12:36:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=MS34JneIXe2cr4Zw4VSoJkkUB+splLBi5YgL0r5NFUE=;
-        b=1fVCx2XCO96HWGHmqMT+95KanFG/MaZFOk5g1B2M/olyqrfQhG9tu9sldvEU5xvUM8
-         ahDSybUlSbc0r/i0kTH1ewcB3/Zu/n5qUK5hxshIvF/5qXlQIeMCMV0zcrZ3iE+zG8tK
-         xOxouRhFxtCxk+iIH24gFXr19GbPG+DRWVaOO2Iqo4cwScoMd1FWaUc+7GNJZnbUWbk8
-         uh10A2jKl0jv7VYmXSYviPQq7lHSHmi27JwOxxkQ1jKIy5uRd8Gs5NAU4PhUMFfbEkUl
-         op6hZRubjkhbFUHP2RYhgzLi3FKn2rjmceNdJxv/g/x3yK61MbixjAX6kbQPdVmm3Lgf
-         1B+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=MS34JneIXe2cr4Zw4VSoJkkUB+splLBi5YgL0r5NFUE=;
-        b=d49WMvD8I8+lVi5blp8p2unAKf7e5j63uCNl6w4yHWWUJxEtqM+OfOJOcB4qpAzUUU
-         FkONfj6DvO58LSfztgc/kePjhEtliDCoCPps8iPivgJC9UeHRbBDswsATpwz01bkHGjK
-         9EJ+hfipZZ8r/BAG7iDNA5qCFFF87JX+On/7T7hcTlGoJpw6vmlIm2jTTS7WjdC5JIhz
-         pAfT5XVG5c7ufk/CKzIvt4dxLWWbBHYUL04lW7Jvm074QijmevynuQZ+Psc+TrM6ee/z
-         ykXrfSictNOxeQ8OuDgat4i3VHT3clalnKgH4FeIly2MW4UWuyqgvfsW86dnFw4xleCL
-         C9PQ==
-X-Gm-Message-State: AOAM533zrfPG718ahkU5egSUo2Sp9j7Sk1370Jqz7Fta8zCqE+tU2MDC
-        WRglyAhYdBdJl1zh21jsu+Wewmb34IpHQg==
-X-Google-Smtp-Source: ABdhPJy5g2iblnEBSZTxvgjc3b5oSMRyyCmenrG289QeOSNqfVatufCv1wQZcIoYniIBy/y92lK2zA==
-X-Received: by 2002:a05:6000:381:b0:20c:6911:f85b with SMTP id u1-20020a056000038100b0020c6911f85bmr11479995wrf.406.1652643385471;
-        Sun, 15 May 2022 12:36:25 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id g23-20020adfa497000000b0020d0a070c80sm570044wrb.35.2022.05.15.12.36.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 May 2022 12:36:24 -0700 (PDT)
-Date:   Sun, 15 May 2022 21:36:20 +0200
-From:   LABBE Corentin <clabbe@baylibre.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>
-Subject: Re: [PATCH v3 2/2] hwmon: acpi_power_meter: convert to
- hwmon_device_register_with_info
-Message-ID: <YoFWNAhiDrzpeBU8@Red>
-References: <20220509063010.3878134-1-clabbe@baylibre.com>
- <20220509063010.3878134-3-clabbe@baylibre.com>
- <e5f6c712-efed-2126-de2b-9a0d09150e7b@roeck-us.net>
+        Sun, 15 May 2022 15:38:12 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9DFF2A723
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 12:38:11 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652643489;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+5LCsW8k7IMBIoubQ8rXPA9GnJrMZKFQzAkQTlILy9g=;
+        b=FldEA02iAWFSLvS9H+hHyYfFA9ud0FV7oPLk+g7hDSj8oxQiPEX1hLAxn+AfidjhgMCwJ3
+        mobJFKKzvWnUg8imAqqVxCt4cuirIKf1ZeQvr81b664kPA31aROreeQt0WMV/20wompYKH
+        3Pb1aVgmlSV8LLrjLqN7/oNBdFPj8Ioe7G1sfwZ5g2kPHB1ScBFd/gn5xSa62oVbFaMUYb
+        Fty5/uYikAg4yCyW2nz+o3PmCFBtNndpyXOb/8S+Zg8pDv/wDtxU5w0SXLN7UCMfvq3P+W
+        fbPctagAzNFNmIMb0ZoTrq+UQDgctfKpQmG8+yx1i1clnaVL76/VnngPh+BRjA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652643489;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+5LCsW8k7IMBIoubQ8rXPA9GnJrMZKFQzAkQTlILy9g=;
+        b=t0slTWbY4t8OnN7SBKS0xeJTT4TAWF5Ik5fODcSiFhvNSMnWKvW7AqqA3DXciGMvfww3Zy
+        KCqcCoLTZrts9+DQ==
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "aryabinin@virtuozzo.com" <aryabinin@virtuozzo.com>,
+        "dvyukov@google.com" <dvyukov@google.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "glider@google.com" <glider@google.com>
+Subject: Re: [RFCv2 03/10] x86: Introduce userspace API to handle per-thread
+ features
+In-Reply-To: <95efb5ae85a96914fff3939d4924e46686196cc7.camel@intel.com>
+References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
+ <20220511022751.65540-5-kirill.shutemov@linux.intel.com>
+ <CAG_fn=V8k3hiviv3htV6wWZ6fUBri=MORfXGJ+Kz7GdRDZvesA@mail.gmail.com>
+ <da0f438bb459050e5a586a17382e961259449761.camel@intel.com>
+ <20220513230958.dbxp6m3y3lnq74qb@black.fi.intel.com>
+ <543eb3ff98f624c6cfa1d450ac3e9ae8934c7c38.camel@intel.com>
+ <87k0aose62.ffs@tglx>
+ <9e59305039f2c8077ee087313d1df5ff06028cfe.camel@intel.com>
+ <87zgjjqico.ffs@tglx>
+ <95efb5ae85a96914fff3939d4924e46686196cc7.camel@intel.com>
+Date:   Sun, 15 May 2022 21:38:08 +0200
+Message-ID: <87lev2r3hb.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e5f6c712-efed-2126-de2b-9a0d09150e7b@roeck-us.net>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Wed, May 11, 2022 at 07:10:29PM -0700, Guenter Roeck a écrit :
-> Corentin,
-> 
-> On 5/8/22 23:30, Corentin Labbe wrote:
-> > Booting lead to a hwmon_device_register() is deprecated. Please convert the driver to use hwmon_device_register_with_info().
-> > So let's convert the driver to use hwmon_device_register_with_info().
-> > 
-> > Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> > ---
-> [ ... ]
-> 
-> > @@ -836,20 +740,20 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
-> >   		if (res)
-> >   			break;
-> >   
-> > -		remove_attrs(resource);
-> > +		remove_domain_devices(resource);
-> >   		setup_attrs(resource);
-> 
-> Zhang Rui found an interesting problem with this code:
-> It needs a call to sysfs_update_groups(hwmon_dev->groups)
-> to update sysfs attribute visibility, probably between
-> remove_domain_devices() and setup_attrs().
-> 
-> >   		break;
-> >   	case METER_NOTIFY_TRIP:
-> > -		sysfs_notify(&device->dev.kobj, NULL, POWER_AVERAGE_NAME);
-> > +		hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_average, 0);
-> 
-> ... which makes realize: The notification device should be the hwmon device.
-> That would be resource->hwmon_dev, not the acpi device.
-> 
+On Sun, May 15 2022 at 18:24, Edgecombe, Rick P wrote:
+> On Sun, 2022-05-15 at 11:02 +0200, Thomas Gleixner wrote:
+>> If it really turns out to be something which matters, then you can
+>> provide a batch interface later on if it makes sense to do so, but
+>> see
+>> above.
+>
+> Thanks, sounds good to me.
+>
+> Kirill, so I guess we can just change ARCH_THREAD_FEATURE_ENABLE/
+> ARCH_THREAD_FEATURE_DISABLE to return EINVAL if more than one bit is
+> set. It returns 0 on success and whatever error code on failure.
+> Userspace can do whatever rollback logic it wants. What do you think?
 
-Hello
+Why having this feature bit interface in the first place?
 
-Since my hardware lacks capabilities testing this, I have emulated it on qemu:
-https://github.com/montjoie/qemu/commit/320f2ddacb954ab308ef699f66fca6313f75bc2b
+It's going to be a demultiplex mechanism with incompatible
+arguments. Just look at LAM. What's really architecture specific about
+it?
 
-I have added a custom ACPI _DBX method for triggering some ACPI state change. (like config change, like enabling CAP).
+The mechanism per se is architecture independent: pointer tagging.
 
-For testing config change I have tried lot of way:
-                res = read_capabilities(resource);
-@@ -742,18 +758,22 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
- 
-                remove_domain_devices(resource);
-                setup_attrs(resource);
-+               res = sysfs_update_groups(&resource->hwmon_dev->kobj, acpi_power_groups);
-+               res = sysfs_update_groups(&resource->acpi_dev->dev.kobj, acpi_power_groups);
-+               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_cap, 0);
-+               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_average, 0);
-                break;
-        case METER_NOTIFY_TRIP:
--               hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_average, 0);
-+               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_average, 0);
-                break;
-        case METER_NOTIFY_CAP:
--               hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_cap, 0);
-+               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_cap, 0);
-                break;
-        case METER_NOTIFY_INTERVAL:
--               hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_average_interval, 0);
-+               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_average_interval, 0);
-                break;
-        case METER_NOTIFY_CAPPING:
--               hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_alarm, 0);
-+               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_alarm, 0);
-                dev_info(&device->dev, "Capping in progress.\n");
-                break;
-        default:
+What's architecture specific is whether it's supported, the address mask
+and the enable/disable mechanism.
 
-But nothing force visibility to be rerun.
+So having e.g.
 
-Any idea on how to force visibility to be re-run ?
+   prctl(POINTER_TAGGING_GET_MASK, &mask);
+
+works on all architectures which support this. Ditto
+
+   prctl(POINTER_TAGGING_ENABLE, &mask);
+
+is architecture agnostic. Both need to be backed by an architecture
+specific implementation of course.
+
+This makes it future proof because new CPUs could define the mask to be
+bit 57-61 and use bit 62 for something else. So from a user space
+perspective the mask retrival is useful because it's obvious and trivial
+to use and does not need code changes when the hardware implementation
+provides a different mask.
+
+See?
+
+The thread.features bitmap could still be used as an internal storage
+for enabled features, but having this as the primary programming
+interface is cumbersome and unflexible for anything which is not binary
+on/off.
+
+Thanks,
+
+        tglx
+
+

@@ -2,101 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7413552753C
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 05:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F7352753D
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 05:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234070AbiEODlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 23:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39200 "EHLO
+        id S235262AbiEODmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 23:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235650AbiEODll (ORCPT
+        with ESMTP id S234156AbiEODmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 23:41:41 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399CD65CA
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 20:41:40 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so11258816pjq.2
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 20:41:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yTJ/JqBThBUULFI/eq0KMUagYlEy+U8Gm8DCXUOLqI4=;
-        b=Nj4rFH2iGcDCRWm7En8MMB9PlgCsyGVxQAPs7BMHVclQ27z31PBw6Dxdm3IvfWzPAV
-         L7mSdonC/7b1wN1otPDwe1wD51BlBkiLnb6TRuJ8hkgKwbPpocmSPsCRB/70parsHMgc
-         4ME6hu5g6TfCBsYNyr2rW8AOj4lsDpFe7p17c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yTJ/JqBThBUULFI/eq0KMUagYlEy+U8Gm8DCXUOLqI4=;
-        b=wB8TmYOoKZrHkHoXSBnlzOmoe3gzcWubr+a4c3dOoLgKN6k34mbKhqciFjkD56RN8o
-         ZVFa7eC5oVjxaGCHfwq+KR8YwV0yU8T6CfQDjgy+KOwWlVgCWAPoGd18VT5qvvEh5sGH
-         8+bPQ6i+fMtNT8MpvkXS8PIiZWkIAWnZsnyAszbBPpTZM+bDYl7Ly26feltegXPcYJ8j
-         KY+gkKGjK4RIZV1mPW1JLXgF6BnfxJqWjtavNGEyr04JPBLPlzDFgdsobT6Zn6ICbJ1H
-         7r4rgfVInuwY7aQrR9py9wt3dKPrw5eXw5PTkq6CROGXmuFnON+GLJxX2ED2u+dQoIBE
-         nNcg==
-X-Gm-Message-State: AOAM531f0wDDi4PfzvwZ50i8WQ0qKyDPl95IgW5hhh/lUuDT+sg8oqCW
-        EABBjVdeAdDXBGZxsuDWAGin5g==
-X-Google-Smtp-Source: ABdhPJzZ7tgR5pXn1XQv2q/TxKce2IqTRDTreHqkACR4UFVQZMe4HvU+Dngyrw5oYGEcUo13rmdg5w==
-X-Received: by 2002:a17:90b:1251:b0:1d7:f7ae:9f1 with SMTP id gx17-20020a17090b125100b001d7f7ae09f1mr24122359pjb.65.1652586099705;
-        Sat, 14 May 2022 20:41:39 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id cu8-20020a056a00448800b0050dc76281b3sm4375942pfb.141.2022.05.14.20.41.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 May 2022 20:41:39 -0700 (PDT)
-Date:   Sat, 14 May 2022 20:41:35 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-hardening@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH v2 06/21] cfi: Switch to -fsanitize=kcfi
-Message-ID: <202205142031.A3322C75@keescook>
-References: <20220513202159.1550547-1-samitolvanen@google.com>
- <20220513202159.1550547-7-samitolvanen@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220513202159.1550547-7-samitolvanen@google.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 14 May 2022 23:42:08 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA394B7C1
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 20:42:06 -0700 (PDT)
+Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxMNqKdoBiT5YWAA--.16685S2;
+        Sun, 15 May 2022 11:42:02 +0800 (CST)
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jianmin Lv <lvjianmin@loongson.cn>
+Subject: [PATCH RFC 07/10] irqchip/loongson-htvec: Add suspend/resume support
+Date:   Sun, 15 May 2022 11:41:59 +0800
+Message-Id: <1652586122-22975-1-git-send-email-lvjianmin@loongson.cn>
+X-Mailer: git-send-email 1.8.3.1
+X-CM-TRANSID: AQAAf9BxMNqKdoBiT5YWAA--.16685S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJr18ZrW7uF18Jw4UuFWfZrb_yoW8Cw17pa
+        y5CrW5tw47GFyxXrnxAF4UZr1av34rGrW2vFWfta13u3ZrKw1DGF48AF1YyF48ArZ29Fn0
+        gFW5uws8Ca15JFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE-syl
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r
+        4UJwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUp6wZUUUUU=
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 01:21:44PM -0700, Sami Tolvanen wrote:
-> Switch from Clang's original forward-edge control-flow integrity
-> implementation to -fsanitize=kcfi, which is better suited for the
-> kernel, as it doesn't require LTO, doesn't use a jump table that
-> requires altering function references, and won't break cross-module
-> function address equality.
-> 
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+Add suspend/resume support for HTVEC irqchip, which is needed for
+suspend/hibernation.
 
-Looks good on arm64 with LKDTM, too:
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+---
+ drivers/irqchip/irq-loongson-htvec.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-[   96.904483] lkdtm: Performing direct entry CFI_FORWARD_PROTO
-[   96.904718] lkdtm: Calling matched prototype ...
-[   96.904829] lkdtm: Calling mismatched prototype ...
-[   96.905250] CFI failure at lkdtm_CFI_FORWARD_PROTO+0x54/0x94 [lkdtm] (target: lkdtm_increment_int+0x0/0x20 [lkdtm]; expected type: 0x7e0c52a5)
-
-Tested-by: Kees Cook <keescook@chromium.org>
-
--Kees
-
+diff --git a/drivers/irqchip/irq-loongson-htvec.c b/drivers/irqchip/irq-loongson-htvec.c
+index 354630b..a3c60e3 100644
+--- a/drivers/irqchip/irq-loongson-htvec.c
++++ b/drivers/irqchip/irq-loongson-htvec.c
+@@ -16,6 +16,7 @@
+ #include <linux/of_address.h>
+ #include <linux/of_irq.h>
+ #include <linux/of_platform.h>
++#include <linux/syscore_ops.h>
+ #include "irq-loongarch-pic-common.h"
+ 
+ /* Registers */
+@@ -31,6 +32,7 @@ struct htvec {
+ 	struct irq_domain	*htvec_domain;
+ 	raw_spinlock_t		htvec_lock;
+ 	struct fwnode_handle	*domain_handle;
++	u32			saved_vec_en[HTVEC_MAX_PARENT_IRQ];
+ };
+ 
+ static struct htvec *htvec_priv;
+@@ -158,6 +160,29 @@ static void htvec_reset(struct htvec *priv)
+ 	}
+ }
+ 
++static int htvec_suspend(void)
++{
++	int i;
++
++	for (i = 0; i < htvec_priv->num_parents; i++)
++		htvec_priv->saved_vec_en[i] = readl(htvec_priv->base + HTVEC_EN_OFF + 4 * i);
++
++	return 0;
++}
++
++static void htvec_resume(void)
++{
++	int i;
++
++	for (i = 0; i < htvec_priv->num_parents; i++)
++		writel(htvec_priv->saved_vec_en[i], htvec_priv->base + HTVEC_EN_OFF + 4 * i);
++}
++
++static struct syscore_ops htvec_syscore_ops = {
++	.suspend = htvec_suspend,
++	.resume = htvec_resume,
++};
++
+ static int htvec_init(phys_addr_t addr, unsigned long size,
+ 		int num_parents, int parent_irq[], struct fwnode_handle *domain_handle)
+ {
+@@ -193,6 +218,8 @@ static int htvec_init(phys_addr_t addr, unsigned long size,
+ 
+ 	register_syscore_ops(&htvec_syscore_ops);
+ 
++	register_syscore_ops(&htvec_syscore_ops);
++
+ 	return 0;
+ 
+ iounmap_base:
 -- 
-Kees Cook
+1.8.3.1
+

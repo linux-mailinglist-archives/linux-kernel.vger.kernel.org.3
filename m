@@ -2,77 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7B252780D
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 16:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A1352780F
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 16:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237092AbiEOO0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 10:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54258 "EHLO
+        id S237321AbiEOO1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 10:27:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237150AbiEOO0N (ORCPT
+        with ESMTP id S237157AbiEOO1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 10:26:13 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0F8E0F7
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 07:26:11 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id z26so13528974iot.8
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 07:26:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=ZSoUlf0cPEpL7jjk6Nyt81rsCpO1vJSuE6CFnE/F0mc=;
-        b=b0f/0zGlxeNvBazCWHGLnEogvpYVwdbHKraBidfsS+DkeWqlwrQIc3N1xeah/fVea+
-         UUdObxZ+WzVcdANTee84Dzmz4V361Es6A4m2OMgNl/blJb+l4TfYIHN1kAGywVPDu2Kj
-         BdSeR4I9ln2Eu42xsTHm+op99KhtmX+R33f0vu84er35mC4fxOyghJKiTvdiQuvfgLhj
-         /oq6MijwDgaUd/A9mQLTfCIbedS373eDvTiJuXjh+s3ok+1gXW65DBpcztaFeNORrKwo
-         1Yx6iTiodl/+nHw/OUUfkQCx5gNB6Q1FUKzvruaDD1If61XnfFlw2DxPdIueq+DhiAbO
-         ksDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=ZSoUlf0cPEpL7jjk6Nyt81rsCpO1vJSuE6CFnE/F0mc=;
-        b=RqyDfWYJSKoEDpNSgJ4Uyze7nMEFy9RdStvryx09FH4P7ekbls4OsxXA+mkPrLqTAX
-         0MDKaMciLQHtsF/XQkciEMXnPSGPkIIbhi+EMeTe6iouxjy51Z6gQvnI1rFJBJ8PdZr0
-         YYnfKLORFSdenIbXTgjkjWbR0KCPMBaDzzNYpoJGsaLnA9EfYW9dHG1+Qa0goy3quabb
-         M2wTzzaI0HvVtwM1ssb650WD+A5UNhrdWiXUfQFLWa2NjgiN76hsdY0o/hlQgB22zXTh
-         W7PUWT4p/xxsP6VRBvmQ1qXOiUCFu8gncYvpLns44v98XnWZHSzGhPieojrv/YQaaqZV
-         NRgg==
-X-Gm-Message-State: AOAM530obfl3KDyTvlkuXL7DwNp9hGjSzGQ7x3JqOXlqVls2IJHgJQvQ
-        8bDMQ8mZUsteuhPJVPnq0zZjF8qpJglngVoCWOI=
-X-Google-Smtp-Source: ABdhPJzybqplS+ZUobLPmrJVOaclSJUS7jYcUxDQFT/Co8y/3rj2stEicX0BOd65DVwhvdT5DTp4HOHjMU3WMBAuCyo=
-X-Received: by 2002:a6b:3ec1:0:b0:65a:499f:23a4 with SMTP id
- l184-20020a6b3ec1000000b0065a499f23a4mr5969547ioa.189.1652624771350; Sun, 15
- May 2022 07:26:11 -0700 (PDT)
+        Sun, 15 May 2022 10:27:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B312A26D;
+        Sun, 15 May 2022 07:27:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F45DB80CFA;
+        Sun, 15 May 2022 14:27:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B83FEC385B8;
+        Sun, 15 May 2022 14:27:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652624827;
+        bh=nDUjVQrVdv4GW477qujXZY3cFAwB5uBxzIt6AfcP7lI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=lkXSBWFbOcy6Bve1L1Hi4GtW8wVrnbgBWlndYqNEgAasFtrZZntqQBz9awmDWc+nY
+         87bydvn44EpxOI3mV5D15CHsBQzv9/5Etf/KSEdWrAR/RWPzyV/gUEa1g29a5c8JXF
+         bOT3t4y4vKO5D1hqcGHP7knPIH9UQY+ykvOg0S5M=
+Date:   Sun, 15 May 2022 16:27:04 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB driver fixes for 5.18-rc7
+Message-ID: <YoENuIsPvWwfh3F7@kroah.com>
 MIME-Version: 1.0
-Sender: soniaavis.ibrahim02@gmail.com
-Received: by 2002:a05:6638:34a6:0:0:0:0 with HTTP; Sun, 15 May 2022 07:26:10
- -0700 (PDT)
-From:   Frances Patrick <francespatrick49@gmail.com>
-Date:   Sun, 15 May 2022 07:26:10 -0700
-X-Google-Sender-Auth: aKDpS_Rf5Xd8Vv0PW65YD52D9-I
-Message-ID: <CAPwBKQB_T+LRPRdJ_KENQ4AbUV2ss4wtSPLZVB2zbFosOCqN5w@mail.gmail.com>
-Subject: Donation to you
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Dearest Friend,
+The following changes since commit 672c0c5173427e6b3e2a9bbb7be51ceeec78093a:
 
-Two Million Euros has been donated to you by Frances and Patrick
-Connolly, we are from County Armagh in Northern Ireland, We won the
-New Year's Day EuroMillions draw of  =C2=A3115 million Euros Lottery
-jackpot which was drawn on New Year=E2=80=99s Day. Email for more details:
-francespatrick49@gmail.com Looking forward to hearing from you soon,
+  Linux 5.18-rc5 (2022-05-01 13:57:58 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.18-rc7
+
+for you to fetch changes up to 757b9f6e6a2070043e5f215ff4afe350ecfb2bf7:
+
+  Merge tag 'usb-serial-5.18-rc7' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial (2022-05-13 08:29:40 +0200)
+
+----------------------------------------------------------------
+USB fixes for 5.18-rc7
+
+Here are some small fixes for reported issues with some USB drivers.
+They include:
+	- xhci fixes for xhci-mtk platform driver
+	- typec driver fixes for reported problems.
+	- cdc-wdm read-stuck fix
+	- gadget driver fix for reported race condition
+	- new usb-serial driver ids
+
+All of these have been in linux-next with no reported problems.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+ChiYuan Huang (1):
+      usb: typec: tcpci_mt6360: Update for BMC PHY setting
+
+Chunfeng Yun (2):
+      usb: xhci-mtk: fix fs isoc's transfer error
+      usb: xhci-mtk: remove bandwidth budget table
+
+Dan Vacura (1):
+      usb: gadget: uvc: allow for application to cleanly shutdown
+
+Ethan Yang (1):
+      USB: serial: qcserial: add support for Sierra Wireless EM7590
+
+Greg Kroah-Hartman (1):
+      Merge tag 'usb-serial-5.18-rc7' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial
+
+Schspa Shi (1):
+      usb: gadget: fix race when gadget driver register via ioctl
+
+Scott Chen (1):
+      USB: serial: pl2303: add device id for HP LM930 Display
+
+Sergey Ryazanov (1):
+      usb: cdc-wdm: fix reading stuck on device close
+
+Sven Schwermer (2):
+      USB: serial: option: add Fibocom L610 modem
+      USB: serial: option: add Fibocom MA510 modem
+
+Uwe Kleine-König (1):
+      usb: typec: tcpci: Don't skip cleanup in .remove() on error
+
+ drivers/usb/class/cdc-wdm.c            |  1 +
+ drivers/usb/gadget/function/f_uvc.c    | 25 ++++++++++
+ drivers/usb/gadget/function/uvc.h      |  2 +
+ drivers/usb/gadget/function/uvc_v4l2.c |  3 +-
+ drivers/usb/gadget/legacy/raw_gadget.c |  2 +
+ drivers/usb/host/xhci-mtk-sch.c        | 90 +++++++---------------------------
+ drivers/usb/host/xhci-mtk.h            |  2 -
+ drivers/usb/serial/option.c            |  4 ++
+ drivers/usb/serial/pl2303.c            |  1 +
+ drivers/usb/serial/pl2303.h            |  1 +
+ drivers/usb/serial/qcserial.c          |  2 +
+ drivers/usb/typec/tcpm/tcpci.c         |  2 +-
+ drivers/usb/typec/tcpm/tcpci_mt6360.c  | 26 ++++++++++
+ 13 files changed, 86 insertions(+), 75 deletions(-)

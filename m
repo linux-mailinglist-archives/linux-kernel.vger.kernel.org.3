@@ -2,190 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A9752778F
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 14:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CEEB527798
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 15:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236904AbiEOMnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 08:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59602 "EHLO
+        id S233957AbiEOMwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 08:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236773AbiEOMml (ORCPT
+        with ESMTP id S231362AbiEOMwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 08:42:41 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B497D17A9C;
-        Sun, 15 May 2022 05:42:39 -0700 (PDT)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24F64tN2018967;
-        Sun, 15 May 2022 12:42:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=1l2WtRMp20/zQ/ARHctl2Xng4JO8XSuqPYRhaDk3aLw=;
- b=dZMuiPoMk+WxPCjwNoZsekgcEowc7lrwMfmxvnU2IjKVfAJV/io+ABy04qhfwzLhZYrw
- 8BchtP3QhnvBBLAxnFLdXUnEA8VRxsZfTcpJiUZaIau+pxO20J2i2iE9IYY/t/0ZX8A7
- lA2H8tbK+DXtzsgMigKOCclwALVh7xStuQAAi3o2nV8Z07jk9QrO2/XvE+St/4/kuhxt
- 2uyrWr+RVrdpS+/nSeu4cohuFXCGAMc3kllhzQEppeteR/85wkiZezmO9pLlxGp71LSL
- ixnjBh5E9w2z6QzeYn8p90mDEgwi/X6iNRLxiNp1Glb+xYjBKb7Do8zMadwAHTjLm4Kk VQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g2e07x6nb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 15 May 2022 12:42:08 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24FCg7u7016544;
-        Sun, 15 May 2022 12:42:07 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g2e07x6ms-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 15 May 2022 12:42:07 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24FCdeI1022804;
-        Sun, 15 May 2022 12:42:05 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03fra.de.ibm.com with ESMTP id 3g2428s208-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 15 May 2022 12:42:05 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24FCg3bI22020378
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 15 May 2022 12:42:03 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E94B811C058;
-        Sun, 15 May 2022 12:42:02 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 53EFB11C04A;
-        Sun, 15 May 2022 12:42:00 +0000 (GMT)
-Received: from sig-9-65-80-60.ibm.com (unknown [9.65.80.60])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sun, 15 May 2022 12:42:00 +0000 (GMT)
-Message-ID: <5d5e459069bef1c9c7eddec973987a08c4b16d30.camel@linux.ibm.com>
-Subject: Re: [PATCH v7] efi: Do not import certificates from UEFI Secure
- Boot for T2 Macs
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Aditya Garg <gargaditya08@live.com>
-Cc:     "jarkko@kernel.org" <jarkko@kernel.org>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "kafai@fb.com" <kafai@fb.com>,
-        "songliubraving@fb.com" <songliubraving@fb.com>,
-        "yhs@fb.com" <yhs@fb.com>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        "admin@kodeit.net" <admin@kodeit.net>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Date:   Sun, 15 May 2022 08:41:59 -0400
-In-Reply-To: <D6CDA21E-CC8F-4DA1-A5A4-8B706CA79182@live.com>
-References: <652C3E9E-CB97-4C70-A961-74AF8AEF9E39@live.com>
-         <94DD0D83-8FDE-4A61-AAF0-09A0175A0D0D@live.com>
-         <590ED76A-EE91-4ED1-B524-BC23419C051E@live.com>
-         <E9C28706-2546-40BF-B32C-66A047BE9EFB@live.com>
-         <02125722-91FC-43D3-B63C-1B789C2DA8C3@live.com>
-         <958B8D22-F11E-4B5D-9F44-6F0626DBCB63@live.com>
-         <06062b288d675dc060f33041e9b2009c151698e6.camel@linux.ibm.com>
-         <D6CDA21E-CC8F-4DA1-A5A4-8B706CA79182@live.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: saHdDgJSxeCMDniNSm7mqvPsBH743un7
-X-Proofpoint-GUID: 2Fr8-VO3Z_jmN7W97rGgdr-O6jwKDpMn
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Sun, 15 May 2022 08:52:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F87435854
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 05:52:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D175B80CE5
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 12:52:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33A63C385B8;
+        Sun, 15 May 2022 12:52:05 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZiMLpABp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1652619123;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=YaXUzN8cIV7XbtzawW082K/tICSDvFVRFypohP8tyl8=;
+        b=ZiMLpABpinYKIHxJSdsU70/14JOXTUjyVc/WDMhB79jsLJYO5L6R2YBMonxevSGEoN2CH+
+        Dh52aThrmZgr6Z7X5ZnlfgJ5NueForeSijagjQcvI8c92qOlcFFmArHDC3hyV5ba9cG9Zr
+        GVDNMEOP3XPIzafB20HKSwpdy5SW4jU=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 38e2dcf6 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sun, 15 May 2022 12:52:02 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: [PATCH] random: unify batched entropy implementations
+Date:   Sun, 15 May 2022 14:51:59 +0200
+Message-Id: <20220515125159.444709-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-15_06,2022-05-13_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
- bulkscore=0 impostorscore=0 spamscore=0 malwarescore=0 mlxscore=0
- adultscore=0 phishscore=0 priorityscore=1501 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205150065
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-05-13 at 18:31 +0000, Aditya Garg wrote:
-> > Are there directions for installing Linux on a Mac with Apple firmware
-> > code?  
-> 
-> Well, directions of installing Linux on an Intel based Mac, which
-> includes the T2 Macs is the same as on a normal PC.
-> 
-> Though, in case of T2 Macs, we for now need to use customised ISOs,
-> since some drivers and patches to support T2 Macs are yet to be
-> upstreamed.
-> 
-> An example of installing Ubuntu can be read here on 
-> https://wiki.t2linux.org/distributions/ubuntu/installation/
-> 
-> Talking about the official ISOs, for many distros, since
-> CONFIG_LOAD_UEFI_KEYS is not enabled in their kernel config, we can
-> install Linux using them, but they still lack many drivers required,
-> since they are yet to be upstreamed. So the installation doesn’t work
-> efficiently and we have to manually install custom kernels having
-> those patches.
-> 
-> In some distros like Ubuntu, they have CONFIG_LOAD_UEFI_KEYS enabled
-> in their kernel config. In this case the crash as mentioned in the
-> patch description occurs and EFI Runtime Services get disabled. Since
-> installing GRUB requires access to NVRAM, the installation fails with
-> official ISOs in this case. Thus, a custom ISO, with this patch
-> incorporated in being used for now for users interested in Ubuntu on
-> T2 Macs.
-> 
-> > Are you dual booting Linux and Mac, or just Linux?
-> 
-> I don’t think it actually matters, though in most of the cases, we
-> dual boot macOS and Linux, but I do have seen cases who wipe out
-> their macOS completely. But this doesn't affect the Secure Boot
-> policy of these machines.
-> 
-> >  While in
-> > secure boot mode, without being able to read the keys to verify the
-> > kernel image signature, the signature verification should fail.
-> 
-> If I enable secure boot in the BIOS settings (macOS Recovery),
-> Apple’s firmware won't allow even the boot loader like GRUB, rEFInd
-> to boot. It shall only allow Windows and macOS to Boot. You could see
-> https://support.apple.com/en-in/HT208198 for more details.
-> 
-> > 
-> > Has anyone else tested this patch?
-> 
-> I work as a maintainer for Ubuntu for T2 Linux community and I have
-> this patch incorporated in the kernels used for Ubuntu ISOs
-> customised for T2 Macs, and thus have many users who have used the
-> ISO and have a successful installation. Thus, there are many users
-> who have tested this patch and are actually using it right now.
-> We also need the have the NVRAM writes enabled so as to unlock the
-> iGPU in Macs with both Intel and AMD GPU, and with this patch, we
-> have been successfully able to unlock it,
-> 
-> I hope I could answer your questions
+There are currently two separate batched entropy implementations, for
+u32 and u64, with nearly identical code, with the goal of avoiding
+unaligned memory accesses and letting the buffers be used more
+efficiently. Having to maintain these two functions independently is a
+bit of a hassle though, considering that they always need to be kept in
+sync.
 
-Yes, thank you.   Based on the link above and 
-https://wiki.t2linux.org/guides/kernel/, I was able boot a kernel
-with/without this patch.
+This commit factors them out into a type-generic macro, so that the
+expansion produces the same code as before, such that diffing the
+assembly shows no differences. This will also make it easier in the
+future to add u16 and u8 batches.
 
-The patch is now queued in the next-integrity-testing branch.
+This was initially tested using an always_inline function and letting
+gcc constant fold the type size in, but the code gen was less efficient,
+and in general it was more verbose and harder to follow. So this patch
+goes with the boring macro solution, similar to what's already done for
+the _wait functions in random.h.
 
-thanks,
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/char/random.c | 147 ++++++++++++++++--------------------------
+ 1 file changed, 55 insertions(+), 92 deletions(-)
 
-Mimi
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 38b4ed7cd5e2..909c23f66fd8 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -507,99 +507,62 @@ static ssize_t get_random_bytes_user(void __user *ubuf, size_t len)
+  * provided by this function is okay, the function wait_for_random_bytes()
+  * should be called and return 0 at least once at any point prior.
+  */
+-struct batched_entropy {
+-	union {
+-		/*
+-		 * We make this 1.5x a ChaCha block, so that we get the
+-		 * remaining 32 bytes from fast key erasure, plus one full
+-		 * block from the detached ChaCha state. We can increase
+-		 * the size of this later if needed so long as we keep the
+-		 * formula of (integer_blocks + 0.5) * CHACHA_BLOCK_SIZE.
+-		 */
+-		u64 entropy_u64[CHACHA_BLOCK_SIZE * 3 / (2 * sizeof(u64))];
+-		u32 entropy_u32[CHACHA_BLOCK_SIZE * 3 / (2 * sizeof(u32))];
+-	};
+-	local_lock_t lock;
+-	unsigned long generation;
+-	unsigned int position;
+-};
+-
+-
+-static DEFINE_PER_CPU(struct batched_entropy, batched_entropy_u64) = {
+-	.lock = INIT_LOCAL_LOCK(batched_entropy_u64.lock),
+-	.position = UINT_MAX
+-};
+-
+-u64 get_random_u64(void)
+-{
+-	u64 ret;
+-	unsigned long flags;
+-	struct batched_entropy *batch;
+-	unsigned long next_gen;
+-
+-	warn_unseeded_randomness();
+-
+-	if  (!crng_ready()) {
+-		_get_random_bytes(&ret, sizeof(ret));
+-		return ret;
+-	}
+-
+-	local_lock_irqsave(&batched_entropy_u64.lock, flags);
+-	batch = raw_cpu_ptr(&batched_entropy_u64);
+-
+-	next_gen = READ_ONCE(base_crng.generation);
+-	if (batch->position >= ARRAY_SIZE(batch->entropy_u64) ||
+-	    next_gen != batch->generation) {
+-		_get_random_bytes(batch->entropy_u64, sizeof(batch->entropy_u64));
+-		batch->position = 0;
+-		batch->generation = next_gen;
+-	}
+ 
+-	ret = batch->entropy_u64[batch->position];
+-	batch->entropy_u64[batch->position] = 0;
+-	++batch->position;
+-	local_unlock_irqrestore(&batched_entropy_u64.lock, flags);
+-	return ret;
+-}
+-EXPORT_SYMBOL(get_random_u64);
+-
+-static DEFINE_PER_CPU(struct batched_entropy, batched_entropy_u32) = {
+-	.lock = INIT_LOCAL_LOCK(batched_entropy_u32.lock),
+-	.position = UINT_MAX
+-};
+-
+-u32 get_random_u32(void)
+-{
+-	u32 ret;
+-	unsigned long flags;
+-	struct batched_entropy *batch;
+-	unsigned long next_gen;
+-
+-	warn_unseeded_randomness();
+-
+-	if  (!crng_ready()) {
+-		_get_random_bytes(&ret, sizeof(ret));
+-		return ret;
+-	}
+-
+-	local_lock_irqsave(&batched_entropy_u32.lock, flags);
+-	batch = raw_cpu_ptr(&batched_entropy_u32);
+-
+-	next_gen = READ_ONCE(base_crng.generation);
+-	if (batch->position >= ARRAY_SIZE(batch->entropy_u32) ||
+-	    next_gen != batch->generation) {
+-		_get_random_bytes(batch->entropy_u32, sizeof(batch->entropy_u32));
+-		batch->position = 0;
+-		batch->generation = next_gen;
+-	}
+-
+-	ret = batch->entropy_u32[batch->position];
+-	batch->entropy_u32[batch->position] = 0;
+-	++batch->position;
+-	local_unlock_irqrestore(&batched_entropy_u32.lock, flags);
+-	return ret;
+-}
+-EXPORT_SYMBOL(get_random_u32);
++#define DEFINE_BATCHED_ENTROPY(type)						\
++struct batch_ ##type {								\
++	/*									\
++	 * We make this 1.5x a ChaCha block, so that we get the			\
++	 * remaining 32 bytes from fast key erasure, plus one full		\
++	 * block from the detached ChaCha state. We can increase		\
++	 * the size of this later if needed so long as we keep the		\
++	 * formula of (integer_blocks + 0.5) * CHACHA_BLOCK_SIZE.		\
++	 */									\
++	type entropy[CHACHA_BLOCK_SIZE * 3 / (2 * sizeof(type))];		\
++	local_lock_t lock;							\
++	unsigned long generation;						\
++	unsigned int position;							\
++};										\
++										\
++static DEFINE_PER_CPU(struct batch_ ##type, batched_entropy_ ##type) = {	\
++	.lock = INIT_LOCAL_LOCK(batched_entropy_ ##type.lock),			\
++	.position = UINT_MAX							\
++};										\
++										\
++type get_random_ ##type(void)							\
++{										\
++	type ret;								\
++	unsigned long flags;							\
++	struct batch_ ##type *batch;						\
++	unsigned long next_gen;							\
++										\
++	warn_unseeded_randomness();						\
++										\
++	if  (!crng_ready()) {							\
++		_get_random_bytes(&ret, sizeof(ret));				\
++		return ret;							\
++	}									\
++										\
++	local_lock_irqsave(&batched_entropy_ ##type.lock, flags);		\
++	batch = raw_cpu_ptr(&batched_entropy_##type);				\
++										\
++	next_gen = READ_ONCE(base_crng.generation);				\
++	if (batch->position >= ARRAY_SIZE(batch->entropy) ||			\
++	    next_gen != batch->generation) {					\
++		_get_random_bytes(batch->entropy, sizeof(batch->entropy));	\
++		batch->position = 0;						\
++		batch->generation = next_gen;					\
++	}									\
++										\
++	ret = batch->entropy[batch->position];					\
++	batch->entropy[batch->position] = 0;					\
++	++batch->position;							\
++	local_unlock_irqrestore(&batched_entropy_ ##type.lock, flags);		\
++	return ret;								\
++}										\
++EXPORT_SYMBOL(get_random_ ##type);
++
++DEFINE_BATCHED_ENTROPY(u64)
++DEFINE_BATCHED_ENTROPY(u32)
+ 
+ #ifdef CONFIG_SMP
+ /*
+-- 
+2.35.1
 

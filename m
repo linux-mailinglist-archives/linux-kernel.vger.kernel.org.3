@@ -2,276 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC36852780E
+	by mail.lfdr.de (Postfix) with ESMTP id 3E7B252780D
 	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 16:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237156AbiEOO0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 10:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54448 "EHLO
+        id S237092AbiEOO0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 10:26:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237184AbiEOO0Z (ORCPT
+        with ESMTP id S237150AbiEOO0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 10:26:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C96A29819
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 07:26:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D268860DBB
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 14:26:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08214C385B8;
-        Sun, 15 May 2022 14:26:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652624783;
-        bh=SGNq/0CIjjXJLoruFRX372xgbkcA0eccmxedWyD7NGA=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=MWlbK74dr032jPmkHdl4YVN0qyGcnFLn+odt7kKOj0vAbXcfyM3HI3GwU/+j36MJr
-         hp6/Jon7DpbMNQvzQajjfXNeytiMJ0eeRDMoS40maIClp6cCVG8BXbzdTmh//9xEgp
-         APRYpQKI+r2H1E7cKqE6k4FzC+YFFpADDPFpxOoaBt2kH1+eu0G857J5YlhfDqhvKR
-         2zp1gFjgRJa5kKyElCOFvID0Jb40ho3rH3G2AXnZbrzAv/XsduCyXrzV/h352aH4YL
-         YY7RS7FlQ6TJ+2Ln4FDWv++u6fRVvMTJ3aBTA16jHK5mrQCWL00eybEBM+IknKNqbk
-         pfyrs4amFxuDw==
-Message-ID: <c4a1b40f-469c-8e27-5fef-cd0d3ccd0089@kernel.org>
-Date:   Sun, 15 May 2022 22:26:09 +0800
+        Sun, 15 May 2022 10:26:13 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0F8E0F7
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 07:26:11 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id z26so13528974iot.8
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 07:26:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=ZSoUlf0cPEpL7jjk6Nyt81rsCpO1vJSuE6CFnE/F0mc=;
+        b=b0f/0zGlxeNvBazCWHGLnEogvpYVwdbHKraBidfsS+DkeWqlwrQIc3N1xeah/fVea+
+         UUdObxZ+WzVcdANTee84Dzmz4V361Es6A4m2OMgNl/blJb+l4TfYIHN1kAGywVPDu2Kj
+         BdSeR4I9ln2Eu42xsTHm+op99KhtmX+R33f0vu84er35mC4fxOyghJKiTvdiQuvfgLhj
+         /oq6MijwDgaUd/A9mQLTfCIbedS373eDvTiJuXjh+s3ok+1gXW65DBpcztaFeNORrKwo
+         1Yx6iTiodl/+nHw/OUUfkQCx5gNB6Q1FUKzvruaDD1If61XnfFlw2DxPdIueq+DhiAbO
+         ksDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=ZSoUlf0cPEpL7jjk6Nyt81rsCpO1vJSuE6CFnE/F0mc=;
+        b=RqyDfWYJSKoEDpNSgJ4Uyze7nMEFy9RdStvryx09FH4P7ekbls4OsxXA+mkPrLqTAX
+         0MDKaMciLQHtsF/XQkciEMXnPSGPkIIbhi+EMeTe6iouxjy51Z6gQvnI1rFJBJ8PdZr0
+         YYnfKLORFSdenIbXTgjkjWbR0KCPMBaDzzNYpoJGsaLnA9EfYW9dHG1+Qa0goy3quabb
+         M2wTzzaI0HvVtwM1ssb650WD+A5UNhrdWiXUfQFLWa2NjgiN76hsdY0o/hlQgB22zXTh
+         W7PUWT4p/xxsP6VRBvmQ1qXOiUCFu8gncYvpLns44v98XnWZHSzGhPieojrv/YQaaqZV
+         NRgg==
+X-Gm-Message-State: AOAM530obfl3KDyTvlkuXL7DwNp9hGjSzGQ7x3JqOXlqVls2IJHgJQvQ
+        8bDMQ8mZUsteuhPJVPnq0zZjF8qpJglngVoCWOI=
+X-Google-Smtp-Source: ABdhPJzybqplS+ZUobLPmrJVOaclSJUS7jYcUxDQFT/Co8y/3rj2stEicX0BOd65DVwhvdT5DTp4HOHjMU3WMBAuCyo=
+X-Received: by 2002:a6b:3ec1:0:b0:65a:499f:23a4 with SMTP id
+ l184-20020a6b3ec1000000b0065a499f23a4mr5969547ioa.189.1652624771350; Sun, 15
+ May 2022 07:26:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [f2fs-dev] [PATCH 4/5 v2] f2fs: do not stop GC when requiring a
- free section
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-References: <20220506232032.1264078-1-jaegeuk@kernel.org>
- <20220506232032.1264078-4-jaegeuk@kernel.org> <Yn1zC6MUZOEbSlWK@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <Yn1zC6MUZOEbSlWK@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Sender: soniaavis.ibrahim02@gmail.com
+Received: by 2002:a05:6638:34a6:0:0:0:0 with HTTP; Sun, 15 May 2022 07:26:10
+ -0700 (PDT)
+From:   Frances Patrick <francespatrick49@gmail.com>
+Date:   Sun, 15 May 2022 07:26:10 -0700
+X-Google-Sender-Auth: aKDpS_Rf5Xd8Vv0PW65YD52D9-I
+Message-ID: <CAPwBKQB_T+LRPRdJ_KENQ4AbUV2ss4wtSPLZVB2zbFosOCqN5w@mail.gmail.com>
+Subject: Donation to you
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/13 4:50, Jaegeuk Kim wrote:
-> The f2fs_gc uses a bitmap to indicate pinned sections, but when disabling
-> chckpoint, we call f2fs_gc() with NULL_SEGNO which selects the same dirty
-> segment as a victim all the time, resulting in checkpoint=disable failure,
-> for example. Let's pick another one, if we fail to collect it.
-> 
-> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> ---
-> 
->   Change log from v1:
->    - refactor the code path to avoid ambiguous condition like BG_GC/sec_freed
-> 
->   fs/f2fs/f2fs.h              |  1 +
->   fs/f2fs/file.c              | 12 ++++++++----
->   fs/f2fs/gc.c                | 14 +++++++++-----
->   fs/f2fs/segment.c           |  3 ++-
->   fs/f2fs/super.c             |  3 ++-
->   include/trace/events/f2fs.h | 11 ++++++++---
->   6 files changed, 30 insertions(+), 14 deletions(-)
-> 
-> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> index 9920b2d6af8f..492af5b96de1 100644
-> --- a/fs/f2fs/f2fs.h
-> +++ b/fs/f2fs/f2fs.h
-> @@ -1271,6 +1271,7 @@ struct f2fs_gc_control {
->   	bool no_bg_gc;			/* check the space and stop bg_gc */
->   	bool should_migrate_blocks;	/* should migrate blocks */
->   	bool err_gc_skipped;		/* return EAGAIN if GC skipped */
-> +	unsigned int nr_free_secs;	/* # of free sections to do GC */
->   };
->   
->   /* For s_flag in struct f2fs_sb_info */
-> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-> index d0547bef0851..216081ea8c81 100644
-> --- a/fs/f2fs/file.c
-> +++ b/fs/f2fs/file.c
-> @@ -1650,7 +1650,8 @@ static int expand_inode_data(struct inode *inode, loff_t offset,
->   	struct f2fs_gc_control gc_control = { .victim_segno = NULL_SEGNO,
->   			.init_gc_type = FG_GC,
->   			.should_migrate_blocks = false,
-> -			.err_gc_skipped = true };
-> +			.err_gc_skipped = true,
-> +			.nr_free_secs = 0 };
->   	pgoff_t pg_start, pg_end;
->   	loff_t new_size = i_size_read(inode);
->   	loff_t off_end;
-> @@ -2350,7 +2351,8 @@ static int f2fs_ioc_gc(struct file *filp, unsigned long arg)
->   	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
->   	struct f2fs_gc_control gc_control = { .victim_segno = NULL_SEGNO,
->   			.no_bg_gc = false,
-> -			.should_migrate_blocks = false };
-> +			.should_migrate_blocks = false,
-> +			.nr_free_secs = 0 };
->   	__u32 sync;
->   	int ret;
->   
-> @@ -2391,7 +2393,8 @@ static int __f2fs_ioc_gc_range(struct file *filp, struct f2fs_gc_range *range)
->   			.init_gc_type = range->sync ? FG_GC : BG_GC,
->   			.no_bg_gc = false,
->   			.should_migrate_blocks = false,
-> -			.err_gc_skipped = range->sync };
-> +			.err_gc_skipped = range->sync,
-> +			.nr_free_secs = 0 };
->   	u64 end;
->   	int ret;
->   
-> @@ -2837,7 +2840,8 @@ static int f2fs_ioc_flush_device(struct file *filp, unsigned long arg)
->   	struct f2fs_gc_control gc_control = {
->   			.init_gc_type = FG_GC,
->   			.should_migrate_blocks = true,
-> -			.err_gc_skipped = true };
-> +			.err_gc_skipped = true,
-> +			.nr_free_secs = 0 };
->   	int ret;
->   
->   	if (!capable(CAP_SYS_ADMIN))
-> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-> index e275b72bc65f..10b24b0f13a5 100644
-> --- a/fs/f2fs/gc.c
-> +++ b/fs/f2fs/gc.c
-> @@ -147,6 +147,7 @@ static int gc_thread_func(void *data)
->   
->   		gc_control.init_gc_type = sync_mode ? FG_GC : BG_GC;
->   		gc_control.no_bg_gc = foreground;
-> +		gc_control.nr_free_secs = foreground ? 1 : 0;
->   
->   		/* if return value is not zero, no victim was selected */
->   		if (f2fs_gc(sbi, &gc_control))
-> @@ -1761,6 +1762,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
->   	unsigned int skipped_round = 0, round = 0;
->   
->   	trace_f2fs_gc_begin(sbi->sb, gc_type, gc_control->no_bg_gc,
-> +				gc_control->nr_free_secs,
->   				get_pages(sbi, F2FS_DIRTY_NODES),
->   				get_pages(sbi, F2FS_DIRTY_DENTS),
->   				get_pages(sbi, F2FS_DIRTY_IMETA),
-> @@ -1823,12 +1825,13 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
->   	if (gc_type == FG_GC)
->   		sbi->cur_victim_sec = NULL_SEGNO;
->   
-> -	if (gc_control->init_gc_type == FG_GC)
-> -		goto stop;
-> -
-> -	if (!has_not_enough_free_secs(sbi,
-> -			(gc_type == FG_GC) ? sec_freed : 0, 0))
-> +	if (gc_control->init_gc_type == FG_GC ||
-> +	    !has_not_enough_free_secs(sbi,
-> +				(gc_type == FG_GC) ? sec_freed : 0, 0)) {
+Hello, Dearest Friend,
 
-In all gc_control->init_gc_type = BG_GC cases, gc_control->no_bg_gc is true,
-if gc_type = BG_GC, then it should break out due to below condition.
-
-	/* f2fs_balance_fs doesn't need to do BG_GC in critical path. */
-	if (gc_type == BG_GC && gc_control->no_bg_gc) {
-		ret = -EINVAL;
-		goto stop;
-	}
-
-Otherwise gc_type should always be FG_GC in
-!has_not_enough_free_secs(sbi, (gc_type == FG_GC) ? sec_freed : 0, 0), right?
-
-Thanks,
-
-> +		if (gc_mode == FG_GC && sec_freed < gc_control->nr_free_secs)
-> +			goto go_gc_more;
->   		goto stop;
-> +	}
->   
->   	/* FG_GC stops GC by skip_count */
->   	if (gc_type == FG_GC) {
-> @@ -1849,6 +1852,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
->   		if (ret)
->   			goto stop;
->   	}
-> +go_gc_more:
->   	segno = NULL_SEGNO;
->   	goto gc_more;
->   
-> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-> index 8b4f2b1d2cca..0a4180f64291 100644
-> --- a/fs/f2fs/segment.c
-> +++ b/fs/f2fs/segment.c
-> @@ -404,7 +404,8 @@ void f2fs_balance_fs(struct f2fs_sb_info *sbi, bool need)
->   				.init_gc_type = BG_GC,
->   				.no_bg_gc = true,
->   				.should_migrate_blocks = false,
-> -				.err_gc_skipped = false };
-> +				.err_gc_skipped = false,
-> +				.nr_free_secs = 1 };
->   			f2fs_down_write(&sbi->gc_lock);
->   			f2fs_gc(sbi, &gc_control);
->   		}
-> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-> index a28c27eed6d0..63daae67a9d9 100644
-> --- a/fs/f2fs/super.c
-> +++ b/fs/f2fs/super.c
-> @@ -2080,7 +2080,8 @@ static int f2fs_disable_checkpoint(struct f2fs_sb_info *sbi)
->   			.victim_segno = NULL_SEGNO,
->   			.init_gc_type = FG_GC,
->   			.should_migrate_blocks = false,
-> -			.err_gc_skipped = true };
-> +			.err_gc_skipped = true,
-> +			.nr_free_secs = 1 };
->   
->   		f2fs_down_write(&sbi->gc_lock);
->   		err = f2fs_gc(sbi, &gc_control);
-> diff --git a/include/trace/events/f2fs.h b/include/trace/events/f2fs.h
-> index 54ec9e543f09..16c67ede85b6 100644
-> --- a/include/trace/events/f2fs.h
-> +++ b/include/trace/events/f2fs.h
-> @@ -645,18 +645,21 @@ TRACE_EVENT(f2fs_background_gc,
->   TRACE_EVENT(f2fs_gc_begin,
->   
->   	TP_PROTO(struct super_block *sb, int gc_type, bool no_bg_gc,
-> +			unsigned int nr_free_secs,
->   			long long dirty_nodes, long long dirty_dents,
->   			long long dirty_imeta, unsigned int free_sec,
->   			unsigned int free_seg, int reserved_seg,
->   			unsigned int prefree_seg),
->   
-> -	TP_ARGS(sb, gc_type, no_bg_gc, dirty_nodes, dirty_dents, dirty_imeta,
-> +	TP_ARGS(sb, gc_type, no_bg_gc, nr_free_secs, dirty_nodes,
-> +		dirty_dents, dirty_imeta,
->   		free_sec, free_seg, reserved_seg, prefree_seg),
->   
->   	TP_STRUCT__entry(
->   		__field(dev_t,		dev)
->   		__field(int,		gc_type)
->   		__field(bool,		no_bg_gc)
-> +		__field(unsigned int,	nr_free_secs)
->   		__field(long long,	dirty_nodes)
->   		__field(long long,	dirty_dents)
->   		__field(long long,	dirty_imeta)
-> @@ -670,6 +673,7 @@ TRACE_EVENT(f2fs_gc_begin,
->   		__entry->dev		= sb->s_dev;
->   		__entry->gc_type	= gc_type;
->   		__entry->no_bg_gc	= no_bg_gc;
-> +		__entry->nr_free_secs	= nr_free_secs;
->   		__entry->dirty_nodes	= dirty_nodes;
->   		__entry->dirty_dents	= dirty_dents;
->   		__entry->dirty_imeta	= dirty_imeta;
-> @@ -679,12 +683,13 @@ TRACE_EVENT(f2fs_gc_begin,
->   		__entry->prefree_seg	= prefree_seg;
->   	),
->   
-> -	TP_printk("dev = (%d,%d), gc_type = %s, no_background_GC = %d, nodes = %lld, "
-> -		"dents = %lld, imeta = %lld, free_sec:%u, free_seg:%u, "
-> +	TP_printk("dev = (%d,%d), gc_type = %s, no_background_GC = %d, nr_free_secs = %u, "
-> +		"nodes = %lld, dents = %lld, imeta = %lld, free_sec:%u, free_seg:%u, "
->   		"rsv_seg:%d, prefree_seg:%u",
->   		show_dev(__entry->dev),
->   		show_gc_type(__entry->gc_type),
->   		(__entry->gc_type == BG_GC) ? __entry->no_bg_gc : -1,
-> +		__entry->nr_free_secs,
->   		__entry->dirty_nodes,
->   		__entry->dirty_dents,
->   		__entry->dirty_imeta,
+Two Million Euros has been donated to you by Frances and Patrick
+Connolly, we are from County Armagh in Northern Ireland, We won the
+New Year's Day EuroMillions draw of  =C2=A3115 million Euros Lottery
+jackpot which was drawn on New Year=E2=80=99s Day. Email for more details:
+francespatrick49@gmail.com Looking forward to hearing from you soon,

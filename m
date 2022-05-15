@@ -2,75 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9ADB527932
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 20:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B054527939
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 20:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238415AbiEOSml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 14:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36076 "EHLO
+        id S238385AbiEOSpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 14:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238384AbiEOSmc (ORCPT
+        with ESMTP id S231247AbiEOSpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 14:42:32 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2288ADF15
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 11:42:31 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id y21so15769983edo.2
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 11:42:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kf1qyJ7WcrGbAyk0+4ZCl1Hcx0Pw2x4ceEltokIn6Ec=;
-        b=V+OE4PXTIHs3eExpcvYxcCgVE0v7IGBJuh3YlE13WPevogBZZfxhg1Igl7Y4+nH4mk
-         4sHrazj3HNHHianDRyfEucO/fVJIXTwxsXFDBVQ2XKrYV1rClmK6oXsB8C5uwi0Xhz4m
-         GgeCnq0QQ9LneuNTbbgzd3aQCNSW9k/t8Nk1egm9jPQttvqvB7ByZlpU4D0K2VGY0noj
-         cF7hWYP6DsFj8ntI426bXgGM/f3GKJLCrz0t0avo7qD5Gmsj/x41aE1E/cLosqRojKPh
-         EhKuk1SWUt+FHkMmayhJP5rvcKGykKeh7Beoim1Pf2n8AoB7e0p3cd3VwAehCc4WJbul
-         Ax/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kf1qyJ7WcrGbAyk0+4ZCl1Hcx0Pw2x4ceEltokIn6Ec=;
-        b=qmVQkPYfXPS/E9WHnsTeffjtP0YvJ1bjQ51KQxHQ0uAgmaAfkOGbCon7bz/Qai9aSB
-         /NipMYKvVkEeVE1LEAFr8sAr0nGm1pJHzT9seTAtq1sm48khJLJE718pX3JoAIqxlac3
-         wgFRBGqM5d38IBtZDviVSpqz7mkc7KVRtmkQy+p5GfTmaAwkZcqJpQs3y7i9Ev+pSWys
-         +VrNu6YxcQVnSUFzFWUmjTephgUd7PSsrq5K9IOwMxMWxjrN1yIh+z/twMFOBV1hcNTh
-         VWtdw/Kmkuae25qZ8JN8DthShC781ft38SkIhoDDu4lmHm/veNl5iJlzMazTLAGyUl/Y
-         R4rA==
-X-Gm-Message-State: AOAM530Nu2wEzZkJY6gKaC/BJquC1UMFT/PRTTruSThpDM6Raxf0S72R
-        /Wh82kcbGWSS3kKFnA8BQnw=
-X-Google-Smtp-Source: ABdhPJy/R817RklJo9xBiaf3PVrccBMZmQvjIt08J7GAbWoKofO7M0ET9r2V7/mrtYjbDRwn69ypGw==
-X-Received: by 2002:a05:6402:296:b0:427:e497:29ef with SMTP id l22-20020a056402029600b00427e49729efmr9372588edv.399.1652640149715;
-        Sun, 15 May 2022 11:42:29 -0700 (PDT)
-Received: from localhost.localdomain (93-103-18-160.static.t-2.net. [93.103.18.160])
-        by smtp.gmail.com with ESMTPSA id hv7-20020a17090760c700b006f3ef214e62sm2861898ejc.200.2022.05.15.11.42.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 May 2022 11:42:29 -0700 (PDT)
-From:   Uros Bizjak <ubizjak@gmail.com>
-To:     x86@kernel.org, linux-kernel@vger.kernel.org
-Cc:     Uros Bizjak <ubizjak@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Marco Elver <elver@google.com>
-Subject: [PATCH v3 2/2] locking/atomic/x86: Introduce arch_try_cmpxchg64
-Date:   Sun, 15 May 2022 20:42:04 +0200
-Message-Id: <20220515184205.103089-3-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220515184205.103089-1-ubizjak@gmail.com>
-References: <20220515184205.103089-1-ubizjak@gmail.com>
+        Sun, 15 May 2022 14:45:30 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879A4DF15
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 11:45:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652640329; x=1684176329;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9EEbJRLuIr2Diwm/dZtvlHM+45ZUh+i/4MqYFxrlw40=;
+  b=TVvfwRLpDm23UPr+F1HTVYGo2Iy2ka/7UN3xEydOpnlSauiw9De88Bzl
+   08fW1FQTgZ+Pq5vcyJc8SL4PYR/D/wqSjIUXsd+Z7BQwY+1kl0bgOhNES
+   d4vUsXgH+2kwSWWDBc+2NSQCa8/YMJGviaUES2Es5jwsLskO0avbbPY/W
+   I76WYEiqssw7BRYhYpCvY+Jg+ldb9Gcb8cRdojv2koGSMTt2f3+VNe6Cv
+   BEkBmjtO8BAPusnUbZuDnW8w5Byh9joKVwD2auj6B0/Y24sH/ZJNf4TZ0
+   XbfVasW6y8tYudTOoMc0p3jeaBP6EfLQzbUCX9SFQr/z/GIs4MCFmOv57
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="357074152"
+X-IronPort-AV: E=Sophos;i="5.91,228,1647327600"; 
+   d="scan'208";a="357074152"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2022 11:45:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,228,1647327600"; 
+   d="scan'208";a="625627008"
+Received: from lkp-server01.sh.intel.com (HELO d1462bc4b09b) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 15 May 2022 11:45:28 -0700
+Received: from kbuild by d1462bc4b09b with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nqJF9-0001tz-Bs;
+        Sun, 15 May 2022 18:45:27 +0000
+Date:   Mon, 16 May 2022 02:45:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/cleanups] BUILD SUCCESS
+ 553b0cb30b5452198de3187f1a79989eba38df00
+Message-ID: <62814a2e.2yqz5wtuaudd38P9%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,111 +63,193 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce arch_try_cmpxchg64 for 64-bit and 32-bit targets to improve
-code using cmpxchg64.  On 64-bit targets, the generated assembly improves
-from:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cleanups
+branch HEAD: 553b0cb30b5452198de3187f1a79989eba38df00  x86/speculation: Add missing srbds=off to the mitigations= help text
 
-  ab:	89 c8                	mov    %ecx,%eax
-  ad:	48 89 4c 24 60       	mov    %rcx,0x60(%rsp)
-  b2:	83 e0 fd             	and    $0xfffffffd,%eax
-  b5:	89 54 24 64          	mov    %edx,0x64(%rsp)
-  b9:	88 44 24 60          	mov    %al,0x60(%rsp)
-  bd:	48 89 c8             	mov    %rcx,%rax
-  c0:	c6 44 24 62 f2       	movb   $0xf2,0x62(%rsp)
-  c5:	48 8b 74 24 60       	mov    0x60(%rsp),%rsi
-  ca:	f0 49 0f b1 34 24    	lock cmpxchg %rsi,(%r12)
-  d0:	48 39 c1             	cmp    %rax,%rcx
-  d3:	75 cf                	jne    a4 <t+0xa4>
+elapsed time: 3219m
 
-to:
+configs tested: 166
+configs skipped: 4
 
-  b3:	89 c2                	mov    %eax,%edx
-  b5:	48 89 44 24 60       	mov    %rax,0x60(%rsp)
-  ba:	83 e2 fd             	and    $0xfffffffd,%edx
-  bd:	89 4c 24 64          	mov    %ecx,0x64(%rsp)
-  c1:	88 54 24 60          	mov    %dl,0x60(%rsp)
-  c5:	c6 44 24 62 f2       	movb   $0xf2,0x62(%rsp)
-  ca:	48 8b 54 24 60       	mov    0x60(%rsp),%rdx
-  cf:	f0 48 0f b1 13       	lock cmpxchg %rdx,(%rbx)
-  d4:	75 d5                	jne    ab <t+0xab>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-where a move and a compare after cmpxchg is saved.  The improvements
-for 32-bit targets are even more noticeable, because dual-word compare
-after cmpxchg8b gets eliminated.
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+arm                           stm32_defconfig
+csky                                defconfig
+riscv             nommu_k210_sdcard_defconfig
+powerpc                     tqm8555_defconfig
+arm                          simpad_defconfig
+arm                        cerfcube_defconfig
+sh                          r7785rp_defconfig
+sh                          urquell_defconfig
+xtensa                  audio_kc705_defconfig
+xtensa                           alldefconfig
+m68k                       m5275evb_defconfig
+ia64                      gensparse_defconfig
+xtensa                    xip_kc705_defconfig
+h8300                     edosk2674_defconfig
+arm                            hisi_defconfig
+mips                        bcm47xx_defconfig
+sh                              ul2_defconfig
+sh                      rts7751r2d1_defconfig
+sh                           se7712_defconfig
+mips                             allyesconfig
+mips                         tb0226_defconfig
+sh                   secureedge5410_defconfig
+arc                                 defconfig
+mips                             allmodconfig
+ia64                          tiger_defconfig
+m68k                           sun3_defconfig
+powerpc                       eiger_defconfig
+openrisc                            defconfig
+arm                        trizeps4_defconfig
+powerpc                     stx_gp3_defconfig
+arm64                            alldefconfig
+m68k                          sun3x_defconfig
+nios2                         3c120_defconfig
+m68k                       bvme6000_defconfig
+arm                         axm55xx_defconfig
+i386                             alldefconfig
+ia64                         bigsur_defconfig
+m68k                        mvme147_defconfig
+sh                         ecovec24_defconfig
+powerpc                     taishan_defconfig
+sparc                       sparc32_defconfig
+arm                             ezx_defconfig
+sh                          lboxre2_defconfig
+sh                        sh7763rdp_defconfig
+powerpc                           allnoconfig
+powerpc                 mpc837x_mds_defconfig
+xtensa                  cadence_csp_defconfig
+arm                        oxnas_v6_defconfig
+arm                     eseries_pxa_defconfig
+parisc                generic-64bit_defconfig
+mips                           gcw0_defconfig
+arm                        clps711x_defconfig
+riscv                               defconfig
+powerpc                      pcm030_defconfig
+sparc                       sparc64_defconfig
+arc                     nsimosci_hs_defconfig
+sh                  sh7785lcr_32bit_defconfig
+xtensa                  nommu_kc705_defconfig
+mips                 decstation_r4k_defconfig
+openrisc                  or1klitex_defconfig
+powerpc                    amigaone_defconfig
+sh                          landisk_defconfig
+arm                         s3c6400_defconfig
+sh                   rts7751r2dplus_defconfig
+mips                         mpc30x_defconfig
+sh                          rsk7264_defconfig
+sh                           se7751_defconfig
+parisc                generic-32bit_defconfig
+sh                            hp6xx_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220512
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+s390                 randconfig-r044-20220512
+riscv                randconfig-r042-20220512
+arc                  randconfig-r043-20220512
+arc                  randconfig-r043-20220513
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
 
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Marco Elver <elver@google.com>
----
- arch/x86/include/asm/cmpxchg_32.h | 21 +++++++++++++++++++++
- arch/x86/include/asm/cmpxchg_64.h |  6 ++++++
- 2 files changed, 27 insertions(+)
+clang tested configs:
+powerpc              randconfig-c003-20220512
+x86_64                        randconfig-c007
+riscv                randconfig-c006-20220512
+mips                 randconfig-c004-20220512
+i386                          randconfig-c001
+arm                  randconfig-c002-20220512
+powerpc                     tqm5200_defconfig
+powerpc                          allyesconfig
+powerpc                      ppc64e_defconfig
+x86_64                           allyesconfig
+arm                         orion5x_defconfig
+arm                      pxa255-idp_defconfig
+arm                  colibri_pxa270_defconfig
+arm                        magician_defconfig
+arm                       netwinder_defconfig
+riscv                    nommu_virt_defconfig
+arm                           spitz_defconfig
+mips                  cavium_octeon_defconfig
+powerpc                     tqm8540_defconfig
+riscv                             allnoconfig
+arm                        mvebu_v5_defconfig
+powerpc                 mpc8315_rdb_defconfig
+arm                          moxart_defconfig
+powerpc                   lite5200b_defconfig
+mips                   sb1250_swarm_defconfig
+powerpc                      ppc44x_defconfig
+powerpc                   bluestone_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon              randconfig-r045-20220512
+hexagon              randconfig-r041-20220512
 
-diff --git a/arch/x86/include/asm/cmpxchg_32.h b/arch/x86/include/asm/cmpxchg_32.h
-index 0a7fe0321613..215f5a65790f 100644
---- a/arch/x86/include/asm/cmpxchg_32.h
-+++ b/arch/x86/include/asm/cmpxchg_32.h
-@@ -42,6 +42,9 @@ static inline void set_64bit(volatile u64 *ptr, u64 value)
- #define arch_cmpxchg64_local(ptr, o, n)					\
- 	((__typeof__(*(ptr)))__cmpxchg64_local((ptr), (unsigned long long)(o), \
- 					       (unsigned long long)(n)))
-+#define arch_try_cmpxchg64(ptr, po, n)					\
-+	__try_cmpxchg64((ptr), (unsigned long long *)(po), \
-+			(unsigned long long)(n))
- #endif
- 
- static inline u64 __cmpxchg64(volatile u64 *ptr, u64 old, u64 new)
-@@ -70,6 +73,24 @@ static inline u64 __cmpxchg64_local(volatile u64 *ptr, u64 old, u64 new)
- 	return prev;
- }
- 
-+static inline bool __try_cmpxchg64(volatile u64 *ptr, u64 *pold, u64 new)
-+{
-+	bool success;
-+	u64 old = *pold;
-+	asm volatile(LOCK_PREFIX "cmpxchg8b %[ptr]"
-+		     CC_SET(z)
-+		     : CC_OUT(z) (success),
-+		       [ptr] "+m" (*ptr),
-+		       "+A" (old)
-+		     : "b" ((u32)new),
-+		       "c" ((u32)(new >> 32))
-+		     : "memory");
-+
-+	if (unlikely(!success))
-+		*pold = old;
-+	return success;
-+}
-+
- #ifndef CONFIG_X86_CMPXCHG64
- /*
-  * Building a kernel capable running on 80386 and 80486. It may be necessary
-diff --git a/arch/x86/include/asm/cmpxchg_64.h b/arch/x86/include/asm/cmpxchg_64.h
-index 072e5459fe2f..250187ac8248 100644
---- a/arch/x86/include/asm/cmpxchg_64.h
-+++ b/arch/x86/include/asm/cmpxchg_64.h
-@@ -19,6 +19,12 @@ static inline void set_64bit(volatile u64 *ptr, u64 val)
- 	arch_cmpxchg_local((ptr), (o), (n));				\
- })
- 
-+#define arch_try_cmpxchg64(ptr, po, n)					\
-+({									\
-+	BUILD_BUG_ON(sizeof(*(ptr)) != 8);				\
-+	arch_try_cmpxchg((ptr), (po), (n));				\
-+})
-+
- #define system_has_cmpxchg_double() boot_cpu_has(X86_FEATURE_CX16)
- 
- #endif /* _ASM_X86_CMPXCHG_64_H */
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

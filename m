@@ -2,205 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE25D527684
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 11:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75AB4527689
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 11:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236026AbiEOJI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 05:08:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
+        id S236038AbiEOJL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 05:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236023AbiEOJIU (ORCPT
+        with ESMTP id S233340AbiEOJLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 05:08:20 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366581A05A
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 02:08:18 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id bg25so7097806wmb.4
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 02:08:18 -0700 (PDT)
+        Sun, 15 May 2022 05:11:54 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A4F2BB3D;
+        Sun, 15 May 2022 02:11:52 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id 204so11477315pfx.3;
+        Sun, 15 May 2022 02:11:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4UPlHLLMHUIw4lCwKqytRf70kgAzZVqEMbwMAZTs8QI=;
-        b=eDigYPY7ZRSUS7IKjWCTISNXs1Mys0oeAvOEd5+sNlqwpX/dS2dJLe2BoeGzOeZQkq
-         sUcSBmdYkVkjREcbeEEv72lz4QsNrMpGz9mOQhhXyrQpv0JIjo9XV+tqyVWAtFxDAFpI
-         fNlNnlVdMUgm5Mn3stDJyOZBPJ0u7gI8r6mXz/bkfOGeSSSNK1Tstp8bUrvWh4EZkZ4W
-         ID3H65U+HKbAcs/n1WlOg25czuxfIHpZtmV5poPiYVNi9iPigGWfvCe2vCcb+1NWTQAa
-         XZV0cRmMCXEyyTV7kYBQs/i91pSuUC+zwwJ8CHtdKulK4395d1OQn4p7KP/utLJpZvQJ
-         PhuQ==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:to:cc:references:subject
+         :content-language:from:in-reply-to:content-transfer-encoding;
+        bh=hfMVvEM6vaHEBJKHF5ti7tr+GNbeVh1Fj7Lz2XuFJas=;
+        b=SKdkUX8smXfIVh75dXPn/LgIXpyOmdAoijupL4g/kIA8g9JeXMK7b+Z344rZFKM3jq
+         zgA7PjVaTg8ifJs6TE6Yqb18v0lWJHlv8r9Vf6B0KESH8bOfmRBZROVrcofhpP8nTDXs
+         Kiwd7KPtTq8QbGqio+c24HjZZ3x0ZT8PN1YHWPxIzBzRIFVd0IlBTO6fyRkDEVFX3IqT
+         s1d5L6dhN8q40R4EDwiSuPhp24Qq2t4hAdHUeG7ifOBnP61yaz3EIv7wfyUpqzuThi4G
+         y0TQJEJSJytFYD7InHLQmcRfV0jOsgJgUzODPQrKRbbRGghQXEeh4XmV23dnG9hjnhse
+         NcNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4UPlHLLMHUIw4lCwKqytRf70kgAzZVqEMbwMAZTs8QI=;
-        b=znForvscCiDBsb+vLJF45to5bPEClX80nlhgfS9bwgp5gOVJsA5ppsNVWA+lF8mGNX
-         +MGvmZzwxRHpQZd/PlXfuEXvGT5IfVszc/rV7DCDXVka8TUbyo0nu1BMYWHlC/r4xlXM
-         lJyN9NON0UXyMJQxdMdjsd881mfkKGPXit3azpIkpHtILa44IH4s7V7uhU4XswHOjVfz
-         jZ5rdy97+S9VstUX0bLa1xvnRcR7OOFy80AD+oWwUCfvJHZi9cRdbQ2DcUAkYswiLlLK
-         Q36xQj+vsXcrInOdH68AKZVaIdZ5pf4IACeHng+Peyh2hs8w/mVU/6sxJLDH+1zmKK+L
-         5ugg==
-X-Gm-Message-State: AOAM531APRGVUDZRZ4NaFfd5ighk4fr+9n446FbQ0QECfhft/AV7tkDK
-        aaGeH4Mdme5FSt1dtzNvTTwpx0UUVTGuLgT/s/Ar/g==
-X-Google-Smtp-Source: ABdhPJz9ONQSxakxMZXfP3VzMmYw2QEzxC32G/LK7q2wOgqvmlcLcPLMQv3BfxhBR402cK+g90Fl6xzpUljK0keHiyQ=
-X-Received: by 2002:a05:600c:1908:b0:394:867d:66c4 with SMTP id
- j8-20020a05600c190800b00394867d66c4mr22018729wmq.152.1652605696605; Sun, 15
- May 2022 02:08:16 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
+         :references:subject:content-language:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hfMVvEM6vaHEBJKHF5ti7tr+GNbeVh1Fj7Lz2XuFJas=;
+        b=7CB0ZZBYDFOkEBOm3YTXc1dClwiWOPz0uBl5SsXDFLPHb9lcYBCBGF2CRLpwYVbOZt
+         MuSuSVhKas8bYEBfNlDhMnS4nJ7+EzmFVHlgC/SpVL5rUsvf2RgGgVT9BnckkgqQWYKr
+         5bts7N6q0NXyxB/+QYsawzSuWqk6dc71p55ec60UXmOCpTHIXtltwznWwD6knMoZcbBE
+         9Yb6BjselnWL5uaUt+6xJBcwfRfh6VdxgWVy8ZNdIIVFUqno56bEKEme4jdMReZSNnce
+         5OfwTSONO6r5WSNZdEOjTZsvdrFrHI+zfRbjJDqZd8l6j5EmsGYHYEDLwiC4bASCQL3c
+         UY2g==
+X-Gm-Message-State: AOAM532sUZgzm8ZqzoG57bu8uatKEz2ba9si8G4n0VG12WhhzXTPCABv
+        3d6yOQMREofZ3Z0M0NVlK8o=
+X-Google-Smtp-Source: ABdhPJzQ26g/dK+hBG4nIji59oNyIp7QYa2TAHLdsXCiQIbXoIyj4m0AqCey4lEXiAeEL3j4FdDqCg==
+X-Received: by 2002:aa7:88d1:0:b0:510:3ee2:3f25 with SMTP id k17-20020aa788d1000000b005103ee23f25mr12370982pff.41.1652605911755;
+        Sun, 15 May 2022 02:11:51 -0700 (PDT)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id y1-20020a17090322c100b0015e8d4eb2besm4768941plg.264.2022.05.15.02.11.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 May 2022 02:11:51 -0700 (PDT)
+Message-ID: <f4d40da6-756b-9e75-b867-cc9eedc4b232@gmail.com>
+Date:   Sun, 15 May 2022 18:11:47 +0900
 MIME-Version: 1.0
-References: <20220515023504.1823463-1-yosryahmed@google.com> <20220515023504.1823463-4-yosryahmed@google.com>
-In-Reply-To: <20220515023504.1823463-4-yosryahmed@google.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Sun, 15 May 2022 02:07:40 -0700
-Message-ID: <CAJD7tkaCEcabywFGyeiM9zggx2Tw-e=Qa2UArgxXN8j7vJR-fA@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v2 3/7] libbpf: Add support for rstat flush progs
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>
-Cc:     Stanislav Fomichev <sdf@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-serial@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <alpine.DEB.2.21.2205131712410.10656@angie.orcam.me.uk>
+Subject: Re: [PATCH 0/3] Documentation: Fix issues with Oxford Semiconductor
+ PCIe (Tornado) 950
+Content-Language: en-US
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <alpine.DEB.2.21.2205131712410.10656@angie.orcam.me.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 14, 2022 at 7:35 PM Yosry Ahmed <yosryahmed@google.com> wrote:
->
-> Add support to attach RSTAT_FLUSH programs.
->
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> ---
->  tools/lib/bpf/bpf.c      |  1 -
->  tools/lib/bpf/libbpf.c   | 40 ++++++++++++++++++++++++++++++++++++++++
->  tools/lib/bpf/libbpf.h   |  3 +++
->  tools/lib/bpf/libbpf.map |  1 +
->  4 files changed, 44 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> index 5660268e103f..9e3cb0d1eb99 100644
-> --- a/tools/lib/bpf/bpf.c
-> +++ b/tools/lib/bpf/bpf.c
-> @@ -870,7 +870,6 @@ int bpf_link_create(int prog_fd, int target_fd,
->                 attr.link_create.tracing.cookie = OPTS_GET(opts, tracing.cookie, 0);
->                 if (!OPTS_ZEROED(opts, tracing))
->                         return libbpf_err(-EINVAL);
-> -               break;
+Hi Maciej,
 
-This is a mistake, a remnant of RFC V1. Will remove it in the next version.
+On Fri, 13 May 2022 23:41:57 +0100 (BST),
+Maciej W. Rozycki wrote:
+> Hi,
+> 
+[...]
+> 
+>  For the latter command however I need to note that several other 
+> documents in our Documentation/ tree suffer from a problem that causes 
+> `make pdfdocs' to fail (and the failure cannot be worked around with 
+> make's `-k -i' options, i.e. no output is ever produced), e.g.:
+> 
+> Markup is unsupported in LaTeX:
+> filesystems/9p:: nested tables are not yet implemented.
+> 
+> and similarly for: filesystems/erofs, filesystems/f2fs, filesystems/ntfs, 
+> networking/device_drivers/ethernet/dlink/dl2k, scsi/arcmsr_spec, 
+> scsi/g_NCR5380, scsi/ncr53c8xx, and scsi/sym53c8xx_2.  I don't know if it 
+> is a known problem, possibly addressed in a newer version of tools, so 
+> I've thought it might be worth reporting.
+> 
+[...]
+> 
+>  NB XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2019/dev/Debian) and 
+> Sphinx 1.8.4 here.
 
->         default:
->                 if (!OPTS_ZEROED(opts, flags))
->                         return libbpf_err(-EINVAL);
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 4867a930628b..b7fc64ebf8dd 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -8998,6 +8998,7 @@ static int attach_trace(const struct bpf_program *prog, long cookie, struct bpf_
->  static int attach_kprobe_multi(const struct bpf_program *prog, long cookie, struct bpf_link **link);
->  static int attach_lsm(const struct bpf_program *prog, long cookie, struct bpf_link **link);
->  static int attach_iter(const struct bpf_program *prog, long cookie, struct bpf_link **link);
-> +static int attach_rstat(const struct bpf_program *prog, long cookie, struct bpf_link **link);
->
->  static const struct bpf_sec_def section_defs[] = {
->         SEC_DEF("socket",               SOCKET_FILTER, 0, SEC_NONE | SEC_SLOPPY_PFX),
-> @@ -9078,6 +9079,7 @@ static const struct bpf_sec_def section_defs[] = {
->         SEC_DEF("cgroup/setsockopt",    CGROUP_SOCKOPT, BPF_CGROUP_SETSOCKOPT, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
->         SEC_DEF("struct_ops+",          STRUCT_OPS, 0, SEC_NONE),
->         SEC_DEF("sk_lookup",            SK_LOOKUP, BPF_SK_LOOKUP, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-> +       SEC_DEF("rstat/flush",          RSTAT_FLUSH, 0, SEC_NONE, attach_rstat),
->  };
->
->  static size_t custom_sec_def_cnt;
-> @@ -11784,6 +11786,44 @@ static int attach_iter(const struct bpf_program *prog, long cookie, struct bpf_l
->         return libbpf_get_error(*link);
->  }
->
-> +struct bpf_link *bpf_program__attach_rstat(const struct bpf_program *prog)
-> +{
-> +       struct bpf_link *link = NULL;
-> +       char errmsg[STRERR_BUFSIZE];
-> +       int err, prog_fd, link_fd;
-> +
-> +       prog_fd = bpf_program__fd(prog);
-> +       if (prog_fd < 0) {
-> +               pr_warn("prog '%s': can't attach before loaded\n", prog->name);
-> +               return libbpf_err_ptr(-EINVAL);
-> +       }
-> +
-> +       link = calloc(1, sizeof(*link));
-> +       if (!link)
-> +               return libbpf_err_ptr(-ENOMEM);
-> +       link->detach = &bpf_link__detach_fd;
-> +
-> +       /* rstat flushers are currently the only supported rstat programs */
-> +       link_fd = bpf_link_create(prog_fd, 0, BPF_RSTAT_FLUSH, NULL);
-> +       if (link_fd < 0) {
-> +               err = -errno;
-> +               pr_warn("prog '%s': failed to attach: %s\n",
-> +                       prog->name, libbpf_strerror_r(err, errmsg,
-> +                                                     sizeof(errmsg)));
-> +               free(link);
-> +               return libbpf_err_ptr(err);
-> +       }
-> +
-> +       link->fd = link_fd;
-> +       return link;
-> +}
-> +
-> +static int attach_rstat(const struct bpf_program *prog, long cookie, struct bpf_link **link)
-> +{
-> +       *link = bpf_program__attach_rstat(prog);
-> +       return libbpf_get_error(*link);
-> +}
-> +
->  struct bpf_link *bpf_program__attach(const struct bpf_program *prog)
->  {
->         struct bpf_link *link = NULL;
-> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> index 21984dcd6dbe..f8b6827d5550 100644
-> --- a/tools/lib/bpf/libbpf.h
-> +++ b/tools/lib/bpf/libbpf.h
-> @@ -662,6 +662,9 @@ LIBBPF_API struct bpf_link *
->  bpf_program__attach_iter(const struct bpf_program *prog,
->                          const struct bpf_iter_attach_opts *opts);
->
-> +LIBBPF_API struct bpf_link *
-> +bpf_program__attach_rstat(const struct bpf_program *prog);
-> +
->  /*
->   * Libbpf allows callers to adjust BPF programs before being loaded
->   * into kernel. One program in an object file can be transformed into
-> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> index 008da8db1d94..f945c6265cb5 100644
-> --- a/tools/lib/bpf/libbpf.map
-> +++ b/tools/lib/bpf/libbpf.map
-> @@ -449,6 +449,7 @@ LIBBPF_0.8.0 {
->                 bpf_program__attach_kprobe_multi_opts;
->                 bpf_program__attach_trace_opts;
->                 bpf_program__attach_usdt;
-> +               bpf_program__attach_rstat;
->                 bpf_program__set_insns;
->                 libbpf_register_prog_handler;
->                 libbpf_unregister_prog_handler;
-> --
-> 2.36.0.550.gb090851708-goog
->
+As mentioned in the section titled "PDF and LaTeX builds" in
+Documentation/doc-guide/sphinx.rst, "make pdfdocs" requires Sphinx 2.4 or
+later.
+
+Another hint for you.
+
+You can say "make SPHINXDIRS=<sub dir> htmldocs pdfdocs" to
+test-build docs under Documentation/<sub dir>/.
+You might see false warnings of "WARNING: undefined label: ..."
+which you wouldn't see in full builds, though.
+
+Hope this helps.
+
+I see there is no mention of the SPHINXDIRS make variable in the
+doc-guide.  I'll see it can be explained somewhere in sphinx.rst.
+
+        Thanks, Akira
+> 
+>  The issues are not directly related to the changes proposed here though,
+> so please apply them.
+> 
+>   Maciej
+

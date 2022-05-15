@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E359527A03
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 22:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3C9B527A0D
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 22:46:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235415AbiEOUpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 16:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41602 "EHLO
+        id S238751AbiEOUqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 16:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbiEOUpp (ORCPT
+        with ESMTP id S233965AbiEOUpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 16:45:45 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB62F101CF;
-        Sun, 15 May 2022 13:45:43 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id j28so1942400eda.13;
-        Sun, 15 May 2022 13:45:43 -0700 (PDT)
+        Sun, 15 May 2022 16:45:47 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCE3237CE;
+        Sun, 15 May 2022 13:45:45 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id ch13so25153067ejb.12;
+        Sun, 15 May 2022 13:45:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tU6uMaYficFOXva4xeM/4aLqe2TPDWlHeWmOttB+92A=;
-        b=P7TMK03vc1TChbgogl3ipw55D51VjwvKdAuihPqDCO8UPPVh9Hc0+K5hf9Qd33/Mpt
-         //OL49uwGwZj8lWj1IMXNYKWboerFDDcdcewQ9+JoiJYwQanBfr5NEgUKSxZOdWKf6Wr
-         eKobsDqGALNdzY2YV6d1nx3uqui1Snzyab+zeDVy2F94uUeHxkhKJWgnT5fFRvnqTYDm
-         UdCSzE53aVfkag8SZGOaDxyzQyi53579I1wwdyN4NFNQXwKcu9yXSfUOdPozgjThn22+
-         3DfnrqeqV9+i05AQq9wWJMkrvhhlHugZCypqqBsA59IAFmacAgcIJdsdAiNHnx+L4K8D
-         FDZw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=CVJmMjKSGPsdpVl5B7dwM8pbpVk/e6e/YzA6OtxjZig=;
+        b=P7dGGjdNUaA0IqLlqPADFrdhjN+QY+65AfnxxdOJ92BG17pe0Db6F1DK+0XbfT9x56
+         sTXlhvcXcZE7U66UusoiJZrmSpN86bzHgnSj4BaHbSBPXRWOdzRj2wCChSapmcsbvNEC
+         T3GHb9ULoHbo9tZfLuA+TcDCAgbxvDsXeVRAUEVRSDhNTjScb+D52apg3gOEEIblnV20
+         t66dmMgXZExdyTzO14up9vEVKwjRfS4H6z53voEUCxRw6WxPIzaugRijlrIUtvmQkxEZ
+         IBKXqZrhlYijJ/EteeglkPZl4V7bdaX7HTzfBC7AYJfL/wUeA7lA9X4EInAzNYY/XODh
+         x1qQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tU6uMaYficFOXva4xeM/4aLqe2TPDWlHeWmOttB+92A=;
-        b=ZcpvOvx6XsAv+zwHmK6IwDE5dAR7NccupoC7p705AHHuuq6W05IYXrSqkxGox3SCR7
-         RdiJg+6ugyTelWmIGLh6g1A0ag3WGe/coJRcktHD4eXhR0d66qyDTiIO3d+Q0VxSZS7p
-         +T5l7zlLKEipT1DYF4qO3VTQrQdnLlBKTovQGU2QESkYfet8ubs+x1c26cUzrKMv3VLU
-         XL0rCxZ8+X+/tQC98g1OAtB3CPHJY5Y1zBKZU1MsJp9u23YGHXSGtKZKgMOqLAtZAd3H
-         rT7oGBmBgmMiRP78K0n7DF1RYWwDHwg7FKtNfkGT1hn/TwSkomYG3QMiVEZxK5A8VkVV
-         bgBQ==
-X-Gm-Message-State: AOAM532d2dXqCmXyEaXbcHT1LHYdTUK1wK8gAFKZwKiDKwej2cuctssg
-        vUN7ACaZMgr6xCdudk/mJMG0z/Bqn2Gp9w==
-X-Google-Smtp-Source: ABdhPJwYZFDmvGmQVM5BvZuDSpnC/dP7nbjdio7lY6LzlTi8nCBgbLC9fjqP2uJkwsFacO3oCVqxzg==
-X-Received: by 2002:a05:6402:b3a:b0:42a:a6de:e533 with SMTP id bo26-20020a0564020b3a00b0042aa6dee533mr5513937edb.100.1652647542371;
-        Sun, 15 May 2022 13:45:42 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=CVJmMjKSGPsdpVl5B7dwM8pbpVk/e6e/YzA6OtxjZig=;
+        b=UGOcJnIbbMi2EGetrm5XzcaBCW/gPU8ai6QV55VwrkyCTv189DHp9GN/4APzEO7W4B
+         LsXwqUV/4SCUBa7gNivLNDZLafCHrp16End5+LRUQeiSemR3GqQvmfNChAwRF1ugEKkC
+         2t0py2UFbIJJ1h4sLF7VTcXqHFt8FTkoAPdVg4lJIAJFMHZvIGdKZxAfJc1Xzg81EsaC
+         nJBwtxyiaBbsKcjMmpnjhrYyH06uET9+7dcRp8wI4HgSI7xj5K1nicEFRlvs7+heZzhv
+         kWfIlySNLFKFRSjQ0+zXHcrhL2qwpemdqzYsSpGekeaF2IZUotsgdPQ6JBaHFBV8Ap0v
+         7aiQ==
+X-Gm-Message-State: AOAM531z91+SNxWFm8jpcr6wEltrh03xX+2UAEArbWddcARFny5/vKPX
+        Y3F2VJEaRxULIhflB6gR2rI=
+X-Google-Smtp-Source: ABdhPJwzqJKxcby/qor1KpG+PZmQynhtAuF4IqryADP1xTGOxUowbSTR18nsvDEKYxIzbfRIAlgKRg==
+X-Received: by 2002:a17:907:6d22:b0:6f4:85c1:5a07 with SMTP id sa34-20020a1709076d2200b006f485c15a07mr12613313ejc.733.1652647543951;
+        Sun, 15 May 2022 13:45:43 -0700 (PDT)
 Received: from fedora.robimarko.hr (dh207-98-105.xnet.hr. [88.207.98.105])
-        by smtp.googlemail.com with ESMTPSA id i10-20020a50870a000000b0042617ba63cdsm4174156edb.87.2022.05.15.13.45.41
+        by smtp.googlemail.com with ESMTPSA id i10-20020a50870a000000b0042617ba63cdsm4174156edb.87.2022.05.15.13.45.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 May 2022 13:45:41 -0700 (PDT)
+        Sun, 15 May 2022 13:45:43 -0700 (PDT)
 From:   Robert Marko <robimarko@gmail.com>
 To:     agross@kernel.org, bjorn.andersson@linaro.org,
         jassisinghbrar@gmail.com, robh+dt@kernel.org,
@@ -55,11 +55,14 @@ To:     agross@kernel.org, bjorn.andersson@linaro.org,
         sboyd@kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-clk@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v4 1/6] clk: qcom: clk-alpha-pll: add support for APSS PLL
-Date:   Sun, 15 May 2022 22:45:35 +0200
-Message-Id: <20220515204540.477711-1-robimarko@gmail.com>
+Cc:     Robert Marko <robimarko@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4 2/6] dt-bindings: clock: Add support for IPQ8074 APSS clock controller
+Date:   Sun, 15 May 2022 22:45:36 +0200
+Message-Id: <20220515204540.477711-2-robimarko@gmail.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220515204540.477711-1-robimarko@gmail.com>
+References: <20220515204540.477711-1-robimarko@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,52 +75,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-APSS PLL type will be used by the IPQ8074 APSS driver for providing the
-CPU core clocks and enabling CPU Frequency scaling.
-
-This is ported from the downstream 5.4 kernel.
+Add dt-binding for the IPQ8074 APSS clock controller which provides
+clocks to the CPU cores.
 
 Signed-off-by: Robert Marko <robimarko@gmail.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/clk/qcom/clk-alpha-pll.c | 12 ++++++++++++
- drivers/clk/qcom/clk-alpha-pll.h |  1 +
- 2 files changed, 13 insertions(+)
+Changes in v4:
+* Dual license the bindings
+* Update the copyright year
 
-diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
-index 4406cf609aae..8270363ff98e 100644
---- a/drivers/clk/qcom/clk-alpha-pll.c
-+++ b/drivers/clk/qcom/clk-alpha-pll.c
-@@ -154,6 +154,18 @@ const u8 clk_alpha_pll_regs[][PLL_OFF_MAX_REGS] = {
- 		[PLL_OFF_TEST_CTL_U] = 0x30,
- 		[PLL_OFF_TEST_CTL_U1] = 0x34,
- 	},
-+	[CLK_ALPHA_PLL_TYPE_APSS] = {
-+		[PLL_OFF_L_VAL] = 0x08,
-+		[PLL_OFF_ALPHA_VAL] = 0x10,
-+		[PLL_OFF_ALPHA_VAL_U] = 0xff,
-+		[PLL_OFF_USER_CTL] = 0x18,
-+		[PLL_OFF_USER_CTL_U] = 0xff,
-+		[PLL_OFF_CONFIG_CTL] = 0x20,
-+		[PLL_OFF_CONFIG_CTL_U] = 0x24,
-+		[PLL_OFF_TEST_CTL] = 0x30,
-+		[PLL_OFF_TEST_CTL_U] = 0x34,
-+		[PLL_OFF_STATUS] = 0x28,
-+	},
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_regs);
- 
-diff --git a/drivers/clk/qcom/clk-alpha-pll.h b/drivers/clk/qcom/clk-alpha-pll.h
-index 6e9907deaf30..626fdf80336d 100644
---- a/drivers/clk/qcom/clk-alpha-pll.h
-+++ b/drivers/clk/qcom/clk-alpha-pll.h
-@@ -18,6 +18,7 @@ enum {
- 	CLK_ALPHA_PLL_TYPE_AGERA,
- 	CLK_ALPHA_PLL_TYPE_ZONDA,
- 	CLK_ALPHA_PLL_TYPE_LUCID_EVO,
-+	CLK_ALPHA_PLL_TYPE_APSS,
- 	CLK_ALPHA_PLL_TYPE_MAX,
- };
- 
+Changes in v2:
+* Correct subject
+---
+ include/dt-bindings/clock/qcom,apss-ipq8074.h | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+ create mode 100644 include/dt-bindings/clock/qcom,apss-ipq8074.h
+
+diff --git a/include/dt-bindings/clock/qcom,apss-ipq8074.h b/include/dt-bindings/clock/qcom,apss-ipq8074.h
+new file mode 100644
+index 000000000000..32538c9311ff
+--- /dev/null
++++ b/include/dt-bindings/clock/qcom,apss-ipq8074.h
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * Copyright (c) 2022, The Linux Foundation. All rights reserved.
++ */
++
++#ifndef _DT_BINDINGS_CLOCK_QCA_APSS_IPQ8074_H
++#define _DT_BINDINGS_CLOCK_QCA_APSS_IPQ8074_H
++
++#define APSS_PLL_EARLY				0
++#define APSS_PLL				1
++#define APCS_ALIAS0_CLK_SRC			2
++#define APCS_ALIAS0_CORE_CLK			3
++
++#endif
 -- 
 2.36.1
 

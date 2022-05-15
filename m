@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84728527A46
+	by mail.lfdr.de (Postfix) with ESMTP id 38272527A45
 	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 23:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238796AbiEOVBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 17:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40666 "EHLO
+        id S238924AbiEOVBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 17:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234471AbiEOVBB (ORCPT
+        with ESMTP id S234910AbiEOVBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 15 May 2022 17:01:01 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52CEBC3A;
-        Sun, 15 May 2022 14:00:58 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id i40so995850eda.7;
-        Sun, 15 May 2022 14:00:58 -0700 (PDT)
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93F1B4B1;
+        Sun, 15 May 2022 14:00:59 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id dk23so25243590ejb.8;
+        Sun, 15 May 2022 14:00:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dzaCsc5NE5smSEagSfvo1JD5ChGYk1foMXMH/Nh5gcI=;
-        b=eTpbzX5AEb89EE1/KYxfriGv7uZdAeDMhxb/5pbmaetRjjV6zWlCQ8WaxcTt4JzZ5Z
-         nYpsZyAPp64m7mQ2ifmCrSIt9kiNj2EYy+NMr8W63x1XvNzDI4CNVPvrMQ1f/dFn+g70
-         xfnvnmsXjIKRH6BUr4ol1bUcHRy4dRSQhtA4biWsu9JKQptbHx4btlA3odMMORpUOZij
-         uWGfA5fLtiN/Q73KLmGHmUYiu6C/jW2QdEJx71agjFJmht6zYhEVc/ORZoZ+cXandlrd
-         FHSwwJD70XgwQl95RbQCAyeyBvJQu7H5Py8719uCK2IhphDux66kuS0+K/wQ3B9zQ/Xd
-         ckpQ==
+        bh=aCoys9+EB+DWbQTKp/pC9Oi+8WUMKWGset+R0a+3uFo=;
+        b=gd1q++gP/CRc0Zv0w048Y9BeScIVKinFxwEfKHyqQpvQtZbygqNKvKxVVCSA/7wy7O
+         E6k5miFxkbdBwbClJ2IAeZzamTkPe2AqKXFsuDiUli5WDVQWIufA69d0uCNwHHKqDdFt
+         limgyj+ay3reYIgKIczIXlmg58NjXTzpEqJVVRVnq2er8cmuuXFUSEiPsl3QiyZMoDZz
+         rLb1Tj8BVfR8SX0wct2NsImgP2bkGvBTsPUhVG4JuIoe+3Bd7Spa6ldDFuKHu4MDqy17
+         mRPogKJ9yXWOduYU2TXXYVMqGVDr+U37fyO/s0Z1h6IARRmLVk+vMh66gg3ipC935pa1
+         a2mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=dzaCsc5NE5smSEagSfvo1JD5ChGYk1foMXMH/Nh5gcI=;
-        b=KccOdG5x8vK1egaQGqNUUzT/SZCOtexO+iyW9S6gxB6v5ACZQQ/byZ2/HVOkP+hxDp
-         yThf5cxnaMoxpOMJXQhpwO5zsaMzcA3l1KokP3GfSsmxSKzEU65+RsP7UzA2PYaDIcLk
-         MdWZieVT/BeL46kJYHCEL28SwmpDhUGlAIDStwSEoFCaxwAKffJgnhVO+e2k9Gcjo9PL
-         45CMJl2vyZc0zylYZzuQsBxmyogpcm1fwqVaET2EY0//eIS9HYZGDszQAXwX/xST8BSZ
-         LkvUab5ZFpn2HskSyQQI65Vv+KOp5TeWk1WX7RX1ZEr3+A2rNXVVRXfW2Ln7RmMIVpll
-         lxSA==
-X-Gm-Message-State: AOAM533HgvuIgdeszf0WGk9p2xMbYjII55CmTRwA0GQJKsrjkJQoU0fL
-        vdpyYTo0Wycyku1jEa+FV6M=
-X-Google-Smtp-Source: ABdhPJzSIWv2Zor2t1kLv6CBRusMdFa/nCk+yvljtF20Luv1POke9hM92t1imgRn0BqfQtQKZLqe4Q==
-X-Received: by 2002:a50:a6c8:0:b0:428:5b3a:6c99 with SMTP id f8-20020a50a6c8000000b004285b3a6c99mr10029635edc.222.1652648457368;
-        Sun, 15 May 2022 14:00:57 -0700 (PDT)
+        bh=aCoys9+EB+DWbQTKp/pC9Oi+8WUMKWGset+R0a+3uFo=;
+        b=12FqP5bgM3j48RW0kDKJ8kYNCdPJlM5bCdhztXteuPC+T7vyuHO5J7Z0H+lQ0iHzHo
+         iIw+P6ydK6FPB5FGpOZpX6uMsUBJNOV8ZtGExBCI1TQ0DiRgXZXSoPhAE6uEKYx5J+do
+         aCEh0I/HZpj/P2JMvq732CKExfvwczss3jHwnIi+Yu5GeSnWlsfG+AQHbhvB1vEB1VBy
+         xWo7tAfdKi4Q+lMOv3lBQ6EOA6/3ge4G/RXM4ikC7hswzbGtHnN4NVTsvlkHKPMvg16t
+         3kCJR2Qv+X2sAizZTBeP633d4E/vBmWP5wWF+h5tg1A6RCiZLi90kIA7m2VdyMVXfd2h
+         NX3g==
+X-Gm-Message-State: AOAM530A1azCe5GbHVzQAwGjH50biBWNAU5XtzdE0QQpjWq87IbXHMnC
+        jxPFQEQvowXYAsdCa15rIus=
+X-Google-Smtp-Source: ABdhPJzu8JgZy5rVo3d4JNcjwzDEPyAsKWr6dlSm03VSiAqXpD8zJfvcL0Lf6r29qLyRAHkL0e8Grw==
+X-Received: by 2002:a17:906:f88f:b0:6f3:eaed:c143 with SMTP id lg15-20020a170906f88f00b006f3eaedc143mr12338224ejb.311.1652648458543;
+        Sun, 15 May 2022 14:00:58 -0700 (PDT)
 Received: from fedora.robimarko.hr (dh207-98-105.xnet.hr. [88.207.98.105])
-        by smtp.googlemail.com with ESMTPSA id w12-20020aa7da4c000000b0042ab649183asm28917eds.35.2022.05.15.14.00.56
+        by smtp.googlemail.com with ESMTPSA id w12-20020aa7da4c000000b0042ab649183asm28917eds.35.2022.05.15.14.00.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 May 2022 14:00:56 -0700 (PDT)
+        Sun, 15 May 2022 14:00:58 -0700 (PDT)
 From:   Robert Marko <robimarko@gmail.com>
 To:     bjorn.andersson@linaro.org, agross@kernel.org,
         mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
@@ -56,9 +56,9 @@ To:     bjorn.andersson@linaro.org, agross@kernel.org,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, dmitry.baryshkov@linaro.org
 Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v4 06/11] clk: qcom: ipq8074: set BRANCH_HALT_DELAY flag for UBI clocks
-Date:   Sun, 15 May 2022 23:00:43 +0200
-Message-Id: <20220515210048.483898-6-robimarko@gmail.com>
+Subject: [PATCH v4 07/11] dt-bindings: clocks: qcom,gcc-ipq8074: support power domains
+Date:   Sun, 15 May 2022 23:00:44 +0200
+Message-Id: <20220515210048.483898-7-robimarko@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220515210048.483898-1-robimarko@gmail.com>
 References: <20220515210048.483898-1-robimarko@gmail.com>
@@ -74,104 +74,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, attempting to enable the UBI clocks will cause the stuck at
-off warning to be printed and clk_enable will fail.
+GCC inside of IPQ8074 also provides power management via built-in GDSCs.
+In order to do so, '#power-domain-cells' must be set to 1.
 
-[   14.936694] gcc_ubi1_ahb_clk status stuck at 'off'
-
-Downstream 5.4 QCA kernel has fixed this by seting the BRANCH_HALT_DELAY
-flag on UBI clocks, so lets do the same.
-
-Fixes: 5736294aef83 ("clk: qcom: ipq8074: add NSS clocks")
 Signed-off-by: Robert Marko <robimarko@gmail.com>
 ---
- drivers/clk/qcom/gcc-ipq8074.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Changes in v4:
+* Alphabetically sort the cells properties
+---
+ .../devicetree/bindings/clock/qcom,gcc-ipq8074.yaml          | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
-index c964e43ba68a..85076c1383c7 100644
---- a/drivers/clk/qcom/gcc-ipq8074.c
-+++ b/drivers/clk/qcom/gcc-ipq8074.c
-@@ -3372,6 +3372,7 @@ static struct clk_branch gcc_nssnoc_ubi1_ahb_clk = {
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8074.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8074.yaml
+index 98572b4a9b60..21470f52ce36 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8074.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8074.yaml
+@@ -24,6 +24,9 @@ properties:
+   '#clock-cells':
+     const: 1
  
- static struct clk_branch gcc_ubi0_ahb_clk = {
- 	.halt_reg = 0x6820c,
-+	.halt_check = BRANCH_HALT_DELAY,
- 	.clkr = {
- 		.enable_reg = 0x6820c,
- 		.enable_mask = BIT(0),
-@@ -3389,6 +3390,7 @@ static struct clk_branch gcc_ubi0_ahb_clk = {
++  '#power-domain-cells':
++    const: 1
++
+   '#reset-cells':
+     const: 1
  
- static struct clk_branch gcc_ubi0_axi_clk = {
- 	.halt_reg = 0x68200,
-+	.halt_check = BRANCH_HALT_DELAY,
- 	.clkr = {
- 		.enable_reg = 0x68200,
- 		.enable_mask = BIT(0),
-@@ -3406,6 +3408,7 @@ static struct clk_branch gcc_ubi0_axi_clk = {
+@@ -38,6 +41,7 @@ required:
+   - compatible
+   - reg
+   - '#clock-cells'
++  - '#power-domain-cells'
+   - '#reset-cells'
  
- static struct clk_branch gcc_ubi0_nc_axi_clk = {
- 	.halt_reg = 0x68204,
-+	.halt_check = BRANCH_HALT_DELAY,
- 	.clkr = {
- 		.enable_reg = 0x68204,
- 		.enable_mask = BIT(0),
-@@ -3423,6 +3426,7 @@ static struct clk_branch gcc_ubi0_nc_axi_clk = {
- 
- static struct clk_branch gcc_ubi0_core_clk = {
- 	.halt_reg = 0x68210,
-+	.halt_check = BRANCH_HALT_DELAY,
- 	.clkr = {
- 		.enable_reg = 0x68210,
- 		.enable_mask = BIT(0),
-@@ -3440,6 +3444,7 @@ static struct clk_branch gcc_ubi0_core_clk = {
- 
- static struct clk_branch gcc_ubi0_mpt_clk = {
- 	.halt_reg = 0x68208,
-+	.halt_check = BRANCH_HALT_DELAY,
- 	.clkr = {
- 		.enable_reg = 0x68208,
- 		.enable_mask = BIT(0),
-@@ -3457,6 +3462,7 @@ static struct clk_branch gcc_ubi0_mpt_clk = {
- 
- static struct clk_branch gcc_ubi1_ahb_clk = {
- 	.halt_reg = 0x6822c,
-+	.halt_check = BRANCH_HALT_DELAY,
- 	.clkr = {
- 		.enable_reg = 0x6822c,
- 		.enable_mask = BIT(0),
-@@ -3474,6 +3480,7 @@ static struct clk_branch gcc_ubi1_ahb_clk = {
- 
- static struct clk_branch gcc_ubi1_axi_clk = {
- 	.halt_reg = 0x68220,
-+	.halt_check = BRANCH_HALT_DELAY,
- 	.clkr = {
- 		.enable_reg = 0x68220,
- 		.enable_mask = BIT(0),
-@@ -3491,6 +3498,7 @@ static struct clk_branch gcc_ubi1_axi_clk = {
- 
- static struct clk_branch gcc_ubi1_nc_axi_clk = {
- 	.halt_reg = 0x68224,
-+	.halt_check = BRANCH_HALT_DELAY,
- 	.clkr = {
- 		.enable_reg = 0x68224,
- 		.enable_mask = BIT(0),
-@@ -3508,6 +3516,7 @@ static struct clk_branch gcc_ubi1_nc_axi_clk = {
- 
- static struct clk_branch gcc_ubi1_core_clk = {
- 	.halt_reg = 0x68230,
-+	.halt_check = BRANCH_HALT_DELAY,
- 	.clkr = {
- 		.enable_reg = 0x68230,
- 		.enable_mask = BIT(0),
-@@ -3525,6 +3534,7 @@ static struct clk_branch gcc_ubi1_core_clk = {
- 
- static struct clk_branch gcc_ubi1_mpt_clk = {
- 	.halt_reg = 0x68228,
-+	.halt_check = BRANCH_HALT_DELAY,
- 	.clkr = {
- 		.enable_reg = 0x68228,
- 		.enable_mask = BIT(0),
+ additionalProperties: false
+@@ -48,6 +52,7 @@ examples:
+       compatible = "qcom,gcc-ipq8074";
+       reg = <0x01800000 0x80000>;
+       #clock-cells = <1>;
++      #power-domain-cells = <1>;
+       #reset-cells = <1>;
+     };
+ ...
 -- 
 2.36.1
 

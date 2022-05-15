@@ -2,161 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DCFF52776E
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 14:41:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0250E527772
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 14:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236651AbiEOMlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 08:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
+        id S236665AbiEOMmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 08:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234838AbiEOMlh (ORCPT
+        with ESMTP id S234838AbiEOMmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 08:41:37 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B414011C0C;
-        Sun, 15 May 2022 05:41:32 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id q7so609717plx.3;
-        Sun, 15 May 2022 05:41:32 -0700 (PDT)
+        Sun, 15 May 2022 08:42:09 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F5E1208F
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 05:42:09 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id f10so45150pjs.3
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 05:42:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=kA3N244HR0B/WxpzUM2TTlWPU7qXJvhWmssUtsOSc8U=;
-        b=b5AgYbLXyfXl/XWctvOvnhun+2qT68pBmWthVew4xn7RRPcUxm5I7PMrs//Hq/Rs0W
-         V/8h5snrhCxZuRskZ5XivTgOqz0ZXoz21xJge3rV4bLITSV8YxLslgH2wXSCkONgwNrZ
-         IiJbwqiK96t3y233KApUYvsL+2FksUWH5tD8G3/pQo9cuRHCPrAlX9kqmDxWzcunTKQc
-         s0QEz6TZKWB9xtok/oC/LKSi1mwZLhvE6ngQ3dNaapFtKwd4xCTTsVcF2LAT4Olou/qc
-         2pFErHg7itKm/PdmkHVMzhepbGYTeE2Qb+ac0SQJPMjtvlMRJiJf0VWhshohevusQ6k+
-         HYOw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AVFRHlzGX/WRPz6rMiRYI/Ib3vqoWaqc8BQYvZ/LSIw=;
+        b=GdwFTCPfiO7U9zosXxBYcmAhFZEaMxvG4SFgMUw0AhuFegMc2OQ1Xwr5VDAyHE1+J4
+         4VNF81weFqaGZIrQm8Ee6tApJwzn7N3atSaPeZop5agNoThRnLzfvoz5JXBMPG1SOghp
+         DGEcGxEgnBY8LVTZtiQ8c0Ixix2KZqYdiBQrcoH5stOW+UhNYay8I5QDbcJmfQkQBC8h
+         XYBsRGvVJlLbTAml3ooN9rZsrzGu+EETood1emxQvigTV1O0x/b9Sj6rWqW1MyU7anUU
+         WKZt8+Bcoubs3Jki51/L77N/m10WeSOPZ0MHxzv3u/bk13EMIZEd7QbzBMGOJSXyNlAK
+         sctg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=kA3N244HR0B/WxpzUM2TTlWPU7qXJvhWmssUtsOSc8U=;
-        b=bQrNYEh81n4TQ8EdZSK9mN/Z3U+0l1YflwpMsGFuQueMEpzm7rclrXlZ3mLQBfsnHG
-         lh0NmOuqSxrksTQSnCs3O9ZDam1oSCrMAmsdgUqJGnQ2e5CG0Ht7BYbegrP20F7//qza
-         rWS7NGe5EVxq99hOyoo9jXML3K5nUZTyQEt1ip3DINLGK8xUBpboVyYi6cOpTqmrUe5N
-         poM0xEpFgK1i3IVLsnxxGSQec/QjQsyt7NO4/8gFoComTqEc/X9OzA+OuzYhb24T7eht
-         8yAkQnqH3dLkgGQOF4Jgax86Q7P9VjXcWUmUbiAs+62beIN2cr/6nfUjzUQBDYAbEjYq
-         XAvA==
-X-Gm-Message-State: AOAM531NMeBhxoHI2N2Yheqde+aiB43iNrW55Owb4QNMV4w39QW5JkbK
-        HLcqOVrC5E7JV224LdUMtfo=
-X-Google-Smtp-Source: ABdhPJw9AJs02Kuf9vGh0FbjVkrWA/U3EDrwslzHW6wPe/EbCBUrBP7JSaEudGvNFD4wZClR1k5rRw==
-X-Received: by 2002:a17:902:bc8c:b0:15e:c103:940c with SMTP id bb12-20020a170902bc8c00b0015ec103940cmr12745187plb.154.1652618492188;
-        Sun, 15 May 2022 05:41:32 -0700 (PDT)
-Received: from [192.168.43.80] (subs09a-223-255-225-69.three.co.id. [223.255.225.69])
-        by smtp.gmail.com with ESMTPSA id o22-20020a17090ac09600b001d9acbc3b4esm4574655pjs.47.2022.05.15.05.41.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 15 May 2022 05:41:31 -0700 (PDT)
-Message-ID: <64fdb3fc-87bb-53e8-52b5-36288de85cb3@gmail.com>
-Date:   Sun, 15 May 2022 19:41:25 +0700
+        bh=AVFRHlzGX/WRPz6rMiRYI/Ib3vqoWaqc8BQYvZ/LSIw=;
+        b=Plre6ohiLPGAi8Ai0EA2Uubu4fnvCV2u+xNI4y4kWdtk8GFgK3nhDX7U7bWbn2tGyK
+         Sz7oLSBiJx5u2G9jant3l5+7d+ccqoZzXGFYYQh2BgTwBuiUS3aJFnS46bywlwY8pIFZ
+         4PLWgNHjf4E1Ic5x4DGywhyJOK+Rn2TMClNLAyBtE9YJHG8VIGH3djsI1GmQrDtI1PLS
+         MbBzN0GG7GvSnjkkZoCepVMLjY7v9TkHgGtmq2jKyQB8KjGSQ76OuSFdPc/qFjOpBP63
+         AKEMwmnL8FXUe81jbLoW266ma5IHmozkXlqKMtLML+cPlwuXhYEQwLpkigyu1vDza8iU
+         eDSA==
+X-Gm-Message-State: AOAM533cYw0mO9fIgeuz4pOUYGJTu4zglnbTAarCz1aH/dS+V+KAy6jT
+        ddsESwbZywGpAk9d/RN1wjkJ08gEYx8=
+X-Google-Smtp-Source: ABdhPJyttjmNeeyG93To3spB1iaqBDuusIqIkyuFaa7RIV56YC49oI0C1AkgwgnzdhnM5CYiJPEOow==
+X-Received: by 2002:a17:90b:1d92:b0:1dc:3f14:f8d0 with SMTP id pf18-20020a17090b1d9200b001dc3f14f8d0mr14391431pjb.7.1652618528030;
+        Sun, 15 May 2022 05:42:08 -0700 (PDT)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id j11-20020a056a00174b00b0050dc76281bfsm4948797pfc.153.2022.05.15.05.42.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 May 2022 05:42:07 -0700 (PDT)
+From:   Stafford Horne <shorne@gmail.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Openrisc <openrisc@lists.librecores.org>,
+        Stafford Horne <shorne@gmail.com>
+Subject: [PATCH 00/13] OpenIRSC misc cleanups for 5.19
+Date:   Sun, 15 May 2022 21:41:45 +0900
+Message-Id: <20220515124158.3167452-1-shorne@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH V10 01/22] Documentation: LoongArch: Add basic
- documentations
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20220514080402.2650181-1-chenhuacai@loongson.cn>
- <20220514080402.2650181-2-chenhuacai@loongson.cn>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220514080402.2650181-2-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/14/22 15:03, Huacai Chen wrote:
-> +1. Arithmetic Operation Instructions::
-> +
-> +    ADD.W SUB.W ADDI.W ADD.D SUB.D ADDI.D
-> +    SLT SLTU SLTI SLTUI
-> +    AND OR NOR XOR ANDN ORN ANDI ORI XORI
-> +    MUL.W MULH.W MULH.WU DIV.W DIV.WU MOD.W MOD.WU
-> +    MUL.D MULH.D MULH.DU DIV.D DIV.DU MOD.D MOD.DU
-> +    PCADDI PCADDU12I PCADDU18I
-> +    LU12I.W LU32I.D LU52I.D ADDU16I.D
-> +
-> +2. Bit-shift Instructions::
-> +
-> +    SLL.W SRL.W SRA.W ROTR.W SLLI.W SRLI.W SRAI.W ROTRI.W
-> +    SLL.D SRL.D SRA.D ROTR.D SLLI.D SRLI.D SRAI.D ROTRI.D
-> +
-> +3. Bit-manipulation Instructions::
-> +
-> +    EXT.W.B EXT.W.H CLO.W CLO.D SLZ.W CLZ.D CTO.W CTO.D CTZ.W CTZ.D
-> +    BYTEPICK.W BYTEPICK.D BSTRINS.W BSTRINS.D BSTRPICK.W BSTRPICK.D
-> +    REVB.2H REVB.4H REVB.2W REVB.D REVH.2W REVH.D BITREV.4B BITREV.8B BITREV.W BITREV.D
-> +    MASKEQZ MASKNEZ
-> +
-> +4. Branch Instructions::
-> +
-> +    BEQ BNE BLT BGE BLTU BGEU BEQZ BNEZ B BL JIRL
-> +
-> +5. Load/Store Instructions::
-> +
-> +    LD.B LD.BU LD.H LD.HU LD.W LD.WU LD.D ST.B ST.H ST.W ST.D
-> +    LDX.B LDX.BU LDX.H LDX.HU LDX.W LDX.WU LDX.D STX.B STX.H STX.W STX.D
-> +    LDPTR.W LDPTR.D STPTR.W STPTR.D
-> +    PRELD PRELDX
-> +
-> +6. Atomic Operation Instructions::
-> +
-> +    LL.W SC.W LL.D SC.D
-> +    AMSWAP.W AMSWAP.D AMADD.W AMADD.D AMAND.W AMAND.D AMOR.W AMOR.D AMXOR.W AMXOR.D
-> +    AMMAX.W AMMAX.D AMMIN.W AMMIN.D
-> +
-> +7. Barrier Instructions::
-> +
-> +    IBAR DBAR
-> +
-> +8. Special Instructions::
-> +
-> +    SYSCALL BREAK CPUCFG NOP IDLE ERTN DBCL RDTIMEL.W RDTIMEH.W RDTIME.D ASRTLE.D ASRTGT.D
-> +
-> +9. Privileged Instructions::
-> +
-> +    CSRRD CSRWR CSRXCHG
-> +    IOCSRRD.B IOCSRRD.H IOCSRRD.W IOCSRRD.D IOCSRWR.B IOCSRWR.H IOCSRWR.W IOCSRWR.D
-> +    CACOP TLBP(TLBSRCH) TLBRD TLBWR TLBFILL TLBCLR TLBFLUSH INVTLB LDDIR LDPTE
-> +
+This is a collection of misc cleanups I have accumulated when working on some
+recent OpenRISC projects.
 
-I haven't addressed this in v9 [1], so I'm discussing it now.
+The patch themes:
+ - Sparse warning cleanups
+ - Removal of dead code
+ - Emergency debug fixups in head.S
+ - Support for gcc machine instruction flags
+ - defconfig updates for litex
 
-I think for grouping similar instructions lower-level list numbering can
-be used, like:
+I have tested these patches when verifying the glibc port by running the glibc
+test suite.
 
-1. Arithmetic Operation Instructions
-   a. ADD.W...
-   b. SLT...
-...
+Stafford Horne (13):
+  openrisc: Add gcc machine instruction flag configuration
+  openrisc: Cleanup emergency print handling
+  openrisc: Add support for liteuart emergency printing
+  openrisc: Add syscall details to emergency syscall debugging
+  openrisc: Pretty print show_registers memory dumps
+  openrisc: Update litex defconfig to support glibc userland
+  openrisc/traps: Declare file scope symbols as static
+  openrisc/traps: Remove die_if_kernel function
+  openrisc/traps: Declare unhandled_exception for asmlinkage
+  openrisc/time: Fix symbol scope warnings
+  openrisc/delay: Add include to fix symbol not declared warning
+  openrisc/fault: Fix symbol scope warnings
+  openrisc: Remove unused IMMU tlb workardound
 
-Why is literal blocks used instead?
+ arch/openrisc/Kconfig                     |  53 ++++
+ arch/openrisc/Makefile                    |  17 +
+ arch/openrisc/configs/or1klitex_defconfig |  33 ++
+ arch/openrisc/kernel/entry.S              |  20 +-
+ arch/openrisc/kernel/head.S               | 368 ++++++----------------
+ arch/openrisc/kernel/time.c               |   3 +-
+ arch/openrisc/kernel/traps.c              |  63 ++--
+ arch/openrisc/lib/delay.c                 |   1 +
+ arch/openrisc/mm/fault.c                  |   4 +-
+ 9 files changed, 255 insertions(+), 307 deletions(-)
 
-[1]: https://lore.kernel.org/linux-doc/Ym47ZAuwEA9as98h@debian.me/
 -- 
-An old man doll... just what I always wanted! - Clara
+2.31.1
+

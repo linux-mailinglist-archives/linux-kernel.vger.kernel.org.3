@@ -2,381 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A54F1527A6E
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 23:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62908527A7D
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 00:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235081AbiEOVgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 17:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52770 "EHLO
+        id S231553AbiEOWBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 18:01:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231289AbiEOVgM (ORCPT
+        with ESMTP id S229715AbiEOWB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 17:36:12 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1A210FDA
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 14:36:11 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id q4so12722623plr.11
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 14:36:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BOBTeMYyJP2udCxIFP3cJSYwub7NLw76SifRMO0Xw5s=;
-        b=TYJmuoOodfTJWuKNIMllrEIBinnHNYcwWTH9keLCnMUxzFXoeaoJYIfA872vFlYknf
-         Kq3az/rIcc7PLVokt4xNEm4M/oano96P2vzbvR3r+2tMaeoon2aGvjoX2mdiSeB1glpw
-         pMCXoS9ThGVDwjYHz4HXtOV3Qb2/sty1yGk1+4kcTRjiq8e9wM1UAWFsSbeWAWXWD7eh
-         SMZO52DTFgJ6DrvG9g5AeSLVxiwQMvyZ4ZAjTu3PreZokJCQp/9fk2vcMiQzjh4psY//
-         vqkQD/3tCY+Br4EnoCsAs8vs6TocH+WKTvP+jVIJAGKfGI0K0fERrPQgcbFZKRsCONV+
-         2Ofw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BOBTeMYyJP2udCxIFP3cJSYwub7NLw76SifRMO0Xw5s=;
-        b=jdswOHRYTjDmk1naL7Tt1rbT5JztnrpkjwG9e6ud9ZkYh6txTPAbfxCTuT0X6z4lf6
-         N6ldwJ6VIwSI0n8kSkR73O3tAPS4epbqFuivuvd5VnPsGiQG4XE6F80fxxguYHZ6kUcT
-         s/ovKKbxTz77xoysNXLx0l8apl2hxsx30cDsFqOm3ejZl1Q8ttQEWqbHaRfU57gBTm0r
-         HGkpwwd0MNJ0jQcjGjXn3uOkNnePWmJmuohvqr5761RUaWlN2Bvh1Jq14Dhn/mkflvER
-         tc+FQTFOIf/vTMkAlT2UNkek3pCHxa8c9CwOn7+NEiNpcg9RNKqTdPue40DuDwBZj5/C
-         Tu8g==
-X-Gm-Message-State: AOAM532B+nCIq4THopWpIGsssYhh76aZWKLB6TxqOYWRiKLGax28uiDV
-        +IL+uMgybw33zzezA8v7lhg=
-X-Google-Smtp-Source: ABdhPJxwdyABxTsLvzM5ShI2GeL2P+xZBIOj+9ukmxbo4kiWRNn92T4S5T49iuiMx2i5Qqvl/FGDcg==
-X-Received: by 2002:a17:90b:1d87:b0:1dc:a9c0:3d49 with SMTP id pf7-20020a17090b1d8700b001dca9c03d49mr27799528pjb.12.1652650570671;
-        Sun, 15 May 2022 14:36:10 -0700 (PDT)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id d2-20020a170902cec200b0015e8d4eb2ddsm5530452plg.295.2022.05.15.14.36.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 May 2022 14:36:10 -0700 (PDT)
-Date:   Mon, 16 May 2022 06:36:08 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH 02/13] openrisc: Cleanup emergency print handling
-Message-ID: <YoFySJFQbjNlSuUZ@antec>
-References: <20220515124158.3167452-1-shorne@gmail.com>
- <20220515124158.3167452-3-shorne@gmail.com>
- <7b18962e-d1ce-699f-dd59-719255f19ade@sholland.org>
+        Sun, 15 May 2022 18:01:27 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DA713CCE
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 15:01:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652652085; x=1684188085;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=68Cd+Rp++cqty6phoouxLE86/gnHseweDztGu08Du90=;
+  b=KY1Z4ThIwbWcNdXSE2hVICe3P/o90pjyazsGUht7Xo2ib95YKeYpyXR7
+   w1t5Joo8r+ueZnU8Kz2KzlxnGDMPTYohGoobxpqwwYzTrkBH2IzFZUUZz
+   nmSjgfpjDTJFNixnGFtDTykbaBB+wsDtCjhYm8EAAN1WaBSwovFDauJp7
+   RBJm+Sk7+D915AgdZN1c6SQTGSF5RvyfaEbcDPUhSS02i3uHP4yVADn3o
+   SfG8phNzZzb2nanqcjfEZ7Ku6OtFkXatFm/WA1oj7Ns1oSJOK03iV7H3o
+   67kIZ6Jr1TmG9lhCPDSqIITAV4nuBHjsQW7SR69IcyQRFWaeQFvEFQYNE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="269507970"
+X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
+   d="scan'208";a="269507970"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2022 15:01:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
+   d="scan'208";a="625663894"
+Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
+  by fmsmga008.fm.intel.com with ESMTP; 15 May 2022 15:01:22 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Sun, 15 May 2022 15:01:21 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Sun, 15 May 2022 15:01:21 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.108)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Sun, 15 May 2022 15:01:21 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HiGsJpspmh5W1e9mm1IyYmm9qd8WvoDgm5iGfYCb7+3DyMaqQTn4vos0CHn7eBDbKT/kFs5+aq21F3P/B2uF8WLyVDUX/aKABnCESKRCtIxWhwuuJdehNLUcRWKCeUfih/Jj5wJ7mAXhGh+fhpxwv1Ct1ZTbVU/t+03hf45UguIJ5z2B/gu88e7rly/hTg2TJNODQOwp+Gq1GUepfWkZLyYPeU4TVZ1e6g65pcoUv7kn+0OozQWbzSi0TVT2PKTv2ymEP6dGxq3SS/ooe4PimOcbx9oQdnUoKj0ngTEVV+HBlQbGjRGnBvtNjuWtQ/pXKh2ssQevmyGLb6VeUkBqWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=68Cd+Rp++cqty6phoouxLE86/gnHseweDztGu08Du90=;
+ b=QMYJvoRY5LBUGXgZAe7l32Bffpns6DtR256jrJXTP6GvJ6th0+JbQtzBXQH59kxR/s5R/0Z/dZ5FNMkBTtEVgqJrfevFTeAdwuvI5EeG3weUdbUClZWHj5QFsR71cNb1HNq8nR1z4bEmaKgTUtPbMnUBI8yDV9Pi7pK1RH47H4Git7DyEa6yMrZzyNK4iGwEYviTfaIvPHNzs/4D28vnVc56UskA2V+L58IHkGArax9vAFZYP0GAtZlPP5lI31Pj6zxhmGk/+Rh6FiIaKdgMJoCpzSzbVOllYQuXaNb8xUeMBGQjA1YbuDqguVxKDiAkoyYzi8ClJYYZmD8XF8PHmw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
+ by DM6PR11MB4491.namprd11.prod.outlook.com (2603:10b6:5:204::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.18; Sun, 15 May
+ 2022 22:01:19 +0000
+Received: from MWHPR11MB1392.namprd11.prod.outlook.com
+ ([fe80::34f6:8e1d:ac6b:6e03]) by MWHPR11MB1392.namprd11.prod.outlook.com
+ ([fe80::34f6:8e1d:ac6b:6e03%12]) with mapi id 15.20.5250.018; Sun, 15 May
+ 2022 22:01:19 +0000
+From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+To:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "aryabinin@virtuozzo.com" <aryabinin@virtuozzo.com>,
+        "dvyukov@google.com" <dvyukov@google.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "glider@google.com" <glider@google.com>
+Subject: Re: [RFCv2 03/10] x86: Introduce userspace API to handle per-thread
+ features
+Thread-Topic: [RFCv2 03/10] x86: Introduce userspace API to handle per-thread
+ features
+Thread-Index: AQHYZOBkvB2PlILtfUOVczGp43rrrq0c3EGAgAA5TwCAAF3QAIAACzIAgACTWYCAAPLzAIAAplKAgACc9ACAABS2AIAAKAAA
+Date:   Sun, 15 May 2022 22:01:18 +0000
+Message-ID: <0d10c85ed7cdad0150bb3daa1b893722d00f87e5.camel@intel.com>
+References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
+         <20220511022751.65540-5-kirill.shutemov@linux.intel.com>
+         <CAG_fn=V8k3hiviv3htV6wWZ6fUBri=MORfXGJ+Kz7GdRDZvesA@mail.gmail.com>
+         <da0f438bb459050e5a586a17382e961259449761.camel@intel.com>
+         <20220513230958.dbxp6m3y3lnq74qb@black.fi.intel.com>
+         <543eb3ff98f624c6cfa1d450ac3e9ae8934c7c38.camel@intel.com>
+         <87k0aose62.ffs@tglx>
+         <9e59305039f2c8077ee087313d1df5ff06028cfe.camel@intel.com>
+         <87zgjjqico.ffs@tglx>
+         <95efb5ae85a96914fff3939d4924e46686196cc7.camel@intel.com>
+         <87lev2r3hb.ffs@tglx>
+In-Reply-To: <87lev2r3hb.ffs@tglx>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2b9cbc8e-4b7a-4dc2-766b-08da36be70bc
+x-ms-traffictypediagnostic: DM6PR11MB4491:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <DM6PR11MB44915F74AF291A6955931646C9CC9@DM6PR11MB4491.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: M0gO26yG4AArwue1u6pcBYwHSt6O1EK8V3j7UL65jZD9GsGwOwwzKMwJcE316n6+c5Jblo5q7sjzmiB7tAoMOvtrlQhl2FoezPQNcNd8z2CUj4Nw8JnMSHmkUyyAd9SjbhmA8Lhn37UX3SVSgoZtaEyfRUZDJfPjHMghKMTD6/EA8ehvJxflUX7AGYoqxtVxdQGftMitjxeJHBg1ihUgReKI4iR1tMpCofY6d957eieCNLhmgpayOjJETOrRE3tTUYfEeqqzfragrLP0Ht4P3p6HaM9uIaVjFphqxA1oVix/tYqEq4ub1+erbeAMXD3BhNVTg2um13AB4VMQP/iJyrESibFJyFu0fJs/Pemy2rGv0LyC95+Uzii9HLRM7yysqWJtAI7lx8hWRa52lJW/i/tDys/OxkMZNw1FuAb8MslklDrTbFmdIR2/g+hBiMzMw1Lc+xtItIcDxk170Uhr6ABsG6MUep12Ra5iJRNLFRoV4SAIceXxfRsVawecI7gVKaiOlIdZCTt9ii3vzDCzgbxsMstuSNrkJTUP2zznmsbeltfQTQO/KLt53i+BwisZPci+DKUgmSd73TYyUgji/1EVu4rxyj0TSyJpGO6NX7TAsUrFBeg+VFVifOnNbsvxiNOXlnIph3pnkc/hDLeHFUTzgcSb1JEIqkL6PJ3WoDWco6gGB+q/1jX/mQZFQajfGbb9j8pXOMDZ+hkSQkfGY1NQGFGDgcOhPe0XlOKL2Vc=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66946007)(6506007)(64756008)(76116006)(91956017)(8676002)(86362001)(71200400001)(54906003)(66556008)(316002)(6486002)(508600001)(38100700002)(66446008)(36756003)(66476007)(26005)(2616005)(122000001)(186003)(82960400001)(38070700005)(83380400001)(8936002)(2906002)(6512007)(4326008)(110136005)(5660300002)(7416002)(99106002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TllUV21tOFF3bWNOeEJaaXQ0bmpJUUt2UzZtd3NaV1B0c3FUbHdBV1lYSEYr?=
+ =?utf-8?B?UVcvaXVSN252UWVDV1lnWWRMSDhvVDVtMTJOcjlqeXpQdTdhM0dIWjlKUXp1?=
+ =?utf-8?B?NEtiZGtUUXV3aFVRTGRBQUFzYXJ4YzExY1lWSFhVMnBJVzgvbzVmRnh1d0ox?=
+ =?utf-8?B?bUNQV3NMU2FIRW9XUlZabVNxZjhOc3JaSTJ3MnQ2SDZFYVRhMVgzVkhlRDVp?=
+ =?utf-8?B?TzVxanJNZVQ2dk9UZzVsdWxraTRJVi93Mzc5UFhVRXJnY3hMR202SC8rWEo2?=
+ =?utf-8?B?ZFJDRjhGN0ZWK2grZlB3WUNJZnRnYlpPdEFzaTh4QUVJWHJpN1J2eW1kdUFm?=
+ =?utf-8?B?Y3JCbWxZUzlRak5HRkErdXFlQloxc29qUFl5Y1ZkbzJlOHJEakdKbkQ5bjd3?=
+ =?utf-8?B?d0lOWnpyb3hGRWhxMkZ6Umw4ajFtSEtTRUExTnlqV1BhWTRTY0xaSkQ5WEJt?=
+ =?utf-8?B?N2ZRUUU2SkJvWjE5M0JpQWFrWkw1V1pQOHJ3Rm1tendCTS9zYWhRallZYllJ?=
+ =?utf-8?B?dU5XZ0J6YkpWODJLZ2VjTXhnVUJ3NDl5aGUwTzU3U0JFMkl1NXBHTkhCVUV1?=
+ =?utf-8?B?K282bUpYek50RFBpMFM5MHVsVDRaU0t5emNWbzdjRVpwbGh0V0hML3kvVE5F?=
+ =?utf-8?B?SFFVc2loWERWeFRpRkVmWm5BVE5aY2YwVGJpRS9QK05aaHA5VE9wR1M2WnBl?=
+ =?utf-8?B?ZHFQL0MwT3E1Y1lPQzNLc3Y4S2padWRxaVlRRGt3ZlF6MVJqZU1VQVZPaEJp?=
+ =?utf-8?B?M2pNaklLZ2twYyt4VGNSYnhtWGlnSzBhMExYVjRpVERXZVJoeThiVk8zMDJx?=
+ =?utf-8?B?V0RPUWF4bnpCTUsrWnVMMjBjbElTZVgyKys2M0NaN0x3anJsbC9rZUhuQksz?=
+ =?utf-8?B?Y0Jmd1YyWWp2M3doZXVvUTlmLys5QW5CRW1sZnpoeTU4bjdCempXQThxOSs1?=
+ =?utf-8?B?VWl3a0p1c29mNkthWkQ3ODJrY2tPVzJqUENSajR4ZTlTUTNRbWowQ3lPbmN6?=
+ =?utf-8?B?YUpzditndjRCd1hSRCtyOEFSNThyRkVvRjNrQjYxb2hBU0dEbzdjbklRVmpn?=
+ =?utf-8?B?ekNXRXNvOU15WmsvZUN4YWpTNWU3alovNFVEWjRRbGhnTlR3ZWVoaktabTdT?=
+ =?utf-8?B?bWJ4VGg5RjdLQUZ2R1RnMHBMMXVWekJTV3dzOS9oMEkwZ1VLakovVUNFRkU1?=
+ =?utf-8?B?V0hkTjd1TlVITlZxK0c4dWR4Q1BMYXVUVUtYaWJxT09mWms2aTZmYVpRYmlm?=
+ =?utf-8?B?VVlmUVhYckVYY2ZUK1dhOWFNbUxUOGh3OWpYV0tGVE5taEh1bUgweHB1RCtQ?=
+ =?utf-8?B?bVN5akdhMFI5VjkrRHdmTmZ4QlltMUtUa1NtRTdsVURNcUxPL1BySTd4SE1u?=
+ =?utf-8?B?cHc5ZVV1b1VxWmRXSy9Rb0RtQ1pLZElwNXdicS9Lc0xRamQzVXBFQzZPR2k0?=
+ =?utf-8?B?OFhSQnc2a1ZnaGV5eExtTzlVMmFQRFBmMDFtTUZsUytYUytWaWpQVHU5aXZQ?=
+ =?utf-8?B?cUtLbkNkNzg5WEdmMys3aVdyTXN3bWNiM3kraUw3VkNoVmcvN0xxMitnai9u?=
+ =?utf-8?B?SG9aVWFZMmg4Vm5OT1FqdDJDSEt0QjdQZDlRUEFiRWR1UjBNaGhrOWFCTFVB?=
+ =?utf-8?B?MGNBamF6TXo4YjFjUXRBS1ZzUHB2VnU3bmw5Z2lJbjRWdHhYVUZJRDRwdkNu?=
+ =?utf-8?B?VEpDTCswZ3U3QVg1V0hmWTd3TDBrcEYwUmxYVzNNWTNFZkEwMldza1ZSWExL?=
+ =?utf-8?B?WGU3QUwxclhLK2dlU1E1NDVlUVBYcXFidVl6NTIzSHg5azhyRDFMR1g0V1N6?=
+ =?utf-8?B?WWFyUUhaRE9McUlNYWtycXFwNlIxaDF4Z0VObGwxZGI3MkRGVi9rbTJXazN3?=
+ =?utf-8?B?Y0dOUlpTMjY3SUVzRlJlNW54MXNvN0xBVGFPUXZCRGhGSGt0TXdmRHBRV2pY?=
+ =?utf-8?B?SHR5SFNEcVFkdnQ0VGRsSzNCQ0JZbDJCR1JjZDN5UzNTY0JXbVdnMWYwdk9S?=
+ =?utf-8?B?VnMzYkV0RHVTVExIWW5ZNWJvenVCMmlVa0dRMTIvR3RWOTVGcHg2cFNNRzBP?=
+ =?utf-8?B?NTBIVlRTVWxYa3lVcG03UDdKZmtQeEh3RG9EK2lERnNMRXY4M2VmVml1bnRy?=
+ =?utf-8?B?My9PZHJOOEVQNndLWnIvVkRSdEROcTFOQmMxUG1IaTlxdkVWS3haQUZWeFlG?=
+ =?utf-8?B?UlNSSEx3aHduYmNUNmNnMVV2VnZ1YXpWRDNPSHUwbGZjcHAwemhZR1NwZ2xo?=
+ =?utf-8?B?Nk1OemhhV1dvaUhxNzdVVlpDVXBzdWJaeXR6eGVEZ2dvdTNxay84eTRRQllm?=
+ =?utf-8?B?ZUpCQ25tcHBhSnk3eGhhT2k3d2xDcFRMQllSMVdtVWowRllGRXBrbzk4dHpR?=
+ =?utf-8?Q?DjPfkp1l9w4kD+keXJzH1UXIzYdaT/ITLnJRx?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <FFD3DAF0C35CC7489FCA96D570B1559E@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7b18962e-d1ce-699f-dd59-719255f19ade@sholland.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2b9cbc8e-4b7a-4dc2-766b-08da36be70bc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 May 2022 22:01:18.9275
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 9eKo1yUKxbidGSamo/C7WWyLKuGHsOD1z+D4Qot4C8aVRVcgM0vPmXgojirLJeHcjLerNP/GGH4t1begfzIfrcLDxSQilgx2njkModfxq3c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4491
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 15, 2022 at 11:03:47AM -0500, Samuel Holland wrote:
-> Hi Stafford,
-> 
-> On 5/15/22 7:41 AM, Stafford Horne wrote:
-> > The emergency print support only works for 8250 compatible serial ports.
-> > Now that OpenRISC platforms may be configured with different serial port
-> > hardware we don't want emergency print to try to print to non-existent
-> > hardware which will cause lockups.
-> > 
-> > This patch contains several fixes to get emergency print working again:
-> > 
-> >  - Update symbol loading to not assume the location of symbols
-> >  - Split the putc print operation out to its own function to allow
-> >    for different future implementations.
-> >  - Update _emergency_print_nr and _emergency_print to use the putc
-> >    function.
-> >  - Guard serial 8250 specific sequences by CONFIG_SERIAL_8250
-> >  - Update string line feed from lf,cr to cr,lf.
-> > 
-> > Signed-off-by: Stafford Horne <shorne@gmail.com>
-> > ---
-> >  arch/openrisc/kernel/head.S | 148 +++++++++++++++++++++---------------
-> >  1 file changed, 85 insertions(+), 63 deletions(-)
-> > 
-> > diff --git a/arch/openrisc/kernel/head.S b/arch/openrisc/kernel/head.S
-> > index 15f1b38dfe03..b1f3a65c271c 100644
-> > --- a/arch/openrisc/kernel/head.S
-> > +++ b/arch/openrisc/kernel/head.S
-> > @@ -297,19 +297,23 @@
-> >  	/* temporary store r3, r9 into r1, r10 */		;\
-> >  	l.addi	r1,r3,0x0					;\
-> >  	l.addi	r10,r9,0x0					;\
-> > -	/* the string referenced by r3 must be low enough */	;\
-> > +	LOAD_SYMBOL_2_GPR(r9,_string_unhandled_exception)	;\
-> > +	tophys	(r3,r9)						;\
-> >  	l.jal	_emergency_print				;\
-> > -	l.ori	r3,r0,lo(_string_unhandled_exception)		;\
-> > +	 l.nop							;\
-> >  	l.mfspr	r3,r0,SPR_NPC					;\
-> >  	l.jal	_emergency_print_nr				;\
-> > -	l.andi	r3,r3,0x1f00					;\
-> > -	/* the string referenced by r3 must be low enough */	;\
-> > +	 l.andi	r3,r3,0x1f00					;\
-> > +	LOAD_SYMBOL_2_GPR(r9,_string_epc_prefix)		;\
-> > +	tophys	(r3,r9)						;\
-> >  	l.jal	_emergency_print				;\
-> > -	l.ori	r3,r0,lo(_string_epc_prefix)			;\
-> > +	 l.nop							;\
-> >  	l.jal	_emergency_print_nr				;\
-> > -	l.mfspr	r3,r0,SPR_EPCR_BASE				;\
-> > +	 l.mfspr r3,r0,SPR_EPCR_BASE				;\
-> > +	LOAD_SYMBOL_2_GPR(r9,_string_nl)			;\
-> > +	tophys	(r3,r9)						;\
-> >  	l.jal	_emergency_print				;\
-> > -	l.ori	r3,r0,lo(_string_nl)				;\
-> > +	 l.nop							;\
-> >  	/* end of printing */					;\
-> >  	l.addi	r3,r1,0x0					;\
-> >  	l.addi	r9,r10,0x0					;\
-> > @@ -1530,65 +1534,99 @@ trampoline_out:
-> >  	l.jr	r9
-> >  	l.nop
-> >  
-> > -
-> >  /*
-> > - * DSCR: prints a string referenced by r3.
-> > + * DESC: Prints ASCII character stored in r7
-> >   *
-> > - * PRMS: r3     	- address of the first character of null
-> > - *			terminated string to be printed
-> > + * PRMS: r7	- a 32-bit value with an ASCII character in the first byte
-> > + *		position.
-> >   *
-> > - * PREQ: UART at UART_BASE_ADD has to be initialized
-> > + * PREQ: The UART at UART_BASE_ADD has to be initialized
-> >   *
-> > - * POST: caller should be aware that r3, r9 are changed
-> > + * POST: internally used but restores:
-> > + * 	 r4	- to store UART_BASE_ADD
-> > + *	 r5	- for loading OFF_TXFULL / THRE,TEMT
-> > + *	 r6	- for storing bitmask (SERIAL_8250)
-> >   */
-> > -ENTRY(_emergency_print)
-> > +ENTRY(_emergency_putc)
-> >  	EMERGENCY_PRINT_STORE_GPR4
-> >  	EMERGENCY_PRINT_STORE_GPR5
-> >  	EMERGENCY_PRINT_STORE_GPR6
-> > -	EMERGENCY_PRINT_STORE_GPR7
-> > -2:
-> > -	l.lbz	r7,0(r3)
-> > -	l.sfeq	r7,r0
-> > -	l.bf	9f
-> > -	l.nop
-> >  
-> > -// putc:
-> >  	l.movhi r4,hi(UART_BASE_ADD)
-> > +	l.ori	r4,r4,lo(UART_BASE_ADD)
-> >  
-> > +#elif defined(CONFIG_SERIAL_8250)
-> 
-> This needs to use #if in this patch (and #elif in the next patch).
-
-Thnak you.  right, I split these patches up at the last moment
-and I messed up these ifdefs.  They work together but not separated.
-
-I will fix this, do some testing and send a v2 tomorrow.
-
-Patches posted here:
-
-  https://github.com/stffrdhrn/linux/commits/or1k-5.19-cleanups
-
--Stafford
-
-> > +	/* Check UART LSR THRE (hold) bit */
-> >  	l.addi  r6,r0,0x20
-> >  1:      l.lbz   r5,5(r4)
-> >  	l.andi  r5,r5,0x20
-> >  	l.sfeq  r5,r6
-> >  	l.bnf   1b
-> > -	l.nop
-> > +	 l.nop
-> >  
-> > +	/* Write character */
-> >  	l.sb    0(r4),r7
-> >  
-> > +	/* Check UART LSR THRE|TEMT (hold, empty) bits */
-> >  	l.addi  r6,r0,0x60
-> >  1:      l.lbz   r5,5(r4)
-> >  	l.andi  r5,r5,0x60
-> >  	l.sfeq  r5,r6
-> >  	l.bnf   1b
-> > -	l.nop
-> > +	 l.nop
-> > +#endif
-> > +	EMERGENCY_PRINT_LOAD_GPR6
-> > +	EMERGENCY_PRINT_LOAD_GPR5
-> > +	EMERGENCY_PRINT_LOAD_GPR4
-> > +	l.jr	r9
-> > +	 l.nop
-> > +
-> > +/*
-> > + * DSCR: prints a string referenced by r3.
-> > + *
-> > + * PRMS: r3     	- address of the first character of null
-> > + *			terminated string to be printed
-> > + *
-> > + * PREQ: UART at UART_BASE_ADD has to be initialized
-> > + *
-> > + * POST: caller should be aware that r3, r9 are changed
-> > + */
-> > +ENTRY(_emergency_print)
-> > +	EMERGENCY_PRINT_STORE_GPR7
-> > +	EMERGENCY_PRINT_STORE_GPR9
-> > +
-> > +	/* Load character to r7, check for null terminator */
-> > +2:	l.lbz	r7,0(r3)
-> > +	l.sfeqi	r7,0x0
-> > +	l.bf	9f
-> > +	 l.nop
-> > +
-> > +	l.jal	_emergency_putc
-> > +	 l.nop
-> >  
-> >  	/* next character */
-> >  	l.j	2b
-> > -	l.addi	r3,r3,0x1
-> > +	 l.addi	r3,r3,0x1
-> >  
-> >  9:
-> > +	EMERGENCY_PRINT_LOAD_GPR9
-> >  	EMERGENCY_PRINT_LOAD_GPR7
-> > -	EMERGENCY_PRINT_LOAD_GPR6
-> > -	EMERGENCY_PRINT_LOAD_GPR5
-> > -	EMERGENCY_PRINT_LOAD_GPR4
-> >  	l.jr	r9
-> > -	l.nop
-> > +	 l.nop
-> >  
-> > +/*
-> > + * DSCR: prints a number in r3 in hex.
-> > + *
-> > + * PRMS: r3     	- a 32-bit unsigned integer
-> > + *
-> > + * PREQ: UART at UART_BASE_ADD has to be initialized
-> > + *
-> > + * POST: caller should be aware that r3, r9 are changed
-> > + */
-> >  ENTRY(_emergency_print_nr)
-> > -	EMERGENCY_PRINT_STORE_GPR4
-> > -	EMERGENCY_PRINT_STORE_GPR5
-> > -	EMERGENCY_PRINT_STORE_GPR6
-> >  	EMERGENCY_PRINT_STORE_GPR7
-> >  	EMERGENCY_PRINT_STORE_GPR8
-> > +	EMERGENCY_PRINT_STORE_GPR9
-> >  
-> >  	l.addi	r8,r0,32		// shift register
-> >  
-> > @@ -1600,58 +1638,39 @@ ENTRY(_emergency_print_nr)
-> >  	/* don't skip the last zero if number == 0x0 */
-> >  	l.sfeqi	r8,0x4
-> >  	l.bf	2f
-> > -	l.nop
-> > +	 l.nop
-> >  
-> >  	l.sfeq	r7,r0
-> >  	l.bf	1b
-> > -	l.nop
-> > +	 l.nop
-> >  
-> >  2:
-> >  	l.srl	r7,r3,r8
-> >  
-> >  	l.andi	r7,r7,0xf
-> >  	l.sflts	r8,r0
-> > -	l.bf	9f
-> > +	 l.bf	9f
-> >  
-> > +	/* Numbers greater than 9 translate to a-f */
-> >  	l.sfgtui r7,0x9
-> >  	l.bnf	8f
-> > -	l.nop
-> > +	 l.nop
-> >  	l.addi	r7,r7,0x27
-> >  
-> > -8:
-> > -	l.addi	r7,r7,0x30
-> > -// putc:
-> > -	l.movhi r4,hi(UART_BASE_ADD)
-> > -
-> > -	l.addi  r6,r0,0x20
-> > -1:      l.lbz   r5,5(r4)
-> > -	l.andi  r5,r5,0x20
-> > -	l.sfeq  r5,r6
-> > -	l.bnf   1b
-> > -	l.nop
-> > -
-> > -	l.sb    0(r4),r7
-> > -
-> > -	l.addi  r6,r0,0x60
-> > -1:      l.lbz   r5,5(r4)
-> > -	l.andi  r5,r5,0x60
-> > -	l.sfeq  r5,r6
-> > -	l.bnf   1b
-> > -	l.nop
-> > +	/* Convert to ascii and output character */
-> > +8:	l.jal	_emergency_putc
-> > +	 l.addi	r7,r7,0x30
-> >  
-> >  	/* next character */
-> >  	l.j	2b
-> >  	l.addi	r8,r8,-0x4
-> >  
-> >  9:
-> > +	EMERGENCY_PRINT_LOAD_GPR9
-> >  	EMERGENCY_PRINT_LOAD_GPR8
-> >  	EMERGENCY_PRINT_LOAD_GPR7
-> > -	EMERGENCY_PRINT_LOAD_GPR6
-> > -	EMERGENCY_PRINT_LOAD_GPR5
-> > -	EMERGENCY_PRINT_LOAD_GPR4
-> >  	l.jr	r9
-> > -	l.nop
-> > -
-> > +	 l.nop
-> >  
-> >  /*
-> >   * This should be used for debugging only.
-> > @@ -1676,7 +1695,9 @@ ENTRY(_emergency_print_nr)
-> >  
-> >  ENTRY(_early_uart_init)
-> >  	l.movhi	r3,hi(UART_BASE_ADD)
-> > +	l.ori	r3,r3,lo(UART_BASE_ADD)
-> >  
-> > +#if defined(CONFIG_SERIAL_8250)
-> >  	l.addi	r4,r0,0x7
-> >  	l.sb	0x2(r3),r4
-> >  
-> > @@ -1694,9 +1715,10 @@ ENTRY(_early_uart_init)
-> >  	l.addi  r4,r0,((UART_DIVISOR) & 0x000000ff)
-> >  	l.sb	UART_DLL(r3),r4
-> >  	l.sb	0x3(r3),r5
-> > +#endif
-> >  
-> >  	l.jr	r9
-> > -	l.nop
-> > +	 l.nop
-> >  
-> >  	.align	0x1000
-> >  	.global _secondary_evbar
-> > @@ -1711,13 +1733,13 @@ _secondary_evbar:
-> >  
-> >  	.section .rodata
-> >  _string_unhandled_exception:
-> > -	.string "\n\rRunarunaround: Unhandled exception 0x\0"
-> > +	.string "\r\nRunarunaround: Unhandled exception 0x\0"
-> >  
-> >  _string_epc_prefix:
-> >  	.string ": EPC=0x\0"
-> >  
-> >  _string_nl:
-> > -	.string "\n\r\0"
-> > +	.string "\r\n\0"
-> >  
-> >  
-> >  /* ========================================[ page aligned structures ]=== */
-> > 
-> 
+T24gU3VuLCAyMDIyLTA1LTE1IGF0IDIxOjM4ICswMjAwLCBUaG9tYXMgR2xlaXhuZXIgd3JvdGU6
+DQo+IE9uIFN1biwgTWF5IDE1IDIwMjIgYXQgMTg6MjQsIEVkZ2Vjb21iZSwgUmljayBQIHdyb3Rl
+Og0KPiA+IE9uIFN1biwgMjAyMi0wNS0xNSBhdCAxMTowMiArMDIwMCwgVGhvbWFzIEdsZWl4bmVy
+IHdyb3RlOg0KPiA+ID4gSWYgaXQgcmVhbGx5IHR1cm5zIG91dCB0byBiZSBzb21ldGhpbmcgd2hp
+Y2ggbWF0dGVycywgdGhlbiB5b3UNCj4gPiA+IGNhbg0KPiA+ID4gcHJvdmlkZSBhIGJhdGNoIGlu
+dGVyZmFjZSBsYXRlciBvbiBpZiBpdCBtYWtlcyBzZW5zZSB0byBkbyBzbywNCj4gPiA+IGJ1dA0K
+PiA+ID4gc2VlDQo+ID4gPiBhYm92ZS4NCj4gPiANCj4gPiBUaGFua3MsIHNvdW5kcyBnb29kIHRv
+IG1lLg0KPiA+IA0KPiA+IEtpcmlsbCwgc28gSSBndWVzcyB3ZSBjYW4ganVzdCBjaGFuZ2UgQVJD
+SF9USFJFQURfRkVBVFVSRV9FTkFCTEUvDQo+ID4gQVJDSF9USFJFQURfRkVBVFVSRV9ESVNBQkxF
+IHRvIHJldHVybiBFSU5WQUwgaWYgbW9yZSB0aGFuIG9uZSBiaXQNCj4gPiBpcw0KPiA+IHNldC4g
+SXQgcmV0dXJucyAwIG9uIHN1Y2Nlc3MgYW5kIHdoYXRldmVyIGVycm9yIGNvZGUgb24gZmFpbHVy
+ZS4NCj4gPiBVc2Vyc3BhY2UgY2FuIGRvIHdoYXRldmVyIHJvbGxiYWNrIGxvZ2ljIGl0IHdhbnRz
+LiBXaGF0IGRvIHlvdQ0KPiA+IHRoaW5rPw0KPiANCj4gV2h5IGhhdmluZyB0aGlzIGZlYXR1cmUg
+Yml0IGludGVyZmFjZSBpbiB0aGUgZmlyc3QgcGxhY2U/DQoNClRoZSBpZGVhIHdhcyB0aGF0IHdl
+IHNob3VsZCBub3QgaGF2ZSBkdXBsaWNhdGUgaW50ZXJmYWNlcyBpZiB3ZSBjYW4NCmF2b2lkIGl0
+LiBJdCBvZiBjb3Vyc2UgZ3JldyBvdXQgb2YgdGhlICJlbGYgZmVhdHVyZSBiaXQiIHN0dWZmLCBi
+dXQgd2UNCmNvbnNpZGVyZWQgc3BsaXR0aW5nIHRoZW0gYWZ0ZXIgbW92aW5nIGF3YXkgZnJvbSB0
+aGF0LiBMQU0gYW5kIENFVCdzDQplbmFibGluZyBuZWVkcyBzZWVtZWQgY2xvc2UgZW5vdWdoIHRv
+IGF2b2lkIGhhdmluZyB0d28gaW50ZXJmYWNlcy4NCg0KPiANCj4gSXQncyBnb2luZyB0byBiZSBh
+IGRlbXVsdGlwbGV4IG1lY2hhbmlzbSB3aXRoIGluY29tcGF0aWJsZQ0KPiBhcmd1bWVudHMuIEp1
+c3QgbG9vayBhdCBMQU0uIFdoYXQncyByZWFsbHkgYXJjaGl0ZWN0dXJlIHNwZWNpZmljDQo+IGFi
+b3V0DQo+IGl0Pw0KPiANCj4gVGhlIG1lY2hhbmlzbSBwZXIgc2UgaXMgYXJjaGl0ZWN0dXJlIGlu
+ZGVwZW5kZW50OiBwb2ludGVyIHRhZ2dpbmcuDQo+IA0KPiBXaGF0J3MgYXJjaGl0ZWN0dXJlIHNw
+ZWNpZmljIGlzIHdoZXRoZXIgaXQncyBzdXBwb3J0ZWQsIHRoZSBhZGRyZXNzDQo+IG1hc2sNCj4g
+YW5kIHRoZSBlbmFibGUvZGlzYWJsZSBtZWNoYW5pc20uDQo+IA0KPiBTbyBoYXZpbmcgZS5nLg0K
+PiANCj4gICAgcHJjdGwoUE9JTlRFUl9UQUdHSU5HX0dFVF9NQVNLLCAmbWFzayk7DQo+IA0KPiB3
+b3JrcyBvbiBhbGwgYXJjaGl0ZWN0dXJlcyB3aGljaCBzdXBwb3J0IHRoaXMuIERpdHRvDQo+IA0K
+PiAgICBwcmN0bChQT0lOVEVSX1RBR0dJTkdfRU5BQkxFLCAmbWFzayk7DQo+IA0KPiBpcyBhcmNo
+aXRlY3R1cmUgYWdub3N0aWMuIEJvdGggbmVlZCB0byBiZSBiYWNrZWQgYnkgYW4gYXJjaGl0ZWN0
+dXJlDQo+IHNwZWNpZmljIGltcGxlbWVudGF0aW9uIG9mIGNvdXJzZS4NCj4gDQo+IFRoaXMgbWFr
+ZXMgaXQgZnV0dXJlIHByb29mIGJlY2F1c2UgbmV3IENQVXMgY291bGQgZGVmaW5lIHRoZSBtYXNr
+IHRvDQo+IGJlDQo+IGJpdCA1Ny02MSBhbmQgdXNlIGJpdCA2MiBmb3Igc29tZXRoaW5nIGVsc2Uu
+IFNvIGZyb20gYSB1c2VyIHNwYWNlDQo+IHBlcnNwZWN0aXZlIHRoZSBtYXNrIHJldHJpdmFsIGlz
+IHVzZWZ1bCBiZWNhdXNlIGl0J3Mgb2J2aW91cyBhbmQNCj4gdHJpdmlhbA0KPiB0byB1c2UgYW5k
+IGRvZXMgbm90IG5lZWQgY29kZSBjaGFuZ2VzIHdoZW4gdGhlIGhhcmR3YXJlDQo+IGltcGxlbWVu
+dGF0aW9uDQo+IHByb3ZpZGVzIGEgZGlmZmVyZW50IG1hc2suDQoNClRoZSBsYWNrIG9mIGFiaWxp
+dHkgdG8gcGFzcyBleHRyYSBhcmd1bWVudHMgaXMgYSBnb29kIHBvaW50Lg0KDQo+IA0KPiBTZWU/
+DQoNClJlZ2FyZGluZyBtYWtpbmcgaXQgYXJjaCBzcGVjaWZpYyBvciBub3QsIGlmIHRoZSBMQU0g
+aW50ZXJmYWNlIGNhbiBiZQ0KYXJjaCBhZ25vc3RpYywgdGhlbiB0aGF0IG1ha2VzIHNlbnNlIHRv
+IG1lLiBJIGd1ZXNzIHNvbWUgQ1BVIGZlYXR1cmVzDQoodmlydHVhbCBtZW1vcnksIGV0YykgYXJl
+IHNpbWlsYXIgZW5vdWdoIHRoYXQgdGhlIGtlcm5lbCBjYW4gaGlkZSB0aGVtDQpiZXlvbmQgY29t
+bW9uIGludGVyZmFjZXMuIFNvbWUgYXJlbid0IChjcHVpZCwgZ3MgcmVnaXN0ZXIsIGV0YykuIElm
+IExBTQ0KY2FuIGJlIG9uZSBvZiB0aGUgZm9ybWVyLCB0aGVuIHNoYXJpbmcgYW4gaW50ZXJmYWNl
+IHdpdGggb3RoZXINCmFyY2hpdGVjdHVyZXMgZG9lcyBzZWVtIG11Y2ggYmV0dGVyLg0KDQpJJ20g
+dGhpbmtpbmcgQ0VUIGlzIGRpZmZlcmVudCBlbm91Z2ggZnJvbSBvdGhlciBzaW1pbGFyIGZlYXR1
+cmVzIHRoYXQNCmxlYXZpbmcgaXQgYXMgYW4gYXJjaCB0aGluZyBpcyBwcm9iYWJseSBhcHByb3By
+aWF0ZS4gQlRJIGlzIHByb2JhYmx5DQp0aGUgY2xvc2VzdCAodG8gSUJUKS4gSXQgdXNlcyBpdCdz
+IG93biBCVEkgc3BlY2lmaWMgZWxmIGhlYWRlciBiaXQsIGFuZA0KcmVxdWlyZXMgc3BlY2lhbCBQ
+Uk9UIG9uIG1lbW9yeSwgdW5saWtlIElCVC4NCg0KPiANCj4gVGhlIHRocmVhZC5mZWF0dXJlcyBi
+aXRtYXAgY291bGQgc3RpbGwgYmUgdXNlZCBhcyBhbiBpbnRlcm5hbCBzdG9yYWdlDQo+IGZvciBl
+bmFibGVkIGZlYXR1cmVzLCBidXQgaGF2aW5nIHRoaXMgYXMgdGhlIHByaW1hcnkgcHJvZ3JhbW1p
+bmcNCj4gaW50ZXJmYWNlIGlzIGN1bWJlcnNvbWUgYW5kIHVuZmxleGlibGUgZm9yIGFueXRoaW5n
+IHdoaWNoIGlzIG5vdA0KPiBiaW5hcnkNCj4gb24vb2ZmLg0KPiANCj4gVGhhbmtzLA0KPiANCj4g
+ICAgICAgICB0Z2x4DQo+IA0KPiANCg==

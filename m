@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD83527620
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 08:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4997527624
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 08:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235856AbiEOGmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 02:42:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58680 "EHLO
+        id S235876AbiEOGmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 02:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235842AbiEOGmP (ORCPT
+        with ESMTP id S235865AbiEOGmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 02:42:15 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04BF21E2E;
-        Sat, 14 May 2022 23:42:14 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id ev18so940815pjb.4;
-        Sat, 14 May 2022 23:42:14 -0700 (PDT)
+        Sun, 15 May 2022 02:42:24 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12AAF21E1C;
+        Sat, 14 May 2022 23:42:22 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso11470591pjg.0;
+        Sat, 14 May 2022 23:42:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=RNX8IttIs7gPKZ/ZnlljxMvfqRG5qWD1gnAXVMMqp+0=;
-        b=XEBWuyekW9Udsy/Vmpi4TY/XNvR6qWx5rXCSqsQu38ntjFvrZ7UBEto6MpPBdQJnzp
-         H/QYIJJVqffc+impBIGZY/MgvA6BcxfpypE61Mv5qsOkhdyooPNwgtunUKmau/HX6NHB
-         jlmk2eGVS+8L5jSUCeHPBenPyLuAWSCf5azOXgnp06e7zouH7VdOzz2MHJyrJbnkAEHs
-         pKZtPck8GEuNzxbYjkerb3Y4Ob2PUYY3uBLf4/WDR5fHiVARgxItMmdrluI7oX0g8+Wy
-         QGGGu4wbaA83ceJnAikUtq37nFoDIa9sRNceKxsp2XAzM5oTC9mCnlyesgVnHxR9FBKC
-         AOvw==
+        bh=5SvJ/++bycunC3OKTAB9+JnJnOimY+H66XGtoS2w60s=;
+        b=jrwaBKFl5d35QZ+3Gee2JrXoy7jVYCOzlLjUKMZ00zqNMc4yv3WfXcp3A1Irk2aD4y
+         NHYe7fdu1w2rvINacTdaZsuNalurMXEFmu4dajXvHlIF6fEcGSuSAAmI821cUxO7UjLm
+         T6xQdGAjpDNecUPguBmvEsOWjR1ScYtxo3v9VVkxtPaTlR+ZZ53VXeWYZQfx/fFNIilS
+         az/p6n/0+RaYr0W8QnQe3gwjPHsOEx+GTyAjfDIEUoMbDqWNZW5aPLZENyceBVgKT/VO
+         e8GRHJRCpNaEmFe89deWgZRv2GlMK56yVyuKiATL3+K/sJNTjosJiHhakkCww3cKbfZh
+         2EEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=RNX8IttIs7gPKZ/ZnlljxMvfqRG5qWD1gnAXVMMqp+0=;
-        b=6U83q/tKBX4o5dqx9DtXcet6VeKNcd4cbJ+McZ2bc20OhgvbLh+klUGC9HERBV0xAs
-         fIlhdASrNTZn/WqeFUe5iOTk1r18BuoMWtAaIhPK5Oy49jEF06dvYJPbtGVD6jkylAde
-         P19fDs+lXcsuTx6HwyKSzZT9Dri98LS3EexGIHbk0f7qzBzwTvvoLxemqto272Bm9j22
-         k6cS+VPDSK/PdJ6zMohvneNYvPDms+z8Ye9d7CPurwTtxWk9hnat4XvOdnPGhRzmQQEr
-         r4fWiqb1nMJFacUo/bkv1AMrr/6cWQlHJhy6G79ieHCTQmgHZ9t6H7wVYlJfTQK4nVGc
-         E9EQ==
-X-Gm-Message-State: AOAM533PqLzu6b54oFkdDPuBvGUo+LBtNNcPwfUZSdTXf1buyGmdF4yE
-        zhRZkFxTW/gKXoEj9sJSe0k=
-X-Google-Smtp-Source: ABdhPJyT8+/XLu+q/7btdUnRMr1o9G/m+//8acAzxbS43SlpLD4HVZDMbTlxRTchAJLWw+4FK5O7pQ==
-X-Received: by 2002:a17:90a:f2ce:b0:1d9:a18f:87f3 with SMTP id gt14-20020a17090af2ce00b001d9a18f87f3mr24550386pjb.213.1652596934488;
-        Sat, 14 May 2022 23:42:14 -0700 (PDT)
+        bh=5SvJ/++bycunC3OKTAB9+JnJnOimY+H66XGtoS2w60s=;
+        b=1/CVOIgl9axhSrIcOyuBRgNOdQTdFJ3sw8igd5FKKTnGoiekyo1gphKF5aG3I5qQec
+         QQYo0eWS9/o7RG6Xr2RRVNRJCTufN9W8/XNfqGxauo6c6Zhele5UXz7+if/Pu+t5Nt1C
+         efPrK98CSWHBpuopYuyFW2TBsqheMQteqkO4gMgJnzkvy9GjatVrJ9CG/PSWUJQZ+gTh
+         dEHC5nGP1/y3Cu7W21q9k0LlU3LruztaRveDnyS/lU0EbblqG1wX+2Pg8oIAjZHUtDfK
+         TKDgi2vtvHnp+VNV6L5Av32iV/syAHWIAMiC+nqRCfCwoIpuZxatXjkHnUxnoVRJgDWX
+         4fqg==
+X-Gm-Message-State: AOAM532JBzc9Mv2QeJJ0DpI+mwp4kJFpM+3WfAKEBGH+kVBnzKajfroI
+        S7SL/94v/Zr31p6/rhU4fy4=
+X-Google-Smtp-Source: ABdhPJzWcVVfdugYBkVY7O80ZUsr97cxYMYWRp1vfSYA4vb0IAvOv+WNAehaqvlWeMBCDABHd9zg/A==
+X-Received: by 2002:a17:90a:ba11:b0:1df:2d09:1308 with SMTP id s17-20020a17090aba1100b001df2d091308mr3500270pjr.184.1652596941625;
+        Sat, 14 May 2022 23:42:21 -0700 (PDT)
 Received: from alarm.. ([103.51.72.28])
-        by smtp.gmail.com with ESMTPSA id g24-20020a170902d5d800b0015e8d4eb2e3sm4568687plh.301.2022.05.14.23.42.10
+        by smtp.gmail.com with ESMTPSA id g24-20020a170902d5d800b0015e8d4eb2e3sm4568687plh.301.2022.05.14.23.42.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 May 2022 23:42:14 -0700 (PDT)
+        Sat, 14 May 2022 23:42:21 -0700 (PDT)
 From:   Anand Moon <linux.amoon@gmail.com>
 To:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
@@ -59,9 +59,9 @@ To:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
         linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     Anand Moon <linux.amoon@gmail.com>
-Subject: [PATCHv2 2/6] thermal: exynos: Reorder the gpu clock initialization for exynos5420 SoC
-Date:   Sun, 15 May 2022 06:41:19 +0000
-Message-Id: <20220515064126.1424-3-linux.amoon@gmail.com>
+Subject: [PATCHv2 3/6] thermal: exynos: Check before clk_disable_unprepare() not needed
+Date:   Sun, 15 May 2022 06:41:20 +0000
+Message-Id: <20220515064126.1424-4-linux.amoon@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220515064126.1424-1-linux.amoon@gmail.com>
 References: <20220515064126.1424-1-linux.amoon@gmail.com>
@@ -77,96 +77,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reorder the tmu_gpu clock initialization for exynos5422 SoC.
+All code in clk_disable_unprepare() already checks the clk ptr using
+IS_ERR_OR_NULL so there is no need to check it again before calling it.
+A lot of other drivers already rely on this behaviour, so it's safe
+to do so here.
 
 Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
 Signed-off-by: Anand Moon <linux.amoon@gmail.com>
 ---
-v1: split the changes and improve the commit messages
+v1: improve the commit message
 ---
- drivers/thermal/samsung/exynos_tmu.c | 43 ++++++++++++++--------------
- 1 file changed, 21 insertions(+), 22 deletions(-)
+ drivers/thermal/samsung/exynos_tmu.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
-index 75b3afadb5be..1ef90dc52c08 100644
+index 1ef90dc52c08..58ff1b577c47 100644
 --- a/drivers/thermal/samsung/exynos_tmu.c
 +++ b/drivers/thermal/samsung/exynos_tmu.c
-@@ -1044,42 +1044,41 @@ static int exynos_tmu_probe(struct platform_device *pdev)
- 		dev_err(&pdev->dev, "Failed to get clock\n");
- 		ret = PTR_ERR(data->clk);
- 		goto err_sensor;
--	}
--
--	data->clk_sec = devm_clk_get(&pdev->dev, "tmu_triminfo_apbif");
--	if (IS_ERR(data->clk_sec)) {
--		if (data->soc == SOC_ARCH_EXYNOS5420_TRIMINFO) {
--			dev_err(&pdev->dev, "Failed to get triminfo clock\n");
--			ret = PTR_ERR(data->clk_sec);
--			goto err_sensor;
--		}
- 	} else {
--		ret = clk_prepare_enable(data->clk_sec);
-+		ret = clk_prepare_enable(data->clk);
- 		if (ret) {
- 			dev_err(&pdev->dev, "Failed to get clock\n");
- 			goto err_sensor;
- 		}
- 	}
+@@ -289,8 +289,7 @@ static int exynos_tmu_initialize(struct platform_device *pdev)
  
--	ret = clk_prepare_enable(data->clk);
--	if (ret) {
--		dev_err(&pdev->dev, "Failed to get clock\n");
--		goto err_clk_sec;
--	}
--
- 	switch (data->soc) {
-+	case SOC_ARCH_EXYNOS5420_TRIMINFO:
-+		data->clk_sec = devm_clk_get(&pdev->dev, "tmu_triminfo_apbif");
-+		if (IS_ERR(data->clk_sec)) {
-+			dev_err(&pdev->dev, "Failed to get triminfo clock\n");
-+			ret = PTR_ERR(data->clk_sec);
-+			goto err_clk_apbif;
-+		} else {
-+			ret = clk_prepare_enable(data->clk_sec);
-+			if (ret) {
-+				dev_err(&pdev->dev, "Failed to get clock\n");
-+				goto err_clk_apbif;
-+			}
-+		}
-+		break;
- 	case SOC_ARCH_EXYNOS5433:
- 	case SOC_ARCH_EXYNOS7:
- 		data->sclk = devm_clk_get(&pdev->dev, "tmu_sclk");
- 		if (IS_ERR(data->sclk)) {
- 			dev_err(&pdev->dev, "Failed to get sclk\n");
- 			ret = PTR_ERR(data->sclk);
--			goto err_clk;
-+			goto err_clk_sec;
- 		} else {
- 			ret = clk_prepare_enable(data->sclk);
- 			if (ret) {
- 				dev_err(&pdev->dev, "Failed to enable sclk\n");
--				goto err_clk;
-+				goto err_clk_sec;
- 			}
- 		}
- 		break;
-@@ -1119,13 +1118,13 @@ static int exynos_tmu_probe(struct platform_device *pdev)
+ 	mutex_lock(&data->lock);
+ 	clk_enable(data->clk);
+-	if (!IS_ERR(data->clk_sec))
+-		clk_enable(data->clk_sec);
++	clk_enable(data->clk_sec);
  
+ 	status = readb(data->base + EXYNOS_TMU_REG_STATUS);
+ 	if (!status) {
+@@ -323,8 +322,7 @@ static int exynos_tmu_initialize(struct platform_device *pdev)
+ err:
+ 	clk_disable(data->clk);
+ 	mutex_unlock(&data->lock);
+-	if (!IS_ERR(data->clk_sec))
+-		clk_disable(data->clk_sec);
++	clk_disable(data->clk_sec);
+ out:
+ 	return ret;
+ }
+@@ -1119,8 +1117,7 @@ static int exynos_tmu_probe(struct platform_device *pdev)
  err_thermal:
  	thermal_zone_of_sensor_unregister(&pdev->dev, data->tzd);
--err_sclk:
--	clk_disable_unprepare(data->sclk);
--err_clk:
--	clk_disable_unprepare(data->clk);
  err_clk_sec:
- 	if (!IS_ERR(data->clk_sec))
- 		clk_disable_unprepare(data->clk_sec);
-+err_sclk:
-+	clk_disable_unprepare(data->sclk);
-+err_clk_apbif:
-+	clk_disable_unprepare(data->clk);
- err_sensor:
+-	if (!IS_ERR(data->clk_sec))
+-		clk_disable_unprepare(data->clk_sec);
++	clk_disable_unprepare(data->clk_sec);
+ err_sclk:
+ 	clk_disable_unprepare(data->sclk);
+ err_clk_apbif:
+@@ -1142,8 +1139,7 @@ static int exynos_tmu_remove(struct platform_device *pdev)
+ 
+ 	clk_disable_unprepare(data->sclk);
+ 	clk_disable_unprepare(data->clk);
+-	if (!IS_ERR(data->clk_sec))
+-		clk_disable_unprepare(data->clk_sec);
++	clk_disable_unprepare(data->clk_sec);
+ 
  	if (!IS_ERR(data->regulator))
  		regulator_disable(data->regulator);
 -- 

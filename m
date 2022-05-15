@@ -2,133 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74C425279EA
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 22:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8BE5279EE
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 22:37:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238447AbiEOUfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 16:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52200 "EHLO
+        id S238649AbiEOUhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 16:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbiEOUfx (ORCPT
+        with ESMTP id S230463AbiEOUhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 16:35:53 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFA0FD35
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 13:35:51 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 1-20020a05600c248100b00393fbf11a05so9839935wms.3
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 13:35:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=l7yzdPWP9oJM8k+dt6SbrPRUqaxJOT+vLQ0kaYXYGIc=;
-        b=CfeyHbLqe3DOG6Rp9HJfMomA38jRORPLC1I7vYd2YICmjRiR4K4Wh+5Hn+IWHTylv2
-         nwjhKxkrn+SJ3+y5yjcwIcHkB1nKiaEjWYChGRHGP8g+n0ocpj/K05BaCcuZetf0kZF7
-         mM7klvbV4zhq71O7qbFNCR9Jct8L5M1XRBeGfotY9FfSsoTJXc4YtsetZ4H/sL2L1IUf
-         uXlsGoCgwvBzs6Y8ETA6jpfU9fRV/UDVK4Pr1ShUi991IwsHmIAcJFFEi9+0YvaCzLJ3
-         jYQmup4YQ3COrHsDE4iGOCo8v5N8jD8O//cUfBgr929Sg79o28/S21mE1khmDPFYc8Ys
-         aYbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=l7yzdPWP9oJM8k+dt6SbrPRUqaxJOT+vLQ0kaYXYGIc=;
-        b=zCh/YjpK+KW25vBMkHlJOYkkLlWYSqKR/JI7WbBlKJLCtb/bjW8MNyzAZ4VgmoIhC2
-         xNUCABdMME9DxU4FrgDh1UUV9YxtsCik2fSZ2XLvA9Ils5oGM7kQ1DxZ6PGPsB17AOxJ
-         Mrmx+f1h7WHI+KaIfYKIqLqzbf3lPivWg5NAZOwXGcdrALbzxPcz2imq1gRnEPSc1a/T
-         C0102A7GMUWh1xuZ4kBCCaGDUNXTCcprq2bEz18YMEFeyMNGPGZUgwnl00UEz13beNPK
-         4kkgnj6rVSyqqtpBQYgbrKHI/7KsMKixP2vPDn+7HVJbO+GVNI6iloR5mSyCVZxA3SDu
-         I/oA==
-X-Gm-Message-State: AOAM532p3qKPRztrRc+UZPz8wdxmMi9D8ZMe5vlzTrzx955bfYc4cTKI
-        r24wDs/DPrVsVWruDbEmRfp28s3m9yg=
-X-Google-Smtp-Source: ABdhPJx7i5LUMAYFSRbrqwFRUOMEWyj8ZLAYg9JWtTsxoL1UBEnyY3RCo03bQJ0r7Z1CvxJCK00+7w==
-X-Received: by 2002:a7b:c001:0:b0:394:87bc:ad70 with SMTP id c1-20020a7bc001000000b0039487bcad70mr24710869wmb.147.1652646949662;
-        Sun, 15 May 2022 13:35:49 -0700 (PDT)
-Received: from [192.168.1.20] ([195.245.23.54])
-        by smtp.gmail.com with ESMTPSA id m18-20020adfa3d2000000b0020c5253d8ffsm7736509wrb.75.2022.05.15.13.35.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 15 May 2022 13:35:49 -0700 (PDT)
-Message-ID: <6e0029f6-f499-c688-9174-61409180eae5@gmail.com>
-Date:   Sun, 15 May 2022 22:35:47 +0200
+        Sun, 15 May 2022 16:37:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FEF211C31;
+        Sun, 15 May 2022 13:37:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16B5CB80E11;
+        Sun, 15 May 2022 20:37:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38A05C385B8;
+        Sun, 15 May 2022 20:36:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652647019;
+        bh=GrCoDmkEGZhrFkRwhSQwfYPPWhwhCDYMWQ8Z6at6QAI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=EQ3ICpYy6jfWgWmBpV4ItsGmja6AVNh1JNSf7Vb+tTCCYV3NO20oXIo5sQQ8lnBrQ
+         0Ww9D62uD8n/jh6QR+M86Nql6+e2twSa//3MkdaJDF3XfmAjdI5hhS9zBWWPeLOZTW
+         dZImeLoqFQbBm8PBlG9TyTM1G0dQEN3L8KUrqD5mM5bq/U+pgwH7UllN/DriFHnWOl
+         b1bghyhM9ZoKnWee1E9yTDOy5uEWMcmlk9ZPMR8VOYWlQqweU627zKXF/C0OOphqr5
+         LbWflqpT5UW1TOjEopiiUPHYQjQDuRDn9T00f29o2x/RYyZLIFey/a4TkGm/Fxlg1I
+         cTDBRbTqfOJhg==
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [PATCH bpf-next 1/2] cpuidle/rcu: Making arch_cpu_idle and rcu_idle_exit noinstr
+Date:   Sun, 15 May 2022 22:36:52 +0200
+Message-Id: <20220515203653.4039075-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] ep93xx: clock: Do not return the address of the freed
- memory
-Content-Language: en-US
-To:     Genjian Zhang <zhanggenjian123@gmail.com>,
-        hsweeten@visionengravers.com, linux@armlinux.org.uk
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Genjian Zhang <zhanggenjian@kylinos.cn>
-References: <20220512075943.2397833-1-zhanggenjian@kylinos.cn>
-From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
-In-Reply-To: <20220512075943.2397833-1-zhanggenjian@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Genjian!
+Making arch_cpu_idle and rcu_idle_exit noinstr. Both functions run
+in rcu 'not watching' context and if there's tracer attached to
+them, which uses rcu (e.g. kprobe multi interface) it will hit RCU
+warning like:
 
-Thank you for the patch!
+  [    3.017540] WARNING: suspicious RCU usage
+  ...
+  [    3.018363]  kprobe_multi_link_handler+0x68/0x1c0
+  [    3.018364]  ? kprobe_multi_link_handler+0x3e/0x1c0
+  [    3.018366]  ? arch_cpu_idle_dead+0x10/0x10
+  [    3.018367]  ? arch_cpu_idle_dead+0x10/0x10
+  [    3.018371]  fprobe_handler.part.0+0xab/0x150
+  [    3.018374]  0xffffffffa00080c8
+  [    3.018393]  ? arch_cpu_idle+0x5/0x10
+  [    3.018398]  arch_cpu_idle+0x5/0x10
+  [    3.018399]  default_idle_call+0x59/0x90
+  [    3.018401]  do_idle+0x1c3/0x1d0
 
-On 12/05/2022 09:59, Genjian Zhang wrote:
-> Although there will be basic judgments of IS_ERR() on this return value
-> elsewhere,but I think it can be replaced by the actual error return
-> value of clk_register.
+The call path is following:
 
-Actually this fixes very similar use-after-free which I missed in
-commit 9645ccc7bd7a1.
+default_idle_call
+  rcu_idle_enter
+  arch_cpu_idle
+  rcu_idle_exit
 
-I propose to add
-Fixes: 9645ccc7bd7a1 ("ep93xx: clock: convert in-place to COMMON_CLK")
+The arch_cpu_idle and rcu_idle_exit are the only ones from above
+path that are traceble and cause this problem on my setup.
 
-> Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
-> ---
->  arch/arm/mach-ep93xx/clock.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm/mach-ep93xx/clock.c b/arch/arm/mach-ep93xx/clock.c
-> index 4fa6ea5461b7..762328de4bce 100644
-> --- a/arch/arm/mach-ep93xx/clock.c
-> +++ b/arch/arm/mach-ep93xx/clock.c
-> @@ -345,9 +345,10 @@ static struct clk_hw *clk_hw_register_ddiv(const char *name,
->  	psc->hw.init = &init;
->  
->  	clk = clk_register(NULL, &psc->hw);
-> -	if (IS_ERR(clk))
-> +	if (IS_ERR(clk)) {
->  		kfree(psc);
-> -
-> +		return (struct clk_hw *)clk;
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ arch/x86/kernel/process.c | 2 +-
+ kernel/rcu/tree.c         | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Could you please use ERR_CAST()?
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index b370767f5b19..1345cb0124a6 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -720,7 +720,7 @@ void arch_cpu_idle_dead(void)
+ /*
+  * Called from the generic idle code.
+  */
+-void arch_cpu_idle(void)
++void noinstr arch_cpu_idle(void)
+ {
+ 	x86_idle();
+ }
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index a4b8189455d5..20d529722f51 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -896,7 +896,7 @@ static void noinstr rcu_eqs_exit(bool user)
+  * If you add or remove a call to rcu_idle_exit(), be sure to test with
+  * CONFIG_RCU_EQS_DEBUG=y.
+  */
+-void rcu_idle_exit(void)
++void noinstr rcu_idle_exit(void)
+ {
+ 	unsigned long flags;
+ 
+-- 
+2.35.3
 
-> +	}
->  	return &psc->hw;
->  }
->  
-> @@ -452,9 +453,10 @@ static struct clk_hw *clk_hw_register_div(const char *name,
->  	psc->hw.init = &init;
->  
->  	clk = clk_register(NULL, &psc->hw);
-> -	if (IS_ERR(clk))
-> +	if (IS_ERR(clk)) {
->  		kfree(psc);
-> -
-> +		return (struct clk_hw *)clk;
-
-same as above
-
-> +	}
->  	return &psc->hw;
->  }
->  

@@ -2,60 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E9B5279F1
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 22:37:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A5A5279F5
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 22:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238734AbiEOUh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 16:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54746 "EHLO
+        id S238691AbiEOUkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 16:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238665AbiEOUhQ (ORCPT
+        with ESMTP id S230463AbiEOUkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 16:37:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4673B12600;
-        Sun, 15 May 2022 13:37:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CEE1FB80DDB;
-        Sun, 15 May 2022 20:37:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6354EC385B8;
-        Sun, 15 May 2022 20:37:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652647030;
-        bh=RcJBgCp3hjncPUbVdOsuPx3xKTW8fhv7TADAmDBK+xI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FxBo9+mUw16uIlgNo88CdSL25AKVNnpiSvqHVaNCOliKw93XjS8R/iCJJTONvmvqx
-         G02kCfjC9uVx+u0REvA2u6zSD6BiZCpgtgrOABPVufcegvqAUXwgL8DaeK2PKs7Gr0
-         CSgLbbq2e7tvbwbvOblmxX8a+E52tBf3u+QBx6udVV45MmgVOu0JRa3iV+uw+tVBs2
-         TmKDBnpcK90B4c6EZQoFrzQwf3oQ9NzkcEBCE7TnuCgq2C0aQICWCj7e/1d8PR3Fus
-         F4ChvoAjFU+vjK+YL5aShXrQoBtdRzgV2GuAyEz0cEEudd3I2wl1nb68jHbUFeEek6
-         4zCIpt9s2uJQg==
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Remove filter for unsafe functions in kprobe_multi test
-Date:   Sun, 15 May 2022 22:36:53 +0200
-Message-Id: <20220515203653.4039075-2-jolsa@kernel.org>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220515203653.4039075-1-jolsa@kernel.org>
-References: <20220515203653.4039075-1-jolsa@kernel.org>
+        Sun, 15 May 2022 16:40:18 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B9318B18;
+        Sun, 15 May 2022 13:40:14 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nqL26-0006KS-GD; Sun, 15 May 2022 22:40:06 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     zhangqing@rock-chips.com, Johan Jonker <jbx6244@gmail.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, linux-clk@vger.kernel.org,
+        sboyd@kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, krzk+dt@kernel.org, robh+dt@kernel.org,
+        mturquette@baylibre.com, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/3] dt-bindings: clock: convert rockchip,rv1108-cru.txt to YAML
+Date:   Sun, 15 May 2022 22:40:04 +0200
+Message-Id: <165264719504.2587306.15719505641957259296.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220330131608.30040-1-jbx6244@gmail.com>
+References: <20220330131608.30040-1-jbx6244@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,52 +45,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Removing filter for arch_cpu_idle and rcu_* functions.
+On Wed, 30 Mar 2022 15:16:06 +0200, Johan Jonker wrote:
+> Convert rockchip,rv1108-cru.txt to YAML.
+> 
+> Changes against original bindings:
+>   Add clocks and clock-names because the device has to have
+>   at least one input clock.
 
-Attaching to them was causing RCU warnings [1]:
+Applied, thanks!
 
-  [    3.017540] WARNING: suspicious RCU usage
-  ...
-  [    3.018363]  kprobe_multi_link_handler+0x68/0x1c0
-  [    3.018364]  ? kprobe_multi_link_handler+0x3e/0x1c0
-  [    3.018366]  ? arch_cpu_idle_dead+0x10/0x10
-  [    3.018367]  ? arch_cpu_idle_dead+0x10/0x10
-  [    3.018371]  fprobe_handler.part.0+0xab/0x150
-  [    3.018374]  0xffffffffa00080c8
-  [    3.018393]  ? arch_cpu_idle+0x5/0x10
-  [    3.018398]  arch_cpu_idle+0x5/0x10
-  [    3.018399]  default_idle_call+0x59/0x90
-  [    3.018401]  do_idle+0x1c3/0x1d0
+[1/3] dt-bindings: clock: convert rockchip,rv1108-cru.txt to YAML
+      commit: 5eb60b7bff3233d07e6a9e3328d2ba415209691e
+[2/3] ARM: dts: rockchip: add clocks property to cru node rv1108
+      commit: f36fed209444efe8ac6621900f407c6569c92dc9
+[3/3] ARM: dts: rockchip: Remove bogus "amba" bus nodes part 2
+      commit: 191800d40222ee920dab2e7a774ea2ae4f28c1c9
 
-With previous fix the functions causing that are no longer attachable.
-
-[1] https://lore.kernel.org/bpf/CAEf4BzYtXWvBWzmadhLGqwf8_e2sruK6999th6c=b=O0WLkHOA@mail.gmail.com/
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- .../selftests/bpf/prog_tests/kprobe_multi_test.c       | 10 ----------
- 1 file changed, 10 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-index 586dc52d6fb9..8bb974c263c3 100644
---- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-@@ -354,16 +354,6 @@ static int get_syms(char ***symsp, size_t *cntp)
- 			continue;
- 		if (sscanf(buf, "%ms$*[^\n]\n", &name) != 1)
- 			continue;
--		/*
--		 * We attach to almost all kernel functions and some of them
--		 * will cause 'suspicious RCU usage' when fprobe is attached
--		 * to them. Filter out the current culprits - arch_cpu_idle
--		 * and rcu_* functions.
--		 */
--		if (!strcmp(name, "arch_cpu_idle"))
--			continue;
--		if (!strncmp(name, "rcu_", 4))
--			continue;
- 		err = hashmap__add(map, name, NULL);
- 		if (err) {
- 			free(name);
+Best regards,
 -- 
-2.35.3
-
+Heiko Stuebner <heiko@sntech.de>

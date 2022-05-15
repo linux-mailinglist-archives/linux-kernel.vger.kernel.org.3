@@ -2,174 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8214752762C
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 08:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1AD527640
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 09:24:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235907AbiEOGm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 02:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60174 "EHLO
+        id S233629AbiEOHYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 03:24:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235889AbiEOGmq (ORCPT
+        with ESMTP id S229709AbiEOHYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 02:42:46 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F1E2DA93;
-        Sat, 14 May 2022 23:42:44 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id y41so11286373pfw.12;
-        Sat, 14 May 2022 23:42:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=D4Q6w6yEvGwJK0TRipYAGtfiK43Dmnd3tJ7ygkkWia4=;
-        b=IOLCGdIAmm3LunK3vBZkd/zL03BzIKvSMk+Utas+4Rbjc1kgqSnZVisi+yBAvrPSDX
-         y/Rykv02QICz7x6MMGfUNDMjOAi4QyP4CLjK2VAtFwUkiLT3BX177/DXaBBSNwn+3pqJ
-         /0ff8f8msGQ6Vt+K0aLeKn6GW8pHmSYYnpdjnAb62dJmQvKUMfH2MLQ535Rd7tTii5XG
-         3BaPorgEEpb36Ei2LBex0KVE+uwJOOByOUuGpxiizr+744YJpAdXdIbAHw92oxLozHGE
-         PhIFmkCTc9jLTwxecZUGpxlplo/YS2t1cDMhwxol4xU22WvCo5uuGreWf8bAEF0GIvfv
-         gW2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=D4Q6w6yEvGwJK0TRipYAGtfiK43Dmnd3tJ7ygkkWia4=;
-        b=I/FCBW0FE+Y+f0smgt8SoGbvoVK2tnHR7KuHWuaMRa7C2RXGUkrHGn9jHF4Q4jbBeO
-         C34ZFwZOiyOoy0sVDzKrYWl6ReNXGxC8dJ9/dkqHyOSSz/aLtIgBAoWrA5ZG8j5suH/Q
-         Y9lYzQdHsEuNOwPU5IVPps0rIF8b2sFvbeqwqw6UEyrSKO0EGXTljsfK6KSLSAyUVJ6l
-         vLCblO6aUX3oq9X5Xe2ETRxFzFccHHqHcQm3UYyICfiCD92e9CDGi6ILwv1wOuOzsYX/
-         uLnowzHy/9yIUxIhqp3MyxlV8h8KMvsXQcutJdnlP1hdt4544bvlXzTCPsOlw8mqq3IZ
-         dFzA==
-X-Gm-Message-State: AOAM532Hr9HK0RZSlk7QERx5K3WMbtjD1/sf9qxKqkIBD/VFlsYYpp/Y
-        5o+zrOmRyNhqKH4RxfAPlNg=
-X-Google-Smtp-Source: ABdhPJzaWlQJYvbQ+EagfN3qdp16Rk+tbk02UoNETO2+CAcbdrv7RLtNe2Z7jSDRK6RLvZbVgRfX3A==
-X-Received: by 2002:a62:1ad4:0:b0:510:c635:e516 with SMTP id a203-20020a621ad4000000b00510c635e516mr12359143pfa.42.1652596964160;
-        Sat, 14 May 2022 23:42:44 -0700 (PDT)
-Received: from alarm.. ([103.51.72.28])
-        by smtp.gmail.com with ESMTPSA id g24-20020a170902d5d800b0015e8d4eb2e3sm4568687plh.301.2022.05.14.23.42.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 May 2022 23:42:43 -0700 (PDT)
-From:   Anand Moon <linux.amoon@gmail.com>
-To:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Anand Moon <linux.amoon@gmail.com>
-Subject: [PATCHv2 6/6] thermal: exynos: Add runtime power management for tmu
-Date:   Sun, 15 May 2022 06:41:23 +0000
-Message-Id: <20220515064126.1424-7-linux.amoon@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220515064126.1424-1-linux.amoon@gmail.com>
-References: <20220515064126.1424-1-linux.amoon@gmail.com>
+        Sun, 15 May 2022 03:24:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1D6DFEA
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 00:24:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A3633B80B34
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 07:24:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4741C385B8;
+        Sun, 15 May 2022 07:24:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652599448;
+        bh=2PGo9NsLUewmGRkHS6RJc63L7P46JEsartEngldOhNg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SX3l+6L+B22OvT/rcofdvbZZzesdNJ72HpL7/7fw8pXVfwtecqyPLrJEf9WZMOTjC
+         btxz4EgPlv2KnK/aBpfRhaFr85ODVC+n6/6CngaG0V1nTr8mKvdkhtK8lKNsDp7cIT
+         awehGVF/PxauX2FH6GpaB4uVHTSIiVLjzsX9W7adwu1toxbC1BlrpPW+tx6m8LZHg7
+         RQAtI4elVMaVxNQaN9gT74oaGaBqB+VjJZ7StTT/jqhN4UBqSYGnxZ3+82F2nR7ad8
+         4E0xHqlV69wCZUZht9pyPykQHgqbgeJs1VXa3CAH1An98wkUTeAGS1zCybg3Es0Hgp
+         0TQL0AAn4Dswg==
+Date:   Sun, 15 May 2022 15:15:34 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        kasan-dev@googlegroups.com
+Subject: Re: [PATCH v2 2/4] riscv: introduce unified static key mechanism for
+ CPU features
+Message-ID: <YoCollqhS93NJZjL@xhacker>
+References: <20220508160749.984-1-jszhang@kernel.org>
+ <20220508160749.984-3-jszhang@kernel.org>
+ <CAK9=C2Xinc6Y9ue+3ZOvKOOgru7wvJNcEPLvO4aZGuQqETXi2w@mail.gmail.com>
+ <YnkoKxaPbrTnZPQv@xhacker>
+ <CAOnJCU+XR5mtqKBQLMj3JgsTPgvAQdO_jj2FWqcu7f9MezNCKA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAOnJCU+XR5mtqKBQLMj3JgsTPgvAQdO_jj2FWqcu7f9MezNCKA@mail.gmail.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add runtime power management for exynos thermal driver.
+On Wed, May 11, 2022 at 11:29:32PM -0700, Atish Patra wrote:
+> On Mon, May 9, 2022 at 7:50 AM Jisheng Zhang <jszhang@kernel.org> wrote:
+> >
+> > On Mon, May 09, 2022 at 09:17:10AM +0530, Anup Patel wrote:
+> > > On Sun, May 8, 2022 at 9:47 PM Jisheng Zhang <jszhang@kernel.org> wrote:
+> > > >
+> > > > Currently, riscv has several features why may not be supported on all
+> > > > riscv platforms, for example, FPU, SV48 and so on. To support unified
+> > > > kernel Image style, we need to check whether the feature is suportted
+> > > > or not. If the check sits at hot code path, then performance will be
+> > > > impacted a lot. static key can be used to solve the issue. In the past
+> > > > FPU support has been converted to use static key mechanism. I believe
+> > > > we will have similar cases in the future.
+> > >
+> > > It's not just FPU and Sv48. There are several others such as Svinval,
+> > > Vector, Svnapot, Svpbmt, and many many others.
+> > >
+> > > Overall, I agree with the approach of using static key array but I
+> > > disagree with the semantics and the duplicate stuff being added.
+> > >
+> > > Please see more comments below ..
+> > >
+> > > >
+> > > > Similar as arm64 does(in fact, some code is borrowed from arm64), this
+> > > > patch tries to add an unified mechanism to use static keys for all
+> > > > the cpu features by implementing an array of default-false static keys
+> > > > and enabling them when detected. The cpus_have_*_cap() check uses the
+> > > > static keys if riscv_const_caps_ready is finalized, otherwise the
+> > > > compiler generates the bitmap test.
+> > >
+> > > First of all, we should stop calling this a feature (like ARM does). Rather,
+> > > we should call these as isa extensions ("isaext") to align with the RISC-V
+> > > priv spec and RISC-V profiles spec. For all the ISA optionalities which do
+> > > not have distinct extension name, the RISC-V profiles spec is assigning
+> > > names to all such optionalities.
+> >
+> > Same as the reply a few minutes ago, the key problem here is do all
+> > CPU features belong to *ISA* extensions? For example, SV48, SV57 etc.
+> > I agree with Atish's comments here:
+> >
+> > "I think the cpu feature is a superset of the ISA extension.
+> > cpu feature != ISA extension"
+> >
+> 
+> It seems to be accurate at that point in time. However, the latest
+> profile spec seems to
+> define everything as an extension including sv48.
+> 
+> https://github.com/riscv/riscv-profiles/blob/main/profiles.adoc#623-rva22s64-supported-optional-extensions
+> 
+> It may be a redundant effort and confusing to create two sets i.e.
+> feature and extension in this case.
+> But this specification is not frozen yet and may change in the future.
+> We at least know that that is the current intention.
+> 
+> Array of static keys is definitely useful and should be used for all
+> well defined ISA extensions by the ratified priv spec.
+> This will simplify this patch as well. For any feature/extensions
+> (i.e. sv48/sv57) which was never defined as an extension
+> in the priv spec but profile seems to define it now, I would leave it
+> alone for the time being. Converting the existing code
+> to static key probably has value but please do not include it in the
+> static key array setup.
+> 
+> Once the profile spec is frozen, we can decide which direction the
+> Linux kernel should go.
+>
 
-Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
-Signed-off-by: Anand Moon <linux.amoon@gmail.com>
----
-v1: new patch in this series.
----
- drivers/thermal/samsung/exynos_tmu.c | 29 ++++++++++++++++++++++++++--
- 1 file changed, 27 insertions(+), 2 deletions(-)
+Hi Atish, Anup,
 
-diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
-index f8a527f19383..be9b98caf2ba 100644
---- a/drivers/thermal/samsung/exynos_tmu.c
-+++ b/drivers/thermal/samsung/exynos_tmu.c
-@@ -20,6 +20,7 @@
- #include <linux/of_irq.h>
- #include <linux/platform_device.h>
- #include <linux/regulator/consumer.h>
-+#include <linux/pm_runtime.h>
- 
- #include <dt-bindings/thermal/thermal_exynos.h>
- 
-@@ -1106,6 +1107,15 @@ static int exynos_tmu_probe(struct platform_device *pdev)
- 		goto err_thermal;
- 	}
- 
-+	pm_runtime_set_active(&pdev->dev);
-+	pm_runtime_set_autosuspend_delay(&pdev->dev, 1000);
-+	pm_runtime_use_autosuspend(&pdev->dev);
-+	pm_runtime_enable(&pdev->dev);
-+
-+	ret = pm_runtime_resume_and_get(&pdev->dev);
-+	if (ret < 0)
-+		goto disable_runtime_pm;
-+
- 	ret = devm_request_irq(&pdev->dev, data->irq, exynos_tmu_irq,
- 		IRQF_TRIGGER_RISING | IRQF_SHARED, dev_name(&pdev->dev), data);
- 	if (ret) {
-@@ -1113,11 +1123,16 @@ static int exynos_tmu_probe(struct platform_device *pdev)
- 		goto err_thermal;
- 	}
- 
-+	pm_runtime_put(&pdev->dev);
-+
- 	exynos_tmu_control(pdev, true);
- 	return 0;
- 
- err_thermal:
- 	thermal_zone_of_sensor_unregister(&pdev->dev, data->tzd);
-+disable_runtime_pm:
-+	pm_runtime_put_noidle(&pdev->dev);
-+	pm_runtime_disable(&pdev->dev);
- err_clk_sec:
- 	clk_disable_unprepare(data->clk_sec);
- err_sclk:
-@@ -1143,6 +1158,9 @@ static int exynos_tmu_remove(struct platform_device *pdev)
- 	clk_disable_unprepare(data->clk);
- 	clk_disable_unprepare(data->clk_sec);
- 
-+	pm_runtime_put_noidle(&pdev->dev);
-+	pm_runtime_disable(&pdev->dev);
-+
- 	if (!IS_ERR(data->regulator))
- 		regulator_disable(data->regulator);
- 
-@@ -1151,18 +1169,25 @@ static int exynos_tmu_remove(struct platform_device *pdev)
- 
- static int __maybe_unused exynos_tmu_suspend(struct device *dev)
- {
--	exynos_tmu_control(to_platform_device(dev), false);
-+	struct platform_device *pdev = to_platform_device(dev);
- 
--	return 0;
-+	exynos_tmu_control(pdev, false);
-+
-+	return pm_runtime_force_suspend(&pdev->dev);
- }
- 
- static int __maybe_unused exynos_tmu_resume(struct device *dev)
- {
- 	struct platform_device *pdev = to_platform_device(dev);
-+	int ret;
- 
- 	exynos_tmu_initialize(pdev);
- 	exynos_tmu_control(pdev, true);
- 
-+	ret = pm_runtime_force_resume(&pdev->dev);
-+	if (ret)
-+		return ret;
-+
- 	return 0;
- }
- 
--- 
-2.36.1
+I see your points and thanks for the information of the profile
+spec. Now, I have other two points about isa VS features:
 
+1. Not all isa extenstions need static key mechanism, so if we
+make a static key array with 1:1 riscv_isa <-> static key relationship
+there may be waste.
+
+For example, the 'a', 'c', 'i', 'm' and so on don't have static
+key usage.
+
+2.We may need riscv architecture static keys for non-isa, this is
+usually related with the linux os itself, for example
+a static key for "unmap kernelspace at userspace".
+static keys for "spectre CVE mitigations"
+etc.
+
+In summary, I can see riscv_isa doesn't cover features which need static
+keys, and vice vesa.
+
+Could you please comment?
+
+Thanks in advance,
+Jisheng

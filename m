@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F5B75279E4
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 22:31:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDAF25279E6
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 22:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238597AbiEOUbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 16:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43326 "EHLO
+        id S238581AbiEOUbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 16:31:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233281AbiEOUb0 (ORCPT
+        with ESMTP id S234191AbiEOUb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 16:31:26 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB082BE5;
-        Sun, 15 May 2022 13:31:25 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id i40so939992eda.7;
-        Sun, 15 May 2022 13:31:25 -0700 (PDT)
+        Sun, 15 May 2022 16:31:27 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB05E5FEC;
+        Sun, 15 May 2022 13:31:26 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id fd25so3355819edb.3;
+        Sun, 15 May 2022 13:31:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ENgyZIarJt3vx0WIXiC6L0+jAAX3vWhh6cAjsl5a67I=;
-        b=SZFpiN8zhdmdVfDFONWVxa4X3LiXAkoHxyC9IzvkoFe/QoZrcetJZU/JXmQm9HXQFv
-         NMfbWmRekKmuE2oBEVR75w6N5bj/4fcNfg7gIDcubWs2i1I9W7lqvcgkF/rGjadNkCEL
-         T/VLOLtlg/GHcJ8KkqMOnSSjIkaTVI/8/IShYt0W5W3CHsm9OAXxWDPW/DTao27c0rE/
-         hmjhujBCw9T1Py27mX8WsyE7UwS3nyKSqwrwIgD1rblF00lBhBJkx3p3CJ8/uV+JbreC
-         rHzHgLKRK75KXGFUjWrO1wNRPNA2yToiiqPorpRuh9VKum5QPJGKZvQLp5ynZY7xTrQ4
-         Fzhw==
+        bh=DzxGK66oNP5EqUefEbuvx65uQZvfKjOjhE65FjoDOMc=;
+        b=hoKt9d8+dKND6Y6Bwsc8ypDLly19+Ewi/s13gjFFKg67ZgbfWM+I8A8eJQ4bJhwNw3
+         NZ1IDZPxtmBRBIlzAiefyAtajH2ZmXa+Ut+d5Y+7sHoSQD0xkFd6YK8c36hJ4rxGTqlm
+         /IfM3fFQXty9jCWH83xiSPU/zexhOZnWRaI4yyQw8u2Pd7/izbovPn3FPp1W8H7u+pv9
+         MBgz4DtiFyIccF5tGPCZoSPt2fES4ZWesMtg1uEJzeg2XKXH++i6RT/JcXOQ+VjdKjF3
+         yglYZ4i+acrqy627qTQRy4swy8RytTXqhjdAZwNeSngYEWB+BF7WzxD5os2f81dTbnjh
+         genQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ENgyZIarJt3vx0WIXiC6L0+jAAX3vWhh6cAjsl5a67I=;
-        b=kbK0YYbum+ueBk8BdQalngSjvRvu3jV2nUrOBcrFQcIilkQUfX1oAFsmaxvP3saKBr
-         rBCGPJuY34mZszvF9Qt/iXZcFD1S2MZ8bg9NDzyIFZlBUcHbfYl97NBtSOW3/MMZd3dX
-         drGAuGFsfHsRrAVTBcOg9Sd9acqOpO3Z7V6Cz+O1heB/cHM8jW6o9mQ5yUPdtG9EHyqw
-         Or/OjTRGWsahkmVuWvM8HTjXDpho3TN/g4nvDSZHr46ggd0bMzfVqWy8/pOHf8cPinCq
-         iBUjyp/JFuI9Z3ZtyeHhVKa+YecH3iJljxi+QngKVJycexlbXUJducZC0TbKwDzfffQ4
-         QRvQ==
-X-Gm-Message-State: AOAM531n7yR7XKzvBeoPMz+lC2ODDc3pa4zhBcyaxoOD0+AGoThL+TcQ
-        QaUte+5II4QZ1M8oc8gKWsw=
-X-Google-Smtp-Source: ABdhPJwmuEMVFMd3pOhbiXip1TKJdHQndx6BAJa7uGYqCpSA87Jir89Hbfu2jtrHA9DhPU4RPnqLnA==
-X-Received: by 2002:a05:6402:c90:b0:42a:98c7:3fe with SMTP id cm16-20020a0564020c9000b0042a98c703femr7851455edb.270.1652646683799;
-        Sun, 15 May 2022 13:31:23 -0700 (PDT)
+        bh=DzxGK66oNP5EqUefEbuvx65uQZvfKjOjhE65FjoDOMc=;
+        b=L7qp3oAafX/afOZCH4MZvqh5O0cjgJUSXL6NOuTK8g0XL6cx5eRZyf5rRjfCPCblKn
+         jRbegtBgq74EXYoZD8g/PFVAAh/+gEohtlGa0nWePQTwGqlpoXzxfQqzb0BMryC0NZBB
+         WBVcGGvy1JxLbHxAPTKYWp0xW7Lhl+RGVOdyvhoJiF3Qf8rpwmSD7izLcQoPrrrVi5YJ
+         N7QR0qH4Qrv/3DQReMFt1SaZ45CQ9cQXkPjMKQk/IH/Gb0TMY8ESYx82rfoXi48NydPI
+         S9BpevNODK46jvIByvYfVqcUluRE0ZI8rOlKAt4qdyNIEFWowjL6sgTnMbgcZdvoEPYf
+         vh7w==
+X-Gm-Message-State: AOAM533M69bOAO39D/c6n2ifRsojtgbgo18zhPVuLPGz+ZTY/ke/idYZ
+        jj80B81pW6XHrSQFDXPQbsdc75n0XpA=
+X-Google-Smtp-Source: ABdhPJyb74RJcWIEYubGmbz8xaQt2Fz2l8jFS1qtV6F7iSnoqELAjmlPQcyYwdu8RxTezVJrLvKbYA==
+X-Received: by 2002:a05:6402:90d:b0:428:bda9:3e6b with SMTP id g13-20020a056402090d00b00428bda93e6bmr9829164edz.132.1652646685338;
+        Sun, 15 May 2022 13:31:25 -0700 (PDT)
 Received: from fedora.robimarko.hr (dh207-98-105.xnet.hr. [88.207.98.105])
-        by smtp.googlemail.com with ESMTPSA id ze16-20020a170906ef9000b006f3ef214e4esm2944884ejb.180.2022.05.15.13.31.22
+        by smtp.googlemail.com with ESMTPSA id ze16-20020a170906ef9000b006f3ef214e4esm2944884ejb.180.2022.05.15.13.31.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 May 2022 13:31:23 -0700 (PDT)
+        Sun, 15 May 2022 13:31:25 -0700 (PDT)
 From:   Robert Marko <robimarko@gmail.com>
 To:     agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
         broonie@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH 3/6] dt-bindings: regulator: qcom,spmi-regulator: add PMP8074 PMIC
-Date:   Sun, 15 May 2022 22:31:15 +0200
-Message-Id: <20220515203118.474684-3-robimarko@gmail.com>
+Subject: [PATCH 4/6] regulator: qcom_spmi: Add support for PMP8074 regulators
+Date:   Sun, 15 May 2022 22:31:16 +0200
+Message-Id: <20220515203118.474684-4-robimarko@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220515203118.474684-1-robimarko@gmail.com>
 References: <20220515203118.474684-1-robimarko@gmail.com>
@@ -72,25 +72,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the PMP8074 PMIC compatible.
+PMP8074 is a companion PMIC for the Qualcomm IPQ8074 WiSoC-s.
+
+It features 5 HF-SMPS and 13 LDO regulators.
+
+This commit adds support for S3 and S4 HF-SMPS buck regulators of
+the HFS430 type and LDO11 of the HT_P150 type.
+S3 is the CPU cluster voltage supply, S4 supplies the UBI32 NPU cores
+and LDO11 is the SDIO/eMMC I/O voltage regulator required for high speeds.
 
 Signed-off-by: Robert Marko <robimarko@gmail.com>
 ---
- .../devicetree/bindings/regulator/qcom,spmi-regulator.yaml       | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/regulator/qcom_spmi-regulator.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
-index f7da310f1845..960e61661bc8 100644
---- a/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
-+++ b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
-@@ -23,6 +23,7 @@ properties:
-       - qcom,pm8950-regulators
-       - qcom,pm8994-regulators
-       - qcom,pmi8994-regulators
-+      - qcom,pmp8074-regulators
-       - qcom,pms405-regulators
+diff --git a/drivers/regulator/qcom_spmi-regulator.c b/drivers/regulator/qcom_spmi-regulator.c
+index 38bbc70241ae..696b088aae40 100644
+--- a/drivers/regulator/qcom_spmi-regulator.c
++++ b/drivers/regulator/qcom_spmi-regulator.c
+@@ -2137,6 +2137,13 @@ static const struct spmi_regulator_data pms405_regulators[] = {
+ 	{ }
+ };
  
-   qcom,saw-reg:
++static const struct spmi_regulator_data pmp8074_regulators[] = {
++	{ "s3", 0x1a00, "vdd_s3"},
++	{ "s4", 0x1d00, "vdd_s4"},
++	{ "l11", 0x4a00, "vdd_l10_l11_l12_l13"},
++	{ }
++};
++
+ static const struct of_device_id qcom_spmi_regulator_match[] = {
+ 	{ .compatible = "qcom,pm8004-regulators", .data = &pm8004_regulators },
+ 	{ .compatible = "qcom,pm8005-regulators", .data = &pm8005_regulators },
+@@ -2150,6 +2157,7 @@ static const struct of_device_id qcom_spmi_regulator_match[] = {
+ 	{ .compatible = "qcom,pm660-regulators", .data = &pm660_regulators },
+ 	{ .compatible = "qcom,pm660l-regulators", .data = &pm660l_regulators },
+ 	{ .compatible = "qcom,pms405-regulators", .data = &pms405_regulators },
++	{ .compatible = "qcom,pmp8074-regulators", .data = &pmp8074_regulators },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, qcom_spmi_regulator_match);
 -- 
 2.36.1
 

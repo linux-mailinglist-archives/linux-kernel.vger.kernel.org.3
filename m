@@ -2,388 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78FEA5278B0
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 18:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 998105278BA
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 18:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237629AbiEOQDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 12:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34946 "EHLO
+        id S237660AbiEOQR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 12:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231899AbiEOQDu (ORCPT
+        with ESMTP id S231624AbiEOQRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 12:03:50 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768511EC5D
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 09:03:49 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id DB0A85C0121;
-        Sun, 15 May 2022 12:03:48 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sun, 15 May 2022 12:03:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1652630628; x=
-        1652717028; bh=A+Z6uQVNDpQfDaY0iiQ+fbaP7QdS6F3+IaNBU9dAM3Q=; b=D
-        +z2nCfO3F8Qfqlmlb+9WWZTxn283R11k+i8OnH7NOGhJWh6nQt0wIPIi/q9UsMfw
-        6SsdA/MHwak0E8QlRmvyZfEdW0V/yu/wJBGa4H3z4goJd5ar0wvIrGzM2CZJOEZa
-        7BFhyv5Y7w+zntdtvgtJhjk2k0H6fBmUOpHKPYYq2bALg331zySSFIdEJFuXL/wx
-        1ocjidVItT43gtPSMxOThU8xG+wek/p52HGCpTYrxmfKc68oUIBFFfn66LdXjhtX
-        f794oiusRZ1TGkXRx6kwLiBHqISshhOblwjN4bBjj6sXo5vv6gifsYZdE5arDayD
-        S/fhVybVAC0iMmHr8FFng==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1652630628; x=1652717028; bh=A+Z6uQVNDpQfD
-        aY0iiQ+fbaP7QdS6F3+IaNBU9dAM3Q=; b=rxNOpCNw1fnzU9vOIiLFgHPmSkbHf
-        QhG1A2DKhpfABX4G5HkpDADEh9KLKopSGkKJLMD7fpWa1aNRSYjiLIpFbnrqbBt1
-        n7Bov9sUAXXuRcgItGMDfj5PANrEuXVYPECznv2rTr1UGm0lBh59L6gAhtduHk1m
-        KL2rXYhOm8bWNIRejetL8/+ki72OkgdbqpiztY6t3exqP6k7FbSfQsCHSoYuOnMU
-        I6cNxfyQb5rCKpp/YGUoXLJHkIasHSj8nOuoQGlSO2gCdvpucHNdNNp5MkH1voOM
-        x9lcpdM9Gu24rmoHvZXHk/VbZgGNTlSXZUlcTpkpc+Tt7HP8esM+xZZ6g==
-X-ME-Sender: <xms:ZCSBYn8c0K3KLGPTpzUdgF0Zn1QYT-N_eOL89Fckawlai5OKiIOggw>
-    <xme:ZCSBYjtYQKrn8vPchqYSi-jYrCQ_7dEAevKTwz10RcbY24lOBef_w1XR1urVBlO_c
-    vfLx7SQyhJoN62qwg>
-X-ME-Received: <xmr:ZCSBYlDrbsS7ksiucVds1o_Rgjewu_qU_gRReuxRKjSq1O5RjcpOBix1Kx3sPseU5NKE2h2ybRak_AB9UxzvwLQAJqE9gdakzozz9bP51_wBL9mbtHu2MvxgLA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrheefgdelhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefuvfevfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepgfetffefteehkeduieffhfevhfffiefhieekffefjedtgeelleeg
-    tefftdfgteefnecuffhomhgrihhnpehhvggrugdrshgsnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhlrghnugdr
-    ohhrgh
-X-ME-Proxy: <xmx:ZCSBYjd9R91ejSK-ODuir8ZRrYhk1x4ci2ETJtsnp5oEvD0oFhyCSA>
-    <xmx:ZCSBYsN-585JVmeItOCXMHh14rYI1fR3gW6RZu7RsuyT2KwJkCazuQ>
-    <xmx:ZCSBYlnHHovFUQL7DfayvlirLTaSdpTGJm01WheV1QGw97fBHiRRmQ>
-    <xmx:ZCSBYhpfTQmWE7weQh3BgDKoUcs1gOOqgemzfrJD-aq0JB9-VfS_ew>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 15 May 2022 12:03:47 -0400 (EDT)
-Subject: Re: [PATCH 02/13] openrisc: Cleanup emergency print handling
-To:     Stafford Horne <shorne@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <20220515124158.3167452-1-shorne@gmail.com>
- <20220515124158.3167452-3-shorne@gmail.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <7b18962e-d1ce-699f-dd59-719255f19ade@sholland.org>
-Date:   Sun, 15 May 2022 11:03:47 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Sun, 15 May 2022 12:17:24 -0400
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F4CDF65
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 09:17:22 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id c12so1725277eds.10
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 09:17:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:reply-to
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=m+papEz+RWVYQ4erdcb0O46hSO9mcyw8EdGsK52iQDQ=;
+        b=W51tJtXEwpTJ1OHl3shN+SwRTSodR/sf9c+Bb1f3Ep0oeMZz5vEwC7ZhWtQOrfa/e1
+         BbcO4GwAtIiusCde8YnQdC0DcQ+ypL1wmkHiKxRVDvCaw5Cstk0rFV2Xjza0m8O1MAV3
+         91/imL8gqoKl6E0Fc21GJmhvh7Whe32ha6WNUjOo8Vq3TDUjxU11qKEkOMxviKuJPSKQ
+         X3Tjs8dq3RS+kCKNWRNOS1Ge5F4yN+kNGciiMUr0L3UtZxhxgR/3GA/BcRM7Qlt2NgAX
+         jlXsBjS1XO9TMLJz0t1j/zLppklWrEOWDuuIg6PC9MmG06BBrKpGvfXu1ND3PR1NsCEi
+         Mrfg==
+X-Gm-Message-State: AOAM531XTr92C5d8ZCoXj1wqerfOCu/SsDcEbB2v3XCDYWTXLYG8j1XD
+        6t1vsgsRAYnU8r8GYrYr1gk=
+X-Google-Smtp-Source: ABdhPJzbk5jxfNgZbkHfRwpJoX6Viho3cdHkj4vdkUG/fHA0J7sETGUZWsM0m/qY9QFMH3Se5dSZoA==
+X-Received: by 2002:a05:6402:84a:b0:423:fe99:8c53 with SMTP id b10-20020a056402084a00b00423fe998c53mr8842690edz.195.1652631441184;
+        Sun, 15 May 2022 09:17:21 -0700 (PDT)
+Received: from [10.9.0.34] ([46.166.133.199])
+        by smtp.gmail.com with ESMTPSA id o23-20020a50fd97000000b0042aaaf3f41csm1171934edt.4.2022.05.15.09.17.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 May 2022 09:17:20 -0700 (PDT)
+Message-ID: <8d8061c4-2a3e-cb3a-00c9-677fa8899058@linux.com>
+Date:   Sun, 15 May 2022 19:17:16 +0300
 MIME-Version: 1.0
-In-Reply-To: <20220515124158.3167452-3-shorne@gmail.com>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Reply-To: alex.popov@linux.com
+Subject: Re: [PATCH v2 03/13] stackleak: remove redundant check
 Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org,
+        catalin.marinas@arm.com, linux-kernel@vger.kernel.org,
+        luto@kernel.org, will@kernel.org
+References: <20220427173128.2603085-1-mark.rutland@arm.com>
+ <20220427173128.2603085-4-mark.rutland@arm.com>
+ <a604fa2b-e7c3-3fff-dd81-1a0585a9e2fa@linux.com>
+ <YnpQqBwYjlVffJk8@FVFF77S0Q05N> <202205101958.2A33DE20@keescook>
+ <YnttpThLX0tgrw5i@FVFF77S0Q05N>
+ <33711C66-BB24-4A75-8756-3CDDA02BC0CD@chromium.org>
+ <YnzQDWTw1qdtVJMJ@FVFF77S0Q05N>
+From:   Alexander Popov <alex.popov@linux.com>
+In-Reply-To: <YnzQDWTw1qdtVJMJ@FVFF77S0Q05N>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stafford,
-
-On 5/15/22 7:41 AM, Stafford Horne wrote:
-> The emergency print support only works for 8250 compatible serial ports.
-> Now that OpenRISC platforms may be configured with different serial port
-> hardware we don't want emergency print to try to print to non-existent
-> hardware which will cause lockups.
+On 12.05.2022 12:14, Mark Rutland wrote:
+> On Wed, May 11, 2022 at 07:44:41AM -0700, Kees Cook wrote:
+>>
+>>
+>> On May 11, 2022 1:02:45 AM PDT, Mark Rutland <mark.rutland@arm.com> wrote:
+>>> On Tue, May 10, 2022 at 08:00:38PM -0700, Kees Cook wrote:
+>>>> On Tue, May 10, 2022 at 12:46:48PM +0100, Mark Rutland wrote:
+>>>>> On Sun, May 08, 2022 at 09:17:01PM +0300, Alexander Popov wrote:
+>>>>>> On 27.04.2022 20:31, Mark Rutland wrote:
+>>>>>>> In __stackleak_erase() we check that the `erase_low` value derived from
+>>>>>>> `current->lowest_stack` is above the lowest legitimate stack pointer
+>>>>>>> value, but this is already enforced by stackleak_track_stack() when
+>>>>>>> recording the lowest stack value.
+>>>>>>>
+>>>>>>> Remove the redundant check.
+>>>>>>>
+>>>>>>> There should be no functional change as a result of this patch.
+>>>>>>
+>>>>>> Mark, I can't agree here. I think this check is important.
+>>>>>> The performance profit from dropping it is less than the confidence decrease :)
+>>>>>>
+>>>>>> With this check, if the 'lowest_stack' value is corrupted, stackleak doesn't
+>>>>>> overwrite some wrong kernel memory, but simply clears the whole thread
+>>>>>> stack, which is safe behavior.
+>>>>>
+>>>>> If you feel strongly about it, I can restore the check, but I struggle to
+>>>>> believe that it's worthwhile. The `lowest_stack` value lives in the
+>>>>> task_struct, and if you have the power to corrupt that you have the power to do
+>>>>> much more interesting things.
+>>>>>
+>>>>> If we do restore it, I'd like to add a big fat comment explaining the
+>>>>> rationale (i.e. that it only matter if someone could corrupt
+>>>>> `current->lowest_stack`, as otherwise that's guarnateed to be within bounds).
+>>>>
+>>>> Yeah, let's restore it and add the comment. While I do agree it's likely
+>>>> that such an corruption would likely mean an attacker had significant
+>>>> control over kernel memory already, it is not uncommon that an attack
+>>>> only has a limited index from a given address, etc. Or some manipulation
+>>>> is possible via weird gadgets, etc. It's unlikely, but not impossible,
+>>>> and a bounds-check for that value is cheap compared to the rest of the
+>>>> work happening. :)
+>>>
+>>> Fair enough; I can go spin a patch restoring this. I'm somewhat unhappy with
+>>> silently fixing that up, though -- IMO it'd be better to BUG() or similar in
+>>> that case.
+>>
+>> I share your desires, and this was exactly what Alexander originally proposed, but Linus rejected it violently. :(
+>> https://lore.kernel.org/lkml/CA+55aFy6jNLsywVYdGp83AMrXBo_P-pkjkphPGrO=82SPKCpLQ@mail.gmail.com/
 > 
-> This patch contains several fixes to get emergency print working again:
+> I see. :/
 > 
->  - Update symbol loading to not assume the location of symbols
->  - Split the putc print operation out to its own function to allow
->    for different future implementations.
->  - Update _emergency_print_nr and _emergency_print to use the putc
->    function.
->  - Guard serial 8250 specific sequences by CONFIG_SERIAL_8250
->  - Update string line feed from lf,cr to cr,lf.
+> Thinking about this some more, if we assume someone can corrupt *some* word of
+> memory, then we need to consider that instead of corrupting
+> task_struct::lowest_stack, they could corrupt task_struct::stack (or x86's
+> cpu_current_top_of_stack prior to this series).
 > 
-> Signed-off-by: Stafford Horne <shorne@gmail.com>
-> ---
->  arch/openrisc/kernel/head.S | 148 +++++++++++++++++++++---------------
->  1 file changed, 85 insertions(+), 63 deletions(-)
-> 
-> diff --git a/arch/openrisc/kernel/head.S b/arch/openrisc/kernel/head.S
-> index 15f1b38dfe03..b1f3a65c271c 100644
-> --- a/arch/openrisc/kernel/head.S
-> +++ b/arch/openrisc/kernel/head.S
-> @@ -297,19 +297,23 @@
->  	/* temporary store r3, r9 into r1, r10 */		;\
->  	l.addi	r1,r3,0x0					;\
->  	l.addi	r10,r9,0x0					;\
-> -	/* the string referenced by r3 must be low enough */	;\
-> +	LOAD_SYMBOL_2_GPR(r9,_string_unhandled_exception)	;\
-> +	tophys	(r3,r9)						;\
->  	l.jal	_emergency_print				;\
-> -	l.ori	r3,r0,lo(_string_unhandled_exception)		;\
-> +	 l.nop							;\
->  	l.mfspr	r3,r0,SPR_NPC					;\
->  	l.jal	_emergency_print_nr				;\
-> -	l.andi	r3,r3,0x1f00					;\
-> -	/* the string referenced by r3 must be low enough */	;\
-> +	 l.andi	r3,r3,0x1f00					;\
-> +	LOAD_SYMBOL_2_GPR(r9,_string_epc_prefix)		;\
-> +	tophys	(r3,r9)						;\
->  	l.jal	_emergency_print				;\
-> -	l.ori	r3,r0,lo(_string_epc_prefix)			;\
-> +	 l.nop							;\
->  	l.jal	_emergency_print_nr				;\
-> -	l.mfspr	r3,r0,SPR_EPCR_BASE				;\
-> +	 l.mfspr r3,r0,SPR_EPCR_BASE				;\
-> +	LOAD_SYMBOL_2_GPR(r9,_string_nl)			;\
-> +	tophys	(r3,r9)						;\
->  	l.jal	_emergency_print				;\
-> -	l.ori	r3,r0,lo(_string_nl)				;\
-> +	 l.nop							;\
->  	/* end of printing */					;\
->  	l.addi	r3,r1,0x0					;\
->  	l.addi	r9,r10,0x0					;\
-> @@ -1530,65 +1534,99 @@ trampoline_out:
->  	l.jr	r9
->  	l.nop
->  
-> -
->  /*
-> - * DSCR: prints a string referenced by r3.
-> + * DESC: Prints ASCII character stored in r7
->   *
-> - * PRMS: r3     	- address of the first character of null
-> - *			terminated string to be printed
-> + * PRMS: r7	- a 32-bit value with an ASCII character in the first byte
-> + *		position.
->   *
-> - * PREQ: UART at UART_BASE_ADD has to be initialized
-> + * PREQ: The UART at UART_BASE_ADD has to be initialized
->   *
-> - * POST: caller should be aware that r3, r9 are changed
-> + * POST: internally used but restores:
-> + * 	 r4	- to store UART_BASE_ADD
-> + *	 r5	- for loading OFF_TXFULL / THRE,TEMT
-> + *	 r6	- for storing bitmask (SERIAL_8250)
->   */
-> -ENTRY(_emergency_print)
-> +ENTRY(_emergency_putc)
->  	EMERGENCY_PRINT_STORE_GPR4
->  	EMERGENCY_PRINT_STORE_GPR5
->  	EMERGENCY_PRINT_STORE_GPR6
-> -	EMERGENCY_PRINT_STORE_GPR7
-> -2:
-> -	l.lbz	r7,0(r3)
-> -	l.sfeq	r7,r0
-> -	l.bf	9f
-> -	l.nop
->  
-> -// putc:
->  	l.movhi r4,hi(UART_BASE_ADD)
-> +	l.ori	r4,r4,lo(UART_BASE_ADD)
->  
-> +#elif defined(CONFIG_SERIAL_8250)
+> With that in mind, if we detect that task_struct::lowest_stack is
+> out-of-bounds, we have no idea whether it has been corrupted or the other bound
+> values have been corrupted, and so we can't do the erase safely anyway.
 
-This needs to use #if in this patch (and #elif in the next patch).
+:)
 
-Regards,
-Samuel
+IMO, even if a kernel thread stack is moved somewhere for any weird reason, 
+stackleak must erase it at the end of syscall and do its job.
 
-> +	/* Check UART LSR THRE (hold) bit */
->  	l.addi  r6,r0,0x20
->  1:      l.lbz   r5,5(r4)
->  	l.andi  r5,r5,0x20
->  	l.sfeq  r5,r6
->  	l.bnf   1b
-> -	l.nop
-> +	 l.nop
->  
-> +	/* Write character */
->  	l.sb    0(r4),r7
->  
-> +	/* Check UART LSR THRE|TEMT (hold, empty) bits */
->  	l.addi  r6,r0,0x60
->  1:      l.lbz   r5,5(r4)
->  	l.andi  r5,r5,0x60
->  	l.sfeq  r5,r6
->  	l.bnf   1b
-> -	l.nop
-> +	 l.nop
-> +#endif
-> +	EMERGENCY_PRINT_LOAD_GPR6
-> +	EMERGENCY_PRINT_LOAD_GPR5
-> +	EMERGENCY_PRINT_LOAD_GPR4
-> +	l.jr	r9
-> +	 l.nop
-> +
-> +/*
-> + * DSCR: prints a string referenced by r3.
-> + *
-> + * PRMS: r3     	- address of the first character of null
-> + *			terminated string to be printed
-> + *
-> + * PREQ: UART at UART_BASE_ADD has to be initialized
-> + *
-> + * POST: caller should be aware that r3, r9 are changed
-> + */
-> +ENTRY(_emergency_print)
-> +	EMERGENCY_PRINT_STORE_GPR7
-> +	EMERGENCY_PRINT_STORE_GPR9
-> +
-> +	/* Load character to r7, check for null terminator */
-> +2:	l.lbz	r7,0(r3)
-> +	l.sfeqi	r7,0x0
-> +	l.bf	9f
-> +	 l.nop
-> +
-> +	l.jal	_emergency_putc
-> +	 l.nop
->  
->  	/* next character */
->  	l.j	2b
-> -	l.addi	r3,r3,0x1
-> +	 l.addi	r3,r3,0x1
->  
->  9:
-> +	EMERGENCY_PRINT_LOAD_GPR9
->  	EMERGENCY_PRINT_LOAD_GPR7
-> -	EMERGENCY_PRINT_LOAD_GPR6
-> -	EMERGENCY_PRINT_LOAD_GPR5
-> -	EMERGENCY_PRINT_LOAD_GPR4
->  	l.jr	r9
-> -	l.nop
-> +	 l.nop
->  
-> +/*
-> + * DSCR: prints a number in r3 in hex.
-> + *
-> + * PRMS: r3     	- a 32-bit unsigned integer
-> + *
-> + * PREQ: UART at UART_BASE_ADD has to be initialized
-> + *
-> + * POST: caller should be aware that r3, r9 are changed
-> + */
->  ENTRY(_emergency_print_nr)
-> -	EMERGENCY_PRINT_STORE_GPR4
-> -	EMERGENCY_PRINT_STORE_GPR5
-> -	EMERGENCY_PRINT_STORE_GPR6
->  	EMERGENCY_PRINT_STORE_GPR7
->  	EMERGENCY_PRINT_STORE_GPR8
-> +	EMERGENCY_PRINT_STORE_GPR9
->  
->  	l.addi	r8,r0,32		// shift register
->  
-> @@ -1600,58 +1638,39 @@ ENTRY(_emergency_print_nr)
->  	/* don't skip the last zero if number == 0x0 */
->  	l.sfeqi	r8,0x4
->  	l.bf	2f
-> -	l.nop
-> +	 l.nop
->  
->  	l.sfeq	r7,r0
->  	l.bf	1b
-> -	l.nop
-> +	 l.nop
->  
->  2:
->  	l.srl	r7,r3,r8
->  
->  	l.andi	r7,r7,0xf
->  	l.sflts	r8,r0
-> -	l.bf	9f
-> +	 l.bf	9f
->  
-> +	/* Numbers greater than 9 translate to a-f */
->  	l.sfgtui r7,0x9
->  	l.bnf	8f
-> -	l.nop
-> +	 l.nop
->  	l.addi	r7,r7,0x27
->  
-> -8:
-> -	l.addi	r7,r7,0x30
-> -// putc:
-> -	l.movhi r4,hi(UART_BASE_ADD)
-> -
-> -	l.addi  r6,r0,0x20
-> -1:      l.lbz   r5,5(r4)
-> -	l.andi  r5,r5,0x20
-> -	l.sfeq  r5,r6
-> -	l.bnf   1b
-> -	l.nop
-> -
-> -	l.sb    0(r4),r7
-> -
-> -	l.addi  r6,r0,0x60
-> -1:      l.lbz   r5,5(r4)
-> -	l.andi  r5,r5,0x60
-> -	l.sfeq  r5,r6
-> -	l.bnf   1b
-> -	l.nop
-> +	/* Convert to ascii and output character */
-> +8:	l.jal	_emergency_putc
-> +	 l.addi	r7,r7,0x30
->  
->  	/* next character */
->  	l.j	2b
->  	l.addi	r8,r8,-0x4
->  
->  9:
-> +	EMERGENCY_PRINT_LOAD_GPR9
->  	EMERGENCY_PRINT_LOAD_GPR8
->  	EMERGENCY_PRINT_LOAD_GPR7
-> -	EMERGENCY_PRINT_LOAD_GPR6
-> -	EMERGENCY_PRINT_LOAD_GPR5
-> -	EMERGENCY_PRINT_LOAD_GPR4
->  	l.jr	r9
-> -	l.nop
-> -
-> +	 l.nop
->  
->  /*
->   * This should be used for debugging only.
-> @@ -1676,7 +1695,9 @@ ENTRY(_emergency_print_nr)
->  
->  ENTRY(_early_uart_init)
->  	l.movhi	r3,hi(UART_BASE_ADD)
-> +	l.ori	r3,r3,lo(UART_BASE_ADD)
->  
-> +#if defined(CONFIG_SERIAL_8250)
->  	l.addi	r4,r0,0x7
->  	l.sb	0x2(r3),r4
->  
-> @@ -1694,9 +1715,10 @@ ENTRY(_early_uart_init)
->  	l.addi  r4,r0,((UART_DIVISOR) & 0x000000ff)
->  	l.sb	UART_DLL(r3),r4
->  	l.sb	0x3(r3),r5
-> +#endif
->  
->  	l.jr	r9
-> -	l.nop
-> +	 l.nop
->  
->  	.align	0x1000
->  	.global _secondary_evbar
-> @@ -1711,13 +1733,13 @@ _secondary_evbar:
->  
->  	.section .rodata
->  _string_unhandled_exception:
-> -	.string "\n\rRunarunaround: Unhandled exception 0x\0"
-> +	.string "\r\nRunarunaround: Unhandled exception 0x\0"
->  
->  _string_epc_prefix:
->  	.string ": EPC=0x\0"
->  
->  _string_nl:
-> -	.string "\n\r\0"
-> +	.string "\r\n\0"
->  
->  
->  /* ========================================[ page aligned structures ]=== */
-> 
+> So AFAICT we must *avoid* erasing when that goes wrong. Maybe we could WARN()
+> instead of BUG()?
 
+Mark, I think security features must not go out of service.
+
+The 'lowest_stack' value is for making stackleak faster. I believe if the 
+'lowest_stack' value is invalid, stackleak must not skip its main job and should 
+erase the whole kernel thread stack.
+
+When I developed 'stackleak_erase()' I tried adding 'WARN_ON()', but it didn't 
+work properly there, as I remember. Warning handling code is very complex. So I 
+dropped that fragile part.
+
+Best regards,
+Alexander

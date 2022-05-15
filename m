@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F31C45279DA
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 22:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3CB35279E5
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 22:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235113AbiEOUb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 16:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
+        id S238621AbiEOUbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 16:31:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbiEOUbX (ORCPT
+        with ESMTP id S233179AbiEOUbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 16:31:23 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC532BE5;
-        Sun, 15 May 2022 13:31:22 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id g6so25221459ejw.1;
-        Sun, 15 May 2022 13:31:22 -0700 (PDT)
+        Sun, 15 May 2022 16:31:25 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB095FB5;
+        Sun, 15 May 2022 13:31:23 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id y21so15979028edo.2;
+        Sun, 15 May 2022 13:31:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GMH39Son2N3gZ9c/oeFLwOmolsOkBedh777nxOuqfek=;
-        b=ICNuozQdrKs9S7QW4c7BmzeSDmB6P5eSXxchDKGIniTnOy9u6UXnhLsLw06CAeFl35
-         uU4YG5BYBnA8tlQzkDNgjEu5qF1AFJj8HCdiwMzY6I5uc8cBL6JyC5jRFfRAVVjJm1Fn
-         m8lK6UslYi8crDNayf8bv+RCUyk7sFme0sdXzIEvOh65pwhGcKVk6bFxHmnLtyeJzT7b
-         YBd9w+9sNPXw3e47DOOwbDYGsTIgMqXkzTgvYpkfeh2S0pc3gKxKVQzRsT3TSTyZDFrg
-         9OT0H+64hSrJ8iZObQ4VouvaCfXl3RWSBcYfGMQusyeLvGZbx4kLMz4yyif0tYyMg+od
-         bGzg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=oIDUTK5KnimKV7JPutWUmQpjQBhC0JH0W89/0KDYnjU=;
+        b=JPX+v4vULFUBp68FIay0x+aQNSp90Bl4RKUV5uiaMUeZLnWH6Rrd4mqjDDt6R/HBAd
+         UWcOCQeRoPHZ8hYIycyTKf9vssyyUGae6CHYB7WObBe0trf8+e8pzL1f6yHLGoU+ZU2h
+         5bTfxbOOPyUcYxdPUtuE62ohQZU8jAcG0rWSam6EpW7/1NiR0uHnG6LfU542eGys1KjG
+         yek5OvDviVsOE+0X875PU64L5UEp98fxT1abvOwfCEu2PH8nGpzgP7RHSNqfqyGY6jcz
+         FXWji9zfC0hHpgZteZ6wKFutF7zMNkGbkt+MopgoKPTscEgcW9aFtxLghRHV/W/vbttZ
+         HXBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GMH39Son2N3gZ9c/oeFLwOmolsOkBedh777nxOuqfek=;
-        b=fEtjlNHCfwCvSN0vTGrXK+GBKRwwkLEtoSR1b0xgjipDZp5gaTfJOkmkMgZGCx0wqv
-         0PRaWSYyfD2fykBWe2n7yYzI9soM7HKcNw6qkv6GDqr2x8EWZ/u2XAEkBU+yPtGaEH3F
-         kwR3hFElXBzkEiik0FUN9OOcBDMqwpz2SUdlOPUcKhNgyzM1g8Qdkg3rOn88jtH1H396
-         sfl5cEUBPiVQMlNFyzp/IbQEj1s6UrLWqLbi0S+Bpq9tfqDThSHxmovCl7wHxBy8NcA5
-         o6dC97A84ON0lTL6PTzTQNdMgd+WF3WLOysMmct7PFnczP2wBDSnhOKl7UUlvy1OKLZf
-         y/6g==
-X-Gm-Message-State: AOAM531pAHnQQMuaOC+RPO18DF+D6kEpw4cBoPeCZAml9Z+K+U/wnESB
-        iNm6ge2rAw2qcM0W9ofRCh8=
-X-Google-Smtp-Source: ABdhPJzwjb3a5SuYFnXIm2M/C54wSpppovcGlUDKCA+/oHrU+JHpmN1eQxv2BMUB5VucaTIsEAW8SA==
-X-Received: by 2002:a17:906:5006:b0:6ce:3762:c72e with SMTP id s6-20020a170906500600b006ce3762c72emr12588246ejj.30.1652646680755;
-        Sun, 15 May 2022 13:31:20 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=oIDUTK5KnimKV7JPutWUmQpjQBhC0JH0W89/0KDYnjU=;
+        b=xzYFdlBx6uyssX6cIPI79jAscpm6wh7bGwFB2X2RfphtZEZnCrsf6ZXlH7es5OPgdl
+         G1JBD1os/mG/SYbysKtDOVXeBAxrZvqz1EOXeElafR7LX+9F44KVQqjf37ce79JUztQK
+         ozMdVRzjECxKUTA7fpgyt4HT2LaURAiJe4Y+C9YsvpotbZoavbFlcSVFrerekPdUqMu8
+         DwWU45R9WbXW2taaFL6Yk1Ew5VQ4gfkjpipHQ6wr03bZ1SYAbvrwOmmHQ54FuKxZwij4
+         ujV6OShKh8K2yNl+UHo4IGrFLT8G0V39NIKaIVMETL9B3NsczlpUrHJdInacQMUE5DdB
+         aYjg==
+X-Gm-Message-State: AOAM532kS9KsnJCjAE4yTJ6bevcgAEnyO4n+364UuRDQXsXHwJ4MJWcn
+        Ys/v4bEO4T2Jn6EQDHFD+Ow=
+X-Google-Smtp-Source: ABdhPJzhYQx51/jgjxFRkreUSKfXrtPv1emyMvjQDq7CKL4SZgBgjJBcRXXxZ0bl/lN2DGl/wK0ZZg==
+X-Received: by 2002:a05:6402:2926:b0:42a:ab8a:edf2 with SMTP id ee38-20020a056402292600b0042aab8aedf2mr4363780edb.190.1652646682298;
+        Sun, 15 May 2022 13:31:22 -0700 (PDT)
 Received: from fedora.robimarko.hr (dh207-98-105.xnet.hr. [88.207.98.105])
-        by smtp.googlemail.com with ESMTPSA id ze16-20020a170906ef9000b006f3ef214e4esm2944884ejb.180.2022.05.15.13.31.19
+        by smtp.googlemail.com with ESMTPSA id ze16-20020a170906ef9000b006f3ef214e4esm2944884ejb.180.2022.05.15.13.31.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 May 2022 13:31:20 -0700 (PDT)
+        Sun, 15 May 2022 13:31:21 -0700 (PDT)
 From:   Robert Marko <robimarko@gmail.com>
 To:     agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
         broonie@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH 1/6] dt-bindings: regulator: qcom,spmi-regulator: Convert to dtschema
-Date:   Sun, 15 May 2022 22:31:13 +0200
-Message-Id: <20220515203118.474684-1-robimarko@gmail.com>
+Subject: [PATCH 2/6] regulator: qcom_spmi: add support for HT_P150
+Date:   Sun, 15 May 2022 22:31:14 +0200
+Message-Id: <20220515203118.474684-2-robimarko@gmail.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220515203118.474684-1-robimarko@gmail.com>
+References: <20220515203118.474684-1-robimarko@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,205 +72,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the bindings of Qualcomm SPMI regulators to DT schema.
+HT_P150 is a LDO PMOS regulator based on LV P150 using HFS430 layout
+found in PMP8074 and PMS405 PMIC-s.
+
+Both PMP8074 and PMS405 define the programmable range as 1.616V to 3.304V
+but the actual MAX output voltage depends on the exact LDO in each of
+the PMIC-s.
+
+It has a max current of 150mA, voltage step of 8mV.
 
 Signed-off-by: Robert Marko <robimarko@gmail.com>
 ---
-I am aware that syscon alone is not really acceptable, its converted
-directly from the old text bindings.
+ drivers/regulator/qcom_spmi-regulator.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-There is also the issue of some MSM8994, MSM8996 and APQ8096 devices using
-'#address-cells', '#size-cells', some even defining reg property for
-regulators.
-
-Any advice on how to solve these issues is appreciated.
----
- .../regulator/qcom,spmi-regulator.yaml        | 176 ++++++++++++++++++
- 1 file changed, 176 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
-
-diff --git a/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
-new file mode 100644
-index 000000000000..f7da310f1845
---- /dev/null
-+++ b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
-@@ -0,0 +1,176 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/regulator/qcom,spmi-regulator.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/regulator/qcom_spmi-regulator.c b/drivers/regulator/qcom_spmi-regulator.c
+index 02bfce981150..38bbc70241ae 100644
+--- a/drivers/regulator/qcom_spmi-regulator.c
++++ b/drivers/regulator/qcom_spmi-regulator.c
+@@ -164,6 +164,7 @@ enum spmi_regulator_subtype {
+ 	SPMI_REGULATOR_SUBTYPE_ULT_HF_CTL3	= 0x0f,
+ 	SPMI_REGULATOR_SUBTYPE_ULT_HF_CTL4	= 0x10,
+ 	SPMI_REGULATOR_SUBTYPE_HFS430		= 0x0a,
++	SPMI_REGULATOR_SUBTYPE_HT_P150		= 0x35,
+ };
+ 
+ enum spmi_common_regulator_registers {
+@@ -544,6 +545,10 @@ static struct spmi_voltage_range hfs430_ranges[] = {
+ 	SPMI_VOLTAGE_RANGE(0, 320000, 320000, 2040000, 2040000, 8000),
+ };
+ 
++static struct spmi_voltage_range ht_p150_ranges[] = {
++	SPMI_VOLTAGE_RANGE(0, 1616000, 1616000, 3304000, 3304000, 8000),
++};
 +
-+title: Qualcomm SPMI Regulators
-+
-+maintainers:
-+  - Robert Marko <robert.marko@sartura.hr>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - qcom,pm660-regulators
-+      - qcom,pm660l-regulators
-+      - qcom,pm8004-regulators
-+      - qcom,pm8005-regulators
-+      - qcom,pm8226-regulators
-+      - qcom,pm8841-regulators
-+      - qcom,pm8916-regulators
-+      - qcom,pm8941-regulators
-+      - qcom,pm8950-regulators
-+      - qcom,pm8994-regulators
-+      - qcom,pmi8994-regulators
-+      - qcom,pms405-regulators
-+
-+  qcom,saw-reg:
-+    description: Reference to syscon node defining the SAW registers
-+    $ref: "/schemas/types.yaml#/definitions/phandle"
-+
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,pm8941-regulators
-+    then:
-+      properties:
-+        interrupts:
-+          items:
-+            - description: Over-current protection interrupt for 5V S1
-+            - description: Over-current protection interrupt for 5V S2
-+        interrupt-names:
-+          items:
-+            - const: ocp-5vs1
-+            - const: ocp-5vs2
-+
-+patternProperties:
-+  ".*-supply$":
-+    description: Input supply phandle(s) for this node
-+    $ref: "/schemas/types.yaml#/definitions/phandle"
-+
-+  "^((s|l|lvs|5vs)[0-9]*)$":
-+    description: List of regulators and its properties
-+    $ref: regulator.yaml#
-+
-+    properties:
-+      qcom,ocp-max-retries:
-+        description:
-+          Maximum number of times to try toggling a voltage switch off and
-+          back on as a result of consecutive over current events
-+        $ref: "/schemas/types.yaml#/definitions/uint32"
-+
-+      qcom,ocp-retry-delay:
-+        description:
-+          Time to delay in milliseconds between each voltage switch toggle
-+          after an over current event takes place
-+        $ref: "/schemas/types.yaml#/definitions/uint32"
-+
-+      qcom,pin-ctrl-enable:
-+        description:
-+          Bit mask specifying which hardware pins should be used to enable the
-+          regulator, if any.
-+          Supported bits are
-+          0 = ignore all hardware enable signals
-+          BIT(0) = follow HW0_EN signal
-+          BIT(1) = follow HW1_EN signal
-+          BIT(2) = follow HW2_EN signal
-+          BIT(3) = follow HW3_EN signal
-+        $ref: "/schemas/types.yaml#/definitions/uint32"
-+        minimum: 0
-+        maximum: 15
-+
-+      qcom,pin-ctrl-hpm:
-+        description:
-+          Bit mask specifying which hardware pins should be used to force the
-+          regulator into high power mode, if any.
-+          Supported bits are
-+          0 = ignore all hardware enable signals
-+          BIT(0) = follow HW0_EN signal
-+          BIT(1) = follow HW1_EN signal
-+          BIT(2) = follow HW2_EN signal
-+          BIT(3) = follow HW3_EN signal
-+          BIT(4) = follow PMIC awake state
-+        $ref: "/schemas/types.yaml#/definitions/uint32"
-+        minimum: 0
-+        maximum: 31
-+
-+      qcom,vs-soft-start-strength:
-+        description:
-+          This property sets the soft start strength for voltage switch type
-+          regulators.
-+          Supported values are
-+          0 = 0.05 uA
-+          1 = 0.25 uA
-+          2 = 0.55 uA
-+          3 = 0.75 uA
-+        $ref: "/schemas/types.yaml#/definitions/uint32"
-+        minimum: 0
-+        maximum: 3
-+
-+      qcom,saw-slave:
-+        description: SAW controlled gang slave. Will not be configured.
-+        type: boolean
-+
-+      qcom,saw-leader:
-+        description:
-+          SAW controlled gang leader. Will be configured as SAW regulator.
-+        type: boolean
-+
-+      unevaluatedProperties: false
-+
-+unevaluatedProperties: false
-+
-+required:
-+  - compatible
-+
-+examples:
-+  - |
-+    regulators {
-+      compatible = "qcom,pm8941-regulators";
-+      vdd_l1_l3-supply = <&s1>;
-+
-+      s1: s1 {
-+        regulator-min-microvolt = <1300000>;
-+        regulator-max-microvolt = <1400000>;
-+      };
-+
-+      l1: l1 {
-+        regulator-min-microvolt = <1225000>;
-+        regulator-max-microvolt = <1300000>;
-+      };
-+    };
-+
-+  - |
-+    saw3: syscon@9a10000 {
-+      compatible = "syscon";
-+      reg = <0x9a10000 0x1000>;
-+    };
-+
-+    regulators {
-+      compatible = "qcom,pm8994-regulators";
-+      qcom,saw-reg = <&saw3>;
-+
-+      s8 {
-+        qcom,saw-slave;
-+      };
-+
-+      s9 {
-+        qcom,saw-slave;
-+      };
-+
-+      s10 {
-+        qcom,saw-slave;
-+      };
-+
-+      pm8994_s11_saw: s11 {
-+        qcom,saw-leader;
-+        regulator-always-on;
-+        regulator-min-microvolt = <900000>;
-+        regulator-max-microvolt = <1140000>;
-+      };
-+    };
-+...
+ static DEFINE_SPMI_SET_POINTS(pldo);
+ static DEFINE_SPMI_SET_POINTS(nldo1);
+ static DEFINE_SPMI_SET_POINTS(nldo2);
+@@ -564,6 +569,7 @@ static DEFINE_SPMI_SET_POINTS(nldo660);
+ static DEFINE_SPMI_SET_POINTS(ht_lvpldo);
+ static DEFINE_SPMI_SET_POINTS(ht_nldo);
+ static DEFINE_SPMI_SET_POINTS(hfs430);
++static DEFINE_SPMI_SET_POINTS(ht_p150);
+ 
+ static inline int spmi_vreg_read(struct spmi_regulator *vreg, u16 addr, u8 *buf,
+ 				 int len)
+@@ -1458,6 +1464,7 @@ static const struct regulator_ops spmi_hfs430_ops = {
+ 
+ static const struct spmi_regulator_mapping supported_regulators[] = {
+ 	/*           type subtype dig_min dig_max ltype ops setpoints hpm_min */
++	SPMI_VREG(LDO,   HT_P150,  0, INF, HFS430, hfs430, ht_p150, 10000),
+ 	SPMI_VREG(BUCK,  GP_CTL,   0, INF, SMPS,   smps,   smps,   100000),
+ 	SPMI_VREG(BUCK,  HFS430,   0, INF, HFS430, hfs430, hfs430,  10000),
+ 	SPMI_VREG(LDO,   N300,     0, INF, LDO,    ldo,    nldo1,   10000),
 -- 
 2.36.1
 

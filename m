@@ -2,170 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4092527531
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 05:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFBD4527532
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 05:37:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234792AbiEODd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 23:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
+        id S234784AbiEODh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 23:37:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234742AbiEODdv (ORCPT
+        with ESMTP id S231326AbiEODhW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 23:33:51 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4B93896;
-        Sat, 14 May 2022 20:33:49 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id o80so1921580ybg.1;
-        Sat, 14 May 2022 20:33:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=vtZpCF2eVfrsEShzCqG/31YFWN+65aph4jwpCIOfvTM=;
-        b=StUmTH4HRARTE9iPSXhUk/FpIxloaIfjujaD6EetNSRLEL0xFRXi+ylEv9t6hayslT
-         RoiVRxdwM5/3Ddb1NysWLPqsc0P6tDChVD5k19bdrBZwzTjkGrlExI/RV0TC25WqhxGo
-         bwqVGYVKw3LPUrbOmc6F/ryOo22aecKSt4d/SFN8lRXYDmaYQCa9Gzzn83mnhvpk4/B9
-         +7bWzTw9UKRUeYeA02qG4sYSiVLzIN/Dw/MrE8FPonrHESDw9pu70ogBGq/9h1tGiWCx
-         CqPWJQlyqZX2hdIZdTRlWnfGBAeKUco6CWQ3ILf9NVlWaeMsLg6SfADdrM+madX/qcjq
-         Uf/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=vtZpCF2eVfrsEShzCqG/31YFWN+65aph4jwpCIOfvTM=;
-        b=irJ8K7DAgSi6DV0E0hemI9IOB4EPo70/97Y50u4gjw+dM4j+Ztk1eYl+rus+aUcVde
-         B+gzudyqOJsHnJfveXa6EnwiOvTwxrzubyB1nA9a0q2nHwCKYC7RZZgKOLbXE7qXpzHx
-         ldC2eBHT8xIc3q4mUr/W7jOUfrg5aAa0GW6obxZv6bIbQRSa7+FuJwlixfPdWt9VzRDG
-         pnkJEiXjCiVOVHfIFkwH4+hMLd9umg9mzBGo/lKMGDzYSoRxUvjW4/iaJuvaveyppwMe
-         MvyWeXtNoskVmYIKdcYbQdCEn94kM7FpVRh978ghBf5AXBSJ+ah/OUJejESPzPx4b2MR
-         XlJw==
-X-Gm-Message-State: AOAM531290uJQbp7YK2qF4lh2mUAwO1LIbBwJ+g826XXwOTvEKooP1h5
-        bHSM+FfbpVq5yCEttSTAi+NNn6O8S0FMS64XOys=
-X-Google-Smtp-Source: ABdhPJyCudeg8Z2SFTD7Vq2yUFVWPuT6OFCvNc1jJVlmxZlw8qVWBNqWkjVFX4dX4Pbzf12Vp+54xMysyZg7zM7ftVI=
-X-Received: by 2002:a5b:5c2:0:b0:649:c4fe:ca5b with SMTP id
- w2-20020a5b05c2000000b00649c4feca5bmr11703621ybp.284.1652585629047; Sat, 14
- May 2022 20:33:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220512001500.16739-1-fletcher0max@gmail.com>
- <CAEc3jaBbVT1t1kS_Vvp3EqfheCWr=CAvVgdzw7vkeFyYz9H_7Q@mail.gmail.com> <CAKcX28WpKoP=HVq3zCvBh9knKFEdR0_+NmATpt9D6rFmprkFDA@mail.gmail.com>
-In-Reply-To: <CAKcX28WpKoP=HVq3zCvBh9knKFEdR0_+NmATpt9D6rFmprkFDA@mail.gmail.com>
-From:   Roderick Colenbrander <thunderbird2k@gmail.com>
-Date:   Sat, 14 May 2022 20:33:38 -0700
-Message-ID: <CAEc3jaCq9DOa86TAakY7K9Mrzc9qKt5wraTJ7Z2Y5yAu-XqWzg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] HID: nintendo: fix face button mappings
-To:     Maxwell Fletcher <fletcher0max@gmail.com>
-Cc:     "Daniel J. Ogorchock" <djogorchock@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input <linux-input@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 14 May 2022 23:37:22 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A4E15FF3
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 20:37:19 -0700 (PDT)
+Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxYNppdYBiOpUWAA--.12697S2;
+        Sun, 15 May 2022 11:37:13 +0800 (CST)
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jianmin Lv <lvjianmin@loongson.cn>
+Subject: [PATCH RFC 00/10] irqchip: Add LoongArch-related irqchip drivers
+Date:   Sun, 15 May 2022 11:37:03 +0800
+Message-Id: <1652585833-22526-1-git-send-email-lvjianmin@loongson.cn>
+X-Mailer: git-send-email 1.8.3.1
+X-CM-TRANSID: AQAAf9BxYNppdYBiOpUWAA--.12697S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxKFyrWFy5Cr4rWF17CFWUtwb_yoWxKr45pF
+        43Cr1aqF1UKryaqr15Jw18XFy5GFn3JwsrGa1xtryxXr90yr1DGr1UAF95ZF9xAryIqw1j
+        vFW0qw4UG3WUCF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkI14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJV
+        WxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK6svPMxAI
+        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
+        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxG
+        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
+        CI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VU1a9aPUUUUU==
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxwell,
+LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
+LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
+version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
+boot protocol LoongArch-specific interrupt controllers (similar to APIC)
+are already added in the ACPI Specification 6.5(which may be published in
+early June this year and the board is reviewing the draft).
 
-I don't think it is desired to have such kernel module parameters as
-it essentially adds new kernel APIs, which have to be maintained
-unless truly needed.
+Currently, LoongArch based processors (e.g. Loongson-3A5000) can only
+work together with LS7A chipsets. The irq chips in LoongArch computers
+include CPUINTC (CPU Core Interrupt Controller), LIOINTC (Legacy I/O
+Interrupt Controller), EIOINTC (Extended I/O Interrupt Controller),
+HTVECINTC (Hyper-Transport Vector Interrupt Controller), PCH-PIC (Main
+Interrupt Controller in LS7A chipset), PCH-LPC (LPC Interrupt Controller
+in LS7A chipset) and PCH-MSI (MSI Interrupt Controller).
 
-However, you may have seen the work Benjamin is doing around eBPF for
-HID. I'm no expert on it yet, but it could probably allow you to do a
-similar kind of fixup without having to modify the kernel module.
+CPUINTC is a per-core controller (in CPU), LIOINTC/EIOINTC/HTVECINTC are
+per-package controllers (in CPU), while PCH-PIC/PCH-LPC/PCH-MSI are all
+controllers out of CPU (i.e., in chipsets). These controllers (in other
+words, irqchips) are linked in a hierarchy, and there are two models of
+hierarchy (legacy model and extended model). 
 
-Thanks,
-Roderick
+Legacy IRQ model:
 
-On Sat, May 14, 2022 at 5:57 PM Maxwell Fletcher <fletcher0max@gmail.com> w=
-rote:
->
-> Hi Roderick,
->
-> Thanks for the explanation. It makes sense that the mappings were never m=
-eant to mirror Xbox controllers. Would it still be possible to merge a patc=
-h that adds an opt-in module parameter that changes the mappings, similar t=
-o the one in the second part of this patch?
->
-> Thanks,
-> Max
->
-> On Fri, May 13, 2022 at 12:58 PM Roderick Colenbrander <thunderbird2k@gma=
-il.com> wrote:
->>
->> Hi Max,
->>
->> Thanks for your patch, however I must say the patch is not correct for
->> 2 reasons.
->>
->> Over the years different controllers have different layouts. The
->> standard which this driver (as well as others such as
->> hid-sony/hid-playstation) follow is the Linux gamepad standard (see
->> Documentation/input/gamepad.rst). It stays away of the debate what is
->> A/B/X/Y. It talks about North/west/.., (yes they are macros which map
->> to A/B/X/Y). In case of the Switch it does mean things are flipped,
->> but it was not meant to represent an Xbox controller. (Technically one
->> could argue that the Xbox controller should be flipped as it was the
->> SNES controller back in the days which introduced X/Y and the Switch
->> is still consistent with that.)
->>
->> Second, even if the patch was right it would be tricky to merge. The
->> problem is that a changed mapping breaks user spaces and in general
->> can't do this unless there is a really good reason. It just would
->> break existing applications and libraries (often e.g. SDL)
->>
->> Thanks,
->> Roderick
->>
->> On Wed, May 11, 2022 at 8:12 PM Max Fletcher <fletcher0max@gmail.com> wr=
-ote:
->> >
->> > Previously, A and B would match the Xbox layout, but X and Y were inco=
-rrectly swapped. This corrects it so that X and Y match the Xbox layout.
->> >
->> > Signed-off-by: Max Fletcher <fletcher0max@gmail.com>
->> > ---
->> >  drivers/hid/hid-nintendo.c | 10 +++++-----
->> >  1 file changed, 5 insertions(+), 5 deletions(-)
->> >
->> > diff --git a/drivers/hid/hid-nintendo.c b/drivers/hid/hid-nintendo.c
->> > index 2204de889739..7735971ede3f 100644
->> > --- a/drivers/hid/hid-nintendo.c
->> > +++ b/drivers/hid/hid-nintendo.c
->> > @@ -1351,10 +1351,10 @@ static void joycon_parse_report(struct joycon_=
-ctlr *ctlr,
->> >                 input_report_key(dev, BTN_START, btns & JC_BTN_PLUS);
->> >                 input_report_key(dev, BTN_THUMBR, btns & JC_BTN_RSTICK=
-);
->> >                 input_report_key(dev, BTN_MODE, btns & JC_BTN_HOME);
->> > -               input_report_key(dev, BTN_WEST, btns & JC_BTN_Y);
->> > -               input_report_key(dev, BTN_NORTH, btns & JC_BTN_X);
->> > -               input_report_key(dev, BTN_EAST, btns & JC_BTN_A);
->> > -               input_report_key(dev, BTN_SOUTH, btns & JC_BTN_B);
->> > +               input_report_key(dev, BTN_X, btns & JC_BTN_Y);
->> > +               input_report_key(dev, BTN_Y, btns & JC_BTN_X);
->> > +               input_report_key(dev, BTN_B, btns & JC_BTN_A);
->> > +               input_report_key(dev, BTN_A, btns & JC_BTN_B);
->> >         }
->> >
->> >         input_sync(dev);
->> > @@ -1578,7 +1578,7 @@ static const unsigned int joycon_button_inputs_l=
-[] =3D {
->> >
->> >  static const unsigned int joycon_button_inputs_r[] =3D {
->> >         BTN_START, BTN_MODE, BTN_THUMBR,
->> > -       BTN_SOUTH, BTN_EAST, BTN_NORTH, BTN_WEST,
->> > +       BTN_A, BTN_B, BTN_Y, BTN_X,
->> >         BTN_TR, BTN_TR2,
->> >         0 /* 0 signals end of array */
->> >  };
->> > --
->> > 2.35.3
->> >
+In this model, the IPI (Inter-Processor Interrupt) and CPU Local Timer
+interrupt go to CPUINTC directly, CPU UARTS interrupts go to LIOINTC,
+while all other devices interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and
+gathered by HTVECINTC, and then go to LIOINTC, and then CPUINTC.
+
+ +---------------------------------------------+
+ |                                             |
+ |    +-----+     +---------+     +-------+    |
+ |    | IPI | --> | CPUINTC | <-- | Timer |    |
+ |    +-----+     +---------+     +-------+    |
+ |                     ^                       |
+ |                     |                       |
+ |                +---------+     +-------+    |
+ |                | LIOINTC | <-- | UARTs |    |
+ |                +---------+     +-------+    |
+ |                     ^                       |
+ |                     |                       |
+ |               +-----------+                 |
+ |               | HTVECINTC |                 |
+ |               +-----------+                 |
+ |                ^         ^                  |
+ |                |         |                  |
+ |          +---------+ +---------+            |
+ |          | PCH-PIC | | PCH-MSI |            |
+ |          +---------+ +---------+            |
+ |            ^     ^           ^              |
+ |            |     |           |              |
+ |    +---------+ +---------+ +---------+      |
+ |    | PCH-LPC | | Devices | | Devices |      |
+ |    +---------+ +---------+ +---------+      |
+ |         ^                                   |
+ |         |                                   |
+ |    +---------+                              |
+ |    | Devices |                              |
+ |    +---------+                              |
+ |                                             |
+ |                                             |
+ +---------------------------------------------+
+
+Extended IRQ model:
+
+In this model, the IPI (Inter-Processor Interrupt) and CPU Local Timer
+interrupt go to CPUINTC directly, CPU UARTS interrupts go to LIOINTC,
+while all other devices interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and
+gathered by EIOINTC, and then go to to CPUINTC directly.
+
+ +--------------------------------------------------------+
+ |                                                        |
+ |         +-----+     +---------+     +-------+          |
+ |         | IPI | --> | CPUINTC | <-- | Timer |          |
+ |         +-----+     +---------+     +-------+          |
+ |                      ^       ^                         |
+ |                      |       |                         |
+ |               +---------+ +---------+     +-------+    |
+ |               | EIOINTC | | LIOINTC | <-- | UARTs |    |
+ |               +---------+ +---------+     +-------+    |
+ |                ^       ^                               |
+ |                |       |                               |
+ |         +---------+ +---------+                        |
+ |         | PCH-PIC | | PCH-MSI |                        |
+ |         +---------+ +---------+                        |
+ |           ^     ^           ^                          |
+ |           |     |           |                          |
+ |   +---------+ +---------+ +---------+                  |
+ |   | PCH-LPC | | Devices | | Devices |                  |
+ |   +---------+ +---------+ +---------+                  |
+ |        ^                                               |
+ |        |                                               |
+ |   +---------+                                          |
+ |   | Devices |                                          |
+ |   +---------+                                          |
+ |                                                        |
+ |                                                        |
+ +--------------------------------------------------------+
+
+The hierarchy model is constructed by parsing irq contronler structures
+in MADT. Some controllers((e.g. LIOINTC, HTVECINTC, EIOINTC and PCH-LPC)
+are hardcodingly connected to their parents, so their irqdomins are
+separately routed to their parents in a fixed way. Some controllers
+(e.g. PCH-PIC and PCH-MSI) could be routed to different parents for different
+CPU. The firmware will config EIOINTC for the newer CPU and config HTVECINTC
+for old CPU in MADT. By this way, PCH-PIC and PCH-MSI irqdomain can only be
+routed one parent irqdomin: HTVECINTC or EIOINTC.
+
+Cross-compile tool chain to build kernel:
+https://github.com/loongson/build-tools/releases/latest/download/loongarch64-clfs-20211202-cross-tools.tar.xz
+
+A CLFS-based Linux distro:
+https://github.com/loongson/build-tools/releases/latest/download/loongarch64-clfs-system-2021-12-02.tar.bz2
+
+Loongson and LoongArch documentations:
+https://github.com/loongson/LoongArch-Documentation
+
+
+V1 -> V2:
+1, Remove queued patches;
+2, Move common logic of DT/ACPI probing to common functions;
+3, Split .suspend()/.resume() functions to separate patches.
+
+V2 -> V3:
+1, Fix a bug for loongson-pch-pic probe;
+2, Some minor improvements for LPC controller.
+
+V3 -> V4:
+1, Rework the CPU interrupt controller driver;
+2, Some minor improvements for other controllers.
+
+V4 -> V5:
+1, Add a description of LoonArch's IRQ model;
+2, Support multiple EIOINTCs in one system;
+3, Some minor improvements for other controllers.
+
+V5 -> V6:
+1, Attach a fwnode to CPUINTC irq domain;
+2, Use raw spinlock instead of generic spinlock;
+3, Improve the method of restoring EIOINTC state;
+4, Update documentation, comments and commit messages.
+
+V6 -> V7:
+1, Fix build warnings reported by kernel test robot.
+
+V7 -> V8:
+1, Add arguments sanity checking for irqchip init functions;
+2, Support Loongson-3C5000 (One NUMA Node includes 4 EIOINTC Node).
+
+V8 -> V9:
+1, Rebase on 5.17-rc5;
+2, Update cover letter;
+3, Some small improvements.
+
+V9 -> V10:
+1, Rebase on 5.17-rc6;
+2, Fix build warnings reported by kernel test robot.
+
+V10 -> V11:
+1, Rebase on 5.18-rc4;
+2, Fix irq affinity setting for EIOINTC;
+3, Fix hwirq allocation failure for EIOINTC.
+
+V11 -> RFC:
+1, Refactored the way to build irqchip hierarchy topology.
+
+Huacai Chen (1):
+  irqchip: Adjust Kconfig for Loongson
+
+Jianmin Lv (9):
+  irqchip: Add LoongArch CPU interrupt controller support
+  irqchip/loongson-pch-pic: Add ACPI init support
+  irqchip/loongson-pch-pic: Add suspend/resume support
+  irqchip/loongson-pch-msi: Add ACPI init support
+  irqchip/loongson-htvec: Add ACPI init support
+  irqchip/loongson-htvec: Add suspend/resume support
+  irqchip/loongson-liointc: Add ACPI init support
+  irqchip: Add Loongson Extended I/O interrupt controller  support
+  irqchip: Add Loongson PCH LPC controller support
+
+ drivers/irqchip/Kconfig                    |  38 ++-
+ drivers/irqchip/Makefile                   |   3 +
+ drivers/irqchip/irq-loongarch-cpu.c        | 134 ++++++++++
+ drivers/irqchip/irq-loongarch-pic-common.c |  66 +++++
+ drivers/irqchip/irq-loongarch-pic-common.h |  22 ++
+ drivers/irqchip/irq-loongson-eiointc.c     | 381 +++++++++++++++++++++++++++++
+ drivers/irqchip/irq-loongson-htvec.c       | 148 ++++++++---
+ drivers/irqchip/irq-loongson-liointc.c     | 215 ++++++++++------
+ drivers/irqchip/irq-loongson-pch-lpc.c     | 225 +++++++++++++++++
+ drivers/irqchip/irq-loongson-pch-msi.c     | 138 +++++++----
+ drivers/irqchip/irq-loongson-pch-pic.c     | 214 ++++++++++++++--
+ include/linux/cpuhotplug.h                 |   1 +
+ 12 files changed, 1398 insertions(+), 187 deletions(-)
+ create mode 100644 drivers/irqchip/irq-loongarch-cpu.c
+ create mode 100644 drivers/irqchip/irq-loongarch-pic-common.c
+ create mode 100644 drivers/irqchip/irq-loongarch-pic-common.h
+ create mode 100644 drivers/irqchip/irq-loongson-eiointc.c
+ create mode 100644 drivers/irqchip/irq-loongson-pch-lpc.c
+
+-- 
+1.8.3.1
+

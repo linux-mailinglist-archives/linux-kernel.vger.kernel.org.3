@@ -2,160 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E449C527680
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 11:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE25D527684
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 11:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236022AbiEOJHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 05:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50786 "EHLO
+        id S236026AbiEOJI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 05:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232473AbiEOJHK (ORCPT
+        with ESMTP id S236023AbiEOJIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 05:07:10 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D2D18350;
-        Sun, 15 May 2022 02:07:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1652605625; bh=ZAWhqvrmFjpIY2vBRREaiKU7FGkoaZMIpR85XAtmgqU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RJNL8opaXVAjtLLkAHCHToS2cmIGjMqb9RcssbMc6FJhFNKyrnITDwQtbM0iAu7pH
-         bHNi0JUeKCu2N65o2/1ZKc/cH7wGO7AYtuSGqy64oNqSpUrZpH6xLrveXXmPRmOtLZ
-         nNfsqxg/aDXJegtPcjLt5jNSGeAyEAdv87zG3dls=
-Received: from [192.168.9.172] (unknown [101.88.28.48])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 1EBD260691;
-        Sun, 15 May 2022 17:07:05 +0800 (CST)
-Message-ID: <3982e7e7-f98e-8d8b-f13b-2bfa10a69b95@xen0n.name>
-Date:   Sun, 15 May 2022 17:07:04 +0800
+        Sun, 15 May 2022 05:08:20 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366581A05A
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 02:08:18 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id bg25so7097806wmb.4
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 02:08:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4UPlHLLMHUIw4lCwKqytRf70kgAzZVqEMbwMAZTs8QI=;
+        b=eDigYPY7ZRSUS7IKjWCTISNXs1Mys0oeAvOEd5+sNlqwpX/dS2dJLe2BoeGzOeZQkq
+         sUcSBmdYkVkjREcbeEEv72lz4QsNrMpGz9mOQhhXyrQpv0JIjo9XV+tqyVWAtFxDAFpI
+         fNlNnlVdMUgm5Mn3stDJyOZBPJ0u7gI8r6mXz/bkfOGeSSSNK1Tstp8bUrvWh4EZkZ4W
+         ID3H65U+HKbAcs/n1WlOg25czuxfIHpZtmV5poPiYVNi9iPigGWfvCe2vCcb+1NWTQAa
+         XZV0cRmMCXEyyTV7kYBQs/i91pSuUC+zwwJ8CHtdKulK4395d1OQn4p7KP/utLJpZvQJ
+         PhuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4UPlHLLMHUIw4lCwKqytRf70kgAzZVqEMbwMAZTs8QI=;
+        b=znForvscCiDBsb+vLJF45to5bPEClX80nlhgfS9bwgp5gOVJsA5ppsNVWA+lF8mGNX
+         +MGvmZzwxRHpQZd/PlXfuEXvGT5IfVszc/rV7DCDXVka8TUbyo0nu1BMYWHlC/r4xlXM
+         lJyN9NON0UXyMJQxdMdjsd881mfkKGPXit3azpIkpHtILa44IH4s7V7uhU4XswHOjVfz
+         jZ5rdy97+S9VstUX0bLa1xvnRcR7OOFy80AD+oWwUCfvJHZi9cRdbQ2DcUAkYswiLlLK
+         Q36xQj+vsXcrInOdH68AKZVaIdZ5pf4IACeHng+Peyh2hs8w/mVU/6sxJLDH+1zmKK+L
+         5ugg==
+X-Gm-Message-State: AOAM531APRGVUDZRZ4NaFfd5ighk4fr+9n446FbQ0QECfhft/AV7tkDK
+        aaGeH4Mdme5FSt1dtzNvTTwpx0UUVTGuLgT/s/Ar/g==
+X-Google-Smtp-Source: ABdhPJz9ONQSxakxMZXfP3VzMmYw2QEzxC32G/LK7q2wOgqvmlcLcPLMQv3BfxhBR402cK+g90Fl6xzpUljK0keHiyQ=
+X-Received: by 2002:a05:600c:1908:b0:394:867d:66c4 with SMTP id
+ j8-20020a05600c190800b00394867d66c4mr22018729wmq.152.1652605696605; Sun, 15
+ May 2022 02:08:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0a1
-Subject: Re: [PATCH V10 10/22] LoongArch: Add exception/interrupt handling
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20220514080402.2650181-1-chenhuacai@loongson.cn>
- <20220514080402.2650181-11-chenhuacai@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20220514080402.2650181-11-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220515023504.1823463-1-yosryahmed@google.com> <20220515023504.1823463-4-yosryahmed@google.com>
+In-Reply-To: <20220515023504.1823463-4-yosryahmed@google.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Sun, 15 May 2022 02:07:40 -0700
+Message-ID: <CAJD7tkaCEcabywFGyeiM9zggx2Tw-e=Qa2UArgxXN8j7vJR-fA@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next v2 3/7] libbpf: Add support for rstat flush progs
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>
+Cc:     Stanislav Fomichev <sdf@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 5/14/22 16:03, Huacai Chen wrote:
-> Add the exception and interrupt handling machanism for basic LoongArch
-> support.
+On Sat, May 14, 2022 at 7:35 PM Yosry Ahmed <yosryahmed@google.com> wrote:
 >
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> Add support to attach RSTAT_FLUSH programs.
+>
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 > ---
->   arch/loongarch/include/asm/branch.h       |  21 +
->   arch/loongarch/include/asm/bug.h          |  23 +
->   arch/loongarch/include/asm/entry-common.h |  13 +
->   arch/loongarch/include/asm/hardirq.h      |  24 +
->   arch/loongarch/include/asm/hw_irq.h       |  17 +
->   arch/loongarch/include/asm/irq.h          | 130 ++++
->   arch/loongarch/include/asm/irq_regs.h     |  27 +
->   arch/loongarch/include/asm/irqflags.h     |  78 +++
->   arch/loongarch/include/asm/kdebug.h       |  23 +
->   arch/loongarch/include/asm/stackframe.h   | 212 ++++++
->   arch/loongarch/include/asm/stacktrace.h   |  74 +++
->   arch/loongarch/include/uapi/asm/break.h   |  23 +
->   arch/loongarch/kernel/access-helper.h     |  13 +
->   arch/loongarch/kernel/genex.S             |  95 +++
->   arch/loongarch/kernel/irq.c               | 131 ++++
->   arch/loongarch/kernel/traps.c             | 755 ++++++++++++++++++++++
->   16 files changed, 1659 insertions(+)
->   create mode 100644 arch/loongarch/include/asm/branch.h
->   create mode 100644 arch/loongarch/include/asm/bug.h
->   create mode 100644 arch/loongarch/include/asm/entry-common.h
->   create mode 100644 arch/loongarch/include/asm/hardirq.h
->   create mode 100644 arch/loongarch/include/asm/hw_irq.h
->   create mode 100644 arch/loongarch/include/asm/irq.h
->   create mode 100644 arch/loongarch/include/asm/irq_regs.h
->   create mode 100644 arch/loongarch/include/asm/irqflags.h
->   create mode 100644 arch/loongarch/include/asm/kdebug.h
->   create mode 100644 arch/loongarch/include/asm/stackframe.h
->   create mode 100644 arch/loongarch/include/asm/stacktrace.h
->   create mode 100644 arch/loongarch/include/uapi/asm/break.h
->   create mode 100644 arch/loongarch/kernel/access-helper.h
->   create mode 100644 arch/loongarch/kernel/genex.S
->   create mode 100644 arch/loongarch/kernel/irq.c
->   create mode 100644 arch/loongarch/kernel/traps.c
-This patch mostly looks good, except...
-> (snip)
+>  tools/lib/bpf/bpf.c      |  1 -
+>  tools/lib/bpf/libbpf.c   | 40 ++++++++++++++++++++++++++++++++++++++++
+>  tools/lib/bpf/libbpf.h   |  3 +++
+>  tools/lib/bpf/libbpf.map |  1 +
+>  4 files changed, 44 insertions(+), 1 deletion(-)
 >
-> +asmlinkage void cache_parity_error(void)
+> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+> index 5660268e103f..9e3cb0d1eb99 100644
+> --- a/tools/lib/bpf/bpf.c
+> +++ b/tools/lib/bpf/bpf.c
+> @@ -870,7 +870,6 @@ int bpf_link_create(int prog_fd, int target_fd,
+>                 attr.link_create.tracing.cookie = OPTS_GET(opts, tracing.cookie, 0);
+>                 if (!OPTS_ZEROED(opts, tracing))
+>                         return libbpf_err(-EINVAL);
+> -               break;
+
+This is a mistake, a remnant of RFC V1. Will remove it in the next version.
+
+>         default:
+>                 if (!OPTS_ZEROED(opts, flags))
+>                         return libbpf_err(-EINVAL);
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 4867a930628b..b7fc64ebf8dd 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -8998,6 +8998,7 @@ static int attach_trace(const struct bpf_program *prog, long cookie, struct bpf_
+>  static int attach_kprobe_multi(const struct bpf_program *prog, long cookie, struct bpf_link **link);
+>  static int attach_lsm(const struct bpf_program *prog, long cookie, struct bpf_link **link);
+>  static int attach_iter(const struct bpf_program *prog, long cookie, struct bpf_link **link);
+> +static int attach_rstat(const struct bpf_program *prog, long cookie, struct bpf_link **link);
+>
+>  static const struct bpf_sec_def section_defs[] = {
+>         SEC_DEF("socket",               SOCKET_FILTER, 0, SEC_NONE | SEC_SLOPPY_PFX),
+> @@ -9078,6 +9079,7 @@ static const struct bpf_sec_def section_defs[] = {
+>         SEC_DEF("cgroup/setsockopt",    CGROUP_SOCKOPT, BPF_CGROUP_SETSOCKOPT, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
+>         SEC_DEF("struct_ops+",          STRUCT_OPS, 0, SEC_NONE),
+>         SEC_DEF("sk_lookup",            SK_LOOKUP, BPF_SK_LOOKUP, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
+> +       SEC_DEF("rstat/flush",          RSTAT_FLUSH, 0, SEC_NONE, attach_rstat),
+>  };
+>
+>  static size_t custom_sec_def_cnt;
+> @@ -11784,6 +11786,44 @@ static int attach_iter(const struct bpf_program *prog, long cookie, struct bpf_l
+>         return libbpf_get_error(*link);
+>  }
+>
+> +struct bpf_link *bpf_program__attach_rstat(const struct bpf_program *prog)
 > +{
-> +	const int field = 2 * sizeof(unsigned long);
-> +	unsigned int reg_val;
+> +       struct bpf_link *link = NULL;
+> +       char errmsg[STRERR_BUFSIZE];
+> +       int err, prog_fd, link_fd;
 > +
-> +	/* For the moment, report the problem and hang. */
-> +	pr_err("Cache error exception:\n");
-> +	pr_err("csr_merrera == %0*llx\n", field, csr_readq(LOONGARCH_CSR_MERRERA));
-> +	reg_val = csr_readl(LOONGARCH_CSR_MERRCTL);
-> +	pr_err("csr_merrctl == %08x\n", reg_val);
+> +       prog_fd = bpf_program__fd(prog);
+> +       if (prog_fd < 0) {
+> +               pr_warn("prog '%s': can't attach before loaded\n", prog->name);
+> +               return libbpf_err_ptr(-EINVAL);
+> +       }
 > +
-> +	pr_err("Decoded c0_cacheerr: %s cache fault in %s reference.\n",
-> +	       reg_val & (1<<30) ? "secondary" : "primary",
-> +	       reg_val & (1<<31) ? "data" : "insn");
-> +	if (((current_cpu_data.processor_id & 0xff0000) == PRID_COMP_LOONGSON)) {
-> +		pr_err("Error bits: %s%s%s%s%s%s%s%s\n",
-> +			reg_val & (1<<29) ? "ED " : "",
-> +			reg_val & (1<<28) ? "ET " : "",
-> +			reg_val & (1<<27) ? "ES " : "",
-> +			reg_val & (1<<26) ? "EE " : "",
-> +			reg_val & (1<<25) ? "EB " : "",
-> +			reg_val & (1<<24) ? "EI " : "",
-> +			reg_val & (1<<23) ? "E1 " : "",
-> +			reg_val & (1<<22) ? "E0 " : "");
-> +	} else {
-> +		pr_err("Error bits: %s%s%s%s%s%s%s\n",
-> +			reg_val & (1<<29) ? "ED " : "",
-> +			reg_val & (1<<28) ? "ET " : "",
-> +			reg_val & (1<<26) ? "EE " : "",
-> +			reg_val & (1<<25) ? "EB " : "",
-> +			reg_val & (1<<24) ? "EI " : "",
-> +			reg_val & (1<<23) ? "E1 " : "",
-> +			reg_val & (1<<22) ? "E0 " : "");
-> +	}
-> +	pr_err("IDX: 0x%08x\n", reg_val & ((1<<22)-1));
+> +       link = calloc(1, sizeof(*link));
+> +       if (!link)
+> +               return libbpf_err_ptr(-ENOMEM);
+> +       link->detach = &bpf_link__detach_fd;
 > +
-> +	panic("Can't handle the cache error!");
+> +       /* rstat flushers are currently the only supported rstat programs */
+> +       link_fd = bpf_link_create(prog_fd, 0, BPF_RSTAT_FLUSH, NULL);
+> +       if (link_fd < 0) {
+> +               err = -errno;
+> +               pr_warn("prog '%s': failed to attach: %s\n",
+> +                       prog->name, libbpf_strerror_r(err, errmsg,
+> +                                                     sizeof(errmsg)));
+> +               free(link);
+> +               return libbpf_err_ptr(err);
+> +       }
+> +
+> +       link->fd = link_fd;
+> +       return link;
 > +}
-
-... this function. This implementation is completely wrong, as it's the 
-same logic on MIPS, but LoongArch's MERRCTL CSR is not arranged in the 
-same way. There are no individual error bits, for example.
-
-You can simply replace this with a direct panic for now, for correctness.
-
-With this fixed:
-
-Reviewed-by: WANG Xuerui <git@xen0n.name>
-
+> +
+> +static int attach_rstat(const struct bpf_program *prog, long cookie, struct bpf_link **link)
+> +{
+> +       *link = bpf_program__attach_rstat(prog);
+> +       return libbpf_get_error(*link);
+> +}
+> +
+>  struct bpf_link *bpf_program__attach(const struct bpf_program *prog)
+>  {
+>         struct bpf_link *link = NULL;
+> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> index 21984dcd6dbe..f8b6827d5550 100644
+> --- a/tools/lib/bpf/libbpf.h
+> +++ b/tools/lib/bpf/libbpf.h
+> @@ -662,6 +662,9 @@ LIBBPF_API struct bpf_link *
+>  bpf_program__attach_iter(const struct bpf_program *prog,
+>                          const struct bpf_iter_attach_opts *opts);
+>
+> +LIBBPF_API struct bpf_link *
+> +bpf_program__attach_rstat(const struct bpf_program *prog);
+> +
+>  /*
+>   * Libbpf allows callers to adjust BPF programs before being loaded
+>   * into kernel. One program in an object file can be transformed into
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index 008da8db1d94..f945c6265cb5 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -449,6 +449,7 @@ LIBBPF_0.8.0 {
+>                 bpf_program__attach_kprobe_multi_opts;
+>                 bpf_program__attach_trace_opts;
+>                 bpf_program__attach_usdt;
+> +               bpf_program__attach_rstat;
+>                 bpf_program__set_insns;
+>                 libbpf_register_prog_handler;
+>                 libbpf_unregister_prog_handler;
+> --
+> 2.36.0.550.gb090851708-goog
+>

@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32097527A8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 00:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FA50527AA2
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 00:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233176AbiEOWOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 18:14:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36768 "EHLO
+        id S234619AbiEOWSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 18:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230506AbiEOWOq (ORCPT
+        with ESMTP id S229824AbiEOWSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 18:14:46 -0400
+        Sun, 15 May 2022 18:18:09 -0400
 Received: from ixit.cz (ip-94-112-206-30.net.upcbroadband.cz [94.112.206.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF032AE1F;
-        Sun, 15 May 2022 15:14:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBB22C105;
+        Sun, 15 May 2022 15:18:07 -0700 (PDT)
 Received: from newone.lan (_gateway [10.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id 56D492007F;
-        Mon, 16 May 2022 00:14:38 +0200 (CEST)
+        by ixit.cz (Postfix) with ESMTPSA id 8287F2007F;
+        Mon, 16 May 2022 00:18:00 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1652652878;
+        t=1652653080;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
-        bh=MLZhRj5/QshWcbIy13jN3ecfRISvXBqT31chsPpYvAs=;
-        b=qm3yq/UlsJgXuFYnLVCpc44sSBSpt73USx6kUietYc5U1ESqNEQZysW4ZVc6CpTE9VIu5r
-        kGWcadhuufBITbCAYejLuB0YB9Exn0a71rEJtx0nzwZC4YGvMWnEGvY7AcAjckm0HXDypa
-        a9plqIo5KxhaRSNWHla/VGgSyaDjohk=
+        bh=ybIBHjPejoUG7gKQIT2nuQfzYTY7QcYBd6Ac2woJbhQ=;
+        b=jg8VyXGVCl0xQpTw7gMICa+oq3PUKr5CStnlWiKQOfRAF2MadguxJbn34DfdNkm1rDTQ78
+        O9CR0lMa23/fETD1f/X98gCDDDfDh/3bRfDwhWYtqhK9SM4Xm9EqQgm7YwfV7d9bTru/zx
+        HoU8AQY+LZUX0EeVs6kOGbWkgscV60k=
 From:   David Heidelberg <david@ixit.cz>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -37,9 +37,9 @@ To:     Andy Gross <agross@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     David Heidelberg <david@ixit.cz>, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: qcom: timer should use only 32-bit size
-Date:   Mon, 16 May 2022 00:14:35 +0200
-Message-Id: <20220515221436.87996-1-david@ixit.cz>
+Subject: [PATCH v2] arm64: dts: qcom: timer should use only 32-bit size
+Date:   Mon, 16 May 2022 00:17:57 +0200
+Message-Id: <20220515221758.88723-1-david@ixit.cz>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -66,19 +66,18 @@ Signed-off-by: David Heidelberg <david@ixit.cz>
 
 ---
 Replaces "dt-bindings: timer: add #size-cells 2 for ARM"
+v2: fix accidental change of value 0x0 to 0
 
-Signed-off-by: David Heidelberg <david@ixit.cz>
----
  arch/arm64/boot/dts/qcom/ipq6018.dtsi | 20 ++++++++++----------
  arch/arm64/boot/dts/qcom/sc7180.dtsi  | 20 ++++++++++----------
  arch/arm64/boot/dts/qcom/sc7280.dtsi  | 20 ++++++++++----------
  arch/arm64/boot/dts/qcom/sdm845.dtsi  | 20 ++++++++++----------
- arch/arm64/boot/dts/qcom/sm6350.dtsi  | 22 +++++++++++-----------
+ arch/arm64/boot/dts/qcom/sm6350.dtsi  | 20 ++++++++++----------
  arch/arm64/boot/dts/qcom/sm8150.dtsi  | 20 ++++++++++----------
  arch/arm64/boot/dts/qcom/sm8250.dtsi  | 20 ++++++++++----------
  arch/arm64/boot/dts/qcom/sm8350.dtsi  | 20 ++++++++++----------
  arch/arm64/boot/dts/qcom/sm8450.dtsi  | 20 ++++++++++----------
- 9 files changed, 91 insertions(+), 91 deletions(-)
+ 9 files changed, 90 insertions(+), 90 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
 index c89499e366d3..8638231dbd2f 100644
@@ -373,15 +372,11 @@ index 0692ae0e60a4..9a1705bfa425 100644
  			};
  		};
 diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
-index d4f8f33f3f0c..089b321e61b8 100644
+index d4f8f33f3f0c..fc473cb8c93b 100644
 --- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
-@@ -1302,59 +1302,59 @@ watchdog@17c10000 {
- 
- 		timer@17c20000 {
- 			compatible = "arm,armv7-timer-mem";
--			reg = <0x0 0x17c20000 0x0 0x1000>;
-+			reg = <0x0 0x17c20000 0 0x1000>;
+@@ -1305,56 +1305,56 @@ timer@17c20000 {
+ 			reg = <0x0 0x17c20000 0x0 0x1000>;
  			clock-frequency = <19200000>;
  			#address-cells = <2>;
 -			#size-cells = <2>;

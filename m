@@ -2,39 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E5C527875
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 17:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94F50527879
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 17:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236319AbiEOP2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 11:28:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50888 "EHLO
+        id S237396AbiEOPaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 11:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233933AbiEOP2c (ORCPT
+        with ESMTP id S237247AbiEOPaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 11:28:32 -0400
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1341208A
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 08:28:30 -0700 (PDT)
-Received: from dslb-188-096-141-066.188.096.pools.vodafone-ip.de ([188.96.141.66] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1nqGAS-0006Dx-Gb; Sun, 15 May 2022 17:28:24 +0200
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>, Joe Perches <joe@perches.com>
-Subject: [PATCH] staging: r8188eu: use defines for addba response status
-Date:   Sun, 15 May 2022 17:27:59 +0200
-Message-Id: <20220515152759.335889-1-martin@kaiser.cx>
-X-Mailer: git-send-email 2.30.2
+        Sun, 15 May 2022 11:30:10 -0400
+Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1044E1262C;
+        Sun, 15 May 2022 08:30:08 -0700 (PDT)
+Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 27B293F653;
+        Sun, 15 May 2022 17:30:06 +0200 (CEST)
+Date:   Sun, 15 May 2022 17:30:04 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     phone-devel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/7] iio: adc: qcom-spmi-adc5: Add missing
+ VCOIN/AMUX_THM3/GPIO# channels
+Message-ID: <20220515153004.iniplpuf6g5ibvjw@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Jonathan Cameron <jic23@kernel.org>, phone-devel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>, linux-arm-msm@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220511220613.1015472-1-marijn.suijten@somainline.org>
+ <20220511220613.1015472-5-marijn.suijten@somainline.org>
+ <20220514171312.227a1f07@jic23-huawei>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220514171312.227a1f07@jic23-huawei>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,32 +66,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace the numeric values with defines from ieee80211.h.
+On 2022-05-14 17:13:12, Jonathan Cameron wrote:
+> On Thu, 12 May 2022 00:06:10 +0200
+> Marijn Suijten <marijn.suijten@somainline.org> wrote:
+> 
+> > These channels are specified in downstream kernels [1] and actively used
+> > by ie. the Sony Seine platform on the SM6125 SoC.
+> 
+> Looking at the links, some of them are on that platform but not all.
+> Better to make that explicit in this description.
 
-Suggested-by: Joe Perches <joe@perches.com>
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
+This has already been queued up for v2.  Adding these seemed easy at the
+time but they are in fact not used, and I ended up sending the wrong
+patch.
 
-This should be applied after yesterday's series "more cleanups in
-OnAction_back".
+Just so that we're on the same page: only ADC5_AMUX_THM3 and
+ADC5_GPIO2_100K_PU are unused by my platform.  It seems the first should
+be dropped, but the latter can probably stay in the patch with an
+explicit mention.  If you think both should stay, there are a bunch more
+channels defined in the downstream kernel as per [1] and I'm not sure if
+all should be added for completeness.
 
- drivers/staging/r8188eu/core/rtw_mlme_ext.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > [1]: https://source.codeaurora.org/quic/la/kernel/msm-4.14/tree/drivers/iio/adc/qcom-spmi-adc5.c?h=LA.UM.7.11.r1-05200-NICOBAR.0#n688
+> > 
+> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> 
+> I'm not keen on patches with no context being
+> sent to mailing lists. Please cc all lists (and preferably individuals)
+> on at least the cover letter so we can see overall discussion.
 
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-index b24c6a79646d..65330baa5a73 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-@@ -1504,7 +1504,8 @@ unsigned int OnAction_back(struct adapter *padapter, struct recv_frame *precv_fr
- 		preorder_ctrl->enable = pmlmeinfo->bAcceptAddbaReq;
- 
- 		issue_action_BA(padapter, mgmt->sa, WLAN_ACTION_ADDBA_RESP,
--				pmlmeinfo->bAcceptAddbaReq ? 0 : 37);
-+				pmlmeinfo->bAcceptAddbaReq ?
-+					WLAN_STATUS_SUCCESS : WLAN_STATUS_REQUEST_DECLINED);
- 		break;
- 	case WLAN_ACTION_ADDBA_RESP:
- 		tid = u16_get_bits(le16_to_cpu(mgmt->u.action.u.addba_resp.capab),
--- 
-2.30.2
+That can be attributed to the terrible workflow for sending
+patch-series.  Somehow only `git send-email` supports --cc-cmd yet I'd
+expect it on `git format-patch` for auditing and possibly copying to the
+cover letter, if `git format-patch --cover-letter` couldn't do this from
+the beginning.
+At the same time `git send-email` has --[to/cc]-cover options to
+propagate email addresses from the cover letter to all the individual
+patch-replies, but not the inverse :(
 
+In the end this leaves me manually running get_maintainer.pl over the
+entire formatted patch-series, and manually copy-pasting + editing the
+addresses into the cover letter... Which is easy to forget and is no
+different here.
+
+My apologies for (yet again) accidentally not sending at least the cover
+letter to everyone.  That's a gross oversight, and I'm probably - no, I
+must - be doing something wrong.  Suggestions and/or documentation
+references are welcome.
+
+> If nothing else, I've no idea if intent is that the patches go through different
+> trees or all need to merge via one route.
+
+I have no idea either, and have not yet had an answer to a similar
+question on a different list.  Usually it seems the maintainers work out
+amongst themselves who picks what patch, putting them on hold where
+necessary to preseve ordering.  If not, should the sender split patches
+across multiple series, either holding off sending part of it or linking
+to a dependent series?
+
+In this particular case DT has to wait for these driver patches to land,
+otherwise they may define channels that do not exist and unnecessarily
+fail probe.
+
+> Patch itself looks fine,
+
+Thanks.
+
+Looking forward to your suggestions and answers,
+
+- Marijn
+
+> [..]

@@ -2,74 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C7785276E7
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 12:18:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 554D55276F4
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 12:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236305AbiEOKSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 06:18:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50500 "EHLO
+        id S236355AbiEOKbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 06:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbiEOKS1 (ORCPT
+        with ESMTP id S236191AbiEOKbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 06:18:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECCD175BC
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 03:18:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 15 May 2022 06:31:10 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7282AA1B2
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 03:31:08 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CF9D7B80BE9
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 10:18:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1648AC385B8;
-        Sun, 15 May 2022 10:18:22 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="OV02Vra2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1652609900;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q/BkFmFZ1XoCw3vsJkmslzb+cMHbb9FFT6c5rZJWuH4=;
-        b=OV02Vra2A8y5JYZOfWwQJaaJ1e460Rr0qjvRqaJ86NY/IMtYuSkwsTVQZDKwpSrIYSPfPj
-        EtOg2i9AjJjEqfqwAA+8OQv1Z+NvYvtD0qERn5iSTnDvEBxd2aCD+3LKpc1DAIDJ0fC3B1
-        Uk24/Du0J/O6/kGFYBOsFPhyp5Hu2X0=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7d4a126c (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sun, 15 May 2022 10:18:20 +0000 (UTC)
-Date:   Sun, 15 May 2022 12:18:18 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: Re: [PATCH] random: handle latent entropy and command line from
- random_init()
-Message-ID: <YoDTavkNV6ufHN9s@zx2c4.com>
-References: <20220512124839.20755-1-Jason@zx2c4.com>
- <YoBMk1lKmF3B5kZC@sol.localdomain>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L1JZL60QLz4xZ5;
+        Sun, 15 May 2022 20:31:06 +1000 (AEST)
+From:   Michael Ellerman <patch-notifications@ellerman.id.au>
+To:     Paul Mackerras <paulus@samba.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+In-Reply-To: <cover.1649523076.git.christophe.leroy@csgroup.eu>
+References: <cover.1649523076.git.christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH v10 00/13] Convert powerpc to default topdown mmap layout (v10)
+Message-Id: <165261051322.1047019.8471968649588278768.b4-ty@ellerman.id.au>
+Date:   Sun, 15 May 2022 20:28:33 +1000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YoBMk1lKmF3B5kZC@sol.localdomain>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
-
-On Sat, May 14, 2022 at 05:42:59PM -0700, Eric Biggers wrote:
-> On Thu, May 12, 2022 at 02:48:39PM +0200, Jason A. Donenfeld wrote:
-> > 
-> > While we're at it, rename the awkwardly titled "rand_initialize()" to
-> > the more standard "random_init()" nomenclature.
+On Sat, 9 Apr 2022 19:17:24 +0200, Christophe Leroy wrote:
+> Rebased on top of v5.18-rc1
 > 
-> One nit: there's still a mention of "rand_initialize()" in
-> arch/openrisc/kernel/head.S.
+> This series converts powerpc to default topdown mmap layout.
+> 
+> First patch is a mm fix that should go into v5.18 and stable.
+> 
+> Andrew, can you take it ?
+> 
+> [...]
 
-Thanks, will fix that too.
+Patches 2-13 applied to powerpc/next.
 
-Jason
+[02/13] mm: Allow arch specific arch_randomize_brk() with CONFIG_ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
+        https://git.kernel.org/powerpc/c/723820f3f77dc9f7ffdceb076ebcf6a5b91d0a27
+[03/13] mm, hugetlbfs: Allow an arch to always use generic versions of get_unmapped_area functions
+        https://git.kernel.org/powerpc/c/4b439e25e29ec336c0e71ef1d1b212c412526518
+[04/13] mm: Add len and flags parameters to arch_get_mmap_end()
+        https://git.kernel.org/powerpc/c/2cb4de085f383cb9289083d1bedbaad046f640eb
+[05/13] powerpc/mm: Move vma_mmu_pagesize()
+        https://git.kernel.org/powerpc/c/93ea910295cae7ad69571ed1570e5b5ca54a2f9e
+[06/13] powerpc/mm: Make slice specific to book3s/64
+        https://git.kernel.org/powerpc/c/1408fca0c198471a5cd089742b9d3f9739073483
+[07/13] powerpc/mm: Remove CONFIG_PPC_MM_SLICES
+        https://git.kernel.org/powerpc/c/f693d38d9468101587175b1e62d7e4483b51d8f5
+[08/13] powerpc/mm: Use generic_get_unmapped_area() and call it from arch_get_unmapped_area()
+        https://git.kernel.org/powerpc/c/76a345ed16c63df9b02d3e374e8d5e39471174ad
+[09/13] powerpc/mm: Use generic_hugetlb_get_unmapped_area()
+        https://git.kernel.org/powerpc/c/1a0261fd3b218b6999f38dc791a66c9b7ddc7e8b
+[10/13] powerpc/mm: Move get_unmapped_area functions to slice.c
+        https://git.kernel.org/powerpc/c/ab57bd7570d4393beb5a91bf092ed54e9c3574a2
+[11/13] powerpc/mm: Enable full randomisation of memory mappings
+        https://git.kernel.org/powerpc/c/5cf7f9a0a54e93a6d3361de5f4ba4358b054c6c2
+[12/13] powerpc/mm: Convert to default topdown mmap layout
+        https://git.kernel.org/powerpc/c/36e5f9ee776cb6db6ab8cb9b056076c4492b9871
+[13/13] powerpc: Simplify and move arch_randomize_brk()
+        https://git.kernel.org/powerpc/c/3ba4289a3e7ff4a89a78c4f74d694a344e8d9cc9
+
+cheers

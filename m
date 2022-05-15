@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A5F55278C0
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 18:31:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F4395278C3
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 18:32:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237695AbiEOQbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 12:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49678 "EHLO
+        id S237735AbiEOQcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 12:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236754AbiEOQbs (ORCPT
+        with ESMTP id S237738AbiEOQcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 12:31:48 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2055.outbound.protection.outlook.com [40.107.96.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC5F1A071;
-        Sun, 15 May 2022 09:31:44 -0700 (PDT)
+        Sun, 15 May 2022 12:32:07 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2055.outbound.protection.outlook.com [40.107.212.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699A61B7A3;
+        Sun, 15 May 2022 09:32:02 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XeahX74TAJI2ZkNCtjULEsUoeqVd6FW6avpCVZMVIannwSw4fA1qTXUL41dJeRCi2eix2e3VngE7Rqox0dacFB1MrYClXcymv/lXYXBO3+bFFLaCy0wfrNIV62PgJOFyE08O7vFQdlK1ubOJQwLiGsvSfPHIzHZI/XFcMgcUkQIfTaOphyNmQqul96MN7xq6xb0MRM9sPbJRuI3+mMFTA7GNc4G21wQL5Y2wEyybDaxwyYSoZLyh9CrHeipPTbWtIP4iYGfm56jhhh86PNRoUzQXv3gPSXwL12q/J1KOZ6FiEQM+uGqlzfXTsz51snP9xJKtAGCGQsGWOdsoH8jD4Q==
+ b=BmAJKoTL3+SxmR9D9dSuJAP4xteSiFTiVEv5fmmn3a8S2z9TfDteeBIpS0ISf1XWE8j2bW/DL6aGn/pcyIMxDSbaeJ1d95sBTlKJPjgcUFs0TpbXIUV2DkwGztpLxy5Q5pmG9CtAX75xwMntnXjCxtGCfO1JbOkSw25VjgiD4REY0sW+dnUkGaaT1hWMhufhsjfQZ+It9Vbaie7E8ArHthPILfdxQdFLz3tWxdoiDyEB9ToY6WeMF/xUcbEbedG5GofMiYnWxoiQlCEQrrdkEW1Zr3Em+4gcm3driHmXbg/7QL/9dNn5eQnvdbZfCVItfTjlho+ibjqXgg3DmdVhhw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lUGxG/nJWjzHhMENcCK93ehPnTBOuAIAfyDMF6UQRJs=;
- b=avlw9G93/4+736QMMF3YbxdLeJnveVUJo23EWuj15lBbkBwDTwq4qVLjH0kQTFh9/0w+uJ2vpk0OSK1cnSkAWjSJxVPVw6SlVi4OFqFrqW3XNTdaKSYtx+9olAakUf3GO7ylhuS2kMjtyva1G8RmanFeU6D1gVRli1PpDNO/+N6FcNdPWyy8JJqv3Qs3vR7hyeGniBP1Lriy8RTXRFRvpgN147vy5ZzZi2Qry1ssff3gOy5lTb645GPAntZXRj3PN2hPqzPE4C2Bze9kcw4/bb3BlTLK56Hj1zNgza/6CMsGRTUOQFv9gsNJ1pE0l0EhKAIez9Xjd7zQYNoS9EazjA==
+ bh=ZJCtvQ/SooZHbBRhHGqlR4jLK3qLpVubklMSl24XlDk=;
+ b=IGmwccxkacRL4i86iaMCSFhyfqHlNu+5OfBdXj1UBSU7JU2XPEpau222f1NLKcIdkB5vg+O6ERyjV4SjAboccQ/k7QMi+NiRIjCVzgP6mfQQxNSbcj7BNJRaE0bYhx2Ni9PJ3BNkJi1+r9PqGmTqpn5qRENFAs5aj+XOrfaCldIsVsVxLU5qsT9hfzrsM24szzkngjgpvEHwYkyfVVFFjZ9HeeiEb1BhQDarZSBf6IpOigJnChvnFekQBghy2TvC1c8i8utZL+4/bbIN9sgcfRWs4/74BBA+5lNKLr2+OGaRZmcSDfs2D/UfXeY8uw/gtdqLl1tzibHZMztxgyOU0Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com; dmarc=pass
+ 12.22.5.238) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com; dmarc=pass
  (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
  (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lUGxG/nJWjzHhMENcCK93ehPnTBOuAIAfyDMF6UQRJs=;
- b=rMuXVRrM4j6G3u2aZTqnhfjNtvhrHhQfnwzaObmP26ClglukkTlUUoxK3OG1Bk8dE9wK2p8INY2czTmfLtU3rahnQXO9Na6AkEuBHeeHdKpTTa+Juhgl8t3yBxKgmfk7dIbozR1VAPnSN2TufvHK/ZWTaNw+DV2HUDoaWTuJRY93iIQ4FLn2ULjCOcNaIJlu27ZZPMMhgB0tN5x0yQL73HgbdSt9FjnIu7odBlea0h0OZ4jd/YNE5hylW6/4pr4Hh37WDi87uDyyK0Qz+KoAwcqfv3cIOUHbjDDYYgMhjGBgfLyd+JNaXiASQPLnyfvbWevAOot5iDVbYF2xCPVOJg==
-Received: from BN9PR03CA0309.namprd03.prod.outlook.com (2603:10b6:408:112::14)
- by BN6PR12MB1729.namprd12.prod.outlook.com (2603:10b6:404:108::16) with
+ bh=ZJCtvQ/SooZHbBRhHGqlR4jLK3qLpVubklMSl24XlDk=;
+ b=hwD0MD+qKnX7dFjkktJh7Mo29qFw4OJVb+zvrO/K5QP/kZ+CGMVlswuSuWr2g1HFu0HWNS5P/6CEW/JaihjVddKXeucLayMoEgl3QjmuZh9k3wzbEelzVA/y3i8JhD4dbHZYI8WhQgTNirThyaR8qKUAt03aNCdO/iIKfVP/IjA+DSHr4ClcravgsbLBLScDDgT2xaBa0iXEHhklU5SlJykg1c4fzY9jQsndtdtzx28H6J21IY5H07O+xOk8W3UABspYrsdP9Sg155ftl1kCX5C/JEexVdWsWCtXZOaMgcbFcUwnwt/gAu2xoHgo44Vn6Z2+KaTkjJ+IrScwnaRGrA==
+Received: from BN9PR03CA0955.namprd03.prod.outlook.com (2603:10b6:408:108::30)
+ by CH0PR12MB5314.namprd12.prod.outlook.com (2603:10b6:610:d5::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13; Sun, 15 May
- 2022 16:31:42 +0000
-Received: from BN8NAM11FT051.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:112:cafe::7f) by BN9PR03CA0309.outlook.office365.com
- (2603:10b6:408:112::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14 via Frontend
- Transport; Sun, 15 May 2022 16:31:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14; Sun, 15 May
+ 2022 16:32:00 +0000
+Received: from BN8NAM11FT063.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:108:cafe::90) by BN9PR03CA0955.outlook.office365.com
+ (2603:10b6:408:108::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13 via Frontend
+ Transport; Sun, 15 May 2022 16:32:00 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.236) by
- BN8NAM11FT051.mail.protection.outlook.com (10.13.177.66) with Microsoft SMTP
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.238) by
+ BN8NAM11FT063.mail.protection.outlook.com (10.13.177.110) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5250.13 via Frontend Transport; Sun, 15 May 2022 16:31:41 +0000
+ 15.20.5250.13 via Frontend Transport; Sun, 15 May 2022 16:32:00 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ DRHQMAIL105.nvidia.com (10.27.9.14) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.32; Sun, 15 May 2022 16:31:59 +0000
 Received: from drhqmail201.nvidia.com (10.126.190.180) by
- DRHQMAIL109.nvidia.com (10.27.9.19) with Microsoft SMTP Server (TLS) id
- 15.0.1497.32; Sun, 15 May 2022 16:31:40 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sun, 15 May 2022 09:31:40 -0700
+ 15.2.986.22; Sun, 15 May 2022 09:31:59 -0700
 Received: from msst-build.nvidia.com (10.127.8.14) by mail.nvidia.com
  (10.126.190.180) with Microsoft SMTP Server id 15.2.986.22 via Frontend
- Transport; Sun, 15 May 2022 09:31:39 -0700
+ Transport; Sun, 15 May 2022 09:31:58 -0700
 From:   Besar Wicaksono <bwicaksono@nvidia.com>
 To:     <robin.murphy@arm.com>, <catalin.marinas@arm.com>,
         <will@kernel.org>, <mark.rutland@arm.com>
@@ -70,9 +70,9 @@ CC:     <linux-arm-kernel@lists.infradead.org>,
         <Michael.Williams@arm.com>, <suzuki.poulose@arm.com>,
         <treding@nvidia.com>, <jonathanh@nvidia.com>, <vsethi@nvidia.com>,
         Besar Wicaksono <bwicaksono@nvidia.com>
-Subject: [PATCH v2 1/2] perf: coresight_pmu: Add support for ARM CoreSight PMU driver
-Date:   Sun, 15 May 2022 11:30:43 -0500
-Message-ID: <20220515163044.50055-2-bwicaksono@nvidia.com>
+Subject: [PATCH v2 2/2] perf: coresight_pmu: Add support for NVIDIA SCF and MCF attribute
+Date:   Sun, 15 May 2022 11:30:44 -0500
+Message-ID: <20220515163044.50055-3-bwicaksono@nvidia.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220515163044.50055-1-bwicaksono@nvidia.com>
 References: <20220509002810.12412-1-bwicaksono@nvidia.com>
@@ -82,24 +82,24 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1510957b-584c-431b-0596-08da369064aa
-X-MS-TrafficTypeDiagnostic: BN6PR12MB1729:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR12MB1729B5C9D852A6EC3E47A081A0CC9@BN6PR12MB1729.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 6df028fb-9fb9-4084-6485-08da36906fa8
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5314:EE_
+X-Microsoft-Antispam-PRVS: <CH0PR12MB5314297CA2C55B4433617AF9A0CC9@CH0PR12MB5314.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: C/pH1FK+6PReZI6bnCqKKGc8dD20O5+GnCr7UjeKH+Go6JEXZyOTZJE3ujgD2SE9cf9eUMx82lUd3R2eiB+v65hoTCPhTI1jCGqJ5jtlslMX31powcXyS0H05psZIU0P71KxVNXHWqa+3S3bB2b55FlUdI+4RAP+M2TOALMT6QXLRDXqKthE9agZTkT03NabVGe8gHDrqoMx9SStpwlHSwA3wY1XETzFiTJNy/CqRp10YFu4eDjZph/i4qx9to2+NUwZT4/J7rx16PrMR3fBST9NZus2tpo7CxPaLQQ3i9eJM+1w0PmVUm1KkCuIDBfQ0hGqGcYOqaoIvmRbZ7ZOv6Sb5uS3vkLNZzdiWZNL4TTdbZKl4qt2tQh2iTamy7K8XSbg1S5eXkCm/dNa+sHUnoFyBQjXCwSR64LQvRZMOqYJ2PplCGzZnQo6YWrrHy1DiL+LkJh+B/duhAM7IO/OJTO/lBS/6Sq6l8IcfSmsGjxetZw8xOwCOKqKgVD5Mrnr3WDo3ueDwiu5deJh83/vwDzClMLh46qm5sMCCDmLiKw3EXRBf2QeFFPMHlY21z2btDQNb7e5S2qS0sOPDLTo5OgfZw/EIXkbH2uJCzUpKe4jz+t7mDF8vPKEf7uDITNTymDAQlsVDALvpGB1cyNbRZKPbQhpeqZghX4Ct+hWABH6beoyZar0PDICaAlV/Zo+Fv9+6QkjkCN6V8vnmP2pyxnGEMUWptKayxYfNBwp8Vhl/1RbywwnjSF2gDupmWCkGBduRYRLS9zdwz3qVz43R2L6u+N6Ar8T6pli1I9XArFrB8NqfEjYzA0AhcsW1bq0ByScL+WDYUCj3xF4UYv5gw==
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(81166007)(36860700001)(7416002)(426003)(47076005)(26005)(356005)(82310400005)(5660300002)(2616005)(316002)(7696005)(186003)(966005)(86362001)(336012)(107886003)(30864003)(1076003)(508600001)(2906002)(8936002)(6666004)(54906003)(8676002)(110136005)(36756003)(40460700003)(70586007)(4326008)(70206006)(83380400001)(36900700001)(579004);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: ErCSQsDvw0WMrcpXi9QayJHGX3iro7IwOkRi2KyQJmHTbg+t2frzmdCYvwz5EpG8sVZThEnwbWmeBXxUqJhdCfCCFzBPVY1t7CywBJlNF4XOV7jO0lbyuU9Up6RChjMcfBW49h8F15Bo2kizy1FcGzSauUiECA8tKgFa9ynWarKAK07m5r4/75w4sTxtgabPcKKaFj+TOHgZ0rXfD8T2HRIIv302zpzM+rGCTi23/hY04vWyPqf5+zy1hrqJlsDVeKd1z/FmWINqXI+P9vw77pOrj/elZ3GezOZ0e1ORQ0AFYc7R0y+9JT7IlhnmhWvu3kr5trxmDXZ2ECNIJH0uAPQeW8KGjg1Tx3Uziu8nJjo1muM/9gJ0BSQjmTjjGiV3jeVGlajCiQllQwi7sg4Vqw/4ss1OJQfr6eGSib9CDLZWBzCV7sekFS/Dbh05OampxAYS/JFD4MAzY6MontWNxXOai2/69b/95BxRM3GjPRGxzD90K9vR/iHzHD24mMOxCuWHWzKGgKi53VKSDR2JjjL4RXFoYpMyRCWCFTgkODGT3kQZhH6ZBtPug5DJ/WulhKNZbBhjUdGb9W5FG7tocTj4hPZTuXzjQo7dp7uBX9giicvQZkOfb7meYKnsanALktTzuofZ9vKnFRr6D2KD+m/4ty4tKVFxOaWfcIMYeN+ci09gs4Zcg2Wd7wcUaQ7PRjEVx35aTMCnUEL1pwT3sw==
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(7696005)(186003)(6666004)(40460700003)(8676002)(2616005)(5660300002)(26005)(7416002)(316002)(1076003)(107886003)(8936002)(508600001)(2906002)(30864003)(82310400005)(36756003)(356005)(86362001)(4326008)(70586007)(81166007)(70206006)(54906003)(36860700001)(83380400001)(47076005)(336012)(426003)(110136005)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2022 16:31:41.6057
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2022 16:32:00.1125
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1510957b-584c-431b-0596-08da369064aa
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6df028fb-9fb9-4084-6485-08da36906fa8
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT051.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT063.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1729
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5314
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -110,1545 +110,374 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for ARM CoreSight PMU driver framework and interfaces.
-The driver provides generic implementation to operate uncore PMU based
-on ARM CoreSight PMU architecture. The driver also provides interface
-to get vendor/implementation specific information, for example event
-attributes and formating.
-
-The specification used in this implementation can be found below:
- * ACPI Arm Performance Monitoring Unit table:
-        https://developer.arm.com/documentation/den0117/latest
- * ARM Coresight PMU architecture:
-        https://developer.arm.com/documentation/ihi0091/latest
+Add support for NVIDIA System Cache Fabric (SCF) and Memory Control
+Fabric (MCF) PMU attributes for CoreSight PMU implementation in
+NVIDIA devices.
 
 Signed-off-by: Besar Wicaksono <bwicaksono@nvidia.com>
 ---
- arch/arm64/configs/defconfig                  |    1 +
- drivers/perf/Kconfig                          |    2 +
- drivers/perf/Makefile                         |    1 +
- drivers/perf/coresight_pmu/Kconfig            |   11 +
- drivers/perf/coresight_pmu/Makefile           |    6 +
- .../perf/coresight_pmu/arm_coresight_pmu.c    | 1267 +++++++++++++++++
- .../perf/coresight_pmu/arm_coresight_pmu.h    |  171 +++
- 7 files changed, 1459 insertions(+)
- create mode 100644 drivers/perf/coresight_pmu/Kconfig
- create mode 100644 drivers/perf/coresight_pmu/Makefile
- create mode 100644 drivers/perf/coresight_pmu/arm_coresight_pmu.c
- create mode 100644 drivers/perf/coresight_pmu/arm_coresight_pmu.h
+ drivers/perf/coresight_pmu/Makefile           |   3 +-
+ .../perf/coresight_pmu/arm_coresight_pmu.c    |   4 +
+ .../coresight_pmu/arm_coresight_pmu_nvidia.c  | 292 ++++++++++++++++++
+ .../coresight_pmu/arm_coresight_pmu_nvidia.h  |  17 +
+ 4 files changed, 315 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/perf/coresight_pmu/arm_coresight_pmu_nvidia.c
+ create mode 100644 drivers/perf/coresight_pmu/arm_coresight_pmu_nvidia.h
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 2ca8b1b336d2..8f2120182b25 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1196,6 +1196,7 @@ CONFIG_PHY_UNIPHIER_USB3=y
- CONFIG_PHY_TEGRA_XUSB=y
- CONFIG_PHY_AM654_SERDES=m
- CONFIG_PHY_J721E_WIZ=m
-+CONFIG_ARM_CORESIGHT_PMU=y
- CONFIG_ARM_SMMU_V3_PMU=m
- CONFIG_FSL_IMX8_DDR_PMU=m
- CONFIG_QCOM_L2_PMU=y
-diff --git a/drivers/perf/Kconfig b/drivers/perf/Kconfig
-index 1e2d69453771..c4e7cd5b4162 100644
---- a/drivers/perf/Kconfig
-+++ b/drivers/perf/Kconfig
-@@ -192,4 +192,6 @@ config MARVELL_CN10K_DDR_PMU
- 	  Enable perf support for Marvell DDR Performance monitoring
- 	  event on CN10K platform.
- 
-+source "drivers/perf/coresight_pmu/Kconfig"
-+
- endmenu
-diff --git a/drivers/perf/Makefile b/drivers/perf/Makefile
-index 57a279c61df5..4126a04b5583 100644
---- a/drivers/perf/Makefile
-+++ b/drivers/perf/Makefile
-@@ -20,3 +20,4 @@ obj-$(CONFIG_ARM_DMC620_PMU) += arm_dmc620_pmu.o
- obj-$(CONFIG_MARVELL_CN10K_TAD_PMU) += marvell_cn10k_tad_pmu.o
- obj-$(CONFIG_MARVELL_CN10K_DDR_PMU) += marvell_cn10k_ddr_pmu.o
- obj-$(CONFIG_APPLE_M1_CPU_PMU) += apple_m1_cpu_pmu.o
-+obj-$(CONFIG_ARM_CORESIGHT_PMU) += coresight_pmu/
-diff --git a/drivers/perf/coresight_pmu/Kconfig b/drivers/perf/coresight_pmu/Kconfig
-new file mode 100644
-index 000000000000..89174f54c7be
---- /dev/null
-+++ b/drivers/perf/coresight_pmu/Kconfig
-@@ -0,0 +1,11 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES.
-+
-+config ARM_CORESIGHT_PMU
-+	tristate "ARM Coresight PMU"
-+	depends on ACPI
-+	depends on ACPI_APMT || COMPILE_TEST
-+	help
-+	  Provides support for Performance Monitoring Unit (PMU) events based on
-+	  ARM CoreSight PMU architecture.
-\ No newline at end of file
 diff --git a/drivers/perf/coresight_pmu/Makefile b/drivers/perf/coresight_pmu/Makefile
-new file mode 100644
-index 000000000000..a2a7a5fbbc16
---- /dev/null
+index a2a7a5fbbc16..181b1b0dbaa1 100644
+--- a/drivers/perf/coresight_pmu/Makefile
 +++ b/drivers/perf/coresight_pmu/Makefile
-@@ -0,0 +1,6 @@
-+# Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES.
-+#
-+# SPDX-License-Identifier: GPL-2.0
-+
-+obj-$(CONFIG_ARM_CORESIGHT_PMU) += \
-+	arm_coresight_pmu.o
+@@ -3,4 +3,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+ obj-$(CONFIG_ARM_CORESIGHT_PMU) += \
+-	arm_coresight_pmu.o
++	arm_coresight_pmu.o \
++	arm_coresight_pmu_nvidia.o
 diff --git a/drivers/perf/coresight_pmu/arm_coresight_pmu.c b/drivers/perf/coresight_pmu/arm_coresight_pmu.c
-new file mode 100644
-index 000000000000..36ac77ab85cd
---- /dev/null
+index 36ac77ab85cd..85ef653e238d 100644
+--- a/drivers/perf/coresight_pmu/arm_coresight_pmu.c
 +++ b/drivers/perf/coresight_pmu/arm_coresight_pmu.c
-@@ -0,0 +1,1267 @@
+@@ -40,6 +40,7 @@
+ #include <acpi/processor.h>
+ 
+ #include "arm_coresight_pmu.h"
++#include "arm_coresight_pmu_nvidia.h"
+ 
+ #define PMUNAME "arm_coresight_pmu"
+ 
+@@ -351,6 +352,9 @@ struct impl_match {
+ };
+ 
+ static const struct impl_match impl_match[] = {
++	{ .pmiidr = 0x36B,
++	  .mask = PMIIDR_IMPLEMENTER_MASK,
++	  .impl_init_ops = nv_coresight_init_ops },
+ 	{}
+ };
+ 
+diff --git a/drivers/perf/coresight_pmu/arm_coresight_pmu_nvidia.c b/drivers/perf/coresight_pmu/arm_coresight_pmu_nvidia.c
+new file mode 100644
+index 000000000000..21f96e95b2a6
+--- /dev/null
++++ b/drivers/perf/coresight_pmu/arm_coresight_pmu_nvidia.c
+@@ -0,0 +1,292 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * ARM CoreSight PMU driver.
-+ *
-+ * This driver adds support for uncore PMU based on ARM CoreSight Performance
-+ * Monitoring Unit Architecture. The PMU is accessible via MMIO registers and
-+ * like other uncore PMUs, it does not support process specific events and
-+ * cannot be used in sampling mode.
-+ *
-+ * This code is based on other uncore PMUs like ARM DSU PMU. It provides a
-+ * generic implementation to operate the PMU according to CoreSight PMU
-+ * architecture and ACPI ARM PMU table (APMT) documents below:
-+ *   - ARM CoreSight PMU architecture document number: ARM IHI 0091 A.a-00bet0.
-+ *   - APMT document number: ARM DEN0117.
-+ * The description of the PMU, like the PMU device identification, available
-+ * events, and configuration options, is vendor specific. The driver provides
-+ * interface for vendor specific code to get this information. This allows the
-+ * driver to be shared with PMU from different vendors.
-+ *
-+ * CoreSight PMU devices are named as arm_coresight_pmu<node_id> where <node_id>
-+ * is APMT node id. The description of the device, like the identifier,
-+ * supported events, and formats can be found in sysfs
-+ * /sys/bus/event_source/devices/arm_coresight_pmu<node_id>
-+ *
-+ * The user should refer to the vendor technical documentation to get details
-+ * about the supported events.
-+ *
 + * Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES.
 + *
 + */
 +
-+#include <linux/acpi.h>
-+#include <linux/cacheinfo.h>
-+#include <linux/ctype.h>
-+#include <linux/interrupt.h>
-+#include <linux/io-64-nonatomic-lo-hi.h>
-+#include <linux/module.h>
-+#include <linux/perf_event.h>
-+#include <linux/platform_device.h>
-+#include <acpi/processor.h>
++/* Support for NVIDIA specific attributes. */
 +
-+#include "arm_coresight_pmu.h"
++#include "arm_coresight_pmu_nvidia.h"
 +
-+#define PMUNAME "arm_coresight_pmu"
++#define NV_MCF_PCIE_PORT_COUNT		10ULL
++#define NV_MCF_PCIE_FILTER_ID_MASK	((1ULL << NV_MCF_PCIE_PORT_COUNT) - 1)
 +
-+#define CORESIGHT_CPUMASK_ATTR(_name, _config)				\
-+	CORESIGHT_EXT_ATTR(_name, coresight_pmu_cpumask_show,		\
-+			   (unsigned long)_config)
++#define NV_MCF_GPU_PORT_COUNT		2ULL
++#define NV_MCF_GPU_FILTER_ID_MASK	((1ULL << NV_MCF_GPU_PORT_COUNT) - 1)
 +
-+/*
-+ * Register offsets based on CoreSight Performance Monitoring Unit Architecture
-+ * Document number: ARM-ECM-0640169 00alp6
-+ */
-+#define PMEVCNTR_LO					0x0
-+#define PMEVCNTR_HI					0x4
-+#define PMEVTYPER					0x400
-+#define PMCCFILTR					0x47C
-+#define PMEVFILTR					0xA00
-+#define PMCNTENSET					0xC00
-+#define PMCNTENCLR					0xC20
-+#define PMINTENSET					0xC40
-+#define PMINTENCLR					0xC60
-+#define PMOVSCLR					0xC80
-+#define PMOVSSET					0xCC0
-+#define PMCFGR						0xE00
-+#define PMCR						0xE04
-+#define PMIIDR						0xE08
++#define NV_MCF_NVLINK_PORT_COUNT	4ULL
++#define NV_MCF_NVLINK_FILTER_ID_MASK	((1ULL << NV_MCF_NVLINK_PORT_COUNT) - 1)
 +
-+/* PMCFGR register field */
-+#define PMCFGR_NCG_SHIFT				28
-+#define PMCFGR_NCG_MASK					0xf
-+#define PMCFGR_HDBG					BIT(24)
-+#define PMCFGR_TRO					BIT(23)
-+#define PMCFGR_SS					BIT(22)
-+#define PMCFGR_FZO					BIT(21)
-+#define PMCFGR_MSI					BIT(20)
-+#define PMCFGR_UEN					BIT(19)
-+#define PMCFGR_NA					BIT(17)
-+#define PMCFGR_EX					BIT(16)
-+#define PMCFGR_CCD					BIT(15)
-+#define PMCFGR_CC					BIT(14)
-+#define PMCFGR_SIZE_SHIFT				8
-+#define PMCFGR_SIZE_MASK				0x3f
-+#define PMCFGR_N_SHIFT					0
-+#define PMCFGR_N_MASK					0xff
++#define PMIIDR_PRODUCTID_MASK		0xFFF
++#define PMIIDR_PRODUCTID_SHIFT		20
 +
-+/* PMCR register field */
-+#define PMCR_TRO					BIT(11)
-+#define PMCR_HDBG					BIT(10)
-+#define PMCR_FZO					BIT(9)
-+#define PMCR_NA						BIT(8)
-+#define PMCR_DP						BIT(5)
-+#define PMCR_X						BIT(4)
-+#define PMCR_D						BIT(3)
-+#define PMCR_C						BIT(2)
-+#define PMCR_P						BIT(1)
-+#define PMCR_E						BIT(0)
++#define to_nv_pmu_impl(coresight_pmu)	\
++	(container_of(coresight_pmu->impl.ops, struct nv_pmu_impl, ops))
 +
-+/* PMIIDR register field */
-+#define PMIIDR_IMPLEMENTER_MASK				0xFFF
-+#define PMIIDR_PRODUCTID_MASK				0xFFF
-+#define PMIIDR_PRODUCTID_SHIFT				20
++#define CORESIGHT_EVENT_ATTR_4_INNER(_pref, _num, _suff, _config)	\
++	CORESIGHT_EVENT_ATTR(_pref##_num##_suff, _config)
 +
-+/* Each SET/CLR register supports up to 32 counters. */
-+#define CORESIGHT_SET_CLR_REG_COUNTER_NUM		32
-+#define CORESIGHT_SET_CLR_REG_COUNTER_SHIFT		5
++#define CORESIGHT_EVENT_ATTR_4(_pref, _suff, _config)			\
++	CORESIGHT_EVENT_ATTR_4_INNER(_pref, _0_, _suff, _config),	\
++	CORESIGHT_EVENT_ATTR_4_INNER(_pref, _1_, _suff, _config + 1),	\
++	CORESIGHT_EVENT_ATTR_4_INNER(_pref, _2_, _suff, _config + 2),	\
++	CORESIGHT_EVENT_ATTR_4_INNER(_pref, _3_, _suff, _config + 3)
 +
-+/* The number of 32-bit SET/CLR register that can be supported. */
-+#define CORESIGHT_SET_CLR_REG_MAX_NUM ((PMCNTENCLR - PMCNTENSET) / sizeof(u32))
++struct nv_pmu_impl {
++	struct coresight_pmu_impl_ops ops;
++	const char *identifier;
++	u32 filter_mask;
++	struct attribute **event_attr;
++	struct attribute **format_attr;
++};
 +
-+static_assert((CORESIGHT_SET_CLR_REG_MAX_NUM *
-+	       CORESIGHT_SET_CLR_REG_COUNTER_NUM) >=
-+	      CORESIGHT_PMU_MAX_HW_CNTRS);
++static struct attribute *scf_pmu_event_attrs[] = {
++	CORESIGHT_EVENT_ATTR(bus_cycles,			0x1d),
 +
-+/* Convert counter idx into SET/CLR register number. */
-+#define CORESIGHT_IDX_TO_SET_CLR_REG_ID(idx)				\
-+	(idx >> CORESIGHT_SET_CLR_REG_COUNTER_SHIFT)
++	CORESIGHT_EVENT_ATTR(scf_cache_allocate,		0xF0),
++	CORESIGHT_EVENT_ATTR(scf_cache_refill,			0xF1),
++	CORESIGHT_EVENT_ATTR(scf_cache,				0xF2),
++	CORESIGHT_EVENT_ATTR(scf_cache_wb,			0xF3),
 +
-+/* Convert counter idx into SET/CLR register bit. */
-+#define CORESIGHT_IDX_TO_SET_CLR_REG_BIT(idx)				\
-+	(idx & (CORESIGHT_SET_CLR_REG_COUNTER_NUM - 1))
++	CORESIGHT_EVENT_ATTR_4(socket, rd_data,			0x101),
++	CORESIGHT_EVENT_ATTR_4(socket, dl_rsp,			0x105),
++	CORESIGHT_EVENT_ATTR_4(socket, wb_data,			0x109),
++	CORESIGHT_EVENT_ATTR_4(socket, ev_rsp,			0x10d),
++	CORESIGHT_EVENT_ATTR_4(socket, prb_data,		0x111),
 +
-+#define CORESIGHT_ACTIVE_CPU_MASK			0x0
-+#define CORESIGHT_ASSOCIATED_CPU_MASK			0x1
++	CORESIGHT_EVENT_ATTR_4(socket, rd_outstanding,		0x115),
++	CORESIGHT_EVENT_ATTR_4(socket, dl_outstanding,		0x119),
++	CORESIGHT_EVENT_ATTR_4(socket, wb_outstanding,		0x11d),
++	CORESIGHT_EVENT_ATTR_4(socket, wr_outstanding,		0x121),
++	CORESIGHT_EVENT_ATTR_4(socket, ev_outstanding,		0x125),
++	CORESIGHT_EVENT_ATTR_4(socket, prb_outstanding,		0x129),
 +
++	CORESIGHT_EVENT_ATTR_4(socket, rd_access,		0x12d),
++	CORESIGHT_EVENT_ATTR_4(socket, dl_access,		0x131),
++	CORESIGHT_EVENT_ATTR_4(socket, wb_access,		0x135),
++	CORESIGHT_EVENT_ATTR_4(socket, wr_access,		0x139),
++	CORESIGHT_EVENT_ATTR_4(socket, ev_access,		0x13d),
++	CORESIGHT_EVENT_ATTR_4(socket, prb_access,		0x141),
 +
-+/* Check if field f in flags is set with value v */
-+#define CHECK_APMT_FLAG(flags, f, v) \
-+	((flags & (ACPI_APMT_FLAGS_ ## f)) == (ACPI_APMT_FLAGS_ ## f ## _ ## v))
++	CORESIGHT_EVENT_ATTR_4(ocu, gmem_rd_data,		0x145),
++	CORESIGHT_EVENT_ATTR_4(ocu, gmem_rd_access,		0x149),
++	CORESIGHT_EVENT_ATTR_4(ocu, gmem_wb_access,		0x14d),
++	CORESIGHT_EVENT_ATTR_4(ocu, gmem_rd_outstanding,	0x151),
++	CORESIGHT_EVENT_ATTR_4(ocu, gmem_wr_outstanding,	0x155),
 +
-+static unsigned long coresight_pmu_cpuhp_state;
++	CORESIGHT_EVENT_ATTR_4(ocu, rem_rd_data,		0x159),
++	CORESIGHT_EVENT_ATTR_4(ocu, rem_rd_access,		0x15d),
++	CORESIGHT_EVENT_ATTR_4(ocu, rem_wb_access,		0x161),
++	CORESIGHT_EVENT_ATTR_4(ocu, rem_rd_outstanding,		0x165),
++	CORESIGHT_EVENT_ATTR_4(ocu, rem_wr_outstanding,		0x169),
 +
-+/*
-+ * In CoreSight PMU architecture, all of the MMIO registers are 32-bit except
-+ * counter register. The counter register can be implemented as 32-bit or 64-bit
-+ * register depending on the value of PMCFGR.SIZE field. For 64-bit access,
-+ * single-copy 64-bit atomic support is implementation defined. APMT node flag
-+ * is used to identify if the PMU supports 64-bit single copy atomic. If 64-bit
-+ * single copy atomic is not supported, the driver treats the register as a pair
-+ * of 32-bit register.
-+ */
++	CORESIGHT_EVENT_ATTR(gmem_rd_data,			0x16d),
++	CORESIGHT_EVENT_ATTR(gmem_rd_access,			0x16e),
++	CORESIGHT_EVENT_ATTR(gmem_rd_outstanding,		0x16f),
++	CORESIGHT_EVENT_ATTR(gmem_dl_rsp,			0x170),
++	CORESIGHT_EVENT_ATTR(gmem_dl_access,			0x171),
++	CORESIGHT_EVENT_ATTR(gmem_dl_outstanding,		0x172),
++	CORESIGHT_EVENT_ATTR(gmem_wb_data,			0x173),
++	CORESIGHT_EVENT_ATTR(gmem_wb_access,			0x174),
++	CORESIGHT_EVENT_ATTR(gmem_wb_outstanding,		0x175),
++	CORESIGHT_EVENT_ATTR(gmem_ev_rsp,			0x176),
++	CORESIGHT_EVENT_ATTR(gmem_ev_access,			0x177),
++	CORESIGHT_EVENT_ATTR(gmem_ev_outstanding,		0x178),
++	CORESIGHT_EVENT_ATTR(gmem_wr_data,			0x179),
++	CORESIGHT_EVENT_ATTR(gmem_wr_outstanding,		0x17a),
++	CORESIGHT_EVENT_ATTR(gmem_wr_access,			0x17b),
 +
-+/*
-+ * Read 64-bit register as a pair of 32-bit registers using hi-lo-hi sequence.
-+ */
-+static u64 read_reg64_hilohi(const void __iomem *addr)
-+{
-+	u32 val_lo, val_hi;
-+	u64 val;
++	CORESIGHT_EVENT_ATTR_4(socket, wr_data,			0x17c),
 +
-+	/* Use high-low-high sequence to avoid tearing */
-+	do {
-+		val_hi = readl(addr + 4);
-+		val_lo = readl(addr);
-+	} while (val_hi != readl(addr + 4));
++	CORESIGHT_EVENT_ATTR_4(ocu, gmem_wr_data,		0x180),
++	CORESIGHT_EVENT_ATTR_4(ocu, gmem_wb_data,		0x184),
++	CORESIGHT_EVENT_ATTR_4(ocu, gmem_wr_access,		0x188),
++	CORESIGHT_EVENT_ATTR_4(ocu, gmem_wb_outstanding,	0x18c),
 +
-+	val = (((u64)val_hi << 32) | val_lo);
++	CORESIGHT_EVENT_ATTR_4(ocu, rem_wr_data,		0x190),
++	CORESIGHT_EVENT_ATTR_4(ocu, rem_wb_data,		0x194),
++	CORESIGHT_EVENT_ATTR_4(ocu, rem_wr_access,		0x198),
++	CORESIGHT_EVENT_ATTR_4(ocu, rem_wb_outstanding,		0x19c),
 +
-+	return val;
-+}
++	CORESIGHT_EVENT_ATTR(gmem_wr_total_bytes,		0x1a0),
++	CORESIGHT_EVENT_ATTR(remote_socket_wr_total_bytes,	0x1a1),
++	CORESIGHT_EVENT_ATTR(remote_socket_rd_data,		0x1a2),
++	CORESIGHT_EVENT_ATTR(remote_socket_rd_outstanding,	0x1a3),
++	CORESIGHT_EVENT_ATTR(remote_socket_rd_access,		0x1a4),
 +
-+/* Check if PMU supports 64-bit single copy atomic. */
-+static inline bool support_atomic(const struct coresight_pmu *coresight_pmu)
-+{
-+	return CHECK_APMT_FLAG(coresight_pmu->apmt_node->flags, ATOMIC, SUPP);
-+}
++	CORESIGHT_EVENT_ATTR(cmem_rd_data,			0x1a5),
++	CORESIGHT_EVENT_ATTR(cmem_rd_access,			0x1a6),
++	CORESIGHT_EVENT_ATTR(cmem_rd_outstanding,		0x1a7),
++	CORESIGHT_EVENT_ATTR(cmem_dl_rsp,			0x1a8),
++	CORESIGHT_EVENT_ATTR(cmem_dl_access,			0x1a9),
++	CORESIGHT_EVENT_ATTR(cmem_dl_outstanding,		0x1aa),
++	CORESIGHT_EVENT_ATTR(cmem_wb_data,			0x1ab),
++	CORESIGHT_EVENT_ATTR(cmem_wb_access,			0x1ac),
++	CORESIGHT_EVENT_ATTR(cmem_wb_outstanding,		0x1ad),
++	CORESIGHT_EVENT_ATTR(cmem_ev_rsp,			0x1ae),
++	CORESIGHT_EVENT_ATTR(cmem_ev_access,			0x1af),
++	CORESIGHT_EVENT_ATTR(cmem_ev_outstanding,		0x1b0),
++	CORESIGHT_EVENT_ATTR(cmem_wr_data,			0x1b1),
++	CORESIGHT_EVENT_ATTR(cmem_wr_outstanding,		0x1b2),
 +
-+/* Check if cycle counter is supported. */
-+static inline bool support_cc(const struct coresight_pmu *coresight_pmu)
-+{
-+	return (coresight_pmu->pmcfgr & PMCFGR_CC);
-+}
++	CORESIGHT_EVENT_ATTR_4(ocu, cmem_rd_data,		0x1b3),
++	CORESIGHT_EVENT_ATTR_4(ocu, cmem_rd_access,		0x1b7),
++	CORESIGHT_EVENT_ATTR_4(ocu, cmem_wb_access,		0x1bb),
++	CORESIGHT_EVENT_ATTR_4(ocu, cmem_rd_outstanding,	0x1bf),
++	CORESIGHT_EVENT_ATTR_4(ocu, cmem_wr_outstanding,	0x1c3),
 +
-+/* Get counter size. */
-+static inline u32 pmcfgr_size(const struct coresight_pmu *coresight_pmu)
-+{
-+	return (coresight_pmu->pmcfgr >> PMCFGR_SIZE_SHIFT) & PMCFGR_SIZE_MASK;
-+}
++	CORESIGHT_EVENT_ATTR(ocu_prb_access,			0x1c7),
++	CORESIGHT_EVENT_ATTR(ocu_prb_data,			0x1c8),
++	CORESIGHT_EVENT_ATTR(ocu_prb_outstanding,		0x1c9),
 +
-+/* Check if counter is implemented as 64-bit register. */
-+static inline bool
-+use_64b_counter_reg(const struct coresight_pmu *coresight_pmu)
-+{
-+	return (pmcfgr_size(coresight_pmu) > 31);
-+}
++	CORESIGHT_EVENT_ATTR(cmem_wr_access,			0x1ca),
 +
-+/* Get number of counters, minus one. */
-+static inline u32 pmcfgr_n(const struct coresight_pmu *coresight_pmu)
-+{
-+	return (coresight_pmu->pmcfgr >> PMCFGR_N_SHIFT) & PMCFGR_N_MASK;
-+}
++	CORESIGHT_EVENT_ATTR_4(ocu, cmem_wr_access,		0x1cb),
++	CORESIGHT_EVENT_ATTR_4(ocu, cmem_wb_data,		0x1cf),
++	CORESIGHT_EVENT_ATTR_4(ocu, cmem_wr_data,		0x1d3),
++	CORESIGHT_EVENT_ATTR_4(ocu, cmem_wb_outstanding,	0x1d7),
 +
-+ssize_t coresight_pmu_sysfs_event_show(struct device *dev,
-+				       struct device_attribute *attr, char *buf)
-+{
-+	struct dev_ext_attribute *eattr =
-+		container_of(attr, struct dev_ext_attribute, attr);
-+	return sysfs_emit(buf, "event=0x%llx\n",
-+			  (unsigned long long)eattr->var);
-+}
-+EXPORT_SYMBOL_GPL(coresight_pmu_sysfs_event_show);
++	CORESIGHT_EVENT_ATTR(cmem_wr_total_bytes,		0x1db),
 +
-+/* Default event list. */
-+static struct attribute *coresight_pmu_event_attrs[] = {
 +	CORESIGHT_EVENT_ATTR(cycles, CORESIGHT_PMU_EVT_CYCLES_DEFAULT),
 +	NULL,
 +};
 +
-+struct attribute **
-+coresight_pmu_get_event_attrs(const struct coresight_pmu *coresight_pmu)
-+{
-+	return coresight_pmu_event_attrs;
-+}
-+EXPORT_SYMBOL_GPL(coresight_pmu_get_event_attrs);
++static struct attribute *mcf_pmu_event_attrs[] = {
++	CORESIGHT_EVENT_ATTR(rd_bytes_loc,			0x0),
++	CORESIGHT_EVENT_ATTR(rd_bytes_rem,			0x1),
++	CORESIGHT_EVENT_ATTR(wr_bytes_loc,			0x2),
++	CORESIGHT_EVENT_ATTR(wr_bytes_rem,			0x3),
++	CORESIGHT_EVENT_ATTR(total_bytes_loc,			0x4),
++	CORESIGHT_EVENT_ATTR(total_bytes_rem,			0x5),
++	CORESIGHT_EVENT_ATTR(rd_req_loc,			0x6),
++	CORESIGHT_EVENT_ATTR(rd_req_rem,			0x7),
++	CORESIGHT_EVENT_ATTR(wr_req_loc,			0x8),
++	CORESIGHT_EVENT_ATTR(wr_req_rem,			0x9),
++	CORESIGHT_EVENT_ATTR(total_req_loc,			0xa),
++	CORESIGHT_EVENT_ATTR(total_req_rem,			0xb),
++	CORESIGHT_EVENT_ATTR(rd_cum_outs_loc,			0xc),
++	CORESIGHT_EVENT_ATTR(rd_cum_outs_rem,			0xd),
++	CORESIGHT_EVENT_ATTR(cycles, CORESIGHT_PMU_EVT_CYCLES_DEFAULT),
++	NULL,
++};
 +
-+umode_t coresight_pmu_event_attr_is_visible(struct kobject *kobj,
-+					    struct attribute *attr, int unused)
-+{
-+	struct device *dev = kobj_to_dev(kobj);
-+	struct coresight_pmu *coresight_pmu =
-+		to_coresight_pmu(dev_get_drvdata(dev));
-+	struct perf_pmu_events_attr *eattr;
-+
-+	eattr = container_of(attr, typeof(*eattr), attr.attr);
-+
-+	/* Hide cycle event if not supported */
-+	if (!support_cc(coresight_pmu) &&
-+	    eattr->id == CORESIGHT_PMU_EVT_CYCLES_DEFAULT) {
-+		return 0;
-+	}
-+
-+	return attr->mode;
-+}
-+EXPORT_SYMBOL_GPL(coresight_pmu_event_attr_is_visible);
-+
-+ssize_t coresight_pmu_sysfs_format_show(struct device *dev,
-+					struct device_attribute *attr,
-+					char *buf)
-+{
-+	struct dev_ext_attribute *eattr =
-+		container_of(attr, struct dev_ext_attribute, attr);
-+	return sysfs_emit(buf, "%s\n", (char *)eattr->var);
-+}
-+EXPORT_SYMBOL_GPL(coresight_pmu_sysfs_format_show);
-+
-+static struct attribute *coresight_pmu_format_attrs[] = {
++static struct attribute *scf_pmu_format_attrs[] = {
 +	CORESIGHT_FORMAT_EVENT_ATTR,
-+	CORESIGHT_FORMAT_FILTER_ATTR,
 +	NULL,
 +};
 +
-+struct attribute **
-+coresight_pmu_get_format_attrs(const struct coresight_pmu *coresight_pmu)
-+{
-+	return coresight_pmu_format_attrs;
-+}
-+EXPORT_SYMBOL_GPL(coresight_pmu_get_format_attrs);
-+
-+u32 coresight_pmu_event_type(const struct perf_event *event)
-+{
-+	return event->attr.config & CORESIGHT_EVENT_MASK;
-+}
-+EXPORT_SYMBOL_GPL(coresight_pmu_event_type);
-+
-+u32 coresight_pmu_event_filter(const struct perf_event *event)
-+{
-+	return event->attr.config1 & CORESIGHT_FILTER_MASK;
-+}
-+EXPORT_SYMBOL_GPL(coresight_pmu_event_filter);
-+
-+static ssize_t coresight_pmu_identifier_show(struct device *dev,
-+					     struct device_attribute *attr,
-+					     char *page)
-+{
-+	struct coresight_pmu *coresight_pmu =
-+		to_coresight_pmu(dev_get_drvdata(dev));
-+
-+	return sysfs_emit(page, "%s\n", coresight_pmu->identifier);
-+}
-+
-+static struct device_attribute coresight_pmu_identifier_attr =
-+	__ATTR(identifier, 0444, coresight_pmu_identifier_show, NULL);
-+
-+static struct attribute *coresight_pmu_identifier_attrs[] = {
-+	&coresight_pmu_identifier_attr.attr,
++static struct attribute *mcf_pcie_pmu_format_attrs[] = {
++	CORESIGHT_FORMAT_EVENT_ATTR,
++	CORESIGHT_FORMAT_ATTR(root_port, "config1:0-9"),
 +	NULL,
 +};
 +
-+static struct attribute_group coresight_pmu_identifier_attr_group = {
-+	.attrs = coresight_pmu_identifier_attrs,
++static struct attribute *mcf_gpu_pmu_format_attrs[] = {
++	CORESIGHT_FORMAT_EVENT_ATTR,
++	CORESIGHT_FORMAT_ATTR(gpu, "config1:0-1"),
++	NULL,
 +};
 +
-+const char *
-+coresight_pmu_get_identifier(const struct coresight_pmu *coresight_pmu)
++static struct attribute *mcf_nvlink_pmu_format_attrs[] = {
++	CORESIGHT_FORMAT_EVENT_ATTR,
++	CORESIGHT_FORMAT_ATTR(socket, "config1:0-3"),
++	NULL,
++};
++
++static struct attribute **
++nv_coresight_pmu_get_event_attrs(const struct coresight_pmu *coresight_pmu)
 +{
-+	const char *identifier =
-+		devm_kasprintf(coresight_pmu->dev, GFP_KERNEL, "%x",
-+			       coresight_pmu->impl.pmiidr);
-+	return identifier;
++	const struct nv_pmu_impl *impl = to_nv_pmu_impl(coresight_pmu);
++
++	return impl->event_attr;
 +}
-+EXPORT_SYMBOL_GPL(coresight_pmu_get_identifier);
 +
-+static ssize_t coresight_pmu_cpumask_show(struct device *dev,
-+					  struct device_attribute *attr,
-+					  char *buf)
++static struct attribute **
++nv_coresight_pmu_get_format_attrs(const struct coresight_pmu *coresight_pmu)
 +{
-+	struct pmu *pmu = dev_get_drvdata(dev);
-+	struct coresight_pmu *coresight_pmu = to_coresight_pmu(pmu);
-+	struct dev_ext_attribute *eattr =
-+		container_of(attr, struct dev_ext_attribute, attr);
-+	unsigned long mask_id = (unsigned long)eattr->var;
-+	const cpumask_t *cpumask;
++	const struct nv_pmu_impl *impl = to_nv_pmu_impl(coresight_pmu);
 +
-+	switch (mask_id) {
-+	case CORESIGHT_ACTIVE_CPU_MASK:
-+		cpumask = &coresight_pmu->active_cpu;
++	return impl->format_attr;
++}
++
++static const char *
++nv_coresight_pmu_get_identifier(const struct coresight_pmu *coresight_pmu)
++{
++	const struct nv_pmu_impl *impl = to_nv_pmu_impl(coresight_pmu);
++
++	return impl->identifier;
++}
++
++static u32 nv_coresight_pmu_event_filter(const struct perf_event *event)
++{
++	const struct nv_pmu_impl *impl =
++		to_nv_pmu_impl(to_coresight_pmu(event->pmu));
++	return event->attr.config1 & impl->filter_mask;
++}
++
++int nv_coresight_init_ops(struct coresight_pmu *coresight_pmu)
++{
++	u32 product_id;
++	struct nv_pmu_impl *impl;
++
++	impl = devm_kzalloc(coresight_pmu->dev, sizeof(struct nv_pmu_impl),
++			   GFP_KERNEL);
++	if (!impl)
++		return -ENOMEM;
++
++	product_id = (coresight_pmu->impl.pmiidr >> PMIIDR_PRODUCTID_SHIFT) &
++		     PMIIDR_PRODUCTID_MASK;
++
++	switch (product_id) {
++	case 0x103:
++		impl->identifier	= "nvidia_mcf_pcie";
++		impl->filter_mask	= NV_MCF_PCIE_FILTER_ID_MASK;
++		impl->event_attr	= mcf_pmu_event_attrs;
++		impl->format_attr	= mcf_pcie_pmu_format_attrs;
 +		break;
-+	case CORESIGHT_ASSOCIATED_CPU_MASK:
-+		cpumask = &coresight_pmu->associated_cpus;
++	case 0x104:
++		impl->identifier	= "nvidia_mcf_gpuvir";
++		impl->filter_mask	= NV_MCF_GPU_FILTER_ID_MASK;
++		impl->event_attr	= mcf_pmu_event_attrs;
++		impl->format_attr	= mcf_gpu_pmu_format_attrs;
++		break;
++	case 0x105:
++		impl->identifier	= "nvidia_mcf_gpu";
++		impl->filter_mask	= NV_MCF_GPU_FILTER_ID_MASK;
++		impl->event_attr	= mcf_pmu_event_attrs;
++		impl->format_attr	= mcf_gpu_pmu_format_attrs;
++		break;
++	case 0x106:
++		impl->identifier	= "nvidia_mcf_nvlink";
++		impl->filter_mask	= NV_MCF_NVLINK_FILTER_ID_MASK;
++		impl->event_attr	= mcf_pmu_event_attrs;
++		impl->format_attr	= mcf_nvlink_pmu_format_attrs;
++		break;
++	case 0x2CF:
++		impl->identifier	= "nvidia_scf";
++		impl->filter_mask	= 0x0;
++		impl->event_attr	= scf_pmu_event_attrs;
++		impl->format_attr	= scf_pmu_format_attrs;
 +		break;
 +	default:
-+		return 0;
-+	}
-+	return cpumap_print_to_pagebuf(true, buf, cpumask);
-+}
-+
-+static struct attribute *coresight_pmu_cpumask_attrs[] = {
-+	CORESIGHT_CPUMASK_ATTR(cpumask, CORESIGHT_ACTIVE_CPU_MASK),
-+	CORESIGHT_CPUMASK_ATTR(associated_cpus, CORESIGHT_ASSOCIATED_CPU_MASK),
-+	NULL,
-+};
-+
-+static struct attribute_group coresight_pmu_cpumask_attr_group = {
-+	.attrs = coresight_pmu_cpumask_attrs,
-+};
-+
-+static const struct coresight_pmu_impl_ops default_impl_ops = {
-+	.get_event_attrs	= coresight_pmu_get_event_attrs,
-+	.get_format_attrs	= coresight_pmu_get_format_attrs,
-+	.get_identifier		= coresight_pmu_get_identifier,
-+	.is_cc_event		= coresight_pmu_is_cc_event,
-+	.event_type		= coresight_pmu_event_type,
-+	.event_filter		= coresight_pmu_event_filter,
-+	.event_attr_is_visible	= coresight_pmu_event_attr_is_visible
-+};
-+
-+struct impl_match {
-+	u32 pmiidr;
-+	u32 mask;
-+	int (*impl_init_ops)(struct coresight_pmu *coresight_pmu);
-+};
-+
-+static const struct impl_match impl_match[] = {
-+	{}
-+};
-+
-+static int coresight_pmu_init_impl_ops(struct coresight_pmu *coresight_pmu)
-+{
-+	int idx, ret;
-+	struct acpi_apmt_node *apmt_node = coresight_pmu->apmt_node;
-+	const struct impl_match *match = impl_match;
-+
-+	/*
-+	 * Get PMU implementer and product id from APMT node.
-+	 * If APMT node doesn't have implementer/product id, try get it
-+	 * from PMIIDR.
-+	 */
-+	coresight_pmu->impl.pmiidr =
-+		(apmt_node->impl_id) ? apmt_node->impl_id :
-+				       readl(coresight_pmu->base0 + PMIIDR);
-+
-+	/* Find implementer specific attribute ops. */
-+	for (idx = 0; match->pmiidr; match++, idx++) {
-+		if ((match->pmiidr & match->mask) ==
-+		    (coresight_pmu->impl.pmiidr & match->mask)) {
-+			ret = match->impl_init_ops(coresight_pmu);
-+			if (ret)
-+				return ret;
-+
-+			return 0;
-+		}
++		impl->identifier  = coresight_pmu_get_identifier(coresight_pmu);
++		impl->filter_mask = CORESIGHT_FILTER_MASK;
++		impl->event_attr  = coresight_pmu_get_event_attrs(coresight_pmu);
++		impl->format_attr =
++			coresight_pmu_get_format_attrs(coresight_pmu);
++		break;
 +	}
 +
-+	/* We don't find implementer specific attribute ops, use default. */
-+	coresight_pmu->impl.ops = &default_impl_ops;
++	impl->ops.get_event_attrs	= nv_coresight_pmu_get_event_attrs;
++	impl->ops.get_format_attrs	= nv_coresight_pmu_get_format_attrs;
++	impl->ops.get_identifier	= nv_coresight_pmu_get_identifier;
++	impl->ops.event_filter		= nv_coresight_pmu_event_filter;
++	impl->ops.event_type		= coresight_pmu_event_type;
++	impl->ops.event_attr_is_visible	= coresight_pmu_event_attr_is_visible;
++	impl->ops.is_cc_event		= coresight_pmu_is_cc_event;
++
++	coresight_pmu->impl.ops = &impl->ops;
 +	return 0;
 +}
-+
-+static struct attribute_group *
-+coresight_pmu_alloc_event_attr_group(struct coresight_pmu *coresight_pmu)
-+{
-+	struct attribute_group *event_group;
-+	struct device *dev = coresight_pmu->dev;
-+
-+	event_group =
-+		devm_kzalloc(dev, sizeof(struct attribute_group), GFP_KERNEL);
-+	if (!event_group)
-+		return NULL;
-+
-+	event_group->name = "events";
-+	event_group->attrs =
-+		coresight_pmu->impl.ops->get_event_attrs(coresight_pmu);
-+	event_group->is_visible =
-+		coresight_pmu->impl.ops->event_attr_is_visible;
-+
-+	return event_group;
-+}
-+
-+static struct attribute_group *
-+coresight_pmu_alloc_format_attr_group(struct coresight_pmu *coresight_pmu)
-+{
-+	struct attribute_group *format_group;
-+	struct device *dev = coresight_pmu->dev;
-+
-+	format_group =
-+		devm_kzalloc(dev, sizeof(struct attribute_group), GFP_KERNEL);
-+	if (!format_group)
-+		return NULL;
-+
-+	format_group->name = "format";
-+	format_group->attrs =
-+		coresight_pmu->impl.ops->get_format_attrs(coresight_pmu);
-+
-+	return format_group;
-+}
-+
-+static struct attribute_group **
-+coresight_pmu_alloc_attr_group(struct coresight_pmu *coresight_pmu)
-+{
-+	const struct coresight_pmu_impl_ops *impl_ops;
-+	struct attribute_group **attr_groups = NULL;
-+	struct device *dev = coresight_pmu->dev;
-+	int ret;
-+
-+	ret = coresight_pmu_init_impl_ops(coresight_pmu);
-+	if (ret)
-+		return NULL;
-+
-+	impl_ops = coresight_pmu->impl.ops;
-+
-+	coresight_pmu->identifier = impl_ops->get_identifier(coresight_pmu);
-+
-+	attr_groups = devm_kzalloc(dev, 5 * sizeof(struct attribute_group *),
-+				   GFP_KERNEL);
-+	if (!attr_groups)
-+		return NULL;
-+
-+	attr_groups[0] = coresight_pmu_alloc_event_attr_group(coresight_pmu);
-+	attr_groups[1] = coresight_pmu_alloc_format_attr_group(coresight_pmu);
-+	attr_groups[2] = &coresight_pmu_identifier_attr_group;
-+	attr_groups[3] = &coresight_pmu_cpumask_attr_group;
-+
-+	return attr_groups;
-+}
-+
-+static inline void
-+coresight_pmu_reset_counters(struct coresight_pmu *coresight_pmu)
-+{
-+	u32 pmcr = 0;
-+
-+	pmcr |= PMCR_P;
-+	pmcr |= PMCR_C;
-+	writel(pmcr, coresight_pmu->base0 + PMCR);
-+}
-+
-+static inline void
-+coresight_pmu_start_counters(struct coresight_pmu *coresight_pmu)
-+{
-+	u32 pmcr;
-+
-+	pmcr = PMCR_E;
-+	writel(pmcr, coresight_pmu->base0 + PMCR);
-+}
-+
-+static inline void
-+coresight_pmu_stop_counters(struct coresight_pmu *coresight_pmu)
-+{
-+	u32 pmcr;
-+
-+	pmcr = 0;
-+	writel(pmcr, coresight_pmu->base0 + PMCR);
-+}
-+
-+static void coresight_pmu_enable(struct pmu *pmu)
-+{
-+	bool disabled;
-+	struct coresight_pmu *coresight_pmu = to_coresight_pmu(pmu);
-+
-+	disabled = bitmap_empty(coresight_pmu->hw_events.used_ctrs,
-+				coresight_pmu->num_logical_counters);
-+
-+	if (disabled)
-+		return;
-+
-+	coresight_pmu_start_counters(coresight_pmu);
-+}
-+
-+static void coresight_pmu_disable(struct pmu *pmu)
-+{
-+	struct coresight_pmu *coresight_pmu = to_coresight_pmu(pmu);
-+
-+	coresight_pmu_stop_counters(coresight_pmu);
-+}
-+
-+bool coresight_pmu_is_cc_event(const struct perf_event *event)
-+{
-+	return (event->attr.config == CORESIGHT_PMU_EVT_CYCLES_DEFAULT);
-+}
-+EXPORT_SYMBOL_GPL(coresight_pmu_is_cc_event);
-+
-+static int
-+coresight_pmu_get_event_idx(struct coresight_pmu_hw_events *hw_events,
-+			    struct perf_event *event)
-+{
-+	int idx;
-+	struct coresight_pmu *coresight_pmu = to_coresight_pmu(event->pmu);
-+
-+	if (support_cc(coresight_pmu)) {
-+		if (coresight_pmu->impl.ops->is_cc_event(event)) {
-+			/* Search for available cycle counter. */
-+			if (test_and_set_bit(coresight_pmu->cc_logical_idx,
-+					     hw_events->used_ctrs))
-+				return -EAGAIN;
-+
-+			return coresight_pmu->cc_logical_idx;
-+		}
-+
-+		/*
-+		 * Search a regular counter from the used counter bitmap.
-+		 * The cycle counter divides the bitmap into two parts. Search
-+		 * the first then second half to exclude the cycle counter bit.
-+		 */
-+		idx = find_first_zero_bit(hw_events->used_ctrs,
-+					  coresight_pmu->cc_logical_idx);
-+		if (idx >= coresight_pmu->cc_logical_idx) {
-+			idx = find_next_zero_bit(
-+				hw_events->used_ctrs,
-+				coresight_pmu->num_logical_counters,
-+				coresight_pmu->cc_logical_idx + 1);
-+		}
-+	} else {
-+		idx = find_first_zero_bit(hw_events->used_ctrs,
-+					  coresight_pmu->num_logical_counters);
-+	}
-+
-+	if (idx >= coresight_pmu->num_logical_counters)
-+		return -EAGAIN;
-+
-+	set_bit(idx, hw_events->used_ctrs);
-+
-+	return idx;
-+}
-+
-+static bool
-+coresight_pmu_validate_event(struct pmu *pmu,
-+			     struct coresight_pmu_hw_events *hw_events,
-+			     struct perf_event *event)
-+{
-+	if (is_software_event(event))
-+		return true;
-+
-+	/* Reject groups spanning multiple HW PMUs. */
-+	if (event->pmu != pmu)
-+		return false;
-+
-+	return (coresight_pmu_get_event_idx(hw_events, event) >= 0);
-+}
-+
-+/*
-+ * Make sure the group of events can be scheduled at once
-+ * on the PMU.
-+ */
-+static bool coresight_pmu_validate_group(struct perf_event *event)
-+{
-+	struct perf_event *sibling, *leader = event->group_leader;
-+	struct coresight_pmu_hw_events fake_hw_events;
-+
-+	if (event->group_leader == event)
-+		return true;
-+
-+	memset(&fake_hw_events, 0, sizeof(fake_hw_events));
-+
-+	if (!coresight_pmu_validate_event(event->pmu, &fake_hw_events, leader))
-+		return false;
-+
-+	for_each_sibling_event(sibling, leader) {
-+		if (!coresight_pmu_validate_event(event->pmu, &fake_hw_events,
-+						  sibling))
-+			return false;
-+	}
-+
-+	return coresight_pmu_validate_event(event->pmu, &fake_hw_events, event);
-+}
-+
-+static int coresight_pmu_event_init(struct perf_event *event)
-+{
-+	struct coresight_pmu *coresight_pmu;
-+	struct hw_perf_event *hwc = &event->hw;
-+
-+	coresight_pmu = to_coresight_pmu(event->pmu);
-+
-+	/*
-+	 * Following other "uncore" PMUs, we do not support sampling mode or
-+	 * attach to a task (per-process mode).
-+	 */
-+	if (is_sampling_event(event)) {
-+		dev_dbg(coresight_pmu->pmu.dev,
-+			"Can't support sampling events\n");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	if (event->cpu < 0 || event->attach_state & PERF_ATTACH_TASK) {
-+		dev_dbg(coresight_pmu->pmu.dev,
-+			"Can't support per-task counters\n");
-+		return -EINVAL;
-+	}
-+
-+	/*
-+	 * Make sure the CPU assignment is on one of the CPUs associated with
-+	 * this PMU.
-+	 */
-+	if (!cpumask_test_cpu(event->cpu, &coresight_pmu->associated_cpus)) {
-+		dev_dbg(coresight_pmu->pmu.dev,
-+			"Requested cpu is not associated with the PMU\n");
-+		return -EINVAL;
-+	}
-+
-+	/* Enforce the current active CPU to handle the events in this PMU. */
-+	event->cpu = cpumask_first(&coresight_pmu->active_cpu);
-+	if (event->cpu >= nr_cpu_ids)
-+		return -EINVAL;
-+
-+	if (!coresight_pmu_validate_group(event))
-+		return -EINVAL;
-+
-+	/*
-+	 * The logical counter id is tracked with hw_perf_event.extra_reg.idx.
-+	 * The physical counter id is tracked with hw_perf_event.idx.
-+	 * We don't assign an index until we actually place the event onto
-+	 * hardware. Use -1 to signify that we haven't decided where to put it
-+	 * yet.
-+	 */
-+	hwc->idx = -1;
-+	hwc->extra_reg.idx = -1;
-+	hwc->config_base = coresight_pmu->impl.ops->event_type(event);
-+
-+	return 0;
-+}
-+
-+static inline u32 counter_offset(u32 reg_sz, u32 ctr_idx)
-+{
-+	return (PMEVCNTR_LO + (reg_sz * ctr_idx));
-+}
-+
-+static void coresight_pmu_write_counter(struct perf_event *event, u64 val)
-+{
-+	u32 offset;
-+	struct coresight_pmu *coresight_pmu = to_coresight_pmu(event->pmu);
-+
-+	if (use_64b_counter_reg(coresight_pmu)) {
-+		offset = counter_offset(sizeof(u64), event->hw.idx);
-+
-+		writeq(val, coresight_pmu->base1 + offset);
-+	} else {
-+		offset = counter_offset(sizeof(u32), event->hw.idx);
-+
-+		writel(lower_32_bits(val), coresight_pmu->base1 + offset);
-+	}
-+}
-+
-+static u64 coresight_pmu_read_counter(struct perf_event *event)
-+{
-+	u32 offset;
-+	const void __iomem *counter_addr;
-+	struct coresight_pmu *coresight_pmu = to_coresight_pmu(event->pmu);
-+
-+	if (use_64b_counter_reg(coresight_pmu)) {
-+		offset = counter_offset(sizeof(u64), event->hw.idx);
-+		counter_addr = coresight_pmu->base1 + offset;
-+
-+		return support_atomic(coresight_pmu) ?
-+			       readq(counter_addr) :
-+			       read_reg64_hilohi(counter_addr);
-+	}
-+
-+	offset = counter_offset(sizeof(u32), event->hw.idx);
-+	return readl(coresight_pmu->base1 + offset);
-+}
-+
-+/*
-+ * coresight_pmu_set_event_period: Set the period for the counter.
-+ *
-+ * To handle cases of extreme interrupt latency, we program
-+ * the counter with half of the max count for the counters.
-+ */
-+static void coresight_pmu_set_event_period(struct perf_event *event)
-+{
-+	struct coresight_pmu *coresight_pmu = to_coresight_pmu(event->pmu);
-+	u64 val = GENMASK_ULL(pmcfgr_size(coresight_pmu), 0) >> 1;
-+
-+	local64_set(&event->hw.prev_count, val);
-+	coresight_pmu_write_counter(event, val);
-+}
-+
-+static void coresight_pmu_enable_counter(struct coresight_pmu *coresight_pmu,
-+					 int idx)
-+{
-+	u32 reg_id, reg_bit, inten_off, cnten_off;
-+
-+	reg_id = CORESIGHT_IDX_TO_SET_CLR_REG_ID(idx);
-+	reg_bit = CORESIGHT_IDX_TO_SET_CLR_REG_BIT(idx);
-+
-+	inten_off = PMINTENSET + (4 * reg_id);
-+	cnten_off = PMCNTENSET + (4 * reg_id);
-+
-+	writel(BIT(reg_bit), coresight_pmu->base0 + inten_off);
-+	writel(BIT(reg_bit), coresight_pmu->base0 + cnten_off);
-+}
-+
-+static void coresight_pmu_disable_counter(struct coresight_pmu *coresight_pmu,
-+					  int idx)
-+{
-+	u32 reg_id, reg_bit, inten_off, cnten_off;
-+
-+	reg_id = CORESIGHT_IDX_TO_SET_CLR_REG_ID(idx);
-+	reg_bit = CORESIGHT_IDX_TO_SET_CLR_REG_BIT(idx);
-+
-+	inten_off = PMINTENCLR + (4 * reg_id);
-+	cnten_off = PMCNTENCLR + (4 * reg_id);
-+
-+	writel(BIT(reg_bit), coresight_pmu->base0 + cnten_off);
-+	writel(BIT(reg_bit), coresight_pmu->base0 + inten_off);
-+}
-+
-+static void coresight_pmu_event_update(struct perf_event *event)
-+{
-+	struct coresight_pmu *coresight_pmu = to_coresight_pmu(event->pmu);
-+	struct hw_perf_event *hwc = &event->hw;
-+	u64 delta, prev, now;
-+
-+	do {
-+		prev = local64_read(&hwc->prev_count);
-+		now = coresight_pmu_read_counter(event);
-+	} while (local64_cmpxchg(&hwc->prev_count, prev, now) != prev);
-+
-+	delta = (now - prev) & GENMASK_ULL(pmcfgr_size(coresight_pmu), 0);
-+	local64_add(delta, &event->count);
-+}
-+
-+static inline void coresight_pmu_set_event(struct coresight_pmu *coresight_pmu,
-+					   struct hw_perf_event *hwc)
-+{
-+	u32 offset = PMEVTYPER + (4 * hwc->idx);
-+
-+	writel(hwc->config_base, coresight_pmu->base0 + offset);
-+}
-+
-+static inline void
-+coresight_pmu_set_ev_filter(struct coresight_pmu *coresight_pmu,
-+			    struct hw_perf_event *hwc, u32 filter)
-+{
-+	u32 offset = PMEVFILTR + (4 * hwc->idx);
-+
-+	writel(filter, coresight_pmu->base0 + offset);
-+}
-+
-+static inline void
-+coresight_pmu_set_cc_filter(struct coresight_pmu *coresight_pmu, u32 filter)
-+{
-+	u32 offset = PMCCFILTR;
-+
-+	writel(filter, coresight_pmu->base0 + offset);
-+}
-+
-+static void coresight_pmu_start(struct perf_event *event, int pmu_flags)
-+{
-+	struct coresight_pmu *coresight_pmu = to_coresight_pmu(event->pmu);
-+	struct hw_perf_event *hwc = &event->hw;
-+	u32 filter;
-+
-+	/* We always reprogram the counter */
-+	if (pmu_flags & PERF_EF_RELOAD)
-+		WARN_ON(!(hwc->state & PERF_HES_UPTODATE));
-+
-+	coresight_pmu_set_event_period(event);
-+
-+	filter = coresight_pmu->impl.ops->event_filter(event);
-+
-+	if (event->hw.extra_reg.idx == coresight_pmu->cc_logical_idx) {
-+		coresight_pmu_set_cc_filter(coresight_pmu, filter);
-+	} else {
-+		coresight_pmu_set_event(coresight_pmu, hwc);
-+		coresight_pmu_set_ev_filter(coresight_pmu, hwc, filter);
-+	}
-+
-+	hwc->state = 0;
-+
-+	coresight_pmu_enable_counter(coresight_pmu, hwc->idx);
-+}
-+
-+static void coresight_pmu_stop(struct perf_event *event, int pmu_flags)
-+{
-+	struct coresight_pmu *coresight_pmu = to_coresight_pmu(event->pmu);
-+	struct hw_perf_event *hwc = &event->hw;
-+
-+	if (hwc->state & PERF_HES_STOPPED)
-+		return;
-+
-+	coresight_pmu_disable_counter(coresight_pmu, hwc->idx);
-+	coresight_pmu_event_update(event);
-+
-+	hwc->state |= PERF_HES_STOPPED | PERF_HES_UPTODATE;
-+}
-+
-+static inline u32 to_phys_idx(struct coresight_pmu *coresight_pmu, u32 idx)
-+{
-+	return (idx == coresight_pmu->cc_logical_idx) ?
-+		       CORESIGHT_PMU_IDX_CCNTR : idx;
-+}
-+
-+static int coresight_pmu_add(struct perf_event *event, int flags)
-+{
-+	struct coresight_pmu *coresight_pmu = to_coresight_pmu(event->pmu);
-+	struct coresight_pmu_hw_events *hw_events = &coresight_pmu->hw_events;
-+	struct hw_perf_event *hwc = &event->hw;
-+	int idx;
-+
-+	if (WARN_ON_ONCE(!cpumask_test_cpu(smp_processor_id(),
-+					   &coresight_pmu->associated_cpus)))
-+		return -ENOENT;
-+
-+	idx = coresight_pmu_get_event_idx(hw_events, event);
-+	if (idx < 0)
-+		return idx;
-+
-+	hw_events->events[idx] = event;
-+	hwc->idx = to_phys_idx(coresight_pmu, idx);
-+	hwc->extra_reg.idx = idx;
-+	hwc->state = PERF_HES_STOPPED | PERF_HES_UPTODATE;
-+
-+	if (flags & PERF_EF_START)
-+		coresight_pmu_start(event, PERF_EF_RELOAD);
-+
-+	/* Propagate changes to the userspace mapping. */
-+	perf_event_update_userpage(event);
-+
-+	return 0;
-+}
-+
-+static void coresight_pmu_del(struct perf_event *event, int flags)
-+{
-+	struct coresight_pmu *coresight_pmu = to_coresight_pmu(event->pmu);
-+	struct coresight_pmu_hw_events *hw_events = &coresight_pmu->hw_events;
-+	struct hw_perf_event *hwc = &event->hw;
-+	int idx = hwc->extra_reg.idx;
-+
-+	coresight_pmu_stop(event, PERF_EF_UPDATE);
-+
-+	hw_events->events[idx] = NULL;
-+
-+	clear_bit(idx, hw_events->used_ctrs);
-+
-+	perf_event_update_userpage(event);
-+}
-+
-+static void coresight_pmu_read(struct perf_event *event)
-+{
-+	coresight_pmu_event_update(event);
-+}
-+
-+static int coresight_pmu_alloc(struct platform_device *pdev,
-+			       struct coresight_pmu **coresight_pmu)
-+{
-+	struct acpi_apmt_node *apmt_node;
-+	struct device *dev;
-+	struct coresight_pmu *pmu;
-+
-+	dev = &pdev->dev;
-+	apmt_node = *(struct acpi_apmt_node **)dev_get_platdata(dev);
-+	if (!apmt_node) {
-+		dev_err(dev, "failed to get APMT node\n");
-+		return -ENOMEM;
-+	}
-+
-+	pmu = devm_kzalloc(dev, sizeof(*pmu), GFP_KERNEL);
-+	if (!pmu)
-+		return -ENOMEM;
-+
-+	*coresight_pmu = pmu;
-+
-+	pmu->dev = dev;
-+	pmu->apmt_node = apmt_node;
-+	pmu->name =
-+		devm_kasprintf(dev, GFP_KERNEL, PMUNAME "%u", apmt_node->id);
-+
-+	platform_set_drvdata(pdev, coresight_pmu);
-+
-+	return 0;
-+}
-+
-+static int coresight_pmu_init_mmio(struct coresight_pmu *coresight_pmu)
-+{
-+	struct device *dev;
-+	struct platform_device *pdev;
-+	struct acpi_apmt_node *apmt_node;
-+
-+	dev = coresight_pmu->dev;
-+	pdev = to_platform_device(dev);
-+	apmt_node = coresight_pmu->apmt_node;
-+
-+	/* Base address for page 0. */
-+	coresight_pmu->base0 = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(coresight_pmu->base0)) {
-+		dev_err(dev, "ioremap failed for page-0 resource\n");
-+		return PTR_ERR(coresight_pmu->base0);
-+	}
-+
-+	/* Base address for page 1 if supported. Otherwise point it to page 0. */
-+	coresight_pmu->base1 = coresight_pmu->base0;
-+	if (CHECK_APMT_FLAG(apmt_node->flags, DUAL_PAGE, SUPP)) {
-+		coresight_pmu->base1 = devm_platform_ioremap_resource(pdev, 1);
-+		if (IS_ERR(coresight_pmu->base1)) {
-+			dev_err(dev, "ioremap failed for page-1 resource\n");
-+			return PTR_ERR(coresight_pmu->base1);
-+		}
-+	}
-+
-+	coresight_pmu->pmcfgr = readl(coresight_pmu->base0 + PMCFGR);
-+
-+	coresight_pmu->num_logical_counters = pmcfgr_n(coresight_pmu) + 1;
-+
-+	coresight_pmu->cc_logical_idx = CORESIGHT_PMU_MAX_HW_CNTRS;
-+
-+	if (support_cc(coresight_pmu)) {
-+		/*
-+		 * The last logical counter is mapped to cycle counter if
-+		 * there is a gap between regular and cycle counter. Otherwise,
-+		 * logical and physical have 1-to-1 mapping.
-+		 */
-+		coresight_pmu->cc_logical_idx =
-+			(coresight_pmu->num_logical_counters <=
-+			 CORESIGHT_PMU_IDX_CCNTR) ?
-+				coresight_pmu->num_logical_counters - 1 :
-+				CORESIGHT_PMU_IDX_CCNTR;
-+	}
-+
-+	coresight_pmu->num_set_clr_reg =
-+		DIV_ROUND_UP(coresight_pmu->num_logical_counters,
-+			 CORESIGHT_SET_CLR_REG_COUNTER_NUM);
-+
-+	coresight_pmu->hw_events.events =
-+		devm_kzalloc(dev,
-+			     sizeof(*coresight_pmu->hw_events.events) *
-+				     coresight_pmu->num_logical_counters,
-+			     GFP_KERNEL);
-+
-+	if (!coresight_pmu->hw_events.events)
-+		return -ENOMEM;
-+
-+	return 0;
-+}
-+
-+static inline int
-+coresight_pmu_get_reset_overflow(struct coresight_pmu *coresight_pmu,
-+				 u32 *pmovs)
-+{
-+	int i;
-+	u32 pmovclr_offset = PMOVSCLR;
-+	u32 has_overflowed = 0;
-+
-+	for (i = 0; i < coresight_pmu->num_set_clr_reg; ++i) {
-+		pmovs[i] = readl(coresight_pmu->base1 + pmovclr_offset);
-+		has_overflowed |= pmovs[i];
-+		writel(pmovs[i], coresight_pmu->base1 + pmovclr_offset);
-+		pmovclr_offset += sizeof(u32);
-+	}
-+
-+	return has_overflowed != 0;
-+}
-+
-+static irqreturn_t coresight_pmu_handle_irq(int irq_num, void *dev)
-+{
-+	int idx, has_overflowed;
-+	struct perf_event *event;
-+	struct coresight_pmu *coresight_pmu = dev;
-+	u32 pmovs[CORESIGHT_SET_CLR_REG_MAX_NUM] = { 0 };
-+	bool handled = false;
-+
-+	coresight_pmu_stop_counters(coresight_pmu);
-+
-+	has_overflowed = coresight_pmu_get_reset_overflow(coresight_pmu, pmovs);
-+	if (!has_overflowed)
-+		goto done;
-+
-+	for_each_set_bit(idx, coresight_pmu->hw_events.used_ctrs,
-+			coresight_pmu->num_logical_counters) {
-+		event = coresight_pmu->hw_events.events[idx];
-+
-+		if (!event)
-+			continue;
-+
-+		if (!test_bit(event->hw.idx, (unsigned long *)pmovs))
-+			continue;
-+
-+		coresight_pmu_event_update(event);
-+		coresight_pmu_set_event_period(event);
-+
-+		handled = true;
-+	}
-+
-+done:
-+	coresight_pmu_start_counters(coresight_pmu);
-+	return IRQ_RETVAL(handled);
-+}
-+
-+static int coresight_pmu_request_irq(struct coresight_pmu *coresight_pmu)
-+{
-+	int irq, ret;
-+	struct device *dev;
-+	struct platform_device *pdev;
-+	struct acpi_apmt_node *apmt_node;
-+
-+	dev = coresight_pmu->dev;
-+	pdev = to_platform_device(dev);
-+	apmt_node = coresight_pmu->apmt_node;
-+
-+	/* Skip IRQ request if the PMU does not support overflow interrupt. */
-+	if (apmt_node->ovflw_irq == 0)
-+		return 0;
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
-+
-+	ret = devm_request_irq(dev, irq, coresight_pmu_handle_irq,
-+			       IRQF_NOBALANCING | IRQF_NO_THREAD, dev_name(dev),
-+			       coresight_pmu);
-+	if (ret) {
-+		dev_err(dev, "Could not request IRQ %d\n", irq);
-+		return ret;
-+	}
-+
-+	coresight_pmu->irq = irq;
-+
-+	return 0;
-+}
-+
-+static inline int coresight_pmu_find_cpu_container(int cpu, u32 container_uid)
-+{
-+	u32 acpi_uid;
-+	struct device *cpu_dev = get_cpu_device(cpu);
-+	struct acpi_device *acpi_dev = ACPI_COMPANION(cpu_dev);
-+	int level = 0;
-+
-+	if (!cpu_dev)
-+		return -ENODEV;
-+
-+	while (acpi_dev) {
-+		if (!strcmp(acpi_device_hid(acpi_dev),
-+			    ACPI_PROCESSOR_CONTAINER_HID) &&
-+		    !kstrtouint(acpi_device_uid(acpi_dev), 0, &acpi_uid) &&
-+		    acpi_uid == container_uid)
-+			return 0;
-+
-+		acpi_dev = acpi_dev->parent;
-+		level++;
-+	}
-+
-+	return -ENODEV;
-+}
-+
-+static int coresight_pmu_get_cpus(struct coresight_pmu *coresight_pmu)
-+{
-+	struct acpi_apmt_node *apmt_node;
-+	int affinity_flag;
-+	int cpu;
-+
-+	apmt_node = coresight_pmu->apmt_node;
-+	affinity_flag = apmt_node->flags & ACPI_APMT_FLAGS_AFFINITY;
-+
-+	if (affinity_flag == ACPI_APMT_FLAGS_AFFINITY_PROC) {
-+		for_each_possible_cpu(cpu) {
-+			if (apmt_node->proc_affinity ==
-+			    get_acpi_id_for_cpu(cpu)) {
-+				cpumask_set_cpu(
-+					cpu, &coresight_pmu->associated_cpus);
-+				break;
-+			}
-+		}
-+	} else {
-+		for_each_possible_cpu(cpu) {
-+			if (coresight_pmu_find_cpu_container(
-+				    cpu, apmt_node->proc_affinity))
-+				continue;
-+
-+			cpumask_set_cpu(cpu, &coresight_pmu->associated_cpus);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int coresight_pmu_register_pmu(struct coresight_pmu *coresight_pmu)
-+{
-+	int ret;
-+	struct attribute_group **attr_groups;
-+
-+	attr_groups = coresight_pmu_alloc_attr_group(coresight_pmu);
-+	if (!attr_groups) {
-+		ret = -ENOMEM;
-+		return ret;
-+	}
-+
-+	ret = cpuhp_state_add_instance(coresight_pmu_cpuhp_state,
-+				       &coresight_pmu->cpuhp_node);
-+	if (ret)
-+		return ret;
-+
-+	coresight_pmu->pmu = (struct pmu){
-+		.task_ctx_nr	= perf_invalid_context,
-+		.module		= THIS_MODULE,
-+		.pmu_enable	= coresight_pmu_enable,
-+		.pmu_disable	= coresight_pmu_disable,
-+		.event_init	= coresight_pmu_event_init,
-+		.add		= coresight_pmu_add,
-+		.del		= coresight_pmu_del,
-+		.start		= coresight_pmu_start,
-+		.stop		= coresight_pmu_stop,
-+		.read		= coresight_pmu_read,
-+		.attr_groups	= (const struct attribute_group **)attr_groups,
-+		.capabilities	= PERF_PMU_CAP_NO_EXCLUDE,
-+	};
-+
-+	/* Hardware counter init */
-+	coresight_pmu_stop_counters(coresight_pmu);
-+	coresight_pmu_reset_counters(coresight_pmu);
-+
-+	ret = perf_pmu_register(&coresight_pmu->pmu, coresight_pmu->name, -1);
-+	if (ret) {
-+		cpuhp_state_remove_instance(coresight_pmu_cpuhp_state,
-+					    &coresight_pmu->cpuhp_node);
-+	}
-+
-+	return ret;
-+}
-+
-+static int coresight_pmu_device_probe(struct platform_device *pdev)
-+{
-+	int ret;
-+	struct coresight_pmu *coresight_pmu;
-+
-+	ret = coresight_pmu_alloc(pdev, &coresight_pmu);
-+	if (ret)
-+		return ret;
-+
-+	ret = coresight_pmu_init_mmio(coresight_pmu);
-+	if (ret)
-+		return ret;
-+
-+	ret = coresight_pmu_request_irq(coresight_pmu);
-+	if (ret)
-+		return ret;
-+
-+	ret = coresight_pmu_get_cpus(coresight_pmu);
-+	if (ret)
-+		return ret;
-+
-+	ret = coresight_pmu_register_pmu(coresight_pmu);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static int coresight_pmu_device_remove(struct platform_device *pdev)
-+{
-+	struct coresight_pmu *coresight_pmu = platform_get_drvdata(pdev);
-+
-+	perf_pmu_unregister(&coresight_pmu->pmu);
-+	cpuhp_state_remove_instance(coresight_pmu_cpuhp_state,
-+				    &coresight_pmu->cpuhp_node);
-+
-+	return 0;
-+}
-+
-+static struct platform_driver coresight_pmu_driver = {
-+	.driver = {
-+			.name = "arm-coresight-pmu",
-+			.suppress_bind_attrs = true,
-+		},
-+	.probe = coresight_pmu_device_probe,
-+	.remove = coresight_pmu_device_remove,
-+};
-+
-+static void coresight_pmu_set_active_cpu(int cpu,
-+					 struct coresight_pmu *coresight_pmu)
-+{
-+	cpumask_set_cpu(cpu, &coresight_pmu->active_cpu);
-+	WARN_ON(irq_set_affinity(coresight_pmu->irq,
-+				 &coresight_pmu->active_cpu));
-+}
-+
-+static int coresight_pmu_cpu_online(unsigned int cpu, struct hlist_node *node)
-+{
-+	struct coresight_pmu *coresight_pmu =
-+		hlist_entry_safe(node, struct coresight_pmu, cpuhp_node);
-+
-+	if (!cpumask_test_cpu(cpu, &coresight_pmu->associated_cpus))
-+		return 0;
-+
-+	/* If the PMU is already managed, there is nothing to do */
-+	if (!cpumask_empty(&coresight_pmu->active_cpu))
-+		return 0;
-+
-+	/* Use this CPU for event counting */
-+	coresight_pmu_set_active_cpu(cpu, coresight_pmu);
-+
-+	return 0;
-+}
-+
-+static int coresight_pmu_cpu_teardown(unsigned int cpu, struct hlist_node *node)
-+{
-+	int dst;
-+	struct cpumask online_supported;
-+
-+	struct coresight_pmu *coresight_pmu =
-+		hlist_entry_safe(node, struct coresight_pmu, cpuhp_node);
-+
-+	/* Nothing to do if this CPU doesn't own the PMU */
-+	if (!cpumask_test_and_clear_cpu(cpu, &coresight_pmu->active_cpu))
-+		return 0;
-+
-+	/* Choose a new CPU to migrate ownership of the PMU to */
-+	cpumask_and(&online_supported, &coresight_pmu->associated_cpus,
-+		    cpu_online_mask);
-+	dst = cpumask_any_but(&online_supported, cpu);
-+	if (dst >= nr_cpu_ids)
-+		return 0;
-+
-+	/* Use this CPU for event counting */
-+	perf_pmu_migrate_context(&coresight_pmu->pmu, cpu, dst);
-+	coresight_pmu_set_active_cpu(dst, coresight_pmu);
-+
-+	return 0;
-+}
-+
-+static int __init coresight_pmu_init(void)
-+{
-+	int ret;
-+
-+	ret = cpuhp_setup_state_multi(CPUHP_AP_ONLINE_DYN, PMUNAME,
-+				      coresight_pmu_cpu_online,
-+				      coresight_pmu_cpu_teardown);
-+	if (ret < 0)
-+		return ret;
-+	coresight_pmu_cpuhp_state = ret;
-+	return platform_driver_register(&coresight_pmu_driver);
-+}
-+
-+static void __exit coresight_pmu_exit(void)
-+{
-+	platform_driver_unregister(&coresight_pmu_driver);
-+	cpuhp_remove_multi_state(coresight_pmu_cpuhp_state);
-+}
-+
-+module_init(coresight_pmu_init);
-+module_exit(coresight_pmu_exit);
-diff --git a/drivers/perf/coresight_pmu/arm_coresight_pmu.h b/drivers/perf/coresight_pmu/arm_coresight_pmu.h
++EXPORT_SYMBOL_GPL(nv_coresight_init_ops);
+diff --git a/drivers/perf/coresight_pmu/arm_coresight_pmu_nvidia.h b/drivers/perf/coresight_pmu/arm_coresight_pmu_nvidia.h
 new file mode 100644
-index 000000000000..963f7483dc36
+index 000000000000..3c81c16c14f4
 --- /dev/null
-+++ b/drivers/perf/coresight_pmu/arm_coresight_pmu.h
-@@ -0,0 +1,171 @@
++++ b/drivers/perf/coresight_pmu/arm_coresight_pmu_nvidia.h
+@@ -0,0 +1,17 @@
 +/* SPDX-License-Identifier: GPL-2.0
 + *
-+ * ARM CoreSight PMU driver.
 + * Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES.
 + *
 + */
 +
-+#ifndef __ARM_CORESIGHT_PMU_H__
-+#define __ARM_CORESIGHT_PMU_H__
++/* Support for NVIDIA specific attributes. */
 +
-+#include <linux/acpi.h>
-+#include <linux/bitfield.h>
-+#include <linux/cpumask.h>
-+#include <linux/device.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/perf_event.h>
-+#include <linux/platform_device.h>
-+#include <linux/types.h>
++#ifndef __ARM_CORESIGHT_PMU_NVIDIA_H__
++#define __ARM_CORESIGHT_PMU_NVIDIA_H__
 +
-+#define to_coresight_pmu(p) (container_of(p, struct coresight_pmu, pmu))
++#include "arm_coresight_pmu.h"
 +
-+#define CORESIGHT_EXT_ATTR(_name, _func, _config)			\
-+	(&((struct dev_ext_attribute[]){				\
-+		{							\
-+			.attr = __ATTR(_name, 0444, _func, NULL),	\
-+			.var = (void *)_config				\
-+		}							\
-+	})[0].attr.attr)
++/* Allocate NVIDIA descriptor. */
++int nv_coresight_init_ops(struct coresight_pmu *coresight_pmu);
 +
-+#define CORESIGHT_FORMAT_ATTR(_name, _config)				\
-+	CORESIGHT_EXT_ATTR(_name, coresight_pmu_sysfs_format_show,	\
-+			   (char *)_config)
-+
-+#define CORESIGHT_EVENT_ATTR(_name, _config)				\
-+	PMU_EVENT_ATTR_ID(_name, coresight_pmu_sysfs_event_show, _config)
-+
-+
-+/* Default event id mask */
-+#define CORESIGHT_EVENT_MASK				0xFFFFFFFFULL
-+
-+/* Default filter value mask */
-+#define CORESIGHT_FILTER_MASK				0xFFFFFFFFULL
-+
-+/* Default event format */
-+#define CORESIGHT_FORMAT_EVENT_ATTR CORESIGHT_FORMAT_ATTR(event, "config:0-32")
-+
-+/* Default filter format */
-+#define CORESIGHT_FORMAT_FILTER_ATTR                                           \
-+	CORESIGHT_FORMAT_ATTR(filter, "config1:0-31")
-+
-+/*
-+ * This is the default event number for cycle count, if supported, since the
-+ * ARM Coresight PMU specification does not define a standard event code
-+ * for cycle count.
-+ */
-+#define CORESIGHT_PMU_EVT_CYCLES_DEFAULT (0x1ULL << 32)
-+
-+/*
-+ * The ARM Coresight PMU supports up to 256 event counters.
-+ * If the counters are larger-than 32-bits, then the PMU includes at
-+ * most 128 counters.
-+ */
-+#define CORESIGHT_PMU_MAX_HW_CNTRS 256
-+
-+/* The cycle counter, if implemented, is located at counter[31]. */
-+#define CORESIGHT_PMU_IDX_CCNTR 31
-+
-+struct coresight_pmu;
-+
-+/* This tracks the events assigned to each counter in the PMU. */
-+struct coresight_pmu_hw_events {
-+	/* The events that are active on the PMU for a given logical index. */
-+	struct perf_event **events;
-+
-+	/*
-+	 * Each bit indicates a logical counter is being used (or not) for an
-+	 * event. If cycle counter is supported and there is a gap between
-+	 * regular and cycle counter, the last logical counter is mapped to
-+	 * cycle counter. Otherwise, logical and physical have 1-to-1 mapping.
-+	 */
-+	DECLARE_BITMAP(used_ctrs, CORESIGHT_PMU_MAX_HW_CNTRS);
-+};
-+
-+/* Contains ops to query vendor/implementer specific attribute. */
-+struct coresight_pmu_impl_ops {
-+	/* Get event attributes */
-+	struct attribute **(*get_event_attrs)(
-+		const struct coresight_pmu *coresight_pmu);
-+	/* Get format attributes */
-+	struct attribute **(*get_format_attrs)(
-+		const struct coresight_pmu *coresight_pmu);
-+	/* Get string identifier */
-+	const char *(*get_identifier)(const struct coresight_pmu *coresight_pmu);
-+	/* Check if the event corresponds to cycle count event */
-+	bool (*is_cc_event)(const struct perf_event *event);
-+	/* Decode event type/id from configs */
-+	u32 (*event_type)(const struct perf_event *event);
-+	/* Decode filter value from configs */
-+	u32 (*event_filter)(const struct perf_event *event);
-+	/* Hide/show unsupported events */
-+	umode_t (*event_attr_is_visible)(struct kobject *kobj,
-+					 struct attribute *attr, int unused);
-+};
-+
-+/* Vendor/implementer descriptor. */
-+struct coresight_pmu_impl {
-+	u32 pmiidr;
-+	const struct coresight_pmu_impl_ops *ops;
-+};
-+
-+/* Coresight PMU descriptor. */
-+struct coresight_pmu {
-+	struct pmu pmu;
-+	struct device *dev;
-+	struct acpi_apmt_node *apmt_node;
-+	const char *name;
-+	const char *identifier;
-+	void __iomem *base0;
-+	void __iomem *base1;
-+	int irq;
-+	cpumask_t associated_cpus;
-+	cpumask_t active_cpu;
-+	struct hlist_node cpuhp_node;
-+
-+	u32 pmcfgr;
-+	u32 num_logical_counters;
-+	u32 num_set_clr_reg;
-+	int cc_logical_idx;
-+
-+	struct coresight_pmu_hw_events hw_events;
-+
-+	struct coresight_pmu_impl impl;
-+};
-+
-+/* Default function to show event attribute in sysfs. */
-+ssize_t coresight_pmu_sysfs_event_show(struct device *dev,
-+				       struct device_attribute *attr,
-+				       char *buf);
-+
-+/* Default function to show format attribute in sysfs. */
-+ssize_t coresight_pmu_sysfs_format_show(struct device *dev,
-+					struct device_attribute *attr,
-+					char *buf);
-+
-+/* Get the default Coresight PMU event attributes. */
-+struct attribute **
-+coresight_pmu_get_event_attrs(const struct coresight_pmu *coresight_pmu);
-+
-+/* Get the default Coresight PMU format attributes. */
-+struct attribute **
-+coresight_pmu_get_format_attrs(const struct coresight_pmu *coresight_pmu);
-+
-+/* Get the default Coresight PMU device identifier. */
-+const char *
-+coresight_pmu_get_identifier(const struct coresight_pmu *coresight_pmu);
-+
-+/* Default function to query if an event is a cycle counter event. */
-+bool coresight_pmu_is_cc_event(const struct perf_event *event);
-+
-+/* Default function to query the type/id of an event. */
-+u32 coresight_pmu_event_type(const struct perf_event *event);
-+
-+/* Default function to query the filter value of an event. */
-+u32 coresight_pmu_event_filter(const struct perf_event *event);
-+
-+/* Default function that hides (default) cycle event id if not supported. */
-+umode_t coresight_pmu_event_attr_is_visible(struct kobject *kobj,
-+					    struct attribute *attr, int unused);
-+
-+#endif /* __ARM_CORESIGHT_PMU_H__ */
++#endif /* __ARM_CORESIGHT_PMU_NVIDIA_H__ */
 -- 
 2.17.1
 

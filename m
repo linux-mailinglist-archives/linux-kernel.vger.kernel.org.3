@@ -2,132 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0BBE5278DB
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 19:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ABE65278E1
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 19:17:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237861AbiEORK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 13:10:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
+        id S237867AbiEORRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 13:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237848AbiEORKx (ORCPT
+        with ESMTP id S237720AbiEORRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 13:10:53 -0400
-Received: from out199-11.us.a.mail.aliyun.com (out199-11.us.a.mail.aliyun.com [47.90.199.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89816F5;
-        Sun, 15 May 2022 10:10:50 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R661e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=tonylu@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VDBAVZA_1652634645;
-Received: from localhost(mailfrom:tonylu@linux.alibaba.com fp:SMTPD_---0VDBAVZA_1652634645)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 16 May 2022 01:10:46 +0800
-Date:   Mon, 16 May 2022 01:10:44 +0800
-From:   Tony Lu <tonylu@linux.alibaba.com>
-To:     Guangguan Wang <guangguan.wang@linux.alibaba.com>
-Cc:     kgraul@linux.ibm.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, leon@kernel.org,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH net-next v2 1/2] net/smc: send cdc msg inline if qp has
- sufficient inline space
-Message-ID: <YoE0FDc7ivfgabzy@TonyMac-Alibaba>
-Reply-To: Tony Lu <tonylu@linux.alibaba.com>
-References: <20220514102739.41252-1-guangguan.wang@linux.alibaba.com>
- <20220514102739.41252-2-guangguan.wang@linux.alibaba.com>
+        Sun, 15 May 2022 13:17:20 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEBCDFD6;
+        Sun, 15 May 2022 10:17:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652635038; x=1684171038;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=KYPpmCqaYm6PKBzjbAt+0LaUtQHugFCcWHEHTiJmM2s=;
+  b=Sciz8hZdL/lz/15RjHYKnopqOyjc9a2lm2LWiNPk25hsRexurrv/B7f8
+   q5Cb7EL3HrSoWmxsFXK/BRB8CwTHPAfnrWZwZ94BaSB2SgovII8LQQemn
+   aqwMkcnGPtWtz20FzL4W9ezRe+QV0gB6CkfkxdFH9sA77kbTY1/TM4aND
+   TsuyBOX4fHZAK0GXXmSKwvEif+ak+tufr1gIIAP0+ZDnCIknQldLiHFo/
+   h9ehN4GLOXKO+S4wK6TjphM/fS6kS0Kwf5901/wwqzRUo+4QfDaG8Ix5C
+   6w2077njf6xTns5o+Vs9p00XNBe8aj6B6y/q+tVfrsj1KmtYcpNY072IC
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="333719481"
+X-IronPort-AV: E=Sophos;i="5.91,228,1647327600"; 
+   d="scan'208";a="333719481"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2022 10:17:16 -0700
+X-IronPort-AV: E=Sophos;i="5.91,228,1647327600"; 
+   d="scan'208";a="544016288"
+Received: from tower.bj.intel.com ([10.238.157.62])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2022 10:17:12 -0700
+From:   Yanfei Xu <yanfei.xu@intel.com>
+To:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86: Fix the intel_pt PMI handling wrongly considered from guest
+Date:   Mon, 16 May 2022 01:16:33 +0800
+Message-Id: <20220515171633.902901-1-yanfei.xu@intel.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220514102739.41252-2-guangguan.wang@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 14, 2022 at 06:27:38PM +0800, Guangguan Wang wrote:
-> As cdc msg's length is 44B, cdc msgs can be sent inline in
-> most rdma devices, which can help reducing sending latency.
-> 
-> In my test environment, which are 2 VMs running on the same
-> physical host and whose NICs(ConnectX-4Lx) are working on
-> SR-IOV mode, qperf shows 0.4us-0.7us improvement in latency.
-> 
-> Test command:
-> server: smc_run taskset -c 1 qperf
-> client: smc_run taskset -c 1 qperf <server ip> -oo \
-> 		msg_size:1:2K:*2 -t 30 -vu tcp_lat
-> 
-> The results shown below:
-> msgsize     before       after
-> 1B          11.9 us      11.2 us (-0.7 us)
-> 2B          11.7 us      11.2 us (-0.5 us)
-> 4B          11.7 us      11.3 us (-0.4 us)
-> 8B          11.6 us      11.2 us (-0.4 us)
-> 16B         11.7 us      11.3 us (-0.4 us)
-> 32B         11.7 us      11.3 us (-0.4 us)
-> 64B         11.7 us      11.2 us (-0.5 us)
-> 128B        11.6 us      11.2 us (-0.4 us)
-> 256B        11.8 us      11.2 us (-0.6 us)
-> 512B        11.8 us      11.4 us (-0.4 us)
-> 1KB         11.9 us      11.4 us (-0.5 us)
-> 2KB         12.1 us      11.5 us (-0.6 us)
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
+When kernel handles the vm-exit caused by external interrupts and PMI,
+it always set a type of kvm_intr_type to handling_intr_from_guest to
+tell if it's dealing an IRQ or NMI.
+However, the further type judgment is missing in kvm_arch_pmi_in_guest().
+It could make the PMI of intel_pt wrongly considered it comes from a
+guest once the PMI breaks the handling of vm-exit of external interrupts.
 
-You don't need to add this tag, this tag represents who found the issue.
-Tested-by is reasonable.
+Fixes: db215756ae59 ("KVM: x86: More precisely identify NMI from guest when handling PMI")
+Signed-off-by: Yanfei Xu <yanfei.xu@intel.com>
+---
+ arch/x86/include/asm/kvm_host.h | 8 +++++++-
+ arch/x86/kvm/x86.h              | 6 ------
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-> Signed-off-by: Guangguan Wang <guangguan.wang@linux.alibaba.com>
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 4ff36610af6a..308cf19f123d 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1582,8 +1582,14 @@ static inline int kvm_arch_flush_remote_tlb(struct kvm *kvm)
+ 		return -ENOTSUPP;
+ }
+ 
++enum kvm_intr_type {
++	/* Values are arbitrary, but must be non-zero. */
++	KVM_HANDLING_IRQ = 1,
++	KVM_HANDLING_NMI,
++};
++
+ #define kvm_arch_pmi_in_guest(vcpu) \
+-	((vcpu) && (vcpu)->arch.handling_intr_from_guest)
++	((vcpu) && (vcpu)->arch.handling_intr_from_guest == KVM_HANDLING_NMI)
+ 
+ void kvm_mmu_x86_module_init(void);
+ int kvm_mmu_vendor_module_init(void);
+diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
+index 588792f00334..3bdf1bc76863 100644
+--- a/arch/x86/kvm/x86.h
++++ b/arch/x86/kvm/x86.h
+@@ -344,12 +344,6 @@ static inline bool kvm_cstate_in_guest(struct kvm *kvm)
+ 	return kvm->arch.cstate_in_guest;
+ }
+ 
+-enum kvm_intr_type {
+-	/* Values are arbitrary, but must be non-zero. */
+-	KVM_HANDLING_IRQ = 1,
+-	KVM_HANDLING_NMI,
+-};
+-
+ static inline void kvm_before_interrupt(struct kvm_vcpu *vcpu,
+ 					enum kvm_intr_type intr)
+ {
+-- 
+2.32.0
 
-Reviewed-by: Tony Lu <tonylu@linux.alibaba.com>
-
-Thanks,
-Tony Lu
-
-> ---
->  net/smc/smc_ib.c | 1 +
->  net/smc/smc_wr.c | 5 ++++-
->  2 files changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/smc/smc_ib.c b/net/smc/smc_ib.c
-> index a3e2d3b89568..dcda4165d107 100644
-> --- a/net/smc/smc_ib.c
-> +++ b/net/smc/smc_ib.c
-> @@ -671,6 +671,7 @@ int smc_ib_create_queue_pair(struct smc_link *lnk)
->  			.max_recv_wr = SMC_WR_BUF_CNT * 3,
->  			.max_send_sge = SMC_IB_MAX_SEND_SGE,
->  			.max_recv_sge = sges_per_buf,
-> +			.max_inline_data = 0,
->  		},
->  		.sq_sig_type = IB_SIGNAL_REQ_WR,
->  		.qp_type = IB_QPT_RC,
-> diff --git a/net/smc/smc_wr.c b/net/smc/smc_wr.c
-> index 24be1d03fef9..26f8f240d9e8 100644
-> --- a/net/smc/smc_wr.c
-> +++ b/net/smc/smc_wr.c
-> @@ -554,10 +554,11 @@ void smc_wr_remember_qp_attr(struct smc_link *lnk)
->  static void smc_wr_init_sge(struct smc_link *lnk)
->  {
->  	int sges_per_buf = (lnk->lgr->smc_version == SMC_V2) ? 2 : 1;
-> +	bool send_inline = (lnk->qp_attr.cap.max_inline_data > SMC_WR_TX_SIZE);
->  	u32 i;
->  
->  	for (i = 0; i < lnk->wr_tx_cnt; i++) {
-> -		lnk->wr_tx_sges[i].addr =
-> +		lnk->wr_tx_sges[i].addr = send_inline ? (uintptr_t)(&lnk->wr_tx_bufs[i]) :
->  			lnk->wr_tx_dma_addr + i * SMC_WR_BUF_SIZE;
->  		lnk->wr_tx_sges[i].length = SMC_WR_TX_SIZE;
->  		lnk->wr_tx_sges[i].lkey = lnk->roce_pd->local_dma_lkey;
-> @@ -575,6 +576,8 @@ static void smc_wr_init_sge(struct smc_link *lnk)
->  		lnk->wr_tx_ibs[i].opcode = IB_WR_SEND;
->  		lnk->wr_tx_ibs[i].send_flags =
->  			IB_SEND_SIGNALED | IB_SEND_SOLICITED;
-> +		if (send_inline)
-> +			lnk->wr_tx_ibs[i].send_flags |= IB_SEND_INLINE;
->  		lnk->wr_tx_rdmas[i].wr_tx_rdma[0].wr.opcode = IB_WR_RDMA_WRITE;
->  		lnk->wr_tx_rdmas[i].wr_tx_rdma[1].wr.opcode = IB_WR_RDMA_WRITE;
->  		lnk->wr_tx_rdmas[i].wr_tx_rdma[0].wr.sg_list =
-> -- 
-> 2.24.3 (Apple Git-128)

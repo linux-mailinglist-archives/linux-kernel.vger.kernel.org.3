@@ -2,70 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 493E7527A48
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 23:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 923E0527A51
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 23:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238229AbiEOVB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 17:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
+        id S232505AbiEOVQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 17:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238735AbiEOVBG (ORCPT
+        with ESMTP id S229661AbiEOVQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 17:01:06 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2369DFC0;
-        Sun, 15 May 2022 14:01:04 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id m20so25211083ejj.10;
-        Sun, 15 May 2022 14:01:04 -0700 (PDT)
+        Sun, 15 May 2022 17:16:31 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788C5BE30;
+        Sun, 15 May 2022 14:16:29 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id i24so12373375pfa.7;
+        Sun, 15 May 2022 14:16:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kiaVpz1eUfDqE52UW9rfQ/0tpqjiTOXtuh3HRB0EhLk=;
-        b=UlQ0Wf4tAlxYudfXwS23LRgu7dEtmTUo6YZPEmJB3AF6ca0mvh5MF0ywA2vOD7bHQh
-         CekfjhGkXVJpcqQ2GevOtNV5QHVIEneEtijwSbig0xXpEucR+qO7NdPN3QeiIyJszPzc
-         2T5KV0sl36xM8NMfPJ7AdRCr4H7KzynVtd8zIYUaH51YVyFNedh27Y/kp5dEE17AopTe
-         tqLUjB2QfcilRCICW+O90HzNz56eS+fi25DTL1og+HzzfvahvnoZXLk/7uY9hr/j8VYa
-         auaiP4+wOb1XY16iKWyCNIDHd01Fe9GxwpkAaiowHaP1OloPbKZ1PjTCyiqATiVQfR6V
-         lOSQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=MF3ww9WqyFLZs80BbLjzJynm/63WVfRXoNS9SF4RNm0=;
+        b=dnnGZbfmQHP0/AIys9QQSIFsd/cTrURdK7dwcAgwLwIBRoAVi9XzjRszs6XzAUUdpy
+         P2p+NmZu2dTOQhvEYpd2J230zPw0D8/Wz5htXbWWBOIZjLaj+kt4f/KGWBE/l2SCtHUZ
+         eIWNlkr/N2n33l4US6knormnyIkL0pSGFINxX5lK/jUNwUFquyz0SWAaPO8ogmVbVRpw
+         NLO7EvG/h4D5bOEr8jqJuAnjVTtvxO9FVIultFShLcPRHCv9pgOlO6y6TTtUBphkiHTl
+         casVFSfXeF6wB9+FinfWoYrr0VhJcgJdCQ2GgSZg7V8xplAWc00GDUawPgr1UsqsS2/R
+         fgIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kiaVpz1eUfDqE52UW9rfQ/0tpqjiTOXtuh3HRB0EhLk=;
-        b=PzCiuAHVcNdn94A+Qnq6vZOf6C42UBi0PCGYgotn1Oe2qoB2lFsA5VF/OluFxvfxgj
-         /ZlBsb7gqCCLIB5Z1y4r+y6dlxjZT5MOtDoWbSH4pC3aYr+CTdXC5V6W9KK+T+dzvUYY
-         IMd6OPgCQh6T6YQIsEC84uaBXBDtFzXzyUncfS+HxPdJAqQdEPggJcaguYOHv2rX0cpF
-         uEPUjywleMqxI9RPVnFlpc2+PdOlkYqv23V4nFpve8swhflrerF/qMkGgDoBGbYCF60I
-         x5Jx2gH0yt6MlS6p5+GeRwVLQB3dHhDMHh7KJw15VchABz3v+El6fH7hienjQfcv58Xq
-         TyZQ==
-X-Gm-Message-State: AOAM533QC9VO5akF/zROeGHBNYczc/XTdtKkCvZySQzOOKSh7ECpjPKV
-        Sg0Rrq26ev8B6rHj0qtchyU=
-X-Google-Smtp-Source: ABdhPJy32tmp8NybQjxKq745ldaozsmbaAs7o3W5RY1yw4zX9siucDBSA5IoMjvGbdeQ6Pvy3b4L7A==
-X-Received: by 2002:a17:906:58d2:b0:6fd:daa7:3a6e with SMTP id e18-20020a17090658d200b006fddaa73a6emr12977265ejs.0.1652648463193;
-        Sun, 15 May 2022 14:01:03 -0700 (PDT)
-Received: from fedora.robimarko.hr (dh207-98-105.xnet.hr. [88.207.98.105])
-        by smtp.googlemail.com with ESMTPSA id w12-20020aa7da4c000000b0042ab649183asm28917eds.35.2022.05.15.14.01.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 May 2022 14:01:02 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     bjorn.andersson@linaro.org, agross@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, tdas@codeaurora.org,
-        absahu@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmitry.baryshkov@linaro.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v4 11/11] arm64: dts: ipq8074: add USB power domains
-Date:   Sun, 15 May 2022 23:00:48 +0200
-Message-Id: <20220515210048.483898-11-robimarko@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220515210048.483898-1-robimarko@gmail.com>
-References: <20220515210048.483898-1-robimarko@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MF3ww9WqyFLZs80BbLjzJynm/63WVfRXoNS9SF4RNm0=;
+        b=evQw3S5H+O1cAqotNrIDjQcyNem1GooRTSdPNgr3tAvjZ3M1wXL4UBjHp5t5nMQsQ+
+         /rWqKHPW/kQwSX9vYHR/PbADr4UOsF+WyWliEq76yNaVH2NbzycEQsFGX1x3J5BU+AHS
+         4nwUzxtqXvxaNFUfsykmcj5G9gHxMeCJgOioJMnOpOGTkCoAYJ0LYwSOMknmREq87JSM
+         yJAE6WcSNKkcoMTXR2WPHfk660TcFu1MuKpbGvdpgAKlkGMZcku5CXDGojk8qJCVcMC4
+         FoS8xf2Tn2yXvdoM3R2pU9xbHgXwne/L8NRE2WNiOAwHDWcsyYdnwwg/8TakKH8giqi3
+         RqJA==
+X-Gm-Message-State: AOAM533FRW8tU5ZpeFSXImHQm6o0l+yLPyY6bFg9v+EM9gSgEXeEBHh9
+        nv8fDu1oztD9EbY/I1IWSLk=
+X-Google-Smtp-Source: ABdhPJxJUBms7ljkBc7EgrqPwogtghHGVmFUXmTXV/GwAbmTXnn46iKEZkifyboul35QOYJ0VzcYng==
+X-Received: by 2002:a63:85c8:0:b0:3da:eb5d:6def with SMTP id u191-20020a6385c8000000b003daeb5d6defmr12677081pgd.96.1652649389339;
+        Sun, 15 May 2022 14:16:29 -0700 (PDT)
+Received: from ?IPV6:2600:8802:b00:4a48:cca8:f194:3bcd:331c? ([2600:8802:b00:4a48:cca8:f194:3bcd:331c])
+        by smtp.gmail.com with ESMTPSA id d5-20020a170902654500b0015e8d4eb1besm2914292pln.8.2022.05.15.14.16.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 May 2022 14:16:28 -0700 (PDT)
+Message-ID: <86c9e526-c4e6-d549-14cb-1495895279d0@gmail.com>
+Date:   Sun, 15 May 2022 14:16:27 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] net: systemport: Fix an error handling path in
+ bcm_sysport_probe()
+Content-Language: en-US
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <99d70634a81c229885ae9e4ee69b2035749f7edc.1652634040.git.christophe.jaillet@wanadoo.fr>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <99d70634a81c229885ae9e4ee69b2035749f7edc.1652634040.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,47 +82,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add USB power domains provided by GCC GDSCs.
-Add the required #power-domain-cells to the GCC as well.
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
----
-Changes in v4:
-* Alphabetically sort the GCC cells properties
----
- arch/arm64/boot/dts/qcom/ipq8074.dtsi | 5 +++++
- 1 file changed, 5 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-index ba81c510dd39..4d278151cfcf 100644
---- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-@@ -382,6 +382,7 @@ gcc: gcc@1800000 {
- 			compatible = "qcom,gcc-ipq8074";
- 			reg = <0x01800000 0x80000>;
- 			#clock-cells = <0x1>;
-+			#power-domain-cells = <1>;
- 			#reset-cells = <0x1>;
- 		};
- 
-@@ -610,6 +611,8 @@ usb_0: usb@8af8800 {
- 						<133330000>,
- 						<19200000>;
- 
-+			power-domains = <&gcc USB0_GDSC>;
-+
- 			resets = <&gcc GCC_USB0_BCR>;
- 			status = "disabled";
- 
-@@ -650,6 +653,8 @@ usb_1: usb@8cf8800 {
- 						<133330000>,
- 						<19200000>;
- 
-+			power-domains = <&gcc USB1_GDSC>;
-+
- 			resets = <&gcc GCC_USB1_BCR>;
- 			status = "disabled";
- 
+On 5/15/2022 10:01 AM, Christophe JAILLET wrote:
+> if devm_clk_get_optional() fails, we still need to go through the error
+> handling path.
+> 
+> Add the missing goto.
+> 
+> Fixes: 6328a126896ea ("net: systemport: Manage Wake-on-LAN clock")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.36.1
-
+Florian

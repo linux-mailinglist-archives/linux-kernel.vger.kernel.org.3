@@ -2,56 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E95FF5274BB
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 02:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 601F35274BD
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 02:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234352AbiEOAJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 20:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52514 "EHLO
+        id S235369AbiEOAWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 20:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233320AbiEOAJL (ORCPT
+        with ESMTP id S235262AbiEOAWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 20:09:11 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB228DF6A
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 17:09:10 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id r5-20020a924405000000b002cf9a5b9080so6363960ila.16
-        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 17:09:10 -0700 (PDT)
+        Sat, 14 May 2022 20:22:10 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A95C6548
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 17:22:09 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id ay38-20020a5d9da6000000b0065adc1f932bso7678596iob.11
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 17:22:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
          :from:to;
-        bh=4w7LpxRj5X+vIy/lVETOxSz5ptDf34rf9VfAF1/2p4Q=;
-        b=ZLtc60OEdGQLCvBCEaayANYK67bHkIAgKFahX1OfLYxq5vYOtG9f8Bq3A3Tm3Jou8M
-         oWuhrwlX36dVJcgzOirI6BMiTi7VG/u0hoGUdYo7Sg33znbPZzM2+W+mnTtgr4CzNzMw
-         DTsOTlp11hjevpLG1hws8Np+xT4MCpl7RrPo/qFFm8WtkMILU5NyOO6dxcOS1Nksds+Y
-         O6EHGboRox6DuGGherTxsfe1ThXxwNNux/JEtkqC4JXCjLyrXnhUQbEdWSs9Yexgys5v
-         zNM48UAJ8+GusPd4nn1ws+WORhecb5w1ZOqoCvsV/SrtgZRl2Fhx07er9WTdRQmwh2Cb
-         K/4Q==
-X-Gm-Message-State: AOAM533jMe1YsLvU7pZQvzfhr7p+yibRytkiyp0rXaHCDXCNLwqAeAeA
-        lCVqCnjYsYYCRidbkmSuTDftFcylY0aOpM7i8LUMmU7KyOqN
-X-Google-Smtp-Source: ABdhPJz/8k9ckOb1pHQyHhQ0NYpFe1XoF44PaTpQPq0tV/ZauCYyGjXK/7Cyq7CPLx4IZfTwoJCGYAS39kAvmzBynHDPXZgzelSW
+        bh=tVCL+Ix39RObOP8KYLj0judOKhnBQ9s1gFvbw6AFlAA=;
+        b=sS1W0d0CNZ9rYgEXh+DNxnkST3rvAAA9cTPflyA1UUtrxHtGuMtNQb8TVKzeImt+Mc
+         ADaAN6QGNw7s2ZIn24B0OZqQJiA+vpEsfcOho60GJoMyYHUqTQLs9cBNmV5u5RigP3HJ
+         19UQ1DUBUdNCAJIa93pq8ViUw9ayCQ1rqy+t7RKue5eDOnBie68YjWy+MR/VhP5p8jAR
+         hjIm9PDzMXISkf5JHQZrN4gwIHpvjhFnlr9Tb7ikr3Fiqh1c43YLUmADjoajqmEwkTux
+         iI1PT42YNg86faze7OFG0XGtS4BTImNiAjmAbrqaX6Y9jzU11Up74WDuW0eZeOoJi9ui
+         O2wg==
+X-Gm-Message-State: AOAM533qnr5DhnzQuEWI4zAZmAa+EkAWhzuNVV1D5uWoF35LaZMJpuT7
+        FtTvr5nJCFMPFa6vpM+KsqfBNwPyucbdykuPvRxRxtu12jhH
+X-Google-Smtp-Source: ABdhPJwQNKIwgQTArh0y70nb+0X2UIXAyevro151yS7ZKfbmpuB+ybU6HmAySgk6pjJHRGnxPryeQEE8r3ABrAFmEeZrcU62pFlL
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:12ef:b0:2cf:4335:63b6 with SMTP id
- l15-20020a056e0212ef00b002cf433563b6mr5912298iln.284.1652573350109; Sat, 14
- May 2022 17:09:10 -0700 (PDT)
-Date:   Sat, 14 May 2022 17:09:10 -0700
-In-Reply-To: <0000000000007f31db05de0638f0@google.com>
+X-Received: by 2002:a92:ca0d:0:b0:2cf:3b0d:c4bf with SMTP id
+ j13-20020a92ca0d000000b002cf3b0dc4bfmr6054429ils.66.1652574128950; Sat, 14
+ May 2022 17:22:08 -0700 (PDT)
+Date:   Sat, 14 May 2022 17:22:08 -0700
+In-Reply-To: <20220514233453.1426-1-hdanton@sina.com>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007fa7ff05df01b7c4@google.com>
-Subject: Re: [syzbot] general protection fault in vma_interval_tree_remove
-From:   syzbot <syzbot+ee1fdd8dcc770a3a169a@syzkaller.appspotmail.com>
-To:     Liam.Howlett@Oracle.com, akpm@linux-foundation.org, arnd@arndb.de,
-        ccross@google.com, david@redhat.com, ebiederm@xmission.com,
-        liam.howlett@oracle.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, michel@lespinasse.org,
-        syzkaller-bugs@googlegroups.com, vbabka@suse.cz,
-        willy@infradead.org
+Message-ID: <000000000000ebd11505df01e597@google.com>
+Subject: Re: [syzbot] WARNING in mntput_no_expire (3)
+From:   syzbot <syzbot+5b1e53987f858500ec00@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,25 +55,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+Hello,
 
-commit b7d0f898f5ce328ad809417f2e728b58153d52d1
-Author: Liam R. Howlett <Liam.Howlett@Oracle.com>
-Date:   Fri May 13 04:15:44 2022 +0000
+syzbot tried to test the proposed patch but the build/boot failed:
 
-    mm: remove the vma linked list
+fs/file_table.c:377:22: error: implicit declaration of function 'real_mount'; did you mean 'kern_mount'? [-Werror=implicit-function-declaration]
+fs/file_table.c:378:16: error: implicit declaration of function 'mnt_get_count'; did you mean 'init_page_count'? [-Werror=implicit-function-declaration]
+fs/file_table.c:380:13: error: invalid use of undefined type 'struct mount'
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12fefe69f00000
-start commit:   1e1b28b936ae Add linux-next specific files for 20220513
-git tree:       linux-next
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=11fefe69f00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=16fefe69f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e4eb3c0c4b289571
-dashboard link: https://syzkaller.appspot.com/bug?extid=ee1fdd8dcc770a3a169a
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=142757f1f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17cf0966f00000
 
-Reported-by: syzbot+ee1fdd8dcc770a3a169a@syzkaller.appspotmail.com
-Fixes: b7d0f898f5ce ("mm: remove the vma linked list")
+Tested on:
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+commit:         feb9c5e1 Merge tag 'for_linus' of git://git.kernel.org..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+dashboard link: https://syzkaller.appspot.com/bug?extid=5b1e53987f858500ec00
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=16788769f00000
+

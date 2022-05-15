@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51CF55279E7
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 22:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74C425279EA
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 22:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238685AbiEOUbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 16:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43550 "EHLO
+        id S238447AbiEOUfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 16:35:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238049AbiEOUbc (ORCPT
+        with ESMTP id S230463AbiEOUfx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 16:31:32 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C85DED3;
-        Sun, 15 May 2022 13:31:31 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id ch13so25114957ejb.12;
-        Sun, 15 May 2022 13:31:31 -0700 (PDT)
+        Sun, 15 May 2022 16:35:53 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFA0FD35
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 13:35:51 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 1-20020a05600c248100b00393fbf11a05so9839935wms.3
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 13:35:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PaTZIap6SATi669kRyhjyKwcnCOv+7U1T4zX6WeFaro=;
-        b=KmLWDVd5X6xcpiaKXRDi2fjsPUutyKu7aXWvR0erkdVmVwIPnh5jxx13W7egdt06BW
-         ny7XRP69ZsA8OcyVUFatbEP0+tnWSLV2/WJv9OdgJphAlOlTdJufKW2x+BlarZeI9zNX
-         baD0ZFDU2/ClXBJ0rkGX5y+P1KaOz8MuOmPY5wuljk/X4BD/rJqAD5nWMuyjSocUdaP1
-         x2+QrkyzWC7LA7F40+pCc9RKjp3hWt1VNwIQu6/MTcHI+nge2h5BrcaeGQO7M2QtY7kw
-         1gbkStCmV8rxj5ohpaKB4Q/2UCGWiHjCwu/x4ut1BaAFw//hlS33ocAzJ9v9Ry06tD3T
-         nhKA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=l7yzdPWP9oJM8k+dt6SbrPRUqaxJOT+vLQ0kaYXYGIc=;
+        b=CfeyHbLqe3DOG6Rp9HJfMomA38jRORPLC1I7vYd2YICmjRiR4K4Wh+5Hn+IWHTylv2
+         nwjhKxkrn+SJ3+y5yjcwIcHkB1nKiaEjWYChGRHGP8g+n0ocpj/K05BaCcuZetf0kZF7
+         mM7klvbV4zhq71O7qbFNCR9Jct8L5M1XRBeGfotY9FfSsoTJXc4YtsetZ4H/sL2L1IUf
+         uXlsGoCgwvBzs6Y8ETA6jpfU9fRV/UDVK4Pr1ShUi991IwsHmIAcJFFEi9+0YvaCzLJ3
+         jYQmup4YQ3COrHsDE4iGOCo8v5N8jD8O//cUfBgr929Sg79o28/S21mE1khmDPFYc8Ys
+         aYbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PaTZIap6SATi669kRyhjyKwcnCOv+7U1T4zX6WeFaro=;
-        b=Q4OYg5VmNKB2jnvFGERFcdqISaigUFq9qHilUarXJ2xq2+5c3x+95ML97rfpi2xkdh
-         ryXsUQ5j89i5Y8F0gmtgNEN90ciKKYeGrdcfB+z0Zv9t6qKi5tz8gm/KGe3M6unbVXFG
-         8t/UzJZA+FkEo2UbGJoZyRlwKOob5BcxNl08tZ2LsiXvR3BefCmBk8baAivv2QlYgt7Q
-         KDBlf4Qwo8JIHkWhvkcvhBKFX7OPFrMV92FydH8EeZdH68aULhFouWtQi/nyhxCL8tk+
-         Y0pAvSVe8RH5KUeytqUF127+RVHVPmh43pGrsNfuPnlrS8UHWHbCTClVZgPuyaqgnvgP
-         HpbA==
-X-Gm-Message-State: AOAM530nuQrbgBWMM0sGF3Y0T8hZb0dhP4mKr/KuSR4t99YboMnec30x
-        qwqtZI7q7eSnQgGElSiXdE8=
-X-Google-Smtp-Source: ABdhPJzD011Sni2n7zKQi+0xlen0WN3fa8JAf3yBeuqk+YEjslKTDCk6c5kmwvg/aVtYdqWwzdcXUA==
-X-Received: by 2002:a17:907:7d93:b0:6fe:21d9:4230 with SMTP id oz19-20020a1709077d9300b006fe21d94230mr5858712ejc.42.1652646690026;
-        Sun, 15 May 2022 13:31:30 -0700 (PDT)
-Received: from fedora.robimarko.hr (dh207-98-105.xnet.hr. [88.207.98.105])
-        by smtp.googlemail.com with ESMTPSA id ze16-20020a170906ef9000b006f3ef214e4esm2944884ejb.180.2022.05.15.13.31.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 May 2022 13:31:29 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH 6/6] arm64: dts: ipq8074: add VQMMC supply
-Date:   Sun, 15 May 2022 22:31:18 +0200
-Message-Id: <20220515203118.474684-6-robimarko@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220515203118.474684-1-robimarko@gmail.com>
-References: <20220515203118.474684-1-robimarko@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=l7yzdPWP9oJM8k+dt6SbrPRUqaxJOT+vLQ0kaYXYGIc=;
+        b=zCh/YjpK+KW25vBMkHlJOYkkLlWYSqKR/JI7WbBlKJLCtb/bjW8MNyzAZ4VgmoIhC2
+         xNUCABdMME9DxU4FrgDh1UUV9YxtsCik2fSZ2XLvA9Ils5oGM7kQ1DxZ6PGPsB17AOxJ
+         Mrmx+f1h7WHI+KaIfYKIqLqzbf3lPivWg5NAZOwXGcdrALbzxPcz2imq1gRnEPSc1a/T
+         C0102A7GMUWh1xuZ4kBCCaGDUNXTCcprq2bEz18YMEFeyMNGPGZUgwnl00UEz13beNPK
+         4kkgnj6rVSyqqtpBQYgbrKHI/7KsMKixP2vPDn+7HVJbO+GVNI6iloR5mSyCVZxA3SDu
+         I/oA==
+X-Gm-Message-State: AOAM532p3qKPRztrRc+UZPz8wdxmMi9D8ZMe5vlzTrzx955bfYc4cTKI
+        r24wDs/DPrVsVWruDbEmRfp28s3m9yg=
+X-Google-Smtp-Source: ABdhPJx7i5LUMAYFSRbrqwFRUOMEWyj8ZLAYg9JWtTsxoL1UBEnyY3RCo03bQJ0r7Z1CvxJCK00+7w==
+X-Received: by 2002:a7b:c001:0:b0:394:87bc:ad70 with SMTP id c1-20020a7bc001000000b0039487bcad70mr24710869wmb.147.1652646949662;
+        Sun, 15 May 2022 13:35:49 -0700 (PDT)
+Received: from [192.168.1.20] ([195.245.23.54])
+        by smtp.gmail.com with ESMTPSA id m18-20020adfa3d2000000b0020c5253d8ffsm7736509wrb.75.2022.05.15.13.35.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 May 2022 13:35:49 -0700 (PDT)
+Message-ID: <6e0029f6-f499-c688-9174-61409180eae5@gmail.com>
+Date:   Sun, 15 May 2022 22:35:47 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] ep93xx: clock: Do not return the address of the freed
+ memory
+Content-Language: en-US
+To:     Genjian Zhang <zhanggenjian123@gmail.com>,
+        hsweeten@visionengravers.com, linux@armlinux.org.uk
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Genjian Zhang <zhanggenjian@kylinos.cn>
+References: <20220512075943.2397833-1-zhanggenjian@kylinos.cn>
+From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
+In-Reply-To: <20220512075943.2397833-1-zhanggenjian@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,32 +76,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SDHCI controller claims DDR, HS200 and HS400 1.8V support, however it
-cannot achieve those using the 2.95V I/O that is the default set by
-firmware.
+Hello Genjian!
 
-Since we know have access to the PMP8074 PMIC provided LDO that provides
-the I/O voltage set it as VQMMC supply so that higher speeds can actually
-be achieved.
+Thank you for the patch!
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
----
- arch/arm64/boot/dts/qcom/ipq8074.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+On 12/05/2022 09:59, Genjian Zhang wrote:
+> Although there will be basic judgments of IS_ERR() on this return value
+> elsewhere,but I think it can be replaced by the actual error return
+> value of clk_register.
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-index 906468ee990e..2e8765aa8f37 100644
---- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-@@ -476,6 +476,8 @@ sdhc_1: sdhci@7824900 {
- 			mmc-hs400-1_8v;
- 			bus-width = <8>;
- 
-+			vqmmc-supply = <&l11>;
-+
- 			status = "disabled";
- 		};
- 
--- 
-2.36.1
+Actually this fixes very similar use-after-free which I missed in
+commit 9645ccc7bd7a1.
 
+I propose to add
+Fixes: 9645ccc7bd7a1 ("ep93xx: clock: convert in-place to COMMON_CLK")
+
+> Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
+> ---
+>  arch/arm/mach-ep93xx/clock.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm/mach-ep93xx/clock.c b/arch/arm/mach-ep93xx/clock.c
+> index 4fa6ea5461b7..762328de4bce 100644
+> --- a/arch/arm/mach-ep93xx/clock.c
+> +++ b/arch/arm/mach-ep93xx/clock.c
+> @@ -345,9 +345,10 @@ static struct clk_hw *clk_hw_register_ddiv(const char *name,
+>  	psc->hw.init = &init;
+>  
+>  	clk = clk_register(NULL, &psc->hw);
+> -	if (IS_ERR(clk))
+> +	if (IS_ERR(clk)) {
+>  		kfree(psc);
+> -
+> +		return (struct clk_hw *)clk;
+
+Could you please use ERR_CAST()?
+
+> +	}
+>  	return &psc->hw;
+>  }
+>  
+> @@ -452,9 +453,10 @@ static struct clk_hw *clk_hw_register_div(const char *name,
+>  	psc->hw.init = &init;
+>  
+>  	clk = clk_register(NULL, &psc->hw);
+> -	if (IS_ERR(clk))
+> +	if (IS_ERR(clk)) {
+>  		kfree(psc);
+> -
+> +		return (struct clk_hw *)clk;
+
+same as above
+
+> +	}
+>  	return &psc->hw;
+>  }
+>  

@@ -2,163 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02AEE527A6F
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 23:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D1EC527A6B
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 23:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235639AbiEOVgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 17:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
+        id S233867AbiEOVeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 17:34:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231289AbiEOVgi (ORCPT
+        with ESMTP id S231289AbiEOVeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 17:36:38 -0400
-Received: from crane.ash.relay.mailchannels.net (crane.ash.relay.mailchannels.net [23.83.222.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AB713DF0
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 14:36:35 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 099445A0DA2;
-        Sun, 15 May 2022 21:36:32 +0000 (UTC)
-Received: from pdx1-sub0-mail-a203.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 665145A1583;
-        Sun, 15 May 2022 21:36:31 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1652650591; a=rsa-sha256;
-        cv=none;
-        b=LgdPE8NOMB4Kh7lUuUn6Yw14uARfgc/aEN3BEwLlhw7lQnMgI6kdxgKr1TkXeZgKL23aVv
-        EGSVJeNeuOfJr1EsoFNX5xjLsZhCozyEh1/NyPhjXZtcc/CgFKRwq6tnp6qy8OMoaNle7S
-        qNc5+ULhTs7wXlkqqhnppZKUWkoluEhoJZisSd7ujZmx2BPwcCH3h8Azb9XBeqd18tW0R4
-        GQrJs3b3NFZmGZaEREB4h+eSdCyqVqjF8WKITXhiD3W8iH7hGIppsCvZq+PNYXB0Jr8sYA
-        e/aDE1PIgk5jFLNgcY9hkPWgY763G7Px4HSm7Eie5rs/aqu7y4d7UAoKNAPXaQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1652650591;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=4YrQnMDt0+5+4+E+HKFDCXkGSxW5eIifGAL66j7/sxI=;
-        b=lo7GakGCNHdSAZBc3f7ORE+4gDRNNIsk7q5ZUmErD+KJv5dwAl/DYkd5V0SWf5O2uCR+sa
-        yT1MIsDQAg2ZGUeXrpzvYK4g94p+cfdL4s12IfZgYQMBSSQRJf/OrcbceDWFChOGyeIO5N
-        KiekEBpFeb/Z2IQ0Kvbj2nS1mUZfvNpDyHTgiU5N/+ILbUtX2Kb5kawXy5h2vHAxu9EqYS
-        o7/bNCwGRLsFU+Qrvt9QytGcW0JX0EgLt14nXmfRqCb3pgddYh1bvt7vf15esLiZE/hn4Y
-        vDzncrjInisiC760hSrBjdpteL9TfRV91OMU1eSD1TdGOJ0A1myprrBbIsxxkw==
-ARC-Authentication-Results: i=1;
-        rspamd-554c8f6c56-mmrs7;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Madly-Madly: 71319b7470d107b1_1652650591872_3404003711
-X-MC-Loop-Signature: 1652650591872:2864187479
-X-MC-Ingress-Time: 1652650591872
-Received: from pdx1-sub0-mail-a203.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.115.45.17 (trex/6.7.1);
-        Sun, 15 May 2022 21:36:31 +0000
-Received: from offworld (unknown [104.36.31.105])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a203.dreamhost.com (Postfix) with ESMTPSA id 4L1bL54MSTzlR;
-        Sun, 15 May 2022 14:36:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1652650591;
-        bh=4YrQnMDt0+5+4+E+HKFDCXkGSxW5eIifGAL66j7/sxI=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=lI69PTyrU+cc5IeqSeZ1Ce9igsVBvOFWig9gIrxzNLxnkg0WSpk2J2n865MtjDlej
-         FXnZ3nJIqlY4bZWaTlFGAUX9T7/fKTXTek2zl7z06usWKHX8qygkHQuVVCP9anfc+b
-         /wbT7Sx+TTlua3THNaj2XyrMyfm1c8cBahKI/w1D+9aSNaE0K2pTe7bV9+YHGeHMSc
-         U+ki61r28TrdOlu9mKQ+V/4Ubs3YKgNv684Mz24p5R8lpW7XjdPumHAH8wUvuO2F8i
-         6B/HkcEeiOIn+VQT3NxNj/Qvitdr/C02gc7tBJHZaOWxKNepe1BbCfTJXOCnNxhnI/
-         sl1T47TnGm7LQ==
-Date:   Sun, 15 May 2022 14:24:04 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Christophe de Dinechin <dinechin@redhat.com>
-Cc:     trivial@kernel.org, Ben Segall <bsegall@google.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Mel Gorman <mgorman@suse.de>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        torvalds@linux-foundation.org
-Subject: Re: [PATCH 0/3] trivial: Fix several compilation errors/warnings
- with GCC12
-Message-ID: <20220515212404.3nfnalivgsyyu7ii@offworld>
-References: <20220414150855.2407137-1-dinechin@redhat.com>
+        Sun, 15 May 2022 17:34:23 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150122.outbound.protection.outlook.com [40.107.15.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3D0C05;
+        Sun, 15 May 2022 14:34:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=L6JSAtIumXCJhrb0SzixTFLWnIc/mGbpldgNYuPnFyhYcrqRAJVM2z7+qT8mjGKjTi023nSp5DGimRvzQhB9nwBwqj4hySdgZ49xhOihu6/bExf2D8Aw6pNP1wLo0kK+1RsTVxRbAdqYhEgggU4baqee+5qqIrCxKCmRz2kGnemvaYMKx3gNOpJ9WHb18+lEOSD3BNtrVjEakmEl3r5tB2qMr4Hw73VcOSQwEUjVaj9W+eshY/oP2k+v2eJFtDcl/K7oGzUVsjSqZvDz42jkt5yB6P2PKs7o1fo5NjxGISLNIM4KRTHgNGyVyWz1o40ZTt9S+cNKjRm+tjGgBDEQvw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QHOen47HhErskXsg7TwGZPlRzYlxjc0JDak0G1u972M=;
+ b=AexfIn/cheaavdB/WR/WQp/+Q833vNVnQPoldAF0OOf+oKpWVAMoIGOAi5SOnhdXuw6H+XLU7AU5yPUq95+HGbeG0zmWXVjkIY81aQ+ckkPCnHFfa6HvrCyXNNt0mAjcSq5n7RBWtliIx/4Ptq7QflDtIGeUYeTo+fB40w0kQCweOfDmKvFVY/op6BcM8TI14TrxjHtB1iMXR6txB1x/rzZzYrE5E/zm8/9BqVaQo+cRoacDb06d/fstxObzXWsrSoOXMmn2E7MaZBlTvEk8G5BpTzh9Tgvnup3dU9tMtFKICFLp23ZIcvFtWvRHMzWLqUu2/EyhOHVkw/CqDnhpZg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
+ dkim=pass header.d=axentia.se; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QHOen47HhErskXsg7TwGZPlRzYlxjc0JDak0G1u972M=;
+ b=P+YwDLLJ0EnSiV7bWFzwlILIksB4BKClnng/JbFEUrqJ9cAGifsS14kQzM7TzJKsCwyTx0wlnYCgjc/k4Max4TJ1hpG4qSwockKQBzxc/fUr9lYcI47zE3plhiCL+umrDIprct+r+i3sSvw1OOztKZNyS58+UYGLoae9kTool6k=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=axentia.se;
+Received: from AM0PR02MB4436.eurprd02.prod.outlook.com (2603:10a6:208:ed::15)
+ by PAXPR02MB7743.eurprd02.prod.outlook.com (2603:10a6:102:20e::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.18; Sun, 15 May
+ 2022 21:34:19 +0000
+Received: from AM0PR02MB4436.eurprd02.prod.outlook.com
+ ([fe80::dcef:9022:d307:3e8a]) by AM0PR02MB4436.eurprd02.prod.outlook.com
+ ([fe80::dcef:9022:d307:3e8a%4]) with mapi id 15.20.5250.018; Sun, 15 May 2022
+ 21:34:19 +0000
+Message-ID: <12be48dc-b5d1-063c-87a0-050886cc2505@axentia.se>
+Date:   Sun, 15 May 2022 23:34:16 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v3 0/9] introduce fwnode in the I2C subsystem
+Content-Language: en-US
+To:     Wolfram Sang <wsa@kernel.org>,
+        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220325113148.588163-1-clement.leger@bootlin.com>
+ <Yn/BFKwzVLwrjF/F@shikoro>
+From:   Peter Rosin <peda@axentia.se>
+In-Reply-To: <Yn/BFKwzVLwrjF/F@shikoro>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: GV3P280CA0112.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:150:8::23) To AM0PR02MB4436.eurprd02.prod.outlook.com
+ (2603:10a6:208:ed::15)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220414150855.2407137-1-dinechin@redhat.com>
-User-Agent: NeoMutt/20220408
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 949b71ca-cf72-44e9-4d50-08da36baab30
+X-MS-TrafficTypeDiagnostic: PAXPR02MB7743:EE_
+X-Microsoft-Antispam-PRVS: <PAXPR02MB7743A5A42D11F2CA827F720ABCCC9@PAXPR02MB7743.eurprd02.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: x4bjfXuZdwQZXL7Mhf/1oxNFweY+VItEWnj/fONP1sEytAW1jd2Xrg6IhvuqzMEJPMN62UD6sY1WRwM/JLdlXgFPY8GEnkFlIF23Uh1PXJJdKNS/ofYdJ6Jqbi8cf9VeTXKt9Y82DUKCRRSXIiEArCItVwO4Qp5243yUiWPKIwzwaDlq2YvZurFGICsXsN2WnIMPdGwoDQLeCOOhlS9Pv8iYhqiYVRZmW2gtHr0FaKD90Q5OpJFAMEHpSqovdcMVa2hCp9mLvOiVjXBOiPKgqKJf5d71FqbLG75f/uompXpNdGkTdKyEEC1WyKCjQk1du/T7YSA3WAPc7aQW024umoV/HDAJI+x4HnbFERidKta+fIT8Fj4rdvRFhJLcRPVXf/zogBVpLeY8NqEPQIrwcMt90TRPE46gpScO0xU5pT620FbABjou9rXpWbI39637/8a6IgpjcJ1zC2ls0CHyp7wZAl1b1NWTQIpr+CP7NFsYNNW/2yCsfVLlCFA1ATKh1R7j90mrsNu5byDXhpgcRNka6Na1dprAOb/hCxJbCzNTfrbnmUep2T5Kq8TqsXZT+yw0Axy2ICxOvYRrRATKf6z7CbtQFXS/Mc1a8YAAafAwV7BaXwuPTvPSwty4l1pfRFCLNN9RDB+QgZl+Jw9eG0MHtwmvqrQI71NFi+eCBtdIUV1tDLqw3B2+HAyhmU1+bTxq+Zx4FpXbT1+Rj1i0k/bbi+l5wKc+GgB6Q55cpNjeE/LNSA/AfobMjBsHIwM9
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR02MB4436.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(346002)(39830400003)(376002)(136003)(396003)(41300700001)(8676002)(8936002)(36756003)(316002)(4744005)(7416002)(31686004)(26005)(6512007)(110136005)(186003)(2616005)(5660300002)(31696002)(6486002)(2906002)(38100700002)(86362001)(6666004)(921005)(66946007)(66476007)(66556008)(508600001)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZVBZQ2ZMZVdqcHVpa2xTZm9PQ3kzOW5hd3RVUjQ0VitlRUFyYU55ZytBc20r?=
+ =?utf-8?B?MkxqeHczb0FUcHBHN1NnMGs4c0VmVTFyUk5jSERnbE5zSTV4dWFmRzhrMTNE?=
+ =?utf-8?B?UzdaQnk1SDJTT0R0b0FFLzVVVDhmaUh6MyszQm03RFBsSkM1cVcwUDRGNlBS?=
+ =?utf-8?B?ZERTMzVjRHpUVVJSVTRMZHF6Uko1TVQ4ZVZrN0tRaElPUEdZaHloSWx4Q2p3?=
+ =?utf-8?B?ODYvWkxTUTBJMG1BZnVHcXk3WXpSd09vOW8wM1ZTc1F1SllJZDk3Y3R2Q2ZN?=
+ =?utf-8?B?eVNvcGRhSHgzTUlGRHBrM2RxRFl5SWczTmZ3MlIvT3BvQnVuZWdmMXlVQVJi?=
+ =?utf-8?B?QklKbkpWaW9mQU5qeFE3dUJxeHpYYlZJYTU1amx2S0o1dzBaekx0azdYTkRt?=
+ =?utf-8?B?amRCU1RoemQraGRsa09zVDluMkNsTmRUOHp0VmlhS2xSZW1iOVRxcThtb0VG?=
+ =?utf-8?B?Z0p3eTl3YVl0dTRLZ2pNTVJDMHpoUjY2WlBnMWxlVFk0RStwN3pPbVFYaE9P?=
+ =?utf-8?B?cEI3RUxOTDNxYzFPMFJmQnBmOEgyK1JaUDhtQXVYUTRTVkRNL2c2eVl4TDFF?=
+ =?utf-8?B?amplZ2t6YlQvUXNmbzRWTk9GcE1aSmdoWVQ3RXNhZGI0d251SDBoaGh6WUZh?=
+ =?utf-8?B?MUpIVThzaHl0M0lzd3UrdWVZRFJGbUgxT0d3VkZ6U0NYOHRzMlFFdWFPWlNn?=
+ =?utf-8?B?VDlCZkZ6bHhPalpWSUp0VWNPYjBPY1k0eFlhVkpBVktjZXZaVkVjKzJET2FO?=
+ =?utf-8?B?V1pwVkhNbGliYncvd2liK25Kb2FZWlF3V25KcGdlaUpqWjFoZE1ydXFOcU1s?=
+ =?utf-8?B?Y2Z6TXltcVZIYUx5S2dpK0pVUk82YUNCNW8wVGJMYnJ0dmZLeTZPNGUzNjZj?=
+ =?utf-8?B?aTdGL1JhempzOGhsNmNYb2tGSGZmMHVCTXdCQWJUdXVWWHlKanlaRkhCc2gv?=
+ =?utf-8?B?cnh2TFoyQXlpZEV4cmQ2c2tFUGh4RE1Wc2tiVFVvVDNNcFhWTkFid0d3MHVC?=
+ =?utf-8?B?eEExaGRUN28vNHUyOGFhemxXQ0kydGZkK1FlZnF4bG42a0VDYkxqaGkyY08w?=
+ =?utf-8?B?cEF3VFZBY1h2U2ZyanRrUFJReU5tVEp3b1A1VnB5NHovL0NoN2ZOUGRvRnN3?=
+ =?utf-8?B?bzU1R010alNYd2pmSGNlczZSWHIxWUV0dWlhb2FtSi9NNjgrR2toaFB5T2k3?=
+ =?utf-8?B?YkpVTjJlaUVhRGtta3JQTXpaSU5YMmYvK251YU5OUU9Vek5FdE1PcVVuZ3VV?=
+ =?utf-8?B?aGY2dkRITUEwUFpGK3lLbTJvYnJnNi9tTWdibXNmZXFaTFdUVkliU2RtZEVN?=
+ =?utf-8?B?MmZHdjNudmR3T1VLNWt0YXd4N3l3ZE1sejQyTkhHeE10djRrUEhTLzBob1NY?=
+ =?utf-8?B?ekdmNW9mV3V0b0Zod3V0NTZ6aFUvQzAyczJJQzNPNWo3NVUrYllna09BWUEr?=
+ =?utf-8?B?ZkJvWVg3OHJIcG9KcU8rT3liQnE0d2dLMHFQVjNOOENyWGdTTitobjZ5UkVo?=
+ =?utf-8?B?ZE9WSEJsb3FyUXR0aG1wNGo4dEVMMDdlQktGMiswVGk3VHZDTGl5eXU3S1B1?=
+ =?utf-8?B?YStPeXNkWFBka2RUOWJaTTJ6Szl4anhvaEk0MWU0UDhtQ1VMa2dkWDlaRXlC?=
+ =?utf-8?B?OGNYb295aHFGcGlEWEg4Y09vTjRvYWY2K3dtWVBHV05yYlIxYk9vU0EyZzVz?=
+ =?utf-8?B?Ri9ocFBqeWQxVHcxclBXbzN3M1ZsZGU2NHNxdVYzTG0rc0Zuakl0OEJJazJW?=
+ =?utf-8?B?Y0J0dzRvK3gwbmhSOUJlSmJmNitiaWh1dGVxalljbC9lZGt6NUxnd1Vkclk0?=
+ =?utf-8?B?VHlrS0UrUFBFaUZibmd2YlZRdi95QmhYbEZnd3RGR0lNSmhEZlZ2T2VkLzR0?=
+ =?utf-8?B?M2dQRDdsenY4T0pTZHVKaVZJcGo4SFFLQjh0bHdlTG8zUVVLTGtDdG92UkM2?=
+ =?utf-8?B?eE1PWWR0N1NCZHpJekUrVFBDck9MQlJZVkNpZEI4dDVHeHZtOWJyN1BER0Qz?=
+ =?utf-8?B?U0tMOHR2TzE2M0xNMVNqZVNLdnNWMDc3a0pERldyNjdwYXZBL21pWHl5eVZi?=
+ =?utf-8?B?VzVhMmR1UHQ0V1JHdEVMczYxa0QwWlRZQm1vNjl6Z2tTa2NZN0M5K0JwU0Jl?=
+ =?utf-8?B?dDFsa1ZtSCtxeHVhOFVJVFVXbWl4ZkJzQ3BaVWNVaUMyYS9GVjZCZFdhY1ps?=
+ =?utf-8?B?ZFZnN2V2MG1ZSGhQVG9WcHA4Q1ZudTZpTkNMSnlwQm1kZXB0S2NYaGhrc2xm?=
+ =?utf-8?B?eEZkcEFaWllTUURaUVowTTc5MDlLektRdzhXcjJIa3Zod2RqK0JVQ3k3QUNo?=
+ =?utf-8?B?OGpzOEZ6bWxvV3N0cWVBbWxTTS90K1Fpb3d3ZldJWjBYV1BvdE4xQT09?=
+X-OriginatorOrg: axentia.se
+X-MS-Exchange-CrossTenant-Network-Message-Id: 949b71ca-cf72-44e9-4d50-08da36baab30
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR02MB4436.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2022 21:34:19.1951
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: H0oalLzwCQyD6abl00RWOVOkPpzNSDWrKelTtbGRt72UWaDDhQJRUiiSWlLVoWum
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR02MB7743
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello - What is the status of this? Currently gcc 12 (tumbleweed) is unable to
-build Linus' latest because of splats in the scheduler headers...
+2022-05-14 at 16:47, Wolfram Sang wrote:
+> O
+>> This series is a subset of the one that was first submitted as a larger
+>> series to add swnode support [1]. In this one, it will be focused on
+>> fwnode support only since it seems to have reach a consensus that
+>> adding fwnode to subsystems makes sense.
+> 
+> From a high level view, I like this series. Though, it will need Peter's
+> ack on the I2C mux patches as he is the I2C mux maintainer. Still, I
+> wonder about the way to upstream the series. Feels like the first 5
+> patches should not go via I2C but seperately?
 
-Thanks,
-Davidlohr
+Hi Wolfram,
 
-On Thu, 14 Apr 2022, Christophe de Dinechin wrote:
+I also think it looks basically sane. However, there are a couple of
+comments plus promises to adjust accordingly. I guess I filed it under
+"wait for the next iteration"...
 
->Compiling with GCC 12 using defconfig generates a number of build errors
->due to new warnings, notably array-bounds checks. Some of these warnings appear
->legitimate and relatively easy to fix.
->
->Note that this series is not sufficient for a clean build yet. There are
->in particular a number of warnings reported by the array-bounds check
->that appear bogus, like:
->
->| In function ???__native_read_cr3???,
->|     inlined from ???__read_cr3???
->|         at ./arch/x86/include/asm/special_insns.h:169:9,
->|     inlined from ???read_cr3_pa???
->|         at ./arch/x86/include/asm/processor.h:252:9,
->|     inlined from ???relocate_restore_code???
->|         at arch/x86/power/hibernate.c:165:17:
->| ./arch/x86/include/asm/special_insns.h:48:9: error:
->|    array subscript 0 is outside array bounds of ???unsigned int[0]???
->|    [-Werror=array-bounds]
->|    48 | asm volatile("mov %%cr3,%0\n\t" : "=r" (val) : __FORCE_ORDER);
->|       | ^~~
->| cc1: all warnings being treated as errors
->
->The error above is for an instruction that does not obviously address any
->C array, in particular since the asm constraint is "=r" and not "=rm".
->
->Consequently, the series here only addresses a few low hanging fruits that
->appear legitimate and relatively easy to fix.
->
->Christophe de Dinechin (3):
->  sched/headers: Fix compilation error with GCC 12
->  nodemask.h: Fix compilation error with GCC12
->  virtio-pci: Use cpumask_available to fix compilation error
->
-> drivers/virtio/virtio_pci_common.c |  2 +-
-> include/linux/nodemask.h           | 13 ++++++-------
-> kernel/sched/sched.h               | 11 +++++++++--
-> 3 files changed, 16 insertions(+), 10 deletions(-)
->
->--
->2.35.1
->
->
+Cheers,
+Peter

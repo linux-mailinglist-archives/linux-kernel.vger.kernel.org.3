@@ -2,142 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C5652767A
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 11:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A18852767C
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 11:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235987AbiEOJCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 05:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
+        id S236016AbiEOJGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 05:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiEOJCT (ORCPT
+        with ESMTP id S236015AbiEOJF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 05:02:19 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD944F2B
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 02:02:17 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652605335;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2mDUSPGcPZzaMW7gML3LPCubye4TyOLT8f3zTeFZihs=;
-        b=a22bC37E63DPGgcF/cz1PLTXMxwvqwE5Kp+PQ0VF0jHQ0m9peE6Ue6mUsIqGSFnIv2qQwL
-        nTN8sn/6BFGBP6WlL2ErTQYt+ZwrJYk7ccXnKdwRmmHOnG5bBJSCJYlFUqDZdDYV1oDVgS
-        qkHyXRyBc1958ETMJ7qJdemW9yvK38LhcpYIv0KJXe2JyYNGZFF41b3cexDMBrvcnvCZrT
-        +RhA7KFtNXGvpTrg9UnA715yqzW8lL+ak/moaxwSnJxvt4s+BUpIVOdbKPU0pr4CJubhas
-        HywYq5cSza59BEFAsRU7a5Z0Uq63NhqIHROLx6zgBBGYQ+v51Yw8DVF2wY8ULA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652605335;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2mDUSPGcPZzaMW7gML3LPCubye4TyOLT8f3zTeFZihs=;
-        b=l0ei/dXdudkTpXgkRl5uoJzI+bBhcdRFKRkbbHQSjBtbrfr0fS5DeQhr6NQUU/DiIWjZu3
-        JDO8C2GHyWd5TpAQ==
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "aryabinin@virtuozzo.com" <aryabinin@virtuozzo.com>,
-        "dvyukov@google.com" <dvyukov@google.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "glider@google.com" <glider@google.com>
-Subject: Re: [RFCv2 03/10] x86: Introduce userspace API to handle per-thread
- features
-In-Reply-To: <9e59305039f2c8077ee087313d1df5ff06028cfe.camel@intel.com>
-References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
- <20220511022751.65540-5-kirill.shutemov@linux.intel.com>
- <CAG_fn=V8k3hiviv3htV6wWZ6fUBri=MORfXGJ+Kz7GdRDZvesA@mail.gmail.com>
- <da0f438bb459050e5a586a17382e961259449761.camel@intel.com>
- <20220513230958.dbxp6m3y3lnq74qb@black.fi.intel.com>
- <543eb3ff98f624c6cfa1d450ac3e9ae8934c7c38.camel@intel.com>
- <87k0aose62.ffs@tglx>
- <9e59305039f2c8077ee087313d1df5ff06028cfe.camel@intel.com>
-Date:   Sun, 15 May 2022 11:02:15 +0200
-Message-ID: <87zgjjqico.ffs@tglx>
+        Sun, 15 May 2022 05:05:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB40765C;
+        Sun, 15 May 2022 02:05:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D3C4FB80AF2;
+        Sun, 15 May 2022 09:05:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C060C385B8;
+        Sun, 15 May 2022 09:05:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652605553;
+        bh=Mwj8x5n/ya19o/UjDZ9DoXSZRKW2j74+Pxpl01vamHo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Aw8nfDi+XuMAAvR8hXetPUqHAMISpxvq/+AC3YD6OlFkrUOrRQrZ1Ak72n1lAmdT2
+         N9a0UuSW1irAO31CoFBE/4uD5AVZ77ZriRkVJX7OfEnShDnVEZZtTqEF9CGc2v3qX3
+         ypfyVg5YVIV80gg5sAi46/WGSKQpQPKut23DiTxeVWm0K1lReth16WCT0vQDiq0R00
+         O58qgnIlyRsLttNVpJhPVHA4nibzXiw8VuYKLzxh8r+Zq3xOhFtnzz8TkMec2CzzOH
+         nZG33bMVgW6VMsoPZlkgbCJvcMijg10UgcdjBfK1nch1wLlIDfiX0yLSUu582iM2cd
+         zUnzgPBA+TONQ==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        stable@vger.kernel.org, Ming Yan <yanming@tju.edu.cn>,
+        Chao Yu <chao.yu@oppo.com>
+Subject: [PATCH v3] f2fs: fix to do sanity check for inline inode
+Date:   Sun, 15 May 2022 17:05:47 +0800
+Message-Id: <20220515090547.1914-1-chao@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 14 2022 at 23:06, Edgecombe, Rick P wrote:
-> On Sat, 2022-05-14 at 10:37 +0200, Thomas Gleixner wrote:
->> > "On success, arch_prctl() returns positive values; on error, -1 is
->> > returned, and errno is set to indicate the error."
->> 
->> Why?
->> 
->>         prctl(GET, &out)
->> 
->> is the pattern used all over the place.
->
-> It seems better to me, but we also need to pass something in.
->
-> The idea of the "enable" operation is that userspace would pass in all
-> the features that it wants in one call, and then find out back what was
-> successfully enabled. So unlike the other arch_prctl()s, it wants to
-> pass something in AND get a result in one arch_prctl() call. It doesn't
-> need to check what is supported ahead of time. Since these enabling
-> operations can fail (OOM, etc), userspace has to handle unexpected per-
-> feature failure anyway. So it just blindly asks for what it wants.
+Yanming reported a kernel bug in Bugzilla kernel [1], which can be
+reproduced. The bug message is:
 
-I'm not convinced at all, that this wholesale enabling of independent
-features makes any sense. That would require:
+The kernel message is shown below:
 
-  - that all features are strict binary of/off which is alredy not the
-    case with LAM due to the different mask sizes.
+kernel BUG at fs/inode.c:611!
+Call Trace:
+ evict+0x282/0x4e0
+ __dentry_kill+0x2b2/0x4d0
+ dput+0x2dd/0x720
+ do_renameat2+0x596/0x970
+ __x64_sys_rename+0x78/0x90
+ do_syscall_64+0x3b/0x90
 
-  - that user space knows at some potentially early point of process
-    startup which features it needs. Some of them might be requested
-    later when libraries are loaded, but that would be too late for
-    others.
+[1] https://bugzilla.kernel.org/show_bug.cgi?id=215895
 
-Aside of that, if you lump all these things together, what's the
-semantics of this feature lump in case of failure:
+The bug is due to fuzzed inode has both inline_data and encrypted flags.
+During f2fs_evict_inode(), as the inode was deleted by rename(), it
+will cause inline data conversion due to conflicting flags. The page
+cache will be polluted and the panic will be triggered in clear_inode().
 
-  Try to enable the rest when one fails, skip the rest, roll back?
+Try fixing the bug by doing more sanity checks for inline data inode in
+sanity_check_inode().
 
-Also such a feature lump results in a demultiplexing prctl() which is
-code wise always inferior to dedicated controls.
+Cc: stable@vger.kernel.org
+Reported-by: Ming Yan <yanming@tju.edu.cn>
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+---
+v3:
+- clean up commit message suggested by Bagas Sanjaya.
+ fs/f2fs/f2fs.h  | 8 ++++++++
+ fs/f2fs/inode.c | 3 +--
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
-> Any objections to having it write back the result in the same
-> structure?
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 492af5b96de1..0dc2461ef02c 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -4126,6 +4126,14 @@ static inline void f2fs_set_encrypted_inode(struct inode *inode)
+  */
+ static inline bool f2fs_post_read_required(struct inode *inode)
+ {
++	/*
++	 * used by sanity_check_inode(), when disk layout fields has not
++	 * been synchronized to inmem fields.
++	 */
++	if (S_ISREG(inode->i_mode) && (file_is_encrypt(inode) ||
++		F2FS_I(inode)->i_flags & F2FS_COMPR_FL ||
++		file_is_verity(inode)))
++		return true;
+ 	return f2fs_encrypted_file(inode) || fsverity_active(inode) ||
+ 		f2fs_compressed_file(inode);
+ }
+diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+index 2fce8fa0dac8..5e494c98e3c2 100644
+--- a/fs/f2fs/inode.c
++++ b/fs/f2fs/inode.c
+@@ -276,8 +276,7 @@ static bool sanity_check_inode(struct inode *inode, struct page *node_page)
+ 		}
+ 	}
+ 
+-	if (f2fs_has_inline_data(inode) &&
+-			(!S_ISREG(inode->i_mode) && !S_ISLNK(inode->i_mode))) {
++	if (f2fs_has_inline_data(inode) && !f2fs_may_inline_data(inode)) {
+ 		set_sbi_flag(sbi, SBI_NEED_FSCK);
+ 		f2fs_warn(sbi, "%s: inode (ino=%lx, mode=%u) should not have inline_data, run fsck to fix",
+ 			  __func__, inode->i_ino, inode->i_mode);
+-- 
+2.32.0
 
-Why not.
-
-> Otherwise, the option that used to be used here was a "status"
-> arch_prctl(), which was called separately to find out what actually got
-> enabled after an "enable" call. That fit with the GET/SET semantics
-> already in place.
->
-> I guess we could also get rid of the batch enabling idea, and just have
-> one "enable" call per feature too. But then it is syscall heavy.
-
-This is not a runtime hotpath problem. Those prctls() happen once when
-the process starts, so having three which are designed for the
-individual purpose instead of one ill defined is definitely the better
-choice.
-
-Premature optimization is never a good idea. Keep it simple is the right
-starting point.
-
-If it really turns out to be something which matters, then you can
-provide a batch interface later on if it makes sense to do so, but see
-above.
-
-Thanks,
-
-        tglx

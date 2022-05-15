@@ -2,133 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9573527677
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 10:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C5652767A
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 11:02:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235950AbiEOI50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 04:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60496 "EHLO
+        id S235987AbiEOJCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 05:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233797AbiEOI5Z (ORCPT
+        with ESMTP id S229539AbiEOJCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 04:57:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7406274;
-        Sun, 15 May 2022 01:57:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 882CA60EC3;
-        Sun, 15 May 2022 08:57:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89667C385B8;
-        Sun, 15 May 2022 08:57:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652605042;
-        bh=VxFX7xx56JZzOHMNORrQI6bWg6BbNTRrh7GpU1e75ew=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=g/CZJvOU1p1ZrPXYrVQvy1DW6PuSKfsNt6Hx9SxbNQA3J2ffj1FQqyBsZOnvjHtAc
-         yR9a1B18F8UujVdntyEYxjkx5KlnHFeXp9hcudsx+pqZG7tnFFs29u5o1k7urIEZlI
-         lo4PfqtaJvVvziEDvfugt44I1pd8H9nymDOLW3oJ+ov37LNufRFT94ZDa2mu0/n3aq
-         r3w+bt1E++P01OcXiIjagYV8Z8q879qGmu9NbeOv5Bbnwn2k249Wv55TVUAa3J3H8p
-         WrIqcv7othwhF8lkpO9nqKORo4YDU2nXXnKPSQNGqDcwNOLXV7Ega173ZAXiFXk4Gu
-         2bGbvqKrUl7gQ==
-Message-ID: <6b316ed0-c5af-0157-b04a-4aea1c0b9143@kernel.org>
-Date:   Sun, 15 May 2022 16:57:19 +0800
+        Sun, 15 May 2022 05:02:19 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD944F2B
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 02:02:17 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652605335;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2mDUSPGcPZzaMW7gML3LPCubye4TyOLT8f3zTeFZihs=;
+        b=a22bC37E63DPGgcF/cz1PLTXMxwvqwE5Kp+PQ0VF0jHQ0m9peE6Ue6mUsIqGSFnIv2qQwL
+        nTN8sn/6BFGBP6WlL2ErTQYt+ZwrJYk7ccXnKdwRmmHOnG5bBJSCJYlFUqDZdDYV1oDVgS
+        qkHyXRyBc1958ETMJ7qJdemW9yvK38LhcpYIv0KJXe2JyYNGZFF41b3cexDMBrvcnvCZrT
+        +RhA7KFtNXGvpTrg9UnA715yqzW8lL+ak/moaxwSnJxvt4s+BUpIVOdbKPU0pr4CJubhas
+        HywYq5cSza59BEFAsRU7a5Z0Uq63NhqIHROLx6zgBBGYQ+v51Yw8DVF2wY8ULA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652605335;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2mDUSPGcPZzaMW7gML3LPCubye4TyOLT8f3zTeFZihs=;
+        b=l0ei/dXdudkTpXgkRl5uoJzI+bBhcdRFKRkbbHQSjBtbrfr0fS5DeQhr6NQUU/DiIWjZu3
+        JDO8C2GHyWd5TpAQ==
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "aryabinin@virtuozzo.com" <aryabinin@virtuozzo.com>,
+        "dvyukov@google.com" <dvyukov@google.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "glider@google.com" <glider@google.com>
+Subject: Re: [RFCv2 03/10] x86: Introduce userspace API to handle per-thread
+ features
+In-Reply-To: <9e59305039f2c8077ee087313d1df5ff06028cfe.camel@intel.com>
+References: <20220511022751.65540-1-kirill.shutemov@linux.intel.com>
+ <20220511022751.65540-5-kirill.shutemov@linux.intel.com>
+ <CAG_fn=V8k3hiviv3htV6wWZ6fUBri=MORfXGJ+Kz7GdRDZvesA@mail.gmail.com>
+ <da0f438bb459050e5a586a17382e961259449761.camel@intel.com>
+ <20220513230958.dbxp6m3y3lnq74qb@black.fi.intel.com>
+ <543eb3ff98f624c6cfa1d450ac3e9ae8934c7c38.camel@intel.com>
+ <87k0aose62.ffs@tglx>
+ <9e59305039f2c8077ee087313d1df5ff06028cfe.camel@intel.com>
+Date:   Sun, 15 May 2022 11:02:15 +0200
+Message-ID: <87zgjjqico.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2] f2fs: fix to do sanity check for inline inode
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     jaegeuk@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Ming Yan <yanming@tju.edu.cn>, Chao Yu <chao.yu@oppo.com>
-References: <20220514080102.2246-1-chao@kernel.org>
- <Yn+dLtxsy6LwVIBQ@debian.me>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <Yn+dLtxsy6LwVIBQ@debian.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/14 20:14, Bagas Sanjaya wrote:
-> On Sat, May 14, 2022 at 04:01:02PM +0800, Chao Yu wrote:
->> As Yanming reported in bugzilla:
->>
->> https://bugzilla.kernel.org/show_bug.cgi?id=215895
->>
->> I have encountered a bug in F2FS file system in kernel v5.17.
->>
->> The kernel message is shown below:
->>
->> kernel BUG at fs/inode.c:611!
->> Call Trace:
->>   evict+0x282/0x4e0
->>   __dentry_kill+0x2b2/0x4d0
->>   dput+0x2dd/0x720
->>   do_renameat2+0x596/0x970
->>   __x64_sys_rename+0x78/0x90
->>   do_syscall_64+0x3b/0x90
->>
->> The root cause is: fuzzed inode has both inline_data flag and encrypted
->> flag, so after it was deleted by rename(), during f2fs_evict_inode(),
->> it will cause inline data conversion due to flags confilction, then
->> page cache will be polluted and trigger panic in clear_inode().
->>
->> This patch tries to fix the issue by do more sanity checks for inline
->> data inode in sanity_check_inode().
->>
->> Cc: stable@vger.kernel.org
->> Reported-by: Ming Yan <yanming@tju.edu.cn>
->> Signed-off-by: Chao Yu <chao.yu@oppo.com>
-> 
-> Hi Chao,
-> 
-> I think the patch message can be reworked , like below:
+On Sat, May 14 2022 at 23:06, Edgecombe, Rick P wrote:
+> On Sat, 2022-05-14 at 10:37 +0200, Thomas Gleixner wrote:
+>> > "On success, arch_prctl() returns positive values; on error, -1 is
+>> > returned, and errno is set to indicate the error."
+>> 
+>> Why?
+>> 
+>>         prctl(GET, &out)
+>> 
+>> is the pattern used all over the place.
+>
+> It seems better to me, but we also need to pass something in.
+>
+> The idea of the "enable" operation is that userspace would pass in all
+> the features that it wants in one call, and then find out back what was
+> successfully enabled. So unlike the other arch_prctl()s, it wants to
+> pass something in AND get a result in one arch_prctl() call. It doesn't
+> need to check what is supported ahead of time. Since these enabling
+> operations can fail (OOM, etc), userspace has to handle unexpected per-
+> feature failure anyway. So it just blindly asks for what it wants.
 
-Hi Bagas,
+I'm not convinced at all, that this wholesale enabling of independent
+features makes any sense. That would require:
 
-Thanks a lot for your cleanup. :)
+  - that all features are strict binary of/off which is alredy not the
+    case with LAM due to the different mask sizes.
 
-> 
-> Yanming reported a kernel bug in Bugzilla kernel, which can be reproduced.
-> The bug message is:
+  - that user space knows at some potentially early point of process
+    startup which features it needs. Some of them might be requested
+    later when libraries are loaded, but that would be too late for
+    others.
 
-I will keep the link for backtrace.
+Aside of that, if you lump all these things together, what's the
+semantics of this feature lump in case of failure:
 
-> 
-> kernel BUG at fs/inode.c:611!
-> Call Trace:
->   evict+0x282/0x4e0
->   __dentry_kill+0x2b2/0x4d0
->   dput+0x2dd/0x720
->   do_renameat2+0x596/0x970
->   __x64_sys_rename+0x78/0x90
->   do_syscall_64+0x3b/0x90
-> 
-> The bug is due to fuzzed inode has both inline_data and encrypted flags.
-> During f2fs_evict_inode(), after the inode was deleted by rename(), it
+  Try to enable the rest when one fails, skip the rest, roll back?
 
-I prefer "during f2fs_evict_inode(), as inode was deleted by rename()"
+Also such a feature lump results in a demultiplexing prctl() which is
+code wise always inferior to dedicated controls.
 
-> will cause inline data conversion due to conflicting flags. The page
-> cache will be polluted and the panic will be triggered in clear_inode().
-> 
-> Try fixing the bug by doing more sanity checks for inline data inode in
-> sanity_check_inode().
+> Any objections to having it write back the result in the same
+> structure?
 
-Let me revise in v3.
+Why not.
+
+> Otherwise, the option that used to be used here was a "status"
+> arch_prctl(), which was called separately to find out what actually got
+> enabled after an "enable" call. That fit with the GET/SET semantics
+> already in place.
+>
+> I guess we could also get rid of the batch enabling idea, and just have
+> one "enable" call per feature too. But then it is syscall heavy.
+
+This is not a runtime hotpath problem. Those prctls() happen once when
+the process starts, so having three which are designed for the
+individual purpose instead of one ill defined is definitely the better
+choice.
+
+Premature optimization is never a good idea. Keep it simple is the right
+starting point.
+
+If it really turns out to be something which matters, then you can
+provide a batch interface later on if it makes sense to do so, but see
+above.
 
 Thanks,
 
-> 
-> Thanks.
-> 
+        tglx

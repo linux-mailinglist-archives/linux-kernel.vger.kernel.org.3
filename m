@@ -2,126 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADBDE52FEAD
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 19:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0EF52FEFA
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 21:41:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344348AbiEUR6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 13:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45380 "EHLO
+        id S1345220AbiEUTkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 15:40:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241182AbiEUR6k (ORCPT
+        with ESMTP id S232304AbiEUTj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 13:58:40 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E774A66F90
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 10:58:38 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id w14so19133642lfl.13
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 10:58:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=Q66Lzs3M5kOo/8VJybpmTwF9IYF2g+3dQsdn1hpx9NQ=;
-        b=QCTfmXQGadwwlQM7hEIdm50KOXHwYga0OF/NGlbgOk3004UEHV2j12kft+vGwKwWir
-         wRilZT8O9unVC1Xau1Q/xJ/oXjKUn097Ca9N477mVVb4T+K+qMPT9zUfhK0U696onLrH
-         0os54gYtDt7QmTh2QJVp0zVX+VOwBBN3tTEji9jfwScy0wauB/MKvMR9weEQeZu99gcl
-         S6q0/FQT5dVQFSiYwCJOEzJUVh2eXtxNXRkNhlzUj8VPMJ4+JVhxhMspOoclfnBCfr0o
-         JdQNunNe+PYOALJWx7fSQNgpOjodEVLFipBmw9+pinSFfPkeFtfzzVFHvhyVXcuEKFmZ
-         Cu/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=Q66Lzs3M5kOo/8VJybpmTwF9IYF2g+3dQsdn1hpx9NQ=;
-        b=1iCzhwrc/eyilJUsvzoBwX3yO1ACz51OFvRFABnKmqQ9GrkOyokh0WF58VWZ6RZtlp
-         VUjEyv839vQUbdvyD3cc+Pc7jxQt8ud3fiELQxbcIBQ1Q0V82m4vRtdEu/K64ARJsdg+
-         0QZGID8BmkUTZCezStyf/Wh4dIOvM0thAJZUlELWhl756tYXuisxd9ylnTV0xhO+5YVN
-         RQ2Shd2uw+6GAmJ+IAO/EmaeOrVNJXkzALJKdLOY3CLaoFmHGotZ5Uz1tG6ik32sXgiL
-         +WD7A8N1IZ5SqHVJLOFOzICGFFy1Dg22bxB4JyzNf3kXuB/mmA9ylUWPWer8/L3ku3oo
-         cKaQ==
-X-Gm-Message-State: AOAM531fxZLywId58jyjccfOG8rGwiYx5v5YJoCKuGLpfiKrKFEezHPc
-        6wcAmK8NV/EfvXsRsLnx+wCkNg==
-X-Google-Smtp-Source: ABdhPJyB9B+bG3bgVBta8/fXq6YFYitnbNXhL8nlLKB83LEun2rtCldE5J3VJc5xMYhCSzqLebY3cg==
-X-Received: by 2002:a05:6512:3403:b0:475:afe3:740b with SMTP id i3-20020a056512340300b00475afe3740bmr10998844lfr.436.1653155917305;
-        Sat, 21 May 2022 10:58:37 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.185])
-        by smtp.gmail.com with ESMTPSA id r5-20020a2e94c5000000b0024f3d1dae91sm799624ljh.25.2022.05.21.10.58.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 May 2022 10:58:36 -0700 (PDT)
-Message-ID: <6c980ae0-9731-ba89-d04f-cd55a6badc24@openvz.org>
-Date:   Sat, 21 May 2022 20:58:35 +0300
+        Sat, 21 May 2022 15:39:57 -0400
+X-Greylist: delayed 4645 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 21 May 2022 12:39:53 PDT
+Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02hn2211.outbound.protection.partner.outlook.cn [139.219.17.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2393B28B;
+        Sat, 21 May 2022 12:39:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QxlQ/ygfVVPEINRL0DLOXYMdl9sT00YnYllRyth2gly4mi6G9OT6Tiq/JkcTbzIwsSlOd0F4n3F/ZbuB5Y0IZ2Qm6XpImiGfdxSkBJr7P/aWV2pSmGfCoU2xXwW7LgmMiKqfpGFWuGU4Ix9H+lo8RqBsrt8Cn/pCDQ3Fe42q0f6Uci8hZQMzHZRYRJoBgySbFPv7InLbuCVuZBF/gHSLBe0e7lDgZArFRAwyjjidPRitk+S2ltawMCPVLJobS8W1Q77knT4ueg/TNr2j+EH+OPD4qM+Sed7ADsnynpuOI4gw/W68U6p0JssYPQApdHjQRNh70U4FfMwNB4z2BuLxDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3z5uhVUtqN5OyplYkKXQ17d4OAmlRJ8nVcEl3nfclrI=;
+ b=oPh1klGPXJWoQL+0vdik6ZeChVZyWeGF4YIZSD5D+wGXEXWu2iuKnNlsBIorz4HeH/4MLh1KuVUwFd69aFuRyWczMim4ZGTKG3qf+Jh5TVtP9we+2t0EGUSERawzUPvunQk6reYI7EnBdSHvHW2//TVSSDcUvhV1s9YOaz2iFwU8zT14P8ZvsqsLxhV2XMaPi4nTid+DjyLXCcmIZ/ng0NMwJ8T4VaESNHCYiQmasEsRadUlQkhuPoa37NRlnyeo2N5/ayaZVb8SbOaquZQeVRgrXgqDd90K6OzoEaGYGo15geNkxUG3wZp9mYPF4FnGoLMkqSRsFaKjIDetRSBXwQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=gientech.com; dmarc=pass action=none header.from=gientech.com;
+ dkim=pass header.d=gientech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gientech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3z5uhVUtqN5OyplYkKXQ17d4OAmlRJ8nVcEl3nfclrI=;
+ b=WHnNPDuFriuL2nzAkI1mck2cj+/OMC91GgRxuD+N43tXDnPbeiVP4PVZLBPjijJ7ot8mOOKxNtZ2ZQ5O0zf3x03I2K6twMcXnweH7DWmIChF6/t18uekZ4TPnKXGSQ9y0frjfP8iJswRfQ0749GSbItVK6lLuYAFUStjB5/ZR4H/qzQ7m9U3qTYSudvHvzcpDbSQI6xvCUB6RihEOZqRzJ+vvCucD4M1bokc/YQ/SH4F1190HH7+vxO2dmaq0uWZUrj4yxbnW/s6YM9ZXKf5s57aM/uWrmpcDQvS4zi6wIzVrcTxs1g5racvOrHFZPm/elEr3ZhSpmtKcnMTYdGPMw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=gientech.com;
+Received: from SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn (10.43.106.85) by
+ SH0PR01MB0635.CHNPR01.prod.partner.outlook.cn (10.43.108.10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5273.14; Sat, 21 May 2022 18:06:25 +0000
+Received: from SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn ([10.43.106.85])
+ by SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn ([10.43.106.85]) with mapi
+ id 15.20.5273.019; Sat, 21 May 2022 18:06:25 +0000
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: RE..
+To:     Recipients <tianjiao.yang@gientech.com>
+From:   "J Wu" <tianjiao.yang@gientech.com>
+Date:   Sun, 15 May 2022 12:39:17 +0000
+Reply-To: contact@jimmywu.online
+X-ClientProxiedBy: SH2PR01CA016.CHNPR01.prod.partner.outlook.cn (10.41.247.26)
+ To SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn (10.43.106.85)
+Message-ID: <SH0PR01MB0729C099185546056248DCE08ACC9@SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH mm v2 6/9] memcg: enable accounting for percpu allocation
- of struct cgroup_rstat_cpu
-Content-Language: en-US
-From:   Vasily Averin <vvs@openvz.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org
-References: <Yn6aL3cO7VdrmHHp@carbon>
- <c0d01d6e-530c-9be3-1c9b-67a7f8ea09be@openvz.org>
-In-Reply-To: <c0d01d6e-530c-9be3-1c9b-67a7f8ea09be@openvz.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 054d09aa-bd06-4dcc-0df3-08da366ff9a0
+X-MS-TrafficTypeDiagnostic: SH0PR01MB0635:EE_
+X-Microsoft-Antispam-PRVS: <SH0PR01MB0635BBC0862A5718E75F65E68AD29@SH0PR01MB0635.CHNPR01.prod.partner.outlook.cn>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: =?iso-8859-1?Q?nTBVRFoLQC9SwW4G6eh49CBemDcEmLOr9uaOxMruhwWCAfTAWIpJQIjEPT?=
+ =?iso-8859-1?Q?We+NJUwE0Xn96rKZnN6lLa+4oPnUpMSLwgHcB4btBMfFzo4SXhO+FzvPSI?=
+ =?iso-8859-1?Q?T/10v06uAI7UGTr4dkP3pmuYD3xP+bXqzHkAJrWJ9LCKCjEWRPXOqYl9l+?=
+ =?iso-8859-1?Q?VvROtXLuKPfJCiAFxYafkffzRYr+lJXDZA2TaeYiSjecvGYx6szMgEwgTe?=
+ =?iso-8859-1?Q?A1J5Z8Cy4+wymTlScllABbJlyAbGOAjDD3yrXtkwbmr5ko1CsZqmQX0uT2?=
+ =?iso-8859-1?Q?SHGx7TGH+IDZi+OJzFN7K3TTtKlZn5Oa5r+8xlYD7jnTCjajNGwHwnNLZj?=
+ =?iso-8859-1?Q?fvqygH4Ej635M5ZHdhuoQpAWor6sqZAzExKLikW3+VUwI4sSD3YIM5Wrxx?=
+ =?iso-8859-1?Q?Bc97hdK0ST5LKoU2j4OvHu5xHUbfHwb4BPqYA8iPhDYR1W5buYlQoyMizN?=
+ =?iso-8859-1?Q?t4pEQWvZ/BSk2nJaGY/iPczTQLYLJYe4rDlLvt6o8rC8e3JxjhDu3XEWMh?=
+ =?iso-8859-1?Q?CSjBtwejbAij4/FdqWPgdAoKhJC4qcYUNNmMKsNpP+NktgOArS6HFRt+w6?=
+ =?iso-8859-1?Q?DgUvs8b+Oty9l8kiEvYzxquDXwvZ+pG8HreWJEzfHTeKaQdH/FrN9CInkw?=
+ =?iso-8859-1?Q?FP8vlNnyFAoPe8EtklX6kA1WiEFhMadRZhdt2GShOc5TJuZGPDo9Psnh9G?=
+ =?iso-8859-1?Q?tuNyJzylQID2F76bKhczcXEubVSDbbsCV17nD4jpxA1Q8ROU9lItMCxdkZ?=
+ =?iso-8859-1?Q?8e7Jx/PrvTVlRFTkg/4X+fty6Kyc0QVK1LKmCa5cxXXWMUHxstu9iZw8+y?=
+ =?iso-8859-1?Q?9pskNM1pgQVj1P+GcThBwuUJKfyy6prFJ0PKwVd847/iDZyzETKu0PZ8sg?=
+ =?iso-8859-1?Q?xEfhmBwd03DtStYuquTa4xYGGqhtTsMLBWEgp8HmgbU7de+b/wXi6ufAbV?=
+ =?iso-8859-1?Q?syx0fUjPMpzke0lCpLGjTjNoDlIkXYrQ76EMBb2Ryx1KYyxJbB80NnD70Z?=
+ =?iso-8859-1?Q?SllBKdG9UMo7QCSTBEWY2ij+2X/waYMsXSc5Ph+4ox4aN4x5NqJeg2eA0Q?=
+ =?iso-8859-1?Q?Mg=3D=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:OSPM;SFS:(13230001)(366004)(7696005)(9686003)(4270600006)(26005)(3480700007)(52116002)(38350700002)(38100700002)(2906002)(7366002)(7406005)(33656002)(6200100001)(7416002)(40180700001)(8936002)(19618925003)(55016003)(558084003)(86362001)(40160700002)(6862004)(8676002)(66476007)(66556008)(7116003)(508600001)(6666004)(66946007)(186003)(62346012);DIR:OUT;SFP:1501;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?gg00/qmx7frMXAjMpazWJYG/cGG+QL3LQ6yx7w330QrKDoZ9JTelPHhUuJ?=
+ =?iso-8859-1?Q?MqV5KN2qTxNgrOlAM0U+LzMOGnEPOcjmb/o6UAMhBijJFjFQDk4gHGilt5?=
+ =?iso-8859-1?Q?oJj+xO+2t8siNzkCLiaBG3WEXK7frkFavNOsYsnA4xeknBwEVmq+8RTEsO?=
+ =?iso-8859-1?Q?aE5Y2+RIBApKK290nHRzF1v7GlCDQPF0d0ZSqfAtbAde5gneUWV6mpcFRA?=
+ =?iso-8859-1?Q?RtqHgoxXHkf5qkrbhvkRfmH6rOOeh8e8WpbvWaMwJZUzELNxwrMiPiV1vt?=
+ =?iso-8859-1?Q?sGY4gqSbpgURUwIDUkfjxMP6BZG8wdhMYR8FONAzF5aY2HT1qcDdQs7LsC?=
+ =?iso-8859-1?Q?PlDqUQVp3WisgqbIlgSp8lOFcihZIjkl2XwhaAk5moJIud9THg8xO0Smj0?=
+ =?iso-8859-1?Q?OcuWW63VVKCGf/4iq7ZYthc8mCYUOVzrPPDCfgfHJR2XzzKt6yt56EQEI8?=
+ =?iso-8859-1?Q?BDF4cigTJxbgo3NrqedT8wJv5p7stNqRWOcYkYOlhmpSaj0SFAzAQHvKHm?=
+ =?iso-8859-1?Q?HdMb7fEEHuucXqZ1V0O+9Y9AgpLgppzyyA0mpXfwhmxCGPJePitKUAtJk2?=
+ =?iso-8859-1?Q?dvxclVSH4qBJhmPd9dHfb/dVLdclJ/2G6Xulh6kGHwVekuxXLA5l5JKC+C?=
+ =?iso-8859-1?Q?CodOSEmgk3j7u4Lmh7Bb7c4PxTAyq2XwiEv1C2Tmrt8ObZio1mxruZdu7/?=
+ =?iso-8859-1?Q?cm7oKNTcGmpdDwCOmXp6XXMCwohJBieJD1yLSbloCaoJo4eV50xHOMOcl8?=
+ =?iso-8859-1?Q?2747XHqTEKmJ/Lo6TZAgTmSF4H/4yXLYaXJDNyMLMZnqtpLXvefalO43ho?=
+ =?iso-8859-1?Q?jFqOy/8Ha4+OYvg1bH/Cx69ecL3TasQULkLwIPs31bCFDxYN8tFLyzI8Ay?=
+ =?iso-8859-1?Q?Bvp1qfLXWhCYiSxdnsO6jZFRpSJgxpo5pPkdd+kZ4D57i2dtkpcZ+e3Omc?=
+ =?iso-8859-1?Q?vpVj2JejanJfF7dwkk8le/nXFjWKGG+237hRhQIL3lVWi/kbbiTDyyCKT9?=
+ =?iso-8859-1?Q?qwOp8IDSZli4wIHzFLcyyUDUkHEwKXWbFyrqd4xSgriOmiRPdbn4KIQfG/?=
+ =?iso-8859-1?Q?5jwTQR+V1D7hLPgafXGI4hOCp1XoM5/aDDxGUgfQc2gJ5OQZvwK6UboCKI?=
+ =?iso-8859-1?Q?WNxiXwCQ3BLS++z03n7Asct6emHyPvgceLfjpii8eRhYqbsTsNZvWT1Pf0?=
+ =?iso-8859-1?Q?tNO8z7zl87+a4JUybGe4l2HxBxyCnES0N7aLR6/QVDQEJB1hiLs8FF52Hl?=
+ =?iso-8859-1?Q?O5GEXFe7LzzvZtRpc/68wgc4W8AiA+orE/CIQKiJLhIFQ/13JW7GmmMGiP?=
+ =?iso-8859-1?Q?Ncq8kPI8rZBjjn8onHcioJruFfIT/1RN5tRn92BRQp+OuMa1r5wH1FNqn0?=
+ =?iso-8859-1?Q?lsu3PWSi94nt86oMW6Drk6+eV3Jr11oijBsURb3GVdzpVuludjtCNAj59C?=
+ =?iso-8859-1?Q?BL7/knTwWxXBLOI1YU6oLv8BHuwADwxnByxkw1TxDaSbltFBluAimUuseP?=
+ =?iso-8859-1?Q?E7A29t9p3GM3vLYEoNnJFGtOLpWk2Z/QlaUXEVB8xEfGwxzuI9VWi6MDZI?=
+ =?iso-8859-1?Q?DNejtfqES/Txc8ruDpK6u+x33/ZxUwYijfn0RsOtzNRwj8a8RJsNKGMkhW?=
+ =?iso-8859-1?Q?OD7+eRNSmt7xSlYF/8HnPJQ/sn/FdIjE4alRgSOK35UVJvjjHrW5bOk+FC?=
+ =?iso-8859-1?Q?P0JogiCbAbw+2aeXIXu/99XF8QvAJ8/WqRyhUFkxBTMJVLVZh0QvRUa1J6?=
+ =?iso-8859-1?Q?BpheW4XB/UArAYGWd47Utde1g=3D?=
+X-OriginatorOrg: gientech.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 054d09aa-bd06-4dcc-0df3-08da366ff9a0
+X-MS-Exchange-CrossTenant-AuthSource: SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2022 12:39:38.4726
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 89592e53-6f9d-4b93-82b1-9f8da689f1b4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cWSgi5LZh61AbMJ1oyKwdg1f/5vonCgmw47j+jrumONtPndlfPx584af2wCFZ9V/3yj8Vo3EricyGDZIrFA9ZuhwdZgGbFkuaZJGU+72IdI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SH0PR01MB0635
+X-Spam-Status: Yes, score=7.4 required=5.0 tests=BAYES_50,DATE_IN_PAST_96_XX,
+        DKIM_INVALID,DKIM_SIGNED,NIXSPAM_IXHASH,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4864]
+        *  3.0 NIXSPAM_IXHASH http://www.nixspam.org/
+        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
+        *  3.4 DATE_IN_PAST_96_XX Date: is 96 hours or more before Received:
+        *      date
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.1 DKIM_INVALID DKIM or DK signature exists, but is not valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/21/22 19:38, Vasily Averin wrote:
-> struct cgroup_rstat_cpu is percpu allocated for each new cgroup and
-> can consume a significant portion of all allocated memory on nodes
-> with a large number of CPUs.
-> 
-> Common part of the cgroup creation:
-> Allocs  Alloc   $1*$2   Sum	Allocation
-> number  size
-> --------------------------------------------
-> 16  ~   352     5632    5632    KERNFS
-> 1   +   4096    4096    9728    (cgroup_mkdir+0xe4)
-> 1       584     584     10312   (radix_tree_node_alloc.constprop.0+0x89)
-> 1       192     192     10504   (__d_alloc+0x29)
-> 2       72      144     10648   (avc_alloc_node+0x27)
-> 2       64      128     10776   (percpu_ref_init+0x6a)
-> 1       64      64      10840   (memcg_list_lru_alloc+0x21a)
-> percpu:
-> 1   +   192     192     192     call_site=psi_cgroup_alloc+0x1e
-> 1   +   96      96      288     call_site=cgroup_rstat_init+0x5f
-> 2       12      24      312     call_site=percpu_ref_init+0x23
-> 1       6       6       318     call_site=__percpu_counter_init+0x22
-> 
->  '+' -- to be accounted,
->  '~' -- partially accounted
-> 
-> Signed-off-by: Vasily Averin <vvs@openvz.org>
-> ---
->  kernel/cgroup/rstat.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
-> index 24b5c2ab5598..f76cb63ae2e0 100644
-> --- a/kernel/cgroup/rstat.c
-> +++ b/kernel/cgroup/rstat.c
-> @@ -257,7 +257,8 @@ int cgroup_rstat_init(struct cgroup *cgrp)
->  
->  	/* the root cgrp has rstat_cpu preallocated */
->  	if (!cgrp->rstat_cpu) {
-> -		cgrp->rstat_cpu = alloc_percpu(struct cgroup_rstat_cpu);
-> +		cgrp->rstat_cpu = alloc_percpu_gfp(struct cgroup_rstat_cpu
-"," was lost here
-> +						   GFP_KERNEL_ACCOUNT);
->  		if (!cgrp->rstat_cpu)
->  			return -ENOMEM;
->  	}
-
+Can we do this together

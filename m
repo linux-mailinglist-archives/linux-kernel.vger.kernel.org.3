@@ -2,48 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F45527A82
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 00:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC7C527A84
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 00:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235631AbiEOWGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 18:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50174 "EHLO
+        id S236603AbiEOWJJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 15 May 2022 18:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234992AbiEOWGr (ORCPT
+        with ESMTP id S230050AbiEOWJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 18:06:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D67205D5;
-        Sun, 15 May 2022 15:06:46 -0700 (PDT)
+        Sun, 15 May 2022 18:09:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0FD124964
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 15:09:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CFA49B80E66;
-        Sun, 15 May 2022 22:06:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0803EC385B8;
-        Sun, 15 May 2022 22:06:41 +0000 (UTC)
-Date:   Sun, 15 May 2022 18:06:40 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69833611A3
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 22:09:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEB27C385B8;
+        Sun, 15 May 2022 22:09:04 +0000 (UTC)
+Date:   Sun, 15 May 2022 18:09:03 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Vasily Averin <vvs@openvz.org>, Shakeel Butt <shakeelb@google.com>,
-        Ingo Molnar <mingo@redhat.com>, kernel@openvz.org,
-        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>, linux-mm@kvack.org,
-        "linux-trace-users@vger.kernel.org" 
-        <linux-trace-users@vger.kernel.org>
-Subject: Re: [PATCH v2] percpu: improve percpu_alloc_percpu event trace
-Message-ID: <20220515180640.0ae2ead5@gandalf.local.home>
-In-Reply-To: <YnsgbXKiNNSF+1ZO@carbon>
-References: <2b388d09-940e-990f-1f8a-2fdaa9210fa0@openvz.org>
-        <a07be858-c8a3-7851-9086-e3262cbcf707@openvz.org>
-        <YnsgbXKiNNSF+1ZO@carbon>
+        Matthew Wilcox <willy@infradead.org>,
+        Joe Perches <joe@perches.com>, kernel@openvz.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH mm v2] tracing: incorrect gfp_t conversion
+Message-ID: <20220515180903.37fc18e4@gandalf.local.home>
+In-Reply-To: <8b9ba8ce-7376-2ef2-95f5-30e53cb46914@openvz.org>
+References: <b8feb625dd2ba0d0dfc298a2f39ca1d8368ba5c9.camel@perches.com>
+        <8b9ba8ce-7376-2ef2-95f5-30e53cb46914@openvz.org>
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -53,41 +48,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 May 2022 19:33:17 -0700
-Roman Gushchin <roman.gushchin@linux.dev> wrote:
+On Wed, 11 May 2022 10:20:39 +0300
+Vasily Averin <vvs@openvz.org> wrote:
 
->  --- a/include/trace/events/percpu.h
-> > +++ b/include/trace/events/percpu.h
-> > @@ -6,15 +6,20 @@
-> >  #define _TRACE_PERCPU_H
-> >  
-> >  #include <linux/tracepoint.h>
-> > +#include <trace/events/mmflags.h>
-> >  
-> >  TRACE_EVENT(percpu_alloc_percpu,
-> >  
-> > -	TP_PROTO(bool reserved, bool is_atomic, size_t size,
-> > -		 size_t align, void *base_addr, int off, void __percpu *ptr),
-> > +	TP_PROTO(unsigned long call_site,
-> > +		 bool reserved, bool is_atomic, size_t size,
-> > +		 size_t align, void *base_addr, int off,
-> > +		 void __percpu *ptr, size_t bytes_alloc, gfp_t gfp_flags),  
+> Fixes the following sparse warnings:
 > 
-> Don't we want to preserve the order and add the call_site at the end?
-> Trace events are not ABI, but if we don't have a strong reason to break it,
-> I'd preserve the old order.
+> include/trace/events/*: sparse: cast to restricted gfp_t
+> include/trace/events/*: sparse: restricted gfp_t degrades to integer
+> 
+> gfp_t type is bitwise and requires __force attributes for any casts.
+> 
+> Signed-off-by:	Vasily Averin <vvs@openvz.org>
+> ---
+> v2: 1) re-based to 5.18-rc6
+>     2) re-defined __def_gfpflag_names array according to
+> 	akpm@, willy@ and Joe Perches recommendations
+> ---
+>  include/linux/gfp.h               |  2 +-
+>  include/trace/events/btrfs.h      |  4 +-
+>  include/trace/events/compaction.h |  4 +-
+>  include/trace/events/kmem.h       | 12 ++---
+>  include/trace/events/mmflags.h    | 84 ++++++++++++++++---------------
+>  include/trace/events/vmscan.h     | 16 +++---
+>  mm/compaction.c                   |  2 +-
+>  7 files changed, 63 insertions(+), 61 deletions(-)
 
-Ideally everyone should be using libtraceevent which will parse the format
-file for the needed entries.
+From the tracing POV:
 
-Nothing (important) should be parsing the raw ascii from the trace files.
-It's slow and unreliable. The raw format (trace_pipe_raw) files, along with
-libtraceevent will handle fining the fields you are looking for, even if
-the fields move around (internally or externally).
-
-Then there's trace-cruncher (a python script that uses libtracefs and
-libtraceevent) that will work too.
-
-  https://github.com/vmware/trace-cruncher
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
 -- Steve

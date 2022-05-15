@@ -2,71 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 750BD52763E
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 09:23:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 295CA527642
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 09:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235945AbiEOHXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 03:23:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53954 "EHLO
+        id S234212AbiEOH1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 03:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233629AbiEOHXQ (ORCPT
+        with ESMTP id S229709AbiEOH1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 03:23:16 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC324DFE3
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 00:23:14 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id a3-20020a92c543000000b002d1108788a1so369220ilj.4
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 00:23:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=dQNDJrcSlSeQiac7rbEEb7iB5P6+L27qAWitqYNvlXk=;
-        b=tsUV6iK9T0TJb9b99lkdOFtWBfdyNoUxg+vLBHrvB7vtw8QjOgXlyNcBJSj1fHebHw
-         V/Woa/2XY6+zgAkg0ysOTqJVwLuTVIl8Vd5CaAdL2o2UAKOz7e4M8K2z1ei6BpKqGtdq
-         Ku591B00QZEuXXlC945rzEPueEeED5SY7TRdUram6lyBarxgVMXxFcPhtARJ5jbtkoSW
-         B8hRsQmBIzhHApye0RTNkMtU9lzAOmBFOdAPLJwVtGfY8E9Ys0nID9cJf/dCzFllhyxN
-         /P10BTMnHpkXjELlalCfmBOVnXjOm6xqZS1OHZ1Y9iBHVMjzSypLQlteXHRuzSCNJK9/
-         NCmw==
-X-Gm-Message-State: AOAM53329uW2LK0k5BLpKHgc1h+WNBbyjhuSOOtN/e1KIUGOunnrV9EO
-        16L7a5/gviTo0fLZDP87KGDWEryTgxbcS//gXPV3qS1WFGV5
-X-Google-Smtp-Source: ABdhPJyOq69nXmeX37CZgjAvoiFiYs9naNVqtYvZqT+ccU8+uxrae5vbCaJftfaBWw0Z268nnlzGVs8lUIu9Z2mUwSbItm+p4Q/U
+        Sun, 15 May 2022 03:27:52 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E959AB874;
+        Sun, 15 May 2022 00:27:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652599671; x=1684135671;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Smy0VW9Z/B0hw61N8jmj4g4kLpvB1teUObFaA9+9Bgw=;
+  b=fPYuatnlvF1Nozp1hkrsg/XrTkjbnKkp7XYNN5RnxHjrk3HvvxSXxIT4
+   R1ehTedzYTfFK+fqk4J/Rkuo3D+MKjOma8ia2Iudti13fF2GAGgnXO6c4
+   7PAkyZXHY2SU4/qKDYLPQQ51EmUU8HcX+pNwTl9ddmx4No09OiWf/G/5K
+   RLexhYmFqs9pixYpySJ6QukU+0fOO1STiYCpe8LMz5vcGwcykfMbK4OW4
+   oexMj/XgfKm2gKb4RYOsf7sWdb/EfqCewLsyNNFZ01W7QaPhE+rbW5Xtq
+   734WXDqwZRnFbUyoPZ4pvqyIP9qzgZOiXgEYh1YzvyuLDmyF9Op5CEdJq
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10347"; a="295864279"
+X-IronPort-AV: E=Sophos;i="5.91,227,1647327600"; 
+   d="scan'208";a="295864279"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2022 00:27:51 -0700
+X-IronPort-AV: E=Sophos;i="5.91,227,1647327600"; 
+   d="scan'208";a="595975304"
+Received: from fiegl-mobl.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.51.28])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2022 00:27:48 -0700
+Message-ID: <47690d71-6ebf-b85c-97f7-d37b20f3cd65@intel.com>
+Date:   Sun, 15 May 2022 10:27:43 +0300
 MIME-Version: 1.0
-X-Received: by 2002:a92:4a0a:0:b0:2d0:fdf4:6f45 with SMTP id
- m10-20020a924a0a000000b002d0fdf46f45mr4584046ilf.262.1652599394077; Sun, 15
- May 2022 00:23:14 -0700 (PDT)
-Date:   Sun, 15 May 2022 00:23:14 -0700
-In-Reply-To: <20220515012731.1529-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d715a005df07c7c2@google.com>
-Subject: Re: [syzbot] WARNING in mntput_no_expire (3)
-From:   syzbot <syzbot+5b1e53987f858500ec00@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.8.1
+Subject: Re: [PATCH 6/6] perf intel-pt: Add guest_code support
+Content-Language: en-US
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, Leo Yan <leo.yan@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20220513090237.10444-1-adrian.hunter@intel.com>
+ <20220513090237.10444-7-adrian.hunter@intel.com>
+ <875ym9h4mt.fsf@linux.intel.com>
+ <df56f04b-cb25-5a47-ffef-b2e2ee0f6b74@intel.com>
+ <871qwxgv1e.fsf@linux.intel.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <871qwxgv1e.fsf@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 13/05/22 21:13, Andi Kleen wrote:
+> Adrian Hunter <adrian.hunter@intel.com> writes:
+>>>
+>>> I'm still not fully sure how it exactly finds the code on the host,
+>>> how is the code transferred?
+>>
+>> I don't know.  From a quick look at the code in
+>> tools/testing/selftests/kvm/lib/kvm_util.c it seems to be using
+>> KVM_SET_USER_MEMORY_REGION IOCTL.
+> 
+> Okay so it assumes that the pages with code on the guest are still intact: that is
+> you cannot quit the traced program, or at least not do something that would
+> fill it with other data?. Is that correct?
+> 
+> It sounds like with that restriction it's more useful for kernel traces.
 
-syzbot tried to test the proposed patch but the build/boot failed:
+These patches are to support tracing of test programs that
+ *are* the hypervisor, creating, populating, and destroying the VM.
+The VM is not running an OS.
 
-fs/namespace.c:1302:1: error: expected identifier or '(' before '{' token
-
-
-Tested on:
-
-commit:         feb9c5e1 Merge tag 'for_linus' of git://git.kernel.org..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-dashboard link: https://syzkaller.appspot.com/bug?extid=5b1e53987f858500ec00
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=13dff259f00000
-
+Like:
+	https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/kvm/x86_64/tsc_msrs_test.c
+	
+guest_code() gets mapped into the VM at the same virtual address as the host,
+so the Intel PT decoder, which wants to walk the object code, can find the
+object code in the host program.

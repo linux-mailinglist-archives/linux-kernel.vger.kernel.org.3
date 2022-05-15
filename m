@@ -2,42 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F9E527969
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 21:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D6A052797A
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 21:26:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238474AbiEOTRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 15:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48580 "EHLO
+        id S238516AbiEOTZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 15:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238406AbiEOTRZ (ORCPT
+        with ESMTP id S229587AbiEOTZz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 15:17:25 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610C7120B8;
-        Sun, 15 May 2022 12:17:22 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1nqJjs-0005vt-RK; Sun, 15 May 2022 21:17:12 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     linux-rockchip@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>
-Cc:     Peter Geis <pgwipeout@gmail.com>, Marc Zyngier <maz@kernel.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 4/5] arm64: dts: rockchip: Add rk3568 PCIe2x1 controller
-Date:   Sun, 15 May 2022 21:17:11 +0200
-Message-ID: <5575428.DvuYhMxLoT@diego>
-In-Reply-To: <20220429123832.2376381-5-pgwipeout@gmail.com>
-References: <20220429123832.2376381-1-pgwipeout@gmail.com> <20220429123832.2376381-5-pgwipeout@gmail.com>
+        Sun, 15 May 2022 15:25:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EEFE6558;
+        Sun, 15 May 2022 12:25:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35DCC60F72;
+        Sun, 15 May 2022 19:25:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F9BFC385B8;
+        Sun, 15 May 2022 19:25:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652642753;
+        bh=RFTP1/aXg2gz8WWSzFegDcI5lIwB0N/pGEC7mYi4n6Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aeXVZIwgboyVHJ/1800mrADW20haf/6qzf0O+55fMAuSq3fscTyhmuerAyTrwKkGg
+         rG6dVYKN5I0vmL2lfHcEdMzWvCH6FSaxQwa/R/2zOsN8hG+youCKbNbNNe8i78fu3w
+         D1gPEY+8Kza8XDrwU6Bq1+3hUB7SL2nv8eCkS3COk57JcAI+fzbxbF7yAcKso58WAf
+         YFYk9rJOSypeb8rkewxQ9wbGA5E+QAmDzuYc1DPGFEDlAr95LxCkmh45TblmOkUduY
+         WaoRNbmZ+VDqY750I7Xw3DTToyG2GJwM3EAJkVo3kJ0ksH4s/zTtZ1jCuWgCQUuvae
+         Yo9rqcTFQes+g==
+Date:   Sun, 15 May 2022 12:25:52 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] xfs: Remove duplicate include
+Message-ID: <YoFTwGLupUVjzQve@magnolia>
+References: <20220515131140.31281-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220515131140.31281-1-jiapeng.chong@linux.alibaba.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,85 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Freitag, 29. April 2022, 14:38:30 CEST schrieb Peter Geis:
-> The PCIe2x1 controller is common between the rk3568 and rk3566. It is a
-> single lane PCIe2 compliant controller.
+On Sun, May 15, 2022 at 09:11:40PM +0800, Jiapeng Chong wrote:
+> Clean up the following includecheck warning:
 > 
-> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> ./fs/xfs/xfs_attr_item.c: xfs_inode.h is included more than once.
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+
+LGTM
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+
+--D
+
 > ---
->  arch/arm64/boot/dts/rockchip/rk356x.dtsi | 52 ++++++++++++++++++++++++
->  1 file changed, 52 insertions(+)
+>  fs/xfs/xfs_attr_item.c | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> index 7cdef800cb3c..aea5d9255235 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> @@ -689,6 +689,58 @@ qos_vop_m1: qos@fe1a8100 {
->  		reg = <0x0 0xfe1a8100 0x0 0x20>;
->  	};
->  
-> +	pcie2x1: pcie@fe260000 {
-> +		compatible = "rockchip,rk3568-pcie";
-> +		#address-cells = <3>;
-> +		#size-cells = <2>;
-> +		bus-range = <0x0 0xf>;
-> +		clocks = <&cru ACLK_PCIE20_MST>, <&cru ACLK_PCIE20_SLV>,
-> +			 <&cru ACLK_PCIE20_DBI>, <&cru PCLK_PCIE20>,
-> +			 <&cru CLK_PCIE20_AUX_NDFT>;
-> +		clock-names = "aclk_mst", "aclk_slv",
-> +			      "aclk_dbi", "pclk", "aux";
-> +		device_type = "pci";
-> +		interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>,
-> +			     <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>,
-> +			     <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>,
-> +			     <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>,
-> +			     <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
-> +		interrupt-names = "sys", "pmc", "msi", "legacy", "err";
-> +		#interrupt-cells = <1>;
-
-I guess #interrupt-cells shouldn't be necessary here, as that property
-is meant for interrupt-controller nodes - like the subnode here
-which already has its own #interrupt-cells, right?
-
-> +		interrupt-map-mask = <0 0 0 7>;
-> +		interrupt-map = <0 0 0 1 &pcie_intc 0>,
-> +				<0 0 0 2 &pcie_intc 1>,
-> +				<0 0 0 3 &pcie_intc 2>,
-> +				<0 0 0 4 &pcie_intc 3>;
-> +		linux,pci-domain = <0>;
-> +		num-ib-windows = <6>;
-> +		num-ob-windows = <2>;
-> +		max-link-speed = <2>;
-> +		msi-map = <0x0 &gic 0x0 0x1000>;
-> +		num-lanes = <1>;
-> +		phys = <&combphy2 PHY_TYPE_PCIE>;
-> +		phy-names = "pcie-phy";
-> +		power-domains = <&power RK3568_PD_PIPE>;
-> +		reg = <0x3 0xc0000000 0x0 0x00400000>,
-> +		      <0x0 0xfe260000 0x0 0x00010000>,
-> +		      <0x3 0x00000000 0x0 0x01000000>;
-> +		ranges = <0x01000000 0x0 0x01000000 0x3 0x01000000 0x0 0x00100000
-> +			  0x02000000 0x0 0x02000000 0x3 0x01100000 0x0 0x3ef00000>;
-> +		reg-names = "dbi", "apb", "config";
-> +		resets = <&cru SRST_PCIE20_POWERUP>;
-> +		reset-names = "pipe";
-> +		status = "disabled";
-> +
-> +		pcie_intc: legacy-interrupt-controller {
-> +			#address-cells = <0>;
-> +			#interrupt-cells = <1>;
-> +			interrupt-controller;
-> +			interrupt-parent = <&gic>;
-> +			interrupts = <GIC_SPI 72 IRQ_TYPE_EDGE_RISING>;
-> +		};
-> +
-> +	};
-> +
->  	sdmmc0: mmc@fe2b0000 {
->  		compatible = "rockchip,rk3568-dw-mshc", "rockchip,rk3288-dw-mshc";
->  		reg = <0x0 0xfe2b0000 0x0 0x4000>;
+> diff --git a/fs/xfs/xfs_attr_item.c b/fs/xfs/xfs_attr_item.c
+> index e8ac88d9fd14..bf9a01b083b8 100644
+> --- a/fs/xfs/xfs_attr_item.c
+> +++ b/fs/xfs/xfs_attr_item.c
+> @@ -22,7 +22,6 @@
+>  #include "xfs_attr.h"
+>  #include "xfs_attr_item.h"
+>  #include "xfs_trace.h"
+> -#include "xfs_inode.h"
+>  #include "xfs_trans_space.h"
+>  #include "xfs_errortag.h"
+>  #include "xfs_error.h"
+> -- 
+> 2.20.1.7.g153144c
 > 
-
-
-
-

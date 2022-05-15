@@ -2,111 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0039A527693
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 11:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE684527697
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 11:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236088AbiEOJZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 05:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57068 "EHLO
+        id S236112AbiEOJZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 05:25:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236064AbiEOJZM (ORCPT
+        with ESMTP id S236096AbiEOJZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 05:25:12 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE02813F4B
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 02:25:10 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652606709;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=SUxfBjeM7R1jgkM/zti1dxKT7f0QkoDx8P2YTs/aV7g=;
-        b=LiB4G/q9YkhJ0W/VrVtZcAklUfl3VHwdjv3gSRaj7afgMqv/hX17xbVotw0QjJ37hwFLQy
-        EnJ0E0QPMl+g+hZQGrHmR3YNgqtBOoI8sj0XEBtzMYAVTdnbgKPXC7AEyPjoZ6Vmdl+X3I
-        iCxaFRV5RPeAT9ZykpEXStchC802jt6OrgI36ZfC3LPhJe85UftkRRqRiOBfKwtzLRbUgB
-        lc3fVlYGgKhCLBbhmi9jyu50P+UE16hY9gK/6SEEPIO3E9LqtCMzv6GlE7lXruGrqwU4Yn
-        Dddo3I/r1qLlUGD3LQseKkyRLyXBYdpV0TX9RCMQLMIHBaO/ckp+baT1Wgp9Xw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652606709;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=SUxfBjeM7R1jgkM/zti1dxKT7f0QkoDx8P2YTs/aV7g=;
-        b=+t8IuuN3UX37AKn9yJAHy4pj0b4871XpSR6+e/t525ce3m9dGMvIVV0BnDS5HuP7v/9xwp
-        SM+iRl5ypENf9XDA==
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: [GIT pull] x86/urgent for v5.18-rc7
-References: <165260667543.920532.17932536291158599837.tglx@xen13>
-Message-ID: <165260667833.920532.1890128975471695929.tglx@xen13>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        Sun, 15 May 2022 05:25:27 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5B917ABE;
+        Sun, 15 May 2022 02:25:26 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id i24so11471136pfa.7;
+        Sun, 15 May 2022 02:25:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=pZRHTBR5dW8zhXvTd2YkxEziReBHgNlpU15cq9pMkk8=;
+        b=FQ0dXDu3kUXPdQIr+jFJkLS/ZbZ9PlZTQ4wWSYIr5yWwZ/09YzhfV8eGn03lXhFRHr
+         tcnmaCstg8v2gAAQAz1Bu0igGXJLayl9RmbEo+pXoQQCus7vO1rKXLQeUhLs0a1eAZQp
+         hcKHVTj8Bclsxj9QRh4cPyFLadum0Zhm+juTNHrBSsOs5o3iWdsRl+mNogvIS7IHqva0
+         EzMvDZQ45BrzCUIVFCXPTe5vXwGxsKz6pW2npd5O9CrTd4nzva5yw7H6M0rvJwgFH8a1
+         RvkkK+Azf2H7SjKYC0en7f1Sz7XSF1tBTnh3bZr9Vak4cr3unWsbSP3LsWVbME/32DAd
+         sUAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pZRHTBR5dW8zhXvTd2YkxEziReBHgNlpU15cq9pMkk8=;
+        b=MnrD/ttXPz2ow7z13UW7Bh52M0188rG7CFuSnwEUuU/rdNcphHHZzry/1/AQKpMPIM
+         +v1Ygt28TyCxO+d0SmUGVcLQnmgkwmejjYzNKa+WbW94HUvwhEZszOCC1JOuIqZvlrDI
+         UvPikZsJhgL1yigZhXSgFQC4sUo3E7TqvfMk7ds9IYRX7KC225AefR54cDzhtAG7Qdh5
+         /HrbBPgbmM5H8GUX+u0YYNj4IkMwj78W4C/bZ5aSVur/JLXPMa0dbRvr6EizaG3y+xP2
+         l62Asycve+7xJCR8BcBjqfH/YWaiHFJsFpDcnv5TBV3ytuhvriH/I+Ylc7r8AB7W0HtZ
+         5g6Q==
+X-Gm-Message-State: AOAM533bINoCrzC7xon95FQzcSoxRFATWUVCQvVB6DvH3CTSbDyBnWGf
+        NPGVx6TYraRky2cpu0nmZh4=
+X-Google-Smtp-Source: ABdhPJwyVaqhzNfKTvfJOWAQRy7DrGywtaMNEL6nqrpqhjUEjhj5tUWrFWWMPS8s9f71ukqR6dpcYg==
+X-Received: by 2002:a63:dc42:0:b0:3c5:e187:572 with SMTP id f2-20020a63dc42000000b003c5e1870572mr11050855pgj.82.1652606725864;
+        Sun, 15 May 2022 02:25:25 -0700 (PDT)
+Received: from [192.168.255.10] ([203.205.141.27])
+        by smtp.gmail.com with ESMTPSA id o12-20020a170902e00c00b0016174b312f5sm485835plo.104.2022.05.15.02.25.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 May 2022 02:25:25 -0700 (PDT)
+Message-ID: <d741a183-6180-1a49-fffb-b62d36286a04@gmail.com>
+Date:   Sun, 15 May 2022 17:25:21 +0800
 MIME-Version: 1.0
-Date:   Sun, 15 May 2022 11:25:08 +0200 (CEST)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [KVM] db16e9b28b: kvm-unit-tests.pmu.fail
+Content-Language: en-US
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
+        lkp@lists.01.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org
+References: <20220515092217.GD10578@xsang-OptiPlex-9020>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <20220515092217.GD10578@xsang-OptiPlex-9020>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On 15/5/2022 5:22 pm, kernel test robot wrote:
+> patch link:https://lore.kernel.org/kvm/20220509102204.62389-2-likexu@tencent.com
 
-please pull the latest x86/urgent branch from:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86-urgent-2022-=
-05-15
-
-up to:  280abe14b6e0: x86/mm: Fix marking of unused sub-pmd ranges
-
-
-A single fix for the handling of unpopulated sub-pmd spaces. The copy &
-pasta from the corresponding s390 code screwed up the address calculation
-for marking the sub-pmd ranges via memset by omitting the ALIGN_DOWN() to
-calculate the proper start address. It's a mystery why this code is not
-generic and shared because there is nothing architecture specific in there,
-but that's too intrusive for a backportable fix.
-
-Thanks,
-
-	tglx
-
------------------->
-Adrian-Ken Rueegsegger (1):
-      x86/mm: Fix marking of unused sub-pmd ranges
-
-
- arch/x86/mm/init_64.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
-index 96d34ebb20a9..e2942335d143 100644
---- a/arch/x86/mm/init_64.c
-+++ b/arch/x86/mm/init_64.c
-@@ -902,6 +902,8 @@ static void __meminit vmemmap_use_sub_pmd(unsigned long s=
-tart, unsigned long end
-=20
- static void __meminit vmemmap_use_new_sub_pmd(unsigned long start, unsigned =
-long end)
- {
-+	const unsigned long page =3D ALIGN_DOWN(start, PMD_SIZE);
-+
- 	vmemmap_flush_unused_pmd();
-=20
- 	/*
-@@ -914,8 +916,7 @@ static void __meminit vmemmap_use_new_sub_pmd(unsigned lo=
-ng start, unsigned long
- 	 * Mark with PAGE_UNUSED the unused parts of the new memmap range
- 	 */
- 	if (!IS_ALIGNED(start, PMD_SIZE))
--		memset((void *)start, PAGE_UNUSED,
--			start - ALIGN_DOWN(start, PMD_SIZE));
-+		memset((void *)page, PAGE_UNUSED, start - page);
-=20
- 	/*
- 	 * We want to avoid memset(PAGE_UNUSED) when populating the vmemmap of
-
+Fixed by the V2 version. Please help try.

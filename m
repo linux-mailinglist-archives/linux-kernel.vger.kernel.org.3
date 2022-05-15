@@ -2,100 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 295CA527642
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 09:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3F1527643
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 09:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234212AbiEOH1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 03:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33846 "EHLO
+        id S234706AbiEOH3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 03:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbiEOH1w (ORCPT
+        with ESMTP id S229709AbiEOH3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 03:27:52 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E959AB874;
-        Sun, 15 May 2022 00:27:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652599671; x=1684135671;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Smy0VW9Z/B0hw61N8jmj4g4kLpvB1teUObFaA9+9Bgw=;
-  b=fPYuatnlvF1Nozp1hkrsg/XrTkjbnKkp7XYNN5RnxHjrk3HvvxSXxIT4
-   R1ehTedzYTfFK+fqk4J/Rkuo3D+MKjOma8ia2Iudti13fF2GAGgnXO6c4
-   7PAkyZXHY2SU4/qKDYLPQQ51EmUU8HcX+pNwTl9ddmx4No09OiWf/G/5K
-   RLexhYmFqs9pixYpySJ6QukU+0fOO1STiYCpe8LMz5vcGwcykfMbK4OW4
-   oexMj/XgfKm2gKb4RYOsf7sWdb/EfqCewLsyNNFZ01W7QaPhE+rbW5Xtq
-   734WXDqwZRnFbUyoPZ4pvqyIP9qzgZOiXgEYh1YzvyuLDmyF9Op5CEdJq
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10347"; a="295864279"
-X-IronPort-AV: E=Sophos;i="5.91,227,1647327600"; 
-   d="scan'208";a="295864279"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2022 00:27:51 -0700
-X-IronPort-AV: E=Sophos;i="5.91,227,1647327600"; 
-   d="scan'208";a="595975304"
-Received: from fiegl-mobl.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.51.28])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2022 00:27:48 -0700
-Message-ID: <47690d71-6ebf-b85c-97f7-d37b20f3cd65@intel.com>
-Date:   Sun, 15 May 2022 10:27:43 +0300
+        Sun, 15 May 2022 03:29:14 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FFD13CC1
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 00:29:13 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id l8-20020a056e021aa800b002cf778c63caso6487608ilv.10
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 00:29:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=odEcK5lFa5mJCte0c3eNEJ2xjgp3/O7yqETrrH7RhUc=;
+        b=YO95UwsfKHLKN4ojHkdXDiz5mFdrv0yGgblTlF4Vj4fejESJEHddozLU+vNQCEQDrC
+         80mtf7UHpfDKcU6xikQf6lD8yV7XWZ3MetucvCExta2Bhbg+5UJEL1HHP3d/XJxkgUE4
+         JT6I2RLbhh2jK0h0SF7HMi0k9Mzo9vBGnTXgx2VTjzTQjBGf5tijSVzzvEIE0EvswwDZ
+         Iyk+EFoym5XFM//4moLMJ7ZsO8FR85QxOaz2FQh7H3gSe7nU9B8MA+ZDxhJnTyFxOOB1
+         8QLWFHJQt092OYqBXsokmJFHR6t/IY0pFpbrIy7H06VcYyUnYxRvYqY90ZVzsh8DAXkc
+         Dg2g==
+X-Gm-Message-State: AOAM530ZuAJcGfdllXSrTfbFxct7gfy7Qgc8/7YpkgA3nzUPkIwBxDXX
+        HiZjzFPbvDAZ9j1hVLWd8v7tEoX+Fgcf1bIM3DEhdvHANhkn
+X-Google-Smtp-Source: ABdhPJyALqjL6v16Y4IMeCzezgXjUGrvf72sn8KmJC1WoY8/otjLzuQBAV4ZxIDoBY4ihnx6C9LS0ap8LZehypT6P9MCP1ab7b3X
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.8.1
-Subject: Re: [PATCH 6/6] perf intel-pt: Add guest_code support
-Content-Language: en-US
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, Leo Yan <leo.yan@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        kvm@vger.kernel.org
-References: <20220513090237.10444-1-adrian.hunter@intel.com>
- <20220513090237.10444-7-adrian.hunter@intel.com>
- <875ym9h4mt.fsf@linux.intel.com>
- <df56f04b-cb25-5a47-ffef-b2e2ee0f6b74@intel.com>
- <871qwxgv1e.fsf@linux.intel.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <871qwxgv1e.fsf@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6602:15d0:b0:65a:a94e:8814 with SMTP id
+ f16-20020a05660215d000b0065aa94e8814mr5717505iow.11.1652599752703; Sun, 15
+ May 2022 00:29:12 -0700 (PDT)
+Date:   Sun, 15 May 2022 00:29:12 -0700
+In-Reply-To: <20220515070049.1718-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003744d205df07dd52@google.com>
+Subject: Re: [syzbot] WARNING: refcount bug in l2cap_chan_hold
+From:   syzbot <syzbot+fd86a41b17a416a37a75@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/05/22 21:13, Andi Kleen wrote:
-> Adrian Hunter <adrian.hunter@intel.com> writes:
->>>
->>> I'm still not fully sure how it exactly finds the code on the host,
->>> how is the code transferred?
->>
->> I don't know.  From a quick look at the code in
->> tools/testing/selftests/kvm/lib/kvm_util.c it seems to be using
->> KVM_SET_USER_MEMORY_REGION IOCTL.
-> 
-> Okay so it assumes that the pages with code on the guest are still intact: that is
-> you cannot quit the traced program, or at least not do something that would
-> fill it with other data?. Is that correct?
-> 
-> It sounds like with that restriction it's more useful for kernel traces.
+Hello,
 
-These patches are to support tracing of test programs that
- *are* the hypervisor, creating, populating, and destroying the VM.
-The VM is not running an OS.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Like:
-	https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/kvm/x86_64/tsc_msrs_test.c
-	
-guest_code() gets mapped into the VM at the same virtual address as the host,
-so the Intel PT decoder, which wants to walk the object code, can find the
-object code in the host program.
+Reported-and-tested-by: syzbot+fd86a41b17a416a37a75@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         9be9ed26 Merge tag 'platform-drivers-x86-v5.18-4' of g..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3afe599903e2c6b6
+dashboard link: https://syzkaller.appspot.com/bug?extid=fd86a41b17a416a37a75
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=12d8a5bef00000
+
+Note: testing is done by a robot and is best-effort only.

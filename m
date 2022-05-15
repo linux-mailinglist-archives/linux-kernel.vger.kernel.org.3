@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FCB652778A
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 14:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98EF652778E
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 14:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236761AbiEOMnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 08:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58548 "EHLO
+        id S236894AbiEOMnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 08:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236702AbiEOMmg (ORCPT
+        with ESMTP id S236751AbiEOMmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 08:42:36 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234D211C0C
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 05:42:36 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id cu23-20020a17090afa9700b001d98d8e53b7so11231993pjb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 05:42:36 -0700 (PDT)
+        Sun, 15 May 2022 08:42:40 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A80413F75
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 05:42:39 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id q4so12000384plr.11
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 05:42:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/YxdBnzui3ni5Jh3oFs5foUUYY4daAUO1PEkpPdCqlo=;
-        b=CUCIL+9IqRDN2tJAKVtzSzg97nX5O/JVAGHwOTY5DEpkHUytrXA/oXzlwAwXb2WBb8
-         8N2nRud02vIqlwXUP4YZnnsD9AxZu8iQtGS0pp5/8XppjqZnmaE07Wz82rf+a+DSfpBt
-         ekv1ybRFgnpr6UTANmIfRECHA1i/xQ91h9vPuP/t/pCZxhtGF74ECwz0v0/Jb4den/pl
-         B2ymDTQk0nfTvlwnAMloyqPyY3m/ADG/xu5L98Zldy5/WwcpmZd6SsdGC2mICJOlk7rc
-         tHvBznNJt1polk4ODdmghCrvTMXZVeA5uN4J9yIr5meyA9JA1Yk88zBWmxmOxcmEmSBH
-         nVoQ==
+        bh=g7Q4DIyBFdkOfQfLesIacT6b2x85qOReA4ewSFpfUcU=;
+        b=Lo6scrQ+k9iHe4huyVLvgU/wxxBjA9bU8Ih1wmkpJo0Ev0Rlpkd25v1GKuGMlqkX92
+         WhVHWnsm2nWCy3gNU+y1xjk2pto+37bnLdMW3kD0/lEbz2M1JP0suKY4CLM1rvk5Z7CH
+         2xadzZOzkWj/MD3u73lOVz3iUthzEzb2rkQqezefryB2ovt/hkV8mbVLG5h9JNNjnFfA
+         poh54JesuZhk4+fKKyORu0rR0HlP82O00aymUyUQgEH6UwcmkHr6TLdlcK7+Y/ZifE1+
+         4EV+dlTkeiLs0q8Sdvbh5mntq3H9ULNfMyNdQb4C8vzJBK2aS0p44umitDyzX+pfs9u0
+         A9+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/YxdBnzui3ni5Jh3oFs5foUUYY4daAUO1PEkpPdCqlo=;
-        b=M4vMQDulvNAxcSieL1zKyWKhJRnp6ZI9szLio2DCrIF/tZ4/j2LRH265XeVmyGCbW2
-         X1Qqo5pCdGWt6IT8a+ITAVqFLSFFQMeZiWPNo11p+nd+XoahDrk4q0xfqcHMbHvqTXGu
-         MFhTU3jH1S/MwalQjkYVyvqmpWp74xZv5Sbr3zm7xW3JpTEsQ7pBNQzZggG6OrLWkLfG
-         FRdYQnhWqxF6Vm3Hd7S18/R/wxVvXzvdwlRhamKwx3O54XkquR0NUEb4LeDocBD5cgpj
-         GRDOYSe6QZrIRmcaYTllz8f92jBlzJ8UiyknMG816vOUiuTiIKB+YqBEvz+OTbLKpSX+
-         ayFw==
-X-Gm-Message-State: AOAM530zrFgP4ckzEu/FN7DxZdRey5jXXTi6QKsdtWkCVMiApx4WjiCw
-        hzSPCMtY54z+z9OsUNAJCeVWetF8SyP0og==
-X-Google-Smtp-Source: ABdhPJwll4DIMNy2JuWm6ejdna8WNoX3+eiQHDVN4fLW8HnaNS1u+hk/bQv2o6r610cu+5jGCXD9vQ==
-X-Received: by 2002:a17:903:240f:b0:156:8e81:a0a3 with SMTP id e15-20020a170903240f00b001568e81a0a3mr13027370plo.13.1652618555086;
-        Sun, 15 May 2022 05:42:35 -0700 (PDT)
+        bh=g7Q4DIyBFdkOfQfLesIacT6b2x85qOReA4ewSFpfUcU=;
+        b=32CvXkMN7blI2lZmTLArjFsg4bXuk7Sfm1WQ2WXORLozkueesm0Bp8/PPV2M3/zIlm
+         kq42q7Lk9i4n3aJIMRJUN/ACUyDZeP8dlVvdTsdaXt+C5dVgq6udGAVX0sGkXUfqEGoZ
+         mCnY6VBUWu4ohkdx/VD0uqOIm40+vsoFlvO/8lJqWYC8qTh1erRcr5Jsnf+Xha0o3JuL
+         FjaBv9rIfINmvmd1/N8G8sAlBG6BunOggTX3NYWLOGaKLVe4kz63aTfXO0/Y1VaqFYxo
+         qlpGah2CQEVKdvzYvtocau7vlBJBmLMIpAqTkZ2SdoU+Dwy0QbNiMMYpSDVdoFCdaeOx
+         eK5A==
+X-Gm-Message-State: AOAM533Xmw8cjWEyEZR/rtv1AcnOL9wgKdDSZ6qJo9NAJwiA0W9lT3NT
+        3KH++X/H0QjKNxpuHl5mX7GGFFVlgVMZCg==
+X-Google-Smtp-Source: ABdhPJwEa15HWk3Et/kczvNW94n1lSxp/nf7itF2ZI5UFYnj6sBZE9pkT79HfOEXd7/OGPTL5nmjyw==
+X-Received: by 2002:a17:902:f78d:b0:14d:522e:deb3 with SMTP id q13-20020a170902f78d00b0014d522edeb3mr13304884pln.173.1652618558263;
+        Sun, 15 May 2022 05:42:38 -0700 (PDT)
 Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id c9-20020aa78e09000000b0050dc76281ebsm4945390pfr.197.2022.05.15.05.42.34
+        by smtp.gmail.com with ESMTPSA id f38-20020a631026000000b003c14af5062csm4751375pgl.68.2022.05.15.05.42.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 May 2022 05:42:34 -0700 (PDT)
+        Sun, 15 May 2022 05:42:37 -0700 (PDT)
 From:   Stafford Horne <shorne@gmail.com>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Openrisc <openrisc@lists.librecores.org>,
@@ -55,13 +55,12 @@ Cc:     Openrisc <openrisc@lists.librecores.org>,
         Jonas Bonn <jonas@southpole.se>,
         Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
         "Eric W. Biederman" <ebiederm@xmission.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH 08/13] openrisc/traps: Remove die_if_kernel function
-Date:   Sun, 15 May 2022 21:41:53 +0900
-Message-Id: <20220515124158.3167452-9-shorne@gmail.com>
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 09/13] openrisc/traps: Declare unhandled_exception for asmlinkage
+Date:   Sun, 15 May 2022 21:41:54 +0900
+Message-Id: <20220515124158.3167452-10-shorne@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220515124158.3167452-1-shorne@gmail.com>
 References: <20220515124158.3167452-1-shorne@gmail.com>
@@ -77,40 +76,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This was noticed when I saw this warning:
-
-    arch/openrisc/kernel/traps.c:234:6: warning: no previous prototype for 'die_if_kernel' [-Wmissing-prototypes]
-      234 | void die_if_kernel(const char *str, struct pt_regs *regs, long err)
-	  |      ^~~~~~~~~~~~~
-
-The die_if_kernel function is not used in the OpenRISC port so remove
-it.
+Noticed this when workin on warnings.  As unhandled_exception is used in
+entry.S we should attribute it with asmlinkage.
 
 Signed-off-by: Stafford Horne <shorne@gmail.com>
 ---
- arch/openrisc/kernel/traps.c | 9 ---------
- 1 file changed, 9 deletions(-)
+ arch/openrisc/kernel/traps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/openrisc/kernel/traps.c b/arch/openrisc/kernel/traps.c
-index 9e0937eb31ca..99cd2e6f8873 100644
+index 99cd2e6f8873..fd9a0f2b66c4 100644
 --- a/arch/openrisc/kernel/traps.c
 +++ b/arch/openrisc/kernel/traps.c
-@@ -235,15 +235,6 @@ void __noreturn die(const char *str, struct pt_regs *regs, long err)
+@@ -235,7 +235,7 @@ void __noreturn die(const char *str, struct pt_regs *regs, long err)
  	make_task_dead(SIGSEGV);
  }
  
--/* This is normally the 'Oops' routine */
--void die_if_kernel(const char *str, struct pt_regs *regs, long err)
--{
--	if (user_mode(regs))
--		return;
--
--	die(str, regs, err);
--}
--
- void unhandled_exception(struct pt_regs *regs, int ea, int vector)
+-void unhandled_exception(struct pt_regs *regs, int ea, int vector)
++asmlinkage void unhandled_exception(struct pt_regs *regs, int ea, int vector)
  {
  	printk("Unable to handle exception at EA =0x%x, vector 0x%x",
+ 	       ea, vector);
 -- 
 2.31.1
 

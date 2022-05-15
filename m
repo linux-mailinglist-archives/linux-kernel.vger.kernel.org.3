@@ -2,37 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC2E52789C
+	by mail.lfdr.de (Postfix) with ESMTP id A1EDD52789D
 	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 17:58:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237541AbiEOP5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 11:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53128 "EHLO
+        id S234828AbiEOP5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 11:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237660AbiEOP4d (ORCPT
+        with ESMTP id S236841AbiEOP5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 11:56:33 -0400
-Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C0013F7F
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 08:56:32 -0700 (PDT)
+        Sun, 15 May 2022 11:57:18 -0400
+Received: from smtp.smtpout.orange.fr (smtp07.smtpout.orange.fr [80.12.242.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B30713F8A
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 08:57:16 -0700 (PDT)
 Received: from pop-os.home ([86.243.180.246])
         by smtp.orange.fr with ESMTPA
-        id qGbcngusBVfTCqGbdnSibo; Sun, 15 May 2022 17:56:31 +0200
+        id qGcCn0Tbaqn1xqGcCnISX0; Sun, 15 May 2022 17:57:15 +0200
 X-ME-Helo: pop-os.home
 X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 15 May 2022 17:56:31 +0200
+X-ME-Date: Sun, 15 May 2022 17:57:15 +0200
 X-ME-IP: 86.243.180.246
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     vburru@marvell.com, aayarekar@marvell.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        sburla@marvell.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH 0/2] octeon_ep: Fix the error handling path of octep_request_irqs()
-Date:   Sun, 15 May 2022 17:56:25 +0200
-Message-Id: <cover.1652629833.git.christophe.jaillet@wanadoo.fr>
+To:     Veerasenareddy Burru <vburru@marvell.com>,
+        Abhijit Ayarekar <aayarekar@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Satananda Burla <sburla@marvell.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        netdev@vger.kernel.org
+Subject: [PATCH 1/2] octeon_ep: Fix a memory leak in the error handling path of octep_request_irqs()
+Date:   Sun, 15 May 2022 17:56:44 +0200
+Message-Id: <78dcfbb5d22328bc83edbfc74af10c3625c54087.1652629833.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1652629833.git.christophe.jaillet@wanadoo.fr>
+References: <cover.1652629833.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
@@ -44,21 +50,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I send a small serie to ease review and because I'm sighly less confident with
-the 2nd patch.
+'oct->non_ioq_irq_names' is not freed in the error handling path of
+octep_request_irqs().
 
-They are related to the same Fixes: tag, so they obviously could be merged if
-it is preferred.
+Add the missing kfree().
 
-Christophe JAILLET (2):
-  octeon_ep: Fix a memory leak in the error handling path of
-    octep_request_irqs()
-  octeon_ep: Fix irq releasing in the error handling path of
-    octep_request_irqs()
+Fixes: 37d79d059606 ("octeon_ep: add Tx/Rx processing and interrupt support")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/net/ethernet/marvell/octeon_ep/octep_main.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
- drivers/net/ethernet/marvell/octeon_ep/octep_main.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
+diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
+index e020c81f3455..6b60a03574a0 100644
+--- a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
++++ b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
+@@ -267,6 +267,8 @@ static int octep_request_irqs(struct octep_device *oct)
+ 		--i;
+ 		free_irq(oct->msix_entries[i].vector, oct);
+ 	}
++	kfree(oct->non_ioq_irq_names);
++	oct->non_ioq_irq_names = NULL;
+ alloc_err:
+ 	return -1;
+ }
 -- 
 2.34.1
 

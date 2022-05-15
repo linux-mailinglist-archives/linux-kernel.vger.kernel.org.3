@@ -2,56 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ABE65278E1
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 19:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 378C15278E4
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 19:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237867AbiEORRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 13:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45548 "EHLO
+        id S237873AbiEORXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 13:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237720AbiEORRU (ORCPT
+        with ESMTP id S230196AbiEORXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 13:17:20 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEBCDFD6;
-        Sun, 15 May 2022 10:17:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652635038; x=1684171038;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=KYPpmCqaYm6PKBzjbAt+0LaUtQHugFCcWHEHTiJmM2s=;
-  b=Sciz8hZdL/lz/15RjHYKnopqOyjc9a2lm2LWiNPk25hsRexurrv/B7f8
-   q5Cb7EL3HrSoWmxsFXK/BRB8CwTHPAfnrWZwZ94BaSB2SgovII8LQQemn
-   aqwMkcnGPtWtz20FzL4W9ezRe+QV0gB6CkfkxdFH9sA77kbTY1/TM4aND
-   TsuyBOX4fHZAK0GXXmSKwvEif+ak+tufr1gIIAP0+ZDnCIknQldLiHFo/
-   h9ehN4GLOXKO+S4wK6TjphM/fS6kS0Kwf5901/wwqzRUo+4QfDaG8Ix5C
-   6w2077njf6xTns5o+Vs9p00XNBe8aj6B6y/q+tVfrsj1KmtYcpNY072IC
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="333719481"
-X-IronPort-AV: E=Sophos;i="5.91,228,1647327600"; 
-   d="scan'208";a="333719481"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2022 10:17:16 -0700
-X-IronPort-AV: E=Sophos;i="5.91,228,1647327600"; 
-   d="scan'208";a="544016288"
-Received: from tower.bj.intel.com ([10.238.157.62])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2022 10:17:12 -0700
-From:   Yanfei Xu <yanfei.xu@intel.com>
-To:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: x86: Fix the intel_pt PMI handling wrongly considered from guest
-Date:   Mon, 16 May 2022 01:16:33 +0800
-Message-Id: <20220515171633.902901-1-yanfei.xu@intel.com>
-X-Mailer: git-send-email 2.32.0
+        Sun, 15 May 2022 13:23:04 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072EA13CFD
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 10:23:00 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id x52so12032389pfu.11
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 10:23:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=lako1s90iv7mGjeeXnoRjSCjYy4a0LZsCpdiegVx6o0=;
+        b=oRXqB9iM8/RGMZ9TRhj5Va0gAsNpHnuF65cKqV3IbwSX5JE7s0wCO3vS1junFZr9nl
+         e1q1LaABzhGX7TvEKjv5frIOX1Zj8qLMOKQOgl2qRPaHZjeEcBlVk2BeDKrIoEgYdMqN
+         fJgudEGgG7FFLNxNgShP5dmvwKdi8LSVoy/uN/HNCwFMUJh70ZKKZMCjAz1Cmgh8m7kJ
+         e5fh1E/D8emfury5MxoBvr/s8F2n5pzTV0kjZq6a92lce/6v2/yBclYU8GiYq93h/uz7
+         Ta98UHfUVBYeHT87HvSnPcHFRdUyFTxvbhiburWEcjSxW/djHNgVeqTwDQtLH263Qhm1
+         VUdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=lako1s90iv7mGjeeXnoRjSCjYy4a0LZsCpdiegVx6o0=;
+        b=fGEWp6djj9+4BotdVJaRc+7GidnKC8c5IMmiN6Ct5ihMp/y8VsGchHyJm7EbKfrIVO
+         5dZowBan2eflLn7xONoxO4T7bCSq8AyPDH5Z1350Anikf8hiPhKefy9EMd1Swe8MqlqY
+         UtPQaoqyfXxYj4Cbqt6VxY3iq4sRYbZVjeIZPQ/CqmJ+/cXxrhuzWVYNe7STAiGuGL8X
+         vjThpRKRh2Muzjqrlt0g3cXq+NwUYY7UPxAzJDsG6YVKFTudasgQ1OG+LIfohj8YmNZw
+         lmc2+qWg9Nwq3TrtF2RDeKZP08qmLZCogEB2W+bp0EC1YdaAZdmT2VQjMpPf7vY8Z70v
+         krwg==
+X-Gm-Message-State: AOAM531o8j/ni0Kq1mubSjTOQ/46DQCz0/Jd3ssMZxFpwpr8WzWNVVhD
+        DbB9G/Qpw7clOykVCOmo3bbhcUfxepmq6Q==
+X-Google-Smtp-Source: ABdhPJzzuElGI25UpjDd2J/j3a61E8jxQDdCFJaJT8lh08LSFFpUmI0GsPa2xef0CDBDPMcb7vG9fA==
+X-Received: by 2002:a05:6a00:150d:b0:510:3a9c:3eed with SMTP id q13-20020a056a00150d00b005103a9c3eedmr14049388pfu.86.1652635379452;
+        Sun, 15 May 2022 10:22:59 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id u10-20020a170902bf4a00b0015e8d4eb26csm5344971pls.182.2022.05.15.10.22.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 May 2022 10:22:58 -0700 (PDT)
+Message-ID: <de26ea1c-c263-0418-ba79-e9dfa85a3abd@kernel.dk>
+Date:   Sun, 15 May 2022 11:22:56 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [syzbot] WARNING: still has locks held in io_ring_submit_lock
+Content-Language: en-US
+To:     syzbot <syzbot+987d7bb19195ae45208c@syzkaller.appspotmail.com>,
+        asml.silence@gmail.com, f.fainelli@gmail.com,
+        io-uring@vger.kernel.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, olteanv@gmail.com,
+        syzkaller-bugs@googlegroups.com, xiam0nd.tong@gmail.com
+References: <0000000000001c058f05df0e0eea@google.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <0000000000001c058f05df0e0eea@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,57 +76,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When kernel handles the vm-exit caused by external interrupts and PMI,
-it always set a type of kvm_intr_type to handling_intr_from_guest to
-tell if it's dealing an IRQ or NMI.
-However, the further type judgment is missing in kvm_arch_pmi_in_guest().
-It could make the PMI of intel_pt wrongly considered it comes from a
-guest once the PMI breaks the handling of vm-exit of external interrupts.
+On 5/15/22 8:52 AM, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    1e1b28b936ae Add linux-next specific files for 20220513
+> git tree:       linux-next
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=10872211f00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=e4eb3c0c4b289571
+> dashboard link: https://syzkaller.appspot.com/bug?extid=987d7bb19195ae45208c
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1141bd21f00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=167ebdbef00000
+> 
+> The issue was bisected to:
+> 
+> commit 6da69b1da130e7d96766042750cd9f902e890eba
+> Author: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+> Date:   Mon Mar 28 03:24:31 2022 +0000
+> 
+>     net: dsa: bcm_sf2_cfp: fix an incorrect NULL check on list iterator
 
-Fixes: db215756ae59 ("KVM: x86: More precisely identify NMI from guest when handling PMI")
-Signed-off-by: Yanfei Xu <yanfei.xu@intel.com>
----
- arch/x86/include/asm/kvm_host.h | 8 +++++++-
- arch/x86/kvm/x86.h              | 6 ------
- 2 files changed, 7 insertions(+), 7 deletions(-)
+That looks totally unrelated...
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 4ff36610af6a..308cf19f123d 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1582,8 +1582,14 @@ static inline int kvm_arch_flush_remote_tlb(struct kvm *kvm)
- 		return -ENOTSUPP;
- }
- 
-+enum kvm_intr_type {
-+	/* Values are arbitrary, but must be non-zero. */
-+	KVM_HANDLING_IRQ = 1,
-+	KVM_HANDLING_NMI,
-+};
-+
- #define kvm_arch_pmi_in_guest(vcpu) \
--	((vcpu) && (vcpu)->arch.handling_intr_from_guest)
-+	((vcpu) && (vcpu)->arch.handling_intr_from_guest == KVM_HANDLING_NMI)
- 
- void kvm_mmu_x86_module_init(void);
- int kvm_mmu_vendor_module_init(void);
-diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
-index 588792f00334..3bdf1bc76863 100644
---- a/arch/x86/kvm/x86.h
-+++ b/arch/x86/kvm/x86.h
-@@ -344,12 +344,6 @@ static inline bool kvm_cstate_in_guest(struct kvm *kvm)
- 	return kvm->arch.cstate_in_guest;
- }
- 
--enum kvm_intr_type {
--	/* Values are arbitrary, but must be non-zero. */
--	KVM_HANDLING_IRQ = 1,
--	KVM_HANDLING_NMI,
--};
--
- static inline void kvm_before_interrupt(struct kvm_vcpu *vcpu,
- 					enum kvm_intr_type intr)
- {
+#syz test: git://git.kernel.dk/linux-block.git for-next
+
 -- 
-2.32.0
+Jens Axboe
 

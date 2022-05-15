@@ -2,241 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CEEB527798
+	by mail.lfdr.de (Postfix) with ESMTP id 30EF0527797
 	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 15:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233957AbiEOMwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 08:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51570 "EHLO
+        id S235606AbiEOM7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 08:59:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231362AbiEOMwL (ORCPT
+        with ESMTP id S231362AbiEOM7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 08:52:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F87435854
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 05:52:08 -0700 (PDT)
+        Sun, 15 May 2022 08:59:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6B93A739;
+        Sun, 15 May 2022 05:59:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D175B80CE5
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 12:52:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33A63C385B8;
-        Sun, 15 May 2022 12:52:05 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZiMLpABp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1652619123;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=YaXUzN8cIV7XbtzawW082K/tICSDvFVRFypohP8tyl8=;
-        b=ZiMLpABpinYKIHxJSdsU70/14JOXTUjyVc/WDMhB79jsLJYO5L6R2YBMonxevSGEoN2CH+
-        Dh52aThrmZgr6Z7X5ZnlfgJ5NueForeSijagjQcvI8c92qOlcFFmArHDC3hyV5ba9cG9Zr
-        GVDNMEOP3XPIzafB20HKSwpdy5SW4jU=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 38e2dcf6 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sun, 15 May 2022 12:52:02 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: [PATCH] random: unify batched entropy implementations
-Date:   Sun, 15 May 2022 14:51:59 +0200
-Message-Id: <20220515125159.444709-1-Jason@zx2c4.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8CE260ED7;
+        Sun, 15 May 2022 12:59:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACF53C385B8;
+        Sun, 15 May 2022 12:59:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652619576;
+        bh=Er1icabn7IATRCtWvAKCaZjREXU9z20DohHXO16mmQM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uTpCEPIgJCY5lRX9hVZ3eN/1yRQ0ujHoW9UKB2JHx4Y5QTrglRVb9vQUZH+sV6kZA
+         uf7IuLb+tmtLNPBFUT1kxSdRLAnTZAsq+tljBXQNIPao1/Wb50p3lhH3yI6EhTL3Lk
+         udzvKpY4fyPvegyofNS13yU1XWHpvAdnjo3ax45AxXJyOZL+f0m++PXAmMMSE8d5ar
+         EMRyUBNVEvAVoktqeymHBO0kXYNWreSgWqD4tGLwrl57p0q6Gw0U8dviFAt92AHdzm
+         QQ5QehFLLfevgJSHg0XBT9JrKA7HgOjF7/r/dqinZCHgGkid3GXp4jN4TaFpC6z9Yv
+         aZYF0EVkNIw+w==
+Received: by pali.im (Postfix)
+        id 503B77B8; Sun, 15 May 2022 14:59:32 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] Revert "PCI: aardvark: Rewrite IRQ code to chained IRQ handler"
+Date:   Sun, 15 May 2022 14:58:15 +0200
+Message-Id: <20220515125815.30157-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are currently two separate batched entropy implementations, for
-u32 and u64, with nearly identical code, with the goal of avoiding
-unaligned memory accesses and letting the buffers be used more
-efficiently. Having to maintain these two functions independently is a
-bit of a hassle though, considering that they always need to be kept in
-sync.
+This reverts commit 1571d67dc190e50c6c56e8f88cdc39f7cc53166e.
 
-This commit factors them out into a type-generic macro, so that the
-expansion produces the same code as before, such that diffing the
-assembly shows no differences. This will also make it easier in the
-future to add u16 and u8 batches.
+This commit broke support for setting interrupt affinity. It looks like
+that it is related to the chained IRQ handler. Revert this commit until
+issue with setting interrupt affinity is fixed.
 
-This was initially tested using an always_inline function and letting
-gcc constant fold the type size in, but the code gen was less efficient,
-and in general it was more verbose and harder to follow. So this patch
-goes with the boring macro solution, similar to what's already done for
-the _wait functions in random.h.
+Fixes: 1571d67dc190 ("PCI: aardvark: Rewrite IRQ code to chained IRQ handler")
+Signed-off-by: Pali Rohár <pali@kernel.org>
 
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- drivers/char/random.c | 147 ++++++++++++++++--------------------------
- 1 file changed, 55 insertions(+), 92 deletions(-)
+This commit was introduced in v5.18-rc1 and hence it is regression for 5.18
+release. After reverting this commit, it is possible to move aardvark
+interrupt from CPU0 to CPU1 by "echo 2 > /proc/irq/XX/smp_affinity" where
+XX is the interrupt number which can be find in /proc/interrupts on line
+with advk-pcie.
+---
+ drivers/pci/controller/pci-aardvark.c | 48 ++++++++++++---------------
+ 1 file changed, 22 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 38b4ed7cd5e2..909c23f66fd8 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -507,99 +507,62 @@ static ssize_t get_random_bytes_user(void __user *ubuf, size_t len)
-  * provided by this function is okay, the function wait_for_random_bytes()
-  * should be called and return 0 at least once at any point prior.
-  */
--struct batched_entropy {
--	union {
--		/*
--		 * We make this 1.5x a ChaCha block, so that we get the
--		 * remaining 32 bytes from fast key erasure, plus one full
--		 * block from the detached ChaCha state. We can increase
--		 * the size of this later if needed so long as we keep the
--		 * formula of (integer_blocks + 0.5) * CHACHA_BLOCK_SIZE.
--		 */
--		u64 entropy_u64[CHACHA_BLOCK_SIZE * 3 / (2 * sizeof(u64))];
--		u32 entropy_u32[CHACHA_BLOCK_SIZE * 3 / (2 * sizeof(u32))];
--	};
--	local_lock_t lock;
--	unsigned long generation;
--	unsigned int position;
--};
--
--
--static DEFINE_PER_CPU(struct batched_entropy, batched_entropy_u64) = {
--	.lock = INIT_LOCAL_LOCK(batched_entropy_u64.lock),
--	.position = UINT_MAX
--};
--
--u64 get_random_u64(void)
--{
--	u64 ret;
--	unsigned long flags;
--	struct batched_entropy *batch;
--	unsigned long next_gen;
--
--	warn_unseeded_randomness();
--
--	if  (!crng_ready()) {
--		_get_random_bytes(&ret, sizeof(ret));
--		return ret;
--	}
--
--	local_lock_irqsave(&batched_entropy_u64.lock, flags);
--	batch = raw_cpu_ptr(&batched_entropy_u64);
--
--	next_gen = READ_ONCE(base_crng.generation);
--	if (batch->position >= ARRAY_SIZE(batch->entropy_u64) ||
--	    next_gen != batch->generation) {
--		_get_random_bytes(batch->entropy_u64, sizeof(batch->entropy_u64));
--		batch->position = 0;
--		batch->generation = next_gen;
--	}
+diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
+index 54651a1808cc..22ac607343bd 100644
+--- a/drivers/pci/controller/pci-aardvark.c
++++ b/drivers/pci/controller/pci-aardvark.c
+@@ -274,7 +274,6 @@ struct advk_pcie {
+ 		u32 actions;
+ 	} wins[OB_WIN_COUNT];
+ 	u8 wins_count;
+-	int irq;
+ 	struct irq_domain *rp_irq_domain;
+ 	struct irq_domain *irq_domain;
+ 	struct irq_chip irq_chip;
+@@ -1664,26 +1663,21 @@ static void advk_pcie_handle_int(struct advk_pcie *pcie)
+ 	}
+ }
  
--	ret = batch->entropy_u64[batch->position];
--	batch->entropy_u64[batch->position] = 0;
--	++batch->position;
--	local_unlock_irqrestore(&batched_entropy_u64.lock, flags);
--	return ret;
--}
--EXPORT_SYMBOL(get_random_u64);
--
--static DEFINE_PER_CPU(struct batched_entropy, batched_entropy_u32) = {
--	.lock = INIT_LOCAL_LOCK(batched_entropy_u32.lock),
--	.position = UINT_MAX
--};
--
--u32 get_random_u32(void)
--{
--	u32 ret;
--	unsigned long flags;
--	struct batched_entropy *batch;
--	unsigned long next_gen;
--
--	warn_unseeded_randomness();
--
--	if  (!crng_ready()) {
--		_get_random_bytes(&ret, sizeof(ret));
--		return ret;
+-static void advk_pcie_irq_handler(struct irq_desc *desc)
++static irqreturn_t advk_pcie_irq_handler(int irq, void *arg)
+ {
+-	struct advk_pcie *pcie = irq_desc_get_handler_data(desc);
+-	struct irq_chip *chip = irq_desc_get_chip(desc);
+-	u32 val, mask, status;
++	struct advk_pcie *pcie = arg;
++	u32 status;
+ 
+-	chained_irq_enter(chip, desc);
++	status = advk_readl(pcie, HOST_CTRL_INT_STATUS_REG);
++	if (!(status & PCIE_IRQ_CORE_INT))
++		return IRQ_NONE;
+ 
+-	val = advk_readl(pcie, HOST_CTRL_INT_STATUS_REG);
+-	mask = advk_readl(pcie, HOST_CTRL_INT_MASK_REG);
+-	status = val & ((~mask) & PCIE_IRQ_ALL_MASK);
++	advk_pcie_handle_int(pcie);
+ 
+-	if (status & PCIE_IRQ_CORE_INT) {
+-		advk_pcie_handle_int(pcie);
++	/* Clear interrupt */
++	advk_writel(pcie, PCIE_IRQ_CORE_INT, HOST_CTRL_INT_STATUS_REG);
+ 
+-		/* Clear interrupt */
+-		advk_writel(pcie, PCIE_IRQ_CORE_INT, HOST_CTRL_INT_STATUS_REG);
 -	}
 -
--	local_lock_irqsave(&batched_entropy_u32.lock, flags);
--	batch = raw_cpu_ptr(&batched_entropy_u32);
--
--	next_gen = READ_ONCE(base_crng.generation);
--	if (batch->position >= ARRAY_SIZE(batch->entropy_u32) ||
--	    next_gen != batch->generation) {
--		_get_random_bytes(batch->entropy_u32, sizeof(batch->entropy_u32));
--		batch->position = 0;
--		batch->generation = next_gen;
--	}
--
--	ret = batch->entropy_u32[batch->position];
--	batch->entropy_u32[batch->position] = 0;
--	++batch->position;
--	local_unlock_irqrestore(&batched_entropy_u32.lock, flags);
--	return ret;
--}
--EXPORT_SYMBOL(get_random_u32);
-+#define DEFINE_BATCHED_ENTROPY(type)						\
-+struct batch_ ##type {								\
-+	/*									\
-+	 * We make this 1.5x a ChaCha block, so that we get the			\
-+	 * remaining 32 bytes from fast key erasure, plus one full		\
-+	 * block from the detached ChaCha state. We can increase		\
-+	 * the size of this later if needed so long as we keep the		\
-+	 * formula of (integer_blocks + 0.5) * CHACHA_BLOCK_SIZE.		\
-+	 */									\
-+	type entropy[CHACHA_BLOCK_SIZE * 3 / (2 * sizeof(type))];		\
-+	local_lock_t lock;							\
-+	unsigned long generation;						\
-+	unsigned int position;							\
-+};										\
-+										\
-+static DEFINE_PER_CPU(struct batch_ ##type, batched_entropy_ ##type) = {	\
-+	.lock = INIT_LOCAL_LOCK(batched_entropy_ ##type.lock),			\
-+	.position = UINT_MAX							\
-+};										\
-+										\
-+type get_random_ ##type(void)							\
-+{										\
-+	type ret;								\
-+	unsigned long flags;							\
-+	struct batch_ ##type *batch;						\
-+	unsigned long next_gen;							\
-+										\
-+	warn_unseeded_randomness();						\
-+										\
-+	if  (!crng_ready()) {							\
-+		_get_random_bytes(&ret, sizeof(ret));				\
-+		return ret;							\
-+	}									\
-+										\
-+	local_lock_irqsave(&batched_entropy_ ##type.lock, flags);		\
-+	batch = raw_cpu_ptr(&batched_entropy_##type);				\
-+										\
-+	next_gen = READ_ONCE(base_crng.generation);				\
-+	if (batch->position >= ARRAY_SIZE(batch->entropy) ||			\
-+	    next_gen != batch->generation) {					\
-+		_get_random_bytes(batch->entropy, sizeof(batch->entropy));	\
-+		batch->position = 0;						\
-+		batch->generation = next_gen;					\
-+	}									\
-+										\
-+	ret = batch->entropy[batch->position];					\
-+	batch->entropy[batch->position] = 0;					\
-+	++batch->position;							\
-+	local_unlock_irqrestore(&batched_entropy_ ##type.lock, flags);		\
-+	return ret;								\
-+}										\
-+EXPORT_SYMBOL(get_random_ ##type);
+-	chained_irq_exit(chip, desc);
++	return IRQ_HANDLED;
+ }
+ 
+ static int advk_pcie_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+@@ -1763,7 +1757,7 @@ static int advk_pcie_probe(struct platform_device *pdev)
+ 	struct advk_pcie *pcie;
+ 	struct pci_host_bridge *bridge;
+ 	struct resource_entry *entry;
+-	int ret;
++	int ret, irq;
+ 
+ 	bridge = devm_pci_alloc_host_bridge(dev, sizeof(struct advk_pcie));
+ 	if (!bridge)
+@@ -1849,9 +1843,17 @@ static int advk_pcie_probe(struct platform_device *pdev)
+ 	if (IS_ERR(pcie->base))
+ 		return PTR_ERR(pcie->base);
+ 
+-	pcie->irq = platform_get_irq(pdev, 0);
+-	if (pcie->irq < 0)
+-		return pcie->irq;
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0)
++		return irq;
 +
-+DEFINE_BATCHED_ENTROPY(u64)
-+DEFINE_BATCHED_ENTROPY(u32)
++	ret = devm_request_irq(dev, irq, advk_pcie_irq_handler,
++			       IRQF_SHARED | IRQF_NO_THREAD, "advk-pcie",
++			       pcie);
++	if (ret) {
++		dev_err(dev, "Failed to register interrupt\n");
++		return ret;
++	}
  
- #ifdef CONFIG_SMP
- /*
+ 	pcie->reset_gpio = devm_gpiod_get_from_of_node(dev, dev->of_node,
+ 						       "reset-gpios", 0,
+@@ -1916,15 +1918,12 @@ static int advk_pcie_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
+-	irq_set_chained_handler_and_data(pcie->irq, advk_pcie_irq_handler, pcie);
+-
+ 	bridge->sysdata = pcie;
+ 	bridge->ops = &advk_pcie_ops;
+ 	bridge->map_irq = advk_pcie_map_irq;
+ 
+ 	ret = pci_host_probe(bridge);
+ 	if (ret < 0) {
+-		irq_set_chained_handler_and_data(pcie->irq, NULL, NULL);
+ 		advk_pcie_remove_rp_irq_domain(pcie);
+ 		advk_pcie_remove_msi_irq_domain(pcie);
+ 		advk_pcie_remove_irq_domain(pcie);
+@@ -1973,9 +1972,6 @@ static int advk_pcie_remove(struct platform_device *pdev)
+ 	advk_writel(pcie, PCIE_ISR1_ALL_MASK, PCIE_ISR1_REG);
+ 	advk_writel(pcie, PCIE_IRQ_ALL_MASK, HOST_CTRL_INT_STATUS_REG);
+ 
+-	/* Remove IRQ handler */
+-	irq_set_chained_handler_and_data(pcie->irq, NULL, NULL);
+-
+ 	/* Remove IRQ domains */
+ 	advk_pcie_remove_rp_irq_domain(pcie);
+ 	advk_pcie_remove_msi_irq_domain(pcie);
 -- 
-2.35.1
+2.20.1
 

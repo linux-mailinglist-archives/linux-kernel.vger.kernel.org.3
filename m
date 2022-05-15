@@ -2,35 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 766715276FF
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 12:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D99252770D
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 12:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236445AbiEOKcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 06:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44534 "EHLO
+        id S232916AbiEOKfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 06:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236312AbiEOKbN (ORCPT
+        with ESMTP id S232051AbiEOKfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 06:31:13 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B9DAE4B;
-        Sun, 15 May 2022 03:31:12 -0700 (PDT)
+        Sun, 15 May 2022 06:35:32 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C722A279;
+        Sun, 15 May 2022 03:35:31 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L1JZS1sXJz4xZv;
-        Sun, 15 May 2022 20:31:12 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L1JgQ2lXhz4xZ0;
+        Sun, 15 May 2022 20:35:30 +1000 (AEST)
 From:   Michael Ellerman <patch-notifications@ellerman.id.au>
-To:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Laurent Dufour <ldufour@linux.ibm.com>, mpe@ellerman.id.au
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>, stable@vger.kernel.org
-In-Reply-To: <20220504101244.12107-1-ldufour@linux.ibm.com>
-References: <20220504101244.12107-1-ldufour@linux.ibm.com>
-Subject: Re: [PATCH v3] powerpc/rtas: Keep MSR[RI] set when calling RTAS
-Message-Id: <165261054578.1047019.8022784676618367625.b4-ty@ellerman.id.au>
-Date:   Sun, 15 May 2022 20:29:05 +1000
+To:     Alexander Graf <graf@amazon.com>, kvm@vger.kernel.org
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Matt Evans <matt@ozlabs.org>, linuxppc-dev@lists.ozlabs.org,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+In-Reply-To: <20220510123717.24508-1-graf@amazon.com>
+References: <20220510123717.24508-1-graf@amazon.com>
+Subject: Re: [PATCH v3] KVM: PPC: Book3S PR: Enable MSR_DR for switch_mmu_context()
+Message-Id: <165261089230.1048761.8692230745966082398.b4-ty@ellerman.id.au>
+Date:   Sun, 15 May 2022 20:34:52 +1000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -43,21 +46,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 4 May 2022 12:12:44 +0200, Laurent Dufour wrote:
-> RTAS runs in real mode (MSR[DR] and MSR[IR] unset) and in 32bits
-> big endian mode (MSR[SF,LE] unset).
+On Tue, 10 May 2022 14:37:17 +0200, Alexander Graf wrote:
+> Commit 863771a28e27 ("powerpc/32s: Convert switch_mmu_context() to C")
+> moved the switch_mmu_context() to C. While in principle a good idea, it
+> meant that the function now uses the stack. The stack is not accessible
+> from real mode though.
 > 
-> The change in MSR is done in enter_rtas() in a relatively complex way,
-> since the MSR value could be hardcoded.
-> 
-> Furthermore, a panic has been reported when hitting the watchdog interrupt
-> while running in RTAS, this leads to the following stack trace:
+> So to keep calling the function, let's turn on MSR_DR while we call it.
+> That way, all pointer references to the stack are handled virtually.
 > 
 > [...]
 
-Applied to powerpc/next.
+Applied to powerpc/fixes.
 
-[1/1] powerpc/rtas: Keep MSR[RI] set when calling RTAS
-      https://git.kernel.org/powerpc/c/b6b1c3ce06ca438eb24e0f45bf0e63ecad0369f5
+[1/1] KVM: PPC: Book3S PR: Enable MSR_DR for switch_mmu_context()
+      https://git.kernel.org/powerpc/c/ee8348496c77e3737d0a6cda307a521f2cff954f
 
 cheers

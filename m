@@ -2,52 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8177852772A
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 12:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE9E527735
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 13:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236542AbiEOK4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 06:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
+        id S236262AbiEOLC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 07:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236467AbiEOKzy (ORCPT
+        with ESMTP id S233018AbiEOLCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 06:55:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78013E0F7
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 03:55:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 33179B80C9D
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 10:55:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89B50C385B8;
-        Sun, 15 May 2022 10:55:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652612150;
-        bh=eMzgbuvzHahLRRnZiAI5LEHuxl1LzYgVFGtZA2pB6tM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BvYbqowRbwZoV4bF7hG1pAbBnSdM08U6VcUIEYA9GhPplOBrU55E+ph4FeU1cClds
-         8fH9eHRZ43hkBRgRLr2SIVkkwXy4Csj1hUUkTg+mpq0AMG78j0E71JuJHjypQrXeJs
-         wfD28+g9vm0soGoo7nwFnHscVlxlnZ5rUetw4EzY=
-Date:   Sun, 15 May 2022 12:55:46 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     =?utf-8?B?WWHFn2FyIEFyYWJhY8Sx?= <yasar11732@gmail.com>
-Cc:     paulo.miguel.almeida.rodenas@gmail.com, dan.carpenter@oracle.com,
-        alexandre.belloni@bootlin.com, realwakka@gmail.com,
-        u.kleine-koenig@pengutronix.de, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Staging: pi433: Don't use ioctl for per-client
- configuration
-Message-ID: <YoDcMmcnbPjk4uuV@kroah.com>
-References: <20220515104711.94567-1-yasar11732@gmail.com>
+        Sun, 15 May 2022 07:02:23 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0192625592;
+        Sun, 15 May 2022 04:02:22 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 3BAD292009C; Sun, 15 May 2022 13:02:20 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 2D02192009B;
+        Sun, 15 May 2022 12:02:20 +0100 (BST)
+Date:   Sun, 15 May 2022 12:02:20 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Akira Yokosawa <akiyks@gmail.com>
+cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-serial@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH 0/3] Documentation: Fix issues with Oxford Semiconductor
+ PCIe (Tornado) 950
+In-Reply-To: <f4d40da6-756b-9e75-b867-cc9eedc4b232@gmail.com>
+Message-ID: <alpine.DEB.2.21.2205151152360.10656@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2205131712410.10656@angie.orcam.me.uk> <f4d40da6-756b-9e75-b867-cc9eedc4b232@gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220515104711.94567-1-yasar11732@gmail.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,21 +47,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 15, 2022 at 01:47:11PM +0300, Yaşar Arabacı wrote:
-> Currently this driver uses ioctl for reading/writing per-device and
-> per-client configuration. Per-client configuration can be handled by
-> usespace and sent to driver with each write() call. Doing so does not
-> introduce extra overhead because we copy tx config to fifo for each
-> transmit anyway. This way, we don't have to introduce new ioctl's.
+On Sun, 15 May 2022, Akira Yokosawa wrote:
 
-Wait, you just changed the user api of the write/read call to the
-driver?  That's dangerous, especially:
+> >  NB XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2019/dev/Debian) and 
+> > Sphinx 1.8.4 here.
+> 
+> As mentioned in the section titled "PDF and LaTeX builds" in
+> Documentation/doc-guide/sphinx.rst, "make pdfdocs" requires Sphinx 2.4 or
+> later.
 
-> This has not been tested as I don't have access to hardware.
+ Ack, noted.  Note however that Documentation/Changes says:
 
-That's not good.  You need to figure out what userspace tool(s) use this
-api and ensure that you did not just break them for no good reason.
+Sphinx\ [#f1]_         1.7              sphinx-build --version
+====================== ===============  ========================================
+.. [#f1] Sphinx is needed only to build the Kernel documentation
 
-thanks,
+Perhaps the additional requirement could be mentioned in the footnote?
 
-greg k-h
+[Also this is a production system and 1.8.4 is the only version available 
+in the distribution it has installed, so I may not be able to upgrade for 
+the foreseeable future anyway.]
+
+> You can say "make SPHINXDIRS=<sub dir> htmldocs pdfdocs" to
+> test-build docs under Documentation/<sub dir>/.
+> You might see false warnings of "WARNING: undefined label: ..."
+> which you wouldn't see in full builds, though.
+> 
+> Hope this helps.
+
+ Sure, thanks a lot!
+
+  Maciej

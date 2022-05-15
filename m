@@ -2,77 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C1D52785C
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 17:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25E5C527875
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 17:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237379AbiEOPLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 11:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53422 "EHLO
+        id S236319AbiEOP2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 11:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237451AbiEOPLj (ORCPT
+        with ESMTP id S233933AbiEOP2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 11:11:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1905B65EB;
-        Sun, 15 May 2022 08:11:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DC2E5B80D18;
-        Sun, 15 May 2022 15:11:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9A27BC34117;
-        Sun, 15 May 2022 15:11:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652627460;
-        bh=vLtALtIMRKySMYk03NaiVsQOMocsPfeYFfj22XmCJ24=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=vD7vVqvgYoDOhjrlKw35s2NGuJD5cTzIjzUPEVmBctEtPYI1aUJEDktR9qvqRFalY
-         E8RLQ0I67gwJ1q8RzD9ZGCofBaIHq63Eb9LysuhvmLg/6j7NgaB4cRoe2s7mE1f3Bo
-         KWftYSM+FQDrzBAA/TGyWYz8oNrE6xu0iA81AbFHj5wLzBUPMrDoKXFqXQMt5Umw/R
-         U0nYEqFCWgyGA+TI44DYvbGk+i7i2hfFaUltjd3kloA4Y7GLbelbw8Vf16cUsu5CLb
-         5TmD5bQXD5lDwK96JpdG2OEOznQGDl+5QVdRVp6Ql+0UmCq5QOqnt421QvWWsDYgkv
-         y8MnfScUoisug==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8439DF03934;
-        Sun, 15 May 2022 15:11:00 +0000 (UTC)
-Subject: Re: [GIT PULL] TTY/Serial driver fixes for 5.18-rc7
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YoENxyxFu4xUQD6b@kroah.com>
-References: <YoENxyxFu4xUQD6b@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YoENxyxFu4xUQD6b@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-5.18-rc7
-X-PR-Tracked-Commit-Id: 401fb66a355eb0f22096cf26864324f8e63c7d78
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 6811a466d27ba79e6c31c0aecc74feab0472df36
-Message-Id: <165262746053.2129.3527105823905607193.pr-tracker-bot@kernel.org>
-Date:   Sun, 15 May 2022 15:11:00 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jiri Slaby <jslaby@suse.cz>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 15 May 2022 11:28:32 -0400
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1341208A
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 08:28:30 -0700 (PDT)
+Received: from dslb-188-096-141-066.188.096.pools.vodafone-ip.de ([188.96.141.66] helo=martin-debian-2.paytec.ch)
+        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <martin@kaiser.cx>)
+        id 1nqGAS-0006Dx-Gb; Sun, 15 May 2022 17:28:24 +0200
+From:   Martin Kaiser <martin@kaiser.cx>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Martin Kaiser <martin@kaiser.cx>, Joe Perches <joe@perches.com>
+Subject: [PATCH] staging: r8188eu: use defines for addba response status
+Date:   Sun, 15 May 2022 17:27:59 +0200
+Message-Id: <20220515152759.335889-1-martin@kaiser.cx>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 15 May 2022 16:27:19 +0200:
+Replace the numeric values with defines from ieee80211.h.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-5.18-rc7
+Suggested-by: Joe Perches <joe@perches.com>
+Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+---
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/6811a466d27ba79e6c31c0aecc74feab0472df36
+This should be applied after yesterday's series "more cleanups in
+OnAction_back".
 
-Thank you!
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+index b24c6a79646d..65330baa5a73 100644
+--- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
++++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+@@ -1504,7 +1504,8 @@ unsigned int OnAction_back(struct adapter *padapter, struct recv_frame *precv_fr
+ 		preorder_ctrl->enable = pmlmeinfo->bAcceptAddbaReq;
+ 
+ 		issue_action_BA(padapter, mgmt->sa, WLAN_ACTION_ADDBA_RESP,
+-				pmlmeinfo->bAcceptAddbaReq ? 0 : 37);
++				pmlmeinfo->bAcceptAddbaReq ?
++					WLAN_STATUS_SUCCESS : WLAN_STATUS_REQUEST_DECLINED);
+ 		break;
+ 	case WLAN_ACTION_ADDBA_RESP:
+ 		tid = u16_get_bits(le16_to_cpu(mgmt->u.action.u.addba_resp.capab),
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.30.2
+

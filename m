@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ECD65279B1
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 22:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA165279B2
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 22:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238536AbiEOUB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 16:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
+        id S238561AbiEOUBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 16:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiEOUBY (ORCPT
+        with ESMTP id S233813AbiEOUB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 16:01:24 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C3C108A
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 13:01:22 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id t25so15939133ljd.6
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 13:01:22 -0700 (PDT)
+        Sun, 15 May 2022 16:01:26 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA84115E
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 13:01:25 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id u23so22653752lfc.1
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 13:01:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Gp1BBNbZ42X2QQArBCdHGs3vRj6i0vfmgJdrQAenEi8=;
-        b=KaYlgWABpd6a3tNDr5IgU145YKsThgKBIjyTd4jrNPrzi2nb1bueC3Xy82RlkV9vQ/
-         yOBRpZnEHtedYLPJ05sfQjJWeWLP2iLHEMC+vqAB16psAn+GkZYuoZVNijh+EmbB87oh
-         KKt8qa++8sziMV5BFeFPUcrISPtqGsonKj4ouLj8xshJgmU2jS3aQagGgK/rUyUqBxEI
-         q7mpIexGUZJ+DsYkDYQvkOxvMmvrxCz3LzxViPIoRZRGejSyIW5WH1BiZQGdbI2DRgQL
-         NwgkQI6o3P+lAn0Pm6t5WghxFjGcSiOHcu6uCll+BpgLq2V57kjcXdwyFEAUV09fw1rz
-         nO9A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=KXD8XuC6lGBVzyqbnaNhW/9Jgk1+Ek/2FLjcPeEVLJA=;
+        b=KH5+P8Xoi5HgyXB7Y+7GMpsUsGVV6RDdEUampVl6jnhZxuvpLkdrzHHFIKi7VLgOQV
+         UHr4MVDLXs0NOxd0t6wApmnjRo/n5HKhEWi5ibYjjxhZk6DICECGZBfkulbgqbHT+ooC
+         0zuvcX3HGyZnBWz3TWGwWAPPyT5qhoIWXKS4z0HltbTR+DvoYj2xi2DLU6uHAUffPtzN
+         gZ0vPGsW3tKgS22I72Agpv/XHZeE5sZjxnkjZMMozRBvYgZZn0wGBdqXoqzBA1Q7GthI
+         SPXY4w4bg6l4OX1pH7GxfPPkob/iAgAqYr4U9KF+RCLnZ1dbUoHkHP+y3gmPSyTainix
+         vNlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Gp1BBNbZ42X2QQArBCdHGs3vRj6i0vfmgJdrQAenEi8=;
-        b=rWmMwM1S77oTu0mcU9LVacdN/1RL3BXzgPflDFigrUFPBX+5nZ7SIcnRfFQYl/znd7
-         urEMGJoNkY85EmFUXQ0gWkY0JAE4hqIbQdRAwMxbxZr8+zVwXyaBoKaLxODSuG30DyGY
-         qI065ztSCt3e8Ve3kb2wT+9og8aV4a50M1LMYd4n5HIbf1z5iuNxGvIiQJOV60pcHEBY
-         lXRrMfOKxLdwczLK9cj93Pegu90/HpsEb0rF6+7CUd46fdFXJgQ3I3iczFbbFESU0iI9
-         Y5hCcRBXcfZk3FW3AdVAnF18LWYv4LCunUJC71Ng+ZlJL5GPWtxdKBJ3UmZWA69GJPCv
-         QeTw==
-X-Gm-Message-State: AOAM531rfB/Dz+6eYsoJwPL+liZVHPuyQMqHzn5mv54HPpLl4w+4VEW6
-        wGdu5JCqEgAaWToRozmvmTg=
-X-Google-Smtp-Source: ABdhPJwOSzSWFgoL3e9QR6GHMUfWEHBZOf7c/bjyfVeBDKmOZCSFVEDUldjICnUZ5ADXEnxg9cHzCw==
-X-Received: by 2002:a05:651c:1077:b0:24f:10fb:5d80 with SMTP id y23-20020a05651c107700b0024f10fb5d80mr9515287ljm.207.1652644880593;
-        Sun, 15 May 2022 13:01:20 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=KXD8XuC6lGBVzyqbnaNhW/9Jgk1+Ek/2FLjcPeEVLJA=;
+        b=rsfpPh087jIm0aQ0UHR18DwARtzX5hFi5v4Eo0aaOlNTUvNJqsBAvK8H05/bemhOKv
+         gE7L62Iu70m8q95v7WfR1v5xjo3qooydT0RO1szgI06psWtp80bmx8X8O8gXckVpfA8R
+         7XtDZanPWvEd6iueCRmTwr+E/yMHxx8NgAnb85KZPi3g0brsk2I59/Fhm8zWY41PxCvk
+         XRhlV7DIIXa/9xfatPQiGdmPe1vHMPXJ5u5kUNa0jOmoqDQK8WJSwMPrNcprDo00dNc3
+         seE2cXwgIR1ldA7Ervv0TCd9XW5RRyebIvKL0h8oUEPj1kTq1eyrvw07JFgNrp1dIqdN
+         JsPQ==
+X-Gm-Message-State: AOAM530C+6IAeAa37Gq1fO/UhIjr49kZvjyfES2Vgo/yVheY6JlmW5fw
+        qKRZ7NNvneYGseDIUDFkKmTSSM7kH4Q=
+X-Google-Smtp-Source: ABdhPJyVp1bL9PhOCNDmLztDmC0ZfC5UKbkq60mzC+SVyNyN8IH8vEaPFuRcGyaj2fVkg6u9xESa5Q==
+X-Received: by 2002:a19:ca02:0:b0:474:854:ed5c with SMTP id a2-20020a19ca02000000b004740854ed5cmr10574246lfg.643.1652644883805;
+        Sun, 15 May 2022 13:01:23 -0700 (PDT)
 Received: from localhost ([178.170.168.3])
-        by smtp.gmail.com with ESMTPSA id b18-20020a056512219200b0047255d210f9sm1099424lft.40.2022.05.15.13.01.20
+        by smtp.gmail.com with ESMTPSA id j20-20020a2e8014000000b0024f3d1dae96sm1295878ljg.30.2022.05.15.13.01.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 May 2022 13:01:20 -0700 (PDT)
+        Sun, 15 May 2022 13:01:23 -0700 (PDT)
 From:   Maxim Zhukov <crazycdeveloper@gmail.com>
 X-Google-Original-From: Maxim Zhukov <mussitantesmortem@gmail.com>
 To:     chi.minghao@zte.com.cn, varad.gautam@suse.com, arnd@arndb.de
@@ -55,10 +55,12 @@ Cc:     akpm@linux-foundation.org, shakeelb@google.com,
         vasily.averin@linux.dev, manfred@colorfullife.com, dbueso@suse.de,
         linux-kernel@vger.kernel.org,
         Maxim Zhukov <mussitantesmortem@gmail.com>
-Subject: [RFC PATCH 0/1] Fix handling semctl on x86-32 kernels
-Date:   Sun, 15 May 2022 23:01:02 +0300
-Message-Id: <20220515200103.1408370-1-mussitantesmortem@gmail.com>
+Subject: [RFC PATCH 1/1] ipc, sem: fix backward compatibility with x86-32 kernels
+Date:   Sun, 15 May 2022 23:01:03 +0300
+Message-Id: <20220515200103.1408370-2-mussitantesmortem@gmail.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220515200103.1408370-1-mussitantesmortem@gmail.com>
+References: <20220515200103.1408370-1-mussitantesmortem@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,20 +73,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm not sure about this patch. Maybe there is a better way to solve this problem:
-all libc sends with cmd IPC_64 flag[1][2][3], but x86-32 kernel does not have compat
-syscall layer to handle correctly semctl command.
+Since with commit 275f22148e87 ("ipc: rename old-style shmctl/semctl/msgctl syscalls")
+we have changed behavior:
+
+ksys_semctl lost parse ipc version (ipc_parse_version), because the
+new syscall works with IPC_64 only, but the parse function has some
+side effect - it removes IPC_64 bit from `cmd`.
+
+Some libc forced sends IPC_64 bit in semctl syscall[1][2][3], this leads to
+a bug - X86-32 kernel does not have compat headers and does not
+correctly parse received command (cmd) from semctl syscall: cmd have actual
+command and IPC_64 bit, thus throw EINVAL error in ksys_semctl
+
+This commit forcibly removes IPC_64 bit from the cmd for restore
+backward compatibility.
 
 [1]: https://elixir.bootlin.com/uclibc-ng/v1.0.40/source/libc/misc/sysvipc/sem.c#L58
 [2]: https://elixir.bootlin.com/musl/v1.2.3/source/src/ipc/semctl.c#L48 -> https://elixir.bootlin.com/musl/v1.2.3/source/src/ipc/ipc.h#L22
 [3]: https://elixir.bootlin.com/glibc/glibc-2.35/source/sysdeps/unix/sysv/linux/semctl.c#L124
 
-Maxim Zhukov (1):
-  ipc, sem: fix backward compatibility with x86-32 kernels
-
+Signed-off-by: Maxim Zhukov <mussitantesmortem@gmail.com>
+---
  ipc/sem.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/ipc/sem.c b/ipc/sem.c
+index 0dbdb98fdf2d..824244170000 100644
+--- a/ipc/sem.c
++++ b/ipc/sem.c
+@@ -1706,7 +1706,7 @@ static long ksys_semctl(int semid, int semnum, int cmd, unsigned long arg, int v
+ 
+ SYSCALL_DEFINE4(semctl, int, semid, int, semnum, int, cmd, unsigned long, arg)
+ {
+-	return ksys_semctl(semid, semnum, cmd, arg, IPC_64);
++	return ksys_semctl(semid, semnum, cmd & (~IPC_64), arg, IPC_64);
+ }
+ 
+ #ifdef CONFIG_ARCH_WANT_IPC_PARSE_VERSION
 -- 
 2.36.1
 

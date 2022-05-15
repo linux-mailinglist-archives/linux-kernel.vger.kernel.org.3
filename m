@@ -2,91 +2,389 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD585278A1
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 17:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9945D527898
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 17:58:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237579AbiEOP7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 11:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56966 "EHLO
+        id S237680AbiEOP5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 11:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbiEOP7C (ORCPT
+        with ESMTP id S237559AbiEOP50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 11:59:02 -0400
-Received: from smtp.smtpout.orange.fr (smtp07.smtpout.orange.fr [80.12.242.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9BD1409B
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 08:59:01 -0700 (PDT)
-Received: from pop-os.home ([86.243.180.246])
-        by smtp.orange.fr with ESMTPA
-        id qGcCn0Tbaqn1xqGe3nISmG; Sun, 15 May 2022 17:59:00 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 15 May 2022 17:59:00 +0200
-X-ME-IP: 86.243.180.246
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Veerasenareddy Burru <vburru@marvell.com>,
-        Abhijit Ayarekar <aayarekar@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Satananda Burla <sburla@marvell.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        netdev@vger.kernel.org
-Subject: [PATCH 2/2] octeon_ep: Fix irq releasing in the error handling path of octep_request_irqs()
-Date:   Sun, 15 May 2022 17:56:45 +0200
-Message-Id: <a1b6f082fff4e68007914577961113bc452c8030.1652629833.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1652629833.git.christophe.jaillet@wanadoo.fr>
-References: <cover.1652629833.git.christophe.jaillet@wanadoo.fr>
+        Sun, 15 May 2022 11:57:26 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A219313F86
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 08:57:23 -0700 (PDT)
+Date:   Sun, 15 May 2022 15:57:19 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652630240;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pSYd5oHHl2wlRZTqxYRq4Y2oHAr6Szr+vA49N1YzGbE=;
+        b=EXQCS07uU/gjcW2QkSS1rm0pciX4IK2Em5pO4BTWJvpksdqFT5GsCAIuQEKna5UOsJc/tV
+        YNDv4Q8A8mivFfmH5xFJAKQqGi2EhLTsfcrF6+i0M702eHgLiWfCruESzj9wPCVSoHeCIl
+        tgSdgVrmO4Jz89/E3MP5ofmJOUJ1yhOnl0Ba87w780YuQqLp0+gFwkQuy/9DUFztwG1eqI
+        7/Z6Da4hpEOmKcXdOiM9pLEqD4UQrLQtzblrzMsjt4rp9CsWTk/SbCUUd3vtueEqEkwPnp
+        vusLuDaVB7zgBQxaH5XrVdq/Lq1OAqxm9HYKR2Nar24u5vOG2UObONNjpJPq1A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652630240;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pSYd5oHHl2wlRZTqxYRq4Y2oHAr6Szr+vA49N1YzGbE=;
+        b=pOz4Qa7NiG16Lv3lSyWsemABRqU6Xconw2gMuZFesxuaclACH16TZk5jluu7PNcS+7TUXP
+        nVJ64cTaDognVfCw==
+From:   "irqchip-bot for Mark Rutland" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-next] irqchip/gic-v3: Fix priority mask handling
+Cc:     Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+In-Reply-To: <20220513133038.226182-4-mark.rutland@arm.com>
+References: <20220513133038.226182-4-mark.rutland@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Message-ID: <165263023931.4207.1704438563942861531.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the error handling to work as expected, the index in the
-'oct->msix_entries' array must be tweaked because, when the irq are
-requested there is:
-	msix_entry = &oct->msix_entries[i + num_non_ioq_msix];
+The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-So in the error handling path, 'i + num_non_ioq_msix' should be used
-instead of 'i'.
+Commit-ID:     614ab80c96474682157cabb14f8c8602b3422e90
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/614ab80c96474682157cabb14f8c8602b3422e90
+Author:        Mark Rutland <mark.rutland@arm.com>
+AuthorDate:    Fri, 13 May 2022 14:30:38 +01:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Sun, 15 May 2022 16:47:31 +01:00
 
-The 2nd argument of free_irq() also needs to be adjusted.
+irqchip/gic-v3: Fix priority mask handling
 
-Fixes: 37d79d059606 ("octeon_ep: add Tx/Rx processing and interrupt support")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+When a kernel is built with CONFIG_ARM64_PSEUDO_NMI=y and pseudo-NMIs
+are enabled at runtime, GICv3's gic_handle_irq() can leave DAIF and
+ICC_PMR_EL1 in an unexpected state in some cases, breaking subsequent
+usage of local_irq_enable() and resulting in softirqs being run with
+IRQs erroneously masked (possibly resulting in deadlocks).
+
+This can happen when an IRQ exception is taken from a context where
+regular IRQs were unmasked, and either:
+
+(1) ICC_IAR1_EL1 indicates a special INTID (e.g. as a result of an IRQ
+    being withdrawn since the IRQ exception was taken).
+
+(2) ICC_IAR1_EL1 and ICC_RPR_EL1 indicate an NMI was acknowledged.
+
+When an NMI is taken from a context where regular IRQs were masked,
+there is no problem.
+
+When CONFIG_ARM64_DEBUG_PRIORITY_MASKING=y, this can be detected with
+perf, e.g.
+
+| # ./perf record -a -g -e cycles:k ls -alR / > /dev/null 2>&1
+| ------------[ cut here ]------------
+| WARNING: CPU: 0 PID: 14 at arch/arm64/include/asm/irqflags.h:32 arch_local_irq_enable+0x4c/0x6c
+| Modules linked in:
+| CPU: 0 PID: 14 Comm: ksoftirqd/0 Not tainted 5.18.0-rc5-00004-g876c38e3d20b #12
+| Hardware name: linux,dummy-virt (DT)
+| pstate: 204000c5 (nzCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+| pc : arch_local_irq_enable+0x4c/0x6c
+| lr : __do_softirq+0x110/0x5d8
+| sp : ffff8000080bbbc0
+| pmr_save: 000000f0
+| x29: ffff8000080bbbc0 x28: ffff316ac3a6ca40 x27: 0000000000000000
+| x26: 0000000000000000 x25: ffffa04611c06008 x24: ffffa04611c06008
+| x23: 0000000040400005 x22: 0000000000000200 x21: ffff8000080bbe20
+| x20: ffffa0460fe10320 x19: 0000000000000009 x18: 0000000000000000
+| x17: ffff91252dfa9000 x16: ffff800008004000 x15: 0000000000004000
+| x14: 0000000000000028 x13: ffffa0460fe17578 x12: ffffa0460fed4294
+| x11: ffffa0460fedc168 x10: ffffffffffffff80 x9 : ffffa0460fe10a70
+| x8 : ffffa0460fedc168 x7 : 000000000000b762 x6 : 00000000057c3bdf
+| x5 : ffff8000080bbb18 x4 : 0000000000000000 x3 : 0000000000000001
+| x2 : ffff91252dfa9000 x1 : 0000000000000060 x0 : 00000000000000f0
+| Call trace:
+|  arch_local_irq_enable+0x4c/0x6c
+|  __irq_exit_rcu+0x180/0x1ac
+|  irq_exit_rcu+0x1c/0x44
+|  el1_interrupt+0x4c/0xe4
+|  el1h_64_irq_handler+0x18/0x24
+|  el1h_64_irq+0x74/0x78
+|  smpboot_thread_fn+0x68/0x2c0
+|  kthread+0x124/0x130
+|  ret_from_fork+0x10/0x20
+| irq event stamp: 193241
+| hardirqs last  enabled at (193240): [<ffffa0460fe10a9c>] __do_softirq+0x10c/0x5d8
+| hardirqs last disabled at (193241): [<ffffa0461102ffe4>] el1_dbg+0x24/0x90
+| softirqs last  enabled at (193234): [<ffffa0460fe10e00>] __do_softirq+0x470/0x5d8
+| softirqs last disabled at (193239): [<ffffa0460fea9944>] __irq_exit_rcu+0x180/0x1ac
+| ---[ end trace 0000000000000000 ]---
+
+The necessary manipulation of DAIF and ICC_PMR_EL1 depends on the
+interrupted context, but the structure of gic_handle_irq() makes this
+also depend on whether the GIC reports an IRQ, NMI, or special INTID:
+
+*  When the interrupted context had regular IRQs masked (and hence the
+   interrupt must be an NMI), the entry code performs the NMI
+   entry/exit and gic_handle_irq() should return with DAIF and
+   ICC_PMR_EL1 unchanged.
+
+   This is handled correctly today.
+
+* When the interrupted context had regular IRQs unmasked, the entry code
+  performs IRQ entry/exit, but expects gic_handle_irq() to always update
+  ICC_PMR_EL1 and DAIF.IF to unmask NMIs (but not regular IRQs) prior to
+  returning (which it must do prior to invoking any regular IRQ
+  handler).
+
+  This unbalanced calling convention is necessary because we don't know
+  whether an NMI has been taken until acknowledged by a read from
+  ICC_IAR1_EL1, and so we need to perform the read with NMI masked in
+  case an NMI has been taken (and needs to be handled with NMIs masked).
+
+  Unfortunately, this is not handled consistently:
+
+  - When ICC_IAR1_EL1 reports a special INTID, gic_handle_irq() returns
+    immediately without manipulating ICC_PMR_EL1 and DAIF.
+
+  - When RPR_EL1 indicates an NMI, gic_handle_irq() calls
+    gic_handle_nmi() to invoke the NMI handler, then returns without
+    manipulating ICC_PMR_EL1 and DAIF.
+
+  - For regular IRQs, gic_handle_irq() manipulates ICC_PMR_EL1 and DAIF
+    prior to invoking the IRQ handler.
+
+There were related problems with special INTID handling in the past,
+where if an exception was taken from a context with regular IRQs masked
+and ICC_IAR_EL1 reported a special INTID, gic_handle_irq() would
+erroneously unmask NMIs in NMI context permitted an unexpected nested
+NMI. That case specifically was fixed by commit:
+
+  a97709f563a078e2 ("irqchip/gic-v3: Do not enable irqs when handling spurious interrups")
+
+... but unfortunately that commit added an inverse problem, where if an
+exception was taken from a context with regular IRQs *unmasked* and
+ICC_IAR_EL1 reported a special INTID, gic_handle_irq() would erroneously
+fail to  unmask NMIs (and consequently regular IRQs could not be
+unmasked during softirq processing). Before and after that commit, if an
+NMI was taken from a context with regular IRQs unmasked gic_handle_irq()
+would not unmask NMIs prior to returning, leading to the same problem
+with softirq handling.
+
+This patch fixes this by restructuring gic_handle_irq(), splitting it
+into separate irqson/irqsoff helper functions which consistently perform
+the DAIF + ICC_PMR1_EL1 manipulation based upon the interrupted context,
+regardless of the event indicated by ICC_IAR1_EL1.
+
+The special INTID handling is moved into the low-level IRQ/NMI handler
+invocation helper functions, so that early returns don't prevent the
+required manipulation of DAIF + ICC_PMR_EL1.
+
+Fixes: f32c926651dcd168 ("irqchip/gic-v3: Handle pseudo-NMIs")
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220513133038.226182-4-mark.rutland@arm.com
 ---
-I think that the wording above is awful, but I'm sure you get it.
-Feel free to rephrase everything to have it more readable.
----
- drivers/net/ethernet/marvell/octeon_ep/octep_main.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/irqchip/irq-gic-v3.c | 147 ++++++++++++++++++++--------------
+ 1 file changed, 89 insertions(+), 58 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-index 6b60a03574a0..4dcae805422b 100644
---- a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-+++ b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-@@ -257,10 +257,12 @@ static int octep_request_irqs(struct octep_device *oct)
+diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+index 0cbc4e2..1af2b50 100644
+--- a/drivers/irqchip/irq-gic-v3.c
++++ b/drivers/irqchip/irq-gic-v3.c
+@@ -673,78 +673,69 @@ static inline void gic_complete_ack(u32 irqnr)
+ 	isb();
+ }
  
- 	return 0;
- ioq_irq_err:
-+	i += num_non_ioq_msix;
- 	while (i > num_non_ioq_msix) {
- 		--i;
- 		irq_set_affinity_hint(oct->msix_entries[i].vector, NULL);
--		free_irq(oct->msix_entries[i].vector, oct->ioq_vector[i]);
-+		free_irq(oct->msix_entries[i].vector,
-+			 oct->ioq_vector[i - num_non_ioq_msix]);
+-static inline void gic_handle_nmi(u32 irqnr, struct pt_regs *regs)
++static bool gic_rpr_is_nmi_prio(void)
+ {
+-	bool irqs_enabled = interrupts_enabled(regs);
+-	int err;
++	if (!gic_supports_nmi())
++		return false;
+ 
+-	if (irqs_enabled)
+-		nmi_enter();
++	return unlikely(gic_read_rpr() == GICD_INT_RPR_PRI(GICD_INT_NMI_PRI));
++}
++
++static bool gic_irqnr_is_special(u32 irqnr)
++{
++	return irqnr >= 1020 && irqnr <= 1023;
++}
++
++static void __gic_handle_irq(u32 irqnr, struct pt_regs *regs)
++{
++	if (gic_irqnr_is_special(irqnr))
++		return;
+ 
+ 	gic_complete_ack(irqnr);
+ 
+-	/*
+-	 * Leave the PSR.I bit set to prevent other NMIs to be
+-	 * received while handling this one.
+-	 * PSR.I will be restored when we ERET to the
+-	 * interrupted context.
+-	 */
+-	err = generic_handle_domain_nmi(gic_data.domain, irqnr);
+-	if (err)
++	if (generic_handle_domain_irq(gic_data.domain, irqnr)) {
++		WARN_ONCE(true, "Unexpected interrupt (irqnr %u)\n", irqnr);
+ 		gic_deactivate_unhandled(irqnr);
+-
+-	if (irqs_enabled)
+-		nmi_exit();
++	}
+ }
+ 
+-static u32 do_read_iar(struct pt_regs *regs)
++static void __gic_handle_nmi(u32 irqnr, struct pt_regs *regs)
+ {
+-	u32 iar;
+-
+-	if (gic_supports_nmi() && unlikely(!interrupts_enabled(regs))) {
+-		u64 pmr;
+-
+-		/*
+-		 * We were in a context with IRQs disabled. However, the
+-		 * entry code has set PMR to a value that allows any
+-		 * interrupt to be acknowledged, and not just NMIs. This can
+-		 * lead to surprising effects if the NMI has been retired in
+-		 * the meantime, and that there is an IRQ pending. The IRQ
+-		 * would then be taken in NMI context, something that nobody
+-		 * wants to debug twice.
+-		 *
+-		 * Until we sort this, drop PMR again to a level that will
+-		 * actually only allow NMIs before reading IAR, and then
+-		 * restore it to what it was.
+-		 */
+-		pmr = gic_read_pmr();
+-		gic_pmr_mask_irqs();
+-		isb();
++	if (gic_irqnr_is_special(irqnr))
++		return;
+ 
+-		iar = gic_read_iar();
++	gic_complete_ack(irqnr);
+ 
+-		gic_write_pmr(pmr);
+-	} else {
+-		iar = gic_read_iar();
++	if (generic_handle_domain_nmi(gic_data.domain, irqnr)) {
++		WARN_ONCE(true, "Unexpected pseudo-NMI (irqnr %u)\n", irqnr);
++		gic_deactivate_unhandled(irqnr);
  	}
- non_ioq_irq_err:
- 	while (i) {
--- 
-2.34.1
-
+-
+-	return iar;
+ }
+ 
+-static asmlinkage void __exception_irq_entry gic_handle_irq(struct pt_regs *regs)
++/*
++ * An exception has been taken from a context with IRQs enabled, and this could
++ * be an IRQ or an NMI.
++ *
++ * The entry code called us with DAIF.IF set to keep NMIs masked. We must clear
++ * DAIF.IF (and update ICC_PMR_EL1 to mask regular IRQs) prior to returning,
++ * after handling any NMI but before handling any IRQ.
++ *
++ * The entry code has performed IRQ entry, and if an NMI is detected we must
++ * perform NMI entry/exit around invoking the handler.
++ */
++static void __gic_handle_irq_from_irqson(struct pt_regs *regs)
+ {
++	bool is_nmi;
+ 	u32 irqnr;
+ 
+-	irqnr = do_read_iar(regs);
++	irqnr = gic_read_iar();
+ 
+-	/* Check for special IDs first */
+-	if ((irqnr >= 1020 && irqnr <= 1023))
+-		return;
++	is_nmi = gic_rpr_is_nmi_prio();
+ 
+-	if (gic_supports_nmi() &&
+-	    unlikely(gic_read_rpr() == GICD_INT_RPR_PRI(GICD_INT_NMI_PRI))) {
+-		gic_handle_nmi(irqnr, regs);
+-		return;
++	if (is_nmi) {
++		nmi_enter();
++		__gic_handle_nmi(irqnr, regs);
++		nmi_exit();
+ 	}
+ 
+ 	if (gic_prio_masking_enabled()) {
+@@ -752,12 +743,52 @@ static asmlinkage void __exception_irq_entry gic_handle_irq(struct pt_regs *regs
+ 		gic_arch_enable_irqs();
+ 	}
+ 
+-	gic_complete_ack(irqnr);
++	if (!is_nmi)
++		__gic_handle_irq(irqnr, regs);
++}
+ 
+-	if (generic_handle_domain_irq(gic_data.domain, irqnr)) {
+-		WARN_ONCE(true, "Unexpected interrupt received!\n");
+-		gic_deactivate_unhandled(irqnr);
+-	}
++/*
++ * An exception has been taken from a context with IRQs disabled, which can only
++ * be an NMI.
++ *
++ * The entry code called us with DAIF.IF set to keep NMIs masked. We must leave
++ * DAIF.IF (and ICC_PMR_EL1) unchanged.
++ *
++ * The entry code has performed NMI entry.
++ */
++static void __gic_handle_irq_from_irqsoff(struct pt_regs *regs)
++{
++	u64 pmr;
++	u32 irqnr;
++
++	/*
++	 * We were in a context with IRQs disabled. However, the
++	 * entry code has set PMR to a value that allows any
++	 * interrupt to be acknowledged, and not just NMIs. This can
++	 * lead to surprising effects if the NMI has been retired in
++	 * the meantime, and that there is an IRQ pending. The IRQ
++	 * would then be taken in NMI context, something that nobody
++	 * wants to debug twice.
++	 *
++	 * Until we sort this, drop PMR again to a level that will
++	 * actually only allow NMIs before reading IAR, and then
++	 * restore it to what it was.
++	 */
++	pmr = gic_read_pmr();
++	gic_pmr_mask_irqs();
++	isb();
++	irqnr = gic_read_iar();
++	gic_write_pmr(pmr);
++
++	__gic_handle_nmi(irqnr, regs);
++}
++
++static asmlinkage void __exception_irq_entry gic_handle_irq(struct pt_regs *regs)
++{
++	if (unlikely(gic_supports_nmi() && !interrupts_enabled(regs)))
++		__gic_handle_irq_from_irqsoff(regs);
++	else
++		__gic_handle_irq_from_irqson(regs);
+ }
+ 
+ static u32 gic_get_pribits(void)

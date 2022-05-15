@@ -2,416 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99C295277B5
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 15:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0795277C4
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 15:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236812AbiEONL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 09:11:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36476 "EHLO
+        id S236866AbiEONOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 09:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231362AbiEONL5 (ORCPT
+        with ESMTP id S236864AbiEONOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 09:11:57 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3A5DF67;
-        Sun, 15 May 2022 06:11:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1652620311; bh=mc2ZY/afrshLDQJL1VkB0y4Hk7wGVJ/NTCa6MUXFe1Y=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=G+JWgKzSM5SNeFbwAlojwOtpL9KQZLol2egSV+nXA8Xl70+wPEaDwGETsqsam2+So
-         OoPu0QV3CAgCYcIx7p1O/TTPFkDLJUFeEqjsil2YWe9FQvhRYtYVzyTC4c04Rlk/aa
-         I6cKoA/U6hJEk0E0YLFuOJdVhMeQ2/VOaWI2Jn0M=
-Received: from [192.168.9.172] (unknown [101.88.28.48])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id C902C60691;
-        Sun, 15 May 2022 21:11:50 +0800 (CST)
-Message-ID: <28828250-ced3-9b03-26fc-63323be12f3a@xen0n.name>
-Date:   Sun, 15 May 2022 21:11:49 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0a1
-Subject: Re: [PATCH V10 17/22] LoongArch: Add some library functions
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20220514080402.2650181-1-chenhuacai@loongson.cn>
- <20220514080402.2650181-18-chenhuacai@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20220514080402.2650181-18-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sun, 15 May 2022 09:14:15 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1488613F41
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 06:14:13 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VDAcGqu_1652620449;
+Received: from localhost(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VDAcGqu_1652620449)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sun, 15 May 2022 21:14:09 +0800
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+To:     paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
+        palmer@dabbelt.com, wangkefeng.wang@huawei.com,
+        vitaly.wool@konsulko.com, rmk+kernel@armlinux.org.uk,
+        ebiederm@xmission.com, tongtiangen@huawei.co
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        guoren@kernel.org, mick@ics.forth.gr,
+        Xianting Tian <xianting.tian@linux.alibaba.com>
+Subject: [PATCH] RISC-V: Add fast call path of crash_kexec()
+Date:   Sun, 15 May 2022 21:14:07 +0800
+Message-Id: <20220515131407.946832-1-xianting.tian@linux.alibaba.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Currently, almost all archs (x86, arm64, mips...) support fast call
+of crash_kexec() when "regs && kexec_should_crash()" is true. But
+RISC-V not, it can only enter crash system via panic(). However panic()
+doesn't pass the regs of the real accident scene to crash_kexec(),
+it caused we can't get accurate backtrace via gdb,
+	$ riscv64-linux-gnu-gdb vmlinux vmcore
+	Reading symbols from vmlinux...
+	[New LWP 95]
+	#0  console_unlock () at kernel/printk/printk.c:2557
+	2557                    if (do_cond_resched)
+	(gdb) bt
+	#0  console_unlock () at kernel/printk/printk.c:2557
+	#1  0x0000000000000000 in ?? ()
 
-On 5/14/22 16:03, Huacai Chen wrote:
-> Add some library functions for LoongArch, including: delay, memset,
-> memcpy, memmove, copy_user, strncpy_user, strnlen_user and tlb dump
-> functions.
->
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->   arch/loongarch/include/asm/delay.h  |  26 +++++++
->   arch/loongarch/include/asm/string.h |  12 +++
->   arch/loongarch/lib/clear_user.S     |  43 +++++++++++
->   arch/loongarch/lib/copy_user.S      |  47 ++++++++++++
->   arch/loongarch/lib/delay.c          |  43 +++++++++++
->   arch/loongarch/lib/dump_tlb.c       | 111 ++++++++++++++++++++++++++++
->   6 files changed, 282 insertions(+)
->   create mode 100644 arch/loongarch/include/asm/delay.h
->   create mode 100644 arch/loongarch/include/asm/string.h
->   create mode 100644 arch/loongarch/lib/clear_user.S
->   create mode 100644 arch/loongarch/lib/copy_user.S
->   create mode 100644 arch/loongarch/lib/delay.c
->   create mode 100644 arch/loongarch/lib/dump_tlb.c
->
-> diff --git a/arch/loongarch/include/asm/delay.h b/arch/loongarch/include/asm/delay.h
-> new file mode 100644
-> index 000000000000..016b3aca65cb
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/delay.h
-> @@ -0,0 +1,26 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-This file is derived from MIPS so copyright should be marked here.
-> + */
-> +#ifndef _ASM_DELAY_H
-> +#define _ASM_DELAY_H
-> +
-> +#include <linux/param.h>
-> +
-> +extern void __delay(unsigned long loops);
-Argument is called "cycles" in the .c file.
-> +extern void __ndelay(unsigned long ns);
-> +extern void __udelay(unsigned long us);
-> +
-> +#define ndelay(ns) __ndelay(ns)
-> +#define udelay(us) __udelay(us)
-> +
-> +/* make sure "usecs *= ..." in udelay do not overflow. */
-> +#if HZ >= 1000
-> +#define MAX_UDELAY_MS	1
-> +#elif HZ <= 200
-> +#define MAX_UDELAY_MS	5
-> +#else
-> +#define MAX_UDELAY_MS	(1000 / HZ)
-> +#endif
-> +
-> +#endif /* _ASM_DELAY_H */
-> diff --git a/arch/loongarch/include/asm/string.h b/arch/loongarch/include/asm/string.h
-> new file mode 100644
-> index 000000000000..b07e60ded957
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/string.h
-> @@ -0,0 +1,12 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> + */
-> +#ifndef _ASM_STRING_H
-> +#define _ASM_STRING_H
-> +
-> +extern void *memset(void *__s, int __c, size_t __count);
-> +extern void *memcpy(void *__to, __const__ void *__from, size_t __n);
-> +extern void *memmove(void *__dest, __const__ void *__src, size_t __n);
-> +
-> +#endif /* _ASM_STRING_H */
-> diff --git a/arch/loongarch/lib/clear_user.S b/arch/loongarch/lib/clear_user.S
-> new file mode 100644
-> index 000000000000..b8168d22ac80
-> --- /dev/null
-> +++ b/arch/loongarch/lib/clear_user.S
-> @@ -0,0 +1,43 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> + */
-> +
-> +#include <asm/asm.h>
-> +#include <asm/asmmacro.h>
-> +#include <asm/export.h>
-> +#include <asm/regdef.h>
-> +
-> +.macro fixup_ex from, to, offset, fix
-> +.if \fix
-> +	.section .fixup, "ax"
-> +\to:	addi.d	v0, a1, \offset
-> +	jr	ra
-> +	.previous
-> +.endif
-> +	.section __ex_table, "a"
-> +	PTR	\from\()b, \to\()b
-> +	.previous
-> +.endm
-> +
-> +/*
-> + * unsigned long __clear_user(void *addr, size_t size)
-> + *
-> + * a0: addr
-> + * a1: size
-> + */
-> +SYM_FUNC_START(__clear_user)
-> +	beqz	a1, 2f
-> +
-> +1:	st.b	zero, a0, 0
-> +	addi.d	a0, a0, 1
-> +	addi.d	a1, a1, -1
-> +	bgt	a1, zero, 1b
-> +
-> +2:	move	v0, a1
-> +	jr	ra
-> +
-> +	fixup_ex 1, 3, 0, 1
-> +SYM_FUNC_END(__clear_user)
-> +
-> +EXPORT_SYMBOL(__clear_user)
-> diff --git a/arch/loongarch/lib/copy_user.S b/arch/loongarch/lib/copy_user.S
-> new file mode 100644
-> index 000000000000..43ed26304954
-> --- /dev/null
-> +++ b/arch/loongarch/lib/copy_user.S
-> @@ -0,0 +1,47 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> + */
-> +
-> +#include <asm/asm.h>
-> +#include <asm/asmmacro.h>
-> +#include <asm/export.h>
-> +#include <asm/regdef.h>
-> +
-> +.macro fixup_ex from, to, offset, fix
-> +.if \fix
-> +	.section .fixup, "ax"
-> +\to:	addi.d	v0, a2, \offset
-> +	jr	ra
-> +	.previous
-> +.endif
-> +	.section __ex_table, "a"
-> +	PTR	\from\()b, \to\()b
-> +	.previous
-> +.endm
-> +
-> +/*
-> + * unsigned long __copy_user(void *to, const void *from, size_t n)
-> + *
-> + * a0: to
-> + * a1: from
-> + * a2: n
-> + */
-> +SYM_FUNC_START(__copy_user)
-> +	beqz	a2, 3f
-> +
-> +1:	ld.b	t0, a1, 0
-> +2:	st.b	t0, a0, 0
-> +	addi.d	a0, a0, 1
-> +	addi.d	a1, a1, 1
-> +	addi.d	a2, a2, -1
-> +	bgt	a2, zero, 1b
-> +
-> +3:	move	v0, a2
-> +	jr	ra
-> +
-> +	fixup_ex 1, 4, 0, 1
-> +	fixup_ex 2, 4, 0, 0
-> +SYM_FUNC_END(__copy_user)
-> +
-> +EXPORT_SYMBOL(__copy_user)
-> diff --git a/arch/loongarch/lib/delay.c b/arch/loongarch/lib/delay.c
-> new file mode 100644
-> index 000000000000..5d856694fcfe
-> --- /dev/null
-> +++ b/arch/loongarch/lib/delay.c
-> @@ -0,0 +1,43 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-So is this file.
-> + */
-> +#include <linux/delay.h>
-> +#include <linux/export.h>
-> +#include <linux/smp.h>
-> +#include <linux/timex.h>
-> +
-> +#include <asm/compiler.h>
-> +#include <asm/processor.h>
-> +
-> +void __delay(unsigned long cycles)
-> +{
-> +	u64 t0 = get_cycles();
-> +
-> +	while ((unsigned long)(get_cycles() - t0) < cycles)
-> +		cpu_relax();
-> +}
-> +EXPORT_SYMBOL(__delay);
-> +
-> +/*
-> + * Division by multiplication: you don't have to worry about
-> + * loss of precision.
-> + *
-> + * Use only for very small delays ( < 1 msec).	Should probably use a
-> + * lookup table, really, as the multiplications take much too long with
-> + * short delays.  This is a "reasonable" implementation, though (and the
-> + * first constant multiplications gets optimized away if the delay is
-> + * a constant)
-> + */
-> +
-> +void __udelay(unsigned long us)
-> +{
-> +	__delay((us * 0x000010c7ull * HZ * lpj_fine) >> 32);
-> +}
-> +EXPORT_SYMBOL(__udelay);
-> +
-> +void __ndelay(unsigned long ns)
-> +{
-> +	__delay((ns * 0x00000005ull * HZ * lpj_fine) >> 32);
-> +}
-> +EXPORT_SYMBOL(__ndelay);
-> diff --git a/arch/loongarch/lib/dump_tlb.c b/arch/loongarch/lib/dump_tlb.c
-> new file mode 100644
-> index 000000000000..cda2c6bc7f09
-> --- /dev/null
-> +++ b/arch/loongarch/lib/dump_tlb.c
-> @@ -0,0 +1,111 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> + *
-> + * Derived from MIPS:
-> + * Copyright (C) 1994, 1995 by Waldorf Electronics, written by Ralf Baechle.
-> + * Copyright (C) 1999 by Silicon Graphics, Inc.
-> + */
-> +#include <linux/kernel.h>
-> +#include <linux/mm.h>
-> +
-> +#include <asm/loongarch.h>
-> +#include <asm/page.h>
-> +#include <asm/pgtable.h>
-> +#include <asm/tlb.h>
-> +
-> +void dump_tlb_regs(void)
-> +{
-> +	const int field = 2 * sizeof(unsigned long);
-> +
-> +	pr_info("Index    : %0x\n", read_csr_tlbidx());
-> +	pr_info("PageSize : %0x\n", read_csr_pagesize());
-> +	pr_info("EntryHi  : %0*llx\n", field, read_csr_entryhi());
-> +	pr_info("EntryLo0 : %0*llx\n", field, read_csr_entrylo0());
-> +	pr_info("EntryLo1 : %0*llx\n", field, read_csr_entrylo1());
-> +}
-> +
-> +static void dump_tlb(int first, int last)
-> +{
-> +	unsigned long s_entryhi, entryhi, asid;
-> +	unsigned long long entrylo0, entrylo1, pa;
-> +	unsigned int index;
-> +	unsigned int s_index, s_asid;
-> +	unsigned int pagesize, c0, c1, i;
-> +	unsigned long asidmask = cpu_asid_mask(&current_cpu_data);
-> +	int pwidth = 11;
-> +	int vwidth = 11;
-> +	int asidwidth = DIV_ROUND_UP(ilog2(asidmask) + 1, 4);
-> +
-> +	s_entryhi = read_csr_entryhi();
-> +	s_index = read_csr_tlbidx();
-> +	s_asid = read_csr_asid();
-> +
-> +	for (i = first; i <= last; i++) {
-> +		write_csr_index(i);
-> +		tlb_read();
-> +		pagesize = read_csr_pagesize();
-> +		entryhi	 = read_csr_entryhi();
-> +		entrylo0 = read_csr_entrylo0();
-> +		entrylo1 = read_csr_entrylo1();
-> +		index = read_csr_tlbidx();
-> +		asid = read_csr_asid();
-> +
-> +		/* EHINV bit marks entire entry as invalid */
-> +		if (index & CSR_TLBIDX_EHINV)
-> +			continue;
-> +		/*
-> +		 * ASID takes effect in absence of G (global) bit.
-> +		 */
-> +		if (!((entrylo0 | entrylo1) & ENTRYLO_G) &&
-> +		    asid != s_asid)
-> +			continue;
-> +
-> +		/*
-> +		 * Only print entries in use
-> +		 */
-> +		pr_info("Index: %2d pgsize=%x ", i, (1 << pagesize));
-> +
-> +		c0 = (entrylo0 & ENTRYLO_C) >> ENTRYLO_C_SHIFT;
-> +		c1 = (entrylo1 & ENTRYLO_C) >> ENTRYLO_C_SHIFT;
-> +
-> +		pr_cont("va=%0*lx asid=%0*lx",
-> +			vwidth, (entryhi & ~0x1fffUL), asidwidth, asid & asidmask);
-> +
-> +		/* NR/NX are in awkward places, so mask them off separately */
-> +		pa = entrylo0 & ~(ENTRYLO_NR | ENTRYLO_NX);
-> +		pa = pa & PAGE_MASK;
-> +		pr_cont("\n\t[");
-> +		pr_cont("ri=%d xi=%d ",
-> +			(entrylo0 & ENTRYLO_NR) ? 1 : 0,
-> +			(entrylo0 & ENTRYLO_NX) ? 1 : 0);
-> +		pr_cont("pa=%0*llx c=%d d=%d v=%d g=%d plv=%lld] [",
-> +			pwidth, pa, c0,
-> +			(entrylo0 & ENTRYLO_D) ? 1 : 0,
-> +			(entrylo0 & ENTRYLO_V) ? 1 : 0,
-> +			(entrylo0 & ENTRYLO_G) ? 1 : 0,
-> +			(entrylo0 & ENTRYLO_PLV) >> ENTRYLO_PLV_SHIFT);
-> +		/* NR/NX are in awkward places, so mask them off separately */
-> +		pa = entrylo1 & ~(ENTRYLO_NR | ENTRYLO_NX);
-> +		pa = pa & PAGE_MASK;
-> +		pr_cont("ri=%d xi=%d ",
-> +			(entrylo1 & ENTRYLO_NR) ? 1 : 0,
-> +			(entrylo1 & ENTRYLO_NX) ? 1 : 0);
-> +		pr_cont("pa=%0*llx c=%d d=%d v=%d g=%d plv=%lld]\n",
-> +			pwidth, pa, c1,
-> +			(entrylo1 & ENTRYLO_D) ? 1 : 0,
-> +			(entrylo1 & ENTRYLO_V) ? 1 : 0,
-> +			(entrylo1 & ENTRYLO_G) ? 1 : 0,
-> +			(entrylo1 & ENTRYLO_PLV) >> ENTRYLO_PLV_SHIFT);
-> +	}
-> +	pr_info("\n");
-> +
-> +	write_csr_entryhi(s_entryhi);
-> +	write_csr_tlbidx(s_index);
-> +	write_csr_asid(s_asid);
-> +}
-> +
-> +void dump_tlb_all(void)
-> +{
-> +	dump_tlb(0, current_cpu_data.tlbsize - 1);
-> +}
+With the patch we can get the accurate backtrace,
+	$ riscv64-linux-gnu-gdb vmlinux vmcore
+	Reading symbols from vmlinux...
+	[New LWP 95]
+	#0  0xffffffe00063a4e0 in test_thread (data=<optimized out>) at drivers/virtio/virtio_mmio.c:806
+	806             *(int *)p = 0xdead;
+	(gdb)
+	(gdb) bt
+	#0  0xffffffe00063a4e0 in test_thread (data=<optimized out>) at drivers/virtio/virtio_mmio.c:806
+	#1  0x0000000000000000 in ?? ()
 
-Overall LGTM; with the copyright lines amended:
+Test code to produce NULL address dereference,
+	+extern int panic_on_oops;
+	+static struct task_struct *k;
+	+static int test_thread(void *data) {
+	+
+	+       void *p = NULL;
+	+
+	+       while (!panic_on_oops)
+	+               msleep(2000);
+	+
+	+       *(int *)p = 0xdead;
+	+
+	+       return 0;
+	+}
+	+
+	 static int __init virtio_mmio_init(void)
+	 {
+	+       k = kthread_run(test_thread, NULL, "test_thread");
+	+       if (IS_ERR(k))
+	+               pr_err("Couldn't create test kthread\n");
+	+
+	        return platform_driver_register(&virtio_mmio_driver);
+	 }
 
-Reviewed-by: WANG Xuerui <git@xen0n.name>
+Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+---
+ arch/riscv/kernel/traps.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+index fe92e119e6a3..e666ebfa2a64 100644
+--- a/arch/riscv/kernel/traps.c
++++ b/arch/riscv/kernel/traps.c
+@@ -16,6 +16,7 @@
+ #include <linux/mm.h>
+ #include <linux/module.h>
+ #include <linux/irq.h>
++#include <linux/kexec.h>
+ 
+ #include <asm/asm-prototypes.h>
+ #include <asm/bug.h>
+@@ -44,6 +45,9 @@ void die(struct pt_regs *regs, const char *str)
+ 
+ 	ret = notify_die(DIE_OOPS, str, regs, 0, regs->cause, SIGSEGV);
+ 
++	if (regs && kexec_should_crash(current))
++		crash_kexec(regs);
++
+ 	bust_spinlocks(0);
+ 	add_taint(TAINT_DIE, LOCKDEP_NOW_UNRELIABLE);
+ 	spin_unlock_irq(&die_lock);
+-- 
+2.17.1
 

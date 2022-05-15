@@ -2,61 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34F5B5276E2
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 12:18:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E3305276E4
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 12:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236296AbiEOKRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 06:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
+        id S236301AbiEOKRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 06:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236271AbiEOKRI (ORCPT
+        with ESMTP id S236253AbiEOKRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 06:17:08 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60AB117A93
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 03:17:08 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sun, 15 May 2022 06:17:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C243017A8E;
+        Sun, 15 May 2022 03:17:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L1JG93lXtz4xXJ;
-        Sun, 15 May 2022 20:17:05 +1000 (AEST)
-From:   Michael Ellerman <patch-notifications@ellerman.id.au>
-To:     benh@kernel.crashing.org, ruscur@russell.cc,
-        YueHaibing <yuehaibing@huawei.com>, oohall@gmail.com,
-        mpe@ellerman.id.au, nick.child@ibm.com, paulus@samba.org,
-        christophe.leroy@csgroup.eu
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220316104239.26508-1-yuehaibing@huawei.com>
-References: <20220316104239.26508-1-yuehaibing@huawei.com>
-Subject: Re: [PATCH v2 -next] powerpc/eeh: Remove unused inline functions
-Message-Id: <165260954984.1040779.9924441836509487459.b4-ty@ellerman.id.au>
-Date:   Sun, 15 May 2022 20:12:29 +1000
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA76F60EC6;
+        Sun, 15 May 2022 10:17:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AECA0C385B8;
+        Sun, 15 May 2022 10:17:17 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Y4NvPVhN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1652609836;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0o2sK9SiTyazcAoY3sQ2kelM8l35xwqcMUnMwIMkSWY=;
+        b=Y4NvPVhNyzUERLxKCPVU/603iJX2SN5RYATdy5+npvykSCz1EjVvdLECgcirQkwT/DN3D8
+        2CHg5I4Taa6eNMkUpPzm3PlYqu7v/loBIldAJBHa6yd0ZCzZ2jrUReklnDMWqDoAPNKr30
+        pm9D/k0kvNxwJe3Wu8KZo6jW/M61NCs=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 646f83ef (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sun, 15 May 2022 10:17:15 +0000 (UTC)
+Date:   Sun, 15 May 2022 12:17:13 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH] random: do not pretend to handle premature next security
+ model
+Message-ID: <YoDTKTxrCXnIxDyJ@zx2c4.com>
+References: <20220504113025.285784-1-Jason@zx2c4.com>
+ <YntvKcp5PYDUKoFE@sol.localdomain>
+ <YnuQlIOuOy7nHvSr@zx2c4.com>
+ <YoBNHEqeNahziJt5@sol.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YoBNHEqeNahziJt5@sol.localdomain>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Mar 2022 18:42:39 +0800, YueHaibing wrote:
-> pseries_eeh_init_edev() is exclusively in eeh_pseries.c,
-> make it static and remove unused inline function.
-> pseries_eeh_init_edev_recursive() is only called from files build
-> wich CONFIG_HOTPLUG_PCI_RPA which depends on CONFIG_PSERIES and
-> CONFIG_EEH, so can remove the unused inline version.
+Hi Eric,
+
+On Sat, May 14, 2022 at 05:45:16PM -0700, Eric Biggers wrote:
+> On Wed, May 11, 2022 at 12:32:19PM +0200, Jason A. Donenfeld wrote:
+> > Hi Eric,
+> > 
+> > On Wed, May 11, 2022 at 01:09:13AM -0700, Eric Biggers wrote:
+> > > A couple very minor comments:
+> > 
+> > Thanks, will fix these.
+> > 
+> > Jason
 > 
+> Found one more:
 > 
-> [...]
+>  /*
+>   * Return whether the crng seed is considered to be sufficiently
+>   * old that a reseeding might be attempted.
+> 
+> It should say "that a reseeding is needed", or something similar.
 
-Applied to powerpc/next.
+Ahh, since it's now unconditional. Nice catch. Fixed as you suggested.
 
-[1/1] powerpc/eeh: Remove unused inline functions
-      https://git.kernel.org/powerpc/c/f06351f8c0c85e2d53e73c53a33b4ef55b4ad6de
-
-cheers
+Jason

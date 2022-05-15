@@ -2,113 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F4B55274B8
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 02:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E95FF5274BB
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 May 2022 02:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233411AbiEOABq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 May 2022 20:01:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
+        id S234352AbiEOAJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 May 2022 20:09:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233113AbiEOABn (ORCPT
+        with ESMTP id S233320AbiEOAJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 May 2022 20:01:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E96624F34;
-        Sat, 14 May 2022 17:01:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2ED7360C77;
-        Sun, 15 May 2022 00:01:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92ED8C340EE;
-        Sun, 15 May 2022 00:01:37 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="LF2BHC23"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1652572895;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lbeJpfAzZqKlcW2gnPn7UeQQW5Vthh4v2JU+1Y3Do4I=;
-        b=LF2BHC23HiZypFaW4/oFFz3rtooK0g3A0x0ESrklX/UPaMHFSf5n5TZlBzYdpIJ/YF1qZG
-        KPvuYzVJlTID9PqF9aIhy6BNXVTqmogF11Cr2ko9+w3MkzxycBCycpP4t51xeVnZKyJQqR
-        nKDPiErAdUSPZO8QLBxzIfy2wSIHa3o=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 1e89a44e (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sun, 15 May 2022 00:01:35 +0000 (UTC)
-Date:   Sun, 15 May 2022 02:01:31 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH V10 08/22] LoongArch: Add other common headers
-Message-ID: <YoBC2+2fvmNtcftr@zx2c4.com>
-References: <20220514080402.2650181-1-chenhuacai@loongson.cn>
- <20220514080402.2650181-9-chenhuacai@loongson.cn>
+        Sat, 14 May 2022 20:09:11 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB228DF6A
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 17:09:10 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id r5-20020a924405000000b002cf9a5b9080so6363960ila.16
+        for <linux-kernel@vger.kernel.org>; Sat, 14 May 2022 17:09:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=4w7LpxRj5X+vIy/lVETOxSz5ptDf34rf9VfAF1/2p4Q=;
+        b=ZLtc60OEdGQLCvBCEaayANYK67bHkIAgKFahX1OfLYxq5vYOtG9f8Bq3A3Tm3Jou8M
+         oWuhrwlX36dVJcgzOirI6BMiTi7VG/u0hoGUdYo7Sg33znbPZzM2+W+mnTtgr4CzNzMw
+         DTsOTlp11hjevpLG1hws8Np+xT4MCpl7RrPo/qFFm8WtkMILU5NyOO6dxcOS1Nksds+Y
+         O6EHGboRox6DuGGherTxsfe1ThXxwNNux/JEtkqC4JXCjLyrXnhUQbEdWSs9Yexgys5v
+         zNM48UAJ8+GusPd4nn1ws+WORhecb5w1ZOqoCvsV/SrtgZRl2Fhx07er9WTdRQmwh2Cb
+         K/4Q==
+X-Gm-Message-State: AOAM533jMe1YsLvU7pZQvzfhr7p+yibRytkiyp0rXaHCDXCNLwqAeAeA
+        lCVqCnjYsYYCRidbkmSuTDftFcylY0aOpM7i8LUMmU7KyOqN
+X-Google-Smtp-Source: ABdhPJz/8k9ckOb1pHQyHhQ0NYpFe1XoF44PaTpQPq0tV/ZauCYyGjXK/7Cyq7CPLx4IZfTwoJCGYAS39kAvmzBynHDPXZgzelSW
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220514080402.2650181-9-chenhuacai@loongson.cn>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:12ef:b0:2cf:4335:63b6 with SMTP id
+ l15-20020a056e0212ef00b002cf433563b6mr5912298iln.284.1652573350109; Sat, 14
+ May 2022 17:09:10 -0700 (PDT)
+Date:   Sat, 14 May 2022 17:09:10 -0700
+In-Reply-To: <0000000000007f31db05de0638f0@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007fa7ff05df01b7c4@google.com>
+Subject: Re: [syzbot] general protection fault in vma_interval_tree_remove
+From:   syzbot <syzbot+ee1fdd8dcc770a3a169a@syzkaller.appspotmail.com>
+To:     Liam.Howlett@Oracle.com, akpm@linux-foundation.org, arnd@arndb.de,
+        ccross@google.com, david@redhat.com, ebiederm@xmission.com,
+        liam.howlett@oracle.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, michel@lespinasse.org,
+        syzkaller-bugs@googlegroups.com, vbabka@suse.cz,
+        willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 14, 2022 at 04:03:48PM +0800, Huacai Chen wrote:
-> diff --git a/arch/loongarch/include/asm/timex.h b/arch/loongarch/include/asm/timex.h
-> new file mode 100644
-> index 000000000000..3f8db082f00d
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/timex.h
-> @@ -0,0 +1,31 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> + */
-> +#ifndef _ASM_TIMEX_H
-> +#define _ASM_TIMEX_H
-> +
-> +#ifdef __KERNEL__
-> +
-> +#include <linux/compiler.h>
-> +
-> +#include <asm/cpu.h>
-> +#include <asm/cpu-features.h>
-> +
-> +/*
-> + * Standard way to access the cycle counter.
-> + * Currently only used on SMP for scheduling.
-> + *
-> + * We know that all SMP capable CPUs have cycle counters.
-> + */
-> +
-> +typedef unsigned long cycles_t;
-> +
-> +static inline cycles_t get_cycles(void)
-> +{
-> +	return drdtime();
-> +}
+syzbot has bisected this issue to:
 
-Please add:
+commit b7d0f898f5ce328ad809417f2e728b58153d52d1
+Author: Liam R. Howlett <Liam.Howlett@Oracle.com>
+Date:   Fri May 13 04:15:44 2022 +0000
 
-    #define get_cycles get_cycles
+    mm: remove the vma linked list
 
-which is what other archs are getting for 5.19.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12fefe69f00000
+start commit:   1e1b28b936ae Add linux-next specific files for 20220513
+git tree:       linux-next
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=11fefe69f00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=16fefe69f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e4eb3c0c4b289571
+dashboard link: https://syzkaller.appspot.com/bug?extid=ee1fdd8dcc770a3a169a
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=142757f1f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17cf0966f00000
 
-Jason
+Reported-by: syzbot+ee1fdd8dcc770a3a169a@syzkaller.appspotmail.com
+Fixes: b7d0f898f5ce ("mm: remove the vma linked list")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

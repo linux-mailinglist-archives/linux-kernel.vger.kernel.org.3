@@ -2,69 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D244528739
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3672B528745
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242368AbiEPOiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 10:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
+        id S244729AbiEPOl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 10:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiEPOh7 (ORCPT
+        with ESMTP id S244674AbiEPOlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 10:37:59 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71ECD2C11E
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:37:57 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2f863469afbso156101427b3.0
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:37:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kTB0WxbI7pNKziLAOm0Rj4onIqJzYX3pDVUnNfUI1io=;
-        b=f2noysl2zQeqrEgraTrbm5eIDW9y7aF4He2L+WhdMWL3Jed6jjFrGT5Z7TR9vRbBOi
-         Nq9r+fbYtjXvN+13e+UP7dAUDCPan7jRMMp7+Xk+ssS7cIIf9gRVKKmMxkddMUq+BYTA
-         srFAOGlacayVNCmaEBD+GPMTrRuN+D2r1CYdIY2+4FdOauuGGeVeTupX+TWgGZD4jO9a
-         /u6GQ/x16tfcv8GEUHVmZ7vY9oRHY4fqgc4u+Z50SpGqAbnzw8nUh79MVOPdoPD2CHab
-         /ph5+GQw4CQagic4Js86pIR468L9yuQqnrtFnWF2o3gMCTRufY2w56Vg5p0vpdiGxWX5
-         NN9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kTB0WxbI7pNKziLAOm0Rj4onIqJzYX3pDVUnNfUI1io=;
-        b=sDIszf+mJmQow3ylSIn/nVNHDyHtdWv6Y8x1FTAdow5Nkd8qysUzd5PZAuKol9ZTAW
-         JGzUNl9huz+wryZIKrzlns/WGtwZAvelR6Z8u0vZcrX8Vq30oVa0JyVCF/mKi4X2FzHm
-         D/116WbVSQN2r1YdTorMnleA81d8s/23Xl34KV+DFJ0unSfBChsM5xZr7clT21YcqQlU
-         tsili4q2rP8vYF/WJYLJHSOSNgP0vgvkc9rtLR+CaJPwQ74XAvJd1N7BWH+rGgy16vV2
-         MDO5ncMN734uwG02a9CX6/pmGMO76u3Wjhgu6HJdYudiVKYVThnK7VYZg1ieU7vUCSWN
-         jyBg==
-X-Gm-Message-State: AOAM530tWgns8L0QA8n1TJ7kN/cFdwQPTqE7OcIivmlKwiDJLxOxB8GP
-        cgmvAEVWc9sTjQ/RmP60gTN/v2otQ8proY/S/op61g==
-X-Google-Smtp-Source: ABdhPJwv43CtwkpKD1bPIxvSd/VT/IBz3YSs4otXb88oEdQFyDBVIq5Q8MhVJ5VPRySQku9SwyVn/AAVGsWYUp8h7bE=
-X-Received: by 2002:a81:478b:0:b0:2ea:da8c:5c21 with SMTP id
- u133-20020a81478b000000b002eada8c5c21mr20894327ywa.189.1652711876582; Mon, 16
- May 2022 07:37:56 -0700 (PDT)
+        Mon, 16 May 2022 10:41:12 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB552CCB7;
+        Mon, 16 May 2022 07:41:11 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id 674151F42330
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652712069;
+        bh=8BYTLgL7DNJMJHGxPDAPccqtEpDPhR7Z3zFk1UgBjIc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fsXq9RO5eqw/T8yDtZ9lIbJ1TmFcfGOYBVOnvXCQYo0FpkwjkzWr5K+eQFZnBaOml
+         fCBWcoMOeljiNkSas8UyyJqbj9Vz4AXbYnjHK4NwYb5+78oRZ08JyAVGl7QauMJhrU
+         IgX+OQu/IdZFaguIkyeI51Ze64t86HjO4TtIScPoxQMA7fzBFejhchi6hmCthMzN9I
+         Qfv3Zp8wjs2O+E4uYet8U58e1c4I/HZowCndnSyi2NyVXe2RAfZA8FEHinx9g55Ayd
+         h7sA3v5xQYcifDGKTfi9yXTQdqcF8tkMoAFWlG8uAYxFsL9PL5dENowgbelKhL5X2j
+         TzGD5vVwGGNtw==
+Date:   Mon, 16 May 2022 10:41:04 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>, kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Tzung-Bi Shih <tzungbi@google.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] dt-bindings: remoteproc: mediatek: Make l1tcm reg
+ exclusive to mt819x
+Message-ID: <20220516144104.yvy2a2lncdcgznu6@notapiano>
+References: <20220511195452.871897-1-nfraprado@collabora.com>
+ <20220511195452.871897-2-nfraprado@collabora.com>
+ <30978e5a-18ef-3ea2-8df3-3ced50f44bfc@linaro.org>
 MIME-Version: 1.0
-References: <CA+G9fYtsp-1pi6d4J71BPYh-msjzbVt_-v3YrUu12dXPeyqTDg@mail.gmail.com>
- <87o7zylztd.wl-maz@kernel.org> <CA+G9fYtLP1Kf1Ck-33XrLFQ5uc_p1z1S5Sr1x=9ZRGi=D851PQ@mail.gmail.com>
-In-Reply-To: <CA+G9fYtLP1Kf1Ck-33XrLFQ5uc_p1z1S5Sr1x=9ZRGi=D851PQ@mail.gmail.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 16 May 2022 20:07:45 +0530
-Message-ID: <CA+G9fYtW58D057A=gdA2JCk5QTHwXywpEeRfLXBELouUzBsugw@mail.gmail.com>
-Subject: Re: Unexpected kernel BRK exception at EL1 - Internal error: BRK
- handler: f20003e8 - gic_dist_config
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>, pali@kernel.org,
-        Ingo Molnar <mingo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <30978e5a-18ef-3ea2-8df3-3ced50f44bfc@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,24 +65,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+On Fri, May 13, 2022 at 10:15:51AM +0200, Krzysztof Kozlowski wrote:
+> On 11/05/2022 21:54, Nícolas F. R. A. Prado wrote:
+> 
+> Thank you for your patch. There is something to discuss/improve.
+> 
+> >  
+> > -if:
+> > -  properties:
+> > -    compatible:
+> > -      enum:
+> > -        - mediatek,mt8183-scp
+> > -        - mediatek,mt8192-scp
+> > -then:
+> > -  required:
+> > -    - clocks
+> > -    - clock-names
+> > +allOf:
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          enum:
+> > +            - mediatek,mt8183-scp
+> > +            - mediatek,mt8192-scp
+> > +    then:
+> > +      required:
+> > +        - clocks
+> > +        - clock-names
+> > +
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          enum:
+> > +            - mediatek,mt8183-scp
+> > +            - mediatek,mt8186-scp
+> > +    then:
+> > +      properties:
+> > +        reg:
+> > +          maxItems: 2
+> > +        reg-names:
+> > +          maxItems: 2
+> 
+> Isn't l1tcm required on mt819x? Now it is left optional.
 
-FYI,
+Hi Krzysztof,
 
-On Mon, 16 May 2022 at 19:28, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->
-> Hi Marc,
->
-> Thanks for looking into this report.
->
-> On Mon, 16 May 2022 at 12:38, Marc Zyngier <maz@kernel.org> wrote:
-> >
-> > On Mon, 16 May 2022 07:16:22 +0100,
-> > Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> > >
-> > > The kernel crash reported on arm64 juno-r2 device with kselftest-merge config
-> > > while booting Linux next-20220513 kernel  [1].
+actually l1tcm is optional for mt819x, as commented by Tzung-Bi on v4 [1]. So
+that change was intended.
 
-This is happening only with the gcc-7.3.x built kernel on arm64 juno-r2 device.
+Thanks,
+Nícolas
 
-- Naresh
+[1] https://lore.kernel.org/all/CA+Px+wXQjys8xvTSSJkLXoGp4yQnANbKWBtfuxiYi0UX6DH0jw@mail.gmail.com/
+
+> 
+> 
+> Best regards,
+> Krzysztof

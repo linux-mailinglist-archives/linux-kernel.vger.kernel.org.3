@@ -2,90 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D251528F1C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D0F528E16
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346966AbiEPTvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:51:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36468 "EHLO
+        id S1345557AbiEPTkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346627AbiEPTqi (ORCPT
+        with ESMTP id S1345600AbiEPTi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:46:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEAD4162C;
-        Mon, 16 May 2022 12:43:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 335D361557;
-        Mon, 16 May 2022 19:43:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FA8FC36AF3;
-        Mon, 16 May 2022 19:43:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730233;
-        bh=BTB41/R4kJKDuRFtO1AJT/GmcZ1Qb1obV1+MMcxmR6s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f3WlRkrTB6wo5sYKFgRwLLYsPGQwPKWN1VBMCttcisqnI+kSdNU9PLDVvGCqmzYiv
-         MO2UB0qhmEYLDCQwWIlSDm4D4UZUVD1bYs3ZYpa3UFy+DRPbUU4Arrd7KBvFxWBJg8
-         Br7+N4FEnUYzKbVCg/oSogFD4MxIlJWZca7heFUw=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        Baruch Siach <baruch@tkos.co.il>
-Subject: [PATCH 5.4 43/43] tty/serial: digicolor: fix possible null-ptr-deref in digicolor_uart_probe()
-Date:   Mon, 16 May 2022 21:36:54 +0200
-Message-Id: <20220516193615.989385267@linuxfoundation.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193614.714657361@linuxfoundation.org>
-References: <20220516193614.714657361@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Mon, 16 May 2022 15:38:57 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71423F88C;
+        Mon, 16 May 2022 12:38:45 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id i40so4692715eda.7;
+        Mon, 16 May 2022 12:38:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LebDF3RuPxmX1Cw/8NAKFfKs/e37d3Ws73/ZUWsOSYY=;
+        b=bseiz9mTWBFks9ltjnA8R2a+/W7/FVLzfkmSDHkJfeKfQX1rYGRuIyUViZL8yKA9mF
+         MLEAdCbqCH+RPshFcSqj8Y/AkfxtyUTdOtL2F5UnpHv0UXW0mf1LKw3QS/uRg9BEqWq7
+         QMATuJ+nvY4vq7d4KZnFOq4VS8QyGepI2Sam7Qz6f6IallvZ+rxo7sHaARhKMtw359gl
+         9H/CUYF9h8DrFCKvAY6T1zMs8VFaRAwHSyzzb1/zafJQy5vhl5bQ42vFNfVAh7T7ClI8
+         oRRmlyG0j5tAoD3DEzyuDLbHY6upzDkmAnY6zHLJ8BGTThl1mtVURC7BBqr7hvTVZUbw
+         kcCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LebDF3RuPxmX1Cw/8NAKFfKs/e37d3Ws73/ZUWsOSYY=;
+        b=bQAU7dH3n3ni1KT0j80EoabV5Q3NzXee7YMiF/RDOkdDdI0mfh4nwvKeA60967TDMB
+         hQds208CVNIYz+Y84XbzXe5m/H2sRwnXQPScqcAaFnbDTPaBr1KpygD4tBpk4hlDRJjs
+         R1tQNWwlOtZJi3IWSW7N2/IkkbmKWB8hkN8wDV1SXOquv1TtAa3g3o5K4bASsFUEz/4G
+         +2DFL21cAa1MPMisgszKLqyHfRWBPjzfzAtT2EhKEN7PHY5TQWbCR28qiPUO1OBt4Zi5
+         7WQG4oFlIk5R1znnYzzwhbgmFpZMtLFZLu/KR9Y0a6e7t1wEd/WEzCt6TGjhJEFCeizC
+         +kkA==
+X-Gm-Message-State: AOAM533Q6CzTq50rh+UzXdJrxu437jdpEQhqll4+4ePpZkitStn73OPm
+        Hf/lxjgW7CvqJv3HXkA2ik0=
+X-Google-Smtp-Source: ABdhPJyTP9Rwj4orjplkbScv8cYbfHA3DBy1Z17s4DcQWsXitJXORWnR2TTE2sCfqqK/ke8zXrzj6Q==
+X-Received: by 2002:a05:6402:f13:b0:428:a849:d0c1 with SMTP id i19-20020a0564020f1300b00428a849d0c1mr15059561eda.346.1652729923428;
+        Mon, 16 May 2022 12:38:43 -0700 (PDT)
+Received: from adroid (102-167-184-091.ip-addr.vsenet.de. [91.184.167.102])
+        by smtp.gmail.com with ESMTPSA id s7-20020a170906220700b006f3ef214e45sm94042ejs.171.2022.05.16.12.38.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 12:38:43 -0700 (PDT)
+From:   =?UTF-8?q?Martin=20J=C3=BCcker?= <martin.juecker@gmail.com>
+To:     linux-samsung-soc@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Martin=20J=C3=BCcker?= <martin.juecker@gmail.com>
+Subject: [PATCH 1/3] dt-bindings: display: simple: add support for Samsung LTL101AL01
+Date:   Mon, 16 May 2022 21:37:07 +0200
+Message-Id: <20220516193709.10037-1-martin.juecker@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+Add the Samsung LTL101AL01 WXGA LCD panel to the list.
 
-commit 447ee1516f19f534a228dda237eddb202f23e163 upstream.
-
-It will cause null-ptr-deref when using 'res', if platform_get_resource()
-returns NULL, so move using 'res' after devm_ioremap_resource() that
-will check it to avoid null-ptr-deref.
-And use devm_platform_get_and_ioremap_resource() to simplify code.
-
-Fixes: 5930cb3511df ("serial: driver for Conexant Digicolor USART")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Reviewed-by: Baruch Siach <baruch@tkos.co.il>
-Cc: stable <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220505124621.1592697-1-yangyingliang@huawei.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Martin Jücker <martin.juecker@gmail.com>
 ---
- drivers/tty/serial/digicolor-usart.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../devicetree/bindings/display/panel/panel-simple.yaml         | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/tty/serial/digicolor-usart.c
-+++ b/drivers/tty/serial/digicolor-usart.c
-@@ -472,10 +472,10 @@ static int digicolor_uart_probe(struct p
- 		return PTR_ERR(uart_clk);
- 
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	dp->port.mapbase = res->start;
- 	dp->port.membase = devm_ioremap_resource(&pdev->dev, res);
- 	if (IS_ERR(dp->port.membase))
- 		return PTR_ERR(dp->port.membase);
-+	dp->port.mapbase = res->start;
- 
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0)
-
+diff --git a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
+index 1eb9dd4f8f58..9501b5a3c011 100644
+--- a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
++++ b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
+@@ -270,6 +270,8 @@ properties:
+       - samsung,atna33xc20
+         # Samsung 12.2" (2560x1600 pixels) TFT LCD panel
+       - samsung,lsn122dl01-c01
++        # Samsung Electronics 10.1" WXGA (1280x800) TFT LCD panel
++      - samsung,ltl101al01
+         # Samsung Electronics 10.1" WSVGA TFT LCD panel
+       - samsung,ltn101nt05
+         # Samsung Electronics 14" WXGA (1366x768) TFT LCD panel
+-- 
+2.25.1
 

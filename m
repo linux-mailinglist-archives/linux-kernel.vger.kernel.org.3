@@ -2,53 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C79529169
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E46D0528FD5
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348549AbiEPT6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52946 "EHLO
+        id S1347733AbiEPT6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347956AbiEPTwf (ORCPT
+        with ESMTP id S1348055AbiEPTwi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:52:35 -0400
+        Mon, 16 May 2022 15:52:38 -0400
 Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73BD45054
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:48:07 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id h13-20020a170902f70d00b0015f4cc5d19aso6146070plo.18
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:48:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE1444A3B
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:48:14 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id x23-20020a170902b41700b0015ea144789fso8484475plr.13
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:48:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Qkg0VjWV3dsGLC/CTbEN1HI3toMCNaiLgVonfkXEzUI=;
-        b=ELl/+bvBtXGZEAVx8mem5Q3fzIyUxLAZGICbsmjVju4tZ944Iwcorx7cGW1jTq1iYe
-         ktSPcF4PizIiRw0N0DST0B1W3+to2EnvgNTAv9TXxjOGKn7LubfIoqpPLlMhOA6+bwBm
-         BXaevB4q+4AcFdXD98nI4UDZoDP27eMKHOKqaTwOufzSl1HLCiZOrKbruZnnN4BXEOSg
-         D76Qm4xAyw/pTTdIyEUXvh3tcyRqCi8MqQszIB6DB+NcoXAULeUsSU60PL29iVlFkB3n
-         QAnltMu6gSJA9SeEJx6l8qjBmc9ZUy4LjMJg+CRP+1+NAQvzhI3eeHQUsDlR4OK8tn6q
-         iHfw==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=7zxkc5ZXExRsw2+htaBLaHICt2hKO01Qx7emNNIuPE0=;
+        b=WjNwvg62TXvaMOE3bJ3rVJRZqhLuj4FN2JiSrbyDgPKxQm0Z5/Zfo09Si3yiNsbr7w
+         fvMNxbeF+qScnuYTamACHMeCLcn2I1ZhJL3zwn584F92egbFP+M+/iI91+78Qxs+G+KN
+         gIUwtOjWOfk5LRjil5DZXu/ZWc0Bny4kNCcUo0pE1C7BbUlKlLwyP5ayoAR88VEWwA6Z
+         7QjHyPLsdbVVhQ+rDfaPrJrZB+3rQMNSVOcZqum+/oSPXKx8V20GHxehDI/7lUyLGnWM
+         MJjpcmsFEXyN9gYQwkztG57Oy+bdjLIaKayZxlNdeqyPFpkfuAxF60X7wMaoEbm/SThU
+         flrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Qkg0VjWV3dsGLC/CTbEN1HI3toMCNaiLgVonfkXEzUI=;
-        b=vnYhKpSVwB7cZgc9M1pKEGo1DfA+v+/SGlX2N0g/1eo4uYDht5As22QjfqWsP1Stss
-         OnsfAPJs32snTqIUAI8YtztVCoKwn0Z6TQcM1SXxwlVGctEpAOCpxzmHOvNPMM4qXWVy
-         KR2hvL5l0me2iQaU6VN5dLt/fu65oOoUdMjbCTU/FlkVxFkjgJmw4ykuDnS6iyIHAYki
-         n/LxccXn4EsRDlhSVTt2R7aSlNyUrMdSjxHhpF7p2CsPYMuX/euDIjt6zUCHQ54SZLrr
-         u5fHTUb9OViBpSZ6+uyK3NxUchC9GcznwCzNGmR6viKlwAb75NtvkIRWqpL2aSnxYu9f
-         s0lw==
-X-Gm-Message-State: AOAM531Xaufbjat7pgDCgqzZUKNHU6ISlYK4BUaJ7yTLdrjzs/hb8jvE
-        e4qMM/Q/QRDX/LrqS6IxTZc6Vkn9zLlQgQ==
-X-Google-Smtp-Source: ABdhPJz0foU0ikc41QMADjDWwlkzr82FMjEnCkBdlOiEAm5yyAiZw9tbfdq+oePhNzVyIsOmA4tEa+4C3+OyWQ==
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=7zxkc5ZXExRsw2+htaBLaHICt2hKO01Qx7emNNIuPE0=;
+        b=Qv9sYnIQvu6UY1A1PHAnNaC9ZlTP2NA8aWlDJvX6AyGQF/YVtG7wseqK1aRnW+2ray
+         kj8XiU4Mj8R8yuYb3vuGPkt3Er94nMSQVib0X0KCQFJRkKqHm0gfc/Iv/yBYXlx5OSWD
+         CE/AFnKdsHK0xeagpAjpMgjEePjpr8ndIiNGYskAizr5kvis5nhIQOi7dwrCc8OnKy5P
+         LPAjcdIQqBGmlHtT7lo9i6rVaeu8hQBQMbRHouH0UBrZ56i0q2AElJrN+HeD3eLYNyf2
+         albw3O/fAmNhkhJVoI6h57lSmnGw/GP8MJYI/K11MNWTJ6ZgaSkfmWOImkKl1KsDlDG3
+         /6uw==
+X-Gm-Message-State: AOAM532rzTrSMHjBRsy+7MTxOqPyt3Dl+UvDXlatOznMU28G62mpeOMo
+        Uavsz23JeI86nWuB4/u72plX8QVM4TI4sg==
+X-Google-Smtp-Source: ABdhPJzsv0ZSkVGrhs01PhuMYzcc4fjoIMDaCDa/ta9nFEchQcxe8TTwNYD1/jAHfoxtJmb9D8mOM6DFYi9s/w==
 X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:8f91:3848:5672:cb59])
- (user=dlatypov job=sendgmr) by 2002:a17:90a:990c:b0:1df:fb1:bc2f with SMTP id
- b12-20020a17090a990c00b001df0fb1bc2fmr14623551pjp.79.1652730486427; Mon, 16
- May 2022 12:48:06 -0700 (PDT)
-Date:   Mon, 16 May 2022 12:47:28 -0700
-Message-Id: <20220516194730.1546328-1-dlatypov@google.com>
+ (user=dlatypov job=sendgmr) by 2002:a05:6a00:1146:b0:4c9:ede0:725a with SMTP
+ id b6-20020a056a00114600b004c9ede0725amr18914364pfm.35.1652730490733; Mon, 16
+ May 2022 12:48:10 -0700 (PDT)
+Date:   Mon, 16 May 2022 12:47:29 -0700
+In-Reply-To: <20220516194730.1546328-1-dlatypov@google.com>
+Message-Id: <20220516194730.1546328-2-dlatypov@google.com>
 Mime-Version: 1.0
+References: <20220516194730.1546328-1-dlatypov@google.com>
 X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [PATCH 1/3] kunit: tool: drop unused load_config argument
+Subject: [PATCH 2/3] kunit: tool: redo how we construct and mock LinuxSourceTree
 From:   Daniel Latypov <dlatypov@google.com>
 To:     brendanhiggins@google.com, davidgow@google.com
 Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
@@ -58,59 +62,365 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's always set to true except in one test case.
-And in that test case it can safely be set to true anyways.
+Our main function currently has an optional `linux` argument which is
+used to by our unit tests to inject a mock.
+We currently have the same code copy-pasted several times to do
+  if not linux:
+    linux = MakeRealInstance(cli_args.foo, cli_args.bar, ...)
+
+But in python, dependency injection isn't necessary or idiomatic when we
+can just use mock.patch() to mock things out.
+
+This change
+1. adds a helper to create a LinuxSourceTree from the cli_args
+2. drops the `linux` parameter in favor of mocking the __init__ func.
 
 Signed-off-by: Daniel Latypov <dlatypov@google.com>
 ---
- tools/testing/kunit/kunit_kernel.py    | 4 ----
- tools/testing/kunit/kunit_tool_test.py | 2 +-
- 2 files changed, 1 insertion(+), 5 deletions(-)
+ tools/testing/kunit/kunit.py           |  49 ++++--------
+ tools/testing/kunit/kunit_tool_test.py | 103 ++++++++++++-------------
+ 2 files changed, 65 insertions(+), 87 deletions(-)
 
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 3539efaf99ba..8bc8305ba817 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -219,7 +219,6 @@ class LinuxSourceTree:
- 	def __init__(
- 	      self,
- 	      build_dir: str,
--	      load_config=True,
- 	      kunitconfig_path='',
- 	      kconfig_add: Optional[List[str]]=None,
- 	      arch=None,
-@@ -233,9 +232,6 @@ class LinuxSourceTree:
- 			self._arch = 'um' if arch is None else arch
- 			self._ops = get_source_tree_ops(self._arch, cross_compile)
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index 13bd72e47da8..8a90d80ee66e 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -365,7 +365,18 @@ def add_parse_opts(parser) -> None:
+ 			    'filename is specified',
+ 			    type=str, const='stdout', default=None, metavar='FILE')
  
--		if not load_config:
--			return
+-def main(argv, linux=None):
++
++def tree_from_args(cli_args: argparse.Namespace) -> kunit_kernel.LinuxSourceTree:
++	"""Returns a LinuxSourceTree based on the user's arguments."""
++	return kunit_kernel.LinuxSourceTree(cli_args.build_dir,
++			kunitconfig_path=cli_args.kunitconfig,
++			kconfig_add=cli_args.kconfig_add,
++			arch=cli_args.arch,
++			cross_compile=cli_args.cross_compile,
++			qemu_config_path=cli_args.qemu_config)
++
++
++def main(argv):
+ 	parser = argparse.ArgumentParser(
+ 			description='Helps writing and running KUnit tests.')
+ 	subparser = parser.add_subparsers(dest='subcommand')
+@@ -412,14 +423,7 @@ def main(argv, linux=None):
+ 		if not os.path.exists(cli_args.build_dir):
+ 			os.mkdir(cli_args.build_dir)
+ 
+-		if not linux:
+-			linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
+-					kunitconfig_path=cli_args.kunitconfig,
+-					kconfig_add=cli_args.kconfig_add,
+-					arch=cli_args.arch,
+-					cross_compile=cli_args.cross_compile,
+-					qemu_config_path=cli_args.qemu_config)
 -
- 		if kunitconfig_path:
- 			if os.path.isdir(kunitconfig_path):
- 				kunitconfig_path = os.path.join(kunitconfig_path, KUNITCONFIG_PATH)
++		linux = tree_from_args(cli_args)
+ 		request = KunitRequest(build_dir=cli_args.build_dir,
+ 				       make_options=cli_args.make_options,
+ 				       jobs=cli_args.jobs,
+@@ -438,14 +442,7 @@ def main(argv, linux=None):
+ 				not os.path.exists(cli_args.build_dir)):
+ 			os.mkdir(cli_args.build_dir)
+ 
+-		if not linux:
+-			linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
+-					kunitconfig_path=cli_args.kunitconfig,
+-					kconfig_add=cli_args.kconfig_add,
+-					arch=cli_args.arch,
+-					cross_compile=cli_args.cross_compile,
+-					qemu_config_path=cli_args.qemu_config)
+-
++		linux = tree_from_args(cli_args)
+ 		request = KunitConfigRequest(build_dir=cli_args.build_dir,
+ 					     make_options=cli_args.make_options)
+ 		result = config_tests(linux, request)
+@@ -455,14 +452,7 @@ def main(argv, linux=None):
+ 		if result.status != KunitStatus.SUCCESS:
+ 			sys.exit(1)
+ 	elif cli_args.subcommand == 'build':
+-		if not linux:
+-			linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
+-					kunitconfig_path=cli_args.kunitconfig,
+-					kconfig_add=cli_args.kconfig_add,
+-					arch=cli_args.arch,
+-					cross_compile=cli_args.cross_compile,
+-					qemu_config_path=cli_args.qemu_config)
+-
++		linux = tree_from_args(cli_args)
+ 		request = KunitBuildRequest(build_dir=cli_args.build_dir,
+ 					    make_options=cli_args.make_options,
+ 					    jobs=cli_args.jobs,
+@@ -474,14 +464,7 @@ def main(argv, linux=None):
+ 		if result.status != KunitStatus.SUCCESS:
+ 			sys.exit(1)
+ 	elif cli_args.subcommand == 'exec':
+-		if not linux:
+-			linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
+-					kunitconfig_path=cli_args.kunitconfig,
+-					kconfig_add=cli_args.kconfig_add,
+-					arch=cli_args.arch,
+-					cross_compile=cli_args.cross_compile,
+-					qemu_config_path=cli_args.qemu_config)
+-
++		linux = tree_from_args(cli_args)
+ 		exec_request = KunitExecRequest(raw_output=cli_args.raw_output,
+ 						build_dir=cli_args.build_dir,
+ 						json=cli_args.json,
 diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 25a2eb3bf114..b9158017ece6 100755
+index b9158017ece6..baee11d96474 100755
 --- a/tools/testing/kunit/kunit_tool_test.py
 +++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -393,7 +393,7 @@ class LinuxSourceTreeTest(unittest.TestCase):
- 			return subprocess.Popen(['echo "hi\nbye"'], shell=True, text=True, stdout=subprocess.PIPE)
+@@ -503,24 +503,25 @@ class KUnitMainTest(unittest.TestCase):
+ 		self.print_mock = mock.patch('builtins.print').start()
+ 		self.addCleanup(mock.patch.stopall)
  
- 		with tempfile.TemporaryDirectory('') as build_dir:
--			tree = kunit_kernel.LinuxSourceTree(build_dir, load_config=False)
-+			tree = kunit_kernel.LinuxSourceTree(build_dir)
- 			mock.patch.object(tree._ops, 'start', side_effect=fake_start).start()
+-		self.linux_source_mock = mock.Mock()
+-		self.linux_source_mock.build_reconfig = mock.Mock(return_value=True)
+-		self.linux_source_mock.build_kernel = mock.Mock(return_value=True)
+-		self.linux_source_mock.run_kernel = mock.Mock(return_value=all_passed_log)
++		self.mock_linux_init = mock.patch.object(kunit_kernel, 'LinuxSourceTree').start()
++		self.linux_source_mock = self.mock_linux_init.return_value
++		self.linux_source_mock.build_reconfig.return_value = True
++		self.linux_source_mock.build_kernel.return_value = True
++		self.linux_source_mock.run_kernel.return_value = all_passed_log
  
- 			with self.assertRaises(ValueError):
-
-base-commit: 8a7ccad38f8b25c8202efd69371a022357286400
+ 	def test_config_passes_args_pass(self):
+-		kunit.main(['config', '--build_dir=.kunit'], self.linux_source_mock)
++		kunit.main(['config', '--build_dir=.kunit'])
+ 		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
+ 		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 0)
+ 
+ 	def test_build_passes_args_pass(self):
+-		kunit.main(['build'], self.linux_source_mock)
++		kunit.main(['build'])
+ 		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
+ 		self.linux_source_mock.build_kernel.assert_called_once_with(False, kunit.get_default_jobs(), '.kunit', None)
+ 		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 0)
+ 
+ 	def test_exec_passes_args_pass(self):
+-		kunit.main(['exec'], self.linux_source_mock)
++		kunit.main(['exec'])
+ 		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 0)
+ 		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 1)
+ 		self.linux_source_mock.run_kernel.assert_called_once_with(
+@@ -528,7 +529,7 @@ class KUnitMainTest(unittest.TestCase):
+ 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
+ 
+ 	def test_run_passes_args_pass(self):
+-		kunit.main(['run'], self.linux_source_mock)
++		kunit.main(['run'])
+ 		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
+ 		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 1)
+ 		self.linux_source_mock.run_kernel.assert_called_once_with(
+@@ -538,13 +539,13 @@ class KUnitMainTest(unittest.TestCase):
+ 	def test_exec_passes_args_fail(self):
+ 		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
+ 		with self.assertRaises(SystemExit) as e:
+-			kunit.main(['exec'], self.linux_source_mock)
++			kunit.main(['exec'])
+ 		self.assertEqual(e.exception.code, 1)
+ 
+ 	def test_run_passes_args_fail(self):
+ 		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
+ 		with self.assertRaises(SystemExit) as e:
+-			kunit.main(['run'], self.linux_source_mock)
++			kunit.main(['run'])
+ 		self.assertEqual(e.exception.code, 1)
+ 		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
+ 		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 1)
+@@ -553,7 +554,7 @@ class KUnitMainTest(unittest.TestCase):
+ 	def test_exec_no_tests(self):
+ 		self.linux_source_mock.run_kernel = mock.Mock(return_value=['TAP version 14', '1..0'])
+ 		with self.assertRaises(SystemExit) as e:
+-			kunit.main(['run'], self.linux_source_mock)
++			kunit.main(['run'])
+ 		self.assertEqual(e.exception.code, 1)
+ 		self.linux_source_mock.run_kernel.assert_called_once_with(
+ 			args=None, build_dir='.kunit', filter_glob='', timeout=300)
+@@ -561,7 +562,7 @@ class KUnitMainTest(unittest.TestCase):
+ 
+ 	def test_exec_raw_output(self):
+ 		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
+-		kunit.main(['exec', '--raw_output'], self.linux_source_mock)
++		kunit.main(['exec', '--raw_output'])
+ 		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 1)
+ 		for call in self.print_mock.call_args_list:
+ 			self.assertNotEqual(call, mock.call(StrContains('Testing complete.')))
+@@ -569,7 +570,7 @@ class KUnitMainTest(unittest.TestCase):
+ 
+ 	def test_run_raw_output(self):
+ 		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
+-		kunit.main(['run', '--raw_output'], self.linux_source_mock)
++		kunit.main(['run', '--raw_output'])
+ 		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
+ 		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 1)
+ 		for call in self.print_mock.call_args_list:
+@@ -578,7 +579,7 @@ class KUnitMainTest(unittest.TestCase):
+ 
+ 	def test_run_raw_output_kunit(self):
+ 		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
+-		kunit.main(['run', '--raw_output=kunit'], self.linux_source_mock)
++		kunit.main(['run', '--raw_output=kunit'])
+ 		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
+ 		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 1)
+ 		for call in self.print_mock.call_args_list:
+@@ -588,27 +589,27 @@ class KUnitMainTest(unittest.TestCase):
+ 	def test_run_raw_output_invalid(self):
+ 		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
+ 		with self.assertRaises(SystemExit) as e:
+-			kunit.main(['run', '--raw_output=invalid'], self.linux_source_mock)
++			kunit.main(['run', '--raw_output=invalid'])
+ 		self.assertNotEqual(e.exception.code, 0)
+ 
+ 	def test_run_raw_output_does_not_take_positional_args(self):
+ 		# --raw_output is a string flag, but we don't want it to consume
+ 		# any positional arguments, only ones after an '='
+ 		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
+-		kunit.main(['run', '--raw_output', 'filter_glob'], self.linux_source_mock)
++		kunit.main(['run', '--raw_output', 'filter_glob'])
+ 		self.linux_source_mock.run_kernel.assert_called_once_with(
+ 			args=None, build_dir='.kunit', filter_glob='filter_glob', timeout=300)
+ 
+ 	def test_exec_timeout(self):
+ 		timeout = 3453
+-		kunit.main(['exec', '--timeout', str(timeout)], self.linux_source_mock)
++		kunit.main(['exec', '--timeout', str(timeout)])
+ 		self.linux_source_mock.run_kernel.assert_called_once_with(
+ 			args=None, build_dir='.kunit', filter_glob='', timeout=timeout)
+ 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
+ 
+ 	def test_run_timeout(self):
+ 		timeout = 3453
+-		kunit.main(['run', '--timeout', str(timeout)], self.linux_source_mock)
++		kunit.main(['run', '--timeout', str(timeout)])
+ 		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
+ 		self.linux_source_mock.run_kernel.assert_called_once_with(
+ 			args=None, build_dir='.kunit', filter_glob='', timeout=timeout)
+@@ -616,7 +617,7 @@ class KUnitMainTest(unittest.TestCase):
+ 
+ 	def test_run_builddir(self):
+ 		build_dir = '.kunit'
+-		kunit.main(['run', '--build_dir=.kunit'], self.linux_source_mock)
++		kunit.main(['run', '--build_dir=.kunit'])
+ 		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
+ 		self.linux_source_mock.run_kernel.assert_called_once_with(
+ 			args=None, build_dir=build_dir, filter_glob='', timeout=300)
+@@ -624,60 +625,54 @@ class KUnitMainTest(unittest.TestCase):
+ 
+ 	def test_config_builddir(self):
+ 		build_dir = '.kunit'
+-		kunit.main(['config', '--build_dir', build_dir], self.linux_source_mock)
++		kunit.main(['config', '--build_dir', build_dir])
+ 		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
+ 
+ 	def test_build_builddir(self):
+ 		build_dir = '.kunit'
+ 		jobs = kunit.get_default_jobs()
+-		kunit.main(['build', '--build_dir', build_dir], self.linux_source_mock)
++		kunit.main(['build', '--build_dir', build_dir])
+ 		self.linux_source_mock.build_kernel.assert_called_once_with(False, jobs, build_dir, None)
+ 
+ 	def test_exec_builddir(self):
+ 		build_dir = '.kunit'
+-		kunit.main(['exec', '--build_dir', build_dir], self.linux_source_mock)
++		kunit.main(['exec', '--build_dir', build_dir])
+ 		self.linux_source_mock.run_kernel.assert_called_once_with(
+ 			args=None, build_dir=build_dir, filter_glob='', timeout=300)
+ 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
+ 
+-	@mock.patch.object(kunit_kernel, 'LinuxSourceTree')
+-	def test_run_kunitconfig(self, mock_linux_init):
+-		mock_linux_init.return_value = self.linux_source_mock
++	def test_run_kunitconfig(self):
+ 		kunit.main(['run', '--kunitconfig=mykunitconfig'])
+ 		# Just verify that we parsed and initialized it correctly here.
+-		mock_linux_init.assert_called_once_with('.kunit',
+-							kunitconfig_path='mykunitconfig',
+-							kconfig_add=None,
+-							arch='um',
+-							cross_compile=None,
+-							qemu_config_path=None)
+-
+-	@mock.patch.object(kunit_kernel, 'LinuxSourceTree')
+-	def test_config_kunitconfig(self, mock_linux_init):
+-		mock_linux_init.return_value = self.linux_source_mock
++		self.mock_linux_init.assert_called_once_with('.kunit',
++						kunitconfig_path='mykunitconfig',
++						kconfig_add=None,
++						arch='um',
++						cross_compile=None,
++						qemu_config_path=None)
++
++	def test_config_kunitconfig(self):
+ 		kunit.main(['config', '--kunitconfig=mykunitconfig'])
+ 		# Just verify that we parsed and initialized it correctly here.
+-		mock_linux_init.assert_called_once_with('.kunit',
+-							kunitconfig_path='mykunitconfig',
+-							kconfig_add=None,
+-							arch='um',
+-							cross_compile=None,
+-							qemu_config_path=None)
+-
+-	@mock.patch.object(kunit_kernel, 'LinuxSourceTree')
+-	def test_run_kconfig_add(self, mock_linux_init):
+-		mock_linux_init.return_value = self.linux_source_mock
++		self.mock_linux_init.assert_called_once_with('.kunit',
++						kunitconfig_path='mykunitconfig',
++						kconfig_add=None,
++						arch='um',
++						cross_compile=None,
++						qemu_config_path=None)
++
++	def test_run_kconfig_add(self):
+ 		kunit.main(['run', '--kconfig_add=CONFIG_KASAN=y', '--kconfig_add=CONFIG_KCSAN=y'])
+ 		# Just verify that we parsed and initialized it correctly here.
+-		mock_linux_init.assert_called_once_with('.kunit',
+-							kunitconfig_path=None,
+-							kconfig_add=['CONFIG_KASAN=y', 'CONFIG_KCSAN=y'],
+-							arch='um',
+-							cross_compile=None,
+-							qemu_config_path=None)
++		self.mock_linux_init.assert_called_once_with('.kunit',
++						kunitconfig_path=None,
++						kconfig_add=['CONFIG_KASAN=y', 'CONFIG_KCSAN=y'],
++						arch='um',
++						cross_compile=None,
++						qemu_config_path=None)
+ 
+ 	def test_run_kernel_args(self):
+-		kunit.main(['run', '--kernel_args=a=1', '--kernel_args=b=2'], self.linux_source_mock)
++		kunit.main(['run', '--kernel_args=a=1', '--kernel_args=b=2'])
+ 		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
+ 		self.linux_source_mock.run_kernel.assert_called_once_with(
+ 		      args=['a=1','b=2'], build_dir='.kunit', filter_glob='', timeout=300)
+@@ -699,7 +694,7 @@ class KUnitMainTest(unittest.TestCase):
+ 	@mock.patch.object(kunit, '_list_tests')
+ 	def test_run_isolated_by_suite(self, mock_tests):
+ 		mock_tests.return_value = ['suite.test1', 'suite.test2', 'suite2.test1']
+-		kunit.main(['exec', '--run_isolated=suite', 'suite*.test*'], self.linux_source_mock)
++		kunit.main(['exec', '--run_isolated=suite', 'suite*.test*'])
+ 
+ 		# Should respect the user's filter glob when listing tests.
+ 		mock_tests.assert_called_once_with(mock.ANY,
+@@ -712,7 +707,7 @@ class KUnitMainTest(unittest.TestCase):
+ 	@mock.patch.object(kunit, '_list_tests')
+ 	def test_run_isolated_by_test(self, mock_tests):
+ 		mock_tests.return_value = ['suite.test1', 'suite.test2', 'suite2.test1']
+-		kunit.main(['exec', '--run_isolated=test', 'suite*'], self.linux_source_mock)
++		kunit.main(['exec', '--run_isolated=test', 'suite*'])
+ 
+ 		# Should respect the user's filter glob when listing tests.
+ 		mock_tests.assert_called_once_with(mock.ANY,
 -- 
 2.36.1.124.g0e6072fb45-goog
 

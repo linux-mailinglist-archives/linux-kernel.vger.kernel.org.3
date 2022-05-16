@@ -2,129 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA856528732
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:35:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B3B5286F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241701AbiEPOfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 10:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57358 "EHLO
+        id S244506AbiEPO0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 10:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231847AbiEPOfC (ORCPT
+        with ESMTP id S244452AbiEPO0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 10:35:02 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17909D5F;
-        Mon, 16 May 2022 07:35:02 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C56F71FB2E;
-        Mon, 16 May 2022 14:35:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652711700; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=W7ceyTjxid5l9ZGGTqZ+wt/EPfbFdKSX+/F4lyNdDKg=;
-        b=g3iVVHUtSyQWBN3Y59HjcBDj1p/IZFTO1o2s8CWmnszg6wBpymi4LOQIZAcNlK/seWQfW5
-        OTdSKo9VL5YnbQyO5U7Jfrl+JZ6OG/lh8V2pkehTwaRN9l9VeiSd8KtqESYl+sNjIGZ0wr
-        /r1jDJWacCJhVoSdrQMTgwD1CqqpyIo=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 883E513AAB;
-        Mon, 16 May 2022 14:35:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id KL9RIBRhgmL0GwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Mon, 16 May 2022 14:35:00 +0000
-Date:   Mon, 16 May 2022 16:34:59 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Minchan Kim <minchan@kernel.org>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com
-Subject: Re: [PATCH v2 6/6] zswap: memcg accounting
-Message-ID: <20220516143459.GA17557@blackbody.suse.cz>
-References: <20220510152847.230957-1-hannes@cmpxchg.org>
- <20220510152847.230957-7-hannes@cmpxchg.org>
- <20220511173218.GB31592@blackbody.suse.cz>
- <YnwJUL90fuoHs3YW@cmpxchg.org>
- <20220513151426.GC16096@blackbody.suse.cz>
- <Yn6QfdouzkcrygTR@cmpxchg.org>
+        Mon, 16 May 2022 10:26:20 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36949220DB;
+        Mon, 16 May 2022 07:26:18 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L21kJ683NzhZLS;
+        Mon, 16 May 2022 22:25:28 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 16 May 2022 22:26:15 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 16 May
+ 2022 22:26:15 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <wellslutw@gmail.com>, <andrew@lunn.ch>, <pabeni@redhat.com>,
+        <davem@davemloft.net>, <kuba@kernel.org>
+Subject: [PATCH -next] net: ethernet: sunplus: add missing of_node_put() in spl2sw_mdio_init()
+Date:   Mon, 16 May 2022 22:37:34 +0800
+Message-ID: <20220516143734.1598316-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yn6QfdouzkcrygTR@cmpxchg.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 01:08:13PM -0400, Johannes Weiner <hannes@cmpxchg.org> wrote:
-> Right, it's accounted as a subset rather than fully disjointed. But it
-> is a limitable counter of its own, so I exported it as such, with a
-> current and a max knob. This is comparable to the kmem counter in v1.
+of_get_child_by_name() returns device node pointer with refcount
+incremented. The refcount should be decremented before returning
+from spl2sw_mdio_init().
 
-That counter and limit didn't turn out well. I liked the analogy to
-writeback (and dirty limit) better.
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/net/ethernet/sunplus/spl2sw_mdio.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-> From an API POV it would be quite strange to have max for a counter
-> that has no current. Likewise it would be strange for a major memory
-> consumer to be missing from memory.stat.
+diff --git a/drivers/net/ethernet/sunplus/spl2sw_mdio.c b/drivers/net/ethernet/sunplus/spl2sw_mdio.c
+index 139ac8f2685e..733ae1704269 100644
+--- a/drivers/net/ethernet/sunplus/spl2sw_mdio.c
++++ b/drivers/net/ethernet/sunplus/spl2sw_mdio.c
+@@ -97,8 +97,10 @@ u32 spl2sw_mdio_init(struct spl2sw_common *comm)
+ 
+ 	/* Allocate and register mdio bus. */
+ 	mii_bus = devm_mdiobus_alloc(&comm->pdev->dev);
+-	if (!mii_bus)
+-		return -ENOMEM;
++	if (!mii_bus) {
++		ret = -ENOMEM;
++		goto out;
++	}
+ 
+ 	mii_bus->name = "sunplus_mii_bus";
+ 	mii_bus->parent = &comm->pdev->dev;
+@@ -110,10 +112,13 @@ u32 spl2sw_mdio_init(struct spl2sw_common *comm)
+ 	ret = of_mdiobus_register(mii_bus, mdio_np);
+ 	if (ret) {
+ 		dev_err(&comm->pdev->dev, "Failed to register mdiobus!\n");
+-		return ret;
++		goto out;
+ 	}
+ 
+ 	comm->mii_bus = mii_bus;
++
++out:
++	of_node_put(mdio_np);
+ 	return ret;
+ }
+ 
+-- 
+2.25.1
 
-My understanding would be to have all memory.stat entries as you
-propose, no extra .current counter and the .max knob for zswap
-configuration.
-
-> It needs to be configured to the workload's access frequency curve,
-> which can be done with trial-and-error (reasonable balance between
-> zswpins and pswpins) or in a more targeted manner using tools such as
-> page_idle, damon etc.
-> [...]
-> Because for load tuning, bytes make much more sense. That's how you
-> measure the workingset, so a percentage is an awkward indirection. At
-> the cgroup level, it makes even less sense: all memcg tunables are in
-> bytes, it would be quite weird to introduce a "max" that is 0-100. Add
-> the confusion of how percentages would propagate down the hierarchy...
-
-Thanks for the explanation. I guess there's no simple tranformation of
-in-kernel available information that'd allow a more semantic
-configuration of this value. The rather crude absolute value requires
-(but also simply allows) some calibration or responsive tuning.
-
-> I don't traverse all ancestors, I bail on disabled groups and skip
-> unlimited ones.
-
-I admit I missed that.
-
-> Flushing unnecessary groups with a ratelimit doesn't sound like an
-> improvement to me.
-
-Then I'm only concerned about a situation when there's a single deep
-memcg that undergoes both workingset_refault() and zswap querying.
-The latter (bare call to cgroup_rstat_flush()) won't reset
-stats_flush_threshold, so the former (or the async flush more likely)
-would attempt a flush too. The flush work (on the leaf memcg) would be
-done twice even though it may be within the tolerance of cumulated
-error the second time.
-
-This is a thing that might require attention in the future (depending on
-some data how it actually performs). I see how the current approach is
-justified.
-
-
-Regards,
-Michal

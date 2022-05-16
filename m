@@ -2,153 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4C6E528D1D
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:31:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CFB0528D1E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238149AbiEPSbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 14:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55654 "EHLO
+        id S1344893AbiEPSbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 14:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344954AbiEPSbZ (ORCPT
+        with ESMTP id S1344948AbiEPSbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 14:31:25 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9502632EFB;
-        Mon, 16 May 2022 11:31:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+8+afjaY3BKlHOSP79HK/qVp1CiDmSymT4MdofQ8IZ4=; b=q5xCbm4UH9jAMw10q00U9nl9fj
-        KFfw+45+4Ggx4ZuRGbGIeBDWL5TE5EcKIheQZ2HOcD65sqSiIJSKWVcm/alk5iPqH8nIHyuoX2Q1D
-        0aBYvGEmDA++xrFn7XpzW5GE/RMldzEZTDzod7CKCiofXw9cSy/uvAsduoZy9pzdYtPF2KMZpn4S5
-        Bke46GD3RlhLsRiOYndBdsYizCEF9XKawVbKWaZqVWT7Wy0StoGuSLfn2434+wBNK4FK+a7PqP+pc
-        Pi3ws4dWkxHA7vo9Gcziiim2MLThS/eXzQRC3Ex4YQg630x8f9zgXJU6jLDJNHGDTXF/3T52t/ZUg
-        CoLNqxyQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nqfUX-00A7XG-Vy; Mon, 16 May 2022 18:30:50 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4BC17980DCC; Mon, 16 May 2022 20:30:47 +0200 (CEST)
-Date:   Mon, 16 May 2022 20:30:47 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-hardening@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
-Message-ID: <20220516183047.GM76023@worktop.programming.kicks-ass.net>
-References: <20220513202159.1550547-1-samitolvanen@google.com>
- <20220513202159.1550547-21-samitolvanen@google.com>
- <YoIfWENLV1AR2ijj@hirez.programming.kicks-ass.net>
- <CABCJKucXA2jbTc9TF1mLUsEDKu52t71tzxpnsGOXY3_ks+W4Bg@mail.gmail.com>
+        Mon, 16 May 2022 14:31:23 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C4A3E5E3
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 11:31:02 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id y41so14764443pfw.12
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 11:31:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=9C8bpp6d21XdJaEwrvELDm0aYiNE+NJR0NE35SfqoPw=;
+        b=JOhFs1aNvRIY7bmGE74VDs+kZuh4q3JIlp+QrRMyFp/PLiOT8r/3UwgXQt6bqHPI65
+         NNYmecm+jORBOX+gKz9WJLCJGXE8LtJQC5YL5L0PG2VmJTEBS8s7+BEqGJwsS/8+CAYW
+         nVtpgMTT9AXF2n5UP9Os5QjiIR9UeLBr/gS7D8XWO4BYz4RxM7rWHE32W8yus+feXD/Q
+         6c9Ngj5rWTW8OVkRdB4rlL0vYTmsqa2mDT/HwyIbkm1tp/SHRbUR9Gaw11RKuYsiNckv
+         aWfNEoZFgG65UKfiNR9mOJwX/KkL4MaqZDcAOWzWPHerMRs6yhZwBq+5tbLfJvRRz/ie
+         gAKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=9C8bpp6d21XdJaEwrvELDm0aYiNE+NJR0NE35SfqoPw=;
+        b=pR8Zuv4eNAHIRD+I12J+LozIN5Y1Z5HBalNuXulqcjXQAlbnSB1wVrSzQXTTscqcyx
+         Ny8X6NqSB5LYf0MM7jr7EgWRqsCk9k8KdKkMNlNEJytTRt3LwvrVmJyReg4DzPoIlPig
+         vqFqPcY8sGu5I/ODTR0VbA8QJ64Y2fI1ge67HKodl4m6yLhMt2n8E30H2djE/CYSnL48
+         miLggmVnr+sS+aOBUqkIUraEk0Nx8+JwR25kK58HJq2pitL//oGy9Q6OM977yUH6LQwz
+         4tZ2W/sba29KTn6UZPV/Aos+Fi+q7AjYwQyZ5XDEH04DxLCHK1kJr44OoNwk5rZyxsJ3
+         hTmg==
+X-Gm-Message-State: AOAM531NrT8MltbbhaGiWpp0SaBr0wwHqjHG9HR0PnZTlF6+GkooCKWg
+        cJ7voOUI+LgKeyz+xjMxGLGiXSvFrMpZmG70jhLL5A==
+X-Google-Smtp-Source: ABdhPJyjaFJSIeFl9j5CO5O2cLnzJAk/+sTu7/7S9nAUSuITSTyO47ux8geJ/ybnqIcWYwvzYkotmXgpj/i/8Woz0+g=
+X-Received: by 2002:a65:4581:0:b0:3f2:638f:6f76 with SMTP id
+ o1-20020a654581000000b003f2638f6f76mr6735655pgq.324.1652725861290; Mon, 16
+ May 2022 11:31:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABCJKucXA2jbTc9TF1mLUsEDKu52t71tzxpnsGOXY3_ks+W4Bg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220502233853.1233742-1-rananta@google.com> <878rri8r78.wl-maz@kernel.org>
+ <CAJHc60xp=UQT_CX0zoiSjAmkS8JSe+NB5Gr+F5mmybjJAWkUtQ@mail.gmail.com>
+ <878rriicez.wl-maz@kernel.org> <CAJHc60w1F7RAgJkv5PRuJtKjTw1gUaYmZk885AVhPLF2h6YbkQ@mail.gmail.com>
+ <87ilq55swj.wl-maz@kernel.org>
+In-Reply-To: <87ilq55swj.wl-maz@kernel.org>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Mon, 16 May 2022 11:30:48 -0700
+Message-ID: <CAJHc60zLt2ZtCR2=DgtS3XK8e7vQrocEO2rinW_hMb4o4-WhTg@mail.gmail.com>
+Subject: Re: [PATCH v7 0/9] KVM: arm64: Add support for hypercall services selection
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 10:15:00AM -0700, Sami Tolvanen wrote:
-> On Mon, May 16, 2022 at 2:54 AM Peter Zijlstra <peterz@infradead.org> wrote:
+On Mon, May 16, 2022 at 9:44 AM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Tue, 03 May 2022 22:09:29 +0100,
+> Raghavendra Rao Ananta <rananta@google.com> wrote:
 > >
-> > On Fri, May 13, 2022 at 01:21:58PM -0700, Sami Tolvanen wrote:
-> > > With CONFIG_CFI_CLANG, the compiler injects a type preamble
-> > > immediately before each function and a check to validate the target
-> > > function type before indirect calls:
+> > On Tue, May 3, 2022 at 1:33 PM Marc Zyngier <maz@kernel.org> wrote:
 > > >
-> > >   ; type preamble
-> > >   __cfi_function:
-> > >     int3
-> > >     int3
-> > >     mov <id>, %eax
-> > >     int3
-> > >     int3
-> > >   function:
-> > >     ...
+> > > On Tue, 03 May 2022 19:49:13 +0100,
+> > > Raghavendra Rao Ananta <rananta@google.com> wrote:
+> > > >
+> > > > Hi Marc,
+> > > >
+> > > > On Tue, May 3, 2022 at 10:24 AM Marc Zyngier <maz@kernel.org> wrote=
+:
+> > > > >
+> > > > > On Tue, 03 May 2022 00:38:44 +0100,
+> > > > > Raghavendra Rao Ananta <rananta@google.com> wrote:
+> > > > > >
+> > > > > > Hello,
+> > > > > >
+> > > > > > Continuing the discussion from [1], the series tries to add sup=
+port
+> > > > > > for the userspace to elect the hypercall services that it wishe=
+s
+> > > > > > to expose to the guest, rather than the guest discovering them
+> > > > > > unconditionally. The idea employed by the series was taken from
+> > > > > > [1] as suggested by Marc Z.
+> > > > >
+> > > > > As it took some time to get there, and that there was still a bun=
+ch of
+> > > > > things to address, I've taken the liberty to apply my own fixes t=
+o the
+> > > > > series.
+> > > > >
+> > > > > Please have a look at [1], and let me know if you're OK with the
+> > > > > result. If you are, I'll merge the series for 5.19.
+> > > > >
+> > > > > Thanks,
+> > > > >
+> > > > >         M.
+> > > > >
+> > > > Thank you for speeding up the process; appreciate it. However, the
+> > > > series's selftest patches have a dependency on Oliver's
+> > > > PSCI_SYSTEM_SUSPEND's selftest patches [1][2]. Can we pull them in
+> > > > too?
+> > >
+> > > Urgh... I guess this is the time to set some ground rules:
+> > >
+> > > - Please don't introduce dependencies between series, that's
+> > >   unmanageable. I really need to see each series independently, and i=
+f
+> > >   there is a merge conflict, that's my job to fix (and I don't really
+> > >   mind).
+> > >
+> > > - If there is a dependency between series, please post a version of
+> > >   the required patches as a prefix to your series, assuming this
+> > >   prefix is itself standalone. If it isn't, then something really is
+> > >   wrong, and the series should be resplit.
+> > >
+> > > - You also should be basing your series on an *official* tag from
+> > >   Linus' tree (preferably -rc1, -rc2 or -rc3), and not something
+> > >   random like any odd commit from the KVM tree (I had conflicts while
+> > >   applying this on -rc3, probably due to the non-advertised dependenc=
+y
+> > >   on Oliver's series).
+> > >
+> > Thanks for picking the dependency patches. I'll keep these mind the
+> > next time I push changes.
 > >
-> > When I enable CFI_CLANG and X86_KERNEL_IBT I get:
-> >
-> > 0000000000000c80 <__cfi_io_schedule_timeout>:
-> > c80:   cc                      int3
-> > c81:   cc                      int3
-> > c82:   b8 b5 b1 39 b3          mov    $0xb339b1b5,%eax
-> > c87:   cc                      int3
-> > c88:   cc                      int3
-> >
-> > 0000000000000c89 <io_schedule_timeout>:
-> > c89:   f3 0f 1e fa             endbr64
-> >
-> >
-> > That seems unfortunate. Would it be possible to get an additional
-> > compiler option to suppress the endbr for all symbols that get a __cfi_
-> > preaamble?
-> 
-> What's the concern with the endbr? Dropping it would currently break
-> the CFI+IBT combination on newer hardware, no?
+> > > >
+> > > > aarch64/hypercalls.c: In function =E2=80=98guest_test_hvc=E2=80=99:
+> > > > aarch64/hypercalls.c:95:30: error: storage size of =E2=80=98res=E2=
+=80=99 isn=E2=80=99t known
+> > > >    95 |         struct arm_smccc_res res;
+> > > >       |                              ^~~
+> > > > aarch64/hypercalls.c:103:17: warning: implicit declaration of funct=
+ion
+> > > > =E2=80=98smccc_hvc=E2=80=99 [-Wimplicit-function-declaration]
+> > > >   103 |                 smccc_hvc(hc_info->func_id, hc_info->arg1, =
+0,
+> > > > 0, 0, 0, 0, 0, &res);
+> > > >       |                 ^~~~~~~~~
+> > > >
+> > >
+> > > I've picked the two patches, which means they will most likely appear
+> > > twice in the history. In the future, please reach out so that we can
+> > > organise this better.
+> > >
+> > > > Also, just a couple of readability nits in the fixed version:
+> > > >
+> > > > 1. Patch-2/9, hypercall.c:kvm_hvc_call_default_allowed(), in the
+> > > > 'default' case, do you think we should probably add a small comment
+> > > > that mentions we are checking for func_id in the PSCI range?
+> > >
+> > > Dumped a one-liner there.
+> > >
+> > > > 2. Patch-2/9, arm_hypercall.h, clear all the macros in this patch
+> > > > itself instead of doing it in increments (unless there's some reaso=
+n
+> > > > that I'm missing)?
+> > >
+> > > Ah, rebasing leftovers, now gone.
+> > >
+> > > I've pushed an updated branch again, please have a look.
+> > >
+> > Thanks for addressing these. The series looks good now.
+>
+> Except it doesn't.
+>
+> I introduced a bug by overly simplifying kvm_arm_set_fw_reg_bmap(), as
+> we have to allow userspace writing the *same* value. As it turns out,
+> QEMU restores all the registers on each reboot. Which as the vcpus
+> have all run. This in turns triggers another issue in QEMU, which
+> instead of taking the hint ans stopping there, sends all the vcpus
+> into the guest in one go with random states... Crap happens.
+>
+> I'll wear a brown paper bag for the rest of the day and add the
+> following patch to the branch.
+>
+> Thanks,
+>
+>         M.
+>
+> From 528ada2811ba0bb2b2db5bf0f829b48c50f3c13c Mon Sep 17 00:00:00 2001
+> From: Marc Zyngier <maz@kernel.org>
+> Date: Mon, 16 May 2022 17:32:54 +0100
+> Subject: [PATCH] KVM: arm64: Fix hypercall bitmap writeback when vcpus ha=
+ve
+>  already run
+>
+> We generally want to disallow hypercall bitmaps being changed
+> once vcpus have already run. But we must allow the write if
+> the written value is unchanged so that userspace can rewrite
+> the register file on reboot, for example.
+>
+> Without this, a QEMU-based VM will fail to reboot correctly.
+>
+> The original code was correct, and it is me that introduced
+> the regression.
+>
+> Fixes: 05714cab7d63 ("KVM: arm64: Setup a framework for hypercall bitmap =
+firmware registers")
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> ---
+>  arch/arm64/kvm/hypercalls.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
+> index ccbd3cefb91a..c9f401fa01a9 100644
+> --- a/arch/arm64/kvm/hypercalls.c
+> +++ b/arch/arm64/kvm/hypercalls.c
+> @@ -379,7 +379,8 @@ static int kvm_arm_set_fw_reg_bmap(struct kvm_vcpu *v=
+cpu, u64 reg_id, u64 val)
+>
+>         mutex_lock(&kvm->lock);
+>
+> -       if (test_bit(KVM_ARCH_FLAG_HAS_RAN_ONCE, &kvm->arch.flags)) {
+> +       if (test_bit(KVM_ARCH_FLAG_HAS_RAN_ONCE, &kvm->arch.flags) &&
+> +           val !=3D *fw_reg_bmap) {
+>                 ret =3D -EBUSY;
+>                 goto out;
+>         }
+Ha, not your fault. We have been going back and forth on this aspect
+of the design. Thanks for correcting this.
+However, since this changes the API behavior, I think we may have to
+amend the documentation as well:
 
-Well, yes, but also that combination isn't very interesting. See,
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rs=
+t
+index b5ccec4572d7..ab04979bf104 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -2615,7 +2615,8 @@ KVM_SET_ONE_REG.
 
-  https://lore.kernel.org/all/20220420004241.2093-1-joao@overdrivepizza.com/T/#m5d67fb010d488b2f8eee33f1eb39d12f769e4ad2
+ Note: These registers are immutable once any of the vCPUs of the VM has
+ run at least once. A KVM_SET_ONE_REG in such a scenario will return
+-a -EBUSY to userspace.
++a -EBUSY to userspace if there's an update in the bitmap. If there's no
++change in the value, it'll simply return a 0.
 
-and the patch I did down-thread:
+ (See Documentation/virt/kvm/arm/hypercalls.rst for more details.)
 
-  https://lkml.kernel.org/r/YoJKhHluN4n0kZDm@hirez.programming.kicks-ass.net
+diff --git a/Documentation/virt/kvm/arm/hypercalls.rst
+b/Documentation/virt/kvm/arm/hypercalls.rst
+index 3e23084644ba..275f4dbe5792 100644
+--- a/Documentation/virt/kvm/arm/hypercalls.rst
++++ b/Documentation/virt/kvm/arm/hypercalls.rst
+@@ -91,9 +91,10 @@ desired bitmap back via SET_ONE_REG. The features
+for the registers that
+ are untouched, probably because userspace isn't aware of them, will be
+ exposed as is to the guest.
 
-If we have IBT, then FineIBT is a much better option than kCFI+IBT.
-Removing that superfluous endbr also shrinks the whole thing by 4 bytes.
+-Note that KVM will not allow the userspace to configure the registers
+-anymore once any of the vCPUs has run at least once. Instead, it will
+-return a -EBUSY.
++Note that KVM will not allow the userspace to update the registers
++with a new value anymore once any of the vCPUs has run at least once,
++and will return a -EBUSY. However, a 'write' of the previously configured
++value is allowed and returns a 0.
 
-So I'm fine with the compiler generating working code for that
-combination; but please get me an option to supress it in order to save
-those pointless bytes. All this CFI stuff is enough bloat as it is.
+ The pseudo-firmware bitmap register are as follows:
 
-> > >   ; indirect call check
-> > >     cmpl    <id>, -6(%r11)
-> > >     je      .Ltmp1
-> > >     ud2
-> > >   .Ltmp1:
-> > >     call    __x86_indirect_thunk_r11
-> >
-> > The first one I try and find looks like:
-> >
-> > 26:       41 81 7b fa a6 96 9e 38         cmpl   $0x389e96a6,-0x6(%r11)
-> > 2e:       74 02                   je     32 <__traceiter_sched_kthread_stop+0x29>
-> > 30:       0f 0b                   ud2
-> > 32:       4c 89 f6                mov    %r14,%rsi
-> > 35:       e8 00 00 00 00          call   3a <__traceiter_sched_kthread_stop+0x31> 36: R_X86_64_PLT32      __x86_indirect_thunk_r11-0x4
-> >
-> > This must not be. If I'm to rewrite that lot to:
-> >
-> >   movl  $\hash, %r10d
-> >   sub   $9, %r11
-> >   call  *%r11
-> >   .nop  4
-> >
-> > Then there must not be spurious instruction in between the ud2 and the
-> > indirect call/retpoline thing.
-> 
-> With the current compiler patch, LLVM sets up function arguments after
-> the CFI check. if it's a problem, we can look into changing that.
+@@ -129,10 +130,10 @@ The pseudo-firmware bitmap register are as follows:
 
-Yes, please fix that. Again see that same patch for why this is a
-problem. Objtool can trivially find retpoline calls, but finding this
-kCFI gadget is going to be hard work. If you ensure they're
-unconditionally stuck together, then the problem goes away find one,
-finds the other.
+ Errors:
 
+-    =3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++    =3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+     -ENOENT   Unknown register accessed.
+-    -EBUSY    Attempt a 'write' to the register after the VM has started.
++    -EBUSY    Attempt to update the register bitmap after the VM has start=
+ed.
+     -EINVAL   Invalid bitmap written to the register.
+-    =3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++    =3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+ .. [1] https://developer.arm.com/-/media/developer/pdf/ARM_DEN_0070A_Firmw=
+are_interfaces_for_mitigating_CVE-2017-5715.pdf
+
+
+Thank you.
+Raghavendra
+> --
+> 2.34.1
+>
+>
+> --
+> Without deviation from the norm, progress is not possible.

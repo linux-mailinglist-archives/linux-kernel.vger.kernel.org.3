@@ -2,709 +2,394 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B55FB5286B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50EBE528685
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241104AbiEPONo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 10:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40836 "EHLO
+        id S244355AbiEPOKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 10:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244408AbiEPONi (ORCPT
+        with ESMTP id S244329AbiEPOKJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 10:13:38 -0400
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26AA3B001;
-        Mon, 16 May 2022 07:13:36 -0700 (PDT)
-Received: from toolbox.int.toradex.com ([81.221.85.15]) by mrelay.perfora.net
- (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MCc0S-1nysvc1IKA-009TOo;
- Mon, 16 May 2022 16:13:18 +0200
-From:   Marcel Ziswiler <marcel@ziswiler.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Fabio Estevam <festevam@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Olof Johansson <olof@lixom.net>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, soc@kernel.org
-Subject: [PATCH v2 24/24] ARM: dts: imx7-colibri: add support for Toradex Iris carrier boards
-Date:   Mon, 16 May 2022 16:13:13 +0200
-Message-Id: <20220516141313.494569-1-marcel@ziswiler.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220516134734.493065-1-marcel@ziswiler.com>
-References: <20220516134734.493065-1-marcel@ziswiler.com>
+        Mon, 16 May 2022 10:10:09 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A3C3A718;
+        Mon, 16 May 2022 07:10:08 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GE25i1018517;
+        Mon, 16 May 2022 14:10:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=gDgbaQNUkXxvnv1l6jh43c0/yQKycjBDb5K390Uzx5g=;
+ b=OP63AjLnT7aPVnwKVKRmiUlDTdh/FCWdT5yc8YWjPEyBKuGsWUZIqHxb192+PSqclX0K
+ 1TRvUt4BQWwbrl2TmBvarHgfCDKOklIyfnzjWdu82IX7+N3lKggotV2Ovztyje8F8x0Z
+ hqgwBdybbqGWy8Emn5XqZDTVTi+S1Efs03Y/nbILkV77mIPaUKtKFy/33QCvM0roWOSB
+ sXu3QUf1GI6hVXM5Bm2FkuAdyKqp1J+y8kBaSUnruxXS2jOzofiOxKdAD7ZKqZBkjGlr
+ 5XVDaBKC9vrcROLAmRLZRmnBqNNsbtj+Ky0TlrwtdxpNhHuMAHpI2sQK4ddLDWmwZlta MQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3r1507dj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 14:10:07 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24GE2ZF6020550;
+        Mon, 16 May 2022 14:10:07 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3r1507cc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 14:10:07 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24GE6Uc3005517;
+        Mon, 16 May 2022 14:10:05 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 3g2429asvy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 14:10:04 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24GEA1j736831610
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 16 May 2022 14:10:01 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 99468A4053;
+        Mon, 16 May 2022 14:10:01 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DB18FA4040;
+        Mon, 16 May 2022 14:10:00 +0000 (GMT)
+Received: from [9.171.15.172] (unknown [9.171.15.172])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 16 May 2022 14:10:00 +0000 (GMT)
+Message-ID: <fa11436a-dff1-094d-1c69-87f7447d20d0@linux.ibm.com>
+Date:   Mon, 16 May 2022 16:13:49 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v9 1/3] s390x: KVM: ipte lock for SCA access should be
+ contained in KVM
+Content-Language: en-US
+To:     Janosch Frank <frankja@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        borntraeger@de.ibm.com, cohuck@redhat.com, david@redhat.com,
+        thuth@redhat.com, imbrenda@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, wintera@linux.ibm.com, seiden@linux.ibm.com,
+        nrb@linux.ibm.com
+References: <20220506092403.47406-1-pmorel@linux.ibm.com>
+ <20220506092403.47406-2-pmorel@linux.ibm.com>
+ <0936ad4b-3a30-5be5-3fc5-7339d86cf56a@linux.ibm.com>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <0936ad4b-3a30-5be5-3fc5-7339d86cf56a@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:gJ7wOm1eo5meT2vDVGz+o1rdcGL9zqiyzJHwYUg6lrRTERJmyGj
- fZEZ9dDjlUzt2LsTf+b/p9bjiIQqBQFkZ+Ry+nHeV6s3vqT5AOWM7J21oW2cvyEkjbOqcan
- y9cUan3dSji1oNNMWeJJbBUd2iKcshJ7pK30VJmQPDYJrA4Wu6C5WeT5aWITAvYIMGXl7UK
- 46BVcOpGkn6xpMVzMK/Bw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:SA1kIogk4Js=:Ou40Mej/z7gI1C6zRERqEZ
- qvE5s1FxULrtuB+La64QJ1xjLeMTVOEseD+Tii6Cnxk3SOsFu3hKQ2jLZOsD87E5mh5U7OIin
- 6ca472/Wmml3CpjEJwEiq+hS7grfW8SfMW19MrY5gGzPdqVXnsalO+6rjJsIsnXwclj4uqUOy
- K31L65EChVtnh67yovCg83s9rhMeRXh/Jwdoeuvyl5IAA5oR00S2xAXXuG9JaqNQQ1dkiOffB
- agDhiVOvCzgkAzW42tiq9V2US4QVo1s/DVBTjlQKPRtRBxuNtw1URUpszRJPJcaMnNox5GShw
- y35uxQgYjhF/S2qlmEVvUlj2fh+cNHN/6S1/LXp5cQyCiXLoDgOJB/fpS/jNKhPgrnhQYkjxH
- KOzsCdYeEGhxH+srRJOuACbKLCuhYcdBPip88W2PA/bJLbOlVDJTQOrm43DXFGB1lFHQTvxaa
- 1P/HfztiAAES6NC1ROIStOxs8xF443rqCPu3Ao99weSYuHP8KtjZnlyTzKV3Yd2gceUP6j49C
- R33Pe+bzKVDLbuTXSRMtpRv4TfVxpY5CrVTJIxHj5KkXO8H2PagrvYe0WJabz3zuNOcNd+JcM
- rJGMeVUKu0VE0WfHNUJkTHW2Do3mklBUcNy1fiNFagQsp01PgplqV/+QmX3MDoa41gM4f2sv7
- 8OgI4lErGYh8lCRZWAHvXfq8h1lXD4hE6vjYx36GNP7OioSz8oPaUb4eYG+vKD56FjG811pS6
- qHvoZIYpFjd0kgeX
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: clg1cNp_7lowPYYnKTzA23M8_FISQmrQ
+X-Proofpoint-ORIG-GUID: OAJ3e5GmUiD2teGSUsWhAa7FdJQisRdF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-16_13,2022-05-16_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ phishscore=0 suspectscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0
+ mlxlogscore=999 bulkscore=0 priorityscore=1501 mlxscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205160079
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Add support for Toradex Iris, small form-factor Pico-ITX Colibri Arm
-Computer Module family Carrier Board.
 
-Additional details available at
-https://www.toradex.com/products/carrier-board/iris-carrier-board
+On 5/12/22 13:32, Janosch Frank wrote:
+> On 5/6/22 11:24, Pierre Morel wrote:
+>> The former check to chose between SIIF or not SIIF can be done
+>> using the sclp.has_siif instead of accessing per vCPU structures
+> 
+> Maybe replace this paragraph with:
+> We can check if SIIF is enabled by testing the sclp_info struct instead 
+> of testing the sie control block eca variable. sclp.has_ssif is the only 
+> requirement to set ECA_SII anyway so we can go straight to the source 
+> for that.
+> 
+> Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
 
-Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+OK, thanks,
 
----
+Regards,
+Pierre
 
-Changes in v2:
-- Revert change on arch/arm/boot/dts/imx6dl-colibri-iris.dts which
-  slipped into this patch set by error.
-- Re-based on top of Shawn's for-next.
+> 
+>>
+>> When accessing the SCA, ipte lock and ipte_unlock do not need
+>> to access any vcpu structures but only the KVM structure.
+>>
+>> Let's simplify the ipte handling.
+>>
+>> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
+>> ---
+>>   arch/s390/kvm/gaccess.c | 96 ++++++++++++++++++++---------------------
+>>   arch/s390/kvm/gaccess.h |  6 +--
+>>   arch/s390/kvm/priv.c    |  6 +--
+>>   3 files changed, 54 insertions(+), 54 deletions(-)
+>>
+>> diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
+>> index d53a183c2005..0e1f6dd31882 100644
+>> --- a/arch/s390/kvm/gaccess.c
+>> +++ b/arch/s390/kvm/gaccess.c
+>> @@ -262,77 +262,77 @@ struct aste {
+>>       /* .. more fields there */
+>>   };
+>> -int ipte_lock_held(struct kvm_vcpu *vcpu)
+>> +int ipte_lock_held(struct kvm *kvm)
+>>   {
+>> -    if (vcpu->arch.sie_block->eca & ECA_SII) {
+>> +    if (sclp.has_siif) {
+>>           int rc;
+>> -        read_lock(&vcpu->kvm->arch.sca_lock);
+>> -        rc = kvm_s390_get_ipte_control(vcpu->kvm)->kh != 0;
+>> -        read_unlock(&vcpu->kvm->arch.sca_lock);
+>> +        read_lock(&kvm->arch.sca_lock);
+>> +        rc = kvm_s390_get_ipte_control(kvm)->kh != 0;
+>> +        read_unlock(&kvm->arch.sca_lock);
+>>           return rc;
+>>       }
+>> -    return vcpu->kvm->arch.ipte_lock_count != 0;
+>> +    return kvm->arch.ipte_lock_count != 0;
+>>   }
+>> -static void ipte_lock_simple(struct kvm_vcpu *vcpu)
+>> +static void ipte_lock_simple(struct kvm *kvm)
+>>   {
+>>       union ipte_control old, new, *ic;
+>> -    mutex_lock(&vcpu->kvm->arch.ipte_mutex);
+>> -    vcpu->kvm->arch.ipte_lock_count++;
+>> -    if (vcpu->kvm->arch.ipte_lock_count > 1)
+>> +    mutex_lock(&kvm->arch.ipte_mutex);
+>> +    kvm->arch.ipte_lock_count++;
+>> +    if (kvm->arch.ipte_lock_count > 1)
+>>           goto out;
+>>   retry:
+>> -    read_lock(&vcpu->kvm->arch.sca_lock);
+>> -    ic = kvm_s390_get_ipte_control(vcpu->kvm);
+>> +    read_lock(&kvm->arch.sca_lock);
+>> +    ic = kvm_s390_get_ipte_control(kvm);
+>>       do {
+>>           old = READ_ONCE(*ic);
+>>           if (old.k) {
+>> -            read_unlock(&vcpu->kvm->arch.sca_lock);
+>> +            read_unlock(&kvm->arch.sca_lock);
+>>               cond_resched();
+>>               goto retry;
+>>           }
+>>           new = old;
+>>           new.k = 1;
+>>       } while (cmpxchg(&ic->val, old.val, new.val) != old.val);
+>> -    read_unlock(&vcpu->kvm->arch.sca_lock);
+>> +    read_unlock(&kvm->arch.sca_lock);
+>>   out:
+>> -    mutex_unlock(&vcpu->kvm->arch.ipte_mutex);
+>> +    mutex_unlock(&kvm->arch.ipte_mutex);
+>>   }
+>> -static void ipte_unlock_simple(struct kvm_vcpu *vcpu)
+>> +static void ipte_unlock_simple(struct kvm *kvm)
+>>   {
+>>       union ipte_control old, new, *ic;
+>> -    mutex_lock(&vcpu->kvm->arch.ipte_mutex);
+>> -    vcpu->kvm->arch.ipte_lock_count--;
+>> -    if (vcpu->kvm->arch.ipte_lock_count)
+>> +    mutex_lock(&kvm->arch.ipte_mutex);
+>> +    kvm->arch.ipte_lock_count--;
+>> +    if (kvm->arch.ipte_lock_count)
+>>           goto out;
+>> -    read_lock(&vcpu->kvm->arch.sca_lock);
+>> -    ic = kvm_s390_get_ipte_control(vcpu->kvm);
+>> +    read_lock(&kvm->arch.sca_lock);
+>> +    ic = kvm_s390_get_ipte_control(kvm);
+>>       do {
+>>           old = READ_ONCE(*ic);
+>>           new = old;
+>>           new.k = 0;
+>>       } while (cmpxchg(&ic->val, old.val, new.val) != old.val);
+>> -    read_unlock(&vcpu->kvm->arch.sca_lock);
+>> -    wake_up(&vcpu->kvm->arch.ipte_wq);
+>> +    read_unlock(&kvm->arch.sca_lock);
+>> +    wake_up(&kvm->arch.ipte_wq);
+>>   out:
+>> -    mutex_unlock(&vcpu->kvm->arch.ipte_mutex);
+>> +    mutex_unlock(&kvm->arch.ipte_mutex);
+>>   }
+>> -static void ipte_lock_siif(struct kvm_vcpu *vcpu)
+>> +static void ipte_lock_siif(struct kvm *kvm)
+>>   {
+>>       union ipte_control old, new, *ic;
+>>   retry:
+>> -    read_lock(&vcpu->kvm->arch.sca_lock);
+>> -    ic = kvm_s390_get_ipte_control(vcpu->kvm);
+>> +    read_lock(&kvm->arch.sca_lock);
+>> +    ic = kvm_s390_get_ipte_control(kvm);
+>>       do {
+>>           old = READ_ONCE(*ic);
+>>           if (old.kg) {
+>> -            read_unlock(&vcpu->kvm->arch.sca_lock);
+>> +            read_unlock(&kvm->arch.sca_lock);
+>>               cond_resched();
+>>               goto retry;
+>>           }
+>> @@ -340,15 +340,15 @@ static void ipte_lock_siif(struct kvm_vcpu *vcpu)
+>>           new.k = 1;
+>>           new.kh++;
+>>       } while (cmpxchg(&ic->val, old.val, new.val) != old.val);
+>> -    read_unlock(&vcpu->kvm->arch.sca_lock);
+>> +    read_unlock(&kvm->arch.sca_lock);
+>>   }
+>> -static void ipte_unlock_siif(struct kvm_vcpu *vcpu)
+>> +static void ipte_unlock_siif(struct kvm *kvm)
+>>   {
+>>       union ipte_control old, new, *ic;
+>> -    read_lock(&vcpu->kvm->arch.sca_lock);
+>> -    ic = kvm_s390_get_ipte_control(vcpu->kvm);
+>> +    read_lock(&kvm->arch.sca_lock);
+>> +    ic = kvm_s390_get_ipte_control(kvm);
+>>       do {
+>>           old = READ_ONCE(*ic);
+>>           new = old;
+>> @@ -356,25 +356,25 @@ static void ipte_unlock_siif(struct kvm_vcpu *vcpu)
+>>           if (!new.kh)
+>>               new.k = 0;
+>>       } while (cmpxchg(&ic->val, old.val, new.val) != old.val);
+>> -    read_unlock(&vcpu->kvm->arch.sca_lock);
+>> +    read_unlock(&kvm->arch.sca_lock);
+>>       if (!new.kh)
+>> -        wake_up(&vcpu->kvm->arch.ipte_wq);
+>> +        wake_up(&kvm->arch.ipte_wq);
+>>   }
+>> -void ipte_lock(struct kvm_vcpu *vcpu)
+>> +void ipte_lock(struct kvm *kvm)
+>>   {
+>> -    if (vcpu->arch.sie_block->eca & ECA_SII)
+>> -        ipte_lock_siif(vcpu);
+>> +    if (sclp.has_siif)
+>> +        ipte_lock_siif(kvm);
+>>       else
+>> -        ipte_lock_simple(vcpu);
+>> +        ipte_lock_simple(kvm);
+>>   }
+>> -void ipte_unlock(struct kvm_vcpu *vcpu)
+>> +void ipte_unlock(struct kvm *kvm)
+>>   {
+>> -    if (vcpu->arch.sie_block->eca & ECA_SII)
+>> -        ipte_unlock_siif(vcpu);
+>> +    if (sclp.has_siif)
+>> +        ipte_unlock_siif(kvm);
+>>       else
+>> -        ipte_unlock_simple(vcpu);
+>> +        ipte_unlock_simple(kvm);
+>>   }
+>>   static int ar_translation(struct kvm_vcpu *vcpu, union asce *asce, 
+>> u8 ar,
+>> @@ -1075,7 +1075,7 @@ int access_guest_with_key(struct kvm_vcpu *vcpu, 
+>> unsigned long ga, u8 ar,
+>>       try_storage_prot_override = storage_prot_override_applicable(vcpu);
+>>       need_ipte_lock = psw_bits(*psw).dat && !asce.r;
+>>       if (need_ipte_lock)
+>> -        ipte_lock(vcpu);
+>> +        ipte_lock(vcpu->kvm);
+>>       /*
+>>        * Since we do the access further down ultimately via a move 
+>> instruction
+>>        * that does key checking and returns an error in case of a 
+>> protection
+>> @@ -1113,7 +1113,7 @@ int access_guest_with_key(struct kvm_vcpu *vcpu, 
+>> unsigned long ga, u8 ar,
+>>           rc = trans_exc(vcpu, rc, ga, ar, mode, prot);
+>>   out_unlock:
+>>       if (need_ipte_lock)
+>> -        ipte_unlock(vcpu);
+>> +        ipte_unlock(vcpu->kvm);
+>>       if (nr_pages > ARRAY_SIZE(gpa_array))
+>>           vfree(gpas);
+>>       return rc;
+>> @@ -1185,10 +1185,10 @@ int check_gva_range(struct kvm_vcpu *vcpu, 
+>> unsigned long gva, u8 ar,
+>>       rc = get_vcpu_asce(vcpu, &asce, gva, ar, mode);
+>>       if (rc)
+>>           return rc;
+>> -    ipte_lock(vcpu);
+>> +    ipte_lock(vcpu->kvm);
+>>       rc = guest_range_to_gpas(vcpu, gva, ar, NULL, length, asce, mode,
+>>                    access_key);
+>> -    ipte_unlock(vcpu);
+>> +    ipte_unlock(vcpu->kvm);
+>>       return rc;
+>>   }
+>> @@ -1451,7 +1451,7 @@ int kvm_s390_shadow_fault(struct kvm_vcpu *vcpu, 
+>> struct gmap *sg,
+>>        * tables/pointers we read stay valid - unshadowing is however
+>>        * always possible - only guest_table_lock protects us.
+>>        */
+>> -    ipte_lock(vcpu);
+>> +    ipte_lock(vcpu->kvm);
+>>       rc = gmap_shadow_pgt_lookup(sg, saddr, &pgt, &dat_protection, 
+>> &fake);
+>>       if (rc)
+>> @@ -1485,7 +1485,7 @@ int kvm_s390_shadow_fault(struct kvm_vcpu *vcpu, 
+>> struct gmap *sg,
+>>       pte.p |= dat_protection;
+>>       if (!rc)
+>>           rc = gmap_shadow_page(sg, saddr, __pte(pte.val));
+>> -    ipte_unlock(vcpu);
+>> +    ipte_unlock(vcpu->kvm);
+>>       mmap_read_unlock(sg->mm);
+>>       return rc;
+>>   }
+>> diff --git a/arch/s390/kvm/gaccess.h b/arch/s390/kvm/gaccess.h
+>> index 1124ff282012..9408d6cc8e2c 100644
+>> --- a/arch/s390/kvm/gaccess.h
+>> +++ b/arch/s390/kvm/gaccess.h
+>> @@ -440,9 +440,9 @@ int read_guest_real(struct kvm_vcpu *vcpu, 
+>> unsigned long gra, void *data,
+>>       return access_guest_real(vcpu, gra, data, len, 0);
+>>   }
+>> -void ipte_lock(struct kvm_vcpu *vcpu);
+>> -void ipte_unlock(struct kvm_vcpu *vcpu);
+>> -int ipte_lock_held(struct kvm_vcpu *vcpu);
+>> +void ipte_lock(struct kvm *kvm);
+>> +void ipte_unlock(struct kvm *kvm);
+>> +int ipte_lock_held(struct kvm *kvm);
+>>   int kvm_s390_check_low_addr_prot_real(struct kvm_vcpu *vcpu, 
+>> unsigned long gra);
+>>   /* MVPG PEI indication bits */
+>> diff --git a/arch/s390/kvm/priv.c b/arch/s390/kvm/priv.c
+>> index 5beb7a4a11b3..0e8603acc105 100644
+>> --- a/arch/s390/kvm/priv.c
+>> +++ b/arch/s390/kvm/priv.c
+>> @@ -443,7 +443,7 @@ static int handle_ipte_interlock(struct kvm_vcpu 
+>> *vcpu)
+>>       vcpu->stat.instruction_ipte_interlock++;
+>>       if (psw_bits(vcpu->arch.sie_block->gpsw).pstate)
+>>           return kvm_s390_inject_program_int(vcpu, PGM_PRIVILEGED_OP);
+>> -    wait_event(vcpu->kvm->arch.ipte_wq, !ipte_lock_held(vcpu));
+>> +    wait_event(vcpu->kvm->arch.ipte_wq, !ipte_lock_held(vcpu->kvm));
+>>       kvm_s390_retry_instr(vcpu);
+>>       VCPU_EVENT(vcpu, 4, "%s", "retrying ipte interlock operation");
+>>       return 0;
+>> @@ -1472,7 +1472,7 @@ static int handle_tprot(struct kvm_vcpu *vcpu)
+>>       access_key = (operand2 & 0xf0) >> 4;
+>>       if (vcpu->arch.sie_block->gpsw.mask & PSW_MASK_DAT)
+>> -        ipte_lock(vcpu);
+>> +        ipte_lock(vcpu->kvm);
+>>       ret = guest_translate_address_with_key(vcpu, address, ar, &gpa,
+>>                              GACC_STORE, access_key);
+>> @@ -1509,7 +1509,7 @@ static int handle_tprot(struct kvm_vcpu *vcpu)
+>>       }
+>>       if (vcpu->arch.sie_block->gpsw.mask & PSW_MASK_DAT)
+>> -        ipte_unlock(vcpu);
+>> +        ipte_unlock(vcpu->kvm);
+>>       return ret;
+>>   }
+> 
 
- arch/arm/boot/dts/Makefile                    |   6 +
- arch/arm/boot/dts/imx7-colibri-iris-v2.dtsi   | 112 ++++++++++++++++++
- arch/arm/boot/dts/imx7-colibri-iris.dtsi      | 108 +++++++++++++++++
- .../boot/dts/imx7d-colibri-emmc-iris-v2.dts   |  21 ++++
- arch/arm/boot/dts/imx7d-colibri-emmc-iris.dts |  21 ++++
- arch/arm/boot/dts/imx7d-colibri-iris-v2.dts   |  83 +++++++++++++
- arch/arm/boot/dts/imx7d-colibri-iris.dts      |  56 +++++++++
- arch/arm/boot/dts/imx7s-colibri-iris-v2.dts   |  78 ++++++++++++
- arch/arm/boot/dts/imx7s-colibri-iris.dts      |  51 ++++++++
- 9 files changed, 536 insertions(+)
- create mode 100644 arch/arm/boot/dts/imx7-colibri-iris-v2.dtsi
- create mode 100644 arch/arm/boot/dts/imx7-colibri-iris.dtsi
- create mode 100644 arch/arm/boot/dts/imx7d-colibri-emmc-iris-v2.dts
- create mode 100644 arch/arm/boot/dts/imx7d-colibri-emmc-iris.dts
- create mode 100644 arch/arm/boot/dts/imx7d-colibri-iris-v2.dts
- create mode 100644 arch/arm/boot/dts/imx7d-colibri-iris.dts
- create mode 100644 arch/arm/boot/dts/imx7s-colibri-iris-v2.dts
- create mode 100644 arch/arm/boot/dts/imx7s-colibri-iris.dts
-
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index a496c4751c86..e8c109d5e3bd 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -735,8 +735,12 @@ dtb-$(CONFIG_SOC_IMX7D) += \
- 	imx7d-cl-som-imx7.dtb \
- 	imx7d-colibri-aster.dtb \
- 	imx7d-colibri-emmc-aster.dtb \
-+	imx7d-colibri-emmc-iris.dtb \
-+	imx7d-colibri-emmc-iris-v2.dtb \
- 	imx7d-colibri-emmc-eval-v3.dtb \
- 	imx7d-colibri-eval-v3.dtb \
-+	imx7d-colibri-iris.dtb \
-+	imx7d-colibri-iris-v2.dtb \
- 	imx7d-flex-concentrator.dtb \
- 	imx7d-flex-concentrator-mfg.dtb \
- 	imx7d-mba7.dtb \
-@@ -756,6 +760,8 @@ dtb-$(CONFIG_SOC_IMX7D) += \
- 	imx7d-zii-rpu2.dtb \
- 	imx7s-colibri-aster.dtb \
- 	imx7s-colibri-eval-v3.dtb \
-+	imx7s-colibri-iris.dtb \
-+	imx7s-colibri-iris-v2.dtb \
- 	imx7s-mba7.dtb \
- 	imx7s-warp.dtb
- dtb-$(CONFIG_SOC_IMX7ULP) += \
-diff --git a/arch/arm/boot/dts/imx7-colibri-iris-v2.dtsi b/arch/arm/boot/dts/imx7-colibri-iris-v2.dtsi
-new file mode 100644
-index 000000000000..6e199613583c
---- /dev/null
-+++ b/arch/arm/boot/dts/imx7-colibri-iris-v2.dtsi
-@@ -0,0 +1,112 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2022 Toradex
-+ */
-+
-+/ {
-+	reg_3v3_vmmc: regulator-3v3-vmmc {
-+		compatible = "regulator-fixed";
-+		enable-active-high;
-+		gpio = <&gpio5 16 GPIO_ACTIVE_HIGH>; /* SODIMM 100 */
-+		regulator-max-microvolt = <3300000>;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-name = "3v3_vmmc";
-+		startup-delay-us = <100>;
-+	};
-+};
-+
-+/* Colibri AD0 to AD3 */
-+&adc1 {
-+	status = "okay";
-+};
-+
-+/* Colibri SSP */
-+&ecspi3 {
-+	status = "okay";
-+};
-+
-+/* Colibri Fast Ethernet */
-+&fec1 {
-+	status = "okay";
-+};
-+
-+&gpio2 {
-+	/*
-+	 * uart_b_c_on_x14_enable turns the UART transceiver for UART2 and 5 on. If one wants to
-+	 * turn the transceiver off, that property has to be deleted and the gpio handled in
-+	 * userspace.
-+	 * The same applies to uart_a_on_x13_enable where the UART_A transceiver is turned on.
-+	 */
-+	uart-b-c-on-x14-enable-hog {
-+		gpio-hog;
-+		gpios = <27 GPIO_ACTIVE_HIGH>; /* SODIMM 104 */
-+		output-high;
-+	};
-+};
-+
-+&gpio5 {
-+	uart-a-on-x13-enable-hog {
-+		gpio-hog;
-+		gpios = <17 GPIO_ACTIVE_HIGH>; /* SODIMM 102 */
-+		output-high;
-+	};
-+};
-+
-+/* Colibri I2C: I2C3_SDA/SCL on SODIMM 194/196 */
-+&i2c4 {
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<A> */
-+&pwm1 {
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<B> */
-+&pwm2 {
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<C> */
-+&pwm3 {
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<D> */
-+&pwm4 {
-+	status = "okay";
-+};
-+
-+/* M41T0M6 real time clock */
-+&rtc {
-+	status = "okay";
-+};
-+
-+/* Colibri UART_A */
-+&uart1 {
-+	status = "okay";
-+};
-+
-+/* Colibri UART_B */
-+&uart2 {
-+	status = "okay";
-+};
-+
-+/* Colibri UART_C */
-+&uart3 {
-+	status = "okay";
-+};
-+
-+/* Colibri USBC */
-+&usbotg1 {
-+	status = "okay";
-+};
-+
-+/* Colibri MMC/SD, UHS-I capable uSD slot */
-+&usdhc1 {
-+	cap-power-off-card;
-+	/delete-property/ keep-power-in-suspend;
-+	/delete-property/ no-1-8-v;
-+	vmmc-supply = <&reg_3v3_vmmc>;
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/imx7-colibri-iris.dtsi b/arch/arm/boot/dts/imx7-colibri-iris.dtsi
-new file mode 100644
-index 000000000000..175c5d478d2e
---- /dev/null
-+++ b/arch/arm/boot/dts/imx7-colibri-iris.dtsi
-@@ -0,0 +1,108 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2022 Toradex
-+ */
-+
-+/* Colibri AD0 to AD3 */
-+&adc1 {
-+	status = "okay";
-+};
-+
-+/*
-+ * The Atmel maxtouch controller uses SODIMM 28/30, also used for PWM<B>, PWM<C>, aka pwm2, pwm3.
-+ * So if you enable following capacitive touch controller, disable pwm2/pwm3 first.
-+ */
-+&atmel_mxt_ts {
-+	interrupt-parent = <&gpio1>;
-+	interrupts = <9 IRQ_TYPE_EDGE_FALLING>;		/* SODIMM 28 / INT */
-+	pinctrl-0 = <&pinctrl_atmel_adapter>;
-+	reset-gpios = <&gpio1 10 GPIO_ACTIVE_LOW>;	/* SODIMM 30 / RST */
-+};
-+
-+/* Colibri SSP */
-+&ecspi3 {
-+	status = "okay";
-+};
-+
-+/* Colibri Fast Ethernet */
-+&fec1 {
-+	status = "okay";
-+};
-+
-+&gpio2 {
-+	/*
-+	 * uart25 turns the UART transceiver for UART2 and 5 on. If one wants to turn the
-+	 * transceiver off, that property has to be deleted and the gpio handled in userspace.
-+	 * The same applies to uart1_tx_on where the UART1 transceiver is turned on.
-+	 */
-+	uart25-tx-on-hog {
-+		gpio-hog;
-+		gpios = <27 GPIO_ACTIVE_HIGH>; /* SODIMM 104 */
-+		output-high;
-+	};
-+};
-+
-+&gpio5 {
-+	uart1-tx-on-hog {
-+		gpio-hog;
-+		gpios = <17 GPIO_ACTIVE_HIGH>; /* SODIMM 102 */
-+		output-high;
-+	};
-+};
-+
-+/* Colibri I2C: I2C3_SDA/SCL on SODIMM 194/196 */
-+&i2c4 {
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<A> */
-+&pwm1 {
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<B> */
-+&pwm2 {
-+	/* The pwm2 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<C> */
-+&pwm3 {
-+	/* The pwm3 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<D> */
-+&pwm4 {
-+	status = "okay";
-+};
-+
-+/* M41T0M6 real time clock */
-+&rtc {
-+	status = "okay";
-+};
-+
-+/* Colibri UART_A */
-+&uart1 {
-+	status = "okay";
-+};
-+
-+/* Colibri UART_B */
-+&uart2 {
-+	status = "okay";
-+};
-+
-+/* Colibri UART_C */
-+&uart3 {
-+	status = "okay";
-+};
-+
-+/* Colibri USBC */
-+&usbotg1 {
-+	status = "okay";
-+};
-+
-+/* Colibri MMC/SD */
-+&usdhc1 {
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/imx7d-colibri-emmc-iris-v2.dts b/arch/arm/boot/dts/imx7d-colibri-emmc-iris-v2.dts
-new file mode 100644
-index 000000000000..7347659557f3
---- /dev/null
-+++ b/arch/arm/boot/dts/imx7d-colibri-emmc-iris-v2.dts
-@@ -0,0 +1,21 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2022 Toradex
-+ */
-+
-+/dts-v1/;
-+#include "imx7d-colibri-emmc.dtsi"
-+#include "imx7-colibri-iris-v2.dtsi"
-+
-+/ {
-+	model = "Toradex Colibri iMX7D 1GB on Iris V2 Carrier Board";
-+	compatible = "toradex,colibri-imx7d-emmc-iris-v2",
-+		     "toradex,colibri-imx7d-emmc",
-+		     "toradex,colibri-imx7d",
-+		     "fsl,imx7d";
-+};
-+
-+/* Colibri USBH */
-+&usbotg2 {
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/imx7d-colibri-emmc-iris.dts b/arch/arm/boot/dts/imx7d-colibri-emmc-iris.dts
-new file mode 100644
-index 000000000000..5324c92e368d
---- /dev/null
-+++ b/arch/arm/boot/dts/imx7d-colibri-emmc-iris.dts
-@@ -0,0 +1,21 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2022 Toradex
-+ */
-+
-+/dts-v1/;
-+#include "imx7d-colibri-emmc.dtsi"
-+#include "imx7-colibri-iris.dtsi"
-+
-+/ {
-+	model = "Toradex Colibri iMX7D 1GB on Iris Carrier Board";
-+	compatible = "toradex,colibri-imx7d-emmc-iris",
-+		     "toradex,colibri-imx7d-emmc",
-+		     "toradex,colibri-imx7d",
-+		     "fsl,imx7d";
-+};
-+
-+/* Colibri USBH */
-+&usbotg2 {
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/imx7d-colibri-iris-v2.dts b/arch/arm/boot/dts/imx7d-colibri-iris-v2.dts
-new file mode 100644
-index 000000000000..5762f51d5f0f
---- /dev/null
-+++ b/arch/arm/boot/dts/imx7d-colibri-iris-v2.dts
-@@ -0,0 +1,83 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2022 Toradex
-+ */
-+
-+/dts-v1/;
-+#include "imx7d-colibri.dtsi"
-+#include "imx7-colibri-iris-v2.dtsi"
-+
-+/ {
-+	model = "Toradex Colibri iMX7D on Iris V2 Carrier Board";
-+	compatible = "toradex,colibri-imx7d-iris-v2",
-+		     "toradex,colibri-imx7d",
-+		     "fsl,imx7d";
-+};
-+
-+&ad7879_ts {
-+	status = "okay";
-+};
-+
-+&atmel_mxt_ts {
-+	status = "okay";
-+};
-+
-+&backlight {
-+	status = "okay";
-+};
-+
-+&gpio2 {
-+	/*
-+	 * This switches the LVDS transceiver to VESA color mapping mode.
-+	 */
-+	lvds-color-map-hog {
-+		gpio-hog;
-+		gpios = <13 GPIO_ACTIVE_HIGH>; /* SODIMM 95 */
-+		line-name = "LVDS_COLOR_MAP";
-+		output-low;
-+	};
-+};
-+
-+&gpio7 {
-+	/*
-+	 * This switches the LVDS transceiver to the 24-bit RGB mode.
-+	 */
-+	lvds-rgb-mode-hog {
-+		gpio-hog;
-+		gpios = <2 GPIO_ACTIVE_HIGH>; /* SODIMM 63 */
-+		line-name = "LVDS_RGB_MODE";
-+		output-low;
-+	};
-+
-+	/*
-+	 * This switches the LVDS transceiver to the single-channel
-+	 * output mode.
-+	 */
-+	lvds-ch-mode-hog {
-+		gpio-hog;
-+		gpios = <3 GPIO_ACTIVE_HIGH>; /* SODIMM 55 */
-+		line-name = "LVDS_CH_MODE";
-+		output-high;
-+	};
-+
-+	/* This turns the LVDS transceiver on */
-+	lvds-power-on-hog {
-+		gpio-hog;
-+		gpios = <11 GPIO_ACTIVE_HIGH>; /* SODIMM 99 */
-+		line-name = "LVDS_POWER_ON";
-+		output-high;
-+	};
-+};
-+
-+&lcdif {
-+	status = "okay";
-+};
-+
-+&panel_dpi {
-+	status = "okay";
-+};
-+
-+/* Colibri USBH */
-+&usbotg2 {
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/imx7d-colibri-iris.dts b/arch/arm/boot/dts/imx7d-colibri-iris.dts
-new file mode 100644
-index 000000000000..9c63cb9d9a64
---- /dev/null
-+++ b/arch/arm/boot/dts/imx7d-colibri-iris.dts
-@@ -0,0 +1,56 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2022 Toradex
-+ */
-+
-+/dts-v1/;
-+#include "imx7d-colibri.dtsi"
-+#include "imx7-colibri-iris.dtsi"
-+
-+/ {
-+	model = "Toradex Colibri iMX7D on Iris Carrier Board";
-+	compatible = "toradex,colibri-imx7d-iris",
-+		     "toradex,colibri-imx7d",
-+		     "fsl,imx7d";
-+};
-+
-+&ad7879_ts {
-+	status = "okay";
-+};
-+
-+/*
-+ * The Atmel maxtouch controller uses SODIMM 28/30, also used for PWM<B>, PWM<C>, aka pwm2, pwm3.
-+ * So if you enable following capacitive touch controller, disable pwm2/pwm3 first.
-+ */
-+&atmel_mxt_ts {
-+	status = "disabled";
-+};
-+
-+&backlight {
-+	status = "okay";
-+};
-+
-+&lcdif {
-+	status = "okay";
-+};
-+
-+&panel_dpi {
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<B> */
-+&pwm2 {
-+	/* The pwm2 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<C> */
-+&pwm3 {
-+	/* The pwm3 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
-+	status = "okay";
-+};
-+
-+/* Colibri USBH */
-+&usbotg2 {
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/imx7s-colibri-iris-v2.dts b/arch/arm/boot/dts/imx7s-colibri-iris-v2.dts
-new file mode 100644
-index 000000000000..72b5c17ab1ab
---- /dev/null
-+++ b/arch/arm/boot/dts/imx7s-colibri-iris-v2.dts
-@@ -0,0 +1,78 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2022 Toradex
-+ */
-+
-+/dts-v1/;
-+#include "imx7s-colibri.dtsi"
-+#include "imx7-colibri-iris-v2.dtsi"
-+
-+/ {
-+	model = "Toradex Colibri iMX7S on Iris V2 Carrier Board";
-+	compatible = "toradex,colibri-imx7s-iris-v2",
-+		     "toradex,colibri-imx7s",
-+		     "fsl,imx7s";
-+};
-+
-+&ad7879_ts {
-+	status = "okay";
-+};
-+
-+&atmel_mxt_ts {
-+	status = "okay";
-+};
-+
-+&backlight {
-+	status = "okay";
-+};
-+
-+&gpio2 {
-+	/*
-+	 * This switches the LVDS transceiver to VESA color mapping mode.
-+	 */
-+	lvds-color-map-hog {
-+		gpio-hog;
-+		gpios = <13 GPIO_ACTIVE_HIGH>; /* SODIMM 95 */
-+		line-name = "LVDS_COLOR_MAP";
-+		output-low;
-+	};
-+};
-+
-+&gpio7 {
-+	/*
-+	 * This switches the LVDS transceiver to the 24-bit RGB mode.
-+	 */
-+	lvds-rgb-mode-hog {
-+		gpio-hog;
-+		gpios = <2 GPIO_ACTIVE_HIGH>; /* SODIMM 63 */
-+		line-name = "LVDS_RGB_MODE";
-+		output-low;
-+	};
-+
-+	/*
-+	 * This switches the LVDS transceiver to the single-channel
-+	 * output mode.
-+	 */
-+	lvds-ch-mode-hog {
-+		gpio-hog;
-+		gpios = <3 GPIO_ACTIVE_HIGH>; /* SODIMM 55 */
-+		line-name = "LVDS_CH_MODE";
-+		output-high;
-+	};
-+
-+	/* This turns the LVDS transceiver on */
-+	lvds-power-on-hog {
-+		gpio-hog;
-+		gpios = <11 GPIO_ACTIVE_HIGH>; /* SODIMM 99 */
-+		line-name = "LVDS_POWER_ON";
-+		output-high;
-+	};
-+};
-+
-+&lcdif {
-+	status = "okay";
-+};
-+
-+&panel_dpi {
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/imx7s-colibri-iris.dts b/arch/arm/boot/dts/imx7s-colibri-iris.dts
-new file mode 100644
-index 000000000000..26ba72c17feb
---- /dev/null
-+++ b/arch/arm/boot/dts/imx7s-colibri-iris.dts
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2022 Toradex
-+ */
-+
-+/dts-v1/;
-+#include "imx7s-colibri.dtsi"
-+#include "imx7-colibri-iris.dtsi"
-+
-+/ {
-+	model = "Toradex Colibri iMX7S on Iris Carrier Board";
-+	compatible = "toradex,colibri-imx7s-iris",
-+		     "toradex,colibri-imx7s",
-+		     "fsl,imx7s";
-+};
-+
-+&ad7879_ts {
-+	status = "okay";
-+};
-+
-+/*
-+ * The Atmel maxtouch controller uses SODIMM 28/30, also used for PWM<B>, PWM<C>, aka pwm2, pwm3.
-+ * So if you enable following capacitive touch controller, disable pwm2/pwm3 first.
-+ */
-+&atmel_mxt_ts {
-+	status = "disabled";
-+};
-+
-+&backlight {
-+	status = "okay";
-+};
-+
-+&lcdif {
-+	status = "okay";
-+};
-+
-+&panel_dpi {
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<B> */
-+&pwm2 {
-+	/* The pwm2 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<C> */
-+&pwm3 {
-+	/* The pwm3 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
-+	status = "okay";
-+};
 -- 
-2.35.1
-
+Pierre Morel
+IBM Lab Boeblingen

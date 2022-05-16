@@ -2,85 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10CB652876D
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E37B7528770
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244538AbiEPOsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 10:48:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37180 "EHLO
+        id S244656AbiEPOtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 10:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232753AbiEPOsg (ORCPT
+        with ESMTP id S232753AbiEPOtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 10:48:36 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BEBA2EA39
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:48:34 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id j6so29115878ejc.13
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:48:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=pFiYrDI2KIk/lu+aID8s/T/vZWJ+Pf0jeglf1Qmti9o=;
-        b=VZeFthn0/+Mkzq95FEWhHGeRBLt9ztigE/j/mkGPyMCgjj2hS3+s0bPTWUhaUMSowz
-         +Y4SA+s45rp/kkwNngSt5sE+MtI48OukedYMYYlS5THImNtpFopQ/pw7es4dNn8zT+fy
-         +ElPBay/aVvcfgCjyEX3cuTM5A8Lik1hLDyzUTmOTDGUN+ir1qyXB69T9psUqx7Ahx+M
-         YOUEbuLttrp3s7fVSgeT1wrO2lKZ9llsuaGi1beg4ZEfAs71W72ow4W2l5jtLHPAcBRP
-         Jx7IMw+CSsHfQjd4fhsHYYjMFqQ998LB1sKM2jcO43xcVnddEWmHxTMm09WtRnUgECzy
-         2d2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=pFiYrDI2KIk/lu+aID8s/T/vZWJ+Pf0jeglf1Qmti9o=;
-        b=IKYnn9g8rH1e+SziNqMgJl9crYTOmguH/jRWrWPr6ydnuHpzD7gmlhx2CQWyMFGx+J
-         Dqz3FJKR9Yo2OwsTUgLMwLjMZkSFhVNZ7SmC0zGRlFJsaMxWM86eM0/kBHgFdxw11HHp
-         c4OF8d89GkfXDUoqw2dx3ruuoP3MWq9g4R9vDsa5klrUbvt0hRT4KkpcQS5WmOQT66ty
-         dj32jnjDAsFWjfWhiMsi0sHboIunX9UPJbpWYN0olBXnWtb3xWHbiO3Wb9yGF0lvhAbX
-         tNILjeiYF1g2SDax+evUSpPklsLqAZf7WolAMW73uuTQj0xLz1mNzl+rWsX8VJYtNLK0
-         Rdew==
-X-Gm-Message-State: AOAM53107ko/rPlcyReHu4CBEYNzH3IOUAIyyDV0YVHge0ID0GErbXbO
-        XDeQSI251GxCyDk32CRSyif0iw==
-X-Google-Smtp-Source: ABdhPJw+z3a4IS51Rh/2SPddsW0nZC5uDNxcK5FVTvU3AbHCQxPKbc9PunOYp96fOKe4UpFZaSKAnA==
-X-Received: by 2002:a17:907:e90:b0:6f4:cbc8:41bc with SMTP id ho16-20020a1709070e9000b006f4cbc841bcmr16005231ejc.536.1652712512721;
-        Mon, 16 May 2022 07:48:32 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id en8-20020a17090728c800b006f3ef214e0bsm3787988ejc.113.2022.05.16.07.48.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 07:48:32 -0700 (PDT)
-Message-ID: <4b58f725-3bc6-d537-ca02-cb2a753227c0@linaro.org>
-Date:   Mon, 16 May 2022 16:48:31 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v5 1/2] dt-bindings: remoteproc: mediatek: Make l1tcm reg
- exclusive to mt819x
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Tzung-Bi Shih <tzungbi@google.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org
-References: <20220511195452.871897-1-nfraprado@collabora.com>
- <20220511195452.871897-2-nfraprado@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220511195452.871897-2-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Mon, 16 May 2022 10:49:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0EAB2EA22;
+        Mon, 16 May 2022 07:49:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E505614E2;
+        Mon, 16 May 2022 14:49:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D592CC385AA;
+        Mon, 16 May 2022 14:49:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652712540;
+        bh=EKoHX+5y+RbWGcamK+8qjsOXmOiTTL6e7+ONLetrMnk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bF9VnhLjpkIZY3AxG/5MyQud5PChf1hzlgY0CEQldaHDIbGMsBdsBSbT1vQlky/Tt
+         YJlcysBwqx9dKeyc6vfSbXFSuvnAo0Wl5t7QTXwqZ7nCg+Z9UfBYXcFd+uqpb0kl1W
+         h0MGyprG5aFKJfmPxKu71FMlojCR6N1cBm3Gq81x3kZinc+Evkyrm2y6p3OHzfmZiG
+         37A/xzwQmgPtsgJ1cbkizeW7No94c1U7MuPqMbsEl3RyT12FoUfxUzQ39a8sib9k/r
+         Gk+zfl6lb+x+oAYqQz+TFtmPV7PFGmiBQWc8SrvBmiiGuEIvCclMVFsiY9O+235azV
+         F51q6o5iKwzmA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nqc1p-00BdrO-T0; Mon, 16 May 2022 15:48:58 +0100
+Date:   Mon, 16 May 2022 15:48:57 +0100
+Message-ID: <87k0al5y92.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>, pali@kernel.org,
+        Ingo Molnar <mingo@kernel.org>
+Subject: Re: Unexpected kernel BRK exception at EL1 - Internal error: BRK handler: f20003e8 - gic_dist_config
+In-Reply-To: <CA+G9fYtLP1Kf1Ck-33XrLFQ5uc_p1z1S5Sr1x=9ZRGi=D851PQ@mail.gmail.com>
+References: <CA+G9fYtsp-1pi6d4J71BPYh-msjzbVt_-v3YrUu12dXPeyqTDg@mail.gmail.com>
+        <87o7zylztd.wl-maz@kernel.org>
+        <CA+G9fYtLP1Kf1Ck-33XrLFQ5uc_p1z1S5Sr1x=9ZRGi=D851PQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: naresh.kamboju@linaro.org, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, lkft-triage@lists.linaro.org, sfr@canb.auug.org.au, tglx@linutronix.de, pali@kernel.org, mingo@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,33 +71,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/05/2022 21:54, Nícolas F. R. A. Prado wrote:
-> Commit ca23ecfdbd44 ("remoteproc/mediatek: support L1TCM") added support
-> for the l1tcm memory region on the MT8192 SCP, adding a new da_to_va
-> callback that handles l1tcm while keeping the old one for
-> back-compatibility with MT8183. However, since the mt8192 compatible was
-> missing from the dt-binding, the accompanying dt-binding commit
-> 503c64cc42f1 ("dt-bindings: remoteproc: mediatek: add L1TCM memory region")
-> mistakenly added this reg as if it were for mt8183. And later
-> it became common to all platforms as their compatibles were added.
+On Mon, 16 May 2022 14:58:28 +0100,
+Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
 > 
-> Fix the dt-binding so that the l1tcm reg can be present only on the
-> supported platforms: mt8192 and mt8195.
+> Hi Marc,
 > 
-> Fixes: 503c64cc42f1 ("dt-bindings: remoteproc: mediatek: add L1TCM memory region")
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Thanks for looking into this report.
 > 
-> ---
+> On Mon, 16 May 2022 at 12:38, Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Mon, 16 May 2022 07:16:22 +0100,
+> > Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> > >
+> > > The kernel crash reported on arm64 juno-r2 device with kselftest-merge config
+> > > while booting Linux next-20220513 kernel  [1].
 > 
-> Changes in v5:
-> - Made l1tcm optional for mt8192/mt8195
-> - Greatly simplified the constraints override in the if:then:
-> - Updated commit message
+> <trim>
 > 
+> >
+> > Huh. Who inserts random BRKs like this?
+> >
+> > > [    0.000000] Internal error: BRK handler: f20003e8 [#1] PREEMPT SMP
+> > > [    0.000000] Modules linked in:
+> > > [    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Not tainted
+> > > 5.18.0-rc6-next-20220513 #1
+> > > [    0.000000] Hardware name: ARM Juno development board (r2) (DT)
+> > > [    0.000000] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > > [    0.000000] pc : gic_dist_config+0x4c/0x68
+> > > [    0.000000] lr : gic_init_bases+0xd4/0x248
+> >
+> > Please provide a disassembly of this function.
+> 
+> objdump snipper is here.
+> http://ix.io/3XUW
 
+Wrong function (I wasn't clear I wanted the breaking function, not the
+caller).
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> The vmlinux file is located in this url
+> Please make use of it.
+> http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/juno/lkft/linux-next/1226/
 
+ffff8000087f9908 <gic_dist_config>:
+ffff8000087f9908:       a9bd7bfd        stp     x29, x30, [sp, #-48]!
+ffff8000087f990c:       910003fd        mov     x29, sp
+ffff8000087f9910:       a90153f3        stp     x19, x20, [sp, #16]
+ffff8000087f9914:       f90013f5        str     x21, [sp, #32]
+ffff8000087f9918:       2a0103f3        mov     w19, w1
+ffff8000087f991c:       aa0003f4        mov     x20, x0
+ffff8000087f9920:       aa0203f5        mov     x21, x2
+ffff8000087f9924:       aa1e03e0        mov     x0, x30
+ffff8000087f9928:       97e0de72        bl      ffff8000080312f0 <_mcount>
+ffff8000087f992c:       7100827f        cmp     w19, #0x20
+ffff8000087f9930:       54000149        b.ls    ffff8000087f9958 <gic_dist_config+0x50>  // b.plast
+ffff8000087f9934:       52800402        mov     w2, #0x20                       // #32
+ffff8000087f9938:       53027c40        lsr     w0, w2, #2
+ffff8000087f993c:       91300000        add     x0, x0, #0xc00
+ffff8000087f9940:       8b000280        add     x0, x20, x0
+ffff8000087f9944:       b900001f        str     wzr, [x0]
+ffff8000087f9948:       11004042        add     w2, w2, #0x10
+ffff8000087f994c:       6b02027f        cmp     w19, w2
+ffff8000087f9950:       54ffff48        b.hi    ffff8000087f9938 <gic_dist_config+0x30>  // b.pmore
+ffff8000087f9954:       d4207d00        brk     #0x3e8
 
-Best regards,
-Krzysztof
+What the hell is this??? This function has no WARN_ON, no BUG_ON, the
+allowed values for the immediate are:
+
+#define KPROBES_BRK_IMM                 0x004
+#define UPROBES_BRK_IMM                 0x005
+#define KPROBES_BRK_SS_IMM              0x006
+#define FAULT_BRK_IMM                   0x100
+#define KGDB_DYN_DBG_BRK_IMM            0x400
+#define KGDB_COMPILED_DBG_BRK_IMM       0x401
+#define BUG_BRK_IMM                     0x800
+#define KASAN_BRK_IMM                   0x900
+#define KASAN_BRK_MASK                  0x0ff
+
+and 0x3e8 isn't one of them. This seems like a GCC 'division by zero'
+hack, but there are no divisions by zero here. Your kernel is also
+full of the stuff.
+
+What sort of odd options do you have? I can't help but notice that you
+have the Rust stuff in your tree. Can you please start by disabling
+this, just in case there is an interaction with your toolchain?
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

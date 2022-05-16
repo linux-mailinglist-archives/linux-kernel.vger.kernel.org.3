@@ -2,55 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5A55287DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B65EA5287DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244849AbiEPPCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 11:02:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
+        id S244843AbiEPPDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 11:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244843AbiEPPCj (ORCPT
+        with ESMTP id S244869AbiEPPCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 11:02:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738D53B3FD;
-        Mon, 16 May 2022 08:02:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95159B811CF;
-        Mon, 16 May 2022 15:02:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A06E2C385AA;
-        Mon, 16 May 2022 15:02:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652713355;
-        bh=BrYg+P0E76QFC+K+QlgC5bvnhhpGso5mTlZran5yFn0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GVy9NZlxVi2S7kRNO3iFcEM/OKeHQmnKzyHXYl1CpDZh5ap4dSxopYPEQuxJRCL8p
-         Lc74BM+vfewteyA1lUiFR3IR6+BwiyYjIXGtvzr2PDUY3QNWB95aWxAf3/eWS6eoVo
-         +9+RnxHJ/logeTxspYuP8Py6CL2MxNLo+8NGQsHroOd2Hs6eDmcTvgQuHPYl4QrSpg
-         UJX68Z8B73ov64eyl6wXZFIPjaMCoh2JZS3RWVfHZh3gy2oJjIRpT+kwG4aW91zveg
-         x30jmjRu2uIdX4D9zhGOEdXjDKxdRcRLF1Om+4zT41XCvA83Jj4iwYPebx60ewnCSw
-         qTSNrzanBQmjQ==
-Date:   Mon, 16 May 2022 16:02:30 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Siddh Raman Pant <siddhpant.gh@gmail.com>
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: alsa: Better error messages
-Message-ID: <YoJnhulbKk49rZsw@sirena.org.uk>
-References: <8598037d-0e24-9bc1-3f2c-a2751ec8e871@gmail.com>
+        Mon, 16 May 2022 11:02:48 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCC83B3F7;
+        Mon, 16 May 2022 08:02:46 -0700 (PDT)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id BBC79FF807;
+        Mon, 16 May 2022 15:02:39 +0000 (UTC)
+Date:   Mon, 16 May 2022 17:02:37 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Philippe CORNU <philippe.cornu@foss.st.com>
+Subject: Re: [PATCH] media: stm32-dcmi: add support of 1X16 serial pixel
+ formats variant
+Message-ID: <20220516150237.v3xt7onp2lpmellw@uno.localdomain>
+References: <20220516092048.264036-1-hugues.fruchet@foss.st.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cH4kqHwkCNRl3JMX"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <8598037d-0e24-9bc1-3f2c-a2751ec8e871@gmail.com>
-X-Cookie: May be too intense for some viewers.
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220516092048.264036-1-hugues.fruchet@foss.st.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,76 +49,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Hugues,
 
---cH4kqHwkCNRl3JMX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, May 16, 2022 at 11:20:48AM +0200, Hugues Fruchet wrote:
+> From: Hugues Fruchet <hugues.fruchet@st.com>
+>
+> Add support of 1X16 serial pixel formats in order to support
+> CSI-2 camera sensor exposing 1x16 pixel formats only.
+>
+> Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
 
-On Fri, May 13, 2022 at 07:10:57PM +0530, Siddh Raman Pant wrote:
+Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
 
-> This allows for potentially better machine-parsing due to an
-> expected / fixed format. Also because of eyecandy reasons.
+Sakari, if you're sending a new pull request for the ov5640 series,
+could you include this one as otherwise dcmi would be broken when used
+with that sensor.
 
-As I said in reply to Takashi's mail I'm not convinced about all the
-changes in here, a lot of it's really bikesheddy at the best of times
-and to be honest there's more here that I don't like than do.  The
-changes aren't entirely consistent in the final style either so
-presumably not great if there is any machine parsing going on.  It'd be
-much better to split this up into separate commits for separate changes,
-that'd be a lot easier to review if nothing else.
+Thanks
+   j
 
->  	if (err < 0) {
-> -		ksft_print_msg("Unable to parse custom alsa-lib configuration: %s\n",
-> +		ksft_print_msg("Unable to parse custom alsa-lib configuration (%s)\n",
->  			       snd_strerror(err));
-
-I'm really unconvinced that replacing : with () is helping either people
-or machines - the form we have at the minute is probably more common for
-command line tools?
-
-> -				ksft_print_msg("%s getting info for %d\n",
-> -					       snd_strerror(err),
-> -					       ctl_data->name);
-> +				ksft_print_msg("%s : %s while getting info\n",
-> +					       ctl_data->name, snd_strerror(err));
-
-Why add the space before the : here?  That really is not idiomatic for
-Unix stuff, or just natural language.
-
-> @@ -542,11 +541,12 @@ static bool show_mismatch(struct ctl_data *ctl, int=
- index,
->  		/*
->  		 * NOTE: The volatile attribute means that the hardware
->  		 * can voluntarily change the state of control element
-> -		 * independent of any operation by software. =20
-> +		 * independent of any operation by software.
->  		 */
-
-This should definitely be a separate commit.
-
->  		bool is_volatile =3D snd_ctl_elem_info_is_volatile(ctl->info);
-> -		ksft_print_msg("%s.%d expected %lld but read %lld, is_volatile %d\n",
-> -			       ctl->name, index, expected_int, read_int, is_volatile);
-> +		ksft_print_msg("%s.%d : Expected %lld, but read %lld (%s)\n",
-> +			       ctl->name, index, expected_int, read_int,
-> +			       (is_volatile ? "Volatile" : "Non-volatile"));
-
-I don't understand the comma here?
-
---cH4kqHwkCNRl3JMX
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKCZ4UACgkQJNaLcl1U
-h9CEbgf9Eps4RQf5GwgggebMWvlsEDS4AHT1wMUSZOns3d44DpU8Em6Fg9BHGF19
-Y8qy5envpJ30adNWBZNS+hH/Cr1mzHsP4CXYxADNBTMLDvwHAT7v0xDThc5lGNhi
-TjMNxnYssD4uk5vwqEDjfukpqQ8ee2U5Mteysg3nNfvUK0Y4Ty7rLU11wHPdpsib
-iuwVlm56PbJwhJz/++DDj5JfAQKz+7K5ZMWmTYNyf4flwB2UyWdueeKknrNh7HrK
-etvB6eYnOddvoP1fLzsZxFWE6Kamk2Fb7UPfdmc9HX26XhvrSpQlre5e+Otbs9Ft
-cLadxKCsaQ6kn9eKdRiwUQwfDNvXEg==
-=9XeY
------END PGP SIGNATURE-----
-
---cH4kqHwkCNRl3JMX--
+> ---
+>  drivers/media/platform/st/stm32/stm32-dcmi.c | 18 ++++++++++++------
+>  1 file changed, 12 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
+> index 09a743cd7004..b2ba4d95bfa3 100644
+> --- a/drivers/media/platform/st/stm32/stm32-dcmi.c
+> +++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
+> @@ -1592,25 +1592,31 @@ static int dcmi_set_default_fmt(struct stm32_dcmi *dcmi)
+>  	return 0;
+>  }
+>
+> -/*
+> - * FIXME: For the time being we only support subdevices
+> - * which expose RGB & YUV "parallel form" mbus code (_2X8).
+> - * Nevertheless, this allows to support serial source subdevices
+> - * and serial to parallel bridges which conform to this.
+> - */
+>  static const struct dcmi_format dcmi_formats[] = {
+>  	{
+>  		.fourcc = V4L2_PIX_FMT_RGB565,
+>  		.mbus_code = MEDIA_BUS_FMT_RGB565_2X8_LE,
+>  		.bpp = 2,
+> +	}, {
+> +		.fourcc = V4L2_PIX_FMT_RGB565,
+> +		.mbus_code = MEDIA_BUS_FMT_RGB565_1X16,
+> +		.bpp = 2,
+>  	}, {
+>  		.fourcc = V4L2_PIX_FMT_YUYV,
+>  		.mbus_code = MEDIA_BUS_FMT_YUYV8_2X8,
+>  		.bpp = 2,
+> +	}, {
+> +		.fourcc = V4L2_PIX_FMT_YUYV,
+> +		.mbus_code = MEDIA_BUS_FMT_YUYV8_1X16,
+> +		.bpp = 2,
+>  	}, {
+>  		.fourcc = V4L2_PIX_FMT_UYVY,
+>  		.mbus_code = MEDIA_BUS_FMT_UYVY8_2X8,
+>  		.bpp = 2,
+> +	}, {
+> +		.fourcc = V4L2_PIX_FMT_UYVY,
+> +		.mbus_code = MEDIA_BUS_FMT_UYVY8_1X16,
+> +		.bpp = 2,
+>  	}, {
+>  		.fourcc = V4L2_PIX_FMT_JPEG,
+>  		.mbus_code = MEDIA_BUS_FMT_JPEG_1X8,
+> --
+> 2.25.1
+>

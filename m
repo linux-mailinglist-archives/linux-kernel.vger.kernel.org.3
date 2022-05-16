@@ -2,161 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD6B528388
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 13:50:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6705D528383
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 13:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236919AbiEPLt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 07:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37348 "EHLO
+        id S240174AbiEPLtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 07:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240727AbiEPLtx (ORCPT
+        with ESMTP id S229890AbiEPLt3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 07:49:53 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4294E0E9
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 04:49:52 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2fed823dd32so39469167b3.12
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 04:49:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=4XtkkgDY70ODUGHGl87xJIvARSTddMeTRl5MzriSEag=;
-        b=tR2WwLJQK3Xoss/NvMGDcRkuGYbpCWjlIeAtJ2fMqal3hOIOFZxrBYz4T3pkmi/5kT
-         xOi7S5z5/vP/VDnpXIh/1M/WpZFpS7X0u2UxPcfYL1JNySJvNfEhgTBkhsB2nKlXP7Mk
-         5geihxNdDq6mP/nnE6vaApD43Vf6/weNRQ1fu0uahCM/tEdy6VtTQAZXmdjn/xwRRoYn
-         edjtIBHuvBjPE8Y+in06a0p5q676OvBJrn+QyU/SAjN2GjXxa99D2NFhhgHWNuaIOzPz
-         hFUT6cp0oaGBfZnXr2VMLvy5FGl1uepzcbU2YZFEotz2VOmdudnUBEfWuJUPTytfniQk
-         /caw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=4XtkkgDY70ODUGHGl87xJIvARSTddMeTRl5MzriSEag=;
-        b=Eb/B3hKovCz506T0Dl8L9hafzCWgOoJZ1gARLhXp/HNIImuywbR4WNGciPedDGTrX9
-         55upt9MYBWqMO+DEUaYClmJ8OqRm3dT9HUHTm6uEdVXaExaTmev3mLBXtRXBURgU9Aii
-         LJFe1LDLGUBQt9RuJBX6JEN1cBy8NEg65I9bSCQrQcGL5PV5Ii9WW3qMQGKtURPEX7fj
-         1CojsgBZqNrB3oDDhc64SwdN3fZtfWEoEAC/kvltfEFbSeh6F7sV5gZwve5ipKvc4i/q
-         VbJDCW/mTck+opcgaDZeUW3Fguoy15yabiVHd9N9J+x9RdpoLwhp+AejIRYF35FehXC3
-         4hqw==
-X-Gm-Message-State: AOAM5301osmNCxyIKqto4c+Y/6Ff5Nwmn1v2BIvlonhB2a+rUMRNBITD
-        mcrKCtZcYTcgIIGHWxVdexZw2uiwxFfcYjcnoKqh9w==
-X-Google-Smtp-Source: ABdhPJx2Q9of50T64pn6+gSbgtYcKkZGPXW6zopRcYz9chzp4PzVO+UL/Je9mgpUQg0Ktv0NtxHiV3crHzWpPx9s5Gw=
-X-Received: by 2002:a0d:f0c3:0:b0:2f4:d291:9dde with SMTP id
- z186-20020a0df0c3000000b002f4d2919ddemr19141054ywe.437.1652701791936; Mon, 16
- May 2022 04:49:51 -0700 (PDT)
+        Mon, 16 May 2022 07:49:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B2FDF8D;
+        Mon, 16 May 2022 04:49:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72A1660FFC;
+        Mon, 16 May 2022 11:49:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5281AC385B8;
+        Mon, 16 May 2022 11:49:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652701765;
+        bh=1UjUf9qgR8mCHZ9pO5ibdXOTkA+2CnwKyYDerjjSjGA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gMkYxYwaD2K0qgkQWrvFjMbEes4kia98EUUVJ/06WXfRTmnyYFI3+clNVoLAQu0/F
+         x+63icf6hFCM/xsO/+YqetIoB4x1gBd+Q0z+jkU58s/KBV5u+gOj1DguI8HjQPFHZJ
+         vvpflzD8mQqRkZEtvS5uJxpZqREmSgXWpzXkSehLhvHWGXMoA0snQrvlWtBU+MRVd8
+         Io7mXMB4rZKJVMePun91CFyq/qLWre8LzQ/Tr8EnQ5HwsN8K0vwCBskWRAyJi2LT75
+         IWBDOZ/t+kz0pTa6dUeW24jK/LLmqV9hPJLuMxUa4YMiCFSYw1elIzxapFohDrxy+r
+         75pBVqDXWPFjg==
+Date:   Mon, 16 May 2022 13:49:22 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH bpf-next 1/2] cpuidle/rcu: Making arch_cpu_idle and
+ rcu_idle_exit noinstr
+Message-ID: <20220516114922.GA349949@lothringen>
+References: <20220515203653.4039075-1-jolsa@kernel.org>
+ <20220516042535.GV1790663@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-References: <20220426164315.625149-1-glider@google.com> <20220426164315.625149-28-glider@google.com>
- <87bkwmy7t4.ffs@tglx>
-In-Reply-To: <87bkwmy7t4.ffs@tglx>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Mon, 16 May 2022 13:49:16 +0200
-Message-ID: <CAG_fn=WhNZ8+7RXvr_2nGa-mCpLYxBK=cw3wFg6bxOqgXTOH0A@mail.gmail.com>
-Subject: Re: [PATCH v3 27/46] kmsan: instrumentation.h: add instrumentation_begin_with_regs()
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220516042535.GV1790663@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 3:28 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> On Tue, Apr 26 2022 at 18:42, Alexander Potapenko wrote:
-> > +void kmsan_instrumentation_begin(struct pt_regs *regs)
-> > +{
-> > +     struct kmsan_context_state *state =3D &kmsan_get_context()->cstat=
-e;
-> > +
-> > +     if (state)
-> > +             __memset(state, 0, sizeof(struct kmsan_context_state));
->
->   sizeof(*state) please
->
-> > +     if (!kmsan_enabled || !regs)
-> > +             return;
->
-> Why has state to be cleared when kmsan is not enabled and how do you end =
-up
-> with regs =3D=3D NULL here?
->
-> Thanks,
->
->         tglx
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "kasan-dev" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kasan-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/kasan-dev/87bkwmy7t4.ffs%40tglx.
+On Sun, May 15, 2022 at 09:25:35PM -0700, Paul E. McKenney wrote:
+> On Sun, May 15, 2022 at 10:36:52PM +0200, Jiri Olsa wrote:
+> > Making arch_cpu_idle and rcu_idle_exit noinstr. Both functions run
+> > in rcu 'not watching' context and if there's tracer attached to
+> > them, which uses rcu (e.g. kprobe multi interface) it will hit RCU
+> > warning like:
+> > 
+> >   [    3.017540] WARNING: suspicious RCU usage
+> >   ...
+> >   [    3.018363]  kprobe_multi_link_handler+0x68/0x1c0
+> >   [    3.018364]  ? kprobe_multi_link_handler+0x3e/0x1c0
+> >   [    3.018366]  ? arch_cpu_idle_dead+0x10/0x10
+> >   [    3.018367]  ? arch_cpu_idle_dead+0x10/0x10
+> >   [    3.018371]  fprobe_handler.part.0+0xab/0x150
+> >   [    3.018374]  0xffffffffa00080c8
+> >   [    3.018393]  ? arch_cpu_idle+0x5/0x10
+> >   [    3.018398]  arch_cpu_idle+0x5/0x10
+> >   [    3.018399]  default_idle_call+0x59/0x90
+> >   [    3.018401]  do_idle+0x1c3/0x1d0
+> > 
+> > The call path is following:
+> > 
+> > default_idle_call
+> >   rcu_idle_enter
+> >   arch_cpu_idle
+> >   rcu_idle_exit
+> > 
+> > The arch_cpu_idle and rcu_idle_exit are the only ones from above
+> > path that are traceble and cause this problem on my setup.
+> > 
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> 
+> From an RCU viewpoint:
+> 
+> Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+> 
+> [ I considered asking for an instrumentation_on() in rcu_idle_exit(),
+> but there is no point given that local_irq_restore() isn't something
+> you instrument anyway. ]
 
-As discussed in another thread, I'll be dropping this patch in favor
-of the new kmsan_unpoison_entry_regs().
+So local_irq_save() in the beginning of rcu_idle_exit() is unsafe because
+it is instrumentable by the function (graph)  tracers and the irqsoff tracer.
 
-I'll also ensure I consistently use sizeof(*pointer) where applicable.
+Also it calls into lockdep that might make use of RCU.
 
-Regarding regs=3D=3DNULL, this is actually not a thing.
+That's why rcu_idle_exit() is not noinstr yet. See this patch:
 
---=20
-Alexander Potapenko
-Software Engineer
+https://lore.kernel.org/lkml/20220503100051.2799723-4-frederic@kernel.org/
 
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
+Thanks.
 
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
-
-Diese E-Mail ist vertraulich. Falls Sie diese f=C3=A4lschlicherweise
-erhalten haben sollten, leiten Sie diese bitte nicht an jemand anderes
-weiter, l=C3=B6schen Sie alle Kopien und Anh=C3=A4nge davon und lassen Sie =
-mich
-bitte wissen, dass die E-Mail an die falsche Person gesendet wurde.
-
-
-This e-mail is confidential. If you received this communication by
-mistake, please don't forward it to anyone else, please erase all
-copies and attachments, and please let me know that it has gone to the
-wrong person.
+> 
+> > ---
+> >  arch/x86/kernel/process.c | 2 +-
+> >  kernel/rcu/tree.c         | 2 +-
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+> > index b370767f5b19..1345cb0124a6 100644
+> > --- a/arch/x86/kernel/process.c
+> > +++ b/arch/x86/kernel/process.c
+> > @@ -720,7 +720,7 @@ void arch_cpu_idle_dead(void)
+> >  /*
+> >   * Called from the generic idle code.
+> >   */
+> > -void arch_cpu_idle(void)
+> > +void noinstr arch_cpu_idle(void)
+> >  {
+> >  	x86_idle();
+> >  }
+> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > index a4b8189455d5..20d529722f51 100644
+> > --- a/kernel/rcu/tree.c
+> > +++ b/kernel/rcu/tree.c
+> > @@ -896,7 +896,7 @@ static void noinstr rcu_eqs_exit(bool user)
+> >   * If you add or remove a call to rcu_idle_exit(), be sure to test with
+> >   * CONFIG_RCU_EQS_DEBUG=y.
+> >   */
+> > -void rcu_idle_exit(void)
+> > +void noinstr rcu_idle_exit(void)
+> >  {
+> >  	unsigned long flags;
+> >  
+> > -- 
+> > 2.35.3
+> > 

@@ -2,212 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19BC7527FF8
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 10:46:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77DB4527FF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 10:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236210AbiEPIo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 04:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45258 "EHLO
+        id S230360AbiEPIpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 04:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242131AbiEPIoN (ORCPT
+        with ESMTP id S241966AbiEPIoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 04:44:13 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F34B1DD
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 01:44:06 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2fb965b34easo144891427b3.1
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 01:44:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WrH/uCV11zaK3gi4NBtuoC2ssefODQWs7qWIOkYeDX0=;
-        b=JSSRWSLDRoqueiwjRYgAua4DvEmAULj2xxKZXkR0YbpFhO8CZv72sRhPAgSbqYd3Gt
-         2eMiPFDAmuCtgnrpCCEqmrAgBhVcMP3H3cwTni/LdQfRiXDSKWjwjoUbohpSwPUM7lXh
-         S4SgbxZ45YqRkx6DRSVZ9V4KhvTduOgk9YCdSM9izIDvHCUFsTjP0IKbOC2+KKVmcidD
-         kP4+wfkYoDq/9TRbWjJF/DVv68KnWAWrVUgx6sJa38STxe/pE4JYgLmzRoY3qJ24vKj0
-         nWdSUnUVklVL6EDdL4rI/XJT1l2GVeQPBlbzXSgWosY1sPRtg7/0/ljBY/9SZGt7LZ9j
-         Zj9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WrH/uCV11zaK3gi4NBtuoC2ssefODQWs7qWIOkYeDX0=;
-        b=hkQBKLp8nKN9OFSt2e1irDAs4qoiMC6CjJsGUzPBHselULM3bC5QSU3XsbmwydDcUH
-         ZduXpk7+dh6ScE3XrAn4iWb6y4fXBcUjwMA4MXHCXlCxkXoaPS3H3ScvbXLyvSVRlbA6
-         9pdJxHbSyWT8JgJsnK9kjYqgQQihx3P+v7DuTrigsrMHdeuGNT95fyJyKuB9h2Z69hH5
-         o3TJZ5oGH1QKbzar7DeEL90f/L12aAbBqbdLa7eOsxowb2D1L6tqARFsB58g/7i9QUdB
-         e0X4V5XVyZAX9lwJNQtSdX7jbahp7RYQDKWIS42GfQ2aOSftngY8ebtMwpODwt92FVAm
-         k88g==
-X-Gm-Message-State: AOAM530UE3xfEfTkwWm6lWaHoAZKhWEjKiO83yMgrObm93kX/EcXJMjM
-        NZiNaKYiwIRjtajV1eQit8K85b94OI8gdytS0ucWXg==
-X-Google-Smtp-Source: ABdhPJyCWaN3bQEreJQ0p+Ot1/7Q84mfkhD572qyNChjOJQjjw/1V6Q6NnNjGhqeBXnNyo+ph18vOM/mnLuOOjFuHlY=
-X-Received: by 2002:a0d:d4d0:0:b0:2fe:b86b:472d with SMTP id
- w199-20020a0dd4d0000000b002feb86b472dmr15902880ywd.469.1652690645161; Mon, 16
- May 2022 01:44:05 -0700 (PDT)
+        Mon, 16 May 2022 04:44:25 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30AEF580;
+        Mon, 16 May 2022 01:44:21 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id AA2351F427F3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652690660;
+        bh=/A+cNqtSPHG/D4qhatlAKYS/dqSWn1bu3i/Z2T9OGN8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XDOVMGDR+NJ6s8VoO9u2vElluOF9m3hpIu+RFa3HjxJBsrZRUvXxnHq4iSzXqxW3O
+         dfQpBXHhFN/+Rc62GprPJ0M9G/kPT5GiZRc/xxU3bonQwqoyGID8I90+SLMwQmr7l7
+         9bP1jxx1FV8GBCxK/drzz+SBpEKbhlOwfc4aDVteuYCrcn3tk3UXC2wovIC/IBiOPH
+         V0wXYHwPixsUeKzr4W5Sf5/254a7Y2o+GNp+ap3oXvEAN7AO0LnlVmlRdTC2JULXvM
+         paQk33Y9eAgNHfa842LRJ6yDI6IOhpxDZljnp1VvwrUr3k2dROpNWIQlh3VZvF5hgs
+         eqJLVkEIB4iIQ==
+Message-ID: <a7afc559-4e0a-6552-190c-19e58851ce68@collabora.com>
+Date:   Mon, 16 May 2022 10:44:16 +0200
 MIME-Version: 1.0
-References: <20220516033524.3130816-1-chenwandun@huawei.com>
- <30b37eeb-e77b-882e-fc24-3367321a8ca3@gmail.com> <CAJuCfpE7fBsp8ntYVeLsW7Cd0Z09OmxN75X9Az_Qco0GJrz3Wg@mail.gmail.com>
-In-Reply-To: <CAJuCfpE7fBsp8ntYVeLsW7Cd0Z09OmxN75X9Az_Qco0GJrz3Wg@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 16 May 2022 01:43:54 -0700
-Message-ID: <CAJuCfpH-BDqsft1YvGFhkbR60VC0TJgfXKRVN+80e0iqQdhxpA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] psi: add support for multi level pressure stall trigger
-To:     Alex Shi <seakeel@gmail.com>
-Cc:     Chen Wandun <chenwandun@huawei.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Alex Shi <alexs@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] soc: mediatek: mtk-mmsys: Add support for MT6795 Helio
+ X10
+Content-Language: en-US
+To:     CK Hu <ck.hu@mediatek.com>, matthias.bgg@gmail.com
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
+        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, paul.bouchara@somainline.org,
+        kernel@collabora.com
+References: <20220513170350.502501-1-angelogioacchino.delregno@collabora.com>
+ <7c996c665a57fdd9ba8d6df4dc085f70afc1b933.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <7c996c665a57fdd9ba8d6df4dc085f70afc1b933.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 1:21 AM Suren Baghdasaryan <surenb@google.com> wrote:
->
-> On Sun, May 15, 2022 at 11:20 PM Alex Shi <seakeel@gmail.com> wrote:
-> >
-> >
-> >
-> > On 5/16/22 11:35, Chen Wandun wrote:
-> > > Nowadays, psi events are triggered when stall time exceed
-> > > stall threshold, but no any different between these events.
-> > >
-> > > Actually, events can be divide into multi level, each level
-> > > represent a different stall pressure, that is help to identify
-> > > pressure information more accurately.
->
-> IIUC by defining min and max, you want the trigger to activate when
-> the stall is between min and max thresholds. But I don't see why you
-> would need that. If you want to have several levels, you can create
-> multiple triggers and monitor them separately. For your example, that
-> would be:
->
-> echo "some 150000 1000000" > /proc/pressure/memory
-> echo "some 350000 1000000" > /proc/pressure/memory
->
-> Your first trigger will fire whenever the stall exceeds 150ms within
-> each 1sec and the second one will trigger when it exceeds 350ms. It is
-> true that if the stall jumps sharply above 350ms, you would get both
-> triggers firing. I'm guessing that's why you want this functionality
-> so that 150ms trigger does not fire when 350ms one is firing but why
-> is that a problem? Can't userspace pick the highest level one and
-> ignore all the lower ones when this happens? Or are you addressing
-> some other requirement?
->
-> > >
-> > > echo "some 150000 350000 1000000" > /proc/pressure/memory would
-> >
-> > This breaks the old ABI. And why you need this new function?
->
-> Both great points.
+Il 16/05/22 07:43, CK Hu ha scritto:
+> Hi, Angelo:
+> 
+> On Fri, 2022-05-13 at 19:03 +0200, AngeloGioacchino Del Regno wrote:
+>> Add MM support for the MT6795 SoC, using the mmsys default routing
+>> table.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <
+>> angelogioacchino.delregno@collabora.com>
+>> ---
+>>
+>> In order for this patch to have any meaning and functionality, it is
+>> required to also have in-tree the [1] MT6795 clocks series, even
+>> though that's not required to actually compile this code.
+>>
+>> [1]
+>> https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/list/?series=641493__;!!CTRNKA9wMg0ARbw!ywDb_Gj4oV0iYHK_PbtJSNejzsJGlFVjX-1O0G1mR0vZX_5VeMtlZJ_AS6K_Mg$
+>>   
+>>
+>>   drivers/soc/mediatek/mtk-mmsys.c | 11 +++++++++++
+>>   1 file changed, 11 insertions(+)
+>>
+>> diff --git a/drivers/soc/mediatek/mtk-mmsys.c
+>> b/drivers/soc/mediatek/mtk-mmsys.c
+>> index 06d8e83a2cb5..38b36b881a3b 100644
+>> --- a/drivers/soc/mediatek/mtk-mmsys.c
+>> +++ b/drivers/soc/mediatek/mtk-mmsys.c
+>> @@ -57,6 +57,13 @@ static const struct mtk_mmsys_match_data
+>> mt6779_mmsys_match_data = {
+>>   	},
+>>   };
+>>   
+>> +static const struct mtk_mmsys_driver_data mt6795_mmsys_driver_data =
+>> {
+>> +	.clk_driver = "clk-mt6795-mm",
+>> +	.routes = mmsys_default_routing_table,
+> 
+> mt6795 should have its own routing table instead of default one. The
+> default one is used for mt8173, mt2701, mt2712 which no one knows how
+> to separate them. If you don't know the routing table of mt6795, just
+> left this as NULL.
+> 
 
-BTW, I think the additional max_threshold parameter could be
-implemented in a backward compatible way so that the old API is not
-broken:
+Hello CK,
 
-arg_count = sscanf(buf, "some %u %u %u", &min_threshold_us,  &arg2, &arg3);
-if (arg_count < 2) return ERR_PTR(-EINVAL);
-if (arg_count < 3) {
-    max_threshold_us = INT_MAX;
-    window_us = arg2;
-} else {
-    max_threshold_us = arg2;
-    window_us = arg3;
-}
+I agree with you, in fact the first test that I've done was with leaving
+routes to NULL, but that did not work (I couldn't get the display to work),
+while assigning the default routing table resulted in having a working
+internal (DSI) display et al, which is why I have done that.
 
-But again, the motivation still needs to be explained.
+I am sure that this may be a quirk that is required due to my platform's
+bootloader, but still, it won't work otherwise.
 
->
-> >
-> > Thanks
-> >
-> > > add [150ms, 350ms) threshold for partial memory stall measured
-> > > within 1sec time window.
-> > >
-> > > Signed-off-by: Chen Wandun <chenwandun@huawei.com>
-> > > ---
-> > >  include/linux/psi_types.h |  3 ++-
-> > >  kernel/sched/psi.c        | 19 +++++++++++++------
-> > >  2 files changed, 15 insertions(+), 7 deletions(-)
-> > >
-> > > diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
-> > > index c7fe7c089718..2b1393c8bf90 100644
-> > > --- a/include/linux/psi_types.h
-> > > +++ b/include/linux/psi_types.h
-> > > @@ -119,7 +119,8 @@ struct psi_trigger {
-> > >       enum psi_states state;
-> > >
-> > >       /* User-spacified threshold in ns */
-> > > -     u64 threshold;
-> > > +     u64 min_threshold;
-> > > +     u64 max_threshold;
-> > >
-> > >       /* List node inside triggers list */
-> > >       struct list_head node;
-> > > diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> > > index 6f9533c95b0a..17dd233b533a 100644
-> > > --- a/kernel/sched/psi.c
-> > > +++ b/kernel/sched/psi.c
-> > > @@ -541,7 +541,7 @@ static u64 update_triggers(struct psi_group *group, u64 now)
-> > >
-> > >                       /* Calculate growth since last update */
-> > >                       growth = window_update(&t->win, now, total[t->state]);
-> > > -                     if (growth < t->threshold)
-> > > +                     if (growth < t->min_threshold || growth >= t->max_threshold)
-> > >                               continue;
-> > >
-> > >                       t->pending_event = true;
-> > > @@ -1087,15 +1087,18 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
-> > >  {
-> > >       struct psi_trigger *t;
-> > >       enum psi_states state;
-> > > -     u32 threshold_us;
-> > > +     u32 min_threshold_us;
-> > > +     u32 max_threshold_us;
-> > >       u32 window_us;
-> > >
-> > >       if (static_branch_likely(&psi_disabled))
-> > >               return ERR_PTR(-EOPNOTSUPP);
-> > >
-> > > -     if (sscanf(buf, "some %u %u", &threshold_us, &window_us) == 2)
-> > > +     if (sscanf(buf, "some %u %u %u", &min_threshold_us,
-> > > +                             &max_threshold_us, &window_us) == 3)
-> > >               state = PSI_IO_SOME + res * 2;
-> > > -     else if (sscanf(buf, "full %u %u", &threshold_us, &window_us) == 2)
-> > > +     else if (sscanf(buf, "full %u %u %u", &min_threshold_us,
-> > > +                             &max_threshold_us, &window_us) == 3)
-> > >               state = PSI_IO_FULL + res * 2;
-> > >       else
-> > >               return ERR_PTR(-EINVAL);
-> > > @@ -1107,8 +1110,11 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
-> > >               window_us > WINDOW_MAX_US)
-> > >               return ERR_PTR(-EINVAL);
-> > >
-> > > +     if (min_threshold_us >= max_threshold_us)
-> > > +             return ERR_PTR(-EINVAL);
-> > > +
-> > >       /* Check threshold */
-> > > -     if (threshold_us == 0 || threshold_us > window_us)
-> > > +     if (max_threshold_us > window_us)
-> > >               return ERR_PTR(-EINVAL);
-> > >
-> > >       t = kmalloc(sizeof(*t), GFP_KERNEL);
-> > > @@ -1117,7 +1123,8 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
-> > >
-> > >       t->group = group;
-> > >       t->state = state;
-> > > -     t->threshold = threshold_us * NSEC_PER_USEC;
-> > > +     t->min_threshold = min_threshold_us * NSEC_PER_USEC;
-> > > +     t->max_threshold = max_threshold_us * NSEC_PER_USEC;
-> > >       t->win.size = window_us * NSEC_PER_USEC;
-> > >       window_reset(&t->win, 0, 0, 0);
-> > >
+If anyone from MediaTek wants to help with providing a better solution for
+that, you're welcome to - but otherwise, my proposal is to configure MT6795
+with that default routing table and eventually come back to this later if
+any issue with this gets discovered... I couldn't find any, though.
+
+Cheers,
+Angelo
+

@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 969DC5290B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D33E529185
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346568AbiEPTyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56760 "EHLO
+        id S1349455AbiEPUig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346453AbiEPTt5 (ORCPT
+        with ESMTP id S1350561AbiEPUBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:49:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C9E43AF2;
-        Mon, 16 May 2022 12:45:14 -0700 (PDT)
+        Mon, 16 May 2022 16:01:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC0A49FAE;
+        Mon, 16 May 2022 12:55:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 33E30B815F6;
-        Mon, 16 May 2022 19:45:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D3EFC385AA;
-        Mon, 16 May 2022 19:45:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31D2E60FD9;
+        Mon, 16 May 2022 19:55:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 224E5C34115;
+        Mon, 16 May 2022 19:55:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730312;
-        bh=elYD8fjMUZjLGbxsKLKL6KOqN9jdSSD/fSjASIUWHZw=;
+        s=korg; t=1652730931;
+        bh=EwrlZFOvzJnjMTJ2FyUy85Q/vhUk54CTxzJFzMEnSow=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hZ1bpU5Uen8osIZNZuc8m89kvouvwGBeR3t/+hdvfqmADhqUmr64UEeTK6x/mU37t
-         jNAiLdDQAOQPzKDOqcKaH0VQO+uhFfMCwOzX5W2gV30Q28OsbzcP+3GtR2xMRvxoLM
-         dIDS0B5tcDA3iOgliueUT/F53W0u5YKujRH06Whc=
+        b=YRfmpfg2IkhsoTRP76maCmxcghA2OAjC3LhOKJWNVlaXLhvoaOO3PC8w2D0DLAKSD
+         7ppZUIPq1wX6zWJr1WiVefef3xCP2458mDKrFLVCbOlNNCQg7YtHTSNU8hFVWmi9Nd
+         wOrhzLvk8W8uimKOgBuurhTCkOZRKOUI6uIwO74I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Geliang Tang <geliang.tang@suse.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        Shiraz Saleem <shiraz.saleem@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 24/66] net/sched: act_pedit: really ensure the skb is writable
-Date:   Mon, 16 May 2022 21:36:24 +0200
-Message-Id: <20220516193620.115452297@linuxfoundation.org>
+Subject: [PATCH 5.17 051/114] RDMA/irdma: Fix deadlock in irdma_cleanup_cm_core()
+Date:   Mon, 16 May 2022 21:36:25 +0200
+Message-Id: <20220516193626.959658720@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
-References: <20220516193619.400083785@linuxfoundation.org>
+In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
+References: <20220516193625.489108457@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,121 +56,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Abeni <pabeni@redhat.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-[ Upstream commit 8b796475fd7882663a870456466a4fb315cc1bd6 ]
+[ Upstream commit 679ab61bf5f5f519377d812afb4fb93634782c74 ]
 
-Currently pedit tries to ensure that the accessed skb offset
-is writable via skb_unclone(). The action potentially allows
-touching any skb bytes, so it may end-up modifying shared data.
+There is a deadlock in irdma_cleanup_cm_core(), which is shown below:
 
-The above causes some sporadic MPTCP self-test failures, due to
-this code:
+   (Thread 1)              |      (Thread 2)
+                           | irdma_schedule_cm_timer()
+irdma_cleanup_cm_core()    |  add_timer()
+ spin_lock_irqsave() //(1) |  (wait a time)
+ ...                       | irdma_cm_timer_tick()
+ del_timer_sync()          |  spin_lock_irqsave() //(2)
+ (wait timer to stop)      |  ...
 
-	tc -n $ns2 filter add dev ns2eth$i egress \
-		protocol ip prio 1000 \
-		handle 42 fw \
-		action pedit munge offset 148 u8 invert \
-		pipe csum tcp \
-		index 100
+We hold cm_core->ht_lock in position (1) of thread 1 and use
+del_timer_sync() to wait timer to stop, but timer handler also need
+cm_core->ht_lock in position (2) of thread 2.  As a result,
+irdma_cleanup_cm_core() will block forever.
 
-The above modifies a data byte outside the skb head and the skb is
-a cloned one, carrying a TCP output packet.
+This patch removes the check of timer_pending() in
+irdma_cleanup_cm_core(), because the del_timer_sync() function will just
+return directly if there isn't a pending timer. As a result, the lock is
+redundant, because there is no resource it could protect.
 
-This change addresses the issue by keeping track of a rough
-over-estimate highest skb offset accessed by the action and ensuring
-such offset is really writable.
-
-Note that this may cause performance regressions in some scenarios,
-but hopefully pedit is not in the critical path.
-
-Fixes: db2c24175d14 ("act_pedit: access skb->data safely")
-Acked-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-Tested-by: Geliang Tang <geliang.tang@suse.com>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
-Link: https://lore.kernel.org/r/1fcf78e6679d0a287dd61bb0f04730ce33b3255d.1652194627.git.pabeni@redhat.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Link: https://lore.kernel.org/r/20220418153322.42524-1-duoming@zju.edu.cn
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Reviewed-by: Shiraz Saleem <shiraz.saleem@intel.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/tc_act/tc_pedit.h |  1 +
- net/sched/act_pedit.c         | 26 ++++++++++++++++++++++----
- 2 files changed, 23 insertions(+), 4 deletions(-)
+ drivers/infiniband/hw/irdma/cm.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/include/net/tc_act/tc_pedit.h b/include/net/tc_act/tc_pedit.h
-index 748cf87a4d7e..3e02709a1df6 100644
---- a/include/net/tc_act/tc_pedit.h
-+++ b/include/net/tc_act/tc_pedit.h
-@@ -14,6 +14,7 @@ struct tcf_pedit {
- 	struct tc_action	common;
- 	unsigned char		tcfp_nkeys;
- 	unsigned char		tcfp_flags;
-+	u32			tcfp_off_max_hint;
- 	struct tc_pedit_key	*tcfp_keys;
- 	struct tcf_pedit_key_ex	*tcfp_keys_ex;
- };
-diff --git a/net/sched/act_pedit.c b/net/sched/act_pedit.c
-index b45304446e13..90510298b32a 100644
---- a/net/sched/act_pedit.c
-+++ b/net/sched/act_pedit.c
-@@ -149,7 +149,7 @@ static int tcf_pedit_init(struct net *net, struct nlattr *nla,
- 	struct nlattr *pattr;
- 	struct tcf_pedit *p;
- 	int ret = 0, err;
--	int ksize;
-+	int i, ksize;
- 	u32 index;
- 
- 	if (!nla) {
-@@ -228,6 +228,18 @@ static int tcf_pedit_init(struct net *net, struct nlattr *nla,
- 		p->tcfp_nkeys = parm->nkeys;
- 	}
- 	memcpy(p->tcfp_keys, parm->keys, ksize);
-+	p->tcfp_off_max_hint = 0;
-+	for (i = 0; i < p->tcfp_nkeys; ++i) {
-+		u32 cur = p->tcfp_keys[i].off;
-+
-+		/* The AT option can read a single byte, we can bound the actual
-+		 * value with uchar max.
-+		 */
-+		cur += (0xff & p->tcfp_keys[i].offmask) >> p->tcfp_keys[i].shift;
-+
-+		/* Each key touches 4 bytes starting from the computed offset */
-+		p->tcfp_off_max_hint = max(p->tcfp_off_max_hint, cur + 4);
-+	}
- 
- 	p->tcfp_flags = parm->flags;
- 	goto_ch = tcf_action_set_ctrlact(*a, parm->action, goto_ch);
-@@ -308,13 +320,18 @@ static int tcf_pedit_act(struct sk_buff *skb, const struct tc_action *a,
- 			 struct tcf_result *res)
+diff --git a/drivers/infiniband/hw/irdma/cm.c b/drivers/infiniband/hw/irdma/cm.c
+index 082a3ddb0fa3..632f65e53b63 100644
+--- a/drivers/infiniband/hw/irdma/cm.c
++++ b/drivers/infiniband/hw/irdma/cm.c
+@@ -3242,15 +3242,10 @@ enum irdma_status_code irdma_setup_cm_core(struct irdma_device *iwdev,
+  */
+ void irdma_cleanup_cm_core(struct irdma_cm_core *cm_core)
  {
- 	struct tcf_pedit *p = to_pedit(a);
-+	u32 max_offset;
- 	int i;
- 
--	if (skb_unclone(skb, GFP_ATOMIC))
--		return p->tcf_action;
+-	unsigned long flags;
 -
- 	spin_lock(&p->tcf_lock);
+ 	if (!cm_core)
+ 		return;
  
-+	max_offset = (skb_transport_header_was_set(skb) ?
-+		      skb_transport_offset(skb) :
-+		      skb_network_offset(skb)) +
-+		     p->tcfp_off_max_hint;
-+	if (skb_ensure_writable(skb, min(skb->len, max_offset)))
-+		goto unlock;
-+
- 	tcf_lastuse_update(&p->tcf_tm);
+-	spin_lock_irqsave(&cm_core->ht_lock, flags);
+-	if (timer_pending(&cm_core->tcp_timer))
+-		del_timer_sync(&cm_core->tcp_timer);
+-	spin_unlock_irqrestore(&cm_core->ht_lock, flags);
++	del_timer_sync(&cm_core->tcp_timer);
  
- 	if (p->tcfp_nkeys > 0) {
-@@ -403,6 +420,7 @@ static int tcf_pedit_act(struct sk_buff *skb, const struct tc_action *a,
- 	p->tcf_qstats.overlimits++;
- done:
- 	bstats_update(&p->tcf_bstats, skb);
-+unlock:
- 	spin_unlock(&p->tcf_lock);
- 	return p->tcf_action;
- }
+ 	destroy_workqueue(cm_core->event_wq);
+ 	cm_core->dev->ws_reset(&cm_core->iwdev->vsi);
 -- 
 2.35.1
 

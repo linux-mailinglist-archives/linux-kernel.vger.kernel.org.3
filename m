@@ -2,138 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0523D528C5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 19:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D9B528C62
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 19:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344472AbiEPRvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 13:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39828 "EHLO
+        id S1344488AbiEPRwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 13:52:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344530AbiEPRu4 (ORCPT
+        with ESMTP id S231317AbiEPRwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 13:50:56 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B6FA44A;
-        Mon, 16 May 2022 10:50:54 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GFCIU6019460;
-        Mon, 16 May 2022 17:50:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : reply-to : subject : to : cc : references : from :
- in-reply-to : content-type : content-transfer-encoding; s=pp1;
- bh=A4jX2fNiMfHRhahwL/lYs1a9gU+e3VH5JPb9+D5ghcw=;
- b=PPo9CjfMuiXdIsXHhy5z8rtD/QrN2K1snGpcLZXMbkD1s/9OiRNe8UYAuRkSs9iX9OBV
- yv6qIv5nNhfYSCXxoNIlNI/H+D7cm0BRGo4QTJeNfOxVZF4ySC5yIxlL2XEZRjh2rMR4
- vqevcFYDSEM8u308Qi/S8COc9ioVOWnJy7Bjrd5FnLz6JRIHCGPg+mffoZYc0J2eROCx
- Wwq0EZ0PhghYH7Upf8jrecaWgGapLoFPRpiLV1MpW+fgMNC9dejRNEgKyZwSLL9tS4V4
- iv20KViGLDvrsmjZncIMVPxcect97lAjPYStIQm72GZYdtZyTNLyBdeAGMPM01gm9eV/ 8A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3s1v398n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 17:50:52 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24GHn7aM005435;
-        Mon, 16 May 2022 17:50:52 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3s1v398e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 17:50:52 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24GHXj62028321;
-        Mon, 16 May 2022 17:50:51 GMT
-Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
-        by ppma03dal.us.ibm.com with ESMTP id 3g242a3qym-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 17:50:51 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24GHonro24969688
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 16 May 2022 17:50:49 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C1CAC78066;
-        Mon, 16 May 2022 17:50:49 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E340D78068;
-        Mon, 16 May 2022 17:50:48 +0000 (GMT)
-Received: from [9.60.75.219] (unknown [9.60.75.219])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon, 16 May 2022 17:50:48 +0000 (GMT)
-Message-ID: <6720e18e-0638-7f2f-533e-beca8a990404@linux.ibm.com>
-Date:   Mon, 16 May 2022 13:50:48 -0400
+        Mon, 16 May 2022 13:52:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085B21DA50;
+        Mon, 16 May 2022 10:52:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 901DE61312;
+        Mon, 16 May 2022 17:52:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0749C385AA;
+        Mon, 16 May 2022 17:52:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652723560;
+        bh=tgr7VUkO7yoaQqswTYm8WTjudC6JDoEskcDcyZ7P5pY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u0Ms1z2MXwVgLXIwJP+KienwIiFdKltD0wJxC9rocdwYctdt5hdXFfT/Yc+QS8q5C
+         Bl0AtXHWUKlPovEGLg6620zM1zAjeRy4VTHaYKgngtcjAVs9JiE5cXvzuJHfijJGfp
+         HO808hJ2M3mqzSuoHgkZPTUCTcJlOyiVZBookyMUuPDHqKR23znNYyeT29YTp+97Su
+         eHjcaw3zjP/gptVP6jeIlVkULqJLwfdvergjIt0216G5PNRU0BkZQJ/R8mrqaNGGVy
+         svc6qJp9IcUUsMqCmAo/le65cXejQrsNxSlU5SdKzdJxkRqVUjCKdSr8E3tB1B5P/y
+         YHgh22hpSXpVg==
+Date:   Mon, 16 May 2022 20:51:04 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lukas@wunner.de,
+        p.rosenberger@kunbus.com, Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Subject: Re: [PATCH v4 5/6] tpm, tpm_tis: Move irq test from tpm_tis_send()
+ to tpm_tis_probe_irq_single()
+Message-ID: <YoKPCKarZiKRWa4b@kernel.org>
+References: <20220509080559.4381-1-LinoSanfilippo@gmx.de>
+ <20220509080559.4381-6-LinoSanfilippo@gmx.de>
+ <YnvRrT19Pe2SPDNe@kernel.org>
+ <34f47a0c-5c2d-1cdc-fb97-03666a5e1918@gmx.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Reply-To: jjherne@linux.ibm.com
-Subject: Re: [PATCH v19 05/20] s390/vfio-ap: refresh guest's APCB by filtering
- AP resources assigned to mdev
-Content-Language: en-US
-To:     Tony Krowiak <akrowiak@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
-        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
-        alex.williamson@redhat.com, kwankhede@nvidia.com,
-        fiuczy@linux.ibm.com
-References: <20220404221039.1272245-1-akrowiak@linux.ibm.com>
- <20220404221039.1272245-6-akrowiak@linux.ibm.com>
- <fc760c00-0559-68d8-fd2d-f29e014a6685@linux.ibm.com>
- <62668577-bf0c-eda5-56a0-9ca56e5f9ce6@linux.ibm.com>
-From:   "Jason J. Herne" <jjherne@linux.ibm.com>
-Organization: IBM
-In-Reply-To: <62668577-bf0c-eda5-56a0-9ca56e5f9ce6@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Bt_VE0whdrn5UjRK6f5Nh0DapcJfUwgm
-X-Proofpoint-ORIG-GUID: SbhiqgXmQxCX-vrqxP77Y69lnlIBg4-u
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-16_15,2022-05-16_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 bulkscore=0 phishscore=0 adultscore=0 mlxscore=0
- malwarescore=0 priorityscore=1501 mlxlogscore=999 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205160096
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <34f47a0c-5c2d-1cdc-fb97-03666a5e1918@gmx.de>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/22 13:13, Tony Krowiak wrote:
-> 
-> 
-> On 5/16/22 12:36 PM, Jason J. Herne wrote:
->> On 4/4/22 18:10, Tony Krowiak wrote:
->>> |@@ -1306,8 +1392,6 @@ static int vfio_ap_mdev_set_kvm(struct ap_matrix_mdev 
->>> *matrix_mdev, kvm_get_kvm(kvm); matrix_mdev->kvm = kvm; - 
->>> memcpy(&matrix_mdev->shadow_apcb, &matrix_mdev->matrix, - sizeof(struct ap_matrix)); 
->>> kvm_arch_crypto_set_masks(kvm, matrix_mdev->shadow_apcb.apm, 
->>> matrix_mdev->shadow_apcb.aqm, matrix_mdev->shadow_apcb.adm);|
->>
->> This looks like an unrelated change. Does this snippet really belong to this patch?
-> 
-> It's kind of hard to tell which snippet you are talking about without the patch context, 
-> but I assume you are referring to the removal of the memcpy statement in the 
-> vfio_ap_mdev_set_kvm() function in which case this snippet belongs with this patch.
-> 
-> This patch introduces a function that filters the contents of the matrix_mdev->matrix to 
-> ensure that the matrix_mdev->shadow_apcb contains only queues that are bound to the 
-> vfio_ap device driver. The filtering function is called whenever an adapter, domain or 
-> control domain is assigned or unassigned, so it is no longer necessary to copy the 
-> contents of matrix_mdev->matrix into matrix_mdev->shadow_apcb before setting the masks in 
-> the guest; that will have already been done by the filter function.
-> 
-> 
+On Wed, May 11, 2022 at 09:56:59PM +0200, Lino Sanfilippo wrote:
+> On 11.05.22 at 17:09, Jarkko Sakkinen wrote:
+> > On Mon, May 09, 2022 at 10:05:58AM +0200, Lino Sanfilippo wrote:
+> >> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> >>
+> >> There is no need to check for the irq test completion at each data
+> >> transmission during the driver livetime. Instead do the check only once at
+> >> driver startup.
+> >>
+> >> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> >> ---
+> >>  drivers/char/tpm/tpm_tis_core.c | 68 +++++++++++----------------------
+> >>  1 file changed, 22 insertions(+), 46 deletions(-)
+> >>
+> >> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> >> index bdfde1cd71fe..4c65718feb7d 100644
+> >> --- a/drivers/char/tpm/tpm_tis_core.c
+> >> +++ b/drivers/char/tpm/tpm_tis_core.c
+> >> @@ -432,7 +432,7 @@ static void disable_interrupts(struct tpm_chip *chip)
+> >>   * tpm.c can skip polling for the data to be available as the interrupt is
+> >>   * waited for here
+> >>   */
+> >> -static int tpm_tis_send_main(struct tpm_chip *chip, const u8 *buf, size_t len)
+> >> +static int tpm_tis_send(struct tpm_chip *chip, u8 *buf, size_t len)
+> >>  {
+> >>  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+> >>  	int rc;
+> >> @@ -465,30 +465,6 @@ static int tpm_tis_send_main(struct tpm_chip *chip, const u8 *buf, size_t len)
+> >>  	return rc;
+> >>  }
+> >>
+> >> -static int tpm_tis_send(struct tpm_chip *chip, u8 *buf, size_t len)
+> >> -{
+> >> -	int rc, irq;
+> >> -	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+> >> -
+> >> -	if (!(chip->flags & TPM_CHIP_FLAG_IRQ) ||
+> >> -	     test_bit(TPM_TIS_IRQTEST_OK, &priv->irqtest_flags))
+> >> -		return tpm_tis_send_main(chip, buf, len);
+> >> -
+> >> -	/* Verify receipt of the expected IRQ */
+> >> -	irq = priv->irq;
+> >> -	priv->irq = 0;
+> >> -	chip->flags &= ~TPM_CHIP_FLAG_IRQ;
+> >> -	rc = tpm_tis_send_main(chip, buf, len);
+> >> -	priv->irq = irq;
+> >> -	chip->flags |= TPM_CHIP_FLAG_IRQ;
+> >> -	if (!test_bit(TPM_TIS_IRQTEST_OK, &priv->irqtest_flags))
+> >> -		tpm_msleep(1);
+> >> -	if (!test_bit(TPM_TIS_IRQTEST_OK, &priv->irqtest_flags))
+> >> -		disable_interrupts(chip);
+> >> -	set_bit(TPM_TIS_IRQTEST_OK, &priv->irqtest_flags);
+> >> -	return rc;
+> >> -}
+> >> -
+> >>  struct tis_vendor_durations_override {
+> >>  	u32 did_vid;
+> >>  	struct tpm1_version version;
+> >> @@ -759,51 +735,54 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
+> >>
+> >>  	rc = tpm_tis_read8(priv, TPM_INT_VECTOR(priv->locality),
+> >>  			   &original_int_vec);
+> >> -	if (rc < 0)
+> >> +	if (rc < 0) {
+> >> +		disable_interrupts(chip);
+> >>  		return rc;
+> >> +	}
+> >>
+> >>  	rc = tpm_tis_write8(priv, TPM_INT_VECTOR(priv->locality), irq);
+> >>  	if (rc < 0)
+> >> -		return rc;
+> >> +		goto out_err;
+> >>
+> >>  	rc = tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &int_status);
+> >>  	if (rc < 0)
+> >> -		return rc;
+> >> +		goto out_err;
+> >>
+> >>  	/* Clear all existing */
+> >>  	rc = tpm_tis_write32(priv, TPM_INT_STATUS(priv->locality), int_status);
+> >>  	if (rc < 0)
+> >> -		return rc;
+> >> +		goto out_err;
+> >>
+> >>  	/* Turn on */
+> >>  	rc = tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality),
+> >>  			     intmask | TPM_GLOBAL_INT_ENABLE);
+> >>  	if (rc < 0)
+> >> -		return rc;
+> >> +		goto out_err;
+> >>
+> >>  	clear_bit(TPM_TIS_IRQTEST_OK, &priv->irqtest_flags);
+> >> -	chip->flags |= TPM_CHIP_FLAG_IRQ;
+> >>
+> >>  	/* Generate an interrupt by having the core call through to
+> >>  	 * tpm_tis_send
+> >>  	 */
+> >>  	rc = tpm_tis_gen_interrupt(chip);
+> >>  	if (rc < 0)
+> >> -		return rc;
+> >> +		goto out_err;
+> >>
+> >> -	/* tpm_tis_send will either confirm the interrupt is working or it
+> >> -	 * will call disable_irq which undoes all of the above.
+> >> -	 */
+> >> -	if (!(chip->flags & TPM_CHIP_FLAG_IRQ)) {
+> >> -		rc = tpm_tis_write8(priv, original_int_vec,
+> >> -				TPM_INT_VECTOR(priv->locality));
+> >> -		if (rc < 0)
+> >> -			return rc;
+> >> +	tpm_msleep(1);
+> >>
+> >> -		return 1;
+> >> -	}
+> >> +	/* Verify receipt of the expected IRQ */
+> >> +	if (!test_bit(TPM_TIS_IRQTEST_OK, &priv->irqtest_flags))
+> >> +		goto out_err;
+> >> +
+> >> +	chip->flags |= TPM_CHIP_FLAG_IRQ;
+> >>
+> >>  	return 0;
+> >> +
+> >> +out_err:
 
-I was apparently a little overzealous with my trimming. Yes, you are correct. Thanks for
-the explanation.
+Rename this as just 'err'.
 
-Reviewed-by: Jason J. Herne <jjherne@linux.ibm.com>
+> >> +	disable_interrupts(chip);
+> >> +	tpm_tis_write8(priv, original_int_vec, TPM_INT_VECTOR(priv->locality));
+> >> +
+> >> +	return rc;
+> >>  }
+> >>
+> >>  /* Try to find the IRQ the TPM is using. This is for legacy x86 systems that
+> >> @@ -1075,12 +1054,9 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+> >>  		if (irq) {
+> >>  			tpm_tis_probe_irq_single(chip, intmask, IRQF_SHARED,
+> >>  						 irq);
+> >> -			if (!(chip->flags & TPM_CHIP_FLAG_IRQ)) {
+> >> +			if (!(chip->flags & TPM_CHIP_FLAG_IRQ))
+> >>  				dev_err(&chip->dev, FW_BUG
+> >>  					"TPM interrupt not working, polling instead\n");
+> >> -
+> >> -				disable_interrupts(chip);
+> >> -			}
+> >>  		} else {
+> >>  			tpm_tis_probe_irq(chip, intmask);
+> >>  		}
+> >> --
+> >> 2.36.0
+> >>
+> >
+> > For me this looks just code shuffling.
+> >
+> > I don't disagree but changing working code without actual semantical
+> > reasons neither makes sense.
+> >
+> > BR, Jarkko
+> >
+> 
+> Well the semantical reason for this change is that the check for irq test completion
+> only has to be done once for the driver livetime. There is no point in doing it
+> over and over again for each transmission.
+> So the code is not simply shuffled around, it is shifted to a place where it is only
+> executed once.
+> 
+> This is not a bugfix but it is clearly an improvement/cleanup. As far as I understood
+> from your comments on the earlier versions of this patch set cleanups are also ok as
+> long as they are not intermixed with bugfixes.
 
+The patch does not do anything particulary useful IMHO. There's no
+stimulus to do this change.
 
--- 
--- Jason J. Herne (jjherne@linux.ibm.com)
+> Regards,
+> Lino
+
+BR, Jarkko

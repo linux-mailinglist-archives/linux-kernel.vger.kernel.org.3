@@ -2,123 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3672B528745
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 631F3528747
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244729AbiEPOl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 10:41:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42668 "EHLO
+        id S240800AbiEPOmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 10:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244674AbiEPOlM (ORCPT
+        with ESMTP id S232814AbiEPOmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 10:41:12 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB552CCB7;
-        Mon, 16 May 2022 07:41:11 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id 674151F42330
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652712069;
-        bh=8BYTLgL7DNJMJHGxPDAPccqtEpDPhR7Z3zFk1UgBjIc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fsXq9RO5eqw/T8yDtZ9lIbJ1TmFcfGOYBVOnvXCQYo0FpkwjkzWr5K+eQFZnBaOml
-         fCBWcoMOeljiNkSas8UyyJqbj9Vz4AXbYnjHK4NwYb5+78oRZ08JyAVGl7QauMJhrU
-         IgX+OQu/IdZFaguIkyeI51Ze64t86HjO4TtIScPoxQMA7fzBFejhchi6hmCthMzN9I
-         Qfv3Zp8wjs2O+E4uYet8U58e1c4I/HZowCndnSyi2NyVXe2RAfZA8FEHinx9g55Ayd
-         h7sA3v5xQYcifDGKTfi9yXTQdqcF8tkMoAFWlG8uAYxFsL9PL5dENowgbelKhL5X2j
-         TzGD5vVwGGNtw==
-Date:   Mon, 16 May 2022 10:41:04 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>, kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Tzung-Bi Shih <tzungbi@google.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] dt-bindings: remoteproc: mediatek: Make l1tcm reg
- exclusive to mt819x
-Message-ID: <20220516144104.yvy2a2lncdcgznu6@notapiano>
-References: <20220511195452.871897-1-nfraprado@collabora.com>
- <20220511195452.871897-2-nfraprado@collabora.com>
- <30978e5a-18ef-3ea2-8df3-3ced50f44bfc@linaro.org>
+        Mon, 16 May 2022 10:42:36 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCA32DD4C
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:42:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652712155; x=1684248155;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=uokgEubVQ9i6ZsvjgXaoP93pmMIsQrs/2gbc1dQeuNQ=;
+  b=iORNAeVZtATqe/x2j7LN2jHujPzNO839G2oA8AaITXSAygJgBFD/J2Ay
+   c1Tz37XyJtDD98Mg2gsssL7TkP8eIILpCmaRBusyBDlCm3BCxsa8yO9ll
+   GN1g1PVEdStjvUkvVf/cuoTkha7WPXUZdndmBj12d38sDGEhKG7LOixVP
+   KmYE0WissxrzsJDbvjmF8GrQWNcCf+g9cYE1+MbThYY8SomoKp6mBnLjR
+   EyOdnYN4UqRp0k2T/ig+yWmyLYZD9pbtTyBx1a3ABsOz9aMUXab8z3sID
+   0/adlYqPI32V9YmMxCqYRuXwazyLpK5l7GeZ0QPgIaq4XNYjasHAw8dcl
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="296121529"
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="296121529"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 07:42:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="699565857"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 16 May 2022 07:42:33 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nqbvc-00006f-ID;
+        Mon, 16 May 2022 14:42:32 +0000
+Date:   Mon, 16 May 2022 22:42:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: vmlinux.o: warning: objtool: __fentry__()+0x8d: call without frame
+ pointer save/setup
+Message-ID: <202205162241.fTWJlbRp-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <30978e5a-18ef-3ea2-8df3-3ced50f44bfc@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 10:15:51AM +0200, Krzysztof Kozlowski wrote:
-> On 11/05/2022 21:54, Nícolas F. R. A. Prado wrote:
-> 
-> Thank you for your patch. There is something to discuss/improve.
-> 
-> >  
-> > -if:
-> > -  properties:
-> > -    compatible:
-> > -      enum:
-> > -        - mediatek,mt8183-scp
-> > -        - mediatek,mt8192-scp
-> > -then:
-> > -  required:
-> > -    - clocks
-> > -    - clock-names
-> > +allOf:
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          enum:
-> > +            - mediatek,mt8183-scp
-> > +            - mediatek,mt8192-scp
-> > +    then:
-> > +      required:
-> > +        - clocks
-> > +        - clock-names
-> > +
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          enum:
-> > +            - mediatek,mt8183-scp
-> > +            - mediatek,mt8186-scp
-> > +    then:
-> > +      properties:
-> > +        reg:
-> > +          maxItems: 2
-> > +        reg-names:
-> > +          maxItems: 2
-> 
-> Isn't l1tcm required on mt819x? Now it is left optional.
+Hi Peter,
 
-Hi Krzysztof,
+FYI, the error/warning still remains.
 
-actually l1tcm is optional for mt819x, as commented by Tzung-Bi on v4 [1]. So
-that change was intended.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   42226c989789d8da4af1de0c31070c96726d990c
+commit: ed53a0d971926e484d86cce617ec02a7ee85c3fe x86/alternative: Use .ibt_endbr_seal to seal indirect calls
+date:   9 weeks ago
+config: x86_64-randconfig-c022-20220516 (https://download.01.org/0day-ci/archive/20220516/202205162241.fTWJlbRp-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ed53a0d971926e484d86cce617ec02a7ee85c3fe
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout ed53a0d971926e484d86cce617ec02a7ee85c3fe
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Thanks,
-Nícolas
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-[1] https://lore.kernel.org/all/CA+Px+wXQjys8xvTSSJkLXoGp4yQnANbKWBtfuxiYi0UX6DH0jw@mail.gmail.com/
+All warnings (new ones prefixed by >>):
 
-> 
-> 
-> Best regards,
-> Krzysztof
+   vmlinux.o: warning: objtool: ibt_selftest()+0x11: sibling call from callable instruction with modified stack frame
+>> vmlinux.o: warning: objtool: __fentry__()+0x8d: call without frame pointer save/setup
+   vmlinux.o: warning: objtool: ibt_selftest()+0x1e: return with modified stack frame
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

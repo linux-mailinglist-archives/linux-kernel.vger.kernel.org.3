@@ -2,124 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3665952933C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:57:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF90529342
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349505AbiEPV5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 17:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33196 "EHLO
+        id S1349522AbiEPV7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 17:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348377AbiEPV5S (ORCPT
+        with ESMTP id S238657AbiEPV7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 17:57:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37EC046153
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 14:57:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BBAADB8167C
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 21:57:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E395AC385AA;
-        Mon, 16 May 2022 21:57:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652738234;
-        bh=2UX7VEgWXWplRyuYdw1siYA11iPaD+OUY4Jd+8EeMa0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JDmKHFOu9IFpLO2Wyz/Hx0s2TDB4CJS6B9cKO7EHAKBz4GNJR5e2sVf3Tr2akBjcE
-         Uq0qyjaONDDsWYkqLqXBmqNQSV5HWBokg53FFZ1c6vbv9aJReqfGhHoJsGOxNF0+w+
-         lMEoq/gnk2V2gy96ns7i1qVlD0o5c7rL3hR7snvS36rgKB2qTye7gyLaBDrBOX370U
-         M93q7aT4S/Ul5BiaGn9Wzm+PguIGzQe/OsoHps0RFkXCizs8niVZ0urQHuqFg0rueq
-         53xB1n+amXVZy9Soj4spMPxkwVXo2IbR5ZH83Fcx+b/Gn3JBUgx2Yzpqyqhtv5tnaS
-         Q81R7FbGnXhIw==
-Date:   Mon, 16 May 2022 14:57:12 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Tom Rix <trix@redhat.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
-        arnd@arndb.de, gregkh@linuxfoundation.org, ricky_wu@realtek.com,
-        kai.heng.feng@canonical.com, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] misc: rtsx: Set setting_reg2 before use.
-Message-ID: <YoLIuKf/1OcRtjdX@dev-arch.thelio-3990X>
-References: <20220516130047.3887590-1-trix@redhat.com>
- <YoJ0I/XPoj1B/+mm@dev-arch.thelio-3990X>
- <d34498ad-0230-7c73-8f1f-9ca59fbf930f@redhat.com>
- <CAKwvOd=-H+rvt83rgrR3GyXdSDe+n0aG8CFLEshij9jNAzCQtw@mail.gmail.com>
+        Mon, 16 May 2022 17:59:10 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6EF846150;
+        Mon, 16 May 2022 14:59:09 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GLi0V1019350;
+        Mon, 16 May 2022 21:59:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=JnK/MfOUk7bOHMz+YFhvU/1hnQiz5Cgwb3eibBD0jTc=;
+ b=dTvcd0mq9jolvsc0zQ6S6L6UKgdXW2NaxSNlsq9cdJQKR+EO0tD3KDIDnSt6NAn5hknN
+ 59VCPaBkXqXLZS45ddKvmnT70rT7hs2wYeX1I7l9XLEu/oIRkL4bDf03yc7de4LCQAv3
+ cBiau468/tHkDPV++Pb6rVlxKcKwPSnyH7c7/JHptSwcnebHRX0xAzQr+YcCZyuFsAxq
+ hp8M+EcoB8BDjiDGhEVmGAjG8w/Grl/G3Y3hCbwiKB0K1rCoQfyrn0kg9kkMsq4XY1jH
+ 8Qlox0PtwTJpiQra8dlZFT7scu5aFq/Hbaoba0q9a+Vc/GOcuRaQls+LcuZvLtzf4ovc vQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3xsn86c8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 21:59:07 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24GLtsKb023222;
+        Mon, 16 May 2022 21:59:07 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3xsn86c2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 21:59:06 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24GLqWsC030888;
+        Mon, 16 May 2022 21:59:06 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma01dal.us.ibm.com with ESMTP id 3g242aw8m3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 21:59:05 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24GLx4YH31523300
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 16 May 2022 21:59:04 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 607D1BE053;
+        Mon, 16 May 2022 21:59:04 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 55AF8BE051;
+        Mon, 16 May 2022 21:59:02 +0000 (GMT)
+Received: from [9.211.37.97] (unknown [9.211.37.97])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon, 16 May 2022 21:59:02 +0000 (GMT)
+Message-ID: <305208c4-db8a-5751-2ffc-753751a70815@linux.ibm.com>
+Date:   Mon, 16 May 2022 17:59:01 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v7 17/22] vfio-pci/zdev: add open/close device hooks
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     alex.williamson@redhat.com, linux-s390@vger.kernel.org,
+        cohuck@redhat.com, schnelle@linux.ibm.com, farman@linux.ibm.com,
+        pmorel@linux.ibm.com, borntraeger@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
+        agordeev@linux.ibm.com, svens@linux.ibm.com, frankja@linux.ibm.com,
+        david@redhat.com, imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
+        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220513191509.272897-1-mjrosato@linux.ibm.com>
+ <20220513191509.272897-18-mjrosato@linux.ibm.com>
+ <20220516172734.GE1343366@nvidia.com>
+ <7a31ec36-ceaf-dcef-8bd0-2b4732050aed@linux.ibm.com>
+ <20220516183558.GN1343366@nvidia.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <20220516183558.GN1343366@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 30vzLlm2jfEQCdAcYolnWjE_hD2_ye-R
+X-Proofpoint-ORIG-GUID: fIATfKPX76OaK45AxglriohR6Kt7GXwL
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOd=-H+rvt83rgrR3GyXdSDe+n0aG8CFLEshij9jNAzCQtw@mail.gmail.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-16_15,2022-05-16_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ lowpriorityscore=0 phishscore=0 bulkscore=0 impostorscore=0
+ mlxlogscore=864 suspectscore=0 priorityscore=1501 malwarescore=0
+ clxscore=1015 spamscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2205160121
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 02:22:50PM -0700, Nick Desaulniers wrote:
-> On Mon, May 16, 2022 at 10:06 AM Tom Rix <trix@redhat.com> wrote:
-> >
-> >
-> > On 5/16/22 8:56 AM, Nathan Chancellor wrote:
-> > > On Mon, May 16, 2022 at 09:00:47AM -0400, Tom Rix wrote:
-> > >> The clang build fails with
-> > >> rts5261.c:406:13: error: variable 'setting_reg2' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-> > >>          } else if (efuse_valid == 0) {
-> > >>                     ^~~~~~~~~~~~~~~~
-> > >>
-> > >> setting_reg2 is set in this block
-> > >>    if (efuse_valid == 2 || efuse_valid == 3) {
-> > >> ..
-> > >>    } else if (efuse_valid == 0) {
-> > >>      // default
-> > >> ..
-> > >>    }
-> > >> But efuse_valid can also have a value of 1.
-> > >> Change the 'else if' to 'else' to make the second block the default.
-> > >>
-> > >> Fixes: b1c5f3085149 ("misc: rtsx: add rts5261 efuse function")
-> > >> Signed-off-by: Tom Rix <trix@redhat.com>
-> > > I am not sure if this fix is correct from a functional standpoint (i.e.
-> > > is treating efuse_valid == 1 the same as efuse_valid == 0 correct?) but
-> > > it is better than not handling this value altogether. For what it's
-> > > worth:
-> >
-> > I looked at how the code used to work, this seemed better than
-> > initializing to NULL.
-> >
-> > >
-> > > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> > >
-> > > As a side note, it is unfortunate that this change made it into -next
-> > > when there was an outstanding report about this warning:
-> >
-> >  From the clang side, this is a build break and my static analysis infra
-> > goes down.
-> >
-> > These build breaks seem to happening every week, is there a precommit
-> > clang gating test that could be done for -next ?
+On 5/16/22 2:35 PM, Jason Gunthorpe wrote:
+> On Mon, May 16, 2022 at 02:30:46PM -0400, Matthew Rosato wrote:
 > 
-> Probably worth asking Stephen, though I don't think there's _any_
-> gating (i.e. presubmit testing) for -next, since that'd increase the
-> build capacity needed. -next is tested post-merge (i.e. post submit
-> testing) IIUC.
+>> Conceptually I think this would work for QEMU anyway (it always sets the kvm
+>> before we open the device).  I tried to test the idea quickly but couldn't
+>> get the following to apply on vfio-next or your vfio_group_locking -- but I
+>> understand what you're trying to do so I'll re-work and try it out.
+> 
+> I created it on 8c9350e9bf43de1ebab3cc8a80703671e6495ab4 which is the
+> vfio_group_locking.. I can send you a github if it helps
+> https://github.com/jgunthorpe/linux/commits/vfio_group_lockin
+> 
+Thanks -- I was able to successfully test your proposed idea (+ some 
+changes to make it compile :)) on top of vfio_group_locking along with a 
+modified version of my zdev series.  I also tried it out with vfio-ap 
+successfully, but have nothing to test GVT with.
 
-Stephen does do build testing during the merges ("Between each merge,
-the tree was built with a ppc64_defconfig for powerpc, an allmodconfig
-for x86_64, a multi_v7_defconfig for arm and a native build of
-tools/perf"), in addition to testing after the final tree is done.
-
-https://lore.kernel.org/20220516205718.2c5a52f9@canb.auug.org.au/
-
-Increasing the "during merge" testing is not a reasonable request (IMO)
-due to the additional time it would add to the entire -next process.  I
-am not sure that having Stephen do builds with clang post merge is any
-different from all the existing build coverage that we already have (the
-tree is already done at that point), other than maybe people listen to a
-human complaining more than a robot... :)
-
-Cheers,
-Nathan
+That said, this has caused me to realize that 'iommu: 
+iommu_group_claim_dma_owner() must always assign a domain' breaks s390x 
+vfio-pci :( I wonder if it is due to the way s390x PCI currently 
+switches between dma ops and iommu ops.  It looks like it breaks vfio-ap 
+mdevs too, but I know less about that --  I will have to investigate 
+both more tomorrow.

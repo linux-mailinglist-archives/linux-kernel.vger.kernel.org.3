@@ -2,161 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 888E3527D00
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 07:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97298527D06
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 07:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238708AbiEPFJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 01:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
+        id S238752AbiEPFTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 01:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232422AbiEPFJt (ORCPT
+        with ESMTP id S232422AbiEPFTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 01:09:49 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2BF28991;
-        Sun, 15 May 2022 22:09:47 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24G59NY7086792;
-        Mon, 16 May 2022 00:09:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1652677763;
-        bh=/z8oplWf9RSWaittYINIFexlqAXiWjMlkFiA5nmmoYU=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=r4nnrlnpqplRCyzn6VGT6+AfQjnBRw3KDNXaNX7ytkARud3afDWhP0hQOesnhoPNU
-         y52n0NjZYcvbVcQ+q+5owau7fI5C8e7DwgwYIZ64KOzNFYURU0Lb+cad7etmcINtC1
-         oTLYtLvDYSzx5pQFV7hZaccmWGo7cA0Q7laHLKZs=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24G59Nrg004775
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 16 May 2022 00:09:23 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 16
- May 2022 00:09:22 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 16 May 2022 00:09:22 -0500
-Received: from [172.24.220.119] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24G59FTt004004;
-        Mon, 16 May 2022 00:09:16 -0500
-Message-ID: <a5e14871-db4f-54ce-b925-0787750ab6c2@ti.com>
-Date:   Mon, 16 May 2022 10:39:15 +0530
+        Mon, 16 May 2022 01:19:40 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CBA35A8F
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 22:19:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=j61Lk+lXHdyvFlw3E6J/i5mxpaw1t3F5zTGmgjpL47w=; b=VD+ckcEpO8NYFYuFn30rfGesR0
+        JJH49HIYQsOkQIrZFjjlxFOqInZBw3D6jaRupFRdzai7XsMfyP4DUuK1tEviEhLKKSWqXz1ZlW7Gr
+        x9+zgPnwoW+6M4FJdJmObJoT3zPD8di2EyapaQf4XNx0pU7G6eAkgIpIIvdTx4uVRWojqN2K8n1cr
+        jSvOLrWkvfLUYopPshH/zR4zKjApUMCYlGg2r42JvI5KzEfLXmZLni2Bppb03kvP2C6nbkVVgcz+j
+        3yZkUNpShniYB0h3KyYgE+YG5DLcdduOqLG0qFD74NQypOrK7xr9qdhmaknKdjtcekLUnpuaOhHU1
+        9PaJ1ybA==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nqT8b-009aQ3-FL; Mon, 16 May 2022 05:19:21 +0000
+Message-ID: <4aeee9a4-e8e1-bcac-1ebb-f2b8860ba363@infradead.org>
+Date:   Sun, 15 May 2022 22:19:16 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 2/2] net: ti: icssg-prueth: Add ICSSG ethernet driver
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] scripts:modify output format
 Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-CC:     <linux-kernel@vger.kernel.org>, <davem@davemloft.net>,
-        <edumazet@google.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <nm@ti.com>, <ssantosh@kernel.org>, <s-anna@ti.com>,
-        <linux-arm-kernel@lists.infradead.org>, <rogerq@kernel.org>,
-        <grygorii.strashko@ti.com>, <vigneshr@ti.com>, <kishon@ti.com>,
-        <robh+dt@kernel.org>, <afd@ti.com>
-References: <20220506052433.28087-1-p-mohan@ti.com>
- <20220506052433.28087-3-p-mohan@ti.com> <YnVQW7xpSWEE2/HP@lunn.ch>
- <f674c56c-0621-f471-9517-5c349940d362@ti.com> <YnkJ5bFd72d0FagD@lunn.ch>
-From:   Puranjay Mohan <p-mohan@ti.com>
-In-Reply-To: <YnkJ5bFd72d0FagD@lunn.ch>
-Content-Type: text/plain; charset="UTF-8"
+To:     Dong Chuanjian <chuanjian@nfschina.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Changbin Du <changbin.du@intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-kernel@vger.kernel.org, Kernel@nfschina.com
+References: <20220516020442.GA4277@localhost.localdomain>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220516020442.GA4277@localhost.localdomain>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
+Hi,
 
-On 09/05/22 18:02, Andrew Lunn wrote:
->>>> +static void icssg_init_emac_mode(struct prueth *prueth)
->>>> +{
->>>> +	u8 mac[ETH_ALEN] = { 0 };
->>>> +
->>>> +	if (prueth->emacs_initialized)
->>>> +		return;
->>>> +
->>>> +	regmap_update_bits(prueth->miig_rt, FDB_GEN_CFG1, SMEM_VLAN_OFFSET_MASK, 0);
->>>> +	regmap_write(prueth->miig_rt, FDB_GEN_CFG2, 0);
->>>> +	/* Clear host MAC address */
->>>> +	icssg_class_set_host_mac_addr(prueth->miig_rt, mac);
->>>
->>> Seems an odd thing to do, set it to 00:00:00:00:00:00. You probably
->>> want to add a comment why you do this odd thing.
->>
->> Actually, this is when the device is configured as a bridge, the host
->> mac address has to be set to zero to while bringing it back to emac
->> mode. I will add a comment to explain this.
+The change looks good to me, but there are a few other
+"process" problems.
+
+1. Was there a compiler warning that caused this patch?
+If so, then tell us about it.
+
+2. This is v2 of the patch. You should describe what changed
+between v1 and v2 (below the first --- line).
+
+Thanks.
+
+On 5/15/22 19:04, Dong Chuanjian wrote:
+> scripts:modify output format
 > 
-> I don't see any switchdev interface. How does it get into bridge mode?
-
-I will be sending patches to add the switch mode support after this
-series gets merged.
-
+> Signed-off-by: Dong Chuanjian <chuanjian@nfschina.com>
+> ---
+>  scripts/kallsyms.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->>>> +	} else if (emac->link) {
->>>> +		new_state = true;
->>>> +		emac->link = 0;
->>>> +		/* defaults for no link */
->>>> +
->>>> +		/* f/w should support 100 & 1000 */
->>>> +		emac->speed = SPEED_1000;
->>>> +
->>>> +		/* half duplex may not supported by f/w */
->>>> +		emac->duplex = DUPLEX_FULL;
->>>
->>> Why set speed and duplex when you have just lost the link? They are
->>> meaningless until the link comes back.
->>
->> These were just the default values that we added.
->> What do you suggest I put here?
-> 
-> Nothing. If the link is down, they are meaningless. If something is
-> accessing them when the link is down, that code is broken. So i
-> suppose you could give them poison values to help find your broken
-> code.
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index 8caabddf817c..ba50993785ec 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+> @@ -498,7 +498,7 @@ static void write_src(void)
+>  
+>  	output_label("kallsyms_token_index");
+>  	for (i = 0; i < 256; i++)
+> -		printf("\t.short\t%d\n", best_idx[i]);
+> +		printf("\t.short\t%u\n", best_idx[i]);
+>  	printf("\n");
+>  }
+>  
 
-Okay, I will remove it in next version.
-
-> 
->>>> +	for_each_child_of_node(eth_ports_node, eth_node) {
->>>> +		u32 reg;
->>>> +
->>>> +		if (strcmp(eth_node->name, "port"))
->>>> +			continue;
->>>> +		ret = of_property_read_u32(eth_node, "reg", &reg);
->>>> +		if (ret < 0) {
->>>> +			dev_err(dev, "%pOF error reading port_id %d\n",
->>>> +				eth_node, ret);
->>>> +		}
->>>> +
->>>> +		if (reg == 0)
->>>> +			eth0_node = eth_node;
->>>> +		else if (reg == 1)
->>>> +			eth1_node = eth_node;
->>>
->>> and if reg == 4
->>>
->>> Or reg 0 appears twice?
->>
->> In both of the cases that you mentioned, the device tree schema check
->> will fail, hence, we can safely assume that this will be 0 and 1 only.
-> 
-> Nothing forces you to run the scheme checker. It is not run by the
-> kernel before it starts accessing the DT blob. You should assume it is
-> invalid until you have proven it to be valid.
-
-I will add error checking here to make sure it is handled.
-
-> 
-> 	Andrew
-
-Thanks,
-Puranjay Mohan
+-- 
+~Randy

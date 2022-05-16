@@ -2,140 +2,474 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B6D527EC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:45:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3879527ECE
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241261AbiEPHpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 03:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50134 "EHLO
+        id S241255AbiEPHtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 03:49:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241241AbiEPHp0 (ORCPT
+        with ESMTP id S241223AbiEPHtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 03:45:26 -0400
-Received: from server.lespinasse.org (server.lespinasse.org [IPv6:2001:470:82ab::100:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6742495C
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:45:25 -0700 (PDT)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
- d=lespinasse.org; i=@lespinasse.org; q=dns/txt; s=srv-68-ed;
- t=1652687124; h=date : from : to : cc : subject : message-id :
- references : mime-version : content-type : content-transfer-encoding :
- in-reply-to : from; bh=pw3SQmitQZih51+UiGS5tizm1ZvzDcl0PRQC+JGIjCM=;
- b=XMiPrSOfwdfmHpqwPDiHQ5kwPpaT/PRqvzXgXk5VLI1AHwQkW4UkJ0VyzARjYPT7sJ/ZK
- VLbsUG4ljRofBY3Cw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lespinasse.org;
- i=@lespinasse.org; q=dns/txt; s=srv-68-rsa; t=1652687124; h=date :
- from : to : cc : subject : message-id : references : mime-version :
- content-type : content-transfer-encoding : in-reply-to : from;
- bh=pw3SQmitQZih51+UiGS5tizm1ZvzDcl0PRQC+JGIjCM=;
- b=MPb39cPFMsmI2rj1zj+Pb9gyBKGgoODiK4tJuDS5g3kU6SPPoHbK9J2Vi8PiOrQqcmBWH
- YnqFj+i0LEczNHtfZVtKNfNqR3UdteLAV/EMqgllLHV0DGrGJwa0XtXbfcJl36JiM6D6skC
- HryP9WrMzduqE542Yd5cVOb/b/E/y7rx1wPFhKNnnIOb0o3rWwrqHOYlE3/S8A+ECdnwbNh
- qiuGS0uQ4Qn+dzjPnxfcR8IKK0JY876iPYoXicmLKwUH/DhoD6ej3yfPE+vpkaezBmrvfz8
- Q8c1gjNMwPRmd5SL0HtuQVkSuEYlsTDVvG02jIp84bViTY7fXy5NUOTLQQpA==
-Received: by server.lespinasse.org (Postfix, from userid 1000)
-        id 36A6E160B7F; Mon, 16 May 2022 00:45:24 -0700 (PDT)
-Date:   Mon, 16 May 2022 00:45:24 -0700
-From:   Michel Lespinasse <michel@lespinasse.org>
-To:     "lipeifeng@oppo.com" <lipeifeng@oppo.com>
-Cc:     michel <michel@lespinasse.org>, akpm <akpm@linux-foundation.org>,
-        hughd <hughd@google.com>, linux-mm <linux-mm@kvack.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Barry Song <21cnbao@gmail.com>,
-        zhangshiming <zhangshiming@oppo.com>,
-        peifengl55 <peifengl55@gmail.com>
-Subject: Re: Re: [PATCH] mm: fix align-error when get_addr in
- unmapped_area_topdown
-Message-ID: <20220516074524.GA27455@lespinasse.org>
-References: <20220412081014.399-1-lipeifeng@oppo.com>
- <20220412142238.93e36cc4095e4e0b362db348@linux-foundation.org>
- <2022041310411426044561@oppo.com>
- <2022050110235766139218@oppo.com>
- <20220501181041.6d53cb9ed54bf697840e36cc@linux-foundation.org>
- <2022050211305415626916@oppo.com>
- <20220509114521.GA9512@lespinasse.org>
- <2022051610294089439420@oppo.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2022051610294089439420@oppo.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 16 May 2022 03:49:08 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08B025E82;
+        Mon, 16 May 2022 00:49:05 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 843DC1FB1D;
+        Mon, 16 May 2022 07:49:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1652687344; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FHfbjQvmgeHMVCppWrjk3qvoQCSGOOt7FMv3LUPp5v0=;
+        b=MVKBLLVJCiC63Oqw+aIw04HPqFriHhogPGQN02LxTvKsLo+RV7rKYkNYR/cEQbBx7mgco+
+        Xed3hNrt+2eZlt4ZJLvNH7YboXFjSpGAg7bixKE4aJvbGr2/1VWVVJ6ipyzN9qu+clazWn
+        +uAxYy/mESrfdJnF3ljv8y8NuSw6Yv8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1652687344;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FHfbjQvmgeHMVCppWrjk3qvoQCSGOOt7FMv3LUPp5v0=;
+        b=fZxyJvYSDpa3bvNa/nG5l+Zz8b+36hHsOOf+fNzeIzNiQgoNoK0M+YkFLf9CTJpGvl655y
+        vglPOogyDqFjdQAw==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 746822C142;
+        Mon, 16 May 2022 07:49:04 +0000 (UTC)
+Date:   Mon, 16 May 2022 09:49:04 +0200
+Message-ID: <s5h35h9c3yn.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Siddh Raman Pant <siddhpant.gh@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: alsa: Better error messages
+In-Reply-To: <8598037d-0e24-9bc1-3f2c-a2751ec8e871@gmail.com>
+References: <8598037d-0e24-9bc1-3f2c-a2751ec8e871@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 10:43:39AM +0800, lipeifeng@oppo.com wrote:
-> Thank you for your reply.
-> I am sorry for my late reply.
-
-I understand, I was pretty slow to answer myself.
-Let's stop it there with the apologies :)
-
-> > This previous thread is very relevant here:
-> > https://lore.kernel.org/lkml/CANN689G6mGLSOkyj31ympGgnqxnJosPVc4EakW5gYGtA_45L7g@mail.gmail.com/
->
-> > I am sorry that I had confused you with the original poster on that
-> > thread - your proposed changes are very similar. That said, I still
-> > have the exact same concerns that I had at the time. The current
-> > search algorithm is guaranteed to find a gap in O(log N) time, if there
-> > is an available gap of size (requested_size + alignment - page_size).
-> > The modified search only requires an available gap of the requested
-> > size and alignment, but it can take O(N) time which might be too slow.
-> > Maybe we could afford the slow search if it's only used as a fallback
-> > when the fast search fails, but very few people would ever execute
-> > that fallback and that makes it hard to test / easy for bugs to hide in.
+On Fri, 13 May 2022 15:40:57 +0200,
+Siddh Raman Pant wrote:
 > 
-> In my opions, my new methods to search addr take O(log N) time too,
-> is it right? i will only add more action to judge if the space is available
-> at the same time.
-
-Candidate gaps, large enough for an unaligned allocation of the
-desired size, can still be found in O(log N) time. The problem with
-your proposal, is that it might inspect and reject many candidates due
-to being too small for an aligned allocation. In the worst case, there
-might be candidate gaps (again, large enough for an unaligned
-allocation) between every VMA, and every one of them might be too
-small for an aligned allocation. That worst case then becomes O(N) as
-it has to inspect and reject every vma gap.
-
-The current allocation code avoids that issue by only looking for gaps
-of size (requested + alignment - page_size), which are guaranteed to
-be large enough to satisfy an aligned allocation. By being more restrictive
-in the gaps it is looking for, it guarantees that the first gap returned by
-the O(log N) search will always work, thus keeping the overall complexity
-at O(log N). Of course, the issue is if it is so restrictive that it won't
-find any gaps - the design assumption was that virtual address space
-shouldn't be so saturated to make this an issue, but that doesn't seem to
-hold in the use case you are trying to address....
-
-> > If I understand your message at
-> > https://lore.kernel.org/lkml/202204241833454848958@oppo.com/ ,
-> > it seems like some andoid apps such as wechat are filling up
-> > a 32-bit address space such as there is no 13MB gap available anymore
-> > (as would be required by the current search), but there are still some
-> > 12MB gaps aligned on a 1MB boundary, which they are then trying to
-> > allocate from. It seems very odd to me that one would find themselves
-> > in that situation, could you give us some details as to how that happened ?
-> > Do you know what the app is trying to do to fill the address space that way ?
-> > Also, why is this odd behavior considered to be a kernel issue - was the
-> > app previously running on a (quite old !) kernel that didn't have the fast
-> > vma gap search, and is now failing when ported to a more recent kernel ?
+> This allows for potentially better machine-parsing due to an
+> expected / fixed format. Also because of eyecandy reasons.
 > 
-> 1. Wechat just one of the case we found to space unsuccessfully by the old way,
-> others app, like sgame、taobao and so on， which have been found the same
-> issue(The allocated size is 1M~12M). Unfortunately, we can not see how the 
-> above apps operate.
+> Whenever possible, errors will start with the name of the
+> offending card/control, separated by the error with colons.
+> 
+> Whenever there is a description of an error given, the generated
+> error string from snd_strerror will be (mostly) enclosed in
+> parentheses at the end.
+> 
+> Clarity of error messages have been (hopefully) improved.
+> 
+> Signed-off-by: Siddh Raman Pant <siddhpant.gh@gmail.com>
 
-Are such apps running on current android devices ? If so, how ? Do these
-devices ship with kernel patches similar to what you are proposing ?
-Or, are they based on a kernel that is so old (we are talking 8+ years now)
-that it doesn't have the current fast gap search algorithm ?
+Thanks for the patch.
 
---
-Michel "walken" Lespinasse
+But, honestly speaking, I'm not sure whether it worth.
+Although it's possibly a bit more consistent over all texts, I
+don't see significant improvement by this change.
+
+But I'm fine to apply it, so keep this pending and would like to
+hear from others.
+
+
+thanks,
+
+Takashi
+
+> ---
+>  tools/testing/selftests/alsa/mixer-test.c | 94 +++++++++++------------
+>  1 file changed, 47 insertions(+), 47 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/alsa/mixer-test.c b/tools/testing/selftests/alsa/mixer-test.c
+> index a38b89c28..4719b12a5 100644
+> --- a/tools/testing/selftests/alsa/mixer-test.c
+> +++ b/tools/testing/selftests/alsa/mixer-test.c
+> @@ -114,7 +114,7 @@ static void find_controls(void)
+>  
+>  	err = snd_config_load_string(&config, alsa_config, strlen(alsa_config));
+>  	if (err < 0) {
+> -		ksft_print_msg("Unable to parse custom alsa-lib configuration: %s\n",
+> +		ksft_print_msg("Unable to parse custom alsa-lib configuration (%s)\n",
+>  			       snd_strerror(err));
+>  		ksft_exit_fail();
+>  	}
+> @@ -128,7 +128,7 @@ static void find_controls(void)
+>  
+>  		err = snd_ctl_open_lconf(&card_data->handle, name, 0, config);
+>  		if (err < 0) {
+> -			ksft_print_msg("Failed to get hctl for card %d: %s\n",
+> +			ksft_print_msg("Card %d: Failed to get hctl (%s)\n",
+>  				       card, snd_strerror(err));
+>  			goto next_card;
+>  		}
+> @@ -177,9 +177,8 @@ static void find_controls(void)
+>  			err = snd_ctl_elem_info(card_data->handle,
+>  						ctl_data->info);
+>  			if (err < 0) {
+> -				ksft_print_msg("%s getting info for %d\n",
+> -					       snd_strerror(err),
+> -					       ctl_data->name);
+> +				ksft_print_msg("%s : %s while getting info\n",
+> +					       ctl_data->name, snd_strerror(err));
+>  			}
+>  
+>  			snd_ctl_elem_value_set_id(ctl_data->def_val,
+> @@ -192,20 +191,20 @@ static void find_controls(void)
+>  		/* Set up for events */
+>  		err = snd_ctl_subscribe_events(card_data->handle, true);
+>  		if (err < 0) {
+> -			ksft_exit_fail_msg("snd_ctl_subscribe_events() failed for card %d: %d\n",
+> +			ksft_exit_fail_msg("Card %d : snd_ctl_subscribe_events() failed (%d)\n",
+>  					   card, err);
+>  		}
+>  
+>  		err = snd_ctl_poll_descriptors_count(card_data->handle);
+>  		if (err != 1) {
+> -			ksft_exit_fail_msg("Unexpected descriptor count %d for card %d\n",
+> -					   err, card);
+> +			ksft_exit_fail_msg("Card %d : Unexpected descriptor count %d\n",
+> +					   card, err);
+>  		}
+>  
+>  		err = snd_ctl_poll_descriptors(card_data->handle,
+>  					       &card_data->pollfd, 1);
+>  		if (err != 1) {
+> -			ksft_exit_fail_msg("snd_ctl_poll_descriptors() failed for %d\n",
+> +			ksft_exit_fail_msg("Card %d : snd_ctl_poll_descriptors() failed (%d)\n",
+>  				       card, err);
+>  		}
+>  
+> @@ -236,8 +235,8 @@ static int wait_for_event(struct ctl_data *ctl, int timeout)
+>  	do {
+>  		err = poll(&(ctl->card->pollfd), 1, timeout);
+>  		if (err < 0) {
+> -			ksft_print_msg("poll() failed for %s: %s (%d)\n",
+> -				       ctl->name, strerror(errno), errno);
+> +			ksft_print_msg("%s : poll() failed (%d - %s)\n",
+> +				       ctl->name, errno, strerror(errno));
+>  			return -1;
+>  		}
+>  		/* Timeout */
+> @@ -248,12 +247,12 @@ static int wait_for_event(struct ctl_data *ctl, int timeout)
+>  						       &(ctl->card->pollfd),
+>  						       1, &revents);
+>  		if (err < 0) {
+> -			ksft_print_msg("snd_ctl_poll_descriptors_revents() failed for %s: %d\n",
+> +			ksft_print_msg("%s : snd_ctl_poll_descriptors_revents() failed (%d)\n",
+>  				       ctl->name, err);
+>  			return err;
+>  		}
+>  		if (revents & POLLERR) {
+> -			ksft_print_msg("snd_ctl_poll_descriptors_revents() reported POLLERR for %s\n",
+> +			ksft_print_msg("%s : snd_ctl_poll_descriptors_revents() reported POLLERR\n",
+>  				       ctl->name);
+>  			return -1;
+>  		}
+> @@ -265,7 +264,7 @@ static int wait_for_event(struct ctl_data *ctl, int timeout)
+>  
+>  		err = snd_ctl_read(ctl->card->handle, event);
+>  		if (err < 0) {
+> -			ksft_print_msg("snd_ctl_read() failed for %s: %d\n",
+> +			ksft_print_msg("%s : snd_ctl_read() failed (%d)\n",
+>  			       ctl->name, err);
+>  			return err;
+>  		}
+> @@ -283,7 +282,7 @@ static int wait_for_event(struct ctl_data *ctl, int timeout)
+>  		}
+>  
+>  		if ((mask & SND_CTL_EVENT_MASK_REMOVE) == SND_CTL_EVENT_MASK_REMOVE) {
+> -			ksft_print_msg("Removal event for %s\n",
+> +			ksft_print_msg("%s : Removal event\n",
+>  				       ctl->name);
+>  			return -1;
+>  		}
+> @@ -301,7 +300,7 @@ static bool ctl_value_index_valid(struct ctl_data *ctl,
+>  
+>  	switch (snd_ctl_elem_info_get_type(ctl->info)) {
+>  	case SND_CTL_ELEM_TYPE_NONE:
+> -		ksft_print_msg("%s.%d Invalid control type NONE\n",
+> +		ksft_print_msg("%s.%d : Invalid control type NONE\n",
+>  			       ctl->name, index);
+>  		return false;
+>  
+> @@ -312,7 +311,7 @@ static bool ctl_value_index_valid(struct ctl_data *ctl,
+>  		case 1:
+>  			break;
+>  		default:
+> -			ksft_print_msg("%s.%d Invalid boolean value %ld\n",
+> +			ksft_print_msg("%s.%d : Invalid boolean value %ld\n",
+>  				       ctl->name, index, int_val);
+>  			return false;
+>  		}
+> @@ -322,14 +321,14 @@ static bool ctl_value_index_valid(struct ctl_data *ctl,
+>  		int_val = snd_ctl_elem_value_get_integer(val, index);
+>  
+>  		if (int_val < snd_ctl_elem_info_get_min(ctl->info)) {
+> -			ksft_print_msg("%s.%d value %ld less than minimum %ld\n",
+> +			ksft_print_msg("%s.%d : Value %ld is less than the minimum (%ld)\n",
+>  				       ctl->name, index, int_val,
+>  				       snd_ctl_elem_info_get_min(ctl->info));
+>  			return false;
+>  		}
+>  
+>  		if (int_val > snd_ctl_elem_info_get_max(ctl->info)) {
+> -			ksft_print_msg("%s.%d value %ld more than maximum %ld\n",
+> +			ksft_print_msg("%s.%d : Value %ld is more than the maximum (%ld)\n",
+>  				       ctl->name, index, int_val,
+>  				       snd_ctl_elem_info_get_max(ctl->info));
+>  			return false;
+> @@ -339,7 +338,7 @@ static bool ctl_value_index_valid(struct ctl_data *ctl,
+>  		if (snd_ctl_elem_info_get_step(ctl->info) &&
+>  		    (int_val - snd_ctl_elem_info_get_min(ctl->info) %
+>  		     snd_ctl_elem_info_get_step(ctl->info))) {
+> -			ksft_print_msg("%s.%d value %ld invalid for step %ld minimum %ld\n",
+> +			ksft_print_msg("%s.%d : Value %ld is invalid for step %ld, minimum %ld\n",
+>  				       ctl->name, index, int_val,
+>  				       snd_ctl_elem_info_get_step(ctl->info),
+>  				       snd_ctl_elem_info_get_min(ctl->info));
+> @@ -351,14 +350,14 @@ static bool ctl_value_index_valid(struct ctl_data *ctl,
+>  		int64_val = snd_ctl_elem_value_get_integer64(val, index);
+>  
+>  		if (int64_val < snd_ctl_elem_info_get_min64(ctl->info)) {
+> -			ksft_print_msg("%s.%d value %lld less than minimum %lld\n",
+> +			ksft_print_msg("%s.%d : Value %lld is less than the minimum (%lld)\n",
+>  				       ctl->name, index, int64_val,
+>  				       snd_ctl_elem_info_get_min64(ctl->info));
+>  			return false;
+>  		}
+>  
+>  		if (int64_val > snd_ctl_elem_info_get_max64(ctl->info)) {
+> -			ksft_print_msg("%s.%d value %lld more than maximum %lld\n",
+> +			ksft_print_msg("%s.%d : Value %lld is more than the maximum (%lld)\n",
+>  				       ctl->name, index, int64_val,
+>  				       snd_ctl_elem_info_get_max(ctl->info));
+>  			return false;
+> @@ -368,7 +367,7 @@ static bool ctl_value_index_valid(struct ctl_data *ctl,
+>  		if (snd_ctl_elem_info_get_step64(ctl->info) &&
+>  		    (int64_val - snd_ctl_elem_info_get_min64(ctl->info)) %
+>  		    snd_ctl_elem_info_get_step64(ctl->info)) {
+> -			ksft_print_msg("%s.%d value %lld invalid for step %lld minimum %lld\n",
+> +			ksft_print_msg("%s.%d : Value %lld is invalid for step %lld, minimum %lld\n",
+>  				       ctl->name, index, int64_val,
+>  				       snd_ctl_elem_info_get_step64(ctl->info),
+>  				       snd_ctl_elem_info_get_min64(ctl->info));
+> @@ -380,13 +379,13 @@ static bool ctl_value_index_valid(struct ctl_data *ctl,
+>  		int_val = snd_ctl_elem_value_get_enumerated(val, index);
+>  
+>  		if (int_val < 0) {
+> -			ksft_print_msg("%s.%d negative value %ld for enumeration\n",
+> +			ksft_print_msg("%s.%d : Negative value %ld for enumeration\n",
+>  				       ctl->name, index, int_val);
+>  			return false;
+>  		}
+>  
+>  		if (int_val >= snd_ctl_elem_info_get_items(ctl->info)) {
+> -			ksft_print_msg("%s.%d value %ld more than item count %ld\n",
+> +			ksft_print_msg("%s.%d : Value %ld is more than item count (%ld)\n",
+>  				       ctl->name, index, int_val,
+>  				       snd_ctl_elem_info_get_items(ctl->info));
+>  			return false;
+> @@ -427,7 +426,7 @@ static void test_ctl_get_value(struct ctl_data *ctl)
+>  
+>  	/* If the control is turned off let's be polite */
+>  	if (snd_ctl_elem_info_is_inactive(ctl->info)) {
+> -		ksft_print_msg("%s is inactive\n", ctl->name);
+> +		ksft_print_msg("%s : Inactive\n", ctl->name);
+>  		ksft_test_result_skip("get_value.%d.%d\n",
+>  				      ctl->card->card, ctl->elem);
+>  		return;
+> @@ -435,7 +434,7 @@ static void test_ctl_get_value(struct ctl_data *ctl)
+>  
+>  	/* Can't test reading on an unreadable control */
+>  	if (!snd_ctl_elem_info_is_readable(ctl->info)) {
+> -		ksft_print_msg("%s is not readable\n", ctl->name);
+> +		ksft_print_msg("%s : Not readable\n", ctl->name);
+>  		ksft_test_result_skip("get_value.%d.%d\n",
+>  				      ctl->card->card, ctl->elem);
+>  		return;
+> @@ -443,7 +442,7 @@ static void test_ctl_get_value(struct ctl_data *ctl)
+>  
+>  	err = snd_ctl_elem_read(ctl->card->handle, ctl->def_val);
+>  	if (err < 0) {
+> -		ksft_print_msg("snd_ctl_elem_read() failed: %s\n",
+> +		ksft_print_msg("snd_ctl_elem_read() failed (%s)\n",
+>  			       snd_strerror(err));
+>  		goto out;
+>  	}
+> @@ -474,7 +473,7 @@ static void test_ctl_name(struct ctl_data *ctl)
+>  	/* Only boolean controls should end in Switch */
+>  	if (strend(ctl->name, " Switch")) {
+>  		if (snd_ctl_elem_info_get_type(ctl->info) != SND_CTL_ELEM_TYPE_BOOLEAN) {
+> -			ksft_print_msg("%d.%d %s ends in Switch but is not boolean\n",
+> +			ksft_print_msg("%d.%d %s : Not a boolean, but name ends in Switch\n",
+>  				       ctl->card->card, ctl->elem, ctl->name);
+>  			name_ok = false;
+>  		}
+> @@ -484,7 +483,7 @@ static void test_ctl_name(struct ctl_data *ctl)
+>  	if (snd_ctl_elem_info_get_type(ctl->info) == SND_CTL_ELEM_TYPE_BOOLEAN &&
+>  	    snd_ctl_elem_info_is_writable(ctl->info)) {
+>  		if (!strend(ctl->name, " Switch")) {
+> -			ksft_print_msg("%d.%d %s is a writeable boolean but not a Switch\n",
+> +			ksft_print_msg("%d.%d %s : Not a Switch despite being a writeable boolean\n",
+>  				       ctl->card->card, ctl->elem, ctl->name);
+>  			name_ok = false;
+>  		}
+> @@ -542,11 +541,12 @@ static bool show_mismatch(struct ctl_data *ctl, int index,
+>  		/*
+>  		 * NOTE: The volatile attribute means that the hardware
+>  		 * can voluntarily change the state of control element
+> -		 * independent of any operation by software.  
+> +		 * independent of any operation by software.
+>  		 */
+>  		bool is_volatile = snd_ctl_elem_info_is_volatile(ctl->info);
+> -		ksft_print_msg("%s.%d expected %lld but read %lld, is_volatile %d\n",
+> -			       ctl->name, index, expected_int, read_int, is_volatile);
+> +		ksft_print_msg("%s.%d : Expected %lld, but read %lld (%s)\n",
+> +			       ctl->name, index, expected_int, read_int,
+> +			       (is_volatile ? "Volatile" : "Non-volatile"));
+>  		return !is_volatile;
+>  	} else {
+>  		return false;
+> @@ -590,7 +590,7 @@ static int write_and_verify(struct ctl_data *ctl,
+>  
+>  		err = snd_ctl_elem_read(ctl->card->handle, initial_val);
+>  		if (err < 0) {
+> -			ksft_print_msg("snd_ctl_elem_read() failed: %s\n",
+> +			ksft_print_msg("snd_ctl_elem_read() failed (%s)\n",
+>  				       snd_strerror(err));
+>  			return err;
+>  		}
+> @@ -602,7 +602,7 @@ static int write_and_verify(struct ctl_data *ctl,
+>  	 */
+>  	err = snd_ctl_elem_write(ctl->card->handle, w_val);
+>  	if (err < 0 && !error_expected) {
+> -		ksft_print_msg("snd_ctl_elem_write() failed: %s\n",
+> +		ksft_print_msg("snd_ctl_elem_write() failed (%s)\n",
+>  			       snd_strerror(err));
+>  		return err;
+>  	}
+> @@ -615,7 +615,7 @@ static int write_and_verify(struct ctl_data *ctl,
+>  
+>  	err = snd_ctl_elem_read(ctl->card->handle, read_val);
+>  	if (err < 0) {
+> -		ksft_print_msg("snd_ctl_elem_read() failed: %s\n",
+> +		ksft_print_msg("snd_ctl_elem_read() failed (%s)\n",
+>  			       snd_strerror(err));
+>  		return err;
+>  	}
+> @@ -631,13 +631,13 @@ static int write_and_verify(struct ctl_data *ctl,
+>  		err = wait_for_event(ctl, 0);
+>  		if (snd_ctl_elem_value_compare(initial_val, read_val)) {
+>  			if (err < 1) {
+> -				ksft_print_msg("No event generated for %s\n",
+> +				ksft_print_msg("%s : No event generated\n",
+>  					       ctl->name);
+>  				ctl->event_missing++;
+>  			}
+>  		} else {
+>  			if (err != 0) {
+> -				ksft_print_msg("Spurious event generated for %s\n",
+> +				ksft_print_msg("%s : Spurious event generated\n",
+>  					       ctl->name);
+>  				ctl->event_spurious++;
+>  			}
+> @@ -658,7 +658,7 @@ static int write_and_verify(struct ctl_data *ctl,
+>  			mismatch_shown = true;
+>  
+>  	if (!mismatch_shown)
+> -		ksft_print_msg("%s read and written values differ\n",
+> +		ksft_print_msg("%s : Read and written values differ\n",
+>  			       ctl->name);
+>  
+>  	return -1;
+> @@ -674,14 +674,14 @@ static void test_ctl_write_default(struct ctl_data *ctl)
+>  
+>  	/* If the control is turned off let's be polite */
+>  	if (snd_ctl_elem_info_is_inactive(ctl->info)) {
+> -		ksft_print_msg("%s is inactive\n", ctl->name);
+> +		ksft_print_msg("%s : Inactive\n", ctl->name);
+>  		ksft_test_result_skip("write_default.%d.%d\n",
+>  				      ctl->card->card, ctl->elem);
+>  		return;
+>  	}
+>  
+>  	if (!snd_ctl_elem_info_is_writable(ctl->info)) {
+> -		ksft_print_msg("%s is not writeable\n", ctl->name);
+> +		ksft_print_msg("%s : Not writeable\n", ctl->name);
+>  		ksft_test_result_skip("write_default.%d.%d\n",
+>  				      ctl->card->card, ctl->elem);
+>  		return;
+> @@ -689,7 +689,7 @@ static void test_ctl_write_default(struct ctl_data *ctl)
+>  
+>  	/* No idea what the default was for unreadable controls */
+>  	if (!snd_ctl_elem_info_is_readable(ctl->info)) {
+> -		ksft_print_msg("%s couldn't read default\n", ctl->name);
+> +		ksft_print_msg("%s : Couldn't read default\n", ctl->name);
+>  		ksft_test_result_skip("write_default.%d.%d\n",
+>  				      ctl->card->card, ctl->elem);
+>  		return;
+> @@ -808,14 +808,14 @@ static void test_ctl_write_valid(struct ctl_data *ctl)
+>  
+>  	/* If the control is turned off let's be polite */
+>  	if (snd_ctl_elem_info_is_inactive(ctl->info)) {
+> -		ksft_print_msg("%s is inactive\n", ctl->name);
+> +		ksft_print_msg("%s : Inactive\n", ctl->name);
+>  		ksft_test_result_skip("write_valid.%d.%d\n",
+>  				      ctl->card->card, ctl->elem);
+>  		return;
+>  	}
+>  
+>  	if (!snd_ctl_elem_info_is_writable(ctl->info)) {
+> -		ksft_print_msg("%s is not writeable\n", ctl->name);
+> +		ksft_print_msg("%s : Not writeable\n", ctl->name);
+>  		ksft_test_result_skip("write_valid.%d.%d\n",
+>  				      ctl->card->card, ctl->elem);
+>  		return;
+> @@ -868,7 +868,7 @@ static bool test_ctl_write_invalid_value(struct ctl_data *ctl,
+>  	/* ...but some devices will clamp to an in range value */
+>  	err = snd_ctl_elem_read(ctl->card->handle, val);
+>  	if (err < 0) {
+> -		ksft_print_msg("%s failed to read: %s\n",
+> +		ksft_print_msg("%s : Failed to read (%s)\n",
+>  			       ctl->name, snd_strerror(err));
+>  		return true;
+>  	}
+> @@ -1026,14 +1026,14 @@ static void test_ctl_write_invalid(struct ctl_data *ctl)
+>  
+>  	/* If the control is turned off let's be polite */
+>  	if (snd_ctl_elem_info_is_inactive(ctl->info)) {
+> -		ksft_print_msg("%s is inactive\n", ctl->name);
+> +		ksft_print_msg("%s : Inactive\n", ctl->name);
+>  		ksft_test_result_skip("write_invalid.%d.%d\n",
+>  				      ctl->card->card, ctl->elem);
+>  		return;
+>  	}
+>  
+>  	if (!snd_ctl_elem_info_is_writable(ctl->info)) {
+> -		ksft_print_msg("%s is not writeable\n", ctl->name);
+> +		ksft_print_msg("%s : Not writeable\n", ctl->name);
+>  		ksft_test_result_skip("write_invalid.%d.%d\n",
+>  				      ctl->card->card, ctl->elem);
+>  		return;
+> -- 
+> 2.35.1
+> 

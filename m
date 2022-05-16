@@ -2,38 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB3AA528D59
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:45:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F64528D5C
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345081AbiEPSpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 14:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59030 "EHLO
+        id S1345134AbiEPSqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 14:46:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234682AbiEPSpR (ORCPT
+        with ESMTP id S1345095AbiEPSp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 14:45:17 -0400
+        Mon, 16 May 2022 14:45:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253783EA98;
-        Mon, 16 May 2022 11:45:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08C43E0E9
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 11:45:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B456261482;
-        Mon, 16 May 2022 18:45:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85AC9C385AA;
-        Mon, 16 May 2022 18:45:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B9BB61493
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 18:45:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8FDCC34100;
+        Mon, 16 May 2022 18:45:50 +0000 (UTC)
 From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Shuah Khan <shuah@kernel.org>, Will Deacon <will@kernel.org>,
-        Andre Przywara <andre.przywara@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] kselftest/arm64: bti: force static linking
-Date:   Mon, 16 May 2022 19:45:11 +0100
-Message-Id: <165272667337.3711461.11956194541511506230.b4-ty@arm.com>
+To:     "H . Peter Anvin" <hpa@zytor.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Ingo Molnar <mingo@redhat.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Tong Tiangen <tongtiangen@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        James Morse <james.morse@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Andrew Morton <akpm@linux-foundation.org>, x86@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Guohanjun <guohanjun@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Xie XiuQi <xiexiuqi@huawei.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-mm@kvack.org
+Subject: Re: (subset) [PATCH -next v4 0/7]arm64: add machine check safe support
+Date:   Mon, 16 May 2022 19:45:48 +0100
+Message-Id: <165272673863.3711727.11330202585228113786.b4-ty@arm.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220511172129.2078337-1-andre.przywara@arm.com>
-References: <20220511172129.2078337-1-andre.przywara@arm.com>
+In-Reply-To: <20220420030418.3189040-1-tongtiangen@huawei.com>
+References: <20220420030418.3189040-1-tongtiangen@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -46,31 +61,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 May 2022 18:21:29 +0100, Andre Przywara wrote:
-> The "bti" selftests are built with -nostdlib, which apparently
-> automatically creates a statically linked binary, which is what we want
-> and need for BTI (to avoid interactions with the dynamic linker).
+On Wed, 20 Apr 2022 03:04:11 +0000, Tong Tiangen wrote:
+> With the increase of memory capacity and density, the probability of
+> memory error increases. The increasing size and density of server RAM
+> in the data center and cloud have shown increased uncorrectable memory
+> errors.
 > 
-> However this is not true when building a PIE binary, which some
-> toolchains (Ubuntu) configure as the default.
-> When compiling btitest with such a toolchain, it will create a
-> dynamically linked binary, which will probably fail some tests, as the
-> dynamic linker might not support BTI:
-> ===================
-> TAP version 13
-> 1..18
-> not ok 1 nohint_func/call_using_br_x0
-> not ok 2 nohint_func/call_using_br_x16
-> not ok 3 nohint_func/call_using_blr
-> ....
-> ===================
+> Currently, the kernel has a mechanism to recover from hardware memory
+> errors. This patchset provides an new recovery mechanism.
 > 
 > [...]
 
-Applied to arm64 (for-next/kselftest), thanks!
+Applied to arm64 (for-next/misc), thanks!
 
-[1/1] kselftest/arm64: bti: force static linking
-      https://git.kernel.org/arm64/c/d7a49291d786
+[5/7] arm64: mte: Clean up user tag accessors
+      https://git.kernel.org/arm64/c/b4d6bb38f9dc
 
 -- 
 Catalin

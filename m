@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985AB528FE5
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8554528F98
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348498AbiEPUbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55976 "EHLO
+        id S1348470AbiEPT6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350983AbiEPUBy (ORCPT
+        with ESMTP id S1347511AbiEPTwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:01:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF7E4B866;
-        Mon, 16 May 2022 12:56:14 -0700 (PDT)
+        Mon, 16 May 2022 15:52:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86FD241F8C;
+        Mon, 16 May 2022 12:47:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8F5EB81612;
-        Mon, 16 May 2022 19:56:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EDC6C385AA;
-        Mon, 16 May 2022 19:56:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE769B81612;
+        Mon, 16 May 2022 19:47:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28483C385AA;
+        Mon, 16 May 2022 19:47:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730971;
-        bh=jiZIGqimzJx7MG/LdMHB9cLF+AbHoKZ7IVmSgy0pbp8=;
+        s=korg; t=1652730454;
+        bh=DMfk2C4x4pFjrWAncW3ibnLRZMa9P+J5sL+rXn/mBoE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VN4dw2esQzR8UfjiKoNmmJDl75mTHv1pk63V1+la2mDlnmWIn9bP07uLkhVPNMZpM
-         s+xMgwTOVVo/J1bjpfLnuT7ZJJwQslEcfsFg9zbvMG6+CEmvdcpZCqn4SiAxWJFocw
-         j106gYfeAdt9jXeB+q7CFlZ/swWfCik6rLLyZlzE=
+        b=JTC5kbKyeUrhzQUKNLCF5Eb8ts87J8myjJDhWLrH+X98ghC2KWtlNBWj8ars5O0CW
+         HdsLRqE7aStopY9fDAEHLHAvEP/EbGU5vycSU65BfFZh4BaT8SogfQt9ljXg60sZgs
+         La4mWPz2mfT1L3FLfnR1s6KSNz+xkYWRHY2bikDE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Moshe Kol <moshe.kol@mail.huji.ac.il>,
-        Yossi Gilad <yossi.gilad@mail.huji.ac.il>,
-        Amit Klein <aksecurity@gmail.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, Willy Tarreau <w@1wt.eu>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Matthew Hagan <mnhagan88@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 063/114] tcp: resalt the secret every 10 seconds
+Subject: [PATCH 5.10 37/66] net: sfp: Add tx-fault workaround for Huawei MA5671A SFP ONT
 Date:   Mon, 16 May 2022 21:36:37 +0200
-Message-Id: <20220516193627.302439388@linuxfoundation.org>
+Message-Id: <20220516193620.487852712@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
-References: <20220516193625.489108457@linuxfoundation.org>
+In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
+References: <20220516193619.400083785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,68 +55,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Matthew Hagan <mnhagan88@gmail.com>
 
-[ Upstream commit 4dfa9b438ee34caca4e6a4e5e961641807367f6f ]
+[ Upstream commit 2069624dac19d62c558bb6468fe03678553ab01d ]
 
-In order to limit the ability for an observer to recognize the source
-ports sequence used to contact a set of destinations, we should
-periodically shuffle the secret. 10 seconds looks effective enough
-without causing particular issues.
+As noted elsewhere, various GPON SFP modules exhibit non-standard
+TX-fault behaviour. In the tested case, the Huawei MA5671A, when used
+in combination with a Marvell mv88e6085 switch, was found to
+persistently assert TX-fault, resulting in the module being disabled.
 
-Cc: Moshe Kol <moshe.kol@mail.huji.ac.il>
-Cc: Yossi Gilad <yossi.gilad@mail.huji.ac.il>
-Cc: Amit Klein <aksecurity@gmail.com>
-Cc: Jason A. Donenfeld <Jason@zx2c4.com>
-Tested-by: Willy Tarreau <w@1wt.eu>
-Signed-off-by: Eric Dumazet <edumazet@google.com>
+This patch adds a quirk to ignore the SFP_F_TX_FAULT state, allowing the
+module to function.
+
+Change from v1: removal of erroneous return statment (Andrew Lunn)
+
+Signed-off-by: Matthew Hagan <mnhagan88@gmail.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Link: https://lore.kernel.org/r/20220502223315.1973376-1-mnhagan88@gmail.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/secure_seq.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ drivers/net/phy/sfp.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/net/core/secure_seq.c b/net/core/secure_seq.c
-index 55aa5cc258e3..5f85e01d4093 100644
---- a/net/core/secure_seq.c
-+++ b/net/core/secure_seq.c
-@@ -22,6 +22,8 @@
- static siphash_aligned_key_t net_secret;
- static siphash_aligned_key_t ts_secret;
+diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
+index efffa65f8214..96068e0d841a 100644
+--- a/drivers/net/phy/sfp.c
++++ b/drivers/net/phy/sfp.c
+@@ -249,6 +249,7 @@ struct sfp {
+ 	struct sfp_eeprom_id id;
+ 	unsigned int module_power_mW;
+ 	unsigned int module_t_start_up;
++	bool tx_fault_ignore;
  
-+#define EPHEMERAL_PORT_SHUFFLE_PERIOD (10 * HZ)
+ #if IS_ENABLED(CONFIG_HWMON)
+ 	struct sfp_diag diag;
+@@ -1893,6 +1894,12 @@ static int sfp_sm_mod_probe(struct sfp *sfp, bool report)
+ 	else
+ 		sfp->module_t_start_up = T_START_UP;
+ 
++	if (!memcmp(id.base.vendor_name, "HUAWEI          ", 16) &&
++	    !memcmp(id.base.vendor_pn, "MA5671A         ", 16))
++		sfp->tx_fault_ignore = true;
++	else
++		sfp->tx_fault_ignore = false;
 +
- static __always_inline void net_secret_init(void)
- {
- 	net_get_random_once(&net_secret, sizeof(net_secret));
-@@ -100,11 +102,13 @@ u64 secure_ipv6_port_ephemeral(const __be32 *saddr, const __be32 *daddr,
- 	const struct {
- 		struct in6_addr saddr;
- 		struct in6_addr daddr;
-+		unsigned int timeseed;
- 		__be16 dport;
- 	} __aligned(SIPHASH_ALIGNMENT) combined = {
- 		.saddr = *(struct in6_addr *)saddr,
- 		.daddr = *(struct in6_addr *)daddr,
--		.dport = dport
-+		.timeseed = jiffies / EPHEMERAL_PORT_SHUFFLE_PERIOD,
-+		.dport = dport,
- 	};
- 	net_secret_init();
- 	return siphash(&combined, offsetofend(typeof(combined), dport),
-@@ -145,8 +149,10 @@ EXPORT_SYMBOL_GPL(secure_tcp_seq);
- u64 secure_ipv4_port_ephemeral(__be32 saddr, __be32 daddr, __be16 dport)
- {
- 	net_secret_init();
--	return siphash_3u32((__force u32)saddr, (__force u32)daddr,
--			    (__force u16)dport, &net_secret);
-+	return siphash_4u32((__force u32)saddr, (__force u32)daddr,
-+			    (__force u16)dport,
-+			    jiffies / EPHEMERAL_PORT_SHUFFLE_PERIOD,
-+			    &net_secret);
+ 	return 0;
  }
- EXPORT_SYMBOL_GPL(secure_ipv4_port_ephemeral);
- #endif
+ 
+@@ -2320,7 +2327,10 @@ static void sfp_check_state(struct sfp *sfp)
+ 	mutex_lock(&sfp->st_mutex);
+ 	state = sfp_get_state(sfp);
+ 	changed = state ^ sfp->state;
+-	changed &= SFP_F_PRESENT | SFP_F_LOS | SFP_F_TX_FAULT;
++	if (sfp->tx_fault_ignore)
++		changed &= SFP_F_PRESENT | SFP_F_LOS;
++	else
++		changed &= SFP_F_PRESENT | SFP_F_LOS | SFP_F_TX_FAULT;
+ 
+ 	for (i = 0; i < GPIO_MAX; i++)
+ 		if (changed & BIT(i))
 -- 
 2.35.1
 

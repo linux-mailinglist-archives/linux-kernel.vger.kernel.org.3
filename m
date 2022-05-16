@@ -2,114 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0545292F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13DFD5292F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349351AbiEPVfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 17:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35420 "EHLO
+        id S1349364AbiEPVgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 17:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbiEPVfK (ORCPT
+        with ESMTP id S1347346AbiEPVf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 17:35:10 -0400
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E72403CA;
-        Mon, 16 May 2022 14:35:09 -0700 (PDT)
-Received: by mail-oi1-f172.google.com with SMTP id q10so20236079oia.9;
-        Mon, 16 May 2022 14:35:08 -0700 (PDT)
+        Mon, 16 May 2022 17:35:59 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7315A101E
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 14:35:58 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id q130so19683727ljb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 14:35:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uwkH153JjE/VISwDC6yOaTP7NOzBFSKZdipSvNP+ktE=;
+        b=pPEsL44A8/+VNexCO9dAr1v1HAI5ycZSTdy7Flz8UBakDFVI1Rxg0FRqBCOmyGWTXT
+         TVAE+qwcOA6paQsDhTqw2ITaa/gsU/0l/O/x52asujpIJJuF0kTMD7zhJ8OECUjiJTSm
+         or+nY2JtuynV/X2RIdxr05qWoL1N7dVZ9+ghQy3Ox46w6lwgjIwEYwNcr8Bo9Kehx8Wx
+         UpJumvUJjYDPDPWt1ycthLsqqFZEMNJ3HM9JE0VYSbPSrAE3GEZpuyUd8TnRW1qK+e6M
+         Uu2iZivkDEufqTjA9Pnfqxj/SRSwptWKzhvDJMHRaNO6zEfuDLy//XKHmnvMwvb2xWGg
+         I7+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QRRTVmbsOznarMBJuHotqu041qdpgdvGYlyrPqo5TcQ=;
-        b=6Twa4pjszQmTOk6HhVrTszWOhTVCNF40hi2fL+B3uyA1J/EBDNqtAbk/Ia6PINACaG
-         c6eJl9e2HPnEgmwoAGSTOzZ8/VAczv8+vviT9lPjKrCD08PNm3YZmN3LFoWLNSpOnNHB
-         9VeV0JFPhULfcOIZqv5OI66hqkdPtesDlKBYzOHcR8NdjvSvEVsIlYhEEVoPWwHWhouY
-         +gaqZt/IWOnCF8qrnNXuAdzZwOkAdNQPNcYSlMhpfL15EYt9jfhZK+ah4dwFmsrq0jaq
-         pHZ0mo0OnAXYEqxqn9ftkX9nYlwp5acyRqYpCnlYzWEhIQSI9I5n05VrOHFtMSaf0Qf4
-         rPIQ==
-X-Gm-Message-State: AOAM533woWAr1LYfLRkg44f8tZfzCq1iNKQFxlv2S3rUfgUP63TmO8JB
-        si51M8Hqjvi0Je0AZi6y0Q==
-X-Google-Smtp-Source: ABdhPJyg/bljvc3L69umiFFD/pWAfJ6St3S1czd9cyg99pTSQijW+nCzk8jOObbUB2RQvhUXn7OvfQ==
-X-Received: by 2002:aca:4b95:0:b0:326:1179:5414 with SMTP id y143-20020aca4b95000000b0032611795414mr14718839oia.256.1652736908283;
-        Mon, 16 May 2022 14:35:08 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i20-20020a056870345400b000f17905320esm4356783oah.13.2022.05.16.14.35.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 14:35:07 -0700 (PDT)
-Received: (nullmailer pid 3336000 invoked by uid 1000);
-        Mon, 16 May 2022 21:35:06 -0000
-Date:   Mon, 16 May 2022 16:35:06 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rahul Tanwar <rtanwar@maxlinear.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 14/17] PCI: dwc: Check iATU in/outbound ranges setup
- methods status
-Message-ID: <20220516213506.GA3296584-robh@kernel.org>
-References: <20220503214638.1895-1-Sergey.Semin@baikalelectronics.ru>
- <20220503214638.1895-15-Sergey.Semin@baikalelectronics.ru>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uwkH153JjE/VISwDC6yOaTP7NOzBFSKZdipSvNP+ktE=;
+        b=otaF0BRKCpMCl7ctb2v2WJ1+wUrAIvGUzOwZAPFVptJKaKfOiE5AtfY/AnfcnQ4IOW
+         sk1LQgMTIWFDi0RkszZJXX6L81ZsW+zLKfTIg8RIUzfBDNgom8Q4XoAZakcG0FRol4Mq
+         0ycTCzNVRJoCXEMwKsY29UnaQo34FwA54+aBgZMycUt051UiA8SedUkek0mAv2jtPyeU
+         k3WOOlMq8rvjHI8zEeL/AxaIPjwDOASNOouYA3Lo2G5axMR3ofFy696hnM1AFpVnR47T
+         Vgjfpg4l308LGLiECBLXW/JfzzUL7HqEXxhjn+Nc+6hZTH76YTCj48hNz/I2KtTtNEy8
+         IxxA==
+X-Gm-Message-State: AOAM5330Cp1TQEG/wEQvwMY/AnP20sod+VcOUL1D9eCgeQTrDqGA0x1I
+        FyBG97CA/7P+cVayC48VddlC1OXevfBoKiMIytM7GUlw0doOuw==
+X-Google-Smtp-Source: ABdhPJzU9+gfgDOfFGF1PxDHLodCEyA3jCCPrw7fhlBjvTt89XPwU+9AcC6bORZU1NTMdnruU+wLNmh9RPLfai8Jksg=
+X-Received: by 2002:a2e:91cf:0:b0:24f:11ea:d493 with SMTP id
+ u15-20020a2e91cf000000b0024f11ead493mr12125591ljg.408.1652736956594; Mon, 16
+ May 2022 14:35:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220503214638.1895-15-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220511174531.1098548-1-keescook@chromium.org>
+In-Reply-To: <20220511174531.1098548-1-keescook@chromium.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 16 May 2022 14:35:45 -0700
+Message-ID: <CAKwvOdkXUiB3T_YkcqDZAkdvN0=cB2NH-i6jj+Y=sL8r9VCJ6A@mail.gmail.com>
+Subject: Re: [PATCH] lib: overflow: Always build 64-bit test cases
+To:     Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Vitor Massaru Iha <vitor@massaru.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 12:46:35AM +0300, Serge Semin wrote:
-> Let's make the DWC PCIe RC/EP safer and more verbose for the invalid or
-> failed inbound and outbound iATU windows setups. Needless to say that
-> silently ignoring iATU regions setup errors may cause unpredictable
-> errors. For instance if for some reason a cfg or IO window fails to be
-> activated, then any CFG/IO requested won't reach target PCIe devices and
-> the corresponding accessors will return platform-specific random values.
-> 
-> First of all we need to convert dw_pcie_ep_outbound_atu() method to check
-> whether the specified outbound iATU range is successfully setup. That
-> method is called by the pci_epc_ops.map_addr callback. Thus we'll make the
-> EP-specific CPU->PCIe memory mappings saver.
-> 
-> Secondly since the iATU outbound range programming method now returns the
-> operation status, it will be handy to take that status into account in the
-> pci_ops.{map_bus,read,write} methods. Thus any failed mapping will be
-> immediately noticeable by the PCIe CFG operations requesters.
-> 
-> Finally we need to convert the dw_pcie_setup_rc() method to returning the
-> operation status, since the iATU outbound ranges setup procedure may now
-> fail. It will be especially handy in case if the DW PCIe RC DT-node has
-> invalid/unsupported (dma-)ranges property. Note since the suggested
-> modification causes having too wide code indentation, it is reasonable
-> from maintainability and readability points of view to move the outbound
-> ranges setup procedure in the separate function.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+On Wed, May 11, 2022 at 10:45 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> There shouldn't be a reason to not build the 64-bit test cases on 32-bit
+> systems; the types exist there too. Remove the #ifdefs.
+
+I think this is breaking 32b ARM for clang-13 and older?
+https://github.com/ClangBuiltLinux/linux/issues/1636
+
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/lkml/202205110324.7GrtxG8u-lkp@intel.com
+> Fixes: 455a35a6cdb6 ("lib: add runtime test of check_*_overflow functions")
+> Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> Cc: Vitor Massaru Iha <vitor@massaru.org>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: Daniel Latypov <dlatypov@google.com>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 > ---
->  .../pci/controller/dwc/pcie-designware-ep.c   |   9 +-
->  .../pci/controller/dwc/pcie-designware-host.c | 149 ++++++++++++------
->  drivers/pci/controller/dwc/pcie-designware.h  |   5 +-
->  drivers/pci/controller/dwc/pcie-intel-gw.c    |   6 +-
+>  lib/overflow_kunit.c | 4 ----
+>  1 file changed, 4 deletions(-)
+>
+> diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
+> index 475f0c064bf6..ac37bb543476 100644
+> --- a/lib/overflow_kunit.c
+> +++ b/lib/overflow_kunit.c
+> @@ -255,10 +255,8 @@ DEFINE_TEST_FUNC(u16, "%d");
+>  DEFINE_TEST_FUNC(s16, "%d");
+>  DEFINE_TEST_FUNC(u32, "%u");
+>  DEFINE_TEST_FUNC(s32, "%d");
+> -#if BITS_PER_LONG == 64
+>  DEFINE_TEST_FUNC(u64, "%llu");
+>  DEFINE_TEST_FUNC(s64, "%lld");
+> -#endif
+>
+>  static void overflow_shift_test(struct kunit *test)
+>  {
+> @@ -650,10 +648,8 @@ static struct kunit_case overflow_test_cases[] = {
+>         KUNIT_CASE(s16_overflow_test),
+>         KUNIT_CASE(u32_overflow_test),
+>         KUNIT_CASE(s32_overflow_test),
+> -#if BITS_PER_LONG == 64
+>         KUNIT_CASE(u64_overflow_test),
+>         KUNIT_CASE(s64_overflow_test),
+> -#endif
+>         KUNIT_CASE(overflow_shift_test),
+>         KUNIT_CASE(overflow_allocation_test),
+>         KUNIT_CASE(overflow_size_helpers_test),
+> --
+> 2.32.0
+>
 
-I worry that this could regress some platforms that happened to work 
-before. But only one way to find out...
 
-Reviewed-by: Rob Herring <robh@kernel.org>
-
+-- 
+Thanks,
+~Nick Desaulniers

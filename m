@@ -2,141 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD52E527D17
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 07:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D5C527D1D
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 07:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239868AbiEPFlq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 16 May 2022 01:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57006 "EHLO
+        id S239747AbiEPFnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 01:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239802AbiEPFlR (ORCPT
+        with ESMTP id S236196AbiEPFnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 01:41:17 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC32DF48
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 22:41:16 -0700 (PDT)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24FGukFT022042
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 22:41:15 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g29xxf5en-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 22:41:15 -0700
-Received: from twshared8307.18.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sun, 15 May 2022 22:41:09 -0700
-Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-        id D36787AEBCA2; Sun, 15 May 2022 22:41:04 -0700 (PDT)
-From:   Song Liu <song@kernel.org>
-To:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <peterz@infradead.org>,
-        <mcgrof@kernel.org>, <torvalds@linux-foundation.org>,
-        <rick.p.edgecombe@intel.com>, <kernel-team@fb.com>,
-        Song Liu <song@kernel.org>
-Subject: [PATCH bpf-next 5/5] bpf: use module_alloc_huge for bpf_prog_pack
-Date:   Sun, 15 May 2022 22:40:51 -0700
-Message-ID: <20220516054051.114490-6-song@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220516054051.114490-1-song@kernel.org>
-References: <20220516054051.114490-1-song@kernel.org>
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: f1iCgb4j8qCen5Wa1I7FbUw-e3i3W7jz
-X-Proofpoint-ORIG-GUID: f1iCgb4j8qCen5Wa1I7FbUw-e3i3W7jz
-Content-Transfer-Encoding: 8BIT
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 16 May 2022 01:43:12 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDD7DF76;
+        Sun, 15 May 2022 22:43:07 -0700 (PDT)
+X-UUID: 074eb6915b3c406aa043d7378e4a2c00-20220516
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:26e03723-d3a7-41b9-bcb0-ec5d52cd0861,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:a84b5df2-ab23-4aed-a67b-f96514452486,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 074eb6915b3c406aa043d7378e4a2c00-20220516
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1874855302; Mon, 16 May 2022 13:43:02 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 16 May 2022 13:43:01 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Mon, 16 May 2022 13:43:01 +0800
+Message-ID: <7c996c665a57fdd9ba8d6df4dc085f70afc1b933.camel@mediatek.com>
+Subject: Re: [PATCH] soc: mediatek: mtk-mmsys: Add support for MT6795 Helio
+ X10
+From:   CK Hu <ck.hu@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <matthias.bgg@gmail.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <konrad.dybcio@somainline.org>,
+        <marijn.suijten@somainline.org>, <martin.botka@somainline.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        <phone-devel@vger.kernel.org>, <paul.bouchara@somainline.org>,
+        <kernel@collabora.com>
+Date:   Mon, 16 May 2022 13:43:01 +0800
+In-Reply-To: <20220513170350.502501-1-angelogioacchino.delregno@collabora.com>
+References: <20220513170350.502501-1-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-15_11,2022-05-13_01,2022-02-23_01
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use module_alloc_huge for bpf_prog_pack so that BPF programs sit on
-PMD_SIZE pages. This benefits system performance by reducing iTLB miss
-rate. Benchmark of a real web service workload shows this change gives
-another ~0.2% performance boost on top of PAGE_SIZE bpf_prog_pack
-(which improve system throughput by ~0.5%).
+Hi, Angelo:
 
-Also, remove set_vm_flush_reset_perms() from alloc_new_pack() and use
-set_memory_[nx|rw] in bpf_prog_pack_free(). This is because
-VM_FLUSH_RESET_PERMS does not work with huge pages yet. [1]
+On Fri, 2022-05-13 at 19:03 +0200, AngeloGioacchino Del Regno wrote:
+> Add MM support for the MT6795 SoC, using the mmsys default routing
+> table.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> ---
+> 
+> In order for this patch to have any meaning and functionality, it is
+> required to also have in-tree the [1] MT6795 clocks series, even
+> though that's not required to actually compile this code.
+> 
+> [1] 
+> https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/list/?series=641493__;!!CTRNKA9wMg0ARbw!ywDb_Gj4oV0iYHK_PbtJSNejzsJGlFVjX-1O0G1mR0vZX_5VeMtlZJ_AS6K_Mg$
+>  
+> 
+>  drivers/soc/mediatek/mtk-mmsys.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/soc/mediatek/mtk-mmsys.c
+> b/drivers/soc/mediatek/mtk-mmsys.c
+> index 06d8e83a2cb5..38b36b881a3b 100644
+> --- a/drivers/soc/mediatek/mtk-mmsys.c
+> +++ b/drivers/soc/mediatek/mtk-mmsys.c
+> @@ -57,6 +57,13 @@ static const struct mtk_mmsys_match_data
+> mt6779_mmsys_match_data = {
+>  	},
+>  };
+>  
+> +static const struct mtk_mmsys_driver_data mt6795_mmsys_driver_data =
+> {
+> +	.clk_driver = "clk-mt6795-mm",
+> +	.routes = mmsys_default_routing_table,
 
-[1] https://lore.kernel.org/bpf/aeeeaf0b7ec63fdba55d4834d2f524d8bf05b71b.camel@intel.com/
-Suggested-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-Signed-off-by: Song Liu <song@kernel.org>
----
- kernel/bpf/core.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+mt6795 should have its own routing table instead of default one. The
+default one is used for mt8173, mt2701, mt2712 which no one knows how
+to separate them. If you don't know the routing table of mt6795, just
+left this as NULL.
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index cacd8684c3c4..b64d91fcb0ba 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -857,7 +857,7 @@ static size_t select_bpf_prog_pack_size(void)
- 	void *ptr;
- 
- 	size = BPF_HPAGE_SIZE * num_online_nodes();
--	ptr = module_alloc(size);
-+	ptr = module_alloc_huge(size);
- 
- 	/* Test whether we can get huge pages. If not just use PAGE_SIZE
- 	 * packs.
-@@ -881,7 +881,7 @@ static struct bpf_prog_pack *alloc_new_pack(bpf_jit_fill_hole_t bpf_fill_ill_ins
- 		       GFP_KERNEL);
- 	if (!pack)
- 		return NULL;
--	pack->ptr = module_alloc(bpf_prog_pack_size);
-+	pack->ptr = module_alloc_huge(bpf_prog_pack_size);
- 	if (!pack->ptr) {
- 		kfree(pack);
- 		return NULL;
-@@ -890,7 +890,6 @@ static struct bpf_prog_pack *alloc_new_pack(bpf_jit_fill_hole_t bpf_fill_ill_ins
- 	bitmap_zero(pack->bitmap, bpf_prog_pack_size / BPF_PROG_CHUNK_SIZE);
- 	list_add_tail(&pack->list, &pack_list);
- 
--	set_vm_flush_reset_perms(pack->ptr);
- 	set_memory_ro((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
- 	set_memory_x((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
- 	return pack;
-@@ -909,10 +908,9 @@ static void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insn
- 
- 	if (size > bpf_prog_pack_size) {
- 		size = round_up(size, PAGE_SIZE);
--		ptr = module_alloc(size);
-+		ptr = module_alloc_huge(size);
- 		if (ptr) {
- 			bpf_fill_ill_insns(ptr, size);
--			set_vm_flush_reset_perms(ptr);
- 			set_memory_ro((unsigned long)ptr, size / PAGE_SIZE);
- 			set_memory_x((unsigned long)ptr, size / PAGE_SIZE);
- 		}
-@@ -949,6 +947,8 @@ static void bpf_prog_pack_free(struct bpf_binary_header *hdr)
- 
- 	mutex_lock(&pack_mutex);
- 	if (hdr->size > bpf_prog_pack_size) {
-+		set_memory_nx((unsigned long)hdr, hdr->size / PAGE_SIZE);
-+		set_memory_rw((unsigned long)hdr, hdr->size / PAGE_SIZE);
- 		module_memfree(hdr);
- 		goto out;
- 	}
-@@ -975,6 +975,8 @@ static void bpf_prog_pack_free(struct bpf_binary_header *hdr)
- 	if (bitmap_find_next_zero_area(pack->bitmap, bpf_prog_chunk_count(), 0,
- 				       bpf_prog_chunk_count(), 0) == 0) {
- 		list_del(&pack->list);
-+		set_memory_nx((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
-+		set_memory_rw((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
- 		module_memfree(pack->ptr);
- 		kfree(pack);
- 	}
--- 
-2.30.2
+Regards,
+CK
+
+> +	.num_routes = ARRAY_SIZE(mmsys_default_routing_table),
+> +	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
+> +};
+> +
+>  static const struct mtk_mmsys_driver_data mt6797_mmsys_driver_data =
+> {
+>  	.clk_driver = "clk-mt6797-mm",
+>  };
+> @@ -363,6 +370,10 @@ static const struct of_device_id
+> of_match_mtk_mmsys[] = {
+>  		.compatible = "mediatek,mt6779-mmsys",
+>  		.data = &mt6779_mmsys_match_data,
+>  	},
+> +	{
+> +		.compatible = "mediatek,mt6795-mmsys",
+> +		.data = &mt6795_mmsys_driver_data,
+> +	},
+>  	{
+>  		.compatible = "mediatek,mt6797-mmsys",
+>  		.data = &mt6797_mmsys_match_data,
 

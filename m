@@ -2,79 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D5A528316
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 13:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F8252831C
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 13:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243054AbiEPLXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 07:23:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39750 "EHLO
+        id S243056AbiEPLXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 07:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243036AbiEPLWv (ORCPT
+        with ESMTP id S243029AbiEPLXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 07:22:51 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892293818B
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 04:22:49 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id ch13so27921884ejb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 04:22:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=mime-version:content-transfer-encoding:date:message-id:from:to:cc
-         :subject:references:in-reply-to;
-        bh=z/sJ+M1XxtJXB9OHfNzwnEILWmK+EFv1aJKz+1MttWM=;
-        b=ab8F5qnQhlZymUFMlry85o+kQxlSUkk0qQBmbXQYDXjm6tNk3f6wwBfgFJ1jkUG2BR
-         9v/egoOeHoFAOvSkPi97wnKqMnwmRk/EudKcPqdzI7bZmacULRjBYlRU7D/SeUtVzHe6
-         1jpYmWBlJ7TEO+YYOrI81j+TJhU+p4DzVB4hazDxVI0/RBdIoOAaRGjbUuuzJHB3229d
-         6RdS/WrDZwulYt+3uULiQuISRpBwDmdlr4ZEtACXr9h6yhicZRKAh7wTL/PwyMUNmJ0R
-         fTpjEagPe4gjas7QXRGL7og5z20u84pfcM9xWlubSEipIrfk3RGiCG2G6zzy9Sn0/fEj
-         4m4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:content-transfer-encoding:date
-         :message-id:from:to:cc:subject:references:in-reply-to;
-        bh=z/sJ+M1XxtJXB9OHfNzwnEILWmK+EFv1aJKz+1MttWM=;
-        b=hC8/tWA5zGoIJI2etxgakjKpsUYTFwOT6CVdFcdYcbKb1VY70IOnZVwNn2CSJ/jQ0T
-         VsG9bZtTSRuDC+kdEYttbOySkeqSZzKCPgYOKsBB42y6W9JlW8q/IBI2CbFZSW0zk+9M
-         WAgGhNNPl/1nH8TNAE1h3qQ/0VaIpuysDj6su26UpjE3yyRM81Uw7UeqjYSQoCb4zoF6
-         Supe2SopLZKxNwgptIqTr9Qtb4gCRVE+XQ4Xeqeydfi6gYaJepxGqS7vMraVBSS8Fe5p
-         51xr9keEQ4u8JEoK3apmbDd86rLYx+ZIYjlP7h8VnU+OKN0CNm3LKGP2nN+yNoIGUmMH
-         jIeg==
-X-Gm-Message-State: AOAM530buuhuxPXOOgl9Ms6G6U4t/dDFq5hXcTaWlZevGF5jsyTcOQ6T
-        TyaqgGBehdpiFa6Sd9TqZT48+w==
-X-Google-Smtp-Source: ABdhPJzgJws20+k1w/bd9YDmKu6f8bJwp96JqZDsW4Rp66WDsfycPObkkkYE4zEcys2M4yADuMjhxg==
-X-Received: by 2002:a17:906:dc8a:b0:6f9:13e9:4c87 with SMTP id cs10-20020a170906dc8a00b006f913e94c87mr14513978ejc.729.1652700167860;
-        Mon, 16 May 2022 04:22:47 -0700 (PDT)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id cn7-20020a0564020ca700b0042617ba6387sm5006533edb.17.2022.05.16.04.22.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 04:22:47 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 16 May 2022 13:22:46 +0200
-Message-Id: <CK15BB34PCJM.1PI9Z68ZM20K9@otso>
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>
-Cc:     <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>, "Rob Herring" <robh@kernel.org>,
-        "Andy Gross" <agross@kernel.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Marc Zyngier" <maz@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v2] dt-bindings: qcom,pdc: convert to YAML
-X-Mailer: aerc 0.9.0
-References: <20220103074348.6039-1-luca.weiss@fairphone.com>
- <bef4922d-4a32-f184-44a1-8f5430190938@linaro.org>
- <fef5f229-f247-d032-fc76-46ed7083dbf4@linaro.org>
- <CK10OTVFAP75.WCSVY40A7PXO@otso>
- <13d65ae2-f378-5353-16b9-5bf68883a701@linaro.org>
-In-Reply-To: <13d65ae2-f378-5353-16b9-5bf68883a701@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Mon, 16 May 2022 07:23:34 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3012238785
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 04:23:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652700213; x=1684236213;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=J11eG9Z8B4HYN0ujde5sOnR2ETQToSb8LLwMG0HWeUg=;
+  b=aJVDARMJJYTqCXhkvbl7j4GAjOtBWIhuwpH/VJxvehajEgOcvPqxEhOf
+   7bJUzTN1mfqWvNVbEN7MLGaayyvbK5dD3Ci2denHw9Xl3rMavaPb2dcF6
+   c+UftroZBFhBTKHL4LfSneQdi4nEEnxfUZ5J3M+RriY980fc/ENYtt2yp
+   /q1LsgAj/604ffZxHwGQqrlENXcA5dmTkS/Qa/Hj0OeLP4VcRawF3wUbi
+   JWjE4wX7k+hRgfC+V3WnnARIHZOyqYo8pU0oV70gcTexmGr+cF+NkReSr
+   +AH8JdPUROAI9wCa6mSCDLllFocbOiSg4xFpQEGZJ82KHkhmPDgxQEfph
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="269628654"
+X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
+   d="scan'208";a="269628654"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 04:23:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
+   d="scan'208";a="555204817"
+Received: from lkp-server02.sh.intel.com (HELO 0628dcddc537) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 16 May 2022 04:23:29 -0700
+Received: from kbuild by 0628dcddc537 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nqYoy-000037-D0;
+        Mon, 16 May 2022 11:23:28 +0000
+Date:   Mon, 16 May 2022 19:23:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?utf-8?B?WWHFn2FyIEFyYWJhY8Sx?= <yasar11732@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        paulo.miguel.almeida.rodenas@gmail.com, dan.carpenter@oracle.com,
+        alexandre.belloni@bootlin.com, realwakka@gmail.com,
+        u.kleine-koenig@pengutronix.de, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        =?utf-8?B?WWHFn2FyIEFyYWJhY8Sx?= <yasar11732@gmail.com>
+Subject: Re: [PATCH] Staging: pi433: Don't use ioctl for per-client
+ configuration
+Message-ID: <202205161930.aGSjQp2u-lkp@intel.com>
+References: <20220515104711.94567-1-yasar11732@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220515104711.94567-1-yasar11732@gmail.com>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,84 +71,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+Hi "Yaşar,
 
-On Mon May 16, 2022 at 12:35 PM CEST, Krzysztof Kozlowski wrote:
-> On 16/05/2022 09:45, Luca Weiss wrote:
-> > Hi Krzysztof,
-> >=20
-> > On Mon May 9, 2022 at 10:40 AM CEST, Krzysztof Kozlowski wrote:
-> >> On 09/05/2022 10:38, Krzysztof Kozlowski wrote:
-> >>> On 03/01/2022 08:43, Luca Weiss wrote:
-> >>>> Convert the PDC interrupt controller bindings to YAML.
-> >>>>
-> >>>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> >>>> Reviewed-by: Rob Herring <robh@kernel.org>
-> >>>> ---
-> >>>> Changes since v1:
-> >>>> * Adjust description of second reg-name as suggested by Maulik Shah
-> >>>>
-> >>>> @Rob Herring: Hope it's ok to keep your R-b given the above changes
-> >>>>
-> >>>> This patch depends on the following patch, which fixed sm8250 & sm83=
-50
-> >>>> compatibles and adds sm6350.
-> >>>> https://lore.kernel.org/linux-arm-msm/20211213082614.22651-4-luca.we=
-iss@fairphone.com/
-> >>>
-> >>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >>>
-> >>> Luca,
-> >>> I think this needs resending as dependency was merged. Alternatively,
-> >>> maybe Bjorn could pick it up through QCom SoC?
-> >>
-> >> Correction - it seems that Rob took the dependency in April, so this
-> >> should go via Rob's tree as well.
-> >>
-> >> Luca, can you resend without Rob's Review tag and ask him to pick it u=
-p?
-> >>
-> >=20
-> > So... since torvalds/master my sm6350 patch is merged through Rob's
->
-> If it was merged to torvalds/master, it's not a dependency anymore...
+Thank you for the patch! Perhaps something to improve:
 
-Yeah of course, but currently sm6350 and sm8150 patches are lined up to
-be merged in the next merge window from different trees which just make
-it difficult.
+[auto build test WARNING on staging/staging-testing]
 
->
-> > tree, but there was also a sm8150 patch applied through Linus Walleij's
-> > tree. This means (as far as I understand) that neither can really
-> > properly apply this (rebased) patch as one tree will have missed the
-> > other commit.
->
-> sm8150 patch is also a dependency?
+url:    https://github.com/intel-lab-lkp/linux/commits/Ya-ar-Arabac/Staging-pi433-Don-t-use-ioctl-for-per-client-configuration/20220515-185057
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git e41f7a5521d7f03dca99e3207633df71740569dd
+config: riscv-randconfig-r036-20220516 (https://download.01.org/0day-ci/archive/20220516/202205161930.aGSjQp2u-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/0cfbff215eb0e9e558af6b491d319fc736a927c6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ya-ar-Arabac/Staging-pi433-Don-t-use-ioctl-for-per-client-configuration/20220515-185057
+        git checkout 0cfbff215eb0e9e558af6b491d319fc736a927c6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/staging/pi433/
 
-I mean either this conversion patch includes sm8150 or it doesn't but
-given it's applied to some tree and lined up for the next merge window
-it should probably include it?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> >=20
-> > Does it make sense to send a v3 rebased on linux-next now, or wait unti=
-l
-> > this has settled down in torvalds's tree?
->
-> Conflicts can be resolved, you just need to choose one tree to based on.
+All warnings (new ones prefixed by >>):
 
-If conflict resolution will be done when merging Linus' and Rob's tree
-(e.g. add sm8150 to the yaml) then this v2 can be applied to Rob's tree
-now.
+>> drivers/staging/pi433/pi433_if.c:832:4: warning: variable 'required' is uninitialized when used here [-Wuninitialized]
+                           required, available);
+                           ^~~~~~~~
+   include/linux/dev_printk.h:155:39: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:167:19: note: expanded from macro 'dynamic_dev_dbg'
+                              dev, fmt, ##__VA_ARGS__)
+                                          ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
+           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+                                                                 ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
+                   func(&id, ##__VA_ARGS__);               \
+                               ^~~~~~~~~~~
+   drivers/staging/pi433/pi433_if.c:801:24: note: initialize the variable 'required' to silence this warning
+           unsigned int            required, available, copied;
+                                           ^
+                                            = 0
+   1 warning generated.
 
-Otherwise, I'll just wait until everything's merged into torvald's tree
-so the issue disappears.
 
-Regards
-Luca
+vim +/required +832 drivers/staging/pi433/pi433_if.c
 
->
->
-> Best regards,
-> Krzysztof
+874bcba65f9a3a Marcus Wolf          2017-07-16  792  
+874bcba65f9a3a Marcus Wolf          2017-07-16  793  static ssize_t
+874bcba65f9a3a Marcus Wolf          2017-07-16  794  pi433_write(struct file *filp, const char __user *buf,
+874bcba65f9a3a Marcus Wolf          2017-07-16  795  	    size_t count, loff_t *f_pos)
+874bcba65f9a3a Marcus Wolf          2017-07-16  796  {
+874bcba65f9a3a Marcus Wolf          2017-07-16  797  	struct pi433_instance	*instance;
+0cfbff215eb0e9 Yaşar Arabacı        2022-05-15  798  	struct pi433_tx_cfg *tx_cfg;
+874bcba65f9a3a Marcus Wolf          2017-07-16  799  	struct pi433_device	*device;
+57f8965af417f9 Stefano Manni        2017-11-16  800  	int                     retval;
+5451dab9b7f546 Valentin Vidic       2018-04-19  801  	unsigned int		required, available, copied;
+874bcba65f9a3a Marcus Wolf          2017-07-16  802  
+874bcba65f9a3a Marcus Wolf          2017-07-16  803  	instance = filp->private_data;
+874bcba65f9a3a Marcus Wolf          2017-07-16  804  	device = instance->device;
+874bcba65f9a3a Marcus Wolf          2017-07-16  805  
+63688e61d5629c Sophie Matter        2018-07-11  806  	/*
+63688e61d5629c Sophie Matter        2018-07-11  807  	 * check, whether internal buffer (tx thread) is big enough
+63688e61d5629c Sophie Matter        2018-07-11  808  	 * for requested size
+63688e61d5629c Sophie Matter        2018-07-11  809  	 */
+0cfbff215eb0e9 Yaşar Arabacı        2022-05-15  810  	if (unlikely(count > MAX_MSG_SIZE))
+874bcba65f9a3a Marcus Wolf          2017-07-16  811  		return -EMSGSIZE;
+874bcba65f9a3a Marcus Wolf          2017-07-16  812  
+0cfbff215eb0e9 Yaşar Arabacı        2022-05-15  813  	if (unlikely(count < sizeof(struct pi433_tx_cfg)))
+0cfbff215eb0e9 Yaşar Arabacı        2022-05-15  814  		return -EMSGSIZE;
+0cfbff215eb0e9 Yaşar Arabacı        2022-05-15  815  
+0cfbff215eb0e9 Yaşar Arabacı        2022-05-15  816  	tx_cfg = (struct pi433_tx_cfg *)buf;
+0cfbff215eb0e9 Yaşar Arabacı        2022-05-15  817  
+0cfbff215eb0e9 Yaşar Arabacı        2022-05-15  818  	if (unlikely(count != sizeof(struct pi433_tx_cfg)) + tx_cfg->payload_size)
+0cfbff215eb0e9 Yaşar Arabacı        2022-05-15  819  		return -EMSGSIZE;
+ce514dadc61a53 Paulo Miguel Almeida 2022-01-15  820  
+63688e61d5629c Sophie Matter        2018-07-11  821  	/*
+63688e61d5629c Sophie Matter        2018-07-11  822  	 * write the following sequence into fifo:
+056eeda2f9e637 Derek Robson         2017-07-22  823  	 * - tx_cfg
+056eeda2f9e637 Derek Robson         2017-07-22  824  	 * - size of message
+056eeda2f9e637 Derek Robson         2017-07-22  825  	 * - message
+056eeda2f9e637 Derek Robson         2017-07-22  826  	 */
+874bcba65f9a3a Marcus Wolf          2017-07-16  827  	mutex_lock(&device->tx_fifo_lock);
+5451dab9b7f546 Valentin Vidic       2018-04-19  828  
+5451dab9b7f546 Valentin Vidic       2018-04-19  829  	available = kfifo_avail(&device->tx_fifo);
+0cfbff215eb0e9 Yaşar Arabacı        2022-05-15  830  	if (count > available) {
+1b6a6147374eb3 Paulo Miguel Almeida 2022-02-07  831  		dev_dbg(device->dev, "write to fifo failed: %d bytes required but %d available\n",
+5451dab9b7f546 Valentin Vidic       2018-04-19 @832  			required, available);
+5451dab9b7f546 Valentin Vidic       2018-04-19  833  		mutex_unlock(&device->tx_fifo_lock);
+5451dab9b7f546 Valentin Vidic       2018-04-19  834  		return -EAGAIN;
+5451dab9b7f546 Valentin Vidic       2018-04-19  835  	}
+5451dab9b7f546 Valentin Vidic       2018-04-19  836  
+874bcba65f9a3a Marcus Wolf          2017-07-16  837  	retval = kfifo_from_user(&device->tx_fifo, buf, count, &copied);
+874bcba65f9a3a Marcus Wolf          2017-07-16  838  	if (retval || copied != count)
+874bcba65f9a3a Marcus Wolf          2017-07-16  839  		goto abort;
+874bcba65f9a3a Marcus Wolf          2017-07-16  840  
+874bcba65f9a3a Marcus Wolf          2017-07-16  841  	mutex_unlock(&device->tx_fifo_lock);
+874bcba65f9a3a Marcus Wolf          2017-07-16  842  
+874bcba65f9a3a Marcus Wolf          2017-07-16  843  	/* start transfer */
+874bcba65f9a3a Marcus Wolf          2017-07-16  844  	wake_up_interruptible(&device->tx_wait_queue);
+1b6a6147374eb3 Paulo Miguel Almeida 2022-02-07  845  	dev_dbg(device->dev, "write: generated new msg with %d bytes.\n", copied);
+874bcba65f9a3a Marcus Wolf          2017-07-16  846  
+dd1114693bcc7d Oliver Graute        2017-12-19  847  	return copied;
+874bcba65f9a3a Marcus Wolf          2017-07-16  848  
+874bcba65f9a3a Marcus Wolf          2017-07-16  849  abort:
+5451dab9b7f546 Valentin Vidic       2018-04-19  850  	dev_warn(device->dev,
+1b6a6147374eb3 Paulo Miguel Almeida 2022-02-07  851  		 "write to fifo failed, non recoverable: 0x%x\n", retval);
+874bcba65f9a3a Marcus Wolf          2017-07-16  852  	mutex_unlock(&device->tx_fifo_lock);
+874bcba65f9a3a Marcus Wolf          2017-07-16  853  	return -EAGAIN;
+874bcba65f9a3a Marcus Wolf          2017-07-16  854  }
+874bcba65f9a3a Marcus Wolf          2017-07-16  855  
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

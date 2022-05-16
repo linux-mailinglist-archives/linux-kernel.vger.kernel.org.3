@@ -2,148 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E4652883B
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:14:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B9352883E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244866AbiEPPOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 11:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45430 "EHLO
+        id S242512AbiEPPPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 11:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235121AbiEPPOo (ORCPT
+        with ESMTP id S245039AbiEPPPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 11:14:44 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59FE83BA4F
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 08:14:43 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d22so14708230plr.9
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 08:14:43 -0700 (PDT)
+        Mon, 16 May 2022 11:15:02 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF67C3BBC1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 08:14:58 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id ch13so29257702ejb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 08:14:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=18f9yUH1/w73tmifgqC4XWy7DHTtV6nZ9pn9JLOs8G4=;
-        b=BMoeDTwmiLVu4Yp7Hb0ZS2ktRN19j8if9lN2p7YpJuwfvZMETAPUAdeU+YJo8AMPlg
-         MCmCHbU/CKD+LiJ4Pjfxlbhvfk/1AnBjSBNX8oqKjnw2ya2zf2vVny5Md7+vJt+qJmrb
-         BUOkJ4YyEHH5sBZGFEGxEMDm4W4V9BG0n98a8oqKwLXaVlrIeEkMuA2dKL21KgzGM9Az
-         4SxA5msjI+ifRYKYSZrH/gue3IMkfqclFB9pBj2pz1khU112i/89GzVXLgdUDbOb4R1b
-         46QRgkkcE/HkoH2njsKRysihh3Y2ZFmA78C3nh8fkKStwO/MW/69ph4fWii92pqlgvno
-         b92A==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=mT7/Ms8+mt3fxt9Iti7ZV4qUURzTdQF9NTtcKJjj9p0=;
+        b=eTtQA3FGnuABes6xiwZEqM1pVCSn6mP/1J0Zs8PnYUbrf6wa6sWtZV1CMHBCZtTm4P
+         jSKHjKMdc6cj+Qp2wMPTw39Fd+cznhXrru+fGRovVTqjLKhNt3i0Jcx6HekN37E9U0kd
+         0RbT6UHXqoyaa8cBAGwVJO2eQlpWNLNX/MNYBczXUMe4Ino92smkbHWRDU/Ybwyu50qS
+         VGI7DHqkTLHxbPpM2HBhoZILupb4I0WHNRyqCyykv/QPmqpahJFQvs9FQSJymcIdtT8R
+         H3dANwMPkow+FrXWsWmZpYThFo6OWev9hWfWFHOVF9h38h5cwOo0D3Hx/0Mvul4iXPo6
+         0hoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=18f9yUH1/w73tmifgqC4XWy7DHTtV6nZ9pn9JLOs8G4=;
-        b=6Dm5RWKQNRsV0L+Lv6s7NNCJU4/8jf+ffo1b9exdtinu80RUmIePWE4CJ53yIO9vae
-         iKxIk82dlFkxY3srJlLFFF/cixQRAe6ZQlUDSsSFmULtrwb8bC64AiRzXboJahwRcfut
-         wGL0K9DngI4uCRBJiUk67tIKvEmgujb1Qr5UulmDCnCIdUAuRdMpMOXysznW419qurb0
-         2VAJXZko1TB+svBzyTeyFTIyRno0eXGDvM9qfrCDtBYtLM4lw/Dge7gx0wXd8ABQ0vHs
-         qq0349CPjnsYLDgfVfkSCN8RpgedHAAjzRogreWbFy3vv3cz2zb61k5h8kQ5xGxGtgIY
-         ewEg==
-X-Gm-Message-State: AOAM5305HsNQaIOzHNhqMMQ42CbOJAhMRLc8zDpoC1hD4uzfWjtBL/bm
-        8ygdhmN4haAvmipKUkp8lvEZtw==
-X-Google-Smtp-Source: ABdhPJyl+1yfgFUS4YuuskID0E4r3jxMJV3EP+gpOW8qxwgxQr3JeLBasBIfZBXK57mOkF0wiRRWBg==
-X-Received: by 2002:a17:903:288:b0:15f:4cc6:3195 with SMTP id j8-20020a170903028800b0015f4cc63195mr17620427plr.45.1652714082615;
-        Mon, 16 May 2022 08:14:42 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id b12-20020a17090a5a0c00b001ded49491basm198821pjd.2.2022.05.16.08.14.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 08:14:41 -0700 (PDT)
-Date:   Mon, 16 May 2022 15:14:36 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Uros Bizjak <ubizjak@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Marco Elver <elver@google.com>
-Subject: Re: [PATCH] locking/atomic/x86: Introduce try_cmpxchg64
-Message-ID: <YoJqXMN38b8dYwyY@google.com>
-References: <20220510154217.5216-1-ubizjak@gmail.com>
- <20220510165506.GP76023@worktop.programming.kicks-ass.net>
- <CAFULd4aNME5s2zGOO0A11kdjfHekH=ceSH7jUfAhmZaJWHv9cQ@mail.gmail.com>
- <20220511075409.GX76023@worktop.programming.kicks-ass.net>
- <CAFULd4aXpt_pnCR5OK5B1m5sErfB3uj_ez=-KW7=0qQheEdVzA@mail.gmail.com>
- <Ynven5y2u9WNfwK+@google.com>
- <CAFULd4bZDO5-3T4q9fanHFrRTDj8v6fypiTc=dFPO9Rp61g9eQ@mail.gmail.com>
- <fcf55234cfb95600d412322fba4dc9d0c9a1d7f4.camel@redhat.com>
- <YoJayBWZF3mUnYS6@google.com>
- <9ed2fc294bf2c21b41b22605ff8039bb71903712.camel@redhat.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mT7/Ms8+mt3fxt9Iti7ZV4qUURzTdQF9NTtcKJjj9p0=;
+        b=apAEHmCaa0jiug7kWZsN+Q593mYX6s/xzSWPVUh0APrzGaPWf0rNB5JYZ7ZKDE2tdt
+         Avug0CmcLASue7EVL4DnN/tqnOEeJDO3XnRdM52XcYWvE4sYJtUytf4Cua01hL4jqNpI
+         80iscBcF3R4K/FzAwFdNktLAlaDILlUzbpEn/YlERaVXg3Calc/s0TCyDkGtO2rodEMA
+         V3RnytIABGF03fmWpXw6nmRl7eHmfdJFQ9hoXleJduVAwWXIzNdiXlA19K/BgnjsrobA
+         kdS9fnaFGBNhb9dM1kQO9rvY0xqXM1MVScq2Gx8353KXHCDzhLRKfZANyuhsOfKKa5k/
+         Gtmw==
+X-Gm-Message-State: AOAM530/VTHL0hY8Km4hoWjF2ddQ9KJMti2dH6YvV8IubHSTAe3KMR1+
+        PVK2UlqlMoh1FjDor+6wBPqVIA==
+X-Google-Smtp-Source: ABdhPJzZJYJRYHriof0O9i6fwoHE6QsUFvkL/p4fdhMBl53WDdCzW2eGFoljqkVBReNlwPP91IzS9g==
+X-Received: by 2002:a17:906:aed8:b0:6f3:7e6b:14d with SMTP id me24-20020a170906aed800b006f37e6b014dmr16118561ejb.451.1652714097404;
+        Mon, 16 May 2022 08:14:57 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id y9-20020a170906518900b006f3ef214e0csm8153ejk.114.2022.05.16.08.14.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 08:14:56 -0700 (PDT)
+Message-ID: <e7730596-8fb9-7fbd-3074-de561086a121@linaro.org>
+Date:   Mon, 16 May 2022 17:14:55 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9ed2fc294bf2c21b41b22605ff8039bb71903712.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 1/3] dt-bindings: arm: qcom: Add sc7180 Chromebook board
+ bindings
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Alexandru M Stan <amstan@chromium.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        "Joseph S . Barrera III" <joebar@chromium.org>,
+        Julius Werner <jwerner@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220512090429.1.I9804fcd5d6c8552ab25f598dd7a3ea71b15b55f0@changeid>
+ <828bc65f-e585-0fe7-c038-c750861c9446@linaro.org>
+ <48d96a4e-ce1b-03a1-1831-36555efd7080@linaro.org>
+ <CAD=FV=WNSv+kgTZwjHVq+YNQAG0uB42QUPaU-BPTV_W+j=5aYg@mail.gmail.com>
+ <96686d6d-83a9-05a2-9fdc-f9fc4b4e7eed@linaro.org>
+ <CAD=FV=W8F5xbv2tKhCvjLLHitts+eQFbFE3fb3wogwY91Q7gAA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAD=FV=W8F5xbv2tKhCvjLLHitts+eQFbFE3fb3wogwY91Q7gAA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022, Maxim Levitsky wrote:
-> On Mon, 2022-05-16 at 14:08 +0000, Sean Christopherson wrote:
-> > On Mon, May 16, 2022, Maxim Levitsky wrote:
-> > > On Wed, 2022-05-11 at 21:54 +0200, Uros Bizjak wrote:
-> > > > On Wed, May 11, 2022 at 6:04 PM Sean Christopherson <seanjc@google.com> wrote:
-> > > > > On Wed, May 11, 2022, Uros Bizjak wrote:
-> > > > > > On Wed, May 11, 2022 at 9:54 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > > > > > > Still, does 32bit actually support that stuff?
-> > > > > > 
-> > > > > > Unfortunately, it does:
-> > > > > > 
-> > > > > > kvm-intel-y        += vmx/vmx.o vmx/vmenter.o vmx/pmu_intel.o vmx/vmcs12.o \
-> > > > > >                vmx/evmcs.o vmx/nested.o vmx/posted_intr.o
-> > > > > > 
-> > > > > > And when existing cmpxchg64 is substituted with cmpxchg, the
-> > > > > > compilation dies for 32bits with:
-> > > > > 
-> > > > > ...
-> > > > > 
-> > > > > > > Anyway, your patch looks about right, but I find it *really* hard to
-> > > > > > > care about 32bit code these days.
-> > > > > > 
-> > > > > > Thanks, this is also my sentiment, but I hope the patch will enable
-> > > > > > better code and perhaps ease similar situation I have had elsewhere.
-> > > > > 
-> > > > > IMO, if we merge this it should be solely on the benefits to 64-bit code.  Yes,
-> > > > > KVM still supports 32-bit kernels, but I'm fairly certain the only people that
-> > > > > run 32-bit KVM are KVM developers.  32-bit KVM has been completely broken for
-> > > > > multiple releases at least once, maybe twice, and no one ever complained.
-> > > > 
-> > > > Yes, the idea was to improve cmpxchg64 with the implementation of
-> > > > try_cmpxchg64 for 64bit targets. However, the issue with 32bit targets
-> > > > stood in the way, so the effort with 32-bit implementation was mainly
-> > > > to unblock progression for 64-bit targets.
-> > > 
-> > > Would that allow tdp mmu to work on 32 bit?
-> > 
-> > From a purely technical perspective, there's nothing that prevents enabling the
-> > TDP MMU on 32-bit kernels.  The TDP MMU is 64-bit only to simplify the implementation
-> > and to reduce the maintenance and validation costs.
+On 16/05/2022 17:11, Doug Anderson wrote:
+> Hi,
 > 
-> I understand exactly that, so the question, will this patch help make the tdp
-> mmu work transparently on 32 bit kernels? I  heard that 64 bit cmpxchg was
-> one of the main reasons that it is 64 bit only.
+> On Sun, May 15, 2022 at 11:40 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 13/05/2022 19:00, Doug Anderson wrote:
+>>> Hi,
+>>>
+>>> On Fri, May 13, 2022 at 2:01 AM Krzysztof Kozlowski
+>>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>>
+>>>> On 13/05/2022 09:57, Krzysztof Kozlowski wrote:
+>>>>> On 12/05/2022 18:04, Douglas Anderson wrote:
+>>>>>> This copy-pastes compatibles from sc7180-based boards from the device
+>>>>>> trees to the yaml file so that `make dtbs_check` will be happy.
+>>>>>>
+>>>>>> NOTES:
+>>>>>> - I make no attempt to try to share an "item" for all sc7180 based
+>>>>>>   Chromebooks. Because of the revision matching scheme used by the
+>>>>>>   Chromebook bootloader, at times we need a different number of
+>>>>>>   revisions listed.
+>>>>>> - Some of the odd entries in here (like google,homestar-rev23 or the
+>>>>>>   fact that "Google Lazor Limozeen without Touchscreen" changed from
+>>>>>>   sku5 to sku6) are not typos but simply reflect reality.
+>>>>>> - Many revisions of boards here never actually went to consumers, but
+>>>>>>   they are still in use within various companies that were involved in
+>>>>>>   Chromebook development. Since Chromebooks are developed with an
+>>>>>>   "upstream first" methodology, having these revisions supported with
+>>>>>>   upstream Linux is important. Making it easy for Chromebooks to be
+>>>>>>   developed with an "upstream first" methodology is valuable to the
+>>>>>>   upstream community because it improves the quality of upstream and
+>>>>>>   gets Chromebooks supported with vanilla upstream faster.
+>>>>>>
+>>>>>> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+>>>>>> ---
+>>>>>>
+>>>>>>  .../devicetree/bindings/arm/qcom.yaml         | 180 ++++++++++++++++++
+>>>>>>  1 file changed, 180 insertions(+)
+>>>>>>
+>>>>>> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+>>>>>> index 5c06d1bfc046..399be67eb5d2 100644
+>>>>>> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
+>>>>>> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+>>>>>> @@ -214,11 +214,191 @@ properties:
+>>>>>>                - qcom,ipq8074-hk10-c2
+>>>>>>            - const: qcom,ipq8074
+>>>>>>
+>>>>>> +      # Qualcomm Technologies, Inc. SC7180 IDP
+>>>>>>        - items:
+>>>>>>            - enum:
+>>>>>>                - qcom,sc7180-idp
+>>>>>>            - const: qcom,sc7180
+>>>>>>
+>>>>>> +      # Google CoachZ (rev1 - 2)
+>>>>>> +      - items:
+>>>>>> +          - const: google,coachz-rev1
+>>>>>> +          - const: google,coachz-rev2
+>>>>>
+>>>>> The inverted pattern of old revision being compatible with the new one,
+>>>>> is done on purpose? You claim here every rev1 is always compatible with
+>>>>> rev2 ...
+>>>>>
+>>>>> I don't think we discussed such patterns in previous talk. I quickly
+>>>>> went through it and there were only skuX moving around, not rev1 being
+>>>>> newer then rev2.
+>>>
+>>> Isn't this what we just had a whole discussion about?
+>>>
+>>> Oh, I see. You're objecting to the fact that the order here lists
+>>> "rev1" first and "rev2" second.
+>>>
+>>> I think the issue here is that for the purposes of booting Chromebooks
+>>> the order here doesn't matter. Certainly we can pick a fixed order and
+>>> we can validate that the order in the yaml matches the order in the
+>>> device tree, but for all intents and purposes it doesn't matter to
+>>> anything. The same device tree is compatible with _both_ rev1 and rev2
+>>> coachz devices. Neither of those two devices is inherently better
+>>> supported by this device tree than the other.
+>>
+>> OK, thanks for explanation. Since these were not documented maybe fixing
+>> existing DTS to more expected order (rev2 being the newest, rev1
+>> following) would make sense. But certainly please use such new order
+>> compatibles for new DTSes.
+> 
+> I'm still not sure I understand: if the list of revisions is
+> effectively unordered, why does it matter which order they are listed
+> in? Certainly we can change the order, but I'm not sure how I justify
+> the extra churn in my patch description.
 
-I don't think it moves the needled much, e.g. non-atomic 64-bit accesses are still
-problematic, and we'd have to update the TDP MMU to deal with PAE paging (thanks
-NPT).  All those problems are solvable, it's purely a matter of the ongoing costs
-to solve them.
+The list for the bindings (YAML), the toolset and for the Devicetree
+spec is ordered. Even if it is not ordered for your bootloader
+implementation. Your current order is a bit confusing:
 
-> I am asking because there was some talk to eliminate the direct mode from the
-> legacy non tdp mmu, which would simplify its code by a lot, but then it will
-> make 32 bit kernel fail back to shadowing mmu.
+compatible = "google,coachz-rev1", "google,coachz-rev2", "qcom,sc7180";
 
-Simplify which code?  Between the nonpaging code and direct shadow pages in
-indirect MMUs, the vast majority of the "direct" support in the legacy MMU needs
-to be kept even if TDP support is dropped.  And the really nasty stuff, e.g. PAE
-roots, would need to be carried over to the TDP MMU.
+Changing the order in existing DTS, might not be worth. I propose then
+to introduce the logical order in the future, so for new DTS:
+
+compatible = "google,XXX-rev2", "google,XXX-rev1", "qcom,sc7180";
+
+I understood that for your bootloader it does not matter.
+
+Best regards,
+Krzysztof

@@ -2,196 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F7555284CA
+	by mail.lfdr.de (Postfix) with ESMTP id D87DA5284CC
 	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 14:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243677AbiEPM4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 08:56:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45204 "EHLO
+        id S243705AbiEPM5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 08:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243894AbiEPM4E (ORCPT
+        with ESMTP id S243670AbiEPM4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 08:56:04 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11C9393E3;
-        Mon, 16 May 2022 05:55:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652705759; x=1684241759;
-  h=from:to:cc:subject:date:message-id;
-  bh=NujqjRizuBf3cIzWf3CK7LJlKgLj8HX9ToWEqxFAgBQ=;
-  b=XFebXXwUCmcFM4xpYaz3gYOlAz+BalUsYfNe2dsflo7Us7Ym2uWC/Dbf
-   rzSkPuW+lY3ujztS5ZIoXmFDS3YeLi76BjoXwV5oKNr6B8JExB7uax57n
-   QZcu2DB3Os2o1Sy8v/PNxO8HLAsFJak+lYULr6uZPsO61QztGS6Wl3eZ/
-   0=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 16 May 2022 05:55:58 -0700
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 16 May 2022 05:55:57 -0700
-X-QCInternal: smtphost
-Received: from hu-c-spathi-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.108.59])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 16 May 2022 18:25:41 +0530
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 212714)
-        id E44573DC6; Mon, 16 May 2022 18:25:39 +0530 (+0530)
-From:   Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
-To:     will@kernel.org, mark.rutland@arm.com, peterz@infradead.org,
-        mingo@redhat.com, acme@kernel.org,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, catalin.marinas@arm.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
-Subject: [PATCH V4] arm64: perf: Set PMCR.X of PMCR_EL0 during pmu reset
-Date:   Mon, 16 May 2022 18:25:38 +0530
-Message-Id: <1652705738-1628-1-git-send-email-quic_c_spathi@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 16 May 2022 08:56:55 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11olkn2051.outbound.protection.outlook.com [40.92.19.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A91E393E0;
+        Mon, 16 May 2022 05:56:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DpvUdK5t7jV0TAjNjV0ajcz78lVM4cSZOPmXJWAqXECe31keC5x8vlxXxH/GFLDKvSgroEjwCU6k4PNttcWW8yjZkGlOZuMPbGgM/L2H39Y3fv7bwV+cEB5CJH2UCWPcCxdF1jm218ODZXfyaf5P0+CMNq0cGrXG2ALPcEl18/AMb5H1AG37CoAevx6hLQIvRxCJEBDJ3QueMYHWo/uBdN2kQcjvQQ5r/2AgkLt6kY8V19IFkT8EJPN+9zj5igIpMDO6t0+NEC4PuzJ2AwAOIBuUWuIIT7X7D/XHVh9veZHa7TQFegmGbRc9Dnwnw77znYwfW1y+oGvmkYTqQxMzYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bwDy906R8zFoWuOG3vh+sGkKJlZnX4rJHAAS+PoV7c4=;
+ b=YMjdmycHJjx6JmnW3U09oM7rhS4xKIlNg5IsQcqmUv8Ugy7MR44XIjntftqWERZVeqF4EJfq65DgXTAfu7R1kGvpPp9ofnMh6Xx54HTsnzN2kgt99jHtusxeO/1kpVFxv2Io0VN2hfcg8dptOferg0JVKhnp29mLkBlqca/dSfE2cxZ02hdzaI2SelBRpdN8wIxePTXRITOSa7jURjU8q51jypPFp70HYcyng/Yu796KwS3CCpKQp01Kjd8vIzZuoyNk3uyo8Yj8O8EgIPJXkHyEwKYbB5TkPO/kHsYyQ3SYdtt8m/PvSS2Stl8exTvi3ekSwkMrNNsRW7SeCaatfw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from BY5PR02MB7009.namprd02.prod.outlook.com (2603:10b6:a03:236::13)
+ by PH7PR02MB9052.namprd02.prod.outlook.com (2603:10b6:510:1f0::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.18; Mon, 16 May
+ 2022 12:56:51 +0000
+Received: from BY5PR02MB7009.namprd02.prod.outlook.com
+ ([fe80::303a:ab1:17c1:2d16]) by BY5PR02MB7009.namprd02.prod.outlook.com
+ ([fe80::303a:ab1:17c1:2d16%8]) with mapi id 15.20.5250.018; Mon, 16 May 2022
+ 12:56:51 +0000
+Message-ID: <BY5PR02MB7009831D8BC4DB2B34739CB6D9CF9@BY5PR02MB7009.namprd02.prod.outlook.com>
+Date:   Mon, 16 May 2022 18:26:38 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 3/3] drm/panel: introduce ebbg,ft8719 panel
+Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     devicetree@vger.kernel.org, Hao Fang <fanghao11@huawei.com>,
+        David Airlie <airlied@linux.ie>,
+        Shawn Guo <shawnguo@kernel.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        phone-devel@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <cover.1651835715.git.jo@jsfamily.in>
+ <BY5PR02MB7009B91FB7306503B58C264BD9C59@BY5PR02MB7009.namprd02.prod.outlook.com>
+ <CACRpkdYhkP9RYj98Lu=zkt+6aefx172R=8JtvOFpvh2uJ4byKA@mail.gmail.com>
+From:   Joel Selvaraj <jo@jsfamily.in>
+In-Reply-To: <CACRpkdYhkP9RYj98Lu=zkt+6aefx172R=8JtvOFpvh2uJ4byKA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TMN:  [n0i7MlgpymcXPupIYSrhvR27AjFasYamlhtX6qAZWi8XJ16Ga33WNNPGOF6yY5m/]
+X-ClientProxiedBy: PN3PR01CA0007.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:95::13) To BY5PR02MB7009.namprd02.prod.outlook.com
+ (2603:10b6:a03:236::13)
+X-Microsoft-Original-Message-ID: <9cbbca03-dfeb-d456-651e-67394c2762e8@jsfamily.in>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4f5e4ad5-5b6a-4023-e7b0-08da373b8b61
+X-MS-TrafficTypeDiagnostic: PH7PR02MB9052:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oSprm4vWHu9udrfCx+e8EI+ZrMSKCLuab2aYtCXfTqTgfOYLAsgOedC7MqVjOabikcVWvOtg8gZxwjdIXLu2hNGcCZCHWsHqJ1Zpiksi6vP7B60NVq1AXw8D3przitELxejPbokJxiiMGZQDQFxE80jRfgyaKRXyW4cQbxmeJayFfOi4FyeNJHTpo96WWMHI2TLwqsSW+dHCy2M/9pEOfcWRiMK0lVyyE9AxZSFQNxolC1r9A0gqY2NNqNjGGlNCYwGvARS5zSjRDm92U9a5vY5uHg6g0n90OSJMfMFuuLOxhiUWHANUyK8tuFS1leayCgSTt3VvfiBldlKgbYFeaMwEXNqGj9sPZgGJHRMvu08TY4xOQs+6T+UN5AtnhlXBqRETbFjKj7Vj5lmSoE1omisKG4lgCRS2X0XtHAJ7xGPk5N7mxDj4jRbh8kYAc+l4Mhk+3rffEPeYmzE9TxmfuQ53UI1qw/7t/+SSQ7zBctYHLYhTGObTcJqbkC4oens1ZthKKceb2d8mEHXYm/3vBtPpzUq/+l1bWQg8A4RBB3RqEDZ5OBgXjxHoOaoHE6jCkiH0eHdGavf3iplrlAseI2qpZXzImuM6Cul0gDm9dheO/K6BneLirAJjlsYZKQnb
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MlUyVUp4NFlPQlZULzUxaytlcDhCMG1mUmc0NkVxR1laUmRrS3Rsb0ZlaUJR?=
+ =?utf-8?B?RFpXMUFRQ2dWQXh6bUJ3bmpzdkh4T3VIajU1RmJweHJBYXhDakMwWGJKN0Vz?=
+ =?utf-8?B?ZVBYODNzQ3JWRmFEbE1lMTdLQW11VXhyK1UrTkx6SXlQcTRWazhpTmE2YjZE?=
+ =?utf-8?B?UDZud1dIelFxblJaQmc3aHZ2bEhCczMxWnJCUTdid3dhbzA5S1NhS2ZNeFJm?=
+ =?utf-8?B?WXdFN05HbCtkeW9tYk1malVOcUNxOXExSEVlc2krb3hYcXFoNFpOYWpia3FP?=
+ =?utf-8?B?OWpzbEhieVFueVhTVGpnZEJqN2VSN2JsSmdQZVd0ek0wak54c0ZSWHZCM2FZ?=
+ =?utf-8?B?YkpvTWpPWUdKakVFUklJcDZSNjVhWk81UEhoYk13UjY2cTgyWXVLeVBKM0hi?=
+ =?utf-8?B?WlNMZnZGdEUzbzQzQVlZK3VHbVNWK0VEbmtnNTJqNmNxdWx3S3BEblRCbEQy?=
+ =?utf-8?B?dk9Na3llSGVoY3cvSjNWY3RBemp1amJpK3FrUFZiQTJUL0ZHOWwzVTVtUy9r?=
+ =?utf-8?B?MVU5OStMT1JWeGNWM2VSb2lMcjBEVTBlNmRwRmNaZW5rV0wxc01EbjMyVVNt?=
+ =?utf-8?B?bXpFTXQwc0NEZ2dFelJlcEFZQjZjNmFpTUdoY0RmdTNuQVB1WHNJVWV1UnZI?=
+ =?utf-8?B?clBvUFQ1NTc2RGZ3WjBGNmZOc0JjZ0tmdmsxZ2FQQzNianowOVRNeWU4Zjl0?=
+ =?utf-8?B?dkFxcUpQMkRnN05UdXZwYmtBZnhSUFF2WlV4NWM5ZE1kUzZKNWI5MUF0dFlo?=
+ =?utf-8?B?RGZ4dDFvN3ZHV0VmeVRGdmpNV2k4dnhuSENnVGxoZUwyOUNlZ09IY3dOdjRp?=
+ =?utf-8?B?ZmxUdVJ6ZWUxMmE4T1hSLy9iNlcxcXY2bFdNSjlKTDJMR3FCU2FtSFVpcVpR?=
+ =?utf-8?B?WG1GVnJONzEvQnhUcWJxL3hIb2FSQk10L0h1a3huRjJxcTZtY2tiRSsxejEx?=
+ =?utf-8?B?Y2wwODRMT2UzOTV0bjlkK25tQm5FVFhJYy9XYkZKalY4NVA0VURJVWd6VHRW?=
+ =?utf-8?B?RXdzNVNMK1g4ZXFUMXh4Ui82ZnEvby9icmxnVDhsSENWMnhNZjduSzAvQXFZ?=
+ =?utf-8?B?Mml3UzdhNzRFb2hIMXd0YVJOZ3dEa3V3ZysvZTY1T3ZYVjkrR0NtcmJyc1pq?=
+ =?utf-8?B?eVB5dW1oSlNSQWkxM3pHUmJtWWxVRWR3WURmMXNCQitkNTJwQUMvTmhvNmQy?=
+ =?utf-8?B?Wm9jTGdmbUZDSlZJVDRjaG1VczZqd0VVb20wZThNbnBBR0hZcm45d251OGw2?=
+ =?utf-8?B?NURmdUlxdC94a3JTQmplanNSMmxaRDdSbmkvenJ1S0Z2VlB0T1d3N1VWb0k5?=
+ =?utf-8?B?Vno4T1hqOXFoYndUaVhZTVFGanZhaUFtNFJUQS8rai9EQ0F1Mmt3Y0VqOXhC?=
+ =?utf-8?B?RE8wQU44bE4rZW8xNy8rcW5Bb1hPeUw1ZEMra2RvK1I0NXJDQk5mNVd2TE5U?=
+ =?utf-8?B?Y3JvNU4weUhvcFdrRGcvL0pCd1pia3ExQllSWGh4NUdncHNHRzVNYTIxM0Zl?=
+ =?utf-8?B?TktYNjV1MTFSSzFEdGpLY3U4UytpbzhHVzV3dDJDRlZ3R2pLamprWGI2VXo1?=
+ =?utf-8?B?ZktJNzczNlBIMXFUeFZ2YzgvbVlUdU9xZDJxRVNXZW9aL2pKZzJLemZySWRY?=
+ =?utf-8?B?anNsdE1QT3dmcWFUazgyc3BqdHFwNll4OEpPdWxuMG1UMGJMak5lb2dwTXFF?=
+ =?utf-8?B?TXdNK2NHemlJdG8wVDF0aU9MM0UvYzVVWTk1STVBMXBCTGZGOWwzQmNmQTNy?=
+ =?utf-8?B?dVNKRnRvQ1pMb0ZoSGxFMzg5MUkzZVRGSnJYVTJNRjJUMEhpT3U1MGVLbVhr?=
+ =?utf-8?B?ZnRrQmhleVhDK1IwaWpmMnZaaTE4R3AxRzFGbnRPK010anZWYmI0ZVk1YWhI?=
+ =?utf-8?B?M0xuRUpJRU5oY2orVTBySWZieDhjT1hOalhVb1FSeUwxY3hHWWVpb1BOelZW?=
+ =?utf-8?B?Y3ZhNDZueDY1d2RiWlkrZGVxM281ZnhsVVVYVEFkSVM4Y2lhakdEZ09kQ0hm?=
+ =?utf-8?B?eXY3alY1UGVBPT0=?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-99c3d.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4f5e4ad5-5b6a-4023-e7b0-08da373b8b61
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR02MB7009.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2022 12:56:51.3018
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR02MB9052
+X-Spam-Status: No, score=-0.0 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable exporting of events over PMU event export bus by setting
-PMCR.X of PMCR_EL0 during pmu reset.
+Hi Linus Walleij,
 
-As it impacts power consumption make it configurable at bootup
-with kernel arguments and at runtime with sysctl.
+On 13/05/22 03:21, Linus Walleij wrote:
+> On Fri, May 6, 2022 at 2:18 PM Joel Selvaraj <jo@jsfamily.in> wrote:
+>> +#define dsi_dcs_write_seq(dsi, seq...) do {                            \
+>> +               static const u8 d[] = { seq };                          \
+>> +               int ret;                                                \
+>> +               ret = mipi_dsi_dcs_write_buffer(dsi, d, ARRAY_SIZE(d)); \
+>> +               if (ret < 0)                                            \
+>> +                       return ret;                                     \
+>> +       } while (0)
+> 
+> First I don't see what the do {} while (0) buys you, just use
+> a basic block {}.
 
-Signed-off-by: Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
----
-Changes since V3:
-	- export bit is now configurable with sysctl
-	- enabling export bit on reset instead of retaining
+The do {} while (0) in macro ensures there is a semicolon when it's 
+used. With normal blocking, it would have issues with if conditions?
+I read about them here: https://stackoverflow.com/a/2381339
 
-Changes since V2:
-	Done below changes as per Will's comments
-	- enabling pmcr_x now configurable with kernel parameters and
-	  by default it is disabled.
-	
-Changes since V1:
-	- Preserving only PMCR_X bit as per Robin Murphy's comment.
----
- Documentation/admin-guide/kernel-parameters.txt |  4 ++++
- Documentation/admin-guide/sysctl/kernel.rst     |  8 ++++++++
- arch/arm64/kernel/perf_event.c                  | 15 +++++++++++++++
- include/linux/perf_event.h                      |  1 +
- kernel/sysctl.c                                 | 12 ++++++++++++
- 5 files changed, 40 insertions(+)
+> Second look at mipi_dbi_command() in include/drm/drm_mipi_dbi.h
+> this is very similar.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index de3da15..2139b81 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5150,6 +5150,10 @@
- 			Useful for devices that are detected asynchronously
- 			(e.g. USB and MMC devices).
- 
-+	export_pmu_events
-+			[KNL] Sets export bit of PMCR_EL0 to enable the exporting of
-+			events over PMU event export bus.
-+
- 	retain_initrd	[RAM] Keep initrd memory after extraction
- 
- 	rfkill.default_state=
-diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
-index ddccd10..8fbc3a0 100644
---- a/Documentation/admin-guide/sysctl/kernel.rst
-+++ b/Documentation/admin-guide/sysctl/kernel.rst
-@@ -892,6 +892,14 @@ The default value is 0 (access disabled).
- 
- See Documentation/arm64/perf.rst for more information.
- 
-+export_pmu_events
-+=================
-+Controls the export bit(4th bit) of PMCR_EL0 which enables the exporting of
-+events over an IMPLEMENTATION DEFINED PMU event export bus to another device.
-+
-+0: disables exporting of events
-+
-+1: enables exporting of events
- 
- pid_max
- =======
-diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
-index cb69ff1..271a8c6 100644
---- a/arch/arm64/kernel/perf_event.c
-+++ b/arch/arm64/kernel/perf_event.c
-@@ -34,6 +34,7 @@
- #define ARMV8_THUNDER_PERFCTR_L1I_CACHE_PREF_ACCESS		0xEC
- #define ARMV8_THUNDER_PERFCTR_L1I_CACHE_PREF_MISS		0xED
- 
-+int sysctl_export_pmu_events __read_mostly;
- /*
-  * ARMv8 Architectural defined events, not all of these may
-  * be supported on any given implementation. Unsupported events will
-@@ -1025,6 +1026,17 @@ static int armv8pmu_filter_match(struct perf_event *event)
- 	return evtype != ARMV8_PMUV3_PERFCTR_CHAIN;
- }
- 
-+static int __init export_pmu_events(char *str)
-+{
-+	/* Exporting of events can be enabled at runtime with sysctl or
-+	 * statically at bootup with kernel parameters.
-+	 */
-+	sysctl_export_pmu_events = 1;
-+	return 0;
-+}
-+
-+early_param("export_pmu_events", export_pmu_events);
-+
- static void armv8pmu_reset(void *info)
- {
- 	struct arm_pmu *cpu_pmu = (struct arm_pmu *)info;
-@@ -1047,6 +1059,9 @@ static void armv8pmu_reset(void *info)
- 	if (armv8pmu_has_long_event(cpu_pmu))
- 		pmcr |= ARMV8_PMU_PMCR_LP;
- 
-+	if (sysctl_export_pmu_events)
-+		pmcr |= ARMV8_PMU_PMCR_X;
-+
- 	armv8pmu_pmcr_write(pmcr);
- }
- 
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index da75956..7790328 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -1311,6 +1311,7 @@ extern void put_callchain_entry(int rctx);
- 
- extern int sysctl_perf_event_max_stack;
- extern int sysctl_perf_event_max_contexts_per_stack;
-+extern int sysctl_export_pmu_events;
- 
- static inline int perf_callchain_store_context(struct perf_callchain_entry_ctx *ctx, u64 ip)
- {
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index e52b6e3..3b751a2e 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -2008,6 +2008,18 @@ static struct ctl_table kern_table[] = {
- 		.extra2		= SYSCTL_ONE_THOUSAND,
- 	},
- #endif
-+#ifdef CONFIG_HW_PERF_EVENTS
-+	{
-+		.procname       = "export_pmu_events",
-+		.data           = &sysctl_export_pmu_events,
-+		.maxlen         = sizeof(int),
-+		.mode           = 0644,
-+		.proc_handler   = proc_dointvec_minmax,
-+		.extra1         = SYSCTL_ZERO,
-+		.extra2         = SYSCTL_ONE,
-+
-+	},
-+#endif
- 	{
- 		.procname	= "panic_on_warn",
- 		.data		= &panic_on_warn,
--- 
-2.7.4
+Does the ({..}) style blocking used in mipi_dbi_command help workaround 
+the semicolon issue I mentioned above?
+
+> So this utility macro should be in a generic file such as
+> include/drm/drm_mipi_dsi.h. (Can be added in a separate
+> patch.)
+
+I agree. Could be done in another patch.
+
+> Third I think you need only one macro (see below).
+> 
+>> +static int ebbg_ft8719_on(struct ebbg_ft8719 *ctx)
+>> +{
+>> +       struct mipi_dsi_device *dsi = ctx->dsi;
+>> +       struct device *dev = &dsi->dev;
+>> +       int ret;
+>> +
+>> +       dsi->mode_flags |= MIPI_DSI_MODE_LPM;
+>> +
+>> +       dsi_dcs_write_seq(dsi, 0x00, 0x00);
+>> +       dsi_generic_write_seq(dsi, 0xff, 0x87, 0x19, 0x01);
+> 
+> It's dubious that you always have dsi_dcs_write_seq()
+> followed by dsi_generic_write_seq().
+> 
+> That means mipi_dsi_generic_write() followed by
+> mipi_dsi_dcs_write_buffer(). But if you look at these
+> commands in drivers/gpu/drm/drm_mipi_dsi.c
+> you see that they do the same thing!
+
+They almost do the same thing except for the msg.type values? Mostly the 
+msg.type value is used to just check whether it's a long or short write 
+in the msm dsi_host code. However, in mipi_dsi_create_packet function, 
+the msg->type value is used to calculate packet->header[0] as follows:
+
+packet->header[0] = ((msg->channel & 0x3) << 6) | (msg->type & 0x3f);
+
+Wouldn't the difference between the mipi_dsi_dcs_write_buffer's and 
+mipi_dsi_generic_write's msg.type values cause issue here?
+
+I tried using mipi_dsi_dcs_write_buffer for all commands and the panel 
+worked fine, but I am not sure if it's correct to do so?
+
+> Lots of magic numbers. You don't have a datasheet do you?
+> So you could #define some of the magic?
+
+Unfortunately, I don't have a datasheet and the power on sequence is 
+taken from downstream android dts. It works pretty well though. So I 
+don't think I can #define any of these magic.
+
+ > Doesn't it work to combine them into one call for each
+ > pair?
+ >> +       dsi_dcs_write_seq(dsi, 0x00, 0x80);
+ >> +       dsi_generic_write_seq(dsi, 0xff, 0x87, 0x19);
+
+By using a macro? We can... but I am not sure what (0x00, 0x80), (0x00, 
+0xa0),etc type of commands signify without the datasheet, so I am not 
+sure what to name them in the macro and make any sensible meaning out of it.
+
+> 
+>> +       if (ctx->prepared)
+>> +               return 0;
+> (...)
+>> +       ctx->prepared = true;
+>> +       return 0;
+> (...)
+>> +       if (!ctx->prepared)
+>> +               return 0;
+> (...)
+>> +       ctx->prepared = false;
+>> +       return 0;
+> 
+> Drop this state variable it is a reimplementation of something
+> that the core will track for you.
+
+ok. Will drop them in the next version.
+
+> The rest looks nice!
+
+Thanks for your review!
+
+> Yours,
+> Linus Walleij
+
+Best Regards,
+Joel Selvaraj
 

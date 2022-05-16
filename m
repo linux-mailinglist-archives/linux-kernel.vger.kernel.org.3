@@ -2,94 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 304335289ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 18:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D95F35289E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 18:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245754AbiEPQMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 12:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45862 "EHLO
+        id S245711AbiEPQLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 12:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234205AbiEPQMG (ORCPT
+        with ESMTP id S236231AbiEPQLo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 12:12:06 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB6C3878D;
-        Mon, 16 May 2022 09:12:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=OZBRCsaeLLQD9CguIhK5Gsbv+Do9lNI4dRKnX3DnTVs=; b=cTAo65jHTM3B0ITLRt2mTe+qMi
-        Mgnedog4ec+puSbe0nyROSa19Q4JMc3jLrINzY75lEJgN4ZnZLbXRnbU9VgE7MZjNWhyf408I+eF0
-        UZsTZ4wldMCBZxElXn52I0DKJCfHcNJLOcsxnTRMPLlShL9EHMOqzRahK2vVGGFXB6RnGo8XEEJPO
-        gpyhtwCxU0EgZFBR09A8u7wGxD5xH5ep8p3kCFTe8PlGSgTOkVsHijQweIsXqaGaP95QgkavUlo4N
-        GY9l6sOGeJeiAc+wGG54Szh2/VK5I4c73G47OXj82SsENDkfCXLscQrlJiBmPFlo290c84ZDH/amA
-        F9S82K0A==;
-Received: from [177.183.162.244] (helo=[192.168.0.5])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nqdK8-006sYA-BV; Mon, 16 May 2022 18:11:56 +0200
-Message-ID: <41bede24-2bc4-a85b-9ba0-0f2562f8d0ca@igalia.com>
-Date:   Mon, 16 May 2022 13:11:25 -0300
+        Mon, 16 May 2022 12:11:44 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C8D381BD;
+        Mon, 16 May 2022 09:11:43 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GFlWun022190;
+        Mon, 16 May 2022 16:11:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=GOINm4iGy/8EjlIRjqhfX+GsqOsUpwjHjDIg/ubaWJw=;
+ b=E7tEH4vLcR/QjisobGo/RhKqL2AEPkejPA/o29qCJHeoXh/D0Sh89YLMK7MX63utMWIM
+ RPvni98sBuCqC/m9VF0nKVDH1hEsOuZFM8Evl7OqqvB63/ecq9KzsDCUVgVIZlHqMPk0
+ 2OVA910TyZZKaSBd2sLoZ4o3xAZUkXTxU5mNvESZcMDLRHU+UU8K+7wZV42c66nqsZLx
+ ABaPMjRmItK1MklCvQyub12XeqSL36kmzjQwlIbHJlzZj4zqi9wnJeUci00obTDqYYiv
+ 0mkE3bGMUKRQP2VW/UAT+sh0dBt1inSMQdUDwvlt5KLYLKd4HsgGDLuCxWOHWlXlcJxz 1Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3sjm8gnd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 16:11:42 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24GFmEEO023860;
+        Mon, 16 May 2022 16:11:42 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3sjm8gmv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 16:11:41 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24GGAwqj020663;
+        Mon, 16 May 2022 16:11:40 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma01fra.de.ibm.com with ESMTP id 3g2428tbhp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 16:11:40 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24GFvnds47317278
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 16 May 2022 15:57:49 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 05E9D42042;
+        Mon, 16 May 2022 16:11:37 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6969342041;
+        Mon, 16 May 2022 16:11:36 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.145.0.224])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 16 May 2022 16:11:36 +0000 (GMT)
+Date:   Mon, 16 May 2022 18:11:34 +0200
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Nico Boehr <nrb@linux.ibm.com>
+Cc:     kvm@vger.kernel.org, borntraeger@de.ibm.com, frankja@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, david@redhat.com,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        scgl@linux.ibm.com, mimu@linux.ibm.com
+Subject: Re: [PATCH v10 04/19] KVM: s390: pv: refactor s390_reset_acc
+Message-ID: <20220516181134.40652725@p-imbrenda>
+In-Reply-To: <6948806da404fd5822b59fd65b8a5a948e6bb317.camel@linux.ibm.com>
+References: <20220414080311.1084834-1-imbrenda@linux.ibm.com>
+        <20220414080311.1084834-5-imbrenda@linux.ibm.com>
+        <6948806da404fd5822b59fd65b8a5a948e6bb317.camel@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 25/30] panic, printk: Add console flush parameter and
- convert panic_print to a notifier
-Content-Language: en-US
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-26-gpiccoli@igalia.com> <YoJmKYLzPZqCDDim@alley>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <YoJmKYLzPZqCDDim@alley>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: xqKXHyI9NazAQAfp8LMS6545uOYZmnws
+X-Proofpoint-GUID: Lh0EaJdRO2M_bF5FKhpID_MGuCTBWhgp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-16_14,2022-05-16_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1015 impostorscore=0 lowpriorityscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 adultscore=0 mlxscore=0 mlxlogscore=999
+ spamscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205160091
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/05/2022 11:56, Petr Mladek wrote:
+On Mon, 16 May 2022 10:04:54 +0200
+Nico Boehr <nrb@linux.ibm.com> wrote:
+
+> On Thu, 2022-04-14 at 10:02 +0200, Claudio Imbrenda wrote:
+> > Refactor s390_reset_acc so that it can be reused in upcoming patches.
+> >=20
+> > We don't want to hold all the locks used in a walk_page_range for too
+> > long, and the destroy page UVC does take some time to complete.
+> > Therefore we quickly gather the pages to destroy, and then destroy
+> > them
+> > without holding all the locks.
+> >=20
+> > The new refactored function optionally allows to return early without
+> > completing if a fatal signal is pending (and return and appropriate
+> > error code). Two wrappers are provided to call the new function.
+> >=20
+> > Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> > Reviewed-by: Janosch Frank <frankja@linux.ibm.com> =20
+>=20
+> Reviewed-by: Nico Boehr <nrb@linux.ibm.com>
+>=20
+> But see below with one naming suggestion you might want to take into
+> account.
+>=20
 > [...]
-> I really like both changes. Just please split it them into two
-> patchset. I mean one patch for the new "panic_console_replay"
-> parameter and 2nd that moves "printk_info" into the notifier.
-> 
+> > diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
+> > index e8904cb9dc38..a3a1f90f6ec1 100644
+> > --- a/arch/s390/mm/gmap.c
+> > +++ b/arch/s390/mm/gmap.c
+> > @@ -2676,44 +2676,81 @@ void s390_reset_cmma(struct mm_struct *mm)
+> > =C2=A0}
+> > =C2=A0EXPORT_SYMBOL_GPL(s390_reset_cmma);
+> > =C2=A0
+> > -/*
+> > - * make inaccessible pages accessible again
+> > - */
+> > -static int __s390_reset_acc(pte_t *ptep, unsigned long addr,
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 unsigned long next, struct mm_walk *walk)
+> > +#define DESTROY_LOOP_THRESHOLD 32 =20
+>=20
+> maybe GATHER_NUM_PAGE_REFS_TO_TAKE?
 
-OK sure, will do that in V2.
-Thanks,
-
-
-Guilherme
+what about GATHER_GET_PAGES ?

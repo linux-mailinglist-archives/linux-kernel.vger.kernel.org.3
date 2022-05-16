@@ -2,108 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19DD7528C2F
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 19:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD88528C2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 19:42:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236513AbiEPRmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 13:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
+        id S1344419AbiEPRlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 13:41:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344392AbiEPRlc (ORCPT
+        with ESMTP id S1344344AbiEPRkz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 13:41:32 -0400
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 16 May 2022 10:41:25 PDT
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3C4423701D;
-        Mon, 16 May 2022 10:41:24 -0700 (PDT)
+        Mon, 16 May 2022 13:40:55 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156393701F
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 10:40:54 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id r27so16770673iot.1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 10:40:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id; bh=DjFY8kI2tBxuMhCnW3UlpTLlJzV7HoCSZMoVqH/WCD8=; b=S
-        RirxfGceUucx9whh94apwdg2TnJjAuwqnl5Q25s4qXetI+lACrLCcYCaz4sEG03b
-        T+xN3MQh5Jczp+gCk5J/5avnk6+p/yC4fN2ygWCFxottkUetJW/q1muDbkEGnYHi
-        wl5oAFUyLNYbbdsO4TXRLbirXMxCjcx8p87lqJvNEo=
-Received: from localhost (unknown [10.129.21.144])
-        by front02 (Coremail) with SMTP id 54FpogD39OR0jIJidi5ABg--.34814S2;
-        Tue, 17 May 2022 01:40:05 +0800 (CST)
-From:   Yongzhi Liu <lyz_cs@pku.edu.cn>
-To:     serge@hallyn.com, jmorris@namei.org, viro@zeniv.linux.org.uk,
-        dhowells@redhat.com, ebiederm@xmission.com
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yongzhi Liu <lyz_cs@pku.edu.cn>
-Subject: [PATCH] commoncap: check return value to avoid null pointer dereference
-Date:   Mon, 16 May 2022 10:40:02 -0700
-Message-Id: <1652722802-66170-1-git-send-email-lyz_cs@pku.edu.cn>
-X-Mailer: git-send-email 2.7.4
-X-CM-TRANSID: 54FpogD39OR0jIJidi5ABg--.34814S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7trWfuryxJF15Xr43tF15XFb_yoW8Xr4fpa
-        1fCa48Jr4rJFyj9w1vvF4Duw1Y9ayfZFW8GFWkuw1ayFs3Gry0yryakw1UuF15CryYk34j
-        qr4Yk3y5WF1UA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkK1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E
-        87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzx
-        vE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        JVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
-        AKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l
-        42xK82IY6x8ErcxFaVAv8VWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
-        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
-        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j
-        6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbU
-        UUUUU==
-X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwEHBlPy7vG+mAAFse
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=bkBYbqFw8Uqt2LrlL3b8A2k4CheYeXwKOqf0DAmC3h4=;
+        b=n1mNAB+0PSwsAxiakcc+rlhe/EZVDgezWHiyER1cVuh4UPi8Ymz2Syc3w6wYTymETD
+         pr2G+uID5qk/YWsWl0tUYPtYQBsBW9gAfcctEIWpNzFxIm/5/SoH/ZugZXxd8dr/9Se4
+         DwAg20e8QGCXPzZ0AaTnlCL1hCBAjwXIyhURn+858wfM4tfuL+JPpem6qUf0vDQbC5dl
+         Fs4gXpfr0ZH7NCdNV6gDoN2V3k/rejOnfR08RACy0bUvkXOXWwFdyuW1EQIq3kHJxXNv
+         OHeH/C6qrx0Okx7gnHjXHm28c6ZlvLzHWsmSyKs9c5g5n9fH85Wz/H147j7CK8XXZD1T
+         Ujxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=bkBYbqFw8Uqt2LrlL3b8A2k4CheYeXwKOqf0DAmC3h4=;
+        b=trvNmNsYinPD3nnXHIbjLYXUnvYhl7sXGuwPib4aRCa+y321ROqHLNu92dKzjFlWuW
+         mmObPEBoP0a7pnd0AZXJD3VOgKadLKNn7W8u9zTeklr3QsD46LexYgfSuL9qu/Hdx7RC
+         FNeX5ajsuIgStQHZ7lmU8qGUBx9LsuscLyuVAvW7FeS7sumQMFIVZNPLwbWKJWfRr6gf
+         kHy/ULQa5n9nzL6/s2vGAaXfRgexQzR/YcZkExU9J/ye+N+uGkHFUCyklZ7V7LT5uzTX
+         DCdr5QtEmHCLSaqP0nERbwyNUWGbXyE979+Ffw4RfKUWEpwDZ2TDPr962Vg+VIloX+Uk
+         NcLQ==
+X-Gm-Message-State: AOAM531M6b1MeWBtSMwyU87sut/LekCwAGSu0/S3MeWbEy38WJebzvHW
+        07wNT0h2G5cfk04nEFDt8hQ4XQ==
+X-Google-Smtp-Source: ABdhPJwzFS9gS5AVmSDi/Y7kLQ3Xm6tjAaR656Vkq1IYvhBKxr5hb7ksEb4pvoQfzpinz9N7d7RqLQ==
+X-Received: by 2002:a05:6638:196:b0:32d:fde1:582d with SMTP id a22-20020a056638019600b0032dfde1582dmr8912456jaq.134.1652722853481;
+        Mon, 16 May 2022 10:40:53 -0700 (PDT)
+Received: from [192.168.1.172] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id n11-20020a02714b000000b0032e16c566adsm1757970jaf.109.2022.05.16.10.40.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 10:40:52 -0700 (PDT)
+Message-ID: <83042952-30e9-849a-be31-c31e951e8d70@kernel.dk>
+Date:   Mon, 16 May 2022 11:40:51 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] blk-iocos: fix inuse clamp when iocg deactivate or free
+Content-Language: en-US
+To:     Chengming Zhou <zhouchengming@bytedance.com>, tj@kernel.org
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com
+References: <20220516101909.99768-1-zhouchengming@bytedance.com>
+ <bbd8744f-d938-c4a5-cb02-145c9875ea53@bytedance.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <bbd8744f-d938-c4a5-cb02-145c9875ea53@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pointer inode is dereferenced before a null pointer
-check on inode, hence if inode is actually null we will
-get a null pointer dereference. Fix this by only dereferencing
-inode after the null pointer check on inode.
+On 5/16/22 6:18 AM, Chengming Zhou wrote:
+> Then this effect is very small, unlikely to have an impact in
+> practice. Should I modify the commit message to send v2 or just drop
+> it?
 
-Fixes: c6f493d631c ("VFS: security/: d_backing_inode() annotations")
-Fixes: 8db6c34 ("Introduce v3 namespaced file capabilities")
+Send a v2 please.
 
-Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
----
- security/commoncap.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/security/commoncap.c b/security/commoncap.c
-index 5fc8986..978f011 100644
---- a/security/commoncap.c
-+++ b/security/commoncap.c
-@@ -298,6 +298,8 @@ int cap_inode_need_killpriv(struct dentry *dentry)
- 	struct inode *inode = d_backing_inode(dentry);
- 	int error;
- 
-+	if (!inode)
-+		return 0;
- 	error = __vfs_getxattr(dentry, inode, XATTR_NAME_CAPS, NULL, 0);
- 	return error > 0;
- }
-@@ -545,11 +547,13 @@ int cap_convert_nscap(struct user_namespace *mnt_userns, struct dentry *dentry,
- 	const struct vfs_cap_data *cap = *ivalue;
- 	__u32 magic, nsmagic;
- 	struct inode *inode = d_backing_inode(dentry);
--	struct user_namespace *task_ns = current_user_ns(),
--		*fs_ns = inode->i_sb->s_user_ns;
-+	struct user_namespace *task_ns = current_user_ns(), *fs_ns;
- 	kuid_t rootid;
- 	size_t newsize;
- 
-+	if (!inode)
-+		return -EINVAL;
-+	fs_ns = inode->i_sb->s_user_ns;
- 	if (!*ivalue)
- 		return -EINVAL;
- 	if (!validheader(size, cap))
 -- 
-2.7.4
+Jens Axboe
 

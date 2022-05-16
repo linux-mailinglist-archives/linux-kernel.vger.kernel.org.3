@@ -2,65 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5DD527DBC
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3AE4527DBE
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240388AbiEPGnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 02:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38426 "EHLO
+        id S240400AbiEPGor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 02:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiEPGnm (ORCPT
+        with ESMTP id S237066AbiEPGon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 02:43:42 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CF335876;
-        Sun, 15 May 2022 23:43:40 -0700 (PDT)
+        Mon, 16 May 2022 02:44:43 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7CD36332
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:44:42 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id f4so11236982lfu.12
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:44:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1652683421;
-  x=1684219421;
-  h=date:from:to:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=UBLXuJ3x/eQp0h7RffFZ6La9xjLghucU1bkO5zIfwR8=;
-  b=E6wWDmE0XsYIeyYopAjQls833PBad5MWIL0I+04i7EG41kmbR7/sfSKR
-   7WCEagOqsbmvTVRsyzZABhDgYZRLAUXTVtmOspOkNPKHm14sANr1DoQsX
-   fvAIR/J5c/N8vGt5sUIWkx2qBA7XPRCo/qvmMldK32n+fwHmY28jbzWL9
-   gdeG17Txb9xPYGyCJrTVb1zPBLc22fj2ejojJsEibsQr54j25ZKcQrD2F
-   B1i2EjUJcBUOhoindOh3bIywmz2KaKJieH0A3/3RplcvDxa8DkpIwemaI
-   nNZVgGhmH1K9Et+Cciu0mKJRSw5qC0sNFSUmWEcRYEaeMKYsO+U620xJV
-   Q==;
-Date:   Mon, 16 May 2022 08:43:38 +0200
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Wolfram Sang <wsa@kernel.org>, <kernel@axis.com>,
-        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <krzk+dt@kernel.org>, <robh+dt@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: add property to avoid device
- detection
-Message-ID: <20220516064338.GA28916@axis.com>
-References: <20220412085046.1110127-1-vincent.whitchurch@axis.com>
- <20220412085046.1110127-2-vincent.whitchurch@axis.com>
- <Yn+8CJ3j2SY2+Mq+@shikoro>
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1LbC7djwtLM4YZ72y/hNCJx0pEPopsHYbpFNoVttBhA=;
+        b=RCmUuhtjhJeNYEVEw1Rol9WRb4ku+esDkaKAShmsnU5o+Q9m6BZwSLu0PICvvwOcXh
+         2IN/J1kv0RgTIiQYDUHqWzc4AExXT4nWjeJvI+wLNAghb3kz9Ts5dlKK1B57hZavzY37
+         RvW51gSY/S9G/jwF/VKioXGgCHR07sVTghcWjdnlhSfEQC+SaSbzhqBUy4gIDbWZ3yhG
+         EZboCW+y1VFmsY6ordwkQq4LmqJo9GYu//djNuAfBDqjeBetka79LaC1SaRdxi1JcNUm
+         +Rm2v/e6ktXMpMq0OaynyTFC5FVuRFiBe1EK1F1MRaDK05Y5saajpz9aTXHxF3TMd+f3
+         ePOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1LbC7djwtLM4YZ72y/hNCJx0pEPopsHYbpFNoVttBhA=;
+        b=U/BY7I4rlnriXpmn0skEKEzP9rbUcS24pAz+4xv1X81I80veghpcFKoYa6VBxLxWAi
+         dITBoCir8rIFdLlxmvh+449aaIzeW2XFExNy7wlEQsyiXr7AydUh5DO4kS+JdjCUpI1B
+         KVW8IY3cmLR6ZW6RrsqjPBR4EOmCbXC0tvCnC8XxkbxycXuo47vMOfAHO0AR7KNcWyAz
+         x5OBQVay8xDag8EW9zceNIcINYlFfwk5ihYXw7TIggej2JbFUfi8vZ4hK2fgdRYxeNQJ
+         TSKwxkit62CHDk1C4MHnD6Xthi+xiNSo6foRBYBprJjPoy8EEeV5IM08YGc8We2nTDwl
+         FLug==
+X-Gm-Message-State: AOAM530kf01VuFEB3rlnKlqN/Y4Uk6sgKTJe9A84HNXgMGw13yCUfWgs
+        EQ0LQLciIUcch+OaAv2vHeruog==
+X-Google-Smtp-Source: ABdhPJy7JBh/EolHXYB9iXXCO/1B6ptm129XpZcRWu58H0Zz4/1TzYvTCpH32xofvi+onbrPm/AWsA==
+X-Received: by 2002:a19:7710:0:b0:472:3486:a49e with SMTP id s16-20020a197710000000b004723486a49emr12318505lfc.600.1652683481024;
+        Sun, 15 May 2022 23:44:41 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id y27-20020a2e545b000000b0024f3d1daef3sm1435220ljd.123.2022.05.15.23.44.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 May 2022 23:44:40 -0700 (PDT)
+Message-ID: <d5fdfe27-a6de-3030-ce51-9f4f45d552f3@linaro.org>
+Date:   Mon, 16 May 2022 08:44:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Yn+8CJ3j2SY2+Mq+@shikoro>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH net] NFC: hci: fix sleep in atomic context bugs in
+ nfc_hci_hcp_message_tx
+Content-Language: en-US
+To:     Duoming Zhou <duoming@zju.edu.cn>, linux-kernel@vger.kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, gregkh@linuxfoundation.org,
+        alexander.deucher@amd.com, broonie@kernel.org,
+        netdev@vger.kernel.org
+References: <20220516021028.54063-1-duoming@zju.edu.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220516021028.54063-1-duoming@zju.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 14, 2022 at 04:26:16PM +0200, Wolfram Sang wrote:
-> That aside, I am not sure we should handle this at DT level. Maybe we
-> should better change the GPIO driver to not populate a class if we have
-> a firmware node?
+On 16/05/2022 04:10, Duoming Zhou wrote:
+> There are sleep in atomic context bugs when the request to secure
+> element of st21nfca is timeout. The root cause is that kzalloc and
+> alloc_skb with GFP_KERNEL parameter is called in st21nfca_se_wt_timeout
+> which is a timer handler. The call tree shows the execution paths that
+> could lead to bugs:
+> 
+>    (Interrupt context)
+> st21nfca_se_wt_timeout
+>   nfc_hci_send_event
+>     nfc_hci_hcp_message_tx
+>       kzalloc(..., GFP_KERNEL) //may sleep
+>       alloc_skb(..., GFP_KERNEL) //may sleep
+> 
+> This patch changes allocation mode of kzalloc and alloc_skb from
+> GFP_KERNEL to GFP_ATOMIC in order to prevent atomic context from
+> sleeping. The GFP_ATOMIC flag makes memory allocation operation
+> could be used in atomic context.
+> 
+> Fixes: 8b8d2e08bf0d ("NFC: HCI support")
+> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+> ---
+>  net/nfc/hci/hcp.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/net/nfc/hci/hcp.c b/net/nfc/hci/hcp.c
+> index 05c60988f59..1caf9c2086f 100644
+> --- a/net/nfc/hci/hcp.c
+> +++ b/net/nfc/hci/hcp.c
+> @@ -30,7 +30,7 @@ int nfc_hci_hcp_message_tx(struct nfc_hci_dev *hdev, u8 pipe,
+>  	int hci_len, err;
+>  	bool firstfrag = true;
+>  
+> -	cmd = kzalloc(sizeof(struct hci_msg), GFP_KERNEL);
+> +	cmd = kzalloc(sizeof(*cmd), GFP_ATOMIC);
 
-Is it always safe to not do this detection if we have a firmware node?
-Then maybe the core could just always skip it in that case without
-looking for a special property or requiring individual drivers to choose
-what to do?
+No, this does not look correct. This function can sleep, so it can use
+GFP_KERNEL. Please just look at the function before replacing any flags...
+
+
+
+Best regards,
+Krzysztof

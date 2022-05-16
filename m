@@ -2,54 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CCEA528294
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E962E5282A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:52:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242763AbiEPKuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 06:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
+        id S242769AbiEPKwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 06:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235688AbiEPKuP (ORCPT
+        with ESMTP id S242980AbiEPKvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 06:50:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA94275F3;
-        Mon, 16 May 2022 03:50:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4534B60F75;
-        Mon, 16 May 2022 10:50:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A9106C34116;
-        Mon, 16 May 2022 10:50:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652698212;
-        bh=wRNyfCK/WPWxXzFGZ/xTULv4XtjZo+urdccl0BTZEcs=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Qvk7CoITCK8k6Rvv66oS0vJI1OIpt1jvBuZoIOTP6hwbrAJaX62v7VqUP37uqcKuK
-         TNSDpoOAS4RdJj6noC4/1yQVWURPhJPI2vfe9D4RtYcQAdpcQ/ql8iae04RFWlm9DH
-         aSjzaTxEH+j1sxF6am6C4hGfr004nbEIUHANMIPbAU6ZZnT2yPsIk+OGSGHcILz018
-         0OfZ2T93ywBsFSzJD5my1DRk0mbQeoVlG1frCVeItnUuY4/IppRA5wYp89arYav4Q2
-         1nKceOJbgCwjHfZiqpd6LIHcTp40UKU5ZMZ9aIAC/A43n015blz3fKDiI+KValUC4o
-         FjGak9qWh+azQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9446EF03935;
-        Mon, 16 May 2022 10:50:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 16 May 2022 06:51:17 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB45BF72
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 03:51:16 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id i8so110595plr.13
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 03:51:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5qABwBGQeqRGyH4s8D1h5zI8q8n2HwL4/08QSvpU+KQ=;
+        b=VSDQMlv8C2J9HnzLs/CYYNTmLUOIJa3xmXUvEFaE+GppMb+UfDrfgb9MvmDs2L4DgE
+         fAw8N2GLUo5h45FxctT4TbOBV7xvP5WLkymIZTfaMtTUwmiFhjVIi+IE9N+TRYbne3W/
+         xUqNzX7bvQkIEWp/4H5F17zPthIGutwTcK3pg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5qABwBGQeqRGyH4s8D1h5zI8q8n2HwL4/08QSvpU+KQ=;
+        b=m05Zgg6LyULmXeu2ZsdblF3el+JBfIiW8omyCWZhjNWe+he2eo3XkGegz9ecvok2lY
+         AJjl0UlooN/ZK7pkmbVs/5CyGkaE/ZHB+Mq+g0hhDRHiEFz3dTRFRQhhax/bb4/v6BkG
+         j4F+xEzXvwjuwc+yBCGD/TuG6lBbCJEzD+jQKIjafVW0kjPH4GEduuCZatXMAAanOdek
+         dNWL2GdIQr9RLNQEYfPEW7TbPVbSCTtAU5WhDGKgGBw30MiVppmdsFsOPcQoYT6crmTq
+         9fimt6zw7cvu+VNFsrXRvwl5EvVMmN1JC0bDXZ3iSb2aBVB16Esn8lb3BIx9xXpzhJkF
+         n54w==
+X-Gm-Message-State: AOAM533B4rjAaFm8JjvfvBYlKdkphJtNMGii6e31s4lDKC5Kvu/QGQGB
+        BrzoRpyHElUd7JFCvlr0lM4pLA==
+X-Google-Smtp-Source: ABdhPJzEhc6Nq+jLxQgfZOwbXkTmoQiUhXix3nS4TzvMkiag7XSXc+R5p+oyIy22fYfHXoiCxcP8fQ==
+X-Received: by 2002:a17:90b:33ca:b0:1dc:e5b8:482b with SMTP id lk10-20020a17090b33ca00b001dce5b8482bmr29885251pjb.165.1652698275616;
+        Mon, 16 May 2022 03:51:15 -0700 (PDT)
+Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:cdcb:c865:6f65:d875])
+        by smtp.gmail.com with ESMTPSA id o14-20020a655bce000000b003db8dd388afsm6332778pgr.10.2022.05.16.03.51.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 03:51:15 -0700 (PDT)
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+To:     Phillip Lougher <phillip@squashfs.org.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Xiongwei Song <Xiongwei.Song@windriver.com>
+Cc:     Zheng Liang <zhengliang6@huawei.com>,
+        Zhang Yi <yi.zhang@huawei.com>, Hou Tao <houtao1@huawei.com>,
+        Miao Xie <miaoxie@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm @ kvack . org" <linux-mm@kvack.org>,
+        "squashfs-devel @ lists . sourceforge . net" 
+        <squashfs-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] Implement readahead for squashfs
+Date:   Mon, 16 May 2022 18:50:59 +0800
+Message-Id: <20220516105100.1412740-1-hsinyi@chromium.org>
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] octeon_ep: delete unnecessary NULL check
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165269821259.15644.6055083761195107529.git-patchwork-notify@kernel.org>
-Date:   Mon, 16 May 2022 10:50:12 +0000
-References: <20220513072928.3713739-1-william.xuanziyang@huawei.com>
-In-Reply-To: <20220513072928.3713739-1-william.xuanziyang@huawei.com>
-To:     Ziyang Xuan <william.xuanziyang@huawei.com>
-Cc:     vburru@marvell.com, aayarekar@marvell.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,29 +73,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Commit c1f6925e1091("mm: put readahead pages in cache earlier") requires
+fs to implement readahead callback. Otherwise there will be a
+performance regression.
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+Commit 9eec1d897139("squashfs: provide backing_dev_info in order to
+disable read-ahead") mitigates the performance drop issue for squashfs
+by closing readahead for it.
 
-On Fri, 13 May 2022 15:29:28 +0800 you wrote:
-> vfree(NULL) is safe. NULL check before vfree() is not needed.
-> Delete them to simplify the code.
-> 
-> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
-> ---
->  drivers/net/ethernet/marvell/octeon_ep/octep_main.c | 3 +--
->  drivers/net/ethernet/marvell/octeon_ep/octep_rx.c   | 3 +--
->  drivers/net/ethernet/marvell/octeon_ep/octep_tx.c   | 3 +--
->  3 files changed, 3 insertions(+), 6 deletions(-)
+This series implements readahead callback for squashfs. The previous
+discussion are in [1] and [2].
 
-Here is the summary with links:
-  - [net-next] octeon_ep: delete unnecessary NULL check
-    https://git.kernel.org/netdev/net-next/c/1dee43c2c6f1
+[1] https://lore.kernel.org/all/CAJMQK-g9G6KQmH-V=BRGX0swZji9Wxe_2c7ht-MMAapdFy2pXw@mail.gmail.com/T/
+[2] https://lore.kernel.org/linux-mm/Yn5Yij9pRPCzDozt@casper.infradead.org/t/#m4af4473b94f98a4996cb11756b633a07e5e059d1
 
-You are awesome, thank you!
+Hsin-Yi Wang (2):
+  Revert "squashfs: provide backing_dev_info in order to disable
+    read-ahead"
+  squashfs: implement readahead
+
+ fs/squashfs/file.c  | 77 +++++++++++++++++++++++++++++++++++++++++++++
+ fs/squashfs/super.c | 33 -------------------
+ 2 files changed, 77 insertions(+), 33 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.36.0.550.gb090851708-goog
 

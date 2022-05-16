@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37111528FD8
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E05528F8D
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349800AbiEPUcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59234 "EHLO
+        id S1348589AbiEPUGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351037AbiEPUB4 (ORCPT
+        with ESMTP id S1347030AbiEPTvf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:01:56 -0400
+        Mon, 16 May 2022 15:51:35 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A201F47559;
-        Mon, 16 May 2022 12:57:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC1E3EB82;
+        Mon, 16 May 2022 12:46:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5CB58B81613;
-        Mon, 16 May 2022 19:57:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7EB3C34100;
-        Mon, 16 May 2022 19:57:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 414E7B815F6;
+        Mon, 16 May 2022 19:46:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D4EBC385AA;
+        Mon, 16 May 2022 19:46:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652731022;
-        bh=l9vK0Sdh9FgyGUOPCCX0OfhhDLvjeRSbXgox8Ua7K8k=;
+        s=korg; t=1652730400;
+        bh=icSuAv8bKxjkgQCS0+EKtkHmPx2uqUq5zHY0/SpG3nk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ODrElaCuyQu9AEV1at5L/hGuAFwKMBsA9+qyGJuWfNYvlT6Lyv4j87Jb37w4mcDPq
-         ggDjeSERFmAlM0x6oY1JXr3NHzz8GvjzSqAph1L5rxiC8sNON/n9BwsRaTs7P846dO
-         qtWtd2FvrVvjGV8wywcUXXdnw0Tq/jYkiduJeC7w=
+        b=Xj77AOwJaNvWloM7psr6fTzNSXEzToFcHqKBRHpYcsZmg5CLwl3xqv/b2YDznZIS+
+         a/Lre+N97soNDe25+Zpxq+NDAZHgM8yMv2iUR2Y1X5QBkzWI+YJELXtWEPTND8Wb8c
+         b1BQ2EGbDKTxw66hEOjvd09zMc7lij6me43nV6Xc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH 5.17 078/114] tty: n_gsm: fix invalid gsmtty_write_room() result
-Date:   Mon, 16 May 2022 21:36:52 +0200
-Message-Id: <20220516193627.725542986@linuxfoundation.org>
+        stable@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
+        Lyude Paul <lyude@redhat.com>
+Subject: [PATCH 5.10 53/66] drm/nouveau/tegra: Stop using iommu_present()
+Date:   Mon, 16 May 2022 21:36:53 +0200
+Message-Id: <20220516193620.942202204@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
-References: <20220516193625.489108457@linuxfoundation.org>
+In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
+References: <20220516193619.400083785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,64 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+From: Robin Murphy <robin.murphy@arm.com>
 
-commit 9361ebfbb79fd1bc8594a487c01ad52cdaa391ea upstream.
+commit 87fd2b091fb33871a7f812658a0971e8e26f903f upstream.
 
-gsmtty_write() does not prevent the user to use the full fifo size of 4096
-bytes as allocated in gsm_dlci_alloc(). However, gsmtty_write_room() tries
-to limit the return value by 'TX_SIZE' and returns a negative value if the
-fifo has more than 'TX_SIZE' bytes stored. This is obviously wrong as
-'TX_SIZE' is defined as 512.
-Define 'TX_SIZE' to the fifo size and use it accordingly for allocation to
-keep the current behavior. Return the correct remaining size of the fifo in
-gsmtty_write_room() via kfifo_avail().
+Even if some IOMMU has registered itself on the platform "bus", that
+doesn't necessarily mean it provides translation for the device we
+care about. Replace iommu_present() with a more appropriate check.
 
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
-Cc: stable@vger.kernel.org
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-Link: https://lore.kernel.org/r/20220504081733.3494-3-daniel.starke@siemens.com
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+Reviewed-by: Lyude Paul <lyude@redhat.com>
+[added cc for stable]
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Cc: stable@vger.kernel.org # v5.0+
+Link: https://patchwork.freedesktop.org/patch/msgid/70d40ea441da3663c2824d54102b471e9a621f8a.1649168494.git.robin.murphy@arm.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/n_gsm.c |    7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -137,6 +137,7 @@ struct gsm_dlci {
- 	int retries;
- 	/* Uplink tty if active */
- 	struct tty_port port;	/* The tty bound to this DLCI if there is one */
-+#define TX_SIZE		4096    /* Must be power of 2. */
- 	struct kfifo fifo;	/* Queue fifo for the DLCI */
- 	int adaption;		/* Adaption layer in use */
- 	int prev_adaption;
-@@ -1731,7 +1732,7 @@ static struct gsm_dlci *gsm_dlci_alloc(s
- 		return NULL;
- 	spin_lock_init(&dlci->lock);
- 	mutex_init(&dlci->mutex);
--	if (kfifo_alloc(&dlci->fifo, 4096, GFP_KERNEL) < 0) {
-+	if (kfifo_alloc(&dlci->fifo, TX_SIZE, GFP_KERNEL) < 0) {
- 		kfree(dlci);
- 		return NULL;
- 	}
-@@ -2976,8 +2977,6 @@ static struct tty_ldisc_ops tty_ldisc_pa
-  *	Virtual tty side
-  */
+--- a/drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c
++++ b/drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c
+@@ -123,7 +123,7 @@ nvkm_device_tegra_probe_iommu(struct nvk
  
--#define TX_SIZE		512
--
- /**
-  *	gsm_modem_upd_via_data	-	send modem bits via convergence layer
-  *	@dlci: channel
-@@ -3217,7 +3216,7 @@ static unsigned int gsmtty_write_room(st
- 	struct gsm_dlci *dlci = tty->driver_data;
- 	if (dlci->state == DLCI_CLOSED)
- 		return 0;
--	return TX_SIZE - kfifo_len(&dlci->fifo);
-+	return kfifo_avail(&dlci->fifo);
- }
+ 	mutex_init(&tdev->iommu.mutex);
  
- static unsigned int gsmtty_chars_in_buffer(struct tty_struct *tty)
+-	if (iommu_present(&platform_bus_type)) {
++	if (device_iommu_mapped(dev)) {
+ 		tdev->iommu.domain = iommu_domain_alloc(&platform_bus_type);
+ 		if (!tdev->iommu.domain)
+ 			goto error;
 
 

@@ -2,72 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 893F952868A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:10:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E315286AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244384AbiEPOKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 10:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
+        id S237738AbiEPONS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 10:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244362AbiEPOKW (ORCPT
+        with ESMTP id S244080AbiEPONN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 10:10:22 -0400
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0AC23B001
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:10:20 -0700 (PDT)
-Received: by mail-oo1-xc34.google.com with SMTP id c19-20020a4a3813000000b0035ea4a3b97eso4020657ooa.12
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:10:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3L9ucVaR/Ejc1j0lbTxJ50RjR5DDft1mXnfjZbe8XHI=;
-        b=kAT+QhfzSE4Rv08p4UM1CjKAom7zKObZf2OKcy5fXfLNxtuRPYKKwYChwNtwR4Aqce
-         YgYMx7SOIRE6dF0bgdXbmewYbRR0B+MoL0E8fCjvpX5MNFsp1hsUY4lGVYuG09gelIGn
-         p/U41VzFdduU/yYeT2g6XzrPQHrKxNuQW8eXweG6qYsUCtI9hIzkeTtxXZlnUW7TjQG8
-         YLMjUZdJw17HouZps03Qo2ZJeR+UyX/uL+X+zoDH957b0E8IuMax5dazbUcfyb0Nannv
-         dR4S2vD9ss7OwjfmzGmG5lxLFgc8yDJOA1X1ij4oZoTSrXnlIFW39tmGV4yUHYHX8PfV
-         f8QQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3L9ucVaR/Ejc1j0lbTxJ50RjR5DDft1mXnfjZbe8XHI=;
-        b=Fyr2FbSD+9FtVWYxzevieSuRiWztKutNK+M+2iThWnnFVl3vsoEjrr+1vPq6qF3eeQ
-         sBV5TBUX9l11/lxxz2epI7VN0rTJEV7Z6RnBJCSZmelPlCsi/FxBEt1LrKc96hqGmvfv
-         brkeDXqQ4+SJUbNrVDkgTTLRd+kdarLXKMcDPYj0zg2YoWCmbVkTryPtuydaYQ/iacpQ
-         rGqARUyWzUN/asyG5AorZvdNKUYN6t45YE+BDr/sq1p9azziLHBCnvR4zfysBKiKIGv+
-         uxoOrpbgahJfJRw4P9WySEIymr0ySDBu7ZAxz+wGpt1dIvGshvwtBT37UCQa7MmEDSnX
-         bBNw==
-X-Gm-Message-State: AOAM532Z7pqTMvJuRMlW/OkpUiH7nOns01HETl4mI8V7PaKa1kd6j2lF
-        IuCJHmcrFq0sx5ECn/EFntldRbpyLHZD+7joiyk=
-X-Google-Smtp-Source: ABdhPJyqMj2s7jfJDLnF/x95jeeMc9LMg+uGl/fQSL/8oDUhl/dYxxYmMXphzX9sA5hJ+jbtT7eycyWH/Ms4xPQo0L8=
-X-Received: by 2002:a4a:8c41:0:b0:362:19a7:7529 with SMTP id
- v1-20020a4a8c41000000b0036219a77529mr6055010ooj.38.1652710219915; Mon, 16 May
- 2022 07:10:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220414143426.723168-1-gch981213@gmail.com> <20220414143426.723168-2-gch981213@gmail.com>
- <05966ece-65c8-ff7c-cb44-55c4d5a5542e@kontron.de>
-In-Reply-To: <05966ece-65c8-ff7c-cb44-55c4d5a5542e@kontron.de>
-From:   Chuanhong Guo <gch981213@gmail.com>
-Date:   Mon, 16 May 2022 22:10:08 +0800
-Message-ID: <CAJsYDVJ=WRT270mj2jNc+yy0v_XRpyH8N+GOmkNJv1zAh76rDA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] mtd: spinand: add support for detection with param page
-To:     Frieder Schrempf <frieder.schrempf@kontron.de>
-Cc:     linux-mtd@lists.infradead.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Mon, 16 May 2022 10:13:13 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9D832066;
+        Mon, 16 May 2022 07:13:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652710392; x=1684246392;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=q8T0jBh7cGQQ4AUWl+1aBVbwpP+Txn2+ZD1GDsXUmwY=;
+  b=M49qI2RJYNeFyww4GpPEloAJZf3RvDjzRG/yy1d94WdKvwT70eNfFVah
+   rHztlRV/mWPf6deUpgZmot8zsEE3Sy4c/WuAal94+s7f8JXFx2DBmFSEJ
+   LJ/nAuUNJhgdsbdkTnhBU+aPmZqkuYbowLgerMOOuCzCnpZ7+BFG4OOUG
+   E5oQgCkYYpvy3ZH2pI4dWq1GLRVAS14Mc3vr9ZJme/SJAHxU9qCXD4JuQ
+   BDOOW2soJYlGtKzCHw7/1xW9gkEGPhH/YmvpaVjd9dorsFmN8inO1eeib
+   YgU4SB2U0qnzuooP5UuyHm64U2EzZu1f37bbqi0xs4zewgcHeRUaZ5voi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="252906637"
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="252906637"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 07:13:11 -0700
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="638258613"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 07:13:05 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nqbQv-0006ib-VU;
+        Mon, 16 May 2022 17:10:49 +0300
+Date:   Mon, 16 May 2022 17:10:49 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Mark Brown <broonie@kernel.org>,
-        Daniel Palmer <daniel@0x0f.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        chris.packham@alliedtelesis.co.nz,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Anatolij Gustschin <agust@denx.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pantelis Antoniou <pantelis.antoniou@gmail.com>
+Subject: Re: [PATCH v2 4/4] powerpc/52xx: Convert to use fwnode API
+Message-ID: <YoJbaTNJFV2A1Etw@smile.fi.intel.com>
+References: <20220507100147.5802-1-andriy.shevchenko@linux.intel.com>
+ <20220507100147.5802-4-andriy.shevchenko@linux.intel.com>
+ <877d6l7fmy.fsf@mpe.ellerman.id.au>
+ <YoJaGGwfoSYhaT13@smile.fi.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YoJaGGwfoSYhaT13@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,47 +85,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+On Mon, May 16, 2022 at 05:05:12PM +0300, Andy Shevchenko wrote:
+> On Mon, May 16, 2022 at 11:48:05PM +1000, Michael Ellerman wrote:
+> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
+> > > We may convert the GPT driver to use fwnode API for the sake
+> > > of consistency of the used APIs inside the driver.
+> > 
+> > I'm not sure about this one.
+> > 
+> > It's more consistent to use fwnode in this driver, but it's very
+> > inconsistent with the rest of the powerpc code. We have basically no
+> > uses of the fwnode APIs at the moment.
+> 
+> Fair point!
+> 
+> > It seems like a pretty straight-forward conversion, but there could
+> > easily be a bug in there, I don't have any way to test it. Do you?
+> 
+> Nope, only compile testing. The important part of this series is to
+> clean up of_node from GPIO library, so since here it's a user of
+> it I want to do that. This patch is just ad-hoc conversion that I
+> noticed is possible. But there is no any requirement to do so.
+> 
+> Lemme drop this from v3.
 
-On Mon, May 16, 2022 at 3:38 PM Frieder Schrempf
-<frieder.schrempf@kontron.de> wrote:
->
-> Hi Chuanhong,
->
-> Am 14.04.22 um 16:34 schrieb Chuanhong Guo:
-> > SPI-NAND detection using chip ID isn't always reliable.
-> > Here are two known cases:
-> > 1. ESMT uses JEDEC ID from other vendors. This may collapse with future
-> >    chips.
-> > 2. Winbond W25N01KV uses the exact same JEDEC ID as W25N01GV while
-> >    having completely different chip parameters.
->
-> I think they share the same first byte of the JEDEC ID, but the second
-> byte actually differs and would allow to differentiate between them, right?
-
-No. For the 128M version, all 3 bytes are the same between
-W25N01GV and W25N01KV.
-
->
-> I have this patchset [1] that I didn't manage to send upstream yet which
-> adds support for the W25N02KV. I added the second ID byte to detect them.
->
-> Still your approach using the ONFI data is more flexible of course and
-> probably a better way to handle this. I will see if I can find some time
-> to add support for the W25N02KV based on your patches.
-
-Don't do that. I abandoned this patchset because I later found that
-some early W25N01GV doesn't contain a parameter page at all,
-which means detecting W25N01GV/KV using only the parameter
-page is unreliable.
-I think what Boris proposed earlier in v1 (use parameter page
-just to distinguish the two chips) is the correct way to go.
-
-BTW I was making this patchset for a potential future ID conflict
-between ESMT and GigaDevice, and I don't actually need to
-deal with the W25N01GV/KV nonsense now, so I don't have a
-plan for send a new version of this atm.
+I just realize that there is no point to send a v3. You can just apply
+first 3 patches. Or is your comment against entire series?
 
 -- 
-Regards,
-Chuanhong Guo
+With Best Regards,
+Andy Shevchenko
+
+

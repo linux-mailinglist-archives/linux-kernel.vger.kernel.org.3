@@ -2,298 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32DA4527D80
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56F3A527D83
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240245AbiEPGVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 02:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
+        id S236782AbiEPGWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 02:22:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234525AbiEPGVf (ORCPT
+        with ESMTP id S234525AbiEPGWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 02:21:35 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5885124941;
-        Sun, 15 May 2022 23:21:34 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id n8so13524724plh.1;
-        Sun, 15 May 2022 23:21:34 -0700 (PDT)
+        Mon, 16 May 2022 02:22:03 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBC62528E
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:22:01 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id w4so18980979wrg.12
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:22:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2XQvQdTgnCwDfmHkTZtajXuRMAeapjHZEvNeUkViza8=;
-        b=ZLrZuXWGhglqCmNncstz6ccn5vDYbYWzH2VkXAZA1887OQvrY9eWeB0/8UQQgwWSGB
-         pVzZi6ep4Ax9nm3l099qIlairb6gML7KBNuKERwrzUYQKU5NB+Chh4uwnt1fUGD3DE0v
-         UVgcdupbcev1+NvQClM6qz9BVECcYIcbIAc2jk+cxmDVvMnR1sraxFf/z4kVM62+mgmr
-         YG0sv49pzekIRo8vFDi2WXwQkJUYsQ4dyp/aZReuOOSbOFLpNQgBchkiWCIzyH9ZSWww
-         0vH4RNk6R8t4fh5r6JasX81Clk/MpWUx0Ft4/SLtqC8ha+FyAKf7T2imbZHL04MZ9fsN
-         zzNg==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Xp1rVwPwZGm7aF8iBwYRdIWeIaUhDLQIkjkOwhePjAY=;
+        b=iq2HX1uTXyQEWAi6ay0HnkfbkC3CVIsazuwyCJFW3C3Hh046BFw0kDWhDr2SxPQOmY
+         gZ5/i9xcNzaF97stiCr81Cv1kkGPNEt8CvGSSPYgsTFA3s6PnuVqtQxLhhEnv4r1bWdQ
+         ulQrZnlWAydV2ggzvePsMHij+glCwWkU3muVOF77nNrk7sVezY5HnCctHZXJioEkcai3
+         axC6np97mR9mYdAXGmzkvheKzxcVIm3dq+aEB8tyW9vKcESJDhwtMw/n5NyQQYcWvt7S
+         A7ns85Mk1OHpyCA8vjrNJ3qe8h39gKBCBM8v88ubQmI+tbsNKYivEd/iY4Mih3SEcszQ
+         pk+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2XQvQdTgnCwDfmHkTZtajXuRMAeapjHZEvNeUkViza8=;
-        b=TiYkjbFzf0VJE0I0rbxTHbIaHH1+HUt+v2P4DVvXCceS4cpx8/i1Myv3jj905fGMk3
-         5f/Di7zd6/FbK7g4QsFYjnpXbNeKwihfei9+QqUUhxZEOlDCnRUpAL5oHLAsqwTuXsAN
-         iFCEVAzhHFTjEXF45SAKg7wOVTUjXID6NpQlU9v79dRmX1xRjeP3qcgIcc3QBdZcwq6U
-         71mqpYBasORwnebHuDzedUB6MOMhbWgA+NLLHPIB7yPEyOCh4UUmjxOpsiJuZcs9GZWw
-         F8ewnCkr9u1CqKlmf4oW6yDcnSSbIuurZ9sKzaNNYD4SKEYJJIm1kfyRDxQ0nkvKHik/
-         YMkw==
-X-Gm-Message-State: AOAM530p9Leq5DwdyEN6SpmrxxWqvhc9V0XCWApdcrlog/azxjU6BPJp
-        nbNGqWIzTp+0lcGbAAcU81Q=
-X-Google-Smtp-Source: ABdhPJydDWCC0cImtGR3ApozIWoml6FLqAUUWtzPeE7bW1eJQ3xAFnItpbdPcy3zKpfDYwU75NnssA==
-X-Received: by 2002:a17:902:7593:b0:15e:fe5d:58e1 with SMTP id j19-20020a170902759300b0015efe5d58e1mr16364570pll.102.1652682093885;
-        Sun, 15 May 2022 23:21:33 -0700 (PDT)
-Received: from genechen-System-Product-Name.richtek.com ([2402:7500:469:4645:1448:44e0:4d9f:8e5b])
-        by smtp.gmail.com with ESMTPSA id v15-20020a17090ad58f00b001d840f4eee0sm7597337pju.20.2022.05.15.23.21.31
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Xp1rVwPwZGm7aF8iBwYRdIWeIaUhDLQIkjkOwhePjAY=;
+        b=Kkxv0o7kIzhR0b69g51ESR+nTAxBujLTeNbqYEa6Mr4v3zGKcqv99UFYYC3it+AuUE
+         O7TmcOKdjmB1cdY3YYWGy8EOHq6PMrwi5WqZAMiXM7MwPgwzSGg+ycGBUwGeUUaD4Fvs
+         dqpRC0dsMZuo3PHvrnjd3ov9LyMiQMrZxY4pmjN/yS/47o5cTQ8C34Q0o6PHjl+y39hN
+         3FPrQUTz/QDLsFb+8Z/VdAjitI0m24DPA6sLyAXz2jQR0JerqWcogToop29+oIU6yoYe
+         3K0PEIwqEkSFyYD4Xx8PrZPLigtcICwY5+QA8/w3dIh0miXdczCOQkWvK/JOYAre7SFI
+         YBNg==
+X-Gm-Message-State: AOAM5307eBO0/kjbh6fL/4Cuw4kfw+/kY6r1yPaLnMLYrKhYESE83+sT
+        bdiIUabA120a89aNZwEbqGZGyA==
+X-Google-Smtp-Source: ABdhPJxQ/XKcwgPOESm2/QEXJrNDYN9zyZ28eUqekJkdf8gu94KblmKplU/gsk700oAAqTuC4iC+UA==
+X-Received: by 2002:adf:f543:0:b0:20d:80e:dde with SMTP id j3-20020adff543000000b0020d080e0ddemr3214144wrp.269.1652682119617;
+        Sun, 15 May 2022 23:21:59 -0700 (PDT)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id o5-20020adf8b85000000b0020c5253d8f0sm8552839wra.60.2022.05.15.23.21.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 May 2022 23:21:33 -0700 (PDT)
-From:   Gene Chen <gene.chen.richtek@gmail.com>
-To:     lee.jones@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        pavel@ucw.cz
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        gene_chen@richtek.com, cy_huang@richtek.com
-Subject: [PATCH v2] dt-bindings: mfd: Add bindings child nodes for the Mediatek MT6360
-Date:   Mon, 16 May 2022 14:21:27 +0800
-Message-Id: <20220516062127.99647-1-gene.chen.richtek@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 15 May 2022 23:21:59 -0700 (PDT)
+Date:   Mon, 16 May 2022 08:21:55 +0200
+From:   LABBE Corentin <clabbe@baylibre.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>
+Subject: Re: [PATCH v3 2/2] hwmon: acpi_power_meter: convert to
+ hwmon_device_register_with_info
+Message-ID: <YoHtg30ZrhxjVedA@Red>
+References: <20220509063010.3878134-1-clabbe@baylibre.com>
+ <20220509063010.3878134-3-clabbe@baylibre.com>
+ <e5f6c712-efed-2126-de2b-9a0d09150e7b@roeck-us.net>
+ <YoFWNAhiDrzpeBU8@Red>
+ <9f7d7281-0434-df59-40fa-1f5d8f53356d@roeck-us.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <9f7d7281-0434-df59-40fa-1f5d8f53356d@roeck-us.net>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gene Chen <gene_chen@richtek.com>
+Le Sun, May 15, 2022 at 05:29:54PM -0700, Guenter Roeck a écrit :
+> On 5/15/22 12:36, LABBE Corentin wrote:
+> > Le Wed, May 11, 2022 at 07:10:29PM -0700, Guenter Roeck a écrit :
+> >> Corentin,
+> >>
+> >> On 5/8/22 23:30, Corentin Labbe wrote:
+> >>> Booting lead to a hwmon_device_register() is deprecated. Please convert the driver to use hwmon_device_register_with_info().
+> >>> So let's convert the driver to use hwmon_device_register_with_info().
+> >>>
+> >>> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> >>> ---
+> >> [ ... ]
+> >>
+> >>> @@ -836,20 +740,20 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
+> >>>    		if (res)
+> >>>    			break;
+> >>>    
+> >>> -		remove_attrs(resource);
+> >>> +		remove_domain_devices(resource);
+> >>>    		setup_attrs(resource);
+> >>
+> >> Zhang Rui found an interesting problem with this code:
+> >> It needs a call to sysfs_update_groups(hwmon_dev->groups)
+> >> to update sysfs attribute visibility, probably between
+> >> remove_domain_devices() and setup_attrs().
+> >>
+> >>>    		break;
+> >>>    	case METER_NOTIFY_TRIP:
+> >>> -		sysfs_notify(&device->dev.kobj, NULL, POWER_AVERAGE_NAME);
+> >>> +		hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_average, 0);
+> >>
+> >> ... which makes realize: The notification device should be the hwmon device.
+> >> That would be resource->hwmon_dev, not the acpi device.
+> >>
+> > 
+> > Hello
+> > 
+> > Since my hardware lacks capabilities testing this, I have emulated it on qemu:
+> > https://github.com/montjoie/qemu/commit/320f2ddacb954ab308ef699f66fca6313f75bc2b
+> > 
+> > I have added a custom ACPI _DBX method for triggering some ACPI state change. (like config change, like enabling CAP).
+> > 
+> > For testing config change I have tried lot of way:
+> >                  res = read_capabilities(resource);
+> > @@ -742,18 +758,22 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
+> >   
+> >                  remove_domain_devices(resource);
+> >                  setup_attrs(resource);
+> > +               res = sysfs_update_groups(&resource->hwmon_dev->kobj, acpi_power_groups);
+> > +               res = sysfs_update_groups(&resource->acpi_dev->dev.kobj, acpi_power_groups);
+> > +               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_cap, 0);
+> > +               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_average, 0);
+> 
+> Did you add a debug log here ?
 
-Add bindings child nodes for the Mediatek MT6360
+Yes I added debug log to check what is called.
 
-Signed-off-by: Gene Chen <gene_chen@richtek.com>
-Link: https://lore.kernel.org/all/YmqTzlrVL5KaVPuz@robh.at.kernel.org/
----
- .../bindings/mfd/mediatek,mt6360.yaml         | 189 ++++++++++++++++++
- 1 file changed, 189 insertions(+)
+> 
+> acpi_power_groups would be the wrong parameter for sysfs_update_groups().
+> It would have to be resource->hwmon_dev->groups.
+> 
 
-diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6360.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6360.yaml
-index 4d8769f3748c..28eee02441ee 100644
---- a/Documentation/devicetree/bindings/mfd/mediatek,mt6360.yaml
-+++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6360.yaml
-@@ -37,6 +37,18 @@ properties:
-     description:
-       The first cell is the IRQ number.
+Even with that, no call to is_visible:
+@@ -742,18 +758,22 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
  
-+  regulators:
-+    $ref: /schemas/regulator/mt6360-regulator.yaml#
-+
-+  charger:
-+    $ref: /schemas/power/supply/mt6360_charger.yaml#
-+
-+  tcpc:
-+    $ref: /schemas/usb/mediatek,mt6360-tcpc.yaml#
-+
-+  led-controller:
-+    $ref: /schemas/leds/leds-mt6360.yaml#
-+
- required:
-   - compatible
-   - reg
-@@ -51,6 +63,8 @@ examples:
-   - |
-     #include <dt-bindings/interrupt-controller/irq.h>
-     #include <dt-bindings/regulator/mediatek,mt6360-regulator.h>
-+    #include <dt-bindings/leds/common.h>
-+    #include <dt-bindings/usb/pd.h>
-     i2c {
-         #address-cells = <1>;
-         #size-cells = <0>;
-@@ -63,5 +77,180 @@ examples:
-             interrupt-names = "IRQB";
-             interrupt-controller;
-             #interrupt-cells = <1>;
-+
-+            mt6360_charger: charger {
-+                compatible = "mediatek,mt6360-chg";
-+                richtek,vinovp-microvolt = <14500000>;
-+
-+                otg_vbus_regulator: usb-otg-vbus-regulator {
-+                    regulator-compatible = "usb-otg-vbus";
-+                    regulator-name = "usb-otg-vbus";
-+                    regulator-min-microvolt = <4425000>;
-+                    regulator-max-microvolt = <5825000>;
-+                };
-+            };
-+
-+            led-controller {
-+                compatible = "mediatek,mt6360-led";
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+
-+                multi-led@0 {
-+                    reg = <0>;
-+                    function = LED_FUNCTION_INDICATOR;
-+                    color = <LED_COLOR_ID_RGB>;
-+                    led-max-microamp = <24000>;
-+                    #address-cells = <1>;
-+                    #size-cells = <0>;
-+                    led@0 {
-+                        reg = <0>;
-+                        color = <LED_COLOR_ID_RED>;
-+                    };
-+                    led@1 {
-+                        reg = <1>;
-+                        color = <LED_COLOR_ID_GREEN>;
-+                    };
-+                    led@2 {
-+                        reg = <2>;
-+                        color = <LED_COLOR_ID_BLUE>;
-+                    };
-+                };
-+                led@3 {
-+                    reg = <3>;
-+                    function = LED_FUNCTION_INDICATOR;
-+                    color = <LED_COLOR_ID_WHITE>;
-+                    led-max-microamp = <150000>;
-+                };
-+                led@4 {
-+                    reg = <4>;
-+                    function = LED_FUNCTION_FLASH;
-+                    color = <LED_COLOR_ID_WHITE>;
-+                    function-enumerator = <1>;
-+                    led-max-microamp = <200000>;
-+                    flash-max-microamp = <500000>;
-+                    flash-max-timeout-us = <1024000>;
-+                };
-+                led@5 {
-+                    reg = <5>;
-+                    function = LED_FUNCTION_FLASH;
-+                    color = <LED_COLOR_ID_WHITE>;
-+                    function-enumerator = <2>;
-+                    led-max-microamp = <200000>;
-+                    flash-max-microamp = <500000>;
-+                    flash-max-timeout-us = <1024000>;
-+                };
-+            };
-+
-+            regulators {
-+                compatible = "mediatek,mt6360-regulator";
-+                LDO_VIN3-supply = <&BUCK2>;
-+                buck1 {
-+                    regulator-compatible = "BUCK1";
-+                    regulator-name = "mt6360,buck1";
-+                    regulator-min-microvolt = <300000>;
-+                    regulator-max-microvolt = <1300000>;
-+                    regulator-allowed-modes = <MT6360_OPMODE_NORMAL
-+                         MT6360_OPMODE_LP
-+                         MT6360_OPMODE_ULP>;
-+                };
-+                BUCK2: buck2 {
-+                    regulator-compatible = "BUCK2";
-+                    regulator-name = "mt6360,buck2";
-+                    regulator-min-microvolt = <300000>;
-+                    regulator-max-microvolt = <1300000>;
-+                    regulator-allowed-modes = <MT6360_OPMODE_NORMAL
-+                         MT6360_OPMODE_LP
-+                         MT6360_OPMODE_ULP>;
-+                };
-+                ldo6 {
-+                    regulator-compatible = "LDO6";
-+                    regulator-name = "mt6360,ldo6";
-+                    regulator-min-microvolt = <500000>;
-+                    regulator-max-microvolt = <2100000>;
-+                    regulator-allowed-modes = <MT6360_OPMODE_NORMAL
-+                         MT6360_OPMODE_LP>;
-+                };
-+                ldo7 {
-+                    regulator-compatible = "LDO7";
-+                    regulator-name = "mt6360,ldo7";
-+                    regulator-min-microvolt = <500000>;
-+                    regulator-max-microvolt = <2100000>;
-+                    regulator-allowed-modes = <MT6360_OPMODE_NORMAL
-+                         MT6360_OPMODE_LP>;
-+                };
-+                ldo1 {
-+                    regulator-compatible = "LDO1";
-+                    regulator-name = "mt6360,ldo1";
-+                    regulator-min-microvolt = <1200000>;
-+                    regulator-max-microvolt = <3600000>;
-+                    regulator-allowed-modes = <MT6360_OPMODE_NORMAL
-+                         MT6360_OPMODE_LP>;
-+                };
-+                ldo2 {
-+                    regulator-compatible = "LDO2";
-+                    regulator-name = "mt6360,ldo2";
-+                    regulator-min-microvolt = <1200000>;
-+                    regulator-max-microvolt = <3600000>;
-+                    regulator-allowed-modes = <MT6360_OPMODE_NORMAL
-+                         MT6360_OPMODE_LP>;
-+                };
-+                ldo3 {
-+                    regulator-compatible = "LDO3";
-+                    regulator-name = "mt6360,ldo3";
-+                    regulator-min-microvolt = <1200000>;
-+                    regulator-max-microvolt = <3600000>;
-+                    regulator-allowed-modes = <MT6360_OPMODE_NORMAL
-+                         MT6360_OPMODE_LP>;
-+                };
-+                ldo5 {
-+                    regulator-compatible = "LDO5";
-+                    regulator-name = "mt6360,ldo5";
-+                    regulator-min-microvolt = <2700000>;
-+                    regulator-max-microvolt = <3600000>;
-+                    regulator-allowed-modes = <MT6360_OPMODE_NORMAL
-+                         MT6360_OPMODE_LP>;
-+                };
-+            };
-+
-+            tcpc {
-+                compatible = "mediatek,mt6360-tcpc";
-+                interrupts-extended = <&gpio26 3 IRQ_TYPE_LEVEL_LOW>;
-+                interrupt-names = "PD_IRQB";
-+
-+                connector {
-+                    compatible = "usb-c-connector";
-+                    label = "USB-C";
-+                    data-role = "dual";
-+                    power-role = "dual";
-+                    try-power-role = "sink";
-+                    source-pdos = <PDO_FIXED(5000, 1000, PDO_FIXED_DUAL_ROLE | PDO_FIXED_DATA_SWAP)>;
-+                    sink-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_DUAL_ROLE | PDO_FIXED_DATA_SWAP)>;
-+                    op-sink-microwatt = <10000000>;
-+
-+                    ports {
-+                        #address-cells = <1>;
-+                        #size-cells = <0>;
-+
-+                        port@0 {
-+                            reg = <0>;
-+                            endpoint {
-+                                remote-endpoint = <&usb_hs>;
-+                            };
-+                        };
-+                        port@1 {
-+                            reg = <1>;
-+                            endpoint {
-+                                remote-endpoint = <&usb_ss>;
-+                          };
-+                        };
-+                        port@2 {
-+                            reg = <2>;
-+                            endpoint {
-+                                remote-endpoint = <&dp_aux>;
-+                            };
-+                        };
-+                    };
-+                };
-+            };
-         };
-     };
--- 
-2.25.1
+                remove_domain_devices(resource);
+                setup_attrs(resource);
++               res = sysfs_update_groups(&resource->hwmon_dev->kobj, resource->hwmon_dev->groups);
++               res = sysfs_update_groups(&resource->acpi_dev->dev.kobj, resource->hwmon_dev->groups);
++               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_cap, 0);
++               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_average, 0);
+                break;
 
+I checked drivers/hwmon/hwmon.c is seems that is_visible is only called by gen_attr/gen_attrs which is only called by __hwmon_create_attrs and then by registers functions.
+So perhaps it explain why it is never called.

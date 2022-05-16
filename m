@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79F3552908D
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C64CF5291B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346843AbiEPT4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55764 "EHLO
+        id S234785AbiEPUO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346889AbiEPTv3 (ORCPT
+        with ESMTP id S1348641AbiEPT6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:51:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F3840917;
-        Mon, 16 May 2022 12:46:00 -0700 (PDT)
+        Mon, 16 May 2022 15:58:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C95E43AD9;
+        Mon, 16 May 2022 12:50:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA7256151D;
-        Mon, 16 May 2022 19:45:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8E6EC385AA;
-        Mon, 16 May 2022 19:45:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E610EB81615;
+        Mon, 16 May 2022 19:50:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E503C34100;
+        Mon, 16 May 2022 19:50:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730359;
-        bh=tp+iY+5N+WnKZV1bBz/lKDeRyBo9XckND8D3YCkF+Ps=;
+        s=korg; t=1652730650;
+        bh=4bf/UsuSgVW7vJNOHxwczts9LNMMkWBw0O6Z5qy8XRo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z8IcxtN5sHgIkor5hwOBmAdp4iJNXsh5k3ByqDdIDRo1Faz5OJf1yWw397H+G+9Nt
-         FxwmuJ4yRjYYQSM5MwemvoXdGfkPFlP6C998T9wBotuG3kJPSQkRZgDvZV6blA367u
-         13h8ZtlvYmRuGTaokEKu5Xqd72xgEtzbWZZRxqu8=
+        b=rgdYBfa6pDoNV8sTyJ2dHy4k5r2QQj53qqOaUQdiRJnnVeibjlJEYyVLSq/mWbQJh
+         U47HiG7kftI0QI5VAo7lpqBaBlwGoBFh/MlC8uC96Ibyy0c3QqXM1auu0NYTPaHKv8
+         vMLfMa3+6oCaNWDnsEc+Rf8PWLWv7Sbj0ZUe7Icc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH 5.10 41/66] tty: n_gsm: fix mux activation issues in gsm_config()
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Baruch Siach <baruch@tkos.co.il>
+Subject: [PATCH 5.15 067/102] tty/serial: digicolor: fix possible null-ptr-deref in digicolor_uart_probe()
 Date:   Mon, 16 May 2022 21:36:41 +0200
-Message-Id: <20220516193620.602120115@linuxfoundation.org>
+Message-Id: <20220516193625.920760727@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
-References: <20220516193619.400083785@linuxfoundation.org>
+In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
+References: <20220516193623.989270214@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,60 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-commit edd5f60c340086891fab094ad61270d6c80f9ca4 upstream.
+commit 447ee1516f19f534a228dda237eddb202f23e163 upstream.
 
-The current implementation activates the mux if it was restarted and opens
-the control channel if the mux was previously closed and we are now acting
-as initiator instead of responder, which is the default setting.
-This has two issues.
-1) No mux is activated if we keep all default values and only switch to
-initiator. The control channel is not allocated but will be opened next
-which results in a NULL pointer dereference.
-2) Switching the configuration after it was once configured while keeping
-the initiator value the same will not reopen the control channel if it was
-closed due to parameter incompatibilities. The mux remains dead.
+It will cause null-ptr-deref when using 'res', if platform_get_resource()
+returns NULL, so move using 'res' after devm_ioremap_resource() that
+will check it to avoid null-ptr-deref.
+And use devm_platform_get_and_ioremap_resource() to simplify code.
 
-Fix 1) by always activating the mux if it is dead after configuration.
-Fix 2) by always opening the control channel after mux activation.
-
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
-Cc: stable@vger.kernel.org
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-Link: https://lore.kernel.org/r/20220504081733.3494-2-daniel.starke@siemens.com
+Fixes: 5930cb3511df ("serial: driver for Conexant Digicolor USART")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+Cc: stable <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220505124621.1592697-1-yangyingliang@huawei.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/n_gsm.c |   12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ drivers/tty/serial/digicolor-usart.c |    5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -2276,6 +2276,7 @@ static void gsm_copy_config_values(struc
+--- a/drivers/tty/serial/digicolor-usart.c
++++ b/drivers/tty/serial/digicolor-usart.c
+@@ -471,11 +471,10 @@ static int digicolor_uart_probe(struct p
+ 	if (IS_ERR(uart_clk))
+ 		return PTR_ERR(uart_clk);
  
- static int gsm_config(struct gsm_mux *gsm, struct gsm_config *c)
- {
-+	int ret = 0;
- 	int need_close = 0;
- 	int need_restart = 0;
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	dp->port.mapbase = res->start;
+-	dp->port.membase = devm_ioremap_resource(&pdev->dev, res);
++	dp->port.membase = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+ 	if (IS_ERR(dp->port.membase))
+ 		return PTR_ERR(dp->port.membase);
++	dp->port.mapbase = res->start;
  
-@@ -2343,10 +2344,13 @@ static int gsm_config(struct gsm_mux *gs
- 	 * FIXME: We need to separate activation/deactivation from adding
- 	 * and removing from the mux array
- 	 */
--	if (need_restart)
--		gsm_activate_mux(gsm);
--	if (gsm->initiator && need_close)
--		gsm_dlci_begin_open(gsm->dlci[0]);
-+	if (gsm->dead) {
-+		ret = gsm_activate_mux(gsm);
-+		if (ret)
-+			return ret;
-+		if (gsm->initiator)
-+			gsm_dlci_begin_open(gsm->dlci[0]);
-+	}
- 	return 0;
- }
- 
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq < 0)
 
 

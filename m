@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 307D152901A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D80FB529019
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237583AbiEPTzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:55:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56802 "EHLO
+        id S232855AbiEPUar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346212AbiEPTux (ORCPT
+        with ESMTP id S1350734AbiEPUBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:50:53 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E31443CE;
-        Mon, 16 May 2022 12:45:30 -0700 (PDT)
+        Mon, 16 May 2022 16:01:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0584B1D9;
+        Mon, 16 May 2022 12:55:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 982BCCE1798;
-        Mon, 16 May 2022 19:45:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3EDEC34100;
-        Mon, 16 May 2022 19:45:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D71FB81615;
+        Mon, 16 May 2022 19:55:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7996C36AE3;
+        Mon, 16 May 2022 19:55:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730327;
-        bh=eWA4IP9jXbZ4Dw5owvga1ugxXXjxeiJvUw4vGvqPllA=;
+        s=korg; t=1652730943;
+        bh=U2QEQ5QezFbQ1cxaLei4whHr3zcv3wJMKZL1uAsZsC4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0taIAyD32eo4azoyz70fvJscoOHyCt4IX/xoyOKlVqtiS3oI1Z/On/LZ/2PxKSkh8
-         DnTxuV+rw8kXpMaeDmAxdj3TFd74vtakoS5NjYdWtOe1TpGNgE7VZ9hmuRNqWKlfG9
-         SGtzfjltktU8baqCApIsR7P9WbphfVUx9KIIckoM=
+        b=fSsntxdY//llWkAyzZJw2OqLyQGlE5vNw2naxSnaGZY0hGQRJxTEo1Tep31Teqyob
+         gSPA++XfF8KpTaScZB11DdGj1KndE2TqsHE5qrq0UF+GjhuYkWKsb0Kf6VVeOERwGa
+         oXj/WxqfFHYfgS3cS8newPuThaiOiMw/b1V1O4Wc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 29/66] tls: Fix context leak on tls_device_down
+Subject: [PATCH 5.17 055/114] ASoC: ops: Validate input values in snd_soc_put_volsw_range()
 Date:   Mon, 16 May 2022 21:36:29 +0200
-Message-Id: <20220516193620.257989798@linuxfoundation.org>
+Message-Id: <20220516193627.075835157@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
-References: <20220516193619.400083785@linuxfoundation.org>
+In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
+References: <20220516193625.489108457@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +54,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxim Mikityanskiy <maximmi@nvidia.com>
+From: Mark Brown <broonie@kernel.org>
 
-[ Upstream commit 3740651bf7e200109dd42d5b2fb22226b26f960a ]
+[ Upstream commit aa22125c57f9e577f0a667e4fa07fc3fa8ca1e60 ]
 
-The commit cited below claims to fix a use-after-free condition after
-tls_device_down. Apparently, the description wasn't fully accurate. The
-context stayed alive, but ctx->netdev became NULL, and the offload was
-torn down without a proper fallback, so a bug was present, but a
-different kind of bug.
+Check that values written via snd_soc_put_volsw_range() are
+within the range advertised by the control, ensuring that we
+don't write out of spec values to the hardware.
 
-Due to misunderstanding of the issue, the original patch dropped the
-refcount_dec_and_test line for the context to avoid the alleged
-premature deallocation. That line has to be restored, because it matches
-the refcount_inc_not_zero from the same function, otherwise the contexts
-that survived tls_device_down are leaked.
-
-This patch fixes the described issue by restoring refcount_dec_and_test.
-After this change, there is no leak anymore, and the fallback to
-software kTLS still works.
-
-Fixes: c55dcdd435aa ("net/tls: Fix use-after-free after the TLS device goes down and up")
-Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
-Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
-Link: https://lore.kernel.org/r/20220512091830.678684-1-maximmi@nvidia.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/r/20220423131239.3375261-1-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/tls/tls_device.c | 3 +++
- 1 file changed, 3 insertions(+)
+ sound/soc/soc-ops.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
-index 1f56225a10e3..3c82286e5bcc 100644
---- a/net/tls/tls_device.c
-+++ b/net/tls/tls_device.c
-@@ -1345,7 +1345,10 @@ static int tls_device_down(struct net_device *netdev)
+diff --git a/sound/soc/soc-ops.c b/sound/soc/soc-ops.c
+index 58347eadd219..e693070f51fe 100644
+--- a/sound/soc/soc-ops.c
++++ b/sound/soc/soc-ops.c
+@@ -519,7 +519,15 @@ int snd_soc_put_volsw_range(struct snd_kcontrol *kcontrol,
+ 	unsigned int mask = (1 << fls(max)) - 1;
+ 	unsigned int invert = mc->invert;
+ 	unsigned int val, val_mask;
+-	int err, ret;
++	int err, ret, tmp;
++
++	tmp = ucontrol->value.integer.value[0];
++	if (tmp < 0)
++		return -EINVAL;
++	if (mc->platform_max && tmp > mc->platform_max)
++		return -EINVAL;
++	if (tmp > mc->max - mc->min + 1)
++		return -EINVAL;
  
- 		/* Device contexts for RX and TX will be freed in on sk_destruct
- 		 * by tls_device_free_ctx. rx_conf and tx_conf stay in TLS_HW.
-+		 * Now release the ref taken above.
- 		 */
-+		if (refcount_dec_and_test(&ctx->refcount))
-+			tls_device_free_ctx(ctx);
- 	}
+ 	if (invert)
+ 		val = (max - ucontrol->value.integer.value[0]) & mask;
+@@ -534,6 +542,14 @@ int snd_soc_put_volsw_range(struct snd_kcontrol *kcontrol,
+ 	ret = err;
  
- 	up_write(&device_offload_lock);
+ 	if (snd_soc_volsw_is_stereo(mc)) {
++		tmp = ucontrol->value.integer.value[1];
++		if (tmp < 0)
++			return -EINVAL;
++		if (mc->platform_max && tmp > mc->platform_max)
++			return -EINVAL;
++		if (tmp > mc->max - mc->min + 1)
++			return -EINVAL;
++
+ 		if (invert)
+ 			val = (max - ucontrol->value.integer.value[1]) & mask;
+ 		else
 -- 
 2.35.1
 

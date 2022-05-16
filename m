@@ -2,235 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D87DA5284CC
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 14:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 600985284D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 14:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243705AbiEPM5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 08:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
+        id S229632AbiEPM6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 08:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243670AbiEPM4z (ORCPT
+        with ESMTP id S237099AbiEPM5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 08:56:55 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11olkn2051.outbound.protection.outlook.com [40.92.19.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A91E393E0;
-        Mon, 16 May 2022 05:56:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DpvUdK5t7jV0TAjNjV0ajcz78lVM4cSZOPmXJWAqXECe31keC5x8vlxXxH/GFLDKvSgroEjwCU6k4PNttcWW8yjZkGlOZuMPbGgM/L2H39Y3fv7bwV+cEB5CJH2UCWPcCxdF1jm218ODZXfyaf5P0+CMNq0cGrXG2ALPcEl18/AMb5H1AG37CoAevx6hLQIvRxCJEBDJ3QueMYHWo/uBdN2kQcjvQQ5r/2AgkLt6kY8V19IFkT8EJPN+9zj5igIpMDO6t0+NEC4PuzJ2AwAOIBuUWuIIT7X7D/XHVh9veZHa7TQFegmGbRc9Dnwnw77znYwfW1y+oGvmkYTqQxMzYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bwDy906R8zFoWuOG3vh+sGkKJlZnX4rJHAAS+PoV7c4=;
- b=YMjdmycHJjx6JmnW3U09oM7rhS4xKIlNg5IsQcqmUv8Ugy7MR44XIjntftqWERZVeqF4EJfq65DgXTAfu7R1kGvpPp9ofnMh6Xx54HTsnzN2kgt99jHtusxeO/1kpVFxv2Io0VN2hfcg8dptOferg0JVKhnp29mLkBlqca/dSfE2cxZ02hdzaI2SelBRpdN8wIxePTXRITOSa7jURjU8q51jypPFp70HYcyng/Yu796KwS3CCpKQp01Kjd8vIzZuoyNk3uyo8Yj8O8EgIPJXkHyEwKYbB5TkPO/kHsYyQ3SYdtt8m/PvSS2Stl8exTvi3ekSwkMrNNsRW7SeCaatfw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from BY5PR02MB7009.namprd02.prod.outlook.com (2603:10b6:a03:236::13)
- by PH7PR02MB9052.namprd02.prod.outlook.com (2603:10b6:510:1f0::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.18; Mon, 16 May
- 2022 12:56:51 +0000
-Received: from BY5PR02MB7009.namprd02.prod.outlook.com
- ([fe80::303a:ab1:17c1:2d16]) by BY5PR02MB7009.namprd02.prod.outlook.com
- ([fe80::303a:ab1:17c1:2d16%8]) with mapi id 15.20.5250.018; Mon, 16 May 2022
- 12:56:51 +0000
-Message-ID: <BY5PR02MB7009831D8BC4DB2B34739CB6D9CF9@BY5PR02MB7009.namprd02.prod.outlook.com>
-Date:   Mon, 16 May 2022 18:26:38 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 3/3] drm/panel: introduce ebbg,ft8719 panel
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     devicetree@vger.kernel.org, Hao Fang <fanghao11@huawei.com>,
-        David Airlie <airlied@linux.ie>,
-        Shawn Guo <shawnguo@kernel.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        phone-devel@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <cover.1651835715.git.jo@jsfamily.in>
- <BY5PR02MB7009B91FB7306503B58C264BD9C59@BY5PR02MB7009.namprd02.prod.outlook.com>
- <CACRpkdYhkP9RYj98Lu=zkt+6aefx172R=8JtvOFpvh2uJ4byKA@mail.gmail.com>
-From:   Joel Selvaraj <jo@jsfamily.in>
-In-Reply-To: <CACRpkdYhkP9RYj98Lu=zkt+6aefx172R=8JtvOFpvh2uJ4byKA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TMN:  [n0i7MlgpymcXPupIYSrhvR27AjFasYamlhtX6qAZWi8XJ16Ga33WNNPGOF6yY5m/]
-X-ClientProxiedBy: PN3PR01CA0007.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:95::13) To BY5PR02MB7009.namprd02.prod.outlook.com
- (2603:10b6:a03:236::13)
-X-Microsoft-Original-Message-ID: <9cbbca03-dfeb-d456-651e-67394c2762e8@jsfamily.in>
+        Mon, 16 May 2022 08:57:54 -0400
+Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1A339682
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 05:57:53 -0700 (PDT)
+Received: by mail-vk1-xa32.google.com with SMTP id bc42so7429336vkb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 05:57:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=o8xDKjeA5vjhnmsZaoY94PaYuZJ/k/2yUmf/Dmij7ao=;
+        b=IIAZ2Vr+cKp9N/hE450cPXfGMc4W6fTjUA8NYQM8OGAxXmIn1uHumxtB8a/sB6412j
+         7sdniG4owzBih4e4mPYRlB3BXJ01DS3cwu+86vHTAJNTxcICEueQB4LSBWAXb4H9CYav
+         /1AyHO5SDWCl65RbUtarwktsst7MJJfImV4wA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=o8xDKjeA5vjhnmsZaoY94PaYuZJ/k/2yUmf/Dmij7ao=;
+        b=WFw0ziTThAcGPkecnDxgqIIa2/FGrtGypg6PvI8zNiD0DINahqecu9JkEOj4zwPt9M
+         MqunRJ5qMeTXEMaCkM6SfWZ1QJ9JKueD8BcmQc94GMfNN6JpMAOb9CpqAe0nqXDIsVZE
+         JWIvVSYt/t8RfJsnYbxfJisJ7zSpZzW2WrjmXz2p0J/mm29kV9VZfjMhoI/iwAJlBmbD
+         SCKUF0mrCv70Aak/U/pTSIKfgmMoB1CQdhlnz/RJWcucbvVuGNNBELVWuWgE9FDF3KY4
+         Bs5qBeBMrxe0GBt6q9kg4027V7zBbU67itNsugisedAuf/IU7/Q8nsjEbyyjFCqE7Vj5
+         ZSQw==
+X-Gm-Message-State: AOAM532x3QRAvj9vG6fTKDMiu58e7YfIFuipQnauSiD0FcQsLb+ddjm/
+        kXnVQjZdwuuevbh/tLJOUKOIMOHldwxFaGKqsd6apQ==
+X-Google-Smtp-Source: ABdhPJzbR154HdykUqMlOSgdS61sMbReXdsrDnc05byBsyuvClGk3qSBPM5na8t5c/P9iHuHZlbfFJyxBc7kjWU87L4=
+X-Received: by 2002:a05:6122:da8:b0:331:3b30:8b40 with SMTP id
+ bc40-20020a0561220da800b003313b308b40mr5898585vkb.30.1652705872210; Mon, 16
+ May 2022 05:57:52 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4f5e4ad5-5b6a-4023-e7b0-08da373b8b61
-X-MS-TrafficTypeDiagnostic: PH7PR02MB9052:EE_
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oSprm4vWHu9udrfCx+e8EI+ZrMSKCLuab2aYtCXfTqTgfOYLAsgOedC7MqVjOabikcVWvOtg8gZxwjdIXLu2hNGcCZCHWsHqJ1Zpiksi6vP7B60NVq1AXw8D3przitELxejPbokJxiiMGZQDQFxE80jRfgyaKRXyW4cQbxmeJayFfOi4FyeNJHTpo96WWMHI2TLwqsSW+dHCy2M/9pEOfcWRiMK0lVyyE9AxZSFQNxolC1r9A0gqY2NNqNjGGlNCYwGvARS5zSjRDm92U9a5vY5uHg6g0n90OSJMfMFuuLOxhiUWHANUyK8tuFS1leayCgSTt3VvfiBldlKgbYFeaMwEXNqGj9sPZgGJHRMvu08TY4xOQs+6T+UN5AtnhlXBqRETbFjKj7Vj5lmSoE1omisKG4lgCRS2X0XtHAJ7xGPk5N7mxDj4jRbh8kYAc+l4Mhk+3rffEPeYmzE9TxmfuQ53UI1qw/7t/+SSQ7zBctYHLYhTGObTcJqbkC4oens1ZthKKceb2d8mEHXYm/3vBtPpzUq/+l1bWQg8A4RBB3RqEDZ5OBgXjxHoOaoHE6jCkiH0eHdGavf3iplrlAseI2qpZXzImuM6Cul0gDm9dheO/K6BneLirAJjlsYZKQnb
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MlUyVUp4NFlPQlZULzUxaytlcDhCMG1mUmc0NkVxR1laUmRrS3Rsb0ZlaUJR?=
- =?utf-8?B?RFpXMUFRQ2dWQXh6bUJ3bmpzdkh4T3VIajU1RmJweHJBYXhDakMwWGJKN0Vz?=
- =?utf-8?B?ZVBYODNzQ3JWRmFEbE1lMTdLQW11VXhyK1UrTkx6SXlQcTRWazhpTmE2YjZE?=
- =?utf-8?B?UDZud1dIelFxblJaQmc3aHZ2bEhCczMxWnJCUTdid3dhbzA5S1NhS2ZNeFJm?=
- =?utf-8?B?WXdFN05HbCtkeW9tYk1malVOcUNxOXExSEVlc2krb3hYcXFoNFpOYWpia3FP?=
- =?utf-8?B?OWpzbEhieVFueVhTVGpnZEJqN2VSN2JsSmdQZVd0ek0wak54c0ZSWHZCM2FZ?=
- =?utf-8?B?YkpvTWpPWUdKakVFUklJcDZSNjVhWk81UEhoYk13UjY2cTgyWXVLeVBKM0hi?=
- =?utf-8?B?WlNMZnZGdEUzbzQzQVlZK3VHbVNWK0VEbmtnNTJqNmNxdWx3S3BEblRCbEQy?=
- =?utf-8?B?dk9Na3llSGVoY3cvSjNWY3RBemp1amJpK3FrUFZiQTJUL0ZHOWwzVTVtUy9r?=
- =?utf-8?B?MVU5OStMT1JWeGNWM2VSb2lMcjBEVTBlNmRwRmNaZW5rV0wxc01EbjMyVVNt?=
- =?utf-8?B?bXpFTXQwc0NEZ2dFelJlcEFZQjZjNmFpTUdoY0RmdTNuQVB1WHNJVWV1UnZI?=
- =?utf-8?B?clBvUFQ1NTc2RGZ3WjBGNmZOc0JjZ0tmdmsxZ2FQQzNianowOVRNeWU4Zjl0?=
- =?utf-8?B?dkFxcUpQMkRnN05UdXZwYmtBZnhSUFF2WlV4NWM5ZE1kUzZKNWI5MUF0dFlo?=
- =?utf-8?B?RGZ4dDFvN3ZHV0VmeVRGdmpNV2k4dnhuSENnVGxoZUwyOUNlZ09IY3dOdjRp?=
- =?utf-8?B?ZmxUdVJ6ZWUxMmE4T1hSLy9iNlcxcXY2bFdNSjlKTDJMR3FCU2FtSFVpcVpR?=
- =?utf-8?B?WG1GVnJONzEvQnhUcWJxL3hIb2FSQk10L0h1a3huRjJxcTZtY2tiRSsxejEx?=
- =?utf-8?B?Y2wwODRMT2UzOTV0bjlkK25tQm5FVFhJYy9XYkZKalY4NVA0VURJVWd6VHRW?=
- =?utf-8?B?RXdzNVNMK1g4ZXFUMXh4Ui82ZnEvby9icmxnVDhsSENWMnhNZjduSzAvQXFZ?=
- =?utf-8?B?Mml3UzdhNzRFb2hIMXd0YVJOZ3dEa3V3ZysvZTY1T3ZYVjkrR0NtcmJyc1pq?=
- =?utf-8?B?eVB5dW1oSlNSQWkxM3pHUmJtWWxVRWR3WURmMXNCQitkNTJwQUMvTmhvNmQy?=
- =?utf-8?B?Wm9jTGdmbUZDSlZJVDRjaG1VczZqd0VVb20wZThNbnBBR0hZcm45d251OGw2?=
- =?utf-8?B?NURmdUlxdC94a3JTQmplanNSMmxaRDdSbmkvenJ1S0Z2VlB0T1d3N1VWb0k5?=
- =?utf-8?B?Vno4T1hqOXFoYndUaVhZTVFGanZhaUFtNFJUQS8rai9EQ0F1Mmt3Y0VqOXhC?=
- =?utf-8?B?RE8wQU44bE4rZW8xNy8rcW5Bb1hPeUw1ZEMra2RvK1I0NXJDQk5mNVd2TE5U?=
- =?utf-8?B?Y3JvNU4weUhvcFdrRGcvL0pCd1pia3ExQllSWGh4NUdncHNHRzVNYTIxM0Zl?=
- =?utf-8?B?TktYNjV1MTFSSzFEdGpLY3U4UytpbzhHVzV3dDJDRlZ3R2pLamprWGI2VXo1?=
- =?utf-8?B?ZktJNzczNlBIMXFUeFZ2YzgvbVlUdU9xZDJxRVNXZW9aL2pKZzJLemZySWRY?=
- =?utf-8?B?anNsdE1QT3dmcWFUazgyc3BqdHFwNll4OEpPdWxuMG1UMGJMak5lb2dwTXFF?=
- =?utf-8?B?TXdNK2NHemlJdG8wVDF0aU9MM0UvYzVVWTk1STVBMXBCTGZGOWwzQmNmQTNy?=
- =?utf-8?B?dVNKRnRvQ1pMb0ZoSGxFMzg5MUkzZVRGSnJYVTJNRjJUMEhpT3U1MGVLbVhr?=
- =?utf-8?B?ZnRrQmhleVhDK1IwaWpmMnZaaTE4R3AxRzFGbnRPK010anZWYmI0ZVk1YWhI?=
- =?utf-8?B?M0xuRUpJRU5oY2orVTBySWZieDhjT1hOalhVb1FSeUwxY3hHWWVpb1BOelZW?=
- =?utf-8?B?Y3ZhNDZueDY1d2RiWlkrZGVxM281ZnhsVVVYVEFkSVM4Y2lhakdEZ09kQ0hm?=
- =?utf-8?B?eXY3alY1UGVBPT0=?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-99c3d.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4f5e4ad5-5b6a-4023-e7b0-08da373b8b61
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR02MB7009.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2022 12:56:51.3018
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR02MB9052
-X-Spam-Status: No, score=-0.0 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220516105100.1412740-1-hsinyi@chromium.org> <20220516105100.1412740-3-hsinyi@chromium.org>
+ <CAJMQK-jjNRuZFOJrd2knQHwPERaJ64pyys+14cCVyfdsP1GZSQ@mail.gmail.com>
+ <YoJFOpbMYSEOGfXy@casper.infradead.org> <CAJMQK-iDFJGHzmJQ0VZRXL-O8MBeqLFS-b0M-6bm3ncZ4TgMJQ@mail.gmail.com>
+ <YoJJvabBCTJHryGm@casper.infradead.org>
+In-Reply-To: <YoJJvabBCTJHryGm@casper.infradead.org>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Mon, 16 May 2022 20:57:26 +0800
+Message-ID: <CAJMQK-hst=6NYehj8Bw5LsSv3bqWpQ9whOdrOKEOPWe4dVz_BA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] squashfs: implement readahead
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Phillip Lougher <phillip@squashfs.org.uk>,
+        Xiongwei Song <Xiongwei.Song@windriver.com>,
+        Zheng Liang <zhengliang6@huawei.com>,
+        Zhang Yi <yi.zhang@huawei.com>, Hou Tao <houtao1@huawei.com>,
+        Miao Xie <miaoxie@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm @ kvack . org" <linux-mm@kvack.org>,
+        "squashfs-devel @ lists . sourceforge . net" 
+        <squashfs-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus Walleij,
+On Mon, May 16, 2022 at 8:55 PM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Mon, May 16, 2022 at 08:47:52PM +0800, Hsin-Yi Wang wrote:
+> > On Mon, May 16, 2022 at 8:36 PM Matthew Wilcox <willy@infradead.org> wrote:
+> > >
+> > > On Mon, May 16, 2022 at 07:04:08PM +0800, Hsin-Yi Wang wrote:
+> > > > > +       loff_t req_end = readahead_pos(ractl) + readahead_length(ractl);
+> > > > > +       loff_t start = readahead_pos(ractl) &~ mask;
+> > > > > +       size_t len = readahead_length(ractl) + readahead_pos(ractl) - start;
+> > > > > +       struct squashfs_page_actor *actor;
+> > > > > +       unsigned int nr_pages = 0;
+> > > > > +       struct page **pages;
+> > > > > +       u64 block = 0;
+> > > > > +       int bsize, res, i, index;
+> > > > > +       int file_end = i_size_read(inode) >> msblk->block_log;
+> > > > > +       unsigned int max_pages = 1UL << shift;
+> > > > > +
+> > > > > +       readahead_expand(ractl, start, (len | mask) + 1);
+> > > > > +
+> > > > > +       if (readahead_pos(ractl) + readahead_length(ractl) < req_end ||
+> > > > > +           file_end == 0)
+> > > > > +               return;
+> > >
+> > > What's the first half of this condition supposed to be checking for?
+> > > It seems to be checking whether readahead_expand() shrunk the range
+> > > covered by the ractl, but readahead_expand() never does that, so I'm
+> > > confused why you're checking for it.
+> >
+> > hi Matthew,
+> >
+> > This is to check if readahead_expand() expands as much as it's requested.
+> > I didn't encounter the mismatch so far in my testing. If this check is
+> > not necessary, it can be removed.
+>
+> Then I think req_end is miscalculated?  It should surely be:
+>
+>         req_end = start + (len | mask) + 1;
+>
+> But I'm not sure that we should be failing under such circumstances.
+> For example, we may have been asked to read 1.5MB, attempt to round up
+> to 2MB, and fail.  But we can still submit a readahead for the first 1MB,
+> before leaving the second 512kB for readpage to handle.
+>
+> So maybe we should just remove this check entirely.
 
-On 13/05/22 03:21, Linus Walleij wrote:
-> On Fri, May 6, 2022 at 2:18 PM Joel Selvaraj <jo@jsfamily.in> wrote:
->> +#define dsi_dcs_write_seq(dsi, seq...) do {                            \
->> +               static const u8 d[] = { seq };                          \
->> +               int ret;                                                \
->> +               ret = mipi_dsi_dcs_write_buffer(dsi, d, ARRAY_SIZE(d)); \
->> +               if (ret < 0)                                            \
->> +                       return ret;                                     \
->> +       } while (0)
-> 
-> First I don't see what the do {} while (0) buys you, just use
-> a basic block {}.
-
-The do {} while (0) in macro ensures there is a semicolon when it's 
-used. With normal blocking, it would have issues with if conditions?
-I read about them here: https://stackoverflow.com/a/2381339
-
-> Second look at mipi_dbi_command() in include/drm/drm_mipi_dbi.h
-> this is very similar.
-
-Does the ({..}) style blocking used in mipi_dbi_command help workaround 
-the semicolon issue I mentioned above?
-
-> So this utility macro should be in a generic file such as
-> include/drm/drm_mipi_dsi.h. (Can be added in a separate
-> patch.)
-
-I agree. Could be done in another patch.
-
-> Third I think you need only one macro (see below).
-> 
->> +static int ebbg_ft8719_on(struct ebbg_ft8719 *ctx)
->> +{
->> +       struct mipi_dsi_device *dsi = ctx->dsi;
->> +       struct device *dev = &dsi->dev;
->> +       int ret;
->> +
->> +       dsi->mode_flags |= MIPI_DSI_MODE_LPM;
->> +
->> +       dsi_dcs_write_seq(dsi, 0x00, 0x00);
->> +       dsi_generic_write_seq(dsi, 0xff, 0x87, 0x19, 0x01);
-> 
-> It's dubious that you always have dsi_dcs_write_seq()
-> followed by dsi_generic_write_seq().
-> 
-> That means mipi_dsi_generic_write() followed by
-> mipi_dsi_dcs_write_buffer(). But if you look at these
-> commands in drivers/gpu/drm/drm_mipi_dsi.c
-> you see that they do the same thing!
-
-They almost do the same thing except for the msg.type values? Mostly the 
-msg.type value is used to just check whether it's a long or short write 
-in the msm dsi_host code. However, in mipi_dsi_create_packet function, 
-the msg->type value is used to calculate packet->header[0] as follows:
-
-packet->header[0] = ((msg->channel & 0x3) << 6) | (msg->type & 0x3f);
-
-Wouldn't the difference between the mipi_dsi_dcs_write_buffer's and 
-mipi_dsi_generic_write's msg.type values cause issue here?
-
-I tried using mipi_dsi_dcs_write_buffer for all commands and the panel 
-worked fine, but I am not sure if it's correct to do so?
-
-> Lots of magic numbers. You don't have a datasheet do you?
-> So you could #define some of the magic?
-
-Unfortunately, I don't have a datasheet and the power on sequence is 
-taken from downstream android dts. It works pretty well though. So I 
-don't think I can #define any of these magic.
-
- > Doesn't it work to combine them into one call for each
- > pair?
- >> +       dsi_dcs_write_seq(dsi, 0x00, 0x80);
- >> +       dsi_generic_write_seq(dsi, 0xff, 0x87, 0x19);
-
-By using a macro? We can... but I am not sure what (0x00, 0x80), (0x00, 
-0xa0),etc type of commands signify without the datasheet, so I am not 
-sure what to name them in the macro and make any sensible meaning out of it.
-
-> 
->> +       if (ctx->prepared)
->> +               return 0;
-> (...)
->> +       ctx->prepared = true;
->> +       return 0;
-> (...)
->> +       if (!ctx->prepared)
->> +               return 0;
-> (...)
->> +       ctx->prepared = false;
->> +       return 0;
-> 
-> Drop this state variable it is a reimplementation of something
-> that the core will track for you.
-
-ok. Will drop them in the next version.
-
-> The rest looks nice!
-
-Thanks for your review!
-
-> Yours,
-> Linus Walleij
-
-Best Regards,
-Joel Selvaraj
-
+I'll remove this in the next version.

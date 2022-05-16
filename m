@@ -2,70 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16336529494
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 01:02:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D56F52949C
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 01:05:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347496AbiEPXCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 19:02:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37774 "EHLO
+        id S1349939AbiEPXE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 19:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240212AbiEPXCB (ORCPT
+        with ESMTP id S1347655AbiEPXEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 19:02:01 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D5F2AFF
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 16:01:58 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id bo5so15356219pfb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 16:01:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lGx5OaF/nNf+wAk/UXSTp7o/h1yC5nC+cmEZ08o7IyE=;
-        b=H6Efosz+U4jL2Q/PRaySKd7X1SckPh/0vK1RwkUKGINiTgldM9LZ6aaqeeIxLJrjyA
-         0TyW5rImHO2dZuioVDvS5m2xiA38/mzt0eoPEITqOTx40PddhxtCCtpekYSjT4Dt5eQT
-         prIv07wrhhjPwKg9g1h+ACZL2KBo8DGGfraR4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lGx5OaF/nNf+wAk/UXSTp7o/h1yC5nC+cmEZ08o7IyE=;
-        b=f+avSYjy2552JQ7xSjPNTiYYIz2zFqBYrc2fhuFVkxCFvL8OdDr7t7DB257uf56G79
-         4lcVNnzwi4lGg1wEubaWq+G2iwwnFy3tirS7JDwQEvXU6ign62gNSowQuJscIWCQDATJ
-         3C1cVNed3P1IycNuW3vIP14I6ybXIatEvetrDU6Nhsd8pNmsJfnPbERoqo5mFWQcG9BJ
-         6YYD6SKYHAYSZw1kKuIVYkOy66sGBNXmC3v2Unw0I9dzqYG9Py5iOwfji0UVMNDAzP6v
-         1bP9O0SRb6xP51KXx+QVn9THxoI/JCPdITHOYX/t5rsGUYVvVs6rui0w81AvzjU9Blvc
-         mhCw==
-X-Gm-Message-State: AOAM53340aYDeJVK2a63HGMvns2V+INpyRKb5GIvRralfSZxLeyyYrAM
-        9w2rpp4ouzvkrA5bWgZXKQM9Fg==
-X-Google-Smtp-Source: ABdhPJxko9JuM1KI2cl8VriIGs+4kOv8T8gQAgbApOgjucLuTCSJVO9OOecJiH06QAjAJNiIJdWiqA==
-X-Received: by 2002:a05:6a00:174f:b0:4fd:aed5:b5e4 with SMTP id j15-20020a056a00174f00b004fdaed5b5e4mr19751789pfc.39.1652742118486;
-        Mon, 16 May 2022 16:01:58 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id r8-20020a170902ea4800b001618f5186f1sm1908968plg.80.2022.05.16.16.01.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 16:01:58 -0700 (PDT)
-Date:   Mon, 16 May 2022 16:01:57 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Vitor Massaru Iha <vitor@massaru.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] lib: overflow: Always build 64-bit test cases
-Message-ID: <202205161601.14C4F8DF@keescook>
-References: <20220511174531.1098548-1-keescook@chromium.org>
- <CAKwvOdkXUiB3T_YkcqDZAkdvN0=cB2NH-i6jj+Y=sL8r9VCJ6A@mail.gmail.com>
+        Mon, 16 May 2022 19:04:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 065B345521
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 16:04:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652742291;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=cmReX5yn/6MzBKcNdErsm0OK10oGaUXumDT5snIQIGU=;
+        b=Uz7C+VgFvvWf3HEW0uV/vrGmYtkIDBCBdIX6aA49bdIoB4rTKDt6y9QBmZg0GGmlvKkxu5
+        goZOMVMRdr/+dX0hfRPpyCYQHiopgoYm1Rf0rC0W8tDStvWqij1s7iu3kFm+pT98pFuiF2
+        WdC5d6nD17nha0nC1JzztCOMKmtIKxM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-304-_Z5MfNZKM9qJnaaeI0HkrA-1; Mon, 16 May 2022 19:04:48 -0400
+X-MC-Unique: _Z5MfNZKM9qJnaaeI0HkrA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E27B21D96CA0;
+        Mon, 16 May 2022 23:04:47 +0000 (UTC)
+Received: from asgard.redhat.com (unknown [10.36.110.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4E9BF40C1421;
+        Mon, 16 May 2022 23:04:44 +0000 (UTC)
+Date:   Tue, 17 May 2022 01:04:41 +0200
+From:   Eugene Syromiatnikov <esyr@redhat.com>
+To:     Jiri Olsa <jolsa@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf v2 0/4] Fix 32-bit arch and compat support for the
+ kprobe_multi attach type
+Message-ID: <20220516230441.GA22091@asgard.redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKwvOdkXUiB3T_YkcqDZAkdvN0=cB2NH-i6jj+Y=sL8r9VCJ6A@mail.gmail.com>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,16 +69,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 02:35:45PM -0700, Nick Desaulniers wrote:
-> On Wed, May 11, 2022 at 10:45 AM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > There shouldn't be a reason to not build the 64-bit test cases on 32-bit
-> > systems; the types exist there too. Remove the #ifdefs.
-> 
-> I think this is breaking 32b ARM for clang-13 and older?
-> https://github.com/ClangBuiltLinux/linux/issues/1636
+As suggested in [1], the kprobe_multi interface is to be fixed for 32-bit
+architectures and compat, rather then disabled.  As it turned out,
+there are a couple of additional problems that are to be addressed:
+ - the absence of size overflow checks, leading to possible
+   out-of-bounds writes (addressed by the first patch);
+ - the assumption that long has the same size as u64, which would make
+   cookies arrays size calculation incorrect on 32-bit architectures
+   (addressed by the second patch);
+ - the addrs array passing API, that is incompatible with compat and has
+   to be changed (addressed in the fourth patch): those are kernel
+   addresses and not user ones (as was incorrectly stated in [2]);
+   this change is only semantical for 64-bit user/kernelspace,
+   so it shouldn't impact ABI there, at least.
 
-Ah-ha, that's the combo I hadn't found. Thank you!
+[1] https://lore.kernel.org/lkml/CAADnVQ+2gwhcMht4PuDnDOFKY68Wsq8QFz4Y69NBX_TLaSexQQ@mail.gmail.com/
+[2] https://lore.kernel.org/lkml/20220510184155.GA8295@asgard.redhat.com/
+
+v2:
+ - Fixed the isses reported by CI
+
+v1: https://lore.kernel.org/lkml/20220516182657.GA28596@asgard.redhat.com/
+
+Eugene Syromiatnikov (4):
+  bpf_trace: check size for overflow in bpf_kprobe_multi_link_attach
+  bpf_trace: support 32-bit kernels in bpf_kprobe_multi_link_attach
+  bpf_trace: handle compat in kprobe_multi_resolve_syms
+  bpf_trace: pass array of u64 values in kprobe_multi.addrs
+
+ kernel/trace/bpf_trace.c                           | 62 ++++++++++++++++------
+ tools/lib/bpf/bpf.h                                |  2 +-
+ tools/lib/bpf/libbpf.c                             |  8 +--
+ tools/lib/bpf/libbpf.h                             |  2 +-
+ .../testing/selftests/bpf/prog_tests/bpf_cookie.c  |  2 +-
+ .../selftests/bpf/prog_tests/kprobe_multi_test.c   |  8 +--
+ 6 files changed, 56 insertions(+), 28 deletions(-)
 
 -- 
-Kees Cook
+2.1.4
+

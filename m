@@ -2,345 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CADAB5292DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2505292E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:33:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348125AbiEPV2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 17:28:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51570 "EHLO
+        id S1347113AbiEPVdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 17:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbiEPV2k (ORCPT
+        with ESMTP id S231365AbiEPVdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 17:28:40 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C572E3ED20;
-        Mon, 16 May 2022 14:28:39 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id w130so20288625oig.0;
-        Mon, 16 May 2022 14:28:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=32Vs/LktarNB8NEtIL9LhiUa0qUkh/sqQBbAeb81eFU=;
-        b=Of9ddJJaYzrTIkpGTr6Q+p9V0T2tQeh1XbACZmQ47L5XcLCYwe0EmHd8zzLjTSYnNK
-         OTFLzRIPcbsiFLWbhqVGJET6/2RacoJ0JcGshT0UrJ9TXRJWOMjdqXcKYFxlDOCdHvMC
-         BvawKgB4xoUAmY2hVr57xXKNPhNymSeieC+PPdBQOVDpcTjohy1tMR+67kM7Y101MJVz
-         HYfVFyD7y2Q8fUROlKCPvDZl+RXYXvEfG+gdDMTnl6i6WZl+6Gq1LrTnSsp+QN6hXW9h
-         FteKimp9m7F9Bkt3Np2DckdEzdx9e33AxXrxz4jcbVU5Ew0MsHz6ZHtlP0s1SSHDdf7S
-         5Dwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=32Vs/LktarNB8NEtIL9LhiUa0qUkh/sqQBbAeb81eFU=;
-        b=XuYpbjob+66j+f58xAi9bs2UQmZVARxa8kNBhGfyPICusgUL+TdpokJM5mS1wW5MNV
-         Z4Kmot5b00KResC68VGzaWt29tN9zam0dOkUVSmYU35Fi8P+alcvjMlRNbsRyt9HJwYo
-         GV3GZjjcUh3Ul19AVZR0GYUn+JRg/JtYPOGp7BCx3G88EDktCkiB0d4cIoekcu96laD2
-         yUi4bWYFwBOik//aHFL7/fFkOgdrGP1qa6BP4jQHYua5s94MU+yjFRZguNVLphuYKJAf
-         3Z22v4Qt9ZFkJxydEO289Q+W1X5xJIbA6iAuqOrzDnWIOjG34hcVmvSlOakChC22EB0P
-         J7xg==
-X-Gm-Message-State: AOAM531eccCD7r2srEUJMZIaFhG1FTpREdz/AD0Zt6/XOEZxox+3+Hhg
-        mv6cVloPx3rfCfCWGcEGYhE=
-X-Google-Smtp-Source: ABdhPJwz5GfUNAs8qsj6y/LqPyAEzw6N88FvrN25rjGlCvMNcjpwLl6NYhfcY/A7zSrYEBH7JUfQYA==
-X-Received: by 2002:a05:6808:1202:b0:322:dc37:2c3b with SMTP id a2-20020a056808120200b00322dc372c3bmr15003269oil.298.1652736519128;
-        Mon, 16 May 2022 14:28:39 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r25-20020a4a7019000000b0035eb4e5a6c8sm4656637ooc.30.2022.05.16.14.28.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 14:28:38 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 16 May 2022 14:28:36 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     nick.hawkins@hpe.com
-Cc:     verdun@hpe.com, joel@jms.id.au, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v8 3/8] watchdog: hpe-wdt: Introduce HPE GXP Watchdog
-Message-ID: <20220516212836.GA4080706@roeck-us.net>
-References: <20220516163347.44890-1-nick.hawkins@hpe.com>
- <20220516163347.44890-3-nick.hawkins@hpe.com>
+        Mon, 16 May 2022 17:33:05 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E8183FDBB
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 14:32:58 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-258-XPGIMpHAPt6Ggx_0Nc-b8Q-1; Mon, 16 May 2022 22:32:56 +0100
+X-MC-Unique: XPGIMpHAPt6Ggx_0Nc-b8Q-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Mon, 16 May 2022 22:32:55 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Mon, 16 May 2022 22:32:55 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Sami Tolvanen' <samitolvanen@google.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: RE: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
+Thread-Topic: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
+Thread-Index: AQHYZwdlgt4N7xLw0EK8voqNmmoVIa0hK0vAgAB8yACAAF6CUA==
+Date:   Mon, 16 May 2022 21:32:55 +0000
+Message-ID: <19b3e040302d4d8aa240eee43427dfaa@AcuMS.aculab.com>
+References: <20220513202159.1550547-1-samitolvanen@google.com>
+ <20220513202159.1550547-21-samitolvanen@google.com>
+ <f65c01979b884174965802a13cf6b077@AcuMS.aculab.com>
+ <CABCJKueo+cw1DHH6N2dUjD-U7OKqmkJUyimm0ychv1drt5U9Rg@mail.gmail.com>
+In-Reply-To: <CABCJKueo+cw1DHH6N2dUjD-U7OKqmkJUyimm0ychv1drt5U9Rg@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220516163347.44890-3-nick.hawkins@hpe.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 11:33:41AM -0500, nick.hawkins@hpe.com wrote:
-> From: Nick Hawkins <nick.hawkins@hpe.com>
-> 
-> Add support for the HPE GXP Watchdog. The GXP asic contains a full
-> complement of timers one of which is the watchdog timer. The watchdog
-> timer is 16 bit and has 10ms resolution. The watchdog is created as a
-> child device of timer since the same register range is used.
-> 
-> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+RnJvbTogU2FtaSBUb2x2YW5lbg0KPiBTZW50OiAxNiBNYXkgMjAyMiAxNzozOQ0KPiANCj4gT24g
+TW9uLCBNYXkgMTYsIDIwMjIgYXQgMTozMiBBTSBEYXZpZCBMYWlnaHQgPERhdmlkLkxhaWdodEBh
+Y3VsYWIuY29tPiB3cm90ZToNCj4gPg0KPiA+IEZyb206IFNhbWkgVG9sdmFuZW4NCj4gPiA+IFNl
+bnQ6IDEzIE1heSAyMDIyIDIxOjIyDQo+ID4gPg0KPiA+ID4gV2l0aCBDT05GSUdfQ0ZJX0NMQU5H
+LCB0aGUgY29tcGlsZXIgaW5qZWN0cyBhIHR5cGUgcHJlYW1ibGUNCj4gPiA+IGltbWVkaWF0ZWx5
+IGJlZm9yZSBlYWNoIGZ1bmN0aW9uIGFuZCBhIGNoZWNrIHRvIHZhbGlkYXRlIHRoZSB0YXJnZXQN
+Cj4gPiA+IGZ1bmN0aW9uIHR5cGUgYmVmb3JlIGluZGlyZWN0IGNhbGxzOg0KPiA+ID4NCj4gPiA+
+ICAgOyB0eXBlIHByZWFtYmxlDQo+ID4gPiAgIF9fY2ZpX2Z1bmN0aW9uOg0KPiA+ID4gICAgIGlu
+dDMNCj4gPiA+ICAgICBpbnQzDQo+ID4gPiAgICAgbW92IDxpZD4sICVlYXgNCj4gPg0KPiA+IElu
+dGVyZXN0aW5nIC0gc2luY2UgdGhpcyBjb2RlIGNhbid0IGJlIGV4ZWN1dGVkIHRoZXJlIGlzIG5v
+DQo+ID4gcG9pbnQgYWRkaW5nIGFuIGluc3RydWN0aW9uICdwcmVmaXgnIHRvIHRoZSAzMmJpdCBj
+b25zdGFudC4NCj4gDQo+IFRoZSByZWFzb24gdG8gZW1iZWQgdGhlIHR5cGUgaW50byBhbiBpbnN0
+cnVjdGlvbiBpcyB0byBhdm9pZCB0aGUgbmVlZA0KPiB0byBzcGVjaWFsIGNhc2Ugb2JqdG9vbCdz
+IGluc3RydWN0aW9uIGRlY29kZXIuDQo+IA0KPiA+ID4gICAgIGludDMNCj4gPiA+ICAgICBpbnQz
+DQo+ID4gPiAgIGZ1bmN0aW9uOg0KPiA+ID4gICAgIC4uLg0KPiA+ID4gICA7IGluZGlyZWN0IGNh
+bGwgY2hlY2sNCj4gPiA+ICAgICBjbXBsICAgIDxpZD4sIC02KCVyMTEpDQo+ID4gPiAgICAgamUg
+ICAgICAuTHRtcDENCj4gPiA+ICAgICB1ZDINCj4gPiA+ICAgLkx0bXAxOg0KPiA+ID4gICAgIGNh
+bGwgICAgX194ODZfaW5kaXJlY3RfdGh1bmtfcjExDQo+ID4gPg0KPiA+ID4gRGVmaW5lIHRoZSBf
+X0NGSV9UWVBFIGhlbHBlciBtYWNybyBmb3IgbWFudWFsIHR5cGUgYW5ub3RhdGlvbnMgaW4NCj4g
+PiA+IGFzc2VtYmx5IGNvZGUsIGFkZCBlcnJvciBoYW5kbGluZyBmb3IgdGhlIENGSSB1ZDIgdHJh
+cHMsIGFuZCBhbGxvdw0KPiA+ID4gQ09ORklHX0NGSV9DTEFORyB0byBiZSBzZWxlY3RlZCBvbiB4
+ODZfNjQuDQo+ID4gPg0KPiA+IC4uLg0KPiA+ID4gKw0KPiA+ID4gKyAgICAgLyoNCj4gPiA+ICsg
+ICAgICAqIFRoZSBjb21waWxlciBnZW5lcmF0ZXMgdGhlIGZvbGxvd2luZyBpbnN0cnVjdGlvbiBz
+ZXF1ZW5jZQ0KPiA+ID4gKyAgICAgICogZm9yIGluZGlyZWN0IGNhbGwgY2hlY2tzOg0KPiA+ID4g
+KyAgICAgICoNCj4gPiA+ICsgICAgICAqICAgY21wbCAgICA8aWQ+LCAtNiglcmVnKSAgICAgOyA3
+IGJ5dGVzDQo+ID4NCj4gPiBJZiB0aGUgPGlkPiBpcyBiZXR3ZWVuIC0xMjggYW5kIDEyNyB0aGVu
+IGFuIDhiaXQgY29uc3RhbnQNCj4gPiAoc2lnbiBleHRlbmRlZCkgbWlnaHQgYmUgdXNlZC4NCj4g
+PiBQb3NzaWJseSB0aGUgY29tcGlsZXIgZm9yY2VzIHRoZSBhc3NlbWJsZXIgdG8gZ2VuZXJhdGUg
+dGhlDQo+ID4gbG9uZyBmb3JtLg0KPiA+DQo+ID4gVGhlcmUgY291bGQgYWxzbyBiZSBhIFJFWCBw
+cmVmaXguDQo+ID4gVGhhdCB3aWxsIGJyZWFrIGFueSBjb2RlIHRoYXQgdHJpZXMgdG8gdXNlICVy
+ZWcuDQo+IA0KPiBUaGUgY29tcGlsZXIgYWx3YXlzIGdlbmVyYXRlcyB0aGlzIHNwZWNpZmljIGlu
+c3RydWN0aW9uIHNlcXVlbmNlLg0KDQpZZXMsIGJ1dCB0aGVyZSBhcmUgc2V2ZXJhbCB3YXlzIHRv
+IGVuY29kZSAnY21wbCBpbW0sLTYocmVnKScuDQpGaXJzdGx5IHlvdSBjYW4gdXNlICc4MSAvNyBp
+bW0zMicgb3IgJzgzIC83IGltbTgnIHdoZXJlIGltbTggaXMgc2lnbiBleHRlbmRlZC4NCih0aGUg
+LzcgMS83L2luZGV4X3JlZyBmb3IgYSBzaWduZWQgOCBiaXQgb2Zmc2V0KS4NCkJ1dCB0aGF0IG9u
+bHkgd29ya3MgZm9yIHRoZSBvcmlnaW5hbCAzMmJpdCByZWdpc3RlcnMuDQpGb3IgdGhlIDY0Yml0
+IHI4IHRvIHIxNSBhbiBleHRyYSBSRVggcHJlZml4IGlzIHJlcXVpcmVkLg0KVGhhdCBtYWtlcyB0
+aGUgaW5zdHJ1Y3Rpb24gOCBieXRlcyAoaWYgaXQgbmVlZHMgYSBmdWxsIDMyYml0IGltbWVkaWF0
+ZSkuDQoNClNvIGlmIHRoZSByZWdpc3RlciBpcyAlcjExIHRoZXJlIGlzIGFuIGV4dHJhIFJFWCBi
+eXRlLg0KSWYgdGhlIDxpZD4gaXMgYSBoYXNoIGFuZCBoYXBwZW5zIHRvIGJlIGJldHdlZW4gLTEy
+OCBhbmQgMTI3DQp0aGVuIHRoZXJlIGFyZSB0aHJlZSBsZXNzIGJ5dGVzLg0KDQpTbyBkZWNvZGlu
+ZyBmcm9tIHJlZ3MtPmlwIC0gMCBpc24ndCBhbHdheXMgZ29pbmcgdG8gZ2l2ZQ0KeW91IHRoZSBz
+dGFydCBvZiB0aGUgaW5zdHJ1Y3Rpb24uDQoNCj4gDQo+ID4gPiArICAgICAgKiAgIGplICAgICAg
+Lkx0bXAxICAgICAgICAgICAgIDsgMiBieXRlcw0KPiA+ID4gKyAgICAgICogICB1ZDIgICAgICAg
+ICAgICAgICAgICAgICAgICA7IDwtIGFkZHINCj4gPiA+ICsgICAgICAqICAgLkx0bXAxOg0KPiA+
+ID4gKyAgICAgICoNCj4gPiA+ICsgICAgICAqIEJvdGggdGhlIHR5cGUgYW5kIHRoZSB0YXJnZXQg
+YWRkcmVzcyBjYW4gYmUgZGVjb2RlZCBmcm9tIHRoZQ0KPiA+ID4gKyAgICAgICogY21wbCBpbnN0
+cnVjdGlvbi4NCj4gPiA+ICsgICAgICAqLw0KPiA+ID4gKyAgICAgaWYgKGNvcHlfZnJvbV9rZXJu
+ZWxfbm9mYXVsdChidWZmZXIsICh2b2lkICopcmVncy0+aXAgLSA5LCBNQVhfSU5TTl9TSVpFKSkN
+Cj4gPiA+ICsgICAgICAgICAgICAgcmV0dXJuOw0KPiA+ID4gKyAgICAgaWYgKGluc25fZGVjb2Rl
+X2tlcm5lbCgmaW5zbiwgYnVmZmVyKSkNCj4gPiA+ICsgICAgICAgICAgICAgcmV0dXJuOw0KPiA+
+ID4gKyAgICAgaWYgKGluc24ub3Bjb2RlLnZhbHVlICE9IDB4ODEgfHwgWDg2X01PRFJNX1JFRyhp
+bnNuLm1vZHJtLnZhbHVlKSAhPSA3KQ0KPiA+ID4gKyAgICAgICAgICAgICByZXR1cm47DQo+ID4N
+Cj4gPiBTaW5jZSB5b3UgYXJlIGxvb2tpbmcgZm9yIGEgdmVyeSBzcGVjaWZpYyBvcGNvZGUgd2h5
+IGJvdGhlcg0KPiA+IGNhbGxpbmcgaW5zbl9kZWNvZGVfa2VybmVsKCkgLSBqdXN0IGNoZWNrIGZv
+ciB0aGUgcmVxdWlyZWQgKG1hc2tlZCkNCj4gPiBieXRlIHZhbHVlcy4NCj4gDQo+IEJlY2F1c2Ug
+SSBuZWVkIHRvIGRlY29kZSBib3RoIHRoZSBpbW1lZGlhdGUgdmFsdWUgYW5kIHRoZSByZWdpc3Rl
+cg0KPiBmcm9tIHRoYXQgaW5zdHJ1Y3Rpb24uDQo+IA0KPiA+ID4gKw0KPiA+ID4gKyAgICAgKnR5
+cGUgPSBpbnNuLmltbWVkaWF0ZS52YWx1ZTsNCj4gPiA+ICsNCj4gPiA+ICsgICAgIG9mZnNldCA9
+IGluc25fZ2V0X21vZHJtX3JtX29mZigmaW5zbiwgcmVncyk7DQo+ID4NCj4gPiBHaXZlbiB0aGUg
+ZXhwZWN0ZWQgaW5zdHJ1Y3Rpb24sIGlzbid0IHRoYXQgLTYgPz8NCj4gDQo+IE5vLCB0aGlzIGlz
+IHRoZSByZWdpc3RlciBvZmZzZXQuDQoNCkhtbW0uLi4uIHN0cmFuZ2UgZnVuY3Rpb24gbmFtZS4u
+Lg0KPiANCj4gPiA+ICsgICAgIGlmIChvZmZzZXQgPCAwKQ0KPiA+ID4gKyAgICAgICAgICAgICBy
+ZXR1cm47DQo+ID4gPiArDQo+ID4gPiArICAgICAqdGFyZ2V0ID0gKih1bnNpZ25lZCBsb25nICop
+KCh2b2lkICopcmVncyArIG9mZnNldCk7DQo+ID4NCj4gPiBXVEYgaXMgdGhhdCBjYWxjdWxhdGlu
+Zz8/DQo+IA0KPiBJdCdzIHJlYWRpbmcgdGhlIHJlZ2lzdGVyIHZhbHVlIGZyb20gcHRfcmVncy4N
+Cj4gDQo+IFNhbWkNCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwg
+QnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVn
+aXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-
-> 
-> ---
-> v8:
-> * Fix comment format
-> v7:
-> * Change commit description to replace Adding with Add and compliment
->   with complement
-> * Removed unused include files of_address.h and of_platform.h
-> * Fixed the max timeout on watchdog to be 655350
-> * Changed time variable computations in gxp_wdt_set_timeout to be clear
-> * Decreased reboot delay to 10ms from 100ms
-> * Added comment to explain why it is necessary to pass the base address
->   over a private interface from the timer driver.
-> v6:
-> * No code change.
-> * Fixed commit subject line to match the ones in log.
-> * Adjusted commit message to be closer to 75 chars per line.
-> v5:
-> * Fixed version log
-> * Added details to Kconfig for module support.
-> * Adjusted commit messaged
-> v4:
-> * Made watchdog a child of timer as they share the same register region
->   per change request on dtsi.
-> * Removed extra parenthesis
-> * Fixed u8 u32 u64 usage
-> * Fixed alignment issue
-> * Reconfigured conditional statement for interrupt setup
-> * Removed unused gxp_wdt_remove function
-> v3:
-> * Put into proper patchset format
-> v2:
-> * No change
-> ---
->  drivers/watchdog/Kconfig   |  11 +++
->  drivers/watchdog/Makefile  |   1 +
->  drivers/watchdog/gxp-wdt.c | 174 +++++++++++++++++++++++++++++++++++++
->  3 files changed, 186 insertions(+)
->  create mode 100644 drivers/watchdog/gxp-wdt.c
-> 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index c4e82a8d863f..a591cc6aa152 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -1820,6 +1820,17 @@ config RALINK_WDT
->  	help
->  	  Hardware driver for the Ralink SoC Watchdog Timer.
->  
-> +config GXP_WATCHDOG
-> +	tristate "HPE GXP watchdog support"
-> +	depends on ARCH_HPE_GXP
-> +	select WATCHDOG_CORE
-> +	help
-> +	  Say Y here to include support for the watchdog timer
-> +	  in HPE GXP SoCs.
-> +
-> +	  To compile this driver as a module, choose M here.
-> +	  The module will be called gxp-wdt.
-> +
->  config MT7621_WDT
->  	tristate "Mediatek SoC watchdog"
->  	select WATCHDOG_CORE
-> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-> index f7da867e8782..e2acf3a0d0fc 100644
-> --- a/drivers/watchdog/Makefile
-> +++ b/drivers/watchdog/Makefile
-> @@ -92,6 +92,7 @@ obj-$(CONFIG_RTD119X_WATCHDOG) += rtd119x_wdt.o
->  obj-$(CONFIG_SPRD_WATCHDOG) += sprd_wdt.o
->  obj-$(CONFIG_PM8916_WATCHDOG) += pm8916_wdt.o
->  obj-$(CONFIG_ARM_SMC_WATCHDOG) += arm_smc_wdt.o
-> +obj-$(CONFIG_GXP_WATCHDOG) += gxp-wdt.o
->  obj-$(CONFIG_VISCONTI_WATCHDOG) += visconti_wdt.o
->  obj-$(CONFIG_MSC313E_WATCHDOG) += msc313e_wdt.o
->  obj-$(CONFIG_APPLE_WATCHDOG) += apple_wdt.o
-> diff --git a/drivers/watchdog/gxp-wdt.c b/drivers/watchdog/gxp-wdt.c
-> new file mode 100644
-> index 000000000000..b0b2d7a6fdde
-> --- /dev/null
-> +++ b/drivers/watchdog/gxp-wdt.c
-> @@ -0,0 +1,174 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (C) 2022 Hewlett-Packard Enterprise Development Company, L.P. */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/io.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/types.h>
-> +#include <linux/watchdog.h>
-> +
-> +#define MASK_WDGCS_ENABLE	0x01
-> +#define MASK_WDGCS_RELOAD	0x04
-> +#define MASK_WDGCS_NMIEN	0x08
-> +#define MASK_WDGCS_WARN		0x80
-> +
-> +#define WDT_MAX_TIMEOUT_MS	655350
-> +#define WDT_DEFAULT_TIMEOUT	30
-> +#define SECS_TO_WDOG_TICKS(x) ((x) * 100)
-> +#define WDOG_TICKS_TO_SECS(x) ((x) / 100)
-> +
-> +#define GXP_WDT_CNT_OFS		0x10
-> +#define GXP_WDT_CTRL_OFS	0x16
-> +
-> +struct gxp_wdt {
-> +	void __iomem *base;
-> +	struct watchdog_device wdd;
-> +};
-> +
-> +static void gxp_wdt_enable_reload(struct gxp_wdt *drvdata)
-> +{
-> +	u8 val;
-> +
-> +	val = readb(drvdata->base + GXP_WDT_CTRL_OFS);
-> +	val |= (MASK_WDGCS_ENABLE | MASK_WDGCS_RELOAD);
-> +	writeb(val, drvdata->base + GXP_WDT_CTRL_OFS);
-> +}
-> +
-> +static int gxp_wdt_start(struct watchdog_device *wdd)
-> +{
-> +	struct gxp_wdt *drvdata = watchdog_get_drvdata(wdd);
-> +
-> +	writew(SECS_TO_WDOG_TICKS(wdd->timeout), drvdata->base + GXP_WDT_CNT_OFS);
-> +	gxp_wdt_enable_reload(drvdata);
-> +	return 0;
-> +}
-> +
-> +static int gxp_wdt_stop(struct watchdog_device *wdd)
-> +{
-> +	struct gxp_wdt *drvdata = watchdog_get_drvdata(wdd);
-> +	u8 val;
-> +
-> +	val = readb_relaxed(drvdata->base + GXP_WDT_CTRL_OFS);
-> +	val &= ~MASK_WDGCS_ENABLE;
-> +	writeb(val, drvdata->base + GXP_WDT_CTRL_OFS);
-> +	return 0;
-> +}
-> +
-> +static int gxp_wdt_set_timeout(struct watchdog_device *wdd,
-> +			       unsigned int timeout)
-> +{
-> +	struct gxp_wdt *drvdata = watchdog_get_drvdata(wdd);
-> +	u32 actual;
-> +
-> +	wdd->timeout = timeout;
-> +	actual = min(timeout * 100, wdd->max_hw_heartbeat_ms / 10);
-> +	writew(actual, drvdata->base + GXP_WDT_CNT_OFS);
-> +
-> +	return 0;
-> +}
-> +
-> +static unsigned int gxp_wdt_get_timeleft(struct watchdog_device *wdd)
-> +{
-> +	struct gxp_wdt *drvdata = watchdog_get_drvdata(wdd);
-> +	u32 val = readw(drvdata->base + GXP_WDT_CNT_OFS);
-> +
-> +	return WDOG_TICKS_TO_SECS(val);
-> +}
-> +
-> +static int gxp_wdt_ping(struct watchdog_device *wdd)
-> +{
-> +	struct gxp_wdt *drvdata = watchdog_get_drvdata(wdd);
-> +
-> +	gxp_wdt_enable_reload(drvdata);
-> +	return 0;
-> +}
-> +
-> +static int gxp_restart(struct watchdog_device *wdd, unsigned long action,
-> +		       void *data)
-> +{
-> +	struct gxp_wdt *drvdata = watchdog_get_drvdata(wdd);
-> +
-> +	writew(1, drvdata->base + GXP_WDT_CNT_OFS);
-> +	gxp_wdt_enable_reload(drvdata);
-> +	mdelay(100);
-> +	return 0;
-> +}
-> +
-> +static const struct watchdog_ops gxp_wdt_ops = {
-> +	.owner =	THIS_MODULE,
-> +	.start =	gxp_wdt_start,
-> +	.stop =		gxp_wdt_stop,
-> +	.ping =		gxp_wdt_ping,
-> +	.set_timeout =	gxp_wdt_set_timeout,
-> +	.get_timeleft =	gxp_wdt_get_timeleft,
-> +	.restart =	gxp_restart,
-> +};
-> +
-> +static const struct watchdog_info gxp_wdt_info = {
-> +	.options = WDIOF_SETTIMEOUT | WDIOF_MAGICCLOSE | WDIOF_KEEPALIVEPING,
-> +	.identity = "HPE GXP Watchdog timer",
-> +};
-> +
-> +static int gxp_wdt_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct gxp_wdt *drvdata;
-> +	int err;
-> +	u8 val;
-> +
-> +	drvdata = devm_kzalloc(dev, sizeof(struct gxp_wdt), GFP_KERNEL);
-> +	if (!drvdata)
-> +		return -ENOMEM;
-> +
-> +	/*
-> +	 * The register area where the timer and watchdog reside is disarranged.
-> +	 * Hence mapping individual register blocks for the timer and watchdog
-> +	 * is not recommended as they would have access to each others
-> +	 * registers. Based on feedback the watchdog is no longer part of the
-> +	 * device tree file and the timer driver now creates the watchdog as a
-> +	 * child device. During the watchdogs creation, the timer driver passes
-> +	 * the base address to the watchdog over the private interface.
-> +	 */
-> +
-> +	drvdata->base = (void __iomem *)dev->platform_data;
-> +
-> +	drvdata->wdd.info = &gxp_wdt_info;
-> +	drvdata->wdd.ops = &gxp_wdt_ops;
-> +	drvdata->wdd.max_hw_heartbeat_ms = WDT_MAX_TIMEOUT_MS;
-> +	drvdata->wdd.parent = dev;
-> +	drvdata->wdd.timeout = WDT_DEFAULT_TIMEOUT;
-> +
-> +	watchdog_set_drvdata(&drvdata->wdd, drvdata);
-> +	watchdog_set_nowayout(&drvdata->wdd, WATCHDOG_NOWAYOUT);
-> +
-> +	val = readb(drvdata->base + GXP_WDT_CTRL_OFS);
-> +
-> +	if (val & MASK_WDGCS_ENABLE)
-> +		set_bit(WDOG_HW_RUNNING, &drvdata->wdd.status);
-> +
-> +	watchdog_set_restart_priority(&drvdata->wdd, 128);
-> +
-> +	watchdog_stop_on_reboot(&drvdata->wdd);
-> +	err = devm_watchdog_register_device(dev, &drvdata->wdd);
-> +	if (err) {
-> +		dev_err(dev, "Failed to register watchdog device");
-> +		return err;
-> +	}
-> +
-> +	dev_info(dev, "HPE GXP watchdog timer");
-> +
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver gxp_wdt_driver = {
-> +	.probe = gxp_wdt_probe,
-> +	.driver = {
-> +		.name =	"gxp-wdt",
-> +	},
-> +};
-> +module_platform_driver(gxp_wdt_driver);
-> +
-> +MODULE_AUTHOR("Nick Hawkins <nick.hawkins@hpe.com>");
-> +MODULE_AUTHOR("Jean-Marie Verdun <verdun@hpe.com>");
-> +MODULE_DESCRIPTION("Driver for GXP watchdog timer");
-> -- 
-> 2.17.1
-> 

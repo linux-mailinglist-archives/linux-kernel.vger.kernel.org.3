@@ -2,109 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2E97529293
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5B35292A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349333AbiEPVIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 17:08:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36224 "EHLO
+        id S1349155AbiEPVIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 17:08:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349169AbiEPVIM (ORCPT
+        with ESMTP id S1349204AbiEPVIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 17:08:12 -0400
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E955A4A3C8;
-        Mon, 16 May 2022 13:49:44 -0700 (PDT)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-edf9ddb312so21773769fac.8;
-        Mon, 16 May 2022 13:49:44 -0700 (PDT)
+        Mon, 16 May 2022 17:08:13 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1EB4A3E7
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 13:49:56 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id q4so15564522plr.11
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 13:49:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KrZd1d7ZW1bFcikModx6EkxPFI/wL98ky5uKMz/aH5s=;
+        b=MONmx06zlMIYc3wCFtScWn/8i4RuJ7ZboFJ76kZhENs65e+45QZ9TJiv8sWMkWiH3i
+         oMf04Udsv5xFLVu8pZE6Oi957vt5/1YMSwrOFXbdWqCnWjD3OiHE+stQXPhVfLhrNtUD
+         YTr/FlydzldOfEek6k+R0YmmIbjNWSeIWc99Arc2CAig9n+ZY1W3JXsqnHmHZaOU+rce
+         sCdtaAQuzebqWxJEffXBMZkzQ+FIg8wmEWPNFp/6+5tC0BpkpszO707w1tYwG2vRUQHs
+         4XzCsZAs3Lm+5PtNS0cv7POMWbi8quYX8ck/U6lsOwQ8TanCa4cAzne213tIRV4+xwlF
+         Ntwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=dJ407RX9rra+MeG41XsuDhxD1nvVBeIHBR/vdQHMxFg=;
-        b=uGnV8i7EYk9xkRxbGIAMf418oeQ21KaYhYgowf2A8Vjd1QfUKN0nrw8E6GKqiwZu4Z
-         HDq7Q+CkWPNONUBqc5ecbQLl/2TB0k87rKSJsqOGfrK0ILY4Ih7UXk1JodpzHhPMMMEE
-         X/ieg0ezp8uETsPc4Xj2JNDoEBXJLvEgjujThQc0jbBFtnXVYY8Vb8claRIFIa172oXt
-         2y0DXKRWlFOyB0wav+uxASE0NCpab1+qvwMp92YmyiM4GtvZchi9Lfvh6R+KzS+USEGp
-         /kvL4iuBaPlhumU9vVvKTTr7lViMclSWluR7YV1rxd7F8aJnG9BI9HuNT+XzXcCUFLe/
-         ZcWg==
-X-Gm-Message-State: AOAM533L8IRKnD8E53wXa6Kb9BMPlr1SJYiY4zooFQ6Likc1YShOskbM
-        Hgbc8f/m+uCxXbhj4MgJFg==
-X-Google-Smtp-Source: ABdhPJwSZjeoTdSCcmGSB5osGq7WGCVKCO9I/IGTjq81+0ENZwa2gjhYxpSHG+AyOhA/zPGQj+g1IQ==
-X-Received: by 2002:a05:6870:b527:b0:ed:9cbd:e04a with SMTP id v39-20020a056870b52700b000ed9cbde04amr16246920oap.41.1652734184207;
-        Mon, 16 May 2022 13:49:44 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s124-20020aca5e82000000b00325cda1ffb8sm4158039oib.55.2022.05.16.13.49.42
+        bh=KrZd1d7ZW1bFcikModx6EkxPFI/wL98ky5uKMz/aH5s=;
+        b=W5j6YwrQMzZZ9MDNtbKRJbBJaZD4/VvDAVuHoacmhEdAv0DVNy8goEuTxHDNSB7lvV
+         Z9TAI5LLhLcemdL7TRRiBBfTHPCCJhbBoNKvu7Afn0R4IfLmgszYR+phZCcGG5GIcKZ3
+         Z95nn4JzTQaYoBNva2zHfraTvmxnSi9muDt0k6wgDUVt6YX2pnh5pdyYVA+PytcLXpf7
+         VlOHD4xmf+YWWo5pNrJ1lalR4N5MQZaT8NodtSamMfj7rsgiSgMBdE1jnNB2u9mHQ5Vr
+         xcfboFNuz850q3bkHLWri1/p5rDDoeoZejxyCk3auq77rI2ubgGa2jG+0eymqsFM6wLe
+         aM3A==
+X-Gm-Message-State: AOAM5305ZWUAHF9l849CCo7YTmRLK5W8zYUrhGUDs7xon5wQCyWG+T24
+        ebZ+8XmoWDpgrrP4byJtUB0hVA==
+X-Google-Smtp-Source: ABdhPJyfN+D2uao0MqY3oPEXUKmvH4qWuWl1YZgKcJeE6F9PV+VJP4kEuxpIbb6adk0PONfl+dMizw==
+X-Received: by 2002:a17:902:e94e:b0:15b:22a7:f593 with SMTP id b14-20020a170902e94e00b0015b22a7f593mr19047116pll.148.1652734196312;
+        Mon, 16 May 2022 13:49:56 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id n12-20020a1709026a8c00b0015ea9aabd19sm7372503plk.241.2022.05.16.13.49.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 13:49:43 -0700 (PDT)
-Received: (nullmailer pid 3259375 invoked by uid 1000);
-        Mon, 16 May 2022 20:49:42 -0000
-Date:   Mon, 16 May 2022 15:49:42 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 10/17] PCI: dwc: Drop iATU regions enumeration -
- dw_pcie_region_type
-Message-ID: <20220516204942.GG3209795-robh@kernel.org>
-References: <20220503214638.1895-1-Sergey.Semin@baikalelectronics.ru>
- <20220503214638.1895-11-Sergey.Semin@baikalelectronics.ru>
+        Mon, 16 May 2022 13:49:55 -0700 (PDT)
+Date:   Mon, 16 May 2022 20:49:52 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Zeng Guang <guang.zeng@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hu, Robert" <robert.hu@intel.com>,
+        "Gao, Chao" <chao.gao@intel.com>
+Subject: Re: [PATCH v9 0/9] IPI virtualization support for VM
+Message-ID: <YoK48P2UrrjxaRrJ@google.com>
+References: <20220419153155.11504-1-guang.zeng@intel.com>
+ <2d33b71a-13e5-d377-abc2-c20958526497@redhat.com>
+ <cf178428-8c98-e7b3-4317-8282938976fd@intel.com>
+ <f0e633b3-38ea-f288-c74d-487387cefddc@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220503214638.1895-11-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <f0e633b3-38ea-f288-c74d-487387cefddc@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 12:46:31AM +0300, Serge Semin wrote:
-> There is no point in having the dw_pcie_region_type enumeration for almost
-> the same reasons as it was stated for dw_pcie_as_type. First of all it's
-> redundant since the driver already has a set of the macros declared which
-> describe the possible inbound and outbound iATU regions. Having an
-> addition abstraction just needlessly complicates the code. Secondly
-> checking the region type passed to the dw_pcie_disable_atu() method for
-> validity is pointless since the erroneous situation is just ignored in the
-> current method implementation. So to speak let's drop the redundant
-> dw_pcie_region_type enumeration replacing it with the direct iATU
-> direction macro usage.
+On Tue, May 03, 2022, Paolo Bonzini wrote:
+> On 5/3/22 09:32, Zeng Guang wrote:
+> > 
+> > I don't see "[PATCH v9 4/9] KVM: VMX: Report tertiary_exec_control field in
+> > dump_vmcs()" in kvm/queue. Does it not need ?
 > 
-> Since the dw_pcie_disable_atu() method now directly accepts the
-> in-/outbound iATU region direction instead of the abstract region type we
-> need to change the argument name and the arguments order. The later change
-> makes the function prototype looking more logical since the passed index
-> indicates an iATU window within the regions with the corresponding
-> direction.
+> Added now (somehow the patches were not threaded, so I had to catch them one
+> by one from lore).
 > 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Selftests for KVM_CAP_MAX_VCPU_ID is posted in V2 which is revised on top of
+> > kvm/queue.
+> > ([PATCH v2] kvm: selftests: Add KVM_CAP_MAX_VCPU_ID cap test - Zeng
+> > Guang (kernel.org) <https://lore.kernel.org/lkml/20220503064037.10822-1-guang.zeng@intel.com/>)
 > 
-> ---
-> 
-> Changelog v2:
-> - Move this patch to being applied before the IB/OB iATU windows setup
->   simplification patch (@Rob).
-> ---
->  .../pci/controller/dwc/pcie-designware-ep.c   |  4 +--
->  .../pci/controller/dwc/pcie-designware-host.c |  2 +-
->  drivers/pci/controller/dwc/pcie-designware.c  | 28 +++++--------------
->  drivers/pci/controller/dwc/pcie-designware.h  | 13 ++-------
->  4 files changed, 13 insertions(+), 34 deletions(-)
+> Queued, thanks.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Shouldn't we have a solution for the read-only APIC_ID mess before this is merged?

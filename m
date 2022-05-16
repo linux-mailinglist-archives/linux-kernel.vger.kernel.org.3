@@ -2,168 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E89752825A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D219528260
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238785AbiEPKmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 06:42:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46730 "EHLO
+        id S242750AbiEPKm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 06:42:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242947AbiEPKlk (ORCPT
+        with ESMTP id S236543AbiEPKmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 06:41:40 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEEF9261C;
-        Mon, 16 May 2022 03:41:37 -0700 (PDT)
-X-UUID: 6456a25257d540899786888d20ed49f0-20220516
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:14da1c38-918c-4adf-b92e-1cf13a3a5ae1,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:89bb2e94-563e-4fc2-8a0d-fda4821947ab,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 6456a25257d540899786888d20ed49f0-20220516
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1875934610; Mon, 16 May 2022 18:41:33 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 16 May 2022 18:41:31 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 16 May 2022 18:41:31 +0800
-Message-ID: <e1dffbf98c034b99b1d7fd10aa009a645812abdc.camel@mediatek.com>
-Subject: Re: [PATCH v6 09/10] arm64: dts: mediatek: Add MediaTek CCI node
- for MT8183
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>
-CC:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
-        <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
-        <roger.lu@mediatek.com>, <hsinyi@google.com>,
-        <khilman@baylibre.com>, <angelogioacchino.delregno@collabora.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "Andrew-sh . Cheng" <andrew-sh.cheng@mediatek.com>
-Date:   Mon, 16 May 2022 18:41:31 +0800
-In-Reply-To: <CAGXv+5FW59B1Dq8eH=5KjEdTxgT64GuvYZHZ9LnnTuaVrK3XpQ@mail.gmail.com>
-References: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
-         <20220505115226.20130-10-rex-bc.chen@mediatek.com>
-         <CAGXv+5FW59B1Dq8eH=5KjEdTxgT64GuvYZHZ9LnnTuaVrK3XpQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 16 May 2022 06:42:05 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A653B28
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 03:42:03 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id c12so3947004eds.10
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 03:42:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=erbXfCmeHocQjfL+rgDZPz13+JsufODTkqH4MW8FPkU=;
+        b=P77DC0Il8yTtkstHIFJR8Nqlq8byFBHMvwFcvt4Nt22CzyvC/Fv+KdNgonw4S3OD3K
+         2LvZ1t/0q7xkgaqJ5UbQef9PLfEU7ibZjarM7y30f4syi3XrIkk66bNTygONFoWTGBsW
+         T0zLbcuIOAC9Pea0Sj+b22Ih6ju5PVW+bGFZBfbQIQwsZ2smRedVpMeslKaL1/f8c8ws
+         cpfStIYgXZGpFXthRtvUGpT3DV00iZ9sg3V6xgZDESod1iRqB5UonePNMTjP7uGf8dB4
+         IBqMuAHh6o186Vqyr9HRq/GyB3509vT7hUFGMlFByEIaa6lwVHd0K6KyZqrr3pKGyAHv
+         dkfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=erbXfCmeHocQjfL+rgDZPz13+JsufODTkqH4MW8FPkU=;
+        b=VsZTZpEMYq7vnAwPfc99al06uv2EMD5QBrt86F+bOB58eM2Duc0cfPS6dA5kVs+roG
+         iLRo6tsvDbOZd9sKdDbrJxc9Mq6OJMuWXX2kdr0Emo7BJNzXBZccUTnyBXz6Dx3OX6Fy
+         cUJ9JDe8Fj7V40ItImVUGJFvmfxGQ/jPKGHbHHK+XAtwi3Xs9O4Vi2d7zHkslBDempL7
+         vx5Fjc2QYJIb+ld06i7NDowiv+Gu6HrgXBEXGxgmJGmpMBOgTeYqPHqRR1hL6eBppxnv
+         enYadsXR7l2xdGQBVjgxuGKRQiIxO99V7jIga04jhTMwHrPLuypYBhqD1HuAsUYrGSsy
+         Oy8w==
+X-Gm-Message-State: AOAM531RIkU8lXScZhbE3SVCFVyLdUMwsvkxpxV3KL25xtNxE1z5XKVX
+        DIvefRN61Qmaq5+7yUXtHjIQ+A==
+X-Google-Smtp-Source: ABdhPJwCmZ7TsADf4yBSO70bp+4Cv2yZYtgdUiE6w+q/M7boOVpmbsE2ZQrGrh1nN3VKR0CPmxFF2w==
+X-Received: by 2002:a05:6402:2710:b0:427:d087:b with SMTP id y16-20020a056402271000b00427d087000bmr12509532edd.11.1652697721952;
+        Mon, 16 May 2022 03:42:01 -0700 (PDT)
+Received: from google.com (30.171.91.34.bc.googleusercontent.com. [34.91.171.30])
+        by smtp.gmail.com with ESMTPSA id ec33-20020a0564020d6100b0042ab48ea729sm1151662edb.88.2022.05.16.03.42.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 03:42:01 -0700 (PDT)
+Date:   Mon, 16 May 2022 10:41:58 +0000
+From:   Quentin Perret <qperret@google.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH] KVM: arm64: Don't hypercall before EL2 init
+Message-ID: <YoIqdiOoCf0A1hcV@google.com>
+References: <20220513092607.35233-1-qperret@google.com>
+ <87sfpb59wj.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87sfpb59wj.wl-maz@kernel.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-05-16 at 13:35 +0800, Chen-Yu Tsai wrote:
-> On Thu, May 5, 2022 at 8:04 PM Rex-BC Chen <rex-bc.chen@mediatek.com>
-> wrote:
-> > 
-> > Add MediaTek CCI devfreq node for MT8183.
-> > 
-> > Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
-> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
-> > ---
-> >  arch/arm64/boot/dts/mediatek/mt8183-evb.dts    | 4 ++++
-> >  arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 4 ++++
-> >  arch/arm64/boot/dts/mediatek/mt8183.dtsi       | 7 +++++++
-> >  3 files changed, 15 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-> > b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-> > index 8953dbf84f3e..7ac9864db9de 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-> > @@ -412,6 +412,10 @@
-> > 
-> >  };
-> > 
-> > +&cci {
-> > +       proc-supply = <&mt6358_vproc12_reg>;
-> > +};
-> > +
-> >  &cpu0 {
-> >         proc-supply = <&mt6358_vproc12_reg>;
-> >  };
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> > b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> > index 8d5bf73a9099..b035e06840e6 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> > @@ -230,6 +230,10 @@
-> >         status = "okay";
-> >  };
-> > 
-> > +&cci {
-> > +       proc-supply = <&mt6358_vproc12_reg>;
-> > +};
-> > +
-> >  &cpu0 {
-> >         proc-supply = <&mt6358_vproc12_reg>;
-> >  };
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > index cecf96b628b7..11caf3dd85cd 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > @@ -280,6 +280,13 @@
-> >                 };
-> >         };
-> > 
-> > +       cci: cci {
-> > +               compatible = "mediatek,mt8183-cci";
-> > +               clocks = <&apmixedsys CLK_APMIXED_CCIPLL>;
-> > +               clock-names = "cci_clock";
+On Sunday 15 May 2022 at 12:10:20 (+0100), Marc Zyngier wrote:
+> Can we simplify the condition? ARM64_SPECTRE_V3A is only set when
+> !VHE, and we already bail in kvm_patch_vector_branch() if we see
+> VHE+V3A, because the combination makes no sense at all. I think this
+> can be rewritten as:
 > 
-> Binding says there should be two clocks: the actual clock that drives
-> CCI, and a stable "intermediate" clock to switch to during clock rate
-> changes. So I think this should look like:
+> 	if (kvm_system_needs_idmapped_vectors() &&
+> 	    !is_protected_lvm_enabled())
 > 
->     clocks = <&mcucfg CLK_MCU_BUS_SEL>,
->              <&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
->     clock-names = "cci", "intermediate";
-> 
-> 
-> ChenYu
-> 
+> Thoughts?
 
-Hello Chen-Yu,
+Yup I think this works as both CPUs that are vulnerable to V3A aren't
+VHE-capable. But if we ever get a VHE-capable CPU that's vulnerable I
+think the next call to create_hyp_exec_mappings() will BUG(). Perhaps
+the alternative would be to have has_spectre_v3a() say no in VHE to be
+on the safe side? That is, prevent the cap from being set to begin with.
 
-Thanks for your reminder.
-I will update this and sned next version.
-
-BRs,
-Rex
-
-> > +               operating-points-v2 = <&cci_opp>;
-> > +       };
-> > +
-> >         cpus {
-> >                 #address-cells = <1>;
-> >                 #size-cells = <0>;
-> > --
-> > 2.18.0
-> > 
-> > 
-> > _______________________________________________
-> > Linux-mediatek mailing list
-> > Linux-mediatek@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-mediatek
-
+Cheers,
+Quentin

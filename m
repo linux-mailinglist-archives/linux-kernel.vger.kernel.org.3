@@ -2,85 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E26528321
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 13:25:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A278852831F
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 13:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241508AbiEPLYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 07:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43254 "EHLO
+        id S243128AbiEPLYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 07:24:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243144AbiEPLY0 (ORCPT
+        with ESMTP id S243148AbiEPLY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 16 May 2022 07:24:26 -0400
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2976C38BCF
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 04:24:15 -0700 (PDT)
-Received: by mail-vs1-xe2b.google.com with SMTP id c62so15118214vsc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 04:24:15 -0700 (PDT)
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE91B387A1;
+        Mon, 16 May 2022 04:24:24 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id z2so28005792ejj.3;
+        Mon, 16 May 2022 04:24:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=v7/xR8YHxvtEWItoGCcgyQFho9j9XpVaXw2jIxKf7To=;
-        b=OhVqqpLAbPXjjKDWmVRAFa10mRAob2fdAzcqWV9zrJxwX0LtPuiRLxizlgUp/8TXJ1
-         iI4BJzI0SN0OnaIC9NeWY61sOf2wEJjp109SfcJRaRGsIGPXesbZf/Mn8I49tfqPSZwA
-         62PgTVLOlH6OaeG1TJUHcAtRuyGHJc1xryV5ISyIQlJMwvjtAc1HqwynHKP6RufVyO2e
-         BWylSCD1T+/oall7nxOws7qbB9hkTwGR1mS0JtZ2QyDkbyxyYYjoS8gJlgFKC0bxwrO0
-         Dh9wbTgZ5YlwENnJSbAXKvnYqiHbvAtX6KkkPrw1/9wlxbzJq+g1ZLR6C62A1C9mPv2E
-         brtQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=77gx/XLhnKSDiVibNMBRLIPjcw3E1r3YTb0F7inWImQ=;
+        b=iXVszanG6bjkeDIEEDw7fW2lVJpChg3S/DptMsSdJR93CW1yQd6530UO3dwLgnAQvk
+         +MpAW4yMSlqLZPsk+iARePydg9/ulzdCjc3sO2CjDy4Z6ooWofrHOBny5r0HHkjdsTh2
+         HARdrE0jAkfDHgAFGKJhrM9nqvgDsALmSE+q6XrnsaTmFq6t68wCqAvENjcE8Cjl87Tf
+         SQ7B/ICb7rpcro+mAmTzNSKnwbELGtP7UKfBd4cPnkZ/QwI/3OvNFs/hpgHCa6pbf/Q1
+         /NSrHLtAfFj5BSX5m1tWzCoKIurq65ViOy2cqVcLQtbff9kkZzkvuUB3Xso3kEkOU/7N
+         wzYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=v7/xR8YHxvtEWItoGCcgyQFho9j9XpVaXw2jIxKf7To=;
-        b=kdoEe+oIsFALbETszvteVdCQnoocCW0bKnFw72jYWz8ld+eE/WEdCMhBfXuXRu+a2G
-         RKdEE8bn7Oc0kPufCJviz/8PBjcNwKGbjNfEdKGjEhG34JZtusqD+7/i5X0SWAPPQrRp
-         m6rz5HeoRiq0n0rBDh9qXhwEaVBhc3/++02LOnJOVdS4OLjda7f/7HljtuqwP3/yUTeb
-         /mcB7XN5BPsivly/+K/sUMdwxUNXYcieH9MUkAzofD5KBQ2xRCfIEN1d+vr37J+7aZHa
-         87M63YUO2I/1bC82ZEh1TACBiGlVKTJBaUWCsGfVLxEGXf1Gj4X33pT4Sid/lDVkh8DX
-         BMPA==
-X-Gm-Message-State: AOAM533xPbhbCOrbeLRjOD6DEklM7EIOgx7F4uqxCErgl08yuRQofwyr
-        HMNaOwc2N5z+4Un75GGmYmCfgMd7Btwy9VhL4Wo3yZj0jIk=
-X-Google-Smtp-Source: ABdhPJxkIBetGFd0fncG6WKgWZs3V56KjTj8J5gyeBHu4WJLV6uqy/olLyY+JsHfGq/FEQ0QkCCHn4QZuOMU3+giNsM=
-X-Received: by 2002:a67:f5cf:0:b0:32c:c4ed:12ce with SMTP id
- t15-20020a67f5cf000000b0032cc4ed12cemr6010687vso.27.1652700254335; Mon, 16
- May 2022 04:24:14 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=77gx/XLhnKSDiVibNMBRLIPjcw3E1r3YTb0F7inWImQ=;
+        b=JP3krF9BmYIUwIMsfT5OmDI5f9Ci5638ZKTSOdkZfgr5Rz1YSUwATpVXud5xowpOwA
+         hy+ougdPF1ZJcdoWLjv5KSYsD5bTSkx6F8O0h0eAtBxueE50K5Z1bBAN2i+QdTz0TZMW
+         1vEBr8M++y8ypZ9fe+V5zrGHJT1i+YSyRgyFtFqmklDzi/Ra+RUoft7HGtza/rEq9A5s
+         7MCTjsZ/velu+Fj5LrVh6rPblWvxQ0HxRxofKRexfXK/s0FigxcBCpi3OEF708NE+iNo
+         SqxRV8Gd8fiSoBc36xkhigwohlP8bbU2rfuWHmFS1FXODEamOjKoXotY/s6TnXvQP+jJ
+         NrqQ==
+X-Gm-Message-State: AOAM532vC9SlprvN6PXVddV7rVU5GimmI+NkAIiiKw9QKk3i0AsiPQan
+        gMTWHpgtNQQu+f3J0dtEczg=
+X-Google-Smtp-Source: ABdhPJxT6XSfbzOLNrpQtOjop8bYz8T8iKdEu7rm4HQvaqRMsW3WRPuPU3WoD3SO2asQfdShRD+JVA==
+X-Received: by 2002:a17:907:94c6:b0:6f5:287a:2bf2 with SMTP id dn6-20020a17090794c600b006f5287a2bf2mr15551079ejc.124.1652700263341;
+        Mon, 16 May 2022 04:24:23 -0700 (PDT)
+Received: from skbuf ([188.25.160.86])
+        by smtp.gmail.com with ESMTPSA id w27-20020a170907271b00b006f3ef214e12sm3563951ejk.120.2022.05.16.04.24.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 04:24:22 -0700 (PDT)
+Date:   Mon, 16 May 2022 14:24:21 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Arun Ramadoss <arun.ramadoss@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Marek Vasut <marex@denx.de>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Eric Dumazet <edumazet@google.com>
+Subject: Re: [RFC Patch net-next v2 6/9] net: dsa: microchip: move
+ get_strings to ksz_common
+Message-ID: <20220516112421.ndzmocmw4opdpvbw@skbuf>
+References: <20220513102219.30399-1-arun.ramadoss@microchip.com>
+ <20220513102219.30399-7-arun.ramadoss@microchip.com>
 MIME-Version: 1.0
-Sender: ibrakabora135.bib@gmail.com
-Received: by 2002:a05:6102:2050:0:0:0:0 with HTTP; Mon, 16 May 2022 04:24:14
- -0700 (PDT)
-From:   Mrs Vivian Thomson <viviatom02@gmail.com>
-Date:   Mon, 16 May 2022 04:24:14 -0700
-X-Google-Sender-Auth: ErnEgpdpqeHr8Zr_hsXn8pHnP0g
-Message-ID: <CAPQQAPHnCB=_=WL2hNRCpPcyJ4AgBgns7uDz7wNHk2_=i7MiPA@mail.gmail.com>
-Subject: DONATION IS FOR CHARITY AND NEEDY
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_NAME_FM_MR_MRS,
-        LOTS_OF_MONEY,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,UPPERCASE_75_100
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220513102219.30399-7-arun.ramadoss@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MY WARM GREETINGS,
+On Fri, May 13, 2022 at 03:52:16PM +0530, Arun Ramadoss wrote:
+> ksz8795 and ksz9477 uses the same algorithm for copying the ethtool
+> strings. Hence moved to ksz_common to remove the redundant code.
+> 
+> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+> ---
 
- I AM MRS VIVIAN THOMSON FROM FRANCE, I DECIDED TO DONATE WHAT I HAVE
-TO YOU  FOR INVESTMENT TOWARDS THE GOOD WORK OF CHARITY ORGANIZATION,
-AND ALSO  TO HELP THE MOTHERLESS AND THE LESS PRIVILEGED ONES AND TO
-CARRY OUT A CHARITABLE WORKS IN YOUR COUNTRY AND AROUND THE WORLD ON
-MY BEHALF.
-
- I AM DIAGNOSING OF THROAT CANCER, HOSPITALIZE FOR GOOD 2 YEARS AND
-SOME MONTHS NOW AND QUITE OBVIOUS THAT I HAVE FEW DAYS TO LIVE, AND I
-AM A WIDOW NO CHILD; I DECIDED TO WILL/DONATE THE SUM OF $5.8 MILLION
-PRIVILEGE AND ALSO FORTH ASSISTANCE OF THE WIDOWS.
-IF YOU KNOW THAT YOU ARE ABLE TO RECIVE THIS FUND DONATION AND DO AS I
-HAVE INDICATED, REPLY URGENTLY TO THIS MESSAGES.
-
-WAITING YOUR REPLY
-MRS VIVIAN THOMSON
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>

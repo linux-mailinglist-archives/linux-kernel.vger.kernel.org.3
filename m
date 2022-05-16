@@ -2,121 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5532C528351
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 13:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 516D852834F
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 13:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243185AbiEPLc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 07:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34564 "EHLO
+        id S243180AbiEPLdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 07:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiEPLcv (ORCPT
+        with ESMTP id S243176AbiEPLdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 07:32:51 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317D138D8B;
-        Mon, 16 May 2022 04:32:50 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id p5-20020a1c2905000000b003970dd5404dso793881wmp.0;
-        Mon, 16 May 2022 04:32:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=caeR1d5UF/OVvqIoQomSco97tJ43m4mKPZrJZyYHxJw=;
-        b=J9z9Eo4Uws1wL5DN7Apv1Nidg+AkLal3CFdoeL6/CmNOcfT+UuLdAwwacmvG72zOjp
-         AJfH7g3i4BHKEG3vxH0OCHDxdgDOWHtmgZoSfTjRvEhAPgwsfzY0PgDT0uDPZ2QzGsSb
-         K8e21Vw3Q/4L5V2DDzqveSFoIMTm4O8Z1Eg0AQxycGm9+FcRUhjuQvLyLzZLYXpZ8c+U
-         nxHnJEoTyKSxHH6VU5jLYXW8Wi5vz+8KgiL1r73b+mqpC6r6bX72GL53a/Zhjf8iroFY
-         FgUN9zRwN0Jo/Z88OXmjABQ34oU6ncA478+oJ1k1OXf0rZ3NbiEdheSVwWLMaHekGxx9
-         PJ2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=caeR1d5UF/OVvqIoQomSco97tJ43m4mKPZrJZyYHxJw=;
-        b=XHcaxlv3YOf59u8YzLiGiCLkNsPGCTkkmBFittSgZbeFnBgcUiTcl+O5BxAwPl3tFp
-         r23kfXFYAyF7dIxL68zO5VREG6OH+T5UcPo+/9z1okER/FUvaRgx30SRxHsibKkE9ZvI
-         /rUyvNKmqcFk9s1P2lqXWTA97BFN+feMWIN41NMe0edho8jrzkOYuP7cKBFLQFgnTrqE
-         pz50LCaVC/B8uHwWbD0CKcNdScWuz1CqAbT2Qz0tJbBfb8rLo67W0sC1yZPQttMTR7zm
-         gpJ75RqafQzSaxkhHNfMRTJQPJQBVR2UOhCGzvZBBZoNlJDXLxlSd9Ok5xgr+kkQ/75A
-         sq9A==
-X-Gm-Message-State: AOAM532yCUiiCLGME1oQZiY5Rsxzjbnzvf4fGPJpk/2p5jTfw0xjmO6A
-        UZ1h7qFZatmKdn9oYIVqGIo=
-X-Google-Smtp-Source: ABdhPJz3pErEXVh6c5jSOm5lb9urUb/kznpC3Pzf2jcgE4pcvIh1nDHvdVZVd+IKCii501ptpAeCxw==
-X-Received: by 2002:a05:600c:154d:b0:394:8d64:9166 with SMTP id f13-20020a05600c154d00b003948d649166mr16485448wmg.102.1652700768735;
-        Mon, 16 May 2022 04:32:48 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id n12-20020adf8b0c000000b0020cdf6ecafbsm11529943wra.81.2022.05.16.04.32.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 04:32:48 -0700 (PDT)
-Message-ID: <d602eb96-587d-5b1d-17af-2af83acde709@gmail.com>
-Date:   Mon, 16 May 2022 13:32:46 +0200
+        Mon, 16 May 2022 07:33:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09E938D9B;
+        Mon, 16 May 2022 04:32:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 662E0B810DC;
+        Mon, 16 May 2022 11:32:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5215C385B8;
+        Mon, 16 May 2022 11:32:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652700777;
+        bh=J35KBiLWm9yx0BOYLnTJk7rVxmulK79qiZiILuB4w7k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kMKcB0R+c500+oR6qABXuSCXVrIbnUak6NCFWtM5aHlhxqCAiwXypcX9XDUprR+JO
+         hXlvFSmLXs7Bt+iAGGZIhcB7QOArbT2q6lzSc/l+7WEscTBh+WkdjFHQB6RAB12jam
+         fRMFsXbWsDD7O2urjxR32bxfAIjRliYPpHo/gfdCb99FsUJPXNhx81XBzZO5Y9taLr
+         xDQnBxJMXe1hKiTyEmAoLznn1PsWhp8+/RY8QjbcacKGV9SDD5VB4e4mHoDghD9Ys6
+         vkSzJu4b3HgXfmeUwXUkZj3d2cJbuE4ts3W1zbEM1Dkhab25cI5DTD+VOiBEIgFJdz
+         hDv/CeINXRrrw==
+Date:   Mon, 16 May 2022 17:02:53 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     cgel.zte@gmail.com
+Cc:     dave.jiang@intel.com, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] dmaengine: idxd: Remove unnecessary synchronize_irq()
+ before free_irq()
+Message-ID: <YoI2ZRm3irWmqZDg@matsya>
+References: <20220513081622.1631073-1-chi.minghao@zte.com.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 1/2] dt-bindings: memory: mtk-smi: Add MT6795 Helio X10
- bindings
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, yong.wu@mediatek.com
-Cc:     krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, paul.bouchara@somainline.org,
-        kernel@collabora.com
-References: <20220513150633.387200-1-angelogioacchino.delregno@collabora.com>
- <20220513150633.387200-2-angelogioacchino.delregno@collabora.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220513150633.387200-2-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220513081622.1631073-1-chi.minghao@zte.com.cn>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 13/05/2022 17:06, AngeloGioacchino Del Regno wrote:
-> Add SMI bindings for the MediaTek Helio X10 (MT6795) SoC
+On 13-05-22, 08:16, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Calling synchronize_irq() right before free_irq() is quite useless. On one
+> hand the IRQ can easily fire again before free_irq() is entered, on the
+> other hand free_irq() itself calls synchronize_irq() internally (in a race
+> condition free way) before any state associated with the IRQ is freed.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
 
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+where is this report...?
 
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 > ---
->   .../bindings/memory-controllers/mediatek,smi-common.yaml         | 1 +
->   .../bindings/memory-controllers/mediatek,smi-larb.yaml           | 1 +
->   2 files changed, 2 insertions(+)
+>  drivers/dma/idxd/device.c | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
-> index a98b359bf909..71bc5cefb49c 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
-> @@ -32,6 +32,7 @@ properties:
->             - mediatek,mt2701-smi-common
->             - mediatek,mt2712-smi-common
->             - mediatek,mt6779-smi-common
-> +          - mediatek,mt6795-smi-common
->             - mediatek,mt8167-smi-common
->             - mediatek,mt8173-smi-common
->             - mediatek,mt8183-smi-common
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
-> index c886681f62a7..59dcd163668f 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
-> @@ -20,6 +20,7 @@ properties:
->             - mediatek,mt2701-smi-larb
->             - mediatek,mt2712-smi-larb
->             - mediatek,mt6779-smi-larb
-> +          - mediatek,mt6795-smi-larb
->             - mediatek,mt8167-smi-larb
->             - mediatek,mt8173-smi-larb
->             - mediatek,mt8183-smi-larb
+> diff --git a/drivers/dma/idxd/device.c b/drivers/dma/idxd/device.c
+> index 5363fb9218f2..9dd8e6bb21e6 100644
+> --- a/drivers/dma/idxd/device.c
+> +++ b/drivers/dma/idxd/device.c
+> @@ -1179,7 +1179,6 @@ void idxd_wq_free_irq(struct idxd_wq *wq)
+>  	struct idxd_device *idxd = wq->idxd;
+>  	struct idxd_irq_entry *ie = &wq->ie;
+>  
+> -	synchronize_irq(ie->vector);
+>  	free_irq(ie->vector, ie);
+>  	idxd_flush_pending_descs(ie);
+>  	if (idxd->request_int_handles)
+> --
+> 2.25.1
+> 
+
+-- 
+~Vinod

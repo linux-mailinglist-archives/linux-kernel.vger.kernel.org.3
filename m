@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7088D527F74
+	by mail.lfdr.de (Postfix) with ESMTP id 00736527F73
 	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 10:19:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241602AbiEPITI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 04:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56378 "EHLO
+        id S234500AbiEPITX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 04:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236381AbiEPISt (ORCPT
+        with ESMTP id S241587AbiEPISu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 04:18:49 -0400
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B9C36E24
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 01:18:46 -0700 (PDT)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 6F68F1A0490;
-        Mon, 16 May 2022 10:18:45 +0200 (CEST)
+        Mon, 16 May 2022 04:18:50 -0400
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEAE736E36
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 01:18:47 -0700 (PDT)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 6B8A4200513;
+        Mon, 16 May 2022 10:18:46 +0200 (CEST)
 Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 37F1D1A0474;
-        Mon, 16 May 2022 10:18:45 +0200 (CEST)
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 33F5820050C;
+        Mon, 16 May 2022 10:18:46 +0200 (CEST)
 Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id B7995180219B;
-        Mon, 16 May 2022 16:18:43 +0800 (+08)
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id B6ECD180031D;
+        Mon, 16 May 2022 16:18:44 +0800 (+08)
 From:   Shengjiu Wang <shengjiu.wang@nxp.com>
 To:     nicoleotsuka@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
         shengjiu.wang@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
         perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
 Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] ASoC: fsl_sai: Add support for i.MX8M Plus
-Date:   Mon, 16 May 2022 16:06:11 +0800
-Message-Id: <1652688372-10274-3-git-send-email-shengjiu.wang@nxp.com>
+Subject: [PATCH 3/3] ASoC: fsl_sai: Add support for i.MX8ULP
+Date:   Mon, 16 May 2022 16:06:12 +0800
+Message-Id: <1652688372-10274-4-git-send-email-shengjiu.wang@nxp.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1652688372-10274-1-git-send-email-shengjiu.wang@nxp.com>
 References: <1652688372-10274-1-git-send-email-shengjiu.wang@nxp.com>
@@ -45,40 +45,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add i.MX8M Plus specific soc data, the max register is FSL_SAI_MDIV.
+Add i.MX8ULP specific soc data, the max register is FSL_SAI_RTCAP
+the IP version is also 0x0301, So version can't be used for the
+condition of register FSL_SAI_MCTL setting.
 
 Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
 ---
- sound/soc/fsl/fsl_sai.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ sound/soc/fsl/fsl_sai.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
 diff --git a/sound/soc/fsl/fsl_sai.c b/sound/soc/fsl/fsl_sai.c
-index 1ac65de094b9..b528722acd65 100644
+index b528722acd65..fa950dde5310 100644
 --- a/sound/soc/fsl/fsl_sai.c
 +++ b/sound/soc/fsl/fsl_sai.c
-@@ -1261,6 +1261,17 @@ static const struct fsl_sai_soc_data fsl_sai_imx8mm_data = {
- 	.max_register = FSL_SAI_MCTL,
+@@ -1147,7 +1147,7 @@ static int fsl_sai_probe(struct platform_device *pdev)
+ 
+ 	/* Select MCLK direction */
+ 	if (of_find_property(np, "fsl,sai-mclk-direction-output", NULL) &&
+-	    sai->verid.version >= 0x0301) {
++	    sai->soc_data->max_register >= FSL_SAI_MCTL) {
+ 		regmap_update_bits(sai->regmap, FSL_SAI_MCTL,
+ 				   FSL_SAI_MCTL_MCLK_EN, FSL_SAI_MCTL_MCLK_EN);
+ 	}
+@@ -1272,6 +1272,17 @@ static const struct fsl_sai_soc_data fsl_sai_imx8mp_data = {
+ 	.max_register = FSL_SAI_MDIV,
  };
  
-+static const struct fsl_sai_soc_data fsl_sai_imx8mp_data = {
++static const struct fsl_sai_soc_data fsl_sai_imx8ulp_data = {
 +	.use_imx_pcm = true,
-+	.use_edma = false,
-+	.fifo_depth = 128,
++	.use_edma = true,
++	.fifo_depth = 16,
 +	.reg_offset = 8,
 +	.mclk0_is_mclk1 = false,
-+	.pins = 8,
-+	.flags = 0,
-+	.max_register = FSL_SAI_MDIV,
++	.pins = 4,
++	.flags = PMQOS_CPU_LATENCY,
++	.max_register = FSL_SAI_RTCAP,
 +};
 +
  static const struct of_device_id fsl_sai_ids[] = {
  	{ .compatible = "fsl,vf610-sai", .data = &fsl_sai_vf610_data },
  	{ .compatible = "fsl,imx6sx-sai", .data = &fsl_sai_imx6sx_data },
-@@ -1269,6 +1280,7 @@ static const struct of_device_id fsl_sai_ids[] = {
- 	{ .compatible = "fsl,imx8mq-sai", .data = &fsl_sai_imx8mq_data },
+@@ -1281,6 +1292,7 @@ static const struct of_device_id fsl_sai_ids[] = {
  	{ .compatible = "fsl,imx8qm-sai", .data = &fsl_sai_imx8qm_data },
  	{ .compatible = "fsl,imx8mm-sai", .data = &fsl_sai_imx8mm_data },
-+	{ .compatible = "fsl,imx8mp-sai", .data = &fsl_sai_imx8mp_data },
+ 	{ .compatible = "fsl,imx8mp-sai", .data = &fsl_sai_imx8mp_data },
++	{ .compatible = "fsl,imx8ulp-sai", .data = &fsl_sai_imx8ulp_data },
  	{ /* sentinel */ }
  };
  MODULE_DEVICE_TABLE(of, fsl_sai_ids);

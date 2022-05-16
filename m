@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5837A528FBD
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3EC529108
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347344AbiEPT5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
+        id S1343545AbiEPUPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:15:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347039AbiEPTvf (ORCPT
+        with ESMTP id S1351045AbiEPUB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:51:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76D13FBD6;
-        Mon, 16 May 2022 12:46:44 -0700 (PDT)
+        Mon, 16 May 2022 16:01:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D006A473AE;
+        Mon, 16 May 2022 12:57:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C2F6604F5;
-        Mon, 16 May 2022 19:46:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D02FC385AA;
-        Mon, 16 May 2022 19:46:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 777ABB81613;
+        Mon, 16 May 2022 19:57:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0243C385AA;
+        Mon, 16 May 2022 19:57:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730403;
-        bh=2dqIFbD/1xq+mInJPqNxPK1QhNRQ0cRRfbZNWQ5TaYg=;
+        s=korg; t=1652731035;
+        bh=18TsozEqMlpQhPgYryuK9UP4KaIWqrgwWG2uxJOE024=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Tc6pIGK1Equlu00j8A3VasCvTZPuMoSJl+NNlxt+nwXfNf4iBvaLcFAkDvC3CT5FQ
-         CqDY/m6JGoTOFo7QIVmMEAdiSs3LNat3XkpL4/t9rZKChfJgJSggudGE3JKNceMvTr
-         yeL18T2qm2CGz16zgj7fIogtqe2e8qmupkAPdOH4=
+        b=cXbRQaNQZqSw8/0tJF5crQ+Lt00WCPxLtPwTmROZ1VozFA/z/GxElg1vhlzY+K+/H
+         6ag+i68y/Hd4Kjp1R3w7Z74EdM0oIuccLtVh8NcevH4oLqLjHUOmNsCE3xcAvym9Wn
+         QY5EniPgkHqWGlPxYfgv7rNxY6j1dWf85taonFkU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Gurucharan <gurucharanx.g@intel.com>
-Subject: [PATCH 5.10 54/66] i40e: i40e_main: fix a missing check on list iterator
-Date:   Mon, 16 May 2022 21:36:54 +0200
-Message-Id: <20220516193620.971383985@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 5.17 081/114] usb: typec: tcpci: Dont skip cleanup in .remove() on error
+Date:   Mon, 16 May 2022 21:36:55 +0200
+Message-Id: <20220516193627.811077315@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
-References: <20220516193619.400083785@linuxfoundation.org>
+In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
+References: <20220516193625.489108457@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,92 +57,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-commit 3f95a7472d14abef284d8968734fe2ae7ff4845f upstream.
+commit bbc126ae381cf0a27822c1f822d0aeed74cc40d9 upstream.
 
-The bug is here:
-	ret = i40e_add_macvlan_filter(hw, ch->seid, vdev->dev_addr, &aq_err);
+Returning an error value in an i2c remove callback results in an error
+message being emitted by the i2c core, but otherwise it doesn't make a
+difference. The device goes away anyhow and the devm cleanups are
+called.
 
-The list iterator 'ch' will point to a bogus position containing
-HEAD if the list is empty or no element is found. This case must
-be checked before any use of the iterator, otherwise it will
-lead to a invalid memory access.
+In this case the remove callback even returns early without stopping the
+tcpm worker thread and various timers. A work scheduled on the work
+queue, or a firing timer after tcpci_remove() returned probably results
+in a use-after-free situation because the regmap and driver data were
+freed. So better make sure that tcpci_unregister_port() is called even
+if disabling the irq failed.
 
-To fix this bug, use a new variable 'iter' as the list iterator,
-while use the origin variable 'ch' as a dedicated pointer to
-point to the found element.
+Also emit a more specific error message instead of the i2c core's
+"remove failed (EIO), will be ignored" and return 0 to suppress the
+core's warning.
 
-Cc: stable@vger.kernel.org
-Fixes: 1d8d80b4e4ff6 ("i40e: Add macvlan support on i40e")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Link: https://lore.kernel.org/r/20220510204846.2166999-1-anthony.l.nguyen@intel.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+This patch is (also) a preparation for making i2c remove callbacks
+return void.
+
+Fixes: 3ba76256fc4e ("usb: typec: tcpci: mask event interrupts when remove driver")
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Cc: stable <stable@vger.kernel.org>
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/r/20220502080456.21568-1-u.kleine-koenig@pengutronix.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/i40e/i40e_main.c |   27 ++++++++++++++-------------
- 1 file changed, 14 insertions(+), 13 deletions(-)
+ drivers/usb/typec/tcpm/tcpci.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -7175,42 +7175,43 @@ static void i40e_free_macvlan_channels(s
- static int i40e_fwd_ring_up(struct i40e_vsi *vsi, struct net_device *vdev,
- 			    struct i40e_fwd_adapter *fwd)
- {
-+	struct i40e_channel *ch = NULL, *ch_tmp, *iter;
- 	int ret = 0, num_tc = 1,  i, aq_err;
--	struct i40e_channel *ch, *ch_tmp;
- 	struct i40e_pf *pf = vsi->back;
- 	struct i40e_hw *hw = &pf->hw;
+--- a/drivers/usb/typec/tcpm/tcpci.c
++++ b/drivers/usb/typec/tcpm/tcpci.c
+@@ -877,7 +877,7 @@ static int tcpci_remove(struct i2c_clien
+ 	/* Disable chip interrupts before unregistering port */
+ 	err = tcpci_write16(chip->tcpci, TCPC_ALERT_MASK, 0);
+ 	if (err < 0)
+-		return err;
++		dev_warn(&client->dev, "Failed to disable irqs (%pe)\n", ERR_PTR(err));
  
--	if (list_empty(&vsi->macvlan_list))
--		return -EINVAL;
--
- 	/* Go through the list and find an available channel */
--	list_for_each_entry_safe(ch, ch_tmp, &vsi->macvlan_list, list) {
--		if (!i40e_is_channel_macvlan(ch)) {
--			ch->fwd = fwd;
-+	list_for_each_entry_safe(iter, ch_tmp, &vsi->macvlan_list, list) {
-+		if (!i40e_is_channel_macvlan(iter)) {
-+			iter->fwd = fwd;
- 			/* record configuration for macvlan interface in vdev */
- 			for (i = 0; i < num_tc; i++)
- 				netdev_bind_sb_channel_queue(vsi->netdev, vdev,
- 							     i,
--							     ch->num_queue_pairs,
--							     ch->base_queue);
--			for (i = 0; i < ch->num_queue_pairs; i++) {
-+							     iter->num_queue_pairs,
-+							     iter->base_queue);
-+			for (i = 0; i < iter->num_queue_pairs; i++) {
- 				struct i40e_ring *tx_ring, *rx_ring;
- 				u16 pf_q;
+ 	tcpci_unregister_port(chip->tcpci);
  
--				pf_q = ch->base_queue + i;
-+				pf_q = iter->base_queue + i;
- 
- 				/* Get to TX ring ptr */
- 				tx_ring = vsi->tx_rings[pf_q];
--				tx_ring->ch = ch;
-+				tx_ring->ch = iter;
- 
- 				/* Get the RX ring ptr */
- 				rx_ring = vsi->rx_rings[pf_q];
--				rx_ring->ch = ch;
-+				rx_ring->ch = iter;
- 			}
-+			ch = iter;
- 			break;
- 		}
- 	}
- 
-+	if (!ch)
-+		return -EINVAL;
-+
- 	/* Guarantee all rings are updated before we update the
- 	 * MAC address filter.
- 	 */
 
 

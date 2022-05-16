@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D1B5290DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B947528FB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346476AbiEPTyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
+        id S235618AbiEPUOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346418AbiEPTtg (ORCPT
+        with ESMTP id S1351051AbiEPUB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:49:36 -0400
+        Mon, 16 May 2022 16:01:57 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9390343380;
-        Mon, 16 May 2022 12:45:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694C1473B8;
+        Mon, 16 May 2022 12:57:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C889B815F6;
-        Mon, 16 May 2022 19:45:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1516CC385AA;
-        Mon, 16 May 2022 19:44:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3197EB81613;
+        Mon, 16 May 2022 19:57:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9807CC385AA;
+        Mon, 16 May 2022 19:57:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730300;
-        bh=dQioUUuOpbEXoJWHqg1dj+APselo5JSrLTXMWrfhIUo=;
+        s=korg; t=1652731046;
+        bh=SA/u6TfraJ4HVYA3POmKSQ4ZBz9ogmdGYvSFcf8IZ14=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JqvP4OCT2FNemfq2lyK0Pk5XTNWd/gFEiu+W9ljEnM7a867qVOwjglkYE/Gyn/mDf
-         qUMmUm7iyLJF9f1yoidXYhs6jwMaE3JzumIssnJxKb6RkJs+Vs+pOAjKoFjXLy+Zxl
-         pY9eAwJ4mHXMWuBxtZ1YNXf3eX/pBIammnWMmI38=
+        b=VFV2aFAdKdGzqaG+doSqvAbln0nN0rAQ9g82fzyuhkxfm1ixnr+AK8hM/2Tu00iLP
+         GvlMF84JEPInffWa88v1vE63/FydSFHOae7l2Fox8KMTbQ9UKtJx5jHb+ZMJ8iYB9z
+         Z8Z6hGyAQiVr0sF/fqWHO5L/Mr+lEK04gsY0uZuM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joel Savitz <jsavitz@redhat.com>,
-        Nico Pache <npache@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Sandipan Das <sandipan@linux.ibm.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 20/66] selftests: vm: Makefile: rename TARGETS to VMTARGETS
+Subject: [PATCH 5.17 046/114] tls: Fix context leak on tls_device_down
 Date:   Mon, 16 May 2022 21:36:20 +0200
-Message-Id: <20220516193620.000211932@linuxfoundation.org>
+Message-Id: <20220516193626.815898749@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
-References: <20220516193619.400083785@linuxfoundation.org>
+In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
+References: <20220516193625.489108457@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,82 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joel Savitz <jsavitz@redhat.com>
+From: Maxim Mikityanskiy <maximmi@nvidia.com>
 
-[ Upstream commit 41c240099fe09377b6b9f8272e45d2267c843d3e ]
+[ Upstream commit 3740651bf7e200109dd42d5b2fb22226b26f960a ]
 
-The tools/testing/selftests/vm/Makefile uses the variable TARGETS
-internally to generate a list of platform-specific binary build targets
-suffixed with _{32,64}.  When building the selftests using its own
-Makefile directly, such as via the following command run in a kernel tree:
+The commit cited below claims to fix a use-after-free condition after
+tls_device_down. Apparently, the description wasn't fully accurate. The
+context stayed alive, but ctx->netdev became NULL, and the offload was
+torn down without a proper fallback, so a bug was present, but a
+different kind of bug.
 
-One receives an error such as the following:
+Due to misunderstanding of the issue, the original patch dropped the
+refcount_dec_and_test line for the context to avoid the alleged
+premature deallocation. That line has to be restored, because it matches
+the refcount_inc_not_zero from the same function, otherwise the contexts
+that survived tls_device_down are leaked.
 
-make: Entering directory '/root/linux/tools/testing/selftests'
-make --no-builtin-rules ARCH=x86 -C ../../.. headers_install
-make[1]: Entering directory '/root/linux'
-  INSTALL ./usr/include
-make[1]: Leaving directory '/root/linux'
-make[1]: Entering directory '/root/linux/tools/testing/selftests/vm'
-make[1]: *** No rule to make target 'vm.c', needed by '/root/linux/tools/testing/selftests/vm/vm_64'.  Stop.
-make[1]: Leaving directory '/root/linux/tools/testing/selftests/vm'
-make: *** [Makefile:175: all] Error 2
-make: Leaving directory '/root/linux/tools/testing/selftests'
+This patch fixes the described issue by restoring refcount_dec_and_test.
+After this change, there is no leak anymore, and the fallback to
+software kTLS still works.
 
-The TARGETS variable passed to tools/testing/selftests/Makefile collides
-with the TARGETS used in tools/testing/selftests/vm/Makefile, so rename
-the latter to VMTARGETS, eliminating the collision with no functional
-change.
-
-Link: https://lkml.kernel.org/r/20220504213454.1282532-1-jsavitz@redhat.com
-Fixes: f21fda8f6453 ("selftests: vm: pkeys: fix multilib builds for x86")
-Signed-off-by: Joel Savitz <jsavitz@redhat.com>
-Acked-by: Nico Pache <npache@redhat.com>
-Cc: Joel Savitz <jsavitz@redhat.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Sandipan Das <sandipan@linux.ibm.com>
-Cc: Dave Hansen <dave.hansen@intel.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Fixes: c55dcdd435aa ("net/tls: Fix use-after-free after the TLS device goes down and up")
+Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+Link: https://lore.kernel.org/r/20220512091830.678684-1-maximmi@nvidia.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/vm/Makefile | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ net/tls/tls_device.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index 01ec6876e8f5..d8479552e222 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -44,9 +44,9 @@ CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_32bit_prog
- CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_64bit_program.c)
- CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_program.c -no-pie)
+diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
+index a40553e83f8b..f3e3d009cf1c 100644
+--- a/net/tls/tls_device.c
++++ b/net/tls/tls_device.c
+@@ -1347,7 +1347,10 @@ static int tls_device_down(struct net_device *netdev)
  
--TARGETS := protection_keys
--BINARIES_32 := $(TARGETS:%=%_32)
--BINARIES_64 := $(TARGETS:%=%_64)
-+VMTARGETS := protection_keys
-+BINARIES_32 := $(VMTARGETS:%=%_32)
-+BINARIES_64 := $(VMTARGETS:%=%_64)
+ 		/* Device contexts for RX and TX will be freed in on sk_destruct
+ 		 * by tls_device_free_ctx. rx_conf and tx_conf stay in TLS_HW.
++		 * Now release the ref taken above.
+ 		 */
++		if (refcount_dec_and_test(&ctx->refcount))
++			tls_device_free_ctx(ctx);
+ 	}
  
- ifeq ($(CAN_BUILD_WITH_NOPIE),1)
- CFLAGS += -no-pie
-@@ -101,7 +101,7 @@ $(BINARIES_32): CFLAGS += -m32
- $(BINARIES_32): LDLIBS += -lrt -ldl -lm
- $(BINARIES_32): $(OUTPUT)/%_32: %.c
- 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
--$(foreach t,$(TARGETS),$(eval $(call gen-target-rule-32,$(t))))
-+$(foreach t,$(VMTARGETS),$(eval $(call gen-target-rule-32,$(t))))
- endif
- 
- ifeq ($(CAN_BUILD_X86_64),1)
-@@ -109,7 +109,7 @@ $(BINARIES_64): CFLAGS += -m64
- $(BINARIES_64): LDLIBS += -lrt -ldl
- $(BINARIES_64): $(OUTPUT)/%_64: %.c
- 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
--$(foreach t,$(TARGETS),$(eval $(call gen-target-rule-64,$(t))))
-+$(foreach t,$(VMTARGETS),$(eval $(call gen-target-rule-64,$(t))))
- endif
- 
- # x86_64 users should be encouraged to install 32-bit libraries
+ 	up_write(&device_offload_lock);
 -- 
 2.35.1
 

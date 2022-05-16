@@ -2,230 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFCA1528E3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C95E528E13
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345723AbiEPTkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43896 "EHLO
+        id S1345779AbiEPTkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:40:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345714AbiEPTjn (ORCPT
+        with ESMTP id S1345602AbiEPTi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:39:43 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F6F3FD9B;
-        Mon, 16 May 2022 12:39:11 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id i27so30583089ejd.9;
-        Mon, 16 May 2022 12:39:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=zJNYDk4SvD1YtpXR0oj8NsF6HENGwzWTt8Lj8cCkpNo=;
-        b=GfpaCn3LMRvcWxUW26o8K7i1OgF9OOlb+NMttVfSDfnGCO1x92FO4XgTiW/aE8cK/a
-         6EPLXmEh5UIZPGY4T7AjjkJSyPvSKwZzGg/WsQlcpdF+aQT1oaX15KSys6jajMRl4daE
-         Dkb/qDAMY2pyPHhL0AS/NHTNs9O4/rHbQSL9QWD2/uXlhfBPY67M6Fvrt62I4p3t1z6t
-         3MrdJV2MYZJtHqV7xx+vuMYj9PN+WgalQiRsAqj4e6Ge0FxL2FgyQ+gqB7U1FYmflxs8
-         wEL79+0JU40DzFh9awCDRLt/FOmSQs2etsHFSNeG/jjYqyz448nzVYV/ZhAsL9/nmz7/
-         UluQ==
+        Mon, 16 May 2022 15:38:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A71EF3F88E
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:38:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652729923;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+tK7o+o7Kj2BQK1w3k57mXkaPLoN/4QFNnxgOKxEuBU=;
+        b=LfTk844feNuMvpixAdumjrUNDcHZdcpR2OOLbwIT6WZkwqyRUUUSo14HjfSQmi5O+qx0uF
+        GVY5iJrG+oTUNovTVw91mVu849UNw6zx5KTMSEQzuUyYFleWYIsDAMKJuH9c5BasnkoBXF
+        eZMNUm3iNy3Yy0DceMnkWUketa94lPM=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-113-DBgmTOhsPc6xdxXVZ6Sw1Q-1; Mon, 16 May 2022 15:38:42 -0400
+X-MC-Unique: DBgmTOhsPc6xdxXVZ6Sw1Q-1
+Received: by mail-il1-f199.google.com with SMTP id s6-20020a056e021a0600b002d0fe2b6d2fso3810751ild.12
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:38:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=zJNYDk4SvD1YtpXR0oj8NsF6HENGwzWTt8Lj8cCkpNo=;
-        b=jFRuY6sNOGRrg/d8eDCTF+tXeu0taDfaIpAYvS/9Y8QsWHnPXSat2/MUOK72N+EUoA
-         ed3wb8/yum3A68vrE6IIo/LmlUeMoT5P14YpNZ+n0ShKI1gnr4yWD3xJiTLC/dwVZQD5
-         sXVJtkS1gDU/MNmzKbD8r1VRoOg7LQ+ZNoI+Z+Nl3F1/gvripsXJMYBfmw7zHHhTd2tB
-         UgfcR5up1hzZ9gwpcKaU8agb8TEM+MnAylUoHqj+LWf+tX1XhJJu8g1VQI9qLG/53o12
-         GEkrnRpVp5HsrjalTUy1wOYqct3/slxFfTQ3AHB6YVTCibotWXObIuyiUfTVUOrlqYf2
-         msFA==
-X-Gm-Message-State: AOAM533y0p6FWxLjt73o19SuIY3kuVhjmshF2eSHwl/TBYdOXyyl551w
-        3mc/xJNEih4VKyvJ0A3R0Y0=
-X-Google-Smtp-Source: ABdhPJxoPobHPfYM65bQ9gkqOcRe7+3noo9i4Ud/hXXldy2+MIeYBuZ0nPEvonOeOo7whoyTzmPsMg==
-X-Received: by 2002:a17:907:6d25:b0:6f4:d753:f250 with SMTP id sa37-20020a1709076d2500b006f4d753f250mr16485319ejc.580.1652729950114;
-        Mon, 16 May 2022 12:39:10 -0700 (PDT)
-Received: from adroid (102-167-184-091.ip-addr.vsenet.de. [91.184.167.102])
-        by smtp.gmail.com with ESMTPSA id d3-20020a170907272300b006f3ef214e6fsm85180ejl.213.2022.05.16.12.39.09
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=+tK7o+o7Kj2BQK1w3k57mXkaPLoN/4QFNnxgOKxEuBU=;
+        b=h8W40qIVLnqzZuLoUWzizxjijmmUdOmfaeo05QwjGhVv5wLNEk5F8HDQcY1WC8XQGh
+         STjVziEBXYgvA+nrCTgBPyjCoSG6VqxA0NphqZ38f1XPAQXx0iBjb27JQDRjBtDSgeYQ
+         xyhXd8L0NbWFHDFb3ttvm2N/omI9fL72Mki8GWtZGJxOSl+V44A+t4+cstonjO/dNV/e
+         kNqU+DQjYp66eCXWmxGxpvJqvxcEmeh0bWrDG5UiIjn9bt1PY7GDv2XVDBlm7vFLEZAv
+         LiOxDPQhRlRgeLETXMHmO9/39ehQVJ8A6x24U9vRwzGnVcSn7O9HKONpEu3Er1VI9sx4
+         Lkxw==
+X-Gm-Message-State: AOAM5320PxkkNAc0ip+NRIxzyw/0QIgYdoMVNrTfohKDS9RQXWoBbdjr
+        8J1Fa2YlKxpNYcxNra6pwAoAYghBnkUnRXPUDJoXs0e3myPN0gWfokPouInsCji5XvnUg5E4GZ2
+        JlJB9OT/riZP8ZicBwhDjZDXl
+X-Received: by 2002:a05:6638:41a9:b0:32e:415a:a8a9 with SMTP id az41-20020a05663841a900b0032e415aa8a9mr2168794jab.101.1652729921713;
+        Mon, 16 May 2022 12:38:41 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy1ASRKUsHnS3u0hy5oNZdsYdaQJ/MYozulGQvgUeh7FSJ+d//YDvBT7RymfdniEX5hlCY/9Q==
+X-Received: by 2002:a05:6638:41a9:b0:32e:415a:a8a9 with SMTP id az41-20020a05663841a900b0032e415aa8a9mr2168777jab.101.1652729921515;
+        Mon, 16 May 2022 12:38:41 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id v20-20020a02b914000000b0032e049b2949sm2803562jan.101.2022.05.16.12.38.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 12:39:09 -0700 (PDT)
-From:   =?UTF-8?q?Martin=20J=C3=BCcker?= <martin.juecker@gmail.com>
-To:     linux-samsung-soc@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Martin=20J=C3=BCcker?= <martin.juecker@gmail.com>
-Subject: [PATCH 3/3] ARM: dts: exynos: add panel and backlight to p4note
-Date:   Mon, 16 May 2022 21:37:09 +0200
-Message-Id: <20220516193709.10037-3-martin.juecker@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220516193709.10037-1-martin.juecker@gmail.com>
-References: <20220516193709.10037-1-martin.juecker@gmail.com>
+        Mon, 16 May 2022 12:38:41 -0700 (PDT)
+Date:   Mon, 16 May 2022 13:38:39 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        linux-s390@vger.kernel.org, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
+        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
+        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v7 17/22] vfio-pci/zdev: add open/close device hooks
+Message-ID: <20220516133839.7e116489.alex.williamson@redhat.com>
+In-Reply-To: <20220516183558.GN1343366@nvidia.com>
+References: <20220513191509.272897-1-mjrosato@linux.ibm.com>
+        <20220513191509.272897-18-mjrosato@linux.ibm.com>
+        <20220516172734.GE1343366@nvidia.com>
+        <7a31ec36-ceaf-dcef-8bd0-2b4732050aed@linux.ibm.com>
+        <20220516183558.GN1343366@nvidia.com>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add configuration for the LTL101AL01 panel and a pwm backlight to drive
-the display in the p4note devices.
+On Mon, 16 May 2022 15:35:58 -0300
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-Signed-off-by: Martin Jücker <martin.juecker@gmail.com>
----
- arch/arm/boot/dts/exynos4412-p4note.dtsi | 84 ++++++++++++++++++++----
- 1 file changed, 71 insertions(+), 13 deletions(-)
+> On Mon, May 16, 2022 at 02:30:46PM -0400, Matthew Rosato wrote:
+> 
+> > Conceptually I think this would work for QEMU anyway (it always sets the kvm
+> > before we open the device).  I tried to test the idea quickly but couldn't
+> > get the following to apply on vfio-next or your vfio_group_locking -- but I
+> > understand what you're trying to do so I'll re-work and try it out.  
+> 
+> I created it on 8c9350e9bf43de1ebab3cc8a80703671e6495ab4 which is the
+> vfio_group_locking.. I can send you a github if it helps
+> https://github.com/jgunthorpe/linux/commits/vfio_group_lockin
+> 
+> > @Alex can you think of any usecase/reason why we would need to be able to
+> > set the KVM sometime after the device was opened?  Doing something like
+> > below would break that, as this introduces the assumption that the group is
+> > associated with the KVM before the device is opened (and if it's not, the
+> > device open fails).  
+> 
+> Keep in mind that GVT already hard requires this ordering to even
+> allow open_device to work - so it already sets a floor for what
+> userspace can do..
 
-diff --git a/arch/arm/boot/dts/exynos4412-p4note.dtsi b/arch/arm/boot/dts/exynos4412-p4note.dtsi
-index 97f131b1014b..1fd051b52387 100644
---- a/arch/arm/boot/dts/exynos4412-p4note.dtsi
-+++ b/arch/arm/boot/dts/exynos4412-p4note.dtsi
-@@ -106,6 +106,16 @@ voltage-regulator-3 {
- 		regulator-always-on;
- 	};
- 
-+	panel_vdd: voltage-regulator-4 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "LCD_ENABLE";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&lcd_enable>;
-+		gpios = <&gpc0 1 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		regulator-boot-on;
-+	};
-+
- 	wlan_pwrseq: sdhci3-pwrseq {
- 		compatible = "mmc-pwrseq-simple";
- 		reset-gpios = <&gpm3 5 GPIO_ACTIVE_LOW>;
-@@ -216,6 +226,32 @@ power_supply: charger@6 {
- 			monitored-battery = <&battery_cell>;
- 		};
- 	};
-+
-+	panel {
-+		compatible = "samsung,ltl101al01";
-+		pinctrl-0 = <&lvds_nshdn>;
-+		pinctrl-names = "default";
-+		power-supply = <&panel_vdd>;
-+		enable-gpios = <&gpm0 5 GPIO_ACTIVE_HIGH>;
-+		backlight = <&backlight>;
-+
-+		port {
-+			lcd_ep: endpoint {
-+				remote-endpoint = <&fimd_ep>;
-+			};
-+		};
-+	};
-+
-+	backlight: backlight {
-+		compatible = "pwm-backlight";
-+		pinctrl-0 = <&led_bl_reset>;
-+		pinctrl-names = "default";
-+		enable-gpios = <&gpm0 1 GPIO_ACTIVE_HIGH>;
-+		pwms = <&pwm 1 78770 0>;
-+		brightness-levels = <0 48 128 255>;
-+		num-interpolated-steps = <8>;
-+		default-brightness-level = <12>;
-+	};
- };
- 
- &adc {
-@@ -295,22 +331,19 @@ &exynos_usbphy {
- };
- 
- &fimd {
--	pinctrl-0 = <&lcd_clk &lcd_data24 &pwm1_out>;
-+	pinctrl-0 = <&lcd_clk &lcd_data24>;
- 	pinctrl-names = "default";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
- 	status = "okay";
- 
--	display-timings {
--		timing0 {
--			clock-frequency = <66666666>;
--			hactive = <1280>;
--			vactive = <800>;
--			hfront-porch = <18>;
--			hback-porch = <36>;
--			hsync-len = <16>;
--			vback-porch = <16>;
--			vfront-porch = <4>;
--			vsync-len = <3>;
--			hsync-active = <1>;
-+	samsung,invert-vclk;
-+
-+	port@3 {
-+		reg = <3>;
-+
-+		fimd_ep: endpoint {
-+			remote-endpoint = <&lcd_ep>;
- 		};
- 	};
- };
-@@ -687,6 +720,12 @@ tsp_reg_gpio_3: tsp-reg-gpio-3-pins {
- 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
- 	};
- 
-+	lcd_enable: lcd-enable-pins {
-+		samsung,pins = "gpc0-1";
-+		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
-+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
-+	};
-+
- 	sleep0: sleep-state {
- 		PIN_SLP(gpa0-0, INPUT, NONE);
- 		PIN_SLP(gpa0-1, OUT0, NONE);
-@@ -809,12 +848,24 @@ uart_sel: uart-sel-pins {
- 		/* 0 = CP, 1 = AP (serial output) */
- 	};
- 
-+	led_bl_reset: led-bl-reset-pins {
-+		samsung,pins = "gpm0-1";
-+		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
-+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
-+	};
-+
- 	tsp_rst: tsp-rst-pins {
- 		samsung,pins = "gpm0-4";
- 		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
- 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
- 	};
- 
-+	lvds_nshdn: lvds-nshdn-pins {
-+		samsung,pins = "gpm0-5";
-+		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
-+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
-+	};
-+
- 	tsp_irq: tsp-irq-pins {
- 		samsung,pins = "gpm2-3";
- 		samsung,pin-function = <EXYNOS_PIN_FUNC_F>;
-@@ -1100,6 +1151,13 @@ &pmu_system_controller {
- 	assigned-clock-parents = <&clock CLK_XUSBXTI>;
- };
- 
-+&pwm {
-+	pinctrl-0 = <&pwm1_out>;
-+	pinctrl-names = "default";
-+	samsung,pwm-outputs = <1>;
-+	status = "okay";
-+};
-+
- &rtc {
- 	clocks = <&clock CLK_RTC>, <&max77686 MAX77686_CLK_AP>;
- 	clock-names = "rtc", "rtc_src";
--- 
-2.25.1
+How is this going to work when vfio devices are exposed directly?  We
+currently have a strict ordering through the group to get to the
+device, and it's therefore a reasonable requirement for userspace to
+register the group with kvm before opening the device.  Is the notifier
+and async KVM registration necessary to support this dependency with
+direct device access?  I don't have as clear a picture of the ordering
+with with direct access.  Thanks,
+
+Alex
 

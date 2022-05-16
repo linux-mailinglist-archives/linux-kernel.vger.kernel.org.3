@@ -2,56 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B3A528F04
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D77E528E2C
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232659AbiEPTtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
+        id S242395AbiEPTku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346004AbiEPTnS (ORCPT
+        with ESMTP id S1345716AbiEPTjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:43:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8283EF1B;
-        Mon, 16 May 2022 12:42:28 -0700 (PDT)
+        Mon, 16 May 2022 15:39:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0AA3FD87;
+        Mon, 16 May 2022 12:39:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA43A61512;
-        Mon, 16 May 2022 19:42:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0BE8C385AA;
-        Mon, 16 May 2022 19:42:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1F972B81614;
+        Mon, 16 May 2022 19:39:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFEC0C385AA;
+        Mon, 16 May 2022 19:39:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730147;
-        bh=7YYoJ4XlY2PCPxmjMnCHSCKYCIIyjIWmTjXtuXY9mpY=;
+        s=korg; t=1652729948;
+        bh=LjCgzxjulikzvPBmeCtPffV+V9h4CeO8QM7tlEWfTNA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Eeu6IRb54ho2rzYyoe5cdjou9n7UIkN6Rs6KHMd8G2Dgj7Riz/kW0vH6yH6NT6LJd
-         k/Yx9bEri5xgIdn4vAfyzG/1sCWVY1SMnEyAGIBAKOlNY0O7ZAG9T7zqdbUvC7+sP5
-         /RBWGmZFkiGOiYxtwqPOSXu0ZhsuyAEW3MEavXBs=
+        b=GtMmbT1qxmsTXPb6taYGUudxRB/F9cI4NyFWbJewvmIOi+gm3abRKnlbcxjTQrDxs
+         nYTCJoGNnMsd2efqoidJJ8z1/1I69E9TMt57LnNjp4y26qV5cj1dRCy/Yh/dcLdgse
+         D+fnvAuDE5kc3ISmOAdLzhowMbhYqyfitis/v+nc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Geliang Tang <geliang.tang@suse.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
+        stable@vger.kernel.org, Martin Habets <habetsm.xilinx@gmail.com>,
+        Taehee Yoo <ap420073@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 14/43] net/sched: act_pedit: really ensure the skb is writable
+Subject: [PATCH 4.14 11/25] net: sfc: ef10: fix memory leak in efx_ef10_mtd_probe()
 Date:   Mon, 16 May 2022 21:36:25 +0200
-Message-Id: <20220516193615.139315885@linuxfoundation.org>
+Message-Id: <20220516193615.025520009@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193614.714657361@linuxfoundation.org>
-References: <20220516193614.714657361@linuxfoundation.org>
+In-Reply-To: <20220516193614.678319286@linuxfoundation.org>
+References: <20220516193614.678319286@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,121 +56,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Abeni <pabeni@redhat.com>
+From: Taehee Yoo <ap420073@gmail.com>
 
-[ Upstream commit 8b796475fd7882663a870456466a4fb315cc1bd6 ]
+[ Upstream commit 1fa89ffbc04545b7582518e57f4b63e2a062870f ]
 
-Currently pedit tries to ensure that the accessed skb offset
-is writable via skb_unclone(). The action potentially allows
-touching any skb bytes, so it may end-up modifying shared data.
+In the NIC ->probe() callback, ->mtd_probe() callback is called.
+If NIC has 2 ports, ->probe() is called twice and ->mtd_probe() too.
+In the ->mtd_probe(), which is efx_ef10_mtd_probe() it allocates and
+initializes mtd partiion.
+But mtd partition for sfc is shared data.
+So that allocated mtd partition data from last called
+efx_ef10_mtd_probe() will not be used.
+Therefore it must be freed.
+But it doesn't free a not used mtd partition data in efx_ef10_mtd_probe().
 
-The above causes some sporadic MPTCP self-test failures, due to
-this code:
+kmemleak reports:
+unreferenced object 0xffff88811ddb0000 (size 63168):
+  comm "systemd-udevd", pid 265, jiffies 4294681048 (age 348.586s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffffa3767749>] kmalloc_order_trace+0x19/0x120
+    [<ffffffffa3873f0e>] __kmalloc+0x20e/0x250
+    [<ffffffffc041389f>] efx_ef10_mtd_probe+0x11f/0x270 [sfc]
+    [<ffffffffc0484c8a>] efx_pci_probe.cold.17+0x3df/0x53d [sfc]
+    [<ffffffffa414192c>] local_pci_probe+0xdc/0x170
+    [<ffffffffa4145df5>] pci_device_probe+0x235/0x680
+    [<ffffffffa443dd52>] really_probe+0x1c2/0x8f0
+    [<ffffffffa443e72b>] __driver_probe_device+0x2ab/0x460
+    [<ffffffffa443e92a>] driver_probe_device+0x4a/0x120
+    [<ffffffffa443f2ae>] __driver_attach+0x16e/0x320
+    [<ffffffffa4437a90>] bus_for_each_dev+0x110/0x190
+    [<ffffffffa443b75e>] bus_add_driver+0x39e/0x560
+    [<ffffffffa4440b1e>] driver_register+0x18e/0x310
+    [<ffffffffc02e2055>] 0xffffffffc02e2055
+    [<ffffffffa3001af3>] do_one_initcall+0xc3/0x450
+    [<ffffffffa33ca574>] do_init_module+0x1b4/0x700
 
-	tc -n $ns2 filter add dev ns2eth$i egress \
-		protocol ip prio 1000 \
-		handle 42 fw \
-		action pedit munge offset 148 u8 invert \
-		pipe csum tcp \
-		index 100
-
-The above modifies a data byte outside the skb head and the skb is
-a cloned one, carrying a TCP output packet.
-
-This change addresses the issue by keeping track of a rough
-over-estimate highest skb offset accessed by the action and ensuring
-such offset is really writable.
-
-Note that this may cause performance regressions in some scenarios,
-but hopefully pedit is not in the critical path.
-
-Fixes: db2c24175d14 ("act_pedit: access skb->data safely")
-Acked-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-Tested-by: Geliang Tang <geliang.tang@suse.com>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
-Link: https://lore.kernel.org/r/1fcf78e6679d0a287dd61bb0f04730ce33b3255d.1652194627.git.pabeni@redhat.com
+Acked-by: Martin Habets <habetsm.xilinx@gmail.com>
+Fixes: 8127d661e77f ("sfc: Add support for Solarflare SFC9100 family")
+Signed-off-by: Taehee Yoo <ap420073@gmail.com>
+Link: https://lore.kernel.org/r/20220512054709.12513-1-ap420073@gmail.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/tc_act/tc_pedit.h |  1 +
- net/sched/act_pedit.c         | 26 ++++++++++++++++++++++----
- 2 files changed, 23 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/sfc/ef10.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/include/net/tc_act/tc_pedit.h b/include/net/tc_act/tc_pedit.h
-index 748cf87a4d7e..3e02709a1df6 100644
---- a/include/net/tc_act/tc_pedit.h
-+++ b/include/net/tc_act/tc_pedit.h
-@@ -14,6 +14,7 @@ struct tcf_pedit {
- 	struct tc_action	common;
- 	unsigned char		tcfp_nkeys;
- 	unsigned char		tcfp_flags;
-+	u32			tcfp_off_max_hint;
- 	struct tc_pedit_key	*tcfp_keys;
- 	struct tcf_pedit_key_ex	*tcfp_keys_ex;
- };
-diff --git a/net/sched/act_pedit.c b/net/sched/act_pedit.c
-index ff4f2437b592..305cb190e997 100644
---- a/net/sched/act_pedit.c
-+++ b/net/sched/act_pedit.c
-@@ -148,7 +148,7 @@ static int tcf_pedit_init(struct net *net, struct nlattr *nla,
- 	struct nlattr *pattr;
- 	struct tcf_pedit *p;
- 	int ret = 0, err;
--	int ksize;
-+	int i, ksize;
- 	u32 index;
- 
- 	if (!nla) {
-@@ -227,6 +227,18 @@ static int tcf_pedit_init(struct net *net, struct nlattr *nla,
- 		p->tcfp_nkeys = parm->nkeys;
+diff --git a/drivers/net/ethernet/sfc/ef10.c b/drivers/net/ethernet/sfc/ef10.c
+index 2d92a9fe4606..4f0da3963b01 100644
+--- a/drivers/net/ethernet/sfc/ef10.c
++++ b/drivers/net/ethernet/sfc/ef10.c
+@@ -5956,6 +5956,11 @@ static int efx_ef10_mtd_probe(struct efx_nic *efx)
+ 		n_parts++;
  	}
- 	memcpy(p->tcfp_keys, parm->keys, ksize);
-+	p->tcfp_off_max_hint = 0;
-+	for (i = 0; i < p->tcfp_nkeys; ++i) {
-+		u32 cur = p->tcfp_keys[i].off;
-+
-+		/* The AT option can read a single byte, we can bound the actual
-+		 * value with uchar max.
-+		 */
-+		cur += (0xff & p->tcfp_keys[i].offmask) >> p->tcfp_keys[i].shift;
-+
-+		/* Each key touches 4 bytes starting from the computed offset */
-+		p->tcfp_off_max_hint = max(p->tcfp_off_max_hint, cur + 4);
+ 
++	if (!n_parts) {
++		kfree(parts);
++		return 0;
 +	}
- 
- 	p->tcfp_flags = parm->flags;
- 	goto_ch = tcf_action_set_ctrlact(*a, parm->action, goto_ch);
-@@ -307,13 +319,18 @@ static int tcf_pedit_act(struct sk_buff *skb, const struct tc_action *a,
- 			 struct tcf_result *res)
- {
- 	struct tcf_pedit *p = to_pedit(a);
-+	u32 max_offset;
- 	int i;
- 
--	if (skb_unclone(skb, GFP_ATOMIC))
--		return p->tcf_action;
--
- 	spin_lock(&p->tcf_lock);
- 
-+	max_offset = (skb_transport_header_was_set(skb) ?
-+		      skb_transport_offset(skb) :
-+		      skb_network_offset(skb)) +
-+		     p->tcfp_off_max_hint;
-+	if (skb_ensure_writable(skb, min(skb->len, max_offset)))
-+		goto unlock;
 +
- 	tcf_lastuse_update(&p->tcf_tm);
- 
- 	if (p->tcfp_nkeys > 0) {
-@@ -402,6 +419,7 @@ static int tcf_pedit_act(struct sk_buff *skb, const struct tc_action *a,
- 	p->tcf_qstats.overlimits++;
- done:
- 	bstats_update(&p->tcf_bstats, skb);
-+unlock:
- 	spin_unlock(&p->tcf_lock);
- 	return p->tcf_action;
- }
+ 	rc = efx_mtd_add(efx, &parts[0].common, n_parts, sizeof(*parts));
+ fail:
+ 	if (rc)
 -- 
 2.35.1
 

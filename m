@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A4A9527DD8
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 304E0527DDD
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240480AbiEPGvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 02:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52562 "EHLO
+        id S240525AbiEPGwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 02:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240654AbiEPGvT (ORCPT
+        with ESMTP id S240651AbiEPGvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 02:51:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7703633F
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:51:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E6CADB80E17
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:51:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABE69C385B8
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:51:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652683874;
-        bh=VnhplqP5C1OGrCIayDVu5lClsqFPYcrnV6QF9ztKEzI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rlCBtdsyM1BLOb6pklLk17Li+O4g9Sjs4+g2dOgvnhrrR2V3279c4/CNyFEqjBE7I
-         jiHUg7zeXv4A6zC5a0B43hA+WriVHB6peH3CHzbVw/drmh8pXSXNGHEJkTMtzahs0w
-         nour/DbCXZ5mmJaelC/946rdADD/JVKchXyUYr+iWr51Dng3BkOTHgMPG+w1Cx+SSu
-         vT/K0IWkEQpnK46jVD6cEfaRMjJfP7E+Ulg5DfNxmYA7ep3RCc9DaLQAOvtO+uWBqr
-         TBLfhjZsfjGyS6pvI2rivKts2a89BneaWVxymQUpK/Qb727vWoU6Pfp1iV9NQPPZOR
-         zyo4WLSVUOmEw==
-Received: by mail-vs1-f48.google.com with SMTP id a127so14521058vsa.3
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:51:14 -0700 (PDT)
-X-Gm-Message-State: AOAM533YiOoygqmefm1Vph4hqqKtkRpQk/i/xMtsMw4S61qOqUZIVBXE
-        c6LOEwKpcPIomHgNxJ0r5D5UQutlr+nMFv0eq7c=
-X-Google-Smtp-Source: ABdhPJzE0ghTRETFmmFWpTrlU6Xx8/k8CZMycNU4BOY6FtbZ6KEMJI6pw0TcqX4NszTl0oN6BxWhztxrBibIAQzmJ1M=
-X-Received: by 2002:a05:6102:390b:b0:32d:5fc3:bd2c with SMTP id
- e11-20020a056102390b00b0032d5fc3bd2cmr5076830vsu.51.1652683873645; Sun, 15
- May 2022 23:51:13 -0700 (PDT)
+        Mon, 16 May 2022 02:51:17 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB601113A
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:51:15 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2fee010f509so26149317b3.11
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:51:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=WtJcp6p7F7Zx5ASUnudcGO+8dHaIwXHyfKly8cDbuMA=;
+        b=oB2Ym7tGmxL3Mlm+Wc1BXaW8WLPTji+h+AaKCmX2oOE1nEnLZi9o83zPuBaDTSladG
+         LC7dVQHIRm5V1RDgF9NS0qR3UaEUy9kvm6P0jx1CDCs4WE1Ev2BPY88pTRgqM/xDn8KN
+         EeW6jdO0/EJ086wo/u53BxdRlojUD1DJVxq0J4TricFtGgMSda8uHaMOnSC4FU+1Nu+A
+         vtAH/FQmLLG9MTqLaQ+QgabCdfwOFXRUhGiNSkqDbwT7JH0Ds+9W7z7KictLR52hMQ6R
+         Zg97pjSruiAqRBSaqDyOYetlLuJLVC5WxbaWIvwLn2LOut6Y0y564psgFxVuFzfnsv68
+         wBkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=WtJcp6p7F7Zx5ASUnudcGO+8dHaIwXHyfKly8cDbuMA=;
+        b=CewRs4aDd/vFgxCIL1XjvFYxm/UNjUdlA5fCXhbO/3QTblIZrtATD00n47h2X0/p4l
+         tLa/l5s5/kBCbCwZEj0TEWOxjjGgJFCqGPRcFTuK04WQi5S08JmeyXjnbWJaJEM5gTPy
+         cWLMAtLre0/XAPGYkrtJJ3gqi1h/BbZsL14IdIZPopdu6rBzCG4qP9DSnKqsUaLJMJgz
+         SWhmxw7ITa6iV2IYT5GH7uw1apTzdUHtMz63m5Z993LXjmlYWUHDsgel6TGmM171+SWr
+         7dKptnd3qVyw5MF0BiCng87tXYgOghZNvfLiTlxIKv5M0BgCl3EQlqbbk3LUDnxxmu58
+         H6iw==
+X-Gm-Message-State: AOAM533vVBju0O3PhZDoMA62sGVShLk3n8TdX4ftcgPWJUB53f2maxCR
+        rI475Ir4Ke0Cn122DBMJ5iopYo1IbBZcRtuu63R3jg==
+X-Google-Smtp-Source: ABdhPJzlok8aacHYgGi100CNNq62mWJ4OfwGkBms8SJ6eKfBCxXNgSs1LakblRxkgfX/CqfHP+t6a2ECtWrIWmBWeK0=
+X-Received: by 2002:a81:2f8c:0:b0:2fe:ed42:21ca with SMTP id
+ v134-20020a812f8c000000b002feed4221camr4783213ywv.120.1652683874940; Sun, 15
+ May 2022 23:51:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220515131407.946832-1-xianting.tian@linux.alibaba.com>
-In-Reply-To: <20220515131407.946832-1-xianting.tian@linux.alibaba.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 16 May 2022 14:51:02 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTS6StTP2QgEW65w79UaYLx2LEYLC8HF_VzFkgzRpfvXyw@mail.gmail.com>
-Message-ID: <CAJF2gTS6StTP2QgEW65w79UaYLx2LEYLC8HF_VzFkgzRpfvXyw@mail.gmail.com>
-Subject: Re: [PATCH] RISC-V: Add fast call path of crash_kexec()
-To:     Xianting Tian <xianting.tian@linux.alibaba.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Vitaly Wool <vitaly.wool@konsulko.com>,
-        rmk+kernel@armlinux.org.uk,
-        "Eric W. Biederman" <ebiederm@xmission.com>, tongtiangen@huawei.co,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nick Kossifidis <mick@ics.forth.gr>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 16 May 2022 12:21:04 +0530
+Message-ID: <CA+G9fYtU7i356bhfGSVaZUkeqE2gE-GE0NQ1iqxJEH_u4BZjSw@mail.gmail.com>
+Subject: [next ] kernel BUG at mm/mmap.c:3235! - invalid opcode: 0000 [#1]
+ PREEMPT SMP NOPTI
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org
+Cc:     Yang Shi <shy828301@gmail.com>, Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Song Liu <songliubraving@fb.com>,
+        Rik van Riel <riel@surriel.com>,
+        Matthew Wilcox <willy@infradead.org>, Zi Yan <ziy@nvidia.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Song Liu <song@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        David Howells <dhowells@redhat.com>,
+        SeongJae Park <sj@kernel.org>, Will Deacon <will@kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,96 +76,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Great Job, I think it's a fixup, we should add Fix: and Cc: stable@kernel.org
+While running LTP mm tests on x86_64 the following kernel BUG was noticed
+on Linux next-20220513 [1].
 
-Reviewed-by: Guo Ren <guoren@kernel.org>
+mmapstress01    1  TPASS  :  Test passed
+mmapstress02    1  TPASS  :  Test passed
+mmapstress03    0  TINFO  :  uname.machine=x86_64 kernel is 64bit
+mmapstress03    1  TPASS  :  Test passed
+[  666.897222] ------------[ cut here ]------------
+[  666.897260] kernel BUG at mm/mmap.c:3235!
+[  666.897285] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+[  666.899420] CPU: 3 PID: 25230 Comm: mmapstress03 Not tainted
+5.18.0-rc6-next-20220513 #1
+[  666.900552] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.12.0-1 04/01/2014
+[  666.901868] RIP: 0010:exit_mmap+0x32c/0x3a0
+[  666.902542] Code: 87 78 03 00 00 00 00 00 02 0f 84 41 fe ff ff 4c
+89 ff e8 37 bb fa ff f0 41 80 8f 7a 03 00 00 20 e9 2b fe ff ff e8 74
+e5 e1 00 <0f> 0b 65 8b 05 b3 ab 63 55 89 c0 48 0f a3 05 39 4b f0 01 0f
+83 36
+[  666.905542] RSP: 0018:ffff991342abbd10 EFLAGS: 00010202
+[  666.906334] RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffff93ea0353540c
+[  666.907464] RDX: ffffffffffffffff RSI: 0000000000000000 RDI: ffff991342abbd18
+[  666.908589] RBP: ffff991342abbe08 R08: 00007ffe337a6fff R09: 0000000000000009
+[  666.909745] R10: ffffffffffffff00 R11: ffff991342abbd40 R12: 0000000000000058
+[  666.910810] R13: ffff991342abbd18 R14: 0000000000000012 R15: ffff93ea07f8d800
+[  666.911940] FS:  00007fad8494b580(0000) GS:ffff93ea3bd80000(0000)
+knlGS:0000000000000000
+[  666.913153] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  666.914147] CR2: 0000000000bba268 CR3: 0000000075610000 CR4: 00000000003506e0
+[  666.915119] Call Trace:
+[  666.915473]  <TASK>
+[  666.915805]  __mmput+0x47/0x100
+[  666.916280]  mmput+0x20/0x30
+[  666.916677]  exit_mm+0xe7/0x150
+[  666.917116]  do_exit+0x1c5/0xa40
+[  666.917566]  ? __audit_syscall_entry+0x109/0x130
+[  666.918220]  do_group_exit+0x54/0xb0
+[  666.918708]  __do_sys_exit_group+0xf/0x10
+[  666.919249]  __se_sys_exit_group+0xe/0x10
+[  666.919790]  __x64_sys_exit_group+0x12/0x20
+[  666.920356]  do_syscall_64+0x35/0x60
+[  666.920876]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+[  666.921561] RIP: 0033:0x7fad842c1846
+[  666.922095] Code: Unable to access opcode bytes at RIP 0x7fad842c181c.
+[  666.922959] RSP: 002b:00007ffe336ad8b8 EFLAGS: 00000246 ORIG_RAX:
+00000000000000e7
+[  666.923954] RAX: ffffffffffffffda RBX: 00007fad845a9740 RCX: 00007fad842c1846
+[  666.924895] RDX: 0000000000000000 RSI: 000000000000003c RDI: 0000000000000000
+[  666.925846] RBP: 0000000000000000 R08: 00000000000000e7 R09: ffffffffffffff80
+[  666.926779] R10: 0000000000000002 R11: 0000000000000246 R12: 00007fad845a9740
+[  666.927711] R13: 0000000000000001 R14: 00007fad845b2628 R15: 0000000000000000
+[  666.928671]  </TASK>
+[  666.928976] Modules linked in:
+[  666.929491] ---[ end trace 0000000000000000 ]---
+[  666.929502] RIP: 0010:exit_mmap+0x32c/0x3a0
+[  666.929508] Code: 87 78 03 00 00 00 00 00 02 0f 84 41 fe ff ff 4c
+89 ff e8 37 bb fa ff f0 41 80 8f 7a 03 00 00 20 e9 2b fe ff ff e8 74
+e5 e1 00 <0f> 0b 65 8b 05 b3 ab 63 55 89 c0 48 0f a3 05 39 4b f0 01 0f
+83 36
+[  666.929511] RSP: 0018:ffff991342abbd10 EFLAGS: 00010202
+[  666.929513] RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffff93ea0353540c
+[  666.929516] RDX: ffffffffffffffff RSI: 0000000000000000 RDI: ffff991342abbd18
+[  666.929518] RBP: ffff991342abbe08 R08: 00007ffe337a6fff R09: 0000000000000009
+[  666.929520] R10: ffffffffffffff00 R11: ffff991342abbd40 R12: 0000000000000058
+[  666.929522] R13: ffff991342abbd18 R14: 0000000000000012 R15: ffff93ea07f8d800
+[  666.929527] FS:  00007fad8494b580(0000) GS:ffff93ea3bd80000(0000)
+knlGS:0000000000000000
+[  666.929531] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  666.929535] CR2: 0000000000bba268 CR3: 0000000075610000 CR4: 00000000003506e0
+[  666.929540] Fixing recursive fault but reboot is needed!
+[  666.929544] BUG: using smp_processor_id() in preemptible [00000000]
+code: mmapstress03/25230
+[  666.929562] caller is debug_smp_processor_id+0x17/0x20
+[  666.929575] CPU: 3 PID: 25230 Comm: mmapstress03 Tainted: G      D
+         5.18.0-rc6-next-20220513 #1
+[  666.929580] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.12.0-1 04/01/2014
+[  666.929582] Call Trace:
+[  666.929584]  <TASK>
+[  666.929586]  dump_stack_lvl+0x6c/0x9a
+[  666.929590]  dump_stack+0x10/0x12
+[  666.929594]  check_preemption_disabled+0x10f/0x120
+[  666.929606]  debug_smp_processor_id+0x17/0x20
+[  666.929609]  __schedule+0x36/0x600
+[  666.929618]  ? trace_preempt_on+0x31/0x40
+[  666.929634]  do_task_dead+0x41/0x50
+[  666.929661]  make_task_dead+0xd3/0xe0
+[  666.929664]  rewind_stack_and_make_dead+0x17/0x18
+[  666.929702] RIP: 0033:0x7fad842c1846
+[  666.929705] Code: Unable to access opcode bytes at RIP 0x7fad842c181c.
+[  666.929706] RSP: 002b:00007ffe336ad8b8 EFLAGS: 00000246 ORIG_RAX:
+00000000000000e7
+[  666.929709] RAX: ffffffffffffffda RBX: 00007fad845a9740 RCX: 00007fad842c1846
+[  666.929710] RDX: 0000000000000000 RSI: 000000000000003c RDI: 0000000000000000
+[  666.929711] RBP: 0000000000000000 R08: 00000000000000e7 R09: ffffffffffffff80
+[  666.929712] R10: 0000000000000002 R11: 0000000000000246 R12: 00007fad845a9740
+[  666.929714] R13: 0000000000000001 R14: 00007fad845b2628 R15: 0000000000000000
+[  666.929717]  </TASK>
+[  666.929718] BUG: scheduling while atomic: mmapstress03/25230/0x00000000
+[  666.929721] Modules linked in:
+[  666.929722] Preemption disabled at:
+[  666.929728] [<ffffffffaa82a574>] do_task_dead+0x24/0x50
+[  666.929733] CPU: 3 PID: 25230 Comm: mmapstress03 Tainted: G      D
+         5.18.0-rc6-next-20220513 #1
+[  666.929736] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.12.0-1 04/01/2014
+[  666.929738] Call Trace:
+[  666.929739]  <TASK>
+[  666.929739]  dump_stack_lvl+0x6c/0x9a
+[  666.929743]  ? do_task_dead+0x24/0x50
+[  666.929747]  dump_stack+0x10/0x12
+[  666.929750]  __schedule_bug+0xd2/0x100
+[  666.929753]  __schedule+0x471/0x600
+[  666.929756]  ? trace_preempt_on+0x31/0x40
+[  666.929759]  do_task_dead+0x41/0x50
+[  666.929763]  make_task_dead+0xd3/0xe0
+[  666.929766]  rewind_stack_and_make_dead+0x17/0x18
+[  666.929768] RIP: 0033:0x7fad842c1846
+[  666.929771] Code: Unable to access opcode bytes at RIP 0x7fad842c181c.
+[  666.929772] RSP: 002b:00007ffe336ad8b8 EFLAGS: 00000246 ORIG_RAX:
+00000000000000e7
+[  666.929774] RAX: ffffffffffffffda RBX: 00007fad845a9740 RCX: 00007fad842c1846
+[  666.929775] RDX: 0000000000000000 RSI: 000000000000003c RDI: 0000000000000000
+[  666.929777] RBP: 0000000000000000 R08: 00000000000000e7 R09: ffffffffffffff80
+[  666.929778] R10: 0000000000000002 R11: 0000000000000246 R12: 00007fad845a9740
+[  666.929779] R13: 0000000000000001 R14: 00007fad845b2628 R15:
+0000000000000000Running with 50*40 (== 2000) tasks.
 
-On Sun, May 15, 2022 at 9:14 PM Xianting Tian
-<xianting.tian@linux.alibaba.com> wrote:
->
-> Currently, almost all archs (x86, arm64, mips...) support fast call
-> of crash_kexec() when "regs && kexec_should_crash()" is true. But
-> RISC-V not, it can only enter crash system via panic(). However panic()
-> doesn't pass the regs of the real accident scene to crash_kexec(),
-> it caused we can't get accurate backtrace via gdb,
->         $ riscv64-linux-gnu-gdb vmlinux vmcore
->         Reading symbols from vmlinux...
->         [New LWP 95]
->         #0  console_unlock () at kernel/printk/printk.c:2557
->         2557                    if (do_cond_resched)
->         (gdb) bt
->         #0  console_unlock () at kernel/printk/printk.c:2557
->         #1  0x0000000000000000 in ?? ()
->
-> With the patch we can get the accurate backtrace,
->         $ riscv64-linux-gnu-gdb vmlinux vmcore
->         Reading symbols from vmlinux...
->         [New LWP 95]
->         #0  0xffffffe00063a4e0 in test_thread (data=<optimized out>) at drivers/virtio/virtio_mmio.c:806
->         806             *(int *)p = 0xdead;
->         (gdb)
->         (gdb) bt
->         #0  0xffffffe00063a4e0 in test_thread (data=<optimized out>) at drivers/virtio/virtio_mmio.c:806
->         #1  0x0000000000000000 in ?? ()
->
-> Test code to produce NULL address dereference,
->         +extern int panic_on_oops;
->         +static struct task_struct *k;
->         +static int test_thread(void *data) {
->         +
->         +       void *p = NULL;
->         +
->         +       while (!panic_on_oops)
->         +               msleep(2000);
->         +
->         +       *(int *)p = 0xdead;
->         +
->         +       return 0;
->         +}
->         +
->          static int __init virtio_mmio_init(void)
->          {
->         +       k = kthread_run(test_thread, NULL, "test_thread");
->         +       if (IS_ERR(k))
->         +               pr_err("Couldn't create test kthread\n");
->         +
->                 return platform_driver_register(&virtio_mmio_driver);
->          }
->
-> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
-> ---
->  arch/riscv/kernel/traps.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> index fe92e119e6a3..e666ebfa2a64 100644
-> --- a/arch/riscv/kernel/traps.c
-> +++ b/arch/riscv/kernel/traps.c
-> @@ -16,6 +16,7 @@
->  #include <linux/mm.h>
->  #include <linux/module.h>
->  #include <linux/irq.h>
-> +#include <linux/kexec.h>
->
->  #include <asm/asm-prototypes.h>
->  #include <asm/bug.h>
-> @@ -44,6 +45,9 @@ void die(struct pt_regs *regs, const char *str)
->
->         ret = notify_die(DIE_OOPS, str, regs, 0, regs->cause, SIGSEGV);
->
-> +       if (regs && kexec_should_crash(current))
-> +               crash_kexec(regs);
-> +
->         bust_spinlocks(0);
->         add_taint(TAINT_DIE, LOCKDEP_NOW_UNRELIABLE);
->         spin_unlock_irq(&die_lock);
-> --
-> 2.17.1
->
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
 
--- 
-Best Regards
- Guo Ren
+metadata:
+  git_ref: master
+  git_repo: ''
+  git_sha: 1e1b28b936aed946122b4e0991e7144fdbbfd77e
+  git_describe: next-20220513
+  kernel_version: 5.18.0-rc6
+  kernel-config: https://builds.tuxbuild.com/296PqKcUcCQSykZbASUqmdlP33g/config
+  build-url: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/pipelines/538244935
+  artifact-location: https://builds.tuxbuild.com/296PqKcUcCQSykZbASUqmdlP33g
+  toolchain: clang-12
 
-ML: https://lore.kernel.org/linux-csky/
+--
+Linaro LKFT
+https://lkft.linaro.org
+
+[1] https://lkft.validation.linaro.org/scheduler/job/5021584#L2916

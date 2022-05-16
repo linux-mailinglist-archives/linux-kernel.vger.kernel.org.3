@@ -2,120 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D37A7527D30
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 07:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1921527D38
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 07:54:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238186AbiEPFwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 01:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48876 "EHLO
+        id S239958AbiEPFyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 01:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239943AbiEPFvw (ORCPT
+        with ESMTP id S232736AbiEPFyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 01:51:52 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1453615712;
-        Sun, 15 May 2022 22:51:50 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R881e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=guangguan.wang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VDEQJfr_1652680307;
-Received: from localhost.localdomain(mailfrom:guangguan.wang@linux.alibaba.com fp:SMTPD_---0VDEQJfr_1652680307)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 16 May 2022 13:51:47 +0800
-From:   Guangguan Wang <guangguan.wang@linux.alibaba.com>
-To:     kgraul@linux.ibm.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, leon@kernel.org,
-        tonylu@linux.alibaba.com
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: [PATCH net-next v3 2/2] net/smc: rdma write inline if qp has sufficient inline space
-Date:   Mon, 16 May 2022 13:51:37 +0800
-Message-Id: <20220516055137.51873-3-guangguan.wang@linux.alibaba.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
-In-Reply-To: <20220516055137.51873-1-guangguan.wang@linux.alibaba.com>
-References: <20220516055137.51873-1-guangguan.wang@linux.alibaba.com>
+        Mon, 16 May 2022 01:54:08 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0719717054
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 22:54:07 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id h29so23944528lfj.2
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 22:54:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=iQu4lukAu6aND/lSxHXOC9CQZKXgScz0FZajkncufEw=;
+        b=WOTncPc2v5NZjRnTIJIh4IXO1dj9ckDUzbSMpFADqaVVFteQj9TEczbboaO7BSW2/s
+         XISBzIocyQtoLTgR7gWJ/xy+YDxJlUaAAnAbtnBo+Ja4yyTkPE3dNrqwQyJL1N6Lt4H0
+         ++LYr9UXQs5/Qplz1Zqp2mpf5Mt3r7P9Z9O4UHYmkTLk3lPXMJ1Bwkihocd9f4kVWpdk
+         3IzpmTfXxrlrmJeAStqS0d+5hFCtGcTIYjrwdLrzg/HL53pH2ksHGVkx5ljLbGLK0EZE
+         n33jLIToD1mvWSg0ZTsItxhaHXXnCYpgLBJ7kwzcMxk9kRkJfIChVs5xPxBONi0DnCfU
+         rI9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iQu4lukAu6aND/lSxHXOC9CQZKXgScz0FZajkncufEw=;
+        b=OsG7i+8Vm2fxDpeafeNjtLptp958t8CkFjkDoCZ3YWx/46tOnBfCJJQRa3myYm5i4X
+         8d4r++KnaJJmFmS/nftRJYrTUy2vRfs+v+szk0hv6hSakr9OvS4HZVXpsxqwgSM9gbgL
+         8YGo+nM/7c3ro9F3/wStKW+1111lz/LB1cY9GhWd3GLmJTkk9kDECfvlTQPE6e6GZKEP
+         mV26khkavSNrQ6yNyorcrhZiz2NpluC/hcHG0w4+bW54tzlwDmy6azH0pqDiisOaW85x
+         Z+bJGYMmGSWtwjpdeD5HCGJdzRk0GDpR21m+WCNqRxx+JYxAmSUSIHg2jkQ7ddl9uVdO
+         rS9g==
+X-Gm-Message-State: AOAM530LB18k7u51FwWg41Ihe7VW1WrqoG8XDcufPBUOdzVQL0qxdPYW
+        8XMaIjpmfAmIuRDSR7d5pKGmsA==
+X-Google-Smtp-Source: ABdhPJxDB/Sa5OHAguWRCgpV67m8ipVKXudtdyV00vw1QteYiiQh9fRXMYiofl5SGOVzWKsH/Wkjhg==
+X-Received: by 2002:a05:6512:228d:b0:473:f729:3219 with SMTP id f13-20020a056512228d00b00473f7293219mr12132861lfu.428.1652680445339;
+        Sun, 15 May 2022 22:54:05 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id m20-20020a2e9114000000b0024f3d1daeb5sm1384293ljg.61.2022.05.15.22.54.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 May 2022 22:54:04 -0700 (PDT)
+Message-ID: <3499cca2-1d7b-12f5-adbe-0c9b279cc51a@linaro.org>
+Date:   Mon, 16 May 2022 07:54:03 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 3/3] dt-bindings: usb: add documentation for aspeed udc
+Content-Language: en-US
+To:     Neal Liu <neal_liu@aspeedtech.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Felipe Balbi <balbi@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Li Yang <leoyang.li@nxp.com>
+Cc:     "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>
+References: <20220513065728.857722-1-neal_liu@aspeedtech.com>
+ <20220513065728.857722-4-neal_liu@aspeedtech.com>
+ <da78aaf6-c9ae-d591-fdc4-723f097ace2c@linaro.org>
+ <HK0PR06MB3202679A7FABAF7D0D045F0880CA9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+ <567d135b-3d40-9958-e000-1357020b5650@linaro.org>
+ <HK0PR06MB32020539063F8A7C5D56E0B980CF9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <HK0PR06MB32020539063F8A7C5D56E0B980CF9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rdma write with inline flag when sending small packages,
-whose length is shorter than the qp's max_inline_data, can
-help reducing latency.
+On 16/05/2022 03:59, Neal Liu wrote:
+>>> Okay, I could rename it for next patch if you preferred.
+>>> But there are lots of yaml files which are not named as first compatible.
+>>
+>> Yes, I know, I quite likely I also produced such bindings, but a specific name is
+>> rather preferred. Otherwise you will have a difficult naming choice when your
+>> next Aspeed UDC requires new bindings file because of some differences (not
+>> yet known now).
+>>
+> We can rename the bindings if next Aspeed UDC needs, don't you think?
+> Currently, Aspeed has no requirement.
 
-In my test environment, which are 2 VMs running on the same
-physical host and whose NICs(ConnectX-4Lx) are working on
-SR-IOV mode, qperf shows 0.5us-0.7us improvement in latency.
+So just use proper name from the beginning....
 
-Test command:
-server: smc_run taskset -c 1 qperf
-client: smc_run taskset -c 1 qperf <server ip> -oo \
-		msg_size:1:2K:*2 -t 30 -vu tcp_lat
 
-The results shown below:
-msgsize     before       after
-1B          11.2 us      10.6 us (-0.6 us)
-2B          11.2 us      10.7 us (-0.5 us)
-4B          11.3 us      10.7 us (-0.6 us)
-8B          11.2 us      10.6 us (-0.6 us)
-16B         11.3 us      10.7 us (-0.6 us)
-32B         11.3 us      10.6 us (-0.7 us)
-64B         11.2 us      11.2 us (0 us)
-128B        11.2 us      11.2 us (0 us)
-256B        11.2 us      11.2 us (0 us)
-512B        11.4 us      11.3 us (-0.1 us)
-1KB         11.4 us      11.5 us (0.1 us)
-2KB         11.5 us      11.5 us (0 us)
-
-Signed-off-by: Guangguan Wang <guangguan.wang@linux.alibaba.com>
-Reviewed-by: Tony Lu <tonylu@linux.alibaba.com>
-Tested-by: kernel test robot <lkp@intel.com>
----
- net/smc/smc_tx.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
-
-diff --git a/net/smc/smc_tx.c b/net/smc/smc_tx.c
-index 98ca9229fe87..805a546e8c04 100644
---- a/net/smc/smc_tx.c
-+++ b/net/smc/smc_tx.c
-@@ -391,12 +391,20 @@ static int smcr_tx_rdma_writes(struct smc_connection *conn, size_t len,
- 	int rc;
- 
- 	for (dstchunk = 0; dstchunk < 2; dstchunk++) {
--		struct ib_sge *sge =
--			wr_rdma_buf->wr_tx_rdma[dstchunk].wr.sg_list;
-+		struct ib_rdma_wr *wr = &wr_rdma_buf->wr_tx_rdma[dstchunk];
-+		struct ib_sge *sge = wr->wr.sg_list;
-+		u64 base_addr = dma_addr;
-+
-+		if (dst_len < link->qp_attr.cap.max_inline_data) {
-+			base_addr = (uintptr_t)conn->sndbuf_desc->cpu_addr;
-+			wr->wr.send_flags |= IB_SEND_INLINE;
-+		} else {
-+			wr->wr.send_flags &= ~IB_SEND_INLINE;
-+		}
- 
- 		num_sges = 0;
- 		for (srcchunk = 0; srcchunk < 2; srcchunk++) {
--			sge[srcchunk].addr = dma_addr + src_off;
-+			sge[srcchunk].addr = base_addr + src_off;
- 			sge[srcchunk].length = src_len;
- 			num_sges++;
- 
-@@ -410,8 +418,7 @@ static int smcr_tx_rdma_writes(struct smc_connection *conn, size_t len,
- 			src_len = dst_len - src_len; /* remainder */
- 			src_len_sum += src_len;
- 		}
--		rc = smc_tx_rdma_write(conn, dst_off, num_sges,
--				       &wr_rdma_buf->wr_tx_rdma[dstchunk]);
-+		rc = smc_tx_rdma_write(conn, dst_off, num_sges, wr);
- 		if (rc)
- 			return rc;
- 		if (dst_len_sum == len)
--- 
-2.24.3 (Apple Git-128)
-
+Best regards,
+Krzysztof

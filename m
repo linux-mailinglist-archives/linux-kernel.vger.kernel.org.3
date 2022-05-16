@@ -2,48 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E815528233
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8A05528236
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:36:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238199AbiEPKfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 06:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34952 "EHLO
+        id S240501AbiEPKf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 06:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiEPKfe (ORCPT
+        with ESMTP id S240064AbiEPKfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 06:35:34 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0A68201B6
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 03:35:32 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BB5421063;
-        Mon, 16 May 2022 03:35:32 -0700 (PDT)
-Received: from bogus (unknown [10.57.65.38])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 00BFD3F66F;
-        Mon, 16 May 2022 03:35:30 -0700 (PDT)
-Date:   Mon, 16 May 2022 11:35:24 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Qing Wang <wangqing@vivo.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] arch_topology: Use llc_id instead of package_id
-Message-ID: <20220516103524.35swlxp2367baxx6@bogus>
-References: <20220513083400.343706-1-dietmar.eggemann@arm.com>
- <20220513090330.z25fwthekn4rjkwq@bogus>
- <afafbb0c-5279-bee8-1ef4-434733e2a552@arm.com>
- <20220513110312.wy6g5avs7ngkmhfu@bogus>
- <634a4b8c-84d2-51a9-ef54-33b81683c849@arm.com>
+        Mon, 16 May 2022 06:35:44 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C98DEFA
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 03:35:41 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id b18so24947444lfv.9
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 03:35:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=TybrrNwubeiCmJTT/Pt5SvO7o0SXKQNwkYoFAX++S+M=;
+        b=ywixI+hrkyjZVveqrBs5WbTfJrk3HXSjXdkw/yG+ZcMSgfRLYwk/qZXOUnJIP1WgXO
+         lBVVRcBv8NUHq+A+ubYszRGIn7INTCE/F31x001Db5x3fLnrVpEmL7vSHY882isd5YBX
+         IgKxgv7LNqsEwCDn8jKJej8c3eymfGOqJUVqfJZ14cGhIZkaUcMaHExYzZotzDgRMr/G
+         /la28vRUa6mnJSrxsNnFK6J9NtRC0I/hUwnzzwLYXrJt8vgGZLdal1yBrwJI1gb2tUfC
+         fB4fiIZIahFse2SAC7pVz9X9ne4v2ymyvwkDBWr3JDUMtsIoPd4r5HeyJNHNgB5Gnf6G
+         BvIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TybrrNwubeiCmJTT/Pt5SvO7o0SXKQNwkYoFAX++S+M=;
+        b=nBeV3GFa2Uzx3xUcwiz7A6bfBMDXkHW65unS63mt3BRX+8eKN/Vlab4PcRXur7yfOb
+         w7jCfRSH56r8f9X21YpBeTI5F4nMwq1W4wH30yONo2jIWydMKJjChgeX9zTCeCRWZZyt
+         mTD24les81Q3DKKL+3Hg0mkcVYJDjJj0N2e1rmucbw3/lt7bfo6V8J45BVaAoj3FD5wX
+         FiMuJWErqV9yV9Db4lPKHtYjCzEO2ozodnModXyZLT7NGMzs8yQgzh9LE3tZQSPLT5or
+         7eHWAeSU1iK4y3CSz76/4+4/79ebHr7sHTj1OcqTexW8drYSCt0NVBYZpnOhB1mogduS
+         O0OA==
+X-Gm-Message-State: AOAM531VKTcQYJgPehU4iysoEKnEfHCqLxosTNgeArnuPeNCEBqtKXxC
+        0aHYFIbB5Vkq7v/LdmfTln0zuQ==
+X-Google-Smtp-Source: ABdhPJzsVUrwn0tS3KToBIsJDTgtNs7vd3KqCRuQCih/v/B3esQjDRGT86G4+aNwUBJFRoPzISn/og==
+X-Received: by 2002:a05:6512:3ee:b0:471:f84f:7d5b with SMTP id n14-20020a05651203ee00b00471f84f7d5bmr12436445lfq.18.1652697340056;
+        Mon, 16 May 2022 03:35:40 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id h12-20020a05651211cc00b0047255d21174sm1265168lfr.163.2022.05.16.03.35.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 03:35:39 -0700 (PDT)
+Message-ID: <13d65ae2-f378-5353-16b9-5bf68883a701@linaro.org>
+Date:   Mon, 16 May 2022 12:35:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <634a4b8c-84d2-51a9-ef54-33b81683c849@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2] dt-bindings: qcom,pdc: convert to YAML
+Content-Language: en-US
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Rob Herring <robh@kernel.org>, Andy Gross <agross@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20220103074348.6039-1-luca.weiss@fairphone.com>
+ <bef4922d-4a32-f184-44a1-8f5430190938@linaro.org>
+ <fef5f229-f247-d032-fc76-46ed7083dbf4@linaro.org>
+ <CK10OTVFAP75.WCSVY40A7PXO@otso>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CK10OTVFAP75.WCSVY40A7PXO@otso>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,117 +83,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 02:04:29PM +0200, Dietmar Eggemann wrote:
-> On 13/05/2022 13:03, Sudeep Holla wrote:
-> > On Fri, May 13, 2022 at 12:42:00PM +0200, Dietmar Eggemann wrote:
-> >> On 13/05/2022 11:03, Sudeep Holla wrote:
-> >>> On Fri, May 13, 2022 at 10:34:00AM +0200, Dietmar Eggemann wrote:
-> >>
-> >> [...]
-> >>
-> >>>> @@ -527,7 +528,8 @@ static int __init parse_core(struct device_node *core, int package_id,
-> >>>>  			return -EINVAL;
-> >>>>  		}
-> >>>>
-> >>>> -		cpu_topology[cpu].package_id = package_id;
-> >>>> +		cpu_topology[cpu].package_id = 0;
-> >>>
-> >>> While the above looks good and matches with what I am attempting to do
-> >>> as well ...
-> >>>
-> >>>> +		cpu_topology[cpu].llc_id = llc_id;
-> >>>
-> >>> This looks wrong for simple reason that this is derived incorrectly from
-> >>> the cpu-map while there is no guarantee that it matches the last level
-> >>> cache ID on the system as we didn't parse the cache topology for this.
-> >>> So I disagree with this change as it might conflict with the actual and
-> >>> correct llc_id.
-> >>
-> >> It might not match the LLC, that's true. Something we have already today
-> >> in Android for DynamIQ clusters with big/Little. People using 1. level
-> >> clusters to group CPUs according to uArch.
-> >
-> > Not sure if that is the correct representation of h/w cluster on those
-> > platforms, but if they want to misguide OS with the f/w(DT in this case)
-> > well that's their choice.
-> >
-> > The main point is we need to get the exact h/w topology information and
-> > then we can decide how to present the below masks as required by the
-> > scheduler for its sched domains.
-> >
-> >> My point is we manage to get:
-> >>
-> >> SMT - cpu_smt_mask()
-> >> CLS - cpu_clustergroup_mask()
-> >> MC  - cpu_coregroup_mask()
-> >> DIE - cpu_cpu_mask()
-> >>
-> >> covered in ACPI with the cpu_topology[] structure and if we want CLS on
-> >> DT we have to save cluster_id for the 2. level (DT) cluster.
-> >>
-> >
-> > I am not sure on the above point. Even with ACPI PPTT we are just setting
-> > cluster_id based on first or leaf level of the clusters ignoring the
->
-> Not sure about this. cluster_id was introduced last year into ACPI PPTT
-> commit c5e22feffdd7 ("topology: Represent clusters of CPUs within a
-> die") to cover L3-tag (4 CPUs) within L3 (24 CPUs) on Kunpeng920 for
-> instance.
->
-> cat /sys/kernel/debug/sched/domains/cpu0/domain*/name
-> CLS
-> MC
-> ... I skip the NUMA levels
->
-> # cat /proc/schedstat | awk '{print $1 " " $2 }' | grep ^[cd] | head -5
-> cpu0 0
-> domain0 00000000,00000000,0000000f <--  4 CPUs <-- cluster_id
-> domain1 00000000,00000000,00ffffff <-- 24 CPUs
->
-> If you use cluster_id for 1. level cluster then you cover MC's 24 CPUs
+On 16/05/2022 09:45, Luca Weiss wrote:
+> Hi Krzysztof,
+> 
+> On Mon May 9, 2022 at 10:40 AM CEST, Krzysztof Kozlowski wrote:
+>> On 09/05/2022 10:38, Krzysztof Kozlowski wrote:
+>>> On 03/01/2022 08:43, Luca Weiss wrote:
+>>>> Convert the PDC interrupt controller bindings to YAML.
+>>>>
+>>>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+>>>> Reviewed-by: Rob Herring <robh@kernel.org>
+>>>> ---
+>>>> Changes since v1:
+>>>> * Adjust description of second reg-name as suggested by Maulik Shah
+>>>>
+>>>> @Rob Herring: Hope it's ok to keep your R-b given the above changes
+>>>>
+>>>> This patch depends on the following patch, which fixed sm8250 & sm8350
+>>>> compatibles and adds sm6350.
+>>>> https://lore.kernel.org/linux-arm-msm/20211213082614.22651-4-luca.weiss@fairphone.com/
+>>>
+>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>
+>>> Luca,
+>>> I think this needs resending as dependency was merged. Alternatively,
+>>> maybe Bjorn could pick it up through QCom SoC?
+>>
+>> Correction - it seems that Rob took the dependency in April, so this
+>> should go via Rob's tree as well.
+>>
+>> Luca, can you resend without Rob's Review tag and ask him to pick it up?
+>>
+> 
+> So... since torvalds/master my sm6350 patch is merged through Rob's
 
-OK, the way I am looking at this from CPU topology perspective seem to be
-different from what you are expecting here w.r.t sched_domains.
+If it was merged to torvalds/master, it's not a dependency anymore...
 
-IMO, these cpumasks on its own must represent real CPU topology and how it
-is used via cpu_*_mask by the scheduler domains is different.
+> tree, but there was also a sm8150 patch applied through Linus Walleij's
+> tree. This means (as far as I understand) that neither can really
+> properly apply this (rebased) patch as one tree will have missed the
+> other commit.
 
-> > nesting ATM. And that's exactly what I am trying to get with this series[1]
-> >
-> >
-> >> And that's why I proposed to (ab)use llc_id to form the MC mask.
-> >>
-> >
-> > Sure, it is already supported IIUC by cpu_coregroup_mask in arch_topology.c
-> > We just need to make sure llc_id is set correctly in case of DT. Now if
-> > you are saying llc_sibling is not what you need but something else, then
-> > we may need to add that new mask and update cpu_coregroup_mask to choose
-> > that based on certain condition which I believe is bit complicated.
-> >
-> >> I'm not currently aware of another solution to get CLS somehow elegantly
-> >> into a DT system.
-> >
-> > Will grouping of CPUs into cluster they belong not good enough for CLS ?
->
-> No, IMHO then you'll cover MC and it's cpu_coregroup_mask() and you get
-> MC.                                        ^^^^
->
+sm8150 patch is also a dependency?
 
-I see on Juno with SCHED_CLUSTER and cluster masks set, I see CLS and MC
-domains.
+> 
+> Does it make sense to send a v3 rebased on linux-next now, or wait until
+> this has settled down in torvalds's tree?
 
-> > I thought that should suffice based on what we have in cpu_clustergroup_mask
-> > (i.e. cluster sibling mask)
->
-> For one level (MC) yes, but not for 2 (MC and CLS). And cluster_id was
-> introduces for the 2. level.
->
+Conflicts can be resolved, you just need to choose one tree to based on.
 
-That sounds wrong and not what ACPI PPTT code says. My series just aligns
-with what is done with ACPI PPTT IIUC. I need to check that again if my
-understand differs from what is being done. But the example of Kunpeng920
-aligns with my understanding.
 
---
-Regards,
-Sudeep
+Best regards,
+Krzysztof

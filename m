@@ -2,53 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF26527EF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B4B527EEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241457AbiEPH4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 03:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42736 "EHLO
+        id S241473AbiEPH4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 03:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241423AbiEPH40 (ORCPT
+        with ESMTP id S241426AbiEPH41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 03:56:26 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4078CB33
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:56:24 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id y6-20020a25a086000000b0064d8822f94bso2505188ybh.22
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:56:24 -0700 (PDT)
+        Mon, 16 May 2022 03:56:27 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6E2766C
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:56:26 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2fee7869e4fso22618517b3.4
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:56:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=AkzbZUUJbKkKZF8OCLuIxnaK4yhhmDEBAMVwQQZIjPw=;
-        b=NHb73BqEQQrOLYwOniqH+I1KrZOGNOQlLtgMcagSkYUSWDy6GPOzxTw7tEKSlK2J3N
-         FR54JD6olOOTL2vnRrP48GyP8UtZGMbg2uZS6ZK31kbD65Rwi1MmwobJYt4XF6bDT45N
-         MkZvFxTloWynDzi7URUQCiKC112K+j2qIf1uRoQpmYLqbcjcS9EHTOzECCiTGM7jqIoP
-         X9V58uSAJjXUTQv31yTK45lW/bIhqPTIVXc7063Q1rAPzZ9hULPMnuAeGQEl3DnHO3N3
-         zF1GXUi+2rVHEJwDxlzfwGpDsI/apcxtXOY7QYv3qlM6SUbPtxAneseB5rQOd7rWf7/s
-         mf/w==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=bbA0qY1A4n3sQ32XOHCQYzNEBpxFCtTkAwZ65vjYfT4=;
+        b=EzUcTngDzwso/L64fcVNakp/QNp2XxIVJx7Dc64hdmuiHc5AH2OFv0w8gdLxmwWPWS
+         0lQp7y6srQf/7QpKJATmstgTbdAePXt4McKCxanrSy9x4wAMtIKXHDH2UV3TEr2bdzhs
+         rcv9dZx45zGWQpgfxEMwDy/ft01xVUILxl+wSJ46UXteeV8JbEzRu/DYN25yCr87q4Et
+         WJkOZgXv3btbIB15dVs5CPFaVIHanllDdUmXZbSSbxLomlDB7QFoAqNJIf/80XLX4OVN
+         X3x+FbDeBVcrGj1t4b2xdzKv/JYHrwX6M/n8h17yd3Z388IDgEuKg4e5FgyujLjSJRUk
+         /O1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=AkzbZUUJbKkKZF8OCLuIxnaK4yhhmDEBAMVwQQZIjPw=;
-        b=KM3easg+bo5qvqQ4Wa08O0pm7HSLE8g/ukXDmuN/Bm7rhdQwyXCxx9hl5ojrJ2XNY7
-         kh/ytp+y32diIOcr874IDaGMpZ26cPdsKcNZ97bRLobZxt7GA5WMOGpxML302vaoH0xt
-         kN4FO9L4mPGXdbctKp7L0u4GMDKOWUvwtxVdFy8TGu7uFYYW4Z3SDI1N0ALJTl/d6F/W
-         h6F2U68kqfRPGgHKRgmDu3Ozxcn9+Bda5/CKEKCBh0d1R03VA/sPMdZ3AEPhbYgWhANP
-         FNnQmvmQ3RzBoEw0e8zFWVL7pOIlQIm0REJcLHvzxzP+EqNc8PJ/8PkIkqzLnOFLTb+5
-         8kkw==
-X-Gm-Message-State: AOAM530/8n3D53TVZrGDNjL20qIKHS+WCYFyeK+p05DGKz6ZPkiGRAZe
-        /yPdQGCBmrAGzEBt1sgQnqRwmdxEPIA=
-X-Google-Smtp-Source: ABdhPJyBBCojxk0seMo3izlq0YIsm5tU550dSAqNmlgmosNUvnP68lSg1jhby26PHmTgALdpi3FuEyIMnak=
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=bbA0qY1A4n3sQ32XOHCQYzNEBpxFCtTkAwZ65vjYfT4=;
+        b=HFla7H7eSGfgbjN+p+aHHzrGrUf82ITvMckXlk4ljBz/DFu1yiMgjfjo2TbLWqIu6t
+         eAz69G2So5czugbvE3rI324fAD9Wp50ESDlxpdr6oXXLiB4qSoEnB4XyeOHgTTc/dpMO
+         +Wg9plBD9U9lJI+crlmeYp0cCwuEqmYLH3CXGdGubHJ6j3Jc7UjFPW/bAHHvf0xzHSZW
+         kBPJFS7rFy/1T3DQBErThonFzxgOP9bFeDGlYhBLRKJs3Zxl537UgxZizxtDlGp4IdVd
+         u2Lwer32TTr7mQZjo89UUbJevFRRd1xJewAUx5/RlmN3JLYpKWq9CoEuj+LondNI8ZTv
+         4HOA==
+X-Gm-Message-State: AOAM531Vg/nd1D04zpSS11RdFMDEDJbTImo5sNfbCVeYGYhjkBl8kbl5
+        AAvKu7qgqkl7av1rAlC5InVMfwUFsVM=
+X-Google-Smtp-Source: ABdhPJxRNFyBKRteFpyB2k4NehlzATJkvZrFhQcwM3ufUJXDyGPuUAk/55A2q7MGyZ2oCIfTir1jgdNC7NA=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:97b7:3e1e:26a3:690f])
- (user=surenb job=sendgmr) by 2002:a0d:eb53:0:b0:2fe:b6bb:aa38 with SMTP id
- u80-20020a0deb53000000b002feb6bbaa38mr15064368ywe.377.1652687783377; Mon, 16
- May 2022 00:56:23 -0700 (PDT)
-Date:   Mon, 16 May 2022 00:56:18 -0700
-Message-Id: <20220516075619.1277152-1-surenb@google.com>
+ (user=surenb job=sendgmr) by 2002:a25:b6c9:0:b0:64a:9f32:5ac4 with SMTP id
+ f9-20020a25b6c9000000b0064a9f325ac4mr15077774ybm.131.1652687785373; Mon, 16
+ May 2022 00:56:25 -0700 (PDT)
+Date:   Mon, 16 May 2022 00:56:19 -0700
+In-Reply-To: <20220516075619.1277152-1-surenb@google.com>
+Message-Id: <20220516075619.1277152-2-surenb@google.com>
 Mime-Version: 1.0
+References: <20220516075619.1277152-1-surenb@google.com>
 X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [PATCH v2 1/2] mm: drop oom code from exit_mmap
+Subject: [PATCH v2 2/2] mm: delete unused MMF_OOM_VICTIM flag
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     mhocko@suse.com, rientjes@google.com, willy@infradead.org,
@@ -70,115 +74,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The primary reason to invoke the oom reaper from the exit_mmap path used
-to be a prevention of an excessive oom killing if the oom victim exit
-races with the oom reaper (see [1] for more details). The invocation has
-moved around since then because of the interaction with the munlock
-logic but the underlying reason has remained the same (see [2]).
-
-Munlock code is no longer a problem since [3] and there shouldn't be
-any blocking operation before the memory is unmapped by exit_mmap so
-the oom reaper invocation can be dropped. The unmapping part can be done
-with the non-exclusive mmap_sem and the exclusive one is only required
-when page tables are freed.
-
-Remove the oom_reaper from exit_mmap which will make the code easier to
-read. This is really unlikely to make any observable difference although
-some microbenchmarks could benefit from one less branch that needs to be
-evaluated even though it almost never is true.
-
-[1] 212925802454 ("mm: oom: let oom_reap_task and exit_mmap run concurrently")
-[2] 27ae357fa82b ("mm, oom: fix concurrent munlock and oom reaper unmap, v3")
-[3] a213e5cf71cb ("mm/munlock: delete munlock_vma_pages_all(), allow oomreap")
+With the last usage of MMF_OOM_VICTIM in exit_mmap gone, this flag is
+now unused and can be removed.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 Acked-by: Michal Hocko <mhocko@suse.com>
 ---
- include/linux/oom.h |  2 --
- mm/mmap.c           | 31 ++++++++++++-------------------
- mm/oom_kill.c       |  2 +-
- 3 files changed, 13 insertions(+), 22 deletions(-)
+ include/linux/oom.h            | 9 ---------
+ include/linux/sched/coredump.h | 7 +++----
+ mm/oom_kill.c                  | 4 +---
+ 3 files changed, 4 insertions(+), 16 deletions(-)
 
 diff --git a/include/linux/oom.h b/include/linux/oom.h
-index 2db9a1432511..6cdf0772dbae 100644
+index 6cdf0772dbae..25990e9d9e15 100644
 --- a/include/linux/oom.h
 +++ b/include/linux/oom.h
-@@ -106,8 +106,6 @@ static inline vm_fault_t check_stable_address_space(struct mm_struct *mm)
- 	return 0;
+@@ -77,15 +77,6 @@ static inline bool tsk_is_oom_victim(struct task_struct * tsk)
+ 	return tsk->signal->oom_mm;
  }
  
--bool __oom_reap_task_mm(struct mm_struct *mm);
+-/*
+- * Use this helper if tsk->mm != mm and the victim mm needs a special
+- * handling. This is guaranteed to stay true after once set.
+- */
+-static inline bool mm_is_oom_victim(struct mm_struct *mm)
+-{
+-	return test_bit(MMF_OOM_VICTIM, &mm->flags);
+-}
 -
- long oom_badness(struct task_struct *p,
- 		unsigned long totalpages);
+ /*
+  * Checks whether a page fault on the given mm is still reliable.
+  * This is no longer true if the oom reaper started to reap the
+diff --git a/include/linux/sched/coredump.h b/include/linux/sched/coredump.h
+index 4d9e3a656875..5318c791ad39 100644
+--- a/include/linux/sched/coredump.h
++++ b/include/linux/sched/coredump.h
+@@ -70,9 +70,8 @@ static inline int get_dumpable(struct mm_struct *mm)
+ #define MMF_UNSTABLE		22	/* mm is unstable for copy_from_user */
+ #define MMF_HUGE_ZERO_PAGE	23      /* mm has ever used the global huge zero page */
+ #define MMF_DISABLE_THP		24	/* disable THP for all VMAs */
+-#define MMF_OOM_VICTIM		25	/* mm is the oom victim */
+-#define MMF_OOM_REAP_QUEUED	26	/* mm was queued for oom_reaper */
+-#define MMF_MULTIPROCESS	27	/* mm is shared between processes */
++#define MMF_OOM_REAP_QUEUED	25	/* mm was queued for oom_reaper */
++#define MMF_MULTIPROCESS	26	/* mm is shared between processes */
+ /*
+  * MMF_HAS_PINNED: Whether this mm has pinned any pages.  This can be either
+  * replaced in the future by mm.pinned_vm when it becomes stable, or grow into
+@@ -80,7 +79,7 @@ static inline int get_dumpable(struct mm_struct *mm)
+  * pinned pages were unpinned later on, we'll still keep this bit set for the
+  * lifecycle of this mm, just for simplicity.
+  */
+-#define MMF_HAS_PINNED		28	/* FOLL_PIN has run, never cleared */
++#define MMF_HAS_PINNED		27	/* FOLL_PIN has run, never cleared */
+ #define MMF_DISABLE_THP_MASK	(1 << MMF_DISABLE_THP)
  
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 313b57d55a63..ded42150e706 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -3105,30 +3105,13 @@ void exit_mmap(struct mm_struct *mm)
- 	/* mm's last user has gone, and its about to be pulled down */
- 	mmu_notifier_release(mm);
- 
--	if (unlikely(mm_is_oom_victim(mm))) {
--		/*
--		 * Manually reap the mm to free as much memory as possible.
--		 * Then, as the oom reaper does, set MMF_OOM_SKIP to disregard
--		 * this mm from further consideration.  Taking mm->mmap_lock for
--		 * write after setting MMF_OOM_SKIP will guarantee that the oom
--		 * reaper will not run on this mm again after mmap_lock is
--		 * dropped.
--		 *
--		 * Nothing can be holding mm->mmap_lock here and the above call
--		 * to mmu_notifier_release(mm) ensures mmu notifier callbacks in
--		 * __oom_reap_task_mm() will not block.
--		 */
--		(void)__oom_reap_task_mm(mm);
--		set_bit(MMF_OOM_SKIP, &mm->flags);
--	}
--
--	mmap_write_lock(mm);
-+	mmap_read_lock(mm);
- 	arch_exit_mmap(mm);
- 
- 	vma = mm->mmap;
- 	if (!vma) {
- 		/* Can happen if dup_mmap() received an OOM */
--		mmap_write_unlock(mm);
-+		mmap_read_unlock(mm);
- 		return;
- 	}
- 
-@@ -3138,6 +3121,16 @@ void exit_mmap(struct mm_struct *mm)
- 	/* update_hiwater_rss(mm) here? but nobody should be looking */
- 	/* Use -1 here to ensure all VMAs in the mm are unmapped */
- 	unmap_vmas(&tlb, vma, 0, -1);
-+	mmap_read_unlock(mm);
-+
-+	/*
-+	 * Set MMF_OOM_SKIP to hide this task from the oom killer/reaper
-+	 * because the memory has been already freed. Do not bother checking
-+	 * mm_is_oom_victim because setting a bit unconditionally is cheaper.
-+	 */
-+	set_bit(MMF_OOM_SKIP, &mm->flags);
-+
-+	mmap_write_lock(mm);
- 	free_pgtables(&tlb, vma, FIRST_USER_ADDRESS, USER_PGTABLES_CEILING);
- 	tlb_finish_mmu(&tlb);
- 
+ #define MMF_INIT_MASK		(MMF_DUMPABLE_MASK | MMF_DUMP_FILTER_MASK |\
 diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-index 49d7df39b02d..36355b162727 100644
+index 36355b162727..11291b99599f 100644
 --- a/mm/oom_kill.c
 +++ b/mm/oom_kill.c
-@@ -509,7 +509,7 @@ static DECLARE_WAIT_QUEUE_HEAD(oom_reaper_wait);
- static struct task_struct *oom_reaper_list;
- static DEFINE_SPINLOCK(oom_reaper_lock);
+@@ -732,10 +732,8 @@ static void mark_oom_victim(struct task_struct *tsk)
+ 		return;
  
--bool __oom_reap_task_mm(struct mm_struct *mm)
-+static bool __oom_reap_task_mm(struct mm_struct *mm)
- {
- 	struct vm_area_struct *vma;
- 	bool ret = true;
+ 	/* oom_mm is bound to the signal struct life time. */
+-	if (!cmpxchg(&tsk->signal->oom_mm, NULL, mm)) {
++	if (!cmpxchg(&tsk->signal->oom_mm, NULL, mm))
+ 		mmgrab(tsk->signal->oom_mm);
+-		set_bit(MMF_OOM_VICTIM, &mm->flags);
+-	}
+ 
+ 	/*
+ 	 * Make sure that the task is woken up from uninterruptible sleep
 -- 
 2.36.0.550.gb090851708-goog
 

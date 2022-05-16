@@ -2,49 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C285290A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF77E529159
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347118AbiEPUUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54812 "EHLO
+        id S1347596AbiEPT55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348902AbiEPT7C (ORCPT
+        with ESMTP id S1347759AbiEPTwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:59:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D29B20F54;
-        Mon, 16 May 2022 12:52:30 -0700 (PDT)
+        Mon, 16 May 2022 15:52:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20C0427E6;
+        Mon, 16 May 2022 12:47:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB2AB60A50;
-        Mon, 16 May 2022 19:52:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCDFBC385AA;
-        Mon, 16 May 2022 19:52:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8687BB81614;
+        Mon, 16 May 2022 19:47:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAC3EC385AA;
+        Mon, 16 May 2022 19:47:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730749;
-        bh=HDvTOfzkdRxHd6HWC3WkqsEF8BETWp49rWnYi3S1Hlw=;
+        s=korg; t=1652730464;
+        bh=dK7FvkxY95j5rtkl9TPq6ygVFfXCqeIs4v8TNpuGobQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l7B897HBsXIsZgBpJhgqWaHOqF2Vm6/FkNZdqKPbvNh1UXyMDZV5o7N+EfgyTxNcl
-         SQhgpPt35NZMxNkdYsFWiyibP6KKAc016XgnYgb8NiUczvOENofME9i5jMU6pUV10R
-         03jU2fDPhQPLLGA/yfhyBEHjYfbE3Msxv24JQ0Hc=
+        b=Kj3D1F+D7tjESIzq2TF+HgYdtNZrKZFXhRxCuEF7PVoKEA+lqa15T949Cv3zKYNL3
+         M5UEJrukBSRHbfHeF0r0cV8roQEjcoCoDcEAIHK1gMaGUzM4fgXnSsFw2MJ9S+F4+0
+         RAgr2vOS9KUrJzC5WRgAWLpkWS4bplsyVja4Awsw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Moshe Kol <moshe.kol@mail.huji.ac.il>,
-        Yossi Gilad <yossi.gilad@mail.huji.ac.il>,
-        Amit Klein <aksecurity@gmail.com>,
-        Eric Dumazet <edumazet@google.com>, Willy Tarreau <w@1wt.eu>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Andreas Gruenbacher <agruenba@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 056/102] tcp: use different parts of the port_offset for index and offset
+Subject: [PATCH 5.10 30/66] gfs2: Fix filesystem block deallocation for short writes
 Date:   Mon, 16 May 2022 21:36:30 +0200
-Message-Id: <20220516193625.604662759@linuxfoundation.org>
+Message-Id: <20220516193620.286938380@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
-References: <20220516193623.989270214@linuxfoundation.org>
+In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
+References: <20220516193619.400083785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,39 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Willy Tarreau <w@1wt.eu>
+From: Andreas Gruenbacher <agruenba@redhat.com>
 
-[ Upstream commit 9e9b70ae923baf2b5e8a0ea4fd0c8451801ac526 ]
+[ Upstream commit d031a8866e709c9d1ee5537a321b6192b4d2dc5b ]
 
-Amit Klein suggests that we use different parts of port_offset for the
-table's index and the port offset so that there is no direct relation
-between them.
+When a write cannot be carried out in full, gfs2_iomap_end() releases
+blocks that have been allocated for this write but haven't been used.
 
-Cc: Jason A. Donenfeld <Jason@zx2c4.com>
-Cc: Moshe Kol <moshe.kol@mail.huji.ac.il>
-Cc: Yossi Gilad <yossi.gilad@mail.huji.ac.il>
-Cc: Amit Klein <aksecurity@gmail.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Willy Tarreau <w@1wt.eu>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+To compute the end of the allocation, gfs2_iomap_end() incorrectly
+rounded the end of the attempted write down to the next block boundary
+to arrive at the end of the allocation.  It would have to round up, but
+the end of the allocation is also available as iomap->offset +
+iomap->length, so just use that instead.
+
+In addition, use round_up() for computing the start of the unused range.
+
+Fixes: 64bc06bb32ee ("gfs2: iomap buffered write support")
+Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/inet_hashtables.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/gfs2/bmap.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-index 606a4220ebb9..81a33af8393d 100644
---- a/net/ipv4/inet_hashtables.c
-+++ b/net/ipv4/inet_hashtables.c
-@@ -777,7 +777,7 @@ int __inet_hash_connect(struct inet_timewait_death_row *death_row,
- 	net_get_random_once(table_perturb, sizeof(table_perturb));
- 	index = hash_32(port_offset, INET_TABLE_PERTURB_SHIFT);
+diff --git a/fs/gfs2/bmap.c b/fs/gfs2/bmap.c
+index 6c047570d6a9..b4fde3a8eeb4 100644
+--- a/fs/gfs2/bmap.c
++++ b/fs/gfs2/bmap.c
+@@ -1235,13 +1235,12 @@ static int gfs2_iomap_end(struct inode *inode, loff_t pos, loff_t length,
  
--	offset = READ_ONCE(table_perturb[index]) + port_offset;
-+	offset = READ_ONCE(table_perturb[index]) + (port_offset >> 32);
- 	offset %= remaining;
+ 	if (length != written && (iomap->flags & IOMAP_F_NEW)) {
+ 		/* Deallocate blocks that were just allocated. */
+-		loff_t blockmask = i_blocksize(inode) - 1;
+-		loff_t end = (pos + length) & ~blockmask;
++		loff_t hstart = round_up(pos + written, i_blocksize(inode));
++		loff_t hend = iomap->offset + iomap->length;
  
- 	/* In first pass we try ports of @low parity.
+-		pos = (pos + written + blockmask) & ~blockmask;
+-		if (pos < end) {
+-			truncate_pagecache_range(inode, pos, end - 1);
+-			punch_hole(ip, pos, end - pos);
++		if (hstart < hend) {
++			truncate_pagecache_range(inode, hstart, hend - 1);
++			punch_hole(ip, hstart, hend - hstart);
+ 		}
+ 	}
+ 
 -- 
 2.35.1
 

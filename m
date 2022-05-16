@@ -2,137 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B1452830E
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 13:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C52E52830C
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 13:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236255AbiEPLUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 07:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35442 "EHLO
+        id S229549AbiEPLUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 07:20:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234457AbiEPLUg (ORCPT
+        with ESMTP id S229735AbiEPLUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 16 May 2022 07:20:36 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A05134BB0
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 04:20:34 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GA1tEZ027622;
-        Mon, 16 May 2022 11:20:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=0sDcy/5NqNqinaz/rCWyl/8Vhyljw4xe8o9woHQh1Ig=;
- b=ArzzKyxtAykXd5sFX4sdhGF6C/zs8q0X/Cl8227uTjnwWdlwNr/dAXL4svcEWt9feTy0
- bJaqfG50A3ro/a6kiFO97HsPrb+0fqaIpU6dH+4/z3ulhEVnmEwdUDkw7KG+XGJi/Imp
- bLiBmT32ErkeRCNgi/U2jTaribwq3eEaFKUqBZBu8xOnyRSHNOzJa9CpJ3XtVAhvBLiY
- DPRzBKm+oudkf0y/4UjbLqoU71zeZf4Gd5ibYisl39MNfCaoY1WYLD66my3JnjUwxeBX
- dsV70Ik9DPUy7bcDUEGoBLYVupZjqynYI0GonTO0o3qvCOjLM8Qx4ZhgBRKmskiz/P4l ng== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3mgm9dej-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 11:20:13 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24GAmWxa011771;
-        Mon, 16 May 2022 11:20:13 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3mgm9ddu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 11:20:13 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24GBF3KD032765;
-        Mon, 16 May 2022 11:20:11 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma05fra.de.ibm.com with ESMTP id 3g24291ye4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 11:20:11 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24GBK8m341288040
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 16 May 2022 11:20:08 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A7E24A405F;
-        Mon, 16 May 2022 11:20:08 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3CA2AA405B;
-        Mon, 16 May 2022 11:20:08 +0000 (GMT)
-Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.152.224.205])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 16 May 2022 11:20:08 +0000 (GMT)
-Date:   Mon, 16 May 2022 13:20:06 +0200
-From:   Halil Pasic <pasic@linux.ibm.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Cornelia Huck <cohuck@redhat.com>, mst <mst@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, eperezma <eperezma@redhat.com>,
-        Cindy Lu <lulu@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Halil Pasic <pasic@linux.ibm.com>
-Subject: Re: [PATCH V4 0/9] rework on the IRQ hardening of virtio
-Message-ID: <20220516132006.29d28fbe.pasic@linux.ibm.com>
-In-Reply-To: <CACGkMEtaN6tZrwp3rsxu4Hn1Rev2P06X3BaR4X1cqDxnRdPCKg@mail.gmail.com>
-References: <20220507071954.14455-1-jasowang@redhat.com>
-        <875ymd3fd1.fsf@redhat.com>
-        <CACGkMEvfkUpsY4LRTuH7w18DZdq+w3=Ef6b-0sG0XvzVUVKdzg@mail.gmail.com>
-        <20220511160147.46cbf2fb.pasic@linux.ibm.com>
-        <CACGkMEtaN6tZrwp3rsxu4Hn1Rev2P06X3BaR4X1cqDxnRdPCKg@mail.gmail.com>
-Organization: IBM
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F2534BBE;
+        Mon, 16 May 2022 04:20:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
+         s=20161220; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=LUKhFyWGsJws4jt1m41drcAy5kgxr8adnAp720eLM7Y=; b=KlbgSdflonmdW6hPspTw/oFJYR
+        yLr4OzBTS5jTqa88i7yjnmsG6GpnO3VrGHQvwpaLGB2sica6hBO1nPPepUxvCjDJ/qMSWv2bqHO+b
+        ZmAAhzszkvaGdABMHDNLbFKBA/0X2cZLpA26IbwG1J+/WKn3BSeYHWPzAy1E2IXsArxpSxY1jKaNf
+        G7qksyN1vqqi7dVGF3f0eawRTnGOVi0UUGB2fOyVmQ+Pmj57atz5AZx29cjIHEp8OKaSWq9LTUTaz
+        ANu8h4V4ZNvvD3woDjGX8sWZqSmMJ69f3GKZYxGyFvG3KOEc3VaTNtMLpx3ov/1arKmls2ipz2Eax
+        IJtGDvbg==;
+Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=[192.168.1.10])
+        by mail.kapsi.fi with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <cyndis@kapsi.fi>)
+        id 1nqYlv-0001Dw-4J; Mon, 16 May 2022 14:20:19 +0300
+Message-ID: <020a8244-760e-fe7c-594a-1d85e5645dbe@kapsi.fi>
+Date:   Mon, 16 May 2022 14:20:18 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v5 5/9] iommu/arm-smmu: Attach to host1x context device
+ bus
+Content-Language: en-US
+To:     Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com, joro@8bytes.org,
+        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
+        linux-tegra@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Mikko Perttunen <mperttunen@nvidia.com>
+References: <20220516085258.1227691-1-cyndis@kapsi.fi>
+ <20220516085258.1227691-6-cyndis@kapsi.fi>
+ <20220516100721.GA1927@willie-the-truck>
+ <4a170997-c893-1788-dcaa-8ed2193146ae@kapsi.fi>
+ <099cf0f9-5c27-0247-7c5e-6704a9527b11@arm.com>
+From:   Mikko Perttunen <cyndis@kapsi.fi>
+In-Reply-To: <099cf0f9-5c27-0247-7c5e-6704a9527b11@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: NypXikSCMvLQ1iQroLyffUfvmf3iPEFe
-X-Proofpoint-GUID: mWAhWuEU_dMPLR8NB5vNWHv6vAcsNqNI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-16_06,2022-05-16_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- lowpriorityscore=0 clxscore=1011 malwarescore=0 adultscore=0 mlxscore=0
- impostorscore=0 priorityscore=1501 mlxlogscore=761 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205160065
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 91.158.25.70
+X-SA-Exim-Mail-From: cyndis@kapsi.fi
+X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 May 2022 11:31:08 +0800
-Jason Wang <jasowang@redhat.com> wrote:
-
-> > > It looks to me we need to use write_lock_irq()/write_unlock_irq() to
-> > > do the synchronization.
-> > >
-> > > And we probably need to keep the
-> > > read_lock_irqsave()/read_lock_irqrestore() logic since I can see the
-> > > virtio_ccw_int_handler() to be called from process context (e.g from
-> > > the io_subchannel_quiesce()).
-> > >  
-> >
-> > Sounds correct.  
+On 5/16/22 13:44, Robin Murphy wrote:
+> On 2022-05-16 11:13, Mikko Perttunen wrote:
+>> On 5/16/22 13:07, Will Deacon wrote:
+>>> On Mon, May 16, 2022 at 11:52:54AM +0300, cyndis@kapsi.fi wrote:
+>>>> From: Mikko Perttunen <mperttunen@nvidia.com>
+>>>>
+>>>> Set itself as the IOMMU for the host1x context device bus, containing
+>>>> "dummy" devices used for Host1x context isolation.
+>>>>
+>>>> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+>>>> ---
+>>>>   drivers/iommu/arm/arm-smmu/arm-smmu.c | 13 +++++++++++++
+>>>>   1 file changed, 13 insertions(+)
+>>>>
+>>>> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c 
+>>>> b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+>>>> index 568cce590ccc..9ff54eaecf81 100644
+>>>> --- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
+>>>> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+>>>> @@ -39,6 +39,7 @@
+>>>>   #include <linux/amba/bus.h>
+>>>>   #include <linux/fsl/mc.h>
+>>>> +#include <linux/host1x_context_bus.h>
+>>>>   #include "arm-smmu.h"
+>>>> @@ -2053,8 +2054,20 @@ static int arm_smmu_bus_init(struct iommu_ops 
+>>>> *ops)
+>>>>               goto err_reset_pci_ops;
+>>>>       }
+>>>>   #endif
+>>>> +#ifdef CONFIG_TEGRA_HOST1X_CONTEXT_BUS
+>>>> +    if (!iommu_present(&host1x_context_device_bus_type)) {
+>>>> +        err = bus_set_iommu(&host1x_context_device_bus_type, ops);
+>>>> +        if (err)
+>>>> +            goto err_reset_fsl_mc_ops;
+>>>> +    }
+>>>> +#endif
+>>>> +
+>>>>       return 0;
+>>>> +err_reset_fsl_mc_ops: __maybe_unused;
+>>>> +#ifdef CONFIG_FSL_MC_BUS
+>>>> +    bus_set_iommu(&fsl_mc_bus_type, NULL);
+>>>> +#endif
+>>>
+>>> bus_set_iommu() is going away:
+>>>
+>>> https://lore.kernel.org/r/cover.1650890638.git.robin.murphy@arm.com
+>>>
+>>> Will
+>>
+>> Thanks for the heads-up. Robin had pointed out that this work was 
+>> ongoing but I hadn't seen the patches yet. I'll look into it.
 > 
-> As Cornelia and Vineeth pointed out, all the paths the vring_interrupt
-> is called with irq disabled.
+> Although that *is* currently blocked on the mystery intel-iommu problem 
+> that I can't reproduce... If this series is ready to land right now for 
+> 5.19 then in principle that might be the easiest option overall. 
+> Hopefully at least patch #2 could sneak in so that the compile-time 
+> dependencies are ready for me to roll up host1x into the next rebase of 
+> "iommu: Always register bus notifiers".
 > 
-> So I will use spin_lock()/spin_unlock() in the next version.
+> Cheers,
+> Robin.
 
-Can we do some sort of an assertion that if the kernel is built with
-the corresponding debug features will make sure this assumption holds
-(and warn if it does not)? That assertion would also document the fact.
+My guess is that the series as a whole is not ready to land in the 5.19 
+timeframe, but #2 could be possible.
 
-If an assertion is not possible, I think we should at least place a
-strategic comment that documents our assumption.
+Thierry, any opinion?
 
-Regards,
-Halil
-
-> 
-> Thanks
+Thanks,
+Mikko

@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E14D152907B
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 629F152908A
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348780AbiEPUXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:23:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48936 "EHLO
+        id S1348387AbiEPUGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348871AbiEPT7B (ORCPT
+        with ESMTP id S1347037AbiEPTvf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:59:01 -0400
+        Mon, 16 May 2022 15:51:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854D27659;
-        Mon, 16 May 2022 12:51:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EEF028A;
+        Mon, 16 May 2022 12:46:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2261260A50;
-        Mon, 16 May 2022 19:51:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 124CEC385AA;
-        Mon, 16 May 2022 19:51:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D414609D0;
+        Mon, 16 May 2022 19:46:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A154C385AA;
+        Mon, 16 May 2022 19:46:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730702;
-        bh=K0e//h/6PydWP4sS4t8OnODJz9/3dzWamQ2oJbLLZmc=;
+        s=korg; t=1652730406;
+        bh=pBZPEgcwSWzTvVDiYZyVpK3hnXuf2CTVNp7A4sC+rao=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HYAYjQPV4E0c70EE31WguZE9SEYOrA9grzQJ8eoTiL8s0NHFf0MgqDJ4n/Znpetjp
-         6UtaWGC/ee49ZeciYWCXumohWE+8rQ0OdzfJiPZFtgycNgkxWzab1t7MG76NhBd6Nt
-         DawYpiCRPN3GTvFK6t3QU6GRFSil7F3ktcecphH0=
+        b=LayEnuD8R2isTzh0OoNoARX4xHZPRg+BuTu5qcNdQ4P8C8vfdaCBYomtOWfsWy02y
+         MjgxmcxTScJVT+ucUZXwMlQS9naLlYdKHuNtx+siU3hB8efJ89dQhFbn4izM9rwtkO
+         0qA/JYCo604w5vmB06tfd62koznTGvZMSuzGatCo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Fortin <fortinj66@gmail.com>,
-        Sri Ramanujam <sri@ramanujam.io>,
-        Jeff Layton <jlayton@kernel.org>, Xiubo Li <xiubli@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>
-Subject: [PATCH 5.15 081/102] ceph: fix setting of xattrs on async created inodes
+        stable@vger.kernel.org,
+        Jordan Leppert <jordanleppert@protonmail.com>,
+        Holger Hoffstaette <holger@applied-asynchrony.com>,
+        Manuel Ullmann <labre@posteo.de>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH 5.10 55/66] net: atlantic: always deep reset on pm op, fixing up my null deref regression
 Date:   Mon, 16 May 2022 21:36:55 +0200
-Message-Id: <20220516193626.318984890@linuxfoundation.org>
+Message-Id: <20220516193621.001311470@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
-References: <20220516193623.989270214@linuxfoundation.org>
+In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
+References: <20220516193619.400083785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,62 +57,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeff Layton <jlayton@kernel.org>
+From: Manuel Ullmann <labre@posteo.de>
 
-commit 620239d9a32e9fe27c9204ec11e40058671aeeb6 upstream.
+commit 1809c30b6e5a83a1de1435fe01aaa4de4d626a7c upstream.
 
-Currently when we create a file, we spin up an xattr buffer to send
-along with the create request. If we end up doing an async create
-however, then we currently pass down a zero-length xattr buffer.
+The impact of this regression is the same for resume that I saw on
+thaw: the kernel hangs and nothing except SysRq rebooting can be done.
 
-Fix the code to send down the xattr buffer in req->r_pagelist. If the
-xattrs span more than a page, however give up and don't try to do an
-async create.
+Fixes regression in commit cbe6c3a8f8f4 ("net: atlantic: invert deep
+par in pm functions, preventing null derefs"), where I disabled deep
+pm resets in suspend and resume, trying to make sense of the
+atl_resume_common() deep parameter in the first place.
 
-Cc: stable@vger.kernel.org
-URL: https://bugzilla.redhat.com/show_bug.cgi?id=2063929
-Fixes: 9a8d03ca2e2c ("ceph: attempt to do async create when possible")
-Reported-by: John Fortin <fortinj66@gmail.com>
-Reported-by: Sri Ramanujam <sri@ramanujam.io>
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
-Reviewed-by: Xiubo Li <xiubli@redhat.com>
-Signed-off-by: Ilya Dryomov <idryomov@gmail.com>
+It turns out, that atlantic always has to deep reset on pm
+operations. Even though I expected that and tested resume, I screwed
+up by kexec-rebooting into an unpatched kernel, thus missing the
+breakage.
+
+This fixup obsoletes the deep parameter of atl_resume_common, but I
+leave the cleanup for the maintainers to post to mainline.
+
+Suspend and hibernation were successfully tested by the reporters.
+
+Fixes: cbe6c3a8f8f4 ("net: atlantic: invert deep par in pm functions, preventing null derefs")
+Link: https://lore.kernel.org/regressions/9-Ehc_xXSwdXcvZqKD5aSqsqeNj5Izco4MYEwnx5cySXVEc9-x_WC4C3kAoCqNTi-H38frroUK17iobNVnkLtW36V6VWGSQEOHXhmVMm5iQ=@protonmail.com/
+Reported-by: Jordan Leppert <jordanleppert@protonmail.com>
+Reported-by: Holger Hoffstaette <holger@applied-asynchrony.com>
+Tested-by: Jordan Leppert <jordanleppert@protonmail.com>
+Tested-by: Holger Hoffstaette <holger@applied-asynchrony.com>
+CC: <stable@vger.kernel.org> # 5.10+
+Signed-off-by: Manuel Ullmann <labre@posteo.de>
+Link: https://lore.kernel.org/r/87bkw8dfmp.fsf@posteo.de
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ceph/file.c |   16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/fs/ceph/file.c
-+++ b/fs/ceph/file.c
-@@ -592,9 +592,15 @@ static int ceph_finish_async_create(stru
- 	iinfo.change_attr = 1;
- 	ceph_encode_timespec64(&iinfo.btime, &now);
+--- a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
++++ b/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
+@@ -455,7 +455,7 @@ static int aq_pm_freeze(struct device *d
  
--	iinfo.xattr_len = ARRAY_SIZE(xattr_buf);
--	iinfo.xattr_data = xattr_buf;
--	memset(iinfo.xattr_data, 0, iinfo.xattr_len);
-+	if (req->r_pagelist) {
-+		iinfo.xattr_len = req->r_pagelist->length;
-+		iinfo.xattr_data = req->r_pagelist->mapped_tail;
-+	} else {
-+		/* fake it */
-+		iinfo.xattr_len = ARRAY_SIZE(xattr_buf);
-+		iinfo.xattr_data = xattr_buf;
-+		memset(iinfo.xattr_data, 0, iinfo.xattr_len);
-+	}
+ static int aq_pm_suspend_poweroff(struct device *dev)
+ {
+-	return aq_suspend_common(dev, false);
++	return aq_suspend_common(dev, true);
+ }
  
- 	in.ino = cpu_to_le64(vino.ino);
- 	in.snapid = cpu_to_le64(CEPH_NOSNAP);
-@@ -706,6 +712,10 @@ int ceph_atomic_open(struct inode *dir,
- 		err = ceph_security_init_secctx(dentry, mode, &as_ctx);
- 		if (err < 0)
- 			goto out_ctx;
-+		/* Async create can't handle more than a page of xattrs */
-+		if (as_ctx.pagelist &&
-+		    !list_is_singular(&as_ctx.pagelist->head))
-+			try_async = false;
- 	} else if (!d_in_lookup(dentry)) {
- 		/* If it's not being looked up, it's negative */
- 		return -ENOENT;
+ static int aq_pm_thaw(struct device *dev)
+@@ -465,7 +465,7 @@ static int aq_pm_thaw(struct device *dev
+ 
+ static int aq_pm_resume_restore(struct device *dev)
+ {
+-	return atl_resume_common(dev, false);
++	return atl_resume_common(dev, true);
+ }
+ 
+ static const struct dev_pm_ops aq_pm_ops = {
 
 

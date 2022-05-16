@@ -2,83 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FAFF529557
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 01:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E6B1529559
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 01:39:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349050AbiEPXfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 19:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55018 "EHLO
+        id S1347927AbiEPXi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 19:38:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347272AbiEPXfK (ORCPT
+        with ESMTP id S230377AbiEPXi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 19:35:10 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6069F3FBCC
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 16:35:08 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id q7so4475532plx.3
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 16:35:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=SW/UVWzWsdpJtnPhkcqrIpoiIUSTo1h+7uoKjNI2+sQ=;
-        b=EvEOYmoNSLO0F/CcduL33KGkB1dDXrs0mafz3naiC3Dca5nTLoBgRdodtmP1lB7IPT
-         qheWKdsw9O7nI9FVnktp0GhXxiTwqOcSPSxamYPQyroUlLiT2NEDcDMcMxIk0OTkNEFK
-         /+0KcO/3FdiAxEF+vMSkP6pxPzWQ7DCgbAAIkHNXhanU2Ao8T9HlBRdhVKYW+3FeKPQ2
-         drS9RMj6vOH4cHprgKeR5oJvUU7v5fZeH2EvdjmG34hm9465T9vpHBSLZZJcDuOKRSvh
-         ATJZRzaXCigEJr3VtTPmbOf5v9njTq4uM1nOx6DpISa/YbJVb0hD9t1hokEVX5HA7QRN
-         lj7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=SW/UVWzWsdpJtnPhkcqrIpoiIUSTo1h+7uoKjNI2+sQ=;
-        b=xgPcvgpFxdzld6JdhpkmvmAol3yPRNwetR4P39ycTPpRSA/fg0tRzrnUp+gQlCzkNK
-         Re68n/LJeggBMRdxw2haFJNRVIv5eGtIUe615J0hkwRoHljOiXPY7+FIF8OoxiDeyPwU
-         V7e1t9Kd8OlrATjMnoyVsuqsdc06DCMZ6reoxOOc22/D7IvRcmVJbQaLmrUcM2wO9IWb
-         dNU1gUQtc4N4/OxSF/Ha3JDbgcz/8XLkuz24o68m5D14IAw/bhBuP45dNut+FW00JpR4
-         sWLbEJEUnhXPp9ghLzs4eKq7O0MoOevyPr6vwQTVwTGjT+w5M4VLrIInT2beh5XpHfo2
-         50Rg==
-X-Gm-Message-State: AOAM532tvLyoO/gAbBkNovlSNFVYdPIhgtYaRlu7wKtuS5eMdCVj2BFz
-        R14EuTz5ZsBIyIwdb4pyqxXpuw==
-X-Google-Smtp-Source: ABdhPJyNjNJettvNBuBgmW/vaef9bry0PDcDa2E6bPktWOuBgPoYjqvHActZgPFjBtpIdhY6VXtTKg==
-X-Received: by 2002:a17:90a:528f:b0:1dc:9a7c:4a3 with SMTP id w15-20020a17090a528f00b001dc9a7c04a3mr21607865pjh.112.1652744107892;
-        Mon, 16 May 2022 16:35:07 -0700 (PDT)
-Received: from [192.168.254.17] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id j6-20020a17090adc8600b001df3a251cc2sm259493pjv.4.2022.05.16.16.35.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 16:35:07 -0700 (PDT)
-Message-ID: <2fcdbecf-5352-ea81-ee42-ee10fbe2f72e@linaro.org>
-Date:   Mon, 16 May 2022 16:35:06 -0700
+        Mon, 16 May 2022 19:38:57 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A535730557
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 16:38:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652744335; x=1684280335;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KkkLfc4fAEbkp53pbjYLSGYfnjBIhuUl1eB506Pyt84=;
+  b=RKs8DhMCVEKdOXx8nw2wVt4pIq7TpnEutm/JFinsmD9AlfhYf3HvYXQT
+   thEXOSNXxit1pMhlQ/l8OvQ6bSujAbcYcFF1Qh6XrTeLfNGrWpy3RR6R9
+   l7A3Ql6jBhKpOTDfOa/y/bWv7gjExPEhb26x+2sQQTN1FAS+2n5fvTAHI
+   ufsMLhip/9ZGHZC0ezSouTCh5NtHz9FpPnMIKKExMf1VS6MjGCcgNWNIl
+   RO3jvQZnonbexNaHbwxD2IVVzxQs5OPNgl5m1rpNvGiNn9FxC0986B0LU
+   tb5wXWawQ2utXoii2x5LONaP/aJwCECtqrekfM6djOBKxYL44ymsBA3zX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="269822006"
+X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
+   d="scan'208";a="269822006"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 16:38:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
+   d="scan'208";a="555498539"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 16 May 2022 16:38:53 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nqkIf-0000Pp-4l;
+        Mon, 16 May 2022 23:38:53 +0000
+Date:   Tue, 17 May 2022 07:38:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [hverkuil-media-tree:extron 2/2] ld.lld: error: undefined symbol:
+ v4l2_device_register
+Message-ID: <202205170716.EOe20iPO-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux- stable <stable@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        syzbot+f264bffdfbd5614f3bb2@syzkaller.appspotmail.com
-References: <CAEf4Bzah9K7dEa_7sXE4TnkuMTRHypMU9DxiLezgRvLjcqE_YA@mail.gmail.com>
- <20220513190821.431762-1-tadeusz.struk@linaro.org>
- <CAEf4BzY-p13huoqo6N7LJRVVj8rcjPeP3Cp=KDX4N2x9BkC9Zw@mail.gmail.com>
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-Subject: Re: [PATCH v3] bpf: Fix KASAN use-after-free Read in
- compute_effective_progs
-In-Reply-To: <CAEf4BzY-p13huoqo6N7LJRVVj8rcjPeP3Cp=KDX4N2x9BkC9Zw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,130 +62,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/22 16:16, Andrii Nakryiko wrote:
-> On Fri, May 13, 2022 at 12:08 PM Tadeusz Struk <tadeusz.struk@linaro.org> wrote:
->>   kernel/bpf/cgroup.c | 64 +++++++++++++++++++++++++++++++++++++++------
->>   1 file changed, 56 insertions(+), 8 deletions(-)
->>
->> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
->> index 128028efda64..9d3af4d6c055 100644
->> --- a/kernel/bpf/cgroup.c
->> +++ b/kernel/bpf/cgroup.c
->> @@ -681,6 +681,57 @@ static struct bpf_prog_list *find_detach_entry(struct list_head *progs,
->>          return ERR_PTR(-ENOENT);
->>   }
->>
->> +/**
->> + * purge_effective_progs() - After compute_effective_progs fails to alloc new
->> + *                           cgrp->bpf.inactive table we can recover by
->> + *                           recomputing the array in place.
->> + *
->> + * @cgrp: The cgroup which descendants to traverse
->> + * @link: A link to detach
->> + * @atype: Type of detach operation
->> + */
->> +static void purge_effective_progs(struct cgroup *cgrp, struct bpf_prog *prog,
->> +                                 enum cgroup_bpf_attach_type atype)
->> +{
->> +       struct cgroup_subsys_state *css;
->> +       struct bpf_prog_array_item *item;
->> +       struct bpf_prog *tmp;
->> +       struct bpf_prog_array *array;
->> +       int index = 0, index_purge = -1;
->> +
->> +       if (!prog)
->> +               return;
->> +
->> +       /* recompute effective prog array in place */
->> +       css_for_each_descendant_pre(css, &cgrp->self) {
->> +               struct cgroup *desc = container_of(css, struct cgroup, self);
->> +
->> +               array = desc->bpf.effective[atype];
-> 
-> ../kernel/bpf/cgroup.c:748:23: warning: incorrect type in assignment
-> (different address spaces)
-> ../kernel/bpf/cgroup.c:748:23:    expected struct bpf_prog_array *array
-> ../kernel/bpf/cgroup.c:748:23:    got struct bpf_prog_array [noderef] __rcu *
-> 
-> 
-> you need rcu_dereference here? but also see suggestions below to avoid
-> iterating effective directly (it's ambiguous to search by prog only)
+tree:   git://linuxtv.org/hverkuil/media_tree.git extron
+head:   d25c7a9925ea4a748782ad0b1f951716be89d672
+commit: d25c7a9925ea4a748782ad0b1f951716be89d672 [2/2] cec/extron: add the Extron CEC driver
+config: x86_64-randconfig-r002-20220516 (https://download.01.org/0day-ci/archive/20220517/202205170716.EOe20iPO-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
+        git fetch --no-tags hverkuil-media-tree extron
+        git checkout d25c7a9925ea4a748782ad0b1f951716be89d672
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-I didn't check it with sparse so I didn't see this warning.
-Will fix in the next version.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 
->> +               item = &array->items[0];
->> +
->> +               /* Find the index of the prog to purge */
->> +               while ((tmp = READ_ONCE(item->prog))) {
->> +                       if (tmp == prog) {
-> 
-> I think comparing just prog isn't always correct, as the same program
-> can be in effective array multiple times if attached through bpf_link.
-> 
-> Looking at replace_effective_prog() I think we can do a very similar
-> (and tested) approach:
-> 
-> 1. restore original pl state in __cgroup_bpf_detach (so we can find it
-> by comparing pl->prog == prog && pl->link == link)
-> 2. use replace_effective_prog's approach to find position of pl in
-> effective array (using this nested for loop over cgroup parents and
-> list_for_each_entry inside)
-> 3. then instead of replacing one prog with another do
-> bpf_prog_array_delete_safe_at ?
-> 
-> I'd feel more comfortable using the same tested overall approach of
-> replace_effective_prog.
+All errors (new ones prefixed by >>):
 
-Ok, I can try that.
-
-> 
->> +                               index_purge = index;
->> +                               break;
->> +                       }
->> +                       item++;
->> +                       index++;
->> +               }
->> +
->> +               /* Check if we found what's needed for removing the prog */
->> +               if (index_purge == -1 || index_purge == index - 1)
->> +                       continue;
-> 
-> the search shouldn't fail, should it?
-
-I wasn't if the prog will be present in all parents so I decided to add this
-check to make sure it is found.
-
-> 
->> +
->> +               /* Remove the program from the array */
->> +               WARN_ONCE(bpf_prog_array_delete_safe_at(array, index_purge),
->> +                         "Failed to purge a prog from array at index %d", index_purge);
->> +
->> +               index = 0;
->> +               index_purge = -1;
->> +       }
->> +}
->> +
->>   /**
->>    * __cgroup_bpf_detach() - Detach the program or link from a cgroup, and
->>    *                         propagate the change to descendants
->> @@ -723,8 +774,11 @@ static int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
->>          pl->link = NULL;
->>
->>          err = update_effective_progs(cgrp, atype);
->> -       if (err)
->> -               goto cleanup;
->> +       if (err) {
->> +               struct bpf_prog *prog_purge = prog ? prog : link->link.prog;
->> +
-> 
-> so here we shouldn't forget link, instead pass both link and prog (one
-> of them will have to be NULL) into purge_effective_progs
-
-ok, I will pass in both.
+   vmlinux.o: warning: objtool: bmi160_data_rdy_trigger_set_state()+0x8e: sibling call from callable instruction with modified stack frame
+>> ld.lld: error: undefined symbol: v4l2_device_register
+   >>> referenced by fbdev.c
+   >>> vmlinux.o:(extron_connect)
+--
+>> ld.lld: error: undefined symbol: v4l2_device_unregister
+   >>> referenced by fbdev.c
+   >>> vmlinux.o:(extron_connect)
+--
+>> ld.lld: error: undefined symbol: v4l2_set_edid_phys_addr
+   >>> referenced by fbdev.c
+   >>> vmlinux.o:(extron_s_edid)
+--
+>> ld.lld: error: undefined symbol: video_device_release_empty
+   >>> referenced by fbdev.c
+   >>> vmlinux.o:(extron_videodev)
+--
+>> ld.lld: error: undefined symbol: v4l2_ctrl_poll
+   >>> referenced by fbdev.c
+   >>> vmlinux.o:(extron_fops)
+--
+>> ld.lld: error: undefined symbol: video_ioctl2
+   >>> referenced by fbdev.c
+   >>> vmlinux.o:(extron_fops)
+--
+>> ld.lld: error: undefined symbol: v4l2_fh_open
+   >>> referenced by fbdev.c
+   >>> vmlinux.o:(extron_fops)
+--
+>> ld.lld: error: undefined symbol: v4l2_fh_release
+   >>> referenced by fbdev.c
+   >>> vmlinux.o:(extron_fops)
+--
+>> ld.lld: error: undefined symbol: v4l2_ctrl_subscribe_event
+   >>> referenced by fbdev.c
+   >>> vmlinux.o:(extron_ioctl_ops)
+--
+>> ld.lld: error: undefined symbol: v4l2_event_unsubscribe
+   >>> referenced by fbdev.c
+   >>> vmlinux.o:(extron_ioctl_ops)
+--
+>> ld.lld: error: undefined symbol: video_unregister_device
+   >>> referenced by fbdev.c
+   >>> vmlinux.o:(extron_disconnect)
+   >>> referenced by fbdev.c
+   >>> vmlinux.o:(extron_setup_thread)
+   >>> referenced by fbdev.c
+   >>> vmlinux.o:(extron_setup_thread)
+..
 
 -- 
-Thanks,
-Tadeusz
+0-DAY CI Kernel Test Service
+https://01.org/lkp

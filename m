@@ -2,84 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4305287B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:57:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6DB05287CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbiEPO5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 10:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
+        id S243709AbiEPPAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 11:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244788AbiEPO5G (ORCPT
+        with ESMTP id S233265AbiEPPAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 10:57:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D21E637BDA
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:57:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652713020;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jPXl400eeBYV3XEnL3rNRzGSIwuQBM+dLWQmtMEQF/g=;
-        b=aSZwI9q7QnmovUNnaGCl+SarujhaW6QEGA+GUO8Vi7pgekQvgmOzoqovi99tb2tXEXuaVu
-        rCyEn+fnk8GGBIW/G9afClP5pwjG+kvMtn2RdHlXFR6QIdQyKhb+bIWL5W1Mah8hqMaqal
-        Uj//lq0+I5IPBPdKQsu1Ph6X3irAh2M=
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
- [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-37-VtcJFY45Pcul2OTIEYoPJQ-1; Mon, 16 May 2022 10:56:59 -0400
-X-MC-Unique: VtcJFY45Pcul2OTIEYoPJQ-1
-Received: by mail-pf1-f198.google.com with SMTP id u25-20020aa78499000000b0050d328e2f6bso6356602pfn.7
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:56:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=jPXl400eeBYV3XEnL3rNRzGSIwuQBM+dLWQmtMEQF/g=;
-        b=5C4wBu9THO5ztgSulqbblTNle99flTuIKnXBwpe+nhTz9vFR+7IfhMLDS3hfoQukhD
-         l9jj/YJoJJlW6C/in/UZ9Tvr7m0C+/0KK9upS7dvdDri64lLmHiP+4wt5r2qi36e+IYD
-         nmg4SYa0we5m4hwvzRX1ZHPYRR6GW/fhulFeyUai+6fJ3UkdCLJlEaq0LRSMNpA0dkM4
-         akS81W41bkSQHsYguQJwu1VbGqnENuw6ZCfapVq7pgtUE7yUkdd7cq7L/jVppnJ5Ji9w
-         Rq1DBy58I0o/sXAYLso2YZLJSUFvd+mQuQoLCnvSUaB3csDA4C9wskE0OJZyx5eSV07v
-         oq9Q==
-X-Gm-Message-State: AOAM530oIpT0TDyfmXfvsTSPrEXJVsUsIQ5253AAcZ/+tuZ8P4X7aEqA
-        YlWLMdJ45igIYa3nzK6jlzNbswcwnT3dH4ZsZ9HAtWeZmgd2udlYvUvKT7MmzFp5aFGtMYEN82u
-        XCyomy61B/zx+pZC1VroJ7qOrlVrGpg9czrC0TrskYKnFBfNiAMlGz0VPEZSnWp2AxDiukd/Ocw
-        ==
-X-Received: by 2002:a63:1702:0:b0:3f2:82e2:4a96 with SMTP id x2-20020a631702000000b003f282e24a96mr1719017pgl.459.1652713017836;
-        Mon, 16 May 2022 07:56:57 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyqOihBdgFIQXf840LiowRXXAdP1clt7aiYuyr+yrZVnJZjLP5iTh5tlokg21SE4eY/9boUPg==
-X-Received: by 2002:a63:1702:0:b0:3f2:82e2:4a96 with SMTP id x2-20020a631702000000b003f282e24a96mr1718970pgl.459.1652713017057;
-        Mon, 16 May 2022 07:56:57 -0700 (PDT)
-Received: from [10.72.12.89] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id u1-20020a1709026e0100b0015e8d4eb1c0sm7259874plk.10.2022.05.16.07.56.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 07:56:56 -0700 (PDT)
-Subject: Re: [PATCH 2/2] ceph: wait the first reply of inflight unlink/rmdir
-To:     Jeff Layton <jlayton@kernel.org>, viro@zeniv.linux.org.uk
-Cc:     idryomov@gmail.com, vshankar@redhat.com,
-        ceph-devel@vger.kernel.org, mcgrof@kernel.org,
-        akpm@linux-foundation.org, arnd@arndb.de,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220516122046.40655-1-xiubli@redhat.com>
- <20220516122046.40655-3-xiubli@redhat.com>
- <ea6eef767ae6bcdf7aeae7bbc00c2dd89f8c7e5f.camel@kernel.org>
-From:   Xiubo Li <xiubli@redhat.com>
-Message-ID: <7a37f7a3-586b-5b75-3692-dc391f737a6b@redhat.com>
-Date:   Mon, 16 May 2022 22:56:49 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Mon, 16 May 2022 11:00:19 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABD0387A6
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 08:00:13 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R901e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=17;SR=0;TI=SMTPD_---0VDN4uY8_1652713206;
+Received: from 30.25.245.93(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0VDN4uY8_1652713206)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 16 May 2022 23:00:07 +0800
+Message-ID: <1b2040ba-9780-8d2b-257d-35c66567011b@linux.alibaba.com>
+Date:   Mon, 16 May 2022 23:00:05 +0800
 MIME-Version: 1.0
-In-Reply-To: <ea6eef767ae6bcdf7aeae7bbc00c2dd89f8c7e5f.camel@kernel.org>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:101.0)
+ Gecko/20100101 Thunderbird/101.0
+Subject: Re: DAMON VA regions don't split on an large Android APP
 Content-Language: en-US
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     sj@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>, shuah@kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        foersleo@amazon.de, sieberf@amazon.com,
+        Shakeel Butt <shakeelb@google.com>, sjpark@amazon.de,
+        tuhailong@gmail.com, Song Jiang <sjiang88@gmail.com>,
+        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
+        <zhangshiming@oppo.com>,
+        =?UTF-8?B?5p2O5Z+56ZSLKHdpbmsp?= <lipeifeng@oppo.com>,
+        xhao@linux.alibaba.com
+References: <CAGsJ_4x_k9009HwpTswEq1ut_co8XYdpZ9k0BVW=0=HRiifxkA@mail.gmail.com>
+ <e3c1beb1-e3d5-6e26-bae2-06785080b57e@linux.alibaba.com>
+ <CAGsJ_4weJ9onh0EJVy8QXMXZ++4qVyVuRi7oP3wiD0XWnqF-Dg@mail.gmail.com>
+ <CAGsJ_4z8vMNDwL4uYB6_=txvm9zW7LKrFA2HChS2D-+fxhBiKA@mail.gmail.com>
+ <08fff4b9-3ae9-db68-13bb-cf5f0654e20a@linux.alibaba.com>
+ <CAGsJ_4wKqPEnFGdijwjKeCvfRwfdxkk-263EZt2Y21GMyn1_uA@mail.gmail.com>
+ <CAGsJ_4z2TT5H2PO+mvgMSnL3h5ke=QVhFzDmYs6yOgwgB24bhg@mail.gmail.com>
+From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
+In-Reply-To: <CAGsJ_4z2TT5H2PO+mvgMSnL3h5ke=QVhFzDmYs6yOgwgB24bhg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -87,404 +61,343 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 5/16/22 9:23 PM, Jeff Layton wrote:
-> On Mon, 2022-05-16 at 20:20 +0800, Xiubo Li wrote:
->> In async unlink case the kclient won't wait for the first reply
->> from MDS and just drop all the links and unhash the dentry and then
->> succeeds immediately.
+
+On 5/16/22 3:03 PM, Barry Song wrote:
+> On Thu, Apr 28, 2022 at 7:37 PM Barry Song <21cnbao@gmail.com> wrote:
 >>
->> For any new create/link/rename,etc requests followed by using the
->> same file names we must wait for the first reply of the inflight
->> unlink request, or the MDS possibly will fail these following
->> requests with -EEXIST if the inflight async unlink request was
->> delayed for some reasons.
+>> On Thu, Apr 28, 2022 at 2:05 PM Rongwei Wang
+>> <rongwei.wang@linux.alibaba.com> wrote:
+>>>
+>>>
+>>>
+>>> On 4/27/22 5:22 PM, Barry Song wrote:
+>>>> On Wed, Apr 27, 2022 at 7:44 PM Barry Song <21cnbao@gmail.com> wrote:
+>>>>>
+>>>>> On Wed, Apr 27, 2022 at 6:56 PM Rongwei Wang
+>>>>> <rongwei.wang@linux.alibaba.com> wrote:
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>> On 4/27/22 7:19 AM, Barry Song wrote:
+>>>>>>> Hi SeongJae & Andrew,
+>>>>>>> (also Cc-ed main damon developers)
+>>>>>>> On an Android phone, I tried to use the DAMON vaddr monitor and found
+>>>>>>> that vaddr regions don't split well on large Android Apps though
+>>>>>>> everything works well on native Apps.
+>>>>>>>
+>>>>>>> I have tried the below two cases on an Android phone with 12GB memory
+>>>>>>> and snapdragon 888 CPU.
+>>>>>>> 1. a native program with small memory working set  as below,
+>>>>>>> #define size (1024*1024*100)
+>>>>>>> main()
+>>>>>>> {
+>>>>>>>            volatile int *p = malloc(size);
+>>>>>>>            memset(p, 0x55, size);
+>>>>>>>
+>>>>>>>            while(1) {
+>>>>>>>                    int i;
+>>>>>>>                    for (i = 0; i < size / 4; i++)
+>>>>>>>                            (void)*(p + i);
+>>>>>>>                    usleep(1000);
+>>>>>>>
+>>>>>>>                    for (i = 0; i < size / 16; i++)
+>>>>>>>                            (void)*(p + i);
+>>>>>>>                    usleep(1000);
+>>>>>>>
+>>>>>>>            }
+>>>>>>> }
+>>>>>>> For this application, the Damon vaddr monitor works very well.
+>>>>>>> I have modified monitor.py in the damo userspace tool a little bit to
+>>>>>>> show the raw data getting from the kernel.
+>>>>>>> Regions can split decently on this kind of applications, a typical raw
+>>>>>>> data is as below,
+>>>>>>>
+>>>>>>> monitoring_start:             2.224 s
+>>>>>>> monitoring_end:               2.329 s
+>>>>>>> monitoring_duration:       104.336 ms
+>>>>>>> target_id: 0
+>>>>>>> nr_regions: 24
+>>>>>>> 005fb37b2000-005fb734a000(  59.594 MiB): 0
+>>>>>>> 005fb734a000-005fbaf95000(  60.293 MiB): 0
+>>>>>>> 005fbaf95000-005fbec0b000(  60.461 MiB): 0
+>>>>>>> 005fbec0b000-005fc2910000(  61.020 MiB): 0
+>>>>>>> 005fc2910000-005fc6769000(  62.348 MiB): 0
+>>>>>>> 005fc6769000-005fca33f000(  59.836 MiB): 0
+>>>>>>> 005fca33f000-005fcdc8b000(  57.297 MiB): 0
+>>>>>>> 005fcdc8b000-005fd115a000(  52.809 MiB): 0
+>>>>>>> 005fd115a000-005fd45bd000(  52.387 MiB): 0
+>>>>>>> 007661c59000-007661ee4000(   2.543 MiB): 2
+>>>>>>> 007661ee4000-0076623e4000(   5.000 MiB): 3
+>>>>>>> 0076623e4000-007662837000(   4.324 MiB): 2
+>>>>>>> 007662837000-0076630f1000(   8.727 MiB): 3
+>>>>>>> 0076630f1000-007663494000(   3.637 MiB): 2
+>>>>>>> 007663494000-007663753000(   2.746 MiB): 1
+>>>>>>> 007663753000-007664251000(  10.992 MiB): 3
+>>>>>>> 007664251000-0076666fd000(  36.672 MiB): 2
+>>>>>>> 0076666fd000-007666e73000(   7.461 MiB): 1
+>>>>>>> 007666e73000-007667c89000(  14.086 MiB): 2
+>>>>>>> 007667c89000-007667f97000(   3.055 MiB): 0
+>>>>>>> 007667f97000-007668112000(   1.480 MiB): 1
+>>>>>>> 007668112000-00766820f000(1012.000 KiB): 0
+>>>>>>> 007ff27b7000-007ff27d6000( 124.000 KiB): 0
+>>>>>>> 007ff27d6000-007ff27d8000(   8.000 KiB): 8
+>>>>>>>
+>>>>>>> 2. a large Android app like Asphalt 9
+>>>>>>> For this case, basically regions can't split very well, but monitor
+>>>>>>> works on small vma:
+>>>>>>>
+>>>>>>> monitoring_start:             2.220 s
+>>>>>>> monitoring_end:               2.318 s
+>>>>>>> monitoring_duration:        98.576 ms
+>>>>>>> target_id: 0
+>>>>>>> nr_regions: 15
+>>>>>>> 000012c00000-0001c301e000(   6.754 GiB): 0
+>>>>>>> 0001c301e000-000371b6c000(   6.730 GiB): 0
+>>>>>>> 000371b6c000-000400000000(   2.223 GiB): 0
+>>>>>>> 005c6759d000-005c675a2000(  20.000 KiB): 0
+>>>>>>> 005c675a2000-005c675a3000(   4.000 KiB): 3
+>>>>>>> 005c675a3000-005c675a7000(  16.000 KiB): 0
+>>>>>>> 0072f1e14000-0074928d4000(   6.510 GiB): 0
+>>>>>>> 0074928d4000-00763c71f000(   6.655 GiB): 0
+>>>>>>> 00763c71f000-0077e863e000(   6.687 GiB): 0
+>>>>>>> 0077e863e000-00798e214000(   6.590 GiB): 0
+>>>>>>> 00798e214000-007b0e48a000(   6.002 GiB): 0
+>>>>>>> 007b0e48a000-007c62f00000(   5.323 GiB): 0
+>>>>>>> 007c62f00000-007defb19000(   6.199 GiB): 0
+>>>>>>> 007defb19000-007f794ef000(   6.150 GiB): 0
+>>>>>>> 007f794ef000-007fe8f53000(   1.745 GiB): 0
+>>>>>>>
+>>>>>>> As you can see, we have some regions which are very very big and they
+>>>>>>> are losing the chance to be splitted. But
+>>>>>>> Damon can still monitor memory access for those small VMA areas very well like:
+>>>>>>> 005c675a2000-005c675a3000(   4.000 KiB): 3
+>>>>>> Hi, Barry
+>>>>>>
+>>>>>> Actually, we also had found the same problem in redis by ourselves
+>>>>>> tool[1]. The DAMON can not split the large anon VMA well, and the anon
+>>>>>> VMA has 10G~20G memory. I guess the whole region doesn't have sufficient
+>>>>>> hot areas to been monitored or found by DAMON, likes one or more address
+>>>>>> choose by DAMON not been accessed during sample period.
+>>>>>
+>>>>> Hi Rongwei,
+>>>>> Thanks  for your comments and thanks for sharing your tools.
+>>>>>
+>>>>> I guess the cause might be:
+>>>>> in case a region is very big like 10GiB, we have only 1MiB hot pages
+>>>>> in this large region.
+>>>>> damon will randomly pick one page to sample, but the page has only
+>>>>> 1MiB/10GiB, thus
+>>>>> less than 1/10000 chance to hit the hot 1MiB. so probably we need
+>>>>> 10000 sample periods
+>>>>> to hit the hot 1MiB in order to split this large region?
+>>>>>
+>>>>> @SeongJae, please correct me if I am wrong.
+>>>>>
+>>>>>>
+>>>>>> I'm not sure whether sets init_regions can deal with the above problem,
+>>>>>> or dynamic choose one or limited number VMA to monitor.
+>>>>>>
+>>>>>
+>>>>> I won't set a limited number of VMA as this will make the damon too hard to use
+>>>>> as nobody wants to make such complex operations, especially an Android
+>>>>> app might have more than 8000 VMAs.
+>>>>>
+>>>>> I agree init_regions might be the right place to enhance the situation.
+>>>>>
+>>>>>> I'm not sure, just share my idea.
+>>>>>>
+>>>>>> [1] https://github.com/aliyun/data-profile-tools.git
+>>>>>
+>>>>> I suppose this tool is based on damon? How do you finally resolve the problem
+>>>>> that large anon VMAs can't be splitted?
+>>>>> Anyway, I will give your tool a try.
+>>>>
+>>>> Unfortunately, data-profile-tools.git doesn't build on aarch64 ubuntu
+>>>> though autogen.sh
+>>>> runs successfully.
+>>>>
+>>>> /usr/bin/ld: ./.libs/libdatop.a(disp.o): in function `cons_handler':
+>>>> /root/data-profile-tools/src/disp.c:625: undefined reference to `stdscr'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/disp.c:625: undefined
+>>>> reference to `stdscr'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/disp.c:625: undefined
+>>>> reference to `wgetch'
+>>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_win_create':
+>>>> /root/data-profile-tools/src/reg.c:108: undefined reference to `stdscr'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:108: undefined
+>>>> reference to `stdscr'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:108: undefined
+>>>> reference to `subwin'
+>>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_erase':
+>>>> /root/data-profile-tools/src/reg.c:161: undefined reference to `werase'
+>>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_refresh':
+>>>> /root/data-profile-tools/src/reg.c:171: undefined reference to `wrefresh'
+>>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_refresh_nout':
+>>>> /root/data-profile-tools/src/reg.c:182: undefined reference to `wnoutrefresh'
+>>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_update_all':
+>>>> /root/data-profile-tools/src/reg.c:191: undefined reference to `doupdate'
+>>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_win_destroy':
+>>>> /root/data-profile-tools/src/reg.c:200: undefined reference to `delwin'
+>>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_line_write':
+>>>> /root/data-profile-tools/src/reg.c:226: undefined reference to `mvwprintw'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:230: undefined
+>>>> reference to `wattr_off'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:217: undefined
+>>>> reference to `wattr_on'
+>>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_highlight_write':
+>>>> /root/data-profile-tools/src/reg.c:245: undefined reference to `wattr_on'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:255: undefined
+>>>> reference to `wattr_off'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:252: undefined
+>>>> reference to `mvwprintw'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:255: undefined
+>>>> reference to `wattr_off'
+>>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_curses_fini':
+>>>> /root/data-profile-tools/src/reg.c:367: undefined reference to `stdscr'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:367: undefined
+>>>> reference to `stdscr'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:367: undefined
+>>>> reference to `wclear'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:368: undefined
+>>>> reference to `wrefresh'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:369: undefined
+>>>> reference to `endwin'
+>>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_curses_init':
+>>>> /root/data-profile-tools/src/reg.c:382: undefined reference to `stdscr'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:381: undefined
+>>>> reference to `initscr'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:382: undefined
+>>>> reference to `stdscr'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:382: undefined
+>>>> reference to `wrefresh'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:383: undefined
+>>>> reference to `use_default_colors'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:384: undefined
+>>>> reference to `start_color'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:385: undefined
+>>>> reference to `keypad'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:386: undefined
+>>>> reference to `nonl'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:387: undefined
+>>>> reference to `cbreak'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:388: undefined
+>>>> reference to `noecho'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:389: undefined
+>>>> reference to `curs_set'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:401: undefined
+>>>> reference to `stdscr'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:401: undefined
+>>>> reference to `mvwprintw'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:403: undefined
+>>>> reference to `mvwprintw'
+>>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:405: undefined
+>>>> reference to `wrefresh'
+>>>> collect2: error: ld returned 1 exit status
+>>>> make[1]: *** [Makefile:592: datop] Error 1
+>>>> make[1]: Leaving directory '/root/data-profile-tools'
+>>>> make: *** [Makefile:438: all] Error 2
+>>> Hi, Barry
+>>>
+>>> Now, the question made me realize that the compatibility of this tool is
+>>> very poor. I built a ubuntu environment at yesterday, and fixed above
+>>> errors by:
+>>>
+>>> diff --git a/configure.ac b/configure.ac
+>>> index 7922f27..1ed823c 100644
+>>> --- a/configure.ac
+>>> +++ b/configure.ac
+>>> @@ -21,13 +21,9 @@ AC_PROG_INSTALL
+>>>    AC_CHECK_LIB([numa], [numa_free])
+>>>    AC_CHECK_LIB([pthread], [pthread_create])
+>>>
+>>> -PKG_CHECK_MODULES([CHECK], [check])
+>>> -
+>>> -PKG_CHECK_MODULES([NCURSES], [ncursesw ncurses], [LIBS="$LIBS
+>>> $ncurses_LIBS"], [
+>>> -       AC_SEARCH_LIBS([delwin], [ncursesw ncurses], [], [
+>>> -               AC_MSG_ERROR([ncurses is required but was not found])
+>>> -       ], [])
+>>> -])
+>>> +AC_SEARCH_LIBS([stdscr], [ncurses ncursesw], [], [
+>>> +       AC_MSG_ERROR([required library libncurses or ncurses not found])
+>>> +       ])
+>>>
 >>
->> And the worst case is that for the none async openc request it will
->> successfully open the file if the CDentry hasn't been unlinked yet,
->> but later the previous delayed async unlink request will remove the
->> CDenty. That means the just created file is possiblly deleted later
->> by accident.
+>> I can confirm the patch fixed the issue I reported yesterday, thanks!
 >>
->> We need to wait for the inflight async unlink requests to finish
->> when creating new files/directories by using the same file names.
+>>> It works. But I found an another thing will hinder you using this tool.
+>>> We had developed other patches about DAMON base on upstream. This tool
+>>> only works well in ourselves kernel(anolis kernel, already open source).
+>>> Of course, I think it's unnecessary for you to change kernel, just let
+>>> you know this tool still has this problem.
+>>>
 >>
->> URL: https://tracker.ceph.com/issues/55332
->> Signed-off-by: Xiubo Li <xiubli@redhat.com>
->> ---
->>   fs/ceph/dir.c        | 55 +++++++++++++++++++++++++++++++----
->>   fs/ceph/file.c       |  5 ++++
->>   fs/ceph/mds_client.c | 69 ++++++++++++++++++++++++++++++++++++++++++++
->>   fs/ceph/mds_client.h |  1 +
->>   fs/ceph/super.c      |  2 ++
->>   fs/ceph/super.h      | 18 ++++++++----
->>   6 files changed, 140 insertions(+), 10 deletions(-)
+>> Although I can't use this tool directly as I am not a NUMA right now,
+>> ~/data-profile-tools # ./datop --help
+>> Not support NUMA fault stat (DAMON)!
 >>
->> diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
->> index eae417d71136..20c648406528 100644
->> --- a/fs/ceph/dir.c
->> +++ b/fs/ceph/dir.c
->> @@ -856,6 +856,10 @@ static int ceph_mknod(struct user_namespace *mnt_userns, struct inode *dir,
->>   	if (ceph_snap(dir) != CEPH_NOSNAP)
->>   		return -EROFS;
->>   
->> +	err = ceph_wait_on_conflict_unlink(dentry);
->> +	if (err)
->> +		return err;
->> +
->>   	if (ceph_quota_is_max_files_exceeded(dir)) {
->>   		err = -EDQUOT;
->>   		goto out;
->> @@ -918,6 +922,10 @@ static int ceph_symlink(struct user_namespace *mnt_userns, struct inode *dir,
->>   	if (ceph_snap(dir) != CEPH_NOSNAP)
->>   		return -EROFS;
->>   
->> +	err = ceph_wait_on_conflict_unlink(dentry);
->> +	if (err)
->> +		return err;
->> +
->>   	if (ceph_quota_is_max_files_exceeded(dir)) {
->>   		err = -EDQUOT;
->>   		goto out;
->> @@ -968,9 +976,13 @@ static int ceph_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
->>   	struct ceph_mds_client *mdsc = ceph_sb_to_mdsc(dir->i_sb);
->>   	struct ceph_mds_request *req;
->>   	struct ceph_acl_sec_ctx as_ctx = {};
->> -	int err = -EROFS;
->> +	int err;
->>   	int op;
->>   
->> +	err = ceph_wait_on_conflict_unlink(dentry);
->> +	if (err)
->> +		return err;
->> +
->>   	if (ceph_snap(dir) == CEPH_SNAPDIR) {
->>   		/* mkdir .snap/foo is a MKSNAP */
->>   		op = CEPH_MDS_OP_MKSNAP;
->> @@ -980,6 +992,7 @@ static int ceph_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
->>   		dout("mkdir dir %p dn %p mode 0%ho\n", dir, dentry, mode);
->>   		op = CEPH_MDS_OP_MKDIR;
->>   	} else {
->> +		err = -EROFS;
->>   		goto out;
->>   	}
->>   
->> @@ -1037,6 +1050,10 @@ static int ceph_link(struct dentry *old_dentry, struct inode *dir,
->>   	struct ceph_mds_request *req;
->>   	int err;
->>   
->> +	err = ceph_wait_on_conflict_unlink(dentry);
->> +	if (err)
->> +		return err;
->> +
->>   	if (ceph_snap(dir) != CEPH_NOSNAP)
->>   		return -EROFS;
->>   
->> @@ -1071,9 +1088,24 @@ static int ceph_link(struct dentry *old_dentry, struct inode *dir,
->>   static void ceph_async_unlink_cb(struct ceph_mds_client *mdsc,
->>   				 struct ceph_mds_request *req)
->>   {
->> +	struct dentry *dentry = req->r_dentry;
->> +	struct ceph_dentry_info *di = ceph_dentry(dentry);
->>   	int result = req->r_err ? req->r_err :
->>   			le32_to_cpu(req->r_reply_info.head->result);
->>   
->> +	if (test_bit(CEPH_DENTRY_ASYNC_UNLINK_BIT, &di->flags)) {
->> +		BUG_ON(req->r_op != CEPH_MDS_OP_UNLINK);
->> +
->> +		hash_del_rcu(&di->hnode);
->> +
->> +		spin_lock(&dentry->d_lock);
->> +		di->flags &= ~CEPH_DENTRY_ASYNC_UNLINK;
->> +		wake_up_bit(&di->flags, CEPH_DENTRY_ASYNC_UNLINK_BIT);
->> +		spin_unlock(&dentry->d_lock);
->> +
->> +		synchronize_rcu();
->> +	}
->> +
->>   	if (result == -EJUKEBOX)
->>   		goto out;
->>   
->> @@ -1081,7 +1113,7 @@ static void ceph_async_unlink_cb(struct ceph_mds_client *mdsc,
->>   	if (result) {
->>   		int pathlen = 0;
->>   		u64 base = 0;
->> -		char *path = ceph_mdsc_build_path(req->r_dentry, &pathlen,
->> +		char *path = ceph_mdsc_build_path(dentry, &pathlen,
->>   						  &base, 0);
->>   
->>   		/* mark error on parent + clear complete */
->> @@ -1089,13 +1121,13 @@ static void ceph_async_unlink_cb(struct ceph_mds_client *mdsc,
->>   		ceph_dir_clear_complete(req->r_parent);
->>   
->>   		/* drop the dentry -- we don't know its status */
->> -		if (!d_unhashed(req->r_dentry))
->> -			d_drop(req->r_dentry);
->> +		if (!d_unhashed(dentry))
->> +			d_drop(dentry);
->>   
->>   		/* mark inode itself for an error (since metadata is bogus) */
->>   		mapping_set_error(req->r_old_inode->i_mapping, result);
->>   
->> -		pr_warn("ceph: async unlink failure path=(%llx)%s result=%d!\n",
->> +		pr_warn("async unlink failure path=(%llx)%s result=%d!\n",
->>   			base, IS_ERR(path) ? "<<bad>>" : path, result);
->>   		ceph_mdsc_free_path(path, pathlen);
->>   	}
->> @@ -1189,12 +1221,21 @@ static int ceph_unlink(struct inode *dir, struct dentry *dentry)
->>   		ihold(req->r_old_inode);
->>   		err = ceph_mdsc_submit_request(mdsc, dir, req);
->>   		if (!err) {
->> +			struct ceph_dentry_info *di;
->> +
->>   			/*
->>   			 * We have enough caps, so we assume that the unlink
->>   			 * will succeed. Fix up the target inode and dcache.
->>   			 */
->>   			drop_nlink(inode);
->>   			d_delete(dentry);
->> +
->> +			spin_lock(&dentry->d_lock);
->> +			di = ceph_dentry(dentry);
->> +			di->flags |= CEPH_DENTRY_ASYNC_UNLINK;
->> +			hash_add_rcu(fsc->async_unlink_conflict, &di->hnode,
->> +				     dentry->d_name.hash);
->> +			spin_unlock(&dentry->d_lock);
-> This looks racy. It's possible that the reply comes in before we get to
-> the point of setting this flag. You probably want to do this before
-> calling ceph_mdsc_submit_request, and just unwind it if the submission
-> fails.
+> 
+> I wonder if you can extend it to non-numa by setting "remote" to 0%
+> and local to "100%" always for non-numa machines rather than death.
+Hi Barry
 
-Ah, right. Will fix it.
+That's a great suggestion. Actually, I have removed 'numa_stat' check in 
+datop. Maybe you can found. It does not enable numa stat when 
+'numa_stat' sysfs not found in the current system.
 
+What's more, a new hot key 'f' will be introduced which can enable some 
+features dynamically, such as numa stat. Others features can be used 
+only in our internal version, likes 'f' in top, and will be open source 
+when stable.
 
->
-> Also, you do still need some sort of lock to protect the
-> hash_add/del/_rcu calls.
+> as your tools can map regions to .so, which seems to be quite useful.
+enen, I'm agree with you. But you know, one region maybe covers one or 
+more VMAs, hard to map access count of regions to the related .so or 
+anon. A lazy way used by me now. I still think it's valuable in the future.
 
-Sure, will fix it too.
+Anyway, any idea are welcome.
 
->   Those don't do any locking on their own. The
-> d_lock is insufficient here since it can't protect the whole list. You
-> may be able to use the i_ceph_lock of the parent though?
+Thanks,
+-wrw
 
-The hashtable is a global one, so we couldn't use the i_ceph_lock here. 
-I will add one dedicated spin lock for each sb.
-
->>   		} else if (err == -EJUKEBOX) {
->>   			try_async = false;
->>   			ceph_mdsc_put_request(req);
->> @@ -1237,6 +1278,10 @@ static int ceph_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
->>   	    (!ceph_quota_is_same_realm(old_dir, new_dir)))
->>   		return -EXDEV;
->>   
->> +	err = ceph_wait_on_conflict_unlink(new_dentry);
->> +	if (err)
->> +		return err;
->> +
->>   	dout("rename dir %p dentry %p to dir %p dentry %p\n",
->>   	     old_dir, old_dentry, new_dir, new_dentry);
->>   	req = ceph_mdsc_create_request(mdsc, op, USE_AUTH_MDS);
->> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
->> index 8c8226c0feac..47d068e6436a 100644
->> --- a/fs/ceph/file.c
->> +++ b/fs/ceph/file.c
->> @@ -740,6 +740,10 @@ int ceph_atomic_open(struct inode *dir, struct dentry *dentry,
->>   	if (dentry->d_name.len > NAME_MAX)
->>   		return -ENAMETOOLONG;
->>   
->> +	err = ceph_wait_on_conflict_unlink(dentry);
->> +	if (err)
->> +		return err;
->> +
-> What might be nice here eventually is to not block an async create here,
-> but instead queue the request so that it gets transmitted after the
-> async unlink reply comes in.
->
-> That'll be hard to get right though, so this is fine for now.
-
-Sure.
-
->
->>   	if (flags & O_CREAT) {
->>   		if (ceph_quota_is_max_files_exceeded(dir))
->>   			return -EDQUOT;
->> @@ -757,6 +761,7 @@ int ceph_atomic_open(struct inode *dir, struct dentry *dentry,
->>   		/* If it's not being looked up, it's negative */
->>   		return -ENOENT;
->>   	}
->> +
->>   retry:
->>   	/* do the open */
->>   	req = prepare_open_request(dir->i_sb, flags, mode);
->> diff --git a/fs/ceph/mds_client.c b/fs/ceph/mds_client.c
->> index e8c87dea0551..0ae0e0110eb4 100644
->> --- a/fs/ceph/mds_client.c
->> +++ b/fs/ceph/mds_client.c
->> @@ -468,6 +468,75 @@ static int ceph_parse_deleg_inos(void **p, void *end,
->>   	return -EIO;
->>   }
->>   
->> +/*
->> + * In async unlink case the kclient won't wait for the first reply
->> + * from MDS and just drop all the links and unhash the dentry and then
->> + * succeeds immediately.
->> + *
->> + * For any new create/link/rename,etc requests followed by using the
->> + * same file names we must wait for the first reply of the inflight
->> + * unlink request, or the MDS possibly will fail these following
->> + * requests with -EEXIST if the inflight async unlink request was
->> + * delayed for some reasons.
->> + *
->> + * And the worst case is that for the none async openc request it will
->> + * successfully open the file if the CDentry hasn't been unlinked yet,
->> + * but later the previous delayed async unlink request will remove the
->> + * CDenty. That means the just created file is possiblly deleted later
->> + * by accident.
->> + *
->> + * We need to wait for the inflight async unlink requests to finish
->> + * when creating new files/directories by using the same file names.
->> + */
->> +int ceph_wait_on_conflict_unlink(struct dentry *dentry)
->> +{
->> +	struct ceph_fs_client *fsc = ceph_sb_to_client(dentry->d_sb);
->> +	struct dentry *pdentry = dentry->d_parent;
->> +	struct dentry *udentry, *found = NULL;
->> +	struct ceph_dentry_info *di;
->> +	struct qstr dname;
->> +	u32 hash = dentry->d_name.hash;
->> +	int err;
->> +
->> +	dname.name = dentry->d_name.name;
->> +	dname.len = dentry->d_name.len;
->> +
->> +	rcu_read_lock();
->> +	hash_for_each_possible_rcu(fsc->async_unlink_conflict, di,
->> +				   hnode, hash) {
->> +		udentry = di->dentry;
->> +
->> +		spin_lock(&udentry->d_lock);
->> +		if (udentry->d_name.hash != hash)
->> +			goto next;
->> +		if (unlikely(udentry->d_parent != pdentry))
->> +			goto next;
->> +		if (!hash_hashed(&di->hnode))
->> +			goto next;
->> +
->> +		if (!test_bit(CEPH_DENTRY_ASYNC_UNLINK_BIT, &di->flags))
->> +			goto next;
->> +
-> Maybe this should be a warning? Will we ever have entries in this
-> hashtable that don't have this bit set?
-
-Just before we take "spin_lock(&udentry->d_lock)" the udentry could be 
-already removed from hashtable and the bit was cleared ?
-
--- Xiubo
-
->
->> +		if (d_compare(pdentry, udentry, &dname))
->> +			goto next;
->> +
->> +		spin_unlock(&udentry->d_lock);
->> +		found = dget(udentry);
->> +		break;
->> +next:
->> +		spin_unlock(&udentry->d_lock);
->> +	}
->> +	rcu_read_unlock();
->> +
->> +	if (likely(!found))
->> +		return 0;
->> +
->> +	err = wait_on_bit(&di->flags, CEPH_DENTRY_ASYNC_UNLINK_BIT,
->> +			  TASK_INTERRUPTIBLE);
->> +	dput(found);
->> +	return err;
->> +}
->> +
->>   u64 ceph_get_deleg_ino(struct ceph_mds_session *s)
->>   {
->>   	unsigned long ino;
->> diff --git a/fs/ceph/mds_client.h b/fs/ceph/mds_client.h
->> index 33497846e47e..d1ae679c52c3 100644
->> --- a/fs/ceph/mds_client.h
->> +++ b/fs/ceph/mds_client.h
->> @@ -582,6 +582,7 @@ static inline int ceph_wait_on_async_create(struct inode *inode)
->>   			   TASK_INTERRUPTIBLE);
->>   }
->>   
->> +extern int ceph_wait_on_conflict_unlink(struct dentry *dentry);
->>   extern u64 ceph_get_deleg_ino(struct ceph_mds_session *session);
->>   extern int ceph_restore_deleg_ino(struct ceph_mds_session *session, u64 ino);
->>   #endif
->> diff --git a/fs/ceph/super.c b/fs/ceph/super.c
->> index b73b4f75462c..7ae65001f04c 100644
->> --- a/fs/ceph/super.c
->> +++ b/fs/ceph/super.c
->> @@ -816,6 +816,8 @@ static struct ceph_fs_client *create_fs_client(struct ceph_mount_options *fsopt,
->>   	if (!fsc->cap_wq)
->>   		goto fail_inode_wq;
->>   
->> +	hash_init(fsc->async_unlink_conflict);
->> +
->>   	spin_lock(&ceph_fsc_lock);
->>   	list_add_tail(&fsc->metric_wakeup, &ceph_fsc_list);
->>   	spin_unlock(&ceph_fsc_lock);
->> diff --git a/fs/ceph/super.h b/fs/ceph/super.h
->> index 506d52633627..58bbb5df42da 100644
->> --- a/fs/ceph/super.h
->> +++ b/fs/ceph/super.h
->> @@ -19,6 +19,7 @@
->>   #include <linux/security.h>
->>   #include <linux/netfs.h>
->>   #include <linux/fscache.h>
->> +#include <linux/hashtable.h>
->>   
->>   #include <linux/ceph/libceph.h>
->>   
->> @@ -99,6 +100,8 @@ struct ceph_mount_options {
->>   	char *mon_addr;
->>   };
->>   
->> +#define CEPH_ASYNC_CREATE_CONFLICT_BITS 12
->> +
->>   struct ceph_fs_client {
->>   	struct super_block *sb;
->>   
->> @@ -124,6 +127,8 @@ struct ceph_fs_client {
->>   	struct workqueue_struct *inode_wq;
->>   	struct workqueue_struct *cap_wq;
->>   
->> +	DECLARE_HASHTABLE(async_unlink_conflict, CEPH_ASYNC_CREATE_CONFLICT_BITS);
->> +
->>   #ifdef CONFIG_DEBUG_FS
->>   	struct dentry *debugfs_dentry_lru, *debugfs_caps;
->>   	struct dentry *debugfs_congestion_kb;
->> @@ -281,7 +286,8 @@ struct ceph_dentry_info {
->>   	struct dentry *dentry;
->>   	struct ceph_mds_session *lease_session;
->>   	struct list_head lease_list;
->> -	unsigned flags;
->> +	struct hlist_node hnode;
->> +	unsigned long flags;
->>   	int lease_shared_gen;
->>   	u32 lease_gen;
->>   	u32 lease_seq;
->> @@ -290,10 +296,12 @@ struct ceph_dentry_info {
->>   	u64 offset;
->>   };
->>   
->> -#define CEPH_DENTRY_REFERENCED		1
->> -#define CEPH_DENTRY_LEASE_LIST		2
->> -#define CEPH_DENTRY_SHRINK_LIST		4
->> -#define CEPH_DENTRY_PRIMARY_LINK	8
->> +#define CEPH_DENTRY_REFERENCED		(1 << 0)
->> +#define CEPH_DENTRY_LEASE_LIST		(1 << 1)
->> +#define CEPH_DENTRY_SHRINK_LIST		(1 << 2)
->> +#define CEPH_DENTRY_PRIMARY_LINK	(1 << 3)
->> +#define CEPH_DENTRY_ASYNC_UNLINK_BIT	(4)
->> +#define CEPH_DENTRY_ASYNC_UNLINK	(1 << CEPH_DENTRY_ASYNC_UNLINK_BIT)
->>   
->>   struct ceph_inode_xattrs_info {
->>   	/*
-
+> 
+>> I am still quite interested in your design and the purpose of this project.
+>> Unfortunately the project seems to be lacking some design doc.
+>>
+>> And would you like to send patches to lkml regarding what you
+>> have changed atop DAMON?
+>>
+>>> Anyway, the question that you reported was valuable, made me realize
+>>> what we need to improve next.
+>>>
+>>> Thanks,
+>>> Rongwei Wang
+>>>>
+>>>>>
+>>>>>>>
+>>>>>>> Typical characteristics of a large Android app is that it has
+>>>>>>> thousands of vma and very large virtual address spaces:
+>>>>>>> ~/damo # pmap 2550 | wc -l
+>>>>>>> 8522
+>>>>>>>
+>>>>>>> ~/damo # pmap 2550
+>>>>>>> ...
+>>>>>>> 0000007992bbe000      4K r----   [ anon ]
+>>>>>>> 0000007992bbf000     24K rw---   [ anon ]
+>>>>>>> 0000007fe8753000      4K -----   [ anon ]
+>>>>>>> 0000007fe8754000   8188K rw---   [ stack ]
+>>>>>>>     total         36742112K
+>>>>>>>
+>>>>>>> Because the whole vma list is too long, I have put the list here for
+>>>>>>> you to download:
+>>>>>>> wget http://www.linuxep.com/patches/android-app-vmas
+>>>>>>>
+>>>>>>> I can reproduce this problem on other Apps like youtube as well.
+>>>>>>> I suppose we need to boost the algorithm of splitting regions for this
+>>>>>>> kind of application.
+>>>>>>> Any thoughts?
+>>>>>>>
+>>>>>
+> 
+> Thanks
+> Barry

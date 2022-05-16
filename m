@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2C9528FA7
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF5ED529005
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347202AbiEPU3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:29:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
+        id S1351640AbiEPUGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:06:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350458AbiEPUBN (ORCPT
+        with ESMTP id S1346402AbiEPTxn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:01:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C0E4A3E3;
-        Mon, 16 May 2022 12:55:25 -0700 (PDT)
+        Mon, 16 May 2022 15:53:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C016346B06;
+        Mon, 16 May 2022 12:49:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 57DB9B81614;
-        Mon, 16 May 2022 19:55:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2E30C34100;
-        Mon, 16 May 2022 19:55:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9E22B81616;
+        Mon, 16 May 2022 19:48:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30305C385AA;
+        Mon, 16 May 2022 19:48:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730922;
-        bh=JA2/oYAgXRg4g+FaAARNmweTRaIIvfxrciRC50sgets=;
+        s=korg; t=1652730528;
+        bh=UE+UaX07cuhVOKJs+zw6BCy4MVc8XhQSHHVFf1r1FHE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=POmqdK7ta3ftYq7xX6k+152Q8Zo8fvmD1ZzC8ypeCKBu5zK7VlMGJ6qIjU3/snd6U
-         rQgvA1WpzXS7dIh/KWhn3q5LznbKcrgnAeqw1/lAUCbIIvUsoyocmkID+oeK/rJlLT
-         AsaiivwSz6fkrL4iT6aHZAgHV8kveqBygzV3dL60=
+        b=mw2hmIta+/2rLJZGDj75WeMcBZvBG3Qx+CRfKV80t39HHsZGJzI0jHYiTDBz491WM
+         YjG6eVQhOvWxehZ2Vxm9c+lmiC3ctFFQGKXz7ID7SAqCuG8pvOIIAjcKUEodpQJZBo
+         TMvYIGP4ilCQT9nEIB1xWLvj5e+WmPksdo1O5KEk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 009/114] net: mscc: ocelot: restrict tc-trap actions to VCAP IS2 lookup 0
-Date:   Mon, 16 May 2022 21:35:43 +0200
-Message-Id: <20220516193625.765249279@linuxfoundation.org>
+Subject: [PATCH 5.15 010/102] fbdev: simplefb: Cleanup fb_info in .fb_destroy rather than .remove
+Date:   Mon, 16 May 2022 21:35:44 +0200
+Message-Id: <20220516193624.290501139@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
-References: <20220516193625.489108457@linuxfoundation.org>
+In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
+References: <20220516193623.989270214@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +56,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: Javier Martinez Canillas <javierm@redhat.com>
 
-[ Upstream commit 477d2b91623e682e9a8126ea92acb8f684969cc7 ]
+[ Upstream commit 666b90b3ce9e4aac1e1deba266c3a230fb3913b0 ]
 
-Once the CPU port was added to the destination port mask of a packet, it
-can never be cleared, so even packets marked as dropped by the MASK_MODE
-of a VCAP IS2 filter will still reach it. This is why we need the
-OCELOT_POLICER_DISCARD to "kill dropped packets dead" and make software
-stop seeing them.
+The driver is calling framebuffer_release() in its .remove callback, but
+this will cause the struct fb_info to be freed too early. Since it could
+be that a reference is still hold to it if user-space opened the fbdev.
 
-We disallow policer rules from being put on any other chain than the one
-for the first lookup, but we don't do this for "drop" rules, although we
-should. This change is merely ascertaining that the rules dont't
-(completely) work and letting the user know.
+This would lead to a use-after-free error if the framebuffer device was
+unregistered but later a user-space process tries to close the fbdev fd.
 
-The blamed commit is the one that introduced the multi-chain architecture
-in ocelot. Prior to that, we should have always offloaded the filters to
-VCAP IS2 lookup 0, where they did work.
+To prevent this, move the framebuffer_release() call to fb_ops.fb_destroy
+instead of doing it in the driver's .remove callback.
 
-Fixes: 1397a2eb52e2 ("net: mscc: ocelot: create TCAM skeleton from tc filter chains")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Strictly speaking, the code flow in the driver is still wrong because all
+the hardware cleanupd (i.e: iounmap) should be done in .remove while the
+software cleanup (i.e: releasing the framebuffer) should be done in the
+.fb_destroy handler. But this at least makes to match the behavior before
+commit 27599aacbaef ("fbdev: Hot-unplug firmware fb devices on forced removal").
+
+Fixes: 27599aacbaef ("fbdev: Hot-unplug firmware fb devices on forced removal")
+Suggested-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220505220456.366090-1-javierm@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mscc/ocelot_flower.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/video/fbdev/simplefb.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mscc/ocelot_flower.c b/drivers/net/ethernet/mscc/ocelot_flower.c
-index fdb4d7e7296c..cb602a226149 100644
---- a/drivers/net/ethernet/mscc/ocelot_flower.c
-+++ b/drivers/net/ethernet/mscc/ocelot_flower.c
-@@ -278,9 +278,10 @@ static int ocelot_flower_parse_action(struct ocelot *ocelot, int port,
- 			filter->type = OCELOT_VCAP_FILTER_OFFLOAD;
- 			break;
- 		case FLOW_ACTION_TRAP:
--			if (filter->block_id != VCAP_IS2) {
-+			if (filter->block_id != VCAP_IS2 ||
-+			    filter->lookup != 0) {
- 				NL_SET_ERR_MSG_MOD(extack,
--						   "Trap action can only be offloaded to VCAP IS2");
-+						   "Trap action can only be offloaded to VCAP IS2 lookup 0");
- 				return -EOPNOTSUPP;
- 			}
- 			if (filter->goto_target != -1) {
+diff --git a/drivers/video/fbdev/simplefb.c b/drivers/video/fbdev/simplefb.c
+index b63074fd892e..a2e3a4690025 100644
+--- a/drivers/video/fbdev/simplefb.c
++++ b/drivers/video/fbdev/simplefb.c
+@@ -70,12 +70,18 @@ struct simplefb_par;
+ static void simplefb_clocks_destroy(struct simplefb_par *par);
+ static void simplefb_regulators_destroy(struct simplefb_par *par);
+ 
++/*
++ * fb_ops.fb_destroy is called by the last put_fb_info() call at the end
++ * of unregister_framebuffer() or fb_release(). Do any cleanup here.
++ */
+ static void simplefb_destroy(struct fb_info *info)
+ {
+ 	simplefb_regulators_destroy(info->par);
+ 	simplefb_clocks_destroy(info->par);
+ 	if (info->screen_base)
+ 		iounmap(info->screen_base);
++
++	framebuffer_release(info);
+ }
+ 
+ static const struct fb_ops simplefb_ops = {
+@@ -520,8 +526,8 @@ static int simplefb_remove(struct platform_device *pdev)
+ {
+ 	struct fb_info *info = platform_get_drvdata(pdev);
+ 
++	/* simplefb_destroy takes care of info cleanup */
+ 	unregister_framebuffer(info);
+-	framebuffer_release(info);
+ 
+ 	return 0;
+ }
 -- 
 2.35.1
 

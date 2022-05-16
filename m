@@ -2,44 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F24A752905D
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:44:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACAB352904E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344004AbiEPUTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:19:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44090 "EHLO
+        id S1343704AbiEPUFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348888AbiEPT7C (ORCPT
+        with ESMTP id S1347226AbiEPTvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:59:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001C110B0;
-        Mon, 16 May 2022 12:52:08 -0700 (PDT)
+        Mon, 16 May 2022 15:51:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F5240E62;
+        Mon, 16 May 2022 12:47:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9061C60A50;
-        Mon, 16 May 2022 19:52:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0CB2C385AA;
-        Mon, 16 May 2022 19:52:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE572B81615;
+        Mon, 16 May 2022 19:47:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D583AC385AA;
+        Mon, 16 May 2022 19:47:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730728;
-        bh=3/viTrq2CJi48RpXpQDqdjV7P1sTUTEI5Kc8yZ9ijAU=;
+        s=korg; t=1652730433;
+        bh=4GoVVQCG7X19t4XWYx4lCRbMF93g1P7ZVyf+85BOAxA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XwGdYeAQuiwvCZgBmysyGvD6JL5nWDVTa+oW3de6kPhUmykp6hGgrSGxuJfJ6LbiG
-         6v+OvzefwwS2h/2oSAjCNHjVUE6EGjAxEi1WyKWaTXLE4NAnIag0BAQ3y7uH+i3rvr
-         DprsfwtXvnGd+89kQpczbNR0gsMlFFIlC0Vjw978=
+        b=Opmy+Sg0Pv/xuiMQuq4EoXOiTVN+t5FpVin/YkZBp0QvF754cdqBlnjJ/WTujxZ2l
+         48NwbeDWKjo4ywue7qvHSU2snjvCvxaHasztQDGaS5yWObDp1OHnxZY80p1VuRDLHe
+         hYcZi7AeQFd8xe6Fg5ceSbnnbwY5Gr25UmZeAG0E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jan Kara <jack@suse.cz>,
-        Christoph Hellwig <hch@lst.de>, Jing Xia <jing.xia@unisoc.com>
-Subject: [PATCH 5.15 089/102] writeback: Avoid skipping inode writeback
+        stable@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>,
+        "kernelci.org bot" <bot@kernelci.org>,
+        Mark Brown <broonie@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Tony Lindgren <tony@atomide.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.10 63/66] arm[64]/memremap: dont abuse pfn_valid() to ensure presence of linear map
 Date:   Mon, 16 May 2022 21:37:03 +0200
-Message-Id: <20220516193626.553611508@linuxfoundation.org>
+Message-Id: <20220516193621.233672825@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
-References: <20220516193623.989270214@linuxfoundation.org>
+In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
+References: <20220516193619.400083785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,68 +62,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jing Xia <jing.xia@unisoc.com>
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-commit 846a3351ddfe4a86eede4bb26a205c3f38ef84d3 upstream.
+commit 260364d112bc822005224667c0c9b1b17a53eafd upstream.
 
-We have run into an issue that a task gets stuck in
-balance_dirty_pages_ratelimited() when perform I/O stress testing.
-The reason we observed is that an I_DIRTY_PAGES inode with lots
-of dirty pages is in b_dirty_time list and standard background
-writeback cannot writeback the inode.
-After studing the relevant code, the following scenario may lead
-to the issue:
+The semantics of pfn_valid() is to check presence of the memory map for a
+PFN and not whether a PFN is covered by the linear map.  The memory map
+may be present for NOMAP memory regions, but they won't be mapped in the
+linear mapping.  Accessing such regions via __va() when they are
+memremap()'ed will cause a crash.
 
-task1                                   task2
------                                   -----
-fuse_flush
- write_inode_now //in b_dirty_time
-  writeback_single_inode
-   __writeback_single_inode
-                                 fuse_write_end
-                                  filemap_dirty_folio
-                                   __xa_set_mark:PAGECACHE_TAG_DIRTY
-    lock inode->i_lock
-    if mapping tagged PAGECACHE_TAG_DIRTY
-    inode->i_state |= I_DIRTY_PAGES
-    unlock inode->i_lock
-                                   __mark_inode_dirty:I_DIRTY_PAGES
-                                      lock inode->i_lock
-                                      -was dirty,inode stays in
-                                      -b_dirty_time
-                                      unlock inode->i_lock
+On v5.4.y the crash happens on qemu-arm with UEFI [1]:
 
-   if(!(inode->i_state & I_DIRTY_All))
-      -not true,so nothing done
+<1>[    0.084476] 8<--- cut here ---
+<1>[    0.084595] Unable to handle kernel paging request at virtual address dfb76000
+<1>[    0.084938] pgd = (ptrval)
+<1>[    0.085038] [dfb76000] *pgd=5f7fe801, *pte=00000000, *ppte=00000000
 
-This patch moves the dirty inode to b_dirty list when the inode
-currently is not queued in b_io or b_more_io list at the end of
-writeback_single_inode.
+...
 
-Reviewed-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-CC: stable@vger.kernel.org
-Fixes: 0ae45f63d4ef ("vfs: add support for a lazytime mount option")
-Signed-off-by: Jing Xia <jing.xia@unisoc.com>
-Signed-off-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220510023514.27399-1-jing.xia@unisoc.com
+<4>[    0.093923] [<c0ed6ce8>] (memcpy) from [<c16a06f8>] (dmi_setup+0x60/0x418)
+<4>[    0.094204] [<c16a06f8>] (dmi_setup) from [<c16a38d4>] (arm_dmi_init+0x8/0x10)
+<4>[    0.094408] [<c16a38d4>] (arm_dmi_init) from [<c0302e9c>] (do_one_initcall+0x50/0x228)
+<4>[    0.094619] [<c0302e9c>] (do_one_initcall) from [<c16011e4>] (kernel_init_freeable+0x15c/0x1f8)
+<4>[    0.094841] [<c16011e4>] (kernel_init_freeable) from [<c0f028cc>] (kernel_init+0x8/0x10c)
+<4>[    0.095057] [<c0f028cc>] (kernel_init) from [<c03010e8>] (ret_from_fork+0x14/0x2c)
+
+On kernels v5.10.y and newer the same crash won't reproduce on ARM because
+commit b10d6bca8720 ("arch, drivers: replace for_each_membock() with
+for_each_mem_range()") changed the way memory regions are registered in
+the resource tree, but that merely covers up the problem.
+
+On ARM64 memory resources registered in yet another way and there the
+issue of wrong usage of pfn_valid() to ensure availability of the linear
+map is also covered.
+
+Implement arch_memremap_can_ram_remap() on ARM and ARM64 to prevent access
+to NOMAP regions via the linear mapping in memremap().
+
+Link: https://lore.kernel.org/all/Yl65zxGgFzF1Okac@sirena.org.uk
+Link: https://lkml.kernel.org/r/20220426060107.7618-1-rppt@kernel.org
+Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Tested-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Tony Lindgren <tony@atomide.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: <stable@vger.kernel.org>	[5.4+]
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/fs-writeback.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arm/include/asm/io.h   |    3 +++
+ arch/arm/mm/ioremap.c       |    8 ++++++++
+ arch/arm64/include/asm/io.h |    4 ++++
+ arch/arm64/mm/ioremap.c     |    9 +++++++++
+ 4 files changed, 24 insertions(+)
 
---- a/fs/fs-writeback.c
-+++ b/fs/fs-writeback.c
-@@ -1739,6 +1739,10 @@ static int writeback_single_inode(struct
- 	 */
- 	if (!(inode->i_state & I_DIRTY_ALL))
- 		inode_cgwb_move_to_attached(inode, wb);
-+	else if (!(inode->i_state & I_SYNC_QUEUED) &&
-+		 (inode->i_state & I_DIRTY))
-+		redirty_tail_locked(inode, wb);
+--- a/arch/arm/include/asm/io.h
++++ b/arch/arm/include/asm/io.h
+@@ -442,6 +442,9 @@ extern void pci_iounmap(struct pci_dev *
+ extern int valid_phys_addr_range(phys_addr_t addr, size_t size);
+ extern int valid_mmap_phys_addr_range(unsigned long pfn, size_t size);
+ extern int devmem_is_allowed(unsigned long pfn);
++extern bool arch_memremap_can_ram_remap(resource_size_t offset, size_t size,
++					unsigned long flags);
++#define arch_memremap_can_ram_remap arch_memremap_can_ram_remap
+ #endif
+ 
+ /*
+--- a/arch/arm/mm/ioremap.c
++++ b/arch/arm/mm/ioremap.c
+@@ -479,3 +479,11 @@ void __init early_ioremap_init(void)
+ {
+ 	early_ioremap_setup();
+ }
 +
- 	spin_unlock(&wb->list_lock);
- 	inode_sync_complete(inode);
- out:
++bool arch_memremap_can_ram_remap(resource_size_t offset, size_t size,
++				 unsigned long flags)
++{
++	unsigned long pfn = PHYS_PFN(offset);
++
++	return memblock_is_map_memory(pfn);
++}
+--- a/arch/arm64/include/asm/io.h
++++ b/arch/arm64/include/asm/io.h
+@@ -203,4 +203,8 @@ extern int valid_mmap_phys_addr_range(un
+ 
+ extern int devmem_is_allowed(unsigned long pfn);
+ 
++extern bool arch_memremap_can_ram_remap(resource_size_t offset, size_t size,
++					unsigned long flags);
++#define arch_memremap_can_ram_remap arch_memremap_can_ram_remap
++
+ #endif	/* __ASM_IO_H */
+--- a/arch/arm64/mm/ioremap.c
++++ b/arch/arm64/mm/ioremap.c
+@@ -13,6 +13,7 @@
+ #include <linux/mm.h>
+ #include <linux/vmalloc.h>
+ #include <linux/io.h>
++#include <linux/memblock.h>
+ 
+ #include <asm/fixmap.h>
+ #include <asm/tlbflush.h>
+@@ -99,3 +100,11 @@ void __init early_ioremap_init(void)
+ {
+ 	early_ioremap_setup();
+ }
++
++bool arch_memremap_can_ram_remap(resource_size_t offset, size_t size,
++				 unsigned long flags)
++{
++	unsigned long pfn = PHYS_PFN(offset);
++
++	return memblock_is_map_memory(pfn);
++}
 
 

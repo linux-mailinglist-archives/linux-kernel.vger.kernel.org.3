@@ -2,89 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8523529276
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B1F5292BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:19:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiEPVIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 17:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53732 "EHLO
+        id S1349012AbiEPVJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 17:09:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349309AbiEPVHk (ORCPT
+        with ESMTP id S1349201AbiEPVIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 17:07:40 -0400
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B54849914;
-        Mon, 16 May 2022 13:48:30 -0700 (PDT)
-Received: by mail-oi1-f175.google.com with SMTP id m25so20114851oih.2;
-        Mon, 16 May 2022 13:48:30 -0700 (PDT)
+        Mon, 16 May 2022 17:08:13 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07D84A3F2;
+        Mon, 16 May 2022 13:50:04 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id j28so5867876eda.13;
+        Mon, 16 May 2022 13:50:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=MfY1a6o6LRsipUi6Oijv1/30tnszerh5iJfHfrszphM=;
+        b=HXCoMAoc53CH06c5TEuusqJXTGrlUt2VdqVGKB5lfJbhmEPPWp9HR6Dnyqc/DfmV7L
+         Su8cjxcCGeU8dPA2kBVA8ha8yaB3hf1ElZfRFAn8kNIZdEBFGwz8YvI7sE2lYsDJrFzr
+         a8WOfU7PNsseJdhf3loYxl6FkL4uJJ2THSUtbNFfuDwITDN3Miy3L0437UHFEdFxAlJW
+         LBTD/JW0ECrTidnG0ITqaGuzSnJmq8X6pN3qFM/CGuAvUB3QrgCOA0MMFnfw6e1Sw6Xs
+         +MqxtMeuvvdbX/jy4DRSbREuPnERScrhcsrxMVa1XmHl32QD/v1WgMlfWZK7lFpVnsCT
+         mCYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4B+S5pFtmWEETp4JA5C+fFz+X0jWyKLR/MvdqaxOlMc=;
-        b=cXLD9PR7RxFoh8mhEwM3+808s0+dbWe0m1Y49b/ExAB3FOzCXeQkgKSXExC/a9IfgZ
-         tNDrWRG6XECoh234dmRRxiVJ4y8QFXqqpsy2FdnS1PUSekBaqppdlYs4y6nqLOP1BdTY
-         +n5Y6SOmOxxNJslVMGFgywF9a9DzlAMEtR6eUp0aNkBSmSvK8FCKjeNWXN6JMpFmuToW
-         nzBW2OJ4bn3yimPbzrsFWxyBxocSDFfKwVN6+5NxZRtWX8JHE0Xw7Inua5mXaOV1Qwr4
-         LIWO5BTGh0EbWfksvsfyE7D2vzOMUemNUK3pgf0anqq6kC+u0BY+gzujLMwosNdahgXe
-         le5g==
-X-Gm-Message-State: AOAM5332NWAbT5ph97ARRFukFL8Um8ODuL12+DLrKXKQ0sw3aVuDiIXs
-        h9Hfue3qT9tzUDwcbSqHVw==
-X-Google-Smtp-Source: ABdhPJzajriBb9btty50/SrjCPFYwS4f/6a4+aD5RsLOF7cPJAs2ZVSIcj2DhBYq0d5v/zMdK/NRLw==
-X-Received: by 2002:a05:6808:2004:b0:326:7f22:624e with SMTP id q4-20020a056808200400b003267f22624emr13755044oiw.180.1652734109872;
-        Mon, 16 May 2022 13:48:29 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s186-20020aca45c3000000b00325cda1ff8asm4201224oia.9.2022.05.16.13.48.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 13:48:29 -0700 (PDT)
-Received: (nullmailer pid 3257344 invoked by uid 1000);
-        Mon, 16 May 2022 20:48:28 -0000
-Date:   Mon, 16 May 2022 15:48:28 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 08/17] PCI: dwc: Add host de-initialization callback
-Message-ID: <20220516204828.GF3209795-robh@kernel.org>
-References: <20220503214638.1895-1-Sergey.Semin@baikalelectronics.ru>
- <20220503214638.1895-9-Sergey.Semin@baikalelectronics.ru>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MfY1a6o6LRsipUi6Oijv1/30tnszerh5iJfHfrszphM=;
+        b=jWSOmcupHka+jp3E2e/mpVjZ/gv1dNAEWpWdmB2+oSGitmSLaPlk1DowW22unZLrnv
+         cgE2X82XH2OCA58fLDE5cniY+HQO7oy3YBM8gMyLF6Cts3u/ZtW4sexLQPjnzw5FXGP7
+         PUE/ktUJJsYRjVpW+RrUHcrkavybZGvJQjvQVVPq4WeZbBPlHgUi15fqyh99CKi4Oebz
+         JkNX0h+LrvxEbQg8fuiPZm5cgFXw41zYaVxRMpqpD1dq7oAyOtoX1LqT3GKdl+LsjwQO
+         hK21f3usN+jr6xXm8FkVbjDQ07YYHTQVkMFHj8UDz0r2C+RP1wX1Hdz8i9+EOKY3KdZK
+         PiBw==
+X-Gm-Message-State: AOAM531KmLQnlMdkDFVRY5uvLfiUWsS8UsWaBfQQETeE2/MmRLFJBI6Z
+        4TIaLl3kAo9cDZNIHJK+GPo=
+X-Google-Smtp-Source: ABdhPJwIpOzi7l6lLCM7TPf+IYhZrYJ9g0Gna0wLZavYvqZJBYFGgt9gp9+fD8TF4d8iq/yRn2za7Q==
+X-Received: by 2002:a05:6402:4414:b0:419:28bc:55dc with SMTP id y20-20020a056402441400b0041928bc55dcmr15461714eda.130.1652734203375;
+        Mon, 16 May 2022 13:50:03 -0700 (PDT)
+Received: from [192.168.8.198] ([85.255.232.74])
+        by smtp.gmail.com with ESMTPSA id mm8-20020a170906cc4800b006f3ef214df0sm165586ejb.86.2022.05.16.13.50.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 13:50:02 -0700 (PDT)
+Message-ID: <212de77f-6ad1-e012-9b49-8b5cebaded63@gmail.com>
+Date:   Mon, 16 May 2022 21:48:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220503214638.1895-9-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH net-next v3 00/10] UDP/IPv6 refactoring
+Content-Language: en-US
+To:     Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-kernel@vger.kernel.org
+References: <cover.1652368648.git.asml.silence@gmail.com>
+ <b9025eb4d8a1efefbcd04013cbe8e55e98ef66e1.camel@redhat.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <b9025eb4d8a1efefbcd04013cbe8e55e98ef66e1.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 12:46:29AM +0300, Serge Semin wrote:
-> Seeing the platform-specific DW PCIe host-initialization is performed from
-> within the generic dw_pcie_host_init() method by means of the dedicated
-> dw_pcie_ops.host_init() callback, there must be declared an antagonist
-> which would perform the corresponding cleanups. Let's add such callback
-> then. It will be called in the dw_pcie_host_deinit() method and in the
-> cleanup-on-error path in the dw_pcie_host_init() function.
+On 5/16/22 14:48, Paolo Abeni wrote:
+> Hello,
+> 
+> On Fri, 2022-05-13 at 16:26 +0100, Pavel Begunkov wrote:
+>> Refactor UDP/IPv6 and especially udpv6_sendmsg() paths. The end result looks
+>> cleaner than it was before and the series also removes a bunch of instructions
+>> and other overhead from the hot path positively affecting performance.
+>>
+>> Testing over dummy netdev with 16 byte packets yields 2240481 tx/s,
+>> comparing to 2203417 tx/s previously, which is around +1.6%
+> 
+> I personally feel that some patches in this series have a relevant
+> chance of introducing functional regressions and e.g. syzbot will not
+> help to catch them. That risk is IMHO relevant considered that the
+> performance gain here looks quite limited.
 
-I'm not really a fan of .host_init() to begin with as it isn't really 
-clear by the name when it is supposed to be called and what init to do. 
-The drv probe -> dw_pcie_host_init -> drv .host_init() -> return to drv 
-sequence isn't great either. I'd rather see more fine grained and well 
-defined hooks. So I'm hesitant to add a host_deinit()...
+I can't say I agree with that. First, I do think the code is much
+cleaner having just one block checking corking instead of a couple
+of random ifs in different places. Same for sin6. Not to mention
+negative line count.
 
-Rob
+Also, assuming this 1.6% translates to ~0.5-1% with fast NICs, that's
+still huge, especially when we get >5GB/s in single core zc tests b/w
+servers.
+
+If maintainers are not merging it, I think I'll delay the series until
+I get another batch of planned optimisations implemented on top.
+
+
+> There are a few individual changes that IMHO looks like nice cleanup
+> e.g. patch 5, 6, 8, 9 and possibly even patch 1.
+> 
+> I suggest to reduce the patchset scope to them.
+
+-- 
+Pavel Begunkov

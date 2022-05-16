@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 742BD5283BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 14:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 510E25283BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 14:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243411AbiEPMAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 08:00:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55460 "EHLO
+        id S237762AbiEPMAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 08:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243331AbiEPL7k (ORCPT
+        with ESMTP id S243348AbiEPL7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 07:59:40 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA13F16584;
-        Mon, 16 May 2022 04:59:31 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id dk23so28149832ejb.8;
-        Mon, 16 May 2022 04:59:31 -0700 (PDT)
+        Mon, 16 May 2022 07:59:50 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3B516596;
+        Mon, 16 May 2022 04:59:33 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id l18so28140973ejc.7;
+        Mon, 16 May 2022 04:59:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=t6QnOlaEmPk5w0CUbgkiElPmdAVeupgyOfiVgHTVYrs=;
-        b=poefYTAJysRL8JajKHfgAq/lICxCmMyF+rhh0w43DuY6aRO8dzAW0s4xWZ3AxcN1n7
-         +Qv4CUjgVmaQ8cSg7Jg+3yGpN3EN/8Fhtlpl9piAUXSk714XXKzGwXOCrmazlOzm/9QX
-         kSdJFE0379pD9qH85ORs2ojBZibpxusIVI/20KqVZTJhgg+XEOXNNM/mKewxJP78kxmw
-         f3QsOCabKNhfGB/DrBTOhj8A22j3ls9EqztCyOjB0CnbqHprT0GuRDBOvDSr6NVgA/hh
-         z/zcmbAJ2x0Bzpnn+YfK0e2TaZbSRwlFcMfANmdGZsBZkJjH3PaKkejGg6OyETR+ys/s
-         DAUg==
+        bh=ijndZeMokX/hEJkaDxQ/IoPAmAy206jKv8vbR7k2snk=;
+        b=h5qaa5vCkXXVcZNO1QqCMQAIp7ZLuKfNhYWysWVgoyL66gim/KjrgSjoS65AU29ud7
+         42VkFP/v6+QpOYN/xvPYgOYU7pH+d45e76LDj8m9c2kQkMkKimDNw8Ujco05BgFBpb7J
+         oGdHvEM6WK24fYWFs7UZaAtskaF/aEXdNkLFoYB+NKQX2Ka4121gbkk14WQ7HN7Q29M+
+         1ph4E5IbWsypBG4iqZGa0m5ERGhCvYQbTlYmYfcOoW2bjSnOtZp5GY1S5XOctWlGouGx
+         cplv1akofNnKwSptEpphegTQdkQGS7Ndbrt5UZ1rCz88Da1v/OIIkv/C5Ff0tpSDH40u
+         Qfrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=t6QnOlaEmPk5w0CUbgkiElPmdAVeupgyOfiVgHTVYrs=;
-        b=WG9vILC4SPlfRBD5i03GRC7WvKtlYgEE/tUF8LijrbNUeLHX4M2DcmhUWKz5cqnPIQ
-         wSe8eQ0zCf8lnb++3F0S+8UI2bji7+/VIVVFwVWe4PB7nEU7B3XAP+uEPq0x8h5Wr8Z3
-         NPT633A48vXKNuyrTuSitXPwbHuqkcqLJ+VAz/v00n0Aiveh4ZkQn9QxyDijq4asQKDu
-         qrDpKOon5LJ1Zg2ne5+1HrRHz3L7IcrD8J/hi416jK8DM5W4auT9PrIRflMk/cLUvalv
-         LjBlQeH80Elpn8sHM8oRQJgMzZPQKjjnSlooRpprTNO7LMoRBYn+lFt0LH7BJ0F1Jhxx
-         rR1g==
-X-Gm-Message-State: AOAM533H5E7Xy9rpQYQ6m5wBvgFWoNNn09r9+4tSc8/UVtxQiiOLHCL6
-        UvnmKhhXAslP5H44fhgNAas=
-X-Google-Smtp-Source: ABdhPJxwm87KMgQCehgWjFdS+7fr1G8eU83fjJqZBMEpJZZWwL64J1D4qLUTjnVUDevA3y+Pc27FSQ==
-X-Received: by 2002:a17:907:3e03:b0:6da:8c5a:6d4a with SMTP id hp3-20020a1709073e0300b006da8c5a6d4amr15173944ejc.585.1652702370206;
-        Mon, 16 May 2022 04:59:30 -0700 (PDT)
+        bh=ijndZeMokX/hEJkaDxQ/IoPAmAy206jKv8vbR7k2snk=;
+        b=l3VxZvDAFIG7TiOeJfZ3GSscF8h+WLpZzvdsE/KP8AZF96qbk9xmD8UKMcdj+7ULcy
+         vMPwfybA65M2GeH80OPOzWv/lqgnFKv0FdZfNQSzs2qgj+t/SLzzSiDLtzR4zVr4TUOS
+         dnJKCTGpcV4as+lZyiNLEaubMq1kPoLz9To9Ui5QOnqu/uXTu1L1Cpd52KdxuOZs18Dl
+         Yiwt2qKOBpHZm/kKwqwyosCm0+mEimYdHWIgpgr7wmdtInp1UTFmh2g0ELnTmyKAL0cq
+         QUG8vSB7fOLtuF7uWBopFGHcT2Y6kX/Vb+xOCwFaO50EnLcn8LFU+LQNzTfsvaehYyvl
+         Yj0A==
+X-Gm-Message-State: AOAM5317w/LdiiOPiiwT2PB1meY1Dj/9ZcDxze1HZEepVVMBx52dHcMN
+        Rja6tDvh3jfCO6xVP5J1hgF7Vh85djo=
+X-Google-Smtp-Source: ABdhPJx/cDamiwiWlibYkBKC8V1pm/jPhnUWDYI8f8yVrHf0mOBKx1FpuyesASQq63NRQGd9mplA5Q==
+X-Received: by 2002:a17:906:4786:b0:6f9:635f:72a7 with SMTP id cw6-20020a170906478600b006f9635f72a7mr15385967ejc.326.1652702371721;
+        Mon, 16 May 2022 04:59:31 -0700 (PDT)
 Received: from linuxdev2.toradex.int (31-10-206-125.static.upc.ch. [31.10.206.125])
-        by smtp.gmail.com with ESMTPSA id s18-20020a170906779200b006f3ef214dacsm3711008ejm.18.2022.05.16.04.59.29
+        by smtp.gmail.com with ESMTPSA id s18-20020a170906779200b006f3ef214dacsm3711008ejm.18.2022.05.16.04.59.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 04:59:29 -0700 (PDT)
+        Mon, 16 May 2022 04:59:31 -0700 (PDT)
 From:   Max Krummenacher <max.oss.09@gmail.com>
 To:     max.krummenacher@toradex.com
-Cc:     Oleksandr Suvorov <oleksandr.suvorov@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
+Cc:     Fabio Estevam <festevam@gmail.com>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         NXP Linux Team <linux-imx@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
@@ -59,9 +58,9 @@ Cc:     Oleksandr Suvorov <oleksandr.suvorov@toradex.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 08/17] ARM: dts: imx6q-apalis: Add LVDS panel support
-Date:   Mon, 16 May 2022 13:58:36 +0200
-Message-Id: <20220516115846.58328-9-max.oss.09@gmail.com>
+Subject: [PATCH v1 09/17] ARM: dts: imx6q-apalis: Disable HDMI
+Date:   Mon, 16 May 2022 13:58:37 +0200
+Message-Id: <20220516115846.58328-10-max.oss.09@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220516115846.58328-1-max.oss.09@gmail.com>
 References: <20220516115846.58328-1-max.oss.09@gmail.com>
@@ -77,121 +76,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
+From: Max Krummenacher <max.krummenacher@toradex.com>
 
-Add LVDS panel and endpoint linkage support but keep the inherited
-disabled state. This allows to enable it in an overlay per the current
-system configuration.
+This allows to enable it in an overlay per the current system
+configuration.
 
-Signed-off-by: Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
 Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 ---
 
- arch/arm/boot/dts/imx6q-apalis-eval.dts       |  4 ---
- arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts |  4 ---
- arch/arm/boot/dts/imx6q-apalis-ixora.dts      |  4 ---
- arch/arm/boot/dts/imx6qdl-apalis.dtsi         | 36 +++++++++++++++++++
- 4 files changed, 36 insertions(+), 12 deletions(-)
+ arch/arm/boot/dts/imx6q-apalis-eval.dts       | 4 ----
+ arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts | 4 ----
+ arch/arm/boot/dts/imx6q-apalis-ixora.dts      | 4 ----
+ 3 files changed, 12 deletions(-)
 
 diff --git a/arch/arm/boot/dts/imx6q-apalis-eval.dts b/arch/arm/boot/dts/imx6q-apalis-eval.dts
-index 5985d1169be1..948bbece3ab5 100644
+index 948bbece3ab5..2436f9a1e18c 100644
 --- a/arch/arm/boot/dts/imx6q-apalis-eval.dts
 +++ b/arch/arm/boot/dts/imx6q-apalis-eval.dts
-@@ -102,10 +102,6 @@
+@@ -74,10 +74,6 @@
  	status = "okay";
  };
  
--&ldb {
+-&hdmi {
 -	status = "okay";
 -};
 -
- &pcie {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_reset_moci>;
+ /* I2C1_SDA/SCL on MXM3 209/211 (e.g. RTC on carrier board) */
+ &i2c1 {
+ 	status = "okay";
 diff --git a/arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts b/arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts
-index 21f88e19e87d..beb1981fc775 100644
+index beb1981fc775..b254e96d194a 100644
 --- a/arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts
 +++ b/arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts
-@@ -104,10 +104,6 @@
+@@ -81,10 +81,6 @@
  	status = "okay";
  };
  
--&ldb {
+-&hdmi {
 -	status = "okay";
 -};
 -
- &pcie {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_reset_moci>;
+ /* I2C1_SDA/SCL on MXM3 209/211 (e.g. RTC on carrier board) */
+ &i2c1 {
+ 	status = "okay";
 diff --git a/arch/arm/boot/dts/imx6q-apalis-ixora.dts b/arch/arm/boot/dts/imx6q-apalis-ixora.dts
-index 6743617ad1c1..28e5d6b68530 100644
+index 28e5d6b68530..97ddf4621bdf 100644
 --- a/arch/arm/boot/dts/imx6q-apalis-ixora.dts
 +++ b/arch/arm/boot/dts/imx6q-apalis-ixora.dts
-@@ -108,10 +108,6 @@
+@@ -80,10 +80,6 @@
  	status = "okay";
  };
  
--&ldb {
+-&hdmi {
 -	status = "okay";
 -};
 -
- &pcie {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_reset_moci>;
-diff --git a/arch/arm/boot/dts/imx6qdl-apalis.dtsi b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
-index 3aa66b6d0c88..428841cdaac2 100644
---- a/arch/arm/boot/dts/imx6qdl-apalis.dtsi
-+++ b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
-@@ -68,6 +68,18 @@
- 		};
- 	};
- 
-+	panel_lvds: panel-lvds {
-+		compatible = "panel-lvds";
-+		backlight = <&backlight>;
-+		status = "disabled";
-+
-+		port {
-+			lvds_panel_in: endpoint {
-+				remote-endpoint = <&lvds0_out>;
-+			};
-+		};
-+	};
-+
- 	reg_module_3v3: regulator-module-3v3 {
- 		compatible = "regulator-fixed";
- 		regulator-name = "+V3.3";
-@@ -610,6 +622,30 @@
- 	remote-endpoint = <&lcd_display_in>;
- };
- 
-+&ldb {
-+	lvds-channel@0 {
-+		port@4 {
-+			reg = <4>;
-+
-+			lvds0_out: endpoint {
-+				remote-endpoint = <&lvds_panel_in>;
-+			};
-+		};
-+	};
-+
-+	lvds-channel@1 {
-+		fsl,data-mapping = "spwg";
-+		fsl,data-width = <18>;
-+
-+		port@4 {
-+			reg = <4>;
-+
-+			lvds1_out: endpoint {
-+			};
-+		};
-+	};
-+};
-+
- &pwm1 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_pwm1>;
+ /* I2C1_SDA/SCL on MXM3 209/211 (e.g. RTC on carrier board) */
+ &i2c1 {
+ 	status = "okay";
 -- 
 2.20.1
 

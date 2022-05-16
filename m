@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE08052918E
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57AFB52911D
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347672AbiEPUfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:35:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
+        id S1347020AbiEPUF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351138AbiEPUCD (ORCPT
+        with ESMTP id S1347054AbiEPTvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:02:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B5E5FCF;
-        Mon, 16 May 2022 12:59:31 -0700 (PDT)
+        Mon, 16 May 2022 15:51:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1093EB3D;
+        Mon, 16 May 2022 12:47:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D7E860BAC;
-        Mon, 16 May 2022 19:59:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33A2AC385AA;
-        Mon, 16 May 2022 19:59:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C803AB8160E;
+        Mon, 16 May 2022 19:46:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45A51C385AA;
+        Mon, 16 May 2022 19:46:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652731170;
-        bh=gAF9QkJ8n4r0KvHDf7oKdqFvbg1AdydfWIN71I3LAy8=;
+        s=korg; t=1652730418;
+        bh=wUY38zK8eHO+LyrR9G1cak2ID3jchxMVe18CdxSIph8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kg2eGO0tmCE9CniVK+nrs9ESGCg/JRyr/qW47+jOK0uOJsdm4CVVa17UMTMm2F4Gl
-         AnJWXzkGrAaETNzxyYOOX077k0hv+EaKUwwY7b2eJQAGgHHZz1GuiPUSnJimKiv41U
-         +peHvrN319QntbJT4XbRfsYXBAKtF3TuFvYTuB24=
+        b=YTCbjOB6IyLNO73S1kc+dXZZKW4EteNV6XgLk6EZb8v/ZfdPTXLKRGsFJ9+L2pxQA
+         27UQFcnSw2FEjvdcfFIJkMCVMwL63JuBXTZIrMrsssTsHluIz+FlmRxY8f4IjJ2JOm
+         OWnq4uhSviSKNUy8QHKxl6sxG0/RYHk72blJY7+k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ethan Yang <etyang@sierrawireless.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 5.17 084/114] USB: serial: qcserial: add support for Sierra Wireless EM7590
-Date:   Mon, 16 May 2022 21:36:58 +0200
-Message-Id: <20220516193627.894148502@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Meena Shanmugam <meenashanmugam@google.com>
+Subject: [PATCH 5.10 59/66] SUNRPC: Prevent immediate close+reconnect
+Date:   Mon, 16 May 2022 21:36:59 +0200
+Message-Id: <20220516193621.118602478@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
-References: <20220516193625.489108457@linuxfoundation.org>
+In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
+References: <20220516193619.400083785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,31 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ethan Yang <etyang@sierrawireless.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-commit 870b1eee2d844727b06e238c121d260bc5645580 upstream.
+commit 3be232f11a3cc9b0ef0795e39fa11bdb8e422a06 upstream.
 
-Add support for Sierra Wireless EM7590 0xc080/0xc081 compositions.
+If we have already set up the socket and are waiting for it to connect,
+then don't immediately close and retry.
 
-Signed-off-by: Ethan Yang <etyang@sierrawireless.com>
-Link: https://lore.kernel.org/r/20220425055840.5693-1-etyang@sierrawireless.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Meena Shanmugam <meenashanmugam@google.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/serial/qcserial.c |    2 ++
- 1 file changed, 2 insertions(+)
+ net/sunrpc/xprt.c     |    3 ++-
+ net/sunrpc/xprtsock.c |    2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
---- a/drivers/usb/serial/qcserial.c
-+++ b/drivers/usb/serial/qcserial.c
-@@ -166,6 +166,8 @@ static const struct usb_device_id id_tab
- 	{DEVICE_SWI(0x1199, 0x9090)},	/* Sierra Wireless EM7565 QDL */
- 	{DEVICE_SWI(0x1199, 0x9091)},	/* Sierra Wireless EM7565 */
- 	{DEVICE_SWI(0x1199, 0x90d2)},	/* Sierra Wireless EM9191 QDL */
-+	{DEVICE_SWI(0x1199, 0xc080)},	/* Sierra Wireless EM7590 QDL */
-+	{DEVICE_SWI(0x1199, 0xc081)},	/* Sierra Wireless EM7590 */
- 	{DEVICE_SWI(0x413c, 0x81a2)},	/* Dell Wireless 5806 Gobi(TM) 4G LTE Mobile Broadband Card */
- 	{DEVICE_SWI(0x413c, 0x81a3)},	/* Dell Wireless 5570 HSPA+ (42Mbps) Mobile Broadband Card */
- 	{DEVICE_SWI(0x413c, 0x81a4)},	/* Dell Wireless 5570e HSPA+ (42Mbps) Mobile Broadband Card */
+--- a/net/sunrpc/xprt.c
++++ b/net/sunrpc/xprt.c
+@@ -737,7 +737,8 @@ EXPORT_SYMBOL_GPL(xprt_disconnect_done);
+  */
+ static void xprt_schedule_autoclose_locked(struct rpc_xprt *xprt)
+ {
+-	set_bit(XPRT_CLOSE_WAIT, &xprt->state);
++	if (test_and_set_bit(XPRT_CLOSE_WAIT, &xprt->state))
++		return;
+ 	if (test_and_set_bit(XPRT_LOCKED, &xprt->state) == 0)
+ 		queue_work(xprtiod_workqueue, &xprt->task_cleanup);
+ 	else if (xprt->snd_task && !test_bit(XPRT_SND_IS_COOKIE, &xprt->state))
+--- a/net/sunrpc/xprtsock.c
++++ b/net/sunrpc/xprtsock.c
+@@ -2345,7 +2345,7 @@ static void xs_connect(struct rpc_xprt *
+ 
+ 	WARN_ON_ONCE(!xprt_lock_connect(xprt, task, transport));
+ 
+-	if (transport->sock != NULL) {
++	if (transport->sock != NULL && !xprt_connecting(xprt)) {
+ 		dprintk("RPC:       xs_connect delayed xprt %p for %lu "
+ 				"seconds\n",
+ 				xprt, xprt->reestablish_timeout / HZ);
 
 

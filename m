@@ -2,192 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D17E35285A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91DEC5285A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:41:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243894AbiEPNkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 09:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35458 "EHLO
+        id S243865AbiEPNj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 09:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243421AbiEPNji (ORCPT
+        with ESMTP id S243842AbiEPNjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 09:39:38 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80AD2ED64
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:39:36 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220516133928euoutp02f05b279049e521e3539218a628a68337~vmYFKPPE51726517265euoutp02N
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 13:39:28 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220516133928euoutp02f05b279049e521e3539218a628a68337~vmYFKPPE51726517265euoutp02N
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1652708368;
-        bh=vrYMM/cTOrW0/UYYWyRRUQC9LsDHx9p6dz/qEYyG7Ug=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=lGtjbgmGFr2YxtOx2xcRZIY2OWyIRIMYbS01ZS/PpxA5hEcY6pd459l6tvH1g2IKO
-         HHV7XOx9/DrTxYMCaw4T+JoDU1M//BSmRxI3i+cPqR2kAqsLFKfxHwLijj71J0NVSv
-         /VBh0BxZWe4HpmRa8WpBTQI8jo1RSJY31FvBrZAo=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20220516133928eucas1p17f913d0f1876cd98dcc58f76f736ade6~vmYEsE7iP0943109431eucas1p1M;
-        Mon, 16 May 2022 13:39:28 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id FF.8D.09887.01452826; Mon, 16
-        May 2022 14:39:28 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220516133927eucas1p1bab57e07c14c1194705e254afdd5d346~vmYEMRaTH0242102421eucas1p1n;
-        Mon, 16 May 2022 13:39:27 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220516133927eusmtrp20361a1951764c888368339cde1da5799~vmYELPEDL2486924869eusmtrp2W;
-        Mon, 16 May 2022 13:39:27 +0000 (GMT)
-X-AuditID: cbfec7f4-471ff7000000269f-64-62825410e4a6
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 02.09.09404.F0452826; Mon, 16
-        May 2022 14:39:27 +0100 (BST)
-Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220516133927eusmtip18398a47cd4b3d6f2c96039f7a1ceee72~vmYEAZeBt0855508555eusmtip1b;
-        Mon, 16 May 2022 13:39:27 +0000 (GMT)
-Received: from localhost (106.110.32.130) by CAMSVWEXC01.scsc.local
-        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Mon, 16 May 2022 14:39:26 +0100
-From:   Pankaj Raghav <p.raghav@samsung.com>
-To:     <axboe@kernel.dk>, <naohiro.aota@wdc.com>,
-        <damien.lemoal@opensource.wdc.com>, <Johannes.Thumshirn@wdc.com>,
-        <snitzer@kernel.org>, <dsterba@suse.com>, <jaegeuk@kernel.org>,
-        <hch@lst.de>
-CC:     <linux-btrfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <jonathan.derrick@linux.dev>, <bvanassche@acm.org>,
-        Keith Busch <kbusch@kernel.org>, <gost.dev@samsung.com>,
-        <linux-nvme@lists.infradead.org>,
-        Johannes Thumshirn <jth@kernel.org>,
-        "Josef Bacik" <josef@toxicpanda.com>,
-        <linux-block@vger.kernel.org>, Alasdair Kergon <agk@redhat.com>,
-        <matias.bjorling@wdc.com>, Jens Axboe <axboe@fb.com>,
-        "Sagi Grimberg" <sagi@grimberg.me>, <dm-devel@redhat.com>,
-        <jiangbo.365@bytedance.com>, Chaitanya Kulkarni <kch@nvidia.com>,
-        <linux-fsdevel@vger.kernel.org>, Chris Mason <clm@fb.com>,
-        Pankaj Raghav <p.raghav@samsung.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH v4 04/13] nvmet: Allow ZNS target to support non-power_of_2
- zone sizes
-Date:   Mon, 16 May 2022 15:39:12 +0200
-Message-ID: <20220516133921.126925-5-p.raghav@samsung.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220516133921.126925-1-p.raghav@samsung.com>
+        Mon, 16 May 2022 09:39:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A2D2ED60;
+        Mon, 16 May 2022 06:39:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15F5EB81216;
+        Mon, 16 May 2022 13:39:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CB8EC341C5;
+        Mon, 16 May 2022 13:39:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652708377;
+        bh=CnGkjps7/dZIHE7FzRA5oAC3vT184hDzmq6duMtMPl4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=aGJSEkgXtPP0cdbxghB7KK1T9LA5HecxFsDwnK+Xe74PmhP3C2gsxturwLx6Ztwux
+         KAn1LODgaoNXClcsmN8uVxKlKOG2ReVequ8h0ueoKDGGpoL9B7/tqOibsSGZPyzz8M
+         pDagLNoD+z6rgb9YH4U65dtjwO2iqd3k3LTnTNV7tcwS4JJ6MhQ1weQXb83jih3oaI
+         qmMXBCFU1Fh+NCBYbU/P1bfADi5Htowk0IHTdpOG8yXdLhFX7RCh1UmCXEaua3UuDY
+         73C3JTaDQmIGNdJijhNeEOd+8KLdeDSX0j+8cZhrKAJw++JILQMWXywXRmOfdOAMP0
+         x3TgtfWNu/FZw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id C78DA5C0744; Mon, 16 May 2022 06:39:36 -0700 (PDT)
+Date:   Mon, 16 May 2022 06:39:36 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH bpf-next 1/2] cpuidle/rcu: Making arch_cpu_idle and
+ rcu_idle_exit noinstr
+Message-ID: <20220516133936.GW1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220515203653.4039075-1-jolsa@kernel.org>
+ <20220516042535.GV1790663@paulmck-ThinkPad-P17-Gen-1>
+ <20220516114922.GA349949@lothringen>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [106.110.32.130]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0xTZxjG851zenraWXZanH6pZGaVjSiReWHuy0SciX8cd0WyZYubcS0e
-        LuNS1lpUDLFy2yBgodtUKEzYrdh2dlBgoIUIxBbFAqFDoWMQgs0Qxr1kEgaMcnDhv+d939/7
-        fM+bfBQuuUFKqYSUM6wqRZ4kI4VEvWOhczf9QaZij76ORtb7Dhyt2B0kMv+pI9GV6QUc6XXX
-        +GjR1YWjpkkDD3U/vYQh+/d6DN0w38XQY2spjgruTBNoKX9wtZc9jKN/h/eiYZ+HQPrWhwB5
-        e0sx1OQJRT0jVXxkb7pHIPetMhJd/9nLR0W58zjqK/ICVOy08dDN8SkCtXu2vRnEuH9/m1lu
-        t5BMcdYkn+karCYYt0vD1JjySKZS+y3O2H68yNzu15JMYdYkyTTmDPGYqeZekrHW9hKMreMC
-        U2Sr5jFzNS9GiU8II06zSQlprOrVyM+E8V0T3VjqSsC5kv5BoAX9m/KBgIJ0ODRrZ4l8IKQk
-        dBWAOZN5PK7wAXh7tBznijkAr+rrsGcrv1m+43MDI4D1VSX8/6nOoen1lVoAy4qdq2YURdK7
-        4KW8NWgz3QLgQncV5i9w+j4PLrTX437fQPpj2DChJfyaoF+GmeP1a1pEvwHdS0ace3s7LOn5
-        h+83FdAH4ezlwxwihvdKHq/h+CqSVWfAOQ1hy+go7schLYMGdxjnkgF/cTzgc9olhLkz73DI
-        Uejq2sG1A+GYs3YdCYIrjdfXj78AvX2LaydCOhtAXaOV5HYPwssPkjh5BGbmpnEyAPZNiLks
-        AVBff3U9iwh+lSspAsGlG9KXbkhfuiF9BcBNYCurUSfHsep9KezZMLU8Wa1JiQuLUSbXgNXf
-        3LHs9DUA49hMWCvAKNAKIIXLNov2nNMqJKLT8vPprEp5SqVJYtWtYBtFyLaKYhJ+lUvoOPkZ
-        NpFlU1nVsylGCaRaLDwtsEf32lt/iF/KyZRbmsceuTKivYpIxvGoWZnf8CQkdr9deSRZ9vQ9
-        wfHcnYrzn8Ah+3Si+kTBYd81IDWEPPnSIFcccmENppbw/baZvq+XgtpgT9Td4Ur9LUt1vHe7
-        WHqy1fh+VPGYceWvD0MLRc+frJ6XNT730dFPTebUEE0HdkVqGIqPDp3j5RWORFQcGqyI3fJ3
-        2bs329oGYqWeWN8m3Fo2MHjMpIxRzYqzFw4sQ0t6Uec3mV8UBKeYKk+9En02whWTQTnjytMj
-        L/ZOGW3HdzvKl1mBcMs+J5q/o3uoPfa5eSdY9LTogg/s+EGNmRoH5rCgkYDxxJ9iX3+hSUao
-        4+V7d+Eqtfw/D6uZRDwEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrEKsWRmVeSWpSXmKPExsVy+t/xu7r8IU1JBtfeaVusP3WM2eL/nmNs
-        Fqvv9rNZTPvwk9liUv8MdovfZ88zW+x9N5vV4sKPRiaLPYsmMVmsXH2UyeLJ+lnMFj0HPrBY
-        /O26BxRrechs8eehocXDL7dYLCYdusZo8fTqLCaLvbe0LS49XsFusWfvSRaLy7vmsFnMX/aU
-        3WJC21dmixsTnjJaTDy+mdVi3ev3LBYnbkk7yHhcvuLt8e/EGjaPic3v2D3O39vI4nH5bKnH
-        plWdbB4LG6Yye2xeUu+x+2YDm0dv8zs2j52t91k93u+7yuaxfstVFo/Np6s9JmzeyOrxeZNc
-        gGCUnk1RfmlJqkJGfnGJrVK0oYWRnqGlhZ6RiaWeobF5rJWRqZK+nU1Kak5mWWqRvl2CXsb5
-        txeYCv7zVcy8eY+xgfEmTxcjJ4eEgInE9jXz2LsYuTiEBJYyShy6MZ0ZIiEj8enKR3YIW1ji
-        z7UuNoiij4wSaw7vgerYwigx6fhLoAwHB5uAlkRjJ1hcROAgo8TPCyuYQLqZBU6xSszbKAdS
-        IywQJvHhgy9ImEVAVaLp9TYWEJtXwEri8t/lUIvlJWZe+s4OUs4pYC3xqc8exBQCKln/pgii
-        WlDi5MwnLBDD5SWat85mhrAlJA6+eMEMUi4hoCQx+7IexMBaiVf3dzNOYBSZhaR7FpLuWUi6
-        FzAyr2IUSS0tzk3PLTbSK07MLS7NS9dLzs/dxAhMXNuO/dyyg3Hlq496hxiZOBgPMUpwMCuJ
-        8BpUNCQJ8aYkVlalFuXHF5XmpBYfYjQFenIis5Rocj4wdeaVxBuaGZgamphZGphamhkrifN6
-        FnQkCgmkJ5akZqemFqQWwfQxcXBKNTCtEHCYzbPrqcmaxul6ExqbVOb+aFpkUL6qrGLvxlfB
-        u3U/qW/wPHZayam+UTEoPMBdJGbVPK4k1RWPrE4lPV3xcvmDvZYBRc3L5DadP99apMG65rnI
-        ur03530332RzopdpPuMRC1b/gMZF5z2PKK8OSA+qfSV9+r+m9E3m3Yabbt36vDn8lPX8je31
-        ns8eSr+ODHgtLnhZi6eSf5G2p5b+hWUT5mqkCj91O65ycrda5s65yf6B5eHffc1Vbt4WCN2d
-        GfKh+XNB/fOHDd90Xy8JPRe3L6a3SbUgVvi1E+Pxtqft8YE196LLfew0Pl1YPvmfqZTtDZYn
-        S0JDueY386pVfNDPaOYV/xPOr9hw+IgSS3FGoqEWc1FxIgCY9rvo5QMAAA==
-X-CMS-MailID: 20220516133927eucas1p1bab57e07c14c1194705e254afdd5d346
-X-Msg-Generator: CA
-X-RootMTR: 20220516133927eucas1p1bab57e07c14c1194705e254afdd5d346
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220516133927eucas1p1bab57e07c14c1194705e254afdd5d346
-References: <20220516133921.126925-1-p.raghav@samsung.com>
-        <CGME20220516133927eucas1p1bab57e07c14c1194705e254afdd5d346@eucas1p1.samsung.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220516114922.GA349949@lothringen>
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A generic bdev_zone_no helper is added to calculate zone number for a given
-sector in a block device. This helper internally uses blk_queue_zone_no to
-find the zone number.
+On Mon, May 16, 2022 at 01:49:22PM +0200, Frederic Weisbecker wrote:
+> On Sun, May 15, 2022 at 09:25:35PM -0700, Paul E. McKenney wrote:
+> > On Sun, May 15, 2022 at 10:36:52PM +0200, Jiri Olsa wrote:
+> > > Making arch_cpu_idle and rcu_idle_exit noinstr. Both functions run
+> > > in rcu 'not watching' context and if there's tracer attached to
+> > > them, which uses rcu (e.g. kprobe multi interface) it will hit RCU
+> > > warning like:
+> > > 
+> > >   [    3.017540] WARNING: suspicious RCU usage
+> > >   ...
+> > >   [    3.018363]  kprobe_multi_link_handler+0x68/0x1c0
+> > >   [    3.018364]  ? kprobe_multi_link_handler+0x3e/0x1c0
+> > >   [    3.018366]  ? arch_cpu_idle_dead+0x10/0x10
+> > >   [    3.018367]  ? arch_cpu_idle_dead+0x10/0x10
+> > >   [    3.018371]  fprobe_handler.part.0+0xab/0x150
+> > >   [    3.018374]  0xffffffffa00080c8
+> > >   [    3.018393]  ? arch_cpu_idle+0x5/0x10
+> > >   [    3.018398]  arch_cpu_idle+0x5/0x10
+> > >   [    3.018399]  default_idle_call+0x59/0x90
+> > >   [    3.018401]  do_idle+0x1c3/0x1d0
+> > > 
+> > > The call path is following:
+> > > 
+> > > default_idle_call
+> > >   rcu_idle_enter
+> > >   arch_cpu_idle
+> > >   rcu_idle_exit
+> > > 
+> > > The arch_cpu_idle and rcu_idle_exit are the only ones from above
+> > > path that are traceble and cause this problem on my setup.
+> > > 
+> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > 
+> > From an RCU viewpoint:
+> > 
+> > Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+> > 
+> > [ I considered asking for an instrumentation_on() in rcu_idle_exit(),
+> > but there is no point given that local_irq_restore() isn't something
+> > you instrument anyway. ]
+> 
+> So local_irq_save() in the beginning of rcu_idle_exit() is unsafe because
+> it is instrumentable by the function (graph)  tracers and the irqsoff tracer.
+> 
+> Also it calls into lockdep that might make use of RCU.
+> 
+> That's why rcu_idle_exit() is not noinstr yet. See this patch:
+> 
+> https://lore.kernel.org/lkml/20220503100051.2799723-4-frederic@kernel.org/
 
-Use the helper bdev_zone_no() to calculate nr of zones. This let's us
-make modifications to the math if needed in one place and adds now
-support for npo2 zone devices.
+Ah, I should have looked at the context-tracking series again!
 
-Reviewed by: Adam Manzanares <a.manzanares@samsung.com>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
----
- drivers/nvme/target/zns.c | 2 +-
- include/linux/blkdev.h    | 7 +++++++
- 2 files changed, 8 insertions(+), 1 deletion(-)
+And I have to ask...  How much debugging capability are we really losing
+by continuing to use the raw versions of local_irq_{save,restore}()?
 
-diff --git a/drivers/nvme/target/zns.c b/drivers/nvme/target/zns.c
-index 82b61acf7..5516dd6cc 100644
---- a/drivers/nvme/target/zns.c
-+++ b/drivers/nvme/target/zns.c
-@@ -242,7 +242,7 @@ static unsigned long nvmet_req_nr_zones_from_slba(struct nvmet_req *req)
- 	unsigned int sect = nvmet_lba_to_sect(req->ns, req->cmd->zmr.slba);
- 
- 	return blkdev_nr_zones(req->ns->bdev->bd_disk) -
--		(sect >> ilog2(bdev_zone_sectors(req->ns->bdev)));
-+	       bdev_zone_no(req->ns->bdev, sect);
- }
- 
- static unsigned long get_nr_zones_from_buf(struct nvmet_req *req, u32 bufsize)
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index 32d7bd7b1..967790f51 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -1370,6 +1370,13 @@ static inline sector_t bdev_zone_sectors(struct block_device *bdev)
- 	return 0;
- }
- 
-+static inline unsigned int bdev_zone_no(struct block_device *bdev, sector_t sec)
-+{
-+	struct request_queue *q = bdev_get_queue(bdev);
-+
-+	return blk_queue_zone_no(q, sec);
-+}
-+
- static inline unsigned int bdev_max_open_zones(struct block_device *bdev)
- {
- 	struct request_queue *q = bdev_get_queue(bdev);
--- 
-2.25.1
+							Thanx, Paul
 
+> Thanks.
+> 
+> > 
+> > > ---
+> > >  arch/x86/kernel/process.c | 2 +-
+> > >  kernel/rcu/tree.c         | 2 +-
+> > >  2 files changed, 2 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+> > > index b370767f5b19..1345cb0124a6 100644
+> > > --- a/arch/x86/kernel/process.c
+> > > +++ b/arch/x86/kernel/process.c
+> > > @@ -720,7 +720,7 @@ void arch_cpu_idle_dead(void)
+> > >  /*
+> > >   * Called from the generic idle code.
+> > >   */
+> > > -void arch_cpu_idle(void)
+> > > +void noinstr arch_cpu_idle(void)
+> > >  {
+> > >  	x86_idle();
+> > >  }
+> > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > index a4b8189455d5..20d529722f51 100644
+> > > --- a/kernel/rcu/tree.c
+> > > +++ b/kernel/rcu/tree.c
+> > > @@ -896,7 +896,7 @@ static void noinstr rcu_eqs_exit(bool user)
+> > >   * If you add or remove a call to rcu_idle_exit(), be sure to test with
+> > >   * CONFIG_RCU_EQS_DEBUG=y.
+> > >   */
+> > > -void rcu_idle_exit(void)
+> > > +void noinstr rcu_idle_exit(void)
+> > >  {
+> > >  	unsigned long flags;
+> > >  
+> > > -- 
+> > > 2.35.3
+> > > 

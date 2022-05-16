@@ -2,81 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EEFD527E69
+	by mail.lfdr.de (Postfix) with ESMTP id 03424527E68
 	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240954AbiEPHSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 03:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
+        id S240980AbiEPHSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 03:18:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240905AbiEPHS0 (ORCPT
+        with ESMTP id S240955AbiEPHSh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 03:18:26 -0400
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4543713CD5
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:18:24 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:51ae:171f:35c9:722d])
-        by xavier.telenet-ops.be with bizsmtp
-        id XKJK2700L2UsjYA01KJKhi; Mon, 16 May 2022 09:18:22 +0200
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nqUzi-000YsA-VZ; Mon, 16 May 2022 09:18:18 +0200
-Date:   Mon, 16 May 2022 09:18:18 +0200 (CEST)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-X-X-Sender: geert@ramsan.of.borg
-To:     linux-kernel@vger.kernel.org
-cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-media@vger.kernel.org, linux-hardening@vger.kernel.org,
-        linux-s390@vger.kernel.org
-Subject: Re: Build regressions/improvements in v5.18-rc7
-In-Reply-To: <20220516064231.2425428-1-geert@linux-m68k.org>
-Message-ID: <alpine.DEB.2.22.394.2205160916190.134019@ramsan.of.borg>
-References: <CAHk-=wg2eVUN0a1E5UnBF1ziGaU1yrMJtnFPg4R78O=FcRDqnA@mail.gmail.com> <20220516064231.2425428-1-geert@linux-m68k.org>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Mon, 16 May 2022 03:18:37 -0400
+Received: from relay5.hostedemail.com (relay5.hostedemail.com [64.99.140.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F80513CDD
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:18:36 -0700 (PDT)
+Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay12.hostedemail.com (Postfix) with ESMTP id 6D6D21210F5;
+        Mon, 16 May 2022 07:18:35 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf10.hostedemail.com (Postfix) with ESMTPA id 707F040;
+        Mon, 16 May 2022 07:18:29 +0000 (UTC)
+Message-ID: <eaf82e8001a370d7be779bd15163f7210a968e8b.camel@perches.com>
+Subject: Re: [PATCH v3] workqueue: Wrap flush_workqueue() using a macro
+From:   Joe Perches <joe@perches.com>
+To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Tejun Heo <tj@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, gcc <gcc@gcc.gnu.org>
+Date:   Mon, 16 May 2022 00:18:28 -0700
+In-Reply-To: <1c1b272b-239c-e1d1-84de-47d02feb911e@I-love.SAKURA.ne.jp>
+References: <d34dac10-c12f-8bda-35c4-9cb158781db2@I-love.SAKURA.ne.jp>
+         <a6288570ed3534b0316723061f5604e3871accef.camel@perches.com>
+         <6e4ed62e-888b-6e7a-c13d-67656f39ca94@I-love.SAKURA.ne.jp>
+         <738afe71-2983-05d5-f0fc-d94efbdf7634@I-love.SAKURA.ne.jp>
+         <YnQKNea6KWFaWNis@slm.duckdns.org>
+         <a0d6b5e4-b9c8-1a43-570f-4c73b0f6fc0c@I-love.SAKURA.ne.jp>
+         <Yn0538VavQPv+/Ws@slm.duckdns.org>
+         <7b2fecdb-59ae-2c54-5a5b-774ef7054d1b@I-love.SAKURA.ne.jp>
+         <1c1b272b-239c-e1d1-84de-47d02feb911e@I-love.SAKURA.ne.jp>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: ube18spr5b3crk3gobc31nifo7aa5b81
+X-Rspamd-Server: rspamout06
+X-Rspamd-Queue-Id: 707F040
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18jtvK0bs/QQC9DdHFRHLrEMs2Snoe06V0=
+X-HE-Tag: 1652685509-763519
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 16 May 2022, Geert Uytterhoeven wrote:
-> JFYI, when comparing v5.18-rc7[1] to v5.18-rc6[3], the summaries are:
->  - build errors: +2/-0
+On Mon, 2022-05-16 at 14:00 +0900, Tetsuo Handa wrote:
+[]
+> Changes in v3:
+>   Revert suggested change in v2, for kernel test robot <lkp@intel.com> found
+> 
+>     warning: Function parameter or member 'flush_workqueue' not described in 'void'
+>     warning: expecting prototype for flush_workqueue(). Prototype was for void() instead
+> 
+>   when built with W=1 option.
 
-   + /kisskb/src/drivers/media/platform/nxp/imx-pxp.h: error: initializer element is not constant:  => 582:38
+Odd, perhaps that not a valid error message and is a defect
+in gcc's parsing of function definitions.
 
-mipsel-gcc5/mips-allmodconfig
+> Changes in v2:
+>   Use "void (flush_workqueue)(struct workqueue_struct *wq)" and remove
+>   "#undef flush_workqueue", suggested by Joe Perches <joe@perches.com>.
 
-Seen before in other builds, missing "U"-suffix on large unsigned
-constants.
 
-   + /kisskb/src/include/linux/fortify-string.h: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]:  => 328:25
 
-s390x-gcc11/s390-allmodconfig
-
-> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/42226c989789d8da4af1de0c31070c96726d990c/ (all 131 configs)
-> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/c5eb0a61238dd6faf37f58c9ce61c9980aaffd7a/ (all 131 configs)
-
-Gr{oetje,eeting}s,
-
- 						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds

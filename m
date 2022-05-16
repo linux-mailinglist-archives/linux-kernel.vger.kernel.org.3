@@ -2,323 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EBFB528622
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6659B52862B
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244012AbiEPN5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 09:57:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59124 "EHLO
+        id S244233AbiEPN6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 09:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244641AbiEPN5P (ORCPT
+        with ESMTP id S244227AbiEPN6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 09:57:15 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF342ACC;
-        Mon, 16 May 2022 06:57:14 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id A0FFC320094B;
-        Mon, 16 May 2022 09:57:12 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 16 May 2022 09:57:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=living180.net;
-         h=cc:cc:content-transfer-encoding:content-type:date:date:from
-        :from:in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1652709432; x=
-        1652795832; bh=mF1M53/KHGeDklLmuQE/QSDtbm9XQHoPalgXKTgkd8k=; b=Q
-        MF3xoS/6hQqfaxL+euYfWt23MHOSmjlka8du7tXTp8qPZPCOW7CrLB6bE0O11UgD
-        sfTM77TAVwjJP2/bwnGXL4gBgy5vyN8CE0XNdK49lejK6B1GkQXzUrACR3px/ge2
-        4tQmxgeq8BFisVk4cfADC6IOZaxVoDNuNRb6MeQjTmNxx/x9YTpQRT2tGs+bmbuj
-        31zOe8/UH9QTK0gG35Kk7u/ZM/4/OcfFfoI0HwySp5pagOFu+CJoyz+foW7G0RrS
-        LQoTK3xg2Kcxtn4Q6q1GIYNM9eqZ9Z8TgwjmRESf/JH8sgGhKofZi+a3KGknJpn4
-        BQvr6TI6ERFrysqsRdw+g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1652709432; x=1652795832; bh=mF1M53/KHGeDk
-        lLmuQE/QSDtbm9XQHoPalgXKTgkd8k=; b=bNK1cEQEqQwKpvredKzVhx9+ZxFPB
-        gxSah8qTZcN69GJl6iwweNVeJdSOUPpAMq5nPDX52mIIHo0GifXvbONoHes9psn+
-        rdq51xCCUdw7Ev5sWm4z0v7r4zUsyLn2jh58To3WzpOKzCgYOZL48MOGVal1bVuk
-        VqLsG36LeabTAJVnRsUHrW2SZmlRhD3f/cl4ZPAe7So13wf0AQsCgdnrt0f/WqWt
-        PyT/jQa0ylpczD/+eoll1uyMz6YXC1Su5AZtI2M0dnokiOsdrmHuiqzgN2fYIyuE
-        bwzejir56Woi3eb5j+OGxIxA9bmvORUPrMAZUpghkp4eJ0B6WnQ4yPYSg==
-X-ME-Sender: <xms:N1iCYgcLNh9jIHvvQiH2nsFkI20ZJbkqCu6cSBTRhi72YDHBvMZh1Q>
-    <xme:N1iCYiMYVVwCf9xKTdoZCXn7gBBcwDgGyXJcURg3YNr-7ZYJ8weeGJNv4te6Ntqq_
-    Yp7vFr2G_STEw>
-X-ME-Received: <xmr:N1iCYhgRj1UhuDiQGQkmkivxPfNi2en3s8_0qjIFXuSBJky4SNzj12GwZm366w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrheehgdeikecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfuvfevfhfhjggtgfesthekredttdefjeenucfhrhhomhepffgrnhhi
-    vghlucfjrghrughinhhguceoughhrghrughinhhgsehlihhvihhnghdukedtrdhnvghtqe
-    enucggtffrrghtthgvrhhnpeefffejjeffgeffueevkeekffeigfehhfetgfdvheevieeg
-    ueffgeefieeliefhveenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsth
-    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepughhrghrughinhhgsehl
-    ihhvihhnghdukedtrdhnvght
-X-ME-Proxy: <xmx:N1iCYl9DSc6DVSUQJ4pGvL9ZwjDczTpVOZ2_CLK0clpdaaozzpgciA>
-    <xmx:N1iCYsvNkGHoZhfOvXK01eVwWrdpC3-y-naCliLEmg3jEXK94IQR5A>
-    <xmx:N1iCYsGdluVM7lrYrnZiBg8yJfSOQuwMwOVXqfX0XiNOKIXQPsu3DQ>
-    <xmx:OFiCYmWGIoE_r7G3vzXXJ2rtdNGNJV5y9f8WQqIqNSkwS_GKaqRkJg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 16 May 2022 09:57:09 -0400 (EDT)
-Message-ID: <3fc08243-f9e0-9cec-4207-883c55ccff78@living180.net>
-Date:   Mon, 16 May 2022 16:57:05 +0300
+        Mon, 16 May 2022 09:58:00 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2059.outbound.protection.outlook.com [40.107.92.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91423A5E3
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:57:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=n3gEotI/TXuJAfA98sODQ70r81ieEvZdeido2l86JzzCoyr3Sc75m0VLTCAETV2xgoDLD+dydsB2CRJ2AbL07CvnAZyKm5ETbDQx1WFkIDuQ1xi/XvLm/4xIvwzo1Ja+GLJN5oXdTO8ZTThGYl0Qpm5jwtp/r8jOp+jQhBXgVriSN/V9eIZ+NAbPmuhnd8EFp1SBraVNKeFnSZ9W9dW1W21K02V4qnkKOZx5vUReLj07D4XydPdTq9TA1e9R2o/RZ1BQOiZ0FcxbBwcI1gTDUE/U5imneEyRPmXw4ZYfWkItjLCI9mD7AqfU9UsE2gT1EAAiKOdmttQHAcxD97Z4zw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yyzbf5Srst20Ph1P7tvjZjUvTeGnczC8+FU3A+VB69g=;
+ b=Ef3Z2XiOEY44JwFoAW46L3LjZKsJ5IgbPkFzjawwAq37gss71zzdf0ay4Yj+P234BUQ2+LVSuXAjl1U0N4Rnj3QcXyBJtFZtv80JC8LD3/1KslhZR54BpMCogKIlAFIUcWUuHiMOZFa3SWWKUQrUAvOBQxb58+i5uFrxdc1Ub+sdsqzCA8Ssf2Q7xMxA/RKRS0Sm1zVJV5C5roTvzMClCRpa3ei1V42kQ67BdXSMZoXqlFp7GSX1oB93ip67DLm/6BCXuPVmkH1CMzVWvtZ7a7q4iNDAsSgWrSJCO+iMy3Qv5icSl4oMZdyr0vR4qPdbVhPGATRSFboGG3QD/ojgWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yyzbf5Srst20Ph1P7tvjZjUvTeGnczC8+FU3A+VB69g=;
+ b=XxD/DGNJ/Ri7QEtaemPbHDikLiFrNduqxz9wzgFKaiTLT20hrpk49xF95AIc9BHJjAgFkBAWniZr6LjTulMLq/l39HDffhrneTDT317/bXBRxLO0qHQeW23fyD1+zKnnnfGXreeKOVdjkNdzGlgwlm13GbOqc9JkdyhA0tyz6b8rEKYsWCbOl7pKvCOO4Tqlx9H5IP5M314Vi1rQq87aGdis+lxjw4l2DjQW4/EY2WJOa7BZkZ0rpx4U0kyZTQAwbNDbFwXMYY7mQEtnhnShMkehwqDOsxnMHJ+32qyMoQcvi5pFixMVHSQO1ZMxYAcvQ+1seF4Jpshe5PTr/ha5/Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by BYAPR12MB2839.namprd12.prod.outlook.com (2603:10b6:a03:72::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.18; Mon, 16 May
+ 2022 13:57:43 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2%5]) with mapi id 15.20.5250.018; Mon, 16 May 2022
+ 13:57:42 +0000
+Date:   Mon, 16 May 2022 10:57:41 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/5] iommu: Add blocking_domain_ops field in iommu_ops
+Message-ID: <20220516135741.GV1343366@nvidia.com>
+References: <20220516015759.2952771-1-baolu.lu@linux.intel.com>
+ <20220516015759.2952771-3-baolu.lu@linux.intel.com>
+ <8a0fc6cf-f46e-f17e-2b76-099ada1683c3@arm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8a0fc6cf-f46e-f17e-2b76-099ada1683c3@arm.com>
+X-ClientProxiedBy: MN2PR05CA0045.namprd05.prod.outlook.com
+ (2603:10b6:208:236::14) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [REGRESSION] lxc-stop hang on 5.17.x kernels
-Content-Language: en-US
-To:     Pavel Begunkov <asml.silence@gmail.com>
-Cc:     regressions@lists.linux.dev, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Jens Axboe <axboe@kernel.dk>,
-        Christian Brauner <christian.brauner@ubuntu.com>
-References: <7925e262-e0d4-6791-e43b-d37e9d693414@living180.net>
- <6ad38ecc-b2a9-f0e9-f7c7-f312a2763f97@kernel.dk>
- <ccf6cea1-1139-cd73-c4e5-dc9799708bdd@living180.net>
- <bb283ff5-6820-d096-2fca-ae7679698a50@kernel.dk>
- <371c01dd-258c-e428-7428-ff390b664752@kernel.dk>
- <2436d42c-85ca-d060-6508-350c769804f1@gmail.com>
- <ad9c31e5-ee75-4df2-c16d-b1461be1901a@living180.net>
- <fb0dbd71-9733-0208-48f2-c5d22ed17510@gmail.com>
- <a204ba93-7261-5c6e-1baf-e5427e26b124@living180.net>
- <bd932b5a-9508-e58f-05f8-001503e4bd2b@gmail.com>
- <12a57dd9-4423-a13d-559b-2b1dd2fb0ef3@living180.net>
- <897dc597-fc0a-34ec-84b8-7e1c4901e0fc@leemhuis.info>
- <c2f956e2-b235-9937-d554-424ae44c68e4@living180.net>
- <41c86189-0d1f-60f0-ca8e-f80b3ccf5130@gmail.com>
- <da56fa5f-0624-413e-74a1-545993940d27@gmail.com>
-From:   Daniel Harding <dharding@living180.net>
-In-Reply-To: <da56fa5f-0624-413e-74a1-545993940d27@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 79d89509-280f-4e2f-f990-08da37440c18
+X-MS-TrafficTypeDiagnostic: BYAPR12MB2839:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR12MB28394CB65834C923D03BBC35C2CF9@BYAPR12MB2839.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Hj7nZMZ5XMoWpcZr2MmIyjJxVeLXqES282XFAX72aRxF55/dsNilYWwxiXljiYxkKkzk2866/5lfo7b423jXBOSQRUgy4223WSOcrgiqPWfxtF3Sy2vM8vn+RW5nsoiTWxUQkK6gBHTh0/Z9qrHlac0cKbAUbDmYRQfMLfl7ZeeAbQk4xVxawx1vbAK7DmqdyaO7ivzhoE97HpXVSccmlR3JzzwdBkmuUK8OoF/x5p79xMfLCIdzxhxDYahVLEDnhEtSNWeha4Ay0RYE2R6fzNzq5ljCyOWb16dI862UMiAMuyyb9twczVoHsVTt02ZrFTVrMkLSL8ZiMjILyaQVXOCv7WhfZB2d4vuIkI8Vlu2+Bmh1gj87ncbVDRj2K7ESg0mOtoVt1fXb0FdGRlH+OMNfjz6HA6CMI1dgI2qGTtI2hSYEUxaYuruvS6BSmXw11I1FaezG8ebyT5DJJynL5CCj7izCw2yUcvVcvHuQxyPJXqB0CF+Uvjti39AGLksGEOVp8gvNbEZWgdsR2l8mbaKCjCoL5tmievHANgWCQ8twMsqdKBB84/T64yBMXZ1RKKs64YLQjii/cTPmAlVeKsEZQPgt/U1QZozghXsLvAn4O/GEi8eA/bQDe6bnKHI2a/Flnd9kwnofym2NHakYQg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(6916009)(36756003)(86362001)(8676002)(66476007)(4326008)(53546011)(66946007)(66556008)(54906003)(33656002)(6506007)(1076003)(316002)(26005)(5660300002)(508600001)(2616005)(6512007)(38100700002)(7416002)(2906002)(6486002)(8936002)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SFSmsdRuXsnKV7GnL3Kz0IamvxHofmDar0tK8uNQX35sUvM7acJb0DSNHBAk?=
+ =?us-ascii?Q?fsRIwDKitfz6Vxk7RUnbTYLUy5e6rBGuKlqGRSh/m8VYm99CKTCMPPHu/aA+?=
+ =?us-ascii?Q?TqTMMk727U3KBzL8ANqGWbU7nDcE+CLeOEoWSUk+IYLwavCIIlmU59876mVa?=
+ =?us-ascii?Q?tlKbHtVgJcGfIb+TKQ83AzbTJqJCtMWRxLsCSAPb2bwIYCrP4mNVqT8n5iBX?=
+ =?us-ascii?Q?zmxz4L9t2jNGYMmkbdbu4RjoOCiDtDE+Vg2/A3v6KIWS/hnBtdidfV3Go3f0?=
+ =?us-ascii?Q?if4S4B3fNDEgpan+46Zrppm4oWptMUa/p/15Y0KdR8DkD9q4gcMso5MuAe/x?=
+ =?us-ascii?Q?U6z4pZsBpiKuP5sNDpNDCPcrBQEewTBOcbFfPKwBN3YvZLlDwzPSZv6LjJOj?=
+ =?us-ascii?Q?mZPpjKNc60f/40WcHPHVRyBakHTYFl3cgbPDXQD1/ZoZ/rOzSrSln2XZwcYy?=
+ =?us-ascii?Q?6FjlHtT+6YzUAAym+O1hIpwMlozJudPAixHQrJ+N2zyDBy+nCwjSlI+XV59r?=
+ =?us-ascii?Q?bRVH1yOt92gUdDIdVSnfeLXZW9kENykD2wzy9359cmdKjKo3i+kUtCQLFUK+?=
+ =?us-ascii?Q?5O+uCj9v1vk+2hUWyYMco+Fz6fjuNNVIQoyF4UtQTKbbQv3mZhAGLw1+1ZYg?=
+ =?us-ascii?Q?lNfxHYRJa3Yq+D/H7Lxy3Uk59dsmXw//vmvxUKjClL8BSzD9DO/rty9vh/Yk?=
+ =?us-ascii?Q?pSup+vS2XHl13aQsBn3DOdENuiSphr2fkUh4KjC0kVG3322NwdDVwnkAkNMf?=
+ =?us-ascii?Q?vZS1QolrIVMmu5c98hQhK7y+er8C7Axh2kAW3B7bgkthLd62dlu3D3MvsnFR?=
+ =?us-ascii?Q?1dX61t+Pb+erjE2rXn+rlj06/pY73iWV1866cZFvGbFMaZb1/TIpnkOVvN02?=
+ =?us-ascii?Q?FJRdbULP/G/ZpJvej5q1ypUqqjQIpRAR3Bv82YH2BFOWOnljH/SXfmuC5Kft?=
+ =?us-ascii?Q?k9mJEdG0EYYag6jfVQRxK39LsZwEMWX2W5X4p4wKejenWSc1r58SzaXvGPPC?=
+ =?us-ascii?Q?QnnUnwdH55yBRnEt4HxupwR1lCP1Pp0FIgle1tojUKxV5KAxd+xWlMvyIM9y?=
+ =?us-ascii?Q?RFY0rfe8VUMLjrrkT5blvD6zwmi7ku5K60OXRgTuxJlZixdnBNLXUgEinLys?=
+ =?us-ascii?Q?3kUasciw20AzkH15Cn2/I4n3ATEZ2pq482X7/x1DTq0opamLNDEseCxvKLLE?=
+ =?us-ascii?Q?WZJH4RIwQcRSHOHNXOpYPss0nWRIp8kxs2zZqbed9FxRYZUqDd+1g9ESXQu6?=
+ =?us-ascii?Q?RKl8jEgyOQ4LD6gbXBdG4njdKWZzZsFvKzwBZKxM2z1hioqiiG0OA3YQha80?=
+ =?us-ascii?Q?GyG7LolwuSDR8gBfTjnQGdrx0t9WeLryaaLWLk4CVOB0chHYK8JFBYeii9E7?=
+ =?us-ascii?Q?K6A4tkWlVUYSss4MGSMgT/m6EKJRaqyXvjb41W/w2+1/rX/P8giz2XF2keZq?=
+ =?us-ascii?Q?X822u/tich8fPb2peVL0ax9enb/gCbBO/Hu9ivrYeTqVLATdpehaR1/ItI4i?=
+ =?us-ascii?Q?SOyBTZ2pl29D66Bm5Q4RJHXogLPupv4aDzEN9QRSZFaHaoSZh9vmGx1z3wE5?=
+ =?us-ascii?Q?0qqB+4XsIhGCvKxmP0ufgWnJ/Vhes9dqsqXkQZZqSH2D8j2XjtCywTuADT65?=
+ =?us-ascii?Q?KpDEd9AzHAq7TQuwx98kDFHZzg5FSHTQrMTQDPKmFHbhW3FEQ1oh3N0gxBBq?=
+ =?us-ascii?Q?ZPSpDIG4XLtk9SEcMjEkvqIo2czqJpGmgSPHTa6D+uZ1as0Ft1S5x9luIW4k?=
+ =?us-ascii?Q?qluheJCEAQ=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 79d89509-280f-4e2f-f990-08da37440c18
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2022 13:57:42.8488
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UPaAnEXXN4yMi4aLeM1IZH1BwU31hSPlhbis3OYspc400GtCb/H86gAm5nGKLc6Z
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2839
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/22 16:25, Pavel Begunkov wrote:
-> On 5/16/22 13:12, Pavel Begunkov wrote:
->> On 5/15/22 19:34, Daniel Harding wrote:
->>> On 5/15/22 11:20, Thorsten Leemhuis wrote:
->>>> On 04.05.22 08:54, Daniel Harding wrote:
->>>>> On 5/3/22 17:14, Pavel Begunkov wrote:
->>>>>> On 5/3/22 08:37, Daniel Harding wrote:
->>>>>>> [Resend with a smaller trace]
->>>>>>> On 5/3/22 02:14, Pavel Begunkov wrote:
->>>>>>>> On 5/2/22 19:49, Daniel Harding wrote:
->>>>>>>>> On 5/2/22 20:40, Pavel Begunkov wrote:
->>>>>>>>>> On 5/2/22 18:00, Jens Axboe wrote:
->>>>>>>>>>> On 5/2/22 7:59 AM, Jens Axboe wrote:
->>>>>>>>>>>> On 5/2/22 7:36 AM, Daniel Harding wrote:
->>>>>>>>>>>>> On 5/2/22 16:26, Jens Axboe wrote:
->>>>>>>>>>>>>> On 5/2/22 7:17 AM, Daniel Harding wrote:
->>>>>>>>>>>>>>> I use lxc-4.0.12 on Gentoo, built with io-uring support
->>>>>>>>>>>>>>> (--enable-liburing), targeting liburing-2.1.  My kernel
->>>>>>>>>>>>>>> config is a
->>>>>>>>>>>>>>> very lightly modified version of Fedora's generic kernel
->>>>>>>>>>>>>>> config. After
->>>>>>>>>>>>>>> moving from the 5.16.x series to the 5.17.x kernel 
->>>>>>>>>>>>>>> series, I
->>>>>>>>>>>>>>> started
->>>>>>>>>>>>>>> noticed frequent hangs in lxc-stop. It doesn't happen 100%
->>>>>>>>>>>>>>> of the
->>>>>>>>>>>>>>> time, but definitely more than 50% of the time. Bisecting
->>>>>>>>>>>>>>> narrowed
->>>>>>>>>>>>>>> down the issue to commit
->>>>>>>>>>>>>>> aa43477b040251f451db0d844073ac00a8ab66ee:
->>>>>>>>>>>>>>> io_uring: poll rework. Testing indicates the problem is 
->>>>>>>>>>>>>>> still
->>>>>>>>>>>>>>> present
->>>>>>>>>>>>>>> in 5.18-rc5. Unfortunately I do not have the expertise 
->>>>>>>>>>>>>>> with the
->>>>>>>>>>>>>>> codebases of either lxc or io-uring to try to debug the 
->>>>>>>>>>>>>>> problem
->>>>>>>>>>>>>>> further on my own, but I can easily apply patches to any 
->>>>>>>>>>>>>>> of the
->>>>>>>>>>>>>>> involved components (lxc, liburing, kernel) and rebuild for
->>>>>>>>>>>>>>> testing or
->>>>>>>>>>>>>>> validation.  I am also happy to provide any further
->>>>>>>>>>>>>>> information that
->>>>>>>>>>>>>>> would be helpful with reproducing or debugging the problem.
->>>>>>>>>>>>>> Do you have a recipe to reproduce the hang? That would 
->>>>>>>>>>>>>> make it
->>>>>>>>>>>>>> significantly easier to figure out.
->>>>>>>>>>>>> I can reproduce it with just the following:
->>>>>>>>>>>>>
->>>>>>>>>>>>>       sudo lxc-create --n lxc-test --template download --bdev
->>>>>>>>>>>>> dir --dir /var/lib/lxc/lxc-test/rootfs -- -d ubuntu -r bionic
->>>>>>>>>>>>> -a amd64
->>>>>>>>>>>>>       sudo lxc-start -n lxc-test
->>>>>>>>>>>>>       sudo lxc-stop -n lxc-test
->>>>>>>>>>>>>
->>>>>>>>>>>>> The lxc-stop command never exits and the container continues
->>>>>>>>>>>>> running.
->>>>>>>>>>>>> If that isn't sufficient to reproduce, please let me know.
->>>>>>>>>>>> Thanks, that's useful! I'm at a conference this week and 
->>>>>>>>>>>> hence have
->>>>>>>>>>>> limited amount of time to debug, hopefully Pavel has time to
->>>>>>>>>>>> take a look
->>>>>>>>>>>> at this.
->>>>>>>>>>> Didn't manage to reproduce. Can you try, on both the good 
->>>>>>>>>>> and bad
->>>>>>>>>>> kernel, to do:
->>>>>>>>>> Same here, it doesn't reproduce for me
->>>>>>>>> OK, sorry it wasn't something simple.
->>>>>>>>>> # echo 1 > /sys/kernel/debug/tracing/events/io_uring/enable
->>>>>>>>>>> run lxc-stop
->>>>>>>>>>>
->>>>>>>>>>> # cp /sys/kernel/debug/tracing/trace ~/iou-trace
->>>>>>>>>>>
->>>>>>>>>>> so we can see what's going on? Looking at the source, lxc is 
->>>>>>>>>>> just
->>>>>>>>>>> using
->>>>>>>>>>> plain POLL_ADD, so I'm guessing it's not getting a notification
->>>>>>>>>>> when it
->>>>>>>>>>> expects to, or it's POLL_REMOVE not doing its job. If we have a
->>>>>>>>>>> trace
->>>>>>>>>>> from both a working and broken kernel, that might shed some 
->>>>>>>>>>> light
->>>>>>>>>>> on it.
->>>>>>>>> It's late in my timezone, but I'll try to work on getting those
->>>>>>>>> traces tomorrow.
->>>>>>>> I think I got it, I've attached a trace.
->>>>>>>>
->>>>>>>> What's interesting is that it issues a multi shot poll but I don't
->>>>>>>> see any kind of cancellation, neither cancel requests nor 
->>>>>>>> task/ring
->>>>>>>> exit. Perhaps have to go look at lxc to see how it's supposed
->>>>>>>> to work
->>>>>>> Yes, that looks exactly like my bad trace.  I've attached good 
->>>>>>> trace
->>>>>>> (captured with linux-5.16.19) and a bad trace (captured with
->>>>>>> linux-5.17.5).  These are the differences I noticed with just a
->>>>>>> visual scan:
->>>>>>>
->>>>>>> * Both traces have three io_uring_submit_sqe calls at the very
->>>>>>> beginning, but in the good trace, there are further
->>>>>>> io_uring_submit_sqe calls throughout the trace, while in the bad
->>>>>>> trace, there are none.
->>>>>>> * The good trace uses a mask of c3 for io_uring_task_add much more
->>>>>>> often than the bad trace:  the bad trace uses a mask of c3 only for
->>>>>>> the very last call to io_uring_task_add, but a mask of 41 for the
->>>>>>> other calls.
->>>>>>> * In the good trace, many of the io_uring_complete calls have a
->>>>>>> result of 195, while in the bad trace, they all have a result of 1.
->>>>>>>
->>>>>>> I don't know whether any of those things are significant or not, 
->>>>>>> but
->>>>>>> that's what jumped out at me.
->>>>>>>
->>>>>>> I have also attached a copy of the script I used to generate the
->>>>>>> traces.  If there is anything further I can to do help debug, 
->>>>>>> please
->>>>>>> let me know.
->>>>>> Good observations! thanks for traces.
->>>>>>
->>>>>> It sounds like multi-shot poll requests were getting downgraded
->>>>>> to one-shot, which is a valid behaviour and was so because we
->>>>>> didn't fully support some cases. If that's the reason, than
->>>>>> the userspace/lxc is misusing the ABI. At least, that's the
->>>>>> working hypothesis for now, need to check lxc.
->>>>> So, I looked at the lxc source code, and it appears to at least 
->>>>> try to
->>>>> handle the case of multi-shot being downgraded to one-shot.  I don't
->>>>> know enough to know if the code is actually correct however:
->>>>>
->>>>> https://github.com/lxc/lxc/blob/7e37cc96bb94175a8e351025d26cc35dc2d10543/src/lxc/mainloop.c#L165-L189 
->>>>>
->>>>> https://github.com/lxc/lxc/blob/7e37cc96bb94175a8e351025d26cc35dc2d10543/src/lxc/mainloop.c#L254 
->>>>>
->>>>> https://github.com/lxc/lxc/blob/7e37cc96bb94175a8e351025d26cc35dc2d10543/src/lxc/mainloop.c#L288-L290 
->>>>>
->>>> Hi, this is your Linux kernel regression tracker. Nothing happened 
->>>> here
->>>> for round about ten days now afaics; or did the discussion continue
->>>> somewhere else.
->>>>
->>>>  From what I gathered from this discussion is seems the root cause 
->>>> might
->>>> be in LXC, but it was exposed by kernel change. That makes it sill a
->>>> kernel regression that should be fixed; or is there a strong reason 
->>>> why
->>>> we should let this one slip?
->>>
->>> No, there hasn't been any discussion since the email you replied to. 
->>> I've done a bit more testing on my end, but without anything 
->>> conclusive.  The one thing I can say is that my testing shows that 
->>> LXC does correctly handle multi-shot poll requests which were being 
->>> downgraded to one-shot in 5.16.x kernels, which I think invalidates 
->>> Pavel's theory.  In 5.17.x kernels, those same poll requests are no 
->>> longer being downgraded to one-shot requests, and thus under 5.17.x 
->>> LXC is no longer re-arming those poll requests (but also shouldn't 
->>> need to, according to what is being returned by the kernel). I don't 
->>> know if this change in kernel behavior is related to the hang, or if 
->>> it is just a side effect of other io-uring changes that made it into 
->>> 5.17.  Nothing in the LXC's usage of io-uring seems obviously 
->>> incorrect to me, but I am far from an expert.  I also did some work 
->>> toward creating a simpler reproducer, without success (I was able to 
->>> get a simple program using io-uring running, but never could get it 
->>> to hang).  ISTM that this is still a kernel regression, unless 
->>> someone can point out a definite fault in the way LXC is using 
->>> io-uring.
->>
->> Haven't had time to debug it. Apparently LXC is stuck on
->> read(2) terminal fd. Not yet clear what is the reason.
->
-> How it was with oneshots:
->
-> 1: kernel: poll fires, add a CQE
-> 2: kernel: remove poll
-> 3: userspace: get CQE
-> 4: userspace: read(terminal_fd);
-> 5: userspace: add new poll
-> 6: goto 1)
->
-> What might happen and actually happens with multishot:
->
-> 1: kernel: poll fires, add CQE1
-> 2: kernel: poll fires again, add CQE2
-> 3: userspace: get CQE1
-> 4: userspace: read(terminal_fd); // reads all data, for both CQE1 and 
-> CQE2
-> 5: userspace: get CQE2
-> 6: userspace: read(terminal_fd); // nothing to read, hangs here
->
-> It should be the read in lxc_terminal_ptx_io().
->
-> IMHO, it's not a regression but a not perfect feature API and/or
-> an API misuse.
->
-> Cc: Christian Brauner
->
-> Christian, in case you may have some input on the LXC side of things.
-> Daniel reported an LXC problem when it uses io_uring multishot poll 
-> requests.
-> Before aa43477b04025 ("io_uring: poll rework"), multishot poll 
-> requests for
-> tty/pty and some other files were always downgraded to oneshots, which 
-> had
-> been fixed by the commit and exposed the problem. I hope the example 
-> above
-> explains it, but please let me know if it needs more details
+On Mon, May 16, 2022 at 12:22:08PM +0100, Robin Murphy wrote:
+> On 2022-05-16 02:57, Lu Baolu wrote:
+> > Each IOMMU driver must provide a blocking domain ops. If the hardware
+> > supports detaching domain from device, setting blocking domain equals
+> > detaching the existing domain from the deivce. Otherwise, an UNMANAGED
+> > domain without any mapping will be used instead.
+> 
+> Unfortunately that's backwards - most of the implementations of .detach_dev
+> are disabling translation entirely, meaning the device ends up effectively
+> in passthrough rather than blocked.
 
-Pavel, I had actually just started a draft email with the same theory 
-(although you stated it much more clearly than I could have).  I'm 
-working on debugging the LXC side, but I'm pretty sure the issue is due 
-to LXC using blocking reads and getting stuck exactly as you describe.  
-If I can confirm this, I'll go ahead and mark this regression as invalid 
-and file an issue with LXC.  Thanks for your help and patience.
+Ideally we'd convert the detach_dev of every driver into either
+a blocking or identity domain. The trick is knowing which is which..
 
--- 
-Regards,
+Guessing going down the list:
+ apple dart - blocking, detach_dev calls apple_dart_hw_disable_dma() same as
+              IOMMU_DOMAIN_BLOCKED
+	      [I wonder if this drive ris wrong in other ways though because
+               I dont see a remove_streams in attach_dev]
+ exynos - this seems to disable the 'sysmmu' so I'm guessing this is
+          identity
+ iommu-vmsa - Comment says 'disable mmu translaction' so I'm guessing
+              this is idenity
+ mkt_v1 - Code looks similar to mkt, which is probably identity.
+ rkt - No idea
+ sprd - No idea
+ sun50i - This driver confusingly treats identity the same as
+          unmanaged, seems wrong, no idea.
+ amd - Not sure, clear_dte_entry() seems to set translation on but points
+       the PTE to 0 ? Based on the spec table 8 I would have expected
+       TV to be clear which would be blocking. Maybe a bug??
+ arm smmu qcomm - not sure
+ intel - blocking
 
-Daniel Harding
+These doesn't support default domains, so detach_dev should return 
+back to DMA API ownership, which is either identity or something weird:
+ fsl_pamu - identity due to the PPC use of dma direct
+ msm
+ mkt
+ omap
+ s390 - platform DMA ops
+ terga-gart - Usually something called a GART would be 0 length once
+              disabled, guessing blocking?
+ tegra-smmu
 
+So, the approach here should be to go driver by driver and convert
+detach_dev to either identity, blocking or just delete it entirely,
+excluding the above 7 that don't support default domains. And get acks
+from the driver owners.
+
+> Conversely, at least arm-smmu and arm-smmu-v3 could implement
+> IOMMU_DOMAIN_BLOCKED properly with fault-type S2CRs and STEs
+> respectively, it just needs a bit of wiring up.
+
+Given that vfio now uses them it seems worthwhile to do..
+
+Jason

@@ -2,130 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6FA3528BB1
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 19:13:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 388C3528BBF
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 19:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233987AbiEPRNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 13:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48160 "EHLO
+        id S1344214AbiEPRPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 13:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344110AbiEPRNw (ORCPT
+        with ESMTP id S1344165AbiEPRPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 13:13:52 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96A1326F9;
-        Mon, 16 May 2022 10:13:50 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GFJn72004984;
-        Mon, 16 May 2022 17:13:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=DzrZdpcDRLuxvldPjzyqpu8L+H3FzZFhPx9Zm0YN8io=;
- b=ACMpP0iP8samQDSf17L7q7OrTKW6CnrFPfTjORK7Sshv/CIZ4xqzO3zVyHMkZHlo/H0N
- nVNmLS0v3I2CIigjVoZZvKCgUEBDIdWl+tQQi+w8Rq8lH4j5JhuFc4c4DgukLfgY2oPN
- YJjKs5J6RmY2SgCu+RSyJdMPJghlq2mnF/sHxy/RqvwBkH0gbnbyKKWL6HaAnDNpPHhg
- ZfKmr18cSyap5Q57IoTp2gkv5oq7DfC2F6NYV5ij/Y5YYhTjFYL/wF/Olc+E3kUkFQ06
- atMxyAm4Tlnadz4gyHRmMhFddwMlAT5ZXAmDkJKZ967bqj/NvpJFv/KTpu2UmjrJ9LCk gg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3s5at9p6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 17:13:47 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24GGm8lo024197;
-        Mon, 16 May 2022 17:13:47 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3s5at9p0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 17:13:47 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24GHDf6w026882;
-        Mon, 16 May 2022 17:13:46 GMT
-Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
-        by ppma02dal.us.ibm.com with ESMTP id 3g242a3ha0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 17:13:46 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24GHDj8H22085898
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 16 May 2022 17:13:45 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4CD6B6A058;
-        Mon, 16 May 2022 17:13:45 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 469B96A04D;
-        Mon, 16 May 2022 17:13:44 +0000 (GMT)
-Received: from [9.65.254.31] (unknown [9.65.254.31])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon, 16 May 2022 17:13:44 +0000 (GMT)
-Message-ID: <62668577-bf0c-eda5-56a0-9ca56e5f9ce6@linux.ibm.com>
-Date:   Mon, 16 May 2022 13:13:43 -0400
+        Mon, 16 May 2022 13:15:39 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB36B3389B
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 10:15:37 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2ef5380669cso160903767b3.9
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 10:15:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SGf6wjrvSBA9+5luKWtA8S1TB1Ho/iykZkRoevKUR/M=;
+        b=sG0LBzcw6X5gtPxGyrwzWMTlfNPOaO9928SvntnUZYb9/aTe8ETQvXR+oTGM+2Q01E
+         FT27+UEachU8nZ1/6NE6iFT0H7w2Z3yA+Xt2mScQcVbGHTAWTIC7oC4Ow2OaFjZ9yRPC
+         zsYacU5leVMUJP7q08JQQ5kO8v4LF8Y18NuJOV1FQrJzkb1Q6HVJDb2aR5qUZZ4fxb8L
+         j83sHlqEvTkYQHwcihaYzN7Qej80njRn7ld+NLQm+PvbJhpZV4rhRz6XHZUrjQV7dE19
+         0b1Wx+2l3Noy/e5cucVImILRyz95RaT9Ba/0fxbWcc15VZWfUSGKEh7MDJ5UgWmgO8Wm
+         Fp5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SGf6wjrvSBA9+5luKWtA8S1TB1Ho/iykZkRoevKUR/M=;
+        b=qRuhatHe2GhWxhc+B0j/k960NPZuZch8QXIshVC2oSe6kyhBrU0jdOjGjDxCqcJSP2
+         TzaD6Vf+z2zOV7/D9g1JPB2/hJSJjXxPk3ZTXZJLeM0T56LQ2GmoqUUGySa0y3TasHjk
+         OuheycpJXZV/pPedsBCxPWbQFlFcrdOPwcxuyeWTtfDRmDG2yEa3PummLwTQczimf2Vy
+         s2CCHTp814K/qCaiU/wf5bSCBHi8mFwRIVc1ruQueCHRqpHNsgsU0IslI7D5/PNBhiZX
+         lfDXubXazwahlyB6LIsSeceFJXXpqbfuTwoBSMSRQ3v7UkG4YdrnZ0Yx/XIxMp71mH/y
+         F5Zw==
+X-Gm-Message-State: AOAM530XF+w4qHt5wLCukl4ssgRqzuwd5DXCVPeEMdElKYT40yy2DW9B
+        cNTErN1LbqOUtCjBWvgixpMMix5id4jTdr+Ffe6n4A==
+X-Google-Smtp-Source: ABdhPJwVJxOR6miZJ4+xQc2WHDZMKppmkvrGNnjVqxWGG/tKcoV/VdOV2r77ffndCOhGZP+04/DkGyU0orcJhTS4elU=
+X-Received: by 2002:a0d:d747:0:b0:2ff:22b9:9281 with SMTP id
+ z68-20020a0dd747000000b002ff22b99281mr186733ywd.305.1652721336717; Mon, 16
+ May 2022 10:15:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v19 05/20] s390/vfio-ap: refresh guest's APCB by filtering
- AP resources assigned to mdev
-Content-Language: en-US
-To:     jjherne@linux.ibm.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
-        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
-        alex.williamson@redhat.com, kwankhede@nvidia.com,
-        fiuczy@linux.ibm.com
-References: <20220404221039.1272245-1-akrowiak@linux.ibm.com>
- <20220404221039.1272245-6-akrowiak@linux.ibm.com>
- <fc760c00-0559-68d8-fd2d-f29e014a6685@linux.ibm.com>
-From:   Tony Krowiak <akrowiak@linux.ibm.com>
-In-Reply-To: <fc760c00-0559-68d8-fd2d-f29e014a6685@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: i91RkiB7fX-xeHhOrYTMaIuRYpA-_TYu
-X-Proofpoint-GUID: 3_4dAFx8Tehub2sjs0nkpNHIw-iy7ucL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-16_15,2022-05-16_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 clxscore=1011 adultscore=0 mlxlogscore=999 phishscore=0
- mlxscore=0 priorityscore=1501 malwarescore=0 spamscore=0 impostorscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205160094
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220513202159.1550547-1-samitolvanen@google.com>
+ <20220513202159.1550547-21-samitolvanen@google.com> <YoIfWENLV1AR2ijj@hirez.programming.kicks-ass.net>
+In-Reply-To: <YoIfWENLV1AR2ijj@hirez.programming.kicks-ass.net>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Mon, 16 May 2022 10:15:00 -0700
+Message-ID: <CABCJKucXA2jbTc9TF1mLUsEDKu52t71tzxpnsGOXY3_ks+W4Bg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-hardening@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/16/22 12:36 PM, Jason J. Herne wrote:
-> On 4/4/22 18:10, Tony Krowiak wrote:
->> |@@ -1306,8 +1392,6 @@ static int vfio_ap_mdev_set_kvm(struct 
->> ap_matrix_mdev *matrix_mdev, kvm_get_kvm(kvm); matrix_mdev->kvm = 
->> kvm; - memcpy(&matrix_mdev->shadow_apcb, &matrix_mdev->matrix, - 
->> sizeof(struct ap_matrix)); kvm_arch_crypto_set_masks(kvm, 
->> matrix_mdev->shadow_apcb.apm, matrix_mdev->shadow_apcb.aqm, 
->> matrix_mdev->shadow_apcb.adm);|
+On Mon, May 16, 2022 at 2:54 AM Peter Zijlstra <peterz@infradead.org> wrote:
 >
-> This looks like an unrelated change. Does this snippet really belong 
-> to this patch?
+> On Fri, May 13, 2022 at 01:21:58PM -0700, Sami Tolvanen wrote:
+> > With CONFIG_CFI_CLANG, the compiler injects a type preamble
+> > immediately before each function and a check to validate the target
+> > function type before indirect calls:
+> >
+> >   ; type preamble
+> >   __cfi_function:
+> >     int3
+> >     int3
+> >     mov <id>, %eax
+> >     int3
+> >     int3
+> >   function:
+> >     ...
+>
+> When I enable CFI_CLANG and X86_KERNEL_IBT I get:
+>
+> 0000000000000c80 <__cfi_io_schedule_timeout>:
+> c80:   cc                      int3
+> c81:   cc                      int3
+> c82:   b8 b5 b1 39 b3          mov    $0xb339b1b5,%eax
+> c87:   cc                      int3
+> c88:   cc                      int3
+>
+> 0000000000000c89 <io_schedule_timeout>:
+> c89:   f3 0f 1e fa             endbr64
+>
+>
+> That seems unfortunate. Would it be possible to get an additional
+> compiler option to suppress the endbr for all symbols that get a __cfi_
+> preaamble?
 
-It's kind of hard to tell which snippet you are talking about without 
-the patch context, but I assume you are referring to the removal of the 
-memcpy statement in the vfio_ap_mdev_set_kvm() function in which case 
-this snippet belongs with this patch.
+What's the concern with the endbr? Dropping it would currently break
+the CFI+IBT combination on newer hardware, no?
 
-This patch introduces a function that filters the contents of the 
-matrix_mdev->matrix to ensure that the matrix_mdev->shadow_apcb contains 
-only queues that are bound to the vfio_ap device driver. The filtering 
-function is called whenever an adapter, domain or control domain is 
-assigned or unassigned, so it is no longer necessary to copy the 
-contents of matrix_mdev->matrix into matrix_mdev->shadow_apcb before 
-setting the masks in the guest; that will have already been done by the 
-filter function.
+> Also, perhaps s/CFI_CLANG/KERNEL_CFI/ or somesuch, so that GCC might
+> also implement this same scheme (in time)?
 
+I'm fine with renaming the config.
 
+> >   ; indirect call check
+> >     cmpl    <id>, -6(%r11)
+> >     je      .Ltmp1
+> >     ud2
+> >   .Ltmp1:
+> >     call    __x86_indirect_thunk_r11
+>
+> The first one I try and find looks like:
+>
+> 26:       41 81 7b fa a6 96 9e 38         cmpl   $0x389e96a6,-0x6(%r11)
+> 2e:       74 02                   je     32 <__traceiter_sched_kthread_stop+0x29>
+> 30:       0f 0b                   ud2
+> 32:       4c 89 f6                mov    %r14,%rsi
+> 35:       e8 00 00 00 00          call   3a <__traceiter_sched_kthread_stop+0x31> 36: R_X86_64_PLT32      __x86_indirect_thunk_r11-0x4
+>
+> This must not be. If I'm to rewrite that lot to:
+>
+>   movl  $\hash, %r10d
+>   sub   $9, %r11
+>   call  *%r11
+>   .nop  4
+>
+> Then there must not be spurious instruction in between the ud2 and the
+> indirect call/retpoline thing.
+
+With the current compiler patch, LLVM sets up function arguments after
+the CFI check. if it's a problem, we can look into changing that.
+
+Sami

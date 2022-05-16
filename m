@@ -2,122 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8843C528D6D
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D6FA528D6F
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345154AbiEPSuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 14:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40824 "EHLO
+        id S237068AbiEPSuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 14:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345066AbiEPSuI (ORCPT
+        with ESMTP id S1345066AbiEPSum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 14:50:08 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3193EB81;
-        Mon, 16 May 2022 11:50:07 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id z7-20020a17090abd8700b001df78c7c209so186527pjr.1;
-        Mon, 16 May 2022 11:50:07 -0700 (PDT)
+        Mon, 16 May 2022 14:50:42 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD7036E07
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 11:50:40 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id q8so19703161oif.13
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 11:50:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ogFgPpVvtLABZGqhLzO7aVIGrK84/NfIlVnDOzWwbx8=;
-        b=Hd0Yorn0RW/CYIBNSer8vE7Dkgu4vN8r5CmeQz/yRlhWDVzomT7yKboUIDrEYN8r6H
-         fuPXEADzXBCgJBnKMFjASpP31MlP4WKde1RvxkWhfeiwZwed/VkEkOSpUY78oPDAx5nH
-         vnXswqBP3oQ4laULsL4AVvrMiF3woZrNQwOx+zT0oiiwiKi4t0Uzv7sKv6Qy0AoSTLOz
-         j2BtRCNMtIEmnpzHMK8SHi8OLI10I9r0kB9r9g5yrrgNoLUhbZbrQ5WI5GAkpI7ePLtv
-         ZEL7VVNDuTcYRffrLhc/kRD+xGfSvzZi5PMixafVOTRpY2A1sBZEKfnYkZHyLf5QqNuG
-         loPw==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=z434hv62mhp8lQvS5HCjRqXyQJvXAeM5SVF10IyqdzA=;
+        b=ZMNQEqEvlfGjA3VqetKin487YfdnVKZTT+Xflf7L7ulsAamASHG/ICGwAt+hTwfdId
+         6nfs1LZYHBeesiwNGqzglcZ/UQSFkTyR9nCGsmAC//4AZ8TjB6S5Z16ZprO2wrbK5MwK
+         zsJBWPa37RQLLzyBt/sTFcbD9zMbQSsxAJ39M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ogFgPpVvtLABZGqhLzO7aVIGrK84/NfIlVnDOzWwbx8=;
-        b=e+t/+JGNpPnBccKOeR1Pj+L+y6xVADtY9QVkt+4NGgMW13/6Dgm+l1J0gO2z7BqM8c
-         XrGbVX/Z8EbxvoYpioWHOTmVzvCEENBIVFjUPEFyyWJHbvLkzRQyuage34ZITc3Z/OSU
-         Dv631edAtJrz3AjAE0g+ctqiTu1zG9D6f+2vxW+RORoEfrefPA73M+3qe/B9DlRP2maz
-         BSsMRF1Ey25hcnksWRGsXNy6ByhsdW1uBAcm9z6G4rIIAC/a0o9KoskFiUjGoQoe1Flp
-         a3c24NmGeIsnqYkGnJK1eCJ/sm3cMKZ1rbhSL8rgTNuT35hDnaTloEJJvnHgjdYg8L7A
-         oE5A==
-X-Gm-Message-State: AOAM533XlEC+AMlo3iUC6umB0nkrZIpkdFYWzlutl2SZYmjmo24aWxUW
-        jKEjtzvTnD0snkcRUJSjp04=
-X-Google-Smtp-Source: ABdhPJwJWStGtq2F73tDt655k7SukiNeC417jxnY4Q7eSvMJW6/+8fSvzNv6EKJ51TvR0GUJcSrMHw==
-X-Received: by 2002:a17:90b:4f91:b0:1cd:3a73:3a5d with SMTP id qe17-20020a17090b4f9100b001cd3a733a5dmr20801877pjb.98.1652727007097;
-        Mon, 16 May 2022 11:50:07 -0700 (PDT)
-Received: from [192.168.0.107] ([103.86.19.192])
-        by smtp.gmail.com with ESMTPSA id h20-20020aa786d4000000b0050dc76281a5sm7289062pfo.127.2022.05.16.11.50.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 11:50:06 -0700 (PDT)
-Message-ID: <3f2e9cb6-9b3a-5054-34a8-7c7e1c77a15a@gmail.com>
-Date:   Tue, 17 May 2022 00:20:01 +0530
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=z434hv62mhp8lQvS5HCjRqXyQJvXAeM5SVF10IyqdzA=;
+        b=EVzg4xWdQXHTGCRaeYsAyvzKYpPMCuyxgVx9AinuGsm0mpZcwbpOGbTsPp6pvSaQ06
+         XAX88YBaxT3pYAvjJKnIkb+4fKP4DY4zqMqzIqtPaXdY6Mm1/FpJ+PHdr/aUbbtdum9+
+         2vjSd98J4EhkRme5LC4MYl1Mty2zw/cWGekywiy1undve6ikUMkuMFD6N3g+y8DXGxcO
+         LoKgdEnAhPWw45aFZif5yha4ytKfexeI6Qq6ktBYxF/qtO3UZ7uFT5dyj4IQIYDjjG6T
+         8b1CgpIJM+KrHS3iMqd98b6EQH9C7Mo2kYmhlkzdb9Go6ijfNiRGkBHISyHM4/fLHemx
+         DKIw==
+X-Gm-Message-State: AOAM531wAp7mUuoVS36oIUxon2aeRkgN2u2Up+grE2dIjkFeTXYUrkTN
+        nUh0FmROQG568heQzICv/kpaeUo2OgIMCj7XkxyXxg==
+X-Google-Smtp-Source: ABdhPJyLcEcT/qii9ZWiqgSyrm9nshyiCYaWnRPLiITkkReUt6Wh8gIjEmZrDiaK3D7BsbqzJGQNXIutud4Pml/DalE=
+X-Received: by 2002:a05:6808:23c3:b0:326:bd8d:7993 with SMTP id
+ bq3-20020a05680823c300b00326bd8d7993mr8595142oib.63.1652727039596; Mon, 16
+ May 2022 11:50:39 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 16 May 2022 11:50:39 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] selftests: alsa: Better error messages
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>
-Cc:     Jaroslav Kysela <perex@perex.cz>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <8598037d-0e24-9bc1-3f2c-a2751ec8e871@gmail.com>
- <YoJnhulbKk49rZsw@sirena.org.uk>
-From:   Siddh Raman Pant <siddhpant.gh@gmail.com>
-In-Reply-To: <YoJnhulbKk49rZsw@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220516183452.942008-2-swboyd@chromium.org>
+References: <20220516183452.942008-1-swboyd@chromium.org> <20220516183452.942008-2-swboyd@chromium.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Mon, 16 May 2022 11:50:38 -0700
+Message-ID: <CAE-0n50L-P_MPt6NJgO-HJc8+-GuyQPCfCMpV=3mMCoBOL5f8w@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] dt-bindings: google,cros-ec-keyb: Introduce
+ switches only compatible
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        chrome-platform@lists.linux.dev,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you very much, Takashi, and Mark, for reviewing the patch. Helps me getting
-the hang of kernel development coding styles and conventions while starting out.
+Quoting Stephen Boyd (2022-05-16 11:34:51)
+> diff --git a/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml b/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
+> index e8f137abb03c..e1fb68ca00fc 100644
+> --- a/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
+> +++ b/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
+> @@ -15,14 +15,23 @@ description: |
+>    Google's ChromeOS EC Keyboard is a simple matrix keyboard
+>    implemented on a separate EC (Embedded Controller) device. It provides
+>    a message for reading key scans from the EC. These are then converted
+> -  into keycodes for processing by the kernel.
+> -
+> -allOf:
+> -  - $ref: "/schemas/input/matrix-keymap.yaml#"
+> +  into keycodes for processing by the kernel. This device also supports
+> +  switches/buttons like power and volume buttons.
+>
+>  properties:
+>    compatible:
+> -    const: google,cros-ec-keyb
+> +    anyOf:
+> +      - description: ChromeOS EC with only buttons/switches
+> +      - items:
+> +          - const: google,cros-ec-keyb-switches
+> +      - description: |
+> +          (Deprecated) ChromeOS EC with only buttons/switches; optional matrix properties
 
-The particular motivation for this was that this test tends to potentially
-generate a very long list of warnings/errors.
+s/optional/required/
 
-On Mon, May 16, 2022 At 20:32:30 +0530, Mark Brown wrote:
->>  	if (err < 0) {
->> -		ksft_print_msg("Unable to parse custom alsa-lib configuration: %s\n",
->> +		ksft_print_msg("Unable to parse custom alsa-lib configuration (%s)\n",
->>  			       snd_strerror(err));
-> 
-> I'm really unconvinced that replacing : with () is helping either people
-> or machines - the form we have at the minute is probably more common for
-> command line tools?
+> +      - items:
+> +          - const: google,cros-ec-keyb-switches
+> +          - const: google,cros-ec-keyb
+> +      - description: ChromeOS EC with keyboard and possibly buttons/switches
+> +      - items:
+> +          - const: google,cros-ec-keyb
+>
+>    google,needs-ghost-filter:
+>      description:
+> @@ -41,15 +50,32 @@ properties:
+>        where the lower 16 bits are reserved. This property is specified only
+>        when the keyboard has a custom design for the top row keys.
+>
+> +dependencies:
+> +  function-row-phsymap: [ 'linux,keymap' ]
+> +  google,needs-ghost-filter: [ 'linux,keymap' ]
+> +
+>  required:
+>    - compatible
+>
+> +if:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        const: google,cros-ec-keyb
+> +then:
+> +  allOf:
+> +    - $ref: "/schemas/input/matrix-keymap.yaml#"
+> +  required:
+> +    - keypad,num-rows
+> +    - keypad,num-columns
+> +    - linux,keymap
+> +
+>  unevaluatedProperties: false
+>
+>  examples:
+>    - |
+>      #include <dt-bindings/input/input.h>
+> -    cros-ec-keyb {
+> +    keyboard-controller {
+>          compatible = "google,cros-ec-keyb";
+>          keypad,num-rows = <8>;
+>          keypad,num-columns = <13>;
+> @@ -113,3 +139,56 @@ examples:
+>              /* UP      LEFT    */
+>              0x070b0067 0x070c0069>;
+>      };
+> +
+> +  - |
+> +    keyboard-controller {
+> +        compatible = "google,cros-ec-keyb-switches", "google,cros-ec-keyb";
+> +        /* Matrix keymap properties are optional but ignored */
 
-The intent was to separate card and error with the colon. While it may not affect
-parsing, you are right, the colon separator is seemingly the standard. Apologies.
+Ooops I got the wrong line here from v4 :(
 
-> Why add the space before the : here?  That really is not idiomatic for
-> Unix stuff, or just natural language.
-> ...
-> This should definitely be a separate commit.
+s/optional/required/
 
-You are right. Again, apologies for this.
-
->>  		bool is_volatile = snd_ctl_elem_info_is_volatile(ctl->info);
->> -		ksft_print_msg("%s.%d expected %lld but read %lld, is_volatile %d\n",
->> -			       ctl->name, index, expected_int, read_int, is_volatile);
->> +		ksft_print_msg("%s.%d : Expected %lld, but read %lld (%s)\n",
->> +			       ctl->name, index, expected_int, read_int,
->> +			       (is_volatile ? "Volatile" : "Non-volatile"));
-> 
-> I don't understand the comma here?
-
-Those are independent clauses, hence used a comma. Looking back, the "but" can probably
-be removed here for brevity.
-
-
-Please let me know if there are any other things which bugs you, and whether or not
-should I send a v2 with the issues addressed.
-
-Thanks for the reviews,
-Siddh
+> +        keypad,num-rows = <8>;
+> +        keypad,num-columns = <13>;
+> +        linux,keymap = <
+> +            /* CAPSLCK F1         B          F10     */
+> +            0x0001003a 0x0002003b 0x00030030 0x00040044
+> +            /* N       =          R_ALT      ESC     */
+> +            0x00060031 0x0008000d 0x000a0064 0x01010001
+> +            /* F4      G          F7         H       */

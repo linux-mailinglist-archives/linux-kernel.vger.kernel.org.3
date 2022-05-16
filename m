@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D76529075
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D8552904B
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347460AbiEPU0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41248 "EHLO
+        id S1346533AbiEPTyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347800AbiEPT6K (ORCPT
+        with ESMTP id S243356AbiEPTtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:58:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC3E488A9;
-        Mon, 16 May 2022 12:49:53 -0700 (PDT)
+        Mon, 16 May 2022 15:49:43 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E151433A6;
+        Mon, 16 May 2022 12:45:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 48CF8B8160E;
-        Mon, 16 May 2022 19:49:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1927C385AA;
-        Mon, 16 May 2022 19:49:50 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0EBA2CE1795;
+        Mon, 16 May 2022 19:45:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EAC5C34100;
+        Mon, 16 May 2022 19:45:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730591;
-        bh=EwrlZFOvzJnjMTJ2FyUy85Q/vhUk54CTxzJFzMEnSow=;
+        s=korg; t=1652730303;
+        bh=PzICwLjlQo99NgdyMEC1XtS6+gYXW+gJUuLaUJcbn10=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cgK2+f//YT/rnWNffZn+zHU+B1IQ0gJ5fW2GrKWYAgp/PrcQstiT3iaFP/oKVbggj
-         1IZlTFYU9m+VtagHrfxgc/uBW+P11ZFbnPLmBLmkRG3ZQclAwge/uhiCrUz4y/eOZp
-         D+INvJwG/PGGuN5HvUFczWFbSKsmjMx7XApGPDxs=
+        b=CLBN9ZgqeYdEJbB10Uxh/s1o5N4WvFSlrS0EvwGPKQXe/J3l32cn3bEcQe5eflsOL
+         X3wOmmd4EjiTbkK3m8yrNx43vy75uAzkaS+svEuAqPqrfsFd67w8lneKuSe8hZG29K
+         Y1/UtE8UdcpSyHpW2/yt0QdlUQGb7SFfk5gNtsO0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        Shiraz Saleem <shiraz.saleem@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
+        stable@vger.kernel.org, Colin Ian King <colin.i.king@gmail.com>,
+        Alexandra Winter <wintera@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 046/102] RDMA/irdma: Fix deadlock in irdma_cleanup_cm_core()
-Date:   Mon, 16 May 2022 21:36:20 +0200
-Message-Id: <20220516193625.321476853@linuxfoundation.org>
+Subject: [PATCH 5.10 21/66] s390/ctcm: fix variable dereferenced before check
+Date:   Mon, 16 May 2022 21:36:21 +0200
+Message-Id: <20220516193620.029355283@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
-References: <20220516193623.989270214@linuxfoundation.org>
+In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
+References: <20220516193619.400083785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,60 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Alexandra Winter <wintera@linux.ibm.com>
 
-[ Upstream commit 679ab61bf5f5f519377d812afb4fb93634782c74 ]
+[ Upstream commit 2c50c6867c85afee6f2b3bcbc50fc9d0083d1343 ]
 
-There is a deadlock in irdma_cleanup_cm_core(), which is shown below:
+Found by cppcheck and smatch.
+smatch complains about
+drivers/s390/net/ctcm_sysfs.c:43 ctcm_buffer_write() warn: variable dereferenced before check 'priv' (see line 42)
 
-   (Thread 1)              |      (Thread 2)
-                           | irdma_schedule_cm_timer()
-irdma_cleanup_cm_core()    |  add_timer()
- spin_lock_irqsave() //(1) |  (wait a time)
- ...                       | irdma_cm_timer_tick()
- del_timer_sync()          |  spin_lock_irqsave() //(2)
- (wait timer to stop)      |  ...
-
-We hold cm_core->ht_lock in position (1) of thread 1 and use
-del_timer_sync() to wait timer to stop, but timer handler also need
-cm_core->ht_lock in position (2) of thread 2.  As a result,
-irdma_cleanup_cm_core() will block forever.
-
-This patch removes the check of timer_pending() in
-irdma_cleanup_cm_core(), because the del_timer_sync() function will just
-return directly if there isn't a pending timer. As a result, the lock is
-redundant, because there is no resource it could protect.
-
-Link: https://lore.kernel.org/r/20220418153322.42524-1-duoming@zju.edu.cn
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Reviewed-by: Shiraz Saleem <shiraz.saleem@intel.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Fixes: 3c09e2647b5e ("ctcm: rename READ/WRITE defines to avoid redefinitions")
+Reported-by: Colin Ian King <colin.i.king@gmail.com>
+Signed-off-by: Alexandra Winter <wintera@linux.ibm.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/hw/irdma/cm.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ drivers/s390/net/ctcm_sysfs.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/infiniband/hw/irdma/cm.c b/drivers/infiniband/hw/irdma/cm.c
-index 082a3ddb0fa3..632f65e53b63 100644
---- a/drivers/infiniband/hw/irdma/cm.c
-+++ b/drivers/infiniband/hw/irdma/cm.c
-@@ -3242,15 +3242,10 @@ enum irdma_status_code irdma_setup_cm_core(struct irdma_device *iwdev,
-  */
- void irdma_cleanup_cm_core(struct irdma_cm_core *cm_core)
- {
--	unsigned long flags;
--
- 	if (!cm_core)
- 		return;
+diff --git a/drivers/s390/net/ctcm_sysfs.c b/drivers/s390/net/ctcm_sysfs.c
+index ded1930a00b2..e3813a7aa5e6 100644
+--- a/drivers/s390/net/ctcm_sysfs.c
++++ b/drivers/s390/net/ctcm_sysfs.c
+@@ -39,11 +39,12 @@ static ssize_t ctcm_buffer_write(struct device *dev,
+ 	struct ctcm_priv *priv = dev_get_drvdata(dev);
+ 	int rc;
  
--	spin_lock_irqsave(&cm_core->ht_lock, flags);
--	if (timer_pending(&cm_core->tcp_timer))
--		del_timer_sync(&cm_core->tcp_timer);
--	spin_unlock_irqrestore(&cm_core->ht_lock, flags);
-+	del_timer_sync(&cm_core->tcp_timer);
+-	ndev = priv->channel[CTCM_READ]->netdev;
+-	if (!(priv && priv->channel[CTCM_READ] && ndev)) {
++	if (!(priv && priv->channel[CTCM_READ] &&
++	      priv->channel[CTCM_READ]->netdev)) {
+ 		CTCM_DBF_TEXT(SETUP, CTC_DBF_ERROR, "bfnondev");
+ 		return -ENODEV;
+ 	}
++	ndev = priv->channel[CTCM_READ]->netdev;
  
- 	destroy_workqueue(cm_core->event_wq);
- 	cm_core->dev->ws_reset(&cm_core->iwdev->vsi);
+ 	rc = kstrtouint(buf, 0, &bs1);
+ 	if (rc)
 -- 
 2.35.1
 

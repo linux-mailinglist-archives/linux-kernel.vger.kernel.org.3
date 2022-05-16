@@ -2,163 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B55528A5F
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 18:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B21528A49
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 18:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343644AbiEPQ3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 12:29:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
+        id S235871AbiEPQ1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 12:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343628AbiEPQ3J (ORCPT
+        with ESMTP id S1343585AbiEPQ0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 12:29:09 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951403B012;
-        Mon, 16 May 2022 09:29:08 -0700 (PDT)
-Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4L24PV63Xzz67h1V;
-        Tue, 17 May 2022 00:26:06 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 16 May 2022 18:29:06 +0200
-Received: from [10.47.25.151] (10.47.25.151) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 16 May
- 2022 17:29:05 +0100
-Message-ID: <d874dd82-30fd-f8e0-b7ab-0c9d14e47324@huawei.com>
-Date:   Mon, 16 May 2022 17:29:04 +0100
+        Mon, 16 May 2022 12:26:44 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0233A701;
+        Mon, 16 May 2022 09:26:43 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GGCOdp030439;
+        Mon, 16 May 2022 16:26:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=FW7LXEMJ9ccPDqxTB2fNIrNiMkgGgzIJb2LJamfTN1c=;
+ b=RJ6MmqluV7IZwhEGYh5OC/kAjd842cjLpI0CvsAhXw9s8OHkVyI+o/yV2N/iI5RBtYlc
+ UixYpW+thKJO+VPJRYO7kHIIyW60/fG3WR0Fp4xI1UeJq04zi7FLMcYTKGH0YzDrJmQx
+ +wDk+c2wh1bXRI4abP/e5joYkPAarjeP2T2w8eJXyc4peanB4xggrX46Lho/wgmmVoar
+ /9T1SgGL/WC//27Amif9g1ceK1wfmhCb63pDtt0i+vWnpg7amcllkZPvR/mXj/8Su+KR
+ V8i8bkRPzx+/2sQLZiGr5Ow9jOdaRvUuy42K6l3awQSrYmmGnrd8Ip9r8Glw2gt0dQa+ oQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3swy09a7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 16:26:43 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24GGExP2008296;
+        Mon, 16 May 2022 16:26:42 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3swy099j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 16:26:42 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24GGAMV2012754;
+        Mon, 16 May 2022 16:26:40 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04fra.de.ibm.com with ESMTP id 3g2428tbhe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 16:26:39 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24GGQav041091544
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 16 May 2022 16:26:36 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 90FA3A4055;
+        Mon, 16 May 2022 16:26:36 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DBF29A404D;
+        Mon, 16 May 2022 16:26:35 +0000 (GMT)
+Received: from [9.171.15.172] (unknown [9.171.15.172])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 16 May 2022 16:26:35 +0000 (GMT)
+Message-ID: <15c52e89-d6cf-213a-fc03-413d3dcba90c@linux.ibm.com>
+Date:   Mon, 16 May 2022 18:30:24 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v8 4/8] perf arm: Refactor event list iteration in
- auxtrace_record__init()
-To:     Yicong Yang <yangyicong@hisilicon.com>,
-        <gregkh@linuxfoundation.org>, <alexander.shishkin@linux.intel.com>,
-        <leo.yan@linaro.org>, <james.clark@arm.com>, <will@kernel.org>,
-        <robin.murphy@arm.com>, <acme@kernel.org>,
-        <jonathan.cameron@huawei.com>
-CC:     <helgaas@kernel.org>, <lorenzo.pieralisi@arm.com>,
-        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <mark.rutland@arm.com>, <joro@8bytes.org>,
-        <shameerali.kolothum.thodi@huawei.com>, <peterz@infradead.org>,
-        <mingo@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-pci@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <iommu@lists.linux-foundation.org>, <prime.zeng@huawei.com>,
-        <liuqi115@huawei.com>, <zhangshaokun@hisilicon.com>,
-        <linuxarm@huawei.com>
-References: <20220516125223.32012-1-yangyicong@hisilicon.com>
- <20220516125223.32012-5-yangyicong@hisilicon.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220516125223.32012-5-yangyicong@hisilicon.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v9 1/3] s390x: KVM: ipte lock for SCA access should be
+ contained in KVM
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
+        thuth@redhat.com, imbrenda@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, wintera@linux.ibm.com, seiden@linux.ibm.com,
+        nrb@linux.ibm.com
+References: <20220506092403.47406-1-pmorel@linux.ibm.com>
+ <20220506092403.47406-2-pmorel@linux.ibm.com>
+ <e23160b6-2d3c-ebdb-ac5a-c71311e7e5ec@redhat.com>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <e23160b6-2d3c-ebdb-ac5a-c71311e7e5ec@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.25.151]
-X-ClientProxiedBy: lhreml714-chm.china.huawei.com (10.201.108.65) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: RIuCxaz11snyi8IfVRivkNE-DjSOn0Ha
+X-Proofpoint-GUID: CDHvPm2uNGaGKjFLqeu8NoyXsSodW2PT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-16_14,2022-05-16_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
+ malwarescore=0 impostorscore=0 mlxscore=0 lowpriorityscore=0
+ suspectscore=0 priorityscore=1501 spamscore=0 clxscore=1015 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205160091
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/05/2022 13:52, Yicong Yang wrote:
 
-As requested before, please mention "perf tool" in the commit subject
 
-> From: Qi Liu <liuqi115@huawei.com>
+On 5/12/22 11:08, David Hildenbrand wrote:
+> On 06.05.22 11:24, Pierre Morel wrote:
+>> The former check to chose between SIIF or not SIIF can be done
+>> using the sclp.has_siif instead of accessing per vCPU structures
+>>
+>> When accessing the SCA, ipte lock and ipte_unlock do not need
+>> to access any vcpu structures but only the KVM structure.
+>>
+>> Let's simplify the ipte handling.
+>>
+>> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
 > 
-> Use find_pmu_for_event() to simplify logic in auxtrace_record__init().
+> Much better
 > 
-> Signed-off-by: Qi Liu <liuqi115@huawei.com>
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> ---
->   tools/perf/arch/arm/util/auxtrace.c | 53 ++++++++++++++++++-----------
->   1 file changed, 34 insertions(+), 19 deletions(-)
+> Reviewed-by: David Hildenbrand <david@redhat.com>
 > 
-> diff --git a/tools/perf/arch/arm/util/auxtrace.c b/tools/perf/arch/arm/util/auxtrace.c
-> index 5fc6a2a3dbc5..384c7cfda0fd 100644
-> --- a/tools/perf/arch/arm/util/auxtrace.c
-> +++ b/tools/perf/arch/arm/util/auxtrace.c
-> @@ -50,16 +50,32 @@ static struct perf_pmu **find_all_arm_spe_pmus(int *nr_spes, int *err)
->   	return arm_spe_pmus;
->   }
->   
-> +static struct perf_pmu *find_pmu_for_event(struct perf_pmu **pmus,
-> +					   int pmu_nr, struct evsel *evsel)
-> +{
-> +	int i;
-> +
-> +	if (!pmus)
-> +		return NULL;
-> +
-> +	for (i = 0; i < pmu_nr; i++) {
-> +		if (evsel->core.attr.type == pmus[i]->type)
-> +			return pmus[i];
-> +	}
-> +
-> +	return NULL;
-> +}
-> +
->   struct auxtrace_record
->   *auxtrace_record__init(struct evlist *evlist, int *err)
->   {
-> -	struct perf_pmu	*cs_etm_pmu;
-> +	struct perf_pmu	*cs_etm_pmu = NULL;
-> +	struct perf_pmu **arm_spe_pmus = NULL;
->   	struct evsel *evsel;
-> -	bool found_etm = false;
-> +	struct perf_pmu *found_etm = NULL;
->   	struct perf_pmu *found_spe = NULL;
-> -	struct perf_pmu **arm_spe_pmus = NULL;
-> +	int auxtrace_event_cnt = 0;
->   	int nr_spes = 0;
-> -	int i = 0;
->   
->   	if (!evlist)
->   		return NULL;
-> @@ -68,24 +84,23 @@ struct auxtrace_record
->   	arm_spe_pmus = find_all_arm_spe_pmus(&nr_spes, err);
->   
->   	evlist__for_each_entry(evlist, evsel) {
-> -		if (cs_etm_pmu &&
-> -		    evsel->core.attr.type == cs_etm_pmu->type)
-> -			found_etm = true;
-> -
-> -		if (!nr_spes || found_spe)
-> -			continue;
-> -
-> -		for (i = 0; i < nr_spes; i++) {
-> -			if (evsel->core.attr.type == arm_spe_pmus[i]->type) {
-> -				found_spe = arm_spe_pmus[i];
-> -				break;
-> -			}
-> -		}
-> +		if (cs_etm_pmu && !found_etm)
-> +			found_etm = find_pmu_for_event(&cs_etm_pmu, 1, evsel);
-> +
-> +		if (arm_spe_pmus && !found_spe)
-> +			found_spe = find_pmu_for_event(arm_spe_pmus, nr_spes, evsel);
->   	}
-> +
->   	free(arm_spe_pmus);
->   
-> -	if (found_etm && found_spe) {
-> -		pr_err("Concurrent ARM Coresight ETM and SPE operation not currently supported\n");
-> +	if (found_etm)
-> +		auxtrace_event_cnt++;
-> +
-> +	if (found_spe)
-> +		auxtrace_event_cnt++;
-> +
-> +	if (auxtrace_event_cnt > 1) {
-> +		pr_err("Concurrent AUX trace operation not currently supported\n");
->   		*err = -EOPNOTSUPP;
->   		return NULL;
->   	}
+> 
 
+Thanks,
+Regards,
+
+Pierre
+
+-- 
+Pierre Morel
+IBM Lab Boeblingen

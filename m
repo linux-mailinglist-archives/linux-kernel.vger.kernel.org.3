@@ -2,179 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23192528DA0
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2254E528DA3
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345251AbiEPTDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
+        id S1345259AbiEPTFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345238AbiEPTDL (ORCPT
+        with ESMTP id S1345195AbiEPTFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:03:11 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5452F3EB82
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:03:10 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id y20-20020a056830071400b00606a2ebd91bso10683736ots.5
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:03:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=V4GahDx2+UnkOWB2njUSr2HS/Dy+k/intVgLF5yRzLM=;
-        b=QP66kbFap0dA2vLnSmHdxk2AoXOTdqe7hb6v4tnSQW8iqhqaz7qNKz9OLoio6gX7Cj
-         BqXaUE6kVM+ivPQf2VZUtfYbN1PZrrSOWIiRlwwYRuSAXD8IQ3tIUVtR+4L/ETIV280S
-         M94XYinqs+gK3IV95dVEbmtTOSLiN0/w2ovvE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=V4GahDx2+UnkOWB2njUSr2HS/Dy+k/intVgLF5yRzLM=;
-        b=y39n9/LdteQWFQwvL9I64BnTTr+8Ue/hwZuZc4FGgaPz9IqmiSnKx7TpsbSZ0Sk5wU
-         2NmWbZXDHfDUq79ANgdXRTwjxh6dnyv/A9yfNOyP5SjwWI/itbwNMW7hOMtsf/MzjuiP
-         9syqnfrIuKoI/TJvUecDSJ1GaC5ig7GEQW66Ljj0ZUxG/N8sOgT0Kj73qXU4U3F5VF5X
-         7KKJvPTExJcdO+1b+Zj53tBPdjrAwMtsVf6mp6+LdX0urldwNKyhDEkko6wN2ZUdwjpL
-         x6SLlal9T6+5ni3GU41PdBK0NsAt1RTboh6K7wbmOij1fqFF2KlOD5gqjxmjO2t1DrGy
-         XHzA==
-X-Gm-Message-State: AOAM5311KyemcLGWTYi3L5KKI3VYTFZ8Zsd3wN37/gSRZuonpGzCVpq/
-        si1ft4J3/SUkoqmC+s87XzLLt7oKUZM+l3y8kl+Hpg==
-X-Google-Smtp-Source: ABdhPJzIraMdyy+cf5N3cn2fEi0wvFOaIMKvaCnp5/je8pQqGNGQmIISz4raYx080wid7tlfrVJ4iY97vl4x2QO9CtI=
-X-Received: by 2002:a05:6830:13ce:b0:606:702b:87f0 with SMTP id
- e14-20020a05683013ce00b00606702b87f0mr6480452otq.159.1652727789630; Mon, 16
- May 2022 12:03:09 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 16 May 2022 12:03:08 -0700
+        Mon, 16 May 2022 15:05:45 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5C3273
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:05:40 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220516190537euoutp0232f7fde909c3f026764ff78f5622889e~vq018bEzw1645916459euoutp02O
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 19:05:37 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220516190537euoutp0232f7fde909c3f026764ff78f5622889e~vq018bEzw1645916459euoutp02O
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1652727937;
+        bh=h7+/E7H/MRyrFasC/KFBpCGKVHCYzopaapRzkpChakE=;
+        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
+        b=J3t8bIKww9U91/aXllUx1XFJqoWz8qTBsMAIBINzB4M2tDEHcb+K6B6lI4mhfdYdv
+         nmXw042wt9qwP8rLDH3WmzHnrEHxQT8ddWthxFJqP1JuiQMvWK9SF6apfRvdc+glKc
+         UfLYZ0UWK1ScE07V9alm7bMZyRwAt0qHqwyjX2r0=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220516190537eucas1p1827e4dc46edb0e9fd4eef7e9067f07a0~vq01ienVy2497024970eucas1p1I;
+        Mon, 16 May 2022 19:05:37 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 07.CC.10260.080A2826; Mon, 16
+        May 2022 20:05:37 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220516190536eucas1p2ee3b60a2f6bc708919b76d35e69562a2~vq00_9hJ02269122691eucas1p28;
+        Mon, 16 May 2022 19:05:36 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220516190536eusmtrp14da1d7baf4a6dcff2f764c9908a67164~vq00_HXpd1633216332eusmtrp1D;
+        Mon, 16 May 2022 19:05:36 +0000 (GMT)
+X-AuditID: cbfec7f5-bddff70000002814-8b-6282a080c59a
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id D6.23.09404.080A2826; Mon, 16
+        May 2022 20:05:36 +0100 (BST)
+Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220516190536eusmtip2c5868c94ebcb947cde3c0db117dc5408~vq00zV-qZ2254722547eusmtip23;
+        Mon, 16 May 2022 19:05:36 +0000 (GMT)
+Received: from [192.168.8.130] (106.210.248.7) by CAMSVWEXC01.scsc.local
+        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Mon, 16 May 2022 20:05:34 +0100
+Message-ID: <b9a02707-8628-b7de-487b-a93697e8a2cb@samsung.com>
+Date:   Mon, 16 May 2022 21:05:32 +0200
 MIME-Version: 1.0
-In-Reply-To: <1652275113-10277-8-git-send-email-quic_c_skakit@quicinc.com>
-References: <1652275113-10277-1-git-send-email-quic_c_skakit@quicinc.com> <1652275113-10277-8-git-send-email-quic_c_skakit@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Mon, 16 May 2022 12:03:08 -0700
-Message-ID: <CAE-0n51JeC7oobCYNCJ-rOi3n_FVPBjz7yFmtwKEDeqWcX0vFw@mail.gmail.com>
-Subject: Re: [PATCH V12 7/9] regulator: Add a regulator driver for the PM8008 PMIC
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_collinsd@quicinc.com, quic_subbaram@quicinc.com,
-        quic_jprakash@quicinc.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+        Thunderbird/91.8.1
+Subject: Re: [PATCH v4 02/13] block: allow blk-zoned devices to have
+ non-power-of-2 zone size
+Content-Language: en-US
+To:     <damien.lemoal@opensource.wdc.com>
+CC:     <linux-nvme@lists.infradead.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-btrfs@vger.kernel.org>, <jiangbo.365@bytedance.com>,
+        <linux-block@vger.kernel.org>, <gost.dev@samsung.com>,
+        <linux-kernel@vger.kernel.org>, <dm-devel@redhat.com>,
+        Luis Chamberlain <mcgrof@kernel.org>, <axboe@kernel.dk>,
+        <pankydev8@gmail.com>, <dsterba@suse.com>, <hch@lst.de>
+From:   Pankaj Raghav <p.raghav@samsung.com>
+In-Reply-To: <20220516165416.171196-3-p.raghav@samsung.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [106.210.248.7]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrEKsWRmVeSWpSXmKPExsWy7djP87qNC5qSDGa2MlmsvtvPZvH77Hlm
+        i73vZrNaXPjRyGSxcvVRJoueAx9YLPbe0ra49HgFu8WevSdZLC7vmsNmMX/ZU3aLGxOeMlqs
+        ufmUxYHX49+JNWweO2fdZfe4fLbUY9OqTjaPzUvqPXbfbAAKt95n9Xi/7yqbx/otV1k8Pm+S
+        C+CK4rJJSc3JLEst0rdL4MrY/uA0Y8EfuYrDCzYxNjAuk+hi5OSQEDCReLf0HUsXIxeHkMAK
+        RomN/X+YIJwvjBLvry1ih3A+M0r0nO1khmlZsf8xmC0ksJxRYv4qUbii6Y/2sEI4Oxklml98
+        ZwGp4hWwk/i2aQcriM0ioCqxedZ9Roi4oMTJmU/AakQFIiSmzTrDBmILC8RLfGlezw5iMwuI
+        S9x6Mh/oJg4OEQE1iQ8L60DmMwu8ZpKYPGUXM0icTUBLorETrJxTwFri8opGRohWTYnW7b+h
+        xshLbH87B+oBRYmbK3+xQdi1EmuPnWGHsC9xSpw4AQ0XF4krFyZA1QhLvDq+BapGRuL05B4W
+        CLta4umN38wg90gItDBK9O9czwZyjwTQEX1nciBqHCXmnbnHBBHmk7jxVhDiHD6JSdumM09g
+        VJ2FFBCzkDw8C8kHs5B8sICRZRWjeGppcW56arFxXmq5XnFibnFpXrpecn7uJkZgsjv97/jX
+        HYwrXn3UO8TIxMF4iFGCg1lJhNegoiFJiDclsbIqtSg/vqg0J7X4EKM0B4uSOG9y5oZEIYH0
+        xJLU7NTUgtQimCwTB6dUA5OSlPKnTTOmG6u0zZw9ddGzfB2e8i7tSrXzm89WCX/ZKlM4/czF
+        DQy1pzcXmO6qa5Y88Z5/z4zy2OyluySyrwm7P/bimaI94WCpw2UNSZeYZHEFSxO/hPu9p5pv
+        G4enOooleXd1LOg0mbaR5WWbtUmQy4LPlX4uC++rL33ReuHrvpiiNYxvXTIX/J74XF+E5bUF
+        y9rogK0ur/cITJujILV3tczx7G9nlz3+tIrj2NKSNdb7c7bvNr/Sb39mAufEG6FM/tpFy+sb
+        Kxm7ujYeuPHwnqdO49fY1N+9xoLPald3zp6kepFpc7rPkX99rk87g6dsn7tot3+gJ/PbuhBZ
+        9V1fyg99df8WLNqUMSN84yQlluKMREMt5qLiRACLt3n95QMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupkleLIzCtJLcpLzFFi42I5/e/4Pd2GBU1JBs/uSVmsvtvPZvH77Hlm
+        i73vZrNaXPjRyGSxcvVRJoueAx9YLPbe0ra49HgFu8WevSdZLC7vmsNmMX/ZU3aLGxOeMlqs
+        ufmUxYHX49+JNWweO2fdZfe4fLbUY9OqTjaPzUvqPXbfbAAKt95n9Xi/7yqbx/otV1k8Pm+S
+        C+CK0rMpyi8tSVXIyC8usVWKNrQw0jO0tNAzMrHUMzQ2j7UyMlXSt7NJSc3JLEst0rdL0MvY
+        /uA0Y8EfuYrDCzYxNjAuk+hi5OSQEDCRWLH/MXMXIxeHkMBSRomN7VOYIBIyEp+ufGSHsIUl
+        /lzrYoMo+sgosWHxPSYIZyejxI1bD5hBqngF7CS+bdrBCmKzCKhKbJ51nxEiLihxcuYTFhBb
+        VCBC4sHus2A1wgLxEl+a14NtYBYQl7j1ZD7QUA4OEQE1iQ8L60DmMwu8ZpKYPGUX1Hn7GSV2
+        rG8FK2IT0JJo7ATr5RSwlri8opERYo6mROv231Az5SW2v53DDPGBosTNlb/YIOxaiVf3dzNO
+        YBSdheS8WUjOmIVk1CwkoxYwsqxiFEktLc5Nzy020itOzC0uzUvXS87P3cQITBPbjv3csoNx
+        5auPeocYmTgYDzFKcDArifAaVDQkCfGmJFZWpRblxxeV5qQWH2I0BYbRRGYp0eR8YKLKK4k3
+        NDMwNTQxszQwtTQzVhLn9SzoSBQSSE8sSc1OTS1ILYLpY+LglGpgyjnx9+gPLaZLM8zrQ/ax
+        ywQENiyIvd067VKoaNRld+uMnRfds571ndjPYP5p1/n6gsak2YKp12Nefj55tSQz8MXbvYvb
+        Hs9dWOCx9Ox398nPJZd+PnKlSC9L4+zrOf5MfvdnJU16+jhK6jvjk0uTTspMXDNh59z/JyWi
+        /QsuOeWn2p92ZuKcrdXLcPl4RGHYnYO+yzac7SqOXGhw6O3OXnY+yYRfv+Yoa9rVRXpbbCi2
+        EFn8Sa1MJeL9lfM7Uv6tPLjo3/cLedtcTjc33BZ5YrV6MVdASiWfxf5p8rovZUzvLn2SvJy5
+        8O1C5m06P86/O1pwcaPlRGOxtSUF8Rtr9d3nB15NnHb4aej6yFM/Ym8psRRnJBpqMRcVJwIA
+        66Cj/pwDAAA=
+X-CMS-MailID: 20220516190536eucas1p2ee3b60a2f6bc708919b76d35e69562a2
+X-Msg-Generator: CA
+X-RootMTR: 20220516165421eucas1p2515446ac290987bdb9af24ffb835b287
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220516165421eucas1p2515446ac290987bdb9af24ffb835b287
+References: <20220516165416.171196-1-p.raghav@samsung.com>
+        <CGME20220516165421eucas1p2515446ac290987bdb9af24ffb835b287@eucas1p2.samsung.com>
+        <20220516165416.171196-3-p.raghav@samsung.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Satya Priya (2022-05-11 06:18:31)
-> diff --git a/drivers/regulator/qcom-pm8008-regulator.c b/drivers/regulator/qcom-pm8008-regulator.c
-> new file mode 100644
-> index 0000000..0361f02
-> --- /dev/null
-> +++ b/drivers/regulator/qcom-pm8008-regulator.c
-> @@ -0,0 +1,221 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/* Copyright (c) 2022, The Linux Foundation. All rights reserved. */
-> +
-> +#include <linux/device.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mfd/qcom_pm8008.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
+Hi Damien,
+I copied your comments from the previous thread to avoid confusion.
 
-Is this include used?
 
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/regulator/driver.h>
-> +#include <linux/regulator/of_regulator.h>
+On 2022-05-16 16:00, Damien Le Moal wrote:
+> On 2022/05/16 15:39, Pankaj Raghav wrote:
+>> Checking if a given sector is aligned to a zone is a common
+>> operation that is performed for zoned devices. Add
+>> blk_queue_is_zone_start helper to check for this instead of opencoding it
+>> everywhere.
+>>
+>> Convert the calculations on zone size to be generic instead of relying on
+>> power_of_2 based logic in the block layer using the helpers wherever
+>> possible.
+>>
+>> @@ -490,14 +490,29 @@ static int blk_revalidate_zone_cb(struct blk_zone *zone, unsigned int idx,
+>>  	 * smaller last zone.
+>>  	 */
+>>  	if (zone->start == 0) {
+>> -		if (zone->len == 0 || !is_power_of_2(zone->len)) {
+>> -			pr_warn("%s: Invalid zoned device with non power of two zone size (%llu)\n",
+>> -				disk->disk_name, zone->len);
+>> +		if (zone->len == 0) {
+>> +			pr_warn("%s: Invalid zone size",
+>> +				disk->disk_name);
+>
+> This fits on one line, no ?
+>
+Yeah. I don't know why my formatter decided to do that. I will fix it. Thanks.
+>> +			return -ENODEV;
+>> +		}
+>> +
+>> +		/*
+>> +		 * Don't allow zoned device with non power_of_2 zone size with
+>> +		 * zone capacity less than zone size.
+>> +		 */
+>> +		if (!is_power_of_2(zone->len) &&
+>> +		    zone->capacity < zone->len) {
+>> +			pr_warn("%s: Invalid zoned size with non power of 2 zone size and zone capacity < zone size",
+>> +				disk->disk_name);
+>
+> Very long... What about:
+>
+> pr_warn("%s: Invalid zone capacity for non power of 2 zone size",
+> 	disk->disk_name);
+>
+This looks better. I will fix it up!
+>>  			return -ENODEV;
+>>  		}
+>>
+>>  		args->zone_sectors = zone->len;
+>> -		args->nr_zones = (capacity + zone->len - 1) >> ilog2(zone->len);
+>> +		/*
+>> +		 * Division is used to calculate nr_zones for both power_of_2
+>> +		 * and non power_of_2 zone sizes as it is not in the hot path.
+>> +		 */
+>
+> This comment is not very useful.
+>
 
-Is this include used?
+I also saw you mentioning the comment was not useful in nvme code for
+a similar scenario. Hannes brought up a point about making it
+explicit when we are not using any special path for power of 2 zone sizes as in
+most cases we do branching if the zone size is power of 2 to avoid division.
 
-> +
-> +#define VSET_STEP_MV                   8
-> +#define VSET_STEP_UV                   (VSET_STEP_MV * 1000)
-> +
-> +#define LDO_ENABLE_REG(base)           ((base) + 0x46)
-> +#define ENABLE_BIT                     BIT(7)
-> +
-> +#define LDO_VSET_LB_REG(base)          ((base) + 0x40)
-> +
-> +#define LDO_STEPPER_CTL_REG(base)      ((base) + 0x3b)
-> +#define DEFAULT_VOLTAGE_STEPPER_RATE   38400
-> +#define STEP_RATE_MASK                 GENMASK(1, 0)
-> +
-> +struct pm8008_regulator_data {
-> +       const char                      *name;
-> +       const char                      *supply_name;
-> +       int                             min_uv;
-> +       int                             max_uv;
-> +       int                             min_dropout_uv;
-> +       const struct linear_range       *voltage_range;
-> +};
-> +
-> +struct pm8008_regulator {
-> +       struct device           *dev;
-> +       struct regmap           *regmap;
-> +       struct regulator_desc   rdesc;
-> +       u16                     base;
-> +       int                     step_rate;
-> +       int                     voltage_selector;
-> +};
-> +
-> +static const struct linear_range nldo_ranges[] = {
-> +       REGULATOR_LINEAR_RANGE(528000, 0, 122, 8000),
-> +};
-> +
-> +static const struct linear_range pldo_ranges[] = {
-> +       REGULATOR_LINEAR_RANGE(1504000, 0, 237, 8000),
-> +};
-> +
-> +static const struct pm8008_regulator_data reg_data[] = {
-> +       /* name  parent       min_uv  max_uv  headroom_uv voltage_range */
-> +       { "ldo1", "vdd_l1_l2", 528000, 1504000, 225000, nldo_ranges, },
-> +       { "ldo2", "vdd_l1_l2", 528000, 1504000, 225000, nldo_ranges, },
-> +       { "ldo3", "vdd_l3_l4", 1504000, 3400000, 300000, pldo_ranges, },
-> +       { "ldo4", "vdd_l3_l4", 1504000, 3400000, 300000, pldo_ranges, },
-> +       { "ldo5", "vdd_l5",    1504000, 3400000, 200000, pldo_ranges, },
-> +       { "ldo6", "vdd_l6",    1504000, 3400000, 200000, pldo_ranges, },
-> +       { "ldo7", "vdd_l7",    1504000, 3400000, 200000, pldo_ranges, },
-> +};
-> +
-> +static int pm8008_regulator_get_voltage(struct regulator_dev *rdev)
-> +{
-> +       struct pm8008_regulator *pm8008_reg = rdev_get_drvdata(rdev);
-> +
-> +       return pm8008_reg->voltage_selector;
-> +}
-> +
-> +static inline int pm8008_write_voltage(struct pm8008_regulator *pm8008_reg,
-> +                                                       int mV)
-> +{
-> +       __le16 vset_raw;
-> +
-> +       vset_raw = cpu_to_le16(mV);
-> +
-> +       return regmap_bulk_write(pm8008_reg->regmap,
-> +                       LDO_VSET_LB_REG(pm8008_reg->base),
-> +                       (const void *)&vset_raw, sizeof(vset_raw));
+>> +		args->nr_zones = div64_u64(capacity + zone->len - 1, zone->len);
+>>  	} else if (zone->start + args->zone_sectors < capacity) {
+>>  		if (zone->len != args->zone_sectors) {
+>>  			pr_warn("%s: Invalid zoned device with non constant zone size\n",
+>> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+>> index 22fe512ee..32d7bd7b1 100644
+>> --- a/include/linux/blkdev.h
+>> +++ b/include/linux/blkdev.h
+>> @@ -686,6 +686,22 @@ static inline unsigned int blk_queue_zone_no(struct request_queue *q,
+>>  	return div64_u64(sector, zone_sectors);
+>>  }
+>>
+>> +static inline bool blk_queue_is_zone_start(struct request_queue *q, sector_t sec)
+>> +{
+>> +	sector_t zone_sectors = blk_queue_zone_sectors(q);
+>> +	u64 remainder = 0;
+>> +
+>> +	if (!blk_queue_is_zoned(q))
+>> +		return false;
+>> +
+>> +	if (is_power_of_2(zone_sectors))
+>> +		return IS_ALIGNED(sec, zone_sectors);
+>> +
+>> +	div64_u64_rem(sec, zone_sectors, &remainder);
+>> +	/* if there is a remainder, then the sector is not aligned */
+>
+> Hmmm... Fairly obvious. Not sure this comment is useful.
+>
+True. I will remove it.
 
-Does sparse complain about casting away __le16?
-
-> +}
-> +
-> +static int pm8008_regulator_set_voltage_time(struct regulator_dev *rdev,
-> +                               int old_uV, int new_uv)
-> +{
-> +       struct pm8008_regulator *pm8008_reg = rdev_get_drvdata(rdev);
-> +
-> +       return DIV_ROUND_UP(abs(new_uv - old_uV), pm8008_reg->step_rate);
-> +}
-> +
+>> +	return remainder == 0;
+>> +}
+>> +
+>>  static inline bool blk_queue_zone_is_seq(struct request_queue *q,
+>>  					 sector_t sector)
+>>  {
+>> @@ -732,6 +748,12 @@ static inline unsigned int blk_queue_zone_no(struct request_queue *q,
+>>  {
+>>  	return 0;
+>>  }
+>> +
+>> +static inline bool blk_queue_is_zone_start(struct request_queue *q, sector_t sec)
+>> +{
+>> +	return false;
+>> +}
+>> +
+>>  static inline unsigned int queue_max_open_zones(const struct request_queue *q)
+>>  {
+>>  	return 0;
+>
+>

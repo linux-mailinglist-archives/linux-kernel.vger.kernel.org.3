@@ -2,151 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71A39528DEF
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50154528DEB
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345425AbiEPTb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46326 "EHLO
+        id S1345417AbiEPTas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345426AbiEPTbW (ORCPT
+        with ESMTP id S241824AbiEPTao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:31:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C18D51A394
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:31:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652729471;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=RAcicosbrzNtKq22oJlMdmRA4Z34sYOSW6vqrZPUyF0=;
-        b=D2doh2R20EbfNVDoMUyerpLzgZaEOmXMkkwuu/jX8nK8ndYHrfvAVLJoaLnf69jsh1gs1G
-        O+HvvbkVfVuo9Ncobos5511FC32B+wlXmYbxsUbLrIg/haahNZAP/GGRzH5xKHCK7Hcp3p
-        juQZgNb9eta8f2ovz9BRRJpsqXxNQDg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-500-DCgS7vFaPTi9XkWYiP2xVw-1; Mon, 16 May 2022 15:31:09 -0400
-X-MC-Unique: DCgS7vFaPTi9XkWYiP2xVw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DCE983C1E321;
-        Mon, 16 May 2022 19:31:08 +0000 (UTC)
-Received: from localhost (unknown [10.39.192.88])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 714ED555087;
-        Mon, 16 May 2022 19:31:08 +0000 (UTC)
-Date:   Mon, 16 May 2022 20:29:25 +0100
-From:   Stefan Hajnoczi <stefanha@redhat.com>
-To:     ming.lei@redhat.com
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        kwolf@redhat.com, sgarzare@redhat.com
-Subject: Re: [RFC PATCH] ubd: add io_uring based userspace block driver
-Message-ID: <YoKmFYjIe1AWk/P8@stefanha-x1.localdomain>
+        Mon, 16 May 2022 15:30:44 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB0A396
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:30:41 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id p12-20020a9d4e0c000000b00606b40860a3so10750470otf.11
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:30:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YCWtu0aA9CxSyLGzITwZE2RFoiQ9ONEqkxjQ2xXJpA8=;
+        b=N1DvjCOaQM6sCQEEes2mVcUTdjUIrlF10i/geaVSLrHdW9DHYM9RSOwUNdSe7sw5ML
+         iI3+X/2W5j8/acTRzANF1jt2JabJjE9l79gK36u0DlbQpjUQmO+2vvqMqvrd8/hCtNxN
+         h3GpKGPOdbbBsUh+4HGkoE9XTVtn8oJ6wJDYGY6w1Wl1O1sP7dtZAJAbloyhxxl9R4kJ
+         r/lqjcKKIuaM1mV77JcWxk6aaIAec1SVa5DDVsoV9KwfHA28PP5JzR1Hn97cZceOoQF8
+         /yuJWqUkk8aq21QpukmMZWeXguHH0Vk1JAmGo80S4cRvkDK/djzob22EKoiPPQn3x5Vd
+         XlSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YCWtu0aA9CxSyLGzITwZE2RFoiQ9ONEqkxjQ2xXJpA8=;
+        b=HVarSf9IGaNNXVcpZrB92+xYh7+5FjUWLBA4H/Y81kzsXHY0BXkQjcTz2rAaqQ/dgm
+         yWWUQnG/N0k55TSv3OpNtrmZusDTEvKhhm83KKBfgEJLu8lYLZc0CbegcxCFHB9RLqnH
+         Ifzxhm/aNvS69W01c5bjA/oo2THh6SeM1HMJTMHJDlEEsZ1dQIIjbWzfQN10NkfbdVJN
+         oR4s6WrBM9msI7y0DuO3INiZAQlQmXcCJ1NqQS37ZTe5sYx2AuOVPOnt9ipg4v1dYda1
+         I+WT3FuHAuTVzAYfF2EJ6kvEgfryRNY0PlwIUBYR732u9OVcJ0k2qagm/6mb6ENfN/oC
+         GCNw==
+X-Gm-Message-State: AOAM530Gr6TrQzRoGAUyKF+YfBSLCHhdgTVZ34GlRin19OSdRC+fIXp7
+        rwyOtyMccHFEfydGaW+QJbyKrA3bVixLiGx4fjNl5Q==
+X-Google-Smtp-Source: ABdhPJz23KWYvAC+Yv7AxHe5ZYX+hLIjlHHyYF2clYPjWK/Y+R+Tix4W90Th4qCk0Q61fhRXkvUaf+iddyNwXNkW368=
+X-Received: by 2002:a9d:6e83:0:b0:605:4a01:1d8c with SMTP id
+ a3-20020a9d6e83000000b006054a011d8cmr6598748otr.174.1652729439301; Mon, 16
+ May 2022 12:30:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="6o93nD4/ZHY926/y"
-Content-Disposition: inline
-In-Reply-To: <20220509092312.254354-1-ming.lei@redhat.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220412195846.3692374-1-zhanwei@google.com> <YnmqgFkhqWklrQIw@google.com>
+ <CAN86XOYNpzEUN0aL9g=_GQFz5zdXX9Pvcs_TDmBVyJZDTfXREg@mail.gmail.com> <YnwRld0aH8489+XQ@google.com>
+In-Reply-To: <YnwRld0aH8489+XQ@google.com>
+From:   Wei Zhang <zhanwei@google.com>
+Date:   Mon, 16 May 2022 21:30:00 +0200
+Message-ID: <CAN86XOZdW7aZXhSU2=gP5TrRQc8wLmtTQui0J2kwhchp2pnbeQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] KVM: x86: Fix incorrect VM-exit profiling
+To:     Sean Christopherson <seanjc@google.com>,
+        Suleiman Souhlal <suleiman@google.com>
+Cc:     Sangwhan Moon <sxm@google.com>, Ingo Molnar <mingo@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jing Zhang <jingzhangos@google.com>,
+        David Matlack <dmatlack@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> Please don't top-post.  From https://people.kernel.org/tglx/notes-about-netiquette:
 
---6o93nD4/ZHY926/y
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Ah, I didn't know this should be avoided. Thanks for the info!
 
-Hi,
-This looks interesting! I have some questions:
+> My preference would be to find a more complete, KVM-specific solution.  The
+> profiling stuff seems like it's a dead end, i.e. will always be flawed in some
+> way.  If this cleanup didn't require a new hypercall then I wouldn't care, but
+> I don't love having to extend KVM's guest/host ABI for something that ideally
+> will become obsolete sooner than later.
 
-1. What is the ubdsrv permission model?
+I also feel that adding a new hypercall is too much here. A
+KVM-specific solution is definitely better, and the eBPF based
+approach you mentioned sounds like the ultimate solution (at least for
+inspecting exit reasons).
 
-A big usability challenge for *-in-userspace interfaces is the balance
-between security and allowing unprivileged processes to use these
-features.
-
-- Does /dev/ubd-control need to be privileged? I guess the answer is
-  yes since an evil ubdsrv can hang I/O and corrupt data in hopes of
-  triggering file system bugs.
-- Can multiple processes that don't trust each other use UBD at the same
-  time? I guess not since ubd_index_idr is global.
-- What about containers and namespaces? They currently have (write)
-  access to the same global ubd_index_idr.
-- Maybe there should be a struct ubd_device "owner" (struct
-  task_struct *) so only devices created by the current process can be
-  modified?
-
-2. io_uring_cmd design
-
-The rationale for the io_uring_cmd design is not explained in the cover
-letter. I think it's worth explaining the design. Here are my guesses:
-
-The same thing can be achieved with just file_operations and io_uring.
-ubdsrv could read I/O submissions with IORING_OP_READ and write I/O
-completions with IORING_OP_WRITE. That would require 2 sqes per
-roundtrip instead of 1, but the same number of io_uring_enter(2) calls
-since multiple sqes/cqes can be batched per syscall:
-
-- IORING_OP_READ, addr=(struct ubdsrv_io_desc*) (for submission)
-- IORING_OP_WRITE, addr=(struct ubdsrv_io_cmd*) (for completion)
-
-Both operations require a copy_to/from_user() to access the command
-metadata.
-
-The io_uring_cmd approach works differently. The IORING_OP_URING_CMD sqe
-carries a 40-byte payload so it's possible to embed struct ubdsrv_io_cmd
-inside it. The struct ubdsrv_io_desc mmap gets around the fact that
-io_uring cqes contain no payload. The driver therefore needs a
-side-channel to transfer the request submission details to ubdsrv. I
-don't see much of a difference between IORING_OP_READ and the mmap
-approach though.
-
-It's not obvious to me how much more efficient the io_uring_cmd approach
-is, but taking fewer trips around the io_uring submission/completion
-code path is likely to be faster. Something similar can be done with
-file_operations ->ioctl(), but I guess the point of using io_uring is
-that is composes. If ubdsrv itself wants to use io_uring for other I/O
-activity (e.g. networking, disk I/O, etc) then it can do so and won't be
-stuck in a blocking ioctl() syscall.
-
-It would be nice if you could write 2 or 3 paragraphs explaining why the
-io_uring_cmd design and the struct ubdsrv_io_desc mmap was chosen.
-
-3. Miscellaneous stuff
-
-- There isn't much in the way of memory ordering in the code. I worry a
-  little that changes to the struct ubdsrv_io_desc mmap may not be
-  visible at the expected time with respect to the io_uring cq ring.
-
-Thanks,
-Stefan
-
---6o93nD4/ZHY926/y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmKCphUACgkQnKSrs4Gr
-c8hrNAgAm3whe7oUQEB6dbQEsZj/jlnxPIiZq/Fr9/qmzrwAuaYZbQb7wxSij7gS
-agI4tPMiNTdweZSwBQgDzsfaKTZPVJ1Hg7e3a2a8KO2rXgIpuroUVG9D5UIU5cbv
-H1DysO+LRPe82xUkKTzeU6i4iUdIXar5R7hUCPUPZq/0+VMYHfbwwnXz3D37w/4i
-YPYKxaq6uPB75kcC95XiztGm69CXTsSu8Uy6VRE11WEqy0fI5T+mkCx0CecxpKQW
-fMpCO8VMcQKD4el7KiexTboeqA2kxbi1PxJninlh5S9zA8roQpUpLDS6LhwNlQeb
-43+1hxRTFOsSai6oZzonuQaQdYi2Cg==
-=vNPr
------END PGP SIGNATURE-----
-
---6o93nD4/ZHY926/y--
-
++Suleiman What do you think? The on-going work Sean described sounds
+promising, perhaps we should put this patch aside for the time being.

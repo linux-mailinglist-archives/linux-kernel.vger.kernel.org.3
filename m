@@ -2,144 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 093ED5282EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 13:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B3B35282EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 13:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243008AbiEPLMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 07:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47292 "EHLO
+        id S239812AbiEPLN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 07:13:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238564AbiEPLMJ (ORCPT
+        with ESMTP id S242966AbiEPLM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 07:12:09 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5234F2DD2;
-        Mon, 16 May 2022 04:12:02 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GB13MD039771;
-        Mon, 16 May 2022 11:11:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=wS0srYXEmxGor3ycWjDx9735YvM7Pkqu66LHyu1C2Zo=;
- b=N0/JpVTOOnQJxfsgu/OjyJyGQ+25O7a1MAIOQZDHSaB1XCntK0oxR6+rd4zXJddcIGWZ
- a8e5zqn2W56RKcKorE84JEO3axjVEMfUSYTtwEJ4Stf6ShRTWbMtkNZFtChRJfg8jiZ3
- r34NIfNXMG44cvzzqKve8057I38vW8iA8AFDgoR92V/WKRN0J9T3v3Sodw9PN5JhyJpP
- NgUoF3taGzx5KE9vQew/r1UkVXrD5XE4hrf28RUS8Qd3Y2bfcM9D6VsPOi8rp/fQUedZ
- BdZp1VnYY5Jsp08UOFfFYwJFO9r/kWwCNmTnsxyUPDylTblS2AUZRzA03ydijdrDX8MQ NQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3ncb86ja-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 11:11:58 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24GB35d6005691;
-        Mon, 16 May 2022 11:11:57 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3ncb86hw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 11:11:57 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24GB8fp9024019;
-        Mon, 16 May 2022 11:11:55 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3g2429ahh6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 11:11:55 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24GBBKnE25886980
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 16 May 2022 11:11:20 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 61B38AE04D;
-        Mon, 16 May 2022 11:11:50 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F356DAE045;
-        Mon, 16 May 2022 11:11:49 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Mon, 16 May 2022 11:11:49 +0000 (GMT)
-Date:   Mon, 16 May 2022 13:11:48 +0200
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Jonas Paulsson <paulsson@linux.vnet.ibm.com>,
-        Ulrich Weigand <ulrich.weigand@de.ibm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andreas Krebbel <krebbel@linux.ibm.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH 4/8] s390/entry: workaround llvm's IAS limitations
-Message-ID: <YoIxdMNJjt9rxoeZ@tuxmaker.boeblingen.de.ibm.com>
-References: <20220511120532.2228616-1-hca@linux.ibm.com>
- <20220511120532.2228616-5-hca@linux.ibm.com>
- <YnvynSZfF/8I8vmT@dev-arch.thelio-3990X>
- <Yn1CyTcrZk1Kgvoq@osiris>
- <YoIUX864ULCwu4pz@tuxmaker.boeblingen.de.ibm.com>
- <YoIlQaWNy1wu39ak@osiris>
+        Mon, 16 May 2022 07:12:58 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D55A2F01C;
+        Mon, 16 May 2022 04:12:56 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id dk23so27919301ejb.8;
+        Mon, 16 May 2022 04:12:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6hMDjOrTAE3diAoZxz5cxSEFvkxO6o8jPO8oMHqD0pE=;
+        b=JaO5qTYbXiNAu7e32sXuV8ai0ftIGiKMUc61uFgtS26hHmokyvZ4CA2B+3KDazkS5V
+         HXLnKzBeuaPP7wmWCjMPmN8EEt8ZY6B8A+4uvzEMR5btCsHPXzoL5Ww8FeikKkPs5cW4
+         5m5t+EZR17df+Z30ScKCwJDYzB7mcmgPeL1E+/nj/1uNsJEp9JcTXYZMYFyMk5gSQbwb
+         kjKot8ZzZ12C2iIj2hJ3xNFz+70lB5FHi3YhH3jfV4966ac4ypA4sHhJmMS2EABWDZUY
+         /YwiLfd2mCLmvdTZi9mRrXKxGzTffw/1LVbU2tmC4aIugLBjGmn1WFZcjaSYeJ8j15xi
+         NZMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6hMDjOrTAE3diAoZxz5cxSEFvkxO6o8jPO8oMHqD0pE=;
+        b=EUjiVBBon4A0ygYh/cKNAbmPkznr+24FGcYbso6I6H9IayE1utbxXkx3pQAcSshk/1
+         185Wx9HoKcRK3HjgDKOOUONMERFsZX5Myei6cgBpyOfvvhrEvNQJmrIpt6ezfXau1hIH
+         /gc8ODC6iV6EqXLbz8r/aDez2czPJbe0+IIrR2DH23DWwiDb+YJvp7QZiTeKQyG60LTn
+         aY8xUaZoqQn4jZirjV63t259oQW+QxD8QTmjvOAmwD2mDtWkTUhgiWF2+hY2vhZ3mEjr
+         exPo9VHumO8FKvEzoOC3StEMj7YUxkvwE1p2rhLMa4EMSTBrzvOu7/loFZU/FgWAXZad
+         iPLw==
+X-Gm-Message-State: AOAM531t8PlUI2huc065048OG29W9svIZCWgloIPuKW9OrCHLggWuLEK
+        eBLCTXSaywFgHxqp4qqF0CM=
+X-Google-Smtp-Source: ABdhPJzsAwDRZfUEo1XS+urcWt4CPtD86+gNxl8dLKOekqyj1lY4VS3N8tGpuu5CmVqfOjEalegwsQ==
+X-Received: by 2002:a17:906:cb90:b0:6f4:d91b:1025 with SMTP id mf16-20020a170906cb9000b006f4d91b1025mr15074638ejb.177.1652699574926;
+        Mon, 16 May 2022 04:12:54 -0700 (PDT)
+Received: from skbuf ([188.25.160.86])
+        by smtp.gmail.com with ESMTPSA id v2-20020a1709067d8200b006f3ef214e7asm3546441ejo.224.2022.05.16.04.12.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 04:12:54 -0700 (PDT)
+Date:   Mon, 16 May 2022 14:12:52 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Arun Ramadoss <arun.ramadoss@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Marek Vasut <marex@denx.de>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Eric Dumazet <edumazet@google.com>
+Subject: Re: [RFC Patch net-next v2 4/9] net: dsa: microchip: move port
+ memory allocation to ksz_common
+Message-ID: <20220516111252.rggqmaj7mxv6fieg@skbuf>
+References: <20220513102219.30399-1-arun.ramadoss@microchip.com>
+ <20220513102219.30399-5-arun.ramadoss@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YoIlQaWNy1wu39ak@osiris>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Ah_uCgCogIc6033dF8zDRplK3hk-zIq3
-X-Proofpoint-ORIG-GUID: 1y6NPgZ1evu3eDCAvQMH8h0HpMJw65OI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-16_07,2022-05-16_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- impostorscore=0 adultscore=0 mlxlogscore=999 lowpriorityscore=0
- bulkscore=0 suspectscore=0 mlxscore=0 malwarescore=0 priorityscore=1501
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205160065
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220513102219.30399-5-arun.ramadoss@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 12:19:45PM +0200, Heiko Carstens wrote:
-> On Mon, May 16, 2022 at 11:07:43AM +0200, Alexander Gordeev wrote:
-> > Isn't the machine check handler refers to this memory before checking
-> > unrecoverable storage errors (with CHKSTG macro) as result of this change?
+On Fri, May 13, 2022 at 03:52:14PM +0530, Arun Ramadoss wrote:
+> ksz8795 and ksz9477 init function initializes the memory to dev->ports
+> and assigns the ds real number of ports. Since both the routines are
+> same, moved the allocation of port memory to ksz_switch_register after
+> init.
 > 
-> Yes, indeed. However implementing this without another register will
-> be quite of a challenge. So what I would prefer in any case: just
-> assume that this minimal set of memory accesses work. Actually I'd
-> seriously like to go a bit further, and even move the checks for
-> storage errors back to C for two reasons:
+> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+> ---
+
+Does this actually work? ksz8_switch_init() and ksz9477_switch_init()
+still dereference dev->ports. They are called from dev->dev_ops->init()
+from ksz_switch_register(). You have moved the devm_kzalloc() to _after_
+the dev->dev_ops->init() call. So these functions are accessing memory
+behind a not-yet-allocated pointer.
+
+>  drivers/net/dsa/microchip/ksz8795.c    | 8 --------
+>  drivers/net/dsa/microchip/ksz9477.c    | 8 --------
+>  drivers/net/dsa/microchip/ksz_common.c | 9 +++++++++
+>  3 files changed, 9 insertions(+), 16 deletions(-)
 > 
-> - this would make the machine check handler entry code easier again
-> - it would also allow to enter the machine check handler with DAT on
+> diff --git a/drivers/net/dsa/microchip/ksz8795.c b/drivers/net/dsa/microchip/ksz8795.c
+> index b6032b65afc2..91f29ff7256c 100644
+> --- a/drivers/net/dsa/microchip/ksz8795.c
+> +++ b/drivers/net/dsa/microchip/ksz8795.c
+> @@ -1599,11 +1599,6 @@ static int ksz8_switch_init(struct ksz_device *dev)
+>  
+>  	dev->reg_mib_cnt = MIB_COUNTER_NUM;
+>  
+> -	dev->ports = devm_kzalloc(dev->dev,
+> -				  dev->info->port_cnt * sizeof(struct ksz_port),
+> -				  GFP_KERNEL);
+> -	if (!dev->ports)
+> -		return -ENOMEM;
+>  	for (i = 0; i < dev->info->port_cnt; i++) {
+>  		mutex_init(&dev->ports[i].mib.cnt_mutex);
+>  		dev->ports[i].mib.counters =
+> @@ -1615,9 +1610,6 @@ static int ksz8_switch_init(struct ksz_device *dev)
+>  			return -ENOMEM;
+>  	}
+>  
+> -	/* set the real number of ports */
+> -	dev->ds->num_ports = dev->info->port_cnt;
+> -
+>  	/* We rely on software untagging on the CPU port, so that we
+>  	 * can support both tagged and untagged VLANs
+>  	 */
+> diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
+> index c712a0011367..1a0fd36e180e 100644
+> --- a/drivers/net/dsa/microchip/ksz9477.c
+> +++ b/drivers/net/dsa/microchip/ksz9477.c
+> @@ -1482,11 +1482,6 @@ static int ksz9477_switch_init(struct ksz_device *dev)
+>  	dev->reg_mib_cnt = SWITCH_COUNTER_NUM;
+>  	dev->mib_cnt = TOTAL_SWITCH_COUNTER_NUM;
+>  
+> -	dev->ports = devm_kzalloc(dev->dev,
+> -				  dev->info->port_cnt * sizeof(struct ksz_port),
+> -				  GFP_KERNEL);
+> -	if (!dev->ports)
+> -		return -ENOMEM;
+>  	for (i = 0; i < dev->info->port_cnt; i++) {
+>  		spin_lock_init(&dev->ports[i].mib.stats64_lock);
+>  		mutex_init(&dev->ports[i].mib.cnt_mutex);
+> @@ -1499,9 +1494,6 @@ static int ksz9477_switch_init(struct ksz_device *dev)
+>  			return -ENOMEM;
+>  	}
+>  
+> -	/* set the real number of ports */
+> -	dev->ds->num_ports = dev->info->port_cnt;
+> -
+>  	return 0;
+>  }
+>  
+> diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
+> index fd2f1bd3feb5..717734fe437e 100644
+> --- a/drivers/net/dsa/microchip/ksz_common.c
+> +++ b/drivers/net/dsa/microchip/ksz_common.c
+> @@ -768,6 +768,15 @@ int ksz_switch_register(struct ksz_device *dev,
+>  	if (ret)
+>  		return ret;
+>  
+> +	dev->ports = devm_kzalloc(dev->dev,
+> +				  dev->info->port_cnt * sizeof(struct ksz_port),
+> +				  GFP_KERNEL);
+> +	if (!dev->ports)
+> +		return -ENOMEM;
+> +
+> +	/* set the real number of ports */
+> +	dev->ds->num_ports = dev->info->port_cnt;
+> +
+>  	/* Host port interface will be self detected, or specifically set in
+>  	 * device tree.
+>  	 */
+> -- 
+> 2.33.0
 > 
-> After all we rely anyway on the fact that at least the local lowcore +
-> the page(s) which contain text are still accessible. Assuming that a
-> couple of page tables also work won't make this much worse, but the
-> code much easier.
-> 
-> So I'd suggest: leave this code as is, and at some later point move
-> "rework" the early machine check handler code.
-> 
-> What do you think?
 
-Sounds very reasonable. Please, find my:
-
-Acked-by: Alexander Gordeev <agordeev@linux.ibm.com>
-
-
-Also, how such a follow-up looks to you?
-
-	lgr	%r14,\reg
-#ifdef CONFIG_AS_IS_LLVM
-	larl	%r13,\start
-	slgr	%r14,%r13
-	clgfrl	%r14,.Lrange_size\@
-#else
-	slgfi	%r14,\start
-	clgfi	%r14,\end - \start
-#endif

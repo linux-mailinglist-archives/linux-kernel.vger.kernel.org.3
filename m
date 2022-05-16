@@ -2,240 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFA6E528AC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 18:44:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B7A2528ACB
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 18:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343820AbiEPQoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 12:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
+        id S1343827AbiEPQpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 12:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244534AbiEPQog (ORCPT
+        with ESMTP id S1343776AbiEPQpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 12:44:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78763C4B1;
-        Mon, 16 May 2022 09:44:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 16 May 2022 12:45:06 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936303C4BB;
+        Mon, 16 May 2022 09:45:05 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 12F2722023;
+        Mon, 16 May 2022 16:45:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652719504; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=T1cuhmg/5wnGfWVCfJ3OzVK0K9C2gJVK76XQYPz6KqI=;
+        b=Llq6vrw2FLzDd7Ehr6QLl+N0BoHmma0XEANDL72UpqofMZMo5j2CDuWWJLYok6jijOAu+c
+        aaQ7lVgOZe5+suqo7db8fp+u52SFsfKuJrznCh8rc45nwrXUcRol8JxokYILkGhRfWZ4ej
+        u8Lqds9e+S0nLT6TtjeqOuuwKyZyRHM=
+Received: from suse.cz (unknown [10.100.201.86])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 603BAB81263;
-        Mon, 16 May 2022 16:44:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4206C385AA;
-        Mon, 16 May 2022 16:44:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652719472;
-        bh=CYEvraFOukMkXu6WJZExhFsNqffzBStRQaubVucF2VE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hQ3raqWSwFK4Im/gQu5BrQ4j5EyxbLqHUz+Thyw+Air6BDVAOJuI4kc6nzyOZ25OU
-         b1AY5WRVxEfX6D07dcOBR9dytT7129POMhLMkPhRECoHIpow/eHniKQmN8v6TxqUJV
-         tJixyVk71SO7PdcAHVfTeXZiyZVkkd5CwEajyv+QDZqiavEnxLHiwL/2xdBqhdWSmN
-         4A3s5b1Svfd80b2zJy//vKyhJqZOMOaPIwhpcG+FpUJYzDEkcVA7zm4loAzpNzjGFT
-         Dleu4A7zeI1r9OS5GBL1rbamw5P5i4i0d7rnznuEpn/KsRQ8jpMJhqvFRfO1ZSnsZQ
-         1f1tFAW7qheOA==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nqdpc-00Bfyr-Tm; Mon, 16 May 2022 17:44:29 +0100
-Date:   Mon, 16 May 2022 17:44:28 +0100
-Message-ID: <87ilq55swj.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Raghavendra Rao Ananta <rananta@google.com>
-Cc:     Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH v7 0/9] KVM: arm64: Add support for hypercall services selection
-In-Reply-To: <CAJHc60w1F7RAgJkv5PRuJtKjTw1gUaYmZk885AVhPLF2h6YbkQ@mail.gmail.com>
-References: <20220502233853.1233742-1-rananta@google.com>
-        <878rri8r78.wl-maz@kernel.org>
-        <CAJHc60xp=UQT_CX0zoiSjAmkS8JSe+NB5Gr+F5mmybjJAWkUtQ@mail.gmail.com>
-        <878rriicez.wl-maz@kernel.org>
-        <CAJHc60w1F7RAgJkv5PRuJtKjTw1gUaYmZk885AVhPLF2h6YbkQ@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: rananta@google.com, drjones@redhat.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, pbonzini@redhat.com, catalin.marinas@arm.com, will@kernel.org, pshier@google.com, ricarkol@google.com, oupton@google.com, reijiw@google.com, jingzhangos@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by relay2.suse.de (Postfix) with ESMTPS id 134102C141;
+        Mon, 16 May 2022 16:45:01 +0000 (UTC)
+Date:   Mon, 16 May 2022 18:44:58 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Gang Li <ligang.bdlg@bytedance.com>
+Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        ebiederm@xmission.com, keescook@chromium.org,
+        viro@zeniv.linux.org.uk, rostedt@goodmis.org, mingo@redhat.com,
+        peterz@infradead.org, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, david@redhat.com, imbrenda@linux.ibm.com,
+        apopple@nvidia.com, adobriyan@gmail.com,
+        stephen.s.brennan@oracle.com, ohoono.kwon@samsung.com,
+        haolee.swjtu@gmail.com, kaleshsingh@google.com,
+        zhengqi.arch@bytedance.com, peterx@redhat.com, shy828301@gmail.com,
+        surenb@google.com, ccross@google.com, vincent.whitchurch@axis.com,
+        tglx@linutronix.de, bigeasy@linutronix.de, fenghua.yu@intel.com,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH 0/5 v1] mm, oom: Introduce per numa node oom for
+ CONSTRAINT_MEMORY_POLICY
+Message-ID: <YoJ/ioXwGTdCywUE@dhcp22.suse.cz>
+References: <20220512044634.63586-1-ligang.bdlg@bytedance.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220512044634.63586-1-ligang.bdlg@bytedance.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 03 May 2022 22:09:29 +0100,
-Raghavendra Rao Ananta <rananta@google.com> wrote:
->=20
-> On Tue, May 3, 2022 at 1:33 PM Marc Zyngier <maz@kernel.org> wrote:
-> >
-> > On Tue, 03 May 2022 19:49:13 +0100,
-> > Raghavendra Rao Ananta <rananta@google.com> wrote:
-> > >
-> > > Hi Marc,
-> > >
-> > > On Tue, May 3, 2022 at 10:24 AM Marc Zyngier <maz@kernel.org> wrote:
-> > > >
-> > > > On Tue, 03 May 2022 00:38:44 +0100,
-> > > > Raghavendra Rao Ananta <rananta@google.com> wrote:
-> > > > >
-> > > > > Hello,
-> > > > >
-> > > > > Continuing the discussion from [1], the series tries to add suppo=
-rt
-> > > > > for the userspace to elect the hypercall services that it wishes
-> > > > > to expose to the guest, rather than the guest discovering them
-> > > > > unconditionally. The idea employed by the series was taken from
-> > > > > [1] as suggested by Marc Z.
-> > > >
-> > > > As it took some time to get there, and that there was still a bunch=
- of
-> > > > things to address, I've taken the liberty to apply my own fixes to =
-the
-> > > > series.
-> > > >
-> > > > Please have a look at [1], and let me know if you're OK with the
-> > > > result. If you are, I'll merge the series for 5.19.
-> > > >
-> > > > Thanks,
-> > > >
-> > > >         M.
-> > > >
-> > > Thank you for speeding up the process; appreciate it. However, the
-> > > series's selftest patches have a dependency on Oliver's
-> > > PSCI_SYSTEM_SUSPEND's selftest patches [1][2]. Can we pull them in
-> > > too?
-> >
-> > Urgh... I guess this is the time to set some ground rules:
-> >
-> > - Please don't introduce dependencies between series, that's
-> >   unmanageable. I really need to see each series independently, and if
-> >   there is a merge conflict, that's my job to fix (and I don't really
-> >   mind).
-> >
-> > - If there is a dependency between series, please post a version of
-> >   the required patches as a prefix to your series, assuming this
-> >   prefix is itself standalone. If it isn't, then something really is
-> >   wrong, and the series should be resplit.
-> >
-> > - You also should be basing your series on an *official* tag from
-> >   Linus' tree (preferably -rc1, -rc2 or -rc3), and not something
-> >   random like any odd commit from the KVM tree (I had conflicts while
-> >   applying this on -rc3, probably due to the non-advertised dependency
-> >   on Oliver's series).
-> >
-> Thanks for picking the dependency patches. I'll keep these mind the
-> next time I push changes.
->=20
-> > >
-> > > aarch64/hypercalls.c: In function =E2=80=98guest_test_hvc=E2=80=99:
-> > > aarch64/hypercalls.c:95:30: error: storage size of =E2=80=98res=E2=80=
-=99 isn=E2=80=99t known
-> > >    95 |         struct arm_smccc_res res;
-> > >       |                              ^~~
-> > > aarch64/hypercalls.c:103:17: warning: implicit declaration of function
-> > > =E2=80=98smccc_hvc=E2=80=99 [-Wimplicit-function-declaration]
-> > >   103 |                 smccc_hvc(hc_info->func_id, hc_info->arg1, 0,
-> > > 0, 0, 0, 0, 0, &res);
-> > >       |                 ^~~~~~~~~
-> > >
-> >
-> > I've picked the two patches, which means they will most likely appear
-> > twice in the history. In the future, please reach out so that we can
-> > organise this better.
-> >
-> > > Also, just a couple of readability nits in the fixed version:
-> > >
-> > > 1. Patch-2/9, hypercall.c:kvm_hvc_call_default_allowed(), in the
-> > > 'default' case, do you think we should probably add a small comment
-> > > that mentions we are checking for func_id in the PSCI range?
-> >
-> > Dumped a one-liner there.
-> >
-> > > 2. Patch-2/9, arm_hypercall.h, clear all the macros in this patch
-> > > itself instead of doing it in increments (unless there's some reason
-> > > that I'm missing)?
-> >
-> > Ah, rebasing leftovers, now gone.
-> >
-> > I've pushed an updated branch again, please have a look.
-> >
-> Thanks for addressing these. The series looks good now.
+On Thu 12-05-22 12:46:29, Gang Li wrote:
+> TLDR:
+> If a mempolicy is in effect(oc->constraint == CONSTRAINT_MEMORY_POLICY), out_of_memory() will
+> select victim on specific node to kill. So that kernel can avoid accidental killing on NUMA system.
+> 
+> Problem:
+> Before this patch series, oom will only kill the process with the highest memory usage.
+> by selecting process with the highest oom_badness on the entire system to kill.
+> 
+> This works fine on UMA system, but may have some accidental killing on NUMA system.
+> 
+> As shown below, if process c.out is bind to Node1 and keep allocating pages from Node1,
+> a.out will be killed first. But killing a.out did't free any mem on Node1, so c.out
+> will be killed then.
+> 
+> A lot of our AMD machines have 8 numa nodes. In these systems, there is a greater chance
+> of triggering this problem.
 
-Except it doesn't.
+Sorry, I have only now found this email thread. The limitation of the
+NUMA constrained oom is well known and long standing. Basically the
+whole thing is a best effort as we are lacking per numa node memory
+stats. I can see that you are trying to fill up that gap but this is
+not really free. Have you measured the runtime overhead? Accounting is
+done in a very performance sensitive paths and it would be rather
+unfortunate to make everybody pay the overhead while binding to a
+specific node or sets of nodes is not the most common usecase.
 
-I introduced a bug by overly simplifying kvm_arm_set_fw_reg_bmap(), as
-we have to allow userspace writing the *same* value. As it turns out,
-QEMU restores all the registers on each reboot. Which as the vcpus
-have all run. This in turns triggers another issue in QEMU, which
-instead of taking the hint ans stopping there, sends all the vcpus
-into the guest in one go with random states... Crap happens.
+Also have you tried to have a look at cpusets? Those should be easier to
+make a proper selection as it should be possible to iterate over tasks
+belonging to a specific cpuset much more easier - essentialy something
+similar to memcg oom killer. We do not do that right now and by a very
+brief look at the CONSTRAINT_CPUSET it seems that this code is not
+really doing much these days. Maybe that would be a more appropriate way
+to deal with more precise node aware oom killing?
 
-I'll wear a brown paper bag for the rest of the day and add the
-following patch to the branch.
+[...]
+>  21 files changed, 317 insertions(+), 111 deletions(-)
 
-Thanks,
+The code footprint is not free either. And more importantnly does this
+even work much more reliably? I can see quite some NUMA_NO_NODE
+accounting (e.g. copy_pte_range!).Is this somehow fixable?
 
-	M.
+Also how do those numbers add up. Let's say you increase the counter as
+NUMA_NO_NODE but later on during the clean up you decrease based on the
+page node?
 
-=46rom 528ada2811ba0bb2b2db5bf0f829b48c50f3c13c Mon Sep 17 00:00:00 2001
-From: Marc Zyngier <maz@kernel.org>
-Date: Mon, 16 May 2022 17:32:54 +0100
-Subject: [PATCH] KVM: arm64: Fix hypercall bitmap writeback when vcpus have
- already run
-
-We generally want to disallow hypercall bitmaps being changed
-once vcpus have already run. But we must allow the write if
-the written value is unchanged so that userspace can rewrite
-the register file on reboot, for example.
-
-Without this, a QEMU-based VM will fail to reboot correctly.
-
-The original code was correct, and it is me that introduced
-the regression.
-
-Fixes: 05714cab7d63 ("KVM: arm64: Setup a framework for hypercall bitmap fi=
-rmware registers")
-Signed-off-by: Marc Zyngier <maz@kernel.org>
----
- arch/arm64/kvm/hypercalls.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
-index ccbd3cefb91a..c9f401fa01a9 100644
---- a/arch/arm64/kvm/hypercalls.c
-+++ b/arch/arm64/kvm/hypercalls.c
-@@ -379,7 +379,8 @@ static int kvm_arm_set_fw_reg_bmap(struct kvm_vcpu *vcp=
-u, u64 reg_id, u64 val)
-=20
- 	mutex_lock(&kvm->lock);
-=20
--	if (test_bit(KVM_ARCH_FLAG_HAS_RAN_ONCE, &kvm->arch.flags)) {
-+	if (test_bit(KVM_ARCH_FLAG_HAS_RAN_ONCE, &kvm->arch.flags) &&
-+	    val !=3D *fw_reg_bmap) {
- 		ret =3D -EBUSY;
- 		goto out;
- 	}
---=20
-2.34.1
-
-
---=20
-Without deviation from the norm, progress is not possible.
+Last but not least I am really not following MM_NO_TYPE concept. I can
+only see add_mm_counter users without any decrements. What is going on
+there?
+-- 
+Michal Hocko
+SUSE Labs

@@ -2,98 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D54D25288C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A615288CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:27:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245051AbiEPP05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 11:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46044 "EHLO
+        id S244273AbiEPP1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 11:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245280AbiEPP0p (ORCPT
+        with ESMTP id S229688AbiEPP1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 11:26:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AA912090;
-        Mon, 16 May 2022 08:26:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 76535B8121B;
-        Mon, 16 May 2022 15:26:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE3B1C385AA;
-        Mon, 16 May 2022 15:26:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652714802;
-        bh=JztI8HRn1WRJ0KxdPoT2HzVWj4E6+JPXuz5amPg/sf8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P8t6JwlzIdGgNbztG/ue5BkgiDwqsqhHKcBgDxwX2inVugHgGBFrUpWTydW50qGGB
-         1J4+moExBK7TjrSuoT9c/L3oa9lD46L4mhCsqoqqZ2RrLSP1Vbw6t44dOIXaiwiUCA
-         yDDWEft0lvuUK2fOwsmoE9WJGhQ9BXcH4q7HjEWI=
-Date:   Mon, 16 May 2022 17:26:34 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        baruch@tkos.co.il
-Subject: Re: [PATCH 4.9/4.14/4.19/5.4] tty/serial: digicolor: fix possible
- null-ptr-deref in digicolor_uart_probe()
-Message-ID: <YoJtKiRuoWE+oAzG@kroah.com>
-References: <20220516141152.1549756-1-yangyingliang@huawei.com>
+        Mon, 16 May 2022 11:27:02 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DDE12754;
+        Mon, 16 May 2022 08:26:55 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-edf9ddb312so20530436fac.8;
+        Mon, 16 May 2022 08:26:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KHyeVKxqxatLeY3gDq4jdVF9Tt519Zk/h+VHXOLojzc=;
+        b=KewvRBMJACjGiAlIKD93nIY5CDbfu7LGLi5U9OT3JumiPFbrpxe/9hLyeFkc/lrj9W
+         nyGDOJdITBAxQzLjMsAtN3oVx6acR1EWDeCWuS5Bd76MnSfwqtGsu1op6ye4kfO5CSEg
+         kyAvSbwiXB2Wctjrp7/yIbHPfXU8bo/c/Na8FsNDrd2IewsEeOUHsrgrbCChJFtxq4Xg
+         IbIjbK0xHOfAtds8bB6vnnsS1hu/Zv0xIdI/oEbKwWOt7kdKS6i1efSkkS1/Yh+RkHIv
+         AcFdJQl6YijSS3Vzpn7tqldQsxM+mtnHyKfaPlcsPcTq3aYi7vFD5B1VH2e5WXC3ddxO
+         Mftw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KHyeVKxqxatLeY3gDq4jdVF9Tt519Zk/h+VHXOLojzc=;
+        b=tJChQStwvwqF2VBreDpMlHcHk2fInDb+4XutpKFhIzIaNBQn1y+dcfwiy2TnWSvmTF
+         Aza7Md5bST8lepRWHm83VAZA89tXGbxDXPlmoYTKcdbGr6Jni1jJcojh9cwGigr8rtmS
+         al6Zjp42rYcMG59gYG+tBe6d6HTOVJqdUYkCHXq6xe5efpw47XgnKHPpHea6x3RO9jQn
+         3V+GtACDVx9FNm6u7Je0JOSLtod3ezEnbYEyX/lKFBM0OzbSkPC63Yco0bOGVt81eRCY
+         mTtdRYOXq7gXWVmZ1mIyesTPzEzNbT7qbkihg4+wCptTRFCgrSBgtVV6d/GRANz9A0jM
+         3Stw==
+X-Gm-Message-State: AOAM532FG9XcG058P247KiVrPeyRuP07jYZynK+cyGOYyun4IBcN706t
+        2iRwPnkw4CxiPBC1zfQMtj4=
+X-Google-Smtp-Source: ABdhPJzIjGJ8YJEvupAXFxrzzx+fCG8rregIbh6jLEAET5ITg4EypP6IKnXddR5n4Rh0gU+G8PeHrw==
+X-Received: by 2002:a05:6870:c692:b0:e9:5368:10df with SMTP id cv18-20020a056870c69200b000e9536810dfmr9767194oab.182.1652714814852;
+        Mon, 16 May 2022 08:26:54 -0700 (PDT)
+Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
+        by smtp.gmail.com with ESMTPSA id z30-20020a056870461e00b000e686d1389fsm5475774oao.57.2022.05.16.08.26.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 08:26:54 -0700 (PDT)
+Date:   Mon, 16 May 2022 10:26:51 -0500
+From:   Chris Morgan <macroalpha82@gmail.com>
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 6/6] arm64: dts: rockchip: enable sfc controller on
+ Quartz64 Model A
+Message-ID: <20220516152651.GA18461@wintermute.localdomain>
+References: <20220511150117.113070-1-pgwipeout@gmail.com>
+ <20220511150117.113070-7-pgwipeout@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220516141152.1549756-1-yangyingliang@huawei.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220511150117.113070-7-pgwipeout@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 10:11:52PM +0800, Yang Yingliang wrote:
-> commit 447ee1516f19f534a228dda237eddb202f23e163 upstream.
+On Wed, May 11, 2022 at 11:01:17AM -0400, Peter Geis wrote:
+> Add the sfc controller binding for the Quartz64 Model A. This is not
+> populated by default, so leave it disabled.
 > 
-> It will cause null-ptr-deref when using 'res', if platform_get_resource()
-> returns NULL, so move using 'res' after devm_ioremap_resource() that
-> will check it to avoid null-ptr-deref.
-> And use devm_platform_get_and_ioremap_resource() to simplify code.
-> 
-> Fixes: 5930cb3511df ("serial: driver for Conexant Digicolor USART")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> Reviewed-by: Baruch Siach <baruch@tkos.co.il>
-> Cc: stable <stable@vger.kernel.org>
-> Link: https://lore.kernel.org/r/20220505124621.1592697-1-yangyingliang@huawei.com
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
 > ---
-> v1:
->   These stable versions don't have devm_platform_get_and_ioremap_resource(),
->   so just move using 'res' after devm_ioremap_resource().
-> ---
->  drivers/tty/serial/digicolor-usart.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../boot/dts/rockchip/rk3566-quartz64-a.dts      | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
 > 
-> diff --git a/drivers/tty/serial/digicolor-usart.c b/drivers/tty/serial/digicolor-usart.c
-> index 50ec5f1ac77f4..794864fac6250 100644
-> --- a/drivers/tty/serial/digicolor-usart.c
-> +++ b/drivers/tty/serial/digicolor-usart.c
-> @@ -476,10 +476,10 @@ static int digicolor_uart_probe(struct platform_device *pdev)
->  		return PTR_ERR(uart_clk);
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+> index 71df64655de5..6ec349e7e521 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+> +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+> @@ -603,6 +603,22 @@ &sdmmc1 {
+>  	status = "okay";
+>  };
 >  
->  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	dp->port.mapbase = res->start;
->  	dp->port.membase = devm_ioremap_resource(&pdev->dev, res);
->  	if (IS_ERR(dp->port.membase))
->  		return PTR_ERR(dp->port.membase);
-> +	dp->port.mapbase = res->start;
->  
->  	irq = platform_get_irq(pdev, 0);
->  	if (irq < 0)
+> +&sfc {
+> +	pinctrl-0 = <&fspi_pins>;
+> +	pinctrl-names = "default";
+> +	#address-cells = <1>;
+> +	#size-cells = <0>;
+> +	status = "disabled";
+> +
+> +	flash@0 {
+> +		compatible = "jedec,spi-nor";
+> +		reg = <0>;
+> +		spi-max-frequency = <24000000>;
+> +		spi-rx-bus-width = <4>;
+> +		spi-tx-bus-width = <1>;
+
+This isn't really a concern, just a comment. Did you test this with the
+spi-tx-bus-width of 4 by chance? While I did have to use 1 for my
+implementation (the Odroid Go Advance) the Rockchip engineer I worked
+with couldn't replicate the issue on his end and we ended up chalking
+my issues up to an implementation specific problem. I'm only commenting
+here because I don't want you to think that for this device the tx
+always has to be 1, of course if your implementation does have issues
+with a tx of 2 or 4 that's different...
+
+Thank you.
+
+> +	};
+> +};
+> +
+>  /* spdif is exposed on con40 pin 18 */
+>  &spdif {
+>  	status = "okay";
 > -- 
 > 2.25.1
 > 
-
-Now queued up, thanks.
-
-greg k-h

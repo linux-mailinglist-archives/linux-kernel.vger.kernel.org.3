@@ -2,152 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F5B5528902
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE664528904
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245408AbiEPPhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 11:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39346 "EHLO
+        id S244903AbiEPPhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 11:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244903AbiEPPhH (ORCPT
+        with ESMTP id S245334AbiEPPhu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 11:37:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E04C72458A
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 08:37:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652715425;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DIRR+/4xP3PcsIIpPjK0T2ZfAKws5p6jyUGEq00/P8o=;
-        b=IXAl6qc7SwSNaHHtBqvRLdsbEiCysOSgngXi2/Nn+FmP2MLVEbU8WUw3qqLyeIYnafuHRX
-        01D1Wi65Gmnaw3Sx4cLs4MhUpBWM3xyqyf/q6CpKMdmB5xsHZ7jxxy8AszAVioCYSi55mu
-        uwnpmV++hU3Xgaem/+U1JYSMhr2JrPo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-455-9Rov6n1COPmSVID0SU7tbA-1; Mon, 16 May 2022 11:37:01 -0400
-X-MC-Unique: 9Rov6n1COPmSVID0SU7tbA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D8F1D395AFE5;
-        Mon, 16 May 2022 15:37:00 +0000 (UTC)
-Received: from starship (unknown [10.40.192.55])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 71B61400E880;
-        Mon, 16 May 2022 15:36:57 +0000 (UTC)
-Message-ID: <874fad1e8443a88ef962775a960aac219c838b17.camel@redhat.com>
-Subject: Re: [PATCH] locking/atomic/x86: Introduce try_cmpxchg64
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Uros Bizjak <ubizjak@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Marco Elver <elver@google.com>
-Date:   Mon, 16 May 2022 18:36:56 +0300
-In-Reply-To: <YoJqXMN38b8dYwyY@google.com>
-References: <20220510154217.5216-1-ubizjak@gmail.com>
-         <20220510165506.GP76023@worktop.programming.kicks-ass.net>
-         <CAFULd4aNME5s2zGOO0A11kdjfHekH=ceSH7jUfAhmZaJWHv9cQ@mail.gmail.com>
-         <20220511075409.GX76023@worktop.programming.kicks-ass.net>
-         <CAFULd4aXpt_pnCR5OK5B1m5sErfB3uj_ez=-KW7=0qQheEdVzA@mail.gmail.com>
-         <Ynven5y2u9WNfwK+@google.com>
-         <CAFULd4bZDO5-3T4q9fanHFrRTDj8v6fypiTc=dFPO9Rp61g9eQ@mail.gmail.com>
-         <fcf55234cfb95600d412322fba4dc9d0c9a1d7f4.camel@redhat.com>
-         <YoJayBWZF3mUnYS6@google.com>
-         <9ed2fc294bf2c21b41b22605ff8039bb71903712.camel@redhat.com>
-         <YoJqXMN38b8dYwyY@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Mon, 16 May 2022 11:37:50 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9143C72D
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 08:37:49 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GDl7si031378;
+        Mon, 16 May 2022 15:37:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=pp1; bh=CwhzVZhX+sNwtcS0hm5B2TwUiy/ztA6FCyfi+kQwAa4=;
+ b=TFVpFNatV7R8P0N+ECf4MykubGXsKBJ9FmlVMgRdqYa2YBS3bB9dj5Ab6P4A8GJdWN/a
+ snTDqHxj33AzPB0/oICoxQkikS85kX01rFlpF+8ZrYLf4arLx64dhSJDu9kmrRhSG398
+ MtU8fhzsBmA2CL6Bj04PYe1q7Zzjb0fDxpLFcbJAwDnSbH0rE2xC255sW3s/aTdzMXKU
+ zgy4CAYYP8KYLnY9DSkmRAdAEw0mX2lm1qOOSKe2GHAjVdashfro5ojCrULCK04BcG86
+ uX7Bmnrrye80sjhM3ms1HaE+kPAws2MLfQ/WADwUSegmID+y5kIphG4GoFhXn6ZwIMlZ Fw== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3qt5jr4j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 15:37:34 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24GFS3ao026834;
+        Mon, 16 May 2022 15:37:32 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06ams.nl.ibm.com with ESMTP id 3g23pjaxcg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 15:37:32 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24GFbUEd15991182
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 16 May 2022 15:37:30 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 119E652050;
+        Mon, 16 May 2022 15:37:30 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id CC6CE5204E;
+        Mon, 16 May 2022 15:37:29 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     Heiko Carstens <hca@linux.ibm.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mapletree-vs-khugepaged
+References: <20220428172040.GA3623323@roeck-us.net> <YmvVkKXJWBoGqWFx@osiris>
+        <yt9dk0apbicu.fsf@linux.ibm.com>
+        <20220513165955.mkg5wvfi4dwpzoer@revolver>
+        <yt9dbkvy5zu0.fsf@linux.ibm.com>
+        <20220516140202.pcw2f6gu4kyslmjd@revolver>
+Date:   Mon, 16 May 2022 17:37:29 +0200
+In-Reply-To: <20220516140202.pcw2f6gu4kyslmjd@revolver> (Liam Howlett's
+        message of "Mon, 16 May 2022 14:02:09 +0000")
+Message-ID: <yt9d1qwt5w06.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="=-=-="
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 8w7-8ECbtWd7pGOFw5YWXkcOxmQgtVAz
+X-Proofpoint-ORIG-GUID: 8w7-8ECbtWd7pGOFw5YWXkcOxmQgtVAz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-16_14,2022-05-16_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ suspectscore=0 mlxscore=0 clxscore=1015 priorityscore=1501 malwarescore=0
+ lowpriorityscore=0 phishscore=0 bulkscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205160090
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-05-16 at 15:14 +0000, Sean Christopherson wrote:
-> On Mon, May 16, 2022, Maxim Levitsky wrote:
-> > On Mon, 2022-05-16 at 14:08 +0000, Sean Christopherson wrote:
-> > > On Mon, May 16, 2022, Maxim Levitsky wrote:
-> > > > On Wed, 2022-05-11 at 21:54 +0200, Uros Bizjak wrote:
-> > > > > On Wed, May 11, 2022 at 6:04 PM Sean Christopherson <seanjc@google.com> wrote:
-> > > > > > On Wed, May 11, 2022, Uros Bizjak wrote:
-> > > > > > > On Wed, May 11, 2022 at 9:54 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > > > > > > > Still, does 32bit actually support that stuff?
-> > > > > > > 
-> > > > > > > Unfortunately, it does:
-> > > > > > > 
-> > > > > > > kvm-intel-y        += vmx/vmx.o vmx/vmenter.o vmx/pmu_intel.o vmx/vmcs12.o \
-> > > > > > >                vmx/evmcs.o vmx/nested.o vmx/posted_intr.o
-> > > > > > > 
-> > > > > > > And when existing cmpxchg64 is substituted with cmpxchg, the
-> > > > > > > compilation dies for 32bits with:
-> > > > > > 
-> > > > > > ...
-> > > > > > 
-> > > > > > > > Anyway, your patch looks about right, but I find it *really* hard to
-> > > > > > > > care about 32bit code these days.
-> > > > > > > 
-> > > > > > > Thanks, this is also my sentiment, but I hope the patch will enable
-> > > > > > > better code and perhaps ease similar situation I have had elsewhere.
-> > > > > > 
-> > > > > > IMO, if we merge this it should be solely on the benefits to 64-bit code.  Yes,
-> > > > > > KVM still supports 32-bit kernels, but I'm fairly certain the only people that
-> > > > > > run 32-bit KVM are KVM developers.  32-bit KVM has been completely broken for
-> > > > > > multiple releases at least once, maybe twice, and no one ever complained.
-> > > > > 
-> > > > > Yes, the idea was to improve cmpxchg64 with the implementation of
-> > > > > try_cmpxchg64 for 64bit targets. However, the issue with 32bit targets
-> > > > > stood in the way, so the effort with 32-bit implementation was mainly
-> > > > > to unblock progression for 64-bit targets.
-> > > > 
-> > > > Would that allow tdp mmu to work on 32 bit?
-> > > 
-> > > From a purely technical perspective, there's nothing that prevents enabling the
-> > > TDP MMU on 32-bit kernels.  The TDP MMU is 64-bit only to simplify the implementation
-> > > and to reduce the maintenance and validation costs.
-> > 
-> > I understand exactly that, so the question, will this patch help make the tdp
-> > mmu work transparently on 32 bit kernels? I  heard that 64 bit cmpxchg was
-> > one of the main reasons that it is 64 bit only.
-> 
-> I don't think it moves the needled much, e.g. non-atomic 64-bit accesses are still
-> problematic, and we'd have to update the TDP MMU to deal with PAE paging (thanks
-> NPT).  All those problems are solvable, it's purely a matter of the ongoing costs
-> to solve them.
-> 
-> > I am asking because there was some talk to eliminate the direct mode from the
-> > legacy non tdp mmu, which would simplify its code by a lot, but then it will
-> > make 32 bit kernel fail back to shadowing mmu.
-> 
-> Simplify which code?  Between the nonpaging code and direct shadow pages in
-> indirect MMUs, the vast majority of the "direct" support in the legacy MMU needs
-> to be kept even if TDP support is dropped.  And the really nasty stuff, e.g. PAE
-> roots, would need to be carried over to the TDP MMU.
-> 
+--=-=-=
+Content-Type: text/plain
 
-I guess this makes sense. I haven't researched the code well enough to know the exact answer.
-I was just curious if this patch makes any difference :)
+Hi Liam,
 
-Thanks!
+Liam Howlett <liam.howlett@oracle.com> writes:
 
-Best regards,
-	Maxim Levitsky
+> * Sven Schnelle <svens@linux.ibm.com> [220515 16:02]:
+>
+> I tried the above on my qemu s390 with kernel 5.18.0-rc6-next-20220513,
+> but it runs without issue, return code is 0.  Is there something the VM
+> needs to have for this to trigger?
 
+A coworker said the same. Reason for this seems to be that i've run the
+code in a unittest environment which seems to make a difference. When
+compiling the code above with gcc on my system it also doesn't crash.
+So i have to figure out what makes this unittest binary special.
+
+>> I've added a few debug statements to the maple tree code:
+>> 
+>> [   27.769641] mas_next_entry: offset=14
+>> [   27.769642] mas_next_nentry: entry = 0e00000000000000, slots=0000000090249f80, mas->offset=15 count=14
+>
+> Where exactly are you printing this?
+
+I added a lot of debug statements to the code trying to understand
+it. I'll attach it to this mail.
+
+>> 
+>> I see in mas_next_nentry() that there's a while that iterates over the
+>> (used?) slots until count is reached.`
+>
+> Yes, mas_next_nentry() looks for the next non-null entry in the current
+> node.
+>
+>>After that loop mas_next_entry()
+>> just picks the next (unused?) entry, which is slot 15 in that case.
+>
+> mas_next_entry() returns the next non-null entry.  If there isn't one
+> returned by mas_next_nentry(), then it will advance to the next node by
+> calling mas_next_node().  There are checks in there for detecting dead
+> nodes for RCU use and limit checking as well.
+>
+>> 
+>> What i noticed while scanning over include/linux/maple_tree.h is:
+>> 
+>> struct maple_range_64 {
+>> 	struct maple_pnode *parent;
+>> 	unsigned long pivot[MAPLE_RANGE64_SLOTS - 1];
+>> 	union {
+>> 		void __rcu *slot[MAPLE_RANGE64_SLOTS];
+>> 		struct {
+>> 		void __rcu *pad[MAPLE_RANGE64_SLOTS - 1];
+>> 		struct maple_metadata meta;
+>>         	};
+>> 	};
+>> };
+>> 
+>> and struct maple_metadata is:
+>> 
+>> struct maple_metadata {
+>> 	unsigned char end;
+>> 	unsigned char gap;
+>> };
+>> 
+>> If i swap the gap and end members 0x0e00000000000000 becomes
+>> 0x000e000000000000. And 0xe matches our msa->offset 14 above.
+>> So it looks like mas_next() in mmap_region returns the meta
+>> data for the node.
+>
+> If this is the case, then I think any task that has more than 14 VMAs
+> would have issues.  I also use mas_next_entry() in mas_find() which is
+> used for the mas_for_each() macro/iterator.  Can you please enable
+> CONFIG_DEBUG_VM_MAPLE_TREE ?  mmap.c tests the tree after pretty much
+> any change and will dump useful information if there is an issue -
+> including the entire tree. See validate_mm_mt() for details.
+>
+> You can find CONFIG_DEBUG_VM_MAPLE_TREE in the config:
+> kernel hacking -> Memory debugging -> Debug VM -> Debug VM maple trees
+
+I have both DEBUG_MAPPLE_TREE and DEBUG_VM_MAPLE_TREE enabled, but don't
+see anything printed.
+
+--=-=-=
+Content-Type: text/x-diff
+Content-Disposition: attachment; filename=mapple-debug.diff
+
+ lib/maple_tree.c | 37 +++++++++++++++++++++++++++++++++++--
+ mm/mmap.c        | 36 +++++++++++++++++++++++++++++-------
+ 2 files changed, 64 insertions(+), 9 deletions(-)
+
+--=-=-=--
 

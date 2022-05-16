@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C0D2529081
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD1B528FF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347323AbiEPUZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46674 "EHLO
+        id S239953AbiEPTy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348009AbiEPT6T (ORCPT
+        with ESMTP id S1346343AbiEPTt4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:58:19 -0400
+        Mon, 16 May 2022 15:49:56 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F63B434A5;
-        Mon, 16 May 2022 12:50:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0004243AD7;
+        Mon, 16 May 2022 12:45:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7D536B81614;
-        Mon, 16 May 2022 19:50:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9DE4C385AA;
-        Mon, 16 May 2022 19:50:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C204B81612;
+        Mon, 16 May 2022 19:45:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE176C385AA;
+        Mon, 16 May 2022 19:45:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730601;
-        bh=z1xGkviBQ2FOGy3TPlU9X8IBjkMBTFmQhrxx6TChBBM=;
+        s=korg; t=1652730306;
+        bh=vZKr5RrLKJS99fDXwoUibrDS311QQKVyo5YCcgqTtGs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1qu3CSdlcV0CsXOyeEOFGjezTIo23+ZbHMdvP23dzr23DzZz14GcGmWY7ZGM45VVp
-         6EtKNiMlOZYDIBNDldi/HLSfwxNIWOSouzRvmuFymkr9XNBWjsq+IlTCPosbvMBQvM
-         uHx1VEXkNgE9Q9JBjEymtlsi5Ubr8hY4v2wixzrI=
+        b=ylzYMT8XYblDXalaz7TVlEuEiMoDQKC2FidnxnemNP0/thZITvdwqDkJfF5i2VWhb
+         ZN4Djl5l3khlNa0pzVlM8oqM5ApSnoaWx9i/le0ZX6Kyjn5U614buJ14fOKodQhW2e
+         EeZroM1oH+7GMdNsaBR9e8BQ0mo+1M/NM54nJsYY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Alexandra Winter <wintera@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 048/102] ASoC: max98090: Reject invalid values in custom control put()
+Subject: [PATCH 5.10 22/66] s390/ctcm: fix potential memory leak
 Date:   Mon, 16 May 2022 21:36:22 +0200
-Message-Id: <20220516193625.377871050@linuxfoundation.org>
+Message-Id: <20220516193620.058594544@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
-References: <20220516193623.989270214@linuxfoundation.org>
+In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
+References: <20220516193619.400083785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +55,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Alexandra Winter <wintera@linux.ibm.com>
 
-[ Upstream commit 2fbe467bcbfc760a08f08475eea6bbd4c2874319 ]
+[ Upstream commit 0c0b20587b9f25a2ad14db7f80ebe49bdf29920a ]
 
-The max98090 driver has a custom put function for some controls which can
-only be updated in certain circumstances which makes no effort to validate
-that input is suitable for the control, allowing out of spec values to be
-written to the hardware and presented to userspace. Fix this by returning
-an error when invalid values are written.
+smatch complains about
+drivers/s390/net/ctcm_mpc.c:1210 ctcmpc_unpack_skb() warn: possible memory leak of 'mpcginfo'
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20220420193454.2647908-1-broonie@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+mpc_action_discontact() did not free mpcginfo. Consolidate the freeing in
+ctcmpc_unpack_skb().
+
+Fixes: 293d984f0e36 ("ctcm: infrastructure for replaced ctc driver")
+Signed-off-by: Alexandra Winter <wintera@linux.ibm.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/max98090.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/s390/net/ctcm_mpc.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/sound/soc/codecs/max98090.c b/sound/soc/codecs/max98090.c
-index b45ec35cd63c..6d9261346842 100644
---- a/sound/soc/codecs/max98090.c
-+++ b/sound/soc/codecs/max98090.c
-@@ -413,6 +413,9 @@ static int max98090_put_enab_tlv(struct snd_kcontrol *kcontrol,
+diff --git a/drivers/s390/net/ctcm_mpc.c b/drivers/s390/net/ctcm_mpc.c
+index 85a1a4533cbe..20a6097e1b20 100644
+--- a/drivers/s390/net/ctcm_mpc.c
++++ b/drivers/s390/net/ctcm_mpc.c
+@@ -626,8 +626,6 @@ static void mpc_rcvd_sweep_resp(struct mpcg_info *mpcginfo)
+ 		ctcm_clear_busy_do(dev);
+ 	}
  
- 	val = (val >> mc->shift) & mask;
+-	kfree(mpcginfo);
+-
+ 	return;
  
-+	if (sel < 0 || sel > mc->max)
-+		return -EINVAL;
-+
- 	*select = sel;
+ }
+@@ -1206,10 +1204,10 @@ static void ctcmpc_unpack_skb(struct channel *ch, struct sk_buff *pskb)
+ 						CTCM_FUNTAIL, dev->name);
+ 			priv->stats.rx_dropped++;
+ 			/* mpcginfo only used for non-data transfers */
+-			kfree(mpcginfo);
+ 			if (do_debug_data)
+ 				ctcmpc_dump_skb(pskb, -8);
+ 		}
++		kfree(mpcginfo);
+ 	}
+ done:
  
- 	/* Setting a volume is only valid if it is already On */
+@@ -1991,7 +1989,6 @@ static void mpc_action_rcvd_xid0(fsm_instance *fsm, int event, void *arg)
+ 		}
+ 		break;
+ 	}
+-	kfree(mpcginfo);
+ 
+ 	CTCM_PR_DEBUG("ctcmpc:%s() %s xid2:%i xid7:%i xidt_p2:%i \n",
+ 		__func__, ch->id, grp->outstanding_xid2,
+@@ -2052,7 +2049,6 @@ static void mpc_action_rcvd_xid7(fsm_instance *fsm, int event, void *arg)
+ 		mpc_validate_xid(mpcginfo);
+ 		break;
+ 	}
+-	kfree(mpcginfo);
+ 	return;
+ }
+ 
 -- 
 2.35.1
 

@@ -2,75 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CAD6528816
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8AD2528835
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235601AbiEPPJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 11:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34836 "EHLO
+        id S245083AbiEPPL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 11:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241911AbiEPPIv (ORCPT
+        with ESMTP id S245097AbiEPPL1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 11:08:51 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66733BA43
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 08:08:49 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-f17f1acffeso7906929fac.4
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 08:08:49 -0700 (PDT)
+        Mon, 16 May 2022 11:11:27 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4564D2CE37
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 08:11:25 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id ch13so29236850ejb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 08:11:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=elXgl3dl4vAJoBCDptoYieQAN23eMuUcW0bkSZuX+eg=;
-        b=Lwbeh96im5IuvkLt390E8uMSvLj3XCZyRcrLRx3TijXYxvpjKgZjDXvPliCmb7nxSw
-         fFp/Yh6O9X6Xkey8sFb2XDSr8tRSKi9EwgIGZxBn6WffAf6ojn8YM7ih1vrS2Xw/cGDa
-         G17JMjOSQRFt5CDSdh74cRTW2Z338AtLspsbYSoJ0Nbe3cyxj6akBcSkqcSkFG8iv7O0
-         HfLKQAZ5aBnhPx5oorFcXlO+7iAcSzbDl7EIZDS3qQgnSHo+3AFR4f/eow9faQd07am6
-         F9e9DOWwSzfybN83/1Y2e6Y7t3xgu3q2lloR8y+4NFX8gTrVvQaeWkgtspNxQpA75ZL6
-         X6ww==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=dYishxIf8bd1GMWp6XCA0BG1+T1Eg+eJYk8k1IWXpBI=;
+        b=Ut9u8XDPpuCFw95W0NyvgKorAYZlAuFW050yVggI/lY146YLmsTKubJtm6eiZVY8EG
+         H7ile/L7eyDCp4aWvTzFESjrVcP8a7p8IqPTX4jqzQr3TrgiiTn9SKY90lfriIAiA2Na
+         Dy+im26QCsWcixNWxG5EQl1eoZ7tc8aZE0gNvu5cnZl9GFhzrS931ugxCvE0NlC/TkD5
+         3xU793dP3v3vghx4ERqRN9It0YAvxjWZrsLsSxmMGWlZ36VC8O+0WahpIA9IOmF6hjFK
+         D/E1gydUdQVRRWhD6skG2FMB5PjyhYD8cGA2QiHiEnZkaZ7d7UBryItfdVLlKLbTjR6l
+         lQhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=elXgl3dl4vAJoBCDptoYieQAN23eMuUcW0bkSZuX+eg=;
-        b=RR27I58zLcLpZupENcJjSsaisW1Wq5pQmKvodvy1DD4jF6Y9ANXhOz0U8U/Je2Irow
-         drqnqUgjnIdoOJ7RDbEmYgXsAFlur9KCpa1Jjr4yz5lGBDB+2JDIMNwbyvyMcFCXG0E2
-         cJqipwcO6K+rLQ3cERQlTtBRtwtn2J9mW5mjUyUVvJ8wqyTGaPwDz7zXRcDIt10ZKRki
-         IOS9/DdT3amzrQYCEK/f/qT+0EEnDDX3NLwaToO1AcYbL+No1yNXLM+20DAexJ3sswdP
-         sxu2sI9bT9lxRbw64HKHcqY/fziqaH4PK427zcnbADjFDq703kheu6tLnFQUEP1qOwev
-         Pe0Q==
-X-Gm-Message-State: AOAM532in7HP5IKJBvGQr/ZQn3HzVuw4yBRHCbqEtzhLU5GuMuzUX4l1
-        u407EWpzNo/wgt1Al9tiRj+REw==
-X-Google-Smtp-Source: ABdhPJz9R3vuSmtEtCaD+6qvP3nFEpQD2xGDEu/kZCRoF4eUN1B/cQEcyuXSZo8vowPBOqg5QfmoEw==
-X-Received: by 2002:a05:6870:41cc:b0:f1:b014:1107 with SMTP id z12-20020a05687041cc00b000f1b0141107mr1207772oac.185.1652713729077;
-        Mon, 16 May 2022 08:08:49 -0700 (PDT)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id o203-20020aca41d4000000b00325cda1ff93sm3910010oia.18.2022.05.16.08.08.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 08:08:48 -0700 (PDT)
-Date:   Mon, 16 May 2022 08:11:12 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Luca Weiss <luca@z3ntu.xyz>, David Heidelberg <david@ixit.cz>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Subject: Re: [PATCH 1/4] dt-bindings: pinctrl: qcom,pmic-gpio: add
- 'gpio-reserved-ranges'
-Message-ID: <YoJpkG6vqXf7HFcN@ripper>
-References: <20220508135932.132378-1-krzysztof.kozlowski@linaro.org>
- <20220508135932.132378-2-krzysztof.kozlowski@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=dYishxIf8bd1GMWp6XCA0BG1+T1Eg+eJYk8k1IWXpBI=;
+        b=7TrcNYLc2ckCS2PYFYSp98V/jKOxXyhdJKfErcQMrkI+kBatdzFG/hdbNiFefGBTAX
+         J51rHK0tKQBXw3JZ7rGvV51QDkV+51cCswFPSKTyF8AUGKqEPOtmy7NowJDwWg54K9Vo
+         X/X3fJeL+l9tKlOzpakfvwyeesfVUV4ovVTyrenYyw24BSdvrYgDsA4yQbNBdJR1mwB2
+         ZbYKXnEW3dUcL1120GbhCTMPu48L+UPV+Uk45rtnMQiXmmGYUyvpvn6NCzFXslToycUI
+         yLHqlJRlpsPd3EViyK4riZjoAm8UIWalGPKqZcppqRjietsRfhD0EyuVpChvR7jSAnTy
+         AVhQ==
+X-Gm-Message-State: AOAM530xpxNuzW37tI0UyblLm2O2VuGejjgMaC09gH32WnlRul5qQ3ij
+        6It/tGgZU1tmbqNFvwSfHSnBqlR0ucb+V//x
+X-Google-Smtp-Source: ABdhPJz8rL7PhUYNDMzap/vDmRapn2E5WZxAyepGoMi50gSo0lWo4qWxyOsn9m4PMzoe8Lt4ogmF8Q==
+X-Received: by 2002:a17:906:2883:b0:6e8:7012:4185 with SMTP id o3-20020a170906288300b006e870124185mr15334518ejd.204.1652713883670;
+        Mon, 16 May 2022 08:11:23 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id 16-20020a17090600d000b006f3ef214de0sm10389eji.70.2022.05.16.08.11.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 08:11:22 -0700 (PDT)
+Message-ID: <c7d2ac6e-a407-0dbf-d34e-347f505ec4ef@linaro.org>
+Date:   Mon, 16 May 2022 17:11:21 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220508135932.132378-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 1/4] dt-bindings: Document how Chromebooks with
+ depthcharge boot
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Alexandru M Stan <amstan@chromium.org>,
+        Julius Werner <jwerner@chromium.org>,
+        "Joseph S . Barrera III" <joebar@chromium.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+References: <20220513095722.v2.1.I71e42c6174f1cec17da3024c9f73ba373263b9b6@changeid>
+ <d5438d2e-f387-170a-cea1-d5936cc8e15a@linaro.org>
+ <CAD=FV=VNGS+H8biOOigt=drUCYCWY1VBKN=ZFD74T-3RSeWBxA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAD=FV=VNGS+H8biOOigt=drUCYCWY1VBKN=ZFD74T-3RSeWBxA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,197 +87,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun 08 May 06:59 PDT 2022, Krzysztof Kozlowski wrote:
+On 16/05/2022 17:06, Doug Anderson wrote:
+>>
+>> This is not a Devicetree (generic) document, so it is not the best place
+>> for it. Maybe regular vendor place, e.g . Documentation/arm/google/ ?
+> 
+> I can put it there. ...but taking your two pieces of advice together,
+> you're saying:
+> 
+> 1. Don't add this under the devicetree directory.
+> 
+> 2. Don't refer to this by URL but instead by a relative file path.
+> 
+> I can do both of those two things, but I always had it in my mind that
+> the device tree was supposed to be "Linux agnostic". In other words,
+> you could refer to Linux as one OS that boots with device tree, but I
+> thought that the device tree docs were supposed to stand on their own.
+> With the above two suggestions, it seems like an extra piece tieing
+> the two together and assuming that both Linux and device tree docs are
+> living in the same place.
 
-> 'gpio-reserved-ranges' property is already used and supported by common pinctrl
-> bindings, so add it also here to fix warnings like:
-> 
->   qrb5165-rb5.dtb: gpio@c000: 'gpio-reserved-ranges' does not match any of the regexes: '-state$', 'pinctrl-[0-9]+'
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+D'oh, you are right, it should not be referenced via path, if moved into
+docs. Then let's discard that part of idea, so just move it to
+Documentation/arm/google/ and keep the URL link in your bindings change.
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-> ---
->  .../bindings/pinctrl/qcom,pmic-gpio.yaml      | 53 +++++++++++++++++++
->  1 file changed, 53 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
-> index 7e74a87ccc39..69195660ee2a 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
-> @@ -78,6 +78,12 @@ properties:
->      minItems: 2
->      maxItems: 44
->  
-> +  gpio-reserved-ranges:
-> +    minItems: 1
-> +    # maxItems as half of total number of GPIOs, as there has to be at
-> +    # least one usable GPIO between each reserved range.
-> +    maxItems: 22
-> +
->    '#gpio-cells':
->      const: 2
->      description:
-> @@ -107,6 +113,8 @@ allOf:
->          gpio-line-names:
->            minItems: 2
->            maxItems: 2
-> +        gpio-reserved-ranges:
-> +          maxItems: 1
->  
->    - if:
->        properties:
-> @@ -124,6 +132,9 @@ allOf:
->          gpio-line-names:
->            minItems: 4
->            maxItems: 4
-> +        gpio-reserved-ranges:
-> +          minItems: 1
-> +          maxItems: 2
->  
->    - if:
->        properties:
-> @@ -137,6 +148,9 @@ allOf:
->          gpio-line-names:
->            minItems: 6
->            maxItems: 6
-> +        gpio-reserved-ranges:
-> +          minItems: 1
-> +          maxItems: 3
->  
->    - if:
->        properties:
-> @@ -150,6 +164,9 @@ allOf:
->          gpio-line-names:
->            minItems: 8
->            maxItems: 8
-> +        gpio-reserved-ranges:
-> +          minItems: 1
-> +          maxItems: 4
->  
->    - if:
->        properties:
-> @@ -163,6 +180,9 @@ allOf:
->          gpio-line-names:
->            minItems: 9
->            maxItems: 9
-> +        gpio-reserved-ranges:
-> +          minItems: 1
-> +          maxItems: 5
->  
->    - if:
->        properties:
-> @@ -182,6 +202,9 @@ allOf:
->          gpio-line-names:
->            minItems: 10
->            maxItems: 10
-> +        gpio-reserved-ranges:
-> +          minItems: 1
-> +          maxItems: 5
->  
->    - if:
->        properties:
-> @@ -194,6 +217,9 @@ allOf:
->          gpio-line-names:
->            minItems: 11
->            maxItems: 11
-> +        gpio-reserved-ranges:
-> +          minItems: 1
-> +          maxItems: 6
->  
->    - if:
->        properties:
-> @@ -212,6 +238,9 @@ allOf:
->          gpio-line-names:
->            minItems: 12
->            maxItems: 12
-> +        gpio-reserved-ranges:
-> +          minItems: 1
-> +          maxItems: 6
->  
->    - if:
->        properties:
-> @@ -224,6 +253,9 @@ allOf:
->          gpio-line-names:
->            minItems: 13
->            maxItems: 13
-> +        gpio-reserved-ranges:
-> +          minItems: 1
-> +          maxItems: 7
->  
->    - if:
->        properties:
-> @@ -236,6 +268,9 @@ allOf:
->          gpio-line-names:
->            minItems: 14
->            maxItems: 14
-> +        gpio-reserved-ranges:
-> +          minItems: 1
-> +          maxItems: 7
->  
->    - if:
->        properties:
-> @@ -248,6 +283,9 @@ allOf:
->          gpio-line-names:
->            minItems: 16
->            maxItems: 16
-> +        gpio-reserved-ranges:
-> +          minItems: 1
-> +          maxItems: 8
->  
->    - if:
->        properties:
-> @@ -261,6 +299,9 @@ allOf:
->          gpio-line-names:
->            minItems: 22
->            maxItems: 22
-> +        gpio-reserved-ranges:
-> +          minItems: 1
-> +          maxItems: 11
->  
->    - if:
->        properties:
-> @@ -273,6 +314,9 @@ allOf:
->          gpio-line-names:
->            minItems: 26
->            maxItems: 26
-> +        gpio-reserved-ranges:
-> +          minItems: 1
-> +          maxItems: 13
->  
->    - if:
->        properties:
-> @@ -285,6 +329,9 @@ allOf:
->          gpio-line-names:
->            minItems: 36
->            maxItems: 36
-> +        gpio-reserved-ranges:
-> +          minItems: 1
-> +          maxItems: 18
->  
->    - if:
->        properties:
-> @@ -297,6 +344,9 @@ allOf:
->          gpio-line-names:
->            minItems: 38
->            maxItems: 38
-> +        gpio-reserved-ranges:
-> +          minItems: 1
-> +          maxItems: 19
->  
->    - if:
->        properties:
-> @@ -310,6 +360,9 @@ allOf:
->          gpio-line-names:
->            minItems: 44
->            maxItems: 44
-> +        gpio-reserved-ranges:
-> +          minItems: 1
-> +          maxItems: 22
->  
->  patternProperties:
->    '-state$':
-> -- 
-> 2.32.0
-> 
+Best regards,
+Krzysztof

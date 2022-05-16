@@ -2,25 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1E15285DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15E4B5285DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:49:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243800AbiEPNtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 09:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
+        id S244005AbiEPNto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 09:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243595AbiEPNsk (ORCPT
+        with ESMTP id S243953AbiEPNtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 09:48:40 -0400
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D97D3A1AB;
-        Mon, 16 May 2022 06:48:32 -0700 (PDT)
+        Mon, 16 May 2022 09:49:03 -0400
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 036153A198;
+        Mon, 16 May 2022 06:48:36 -0700 (PDT)
 Received: from toolbox.int.toradex.com ([81.221.85.15]) by mrelay.perfora.net
- (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MQgmZ-1oKXcm1fJt-00U2ZC;
- Mon, 16 May 2022 15:48:21 +0200
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0M5ukJ-1nfw1Y1Kpt-00xosc;
+ Mon, 16 May 2022 15:48:25 +0200
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
-Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Fabio Estevam <festevam@gmail.com>,
         Frank Rowand <frowand.list@gmail.com>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -31,195 +32,88 @@ Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 07/24] ARM: dts: imx7-colibri: move aliases, chosen, extcon and gpio-keys
-Date:   Mon, 16 May 2022 15:47:17 +0200
-Message-Id: <20220516134734.493065-8-marcel@ziswiler.com>
+Subject: [PATCH v2 08/24] ARM: dts: imx7-colibri: add ethernet aliases
+Date:   Mon, 16 May 2022 15:47:18 +0200
+Message-Id: <20220516134734.493065-9-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220516134734.493065-1-marcel@ziswiler.com>
 References: <20220516134734.493065-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:Gvb4Pz7xuRxZ+58OL+CJboTfCyHLK0D3kqPOjx0qC972LhlnSeO
- AtsJRG7vrlk/hhQtnfAD1SNBwB5XdeN+lkF/3/ksJjFJu35W/lW1i8H+zDSQTyqXdYEf4jX
- a3WVSZVFDTvMJrDPWWcOoCxMfflBB12btJbfhSKIJqz/cHDG0S+4am7GUT0YgvC2FxYLiKa
- K+9HbPx0TPA14+k4qZMeQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:8NXUCNc3Y5E=:V3+fSEHt1EH+onN28TjwUm
- Jdyt5xk26q5GJvn9bD0PH/y4Le/EcoEv7wtyt/6BIdxiiYJUA5N/eJD2uP1QGjFGKU2BT5K1F
- +B3gypeEztC+cG/7sJ2vxDokepI2OWqQbpQV/HbCl9dtpmd5G34DQDDbDKGsXOkbuUf4so0R2
- laVxVONB4b9MMlUNGd+yZW3/wkNE+RQZHdcM5e/bmRn+RbXQ2ua1d9wN3Jd2+NLiOZFH20P3D
- 58rsVI4qbR8ljHu4yiCD/8RdM/8NO6hWcpLZQd6xUyajKFyJqKZy+jBIle8SgqtZNTvNDPbjl
- 5pCXTsUgg0GG2j9N5OeEDP7Hn50lPePRPDumJw7wbtsS0NAegN7ZxWSaRRHo+jJRTq+6/GMFC
- 6KRR7o/upwPRUnrW4eeB/7eyFvlb/3YIe0HlqmvAapfwMsyQ4qXawifWu3rcILyVqh46dxTlL
- izpmHXGLmPqg0QRjFMbi2d2inS7mRSc6PiW8901sc7r5Nw0wtgNN73mdoThrz0foFgth46vmg
- C5zO84uQ2TFrxzUQQS+q67+ypT/84cmkXqScKFEjqZUl5OI9bjjnaW2fVbBjT/Vsg5ufe0t+S
- 902ARmEA9UvHKVmkMDTXay3ESgQvc99JLzDw24aDf5Fzm1E43sxPfCHEEI9S+E0h/fFKFYGeY
- gRr09F/TMs8EvVbKJLBn96NyfJMjAFnXJ/5NJo1xDiWAqOV78tMPGpGFW9pDjvxjhuac=
+X-Provags-ID: V03:K1:06s0GLfGsN4wSHAFVUljIbyxlOAiw6HaWWbYqR+39cEKSNe34Be
+ gZcUEh62acuDbWmkKiW4qxbP9+YRWf2BNVykJksEFp/gWEJ+NCEUtoJOuJb1fwgXKCM+Dwg
+ 3LWI1VtEcnCnHS7MTf4gmJV4qsDYD+wwSQrmeM/hIKpqewWTnILOSieRm3AWpDZz9Ec+RfK
+ eIPrN1+9wwhwN9umlnnag==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:kas3Xe1GRJ0=:zBPXG2E4kc1dWsy5SN+38P
+ zLSqfi3h6mFDcFq1+nleUcCbmd4fLTJI7/w/yaQaJ3jsib3r67ojN0mUWiugAdEXNMF0kGPQD
+ JveF0BW1DOwZRE13dQ/PQ4z4+ps8q1YVJoX2+YZwspKlpBwe9bj77ZXxXzV0BV0zjpCiA5h9E
+ GMP40zFt0TWxOhU0Z8FFzYTZCKd4K/ozDGZg+Y2RTcP4UkvrAC8m9MJp6vzCY8A1Rp1lXtRmB
+ sOEHMDQHfj4K4yQ8ST/B36tpUymercbdsgIDPghqnbaNjGUbDBYjdei7rqddA08tgo53lEBgo
+ l1ae+XOUYFDPfVDuHyt/BCepp+SBTazk6zUd4NxwMMH6meD51Q5ALVXkf7KrOM1kunAON+oL3
+ Ckv6/OLXDjMrakeja/Vv6p7mwIZy3HvHiXPUFXz1WYujliVvBm0HqWtnGtKvG+WkHtDdvkFkA
+ 3ioqPuCO54XKtuI1/2/neE2ARa6FNht3/iPw5IoRHQupWANObB3rO3EWQmOnVbsKLo1v9v7Qm
+ eq9BVTkTY5HYfFEaAFMdKOGUuuw4ssyuopQ2HcCKltRAQu8u5K8THyAY21HeYcY74pWVXlKlt
+ Q44VzYUn5o4MRs4J48YPYlK1nfv2KZ1a88kS03ccb+SL+TVGei7Dlfcf1m8Q7J8fJsUqZEQM4
+ l/W4q7rTYWGCvx2vDtWnvd3uVnQ8DyZ8sx/TcqU2eSJebqksNZNLgue/lXJ7qPsLvDzHOUX1U
+ KsqtH166pS7MP8Kj
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+From: Max Krummenacher <max.krummenacher@toradex.com>
 
-Move aliases, chosen, extcon and gpio-keys to module-level device tree
-given they are standard Colibri functionalities.
+Add Ethernet aliases which is required to properly pass MAC address
+from bootloader.
 
+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 ---
 
 (no changes since v1)
 
- arch/arm/boot/dts/imx7-colibri-aster.dtsi   | 18 ------------
- arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi | 31 --------------------
- arch/arm/boot/dts/imx7-colibri.dtsi         | 32 +++++++++++++++++++++
- 3 files changed, 32 insertions(+), 49 deletions(-)
+ arch/arm/boot/dts/imx7d-colibri-emmc.dtsi | 6 ++++++
+ arch/arm/boot/dts/imx7d-colibri.dtsi      | 6 ++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/arch/arm/boot/dts/imx7-colibri-aster.dtsi b/arch/arm/boot/dts/imx7-colibri-aster.dtsi
-index 9148c54403f3..c12de1861c05 100644
---- a/arch/arm/boot/dts/imx7-colibri-aster.dtsi
-+++ b/arch/arm/boot/dts/imx7-colibri-aster.dtsi
-@@ -4,24 +4,6 @@
-  */
- 
- / {
--	chosen {
--		stdout-path = "serial0:115200n8";
--	};
--
--	gpio-keys {
--		compatible = "gpio-keys";
--		pinctrl-names = "default";
--		pinctrl-0 = <&pinctrl_gpiokeys>;
--
--		power {
--			label = "Wake-Up";
--			gpios = <&gpio1 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
--			linux,code = <KEY_WAKEUP>;
--			debounce-interval = <10>;
--			wakeup-source;
--		};
--	};
--
- 	reg_3v3: regulator-3v3 {
- 		compatible = "regulator-fixed";
- 		regulator-name = "3.3V";
-diff --git a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-index 4a7e593e9ac6..2e6678f81af6 100644
---- a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-+++ b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-@@ -4,15 +4,6 @@
-  */
- 
- / {
--	aliases {
--		rtc0 = &rtc;
--		rtc1 = &snvs_rtc;
--	};
--
--	chosen {
--		stdout-path = "serial0:115200n8";
--	};
--
- 	/* fixed crystal dedicated to mpc258x */
- 	clk16m: clk16m {
- 		compatible = "fixed-clock";
-@@ -20,27 +11,6 @@ clk16m: clk16m {
- 		clock-frequency = <16000000>;
- 	};
- 
--	extcon_usbc_det: usbc-det {
--		compatible = "linux,extcon-usb-gpio";
--		id-gpio = <&gpio7 14 GPIO_ACTIVE_HIGH>;
--		pinctrl-names = "default";
--		pinctrl-0 = <&pinctrl_usbc_det>;
--	};
--
--	gpio-keys {
--		compatible = "gpio-keys";
--		pinctrl-names = "default";
--		pinctrl-0 = <&pinctrl_gpiokeys>;
--
--		power {
--			label = "Wake-Up";
--			gpios = <&gpio1 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
--			linux,code = <KEY_WAKEUP>;
--			debounce-interval = <10>;
--			wakeup-source;
--		};
--	};
--
- 	reg_3v3: regulator-3v3 {
- 		compatible = "regulator-fixed";
- 		regulator-name = "3.3V";
-@@ -148,7 +118,6 @@ &uart3 {
- };
- 
- &usbotg1 {
--	extcon = <0>, <&extcon_usbc_det>;
- 	status = "okay";
- };
- 
-diff --git a/arch/arm/boot/dts/imx7-colibri.dtsi b/arch/arm/boot/dts/imx7-colibri.dtsi
-index fa615379a117..c5a58949d664 100644
---- a/arch/arm/boot/dts/imx7-colibri.dtsi
-+++ b/arch/arm/boot/dts/imx7-colibri.dtsi
-@@ -6,6 +6,11 @@
- #include <dt-bindings/pwm/pwm.h>
+diff --git a/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi b/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi
+index 198e08409d59..e77f0b26b6fb 100644
+--- a/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi
++++ b/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi
+@@ -7,6 +7,12 @@
+ #include "imx7-colibri.dtsi"
  
  / {
 +	aliases {
-+		rtc0 = &rtc;
-+		rtc1 = &snvs_rtc;
++		/* Required to properly pass MAC addresses from bootloader. */
++		ethernet0 = &fec1;
++		ethernet1 = &fec2;
 +	};
 +
- 	backlight: backlight {
- 		brightness-levels = <0 45 63 88 119 158 203 255>;
- 		compatible = "pwm-backlight";
-@@ -18,6 +23,32 @@ backlight: backlight {
- 		status = "disabled";
- 	};
+ 	memory@80000000 {
+ 		device_type = "memory";
+ 		reg = <0x80000000 0x40000000>;
+diff --git a/arch/arm/boot/dts/imx7d-colibri.dtsi b/arch/arm/boot/dts/imx7d-colibri.dtsi
+index 90d25c604de2..48993abacae4 100644
+--- a/arch/arm/boot/dts/imx7d-colibri.dtsi
++++ b/arch/arm/boot/dts/imx7d-colibri.dtsi
+@@ -7,6 +7,12 @@
+ #include "imx7-colibri.dtsi"
  
-+	chosen {
-+		stdout-path = "serial0:115200n8";
+ / {
++	aliases {
++		/* Required to properly pass MAC addresses from bootloader. */
++		ethernet0 = &fec1;
++		ethernet1 = &fec2;
 +	};
 +
-+	extcon_usbc_det: usbc-det {
-+		compatible = "linux,extcon-usb-gpio";
-+		debounce = <25>;
-+		id-gpio = <&gpio7 14 GPIO_ACTIVE_HIGH>; /* SODIMM 137 / USBC_DET */
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_usbc_det>;
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_gpiokeys>;
-+
-+		wakeup {
-+			debounce-interval = <10>;
-+			gpios = <&gpio1 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>; /* SODIMM 45 */
-+			label = "Wake-Up";
-+			linux,code = <KEY_WAKEUP>;
-+			wakeup-source;
-+		};
-+	};
-+
- 	panel_dpi: panel-dpi {
- 		backlight = <&backlight>;
- 		compatible = "edt,et057090dhu";
-@@ -513,6 +544,7 @@ &uart3 {
- 
- &usbotg1 {
- 	dr_mode = "otg";
-+	extcon = <0>, <&extcon_usbc_det>;
- };
- 
- &usdhc1 {
+ 	memory@80000000 {
+ 		device_type = "memory";
+ 		reg = <0x80000000 0x20000000>;
 -- 
 2.35.1
 

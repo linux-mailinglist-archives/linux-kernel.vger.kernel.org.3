@@ -2,152 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A0E529302
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1E052930F
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349424AbiEPVkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 17:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47640 "EHLO
+        id S1349442AbiEPVms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 17:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234718AbiEPVkR (ORCPT
+        with ESMTP id S240045AbiEPVmp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 17:40:17 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD1C419B2
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 14:40:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=aCb2HiewM12GOnx9FEdB6E4pX5NJT/HZCa9UT6fkVvk=; b=OlCozzdRAQyf+vNMU2vVeuPHd/
-        qjdeQrKKntDC2H9t8AZ1ILZHIERUIF9f75hQRCxN4ftfUviI2YgdlATVvB5CaxsW7/4sm01G2sdpq
-        oTlngSGy3zMhVkJjMdH59yo+1VCti6N84pqoR+OU7ERpLIqK8rTMBay/IMTUWkZ6qXWnV+ZE/x20i
-        7EEtNsu65vlPwEvJpsFiibLuITp6Aeovj9RCPmJ45ftcE5inToCKc5sxSmD6U44WqobMuk/U2BFYe
-        Iiy6yxab5ivpBh39CBfuT4GgKovg5wzH+Eg2YSOqMQdXLzWhT3VhefsbImx1T6BW7Wrn9662ZHZkp
-        PS33ixMw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nqiRj-00120Q-1i; Mon, 16 May 2022 21:40:07 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 05E44980DCC; Mon, 16 May 2022 23:40:06 +0200 (CEST)
-Date:   Mon, 16 May 2022 23:40:05 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com
-Subject: Re: objtool "no non-local symbols" error with tip of tree LLVM
-Message-ID: <20220516214005.GQ76023@worktop.programming.kicks-ass.net>
-References: <YoK4U9RgQ9N+HhXJ@dev-arch.thelio-3990X>
+        Mon, 16 May 2022 17:42:45 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E68F41FAC
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 14:42:43 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5D8741F92F;
+        Mon, 16 May 2022 21:42:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1652737362; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HovTC6FiGf3ja40F9c2fQ83eYmm4tQXXZRRsLYbnnew=;
+        b=C4uCBBXfemb8MP3PaJvLlMu9yHsXfZqNCeK0/wzvpjZNdf6aNz5aWaRHx0KH4pl4kueyrB
+        FJGLewWXchFIshCwRnNFYpncf2B63+m1+M3wbEGERstAdf37CLhR/B6chyUuSRAhyXfDZR
+        uzcaEocfzBK/NNpFy9C8jpi5Q5KkWpM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1652737362;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HovTC6FiGf3ja40F9c2fQ83eYmm4tQXXZRRsLYbnnew=;
+        b=6x2VDOQWPLaOaelqHEiu5a2K30qWoyibm1xQOrvQu2BG7G0HPFg7eFDozfYY3bXC2VEcxw
+        vwDcUi/pKd3NTMBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 189A113AAB;
+        Mon, 16 May 2022 21:42:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6GyHBFLFgmIBOwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 16 May 2022 21:42:42 +0000
+Message-ID: <8eccb3bc-e6b1-354b-e1de-bd3d896dcb35@suse.cz>
+Date:   Mon, 16 May 2022 23:41:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YoK4U9RgQ9N+HhXJ@dev-arch.thelio-3990X>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] tracing: add ACCOUNT flag for allocations from marked
+ slab caches
+Content-Language: en-US
+To:     Shakeel Butt <shakeelb@google.com>, Vasily Averin <vvs@openvz.org>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        David Rientjes <rientjes@google.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Christoph Lameter <cl@linux.com>, kernel@openvz.org,
+        Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+References: <1fd21e25-b095-e055-fc2e-abda640a0575@openvz.org>
+ <CALvZod6wmxxigoLVg8Q+upqOkyoh+nPuVT0yx_XTbu8RXYYFgA@mail.gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <CALvZod6wmxxigoLVg8Q+upqOkyoh+nPuVT0yx_XTbu8RXYYFgA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 01:47:15PM -0700, Nathan Chancellor wrote:
-> Hi Josh and Peter,
+On 5/16/22 21:10, Shakeel Butt wrote:
+> On Mon, May 16, 2022 at 11:53 AM Vasily Averin <vvs@openvz.org> wrote:
+>>
+>> Slab caches marked with SLAB_ACCOUNT force accounting for every
+>> allocation from this cache even if __GFP_ACCOUNT flag is not passed.
+>> Unfortunately, at the moment this flag is not visible in ftrace output,
+>> and this makes it difficult to analyze the accounted allocations.
+>>
+>> This patch adds the __GFP_ACCOUNT flag for allocations from slab caches
+>> marked with SLAB_ACCOUNT to the ftrace output.
+>>
+>> Signed-off-by: Vasily Averin <vvs@openvz.org>
+>> ---
+>>  mm/slab.c | 3 +++
+>>  mm/slub.c | 3 +++
+>>  2 files changed, 6 insertions(+)
+>>
+>> diff --git a/mm/slab.c b/mm/slab.c
+>> index 0edb474edef1..4c3da8dfcbdb 100644
+>> --- a/mm/slab.c
+>> +++ b/mm/slab.c
+>> @@ -3492,6 +3492,9 @@ void *__kmem_cache_alloc_lru(struct kmem_cache *cachep, struct list_lru *lru,
 > 
-> After a recent change in LLVM [1], I see warnings (errors?) from objtool
-> when building x86_64 allmodconfig on 5.15 and 5.17:
+> What about kmem_cache_alloc_node()?
 > 
->   $ make -skj"$(nproc)" KCONFIG_ALLCONFIG=<(echo CONFIG_WERROR) LLVM=1 allmodconfig all
->   ...
->   mm/highmem.o: warning: objtool: no non-local symbols !?
->   mm/highmem.o: warning: objtool: gelf_update_symshndx: invalid section index
->   make[2]: *** [scripts/Makefile.build:288: mm/highmem.o] Error 255
->   ...
->   security/tomoyo/load_policy.o: warning: objtool: no non-local symbols !?
->   security/tomoyo/load_policy.o: warning: objtool: gelf_update_symshndx: invalid section index
->   make[3]: *** [scripts/Makefile.build:288: security/tomoyo/load_policy.o] Error 255
->   ...
+>>  {
+>>         void *ret = slab_alloc(cachep, lru, flags, cachep->object_size, _RET_IP_);
+>>
+>> +       if (cachep->flags & SLAB_ACCOUNT)
 > 
-> I don't see the same errors on x86_64 allmodconfig on mainline so I
-> bisected the 5.17 branch and came upon commit 4abff6d48dbc ("objtool:
-> Fix code relocs vs weak symbols"). I wanted to see what 5.17 might be
-> missing and came to commit ed53a0d97192 ("x86/alternative: Use
-> .ibt_endbr_seal to seal indirect calls") in mainline, which I think just
-> hides the issue for allmodconfig. I can reproduce this problem with a
-> more selective set of config values on mainline:
-> 
->   $ make -skj"$(nproc)" LLVM=1 defconfig
-> 
->   $ scripts/config -e KASAN -e SECURITY_TOMOYO -e SECURITY_TOMOYO_OMIT_USERSPACE_LOADER
-> 
->   $ make -skj"$(nproc)" LLVM=1 olddefconfig security/tomoyo/load_policy.o
->   security/tomoyo/load_policy.o: warning: objtool: no non-local symbols !?
->   security/tomoyo/load_policy.o: warning: objtool: gelf_update_symshndx: invalid section index
->   make[3]: *** [scripts/Makefile.build:288: security/tomoyo/load_policy.o] Error 255
->   ...
-> 
-> Looking at the object file, the '.text.asan.module_ctor' section has
-> disappeared.
-> 
-> Before:
-> 
->   $ llvm-nm -S security/tomoyo/load_policy.o
->   0000000000000000 0000000000000001 t asan.module_ctor
-> 
->   $ llvm-readelf -s security/tomoyo/load_policy.o
-> 
->   Symbol table '.symtab' contains 4 entries:
->      Num:    Value          Size Type    Bind   Vis       Ndx Name
->        0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT   UND
->        1: 0000000000000000     0 FILE    LOCAL  DEFAULT   ABS load_policy.c
->        2: 0000000000000000     0 SECTION LOCAL  DEFAULT     3 .text.asan.module_ctor
->        3: 0000000000000000     1 FUNC    LOCAL  DEFAULT     3 asan.module_ctor
-> 
-> After:
-> 
->   $ llvm-nm -S security/tomoyo/load_policy.o
->   0000000000000000 0000000000000001 t asan.module_ctor
-> 
->   $ llvm-readelf -s security/tomoyo/load_policy.o
-> 
->   Symbol table '.symtab' contains 3 entries:
->      Num:    Value          Size Type    Bind   Vis       Ndx Name
->        0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT   UND
->        1: 0000000000000000     0 FILE    LOCAL  DEFAULT   ABS load_policy.c
->        2: 0000000000000000     1 FUNC    LOCAL  DEFAULT     3 asan.module_ctor
-> 
+> Should this 'if' be unlikely() or should we trace cachep->flags
+> explicitly to avoid this branch altogether?
 
-The problem seems to be that we need to add a local symbols because LLVM
-helpfully stripped all unused section symbols.
+Hm I think ideally the tracepoint accepts cachep instead of current
+cachep->*size parameters and does the necessary extraction and
+modification in its fast_assign.
 
-The way we do that, is by moving a the first non-local symbol to the
-end, thereby creating a hole where we can insert a new local symbol.
-Because ELF very helpfully mandates that local symbols must come before
-non-local symbols and keeps the symbols index of the first non-local in
-sh_info.
-
-Thing is, the above object files don't appear to have a non-local symbol
-so the swizzle thing isn't needed, and apparently the value in sh_info
-isn't valid either.
-
-Does something simple like this work? If not, I'll try and reproduce
-tomorrow, it shouldn't be too hard to fix.
-
-diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-index 583a3ec987b5..baabf38a2a11 100644
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -618,8 +618,7 @@ static int elf_move_global_symbol(struct elf *elf, struct section *symtab,
- 
- 	sym = find_symbol_by_index(elf, first_non_local);
- 	if (!sym) {
--		WARN("no non-local symbols !?");
--		return first_non_local;
-+		return symtab->sh.sh_size / sizeof(sym->sym);
- 	}
- 
- 	s = elf_getscn(elf->elf, symtab->idx);
+> 
+>> +               flags |= __GFP_ACCOUNT;
+>> +
+>>         trace_kmem_cache_alloc(_RET_IP_, ret,
+>>                                cachep->object_size, cachep->size, flags);
+>>
+>> diff --git a/mm/slub.c b/mm/slub.c
+>> index ed5c2c03a47a..670bbfef9e49 100644
+>> --- a/mm/slub.c
+>> +++ b/mm/slub.c
+>> @@ -3231,6 +3231,9 @@ void *__kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
+>>  {
+>>         void *ret = slab_alloc(s, lru, gfpflags, _RET_IP_, s->object_size);
+>>
+>> +       if (s->flags & SLAB_ACCOUNT)
+>> +               gfpflags |= __GFP_ACCOUNT;
+>> +
+>>         trace_kmem_cache_alloc(_RET_IP_, ret, s->object_size,
+>>                                 s->size, gfpflags);
+>>
+>> --
+>> 2.25.1
+>>
 

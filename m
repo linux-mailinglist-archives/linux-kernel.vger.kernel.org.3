@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D8A5285E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD805285EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243902AbiEPNuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 09:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
+        id S244079AbiEPNu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 09:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244061AbiEPNtk (ORCPT
+        with ESMTP id S243989AbiEPNuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 09:49:40 -0400
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4E73AA6D;
-        Mon, 16 May 2022 06:48:54 -0700 (PDT)
+        Mon, 16 May 2022 09:50:00 -0400
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6185039159;
+        Mon, 16 May 2022 06:49:02 -0700 (PDT)
 Received: from toolbox.int.toradex.com ([81.221.85.15]) by mrelay.perfora.net
- (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MCKl5-1nzhtN1EGH-009CKI;
- Mon, 16 May 2022 15:48:44 +0200
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0M7IS8-1ndzew0dgE-00wzGX;
+ Mon, 16 May 2022 15:48:48 +0200
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
@@ -29,31 +29,32 @@ Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Rob Herring <robh+dt@kernel.org>,
         Russell King <linux@armlinux.org.uk>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 13/24] ARM: dts: imx7d-colibri-emmc: add cpu1 supply
-Date:   Mon, 16 May 2022 15:47:23 +0200
-Message-Id: <20220516134734.493065-14-marcel@ziswiler.com>
+Subject: [PATCH v2 14/24] ARM: dts: imx7-colibri-eval-v3: correct can controller comment
+Date:   Mon, 16 May 2022 15:47:24 +0200
+Message-Id: <20220516134734.493065-15-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220516134734.493065-1-marcel@ziswiler.com>
 References: <20220516134734.493065-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:l+yk72S8bzPSdUADeEi9Zp+HG4TkeX/JRomRgvBrEWZQyxG+nX2
- T4QdwMPgHj9NIs717sinS6pmBzxIrSpe9LR5C+vyYMdF6/zRkmIEvsn3P6IEWCV26DS52b7
- 73wyLENNTmjiiz0nv8btIGtBxkklyWU+cC24k6jln/JmFVdsrgFsxJbaQgIdihKrjhm89QV
- vlELvsqAr1Or/q9bE0VMA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:JCmllpc33FA=:4kpFrG4I112Xw5X/XyTMCN
- BuhV5sOcnS7JalOOee3oIH7ixo03WLD5XoCjxzvrWi+ODU/Y7N28pMMtgio3AdkYtaNIfQb95
- ZNaliq4Ep6SI8yH3xWelZx6wRRbpLcpyz2cRiqaAczggB5iMcXq4yu7ejGEoT2ug0n/KOScXD
- XGaZhvyuod+UYDCf70iiNjS2Y7l6M8T0BUkNTgDiqPC/e7+7Q5iKqSciOlUKoZnvYHcu7cz7Y
- 0ztLztW+JNs0bOHN8XKSJm2eJqdCg5m1IFkHjybPz9uzlC99NAYF88DZ0BFrCYLOSdB4nTbFb
- TFj6FdEc4F+hbPNdCKMxgKBwCfTrRw8vsIxLmcA/bSz2V0XA7m6Ut1KPpapxGV/DuqOk8QDjb
- OdtmDwZDE00HEc6WXYAlMXM/TkS4fCuLXmAFFRobgkVlYPHHKmvXrp5Oi7Ta6uItylLPI1vBZ
- netA0BLkshgjJEBeMJS5VI7c4ONrVNE9U/VNZFGGIQAyw7MyqaGZQzzMRVPoWo9zjzF9fDC/m
- bx8gJlGyoSxFzHJenNkiLZiv843wG0JH2JjEmRN9p6tlh6NNgC91zxxRO0VEmHn7KNqW+hDg4
- oEFfWAfyIs3CCL70VDLkEf2UsaJOv2LpGhTllvDScIf6LpJPhXTTetj0OQ/YDIqy1z5cMhgEg
- Qt9YZ491cJg/VzS8C1VKEFoSH4+pLZhAsQjQiFjNhW41Lw6NZ/gFa4Fo0sWKaZfhlTyA=
+X-Provags-ID: V03:K1:P4e6qvQslx7pVS0Qs8hQ9quZzDy3Tei43dyFK/9Jm1jOBrKg4q/
+ klY/gsz4l82GNkm4N0xp8Mpp+8SFLprdBFjrdBqlgdDaPCf80rdwrLmKZh60+cF85dxbWWJ
+ fnrFhrLPXjrGQuIVW63DB0eQSgcBI8K0deNRg0Tal7TNnTWkf3Wso5ksutZ/BU9SAdbt4xT
+ QAlXv6KT5dRSkxB6RLjQw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:s4+VPOFXeeQ=:cgocLZpI4cEgfhoNGuZWZl
+ pdmicKXwZm+hfJsTZa6mxkbslE+gnjWxtgflLhGsvfNMjkgmzmFKdaPYHylOwss4+7vV8czQP
+ q5N8FNRAlj9WnBib6dX6Kn4xb+tp5vDXde0SGJnCiQxvjzVTfgHcgQj8FvxlS90fwaGxI5DXc
+ dsFF81NYtWucF2WCqsmI2B4Ai5YzRqc5k4oEOFKb8/8L89Y3xXaQqYA2QS0HsFB7JvMnqDLnU
+ gll5bfxV325P5U873BkPUQ5SoF5luZqVGGy3IDo+XGIHvZYCVQm+wz062VqO0bYGI3akvxtcl
+ LOwsQs9gWWEmoyqeDpyVSSoH+AxXDJPAL1xI/nUT8ZrLVuwxcSfZwfvc/+egz4TkaY2LaAjaF
+ 2j51nJAVT7l0pYC+gAg3SWPn7DI1AHxC++dinl+ZdJG0xYYcZPMF11YVDhYT1ZkfnfSYpd1/l
+ lHPV3llQgQ+LHETgofXxJkn772iJ+IC/r/jY2e51iFbv2tbT4F32QlJ8c3oK2iLBnr1cXOrSJ
+ 6ZXqvZ+H6RcCb5TloI8ItsU7CuWPkWqGyrYa1fZX16yeoc6Eo1WSdxkDEwp6oQRQO22TCpeHC
+ 7ItQWYVARVK1swrzQO7ZRyTj5eC7nf2h/xlV3w/VAqM0kJQmemYwYVCbT7DtoA32flZccD48p
+ 3zA0TBqpoH02QukFLWz5ivQe4A8jG8gdb35M43jA6nMAcpuYINP6kMH7913L8/GuMcco=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -65,33 +66,30 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Each cpu-core is supposed to list its supply separately, add supply for
-cpu1.
+Correct CAN controller comment. It is a MCP2515 rather than a mpc258x.
 
-Fixes: 2d7401f8632f ("ARM: dts: imx7d: Add cpu1 supply")
+Fixes: 66d59b678a87 ("ARM: dts: imx7-colibri: add MCP2515 CAN controller")
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 ---
 
 (no changes since v1)
 
- arch/arm/boot/dts/imx7d-colibri-emmc.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi b/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi
-index 45b12b0d8710..2b4be7646631 100644
---- a/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi
-+++ b/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi
-@@ -19,6 +19,10 @@ memory@80000000 {
- 	};
- };
+diff --git a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
+index e3aac56aece8..069f56272546 100644
+--- a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
++++ b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
+@@ -4,7 +4,7 @@
+  */
  
-+&cpu1 {
-+	cpu-supply = <&reg_DCDC2>;
-+};
-+
- &gpio6 {
- 	gpio-line-names = "",
- 			  "",
+ / {
+-	/* fixed crystal dedicated to mpc258x */
++	/* Fixed crystal dedicated to MCP2515. */
+ 	clk16m: clk16m {
+ 		compatible = "fixed-clock";
+ 		#clock-cells = <0>;
 -- 
 2.35.1
 

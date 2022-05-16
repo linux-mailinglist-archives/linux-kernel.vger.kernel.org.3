@@ -2,75 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C970352836A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 13:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B50D52836F
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 13:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243271AbiEPLkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 07:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
+        id S232517AbiEPLoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 07:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236194AbiEPLka (ORCPT
+        with ESMTP id S229697AbiEPLo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 07:40:30 -0400
+        Mon, 16 May 2022 07:44:27 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB23DF55;
-        Mon, 16 May 2022 04:40:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6BEDFBF;
+        Mon, 16 May 2022 04:44:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 06F43B80B55;
-        Mon, 16 May 2022 11:40:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE1A2C385AA;
-        Mon, 16 May 2022 11:40:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F3F77B810DF;
+        Mon, 16 May 2022 11:44:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FC2AC385AA;
+        Mon, 16 May 2022 11:44:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652701227;
-        bh=L5E5J6zzQA1xwUAGYCTKpj4tRtQkKMREW7HnJ9e3CWE=;
+        s=k20201202; t=1652701463;
+        bh=EmxLfawp5Dk6/SWKDlV1mvHcmHp8Dr2enYG7AsV29zI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Mfyad4iBN0LffO3Y5W8vZRV64qx1ZV1gUE1laCe8MTfHN8aw6yGD40pgYvagw8JHp
-         RkUxOXMrkJ8ICuW66vpBXQ4uS7FNCe8q7UUmhQL3KibuZajpAQe2IsOFfeah4lTarl
-         Bny6DtzYmcBzwB4VcNiofzmCxQtt93mvY3qLgwsnYKpGGjdOO3SJs6PcgcKVgpI+Hs
-         vPEJM5J3WeoWFGSDCf8ZkuZ9N/wXclWb+7daC6UC6wNCjsxgeqc1j3P7A5g0NYtMVb
-         FHdyB2TIiOxhJajbX49C5xCOxXAfqie/WW1eVp/kpvNf8O5z0bZ5KBztTmK48PVdB5
-         8alU8QOJC0J/w==
-Date:   Mon, 16 May 2022 17:10:23 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Allen Pais <apais@linux.microsoft.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        olivier.dautricourt@orolia.com, sr@denx.de,
-        Kees Cook <keescook@chromium.org>,
-        linux-hardening@vger.kernel.org, ludovic.desroches@microchip.com,
-        tudor.ambarus@microchip.com, f.fainelli@gmail.com,
-        rjui@broadcom.com, sbranden@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, nsaenz@kernel.org,
-        paul@crapouillou.net, Eugeniy.Paltsev@synopsys.com,
-        gustavo.pimentel@synopsys.com, vireshk@kernel.org,
-        leoyang.li@nxp.com, zw@zh-kernel.org, wangzhou1@hisilicon.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de,
-        sean.wang@mediatek.com, matthias.bgg@gmail.com, afaerber@suse.de,
-        mani@kernel.org, logang@deltatee.com, sanju.mehta@amd.com,
-        daniel@zonque.org, haojian.zhuang@gmail.com,
-        robert.jarzmik@free.fr, agross@kernel.org,
-        bjorn.andersson@linaro.org, krzysztof.kozlowski@linaro.org,
-        green.wan@sifive.com, orsonzhai@gmail.com, baolin.wang7@gmail.com,
-        zhang.lyra@gmail.com, patrice.chotard@foss.st.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC 1/1] drivers/dma/*: replace tasklets with workqueue
-Message-ID: <YoI4J8taHehMpjFj@matsya>
-References: <20220419211658.11403-1-apais@linux.microsoft.com>
- <20220419211658.11403-2-apais@linux.microsoft.com>
- <353023ba-d506-5d45-be68-df2025074ed6@kernel.org>
- <3ee366a7-e61f-e513-aa2f-12e8d5316f3c@embeddedor.com>
- <YmpedDjzZXz2t6NS@smile.fi.intel.com>
- <DA101ED8-F99F-4DCB-9CB7-370A62C44B65@linux.microsoft.com>
- <CACRpkdadjPn82G4TMKyyQtkju=oA4EX=GNxs8KRtrQ7CcqVOog@mail.gmail.com>
+        b=ou5Z19QMaL128kR/T8bZXm/wLzTNxYqOdfkNiXnjEgrc2bo6IWp1OnecrFTlknVgt
+         kQJFP+/VRUDKo+19pG/qpKsrqRrYWxiYanJADfhRwNY55BHgBVmVtKSm5wV+8OaZCr
+         W1zfGmpFtwQa++M5oZ+AIjTP0LCQ00npV+JSoAtEMV63eBIuQaPlFOVHH/q1KNabPD
+         XD8BqzYHXkVGKbCIU3VDjbbECwrqZu8gZCnMmAJsuxWjtrHWR5/EHoIInfwjvMdoA6
+         IIzcR6b9yvPT9J+lLBrYXSW94MH3L3JfMWSgrurqm9dyJ2Ni6ftLdRWPr/FjPxtClL
+         pxlIMvxpeMRjA==
+Date:   Mon, 16 May 2022 12:44:16 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Siddh Raman Pant <siddhpant.gh@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: alsa: Better error messages
+Message-ID: <YoI5EEPjOQPzB6se@sirena.org.uk>
+References: <8598037d-0e24-9bc1-3f2c-a2751ec8e871@gmail.com>
+ <s5h35h9c3yn.wl-tiwai@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5M0Q1jZTiTZHriO1"
 Content-Disposition: inline
-In-Reply-To: <CACRpkdadjPn82G4TMKyyQtkju=oA4EX=GNxs8KRtrQ7CcqVOog@mail.gmail.com>
+In-Reply-To: <s5h35h9c3yn.wl-tiwai@suse.de>
+X-Cookie: May be too intense for some viewers.
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -81,18 +61,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12-05-22, 23:54, Linus Walleij wrote:
-> On Fri, May 6, 2022 at 7:43 PM Allen Pais <apais@linux.microsoft.com> wrote:
-> 
-> >  - Concerns regarding throughput, would workqueues be as efficient as tasklets (Vinod)
-> 
-> You need to ask the scheduler people about this.
-> 
-> The workqueues goes deep into the scheduler and I can't make
-> out how they are prioritized, but they are certainly not treated
-> like any other task.
 
-+1
+--5M0Q1jZTiTZHriO1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-~Vinod
+On Mon, May 16, 2022 at 09:49:04AM +0200, Takashi Iwai wrote:
+> On Fri, 13 May 2022 15:40:57 +0200,
+> Siddh Raman Pant wrote:
+
+> > This allows for potentially better machine-parsing due to an
+> > expected / fixed format. Also because of eyecandy reasons.
+
+> > Whenever possible, errors will start with the name of the
+> > offending card/control, separated by the error with colons.
+
+> > Whenever there is a description of an error given, the generated
+> > error string from snd_strerror will be (mostly) enclosed in
+> > parentheses at the end.
+
+> > Clarity of error messages have been (hopefully) improved.
+
+> But, honestly speaking, I'm not sure whether it worth.
+> Although it's possibly a bit more consistent over all texts, I
+> don't see significant improvement by this change.
+
+> But I'm fine to apply it, so keep this pending and would like to
+> hear from others.
+
+Some of it is probably fine but there's a lot of different changes for a
+lot of different styles in here, not all of which look great to me.
+
+--5M0Q1jZTiTZHriO1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKCORAACgkQJNaLcl1U
+h9DH2wf/V+ceewah5O1Pfdjt0PzOsKcr3er5o2sR3Bn2bVPSb37LtrKyLUXz+PNR
+F7JqHqiJRA2ynQUsxWpRKneSLj8rMCh1QPl9k4DJiELy5UzhRiEPoKqaF4qyDW0l
+03Ts3YCLGoZ8+jUr+ke67Gz63B5kxmrzoXsHjcp8d/xPMy7mUZYtJqzDN2Vdqxqr
+U6iDhB2qN+sL6dw+2TpYs1PvKjrKETlEaieH0Q4CTJSACs/WN5aYFZNoVzmOgwwC
+yb+0gevUiAtTZCjgu6Ki+BveQaUa39P3HNoOU9NSdPjkqHt1H7ixIHiaJANzT1xZ
+VX5E8TqorRsoIoDtvTeoxdbsF7mfWg==
+=xUpY
+-----END PGP SIGNATURE-----
+
+--5M0Q1jZTiTZHriO1--

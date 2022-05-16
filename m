@@ -2,285 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513BD5283DA
+	by mail.lfdr.de (Postfix) with ESMTP id 02CAD5283D9
 	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 14:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239823AbiEPMGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 08:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40948 "EHLO
+        id S241690AbiEPMG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 08:06:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233832AbiEPMF5 (ORCPT
+        with ESMTP id S235374AbiEPMGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 08:05:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC7B922B0C
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 05:05:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652702755;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vG/ZLIgl/6sRfeOy7UnubeHdfQCIjGvrLP2A/YOFXi0=;
-        b=Fom5uD0x5rLilCSwlX9xDVvwSI4cMiVaQ068SP0oc3CWLf4jkWJzqPqnOBoIGsopmcaL/g
-        EVCOMsZB+6fljlpwFoVK59f52B+qT7VpmzEsu07qPI9upNPm5vDoDTrydpKrf94YKwuBKM
-        X77CB2G8f8nbQoM7pazU5/DHdsQaO9c=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-203-SpbxjhoTNTyoRXH4EZthqg-1; Mon, 16 May 2022 08:05:51 -0400
-X-MC-Unique: SpbxjhoTNTyoRXH4EZthqg-1
-Received: by mail-ej1-f71.google.com with SMTP id nb10-20020a1709071c8a00b006e8f89863ceso5714949ejc.18
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 05:05:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vG/ZLIgl/6sRfeOy7UnubeHdfQCIjGvrLP2A/YOFXi0=;
-        b=Q7pzv/cjzJRBO9P0O4xNJEdPs3C5xVCoOyG6Ll7x2+ktKE/5TUP52A+avhMTFPd6u5
-         8s7azNjp3vlSbTfWCBlhgywp1Or3cpPDe+6DNMcKbqVJonOmeZcOsuWZ5h0gGM08mMCq
-         pbtuC0wxGuQPSPkVYw0p/Znn24mbftD/HMRv1siwluPZTju7yPLCHTDkpR9pnACqwQKX
-         mS7l8MxT1pbc13Z6Pl6YQ2ILmDu+kAlH3YnkFEeGRspXVItwzbAKjx8asH6AG3W7YgY0
-         qyk/GYt+AmBdKy+d9o0yEo7z6K0OliWkfgMgMG9vtpc1aUYXghEQpGGoOPCiiFCA2YDB
-         ZzDQ==
-X-Gm-Message-State: AOAM531cntxJoWf3k3DFUUQNSOknEz20vmHl1O6Us+GgmYWHSXXQnsJS
-        1QRbROC9hIXjFvRnYetEhM7YRa2N3Y4oQB8OjsXF43NpOg5oIctcgAyD4FPTci3DwCyf2rPE5EG
-        bebSovGQN9h+nmWCw/k9ijozG
-X-Received: by 2002:a05:6402:b8f:b0:42a:be5d:7a94 with SMTP id cf15-20020a0564020b8f00b0042abe5d7a94mr769287edb.150.1652702750684;
-        Mon, 16 May 2022 05:05:50 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyAN7T+5N/B7gyP+ujGejIQ5hVeT1KxXFDW1cynVLgUOmc51xLNbcUysPS1+TQF7PAajXo6tA==
-X-Received: by 2002:a05:6402:b8f:b0:42a:be5d:7a94 with SMTP id cf15-20020a0564020b8f00b0042abe5d7a94mr769267edb.150.1652702750470;
-        Mon, 16 May 2022 05:05:50 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id jl6-20020a17090775c600b006fd6f7b3c84sm3646784ejc.46.2022.05.16.05.05.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 05:05:49 -0700 (PDT)
-Message-ID: <63a9c130-a302-3fec-fcbc-e18c3918ae75@redhat.com>
-Date:   Mon, 16 May 2022 14:05:48 +0200
+        Mon, 16 May 2022 08:06:00 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF45B22B28
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 05:05:58 -0700 (PDT)
+Received: (Authenticated sender: alex@ghiti.fr)
+        by mail.gandi.net (Postfix) with ESMTPSA id A5E1C60008;
+        Mon, 16 May 2022 12:05:53 +0000 (UTC)
+Message-ID: <5e702296-9ce0-f1e6-dae8-cc719bc040b9@ghiti.fr>
+Date:   Mon, 16 May 2022 14:05:53 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
-Subject: Re: [PATCH v4 2/5] drm: Add HPD state to
- drm_connector_oob_hotplug_event()
+Subject: Re: [syzbot] riscv/fixes boot error: can't ssh into the instance
 Content-Language: en-US
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-usb@vger.kernel.org
-References: <20220502165316.4167199-1-bjorn.andersson@linaro.org>
- <20220502165316.4167199-3-bjorn.andersson@linaro.org>
- <YoI0wx/LPK4ZrUFf@kuha.fi.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <YoI0wx/LPK4ZrUFf@kuha.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Dmitry Vyukov <dvyukov@google.com>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Cc:     Aleksandr Nogikh <nogikh@google.com>,
+        linux-riscv@lists.infradead.org,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        syzbot <syzbot+330a558d94b58f7601be@syzkaller.appspotmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzkaller-bugs@googlegroups.com
+References: <00000000000038779505d5d8b372@google.com>
+ <CANp29Y7WjwXwgxPrNq0XXjXPu+wGFqTreh9gry=O6aE7+cKpLQ@mail.gmail.com>
+ <CA+zEjCvu76yW7zfM+qJUe+t5y23oPdzR4KDV1mOdqH8bB4GmTw@mail.gmail.com>
+ <CACT4Y+arufrRgwmN66wUU+_FGxMy-sTkjMQnRN8U2H2tQuhB7A@mail.gmail.com>
+ <a0769218-c84a-a1d3-71e7-aefd40bf54fe@ghiti.fr>
+ <CANp29Y4WMhsE_-VWvNbwq18+qvb1Qc-ES80h_j_G-N_hcAnRAw@mail.gmail.com>
+ <CANp29Y4ujmz901aE9oiBDx9dYWHti4-Jw=6Ewtotm6ck6MN9FQ@mail.gmail.com>
+ <CACT4Y+ZvStiHLYBOcPDoAJnk8hquXwm9BgjQTv=APwh7AvgEUQ@mail.gmail.com>
+ <CANp29Y56Or0V1AG7rzBfV_ZTph2Crg4JKKHiuw1kcGFFxeWqiQ@mail.gmail.com>
+ <CANp29Y5+MuhKAzVxzEDb_k9voXmKWrUFx8k4wnW5=2+5enVFVA@mail.gmail.com>
+ <CA+zEjCtvaT0YsxxUgnEGM+V4b5sWuCAs3=3J+Xocf580uT3t1g@mail.gmail.com>
+ <CA+zEjCs1FEUTcM+pgV+_MZnixSO5c2hexZFxGxuCQWc2ZMQiRg@mail.gmail.com>
+ <CANp29Y4rDSjrfTOxcQqwh+Qm+ocR0v6Oxr7EkFxScf+24M1tNA@mail.gmail.com>
+ <CA+zEjCtB0rTuNAJkrM2q3JQL7D-9fAXBo0Ud0w__gy9CAfo_Ag@mail.gmail.com>
+ <CACT4Y+Z=3MWEhVUH3mAH150XpOmhdjsGPOHoP1nvBcBwU_sphQ@mail.gmail.com>
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <CACT4Y+Z=3MWEhVUH3mAH150XpOmhdjsGPOHoP1nvBcBwU_sphQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 5/16/22 13:25, Heikki Krogerus wrote:
-> +Hans
-> 
-> Hans, do you have any comments?
-
-Thanks for the ping, this looks good to me:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
-
-
-> 
-> On Mon, May 02, 2022 at 09:53:13AM -0700, Bjorn Andersson wrote:
->> In some implementations, such as the Qualcomm platforms, the display
->> driver has no way to query the current HPD state and as such it's
->> impossible to distinguish between disconnect and attention events.
+On 5/12/22 13:48, Dmitry Vyukov wrote:
+> On Fri, 18 Feb 2022 at 14:45, Alexandre Ghiti
+> <alexandre.ghiti@canonical.com> wrote:
+>> Hi Aleksandr,
 >>
->> Add a parameter to drm_connector_oob_hotplug_event() to pass the HPD
->> state.
->>
->> Also push the test for unchanged state in the displayport altmode driver
->> into the i915 driver, to allow other drivers to act upon each update.
->>
->> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
->> ---
->>
->> Changes since v3:
->> - Transition to drm_connector_status instead of custom hpd_state 
->>
->>  drivers/gpu/drm/drm_connector.c          |  6 ++++--
->>  drivers/gpu/drm/i915/display/intel_dp.c  | 17 ++++++++++++++---
->>  drivers/gpu/drm/i915/i915_drv.h          |  3 +++
->>  drivers/usb/typec/altmodes/displayport.c | 10 +++-------
->>  include/drm/drm_connector.h              |  6 ++++--
->>  5 files changed, 28 insertions(+), 14 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
->> index 1c48d162c77e..e86c69f0640f 100644
->> --- a/drivers/gpu/drm/drm_connector.c
->> +++ b/drivers/gpu/drm/drm_connector.c
->> @@ -2794,6 +2794,7 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
->>  /**
->>   * drm_connector_oob_hotplug_event - Report out-of-band hotplug event to connector
->>   * @connector_fwnode: fwnode_handle to report the event on
->> + * @status: hot plug detect logical state
->>   *
->>   * On some hardware a hotplug event notification may come from outside the display
->>   * driver / device. An example of this is some USB Type-C setups where the hardware
->> @@ -2803,7 +2804,8 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
->>   * This function can be used to report these out-of-band events after obtaining
->>   * a drm_connector reference through calling drm_connector_find_by_fwnode().
->>   */
->> -void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode)
->> +void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode,
->> +				     enum drm_connector_status status)
->>  {
->>  	struct drm_connector *connector;
->>  
->> @@ -2812,7 +2814,7 @@ void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode)
->>  		return;
->>  
->>  	if (connector->funcs->oob_hotplug_event)
->> -		connector->funcs->oob_hotplug_event(connector);
->> +		connector->funcs->oob_hotplug_event(connector, status);
->>  
->>  	drm_connector_put(connector);
->>  }
->> diff --git a/drivers/gpu/drm/i915/display/intel_dp.c b/drivers/gpu/drm/i915/display/intel_dp.c
->> index e4a79c11fd25..56cc023f7bbd 100644
->> --- a/drivers/gpu/drm/i915/display/intel_dp.c
->> +++ b/drivers/gpu/drm/i915/display/intel_dp.c
->> @@ -4951,15 +4951,26 @@ static int intel_dp_connector_atomic_check(struct drm_connector *conn,
->>  	return intel_modeset_synced_crtcs(state, conn);
->>  }
->>  
->> -static void intel_dp_oob_hotplug_event(struct drm_connector *connector)
->> +static void intel_dp_oob_hotplug_event(struct drm_connector *connector,
->> +				       enum drm_connector_status hpd_state)
->>  {
->>  	struct intel_encoder *encoder = intel_attached_encoder(to_intel_connector(connector));
->>  	struct drm_i915_private *i915 = to_i915(connector->dev);
->> +	bool hpd_high = hpd_state == connector_status_connected;
->> +	unsigned int hpd_pin = encoder->hpd_pin;
->> +	bool need_work = false;
->>  
->>  	spin_lock_irq(&i915->irq_lock);
->> -	i915->hotplug.event_bits |= BIT(encoder->hpd_pin);
->> +	if (hpd_high != test_bit(hpd_pin, &i915->hotplug.oob_hotplug_last_state)) {
->> +		i915->hotplug.event_bits |= BIT(hpd_pin);
->> +
->> +		__assign_bit(hpd_pin, &i915->hotplug.oob_hotplug_last_state, hpd_high);
->> +		need_work = true;
->> +	}
->>  	spin_unlock_irq(&i915->irq_lock);
->> -	queue_delayed_work(system_wq, &i915->hotplug.hotplug_work, 0);
->> +
->> +	if (need_work)
->> +		queue_delayed_work(system_wq, &i915->hotplug.hotplug_work, 0);
->>  }
->>  
->>  static const struct drm_connector_funcs intel_dp_connector_funcs = {
->> diff --git a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_drv.h
->> index 24111bf42ce0..96c088bb5522 100644
->> --- a/drivers/gpu/drm/i915/i915_drv.h
->> +++ b/drivers/gpu/drm/i915/i915_drv.h
->> @@ -135,6 +135,9 @@ struct i915_hotplug {
->>  	/* Whether or not to count short HPD IRQs in HPD storms */
->>  	u8 hpd_short_storm_enabled;
->>  
->> +	/* Last state reported by oob_hotplug_event for each encoder */
->> +	unsigned long oob_hotplug_last_state;
->> +
->>  	/*
->>  	 * if we get a HPD irq from DP and a HPD irq from non-DP
->>  	 * the non-DP HPD could block the workqueue on a mode config
->> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
->> index c1d8c23baa39..9360ca177c7d 100644
->> --- a/drivers/usb/typec/altmodes/displayport.c
->> +++ b/drivers/usb/typec/altmodes/displayport.c
->> @@ -59,7 +59,6 @@ struct dp_altmode {
->>  	struct typec_displayport_data data;
->>  
->>  	enum dp_state state;
->> -	bool hpd;
->>  
->>  	struct mutex lock; /* device lock */
->>  	struct work_struct work;
->> @@ -143,10 +142,8 @@ static int dp_altmode_status_update(struct dp_altmode *dp)
->>  		if (!ret)
->>  			dp->state = DP_STATE_CONFIGURE;
->>  	} else {
->> -		if (dp->hpd != hpd) {
->> -			drm_connector_oob_hotplug_event(dp->connector_fwnode);
->> -			dp->hpd = hpd;
->> -		}
->> +		drm_connector_oob_hotplug_event(dp->connector_fwnode,
->> +						hpd ? connector_status_connected : connector_status_disconnected);
->>  	}
->>  
->>  	return ret;
->> @@ -573,8 +570,7 @@ void dp_altmode_remove(struct typec_altmode *alt)
->>  	cancel_work_sync(&dp->work);
->>  
->>  	if (dp->connector_fwnode) {
->> -		if (dp->hpd)
->> -			drm_connector_oob_hotplug_event(dp->connector_fwnode);
->> +		drm_connector_oob_hotplug_event(dp->connector_fwnode, connector_status_disconnected);
->>  
->>  		fwnode_handle_put(dp->connector_fwnode);
->>  	}
->> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
->> index 3ac4bf87f257..886aa1861ed9 100644
->> --- a/include/drm/drm_connector.h
->> +++ b/include/drm/drm_connector.h
->> @@ -1141,7 +1141,8 @@ struct drm_connector_funcs {
->>  	 * This will get called when a hotplug-event for a drm-connector
->>  	 * has been received from a source outside the display driver / device.
->>  	 */
->> -	void (*oob_hotplug_event)(struct drm_connector *connector);
->> +	void (*oob_hotplug_event)(struct drm_connector *connector,
->> +				  enum drm_connector_status status);
->>  
->>  	/**
->>  	 * @debugfs_init:
->> @@ -1749,7 +1750,8 @@ drm_connector_is_unregistered(struct drm_connector *connector)
->>  		DRM_CONNECTOR_UNREGISTERED;
->>  }
->>  
->> -void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode);
->> +void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode,
->> +				     enum drm_connector_status status);
->>  const char *drm_get_connector_type_name(unsigned int connector_type);
->>  const char *drm_get_connector_status_name(enum drm_connector_status status);
->>  const char *drm_get_subpixel_order_name(enum subpixel_order order);
->> -- 
->> 2.35.1
-> 
+>> On Thu, Feb 17, 2022 at 6:08 PM Aleksandr Nogikh <nogikh@google.com> wrote:
+>>> Hi Alex,
+>>>
+>>> On Thu, Feb 17, 2022 at 5:53 PM Alexandre Ghiti
+>>> <alexandre.ghiti@canonical.com> wrote:
+>>>> Aleksandr,
+>>>>
+>>>> On Wed, Feb 16, 2022 at 5:58 PM Alexandre Ghiti
+>>>> <alexandre.ghiti@canonical.com> wrote:
+>>>>> First, thank you for working on this.
+>>>>>
+>>>>> On Wed, Feb 16, 2022 at 5:17 PM Aleksandr Nogikh <nogikh@google.com> wrote:
+>>>>>> If I use just defconfig + DEBUG_VIRTUAL, without any KASAN, it begins
+>>>>>> to boot, but overwhelms me with tons of `virt_to_phys used for
+>>>>>> non-linear address:` errors.
+>>>>>>
+>>>>>> Like that
+>>>>>>
+>>>>>> [    2.701271] virt_to_phys used for non-linear address:
+>>>>>> 00000000b59e31b6 (0xffffffff806c2000)
+>>>>>> [    2.701727] WARNING: CPU: 0 PID: 1 at arch/riscv/mm/physaddr.c:16
+>>>>>> __virt_to_phys+0x7e/0x86
+>>>>>> [    2.702207] Modules linked in:
+>>>>>> [    2.702393] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G        W
+>>>>>>    5.17.0-rc1 #1
+>>>>>> [    2.702806] Hardware name: riscv-virtio,qemu (DT)
+>>>>>> [    2.703051] epc : __virt_to_phys+0x7e/0x86
+>>>>>> [    2.703298]  ra : __virt_to_phys+0x7e/0x86
+>>>>>> [    2.703547] epc : ffffffff80008448 ra : ffffffff80008448 sp :
+>>>>>> ffff8f800021bde0
+>>>>>> [    2.703977]  gp : ffffffff80ed9b30 tp : ffffaf8001230000 t0 :
+>>>>>> ffffffff80eea56f
+>>>>>> [    2.704704]  t1 : ffffffff80eea560 t2 : 0000000000000000 s0 :
+>>>>>> ffff8f800021be00
+>>>>>> [    2.705153]  s1 : ffffffff806c2000 a0 : 000000000000004f a1 :
+>>>>>> ffffffff80e723d8
+>>>>>> [    2.705555]  a2 : 0000000000000010 a3 : fffffffffffffffe a4 :
+>>>>>> 0000000000000000
+>>>>>> [    2.706027]  a5 : 0000000000000000 a6 : 0000000000000005 a7 :
+>>>>>> ffffffffffffffff
+>>>>>> [    2.706474]  s2 : ffffffff80b80b08 s3 : 00000000000000c2 s4 :
+>>>>>> ffffffff806c2000
+>>>>>> [    2.706891]  s5 : ffffffff80edba10 s6 : ffffffff80edb960 s7 :
+>>>>>> 0000000000000001
+>>>>>> [    2.707290]  s8 : 00000000000000ff s9 : ffffffff80b80b40 s10:
+>>>>>> 00000000000000cc
+>>>>>> [    2.707689]  s11: ffffaf807e1fcf00 t3 : 0000000000000076 t4 :
+>>>>>> ffffffffffffffff
+>>>>>> [    2.708092]  t5 : 00000000000001f2 t6 : ffff8f800021bb48
+>>>>>> [    2.708433] status: 0000000000000120 badaddr: 0000000000000000
+>>>>>> cause: 0000000000000003
+>>>>>> [    2.708919] [<ffffffff8011416a>] free_reserved_area+0x72/0x19a
+>>>>>> [    2.709296] [<ffffffff80003a5a>] free_initmem+0x6c/0x7c
+>>>>>> [    2.709648] [<ffffffff805f60c8>] kernel_init+0x3a/0x10a
+>>>>>> [    2.709993] [<ffffffff80002fda>] ret_from_exception+0x0/0xc
+>>>>>> [    2.710310] ---[ end trace 0000000000000000 ]---
+>>>>>>
+>>>>> I was able to reproduce this: the first one regarding init_zero_pfn is
+>>>>> legit but not wrong, I have to check when it was introduced and how to
+>>>>> fix this.
+>>>>> Regarding the huge batch that follows, at first sight, I would say
+>>>>> this is linked to my sv48 patchset but that does not seem important as
+>>>>> the address is a kernel mapping address so the use of virt_to_phys is
+>>>>> right.
+>>>>>
+>>>>>> On Wed, Feb 16, 2022 at 5:09 PM Aleksandr Nogikh <nogikh@google.com> wrote:
+>>>>>>> On Wed, Feb 16, 2022 at 12:56 PM Dmitry Vyukov <dvyukov@google.com> wrote:
+>>>>>>>> On Wed, 16 Feb 2022 at 12:47, Aleksandr Nogikh <nogikh@google.com> wrote:
+>>>>>>>>> On Wed, Feb 16, 2022 at 11:37 AM Aleksandr Nogikh <nogikh@google.com> wrote:
+>>>>>>>>>> Hi Alex,
+>>>>>>>>>>
+>>>>>>>>>> On Wed, Feb 16, 2022 at 5:14 AM Alexandre Ghiti <alex@ghiti.fr> wrote:
+>>>>>>>>>>> Hi Dmitry,
+>>>>>>>>>>>
+>>>>>>>>>>> On 2/15/22 18:12, Dmitry Vyukov wrote:
+>>>>>>>>>>>> On Wed, 2 Feb 2022 at 14:18, Alexandre Ghiti
+>>>>>>>>>>>> <alexandre.ghiti@canonical.com> wrote:
+>>>>>>>>>>>>> Hi Aleksandr,
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> On Wed, Feb 2, 2022 at 12:08 PM Aleksandr Nogikh <nogikh@google.com> wrote:
+>>>>>>>>>>>>>> Hello,
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>> syzbot has already not been able to fuzz its RISC-V instance for 97
+>>>>>>>>>>>>> That's a longtime, I'll take a look more regularly.
+>>>>>>>>>>>>>
+>>>>>>>>>>>>>> days now because the compiled kernel cannot boot. I bisected the issue
+>>>>>>>>>>>>>> to the following commit:
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>> commit 54c5639d8f507ebefa814f574cb6f763033a72a5
+>>>>>>>>>>>>>> Author: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+>>>>>>>>>>>>>> Date:   Fri Oct 29 06:59:27 2021 +0200
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>       riscv: Fix asan-stack clang build
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>> Apparently, the problem appears on GCC-built RISC-V kernels with KASAN
+>>>>>>>>>>>>>> enabled. In the previous message syzbot mentions
+>>>>>>>>>>>>>> "riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU
+>>>>>>>>>>>>>> Binutils for Debian) 2.35.2", but the issue also reproduces finely on
+>>>>>>>>>>>>>> a newer GCC compiler: "riscv64-linux-gnu-gcc (Debian 11.2.0-10)
+>>>>>>>>>>>>>> 11.2.0, GNU ld (GNU Binutils for Debian) 2.37".
+>>>>>>>>>>>>>> For convenience, I also duplicate the .config file from the bot's
+>>>>>>>>>>>>>> message: https://syzkaller.appspot.com/x/.config?x=522544a2e0ef2a7d
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>> Can someone with KASAN and RISC-V expertise please take a look?
+>>>>>>>>>>>>> I'll take a look at that today.
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> Thanks for reporting the issue,
+>>>>>>>>>>> I took a quick look, not enough to fix it but I know the issue comes
+>>>>>>>>>>> from the inline instrumentation, I have no problem with the outline
+>>>>>>>>>>> instrumentation. I need to find some cycles to work on this, my goal is
+>>>>>>>>>>> to fix this for 5.17.
+>>>>>>>>>> Thanks for the update!
+>>>>>>>>>>
+>>>>>>>>>> Can you please share the .config with which you tested the outline
+>>>>>>>>>> instrumentation?
+>>>>>>>>>> I updated the syzbot config to use KASAN_OUTLINE instead of KASAN_INLINE,
+>>>>>>>>>> but it still does not boot :(
+>>>>>>>>>>
+>>>>>>>>>> Here's what I used:
+>>>>>>>>>> https://gist.github.com/a-nogikh/279c85c2d24f47efcc3e865c08844138
+>>>>>>>>> Update: it doesn't boot with that big config, but boots if I generate
+>>>>>>>>> a simple one with KASAN_OUTLINE:
+>>>>>>>>>
+>>>>>>>>> make defconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
+>>>>>>>>> ./scripts/config -e KASAN -e KASAN_OUTLINE
+>>>>>>>>> make olddefconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
+>>>>>>>>>
+>>>>>>>>> And it indeed doesn't work if I use KASAN_INLINE.
+>>>>>>>> It may be an issue with code size. Full syzbot config + KASAN + KCOV
+>>>>>>>> produce hugely massive .text. It may be hitting some limitation in the
+>>>>>>>> bootloader/kernel bootstrap code.
+>>>>> I took a quick glance and it traps on a KASAN address that is not
+>>>>> mapped, either because it is too soon or because the mapping failed
+>>>>> somehow.
+>>>>>
+>>>>> I'll definitely dive into that tomorrow, sorry for being slow here and
+>>>>> thanks again for all your work, that helps a lot.
+>>>>>
+>>>>> Thanks,
+>>>>>
+>>>>> Alex
+>>>>>
+>>>>>>> I bisected the difference between the config we use on syzbot and the
+>>>>>>> simple one that was generated like I described above.
+>>>>>>> Turns out that it's the DEBUG_VIRTUAL config that makes the difference.
+>>>>>>>
+>>>>>>> make defconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
+>>>>>>> ./scripts/config -e KASAN -e KASAN_OUTLINE -e DEBUG_VIRTUAL
+>>>>>>> make olddefconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
+>>>>>>>
+>>>>>>> And the resulting kernel does not boot.
+>>>>>>> My env: the `riscv/fixes` branch, commit
+>>>>>>> 6df2a016c0c8a3d0933ef33dd192ea6606b115e3, qemu 6.2.0.
+>>>> I fixed a few things today: KASAN + SPARSE_VMEMMAP, DEBUG_VIRTUAL and
+>>>> maybe KASAN  + KCOV.
+>>>>
+>>>> With those small fixes, I was able to boot your large dotconfig with
+>>>> KASAN_OUTLINE, the inline version still fails, this is my next target
+>>>> :)
+>>>> I'll push that tomorrow!
+>>> Awesome, thank you very much!
+>>> Looking forward to finally seeing the instance run :)
+>> I sent a patchset which should fix your config with *outline* instrumentation.
+> Was this fix merged? The riscv instance still does not boot:
+> https://syzkaller.appspot.com/bug?id=5f2ff52ad42cba9f222202219baebd4e63e35127
 
+
+Yes it has been in Linus tree since 5.18-rc1. I'll take a look at that 
+this week.
+
+Thanks,
+
+Alex
+
+
+>
+>> However, as you'll see in the cover letter, I have an issue with
+>> another KASAN config and if you can take a look at the stacktrace and
+>> see if that rings a bell, that would be great.
+>>
+>> Don't hesitate next time to ping me when the riscv syzbot instance fails :)
+>>
+>> Alex
+>>
+>>
+>>> --
+>>> Best Regards,
+>>> Aleksandr
+>>>
+>>>> Thanks again,
+>>>>
+>>>> Alex
+>> --
+>> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
+>> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
+>> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/CA%2BzEjCtB0rTuNAJkrM2q3JQL7D-9fAXBo0Ud0w__gy9CAfo_Ag%40mail.gmail.com.

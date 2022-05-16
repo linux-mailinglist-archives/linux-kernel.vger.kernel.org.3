@@ -2,124 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 260EB527E7D
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B88C7527E3E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241056AbiEPHV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 03:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58904 "EHLO
+        id S235566AbiEPHJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 03:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241087AbiEPHVp (ORCPT
+        with ESMTP id S240899AbiEPHJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 03:21:45 -0400
-Received: from sender11-op-o11.zoho.eu (sender11-op-o11.zoho.eu [31.186.226.225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F73B17587
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:21:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1652684771; cv=none; 
-        d=zohomail.eu; s=zohoarc; 
-        b=HDr/FFQNBXFV8vicf1l6hjE/A2euDlDbK5kQQYtyPTuLmMQqU/gKfjTrACJrx6jR0/CphquX5DkFCkfb4mKb17jLNVK6awizQlmXdS8N6x1JkCyZx+FUZQayLSP8wZ0JnbUjhh4MOo8cVEWIkwyGZbYX/XxTP0yUj5Z555DD3k0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
-        t=1652684771; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=NIcPko3O8gQnfcEw2wD+BsSr/fE+oPhDVo1xC1CrC1M=; 
-        b=PGL1v/cVRuZhLvAQSBDwMj9g/YkOcUM9aSIA+6MRAtfYksxcG1mKGGGc1poV7hAQeBQxpwRRHi7sZnP4QTYSXQPfnrWrh92ORJlGgbOaCEv4K3ykSpe4lnfmn7+wDue+g/p9S5R4BfKnQzv1MgZoRBnE4mkDPfGsX7YRaa5hFQQ=
-ARC-Authentication-Results: i=1; mx.zohomail.eu;
-        dkim=pass  header.i=kempniu.pl;
-        spf=pass  smtp.mailfrom=kernel@kempniu.pl;
-        dmarc=pass header.from=<kernel@kempniu.pl>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1652684771;
-        s=zmail; d=kempniu.pl; i=kernel@kempniu.pl;
-        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=NIcPko3O8gQnfcEw2wD+BsSr/fE+oPhDVo1xC1CrC1M=;
-        b=LSJOdimXKmYqlmtuFAB+yt/QK2YcoZWZgWEf0df6TxO+n3JV+wtMfFNbdcbDfBKz
-        cOcJ4c5O0peEsmbMjgDNhagL8Mt3JIeII1kLsiSWTlPcwQxwQ+kbRhHxAMxfB7Ygh9p
-        ZSNIFxvQFACfRI0D/BwhyZ1wPe8ADa0TcZrCt6Rk=
-Received: from larwa.hq.kempniu.pl (212.180.138.61 [212.180.138.61]) by mx.zoho.eu
-        with SMTPS id 1652684770360299.9570452205538; Mon, 16 May 2022 09:06:10 +0200 (CEST)
-From:   =?UTF-8?q?Micha=C5=82=20K=C4=99pie=C5=84?= <kernel@kempniu.pl>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Message-ID: <20220516070601.11428-2-kernel@kempniu.pl>
-Subject: [PATCH 1/2] mtdchar: prevent integer overflow in a safety check
+        Mon, 16 May 2022 03:09:23 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F2EE005;
+        Mon, 16 May 2022 00:09:22 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24FLrGwa005786;
+        Mon, 16 May 2022 09:09:12 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=selector1;
+ bh=CCjhfkfdlZYAW6eOnthvQQ1I3uKY4V1Crq2D3uKf1Do=;
+ b=clctPCYcG9o+i7MkeYUa/Iqvt3rbztQYbvVQIc7UcixXeh/NvPhC0Tl7j4QMmCc8ve0F
+ RdcaKh6qxgUHD8fJOls1wBNxwkVT7CK0A+ajBrubAWczuqiawaJYAzPj7G+AWhmIo4qC
+ mXTbIE/5xsUY0Vm/9AImG95EK+8nZUVTjBNHZ8otvxf/sDBL+m2Q8f9KsXl4C6NoxTpX
+ OtaC5hZ3t1xGl3nySyLVgboa/d6W9HUeewbO2kXsjH1elf+Bq54qURWZcbb06NtpLI/c
+ ZlpALffuVBhQPxtIRxByeIb8vDO+CEwex/4rI7/AwuiH3Bkxdq9HkGYqGsdDOrrRAbqq Jw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3g21j8h3jk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 09:09:12 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0721F100038;
+        Mon, 16 May 2022 09:09:12 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F404B21230D;
+        Mon, 16 May 2022 09:09:11 +0200 (CEST)
+Received: from localhost (10.75.127.48) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 16 May 2022 09:09:11
+ +0200
+From:   <gabriel.fernandez@foss.st.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 14/14] ARM: dts: stm32: add optee reserved memory on stm32mp135f-dk
 Date:   Mon, 16 May 2022 09:06:00 +0200
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516070601.11428-1-kernel@kempniu.pl>
-References: <20220516070601.11428-1-kernel@kempniu.pl>
+Message-ID: <20220516070600.7692-15-gabriel.fernandez@foss.st.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220516070600.7692-1-gabriel.fernandez@foss.st.com>
+References: <20220516070600.7692-1-gabriel.fernandez@foss.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-16_03,2022-05-13_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 6420ac0af95d ("mtdchar: prevent unbounded allocation in MEMWRITE
-ioctl") added a safety check to mtdchar_write_ioctl() which attempts to
-ensure that the write request sent by user space does not extend beyond
-the MTD device's size.  However, that check contains an addition of two
-struct mtd_write_req fields, 'start' and 'len', both of which are u64
-variables.  The result of that addition can overflow, allowing the
-safety check to be bypassed.
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
 
-The arguably simplest fix - changing the data types of the relevant
-struct mtd_write_req fields - is not feasible as it would break user
-space.
+Add the static OP-TEE reserved memory regions.
 
-Fix by making mtdchar_write_ioctl() truncate the value provided by user
-space in the 'len' field of struct mtd_write_req, so that only the lower
-32 bits of that field are used, preventing the overflow.
-
-While the 'ooblen' field of struct mtd_write_req is not currently used
-in any similarly flawed safety check, also truncate it to 32 bits, for
-consistency with the 'len' field and with other MTD routines handling
-OOB data.
-
-Update include/uapi/mtd/mtd-abi.h accordingly.
-
-Suggested-by: Richard Weinberger <richard@nod.at>
-Signed-off-by: Micha=C5=82 K=C4=99pie=C5=84 <kernel@kempniu.pl>
+Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
 ---
- drivers/mtd/mtdchar.c      | 3 +++
- include/uapi/mtd/mtd-abi.h | 4 ++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ arch/arm/boot/dts/stm32mp135f-dk.dts | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/drivers/mtd/mtdchar.c b/drivers/mtd/mtdchar.c
-index d0f9c4b0285c..b2700f8467ff 100644
---- a/drivers/mtd/mtdchar.c
-+++ b/drivers/mtd/mtdchar.c
-@@ -615,6 +615,9 @@ static int mtdchar_write_ioctl(struct mtd_info *mtd,
- =09if (!usr_oob)
- =09=09req.ooblen =3D 0;
-=20
-+=09req.len &=3D 0xffffffff;
-+=09req.ooblen &=3D 0xffffffff;
+diff --git a/arch/arm/boot/dts/stm32mp135f-dk.dts b/arch/arm/boot/dts/stm32mp135f-dk.dts
+index 09d6226d598f..2c603ce3500b 100644
+--- a/arch/arm/boot/dts/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/stm32mp135f-dk.dts
+@@ -26,6 +26,22 @@ memory@c0000000 {
+ 		reg = <0xc0000000 0x20000000>;
+ 	};
+ 
++	reserved-memory {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges;
 +
- =09if (req.start + req.len > mtd->size)
- =09=09return -EINVAL;
-=20
-diff --git a/include/uapi/mtd/mtd-abi.h b/include/uapi/mtd/mtd-abi.h
-index b869990c2db2..890d9e5b76d7 100644
---- a/include/uapi/mtd/mtd-abi.h
-+++ b/include/uapi/mtd/mtd-abi.h
-@@ -69,8 +69,8 @@ enum {
-  * struct mtd_write_req - data structure for requesting a write operation
-  *
-  * @start:=09start address
-- * @len:=09length of data buffer
-- * @ooblen:=09length of OOB buffer
-+ * @len:=09length of data buffer (only lower 32 bits are used)
-+ * @ooblen:=09length of OOB buffer (only lower 32 bits are used)
-  * @usr_data:=09user-provided data buffer
-  * @usr_oob:=09user-provided OOB buffer
-  * @mode:=09MTD mode (see "MTD operation modes")
---=20
-2.36.1
-
++		optee_framebuffer@dd000000 {
++			reg = <0xdd000000 0x1000000>;
++			no-map;
++		};
++
++		optee@de000000 {
++			reg = <0xde000000 0x2000000>;
++			no-map;
++		};
++	};
++
+ 	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+-- 
+2.25.1
 

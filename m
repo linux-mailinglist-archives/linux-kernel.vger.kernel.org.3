@@ -2,173 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 826165280E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 11:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1671B5280E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 11:31:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235786AbiEPJbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 05:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52082 "EHLO
+        id S235358AbiEPJbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 05:31:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbiEPJbk (ORCPT
+        with ESMTP id S232856AbiEPJa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 05:31:40 -0400
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11682A729;
-        Mon, 16 May 2022 02:31:38 -0700 (PDT)
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 24G9VJoq019261;
-        Mon, 16 May 2022 18:31:19 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 24G9VJoq019261
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1652693479;
-        bh=gzqkQYz7rXOqzd5Offfjf+c5s3dJ0BdJHrkewXfLFNI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WH+sysyU2V647wgDL1BuggvCEsWsZQImH759xyr5JN1rOy2whSJZQ3QkLV5H1iOx6
-         86HMo/Qa2u2MEhH5xlBa15co9a9dbLNi7TBTZ278ae5TdmRs6C6k7EuFRB5tPfJqMm
-         4/HUny/Nc1/JMf6QIUScEMWmHHlxgVnuIa3WSlcQrvU8xAdboua5NVcPHRQDF1WQ8z
-         37U07cMPrpv79A4mUF+ZsUW7Cmsm50jcIxmcix1ugtsc3YkWywMbdRRWH8/6cQCPjN
-         8MCC0ytlm25NVMXDTTjfbll3Sz5BDPXf98Oqkv7Rq1mnvqN5OQCEi2ByMVCYcFGqy8
-         1vCk71/eVkj4A==
-X-Nifty-SrcIP: [209.85.214.175]
-Received: by mail-pl1-f175.google.com with SMTP id d22so13871446plr.9;
-        Mon, 16 May 2022 02:31:19 -0700 (PDT)
-X-Gm-Message-State: AOAM533nSEUmkeaV2DnzrR9s/bTRBdoW9+xjSc6JZPZbD+WhvYEezX1x
-        KR/9GNI1F1WBY3jt2XyOK3QYabzoSk5LKwbyS6c=
-X-Google-Smtp-Source: ABdhPJz1c44GCw74wJDg/tk23rkfWOwUq4fAOU9wYejXDcdeaEoye+YPF9IjidGFPdQN5FCxZmrv9OAhNTF8IGSFC0c=
-X-Received: by 2002:a17:903:2411:b0:161:39ef:57f7 with SMTP id
- e17-20020a170903241100b0016139ef57f7mr13614580plo.136.1652693478552; Mon, 16
- May 2022 02:31:18 -0700 (PDT)
+        Mon, 16 May 2022 05:30:56 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C732428995
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 02:30:54 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id j24so4405358wrb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 02:30:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=m80xm9L1jWw9gBW5hTqwGkkrRChSL+0rpcHS4Epvok0=;
+        b=cjcvMQzYWpomBRRAqHsEDTNYnZvHwzjPXdIfjBIF1AwTRlM5OjR/Sf9VT4Ys32MAoq
+         cGdcCS+6TwnXcixYMvCmffIiZlM1g9FnAZdYhP5BdtLeSliQvF9m4JI0nwe4LuqTaS+Y
+         N5mHA7QMREkQwUYbyv2OqwWMvHjXLiOEofW9iXVpkhmuR6Ex80VgF13+oyPYXaeSMsCn
+         g/Q/8m3+0FrHB3VHUEGQTq831B6QYPPY1a2L2BnMNcXbnyCLWZZ4aD+eXMNje3K4C4+d
+         u3Wt3QKNAUtN8Qii3AvFGwYq82y7qqr9HKQmFVzKjg57UIZAB3FXwTGlIEqipKhHVVDl
+         gohw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=m80xm9L1jWw9gBW5hTqwGkkrRChSL+0rpcHS4Epvok0=;
+        b=mjcWhee489CPx5hQLUkJUBTw470AFRqWCAQEgcdgJhW9oNWIr8LrPZTKfX6fnTOViq
+         YBF12SnFD3jQyVrb5Ky8Ji4ZUt/lYtK8cAE8QlzVrxy5LUR8wcmEMBjbyWo5h5yXRDXz
+         P1Miy0KZZiF8vYZbJkxcgStfPmwq1VmrQkrXh14t0Jdv6SWnt/MWH3fmByMhG1TKcki9
+         IZpaMpDwwzkwJatpoHgTPqXkznyKSto8JqSNCCp7bN7ZjevGF6l0kpcfvgmEdOY8LdCx
+         pG62lF0T5SasUpabhxbBhjl7d8CwRz8BFEQ5UC6QmOBd3jLjdMaVSDViNCwYonxkRodg
+         TZ0A==
+X-Gm-Message-State: AOAM532lLmI8uE15Hab6B7r7JF88UJQ5zRhJPTy43fedoHpsk8TJXh/K
+        QA1GU4y+mE0tCGHcJe5Z/YzIOA==
+X-Google-Smtp-Source: ABdhPJypVpWTiAtN20AxbhPHVAYRV/UWCOoIOE/TTFwOe0eZ73tiK4k7kXjmx+tId+pgovCQL42ikw==
+X-Received: by 2002:a5d:58d0:0:b0:20d:1176:bf1a with SMTP id o16-20020a5d58d0000000b0020d1176bf1amr322823wrf.167.1652693453303;
+        Mon, 16 May 2022 02:30:53 -0700 (PDT)
+Received: from ?IPV6:2a01:e34:ed2f:f020:b464:e524:6a1d:33d0? ([2a01:e34:ed2f:f020:b464:e524:6a1d:33d0])
+        by smtp.googlemail.com with ESMTPSA id s10-20020a7bc0ca000000b003942a244f34sm12438226wmh.13.2022.05.16.02.30.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 02:30:52 -0700 (PDT)
+Message-ID: <700692b8-02a5-8b09-19e1-846c38d3c78f@linaro.org>
+Date:   Mon, 16 May 2022 11:30:50 +0200
 MIME-Version: 1.0
-References: <20220514040207.282910-1-masahiroy@kernel.org> <20220514040207.282910-2-masahiroy@kernel.org>
- <YoIOhZc3y11n5aMq@FVFF77S0Q05N>
-In-Reply-To: <YoIOhZc3y11n5aMq@FVFF77S0Q05N>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 16 May 2022 18:30:41 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASqZxn3e-DSO0cnYRZ7nY-ztt7rLUry9Fqez+ZT5VMeQw@mail.gmail.com>
-Message-ID: <CAK7LNASqZxn3e-DSO0cnYRZ7nY-ztt7rLUry9Fqez+ZT5VMeQw@mail.gmail.com>
-Subject: Re: [v2 2/2] kbuild: copy scripts/atomic/atomic-*.h to include/generated/atomic-*.h
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [patch 01/10] clocksource/drivers/bcm_kona: Convert to SPDX
+ identifier
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     linux-spdx@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>
+References: <20220510171003.952873904@linutronix.de>
+ <20220510171254.404209482@linutronix.de>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220510171254.404209482@linutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 5:43 PM Mark Rutland <mark.rutland@arm.com> wrote:
->
-> [adding the atomics maintainers to Cc]
->
-> On Sat, May 14, 2022 at 01:02:07PM +0900, Masahiro Yamada wrote:
-> > include/linux/atomic/*.h are generated by scripts/atomic/gen-atomics.sh.
-> >
-> > To ensure they are not edited, scripts/atomic/check-atomics.sh checks
-> > sha1sum every time.
-> >
-> > This commit moves include/linux/atomic/*.h to scripts/atomic/*.h_shipped,
-> > which are copied to include/generated/ at build time:
-> >
-> >   COPY    include/generated/atomic-instrumented.h
-> >   COPY    include/generated/atomic-long.h
-> >   COPY    include/generated/atomic-arch-fallback.h
->
-> FWIW, moving these and copying them at build time is fine by me, given that
-> better indicates that these are generated.
->
-> > I dropped the sha1sum checks. I hope nobody would try to directly modify
-> > *_shipped files.
->
-> I'd prefer to keep the sha1sum check, because we're worried that people *will*
-> modify them, and that won't be noticed until the next time they're regenerated.
 
-OK, but is there any reason to embed the checksum to the headers?
+Hi Thomas,
 
-Generally, you can have *.sha1 file to collect the checksums,
-and use the "sha1sum --check" command.
+I've applied the series
 
-Maybe, scripts/atomic/check-atomics.sh was unneeded.
+Thanks
 
-
-$ sha1sum include/linux/atomic/*.h   >  scripts/atomic/atomics.sha1
-$ cat scripts/atomic/atomics.sha1
-c0f1a9e951f38ccfa146ca2431f9e1611191a402
-include/linux/atomic/atomic-arch-fallback.h
-97ce73d2c176725d199a810eb81c574022ffa899
-include/linux/atomic/atomic-instrumented.h
-b0a5ee2e9497a41795644fa115df184d6331b9c2  include/linux/atomic/atomic-long.h
-$ sha1sum --check   scripts/atomic/atomics.sha1
-include/linux/atomic/atomic-arch-fallback.h: OK
-include/linux/atomic/atomic-instrumented.h: OK
-include/linux/atomic/atomic-long.h: OK
-
-
-It is possible to do "sha1sum --check && cp".
-
-
-
-> > Kbuild runs more and more tools at build time these days because they
-> > are fast enough on modern systems.
-> >
-> > For example,
-> >
-> >  - 29c833061c1d8c2d1d23a62e7061561eadd76cdb
-> >    ("kconfig: generate lexer and parser during build instead of shipping")
-> >
-> >  - 7c0303ff7e67b637c47d8afee533ca9e2a02359b
-> >    ("crypto: arm - generate *.S by Perl at build time instead of shipping them")
-> >
-> > Yet, gen-atomics.sh is too slow.
->
-> Yes; we'd originally wanted to run them at build time, but that was too slow,
-> and as a compromise we moved to regenerating them whenever we changed the
-> scripting.
-
-I remember it.
-
-https://lore.kernel.org/lkml/20181123153321.8561-1-mark.rutland@arm.com/
-
-
->
-> > I guess it can be improved because it is just simple text processing.
-> > Then, Kbuild can execute it at build time.
->
-> It is in theory possible to make them much faster, yes. The actual slowness of
-> the scripting is largely due to using sub-shells resulting in a load of
-> fork+exec, which could be avoided if using a real scripting language.
->
-> Practically speaking though, we're rather limited in what we can rely upon
-> being available. We chose to use POSIX shell as a lowest-common-demoninator,
-> and anything that'd be *nice* to use isn't going to always be available,
-> meaning that even if we make it faster we can't necessarily build it all the
-> time anyway.
-
-
-Kernel builds already rely on Perl.
-
-The base building of the kernel does not depend on Python,
-but some targets such as "make clang-tidy", "make clang-analyzer"
-need Python3.
-
-
->
-> Thanks,
-> Mark.
-
-
-BTW, full-quoting to this thread is not a good idea.
-I cut down the code diff.
-
-
+On 10/05/2022 19:24, Thomas Gleixner wrote:
+> The license information clearly states GPL version 2 only. The extra text
+> which excludes warranties is a transcript of the corresponding GPLv2 clause
+> 11, which is explicitely referenced for details.
+> 
+> So the SPDX identifier covers it completely.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Cc: Ray Jui <rjui@broadcom.com>
+> Cc: Scott Branden <sbranden@broadcom.com>
+> Cc: Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>
+> Cc: linux-spdx@vger.kernel.org
+> ---
+>   drivers/clocksource/bcm_kona_timer.c |   14 ++------------
+>   1 file changed, 2 insertions(+), 12 deletions(-)
+> 
+> --- a/drivers/clocksource/bcm_kona_timer.c
+> +++ b/drivers/clocksource/bcm_kona_timer.c
+> @@ -1,15 +1,5 @@
+> -/*
+> - * Copyright (C) 2012 Broadcom Corporation
+> - *
+> - * This program is free software; you can redistribute it and/or
+> - * modify it under the terms of the GNU General Public License as
+> - * published by the Free Software Foundation version 2.
+> - *
+> - * This program is distributed "as is" WITHOUT ANY WARRANTY of any
+> - * kind, whether express or implied; without even the implied warranty
+> - * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> - * GNU General Public License for more details.
+> - */
+> +// SPDX-License-Identifier: GPL-2.0
+> +// Copyright (C) 2012 Broadcom Corporation
+>   
+>   #include <linux/init.h>
+>   #include <linux/irq.h>
+> 
 
 
 -- 
-Best Regards
-Masahiro Yamada
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

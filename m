@@ -2,74 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3810F528BAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 19:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B997C528BAC
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 19:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344101AbiEPRNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 13:13:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46178 "EHLO
+        id S1344105AbiEPRNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 13:13:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243219AbiEPRNV (ORCPT
+        with ESMTP id S1344099AbiEPRNY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 13:13:21 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C8531DDF
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 10:13:19 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id b32so18968846ljf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 10:13:19 -0700 (PDT)
+        Mon, 16 May 2022 13:13:24 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A6832044
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 10:13:22 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id t14-20020a1709028c8e00b0015cf7e541feso8327433plo.1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 10:13:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=lnCWwgYB3EALSRrRxrjPf1n9pXx9oCWVrfYCKzTAm98=;
-        b=LRFEmYRBoMXSpZQdOYrb+Vu4h9LTz3chVOrf4UH1KxU8nXFyvtdMu7pVYlJFVaoA28
-         vs10OOM/ZkZJYcxCryBaEMCHKHw2HXej4fFw+R8g/vQH/Y/Hw3LQV3RMmnh/nFofdw5M
-         QLRqxjoSob5cyi20+56fFxCYH2VhvI4CFdKx6uPeBLPJ0viAMHWjXbYBPZMeCTULCpIW
-         3sbY5B7SkeYkKLThbwwHnq5GI1a/R5Ld6iVANi6Oe1cTdgoxY/kY2UvexkwLPJjyOMxx
-         8+XHyuaZ3BAP1DLSkwbh/P94twlCLQHB3OWlK2ri1tNa2KSct7PeXJjhIyWc4rroM4L7
-         pa5g==
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=BkxFs5g1qHthSeWFrePkH1QG+J6aKzpMAVQJiVuFFy0=;
+        b=Ux8p5mjSfdEF8/qXvqToIgfPYTMGeSNmiUns1+Eb0yBZkxK6/QPlxdqgH4zKeg3wsG
+         f7OZb33FwyhkU0V7zTKU4LSwif+XVlKDtHIpoTGwrzVGsr+248pDzVPlDoQ3Q7S8ssQ7
+         lou9e8Ztd/VwVlEOBXk/QR8CVl3Q43/Zei/zHQoF1JrOcBTf13eqa4gMu6k9UxP97uKg
+         eozshW0N0nAH+pO71/tmIjfCjIwKLyyLgmrxBTwpPvJQ+WBfYT4cRnlbWwgGEkDLENkZ
+         e2kXNTYxtJPFnB1etcyG3sgm1ExkbhOw5urHMR0khU1dgVNFr9uQvoQOZmgs9RmO6dlH
+         l1JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=lnCWwgYB3EALSRrRxrjPf1n9pXx9oCWVrfYCKzTAm98=;
-        b=ZgEqVxSQ+mUU+SCUucJi8KkJ/GryV/NK2FAUDLNKctaUxNxY8lwsYgFruxFrSPoHXE
-         v479QNawb0iY3M/82/pGxVwU1Bgnnz8RhVFf54V9z5ArFrp8zUoLzHHrbgOIyfMUEQFp
-         RzjXGTnJM8Swb/kgtOto3ZLjkorfGOuBx7g2y7taWZSqXO4mfgbXOZCZY4SrWCoBQqBS
-         5DfrsUY8mzg2dbPF+bgMIyu1ilT0AzHPNZ0CzYkc2CHxUu6d+9pUArR6PYv3ubPL5oMW
-         izNNWu0Lr1DdD9nUOVbI6c7MGPUXXmdLLR13ZCr1iaWuIxmD6ANeDhKkgSUo9BxcIuwI
-         6c8w==
-X-Gm-Message-State: AOAM531chkcb3t0uPoOyARnynKuXihuoZj8YmGrG33amoE25eD6UUUL7
-        NeUOpyYa/TYhC/pLbBsfiBIx8s0q8W8qlYSVI2iPcg==
-X-Google-Smtp-Source: ABdhPJzBEHVsSiNzP4zR1stWQaPZPEfQAH5aioIofZ5uwEr6EpYfJWDt/2/kOV8YEszOtT3ZZ/C/6598MObVeLWWWgY=
-X-Received: by 2002:a2e:bd09:0:b0:24b:9e3:30c6 with SMTP id
- n9-20020a2ebd09000000b0024b09e330c6mr11544182ljq.282.1652721197296; Mon, 16
- May 2022 10:13:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220516154512.259759-1-john.allen@amd.com> <CAMkAt6oUxUFtNS4W0bzu13oWMdfnzfNrphH3OqwAkmxJcXhOqw@mail.gmail.com>
- <SN6PR12MB27678261F176C5D9B5BF64EF8ECF9@SN6PR12MB2767.namprd12.prod.outlook.com>
-In-Reply-To: <SN6PR12MB27678261F176C5D9B5BF64EF8ECF9@SN6PR12MB2767.namprd12.prod.outlook.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Mon, 16 May 2022 10:13:05 -0700
-Message-ID: <CAMkAt6q7kTGS5QgZRq9xc0HaEYyntmj3GRWehr-3Sb4y2eQ=HQ@mail.gmail.com>
-Subject: Re: [PATCH v2] crypto: ccp - Use kzalloc for sev ioctl interfaces to
- prevent kernel memory leak
-To:     "Kalra, Ashish" <Ashish.Kalra@amd.com>
-Cc:     "Allen, John" <John.Allen@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Nguyen <theflow@google.com>,
-        David Rientjes <rientjes@google.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=BkxFs5g1qHthSeWFrePkH1QG+J6aKzpMAVQJiVuFFy0=;
+        b=N6vJZRdwAo+eVJ3WOGvcZ+WBMjqsx0HjcJ0bGaQNQIhV3EqpYS9RzYaw+Cxhcbgwqm
+         3Jl+wSYXLngKLea1s+5iIBP1nrd5GhH0MtE/MS2Z51izBdzU2jGR/wQiWq8H5Ap+5x4Z
+         G7FCBLKQ2fTcoKQ1Psg/csVt42IyNdVDiHExl7wvXCSXVEdyjRF4H49eDBP3gVQhsyRU
+         pNBwBdz+8+gLscnmRhicpeCb5GOe7YuIJM7rE8r22At15BF0/XZVE/gjDnbPjnlNYmOr
+         GILFuYwy6gaoC9Yg478zISNaJ1bvSrg3FtguoPboVn9lbpA4Y2c2VNe8njBMdlge2ryu
+         c/Rg==
+X-Gm-Message-State: AOAM531XIjAQwNdM348/KQiJYmWQWzYXE8P6bfVx1754Ina4NpAXEWKm
+        n92l3sHTDP2r64oJPnWfMAUSRhQEHp5eCo4=
+X-Google-Smtp-Source: ABdhPJyPjKo1eQFHBLHJH6P4Mxk85QYIhhyhsHtKoWV418NVqX0hkw6JvORFy5M+l/4akC4PG6mHy3tzQZlSKeY=
+X-Received: from tj.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:53a])
+ (user=tjmercier job=sendgmr) by 2002:a17:90b:38c4:b0:1dc:6b64:3171 with SMTP
+ id nn4-20020a17090b38c400b001dc6b643171mr32420547pjb.168.1652721201871; Mon,
+ 16 May 2022 10:13:21 -0700 (PDT)
+Date:   Mon, 16 May 2022 17:13:15 +0000
+Message-Id: <20220516171315.2400578-1-tjmercier@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
+Subject: [PATCH v2] dma-buf: Move sysfs work out of DMA-BUF export path
+From:   "T.J. Mercier" <tjmercier@google.com>
+To:     tjmercier@google.com, surenb@google.com, kaleshsingh@google.com,
+        minchan@google.com, gregkh@google.com, jstultz@google.com,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Hridya Valsaraju <hridya@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kernel-team@android.com, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,74 +74,187 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 9:02 AM Kalra, Ashish <Ashish.Kalra@amd.com> wrote:
->
-> [AMD Official Use Only - General]
->
-> Hello Peter,
->
-> -----Original Message-----
-> From: Peter Gonda <pgonda@google.com>
-> Sent: Monday, May 16, 2022 10:53 AM
-> To: Allen, John <John.Allen@amd.com>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>; Linux Crypto Mailing List <=
-linux-crypto@vger.kernel.org>; Sean Christopherson <seanjc@google.com>; Len=
-dacky, Thomas <Thomas.Lendacky@amd.com>; Kalra, Ashish <Ashish.Kalra@amd.co=
-m>; LKML <linux-kernel@vger.kernel.org>; Andy Nguyen <theflow@google.com>; =
-David Rientjes <rientjes@google.com>; stable@vger.kernel.org
-> Subject: Re: [PATCH v2] crypto: ccp - Use kzalloc for sev ioctl interface=
-s to prevent kernel memory leak
->
-> On Mon, May 16, 2022 at 8:46 AM John Allen <john.allen@amd.com> wrote:
-> >
-> > For some sev ioctl interfaces, input may be passed that is less than
-> > or equal to SEV_FW_BLOB_MAX_SIZE, but larger than the data that PSP
-> > firmware returns. In this case, kmalloc will allocate memory that is
-> > the size of the input rather than the size of the data. Since PSP
-> > firmware doesn't fully overwrite the buffer, the sev ioctl interfaces
-> > with the issue may return uninitialized slab memory.
-> >
-> > Currently, all of the ioctl interfaces in the ccp driver are safe, but
-> > to prevent future problems, change all ioctl interfaces that allocate
-> > memory with kmalloc to use kzalloc.
-> >
-> > Fixes: e799035609e15 ("crypto: ccp: Implement SEV_PEK_CSR ioctl
-> > command")
-> > Fixes: 76a2b524a4b1d ("crypto: ccp: Implement SEV_PDH_CERT_EXPORT
-> > ioctl command")
-> > Fixes: d6112ea0cb344 ("crypto: ccp - introduce SEV_GET_ID2 command")
-> > Cc: stable@vger.kernel.org
-> > Reported-by: Andy Nguyen <theflow@google.com>
-> > Suggested-by: David Rientjes <rientjes@google.com>
-> > Suggested-by: Peter Gonda <pgonda@google.com>
-> > Signed-off-by: John Allen <john.allen@amd.com>
-> > ---
-> > v2:
-> >   - Add fixes tags and CC stable@vger.kernel.org
-> > ---
->
->
-> >static int sev_ioctl_do_platform_status(struct sev_issue_cmd *argp) { st=
-ruct sev_user_data_status data; int ret;
->
-> >ret =3D __sev_do_cmd_locked(SEV_CMD_PLATFORM_STATUS, &data, &argp->error=
-); if (ret) return ret;
->
-> >if (copy_to_user((void __user *)argp->data, &data, sizeof(data))) ret =
-=3D -EFAULT;
->
-> >return ret;
-> >}
->
-> >Would it be safer to memset @data here to all zeros too?
->
-> It will be, but this command/function is safe as firmware will fill in th=
-e whole buffer here with the PLATFORM STATUS data retuned to the user.
+Recently, we noticed an issue where a process went into direct reclaim
+while holding the kernfs rw semaphore for sysfs in write (exclusive)
+mode. This caused processes who were doing DMA-BUF exports and releases
+to go into uninterruptible sleep since they needed to acquire the same
+semaphore for the DMA-BUF sysfs entry creation/deletion. In order to avoid
+blocking DMA-BUF export for an indeterminate amount of time while
+another process is holding the sysfs rw semaphore in exclusive mode,
+this patch moves the per-buffer sysfs file creation to the default work
+queue. Note that this can lead to a short-term inaccuracy in the dmabuf
+sysfs statistics, but this is a tradeoff to prevent the hot path from
+being blocked. A work_struct is added to dma_buf to achieve this, but as
+it is unioned with the kobject in the sysfs_entry, dma_buf does not
+increase in size.
 
-That does seem safe for now but I thought we decided it would be
-prudent to not trust the PSPs implementation here and clear all the
-buffers that eventually get sent to userspace?
+Fixes: bdb8d06dfefd ("dmabuf: Add the capability to expose DMA-BUF stats in=
+ sysfs")
+Originally-by: Hridya Valsaraju <hridya@google.com>
+Signed-off-by: T.J. Mercier <tjmercier@google.com>
 
->
-> Thanks,
-> Ashish
+---
+See the originally submitted patch by Hridya Valsaraju here:
+https://lkml.org/lkml/2022/1/4/1066
+
+v2 changes:
+- Defer only sysfs creation instead of creation and teardown per
+Christian K=C3=B6nig
+
+- Use a work queue instead of a kthread for deferred work per
+Christian K=C3=B6nig
+---
+ drivers/dma-buf/dma-buf-sysfs-stats.c | 56 ++++++++++++++++++++-------
+ include/linux/dma-buf.h               | 14 ++++++-
+ 2 files changed, 54 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/dma-buf/dma-buf-sysfs-stats.c b/drivers/dma-buf/dma-bu=
+f-sysfs-stats.c
+index 2bba0babcb62..67b0a298291c 100644
+--- a/drivers/dma-buf/dma-buf-sysfs-stats.c
++++ b/drivers/dma-buf/dma-buf-sysfs-stats.c
+@@ -11,6 +11,7 @@
+ #include <linux/printk.h>
+ #include <linux/slab.h>
+ #include <linux/sysfs.h>
++#include <linux/workqueue.h>
+=20
+ #include "dma-buf-sysfs-stats.h"
+=20
+@@ -168,10 +169,46 @@ void dma_buf_uninit_sysfs_statistics(void)
+ 	kset_unregister(dma_buf_stats_kset);
+ }
+=20
++static void sysfs_add_workfn(struct work_struct *work)
++{
++	struct dma_buf_sysfs_entry *sysfs_entry =3D
++		container_of(work, struct dma_buf_sysfs_entry, sysfs_add_work);
++	struct dma_buf *dmabuf =3D sysfs_entry->dmabuf;
++
++	/*
++	 * A dmabuf is ref-counted via its file member. If this handler holds the=
+ only
++	 * reference to the dmabuf, there is no need for sysfs kobject creation. =
+This is an
++	 * optimization and a race; when the reference count drops to 1 immediate=
+ly after
++	 * this check it is not harmful as the sysfs entry will still get cleaned=
+ up in
++	 * dma_buf_stats_teardown, which won't get called until the final dmabuf =
+reference
++	 * is released, and that can't happen until the end of this function.
++	 */
++	if (file_count(dmabuf->file) > 1) {
++		/*
++		 * kobject_init_and_add expects kobject to be zero-filled, but we have p=
+opulated it
++		 * (the sysfs_add_work union member) to trigger this work function.
++		 */
++		memset(&dmabuf->sysfs_entry->kobj, 0, sizeof(dmabuf->sysfs_entry->kobj))=
+;
++		dmabuf->sysfs_entry->kobj.kset =3D dma_buf_per_buffer_stats_kset;
++		if (kobject_init_and_add(&dmabuf->sysfs_entry->kobj, &dma_buf_ktype, NUL=
+L,
++						"%lu", file_inode(dmabuf->file)->i_ino)) {
++			kobject_put(&dmabuf->sysfs_entry->kobj);
++			dmabuf->sysfs_entry =3D NULL;
++		}
++	} else {
++		/*
++		 * Free the sysfs_entry and reset the pointer so dma_buf_stats_teardown =
+doesn't
++		 * attempt to operate on it.
++		 */
++		kfree(dmabuf->sysfs_entry);
++		dmabuf->sysfs_entry =3D NULL;
++	}
++	dma_buf_put(dmabuf);
++}
++
+ int dma_buf_stats_setup(struct dma_buf *dmabuf)
+ {
+ 	struct dma_buf_sysfs_entry *sysfs_entry;
+-	int ret;
+=20
+ 	if (!dmabuf || !dmabuf->file)
+ 		return -EINVAL;
+@@ -181,25 +218,16 @@ int dma_buf_stats_setup(struct dma_buf *dmabuf)
+ 		return -EINVAL;
+ 	}
+=20
+-	sysfs_entry =3D kzalloc(sizeof(struct dma_buf_sysfs_entry), GFP_KERNEL);
++	sysfs_entry =3D kmalloc(sizeof(struct dma_buf_sysfs_entry), GFP_KERNEL);
+ 	if (!sysfs_entry)
+ 		return -ENOMEM;
+=20
+-	sysfs_entry->kobj.kset =3D dma_buf_per_buffer_stats_kset;
+ 	sysfs_entry->dmabuf =3D dmabuf;
+-
+ 	dmabuf->sysfs_entry =3D sysfs_entry;
+=20
+-	/* create the directory for buffer stats */
+-	ret =3D kobject_init_and_add(&sysfs_entry->kobj, &dma_buf_ktype, NULL,
+-				   "%lu", file_inode(dmabuf->file)->i_ino);
+-	if (ret)
+-		goto err_sysfs_dmabuf;
++	INIT_WORK(&dmabuf->sysfs_entry->sysfs_add_work, sysfs_add_workfn);
++	get_dma_buf(dmabuf); /* This reference will be dropped in sysfs_add_workf=
+n. */
++	schedule_work(&dmabuf->sysfs_entry->sysfs_add_work);
+=20
+ 	return 0;
+-
+-err_sysfs_dmabuf:
+-	kobject_put(&sysfs_entry->kobj);
+-	dmabuf->sysfs_entry =3D NULL;
+-	return ret;
+ }
+diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+index 2097760e8e95..0200caa3c515 100644
+--- a/include/linux/dma-buf.h
++++ b/include/linux/dma-buf.h
+@@ -22,6 +22,7 @@
+ #include <linux/fs.h>
+ #include <linux/dma-fence.h>
+ #include <linux/wait.h>
++#include <linux/workqueue.h>
+=20
+ struct device;
+ struct dma_buf;
+@@ -365,7 +366,7 @@ struct dma_buf {
+ 	 */
+ 	const char *name;
+=20
+-	/** @name_lock: Spinlock to protect name acces for read access. */
++	/** @name_lock: Spinlock to protect name access for read access. */
+ 	spinlock_t name_lock;
+=20
+ 	/**
+@@ -441,6 +442,7 @@ struct dma_buf {
+=20
+ 		__poll_t active;
+ 	} cb_in, cb_out;
++
+ #ifdef CONFIG_DMABUF_SYSFS_STATS
+ 	/**
+ 	 * @sysfs_entry:
+@@ -449,7 +451,15 @@ struct dma_buf {
+ 	 * `DMA-BUF statistics`_ for the uapi this enables.
+ 	 */
+ 	struct dma_buf_sysfs_entry {
+-		struct kobject kobj;
++		union {
++			struct kobject kobj;
++
++			/** @sysfs_add_work:
++			 *
++			 * For deferred sysfs kobject creation using a workqueue.
++			 */
++			struct work_struct sysfs_add_work;
++		};
+ 		struct dma_buf *dmabuf;
+ 	} *sysfs_entry;
+ #endif
+--=20
+2.36.0.550.gb090851708-goog
+

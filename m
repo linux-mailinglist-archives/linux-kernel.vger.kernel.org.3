@@ -2,256 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2236A5294A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 01:06:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E79B75294B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 01:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350252AbiEPXF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 19:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46042 "EHLO
+        id S1350211AbiEPXIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 19:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350172AbiEPXFo (ORCPT
+        with ESMTP id S1350289AbiEPXGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 19:05:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 504DE25EB
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 16:05:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652742340;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=klrXA/FHm9eGbHTShYXyEDFmf+TPE6BZwwZ122M7ZwY=;
-        b=dRSP3FKeY9Sp5zqpaYfm3YQGlo+OTvP1Dt8Ekk3GR/T4lWs0XqtaGE8UXXZm8+g0Gq0/7W
-        iL0Ot2Q61gonPQV15cklV2koY5+XHkaGoYx+zVgX/SkdVcvnnlIT0JjAq2KoRWVAzhN7rC
-        aMTCt+Czpl1UlOgQz+tnwDWAdsAjAqs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-179-HXOcWSGcOEyrFtkVF4nWyQ-1; Mon, 16 May 2022 19:05:36 -0400
-X-MC-Unique: HXOcWSGcOEyrFtkVF4nWyQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 208E7101AA44;
-        Mon, 16 May 2022 23:05:36 +0000 (UTC)
-Received: from asgard.redhat.com (unknown [10.36.110.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6696E568626;
-        Mon, 16 May 2022 23:05:32 +0000 (UTC)
-Date:   Tue, 17 May 2022 01:05:29 +0200
-From:   Eugene Syromiatnikov <esyr@redhat.com>
-To:     Jiri Olsa <jolsa@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v2 4/4] bpf_trace: pass array of u64 values in
- kprobe_multi.addrs
-Message-ID: <20220516230529.GA25780@asgard.redhat.com>
-MIME-Version: 1.0
+        Mon, 16 May 2022 19:06:05 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2053.outbound.protection.outlook.com [40.107.100.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F84FBF44;
+        Mon, 16 May 2022 16:05:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Zvbn/dG8wc+k5JFCFuZr2ZEkvtbG7uMqaFmoTND0AS+l+0DZlrEVMEyWSCN2R18KHetTIj42HMdcl+Emy3AqlfiyVAykHunoo/x7ZU3b/lbGGyhT44VM9i1lLZN8rhqCfjZIy89Ee6UZhdonIbzLtX/fGgcWfNd9eACMsGUpFak7Yka5T1uBE9+1DTsS9gMNxC9ltG+abGRUsy912+6tTcS3F90GdpmfceJGTmPiqHnd1UOOldfh5dhK6hsWgCHYu8QKTiYKA0NfRm+4hSTX6xjijOo85wsTMctGg+T1ksorF4nBGJflB/LGa2mKQylWAew6rkoyxoaA5VSNdGlGAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/9Ucc5Gnc2GvalXuZmNfvwWD/77t0y9K9wEhd0P3YSk=;
+ b=R66Bbp5k9upinb7pkU2DjVzGx8eIbPrUNKfZ86rOvYs8MRKVFEB5lPa2lzyWUdMasg/ppmUZjwF95G7vB1zjW4MfvGCG8MHDv8Ojz8oteRD6xfLPdyHOmny49/H6PEUp5nsPQVgFdFt1FqXCPuUx/TbbGIf0d9RrwzGQVT64xzBD7Wny1nZO/I4omkAK1/R8qRsr9flblGNN1K4302bhcy8p2tJlba/IITBBNJWvKFgbEw5oB/oLZ21CynNnFdR6vKQ4N8ng6Z0PgvDGG98zo4IVUu7cwnsS0O8FqVK0qTLcLO1AOW9zsbhjM5qzkwnGUcqpOGzXAY8LgRaTTkp2eg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/9Ucc5Gnc2GvalXuZmNfvwWD/77t0y9K9wEhd0P3YSk=;
+ b=Ruo+aDXrgjSxmIDDEFGgrhLcosZsXjuJRz93gg/ArJVdYGLTvPJhmSJyO+u0iS/1kmYGNxpni4lBtXynVKsOJdXStYoOesVe1dNs02M2tEolnlPYjOXX02Jx0e9i6am8/O0Kj1Z6YVwCnyB1nI9mjOUacc7huSl7nbPwh9e9GqaHYUQyb+Bvo/DUd66doV6XiPrdhJ4v8emvmsN2j1XQKbZU13QueIdKPB0jz6owIJZVncSGA0lZcthB5lNROepf9eb6L3sqkzxqXO+sBVUqla39aOjAw+eV90RKDJEhfzlV62BkF+Aap7pcrgN79WJvBfFipesew58Dbsy4tfzX+A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by PH7PR12MB5782.namprd12.prod.outlook.com (2603:10b6:510:1d1::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.18; Mon, 16 May
+ 2022 23:05:53 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2%5]) with mapi id 15.20.5250.018; Mon, 16 May 2022
+ 23:05:53 +0000
+Date:   Mon, 16 May 2022 20:05:52 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>
+Cc:     alex.williamson@redhat.com, linux-s390@vger.kernel.org,
+        cohuck@redhat.com, schnelle@linux.ibm.com, farman@linux.ibm.com,
+        pmorel@linux.ibm.com, borntraeger@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
+        agordeev@linux.ibm.com, svens@linux.ibm.com, frankja@linux.ibm.com,
+        david@redhat.com, imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
+        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v7 17/22] vfio-pci/zdev: add open/close device hooks
+Message-ID: <20220516230552.GO1343366@nvidia.com>
+References: <20220513191509.272897-1-mjrosato@linux.ibm.com>
+ <20220513191509.272897-18-mjrosato@linux.ibm.com>
+ <20220516172734.GE1343366@nvidia.com>
+ <7a31ec36-ceaf-dcef-8bd0-2b4732050aed@linux.ibm.com>
+ <20220516183558.GN1343366@nvidia.com>
+ <305208c4-db8a-5751-2ffc-753751a70815@linux.ibm.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <305208c4-db8a-5751-2ffc-753751a70815@linux.ibm.com>
+X-ClientProxiedBy: BL1PR13CA0228.namprd13.prod.outlook.com
+ (2603:10b6:208:2bf::23) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5a5f7bff-8da2-4358-c8c2-08da3790a0ab
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5782:EE_
+X-Microsoft-Antispam-PRVS: <PH7PR12MB5782BF14B2A70922CB73C32EC2CF9@PH7PR12MB5782.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: I5wLcwHWXfVSMYuuYQ1uUY1EgwD5CqMaibUvf1tXtRhv8OScfsk9ITjGVf+gXakXDWhSe/rIkT2V6Y9Locxds/6IKsHpBw3UA9BRVT+QEhAN+i0svo5B2jKnZwjVnDAUxmzvmvUH2t8b3YoM3Kz397fE3Mdp8J+ijGwZ9lkbxU7WAfgGhDwGlyGpqhTDDfT08W4llIL8c3ypW6Jv5/bUEDO9DSU0KNTeWTMTivErscWmsKYHJ+ZhmpTcLCcMHbr/Xq74N/mixa3oM4zFnpZaSt3eloXM1PziFiAfMzWIsKlRQLKypXQWFXH739fBZ1gZKcRhXUYO2l+MyyE+wIFn8rmYplaZNwKpWmM6/cro2J7gzpinH17k09OUSsrsbCC5rlDJYMl9h7xAKuckXswyPq9f/5rTMJ0J+ZHtRMyjhOuYCF2730BNiYF90TbrYNEhebwJ/dWvZkFiU7GLS/d2kSZJT+nMPMdLY0QaQZFB1ypY5IfwSArzeoGKaP4Wo4FvuHPD73a1BpbJYaJnc+REu1pySJSOEMn0PuAIL3NVrX8Oa5WDkQX3rHFgBElHwWdrW6WI5ItVaC11PhGGm5LiKzQgKxR8H5wl1f/w/qjFWTaBQUCtArm8nxYQawGYRdxUb4OhambJIhjKnoZ66ePv9vAXkZvQ42BlJxdmlBQaTrW+KsoeVgodsIn70xKka50tWfh32f/fqdP6VwrE75oUqMwzmV/gcB2BOZ1DTmJNXIk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(83380400001)(38100700002)(186003)(2616005)(1076003)(6512007)(966005)(53546011)(66476007)(26005)(5660300002)(33656002)(4326008)(36756003)(7416002)(8936002)(2906002)(6916009)(86362001)(6506007)(8676002)(66946007)(66556008)(316002)(6486002)(508600001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Mjn9ITNW/AHZMfRQkogHi7By/C6NGHNzKFv5HFQVm4VzPp0TkKMUfoGYu0kR?=
+ =?us-ascii?Q?xZaDKfvq3aVZ7kvdKrangap9a1v/iK9nbO3Lv6W+e3mGBbrC90wK8PlYeLIm?=
+ =?us-ascii?Q?YQzret62omCu2n61N+3gk+H8ve2BEK9BJzxdJO/adh+eKHfgygnv1tFqgxOy?=
+ =?us-ascii?Q?ddRM2+I5n2DM8DAPyFdfinYrEuEObglmgDaYSV908qtF5w8lNHkmU7qmyVkl?=
+ =?us-ascii?Q?N9MJvUGrcRHlVcb21P5XcsnTQ7y6Ds4oYIAsNiI8jDKSvOdGUduMhPgOUd+Y?=
+ =?us-ascii?Q?xfJgJTk/yrSSg321VAx80QCcpzlsTob7jKcb2hgoVqWSHPXLyztvlpL4uN/3?=
+ =?us-ascii?Q?8s76a7EtvHY7hzmPqoaVDJ8n2+TdatmwXD+3pSckY0ePgmYpxw7JN4++oia/?=
+ =?us-ascii?Q?VbEDqhvxJGf1VM2HLeKFVDgl/yszjIq9Iy5jVvtzAU9+B/r/TgPA5oGXOo2A?=
+ =?us-ascii?Q?HdgdVeYhUhPtn3Gd5EAwLTLXsPgarTPtzWB5qpAibWXn5X/qaXXdPJV720lO?=
+ =?us-ascii?Q?MhtAdcbT2e0KdU/D8bn/DfnCPgTSBypdWcXjurjfUPV31v5I4rFEe5/6P3Cd?=
+ =?us-ascii?Q?+F10bYjjHX8Q+m4NySPWCe4VXji4QE2CYaLcn6mhXjp4zgOrQ8PDFZiyGtqy?=
+ =?us-ascii?Q?4oNekKVBYobHbAKohh7KTuvwa9Fro7UGzP5K+G7AziBEDs1zABBORU/w9/Js?=
+ =?us-ascii?Q?oh/wzJiYrhXkznd0dmrh0avyPjMIXFMLlefVzm2zIBbFHTzMcpd1s6m0KdSQ?=
+ =?us-ascii?Q?3Ffo3GhD9dPTwG9//pbA8jq/+xBgXVi15vi+b6Q1qgq+HXlkOWEOqiwynlR8?=
+ =?us-ascii?Q?Eld8ryHKwo6dxzHuOauAO2CP0oN+mn6O77KBDCEjWrM9s8TCcQ5vV5krq5V+?=
+ =?us-ascii?Q?DYBborA/laQoXqGPAVOLso9AMraGxe80Ro3bVn/U2BSCx9h/aXQyJmtLxRwL?=
+ =?us-ascii?Q?a+YW4o/gpWR8hKUyHjUxc0kt6x75eLcyj5y2CKhaotVigMp9fhwp6f3HXUE6?=
+ =?us-ascii?Q?q5VwsGJ1ZtIrUN1tzgkt2RY7x8o/FP6FRWGwC+BrfDiQzqQW59gm6Nf0csx+?=
+ =?us-ascii?Q?NtP/3JzEETZbauVPrt7jHK0bVm6+/7UTLKeIGfpzsQWeW+reywKwHR3ufHlW?=
+ =?us-ascii?Q?X4wz8Ef6RwHa4jV7HS4rDx6cYf+a8Na0nj5z72IxaiSnFHRqEQ1LWyBsaqJk?=
+ =?us-ascii?Q?crrJxe2dkeCBhKTxj/wIQcgoDYrPZCiEExVKehm0gZaoPoDP61v3eJKNkWdy?=
+ =?us-ascii?Q?RkY4I7as2PR6cPYkQZsKUCc1YqpHqy+JcekswjKyoK7Rg4cd+So/+WFUilwP?=
+ =?us-ascii?Q?7dsM5424625k7WsxSA9EEBJ2JWGEkqBZZ4jcJ114XNOkVygAyIOJlm7CDrEL?=
+ =?us-ascii?Q?ygTjtGYhmYYpumu08r0SEob6MFsZ7nUkuXHgvEwo9mUnoDCcMvlpmddyaDq+?=
+ =?us-ascii?Q?6Qy+JR7ci7PQFmczGHuElc/HO/lkgfq2ZIu48XFf6DEc6CNRbIppspJi/gd4?=
+ =?us-ascii?Q?Ifg4YIlBsLe5XY/FDanD/UxhIcMhemjJKvWXKVDABb3CwJTykZIa29/kQBFw?=
+ =?us-ascii?Q?eUzY+5MSymwPzTP4AmkJxPacWjI5PFe+c6TM2UHwPdiItbxK39gm6hpSOVmu?=
+ =?us-ascii?Q?d5BaYzeAhvhJx7GtjjznX209KoQSYkgp/loSNCkgkBd5U0rhScgjhuD+Ud/N?=
+ =?us-ascii?Q?YKvNxqOWcOujgo4bHmEg30a23MJf9LAHuJ3iJ0yHElP1LQNYgmRwGTo8oQAX?=
+ =?us-ascii?Q?WobbV0FOwQ=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a5f7bff-8da2-4358-c8c2-08da3790a0ab
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2022 23:05:53.7870
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eEkH9STYkZ0yzxAVvDjL/wLzoZYa36OXmVaPeMPB4K1/ZMDSxQi0vJD8rhce12GR
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5782
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the interface as defined, it is impossible to pass 64-bit kernel
-addresses from a 32-bit userspace process in BPF_LINK_TYPE_KPROBE_MULTI,
-which severly limits the useability of the interface, change the ABI
-to accept an array of u64 values instead of (kernel? user?) longs.
-Interestingly, the rest of the libbpf infrastructure uses 64-bit values
-for kallsyms addresses already, so this patch also eliminates
-the sym_addr cast in tools/lib/bpf/libbpf.c:resolve_kprobe_multi_cb().
+On Mon, May 16, 2022 at 05:59:01PM -0400, Matthew Rosato wrote:
+> On 5/16/22 2:35 PM, Jason Gunthorpe wrote:
+> > On Mon, May 16, 2022 at 02:30:46PM -0400, Matthew Rosato wrote:
+> > 
+> > > Conceptually I think this would work for QEMU anyway (it always sets the kvm
+> > > before we open the device).  I tried to test the idea quickly but couldn't
+> > > get the following to apply on vfio-next or your vfio_group_locking -- but I
+> > > understand what you're trying to do so I'll re-work and try it out.
+> > 
+> > I created it on 8c9350e9bf43de1ebab3cc8a80703671e6495ab4 which is the
+> > vfio_group_locking.. I can send you a github if it helps
+> > https://github.com/jgunthorpe/linux/commits/vfio_group_lockin
+> > 
+> Thanks -- I was able to successfully test your proposed idea (+ some changes
+> to make it compile :)) on top of vfio_group_locking along with a modified
+> version of my zdev series.  I also tried it out with vfio-ap successfully,
+> but have nothing to test GVT with.
+> 
+> That said, this has caused me to realize that 'iommu:
+> iommu_group_claim_dma_owner() must always assign a domain' breaks s390x
+> vfio-pci :( I wonder if it is due to the way s390x PCI currently switches
+> between dma ops and iommu ops.  It looks like it breaks vfio-ap mdevs too,
+> but I know less about that --  I will have to investigate both more
+> tomorrow.
 
-Fixes: 0dcac272540613d4 ("bpf: Add multi kprobe link")
-Fixes: 5117c26e877352bc ("libbpf: Add bpf_link_create support for multi kprobes")
-Fixes: ddc6b04989eb0993 ("libbpf: Add bpf_program__attach_kprobe_multi_opts function")
-Fixes: f7a11eeccb111854 ("selftests/bpf: Add kprobe_multi attach test")
-Fixes: 9271a0c7ae7a9147 ("selftests/bpf: Add attach test for bpf_program__attach_kprobe_multi_opts")
-Fixes: 2c6401c966ae1fbe ("selftests/bpf: Add kprobe_multi bpf_cookie test")
-Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
----
- kernel/trace/bpf_trace.c                           | 25 ++++++++++++++++++----
- tools/lib/bpf/bpf.h                                |  2 +-
- tools/lib/bpf/libbpf.c                             |  8 +++----
- tools/lib/bpf/libbpf.h                             |  2 +-
- .../testing/selftests/bpf/prog_tests/bpf_cookie.c  |  2 +-
- .../selftests/bpf/prog_tests/kprobe_multi_test.c   |  8 +++----
- 6 files changed, 32 insertions(+), 15 deletions(-)
+At the very least it appears that s390 thinks that attach/detach_dev
+are strictly paired and that isn't how the iommu ops are defined.
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 268c92b..a8a639a 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -2413,7 +2413,7 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
- 	void __user *ucookies;
- 	unsigned long *addrs;
- 	u32 flags, cnt, size, cookies_size;
--	void __user *uaddrs;
-+	u64 __user *uaddrs;
- 	u64 *cookies = NULL;
- 	void __user *usyms;
- 	int err;
-@@ -2446,9 +2446,26 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
- 		return -ENOMEM;
- 
- 	if (uaddrs) {
--		if (copy_from_user(addrs, uaddrs, size)) {
--			err = -EFAULT;
--			goto error;
-+		if (sizeof(*addrs) == sizeof(*uaddrs)) {
-+			if (copy_from_user(addrs, uaddrs, size)) {
-+				err = -EFAULT;
-+				goto error;
-+			}
-+		} else {
-+			u32 i;
-+			u64 addr;
-+
-+			for (i = 0; i < cnt; i++) {
-+				if (get_user(addr, uaddrs + i)) {
-+					err = -EFAULT;
-+					goto error;
-+				}
-+				if (addr > ULONG_MAX) {
-+					err = -EINVAL;
-+					goto error;
-+				}
-+				addrs[i] = addr;
-+			}
- 		}
- 	} else {
- 		err = kprobe_multi_resolve_syms(usyms, cnt, addrs);
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index f4b4afb..f677602 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -417,7 +417,7 @@ struct bpf_link_create_opts {
- 			__u32 flags;
- 			__u32 cnt;
- 			const char **syms;
--			const unsigned long *addrs;
-+			const __u64 *addrs;
- 			const __u64 *cookies;
- 		} kprobe_multi;
- 	};
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 809fe20..03a14a6 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -10279,7 +10279,7 @@ static bool glob_match(const char *str, const char *pat)
- 
- struct kprobe_multi_resolve {
- 	const char *pattern;
--	unsigned long *addrs;
-+	__u64 *addrs;
- 	size_t cap;
- 	size_t cnt;
- };
-@@ -10294,12 +10294,12 @@ resolve_kprobe_multi_cb(unsigned long long sym_addr, char sym_type,
- 	if (!glob_match(sym_name, res->pattern))
- 		return 0;
- 
--	err = libbpf_ensure_mem((void **) &res->addrs, &res->cap, sizeof(unsigned long),
-+	err = libbpf_ensure_mem((void **) &res->addrs, &res->cap, sizeof(__u64),
- 				res->cnt + 1);
- 	if (err)
- 		return err;
- 
--	res->addrs[res->cnt++] = (unsigned long) sym_addr;
-+	res->addrs[res->cnt++] = sym_addr;
- 	return 0;
- }
- 
-@@ -10314,7 +10314,7 @@ bpf_program__attach_kprobe_multi_opts(const struct bpf_program *prog,
- 	};
- 	struct bpf_link *link = NULL;
- 	char errmsg[STRERR_BUFSIZE];
--	const unsigned long *addrs;
-+	const __u64 *addrs;
- 	int err, link_fd, prog_fd;
- 	const __u64 *cookies;
- 	const char **syms;
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 05dde85..ec1cb61 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -431,7 +431,7 @@ struct bpf_kprobe_multi_opts {
- 	/* array of function symbols to attach */
- 	const char **syms;
- 	/* array of function addresses to attach */
--	const unsigned long *addrs;
-+	const __u64 *addrs;
- 	/* array of user-provided values fetchable through bpf_get_attach_cookie */
- 	const __u64 *cookies;
- 	/* number of elements in syms/addrs/cookies arrays */
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-index 923a613..5aa482a 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-@@ -137,7 +137,7 @@ static void kprobe_multi_link_api_subtest(void)
- 	cookies[6] = 7;
- 	cookies[7] = 8;
- 
--	opts.kprobe_multi.addrs = (const unsigned long *) &addrs;
-+	opts.kprobe_multi.addrs = (const __u64 *) &addrs;
- 	opts.kprobe_multi.cnt = ARRAY_SIZE(addrs);
- 	opts.kprobe_multi.cookies = (const __u64 *) &cookies;
- 	prog_fd = bpf_program__fd(skel->progs.test_kprobe);
-diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-index b9876b5..fbf4cf2 100644
---- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-@@ -105,7 +105,7 @@ static void test_link_api_addrs(void)
- 	GET_ADDR("bpf_fentry_test7", addrs[6]);
- 	GET_ADDR("bpf_fentry_test8", addrs[7]);
- 
--	opts.kprobe_multi.addrs = (const unsigned long*) addrs;
-+	opts.kprobe_multi.addrs = (const __u64 *) addrs;
- 	opts.kprobe_multi.cnt = ARRAY_SIZE(addrs);
- 	test_link_api(&opts);
- }
-@@ -183,7 +183,7 @@ static void test_attach_api_addrs(void)
- 	GET_ADDR("bpf_fentry_test7", addrs[6]);
- 	GET_ADDR("bpf_fentry_test8", addrs[7]);
- 
--	opts.addrs = (const unsigned long *) addrs;
-+	opts.addrs = (const __u64 *) addrs;
- 	opts.cnt = ARRAY_SIZE(addrs);
- 	test_attach_api(NULL, &opts);
- }
-@@ -241,7 +241,7 @@ static void test_attach_api_fails(void)
- 		goto cleanup;
- 
- 	/* fail_2 - both addrs and syms set */
--	opts.addrs = (const unsigned long *) addrs;
-+	opts.addrs = (const __u64 *) addrs;
- 	opts.syms = syms;
- 	opts.cnt = ARRAY_SIZE(syms);
- 	opts.cookies = NULL;
-@@ -255,7 +255,7 @@ static void test_attach_api_fails(void)
- 		goto cleanup;
- 
- 	/* fail_3 - pattern and addrs set */
--	opts.addrs = (const unsigned long *) addrs;
-+	opts.addrs = (const __u64 *) addrs;
- 	opts.syms = NULL;
- 	opts.cnt = ARRAY_SIZE(syms);
- 	opts.cookies = NULL;
--- 
-2.1.4
+attach_dev can be called multiple times without any detach_dev.
 
+Possibly the unbalance of zpci_register_ioat / zpci_unregister_ioat
+causes the trouble?
+
+Jason

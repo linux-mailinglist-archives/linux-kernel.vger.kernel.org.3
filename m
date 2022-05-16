@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D434D529152
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:46:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D18529122
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346056AbiEPUYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:24:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44120 "EHLO
+        id S1347980AbiEPU1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349331AbiEPT7j (ORCPT
+        with ESMTP id S1349648AbiEPUAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:59:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2488419B1;
-        Mon, 16 May 2022 12:53:46 -0700 (PDT)
+        Mon, 16 May 2022 16:00:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2050E42EDD;
+        Mon, 16 May 2022 12:54:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DD233B8161C;
-        Mon, 16 May 2022 19:53:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23CEEC385AA;
-        Mon, 16 May 2022 19:53:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 61B4F60ED0;
+        Mon, 16 May 2022 19:53:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71F52C385AA;
+        Mon, 16 May 2022 19:53:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730816;
-        bh=M5yywGuNvNe3nXkUm63hHttNw6vRK4CXJHxqMTHxuFg=;
+        s=korg; t=1652730819;
+        bh=F1CCOG2LTf3l8bdmYcTfYACHq8uRKBCAoBGQK7amE2o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eFcX+uCUWpbPmF8aiPQtTTsX0G4av/4rlsHCCvJjw3kmIYDObcZxi1ztDSnltCAGg
-         XXhEO+ou22TVF07j6eYVONarDnfkyNC7OapK0MA13ac4BP+ItkGhum/1qtTNkV6sPT
-         ryOke8cYjZqVkIHuMgbAaFeU/gE8+7SEGZMvDePI=
+        b=O31vF2uO3y3D3yjg3texrKXm2h16yRYz7gTKs6QmUv5DbpdhLNhnDDRno43ofLEsp
+         ofvEiIOcTiKJvEhkMYpGg0f8McAd7HU3/RCRANq5KlGzq2pl5jquXta42NvL81Jzgq
+         zuM4cO6SM7aDOQcKl3vsdr7iFAngNOi5ZjNFsTsQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Leon Romanovsky <leonro@nvidia.com>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Dave Ertman <david.m.ertman@intel.com>,
+        stable@vger.kernel.org, Jacob Keller <jacob.e.keller@intel.com>,
+        Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
         Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Gurucharan <gurucharanx.g@intel.com>
-Subject: [PATCH 5.17 015/114] ice: Fix race during aux device (un)plugging
-Date:   Mon, 16 May 2022 21:35:49 +0200
-Message-Id: <20220516193625.934213792@linuxfoundation.org>
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 016/114] ice: clear stale Tx queue settings before configuring
+Date:   Mon, 16 May 2022 21:35:50 +0200
+Message-Id: <20220516193625.962990265@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
 References: <20220516193625.489108457@linuxfoundation.org>
@@ -58,232 +57,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ivan Vecera <ivecera@redhat.com>
+From: Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>
 
-[ Upstream commit 486b9eee57ddca5c9a2d59fc41153f36002e0a00 ]
+[ Upstream commit 6096dae926a22e2892ef9169f582589c16d39639 ]
 
-Function ice_plug_aux_dev() assigns pf->adev field too early prior
-aux device initialization and on other side ice_unplug_aux_dev()
-starts aux device deinit and at the end assigns NULL to pf->adev.
-This is wrong because pf->adev should always be non-NULL only when
-aux device is fully initialized and ready. This wrong order causes
-a crash when ice_send_event_to_aux() call occurs because that function
-depends on non-NULL value of pf->adev and does not assume that
-aux device is half-initialized or half-destroyed.
-After order correction the race window is tiny but it is still there,
-as Leon mentioned and manipulation with pf->adev needs to be protected
-by mutex.
+The iAVF driver uses 3 virtchnl op codes to communicate with the PF
+regarding the VF Tx queues:
 
-Fix (un-)plugging functions so pf->adev field is set after aux device
-init and prior aux device destroy and protect pf->adev assignment by
-new mutex. This mutex is also held during ice_send_event_to_aux()
-call to ensure that aux device is valid during that call.
-Note that device lock used ice_send_event_to_aux() needs to be kept
-to avoid race with aux drv unload.
+* VIRTCHNL_OP_CONFIG_VSI_QUEUES configures the hardware and firmware
+logic for the Tx queues
 
-Reproducer:
-cycle=1
-while :;do
-        echo "#### Cycle: $cycle"
+* VIRTCHNL_OP_ENABLE_QUEUES configures the queue interrupts
 
-        ip link set ens7f0 mtu 9000
-        ip link add bond0 type bond mode 1 miimon 100
-        ip link set bond0 up
-        ifenslave bond0 ens7f0
-        ip link set bond0 mtu 9000
-        ethtool -L ens7f0 combined 1
-        ip link del bond0
-        ip link set ens7f0 mtu 1500
-        sleep 1
+* VIRTCHNL_OP_DISABLE_QUEUES disables the queue interrupts and Tx rings.
 
-        let cycle++
-done
+There is a bug in the iAVF driver due to the race condition between VF
+reset request and shutdown being executed in parallel. This leads to a
+break in logic and VIRTCHNL_OP_DISABLE_QUEUES is not being sent.
 
-In short when the device is added/removed to/from bond the aux device
-is unplugged/plugged. When MTU of the device is changed an event is
-sent to aux device asynchronously. This can race with (un)plugging
-operation and because pf->adev is set too early (plug) or too late
-(unplug) the function ice_send_event_to_aux() can touch uninitialized
-or destroyed fields. In the case of crash below pf->adev->dev.mutex.
+If this occurs, the PF driver never cleans up the Tx queues. This results
+in leaving behind stale Tx queue settings in the hardware and firmware.
 
-Crash:
-[   53.372066] bond0: (slave ens7f0): making interface the new active one
-[   53.378622] bond0: (slave ens7f0): Enslaving as an active interface with an u
-p link
-[   53.386294] IPv6: ADDRCONF(NETDEV_CHANGE): bond0: link becomes ready
-[   53.549104] bond0: (slave ens7f1): Enslaving as a backup interface with an up
- link
-[   54.118906] ice 0000:ca:00.0 ens7f0: Number of in use tx queues changed inval
-idating tc mappings. Priority traffic classification disabled!
-[   54.233374] ice 0000:ca:00.1 ens7f1: Number of in use tx queues changed inval
-idating tc mappings. Priority traffic classification disabled!
-[   54.248204] bond0: (slave ens7f0): Releasing backup interface
-[   54.253955] bond0: (slave ens7f1): making interface the new active one
-[   54.274875] bond0: (slave ens7f1): Releasing backup interface
-[   54.289153] bond0 (unregistering): Released all slaves
-[   55.383179] MII link monitoring set to 100 ms
-[   55.398696] bond0: (slave ens7f0): making interface the new active one
-[   55.405241] BUG: kernel NULL pointer dereference, address: 0000000000000080
-[   55.405289] bond0: (slave ens7f0): Enslaving as an active interface with an u
-p link
-[   55.412198] #PF: supervisor write access in kernel mode
-[   55.412200] #PF: error_code(0x0002) - not-present page
-[   55.412201] PGD 25d2ad067 P4D 0
-[   55.412204] Oops: 0002 [#1] PREEMPT SMP NOPTI
-[   55.412207] CPU: 0 PID: 403 Comm: kworker/0:2 Kdump: loaded Tainted: G S
-           5.17.0-13579-g57f2d6540f03 #1
-[   55.429094] bond0: (slave ens7f1): Enslaving as a backup interface with an up
- link
-[   55.430224] Hardware name: Dell Inc. PowerEdge R750/06V45N, BIOS 1.4.4 10/07/
-2021
-[   55.430226] Workqueue: ice ice_service_task [ice]
-[   55.468169] RIP: 0010:mutex_unlock+0x10/0x20
-[   55.472439] Code: 0f b1 13 74 96 eb e0 4c 89 ee eb d8 e8 79 54 ff ff 66 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 65 48 8b 04 25 40 ef 01 00 31 d2 <f0> 48 0f b1 17 75 01 c3 e9 e3 fe ff ff 0f 1f 00 0f 1f 44 00 00 48
-[   55.491186] RSP: 0018:ff4454230d7d7e28 EFLAGS: 00010246
-[   55.496413] RAX: ff1a79b208b08000 RBX: ff1a79b2182e8880 RCX: 0000000000000001
-[   55.503545] RDX: 0000000000000000 RSI: ff4454230d7d7db0 RDI: 0000000000000080
-[   55.510678] RBP: ff1a79d1c7e48b68 R08: ff4454230d7d7db0 R09: 0000000000000041
-[   55.517812] R10: 00000000000000a5 R11: 00000000000006e6 R12: ff1a79d1c7e48bc0
-[   55.524945] R13: 0000000000000000 R14: ff1a79d0ffc305c0 R15: 0000000000000000
-[   55.532076] FS:  0000000000000000(0000) GS:ff1a79d0ffc00000(0000) knlGS:0000000000000000
-[   55.540163] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   55.545908] CR2: 0000000000000080 CR3: 00000003487ae003 CR4: 0000000000771ef0
-[   55.553041] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[   55.560173] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[   55.567305] PKRU: 55555554
-[   55.570018] Call Trace:
-[   55.572474]  <TASK>
-[   55.574579]  ice_service_task+0xaab/0xef0 [ice]
-[   55.579130]  process_one_work+0x1c5/0x390
-[   55.583141]  ? process_one_work+0x390/0x390
-[   55.587326]  worker_thread+0x30/0x360
-[   55.590994]  ? process_one_work+0x390/0x390
-[   55.595180]  kthread+0xe6/0x110
-[   55.598325]  ? kthread_complete_and_exit+0x20/0x20
-[   55.603116]  ret_from_fork+0x1f/0x30
-[   55.606698]  </TASK>
+The most obvious outcome is that upon the next
+VIRTCHNL_OP_CONFIG_VSI_QUEUES, the PF will fail to program the Tx
+scheduler node due to a lack of space.
 
-Fixes: f9f5301e7e2d ("ice: Register auxiliary device to provide RDMA")
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
-Signed-off-by: Ivan Vecera <ivecera@redhat.com>
-Reviewed-by: Dave Ertman <david.m.ertman@intel.com>
-Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
+We need to protect ICE driver against such situation.
+
+To fix this, make sure we clear existing stale settings out when
+handling VIRTCHNL_OP_CONFIG_VSI_QUEUES. This ensures we remove the
+previous settings.
+
+Calling ice_vf_vsi_dis_single_txq should be safe as it will do nothing if
+the queue is not configured. The function already handles the case when the
+Tx queue is not currently configured and exits with a 0 return in that
+case.
+
+Fixes: 7ad15440acf8 ("ice: Refactor VIRTCHNL_OP_CONFIG_VSI_QUEUES handling")
+Signed-off-by: Jacob Keller <jacob.e.keller@intel.com>
+Signed-off-by: Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ice/ice.h      |  1 +
- drivers/net/ethernet/intel/ice/ice_idc.c  | 25 +++++++++++++++--------
- drivers/net/ethernet/intel/ice/ice_main.c |  2 ++
- 3 files changed, 20 insertions(+), 8 deletions(-)
+ .../net/ethernet/intel/ice/ice_virtchnl_pf.c  | 68 ++++++++++++++-----
+ 1 file changed, 50 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice.h b/drivers/net/ethernet/intel/ice/ice.h
-index 9c04a71a9fca..e2ffdf2726fd 100644
---- a/drivers/net/ethernet/intel/ice/ice.h
-+++ b/drivers/net/ethernet/intel/ice/ice.h
-@@ -546,6 +546,7 @@ struct ice_pf {
- 	struct mutex avail_q_mutex;	/* protects access to avail_[rx|tx]qs */
- 	struct mutex sw_mutex;		/* lock for protecting VSI alloc flow */
- 	struct mutex tc_mutex;		/* lock to protect TC changes */
-+	struct mutex adev_mutex;	/* lock to protect aux device access */
- 	u32 msg_enable;
- 	struct ice_ptp ptp;
- 	u16 num_rdma_msix;		/* Total MSIX vectors for RDMA driver */
-diff --git a/drivers/net/ethernet/intel/ice/ice_idc.c b/drivers/net/ethernet/intel/ice/ice_idc.c
-index 5559230eff8b..0deed090645f 100644
---- a/drivers/net/ethernet/intel/ice/ice_idc.c
-+++ b/drivers/net/ethernet/intel/ice/ice_idc.c
-@@ -37,14 +37,17 @@ void ice_send_event_to_aux(struct ice_pf *pf, struct iidc_event *event)
- 	if (WARN_ON_ONCE(!in_task()))
- 		return;
- 
-+	mutex_lock(&pf->adev_mutex);
- 	if (!pf->adev)
--		return;
-+		goto finish;
- 
- 	device_lock(&pf->adev->dev);
- 	iadrv = ice_get_auxiliary_drv(pf);
- 	if (iadrv && iadrv->event_handler)
- 		iadrv->event_handler(pf, event);
- 	device_unlock(&pf->adev->dev);
-+finish:
-+	mutex_unlock(&pf->adev_mutex);
+diff --git a/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c b/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
+index 2bee8f10ad89..0cc8b7e06b72 100644
+--- a/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
++++ b/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
+@@ -3300,13 +3300,52 @@ static int ice_vc_ena_qs_msg(struct ice_vf *vf, u8 *msg)
+ 				     NULL, 0);
  }
  
- /**
-@@ -285,7 +288,6 @@ int ice_plug_aux_dev(struct ice_pf *pf)
- 		return -ENOMEM;
- 
- 	adev = &iadev->adev;
--	pf->adev = adev;
- 	iadev->pf = pf;
- 
- 	adev->id = pf->aux_idx;
-@@ -295,18 +297,20 @@ int ice_plug_aux_dev(struct ice_pf *pf)
- 
- 	ret = auxiliary_device_init(adev);
- 	if (ret) {
--		pf->adev = NULL;
- 		kfree(iadev);
- 		return ret;
- 	}
- 
- 	ret = auxiliary_device_add(adev);
- 	if (ret) {
--		pf->adev = NULL;
- 		auxiliary_device_uninit(adev);
- 		return ret;
- 	}
- 
-+	mutex_lock(&pf->adev_mutex);
-+	pf->adev = adev;
-+	mutex_unlock(&pf->adev_mutex);
++/**
++ * ice_vf_vsi_dis_single_txq - disable a single Tx queue
++ * @vf: VF to disable queue for
++ * @vsi: VSI for the VF
++ * @q_id: VF relative (0-based) queue ID
++ *
++ * Attempt to disable the Tx queue passed in. If the Tx queue was successfully
++ * disabled then clear q_id bit in the enabled queues bitmap and return
++ * success. Otherwise return error.
++ */
++static int
++ice_vf_vsi_dis_single_txq(struct ice_vf *vf, struct ice_vsi *vsi, u16 q_id)
++{
++	struct ice_txq_meta txq_meta = { 0 };
++	struct ice_tx_ring *ring;
++	int err;
 +
- 	return 0;
- }
- 
-@@ -315,12 +319,17 @@ int ice_plug_aux_dev(struct ice_pf *pf)
-  */
- void ice_unplug_aux_dev(struct ice_pf *pf)
- {
--	if (!pf->adev)
--		return;
-+	struct auxiliary_device *adev;
- 
--	auxiliary_device_delete(pf->adev);
--	auxiliary_device_uninit(pf->adev);
-+	mutex_lock(&pf->adev_mutex);
-+	adev = pf->adev;
- 	pf->adev = NULL;
-+	mutex_unlock(&pf->adev_mutex);
++	if (!test_bit(q_id, vf->txq_ena))
++		dev_dbg(ice_pf_to_dev(vsi->back), "Queue %u on VSI %u is not enabled, but stopping it anyway\n",
++			q_id, vsi->vsi_num);
 +
-+	if (adev) {
-+		auxiliary_device_delete(adev);
-+		auxiliary_device_uninit(adev);
++	ring = vsi->tx_rings[q_id];
++	if (!ring)
++		return -EINVAL;
++
++	ice_fill_txq_meta(vsi, ring, &txq_meta);
++
++	err = ice_vsi_stop_tx_ring(vsi, ICE_NO_RESET, vf->vf_id, ring, &txq_meta);
++	if (err) {
++		dev_err(ice_pf_to_dev(vsi->back), "Failed to stop Tx ring %d on VSI %d\n",
++			q_id, vsi->vsi_num);
++		return err;
 +	}
- }
- 
++
++	/* Clear enabled queues flag */
++	clear_bit(q_id, vf->txq_ena);
++
++	return 0;
++}
++
  /**
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index e347030ee2e3..7f6715eb862f 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -3682,6 +3682,7 @@ u16 ice_get_avail_rxq_count(struct ice_pf *pf)
- static void ice_deinit_pf(struct ice_pf *pf)
+  * ice_vc_dis_qs_msg
+  * @vf: pointer to the VF info
+  * @msg: pointer to the msg buffer
+  *
+- * called from the VF to disable all or specific
+- * queue(s)
++ * called from the VF to disable all or specific queue(s)
+  */
+ static int ice_vc_dis_qs_msg(struct ice_vf *vf, u8 *msg)
  {
- 	ice_service_task_stop(pf);
-+	mutex_destroy(&pf->adev_mutex);
- 	mutex_destroy(&pf->sw_mutex);
- 	mutex_destroy(&pf->tc_mutex);
- 	mutex_destroy(&pf->avail_q_mutex);
-@@ -3762,6 +3763,7 @@ static int ice_init_pf(struct ice_pf *pf)
+@@ -3343,30 +3382,15 @@ static int ice_vc_dis_qs_msg(struct ice_vf *vf, u8 *msg)
+ 		q_map = vqs->tx_queues;
  
- 	mutex_init(&pf->sw_mutex);
- 	mutex_init(&pf->tc_mutex);
-+	mutex_init(&pf->adev_mutex);
+ 		for_each_set_bit(vf_q_id, &q_map, ICE_MAX_RSS_QS_PER_VF) {
+-			struct ice_tx_ring *ring = vsi->tx_rings[vf_q_id];
+-			struct ice_txq_meta txq_meta = { 0 };
+-
+ 			if (!ice_vc_isvalid_q_id(vf, vqs->vsi_id, vf_q_id)) {
+ 				v_ret = VIRTCHNL_STATUS_ERR_PARAM;
+ 				goto error_param;
+ 			}
  
- 	INIT_HLIST_HEAD(&pf->aq_wait_list);
- 	spin_lock_init(&pf->aq_wait_lock);
+-			if (!test_bit(vf_q_id, vf->txq_ena))
+-				dev_dbg(ice_pf_to_dev(vsi->back), "Queue %u on VSI %u is not enabled, but stopping it anyway\n",
+-					vf_q_id, vsi->vsi_num);
+-
+-			ice_fill_txq_meta(vsi, ring, &txq_meta);
+-
+-			if (ice_vsi_stop_tx_ring(vsi, ICE_NO_RESET, vf->vf_id,
+-						 ring, &txq_meta)) {
+-				dev_err(ice_pf_to_dev(vsi->back), "Failed to stop Tx ring %d on VSI %d\n",
+-					vf_q_id, vsi->vsi_num);
++			if (ice_vf_vsi_dis_single_txq(vf, vsi, vf_q_id)) {
+ 				v_ret = VIRTCHNL_STATUS_ERR_PARAM;
+ 				goto error_param;
+ 			}
+-
+-			/* Clear enabled queues flag */
+-			clear_bit(vf_q_id, vf->txq_ena);
+ 		}
+ 	}
+ 
+@@ -3615,6 +3639,14 @@ static int ice_vc_cfg_qs_msg(struct ice_vf *vf, u8 *msg)
+ 		if (qpi->txq.ring_len > 0) {
+ 			vsi->tx_rings[i]->dma = qpi->txq.dma_ring_addr;
+ 			vsi->tx_rings[i]->count = qpi->txq.ring_len;
++
++			/* Disable any existing queue first */
++			if (ice_vf_vsi_dis_single_txq(vf, vsi, q_idx)) {
++				v_ret = VIRTCHNL_STATUS_ERR_PARAM;
++				goto error_param;
++			}
++
++			/* Configure a queue with the requested settings */
+ 			if (ice_vsi_cfg_single_txq(vsi, vsi->tx_rings, q_idx)) {
+ 				v_ret = VIRTCHNL_STATUS_ERR_PARAM;
+ 				goto error_param;
 -- 
 2.35.1
 

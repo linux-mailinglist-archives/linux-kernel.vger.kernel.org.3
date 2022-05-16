@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4CF5290C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D60DF528FEB
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234106AbiEPTyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
+        id S1347088AbiEPUTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346400AbiEPTu1 (ORCPT
+        with ESMTP id S1348916AbiEPT7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:50:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7E743ECF;
-        Mon, 16 May 2022 12:45:17 -0700 (PDT)
+        Mon, 16 May 2022 15:59:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695A9369EF;
+        Mon, 16 May 2022 12:52:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A8A66158C;
-        Mon, 16 May 2022 19:45:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 359C6C385AA;
-        Mon, 16 May 2022 19:45:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0296F60A50;
+        Mon, 16 May 2022 19:52:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2095C385AA;
+        Mon, 16 May 2022 19:52:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730315;
-        bh=7EGulCmb0/+blDSK/gzkijpL6zfAOH8X+sgsDtOgLIU=;
+        s=korg; t=1652730766;
+        bh=D10GPRbEwKJfKsKN2QwvZzhLZ1ISe1aCW6XloW6wvuE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IK0KAebXkV7KuFQ1cfDjjYGVBLcVixL+mn6KirrFsY6+G2mvWB9/bGYOvfz0o1sV7
-         VMbMJpnGtgSidAr88XCPHWecw+hIOVKPEZ8NFDW5ZyeF5LsrbKsNtcTq1PqqYIM6hS
-         hM93bAUIroI6dGmCKs2GMZrLoHKnHyXAkmdg4u0Y=
+        b=hTWMz2ZHIxf2afU+Z06ljK55BRWZDO+40n3KKByvChBKMWUgTovCnamljDx33T2PH
+         Xbzhp90+KqKgshHh/Io5iKLnN7WYdgf0+gUUg1ihHYWb1m0ItbDOzmwlk488879Bo1
+         fy+HCaF1+5+e9AOQcbek7/4fOfEagr/m5zJW6TX0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 25/66] net: bcmgenet: Check for Wake-on-LAN interrupt probe deferral
+Subject: [PATCH 5.15 051/102] s390: disable -Warray-bounds
 Date:   Mon, 16 May 2022 21:36:25 +0200
-Message-Id: <20220516193620.142987841@linuxfoundation.org>
+Message-Id: <20220516193625.462471436@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
-References: <20220516193619.400083785@linuxfoundation.org>
+In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
+References: <20220516193623.989270214@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Fainelli <f.fainelli@gmail.com>
+From: Sven Schnelle <svens@linux.ibm.com>
 
-[ Upstream commit 6b77c06655b8a749c1a3d9ebc51e9717003f7e5a ]
+[ Upstream commit 8b202ee218395319aec1ef44f72043e1fbaccdd6 ]
 
-The interrupt controller supplying the Wake-on-LAN interrupt line maybe
-modular on some platforms (irq-bcm7038-l1.c) and might be probed at a
-later time than the GENET driver. We need to specifically check for
--EPROBE_DEFER and propagate that error to ensure that we eventually
-fetch the interrupt descriptor.
+gcc-12 shows a lot of array bound warnings on s390. This is caused
+by the S390_lowcore macro which uses a hardcoded address of 0.
 
-Fixes: 9deb48b53e7f ("bcmgenet: add WOL IRQ check")
-Fixes: 5b1f0e62941b ("net: bcmgenet: Avoid touching non-existent interrupt")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Reviewed-by: Stefan Wahren <stefan.wahren@i2se.com>
-Link: https://lore.kernel.org/r/20220511031752.2245566-1-f.fainelli@gmail.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Wrapping that with absolute_pointer() works, but gcc no longer knows
+that a 12 bit displacement is sufficient to access lowcore. So it
+emits instructions like 'lghi %r1,0; l %rx,xxx(%r1)' instead of a
+single load/store instruction. As s390 stores variables often
+read/written in lowcore, this is considered problematic. Therefore
+disable -Warray-bounds on s390 for gcc-12 for the time being, until
+there is a better solution.
+
+Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+Link: https://lore.kernel.org/r/yt9dzgkelelc.fsf@linux.ibm.com
+Link: https://lore.kernel.org/r/20220422134308.1613610-1-svens@linux.ibm.com
+Link: https://lore.kernel.org/r/20220425121742.3222133-1-svens@linux.ibm.com
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/broadcom/genet/bcmgenet.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/s390/Makefile | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-index 9ffdaa84ba12..e0a6a2e62d23 100644
---- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-+++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-@@ -3946,6 +3946,10 @@ static int bcmgenet_probe(struct platform_device *pdev)
- 		goto err;
- 	}
- 	priv->wol_irq = platform_get_irq_optional(pdev, 2);
-+	if (priv->wol_irq == -EPROBE_DEFER) {
-+		err = priv->wol_irq;
-+		goto err;
-+	}
- 
- 	priv->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(priv->base)) {
+diff --git a/arch/s390/Makefile b/arch/s390/Makefile
+index d4fd1426a822..c7b7a60f6405 100644
+--- a/arch/s390/Makefile
++++ b/arch/s390/Makefile
+@@ -32,6 +32,16 @@ KBUILD_CFLAGS_DECOMPRESSOR += -fno-stack-protector
+ KBUILD_CFLAGS_DECOMPRESSOR += $(call cc-disable-warning, address-of-packed-member)
+ KBUILD_CFLAGS_DECOMPRESSOR += $(if $(CONFIG_DEBUG_INFO),-g)
+ KBUILD_CFLAGS_DECOMPRESSOR += $(if $(CONFIG_DEBUG_INFO_DWARF4), $(call cc-option, -gdwarf-4,))
++
++ifdef CONFIG_CC_IS_GCC
++	ifeq ($(call cc-ifversion, -ge, 1200, y), y)
++		ifeq ($(call cc-ifversion, -lt, 1300, y), y)
++			KBUILD_CFLAGS += $(call cc-disable-warning, array-bounds)
++			KBUILD_CFLAGS_DECOMPRESSOR += $(call cc-disable-warning, array-bounds)
++		endif
++	endif
++endif
++
+ UTS_MACHINE	:= s390x
+ STACK_SIZE	:= $(if $(CONFIG_KASAN),65536,16384)
+ CHECKFLAGS	+= -D__s390__ -D__s390x__
 -- 
 2.35.1
 

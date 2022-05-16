@@ -2,68 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD5B528DCC
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB631528DD5
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345348AbiEPTPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38936 "EHLO
+        id S1345360AbiEPTVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345271AbiEPTPv (ORCPT
+        with ESMTP id S1345352AbiEPTUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:15:51 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118F5217
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:15:49 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-f189b07f57so7956783fac.1
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:15:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=lbg6UoaHuY8gZBYBgSwyGONbSeDZUpjPy6MEqiZHSo0=;
-        b=E8bSDbRgrTAVFsMCG11AaEXfNNucxfn2wFTNviGDD6tRh7MoOJ7bNioo6wo3WOGK93
-         bBNtIMVaErwFNOcbjb4Xd7qoencv/fGdztsSS1CtaIQXmMarfuwqrLPIrcdcvsVViZmZ
-         4ehFvSMssshz+C2jGZtHZKDq+WebUX5/IIBs0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=lbg6UoaHuY8gZBYBgSwyGONbSeDZUpjPy6MEqiZHSo0=;
-        b=2fo4COiCCx2tHXnhuDUjS2Bmse5quyWH8HiEGv0WBCuSkKSfNKZKSBR7CyikJNbEFG
-         zXsmq+dwPMxGAOLTFWe0elIfjdEVfRZ/7s6JoJGk4Kp8QJYauhD1CP4IEIKg0c6GAU4W
-         OBHSgF6JMfXndlVeLadoDLZVUxsZjD2WvWZjgXBq8zBmBIavFwQUl+9y5afVnOTHwCKe
-         7tgloP0ItTEySltxdmPcUMkFdBCVQyGXvU76n3c70fJkSyEP+8g2XSrV1gQWwAW6L3rd
-         /MZlnR9mffYK7Sf6Vm4pk/NQUGF/3EitU6szpm2quzQEd0XtixHFi7dL2zox7r/rPcN9
-         vggA==
-X-Gm-Message-State: AOAM533+K1/bPtHZ/kOZP38/WfvoJzi07nYjoDfdCoW4F8bBu4cmpnhi
-        C5W8hH8I4fqsSpLrANShzEsFwGx8avN6Iou/qMqWlw==
-X-Google-Smtp-Source: ABdhPJw8J+S3O3QL72lJUUSb3xgIZ98mpEigZPdR+fEdEjhhlnlVKzxxctW4gl+zEVjntt/ghPIpbU+BkJAgUaSdhVs=
-X-Received: by 2002:a05:6870:558e:b0:e1:db7c:26aa with SMTP id
- n14-20020a056870558e00b000e1db7c26aamr10247649oao.63.1652728548426; Mon, 16
- May 2022 12:15:48 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 16 May 2022 12:15:47 -0700
+        Mon, 16 May 2022 15:20:55 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7178D10E4;
+        Mon, 16 May 2022 12:20:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9943ECE177A;
+        Mon, 16 May 2022 19:20:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CF39C385AA;
+        Mon, 16 May 2022 19:20:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652728849;
+        bh=7dUSBEaVamNeH7xckM86EZ0E5ZnTZzdD58oA2l0UR3s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VJ7OGTc52LlV1ISiugEC2mc7JmkPYUHU9OJljdPL20C9+c4WADQlABss11pQKlmo1
+         kpnKMpqghOyA0WK8OdDpzqKwonl8XTsQTDbUOzLF3liCLKarJ+Qp5ZpgPdWfhuYu29
+         LV86wvCPO+CqHu4Eumw8WtfxvhO0Z5V19nhm3Tz77ZAxi/wA+r8j4QfZwWHZ+xU1yd
+         EmyEMbazGyMjF/5jMsLqchJD+KZTUAxIa3wqAQw9bMMJPzMGZIXtej6dO62ejWs+up
+         MuEvpp/O8Ty24E+KKTQc7ARAlK42mOyti6GUMCtzItWqSikGZodQknV0Ixscyill6f
+         s+n/vF1Pyk9pw==
+Date:   Mon, 16 May 2022 12:20:48 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: [PATCH net-next v2 2/5] net: dsa: add out-of-band tagging
+ protocol
+Message-ID: <20220516122048.70e238a2@kernel.org>
+In-Reply-To: <20220514150656.122108-3-maxime.chevallier@bootlin.com>
+References: <20220514150656.122108-1-maxime.chevallier@bootlin.com>
+        <20220514150656.122108-3-maxime.chevallier@bootlin.com>
 MIME-Version: 1.0
-In-Reply-To: <20220513065704.1.I9b9b9d4d1a3e0350a89221892261881a1771ad15@changeid>
-References: <20220513065704.1.I9b9b9d4d1a3e0350a89221892261881a1771ad15@changeid>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Mon, 16 May 2022 12:15:47 -0700
-Message-ID: <CAE-0n53=wVCcx_rvT3H8Qhjn8F2w8tNe_gxdQz-+xdpgDP-d0w@mail.gmail.com>
-Subject: Re: [PATCH] arm64: qcom: sc7280-herobrine: Enable DP
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>
-Cc:     quic_aravindh@quicinc.com, quic_khsieh@quicinc.com,
-        quic_sbillaka@quicinc.com, Matthias Kaehlcke <mka@chromium.org>,
-        quic_abhinavk@quicinc.com, Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,10 +65,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Douglas Anderson (2022-05-13 06:57:14)
-> This enables DisplayPort for herobrine boards.
->
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
+On Sat, 14 May 2022 17:06:53 +0200 Maxime Chevallier wrote:
+> This tagging protocol is designed for the situation where the link
+> between the MAC and the Switch is designed such that the Destination
+> Port, which is usually embedded in some part of the Ethernet Header, is
+> sent out-of-band, and isn't present at all in the Ethernet frame.
+> 
+> This can happen when the MAC and Switch are tightly integrated on an
+> SoC, as is the case with the Qualcomm IPQ4019 for example, where the DSA
+> tag is inserted directly into the DMA descriptors. In that case,
+> the MAC driver is responsible for sending the tag to the switch using
+> the out-of-band medium. To do so, the MAC driver needs to have the
+> information of the destination port for that skb.
+> 
+> This out-of-band tagging protocol is using the very beggining of the skb
+> headroom to store the tag. The drawback of this approch is that the
+> headroom isn't initialized upon allocating it, therefore we have a
+> chance that the garbage data that lies there at allocation time actually
+> ressembles a valid oob tag. This is only problematic if we are
+> sending/receiving traffic on the master port, which isn't a valid DSA
+> use-case from the beggining. When dealing from traffic to/from a slave
+> port, then the oob tag will be initialized properly by the tagger or the
+> mac driver through the use of the dsa_oob_tag_push() call.
+> 
+> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+This must had been asked on v1 but there's no trace of it in the
+current submission afaict...
+
+If the tag is passed in the descriptor how is this not a pure switchdev
+driver? The explanation must be preserved somehow.

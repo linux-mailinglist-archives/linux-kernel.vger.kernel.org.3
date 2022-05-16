@@ -2,127 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A615288CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B275288D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:29:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244273AbiEPP1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 11:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46542 "EHLO
+        id S235758AbiEPP1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 11:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiEPP1C (ORCPT
+        with ESMTP id S237564AbiEPP1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 11:27:02 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DDE12754;
-        Mon, 16 May 2022 08:26:55 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-edf9ddb312so20530436fac.8;
-        Mon, 16 May 2022 08:26:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KHyeVKxqxatLeY3gDq4jdVF9Tt519Zk/h+VHXOLojzc=;
-        b=KewvRBMJACjGiAlIKD93nIY5CDbfu7LGLi5U9OT3JumiPFbrpxe/9hLyeFkc/lrj9W
-         nyGDOJdITBAxQzLjMsAtN3oVx6acR1EWDeCWuS5Bd76MnSfwqtGsu1op6ye4kfO5CSEg
-         kyAvSbwiXB2Wctjrp7/yIbHPfXU8bo/c/Na8FsNDrd2IewsEeOUHsrgrbCChJFtxq4Xg
-         IbIjbK0xHOfAtds8bB6vnnsS1hu/Zv0xIdI/oEbKwWOt7kdKS6i1efSkkS1/Yh+RkHIv
-         AcFdJQl6YijSS3Vzpn7tqldQsxM+mtnHyKfaPlcsPcTq3aYi7vFD5B1VH2e5WXC3ddxO
-         Mftw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KHyeVKxqxatLeY3gDq4jdVF9Tt519Zk/h+VHXOLojzc=;
-        b=tJChQStwvwqF2VBreDpMlHcHk2fInDb+4XutpKFhIzIaNBQn1y+dcfwiy2TnWSvmTF
-         Aza7Md5bST8lepRWHm83VAZA89tXGbxDXPlmoYTKcdbGr6Jni1jJcojh9cwGigr8rtmS
-         al6Zjp42rYcMG59gYG+tBe6d6HTOVJqdUYkCHXq6xe5efpw47XgnKHPpHea6x3RO9jQn
-         3V+GtACDVx9FNm6u7Je0JOSLtod3ezEnbYEyX/lKFBM0OzbSkPC63Yco0bOGVt81eRCY
-         mTtdRYOXq7gXWVmZ1mIyesTPzEzNbT7qbkihg4+wCptTRFCgrSBgtVV6d/GRANz9A0jM
-         3Stw==
-X-Gm-Message-State: AOAM532FG9XcG058P247KiVrPeyRuP07jYZynK+cyGOYyun4IBcN706t
-        2iRwPnkw4CxiPBC1zfQMtj4=
-X-Google-Smtp-Source: ABdhPJzIjGJ8YJEvupAXFxrzzx+fCG8rregIbh6jLEAET5ITg4EypP6IKnXddR5n4Rh0gU+G8PeHrw==
-X-Received: by 2002:a05:6870:c692:b0:e9:5368:10df with SMTP id cv18-20020a056870c69200b000e9536810dfmr9767194oab.182.1652714814852;
-        Mon, 16 May 2022 08:26:54 -0700 (PDT)
-Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
-        by smtp.gmail.com with ESMTPSA id z30-20020a056870461e00b000e686d1389fsm5475774oao.57.2022.05.16.08.26.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 08:26:54 -0700 (PDT)
-Date:   Mon, 16 May 2022 10:26:51 -0500
-From:   Chris Morgan <macroalpha82@gmail.com>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 6/6] arm64: dts: rockchip: enable sfc controller on
- Quartz64 Model A
-Message-ID: <20220516152651.GA18461@wintermute.localdomain>
-References: <20220511150117.113070-1-pgwipeout@gmail.com>
- <20220511150117.113070-7-pgwipeout@gmail.com>
+        Mon, 16 May 2022 11:27:15 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A93E12752;
+        Mon, 16 May 2022 08:27:12 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GEgGDL006364;
+        Mon, 16 May 2022 15:27:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=yqTm+tvG0RovaS00GJyo6FfAEwPrCerjF5IWEOA/zzM=;
+ b=Ag4TlQUl824wmRC/GwTfEnnDOPZdkHgLyWppWykEVqmeZYes3WLgihPe4YXrzopnqrAS
+ mGbtJcbdT8sd7iuDIat7/ItJjeNKMBqvS6SFNksrRkhWzuZCoLkjrF7af6ou9tb0DrGt
+ 6phpFVhrG3o06enJJRUffHuWlRmGHmTYsCIbLVKH4Bq/NEglj9DTTt51t1Xrup6D8cVL
+ m8FLSaCnHMd/KkyjtH5mn/Ewk40wzR4wET3Th4VnGVYdn2JcgcVWXQ4yViSdsTqHwd7w
+ CLoVZAHa6iZpyLGk3VR9T8RRA0lfwos+eB/n4w9/2eLsNLvwvaN+raBmOnWsQ8VBqr1E Tw== 
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3rm093ju-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 15:27:11 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24GFIWA8018273;
+        Mon, 16 May 2022 15:27:10 GMT
+Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+        by ppma01dal.us.ibm.com with ESMTP id 3g242ats8k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 15:27:10 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24GFR9le37028224
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 16 May 2022 15:27:09 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2E06A78060;
+        Mon, 16 May 2022 15:27:09 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AA0717805F;
+        Mon, 16 May 2022 15:27:08 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon, 16 May 2022 15:27:08 +0000 (GMT)
+Message-ID: <b01b3269-626f-5918-41c0-08c05518525a@linux.ibm.com>
+Date:   Mon, 16 May 2022 11:27:08 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] evm: Clean up some variables
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20220513174105.3684229-1-stefanb@linux.ibm.com>
+ <6d91e146702bcaf361cb193eaca35c57e38482df.camel@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <6d91e146702bcaf361cb193eaca35c57e38482df.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 3PrTYJ6z17GIOtApsFH2cJEKk5_trfXE
+X-Proofpoint-ORIG-GUID: 3PrTYJ6z17GIOtApsFH2cJEKk5_trfXE
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220511150117.113070-7-pgwipeout@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-16_14,2022-05-16_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 spamscore=0 clxscore=1015 mlxlogscore=814 bulkscore=0
+ suspectscore=0 mlxscore=0 lowpriorityscore=0 priorityscore=1501
+ phishscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205160086
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 11:01:17AM -0400, Peter Geis wrote:
-> Add the sfc controller binding for the Quartz64 Model A. This is not
-> populated by default, so leave it disabled.
-> 
-> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> ---
->  .../boot/dts/rockchip/rk3566-quartz64-a.dts      | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-> index 71df64655de5..6ec349e7e521 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-> +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-> @@ -603,6 +603,22 @@ &sdmmc1 {
->  	status = "okay";
->  };
->  
-> +&sfc {
-> +	pinctrl-0 = <&fspi_pins>;
-> +	pinctrl-names = "default";
-> +	#address-cells = <1>;
-> +	#size-cells = <0>;
-> +	status = "disabled";
-> +
-> +	flash@0 {
-> +		compatible = "jedec,spi-nor";
-> +		reg = <0>;
-> +		spi-max-frequency = <24000000>;
-> +		spi-rx-bus-width = <4>;
-> +		spi-tx-bus-width = <1>;
 
-This isn't really a concern, just a comment. Did you test this with the
-spi-tx-bus-width of 4 by chance? While I did have to use 1 for my
-implementation (the Odroid Go Advance) the Rockchip engineer I worked
-with couldn't replicate the issue on his end and we ended up chalking
-my issues up to an implementation specific problem. I'm only commenting
-here because I don't want you to think that for this device the tx
-always has to be 1, of course if your implementation does have issues
-with a tx of 2 or 4 that's different...
 
-Thank you.
-
-> +	};
-> +};
-> +
->  /* spdif is exposed on con40 pin 18 */
->  &spdif {
->  	status = "okay";
-> -- 
-> 2.25.1
+On 5/16/22 10:50, Mimi Zohar wrote:
+> On Fri, 2022-05-13 at 13:41 -0400, Stefan Berger wrote:
+>> Make hmac_tfm static since it's not used anywhere else besides the file
+>> it is in.
+>>
+>> Remove declaration of hash_tfm since it doesn't exist.
+>>
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 > 
+> Thanks, Stefan.   Both this patch and "evm: Return INTEGRITY_PASS for
+> enum integrity_status value '0'"  are now queued in next-integrity.
+> 
+> Mimi
+> 
+
+There's also this one here:
+
+https://lore.kernel.org/all/20220421175205.798974-1-stefanb@linux.ibm.com/

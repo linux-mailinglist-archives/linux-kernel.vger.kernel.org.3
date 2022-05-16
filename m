@@ -2,119 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F43527B7A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 03:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25155527B94
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 03:56:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239145AbiEPBrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 21:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35774 "EHLO
+        id S239073AbiEPB4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 21:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239111AbiEPBq4 (ORCPT
+        with ESMTP id S236803AbiEPBz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 21:46:56 -0400
-Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 32886389E;
-        Sun, 15 May 2022 18:46:54 -0700 (PDT)
-IronPort-Data: =?us-ascii?q?A9a23=3AM+o5x6/wV6F32GYsfiaPDrUDFHyTJUtcMsCJ2f8?=
- =?us-ascii?q?bfWQNrUp3hD0CmzdLWGjUafjca2LyKY12OYi3/BsC7ZLdx4I2GldlrnsFo1Bi8?=
- =?us-ascii?q?5ScXYvDRqvT04J+FuWaFQQ/qZx2huDodKjYdVeB4Ef9WlTdhSMkj/vQHOKlULe?=
- =?us-ascii?q?s1h1ZHmeIdg9w0HqPpMZp2uaEsfDha++8kYuaT//3YTdJ6BYoWo4g0J9vnTs01?=
- =?us-ascii?q?BjEVJz0iXRlDRxDlAe2e3D4l/vzL4npR5fzatE88uJX24/+IL+FEmPxp3/BC/u?=
- =?us-ascii?q?ulPD1b08LXqXPewOJjxK6WYD72l4b+HN0if19aZLwam8O49mNt9Rw2tVMt525T?=
- =?us-ascii?q?y8nI6/NhP8AFRJfFkmSOIUfouOdfCDj75f7I0ruNiGEL+9VJEo2MIsX6+FqKWV?=
- =?us-ascii?q?P8+EIbjkJbxqKjevwy7W+IsF9j8IhMc+tLoMCknVhyyzJS/orX/jrQ6zD5them?=
- =?us-ascii?q?j0tic9DNfHEbsEdZHxkaxGoSxlOPEoHTZEzhuGlglHhfDBC7lGYv6w65y7U1gM?=
- =?us-ascii?q?Z+LzsNsfFP8aGQMx9gEmVvCTF8n7/DxVcM8aQoRKH/X2ElO7ChS69U4t6KVES3?=
- =?us-ascii?q?paGm3XKnipKVkJQDgD9/JGEZoeFc4o3AyQpFuAG98DeLHCWc+Q=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A7YLr76ph+apSaKbcm3opM9IaV5oXeYIsimQD?=
- =?us-ascii?q?101hICG9E/bo8/xG+c536faaslgssQ4b8+xoVJPgfZq+z+8R3WByB8bAYOCOgg?=
- =?us-ascii?q?LBQ72KhrGSoQEIdRefysdtkY9kc4VbTOb7FEVGi6/BizWQIpINx8am/cmT6dvj?=
- =?us-ascii?q?8w=3D=3D?=
-X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
-   d="scan'208";a="124250463"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 16 May 2022 09:46:50 +0800
-Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
-        by cn.fujitsu.com (Postfix) with ESMTP id DFD334D68A24;
-        Mon, 16 May 2022 09:46:45 +0800 (CST)
-Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
- G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Mon, 16 May 2022 09:46:47 +0800
-Received: from localhost.localdomain (10.167.225.141) by
- G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Mon, 16 May 2022 09:46:47 +0800
-From:   Li Zhijian <lizhijian@fujitsu.com>
-To:     Yanjun Zhu <yanjun.zhu@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>,
-        "Haakon Bugge" <haakon.bugge@oracle.com>,
-        Cheng Xu <chengyou@linux.alibaba.com>,
-        <linux-rdma@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, Li Zhijian <lizhijian@fujitsu.com>
-Subject: [PATCH v3 2/2] RDMA/rxe: Generate error completion for error requester QP state
-Date:   Mon, 16 May 2022 09:53:29 +0800
-Message-ID: <20220516015329.445474-3-lizhijian@fujitsu.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220516015329.445474-1-lizhijian@fujitsu.com>
-References: <20220516015329.445474-1-lizhijian@fujitsu.com>
+        Sun, 15 May 2022 21:55:56 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5919462C7
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 18:55:54 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id gj17-20020a17090b109100b001d8b390f77bso16013694pjb.1
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 18:55:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=KQnul6BomttjXRAElW8MXsYWinaGJAdMxQ34JNltdPE=;
+        b=lHEnF6heGEjJ30vDGmBAz//0dsf9/RNBPwzN+OFFUpaPvjAovS+THylUPUacjSp6df
+         12B4Wy+uYihi9szlnkEPWXJDvL5sd4FqIbsJ5+5K6L0zjbr5QUN7eFoVdz0Uqo2BxA9C
+         AqzLXKBpDNfAG1hXLUxIajsWYpek5ukHHrY1iwVscUHinDQK+XVisRXfGex8dOOya/Vq
+         rbNIwnbyZGCrS/iYhZWWm2k2qdzp22US3fvOjFOpxyFkL3psSHsu0SbMMbWyF+/OmN6q
+         A9ili3tCLYcJoQZ0wb1WqHEar+/5/bGXsjDXO9jmpd5ncQ5rs3Ca6oxtEI3vq/ZD1X3i
+         2z8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=KQnul6BomttjXRAElW8MXsYWinaGJAdMxQ34JNltdPE=;
+        b=aij2v8fbqziCjmiZQ89BvJ6YRDniKe/ibRu99Us4Up9eSrzwL+mPCRDVBrmpnkFGlf
+         WvhWkQgYo4BYXgBOfkL//mYGJjk9rVbiZ3kQUgIfZFA6kzEfsY4I9pUbtvskq8IfK3lS
+         KM8sHAgbKd4SsO7yvhqSv+CypGmW4lPXGEvzz+LfuxQK9hEMUAbpqgPLHnf+Iw97KkGD
+         YmUeMdN+vgDyEcTmy59LasfI1T6EnIs5h505soY9PONXh1kTe8T2ayfc4pcH4fw48lOa
+         AgeUpJ92f5gw4xBZ8TDJEPE6VFy5Dvx3KeLXOMi38Nr3p1YB9fUlef34e346o0WUuuWQ
+         905w==
+X-Gm-Message-State: AOAM531mgp5SHX22lrYcFt4PqNnFqfZMfAD0NmSsZXr3aQE1ESuBVZyG
+        tDWq6pLHlmWDvTg+mJjSDZAcYA==
+X-Google-Smtp-Source: ABdhPJyidz87m6gcjue2sTWA10gYK/ag05Ahv7NiReHPxORN5OC8cn+XAhREd3c9YiJMe8mZbhq2CQ==
+X-Received: by 2002:a17:90b:1251:b0:1d7:f7ae:9f1 with SMTP id gx17-20020a17090b125100b001d7f7ae09f1mr28343920pjb.65.1652666153928;
+        Sun, 15 May 2022 18:55:53 -0700 (PDT)
+Received: from [10.71.57.194] ([139.177.225.225])
+        by smtp.gmail.com with ESMTPSA id y6-20020a655a06000000b003f24a2be89asm3137216pgs.8.2022.05.15.18.55.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 May 2022 18:55:53 -0700 (PDT)
+Message-ID: <192be0a3-47dd-221d-0061-4e04e489ff89@bytedance.com>
+Date:   Mon, 16 May 2022 09:55:42 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-yoursite-MailScanner-ID: DFD334D68A24.AF984
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: lizhijian@fujitsu.com
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+Subject: Re: [External] Re: [PATCH bpf-next v3 0/2] Introduce access remote
+ cpu elem support in BPF percpu map
+To:     Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, jolsa@kernel.org, davemarchevsky@fb.com,
+        joannekoong@fb.com, geliang.tang@suse.com
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        songmuchun@bytedance.com, wangdongdong.6@bytedance.com,
+        cong.wang@bytedance.com, zhouchengming@bytedance.com,
+        yosryahmed@google.com
+References: <20220513063952.41794-1-zhoufeng.zf@bytedance.com>
+ <d8447eee-31d0-f730-bc31-7e55c76135f4@iogearbox.net>
+From:   Feng Zhou <zhoufeng.zf@bytedance.com>
+In-Reply-To: <d8447eee-31d0-f730-bc31-7e55c76135f4@iogearbox.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As per IBTA specification, all subsequent WQEs while QP is in error
-state should be completed with a flush error.
+在 2022/5/13 下午11:01, Daniel Borkmann 写道:
+> On 5/13/22 8:39 AM, Feng zhou wrote:
+> [...]
+>> Changelog:
+>> ----------
+>> v2->v3: Addressed comments from Andrii Nakryiko.
+>> - use /* */ instead of //
+>> - use libbpf_num_possible_cpus() instead of 
+>> sysconf(_SC_NPROCESSORS_ONLN)
+>> - use 8 bytes for value size
+>> - fix memory leak
+>> - use ASSERT_EQ instead of ASSERT_OK
+>> - add bpf_loop to fetch values on each possible CPU
+>> some details in here:
+>> https://lore.kernel.org/lkml/20220511093854.411-1-zhoufeng.zf@bytedance.com/T/ 
+>>
+>
+> The v2 of your series is already in bpf-next tree, please just send a 
+> relative diff for
+> the selftest patch.
+>
+> https://lore.kernel.org/lkml/165231901346.29050.11394051230756915389.git-patchwork-notify@kernel.org/ 
+>
+>
+> Thanks,
+> Daniel
 
-Here we check QP_STATE_ERROR after req_next_wqe() so that rxe_completer()
-has chance to be called where it will set CQ state to FLUSH ERROR and the
-completion can associate with its WQE.
-
-Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
----
-V3: unlikely() optimization # Cheng Xu <chengyou@linux.alibaba.com>
-    update commit log # Haakon Bugge <haakon.bugge@oracle.com>
----
- drivers/infiniband/sw/rxe/rxe_req.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/infiniband/sw/rxe/rxe_req.c b/drivers/infiniband/sw/rxe/rxe_req.c
-index 8bdd0b6b578f..c1f1c19f26b2 100644
---- a/drivers/infiniband/sw/rxe/rxe_req.c
-+++ b/drivers/infiniband/sw/rxe/rxe_req.c
-@@ -624,7 +624,7 @@ int rxe_requester(void *arg)
- 	rxe_get(qp);
- 
- next_wqe:
--	if (unlikely(!qp->valid || qp->req.state == QP_STATE_ERROR))
-+	if (unlikely(!qp->valid))
- 		goto exit;
- 
- 	if (unlikely(qp->req.state == QP_STATE_RESET)) {
-@@ -646,6 +646,14 @@ int rxe_requester(void *arg)
- 	if (unlikely(!wqe))
- 		goto exit;
- 
-+	if (unlikely(qp->req.state == QP_STATE_ERROR)) {
-+		/*
-+		 * Generate an error completion so that user space is able to
-+		 * poll this completion.
-+		 */
-+		goto err;
-+	}
-+
- 	if (wqe->mask & WR_LOCAL_OP_MASK) {
- 		ret = rxe_do_local_ops(qp, wqe);
- 		if (unlikely(ret))
--- 
-2.31.1
-
+Ok, will do. Thanks.
 
 

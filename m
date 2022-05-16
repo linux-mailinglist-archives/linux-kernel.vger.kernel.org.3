@@ -2,100 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7579527EE0
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75821527EE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241309AbiEPHwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 03:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35266 "EHLO
+        id S241333AbiEPHxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 03:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241258AbiEPHwQ (ORCPT
+        with ESMTP id S234133AbiEPHxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 03:52:16 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F7F27151;
-        Mon, 16 May 2022 00:52:16 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id q4so13665530plr.11;
-        Mon, 16 May 2022 00:52:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VHwMpClyQynjA2cM8OcoohBNhLjDi14SgAXOvOdZEbo=;
-        b=nGIjLzNobp+vqVe56g2rvlpS7/7o46TAxZoO0J80VdDyZ0eI8m534CnQp0WOqzc4yl
-         141mrcvH/BsjZoB0P0n5vSQU9+C7ZxD3kOZlObtSFqfXAd7HcXMioy/WoVP2eQIwTOuE
-         X2N5wDDCqpQJWnKOCB40o88MBMmnshdzaX4dhV8DD22pj7Dx4ToH2q8ARFG2kHlif4/U
-         0H2/mE+n5ncdNPXE4y1+c8N2NnrFZgrM7zEUP+hJ//vB3wl5eniAmItPwmwYwFOwdX3r
-         wlfrqHSNk0/J/m3CIoH9R+GdS82N2ELf7Zg0NEEwKEK2zHj2ZW1N/Xuoa+2G+MQD+B0t
-         iXSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VHwMpClyQynjA2cM8OcoohBNhLjDi14SgAXOvOdZEbo=;
-        b=ni1gb6a/IWZojlAdX6TzDyUqmASOyoPmIcR0fQPbAV57AX4091xSJ+zhoBq6CPJqna
-         7B8NfH1aB9L7HgD4Y4MZ4sATEz09oStM2Pne9EQ7X0QX1i1gtlsv8oaDxiKFkL6LIn3Y
-         uXue7pUCHgU/5fTC2C8WYpKrkjyKNk0jvE1Tw137mMEEvHY1ctNNOd5ZwHaWPPQfJg0v
-         TWWq1wcy5P58orhIm7oEHkYmgprGGuOcy1EV/p8hjmCB/Y67YrdUdhaRmgKxu0DxF11G
-         Cd5VDxU4ndr2Z9EjCbTX+vIPrWXxAh/FdP7oknbQRSM1gQnogh8IS3t/d+LUcYmTEFQg
-         EEsA==
-X-Gm-Message-State: AOAM53298SQBNz9LDdQnD/IOfVpPBw4tZuFSwTTzQXaxLGQHp6frxkfK
-        ljkR5YKoBccTTKbeBg+r9So=
-X-Google-Smtp-Source: ABdhPJz276ABAIAuW896KA5vz0XXu814EgBO3IQUcxDqw00HuNKFl6XPbstTD15t/E9qCoX4qIZKFw==
-X-Received: by 2002:a17:90b:1e03:b0:1dc:5a7d:bba8 with SMTP id pg3-20020a17090b1e0300b001dc5a7dbba8mr17849338pjb.156.1652687535848;
-        Mon, 16 May 2022 00:52:15 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id hv19-20020a17090ae41300b001cd630f301fsm7809297pjb.36.2022.05.16.00.52.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 00:52:15 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Billy Tsai <billy_tsai@aspeedtech.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Colin Ian King <colin.king@intel.com>,
-        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] iio: adc: aspeed: Fix refcount leak in aspeed_adc_set_trim_data
-Date:   Mon, 16 May 2022 11:52:02 +0400
-Message-Id: <20220516075206.34580-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 16 May 2022 03:53:34 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D99275C3;
+        Mon, 16 May 2022 00:53:32 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id B95C63200977;
+        Mon, 16 May 2022 03:53:30 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Mon, 16 May 2022 03:53:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1652687610; x=
+        1652774010; bh=3pNP4lkw2arx3DEO7xosFHza4XodA+DQ9cP0mdORw0E=; b=C
+        BY8RdDlTi9S5yAqghIBhAvsJ9Z9JFnZ15BnqDgi3fXaCsVVE8zAQcrPqYSEqVPUr
+        McRqjpR3HMHvzfmYwlaV9knOFEi6n3unw/xN7cvKOiUoOTfpoSV8162qLqMiPm6b
+        vJ9QzlSpUWdWVoMZmA8oyRJ7xDlyw3RnZ27ZasILubYkkmImgdk7FPymC1kWHQdS
+        0x3+CcekhI3VnxEg0rwC+ug9oqPfjLmaleCiVEVGu+h3I4SyoHgsFZ2UyQhB1jM+
+        Lwh5bpToWDOfni9t8XYnRGWJjIWP8Pkace6LWg54c+L+VeE3tkXnukdjAdFyi3CQ
+        GnadUJeA6VRBemwOvknOg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1652687610; x=1652774010; bh=3pNP4lkw2arx3
+        DEO7xosFHza4XodA+DQ9cP0mdORw0E=; b=AoVri4LT+R1c9JiAgs8nFEvz2EMnz
+        pW3sOudgVIzUPEDYAIVj3ak1WInoKUHfjp9QcvNsGV4ozJSPpkEMRFm/PeC9pR8C
+        cqICI/Y9H+LCo/Ev0wY1XQfEhYApEkScBGYoW3nI75gSCS2lxu3r8jYuCZDx7EFy
+        iP4GSNxaiPFj81RAfCgwx2szlCRjMQ+hU7q0QtbWOCIcRLTd93Mf9RiylFvQAC2o
+        uUK9rolMTv1rBJT7JyYKpmWyYFpzxTmHWC3E8w6Z8Xi7omhWssNmq7NyEnuujKgZ
+        DuZ28CKPS81mghPMpc0nBXHFiAdR5/7l1Dw2jmbDn6IC9AIK/y0Imsqgg==
+X-ME-Sender: <xms:-QKCYhPOhCiLS1TKae5X53vLPuM3XPCzDyAcTMXqNMu4cszIRAHZPA>
+    <xme:-QKCYj_sKk3UQpp3LSXTl7QTsXlcAvLGqDEtd6jMfk_u4jAxe0PBdQxruBAQXMQR8
+    vxOFvI2c4amf7z8PVk>
+X-ME-Received: <xmr:-QKCYgSJ-86RwrBARaKK4nZ893pmBsUl5YlbDihst-7CBMMfhASX4aDxbXqc6_zlSWGVmhxDnhKuCCe4kDmsPcDm7obyDXb0FdV5clM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrheeggdduvdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnheptefgleeggfegkeekgffgleduieduffejffegveevkeejudektdduueet
+    feetfefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:-QKCYttaxirpg-hdWnyu-dyUWzq4YVacRDIhbht6JN_YlsQovPcDZA>
+    <xmx:-QKCYpc1PVQApPVPXR-xj9FnSw-SvyshlI3IwUWhBckDxDmiLmFx2w>
+    <xmx:-QKCYp0XULYlGOnJUub9T3OIGlorP2VqRz0nf-znCN_nSW4qwFSR-w>
+    <xmx:-gKCYl7oY9G4refKfxe6WqEOsFFKSkat5VQ2oeC82DI8LrXWx9AEKA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 16 May 2022 03:53:28 -0400 (EDT)
+Date:   Mon, 16 May 2022 09:53:26 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     qianfan <qianfanguijin@163.com>
+Cc:     linux-sunxi@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] ARM: dts: sun8i-r40: Add "cpu-supply" node for
+ sun8i-r40 based board
+Message-ID: <20220516075326.hccburhu743t7p6r@houat>
+References: <20220512071858.10805-1-qianfanguijin@163.com>
+ <20220512071858.10805-2-qianfanguijin@163.com>
+ <20220513073849.cu4jzykefat2sepg@houat>
+ <1352b9d7-5219-af09-948b-6462def39ea5@163.com>
+ <20220513081556.knd3tf6pangfblh3@houat>
+ <666ead08-af1e-81f5-6fe1-e5e3370e6d6f@163.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <666ead08-af1e-81f5-6fe1-e5e3370e6d6f@163.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_find_node_by_name() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
-Add missing of_node_put() to avoid refcount leak.
+On Fri, May 13, 2022 at 04:23:20PM +0800, qianfan wrote:
+> > > > There's a similar issue for all the boards that don't have a regula=
+tor
+> > > > in the first place.
+> > > >=20
+> > > > The way we worked around this for the other SoCs is to have a DTSI =
+with
+> > > > the OPPs with a frequency higher than what U-Boot boots with (1008M=
+Hz?),
+> > > > and only include that DTSI on boards that have a CPU regulator hook=
+ed in.
+> > > Is this really necessary? It seems like every board based on sun8i-r40
+> > > have a cpu regulator.
+> > This probably won't be the case whenever someone starts a new design,
+> > and then they'll face random crashes for no apparent reason, and waste a
+> > lot of time in the process.
+> >=20
+> > Whereas the alternative is that you would be missing some OPPs,
+> > something that is fairly easy to figure out.
+>
+> How about remove the OPPs which greate that 1.08G in sun8i-r40.dtsi,
+> If some boards want to run at a higher frequency, can add them byself
+> in the board's file.
 
-Fixes: d0a4c17b4073 ("iio: adc: aspeed: Get and set trimming data.")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/iio/adc/aspeed_adc.c | 1 +
- 1 file changed, 1 insertion(+)
+You did all the work to support and test them already. It's a bit of a
+waste to do that and not include it.
 
-diff --git a/drivers/iio/adc/aspeed_adc.c b/drivers/iio/adc/aspeed_adc.c
-index 0793d2474cdc..9341e0e0eb55 100644
---- a/drivers/iio/adc/aspeed_adc.c
-+++ b/drivers/iio/adc/aspeed_adc.c
-@@ -186,6 +186,7 @@ static int aspeed_adc_set_trim_data(struct iio_dev *indio_dev)
- 		return -EOPNOTSUPP;
- 	}
- 	scu = syscon_node_to_regmap(syscon);
-+	of_node_put(syscon);
- 	if (IS_ERR(scu)) {
- 		dev_warn(data->dev, "Failed to get syscon regmap\n");
- 		return -EOPNOTSUPP;
--- 
-2.25.1
+Just do a DTSI like we did for the A64 for example.
 
+Maxime

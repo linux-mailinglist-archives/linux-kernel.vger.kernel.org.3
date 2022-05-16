@@ -2,187 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DFBE5288B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:25:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C745288C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233348AbiEPPZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 11:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
+        id S245065AbiEPPZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 11:25:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245043AbiEPPYs (ORCPT
+        with ESMTP id S245341AbiEPPZZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 11:24:48 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38363981A;
-        Mon, 16 May 2022 08:24:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652714686; x=1684250686;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=8WYG3L+/ZLBYQzxHuNKO8Y9ASS/A40+pgEOz9qkoAFA=;
-  b=E7H3WF7LGK9xonMU5zWDaBbLkGGq5ONOhkWDBeXMaxZmtkkNGw3ehmBS
-   HAPNXBPQ4n5UhPbcHZHp2llR7h+dtF40ZkywScqOAr08Sn9THxhFxoAj/
-   Kq7t7PQtxIB1zpSvFoYwLsgCXt5TX4CmbaA86wATr3r/enkDepOwiJo3y
-   FcjgC/oOycgBUJ6fM+CBJsFPobyO/YApkCkRhXBUz2xMz1VUT+lYRbZCJ
-   4toEb3X5wgWRmGCdjIDWnXjKKuFVCd7doDUNwS8jEHiREbHXEkZUUiZV+
-   sjrq1V1gZP3ZgiBWdkfjVqriV4IcH3Hhli00GPD4R4yHGt8WGjyn5Xbbf
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="270561301"
-X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
-   d="scan'208";a="270561301"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 08:24:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
-   d="scan'208";a="741290220"
-Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
-  by orsmga005.jf.intel.com with ESMTP; 16 May 2022 08:24:43 -0700
-From:   kan.liang@linux.intel.com
-To:     acme@kernel.org, mingo@redhat.com, irogers@google.com,
-        jolsa@kernel.org, namhyung@kernel.org,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Cc:     peterz@infradead.org, zhengjun.xing@linux.intel.com,
-        adrian.hunter@intel.com, ak@linux.intel.com, eranian@google.com,
-        Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH V2 4/4] perf parse-events: Move slots event for the hybrid platform too
-Date:   Mon, 16 May 2022 08:24:36 -0700
-Message-Id: <20220516152436.1104757-5-kan.liang@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220516152436.1104757-1-kan.liang@linux.intel.com>
-References: <20220516152436.1104757-1-kan.liang@linux.intel.com>
+        Mon, 16 May 2022 11:25:25 -0400
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2103C705;
+        Mon, 16 May 2022 08:25:24 -0700 (PDT)
+Received: by mail-ot1-f52.google.com with SMTP id i25-20020a9d6259000000b00605df9afea7so10271810otk.1;
+        Mon, 16 May 2022 08:25:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OpVnMo42G5s86PrfDD1Zlh8XPSNlbAHUDJJNgTC/Y9E=;
+        b=Yx3qtJPGKgzOENUnk58tn+v08w+XIRZb6rS6ChkB4a6+KY2K10y6ozK4YkdW7S2KYQ
+         SXwt4ENGsQjUtgjJoFcGn/L7zNrnhbf9sp8SO62mmiohw/7GCN422+0LCNGcRvCz5rVV
+         LP5zQIs2VbwiHRgMxxouKKJ/jLGSSlk7MN+8lKaMqV2MfvBToyMTkAGichBA2uPpH2h7
+         2WrJQu/ODMEiyB69r0vnDOLmH4BHJFfUCpN+1AUHZWLTlj9sNrcrQOYNVzSJnRVwuPAt
+         4a6ObECvz+rQTyQYR3ZoRE3Lgbms5bLz/vgp11jiJbb6n62yhY9WMj4b4PkNDY4Vft3i
+         4Ytg==
+X-Gm-Message-State: AOAM533MP9cdyw4OzxZQDiHUpbvkLlI7S6HPI6G1MrEir5BGy9HPK8Cz
+        0aaZLfY8pf6NZyDwFVgl5w==
+X-Google-Smtp-Source: ABdhPJzQb6U+yxx1+Yyv+RdOBdfG4c9OWyZUaP/P8dWPXkSvXkWGRT72AonAuE9aQlT52lkdYFq4qg==
+X-Received: by 2002:a9d:24a8:0:b0:606:b2b8:cfb6 with SMTP id z37-20020a9d24a8000000b00606b2b8cfb6mr6157234ota.237.1652714723474;
+        Mon, 16 May 2022 08:25:23 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i20-20020a4a8d94000000b0035eb4e5a6c5sm4246865ook.27.2022.05.16.08.25.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 08:25:22 -0700 (PDT)
+Received: (nullmailer pid 2675482 invoked by uid 1000);
+        Mon, 16 May 2022 15:25:21 -0000
+Date:   Mon, 16 May 2022 10:25:21 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sireesh Kodali <sireeshkodali1@gmail.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>
+Subject: Re: [PATCH 08/12] dt-bindings: remoteproc: qcom,smd-edge: define
+ re-usable schema for smd-edge
+Message-ID: <20220516152521.GA2672819-robh@kernel.org>
+References: <20220512100006.99695-1-krzysztof.kozlowski@linaro.org>
+ <20220512100006.99695-9-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220512100006.99695-9-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+On Thu, May 12, 2022 at 12:00:02PM +0200, Krzysztof Kozlowski wrote:
+> 'smd-edge' property appears in multiple bindings, so split it into one
+> place which can be re-used.  This reduces code duplication and strict
+> schema matching for smd-edge nodes (instead of just "type:object").
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/remoteproc/qcom,adsp.yaml        |  2 +-
+>  .../bindings/remoteproc/qcom,smd-edge.yaml    | 88 +++++++++++++++++++
+>  .../bindings/soc/qcom/qcom,smd.yaml           | 53 +----------
+>  3 files changed, 91 insertions(+), 52 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,smd-edge.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+> index 4dfbfece1ec7..3072af5f9d79 100644
+> --- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+> @@ -148,7 +148,7 @@ properties:
+>        three offsets within syscon for q6, modem and nc halt registers.
+>  
+>    smd-edge:
+> -    type: object
+> +    $ref: /schemas/remoteproc/qcom,smd-edge.yaml#
+>      description:
+>        Qualcomm Shared Memory subnode which represents communication edge,
+>        channels and devices related to the ADSP.
+> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,smd-edge.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,smd-edge.yaml
+> new file mode 100644
+> index 000000000000..fde2c450e8b5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,smd-edge.yaml
+> @@ -0,0 +1,88 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/remoteproc/qcom,smd-edge.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm SMD Edge communication channel nodes
+> +
+> +maintainers:
+> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
+> +
+> +description:
+> +  Qualcomm SMD subnode represents a remote subsystem or a remote processor of
+> +  some sort - or in SMD language an "edge". The name of the edges are not
+> +  important.
+> +
+> +
+> +  See also Documentation/devicetree/bindings/soc/qcom/qcom,smd.yaml
+> +
+> +properties:
+> +  $nodename:
+> +    const: "smd-edge"
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  label:
+> +    $ref: /schemas/types.yaml#/definitions/string
 
-The commit 94dbfd6781a0 ("perf parse-events: Architecture specific
-leader override") introduced a feature to reorder the slots event to
-fulfill the restriction of the perf metrics topdown group. But the
-feature doesn't work on the hybrid machine.
+Don't need a type here. Otherwise,
 
-$perf stat -e "{cpu_core/instructions/,cpu_core/slots/,cpu_core/topdown-retiring/}" -a sleep 1
-
- Performance counter stats for 'system wide':
-
-     <not counted>      cpu_core/instructions/
-     <not counted>      cpu_core/slots/
-   <not supported>      cpu_core/topdown-retiring/
-
-       1.002871801 seconds time elapsed
-
-A hybrid platform has a different PMU name for the core PMUs, while
-current perf hard code the PMU name "cpu".
-
-Introduce a new function to check whether the system supports the perf
-metrics feature. The result is cached for the future usage.
-
-For X86, the core PMU name always has "cpu" prefix.
-
-With the patch,
-
-$perf stat -e "{cpu_core/instructions/,cpu_core/slots/,cpu_core/topdown-retiring/}" -a sleep 1
-
- Performance counter stats for 'system wide':
-
-        76,337,010      cpu_core/slots/
-        10,416,809      cpu_core/instructions/
-        11,692,372      cpu_core/topdown-retiring/
-
-       1.002805453 seconds time elapsed
-
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
----
- tools/perf/arch/x86/util/evlist.c  |  5 +++--
- tools/perf/arch/x86/util/topdown.c | 24 ++++++++++++++++++++++++
- tools/perf/arch/x86/util/topdown.h |  7 +++++++
- 3 files changed, 34 insertions(+), 2 deletions(-)
- create mode 100644 tools/perf/arch/x86/util/topdown.h
-
-diff --git a/tools/perf/arch/x86/util/evlist.c b/tools/perf/arch/x86/util/evlist.c
-index 75564a7df15b..68f681ad54c1 100644
---- a/tools/perf/arch/x86/util/evlist.c
-+++ b/tools/perf/arch/x86/util/evlist.c
-@@ -3,6 +3,7 @@
- #include "util/pmu.h"
- #include "util/evlist.h"
- #include "util/parse-events.h"
-+#include "topdown.h"
- 
- #define TOPDOWN_L1_EVENTS	"{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound}"
- #define TOPDOWN_L2_EVENTS	"{slots,topdown-retiring,topdown-bad-spec,topdown-fe-bound,topdown-be-bound,topdown-heavy-ops,topdown-br-mispredict,topdown-fetch-lat,topdown-mem-bound}"
-@@ -25,12 +26,12 @@ struct evsel *arch_evlist__leader(struct list_head *list)
- 
- 	first = list_first_entry(list, struct evsel, core.node);
- 
--	if (!pmu_have_event("cpu", "slots"))
-+	if (!topdown_sys_has_perf_metrics())
- 		return first;
- 
- 	/* If there is a slots event and a topdown event then the slots event comes first. */
- 	__evlist__for_each_entry(list, evsel) {
--		if (evsel->pmu_name && !strcmp(evsel->pmu_name, "cpu") && evsel->name) {
-+		if (evsel->pmu_name && !strncmp(evsel->pmu_name, "cpu", 3) && evsel->name) {
- 			if (strcasestr(evsel->name, "slots")) {
- 				slots = evsel;
- 				if (slots == first)
-diff --git a/tools/perf/arch/x86/util/topdown.c b/tools/perf/arch/x86/util/topdown.c
-index 2f3d96aa92a5..5e86859279e3 100644
---- a/tools/perf/arch/x86/util/topdown.c
-+++ b/tools/perf/arch/x86/util/topdown.c
-@@ -3,6 +3,30 @@
- #include "api/fs/fs.h"
- #include "util/pmu.h"
- #include "util/topdown.h"
-+#include "topdown.h"
-+
-+bool topdown_sys_has_perf_metrics(void)
-+{
-+	static bool has_perf_metrics;
-+	static bool cached;
-+	struct perf_pmu *pmu;
-+
-+	if (cached)
-+		return has_perf_metrics;
-+
-+	/*
-+	 * The perf metrics feature is a core PMU feature.
-+	 * The PERF_TYPE_RAW type is the type of a core PMU.
-+	 * The slots event is only available when the core PMU
-+	 * supports the perf metrics feature.
-+	 */
-+	pmu = perf_pmu__find_by_type(PERF_TYPE_RAW);
-+	if (pmu && pmu_have_event(pmu->name, "slots"))
-+		has_perf_metrics = true;
-+
-+	cached = true;
-+	return has_perf_metrics;
-+}
- 
- /*
-  * Check whether we can use a group for top down.
-diff --git a/tools/perf/arch/x86/util/topdown.h b/tools/perf/arch/x86/util/topdown.h
-new file mode 100644
-index 000000000000..46bf9273e572
---- /dev/null
-+++ b/tools/perf/arch/x86/util/topdown.h
-@@ -0,0 +1,7 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _TOPDOWN_H
-+#define _TOPDOWN_H 1
-+
-+bool topdown_sys_has_perf_metrics(void);
-+
-+#endif
--- 
-2.35.1
-
+Reviewed-by: Rob Herring <robh@kernel.org>

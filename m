@@ -2,149 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA5B528178
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C2852817E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240639AbiEPKHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 06:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60622 "EHLO
+        id S240271AbiEPKIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 06:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242285AbiEPKHM (ORCPT
+        with ESMTP id S236329AbiEPKHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 06:07:12 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344E595A7;
-        Mon, 16 May 2022 03:07:01 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 58EF61F42B2B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652695620;
-        bh=f6jwulb2NLULA/5oaTqgRp/7nSTOiexmXap/G6mpgmQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=K3sXLj7fAWivUuYK3E1gThr/SRZt6RsQxqFySXNUH9sG3uZ73T3VYxUpGWDlTLHgG
-         dTR4g96sT+ayvxJVZalEkVc5f+s2mQrd+R7OQ3f2r4YPE9u4pFV+f3ipZTQx+0FTkD
-         dywnvP7JfxbKkFL/vgoK7NzkSRvHwhcQPCR4T0tTrrnbEmzzB7RrBcJn3d1GoDr//c
-         Dt32cFurWFMVJNN3/cXqLBMLhJ6zP/MVIBAUex9o+5q7ttnJijAroA/7QdvdOZwici
-         Q7foSG414T8SIjIMG81oDq9cxwcFyCu2d+vtCFxpxy//dcvaqvzdEVXAQMHMLkmvt/
-         7pBs8xU9fUqdA==
-Message-ID: <1c0b5dfc-4eb0-aa9d-cf38-657124022ed5@collabora.com>
-Date:   Mon, 16 May 2022 12:06:56 +0200
+        Mon, 16 May 2022 06:07:35 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45E29FFA;
+        Mon, 16 May 2022 03:07:20 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id u3so19824794wrg.3;
+        Mon, 16 May 2022 03:07:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=kHy1DxskfYtTzR10hFBW7KtNkaksqkV+HwXuSa/N4gY=;
+        b=oHg1d6xCKDdsdL8NE3bwuG0bBwUAYpTjeAn1LP/Tc3cG+Ohr9OyXruxPKDzu4MafuG
+         bJPbjUwD6tPDUc0O9jQAjhoustpTvj4NbfSYuKXxuT6OEzH3Gl4utxzVC/bdWsrWDkrA
+         gpzgjL0IEkPmqu+ab5r5K4gXSZMmpODSlO7CkeDEY/nr32hkZYxB5TKe7N5F1/3lqwaA
+         Z12iGlkOUQHHYWBLWPLlb9UWzw7pSJDKWTiYygUNoN/Oz9EYRLplKNF3qp7zqT5uS+eZ
+         9/agR7NiVUUqFqCricljbOy/b6qxIuv2hv0p+Ei42WX7ya+V5I9SDNmdIZiKMgrTaNFO
+         cPCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=kHy1DxskfYtTzR10hFBW7KtNkaksqkV+HwXuSa/N4gY=;
+        b=Ykg1hG/luQ4yhkUGwQHtbEX/zoDaVeFsHbd+WPoatkoesakDxLtvz5VVt/tTMZ+VxC
+         2Ih4U4Ao0uLsBx0oMJGpIf+BYOso/hRu3wnzyUZ+KicvXYatg8MJCVKTUmIrn+gbsXFk
+         RNFhM6CDWfkpcxWiAGFw/gnFU2iKPwyiwD80YptD9W3jrv0voWOu9Mkh86KywMv873Eh
+         WecNuQCDP22kVOM11R/YQXUppfNCUCsMdHBHv99SvgzEi8mlYb/4p1L2E4fAlFEr4YKs
+         QWMvD0GFtCilp6/F1jNkOP4CJJlj1eIDIfRcXB5CUvw6s1DS2/es/t0wtW8C8JvmkYHD
+         6MQA==
+X-Gm-Message-State: AOAM531kcq/eTUz/wIfeKeh0ssQexVoDodrVXJvkcAxs83fRBi2hCUSI
+        kDUwcDUvqv34Hlw26KcXdy8=
+X-Google-Smtp-Source: ABdhPJy/6QfJ7ppvNa6HTP7+zrPrP1+x08PdImq+qjJ/69VIe1VDgNed6Ps0e/Ei+JDetfbC3ad/sg==
+X-Received: by 2002:a05:6000:1848:b0:20c:713b:8e1e with SMTP id c8-20020a056000184800b0020c713b8e1emr14059824wri.640.1652695639241;
+        Mon, 16 May 2022 03:07:19 -0700 (PDT)
+Received: from leap.localnet (host-79-50-182-226.retail.telecomitalia.it. [79.50.182.226])
+        by smtp.gmail.com with ESMTPSA id n9-20020a1c7209000000b0039482d95ab7sm9820684wmc.24.2022.05.16.03.07.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 03:07:17 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Evgeniy Dushistov <dushistov@mail.ru>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] fs/ufs: Replace kmap() with kmap_local_page()
+Date:   Mon, 16 May 2022 12:07:14 +0200
+Message-ID: <13020190.uLZWGnKmhe@leap>
+In-Reply-To: <YoGSjZlucCKjSxVX@iweiny-desk3>
+References: <20220509071207.16176-1-fmdefrancesco@gmail.com> <YoGSjZlucCKjSxVX@iweiny-desk3>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] soc: mediatek: mtk-mmsys: Add support for MT6795 Helio
- X10
-Content-Language: en-US
-To:     CK Hu <ck.hu@mediatek.com>, matthias.bgg@gmail.com
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, paul.bouchara@somainline.org,
-        kernel@collabora.com
-References: <20220513170350.502501-1-angelogioacchino.delregno@collabora.com>
- <7c996c665a57fdd9ba8d6df4dc085f70afc1b933.camel@mediatek.com>
- <a7afc559-4e0a-6552-190c-19e58851ce68@collabora.com>
- <4b5d6607b90f3e36fce7e61e1768da55693546aa.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <4b5d6607b90f3e36fce7e61e1768da55693546aa.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 16/05/22 11:50, CK Hu ha scritto:
-> On Mon, 2022-05-16 at 10:44 +0200, AngeloGioacchino Del Regno wrote:
->> Il 16/05/22 07:43, CK Hu ha scritto:
->>> Hi, Angelo:
->>>
->>> On Fri, 2022-05-13 at 19:03 +0200, AngeloGioacchino Del Regno
->>> wrote:
->>>> Add MM support for the MT6795 SoC, using the mmsys default
->>>> routing
->>>> table.
->>>>
->>>> Signed-off-by: AngeloGioacchino Del Regno <
->>>> angelogioacchino.delregno@collabora.com>
->>>> ---
->>>>
->>>> In order for this patch to have any meaning and functionality, it
->>>> is
->>>> required to also have in-tree the [1] MT6795 clocks series, even
->>>> though that's not required to actually compile this code.
->>>>
->>>> [1]
->>>>
-> https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/list/?series=641493__;!!CTRNKA9wMg0ARbw!ywDb_Gj4oV0iYHK_PbtJSNejzsJGlFVjX-1O0G1mR0vZX_5VeMtlZJ_AS6K_Mg$
->>>>    
->>>>
->>>>    drivers/soc/mediatek/mtk-mmsys.c | 11 +++++++++++
->>>>    1 file changed, 11 insertions(+)
->>>>
->>>> diff --git a/drivers/soc/mediatek/mtk-mmsys.c
->>>> b/drivers/soc/mediatek/mtk-mmsys.c
->>>> index 06d8e83a2cb5..38b36b881a3b 100644
->>>> --- a/drivers/soc/mediatek/mtk-mmsys.c
->>>> +++ b/drivers/soc/mediatek/mtk-mmsys.c
->>>> @@ -57,6 +57,13 @@ static const struct mtk_mmsys_match_data
->>>> mt6779_mmsys_match_data = {
->>>>    	},
->>>>    };
->>>>    
->>>> +static const struct mtk_mmsys_driver_data
->>>> mt6795_mmsys_driver_data =
->>>> {
->>>> +	.clk_driver = "clk-mt6795-mm",
->>>> +	.routes = mmsys_default_routing_table,
->>>
->>> mt6795 should have its own routing table instead of default one.
->>> The
->>> default one is used for mt8173, mt2701, mt2712 which no one knows
->>> how
->>> to separate them. If you don't know the routing table of mt6795,
->>> just
->>> left this as NULL.
->>>
->>
->> Hello CK,
->>
->> I agree with you, in fact the first test that I've done was with
->> leaving
->> routes to NULL, but that did not work (I couldn't get the display to
->> work),
->> while assigning the default routing table resulted in having a
->> working
->> internal (DSI) display et al, which is why I have done that.
->>
->> I am sure that this may be a quirk that is required due to my
->> platform's
->> bootloader, but still, it won't work otherwise.
->>
->> If anyone from MediaTek wants to help with providing a better
->> solution for
->> that, you're welcome to - but otherwise, my proposal is to configure
->> MT6795
->> with that default routing table and eventually come back to this
->> later if
->> any issue with this gets discovered... I couldn't find any, though.
-> 
-> So you have a drm driver which support mt6795 and it would call
-> mtk_mmsys_ddp_connect() to setup routing routing register. You could
-> generate mt6795 routing table from default one by partial element that
-> you use in mt6795. I think this table would be smaller than the default
-> one.
-> 
+On luned=C3=AC 16 maggio 2022 01:53:49 CEST Ira Weiny wrote:
+> On Mon, May 09, 2022 at 09:12:07AM +0200, Fabio M. De Francesco wrote:
+> > The use of kmap() is being deprecated in favor of kmap_local_page().=20
+With
+> > kmap_local_page(), the mapping is thread-local, CPU-local and not=20
+globally
+> > visible.
+> >=20
+> > The usage of kmap_local_page() in fs/ufs is thread-local, therefore=20
+replace
+> > kmap() / kunmap() calls with kmap_local_page() / kunmap_local().
+> >=20
+> > kunmap_local() requires the mapping address, so return that address=20
+from
+> > ufs_get_page() to be used in ufs_put_page().
+> >=20
+> > These changes are essentially ported from fs/ext2 and relie largely on
+> > commit 782b76d7abdf ("fs/ext2: Replace kmap() with kmap_local_page()").
+> >=20
+> > Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> > ---
+> >=20
+> > v1 -> v2: Correct some style's issues reported by checkpatch.pl.
+> > 	  Remove "inline" compiler directive from fs/ufs/ufs.h,
+> > 	  Reported-by: kernel test robot <lkp@intel.com>
+> >=20
+> >  fs/ufs/dir.c   | 116 +++++++++++++++++++++++++++++++------------------
+> >  fs/ufs/namei.c |  38 ++++++++--------
+> >  fs/ufs/ufs.h   |  12 +++--
+> >  3 files changed, 102 insertions(+), 64 deletions(-)
+> >=20
+> >
+> > [snip]
+> >  =20
+> > @@ -250,27 +251,31 @@ static int ufs_rename(struct user_namespace=20
+*mnt_userns, struct inode *old_dir,
+> >  	struct inode *old_inode =3D d_inode(old_dentry);
+> >  	struct inode *new_inode =3D d_inode(new_dentry);
+> >  	struct page *dir_page =3D NULL;
+> > +	void *dir_page_addr;
+> >  	struct ufs_dir_entry * dir_de =3D NULL;
+> >  	struct page *old_page;
+> > +	void *old_page_addr;
+> >  	struct ufs_dir_entry *old_de;
+> >  	int err =3D -ENOENT;
+> > =20
+> >  	if (flags & ~RENAME_NOREPLACE)
+> >  		return -EINVAL;
+> > =20
+> > -	old_de =3D ufs_find_entry(old_dir, &old_dentry->d_name, &old_page);
+> > +	old_de =3D ufs_find_entry(old_dir, &old_dentry->d_name, &old_page,
+> > +				&old_page_addr);
+> >  	if (!old_de)
+> >  		goto out;
+> > =20
+> >  	if (S_ISDIR(old_inode->i_mode)) {
+> >  		err =3D -EIO;
+> > -		dir_de =3D ufs_dotdot(old_inode, &dir_page);
+> > +		dir_de =3D ufs_dotdot(old_inode, &dir_page,=20
+&dir_page_addr);
+> >  		if (!dir_de)
+> >  			goto out_old;
+> >  	}
+> > =20
+> >  	if (new_inode) {
+> >  		struct page *new_page;
+> > +		void *page_addr;
+>=20
+> Nit:
+>=20
+> It might be good to make this new_page_addr to keep it straight with the=
+=20
+other
+> pages mapped in this function.
+>=20
 
-Okay, that makes a lot of sense: I'll try following this advice.
+Yes, it should be "new_page_addr" for consistency. I'm going to rename this=
+=20
+variable and send v3.
 
-Regards,
-Angelo
+>
+> Regardless:
+>=20
+> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+>=20
+
+Thanks!
+
+=46abio
+
+> >  		struct ufs_dir_entry *new_de;
+> > =20
+> >  		err =3D -ENOTEMPTY;
+> > @@ -278,10 +283,11 @@ static int ufs_rename(struct user_namespace=20
+*mnt_userns, struct inode *old_dir,
+> >  			goto out_dir;
+> > =20
+> >  		err =3D -ENOENT;
+> > -		new_de =3D ufs_find_entry(new_dir, &new_dentry->d_name,=20
+&new_page);
+> > +		new_de =3D ufs_find_entry(new_dir, &new_dentry->d_name,=20
+&new_page,
+> > +					&page_addr);
+> >  		if (!new_de)
+> >  			goto out_dir;
+> > -		ufs_set_link(new_dir, new_de, new_page, old_inode, 1);
+> > +		ufs_set_link(new_dir, new_de, new_page, page_addr,=20
+old_inode, 1);
+> >  		new_inode->i_ctime =3D current_time(new_inode);
+> >  		if (dir_de)
+> >  			drop_nlink(new_inode);
+> > @@ -300,29 +306,25 @@ static int ufs_rename(struct user_namespace=20
+*mnt_userns, struct inode *old_dir,
+> >  	 */
+> >  	old_inode->i_ctime =3D current_time(old_inode);
+> > =20
+> > -	ufs_delete_entry(old_dir, old_de, old_page);
+> > +	ufs_delete_entry(old_dir, old_de, old_page, old_page_addr);
+> >  	mark_inode_dirty(old_inode);
+> > =20
+> >  	if (dir_de) {
+> >  		if (old_dir !=3D new_dir)
+> > -			ufs_set_link(old_inode, dir_de, dir_page,=20
+new_dir, 0);
+> > -		else {
+> > -			kunmap(dir_page);
+> > -			put_page(dir_page);
+> > -		}
+> > +			ufs_set_link(old_inode, dir_de, dir_page,
+> > +				     dir_page_addr, new_dir, 0);
+> > +		else
+> > +			ufs_put_page(dir_page, dir_page_addr);
+> >  		inode_dec_link_count(old_dir);
+> >  	}
+> >  	return 0;
+> > =20
+> > =20
+> >  out_dir:
+> > -	if (dir_de) {
+> > -		kunmap(dir_page);
+> > -		put_page(dir_page);
+> > -	}
+> > +	if (dir_de)
+> > +		ufs_put_page(dir_page, dir_page_addr);
+> >  out_old:
+> > -	kunmap(old_page);
+> > -	put_page(old_page);
+> > +	ufs_put_page(old_page, old_page_addr);
+> >  out:
+> >  	return err;
+> >  }
+> >
+> > [snip]
+> >
+
+

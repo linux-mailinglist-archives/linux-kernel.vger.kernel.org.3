@@ -2,129 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 347F2528E01
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC030528F2C
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345458AbiEPTfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60072 "EHLO
+        id S1348353AbiEPTws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232405AbiEPTfL (ORCPT
+        with ESMTP id S1345913AbiEPTrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:35:11 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926153EB8E
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:35:10 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id ev18so4759448pjb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:35:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=L7HskJWRuMiU99+hkHXykGvfHtSWUlmm80hgvb21NIA=;
-        b=gJrVJGg9f8wooWOkKB64seNV3Y9DZXpcdjoXjuuPOxiXlcP66WigXuu+Amy9BJUtn3
-         u3HIuSQ3Vj7xMV3RjDAAp9HbBGxztYKpqVq1zxv8ClC5y3HQj0KT172tBAjS7GdbFELT
-         yrt6iQxwGu49aljDYpDwbqHc5KCh9Ncmv1wbECFIGmCXHLRNvhWI4rbCeLkBLbfDIsGI
-         VIr+rdcZn/lP13UJSV7X1aOdA/55R5a+xJP1EK7t/pmevOLtcMui/qXpmKuvkrfZKmnW
-         gWfJXYJG4AhssF4f4ESfctbEvscFLqg+V+t56mdNMogk454u6SS5Fonr+BWU0aivVmYA
-         OIGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=L7HskJWRuMiU99+hkHXykGvfHtSWUlmm80hgvb21NIA=;
-        b=fS7b6ulRKQft9P02vfKohL7ofmOvaiVjNRz5XG8H9ssAZ7O7VR3G1Pgo8SdVzIRh5g
-         4y4jP8lVwR1hlLMy8rh2ud6P1lyiQVGpFe9sNtqVpqYJ5CS/pTRpA97rBlwMImFtmh3r
-         UagCYI6MH6CsmKz7rqgtB1Bpp2anGqWC0Z1VwR7KpjrMyp8EI71OIO6S+MtBwGHf96AO
-         GQnAwh1Eb4H2TwZQ2YXONWBiqkyNBX7kRi8BVRQoYQqnSyv53ipRSiWLZK6rfuDzyBNl
-         lL433eOwTyFzrMDNdSa9wi1CX1H8VXlrKYznUFivyRH1k11aIyICv9TCMfFMmVWtCv5T
-         e25A==
-X-Gm-Message-State: AOAM533DNzjY1TXIvWYz1boqNrDm2K1TEkcEM8X3VizwkoLPZCG9Zqut
-        zHfkNXE/mK0rLjaXzzL/Z5g=
-X-Google-Smtp-Source: ABdhPJy3GngRJ0n4QNJAd+T8tx3PdZjnc7aplXGOLXY5LunKkZNBOK7Bd1JY8RjBWpSSa6k0JJeiog==
-X-Received: by 2002:a17:90b:3ecd:b0:1dc:945e:41b1 with SMTP id rm13-20020a17090b3ecd00b001dc945e41b1mr21009292pjb.208.1652729709941;
-        Mon, 16 May 2022 12:35:09 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::4:62fc])
-        by smtp.gmail.com with ESMTPSA id p23-20020a62ab17000000b0050dc76281d6sm7427269pff.176.2022.05.16.12.35.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 12:35:09 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 16 May 2022 09:35:07 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Imran Khan <imran.f.khan@oracle.com>
-Cc:     viro@zeniv.linux.org.uk, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/5] kernfs: make ->attr.open RCU protected.
-Message-ID: <YoKna/Ty+k9O+pjt@slm.duckdns.org>
-References: <20220428055431.3826852-1-imran.f.khan@oracle.com>
- <20220428055431.3826852-3-imran.f.khan@oracle.com>
- <YnQtL7+GYHwpo4n2@slm.duckdns.org>
- <f5ff2554-580c-c817-b77f-25e2ef46411f@oracle.com>
- <Yn0/RrgMRie2YPEb@slm.duckdns.org>
- <526b46a7-7daa-9050-1276-e19836816991@oracle.com>
+        Mon, 16 May 2022 15:47:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C514542A33;
+        Mon, 16 May 2022 12:44:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A20461512;
+        Mon, 16 May 2022 19:44:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 233B8C34100;
+        Mon, 16 May 2022 19:44:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652730264;
+        bh=Cg/MuKJoap0hTEysGvsdxLpB4ecmEPAhHBdrvdsOYEQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=AMrDjXaQpDOxU2SA2f6q8htd45Xzh+NUYUUr+rX4JuE2CyCooryxIsuRIeNl4Xu5l
+         6/joJRNj5cRL5KgLNmq3FW3S69Qju62VTjJFPxX4Ln64kP2oN2muuZt3hHmVshnlLR
+         RgKBD/rgkcOKcSWwcCrWod3DGTcyvxp6zQG6bM+w=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Felix Kaechele <felix@kaechele.ca>,
+        Sven Eckelmann <sven@narfation.org>,
+        Simon Wunderlich <sw@simonwunderlich.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 01/66] batman-adv: Dont skb_split skbuffs with frag_list
+Date:   Mon, 16 May 2022 21:36:01 +0200
+Message-Id: <20220516193619.445066192@linuxfoundation.org>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
+References: <20220516193619.400083785@linuxfoundation.org>
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <526b46a7-7daa-9050-1276-e19836816991@oracle.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Sven Eckelmann <sven@narfation.org>
 
-On Mon, May 16, 2022 at 02:00:50AM +1000, Imran Khan wrote:
-> +/*
-> + * Deref RCU protected kn->attr.open.
-> + * If both @of->list and @kn->attr.open->files are non empty, we can safely
-> + * assume that @of is on @kn->attr.open and hence @kn->attr.open will not
-> + * vanish and derefeencing is safe here.
-> + */
+[ Upstream commit a063f2fba3fa633a599253b62561051ac185fa99 ]
 
-Maybe use proper function comment starting with /**?
+The receiving interface might have used GRO to receive more fragments than
+MAX_SKB_FRAGS fragments. In this case, these will not be stored in
+skb_shinfo(skb)->frags but merged into the frag list.
 
-> +static struct kernfs_open_node *
-> +kernfs_deref_on_check(struct kernfs_open_file *of, struct kernfs_node *kn)
-> +{
-> +       struct kernfs_open_node *on;
-> +
-> +       on = rcu_dereference_check(kn->attr.open, !list_empty(&of->list));
-> +
-> +       if (on && list_empty(&on->files))
-> +               return NULL;
-> +       else
-> +               return on;
-> +}
+batman-adv relies on the function skb_split to split packets up into
+multiple smaller packets which are not larger than the MTU on the outgoing
+interface. But this function cannot handle frag_list entries and is only
+operating on skb_shinfo(skb)->frags. If it is still trying to split such an
+skb and xmit'ing it on an interface without support for NETIF_F_FRAGLIST,
+then validate_xmit_skb() will try to linearize it. But this fails due to
+inconsistent information. And __pskb_pull_tail will trigger a BUG_ON after
+skb_copy_bits() returns an error.
 
-Why does it need to return NULL on empty on->files? We wanna trigger lockdep
-warning cuz that's a bug but it's not like the caller can recover from it
-(short of causing unexpected user visible error), so I don't see what the
-point is.
+In case of entries in frag_list, just linearize the skb before operating on
+it with skb_split().
 
-> If this looks okay then I can replace usage of kernfs_deref_on_raw with
-> kernfs_deref_on_check.
+Reported-by: Felix Kaechele <felix@kaechele.ca>
+Fixes: c6c8fea29769 ("net: Add batman-adv meshing protocol")
+Signed-off-by: Sven Eckelmann <sven@narfation.org>
+Tested-by: Felix Kaechele <felix@kaechele.ca>
+Signed-off-by: Simon Wunderlich <sw@simonwunderlich.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ net/batman-adv/fragmentation.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-So, this is the main deref function without holding the mutex, right? Then
-name it kernfs_deref_open_node() (or on but it seem a bit confusing to me).
-
-> > and in the check condition, add the conditions that you need to make this
-> > not trigger warning when used in all the places that you wanna use it.
-> > 
-> 
-> Since ->attr.open is always accessed/modified under kernfs_open_file_mutex, I
-> have included this check in helper which should be used only while holding this
-> mutex. Do you mean that I should include some additional checks as well in the
-> below helper:
-
-Yeah, you're right. _protected makes sense for this one.
-
-Thanks.
-
+diff --git a/net/batman-adv/fragmentation.c b/net/batman-adv/fragmentation.c
+index 1f1f5b0873b2..895d834d479d 100644
+--- a/net/batman-adv/fragmentation.c
++++ b/net/batman-adv/fragmentation.c
+@@ -478,6 +478,17 @@ int batadv_frag_send_packet(struct sk_buff *skb,
+ 		goto free_skb;
+ 	}
+ 
++	/* GRO might have added fragments to the fragment list instead of
++	 * frags[]. But this is not handled by skb_split and must be
++	 * linearized to avoid incorrect length information after all
++	 * batman-adv fragments were created and submitted to the
++	 * hard-interface
++	 */
++	if (skb_has_frag_list(skb) && __skb_linearize(skb)) {
++		ret = -ENOMEM;
++		goto free_skb;
++	}
++
+ 	/* Create one header to be copied to all fragments */
+ 	frag_header.packet_type = BATADV_UNICAST_FRAG;
+ 	frag_header.version = BATADV_COMPAT_VERSION;
 -- 
-tejun
+2.35.1
+
+
+

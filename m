@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 662DF52915E
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:47:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B5C528FC9
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbiEPUR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:17:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44054 "EHLO
+        id S1348875AbiEPUb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348776AbiEPT64 (ORCPT
+        with ESMTP id S1351023AbiEPUB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:58:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27BBE49F04;
-        Mon, 16 May 2022 12:51:02 -0700 (PDT)
+        Mon, 16 May 2022 16:01:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95EFB473BF;
+        Mon, 16 May 2022 12:56:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B882B60A14;
-        Mon, 16 May 2022 19:51:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C19CBC34100;
-        Mon, 16 May 2022 19:51:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32A7260A50;
+        Mon, 16 May 2022 19:56:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FDD4C385AA;
+        Mon, 16 May 2022 19:56:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730661;
-        bh=GPeUlZ7dqcAiB0O1XvoRl8OE1TanIDmrxDmGkvO4ECk=;
+        s=korg; t=1652731000;
+        bh=jTf7Eh2bb4hOd52Orvy2/2LK5efSVJFs0rT6fhpo+Wc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D3H4oeGmxchcgfJXeL3InNVo5eL6VATjXDBpejuUNTIcOdSpmhbuX+KWRKEItRSt8
-         mjE2jES2mXLm9iW3crUCupbRjU/BEHQvcjjKjFjrtXQm/1sgizJStzPULGjqeof0gV
-         cofkMfP+c2ahfAwgnK2JifU4HqB9hN0qCZUSfwDk=
+        b=vc2f2UBQak/vAY6A2PijVGb1h9NulVx9nM+FzINEKdk7sWPIvbavqdgjfdHy1psJW
+         gaTjbBWp97CUvKWTZe6h79QbQL+biQOdGlTZEXGXxYvqeNbiW7LD6RpuYlxH7Em3cs
+         YFc8yvRY62TMSNbjwQO3R1Aj+leTOv1qGvGapvmI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH 5.15 070/102] usb: cdc-wdm: fix reading stuck on device close
-Date:   Mon, 16 May 2022 21:36:44 +0200
-Message-Id: <20220516193626.005661571@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Thi=C3=A9baud=20Weksteen?= <tweek@google.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: [PATCH 5.17 071/114] firmware_loader: use kernel credentials when reading firmware
+Date:   Mon, 16 May 2022 21:36:45 +0200
+Message-Id: <20220516193627.529238328@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
-References: <20220516193623.989270214@linuxfoundation.org>
+In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
+References: <20220516193625.489108457@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,56 +56,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergey Ryazanov <ryazanov.s.a@gmail.com>
+From: Thiébaud Weksteen <tweek@google.com>
 
-commit 01e01f5c89773c600a9f0b32c888de0146066c3a upstream.
+commit 581dd69830341d299b0c097fc366097ab497d679 upstream.
 
-cdc-wdm tracks whether a response reading request is in-progress and
-blocks the next request from being sent until the previous request is
-completed. As soon as last user closes the cdc-wdm device file, the
-driver cancels any ongoing requests, resets the pending response
-counter, but leaves the response reading in-progress flag
-(WDM_RESPONDING) untouched.
+Device drivers may decide to not load firmware when probed to avoid
+slowing down the boot process should the firmware filesystem not be
+available yet. In this case, the firmware loading request may be done
+when a device file associated with the driver is first accessed. The
+credentials of the userspace process accessing the device file may be
+used to validate access to the firmware files requested by the driver.
+Ensure that the kernel assumes the responsibility of reading the
+firmware.
 
-So if the user closes the device file during the response receive
-request is being performed, no more data will be obtained from the
-modem. The request will be cancelled, effectively preventing the
-WDM_RESPONDING flag from being reseted. Keeping the flag set will
-prevent a new response receive request from being sent, permanently
-blocking the read path. The read path will staying blocked until the
-module will be reloaded or till the modem will be re-attached.
+This was observed on Android for a graphic driver loading their firmware
+when the device file (e.g. /dev/mali0) was first opened by userspace
+(i.e. surfaceflinger). The security context of surfaceflinger was used
+to validate the access to the firmware file (e.g.
+/vendor/firmware/mali.bin).
 
-This stuck has been observed with a Huawei E3372 modem attached to an
-OpenWrt router and using the comgt utility to set up a network
-connection.
+Previously, Android configurations were not setting up the
+firmware_class.path command line argument and were relying on the
+userspace fallback mechanism. In this case, the security context of the
+userspace daemon (i.e. ueventd) was consistently used to read firmware
+files. More Android devices are now found to set firmware_class.path
+which gives the kernel the opportunity to read the firmware directly
+(via kernel_read_file_from_path_initns). In this scenario, the current
+process credentials were used, even if unrelated to the loading of the
+firmware file.
 
-Fix this issue by clearing the WDM_RESPONDING flag on the device file
-close.
-
-Without this fix, the device reading stuck can be easily reproduced in a
-few connection establishing attempts. With this fix, a load test for
-modem connection re-establishing worked for several hours without any
-issues.
-
-Fixes: 922a5eadd5a3 ("usb: cdc-wdm: Fix race between autosuspend and reading from the device")
-Signed-off-by: Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Cc: stable <stable@vger.kernel.org>
-Acked-by: Oliver Neukum <oneukum@suse.com>
-Link: https://lore.kernel.org/r/20220501175828.8185-1-ryazanov.s.a@gmail.com
+Signed-off-by: Thiébaud Weksteen <tweek@google.com>
+Cc: <stable@vger.kernel.org> # 5.10
+Reviewed-by: Paul Moore <paul@paul-moore.com>
+Acked-by: Luis Chamberlain <mcgrof@kernel.org>
+Link: https://lore.kernel.org/r/20220502004952.3970800-1-tweek@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/class/cdc-wdm.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/base/firmware_loader/main.c |   17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
---- a/drivers/usb/class/cdc-wdm.c
-+++ b/drivers/usb/class/cdc-wdm.c
-@@ -774,6 +774,7 @@ static int wdm_release(struct inode *ino
- 			poison_urbs(desc);
- 			spin_lock_irq(&desc->iuspin);
- 			desc->resp_count = 0;
-+			clear_bit(WDM_RESPONDING, &desc->flags);
- 			spin_unlock_irq(&desc->iuspin);
- 			desc->manage_power(desc->intf, 0);
- 			unpoison_urbs(desc);
+--- a/drivers/base/firmware_loader/main.c
++++ b/drivers/base/firmware_loader/main.c
+@@ -735,6 +735,8 @@ _request_firmware(const struct firmware
+ 		  size_t offset, u32 opt_flags)
+ {
+ 	struct firmware *fw = NULL;
++	struct cred *kern_cred = NULL;
++	const struct cred *old_cred;
+ 	bool nondirect = false;
+ 	int ret;
+ 
+@@ -751,6 +753,18 @@ _request_firmware(const struct firmware
+ 	if (ret <= 0) /* error or already assigned */
+ 		goto out;
+ 
++	/*
++	 * We are about to try to access the firmware file. Because we may have been
++	 * called by a driver when serving an unrelated request from userland, we use
++	 * the kernel credentials to read the file.
++	 */
++	kern_cred = prepare_kernel_cred(NULL);
++	if (!kern_cred) {
++		ret = -ENOMEM;
++		goto out;
++	}
++	old_cred = override_creds(kern_cred);
++
+ 	ret = fw_get_filesystem_firmware(device, fw->priv, "", NULL);
+ 
+ 	/* Only full reads can support decompression, platform, and sysfs. */
+@@ -776,6 +790,9 @@ _request_firmware(const struct firmware
+ 	} else
+ 		ret = assign_fw(fw, device);
+ 
++	revert_creds(old_cred);
++	put_cred(kern_cred);
++
+  out:
+ 	if (ret < 0) {
+ 		fw_abort_batch_reqs(fw);
 
 

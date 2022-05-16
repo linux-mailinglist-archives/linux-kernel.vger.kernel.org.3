@@ -2,130 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2568E528F8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E115291B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234426AbiEPUjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
+        id S237559AbiEPUjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347378AbiEPUZ7 (ORCPT
+        with ESMTP id S1347238AbiEPUXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:25:59 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDC84BB88;
-        Mon, 16 May 2022 13:10:19 -0700 (PDT)
-Received: from g550jk.localnet (a246182.upc-a.chello.nl [62.163.246.182])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 790ADC77E6;
-        Mon, 16 May 2022 20:09:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1652731787; bh=n3KNc/SOocoBncfkRYrY0TOgCH0gJ+eKHj2WvbuIB3M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=NRUUgsnHwtW8aASLKkBWkdcWUDFz8pZ3h0gi84MBp8qz+D9ilRjeM5RJWfNjwPyqM
-         qAmBlRqxyNNOoviG85T98fDlnY2+aKS96dcCCk3vrEyenaRyaOuOkP8h2IxsDVl8xy
-         66vDh8UiKYZjHfS9BcDKiG+RIIogqF7I67BKVd6o=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Subject: Re: [PATCH 1/2] ARM: dts: qcom: Add LPG node to pm8941
-Date:   Mon, 16 May 2022 22:09:47 +0200
-Message-ID: <2629354.mvXUDI8C0e@g550jk>
-In-Reply-To: <YnSazu3rcBMFPxYw@builder.lan>
-References: <20220504205411.1510667-1-bjorn.andersson@linaro.org> <12122358.O9o76ZdvQC@g550jk> <YnSazu3rcBMFPxYw@builder.lan>
+        Mon, 16 May 2022 16:23:34 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907BA4B404
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 13:09:57 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id n10so15480070pjh.5
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 13:09:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wzx7NT/bkCjJnHFo5lwIctB7nDe602qxHRo5R1R5KC0=;
+        b=AMws03KWgp7hhyS5yH0ZZgkyrQGUxWWjom10rEHGW9HVJe/B39vQdFbOzZDngRLz85
+         11ztlJ90TsfQUyhk0y91m3LCis4j0lmBDTWy8wpzsiElk1XXuk6fnX788cAE6k8QrYwL
+         yT0zTxFfM5QPl22vfnBxoEpoR2ZT9FwAzIynCVhKMued/cmd7czQiTSWJbnLSO8jhzlw
+         6WSvtvN6wUH++ILH1ZQIUrxoVSwjrESLNF6kRwOXQ/lcD3Fp66CwtWMylB5F7do4Wmqj
+         S4qD+3iee59hXjru6GsfvY4Z89JrB+dkWA6OcH6fkzib1ntLAajlQQMdEXjuzmzzOscb
+         p/bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wzx7NT/bkCjJnHFo5lwIctB7nDe602qxHRo5R1R5KC0=;
+        b=8QRWnShN4M1dklF/u/SINslEeYHbo5EUBh6aIKcnIihgMgvWztvSIGZt52dUoBzVTa
+         0Werggna2d/xkbBu/jLown0FWGJNpj8+qhNQrJa0SSkEPffYfAh8nHtRQG2IMXzuMYUE
+         HoJBcGDFrFNTrmcRU2S0KmlCF27P5PqidoXGCYjUYStLnTVUUpJkVxTVBRzhOqrn6ecq
+         2bwWk3nEVesCq3U43Qxuw/dUoec7eJ/VxNUQvGHDpV45Y/ebgO4nSpyHgoC/2/DDUc9l
+         7trrDf7hm/p3ol90NRK5r2eI7rSsQBH2p+wqyYfQcFTsdg21/t3h/oU/uItpZ/jWepUu
+         47zA==
+X-Gm-Message-State: AOAM533R6TFIYrrjVgCGeBcZYCncYBDgM+WT8pMq0njW02QSpVo+7zMY
+        o18gKk+dsFXI+VbRKkCjV+SPpQ==
+X-Google-Smtp-Source: ABdhPJz0Ftz1ke7eSHpyZ28XpMixfb3ZztfsWTYIdzRosBnT6uhFx3Dm1ZEtu6S5LaqcUQfV0PLhHA==
+X-Received: by 2002:a17:903:1c9:b0:161:89e8:229 with SMTP id e9-20020a17090301c900b0016189e80229mr4616450plh.106.1652731796204;
+        Mon, 16 May 2022 13:09:56 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id p14-20020a170902780e00b00161a16f0050sm229094pll.222.2022.05.16.13.09.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 13:09:55 -0700 (PDT)
+Date:   Mon, 16 May 2022 20:09:52 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 15/34] KVM: x86: hyper-v: Introduce
+ kvm_hv_is_tlb_flush_hcall()
+Message-ID: <YoKvkEfvyGJWNmAj@google.com>
+References: <20220414132013.1588929-1-vkuznets@redhat.com>
+ <20220414132013.1588929-16-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220414132013.1588929-16-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
-
-On Freitag, 6. Mai 2022 05:49:34 CEST Bjorn Andersson wrote:
-> On Thu 05 May 03:01 CDT 2022, Luca Weiss wrote:
-> > Hi Bjorn,
-> > 
-> > On Mittwoch, 4. Mai 2022 22:54:10 CEST Bjorn Andersson wrote:
-> > > The PM8941 contains 8 LPG channels, as well as TRILED and LUT blocks.
-> > > Add a node for these.
-> > > 
-> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > ---
-> > > 
-> > >  arch/arm/boot/dts/qcom-pm8941.dtsi | 9 +++++++++
-> > >  1 file changed, 9 insertions(+)
-> > > 
-> > > diff --git a/arch/arm/boot/dts/qcom-pm8941.dtsi
-> > > b/arch/arm/boot/dts/qcom-pm8941.dtsi index cdd2bdb77b32..7881a071b372
-> > > 100644
-> > > --- a/arch/arm/boot/dts/qcom-pm8941.dtsi
-> > > +++ b/arch/arm/boot/dts/qcom-pm8941.dtsi
-> > > @@ -144,6 +144,15 @@ pm8941_1: pm8941@1 {
-> > > 
-> > >  		#address-cells = <1>;
-> > >  		#size-cells = <0>;
-> > > 
-> > > +		pm8941_lpg: lpg {
-> > > +			compatible = "qcom,pm8941-lpg";
-> > > +
-> > > +			#address-cells = <1>;
-> > > +			#size-cells = <0>;
-> > 
-> > Just curious, why doesn't pm8941 have #pwm-cells = <2>; like the other lpg
-> > nodes in [0]?
+On Thu, Apr 14, 2022, Vitaly Kuznetsov wrote:
+> The newly introduced helper checks whether vCPU is performing a
+> Hyper-V TLB flush hypercall. This is required to filter out L2 TLB
+> flush hypercalls for processing.
 > 
-> I guess I didn't have a need for the lpg to be a pwm-chip on this pmic,
-> yet. This could be added now, or at a later point when someone has a
-> usecase for the pwm-chip.
-
-While I don't know the use case for using the lpg as pwm on consumer hardware, 
-it's maybe a good idea to add now?
-
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/kvm/hyperv.h | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
 > 
-> > Other than that, the node works fine on pm8941. Will send a patch for
-> > enabling notification LED on msm8974-FP2 soon.
+> diff --git a/arch/x86/kvm/hyperv.h b/arch/x86/kvm/hyperv.h
+> index d59f96700104..ca67c18cef2c 100644
+> --- a/arch/x86/kvm/hyperv.h
+> +++ b/arch/x86/kvm/hyperv.h
+> @@ -170,6 +170,24 @@ static inline void kvm_hv_vcpu_empty_flush_tlb(struct kvm_vcpu *vcpu)
+>  	tlb_flush_ring = kvm_hv_get_tlb_flush_ring(vcpu);
+>  	tlb_flush_ring->read_idx = tlb_flush_ring->write_idx;
+>  }
+> +
+> +static inline bool kvm_hv_is_tlb_flush_hcall(struct kvm_vcpu *vcpu)
+> +{
+> +	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> +	u16 code;
+> +
+> +	if (!hv_vcpu)
+> +		return false;
+> +
+> +	code = is_64_bit_hypercall(vcpu) ? kvm_rcx_read(vcpu) :
+> +		kvm_rax_read(vcpu);
+
+Nit, can you align the two expressions?
+
+	code = is_64_bit_hypercall(vcpu) ? kvm_rcx_read(vcpu) :
+					   kvm_rax_read(vcpu);
+
+> +
+> +	return (code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE ||
+> +		code == HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST ||
+> +		code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX ||
+> +		code == HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX);
+> +}
+> +
+>  void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu);
+>  
+>  
+> -- 
+> 2.35.1
 > 
-> If you turn that into a Tested-by, and preferably a Reviewed-by, I would
-> have what I need to merge the two changes.
-
-In any case:
-
-Tested-by: Luca Weiss <luca@z3ntu.xyz>
-Reviewed-by: Luca Weiss <luca@z3ntu.xyz>
-
-Regards
-Luca
-
-> 
-> Looking forward to the FP2 patch.
-> 
-> Thanks,
-> Bjorn
-> 
-> > Regards
-> > Luca
-> > 
-> > [0]
-> > https://lore.kernel.org/linux-arm-msm/20220505022706.1692554-2-bjorn.ande
-> > rsson@linaro.org/> 
-> > > +
-> > > +			status = "disabled";
-> > > +		};
-> > > +
-> > > 
-> > >  		pm8941_wled: wled@d800 {
-> > >  		
-> > >  			compatible = "qcom,pm8941-wled";
-> > >  			reg = <0xd800>;
-
-
-
-

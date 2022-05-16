@@ -2,57 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B28527E7A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:22:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58925527E43
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241028AbiEPHVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 03:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58920 "EHLO
+        id S240838AbiEPHJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 03:09:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241090AbiEPHVp (ORCPT
+        with ESMTP id S240883AbiEPHJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 03:21:45 -0400
-X-Greylist: delayed 907 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 16 May 2022 00:21:41 PDT
-Received: from sender11-op-o11.zoho.eu (sender11-op-o11.zoho.eu [31.186.226.225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6439D17076
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:21:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1652684772; cv=none; 
-        d=zohomail.eu; s=zohoarc; 
-        b=Ngw7i+0UWu7Qdbil8j+grmG8yJ1wunVJtZJGAOxIqr/+JVsg6BMwqoocN/3bRvzdiiMgziQxTSHQEMO8cUSsqBFTE7PB93xr79hBNJBI7Vz5anbq0rGrrmrXd0LvNzvdd+OxhFfYcZ67TMi8yChrNpZLPGIRpH7T8V4GnDlRqnk=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
-        t=1652684772; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=LehfBAU/QvIra7OAgcW4TPq9bLABt9XwCeJZGewh1TA=; 
-        b=X0RAg8jgQ/SeF7bxmUVmj8bn3Vc4WNbf1DexcrxorAZL8Evkq7kfTL0l5WLmD/+dRgmS/6OuU5KJKI3FnkpiPX+t2YUnpT/gquf6W35yk5g6G/WB8ZuZCFAsHggzZW7vevpPk1hgwYsuLGrR3/TmyJNE4jW0PhP5PF0M2PQG5fA=
-ARC-Authentication-Results: i=1; mx.zohomail.eu;
-        dkim=pass  header.i=kempniu.pl;
-        spf=pass  smtp.mailfrom=kernel@kempniu.pl;
-        dmarc=pass header.from=<kernel@kempniu.pl>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1652684772;
-        s=zmail; d=kempniu.pl; i=kernel@kempniu.pl;
-        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=LehfBAU/QvIra7OAgcW4TPq9bLABt9XwCeJZGewh1TA=;
-        b=QhGQBq5FWlhvbilFYEJvQteh6s5HQJjUrrvUDpGtDn8+UoVoHhbNe0XKO9RCWXYb
-        PdTjTIww0Dg+n3cg3TvhkvnClCqcwIbfzMsJs6b5Xs4UZKSGV/j2XdSQ3GpmqH4Pg0k
-        /OMz2Ipt1wHfGC7YOPXBFIXL+jfIwiZGpl8ATyyc=
-Received: from larwa.hq.kempniu.pl (212.180.138.61 [212.180.138.61]) by mx.zoho.eu
-        with SMTPS id 16526847706676.485162993223867; Mon, 16 May 2022 09:06:10 +0200 (CEST)
-From:   =?UTF-8?q?Micha=C5=82=20K=C4=99pie=C5=84?= <kernel@kempniu.pl>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Message-ID: <20220516070601.11428-3-kernel@kempniu.pl>
-Subject: [PATCH 2/2] mtdchar: use kvmalloc() for potentially large allocations
-Date:   Mon, 16 May 2022 09:06:01 +0200
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516070601.11428-1-kernel@kempniu.pl>
-References: <20220516070601.11428-1-kernel@kempniu.pl>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Mon, 16 May 2022 03:09:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2904AE038;
+        Mon, 16 May 2022 00:08:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA4D761016;
+        Mon, 16 May 2022 07:08:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D267C385B8;
+        Mon, 16 May 2022 07:08:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652684924;
+        bh=AgxF2rYvCdlJSEVA4mRgENVpDWLgAZ7+rZgRTZv2Dmw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nSBeQY7EAicS4si3qitqxImgQi6Hh/4F8ZwkSjlLQWUsY0K/hf1mU6nmEgEwXzltQ
+         gt6EvL48S9LU8IwCpWLZZDS57t3GrWNyrrfchGKWWALYmQRVrrHAKTy/gLXLg6vKjW
+         84lc7eWmguE0Om6w2su+dsuL+YTeAkUxTsPT5lROqLlZkjZfXgApv6QyC1ugUB8sBW
+         GwY5h5r0LOT1K8ikuBGoJFbM4Mk8FZWImKO2InmgnxRqhSjOydVneNodzR7IuMschT
+         T73VOcSXUhSUuUXbQNBJn6ZmJTUxNzu5eL//Ufw7nLYLfvX05Wr7MjwuhwhSOMlo9w
+         /049dy/Fwh0Cw==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nqUqK-00BXKF-MP; Mon, 16 May 2022 08:08:41 +0100
+Date:   Mon, 16 May 2022 08:08:30 +0100
+Message-ID: <87o7zylztd.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>, pali@kernel.org,
+        Ingo Molnar <mingo@kernel.org>
+Subject: Re: Unexpected kernel BRK exception at EL1 - Internal error: BRK handler: f20003e8 - gic_dist_config
+In-Reply-To: <CA+G9fYtsp-1pi6d4J71BPYh-msjzbVt_-v3YrUu12dXPeyqTDg@mail.gmail.com>
+References: <CA+G9fYtsp-1pi6d4J71BPYh-msjzbVt_-v3YrUu12dXPeyqTDg@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: naresh.kamboju@linaro.org, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, lkft-triage@lists.linaro.org, sfr@canb.auug.org.au, tglx@linutronix.de, pali@kernel.org, mingo@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,55 +69,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mtdchar_write_ioctl() calls kmalloc() with the 'size' argument set to
-the smaller of two values: the write request's data/OOB length provided
-by user space and the erase block size of the MTD device.  If the latter
-is large, kmalloc() may not be able to serve such allocation requests.
-Use kvmalloc() instead.  Correspondingly, replace kfree() calls with
-kvfree() calls.
+On Mon, 16 May 2022 07:16:22 +0100,
+Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> 
+> The kernel crash reported on arm64 juno-r2 device with kselftest-merge config
+> while booting Linux next-20220513 kernel  [1].
+> 
+> [    0.000000] Booting Linux on physical CPU 0x0000000100 [0x410fd033]
+> [    0.000000] Linux version 5.18.0-rc6-next-20220513
+> (oe-user@oe-host) (aarch64-linaro-linux-gcc (GCC) 7.3.0, GNU ld (GNU
+> Binutils) 2.30.0.20180208) #1 SMP PREEMPT Fri May 13 08:34:42 UTC 2022
+> [    0.000000] Machine model: ARM Juno development board (r2)
+> [    0.000000] earlycon: pl11 at MMIO 0x000000007ff80000 (options '')
+> [    0.000000] printk: bootconsole [pl11] enabled
+> [    0.000000] efi: UEFI not found.
+> [    0.000000] NUMA: No NUMA configuration found
+> [    0.000000] NUMA: Faking a node at [mem
+> 0x0000000080000000-0x00000009ffffffff]
+> [    0.000000] NUMA: NODE_DATA [mem 0x9fefce600-0x9fefd0fff]
+> [    0.000000] Zone ranges:
+> [    0.000000]   DMA      [mem 0x0000000080000000-0x00000000ffffffff]
+> [    0.000000]   DMA32    empty
+> [    0.000000]   Normal   [mem 0x0000000100000000-0x00000009ffffffff]
+> [    0.000000] Movable zone start for each node
+> [    0.000000] Early memory node ranges
+> [    0.000000]   node   0: [mem 0x0000000080000000-0x00000000feffffff]
+> [    0.000000]   node   0: [mem 0x0000000880000000-0x00000009ffffffff]
+> [    0.000000] Initmem setup node 0 [mem 0x0000000080000000-0x00000009ffffffff]
+> [    0.000000] On node 0, zone Normal: 4096 pages in unavailable ranges
+> [    0.000000] cma: Reserved 32 MiB at 0x00000000fd000000
+> [    0.000000] psci: probing for conduit method from DT.
+> [    0.000000] psci: PSCIv1.1 detected in firmware.
+> [    0.000000] psci: Using standard PSCI v0.2 function IDs
+> [    0.000000] psci: Trusted OS migration not required
+> [    0.000000] psci: SMC Calling Convention v1.0
+> [    0.000000] percpu: Embedded 31 pages/cpu s89632 r8192 d29152 u126976
+> [    0.000000] pcpu-alloc: s89632 r8192 d29152 u126976 alloc=31*4096
+> [    0.000000] pcpu-alloc: [0] 0 [0] 1 [0] 2 [0] 3 [0] 4 [0] 5
+> [    0.000000] Detected VIPT I-cache on CPU0
+> [    0.000000] CPU features: detected: ARM erratum 843419
+> [    0.000000] CPU features: detected: ARM erratum 845719
+> [    0.000000] Fallback order for Node 0: 0
+> [    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 2060288
+> [    0.000000] Policy zone: Normal
+> [    0.000000] Kernel command line: console=ttyAMA0,115200n8
+> root=/dev/nfs rw
+> nfsroot=10.66.16.125:/var/lib/lava/dispatcher/tmp/5021955/extract-nfsrootfs-23zdukp_,tcp,hard,vers=3
+> rootwait earlycon=pl011,0x7ff80000 debug systemd.log_target=null
+> user_debug=31 androidboot.hardware=juno loglevel=9
+> sky2.mac_address=0x00,0x02,0xF7,0x00,0x68,0x3F ip=dhcp
+> [    0.000000] Unknown kernel command line parameters
+> \"user_debug=31\", will be passed to user space.
+> [    0.000000] Dentry cache hash table entries: 1048576 (order: 11,
+> 8388608 bytes, linear)
+> [    0.000000] Inode-cache hash table entries: 524288 (order: 10,
+> 4194304 bytes, linear)
+> [    0.000000] mem auto-init: stack:off, heap alloc:on, heap free:off
+> [    0.000000] Stack Depot early init allocating hash table with
+> memblock_alloc, 8388608 bytes
+> [    0.000000] software IO TLB: mapped [mem
+> 0x00000000f9000000-0x00000000fd000000] (64MB)
+> [    0.000000] Memory: 8038640K/8372224K available (22784K kernel
+> code, 5468K rwdata, 11824K rodata, 11520K init, 11734K bss, 300816K
+> reserved, 32768K cma-reserved)
+> [    0.000000] **********************************************************
+> [    0.000000] **   NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE   **
+> [    0.000000] **                                                      **
+> [    0.000000] ** This system shows unhashed kernel memory addresses   **
+> [    0.000000] ** via the console, logs, and other interfaces. This    **
+> [    0.000000] ** might reduce the security of your system.            **
+> [    0.000000] **                                                      **
+> [    0.000000] ** If you see this message and you are not debugging    **
+> [    0.000000] ** the kernel, report this immediately to your system   **
+> [    0.000000] ** administrator!                                       **
+> [    0.000000] **                                                      **
+> [    0.000000] **   NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE   **
+> [    0.000000] **********************************************************
+> [    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=6, Nodes=1
+> [    0.000000] ftrace: allocating 69398 entries in 272 pages
+> [    0.000000] ftrace: allocated 272 pages with 2 groups
+> [    0.000000] trace event string verifier disabled
+> [    0.000000] Running RCU self tests
+> [    0.000000] rcu: Preemptible hierarchical RCU implementation.
+> [    0.000000] rcu: RCU event tracing is enabled.
+> [    0.000000] rcu: RCU lockdep checking is enabled.
+> [    0.000000] rcu: RCU restricting CPUs from NR_CPUS=256 to nr_cpu_ids=6.
+> [    0.000000] Trampoline variant of Tasks RCU enabled.
+> [    0.000000] Rude variant of Tasks RCU enabled.
+> [    0.000000] Tracing variant of Tasks RCU enabled.
+> [    0.000000] rcu: RCU calculated value of scheduler-enlistment delay
+> is 25 jiffies.
+> [    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=6
+> [    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+> [    0.000000] Root IRQ handler: gic_handle_irq
+> [    0.000000] GIC: Using split EOI/Deactivate mode
+> [    0.000000] Unexpected kernel BRK exception at EL1
 
-Suggested-by: Richard Weinberger <richard@nod.at>
-Signed-off-by: Micha=C5=82 K=C4=99pie=C5=84 <kernel@kempniu.pl>
----
- drivers/mtd/mtdchar.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Huh. Who inserts random BRKs like this?
 
-diff --git a/drivers/mtd/mtdchar.c b/drivers/mtd/mtdchar.c
-index b2700f8467ff..05860288a7af 100644
---- a/drivers/mtd/mtdchar.c
-+++ b/drivers/mtd/mtdchar.c
-@@ -623,16 +623,16 @@ static int mtdchar_write_ioctl(struct mtd_info *mtd,
-=20
- =09datbuf_len =3D min_t(size_t, req.len, mtd->erasesize);
- =09if (datbuf_len > 0) {
--=09=09datbuf =3D kmalloc(datbuf_len, GFP_KERNEL);
-+=09=09datbuf =3D kvmalloc(datbuf_len, GFP_KERNEL);
- =09=09if (!datbuf)
- =09=09=09return -ENOMEM;
- =09}
-=20
- =09oobbuf_len =3D min_t(size_t, req.ooblen, mtd->erasesize);
- =09if (oobbuf_len > 0) {
--=09=09oobbuf =3D kmalloc(oobbuf_len, GFP_KERNEL);
-+=09=09oobbuf =3D kvmalloc(oobbuf_len, GFP_KERNEL);
- =09=09if (!oobbuf) {
--=09=09=09kfree(datbuf);
-+=09=09=09kvfree(datbuf);
- =09=09=09return -ENOMEM;
- =09=09}
- =09}
-@@ -682,8 +682,8 @@ static int mtdchar_write_ioctl(struct mtd_info *mtd,
- =09=09usr_oob +=3D ops.oobretlen;
- =09}
-=20
--=09kfree(datbuf);
--=09kfree(oobbuf);
-+=09kvfree(datbuf);
-+=09kvfree(oobbuf);
-=20
- =09return ret;
- }
---=20
-2.36.1
+> [    0.000000] Internal error: BRK handler: f20003e8 [#1] PREEMPT SMP
+> [    0.000000] Modules linked in:
+> [    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Not tainted
+> 5.18.0-rc6-next-20220513 #1
+> [    0.000000] Hardware name: ARM Juno development board (r2) (DT)
+> [    0.000000] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [    0.000000] pc : gic_dist_config+0x4c/0x68
+> [    0.000000] lr : gic_init_bases+0xd4/0x248
 
+Please provide a disassembly of this function.
 
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

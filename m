@@ -2,127 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADF14528CCF
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD7EC528CD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344725AbiEPSWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 14:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59658 "EHLO
+        id S1344730AbiEPSYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 14:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244371AbiEPSWM (ORCPT
+        with ESMTP id S230377AbiEPSYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 14:22:12 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06872BB02
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 11:22:10 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id d3so11061717ilr.10
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 11:22:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=fi2MKK4RDnx6306yvIj3WqOA9+3aIysOXF+Rc+RJb4Y=;
-        b=ZoeYipp1srp2zffS6xSdw3auO/PUsqr9RF6aFDmflEnta+cN9h3QQekvih8nXjtLzx
-         denBn/B1SfVOfEOGy2MF80u8pStM64jj/Q2zsXN+0DFTuPMdMb/kksBYYo5pDGgM6Yt+
-         fQrwdiKbkUsAUy4DQF5f5RGSkh1OWCthVya+Z8j8X4Bt7hdKTcT7PU0zWixT1OJgcek/
-         srWG6vzSTBHbi3Je60NibFukSh1mtN5de+TrSHi34uZCkJcKJYnVvJECuvwSJucjknSV
-         D6xDfmCN71FptFkL1m+92AWgmDlknvKgLHAtCLgI4FND7h1wZvCv4Q/JcGlY1n3RjpjN
-         00JA==
+        Mon, 16 May 2022 14:24:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D97A43D484
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 11:24:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652725448;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=01ExSbQaG6QIALPWml7ArAwcPbjjq1W1taEWewAln38=;
+        b=aaEzOdd5DUIk4f1jzUT3TJR0xnfnqecdJ5xc2kvzsuuaYdi1j+UM0sGSNIihDwEgqgzGxD
+        N2nq8nxP3zL1lMQ65BLhDE4KE6gfyYYlARFn5XyZfBDDAw/VDtiyNWMziyh4oh0ivf2Oco
+        YvpqJv4pi4yJu9x9VVkPWl+zQc8WBRk=
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
+ [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-198-ZM4-x8mZOve-UI0F6vHdkQ-1; Mon, 16 May 2022 14:24:07 -0400
+X-MC-Unique: ZM4-x8mZOve-UI0F6vHdkQ-1
+Received: by mail-pl1-f199.google.com with SMTP id u8-20020a170903124800b0015195a5826cso8404746plh.4
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 11:24:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fi2MKK4RDnx6306yvIj3WqOA9+3aIysOXF+Rc+RJb4Y=;
-        b=TcBUAb8Z6x5C3QK0jFV84K+ydaAQjUpfMeFIv37IYpb5e5NA2UVpasRTHIYlDvnVY0
-         +LXvtzArnNvLzGBNYNzGCIt/gKTyDSlReICgMOh8o/Q/zhecAF6Xwl2VHrbMgoPMxD7y
-         FWJMGUTXT0MHGxInEJsd3WDfcpz3GHeVibW+/B1FPtILx5bo7DSSDvXryVWSdNZzubKK
-         TQwodK8yDwl8VCda2pLyFHAwZBm7UZAyhmpOnReAiIrIQshAw0oEF2j/ELGjd+wneWA7
-         TQvtRsH3Shk50DnOGG6fcpC7xSm5HXbdkIvJjkrMum6iz5O3xM68yVVQrbenKgUOVfM/
-         grdQ==
-X-Gm-Message-State: AOAM532s9XFoPJjdbvbFn8wofRPdBRP5wx1YnbG8u1kHVtFyA819j5Ms
-        c4ZneXCRbfKq5KrPpaVUiloDFY55Qz3OjA==
-X-Google-Smtp-Source: ABdhPJwu+uko3W1bDT97qFkqQc86IbLg5bTX+TVEm+Bg5/uK411UrX/M11NqCONlxy6V9sq7qROTPA==
-X-Received: by 2002:a05:6e02:1c27:b0:2cf:6de9:5342 with SMTP id m7-20020a056e021c2700b002cf6de95342mr9584457ilh.176.1652725329933;
-        Mon, 16 May 2022 11:22:09 -0700 (PDT)
-Received: from [192.168.1.172] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id l44-20020a026a2c000000b0032b3a7817d3sm2964148jac.151.2022.05.16.11.22.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 11:22:08 -0700 (PDT)
-Message-ID: <eaee4ea1-8e5a-dde8-472d-44241d992037@kernel.dk>
-Date:   Mon, 16 May 2022 12:22:07 -0600
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=01ExSbQaG6QIALPWml7ArAwcPbjjq1W1taEWewAln38=;
+        b=2XYGe5VAIB/5kyeSZEpET0ZxVlu6yYgQKEWh1ohy206oeCOu8aVMwZ70L8+7bBI1zP
+         JvAmh+DsGPfm6OeXfyfsKP0LOWMdumGlhRmPdnHDkoy0eH/zDmW7MEwnoguvSldhn/XV
+         J81BbUjPI4NvD9yPpwJ7/Xwl+a6hSil+Z0cPd9hvAaRX8I96dL6revcJtHXYiA9vm86t
+         EO/vUgdgXuHS7bMxzRSAhRkEY3X9AC7y8C+QR71uGUOxpZkb2PhVsxYpxDMTHhvDTze3
+         1T2MQ+1zLGUmsnTDnlJJ8qag+tjDHRoAdnwkZdl7edtiDLyX0ZfYbr47ukOD5C6nF051
+         q05w==
+X-Gm-Message-State: AOAM533UKiltesEgBiFEANZxoW7xS4Ex0+3JhzjPOEROnpk3xYYC9N06
+        W3JBADYIDDWUctydPaB/NDcsef8Zn5QhCvv/Nr5Zi0wivZwYn/jFracQJh9jWOcDjVxJHtcgduf
+        1suAx+PpqRoI7uZBuViIpGkpXZk62GPzX3i1hVpwP
+X-Received: by 2002:a63:f158:0:b0:3db:8563:e8f5 with SMTP id o24-20020a63f158000000b003db8563e8f5mr16318996pgk.191.1652725446197;
+        Mon, 16 May 2022 11:24:06 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxkuZl8Rv+2k4+VlvjnrLObgGSBS55aFOjT74Z6tve1EBpV7jaR2XyKyRx0wqBjn/BI45ecqmcJN3/CdiCfPlk=
+X-Received: by 2002:a63:f158:0:b0:3db:8563:e8f5 with SMTP id
+ o24-20020a63f158000000b003db8563e8f5mr16318978pgk.191.1652725445882; Mon, 16
+ May 2022 11:24:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [REGRESSION] lxc-stop hang on 5.17.x kernels
-Content-Language: en-US
-To:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Daniel Harding <dharding@living180.net>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Cc:     regressions@lists.linux.dev, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>
-References: <7925e262-e0d4-6791-e43b-d37e9d693414@living180.net>
- <6ad38ecc-b2a9-f0e9-f7c7-f312a2763f97@kernel.dk>
- <ccf6cea1-1139-cd73-c4e5-dc9799708bdd@living180.net>
- <bb283ff5-6820-d096-2fca-ae7679698a50@kernel.dk>
- <371c01dd-258c-e428-7428-ff390b664752@kernel.dk>
- <2436d42c-85ca-d060-6508-350c769804f1@gmail.com>
- <ad9c31e5-ee75-4df2-c16d-b1461be1901a@living180.net>
- <fb0dbd71-9733-0208-48f2-c5d22ed17510@gmail.com>
- <a204ba93-7261-5c6e-1baf-e5427e26b124@living180.net>
- <bd932b5a-9508-e58f-05f8-001503e4bd2b@gmail.com>
- <12a57dd9-4423-a13d-559b-2b1dd2fb0ef3@living180.net>
- <897dc597-fc0a-34ec-84b8-7e1c4901e0fc@leemhuis.info>
- <c2f956e2-b235-9937-d554-424ae44c68e4@living180.net>
- <41c86189-0d1f-60f0-ca8e-f80b3ccf5130@gmail.com>
- <da56fa5f-0624-413e-74a1-545993940d27@gmail.com>
- <3fc08243-f9e0-9cec-4207-883c55ccff78@living180.net>
- <13028ff4-3565-f09e-818c-19e5f95fa60f@living180.net>
- <469e5a9b-c7e0-6365-c353-d831ff1c5071@leemhuis.info>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <469e5a9b-c7e0-6365-c353-d831ff1c5071@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220405183953.2094007-1-pceballos@google.com>
+ <nycvar.YFH.7.76.2204210947590.30217@cbobk.fhfr.pm> <CAKdAkRQ7yxFFGJg41UxptxapKiP4bmHsfw7dRNE+LPzs1PRk=A@mail.gmail.com>
+ <nycvar.YFH.7.76.2205121252090.28985@cbobk.fhfr.pm> <CAO9JgFwA5ZhwOOY0cU3HpMOV69CTumQ50zEgU6SPNAF0zDbCGg@mail.gmail.com>
+ <Yn2OlQAa9I++N80B@penguin>
+In-Reply-To: <Yn2OlQAa9I++N80B@penguin>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Mon, 16 May 2022 20:23:54 +0200
+Message-ID: <CAO-hwJ+Rs=LYseLP7Vvr00vLvm+fTCRdh8pQ-rEduj4izSyiYA@mail.gmail.com>
+Subject: Re: [PATCH] HID: Driver for Google Hangouts Meet Speakermic
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Pablo Ceballos <pceballos@google.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/22 12:17 PM, Thorsten Leemhuis wrote:
->>> Pavel, I had actually just started a draft email with the same theory
->>> (although you stated it much more clearly than I could have).  I'm
->>> working on debugging the LXC side, but I'm pretty sure the issue is
->>> due to LXC using blocking reads and getting stuck exactly as you
->>> describe.  If I can confirm this, I'll go ahead and mark this
->>> regression as invalid and file an issue with LXC. Thanks for your help
->>> and patience.
->>
->> Yes, it does appear that was the problem.  The attach POC patch against
->> LXC fixes the hang.  The kernel is working as intended.
->>
->> #regzbot invalid:  userspace programming error
-> 
-> Hmmm, not sure if I like this. So yes, this might be a bug in LXC, but
-> afaics it's a bug that was exposed by kernel change in 5.17 (correct me
-> if I'm wrong!). The problem thus still qualifies as a kernel regression
-> that normally needs to be fixed, as can be seen my some of the quotes
-> from Linus in this file:
-> https://www.kernel.org/doc/html/latest/process/handling-regressions.html
+On Fri, May 13, 2022 at 12:48 AM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
+>
+> On Thu, May 12, 2022 at 03:35:00PM -0700, Pablo Ceballos wrote:
+> > On Thu, May 12, 2022 at 3:53 AM Jiri Kosina <jikos@kernel.org> wrote:
+> > > On Thu, 12 May 2022, Dmitry Torokhov wrote:
+> > > > I am curious, could not this be achieved without a kernel driver by
+> > > > simply using udev to map this usage code to KEY_RESERVED?
+> > >
+> > > Hmm, good point, using KEY_RESERVED mapping to achieve the key being
+> > > actually ignored didn't immediately occur to me.
+> > >
+> > > Pablo, could you please verify that it behaves in the expected way, and
+> > > confirm that we could drop the 'driver' in favor of udev rule?
+> >
+> > I think I've achieved the same result by adding the following to udev
+> > hwdb. Dmitry, is this what you had in mind, or is there a better way
+> > of doing this?
+> >
+> > evdev:input:b0003v18D1p8001*
+> >  KEYBOARD_KEY_b002f=reserved
+>
+> No, that is exactly what I had in mind, thank you. Please submit this
+> entry to upstream systemd/udev project (and we can cherry-pick it into
+> our udev as well).
+>
+> In general I think we should try to avoid trivial "fixup" HID drivers if
+> it is possible. I also wondered if we could be supplying fixed-up HID
+> descriptors via request_firmware() for HID devices.
 
-Sorry, but that's really BS in this particularly case. This could always
-have triggered, it's the way multishot works. Will we count eg timing
-changes as potential regressions, because an application relied on
-something there? That does not make it ABI.
+Just FYI, in case you haven't noticed it :)
+I am currently working on supporting exactly this kind of fixups
+through eBPF. I had in the past a request_firmware() patch for wacom
+devices, but there were way too much problems raised by that because
+you basically need to have the API right from the first attempt.
 
-In general I agree with Linus on this, a change in behavior breaking
-something should be investigated and figured out (and reverted, if need
-be). This is not that.
+With eBPF, you can programmatically change the report descriptor for
+this particular use case, or you could blindly load a new one. But the
+other advantage that eBPF provides is that we can also change the
+stream of events to accommodate for device mishaps, like a bouncing
+button or garbage in the data.
 
--- 
-Jens Axboe
-I
+Greg KH requested that we embed such fixups in the kernels directly,
+and so I'm going to try to add that feature too. But we can also have
+udev rules in userspace that would fix devices based on the context.
+And the long term plan is also to convert existing simple fixup
+drivers into eBPF progs that would be shipped by the kernel so we
+don't lose functionalities.
+
+Cheers,
+Benjamin
+
+>
+> Thanks.
+>
+> --
+> Dmitry
+>
+

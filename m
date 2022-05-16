@@ -2,97 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F17A529261
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA7852924E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:08:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348960AbiEPVBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 17:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44714 "EHLO
+        id S1347812AbiEPVCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 17:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349185AbiEPVBI (ORCPT
+        with ESMTP id S1349433AbiEPVBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 17:01:08 -0400
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD85B1CC;
-        Mon, 16 May 2022 13:36:15 -0700 (PDT)
-Received: by mail-vs1-xe2e.google.com with SMTP id q2so16785760vsr.5;
-        Mon, 16 May 2022 13:36:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SPVTTEXb7GH/kRukNpd+3rAnRGbjeFyeEDAAtlIB25Q=;
-        b=NSekxAUXRVu2pYaw0hTGwWaFqn/QHyOuuGWIa14VTyd85gOV8xGT6+YTJfzp2WkBp3
-         UeimhWNjhZ5KL0QlzfydQy+0WXY7c7AIZYYeKKvOuaDOOktdY3EpLLbIAFQP6Fj4u9QR
-         v5zVi6prxpCEuv+KArfXza5lhW8bM/Mc6U+n8FXiUizhYlMeZiGNP5vOQyw23rQpLsVh
-         O4wrjiZnAcOrcDWVUQnU5oBcmUMIMlJAdqVLjMP7ROLXrp9Ni95AVYRVrJYTecuNqPYz
-         saKTifld2dgNmTzpXxcxgLhpNG+9HzYb9G2/V6FVymeX/1yGcDVhC42bns9u+jLm/LbT
-         wBXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SPVTTEXb7GH/kRukNpd+3rAnRGbjeFyeEDAAtlIB25Q=;
-        b=UFCc2PPk0eQBbM9dhSDQPw4Ld+0aaE+jO7GLX8Ky0RLus4RV7l6eoTiNsm1MZL/ZrA
-         isa0U4jKwN/vrI+P9ZMenUvfefWAGMV2x3Fhbcb8qLkwYyy6C0Pd+qTLk6ZB1JIEkHHO
-         SDVhaNgozwyfMwOPsKUzLmrQxxgWZsek2QpXPmvc0UVJs2uD3uM+2FQN6ySxV093EyAJ
-         26ZjTwMfMKGdkXyFuyBI8/KJylCMn6xJhJosezK/MFAqWhNem9zJ+zLbKt1zcGO/Ny9I
-         CytsshxzmztuQnF7L2Lzjm5sR/782Ts3dpcqkzV3QVIW+2B7g/IFN2SzBWapTI2apE9R
-         eLNg==
-X-Gm-Message-State: AOAM5323rpzhRTWTBQ2N/g+e2cfMkl2gwtl4alCEnkk3dMdKLi+ZDxCM
-        G6JZVbkKNgvo4BUV3qetMthQYogjcSOuE03GGkc=
-X-Google-Smtp-Source: ABdhPJylvA9O4m7fxtbFb+lkV8pNOJlx1/RRasLF3i25sl6FooKaRcWZritDMSN+ehL0yvKawivRUzI0CFpOVj/+vwo=
-X-Received: by 2002:a67:2ec4:0:b0:32c:c442:a309 with SMTP id
- u187-20020a672ec4000000b0032cc442a309mr6741450vsu.32.1652733375162; Mon, 16
- May 2022 13:36:15 -0700 (PDT)
+        Mon, 16 May 2022 17:01:21 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A590457BC;
+        Mon, 16 May 2022 13:37:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=EbBaokCH/n+lu1lhLbT43j8JHvfW0Dz6fbZSBx6scuQ=; b=cck+N1iLqqxU1fpBU5JRS0N1B6
+        eW8XgJDTLybclIC8HWUHWK+x40eUEu8VMVwSSmlyw+onOPHMk6103otDgCjr7r/gj6AxMt2JG6zUS
+        FW4hJRDCt9gi/Y74jHnj0bbThZ+7LKrvpptAvCL55WgUl7ZD6jSPLOk/J4LOT4mrFcg6jtgO57sZt
+        hoQHbJApaKSta71c1RKZSudOrac98MGT5V/n0coOYJFLWdl32rXWvgxWcG33eetfT5yIc3RruifoO
+        ZrNvjqUXgCWB5KIdVFsLiQqcqKbl6b+c2YyIDFV+k68y0msMUu03cxyi6w0nAy8xLqVwa1jdYBQwI
+        0Zpgu9bA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nqhT5-00ADs8-0T; Mon, 16 May 2022 20:37:27 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 45A20980DCC; Mon, 16 May 2022 22:37:23 +0200 (CEST)
+Date:   Mon, 16 May 2022 22:37:23 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-hardening@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
+Message-ID: <20220516203723.GN76023@worktop.programming.kicks-ass.net>
+References: <20220513202159.1550547-1-samitolvanen@google.com>
+ <20220513202159.1550547-21-samitolvanen@google.com>
+ <YoIfWENLV1AR2ijj@hirez.programming.kicks-ass.net>
+ <CABCJKucXA2jbTc9TF1mLUsEDKu52t71tzxpnsGOXY3_ks+W4Bg@mail.gmail.com>
+ <20220516183047.GM76023@worktop.programming.kicks-ass.net>
+ <CABCJKudmrBOkoDvDPOA-aEyrs9evHPWpzMpDZ10n8vXDBRdCxQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220514091443.4150162-1-william.xuanziyang@huawei.com>
-In-Reply-To: <20220514091443.4150162-1-william.xuanziyang@huawei.com>
-From:   Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Date:   Mon, 16 May 2022 23:36:04 +0300
-Message-ID: <CAHNKnsS0D8bRA5GY0xss2ZUCwY2HoLNMgeR0K4ecH-HfmdTefg@mail.gmail.com>
-Subject: Re: [PATCH net-next] net: wwan: t7xx: fix GFP_KERNEL usage in
- spin_lock context
-To:     Ziyang Xuan <william.xuanziyang@huawei.com>
-Cc:     "Devegowda, Chandrashekar" <chandrashekar.devegowda@intel.com>,
-        Intel Corporation <linuxwwan@intel.com>,
-        chiranjeevi.rapolu@linux.intel.com,
-        =?UTF-8?B?SGFpanVuIExpdSAo5YiY5rW35YabKQ==?= 
-        <haijun.liu@mediatek.com>,
-        M Chetan Kumar <m.chetan.kumar@linux.intel.com>,
-        Ricardo Martinez <ricardo.martinez@linux.intel.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        David Miller <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABCJKudmrBOkoDvDPOA-aEyrs9evHPWpzMpDZ10n8vXDBRdCxQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Ziyang,
+On Mon, May 16, 2022 at 12:39:19PM -0700, Sami Tolvanen wrote:
 
-On Sat, May 14, 2022 at 11:57 AM Ziyang Xuan
-<william.xuanziyang@huawei.com> wrote:
-> t7xx_cldma_clear_rxq() call t7xx_cldma_alloc_and_map_skb() in spin_lock
-> context, But __dev_alloc_skb() in t7xx_cldma_alloc_and_map_skb() uses
-> GFP_KERNEL, that will introduce scheduling factor in spin_lock context.
->
-> Replace GFP_KERNEL with GFP_ATOMIC to fix it.
+> > > With the current compiler patch, LLVM sets up function arguments after
+> > > the CFI check. if it's a problem, we can look into changing that.
+> >
+> > Yes, please fix that. Again see that same patch for why this is a
+> > problem. Objtool can trivially find retpoline calls, but finding this
+> > kCFI gadget is going to be hard work. If you ensure they're
+> > unconditionally stuck together, then the problem goes away find one,
+> > finds the other.
+> 
+> You can use .kcfi_traps to locate the check right now, but I agree,
+> it's not quite ideal.
 
-Would not it will be more reliable to just rework
-t7xx_cldma_clear_rxq() to avoid calling t7xx_cldma_alloc_and_map_skb()
-under the spin lock instead of doing each allocation with GFP_ATOMIC?
-E.g. t7xx_cldma_gpd_rx_from_q() calls t7xx_cldma_alloc_and_map_skb()
-avoiding any lock holding.
+Oohh, indeed. Looking at that, I think .kcfi_traps would be better as
+relative offsets; eg. 'addr = (void*)s + *s' like. Halfs the amount of
+storage needed for it.
 
--- 
-Sergey
+Also, that code can use a few {} extra.

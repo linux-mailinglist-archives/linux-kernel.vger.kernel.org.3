@@ -2,133 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9563052877A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B1E52877D
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244707AbiEPOty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 10:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38474 "EHLO
+        id S244727AbiEPOuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 10:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233386AbiEPOtq (ORCPT
+        with ESMTP id S244710AbiEPOuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 10:49:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88B9D2EA39
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:49:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652712584;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2F5yzzwLJL4gm8RAlP4L9GJYeiZR3Q+rkmeOt6UXeew=;
-        b=PpKPG2sL9702u3m6t1V1MNsZavUIUc5pWVcFYHbjEedFyLeurqVG4fAyFqrkynl/gVcmIP
-        J5KRYp37NkKDtvKb5xmnWfWMfUzY7UdlbADCnLIrph/6L8KlC7ZyITBPyo9UzNc9wnyFrZ
-        llWF1R3uxLhkuuMcVfukpIj9yU+8c48=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-479-M86AaTXkNBmZQgwiWJiKzg-1; Mon, 16 May 2022 10:49:41 -0400
-X-MC-Unique: M86AaTXkNBmZQgwiWJiKzg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9EBC4804196;
-        Mon, 16 May 2022 14:49:40 +0000 (UTC)
-Received: from starship (unknown [10.40.192.55])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1C20E492C14;
-        Mon, 16 May 2022 14:49:36 +0000 (UTC)
-Message-ID: <9ed2fc294bf2c21b41b22605ff8039bb71903712.camel@redhat.com>
-Subject: Re: [PATCH] locking/atomic/x86: Introduce try_cmpxchg64
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Uros Bizjak <ubizjak@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Marco Elver <elver@google.com>
-Date:   Mon, 16 May 2022 17:49:36 +0300
-In-Reply-To: <YoJayBWZF3mUnYS6@google.com>
-References: <20220510154217.5216-1-ubizjak@gmail.com>
-         <20220510165506.GP76023@worktop.programming.kicks-ass.net>
-         <CAFULd4aNME5s2zGOO0A11kdjfHekH=ceSH7jUfAhmZaJWHv9cQ@mail.gmail.com>
-         <20220511075409.GX76023@worktop.programming.kicks-ass.net>
-         <CAFULd4aXpt_pnCR5OK5B1m5sErfB3uj_ez=-KW7=0qQheEdVzA@mail.gmail.com>
-         <Ynven5y2u9WNfwK+@google.com>
-         <CAFULd4bZDO5-3T4q9fanHFrRTDj8v6fypiTc=dFPO9Rp61g9eQ@mail.gmail.com>
-         <fcf55234cfb95600d412322fba4dc9d0c9a1d7f4.camel@redhat.com>
-         <YoJayBWZF3mUnYS6@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
-MIME-Version: 1.0
+        Mon, 16 May 2022 10:50:17 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F41C2EA3E;
+        Mon, 16 May 2022 07:50:12 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GDl4gj031239;
+        Mon, 16 May 2022 14:50:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=UfqGtL3Cr2ukJ7OfAQ9tgKlGz5nWQIeVs7+939f80o8=;
+ b=GXi5HgbPDL03u3w2r1aOchyLfwQm5XwmhtWqqBvoGN14E6vporR7FpT1yPDygNieoc2q
+ +MqJRN7mNPjAf5AC7uxCLGAN8MxyNY2lPTrRddbdERKQqFavRtwUL6cF/+NcHNZaC3XK
+ zVypu+XnxWgWdy78iDJMFO52dniNgEUKGffmdxx9lOq+KFqXQToWwsq1hvZdcFmyi9kx
+ 9BuD+NEr/kT87X8IpH43ccOiw3ezfPWCPMu0PcMzsbr1WB+LT195EA1EYd/cSZHlBwRn
+ xgKvTHksMzVbTbBZ5w6+nF7vfCLs8GHIYuVrQCQPlRAFH7axEzwK0MkA9xJa8xUdbl3g 4Q== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3qt5hm9d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 14:50:11 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24GEm6ol011710;
+        Mon, 16 May 2022 14:50:09 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06ams.nl.ibm.com with ESMTP id 3g23pjav6k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 14:50:09 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24GEaIwL54657290
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 16 May 2022 14:36:18 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 279FCA4040;
+        Mon, 16 May 2022 14:50:06 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 63AB5A404D;
+        Mon, 16 May 2022 14:50:05 +0000 (GMT)
+Received: from sig-9-65-83-206.ibm.com (unknown [9.65.83.206])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 16 May 2022 14:50:05 +0000 (GMT)
+Message-ID: <6d91e146702bcaf361cb193eaca35c57e38482df.camel@linux.ibm.com>
+Subject: Re: [PATCH] evm: Clean up some variables
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Date:   Mon, 16 May 2022 10:50:04 -0400
+In-Reply-To: <20220513174105.3684229-1-stefanb@linux.ibm.com>
+References: <20220513174105.3684229-1-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ci0QwfriHJ-YhCy-jrZg5I23jF3Ns5n7
+X-Proofpoint-ORIG-GUID: ci0QwfriHJ-YhCy-jrZg5I23jF3Ns5n7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-16_13,2022-05-16_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ suspectscore=0 mlxscore=0 clxscore=1015 priorityscore=1501 malwarescore=0
+ lowpriorityscore=0 phishscore=0 bulkscore=0 mlxlogscore=769 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205160079
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-05-16 at 14:08 +0000, Sean Christopherson wrote:
-> On Mon, May 16, 2022, Maxim Levitsky wrote:
-> > On Wed, 2022-05-11 at 21:54 +0200, Uros Bizjak wrote:
-> > > On Wed, May 11, 2022 at 6:04 PM Sean Christopherson <seanjc@google.com> wrote:
-> > > > On Wed, May 11, 2022, Uros Bizjak wrote:
-> > > > > On Wed, May 11, 2022 at 9:54 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > > > > > Still, does 32bit actually support that stuff?
-> > > > > 
-> > > > > Unfortunately, it does:
-> > > > > 
-> > > > > kvm-intel-y        += vmx/vmx.o vmx/vmenter.o vmx/pmu_intel.o vmx/vmcs12.o \
-> > > > >                vmx/evmcs.o vmx/nested.o vmx/posted_intr.o
-> > > > > 
-> > > > > And when existing cmpxchg64 is substituted with cmpxchg, the
-> > > > > compilation dies for 32bits with:
-> > > > 
-> > > > ...
-> > > > 
-> > > > > > Anyway, your patch looks about right, but I find it *really* hard to
-> > > > > > care about 32bit code these days.
-> > > > > 
-> > > > > Thanks, this is also my sentiment, but I hope the patch will enable
-> > > > > better code and perhaps ease similar situation I have had elsewhere.
-> > > > 
-> > > > IMO, if we merge this it should be solely on the benefits to 64-bit code.  Yes,
-> > > > KVM still supports 32-bit kernels, but I'm fairly certain the only people that
-> > > > run 32-bit KVM are KVM developers.  32-bit KVM has been completely broken for
-> > > > multiple releases at least once, maybe twice, and no one ever complained.
-> > > 
-> > > Yes, the idea was to improve cmpxchg64 with the implementation of
-> > > try_cmpxchg64 for 64bit targets. However, the issue with 32bit targets
-> > > stood in the way, so the effort with 32-bit implementation was mainly
-> > > to unblock progression for 64-bit targets.
-> > 
-> > Would that allow tdp mmu to work on 32 bit?
+On Fri, 2022-05-13 at 13:41 -0400, Stefan Berger wrote:
+> Make hmac_tfm static since it's not used anywhere else besides the file
+> it is in.
 > 
-> From a purely technical perspective, there's nothing that prevents enabling the
-> TDP MMU on 32-bit kernels.  The TDP MMU is 64-bit only to simplify the implementation
-> and to reduce the maintenance and validation costs.
+> Remove declaration of hash_tfm since it doesn't exist.
 > 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 
-I understand exactly that, so the question, will this patch help make the tdp mmu work transparently
-on 32 bit kernels? I  heard that 64 bit cmpxchg was one of the main reasons that it is 64 bit only.
+Thanks, Stefan.   Both this patch and "evm: Return INTEGRITY_PASS for
+enum integrity_status value '0'"  are now queued in next-integrity.
 
-I am asking because there was some talk to eliminate the direct mode from the legacy non tdp mmu,
-which would simplify its code by a lot, but then it will make 32 bit kernel fail back to shadowing mmu.
-
-I know that nobody needs 32 bit KVM host support, but it is useful to be sure that nesting still works, and
-doesn't crash the host and such.
-
-Best regards,
-	Maxim Levitsky
+Mimi
 

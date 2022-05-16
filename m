@@ -2,140 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B85A752862C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:58:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD7052862F
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:59:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233122AbiEPN6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 09:58:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33728 "EHLO
+        id S231683AbiEPN7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 09:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244228AbiEPN6Q (ORCPT
+        with ESMTP id S244193AbiEPN6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 09:58:16 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E2F3A1AB
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:58:07 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id gg20so4488430pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:58:07 -0700 (PDT)
+        Mon, 16 May 2022 09:58:52 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294BA3A5F0
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:58:41 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2fedd26615cso41378597b3.7
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:58:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=N6cpZam/M/XKxRuKp/6fbfT6Vs1erHH3zjEgge2faf0=;
-        b=khv0o+3MVYNYERJ+hfeAt/OkcOafq35SOY+tNc3oVpCkvxhXEq9e2qIQDYVq96PpQT
-         +cuxNol8CCVp33079jM//mpFtUa7eA/krfHws7sbxpraTgXKS1rz010nQgDHUTAvS1n4
-         ziXbmG0JYN71C5Ut2Iw81ZreHZDzBJqF5QWmMXUnGpkZue//6JDBypHrMY0OE7X1LWkI
-         9f0p2hcOsfXWxKdka+ONh3KQDQo3sGgjHcTUh35DkH5zzoZv87s4ahmsWvaGYe63CZAp
-         QwJToKm2nIZ8WxRn6zK82AIKgruUF88iMx35EFDus7d67gT7GqTVHOYlLY1RnIyqNtoQ
-         aDSg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9xLKrLVs38tK2b4Kq3Ass3IEY7f7YrEWbVYpcXz55zk=;
+        b=PGqWlhUUb+wFveHHLLMaV8PEbLbvss1saNPo2cO4S8IwUhVkmnD9KsIuDzA7tP+jEm
+         i7ihjjgX+qTLMAr5Ald5b2mr4V6qiryyqxacouqQyRiQhaJeypf+gK9xwYUzUZOOuHUl
+         QQnMd37TggpEkOGxAT8pqrsCZY70EYSBAyeBs/DgVyoOSkdmfYMb1UOXrh5jUR4JIPQy
+         dyfWOkpgnYZ1IuctzAmpqniBfGAvfLI5Y0gfljsf/Ht5tJDWLqDDnwgFKF27yyLRAt80
+         ZosPvWu5J8D+6TyBbyHa9QQkUS5ni2GIhJx5zGhQknX8O7F1Xg4eYPxVWvqD/qqk9gaO
+         2uGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=N6cpZam/M/XKxRuKp/6fbfT6Vs1erHH3zjEgge2faf0=;
-        b=RozJJ0k7bcrhq+fFMf5IbBYCCCUxfrGHupwudpN7h7ND2tAWz40MCHyIbRuLPim1WY
-         k+Cuyt9X9lAtW292hm0ze8ZKqFx+uLZOKDQNNsYKGyBPok99PeJanwBF2+kuGtVR6/xb
-         lt0b6K/5CQ8Em6iRv9M40wBB1Z5O7rWQRZUBarDG+1q1dUZFqKBega9lX6lnL40gHRpE
-         t/6UFaWnpVtiEf4XsywCAyzxs1hs/jbifVdN5hMNb12zgmrW4aQw0fjR12ecrpEw4R5C
-         tNuBcxP3KqqgZd00gD6cWxZm9Tr4wt5siy7/x+CgDYWqNo9RIZ4YCEpXAXFWJEtrYPR5
-         rfqA==
-X-Gm-Message-State: AOAM531rnrLdT/cVD1x3Vd+rHJk+AjK58YetVsp747szfsgWQFhIrVE+
-        dSJrljSJ7P8R3dTR5ijgr9F6YQ==
-X-Google-Smtp-Source: ABdhPJxjPTFJsuPLS/dq8WerHcw3/P8IKjsW6K0Io+IkGGa3+7knYweiV4hF4oJi+M3FINn56qLoWQ==
-X-Received: by 2002:a17:903:2348:b0:15f:2b4a:29c2 with SMTP id c8-20020a170903234800b0015f2b4a29c2mr17894677plh.37.1652709486582;
-        Mon, 16 May 2022 06:58:06 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id x5-20020a63cc05000000b003dafd8f0760sm6769367pgf.28.2022.05.16.06.58.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 06:58:06 -0700 (PDT)
-Date:   Mon, 16 May 2022 13:58:02 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yanfei Xu <yanfei.xu@intel.com>
-Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86: Fix the intel_pt PMI handling wrongly
- considered from guest
-Message-ID: <YoJYah+Ct90aj1I5@google.com>
-References: <20220515171633.902901-1-yanfei.xu@intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9xLKrLVs38tK2b4Kq3Ass3IEY7f7YrEWbVYpcXz55zk=;
+        b=Jbdl7F8qgLJKxkzM1C5Jl9Xy+IttiFW0Cqmo4K/DVBKubwRFWgnGUFB0ZJw2cj6IWo
+         FTJJPy4Sn7B8Z6syqGAZZooC9Pz8vl8tv97pXpe4TIQXdyAi5Kny+qRSdlVqC6MrWupS
+         DxA7cojB/38uO4J94Dy+Ncjcp3SNhx+VOUKGh4RCg/H6aLwOeWiolhj2JmASS4gjLHso
+         xDWzrBIJrVRyO3oirpxMXRCE9tHJZvm3OANX60MgbiqN5lXElY0CC+k8ZkElo1Kb/buJ
+         vpePQclADhFSxwj3G7NfbvXQhM0N9SefsEbVSP75zp3eyhD0Xk9vioSpypqmmL19WGn/
+         scrg==
+X-Gm-Message-State: AOAM532tbsPqHEM7EvGL0l9726rzaskyXCsvQ/nqa5/1uBVqbbBU/9of
+        7NkBUAnmDW550Jlht2x81YVpaKSLChDjMAdG8WrNiA==
+X-Google-Smtp-Source: ABdhPJzO9ZWCQs6j1TdHiLEUfp3n2HHC6K4PgjyQM/2O7ztwMLfGPWVu0GanlonHwWL2hAMSUWZoMJ6gjVfIJkut3Yg=
+X-Received: by 2002:a0d:c607:0:b0:2fe:c294:bfc1 with SMTP id
+ i7-20020a0dc607000000b002fec294bfc1mr15597015ywd.265.1652709520065; Mon, 16
+ May 2022 06:58:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220515171633.902901-1-yanfei.xu@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CA+G9fYtsp-1pi6d4J71BPYh-msjzbVt_-v3YrUu12dXPeyqTDg@mail.gmail.com>
+ <87o7zylztd.wl-maz@kernel.org>
+In-Reply-To: <87o7zylztd.wl-maz@kernel.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 16 May 2022 19:28:28 +0530
+Message-ID: <CA+G9fYtLP1Kf1Ck-33XrLFQ5uc_p1z1S5Sr1x=9ZRGi=D851PQ@mail.gmail.com>
+Subject: Re: Unexpected kernel BRK exception at EL1 - Internal error: BRK
+ handler: f20003e8 - gic_dist_config
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>, pali@kernel.org,
+        Ingo Molnar <mingo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022, Yanfei Xu wrote:
-> When kernel handles the vm-exit caused by external interrupts and PMI,
-> it always set a type of kvm_intr_type to handling_intr_from_guest to
-> tell if it's dealing an IRQ or NMI.
-> However, the further type judgment is missing in kvm_arch_pmi_in_guest().
-> It could make the PMI of intel_pt wrongly considered it comes from a
-> guest once the PMI breaks the handling of vm-exit of external interrupts.
-> 
-> Fixes: db215756ae59 ("KVM: x86: More precisely identify NMI from guest when handling PMI")
-> Signed-off-by: Yanfei Xu <yanfei.xu@intel.com>
-> ---
->  arch/x86/include/asm/kvm_host.h | 8 +++++++-
->  arch/x86/kvm/x86.h              | 6 ------
->  2 files changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 4ff36610af6a..308cf19f123d 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1582,8 +1582,14 @@ static inline int kvm_arch_flush_remote_tlb(struct kvm *kvm)
->  		return -ENOTSUPP;
->  }
->  
-> +enum kvm_intr_type {
-> +	/* Values are arbitrary, but must be non-zero. */
-> +	KVM_HANDLING_IRQ = 1,
-> +	KVM_HANDLING_NMI,
-> +};
-> +
->  #define kvm_arch_pmi_in_guest(vcpu) \
-> -	((vcpu) && (vcpu)->arch.handling_intr_from_guest)
-> +	((vcpu) && (vcpu)->arch.handling_intr_from_guest == KVM_HANDLING_NMI)
+Hi Marc,
 
-My understanding is that this isn't correct as a general change, as perf events
-can use regular IRQs in some cases.  See commit dd60d217062f4 ("KVM: x86: Fix perf
-timer mode IP reporting").
+Thanks for looking into this report.
 
-I assume there's got to be a way to know which mode perf is using, e.g. we should
-be able to make this look something like:
+On Mon, 16 May 2022 at 12:38, Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Mon, 16 May 2022 07:16:22 +0100,
+> Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> >
+> > The kernel crash reported on arm64 juno-r2 device with kselftest-merge config
+> > while booting Linux next-20220513 kernel  [1].
 
-	((vcpu) && (vcpu)->arch.handling_intr_from_guest == kvm_pmi_vector)
+<trim>
 
+>
+> Huh. Who inserts random BRKs like this?
+>
+> > [    0.000000] Internal error: BRK handler: f20003e8 [#1] PREEMPT SMP
+> > [    0.000000] Modules linked in:
+> > [    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Not tainted
+> > 5.18.0-rc6-next-20220513 #1
+> > [    0.000000] Hardware name: ARM Juno development board (r2) (DT)
+> > [    0.000000] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > [    0.000000] pc : gic_dist_config+0x4c/0x68
+> > [    0.000000] lr : gic_init_bases+0xd4/0x248
+>
+> Please provide a disassembly of this function.
 
->  void kvm_mmu_x86_module_init(void);
->  int kvm_mmu_vendor_module_init(void);
-> diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
-> index 588792f00334..3bdf1bc76863 100644
-> --- a/arch/x86/kvm/x86.h
-> +++ b/arch/x86/kvm/x86.h
-> @@ -344,12 +344,6 @@ static inline bool kvm_cstate_in_guest(struct kvm *kvm)
->  	return kvm->arch.cstate_in_guest;
->  }
->  
-> -enum kvm_intr_type {
-> -	/* Values are arbitrary, but must be non-zero. */
-> -	KVM_HANDLING_IRQ = 1,
-> -	KVM_HANDLING_NMI,
-> -};
-> -
->  static inline void kvm_before_interrupt(struct kvm_vcpu *vcpu,
->  					enum kvm_intr_type intr)
->  {
-> -- 
-> 2.32.0
-> 
+objdump snipper is here.
+http://ix.io/3XUW
+
+The vmlinux file is located in this url
+Please make use of it.
+http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/juno/lkft/linux-next/1226/
+
+- Naresh
+
+>
+> Thanks,
+>
+>         M.
+>
+> --
+> Without deviation from the norm, progress is not possible.

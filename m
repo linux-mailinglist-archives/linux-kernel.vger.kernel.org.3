@@ -2,87 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7590F5280DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 11:29:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 826165280E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 11:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232402AbiEPJ3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 05:29:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48444 "EHLO
+        id S235786AbiEPJbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 05:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbiEPJ3m (ORCPT
+        with ESMTP id S229725AbiEPJbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 05:29:42 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC4BB2AE07;
-        Mon, 16 May 2022 02:29:40 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7EBA11063;
-        Mon, 16 May 2022 02:29:40 -0700 (PDT)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6E7863F66F;
-        Mon, 16 May 2022 02:29:39 -0700 (PDT)
-Date:   Mon, 16 May 2022 10:29:35 +0100
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Mark Brown <broonie@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kselftest/arm64: bti: force static linking
-Message-ID: <20220516102935.67505a91@donnerap.cambridge.arm.com>
-In-Reply-To: <YoDQY/0i9BrEIEO8@arm.com>
-References: <20220511172129.2078337-1-andre.przywara@arm.com>
-        <YoDQY/0i9BrEIEO8@arm.com>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        Mon, 16 May 2022 05:31:40 -0400
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11682A729;
+        Mon, 16 May 2022 02:31:38 -0700 (PDT)
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 24G9VJoq019261;
+        Mon, 16 May 2022 18:31:19 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 24G9VJoq019261
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1652693479;
+        bh=gzqkQYz7rXOqzd5Offfjf+c5s3dJ0BdJHrkewXfLFNI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WH+sysyU2V647wgDL1BuggvCEsWsZQImH759xyr5JN1rOy2whSJZQ3QkLV5H1iOx6
+         86HMo/Qa2u2MEhH5xlBa15co9a9dbLNi7TBTZ278ae5TdmRs6C6k7EuFRB5tPfJqMm
+         4/HUny/Nc1/JMf6QIUScEMWmHHlxgVnuIa3WSlcQrvU8xAdboua5NVcPHRQDF1WQ8z
+         37U07cMPrpv79A4mUF+ZsUW7Cmsm50jcIxmcix1ugtsc3YkWywMbdRRWH8/6cQCPjN
+         8MCC0ytlm25NVMXDTTjfbll3Sz5BDPXf98Oqkv7Rq1mnvqN5OQCEi2ByMVCYcFGqy8
+         1vCk71/eVkj4A==
+X-Nifty-SrcIP: [209.85.214.175]
+Received: by mail-pl1-f175.google.com with SMTP id d22so13871446plr.9;
+        Mon, 16 May 2022 02:31:19 -0700 (PDT)
+X-Gm-Message-State: AOAM533nSEUmkeaV2DnzrR9s/bTRBdoW9+xjSc6JZPZbD+WhvYEezX1x
+        KR/9GNI1F1WBY3jt2XyOK3QYabzoSk5LKwbyS6c=
+X-Google-Smtp-Source: ABdhPJz1c44GCw74wJDg/tk23rkfWOwUq4fAOU9wYejXDcdeaEoye+YPF9IjidGFPdQN5FCxZmrv9OAhNTF8IGSFC0c=
+X-Received: by 2002:a17:903:2411:b0:161:39ef:57f7 with SMTP id
+ e17-20020a170903241100b0016139ef57f7mr13614580plo.136.1652693478552; Mon, 16
+ May 2022 02:31:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220514040207.282910-1-masahiroy@kernel.org> <20220514040207.282910-2-masahiroy@kernel.org>
+ <YoIOhZc3y11n5aMq@FVFF77S0Q05N>
+In-Reply-To: <YoIOhZc3y11n5aMq@FVFF77S0Q05N>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 16 May 2022 18:30:41 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASqZxn3e-DSO0cnYRZ7nY-ztt7rLUry9Fqez+ZT5VMeQw@mail.gmail.com>
+Message-ID: <CAK7LNASqZxn3e-DSO0cnYRZ7nY-ztt7rLUry9Fqez+ZT5VMeQw@mail.gmail.com>
+Subject: Re: [v2 2/2] kbuild: copy scripts/atomic/atomic-*.h to include/generated/atomic-*.h
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 15 May 2022 11:05:23 +0100
-Catalin Marinas <catalin.marinas@arm.com> wrote:
+On Mon, May 16, 2022 at 5:43 PM Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> [adding the atomics maintainers to Cc]
+>
+> On Sat, May 14, 2022 at 01:02:07PM +0900, Masahiro Yamada wrote:
+> > include/linux/atomic/*.h are generated by scripts/atomic/gen-atomics.sh.
+> >
+> > To ensure they are not edited, scripts/atomic/check-atomics.sh checks
+> > sha1sum every time.
+> >
+> > This commit moves include/linux/atomic/*.h to scripts/atomic/*.h_shipped,
+> > which are copied to include/generated/ at build time:
+> >
+> >   COPY    include/generated/atomic-instrumented.h
+> >   COPY    include/generated/atomic-long.h
+> >   COPY    include/generated/atomic-arch-fallback.h
+>
+> FWIW, moving these and copying them at build time is fine by me, given that
+> better indicates that these are generated.
+>
+> > I dropped the sha1sum checks. I hope nobody would try to directly modify
+> > *_shipped files.
+>
+> I'd prefer to keep the sha1sum check, because we're worried that people *will*
+> modify them, and that won't be noticed until the next time they're regenerated.
 
-Hi,
+OK, but is there any reason to embed the checksum to the headers?
 
-> On Wed, May 11, 2022 at 06:21:29PM +0100, Andre Przywara wrote:
-> > The "bti" selftests are built with -nostdlib, which apparently
-> > automatically creates a statically linked binary, which is what we want
-> > and need for BTI (to avoid interactions with the dynamic linker).
-> > 
-> > However this is not true when building a PIE binary, which some
-> > toolchains (Ubuntu) configure as the default.
-> > When compiling btitest with such a toolchain, it will create a
-> > dynamically linked binary, which will probably fail some tests, as the
-> > dynamic linker might not support BTI:
-> > ===================
-> > TAP version 13
-> > 1..18
-> > not ok 1 nohint_func/call_using_br_x0
-> > not ok 2 nohint_func/call_using_br_x16
-> > not ok 3 nohint_func/call_using_blr
-> > ....
-> > ===================
-> > 
-> > To make sure we create static binaries, add an explicit -static on the
-> > linker command line. This forces static linking even if the toolchain
-> > defaults to PIE builds, and fixes btitest runs on BTI enabled machines.
-> > 
-> > Signed-off-by: Andre Przywara <andre.przywara@arm.com>  
-> 
-> Does this need to go in as a fix (cc stable, fixes tag)?
+Generally, you can have *.sha1 file to collect the checksums,
+and use the "sha1sum --check" command.
 
-I dimly remember some discussion about stable fixes not being a real thing
-for the selftests? In any case:
+Maybe, scripts/atomic/check-atomics.sh was unneeded.
 
-Fixes: 314bcbf09f14 ("kselftest: arm64: Add BTI tests")
 
-Cheers,
-Andre
+$ sha1sum include/linux/atomic/*.h   >  scripts/atomic/atomics.sha1
+$ cat scripts/atomic/atomics.sha1
+c0f1a9e951f38ccfa146ca2431f9e1611191a402
+include/linux/atomic/atomic-arch-fallback.h
+97ce73d2c176725d199a810eb81c574022ffa899
+include/linux/atomic/atomic-instrumented.h
+b0a5ee2e9497a41795644fa115df184d6331b9c2  include/linux/atomic/atomic-long.h
+$ sha1sum --check   scripts/atomic/atomics.sha1
+include/linux/atomic/atomic-arch-fallback.h: OK
+include/linux/atomic/atomic-instrumented.h: OK
+include/linux/atomic/atomic-long.h: OK
+
+
+It is possible to do "sha1sum --check && cp".
+
+
+
+> > Kbuild runs more and more tools at build time these days because they
+> > are fast enough on modern systems.
+> >
+> > For example,
+> >
+> >  - 29c833061c1d8c2d1d23a62e7061561eadd76cdb
+> >    ("kconfig: generate lexer and parser during build instead of shipping")
+> >
+> >  - 7c0303ff7e67b637c47d8afee533ca9e2a02359b
+> >    ("crypto: arm - generate *.S by Perl at build time instead of shipping them")
+> >
+> > Yet, gen-atomics.sh is too slow.
+>
+> Yes; we'd originally wanted to run them at build time, but that was too slow,
+> and as a compromise we moved to regenerating them whenever we changed the
+> scripting.
+
+I remember it.
+
+https://lore.kernel.org/lkml/20181123153321.8561-1-mark.rutland@arm.com/
+
+
+>
+> > I guess it can be improved because it is just simple text processing.
+> > Then, Kbuild can execute it at build time.
+>
+> It is in theory possible to make them much faster, yes. The actual slowness of
+> the scripting is largely due to using sub-shells resulting in a load of
+> fork+exec, which could be avoided if using a real scripting language.
+>
+> Practically speaking though, we're rather limited in what we can rely upon
+> being available. We chose to use POSIX shell as a lowest-common-demoninator,
+> and anything that'd be *nice* to use isn't going to always be available,
+> meaning that even if we make it faster we can't necessarily build it all the
+> time anyway.
+
+
+Kernel builds already rely on Perl.
+
+The base building of the kernel does not depend on Python,
+but some targets such as "make clang-tidy", "make clang-analyzer"
+need Python3.
+
+
+>
+> Thanks,
+> Mark.
+
+
+BTW, full-quoting to this thread is not a good idea.
+I cut down the code diff.
+
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

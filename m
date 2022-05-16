@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C5E528E08
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:38:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BA2528F41
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345499AbiEPTiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
+        id S1343853AbiEPTxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344524AbiEPTh6 (ORCPT
+        with ESMTP id S1346182AbiEPTsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:37:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164BD3ED09;
-        Mon, 16 May 2022 12:37:58 -0700 (PDT)
+        Mon, 16 May 2022 15:48:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CC342EF8;
+        Mon, 16 May 2022 12:44:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0A1C61518;
-        Mon, 16 May 2022 19:37:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC68DC385AA;
-        Mon, 16 May 2022 19:37:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 06389B81618;
+        Mon, 16 May 2022 19:44:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 597F4C385AA;
+        Mon, 16 May 2022 19:44:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652729877;
-        bh=CJkyGX4Y+zg7DBO1HXve9wC3uu5EtXMgyl2ABC3lC2I=;
+        s=korg; t=1652730285;
+        bh=Br3lB6GtFz/MXTAndSiBppGFrOKcpvhd6MgDFSkSPQM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jBI9r1dlVJ2wrcFWIYJIfeKhLuGR4peZlmTl5xtVovepSlX1qeG7KnVHoxJ0By5dU
-         hH3Bks5L6Lere1y+WHGA6PB3G5k4H6xSS4eBHhjGXEQ5840UVPs5ksqUtRa1l58xKR
-         bk/6yF8B+qafP7xFjBWvuh0fkQSFvWXoVOFsQ5WE=
+        b=IGXqZvTUDU0ixYf1mtFy6We7g7RN0Njk/jSuqotCUTOVhsbRGzKnIuXcJaaIVgrJ4
+         F7Dw4Vv7xpRuCxe01EMtykiqKymYSlx0Rh++6sXOU+Dr156MsFPRvSYW8uAfP+EkPJ
+         ZumQg4tYG++4Lp5oW86QcpbicNYyiCJu7McZt16Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Lokesh Dhoundiyal <lokesh.dhoundiyal@alliedtelesis.co.nz>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Dan Aloni <dan.aloni@vastdata.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 02/19] ipv4: drop dst in multicast routing path
-Date:   Mon, 16 May 2022 21:36:15 +0200
-Message-Id: <20220516193613.571906739@linuxfoundation.org>
+Subject: [PATCH 5.10 16/66] nfs: fix broken handling of the softreval mount option
+Date:   Mon, 16 May 2022 21:36:16 +0200
+Message-Id: <20220516193619.887269240@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193613.497233635@linuxfoundation.org>
-References: <20220516193613.497233635@linuxfoundation.org>
+In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
+References: <20220516193619.400083785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,65 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lokesh Dhoundiyal <lokesh.dhoundiyal@alliedtelesis.co.nz>
+From: Dan Aloni <dan.aloni@vastdata.com>
 
-[ Upstream commit 9e6c6d17d1d6a3f1515ce399f9a011629ec79aa0 ]
+[ Upstream commit 085d16d5f949b64713d5e960d6c9bbf51bc1d511 ]
 
-kmemleak reports the following when routing multicast traffic over an
-ipsec tunnel.
+Turns out that ever since this mount option was added, passing
+`softreval` in NFS mount options cancelled all other flags while not
+affecting the underlying flag `NFS_MOUNT_SOFTREVAL`.
 
-Kmemleak output:
-unreferenced object 0x8000000044bebb00 (size 256):
-  comm "softirq", pid 0, jiffies 4294985356 (age 126.810s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 80 00 00 00 05 13 74 80  ..............t.
-    80 00 00 00 04 9b bf f9 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000f83947e0>] __kmalloc+0x1e8/0x300
-    [<00000000b7ed8dca>] metadata_dst_alloc+0x24/0x58
-    [<0000000081d32c20>] __ipgre_rcv+0x100/0x2b8
-    [<00000000824f6cf1>] gre_rcv+0x178/0x540
-    [<00000000ccd4e162>] gre_rcv+0x7c/0xd8
-    [<00000000c024b148>] ip_protocol_deliver_rcu+0x124/0x350
-    [<000000006a483377>] ip_local_deliver_finish+0x54/0x68
-    [<00000000d9271b3a>] ip_local_deliver+0x128/0x168
-    [<00000000bd4968ae>] xfrm_trans_reinject+0xb8/0xf8
-    [<0000000071672a19>] tasklet_action_common.isra.16+0xc4/0x1b0
-    [<0000000062e9c336>] __do_softirq+0x1fc/0x3e0
-    [<00000000013d7914>] irq_exit+0xc4/0xe0
-    [<00000000a4d73e90>] plat_irq_dispatch+0x7c/0x108
-    [<000000000751eb8e>] handle_int+0x16c/0x178
-    [<000000001668023b>] _raw_spin_unlock_irqrestore+0x1c/0x28
-
-The metadata dst is leaked when ip_route_input_mc() updates the dst for
-the skb. Commit f38a9eb1f77b ("dst: Metadata destinations") correctly
-handled dropping the dst in ip_route_input_slow() but missed the
-multicast case which is handled by ip_route_input_mc(). Drop the dst in
-ip_route_input_mc() avoiding the leak.
-
-Fixes: f38a9eb1f77b ("dst: Metadata destinations")
-Signed-off-by: Lokesh Dhoundiyal <lokesh.dhoundiyal@alliedtelesis.co.nz>
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Link: https://lore.kernel.org/r/20220505020017.3111846-1-chris.packham@alliedtelesis.co.nz
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: c74dfe97c104 ("NFS: Add mount option 'softreval'")
+Signed-off-by: Dan Aloni <dan.aloni@vastdata.com>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/route.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/nfs/fs_context.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index f05b8d63dba3..624bdd74583b 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -1606,6 +1606,7 @@ static int ip_route_input_mc(struct sk_buff *skb, __be32 daddr, __be32 saddr,
- #endif
- 	RT_CACHE_STAT_INC(in_slow_mc);
- 
-+	skb_dst_drop(skb);
- 	skb_dst_set(skb, &rth->dst);
- 	return 0;
- 
+diff --git a/fs/nfs/fs_context.c b/fs/nfs/fs_context.c
+index 05b39e8f97b9..d60c086c6e9c 100644
+--- a/fs/nfs/fs_context.c
++++ b/fs/nfs/fs_context.c
+@@ -476,7 +476,7 @@ static int nfs_fs_context_parse_param(struct fs_context *fc,
+ 		if (result.negated)
+ 			ctx->flags &= ~NFS_MOUNT_SOFTREVAL;
+ 		else
+-			ctx->flags &= NFS_MOUNT_SOFTREVAL;
++			ctx->flags |= NFS_MOUNT_SOFTREVAL;
+ 		break;
+ 	case Opt_posix:
+ 		if (result.negated)
 -- 
 2.35.1
 

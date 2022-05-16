@@ -2,102 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C12527DFC
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA484527DFE
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:03:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240622AbiEPHCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 03:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47062 "EHLO
+        id S240647AbiEPHDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 03:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbiEPHCS (ORCPT
+        with ESMTP id S240626AbiEPHC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 03:02:18 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE47DFB4;
-        Mon, 16 May 2022 00:02:17 -0700 (PDT)
-Date:   Mon, 16 May 2022 09:02:14 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652684536;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BY9zh6DOrpPC4lvvoU6noyY6hJNaHrB0bXgQylzFWy4=;
-        b=ZrbqpuwRnBT0ZUoj0KOZ9rUG5s/eSHc2X7vWVgdWAYz64FsT+7H39/Hs5LlYKtmTwNbUll
-        KJu23dsoxM2n1tSjTjdrFssVcsltxvgq2IkFxCpRY35gdjHKtY9zQGZr7+YftlC+PYoOum
-        ef5E6+TFyilHqZGHbiAJ7Aft0oNllM869RiVA3Eb9WGp1rVjFtzAo6hZxJ0nkU9RNNc5pY
-        FmY+ycGzw7y4nBR+lL64otOm6cjXlZMQr6W5y3Q9RFC1/fdHmxGRqJNbkuJRRwqj0DWrwO
-        jcfp1Ho52Mu+eTZbFLuJYYYIWp02kClFY546p6Hn0gqzWayVgI5E1ALNkjw0aw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652684536;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BY9zh6DOrpPC4lvvoU6noyY6hJNaHrB0bXgQylzFWy4=;
-        b=saDiQLX5+7hZtOFNtF0yoT5muAi7lnc7HHnBOVrvm7pjL3t42BNr+IcmX0xVofgt0DSsNw
-        LG7hXX7i1663uWAA==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Lukas Wunner <lukas@wunner.de>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org,
-        Octavian Purdila <octavian.purdila@nxp.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] genirq: Deduplicate WARN_ON_ONCE() in
- generic_handle_domain_irq()
-Message-ID: <YoH29u6kNTXF/0Ew@linutronix.de>
-References: <c3caf60bfa78e5fdbdf483096b7174da65d1813a.1652168866.git.lukas@wunner.de>
- <YoHvXpo8PJUDbs08@linutronix.de>
- <87ilq6q87q.ffs@tglx>
+        Mon, 16 May 2022 03:02:58 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6832EDFBB
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:02:55 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id s27so16980852ljd.2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:02:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=oirpwm1AGe5M0caD4aV4H+XlkR1kteVHxSnmnXrKWU4=;
+        b=ZXA7vD6G8P26CPF7HOtRct655zWhRS7fd6hici/WgzOo1e74kAWL7FgXV8f1aYt7oY
+         ogzUnuWff17xFKp1lSm6NdqxdDVUxutVJuVRwAFuPhzXDYUoamk6IYgP/dq3P3lSNRca
+         RA6VNBibPx2RWV8wFrL1wD0vdUWAc3zchV4mp5jE48ycPIC9Ifsj2qWD2+0slDmTtblV
+         9ZLnZ8jOrh949/DfQuAgknydvDBmEDrUxFNswZMxEqhH1YtpntBGTXFcRp9wGr+bUN/U
+         idnhvEd+FsGAKEEEmgUgyJ0OLHB1TW/EH8zXF75Kl6H5yWZg8nLjXsUEL9DCU3JT9J/V
+         O2hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oirpwm1AGe5M0caD4aV4H+XlkR1kteVHxSnmnXrKWU4=;
+        b=BivBW6UJUfNeEi4DNnHrTA372w2beJhYzDOaQMVBDBcOnZDBwY2wH1Qu3OPRcexnDz
+         CkHzM1zIsXUGflI17nqsOMxIHz8QPK8HD5PoRi1KQZFz05aHfzv69hQUjmHcVYm5uZww
+         eCN2uJYltJOFskAEiRnZem9mKYTZzTZvbibJMSL/wKsiHzBkR7/HVYG9yt/yBb31qm3r
+         qVgsGqQJsFvu1wxIMtY9fkKKze0YNeFtXUVjQLEoDNkt9NdVFusdoz6Kur8oux/GHm+V
+         0jTNd6t++GzA0jWTfV3Y6FixxO1RyE+/aRGIQq1dGW1/Rwto7xxGcA06jJpgKVH4RaFv
+         inkQ==
+X-Gm-Message-State: AOAM531LXrp3XqK4wpdlfHoOUZz2DmfZh2QtJBK/iKrxxpqK03rRnBpr
+        hsR7yS5gDtSNdpNyXOvCi7lwNQ==
+X-Google-Smtp-Source: ABdhPJxj6ZZdDkD9cnljvIwwhF7SAmKjDxjdXJbfWaHgwbjDJfpcyojxAmpzoC3ILaKnvVlcK0Q2/Q==
+X-Received: by 2002:a05:651c:a0e:b0:250:6a11:ff24 with SMTP id k14-20020a05651c0a0e00b002506a11ff24mr10194829ljq.31.1652684573778;
+        Mon, 16 May 2022 00:02:53 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id x2-20020a056512078200b0047255d21166sm1219236lfr.149.2022.05.16.00.02.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 00:02:53 -0700 (PDT)
+Message-ID: <c05d8369-0e95-0f57-eeb7-f23161a8c101@linaro.org>
+Date:   Mon, 16 May 2022 09:02:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87ilq6q87q.ffs@tglx>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 3/4] dt-bindings: arm: qcom: Add / fix sc7280 board
+ bindings
+Content-Language: en-US
+To:     Douglas Anderson <dianders@chromium.org>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Alexandru M Stan <amstan@chromium.org>,
+        Julius Werner <jwerner@chromium.org>,
+        "Joseph S . Barrera III" <joebar@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220513095722.v2.1.I71e42c6174f1cec17da3024c9f73ba373263b9b6@changeid>
+ <20220513095722.v2.3.I1318c1ae2ce55ade1d092fc21df846360b15c560@changeid>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220513095722.v2.3.I1318c1ae2ce55ade1d092fc21df846360b15c560@changeid>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-16 08:53:29 [+0200], Thomas Gleixner wrote:
-> > they tell you that the context is wrong.
+On 13/05/2022 18:59, Douglas Anderson wrote:
+> This copy-pastes compatibles from sc7280-based boards from the device
+> trees to the yaml file. It also fixes the CRD/IDP bindings which had
+> gotten stale.
 > 
-> Why? These handlers can be called from any context, really. Yes. They
-> need to be called with interrupts disabled, but that's it. The warning
-> is checking hard interrupt context unconditionally.
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 
-correct. If the context is wrong, the interrupts are usually not
-disabled.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> > From looking at gpio-dln2 this is called from USB URB's callback which
-> > is softirq. In the end dln2_gpio_event() is invoked while
-> > dln2_dev::event_cb_lock is acquired.  That lock is acquired by
-> > disabling interrupts which is what gets the locking right for
-> > generic_handle_domain_irq(). If that lock lifted to spin_lock_bh()
-> > (because it is always in urb's calback context and all HCDs complete
-> > in one context unlike now) then this breaks.
-> 
-> Yes, but that's a different problem.
-> 
-> > And PREEMPT_RT is broken already. Therefore, last week, I've been
-> > promoting generic_handle_domain_irq_safe()
-> > https://lkml.kernel.org/r/YnkfWFzvusFFktSt@linutronix.de
-> 
-> Well, that's just a wrapper which adds the local_irq_save(), so it's not
-> any different from having the local_irq_save() at the callsite, unless
-> I'm missing something.
 
-I haven't seen a local_irq_save() at the callsite. If it is, then it is
-not any different.
-
-> Thanks,
-> 
->         tglx
-
-Sebastian
+Best regards,
+Krzysztof

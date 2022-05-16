@@ -2,48 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95C5529070
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FFEE529145
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235742AbiEPTyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37242 "EHLO
+        id S1351394AbiEPUDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346283AbiEPTtA (ORCPT
+        with ESMTP id S1346278AbiEPTxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:49:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B422433BA;
-        Mon, 16 May 2022 12:44:58 -0700 (PDT)
+        Mon, 16 May 2022 15:53:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E1B47042;
+        Mon, 16 May 2022 12:48:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45B2861512;
-        Mon, 16 May 2022 19:44:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A61EC34115;
-        Mon, 16 May 2022 19:44:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB528B81611;
+        Mon, 16 May 2022 19:48:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1C6DC385AA;
+        Mon, 16 May 2022 19:48:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730297;
-        bh=L5m26iIlOdgBK58M1rRzRjKkQm9Am+GRNIiFSrxU1KM=;
+        s=korg; t=1652730531;
+        bh=cuKichH73sDTAWETAXC1JTIM2p/rWmO8HVY3pasalVI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HPzcTFlr0Ax5CqpYUwwLrTATOK3Hy7b+JWdQqX7pYKFpiYaCV+BRvqiQW4JjBnApF
-         dA42LRzYKmIEqExU4vDOz3h4XOk8er5rdNEXpKi0ziyJUKrHgjrVMixlw0x0WDG9Gs
-         G/Xm/DIiO19XtS9w/ouvbYn4hF1AZ5bLZ7q0Dxrs=
+        b=YYDRZiz5wvI1cq2IAIJLZ69ZqqdUOhcxa0tmhInI0+clkwSuqnRWbj9+zaVUfp09C
+         n6gQPXF+53WE7Sl5rRa/mEb+siccTk8HxRWy9+bbdLe3mVpQtt1HIpBDMjzQNtzNk2
+         IS3CBR1WhXpax9ZHbYOC9F0l2Vf9CsC0KcaMuBg0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>
-Subject: [PATCH 5.10 02/66] iwlwifi: iwl-dbg: Use del_timer_sync() before freeing
+        stable@vger.kernel.org, Kalesh Singh <kaleshsingh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Hridya Valsaraju <hridya@google.com>,
+        Jann Horn <jannh@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 028/102] procfs: prevent unprivileged processes accessing fdinfo dir
 Date:   Mon, 16 May 2022 21:36:02 +0200
-Message-Id: <20220516193619.473226461@linuxfoundation.org>
+Message-Id: <20220516193624.808523501@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
-References: <20220516193619.400083785@linuxfoundation.org>
+In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
+References: <20220516193623.989270214@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,47 +61,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+From: Kalesh Singh <kaleshsingh@google.com>
 
-[ Upstream commit 7635a1ad8d92dcc8247b53f949e37795154b5b6f ]
+[ Upstream commit 1927e498aee1757b3df755a194cbfc5cc0f2b663 ]
 
-In Chrome OS, a large number of crashes is observed due to corrupted timer
-lists. Steven Rostedt pointed out that this usually happens when a timer
-is freed while still active, and that the problem is often triggered
-by code calling del_timer() instead of del_timer_sync() just before
-freeing.
+The file permissions on the fdinfo dir from were changed from
+S_IRUSR|S_IXUSR to S_IRUGO|S_IXUGO, and a PTRACE_MODE_READ check was added
+for opening the fdinfo files [1].  However, the ptrace permission check
+was not added to the directory, allowing anyone to get the open FD numbers
+by reading the fdinfo directory.
 
-Steven also identified the iwlwifi driver as one of the possible culprits
-since it does exactly that.
+Add the missing ptrace permission check for opening the fdinfo directory.
 
-Reported-by: Steven Rostedt <rostedt@goodmis.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Johannes Berg <johannes.berg@intel.com>
-Cc: Gregory Greenman <gregory.greenman@intel.com>
-Fixes: 60e8abd9d3e91 ("iwlwifi: dbg_ini: add periodic trigger new API support")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Acked-by: Gregory Greenman <gregory.greenman@intel.com>
-Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # Linux v5.17.3-rc1 and Debian LLVM-14
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220411154210.1870008-1-linux@roeck-us.net
+[1] https://lkml.kernel.org/r/20210308170651.919148-1-kaleshsingh@google.com
+
+Link: https://lkml.kernel.org/r/20210713162008.1056986-1-kaleshsingh@google.com
+Fixes: 7bc3fa0172a4 ("procfs: allow reading fdinfo with PTRACE_MODE_READ")
+Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Eric W. Biederman <ebiederm@xmission.com>
+Cc: Christian Brauner <christian.brauner@ubuntu.com>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Cc: Hridya Valsaraju <hridya@google.com>
+Cc: Jann Horn <jannh@google.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/proc/fd.c | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c b/drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c
-index fcad5cdcabfa..3c931b1b2a0b 100644
---- a/drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c
-+++ b/drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c
-@@ -367,7 +367,7 @@ void iwl_dbg_tlv_del_timers(struct iwl_trans *trans)
- 	struct iwl_dbg_tlv_timer_node *node, *tmp;
+diff --git a/fs/proc/fd.c b/fs/proc/fd.c
+index 172c86270b31..913bef0d2a36 100644
+--- a/fs/proc/fd.c
++++ b/fs/proc/fd.c
+@@ -72,7 +72,7 @@ static int seq_show(struct seq_file *m, void *v)
+ 	return 0;
+ }
  
- 	list_for_each_entry_safe(node, tmp, timer_list, list) {
--		del_timer(&node->timer);
-+		del_timer_sync(&node->timer);
- 		list_del(&node->list);
- 		kfree(node);
- 	}
+-static int seq_fdinfo_open(struct inode *inode, struct file *file)
++static int proc_fdinfo_access_allowed(struct inode *inode)
+ {
+ 	bool allowed = false;
+ 	struct task_struct *task = get_proc_task(inode);
+@@ -86,6 +86,16 @@ static int seq_fdinfo_open(struct inode *inode, struct file *file)
+ 	if (!allowed)
+ 		return -EACCES;
+ 
++	return 0;
++}
++
++static int seq_fdinfo_open(struct inode *inode, struct file *file)
++{
++	int ret = proc_fdinfo_access_allowed(inode);
++
++	if (ret)
++		return ret;
++
+ 	return single_open(file, seq_show, inode);
+ }
+ 
+@@ -348,12 +358,23 @@ static int proc_readfdinfo(struct file *file, struct dir_context *ctx)
+ 				  proc_fdinfo_instantiate);
+ }
+ 
++static int proc_open_fdinfo(struct inode *inode, struct file *file)
++{
++	int ret = proc_fdinfo_access_allowed(inode);
++
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
+ const struct inode_operations proc_fdinfo_inode_operations = {
+ 	.lookup		= proc_lookupfdinfo,
+ 	.setattr	= proc_setattr,
+ };
+ 
+ const struct file_operations proc_fdinfo_operations = {
++	.open		= proc_open_fdinfo,
+ 	.read		= generic_read_dir,
+ 	.iterate_shared	= proc_readfdinfo,
+ 	.llseek		= generic_file_llseek,
 -- 
 2.35.1
 

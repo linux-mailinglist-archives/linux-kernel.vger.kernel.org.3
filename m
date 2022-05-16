@@ -2,47 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 629215290CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E458528FEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347058AbiEPT40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:56:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56696 "EHLO
+        id S1349672AbiEPUce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346952AbiEPTvb (ORCPT
+        with ESMTP id S1351021AbiEPUB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:51:31 -0400
+        Mon, 16 May 2022 16:01:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94A54093E;
-        Mon, 16 May 2022 12:46:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB413473AC;
+        Mon, 16 May 2022 12:56:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 781C161557;
-        Mon, 16 May 2022 19:46:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81A77C385AA;
-        Mon, 16 May 2022 19:46:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47FA760FE4;
+        Mon, 16 May 2022 19:56:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CA90C385AA;
+        Mon, 16 May 2022 19:56:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730367;
-        bh=nHCPrEtDuSjJ96w8i2Zd8GckMSt702jjQBW4XUFJnXU=;
+        s=korg; t=1652730994;
+        bh=k+MToLoaUMchIx7iY04ATQlWvuE0nwEcPwpeCEw1FW8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GLrgSttN59L/KEhQ1z20gwo1CkI3Sx+9PUMNeIKH9B0njzMHCg+O5sXvksFwvLlhp
-         XfEguy/RDiHYVZTvI3uR0Df7Qic8Z+CWnDOU3Zyr+k9s/fwvkMBTwjGycd/TiMx8a0
-         c+dCg5TUmfUlWWQRd4PQyKQNW7xQ7jhgp21SB6oU=
+        b=0xroSUupMv5NOU86NXEA8jgaqZTm74/Chz81VisBpOWGFIxYkyPSF81OgmrAP4Aqf
+         VtmN5Faf1zJXEapvHgD0lhRxrUvlx9QhYNTu3edbLEj1/OzHQQ7Ev6PaemXLUDLqmS
+         +dArWoOXjCT5/vMjm7W/hvljTbwT1hwFRYoS0EtY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Macpaul Lin <macpaul.lin@mediatek.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Fabien Parent <fparent@baylibre.com>
-Subject: [PATCH 5.10 44/66] usb: typec: tcpci_mt6360: Update for BMC PHY setting
+        stable@vger.kernel.org, James Clark <james.clark@arm.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 070/114] perf tests: Fix coresight `perf test` failure.
 Date:   Mon, 16 May 2022 21:36:44 +0200
-Message-Id: <20220516193620.687545703@linuxfoundation.org>
+Message-Id: <20220516193627.501172278@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
-References: <20220516193619.400083785@linuxfoundation.org>
+In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
+References: <20220516193625.489108457@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,106 +63,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+From: Jeremy Linton <jeremy.linton@arm.com>
 
-commit 4031cd95cba70c72e4cadc2d46624bcd31e5a6c0 upstream.
+[ Upstream commit 45fa7c38696bae632310c2876ba81fdfa25cc9c2 ]
 
-Update MT6360 BMC PHY Tx/Rx setting for the compatibility.
+Currently the `perf test` always fails the coresight test like:
 
-Macpaul reported this CtoDP cable attention message cannot be received from
-MT6360 TCPC. But actually, attention message really sent from UFP_D
-device.
+  89: Check Arm CoreSight trace data recording and synthesized samples: FAILED!
 
-After RD's comment, there may be BMC PHY Tx/Rx setting causes this issue.
+That is because the test_arm_coresight.sh is attempting to SIGINT the
+parent but is using $$ rather than $PPID and it sigint's itself when
+run under the perf test framework.
 
-Below's the detailed TCPM log and DP attention message didn't received from 6360
-TCPCI.
-[ 1206.367775] Identity: 0000:0000.0000
-[ 1206.416570] Alternate mode 0: SVID 0xff01, VDO 1: 0x00000405
-[ 1206.447378] AMS DFP_TO_UFP_ENTER_MODE start
-[ 1206.447383] PD TX, header: 0x1d6f
-[ 1206.449393] PD TX complete, status: 0
-[ 1206.454110] PD RX, header: 0x184f [1]
-[ 1206.456867] Rx VDM cmd 0xff018144 type 1 cmd 4 len 1
-[ 1206.456872] AMS DFP_TO_UFP_ENTER_MODE finished
-[ 1206.456873] cc:=4
-[ 1206.473100] AMS STRUCTURED_VDMS start
-[ 1206.473103] PD TX, header: 0x2f6f
-[ 1206.475397] PD TX complete, status: 0
-[ 1206.480442] PD RX, header: 0x2a4f [1]
-[ 1206.483145] Rx VDM cmd 0xff018150 type 1 cmd 16 len 2
-[ 1206.483150] AMS STRUCTURED_VDMS finished
-[ 1206.483151] cc:=4
-[ 1206.505643] AMS STRUCTURED_VDMS start
-[ 1206.505646] PD TX, header: 0x216f
-[ 1206.507933] PD TX complete, status: 0
-[ 1206.512664] PD RX, header: 0x1c4f [1]
-[ 1206.515456] Rx VDM cmd 0xff018151 type 1 cmd 17 len 1
-[ 1206.515460] AMS STRUCTURED_VDMS finished
-[ 1206.515461] cc:=4
+Since this is done in a trap clause it ends up returning a non zero
+return.
 
-Fixes: e1aefcdd394fd ("usb typec: mt6360: Add support for mt6360 Type-C driver")
-Cc: stable <stable@vger.kernel.org>
-Reported-by: Macpaul Lin <macpaul.lin@mediatek.com>
-Tested-by: Macpaul Lin <macpaul.lin@mediatek.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
-Link: https://lore.kernel.org/r/1652159580-30959-1-git-send-email-u0084500@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Since $PPID is a bash ism and not all distros are linking /bin/sh to
+bash, the alternative parent pid lookups are uglier than just dropping
+the kill, and its not strictly needed, lets pick the simple solution and
+drop the sigint.
+
+Fixes: 133fe2e617e48ca0 ("perf tests: Improve temp file cleanup in test_arm_coresight.sh")
+Reviewed-by: James Clark <james.clark@arm.com>
+Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: James Clark <james.clark@arm.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Leo Yan <leo.yan@linaro.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Jeremy Linton <jeremy.linton@arm.com>
+Link: https://lore.kernel.org/r/20220428151947.290146-1-jeremy.linton@arm.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/typec/tcpm/tcpci_mt6360.c |   26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ tools/perf/tests/shell/test_arm_coresight.sh | 1 -
+ 1 file changed, 1 deletion(-)
 
---- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
-+++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
-@@ -15,6 +15,9 @@
- 
- #include "tcpci.h"
- 
-+#define MT6360_REG_PHYCTRL1	0x80
-+#define MT6360_REG_PHYCTRL3	0x82
-+#define MT6360_REG_PHYCTRL7	0x86
- #define MT6360_REG_VCONNCTRL1	0x8C
- #define MT6360_REG_MODECTRL2	0x8F
- #define MT6360_REG_SWRESET	0xA0
-@@ -22,6 +25,8 @@
- #define MT6360_REG_DRPCTRL1	0xA2
- #define MT6360_REG_DRPCTRL2	0xA3
- #define MT6360_REG_I2CTORST	0xBF
-+#define MT6360_REG_PHYCTRL11	0xCA
-+#define MT6360_REG_RXCTRL1	0xCE
- #define MT6360_REG_RXCTRL2	0xCF
- #define MT6360_REG_CTDCTRL2	0xEC
- 
-@@ -106,6 +111,27 @@ static int mt6360_tcpc_init(struct tcpci
- 	if (ret)
- 		return ret;
- 
-+	/* BMC PHY */
-+	ret = mt6360_tcpc_write16(regmap, MT6360_REG_PHYCTRL1, 0x3A70);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(regmap, MT6360_REG_PHYCTRL3,  0x82);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(regmap, MT6360_REG_PHYCTRL7, 0x36);
-+	if (ret)
-+		return ret;
-+
-+	ret = mt6360_tcpc_write16(regmap, MT6360_REG_PHYCTRL11, 0x3C60);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(regmap, MT6360_REG_RXCTRL1, 0xE8);
-+	if (ret)
-+		return ret;
-+
- 	/* Set shipping mode off, AUTOIDLE on */
- 	return regmap_write(regmap, MT6360_REG_MODECTRL2, 0x7A);
+diff --git a/tools/perf/tests/shell/test_arm_coresight.sh b/tools/perf/tests/shell/test_arm_coresight.sh
+index 6de53b7ef5ff..e4cb4f1806ff 100755
+--- a/tools/perf/tests/shell/test_arm_coresight.sh
++++ b/tools/perf/tests/shell/test_arm_coresight.sh
+@@ -29,7 +29,6 @@ cleanup_files()
+ 	rm -f ${file}
+ 	rm -f "${perfdata}.old"
+ 	trap - exit term int
+-	kill -2 $$
+ 	exit $glb_err
  }
+ 
+-- 
+2.35.1
+
 
 

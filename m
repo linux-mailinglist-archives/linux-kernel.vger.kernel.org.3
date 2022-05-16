@@ -2,139 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2275527B4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 03:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9DD527B62
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 03:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238959AbiEPBOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 21:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60112 "EHLO
+        id S239101AbiEPB3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 21:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231937AbiEPBOK (ORCPT
+        with ESMTP id S235072AbiEPB3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 21:14:10 -0400
+        Sun, 15 May 2022 21:29:13 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05553E0C2;
-        Sun, 15 May 2022 18:14:07 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L1h8H5sVvzhZ8f;
-        Mon, 16 May 2022 09:13:19 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by canpemm500010.china.huawei.com
- (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 16 May
- 2022 09:14:05 +0800
-From:   Ye Bin <yebin10@huawei.com>
-To:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
-        <linux-ext4@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>,
-        Ye Bin <yebin10@huawei.com>
-Subject: [PATCH -next v3] ext4: fix bug_on in ext4_writepages
-Date:   Mon, 16 May 2022 09:27:52 +0800
-Message-ID: <20220516012752.17241-1-yebin10@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED01113D4E;
+        Sun, 15 May 2022 18:29:12 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L1hRG6072zGpqF;
+        Mon, 16 May 2022 09:26:18 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 16 May 2022 09:29:11 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 16 May 2022 09:29:10 +0800
+Subject: Re: [PATCH] rcu/nocb: Delete local variable 'need_rcu_nocb_mask' in
+ rcu_init_nohz()
+To:     <paulmck@kernel.org>
+CC:     Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220426073626.967-1-thunder.leizhen@huawei.com>
+ <20220513150556.GH1790663@paulmck-ThinkPad-P17-Gen-1>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <5b8cfec7-198e-1e6c-6ab7-b6bea747c621@huawei.com>
+Date:   Mon, 16 May 2022 09:29:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500010.china.huawei.com (7.192.105.118)
+In-Reply-To: <20220513150556.GH1790663@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-we got issue as follows:
-EXT4-fs error (device loop0): ext4_mb_generate_buddy:1141: group 0, block bitmap and bg descriptor inconsistent: 25 vs 31513 free cls
-------------[ cut here ]------------
-kernel BUG at fs/ext4/inode.c:2708!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
-CPU: 2 PID: 2147 Comm: rep Not tainted 5.18.0-rc2-next-20220413+ #155
-RIP: 0010:ext4_writepages+0x1977/0x1c10
-RSP: 0018:ffff88811d3e7880 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffff88811c098000
-RDX: 0000000000000000 RSI: ffff88811c098000 RDI: 0000000000000002
-RBP: ffff888128140f50 R08: ffffffffb1ff6387 R09: 0000000000000000
-R10: 0000000000000007 R11: ffffed10250281ea R12: 0000000000000001
-R13: 00000000000000a4 R14: ffff88811d3e7bb8 R15: ffff888128141028
-FS:  00007f443aed9740(0000) GS:ffff8883aef00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020007200 CR3: 000000011c2a4000 CR4: 00000000000006e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- do_writepages+0x130/0x3a0
- filemap_fdatawrite_wbc+0x83/0xa0
- filemap_flush+0xab/0xe0
- ext4_alloc_da_blocks+0x51/0x120
- __ext4_ioctl+0x1534/0x3210
- __x64_sys_ioctl+0x12c/0x170
- do_syscall_64+0x3b/0x90
 
-It may happen as follows:
-1. write inline_data inode
-vfs_write
-  new_sync_write
-    ext4_file_write_iter
-      ext4_buffered_write_iter
-        generic_perform_write
-          ext4_da_write_begin
-            ext4_da_write_inline_data_begin -> If inline data size too
-            small will allocate block to write, then mapping will has
-            dirty page
-                ext4_da_convert_inline_data_to_extent ->clear EXT4_STATE_MAY_INLINE_DATA
-2. fallocate
-do_vfs_ioctl
-  ioctl_preallocate
-    vfs_fallocate
-      ext4_fallocate
-        ext4_convert_inline_data
-          ext4_convert_inline_data_nolock
-            ext4_map_blocks -> fail will goto restore data
-            ext4_restore_inline_data
-              ext4_create_inline_data
-              ext4_write_inline_data
-              ext4_set_inode_state -> set inode EXT4_STATE_MAY_INLINE_DATA
-3. writepages
-__ext4_ioctl
-  ext4_alloc_da_blocks
-    filemap_flush
-      filemap_fdatawrite_wbc
-        do_writepages
-          ext4_writepages
-            if (ext4_has_inline_data(inode))
-              BUG_ON(ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA))
 
-The root cause of this issue is we destory inline data until call ext4_writepages
-under delay allocation mode. But there maybe already covert from inline to extent.
-To solved this issue, we call filemap_flush firstly.
+On 2022/5/13 23:05, Paul E. McKenney wrote:
+> On Tue, Apr 26, 2022 at 03:36:26PM +0800, Zhen Lei wrote:
+>> The local variable 'need_rcu_nocb_mask' is true only if CONFIG_NO_HZ_FULL
+>> is defined. So branch "if (need_rcu_nocb_mask)" can be moved within the
+>> scope of "#if defined(CONFIG_NO_HZ_FULL)". At this point, using variable
+>> 'need_rcu_nocb_mask' is not necessary, so delete it.
+>>
+>> No functional changes, but the code looks a little more concise.
+>>
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> 
+> First, please accept my apologies for the late reply and for the
+> overly active spam filters.
+> 
+> One question below.
+> 
+> 							Thanx, Paul
+> 
+>> ---
+>>  kernel/rcu/tree_nocb.h | 8 ++------
+>>  1 file changed, 2 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+>> index 636d0546a4e932e..1e334e217f0afb7 100644
+>> --- a/kernel/rcu/tree_nocb.h
+>> +++ b/kernel/rcu/tree_nocb.h
+>> @@ -1165,15 +1165,10 @@ EXPORT_SYMBOL_GPL(rcu_nocb_cpu_offload);
+>>  void __init rcu_init_nohz(void)
+>>  {
+>>  	int cpu;
+>> -	bool need_rcu_nocb_mask = false;
+>>  	struct rcu_data *rdp;
+>>  
+>>  #if defined(CONFIG_NO_HZ_FULL)
+>> -	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask))
+>> -		need_rcu_nocb_mask = true;
+>> -#endif /* #if defined(CONFIG_NO_HZ_FULL) */
+>> -
+>> -	if (need_rcu_nocb_mask) {
+> 
+> Could you please test this on a kernel built with CONFIG_NO_HZ_FULL=n
+> and CONFIG_RCU_NOCB_CPU=y?  If that works, please add an explanation
 
-Signed-off-by: Ye Bin <yebin10@huawei.com>
----
- fs/ext4/inline.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+OK, I will test it.
 
-diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
-index 6d253edebf9f..79a7d5d700f7 100644
---- a/fs/ext4/inline.c
-+++ b/fs/ext4/inline.c
-@@ -2002,6 +2002,12 @@ int ext4_convert_inline_data(struct inode *inode)
- 	if (!ext4_has_inline_data(inode)) {
- 		ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
- 		return 0;
-+	} else if (!ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)) {
-+		error = filemap_flush(inode->i_mapping);
-+		if (error)
-+			return error;
-+		if (!ext4_has_inline_data(inode))
-+			return 0;
- 	}
- 
- 	needed_blocks = ext4_writepage_trans_blocks(inode);
+> of why it works to the commit log above and repost the patch.
+
+Sorry, If I had written pseudocode in the commit log, it would have been clear, as below:
+
+-----------------before-----------------
+        bool need_rcu_nocb_mask = false;
+
+#if defined(CONFIG_NO_HZ_FULL)
+        if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask))
+                need_rcu_nocb_mask = true;      <----	//Move it here, then delete all 'need_rcu_nocb_mask' related code
+#endif /* #if defined(CONFIG_NO_HZ_FULL) */          |
+                                                     |
+        if (need_rcu_nocb_mask) {                    |  //Can only be true above
+                ...                             -----
+        }
+
+-----------------after-----------------
+#if defined(CONFIG_NO_HZ_FULL)
+        if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask)) {
+                ...
+	}
+#endif /* #if defined(CONFIG_NO_HZ_FULL) */
+
+I'm doing clean up on the premise that the original code is correct.
+
+
+> 
+>> +	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask)) {
+>>  		if (!cpumask_available(rcu_nocb_mask)) {
+>>  			if (!zalloc_cpumask_var(&rcu_nocb_mask, GFP_KERNEL)) {
+>>  				pr_info("rcu_nocb_mask allocation failed, callback offloading disabled.\n");
+>> @@ -1182,6 +1177,7 @@ void __init rcu_init_nohz(void)
+>>  		}
+>>  		rcu_nocb_is_setup = true;
+>>  	}
+>> +#endif /* #if defined(CONFIG_NO_HZ_FULL) */
+>>  
+>>  	if (!rcu_nocb_is_setup)
+>>  		return;
+>> -- 
+>> 2.26.0.106.g9fadedd
+>>
+> .
+> 
+
 -- 
-2.31.1
-
+Regards,
+  Zhen Lei

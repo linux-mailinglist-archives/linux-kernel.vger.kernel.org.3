@@ -2,127 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED44D528800
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B0652880C
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:07:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245003AbiEPPGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 11:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56850 "EHLO
+        id S244960AbiEPPHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 11:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244746AbiEPPG2 (ORCPT
+        with ESMTP id S238196AbiEPPHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 11:06:28 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EDA3B3DA
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 08:06:27 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id dk23so29257032ejb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 08:06:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=X3adrsX+uhZAXoth7knDMjvKgEG3AVzl2RqEOStCFFU=;
-        b=WUC5Xg+4w97H+b3njqlusYipF4b7Bqzncvyv3eg4yB93mgKI/DfXQo99MRIvkX7ysm
-         UbxSikcZHAC7DZafAgPC0PmJIZzdAlQ4kZlG1mvRtBK4iw/VAKUpEYYK7q1asUPtmc1H
-         2sDcNSDhZsnI80IGowjrZiyMN0Dy8GI6NTfK4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X3adrsX+uhZAXoth7knDMjvKgEG3AVzl2RqEOStCFFU=;
-        b=eRotj/VM4Av1yTgbkyMBqgufHcPNWopFzEzRmfmI+O81RiN4PTl5QNk7fC6EN6qEYI
-         ta0PbxTFTVxBltn6YXOEOCwSr4pT8ZauVdgP2rIQY5e+xCB/ZV/VAVht1/wYds+iQpsq
-         Cz//Hde/qpD+APIGFhxFxmQCugOlh/FgXXPm49Iw2FPvspkbRCRf9BxkesEvJ9dWoMlA
-         4Ei+qg/TPVl0BgT27/aOVl09FSxoAg5fUkD2fLxDipLrwCY1UV8JXpcNjVk7srjNcrQt
-         TD2S88P2pnurPoOxfazWOLjOoXxyuQ0ngJk0x3+7oC+Kmpb/x4xKnrCOZrulnNmoum/7
-         Jjvg==
-X-Gm-Message-State: AOAM533FssmzDjU1uCdQA51ukEXEn6n8mYxmd8n0WggIN9zWz8HO5Lw/
-        WsoXHsaqpavdudeTih5cdlDI7R6dGdyKwd+M
-X-Google-Smtp-Source: ABdhPJygDULPkrW7AZfWdh+Weq+1LJwHY4UBLe1HIFn7p4DIl+yFYMh+za2akOjSdfsXcB009EfnHA==
-X-Received: by 2002:a17:907:3d92:b0:6f4:5ddd:94d with SMTP id he18-20020a1709073d9200b006f45ddd094dmr15536467ejc.268.1652713585450;
-        Mon, 16 May 2022 08:06:25 -0700 (PDT)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
-        by smtp.gmail.com with ESMTPSA id jx1-20020a170907760100b006f3ef214da1sm16551ejc.7.2022.05.16.08.06.24
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 08:06:24 -0700 (PDT)
-Received: by mail-wm1-f49.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso11127938wma.0
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 08:06:24 -0700 (PDT)
-X-Received: by 2002:a7b:c4c8:0:b0:394:26c5:b79e with SMTP id
- g8-20020a7bc4c8000000b0039426c5b79emr17514279wmk.15.1652713583816; Mon, 16
- May 2022 08:06:23 -0700 (PDT)
+        Mon, 16 May 2022 11:07:30 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1863B3DA;
+        Mon, 16 May 2022 08:07:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=x8rylV2fo2RhFyw7lXZ7iRi1TUSl/qSAgQ1QFQa6Swk=; b=feXctn9xVfAtMOxpqtYyQ3CA85
+        BjdcLwwe8TiMsRw2fUykvtPuvzY6hmKnTuAYE+A0XsmmVYSLQ/kcthiUMBKg0mNjJ1yc4l+lLSsmf
+        USmCbBkmQnOZm2iGOSrx6Rl0cCpZ73ILK767ZxXmwm6a3QHv/+OS7mfra0PYCo9fNU1O9VQyfm4pw
+        6HrCZSPKvKswSfp/Eu6sagLk3Urn9HpvONKk/wFmV32LKFF9WaILoOgpFS5qfU8S7XCa8c/aUXIoQ
+        86eaCmPOCcjnQf8OfgMGzWfOoSFt/jwGca1nP55u94yjF/tPVCKn3Ik3vagLqYanseWDcV4ZXGkRO
+        T9pShFkw==;
+Received: from [177.183.162.244] (helo=[192.168.0.5])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nqcJI-006nIW-Cg; Mon, 16 May 2022 17:07:00 +0200
+Message-ID: <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com>
+Date:   Mon, 16 May 2022 12:06:17 -0300
 MIME-Version: 1.0
-References: <20220513095722.v2.1.I71e42c6174f1cec17da3024c9f73ba373263b9b6@changeid>
- <d5438d2e-f387-170a-cea1-d5936cc8e15a@linaro.org>
-In-Reply-To: <d5438d2e-f387-170a-cea1-d5936cc8e15a@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 16 May 2022 08:06:11 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VNGS+H8biOOigt=drUCYCWY1VBKN=ZFD74T-3RSeWBxA@mail.gmail.com>
-Message-ID: <CAD=FV=VNGS+H8biOOigt=drUCYCWY1VBKN=ZFD74T-3RSeWBxA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] dt-bindings: Document how Chromebooks with
- depthcharge boot
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Alexandru M Stan <amstan@chromium.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
+Content-Language: en-US
+To:     Petr Mladek <pmladek@suse.com>, David Gow <davidgow@google.com>,
+        Evan Green <evgreen@chromium.org>,
         Julius Werner <jwerner@chromium.org>,
-        "Joseph S . Barrera III" <joebar@chromium.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Scott Branden <scott.branden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dexuan Cui <decui@microsoft.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        zhenwei pi <pizhenwei@bytedance.com>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-20-gpiccoli@igalia.com> <YoJZVZl/MH0KiE/J@alley>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <YoJZVZl/MH0KiE/J@alley>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Thanks for the review!
 
-On Sun, May 15, 2022 at 11:57 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 13/05/2022 18:59, Douglas Anderson wrote:
-> > This documents how many Chromebooks pick the device tree that will be
-> > passed to the OS and can help understand the revisions / skus listed
-> > as the top-level "compatible" in many Chromebooks.
-> >
-> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > ---
-> >
-> > Changes in v2:
-> > - ("Document how Chromebooks with depthcharge boot") new for v2.
-> >
-> >  .../devicetree/chromebook-boot-flow.rst       | 63 +++++++++++++++++++
-> >  1 file changed, 63 insertions(+)
-> >  create mode 100644 Documentation/devicetree/chromebook-boot-flow.rst
->
-> This is not a Devicetree (generic) document, so it is not the best place
-> for it. Maybe regular vendor place, e.g . Documentation/arm/google/ ?
+I agree with the blinking stuff, I can rework and add all LED/blinking
+stuff into the loop list, it does make sense. I'll comment a bit in the
+others below...
 
-I can put it there. ...but taking your two pieces of advice together,
-you're saying:
+On 16/05/2022 11:01, Petr Mladek wrote:
+> [...]
+>> --- a/arch/mips/sgi-ip22/ip22-reset.c
+>> +++ b/arch/mips/sgi-ip22/ip22-reset.c
+>> @@ -195,7 +195,7 @@ static int __init reboot_setup(void)
+>>  	}
+>>  
+>>  	timer_setup(&blink_timer, blink_timeout, 0);
+>> -	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
+>> +	atomic_notifier_chain_register(&panic_hypervisor_list, &panic_block);
+> 
+> This notifier enables blinking. It is not much safe. It calls
+> mod_timer() that takes a lock internally.
+> 
+> This kind of functionality should go into the last list called
+> before panic() enters the infinite loop. IMHO, all the blinking
+> stuff should go there.
+> [...] 
+>> --- a/arch/mips/sgi-ip32/ip32-reset.c
+>> +++ b/arch/mips/sgi-ip32/ip32-reset.c
+>> @@ -145,7 +144,7 @@ static __init int ip32_reboot_setup(void)
+>>  	pm_power_off = ip32_machine_halt;
+>>  
+>>  	timer_setup(&blink_timer, blink_timeout, 0);
+>> -	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
+>> +	atomic_notifier_chain_register(&panic_hypervisor_list, &panic_block);
+> 
+> Same here. Should be done only before the "loop".
+> [...] 
 
-1. Don't add this under the devicetree directory.
+Ack.
 
-2. Don't refer to this by URL but instead by a relative file path.
 
-I can do both of those two things, but I always had it in my mind that
-the device tree was supposed to be "Linux agnostic". In other words,
-you could refer to Linux as one OS that boots with device tree, but I
-thought that the device tree docs were supposed to stand on their own.
-With the above two suggestions, it seems like an extra piece tieing
-the two together and assuming that both Linux and device tree docs are
-living in the same place.
+>> --- a/drivers/firmware/google/gsmi.c
+>> +++ b/drivers/firmware/google/gsmi.c
+>> @@ -1034,7 +1034,7 @@ static __init int gsmi_init(void)
+>>  
+>>  	register_reboot_notifier(&gsmi_reboot_notifier);
+>>  	register_die_notifier(&gsmi_die_notifier);
+>> -	atomic_notifier_chain_register(&panic_notifier_list,
+>> +	atomic_notifier_chain_register(&panic_hypervisor_list,
+>>  				       &gsmi_panic_notifier);
+> 
+> I am not sure about this one. It looks like some logging or
+> pre_reboot stuff.
+> 
 
-In any case, I'm happy to do what you request but I just want to double-check.
+Disagree here. I'm looping Google maintainers, so they can comment.
+(CCed Evan, David, Julius)
 
--Doug
+This notifier is clearly a hypervisor notification mechanism. I've fixed
+a locking stuff there (in previous patch), I feel it's low-risk but even
+if it's mid-risk, the class of such callback remains a perfect fit with
+the hypervisor list IMHO.
+
+
+> [...] 
+>> --- a/drivers/leds/trigger/ledtrig-activity.c
+>> +++ b/drivers/leds/trigger/ledtrig-activity.c
+>> @@ -247,7 +247,7 @@ static int __init activity_init(void)
+>>  	int rc = led_trigger_register(&activity_led_trigger);
+>>  
+>>  	if (!rc) {
+>> -		atomic_notifier_chain_register(&panic_notifier_list,
+>> +		atomic_notifier_chain_register(&panic_hypervisor_list,
+>>  					       &activity_panic_nb);
+> 
+> The notifier is trivial. It just sets a variable.
+> 
+> But still, it is about blinking and should be done
+> in the last "loop" list.
+> 
+> 
+>>  		register_reboot_notifier(&activity_reboot_nb);
+>>  	}
+>> --- a/drivers/leds/trigger/ledtrig-heartbeat.c
+>> +++ b/drivers/leds/trigger/ledtrig-heartbeat.c
+>> @@ -190,7 +190,7 @@ static int __init heartbeat_trig_init(void)
+>>  	int rc = led_trigger_register(&heartbeat_led_trigger);
+>>  
+>>  	if (!rc) {
+>> -		atomic_notifier_chain_register(&panic_notifier_list,
+>> +		atomic_notifier_chain_register(&panic_hypervisor_list,
+>>  					       &heartbeat_panic_nb);
+> 
+> Same here. Blinking => loop list.
+
+Ack.
+
+
+>> [...]
+>> diff --git a/drivers/misc/bcm-vk/bcm_vk_dev.c b/drivers/misc/bcm-vk/bcm_vk_dev.c
+>> index a16b99bdaa13..d9d5199cdb2b 100644
+>> --- a/drivers/misc/bcm-vk/bcm_vk_dev.c
+>> +++ b/drivers/misc/bcm-vk/bcm_vk_dev.c
+>> @@ -1446,7 +1446,7 @@ static int bcm_vk_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+>>  
+>>  	/* register for panic notifier */
+>>  	vk->panic_nb.notifier_call = bcm_vk_on_panic;
+>> -	err = atomic_notifier_chain_register(&panic_notifier_list,
+>> +	err = atomic_notifier_chain_register(&panic_hypervisor_list,
+>>  					     &vk->panic_nb);
+> 
+> It seems to reset some hardware or so. IMHO, it should go into the
+> pre-reboot list.
+
+Mixed feelings here, I'm looping Broadcom maintainers to comment.
+(CC Scott and Broadcom list)
+
+I'm afraid it breaks kdump if this device is not reset beforehand - it's
+a doorbell write, so not high risk I think...
+
+But in case the not-reset device can be probed normally in kdump kernel,
+then I'm fine in moving this to the reboot list! I don't have the HW to
+test myself.
+
+
+> [...]
+>> --- a/drivers/power/reset/ltc2952-poweroff.c
+>> +++ b/drivers/power/reset/ltc2952-poweroff.c
+>> @@ -279,7 +279,7 @@ static int ltc2952_poweroff_probe(struct platform_device *pdev)
+>>  	pm_power_off = ltc2952_poweroff_kill;
+>>  
+>>  	data->panic_notifier.notifier_call = ltc2952_poweroff_notify_panic;
+>> -	atomic_notifier_chain_register(&panic_notifier_list,
+>> +	atomic_notifier_chain_register(&panic_hypervisor_list,
+>>  				       &data->panic_notifier);
+> 
+> I looks like this somehow triggers the reboot. IMHO, it should go
+> into the pre_reboot list.
+
+Mixed feeling again here - CCing the maintainers for comments (Sebastian
+/ PM folks).
+
+This is setting a variable only, and once it's set (data->kernel_panic
+is the bool's name), it just bails out the IRQ handler and a timer
+setting - this timer seems kinda tricky, so bailing out ASAP makes sense
+IMHO.
+
+But my mixed feeling comes from the fact this notifier really is not a
+fit to any list - it's just a "watchdog"/device quiesce in some form.
+Since it's very low-risk (IIUC), I've put it here.
+
+
+> [...]
+>> --- a/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+>> +++ b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+>> @@ -814,7 +814,7 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+>>  		goto out;
+>>  	}
+>>  
+>> -	atomic_notifier_chain_register(&panic_notifier_list,
+>> +	atomic_notifier_chain_register(&panic_hypervisor_list,
+>>  				       &brcmstb_pm_panic_nb);
+> 
+> I am not sure about this one. It instruct some HW to preserve DRAM.
+> IMHO, it better fits into pre_reboot category but I do not have
+> strong opinion.
+
+Disagree here, I'm CCing Florian for information.
+
+This notifier preserves RAM so it's *very interesting* if we have
+kmsg_dump() for example, but maybe might be also relevant in case kdump
+kernel is configured to store something in a persistent RAM (then,
+without this notifier, after kdump reboots the system data would be lost).
+
+Cheers,
+
+
+Guilherme

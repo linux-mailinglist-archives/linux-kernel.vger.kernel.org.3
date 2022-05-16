@@ -2,402 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6DB05287CC
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 322415287CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243709AbiEPPAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 11:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40910 "EHLO
+        id S244801AbiEPPAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 11:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233265AbiEPPAT (ORCPT
+        with ESMTP id S244699AbiEPPA1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 11:00:19 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABD0387A6
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 08:00:13 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R901e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=17;SR=0;TI=SMTPD_---0VDN4uY8_1652713206;
-Received: from 30.25.245.93(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0VDN4uY8_1652713206)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 16 May 2022 23:00:07 +0800
-Message-ID: <1b2040ba-9780-8d2b-257d-35c66567011b@linux.alibaba.com>
-Date:   Mon, 16 May 2022 23:00:05 +0800
+        Mon, 16 May 2022 11:00:27 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E20A3B3E0
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 08:00:25 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id y13-20020a056602164d00b0065a9dec1ef2so10514794iow.23
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 08:00:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=atD1JTvq0nGxvQcWZCNocExfW9qBdyLjxQc8AM0gcG4=;
+        b=qe7dGBYSu2iDxiynUJKL7PqJrK6i3dmTKIOBTJ0O3DnGmTU1SGbpDwlHPwVnAveAJe
+         4OKbawhwLzQ8hb7mxZO7WBFwEwMQS4XwF3ytvNlT7LbB2mlOXdGmiECVD50P7lwaTmBc
+         ovHR3201/xMX7ZnsIIbzcnkgfWiEQY7PNC5RVP9kNdA1Nc4BbnznzruXhepLkYTe/AiI
+         7dfCme4r1Ku85AS61pDc4JHtLAIr5UZiwH4acxnJJp92u+sYgSDu5/I9logTNj1VL7mq
+         9uNPFjzKi5n50+3AVafYPv+apUqyGUL7FvNte/Qc9v9vgyqJwS8NwQogf2YQjeR+a9jf
+         Zssw==
+X-Gm-Message-State: AOAM530R+uG9nd991N5n0ENQ8PRmBh+Sl/jZHElIPLNVY1uRAloghQwq
+        ul+OECOZswR5ITuSeMYCsZKeYlA6SV3qT1BSR/LG3Jx6Evg6
+X-Google-Smtp-Source: ABdhPJz+a5l8SnxqGaEb9nz8b2ovTLH+YU32u/FWM9ecjmIC6IRG2cDdtZNQjI13TQOgFgJfJGRprCxSZ1lEIlK3bJv1COG94q+x
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:101.0)
- Gecko/20100101 Thunderbird/101.0
-Subject: Re: DAMON VA regions don't split on an large Android APP
-Content-Language: en-US
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     sj@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>, shuah@kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        foersleo@amazon.de, sieberf@amazon.com,
-        Shakeel Butt <shakeelb@google.com>, sjpark@amazon.de,
-        tuhailong@gmail.com, Song Jiang <sjiang88@gmail.com>,
-        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
-        <zhangshiming@oppo.com>,
-        =?UTF-8?B?5p2O5Z+56ZSLKHdpbmsp?= <lipeifeng@oppo.com>,
-        xhao@linux.alibaba.com
-References: <CAGsJ_4x_k9009HwpTswEq1ut_co8XYdpZ9k0BVW=0=HRiifxkA@mail.gmail.com>
- <e3c1beb1-e3d5-6e26-bae2-06785080b57e@linux.alibaba.com>
- <CAGsJ_4weJ9onh0EJVy8QXMXZ++4qVyVuRi7oP3wiD0XWnqF-Dg@mail.gmail.com>
- <CAGsJ_4z8vMNDwL4uYB6_=txvm9zW7LKrFA2HChS2D-+fxhBiKA@mail.gmail.com>
- <08fff4b9-3ae9-db68-13bb-cf5f0654e20a@linux.alibaba.com>
- <CAGsJ_4wKqPEnFGdijwjKeCvfRwfdxkk-263EZt2Y21GMyn1_uA@mail.gmail.com>
- <CAGsJ_4z2TT5H2PO+mvgMSnL3h5ke=QVhFzDmYs6yOgwgB24bhg@mail.gmail.com>
-From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
-In-Reply-To: <CAGsJ_4z2TT5H2PO+mvgMSnL3h5ke=QVhFzDmYs6yOgwgB24bhg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:6a6b:0:b0:323:fcf9:2227 with SMTP id
+ m43-20020a026a6b000000b00323fcf92227mr9173197jaf.137.1652713224823; Mon, 16
+ May 2022 08:00:24 -0700 (PDT)
+Date:   Mon, 16 May 2022 08:00:24 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ae6a9905df2248a4@google.com>
+Subject: [syzbot] KASAN: slab-out-of-bounds Read in arch_stack_walk
+From:   syzbot <syzbot+8631f4b15d790f42c8ad@syzkaller.appspotmail.com>
+To:     arnd@arndb.de, dvyukov@google.com, ebiederm@xmission.com,
+        elver@google.com, linux-kernel@vger.kernel.org, sam@ravnborg.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    0966d385830d riscv: Fix auipc+jalr relocation range checks
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
+console output: https://syzkaller.appspot.com/x/log.txt?x=155634cef00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6295d67591064921
+dashboard link: https://syzkaller.appspot.com/bug?extid=8631f4b15d790f42c8ad
+compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: riscv64
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8631f4b15d790f42c8ad@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: slab-out-of-bounds in walk_stackframe+0x11c/0x260 arch/riscv/kernel/stacktrace.c:57
+Read of size 8 at addr ffffaf800ebe7b50 by task kworker/0:5/3954
+
+CPU: 0 PID: 3954 Comm: kworker/0:5 Not tainted 5.17.0-rc1-syzkaller-00002-g0966d385830d #0
+Hardware name: riscv-virtio,qemu (DT)
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+[<ffffffff8000a228>] dump_backtrace+0x2e/0x3c arch/riscv/kernel/stacktrace.c:113
+[<ffffffff831668cc>] show_stack+0x34/0x40 arch/riscv/kernel/stacktrace.c:119
+[<ffffffff831756ba>] __dump_stack lib/dump_stack.c:88 [inline]
+[<ffffffff831756ba>] dump_stack_lvl+0xe4/0x150 lib/dump_stack.c:106
+[<ffffffff8047479e>] print_address_description.constprop.0+0x2a/0x330 mm/kasan/report.c:255
+[<ffffffff80474d4c>] __kasan_report mm/kasan/report.c:442 [inline]
+[<ffffffff80474d4c>] kasan_report+0x184/0x1e0 mm/kasan/report.c:459
+[<ffffffff80475b20>] check_region_inline mm/kasan/generic.c:183 [inline]
+[<ffffffff80475b20>] __asan_load8+0x6e/0x96 mm/kasan/generic.c:256
+[<ffffffff8000a052>] walk_stackframe+0x11c/0x260 arch/riscv/kernel/stacktrace.c:57
+[<ffffffff8000a4a4>] arch_stack_walk+0x2c/0x3c arch/riscv/kernel/stacktrace.c:146
+[<ffffffff80162ac8>] stack_trace_save+0xa6/0xd8 kernel/stacktrace.c:122
+[<ffffffff80473abe>] kasan_save_stack+0x2c/0x58 mm/kasan/common.c:38
+[<ffffffff80473bb6>] kasan_set_track+0x1a/0x26 mm/kasan/common.c:45
+[<ffffffff8047608c>] kasan_set_free_info+0x1e/0x3a mm/kasan/generic.c:370
+[<ffffffff80473a70>] ____kasan_slab_free mm/kasan/common.c:366 [inline]
+[<ffffffff80473a70>] ____kasan_slab_free+0x15e/0x180 mm/kasan/common.c:328
+[<ffffffff80473fde>] __kasan_slab_free+0x10/0x18 mm/kasan/common.c:374
+[<ffffffff80469750>] kasan_slab_free include/linux/kasan.h:236 [inline]
+[<ffffffff80469750>] slab_free_hook mm/slub.c:1728 [inline]
+[<ffffffff80469750>] slab_free_freelist_hook+0x8e/0x1cc mm/slub.c:1754
+[<ffffffff8046d302>] slab_free mm/slub.c:3509 [inline]
+[<ffffffff8046d302>] kfree+0xe0/0x3e4 mm/slub.c:4562
+
+Allocated by task 2066:
+ stack_trace_save+0xa6/0xd8 kernel/stacktrace.c:122
+ kasan_save_stack+0x2c/0x58 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:436 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:515 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:474 [inline]
+ __kasan_kmalloc+0x80/0xb2 mm/kasan/common.c:524
+ kasan_kmalloc include/linux/kasan.h:270 [inline]
+ __kmalloc_node+0x1b0/0x36c mm/slub.c:4472
+ kmalloc_node include/linux/slab.h:604 [inline]
+ kzalloc_node include/linux/slab.h:726 [inline]
+ qdisc_alloc+0x7c/0x522 net/sched/sch_generic.c:941
+ qdisc_create_dflt+0x66/0x42c net/sched/sch_generic.c:1000
+ attach_one_default_qdisc+0x94/0x11e net/sched/sch_generic.c:1148
+ netdev_for_each_tx_queue include/linux/netdevice.h:2373 [inline]
+ attach_default_qdiscs net/sched/sch_generic.c:1166 [inline]
+ dev_activate+0x3f2/0x7c0 net/sched/sch_generic.c:1221
+ __dev_open+0x2e8/0x384 net/core/dev.c:1416
+ __dev_change_flags+0x41a/0x4e0 net/core/dev.c:8139
+ dev_change_flags+0x50/0xba net/core/dev.c:8210
+ do_setlink+0x5d6/0x21c4 net/core/rtnetlink.c:2729
+ __rtnl_newlink+0x99e/0xfa0 net/core/rtnetlink.c:3412
+ rtnl_newlink+0x60/0x8c net/core/rtnetlink.c:3527
+ rtnetlink_rcv_msg+0x338/0x9a0 net/core/rtnetlink.c:5592
+ netlink_rcv_skb+0xf8/0x2be net/netlink/af_netlink.c:2494
+ rtnetlink_rcv+0x26/0x30 net/core/rtnetlink.c:5610
+ netlink_unicast_kernel net/netlink/af_netlink.c:1317 [inline]
+ netlink_unicast+0x40e/0x5fe net/netlink/af_netlink.c:1343
+ netlink_sendmsg+0x4e0/0x994 net/netlink/af_netlink.c:1919
+ sock_sendmsg_nosec net/socket.c:705 [inline]
+ sock_sendmsg+0xa0/0xc4 net/socket.c:725
+ __sys_sendto+0x1f2/0x2e0 net/socket.c:2040
+ __do_sys_sendto net/socket.c:2052 [inline]
+ sys_sendto+0x3e/0x52 net/socket.c:2048
+ ret_from_syscall+0x0/0x2
+
+The buggy address belongs to the object at ffffaf800ebe7800
+ which belongs to the cache kmalloc-1k of size 1024
+The buggy address is located 848 bytes inside of
+ 1024-byte region [ffffaf800ebe7800, ffffaf800ebe7c00)
+The buggy address belongs to the page:
+page:ffffaf807aa6e700 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x8ede0
+head:ffffaf807aa6e700 order:3 compound_mapcount:0 compound_pincount:0
+flags: 0x8800010200(slab|head|section=17|node=0|zone=0)
+raw: 0000008800010200 0000000000000100 0000000000000122 ffffaf8007201dc0
+raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
+raw: 00000000000007ff
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0x52a20(GFP_ATOMIC|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP), pid 2132, ts 1413880102700, free_ts 1413506823600
+ __set_page_owner+0x48/0x136 mm/page_owner.c:183
+ set_page_owner include/linux/page_owner.h:31 [inline]
+ post_alloc_hook+0xd0/0x10a mm/page_alloc.c:2427
+ prep_new_page mm/page_alloc.c:2434 [inline]
+ get_page_from_freelist+0x8da/0x12d8 mm/page_alloc.c:4165
+ __alloc_pages+0x150/0x3b6 mm/page_alloc.c:5389
+ alloc_pages+0x132/0x2a6 mm/mempolicy.c:2271
+ alloc_slab_page.constprop.0+0xc2/0xfa mm/slub.c:1799
+ allocate_slab mm/slub.c:1944 [inline]
+ new_slab+0x76/0x2cc mm/slub.c:2004
+ ___slab_alloc+0x56e/0x918 mm/slub.c:3018
+ __slab_alloc.constprop.0+0x50/0x8c mm/slub.c:3105
+ slab_alloc_node mm/slub.c:3196 [inline]
+ slab_alloc mm/slub.c:3238 [inline]
+ __kmalloc+0x268/0x318 mm/slub.c:4420
+ kmalloc include/linux/slab.h:586 [inline]
+ kzalloc+0x26/0x32 include/linux/slab.h:715
+ neigh_alloc net/core/neighbour.c:433 [inline]
+ ___neigh_create+0xe86/0x1cf0 net/core/neighbour.c:618
+ __neigh_create+0x30/0x40 net/core/neighbour.c:707
+ ip6_finish_output2+0xd64/0x1256 net/ipv6/ip6_output.c:123
+ __ip6_finish_output net/ipv6/ip6_output.c:191 [inline]
+ __ip6_finish_output+0x47c/0x8f6 net/ipv6/ip6_output.c:170
+ ip6_finish_output+0x3e/0x176 net/ipv6/ip6_output.c:201
+page last free stack trace:
+ __reset_page_owner+0x4a/0xea mm/page_owner.c:142
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1352 [inline]
+ free_pcp_prepare+0x29c/0x45e mm/page_alloc.c:1404
+ free_unref_page_prepare mm/page_alloc.c:3325 [inline]
+ free_unref_page+0x6a/0x31e mm/page_alloc.c:3404
+ free_the_page mm/page_alloc.c:706 [inline]
+ __free_pages+0xe2/0x112 mm/page_alloc.c:5474
+ __free_slab+0x122/0x27c mm/slub.c:2028
+ free_slab mm/slub.c:2043 [inline]
+ discard_slab+0x4c/0x7a mm/slub.c:2049
+ __unfreeze_partials+0x16a/0x18e mm/slub.c:2536
+ put_cpu_partial+0xf6/0x162 mm/slub.c:2612
+ __slab_free+0x166/0x29c mm/slub.c:3378
+ do_slab_free mm/slub.c:3497 [inline]
+ ___cache_free+0x17c/0x354 mm/slub.c:3516
+ qlink_free mm/kasan/quarantine.c:157 [inline]
+ qlist_free_all+0x7c/0x132 mm/kasan/quarantine.c:176
+ kasan_quarantine_reduce+0x14c/0x1c8 mm/kasan/quarantine.c:283
+ __kasan_slab_alloc+0x5c/0x98 mm/kasan/common.c:446
+ kasan_slab_alloc include/linux/kasan.h:260 [inline]
+ slab_post_alloc_hook mm/slab.h:732 [inline]
+ slab_alloc_node mm/slub.c:3230 [inline]
+ slab_alloc mm/slub.c:3238 [inline]
+ kmem_cache_alloc+0x338/0x3de mm/slub.c:3243
+ vm_area_dup+0xa4/0x224 kernel/fork.c:357
+ __split_vma+0x7c/0x2fa mm/mmap.c:2720
+
+Memory state around the buggy address:
+ ffffaf800ebe7a00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffffaf800ebe7a80: 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc
+>ffffaf800ebe7b00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+                                                 ^
+ ffffaf800ebe7b80: fc fc fc fc f1 f1 f1 f1 00 00 00 f3 f3 f3 f3 f3
+ ffffaf800ebe7c00: 00 00 00 00 fc fc fc fc 00 00 00 00 00 00 00 00
+==================================================================
 
 
-On 5/16/22 3:03 PM, Barry Song wrote:
-> On Thu, Apr 28, 2022 at 7:37 PM Barry Song <21cnbao@gmail.com> wrote:
->>
->> On Thu, Apr 28, 2022 at 2:05 PM Rongwei Wang
->> <rongwei.wang@linux.alibaba.com> wrote:
->>>
->>>
->>>
->>> On 4/27/22 5:22 PM, Barry Song wrote:
->>>> On Wed, Apr 27, 2022 at 7:44 PM Barry Song <21cnbao@gmail.com> wrote:
->>>>>
->>>>> On Wed, Apr 27, 2022 at 6:56 PM Rongwei Wang
->>>>> <rongwei.wang@linux.alibaba.com> wrote:
->>>>>>
->>>>>>
->>>>>>
->>>>>> On 4/27/22 7:19 AM, Barry Song wrote:
->>>>>>> Hi SeongJae & Andrew,
->>>>>>> (also Cc-ed main damon developers)
->>>>>>> On an Android phone, I tried to use the DAMON vaddr monitor and found
->>>>>>> that vaddr regions don't split well on large Android Apps though
->>>>>>> everything works well on native Apps.
->>>>>>>
->>>>>>> I have tried the below two cases on an Android phone with 12GB memory
->>>>>>> and snapdragon 888 CPU.
->>>>>>> 1. a native program with small memory working set  as below,
->>>>>>> #define size (1024*1024*100)
->>>>>>> main()
->>>>>>> {
->>>>>>>            volatile int *p = malloc(size);
->>>>>>>            memset(p, 0x55, size);
->>>>>>>
->>>>>>>            while(1) {
->>>>>>>                    int i;
->>>>>>>                    for (i = 0; i < size / 4; i++)
->>>>>>>                            (void)*(p + i);
->>>>>>>                    usleep(1000);
->>>>>>>
->>>>>>>                    for (i = 0; i < size / 16; i++)
->>>>>>>                            (void)*(p + i);
->>>>>>>                    usleep(1000);
->>>>>>>
->>>>>>>            }
->>>>>>> }
->>>>>>> For this application, the Damon vaddr monitor works very well.
->>>>>>> I have modified monitor.py in the damo userspace tool a little bit to
->>>>>>> show the raw data getting from the kernel.
->>>>>>> Regions can split decently on this kind of applications, a typical raw
->>>>>>> data is as below,
->>>>>>>
->>>>>>> monitoring_start:             2.224 s
->>>>>>> monitoring_end:               2.329 s
->>>>>>> monitoring_duration:       104.336 ms
->>>>>>> target_id: 0
->>>>>>> nr_regions: 24
->>>>>>> 005fb37b2000-005fb734a000(  59.594 MiB): 0
->>>>>>> 005fb734a000-005fbaf95000(  60.293 MiB): 0
->>>>>>> 005fbaf95000-005fbec0b000(  60.461 MiB): 0
->>>>>>> 005fbec0b000-005fc2910000(  61.020 MiB): 0
->>>>>>> 005fc2910000-005fc6769000(  62.348 MiB): 0
->>>>>>> 005fc6769000-005fca33f000(  59.836 MiB): 0
->>>>>>> 005fca33f000-005fcdc8b000(  57.297 MiB): 0
->>>>>>> 005fcdc8b000-005fd115a000(  52.809 MiB): 0
->>>>>>> 005fd115a000-005fd45bd000(  52.387 MiB): 0
->>>>>>> 007661c59000-007661ee4000(   2.543 MiB): 2
->>>>>>> 007661ee4000-0076623e4000(   5.000 MiB): 3
->>>>>>> 0076623e4000-007662837000(   4.324 MiB): 2
->>>>>>> 007662837000-0076630f1000(   8.727 MiB): 3
->>>>>>> 0076630f1000-007663494000(   3.637 MiB): 2
->>>>>>> 007663494000-007663753000(   2.746 MiB): 1
->>>>>>> 007663753000-007664251000(  10.992 MiB): 3
->>>>>>> 007664251000-0076666fd000(  36.672 MiB): 2
->>>>>>> 0076666fd000-007666e73000(   7.461 MiB): 1
->>>>>>> 007666e73000-007667c89000(  14.086 MiB): 2
->>>>>>> 007667c89000-007667f97000(   3.055 MiB): 0
->>>>>>> 007667f97000-007668112000(   1.480 MiB): 1
->>>>>>> 007668112000-00766820f000(1012.000 KiB): 0
->>>>>>> 007ff27b7000-007ff27d6000( 124.000 KiB): 0
->>>>>>> 007ff27d6000-007ff27d8000(   8.000 KiB): 8
->>>>>>>
->>>>>>> 2. a large Android app like Asphalt 9
->>>>>>> For this case, basically regions can't split very well, but monitor
->>>>>>> works on small vma:
->>>>>>>
->>>>>>> monitoring_start:             2.220 s
->>>>>>> monitoring_end:               2.318 s
->>>>>>> monitoring_duration:        98.576 ms
->>>>>>> target_id: 0
->>>>>>> nr_regions: 15
->>>>>>> 000012c00000-0001c301e000(   6.754 GiB): 0
->>>>>>> 0001c301e000-000371b6c000(   6.730 GiB): 0
->>>>>>> 000371b6c000-000400000000(   2.223 GiB): 0
->>>>>>> 005c6759d000-005c675a2000(  20.000 KiB): 0
->>>>>>> 005c675a2000-005c675a3000(   4.000 KiB): 3
->>>>>>> 005c675a3000-005c675a7000(  16.000 KiB): 0
->>>>>>> 0072f1e14000-0074928d4000(   6.510 GiB): 0
->>>>>>> 0074928d4000-00763c71f000(   6.655 GiB): 0
->>>>>>> 00763c71f000-0077e863e000(   6.687 GiB): 0
->>>>>>> 0077e863e000-00798e214000(   6.590 GiB): 0
->>>>>>> 00798e214000-007b0e48a000(   6.002 GiB): 0
->>>>>>> 007b0e48a000-007c62f00000(   5.323 GiB): 0
->>>>>>> 007c62f00000-007defb19000(   6.199 GiB): 0
->>>>>>> 007defb19000-007f794ef000(   6.150 GiB): 0
->>>>>>> 007f794ef000-007fe8f53000(   1.745 GiB): 0
->>>>>>>
->>>>>>> As you can see, we have some regions which are very very big and they
->>>>>>> are losing the chance to be splitted. But
->>>>>>> Damon can still monitor memory access for those small VMA areas very well like:
->>>>>>> 005c675a2000-005c675a3000(   4.000 KiB): 3
->>>>>> Hi, Barry
->>>>>>
->>>>>> Actually, we also had found the same problem in redis by ourselves
->>>>>> tool[1]. The DAMON can not split the large anon VMA well, and the anon
->>>>>> VMA has 10G~20G memory. I guess the whole region doesn't have sufficient
->>>>>> hot areas to been monitored or found by DAMON, likes one or more address
->>>>>> choose by DAMON not been accessed during sample period.
->>>>>
->>>>> Hi Rongwei,
->>>>> Thanks  for your comments and thanks for sharing your tools.
->>>>>
->>>>> I guess the cause might be:
->>>>> in case a region is very big like 10GiB, we have only 1MiB hot pages
->>>>> in this large region.
->>>>> damon will randomly pick one page to sample, but the page has only
->>>>> 1MiB/10GiB, thus
->>>>> less than 1/10000 chance to hit the hot 1MiB. so probably we need
->>>>> 10000 sample periods
->>>>> to hit the hot 1MiB in order to split this large region?
->>>>>
->>>>> @SeongJae, please correct me if I am wrong.
->>>>>
->>>>>>
->>>>>> I'm not sure whether sets init_regions can deal with the above problem,
->>>>>> or dynamic choose one or limited number VMA to monitor.
->>>>>>
->>>>>
->>>>> I won't set a limited number of VMA as this will make the damon too hard to use
->>>>> as nobody wants to make such complex operations, especially an Android
->>>>> app might have more than 8000 VMAs.
->>>>>
->>>>> I agree init_regions might be the right place to enhance the situation.
->>>>>
->>>>>> I'm not sure, just share my idea.
->>>>>>
->>>>>> [1] https://github.com/aliyun/data-profile-tools.git
->>>>>
->>>>> I suppose this tool is based on damon? How do you finally resolve the problem
->>>>> that large anon VMAs can't be splitted?
->>>>> Anyway, I will give your tool a try.
->>>>
->>>> Unfortunately, data-profile-tools.git doesn't build on aarch64 ubuntu
->>>> though autogen.sh
->>>> runs successfully.
->>>>
->>>> /usr/bin/ld: ./.libs/libdatop.a(disp.o): in function `cons_handler':
->>>> /root/data-profile-tools/src/disp.c:625: undefined reference to `stdscr'
->>>> /usr/bin/ld: /root/data-profile-tools/src/disp.c:625: undefined
->>>> reference to `stdscr'
->>>> /usr/bin/ld: /root/data-profile-tools/src/disp.c:625: undefined
->>>> reference to `wgetch'
->>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_win_create':
->>>> /root/data-profile-tools/src/reg.c:108: undefined reference to `stdscr'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:108: undefined
->>>> reference to `stdscr'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:108: undefined
->>>> reference to `subwin'
->>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_erase':
->>>> /root/data-profile-tools/src/reg.c:161: undefined reference to `werase'
->>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_refresh':
->>>> /root/data-profile-tools/src/reg.c:171: undefined reference to `wrefresh'
->>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_refresh_nout':
->>>> /root/data-profile-tools/src/reg.c:182: undefined reference to `wnoutrefresh'
->>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_update_all':
->>>> /root/data-profile-tools/src/reg.c:191: undefined reference to `doupdate'
->>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_win_destroy':
->>>> /root/data-profile-tools/src/reg.c:200: undefined reference to `delwin'
->>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_line_write':
->>>> /root/data-profile-tools/src/reg.c:226: undefined reference to `mvwprintw'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:230: undefined
->>>> reference to `wattr_off'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:217: undefined
->>>> reference to `wattr_on'
->>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_highlight_write':
->>>> /root/data-profile-tools/src/reg.c:245: undefined reference to `wattr_on'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:255: undefined
->>>> reference to `wattr_off'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:252: undefined
->>>> reference to `mvwprintw'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:255: undefined
->>>> reference to `wattr_off'
->>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_curses_fini':
->>>> /root/data-profile-tools/src/reg.c:367: undefined reference to `stdscr'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:367: undefined
->>>> reference to `stdscr'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:367: undefined
->>>> reference to `wclear'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:368: undefined
->>>> reference to `wrefresh'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:369: undefined
->>>> reference to `endwin'
->>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_curses_init':
->>>> /root/data-profile-tools/src/reg.c:382: undefined reference to `stdscr'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:381: undefined
->>>> reference to `initscr'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:382: undefined
->>>> reference to `stdscr'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:382: undefined
->>>> reference to `wrefresh'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:383: undefined
->>>> reference to `use_default_colors'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:384: undefined
->>>> reference to `start_color'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:385: undefined
->>>> reference to `keypad'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:386: undefined
->>>> reference to `nonl'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:387: undefined
->>>> reference to `cbreak'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:388: undefined
->>>> reference to `noecho'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:389: undefined
->>>> reference to `curs_set'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:401: undefined
->>>> reference to `stdscr'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:401: undefined
->>>> reference to `mvwprintw'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:403: undefined
->>>> reference to `mvwprintw'
->>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:405: undefined
->>>> reference to `wrefresh'
->>>> collect2: error: ld returned 1 exit status
->>>> make[1]: *** [Makefile:592: datop] Error 1
->>>> make[1]: Leaving directory '/root/data-profile-tools'
->>>> make: *** [Makefile:438: all] Error 2
->>> Hi, Barry
->>>
->>> Now, the question made me realize that the compatibility of this tool is
->>> very poor. I built a ubuntu environment at yesterday, and fixed above
->>> errors by:
->>>
->>> diff --git a/configure.ac b/configure.ac
->>> index 7922f27..1ed823c 100644
->>> --- a/configure.ac
->>> +++ b/configure.ac
->>> @@ -21,13 +21,9 @@ AC_PROG_INSTALL
->>>    AC_CHECK_LIB([numa], [numa_free])
->>>    AC_CHECK_LIB([pthread], [pthread_create])
->>>
->>> -PKG_CHECK_MODULES([CHECK], [check])
->>> -
->>> -PKG_CHECK_MODULES([NCURSES], [ncursesw ncurses], [LIBS="$LIBS
->>> $ncurses_LIBS"], [
->>> -       AC_SEARCH_LIBS([delwin], [ncursesw ncurses], [], [
->>> -               AC_MSG_ERROR([ncurses is required but was not found])
->>> -       ], [])
->>> -])
->>> +AC_SEARCH_LIBS([stdscr], [ncurses ncursesw], [], [
->>> +       AC_MSG_ERROR([required library libncurses or ncurses not found])
->>> +       ])
->>>
->>
->> I can confirm the patch fixed the issue I reported yesterday, thanks!
->>
->>> It works. But I found an another thing will hinder you using this tool.
->>> We had developed other patches about DAMON base on upstream. This tool
->>> only works well in ourselves kernel(anolis kernel, already open source).
->>> Of course, I think it's unnecessary for you to change kernel, just let
->>> you know this tool still has this problem.
->>>
->>
->> Although I can't use this tool directly as I am not a NUMA right now,
->> ~/data-profile-tools # ./datop --help
->> Not support NUMA fault stat (DAMON)!
->>
-> 
-> I wonder if you can extend it to non-numa by setting "remote" to 0%
-> and local to "100%" always for non-numa machines rather than death.
-Hi Barry
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-That's a great suggestion. Actually, I have removed 'numa_stat' check in 
-datop. Maybe you can found. It does not enable numa stat when 
-'numa_stat' sysfs not found in the current system.
-
-What's more, a new hot key 'f' will be introduced which can enable some 
-features dynamically, such as numa stat. Others features can be used 
-only in our internal version, likes 'f' in top, and will be open source 
-when stable.
-
-> as your tools can map regions to .so, which seems to be quite useful.
-enen, I'm agree with you. But you know, one region maybe covers one or 
-more VMAs, hard to map access count of regions to the related .so or 
-anon. A lazy way used by me now. I still think it's valuable in the future.
-
-Anyway, any idea are welcome.
-
-Thanks,
--wrw
-
-> 
->> I am still quite interested in your design and the purpose of this project.
->> Unfortunately the project seems to be lacking some design doc.
->>
->> And would you like to send patches to lkml regarding what you
->> have changed atop DAMON?
->>
->>> Anyway, the question that you reported was valuable, made me realize
->>> what we need to improve next.
->>>
->>> Thanks,
->>> Rongwei Wang
->>>>
->>>>>
->>>>>>>
->>>>>>> Typical characteristics of a large Android app is that it has
->>>>>>> thousands of vma and very large virtual address spaces:
->>>>>>> ~/damo # pmap 2550 | wc -l
->>>>>>> 8522
->>>>>>>
->>>>>>> ~/damo # pmap 2550
->>>>>>> ...
->>>>>>> 0000007992bbe000      4K r----   [ anon ]
->>>>>>> 0000007992bbf000     24K rw---   [ anon ]
->>>>>>> 0000007fe8753000      4K -----   [ anon ]
->>>>>>> 0000007fe8754000   8188K rw---   [ stack ]
->>>>>>>     total         36742112K
->>>>>>>
->>>>>>> Because the whole vma list is too long, I have put the list here for
->>>>>>> you to download:
->>>>>>> wget http://www.linuxep.com/patches/android-app-vmas
->>>>>>>
->>>>>>> I can reproduce this problem on other Apps like youtube as well.
->>>>>>> I suppose we need to boost the algorithm of splitting regions for this
->>>>>>> kind of application.
->>>>>>> Any thoughts?
->>>>>>>
->>>>>
-> 
-> Thanks
-> Barry
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

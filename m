@@ -2,161 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA7F2528B49
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 18:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A147528B5A
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 18:58:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245074AbiEPQ45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 12:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52146 "EHLO
+        id S244431AbiEPQ5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 12:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343876AbiEPQy4 (ORCPT
+        with ESMTP id S1344076AbiEPQzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 12:54:56 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CCB3CA4C
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 09:54:39 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220516165438euoutp028a693eb8709bd8940648f056d66e29b7~vpCe0pfg82798927989euoutp02X
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 16:54:38 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220516165438euoutp028a693eb8709bd8940648f056d66e29b7~vpCe0pfg82798927989euoutp02X
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1652720078;
-        bh=6O6R+aWzFD0tH6pBlgRqy5ygmaD7SLpLHM9qftmpwuQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fh6lUpOxEz1L5R0lDXKJogWDFAtYMYr19gWlbSAHU966Zw8+vMGblv2wuPQAu7a5U
-         RPyQtPr0FqsXu3HlSnG97HoIFCkN3dhmm2J3ok64Z/gmmFkIebT+VLWVGYrIW4wgRg
-         wCETrHorIbHw+GZ7QiTP96Jl1l5jjipFf9NzVwYk=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20220516165437eucas1p15eb77c4c9a68927fe7695a2e5830dcb7~vpCdkUKeT1545715457eucas1p1f;
-        Mon, 16 May 2022 16:54:37 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 66.E6.10260.DC182826; Mon, 16
-        May 2022 17:54:37 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220516165436eucas1p178d079302dae3a9fca696b13b0390deb~vpCdOIri62560525605eucas1p1b;
-        Mon, 16 May 2022 16:54:36 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220516165436eusmtrp28837a89a06654af7c04d36f8d5949f97~vpCdNanu61030710307eusmtrp26;
-        Mon, 16 May 2022 16:54:36 +0000 (GMT)
-X-AuditID: cbfec7f5-bddff70000002814-5f-628281cdd3f8
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 23.10.09404.CC182826; Mon, 16
-        May 2022 17:54:36 +0100 (BST)
-Received: from localhost (unknown [106.210.248.7]) by eusmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220516165436eusmtip27c52763e39356a08b7d9cbb75f4140dd~vpCc05sQp3184631846eusmtip2E;
-        Mon, 16 May 2022 16:54:36 +0000 (GMT)
-From:   Pankaj Raghav <p.raghav@samsung.com>
-To:     axboe@kernel.dk, damien.lemoal@opensource.wdc.com,
-        pankydev8@gmail.com, dsterba@suse.com, hch@lst.de
-Cc:     linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, jiangbo.365@bytedance.com,
-        linux-block@vger.kernel.org, gost.dev@samsung.com,
-        p.raghav@samsung.com, linux-kernel@vger.kernel.org,
-        dm-devel@redhat.com, Luis Chamberlain <mcgrof@kernel.org>,
-        Hannes Reinecke <hare@suse.de>
-Subject: [PATCH v4 13/13] dm-zoned: ensure only power of 2 zone sizes are
- allowed
-Date:   Mon, 16 May 2022 18:54:16 +0200
-Message-Id: <20220516165416.171196-14-p.raghav@samsung.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220516165416.171196-1-p.raghav@samsung.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrNKsWRmVeSWpSXmKPExsWy7djP87pnG5uSDLb9FbJYfbefzeL32fPM
-        FnvfzWa1uPCjkcni5oGdTBZ7Fk1isli5+iiTRc+BDywWe29pW1x6vILdYs/ekywWl3fNYbOY
-        v+wpu8WNCU8ZLT4vbWG3WHPzKYuDgMe/E2vYPHbOusvucflsqcemVZ1sHpuX1HvsvtkAFG69
-        z+rxft9VNo++LasYPdZvucrisfl0tcfnTXIBPFFcNimpOZllqUX6dglcGT277jEVzOCquHX2
-        AGsD4yqOLkZODgkBE4npK7YydzFycQgJrGCUOPphLRuE84VR4tflmUwQzmdGiVNPTrDAtOyZ
-        fBkqsZxRonXqK3YI5zmjRMOWaYxdjBwcbAJaEo2d7CANIgJZEtNOPGQEqWEWOMwk8fzofFaQ
-        hLBAsMSqZ7fYQGwWAVWJztfPwOK8AtYSr1a8ZoXYJi8x89J3dpCZnEDx1V3cECWCEidnPgE7
-        iBmopHnrbLAfJASWc0q0Hj4KVi8h4CLRedYHYoywxKvjW9ghbBmJ/zvnM0HY1RJPb/yG6m1h
-        lOjfuZ4Notdaou9MDojJLKApsX6XPkS5o8TWLytZISr4JG68FYS4gE9i0rbpzBBhXomONiGI
-        aiWJnT+fQC2VkLjcNAcagh4S99d/YJ/AqDgLyS+zkPwyC2HvAkbmVYziqaXFuempxcZ5qeV6
-        xYm5xaV56XrJ+bmbGIHp7/S/4193MK549VHvECMTB+MhRgkOZiURXoOKhiQh3pTEyqrUovz4
-        otKc1OJDjNIcLErivMmZGxKFBNITS1KzU1MLUotgskwcnFINTEE/cltaBJZybQq4ve86NzeT
-        VsGkKjd2sZ22K8P8759Y+qz3xz4bkY9dmtyd4jGs2+5rhDmlVKxL3z9T3b3OfbVggsbU5QcY
-        3/+56/HP6Ed60qln1ZMVV1f8j55/UehI/AW93O4jSeznVgdVvHuR9vr0QjdJhQ1Gh1/eZV3e
-        8E7s64SSitWaLjx3VrimPebbt+7VvoWpp9PWRO7rnXObS7B1MdOKRoPTPCa2h5qvRxyM2MM9
-        P25955LzhvxfXGWc7A6t0z39MnL+vtPLk7OzzyptnCIe+kuwX07RTXePS/r0h3P5K3eYq8kx
-        7xbgOCRn/shmDu995+d7L2S+zQrI0/X2Wc7v2LRoObPOsbfTK5VYijMSDbWYi4oTAX69IDHu
-        AwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrFIsWRmVeSWpSXmKPExsVy+t/xe7pnGpuSDO5tN7ZYfbefzeL32fPM
-        FnvfzWa1uPCjkcni5oGdTBZ7Fk1isli5+iiTRc+BDywWe29pW1x6vILdYs/ekywWl3fNYbOY
-        v+wpu8WNCU8ZLT4vbWG3WHPzKYuDgMe/E2vYPHbOusvucflsqcemVZ1sHpuX1HvsvtkAFG69
-        z+rxft9VNo++LasYPdZvucrisfl0tcfnTXIBPFF6NkX5pSWpChn5xSW2StGGFkZ6hpYWekYm
-        lnqGxuaxVkamSvp2NimpOZllqUX6dgl6GT277jEVzOCquHX2AGsD4yqOLkZODgkBE4k9ky8z
-        dTFycQgJLGWUOLjjKQtEQkLi9sImRghbWOLPtS42iKKnjBInJxwHSnBwsAloSTR2soPUiAgU
-        SMzp3wLWyyxwnkli/3p3EFtYIFBi0rZmJhCbRUBVovP1M1YQm1fAWuLVitesEPPlJWZe+s4O
-        MpITKL66ixskLCRgJfH1yS12iHJBiZMzn0CNl5do3jqbeQKjwCwkqVlIUgsYmVYxiqSWFuem
-        5xYb6RUn5haX5qXrJefnbmIERuq2Yz+37GBc+eqj3iFGJg7GQ4wSHMxKIrwGFQ1JQrwpiZVV
-        qUX58UWlOanFhxhNgc6eyCwlmpwPTBV5JfGGZgamhiZmlgamlmbGSuK8ngUdiUIC6Yklqdmp
-        qQWpRTB9TBycUg1Mk6fvdjfa5ON/83dYHLet8aHDRgZJm/7YMf6cwtBzuV9CcP2hI984F6z/
-        seXGjM/F12TvZ65qnTA74+361NWKzd1vUmt975ZEH01/uWZJ6bX7DEdaLcJcd29JOizBtSrp
-        /ZxYBjkRM9OMFQYs7780Rlw1CcpKK14we0//w40XXTsfr6lyDPmRmXv+6+q8JsuPd7iq890/
-        NKztO32j2k/8xM/V/+43BTOsWGIi95gla1/szVtnXB6FxSsd47z/WPRCpMyzahaujsfW23oZ
-        FLZ0GJYLeLIIOs7s2Z5f0ST/oPfmzT8XwhN95j1bnOKeecU2YY39l+OzpF49miMRb77ok5qX
-        ycEXx+bd+KtxtLG5XYmlOCPRUIu5qDgRAFdHucBdAwAA
-X-CMS-MailID: 20220516165436eucas1p178d079302dae3a9fca696b13b0390deb
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20220516165436eucas1p178d079302dae3a9fca696b13b0390deb
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220516165436eucas1p178d079302dae3a9fca696b13b0390deb
-References: <20220516165416.171196-1-p.raghav@samsung.com>
-        <CGME20220516165436eucas1p178d079302dae3a9fca696b13b0390deb@eucas1p1.samsung.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 16 May 2022 12:55:45 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B823D1C1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 09:54:53 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id m11-20020a170902f64b00b0015820f8038fso8263231plg.23
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 09:54:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=+MVCGYE2y7IQ9KF1Y9iPDzkw2D8l040rm/mqMkZxYig=;
+        b=mKJClu0HKRrNlZ2zYdbz8BaxR/mQoLSvaIPcE0MAaAFkDXsZJUEsrZkRdFkDIbC3lL
+         mkzKuu/R2DnLlfdZlZHmDKIn/s1moeWstlVxLAmdNCuuFVsefAwG1a989jtBH6TZ+yMD
+         /jbl9kTzcW4pFeEqD/TaWw+J5LEeHZqUCpdl+By9KDLTfOy5/lIkagLjt2Dk3eoFSNNm
+         nDhXtanRGpHVaLEiDUKN7WW2OnIFJIZgIR9jqaijELDG5HKNaYUpvn0PgV6Er8+00SXl
+         0aa8579UTVd6+AhYzHfaHejdE2JADWEnC3xubiS2PMQTVtHs16SNcCVHmJ/7fAvVZ01x
+         yLGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=+MVCGYE2y7IQ9KF1Y9iPDzkw2D8l040rm/mqMkZxYig=;
+        b=dM/iQGMHB563/PJ4j6Dk9t+1khNladweMiJoX4m0fjJj2U0su+fQ/0PlGwH+D5H13M
+         px6TDo/4AjEFBAUS0Yelg6xq9gNOf2kjvgcEXKbySuH73JH5GeiNH7SLqfs4Ecp2nCjC
+         Sz5XQkf2UBg43C8r5cg5NjQQXblYzNkiC9LSBjWbeYVFgRe7lfc5yJueRBwI8E47k80i
+         e006JY2IEcFfWznYym16i7c/yM8Vew0bV8KvhlnQ/d3g+GxqgqMiLPI9HNqcvRuxuBSx
+         6NEtVpYpPVGQmO6tXGxZSZoDTaAuhANlzRV83wd4DEvQH23madOz482AsaUG+bGBcP8R
+         OjEg==
+X-Gm-Message-State: AOAM533tjLdgm0MB5hQ4b0rLlVlTfBy7eyLK8HJF43GYR7CcSu9fC1K7
+        t7mpkVbwje+fFpN4UtYa8MBWpHbwMHrPdQ==
+X-Google-Smtp-Source: ABdhPJzSxByWvyU4YOLXwLwK1gB4iz+w8j9tTU5kfvCa7KBpjRzaXJVqkxo0fscScun+wy2cd6dqfeR7dWkSRA==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:8f91:3848:5672:cb59])
+ (user=dlatypov job=sendgmr) by 2002:a17:90a:9282:b0:1dc:4a1b:ea55 with SMTP
+ id n2-20020a17090a928200b001dc4a1bea55mr20307630pjo.24.1652720093182; Mon, 16
+ May 2022 09:54:53 -0700 (PDT)
+Date:   Mon, 16 May 2022 09:54:46 -0700
+Message-Id: <20220516165446.1246262-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
+Subject: [PATCH] kunit: use kmemdup in kunit_filter_tests(), take suite as const
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luis Chamberlain <mcgrof@kernel.org>
+kmemdup() is easier than kmalloc() + memcpy(), per lkp bot.
 
-Today dm-zoned relies on the assumption that you have a zone size
-with a power of 2. Even though the block layer today enforces this
-requirement, these devices do exist and so provide a stop-gap measure
-to ensure these devices cannot be used by mistake
+Also make the input `suite` as const since we're now always making
+copies after commit a127b154a8f2 ("kunit: tool: allow filtering test
+cases via glob").
 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
 ---
- drivers/md/dm-zone.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ lib/kunit/executor.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/md/dm-zone.c b/drivers/md/dm-zone.c
-index 3e7b1fe15..f0c588c02 100644
---- a/drivers/md/dm-zone.c
-+++ b/drivers/md/dm-zone.c
-@@ -231,6 +231,18 @@ static int dm_revalidate_zones(struct mapped_device *md, struct dm_table *t)
- 	struct request_queue *q = md->queue;
- 	unsigned int noio_flag;
- 	int ret;
-+	struct block_device *bdev = md->disk->part0;
-+	sector_t zone_sectors;
-+	char bname[BDEVNAME_SIZE];
-+
-+	zone_sectors = bdev_zone_sectors(bdev);
-+
-+	if (!is_power_of_2(zone_sectors)) {
-+		DMWARN("%s: %s only power of two zone size supported",
-+		       dm_device_name(md),
-+		       bdevname(bdev, bname));
-+		return -EINVAL;
-+	}
+diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+index 2f73a6a35a7e..43e15112460a 100644
+--- a/lib/kunit/executor.c
++++ b/lib/kunit/executor.c
+@@ -55,7 +55,7 @@ static void kunit_parse_filter_glob(struct kunit_test_filter *parsed,
  
- 	/*
- 	 * Check if something changed. If yes, cleanup the current resources
+ /* Create a copy of suite with only tests that match test_glob. */
+ static struct kunit_suite *
+-kunit_filter_tests(struct kunit_suite *const suite, const char *test_glob)
++kunit_filter_tests(const struct kunit_suite *const suite, const char *test_glob)
+ {
+ 	int n = 0;
+ 	struct kunit_case *filtered, *test_case;
+@@ -69,11 +69,9 @@ kunit_filter_tests(struct kunit_suite *const suite, const char *test_glob)
+ 	if (n == 0)
+ 		return NULL;
+ 
+-	/* Use memcpy to workaround copy->name being const. */
+-	copy = kmalloc(sizeof(*copy), GFP_KERNEL);
++	copy = kmemdup(suite, sizeof(*copy), GFP_KERNEL);
+ 	if (!copy)
+ 		return ERR_PTR(-ENOMEM);
+-	memcpy(copy, suite, sizeof(*copy));
+ 
+ 	filtered = kcalloc(n + 1, sizeof(*filtered), GFP_KERNEL);
+ 	if (!filtered)
+
+base-commit: 9660209d9418f2295d31fea0d32e313e9b2c1200
 -- 
-2.25.1
+2.36.0.550.gb090851708-goog
 

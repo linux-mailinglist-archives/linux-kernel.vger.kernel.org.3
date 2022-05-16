@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EDA3528F10
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C3B528E2B
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346188AbiEPTuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38060 "EHLO
+        id S1345668AbiEPTkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345994AbiEPTof (ORCPT
+        with ESMTP id S1345752AbiEPTjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:44:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084F54090F;
-        Mon, 16 May 2022 12:43:04 -0700 (PDT)
+        Mon, 16 May 2022 15:39:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468E83FBEE;
+        Mon, 16 May 2022 12:39:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0674161554;
-        Mon, 16 May 2022 19:43:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 190E3C34100;
-        Mon, 16 May 2022 19:43:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61A2AB81610;
+        Mon, 16 May 2022 19:39:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B16A9C385AA;
+        Mon, 16 May 2022 19:39:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730183;
-        bh=z32HWa6td2alq4ISPAdSC/cfDQihTGTfN7yRTzcmYVE=;
+        s=korg; t=1652729941;
+        bh=onsbugrd8bb1fICUsu8CnS0ItXDgQ7J5sQXIVpNEADo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gpRlGvbka91RYGw28QQYoUJpJb8t3EsDGnad0WN9bdkQMoobIMxHo90+yrNAKvd6r
-         OLZU2gYcH57zSUqO7nSuHHUkO9mtFRA8L35uXGaMEkCpc9a2HmNUWWacX0nLxy59Xw
-         QMLc9uR2MC74SQcccaiifQtYho/VgF2Vz2IsecHw=
+        b=VeM/aL4kFEcnyPhnL+nQx3xc5WNkOik24yYV0wsWBJ4lt22dAZrOnhjIV8qxyLjUn
+         iMYZA0nclFOQ9QZoxyY17VhaWbw7HOwT26i3kI6x9mL7ny7bxmrop1ubbvU3iGfMS0
+         TWsS2+J+6VRidSApjbrl5KXE1ocQ2hO0PrtAwm3U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tariq Toukan <tariqt@nvidia.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Felix Kaechele <felix@kaechele.ca>,
+        Sven Eckelmann <sven@narfation.org>,
+        Simon Wunderlich <sw@simonwunderlich.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 04/43] net: Fix features skip in for_each_netdev_feature()
+Subject: [PATCH 4.14 01/25] batman-adv: Dont skb_split skbuffs with frag_list
 Date:   Mon, 16 May 2022 21:36:15 +0200
-Message-Id: <20220516193614.847404487@linuxfoundation.org>
+Message-Id: <20220516193614.726321509@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193614.714657361@linuxfoundation.org>
-References: <20220516193614.714657361@linuxfoundation.org>
+In-Reply-To: <20220516193614.678319286@linuxfoundation.org>
+References: <20220516193614.678319286@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -56,47 +58,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tariq Toukan <tariqt@nvidia.com>
+From: Sven Eckelmann <sven@narfation.org>
 
-[ Upstream commit 85db6352fc8a158a893151baa1716463d34a20d0 ]
+[ Upstream commit a063f2fba3fa633a599253b62561051ac185fa99 ]
 
-The find_next_netdev_feature() macro gets the "remaining length",
-not bit index.
-Passing "bit - 1" for the following iteration is wrong as it skips
-the adjacent bit. Pass "bit" instead.
+The receiving interface might have used GRO to receive more fragments than
+MAX_SKB_FRAGS fragments. In this case, these will not be stored in
+skb_shinfo(skb)->frags but merged into the frag list.
 
-Fixes: 3b89ea9c5902 ("net: Fix for_each_netdev_feature on Big endian")
-Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
-Reviewed-by: Gal Pressman <gal@nvidia.com>
-Link: https://lore.kernel.org/r/20220504080914.1918-1-tariqt@nvidia.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+batman-adv relies on the function skb_split to split packets up into
+multiple smaller packets which are not larger than the MTU on the outgoing
+interface. But this function cannot handle frag_list entries and is only
+operating on skb_shinfo(skb)->frags. If it is still trying to split such an
+skb and xmit'ing it on an interface without support for NETIF_F_FRAGLIST,
+then validate_xmit_skb() will try to linearize it. But this fails due to
+inconsistent information. And __pskb_pull_tail will trigger a BUG_ON after
+skb_copy_bits() returns an error.
+
+In case of entries in frag_list, just linearize the skb before operating on
+it with skb_split().
+
+Reported-by: Felix Kaechele <felix@kaechele.ca>
+Fixes: c6c8fea29769 ("net: Add batman-adv meshing protocol")
+Signed-off-by: Sven Eckelmann <sven@narfation.org>
+Tested-by: Felix Kaechele <felix@kaechele.ca>
+Signed-off-by: Simon Wunderlich <sw@simonwunderlich.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/netdev_features.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/batman-adv/fragmentation.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/include/linux/netdev_features.h b/include/linux/netdev_features.h
-index 640e7279f161..75be8886783e 100644
---- a/include/linux/netdev_features.h
-+++ b/include/linux/netdev_features.h
-@@ -151,7 +151,7 @@ enum {
- #define NETIF_F_HW_TLS_TX	__NETIF_F(HW_TLS_TX)
- #define NETIF_F_HW_TLS_RX	__NETIF_F(HW_TLS_RX)
+diff --git a/net/batman-adv/fragmentation.c b/net/batman-adv/fragmentation.c
+index 4842436c55f3..a50c87329bc5 100644
+--- a/net/batman-adv/fragmentation.c
++++ b/net/batman-adv/fragmentation.c
+@@ -489,6 +489,17 @@ int batadv_frag_send_packet(struct sk_buff *skb,
+ 		goto free_skb;
+ 	}
  
--/* Finds the next feature with the highest number of the range of start till 0.
-+/* Finds the next feature with the highest number of the range of start-1 till 0.
-  */
- static inline int find_next_netdev_feature(u64 feature, unsigned long start)
- {
-@@ -170,7 +170,7 @@ static inline int find_next_netdev_feature(u64 feature, unsigned long start)
- 	for ((bit) = find_next_netdev_feature((mask_addr),		\
- 					      NETDEV_FEATURE_COUNT);	\
- 	     (bit) >= 0;						\
--	     (bit) = find_next_netdev_feature((mask_addr), (bit) - 1))
-+	     (bit) = find_next_netdev_feature((mask_addr), (bit)))
- 
- /* Features valid for ethtool to change */
- /* = all defined minus driver/device-class-related */
++	/* GRO might have added fragments to the fragment list instead of
++	 * frags[]. But this is not handled by skb_split and must be
++	 * linearized to avoid incorrect length information after all
++	 * batman-adv fragments were created and submitted to the
++	 * hard-interface
++	 */
++	if (skb_has_frag_list(skb) && __skb_linearize(skb)) {
++		ret = -ENOMEM;
++		goto free_skb;
++	}
++
+ 	/* Create one header to be copied to all fragments */
+ 	frag_header.packet_type = BATADV_UNICAST_FRAG;
+ 	frag_header.version = BATADV_COMPAT_VERSION;
 -- 
 2.35.1
 

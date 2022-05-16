@@ -2,62 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E5295292D4
+	by mail.lfdr.de (Postfix) with ESMTP id 40EB15292D3
 	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233466AbiEPVXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 17:23:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
+        id S1349264AbiEPVXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 17:23:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343601AbiEPVXN (ORCPT
+        with ESMTP id S1349273AbiEPVXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 17:23:13 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89043377E0
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 14:23:03 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id bu29so28121140lfb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 14:23:03 -0700 (PDT)
+        Mon, 16 May 2022 17:23:18 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5B236B72
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 14:23:09 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id ks9so31066544ejb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 14:23:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=0X13uqjNwYdIdWF5gsH4FGVLE1+a8Dz5UwUWTgnJlnA=;
-        b=sDdIuJSBLpwXUzgV/cidT7T3qcWOdU7KajEF1YzNd/JRtNz/CLGSzqsrvOxCZzMWp7
-         Jnys5cE+YBGvLmz6gGNuzdNjv8fK8wRl+jmqsW+hSKvsIY0PuTiLpoDG9qBwjTX0SPIl
-         ejOpeMDPHIPdCFPNWemfNB60WYn9uYtBijGiVUSQsqQnBcre8eXTW7iYm258/CRjL0/l
-         Bikup4FGjM8uRIedMPAguPjGx3+DLWrqWiG+GLESgbRY3vnIq3Awg9mz2TEQdqU9zUvK
-         7chJcLIxJCt6FD4g/vbWnJHEX29bkdQq99LeK8xzL8xDsQmxg2V2eUYZI16SrA2xFPTj
-         h/Hw==
+        bh=I0a0B8Rv0mJ/OtknlrFk7pFGBT0rhDPrGK40+Qo9Qew=;
+        b=rA+MXBawcX1dqkELsw9JjGpfUGxbUuxgRwUiBl4b6Or1/IA8xaklp8o+QrXJmg4u6N
+         dzsQpLWbdrZYQ1sVhZBbCpkFdtxJD46THecPNqkKIXcKDPY4PmcoG4KY+5L/ir+J6w5T
+         AScaAsVDrSu9OsAIX0nDo0Jix3TJlPTDwkrxKCW80xcVETaq9O3VVfXYxBKj4KW2xSLQ
+         dn2RZLQ5e39QhXQdGu0gCwn/Jes3cPnAs3Jcs3iUgJWshoUAQ97+KTMrWddd8tKknO+P
+         BVoInc2jVFKI3jqDWCo7b1AhXzqHAFA5v1Aphoo68XyH5uS/F85D9eqs0mhUN9UfDaPK
+         PxPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=0X13uqjNwYdIdWF5gsH4FGVLE1+a8Dz5UwUWTgnJlnA=;
-        b=lrVpNQsiz7+kqunI15na2+R6WrHQDHYd7iv0K14SpMl6U1p2tCtkrdTPzN62ckShqt
-         DlF++lZ/t7l9daIFfkKlKX8Z6F/iMGGRRAMNDNmFtNMJ6ZS2xjkuZY0T9BH6bfExY1a/
-         86YzfCGUdCCI7FHMIna4KXN8T6/GLwFH9n95OLjOUsYfm68199Gvp06bTmuBB4YsGaEv
-         loq+Hnj0BUBTAZyJuX5+NUllEV+PmgNsmV5OyPpijx3NCHCa4XwUWagKa1+/ZFrOlIZr
-         vvZC8c+ND7zgQE7q1kgsX//4VjeFCdslXdd4Xdlnbm6hedcsdCFZyqpA9KJ9klkhYjZG
-         Wycw==
-X-Gm-Message-State: AOAM53026YEvOyOPhzhhiTcHiudQAb5JxWboAtqbpfTKckXBx2Gbn8lu
-        NAG4WgKTMsMbvslouRd7e8UhflDVfK5g/IIrkKH5nJGrqYY=
-X-Google-Smtp-Source: ABdhPJyoZlfgGcyXBwCgV/a8OHUAiXJ0ELcBg2e2lZ34zKTVoYlJPwz1ktnYj23HVuUWIkL7HHmLVdBPtWvVtWOyx1o=
-X-Received: by 2002:a05:6512:1291:b0:473:b522:ef58 with SMTP id
- u17-20020a056512129100b00473b522ef58mr14566653lfs.190.1652736181566; Mon, 16
- May 2022 14:23:01 -0700 (PDT)
+        bh=I0a0B8Rv0mJ/OtknlrFk7pFGBT0rhDPrGK40+Qo9Qew=;
+        b=pC8KIJMTSyP+1vkHAhi2BDmRfRofdadFu/rm/Bcgtc+dxQvcjLeitkP9NO3lt45BBs
+         Hc6c4JCWuN/VI7har0XUiDbK7kzDK6Q2IoExcuNKf7+BVpqqPhgKz+uyHU/H8aBWESuo
+         TkhoEF9NeFopN1p/0zrkL38Dz7f8otvlx8ObpVf70QQoThyKvfHulobr43r55rQpZDhE
+         hYXRWy/N45nt0ZX7DYtMrJWhOMoTtCv+mPpXq3opx67TdNG8CuZExnBYWD9QbBTpKcvf
+         4peWgEeIKU/EikKT5GvgBlYthqHH55NBA/YUPp6aok81kB9GUMtf2MjKkHAbInbUCDeI
+         A3Mg==
+X-Gm-Message-State: AOAM530VK88wPg+khQDee1N/3zN7KOho1UvHwAlT5MXOq/+cLOhR33tG
+        oqY0CQkMqvGSP+D7+htYNTWupx1Ww4hZUxfaPxGk6A==
+X-Google-Smtp-Source: ABdhPJywy0Tb8iF+LhJE7kzLQBe5uT7PmY6E6Qm3zmpjX6A0U5IgqJ5gumun0VJuIvITK5vWSI/Oqo36NWeYbiLxxhw=
+X-Received: by 2002:a17:906:8696:b0:6f3:a043:6ea7 with SMTP id
+ g22-20020a170906869600b006f3a0436ea7mr17336946ejx.387.1652736188135; Mon, 16
+ May 2022 14:23:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220516130047.3887590-1-trix@redhat.com> <YoJ0I/XPoj1B/+mm@dev-arch.thelio-3990X>
- <d34498ad-0230-7c73-8f1f-9ca59fbf930f@redhat.com>
-In-Reply-To: <d34498ad-0230-7c73-8f1f-9ca59fbf930f@redhat.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 16 May 2022 14:22:50 -0700
-Message-ID: <CAKwvOd=-H+rvt83rgrR3GyXdSDe+n0aG8CFLEshij9jNAzCQtw@mail.gmail.com>
-Subject: Re: [PATCH] misc: rtsx: Set setting_reg2 before use.
-To:     Tom Rix <trix@redhat.com>, Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Nathan Chancellor <nathan@kernel.org>, arnd@arndb.de,
-        gregkh@linuxfoundation.org, ricky_wu@realtek.com,
-        kai.heng.feng@canonical.com, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
+References: <20220513183707.97290-1-dlatypov@google.com>
+In-Reply-To: <20220513183707.97290-1-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 16 May 2022 17:22:56 -0400
+Message-ID: <CAFd5g45sOpGhbHUQpP5eeVRmqB=MqcFbSyntsfbEbGuOJWcjqA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: fix executor OOM error handling logic on non-UML
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -70,85 +68,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 10:06 AM Tom Rix <trix@redhat.com> wrote:
+On Fri, May 13, 2022 at 2:37 PM Daniel Latypov <dlatypov@google.com> wrote:
 >
+> The existing logic happens to work fine on UML, but is not correct when
+> running on other arches.
 >
-> On 5/16/22 8:56 AM, Nathan Chancellor wrote:
-> > On Mon, May 16, 2022 at 09:00:47AM -0400, Tom Rix wrote:
-> >> The clang build fails with
-> >> rts5261.c:406:13: error: variable 'setting_reg2' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-> >>          } else if (efuse_valid == 0) {
-> >>                     ^~~~~~~~~~~~~~~~
-> >>
-> >> setting_reg2 is set in this block
-> >>    if (efuse_valid == 2 || efuse_valid == 3) {
-> >> ..
-> >>    } else if (efuse_valid == 0) {
-> >>      // default
-> >> ..
-> >>    }
-> >> But efuse_valid can also have a value of 1.
-> >> Change the 'else if' to 'else' to make the second block the default.
-> >>
-> >> Fixes: b1c5f3085149 ("misc: rtsx: add rts5261 efuse function")
-> >> Signed-off-by: Tom Rix <trix@redhat.com>
-> > I am not sure if this fix is correct from a functional standpoint (i.e.
-> > is treating efuse_valid == 1 the same as efuse_valid == 0 correct?) but
-> > it is better than not handling this value altogether. For what it's
-> > worth:
+> 1. We didn't initialize `int err`, and kunit_filter_suites() doesn't
+>    explicitly set it to 0 on success. So we had false "failures".
+>    Note: it doesn't happen on UML, causing this to get overlooked.
+> 2. If we error out, we do not call kunit_handle_shutdown().
+>    This makes kunit.py timeout when using a non-UML arch, since the QEMU
+>    process doesn't ever exit.
 >
-> I looked at how the code used to work, this seemed better than
-> initializing to NULL.
->
-> >
-> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> >
-> > As a side note, it is unfortunate that this change made it into -next
-> > when there was an outstanding report about this warning:
->
->  From the clang side, this is a build break and my static analysis infra
-> goes down.
->
-> These build breaks seem to happening every week, is there a precommit
-> clang gating test that could be done for -next ?
+> Fixes: a02353f49162 ("kunit: bail out of test filtering logic quicker if OOM")
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
-Probably worth asking Stephen, though I don't think there's _any_
-gating (i.e. presubmit testing) for -next, since that'd increase the
-build capacity needed. -next is tested post-merge (i.e. post submit
-testing) IIUC.
-
->
-> Tom
->
-> >
-> > https://lore.kernel.org/202205100220.WyAyhKap-lkp@intel.com/
-> >
-> >> ---
-> >>   drivers/misc/cardreader/rts5261.c | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/misc/cardreader/rts5261.c b/drivers/misc/cardreader/rts5261.c
-> >> index 749cc5a46d13..f22634b14dc8 100644
-> >> --- a/drivers/misc/cardreader/rts5261.c
-> >> +++ b/drivers/misc/cardreader/rts5261.c
-> >> @@ -403,7 +403,7 @@ static void rts5261_init_from_hw(struct rtsx_pcr *pcr)
-> >>                      setting_reg1 = PCR_SETTING_REG4;
-> >>                      setting_reg2 = PCR_SETTING_REG5;
-> >>              }
-> >> -    } else if (efuse_valid == 0) {
-> >> +    } else {
-> >>              // default
-> >>              setting_reg1 = PCR_SETTING_REG1;
-> >>              setting_reg2 = PCR_SETTING_REG2;
-> >> --
-> >> 2.27.0
-> >>
-> > Cheers,
-> > Nathan
-> >
->
-
-
--- 
-Thanks,
-~Nick Desaulniers
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

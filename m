@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2CBC52910F
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F5DC528FA6
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348311AbiEPUN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42444 "EHLO
+        id S1346929AbiEPUQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348233AbiEPT6a (ORCPT
+        with ESMTP id S1348275AbiEPT6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:58:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE91F4968B;
-        Mon, 16 May 2022 12:50:21 -0700 (PDT)
+        Mon, 16 May 2022 15:58:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676CC496A0;
+        Mon, 16 May 2022 12:50:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8A483B81614;
-        Mon, 16 May 2022 19:50:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9738FC385AA;
-        Mon, 16 May 2022 19:50:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A35D8B81615;
+        Mon, 16 May 2022 19:50:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3FB2C34115;
+        Mon, 16 May 2022 19:50:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730619;
-        bh=eOL8HGcogLE/QMMh03izHa5VQCJCsdTi45AIy9Uu/Vw=;
+        s=korg; t=1652730622;
+        bh=QtSTpg4s7bW+z7cb5PjOt/RnDgPxZ0RF5p2u0Qr7maU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HsVw4vTr+rzzWGwCbB335B+t9rvynaNwFvAmrERXopMuENttzK5gWqT3MW2qfIoh7
-         TlUD/+V+BHxT/bbRiGFEHdawGh8rb7ixIMhdjDUmd9hZDMipGEE0fxwEx20jhd6Zq/
-         AsUvkYL4PA34UZt1dO0OFhfC2SpTdINAY/IO3Z9c=
+        b=kl8RjbC956fYRtKzIBjeApzPxgj++7vOxAlSLlz5Z6LkvUzIS62IHey680LY81e/0
+         biVBxOFUjTJB+LNgIoYvNvUg0AjYi9wFWrbjap6M1PXYMpf9Tlmst3QXk+SIhfKYgE
+         L+6RXk4RTGmSl0zfxRPGyMspAJ0X/f21vsu2moA8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Lokesh Dhoundiyal <lokesh.dhoundiyal@alliedtelesis.co.nz>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 016/102] ipv4: drop dst in multicast routing path
-Date:   Mon, 16 May 2022 21:35:50 +0200
-Message-Id: <20220516193624.464706471@linuxfoundation.org>
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Lyude Paul <lyude@redhat.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 017/102] drm/nouveau: Fix a potential theorical leak in nouveau_get_backlight_name()
+Date:   Mon, 16 May 2022 21:35:51 +0200
+Message-Id: <20220516193624.493092068@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
 References: <20220516193623.989270214@linuxfoundation.org>
@@ -58,65 +55,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lokesh Dhoundiyal <lokesh.dhoundiyal@alliedtelesis.co.nz>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 9e6c6d17d1d6a3f1515ce399f9a011629ec79aa0 ]
+[ Upstream commit ab244be47a8f111bc82496a8a20c907236e37f95 ]
 
-kmemleak reports the following when routing multicast traffic over an
-ipsec tunnel.
+If successful ida_simple_get() calls are not undone when needed, some
+additional memory may be allocated and wasted.
 
-Kmemleak output:
-unreferenced object 0x8000000044bebb00 (size 256):
-  comm "softirq", pid 0, jiffies 4294985356 (age 126.810s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 80 00 00 00 05 13 74 80  ..............t.
-    80 00 00 00 04 9b bf f9 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000f83947e0>] __kmalloc+0x1e8/0x300
-    [<00000000b7ed8dca>] metadata_dst_alloc+0x24/0x58
-    [<0000000081d32c20>] __ipgre_rcv+0x100/0x2b8
-    [<00000000824f6cf1>] gre_rcv+0x178/0x540
-    [<00000000ccd4e162>] gre_rcv+0x7c/0xd8
-    [<00000000c024b148>] ip_protocol_deliver_rcu+0x124/0x350
-    [<000000006a483377>] ip_local_deliver_finish+0x54/0x68
-    [<00000000d9271b3a>] ip_local_deliver+0x128/0x168
-    [<00000000bd4968ae>] xfrm_trans_reinject+0xb8/0xf8
-    [<0000000071672a19>] tasklet_action_common.isra.16+0xc4/0x1b0
-    [<0000000062e9c336>] __do_softirq+0x1fc/0x3e0
-    [<00000000013d7914>] irq_exit+0xc4/0xe0
-    [<00000000a4d73e90>] plat_irq_dispatch+0x7c/0x108
-    [<000000000751eb8e>] handle_int+0x16c/0x178
-    [<000000001668023b>] _raw_spin_unlock_irqrestore+0x1c/0x28
+Here, an ID between 0 and MAX_INT is required. If this ID is >=100, it is
+not taken into account and is wasted. It should be released.
 
-The metadata dst is leaked when ip_route_input_mc() updates the dst for
-the skb. Commit f38a9eb1f77b ("dst: Metadata destinations") correctly
-handled dropping the dst in ip_route_input_slow() but missed the
-multicast case which is handled by ip_route_input_mc(). Drop the dst in
-ip_route_input_mc() avoiding the leak.
+Instead of calling ida_simple_remove(), take advantage of the 'max'
+parameter to require the ID not to be too big. Should it be too big, it
+is not allocated and don't need to be freed.
 
-Fixes: f38a9eb1f77b ("dst: Metadata destinations")
-Signed-off-by: Lokesh Dhoundiyal <lokesh.dhoundiyal@alliedtelesis.co.nz>
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Link: https://lore.kernel.org/r/20220505020017.3111846-1-chris.packham@alliedtelesis.co.nz
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+While at it, use ida_alloc_xxx()/ida_free() instead to
+ida_simple_get()/ida_simple_remove().
+The latter is deprecated and more verbose.
+
+Fixes: db1a0ae21461 ("drm/nouveau/bl: Assign different names to interfaces")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Reviewed-by: Lyude Paul <lyude@redhat.com>
+[Fixed formatting warning from checkpatch]
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/9ba85bca59df6813dc029e743a836451d5173221.1644386541.git.christophe.jaillet@wanadoo.fr
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/route.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/nouveau/nouveau_backlight.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index ed9b6842a9a0..6e8020a3bd67 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -1754,6 +1754,7 @@ static int ip_route_input_mc(struct sk_buff *skb, __be32 daddr, __be32 saddr,
- #endif
- 	RT_CACHE_STAT_INC(in_slow_mc);
+diff --git a/drivers/gpu/drm/nouveau/nouveau_backlight.c b/drivers/gpu/drm/nouveau/nouveau_backlight.c
+index 12965a832f94..aa8ed08fe9a7 100644
+--- a/drivers/gpu/drm/nouveau/nouveau_backlight.c
++++ b/drivers/gpu/drm/nouveau/nouveau_backlight.c
+@@ -46,8 +46,9 @@ static bool
+ nouveau_get_backlight_name(char backlight_name[BL_NAME_SIZE],
+ 			   struct nouveau_backlight *bl)
+ {
+-	const int nb = ida_simple_get(&bl_ida, 0, 0, GFP_KERNEL);
+-	if (nb < 0 || nb >= 100)
++	const int nb = ida_alloc_max(&bl_ida, 99, GFP_KERNEL);
++
++	if (nb < 0)
+ 		return false;
+ 	if (nb > 0)
+ 		snprintf(backlight_name, BL_NAME_SIZE, "nv_backlight%d", nb);
+@@ -411,7 +412,7 @@ nouveau_backlight_init(struct drm_connector *connector)
+ 					    nv_encoder, ops, &props);
+ 	if (IS_ERR(bl->dev)) {
+ 		if (bl->id >= 0)
+-			ida_simple_remove(&bl_ida, bl->id);
++			ida_free(&bl_ida, bl->id);
+ 		ret = PTR_ERR(bl->dev);
+ 		goto fail_alloc;
+ 	}
+@@ -439,7 +440,7 @@ nouveau_backlight_fini(struct drm_connector *connector)
+ 		return;
  
-+	skb_dst_drop(skb);
- 	skb_dst_set(skb, &rth->dst);
- 	return 0;
- }
+ 	if (bl->id >= 0)
+-		ida_simple_remove(&bl_ida, bl->id);
++		ida_free(&bl_ida, bl->id);
+ 
+ 	backlight_device_unregister(bl->dev);
+ 	nv_conn->backlight = NULL;
 -- 
 2.35.1
 

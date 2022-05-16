@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 022345290FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5239C5291E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347474AbiEPUCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:02:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55712 "EHLO
+        id S1348391AbiEPT6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348150AbiEPTwm (ORCPT
+        with ESMTP id S1348645AbiEPTw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:52:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D78245522;
-        Mon, 16 May 2022 12:48:19 -0700 (PDT)
+        Mon, 16 May 2022 15:52:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916AA46B0B;
+        Mon, 16 May 2022 12:48:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B21C60ABE;
-        Mon, 16 May 2022 19:48:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C3A8C36AE9;
-        Mon, 16 May 2022 19:48:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9868560A51;
+        Mon, 16 May 2022 19:48:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7AB8C34100;
+        Mon, 16 May 2022 19:48:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730496;
-        bh=rVTxDUp0zD5Y2PVaO85xOsLUVbOGZCNM+BZKHPNu8RQ=;
+        s=korg; t=1652730500;
+        bh=OGmVfHd49qWQoIcN3ycoUD6a2jLg7OUP+fkFDjeRZIQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yb/6CZvqfu5jufgBjkSZEes62C+vMURxb1ZfuitL7On4BNKXOrGIuHdKv00K+pm4j
-         N2ZRAzZMGycZMH2ZhGUgxuRXf1wrZcmFufifYhgieN1AEFZcxekWyjhfkaPqp7hdn7
-         ndWu9y6Z/o+c+8WgSsECS/4jE1Tjr5QucbMdJB78=
+        b=et3sYc+eWhLuLn55gLSnYb/W7FPubStZEI7OR3qSZcG6KyB2ZUaWheaRGOtglv0ef
+         iDcj9PrxbVp5r78oR031TiL0Nttv1tFtkXQ4gBKgBmO+cRWcU0cVBuhTeyrezdmXCA
+         jJvssZHfwYBNg17XI3c2FMAMfqL0Hi3d1cBRWAJA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        syzbot <syzkaller@googlegroups.com>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Raju Rangoju <rajur@chelsio.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 018/102] netlink: do not reset transport header in netlink_recvmsg()
-Date:   Mon, 16 May 2022 21:35:52 +0200
-Message-Id: <20220516193624.521951232@linuxfoundation.org>
+Subject: [PATCH 5.15 019/102] net: chelsio: cxgb4: Avoid potential negative array offset
+Date:   Mon, 16 May 2022 21:35:53 +0200
+Message-Id: <20220516193624.550839514@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
 References: <20220516193623.989270214@linuxfoundation.org>
@@ -56,74 +59,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit d5076fe4049cadef1f040eda4aaa001bb5424225 ]
+[ Upstream commit 1c7ab9cd98b78bef1657a5db7204d8d437e24c94 ]
 
-netlink_recvmsg() does not need to change transport header.
+Using min_t(int, ...) as a potential array index implies to the compiler
+that negative offsets should be allowed. This is not the case, though.
+Replace "int" with "unsigned int". Fixes the following warning exposed
+under future CONFIG_FORTIFY_SOURCE improvements:
 
-If transport header was needed, it should have been reset
-by the producer (netlink_dump()), not the consumer(s).
+In file included from include/linux/string.h:253,
+                 from include/linux/bitmap.h:11,
+                 from include/linux/cpumask.h:12,
+                 from include/linux/smp.h:13,
+                 from include/linux/lockdep.h:14,
+                 from include/linux/rcupdate.h:29,
+                 from include/linux/rculist.h:11,
+                 from include/linux/pid.h:5,
+                 from include/linux/sched.h:14,
+                 from include/linux/delay.h:23,
+                 from drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:35:
+drivers/net/ethernet/chelsio/cxgb4/t4_hw.c: In function 't4_get_raw_vpd_params':
+include/linux/fortify-string.h:46:33: warning: '__builtin_memcpy' pointer overflow between offset 29 and size [2147483648, 4294967295] [-Warray-bounds]
+   46 | #define __underlying_memcpy     __builtin_memcpy
+      |                                 ^
+include/linux/fortify-string.h:388:9: note: in expansion of macro '__underlying_memcpy'
+  388 |         __underlying_##op(p, q, __fortify_size);                        \
+      |         ^~~~~~~~~~~~~
+include/linux/fortify-string.h:433:26: note: in expansion of macro '__fortify_memcpy_chk'
+  433 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+      |                          ^~~~~~~~~~~~~~~~~~~~
+drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:2796:9: note: in expansion of macro 'memcpy'
+ 2796 |         memcpy(p->id, vpd + id, min_t(int, id_len, ID_LEN));
+      |         ^~~~~~
+include/linux/fortify-string.h:46:33: warning: '__builtin_memcpy' pointer overflow between offset 0 and size [2147483648, 4294967295] [-Warray-bounds]
+   46 | #define __underlying_memcpy     __builtin_memcpy
+      |                                 ^
+include/linux/fortify-string.h:388:9: note: in expansion of macro '__underlying_memcpy'
+  388 |         __underlying_##op(p, q, __fortify_size);                        \
+      |         ^~~~~~~~~~~~~
+include/linux/fortify-string.h:433:26: note: in expansion of macro '__fortify_memcpy_chk'
+  433 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+      |                          ^~~~~~~~~~~~~~~~~~~~
+drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:2798:9: note: in expansion of macro 'memcpy'
+ 2798 |         memcpy(p->sn, vpd + sn, min_t(int, sn_len, SERNUM_LEN));
+      |         ^~~~~~
 
-The following trace probably happened when multiple threads
-were using MSG_PEEK.
+Additionally remove needless cast from u8[] to char * in last strim()
+call.
 
-BUG: KCSAN: data-race in netlink_recvmsg / netlink_recvmsg
-
-write to 0xffff88811e9f15b2 of 2 bytes by task 32012 on cpu 1:
- skb_reset_transport_header include/linux/skbuff.h:2760 [inline]
- netlink_recvmsg+0x1de/0x790 net/netlink/af_netlink.c:1978
- sock_recvmsg_nosec net/socket.c:948 [inline]
- sock_recvmsg net/socket.c:966 [inline]
- __sys_recvfrom+0x204/0x2c0 net/socket.c:2097
- __do_sys_recvfrom net/socket.c:2115 [inline]
- __se_sys_recvfrom net/socket.c:2111 [inline]
- __x64_sys_recvfrom+0x74/0x90 net/socket.c:2111
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-write to 0xffff88811e9f15b2 of 2 bytes by task 32005 on cpu 0:
- skb_reset_transport_header include/linux/skbuff.h:2760 [inline]
- netlink_recvmsg+0x1de/0x790 net/netlink/af_netlink.c:1978
- ____sys_recvmsg+0x162/0x2f0
- ___sys_recvmsg net/socket.c:2674 [inline]
- __sys_recvmsg+0x209/0x3f0 net/socket.c:2704
- __do_sys_recvmsg net/socket.c:2714 [inline]
- __se_sys_recvmsg net/socket.c:2711 [inline]
- __x64_sys_recvmsg+0x42/0x50 net/socket.c:2711
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-value changed: 0xffff -> 0x0000
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 0 PID: 32005 Comm: syz-executor.4 Not tainted 5.18.0-rc1-syzkaller-00328-ge1f700ebd6be-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Link: https://lore.kernel.org/r/20220505161946.2867638-1-eric.dumazet@gmail.com
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/lkml/202205031926.FVP7epJM-lkp@intel.com
+Fixes: fc9279298e3a ("cxgb4: Search VPD with pci_vpd_find_ro_info_keyword()")
+Fixes: 24c521f81c30 ("cxgb4: Use pci_vpd_find_id_string() to find VPD ID string")
+Cc: Raju Rangoju <rajur@chelsio.com>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20220505233101.1224230-1-keescook@chromium.org
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netlink/af_netlink.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/net/ethernet/chelsio/cxgb4/t4_hw.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-index fb7f7b17c78c..974d32632ef4 100644
---- a/net/netlink/af_netlink.c
-+++ b/net/netlink/af_netlink.c
-@@ -1996,7 +1996,6 @@ static int netlink_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
- 		copied = len;
- 	}
+diff --git a/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c b/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c
+index 64144b6171d7..b1c9f65ab10f 100644
+--- a/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c
++++ b/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c
+@@ -2793,14 +2793,14 @@ int t4_get_raw_vpd_params(struct adapter *adapter, struct vpd_params *p)
+ 		goto out;
+ 	na = ret;
  
--	skb_reset_transport_header(data_skb);
- 	err = skb_copy_datagram_msg(data_skb, 0, msg, copied);
+-	memcpy(p->id, vpd + id, min_t(int, id_len, ID_LEN));
++	memcpy(p->id, vpd + id, min_t(unsigned int, id_len, ID_LEN));
+ 	strim(p->id);
+-	memcpy(p->sn, vpd + sn, min_t(int, sn_len, SERNUM_LEN));
++	memcpy(p->sn, vpd + sn, min_t(unsigned int, sn_len, SERNUM_LEN));
+ 	strim(p->sn);
+-	memcpy(p->pn, vpd + pn, min_t(int, pn_len, PN_LEN));
++	memcpy(p->pn, vpd + pn, min_t(unsigned int, pn_len, PN_LEN));
+ 	strim(p->pn);
+-	memcpy(p->na, vpd + na, min_t(int, na_len, MACADDR_LEN));
+-	strim((char *)p->na);
++	memcpy(p->na, vpd + na, min_t(unsigned int, na_len, MACADDR_LEN));
++	strim(p->na);
  
- 	if (msg->msg_name) {
+ out:
+ 	vfree(vpd);
 -- 
 2.35.1
 

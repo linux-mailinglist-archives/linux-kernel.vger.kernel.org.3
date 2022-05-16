@@ -2,47 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E6245284FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1E6A5284EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243416AbiEPNJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 09:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48912 "EHLO
+        id S243637AbiEPNF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 09:05:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230428AbiEPNJo (ORCPT
+        with ESMTP id S229895AbiEPNFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 09:09:44 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AAE13E82
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:09:43 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L201z1BcFzhZD7;
-        Mon, 16 May 2022 21:08:55 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 16 May 2022 21:09:41 +0800
-Received: from mdc.huawei.com (10.175.112.208) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 16 May 2022 21:09:41 +0800
-From:   Chen Jun <chenjun102@huawei.com>
-To:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <zhangshaokun@hisilicon.com>, <will@kernel.org>,
-        <mark.rutland@arm.com>
-CC:     <xuqiang36@huawei.com>
-Subject: [PATCH 1/1] perf: hisi: Make irq shared
-Date:   Mon, 16 May 2022 13:05:00 +0000
-Message-ID: <20220516130500.39586-1-chenjun102@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 16 May 2022 09:05:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0EE39B8B;
+        Mon, 16 May 2022 06:05:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2950612CF;
+        Mon, 16 May 2022 13:05:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92BFFC385B8;
+        Mon, 16 May 2022 13:05:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652706323;
+        bh=eq1rcuLPkdu0+ErdkB7P6X9b1HszMe8ou3QsV1dHQYY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DTafzldvGKdyljfANYw13cE2sQ874aht66TSnNi3zI1IHuVNCf93AChAvR1Dl2nUj
+         gWhVODf/m2KPPWfSpS9YE3XUXr8Bc8CGcLJIyV8E34fe92IhLDo1y6VRdHcyDXWGKi
+         Z1pt62ABpXZcuVVPwIKjmntko61Imx4YTmSRAmoLv2ggR/rEd4yLlAiTMYnRwMP7LV
+         mpIB0AI9dmv3y0+coRonGrsebuSSqaPz+IEim6VJzbmx4IJsxpSyc5vuRe4kat4ycy
+         GgsnolHu/lXohA/fbHu69WV44JrIxGqr2h3f1rlhvSNvvb8oO7qZftl7i6tBt+f4p5
+         QKtZMoW2bAO5Q==
+Date:   Mon, 16 May 2022 18:35:19 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] dmaengine/ARM: sprd: use proper
+ 'dma-channels/requests' properties
+Message-ID: <YoJMD5+jcSHEA3tR@matsya>
+References: <20220503065147.51728-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.208]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220503065147.51728-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,32 +60,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some platforms, there are some error:
-genirq: Flags mismatch irq 23. 00010804 (xxx) vs. 00010804 (xxx)
+On 03-05-22, 08:51, Krzysztof Kozlowski wrote:
+> Hi,
+> 
+> The core DT schema defines generic 'dma-channels' and 'dma-requests'
+> properties, so in preparation to moving bindings to DT schema, convert
+> existing users of '#dma-channels' and '#dma-requests' to the generic
+> variant.
 
-The reason is that there are more than one pmu nodes using the same
-irq number.
+Applied 1-2 to dmaengine tree, thanks
 
-Add IROF_SHARED when devm_request_irq.
+> 
+> Not tested on hardware.
+> 
+> The patchset is bisectable - please pick up through independent trees.
+> 
+> Changes since v2
+> ================
+> 1. Keep old properties, so the patchset is bisectable.
+> 2. Add review tags.
+> 
+> See also:
+> [1] https://lore.kernel.org/linux-devicetree/fedb56be-f275-aabb-cdf5-dbd394b8a7bd@linaro.org/T/#m6235f451045c337d70a62dc65eab9a716618550b
+> 
+> Best regards,
+> Krzysztof
+> 
+> Krzysztof Kozlowski (3):
+>   dt-bindings: dmaengine: sprd: deprecate '#dma-channels'
+>   dmaengine: sprd: deprecate '#dma-channels'
+>   arm64: dts: sprd: use new 'dma-channels' property
+> 
+>  Documentation/devicetree/bindings/dma/sprd-dma.txt | 7 +++++--
+>  arch/arm64/boot/dts/sprd/whale2.dtsi               | 4 ++++
+>  drivers/dma/sprd-dma.c                             | 6 +++++-
+>  3 files changed, 14 insertions(+), 3 deletions(-)
+> 
+> -- 
+> 2.32.0
 
-Signed-off-by: Chen Jun <chenjun102@huawei.com>
----
- drivers/perf/hisilicon/hisi_uncore_pmu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.c b/drivers/perf/hisilicon/hisi_uncore_pmu.c
-index 358e4e284a62..bcbd3b467f34 100644
---- a/drivers/perf/hisilicon/hisi_uncore_pmu.c
-+++ b/drivers/perf/hisilicon/hisi_uncore_pmu.c
-@@ -168,7 +168,7 @@ int hisi_uncore_pmu_init_irq(struct hisi_pmu *hisi_pmu,
- 		return irq;
- 
- 	ret = devm_request_irq(&pdev->dev, irq, hisi_uncore_pmu_isr,
--			       IRQF_NOBALANCING | IRQF_NO_THREAD,
-+			       IRQF_NOBALANCING | IRQF_NO_THREAD | IRQF_SHARED,
- 			       dev_name(&pdev->dev), hisi_pmu);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev,
 -- 
-2.17.1
-
+~Vinod

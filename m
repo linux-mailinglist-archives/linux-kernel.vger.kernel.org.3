@@ -2,126 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C95E528E13
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E43D8528EFE
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345779AbiEPTkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43900 "EHLO
+        id S1345662AbiEPTmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345602AbiEPTi5 (ORCPT
+        with ESMTP id S1345956AbiEPTlD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:38:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A71EF3F88E
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:38:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652729923;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+tK7o+o7Kj2BQK1w3k57mXkaPLoN/4QFNnxgOKxEuBU=;
-        b=LfTk844feNuMvpixAdumjrUNDcHZdcpR2OOLbwIT6WZkwqyRUUUSo14HjfSQmi5O+qx0uF
-        GVY5iJrG+oTUNovTVw91mVu849UNw6zx5KTMSEQzuUyYFleWYIsDAMKJuH9c5BasnkoBXF
-        eZMNUm3iNy3Yy0DceMnkWUketa94lPM=
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
- [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-113-DBgmTOhsPc6xdxXVZ6Sw1Q-1; Mon, 16 May 2022 15:38:42 -0400
-X-MC-Unique: DBgmTOhsPc6xdxXVZ6Sw1Q-1
-Received: by mail-il1-f199.google.com with SMTP id s6-20020a056e021a0600b002d0fe2b6d2fso3810751ild.12
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:38:42 -0700 (PDT)
+        Mon, 16 May 2022 15:41:03 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4813F33E
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:39:56 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2ebf4b91212so165178327b3.8
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:39:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=99BWpQJkm6AArPPk7WzhPOholNHloGIEKeqo/lgHTyY=;
+        b=HKQpIxEMC4GFsVb7vDVuur9BVqohtM/mXn0p1tH0Gcc2mwIz+1Tr22I3UprAMWSABk
+         6xud03AVA7BWC54cAD97RMffWEB5L35VrUnFHlscjrrErL5W0hPpOCAJcTZL+Y007vUV
+         jdFL+PVaXOmUgIAWJVRG3vPFljY9tUW2cVk9+nJ/5mSJqi/GSAR6t476Q0FiYvI2y42m
+         sZvXIuXVVO4FakgC30CPAMbCdlNMeUf5MKxgMsgUOtKqD62rCULW3pro/bRAgZbvVwXM
+         0cq3BLN4+NkCWUUcEedGxECqGNRpPkkusw29hef/tZVDtRTdG0FbBo5OE1bTREoX9qYF
+         nAtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=+tK7o+o7Kj2BQK1w3k57mXkaPLoN/4QFNnxgOKxEuBU=;
-        b=h8W40qIVLnqzZuLoUWzizxjijmmUdOmfaeo05QwjGhVv5wLNEk5F8HDQcY1WC8XQGh
-         STjVziEBXYgvA+nrCTgBPyjCoSG6VqxA0NphqZ38f1XPAQXx0iBjb27JQDRjBtDSgeYQ
-         xyhXd8L0NbWFHDFb3ttvm2N/omI9fL72Mki8GWtZGJxOSl+V44A+t4+cstonjO/dNV/e
-         kNqU+DQjYp66eCXWmxGxpvJqvxcEmeh0bWrDG5UiIjn9bt1PY7GDv2XVDBlm7vFLEZAv
-         LiOxDPQhRlRgeLETXMHmO9/39ehQVJ8A6x24U9vRwzGnVcSn7O9HKONpEu3Er1VI9sx4
-         Lkxw==
-X-Gm-Message-State: AOAM5320PxkkNAc0ip+NRIxzyw/0QIgYdoMVNrTfohKDS9RQXWoBbdjr
-        8J1Fa2YlKxpNYcxNra6pwAoAYghBnkUnRXPUDJoXs0e3myPN0gWfokPouInsCji5XvnUg5E4GZ2
-        JlJB9OT/riZP8ZicBwhDjZDXl
-X-Received: by 2002:a05:6638:41a9:b0:32e:415a:a8a9 with SMTP id az41-20020a05663841a900b0032e415aa8a9mr2168794jab.101.1652729921713;
-        Mon, 16 May 2022 12:38:41 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy1ASRKUsHnS3u0hy5oNZdsYdaQJ/MYozulGQvgUeh7FSJ+d//YDvBT7RymfdniEX5hlCY/9Q==
-X-Received: by 2002:a05:6638:41a9:b0:32e:415a:a8a9 with SMTP id az41-20020a05663841a900b0032e415aa8a9mr2168777jab.101.1652729921515;
-        Mon, 16 May 2022 12:38:41 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id v20-20020a02b914000000b0032e049b2949sm2803562jan.101.2022.05.16.12.38.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 12:38:41 -0700 (PDT)
-Date:   Mon, 16 May 2022 13:38:39 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        linux-s390@vger.kernel.org, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
-        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v7 17/22] vfio-pci/zdev: add open/close device hooks
-Message-ID: <20220516133839.7e116489.alex.williamson@redhat.com>
-In-Reply-To: <20220516183558.GN1343366@nvidia.com>
-References: <20220513191509.272897-1-mjrosato@linux.ibm.com>
-        <20220513191509.272897-18-mjrosato@linux.ibm.com>
-        <20220516172734.GE1343366@nvidia.com>
-        <7a31ec36-ceaf-dcef-8bd0-2b4732050aed@linux.ibm.com>
-        <20220516183558.GN1343366@nvidia.com>
-Organization: Red Hat
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=99BWpQJkm6AArPPk7WzhPOholNHloGIEKeqo/lgHTyY=;
+        b=BAN9m4Jbp8dUJfG8wSkSfZezvQOjFux3LAEzeUD2xdimcE6p7Hgs7dNd9I1Xm/xpDG
+         L2Wr4tDA9db2e0n6nVJv/swB9dxysB93TgDxHxNWJoOlWGQFjlbQoWydzhnZyNmU0q0W
+         +wtkJyqqOHMYPjrhGEIzpdrYvGRj1LosYohdHm5TY2f1aOUBYpA76R765KL56l1aC7K3
+         j3Xl4g2USGuDiQYc2GApz/ie2TjzRmV6uJ3ShMVoa1/aONqJd4Z2mGaN0mebgKqvIbM6
+         AEynI24vpuivYCCmr2bF2NA3rFXcOr4ODxTV9u9XNlDmfWXKdp7SkvGdS/DzmGPckIs8
+         qjLQ==
+X-Gm-Message-State: AOAM532dg9XUqX5pa15T88cA6yjqvL8UN/V4L+tSvXfq0EgRu86tuuiE
+        0DpwVRBDOBWcQmD6jthcHW73Jr2GTG46HiRfHAeaTQ==
+X-Google-Smtp-Source: ABdhPJx5GvWkBqAu2Nm1IG231I1soql0HIjYv2G9Ay0REk/aLK0lMgQQ0OdtHS8Nmsne1YoyXIZh5EuOk5GnANhybGQ=
+X-Received: by 2002:a81:9188:0:b0:2fe:d01a:6b09 with SMTP id
+ i130-20020a819188000000b002fed01a6b09mr12922227ywg.243.1652729995504; Mon, 16
+ May 2022 12:39:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220513202159.1550547-1-samitolvanen@google.com>
+ <20220513202159.1550547-21-samitolvanen@google.com> <YoIfWENLV1AR2ijj@hirez.programming.kicks-ass.net>
+ <CABCJKucXA2jbTc9TF1mLUsEDKu52t71tzxpnsGOXY3_ks+W4Bg@mail.gmail.com> <20220516183047.GM76023@worktop.programming.kicks-ass.net>
+In-Reply-To: <20220516183047.GM76023@worktop.programming.kicks-ass.net>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Mon, 16 May 2022 12:39:19 -0700
+Message-ID: <CABCJKudmrBOkoDvDPOA-aEyrs9evHPWpzMpDZ10n8vXDBRdCxQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-hardening@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 16 May 2022 15:35:58 -0300
-Jason Gunthorpe <jgg@nvidia.com> wrote:
+On Mon, May 16, 2022 at 11:30 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Mon, May 16, 2022 at 10:15:00AM -0700, Sami Tolvanen wrote:
+> > On Mon, May 16, 2022 at 2:54 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> > >
+> > > On Fri, May 13, 2022 at 01:21:58PM -0700, Sami Tolvanen wrote:
+> > > > With CONFIG_CFI_CLANG, the compiler injects a type preamble
+> > > > immediately before each function and a check to validate the target
+> > > > function type before indirect calls:
+> > > >
+> > > >   ; type preamble
+> > > >   __cfi_function:
+> > > >     int3
+> > > >     int3
+> > > >     mov <id>, %eax
+> > > >     int3
+> > > >     int3
+> > > >   function:
+> > > >     ...
+> > >
+> > > When I enable CFI_CLANG and X86_KERNEL_IBT I get:
+> > >
+> > > 0000000000000c80 <__cfi_io_schedule_timeout>:
+> > > c80:   cc                      int3
+> > > c81:   cc                      int3
+> > > c82:   b8 b5 b1 39 b3          mov    $0xb339b1b5,%eax
+> > > c87:   cc                      int3
+> > > c88:   cc                      int3
+> > >
+> > > 0000000000000c89 <io_schedule_timeout>:
+> > > c89:   f3 0f 1e fa             endbr64
+> > >
+> > >
+> > > That seems unfortunate. Would it be possible to get an additional
+> > > compiler option to suppress the endbr for all symbols that get a __cfi_
+> > > preaamble?
+> >
+> > What's the concern with the endbr? Dropping it would currently break
+> > the CFI+IBT combination on newer hardware, no?
+>
+> Well, yes, but also that combination isn't very interesting. See,
+>
+>   https://lore.kernel.org/all/20220420004241.2093-1-joao@overdrivepizza.com/T/#m5d67fb010d488b2f8eee33f1eb39d12f769e4ad2
+>
+> and the patch I did down-thread:
+>
+>   https://lkml.kernel.org/r/YoJKhHluN4n0kZDm@hirez.programming.kicks-ass.net
+>
+> If we have IBT, then FineIBT is a much better option than kCFI+IBT.
+> Removing that superfluous endbr also shrinks the whole thing by 4 bytes.
+>
+> So I'm fine with the compiler generating working code for that
+> combination; but please get me an option to supress it in order to save
+> those pointless bytes. All this CFI stuff is enough bloat as it is.
 
-> On Mon, May 16, 2022 at 02:30:46PM -0400, Matthew Rosato wrote:
-> 
-> > Conceptually I think this would work for QEMU anyway (it always sets the kvm
-> > before we open the device).  I tried to test the idea quickly but couldn't
-> > get the following to apply on vfio-next or your vfio_group_locking -- but I
-> > understand what you're trying to do so I'll re-work and try it out.  
-> 
-> I created it on 8c9350e9bf43de1ebab3cc8a80703671e6495ab4 which is the
-> vfio_group_locking.. I can send you a github if it helps
-> https://github.com/jgunthorpe/linux/commits/vfio_group_lockin
-> 
-> > @Alex can you think of any usecase/reason why we would need to be able to
-> > set the KVM sometime after the device was opened?  Doing something like
-> > below would break that, as this introduces the assumption that the group is
-> > associated with the KVM before the device is opened (and if it's not, the
-> > device open fails).  
-> 
-> Keep in mind that GVT already hard requires this ordering to even
-> allow open_device to work - so it already sets a floor for what
-> userspace can do..
+Sure, I'll take a look at what's the best way to accomplish this.
 
-How is this going to work when vfio devices are exposed directly?  We
-currently have a strict ordering through the group to get to the
-device, and it's therefore a reasonable requirement for userspace to
-register the group with kvm before opening the device.  Is the notifier
-and async KVM registration necessary to support this dependency with
-direct device access?  I don't have as clear a picture of the ordering
-with with direct access.  Thanks,
+> > > >   ; indirect call check
+> > > >     cmpl    <id>, -6(%r11)
+> > > >     je      .Ltmp1
+> > > >     ud2
+> > > >   .Ltmp1:
+> > > >     call    __x86_indirect_thunk_r11
+> > >
+> > > The first one I try and find looks like:
+> > >
+> > > 26:       41 81 7b fa a6 96 9e 38         cmpl   $0x389e96a6,-0x6(%r11)
+> > > 2e:       74 02                   je     32 <__traceiter_sched_kthread_stop+0x29>
+> > > 30:       0f 0b                   ud2
+> > > 32:       4c 89 f6                mov    %r14,%rsi
+> > > 35:       e8 00 00 00 00          call   3a <__traceiter_sched_kthread_stop+0x31> 36: R_X86_64_PLT32      __x86_indirect_thunk_r11-0x4
+> > >
+> > > This must not be. If I'm to rewrite that lot to:
+> > >
+> > >   movl  $\hash, %r10d
+> > >   sub   $9, %r11
+> > >   call  *%r11
+> > >   .nop  4
+> > >
+> > > Then there must not be spurious instruction in between the ud2 and the
+> > > indirect call/retpoline thing.
+> >
+> > With the current compiler patch, LLVM sets up function arguments after
+> > the CFI check. if it's a problem, we can look into changing that.
+>
+> Yes, please fix that. Again see that same patch for why this is a
+> problem. Objtool can trivially find retpoline calls, but finding this
+> kCFI gadget is going to be hard work. If you ensure they're
+> unconditionally stuck together, then the problem goes away find one,
+> finds the other.
 
-Alex
+You can use .kcfi_traps to locate the check right now, but I agree,
+it's not quite ideal.
 
+Sami

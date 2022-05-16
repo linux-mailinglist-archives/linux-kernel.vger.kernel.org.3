@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB333528E67
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A675528EA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232444AbiEPTnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
+        id S240670AbiEPTuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345770AbiEPTkZ (ORCPT
+        with ESMTP id S1346095AbiEPTn0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:40:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7EF3F887;
-        Mon, 16 May 2022 12:39:37 -0700 (PDT)
+        Mon, 16 May 2022 15:43:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0A63EF14;
+        Mon, 16 May 2022 12:42:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D124FB81611;
-        Mon, 16 May 2022 19:39:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20F74C34100;
-        Mon, 16 May 2022 19:39:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D97461512;
+        Mon, 16 May 2022 19:42:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DC97C3411B;
+        Mon, 16 May 2022 19:42:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652729974;
-        bh=+VHzgVZj21PNaiDvUb1h+/2IEGRvCp7a4AmoEQN7TQ0=;
+        s=korg; t=1652730173;
+        bh=sAbBE4ZK/Gtrs3Du8M9bUK9bxR4OSTLCtTqbA3WnEw8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fPZI4ygfzFCbpU0RHYtGgIJsCH5BsPwCRQG+TcUqpjPUb17hP0q3w5uvOV3lm+p2E
-         PvdNJy8odOOC7VpVQ9Vf1WJo/+JHhB2WvrM/V9X7bN4IvZn+ZCiDcc2KLrMp9i7zzU
-         FyMPUTIADPoNgTNUawetqliBas3ooilujNmOiQks=
+        b=FCLMqMWF+/fSbyXlFtjKTjpJm1akJwJp3O7EWEXCefpcBGl+xfD67ngmQMG0q2QaS
+         xsJB5r/gGSHBP4oMswLva0hHNOTtI/KalnHZLxaUu7brU0GabFudGf4ER+zs3i/kpi
+         /aMCp9KCy0GosjfH65WLHPoK5PSRcAEJm648pXg0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Scott Chen <scott@labau.com.tw>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 4.14 18/25] USB: serial: pl2303: add device id for HP LM930 Display
-Date:   Mon, 16 May 2022 21:36:32 +0200
-Message-Id: <20220516193615.235503629@linuxfoundation.org>
+        stable@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 22/43] s390: disable -Warray-bounds
+Date:   Mon, 16 May 2022 21:36:33 +0200
+Message-Id: <20220516193615.373763803@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193614.678319286@linuxfoundation.org>
-References: <20220516193614.678319286@linuxfoundation.org>
+In-Reply-To: <20220516193614.714657361@linuxfoundation.org>
+References: <20220516193614.714657361@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,41 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Scott Chen <scott@labau.com.tw>
+From: Sven Schnelle <svens@linux.ibm.com>
 
-commit 26a08f8bad3e1f98d3153f939fb8cd330da4cb26 upstream.
+[ Upstream commit 8b202ee218395319aec1ef44f72043e1fbaccdd6 ]
 
-Add the device id for the HPLM930Display which is a PL2303GC based
-device.
+gcc-12 shows a lot of array bound warnings on s390. This is caused
+by the S390_lowcore macro which uses a hardcoded address of 0.
 
-Signed-off-by: Scott Chen <scott@labau.com.tw>
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Wrapping that with absolute_pointer() works, but gcc no longer knows
+that a 12 bit displacement is sufficient to access lowcore. So it
+emits instructions like 'lghi %r1,0; l %rx,xxx(%r1)' instead of a
+single load/store instruction. As s390 stores variables often
+read/written in lowcore, this is considered problematic. Therefore
+disable -Warray-bounds on s390 for gcc-12 for the time being, until
+there is a better solution.
+
+Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+Link: https://lore.kernel.org/r/yt9dzgkelelc.fsf@linux.ibm.com
+Link: https://lore.kernel.org/r/20220422134308.1613610-1-svens@linux.ibm.com
+Link: https://lore.kernel.org/r/20220425121742.3222133-1-svens@linux.ibm.com
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/serial/pl2303.c |    1 +
- drivers/usb/serial/pl2303.h |    1 +
- 2 files changed, 2 insertions(+)
+ arch/s390/Makefile | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
---- a/drivers/usb/serial/pl2303.c
-+++ b/drivers/usb/serial/pl2303.c
-@@ -103,6 +103,7 @@ static const struct usb_device_id id_tab
- 	{ USB_DEVICE(HP_VENDOR_ID, HP_LCM220_PRODUCT_ID) },
- 	{ USB_DEVICE(HP_VENDOR_ID, HP_LCM960_PRODUCT_ID) },
- 	{ USB_DEVICE(HP_VENDOR_ID, HP_LM920_PRODUCT_ID) },
-+	{ USB_DEVICE(HP_VENDOR_ID, HP_LM930_PRODUCT_ID) },
- 	{ USB_DEVICE(HP_VENDOR_ID, HP_LM940_PRODUCT_ID) },
- 	{ USB_DEVICE(HP_VENDOR_ID, HP_TD620_PRODUCT_ID) },
- 	{ USB_DEVICE(CRESSI_VENDOR_ID, CRESSI_EDY_PRODUCT_ID) },
---- a/drivers/usb/serial/pl2303.h
-+++ b/drivers/usb/serial/pl2303.h
-@@ -134,6 +134,7 @@
- #define HP_TD620_PRODUCT_ID	0x0956
- #define HP_LD960_PRODUCT_ID	0x0b39
- #define HP_LD381_PRODUCT_ID	0x0f7f
-+#define HP_LM930_PRODUCT_ID	0x0f9b
- #define HP_LCM220_PRODUCT_ID	0x3139
- #define HP_LCM960_PRODUCT_ID	0x3239
- #define HP_LD220_PRODUCT_ID	0x3524
+diff --git a/arch/s390/Makefile b/arch/s390/Makefile
+index 2faaf456956a..71e3d7c0b870 100644
+--- a/arch/s390/Makefile
++++ b/arch/s390/Makefile
+@@ -31,6 +31,16 @@ KBUILD_CFLAGS_DECOMPRESSOR += $(call cc-option,-ffreestanding)
+ KBUILD_CFLAGS_DECOMPRESSOR += $(call cc-disable-warning, address-of-packed-member)
+ KBUILD_CFLAGS_DECOMPRESSOR += $(if $(CONFIG_DEBUG_INFO),-g)
+ KBUILD_CFLAGS_DECOMPRESSOR += $(if $(CONFIG_DEBUG_INFO_DWARF4), $(call cc-option, -gdwarf-4,))
++
++ifdef CONFIG_CC_IS_GCC
++	ifeq ($(call cc-ifversion, -ge, 1200, y), y)
++		ifeq ($(call cc-ifversion, -lt, 1300, y), y)
++			KBUILD_CFLAGS += $(call cc-disable-warning, array-bounds)
++			KBUILD_CFLAGS_DECOMPRESSOR += $(call cc-disable-warning, array-bounds)
++		endif
++	endif
++endif
++
+ UTS_MACHINE	:= s390x
+ STACK_SIZE	:= $(if $(CONFIG_KASAN),65536,16384)
+ CHECKFLAGS	+= -D__s390__ -D__s390x__
+-- 
+2.35.1
+
 
 

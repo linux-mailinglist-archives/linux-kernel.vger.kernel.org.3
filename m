@@ -2,97 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD3345280C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 11:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C33B55280C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 11:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240383AbiEPJVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 05:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
+        id S231906AbiEPJVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 05:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242075AbiEPJVN (ORCPT
+        with ESMTP id S242129AbiEPJVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 05:21:13 -0400
-Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E8B8271B
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 02:21:08 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.12.77.33])
-        by mail-app3 (Coremail) with SMTP id cC_KCgB3X7pxF4JiqsxRAA--.14583S4;
-        Mon, 16 May 2022 17:20:50 +0800 (CST)
-From:   Lin Ma <linma@zju.edu.cn>
-To:     oder_chiou@realtek.com, lgirdwood@gmail.com, broonie@kernel.org,
-        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Cc:     Lin Ma <linma@zju.edu.cn>
-Subject: [PATCH v0] ASoC: rt5645: Fix errorenous cleanup order
-Date:   Mon, 16 May 2022 17:20:35 +0800
-Message-Id: <20220516092035.28283-1-linma@zju.edu.cn>
-X-Mailer: git-send-email 2.35.1
+        Mon, 16 May 2022 05:21:34 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED7D26100;
+        Mon, 16 May 2022 02:21:24 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24G8E5W1005786;
+        Mon, 16 May 2022 11:21:09 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=Q4W3Tjig+WlwJ7hKJLTi8rI/emUqtqXFj0FeCqRaQ3Q=;
+ b=qsI4yD4DpV+Z45Pez3UNwySlSjWcJ/PvPbwCIRwr0Dd1WZGmEwouNqMRfB16+DQ0tZQM
+ xtDh1Fn8SNIoUC1WHCD3bAsETNyoJ2+5FGJa4qye8plxHejH1SFwolBCwq3xJDpPDh51
+ EI75uhr/lMRpEoxoygHz/hPZ5TfXe+HNbtrytXiH72IMfVJpTO+zGxOFUxbgIlLxBqv5
+ 4rRzUt29spMX2U9kaMsDVgUuFipAG4/8OXQHiASpM566vCDw1glg0VbmF+Fyu14qykQk
+ da7T6RQArxsFzrar7zt3rrzpksHW9QPw1ZM4c/4vW6CuT7yZzW8uEB4gQUW0rWEEWmmQ hA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3g21j8hxph-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 11:21:09 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EDCF810002A;
+        Mon, 16 May 2022 11:21:06 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E753F2171DB;
+        Mon, 16 May 2022 11:21:06 +0200 (CEST)
+Received: from localhost (10.75.127.45) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 16 May 2022 11:21:06
+ +0200
+From:   Hugues Fruchet <hugues.fruchet@foss.st.com>
+To:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+CC:     <linux-media@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Philippe CORNU <philippe.cornu@foss.st.com>,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>
+Subject: [PATCH] media: stm32-dcmi: add support of 1X16 serial pixel formats variant
+Date:   Mon, 16 May 2022 11:20:48 +0200
+Message-ID: <20220516092048.264036-1-hugues.fruchet@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cC_KCgB3X7pxF4JiqsxRAA--.14583S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF4kuryfZFyDWFW5Cw4fuFg_yoW8XFWrpr
-        Z8WFy3J34Utay29F1qqr4qqF1rGr95XrW3Gr1xta12yw1rXr1rWFy5GF109FWjqrWkCanx
-        ZFZ7Z3yfZr98CaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk21xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E
-        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
-        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
-        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
-        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxF
-        aVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
-        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxG
-        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
-        CI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
-        z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-16_05,2022-05-13_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a logic error when removing rt5645 device as the function
-rt5645_i2c_remove() first cancel the &rt5645->jack_detect_work and
-delete the &rt5645->btn_check_timer latter. However, since the timer
-handler rt5645_btn_check_callback() will re-queue the jack_detect_work,
-this cleanup order is buggy.
+From: Hugues Fruchet <hugues.fruchet@st.com>
 
-That is, once the del_timer_sync in rt5645_i2c_remove is concurrently
-run with the rt5645_btn_check_callback, the canceled jack_detect_work
-will be rescheduled again, leading to possible use-after-free.
+Add support of 1X16 serial pixel formats in order to support
+CSI-2 camera sensor exposing 1x16 pixel formats only.
 
-This patch fix the issue by placing the del_timer_sync function before
-the cancel_delayed_work_sync.
-
-Signed-off-by: Lin Ma <linma@zju.edu.cn>
+Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
 ---
- sound/soc/codecs/rt5645.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/media/platform/st/stm32/stm32-dcmi.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/sound/soc/codecs/rt5645.c b/sound/soc/codecs/rt5645.c
-index 197c56047947..71a8990ba548 100644
---- a/sound/soc/codecs/rt5645.c
-+++ b/sound/soc/codecs/rt5645.c
-@@ -4154,9 +4154,14 @@ static int rt5645_i2c_remove(struct i2c_client *i2c)
- 	if (i2c->irq)
- 		free_irq(i2c->irq, rt5645);
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
+index 09a743cd7004..b2ba4d95bfa3 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmi.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
+@@ -1592,25 +1592,31 @@ static int dcmi_set_default_fmt(struct stm32_dcmi *dcmi)
+ 	return 0;
+ }
  
-+	/*
-+	 * Since the rt5645_btn_check_callback() can queue jack_detect_work,
-+	 * the timer need to be delted first
-+	 */
-+	del_timer_sync(&rt5645->btn_check_timer);
-+
- 	cancel_delayed_work_sync(&rt5645->jack_detect_work);
- 	cancel_delayed_work_sync(&rt5645->rcclock_work);
--	del_timer_sync(&rt5645->btn_check_timer);
- 
- 	regulator_bulk_disable(ARRAY_SIZE(rt5645->supplies), rt5645->supplies);
- 
+-/*
+- * FIXME: For the time being we only support subdevices
+- * which expose RGB & YUV "parallel form" mbus code (_2X8).
+- * Nevertheless, this allows to support serial source subdevices
+- * and serial to parallel bridges which conform to this.
+- */
+ static const struct dcmi_format dcmi_formats[] = {
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_RGB565,
+ 		.mbus_code = MEDIA_BUS_FMT_RGB565_2X8_LE,
+ 		.bpp = 2,
++	}, {
++		.fourcc = V4L2_PIX_FMT_RGB565,
++		.mbus_code = MEDIA_BUS_FMT_RGB565_1X16,
++		.bpp = 2,
+ 	}, {
+ 		.fourcc = V4L2_PIX_FMT_YUYV,
+ 		.mbus_code = MEDIA_BUS_FMT_YUYV8_2X8,
+ 		.bpp = 2,
++	}, {
++		.fourcc = V4L2_PIX_FMT_YUYV,
++		.mbus_code = MEDIA_BUS_FMT_YUYV8_1X16,
++		.bpp = 2,
+ 	}, {
+ 		.fourcc = V4L2_PIX_FMT_UYVY,
+ 		.mbus_code = MEDIA_BUS_FMT_UYVY8_2X8,
+ 		.bpp = 2,
++	}, {
++		.fourcc = V4L2_PIX_FMT_UYVY,
++		.mbus_code = MEDIA_BUS_FMT_UYVY8_1X16,
++		.bpp = 2,
+ 	}, {
+ 		.fourcc = V4L2_PIX_FMT_JPEG,
+ 		.mbus_code = MEDIA_BUS_FMT_JPEG_1X8,
 -- 
-2.35.1
+2.25.1
 

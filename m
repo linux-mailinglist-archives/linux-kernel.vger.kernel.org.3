@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D28E528C60
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 19:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0222528C6B
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 19:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344465AbiEPRwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 13:52:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46150 "EHLO
+        id S241182AbiEPRzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 13:55:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238882AbiEPRwa (ORCPT
+        with ESMTP id S230453AbiEPRzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 13:52:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85E11CFC1;
-        Mon, 16 May 2022 10:52:26 -0700 (PDT)
+        Mon, 16 May 2022 13:55:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34661FA4D;
+        Mon, 16 May 2022 10:55:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 97159B815A6;
-        Mon, 16 May 2022 17:52:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9ABBC385AA;
-        Mon, 16 May 2022 17:52:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F13361328;
+        Mon, 16 May 2022 17:55:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79485C385AA;
+        Mon, 16 May 2022 17:55:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652723544;
-        bh=V6OYfbvl7Gf5jRVgQc6Zwaa10DLCSHKSqD/KiJIBun4=;
+        s=k20201202; t=1652723747;
+        bh=goXFeXlLpONwFnhWgolTtOIqWpucoeNyIZd7yZ63G8I=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DrLKI83o0O+3SLQ8Gd81gugSBsgEJvkW8r3IjFj5jvZs5WCQDZfv/oLy+9iLWMBAA
-         ST7cF7XRRy1j0sDB1lcG5oQNRF1qn+BlWsPbbX+tGDg2LlZgLUYD5DO5QIW5motEkt
-         O4bCAPKqgFSG8lgRmtrzcx+yH8utQ8M1D+dVS4b/e0xKaySz+glNSsFNn+13W1SLbZ
-         NxuW+x1iGowuDgoKi916FnXIwCBjSyJE5c8GLizqXT+8t0QeBTBAIin6X/4/8U/QLD
-         DBEoq9ZKUehrdGDUXgn2g7aIdShs8JIQO7yCUf5aw7iz7vSxydrmg2JdtxAMN0Fa69
-         RuRNZuvafwzfQ==
-Date:   Mon, 16 May 2022 18:52:19 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Antonio Terceiro <antonio.terceiro@linaro.org>
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Shuah Khan <shuah@kernel.org>, alsa-devel@alsa-project.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kselftest: alsa: handle cross compilation
-Message-ID: <YoKPU/QbrkuJPlnx@sirena.org.uk>
-References: <20220516165856.401452-1-antonio.terceiro@linaro.org>
+        b=XdsOZPA+/BUEtLbSivCtZZwJuxQuGJXMUKKGdG4MBng3xZN9iF7EQ3w5ngbpsNv7A
+         BVoivSm4VxmWF9R34FX93AB9LP55jOwrJ+goUqGXYv9LIXmv4+AV/8LT9+k0jQxXTY
+         D3CxqoYU93eX7QC0VxnOBFNNPL0pa+KqrQNd/SSQ4val2+62PCN7HrWM80y1fpu/FS
+         PyDE8IAgaipY06SDw8mDghglChuxRBC2Tl9dEhPcHq70D/MT53+6FA/2dmebMHJE/t
+         RSNAvZmv7fjWUND55bFMquyv2OJeoSFZV0A0LNhJViikYkc76rDZphcEp1chZ7FNuY
+         zXooKYJBZeZxQ==
+Date:   Mon, 16 May 2022 20:54:12 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Johannes Holland <johannes.holland@infineon.com>,
+        Nayna <nayna@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peterhuewe@gmx.de, jgg@ziepe.ca
+Subject: Re: [PATCH] tpm: sleep at least <...> ms in tpm_msleep()
+Message-ID: <YoKPxMLuWWK2al9F@kernel.org>
+References: <20220510112902.23213-1-johannes.holland@infineon.com>
+ <YnvTSqRgYkWu0qgp@kernel.org>
+ <99541f08e8b554dea59334005cafb0af978f9a05.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="l68LM0N6va3Ya2h5"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220516165856.401452-1-antonio.terceiro@linaro.org>
-X-Cookie: May be too intense for some viewers.
+In-Reply-To: <99541f08e8b554dea59334005cafb0af978f9a05.camel@linux.ibm.com>
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,34 +58,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, May 12, 2022 at 08:21:17AM -0400, Mimi Zohar wrote:
+> On Wed, 2022-05-11 at 18:16 +0300, Jarkko Sakkinen wrote:
+> > On Tue, May 10, 2022 at 01:29:03PM +0200, Johannes Holland wrote:
+> > > To comply with protocol requirements, minimum polling times must often
+> > > be adhered to. Therefore, a macro like tpm_msleep() should sleep at
+> > > least the given amount of time (not up to the given period). Have
+> > > tpm_msleep() sleep at least the given number of milliseconds.
+> > > 
+> > > Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+> > > ---
+> > >  drivers/char/tpm/tpm.h | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> > > index 2163c6ee0d36..0971b55fffe3 100644
+> > > --- a/drivers/char/tpm/tpm.h
+> > > +++ b/drivers/char/tpm/tpm.h
+> > > @@ -185,8 +185,8 @@ int tpm_pm_resume(struct device *dev);
+> > >  
+> > >  static inline void tpm_msleep(unsigned int delay_msec)
+> > >  {
+> > > -	usleep_range((delay_msec * 1000) - TPM_TIMEOUT_RANGE_US,
+> > > -		     delay_msec * 1000);
+> > > +	usleep_range(delay_msec * 1000, (delay_msec * 1000)
+> > > +		     + TPM_TIMEOUT_RANGE_US);
+> > >  };
+> > >  
+> > >  int tpm_chip_start(struct tpm_chip *chip);
+> > > -- 
+> > > 2.34.1
+> > > 
+> > 
+> > For this I would really like to hear a 2nd opinion from Nayna and Mimi.
+> 
+> This patch reverts commit 5ef924d9e2e8 ("tpm: use tpm_msleep() value as
+> max delay").    Are you experiencing TPM issues that require it?
+> 
+> thanks,
+> 
+> Mimi
 
---l68LM0N6va3Ya2h5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Yeah, there's no data to support making anything.  Without a live
+system having issues with this, I guess this quite definitive NAK.
 
-On Mon, May 16, 2022 at 01:58:56PM -0300, Antonio Terceiro wrote:
-> Calling just `pkg-config` is adequate for native builds, but finding the
-> foreign libraries with pkg-config needs pkg-config to be called via its
-> architecture-specific wrapper. This works in Debian, where there is a
-> corresponding *-pkg-config wrapper script for each enabled foreign
-> architecture, just like there are *-gcc, *-ld.
-
-Why does this only apply to the ALSA selftests?  There's a bunch of
-kselftests that use unadorned pkg-config calls.
-
---l68LM0N6va3Ya2h5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKCj1IACgkQJNaLcl1U
-h9DcoAf+LVpPlFZWQHDWJ58ZynWUjK/xxuF/HWxAsfbguUHtJNjWrCUgsLI3ipJJ
-/dF3BjpNo4wqsC+6DO5DW+aYiUgzOKC9MhY14A0DQPnbmLSmOhmfhDgycXSyiawq
-qF6Xj9UX9shFYAYi5A6TnULsxnhAc07vDbj7VgTwmNOpNm4d/8/2ksWReJJi0/Ab
-7gnnRE4xV0sqVBg1XQxAarGT3aNu8JBnhwHnr5gEuLAUyrql57+9dIGCJfngtDxY
-BB1lgJBTrW8Z8duAmb2JU+9SbmFoeQUawQAxPEJOG2PebDDJsovTNCu8gmrV52fn
-+7+y33ypsIRzVF+/WvbVh4JE32YDxA==
-=NDzX
------END PGP SIGNATURE-----
-
---l68LM0N6va3Ya2h5--
+BR, Jarkko

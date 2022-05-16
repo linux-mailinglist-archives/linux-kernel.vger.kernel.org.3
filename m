@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5503527F13
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 10:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 758FE527F20
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 10:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241377AbiEPH7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 03:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49564 "EHLO
+        id S241430AbiEPICp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 04:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241375AbiEPH7g (ORCPT
+        with ESMTP id S241425AbiEPICm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 03:59:36 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911F02AE33
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:59:35 -0700 (PDT)
+        Mon, 16 May 2022 04:02:42 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443202CDCA
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 01:02:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=DMPIEYqudJnc78X1YnfA4VhQpF5cbJj7pr8jc+iy0Ug=; b=PloENFhj2BfH5h+b065sfgHG+G
-        jozeFl0MzH+AmDk8tbBw8t7SfF8n0zQjLoEYzQIW2MhXqE2WK6vCyWOR7M8s1qZmWxeVo+tvbRAyh
-        x2Rhoalc8Qzs+OkFIYOldt88iQ95V4lMWJUDDy9rK5vqIHJAn3UrU70fbT+n7GhOt6qe6EJ3GVhQq
-        0fyL13iTdIa4WNHIBD10TyR8cdwS2+cwymKsU4xVPXT1gjI5UDeA1+Y4boLyOj3yjQiFxGCb8JGJ1
-        ePtlhLpYiRYpKxPiMRsR6qmFJx+mhq7OaA9SlnWtAK3r2D+qup7lzODopxrnhFRhzTZDJK7/IxcNX
-        uHEeBx9w==;
+        bh=40WKtHNpgYvlQ581J3rT1HA6i63DjPIBf8CHscK5pRw=; b=KA+gQelwKoYZBp/f8IKa+Ifrsi
+        eHZp1FcdWAGxgxVHfKWUP1BGicYgkN/pP/mrv8A5FriPPBzkvvO1cTFrFwQfD0rjdGyIB93VB1Qzq
+        H/GqQX50A1F2ZK+C+CyHpL5ly1VYCBAHQycEOmZIbnbpWBZAyOY9N8NNyb40c3oVwgm1RKkAjT9bS
+        e1sC6r37zLzMvsTkTPH7nc1w66rI4U9TbEBsID+2rBgH2xs0+d2MdVDefBkN2yCXQNUOQfdUp6r6u
+        8jTgjF8QoyVzFfjx2AGJ0nMmSb8AndPX9Y2RQYROczLylvxn6QwLaa1X7QvNP6SQRKtmv6qK93V5l
+        pFBTouxw==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nqVdW-009gC4-Hz; Mon, 16 May 2022 07:59:26 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nqVgP-000u0c-LL; Mon, 16 May 2022 08:02:25 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E64EA30018E;
-        Mon, 16 May 2022 09:59:23 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4FE73300230;
+        Mon, 16 May 2022 10:02:23 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id ABA2B202674C1; Mon, 16 May 2022 09:59:23 +0200 (CEST)
-Date:   Mon, 16 May 2022 09:59:23 +0200
+        id 387E6202674C1; Mon, 16 May 2022 10:02:23 +0200 (CEST)
+Date:   Mon, 16 May 2022 10:02:23 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Masahiro Yamada <masahiroy@kernel.org>
 Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
@@ -51,17 +51,18 @@ Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         Will Deacon <will@kernel.org>
 Subject: Re: [RFC PATCH v2 2/2] kbuild: call check-atomics.sh only if
  prerequisites change
-Message-ID: <YoIEW/CCs6uyGJix@hirez.programming.kicks-ass.net>
+Message-ID: <YoIFD0zHTdy/Se2t@hirez.programming.kicks-ass.net>
 References: <20220426155229.436681-1-mailhol.vincent@wanadoo.fr>
  <20220507131146.834810-1-mailhol.vincent@wanadoo.fr>
  <20220507131146.834810-3-mailhol.vincent@wanadoo.fr>
  <CAK7LNATuvQhiZZ8A9+RcLYKmbugi6S61Aw5CStc3xbfGM-L34Q@mail.gmail.com>
  <20220514131448.GL76023@worktop.programming.kicks-ass.net>
- <CAK7LNATUMfyqiWeZeZJCVO74XtQ1Bw-MN7bcaTZ1pgQy8H2Ehg@mail.gmail.com>
+ <20220514145551.GC100765@worktop.programming.kicks-ass.net>
+ <CAK7LNAR+F5PspM+6CP+H+443nJYy+Rg3jmKp1NyJeepq9sSFQA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK7LNATUMfyqiWeZeZJCVO74XtQ1Bw-MN7bcaTZ1pgQy8H2Ehg@mail.gmail.com>
+In-Reply-To: <CAK7LNAR+F5PspM+6CP+H+443nJYy+Rg3jmKp1NyJeepq9sSFQA@mail.gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -72,12 +73,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 15, 2022 at 01:07:27AM +0900, Masahiro Yamada wrote:
-> On Sat, May 14, 2022 at 10:15 PM Peter Zijlstra <peterz@infradead.org> wrote:
+On Sun, May 15, 2022 at 01:26:23AM +0900, Masahiro Yamada wrote:
 
-> > NAK
-> 
-> I consider NAK as "I do not like it".
+> BTW, gen-atomics.sh takes more than 1 sec.
+> Do you think gen-atomics.sh can be much faster
+> if it is rewritten by Python or Perl?
+> Then, we can drop 5000 lines from the git repository.
 
-Well, I *am* the maintainer of that stuff, you can consider all you
-like, but I *will* revert anything I don't like.
+I don't speak either; which would make it unsuitable for purpose.

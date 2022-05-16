@@ -2,88 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1F435280EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 11:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 032DD5280F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 11:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbiEPJf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 05:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58280 "EHLO
+        id S229997AbiEPJmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 05:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiEPJf0 (ORCPT
+        with ESMTP id S234139AbiEPJmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 05:35:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D5F2DD49;
-        Mon, 16 May 2022 02:35:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BDA5612BB;
-        Mon, 16 May 2022 09:35:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E9EAC34116;
-        Mon, 16 May 2022 09:35:23 +0000 (UTC)
-Date:   Mon, 16 May 2022 10:35:19 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Mon, 16 May 2022 05:42:31 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E18F31DFE;
+        Mon, 16 May 2022 02:42:29 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id A064D1F427AC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652694148;
+        bh=c1ydz49i6C3IsJ96xkSmOp1z24weTIOHYM24+DkxGaU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=THpfRNpOqui6zvR+BYZmkkqsaw+HmfKIjK2d64FkVNdSUzpMVw63wqDSxFaC+OJra
+         klxciMwyLwKGQ4fYzMgWlLs/e/phiHKepxmPw+Elh00bIY1U7h60uFRN5nEaFEKCKy
+         X1FDAuQFO0dpAcvPvPWP8pyeQXh7DVhjKS+l4u1VTp8GVVapxyvaqCqHM5GcUz3hy2
+         OedzLWz2OHGtO2y8v6DXA4aknaD9TTWVfSQyCfqr2yeAoIFlGOKXmjIw1WnnXaogWL
+         mCiqn5t/s6uWtQJOJRJmwau05eDgz65PUZ5edK+EWtHuam5cIeHsXk0zvEoyEk4ZPC
+         EQ1N10/H/fP4w==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     sean.wang@mediatek.com
+Cc:     pavel@ucw.cz, matthias.bgg@gmail.com, linux-leds@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        Mark Brown <broonie@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kselftest/arm64: bti: force static linking
-Message-ID: <YoIa12y700JR+RGq@arm.com>
-References: <20220511172129.2078337-1-andre.przywara@arm.com>
- <YoDQY/0i9BrEIEO8@arm.com>
- <20220516102935.67505a91@donnerap.cambridge.arm.com>
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 0/3] leds-mt6323: Make driver flexible and cleanups
+Date:   Mon, 16 May 2022 11:42:19 +0200
+Message-Id: <20220516094222.30414-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220516102935.67505a91@donnerap.cambridge.arm.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 10:29:35AM +0100, Andre Przywara wrote:
-> On Sun, 15 May 2022 11:05:23 +0100
-> Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > On Wed, May 11, 2022 at 06:21:29PM +0100, Andre Przywara wrote:
-> > > The "bti" selftests are built with -nostdlib, which apparently
-> > > automatically creates a statically linked binary, which is what we want
-> > > and need for BTI (to avoid interactions with the dynamic linker).
-> > > 
-> > > However this is not true when building a PIE binary, which some
-> > > toolchains (Ubuntu) configure as the default.
-> > > When compiling btitest with such a toolchain, it will create a
-> > > dynamically linked binary, which will probably fail some tests, as the
-> > > dynamic linker might not support BTI:
-> > > ===================
-> > > TAP version 13
-> > > 1..18
-> > > not ok 1 nohint_func/call_using_br_x0
-> > > not ok 2 nohint_func/call_using_br_x16
-> > > not ok 3 nohint_func/call_using_blr
-> > > ....
-> > > ===================
-> > > 
-> > > To make sure we create static binaries, add an explicit -static on the
-> > > linker command line. This forces static linking even if the toolchain
-> > > defaults to PIE builds, and fixes btitest runs on BTI enabled machines.
-> > > 
-> > > Signed-off-by: Andre Przywara <andre.przywara@arm.com>  
-> > 
-> > Does this need to go in as a fix (cc stable, fixes tag)?
-> 
-> I dimly remember some discussion about stable fixes not being a real thing
-> for the selftests? In any case:
-> 
-> Fixes: 314bcbf09f14 ("kselftest: arm64: Add BTI tests")
+MT6323 is not the only PMIC that has a LEDs controller IP and it was
+found that the others do have a compatible register layout, except
+for some register offsets.
+The logic contained in this driver can be totally reused for other
+PMICs as well, so I can't see any reason to keep this specific to
+the MT6323 part.
 
-I'll add the fixes tag. I can see the occasional cc stable for kselftest
-patches.
+This series brings meaningful platform data to this driver, giving
+it flexibility and making it possible and straightforward to add
+support for other (older, or newer!) PMICs.
+
+AngeloGioacchino Del Regno (3):
+  leds: leds-mt6323: Specify registers and specs in platform data
+  leds: leds-mt6323: Open code and drop MT6323_CAL_HW_DUTY macro
+  leds: leds-mt6323: Drop MT6323_ prefix from macros and defines
+
+ drivers/leds/leds-mt6323.c | 258 ++++++++++++++++++++++++-------------
+ 1 file changed, 166 insertions(+), 92 deletions(-)
 
 -- 
-Catalin
+2.35.1
+

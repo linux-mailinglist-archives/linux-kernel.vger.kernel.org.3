@@ -2,110 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8FAD528D07
+	by mail.lfdr.de (Postfix) with ESMTP id F3694528D08
 	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:30:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344857AbiEPS3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 14:29:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51096 "EHLO
+        id S1344939AbiEPS3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 14:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344948AbiEPS3S (ORCPT
+        with ESMTP id S1343520AbiEPS33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 14:29:18 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA4F3EA92
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 11:29:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652725746; x=1684261746;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yhh8Cx5O7qRBIB3057P0bgz78ubgQpZ9gqj4BRCdavE=;
-  b=KwmfklKBEEiuGSy7Uv1G5Gr6tHNDSmcD47pzhZSc8bdCaCyNIYUVzhVm
-   mJcsi3Px3UFV4jebc2mrHRa7iU3IDRQl5MswynEfGa5WS9dDPRBvdA/6d
-   2Z6j/SLMaov1J/V5vLwYrdkrEalrAXr+vhjFhqXAeOikZtPr5V1A4fXbz
-   c60zmGr6rJUwtZKJBCtiuTq6YHRSOqRQawNbB9TyqlohCNU3/+I4sgl5R
-   u9zaM5XO3YyjtDgOGp5chAalHQiYvWFWrKsEV6rFeMvemIac+jn6k1ZBZ
-   PjPz4VrhrgXMul3ik0kA+bz9Ow5H3O1Yf3WqXqy74NsJLhZJ6uo7GlhTo
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="258488512"
-X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
-   d="scan'208";a="258488512"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 11:28:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
-   d="scan'208";a="604975389"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 16 May 2022 11:28:42 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nqfSU-0000Ft-07;
-        Mon, 16 May 2022 18:28:42 +0000
-Date:   Tue, 17 May 2022 02:28:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [linux-stable-rc:linux-5.15.y 6458/6574]
- arch/x86/events/intel/uncore_nhmex.o: warning: objtool:
- nhmex_rbox_msr_enable_event()+0x89: unreachable instruction
-Message-ID: <202205170256.mknqzhrd-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 16 May 2022 14:29:29 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F573E0E5
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 11:29:28 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id z39-20020a25a12a000000b0064dbcd526ffso2279305ybh.15
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 11:29:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=CGsBgLCZ1E7ckC4MxiSy9sirQYDPuKObKimIDda5O9I=;
+        b=VIcEg1aulc0rZskxO6n7AgH4wUYDZgUEC7oUOu3scKOOGZb8FeXCoRIkU/vsRrjNHh
+         DlRqvZOUuhfgzMsvWfiCJyK2mNmrjOCc9VHGEzAD1kccaZMQZ9yPZkMLyH2RzDw3LNzX
+         1PBhU4yJNowUHFBtlK3Ed0W1PJyndEH8VLNEHtwAr1WrC87xMlfp71wyzTImBu/j3Ucc
+         cjn63FrlMgecWpoYTIuXzeUwMP2SNrdLRMZCvJcatCfyTFHhJvyFxjYex8589wfzjpaq
+         gHyndZDEwQNQ60gC1bw2mhWXwmKcO5aZl+Tw6ivMKFCTZOiNj+SVjDPFuZPVeWjxIfkl
+         cCEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=CGsBgLCZ1E7ckC4MxiSy9sirQYDPuKObKimIDda5O9I=;
+        b=XiAnxzuriLIJT5Wf3WOzAlJ/u8RECcOEWNLJ1a/vNxjMCJk8hinJCw0K7rQwF7TVfP
+         zYVIhp1+3Sf8gm6onbl1xNrprY6ssxmwXI1dIxBNgY72oqwf6hHN18yyktEwppqHxJa1
+         HzDONgMQoKpLd/piMRWo1WNhVAGN+bWk9etWicoIyTmfF22CkZp+JutXKGlCDsbPZbZx
+         csfdWucIBfeCQFvxOa4YU2aZWocwWtJtXcNRBuNErPCs80ghZz4S/atpkfi11byD3fa/
+         /3EtvUGo2ztJtx7GVoDqCCUO8TkjXzIzSJV16g9ENVTUTkmIZ0yhGMyJ7Wm+5iFDNxtl
+         xG+w==
+X-Gm-Message-State: AOAM531YUPSFf7obdM9hUzHHfPEVtdyamJt2TTcVD4CiJocMcxlXCOSk
+        hXTw8Cty537vH7ca4i7btyIMoLhJpIk=
+X-Google-Smtp-Source: ABdhPJyjtL3SjX2c2EVY0p5QZbSrJrTJPhvHli/Dz5nPlQrg28kyyyPOGyA7ksdmcRkzjA3j43SkwwqK0fA=
+X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:e952:d4d4:b0de:c336])
+ (user=haoluo job=sendgmr) by 2002:a81:2084:0:b0:2fb:7a14:ea36 with SMTP id
+ g126-20020a812084000000b002fb7a14ea36mr21166392ywg.26.1652725767645; Mon, 16
+ May 2022 11:29:27 -0700 (PDT)
+Date:   Mon, 16 May 2022 11:28:59 -0700
+Message-Id: <20220516182859.3131675-1-haoluo@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
+Subject: [PATCH] kernfs: Separate kernfs_pr_cont_buf and rename_lock.
+From:   Hao Luo <haoluo@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tejun Heo <tj@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Hao Luo <haoluo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-head:   cbfc4f42bd5fbf033342ee467c5614254167e3a8
-commit: 370d33da35e31c1544eb77bcf2539f09b1064b9c [6458/6574] x86: Add straight-line-speculation mitigation
-config: x86_64-randconfig-a015-20220516 (https://download.01.org/0day-ci/archive/20220517/202205170256.mknqzhrd-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=370d33da35e31c1544eb77bcf2539f09b1064b9c
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.15.y
-        git checkout 370d33da35e31c1544eb77bcf2539f09b1064b9c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/ drivers/ fs/ net/
+Previously the protection of kernfs_pr_cont_buf was piggy backed by
+rename_lock, which means that pr_cont() needs to be protected under
+rename_lock. This can cause potential circular lock dependencies.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+If there is an OOM, we have the following call hierarchy:
 
-All warnings (new ones prefixed by >>):
+ -> cpuset_print_current_mems_allowed()
+   -> pr_cont_cgroup_name()
+     -> pr_cont_kernfs_name()
 
->> arch/x86/events/intel/uncore_nhmex.o: warning: objtool: nhmex_rbox_msr_enable_event()+0x89: unreachable instruction
---
->> drivers/regulator/max8998.o: warning: objtool: max8998_get_voltage_register()+0x58: unreachable instruction
---
->> drivers/regulator/qcom_spmi-regulator.o: warning: objtool: spmi_regulator_of_parse()+0x396: unreachable instruction
---
->> drivers/regulator/tps65910-regulator.o: warning: objtool: tps65911_get_voltage_sel()+0x83: unreachable instruction
---
->> drivers/nfc/nfcmrvl/fw_dnld.o: warning: objtool: fw_dnld_rx_work()+0xa5: unreachable instruction
---
->> net/netrom/af_netrom.o: warning: objtool: nr_getsockopt()+0xdf: unreachable instruction
---
->> net/netrom/nr_in.o: warning: objtool: nr_state3_machine()+0xa6: unreachable instruction
---
->> fs/fuse/dev.o: warning: objtool: fuse_notify()+0x50: unreachable instruction
---
->> fs/fuse/inode.o: warning: objtool: fuse_parse_param()+0x12c: unreachable instruction
---
->> net/ax25/af_ax25.o: warning: objtool: ax25_getsockopt()+0x109: unreachable instruction
---
->> net/can/raw.o: warning: objtool: raw_getsockopt()+0xc0: unreachable instruction
-..
+pr_cont_kernfs_name() will grab rename_lock and call printk. So we have
+the following lock dependencies:
 
+ kernfs_rename_lock -> console_sem
+
+Sometimes, printk does a wakeup before releasing console_sem, which has
+the dependence chain:
+
+ console_sem -> p->pi_lock -> rq->lock
+
+Now, imagine one wants to read cgroup_name under rq->lock, for example,
+printing cgroup_name in a tracepoint in the scheduler code. They will
+be holding rq->lock and take rename_lock:
+
+ rq->lock -> kernfs_rename_lock
+
+Now they will deadlock.
+
+A prevention to this circular lock dependency is to separate the
+protection of pr_cont_buf from rename_lock. In principle, rename_lock
+is to protect the integrity of cgroup name when copying to buf. Once
+pr_cont_buf has got its content, rename_lock can be dropped. So it's
+safe to drop rename_lock after kernfs_name_locked (and
+kernfs_path_from_node_locked) and rely on a dedicated pr_cont_lock
+to protect pr_cont_buf.
+
+Signed-off-by: Hao Luo <haoluo@google.com>
+---
+ fs/kernfs/dir.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
+index e205fde7163a..966d24562f0f 100644
+--- a/fs/kernfs/dir.c
++++ b/fs/kernfs/dir.c
+@@ -18,7 +18,8 @@
+ #include "kernfs-internal.h"
+ 
+ static DEFINE_SPINLOCK(kernfs_rename_lock);	/* kn->parent and ->name */
+-static char kernfs_pr_cont_buf[PATH_MAX];	/* protected by rename_lock */
++static DEFINE_SPINLOCK(kernfs_pr_cont_lock);
++static char kernfs_pr_cont_buf[PATH_MAX];	/* protected by pr_cont_lock */
+ static DEFINE_SPINLOCK(kernfs_idr_lock);	/* root->ino_idr */
+ 
+ #define rb_to_kn(X) rb_entry((X), struct kernfs_node, rb)
+@@ -229,12 +230,12 @@ void pr_cont_kernfs_name(struct kernfs_node *kn)
+ {
+ 	unsigned long flags;
+ 
+-	spin_lock_irqsave(&kernfs_rename_lock, flags);
++	spin_lock_irqsave(&kernfs_pr_cont_lock, flags);
+ 
+-	kernfs_name_locked(kn, kernfs_pr_cont_buf, sizeof(kernfs_pr_cont_buf));
++	kernfs_name(kn, kernfs_pr_cont_buf, sizeof(kernfs_pr_cont_buf));
+ 	pr_cont("%s", kernfs_pr_cont_buf);
+ 
+-	spin_unlock_irqrestore(&kernfs_rename_lock, flags);
++	spin_unlock_irqrestore(&kernfs_pr_cont_lock, flags);
+ }
+ 
+ /**
+@@ -248,10 +249,10 @@ void pr_cont_kernfs_path(struct kernfs_node *kn)
+ 	unsigned long flags;
+ 	int sz;
+ 
+-	spin_lock_irqsave(&kernfs_rename_lock, flags);
++	spin_lock_irqsave(&kernfs_pr_cont_lock, flags);
+ 
+-	sz = kernfs_path_from_node_locked(kn, NULL, kernfs_pr_cont_buf,
+-					  sizeof(kernfs_pr_cont_buf));
++	sz = kernfs_path_from_node(kn, NULL, kernfs_pr_cont_buf,
++				   sizeof(kernfs_pr_cont_buf));
+ 	if (sz < 0) {
+ 		pr_cont("(error)");
+ 		goto out;
+@@ -265,7 +266,7 @@ void pr_cont_kernfs_path(struct kernfs_node *kn)
+ 	pr_cont("%s", kernfs_pr_cont_buf);
+ 
+ out:
+-	spin_unlock_irqrestore(&kernfs_rename_lock, flags);
++	spin_unlock_irqrestore(&kernfs_pr_cont_lock, flags);
+ }
+ 
+ /**
+@@ -823,13 +824,12 @@ static struct kernfs_node *kernfs_walk_ns(struct kernfs_node *parent,
+ 
+ 	lockdep_assert_held_read(&kernfs_root(parent)->kernfs_rwsem);
+ 
+-	/* grab kernfs_rename_lock to piggy back on kernfs_pr_cont_buf */
+-	spin_lock_irq(&kernfs_rename_lock);
++	spin_lock_irq(&kernfs_pr_cont_lock);
+ 
+ 	len = strlcpy(kernfs_pr_cont_buf, path, sizeof(kernfs_pr_cont_buf));
+ 
+ 	if (len >= sizeof(kernfs_pr_cont_buf)) {
+-		spin_unlock_irq(&kernfs_rename_lock);
++		spin_unlock_irq(&kernfs_pr_cont_lock);
+ 		return NULL;
+ 	}
+ 
+@@ -841,7 +841,7 @@ static struct kernfs_node *kernfs_walk_ns(struct kernfs_node *parent,
+ 		parent = kernfs_find_ns(parent, name, ns);
+ 	}
+ 
+-	spin_unlock_irq(&kernfs_rename_lock);
++	spin_unlock_irq(&kernfs_pr_cont_lock);
+ 
+ 	return parent;
+ }
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1.124.g0e6072fb45-goog
+

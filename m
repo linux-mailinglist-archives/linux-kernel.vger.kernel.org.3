@@ -2,88 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F4B528D8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA04528D8E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:58:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345205AbiEPS4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 14:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55274 "EHLO
+        id S1345213AbiEPS55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 14:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345187AbiEPS4g (ORCPT
+        with ESMTP id S232270AbiEPS5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 14:56:36 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6FA10FE3
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 11:56:35 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id 31-20020a9d0822000000b00605f1807664so10682817oty.3
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 11:56:35 -0700 (PDT)
+        Mon, 16 May 2022 14:57:55 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A0F3EB82
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 11:57:53 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-2f863469afbso164639077b3.0
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 11:57:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=MJx3UmouNiWNfqqDYIOXDPwtYD13RhsMbDA6eXvF/Sw=;
-        b=gC6y+jKfV/qj1AmBnZ0KeN/8oQPBeF/cIWz93DRzjsfOf05ZsxroN7urSre4hLmM+m
-         E7iQvgJYIVhZ44wg+GSt5fEC6xzfb3wQNbpYqkC5FT4OjpardXbuqt0QagsXt2msNd9U
-         gwoWARsqNYkWrUQqPZnJ5lHKag902yPhLHy1s=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=X0lDvgtygkUQt/MUd8knhUulQHn3vRN7wQxbpMX/7kc=;
+        b=OtkZKug+pHgQ2UZ/72x5bHwTEdoqxCQfEkm1QUCKIEgRffjKW3KbMb3c/K0hbgw8Hh
+         4snt1OZnOFAGl+LpQ4hpHFIJxYGrgyUHb3MpltCQAyohc4EBc2K3cVdSQIPXWZTMCpAo
+         xvkF6YXXSdLtGnt7ynxNOqwGwVVTZspuksDC6xnRRp98ABNh0U+IV0ZaF0Dke8RLQ2hY
+         0zwsUzPrYM4NS77Te/aQXLi3uZ8/Pe1REWifevXQA7rgTj6p6tmReRBxgn3R2O7hm2fZ
+         OJ6CVb4R6Yse/fCzJP36XXgjWUGVUJLUzzJC39/+B4Yu2HI44XK9AEZhZ/l6VNqETlCG
+         d/dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=MJx3UmouNiWNfqqDYIOXDPwtYD13RhsMbDA6eXvF/Sw=;
-        b=1mXf2dixWO6pXqVnDi49FENYZdaw7Q6idJtTScQCU4I2BDivGGGZyvVLPt03KAdpNx
-         KEXlkVYbigrIKlJ15AkIvg9SPOjgUfuxkJOkK0we5J6ocbO+L+xYZG10Lka7PQ4f5WMH
-         C7E+N6iKoOThfVGsfUsRKOPEjJs3t5t3j0wDAPn3/KvPf7vpHg66FgLdg3K3p1eqJWXa
-         YuZ7zDzJAv1i9RvPANa6zm23lwZeXHZESu3TxYKORRXeklRSIpQVgsKQU5nRV3WkYKtn
-         OnKTnCc7aS2e2t1lLp7T262QIY/n4ubQ7hjfhymq7ELnO0QdS9IWLEoekBk261zDADmb
-         TxWQ==
-X-Gm-Message-State: AOAM533DLnP4FOriI6MaxuJKsyoQjkCsRkHxQj6iFWMLq946zXY2oH6k
-        r2OF836xPq5X1ciaN9oC4mkTHzTW5bM3MABYLW3P1w==
-X-Google-Smtp-Source: ABdhPJxW2uQNcDHTxeJaPy9aURBWojLRwuduj2z6Yw/04X8J1t4LFTEC6Ac0cOZHWux42qZgWJxITqgvegNN26EH6JA=
-X-Received: by 2002:a9d:63cd:0:b0:606:9e7f:79f8 with SMTP id
- e13-20020a9d63cd000000b006069e7f79f8mr6668728otl.77.1652727395199; Mon, 16
- May 2022 11:56:35 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 16 May 2022 11:56:34 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=X0lDvgtygkUQt/MUd8knhUulQHn3vRN7wQxbpMX/7kc=;
+        b=qhdMAOCK1yUot0sXtpmp5u81vjEAFI7NiTJ2yd0BzpHT6MY6K9fTxza5r53CxYqEX4
+         0w7NjBshdbrc4lJiMlYDO2axQHKQKlPwaCw2PzcK7VHaEq5Xr+P4roSSJm11Le1f42r3
+         JJMEXZfnqcyWZ02QkF7QhDl8qazGFgJsUa/UXnD/V20yLTd0xH2sv3PUJbqrjlDIWZw0
+         a9EBh9vGIReGDcnOcbWGZ/W+pSA+UlXv6zv3kfla+LoTlXUGGZ4t43VCr9eR7+t9Sku7
+         Jd7FeuYD+YEIsLuGUeCwAXIMNRf1lBFuAVoBd1i2i+F+z1bVFa2Y7VcVgrLhj9KcAk0M
+         PbKg==
+X-Gm-Message-State: AOAM530rLP+JQ6A4VezfqGoWDPYkrJXU3XbWHhuv3Vm90917GsHj7pG0
+        bMh9qQSs9kvV5Okzz3JFteMcgum9V4VVlMIfZnyt3g==
+X-Google-Smtp-Source: ABdhPJyxnegSHSL4esR4Y8T2LGVa+WGgTYoK2/N/07nmR8fbjF1kDUJlLs7zXniWb3x4daFZGwyj8JCag7XedUMNBVU=
+X-Received: by 2002:a81:7953:0:b0:2fe:f8a9:7e45 with SMTP id
+ u80-20020a817953000000b002fef8a97e45mr7139331ywc.23.1652727472248; Mon, 16
+ May 2022 11:57:52 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1652275113-10277-7-git-send-email-quic_c_skakit@quicinc.com>
-References: <1652275113-10277-1-git-send-email-quic_c_skakit@quicinc.com> <1652275113-10277-7-git-send-email-quic_c_skakit@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Mon, 16 May 2022 11:56:34 -0700
-Message-ID: <CAE-0n500ceOR0Fr6=DR9D=hXuDjtyNNVnP3J_B2RMLY5TGCUbg@mail.gmail.com>
-Subject: Re: [PATCH V12 6/9] mfd: pm8008: Use i2c_new_dummy_device() API
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_collinsd@quicinc.com, quic_subbaram@quicinc.com,
-        quic_jprakash@quicinc.com
+References: <20220513202159.1550547-1-samitolvanen@google.com>
+ <20220513202159.1550547-21-samitolvanen@google.com> <202205141501.92A22264B4@keescook>
+In-Reply-To: <202205141501.92A22264B4@keescook>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Mon, 16 May 2022 11:57:16 -0700
+Message-ID: <CABCJKudiLBjsNHUTH6zqhYik0WQZwsM4OceYJadYKoDQYOFRXw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-hardening@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Satya Priya (2022-05-11 06:18:30)
-> Use i2c_new_dummy_device() to register pm8008-regulator
-> client present at a different address space, instead of
-> defining a separate DT node. This avoids calling the probe
-> twice for the same chip, once for each client pm8008-infra
-> and pm8008-regulator.
+On Sat, May 14, 2022 at 3:03 PM Kees Cook <keescook@chromium.org> wrote:
 >
-> As a part of this define pm8008_regmap_init() to do regmap
-> init for both the clients and define pm8008_get_regmap() to
-> pass the regmap to the regulator driver.
+> On Fri, May 13, 2022 at 01:21:58PM -0700, Sami Tolvanen wrote:
+> > +#ifdef CONFIG_CFI_CLANG
+> > +static void decode_cfi_insn(struct pt_regs *regs, unsigned long *target,
+> > +                         unsigned long *type)
+> > +{
+> > +     char buffer[MAX_INSN_SIZE];
+> > +     struct insn insn;
+> > +     int offset;
+> > +
+> > +     *target = *type = 0;
 >
-> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
-> ---
+> Should report_cfi_failure() have some additional hinting for the case
+> where target/type are zero? Like, "hey, got an inexplicable CFI failure
+> here, but preamble decode failed. Yikes!"
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Good point, I'll add an error message here.
+
+Sami

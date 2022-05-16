@@ -2,71 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A19527D7D
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32DA4527D80
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240149AbiEPGUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 02:20:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
+        id S240245AbiEPGVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 02:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234711AbiEPGUd (ORCPT
+        with ESMTP id S234525AbiEPGVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 02:20:33 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D8D237CD;
-        Sun, 15 May 2022 23:20:32 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so16455410pju.2;
-        Sun, 15 May 2022 23:20:32 -0700 (PDT)
+        Mon, 16 May 2022 02:21:35 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5885124941;
+        Sun, 15 May 2022 23:21:34 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id n8so13524724plh.1;
+        Sun, 15 May 2022 23:21:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=DcZjs3ba7f9w8RDs+CRDdm+yhwI/+KTZPcRVRyvUNKE=;
-        b=HOSdc5gOHPemmhTL1XOivDupnikED1vxreDU44nW7s0fajBnemu2JOSnt+mdErJq1L
-         94iIxGcDkfyqkaetzLMSpIPzaSUKO0NUpkEXa9QM24nBP4lDq5DjDLxv3D4T+0B+JNhS
-         siLukponbqWnaosw/uID2jjx011/S0DSEIpFhr/3SQ5byuPgyaSqbWlYv7y8EMhYQ9A2
-         la5whvYCB0DebZhbkT6HfmD+4Xi0YjEEz+PtJI4g2QVmLN1ACae0e4qk1DCGiaSNOUPb
-         q1tIgvUWo4x2cuazMZeGF3+sOjjFAGwCZ5rR+wqpcfWaic1Q4Qy+8dADObSy0o1+p+Cb
-         aQtA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2XQvQdTgnCwDfmHkTZtajXuRMAeapjHZEvNeUkViza8=;
+        b=ZLrZuXWGhglqCmNncstz6ccn5vDYbYWzH2VkXAZA1887OQvrY9eWeB0/8UQQgwWSGB
+         pVzZi6ep4Ax9nm3l099qIlairb6gML7KBNuKERwrzUYQKU5NB+Chh4uwnt1fUGD3DE0v
+         UVgcdupbcev1+NvQClM6qz9BVECcYIcbIAc2jk+cxmDVvMnR1sraxFf/z4kVM62+mgmr
+         YG0sv49pzekIRo8vFDi2WXwQkJUYsQ4dyp/aZReuOOSbOFLpNQgBchkiWCIzyH9ZSWww
+         0vH4RNk6R8t4fh5r6JasX81Clk/MpWUx0Ft4/SLtqC8ha+FyAKf7T2imbZHL04MZ9fsN
+         zzNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=DcZjs3ba7f9w8RDs+CRDdm+yhwI/+KTZPcRVRyvUNKE=;
-        b=c5k9YwPydZHFG1RbXs/0gpf4mepl+y+je+Ow9aLx4cey9dlxadASi23vgRXwEKIYxe
-         5glI+nzUMYvbBtnAJu7lG6g0hQ+oh0dUCuOqQx5dD+vhwo3L+4QcCMgjtlLqCr6eqYSy
-         0ESGKMQHfNPjWASeSBUR0HEVJ/lVkYc3WoSkf2zuHQZ+CDwloh67pHmtB5kCRWEhzvrB
-         YWHrjiUsNxFMC8AUFbOGArmuP5447zIrGUVq85BbfCRxjBTdlJyijCfhA8yJwCT6/KVF
-         5+Rxr5sU6YPmp9adjJVH7HGYgSZQe9xzZH16uLtXUNKhBBXV/CAz5pbE1b75tSAS547t
-         6H8Q==
-X-Gm-Message-State: AOAM531yBOWdnytYWkAw6lEygGS2eBVcgMO90UDYgdQjhmm3uYeAW6mm
-        xHK9dZNdBRZ2FhvWHs71yNU=
-X-Google-Smtp-Source: ABdhPJzc1Z3QiVN/g6C2H+ZM4bEnqCR9FjyMRYwog6HRLTBOfoXH7Q8xVhGqHWpKj4Yzvn4XlD6ujA==
-X-Received: by 2002:a17:90b:4c8a:b0:1dc:6b4b:bf9c with SMTP id my10-20020a17090b4c8a00b001dc6b4bbf9cmr17806666pjb.54.1652682031863;
-        Sun, 15 May 2022 23:20:31 -0700 (PDT)
-Received: from [192.168.2.225] (93.179.119.173.16clouds.com. [93.179.119.173])
-        by smtp.gmail.com with ESMTPSA id d13-20020a62f80d000000b0050dc7628162sm6022977pfh.60.2022.05.15.23.20.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 15 May 2022 23:20:31 -0700 (PDT)
-Message-ID: <30b37eeb-e77b-882e-fc24-3367321a8ca3@gmail.com>
-Date:   Mon, 16 May 2022 14:20:24 +0800
+        bh=2XQvQdTgnCwDfmHkTZtajXuRMAeapjHZEvNeUkViza8=;
+        b=TiYkjbFzf0VJE0I0rbxTHbIaHH1+HUt+v2P4DVvXCceS4cpx8/i1Myv3jj905fGMk3
+         5f/Di7zd6/FbK7g4QsFYjnpXbNeKwihfei9+QqUUhxZEOlDCnRUpAL5oHLAsqwTuXsAN
+         iFCEVAzhHFTjEXF45SAKg7wOVTUjXID6NpQlU9v79dRmX1xRjeP3qcgIcc3QBdZcwq6U
+         71mqpYBasORwnebHuDzedUB6MOMhbWgA+NLLHPIB7yPEyOCh4UUmjxOpsiJuZcs9GZWw
+         F8ewnCkr9u1CqKlmf4oW6yDcnSSbIuurZ9sKzaNNYD4SKEYJJIm1kfyRDxQ0nkvKHik/
+         YMkw==
+X-Gm-Message-State: AOAM530p9Leq5DwdyEN6SpmrxxWqvhc9V0XCWApdcrlog/azxjU6BPJp
+        nbNGqWIzTp+0lcGbAAcU81Q=
+X-Google-Smtp-Source: ABdhPJydDWCC0cImtGR3ApozIWoml6FLqAUUWtzPeE7bW1eJQ3xAFnItpbdPcy3zKpfDYwU75NnssA==
+X-Received: by 2002:a17:902:7593:b0:15e:fe5d:58e1 with SMTP id j19-20020a170902759300b0015efe5d58e1mr16364570pll.102.1652682093885;
+        Sun, 15 May 2022 23:21:33 -0700 (PDT)
+Received: from genechen-System-Product-Name.richtek.com ([2402:7500:469:4645:1448:44e0:4d9f:8e5b])
+        by smtp.gmail.com with ESMTPSA id v15-20020a17090ad58f00b001d840f4eee0sm7597337pju.20.2022.05.15.23.21.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 May 2022 23:21:33 -0700 (PDT)
+From:   Gene Chen <gene.chen.richtek@gmail.com>
+To:     lee.jones@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        pavel@ucw.cz
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        gene_chen@richtek.com, cy_huang@richtek.com
+Subject: [PATCH v2] dt-bindings: mfd: Add bindings child nodes for the Mediatek MT6360
+Date:   Mon, 16 May 2022 14:21:27 +0800
+Message-Id: <20220516062127.99647-1-gene.chen.richtek@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/2] psi: add support for multi level pressure stall
- trigger
-Content-Language: en-US
-To:     Chen Wandun <chenwandun@huawei.com>, linux-kernel@vger.kernel.org,
-        hannes@cmpxchg.org, surenb@google.com, alexs@kernel.org,
-        corbet@lwn.net, linux-doc@vger.kernel.org
-References: <20220516033524.3130816-1-chenwandun@huawei.com>
-From:   Alex Shi <seakeel@gmail.com>
-In-Reply-To: <20220516033524.3130816-1-chenwandun@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,100 +71,229 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Gene Chen <gene_chen@richtek.com>
 
+Add bindings child nodes for the Mediatek MT6360
 
-On 5/16/22 11:35, Chen Wandun wrote:
-> Nowadays, psi events are triggered when stall time exceed
-> stall threshold, but no any different between these events.
-> 
-> Actually, events can be divide into multi level, each level
-> represent a different stall pressure, that is help to identify
-> pressure information more accurately.
-> 
-> echo "some 150000 350000 1000000" > /proc/pressure/memory would
+Signed-off-by: Gene Chen <gene_chen@richtek.com>
+Link: https://lore.kernel.org/all/YmqTzlrVL5KaVPuz@robh.at.kernel.org/
+---
+ .../bindings/mfd/mediatek,mt6360.yaml         | 189 ++++++++++++++++++
+ 1 file changed, 189 insertions(+)
 
-This breaks the old ABI. And why you need this new function?
+diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6360.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6360.yaml
+index 4d8769f3748c..28eee02441ee 100644
+--- a/Documentation/devicetree/bindings/mfd/mediatek,mt6360.yaml
++++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6360.yaml
+@@ -37,6 +37,18 @@ properties:
+     description:
+       The first cell is the IRQ number.
+ 
++  regulators:
++    $ref: /schemas/regulator/mt6360-regulator.yaml#
++
++  charger:
++    $ref: /schemas/power/supply/mt6360_charger.yaml#
++
++  tcpc:
++    $ref: /schemas/usb/mediatek,mt6360-tcpc.yaml#
++
++  led-controller:
++    $ref: /schemas/leds/leds-mt6360.yaml#
++
+ required:
+   - compatible
+   - reg
+@@ -51,6 +63,8 @@ examples:
+   - |
+     #include <dt-bindings/interrupt-controller/irq.h>
+     #include <dt-bindings/regulator/mediatek,mt6360-regulator.h>
++    #include <dt-bindings/leds/common.h>
++    #include <dt-bindings/usb/pd.h>
+     i2c {
+         #address-cells = <1>;
+         #size-cells = <0>;
+@@ -63,5 +77,180 @@ examples:
+             interrupt-names = "IRQB";
+             interrupt-controller;
+             #interrupt-cells = <1>;
++
++            mt6360_charger: charger {
++                compatible = "mediatek,mt6360-chg";
++                richtek,vinovp-microvolt = <14500000>;
++
++                otg_vbus_regulator: usb-otg-vbus-regulator {
++                    regulator-compatible = "usb-otg-vbus";
++                    regulator-name = "usb-otg-vbus";
++                    regulator-min-microvolt = <4425000>;
++                    regulator-max-microvolt = <5825000>;
++                };
++            };
++
++            led-controller {
++                compatible = "mediatek,mt6360-led";
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                multi-led@0 {
++                    reg = <0>;
++                    function = LED_FUNCTION_INDICATOR;
++                    color = <LED_COLOR_ID_RGB>;
++                    led-max-microamp = <24000>;
++                    #address-cells = <1>;
++                    #size-cells = <0>;
++                    led@0 {
++                        reg = <0>;
++                        color = <LED_COLOR_ID_RED>;
++                    };
++                    led@1 {
++                        reg = <1>;
++                        color = <LED_COLOR_ID_GREEN>;
++                    };
++                    led@2 {
++                        reg = <2>;
++                        color = <LED_COLOR_ID_BLUE>;
++                    };
++                };
++                led@3 {
++                    reg = <3>;
++                    function = LED_FUNCTION_INDICATOR;
++                    color = <LED_COLOR_ID_WHITE>;
++                    led-max-microamp = <150000>;
++                };
++                led@4 {
++                    reg = <4>;
++                    function = LED_FUNCTION_FLASH;
++                    color = <LED_COLOR_ID_WHITE>;
++                    function-enumerator = <1>;
++                    led-max-microamp = <200000>;
++                    flash-max-microamp = <500000>;
++                    flash-max-timeout-us = <1024000>;
++                };
++                led@5 {
++                    reg = <5>;
++                    function = LED_FUNCTION_FLASH;
++                    color = <LED_COLOR_ID_WHITE>;
++                    function-enumerator = <2>;
++                    led-max-microamp = <200000>;
++                    flash-max-microamp = <500000>;
++                    flash-max-timeout-us = <1024000>;
++                };
++            };
++
++            regulators {
++                compatible = "mediatek,mt6360-regulator";
++                LDO_VIN3-supply = <&BUCK2>;
++                buck1 {
++                    regulator-compatible = "BUCK1";
++                    regulator-name = "mt6360,buck1";
++                    regulator-min-microvolt = <300000>;
++                    regulator-max-microvolt = <1300000>;
++                    regulator-allowed-modes = <MT6360_OPMODE_NORMAL
++                         MT6360_OPMODE_LP
++                         MT6360_OPMODE_ULP>;
++                };
++                BUCK2: buck2 {
++                    regulator-compatible = "BUCK2";
++                    regulator-name = "mt6360,buck2";
++                    regulator-min-microvolt = <300000>;
++                    regulator-max-microvolt = <1300000>;
++                    regulator-allowed-modes = <MT6360_OPMODE_NORMAL
++                         MT6360_OPMODE_LP
++                         MT6360_OPMODE_ULP>;
++                };
++                ldo6 {
++                    regulator-compatible = "LDO6";
++                    regulator-name = "mt6360,ldo6";
++                    regulator-min-microvolt = <500000>;
++                    regulator-max-microvolt = <2100000>;
++                    regulator-allowed-modes = <MT6360_OPMODE_NORMAL
++                         MT6360_OPMODE_LP>;
++                };
++                ldo7 {
++                    regulator-compatible = "LDO7";
++                    regulator-name = "mt6360,ldo7";
++                    regulator-min-microvolt = <500000>;
++                    regulator-max-microvolt = <2100000>;
++                    regulator-allowed-modes = <MT6360_OPMODE_NORMAL
++                         MT6360_OPMODE_LP>;
++                };
++                ldo1 {
++                    regulator-compatible = "LDO1";
++                    regulator-name = "mt6360,ldo1";
++                    regulator-min-microvolt = <1200000>;
++                    regulator-max-microvolt = <3600000>;
++                    regulator-allowed-modes = <MT6360_OPMODE_NORMAL
++                         MT6360_OPMODE_LP>;
++                };
++                ldo2 {
++                    regulator-compatible = "LDO2";
++                    regulator-name = "mt6360,ldo2";
++                    regulator-min-microvolt = <1200000>;
++                    regulator-max-microvolt = <3600000>;
++                    regulator-allowed-modes = <MT6360_OPMODE_NORMAL
++                         MT6360_OPMODE_LP>;
++                };
++                ldo3 {
++                    regulator-compatible = "LDO3";
++                    regulator-name = "mt6360,ldo3";
++                    regulator-min-microvolt = <1200000>;
++                    regulator-max-microvolt = <3600000>;
++                    regulator-allowed-modes = <MT6360_OPMODE_NORMAL
++                         MT6360_OPMODE_LP>;
++                };
++                ldo5 {
++                    regulator-compatible = "LDO5";
++                    regulator-name = "mt6360,ldo5";
++                    regulator-min-microvolt = <2700000>;
++                    regulator-max-microvolt = <3600000>;
++                    regulator-allowed-modes = <MT6360_OPMODE_NORMAL
++                         MT6360_OPMODE_LP>;
++                };
++            };
++
++            tcpc {
++                compatible = "mediatek,mt6360-tcpc";
++                interrupts-extended = <&gpio26 3 IRQ_TYPE_LEVEL_LOW>;
++                interrupt-names = "PD_IRQB";
++
++                connector {
++                    compatible = "usb-c-connector";
++                    label = "USB-C";
++                    data-role = "dual";
++                    power-role = "dual";
++                    try-power-role = "sink";
++                    source-pdos = <PDO_FIXED(5000, 1000, PDO_FIXED_DUAL_ROLE | PDO_FIXED_DATA_SWAP)>;
++                    sink-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_DUAL_ROLE | PDO_FIXED_DATA_SWAP)>;
++                    op-sink-microwatt = <10000000>;
++
++                    ports {
++                        #address-cells = <1>;
++                        #size-cells = <0>;
++
++                        port@0 {
++                            reg = <0>;
++                            endpoint {
++                                remote-endpoint = <&usb_hs>;
++                            };
++                        };
++                        port@1 {
++                            reg = <1>;
++                            endpoint {
++                                remote-endpoint = <&usb_ss>;
++                          };
++                        };
++                        port@2 {
++                            reg = <2>;
++                            endpoint {
++                                remote-endpoint = <&dp_aux>;
++                            };
++                        };
++                    };
++                };
++            };
+         };
+     };
+-- 
+2.25.1
 
-Thanks
-
-> add [150ms, 350ms) threshold for partial memory stall measured
-> within 1sec time window.
-> 
-> Signed-off-by: Chen Wandun <chenwandun@huawei.com>
-> ---
->  include/linux/psi_types.h |  3 ++-
->  kernel/sched/psi.c        | 19 +++++++++++++------
->  2 files changed, 15 insertions(+), 7 deletions(-)
-> 
-> diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
-> index c7fe7c089718..2b1393c8bf90 100644
-> --- a/include/linux/psi_types.h
-> +++ b/include/linux/psi_types.h
-> @@ -119,7 +119,8 @@ struct psi_trigger {
->  	enum psi_states state;
->  
->  	/* User-spacified threshold in ns */
-> -	u64 threshold;
-> +	u64 min_threshold;
-> +	u64 max_threshold;
->  
->  	/* List node inside triggers list */
->  	struct list_head node;
-> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> index 6f9533c95b0a..17dd233b533a 100644
-> --- a/kernel/sched/psi.c
-> +++ b/kernel/sched/psi.c
-> @@ -541,7 +541,7 @@ static u64 update_triggers(struct psi_group *group, u64 now)
->  
->  			/* Calculate growth since last update */
->  			growth = window_update(&t->win, now, total[t->state]);
-> -			if (growth < t->threshold)
-> +			if (growth < t->min_threshold || growth >= t->max_threshold)
->  				continue;
->  
->  			t->pending_event = true;
-> @@ -1087,15 +1087,18 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
->  {
->  	struct psi_trigger *t;
->  	enum psi_states state;
-> -	u32 threshold_us;
-> +	u32 min_threshold_us;
-> +	u32 max_threshold_us;
->  	u32 window_us;
->  
->  	if (static_branch_likely(&psi_disabled))
->  		return ERR_PTR(-EOPNOTSUPP);
->  
-> -	if (sscanf(buf, "some %u %u", &threshold_us, &window_us) == 2)
-> +	if (sscanf(buf, "some %u %u %u", &min_threshold_us,
-> +				&max_threshold_us, &window_us) == 3)
->  		state = PSI_IO_SOME + res * 2;
-> -	else if (sscanf(buf, "full %u %u", &threshold_us, &window_us) == 2)
-> +	else if (sscanf(buf, "full %u %u %u", &min_threshold_us,
-> +				&max_threshold_us, &window_us) == 3)
->  		state = PSI_IO_FULL + res * 2;
->  	else
->  		return ERR_PTR(-EINVAL);
-> @@ -1107,8 +1110,11 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
->  		window_us > WINDOW_MAX_US)
->  		return ERR_PTR(-EINVAL);
->  
-> +	if (min_threshold_us >= max_threshold_us)
-> +		return ERR_PTR(-EINVAL);
-> +
->  	/* Check threshold */
-> -	if (threshold_us == 0 || threshold_us > window_us)
-> +	if (max_threshold_us > window_us)
->  		return ERR_PTR(-EINVAL);
->  
->  	t = kmalloc(sizeof(*t), GFP_KERNEL);
-> @@ -1117,7 +1123,8 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
->  
->  	t->group = group;
->  	t->state = state;
-> -	t->threshold = threshold_us * NSEC_PER_USEC;
-> +	t->min_threshold = min_threshold_us * NSEC_PER_USEC;
-> +	t->max_threshold = max_threshold_us * NSEC_PER_USEC;
->  	t->win.size = window_us * NSEC_PER_USEC;
->  	window_reset(&t->win, 0, 0, 0);
->  

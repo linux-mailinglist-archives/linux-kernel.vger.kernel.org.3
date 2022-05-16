@@ -2,79 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F1D3527ED6
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01EEF527EDD
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241338AbiEPHvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 03:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32918 "EHLO
+        id S241329AbiEPHv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 03:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241306AbiEPHvO (ORCPT
+        with ESMTP id S241315AbiEPHvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 03:51:14 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4085BF58
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:51:12 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6F4036001B;
-        Mon, 16 May 2022 07:51:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1652687471;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mcRXTnUer1M5l+X0FoLehOx+DusdiUpQF8ofo2RLrEA=;
-        b=TBZ2hEoT6M2chW4inuB16T5f/3DlqDh9AqCVC7x/DRhhqNXu4dIblVMtwm5X6G6vqcQU0q
-        QU7bwd8pYoMgOqNWK4SJ0Vlr1eBda2RnDDFqlOHRXNcJH219lJB/SbGSOTofrjAAELkUhy
-        170b12prFonWwq7xBhiUEUD09IbjObHKYHycxnzHCwqxmY5d5HZGjq9K+M217ePYOR+Pu+
-        NjrVBZXJLdx4RUaZbxYWBEcUIfChRnFomKaZl3vSWS3K9l1nMsFgmqqbxQTH7m7FqX/clk
-        JIYdvTSjdu8lYZDFzSlJb6nz5UYfa1JbjriK17SCJZJFffJQeHt6gLUFu87XXw==
-Date:   Mon, 16 May 2022 09:51:08 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     <linux-kernel@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <richard@nod.at>, <vigneshr@ti.com>
-Subject: Re: [PATCH -next] mtd: st_spi_fsm: add missing
- clk_disable_unprepare() stfsm_remove()
-Message-ID: <20220516095108.4ec6d0d9@xps13>
-In-Reply-To: <0d7ee262-6286-ec41-884e-3ab5863b68b4@huawei.com>
-References: <20220513100322.2664431-1-yangyingliang@huawei.com>
-        <20220513122248.146d6944@xps13>
-        <0d7ee262-6286-ec41-884e-3ab5863b68b4@huawei.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Mon, 16 May 2022 03:51:16 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E6827153
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:51:14 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 4so17062602ljw.11
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:51:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=GRi7qYL5MFc9IxtC0M2IySOujCHuQhCkovUyzI0O1/M=;
+        b=AYmqXQfiZvO+PSvh6p7ZagVdULQKEc55/HGpL8DVoU7zWasDNN7MRWr9s6eXJsas+k
+         54SMOc2TjBqwR/vMiUGLXOVi5GuvpwPg+cRy+zO4jbOdXDEZQp3D+IoeDIkpi01sHfyd
+         80EmsXgpetDsKENZc7lqGlbcGt7Fnwi9M+MaE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=GRi7qYL5MFc9IxtC0M2IySOujCHuQhCkovUyzI0O1/M=;
+        b=Bou3udlfSCbXulbYv6fgSZyU9B3hLbGtKr7bs3OIBO6TgeK6plTNy8+ox6+9glPGHq
+         NazJ3MowXSkVWxkRPdETfJtkAQbtraZ2d2kf3YfoXMBly6mPKMzjwFVbQzPKNODMPO1I
+         Nb5OpCGGxBT+Irw5LKR5AEqk9wkuJtOHozjz93daMJL/KuYsF2xZbgWXAeZVs6eIwSfO
+         HaLA5QjRRWESIU5qDZTLF3AmBXgWBFzIiG5lrsPYL6wdTiIzRRs+z30iD+Z17zKRjVVP
+         bFsJLLHPsiSbQFCqdVYyWprrsv3RAOUbWmF6hhpjp5LGuzQo+KJdgu0eJ3pgV1LJ9BcI
+         F5vg==
+X-Gm-Message-State: AOAM531kXR97C3WXIsGt74tUJdDTucLiB1nN9RgjheC/uIto2Ee0Y/A6
+        lpeErgWuss4Ah7cZV/J+MXfLpg==
+X-Google-Smtp-Source: ABdhPJxV5cvrNAbkftxXsfZ+nU4/40IBBNOdVATlavKOPi3ophjm2KcqQElJ4eiCj32YbcKhSsgp9g==
+X-Received: by 2002:a2e:82cd:0:b0:24b:4a69:790b with SMTP id n13-20020a2e82cd000000b0024b4a69790bmr10416425ljh.326.1652687472586;
+        Mon, 16 May 2022 00:51:12 -0700 (PDT)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id f4-20020a056512092400b0047255d211desm1226591lft.269.2022.05.16.00.51.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 00:51:12 -0700 (PDT)
+Message-ID: <2ff479df-1f88-ecd0-8a0e-7d31ab02ca0d@rasmusvillemoes.dk>
+Date:   Mon, 16 May 2022 09:51:10 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: procfs: open("/proc/self/fd/...") allows bypassing O_RDONLY
+Content-Language: en-US
+To:     Simon Ser <contact@emersion.fr>,
+        Amir Goldstein <amir73il@gmail.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
+References: <lGo7a4qQABKb-u_xsz6p-QtLIy2bzciBLTUJ7-ksv7ppK3mRrJhXqFmCFU4AtQf6EyrZUrYuSLDMBHEUMe5st_iT9VcRuyYPMU_jVpSzoWg=@emersion.fr>
+ <CAOQ4uxjOOe0aouDYNdkVyk7Mu1jQ-eY-6XoW=FrVRtKyBd2KFg@mail.gmail.com>
+ <Uc-5mYLV3EgTlSFyEEzmpLvNdXKVJSL9pOSCiNylGIONHoljlV9kKizN2bz6lHsTDPDR_4ugSxLYNCO7xjdSeF3daahq8_kvxWhpIvXcuHA=@emersion.fr>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <Uc-5mYLV3EgTlSFyEEzmpLvNdXKVJSL9pOSCiNylGIONHoljlV9kKizN2bz6lHsTDPDR_4ugSxLYNCO7xjdSeF3daahq8_kvxWhpIvXcuHA=@emersion.fr>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 12/05/2022 14.38, Simon Ser wrote:
+> On Thursday, May 12th, 2022 at 14:30, Amir Goldstein <amir73il@gmail.com> wrote:
+> 
+>> Clients can also readlink("/proc/self/fd/<fd>") to get the path of the file
+>> and open it from its path (if path is accessible in their mount namespace).
+> 
+> What the compositor does is:
+> 
+> - shm_open with O_RDWR
+> - Write the kyeboard keymap
+> - shm_open again the same file with O_RDONLY
+> - shm_unlink
+> - Send the O_RDONLY FD to clients
+> 
+> Thus, the file doesn't exist anymore when clients get the FD.
 
-yangyingliang@huawei.com wrote on Sat, 14 May 2022 10:12:55 +0800:
+So, what happens if you do fchmod(fd, 0400) on the fd before passing it
+to the client [1].
 
-> Hi,
->=20
-> On 2022/5/13 18:22, Miquel Raynal wrote:
-> > Hi,
-> >
-> > yangyingliang@huawei.com wrote on Fri, 13 May 2022 18:03:22 +0800:
-> > =20
-> >> Clock source is prepared and enabled by clk_prepare_enable()
-> >> in probe function, but no disable or unprepare in remove function. =20
-> > 			 not disabled or unprepared
-> >
-> > Otherwise looks good. =20
-> Do I need to resend it ?
+I assume the client is not running as the same uid as the compositor (so
+it can't fchmod() the inode back); if it is, then it could just ptrace
+you and all bets are off.
 
-Yes, please.
+[1] or for that matter, simply specify 0400 as the mode argument when
+creating the file - that's perfectly legal to do in conjunction with
+O_RDWR | O_CREAT | O_EXCL, and should probably be done to prevent
+anybody else from opening the same shm file with write permission before
+it gets shm_unlinked.
 
-Thanks,
-Miqu=C3=A8l
+Rasmus

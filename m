@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F3D528F0F
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:53:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 098A6528E34
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344736AbiEPTpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:45:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44736 "EHLO
+        id S1345712AbiEPTj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346054AbiEPTmt (ORCPT
+        with ESMTP id S1345638AbiEPTix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:42:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B77F3F336;
-        Mon, 16 May 2022 12:41:14 -0700 (PDT)
+        Mon, 16 May 2022 15:38:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F10C3EF3C;
+        Mon, 16 May 2022 12:38:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DAE3161553;
-        Mon, 16 May 2022 19:41:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C38ECC385AA;
-        Mon, 16 May 2022 19:41:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C957B81607;
+        Mon, 16 May 2022 19:38:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E800C385AA;
+        Mon, 16 May 2022 19:38:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730073;
-        bh=D+cWIivvvb18D1z64YksZpWq4orH49aktHKFoUickBg=;
+        s=korg; t=1652729916;
+        bh=10tgVETi0/0icrHOI5cWzODW+G7sx5Wwa+9DpVGgXQM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QE2epMeT7JS8fLRvth91+yl5z0sSNWXGnqcqk7IOpdi83a/j7diGAbLH/7buwPQgq
-         8THtsMG9IP8QSKHWlSHq1bYNgBwjsuED+/e5OK0Tfbe6u4D7UHU5vlwYXfZg4AhfV0
-         yJEsy3lQ4VPq0k6enElzva8Jan8TxbySTH2k/KP4=
+        b=HmpElj9XCIRLsteH1iMptLvGHAjow00uLj3e0rVBkfjg7YdkvnnhdxCwBgyHs3hPe
+         ahFXm4n8its7SzljdQCvrqdom60t3Ikrull4wLwuD3orubfVy0vYet9HF57TT4/LY9
+         0Gr7DhP0Rxh0eHe29JGDPFpPv8KNWT9EAIAQqEuk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Lokesh Dhoundiyal <lokesh.dhoundiyal@alliedtelesis.co.nz>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Colin Ian King <colin.i.king@gmail.com>,
+        Alexandra Winter <wintera@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 04/32] ipv4: drop dst in multicast routing path
+Subject: [PATCH 4.9 05/19] s390/ctcm: fix variable dereferenced before check
 Date:   Mon, 16 May 2022 21:36:18 +0200
-Message-Id: <20220516193614.907366857@linuxfoundation.org>
+Message-Id: <20220516193613.657644555@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193614.773450018@linuxfoundation.org>
-References: <20220516193614.773450018@linuxfoundation.org>
+In-Reply-To: <20220516193613.497233635@linuxfoundation.org>
+References: <20220516193613.497233635@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,65 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lokesh Dhoundiyal <lokesh.dhoundiyal@alliedtelesis.co.nz>
+From: Alexandra Winter <wintera@linux.ibm.com>
 
-[ Upstream commit 9e6c6d17d1d6a3f1515ce399f9a011629ec79aa0 ]
+[ Upstream commit 2c50c6867c85afee6f2b3bcbc50fc9d0083d1343 ]
 
-kmemleak reports the following when routing multicast traffic over an
-ipsec tunnel.
+Found by cppcheck and smatch.
+smatch complains about
+drivers/s390/net/ctcm_sysfs.c:43 ctcm_buffer_write() warn: variable dereferenced before check 'priv' (see line 42)
 
-Kmemleak output:
-unreferenced object 0x8000000044bebb00 (size 256):
-  comm "softirq", pid 0, jiffies 4294985356 (age 126.810s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 80 00 00 00 05 13 74 80  ..............t.
-    80 00 00 00 04 9b bf f9 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000f83947e0>] __kmalloc+0x1e8/0x300
-    [<00000000b7ed8dca>] metadata_dst_alloc+0x24/0x58
-    [<0000000081d32c20>] __ipgre_rcv+0x100/0x2b8
-    [<00000000824f6cf1>] gre_rcv+0x178/0x540
-    [<00000000ccd4e162>] gre_rcv+0x7c/0xd8
-    [<00000000c024b148>] ip_protocol_deliver_rcu+0x124/0x350
-    [<000000006a483377>] ip_local_deliver_finish+0x54/0x68
-    [<00000000d9271b3a>] ip_local_deliver+0x128/0x168
-    [<00000000bd4968ae>] xfrm_trans_reinject+0xb8/0xf8
-    [<0000000071672a19>] tasklet_action_common.isra.16+0xc4/0x1b0
-    [<0000000062e9c336>] __do_softirq+0x1fc/0x3e0
-    [<00000000013d7914>] irq_exit+0xc4/0xe0
-    [<00000000a4d73e90>] plat_irq_dispatch+0x7c/0x108
-    [<000000000751eb8e>] handle_int+0x16c/0x178
-    [<000000001668023b>] _raw_spin_unlock_irqrestore+0x1c/0x28
-
-The metadata dst is leaked when ip_route_input_mc() updates the dst for
-the skb. Commit f38a9eb1f77b ("dst: Metadata destinations") correctly
-handled dropping the dst in ip_route_input_slow() but missed the
-multicast case which is handled by ip_route_input_mc(). Drop the dst in
-ip_route_input_mc() avoiding the leak.
-
-Fixes: f38a9eb1f77b ("dst: Metadata destinations")
-Signed-off-by: Lokesh Dhoundiyal <lokesh.dhoundiyal@alliedtelesis.co.nz>
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Link: https://lore.kernel.org/r/20220505020017.3111846-1-chris.packham@alliedtelesis.co.nz
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 3c09e2647b5e ("ctcm: rename READ/WRITE defines to avoid redefinitions")
+Reported-by: Colin Ian King <colin.i.king@gmail.com>
+Signed-off-by: Alexandra Winter <wintera@linux.ibm.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/route.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/s390/net/ctcm_sysfs.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index b41d4acc57e6..d7f17581df7d 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -1728,6 +1728,7 @@ static int ip_route_input_mc(struct sk_buff *skb, __be32 daddr, __be32 saddr,
- #endif
- 	RT_CACHE_STAT_INC(in_slow_mc);
+diff --git a/drivers/s390/net/ctcm_sysfs.c b/drivers/s390/net/ctcm_sysfs.c
+index ddb0aa321339..07b7177abf26 100644
+--- a/drivers/s390/net/ctcm_sysfs.c
++++ b/drivers/s390/net/ctcm_sysfs.c
+@@ -38,11 +38,12 @@ static ssize_t ctcm_buffer_write(struct device *dev,
+ 	struct ctcm_priv *priv = dev_get_drvdata(dev);
+ 	int rc;
  
-+	skb_dst_drop(skb);
- 	skb_dst_set(skb, &rth->dst);
- 	return 0;
- }
+-	ndev = priv->channel[CTCM_READ]->netdev;
+-	if (!(priv && priv->channel[CTCM_READ] && ndev)) {
++	if (!(priv && priv->channel[CTCM_READ] &&
++	      priv->channel[CTCM_READ]->netdev)) {
+ 		CTCM_DBF_TEXT(SETUP, CTC_DBF_ERROR, "bfnondev");
+ 		return -ENODEV;
+ 	}
++	ndev = priv->channel[CTCM_READ]->netdev;
+ 
+ 	rc = kstrtouint(buf, 0, &bs1);
+ 	if (rc)
 -- 
 2.35.1
 

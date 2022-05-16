@@ -2,111 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4178F528016
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 10:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9470C528017
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 10:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242017AbiEPIun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 04:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60522 "EHLO
+        id S242006AbiEPIvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 04:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241997AbiEPIuW (ORCPT
+        with ESMTP id S229651AbiEPIvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 04:50:22 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D443712AF6
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 01:50:20 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R251e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VDI4vKu_1652691014;
-Received: from B-LB6YLVDL-0141.local(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VDI4vKu_1652691014)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 16 May 2022 16:50:15 +0800
-Subject: Re: [PATCH v2] RISC-V: Mark IORESOURCE_EXCLUSIVE for reserved mem
- instead of IORESOURCE_BUSY
-To:     mick@ics.forth.gr, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org,
-        akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
-        rppt@kernel.org, david@redhat.com, wangborong@cdjrlc.com,
-        twd2.me@gmail.com, seanjc@google.com, alex@ghiti.fr,
-        petr.pavlu@suse.com, atishp@rivosinc.com
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jianghuaming.jhm@alibaba-inc.com, guoren@kernel.org,
-        stable@kernel.org
-References: <20220512060910.601832-1-xianting.tian@linux.alibaba.com>
-From:   Xianting Tian <xianting.tian@linux.alibaba.com>
-Message-ID: <e32a2228-2e2f-0da2-87e8-e364c0450dcd@linux.alibaba.com>
-Date:   Mon, 16 May 2022 16:50:13 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.10.1
+        Mon, 16 May 2022 04:51:49 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D9D388B;
+        Mon, 16 May 2022 01:51:48 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 8F8C11F407CE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652691107;
+        bh=gV9kB7ivZNyAdhSFNP1wk4K4CwcgA76yv2I+a7JWfyg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=YoFKzksDbBZNLg5EvKENN0GqsHSebAGPsYmisWzx/3PKbAn+FxzB1wSvHECYq75z0
+         2CrtSBGa4usFd2gFvY35Ld/+ec2frrs6NJtvafPe8B4Z9/HQpDr1sLWIUFFRGNUazb
+         c8z2LV3fPBryI42a//xFvhkD/8sIJIZldQGpGqzrX1uPidLBW6pKIzVBTliXJ3MQSY
+         V0K470gXhu3Ydl9xoSWZKHUxGk1PrXWv0TwGBPu6hWb/GYj+6dRLSyvUtcgn1JHHqS
+         Vh+QtQqE+jSuQgV8I2QLruXX35ODzyrRWauKwQSk3syvwBVq9FVD5bbi9dOp+JTzX6
+         uXM5G0La9lXMA==
+Message-ID: <0f303425-3b12-7573-b201-030d4d044db8@collabora.com>
+Date:   Mon, 16 May 2022 10:51:44 +0200
 MIME-Version: 1.0
-In-Reply-To: <20220512060910.601832-1-xianting.tian@linux.alibaba.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 5/7] arm64: dts: mediatek: mt6795: Add fixed clocks for
+ 32kHz and 26MHz XOs
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        robh+dt@kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
+        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, paul.bouchara@somainline.org,
+        kernel@collabora.com
+References: <20220513171617.504430-1-angelogioacchino.delregno@collabora.com>
+ <20220513171617.504430-6-angelogioacchino.delregno@collabora.com>
+ <03e99a02-1233-3882-e1e5-24ab1bbaf257@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <03e99a02-1233-3882-e1e5-24ab1bbaf257@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+Il 16/05/22 09:10, Krzysztof Kozlowski ha scritto:
+> On 13/05/2022 19:16, AngeloGioacchino Del Regno wrote:
+>> Add the 32kHz and 26MHz oscillators as fixed clocks in devicetree to
+>> provide a good initial clock spec, since this SoC features two always
+> 
+> I don't understand that part with actual patch. You claim here you add
+> clocks, but in DTS they were already before.
+> 
+> Additionally, these clocks do not belong to DTSI because, AFAIU, these
+> are properties of boards. At least their frequencies should be moved to
+> the board DTS.
+> 
+> 
 
-Could I get any comments for the v2 patch, thanks
+I should reword the commit description to be clearer, sorry about that: I
+went with "exactly what I've done", but looking at the actual diff, it is
+just a rename. What my brain was ticking on here was about removing clocks
+that didn't really exist (uart_clk is not a fixed clock, etc), and adding
+the ones that do exist.... but then again, the result, casually, is a rename.
 
-ÔÚ 2022/5/12 ÏÂÎç2:09, Xianting Tian Ð´µÀ:
-> Commit 00ab027a3b82 ("RISC-V: Add kernel image sections to the resource tree")
-> marked IORESOURCE_BUSY for reserved memory, which casued resource map
-> failed in subsequent operations of related driver, so remove the
-> IORESOURCE_BUSY flag. In order to prohibit userland mapping reserved
-> memory, mark IORESOURCE_EXCLUSIVE for it.
->
-> The code to reproduce the issue,
-> dts:
->          mem0: memory@a0000000 {
->                  reg = <0x0 0xa0000000 0 0x1000000>;
->                  no-map;
->          };
->
->          &test {
->                  status = "okay";
->                  memory-region = <&mem0>;
->          };
->
-> code:
->          np = of_parse_phandle(pdev->dev.of_node, "memory-region", 0);
->          ret = of_address_to_resource(np, 0, &r);
->          base = devm_ioremap_resource(&pdev->dev, &r);
->          // base = -EBUSY
->
-> Fixes: 00ab027a3b82 ("RISC-V: Add kernel image sections to the resource tree")
-> Reported-by: Huaming Jiang <jianghuaming.jhm@alibaba-inc.com>
-> Reviewed-by: Guo Ren <guoren@kernel.org>
-> Reviewed-by: Nick Kossifidis <mick@ics.forth.gr>
-> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
-> ---
->   arch/riscv/kernel/setup.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> index 834eb652a7b9..e0a00739bd13 100644
-> --- a/arch/riscv/kernel/setup.c
-> +++ b/arch/riscv/kernel/setup.c
-> @@ -189,7 +189,7 @@ static void __init init_resources(void)
->   		res = &mem_res[res_idx--];
->   
->   		res->name = "Reserved";
-> -		res->flags = IORESOURCE_MEM | IORESOURCE_BUSY;
-> +		res->flags = IORESOURCE_MEM | IORESOURCE_EXCLUSIVE;
->   		res->start = __pfn_to_phys(memblock_region_reserved_base_pfn(region));
->   		res->end = __pfn_to_phys(memblock_region_reserved_end_pfn(region)) - 1;
->   
-> @@ -214,7 +214,7 @@ static void __init init_resources(void)
->   
->   		if (unlikely(memblock_is_nomap(region))) {
->   			res->name = "Reserved";
-> -			res->flags = IORESOURCE_MEM | IORESOURCE_BUSY;
-> +			res->flags = IORESOURCE_MEM | IORESOURCE_EXCLUSIVE;
->   		} else {
->   			res->name = "System RAM";
->   			res->flags = IORESOURCE_SYSTEM_RAM | IORESOURCE_BUSY;
+In any case... no, these clocks are not board-specific for two reasons:
+1. AFAIK, these fixed clock outputs are from the SoC itself, not from
+    external components placed on the board, and
+2. Even if these were from external components, the SoC *needs* these
+    ones to work and any board that doesn't have these fixed XOs simply
+    wouldn't be able to work.
+
+Cheers,
+Angelo

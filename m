@@ -2,94 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3676527C15
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 04:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6169B527C2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 05:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239442AbiEPClJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 22:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
+        id S239538AbiEPDDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 23:03:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239434AbiEPClC (ORCPT
+        with ESMTP id S239528AbiEPDDC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 22:41:02 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DAF21E39;
-        Sun, 15 May 2022 19:41:00 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id n10so13161511pjh.5;
-        Sun, 15 May 2022 19:41:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=aIlm/VYtdYStFNftAawGcZJShpGn68mz3cqjYcCYHws=;
-        b=YmiwWn4LKW3H6BQwtwi/Pxsb1NKWvM9/Ezvmd6zY+/O1++OjIciCqRW3Y5kyESlo16
-         VmNTASBq0Tcr7oNrt5H+E1/NOv/v8HClfGl5kuROaVP0fE8ylS4S3BZPg1LM/2+cSksl
-         te2viXEqlxnoGqmrBfoaTAnLBy5nt+LOGOW2BL7vnKI22wCII/ckA1G0FMXMKSgmSvcn
-         L80MszYZLyEgJRpAFrXWoHU3LH/EdEZPe7v01kbBBIJTipgWzX3OXhhlRQui41qi6Bjq
-         W7t6QDFJ3wWBL/B2YsJBpB/A6bS33Uhnn3+5K5k9EZ4nDapCP2ocEG43PPRiig3K5pDg
-         nGaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=aIlm/VYtdYStFNftAawGcZJShpGn68mz3cqjYcCYHws=;
-        b=uVwa9Q0X+GzmVP29U9yEarHGRTlV39Fp3uJiKJIpK35euV8r0UDu2I1YiQmNwteG+A
-         HrRFBMA30iXfqtSYBuG5f+ZnXbtfO95g+QmDfzPp2YrxhosRraMzdJq6/fQ4x7MqLPuN
-         2/knyyLo5dT5TQAAJJWLl4Y/NJeAwkAEPbWAR4hO6bs/596ZxdTn0LqsIeW/QqrJnGor
-         nu/raoOB5HhEVvyFqEmbuVLpiIOcaHJpnvppgUiwvx/G4ElUu9y5SoGWx3MQxhGF19Nm
-         Sra1UxLfIZJYDyzD2VNdPDNq1uPg1Hoa5p+EAORP4LaDoXs1Xbx3NbzwbDisRlhMCCCP
-         9bDA==
-X-Gm-Message-State: AOAM531jcVk9HFtaubaR73BWtj8gI30j085MwZeWF1vKbvBFlIpQxPng
-        P7dG+/niX4un/hnWvk8rvo0=
-X-Google-Smtp-Source: ABdhPJzl2hay+yjqIO1bBR4EP5B/6h8hF8ITX75cQ40q4Y1pO++lfzx26n67+chXkOJsjhnzP0pNJA==
-X-Received: by 2002:a17:90a:9313:b0:1df:10a1:35ef with SMTP id p19-20020a17090a931300b001df10a135efmr10392837pjo.134.1652668860207;
-        Sun, 15 May 2022 19:41:00 -0700 (PDT)
-Received: from [192.168.50.247] ([103.84.139.165])
-        by smtp.gmail.com with ESMTPSA id v4-20020a1709029a0400b0015e8d4eb2c1sm5721198plp.267.2022.05.15.19.40.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 15 May 2022 19:40:59 -0700 (PDT)
-Message-ID: <0b428595-ad3f-3b6c-484c-21b217adab7c@gmail.com>
-Date:   Mon, 16 May 2022 10:40:55 +0800
+        Sun, 15 May 2022 23:03:02 -0400
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 15 May 2022 20:03:00 PDT
+Received: from esa9.hc1455-7.c3s2.iphmx.com (esa9.hc1455-7.c3s2.iphmx.com [139.138.36.223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7898558D
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 20:02:59 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="60951355"
+X-IronPort-AV: E=Sophos;i="5.91,229,1647270000"; 
+   d="scan'208";a="60951355"
+Received: from unknown (HELO oym-r1.gw.nic.fujitsu.com) ([210.162.30.89])
+  by esa9.hc1455-7.c3s2.iphmx.com with ESMTP; 16 May 2022 12:01:54 +0900
+Received: from oym-m1.gw.nic.fujitsu.com (oym-nat-oym-m1.gw.nic.fujitsu.com [192.168.87.58])
+        by oym-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 3D8FB1CFC7C
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:01:54 +0900 (JST)
+Received: from m3004.s.css.fujitsu.com (m3004.s.css.fujitsu.com [10.128.233.124])
+        by oym-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id 18FD0D996B
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:01:53 +0900 (JST)
+Received: from localhost.localdomain (unknown [10.125.5.220])
+        by m3004.s.css.fujitsu.com (Postfix) with ESMTP id 1E01D200B29C;
+        Mon, 16 May 2022 12:01:52 +0900 (JST)
+From:   Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
+To:     akpm@linux-foundation.org
+Cc:     aquini@redhat.com, ddutile@redhat.com, linmiaohe@huawei.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        mgorman@techsingularity.net, vvghjk1234@gmail.com,
+        yamamoto.rei@jp.fujitsu.com
+Subject: Re: [PATCH] mm, compaction: fast_find_migrateblock() should return pfn in the target zone
+Date:   Mon, 16 May 2022 11:41:22 +0900
+Message-Id: <20220516024122.71543-1-yamamoto.rei@jp.fujitsu.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220513140141.3b2accfc8fbae08ec4177781@linux-foundation.org>
+References: <20220513140141.3b2accfc8fbae08ec4177781@linux-foundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] media: dvb_vb2: fix possible out of bound access
-Content-Language: en-US
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     mchehab@kernel.org, caihuoqing@baidu.com, hverkuil-cisco@xs4all.nl,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220324080119.40133-1-hbh25y@gmail.com>
- <YjxGlIyYiULyAXy6@google.com>
-From:   Hangyu Hua <hbh25y@gmail.com>
-In-Reply-To: <YjxGlIyYiULyAXy6@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SORTED_RECIPS,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/24 18:23, Sergey Senozhatsky wrote:
-> On (22/03/24 16:01), Hangyu Hua wrote:
->> vb2_core_qbuf and vb2_core_querybuf don't check the range of b->index
->> controlled by the user.
->>
->> Fix this by adding range checking code before using them.
->>
->> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-> 
-> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+On Fri, 13 May 2022 14:01:41 -0700 Andrew Morton <akpm@linux-foundation.org> wrote:
+> On Fri, 13 May 2022 13:11:12 +0900 Rei Yamamoto <yamamoto.rei@jp.fujitsu.com> wrote:
+>
+>> On Thu, 12 May 2022 13:49:45 -0700 Andrew Morton <akpm@linux-foundation.org> wrote:
+>> > On Thu, 12 May 2022 13:27:33 +0900 Rei Yamamoto <yamamoto.rei@jp.fujitsu.com> wrote:
+>> >
+>> >> >> Thank you for your review.
+>> >> >> The runtime effect is that compaction become unintended behavior.
+>> >> >> For example, pages not in the target zone are added to cc->migratepages list in isolate_migratepages_block().
+>> >> >> As a result, pages migrate between nodes unintentionally.
+>> >> >
+>> >> > Many thanks for clarifying. :) Is this worth a Fixes tag or even CC stable?
+>> >> >
+>> >> > Thanks!
+>> >> 
+>> >> Thank you for your reply.
+>> >> 
+>> >> If add a Fixes tag, I think the following commit:
+>> >>   Fixes: 70b4459 ("mm, compaction: use free lists to quickly locate a migration source")
+>> >> 
+>> >> Andrew, how do you think about this? 
+>> >
+>> > Thanks, I added that and also a paragraph describing the effect of the bug:
+>> >
+>> > https://git.kernel.org/pub/scm/linux/kernel/git/akpm/25-new.git/tree/patches/mm-compaction-fast_find_migrateblock-should-return-pfn-in-the-target-zone.patch
+>> >
+>> > I assume this problem isn't sufficiently serious to require a -stable
+>> > backport of the fix?
+>> 
+>> This would be a serious problem for older kernels without commit a984226, 
+>> because it can corrupt the lru list by handling pages in list without holding proper lru_lock.
+>
+> Thanks, I added the above to the changelog.
+>
+> The patch applies OK to older kernels (I tried v5.10).  So I guess we
+> put a cc:stable in this, so it gets backported?
 
-Hi guys,
+Sounds great.
+I think that's fine.
 
-Two other patches for this module that I submitted at the same time as 
-this one have been accepted. But this bug looks much worse than the 
-other two. Is this patch forgotten to merge?
-
-Thanks.
+Thanks,
+Rei

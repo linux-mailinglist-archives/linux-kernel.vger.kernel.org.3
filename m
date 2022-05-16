@@ -2,60 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 864F2527DF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 339CE527DFA
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240609AbiEPHBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 03:01:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44340 "EHLO
+        id S240625AbiEPHBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 03:01:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236707AbiEPHAv (ORCPT
+        with ESMTP id S240652AbiEPHBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 03:00:51 -0400
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9CC5C46
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:00:47 -0700 (PDT)
-Received: by mail-ej1-f54.google.com with SMTP id l18so26715372ejc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:00:47 -0700 (PDT)
+        Mon, 16 May 2022 03:01:13 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F6E9FE7
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:01:10 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id bu29so24216260lfb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:01:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=NbvfOiX/jtGbPtYjjUDXC+IzrP1LLgnY1EgAFKsMWp0=;
+        b=tgw+AdEnx9eQx5k3kbD6Pq7cq5NnJeNxQilDPd9IaKz3349mKE4c87X+GbStT4GBvs
+         dwiqjLc9JEKbJMrHYcMneCBO2xaG5/bW7wnFdsckzgQCxUlmUpZBEFB87HA9hVF5+/ny
+         T2xT5ZoN3fGW3fxkoDpS+gmAynETh3VUNb1tcwFanze5v5iFTPYtaBl0uK6f7rqzSpCq
+         HPpvtAUckdP9cV6tLPq1KcmRDFHqWqvCIvaZNAQVRIOKqo4SDt6UBwgXMBCXt9m4jntr
+         lormf40CO0lfsyZoqQT6RtgfsVX/nH0v46h+X2WU7FEBFVhjihvSjoFhVur8HagSS2b5
+         KBPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=cR8Hsiy9clKxAsJER0JNovDFDdlOniNfgaMdZde7koY=;
-        b=tJGAsYUBOQSJ9GLG9kezwefSDP58eZZFqFCwohpBvnFI7FWVSUikF6OXmbl+Yalgxt
-         I8g0HLJqp9z7RDrbw6B4fMFPMfpMA3no8hnqjtNsRnJsCiD1/A94PaqfRC0aHyB+MXiL
-         tekXKT/jobNRE/J/5DmHjJAwv2qJxWay6bThVVOg9hTFOmC3IDH6RDQOP2lOlbZLCicY
-         r8mQWQlwOP0wTP6VM3OtK6UFZScUbHa8qGt14/wvHj34hLm8A0FS0AvhHcKLiTj0tFZs
-         WEd/y37U9pfcv3CObitnXj0le0RQrKk7WQxZ6VIhSFWT9BpTxMPcA9pPcsJyqjEnj8T1
-         rhaw==
-X-Gm-Message-State: AOAM533tQurrSAF59Wc6K3aBJVj2fqWQMJHQF4j8Jw/RjOwQwEAgJbge
-        B7TD5EOYwkNLJN3Oo7dP4vs=
-X-Google-Smtp-Source: ABdhPJxWecW7+gEwU5kLk6tc2W1Xkxx0zCkE55qr4QBIHuQKF26l3v5gIJ9e/R1zFbkUkNIF+LB7ew==
-X-Received: by 2002:a17:907:8a0b:b0:6f4:4899:db98 with SMTP id sc11-20020a1709078a0b00b006f44899db98mr14009750ejc.622.1652684446417;
-        Mon, 16 May 2022 00:00:46 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id dq7-20020a170907734700b006f3ef214defsm3357616ejc.85.2022.05.16.00.00.45
+        bh=NbvfOiX/jtGbPtYjjUDXC+IzrP1LLgnY1EgAFKsMWp0=;
+        b=bvEFHW8aX1eqZ022vN1VjBSv0R2l2IPpAdbwZPo59EBa5ySfrSwELbF1cgMWDFOxE+
+         xohxx4a2ecju91q0cTWghPjcOKkx4/KmJJ/e9aPc2xzp8s5Q8JtYpklUIg44stutJBIf
+         f+H7Mx1mPxkI5LeaaCYT2YTgNKAcAL2jZZ8FUxLd+i1upbmhmkWNWVA+BeLv86afcws8
+         Aw2fmRWnbf7/aeF4kvT7n5PD/MEQetGrFEyheOoLUnjVDXg5CEJG/JXkqWe3mWE+xdXR
+         cy9/m/QZlo4eZ/S4la+gije7ZPEDuzJmN/MPCpwbioRm755Em7yhnsprKyNa/7nQZBy/
+         LEoA==
+X-Gm-Message-State: AOAM5322WABvmC+h9XjuqzPDOuxXzdyEWeXYC6WcIoXIah3uVU7/zMbG
+        H2k1svez4dTzNo0qchYkDdjCaA==
+X-Google-Smtp-Source: ABdhPJwmLBBWEwrRgPz4mXsYykl61uynZi06W+txJ8t2mcxBNaa9FQ7HgmbVci/MRO0Eex3gE5NO2w==
+X-Received: by 2002:a05:6512:3091:b0:473:bfb1:8da0 with SMTP id z17-20020a056512309100b00473bfb18da0mr12227874lfd.154.1652684468914;
+        Mon, 16 May 2022 00:01:08 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id v26-20020a05651203ba00b0047255d2116fsm1219146lfp.158.2022.05.16.00.01.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 00:00:45 -0700 (PDT)
-Message-ID: <49a7602f-dd79-cac3-e6e0-83c4c41fcd53@kernel.org>
-Date:   Mon, 16 May 2022 09:00:45 +0200
+        Mon, 16 May 2022 00:01:08 -0700 (PDT)
+Message-ID: <d4e031d0-8a43-e458-6535-1044d43a2b63@linaro.org>
+Date:   Mon, 16 May 2022 09:01:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH -next v2] vt: defkeymap.c_shipped remove unused variables
+Subject: Re: [PATCH v2 2/4] dt-bindings: arm: qcom: Add sc7180 Chromebook
+ board bindings
 Content-Language: en-US
-To:     Zhang Jianhua <chris.zjh@huawei.com>, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20220513015427.569539-1-chris.zjh@huawei.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220513015427.569539-1-chris.zjh@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Douglas Anderson <dianders@chromium.org>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Alexandru M Stan <amstan@chromium.org>,
+        Julius Werner <jwerner@chromium.org>,
+        "Joseph S . Barrera III" <joebar@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220513095722.v2.1.I71e42c6174f1cec17da3024c9f73ba373263b9b6@changeid>
+ <20220513095722.v2.2.I9804fcd5d6c8552ab25f598dd7a3ea71b15b55f0@changeid>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220513095722.v2.2.I9804fcd5d6c8552ab25f598dd7a3ea71b15b55f0@changeid>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,39 +88,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13. 05. 22, 3:54, Zhang Jianhua wrote:
-> The global variables 'funcbufptr' 'funcbufsize' and 'funcbufleft' have
-> been initialized but not used, they are redundant and remove them.
+On 13/05/2022 18:59, Douglas Anderson wrote:
+> This copy-pastes compatibles from sc7180-based boards from the device
+> trees to the yaml file so that `make dtbs_check` will be happy.
 > 
-> Signed-off-by: Zhang Jianhua <chris.zjh@huawei.com>
+> NOTES:
+> - I make no attempt to try to share an "item" for all sc7180 based
+>   Chromebooks. Because of the revision matching scheme used by the
+>   Chromebook bootloader, at times we need a different number of
+>   revisions listed.
+> - Some of the odd entries in here (like google,homestar-rev23 or the
+>   fact that "Google Lazor Limozeen without Touchscreen" changed from
+>   sku5 to sku6) are not typos but simply reflect reality.
+> - Many revisions of boards here never actually went to consumers, but
+>   they are still in use within various companies that were involved in
+>   Chromebook development. Since Chromebooks are developed with an
+>   "upstream first" methodology, having these revisions supported with
+>   upstream Linux is important. Making it easy for Chromebooks to be
+>   developed with an "upstream first" methodology is valuable to the
+>   upstream community because it improves the quality of upstream and
+>   gets Chromebooks supported with vanilla upstream faster.
 > 
+> This patch also adds a link to the Chromebook boot flow documentation
+> to explain that Chromebooks don't use the scheme described for the
+> Qualcomm bootloader.
+> 
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 > ---
-> No code changes since v1, only remove the redundant line "--------" in
-> v1 commit message.
-> ---
->   drivers/tty/vt/defkeymap.c_shipped | 4 ----
+> The link added here will (obviously) not function until the
+> documentation patch makes it to mainline. Presumably folks who want to
+> read it in the meantime can find it pretty easily. If there's a better
+> way to link this then please let me know.
+> 
+> Changes in v2:
+> - Add link to doc about how Chromebook devicetrees work.
+> - Use a "description" instead of a comment for each item.
+> - Use the marketing name instead of the code name where possible.
+> 
+>  .../devicetree/bindings/arm/qcom.yaml         | 187 +++++++++++++++++-
+>  1 file changed, 186 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+> index 5c06d1bfc046..8ec0805f4996 100644
+> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
+> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+> @@ -90,6 +90,11 @@ description: |
+>    A dragonboard board v0.1 of subtype 1 with an apq8074 SoC version 2, made in
+>    foundry 2.
+>  
+> +  There are many devices in the list below that run the standard ChromeOS
+> +  bootloader setup and use the open source depthcharge bootloader to boot the
+> +  OS. These devices do not use the scheme described above. For details, see:
+> +  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/chromebook-boot-flow.rst
 
-The file header says:
-/* Do not edit this file! It was automatically generated by   */
-/*    loadkeys --mktable defkeymap.map > defkeymap.c          */
+Absolute path within Linux repo, please, so
+"Documentation/devicetree/chromebook-boot-flow.rst" (assuming that will
+be the final location). There are tools which check them for validity.
 
-So I'm not sure anyone wants to touch it.
+Actually this change should be rather part of that other commit...
 
-> --- a/drivers/tty/vt/defkeymap.c_shipped
-> +++ b/drivers/tty/vt/defkeymap.c_shipped
-> @@ -185,10 +185,6 @@ char func_buf[] = {
->   	'\033', '[', 'P', 0,
->   };
->   
-> -char *funcbufptr = func_buf;
-> -int funcbufsize = sizeof(func_buf);
-> -int funcbufleft = 0;          /* space left */
-> -
->   char *func_table[MAX_NR_FUNC] = {
->   	func_buf + 0,
->   	func_buf + 5,
-
-
--- 
-js
-suse labs
+Best regards,
+Krzysztof

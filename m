@@ -2,218 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4598A528673
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C2E52867C
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244170AbiEPOGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 10:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
+        id S244312AbiEPOHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 10:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244439AbiEPOGW (ORCPT
+        with ESMTP id S243887AbiEPOHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 10:06:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB05F3A71F
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:06:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652709980;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=C02Jr/UCyAq1WaiVEroFuXNF23GLqP5faeBDBUBpdVo=;
-        b=IKVVFppdi5fnlBvEfjSrWK3z3DTe82XcVsaE2lfo1UcQDEr5xfxTFa03JsZnp4JPtaoZCq
-        6oUZpMLJ/AAZBctBg2fWFsK4uxU7/4Xq9Bym8zU2Fuz1aCXBje1kJQcI+5z58PZCf9pqMy
-        5p7vW8t0YrGmFKRwdnTTCezWemOTlvg=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-417-xtgPWEM7P7mqJHpB7JN5zw-1; Mon, 16 May 2022 10:06:18 -0400
-X-MC-Unique: xtgPWEM7P7mqJHpB7JN5zw-1
-Received: by mail-qt1-f200.google.com with SMTP id q13-20020a05622a04cd00b002f3c0e197afso11573956qtx.0
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:06:17 -0700 (PDT)
+        Mon, 16 May 2022 10:07:19 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30CD43A728;
+        Mon, 16 May 2022 07:07:18 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id f2so13686306wrc.0;
+        Mon, 16 May 2022 07:07:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=sM2sRGLVCJ3Fk4PRrn+4dC0xyoX9H+fcNcN8bioAh10=;
+        b=XEldJpEHMASSsGBrI5Mmn0Pi9N670GLUxxVJp9B5HOBl43K97MwoAJgO8rLsByNaeb
+         lGFHZLdSMp5plsxPECl1hu/RCE92lA3mQMUkELx5ggDkbKbIrRbWl2CF5epTn2VVa9Bk
+         EKleAupnQa510VCDAbAdsbYftuIScC1x7XiBfKKGJN4+Q4XS1jPWRU5vVJ/+q3ubfCcV
+         CqQx3Zr2V7XIS4AOAoBetY/mlyaYWA5HTpaVMVfXp3aqrxwJLDkgz7shVZ2/UZ8uhN3P
+         XQJSOuKhPUftPUtyRVyYYoaZl0WFTnNY6kIltroHODF1It8/lBZoYSRFsyKFcmYNaD1w
+         gFVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=C02Jr/UCyAq1WaiVEroFuXNF23GLqP5faeBDBUBpdVo=;
-        b=oLkEdHtBR3r9D+5dtaL4AGMP9p3OFvsCZBm4g+525gS+yKtp2JDyyC2RAI4MfcnusM
-         RwleKd3TEkYyLwrrR/omkigMVBWwL8Whkg46ijy3wC4skH6GhYHV9VmpNYDoBjoM7UwZ
-         o1e+BfJY1wVMKu1cWAsetr09tXU7/SDtVCoU7+QUpOEgTTCNmqj/OB1LbmWy32777ygZ
-         /uUs3kHFzOWokMKAIgSBP+W0diArrG9dhiSM4jUfLb4YsoBC8NeVDdNutHhXw0On5QyA
-         oaCVVx3baWDD1MUE22Pz2ogJGlY8QF73g3UOlUGLJU+0Q8IvesX260DNZk29dz0EREZZ
-         v8OQ==
-X-Gm-Message-State: AOAM530YHZ9881NUtKWUlutJ1RARc8lx0qg755dmmGyCQ9pTvyeCmVrS
-        SA5aF3krGfIysxmX2OdE/qwQZNerEUwvm7x3a2PyhWTj3LuwvLYnrX+7OsSSIZRNKEqsyRlBqch
-        c7J9rQYADqUlUh/SogvM7fXu4
-X-Received: by 2002:ad4:5dc5:0:b0:45a:82c0:bc4a with SMTP id m5-20020ad45dc5000000b0045a82c0bc4amr15306802qvh.82.1652709977051;
-        Mon, 16 May 2022 07:06:17 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzeK4bI4hwRVpDCN8+j2vIlpM3R4Nn0BJi7TfSN2Dqsq24DwAdv9J6x56912JHzM7MP3DkjJA==
-X-Received: by 2002:ad4:5dc5:0:b0:45a:82c0:bc4a with SMTP id m5-20020ad45dc5000000b0045a82c0bc4amr15306748qvh.82.1652709976709;
-        Mon, 16 May 2022 07:06:16 -0700 (PDT)
-Received: from [192.168.98.18] ([107.12.98.143])
-        by smtp.gmail.com with ESMTPSA id p18-20020ac87412000000b002f3d23cf87esm5991936qtq.27.2022.05.16.07.06.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 07:06:15 -0700 (PDT)
-Message-ID: <6431569f-fb09-096e-7a89-284a71aa5c0f@redhat.com>
-Date:   Mon, 16 May 2022 10:06:14 -0400
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=sM2sRGLVCJ3Fk4PRrn+4dC0xyoX9H+fcNcN8bioAh10=;
+        b=e78sUnF+Z4iNBVcZOHuCis/BExhcDs2feMj/wXXIlPv0D9Yl1uOj/u1JKNh4wwo6pC
+         4IShw9vpuGnPU/2I/LAA+be08DiOEAjpoygT2Cb7joxOkP8WIRtxWLhuZgVo6zQRAQhv
+         3VTATRlxSGmOS/5VaXqK6FPHT9O7+oNtMjyc/2yKuEetmCZMhGHd1o1IXILks9YWMRFV
+         UdHIvbvlB/jIBDIMAdL5MN25oC72mDeoA+JjrRalQytxOGagFxQTeAloOnb97j+51PvP
+         jSr7whyaO8MgJy+Y04oNGRYu9HGpwkw9beeaxvUSfzGppfkdB0vxVB+eNGXnn2TBTXhX
+         jV1g==
+X-Gm-Message-State: AOAM530xGvzCSlfkviTjzerQX0qGfAOwpdHPBNe8HjfbaFGEnq3g632n
+        BfAXCb/8+nI2YST+M8RhPQLBsDHvRXY=
+X-Google-Smtp-Source: ABdhPJy6o0QTxOZPvxVZf6UA03LSbXaPI3cJ5caJlhMXQFfhV3BWO5alGfIPKD4PGJbIVes3G4Q8Uw==
+X-Received: by 2002:a5d:4988:0:b0:20d:9b8:e560 with SMTP id r8-20020a5d4988000000b0020d09b8e560mr3799784wrq.33.1652710036571;
+        Mon, 16 May 2022 07:07:16 -0700 (PDT)
+Received: from orome (pd9e518f7.dip0.t-ipconnect.de. [217.229.24.247])
+        by smtp.gmail.com with ESMTPSA id v8-20020adfa1c8000000b0020d050461c9sm5287367wrv.54.2022.05.16.07.07.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 07:07:15 -0700 (PDT)
+Date:   Mon, 16 May 2022 16:07:13 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Mikko Perttunen <cyndis@kapsi.fi>
+Cc:     Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>,
+        jonathanh@nvidia.com, joro@8bytes.org, robh+dt@kernel.org,
+        krzysztof.kozlowski@canonical.com, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Mikko Perttunen <mperttunen@nvidia.com>
+Subject: Re: [PATCH v5 5/9] iommu/arm-smmu: Attach to host1x context device
+ bus
+Message-ID: <YoJakX0ms7rBF3ia@orome>
+References: <20220516085258.1227691-1-cyndis@kapsi.fi>
+ <20220516085258.1227691-6-cyndis@kapsi.fi>
+ <20220516100721.GA1927@willie-the-truck>
+ <4a170997-c893-1788-dcaa-8ed2193146ae@kapsi.fi>
+ <099cf0f9-5c27-0247-7c5e-6704a9527b11@arm.com>
+ <020a8244-760e-fe7c-594a-1d85e5645dbe@kapsi.fi>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH net-next v3] bond: add mac filter option for balance-xor
-Content-Language: en-US
-To:     Nikolay Aleksandrov <razor@blackwall.org>, netdev@vger.kernel.org
-Cc:     toke@redhat.com, Long Xin <lxin@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <b32eb6656d5a54c0cde6277e9fc5c249c63489ca.1652463336.git.jtoppins@redhat.com>
- <4c9db6ac-aa24-2ca2-3e44-18cfb23ac1bc@blackwall.org>
- <da6bbb3b-344c-f032-fe03-5e8c8ac3c388@blackwall.org>
-From:   Jonathan Toppins <jtoppins@redhat.com>
-In-Reply-To: <da6bbb3b-344c-f032-fe03-5e8c8ac3c388@blackwall.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="pzcJQLU+ls3tyqds"
+Content-Disposition: inline
+In-Reply-To: <020a8244-760e-fe7c-594a-1d85e5645dbe@kapsi.fi>
+User-Agent: Mutt/2.2.4 (c3baa83e) (2022-04-30)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/15/22 02:32, Nikolay Aleksandrov wrote:
-> On 15/05/2022 00:41, Nikolay Aleksandrov wrote:
->> On 13/05/2022 20:43, Jonathan Toppins wrote:
->>> Implement a MAC filter that prevents duplicate frame delivery when
->>> handling BUM traffic. This attempts to partially replicate OvS SLB
->>> Bonding[1] like functionality without requiring significant change
->>> in the Linux bridging code.
->>>
->>> A typical network setup for this feature would be:
->>>
->>>              .--------------------------------------------.
->>>              |         .--------------------.             |
->>>              |         |                    |             |
->>>         .-------------------.               |             |
->>>         |    | Bond 0  |    |               |             |
->>>         | .--'---. .---'--. |               |             |
->>>    .----|-| eth0 |-| eth1 |-|----.    .-----+----.   .----+------.
->>>    |    | '------' '------' |    |    | Switch 1 |   | Switch 2  |
->>>    |    '---,---------------'    |    |          +---+           |
->>>    |       /                     |    '----+-----'   '----+------'
->>>    |  .---'---.    .------.      |         |              |
->>>    |  |  br0  |----| VM 1 |      |      ~~~~~~~~~~~~~~~~~~~~~
->>>    |  '-------'    '------'      |     (                     )
->>>    |      |        .------.      |     ( Rest of Network     )
->>>    |      '--------| VM # |      |     (_____________________)
->>>    |               '------'      |
->>>    |  Host 1                     |
->>>    '-----------------------------'
->>>
->>> Where 'VM1' and 'VM#' are hosts connected to a Linux bridge, br0, with
->>> bond0 and its associated links, eth0 & eth1, provide ingress/egress. One
->>> can assume bond0, br1, and hosts VM1 to VM# are all contained in a
->>> single box, as depicted. Interfaces eth0 and eth1 provide redundant
->>> connections to the data center with the requirement to use all bandwidth
->>> when the system is functioning normally. Switch 1 and Switch 2 are
->>> physical switches that do not implement any advanced L2 management
->>> features such as MLAG, Cisco's VPC, or LACP.
->>>
->>> Combining this feature with vlan+srcmac hash policy allows a user to
->>> create an access network without the need to use expensive switches that
->>> support features like Cisco's VCP.
->>>
->>> [1] https://docs.openvswitch.org/en/latest/topics/bonding/#slb-bonding
->>>
->>> Co-developed-by: Long Xin <lxin@redhat.com>
->>> Signed-off-by: Long Xin <lxin@redhat.com>
->>> Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
->>> ---
->>>
->>> Notes:
->>>      v2:
->>>       * dropped needless abstraction functions and put code in module init
->>>       * renamed variable "rc" to "ret" to stay consistent with most of the
->>>         code
->>>       * fixed parameter setting management, when arp-monitor is turned on
->>>         this feature will be turned off similar to how miimon and arp-monitor
->>>         interact
->>>       * renamed bond_xor_recv to bond_mac_filter_recv for a little more
->>>         clarity
->>>       * it appears the implied default return code for any bonding recv probe
->>>         must be `RX_HANDLER_ANOTHER`. Changed the default return code of
->>>         bond_mac_filter_recv to use this return value to not break skb
->>>         processing when the skb dev is switched to the bond dev:
->>>           `skb->dev = bond->dev`
->>>      
->>>      v3: Nik's comments
->>>       * clarified documentation
->>>       * fixed inline and basic reverse Christmas tree formatting
->>>       * zero'ed entry in mac_create
->>>       * removed read_lock taking in bond_mac_filter_recv
->>>       * made has_expired() atomic and removed critical sections
->>>         surrounding calls to has_expired(), this also removed the
->>>         use-after-free that would have occurred:
->>>             spin_lock_irqsave(&entry->lock, flags);
->>>                 if (has_expired(bond, entry))
->>>                     mac_delete(bond, entry);
->>>             spin_unlock_irqrestore(&entry->lock, flags); <---
->>>       * moved init/destroy of mac_filter_tbl to bond_open/bond_close
->>>         this removed the complex option dependencies, the only behavioural
->>>         change the user will see is if the bond is up and mac_filter is
->>>         enabled if they try and set arp_interval they will receive -EBUSY
->>>       * in bond_changelink moved processing of mac_filter option just below
->>>         mode processing
->>>
->>>   Documentation/networking/bonding.rst  |  20 +++
->>>   drivers/net/bonding/Makefile          |   2 +-
->>>   drivers/net/bonding/bond_mac_filter.c | 201 ++++++++++++++++++++++++++
->>>   drivers/net/bonding/bond_mac_filter.h |  37 +++++
->>>   drivers/net/bonding/bond_main.c       |  30 ++++
->>>   drivers/net/bonding/bond_netlink.c    |  13 ++
->>>   drivers/net/bonding/bond_options.c    |  81 +++++++++--
->>>   drivers/net/bonding/bonding_priv.h    |   1 +
->>>   include/net/bond_options.h            |   1 +
->>>   include/net/bonding.h                 |   3 +
->>>   include/uapi/linux/if_link.h          |   1 +
->>>   11 files changed, 373 insertions(+), 17 deletions(-)
->>>   create mode 100644 drivers/net/bonding/bond_mac_filter.c
->>>   create mode 100644 drivers/net/bonding/bond_mac_filter.h
->>>
->>
-> [snip]
-> 
-> The same problem solved using a few nftables rules (in case you don't want to load eBPF):
-> $ nft 'add table netdev nt'
-> $ nft 'add chain netdev nt bond0EgressFilter { type filter hook egress device bond0 priority 0; }'
-> $ nft 'add chain netdev nt bond0IngressFilter { type filter hook ingress device bond0 priority 0; }'
-> $ nft 'add set netdev nt macset { type ether_addr; flags timeout; }'
-> $ nft 'add rule netdev nt bond0EgressFilter set update ether saddr timeout 5s @macset'
-> $ nft 'add rule netdev nt bond0IngressFilter ether saddr @macset counter drop'
-> 
 
-I get the following when trying to apply this on a fedora 35 install.
+--pzcJQLU+ls3tyqds
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-root@fedora ~]# ip link add bond0 type bond mode balance-xor 
-xmit_hash_policy vlan+srcmac
-[root@fedora ~]# nft 'add table netdev nt'
-[root@fedora ~]# nft 'add chain netdev nt bond0EgressFilter { type 
-filter hook egress device bond0 priority 0; }'
-Error: unknown chain hook
-add chain netdev nt bond0EgressFilter { type filter hook egress device 
-bond0 priority 0; }
-                                                          ^^^^^^
-[root@fedora ~]# uname -a
-Linux fedora 5.17.5-200.fc35.x86_64 #1 SMP PREEMPT Thu Apr 28 15:41:41 
-UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+On Mon, May 16, 2022 at 02:20:18PM +0300, Mikko Perttunen wrote:
+> On 5/16/22 13:44, Robin Murphy wrote:
+> > On 2022-05-16 11:13, Mikko Perttunen wrote:
+> > > On 5/16/22 13:07, Will Deacon wrote:
+> > > > On Mon, May 16, 2022 at 11:52:54AM +0300, cyndis@kapsi.fi wrote:
+> > > > > From: Mikko Perttunen <mperttunen@nvidia.com>
+> > > > >=20
+> > > > > Set itself as the IOMMU for the host1x context device bus, contai=
+ning
+> > > > > "dummy" devices used for Host1x context isolation.
+> > > > >=20
+> > > > > Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+> > > > > ---
+> > > > > =C2=A0 drivers/iommu/arm/arm-smmu/arm-smmu.c | 13 +++++++++++++
+> > > > > =C2=A0 1 file changed, 13 insertions(+)
+> > > > >=20
+> > > > > diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> > > > > b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> > > > > index 568cce590ccc..9ff54eaecf81 100644
+> > > > > --- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> > > > > +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> > > > > @@ -39,6 +39,7 @@
+> > > > > =C2=A0 #include <linux/amba/bus.h>
+> > > > > =C2=A0 #include <linux/fsl/mc.h>
+> > > > > +#include <linux/host1x_context_bus.h>
+> > > > > =C2=A0 #include "arm-smmu.h"
+> > > > > @@ -2053,8 +2054,20 @@ static int arm_smmu_bus_init(struct
+> > > > > iommu_ops *ops)
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 goto err_reset_pci_ops;
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> > > > > =C2=A0 #endif
+> > > > > +#ifdef CONFIG_TEGRA_HOST1X_CONTEXT_BUS
+> > > > > +=C2=A0=C2=A0=C2=A0 if (!iommu_present(&host1x_context_device_bus=
+_type)) {
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 err =3D bus_set_iommu=
+(&host1x_context_device_bus_type, ops);
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (err)
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 goto err_reset_fsl_mc_ops;
+> > > > > +=C2=A0=C2=A0=C2=A0 }
+> > > > > +#endif
+> > > > > +
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
+> > > > > +err_reset_fsl_mc_ops: __maybe_unused;
+> > > > > +#ifdef CONFIG_FSL_MC_BUS
+> > > > > +=C2=A0=C2=A0=C2=A0 bus_set_iommu(&fsl_mc_bus_type, NULL);
+> > > > > +#endif
+> > > >=20
+> > > > bus_set_iommu() is going away:
+> > > >=20
+> > > > https://lore.kernel.org/r/cover.1650890638.git.robin.murphy@arm.com
+> > > >=20
+> > > > Will
+> > >=20
+> > > Thanks for the heads-up. Robin had pointed out that this work was
+> > > ongoing but I hadn't seen the patches yet. I'll look into it.
+> >=20
+> > Although that *is* currently blocked on the mystery intel-iommu problem
+> > that I can't reproduce... If this series is ready to land right now for
+> > 5.19 then in principle that might be the easiest option overall.
+> > Hopefully at least patch #2 could sneak in so that the compile-time
+> > dependencies are ready for me to roll up host1x into the next rebase of
+> > "iommu: Always register bus notifiers".
+> >=20
+> > Cheers,
+> > Robin.
+>=20
+> My guess is that the series as a whole is not ready to land in the 5.19
+> timeframe, but #2 could be possible.
+>=20
+> Thierry, any opinion?
 
+Dave and Daniel typically want new material to be in by -rc6 and I've
+already sent the PR for this cycle. I can ask them if they'd take
+another one, though, if it make things simpler for the next cycle.
+
+Thierry
+
+--pzcJQLU+ls3tyqds
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmKCWpEACgkQ3SOs138+
+s6HS5g/+NDlKp3MuR8qOz2HUhNTb5hZJliQREJuGJiH3Lb+xlTr9HRTYFTog5h2o
+/8FYXEz/xNe0Ksteb58UEMgTzATGtPWYulLdKMfCLgHRSw9jwEG6IOtCweZv5fNf
+9oAzyL/ZTpTOF330ce1BRfk/PvlNVLnetImK4b8OGmaj9ZMgvfNhgJpzq0jSkf7S
+hTZozfgJ++nan7UBRnZofuYzhpbDGrTAbxhTgksppbF0nM6AykU1je/eQBZL6I05
+ASNkCmDqun5PBmXYyMZChBXBhJl6Di2qKGy1kuFwrT2/K8a1WghA+J4ZiW6nGCH+
+9jcbkiXYNiq6T8mwywq3zxONLKKB2gDr07doUPHr2ERBfmXtG+X6lxXq97Zq+eyV
+N8RGawUV8cCELULq/U9t7k9WjNtCLNiLIhXKGj7c1QNK8PervlLaJqY2+t1HQzwt
+JFWZcP2I1S3246kEhCbh+mPTKS+J5HkOgfgbVRkjcDY/lZrcK1QLmvsL95UFIt1f
+pPRcBG9O2CNtjsN2rH8mOHs7dMpR6G1562YhRiRjGJubFFCg5Tmt/Mt7KyER4HGS
+kosQh4xTIxzi6Cs0RIXDO/2krGcibkv3vlWJBsxNczzpoq63d7TIjXM5WaV0UKqL
+UreHGegFDP9Q2xzfuJhqmaYOYg/E/VuRbZOO19Zn28tLtD/wiGY=
+=fv4K
+-----END PGP SIGNATURE-----
+
+--pzcJQLU+ls3tyqds--

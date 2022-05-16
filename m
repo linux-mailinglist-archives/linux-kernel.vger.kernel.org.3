@@ -2,123 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B646528BEF
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 19:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 278AA528BEB
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 19:25:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344261AbiEPRZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 13:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
+        id S1344234AbiEPRZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 13:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344241AbiEPRZo (ORCPT
+        with ESMTP id S1344223AbiEPRY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 13:25:44 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C60D13DF7
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 10:25:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652721943; x=1684257943;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4wTfdXeGKL2uZh8t3c24YC/m4aBIrVRT4kSq3cD/L4s=;
-  b=ITW8q+UiEBFae7AlAD/nhiYk9uJwfdJrpLQ8OpQlV8QSD5ipJEbGeH8e
-   LQdNA0JMBpmlZWMarSlpIgevgkqBhGXehTR4F6QQV/JLpWM9DJVMWBok5
-   5SOC/5ofSJeSjFg71QWfhX9Hn/peiVw4YNPCe2WvyT5HwHqAEQ5HUCmLv
-   zb32pInLL7d79e6/ABhZAP9GBjTnO54HWNGz1TvDiOGa7QZ0ZiclAmLw5
-   RSmoklFBx+OlxFSQKPs/FkqibH+pjEC6C8BCE1MNznQQCutv4gq08Vrwj
-   Euz3sFzVmxPaqgN88cNVz5fxIzKQT/tKHXkYtTbrN0P9mf7Lcb7T729Ri
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="270850326"
-X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
-   d="scan'208";a="270850326"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 10:25:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
-   d="scan'208";a="522547827"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 16 May 2022 10:25:40 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nqeTT-0000Dh-OL;
-        Mon, 16 May 2022 17:25:39 +0000
-Date:   Tue, 17 May 2022 01:24:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kevin Kim <ckkim@hardkernel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Dongjin Kim <tobetter@gmail.com>,
-        Olliver Schinagl <oliver@schinagl.nl>
-Subject: [tobetter:odroid-5.18.y 97/131] drivers/pwm/pwm-gpio.c:60:22:
- warning: no previous prototype for 'gpio_pwm_timer'
-Message-ID: <202205170132.c95JkC0F-lkp@intel.com>
+        Mon, 16 May 2022 13:24:58 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4548369CD
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 10:24:56 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id y21so19291373edo.2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 10:24:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=wFONT99UdzWTBbOdCZ0nawhCHhHpK3WAgPkBP94KotI=;
+        b=IwSnI/YVlQxrtYNLkv/wR62j3Ej+dENgskb1j8ri/eOyRZnQstY1P9AgwpCfuN7q+K
+         CHXbafHWNmykj1q5W2HH4VufJ5H1wLfJ5dcq0OxZqg58Rc1MEMmhAmmHW2ejwy1UZ1Ch
+         bOTQFg1AhgkZktYPjbiko+6cP3j19AabPC6cA7MXK31qfhvJmcUIm/6HCTkyl1hfecbP
+         MK8s7DyzzVw9Nps5/kbOiWqOGXdP1T3aiRZyOemlnR2rWtucdFUWK7/ugmBg4gko61ya
+         /iirmkMTVFjxn+blKro2/mz/3Y7fgG3OT2kaDzksGYgCsuzfNmzVZYGGrfCmahmn8cJq
+         ugBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=wFONT99UdzWTBbOdCZ0nawhCHhHpK3WAgPkBP94KotI=;
+        b=VJfnN0Iz4fgqYtCJcHurEbKfqKN/Nf1BNBw5QicHjr2L1d3WVY6mV2ZXHGYKylib3E
+         Qltc/xFN+ymShVnjiRbY5nT7tufxPK76bhe/e8MkuLMpLSbFgM7am/5zamMARIuc7grE
+         PPhGfw2dWiRFE6/XyXUoinVeOcOq2n8YGWdvNI6sD9U7lmIeLNsj0ngjsBbVojGzKXab
+         z6o3I4TWNL/LhG9d/Hxbq4B1kIDu80aDvVHXoDiEhvU7qXnGAM2xatN2q0PV8HThkFkw
+         I9f2UQrcN2J4Axw1IR7wveONL06COPyqE+e8yXtcStxeJnfvrHorV/gdKxA0WSSdQEFq
+         QRAQ==
+X-Gm-Message-State: AOAM532ygZjfGW1aPS4bhvRFxkDcNA8qEHVc01MF23GN6f7jzr5+hSro
+        FQoFch7ouluQ/FowN8+QqJ3boQq354ARSBHfjrY=
+X-Google-Smtp-Source: ABdhPJyaV5u0KOpQYca3Ip3EStQJlIRjcJKv+ReXjH7yx4sa1BvQ45OmvZvQ1rB64CGftbHMKWpxpA==
+X-Received: by 2002:a05:6402:430f:b0:427:d034:295b with SMTP id m15-20020a056402430f00b00427d034295bmr14339299edc.126.1652721895342;
+        Mon, 16 May 2022 10:24:55 -0700 (PDT)
+Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
+        by smtp.gmail.com with ESMTPSA id cx4-20020a05640222a400b0042ac2b71078sm98950edb.55.2022.05.16.10.24.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 10:24:54 -0700 (PDT)
+Message-ID: <95419cc0-9ef7-9956-3fe3-b4304a45be33@blackwall.org>
+Date:   Mon, 16 May 2022 20:24:53 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH net-next v3] bond: add mac filter option for balance-xor
+Content-Language: en-US
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+To:     Jonathan Toppins <jtoppins@redhat.com>, netdev@vger.kernel.org
+Cc:     toke@redhat.com, Long Xin <lxin@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <b32eb6656d5a54c0cde6277e9fc5c249c63489ca.1652463336.git.jtoppins@redhat.com>
+ <4c9db6ac-aa24-2ca2-3e44-18cfb23ac1bc@blackwall.org>
+ <da6bbb3b-344c-f032-fe03-5e8c8ac3c388@blackwall.org>
+ <6431569f-fb09-096e-7a89-284a71aa5c0f@redhat.com>
+ <53357187-aedf-20dd-a331-bc501aa0484e@blackwall.org>
+In-Reply-To: <53357187-aedf-20dd-a331-bc501aa0484e@blackwall.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/tobetter/linux odroid-5.18.y
-head:   a4a3b755d6825af3be1a233d3d927f40356ff545
-commit: 523b4a5fc40c035f7fb9cc079b1f0a9ba38f16d8 [97/131] ODROID-COMMON: pwm: gpio: Add a generic gpio based PWM driver
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20220517/202205170132.c95JkC0F-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/tobetter/linux/commit/523b4a5fc40c035f7fb9cc079b1f0a9ba38f16d8
-        git remote add tobetter https://github.com/tobetter/linux
-        git fetch --no-tags tobetter odroid-5.18.y
-        git checkout 523b4a5fc40c035f7fb9cc079b1f0a9ba38f16d8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/pwm/
+On 16/05/2022 20:22, Nikolay Aleksandrov wrote:
+> On 16/05/2022 17:06, Jonathan Toppins wrote:
+>> On 5/15/22 02:32, Nikolay Aleksandrov wrote:
+>>> On 15/05/2022 00:41, Nikolay Aleksandrov wrote:
+>>>> On 13/05/2022 20:43, Jonathan Toppins wrote:
+>>>>> Implement a MAC filter that prevents duplicate frame delivery when
+>>>>> handling BUM traffic. This attempts to partially replicate OvS SLB
+>>>>> Bonding[1] like functionality without requiring significant change
+>>>>> in the Linux bridging code.
+>>>>>
+>>>>> A typical network setup for this feature would be:
+>>>>>
+>>>>>              .--------------------------------------------.
+>>>>>              |         .--------------------.             |
+>>>>>              |         |                    |             |
+>>>>>         .-------------------.               |             |
+>>>>>         |    | Bond 0  |    |               |             |
+>>>>>         | .--'---. .---'--. |               |             |
+>>>>>    .----|-| eth0 |-| eth1 |-|----.    .-----+----.   .----+------.
+>>>>>    |    | '------' '------' |    |    | Switch 1 |   | Switch 2  |
+>>>>>    |    '---,---------------'    |    |          +---+           |
+>>>>>    |       /                     |    '----+-----'   '----+------'
+>>>>>    |  .---'---.    .------.      |         |              |
+>>>>>    |  |  br0  |----| VM 1 |      |      ~~~~~~~~~~~~~~~~~~~~~
+>>>>>    |  '-------'    '------'      |     (                     )
+>>>>>    |      |        .------.      |     ( Rest of Network     )
+>>>>>    |      '--------| VM # |      |     (_____________________)
+>>>>>    |               '------'      |
+>>>>>    |  Host 1                     |
+>>>>>    '-----------------------------'
+>>>>>
+>>>>> Where 'VM1' and 'VM#' are hosts connected to a Linux bridge, br0, with
+>>>>> bond0 and its associated links, eth0 & eth1, provide ingress/egress. One
+>>>>> can assume bond0, br1, and hosts VM1 to VM# are all contained in a
+>>>>> single box, as depicted. Interfaces eth0 and eth1 provide redundant
+>>>>> connections to the data center with the requirement to use all bandwidth
+>>>>> when the system is functioning normally. Switch 1 and Switch 2 are
+>>>>> physical switches that do not implement any advanced L2 management
+>>>>> features such as MLAG, Cisco's VPC, or LACP.
+>>>>>
+>>>>> Combining this feature with vlan+srcmac hash policy allows a user to
+>>>>> create an access network without the need to use expensive switches that
+>>>>> support features like Cisco's VCP.
+>>>>>
+>>>>> [1] https://docs.openvswitch.org/en/latest/topics/bonding/#slb-bonding
+>>>>>
+>>>>> Co-developed-by: Long Xin <lxin@redhat.com>
+>>>>> Signed-off-by: Long Xin <lxin@redhat.com>
+>>>>> Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+>>>>> ---
+>>>>>
+>>>>> Notes:
+>>>>>      v2:
+>>>>>       * dropped needless abstraction functions and put code in module init
+>>>>>       * renamed variable "rc" to "ret" to stay consistent with most of the
+>>>>>         code
+>>>>>       * fixed parameter setting management, when arp-monitor is turned on
+>>>>>         this feature will be turned off similar to how miimon and arp-monitor
+>>>>>         interact
+>>>>>       * renamed bond_xor_recv to bond_mac_filter_recv for a little more
+>>>>>         clarity
+>>>>>       * it appears the implied default return code for any bonding recv probe
+>>>>>         must be `RX_HANDLER_ANOTHER`. Changed the default return code of
+>>>>>         bond_mac_filter_recv to use this return value to not break skb
+>>>>>         processing when the skb dev is switched to the bond dev:
+>>>>>           `skb->dev = bond->dev`
+>>>>>           v3: Nik's comments
+>>>>>       * clarified documentation
+>>>>>       * fixed inline and basic reverse Christmas tree formatting
+>>>>>       * zero'ed entry in mac_create
+>>>>>       * removed read_lock taking in bond_mac_filter_recv
+>>>>>       * made has_expired() atomic and removed critical sections
+>>>>>         surrounding calls to has_expired(), this also removed the
+>>>>>         use-after-free that would have occurred:
+>>>>>             spin_lock_irqsave(&entry->lock, flags);
+>>>>>                 if (has_expired(bond, entry))
+>>>>>                     mac_delete(bond, entry);
+>>>>>             spin_unlock_irqrestore(&entry->lock, flags); <---
+>>>>>       * moved init/destroy of mac_filter_tbl to bond_open/bond_close
+>>>>>         this removed the complex option dependencies, the only behavioural
+>>>>>         change the user will see is if the bond is up and mac_filter is
+>>>>>         enabled if they try and set arp_interval they will receive -EBUSY
+>>>>>       * in bond_changelink moved processing of mac_filter option just below
+>>>>>         mode processing
+>>>>>
+>>>>>   Documentation/networking/bonding.rst  |  20 +++
+>>>>>   drivers/net/bonding/Makefile          |   2 +-
+>>>>>   drivers/net/bonding/bond_mac_filter.c | 201 ++++++++++++++++++++++++++
+>>>>>   drivers/net/bonding/bond_mac_filter.h |  37 +++++
+>>>>>   drivers/net/bonding/bond_main.c       |  30 ++++
+>>>>>   drivers/net/bonding/bond_netlink.c    |  13 ++
+>>>>>   drivers/net/bonding/bond_options.c    |  81 +++++++++--
+>>>>>   drivers/net/bonding/bonding_priv.h    |   1 +
+>>>>>   include/net/bond_options.h            |   1 +
+>>>>>   include/net/bonding.h                 |   3 +
+>>>>>   include/uapi/linux/if_link.h          |   1 +
+>>>>>   11 files changed, 373 insertions(+), 17 deletions(-)
+>>>>>   create mode 100644 drivers/net/bonding/bond_mac_filter.c
+>>>>>   create mode 100644 drivers/net/bonding/bond_mac_filter.h
+>>>>>
+>>>>
+>>> [snip]
+>>>
+>>> The same problem solved using a few nftables rules (in case you don't want to load eBPF):
+>>> $ nft 'add table netdev nt'
+>>> $ nft 'add chain netdev nt bond0EgressFilter { type filter hook egress device bond0 priority 0; }'
+>>> $ nft 'add chain netdev nt bond0IngressFilter { type filter hook ingress device bond0 priority 0; }'
+>>> $ nft 'add set netdev nt macset { type ether_addr; flags timeout; }'
+>>> $ nft 'add rule netdev nt bond0EgressFilter set update ether saddr timeout 5s @macset'
+>>> $ nft 'add rule netdev nt bond0IngressFilter ether saddr @macset counter drop'
+>>>
+>>
+>> I get the following when trying to apply this on a fedora 35 install.
+>>
+>> root@fedora ~]# ip link add bond0 type bond mode balance-xor xmit_hash_policy vlan+srcmac
+>> [root@fedora ~]# nft 'add table netdev nt'
+>> [root@fedora ~]# nft 'add chain netdev nt bond0EgressFilter { type filter hook egress device bond0 priority 0; }'
+>> Error: unknown chain hook
+>> add chain netdev nt bond0EgressFilter { type filter hook egress device bond0 priority 0; }
+>>                                                          ^^^^^^
+>> [root@fedora ~]# uname -a
+>> Linux fedora 5.17.5-200.fc35.x86_64 #1 SMP PREEMPT Thu Apr 28 15:41:41 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+>>
+> 
+> Well, take it up with the Fedora nftables package maintainer. :) 
+> 
+> Your nftables version is old (I'd guess <1.0.1):
+>  commit 510c4fad7e78
+>  Author: Lukas Wunner <lukas@wunner.de>
+>  Date:   Wed Mar 11 13:20:06 2020 +0100
+> 
+>      src: Support netdev egress hook
+> 
+> $ git tag --contains 510c4fad7e78f
+> v1.0.1
+> v1.0.2
+> 
+> I just tested it[1] on Linux 5.16.18-200.fc35.x86_64 #1 SMP PREEMPT Mon Mar 28 14:10:07 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+> 
+> Cheers,
+>  Nik
+> 
+> [1] You can clearly see the dynamically learned mac on egress (52:54:00:23:5f:13) and traffic
+>     with that source is now blocked on ingress.
+> 
+> $ nft -a list table netdev nt
+> 	set macset { # handle 10
+> 		type ether_addr
+> 		size 65535
+> 		flags timeout
+> 		elements = { 52:54:00:23:5f:13 timeout 5s expires 4s192ms }
+> 	}
+> 
+> 	chain bond0EgressFilter { # handle 8
+> 		type filter hook egress device "bond0" priority filter; policy accept;
+> 		update @macset { ether saddr timeout 5s } # handle 11
+> 	}
+> 
+> 	chain bond0IngressFilter { # handle 9
+> 		type filter hook ingress device "bond0" priority filter; policy accept;
+> 	}
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Oops, pasted an old list before adding the ingress rule:
+	chain bond0IngressFilter { # handle 9
+		type filter hook ingress device "bond0" priority filter; policy accept;
+		ether saddr @macset counter packets 120 bytes 7680 drop # handle 15
+	}
 
-All warnings (new ones prefixed by >>):
-
->> drivers/pwm/pwm-gpio.c:60:22: warning: no previous prototype for 'gpio_pwm_timer' [-Wmissing-prototypes]
-      60 | enum hrtimer_restart gpio_pwm_timer(struct hrtimer *timer)
-         |                      ^~~~~~~~~~~~~~
-
-
-vim +/gpio_pwm_timer +60 drivers/pwm/pwm-gpio.c
-
-    59	
-  > 60	enum hrtimer_restart gpio_pwm_timer(struct hrtimer *timer)
-    61	{
-    62		struct gpio_pwm_data *gpio_data = container_of(timer,
-    63							      struct gpio_pwm_data,
-    64							      timer);
-    65		if (!gpio_data->run) {
-    66			gpio_pwm_off(gpio_data);
-    67			gpio_data->pin_on = false;
-    68			return HRTIMER_NORESTART;
-    69		}
-    70	
-    71		if (!gpio_data->pin_on) {
-    72			hrtimer_forward_now(&gpio_data->timer,
-    73					    ns_to_ktime(gpio_data->on_time));
-    74			gpio_pwm_on(gpio_data);
-    75			gpio_data->pin_on = true;
-    76		} else {
-    77			hrtimer_forward_now(&gpio_data->timer,
-    78					    ns_to_ktime(gpio_data->off_time));
-    79			gpio_pwm_off(gpio_data);
-    80			gpio_data->pin_on = false;
-    81		}
-    82	
-    83		return HRTIMER_RESTART;
-    84	}
-    85	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

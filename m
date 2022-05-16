@@ -2,310 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8025294C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 01:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8843E52950E
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 01:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350241AbiEPXNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 19:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43896 "EHLO
+        id S1350296AbiEPXQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 19:16:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348931AbiEPXNt (ORCPT
+        with ESMTP id S237243AbiEPXQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 19:13:49 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C6145534
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 16:13:46 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d25so15358078pfo.10
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 16:13:46 -0700 (PDT)
+        Mon, 16 May 2022 19:16:27 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7369B33355;
+        Mon, 16 May 2022 16:16:24 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id e3so17642030ios.6;
+        Mon, 16 May 2022 16:16:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5H3z629Hzfk43FPeQ6l/HvvBwzEkP6gG3fYwPQ2Js60=;
-        b=jhIu5fQgzwPiId/ZxVydKq1h+XIxL2F7FxjE6RLbLjB/hi59yOcqn8ZQzey53AkfLE
-         7+wBDQR3CM6K7jvai1Sv0qU0Tt2NUOhf9Cm37Kv2CCO/OsXB6c2BByySQQTZsFDgXPCV
-         Z1zcA7QhHnof/elpjpaLLtOrIfLm8UczZCpMg=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CkJCpZYF3YiWQAlyyCzoYmT0xNfZ0LhU8zbi9exA0fY=;
+        b=WZWIn4cTUBVxmfh1NkllORnBTgLjF2t2Tw4qtcUtKnWI9Xf10TRiI6CjomCXVBT7Yu
+         ZIwM+AiiAEfivZhQoXoQJMEDBeYCCtZPmBNq75vE7Vh8oehv/8zniMcD7I3+V2VNGKIs
+         aNtHdqHBEkLwZrftH3+rxTtrdIiA8T71OUZUXtpdmabw2FFVM9X6vbrKZJMSiBCMzht2
+         rNwb/Xdbh+R1gLzHosJRQO9bINRNjDsWQZA/JIZ/nuAgJMj3mkuE0JSWRjdZH8Pc/NmT
+         KuPD+sAk458IO2xbqG7PpfZnV3WRX/6YDsdPvAHe+30e3a4UqbAlVebUf6UcWofVS5re
+         kL1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5H3z629Hzfk43FPeQ6l/HvvBwzEkP6gG3fYwPQ2Js60=;
-        b=CpdwQGx8DqV4ocGfs9fCDuKZaLFNxMQoSNR4Gbv5hUw9byBEPCo2pHrg2Ep/fODyA0
-         7iqcAlndBLSY0HTEvQc91MgOMcwWXHfieMIArEaZrE7qK3G9rmnzMtu4V9ySENB6QUkX
-         6gHIDsC4lRh16uTrqn/7cHNfzHCBpMcoZGT2iPF9Pbx9wTlB3/3kDzKUf8WBEjmLHDc+
-         /X6aeCy6KxaUMA9Lg2Q6oWWCy1EBYTc4aYKYJ7woFI1dc4B52FcCPdIqMB8V4DhMxqfK
-         XXBRgU0LarJOZfqW1/yU0D8w4SMOBQsT37WEl4YBiQ+8Cn+MxnwE1q8uwBTORlWs7Oft
-         wTtw==
-X-Gm-Message-State: AOAM5305LgI/8lrLuj2in2aKVMwg05gg1IemPVx7VSuPjYOKbiq7LW8v
-        VotJAU/nSbdx25KzMAwCy8Y8hw==
-X-Google-Smtp-Source: ABdhPJwwnz9S624j2DyMnf5Z0FuaroubFYKYyHv08Qz90vcyybDrg5YFj61CBAtNHDlIP5z3XyNLVQ==
-X-Received: by 2002:a63:8ac7:0:b0:3aa:fa62:5a28 with SMTP id y190-20020a638ac7000000b003aafa625a28mr17119678pgd.400.1652742826365;
-        Mon, 16 May 2022 16:13:46 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:641e:de1c:873b:321e])
-        by smtp.gmail.com with UTF8SMTPSA id q16-20020a170902dad000b0015e8d4eb26fsm7992100plx.185.2022.05.16.16.13.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 16:13:45 -0700 (PDT)
-Date:   Mon, 16 May 2022 16:13:44 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, quic_ppratap@quicinc.com,
-        quic_vpulyala@quicinc.com,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: Re: [v16 2/5] usb: dwc3: core: Host wake up support from system
- suspend
-Message-ID: <YoLaqDCNK0St8qsB@google.com>
-References: <1652379802-8318-1-git-send-email-quic_kriskura@quicinc.com>
- <1652379802-8318-3-git-send-email-quic_kriskura@quicinc.com>
- <Yn2M5hrah78jro1C@google.com>
- <4124392b-a40f-c204-f9b0-68c3b22dd652@quicinc.com>
- <20220516044327.GA19209@hu-pkondeti-hyd.qualcomm.com>
- <20220516150445.GB19209@hu-pkondeti-hyd.qualcomm.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CkJCpZYF3YiWQAlyyCzoYmT0xNfZ0LhU8zbi9exA0fY=;
+        b=PY6Vy71FZeAXwC+y9iMPqY+yKeIszM+d9AElknO2D5k+bSfzaySd/kamDElFkz21uf
+         F5v+af8F9+rF8Nqz1MSFiZcR2WlDb/RQYBQlo9vVU3f8w2Wd2O/Gs+UIjlW/qSjR9WGD
+         n5UkwB0yna3GaYJPYJKgaCpYs8vojgspHhqmWtaCOsNrjHQFJSEAFEZkzEdl390rM3nG
+         utS0zQqb2s3LUDCVhQI/GgSo2OAyVu95gtM96YpgMQzDj2BTy7db5yZm4TNnpSkAyxfZ
+         NEeBAWum6SIPC344LnJpgFMQR6gSp3BO/gBrcFkEokG1QTCNelNYybKlbGnEh2YM2YOF
+         EAEw==
+X-Gm-Message-State: AOAM530jxfMBtrfBJIkoCI0hmecoWi8netOu0jJfgdtRj2MBx/Sr75Be
+        Vglbb6q1vdcC0yNoda2k0D4jvdxnU3gm2Q5vp5zeVxN1lIo=
+X-Google-Smtp-Source: ABdhPJxsgMivtG1wJz81mSCLpYcBucq/j19d/vLSxCTD97TQ5HP/GBtUQs/ZzxG3c70XnQZmFH9b8k8FR1j5HUGNRP4=
+X-Received: by 2002:a05:6638:2393:b0:32e:319d:c7cc with SMTP id
+ q19-20020a056638239300b0032e319dc7ccmr4010364jat.103.1652742983822; Mon, 16
+ May 2022 16:16:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220516150445.GB19209@hu-pkondeti-hyd.qualcomm.com>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <CAEf4Bzah9K7dEa_7sXE4TnkuMTRHypMU9DxiLezgRvLjcqE_YA@mail.gmail.com>
+ <20220513190821.431762-1-tadeusz.struk@linaro.org>
+In-Reply-To: <20220513190821.431762-1-tadeusz.struk@linaro.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 16 May 2022 16:16:12 -0700
+Message-ID: <CAEf4BzY-p13huoqo6N7LJRVVj8rcjPeP3Cp=KDX4N2x9BkC9Zw@mail.gmail.com>
+Subject: Re: [PATCH v3] bpf: Fix KASAN use-after-free Read in compute_effective_progs
+To:     Tadeusz Struk <tadeusz.struk@linaro.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux- stable <stable@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        syzbot+f264bffdfbd5614f3bb2@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 08:34:45PM +0530, Pavan Kondeti wrote:
-> On Mon, May 16, 2022 at 10:13:27AM +0530, Pavan Kondeti wrote:
-> > On Fri, May 13, 2022 at 09:28:16AM +0530, Krishna Kurapati PSSNV wrote:
-> > > 
-> > > On 5/13/2022 4:10 AM, Matthias Kaehlcke wrote:
-> > > >On Thu, May 12, 2022 at 11:53:19PM +0530, Krishna Kurapati wrote:
-> > > >>From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > > >>
-> > > >>During suspend read the status of all port and set hs phy mode
-> > > >>based on current speed. Use this hs phy mode to configure wakeup
-> > > >>interrupts in qcom glue driver.
-> > > >>
-> > > >>Check wakeup-source property for dwc3 core node to set the
-> > > >>wakeup capability. Drop the device_init_wakeup call from
-> > > >>runtime suspend and resume.
-> > > >>
-> > > >>Also check during suspend if any wakeup capable devices are
-> > > >>connected to the controller (directly or through hubs), if there
-> > > >>are none set a flag to indicate that the PHY is powered
-> > > >>down during suspend.
-> > > >>
-> > > >>Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > > >>Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> > > >>---
-> > > >>  drivers/usb/dwc3/core.c | 30 +++++++++++++++++-------------
-> > > >>  drivers/usb/dwc3/core.h |  4 ++++
-> > > >>  drivers/usb/dwc3/host.c | 24 ++++++++++++++++++++++++
-> > > >>  3 files changed, 45 insertions(+), 13 deletions(-)
-> > > >>
-> > > >>diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > > >>index 01115df..8bcabc5 100644
-> > > >>--- a/drivers/usb/dwc3/core.c
-> > > >>+++ b/drivers/usb/dwc3/core.c
-> > > >>@@ -1785,6 +1785,7 @@ static int dwc3_probe(struct platform_device *pdev)
-> > > >>  	platform_set_drvdata(pdev, dwc);
-> > > >>  	dwc3_cache_hwparams(dwc);
-> > > >>+	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
-> > > >>  	spin_lock_init(&dwc->lock);
-> > > >>  	mutex_init(&dwc->mutex);
-> > > >>@@ -1946,10 +1947,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > > >>  		dwc3_core_exit(dwc);
-> > > >>  		break;
-> > > >>  	case DWC3_GCTL_PRTCAP_HOST:
-> > > >>-		if (!PMSG_IS_AUTO(msg)) {
-> > > >>-			dwc3_core_exit(dwc);
-> > > >>-			break;
-> > > >>-		}
-> > > >>+		dwc3_check_phy_speed_mode(dwc);
-> > > >>  		/* Let controller to suspend HSPHY before PHY driver suspends */
-> > > >>  		if (dwc->dis_u2_susphy_quirk ||
-> > > >>@@ -1965,6 +1963,15 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > > >>  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
-> > > >>  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
-> > > >>+
-> > > >>+		if (!PMSG_IS_AUTO(msg)) {
-> > > >>+			if (device_may_wakeup(dwc->dev))
-> > > >I think this should be device_can_wakeup(), i.e. hardware capability instead of
-> > > >device policy. A drawback of powering the PHYs off is that it causes a high
-> > > >power consumption of certain peripherals if VBUS is still supplied, so this
-> > > >should be limited to platforms where the PHYs must be powered off (using wakeup
-> > > >capability as a proxy for now).
-> > > Thnaks Mathias for the review. Will make this change in the next patchset.
-> > > >>+				dwc->phy_power_off = false;
-> > > >>+			else {
-> > > >>+				dwc->phy_power_off = true;
-> > > >>+				dwc3_core_exit(dwc);
-> > > >>+			}
-> > > >>+		}
-> > > >>  		break;
-> > > >>  	case DWC3_GCTL_PRTCAP_OTG:
-> > > >>  		/* do nothing during runtime_suspend */
-> > > >>@@ -2008,11 +2015,12 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
-> > > >>  		break;
-> > > >>  	case DWC3_GCTL_PRTCAP_HOST:
-> > > >>  		if (!PMSG_IS_AUTO(msg)) {
-> > > >>-			ret = dwc3_core_init_for_resume(dwc);
-> > > >>-			if (ret)
-> > > >>-				return ret;
-> > > >>-			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
-> > > >>-			break;
-> > > >>+			if (dwc->phy_power_off) {
-> > > >>+				ret = dwc3_core_init_for_resume(dwc);
-> > > >>+				if (ret)
-> > > >>+					return ret;
-> > > >>+				dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
-> > > >>+			}
-> > > >>  		}
-> > > >>  		/* Restore GUSB2PHYCFG bits that were modified in suspend */
-> > > >>  		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
-> > > >>@@ -2084,8 +2092,6 @@ static int dwc3_runtime_suspend(struct device *dev)
-> > > >>  	if (ret)
-> > > >>  		return ret;
-> > > >>-	device_init_wakeup(dev, true);
-> > > >>-
-> > > >>  	return 0;
-> > > >>  }
-> > > >>@@ -2094,8 +2100,6 @@ static int dwc3_runtime_resume(struct device *dev)
-> > > >>  	struct dwc3     *dwc = dev_get_drvdata(dev);
-> > > >>  	int		ret;
-> > > >>-	device_init_wakeup(dev, false);
-> > > >>-
-> > > >>  	ret = dwc3_resume_common(dwc, PMSG_AUTO_RESUME);
-> > > >>  	if (ret)
-> > > >>  		return ret;
-> > > >>diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> > > >>index 81c486b..37397a8 100644
-> > > >>--- a/drivers/usb/dwc3/core.h
-> > > >>+++ b/drivers/usb/dwc3/core.h
-> > > >>@@ -1155,6 +1155,9 @@ struct dwc3 {
-> > > >>  	bool			phys_ready;
-> > > >>+	unsigned int            hs_phy_mode;
-> > > >>+	bool			phy_power_off;
-> > > >>+
-> > > >>  	struct ulpi		*ulpi;
-> > > >>  	bool			ulpi_ready;
-> > > >>@@ -1539,6 +1542,7 @@ int dwc3_core_soft_reset(struct dwc3 *dwc);
-> > > >>  #if IS_ENABLED(CONFIG_USB_DWC3_HOST) || IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
-> > > >>  int dwc3_host_init(struct dwc3 *dwc);
-> > > >>  void dwc3_host_exit(struct dwc3 *dwc);
-> > > >>+void dwc3_check_phy_speed_mode(struct dwc3 *dwc);
-> > > >>  #else
-> > > >>  static inline int dwc3_host_init(struct dwc3 *dwc)
-> > > >>  { return 0; }
-> > > >>diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> > > >>index f56c30c..e19b40a 100644
-> > > >>--- a/drivers/usb/dwc3/host.c
-> > > >>+++ b/drivers/usb/dwc3/host.c
-> > > >>@@ -12,6 +12,7 @@
-> > > >>  #include <linux/platform_device.h>
-> > > >>  #include "core.h"
-> > > >>+#include "../host/xhci.h"
-> > > >>  static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
-> > > >>  					int irq, char *name)
-> > > >>@@ -136,3 +137,26 @@ void dwc3_host_exit(struct dwc3 *dwc)
-> > > >>  {
-> > > >>  	platform_device_unregister(dwc->xhci);
-> > > >>  }
-> > > >>+
-> > > >>+void dwc3_check_phy_speed_mode(struct dwc3 *dwc)
-> > > >>+{
-> > > >>+	int i, num_ports;
-> > > >>+	u32 reg;
-> > > >>+	struct usb_hcd	*hcd = platform_get_drvdata(dwc->xhci);
-> > > >>+	struct xhci_hcd	*xhci_hcd = hcd_to_xhci(hcd);
-> > > >>+
-> > > >>+	dwc->hs_phy_mode = 0;
-> > > >>+
-> > > >>+	reg = readl(&xhci_hcd->cap_regs->hcs_params1);
-> > > >>+
-> > > >>+	num_ports = HCS_MAX_PORTS(reg);
-> > > >>+	for (i = 0; i < num_ports; i++) {
-> > > >>+		reg = readl(&xhci_hcd->op_regs->port_status_base + i * NUM_PORT_REGS);
-> > > >>+		if (reg & PORT_PE) {
-> > > >>+			if (DEV_HIGHSPEED(reg) || DEV_FULLSPEED(reg))
-> > > >>+				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_HS;
-> > > >>+			else if (DEV_LOWSPEED(reg))
-> > > >>+				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_LS;
-> > > >>+		}
-> > > >>+	}
-> > > >>+}
-> > > >I anticipate that it might raise concerns from maintainers that
-> > > >dwc3_check_phy_speed_mode() accesses xHCI data structures and
-> > > >registers directly. Could there be a generic HCD API that provides
-> > > >this functionality (if implemented by the specific HCD)?
-> > > 
-> > > Hi Mathias, we are not sure if there is any such API present currently.
-> > > 
-> > > Hi Alan, can you help suggest any API (if present) that we can reuse here to
-> > > avoid
-> > > 
-> > > xhci registers and structs here in dwc3.
-> > > 
-> > 
-> > We can probably do something like below to query the speed. This avoids adding
-> > another API and does not touch the underlying registers.
-> > 
-> > Pls define enum usb_device_speed usb2_speed in dwc3 structure.
-> > 
-> > diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> > index f29a264..fed1c58 100644
-> > --- a/drivers/usb/dwc3/host.c
-> > +++ b/drivers/usb/dwc3/host.c
-> > @@ -9,9 +9,29 @@
-> >  
-> >  #include <linux/acpi.h>
-> >  #include <linux/platform_device.h>
-> > +#include <linux/usb.h>
-> >  
-> >  #include "core.h"
-> >  
-> > +void dwc3_update_hs_phy_speed(struct dwc3 *dwc)
-> > +{
-> > +	struct usb_hcd	*hcd = platform_get_drvdata(dwc->xhci);
-> > +	struct usb_device *udev;
-> > +
-> > +	/*
-> > +	 * It is possible to query the speed of all children of
-> > +	 * USB2.0 root hub via usb_hub_for_each_child(). DWC3 code
-> > +	 * currently supports only 1 port per controller. So
-> > +	 * this is sufficient.
-> > +	 */
-> > +	udev = usb_hub_find_child(hcd->self.root_hub, 1);
-> > +
-> > +	if (udev)
-> > +		dwc->usb2_speed = udev->speed;
-> > +	else
-> > +		dwc->usb2_speed = USB_SPEED_UNKNOWN;
-> > +}
-> > +
-> >  static int dwc3_host_get_irq(struct dwc3 *dwc)
-> >  {
-> >  	struct platform_device	*dwc3_pdev = to_platform_device(dwc->dev);
-> > 
-> > 
-> I am also thinking why dwc core needs to cache usb2_speed since dwc3-qcom glue
-> driver is the only sole user. We also require it only during suspend and does
-> not bother about dwc::usb2_speed correctness outside suspend. Lets move this
-> to dwc3-qcom suspend routines where we have to rely on USB2 speed for
-> configuring the D+/D- interrupt.
+On Fri, May 13, 2022 at 12:08 PM Tadeusz Struk <tadeusz.struk@linaro.org> wrote:
+>
+> Syzbot found a Use After Free bug in compute_effective_progs().
+> The reproducer creates a number of BPF links, and causes a fault
+> injected alloc to fail, while calling bpf_link_detach on them.
+> Link detach triggers the link to be freed by bpf_link_free(),
+> which calls __cgroup_bpf_detach() and update_effective_progs().
+> If the memory allocation in this function fails, the function restores
+> the pointer to the bpf_cgroup_link on the cgroup list, but the memory
+> gets freed just after it returns. After this, every subsequent call to
+> update_effective_progs() causes this already deallocated pointer to be
+> dereferenced in prog_list_length(), and triggers KASAN UAF error.
+>
+> To fix this issue don't preserve the pointer to the prog or link in the
+> list, but remove it and replace it with a dummy prog without shrinking
+> the table. The subsequent call to __cgroup_bpf_detach() or
+> __cgroup_bpf_detach() will correct it.
+>
+> Cc: "Alexei Starovoitov" <ast@kernel.org>
+> Cc: "Daniel Borkmann" <daniel@iogearbox.net>
+> Cc: "Andrii Nakryiko" <andrii@kernel.org>
+> Cc: "Martin KaFai Lau" <kafai@fb.com>
+> Cc: "Song Liu" <songliubraving@fb.com>
+> Cc: "Yonghong Song" <yhs@fb.com>
+> Cc: "John Fastabend" <john.fastabend@gmail.com>
+> Cc: "KP Singh" <kpsingh@kernel.org>
+> Cc: <netdev@vger.kernel.org>
+> Cc: <bpf@vger.kernel.org>
+> Cc: <stable@vger.kernel.org>
+> Cc: <linux-kernel@vger.kernel.org>
+>
+> Link: https://syzkaller.appspot.com/bug?id=8ebf179a95c2a2670f7cf1ba62429ec044369db4
+> Fixes: af6eea57437a ("bpf: Implement bpf_link-based cgroup BPF program attachment")
+> Reported-by: <syzbot+f264bffdfbd5614f3bb2@syzkaller.appspotmail.com>
+> Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+> ---
+> v2: Add a fall back path that removes a prog from the effective progs
+>     table in case detach fails to allocate memory in compute_effective_progs().
+>
+> v3: Implement the fallback in a separate function purge_effective_progs
+> ---
+>  kernel/bpf/cgroup.c | 64 +++++++++++++++++++++++++++++++++++++++------
+>  1 file changed, 56 insertions(+), 8 deletions(-)
+>
+> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> index 128028efda64..9d3af4d6c055 100644
+> --- a/kernel/bpf/cgroup.c
+> +++ b/kernel/bpf/cgroup.c
+> @@ -681,6 +681,57 @@ static struct bpf_prog_list *find_detach_entry(struct list_head *progs,
+>         return ERR_PTR(-ENOENT);
+>  }
+>
+> +/**
+> + * purge_effective_progs() - After compute_effective_progs fails to alloc new
+> + *                           cgrp->bpf.inactive table we can recover by
+> + *                           recomputing the array in place.
+> + *
+> + * @cgrp: The cgroup which descendants to traverse
+> + * @link: A link to detach
+> + * @atype: Type of detach operation
+> + */
+> +static void purge_effective_progs(struct cgroup *cgrp, struct bpf_prog *prog,
+> +                                 enum cgroup_bpf_attach_type atype)
+> +{
+> +       struct cgroup_subsys_state *css;
+> +       struct bpf_prog_array_item *item;
+> +       struct bpf_prog *tmp;
+> +       struct bpf_prog_array *array;
+> +       int index = 0, index_purge = -1;
+> +
+> +       if (!prog)
+> +               return;
+> +
+> +       /* recompute effective prog array in place */
+> +       css_for_each_descendant_pre(css, &cgrp->self) {
+> +               struct cgroup *desc = container_of(css, struct cgroup, self);
+> +
+> +               array = desc->bpf.effective[atype];
 
-I like both of your suggestions. If something like dwc3_update_hs_phy_speed()
-works properly here we should have finally sorted out all the layering issues
-Felipe was unhappy about.
+../kernel/bpf/cgroup.c:748:23: warning: incorrect type in assignment
+(different address spaces)
+../kernel/bpf/cgroup.c:748:23:    expected struct bpf_prog_array *array
+../kernel/bpf/cgroup.c:748:23:    got struct bpf_prog_array [noderef] __rcu *
+
+
+you need rcu_dereference here? but also see suggestions below to avoid
+iterating effective directly (it's ambiguous to search by prog only)
+
+> +               item = &array->items[0];
+> +
+> +               /* Find the index of the prog to purge */
+> +               while ((tmp = READ_ONCE(item->prog))) {
+> +                       if (tmp == prog) {
+
+I think comparing just prog isn't always correct, as the same program
+can be in effective array multiple times if attached through bpf_link.
+
+Looking at replace_effective_prog() I think we can do a very similar
+(and tested) approach:
+
+1. restore original pl state in __cgroup_bpf_detach (so we can find it
+by comparing pl->prog == prog && pl->link == link)
+2. use replace_effective_prog's approach to find position of pl in
+effective array (using this nested for loop over cgroup parents and
+list_for_each_entry inside)
+3. then instead of replacing one prog with another do
+bpf_prog_array_delete_safe_at ?
+
+I'd feel more comfortable using the same tested overall approach of
+replace_effective_prog.
+
+> +                               index_purge = index;
+> +                               break;
+> +                       }
+> +                       item++;
+> +                       index++;
+> +               }
+> +
+> +               /* Check if we found what's needed for removing the prog */
+> +               if (index_purge == -1 || index_purge == index - 1)
+> +                       continue;
+
+the search shouldn't fail, should it?
+
+> +
+> +               /* Remove the program from the array */
+> +               WARN_ONCE(bpf_prog_array_delete_safe_at(array, index_purge),
+> +                         "Failed to purge a prog from array at index %d", index_purge);
+> +
+> +               index = 0;
+> +               index_purge = -1;
+> +       }
+> +}
+> +
+>  /**
+>   * __cgroup_bpf_detach() - Detach the program or link from a cgroup, and
+>   *                         propagate the change to descendants
+> @@ -723,8 +774,11 @@ static int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
+>         pl->link = NULL;
+>
+>         err = update_effective_progs(cgrp, atype);
+> -       if (err)
+> -               goto cleanup;
+> +       if (err) {
+> +               struct bpf_prog *prog_purge = prog ? prog : link->link.prog;
+> +
+
+so here we shouldn't forget link, instead pass both link and prog (one
+of them will have to be NULL) into purge_effective_progs
+
+> +               purge_effective_progs(cgrp, prog_purge, atype);
+> +       }
+>
+>         /* now can actually delete it from this cgroup list */
+>         list_del(&pl->node);
+> @@ -736,12 +790,6 @@ static int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
+>                 bpf_prog_put(old_prog);
+>         static_branch_dec(&cgroup_bpf_enabled_key[atype]);
+>         return 0;
+> -
+> -cleanup:
+> -       /* restore back prog or link */
+> -       pl->prog = old_prog;
+> -       pl->link = link;
+> -       return err;
+>  }
+>
+>  static int cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
+> --
+> 2.36.1
+>

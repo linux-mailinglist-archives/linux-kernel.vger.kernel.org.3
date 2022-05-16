@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 348A252910D
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF324529062
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:44:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347300AbiEPU3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55864 "EHLO
+        id S1349493AbiEPUij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350484AbiEPUBR (ORCPT
+        with ESMTP id S1350558AbiEPUBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:01:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DED24A907;
-        Mon, 16 May 2022 12:55:28 -0700 (PDT)
+        Mon, 16 May 2022 16:01:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84234A931;
+        Mon, 16 May 2022 12:55:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFC4960EBF;
-        Mon, 16 May 2022 19:55:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E311BC385AA;
-        Mon, 16 May 2022 19:55:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88FADB81613;
+        Mon, 16 May 2022 19:55:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D80B8C385AA;
+        Mon, 16 May 2022 19:55:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730916;
-        bh=9J3SP8rPHrHOr2ImRk6zzs2MXVHm4hDJT+RPQkhF9ko=;
+        s=korg; t=1652730919;
+        bh=8F2+mQuyKJsVZ+YRZ5vP0LDsn3RVwXnNtAs05DEbjno=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QUkm4dVQfdxWuFR22O9ALmuUi+FaOIrdDlAo7aNtUsBCjbc4P4Q8IXnfLnJpF+0Z+
-         jREIMrkfXFBBaE4tax/a+t7yDz16HDfD/pWOAUd1Vmf59zTP5qTZcJyTDVvOEGdjnr
-         Q94bWBYyRuhXQ+1mtleRe06/RK0K5FoGVwtPTbBU=
+        b=EAAyZOnK5AsOW70mVs1STXGYyHWK5cd3Jr45eKIGzNB2RssBpey0ZvAaglPYZDOnx
+         0lPkeensYLB2xOq1sxrrSlLrjqyfmlzwUoFN3k0Zo6eDgpeUCUtZlcH5W1padPt9rw
+         LtXs51LL3HhbrYM140tN+nb2dAeW3bx0oGynlGSk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 007/114] net: mscc: ocelot: fix last VCAP IS1/IS2 filter persisting in hardware when deleted
-Date:   Mon, 16 May 2022 21:35:41 +0200
-Message-Id: <20220516193625.707724110@linuxfoundation.org>
+Subject: [PATCH 5.17 008/114] net: mscc: ocelot: fix VCAP IS2 filters matching on both lookups
+Date:   Mon, 16 May 2022 21:35:42 +0200
+Message-Id: <20220516193625.736092657@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
 References: <20220516193625.489108457@linuxfoundation.org>
@@ -57,51 +57,65 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-[ Upstream commit 16bbebd35629c93a8c68c6d8d28557e100bcee73 ]
+[ Upstream commit 6741e11880003e35802d78cc58035057934f4dab ]
 
-ocelot_vcap_filter_del() works by moving the next filters over the
-current one, and then deleting the last filter by calling vcap_entry_set()
-with a del_filter which was specially created by memsetting its memory
-to zeroes. vcap_entry_set() then programs this to the TCAM and action
-RAM via the cache registers.
+The VCAP IS2 TCAM is looked up twice per packet, and each filter can be
+configured to only match during the first, second lookup, or both, or
+none.
 
-The problem is that vcap_entry_set() is a dispatch function which looks
-at del_filter->block_id. But since del_filter is zeroized memory, the
-block_id is 0, or otherwise said, VCAP_ES0. So practically, what we do
-is delete the entry at the same TCAM index from VCAP ES0 instead of IS1
-or IS2.
+The blamed commit wrote the code for making VCAP IS2 filters match only
+on the given lookup. But right below that code, there was another line
+that explicitly made the lookup a "don't care", and this is overwriting
+the lookup we've selected. So the code had no effect.
 
-The code was not always like this. vcap_entry_set() used to simply be
-is2_entry_set(), and then, the logic used to work.
+Some of the more noticeable effects of having filters match on both
+lookups:
 
-Restore the functionality by populating the block_id of the del_filter
-based on the VCAP block of the filter that we're deleting. This makes
-vcap_entry_set() know what to do.
+- in "tc -s filter show dev swp0 ingress", we see each packet matching a
+  VCAP IS2 filter counted twice. This throws off scripts such as
+  tools/testing/selftests/net/forwarding/tc_actions.sh and makes them
+  fail.
 
-Fixes: 1397a2eb52e2 ("net: mscc: ocelot: create TCAM skeleton from tc filter chains")
+- a "tc-drop" action offloaded to VCAP IS2 needs a policer as well,
+  because once the CPU port becomes a member of the destination port
+  mask of a packet, nothing removes it, not even a PERMIT/DENY mask mode
+  with a port mask of 0. But VCAP IS2 rules with the POLICE_ENA bit in
+  the action vector can only appear in the first lookup. What happens
+  when a filter matches both lookups is that the action vector is
+  combined, and this makes the POLICE_ENA bit ineffective, since the
+  last lookup in which it has appeared is the second one. In other
+  words, "tc-drop" actions do not drop packets for the CPU port, dropped
+  packets are still seen by software unless there was an FDB entry that
+  directed those packets to some other place different from the CPU.
+
+The last bit used to work, because in the initial commit b596229448dd
+("net: mscc: ocelot: Add support for tcam"), we were writing the FIRST
+field of the VCAP IS2 half key with a 1, not with a "don't care".
+The change to "don't care" was made inadvertently by me in commit
+c1c3993edb7c ("net: mscc: ocelot: generalize existing code for VCAP"),
+which I just realized, and which needs a separate fix from this one,
+for "stable" kernels that lack the commit blamed below.
+
+Fixes: 226e9cd82a96 ("net: mscc: ocelot: only install TCAM entries into a specific lookup and PAG")
 Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mscc/ocelot_vcap.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/ethernet/mscc/ocelot_vcap.c | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/drivers/net/ethernet/mscc/ocelot_vcap.c b/drivers/net/ethernet/mscc/ocelot_vcap.c
-index d3544413a8a4..e650afef12af 100644
+index e650afef12af..6c643936c675 100644
 --- a/drivers/net/ethernet/mscc/ocelot_vcap.c
 +++ b/drivers/net/ethernet/mscc/ocelot_vcap.c
-@@ -1221,7 +1221,11 @@ int ocelot_vcap_filter_del(struct ocelot *ocelot,
- 	struct ocelot_vcap_filter del_filter;
- 	int i, index;
- 
-+	/* Need to inherit the block_id so that vcap_entry_set()
-+	 * does not get confused and knows where to install it.
-+	 */
- 	memset(&del_filter, 0, sizeof(del_filter));
-+	del_filter.block_id = filter->block_id;
- 
- 	/* Gets index of the filter */
- 	index = ocelot_vcap_block_get_filter_index(block, filter);
+@@ -373,7 +373,6 @@ static void is2_entry_set(struct ocelot *ocelot, int ix,
+ 			 OCELOT_VCAP_BIT_0);
+ 	vcap_key_set(vcap, &data, VCAP_IS2_HK_IGR_PORT_MASK, 0,
+ 		     ~filter->ingress_port_mask);
+-	vcap_key_bit_set(vcap, &data, VCAP_IS2_HK_FIRST, OCELOT_VCAP_BIT_ANY);
+ 	vcap_key_bit_set(vcap, &data, VCAP_IS2_HK_HOST_MATCH,
+ 			 OCELOT_VCAP_BIT_ANY);
+ 	vcap_key_bit_set(vcap, &data, VCAP_IS2_HK_L2_MC, filter->dmac_mc);
 -- 
 2.35.1
 

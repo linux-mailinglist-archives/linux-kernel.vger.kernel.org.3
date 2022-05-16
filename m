@@ -2,163 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2942528415
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 14:21:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D69865283EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 14:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242064AbiEPMVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 08:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
+        id S237903AbiEPMM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 08:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243435AbiEPMVg (ORCPT
+        with ESMTP id S236949AbiEPMMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 08:21:36 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4CBD131;
-        Mon, 16 May 2022 05:21:28 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id n24so18319801oie.12;
-        Mon, 16 May 2022 05:21:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=CcyMGAd9/1/nrpJriv7ncUhfzEf1ScHvMZQfYObpwvE=;
-        b=g2DUXy6qsD2CdHMeAsv1xhrChe7ErMle96kke/aIaRKpxIOquj2yfUB32FiKgTjM83
-         t5tOhazH/nx8St5nSD/7JRztPm5oW8ykK9M6mxznlilW68CbwNMSF0pcaCGfoRS55jGu
-         FsqQcbamE+ix9RsBHYWHS+gAzYe/fS1wBUGj/5JWxD+n7AMQDGqvtiea3XTZHwpe8qeT
-         MNd1hGqFIpog6mQ1qReY+ToG+1QdObEmdjsmaMjr1TZ88vZRvRbwgxlytcW+FGfxr6BO
-         9gOXxI+Vh4QcFLVlPge/BIeppXAw1j7qx2yVfR7oYoFU9XUCutTSnWiDbQBa+/BSRcxl
-         a1LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=CcyMGAd9/1/nrpJriv7ncUhfzEf1ScHvMZQfYObpwvE=;
-        b=YI2g0+m+8avtgOrAbvgUl1Ncqsace4B+/2EJFo4RuXYm2xBEoGZafutDZrw1TSliBp
-         SA2ra1dwas4I/mP6ELiWKrLv03UYIwmospKufraDk8eWvMOnw9NeSb5XRSi9GikIpf1B
-         YzJkS41rhL9KfgnxfPJSsFVppTBPUkOO5DYxs9jhYnDLJGyXMG0opmDzJButun3coDzm
-         V/LMaEl5WJ1eICzugnXVPGtSQnzCcVEv+j+BfU7yZnhdJ2bIuoWkdBijQKge0ew6Q3mm
-         /MyN0CI2y31ZcLR9ZO5quX97pATuZ3laW0q7Yz+1sEZ7tVHFoWW+TOp2+QYUOl+UNPrq
-         i2TA==
-X-Gm-Message-State: AOAM531rJS2G66ixQtFWByvQ1UncQBeNx/3lZAAxN/5CLG+G4t/FdWzk
-        MJIkHIIBEcZ9UDeN20q0CQE=
-X-Google-Smtp-Source: ABdhPJzQqa16ntoHnCKJlJaUs1Rg68hKbVxoyrBt+QCmSGoiEOx4hAcxAMzCMrbCeI//MqWfVxmLGw==
-X-Received: by 2002:a05:6808:308c:b0:326:77f8:8cb4 with SMTP id bl12-20020a056808308c00b0032677f88cb4mr13187236oib.292.1652703688114;
-        Mon, 16 May 2022 05:21:28 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ep36-20020a056870a9a400b000e686d1387bsm5560247oab.21.2022.05.16.05.21.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 05:21:26 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1747d709-6640-193d-8290-893b1541fae8@roeck-us.net>
-Date:   Mon, 16 May 2022 05:21:25 -0700
+        Mon, 16 May 2022 08:12:54 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED0A275F5;
+        Mon, 16 May 2022 05:12:50 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L1yjv6cjVzGpsd;
+        Mon, 16 May 2022 20:09:55 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by canpemm500010.china.huawei.com
+ (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 16 May
+ 2022 20:12:48 +0800
+From:   Ye Bin <yebin10@huawei.com>
+To:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>,
+        Ye Bin <yebin10@huawei.com>
+Subject: [PATCH -next v4] ext4: fix bug_on in ext4_writepages
+Date:   Mon, 16 May 2022 20:26:34 +0800
+Message-ID: <20220516122634.1690462-1-yebin10@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     LABBE Corentin <clabbe@baylibre.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>
-References: <20220509063010.3878134-1-clabbe@baylibre.com>
- <20220509063010.3878134-3-clabbe@baylibre.com>
- <e5f6c712-efed-2126-de2b-9a0d09150e7b@roeck-us.net> <YoFWNAhiDrzpeBU8@Red>
- <9f7d7281-0434-df59-40fa-1f5d8f53356d@roeck-us.net> <YoHtg30ZrhxjVedA@Red>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v3 2/2] hwmon: acpi_power_meter: convert to
- hwmon_device_register_with_info
-In-Reply-To: <YoHtg30ZrhxjVedA@Red>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/15/22 23:21, LABBE Corentin wrote:
-> Le Sun, May 15, 2022 at 05:29:54PM -0700, Guenter Roeck a écrit :
->> On 5/15/22 12:36, LABBE Corentin wrote:
->>> Le Wed, May 11, 2022 at 07:10:29PM -0700, Guenter Roeck a écrit :
->>>> Corentin,
->>>>
->>>> On 5/8/22 23:30, Corentin Labbe wrote:
->>>>> Booting lead to a hwmon_device_register() is deprecated. Please convert the driver to use hwmon_device_register_with_info().
->>>>> So let's convert the driver to use hwmon_device_register_with_info().
->>>>>
->>>>> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
->>>>> ---
->>>> [ ... ]
->>>>
->>>>> @@ -836,20 +740,20 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
->>>>>     		if (res)
->>>>>     			break;
->>>>>     
->>>>> -		remove_attrs(resource);
->>>>> +		remove_domain_devices(resource);
->>>>>     		setup_attrs(resource);
->>>>
->>>> Zhang Rui found an interesting problem with this code:
->>>> It needs a call to sysfs_update_groups(hwmon_dev->groups)
->>>> to update sysfs attribute visibility, probably between
->>>> remove_domain_devices() and setup_attrs().
->>>>
->>>>>     		break;
->>>>>     	case METER_NOTIFY_TRIP:
->>>>> -		sysfs_notify(&device->dev.kobj, NULL, POWER_AVERAGE_NAME);
->>>>> +		hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_average, 0);
->>>>
->>>> ... which makes realize: The notification device should be the hwmon device.
->>>> That would be resource->hwmon_dev, not the acpi device.
->>>>
->>>
->>> Hello
->>>
->>> Since my hardware lacks capabilities testing this, I have emulated it on qemu:
->>> https://github.com/montjoie/qemu/commit/320f2ddacb954ab308ef699f66fca6313f75bc2b
->>>
->>> I have added a custom ACPI _DBX method for triggering some ACPI state change. (like config change, like enabling CAP).
->>>
->>> For testing config change I have tried lot of way:
->>>                   res = read_capabilities(resource);
->>> @@ -742,18 +758,22 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
->>>    
->>>                   remove_domain_devices(resource);
->>>                   setup_attrs(resource);
->>> +               res = sysfs_update_groups(&resource->hwmon_dev->kobj, acpi_power_groups);
->>> +               res = sysfs_update_groups(&resource->acpi_dev->dev.kobj, acpi_power_groups);
->>> +               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_cap, 0);
->>> +               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_average, 0);
->>
->> Did you add a debug log here ?
-> 
-> Yes I added debug log to check what is called.
-> 
->>
->> acpi_power_groups would be the wrong parameter for sysfs_update_groups().
->> It would have to be resource->hwmon_dev->groups.
->>
-> 
-> Even with that, no call to is_visible:
-> @@ -742,18 +758,22 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
->   
->                  remove_domain_devices(resource);
->                  setup_attrs(resource);
-> +               res = sysfs_update_groups(&resource->hwmon_dev->kobj, resource->hwmon_dev->groups);
-> +               res = sysfs_update_groups(&resource->acpi_dev->dev.kobj, resource->hwmon_dev->groups);
-> +               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_cap, 0);
-> +               res = hwmon_notify_event(resource->hwmon_dev, hwmon_power, hwmon_power_average, 0);
->                  break;
-> 
-> I checked drivers/hwmon/hwmon.c is seems that is_visible is only called by gen_attr/gen_attrs which is only called by __hwmon_create_attrs and then by registers functions.
-> So perhaps it explain why it is never called.
+we got issue as follows:
+EXT4-fs error (device loop0): ext4_mb_generate_buddy:1141: group 0, block bitmap and bg descriptor inconsistent: 25 vs 31513 free cls
+------------[ cut here ]------------
+kernel BUG at fs/ext4/inode.c:2708!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
+CPU: 2 PID: 2147 Comm: rep Not tainted 5.18.0-rc2-next-20220413+ #155
+RIP: 0010:ext4_writepages+0x1977/0x1c10
+RSP: 0018:ffff88811d3e7880 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffff88811c098000
+RDX: 0000000000000000 RSI: ffff88811c098000 RDI: 0000000000000002
+RBP: ffff888128140f50 R08: ffffffffb1ff6387 R09: 0000000000000000
+R10: 0000000000000007 R11: ffffed10250281ea R12: 0000000000000001
+R13: 00000000000000a4 R14: ffff88811d3e7bb8 R15: ffff888128141028
+FS:  00007f443aed9740(0000) GS:ffff8883aef00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020007200 CR3: 000000011c2a4000 CR4: 00000000000006e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ do_writepages+0x130/0x3a0
+ filemap_fdatawrite_wbc+0x83/0xa0
+ filemap_flush+0xab/0xe0
+ ext4_alloc_da_blocks+0x51/0x120
+ __ext4_ioctl+0x1534/0x3210
+ __x64_sys_ioctl+0x12c/0x170
+ do_syscall_64+0x3b/0x90
 
-Ah yes, you are correct. Sorry, it has been too long ago that I wrote that code.
-Effectively that means we'll have to rework the hwmon core to generate attributes
-anyway and leave it up to the driver core to call the is_visible function.
+It may happen as follows:
+1. write inline_data inode
+vfs_write
+  new_sync_write
+    ext4_file_write_iter
+      ext4_buffered_write_iter
+        generic_perform_write
+          ext4_da_write_begin
+            ext4_da_write_inline_data_begin -> If inline data size too
+            small will allocate block to write, then mapping will has
+            dirty page
+                ext4_da_convert_inline_data_to_extent ->clear EXT4_STATE_MAY_INLINE_DATA
+2. fallocate
+do_vfs_ioctl
+  ioctl_preallocate
+    vfs_fallocate
+      ext4_fallocate
+        ext4_convert_inline_data
+          ext4_convert_inline_data_nolock
+            ext4_map_blocks -> fail will goto restore data
+            ext4_restore_inline_data
+              ext4_create_inline_data
+              ext4_write_inline_data
+              ext4_set_inode_state -> set inode EXT4_STATE_MAY_INLINE_DATA
+3. writepages
+__ext4_ioctl
+  ext4_alloc_da_blocks
+    filemap_flush
+      filemap_fdatawrite_wbc
+        do_writepages
+          ext4_writepages
+            if (ext4_has_inline_data(inode))
+              BUG_ON(ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA))
 
-Guenter
+The root cause of this issue is we destory inline data until call ext4_writepages
+under delay allocation mode. But there maybe already covert from inline to extent.
+To solved this issue, we call filemap_flush firstly.
+
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+---
+ fs/ext4/inline.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
+index 6d253edebf9f..cdaf7978cebb 100644
+--- a/fs/ext4/inline.c
++++ b/fs/ext4/inline.c
+@@ -2002,6 +2002,18 @@ int ext4_convert_inline_data(struct inode *inode)
+ 	if (!ext4_has_inline_data(inode)) {
+ 		ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
+ 		return 0;
++	} else if (!ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)) {
++		/*
++		 * Inode has inline data but EXT4_STATE_MAY_INLINE_DATA is
++		 * cleared. This means we are in the middle of moving of
++		 * inline data to delay allocated block. Just force writeout
++		 * here to finish conversion.
++		 */
++		error = filemap_flush(inode->i_mapping);
++		if (error)
++			return error;
++		if (!ext4_has_inline_data(inode))
++			return 0;
+ 	}
+ 
+ 	needed_blocks = ext4_writepage_trans_blocks(inode);
+-- 
+2.31.1
+

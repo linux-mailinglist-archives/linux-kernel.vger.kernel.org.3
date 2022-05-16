@@ -2,139 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C52E52830C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 13:20:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7EC528310
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 13:22:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbiEPLUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 07:20:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35432 "EHLO
+        id S235787AbiEPLWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 07:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbiEPLUg (ORCPT
+        with ESMTP id S229795AbiEPLWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 07:20:36 -0400
-Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F2534BBE;
-        Mon, 16 May 2022 04:20:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
-         s=20161220; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=LUKhFyWGsJws4jt1m41drcAy5kgxr8adnAp720eLM7Y=; b=KlbgSdflonmdW6hPspTw/oFJYR
-        yLr4OzBTS5jTqa88i7yjnmsG6GpnO3VrGHQvwpaLGB2sica6hBO1nPPepUxvCjDJ/qMSWv2bqHO+b
-        ZmAAhzszkvaGdABMHDNLbFKBA/0X2cZLpA26IbwG1J+/WKn3BSeYHWPzAy1E2IXsArxpSxY1jKaNf
-        G7qksyN1vqqi7dVGF3f0eawRTnGOVi0UUGB2fOyVmQ+Pmj57atz5AZx29cjIHEp8OKaSWq9LTUTaz
-        ANu8h4V4ZNvvD3woDjGX8sWZqSmMJ69f3GKZYxGyFvG3KOEc3VaTNtMLpx3ov/1arKmls2ipz2Eax
-        IJtGDvbg==;
-Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=[192.168.1.10])
-        by mail.kapsi.fi with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <cyndis@kapsi.fi>)
-        id 1nqYlv-0001Dw-4J; Mon, 16 May 2022 14:20:19 +0300
-Message-ID: <020a8244-760e-fe7c-594a-1d85e5645dbe@kapsi.fi>
-Date:   Mon, 16 May 2022 14:20:18 +0300
+        Mon, 16 May 2022 07:22:08 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4CD36E08;
+        Mon, 16 May 2022 04:22:07 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id bg25so8483543wmb.4;
+        Mon, 16 May 2022 04:22:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=xRQD9okv6pCRuhdD2Ev4lqdq+NiQcQKauHb9Si4I5AY=;
+        b=UIrbuHSGZgvRTRYLyIThlQQTa2F/xVWll/DExMs/ReDofS9sHpJXMo4zQGc3z67wqb
+         G9Y0RZ/pMjXfAU7rpDcm1NUOVvinQwtsCOc2lzgl9IwgzPvBgslxgobmLrDetHbZzXia
+         XXWfgkCH8aedhk7iEkeTG+zyTrY7it8/LRG7tpMe9AXy7E4Nj7TRUZDATB/AmTwolzvt
+         ULbebZwrl8BamS3mTe05dL9UjGJhKZzDT6vDbUIOa1WylvDWHoTGUiW2k2vBUSTjUErA
+         MSSM5qZuOzXcfmeAhQBhO0WltUkbuWPU3Yu9hl0GnABIcANK9q0IKdwcZEV6KlYjPSjJ
+         ayJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=xRQD9okv6pCRuhdD2Ev4lqdq+NiQcQKauHb9Si4I5AY=;
+        b=R/qz4VfpdXLolCI2yQYb+uRn1vqdVSA93h0h2eZ8wo5IaM8XDS5nXryymk/l4ClSaz
+         17m4h9LrfTHDb/yNYZ+ZUEzxi8Bkfvi3Ny1AuW7rb8q+BtB1pA9ML7fPImMbF8CH7+d2
+         1ClRVeyXX4hrpNvfkUN8w7B4eE7TBgdXG7IAs1pkL8zpReMVhhF1c93Zqe7NyOloM8NG
+         EhhgvAAZ09xtx5pzQinWgKTZQlDh26DxT5frm3c6uRmusq5jFPO7b0eNMunIn/ameIbE
+         slPgNm9xxkT7xufFKqr7ZKd8T+xZ2eJaUJDq4pE2RHbKEeqIRG2juA9yVsYXVnNB7B1O
+         xMrg==
+X-Gm-Message-State: AOAM5306oE+8o2Xl5ttXZH7W8KqFjXRyKUgsclTcHuspxE0rEwRSn0XS
+        wVnvJ+vIPtVFyWUxAUxkuY4=
+X-Google-Smtp-Source: ABdhPJwMcfCA7vMag5vL9bP6oBjOMaKc5Z6P6CEbF5uwePd5wD3VxizOMCVoFud2PQcaMYaik8AUhQ==
+X-Received: by 2002:a7b:c10d:0:b0:393:fbff:24a9 with SMTP id w13-20020a7bc10d000000b00393fbff24a9mr16348404wmi.53.1652700125779;
+        Mon, 16 May 2022 04:22:05 -0700 (PDT)
+Received: from elementary ([94.73.36.128])
+        by smtp.gmail.com with ESMTPSA id e3-20020a05600c4e4300b003942a244ec5sm9805901wmq.10.2022.05.16.04.22.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 04:22:05 -0700 (PDT)
+Date:   Mon, 16 May 2022 13:21:59 +0200
+From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To:     Stefan Berzl <stefanberzl@gmail.com>
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com, spbnick@gmail.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Status on hid xppen patch
+Message-ID: <20220516112159.GA74406@elementary>
+References: <941a793a-d2f7-9c2c-59be-b3930e1acfec@gmail.com>
+ <20220423172330.32585-1-jose.exposito89@gmail.com>
+ <95576534-1f5e-c2e3-4f73-c1b0a8300b56@gmail.com>
+ <20220424093239.GA4380@elementary>
+ <20220512205952.GA8936@elementary>
+ <ebb6d627-4974-beed-1dc6-60634ab2f034@gmail.com>
+ <20220516090829.GA20623@elementary>
+ <140fe69a-c37a-cce4-c7c1-0344de6f1bf1@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v5 5/9] iommu/arm-smmu: Attach to host1x context device
- bus
-Content-Language: en-US
-To:     Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>
-Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com, joro@8bytes.org,
-        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
-        linux-tegra@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Mikko Perttunen <mperttunen@nvidia.com>
-References: <20220516085258.1227691-1-cyndis@kapsi.fi>
- <20220516085258.1227691-6-cyndis@kapsi.fi>
- <20220516100721.GA1927@willie-the-truck>
- <4a170997-c893-1788-dcaa-8ed2193146ae@kapsi.fi>
- <099cf0f9-5c27-0247-7c5e-6704a9527b11@arm.com>
-From:   Mikko Perttunen <cyndis@kapsi.fi>
-In-Reply-To: <099cf0f9-5c27-0247-7c5e-6704a9527b11@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 91.158.25.70
-X-SA-Exim-Mail-From: cyndis@kapsi.fi
-X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <140fe69a-c37a-cce4-c7c1-0344de6f1bf1@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/22 13:44, Robin Murphy wrote:
-> On 2022-05-16 11:13, Mikko Perttunen wrote:
->> On 5/16/22 13:07, Will Deacon wrote:
->>> On Mon, May 16, 2022 at 11:52:54AM +0300, cyndis@kapsi.fi wrote:
->>>> From: Mikko Perttunen <mperttunen@nvidia.com>
->>>>
->>>> Set itself as the IOMMU for the host1x context device bus, containing
->>>> "dummy" devices used for Host1x context isolation.
->>>>
->>>> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
->>>> ---
->>>>   drivers/iommu/arm/arm-smmu/arm-smmu.c | 13 +++++++++++++
->>>>   1 file changed, 13 insertions(+)
->>>>
->>>> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c 
->>>> b/drivers/iommu/arm/arm-smmu/arm-smmu.c
->>>> index 568cce590ccc..9ff54eaecf81 100644
->>>> --- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
->>>> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
->>>> @@ -39,6 +39,7 @@
->>>>   #include <linux/amba/bus.h>
->>>>   #include <linux/fsl/mc.h>
->>>> +#include <linux/host1x_context_bus.h>
->>>>   #include "arm-smmu.h"
->>>> @@ -2053,8 +2054,20 @@ static int arm_smmu_bus_init(struct iommu_ops 
->>>> *ops)
->>>>               goto err_reset_pci_ops;
->>>>       }
->>>>   #endif
->>>> +#ifdef CONFIG_TEGRA_HOST1X_CONTEXT_BUS
->>>> +    if (!iommu_present(&host1x_context_device_bus_type)) {
->>>> +        err = bus_set_iommu(&host1x_context_device_bus_type, ops);
->>>> +        if (err)
->>>> +            goto err_reset_fsl_mc_ops;
->>>> +    }
->>>> +#endif
->>>> +
->>>>       return 0;
->>>> +err_reset_fsl_mc_ops: __maybe_unused;
->>>> +#ifdef CONFIG_FSL_MC_BUS
->>>> +    bus_set_iommu(&fsl_mc_bus_type, NULL);
->>>> +#endif
->>>
->>> bus_set_iommu() is going away:
->>>
->>> https://lore.kernel.org/r/cover.1650890638.git.robin.murphy@arm.com
->>>
->>> Will
->>
->> Thanks for the heads-up. Robin had pointed out that this work was 
->> ongoing but I hadn't seen the patches yet. I'll look into it.
+On Mon, May 16, 2022 at 12:45:48PM +0200, Stefan Berzl wrote:
+> Yo Jos�,
 > 
-> Although that *is* currently blocked on the mystery intel-iommu problem 
-> that I can't reproduce... If this series is ready to land right now for 
-> 5.19 then in principle that might be the easiest option overall. 
-> Hopefully at least patch #2 could sneak in so that the compile-time 
-> dependencies are ready for me to roll up host1x into the next rebase of 
-> "iommu: Always register bus notifiers".
+> > Also, I don't know if you have seen this error after connecting the
+> > tablet:
+> > 
+> >   xhci_hcd 0000:2a:00.3: WARN urb submitted to disabled ep
+> >   usb 3-2: reset full-speed USB device number 6 using xhci_hcd
+> >   usb 3-2: reset full-speed USB device number 6 using xhci_hcd
+> >   [...]
+> > 
+> > It happens with the Deco Mini 4, even when using the hid-generic
+> > driver. I need to rebase my patches on 5.19 and test again, just to
+> > make sure the problem is not somewhere else.
 > 
-> Cheers,
-> Robin.
+> Can't say I have seen it. The only thing I can think of is that I was
+> using the async urb functions and that delay did something about it.
 
-My guess is that the series as a whole is not ready to land in the 5.19 
-timeframe, but #2 could be possible.
+Thanks, I'll give it a try. I hope is not some kind of time based
+condition.
 
-Thierry, any opinion?
+By the way, I only see the error when the tablet is connected. If I run
+"usbhid-dump" or unload and load the driver, it works as expected.
+I don't know if this could be related to the driver failing to process
+the response to the magic data... Investigating.
 
 Thanks,
-Mikko
+Jose
+

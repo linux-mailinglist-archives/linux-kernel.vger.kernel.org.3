@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0214B529039
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F40B52910B
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347334AbiEPU2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55994 "EHLO
+        id S1346445AbiEPTzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350180AbiEPUAx (ORCPT
+        with ESMTP id S1346624AbiEPTvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:00:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DE246678;
-        Mon, 16 May 2022 12:55:04 -0700 (PDT)
+        Mon, 16 May 2022 15:51:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07F9201AE;
+        Mon, 16 May 2022 12:45:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EADAB60EC5;
-        Mon, 16 May 2022 19:54:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC574C385AA;
-        Mon, 16 May 2022 19:54:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35DDD61596;
+        Mon, 16 May 2022 19:45:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40DF8C385AA;
+        Mon, 16 May 2022 19:45:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730878;
-        bh=JmpcYXscK83DlcoDFesJzDB+yzA4kDzMTLDl4wun3Rw=;
+        s=korg; t=1652730338;
+        bh=VyUjrvGnK/KhkGLPpry69WpvVUt5+9+gb0wJpvfgPP4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ohrXyAK7I4o6WtzKd0DDtboiP6yCVe5OXfj2RyxPcpYTpddGF3aCrvWbprLgMAVL0
-         7GiMDcvyojUj66Ep+2Xze0rmfgYayjXUosGyRXymEwc3LXhWrbaG2CGRV9T7D6vCZJ
-         tRNSKRDP2ugHkmq0xTsxCn7LwtHebkrSbLshVXoo=
+        b=MPjSpPA7GXZ+EPfVE9pJ5aEllC9EdS9XAgI+9fznVbjsAPav5Dht5uO8NqI+Kmh7j
+         6+xcVIFyfdteCYO9RvsnF4pcX65ti284y3XENoT/svf1NBPvzTKlnoSj7/qCPsTmBl
+         8skyPZVTDXxjl2gaE7VlueR8RqpPLPeCO2J+vmqI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 032/114] net: dsa: flush switchdev workqueue on bridge join error path
+Subject: [PATCH 5.10 06/66] net: mscc: ocelot: fix last VCAP IS1/IS2 filter persisting in hardware when deleted
 Date:   Mon, 16 May 2022 21:36:06 +0200
-Message-Id: <20220516193626.413082272@linuxfoundation.org>
+Message-Id: <20220516193619.592463245@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
-References: <20220516193625.489108457@linuxfoundation.org>
+In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
+References: <20220516193619.400083785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,62 +57,51 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-[ Upstream commit 630fd4822af2374cd75c682b7665dcb367613765 ]
+[ Upstream commit 16bbebd35629c93a8c68c6d8d28557e100bcee73 ]
 
-There is a race between switchdev_bridge_port_offload() and the
-dsa_port_switchdev_sync_attrs() call right below it.
+ocelot_vcap_filter_del() works by moving the next filters over the
+current one, and then deleting the last filter by calling vcap_entry_set()
+with a del_filter which was specially created by memsetting its memory
+to zeroes. vcap_entry_set() then programs this to the TCAM and action
+RAM via the cache registers.
 
-When switchdev_bridge_port_offload() finishes, FDB entries have been
-replayed by the bridge, but are scheduled for deferred execution later.
+The problem is that vcap_entry_set() is a dispatch function which looks
+at del_filter->block_id. But since del_filter is zeroized memory, the
+block_id is 0, or otherwise said, VCAP_ES0. So practically, what we do
+is delete the entry at the same TCAM index from VCAP ES0 instead of IS1
+or IS2.
 
-However dsa_port_switchdev_sync_attrs -> dsa_port_can_apply_vlan_filtering()
-may impose restrictions on the vlan_filtering attribute and refuse
-offloading.
+The code was not always like this. vcap_entry_set() used to simply be
+is2_entry_set(), and then, the logic used to work.
 
-When this happens, the delayed FDB entries will dereference dp->bridge,
-which is a NULL pointer because we have stopped the process of
-offloading this bridge.
+Restore the functionality by populating the block_id of the del_filter
+based on the VCAP block of the filter that we're deleting. This makes
+vcap_entry_set() know what to do.
 
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-Workqueue: dsa_ordered dsa_slave_switchdev_event_work
-pc : dsa_port_bridge_host_fdb_del+0x64/0x100
-lr : dsa_slave_switchdev_event_work+0x130/0x1bc
-Call trace:
- dsa_port_bridge_host_fdb_del+0x64/0x100
- dsa_slave_switchdev_event_work+0x130/0x1bc
- process_one_work+0x294/0x670
- worker_thread+0x80/0x460
----[ end trace 0000000000000000 ]---
-Error: dsa_core: Must first remove VLAN uppers having VIDs also present in bridge.
-
-Fix the bug by doing what we do on the normal bridge leave path as well,
-which is to wait until the deferred FDB entries complete executing, then
-exit.
-
-The placement of dsa_flush_workqueue() after switchdev_bridge_port_unoffload()
-guarantees that both the FDB additions and deletions on rollback are waited for.
-
-Fixes: d7d0d423dbaa ("net: dsa: flush switchdev workqueue when leaving the bridge")
+Fixes: 1397a2eb52e2 ("net: mscc: ocelot: create TCAM skeleton from tc filter chains")
 Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Link: https://lore.kernel.org/r/20220507134550.1849834-1-vladimir.oltean@nxp.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/dsa/port.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/mscc/ocelot_vcap.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/net/dsa/port.c b/net/dsa/port.c
-index 4368fd32c4a5..f4bd063f8315 100644
---- a/net/dsa/port.c
-+++ b/net/dsa/port.c
-@@ -367,6 +367,7 @@ int dsa_port_bridge_join(struct dsa_port *dp, struct net_device *br,
- 	switchdev_bridge_port_unoffload(brport_dev, dp,
- 					&dsa_slave_switchdev_notifier,
- 					&dsa_slave_switchdev_blocking_notifier);
-+	dsa_flush_workqueue();
- out_rollback_unbridge:
- 	dsa_broadcast(DSA_NOTIFIER_BRIDGE_LEAVE, &info);
- out_rollback:
+diff --git a/drivers/net/ethernet/mscc/ocelot_vcap.c b/drivers/net/ethernet/mscc/ocelot_vcap.c
+index d8c778ee6f1b..e47098900a69 100644
+--- a/drivers/net/ethernet/mscc/ocelot_vcap.c
++++ b/drivers/net/ethernet/mscc/ocelot_vcap.c
+@@ -1181,7 +1181,11 @@ int ocelot_vcap_filter_del(struct ocelot *ocelot,
+ 	struct ocelot_vcap_filter del_filter;
+ 	int i, index;
+ 
++	/* Need to inherit the block_id so that vcap_entry_set()
++	 * does not get confused and knows where to install it.
++	 */
+ 	memset(&del_filter, 0, sizeof(del_filter));
++	del_filter.block_id = filter->block_id;
+ 
+ 	/* Gets index of the filter */
+ 	index = ocelot_vcap_block_get_filter_index(block, filter);
 -- 
 2.35.1
 

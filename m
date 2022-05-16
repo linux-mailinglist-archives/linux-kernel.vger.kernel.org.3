@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0107D52911C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FFB6529192
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347632AbiEPU0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
+        id S1345933AbiEPULR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347571AbiEPT54 (ORCPT
+        with ESMTP id S1347659AbiEPT6E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:57:56 -0400
+        Mon, 16 May 2022 15:58:04 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA1248328;
-        Mon, 16 May 2022 12:49:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2838D433AB;
+        Mon, 16 May 2022 12:49:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F59FB81613;
-        Mon, 16 May 2022 19:49:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8539FC34100;
-        Mon, 16 May 2022 19:49:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 68B24B81617;
+        Mon, 16 May 2022 19:49:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85C9EC385AA;
+        Mon, 16 May 2022 19:49:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730579;
-        bh=SA/u6TfraJ4HVYA3POmKSQ4ZBz9ogmdGYvSFcf8IZ14=;
+        s=korg; t=1652730582;
+        bh=Ml8YyaLYGD1raSPv7NG7H3fcpkf/4ek+KU+fmvmyHYY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pFLEKuEPiqf4Nu780VqcEKAq6ujFGom+svEyZkmDfvxFsz89F/QRuxaRuykF7nl5A
-         tP9LFKXYYCWIVi/AR9shO1+iAiFr/zlsOeh1NfhD+PSY6wo3dH7j+RMPFtpiPzMT6U
-         0BxeKMFr8gf5RqRS8h+gJcgQ4Yt/VivRi18jaexg=
+        b=jPRNIcSrPmmQ3hp2LLWLbOxheWCOr+PCPHA2oFhPunkWx/A43I48JvOqn9ASQx8WG
+         2sIt33LWCZPA3TxX4rPhY2HVYHRW4TvfHeWBGwoRDpHN7fQ59uD3iRwR5OvvCOtX3P
+         4uj9WfVg+aLiNWz7rOGIio/7UARnzncSR9X4r8O0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Zack Rusin <zackr@vmware.com>,
+        Martin Krastev <krastevm@vmware.com>,
+        Maaz Mombasawala <mombasawalam@vmware.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 042/102] tls: Fix context leak on tls_device_down
-Date:   Mon, 16 May 2022 21:36:16 +0200
-Message-Id: <20220516193625.208088763@linuxfoundation.org>
+Subject: [PATCH 5.15 043/102] drm/vmwgfx: Fix fencing on SVGAv3
+Date:   Mon, 16 May 2022 21:36:17 +0200
+Message-Id: <20220516193625.237070686@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
 References: <20220516193623.989270214@linuxfoundation.org>
@@ -56,51 +56,251 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxim Mikityanskiy <maximmi@nvidia.com>
+From: Zack Rusin <zackr@vmware.com>
 
-[ Upstream commit 3740651bf7e200109dd42d5b2fb22226b26f960a ]
+[ Upstream commit 1d6595b4cd47acfd824550f48f10b54a6f0e93ee ]
 
-The commit cited below claims to fix a use-after-free condition after
-tls_device_down. Apparently, the description wasn't fully accurate. The
-context stayed alive, but ctx->netdev became NULL, and the offload was
-torn down without a proper fallback, so a bug was present, but a
-different kind of bug.
+Port of the vmwgfx to SVGAv3 lacked support for fencing. SVGAv3 removed
+FIFO's and replaced them with command buffers and extra registers.
+The initial version of SVGAv3 lacked support for most advanced features
+(e.g. 3D) which made fences unnecessary. That is no longer the case,
+especially as 3D support is being turned on.
 
-Due to misunderstanding of the issue, the original patch dropped the
-refcount_dec_and_test line for the context to avoid the alleged
-premature deallocation. That line has to be restored, because it matches
-the refcount_inc_not_zero from the same function, otherwise the contexts
-that survived tls_device_down are leaked.
+Switch from FIFO commands and capabilities to command buffers and extra
+registers to enable fences on SVGAv3.
 
-This patch fixes the described issue by restoring refcount_dec_and_test.
-After this change, there is no leak anymore, and the fallback to
-software kTLS still works.
-
-Fixes: c55dcdd435aa ("net/tls: Fix use-after-free after the TLS device goes down and up")
-Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
-Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
-Link: https://lore.kernel.org/r/20220512091830.678684-1-maximmi@nvidia.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 2cd80dbd3551 ("drm/vmwgfx: Add basic support for SVGA3")
+Signed-off-by: Zack Rusin <zackr@vmware.com>
+Reviewed-by: Martin Krastev <krastevm@vmware.com>
+Reviewed-by: Maaz Mombasawala <mombasawalam@vmware.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220302152426.885214-5-zack@kde.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/tls/tls_device.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/gpu/drm/vmwgfx/vmwgfx_cmd.c   |  2 +-
+ drivers/gpu/drm/vmwgfx/vmwgfx_drv.h   |  8 ++++++++
+ drivers/gpu/drm/vmwgfx/vmwgfx_fence.c | 28 ++++++++++++++++++++-------
+ drivers/gpu/drm/vmwgfx/vmwgfx_irq.c   | 26 +++++++++++++++++--------
+ drivers/gpu/drm/vmwgfx/vmwgfx_kms.c   |  8 +++++---
+ 5 files changed, 53 insertions(+), 19 deletions(-)
 
-diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
-index a40553e83f8b..f3e3d009cf1c 100644
---- a/net/tls/tls_device.c
-+++ b/net/tls/tls_device.c
-@@ -1347,7 +1347,10 @@ static int tls_device_down(struct net_device *netdev)
+diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_cmd.c b/drivers/gpu/drm/vmwgfx/vmwgfx_cmd.c
+index a3bfbb6c3e14..bf1b394753da 100644
+--- a/drivers/gpu/drm/vmwgfx/vmwgfx_cmd.c
++++ b/drivers/gpu/drm/vmwgfx/vmwgfx_cmd.c
+@@ -528,7 +528,7 @@ int vmw_cmd_send_fence(struct vmw_private *dev_priv, uint32_t *seqno)
+ 		*seqno = atomic_add_return(1, &dev_priv->marker_seq);
+ 	} while (*seqno == 0);
  
- 		/* Device contexts for RX and TX will be freed in on sk_destruct
- 		 * by tls_device_free_ctx. rx_conf and tx_conf stay in TLS_HW.
-+		 * Now release the ref taken above.
- 		 */
-+		if (refcount_dec_and_test(&ctx->refcount))
-+			tls_device_free_ctx(ctx);
+-	if (!(vmw_fifo_caps(dev_priv) & SVGA_FIFO_CAP_FENCE)) {
++	if (!vmw_has_fences(dev_priv)) {
+ 
+ 		/*
+ 		 * Don't request hardware to send a fence. The
+diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_drv.h b/drivers/gpu/drm/vmwgfx/vmwgfx_drv.h
+index f9f28516ffb4..288e883177be 100644
+--- a/drivers/gpu/drm/vmwgfx/vmwgfx_drv.h
++++ b/drivers/gpu/drm/vmwgfx/vmwgfx_drv.h
+@@ -1677,4 +1677,12 @@ static inline void vmw_irq_status_write(struct vmw_private *vmw,
+ 		outl(status, vmw->io_start + SVGA_IRQSTATUS_PORT);
+ }
+ 
++static inline bool vmw_has_fences(struct vmw_private *vmw)
++{
++	if ((vmw->capabilities & (SVGA_CAP_COMMAND_BUFFERS |
++				  SVGA_CAP_CMD_BUFFERS_2)) != 0)
++		return true;
++	return (vmw_fifo_caps(vmw) & SVGA_FIFO_CAP_FENCE) != 0;
++}
++
+ #endif
+diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_fence.c b/drivers/gpu/drm/vmwgfx/vmwgfx_fence.c
+index b4d9d7258a54..b32ddbb992de 100644
+--- a/drivers/gpu/drm/vmwgfx/vmwgfx_fence.c
++++ b/drivers/gpu/drm/vmwgfx/vmwgfx_fence.c
+@@ -85,6 +85,22 @@ fman_from_fence(struct vmw_fence_obj *fence)
+ 	return container_of(fence->base.lock, struct vmw_fence_manager, lock);
+ }
+ 
++static u32 vmw_fence_goal_read(struct vmw_private *vmw)
++{
++	if ((vmw->capabilities2 & SVGA_CAP2_EXTRA_REGS) != 0)
++		return vmw_read(vmw, SVGA_REG_FENCE_GOAL);
++	else
++		return vmw_fifo_mem_read(vmw, SVGA_FIFO_FENCE_GOAL);
++}
++
++static void vmw_fence_goal_write(struct vmw_private *vmw, u32 value)
++{
++	if ((vmw->capabilities2 & SVGA_CAP2_EXTRA_REGS) != 0)
++		vmw_write(vmw, SVGA_REG_FENCE_GOAL, value);
++	else
++		vmw_fifo_mem_write(vmw, SVGA_FIFO_FENCE_GOAL, value);
++}
++
+ /*
+  * Note on fencing subsystem usage of irqs:
+  * Typically the vmw_fences_update function is called
+@@ -400,7 +416,7 @@ static bool vmw_fence_goal_new_locked(struct vmw_fence_manager *fman,
+ 	if (likely(!fman->seqno_valid))
+ 		return false;
+ 
+-	goal_seqno = vmw_fifo_mem_read(fman->dev_priv, SVGA_FIFO_FENCE_GOAL);
++	goal_seqno = vmw_fence_goal_read(fman->dev_priv);
+ 	if (likely(passed_seqno - goal_seqno >= VMW_FENCE_WRAP))
+ 		return false;
+ 
+@@ -408,9 +424,8 @@ static bool vmw_fence_goal_new_locked(struct vmw_fence_manager *fman,
+ 	list_for_each_entry(fence, &fman->fence_list, head) {
+ 		if (!list_empty(&fence->seq_passed_actions)) {
+ 			fman->seqno_valid = true;
+-			vmw_fifo_mem_write(fman->dev_priv,
+-					   SVGA_FIFO_FENCE_GOAL,
+-					   fence->base.seqno);
++			vmw_fence_goal_write(fman->dev_priv,
++					     fence->base.seqno);
+ 			break;
+ 		}
+ 	}
+@@ -442,13 +457,12 @@ static bool vmw_fence_goal_check_locked(struct vmw_fence_obj *fence)
+ 	if (dma_fence_is_signaled_locked(&fence->base))
+ 		return false;
+ 
+-	goal_seqno = vmw_fifo_mem_read(fman->dev_priv, SVGA_FIFO_FENCE_GOAL);
++	goal_seqno = vmw_fence_goal_read(fman->dev_priv);
+ 	if (likely(fman->seqno_valid &&
+ 		   goal_seqno - fence->base.seqno < VMW_FENCE_WRAP))
+ 		return false;
+ 
+-	vmw_fifo_mem_write(fman->dev_priv, SVGA_FIFO_FENCE_GOAL,
+-			   fence->base.seqno);
++	vmw_fence_goal_write(fman->dev_priv, fence->base.seqno);
+ 	fman->seqno_valid = true;
+ 
+ 	return true;
+diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_irq.c b/drivers/gpu/drm/vmwgfx/vmwgfx_irq.c
+index c5191de365ca..fe4732bf2c9d 100644
+--- a/drivers/gpu/drm/vmwgfx/vmwgfx_irq.c
++++ b/drivers/gpu/drm/vmwgfx/vmwgfx_irq.c
+@@ -32,6 +32,14 @@
+ 
+ #define VMW_FENCE_WRAP (1 << 24)
+ 
++static u32 vmw_irqflag_fence_goal(struct vmw_private *vmw)
++{
++	if ((vmw->capabilities2 & SVGA_CAP2_EXTRA_REGS) != 0)
++		return SVGA_IRQFLAG_REG_FENCE_GOAL;
++	else
++		return SVGA_IRQFLAG_FENCE_GOAL;
++}
++
+ /**
+  * vmw_thread_fn - Deferred (process context) irq handler
+  *
+@@ -96,7 +104,7 @@ static irqreturn_t vmw_irq_handler(int irq, void *arg)
+ 		wake_up_all(&dev_priv->fifo_queue);
+ 
+ 	if ((masked_status & (SVGA_IRQFLAG_ANY_FENCE |
+-			      SVGA_IRQFLAG_FENCE_GOAL)) &&
++			      vmw_irqflag_fence_goal(dev_priv))) &&
+ 	    !test_and_set_bit(VMW_IRQTHREAD_FENCE, dev_priv->irqthread_pending))
+ 		ret = IRQ_WAKE_THREAD;
+ 
+@@ -137,8 +145,7 @@ bool vmw_seqno_passed(struct vmw_private *dev_priv,
+ 	if (likely(dev_priv->last_read_seqno - seqno < VMW_FENCE_WRAP))
+ 		return true;
+ 
+-	if (!(vmw_fifo_caps(dev_priv) & SVGA_FIFO_CAP_FENCE) &&
+-	    vmw_fifo_idle(dev_priv, seqno))
++	if (!vmw_has_fences(dev_priv) && vmw_fifo_idle(dev_priv, seqno))
+ 		return true;
+ 
+ 	/**
+@@ -160,6 +167,7 @@ int vmw_fallback_wait(struct vmw_private *dev_priv,
+ 		      unsigned long timeout)
+ {
+ 	struct vmw_fifo_state *fifo_state = dev_priv->fifo;
++	bool fifo_down = false;
+ 
+ 	uint32_t count = 0;
+ 	uint32_t signal_seq;
+@@ -176,12 +184,14 @@ int vmw_fallback_wait(struct vmw_private *dev_priv,
+ 	 */
+ 
+ 	if (fifo_idle) {
+-		down_read(&fifo_state->rwsem);
+ 		if (dev_priv->cman) {
+ 			ret = vmw_cmdbuf_idle(dev_priv->cman, interruptible,
+ 					      10*HZ);
+ 			if (ret)
+ 				goto out_err;
++		} else if (fifo_state) {
++			down_read(&fifo_state->rwsem);
++			fifo_down = true;
+ 		}
  	}
  
- 	up_write(&device_offload_lock);
+@@ -218,12 +228,12 @@ int vmw_fallback_wait(struct vmw_private *dev_priv,
+ 		}
+ 	}
+ 	finish_wait(&dev_priv->fence_queue, &__wait);
+-	if (ret == 0 && fifo_idle)
++	if (ret == 0 && fifo_idle && fifo_state)
+ 		vmw_fence_write(dev_priv, signal_seq);
+ 
+ 	wake_up_all(&dev_priv->fence_queue);
+ out_err:
+-	if (fifo_idle)
++	if (fifo_down)
+ 		up_read(&fifo_state->rwsem);
+ 
+ 	return ret;
+@@ -266,13 +276,13 @@ void vmw_seqno_waiter_remove(struct vmw_private *dev_priv)
+ 
+ void vmw_goal_waiter_add(struct vmw_private *dev_priv)
+ {
+-	vmw_generic_waiter_add(dev_priv, SVGA_IRQFLAG_FENCE_GOAL,
++	vmw_generic_waiter_add(dev_priv, vmw_irqflag_fence_goal(dev_priv),
+ 			       &dev_priv->goal_queue_waiters);
+ }
+ 
+ void vmw_goal_waiter_remove(struct vmw_private *dev_priv)
+ {
+-	vmw_generic_waiter_remove(dev_priv, SVGA_IRQFLAG_FENCE_GOAL,
++	vmw_generic_waiter_remove(dev_priv, vmw_irqflag_fence_goal(dev_priv),
+ 				  &dev_priv->goal_queue_waiters);
+ }
+ 
+diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_kms.c b/drivers/gpu/drm/vmwgfx/vmwgfx_kms.c
+index 14e8f665b13b..50c64e7813be 100644
+--- a/drivers/gpu/drm/vmwgfx/vmwgfx_kms.c
++++ b/drivers/gpu/drm/vmwgfx/vmwgfx_kms.c
+@@ -1336,7 +1336,6 @@ vmw_kms_new_framebuffer(struct vmw_private *dev_priv,
+ 		ret = vmw_kms_new_framebuffer_surface(dev_priv, surface, &vfb,
+ 						      mode_cmd,
+ 						      is_bo_proxy);
+-
+ 		/*
+ 		 * vmw_create_bo_proxy() adds a reference that is no longer
+ 		 * needed
+@@ -1398,13 +1397,16 @@ static struct drm_framebuffer *vmw_kms_fb_create(struct drm_device *dev,
+ 	ret = vmw_user_lookup_handle(dev_priv, tfile,
+ 				     mode_cmd->handles[0],
+ 				     &surface, &bo);
+-	if (ret)
++	if (ret) {
++		DRM_ERROR("Invalid buffer object handle %u (0x%x).\n",
++			  mode_cmd->handles[0], mode_cmd->handles[0]);
+ 		goto err_out;
++	}
+ 
+ 
+ 	if (!bo &&
+ 	    !vmw_kms_srf_ok(dev_priv, mode_cmd->width, mode_cmd->height)) {
+-		DRM_ERROR("Surface size cannot exceed %dx%d",
++		DRM_ERROR("Surface size cannot exceed %dx%d\n",
+ 			dev_priv->texture_max_width,
+ 			dev_priv->texture_max_height);
+ 		goto err_out;
 -- 
 2.35.1
 

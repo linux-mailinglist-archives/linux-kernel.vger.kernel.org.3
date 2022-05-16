@@ -2,126 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04ECF52934F
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 00:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8435529351
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 00:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349558AbiEPWCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 18:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
+        id S1349571AbiEPWDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 18:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238440AbiEPWCs (ORCPT
+        with ESMTP id S238440AbiEPWDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 18:02:48 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C047E639D;
-        Mon, 16 May 2022 15:02:46 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 795551F939;
-        Mon, 16 May 2022 22:02:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1652738565;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6cIkZu1t4JcnuW9jTK0PkgF8th7GaouWhYTdI3D3pyk=;
-        b=WIhYvYEZcJpAzfluzqgnCgqoHviPg90OjQmw4bs072LgnnGqsiE/4UuMiX7NNiu7SYt0tG
-        N29JVeHRfPwAAO9zoEFeDTIvjtO682d2smEJwb8eqWO+upjxNP+SQ10Vg5hyFnbAuIZ8zk
-        DAltVMxGzxwpgu2Y/RcPgjBCG29y9zI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1652738565;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6cIkZu1t4JcnuW9jTK0PkgF8th7GaouWhYTdI3D3pyk=;
-        b=98ihLesEtp+MaFmDUwSOzucf9EYfg9IyKPNxVVFd/HqJJ3yMz3X35in+n0wIM10GXhgEZu
-        JK7GAlzwShThY5CQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 102A313ADC;
-        Mon, 16 May 2022 22:02:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id w1/AAgXKgmLnQAAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Mon, 16 May 2022 22:02:45 +0000
-Date:   Mon, 16 May 2022 23:58:26 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Pankaj Raghav <p.raghav@samsung.com>
-Cc:     axboe@kernel.dk, damien.lemoal@opensource.wdc.com,
-        pankydev8@gmail.com, dsterba@suse.com, hch@lst.de,
-        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, jiangbo.365@bytedance.com,
-        linux-block@vger.kernel.org, gost.dev@samsung.com,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: Re: [PATCH v4 05/13] btrfs: zoned: Cache superblock location in
- btrfs_zoned_device_info
-Message-ID: <20220516215826.GZ18596@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, Pankaj Raghav <p.raghav@samsung.com>,
-        axboe@kernel.dk, damien.lemoal@opensource.wdc.com,
-        pankydev8@gmail.com, dsterba@suse.com, hch@lst.de,
-        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, jiangbo.365@bytedance.com,
-        linux-block@vger.kernel.org, gost.dev@samsung.com,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com,
-        Luis Chamberlain <mcgrof@kernel.org>
-References: <20220516165416.171196-1-p.raghav@samsung.com>
- <CGME20220516165425eucas1p29fcd11d7051d9d3a9a9efc17cd3b6999@eucas1p2.samsung.com>
- <20220516165416.171196-6-p.raghav@samsung.com>
+        Mon, 16 May 2022 18:03:40 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94F728E09
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 15:03:38 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2ec42eae76bso168486957b3.10
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 15:03:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IjaOHrJPxQNUMk++gKnFcKFfTSw8FlwW+UyobtzjVj0=;
+        b=CmIEj5n1Rl0HWNhLuhDFskWScqMt8sTZf+nhjXYfnm9nlgr/YXq9h82Fae9Y2KTq1g
+         KryZOd70RTA6tPdFd6uEglWV6hKFFIZmg7ZFv30zU1JzLwvckRRLR0MEMdF00hjHIHDf
+         hVEuQ8BqEIRE3mG//CqcrOWdJM1NQz8jL2LfiBTS0Uvbwue/yEjA0leJcwc3aoJbKFUo
+         HsYsHIyfIVblYlpHWWLtcT5unFYiki04NZBQO/jfec+mhGllAxhTLo9QATAqOOLauq7u
+         ckKDPDyG+lHdQjd1OuL/8h39HKfWcmiAhNYRkNnJwcWE1smI+GnPF/PAEkdRN2Dzzitq
+         q0nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IjaOHrJPxQNUMk++gKnFcKFfTSw8FlwW+UyobtzjVj0=;
+        b=E+gXmMSyrgEGrwjoufVOBW89ymgjxJDqzaBuao8BLp8vof/9ZSOFL+dyYIxsTBI6k1
+         d5EGAJeJbEeFvO33UfujOTfzvcptG9r7q9DgG+4QiMSzQoGFKsSoCdOihGseXR3Lo9x7
+         bodxX2SQ3Sce82avEyrgencBvrwS1PIhdrrZsl7SHkL1dHxdo/hje4i/ZnbdULLuuLZV
+         f78nVx1T5CT2ZzExlQVpXU1mmg/uhn+2+wlzU6qvMbvgT/I2g+1eww7neigiMeJaHgdl
+         hwMnxDz6HUqkRDU6LDZUyBaDLThbII+7Sa+2iIUN8n7fa9yAhMwgO0FOWr9vfOxOqtZJ
+         PzBQ==
+X-Gm-Message-State: AOAM530ho6yBkdKv00nt9ZX/+LaVPGiTVjE3ZFLKi6cq6YaU/PwihJEC
+        DeZZzy0WGhONfrExMaXRBbtGLSIoT9M074PQQDvezw==
+X-Google-Smtp-Source: ABdhPJw3sBkLaeksICo+46rO2UaS3Fk7vsTQRrcZQqDXNASr5C339hIh2SUj2o4+spHZoBL4AtjH3f55xJ+hksTEK84=
+X-Received: by 2002:a0d:d747:0:b0:2ff:22b9:9281 with SMTP id
+ z68-20020a0dd747000000b002ff22b99281mr1573852ywd.305.1652738618031; Mon, 16
+ May 2022 15:03:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220516165416.171196-6-p.raghav@samsung.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220513202159.1550547-1-samitolvanen@google.com>
+ <20220513202159.1550547-21-samitolvanen@google.com> <f65c01979b884174965802a13cf6b077@AcuMS.aculab.com>
+ <CABCJKueo+cw1DHH6N2dUjD-U7OKqmkJUyimm0ychv1drt5U9Rg@mail.gmail.com>
+ <19b3e040302d4d8aa240eee43427dfaa@AcuMS.aculab.com> <20220516214414.GR76023@worktop.programming.kicks-ass.net>
+In-Reply-To: <20220516214414.GR76023@worktop.programming.kicks-ass.net>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Mon, 16 May 2022 15:03:02 -0700
+Message-ID: <CABCJKucPMgMQ-D_yByvMSx6yutjsBXGAwirmheOYejWHARi9iQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     David Laight <David.Laight@aculab.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 06:54:08PM +0200, Pankaj Raghav wrote:
-> Instead of calculating the superblock location every time, cache the
-> superblock zone location in btrfs_zoned_device_info struct and use it to
-> locate the zone index.
-> 
-> The functions such as btrfs_sb_log_location_bdev() and
-> btrfs_reset_sb_log_zones() which work directly on block_device shall
-> continue to use the sb_zone_number because btrfs_zoned_device_info
-> struct might not have been initialized at that point.
-> 
-> This patch will enable non power-of-2 zoned devices to not perform
-> division to lookup superblock and its mirror location.
-> 
-> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
-> ---
->  fs/btrfs/zoned.c | 13 +++++++++----
->  fs/btrfs/zoned.h |  1 +
->  2 files changed, 10 insertions(+), 4 deletions(-)
-> 
-> diff --git a/fs/btrfs/zoned.c b/fs/btrfs/zoned.c
-> index 06f22c021..e8c7cebb2 100644
-> --- a/fs/btrfs/zoned.c
-> +++ b/fs/btrfs/zoned.c
-> @@ -511,6 +511,11 @@ int btrfs_get_dev_zone_info(struct btrfs_device *device, bool populate_cache)
->  			   max_active_zones - nactive);
->  	}
->  
-> +	/* Cache the sb zone number */
-> +	for (i = 0; i < BTRFS_SUPER_MIRROR_MAX; ++i) {
-> +		zone_info->sb_zone_location[i] =
-> +			sb_zone_number(zone_info->zone_size_shift, i);
-> +	}
+On Mon, May 16, 2022 at 2:44 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Mon, May 16, 2022 at 09:32:55PM +0000, David Laight wrote:
+>
+> > > The compiler always generates this specific instruction sequence.
+> >
+> > Yes, but there are several ways to encode 'cmpl imm,-6(reg)'.
+>
+> Yes, but we don't care. This *always* uses the 32bit immediate form.
+> Even if the immediate is small.
 
-I don't think we need to cache the value right now, it's not in any hot
-path and call to bdev_zone_no is relatively cheap (only dereferencing a
-few pointers, all in-memory values).
+Yes, that part is not a problem, but it's a valid point that LLVM
+might not always use r8-r15 here, so I will have to check for the REX
+prefix before blindly attempting to decode the instruction.
+
+Sami

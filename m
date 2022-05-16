@@ -2,180 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B3B35282EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 13:13:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1C85282F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 13:14:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239812AbiEPLN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 07:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
+        id S236232AbiEPLOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 07:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242966AbiEPLM6 (ORCPT
+        with ESMTP id S229952AbiEPLO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 07:12:58 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D55A2F01C;
-        Mon, 16 May 2022 04:12:56 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id dk23so27919301ejb.8;
-        Mon, 16 May 2022 04:12:56 -0700 (PDT)
+        Mon, 16 May 2022 07:14:29 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC0B31204
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 04:14:29 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id i186so15103025vsc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 04:14:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6hMDjOrTAE3diAoZxz5cxSEFvkxO6o8jPO8oMHqD0pE=;
-        b=JaO5qTYbXiNAu7e32sXuV8ai0ftIGiKMUc61uFgtS26hHmokyvZ4CA2B+3KDazkS5V
-         HXLnKzBeuaPP7wmWCjMPmN8EEt8ZY6B8A+4uvzEMR5btCsHPXzoL5Ww8FeikKkPs5cW4
-         5m5t+EZR17df+Z30ScKCwJDYzB7mcmgPeL1E+/nj/1uNsJEp9JcTXYZMYFyMk5gSQbwb
-         kjKot8ZzZ12C2iIj2hJ3xNFz+70lB5FHi3YhH3jfV4966ac4ypA4sHhJmMS2EABWDZUY
-         /YwiLfd2mCLmvdTZi9mRrXKxGzTffw/1LVbU2tmC4aIugLBjGmn1WFZcjaSYeJ8j15xi
-         NZMA==
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=v7/xR8YHxvtEWItoGCcgyQFho9j9XpVaXw2jIxKf7To=;
+        b=G2L7i6imBi5Mrm/rvexow90yUbyNJiRA8Dme7oCz1gudB8EpK3LerTGWMhtAaiIO32
+         Gehw5KLT6uXUgA+kiiTvQLaynk7XcCPx1BoxFCp5MXjaaV17UrJWPcV5etgH/VVDHX6y
+         ps8HIzktpghgwWaDbSYmRmwM67V9fPb6YPAvq98Orq+DyHm53Vh/dMq2KtElR478V/J0
+         7YEgw0EuV6Z/wWTj/l6ttpwlyv+YWLtkCNoGnAPBkyV2gZEGP89ZarFCZzPvF2dr9n2x
+         xh20SEJW3tpxJGnJX7czJtu1WDFjAT0iU8tKEDRIJ2BYHLCdwfsqS622Z6Y/gt5TQiXc
+         Lmaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6hMDjOrTAE3diAoZxz5cxSEFvkxO6o8jPO8oMHqD0pE=;
-        b=EUjiVBBon4A0ygYh/cKNAbmPkznr+24FGcYbso6I6H9IayE1utbxXkx3pQAcSshk/1
-         185Wx9HoKcRK3HjgDKOOUONMERFsZX5Myei6cgBpyOfvvhrEvNQJmrIpt6ezfXau1hIH
-         /gc8ODC6iV6EqXLbz8r/aDez2czPJbe0+IIrR2DH23DWwiDb+YJvp7QZiTeKQyG60LTn
-         aY8xUaZoqQn4jZirjV63t259oQW+QxD8QTmjvOAmwD2mDtWkTUhgiWF2+hY2vhZ3mEjr
-         exPo9VHumO8FKvEzoOC3StEMj7YUxkvwE1p2rhLMa4EMSTBrzvOu7/loFZU/FgWAXZad
-         iPLw==
-X-Gm-Message-State: AOAM531t8PlUI2huc065048OG29W9svIZCWgloIPuKW9OrCHLggWuLEK
-        eBLCTXSaywFgHxqp4qqF0CM=
-X-Google-Smtp-Source: ABdhPJzsAwDRZfUEo1XS+urcWt4CPtD86+gNxl8dLKOekqyj1lY4VS3N8tGpuu5CmVqfOjEalegwsQ==
-X-Received: by 2002:a17:906:cb90:b0:6f4:d91b:1025 with SMTP id mf16-20020a170906cb9000b006f4d91b1025mr15074638ejb.177.1652699574926;
-        Mon, 16 May 2022 04:12:54 -0700 (PDT)
-Received: from skbuf ([188.25.160.86])
-        by smtp.gmail.com with ESMTPSA id v2-20020a1709067d8200b006f3ef214e7asm3546441ejo.224.2022.05.16.04.12.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 04:12:54 -0700 (PDT)
-Date:   Mon, 16 May 2022 14:12:52 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Marek Vasut <marex@denx.de>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [RFC Patch net-next v2 4/9] net: dsa: microchip: move port
- memory allocation to ksz_common
-Message-ID: <20220516111252.rggqmaj7mxv6fieg@skbuf>
-References: <20220513102219.30399-1-arun.ramadoss@microchip.com>
- <20220513102219.30399-5-arun.ramadoss@microchip.com>
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=v7/xR8YHxvtEWItoGCcgyQFho9j9XpVaXw2jIxKf7To=;
+        b=cpKyrpK3sXhEYTR25CTn/bqo21pqLKMssdp16nGAexSOmaoEU4Wpn8DLkXRDMF9TDJ
+         Gi1wXeHi2R8k/rD3dgGk7hNtdbaAZ11uaGSHduv8bpakgeIx2fqJ35Q0GR0+W5HZUM7u
+         QqKFG7iTFY8cxFFds50NZKc6s0bYe7Jth4iMIkSdjGIWnVNVcdW73bL4QxbXKphLETib
+         bSxoyVSP+BeO4ZW96S7Oqr7Hj183mjiPF9bGr9Cr2IE4qpZe3jY9qqI0hoUmhUsye10A
+         7JMFHKU+AXx5tiisaGqBO3LCUJ0rj87KL4cpw0QXdZt2XRrmFAqA8WHPX967vDPdDxmo
+         D3dg==
+X-Gm-Message-State: AOAM531wHfOy9/eqfp04pCVsCv/oC67U/ovzTdpgA8AgmPe/Okf30Fg1
+        LFascSjsY6vcITb0RfxOMqXwrfVghMILKY9nC98=
+X-Google-Smtp-Source: ABdhPJzQnTTaHKYrjwNiCrGdQkAiNnP9eBi6ypNfjG5DRrxsXRttZUP0FCQv366KRsb4qqTdAd0nd92WMM4wxfv6j7M=
+X-Received: by 2002:a67:fc86:0:b0:32d:18ed:e71b with SMTP id
+ x6-20020a67fc86000000b0032d18ede71bmr5532267vsp.51.1652699667214; Mon, 16 May
+ 2022 04:14:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220513102219.30399-5-arun.ramadoss@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Sender: ibrakabora135.bib@gmail.com
+Received: by 2002:a05:6102:2050:0:0:0:0 with HTTP; Mon, 16 May 2022 04:14:26
+ -0700 (PDT)
+From:   Mrs Vivian Thomson <viviatom02@gmail.com>
+Date:   Mon, 16 May 2022 04:14:26 -0700
+X-Google-Sender-Auth: WDSQ6ZZQ8bYvyL3oRB4ZKcH4o04
+Message-ID: <CAPQQAPFKxWo0gjhvdQypU4_Py6UO0YkUpu4urAyMsDQ69D8RFA@mail.gmail.com>
+Subject: DONATION IS FOR CHARITY AND NEEDY
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_NAME_FM_MR_MRS,
+        LOTS_OF_MONEY,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,UPPERCASE_75_100
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 03:52:14PM +0530, Arun Ramadoss wrote:
-> ksz8795 and ksz9477 init function initializes the memory to dev->ports
-> and assigns the ds real number of ports. Since both the routines are
-> same, moved the allocation of port memory to ksz_switch_register after
-> init.
-> 
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-> ---
+MY WARM GREETINGS,
 
-Does this actually work? ksz8_switch_init() and ksz9477_switch_init()
-still dereference dev->ports. They are called from dev->dev_ops->init()
-from ksz_switch_register(). You have moved the devm_kzalloc() to _after_
-the dev->dev_ops->init() call. So these functions are accessing memory
-behind a not-yet-allocated pointer.
+ I AM MRS VIVIAN THOMSON FROM FRANCE, I DECIDED TO DONATE WHAT I HAVE
+TO YOU  FOR INVESTMENT TOWARDS THE GOOD WORK OF CHARITY ORGANIZATION,
+AND ALSO  TO HELP THE MOTHERLESS AND THE LESS PRIVILEGED ONES AND TO
+CARRY OUT A CHARITABLE WORKS IN YOUR COUNTRY AND AROUND THE WORLD ON
+MY BEHALF.
 
->  drivers/net/dsa/microchip/ksz8795.c    | 8 --------
->  drivers/net/dsa/microchip/ksz9477.c    | 8 --------
->  drivers/net/dsa/microchip/ksz_common.c | 9 +++++++++
->  3 files changed, 9 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/net/dsa/microchip/ksz8795.c b/drivers/net/dsa/microchip/ksz8795.c
-> index b6032b65afc2..91f29ff7256c 100644
-> --- a/drivers/net/dsa/microchip/ksz8795.c
-> +++ b/drivers/net/dsa/microchip/ksz8795.c
-> @@ -1599,11 +1599,6 @@ static int ksz8_switch_init(struct ksz_device *dev)
->  
->  	dev->reg_mib_cnt = MIB_COUNTER_NUM;
->  
-> -	dev->ports = devm_kzalloc(dev->dev,
-> -				  dev->info->port_cnt * sizeof(struct ksz_port),
-> -				  GFP_KERNEL);
-> -	if (!dev->ports)
-> -		return -ENOMEM;
->  	for (i = 0; i < dev->info->port_cnt; i++) {
->  		mutex_init(&dev->ports[i].mib.cnt_mutex);
->  		dev->ports[i].mib.counters =
-> @@ -1615,9 +1610,6 @@ static int ksz8_switch_init(struct ksz_device *dev)
->  			return -ENOMEM;
->  	}
->  
-> -	/* set the real number of ports */
-> -	dev->ds->num_ports = dev->info->port_cnt;
-> -
->  	/* We rely on software untagging on the CPU port, so that we
->  	 * can support both tagged and untagged VLANs
->  	 */
-> diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-> index c712a0011367..1a0fd36e180e 100644
-> --- a/drivers/net/dsa/microchip/ksz9477.c
-> +++ b/drivers/net/dsa/microchip/ksz9477.c
-> @@ -1482,11 +1482,6 @@ static int ksz9477_switch_init(struct ksz_device *dev)
->  	dev->reg_mib_cnt = SWITCH_COUNTER_NUM;
->  	dev->mib_cnt = TOTAL_SWITCH_COUNTER_NUM;
->  
-> -	dev->ports = devm_kzalloc(dev->dev,
-> -				  dev->info->port_cnt * sizeof(struct ksz_port),
-> -				  GFP_KERNEL);
-> -	if (!dev->ports)
-> -		return -ENOMEM;
->  	for (i = 0; i < dev->info->port_cnt; i++) {
->  		spin_lock_init(&dev->ports[i].mib.stats64_lock);
->  		mutex_init(&dev->ports[i].mib.cnt_mutex);
-> @@ -1499,9 +1494,6 @@ static int ksz9477_switch_init(struct ksz_device *dev)
->  			return -ENOMEM;
->  	}
->  
-> -	/* set the real number of ports */
-> -	dev->ds->num_ports = dev->info->port_cnt;
-> -
->  	return 0;
->  }
->  
-> diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
-> index fd2f1bd3feb5..717734fe437e 100644
-> --- a/drivers/net/dsa/microchip/ksz_common.c
-> +++ b/drivers/net/dsa/microchip/ksz_common.c
-> @@ -768,6 +768,15 @@ int ksz_switch_register(struct ksz_device *dev,
->  	if (ret)
->  		return ret;
->  
-> +	dev->ports = devm_kzalloc(dev->dev,
-> +				  dev->info->port_cnt * sizeof(struct ksz_port),
-> +				  GFP_KERNEL);
-> +	if (!dev->ports)
-> +		return -ENOMEM;
-> +
-> +	/* set the real number of ports */
-> +	dev->ds->num_ports = dev->info->port_cnt;
-> +
->  	/* Host port interface will be self detected, or specifically set in
->  	 * device tree.
->  	 */
-> -- 
-> 2.33.0
-> 
+ I AM DIAGNOSING OF THROAT CANCER, HOSPITALIZE FOR GOOD 2 YEARS AND
+SOME MONTHS NOW AND QUITE OBVIOUS THAT I HAVE FEW DAYS TO LIVE, AND I
+AM A WIDOW NO CHILD; I DECIDED TO WILL/DONATE THE SUM OF $5.8 MILLION
+PRIVILEGE AND ALSO FORTH ASSISTANCE OF THE WIDOWS.
+IF YOU KNOW THAT YOU ARE ABLE TO RECIVE THIS FUND DONATION AND DO AS I
+HAVE INDICATED, REPLY URGENTLY TO THIS MESSAGES.
 
+WAITING YOUR REPLY
+MRS VIVIAN THOMSON

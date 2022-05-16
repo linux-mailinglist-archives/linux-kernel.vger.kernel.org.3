@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92D265291C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D3252911E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347365AbiEPT5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
+        id S1348217AbiEPUfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347090AbiEPTvh (ORCPT
+        with ESMTP id S1351119AbiEPUCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:51:37 -0400
+        Mon, 16 May 2022 16:02:02 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8423FD96;
-        Mon, 16 May 2022 12:47:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2642E13C;
+        Mon, 16 May 2022 12:59:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 93807B8160E;
-        Mon, 16 May 2022 19:47:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0814CC385AA;
-        Mon, 16 May 2022 19:47:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C59A9B81611;
+        Mon, 16 May 2022 19:59:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14E9FC385AA;
+        Mon, 16 May 2022 19:59:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730427;
-        bh=83GQTNq/tBaD7g1NIWDbJ9kE3GD7vyzp8ZZH6TRSWDs=;
+        s=korg; t=1652731145;
+        bh=VMbYmNs67UPfayg47OoF8phgYXKB0mbdTrEmCm1IkK8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xDK3Jf9GD6VCxhlD09KMyG7eC0sWRbjSgECpTfw0B3DzhHDy+w+t1dCTxSQSeMraj
-         T3MEHL7qkonOcQlYYa3vadCDqbLtT/Nb2ux4YxGY8RJcwjOiye/2COEOubAscTLXmu
-         dU8t10SmUPVFA1joRl89UVss3Zb7KhjRyuO2UJW4=
+        b=eVoykfajD2VdoodD4DFRIjJmpEeSgyA8Xx7naHAq2faVx05RAJ2AnNEeH1f3WHsUZ
+         2aBf6tJt490tl2t8TnYovg4OOMfd+XhhM/qKCki5QSuMum3KkR7CwmBIvlW2V1gtMB
+         ZbjnlOf/oZ4JxpH3U2ezqpstCXFhrCP5o7jB6Jd8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Felix Fu <foyjog@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Meena Shanmugam <meenashanmugam@google.com>
-Subject: [PATCH 5.10 61/66] SUNRPC: Ensure we flush any closed sockets before xs_xprt_free()
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH 5.17 087/114] slimbus: qcom: Fix IRQ check in qcom_slim_probe
 Date:   Mon, 16 May 2022 21:37:01 +0200
-Message-Id: <20220516193621.174798907@linuxfoundation.org>
+Message-Id: <20220516193627.977914165@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
-References: <20220516193619.400083785@linuxfoundation.org>
+In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
+References: <20220516193625.489108457@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,115 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit f00432063db1a0db484e85193eccc6845435b80e upstream.
+commit fe503887eed6ea528e144ec8dacfa1d47aa701ac upstream.
 
-We must ensure that all sockets are closed before we call xprt_free()
-and release the reference to the net namespace. The problem is that
-calling fput() will defer closing the socket until delayed_fput() gets
-called.
-Let's fix the situation by allowing rpciod and the transport teardown
-code (which runs on the system wq) to call __fput_sync(), and directly
-close the socket.
+platform_get_irq() returns non-zero IRQ number on success,
+negative error number on failure.
+And the doc of platform_get_irq() provides a usage example:
 
-Reported-by: Felix Fu <foyjog@gmail.com>
-Acked-by: Al Viro <viro@zeniv.linux.org.uk>
-Fixes: a73881c96d73 ("SUNRPC: Fix an Oops in udp_poll()")
-Cc: stable@vger.kernel.org # 5.1.x: 3be232f11a3c: SUNRPC: Prevent immediate close+reconnect
-Cc: stable@vger.kernel.org # 5.1.x: 89f42494f92f: SUNRPC: Don't call connect() more than once on a TCP socket
-Cc: stable@vger.kernel.org # 5.1.x
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-Signed-off-by: Meena Shanmugam <meenashanmugam@google.com>
+    int irq = platform_get_irq(pdev, 0);
+    if (irq < 0)
+        return irq;
+
+Fix the check of return value to catch errors correctly.
+
+Fixes: ad7fcbc308b0 ("slimbus: qcom: Add Qualcomm Slimbus controller driver")
+Cc: stable@vger.kernel.org
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Link: https://lore.kernel.org/r/20220429164917.5202-2-srinivas.kandagatla@linaro.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/file_table.c               |    1 +
- include/trace/events/sunrpc.h |    1 -
- net/sunrpc/xprt.c             |    7 +------
- net/sunrpc/xprtsock.c         |   16 +++++++++++++---
- 4 files changed, 15 insertions(+), 10 deletions(-)
+ drivers/slimbus/qcom-ctrl.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/fs/file_table.c
-+++ b/fs/file_table.c
-@@ -376,6 +376,7 @@ void __fput_sync(struct file *file)
- }
- 
- EXPORT_SYMBOL(fput);
-+EXPORT_SYMBOL(__fput_sync);
- 
- void __init files_init(void)
- {
---- a/include/trace/events/sunrpc.h
-+++ b/include/trace/events/sunrpc.h
-@@ -1006,7 +1006,6 @@ DEFINE_RPC_XPRT_LIFETIME_EVENT(connect);
- DEFINE_RPC_XPRT_LIFETIME_EVENT(disconnect_auto);
- DEFINE_RPC_XPRT_LIFETIME_EVENT(disconnect_done);
- DEFINE_RPC_XPRT_LIFETIME_EVENT(disconnect_force);
--DEFINE_RPC_XPRT_LIFETIME_EVENT(disconnect_cleanup);
- DEFINE_RPC_XPRT_LIFETIME_EVENT(destroy);
- 
- DECLARE_EVENT_CLASS(rpc_xprt_event,
---- a/net/sunrpc/xprt.c
-+++ b/net/sunrpc/xprt.c
-@@ -886,12 +886,7 @@ void xprt_connect(struct rpc_task *task)
- 	if (!xprt_lock_write(xprt, task))
- 		return;
- 
--	if (test_and_clear_bit(XPRT_CLOSE_WAIT, &xprt->state)) {
--		trace_xprt_disconnect_cleanup(xprt);
--		xprt->ops->close(xprt);
--	}
--
--	if (!xprt_connected(xprt)) {
-+	if (!xprt_connected(xprt) && !test_bit(XPRT_CLOSE_WAIT, &xprt->state)) {
- 		task->tk_rqstp->rq_connect_cookie = xprt->connect_cookie;
- 		rpc_sleep_on_timeout(&xprt->pending, task, NULL,
- 				xprt_request_timeout(task->tk_rqstp));
---- a/net/sunrpc/xprtsock.c
-+++ b/net/sunrpc/xprtsock.c
-@@ -871,7 +871,7 @@ static int xs_local_send_request(struct
- 
- 	/* Close the stream if the previous transmission was incomplete */
- 	if (xs_send_request_was_aborted(transport, req)) {
--		xs_close(xprt);
-+		xprt_force_disconnect(xprt);
- 		return -ENOTCONN;
+--- a/drivers/slimbus/qcom-ctrl.c
++++ b/drivers/slimbus/qcom-ctrl.c
+@@ -510,9 +510,9 @@ static int qcom_slim_probe(struct platfo
  	}
  
-@@ -909,7 +909,7 @@ static int xs_local_send_request(struct
- 			-status);
- 		fallthrough;
- 	case -EPIPE:
--		xs_close(xprt);
-+		xprt_force_disconnect(xprt);
- 		status = -ENOTCONN;
+ 	ctrl->irq = platform_get_irq(pdev, 0);
+-	if (!ctrl->irq) {
++	if (ctrl->irq < 0) {
+ 		dev_err(&pdev->dev, "no slimbus IRQ\n");
+-		return -ENODEV;
++		return ctrl->irq;
  	}
  
-@@ -1191,6 +1191,16 @@ static void xs_reset_transport(struct so
- 
- 	if (sk == NULL)
- 		return;
-+	/*
-+	 * Make sure we're calling this in a context from which it is safe
-+	 * to call __fput_sync(). In practice that means rpciod and the
-+	 * system workqueue.
-+	 */
-+	if (!(current->flags & PF_WQ_WORKER)) {
-+		WARN_ON_ONCE(1);
-+		set_bit(XPRT_CLOSE_WAIT, &xprt->state);
-+		return;
-+	}
- 
- 	if (atomic_read(&transport->xprt.swapper))
- 		sk_clear_memalloc(sk);
-@@ -1214,7 +1224,7 @@ static void xs_reset_transport(struct so
- 	mutex_unlock(&transport->recv_mutex);
- 
- 	trace_rpc_socket_close(xprt, sock);
--	fput(filp);
-+	__fput_sync(filp);
- 
- 	xprt_disconnect_done(xprt);
- }
+ 	sctrl = &ctrl->ctrl;
 
 

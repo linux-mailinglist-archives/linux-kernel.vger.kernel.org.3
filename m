@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380FD527D5A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 454F6527D5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240134AbiEPGEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 02:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
+        id S240060AbiEPGEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 02:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240153AbiEPGEH (ORCPT
+        with ESMTP id S235119AbiEPGEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 02:04:07 -0400
+        Mon, 16 May 2022 02:04:47 -0400
 Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB74B2BB24
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:04:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3C52C677
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:04:47 -0700 (PDT)
 Received: by verein.lst.de (Postfix, from userid 2407)
-        id 6E6CC68BEB; Mon, 16 May 2022 08:04:02 +0200 (CEST)
-Date:   Mon, 16 May 2022 08:04:01 +0200
+        id 1724C68BEB; Mon, 16 May 2022 08:04:44 +0200 (CEST)
+Date:   Mon, 16 May 2022 08:04:43 +0200
 From:   Christoph Hellwig <hch@lst.de>
 To:     Heiko Stuebner <heiko@sntech.de>
 Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
@@ -31,14 +31,14 @@ Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
         allen.baum@esperantotech.com, jscheid@ventanamicro.com,
         rtrauben@gmail.com, samuel@sholland.org, cmuellner@linux.com,
         philipp.tomsich@vrull.eu
-Subject: Re: [PATCH 06/12] riscv: prevent compressed instructions in
- alternatives
-Message-ID: <20220516060401.GI12339@lst.de>
-References: <20220511192921.2223629-1-heiko@sntech.de> <20220511192921.2223629-7-heiko@sntech.de>
+Subject: Re: [PATCH 08/12] riscv: Fix accessing pfn bits in PTEs for
+ non-32bit variants
+Message-ID: <20220516060443.GJ12339@lst.de>
+References: <20220511192921.2223629-1-heiko@sntech.de> <20220511192921.2223629-9-heiko@sntech.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220511192921.2223629-7-heiko@sntech.de>
+In-Reply-To: <20220511192921.2223629-9-heiko@sntech.de>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no

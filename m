@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED11528E22
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:43:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07307528F25
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243804AbiEPTjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
+        id S1347687AbiEPTwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345654AbiEPTiz (ORCPT
+        with ESMTP id S1346107AbiEPTpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:38:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6052E3F335;
-        Mon, 16 May 2022 12:38:41 -0700 (PDT)
+        Mon, 16 May 2022 15:45:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977013F884;
+        Mon, 16 May 2022 12:43:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BB8E6151A;
-        Mon, 16 May 2022 19:38:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9331AC385AA;
-        Mon, 16 May 2022 19:38:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4C21CB81616;
+        Mon, 16 May 2022 19:43:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D409C385AA;
+        Mon, 16 May 2022 19:43:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652729920;
-        bh=ImZUDBBgB97HF5DepotU5HncIpadO7ZFQwagfgBDrGw=;
+        s=korg; t=1652730194;
+        bh=C3qRh3O7j80V8NskUV4RSWEG9R9RkIc5taM0ld4ydt4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AdERLr+tSM56pez1pj+wjXAK3+jRZTHWYUSWr8V2WD/PDjOj1vbIrUV/hT+40WstS
-         PxdobHJM7QqVGNcnxXmFIj54UWawBEdB4bFUbyPCAlAjSmYRXlXhsYilBkFdeEyHEz
-         RSyWg/EwvRWNrQAgxJTQhCN3CnJKJJVpKrOOlWgg=
+        b=KjH06WOA2Zx9MNCeY7gsMEtIC1FY7wLqc/Ngw6CjiShFXS+X7ICaxtDHERVZJgCXv
+         uGxWJ+6ROL2EUb67n3QkyPBBzowexaSeE1QO7yFN7h7+RdblZIZ+IeS4/xg/Dp6NTw
+         xb/+uYmyAZywe3o4iwS0K09r1kM6BLrcxrKjwbjE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexandra Winter <wintera@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 06/19] s390/ctcm: fix potential memory leak
+Subject: [PATCH 5.4 08/43] mac80211_hwsim: call ieee80211_tx_prepare_skb under RCU protection
 Date:   Mon, 16 May 2022 21:36:19 +0200
-Message-Id: <20220516193613.689815922@linuxfoundation.org>
+Message-Id: <20220516193614.963992242@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193613.497233635@linuxfoundation.org>
-References: <20220516193613.497233635@linuxfoundation.org>
+In-Reply-To: <20220516193614.714657361@linuxfoundation.org>
+References: <20220516193614.714657361@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,65 +54,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexandra Winter <wintera@linux.ibm.com>
+From: Johannes Berg <johannes.berg@intel.com>
 
-[ Upstream commit 0c0b20587b9f25a2ad14db7f80ebe49bdf29920a ]
+[ Upstream commit 9e2db50f1ef2238fc2f71c5de1c0418b7a5b0ea2 ]
 
-smatch complains about
-drivers/s390/net/ctcm_mpc.c:1210 ctcmpc_unpack_skb() warn: possible memory leak of 'mpcginfo'
+This is needed since it might use (and pass out) pointers to
+e.g. keys protected by RCU. Can't really happen here as the
+frames aren't encrypted, but we need to still adhere to the
+rules.
 
-mpc_action_discontact() did not free mpcginfo. Consolidate the freeing in
-ctcmpc_unpack_skb().
-
-Fixes: 293d984f0e36 ("ctcm: infrastructure for replaced ctc driver")
-Signed-off-by: Alexandra Winter <wintera@linux.ibm.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: cacfddf82baf ("mac80211_hwsim: initialize ieee80211_tx_info at hw_scan_work")
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Link: https://lore.kernel.org/r/20220505230421.5f139f9de173.I77ae111a28f7c0e9fd1ebcee7f39dbec5c606770@changeid
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/s390/net/ctcm_mpc.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ drivers/net/wireless/mac80211_hwsim.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/s390/net/ctcm_mpc.c b/drivers/s390/net/ctcm_mpc.c
-index c103fc7efe9f..f2559e20df70 100644
---- a/drivers/s390/net/ctcm_mpc.c
-+++ b/drivers/s390/net/ctcm_mpc.c
-@@ -624,8 +624,6 @@ static void mpc_rcvd_sweep_resp(struct mpcg_info *mpcginfo)
- 		ctcm_clear_busy_do(dev);
- 	}
+diff --git a/drivers/net/wireless/mac80211_hwsim.c b/drivers/net/wireless/mac80211_hwsim.c
+index 6e1721d53384..ffe27104f654 100644
+--- a/drivers/net/wireless/mac80211_hwsim.c
++++ b/drivers/net/wireless/mac80211_hwsim.c
+@@ -2062,11 +2062,13 @@ static void hw_scan_work(struct work_struct *work)
+ 			if (req->ie_len)
+ 				skb_put_data(probe, req->ie, req->ie_len);
  
--	kfree(mpcginfo);
--
- 	return;
- 
- }
-@@ -1205,10 +1203,10 @@ static void ctcmpc_unpack_skb(struct channel *ch, struct sk_buff *pskb)
- 						CTCM_FUNTAIL, dev->name);
- 			priv->stats.rx_dropped++;
- 			/* mpcginfo only used for non-data transfers */
--			kfree(mpcginfo);
- 			if (do_debug_data)
- 				ctcmpc_dump_skb(pskb, -8);
++			rcu_read_lock();
+ 			if (!ieee80211_tx_prepare_skb(hwsim->hw,
+ 						      hwsim->hw_scan_vif,
+ 						      probe,
+ 						      hwsim->tmp_chan->band,
+ 						      NULL)) {
++				rcu_read_unlock();
+ 				kfree_skb(probe);
+ 				continue;
+ 			}
+@@ -2074,6 +2076,7 @@ static void hw_scan_work(struct work_struct *work)
+ 			local_bh_disable();
+ 			mac80211_hwsim_tx_frame(hwsim->hw, probe,
+ 						hwsim->tmp_chan);
++			rcu_read_unlock();
+ 			local_bh_enable();
  		}
-+		kfree(mpcginfo);
  	}
- done:
- 
-@@ -1998,7 +1996,6 @@ static void mpc_action_rcvd_xid0(fsm_instance *fsm, int event, void *arg)
- 		}
- 		break;
- 	}
--	kfree(mpcginfo);
- 
- 	CTCM_PR_DEBUG("ctcmpc:%s() %s xid2:%i xid7:%i xidt_p2:%i \n",
- 		__func__, ch->id, grp->outstanding_xid2,
-@@ -2059,7 +2056,6 @@ static void mpc_action_rcvd_xid7(fsm_instance *fsm, int event, void *arg)
- 		mpc_validate_xid(mpcginfo);
- 		break;
- 	}
--	kfree(mpcginfo);
- 	return;
- }
- 
 -- 
 2.35.1
 

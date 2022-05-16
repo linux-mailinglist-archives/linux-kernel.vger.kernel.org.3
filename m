@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 280F352906B
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:44:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 876815291E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:49:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232625AbiEPU33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57626 "EHLO
+        id S236508AbiEPU3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:29:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350358AbiEPUBI (ORCPT
+        with ESMTP id S1350365AbiEPUBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:01:08 -0400
+        Mon, 16 May 2022 16:01:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 895F849FA1;
-        Mon, 16 May 2022 12:55:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB634617C;
+        Mon, 16 May 2022 12:55:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D36660EC4;
-        Mon, 16 May 2022 19:54:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 791B6C385AA;
-        Mon, 16 May 2022 19:54:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4859460ABE;
+        Mon, 16 May 2022 19:55:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58E2EC385AA;
+        Mon, 16 May 2022 19:55:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730898;
-        bh=BmEpJ/ld1VzVukNx4iIl4AsXqK1rY8EOvE6U4VYro2A=;
+        s=korg; t=1652730901;
+        bh=AhnYl+ZcmT/1PsCkh76SmPzD+wrnGfBbdCPSpLDGwLs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YyAIm4DQtmWzHAGjvoFlne2cWU2MPNhm9XqDC5/+pmXej7Am2qF3P2maSgxgznKgR
-         /o6H+CFPlouk7uHEei/z/M+bQGMJIMimW32SO0C8jXDG+Ec36J0MhzKf8gT0wRQCOV
-         3VnTbRQkMAxdkSG/Otx2HwzUAQP2GAwtYGwboy48=
+        b=TfTzsZqsZ/TlbA5c6W97lYym6Ze/hdwpjNiQKRB5y/guasi5fE02YKkvVW0ZLRpr9
+         71HdyffLj2RLiWoUDAG4MmnJb5jsHhnAKuj+JvUWDXBwy9ogV6j/fTnGIMAObHgkgN
+         S7DZCsLAkrvvPGoB++M5gHb0huYB1aw1b9hWktLc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Geliang Tang <geliang.tang@suse.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Felix Fietkau <nbd@nbd.name>, Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 038/114] net/sched: act_pedit: really ensure the skb is writable
-Date:   Mon, 16 May 2022 21:36:12 +0200
-Message-Id: <20220516193626.583897601@linuxfoundation.org>
+Subject: [PATCH 5.17 039/114] net: ethernet: mediatek: ppe: fix wrong size passed to memset()
+Date:   Mon, 16 May 2022 21:36:13 +0200
+Message-Id: <20220516193626.612663535@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
 References: <20220516193625.489108457@linuxfoundation.org>
@@ -59,121 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Abeni <pabeni@redhat.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit 8b796475fd7882663a870456466a4fb315cc1bd6 ]
+[ Upstream commit 00832b1d1a393dfb1b9491d085e5b27e8c25d103 ]
 
-Currently pedit tries to ensure that the accessed skb offset
-is writable via skb_unclone(). The action potentially allows
-touching any skb bytes, so it may end-up modifying shared data.
+'foe_table' is a pointer, the real size of struct mtk_foe_entry
+should be pass to memset().
 
-The above causes some sporadic MPTCP self-test failures, due to
-this code:
-
-	tc -n $ns2 filter add dev ns2eth$i egress \
-		protocol ip prio 1000 \
-		handle 42 fw \
-		action pedit munge offset 148 u8 invert \
-		pipe csum tcp \
-		index 100
-
-The above modifies a data byte outside the skb head and the skb is
-a cloned one, carrying a TCP output packet.
-
-This change addresses the issue by keeping track of a rough
-over-estimate highest skb offset accessed by the action and ensuring
-such offset is really writable.
-
-Note that this may cause performance regressions in some scenarios,
-but hopefully pedit is not in the critical path.
-
-Fixes: db2c24175d14 ("act_pedit: access skb->data safely")
-Acked-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-Tested-by: Geliang Tang <geliang.tang@suse.com>
+Fixes: ba37b7caf1ed ("net: ethernet: mtk_eth_soc: add support for initializing the PPE")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Acked-by: Felix Fietkau <nbd@nbd.name>
+Link: https://lore.kernel.org/r/20220511030829.3308094-1-yangyingliang@huawei.com
 Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
-Link: https://lore.kernel.org/r/1fcf78e6679d0a287dd61bb0f04730ce33b3255d.1652194627.git.pabeni@redhat.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/tc_act/tc_pedit.h |  1 +
- net/sched/act_pedit.c         | 26 ++++++++++++++++++++++----
- 2 files changed, 23 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/mediatek/mtk_ppe.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/net/tc_act/tc_pedit.h b/include/net/tc_act/tc_pedit.h
-index 748cf87a4d7e..3e02709a1df6 100644
---- a/include/net/tc_act/tc_pedit.h
-+++ b/include/net/tc_act/tc_pedit.h
-@@ -14,6 +14,7 @@ struct tcf_pedit {
- 	struct tc_action	common;
- 	unsigned char		tcfp_nkeys;
- 	unsigned char		tcfp_flags;
-+	u32			tcfp_off_max_hint;
- 	struct tc_pedit_key	*tcfp_keys;
- 	struct tcf_pedit_key_ex	*tcfp_keys_ex;
- };
-diff --git a/net/sched/act_pedit.c b/net/sched/act_pedit.c
-index 31fcd279c177..0eaaf1f45de1 100644
---- a/net/sched/act_pedit.c
-+++ b/net/sched/act_pedit.c
-@@ -149,7 +149,7 @@ static int tcf_pedit_init(struct net *net, struct nlattr *nla,
- 	struct nlattr *pattr;
- 	struct tcf_pedit *p;
- 	int ret = 0, err;
--	int ksize;
-+	int i, ksize;
- 	u32 index;
+diff --git a/drivers/net/ethernet/mediatek/mtk_ppe.c b/drivers/net/ethernet/mediatek/mtk_ppe.c
+index 3ad10c793308..66298e2235c9 100644
+--- a/drivers/net/ethernet/mediatek/mtk_ppe.c
++++ b/drivers/net/ethernet/mediatek/mtk_ppe.c
+@@ -395,7 +395,7 @@ static void mtk_ppe_init_foe_table(struct mtk_ppe *ppe)
+ 	static const u8 skip[] = { 12, 25, 38, 51, 76, 89, 102 };
+ 	int i, k;
  
- 	if (!nla) {
-@@ -228,6 +228,18 @@ static int tcf_pedit_init(struct net *net, struct nlattr *nla,
- 		p->tcfp_nkeys = parm->nkeys;
- 	}
- 	memcpy(p->tcfp_keys, parm->keys, ksize);
-+	p->tcfp_off_max_hint = 0;
-+	for (i = 0; i < p->tcfp_nkeys; ++i) {
-+		u32 cur = p->tcfp_keys[i].off;
-+
-+		/* The AT option can read a single byte, we can bound the actual
-+		 * value with uchar max.
-+		 */
-+		cur += (0xff & p->tcfp_keys[i].offmask) >> p->tcfp_keys[i].shift;
-+
-+		/* Each key touches 4 bytes starting from the computed offset */
-+		p->tcfp_off_max_hint = max(p->tcfp_off_max_hint, cur + 4);
-+	}
+-	memset(ppe->foe_table, 0, MTK_PPE_ENTRIES * sizeof(ppe->foe_table));
++	memset(ppe->foe_table, 0, MTK_PPE_ENTRIES * sizeof(*ppe->foe_table));
  
- 	p->tcfp_flags = parm->flags;
- 	goto_ch = tcf_action_set_ctrlact(*a, parm->action, goto_ch);
-@@ -308,13 +320,18 @@ static int tcf_pedit_act(struct sk_buff *skb, const struct tc_action *a,
- 			 struct tcf_result *res)
- {
- 	struct tcf_pedit *p = to_pedit(a);
-+	u32 max_offset;
- 	int i;
- 
--	if (skb_unclone(skb, GFP_ATOMIC))
--		return p->tcf_action;
--
- 	spin_lock(&p->tcf_lock);
- 
-+	max_offset = (skb_transport_header_was_set(skb) ?
-+		      skb_transport_offset(skb) :
-+		      skb_network_offset(skb)) +
-+		     p->tcfp_off_max_hint;
-+	if (skb_ensure_writable(skb, min(skb->len, max_offset)))
-+		goto unlock;
-+
- 	tcf_lastuse_update(&p->tcf_tm);
- 
- 	if (p->tcfp_nkeys > 0) {
-@@ -403,6 +420,7 @@ static int tcf_pedit_act(struct sk_buff *skb, const struct tc_action *a,
- 	p->tcf_qstats.overlimits++;
- done:
- 	bstats_update(&p->tcf_bstats, skb);
-+unlock:
- 	spin_unlock(&p->tcf_lock);
- 	return p->tcf_action;
- }
+ 	if (!IS_ENABLED(CONFIG_SOC_MT7621))
+ 		return;
 -- 
 2.35.1
 

@@ -2,225 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74780528C2A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 19:40:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19DD7528C2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 19:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344369AbiEPRj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 13:39:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
+        id S236513AbiEPRmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 13:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344346AbiEPRjs (ORCPT
+        with ESMTP id S1344392AbiEPRlc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 13:39:48 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41EC36B42
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 10:39:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652722787; x=1684258787;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=E351kjdHM4yyOzHxYpzD4Ez9vYrSwygxY8UcWv9n7c0=;
-  b=gUWutekvo1885i1fUHgriFU72BtbZCfw95Dp9UvjDZR7W0px2rLitHsV
-   nRzJcsMToWr+wzp+L12YDoNBa+D5S12mlAW2BeyRv92LsrfAsKLUU11Df
-   +HCIwnMgD3Eniz+DLZhw9vJ5+ihLcfhIGsu+0eerh9Yoe2OODYCvlbzuH
-   z3I2sOZmwlQ6P9Wox/sUV/gcjsV2fI1/xPFi+RXXmnlhDH5Qlhi0BHPgQ
-   RNgNRUd3ZuyRCSAZ3AJ6B4KtZX6hQVSSxIX77BKUtAUPyn+eF+irUZARe
-   SIvDPlULbSOYZNoqKb8u6jo7JV5RUrA4WYe5GwDMjSzP64yPAq283rb6+
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="251426850"
-X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
-   d="scan'208";a="251426850"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 10:39:47 -0700
-X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
-   d="scan'208";a="596631886"
-Received: from skechkar-mobl.ger.corp.intel.com (HELO [10.255.228.165]) ([10.255.228.165])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 10:39:46 -0700
-Message-ID: <f2ab7c58-2d69-9042-4880-9b86bcdd4053@linux.intel.com>
-Date:   Mon, 16 May 2022 10:39:45 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.8.1
-Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-References: <20220503012721.ok7fbvxmnvsr6qny@box.shutemov.name>
- <58d07b2d-cef5-17ed-9c57-e12fe5665e04@intel.com>
- <40ccd0f0-35a1-5aa7-9e51-25ab196d79e5@linux.intel.com>
- <2ed5c9cc316950a5a47ee714715b7980f358a140.camel@intel.com>
- <ab17102c-0cb7-87d3-3494-969866d64573@linux.intel.com>
- <d53696f85ada39a91a3685c61d177c582810772e.camel@intel.com>
- <d63d2774-c44d-27da-74b6-550935a196fd@intel.com>
- <dca06ffa36abe9989f0a7abaeafc83c1a7250651.camel@intel.com>
- <20220507004236.5p5dyksftge7wwr3@black.fi.intel.com>
- <45d184273f1950320843f6696eb3071f7d354fd3.camel@intel.com>
- <20220509120927.7rg6v5pyc3f4pxsh@box.shutemov.name>
- <75d4755c9a376df2e98a267e10e60da3bd178b17.camel@intel.com>
- <690ae2cb2099ac3e13c3da530a1b4a4eb5bafc5a.camel@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <690ae2cb2099ac3e13c3da530a1b4a4eb5bafc5a.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 16 May 2022 13:41:32 -0400
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 16 May 2022 10:41:25 PDT
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3C4423701D;
+        Mon, 16 May 2022 10:41:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id; bh=DjFY8kI2tBxuMhCnW3UlpTLlJzV7HoCSZMoVqH/WCD8=; b=S
+        RirxfGceUucx9whh94apwdg2TnJjAuwqnl5Q25s4qXetI+lACrLCcYCaz4sEG03b
+        T+xN3MQh5Jczp+gCk5J/5avnk6+p/yC4fN2ygWCFxottkUetJW/q1muDbkEGnYHi
+        wl5oAFUyLNYbbdsO4TXRLbirXMxCjcx8p87lqJvNEo=
+Received: from localhost (unknown [10.129.21.144])
+        by front02 (Coremail) with SMTP id 54FpogD39OR0jIJidi5ABg--.34814S2;
+        Tue, 17 May 2022 01:40:05 +0800 (CST)
+From:   Yongzhi Liu <lyz_cs@pku.edu.cn>
+To:     serge@hallyn.com, jmorris@namei.org, viro@zeniv.linux.org.uk,
+        dhowells@redhat.com, ebiederm@xmission.com
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yongzhi Liu <lyz_cs@pku.edu.cn>
+Subject: [PATCH] commoncap: check return value to avoid null pointer dereference
+Date:   Mon, 16 May 2022 10:40:02 -0700
+Message-Id: <1652722802-66170-1-git-send-email-lyz_cs@pku.edu.cn>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID: 54FpogD39OR0jIJidi5ABg--.34814S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7trWfuryxJF15Xr43tF15XFb_yoW8Xr4fpa
+        1fCa48Jr4rJFyj9w1vvF4Duw1Y9ayfZFW8GFWkuw1ayFs3Gry0yryakw1UuF15CryYk34j
+        qr4Yk3y5WF1UA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkK1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E
+        87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzx
+        vE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        JVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
+        AKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l
+        42xK82IY6x8ErcxFaVAv8VWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j
+        6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbU
+        UUUUU==
+X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwEHBlPy7vG+mAAFse
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave,
+The pointer inode is dereferenced before a null pointer
+check on inode, hence if inode is actually null we will
+get a null pointer dereference. Fix this by only dereferencing
+inode after the null pointer check on inode.
 
-On 5/10/22 3:42 AM, Kai Huang wrote:
-> On Tue, 2022-05-10 at 11:54 +1200, Kai Huang wrote:
->> On Mon, 2022-05-09 at 15:09 +0300, Kirill A. Shutemov wrote:
->>> On Mon, May 09, 2022 at 03:37:22PM +1200, Kai Huang wrote:
->>>> On Sat, 2022-05-07 at 03:42 +0300, Kirill A. Shutemov wrote:
->>>>> On Fri, May 06, 2022 at 12:11:03PM +1200, Kai Huang wrote:
->>>>>> Kirill, what's your opinion?
->>>>>
->>>>> I said before that I think DMA API is the right tool here.
->>>>>
->>>>> Speculation about future of DMA in TDX is irrelevant here. If semantics
->>>>> change we will need to re-evaluate all users. VirtIO uses DMA API and it
->>>>> is conceptually the same use-case: communicate with the host.
->>>>
->>>> Virtio is designed for device driver to use, so it's fine to use DMA API. And
->>>> real DMA can happen to the virtio DMA buffers.  Attestation doesn't have such
->>>> assumption.
->>>
->>> Whether attestation driver uses struct device is implementation detail.
->>> I don't see what is you point.
->>
->> No real DMA is involved in attestation.
->>
->>>
->>>> So I don't see why TD guest kernel cannot have a simple protocol to vmap() a
->>>> page (or couple of pages) as shared on-demand, like below:
->>>>
->>>> 	page = alloc_page();
->>>>
->>>> 	addr = vmap(page,  pgprot_decrypted(PAGE_KERNEL));
->>>>
->>>> 	clflush_cache_range(page_address(page), PAGE_SIZE);
->>>>
->>>> 	MapGPA(page_to_phys(page) | cc_mkdec(0), PAGE_SIZE);
->>>>
->>>> And we can even avoid above clflush_cache_range() if I understand correctly.
->>>>
->>>> Or  I missed something?
->>>
->>> For completeness, cover free path too. Are you going to opencode page
->>> accept too?
->>
->> Call __tdx_module_call(TDX_ACCEPT_PAGE, ...) right after MapGPA() to convert
->> back to private.  I don't think there is any problem?
->>
->>>
->>> Private->Shared conversion is destructive. You have to split SEPT, flush
->>> TLB. Backward conversion even more costly.
->>
->> I think I won't call it destructive.
->>
->> And I suggested before, we can allocate a default size buffer (i.e. 4 pages),
->> which is large enough to cover all requests for now, during driver
->> initialization.  This avoids IOCTL time conversion.  We should still have code
->> in the IOCTL to check the request buffer size and when it is larger than the
->> default, the old should be freed a larger one should be allocated.  But for now
->> this code path will never happen.
->>
->> Btw above is based on assumption that we don't support concurrent IOCTLs.  This
->> version Sathya somehow changed to support concurrent IOCTLs but this was a
->> surprise as I thought we somehow agreed we don't need to support this.
-> 
-> Hi Dave,
-> 
-> Sorry I forgot to mention that GHCI 1.5 defines a generic TDVMCALL<Service> for
-> a TD to communicate with VMM or another TD or some service in the host.  This
-> TDVMCALL can support many sub-commands.  For now only sub-commands for TD
-> migration is defined, but we can have more.
-> 
-> For this, we cannot assume the size of the command buffer, and I don't see why
-> we don't want to support concurrent TDVMCALLs.  So looks from long term, we will
-> very likely need IOCTL time buffer private-shared conversion.
-> 
-> 
+Fixes: c6f493d631c ("VFS: security/: d_backing_inode() annotations")
+Fixes: 8db6c34 ("Introduce v3 namespaced file capabilities")
 
+Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+---
+ security/commoncap.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Let me summarize the discussion so far.
-
-Problem: Allocate shared buffer without breaking the direct map.
-
-Solution 1: Use alloc_pages*()/vmap()/set_memory_*crypted() APIs
-
-Pros/Cons:
-
-1. Uses virtual mapped address for shared/private conversion and
-    hence does not touch the direct mapping.
-
-2. Current version of set_memory_*crypted() APIs  modifies the
-    aliased mappings, which also includes the direct mapping. So if we
-    want to use set_memory_*() APIs, we need a new variant that does not
-    touch the direct mapping. An alternative solution is to open code the
-    page attribute conversion, cache flushing and MapGpa/Page acceptance
-    logic in the attestation driver itself. But, IMO, this is not
-    preferred because it is not favorable to sprinkle the mapping
-    conversion code in multiple places in the kernel. It is better to use
-    a single API if possible.
-
-3. This solution can possibly break the SEPT entries on private-shared
-    conversion. The backward conversion is also costly. IMO, since the
-    attestation requests are not very frequent, we don't need to be
-    overly concerned about the cost involved in the conversion.
-
-Solution 2: Use DMA alloc APIs.
-
-Pros/Cons:
-
-1. Simpler to use. It taps into the SWIOTLB buffers and does not
-    affect the direct map. Since we will be using already converted
-    memory, allocation/freeing will be cheaper compared to solution 1.
-
-2. There is a concern that it is not a long term solution. Since
-    with advent of TDX IO, not all DMA allocations need to use
-    SWIOTLB model. But as per Kirill's comments, this is not a concern
-    and force_dma_unencrypted() hook can be used to differentiate which
-    devices need to use TDX IO vs SWIOTLB model.
-
-3. Using DMA APIs requires a valid bus device as argument and hence
-    requires this driver converted into a platform device driver. But,
-    since this driver does not do real DMA, making above changes just
-    to use the DMA API is not recommended.
-
-Since both solutions fix the problem (and there are pros/cons), and both
-Kai/Kirill's comments conclusion is, there is no hard preference and
-to let you decide on it.
-
-Since you have already made a comment about "irrespective of which
-model is chosen, you need the commit log talk about the solution and
-how it not touches the direct map", I have posted the v6 version
-adapting Solution 1.
-
-Please let me know if you agree with this direction or have comments
-about the solution.
-
+diff --git a/security/commoncap.c b/security/commoncap.c
+index 5fc8986..978f011 100644
+--- a/security/commoncap.c
++++ b/security/commoncap.c
+@@ -298,6 +298,8 @@ int cap_inode_need_killpriv(struct dentry *dentry)
+ 	struct inode *inode = d_backing_inode(dentry);
+ 	int error;
+ 
++	if (!inode)
++		return 0;
+ 	error = __vfs_getxattr(dentry, inode, XATTR_NAME_CAPS, NULL, 0);
+ 	return error > 0;
+ }
+@@ -545,11 +547,13 @@ int cap_convert_nscap(struct user_namespace *mnt_userns, struct dentry *dentry,
+ 	const struct vfs_cap_data *cap = *ivalue;
+ 	__u32 magic, nsmagic;
+ 	struct inode *inode = d_backing_inode(dentry);
+-	struct user_namespace *task_ns = current_user_ns(),
+-		*fs_ns = inode->i_sb->s_user_ns;
++	struct user_namespace *task_ns = current_user_ns(), *fs_ns;
+ 	kuid_t rootid;
+ 	size_t newsize;
+ 
++	if (!inode)
++		return -EINVAL;
++	fs_ns = inode->i_sb->s_user_ns;
+ 	if (!*ivalue)
+ 		return -EINVAL;
+ 	if (!validheader(size, cap))
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.7.4
+

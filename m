@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A2B528E27
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36176528EDD
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345670AbiEPTjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
+        id S1346378AbiEPTuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345594AbiEPTih (ORCPT
+        with ESMTP id S1346103AbiEPToi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:38:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443C33EF12;
-        Mon, 16 May 2022 12:38:31 -0700 (PDT)
+        Mon, 16 May 2022 15:44:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786FF3F327;
+        Mon, 16 May 2022 12:43:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D582E614B6;
-        Mon, 16 May 2022 19:38:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB528C34100;
-        Mon, 16 May 2022 19:38:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5E6861512;
+        Mon, 16 May 2022 19:43:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2694C34100;
+        Mon, 16 May 2022 19:43:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652729910;
-        bh=9qxzXmWzDaSC6JFM5nKZ6C0UEuZ0OTnCGnCsKyfPyGc=;
+        s=korg; t=1652730186;
+        bh=yJl8Cd9PvqsmdGwl2MJYBhuRJUxLCHlEUkl8TnA/s2s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wpkM1sWpTT1k6qkNtpPFpHf5z5krw7/qoBKebs17lkX59YHbWm3rAx6FjhmyIIB0t
-         mNfe3GU/6t+GkyOWhP2x+oDWN7c60nrDTy671gj2AcZ+t/0s96FLyWtoNL2osu3Y1x
-         g0dCuYAgPiP2UQl1TSCe/I+Mzkg6Gflmgj9GnBXQ=
+        b=pHmMdn9GSCuAObs4pDEILGTxP69lA4X04BOm3Cbk+5LvsCM4SlapQlJrSSZD/1Nxy
+         vuZWDT2yeN7DTZraQnMNBwT12MmpDDzy4xu8+0z8EBSjL4Bgzoz2I+7R8s+gHdSGo8
+         a0P47RlU+ttqwwF0vjhr88s/w6cMEnv+6EETF/w0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        syzbot <syzkaller@googlegroups.com>,
+        stable@vger.kernel.org,
+        Lokesh Dhoundiyal <lokesh.dhoundiyal@alliedtelesis.co.nz>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        David Ahern <dsahern@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 03/19] netlink: do not reset transport header in netlink_recvmsg()
+Subject: [PATCH 5.4 05/43] ipv4: drop dst in multicast routing path
 Date:   Mon, 16 May 2022 21:36:16 +0200
-Message-Id: <20220516193613.601433126@linuxfoundation.org>
+Message-Id: <20220516193614.877057845@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193613.497233635@linuxfoundation.org>
-References: <20220516193613.497233635@linuxfoundation.org>
+In-Reply-To: <20220516193614.714657361@linuxfoundation.org>
+References: <20220516193614.714657361@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,74 +58,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Lokesh Dhoundiyal <lokesh.dhoundiyal@alliedtelesis.co.nz>
 
-[ Upstream commit d5076fe4049cadef1f040eda4aaa001bb5424225 ]
+[ Upstream commit 9e6c6d17d1d6a3f1515ce399f9a011629ec79aa0 ]
 
-netlink_recvmsg() does not need to change transport header.
+kmemleak reports the following when routing multicast traffic over an
+ipsec tunnel.
 
-If transport header was needed, it should have been reset
-by the producer (netlink_dump()), not the consumer(s).
+Kmemleak output:
+unreferenced object 0x8000000044bebb00 (size 256):
+  comm "softirq", pid 0, jiffies 4294985356 (age 126.810s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 80 00 00 00 05 13 74 80  ..............t.
+    80 00 00 00 04 9b bf f9 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000f83947e0>] __kmalloc+0x1e8/0x300
+    [<00000000b7ed8dca>] metadata_dst_alloc+0x24/0x58
+    [<0000000081d32c20>] __ipgre_rcv+0x100/0x2b8
+    [<00000000824f6cf1>] gre_rcv+0x178/0x540
+    [<00000000ccd4e162>] gre_rcv+0x7c/0xd8
+    [<00000000c024b148>] ip_protocol_deliver_rcu+0x124/0x350
+    [<000000006a483377>] ip_local_deliver_finish+0x54/0x68
+    [<00000000d9271b3a>] ip_local_deliver+0x128/0x168
+    [<00000000bd4968ae>] xfrm_trans_reinject+0xb8/0xf8
+    [<0000000071672a19>] tasklet_action_common.isra.16+0xc4/0x1b0
+    [<0000000062e9c336>] __do_softirq+0x1fc/0x3e0
+    [<00000000013d7914>] irq_exit+0xc4/0xe0
+    [<00000000a4d73e90>] plat_irq_dispatch+0x7c/0x108
+    [<000000000751eb8e>] handle_int+0x16c/0x178
+    [<000000001668023b>] _raw_spin_unlock_irqrestore+0x1c/0x28
 
-The following trace probably happened when multiple threads
-were using MSG_PEEK.
+The metadata dst is leaked when ip_route_input_mc() updates the dst for
+the skb. Commit f38a9eb1f77b ("dst: Metadata destinations") correctly
+handled dropping the dst in ip_route_input_slow() but missed the
+multicast case which is handled by ip_route_input_mc(). Drop the dst in
+ip_route_input_mc() avoiding the leak.
 
-BUG: KCSAN: data-race in netlink_recvmsg / netlink_recvmsg
-
-write to 0xffff88811e9f15b2 of 2 bytes by task 32012 on cpu 1:
- skb_reset_transport_header include/linux/skbuff.h:2760 [inline]
- netlink_recvmsg+0x1de/0x790 net/netlink/af_netlink.c:1978
- sock_recvmsg_nosec net/socket.c:948 [inline]
- sock_recvmsg net/socket.c:966 [inline]
- __sys_recvfrom+0x204/0x2c0 net/socket.c:2097
- __do_sys_recvfrom net/socket.c:2115 [inline]
- __se_sys_recvfrom net/socket.c:2111 [inline]
- __x64_sys_recvfrom+0x74/0x90 net/socket.c:2111
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-write to 0xffff88811e9f15b2 of 2 bytes by task 32005 on cpu 0:
- skb_reset_transport_header include/linux/skbuff.h:2760 [inline]
- netlink_recvmsg+0x1de/0x790 net/netlink/af_netlink.c:1978
- ____sys_recvmsg+0x162/0x2f0
- ___sys_recvmsg net/socket.c:2674 [inline]
- __sys_recvmsg+0x209/0x3f0 net/socket.c:2704
- __do_sys_recvmsg net/socket.c:2714 [inline]
- __se_sys_recvmsg net/socket.c:2711 [inline]
- __x64_sys_recvmsg+0x42/0x50 net/socket.c:2711
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-value changed: 0xffff -> 0x0000
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 0 PID: 32005 Comm: syz-executor.4 Not tainted 5.18.0-rc1-syzkaller-00328-ge1f700ebd6be-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Link: https://lore.kernel.org/r/20220505161946.2867638-1-eric.dumazet@gmail.com
+Fixes: f38a9eb1f77b ("dst: Metadata destinations")
+Signed-off-by: Lokesh Dhoundiyal <lokesh.dhoundiyal@alliedtelesis.co.nz>
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Reviewed-by: David Ahern <dsahern@kernel.org>
+Link: https://lore.kernel.org/r/20220505020017.3111846-1-chris.packham@alliedtelesis.co.nz
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netlink/af_netlink.c | 1 -
- 1 file changed, 1 deletion(-)
+ net/ipv4/route.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-index a8674e9ff37b..47b1631bf14c 100644
---- a/net/netlink/af_netlink.c
-+++ b/net/netlink/af_netlink.c
-@@ -1929,7 +1929,6 @@ static int netlink_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
- 		copied = len;
- 	}
+diff --git a/net/ipv4/route.c b/net/ipv4/route.c
+index d1feec97fa06..9280e5087159 100644
+--- a/net/ipv4/route.c
++++ b/net/ipv4/route.c
+@@ -1775,6 +1775,7 @@ static int ip_route_input_mc(struct sk_buff *skb, __be32 daddr, __be32 saddr,
+ #endif
+ 	RT_CACHE_STAT_INC(in_slow_mc);
  
--	skb_reset_transport_header(data_skb);
- 	err = skb_copy_datagram_msg(data_skb, 0, msg, copied);
- 
- 	if (msg->msg_name) {
++	skb_dst_drop(skb);
+ 	skb_dst_set(skb, &rth->dst);
+ 	return 0;
+ }
 -- 
 2.35.1
 

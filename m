@@ -2,42 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C77527B3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 02:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F0BE527B48
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 03:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239104AbiEPA40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 20:56:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
+        id S238867AbiEPBJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 21:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238979AbiEPA4Q (ORCPT
+        with ESMTP id S231768AbiEPBJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 20:56:16 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE88D2AC2
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 17:56:13 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R311e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VDC5iVF_1652662567;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VDC5iVF_1652662567)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 16 May 2022 08:56:08 +0800
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-To:     catalin.marinas@arm.com, will@kernel.org
-Cc:     mike.kravetz@oracle.com, akpm@linux-foundation.org,
-        songmuchun@bytedance.com, willy@infradead.org,
-        anshuman.khandual@arm.com, christophe.leroy@csgroup.eu,
-        baolin.wang@linux.alibaba.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH v3 2/2] arm64/hugetlb: Implement arm64 specific huge_ptep_get()
-Date:   Mon, 16 May 2022 08:55:58 +0800
-Message-Id: <624109a80ac4bbdf1e462dfa0b49e9f7c31a7c0d.1652496622.git.baolin.wang@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <cover.1652496622.git.baolin.wang@linux.alibaba.com>
-References: <cover.1652496622.git.baolin.wang@linux.alibaba.com>
-In-Reply-To: <cover.1652496622.git.baolin.wang@linux.alibaba.com>
-References: <cover.1652496622.git.baolin.wang@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        Sun, 15 May 2022 21:09:11 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2255E030;
+        Sun, 15 May 2022 18:09:10 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L1h2q6lTGzhYyt;
+        Mon, 16 May 2022 09:08:35 +0800 (CST)
+Received: from [10.174.178.185] (10.174.178.185) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 16 May 2022 09:09:08 +0800
+Subject: Re: [PATCH -next v2] ext4: fix bug_on in ext4_writepages
+To:     Jan Kara <jack@suse.cz>
+References: <20220510100228.1172227-1-yebin10@huawei.com>
+ <20220511134710.4ggvxuxg7dwf7tkp@quack3.lan> <627F7651.4040003@huawei.com>
+CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+From:   yebin <yebin10@huawei.com>
+Message-ID: <6281A434.8000806@huawei.com>
+Date:   Mon, 16 May 2022 09:09:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
+ Thunderbird/38.1.0
+MIME-Version: 1.0
+In-Reply-To: <627F7651.4040003@huawei.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.185]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,83 +50,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now we use huge_ptep_get() to get the pte value of a hugetlb page,
-however it will only return one specific pte value for the CONT-PTE
-or CONT-PMD size hugetlb on ARM64 system, which can contain several
-continuous pte or pmd entries with same page table attributes. And it
-will not take into account the subpages' dirty or young bits of a
-CONT-PTE/PMD size hugetlb page.
 
-So the huge_ptep_get() is inconsistent with huge_ptep_get_and_clear(),
-which already takes account the dirty or young bits for any subpages
-in this CONT-PTE/PMD size hugetlb [1]. Meanwhile we can miss dirty or
-young flags statistics for hugetlb pages with current huge_ptep_get(),
-such as the gather_hugetlb_stats() function, and CONT-PTE/PMD hugetlb
-monitoring with DAMON.
 
-Thus define an ARM64 specific huge_ptep_get() implementation as well as
-enabling __HAVE_ARCH_HUGE_PTEP_GET, that will take into account any
-subpages' dirty or young bits for CONT-PTE/PMD size hugetlb page, for
-those functions that want to check the dirty and young flags of a hugetlb
-page.
-
-[1] https://lore.kernel.org/linux-mm/85bd80b4-b4fd-0d3f-a2e5-149559f2f387@oracle.com/
-
-Suggested-by: Muchun Song <songmuchun@bytedance.com>
-Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- arch/arm64/include/asm/hugetlb.h |  2 ++
- arch/arm64/mm/hugetlbpage.c      | 22 ++++++++++++++++++++++
- 2 files changed, 24 insertions(+)
-
-diff --git a/arch/arm64/include/asm/hugetlb.h b/arch/arm64/include/asm/hugetlb.h
-index 616b2ca..1fd2846 100644
---- a/arch/arm64/include/asm/hugetlb.h
-+++ b/arch/arm64/include/asm/hugetlb.h
-@@ -44,6 +44,8 @@ extern pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
- #define __HAVE_ARCH_HUGE_PTE_CLEAR
- extern void huge_pte_clear(struct mm_struct *mm, unsigned long addr,
- 			   pte_t *ptep, unsigned long sz);
-+#define __HAVE_ARCH_HUGE_PTEP_GET
-+extern pte_t huge_ptep_get(pte_t *ptep);
- extern void set_huge_swap_pte_at(struct mm_struct *mm, unsigned long addr,
- 				 pte_t *ptep, pte_t pte, unsigned long sz);
- #define set_huge_swap_pte_at set_huge_swap_pte_at
-diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
-index 9553851..2a7e143 100644
---- a/arch/arm64/mm/hugetlbpage.c
-+++ b/arch/arm64/mm/hugetlbpage.c
-@@ -158,6 +158,28 @@ static inline int num_contig_ptes(unsigned long size, size_t *pgsize)
- 	return contig_ptes;
- }
- 
-+pte_t huge_ptep_get(pte_t *ptep)
-+{
-+	int ncontig, i;
-+	size_t pgsize;
-+	pte_t orig_pte = ptep_get(ptep);
-+
-+	if (!pte_present(orig_pte) || !pte_cont(orig_pte))
-+		return orig_pte;
-+
-+	ncontig = num_contig_ptes(page_size(pte_page(orig_pte)), &pgsize);
-+	for (i = 0; i < ncontig; i++, ptep++) {
-+		pte_t pte = ptep_get(ptep);
-+
-+		if (pte_dirty(pte))
-+			orig_pte = pte_mkdirty(orig_pte);
-+
-+		if (pte_young(pte))
-+			orig_pte = pte_mkyoung(orig_pte);
-+	}
-+	return orig_pte;
-+}
-+
- /*
-  * Changing some bits of contiguous entries requires us to follow a
-  * Break-Before-Make approach, breaking the whole contiguous set
--- 
-1.8.3.1
+On 2022/5/14 17:28, yebin wrote:
+>
+>
+> On 2022/5/11 21:47, Jan Kara wrote:
+>> On Tue 10-05-22 18:02:28, Ye Bin wrote:
+>>> we got issue as follows:
+>>> EXT4-fs error (device loop0): ext4_mb_generate_buddy:1141: group 0, 
+>>> block bitmap and bg descriptor inconsistent: 25 vs 31513 free cls
+>>> ------------[ cut here ]------------
+>>> kernel BUG at fs/ext4/inode.c:2708!
+>>> invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
+>>> CPU: 2 PID: 2147 Comm: rep Not tainted 5.18.0-rc2-next-20220413+ #155
+>>> RIP: 0010:ext4_writepages+0x1977/0x1c10
+>>> RSP: 0018:ffff88811d3e7880 EFLAGS: 00010246
+>>> RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffff88811c098000
+>>> RDX: 0000000000000000 RSI: ffff88811c098000 RDI: 0000000000000002
+>>> RBP: ffff888128140f50 R08: ffffffffb1ff6387 R09: 0000000000000000
+>>> R10: 0000000000000007 R11: ffffed10250281ea R12: 0000000000000001
+>>> R13: 00000000000000a4 R14: ffff88811d3e7bb8 R15: ffff888128141028
+>>> FS:  00007f443aed9740(0000) GS:ffff8883aef00000(0000) 
+>>> knlGS:0000000000000000
+>>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>> CR2: 0000000020007200 CR3: 000000011c2a4000 CR4: 00000000000006e0
+>>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>>> Call Trace:
+>>>   <TASK>
+>>>   do_writepages+0x130/0x3a0
+>>>   filemap_fdatawrite_wbc+0x83/0xa0
+>>>   filemap_flush+0xab/0xe0
+>>>   ext4_alloc_da_blocks+0x51/0x120
+>>>   __ext4_ioctl+0x1534/0x3210
+>>>   __x64_sys_ioctl+0x12c/0x170
+>>>   do_syscall_64+0x3b/0x90
+>>>
+>>> It may happen as follows:
+>>> 1. write inline_data inode
+>>> vfs_write
+>>>    new_sync_write
+>>>      ext4_file_write_iter
+>>>        ext4_buffered_write_iter
+>>>          generic_perform_write
+>>>            ext4_da_write_begin
+>>>              ext4_da_write_inline_data_begin -> If inline data size too
+>>>              small will allocate block to write, then mapping will has
+>>>              dirty page
+>>>                  ext4_da_convert_inline_data_to_extent ->clear 
+>>> EXT4_STATE_MAY_INLINE_DATA
+>>> 2. fallocate
+>>> do_vfs_ioctl
+>>>    ioctl_preallocate
+>>>      vfs_fallocate
+>>>        ext4_fallocate
+>>>          ext4_convert_inline_data
+>>>            ext4_convert_inline_data_nolock
+>>>              ext4_map_blocks -> fail will goto restore data
+>>>              ext4_restore_inline_data
+>>>                ext4_create_inline_data
+>>>                ext4_write_inline_data
+>>>                ext4_set_inode_state -> set inode 
+>>> EXT4_STATE_MAY_INLINE_DATA
+>>> 3. writepages
+>>> __ext4_ioctl
+>>>    ext4_alloc_da_blocks
+>>>      filemap_flush
+>>>        filemap_fdatawrite_wbc
+>>>          do_writepages
+>>>            ext4_writepages
+>>>              if (ext4_has_inline_data(inode))
+>>>                BUG_ON(ext4_test_inode_state(inode, 
+>>> EXT4_STATE_MAY_INLINE_DATA))
+>>>
+>>> The root cause of this issue is we destory inline data until call 
+>>> ext4_writepages
+>>> under delay allocation mode. But there maybe already covert from 
+>>> inline to extent.
+>>> To solved this issue, we call filemap_flush firstly.
+>>>
+>>> Signed-off-by: Ye Bin <yebin10@huawei.com>
+>>> ---
+>>>   fs/ext4/inline.c | 8 ++++++++
+>>>   1 file changed, 8 insertions(+)
+>>>
+>>> diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
+>>> index 6d253edebf9f..130ed5d83734 100644
+>>> --- a/fs/ext4/inline.c
+>>> +++ b/fs/ext4/inline.c
+>>> @@ -2002,6 +2002,14 @@ int ext4_convert_inline_data(struct inode 
+>>> *inode)
+>>>       if (!ext4_has_inline_data(inode)) {
+>>>           ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
+>>>           return 0;
+>>> +    } else if (test_opt(inode->i_sb, DELALLOC) && 
+>>> !S_ISDIR(inode->i_mode)) {
+>>> +        error = filemap_flush(inode->i_mapping);
+>> This is actually an interesting option and I kind of like it but 
+>> shouldn't
+>> we restrict this to the situation when EXT4_STATE_MAY_INLINE_DATA is 
+>> clear?
+>> Otherwise we would be writing out inline data to the inode unnecessarily
+>> for each ext4_convert_inline_data() call.
+>>
+>>                                 Honza
+> Acctually,  this issue only exist in delay allocate mode. Do we need 
+> to restrict this to
+> “test_opt(inode->i_sb, DELALLOC)” as follows ?
+I've looked again. There's no need to add this constraint.  I'll send v2 
+patch.
+> @@ -2002,6 +2002,13 @@ int ext4_convert_inline_data(struct inode *inode)
+>         if (!ext4_has_inline_data(inode)) {
+>                 ext4_clear_inode_state(inode, 
+> EXT4_STATE_MAY_INLINE_DATA);
+>                 return 0;
+> +       } else if (test_opt(inode->i_sb, DELALLOC) &&
+> +                  !ext4_test_inode_state(inode, 
+> EXT4_STATE_MAY_INLINE_DATA)) {
+> +               error = filemap_flush(inode->i_mapping);
+> +               if (error)
+> +                       return error;
+> +               if (!ext4_has_inline_data(inode))
+> +                       return 0;
+>         }
+>
+>
+> .
+>
 

@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A079C52916F
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF535290DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349151AbiEPUiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
+        id S1346772AbiEPTzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350993AbiEPUBy (ORCPT
+        with ESMTP id S1346867AbiEPTv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:01:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4655147561;
-        Mon, 16 May 2022 12:56:24 -0700 (PDT)
+        Mon, 16 May 2022 15:51:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FE444A1E;
+        Mon, 16 May 2022 12:45:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 070C2B81607;
-        Mon, 16 May 2022 19:56:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70504C385AA;
-        Mon, 16 May 2022 19:56:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E6D5361596;
+        Mon, 16 May 2022 19:45:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0354BC34100;
+        Mon, 16 May 2022 19:45:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730981;
-        bh=I5cs4rPMg6JZJCSn7sJ6TZVwO84ivOWm5OxLrZprd7k=;
+        s=korg; t=1652730356;
+        bh=4bf/UsuSgVW7vJNOHxwczts9LNMMkWBw0O6Z5qy8XRo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ahwNEdnO3eRpO7hnldwjHKoPjQdMa/nrf6nCzbv8hZuP4wsIeGReAbEiV0kC92QeE
-         qwWpt+UJgGKwHMPBRTiWsCGYWfBvtGq9clpvyC9yKveTbHncGwEgwik95bBLtgOvId
-         4ov3rM76E6OiKxb7xhRJmQ8p4QLux3UfvC1TLVPc=
+        b=otu145GOJM6twhz8/Z1zeEPoDwos9H5zQyi3DEvirtqMFm4uzX+C7udy/87GjWyTN
+         JNEUGmeJdEZZK8IXwc4Ycjj2GcIE/v8W08Y+4nRUgg/533hrEW0UTjDYnbVR1fuIi6
+         mXsW/oZiRQU3NxmnR6FJ6/7JMw61nwbcstwgYHoY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Moshe Kol <moshe.kol@mail.huji.ac.il>,
-        Yossi Gilad <yossi.gilad@mail.huji.ac.il>,
-        Amit Klein <aksecurity@gmail.com>,
-        Eric Dumazet <edumazet@google.com>, Willy Tarreau <w@1wt.eu>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 066/114] tcp: increase source port perturb table to 2^16
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Baruch Siach <baruch@tkos.co.il>
+Subject: [PATCH 5.10 40/66] tty/serial: digicolor: fix possible null-ptr-deref in digicolor_uart_probe()
 Date:   Mon, 16 May 2022 21:36:40 +0200
-Message-Id: <20220516193627.387650809@linuxfoundation.org>
+Message-Id: <20220516193620.574237944@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
-References: <20220516193625.489108457@linuxfoundation.org>
+In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
+References: <20220516193619.400083785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,64 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Willy Tarreau <w@1wt.eu>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit 4c2c8f03a5ab7cb04ec64724d7d176d00bcc91e5 ]
+commit 447ee1516f19f534a228dda237eddb202f23e163 upstream.
 
-Moshe Kol, Amit Klein, and Yossi Gilad reported being able to accurately
-identify a client by forcing it to emit only 40 times more connections
-than there are entries in the table_perturb[] table. The previous two
-improvements consisting in resalting the secret every 10s and adding
-randomness to each port selection only slightly improved the situation,
-and the current value of 2^8 was too small as it's not very difficult
-to make a client emit 10k connections in less than 10 seconds.
+It will cause null-ptr-deref when using 'res', if platform_get_resource()
+returns NULL, so move using 'res' after devm_ioremap_resource() that
+will check it to avoid null-ptr-deref.
+And use devm_platform_get_and_ioremap_resource() to simplify code.
 
-Thus we're increasing the perturb table from 2^8 to 2^16 so that the
-same precision now requires 2.6M connections, which is more difficult in
-this time frame and harder to hide as a background activity. The impact
-is that the table now uses 256 kB instead of 1 kB, which could mostly
-affect devices making frequent outgoing connections. However such
-components usually target a small set of destinations (load balancers,
-database clients, perf assessment tools), and in practice only a few
-entries will be visited, like before.
-
-A live test at 1 million connections per second showed no performance
-difference from the previous value.
-
-Reported-by: Moshe Kol <moshe.kol@mail.huji.ac.il>
-Reported-by: Yossi Gilad <yossi.gilad@mail.huji.ac.il>
-Reported-by: Amit Klein <aksecurity@gmail.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Willy Tarreau <w@1wt.eu>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 5930cb3511df ("serial: driver for Conexant Digicolor USART")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+Cc: stable <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220505124621.1592697-1-yangyingliang@huawei.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/inet_hashtables.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/tty/serial/digicolor-usart.c |    5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-index 48ca07853068..cc5f66328b47 100644
---- a/net/ipv4/inet_hashtables.c
-+++ b/net/ipv4/inet_hashtables.c
-@@ -726,11 +726,12 @@ EXPORT_SYMBOL_GPL(inet_unhash);
-  * Note that we use 32bit integers (vs RFC 'short integers')
-  * because 2^16 is not a multiple of num_ephemeral and this
-  * property might be used by clever attacker.
-- * RFC claims using TABLE_LENGTH=10 buckets gives an improvement,
-- * we use 256 instead to really give more isolation and
-- * privacy, this only consumes 1 KB of kernel memory.
-+ * RFC claims using TABLE_LENGTH=10 buckets gives an improvement, though
-+ * attacks were since demonstrated, thus we use 65536 instead to really
-+ * give more isolation and privacy, at the expense of 256kB of kernel
-+ * memory.
-  */
--#define INET_TABLE_PERTURB_SHIFT 8
-+#define INET_TABLE_PERTURB_SHIFT 16
- #define INET_TABLE_PERTURB_SIZE (1 << INET_TABLE_PERTURB_SHIFT)
- static u32 *table_perturb;
+--- a/drivers/tty/serial/digicolor-usart.c
++++ b/drivers/tty/serial/digicolor-usart.c
+@@ -471,11 +471,10 @@ static int digicolor_uart_probe(struct p
+ 	if (IS_ERR(uart_clk))
+ 		return PTR_ERR(uart_clk);
  
--- 
-2.35.1
-
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	dp->port.mapbase = res->start;
+-	dp->port.membase = devm_ioremap_resource(&pdev->dev, res);
++	dp->port.membase = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+ 	if (IS_ERR(dp->port.membase))
+ 		return PTR_ERR(dp->port.membase);
++	dp->port.mapbase = res->start;
+ 
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq < 0)
 
 

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76FED528E3E
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:43:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ADB9528E11
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:38:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345921AbiEPTlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45712 "EHLO
+        id S1345479AbiEPTif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345638AbiEPTjw (ORCPT
+        with ESMTP id S1345517AbiEPTiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:39:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE893EF11;
-        Mon, 16 May 2022 12:39:18 -0700 (PDT)
+        Mon, 16 May 2022 15:38:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612AB3EF05;
+        Mon, 16 May 2022 12:38:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5F39B81614;
-        Mon, 16 May 2022 19:39:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0690C385AA;
-        Mon, 16 May 2022 19:39:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C8809B81607;
+        Mon, 16 May 2022 19:38:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D9B1C385AA;
+        Mon, 16 May 2022 19:38:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652729955;
-        bh=qoqWaRd/F0OSQTFRyfwoyTxq4Huh1sSLBZsSuGzfFQ8=;
+        s=korg; t=1652729890;
+        bh=C6fcos56HLZvJDeIHxko5ZFfqpC2z8ez7/GKRQgVHmo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GR6qdl9T40R4XJVLm9cFf67blQXBquV5xCtNrcsZp1Xsrx+VWSI1f10VzbFx7okMl
-         jC8bsmGeHSatDWOhbc5X4QeeO+DkD3TZdnhbjXXfs2Pq7g8Ewujbn4KMUmQgcgx57y
-         zWm6jbBZqmzCemTvR210Z642lBeSXjFCTcYonWvg=
+        b=jHJGPDOYffcAyau1Zqr6wUk67wU4Uee/w1exi9f6DLZ4crbl79ncKxXbNyycOgcWa
+         zHDUpBpl31gBpOXF3Ck53CDCcLQO9ZIyi4XxSQl8OxR9xD+g+p6sak0LHPIL7RBIdK
+         fUEGedG1f4jJw31ot2GHypV7eUIK8pSj5hwNsDDg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 13/25] ASoC: max98090: Reject invalid values in custom control put()
+        stable@vger.kernel.org, Scott Chen <scott@labau.com.tw>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 4.9 14/19] USB: serial: pl2303: add device id for HP LM930 Display
 Date:   Mon, 16 May 2022 21:36:27 +0200
-Message-Id: <20220516193615.085846914@linuxfoundation.org>
+Message-Id: <20220516193613.921213214@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193614.678319286@linuxfoundation.org>
-References: <20220516193614.678319286@linuxfoundation.org>
+In-Reply-To: <20220516193613.497233635@linuxfoundation.org>
+References: <20220516193613.497233635@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Scott Chen <scott@labau.com.tw>
 
-[ Upstream commit 2fbe467bcbfc760a08f08475eea6bbd4c2874319 ]
+commit 26a08f8bad3e1f98d3153f939fb8cd330da4cb26 upstream.
 
-The max98090 driver has a custom put function for some controls which can
-only be updated in certain circumstances which makes no effort to validate
-that input is suitable for the control, allowing out of spec values to be
-written to the hardware and presented to userspace. Fix this by returning
-an error when invalid values are written.
+Add the device id for the HPLM930Display which is a PL2303GC based
+device.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20220420193454.2647908-1-broonie@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Scott Chen <scott@labau.com.tw>
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/max98090.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/usb/serial/pl2303.c |    1 +
+ drivers/usb/serial/pl2303.h |    1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/sound/soc/codecs/max98090.c b/sound/soc/codecs/max98090.c
-index 3fe09828745a..a25183f6fba6 100644
---- a/sound/soc/codecs/max98090.c
-+++ b/sound/soc/codecs/max98090.c
-@@ -419,6 +419,9 @@ static int max98090_put_enab_tlv(struct snd_kcontrol *kcontrol,
- 
- 	val = (val >> mc->shift) & mask;
- 
-+	if (sel < 0 || sel > mc->max)
-+		return -EINVAL;
-+
- 	*select = sel;
- 
- 	/* Setting a volume is only valid if it is already On */
--- 
-2.35.1
-
+--- a/drivers/usb/serial/pl2303.c
++++ b/drivers/usb/serial/pl2303.c
+@@ -95,6 +95,7 @@ static const struct usb_device_id id_tab
+ 	{ USB_DEVICE(HP_VENDOR_ID, HP_LCM220_PRODUCT_ID) },
+ 	{ USB_DEVICE(HP_VENDOR_ID, HP_LCM960_PRODUCT_ID) },
+ 	{ USB_DEVICE(HP_VENDOR_ID, HP_LM920_PRODUCT_ID) },
++	{ USB_DEVICE(HP_VENDOR_ID, HP_LM930_PRODUCT_ID) },
+ 	{ USB_DEVICE(HP_VENDOR_ID, HP_LM940_PRODUCT_ID) },
+ 	{ USB_DEVICE(HP_VENDOR_ID, HP_TD620_PRODUCT_ID) },
+ 	{ USB_DEVICE(CRESSI_VENDOR_ID, CRESSI_EDY_PRODUCT_ID) },
+--- a/drivers/usb/serial/pl2303.h
++++ b/drivers/usb/serial/pl2303.h
+@@ -133,6 +133,7 @@
+ #define HP_TD620_PRODUCT_ID	0x0956
+ #define HP_LD960_PRODUCT_ID	0x0b39
+ #define HP_LD381_PRODUCT_ID	0x0f7f
++#define HP_LM930_PRODUCT_ID	0x0f9b
+ #define HP_LCM220_PRODUCT_ID	0x3139
+ #define HP_LCM960_PRODUCT_ID	0x3239
+ #define HP_LD220_PRODUCT_ID	0x3524
 
 

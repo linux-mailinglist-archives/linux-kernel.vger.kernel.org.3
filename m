@@ -2,112 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1105528C2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 19:40:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91D3B528C29
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 19:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344377AbiEPRjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 13:39:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46790 "EHLO
+        id S1344343AbiEPRjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 13:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344248AbiEPRjm (ORCPT
+        with ESMTP id S229587AbiEPRjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 13:39:42 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B94036B42;
-        Mon, 16 May 2022 10:39:41 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id l16so19492027oil.6;
-        Mon, 16 May 2022 10:39:41 -0700 (PDT)
+        Mon, 16 May 2022 13:39:41 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0EB2612A
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 10:39:40 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id z18so16762754iob.5
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 10:39:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4QlC2UOYMPKKudwLjLWBF40eX+oeG8Yvuxzp6LWYy94=;
-        b=lN5q6KoGnMVKq8KOjsovYc0Ea9Rz2wCpQaF48i5eMxFhf3pMQhJODDGAvdMNRqWL2n
-         1kuhXkOG7R5wJOM/NAWz7J4UIEiIRaBQzILAI5v2Su+zwhL0GL/t0lZWPP9pPWi9X5w1
-         TRmLsarTXjfHK8MzG/jFj58z06sJ6O70HdWHKxHpNJMABQaWzn4ySx0XB977Cqy6L+Ms
-         68LQaNkjgqCJaydfqryJPKMsb++N4qxHLOKJWhJR9AvA7TVZ0iSC6ytp/1cGqiViasIS
-         jDUUNTS1nVh0xyNxGTDlH8awrM/IWxq4zVYrTKv/Qp1yO7yesfSIN0YJWuUzfIiCwqMP
-         08PA==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:in-reply-to:references:subject:message-id:date
+         :mime-version:content-transfer-encoding;
+        bh=mh56sie1dPkPYUnwa6mvPMhYEaqSra4iS7JfXXMW55U=;
+        b=qAJHetIbc57mNL80Bx30Z2qPkvcxnQSos1cYB90vvXD8rMCvUcp7tK+Ih0E+Uiaps6
+         88iqtYzkzieHEKtlccMzu4XSr9aYh7Uc6X5fsNQvNZkoSSOtgEV0ItopxSe051SaPc8q
+         utRyEINUgmS+GuC13Y0MWbXuUmUvv1g5GXftp0KAq+Bfvasck0TqP2+S2BRzI0KoX6pX
+         Wwu88Nd/qrf9opIcav2IF2irJNp0+VDMN7wxGOoSy6A0+oAfSdXhLavHnf1IuP30OqnM
+         ixsRa4y/YWE1SG8ReCh/DbVE+G2Aj6sHoj9DJWtaNvxEjj1GkQhPll2ZShQhxqgCIaI+
+         +x5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4QlC2UOYMPKKudwLjLWBF40eX+oeG8Yvuxzp6LWYy94=;
-        b=PrrEPO3UnuNlR/bEApMOP3sHY/XbqzTnnXMP3jqLlb1LD31D7cdZHHhseJIMjLs6pj
-         iideI1NSAyEWkx2dyf4v0zuh5lCwl7R3/ZMTcR1I01DYKDWfISJT7BNWM1ng3llrcYrH
-         93R3ITf79Wdi525htb2D9RYrhx5BsB1ypPg0bC8v2kly1NmpZOiYiR7pdlpqYhTi+3y9
-         bD2T/1b1iMWn0VgHlX6Y6mYcBCI2JPz4kcYLDYvUU9fIpYrcMSFxb2GsXMDSbCRFq3JF
-         W6N/2+eA6Wy+iUyvP7GX7MgeMcJaUGUAmmk4JwqAbKUIl7+UaJWgLCbB+uvyHAUp1h7B
-         mJzQ==
-X-Gm-Message-State: AOAM533EBZ0Lq1VQhPu17HpWUaecnvIyrIqqwrtptbnMEf6HydQJ7UTR
-        jHt2RQOJrzCEAKjTjIQxB8Y=
-X-Google-Smtp-Source: ABdhPJygSNZJhhtbXnU4GGWyPg8tyF+H+RqlJkjIxzimnUGLIq1vRXiWXdwn9GweAfMMT4GBb11GiQ==
-X-Received: by 2002:a05:6808:2117:b0:326:4798:88cc with SMTP id r23-20020a056808211700b00326479888ccmr14071383oiw.78.1652722780974;
-        Mon, 16 May 2022 10:39:40 -0700 (PDT)
-Received: from localhost ([199.180.249.178])
-        by smtp.gmail.com with ESMTPSA id o129-20020acabe87000000b003264e122a9asm4002748oif.54.2022.05.16.10.39.40
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
+         :message-id:date:mime-version:content-transfer-encoding;
+        bh=mh56sie1dPkPYUnwa6mvPMhYEaqSra4iS7JfXXMW55U=;
+        b=V3Xmwis+bYvWGhQJ9d7RY/mvW2SY0iIfJ8LdL0uhimhdaUkXYYwwTJ+C47TO3qHsSc
+         JvtQzdkO72VHyLc78HoTYzltGzTh31SJ5s1UpSfsF6wUW4+fIGVTZI8PvZqv20znP/Rw
+         SNCADqGhz68vl/zhY48FFKslb/NDusrIsiYNJs+KTPjInhvZNAG27CzGJK8UYpKij7ju
+         cFZhzKQjALf81+jGNLr13c7nXI2Ou2E4RuO3ANcg4wmw9Gyv18degmMJLYFMy4qDDv6U
+         b77XrpttWBaIeEKplK9jzIFrs5JADPCIcellSOvJMFv676ijOjq3L4MOM83kXUPYD/Pb
+         a8Tw==
+X-Gm-Message-State: AOAM532Yhi4RPL4FqQxzZiCqeqJ1ptkOp4PzRe1k8WxhymwKaR9EFnU3
+        UbxeWXZajysopUHLzfhEYGRlbg==
+X-Google-Smtp-Source: ABdhPJwOSAmiOY0EvbJnF1yn1IJ4NBeO1tm5aNU1l6890ES/z1ezm2dDKuRp3U6XlZ2eqcTsaci5yw==
+X-Received: by 2002:a05:6602:1501:b0:65a:c412:2eeb with SMTP id g1-20020a056602150100b0065ac4122eebmr8148723iow.29.1652722779743;
+        Mon, 16 May 2022 10:39:39 -0700 (PDT)
+Received: from [127.0.1.1] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id c11-20020a02c9cb000000b0032b75b98013sm2953165jap.148.2022.05.16.10.39.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 10:39:40 -0700 (PDT)
-From:   bh1scw@gmail.com
-To:     tj@kernel.org, axboe@kernel.dk
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
-        Fanjun Kong <bh1scw@gmail.com>
-Subject: [PATCH] blk-cgroup: Remove unnecessary rcu_read_lock/unlock()
-Date:   Tue, 17 May 2022 01:39:30 +0800
-Message-Id: <20220516173930.159535-1-bh1scw@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 16 May 2022 10:39:39 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     yukuai3@huawei.com, jack@suse.cz, paolo.valente@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        yi.zhang@huawei.com
+In-Reply-To: <20220513023507.2625717-1-yukuai3@huawei.com>
+References: <20220513023507.2625717-1-yukuai3@huawei.com>
+Subject: Re: [PATCH -next v2 0/2] block, bfq: make bfq_has_work() more accurate
+Message-Id: <165272277894.181860.12420245970045700212.b4-ty@kernel.dk>
+Date:   Mon, 16 May 2022 11:39:38 -0600
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fanjun Kong <bh1scw@gmail.com>
+On Fri, 13 May 2022 10:35:05 +0800, Yu Kuai wrote:
+> Changes in v2:
+>  - add reviewed-by tag for patch 1
+>  - use WRITE_ONCE() for updating of 'bfqd->queued' in patch 2
+> 
+> This patchset try to make bfq_has_work() more accurate, patch 1 is a
+> small problem found by code review.
+> 
+> [...]
 
-spin_lock_irq/spin_unlock_irq contains preempt_disable/enable().
-Which can serve as RCU read-side critical region, so remove
-rcu_read_lock/unlock().
+Applied, thanks!
 
-Signed-off-by: Fanjun Kong <bh1scw@gmail.com>
----
- block/blk-cgroup.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+[1/2] block, bfq: protect 'bfqd->queued' by 'bfqd->lock'
+      commit: 181490d5321806e537dc5386db5ea640b826bf78
+[2/2] block, bfq: make bfq_has_work() more accurate
+      commit: ddc25c86b466d2359b57bc7798f167baa1735a44
 
-diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-index a91f8ae18b49..7bdc16a36560 100644
---- a/block/blk-cgroup.c
-+++ b/block/blk-cgroup.c
-@@ -1283,14 +1283,13 @@ int blkcg_init_queue(struct request_queue *q)
- 	preloaded = !radix_tree_preload(GFP_KERNEL);
- 
- 	/* Make sure the root blkg exists. */
--	rcu_read_lock();
-+	/* spin_lock_irq can serve as RCU read-side critical section. */
- 	spin_lock_irq(&q->queue_lock);
- 	blkg = blkg_create(&blkcg_root, q, new_blkg);
- 	if (IS_ERR(blkg))
- 		goto err_unlock;
- 	q->root_blkg = blkg;
- 	spin_unlock_irq(&q->queue_lock);
--	rcu_read_unlock();
- 
- 	if (preloaded)
- 		radix_tree_preload_end();
-@@ -1316,7 +1315,6 @@ int blkcg_init_queue(struct request_queue *q)
- 	return ret;
- err_unlock:
- 	spin_unlock_irq(&q->queue_lock);
--	rcu_read_unlock();
- 	if (preloaded)
- 		radix_tree_preload_end();
- 	return PTR_ERR(blkg);
+Best regards,
 -- 
-2.36.0
+Jens Axboe
+
 

@@ -2,124 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FD82528D7F
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18040528D83
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345176AbiEPSxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 14:53:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51546 "EHLO
+        id S1345183AbiEPSzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 14:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232386AbiEPSxh (ORCPT
+        with ESMTP id S232386AbiEPSzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 14:53:37 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7CB3EABB
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 11:53:36 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id g16so19255122lja.3
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 11:53:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :content-language:content-transfer-encoding;
-        bh=nuaRCyZ3f8/tAk5NBkEcb+gaJ9vpmmFYS74QQLXNLAk=;
-        b=uHW2EOknJrrdEJKCG/9WPjfw9+6HT1KxNEanFdBQTCPYnK+1353SmGzP9S4QOZIkBM
-         USeZ6AT9OmZ1K/5kggz51UgdnUpkAKg5hiZxDmRECbfTH7AUbRw0vfesKIX5WCM140pa
-         1lzo6/pJrYfCkGtdWfIO/olD1whWCjh70BZ+vzfstWpzXGH/S8Vva2BtDXFWv32Zq9X7
-         VfXEvKtN8dWYgZSekKRsgMYcLiftUAQwGhES7+8UCu9rwRvDqFGZWoXBjPu//0DHBMYw
-         +F/B0aOwFrSH9r7lDT0Sb/zV/FNIpGYLQu/tSluvf7mGdOyZWQJPsXZsSQDf4tJ2qANp
-         GSIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:content-language:content-transfer-encoding;
-        bh=nuaRCyZ3f8/tAk5NBkEcb+gaJ9vpmmFYS74QQLXNLAk=;
-        b=nm2rIoyE/0o+A2hszPgay9Tft8m6xAvU8e3YElTC9Uu8VjGWG6Nl+87YLiiUIVp8RH
-         Bzf4z/2aJ0gJqRFRDLvYOes2rNscE7MbXVmFojb3GVP/wh9WDYz6BURCAO3Y75VBrydI
-         UY0PS4YYcxfMctxmZE1oIOa1kYErgDuAV/cOYrGlkhCBkh0Vp8aHSLoW9Rpb+NBdNnn+
-         NyqDl6XI0sfkqxD9oXHAl/Sim2E3k+wN8hkbrs02YST973RLIKTsmmgX+h32yDnPntiu
-         LxM/rTcIMolj3CnjvyxXf+IlQa9SDxMzjBmkxxL8fLHO13w2n/SqS4vmJDxZH0+gav7C
-         7XUg==
-X-Gm-Message-State: AOAM531WS7ioXAvnW1DkPPFT7UGed58N2TbbwP5ZFhow17AGDi6R4093
-        yDcKBICDat6tLYNZtBttvcpd4g==
-X-Google-Smtp-Source: ABdhPJww7Y9nENr1+mTatkIp+n0/Fh5qQaeQBoLLg5apVauQaouQWDA2JQ+MZO6Cwh5vfN1CWSnZ0A==
-X-Received: by 2002:a2e:9dc8:0:b0:24f:d84:3001 with SMTP id x8-20020a2e9dc8000000b0024f0d843001mr11931801ljj.435.1652727214669;
-        Mon, 16 May 2022 11:53:34 -0700 (PDT)
-Received: from [192.168.1.72] (46-138-221-128.dynamic.spd-mgts.ru. [46.138.221.128])
-        by smtp.gmail.com with ESMTPSA id w8-20020a2e3008000000b00250664c906asm1639086ljw.133.2022.05.16.11.53.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 11:53:34 -0700 (PDT)
-Message-ID: <1fd21e25-b095-e055-fc2e-abda640a0575@openvz.org>
-Date:   Mon, 16 May 2022 21:53:32 +0300
+        Mon, 16 May 2022 14:55:04 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1A33EB91;
+        Mon, 16 May 2022 11:55:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652727303; x=1684263303;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TUcY0yvjkA4ZWXoXYlBDa+cQV3rSyCIF+AQTKalBBvo=;
+  b=lgWmALw3xi+OG2E6leXNZsh2z10s8dlzn0JT9yL9JaPUaY4dxmIuooWl
+   4EIXQ3q+xXEw4a08b0ZLnri6QFlWLXAIr1qaGyijvc5DAiXOsBopp0TcR
+   b3KTjIu30IkdSkdOXG1D9OIKZYz7XJiCUqfR5J1DhtT6OiLO8sgMP9Qge
+   Sp2JEgrk5SV+SrRNYi57SeTVDn0qOMW2sgK0dlsm0Uu1ptfyAODSgD4BZ
+   M40hBsmxytkIz6iYvsJP0FWDecSekBipESv4lpVC5pF4j4/HkuqHq0d/U
+   /LNHpvouOr/iD2OlnHgINa5Enx8x6f+r4UShfQiZL7qsKQR2d9ZhBqVo5
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="268517962"
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="268517962"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 11:55:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="816532117"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 16 May 2022 11:55:01 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 7A049A8; Mon, 16 May 2022 21:55:01 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH v1 1/1] pinctrl: cherryview: Use GPIO chip pointer in chv_gpio_irq_mask_unmask()
+Date:   Mon, 16 May 2022 21:55:00 +0300
+Message-Id: <20220516185500.32304-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-From:   Vasily Averin <vvs@openvz.org>
-Subject: [PATCH] tracing: add ACCOUNT flag for allocations from marked slab
- caches
-To:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        David Rientjes <rientjes@google.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Christoph Lameter <cl@linux.com>
-Cc:     kernel@openvz.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@suse.com>
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Slab caches marked with SLAB_ACCOUNT force accounting for every
-allocation from this cache even if __GFP_ACCOUNT flag is not passed.
-Unfortunately, at the moment this flag is not visible in ftrace output,
-and this makes it difficult to analyze the accounted allocations.
+The callers already have dereferenced pointer to GPIO chip, no need to
+do it again in chv_gpio_irq_mask_unmask(). Hence, replace IRQ data pointer
+by GPIO chip pointer.
 
-This patch adds the __GFP_ACCOUNT flag for allocations from slab caches
-marked with SLAB_ACCOUNT to the ftrace output.
-
-Signed-off-by: Vasily Averin <vvs@openvz.org>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- mm/slab.c | 3 +++
- mm/slub.c | 3 +++
- 2 files changed, 6 insertions(+)
+ drivers/pinctrl/intel/pinctrl-cherryview.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/mm/slab.c b/mm/slab.c
-index 0edb474edef1..4c3da8dfcbdb 100644
---- a/mm/slab.c
-+++ b/mm/slab.c
-@@ -3492,6 +3492,9 @@ void *__kmem_cache_alloc_lru(struct kmem_cache *cachep, struct list_lru *lru,
+diff --git a/drivers/pinctrl/intel/pinctrl-cherryview.c b/drivers/pinctrl/intel/pinctrl-cherryview.c
+index b696f9392789..26b2a425d201 100644
+--- a/drivers/pinctrl/intel/pinctrl-cherryview.c
++++ b/drivers/pinctrl/intel/pinctrl-cherryview.c
+@@ -1255,9 +1255,8 @@ static void chv_gpio_irq_ack(struct irq_data *d)
+ 	raw_spin_unlock(&chv_lock);
+ }
+ 
+-static void chv_gpio_irq_mask_unmask(struct irq_data *d, irq_hw_number_t hwirq, bool mask)
++static void chv_gpio_irq_mask_unmask(struct gpio_chip *gc, irq_hw_number_t hwirq, bool mask)
  {
- 	void *ret = slab_alloc(cachep, lru, flags, cachep->object_size, _RET_IP_);
+-	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
+ 	struct intel_pinctrl *pctrl = gpiochip_get_data(gc);
+ 	u32 value, intr_line;
+ 	unsigned long flags;
+@@ -1283,7 +1282,7 @@ static void chv_gpio_irq_mask(struct irq_data *d)
+ 	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
+ 	irq_hw_number_t hwirq = irqd_to_hwirq(d);
  
-+	if (cachep->flags & SLAB_ACCOUNT)
-+		flags |= __GFP_ACCOUNT;
-+
- 	trace_kmem_cache_alloc(_RET_IP_, ret,
- 			       cachep->object_size, cachep->size, flags);
+-	chv_gpio_irq_mask_unmask(d, hwirq, true);
++	chv_gpio_irq_mask_unmask(gc, hwirq, true);
+ 	gpiochip_disable_irq(gc, hwirq);
+ }
  
-diff --git a/mm/slub.c b/mm/slub.c
-index ed5c2c03a47a..670bbfef9e49 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -3231,6 +3231,9 @@ void *__kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
- {
- 	void *ret = slab_alloc(s, lru, gfpflags, _RET_IP_, s->object_size);
+@@ -1293,7 +1292,7 @@ static void chv_gpio_irq_unmask(struct irq_data *d)
+ 	irq_hw_number_t hwirq = irqd_to_hwirq(d);
  
-+	if (s->flags & SLAB_ACCOUNT)
-+		gfpflags |= __GFP_ACCOUNT;
-+
- 	trace_kmem_cache_alloc(_RET_IP_, ret, s->object_size,
- 				s->size, gfpflags);
+ 	gpiochip_enable_irq(gc, hwirq);
+-	chv_gpio_irq_mask_unmask(d, hwirq, false);
++	chv_gpio_irq_mask_unmask(gc, hwirq, false);
+ }
  
+ static unsigned chv_gpio_irq_startup(struct irq_data *d)
 -- 
-2.25.1
+2.35.1
 

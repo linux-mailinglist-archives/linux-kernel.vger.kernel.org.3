@@ -2,70 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2BF252851A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6715284E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243794AbiEPNOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 09:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59338 "EHLO
+        id S243613AbiEPNEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 09:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243771AbiEPNOl (ORCPT
+        with ESMTP id S233172AbiEPNEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 09:14:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D2CC3A18E
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:14:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652706880;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JJ97JlAV6zFIz097rsMrqoY03C5F3dZPF0NCbznRE10=;
-        b=BoVnPPGGDYkx1/TbDBe9UDZvI9s0J41vD+iFhpGtEl64OJ3pJMwRIMEo/1w3/FWwGnmYZB
-        9PYRlfi5H8cbJIxvaC+wDsxB4hmkps9GCdD6zChqqGwP8I/eMftNeFbDh+fkSkJZaXIKe/
-        FdOcoirqLPl5gsIgy+2/sShFnam4F/s=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-417-vb0tcTncOW6xQRoSVjL4CA-1; Mon, 16 May 2022 09:14:36 -0400
-X-MC-Unique: vb0tcTncOW6xQRoSVjL4CA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2275C1DB28A0;
-        Mon, 16 May 2022 13:14:36 +0000 (UTC)
-Received: from starship (unknown [10.40.192.55])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D487140D1B98;
-        Mon, 16 May 2022 13:14:32 +0000 (UTC)
-Message-ID: <f05dcf66ed2bfb7d113ce0d9a261569959265c68.camel@redhat.com>
-Subject: Re: [PATCH] KVM: x86: fix a typo in __try_cmpxchg_user that caused
- cmpxchg to be not atomic
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Jim Mattson <jmattson@google.com>, x86@kernel.org,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Date:   Mon, 16 May 2022 16:14:31 +0300
-In-Reply-To: <Yn17urxf7vprODed@google.com>
-References: <20220202004945.2540433-5-seanjc@google.com>
-         <20220512101420.306759-1-mlevitsk@redhat.com>
-         <87e16c11-d57b-92cd-c10b-21d855f475ef@redhat.com>
-         <Yn17urxf7vprODed@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Mon, 16 May 2022 09:04:09 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825CA39B8B;
+        Mon, 16 May 2022 06:04:07 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L1zs45YMrzGq0p;
+        Mon, 16 May 2022 21:01:12 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 16 May 2022 21:04:05 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 16 May
+ 2022 21:04:05 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+CC:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>
+Subject: [PATCH -next] usb: typec: ucsi: fix return value check in ucsi_acpi_probe()
+Date:   Mon, 16 May 2022 21:15:27 +0800
+Message-ID: <20220516131527.999909-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,35 +49,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-12 at 21:27 +0000, Sean Christopherson wrote:
-> On Thu, May 12, 2022, Paolo Bonzini wrote:
-> > On 5/12/22 12:14, Maxim Levitsky wrote:
-> > > Yes, this is the root cause of the TDP mmu leak I was doing debug of in the last week.
-> > > Non working cmpxchg on which TDP mmu relies makes it install two differnt shadow pages
-> > > under same spte.
-> > 
-> > Awesome!  And queued, thanks.
-> 
-> If you haven't done so already, can you add 
-> 
->   Cc: stable@vger.kernel.org
+If memremap() fails, it never returns NULL. Replace NULL check
+with IS_ERR().
 
-When I posted my patch, I checked that the patch didn't reach mainline yet,
-so I assumed that it won't be in -stable either yet, although it was CCed there.
+Fixes: cdc3d2abf438 ("usb: typec: ucsi: acpi: Map the mailbox with memremap()")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/usb/typec/ucsi/ucsi_acpi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-
-> 
-> Also, given that we have concrete proof that not honoring atomic accesses can have
-> dire consequences for the guest, what about adding a capability to turn the emul_write
-> path into an emulation error?
-> 
-
-
-This is a good idea. It might though break some guests - I did see that
-warning few times, that is why I wasn't alert by the fact that it started showing up more often.
-
-I'll take a look at this soon.
-
-Best regards,
-	Maxim Levitsky
+diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
+index 7455e3aff2be..8873c1644a29 100644
+--- a/drivers/usb/typec/ucsi/ucsi_acpi.c
++++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
+@@ -133,8 +133,8 @@ static int ucsi_acpi_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	ua->base = devm_memremap(&pdev->dev, res->start, resource_size(res), MEMREMAP_WB);
+-	if (!ua->base)
+-		return -ENOMEM;
++	if (IS_ERR(ua->base))
++		return PTR_ERR(ua->base);
+ 
+ 	ret = guid_parse(UCSI_DSM_UUID, &ua->guid);
+ 	if (ret)
+-- 
+2.25.1
 

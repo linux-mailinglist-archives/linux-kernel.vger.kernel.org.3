@@ -2,58 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9CF45284E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E6245284FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243578AbiEPND2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 09:03:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37732 "EHLO
+        id S243416AbiEPNJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 09:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiEPND0 (ORCPT
+        with ESMTP id S230428AbiEPNJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 09:03:26 -0400
-Received: from outbound-smtp07.blacknight.com (outbound-smtp07.blacknight.com [46.22.139.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EDEC39B8B
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:03:24 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
-        by outbound-smtp07.blacknight.com (Postfix) with ESMTPS id 79B231C3737
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 14:03:23 +0100 (IST)
-Received: (qmail 2770 invoked from network); 16 May 2022 13:03:23 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 16 May 2022 13:03:23 -0000
-Date:   Mon, 16 May 2022 14:03:20 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, vbabka@suse.cz,
-        akpm@linux-foundation.org, willy@infradead.org
-Subject: Re: Is _PAGE_PROTNONE set only for user mappings?
-Message-ID: <20220516130319.GM3441@techsingularity.net>
-References: <20220506051940.156952-1-42.hyeyoo@gmail.com>
- <56f89895-601e-44c9-bda4-5fae6782e27e@amd.com>
- <YnpTHMvOO/pLJQ+l@hyeyoo>
- <5fe161cb-6c55-6c4d-c208-16c77e115d3f@amd.com>
- <8c2735ac-0335-6e2a-8341-8266d5d13c30@intel.com>
- <YntHrTX12TGp35aF@hyeyoo>
- <20220512103748.GH3441@techsingularity.net>
- <Yn3tssUR8w8mC1DJ@hyeyoo>
+        Mon, 16 May 2022 09:09:44 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AAE13E82
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:09:43 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L201z1BcFzhZD7;
+        Mon, 16 May 2022 21:08:55 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 16 May 2022 21:09:41 +0800
+Received: from mdc.huawei.com (10.175.112.208) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 16 May 2022 21:09:41 +0800
+From:   Chen Jun <chenjun102@huawei.com>
+To:     <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <zhangshaokun@hisilicon.com>, <will@kernel.org>,
+        <mark.rutland@arm.com>
+CC:     <xuqiang36@huawei.com>
+Subject: [PATCH 1/1] perf: hisi: Make irq shared
+Date:   Mon, 16 May 2022 13:05:00 +0000
+Message-ID: <20220516130500.39586-1-chenjun102@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <Yn3tssUR8w8mC1DJ@hyeyoo>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,51 +51,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 02:33:38PM +0900, Hyeonggon Yoo wrote:
-> On Thu, May 12, 2022 at 11:37:48AM +0100, Mel Gorman wrote:
-> > On Wed, May 11, 2022 at 02:20:45PM +0900, Hyeonggon Yoo wrote:
-> > > > pgprot_t vm_get_page_prot(unsigned long vm_flags)
-> > > > {
-> > > >        pgprot_t ret = __pgprot(pgprot_val(protection_map[vm_flags &
-> > > >                                (VM_READ|VM_WRITE|VM_EXEC|VM_SHARED)]) |
-> > > >                        pgprot_val(arch_vm_get_page_prot(vm_flags)));
-> > > >
-> > > >        return arch_filter_pgprot(ret);
-> > > > }
-> > > > EXPORT_SYMBOL(vm_get_page_prot);
-> > > 
-> > > I guess it's only set for processes' VMA if no caller is abusing
-> > > vm_get_page_prot() for kernel mappings.
-> > > 
-> > > But yeah, just quick guessing does not make us convinced.
-> > > Let's Cc people working on mm.
-> > > 
-> > > If kernel never uses _PAGE_PROTNONE for kernel mappings, it's just okay
-> > > not to clear _PAGE_GLOBAL at first in __change_page_attr() if it's not user address,
-> > > because no user will confuse _PAGE_GLOBAL as _PAGE_PROTNONE if it's kernel
-> > > address. right?
-> > > 
-> > 
-> > I'm not aware of a case where _PAGE_BIT_PROTNONE is used for a kernel
-> > address expecting PROT_NONE semantics instead of the global bit. NUMA
-> > Balancing is not going to accidentally treat a kernel address as if it's
-> > a NUMA hinting fault. By the time a fault is determining if a PTE access
-> > is a numa hinting fault or accesssing a PROT_NONE region, it has been
-> > established that it is a userspace address backed by a valid VMA.
-> > 
-> 
-> Thanks Mel, and IIUC nor does do_kern_addr_fault() in arch/x86/mm/fault.c
-> expect _PAGE_PROTNONE instead of _PAGE_GLOBAL. I want to make it clear
-> in the code that _PAGE_PROTNONE is only used for user mappings.
-> 
-> How does below look?
-> 
+On some platforms, there are some error:
+genirq: Flags mismatch irq 23. 00010804 (xxx) vs. 00010804 (xxx)
 
-I've no strong objections. I worry that this somehow could be used to
-set PAGE_USER on a kernel mapping page and maybe a comment would be more
-appropriate. However, I'm failing to imagine how NUMA balancing could be
-fooled into doing that.
+The reason is that there are more than one pmu nodes using the same
+irq number.
 
+Add IROF_SHARED when devm_request_irq.
+
+Signed-off-by: Chen Jun <chenjun102@huawei.com>
+---
+ drivers/perf/hisilicon/hisi_uncore_pmu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.c b/drivers/perf/hisilicon/hisi_uncore_pmu.c
+index 358e4e284a62..bcbd3b467f34 100644
+--- a/drivers/perf/hisilicon/hisi_uncore_pmu.c
++++ b/drivers/perf/hisilicon/hisi_uncore_pmu.c
+@@ -168,7 +168,7 @@ int hisi_uncore_pmu_init_irq(struct hisi_pmu *hisi_pmu,
+ 		return irq;
+ 
+ 	ret = devm_request_irq(&pdev->dev, irq, hisi_uncore_pmu_isr,
+-			       IRQF_NOBALANCING | IRQF_NO_THREAD,
++			       IRQF_NOBALANCING | IRQF_NO_THREAD | IRQF_SHARED,
+ 			       dev_name(&pdev->dev), hisi_pmu);
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev,
 -- 
-Mel Gorman
-SUSE Labs
+2.17.1
+

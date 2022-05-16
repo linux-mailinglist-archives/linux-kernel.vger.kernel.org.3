@@ -2,55 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97C3C528E9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B59528F36
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345748AbiEPToE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44062 "EHLO
+        id S232230AbiEPTxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345715AbiEPTlw (ORCPT
+        with ESMTP id S1346286AbiEPTsf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:41:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AE3403D0;
-        Mon, 16 May 2022 12:40:28 -0700 (PDT)
+        Mon, 16 May 2022 15:48:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFD33FDB6;
+        Mon, 16 May 2022 12:44:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D11E9614E2;
-        Mon, 16 May 2022 19:40:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C91DC34116;
-        Mon, 16 May 2022 19:40:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CA106B81604;
+        Mon, 16 May 2022 19:44:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB8C5C385AA;
+        Mon, 16 May 2022 19:44:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730027;
-        bh=bqWgDwcr3MlLqCqxGG3/tgJrQLc9Y5B/BF8VlzQX044=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FGiVj0SjJVe6EgxP0gNKtDIpKz3NV9AeGBUA0RnTBZMI+BZRH4u2bQDs4JGYvHrmA
-         2WKa09ReZ6L7JzayGlLwb0ed8S8W2r2uavWeqsQC16+yjkd1AsQTQZWsGVxMxv+e67
-         a4RqekxopP0iHnJ2j4MiNT4ZHh2LdmQuSwyZWIrc=
+        s=korg; t=1652730282;
+        bh=ChImXpjtgjpTtnXmQs8NpQ/onN5MXvDvL7xnp3VQaEU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=rMrmwKnw8F1A64QjRJnShtd7h2rKvp2cOLyRZiXRsQD9TDtYEjYk3w8mczzn1gW9s
+         9871icy2hsUj+t7m0JfOh+9xS5/r2nicCg/Bvwf4M8qXCIrGebswuuEkrSODEg+8Ip
+         tt8wc7XMt0Qs9FCAYv+XOuJ2X/gRcKL14vsU3cys=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Subject: [PATCH 4.14 00/25] 4.14.280-rc1 review
-Date:   Mon, 16 May 2022 21:36:14 +0200
-Message-Id: <20220516193614.678319286@linuxfoundation.org>
+        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 15/66] mac80211_hwsim: call ieee80211_tx_prepare_skb under RCU protection
+Date:   Mon, 16 May 2022 21:36:15 +0200
+Message-Id: <20220516193619.858719313@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-MIME-Version: 1.0
+In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
+References: <20220516193619.400083785@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.280-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.14.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.14.280-rc1
-X-KernelTest-Deadline: 2022-05-18T19:36+00:00
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -62,135 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.14.280 release.
-There are 25 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+From: Johannes Berg <johannes.berg@intel.com>
 
-Responses should be made by Wed, 18 May 2022 19:36:02 +0000.
-Anything received after that time might be too late.
+[ Upstream commit 9e2db50f1ef2238fc2f71c5de1c0418b7a5b0ea2 ]
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.280-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
-and the diffstat can be found below.
+This is needed since it might use (and pass out) pointers to
+e.g. keys protected by RCU. Can't really happen here as the
+frames aren't encrypted, but we need to still adhere to the
+rules.
 
-thanks,
+Fixes: cacfddf82baf ("mac80211_hwsim: initialize ieee80211_tx_info at hw_scan_work")
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Link: https://lore.kernel.org/r/20220505230421.5f139f9de173.I77ae111a28f7c0e9fd1ebcee7f39dbec5c606770@changeid
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/wireless/mac80211_hwsim.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-greg k-h
+diff --git a/drivers/net/wireless/mac80211_hwsim.c b/drivers/net/wireless/mac80211_hwsim.c
+index cc550ba0c9df..afd2d5add04b 100644
+--- a/drivers/net/wireless/mac80211_hwsim.c
++++ b/drivers/net/wireless/mac80211_hwsim.c
+@@ -2264,11 +2264,13 @@ static void hw_scan_work(struct work_struct *work)
+ 			if (req->ie_len)
+ 				skb_put_data(probe, req->ie, req->ie_len);
+ 
++			rcu_read_lock();
+ 			if (!ieee80211_tx_prepare_skb(hwsim->hw,
+ 						      hwsim->hw_scan_vif,
+ 						      probe,
+ 						      hwsim->tmp_chan->band,
+ 						      NULL)) {
++				rcu_read_unlock();
+ 				kfree_skb(probe);
+ 				continue;
+ 			}
+@@ -2276,6 +2278,7 @@ static void hw_scan_work(struct work_struct *work)
+ 			local_bh_disable();
+ 			mac80211_hwsim_tx_frame(hwsim->hw, probe,
+ 						hwsim->tmp_chan);
++			rcu_read_unlock();
+ 			local_bh_enable();
+ 		}
+ 	}
+-- 
+2.35.1
 
--------------
-Pseudo-Shortlog of commits:
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.14.280-rc1
-
-Yang Yingliang <yangyingliang@huawei.com>
-    tty/serial: digicolor: fix possible null-ptr-deref in digicolor_uart_probe()
-
-Nicolas Dichtel <nicolas.dichtel@6wind.com>
-    ping: fix address binding wrt vrf
-
-Zack Rusin <zackr@vmware.com>
-    drm/vmwgfx: Initialize drm_mode_fb_cmd2
-
-Waiman Long <longman@redhat.com>
-    cgroup/cpuset: Remove cpus_allowed/mems_allowed setup in cpuset_init_smp()
-
-Sven Schwermer <sven.schwermer@disruptive-technologies.com>
-    USB: serial: option: add Fibocom MA510 modem
-
-Sven Schwermer <sven.schwermer@disruptive-technologies.com>
-    USB: serial: option: add Fibocom L610 modem
-
-Ethan Yang <etyang@sierrawireless.com>
-    USB: serial: qcserial: add support for Sierra Wireless EM7590
-
-Scott Chen <scott@labau.com.tw>
-    USB: serial: pl2303: add device id for HP LM930 Display
-
-Sergey Ryazanov <ryazanov.s.a@gmail.com>
-    usb: cdc-wdm: fix reading stuck on device close
-
-Eric Dumazet <edumazet@google.com>
-    tcp: resalt the secret every 10 seconds
-
-Mark Brown <broonie@kernel.org>
-    ASoC: ops: Validate input values in snd_soc_put_volsw_range()
-
-Mark Brown <broonie@kernel.org>
-    ASoC: max98090: Generate notifications on changes for custom control
-
-Mark Brown <broonie@kernel.org>
-    ASoC: max98090: Reject invalid values in custom control put()
-
-Ji-Ze Hong (Peter Hong) <hpeter@gmail.com>
-    hwmon: (f71882fg) Fix negative temperature
-
-Taehee Yoo <ap420073@gmail.com>
-    net: sfc: ef10: fix memory leak in efx_ef10_mtd_probe()
-
-Guangguan Wang <guangguan.wang@linux.alibaba.com>
-    net/smc: non blocking recvmsg() return -EAGAIN when no data and signal_pending
-
-Alexandra Winter <wintera@linux.ibm.com>
-    s390/lcs: fix variable dereferenced before check
-
-Alexandra Winter <wintera@linux.ibm.com>
-    s390/ctcm: fix potential memory leak
-
-Alexandra Winter <wintera@linux.ibm.com>
-    s390/ctcm: fix variable dereferenced before check
-
-Randy Dunlap <rdunlap@infradead.org>
-    hwmon: (ltq-cputemp) restrict it to SOC_XWAY
-
-Johannes Berg <johannes.berg@intel.com>
-    mac80211_hwsim: call ieee80211_tx_prepare_skb under RCU protection
-
-Eric Dumazet <edumazet@google.com>
-    netlink: do not reset transport header in netlink_recvmsg()
-
-Lokesh Dhoundiyal <lokesh.dhoundiyal@alliedtelesis.co.nz>
-    ipv4: drop dst in multicast routing path
-
-Tariq Toukan <tariqt@nvidia.com>
-    net: Fix features skip in for_each_netdev_feature()
-
-Sven Eckelmann <sven@narfation.org>
-    batman-adv: Don't skb_split skbuffs with frag_list
-
-
--------------
-
-Diffstat:
-
- Makefile                              |  4 ++--
- drivers/gpu/drm/vmwgfx/vmwgfx_fb.c    |  2 +-
- drivers/hwmon/Kconfig                 |  2 +-
- drivers/hwmon/f71882fg.c              |  5 +++--
- drivers/net/ethernet/sfc/ef10.c       |  5 +++++
- drivers/net/wireless/mac80211_hwsim.c |  3 +++
- drivers/s390/net/ctcm_mpc.c           |  6 +-----
- drivers/s390/net/ctcm_sysfs.c         |  5 +++--
- drivers/s390/net/lcs.c                |  7 ++++---
- drivers/tty/serial/digicolor-usart.c  |  2 +-
- drivers/usb/class/cdc-wdm.c           |  1 +
- drivers/usb/serial/option.c           |  4 ++++
- drivers/usb/serial/pl2303.c           |  1 +
- drivers/usb/serial/pl2303.h           |  1 +
- drivers/usb/serial/qcserial.c         |  2 ++
- include/linux/netdev_features.h       |  4 ++--
- kernel/cgroup/cpuset.c                |  7 +++++--
- net/batman-adv/fragmentation.c        | 11 +++++++++++
- net/core/secure_seq.c                 | 12 +++++++++---
- net/ipv4/ping.c                       | 12 +++++++++++-
- net/ipv4/route.c                      |  1 +
- net/netlink/af_netlink.c              |  1 -
- net/smc/smc_rx.c                      |  4 ++--
- sound/soc/codecs/max98090.c           |  5 ++++-
- sound/soc/soc-ops.c                   | 18 +++++++++++++++++-
- 25 files changed, 95 insertions(+), 30 deletions(-)
 
 

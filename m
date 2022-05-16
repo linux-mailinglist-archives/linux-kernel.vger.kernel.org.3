@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD8E527BAC
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 04:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC492527BB0
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 04:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239289AbiEPCBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 22:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37790 "EHLO
+        id S239304AbiEPCBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 22:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239255AbiEPCBT (ORCPT
+        with ESMTP id S239300AbiEPCBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 22:01:19 -0400
+        Sun, 15 May 2022 22:01:24 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAFDC12AC4
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 19:01:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA4012AEB
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 19:01:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652666477; x=1684202477;
+  t=1652666481; x=1684202481;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=lw/z1i0cdD3DhbXVRo4EJGfKaM6+wWlycH0aSNhGDhA=;
-  b=m4qAxejcJMjxaFlUPnfEePY/M2yEDyNURj96IAOuo54/YaYGFCulBvbs
-   CXzCiBHyYT1majMJ/GDQXGuBrDybDT6zBKm5oXi07UsQ1SM2JEEVGDi3H
-   IhcWFmlgtjwQZ9QtCNrp2RXpVLvXXgdeS2EBvvl9ueMwdnQuWyRskz2rt
-   c3luQyAdXyRNeQixofqVX8FHlSZfq/vvOdlGO543SgBorH1jqYmEk+1Fw
-   J67UBXJho/0Qo2ZiZt7EbjV16M2anxuypFWzSxmQgT5dAnUCXdqLfso4m
-   vHHar8RgWAQDr/CDHCgfZXZrvAsCdjYDKEjPTd2HAcOy/2K/3ohkP5zWO
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="270658985"
+  bh=WOENIgdcD7RFAjuMLJnNHsT0/7tXgm6YKuBH2LuazZ4=;
+  b=PIQkUIqY9vx0dQoBXIoyffwhW6GOdUJOyq4lCJap/qMVHYRvkltdIHGo
+   ShK4gSFd9A/ZbtB5Ocf4N7rTXHVQRqeOZSczZR9M9AFVYqn4IYP3v69kI
+   vcwWkUFK+caZ9TetNzZj+GZkFrk7qpfUlkkXnjmhADdqoP8ncqramM0CO
+   s9VrGdMutK4TacdRNeEtLAsHCCoI4Oj1Q1yzA7w6eOTnFgbmPD05j4kN1
+   RgLPPQh4SBT47iK8eJdYlyrHN9o3L5MUlY8KYsEzXySvsq4rsYEtMjuUS
+   7oz24LRVcfPZpnrykNsM5frBTxJXW+OjafYOrzWz/x/73Q9Fk13pyd/NF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="270658990"
 X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="270658985"
+   d="scan'208";a="270658990"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2022 19:01:17 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2022 19:01:21 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="713172159"
+   d="scan'208";a="713172168"
 Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by fmsmga001.fm.intel.com with ESMTP; 15 May 2022 19:01:14 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 15 May 2022 19:01:17 -0700
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
         Christoph Hellwig <hch@infradead.org>,
@@ -49,9 +49,9 @@ Cc:     Eric Auger <eric.auger@redhat.com>, Liu Yi L <yi.l.liu@intel.com>,
         Jacob jun Pan <jacob.jun.pan@intel.com>,
         iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
         Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH 1/5] iommu: Rename attach_dev to set_dev in domain ops
-Date:   Mon, 16 May 2022 09:57:55 +0800
-Message-Id: <20220516015759.2952771-2-baolu.lu@linux.intel.com>
+Subject: [PATCH 2/5] iommu: Add blocking_domain_ops field in iommu_ops
+Date:   Mon, 16 May 2022 09:57:56 +0800
+Message-Id: <20220516015759.2952771-3-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220516015759.2952771-1-baolu.lu@linux.intel.com>
 References: <20220516015759.2952771-1-baolu.lu@linux.intel.com>
@@ -67,347 +67,626 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The detach callback of the iommu domain ops is not used in some IOMMU
-drivers. The detach_dev actually means setting a default domain or a
-blocking domain to the device. As attach_dev actually acts as setting
-domain for a device, this renames attach_dev to set_dev to reflect the
-actual usage.
+Each IOMMU driver must provide a blocking domain ops. If the hardware
+supports detaching domain from device, setting blocking domain equals
+detaching the existing domain from the deivce. Otherwise, an UNMANAGED
+domain without any mapping will be used instead.
 
-Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- include/linux/iommu.h                       | 4 ++--
- drivers/iommu/amd/iommu.c                   | 2 +-
- drivers/iommu/apple-dart.c                  | 2 +-
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 2 +-
- drivers/iommu/arm/arm-smmu/arm-smmu.c       | 2 +-
- drivers/iommu/arm/arm-smmu/qcom_iommu.c     | 2 +-
- drivers/iommu/exynos-iommu.c                | 2 +-
- drivers/iommu/fsl_pamu_domain.c             | 2 +-
- drivers/iommu/intel/iommu.c                 | 2 +-
- drivers/iommu/iommu.c                       | 6 +++---
- drivers/iommu/ipmmu-vmsa.c                  | 2 +-
- drivers/iommu/msm_iommu.c                   | 2 +-
- drivers/iommu/mtk_iommu.c                   | 2 +-
- drivers/iommu/mtk_iommu_v1.c                | 2 +-
- drivers/iommu/omap-iommu.c                  | 2 +-
- drivers/iommu/rockchip-iommu.c              | 2 +-
- drivers/iommu/s390-iommu.c                  | 2 +-
- drivers/iommu/sprd-iommu.c                  | 2 +-
- drivers/iommu/sun50i-iommu.c                | 2 +-
- drivers/iommu/tegra-gart.c                  | 2 +-
- drivers/iommu/tegra-smmu.c                  | 2 +-
- drivers/iommu/virtio-iommu.c                | 2 +-
- 22 files changed, 25 insertions(+), 25 deletions(-)
+ include/linux/iommu.h                       |  7 +++++++
+ drivers/iommu/amd/iommu.c                   | 12 ++++++++++++
+ drivers/iommu/apple-dart.c                  | 12 ++++++++++++
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c |  3 +++
+ drivers/iommu/arm/arm-smmu/arm-smmu.c       |  3 +++
+ drivers/iommu/arm/arm-smmu/qcom_iommu.c     | 12 ++++++++++++
+ drivers/iommu/exynos-iommu.c                | 12 ++++++++++++
+ drivers/iommu/fsl_pamu_domain.c             | 12 ++++++++++++
+ drivers/iommu/intel/iommu.c                 | 12 ++++++++++++
+ drivers/iommu/ipmmu-vmsa.c                  | 12 ++++++++++++
+ drivers/iommu/msm_iommu.c                   | 12 ++++++++++++
+ drivers/iommu/mtk_iommu.c                   | 12 ++++++++++++
+ drivers/iommu/mtk_iommu_v1.c                | 12 ++++++++++++
+ drivers/iommu/omap-iommu.c                  | 12 ++++++++++++
+ drivers/iommu/rockchip-iommu.c              | 12 ++++++++++++
+ drivers/iommu/s390-iommu.c                  | 12 ++++++++++++
+ drivers/iommu/sprd-iommu.c                  | 11 +++++++++++
+ drivers/iommu/sun50i-iommu.c                | 12 ++++++++++++
+ drivers/iommu/tegra-gart.c                  | 12 ++++++++++++
+ drivers/iommu/tegra-smmu.c                  | 12 ++++++++++++
+ drivers/iommu/virtio-iommu.c                |  3 +++
+ 21 files changed, 219 insertions(+)
 
 diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index 5e1afe169549..572399ac1d83 100644
+index 572399ac1d83..5e228aad0ef6 100644
 --- a/include/linux/iommu.h
 +++ b/include/linux/iommu.h
-@@ -261,7 +261,7 @@ struct iommu_ops {
+@@ -216,6 +216,7 @@ struct iommu_iotlb_gather {
+  *		- IOMMU_DOMAIN_DMA: must use a dma domain
+  *		- 0: use the default setting
+  * @default_domain_ops: the default ops for domains
++ * @blocking_domain_ops: the blocking ops for domains
+  * @pgsize_bitmap: bitmap of all possible supported page sizes
+  * @owner: Driver module providing these ops
+  */
+@@ -255,6 +256,7 @@ struct iommu_ops {
+ 	int (*def_domain_type)(struct device *dev);
  
- /**
-  * struct iommu_domain_ops - domain specific operations
-- * @attach_dev: attach an iommu domain to a device
-+ * @set_dev: set an iommu domain to a device
-  * @detach_dev: detach an iommu domain from a device
-  * @map: map a physically contiguous memory region to an iommu domain
-  * @map_pages: map a physically contiguous set of pages of the same size to
-@@ -281,7 +281,7 @@ struct iommu_ops {
+ 	const struct iommu_domain_ops *default_domain_ops;
++	const struct iommu_domain_ops *blocking_domain_ops;
+ 	unsigned long pgsize_bitmap;
+ 	struct module *owner;
+ };
+@@ -279,6 +281,9 @@ struct iommu_ops {
+  * @enable_nesting: Enable nesting
+  * @set_pgtable_quirks: Set io page table quirks (IO_PGTABLE_QUIRK_*)
   * @free: Release the domain after use.
++ * @blocking_domain_detach: iommu hardware support detaching a domain from
++ *		a device, hence setting blocking domain to a device equals to
++ *		detach the existing domain from it.
   */
  struct iommu_domain_ops {
--	int (*attach_dev)(struct iommu_domain *domain, struct device *dev);
-+	int (*set_dev)(struct iommu_domain *domain, struct device *dev);
- 	void (*detach_dev)(struct iommu_domain *domain, struct device *dev);
+ 	int (*set_dev)(struct iommu_domain *domain, struct device *dev);
+@@ -310,6 +315,8 @@ struct iommu_domain_ops {
+ 				  unsigned long quirks);
  
- 	int (*map)(struct iommu_domain *domain, unsigned long iova,
+ 	void (*free)(struct iommu_domain *domain);
++
++	unsigned int blocking_domain_detach:1;
+ };
+ 
+ /**
 diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
-index 840831d5d2ad..01b8668ef46d 100644
+index 01b8668ef46d..c66713439824 100644
 --- a/drivers/iommu/amd/iommu.c
 +++ b/drivers/iommu/amd/iommu.c
-@@ -2285,7 +2285,7 @@ const struct iommu_ops amd_iommu_ops = {
- 	.pgsize_bitmap	= AMD_IOMMU_PGSIZES,
- 	.def_domain_type = amd_iommu_def_domain_type,
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
--		.attach_dev	= amd_iommu_attach_device,
-+		.set_dev	= amd_iommu_attach_device,
- 		.detach_dev	= amd_iommu_detach_device,
- 		.map		= amd_iommu_map,
- 		.unmap		= amd_iommu_unmap,
+@@ -2272,6 +2272,14 @@ static bool amd_iommu_enforce_cache_coherency(struct iommu_domain *domain)
+ 	return true;
+ }
+ 
++static int amd_blocking_domain_set_dev(struct iommu_domain *domain,
++				       struct device *dev)
++{
++	amd_iommu_detach_device(domain, dev);
++
++	return 0;
++}
++
+ const struct iommu_ops amd_iommu_ops = {
+ 	.capable = amd_iommu_capable,
+ 	.domain_alloc = amd_iommu_domain_alloc,
+@@ -2295,6 +2303,10 @@ const struct iommu_ops amd_iommu_ops = {
+ 		.iotlb_sync	= amd_iommu_iotlb_sync,
+ 		.free		= amd_iommu_domain_free,
+ 		.enforce_cache_coherency = amd_iommu_enforce_cache_coherency,
++	},
++	.blocking_domain_ops = &(const struct iommu_domain_ops) {
++		.set_dev	= amd_blocking_domain_set_dev,
++		.blocking_domain_detach = true,
+ 	}
+ };
+ 
 diff --git a/drivers/iommu/apple-dart.c b/drivers/iommu/apple-dart.c
-index 8af0242a90d9..a0b7281f1989 100644
+index a0b7281f1989..3c37762e01ec 100644
 --- a/drivers/iommu/apple-dart.c
 +++ b/drivers/iommu/apple-dart.c
-@@ -775,7 +775,7 @@ static const struct iommu_ops apple_dart_iommu_ops = {
- 	.pgsize_bitmap = -1UL, /* Restricted during dart probe */
- 	.owner = THIS_MODULE,
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
--		.attach_dev	= apple_dart_attach_dev,
-+		.set_dev	= apple_dart_attach_dev,
- 		.detach_dev	= apple_dart_detach_dev,
- 		.map_pages	= apple_dart_map_pages,
- 		.unmap_pages	= apple_dart_unmap_pages,
+@@ -763,6 +763,14 @@ static void apple_dart_get_resv_regions(struct device *dev,
+ 	iommu_dma_get_resv_regions(dev, head);
+ }
+ 
++static int apple_dart_blocking_domain_set_dev(struct iommu_domain *domain,
++					      struct device *dev)
++{
++	apple_dart_detach_dev(domain, dev);
++
++	return 0;
++}
++
+ static const struct iommu_ops apple_dart_iommu_ops = {
+ 	.domain_alloc = apple_dart_domain_alloc,
+ 	.probe_device = apple_dart_probe_device,
+@@ -784,6 +792,10 @@ static const struct iommu_ops apple_dart_iommu_ops = {
+ 		.iotlb_sync_map	= apple_dart_iotlb_sync_map,
+ 		.iova_to_phys	= apple_dart_iova_to_phys,
+ 		.free		= apple_dart_domain_free,
++	},
++	.blocking_domain_ops = &(const struct iommu_domain_ops) {
++		.set_dev	= apple_dart_blocking_domain_set_dev,
++		.blocking_domain_detach = true,
+ 	}
+ };
+ 
 diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index 88817a3376ef..7e7d9e0b7aee 100644
+index 7e7d9e0b7aee..4b0ec5bef63b 100644
 --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
 +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -2859,7 +2859,7 @@ static struct iommu_ops arm_smmu_ops = {
- 	.pgsize_bitmap		= -1UL, /* Restricted during device attach */
- 	.owner			= THIS_MODULE,
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
--		.attach_dev		= arm_smmu_attach_dev,
+@@ -2867,6 +2867,9 @@ static struct iommu_ops arm_smmu_ops = {
+ 		.iova_to_phys		= arm_smmu_iova_to_phys,
+ 		.enable_nesting		= arm_smmu_enable_nesting,
+ 		.free			= arm_smmu_domain_free,
++	},
++	.blocking_domain_ops = &(const struct iommu_domain_ops) {
 +		.set_dev		= arm_smmu_attach_dev,
- 		.map_pages		= arm_smmu_map_pages,
- 		.unmap_pages		= arm_smmu_unmap_pages,
- 		.flush_iotlb_all	= arm_smmu_flush_iotlb_all,
+ 	}
+ };
+ 
 diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-index 2ed3594f384e..c91d12b7e283 100644
+index c91d12b7e283..0723f7c97763 100644
 --- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
 +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-@@ -1597,7 +1597,7 @@ static struct iommu_ops arm_smmu_ops = {
- 	.pgsize_bitmap		= -1UL, /* Restricted during device attach */
- 	.owner			= THIS_MODULE,
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
--		.attach_dev		= arm_smmu_attach_dev,
+@@ -1606,6 +1606,9 @@ static struct iommu_ops arm_smmu_ops = {
+ 		.enable_nesting		= arm_smmu_enable_nesting,
+ 		.set_pgtable_quirks	= arm_smmu_set_pgtable_quirks,
+ 		.free			= arm_smmu_domain_free,
++	},
++	.blocking_domain_ops = &(const struct iommu_domain_ops) {
 +		.set_dev		= arm_smmu_attach_dev,
- 		.map_pages		= arm_smmu_map_pages,
- 		.unmap_pages		= arm_smmu_unmap_pages,
- 		.flush_iotlb_all	= arm_smmu_flush_iotlb_all,
+ 	}
+ };
+ 
 diff --git a/drivers/iommu/arm/arm-smmu/qcom_iommu.c b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-index 4c077c38fbd6..cf624bd305e0 100644
+index cf624bd305e0..dee9b5a3a324 100644
 --- a/drivers/iommu/arm/arm-smmu/qcom_iommu.c
 +++ b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-@@ -596,7 +596,7 @@ static const struct iommu_ops qcom_iommu_ops = {
- 	.of_xlate	= qcom_iommu_of_xlate,
- 	.pgsize_bitmap	= SZ_4K | SZ_64K | SZ_1M | SZ_16M,
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
--		.attach_dev	= qcom_iommu_attach_dev,
-+		.set_dev	= qcom_iommu_attach_dev,
- 		.detach_dev	= qcom_iommu_detach_dev,
- 		.map		= qcom_iommu_map,
- 		.unmap		= qcom_iommu_unmap,
+@@ -587,6 +587,14 @@ static int qcom_iommu_of_xlate(struct device *dev, struct of_phandle_args *args)
+ 	return iommu_fwspec_add_ids(dev, &asid, 1);
+ }
+ 
++static int qcom_blocking_domain_set_dev(struct iommu_domain *domain,
++					struct device *dev)
++{
++	qcom_iommu_detach_dev(domain, dev);
++
++	return 0;
++}
++
+ static const struct iommu_ops qcom_iommu_ops = {
+ 	.capable	= qcom_iommu_capable,
+ 	.domain_alloc	= qcom_iommu_domain_alloc,
+@@ -604,6 +612,10 @@ static const struct iommu_ops qcom_iommu_ops = {
+ 		.iotlb_sync	= qcom_iommu_iotlb_sync,
+ 		.iova_to_phys	= qcom_iommu_iova_to_phys,
+ 		.free		= qcom_iommu_domain_free,
++	},
++	.blocking_domain_ops = &(const struct iommu_domain_ops) {
++		.set_dev	= qcom_blocking_domain_set_dev,
++		.blocking_domain_detach = true,
+ 	}
+ };
+ 
 diff --git a/drivers/iommu/exynos-iommu.c b/drivers/iommu/exynos-iommu.c
-index 71f2018e23fe..797348f3440e 100644
+index 797348f3440e..bbecb9a2a554 100644
 --- a/drivers/iommu/exynos-iommu.c
 +++ b/drivers/iommu/exynos-iommu.c
-@@ -1315,7 +1315,7 @@ static const struct iommu_ops exynos_iommu_ops = {
- 	.pgsize_bitmap = SECT_SIZE | LPAGE_SIZE | SPAGE_SIZE,
- 	.of_xlate = exynos_iommu_of_xlate,
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
--		.attach_dev	= exynos_iommu_attach_device,
-+		.set_dev	= exynos_iommu_attach_device,
- 		.detach_dev	= exynos_iommu_detach_device,
- 		.map		= exynos_iommu_map,
+@@ -1307,6 +1307,14 @@ static int exynos_iommu_of_xlate(struct device *dev,
+ 	return 0;
+ }
+ 
++static int exynos_blocking_domain_set_dev(struct iommu_domain *domain,
++					  struct device *dev)
++{
++	exynos_iommu_detach_device(domain, dev);
++
++	return 0;
++}
++
+ static const struct iommu_ops exynos_iommu_ops = {
+ 	.domain_alloc = exynos_iommu_domain_alloc,
+ 	.device_group = generic_device_group,
+@@ -1321,6 +1329,10 @@ static const struct iommu_ops exynos_iommu_ops = {
  		.unmap		= exynos_iommu_unmap,
+ 		.iova_to_phys	= exynos_iommu_iova_to_phys,
+ 		.free		= exynos_iommu_domain_free,
++	},
++	.blocking_domain_ops = &(const struct iommu_domain_ops) {
++		.set_dev	= exynos_blocking_domain_set_dev,
++		.blocking_domain_detach = true,
+ 	}
+ };
+ 
 diff --git a/drivers/iommu/fsl_pamu_domain.c b/drivers/iommu/fsl_pamu_domain.c
-index 94b4589dc67c..7512c8e007e9 100644
+index 7512c8e007e9..92fc320f8c83 100644
 --- a/drivers/iommu/fsl_pamu_domain.c
 +++ b/drivers/iommu/fsl_pamu_domain.c
-@@ -458,7 +458,7 @@ static const struct iommu_ops fsl_pamu_ops = {
- 	.release_device	= fsl_pamu_release_device,
- 	.device_group   = fsl_pamu_device_group,
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
--		.attach_dev	= fsl_pamu_attach_device,
-+		.set_dev	= fsl_pamu_attach_device,
+@@ -451,6 +451,14 @@ static void fsl_pamu_release_device(struct device *dev)
+ {
+ }
+ 
++static int fsl_pamu_blocking_domain_set_dev(struct iommu_domain *domain,
++					    struct device *dev)
++{
++	fsl_pamu_detach_device(domain, dev);
++
++	return 0;
++}
++
+ static const struct iommu_ops fsl_pamu_ops = {
+ 	.capable	= fsl_pamu_capable,
+ 	.domain_alloc	= fsl_pamu_domain_alloc,
+@@ -462,6 +470,10 @@ static const struct iommu_ops fsl_pamu_ops = {
  		.detach_dev	= fsl_pamu_detach_device,
  		.iova_to_phys	= fsl_pamu_iova_to_phys,
  		.free		= fsl_pamu_domain_free,
++	},
++	.blocking_domain_ops = &(const struct iommu_domain_ops) {
++		.set_dev	= fsl_pamu_blocking_domain_set_dev,
++		.blocking_domain_detach = true,
+ 	}
+ };
+ 
 diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index e56b3a4b6998..6abc1fbbd461 100644
+index 6abc1fbbd461..2060e8a540b3 100644
 --- a/drivers/iommu/intel/iommu.c
 +++ b/drivers/iommu/intel/iommu.c
-@@ -4925,7 +4925,7 @@ const struct iommu_ops intel_iommu_ops = {
- 	.page_response		= intel_svm_page_response,
- #endif
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
--		.attach_dev		= intel_iommu_attach_device,
-+		.set_dev		= intel_iommu_attach_device,
- 		.detach_dev		= intel_iommu_detach_device,
- 		.map_pages		= intel_iommu_map_pages,
- 		.unmap_pages		= intel_iommu_unmap_pages,
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index 847ad47a2dfd..8eba26be4363 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -1963,10 +1963,10 @@ static int __iommu_attach_device(struct iommu_domain *domain,
- {
- 	int ret;
- 
--	if (unlikely(domain->ops->attach_dev == NULL))
-+	if (unlikely(domain->ops->set_dev == NULL))
- 		return -ENODEV;
- 
--	ret = domain->ops->attach_dev(domain, dev);
-+	ret = domain->ops->set_dev(domain, dev);
- 	if (!ret)
- 		trace_attach_device_to_domain(dev);
- 	return ret;
-@@ -2142,7 +2142,7 @@ static int __iommu_group_set_domain(struct iommu_group *group,
+@@ -4904,6 +4904,14 @@ static void intel_iommu_iotlb_sync_map(struct iommu_domain *domain,
  	}
+ }
  
- 	/*
--	 * Changing the domain is done by calling attach_dev() on the new
-+	 * Changing the domain is done by calling set_dev() on the new
- 	 * domain. This switch does not have to be atomic and DMA can be
- 	 * discarded during the transition. DMA must only be able to access
- 	 * either new_domain or group->domain, never something else.
++static int intel_blocking_domain_set_dev(struct iommu_domain *domain,
++					 struct device *dev)
++{
++	intel_iommu_detach_device(domain, dev);
++
++	return 0;
++}
++
+ const struct iommu_ops intel_iommu_ops = {
+ 	.capable		= intel_iommu_capable,
+ 	.domain_alloc		= intel_iommu_domain_alloc,
+@@ -4935,6 +4943,10 @@ const struct iommu_ops intel_iommu_ops = {
+ 		.iova_to_phys		= intel_iommu_iova_to_phys,
+ 		.free			= intel_iommu_domain_free,
+ 		.enforce_cache_coherency = intel_iommu_enforce_cache_coherency,
++	},
++	.blocking_domain_ops = &(const struct iommu_domain_ops) {
++		.set_dev		= intel_blocking_domain_set_dev,
++		.blocking_domain_detach = true,
+ 	}
+ };
+ 
 diff --git a/drivers/iommu/ipmmu-vmsa.c b/drivers/iommu/ipmmu-vmsa.c
-index 8fdb84b3642b..b361a4cff688 100644
+index b361a4cff688..72982d1277c2 100644
 --- a/drivers/iommu/ipmmu-vmsa.c
 +++ b/drivers/iommu/ipmmu-vmsa.c
-@@ -877,7 +877,7 @@ static const struct iommu_ops ipmmu_ops = {
- 	.pgsize_bitmap = SZ_1G | SZ_2M | SZ_4K,
- 	.of_xlate = ipmmu_of_xlate,
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
--		.attach_dev	= ipmmu_attach_device,
-+		.set_dev	= ipmmu_attach_device,
- 		.detach_dev	= ipmmu_detach_device,
- 		.map		= ipmmu_map,
- 		.unmap		= ipmmu_unmap,
+@@ -867,6 +867,14 @@ static struct iommu_group *ipmmu_find_group(struct device *dev)
+ 	return group;
+ }
+ 
++static int ipmmu_blocking_domain_set_dev(struct iommu_domain *domain,
++					 struct device *dev)
++{
++	ipmmu_detach_device(domain, dev);
++
++	return 0;
++}
++
+ static const struct iommu_ops ipmmu_ops = {
+ 	.domain_alloc = ipmmu_domain_alloc,
+ 	.probe_device = ipmmu_probe_device,
+@@ -885,6 +893,10 @@ static const struct iommu_ops ipmmu_ops = {
+ 		.iotlb_sync	= ipmmu_iotlb_sync,
+ 		.iova_to_phys	= ipmmu_iova_to_phys,
+ 		.free		= ipmmu_domain_free,
++	},
++	.blocking_domain_ops = &(const struct iommu_domain_ops) {
++		.set_dev	= ipmmu_blocking_domain_set_dev,
++		.blocking_domain_detach = true,
+ 	}
+ };
+ 
 diff --git a/drivers/iommu/msm_iommu.c b/drivers/iommu/msm_iommu.c
-index f09aedfdd462..569d36840b67 100644
+index 569d36840b67..b0471d03db60 100644
 --- a/drivers/iommu/msm_iommu.c
 +++ b/drivers/iommu/msm_iommu.c
-@@ -682,7 +682,7 @@ static struct iommu_ops msm_iommu_ops = {
- 	.pgsize_bitmap = MSM_IOMMU_PGSIZES,
- 	.of_xlate = qcom_iommu_of_xlate,
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
--		.attach_dev	= msm_iommu_attach_dev,
-+		.set_dev	= msm_iommu_attach_dev,
- 		.detach_dev	= msm_iommu_detach_dev,
- 		.map		= msm_iommu_map,
- 		.unmap		= msm_iommu_unmap,
+@@ -674,6 +674,14 @@ irqreturn_t msm_iommu_fault_handler(int irq, void *dev_id)
+ 	return 0;
+ }
+ 
++static int msm_blocking_domain_set_dev(struct iommu_domain *domain,
++				       struct device *dev)
++{
++	msm_iommu_detach_dev(domain, dev);
++
++	return 0;
++}
++
+ static struct iommu_ops msm_iommu_ops = {
+ 	.domain_alloc = msm_iommu_domain_alloc,
+ 	.probe_device = msm_iommu_probe_device,
+@@ -696,6 +704,10 @@ static struct iommu_ops msm_iommu_ops = {
+ 		.iotlb_sync_map	= msm_iommu_sync_map,
+ 		.iova_to_phys	= msm_iommu_iova_to_phys,
+ 		.free		= msm_iommu_domain_free,
++	},
++	.blocking_domain_ops = &(const struct iommu_domain_ops) {
++		.set_dev	= msm_blocking_domain_set_dev,
++		.blocking_domain_detach = true,
+ 	}
+ };
+ 
 diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index bb9dd92c9898..33ec401d40eb 100644
+index 33ec401d40eb..cc8d80290498 100644
 --- a/drivers/iommu/mtk_iommu.c
 +++ b/drivers/iommu/mtk_iommu.c
-@@ -937,7 +937,7 @@ static const struct iommu_ops mtk_iommu_ops = {
- 	.pgsize_bitmap	= SZ_4K | SZ_64K | SZ_1M | SZ_16M,
- 	.owner		= THIS_MODULE,
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
--		.attach_dev	= mtk_iommu_attach_device,
-+		.set_dev	= mtk_iommu_attach_device,
- 		.detach_dev	= mtk_iommu_detach_device,
- 		.map		= mtk_iommu_map,
- 		.unmap		= mtk_iommu_unmap,
+@@ -926,6 +926,14 @@ static void mtk_iommu_get_resv_regions(struct device *dev,
+ 	}
+ }
+ 
++static int mtk_blocking_domain_set_dev(struct iommu_domain *domain,
++				       struct device *dev)
++{
++	mtk_iommu_detach_device(domain, dev);
++
++	return 0;
++}
++
+ static const struct iommu_ops mtk_iommu_ops = {
+ 	.domain_alloc	= mtk_iommu_domain_alloc,
+ 	.probe_device	= mtk_iommu_probe_device,
+@@ -946,6 +954,10 @@ static const struct iommu_ops mtk_iommu_ops = {
+ 		.iotlb_sync_map	= mtk_iommu_sync_map,
+ 		.iova_to_phys	= mtk_iommu_iova_to_phys,
+ 		.free		= mtk_iommu_domain_free,
++	},
++	.blocking_domain_ops = &(const struct iommu_domain_ops) {
++		.set_dev	= mtk_blocking_domain_set_dev,
++		.blocking_domain_detach = true,
+ 	}
+ };
+ 
 diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
-index e1cb51b9866c..fb55802fb841 100644
+index fb55802fb841..894d2526ba4c 100644
 --- a/drivers/iommu/mtk_iommu_v1.c
 +++ b/drivers/iommu/mtk_iommu_v1.c
-@@ -594,7 +594,7 @@ static const struct iommu_ops mtk_iommu_v1_ops = {
- 	.pgsize_bitmap	= ~0UL << MT2701_IOMMU_PAGE_SHIFT,
- 	.owner          = THIS_MODULE,
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
--		.attach_dev	= mtk_iommu_v1_attach_device,
-+		.set_dev	= mtk_iommu_v1_attach_device,
- 		.detach_dev	= mtk_iommu_v1_detach_device,
- 		.map		= mtk_iommu_v1_map,
+@@ -584,6 +584,14 @@ static int mtk_iommu_v1_hw_init(const struct mtk_iommu_v1_data *data)
+ 	return 0;
+ }
+ 
++static int mtk_blocking_domain_set_dev(struct iommu_domain *domain,
++				       struct device *dev)
++{
++	mtk_iommu_v1_detach_device(domain, dev);
++
++	return 0;
++}
++
+ static const struct iommu_ops mtk_iommu_v1_ops = {
+ 	.domain_alloc	= mtk_iommu_v1_domain_alloc,
+ 	.probe_device	= mtk_iommu_v1_probe_device,
+@@ -600,6 +608,10 @@ static const struct iommu_ops mtk_iommu_v1_ops = {
  		.unmap		= mtk_iommu_v1_unmap,
+ 		.iova_to_phys	= mtk_iommu_v1_iova_to_phys,
+ 		.free		= mtk_iommu_v1_domain_free,
++	},
++	.blocking_domain_ops = &(const struct iommu_domain_ops) {
++		.set_dev	= mtk_blocking_domain_set_dev,
++		.blocking_domain_detach = true,
+ 	}
+ };
+ 
 diff --git a/drivers/iommu/omap-iommu.c b/drivers/iommu/omap-iommu.c
-index d9cf2820c02e..6720dcb437a0 100644
+index 6720dcb437a0..7e6ba6f1218d 100644
 --- a/drivers/iommu/omap-iommu.c
 +++ b/drivers/iommu/omap-iommu.c
-@@ -1739,7 +1739,7 @@ static const struct iommu_ops omap_iommu_ops = {
- 	.device_group	= omap_iommu_device_group,
- 	.pgsize_bitmap	= OMAP_IOMMU_PGSIZES,
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
--		.attach_dev	= omap_iommu_attach_dev,
-+		.set_dev	= omap_iommu_attach_dev,
- 		.detach_dev	= omap_iommu_detach_dev,
- 		.map		= omap_iommu_map,
+@@ -1732,6 +1732,14 @@ static struct iommu_group *omap_iommu_device_group(struct device *dev)
+ 	return group;
+ }
+ 
++static int omap_blocking_domain_set_dev(struct iommu_domain *domain,
++					struct device *dev)
++{
++	omap_iommu_detach_dev(domain, dev);
++
++	return 0;
++}
++
+ static const struct iommu_ops omap_iommu_ops = {
+ 	.domain_alloc	= omap_iommu_domain_alloc,
+ 	.probe_device	= omap_iommu_probe_device,
+@@ -1745,6 +1753,10 @@ static const struct iommu_ops omap_iommu_ops = {
  		.unmap		= omap_iommu_unmap,
+ 		.iova_to_phys	= omap_iommu_iova_to_phys,
+ 		.free		= omap_iommu_domain_free,
++	},
++	.blocking_domain_ops = &(const struct iommu_domain_ops) {
++		.set_dev	= omap_blocking_domain_set_dev,
++		.blocking_domain_detach = true,
+ 	}
+ };
+ 
 diff --git a/drivers/iommu/rockchip-iommu.c b/drivers/iommu/rockchip-iommu.c
-index ab57c4b8fade..0a4196c34179 100644
+index 0a4196c34179..29c803759a0b 100644
 --- a/drivers/iommu/rockchip-iommu.c
 +++ b/drivers/iommu/rockchip-iommu.c
-@@ -1193,7 +1193,7 @@ static const struct iommu_ops rk_iommu_ops = {
- 	.pgsize_bitmap = RK_IOMMU_PGSIZE_BITMAP,
- 	.of_xlate = rk_iommu_of_xlate,
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
--		.attach_dev	= rk_iommu_attach_device,
-+		.set_dev	= rk_iommu_attach_device,
- 		.detach_dev	= rk_iommu_detach_device,
- 		.map		= rk_iommu_map,
+@@ -1185,6 +1185,14 @@ static int rk_iommu_of_xlate(struct device *dev,
+ 	return 0;
+ }
+ 
++static int rk_blocking_domain_set_dev(struct iommu_domain *domain,
++				      struct device *dev)
++{
++	rk_iommu_detach_device(domain, dev);
++
++	return 0;
++}
++
+ static const struct iommu_ops rk_iommu_ops = {
+ 	.domain_alloc = rk_iommu_domain_alloc,
+ 	.probe_device = rk_iommu_probe_device,
+@@ -1199,6 +1207,10 @@ static const struct iommu_ops rk_iommu_ops = {
  		.unmap		= rk_iommu_unmap,
+ 		.iova_to_phys	= rk_iommu_iova_to_phys,
+ 		.free		= rk_iommu_domain_free,
++	},
++	.blocking_domain_ops = &(const struct iommu_domain_ops) {
++		.set_dev	= rk_blocking_domain_set_dev,
++		.blocking_domain_detach = true,
+ 	}
+ };
+ 
 diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
-index 3833e86c6e7b..cde01c72f573 100644
+index cde01c72f573..a03bff562a44 100644
 --- a/drivers/iommu/s390-iommu.c
 +++ b/drivers/iommu/s390-iommu.c
-@@ -368,7 +368,7 @@ static const struct iommu_ops s390_iommu_ops = {
- 	.device_group = generic_device_group,
- 	.pgsize_bitmap = S390_IOMMU_PGSIZES,
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
--		.attach_dev	= s390_iommu_attach_device,
-+		.set_dev	= s390_iommu_attach_device,
- 		.detach_dev	= s390_iommu_detach_device,
- 		.map		= s390_iommu_map,
+@@ -360,6 +360,14 @@ void zpci_destroy_iommu(struct zpci_dev *zdev)
+ 	iommu_device_sysfs_remove(&zdev->iommu_dev);
+ }
+ 
++static int s390_blocking_domain_set_dev(struct iommu_domain *domain,
++					struct device *dev)
++{
++	s390_iommu_detach_device(domain, dev);
++
++	return 0;
++}
++
+ static const struct iommu_ops s390_iommu_ops = {
+ 	.capable = s390_iommu_capable,
+ 	.domain_alloc = s390_domain_alloc,
+@@ -374,6 +382,10 @@ static const struct iommu_ops s390_iommu_ops = {
  		.unmap		= s390_iommu_unmap,
+ 		.iova_to_phys	= s390_iommu_iova_to_phys,
+ 		.free		= s390_domain_free,
++	},
++	.blocking_domain_ops = &(const struct iommu_domain_ops) {
++		.set_dev		= s390_blocking_domain_set_dev,
++		.blocking_domain_detach = true,
+ 	}
+ };
+ 
 diff --git a/drivers/iommu/sprd-iommu.c b/drivers/iommu/sprd-iommu.c
-index bd409bab6286..45b58845f5f8 100644
+index 45b58845f5f8..ab62063cee5b 100644
 --- a/drivers/iommu/sprd-iommu.c
 +++ b/drivers/iommu/sprd-iommu.c
-@@ -423,7 +423,7 @@ static const struct iommu_ops sprd_iommu_ops = {
- 	.pgsize_bitmap	= ~0UL << SPRD_IOMMU_PAGE_SHIFT,
- 	.owner		= THIS_MODULE,
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
--		.attach_dev	= sprd_iommu_attach_device,
-+		.set_dev	= sprd_iommu_attach_device,
- 		.detach_dev	= sprd_iommu_detach_device,
- 		.map		= sprd_iommu_map,
- 		.unmap		= sprd_iommu_unmap,
+@@ -413,6 +413,13 @@ static int sprd_iommu_of_xlate(struct device *dev, struct of_phandle_args *args)
+ 	return 0;
+ }
+ 
++static int sprd_blocking_domain_set_dev(struct iommu_domain *domain,
++					struct device *dev)
++{
++	sprd_iommu_detach_device(domain, dev);
++
++	return 0;
++}
+ 
+ static const struct iommu_ops sprd_iommu_ops = {
+ 	.domain_alloc	= sprd_iommu_domain_alloc,
+@@ -431,6 +438,10 @@ static const struct iommu_ops sprd_iommu_ops = {
+ 		.iotlb_sync	= sprd_iommu_sync,
+ 		.iova_to_phys	= sprd_iommu_iova_to_phys,
+ 		.free		= sprd_iommu_domain_free,
++	},
++	.blocking_domain_ops = &(const struct iommu_domain_ops) {
++		.set_dev		= sprd_blocking_domain_set_dev,
++		.blocking_domain_detach = true,
+ 	}
+ };
+ 
 diff --git a/drivers/iommu/sun50i-iommu.c b/drivers/iommu/sun50i-iommu.c
-index c54ab477b8fd..041b30463552 100644
+index 041b30463552..a51a55ae0634 100644
 --- a/drivers/iommu/sun50i-iommu.c
 +++ b/drivers/iommu/sun50i-iommu.c
-@@ -766,7 +766,7 @@ static const struct iommu_ops sun50i_iommu_ops = {
- 	.probe_device	= sun50i_iommu_probe_device,
- 	.release_device	= sun50i_iommu_release_device,
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
--		.attach_dev	= sun50i_iommu_attach_device,
-+		.set_dev	= sun50i_iommu_attach_device,
- 		.detach_dev	= sun50i_iommu_detach_device,
- 		.flush_iotlb_all = sun50i_iommu_flush_iotlb_all,
- 		.iotlb_sync	= sun50i_iommu_iotlb_sync,
+@@ -758,6 +758,14 @@ static int sun50i_iommu_of_xlate(struct device *dev,
+ 	return iommu_fwspec_add_ids(dev, &id, 1);
+ }
+ 
++static int sun50i_blocking_domain_set_dev(struct iommu_domain *domain,
++					  struct device *dev)
++{
++	sun50i_iommu_detach_device(domain, dev);
++
++	return 0;
++}
++
+ static const struct iommu_ops sun50i_iommu_ops = {
+ 	.pgsize_bitmap	= SZ_4K,
+ 	.device_group	= sun50i_iommu_device_group,
+@@ -774,6 +782,10 @@ static const struct iommu_ops sun50i_iommu_ops = {
+ 		.map		= sun50i_iommu_map,
+ 		.unmap		= sun50i_iommu_unmap,
+ 		.free		= sun50i_iommu_domain_free,
++	},
++	.blocking_domain_ops = &(const struct iommu_domain_ops) {
++		.set_dev		= sun50i_blocking_domain_set_dev,
++		.blocking_domain_detach = true,
+ 	}
+ };
+ 
 diff --git a/drivers/iommu/tegra-gart.c b/drivers/iommu/tegra-gart.c
-index a6700a40a6f8..f083a9fba4d0 100644
+index f083a9fba4d0..7e2aef7ae72e 100644
 --- a/drivers/iommu/tegra-gart.c
 +++ b/drivers/iommu/tegra-gart.c
-@@ -278,7 +278,7 @@ static const struct iommu_ops gart_iommu_ops = {
- 	.pgsize_bitmap	= GART_IOMMU_PGSIZES,
- 	.of_xlate	= gart_iommu_of_xlate,
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
--		.attach_dev	= gart_iommu_attach_dev,
-+		.set_dev	= gart_iommu_attach_dev,
- 		.detach_dev	= gart_iommu_detach_dev,
- 		.map		= gart_iommu_map,
- 		.unmap		= gart_iommu_unmap,
+@@ -270,6 +270,14 @@ static void gart_iommu_sync(struct iommu_domain *domain,
+ 	gart_iommu_sync_map(domain, gather->start, length);
+ }
+ 
++static int gart_blocking_domain_set_dev(struct iommu_domain *domain,
++					struct device *dev)
++{
++	gart_iommu_detach_dev(domain, dev);
++
++	return 0;
++}
++
+ static const struct iommu_ops gart_iommu_ops = {
+ 	.domain_alloc	= gart_iommu_domain_alloc,
+ 	.probe_device	= gart_iommu_probe_device,
+@@ -286,6 +294,10 @@ static const struct iommu_ops gart_iommu_ops = {
+ 		.iotlb_sync_map	= gart_iommu_sync_map,
+ 		.iotlb_sync	= gart_iommu_sync,
+ 		.free		= gart_iommu_domain_free,
++	},
++	.blocking_domain_ops = &(const struct iommu_domain_ops) {
++		.set_dev		= gart_blocking_domain_set_dev,
++		.blocking_domain_detach = true,
+ 	}
+ };
+ 
 diff --git a/drivers/iommu/tegra-smmu.c b/drivers/iommu/tegra-smmu.c
-index 1fea68e551f1..36e9c2864e3f 100644
+index 36e9c2864e3f..fe2c463db230 100644
 --- a/drivers/iommu/tegra-smmu.c
 +++ b/drivers/iommu/tegra-smmu.c
-@@ -971,7 +971,7 @@ static const struct iommu_ops tegra_smmu_ops = {
- 	.of_xlate = tegra_smmu_of_xlate,
- 	.pgsize_bitmap = SZ_4K,
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
--		.attach_dev	= tegra_smmu_attach_dev,
-+		.set_dev	= tegra_smmu_attach_dev,
- 		.detach_dev	= tegra_smmu_detach_dev,
- 		.map		= tegra_smmu_map,
+@@ -963,6 +963,14 @@ static int tegra_smmu_of_xlate(struct device *dev,
+ 	return iommu_fwspec_add_ids(dev, &id, 1);
+ }
+ 
++static int tegra_smmu_blocking_domain_set_dev(struct iommu_domain *domain,
++					      struct device *dev)
++{
++	tegra_smmu_detach_dev(domain, dev);
++
++	return 0;
++}
++
+ static const struct iommu_ops tegra_smmu_ops = {
+ 	.domain_alloc = tegra_smmu_domain_alloc,
+ 	.probe_device = tegra_smmu_probe_device,
+@@ -977,6 +985,10 @@ static const struct iommu_ops tegra_smmu_ops = {
  		.unmap		= tegra_smmu_unmap,
+ 		.iova_to_phys	= tegra_smmu_iova_to_phys,
+ 		.free		= tegra_smmu_domain_free,
++	},
++	.blocking_domain_ops = &(const struct iommu_domain_ops) {
++		.set_dev		= tegra_smmu_blocking_domain_set_dev,
++		.blocking_domain_detach = true,
+ 	}
+ };
+ 
 diff --git a/drivers/iommu/virtio-iommu.c b/drivers/iommu/virtio-iommu.c
-index 25be4b822aa0..ce2bd01806d8 100644
+index ce2bd01806d8..5054ebaf9654 100644
 --- a/drivers/iommu/virtio-iommu.c
 +++ b/drivers/iommu/virtio-iommu.c
-@@ -1017,7 +1017,7 @@ static struct iommu_ops viommu_ops = {
- 	.of_xlate		= viommu_of_xlate,
- 	.owner			= THIS_MODULE,
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
--		.attach_dev		= viommu_attach_dev,
-+		.set_dev		= viommu_attach_dev,
- 		.map			= viommu_map,
- 		.unmap			= viommu_unmap,
+@@ -1023,6 +1023,9 @@ static struct iommu_ops viommu_ops = {
  		.iova_to_phys		= viommu_iova_to_phys,
+ 		.iotlb_sync		= viommu_iotlb_sync,
+ 		.free			= viommu_domain_free,
++	},
++	.blocking_domain_ops = &(const struct iommu_domain_ops) {
++		.set_dev		= viommu_attach_dev,
+ 	}
+ };
+ 
 -- 
 2.25.1
 

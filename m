@@ -2,88 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21E6E5293D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 00:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0F9B5293D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 00:52:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349837AbiEPWuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 18:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
+        id S1346049AbiEPWvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 18:51:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349785AbiEPWuN (ORCPT
+        with ESMTP id S1349862AbiEPWvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 18:50:13 -0400
+        Mon, 16 May 2022 18:51:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF544132B;
-        Mon, 16 May 2022 15:50:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A92411C3E
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 15:51:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C56060BD6;
-        Mon, 16 May 2022 22:50:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8F4D9C385B8;
-        Mon, 16 May 2022 22:50:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652741411;
-        bh=H8Ig8EXbJar8cXW0tz5Hm1+0yJvrhqrl2ipJ1AljeLk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=JQ7vmmsWgg1kOotEKFznylZK02CymTRhZ+LDKg7Zv2rmpDw/ppZVPa3PWEkb968On
-         K/pAuJ4nFYV8M/RAqPp/TwkU5+fSLNRgYmmfTioNixlUfAJBFdeR/ilUNE/Wt+XDW8
-         Bl0TwP54vKXRP/lPO82Sfz35IADmwzXxEbgW/WY43TQhXynx7w6peVNeJatDAMsBxc
-         hFEQSt/YZuedFyIETtqbcetVYuha3GQWYg6d/TQKxvjbtJocrnNi0eC/c9XuXiCMCN
-         dYc2W/d76Rbsd7Y4v0jDE+ZfIc4h2TS6pN4+APhxpTTJRhIsBEid87gr+6Y81nOE6o
-         bv62fPoiZ7xUw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6D092E8DBDA;
-        Mon, 16 May 2022 22:50:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1653860B11
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 22:51:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D87F3C385AA;
+        Mon, 16 May 2022 22:51:03 +0000 (UTC)
+Date:   Mon, 16 May 2022 23:51:00 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     will@kernel.org, akpm@linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, hch@infradead.org, arnd@arndb.de
+Subject: Re: [PATCH v2 0/5] arm64: Cleanup ioremap() and support
+ ioremap_prot()
+Message-ID: <YoLVVJXRnDXCPVO8@arm.com>
+References: <20220429103225.75121-1-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: fix building bpf selftests
- statically
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165274141144.14439.10661198051508391335.git-patchwork-notify@kernel.org>
-Date:   Mon, 16 May 2022 22:50:11 +0000
-References: <20220514002115.1376033-1-yosryahmed@google.com>
-In-Reply-To: <20220514002115.1376033-1-yosryahmed@google.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, haoluo@google.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220429103225.75121-1-wangkefeng.wang@huawei.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Sat, 14 May 2022 00:21:15 +0000 you wrote:
-> bpf selftests can no longer be built with CFLAGS=-static with
-> liburandom_read.so and its dependent target.
+On Fri, Apr 29, 2022 at 06:32:20PM +0800, Kefeng Wang wrote:
+> Kefeng Wang (5):
+>   mm: ioremap: Use more sensibly name in ioremap_prot()
+>   mm: ioremap: Setup phys_addr of struct vm_struct
+>   mm: ioremap: Add arch_ioremap/iounmap()
+>   arm64: mm: Convert to GENERIC_IOREMAP
+>   arm64: Add HAVE_IOREMAP_PROT support
 > 
-> Filter out -static for liburandom_read.so and its dependent target.
-> 
-> When building statically, this leaves urandom_read relying on
-> system-wide shared libraries.
-> 
-> [...]
+>  .../features/vm/ioremap_prot/arch-support.txt |  2 +-
+>  arch/arm64/Kconfig                            |  2 +
+>  arch/arm64/include/asm/io.h                   | 20 +++--
+>  arch/arm64/include/asm/pgtable.h              | 10 +++
+>  arch/arm64/kernel/acpi.c                      |  2 +-
+>  arch/arm64/mm/hugetlbpage.c                   | 10 ---
+>  arch/arm64/mm/ioremap.c                       | 85 +++----------------
+>  include/asm-generic/io.h                      | 16 +++-
+>  mm/ioremap.c                                  | 27 ++++--
+>  9 files changed, 74 insertions(+), 100 deletions(-)
 
-Here is the summary with links:
-  - [bpf-next,v2] selftests/bpf: fix building bpf selftests statically
-    https://git.kernel.org/bpf/bpf-next/c/68084a136420
+These patches touch the generic mm parts. Andrew, would you like to
+merge these patches or are happy for them to go via the arm64 tree.
 
-You are awesome, thank you!
+Thanks.
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Catalin

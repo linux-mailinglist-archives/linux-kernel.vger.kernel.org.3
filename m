@@ -2,26 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 957955285D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1E15285DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:49:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243908AbiEPNtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 09:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34702 "EHLO
+        id S243800AbiEPNtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 09:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243858AbiEPNsi (ORCPT
+        with ESMTP id S243595AbiEPNsk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 09:48:38 -0400
+        Mon, 16 May 2022 09:48:40 -0400
 Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957F63917D;
-        Mon, 16 May 2022 06:48:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D97D3A1AB;
+        Mon, 16 May 2022 06:48:32 -0700 (PDT)
 Received: from toolbox.int.toradex.com ([81.221.85.15]) by mrelay.perfora.net
- (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0Lb44F-1nSr6m1rWT-00kk0I;
- Mon, 16 May 2022 15:48:17 +0200
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MQgmZ-1oKXcm1fJt-00U2ZC;
+ Mon, 16 May 2022 15:48:21 +0200
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
-Cc:     Oleksandr Suvorov <oleksandr.suvorov@toradex.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Fabio Estevam <festevam@gmail.com>,
         Frank Rowand <frowand.list@gmail.com>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -32,30 +31,29 @@ Cc:     Oleksandr Suvorov <oleksandr.suvorov@toradex.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 06/24] ARM: dts: imx7-colibri: improve wake-up with gpio key
-Date:   Mon, 16 May 2022 15:47:16 +0200
-Message-Id: <20220516134734.493065-7-marcel@ziswiler.com>
+Subject: [PATCH v2 07/24] ARM: dts: imx7-colibri: move aliases, chosen, extcon and gpio-keys
+Date:   Mon, 16 May 2022 15:47:17 +0200
+Message-Id: <20220516134734.493065-8-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220516134734.493065-1-marcel@ziswiler.com>
 References: <20220516134734.493065-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:/ponqe1H3vjWt2YFBxn3029qEl7K0GNOHiM0G3kQYKbz8vORuas
- vNCrh8JPHZ/po0uB1H2UhjIayfrRD8thP/SvG4HQYeO3NPIqgL6guVInHsIR7QM9A93A+EH
- tjOzBOips5ct+XLosB9wBd3b/DO+uzPETN+oGZ1otJLAqtRjfIxrW5drSW+iYmm8Nj98ca9
- Jg7Y/QlMhMcJYmPheW90g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:W6RXeQ9k9M8=:s2u3Y6s22Dh8v2+pj97wU9
- b8RT5XGKR0yDuLGGAtBaTsqicUwhl5fbYFkNvZSmegSnqF3eq5wclmhvhicuDYUhhEefnPbg8
- 9LJw0d9tPFjcTOcHWD/bK/2jGV62Xl0Km24m3++L/WVgPS2BpextPxiB0EZCKRnhyuoM1z1xP
- VgH5A3MsaSZuJ68G7P6MN/BlsSAKJdGPdxaONcaH2NabbomQN1ZFvTuz5gqtuvsBA4HDZSuP9
- nvzpSFeShokPTvB+9BA1NqsZ67rDayvWtVfx1R76+lo46WA/JMcVPK67t231GDkw695llMKua
- tDVdd8n/vhSB9oAvyHu+SqzduxkzMyJlMaypnNwV6V7G3ZbyU5He0x+WEQatLTuGy2lAdhxUH
- anLac2pj4M30BS89CO7zJhasWNjH1OlB2KK0qmrzLqCfrgcVRJ8qq3TOvn0sl1Qat4Hl+7x2X
- R/NsFVMcaQIPNyV0ofd56ZH28oJRnbtfLle3CZleBnO+dhdjtcZz8Nv3d5y2mNHhK6L4MH32w
- iKZO+fpyBoJLwahzmdUrnLC573TwhA+0/0MeyEN0fyFntbEB9dChUMfVckct9W5inc0Cq0yBs
- u7J0EwjiVvY4aROIusVm0/bnDdBY3geM/UG7L5WNL27ZTibs6dknuVXlzxLqqjG5OJb6Cc4BD
- wRMJPa+JpotSsCPeN2C2Tb+jE6OJwJKKhUiZxWqDVpdm2VGqdlQPHnnhgXLzk1z+M87/vAVZK
- K7DkVbvrPmyeuJvx
+X-Provags-ID: V03:K1:Gvb4Pz7xuRxZ+58OL+CJboTfCyHLK0D3kqPOjx0qC972LhlnSeO
+ AtsJRG7vrlk/hhQtnfAD1SNBwB5XdeN+lkF/3/ksJjFJu35W/lW1i8H+zDSQTyqXdYEf4jX
+ a3WVSZVFDTvMJrDPWWcOoCxMfflBB12btJbfhSKIJqz/cHDG0S+4am7GUT0YgvC2FxYLiKa
+ K+9HbPx0TPA14+k4qZMeQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8NXUCNc3Y5E=:V3+fSEHt1EH+onN28TjwUm
+ Jdyt5xk26q5GJvn9bD0PH/y4Le/EcoEv7wtyt/6BIdxiiYJUA5N/eJD2uP1QGjFGKU2BT5K1F
+ +B3gypeEztC+cG/7sJ2vxDokepI2OWqQbpQV/HbCl9dtpmd5G34DQDDbDKGsXOkbuUf4so0R2
+ laVxVONB4b9MMlUNGd+yZW3/wkNE+RQZHdcM5e/bmRn+RbXQ2ua1d9wN3Jd2+NLiOZFH20P3D
+ 58rsVI4qbR8ljHu4yiCD/8RdM/8NO6hWcpLZQd6xUyajKFyJqKZy+jBIle8SgqtZNTvNDPbjl
+ 5pCXTsUgg0GG2j9N5OeEDP7Hn50lPePRPDumJw7wbtsS0NAegN7ZxWSaRRHo+jJRTq+6/GMFC
+ 6KRR7o/upwPRUnrW4eeB/7eyFvlb/3YIe0HlqmvAapfwMsyQ4qXawifWu3rcILyVqh46dxTlL
+ izpmHXGLmPqg0QRjFMbi2d2inS7mRSc6PiW8901sc7r5Nw0wtgNN73mdoThrz0foFgth46vmg
+ C5zO84uQ2TFrxzUQQS+q67+ypT/84cmkXqScKFEjqZUl5OI9bjjnaW2fVbBjT/Vsg5ufe0t+S
+ 902ARmEA9UvHKVmkMDTXay3ESgQvc99JLzDw24aDf5Fzm1E43sxPfCHEEI9S+E0h/fFKFYGeY
+ gRr09F/TMs8EvVbKJLBn96NyfJMjAFnXJ/5NJo1xDiWAqOV78tMPGpGFW9pDjvxjhuac=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
@@ -65,50 +63,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-The pin GPIO1_IO01 externally pulls down, it is required to sequentially
-connect this pin (signal WAKE_MICO#) to +3v3 and then disconnect it to
-trigger a wakeup interrupt.
-Adding the flag GPIO_PULL_DOWN allows the system to be woken up just
-connecting the pin GPIO1_IO01 to +3v3.
+Move aliases, chosen, extcon and gpio-keys to module-level device tree
+given they are standard Colibri functionalities.
 
-Signed-off-by: Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 ---
 
 (no changes since v1)
 
- arch/arm/boot/dts/imx7-colibri-aster.dtsi   | 2 +-
- arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/arm/boot/dts/imx7-colibri-aster.dtsi   | 18 ------------
+ arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi | 31 --------------------
+ arch/arm/boot/dts/imx7-colibri.dtsi         | 32 +++++++++++++++++++++
+ 3 files changed, 32 insertions(+), 49 deletions(-)
 
 diff --git a/arch/arm/boot/dts/imx7-colibri-aster.dtsi b/arch/arm/boot/dts/imx7-colibri-aster.dtsi
-index bfadb3a3124a..9148c54403f3 100644
+index 9148c54403f3..c12de1861c05 100644
 --- a/arch/arm/boot/dts/imx7-colibri-aster.dtsi
 +++ b/arch/arm/boot/dts/imx7-colibri-aster.dtsi
-@@ -15,7 +15,7 @@ gpio-keys {
+@@ -4,24 +4,6 @@
+  */
  
- 		power {
- 			label = "Wake-Up";
--			gpios = <&gpio1 1 GPIO_ACTIVE_HIGH>;
-+			gpios = <&gpio1 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
- 			linux,code = <KEY_WAKEUP>;
- 			debounce-interval = <10>;
- 			wakeup-source;
+ / {
+-	chosen {
+-		stdout-path = "serial0:115200n8";
+-	};
+-
+-	gpio-keys {
+-		compatible = "gpio-keys";
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&pinctrl_gpiokeys>;
+-
+-		power {
+-			label = "Wake-Up";
+-			gpios = <&gpio1 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
+-			linux,code = <KEY_WAKEUP>;
+-			debounce-interval = <10>;
+-			wakeup-source;
+-		};
+-	};
+-
+ 	reg_3v3: regulator-3v3 {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "3.3V";
 diff --git a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-index 074c96f09191..4a7e593e9ac6 100644
+index 4a7e593e9ac6..2e6678f81af6 100644
 --- a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
 +++ b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-@@ -34,7 +34,7 @@ gpio-keys {
+@@ -4,15 +4,6 @@
+  */
  
- 		power {
- 			label = "Wake-Up";
--			gpios = <&gpio1 1 GPIO_ACTIVE_HIGH>;
-+			gpios = <&gpio1 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
- 			linux,code = <KEY_WAKEUP>;
- 			debounce-interval = <10>;
- 			wakeup-source;
+ / {
+-	aliases {
+-		rtc0 = &rtc;
+-		rtc1 = &snvs_rtc;
+-	};
+-
+-	chosen {
+-		stdout-path = "serial0:115200n8";
+-	};
+-
+ 	/* fixed crystal dedicated to mpc258x */
+ 	clk16m: clk16m {
+ 		compatible = "fixed-clock";
+@@ -20,27 +11,6 @@ clk16m: clk16m {
+ 		clock-frequency = <16000000>;
+ 	};
+ 
+-	extcon_usbc_det: usbc-det {
+-		compatible = "linux,extcon-usb-gpio";
+-		id-gpio = <&gpio7 14 GPIO_ACTIVE_HIGH>;
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&pinctrl_usbc_det>;
+-	};
+-
+-	gpio-keys {
+-		compatible = "gpio-keys";
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&pinctrl_gpiokeys>;
+-
+-		power {
+-			label = "Wake-Up";
+-			gpios = <&gpio1 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
+-			linux,code = <KEY_WAKEUP>;
+-			debounce-interval = <10>;
+-			wakeup-source;
+-		};
+-	};
+-
+ 	reg_3v3: regulator-3v3 {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "3.3V";
+@@ -148,7 +118,6 @@ &uart3 {
+ };
+ 
+ &usbotg1 {
+-	extcon = <0>, <&extcon_usbc_det>;
+ 	status = "okay";
+ };
+ 
+diff --git a/arch/arm/boot/dts/imx7-colibri.dtsi b/arch/arm/boot/dts/imx7-colibri.dtsi
+index fa615379a117..c5a58949d664 100644
+--- a/arch/arm/boot/dts/imx7-colibri.dtsi
++++ b/arch/arm/boot/dts/imx7-colibri.dtsi
+@@ -6,6 +6,11 @@
+ #include <dt-bindings/pwm/pwm.h>
+ 
+ / {
++	aliases {
++		rtc0 = &rtc;
++		rtc1 = &snvs_rtc;
++	};
++
+ 	backlight: backlight {
+ 		brightness-levels = <0 45 63 88 119 158 203 255>;
+ 		compatible = "pwm-backlight";
+@@ -18,6 +23,32 @@ backlight: backlight {
+ 		status = "disabled";
+ 	};
+ 
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	extcon_usbc_det: usbc-det {
++		compatible = "linux,extcon-usb-gpio";
++		debounce = <25>;
++		id-gpio = <&gpio7 14 GPIO_ACTIVE_HIGH>; /* SODIMM 137 / USBC_DET */
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_usbc_det>;
++	};
++
++	gpio-keys {
++		compatible = "gpio-keys";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_gpiokeys>;
++
++		wakeup {
++			debounce-interval = <10>;
++			gpios = <&gpio1 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>; /* SODIMM 45 */
++			label = "Wake-Up";
++			linux,code = <KEY_WAKEUP>;
++			wakeup-source;
++		};
++	};
++
+ 	panel_dpi: panel-dpi {
+ 		backlight = <&backlight>;
+ 		compatible = "edt,et057090dhu";
+@@ -513,6 +544,7 @@ &uart3 {
+ 
+ &usbotg1 {
+ 	dr_mode = "otg";
++	extcon = <0>, <&extcon_usbc_det>;
+ };
+ 
+ &usdhc1 {
 -- 
 2.35.1
 

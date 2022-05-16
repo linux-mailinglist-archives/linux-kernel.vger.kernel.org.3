@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FBBF529085
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A49A752919F
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244517AbiEPUYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46356 "EHLO
+        id S1347579AbiEPUaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348317AbiEPT6d (ORCPT
+        with ESMTP id S1350586AbiEPUBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:58:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2638F40912;
-        Mon, 16 May 2022 12:50:30 -0700 (PDT)
+        Mon, 16 May 2022 16:01:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC9149FAB;
+        Mon, 16 May 2022 12:55:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B2F9C60DDA;
-        Mon, 16 May 2022 19:50:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8D47C34100;
-        Mon, 16 May 2022 19:50:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 19C4160FE1;
+        Mon, 16 May 2022 19:55:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 244CDC34100;
+        Mon, 16 May 2022 19:55:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730629;
-        bh=omJeBGX28SkPxdoJonDoRUB1KOVyZzromm7NoJwczQ8=;
+        s=korg; t=1652730934;
+        bh=EdXBI+t7Z+CJBmYfgvbfu0giiu3XH2CkqB+Azf5RDVQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T81iD2onKp32+92ibBRMrpDS6aSAZhzziQ8ogF+KY/k6GiDoYRtKono+o3GcQ3JHC
-         +TfiJF76HRru5e9RSsg4i2OeBHiCEWzbEE6IR89isCWNbYZhJVPpwDvaCXUfHANmJa
-         /Gt5Ag5s68W4bpYojmlX/cJ8BV9Mgj1gVyv1n/mk=
+        b=r/VEIrEqUznK1kLupwjdiq8pOIBsOQJ7v3ERT/Rfd26O3xPaxQig6h8yS8NSJiQB+
+         aKFEsBSfknV/uS4nSwCRHIgrOay1l6hsF6p7orUIYepjQTWkDvaBns8RzMNR+n6ndg
+         7CCSPCHVjLegH2HEyqoOqVu931HEmI7AY0c/qBQc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 052/102] ASoC: SOF: Fix NULL pointer exception in sof_pci_probe callback
+        stable@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
+        Krishna Reddy <vdumpa@nvidia.com>,
+        Pritesh Raithatha <praithatha@nvidia.com>,
+        Ashish Mhetre <amhetre@nvidia.com>,
+        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 052/114] iommu: arm-smmu: disable large page mappings for Nvidia arm-smmu
 Date:   Mon, 16 May 2022 21:36:26 +0200
-Message-Id: <20220516193625.490547866@linuxfoundation.org>
+Message-Id: <20220516193626.988968670@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
-References: <20220516193623.989270214@linuxfoundation.org>
+In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
+References: <20220516193625.489108457@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,49 +57,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
+From: Ashish Mhetre <amhetre@nvidia.com>
 
-[ Upstream commit c61711c1c95791850be48dd65a1d72eb34ba719f ]
+[ Upstream commit 4a25f2ea0e030b2fc852c4059a50181bfc5b2f57 ]
 
-We are accessing "desc->ops" in sof_pci_probe without checking "desc"
-pointer. This results in NULL pointer exception if pci_id->driver_data
-i.e desc pointer isn't defined in sof device probe:
+Tegra194 and Tegra234 SoCs have the erratum that causes walk cache
+entries to not be invalidated correctly. The problem is that the walk
+cache index generated for IOVA is not same across translation and
+invalidation requests. This is leading to page faults when PMD entry is
+released during unmap and populated with new PTE table during subsequent
+map request. Disabling large page mappings avoids the release of PMD
+entry and avoid translations seeing stale PMD entry in walk cache.
+Fix this by limiting the page mappings to PAGE_SIZE for Tegra194 and
+Tegra234 devices. This is recommended fix from Tegra hardware design
+team.
 
-BUG: kernel NULL pointer dereference, address: 0000000000000060
-PGD 0 P4D 0
-Oops: 0000 [#1] PREEMPT SMP NOPTI
-RIP: 0010:sof_pci_probe+0x1e/0x17f [snd_sof_pci]
-Code: Unable to access opcode bytes at RIP 0xffffffffc043dff4.
-RSP: 0018:ffffac4b03b9b8d8 EFLAGS: 00010246
-
-Add NULL pointer check for sof_dev_desc pointer to avoid such exception.
-
-Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Signed-off-by: Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
-Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Link: https://lore.kernel.org/r/20220426183357.102155-1-pierre-louis.bossart@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Acked-by: Robin Murphy <robin.murphy@arm.com>
+Reviewed-by: Krishna Reddy <vdumpa@nvidia.com>
+Co-developed-by: Pritesh Raithatha <praithatha@nvidia.com>
+Signed-off-by: Pritesh Raithatha <praithatha@nvidia.com>
+Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
+Link: https://lore.kernel.org/r/20220421081504.24678-1-amhetre@nvidia.com
+Signed-off-by: Will Deacon <will@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/sof/sof-pci-dev.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c | 30 ++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/sound/soc/sof/sof-pci-dev.c b/sound/soc/sof/sof-pci-dev.c
-index bc9e70765678..b773289c928d 100644
---- a/sound/soc/sof/sof-pci-dev.c
-+++ b/sound/soc/sof/sof-pci-dev.c
-@@ -129,6 +129,11 @@ int sof_pci_probe(struct pci_dev *pci, const struct pci_device_id *pci_id)
+diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c b/drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c
+index 01e9b50b10a1..87bf522b9d2e 100644
+--- a/drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c
++++ b/drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c
+@@ -258,6 +258,34 @@ static void nvidia_smmu_probe_finalize(struct arm_smmu_device *smmu, struct devi
+ 			dev_name(dev), err);
+ }
  
- 	dev_dbg(&pci->dev, "PCI DSP detected");
- 
-+	if (!desc) {
-+		dev_err(dev, "error: no matching PCI descriptor\n");
-+		return -ENODEV;
++static int nvidia_smmu_init_context(struct arm_smmu_domain *smmu_domain,
++				    struct io_pgtable_cfg *pgtbl_cfg,
++				    struct device *dev)
++{
++	struct arm_smmu_device *smmu = smmu_domain->smmu;
++	const struct device_node *np = smmu->dev->of_node;
++
++	/*
++	 * Tegra194 and Tegra234 SoCs have the erratum that causes walk cache
++	 * entries to not be invalidated correctly. The problem is that the walk
++	 * cache index generated for IOVA is not same across translation and
++	 * invalidation requests. This is leading to page faults when PMD entry
++	 * is released during unmap and populated with new PTE table during
++	 * subsequent map request. Disabling large page mappings avoids the
++	 * release of PMD entry and avoid translations seeing stale PMD entry in
++	 * walk cache.
++	 * Fix this by limiting the page mappings to PAGE_SIZE on Tegra194 and
++	 * Tegra234.
++	 */
++	if (of_device_is_compatible(np, "nvidia,tegra234-smmu") ||
++	    of_device_is_compatible(np, "nvidia,tegra194-smmu")) {
++		smmu->pgsize_bitmap = PAGE_SIZE;
++		pgtbl_cfg->pgsize_bitmap = smmu->pgsize_bitmap;
 +	}
 +
- 	if (!desc->ops) {
- 		dev_err(dev, "error: no matching PCI descriptor ops\n");
- 		return -ENODEV;
++	return 0;
++}
++
+ static const struct arm_smmu_impl nvidia_smmu_impl = {
+ 	.read_reg = nvidia_smmu_read_reg,
+ 	.write_reg = nvidia_smmu_write_reg,
+@@ -268,10 +296,12 @@ static const struct arm_smmu_impl nvidia_smmu_impl = {
+ 	.global_fault = nvidia_smmu_global_fault,
+ 	.context_fault = nvidia_smmu_context_fault,
+ 	.probe_finalize = nvidia_smmu_probe_finalize,
++	.init_context = nvidia_smmu_init_context,
+ };
+ 
+ static const struct arm_smmu_impl nvidia_smmu_single_impl = {
+ 	.probe_finalize = nvidia_smmu_probe_finalize,
++	.init_context = nvidia_smmu_init_context,
+ };
+ 
+ struct arm_smmu_device *nvidia_smmu_impl_init(struct arm_smmu_device *smmu)
 -- 
 2.35.1
 

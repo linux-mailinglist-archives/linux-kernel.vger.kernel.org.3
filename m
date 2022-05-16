@@ -2,253 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 288ED5281D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 265D25281E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbiEPKWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 06:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
+        id S242534AbiEPKX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 06:23:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242449AbiEPKW1 (ORCPT
+        with ESMTP id S232577AbiEPKXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 06:22:27 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0E0DF30;
-        Mon, 16 May 2022 03:22:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652696539; x=1684232539;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4m1rLHdZFdcKcCOwnZk3dcFtZOfNVE/31ZZkpnjq5xs=;
-  b=kd9qL26VzYMgsJnEnWW/6Izv+SJGJXNizJugxImbLl3FTwWabEjvWmKQ
-   s0nDz049Lefk1LdvMN6QP/c7v4xkz9mG7AYGJmXh6R9Fmh3eSc5SBAhau
-   duTFQDXY+ETzXaYIq0VTmnrUeAlt/K4C85f4KHkIWU57S9YyuYXl0duy0
-   N/PaLTJAKW62tnN1w6YyVd+fE44cs+vlJisnNbHz0GvQMXX/SwNKgo0IC
-   2m1eBiRzaRKDidSqJ29dEPxfiN/fl03d2DyDEYeQs3265pYdtfl7HQ3FV
-   ACYTCPRFtLAfmG+9KBvcbzIGw+8N8bJ42BV4tLtPFDK3DuHt2klZwKZtJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="270742688"
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="270742688"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 03:22:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="544299728"
-Received: from lkp-server01.sh.intel.com (HELO d1462bc4b09b) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 16 May 2022 03:22:13 -0700
-Received: from kbuild by d1462bc4b09b with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nqXrh-0002KE-1O;
-        Mon, 16 May 2022 10:22:13 +0000
-Date:   Mon, 16 May 2022 18:21:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Neal Liu <neal_liu@aspeedtech.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Felipe Balbi <balbi@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Li Yang <leoyang.li@nxp.com>
-Cc:     kbuild-all@lists.01.org, Neal Liu <neal_liu@aspeedtech.com>,
-        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        BMC-SW@aspeedtech.com
-Subject: Re: [PATCH 1/3] usb: gadget: add Aspeed ast2600 udc driver
-Message-ID: <202205161842.gsOJeWvM-lkp@intel.com>
-References: <20220513065728.857722-2-neal_liu@aspeedtech.com>
+        Mon, 16 May 2022 06:23:16 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8820FDF20
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 03:23:03 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 202so13649029pgc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 03:23:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wM6Azq4KvZFXPTLv4RjX04U+2mm1UIR+U1KSQ2B9MTI=;
+        b=8H8QXlCOxjBgjGZh3+z6KHLhzw4I/ccGgMza3sUfGcJ+ykdaqDuU7NJXywJqXBmZvm
+         PPb9ZKan1kfrxhDdsKPryMHGMax0yEKcyFZcEs3baaX23BtrzlOgvT3ijDwn92aNcYVT
+         rIY1UjeWjfnn6WsbW+NJ4GczWjtYtJr5qOjrk12P4s6qHql7WRb0/RrPSoUEw/VTfiNY
+         1e7zhvlatMu3Kj6s3Q8WciSzxWO4jZjeBuLtzoa/5+/MKSd8/BwwrpTJ5+16BO81hVxX
+         WeK3JkMVs8MK6NyaFCm0yMZkQ8f5Q4hs/2fEqv96Mtp5NUA5hRTOO9IQdg7bW1JxFo+6
+         tSQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wM6Azq4KvZFXPTLv4RjX04U+2mm1UIR+U1KSQ2B9MTI=;
+        b=lGVaX3FVs3gF+6Ec9sRh3Y6jsIxy80JifIJtHSVXBTsfcIIpji5yOw7e+8SVEVxRrg
+         9e5FnlrbLJY/v8olGoYLAGtXXnk634xgsCn6W2z1SxbH4LtnadFmvshGzhbjRoyQZAv9
+         yeTDx0aNpbVR+Q+5LfWn44nwcOL/OadFv9R4R4uSZuUDQYBuML0srOFiGfyhHSa79bEd
+         rP3n2fV+C2OICyo45ZXLmTJRaWVm/B3r9zYF/gqlI+nq/vZL8iM5n5ybj9InSrdHMAUN
+         M7W4ggNXJbes6gwJL37ERvyM/RrxUQaCTvOI2IYYVWXK3P64kGBQXKlGQdIz0kaEMbGr
+         fnTw==
+X-Gm-Message-State: AOAM532eXwMHXP9EwzDCjG2u/b92/4JBX1X79P+0dJgeAd9bIR09aMCH
+        8d0Kf0u36oBRQClDhfMRtki69w==
+X-Google-Smtp-Source: ABdhPJwA0KYogIQnhHX+aOs8Ju/cjBq8V+xpTctszclbnMr/9fG5BJnPxGY5TbdCQtotKncPsTpNvQ==
+X-Received: by 2002:a63:89c7:0:b0:3da:ee16:c84 with SMTP id v190-20020a6389c7000000b003daee160c84mr14940129pgd.320.1652696582639;
+        Mon, 16 May 2022 03:23:02 -0700 (PDT)
+Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.234])
+        by smtp.gmail.com with ESMTPSA id i9-20020aa79089000000b0050dc76281e4sm6472731pfa.190.2022.05.16.03.22.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 03:23:02 -0700 (PDT)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     corbet@lwn.net, mike.kravetz@oracle.com, akpm@linux-foundation.org,
+        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
+        osalvador@suse.de, david@redhat.com, masahiroy@kernel.org
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, duanxiongchun@bytedance.com, smuchun@gmail.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH v12 0/7] add hugetlb_optimize_vmemmap sysctl
+Date:   Mon, 16 May 2022 18:22:04 +0800
+Message-Id: <20220516102211.41557-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.32.1 (Apple Git-133)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220513065728.857722-2-neal_liu@aspeedtech.com>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neal,
+This series is based on next-20220428.
 
-I love your patch! Perhaps something to improve:
+This series amis to add hugetlb_optimize_vmemmap sysctl to enable or disable
+the feature of optimizing vmemmap pages associated with HugeTLB pages.
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on robh/for-next balbi-usb/testing/next v5.18-rc7 next-20220513]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+v12:
+  - Add patch 3 and patch 4 to handle the coexistence of hugetlb_free_vmemmap
+    and memory_hotplug.memmap_on_memory (David).
+  - Remove Reviewed-by from Mike in the last parch since it is changed.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Neal-Liu/add-Aspeed-udc-driver-for-ast2600/20220513-150314
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: sparc-randconfig-s031-20220516 (https://download.01.org/0day-ci/archive/20220516/202205161842.gsOJeWvM-lkp@intel.com/config)
-compiler: sparc-linux-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/272ae26f9fe89f60d584cf445431d0fa566eb24b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Neal-Liu/add-Aspeed-udc-driver-for-ast2600/20220513-150314
-        git checkout 272ae26f9fe89f60d584cf445431d0fa566eb24b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc SHELL=/bin/bash drivers/usb/gadget/udc/
+v11:
+  - Collect Reviewed-by from Mike.
+  - Remove hugetlb_optimize_vmemmap_enabled() check from flush_free_hpage_work().
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+v10:
+  - Collect Reviewed-by from Mike.
+  - Remove hugetlb_optimize_vmemmap_enabled() check from
+    hugetlb_optimize_vmemmap_pages() (Mike).
+  - Add more explanation to Documentation/admin-guide/sysctl/vm.rst.
+  - Fix cannot disable the feature via hugetlb_optimize_vmemmap sysctl (Mike).
+  - Update patch 2's commit log (Mike).
 
+v9:
+  - Go back to v3 since checking the size of struct page at config time is
+    very complex.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/usb/gadget/udc/aspeed_udc.c:1009:34: sparse: sparse: restricted __le16 degrades to integer
->> drivers/usb/gadget/udc/aspeed_udc.c:1037:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const volatile [noderef] __iomem *src @@     got struct usb_ctrlrequest *creq @@
-   drivers/usb/gadget/udc/aspeed_udc.c:1037:9: sparse:     expected void const volatile [noderef] __iomem *src
-   drivers/usb/gadget/udc/aspeed_udc.c:1037:9: sparse:     got struct usb_ctrlrequest *creq
->> drivers/usb/gadget/udc/aspeed_udc.c:1066:25: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le16 [addressable] [usertype] wValue @@
-   drivers/usb/gadget/udc/aspeed_udc.c:1066:25: sparse:     expected unsigned int [usertype] value
-   drivers/usb/gadget/udc/aspeed_udc.c:1066:25: sparse:     got restricted __le16 [addressable] [usertype] wValue
-   drivers/usb/gadget/udc/aspeed_udc.c:1070:37: sparse: sparse: restricted __le16 degrades to integer
-   drivers/usb/gadget/udc/aspeed_udc.c:1075:37: sparse: sparse: restricted __le16 degrades to integer
->> drivers/usb/gadget/udc/aspeed_udc.c:1518:19: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct usb_ctrlrequest *creq @@     got void [noderef] __iomem * @@
-   drivers/usb/gadget/udc/aspeed_udc.c:1518:19: sparse:     expected struct usb_ctrlrequest *creq
-   drivers/usb/gadget/udc/aspeed_udc.c:1518:19: sparse:     got void [noderef] __iomem *
->> drivers/usb/gadget/udc/aspeed_udc.c:619:38: sparse: sparse: cast truncates bits from constant value (80 becomes 0)
-   drivers/usb/gadget/udc/aspeed_udc.c:625:12: sparse: sparse: context imbalance in 'ast_udc_ep_queue' - different lock contexts for basic block
+v8:
+  - Fix compilation (scripts/selinux/mdp/mdp.c) error when
+    CONFIG_SECURITY_SELINUX is selected.
 
-vim +1009 drivers/usb/gadget/udc/aspeed_udc.c
+v7:
+  - Fix circular dependency issue reported by kernel test robot.
+  - Introduce CONFIG_HUGETLB_PAGE_HAS_OPTIMIZE_VMEMMAP instead of
+    STRUCT_PAGE_SIZE_IS_POWER_OF_2.
+  - Add more comments into vm.rst to explain hugetlb_optimize_vmemmap (Andrew).
+  - Drop the patch "sysctl: allow to set extra1 to SYSCTL_ONE".
+  - Add a new patch "use kstrtobool for hugetlb_vmemmap param parsing".
+  - Reuse static_key's refcount to count the number of HugeTLB pages with
+    vmemmap pages optimized to simplify the lock scheme.
 
-   994	
-   995	static void ast_udc_getstatus(struct ast_udc_dev *udc)
-   996	{
-   997		struct ast_udc_ep *ep;
-   998		u16 status = 0;
-   999		int epnum;
-  1000	
-  1001		switch (udc->creq->bRequestType & USB_RECIP_MASK) {
-  1002		case USB_RECIP_DEVICE:
-  1003			/* Get device status */
-  1004			status = 1 << USB_DEVICE_SELF_POWERED;
-  1005			break;
-  1006		case USB_RECIP_INTERFACE:
-  1007			break;
-  1008		case USB_RECIP_ENDPOINT:
-> 1009			epnum = udc->creq->wIndex & USB_ENDPOINT_NUMBER_MASK;
-  1010			status = udc->ep[epnum].stopped;
-  1011			break;
-  1012		default:
-  1013			goto stall;
-  1014		}
-  1015	
-  1016		ep = &udc->ep[epnum];
-  1017		EP_DBG(ep, "status: 0x%x\n", status);
-  1018		ast_udc_ep0_data_tx(udc, (u8 *)&status, sizeof(status));
-  1019	
-  1020		return;
-  1021	
-  1022	stall:
-  1023		EP_DBG(ep, "Can't respond request\n");
-  1024		ast_udc_write(udc, ast_udc_read(udc, AST_UDC_EP0_CTRL) | EP0_STALL,
-  1025			      AST_UDC_EP0_CTRL);
-  1026	}
-  1027	
-  1028	static void ast_udc_ep0_handle_setup(struct ast_udc_dev *udc)
-  1029	{
-  1030		struct ast_udc_ep *ep = &udc->ep[0];
-  1031		struct ast_udc_request *req;
-  1032		struct usb_ctrlrequest crq;
-  1033		int req_num = 0;
-  1034		u16 ep_num = 0;
-  1035		int rc;
-  1036	
-> 1037		memcpy_fromio(&crq, udc->creq, sizeof(crq));
-  1038	
-  1039		SETUP_DBG(udc, "SETEUP packet: %02x/%02x/%04x/%04x/%04x\n",
-  1040			  crq.bRequestType, crq.bRequest, le16_to_cpu(crq.wValue),
-  1041			  le16_to_cpu(crq.wIndex), le16_to_cpu(crq.wLength));
-  1042	
-  1043		/*
-  1044		 * Cleanup ep0 request(s) in queue because
-  1045		 * there is a new control setup comes.
-  1046		 */
-  1047		list_for_each_entry(req, &udc->ep[0].queue, queue) {
-  1048			req_num++;
-  1049			EP_DBG(ep, "there is req %p in ep0 queue !\n", req);
-  1050		}
-  1051	
-  1052		if (req_num)
-  1053			ast_udc_nuke(&udc->ep[0], -ETIMEDOUT);
-  1054	
-  1055		udc->ep[0].dir_in = crq.bRequestType & USB_DIR_IN;
-  1056	
-  1057		if ((crq.bRequestType & USB_TYPE_MASK) == USB_TYPE_STANDARD) {
-  1058			switch (crq.bRequest) {
-  1059			case USB_REQ_SET_ADDRESS:
-  1060				if (ast_udc_read(udc, AST_UDC_STS) & UDC_STS_HIGHSPEED)
-  1061					udc->gadget.speed = USB_SPEED_HIGH;
-  1062				else
-  1063					udc->gadget.speed = USB_SPEED_FULL;
-  1064	
-  1065				SETUP_DBG(udc, "set addr: 0x%x\n", crq.wValue);
-> 1066				ast_udc_write(udc, crq.wValue, AST_UDC_CONFIG);
-  1067				goto req_complete;
-  1068	
-  1069			case USB_REQ_CLEAR_FEATURE:
-  1070				ep_num = crq.wIndex & USB_ENDPOINT_NUMBER_MASK;
-  1071				SETUP_DBG(udc, "ep%d: CLEAR FEATURE\n", ep_num);
-  1072				goto req_driver;
-  1073	
-  1074			case USB_REQ_SET_FEATURE:
-  1075				ep_num = crq.wIndex & USB_ENDPOINT_NUMBER_MASK;
-  1076				SETUP_DBG(udc, "ep%d: SET FEATURE\n", ep_num);
-  1077				goto req_driver;
-  1078	
-  1079			case USB_REQ_GET_STATUS:
-  1080				ast_udc_getstatus(udc);
-  1081				return;
-  1082	
-  1083			default:
-  1084				goto req_driver;
-  1085			}
-  1086	
-  1087		}
-  1088	
-  1089	req_driver:
-  1090		if (udc->driver) {
-  1091			SETUP_DBG(udc, "Forwarding %s to gadget...\n",
-  1092				  udc->gadget.name);
-  1093	
-  1094			spin_unlock(&udc->lock);
-  1095			rc = udc->driver->setup(&udc->gadget, &crq);
-  1096			spin_lock(&udc->lock);
-  1097	
-  1098		} else
-  1099			SETUP_DBG(udc, "No gadget for request !\n");
-  1100	
-  1101		if (rc >= 0)
-  1102			return;
-  1103	
-  1104		/* Stall if gadget failed */
-  1105		SETUP_DBG(udc, "Stalling, rc:0x%x\n", rc);
-  1106		ast_udc_write(udc, ast_udc_read(udc, AST_UDC_EP0_CTRL) | EP0_STALL,
-  1107			      AST_UDC_EP0_CTRL);
-  1108		return;
-  1109	
-  1110	req_complete:
-  1111		SETUP_DBG(udc, "ep%d: Sending IN status without data\n", ep_num);
-  1112		ast_udc_write(udc, EP0_TX_BUFF_RDY, AST_UDC_EP0_CTRL);
-  1113	}
-  1114	
+v6:
+  - Remove "make syncconfig" from Kbuild.
+
+v5:
+  - Fix not working properly if one is workig off of a very clean build
+    reported by Luis Chamberlain.
+  - Add Suggested-by for Luis Chamberlain.
+
+v4:
+  - Introduce STRUCT_PAGE_SIZE_IS_POWER_OF_2 inspired by Luis.
+
+v3:
+  - Add pr_warn_once() (Mike).
+  - Handle the transition from enabling to disabling (Luis)
+
+v2:
+  - Fix compilation when !CONFIG_MHP_MEMMAP_ON_MEMORY reported by kernel
+    test robot <lkp@intel.com>.
+  - Move sysctl code from kernel/sysctl.c to mm/hugetlb_vmemmap.c.
+
+Muchun Song (7):
+  mm: hugetlb_vmemmap: disable hugetlb_optimize_vmemmap when struct page
+    crosses page boundaries
+  mm: hugetlb_vmemmap: use kstrtobool for hugetlb_vmemmap param parsing
+  mm: memory_hotplug: enumerate all supported section flags
+  mm: hotplug: introduce SECTION_CANNOT_OPTIMIZE_VMEMMAP
+  mm: hugetlb_vmemmap: remove hugetlb_optimize_vmemmap_enabled()
+  sysctl: handle table->maxlen properly for proc_dobool
+  mm: hugetlb_vmemmap: add hugetlb_optimize_vmemmap sysctl
+
+ Documentation/admin-guide/kernel-parameters.txt | 22 +++----
+ Documentation/admin-guide/sysctl/vm.rst         | 38 ++++++++++++
+ arch/arm64/mm/flush.c                           | 13 +---
+ fs/lockd/svc.c                                  |  2 +-
+ include/linux/kconfig.h                         |  1 +
+ include/linux/mmzone.h                          | 54 +++++++++++++---
+ include/linux/page-flags.h                      | 16 +----
+ kernel/sysctl.c                                 | 22 ++++---
+ mm/hugetlb_vmemmap.c                            | 82 ++++++++++++++++++-------
+ mm/memory_hotplug.c                             |  7 ++-
+ mm/sparse.c                                     |  7 +++
+ 11 files changed, 186 insertions(+), 78 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.11.0
+

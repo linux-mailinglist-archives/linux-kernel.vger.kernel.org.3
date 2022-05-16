@@ -2,259 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B997C528BAC
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 19:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6FA3528BB1
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 19:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344105AbiEPRNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 13:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
+        id S233987AbiEPRNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 13:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344099AbiEPRNY (ORCPT
+        with ESMTP id S1344110AbiEPRNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 13:13:24 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A6832044
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 10:13:22 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id t14-20020a1709028c8e00b0015cf7e541feso8327433plo.1
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 10:13:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=BkxFs5g1qHthSeWFrePkH1QG+J6aKzpMAVQJiVuFFy0=;
-        b=Ux8p5mjSfdEF8/qXvqToIgfPYTMGeSNmiUns1+Eb0yBZkxK6/QPlxdqgH4zKeg3wsG
-         f7OZb33FwyhkU0V7zTKU4LSwif+XVlKDtHIpoTGwrzVGsr+248pDzVPlDoQ3Q7S8ssQ7
-         lou9e8Ztd/VwVlEOBXk/QR8CVl3Q43/Zei/zHQoF1JrOcBTf13eqa4gMu6k9UxP97uKg
-         eozshW0N0nAH+pO71/tmIjfCjIwKLyyLgmrxBTwpPvJQ+WBfYT4cRnlbWwgGEkDLENkZ
-         e2kXNTYxtJPFnB1etcyG3sgm1ExkbhOw5urHMR0khU1dgVNFr9uQvoQOZmgs9RmO6dlH
-         l1JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=BkxFs5g1qHthSeWFrePkH1QG+J6aKzpMAVQJiVuFFy0=;
-        b=N6vJZRdwAo+eVJ3WOGvcZ+WBMjqsx0HjcJ0bGaQNQIhV3EqpYS9RzYaw+Cxhcbgwqm
-         3Jl+wSYXLngKLea1s+5iIBP1nrd5GhH0MtE/MS2Z51izBdzU2jGR/wQiWq8H5Ap+5x4Z
-         G7FCBLKQ2fTcoKQ1Psg/csVt42IyNdVDiHExl7wvXCSXVEdyjRF4H49eDBP3gVQhsyRU
-         pNBwBdz+8+gLscnmRhicpeCb5GOe7YuIJM7rE8r22At15BF0/XZVE/gjDnbPjnlNYmOr
-         GILFuYwy6gaoC9Yg478zISNaJ1bvSrg3FtguoPboVn9lbpA4Y2c2VNe8njBMdlge2ryu
-         c/Rg==
-X-Gm-Message-State: AOAM531XIjAQwNdM348/KQiJYmWQWzYXE8P6bfVx1754Ina4NpAXEWKm
-        n92l3sHTDP2r64oJPnWfMAUSRhQEHp5eCo4=
-X-Google-Smtp-Source: ABdhPJyPjKo1eQFHBLHJH6P4Mxk85QYIhhyhsHtKoWV418NVqX0hkw6JvORFy5M+l/4akC4PG6mHy3tzQZlSKeY=
-X-Received: from tj.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:53a])
- (user=tjmercier job=sendgmr) by 2002:a17:90b:38c4:b0:1dc:6b64:3171 with SMTP
- id nn4-20020a17090b38c400b001dc6b643171mr32420547pjb.168.1652721201871; Mon,
- 16 May 2022 10:13:21 -0700 (PDT)
-Date:   Mon, 16 May 2022 17:13:15 +0000
-Message-Id: <20220516171315.2400578-1-tjmercier@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [PATCH v2] dma-buf: Move sysfs work out of DMA-BUF export path
-From:   "T.J. Mercier" <tjmercier@google.com>
-To:     tjmercier@google.com, surenb@google.com, kaleshsingh@google.com,
-        minchan@google.com, gregkh@google.com, jstultz@google.com,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Hridya Valsaraju <hridya@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel-team@android.com, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 16 May 2022 13:13:52 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96A1326F9;
+        Mon, 16 May 2022 10:13:50 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GFJn72004984;
+        Mon, 16 May 2022 17:13:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=DzrZdpcDRLuxvldPjzyqpu8L+H3FzZFhPx9Zm0YN8io=;
+ b=ACMpP0iP8samQDSf17L7q7OrTKW6CnrFPfTjORK7Sshv/CIZ4xqzO3zVyHMkZHlo/H0N
+ nVNmLS0v3I2CIigjVoZZvKCgUEBDIdWl+tQQi+w8Rq8lH4j5JhuFc4c4DgukLfgY2oPN
+ YJjKs5J6RmY2SgCu+RSyJdMPJghlq2mnF/sHxy/RqvwBkH0gbnbyKKWL6HaAnDNpPHhg
+ ZfKmr18cSyap5Q57IoTp2gkv5oq7DfC2F6NYV5ij/Y5YYhTjFYL/wF/Olc+E3kUkFQ06
+ atMxyAm4Tlnadz4gyHRmMhFddwMlAT5ZXAmDkJKZ967bqj/NvpJFv/KTpu2UmjrJ9LCk gg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3s5at9p6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 17:13:47 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24GGm8lo024197;
+        Mon, 16 May 2022 17:13:47 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3s5at9p0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 17:13:47 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24GHDf6w026882;
+        Mon, 16 May 2022 17:13:46 GMT
+Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+        by ppma02dal.us.ibm.com with ESMTP id 3g242a3ha0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 17:13:46 +0000
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24GHDj8H22085898
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 16 May 2022 17:13:45 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4CD6B6A058;
+        Mon, 16 May 2022 17:13:45 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 469B96A04D;
+        Mon, 16 May 2022 17:13:44 +0000 (GMT)
+Received: from [9.65.254.31] (unknown [9.65.254.31])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon, 16 May 2022 17:13:44 +0000 (GMT)
+Message-ID: <62668577-bf0c-eda5-56a0-9ca56e5f9ce6@linux.ibm.com>
+Date:   Mon, 16 May 2022 13:13:43 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v19 05/20] s390/vfio-ap: refresh guest's APCB by filtering
+ AP resources assigned to mdev
+Content-Language: en-US
+To:     jjherne@linux.ibm.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
+        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
+        alex.williamson@redhat.com, kwankhede@nvidia.com,
+        fiuczy@linux.ibm.com
+References: <20220404221039.1272245-1-akrowiak@linux.ibm.com>
+ <20220404221039.1272245-6-akrowiak@linux.ibm.com>
+ <fc760c00-0559-68d8-fd2d-f29e014a6685@linux.ibm.com>
+From:   Tony Krowiak <akrowiak@linux.ibm.com>
+In-Reply-To: <fc760c00-0559-68d8-fd2d-f29e014a6685@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: i91RkiB7fX-xeHhOrYTMaIuRYpA-_TYu
+X-Proofpoint-GUID: 3_4dAFx8Tehub2sjs0nkpNHIw-iy7ucL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-16_15,2022-05-16_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 clxscore=1011 adultscore=0 mlxlogscore=999 phishscore=0
+ mlxscore=0 priorityscore=1501 malwarescore=0 spamscore=0 impostorscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205160094
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recently, we noticed an issue where a process went into direct reclaim
-while holding the kernfs rw semaphore for sysfs in write (exclusive)
-mode. This caused processes who were doing DMA-BUF exports and releases
-to go into uninterruptible sleep since they needed to acquire the same
-semaphore for the DMA-BUF sysfs entry creation/deletion. In order to avoid
-blocking DMA-BUF export for an indeterminate amount of time while
-another process is holding the sysfs rw semaphore in exclusive mode,
-this patch moves the per-buffer sysfs file creation to the default work
-queue. Note that this can lead to a short-term inaccuracy in the dmabuf
-sysfs statistics, but this is a tradeoff to prevent the hot path from
-being blocked. A work_struct is added to dma_buf to achieve this, but as
-it is unioned with the kobject in the sysfs_entry, dma_buf does not
-increase in size.
 
-Fixes: bdb8d06dfefd ("dmabuf: Add the capability to expose DMA-BUF stats in=
- sysfs")
-Originally-by: Hridya Valsaraju <hridya@google.com>
-Signed-off-by: T.J. Mercier <tjmercier@google.com>
 
----
-See the originally submitted patch by Hridya Valsaraju here:
-https://lkml.org/lkml/2022/1/4/1066
+On 5/16/22 12:36 PM, Jason J. Herne wrote:
+> On 4/4/22 18:10, Tony Krowiak wrote:
+>> |@@ -1306,8 +1392,6 @@ static int vfio_ap_mdev_set_kvm(struct 
+>> ap_matrix_mdev *matrix_mdev, kvm_get_kvm(kvm); matrix_mdev->kvm = 
+>> kvm; - memcpy(&matrix_mdev->shadow_apcb, &matrix_mdev->matrix, - 
+>> sizeof(struct ap_matrix)); kvm_arch_crypto_set_masks(kvm, 
+>> matrix_mdev->shadow_apcb.apm, matrix_mdev->shadow_apcb.aqm, 
+>> matrix_mdev->shadow_apcb.adm);|
+>
+> This looks like an unrelated change. Does this snippet really belong 
+> to this patch?
 
-v2 changes:
-- Defer only sysfs creation instead of creation and teardown per
-Christian K=C3=B6nig
+It's kind of hard to tell which snippet you are talking about without 
+the patch context, but I assume you are referring to the removal of the 
+memcpy statement in the vfio_ap_mdev_set_kvm() function in which case 
+this snippet belongs with this patch.
 
-- Use a work queue instead of a kthread for deferred work per
-Christian K=C3=B6nig
----
- drivers/dma-buf/dma-buf-sysfs-stats.c | 56 ++++++++++++++++++++-------
- include/linux/dma-buf.h               | 14 ++++++-
- 2 files changed, 54 insertions(+), 16 deletions(-)
+This patch introduces a function that filters the contents of the 
+matrix_mdev->matrix to ensure that the matrix_mdev->shadow_apcb contains 
+only queues that are bound to the vfio_ap device driver. The filtering 
+function is called whenever an adapter, domain or control domain is 
+assigned or unassigned, so it is no longer necessary to copy the 
+contents of matrix_mdev->matrix into matrix_mdev->shadow_apcb before 
+setting the masks in the guest; that will have already been done by the 
+filter function.
 
-diff --git a/drivers/dma-buf/dma-buf-sysfs-stats.c b/drivers/dma-buf/dma-bu=
-f-sysfs-stats.c
-index 2bba0babcb62..67b0a298291c 100644
---- a/drivers/dma-buf/dma-buf-sysfs-stats.c
-+++ b/drivers/dma-buf/dma-buf-sysfs-stats.c
-@@ -11,6 +11,7 @@
- #include <linux/printk.h>
- #include <linux/slab.h>
- #include <linux/sysfs.h>
-+#include <linux/workqueue.h>
-=20
- #include "dma-buf-sysfs-stats.h"
-=20
-@@ -168,10 +169,46 @@ void dma_buf_uninit_sysfs_statistics(void)
- 	kset_unregister(dma_buf_stats_kset);
- }
-=20
-+static void sysfs_add_workfn(struct work_struct *work)
-+{
-+	struct dma_buf_sysfs_entry *sysfs_entry =3D
-+		container_of(work, struct dma_buf_sysfs_entry, sysfs_add_work);
-+	struct dma_buf *dmabuf =3D sysfs_entry->dmabuf;
-+
-+	/*
-+	 * A dmabuf is ref-counted via its file member. If this handler holds the=
- only
-+	 * reference to the dmabuf, there is no need for sysfs kobject creation. =
-This is an
-+	 * optimization and a race; when the reference count drops to 1 immediate=
-ly after
-+	 * this check it is not harmful as the sysfs entry will still get cleaned=
- up in
-+	 * dma_buf_stats_teardown, which won't get called until the final dmabuf =
-reference
-+	 * is released, and that can't happen until the end of this function.
-+	 */
-+	if (file_count(dmabuf->file) > 1) {
-+		/*
-+		 * kobject_init_and_add expects kobject to be zero-filled, but we have p=
-opulated it
-+		 * (the sysfs_add_work union member) to trigger this work function.
-+		 */
-+		memset(&dmabuf->sysfs_entry->kobj, 0, sizeof(dmabuf->sysfs_entry->kobj))=
-;
-+		dmabuf->sysfs_entry->kobj.kset =3D dma_buf_per_buffer_stats_kset;
-+		if (kobject_init_and_add(&dmabuf->sysfs_entry->kobj, &dma_buf_ktype, NUL=
-L,
-+						"%lu", file_inode(dmabuf->file)->i_ino)) {
-+			kobject_put(&dmabuf->sysfs_entry->kobj);
-+			dmabuf->sysfs_entry =3D NULL;
-+		}
-+	} else {
-+		/*
-+		 * Free the sysfs_entry and reset the pointer so dma_buf_stats_teardown =
-doesn't
-+		 * attempt to operate on it.
-+		 */
-+		kfree(dmabuf->sysfs_entry);
-+		dmabuf->sysfs_entry =3D NULL;
-+	}
-+	dma_buf_put(dmabuf);
-+}
-+
- int dma_buf_stats_setup(struct dma_buf *dmabuf)
- {
- 	struct dma_buf_sysfs_entry *sysfs_entry;
--	int ret;
-=20
- 	if (!dmabuf || !dmabuf->file)
- 		return -EINVAL;
-@@ -181,25 +218,16 @@ int dma_buf_stats_setup(struct dma_buf *dmabuf)
- 		return -EINVAL;
- 	}
-=20
--	sysfs_entry =3D kzalloc(sizeof(struct dma_buf_sysfs_entry), GFP_KERNEL);
-+	sysfs_entry =3D kmalloc(sizeof(struct dma_buf_sysfs_entry), GFP_KERNEL);
- 	if (!sysfs_entry)
- 		return -ENOMEM;
-=20
--	sysfs_entry->kobj.kset =3D dma_buf_per_buffer_stats_kset;
- 	sysfs_entry->dmabuf =3D dmabuf;
--
- 	dmabuf->sysfs_entry =3D sysfs_entry;
-=20
--	/* create the directory for buffer stats */
--	ret =3D kobject_init_and_add(&sysfs_entry->kobj, &dma_buf_ktype, NULL,
--				   "%lu", file_inode(dmabuf->file)->i_ino);
--	if (ret)
--		goto err_sysfs_dmabuf;
-+	INIT_WORK(&dmabuf->sysfs_entry->sysfs_add_work, sysfs_add_workfn);
-+	get_dma_buf(dmabuf); /* This reference will be dropped in sysfs_add_workf=
-n. */
-+	schedule_work(&dmabuf->sysfs_entry->sysfs_add_work);
-=20
- 	return 0;
--
--err_sysfs_dmabuf:
--	kobject_put(&sysfs_entry->kobj);
--	dmabuf->sysfs_entry =3D NULL;
--	return ret;
- }
-diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-index 2097760e8e95..0200caa3c515 100644
---- a/include/linux/dma-buf.h
-+++ b/include/linux/dma-buf.h
-@@ -22,6 +22,7 @@
- #include <linux/fs.h>
- #include <linux/dma-fence.h>
- #include <linux/wait.h>
-+#include <linux/workqueue.h>
-=20
- struct device;
- struct dma_buf;
-@@ -365,7 +366,7 @@ struct dma_buf {
- 	 */
- 	const char *name;
-=20
--	/** @name_lock: Spinlock to protect name acces for read access. */
-+	/** @name_lock: Spinlock to protect name access for read access. */
- 	spinlock_t name_lock;
-=20
- 	/**
-@@ -441,6 +442,7 @@ struct dma_buf {
-=20
- 		__poll_t active;
- 	} cb_in, cb_out;
-+
- #ifdef CONFIG_DMABUF_SYSFS_STATS
- 	/**
- 	 * @sysfs_entry:
-@@ -449,7 +451,15 @@ struct dma_buf {
- 	 * `DMA-BUF statistics`_ for the uapi this enables.
- 	 */
- 	struct dma_buf_sysfs_entry {
--		struct kobject kobj;
-+		union {
-+			struct kobject kobj;
-+
-+			/** @sysfs_add_work:
-+			 *
-+			 * For deferred sysfs kobject creation using a workqueue.
-+			 */
-+			struct work_struct sysfs_add_work;
-+		};
- 		struct dma_buf *dmabuf;
- 	} *sysfs_entry;
- #endif
---=20
-2.36.0.550.gb090851708-goog
 

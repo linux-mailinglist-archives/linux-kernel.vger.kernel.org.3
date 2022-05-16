@@ -2,140 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B1A527C96
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 05:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8CD527C9C
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 06:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239842AbiEPD6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 23:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48220 "EHLO
+        id S230320AbiEPEQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 00:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239828AbiEPD6L (ORCPT
+        with ESMTP id S229448AbiEPEQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 23:58:11 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C3C101C1
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 20:58:01 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id nr2-20020a17090b240200b001df2b1bfc40so3129130pjb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 20:58:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=81zc4fqkgQwb8WIkORpKBhGcFxG3h9Urzvpiad4QCFg=;
-        b=W6LddtNMiFSSJofxVZqIRxwE5VyeMZWnHVjwe/OIn02+PgdfTm416Y8Dx4dggHgh8C
-         vgxt05kJFFWI49QuDa0Ojn/hduH2hjoCCNseMdbramTtwjtRN9YV/nk56X73D/+EaDRn
-         pF0gSzmsQjXrQkdh5VmYmtOx0vxBcXXcqjM5nb4j9ujhDAesgNZ2exU46cuSX51nIcR0
-         xxiXWnf3rzO8qRH2YGtOq5Z8pAyiBfS1sK2hrrfSLY5t1KG6lG3IQGgA1Wl9+NpksLw2
-         VSas7r8Ic3zL97BH+rrvYF5JtMSn4SxcL3P5R4kURmlqT5s9Fwpw174MHKrfrslRXq2O
-         QeJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=81zc4fqkgQwb8WIkORpKBhGcFxG3h9Urzvpiad4QCFg=;
-        b=eznsjYUJx1VXfyGdZqEwmsHtJ5TC1IRR5S8djCDKowfTmhQy8HpWe8FAFPtIwlbRdE
-         cGjFAlugsxFMBUW4K+efUNA0htegpB4EgDohtu3SSSaiwo8YucHXbb5P3en6NZOwTtz+
-         mGKbQV30biXAai9YfLP9yUqu8mXzEzZKyrVCk7Zmvc+BRuZMaua+OFs8Qna52Obfn7xe
-         rywIWxWtSXa94STtQYeVXCMFAXMwm4XQiQZN7PwGwFXMBSGS/1dFSyJlVP/EzEVYeRbm
-         JHbmSANNNEC1B31sAiBOC60rsW9fLyCLtDESRg/mEJJtFyv99dYN3xdxYkeyhwdNPVxo
-         /npw==
-X-Gm-Message-State: AOAM532a4IiI4YbHyU8DfdBVx0HHUt7HgN/8Zyed3ls8Bbw/4AaZgWcu
-        dXfYZ4cLf3jGqGl0tdQndh9nYQ==
-X-Google-Smtp-Source: ABdhPJyg3KrEF088VNTx7elv0wOUTwpEq+w+oeu0yE6kH1FAK/ti7Jhg6b6REiH/sYNyYQAnq5j8vA==
-X-Received: by 2002:a17:902:9684:b0:161:5b2b:6ea2 with SMTP id n4-20020a170902968400b001615b2b6ea2mr7540565plp.71.1652673480745;
-        Sun, 15 May 2022 20:58:00 -0700 (PDT)
-Received: from x1 ([2601:1c2:1001:7090:362:347a:2a38:5df4])
-        by smtp.gmail.com with ESMTPSA id h35-20020a632123000000b003c14af50627sm5511128pgh.63.2022.05.15.20.57.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 May 2022 20:58:00 -0700 (PDT)
-Date:   Sun, 15 May 2022 20:58:55 -0700
-From:   Drew Fustini <dfustini@baylibre.com>
-To:     Marc Zyngier <maz@kernel.org>, Tony Lindgren <tony@atomide.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Dave Gerlach <d-gerlach@ti.com>, linux-omap@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: dmtimer: ack pending interrupt during suspend on am335x/am437x?
-Message-ID: <YoHL/+qYs47LsnCB@x1>
-References: <YniiqM0S+hwsGFni@x1>
- <YnoK+XQiargRGUy/@atomide.com>
- <4de411aa2fc8a6f185afb8bfd5da63d4@kernel.org>
+        Mon, 16 May 2022 00:16:10 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2042.outbound.protection.outlook.com [40.107.244.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F03F8635C;
+        Sun, 15 May 2022 21:16:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z7toA82V/r37smYMshSC+P9Oxp1kTIkNes51LxCpk1BuI3Sk3LzQee6DSs4RsbI50/e3bUwHd+GqwSvVkhARNPGffl4xPDOc6jgYpdu8C94ldC9oTv5CsOK03ypaWWxfPh1FhhlVx7X2jmof5fceQO4Ye7a6cdp4CwFK4H8tfJD0Qq0dil97mEty7Fyw7GYz39pyuH4ARFcV4uLqtLsdM3qslOpBJPWF4/fCrtURGRrcxoz5FFEtsI+S1YjPEV11Js6WLnYKZIk+oUdEt3trNEaj1OXJOXtwJxMp6ihjydDdTFVej/RL///JZc+1uLALhdIqQ/dV5B/boVW8V/vPCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4eueE9zP9QVSm8C1d+evmUVy+UCIAGZ29w0x3stv3NA=;
+ b=GzFiTFx+mHv2eUtxbPIW9Ru5IyRSEbc1jtCvg5YHK051svP1ckD1DM1KzG165JEUieYqlQirNK1cV2pxAVNqdhT93aNuKcozkcpMqErUFhtolcPFSww1TcNAc8CIvU2wCDqUGDfKVKWWqQWaGnwFQAoKqLoAoetZ1kuOvGYZIggP8S1BpUC0QBKUMMnpuQyCl6OVEkc3ru/MEg+t2PwYx0QJbm44Y00DuaBsxTeGvM9WAfrpLwL1deebqWEKUub53G76UqM4zlGf2JPfUGDZ4j1OBfu0rbBF25fcubTWakx6VkPt7AGGTG7JVqzkQ6+cEI4FKDBOhXkWHt/u+xYesQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4eueE9zP9QVSm8C1d+evmUVy+UCIAGZ29w0x3stv3NA=;
+ b=YFzA9npvkUatukL74HANA0/VmxDt8xHg1QcrNGfUyITe/HOcLHEuiwlUV6CDmWCNkeTRNQe7jj8tEtBY++7wx55eY82i4C85QmK6yz3kkX3LZAFWxuHqMhdo1/udgx87L1HS9kl4vO7oQJay4vOmr3sjLxlui0H7IatfIUb+VVQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
+ by BL0PR12MB2547.namprd12.prod.outlook.com (2603:10b6:207:3e::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14; Mon, 16 May
+ 2022 04:16:04 +0000
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::f1f6:dd2c:7e78:9770]) by PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::f1f6:dd2c:7e78:9770%6]) with mapi id 15.20.5250.013; Mon, 16 May 2022
+ 04:16:04 +0000
+Message-ID: <3e3c1d82-581e-5a44-deed-05b5f880746c@amd.com>
+Date:   Mon, 16 May 2022 09:45:44 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v2 6/8] perf header: Parse non-cpu pmu capabilities
+Content-Language: en-US
+To:     acme@kernel.org, jolsa@kernel.org
+Cc:     peterz@infradead.org, rrichter@amd.com, mingo@redhat.com,
+        mark.rutland@arm.com, namhyung@kernel.org, tglx@linutronix.de,
+        bp@alien8.de, irogers@google.com, yao.jin@linux.intel.com,
+        james.clark@arm.com, leo.yan@linaro.org, kan.liang@linux.intel.com,
+        ak@linux.intel.com, eranian@google.com, like.xu.linux@gmail.com,
+        x86@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
+        ananth.narayan@amd.com, kim.phillips@amd.com,
+        santosh.shukla@amd.com, Ravi Bangoria <ravi.bangoria@amd.com>
+References: <20220509044914.1473-1-ravi.bangoria@amd.com>
+ <20220509044914.1473-7-ravi.bangoria@amd.com>
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+In-Reply-To: <20220509044914.1473-7-ravi.bangoria@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN0PR01CA0009.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:4f::14) To PH7PR12MB6588.namprd12.prod.outlook.com
+ (2603:10b6:510:210::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4de411aa2fc8a6f185afb8bfd5da63d4@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f3e03167-0064-4bea-55d5-08da36f2cab5
+X-MS-TrafficTypeDiagnostic: BL0PR12MB2547:EE_
+X-Microsoft-Antispam-PRVS: <BL0PR12MB254727F756DDC488CD84450BE0CF9@BL0PR12MB2547.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: l3DYnSM33MM79WTwTVWhG8RpzN9GIWJwN3uCAGBSExlU7ry3qAsw/8zWHdAlCE65qbwoIWuYMlOjgWcSzyDvhM8CAb3w6sTLp/aNIPkRqeHSDuALVvbqJumjEByQewd7hTpxroM9Sjeoo0X889ByZaInhcNi+IwZwsezKyyljeCeuWiVFvwFKIpTOT7X1HiYPRe46YSvkt2I+ckjTuLwTbwBe0aUcihvzSzwdjXSNW8JGS5Y0Fwx8XbBpZTuNOws49yMh3iow6cbH98zCI+z/5G8y08UKkPWzV4rlsk2OxtNOiAhRwniL53Eh92k5iCt6PmKUcYkHeUUti9V856UuWROtSN4Qda/10Yg824x8eRpd4RXqs7utManSZJ7KZczsP/XUZJE6JWdmus4sf1ngHzYvdfxtvzYWc6x+Tg00HEXn7dEFJOVUWD7fZfoYPQ1iM0OHx1uj6yr+D9vS+AYMfuXhXyhDTGNbihXHeY0WlbcBoqrRrLD0tTP9jQp4JMSi7hEc2Wc+xoUBxnofAgm29L8jTnnQmNWeoLUKB+lHICEjpBfYEW7ZhfZbFmOCA5XExLOA4YYw6aSlqb3IWNNB+yX0MG643pIaPeEE5Om3Tp3k1SXPUiBhriPTIY+dRf5iR7nDCcpInitkVZ3YOw2GgSYV/zfPTuddkASowxbkSne4nP+Wp9/jdScm8KuJONhiG7Dd7psO3N7v4YMS6rUSaAgT/34rgvKX+vnF3ce/qU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(36756003)(31686004)(186003)(316002)(6506007)(44832011)(2906002)(508600001)(6486002)(26005)(6512007)(53546011)(66476007)(66946007)(8676002)(4326008)(66556008)(6666004)(2616005)(5660300002)(7416002)(8936002)(31696002)(38100700002)(4744005)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZlF4R2ZTWlFHNTVwSmdGM1lCbDdUUGkwcHVLRS9TaktnT0lHTlBLemRoNEZC?=
+ =?utf-8?B?dVQrNTltb2VyRjhPYnAzamtDemdza0FsdU9uRVdReFJ5bC95UmRLaktWSlJC?=
+ =?utf-8?B?UUx4SnRTTmVFb2RkaVFDeWZyandOSVBJKzgzSEpYNUpmempkU1pWKzlWUVl4?=
+ =?utf-8?B?Nzc0R2F5Z3NvVFZFT0hyMmNFUExjdVpaMVBYcGRRYk5MM3lRSEZUKzZnQmI2?=
+ =?utf-8?B?OGdBVUxyVllZczNwWmlnQy9QL09VajdwZHJIdHEzakptUkZRUmQ2ZnU0emFk?=
+ =?utf-8?B?cjR4Yk9Rdys0ZlVxSnNkR2dVa0tSenljemY2UzE5N3VIckYzS0g5SGlKS1Zh?=
+ =?utf-8?B?YUIwK2RFREIzKzlpclU1VHE4UzJoMWNyTG1YdGx2V0pBa3RhdUppeW1yWVVJ?=
+ =?utf-8?B?dHl4U0lSbUtIUkRUVjZ5RHZpNjFBaTlpSURWa0JWMzFySW1vVVNkOGZZdHJ0?=
+ =?utf-8?B?SnF2RllhRGJETmNoR2xEa0g5OVlVQjgvc0dhSjVMOHFVUnRTalJVcXFZQndS?=
+ =?utf-8?B?NTlBb0F5REh6ekdtc0Ewb0g4NWZmY1NKVXY1aURjNWpURnR1bkxHaldaa1Nn?=
+ =?utf-8?B?VkVaQ1VBNXdnUVJJbDBhMzdZRnhFNDVJV0M3R0ZWWjNUNExUeVN2ZWZaSWdG?=
+ =?utf-8?B?YkxHc2tucVBxT1BRZmdISGw4bUVHdjVlUUlZU0Rialkzb250YUQrMXBIa1Mv?=
+ =?utf-8?B?eVF6ejlmMzllakhKa0FnY1VvVWZEbVFHcGpuSjU3VHNSVXZKbDhKRzRCdmww?=
+ =?utf-8?B?RTJ3OFowUk5GWnVXU1loZzBKbHE2MDdKZTFLSGErSkR1Vm1QTy9hRDUweDFu?=
+ =?utf-8?B?b01mbnRkT3dSWXk3RERYZWZqYlZCL0Nyd2JXV2ZpSjhFN3RUTjlKNTh3aEZT?=
+ =?utf-8?B?eTNDUVMyWEt4R3RiQzgxd1FiVjU1dTZBZHM0WFNLK0M0R09hMkl3NmJ6Ykdw?=
+ =?utf-8?B?Um1oTks0SGg3aTkxN2dhZk9mLzU3SDJxUHczVyttRGdDbTQ2VEtFeThHcjYx?=
+ =?utf-8?B?Q0dVMXBkVk40aEE1MzYxTkFmSmVwMUoxZEZlVnN0cmJ0Rjhqd05iMlNOc210?=
+ =?utf-8?B?VWxrVjR0dCtxZzUrQlE5OTdMZnlvR09iWWN1dzVwTExyeFc3RVVVOHBQQ0dS?=
+ =?utf-8?B?WE9xWGttVlRZQmVFT2NYSHFuUkZqQVFCWlI0TXQ2MC9IUy9reGhBOVhqTnEr?=
+ =?utf-8?B?MnVDTGhpNnZrZ2cyaWhEZXpGdjh5T0NRR0g2ei9kTVl2dXNpcml1Z1dsa0Vi?=
+ =?utf-8?B?RnVFZTFKRi9VejFrLzgydFNKam5hZ052WExrWTFiRENUKytFaHJ2QndCT0xY?=
+ =?utf-8?B?N01UV1d5N3FwelhKNngrQUpnNjludnBubXV0M1U2VXRjbVZrWG1BYlF6Z2lI?=
+ =?utf-8?B?WlJZRXhQWlAvNllJM2pxZ2ordUNCSE5uRkhDNTVMcENFblhzRkFVbTU1OVRq?=
+ =?utf-8?B?aFFmNjJaUWs2U1JXMGNyOXBGY2hyVzRjVVMwc2FMM2pZVFM3MmlkZnZVVTQ5?=
+ =?utf-8?B?bmt5cmQ3R0I0NDZoc2N6bzVvUVBkSGZrUS9SMVdDM25FUFRFNjFhT205a0tt?=
+ =?utf-8?B?Vld4VTNGYkYxczZrVmszWWlnZTBJcVEzTURVU2s1NURoT2ZlbU5pREszSkVW?=
+ =?utf-8?B?b3BSdSs0dkFtOGxSVmVLdGRySHlNOE9tUEJzSXhPZ2lGNGpPcUtzYmV2b2Vx?=
+ =?utf-8?B?TCtFYkZzYWtXTUJETklWQmlWdm04dXhUczQvdjdJY0pVYmdyQWNjaEoxZzIz?=
+ =?utf-8?B?bzh5N1NIemVla0E1Mnh1Q3lsczRsNVdvYS9WQ0t5ZmVQZlJ0SEdnS1dNbXhN?=
+ =?utf-8?B?ME5pd2tHUzUyUFFJUWd4L2NOSUZ1b1ErN3NFZmE1a0ozTlpCbFhwZ3EzZjFj?=
+ =?utf-8?B?dFFXV09GdWx5T3Vhcnl2U3lCdG5xVWJOaXRJYjNKaytqcUtjeW43VW5IZnFs?=
+ =?utf-8?B?TU9xeXZzUFlRcnkyMmNZZU4wZHFWTGJuQUFheUV6WUxjVjlLNU9CbFVtQ1Ft?=
+ =?utf-8?B?TWRXOFFEbGtiRG9IbUtCT1I4c3JPcElaSFFodkFtaHBDZlQzaEhrQXlpWmRX?=
+ =?utf-8?B?M2krV09vYUdpQzRNTzhNSlpxR2pzMm8wU01VbkJOTmsyU0xsZ2tvQkFwS2RG?=
+ =?utf-8?B?TmVsdXJQeU9zeFd0eER1amRpc29qaEhDUXdTRzlKazR0RTVlT3hXSVNNYVQ1?=
+ =?utf-8?B?d2ZXMEdtSTEwcGtzMTBtZGxkRHRjNGtkTng3ejZjNHFocEN2cFVKRC9scFpZ?=
+ =?utf-8?B?QWhSKzJYZDZ0OUpoM3Z6REtaUDFaNWV3T1dpblhhQjg5MmNQZzJWK21CbHdI?=
+ =?utf-8?B?dDBHbkhISW83bTd1cnhEMDFiZzE2NmVrNVkzTG5uQTdYU2dHeitoZz09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f3e03167-0064-4bea-55d5-08da36f2cab5
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2022 04:16:04.1431
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tZ5K83wWGVblo10caBrNbzE0GLPd89KXLXkE+FmZXyP76cPDiPLvaGWIpPX6UonoaEgSecV8Yfu1GQoAyvgvOQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB2547
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 09:19:51AM +0100, Marc Zyngier wrote:
-> On 2022-05-10 07:49, Tony Lindgren wrote:
-> > * Drew Fustini <dfustini@baylibre.com> [220509 05:07]:
-> > > Hello Daniel, Tony suggested I mail you along with the list to get
-> > > feedback. I'm attempting to upstream these two patches [1][2] from
-> > > ti-linux-5.4.y for arch/arm/mach-omap2/timer.c:
-> > > 96f4c6e2ba8a ("ARM: OMAP2+: timer: Ack pending interrupt during
-> > > suspend")
-> > > 7ae7dd5f8272 ("ARM: OMAP2+: timer: Extend pending interrupt ACK for
-> > > gic")
-> > > 
-> > > On the TI AM335x and AM437x SoCs, it is possible for a late
-> > > interrupt to
-> > > be generated which will cause a suspend failure. The first patch makes
-> > > omap_clkevt_idle() ack the irq both in the timer peripheral register
-> > > and in the interrupt controller to avoid the issue.
-> > > 
-> > > On AM437x only, the GIC cannot be directly acked using only the
-> > > irqchip
-> > > calls. To workaround that, the second patch maps the GIC_CPU_BASE and
-> > > reads the GIC_CPU_INTACK register before calling irq_eoi to properly
-> > > ack
-> > > the late timer interrupts that show up during suspend.
-> > > 
-> > > However, Tony removed most of arch/arm/mach-omap2/timer.c with:
-> > > 2ee04b88547a ("ARM: OMAP2+: Drop old timer code for dmtimer and 32k
-> > > counter")
-> > > 
-> > > The timers are now implemented in drivers/clocksource/timer-ti-dm.c
-> > > and
-> > > drivers/clocksource/timer-ti-dm-systimer.c. The function
-> > > dmtimer_clocksource_suspend() disables the dmtimer and clock but does
-> > > not ack any interrupts.
-> > > 
-> > > Tony suggested the right place to ack the interrupt during suspend is
-> > > in CPU_CLUSTER_PM_ENTER inside omap_timer_context_notifier().
-> > > 
-> > > Do you think that would be an acceptable approach?
-> > 
-> > Based on what we chatted on irc yesterday, I'd suggest try resetting the
-> > clockevent on suspend first for am3/4 at omap_clockevent_idle() and see
-> > if
-> > that takes care of the issue. If it's the timer hardware blocking the
-> > deeper idle states, this should work, and GIC will lose it's context
-> > on system suspend anyways.
-> 
-> Maybe, but the core tracking code will still know it is in the
-> middle of an interrupt. I´d expect things like lockdep to shout
-> at you...
-> 
->         M.
 
-Tony and Marc - thank you for your insights.
+On 09-May-22 10:19 AM, Ravi Bangoria wrote:
+> Pmus advertise their capabilities via sysfs attribute files but
+> perf tool currently parses only core(cpu) pmu capabilities. Add
+> support for parsing non-cpu pmu capabilities.
 
-I have learned from Dave Gerlach that the occurance of suspend failures
-on the downstream TI 5.4 kernel was only 1 in 10,000 prior to his
-downstream patches.
+Arnaldo, Jiri,
 
-I have now done 33,175 cycles of suspend/resume with rtcwake and no
-failures have occurred. Thus, I have to conclude that mainline does not
-exhibit the problem of late timer interrupts causing suspend to fail.
+Does tool side patches looks good to you? Please consider pulling them.
 
 Thanks,
-Drew
-
+Ravi

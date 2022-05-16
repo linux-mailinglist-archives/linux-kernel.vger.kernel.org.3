@@ -2,142 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B40528778
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:49:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9563052877A
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244689AbiEPOt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 10:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37944 "EHLO
+        id S244707AbiEPOty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 10:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244668AbiEPOtY (ORCPT
+        with ESMTP id S233386AbiEPOtq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 10:49:24 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CBAE2EA20
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:49:23 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id n23so3720476edy.0
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:49:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=leJMhhCxM592OrQKvNZxLDLx73jd3Sy6dJLBcOyI06Q=;
-        b=JRNdJtXRqSNoenywdKatWCAptGM4u7BK4MRrYdEh1UXXQFIubVB4ZdyLsTfos3+QHZ
-         2wKDxmg7OBDAr5a3yv/hfDtDbl28KRQe6KPmVrfTVu/pmkF811+GZyVUUXri7/x/Zmlt
-         iNLUnUZKKEvXQawNlND919VNpzkUrNgqT2716JYfY1Jak23P2Cu0ApfMplC3EgocP6Ac
-         1YMhgsyxtoPmc15HsU99x+Lm2JJuG/MapvEZBujGImWKx9ba4N+nDk5lNstob6K46q8m
-         O7ucQgou8h3SDSCmOwuXj9rgmveeOa217T2bJyt7fX+uMfjKi/nnwljWFCuWTUv3RSMM
-         5yxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=leJMhhCxM592OrQKvNZxLDLx73jd3Sy6dJLBcOyI06Q=;
-        b=Sb8DWl2OgsoqMEfWxVSOJSF4HDUT51FE/GB0xNXZS7LU0lq6OzcZ1vJX0o5sutmvmM
-         6gy/NbXlxPZ+Hq0qum0iBRZXd/v1VsPxFHliTKDfnzUAT3pN52vSO8XqCKWLDC98nuR3
-         Q6lovp6/i7L2kBPgpz3W4Ydl7xfGmvn29+gWZtXLjT/fV06gFNImKbmYY2obs43awx1t
-         VBfK+/UZQApKhn2gC23QmD/afyVAoIWTSX1hcxWMnU7MjR0ARBweRLoA6rH2K43ucYGG
-         ZG5D/xszFL/5wiKJGY6Mk8uuRntPTxrc80Xr87jPkPQR5WgiAaeYJry4LDGyRCZ89d4G
-         Qv1g==
-X-Gm-Message-State: AOAM532sFmCXf4JCvGmci60paTi1NDpFqS1iDXRG6wlxi+h1W4KDUsWd
-        mL5k08UN4Kuc9Ip8XosEp2hMJgICuUC3kR/yJ9A=
-X-Google-Smtp-Source: ABdhPJwgt6WMF/YMBkNQvvGjcUz2nxNHec01M9pwi2+NHiXDQ1GwfJcSHyCQ6ozNnoPJ5p397LJuvLYmWago2MoJZ2w=
-X-Received: by 2002:a05:6402:3488:b0:427:b4ec:991b with SMTP id
- v8-20020a056402348800b00427b4ec991bmr13535792edc.319.1652712561711; Mon, 16
- May 2022 07:49:21 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a54:240f:0:0:0:0:0 with HTTP; Mon, 16 May 2022 07:49:21
- -0700 (PDT)
-Reply-To: abraaahammorrison1980@gmail.com
-From:   Abraham Morrison <abrahamabrahammorrison@gmail.com>
-Date:   Mon, 16 May 2022 07:49:21 -0700
-Message-ID: <CAC1R54ZKe9s7cPLdSkM4yKK90Xt9i=A9+1FgPLOmd2MUVpgzTg@mail.gmail.com>
-Subject: Good day!
-To:     undisclosed-recipients:;
+        Mon, 16 May 2022 10:49:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88B9D2EA39
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:49:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652712584;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2F5yzzwLJL4gm8RAlP4L9GJYeiZR3Q+rkmeOt6UXeew=;
+        b=PpKPG2sL9702u3m6t1V1MNsZavUIUc5pWVcFYHbjEedFyLeurqVG4fAyFqrkynl/gVcmIP
+        J5KRYp37NkKDtvKb5xmnWfWMfUzY7UdlbADCnLIrph/6L8KlC7ZyITBPyo9UzNc9wnyFrZ
+        llWF1R3uxLhkuuMcVfukpIj9yU+8c48=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-479-M86AaTXkNBmZQgwiWJiKzg-1; Mon, 16 May 2022 10:49:41 -0400
+X-MC-Unique: M86AaTXkNBmZQgwiWJiKzg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9EBC4804196;
+        Mon, 16 May 2022 14:49:40 +0000 (UTC)
+Received: from starship (unknown [10.40.192.55])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1C20E492C14;
+        Mon, 16 May 2022 14:49:36 +0000 (UTC)
+Message-ID: <9ed2fc294bf2c21b41b22605ff8039bb71903712.camel@redhat.com>
+Subject: Re: [PATCH] locking/atomic/x86: Introduce try_cmpxchg64
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Marco Elver <elver@google.com>
+Date:   Mon, 16 May 2022 17:49:36 +0300
+In-Reply-To: <YoJayBWZF3mUnYS6@google.com>
+References: <20220510154217.5216-1-ubizjak@gmail.com>
+         <20220510165506.GP76023@worktop.programming.kicks-ass.net>
+         <CAFULd4aNME5s2zGOO0A11kdjfHekH=ceSH7jUfAhmZaJWHv9cQ@mail.gmail.com>
+         <20220511075409.GX76023@worktop.programming.kicks-ass.net>
+         <CAFULd4aXpt_pnCR5OK5B1m5sErfB3uj_ez=-KW7=0qQheEdVzA@mail.gmail.com>
+         <Ynven5y2u9WNfwK+@google.com>
+         <CAFULd4bZDO5-3T4q9fanHFrRTDj8v6fypiTc=dFPO9Rp61g9eQ@mail.gmail.com>
+         <fcf55234cfb95600d412322fba4dc9d0c9a1d7f4.camel@redhat.com>
+         <YoJayBWZF3mUnYS6@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:529 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [abrahamabrahammorrison[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [abraaahammorrison1980[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Aufmerksamkeit bitte,
+On Mon, 2022-05-16 at 14:08 +0000, Sean Christopherson wrote:
+> On Mon, May 16, 2022, Maxim Levitsky wrote:
+> > On Wed, 2022-05-11 at 21:54 +0200, Uros Bizjak wrote:
+> > > On Wed, May 11, 2022 at 6:04 PM Sean Christopherson <seanjc@google.com> wrote:
+> > > > On Wed, May 11, 2022, Uros Bizjak wrote:
+> > > > > On Wed, May 11, 2022 at 9:54 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> > > > > > Still, does 32bit actually support that stuff?
+> > > > > 
+> > > > > Unfortunately, it does:
+> > > > > 
+> > > > > kvm-intel-y        += vmx/vmx.o vmx/vmenter.o vmx/pmu_intel.o vmx/vmcs12.o \
+> > > > >                vmx/evmcs.o vmx/nested.o vmx/posted_intr.o
+> > > > > 
+> > > > > And when existing cmpxchg64 is substituted with cmpxchg, the
+> > > > > compilation dies for 32bits with:
+> > > > 
+> > > > ...
+> > > > 
+> > > > > > Anyway, your patch looks about right, but I find it *really* hard to
+> > > > > > care about 32bit code these days.
+> > > > > 
+> > > > > Thanks, this is also my sentiment, but I hope the patch will enable
+> > > > > better code and perhaps ease similar situation I have had elsewhere.
+> > > > 
+> > > > IMO, if we merge this it should be solely on the benefits to 64-bit code.  Yes,
+> > > > KVM still supports 32-bit kernels, but I'm fairly certain the only people that
+> > > > run 32-bit KVM are KVM developers.  32-bit KVM has been completely broken for
+> > > > multiple releases at least once, maybe twice, and no one ever complained.
+> > > 
+> > > Yes, the idea was to improve cmpxchg64 with the implementation of
+> > > try_cmpxchg64 for 64bit targets. However, the issue with 32bit targets
+> > > stood in the way, so the effort with 32-bit implementation was mainly
+> > > to unblock progression for 64-bit targets.
+> > 
+> > Would that allow tdp mmu to work on 32 bit?
+> 
+> From a purely technical perspective, there's nothing that prevents enabling the
+> TDP MMU on 32-bit kernels.  The TDP MMU is 64-bit only to simplify the implementation
+> and to reduce the maintenance and validation costs.
+> 
 
-Ich bin Mr. Abraham Morrison, wie geht es Ihnen, ich hoffe, Sie sind
-wohlauf und gesund? Hiermit m=C3=B6chte ich Sie dar=C3=BCber informieren, d=
-ass
-ich die Transaktion mit Hilfe eines neuen Partners aus Indien
-erfolgreich abgeschlossen habe und nun der Fonds nach Indien auf das
-Bankkonto des neuen Partners =C3=BCberwiesen wurde.
+I understand exactly that, so the question, will this patch help make the tdp mmu work transparently
+on 32 bit kernels? I  heard that 64 bit cmpxchg was one of the main reasons that it is 64 bit only.
 
-Inzwischen habe ich mich entschieden, Sie mit der Summe von 500.000,00
-=E2=82=AC (nur f=C3=BCnfhunderttausend Euro) f=C3=BCr Ihre bisherigen Bem=
-=C3=BChungen zu
-entsch=C3=A4digen, obwohl Sie mich auf der ganzen Linie entt=C3=A4uscht hab=
-en.
-Aber trotzdem freue ich mich sehr =C3=BCber den reibungslosen und
-erfolgreichen Abschluss der Transaktion und habe mich daher
-entschieden, Sie mit der Summe von 500.000,00 =E2=82=AC zu entsch=C3=A4dige=
-n, damit
-Sie die Freude mit mir teilen.
+I am asking because there was some talk to eliminate the direct mode from the legacy non tdp mmu,
+which would simplify its code by a lot, but then it will make 32 bit kernel fail back to shadowing mmu.
 
-Ich rate Ihnen, sich an meine Sekret=C3=A4rin zu wenden, um eine
-Bankomatkarte =C3=BCber 500.000,00 =E2=82=AC zu erhalten, die ich f=C3=BCr =
-Sie
-aufbewahrt habe. Kontaktieren Sie sie jetzt ohne Verz=C3=B6gerung.
+I know that nobody needs 32 bit KVM host support, but it is useful to be sure that nesting still works, and
+doesn't crash the host and such.
 
-Name: Linda Kofi
-E-Mail: koffilinda785@gmail.com
+Best regards,
+	Maxim Levitsky
 
-
-Bitte best=C3=A4tigen Sie ihr die folgenden Informationen:
-
-Ihren vollst=C3=A4ndigen Namen:........
-Deine Adresse:..........
-Dein Land:..........
-Ihr Alter: .........
-Ihr Beruf:..........
-Ihre Handynummer: ...........
-Ihr Reisepass oder F=C3=BChrerschein:.........
-
-Beachten Sie, dass, wenn Sie ihr die oben genannten Informationen
-nicht vollst=C3=A4ndig gesendet haben, sie die Bankomatkarte nicht an Sie
-herausgeben wird, da sie sicher sein muss, dass Sie es sind. Bitten
-Sie sie, Ihnen den Gesamtbetrag (=E2=82=AC 500.000,00) der Bankomatkarte zu
-schicken, die ich f=C3=BCr Sie aufbewahrt habe.
-
-Mit freundlichen Gr=C3=BC=C3=9Fen,
-
-Herr Abraham Morrison

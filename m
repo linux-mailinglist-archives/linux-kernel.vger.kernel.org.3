@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 970BA528E42
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EEAB528ED6
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345552AbiEPTi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
+        id S244900AbiEPTtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345514AbiEPTia (ORCPT
+        with ESMTP id S1346066AbiEPTnY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:38:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54B53F30C;
-        Mon, 16 May 2022 12:38:25 -0700 (PDT)
+        Mon, 16 May 2022 15:43:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9CE62721;
+        Mon, 16 May 2022 12:42:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5E591B81611;
-        Mon, 16 May 2022 19:38:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A3B9C385AA;
-        Mon, 16 May 2022 19:38:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 401BB614EF;
+        Mon, 16 May 2022 19:42:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39FCCC385AA;
+        Mon, 16 May 2022 19:42:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652729903;
-        bh=mK2jv1MCddcFQ5lfdkj7T82ziMCXu6Lai0aBOqQ/1oQ=;
+        s=korg; t=1652730167;
+        bh=qsEmvDv4R6fjTcIXCmhCsv9d2/D+ul3JKKqQnU4Hq18=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t5rDK37ZD1PUmBLkMFGf9Axdik8rtHbasmyw82nMEWKvyY/PTYdYqYKbSYLhZ8mwJ
-         3VY6iANoVyrIOTxMQwlPl/LohNey+t5y4dAjqjqNapCeBxpVw2+hoyr2IbUi5nNkh3
-         rKPNckRHOcitTy/DuBwQRVZXqol2c0jB+QXMJDCk=
+        b=z87idISCh8G7rRr2r5LQ3gYuIOQIVP8Cm22nMVmIiNGq4RmoejnRafVDsAUryNW3Q
+         m1STQwXxhRebzIkvsFPdS3CPnQdDHpSg+kaNeGhKWXWlaRVhJeMactK32RtwE1saDN
+         GiLjsKfvcjTgPwkgbBUuOprUESeDRF1w3fEPB2SI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.9 18/19] ping: fix address binding wrt vrf
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 20/43] ASoC: max98090: Generate notifications on changes for custom control
 Date:   Mon, 16 May 2022 21:36:31 +0200
-Message-Id: <20220516193614.041243621@linuxfoundation.org>
+Message-Id: <20220516193615.314878746@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193613.497233635@linuxfoundation.org>
-References: <20220516193613.497233635@linuxfoundation.org>
+In-Reply-To: <20220516193614.714657361@linuxfoundation.org>
+References: <20220516193614.714657361@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,72 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+From: Mark Brown <broonie@kernel.org>
 
-commit e1a7ac6f3ba6e157adcd0ca94d92a401f1943f56 upstream.
+[ Upstream commit 13fcf676d9e102594effc686d98521ff5c90b925 ]
 
-When ping_group_range is updated, 'ping' uses the DGRAM ICMP socket,
-instead of an IP raw socket. In this case, 'ping' is unable to bind its
-socket to a local address owned by a vrflite.
+The max98090 driver has some custom controls which share a put() function
+which returns 0 unconditionally, meaning that events are not generated
+when the value changes. Fix that.
 
-Before the patch:
-$ sysctl -w net.ipv4.ping_group_range='0  2147483647'
-$ ip link add blue type vrf table 10
-$ ip link add foo type dummy
-$ ip link set foo master blue
-$ ip link set foo up
-$ ip addr add 192.168.1.1/24 dev foo
-$ ip addr add 2001::1/64 dev foo
-$ ip vrf exec blue ping -c1 -I 192.168.1.1 192.168.1.2
-ping: bind: Cannot assign requested address
-$ ip vrf exec blue ping6 -c1 -I 2001::1 2001::2
-ping6: bind icmp socket: Cannot assign requested address
-
-CC: stable@vger.kernel.org
-Fixes: 1b69c6d0ae90 ("net: Introduce L3 Master device abstraction")
-Signed-off-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/r/20220420193454.2647908-2-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/ping.c |   12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ sound/soc/codecs/max98090.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/ipv4/ping.c
-+++ b/net/ipv4/ping.c
-@@ -302,6 +302,7 @@ static int ping_check_bind_addr(struct s
- 	struct net *net = sock_net(sk);
- 	if (sk->sk_family == AF_INET) {
- 		struct sockaddr_in *addr = (struct sockaddr_in *) uaddr;
-+		u32 tb_id = RT_TABLE_LOCAL;
- 		int chk_addr_ret;
+diff --git a/sound/soc/codecs/max98090.c b/sound/soc/codecs/max98090.c
+index 207cdcfb6ebb..ce9f99dd3e87 100644
+--- a/sound/soc/codecs/max98090.c
++++ b/sound/soc/codecs/max98090.c
+@@ -430,7 +430,7 @@ static int max98090_put_enab_tlv(struct snd_kcontrol *kcontrol,
+ 		mask << mc->shift,
+ 		sel << mc->shift);
  
- 		if (addr_len < sizeof(*addr))
-@@ -315,7 +316,8 @@ static int ping_check_bind_addr(struct s
- 		pr_debug("ping_check_bind_addr(sk=%p,addr=%pI4,port=%d)\n",
- 			 sk, &addr->sin_addr.s_addr, ntohs(addr->sin_port));
+-	return 0;
++	return *select != val;
+ }
  
--		chk_addr_ret = inet_addr_type(net, addr->sin_addr.s_addr);
-+		tb_id = l3mdev_fib_table_by_index(net, sk->sk_bound_dev_if) ? : tb_id;
-+		chk_addr_ret = inet_addr_type_table(net, addr->sin_addr.s_addr, tb_id);
- 
- 		if (addr->sin_addr.s_addr == htonl(INADDR_ANY))
- 			chk_addr_ret = RTN_LOCAL;
-@@ -355,6 +357,14 @@ static int ping_check_bind_addr(struct s
- 			if (!dev) {
- 				rcu_read_unlock();
- 				return -ENODEV;
-+			}
-+		}
-+
-+		if (!dev && sk->sk_bound_dev_if) {
-+			dev = dev_get_by_index_rcu(net, sk->sk_bound_dev_if);
-+			if (!dev) {
-+				rcu_read_unlock();
-+				return -ENODEV;
- 			}
- 		}
- 		has_addr = pingv6_ops.ipv6_chk_addr(net, &addr->sin6_addr, dev,
+ static const char *max98090_perf_pwr_text[] =
+-- 
+2.35.1
+
 
 

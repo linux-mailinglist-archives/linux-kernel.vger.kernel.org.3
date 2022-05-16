@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FCE9529022
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 395F3528F99
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349088AbiEPUht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55940 "EHLO
+        id S238610AbiEPUOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347415AbiEPUB5 (ORCPT
+        with ESMTP id S1351057AbiEPUB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 16 May 2022 16:01:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACF547576;
-        Mon, 16 May 2022 12:57:34 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8E447579;
+        Mon, 16 May 2022 12:57:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7498360F83;
-        Mon, 16 May 2022 19:57:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1ACAC34100;
-        Mon, 16 May 2022 19:57:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1E8B4B81611;
+        Mon, 16 May 2022 19:57:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76C51C385AA;
+        Mon, 16 May 2022 19:57:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652731053;
-        bh=cT2tFWx4y6h1jKST9Xbxf3XHUjKuhrR4MsISZKADkV0=;
+        s=korg; t=1652731056;
+        bh=LtglKuDIcoTD0hbZVEoanwLub+zngdfuc7BctvOC8uc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JLorxxBqCMJj5NkHjrZn3fJ+HccMKkVv4+d9+bcMioF1e5NgJRWEsKLdGcOlNGSNS
-         tFOp7B4P2Fx4QY26SbLN39y1KLbq1uo8QCuO/gC1caWMunOJckEt+bj7285AXyxnCj
-         Z2GsSdAy/drNWbcyWsEqVC3FWF3y7taJ0hN17we4=
+        b=m6El1o94BGUWCcUfbB72xlhQYyc2e1Nz14KDPvpHH9m66do9BK2vY+t7kGd9tsQ/u
+         nG92MlGATcmwbL4JTcYnv6b74NNXHOSUZs3lYv01k5Fie/nssMEIGTBPmumfhokrG/
+         ASwJMDuFCMzQooYPl5S3ffUyrhT6A2weLQ6p6pFc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andreas Gruenbacher <agruenba@redhat.com>,
+        stable@vger.kernel.org, Denis Pauk <pauk.denis@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 048/114] gfs2: Fix filesystem block deallocation for short writes
-Date:   Mon, 16 May 2022 21:36:22 +0200
-Message-Id: <20220516193626.873661114@linuxfoundation.org>
+Subject: [PATCH 5.17 049/114] hwmon: (asus_wmi_sensors) Fix CROSSHAIR VI HERO name
+Date:   Mon, 16 May 2022 21:36:23 +0200
+Message-Id: <20220516193626.902382589@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
 References: <20220516193625.489108457@linuxfoundation.org>
@@ -54,51 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andreas Gruenbacher <agruenba@redhat.com>
+From: Denis Pauk <pauk.denis@gmail.com>
 
-[ Upstream commit d031a8866e709c9d1ee5537a321b6192b4d2dc5b ]
+[ Upstream commit 4fd45cc8568e6086272d3036f2c29d61e9b776a1 ]
 
-When a write cannot be carried out in full, gfs2_iomap_end() releases
-blocks that have been allocated for this write but haven't been used.
+CROSSHAIR VI HERO motherboard is incorrectly named as
+ROG CROSSHAIR VI HERO.
 
-To compute the end of the allocation, gfs2_iomap_end() incorrectly
-rounded the end of the attempted write down to the next block boundary
-to arrive at the end of the allocation.  It would have to round up, but
-the end of the allocation is also available as iomap->offset +
-iomap->length, so just use that instead.
-
-In addition, use round_up() for computing the start of the unused range.
-
-Fixes: 64bc06bb32ee ("gfs2: iomap buffered write support")
-Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
+Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+Link: https://lore.kernel.org/r/20220403193455.1363-1-pauk.denis@gmail.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/gfs2/bmap.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ drivers/hwmon/asus_wmi_sensors.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/gfs2/bmap.c b/fs/gfs2/bmap.c
-index fbdb7a30470a..f785af2aa23c 100644
---- a/fs/gfs2/bmap.c
-+++ b/fs/gfs2/bmap.c
-@@ -1154,13 +1154,12 @@ static int gfs2_iomap_end(struct inode *inode, loff_t pos, loff_t length,
- 
- 	if (length != written && (iomap->flags & IOMAP_F_NEW)) {
- 		/* Deallocate blocks that were just allocated. */
--		loff_t blockmask = i_blocksize(inode) - 1;
--		loff_t end = (pos + length) & ~blockmask;
-+		loff_t hstart = round_up(pos + written, i_blocksize(inode));
-+		loff_t hend = iomap->offset + iomap->length;
- 
--		pos = (pos + written + blockmask) & ~blockmask;
--		if (pos < end) {
--			truncate_pagecache_range(inode, pos, end - 1);
--			punch_hole(ip, pos, end - pos);
-+		if (hstart < hend) {
-+			truncate_pagecache_range(inode, hstart, hend - 1);
-+			punch_hole(ip, hstart, hend - hstart);
- 		}
- 	}
- 
+diff --git a/drivers/hwmon/asus_wmi_sensors.c b/drivers/hwmon/asus_wmi_sensors.c
+index c80eee874b6c..49784a6ea23a 100644
+--- a/drivers/hwmon/asus_wmi_sensors.c
++++ b/drivers/hwmon/asus_wmi_sensors.c
+@@ -71,7 +71,7 @@ static const struct dmi_system_id asus_wmi_dmi_table[] = {
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X399-A"),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X470-PRO"),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI EXTREME"),
+-	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI HERO"),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("CROSSHAIR VI HERO"),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VI HERO (WI-FI AC)"),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VII HERO"),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VII HERO (WI-FI)"),
 -- 
 2.35.1
 

@@ -2,61 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40C5F5284E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9CF45284E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243563AbiEPNCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 09:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34040 "EHLO
+        id S243578AbiEPND2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 09:03:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233013AbiEPNCf (ORCPT
+        with ESMTP id S229895AbiEPND0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 09:02:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BAD39B8A;
-        Mon, 16 May 2022 06:02:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 14F13612B4;
-        Mon, 16 May 2022 13:02:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EB71C36AE3;
-        Mon, 16 May 2022 13:02:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652706153;
-        bh=QxrYnzxLkpBboiWbk+tZIWKBZNB1aGowNNS2JwNCBZY=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=eECbBPbd/CwUGSHea5TMEEiO7RapzXxStNpbfSByJLhUUerce3Eqt5rk1+4EyBgWd
-         J8Lfq+S86WuE8+Glx49oeOitauYLsnxlm3oX8qD2hT0m8E1px5uSaf4spe+61vMrdo
-         C4udux4s1uotPACaR6Z8jR7Dk8Ibi+1Hh883MJd7s9Wv33VpWyADMuWIxJtYTJszgL
-         eARUl1C5s+RMHC5bCPQdLwpkvsd52ywuwXp2SN27ujdefo2Fn90Y5BYS55/dxYIjFU
-         vSq1ENMFTZFzDfXYse1eZkWQOIfGTqpYD92MbobQrg29OhnyZPMhkQPI92PO4yfjDi
-         dHw4muV+AIdIQ==
-Received: by mail-wr1-f46.google.com with SMTP id j25so19412769wrc.9;
-        Mon, 16 May 2022 06:02:33 -0700 (PDT)
-X-Gm-Message-State: AOAM531AylIOox6ltyUvDBpjIk1MmqEHQj+CIfcQBl0pYf0OxpdA2LMH
-        wt5UkEOBCcmFYRLusW62qeBeY0qDazwYWhM3cOU=
-X-Google-Smtp-Source: ABdhPJyppBouNKjqRj9f/zuZU9s1i4dLd2e/drF3XJg3+HmjYs+p3oQblbVJf1G8KltxMRgiQcwslacmFaYs8RlwNz4=
-X-Received: by 2002:a5d:584a:0:b0:20c:5bad:11c1 with SMTP id
- i10-20020a5d584a000000b0020c5bad11c1mr14323809wrf.62.1652706151753; Mon, 16
- May 2022 06:02:31 -0700 (PDT)
+        Mon, 16 May 2022 09:03:26 -0400
+Received: from outbound-smtp07.blacknight.com (outbound-smtp07.blacknight.com [46.22.139.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EDEC39B8B
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:03:24 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
+        by outbound-smtp07.blacknight.com (Postfix) with ESMTPS id 79B231C3737
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 14:03:23 +0100 (IST)
+Received: (qmail 2770 invoked from network); 16 May 2022 13:03:23 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 16 May 2022 13:03:23 -0000
+Date:   Mon, 16 May 2022 14:03:20 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, vbabka@suse.cz,
+        akpm@linux-foundation.org, willy@infradead.org
+Subject: Re: Is _PAGE_PROTNONE set only for user mappings?
+Message-ID: <20220516130319.GM3441@techsingularity.net>
+References: <20220506051940.156952-1-42.hyeyoo@gmail.com>
+ <56f89895-601e-44c9-bda4-5fae6782e27e@amd.com>
+ <YnpTHMvOO/pLJQ+l@hyeyoo>
+ <5fe161cb-6c55-6c4d-c208-16c77e115d3f@amd.com>
+ <8c2735ac-0335-6e2a-8341-8266d5d13c30@intel.com>
+ <YntHrTX12TGp35aF@hyeyoo>
+ <20220512103748.GH3441@techsingularity.net>
+ <Yn3tssUR8w8mC1DJ@hyeyoo>
 MIME-Version: 1.0
-Received: by 2002:adf:f344:0:0:0:0:0 with HTTP; Mon, 16 May 2022 06:02:31
- -0700 (PDT)
-In-Reply-To: <20220512075605.34240-1-yang.lee@linux.alibaba.com>
-References: <20220512075605.34240-1-yang.lee@linux.alibaba.com>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Mon, 16 May 2022 22:02:31 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd9wzMPn0MWYDSveg2rdpaAWyg7RD5TOyyzbcu7nvUXHmg@mail.gmail.com>
-Message-ID: <CAKYAXd9wzMPn0MWYDSveg2rdpaAWyg7RD5TOyyzbcu7nvUXHmg@mail.gmail.com>
-Subject: Re: [PATCH -next] ksmbd: Fix some kernel-doc comments
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     sfrench@samba.org, hyc.lee@gmail.com, senozhatsky@chromium.org,
-        linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <Yn3tssUR8w8mC1DJ@hyeyoo>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,33 +62,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022-05-12 16:56 GMT+09:00, Yang Li <yang.lee@linux.alibaba.com>:
-> Remove some warnings found by running scripts/kernel-doc,
-> which is caused by using 'make W=1'.
->
-> fs/ksmbd/misc.c:30: warning: Function parameter or member 'str' not
-> described in 'match_pattern'
-> fs/ksmbd/misc.c:30: warning: Excess function parameter 'string'
-> description in 'match_pattern'
-> fs/ksmbd/misc.c:163: warning: Function parameter or member 'share' not
-> described in 'convert_to_nt_pathname'
-> fs/ksmbd/misc.c:163: warning: Function parameter or member 'path' not
-> described in 'convert_to_nt_pathname'
-> fs/ksmbd/misc.c:163: warning: Excess function parameter 'filename'
-> description in 'convert_to_nt_pathname'
-> fs/ksmbd/misc.c:163: warning: Excess function parameter 'sharepath'
-> description in 'convert_to_nt_pathname'
-> fs/ksmbd/misc.c:259: warning: Function parameter or member 'share' not
-> described in 'convert_to_unix_name'
-> fs/ksmbd/misc.c:259: warning: Function parameter or member 'name' not
-> described in 'convert_to_unix_name'
-> fs/ksmbd/misc.c:259: warning: Excess function parameter 'path'
-> description in 'convert_to_unix_name'
-> fs/ksmbd/misc.c:259: warning: Excess function parameter 'tid'
-> description in 'convert_to_unix_name'
->
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-Acked-by: Namjae Jeon <linkinjeon@kernel.org>
+On Fri, May 13, 2022 at 02:33:38PM +0900, Hyeonggon Yoo wrote:
+> On Thu, May 12, 2022 at 11:37:48AM +0100, Mel Gorman wrote:
+> > On Wed, May 11, 2022 at 02:20:45PM +0900, Hyeonggon Yoo wrote:
+> > > > pgprot_t vm_get_page_prot(unsigned long vm_flags)
+> > > > {
+> > > >        pgprot_t ret = __pgprot(pgprot_val(protection_map[vm_flags &
+> > > >                                (VM_READ|VM_WRITE|VM_EXEC|VM_SHARED)]) |
+> > > >                        pgprot_val(arch_vm_get_page_prot(vm_flags)));
+> > > >
+> > > >        return arch_filter_pgprot(ret);
+> > > > }
+> > > > EXPORT_SYMBOL(vm_get_page_prot);
+> > > 
+> > > I guess it's only set for processes' VMA if no caller is abusing
+> > > vm_get_page_prot() for kernel mappings.
+> > > 
+> > > But yeah, just quick guessing does not make us convinced.
+> > > Let's Cc people working on mm.
+> > > 
+> > > If kernel never uses _PAGE_PROTNONE for kernel mappings, it's just okay
+> > > not to clear _PAGE_GLOBAL at first in __change_page_attr() if it's not user address,
+> > > because no user will confuse _PAGE_GLOBAL as _PAGE_PROTNONE if it's kernel
+> > > address. right?
+> > > 
+> > 
+> > I'm not aware of a case where _PAGE_BIT_PROTNONE is used for a kernel
+> > address expecting PROT_NONE semantics instead of the global bit. NUMA
+> > Balancing is not going to accidentally treat a kernel address as if it's
+> > a NUMA hinting fault. By the time a fault is determining if a PTE access
+> > is a numa hinting fault or accesssing a PROT_NONE region, it has been
+> > established that it is a userspace address backed by a valid VMA.
+> > 
+> 
+> Thanks Mel, and IIUC nor does do_kern_addr_fault() in arch/x86/mm/fault.c
+> expect _PAGE_PROTNONE instead of _PAGE_GLOBAL. I want to make it clear
+> in the code that _PAGE_PROTNONE is only used for user mappings.
+> 
+> How does below look?
+> 
 
-Thanks for your patch!
+I've no strong objections. I worry that this somehow could be used to
+set PAGE_USER on a kernel mapping page and maybe a comment would be more
+appropriate. However, I'm failing to imagine how NUMA balancing could be
+fooled into doing that.
+
+-- 
+Mel Gorman
+SUSE Labs

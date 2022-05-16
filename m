@@ -2,208 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1220A528D73
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5769528D77
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239387AbiEPSvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 14:51:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
+        id S1345153AbiEPSwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 14:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237456AbiEPSvu (ORCPT
+        with ESMTP id S1345141AbiEPSv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 14:51:50 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525C23EA8F
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 11:51:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652727108; x=1684263108;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Bu9A2FLNqJyynjkFJSR1rIgGLMg6U+qTZ+vN+N3RJGQ=;
-  b=l3xgyH+cEdKMSvzgLaYBjc1xezeZoOkir8ezjWJDE8c0634hb34SZR76
-   JDJLjd1rarCPlS4vORZ+XxzEEH+rzySO5YseT/gYmfFD1FfP63v/TyXi/
-   l+MPce1tlt7dqFXnocGN+kanFToL3xeTblENnohlt1vyq5zcHQqBgC3FM
-   N2Xjpglj1wuiv8ygvWD42G5WzFNrTGrnGLA8GCPJJ+kJ3/Fis0Ssm6If4
-   u5V9XuB6OXmSYG3t7c6PZ0AmQhj7cPCJSlueMUfXGsqIEt1+sVPzYi2uw
-   7W1VZyc/29WoJczxbdWxt8mts+ujXxepEUGR8Go67Xs2ogExDi/jAHYoj
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="252986291"
-X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
-   d="scan'208";a="252986291"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 11:51:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
-   d="scan'208";a="713500451"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 16 May 2022 11:51:45 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nqfom-0000Gw-IR;
-        Mon, 16 May 2022 18:51:44 +0000
-Date:   Tue, 17 May 2022 02:51:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [axboe-block:for-5.19/io_uring-pbuf 99/102] fs/io_uring.c:3470:35:
- sparse: sparse: incorrect type in initializer (different address spaces)
-Message-ID: <202205170253.iHvYIuRG-lkp@intel.com>
+        Mon, 16 May 2022 14:51:57 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED023EAA2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 11:51:56 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id v11so14835351pff.6
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 11:51:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=w/vXrhHYz4hayxXTpvluCRqtSLwMXWsi89GFr9tS/YQ=;
+        b=JRehcpW7+f4z4nnJVoYyyn8JTHfm9l7lwwg3/Zc+NghG/A9LUfElMU7tlAgI6zJnGo
+         LKCQmvcigbZB1ml+BnZ81ev55Yy/YSw6DMFKbYvOep7hxWh/H/lxwexytzZbDoi5s68a
+         gMMP2W5FrOB7qNl/5JgcTVgbYZxRV0HozsCvY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=w/vXrhHYz4hayxXTpvluCRqtSLwMXWsi89GFr9tS/YQ=;
+        b=BmTlZeF7pkFaXS/Wp3WzS5l5Z1KbzXxkczF6j/+HZ6vk9lJq6eAPZKGrZkfGqVnpaj
+         ZZAcigv02SAvkJc0FhcWbaRi/x5Rh5Brix5SVSChWZi4fS2/ZPORtk21tFNOSynAhB3L
+         IGSBQppDFhJGnWUZs66sS5GoQ4pfFMM0Fi4SesyqmcbQ4j8gd4Bn3UvPvQ3e/52FU0GZ
+         VoF4Gu5ACiPo0PbUutOdjHgR0Z2Fp0mSR8cUnNEeNZGVmomP1QxLF8ff3KCFsW6Ui3k1
+         6/cp7VVfxebQlcMIFCBXIeNUz45mdVyaHl7FgrZrfMgiaxvex34bnBn7/MWymRT9Ug/O
+         p9uA==
+X-Gm-Message-State: AOAM530hOkgmF5hPURNyANPiO/reSZk9vGYC0IlnOOiTyTf1svScfU60
+        2ccwDTvjzPHyocrtrCF9iOPdRQ==
+X-Google-Smtp-Source: ABdhPJymcURqRMGcWWF5SnA9wwUQk3JoOR0K/mUC0Yv15khQOmO0SNCL+Q4Njsx+FkSULBV01/EO0w==
+X-Received: by 2002:a63:4387:0:b0:3c6:9490:4e4b with SMTP id q129-20020a634387000000b003c694904e4bmr16157541pga.438.1652727116092;
+        Mon, 16 May 2022 11:51:56 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:4ee0:ca4c:63fd:81d2])
+        by smtp.gmail.com with UTF8SMTPSA id b2-20020a170902650200b0015e8d4eb264sm7480975plk.174.2022.05.16.11.51.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 11:51:55 -0700 (PDT)
+Date:   Mon, 16 May 2022 11:51:54 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] dm: Add verity helpers for LoadPin
+Message-ID: <YoKdSrjVf/tHGoa5@google.com>
+References: <20220504195419.1143099-1-mka@chromium.org>
+ <20220504125404.v3.1.I3e928575a23481121e73286874c4c2bdb403355d@changeid>
+ <02028CEA-5704-4A51-8CAD-BEE53CEF7CCA@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+In-Reply-To: <02028CEA-5704-4A51-8CAD-BEE53CEF7CCA@chromium.org>
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-5.19/io_uring-pbuf
-head:   5c7b7e4148d4c9c699b2af604822a012f026fc8f
-commit: ed3ec408f289963ff22b5a9a783e4f211ed45b20 [99/102] io_uring: fix locking state for empty buffer group
-config: sparc-randconfig-s031-20220516 (https://download.01.org/0day-ci/archive/20220517/202205170253.iHvYIuRG-lkp@intel.com/config)
-compiler: sparc-linux-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?id=ed3ec408f289963ff22b5a9a783e4f211ed45b20
-        git remote add axboe-block https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
-        git fetch --no-tags axboe-block for-5.19/io_uring-pbuf
-        git checkout ed3ec408f289963ff22b5a9a783e4f211ed45b20
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc SHELL=/bin/bash
+On Fri, May 13, 2022 at 03:15:53PM -0700, Kees Cook wrote:
+> 
+> 
+> On May 4, 2022 12:54:17 PM PDT, Matthias Kaehlcke <mka@chromium.org> wrote:
+> >LoadPin limits loading of kernel modules, firmware and certain
+> >other files to a 'pinned' file system (typically a read-only
+> >rootfs). To provide more flexibility LoadPin is being extended
+> >to also allow loading these files from trusted dm-verity
+> >devices. For that purpose LoadPin can be provided with a list
+> >of verity root digests that it should consider as trusted.
+> >
+> >Add a bunch of helpers to allow LoadPin to check whether a DM
+> >device is a trusted verity device. The new functions broadly
+> >fall in two categories: those that need access to verity
+> >internals (like the root digest), and the 'glue' between
+> >LoadPin and verity. The new file dm-verity-loadpin.c contains
+> >the glue functions.
+> >
+> >Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > [...]
+> >diff --git a/drivers/md/dm-verity-loadpin.c b/drivers/md/dm-verity-loadpin.c
+> >new file mode 100644
+> >index 000000000000..972ca93a2231
+> >--- /dev/null
+> >+++ b/drivers/md/dm-verity-loadpin.c
+> >@@ -0,0 +1,80 @@
+> >+// SPDX-License-Identifier: GPL-2.0-only
+> >+
+> >+#include <linux/list.h>
+> >+#include <linux/kernel.h>
+> >+#include <linux/dm-verity-loadpin.h>
+> >+
+> >+#include "dm.h"
+> >+#include "dm-verity.h"
+> >+
+> >+static struct list_head *trusted_root_digests;
+> 
+> Does this need to exist in two places? (i.e. why can't dm and loadpin share
+> this instead of needing dm_verity_loadpin_set_trusted_digests()?)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+We could share it. Probably it should then be defined here, since this is
+the first patch of the series, we could add an extern declaration to
+dm-verity-loadpin.h.
 
+> >+
+> >+/*
+> >+ * Sets the root digests of verity devices which LoadPin considers as trusted.
+> >+ *
+> >+ * This function must only be called once.
+> >+ */
+> >+void dm_verity_loadpin_set_trusted_root_digests(struct list_head *digests)
+> >+{
+> >+	if (!trusted_root_digests)
+> >+		trusted_root_digests = digests;
+> >+	else
+> >+		pr_warn("verity root digests trusted by LoadPin are already set!!!\n");
+> >+}
+> >+
+> >+static bool is_trusted_verity_target(struct dm_target *ti)
+> >+{
+> >+	u8 *root_digest;
+> >+	unsigned int digest_size;
+> >+	struct trusted_root_digest *trd;
+> >+	bool trusted = false;
+> >+
+> >+	if (!dm_is_verity_target(ti))
+> >+		return false;
+> >+
+> >+	if (dm_verity_get_root_digest(ti, &root_digest, &digest_size))
+> >+		return false;
+> >+
+> >+	list_for_each_entry(trd, trusted_root_digests, node) {
+> >+		if ((trd->len == digest_size) &&
+> >+		    !memcmp(trd->data, root_digest, digest_size)) {
+> >+			trusted = true;
+> >+			break;
+> >+		}
+> >+	}
+> >+
+> >+	kfree(root_digest);
+> >+
+> >+	return trusted;
+> >+}
+> >+
+> >+/*
+> >+ * Determines whether a mapped device is a verity device that is trusted
+> >+ * by LoadPin.
+> >+ */
+> >+bool dm_verity_loadpin_is_md_trusted(struct mapped_device *md)
+> >+{
+> >+	int srcu_idx;
+> >+	struct dm_table *table;
+> >+	unsigned int num_targets;
+> >+	bool trusted = false;
+> >+	int i;
+> >+
+> >+	if (!trusted_root_digests || list_empty(trusted_root_digests))
+> >+		return false;
+> >+
+> >+	table = dm_get_live_table(md, &srcu_idx);
+> >+	num_targets = dm_table_get_num_targets(table);
+> >+	for (i = 0; i < num_targets; i++) {
+> >+		struct dm_target *ti = dm_table_get_target(table, i);
+> >+
+> >+		if (is_trusted_verity_target(ti)) {
+> >+			trusted = true;
+> >+			break;
+> >+		}
+> >+	}
+> 
+> Pardon my lack of dm vocabulary, but what is "target" vs "table" here?
+> I was only thinking of "whole device", so I must not understand what this is
+> examining.
 
-sparse warnings: (new ones prefixed by >>)
->> fs/io_uring.c:3470:35: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void [noderef] __user *ret @@     got void * @@
-   fs/io_uring.c:3470:35: sparse:     expected void [noderef] __user *ret
-   fs/io_uring.c:3470:35: sparse:     got void *
-   fs/io_uring.c:3500:31: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __user * @@     got void * @@
-   fs/io_uring.c:3500:31: sparse:     expected void [noderef] __user *
-   fs/io_uring.c:3500:31: sparse:     got void *
-   fs/io_uring.c:5255:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
-   fs/io_uring.c:5255:14: sparse:     expected struct file *file
-   fs/io_uring.c:5255:14: sparse:     got struct file [noderef] __rcu *
-   fs/io_uring.c:6087:68: sparse: sparse: incorrect type in initializer (different base types) @@     expected restricted __poll_t [usertype] _key @@     got int apoll_events @@
-   fs/io_uring.c:6087:68: sparse:     expected restricted __poll_t [usertype] _key
-   fs/io_uring.c:6087:68: sparse:     got int apoll_events
-   fs/io_uring.c:6092:48: sparse: sparse: restricted __poll_t degrades to integer
-   fs/io_uring.c:6097:41: sparse: sparse: restricted __poll_t degrades to integer
-   fs/io_uring.c:6102:66: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __poll_t [usertype] val @@     got int @@
-   fs/io_uring.c:6102:66: sparse:     expected restricted __poll_t [usertype] val
-   fs/io_uring.c:6102:66: sparse:     got int
-   fs/io_uring.c:6102:52: sparse: sparse: incorrect type in initializer (different base types) @@     expected restricted __poll_t [usertype] mask @@     got unsigned short @@
-   fs/io_uring.c:6102:52: sparse:     expected restricted __poll_t [usertype] mask
-   fs/io_uring.c:6102:52: sparse:     got unsigned short
-   fs/io_uring.c:6108:50: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected signed int [usertype] res @@     got restricted __poll_t [usertype] mask @@
-   fs/io_uring.c:6108:50: sparse:     expected signed int [usertype] res
-   fs/io_uring.c:6108:50: sparse:     got restricted __poll_t [usertype] mask
-   fs/io_uring.c:6145:68: sparse: sparse: restricted __poll_t degrades to integer
-   fs/io_uring.c:6145:57: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __poll_t [usertype] val @@     got unsigned int @@
-   fs/io_uring.c:6145:57: sparse:     expected restricted __poll_t [usertype] val
-   fs/io_uring.c:6145:57: sparse:     got unsigned int
-   fs/io_uring.c:6227:45: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected int events @@     got restricted __poll_t [usertype] events @@
-   fs/io_uring.c:6227:45: sparse:     expected int events
-   fs/io_uring.c:6227:45: sparse:     got restricted __poll_t [usertype] events
-   fs/io_uring.c:6249:47: sparse: sparse: restricted __poll_t degrades to integer
-   fs/io_uring.c:6249:35: sparse: sparse: restricted __poll_t degrades to integer
-   fs/io_uring.c:6249:23: sparse: sparse: restricted __poll_t degrades to integer
-   fs/io_uring.c:6262:40: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected int mask @@     got restricted __poll_t [usertype] mask @@
-   fs/io_uring.c:6262:40: sparse:     expected int mask
-   fs/io_uring.c:6262:40: sparse:     got restricted __poll_t [usertype] mask
-   fs/io_uring.c:6262:50: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected int events @@     got restricted __poll_t [usertype] events @@
-   fs/io_uring.c:6262:50: sparse:     expected int events
-   fs/io_uring.c:6262:50: sparse:     got restricted __poll_t [usertype] events
-   fs/io_uring.c:6354:24: sparse: sparse: incorrect type in return expression (different base types) @@     expected int @@     got restricted __poll_t [assigned] [usertype] mask @@
-   fs/io_uring.c:6354:24: sparse:     expected int
-   fs/io_uring.c:6354:24: sparse:     got restricted __poll_t [assigned] [usertype] mask
-   fs/io_uring.c:6371:40: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected int mask @@     got restricted __poll_t [assigned] [usertype] mask @@
-   fs/io_uring.c:6371:40: sparse:     expected int mask
-   fs/io_uring.c:6371:40: sparse:     got restricted __poll_t [assigned] [usertype] mask
-   fs/io_uring.c:6371:50: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected int events @@     got restricted __poll_t [usertype] events @@
-   fs/io_uring.c:6371:50: sparse:     expected int events
-   fs/io_uring.c:6371:50: sparse:     got restricted __poll_t [usertype] events
-   fs/io_uring.c:6381:47: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected int events @@     got restricted __poll_t [usertype] events @@
-   fs/io_uring.c:6381:47: sparse:     expected int events
-   fs/io_uring.c:6381:47: sparse:     got restricted __poll_t [usertype] events
-   fs/io_uring.c:6406:33: sparse: sparse: incorrect type in initializer (different base types) @@     expected restricted __poll_t [usertype] mask @@     got int @@
-   fs/io_uring.c:6406:33: sparse:     expected restricted __poll_t [usertype] mask
-   fs/io_uring.c:6406:33: sparse:     got int
-   fs/io_uring.c:6419:22: sparse: sparse: invalid assignment: |=
-   fs/io_uring.c:6419:22: sparse:    left side has type restricted __poll_t
-   fs/io_uring.c:6419:22: sparse:    right side has type int
-   fs/io_uring.c:6424:30: sparse: sparse: invalid assignment: &=
-   fs/io_uring.c:6424:30: sparse:    left side has type restricted __poll_t
-   fs/io_uring.c:6424:30: sparse:    right side has type int
-   fs/io_uring.c:6426:22: sparse: sparse: invalid assignment: |=
-   fs/io_uring.c:6426:22: sparse:    left side has type restricted __poll_t
-   fs/io_uring.c:6426:22: sparse:    right side has type int
-   fs/io_uring.c:6454:33: sparse: sparse: incorrect type in argument 5 (different base types) @@     expected int mask @@     got restricted __poll_t [assigned] [usertype] mask @@
-   fs/io_uring.c:6454:33: sparse:     expected int mask
-   fs/io_uring.c:6454:33: sparse:     got restricted __poll_t [assigned] [usertype] mask
-   fs/io_uring.c:6454:50: sparse: sparse: incorrect type in argument 6 (different base types) @@     expected int events @@     got restricted __poll_t [usertype] events @@
-   fs/io_uring.c:6454:50: sparse:     expected int events
-   fs/io_uring.c:6454:50: sparse:     got restricted __poll_t [usertype] events
-   fs/io_uring.c:6568:24: sparse: sparse: invalid assignment: |=
-   fs/io_uring.c:6568:24: sparse:    left side has type unsigned int
-   fs/io_uring.c:6568:24: sparse:    right side has type restricted __poll_t
-   fs/io_uring.c:6569:65: sparse: sparse: restricted __poll_t degrades to integer
-   fs/io_uring.c:6569:29: sparse: sparse: restricted __poll_t degrades to integer
-   fs/io_uring.c:6569:38: sparse: sparse: incorrect type in return expression (different base types) @@     expected restricted __poll_t @@     got unsigned int @@
-   fs/io_uring.c:6569:38: sparse:     expected restricted __poll_t
-   fs/io_uring.c:6569:38: sparse:     got unsigned int
-   fs/io_uring.c:6617:27: sparse: sparse: incorrect type in assignment (different base types) @@     expected int apoll_events @@     got restricted __poll_t [usertype] events @@
-   fs/io_uring.c:6617:27: sparse:     expected int apoll_events
-   fs/io_uring.c:6617:27: sparse:     got restricted __poll_t [usertype] events
-   fs/io_uring.c:6656:43: sparse: sparse: invalid assignment: &=
-   fs/io_uring.c:6656:43: sparse:    left side has type restricted __poll_t
-   fs/io_uring.c:6656:43: sparse:    right side has type int
-   fs/io_uring.c:6657:62: sparse: sparse: restricted __poll_t degrades to integer
-   fs/io_uring.c:6657:43: sparse: sparse: invalid assignment: |=
-   fs/io_uring.c:6657:43: sparse:    left side has type restricted __poll_t
-   fs/io_uring.c:6657:43: sparse:    right side has type unsigned int
-   fs/io_uring.c:2562:17: sparse: sparse: context imbalance in 'handle_prev_tw_list' - different lock contexts for basic block
-   fs/io_uring.c:7721:39: sparse: sparse: marked inline, but without a definition
-   fs/io_uring.c:7721:39: sparse: sparse: marked inline, but without a definition
-   fs/io_uring.c:7721:39: sparse: sparse: marked inline, but without a definition
-   fs/io_uring.c:7721:39: sparse: sparse: marked inline, but without a definition
+'targets' are different types of DM mappings like 'linear' or 'verity'. A
+device mapper table contains has one or more targets that define the mapping
+of the blocks of the mapped device.
 
-vim +3470 fs/io_uring.c
+Having spelled that out I realize that the above check is wrong. It would
+consider a device like this trusted:
 
-  3465	
-  3466	static void __user *io_provided_buffer_select(struct io_kiocb *req, size_t *len,
-  3467						      struct io_buffer_list *bl,
-  3468						      unsigned int issue_flags)
-  3469	{
-> 3470		void __user *ret = ERR_PTR(-ENOBUFS);
-  3471	
-  3472		if (!list_empty(&bl->buf_list)) {
-  3473			struct io_buffer *kbuf;
-  3474	
-  3475			kbuf = list_first_entry(&bl->buf_list, struct io_buffer, list);
-  3476			list_del(&kbuf->list);
-  3477			if (*len > kbuf->len)
-  3478				*len = kbuf->len;
-  3479			req->flags |= REQ_F_BUFFER_SELECTED;
-  3480			req->kbuf = kbuf;
-  3481			req->buf_index = kbuf->bid;
-  3482			ret = u64_to_user_ptr(kbuf->addr);
-  3483		}
-  3484	
-  3485		io_ring_submit_unlock(req->ctx, issue_flags);
-  3486		return ret;
-  3487	}
-  3488	
+0 10000000 linear 8:1
+10000000 10001000 verity <params>
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+In the above case only a small part of the DM device would be backed by verity.
+
+I think we want a table with a single entry that is a verity target.
+
+> > [...]
+> >diff --git a/include/linux/dm-verity-loadpin.h b/include/linux/dm-verity-loadpin.h
+> >new file mode 100644
+> >index 000000000000..12a86911d05a
+> >--- /dev/null
+> >+++ b/include/linux/dm-verity-loadpin.h
+> >@@ -0,0 +1,27 @@
+> >+/* SPDX-License-Identifier: GPL-2.0 */
+> >+
+> >+#ifndef __LINUX_DM_VERITY_LOADPIN_H
+> >+#define __LINUX_DM_VERITY_LOADPIN_H
+> >+
+> >+#include <linux/list.h>
+> >+
+> >+struct mapped_device;
+> >+
+> >+struct trusted_root_digest {
+> >+	u8 *data;
+> >+	unsigned int len;
+> >+	struct list_head node;
+> >+};
+> 
+> To avoid the double-alloc in patch 2 (and save 1 pointer size of memory), this could just be:
+> 
+> struct trusted_root_digest {
+> 	struct list_head node;
+> 	unsigned int len;
+> 	u8 data[];
+> };
+
+Looks good to me, will change
+
+> Otherwise, looks good to me!
+
+Excellent, thanks for the review!

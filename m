@@ -2,141 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83123528068
+	by mail.lfdr.de (Postfix) with ESMTP id D0017528069
 	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 11:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238342AbiEPJIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 05:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36314 "EHLO
+        id S241784AbiEPJIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 05:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241315AbiEPJIY (ORCPT
+        with ESMTP id S241773AbiEPJIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 05:08:24 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC55ABE2B;
-        Mon, 16 May 2022 02:08:22 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id p8so13461994pfh.8;
-        Mon, 16 May 2022 02:08:22 -0700 (PDT)
+        Mon, 16 May 2022 05:08:35 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB11522B2C;
+        Mon, 16 May 2022 02:08:33 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id n6-20020a05600c3b8600b0039492b44ce7so8221206wms.5;
+        Mon, 16 May 2022 02:08:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=whKmTTMPgrsmaBTT+liiA9Q6qWWn3/ujAQeCBvW7hg4=;
-        b=J+s41SYBzaZiF+BIqdqio5MKIMM9Nbu+9tNDfxzaRzgIIK6Ryvu9Hr1pF0qBtmJQS2
-         dAX2b2Xwr0q1HJ67aetOdYf4CSjsm83RcpZ1aL4grETuvtJimawDHnNsU51aAlm8gUW3
-         p++HcQDqoyq2nDi7or6r5JXNFopckzWb6iDBo8TsJrDmvP9eUvOo3GK2+Gf2c9XdzT9l
-         sKGba6PITaMUnw1jahSUZqRCnEGoY+YXD/Oq13YFDGBCga1UMEWI5nRc8qK7bJj7QHK6
-         2EcPHv0OndoxJdyEs9OeOlnMVyG1GWY/F1+pkvLXmFH4vsXSxvfD2DCun3yRnPzJbzT0
-         8rIQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=DbwlhGlNKP/GOpbAeD4xPGjFcllAu7o315UPeOpEeyU=;
+        b=CxOeoldsv2HbmBTaajEpo3Tkl9Gk25dW8aWLkB2oOyZTqf7EKAIm4x9cD96zpHdSKG
+         wx9h5cRz7nAgq5faFt3OnR34+Sc9y+ClpVN/gUwFRHZiy3x8Wg/2G0yd0QNtxRwX1s4S
+         66I8ixhE0I9q44/UmFRPB89Gse9V1fzngkNDa5FvwOvajT0QFL/bhABYcy5mBHD/svPH
+         +iAMItZmqJR6RXUuaiXV0ZJeqTGrbq0JNQdreZGrqoqAEruSqaVhnXiUGnaIn0aQYuZH
+         cz/WN/N0mJttBo4Z1tK6vgl7z/YQ3Csqr6Y+sFu0xgvB4PS8zKGw8ZVnmdq2Iw4rHPxZ
+         xIQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=whKmTTMPgrsmaBTT+liiA9Q6qWWn3/ujAQeCBvW7hg4=;
-        b=4bu35NpGg63dEJLH45BNY/XrH1IqZp4MUYl8C3ONwKGvFdK03kkE+twXovZCdV184t
-         0KIFA8d9PQ4INxQcm7Qwb00WjstLcFCJs4GADCh7zQeJoPA7BUGlHyBcTKy+GmNBm5zM
-         fGPbFrUfb+3DrgPkVNDi/LA9vGgSwvs45pZYHhv0iAAYRkr/2Lc/9cgM5vinP/dQ5pLW
-         G21JPYin1+tdaCMENGl8HZjGRhAJuFn+f799LiVw7A0rxw+E/mhqIT49kUh91ADHgRqc
-         6HRYYirvGApZ9cslJzxKtSYHyJjYSixox9ud4y6EBzKy5wE2S9W4SmU7kwonq89X3DwR
-         aGsA==
-X-Gm-Message-State: AOAM531PAcmM/ddWbUwVqlI2ntikPTQIt1asc7+7+Kly5Qe3DR20nDu8
-        tEQ15lJ82qjf8DaIvcZmmfE=
-X-Google-Smtp-Source: ABdhPJwLub86flnlwWLj9AmkxcpGA/5RSSJ41bKr/TcufVkI/FoPIxlQxg4n4XoCeukAGz2xv8Cg/Q==
-X-Received: by 2002:a63:a06:0:b0:3c2:3345:bf99 with SMTP id 6-20020a630a06000000b003c23345bf99mr14710016pgk.477.1652692102334;
-        Mon, 16 May 2022 02:08:22 -0700 (PDT)
-Received: from localhost (014136220210.static.ctinets.com. [14.136.220.210])
-        by smtp.gmail.com with ESMTPSA id u6-20020a654c06000000b003db904128d5sm6170096pgq.21.2022.05.16.02.08.21
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=DbwlhGlNKP/GOpbAeD4xPGjFcllAu7o315UPeOpEeyU=;
+        b=0PsIQ0Iuffs1td3GCpSx9Iy/+l9BKdKdBqU3AfJo2SuefanZ6dtNa7B99/M7ip1JJZ
+         H7Q6H+3gstKXm4fPzYYkErakTz3V8vO5qtQjFdaGDpywkOJ3H0Dwkhq6dubgVxKIi72K
+         HxyqCUdA+tV1TQForfgTXj5cwVrZDIzNU5I1dKJ5sG4NqKzo/HRg0tfY3xIAzfcJdZo7
+         fvho1rxmMWaJWxPApfNTT2g5DDep/bUKP9cLjw3ao8G/WdQFpukwr7HhddFB8umCdtnH
+         L/wUiDpGqOCuUT+rmrW64PtJAntt6K0T500B+vw908EZTNt0JKcNkHI7ljbNmh9It9Ye
+         EPsQ==
+X-Gm-Message-State: AOAM533MmtK9Xfb64D8K+D0uMpiwdrgc2q4NNRRysfZHtQ6/SiLw3tUR
+        Eaf1IOKAs7Ww8DrBRKZ5KRA=
+X-Google-Smtp-Source: ABdhPJzPozxn0bDxJUwV0PT6jJ+mRjLbazeRvzPdImLmRzzygJHWYRqmNcOW4fzcXQCGMtylTDNqfg==
+X-Received: by 2002:a7b:c081:0:b0:394:789b:915 with SMTP id r1-20020a7bc081000000b00394789b0915mr15494028wmh.105.1652692112175;
+        Mon, 16 May 2022 02:08:32 -0700 (PDT)
+Received: from elementary ([94.73.36.128])
+        by smtp.gmail.com with ESMTPSA id h12-20020adf9ccc000000b0020adc114136sm11046252wre.0.2022.05.16.02.08.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 02:08:21 -0700 (PDT)
-From:   bh1scw@gmail.com
-To:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        songmuchun@bytedance.com, Fanjun Kong <bh1scw@gmail.com>
-Subject: [PATCH] kernel/sysysctl.c: Remove trailing white space
-Date:   Mon, 16 May 2022 17:07:53 +0800
-Message-Id: <20220516090752.2137286-1-bh1scw@gmail.com>
-X-Mailer: git-send-email 2.36.0
+        Mon, 16 May 2022 02:08:31 -0700 (PDT)
+Date:   Mon, 16 May 2022 11:08:29 +0200
+From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To:     Stefan Berzl <stefanberzl@gmail.com>
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com, spbnick@gmail.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Status on hid xppen patch
+Message-ID: <20220516090829.GA20623@elementary>
+References: <941a793a-d2f7-9c2c-59be-b3930e1acfec@gmail.com>
+ <20220423172330.32585-1-jose.exposito89@gmail.com>
+ <95576534-1f5e-c2e3-4f73-c1b0a8300b56@gmail.com>
+ <20220424093239.GA4380@elementary>
+ <20220512205952.GA8936@elementary>
+ <ebb6d627-4974-beed-1dc6-60634ab2f034@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ebb6d627-4974-beed-1dc6-60634ab2f034@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fanjun Kong <bh1scw@gmail.com>
+Hi Stefan,
 
-This patch removes the trailing white space in kernel/sysysctl.c
-Special thanks to Muchun Song.
+On Fri, May 13, 2022 at 07:22:49PM +0200, Stefan Berzl wrote:
+> Hello José,
+> 
+> > The tablets are the Deco Mini 4 and the Deco L, both of them are UGEE
+> > tablets. I already had a UGEE Parblo A610 Pro tablet and after having a
+> > look to the Windows driver traffic, I found out that after sending a
+> > chunk of magic data to enable the tablet, it requests a string
+> > descriptor ("uclogic_params_get_str_desc" can be used here) and the
+> > tablets respond with their parameters.
+> > 
+> > The information is encoded, in bytes, as:
+> > 
+> >  02 + 03 - UCLOGIC_RDESC_PEN_PH_ID_X_LM
+> >  04 + 05 - UCLOGIC_RDESC_PEN_PH_ID_Y_LM
+> >  06      - Number of buttons
+> >  07      - Dial present or not
+> >  08 + 09 - UCLOGIC_RDESC_PEN_PH_ID_PRESSURE_LM
+> >  10 + 11 - Resolution
+> > 
+> > Bytes 12 and 13 are present but set to 0, probably indicating my
+> > tablets are lacking some feature.
+> > 
+> > Could you confirm that your tablet returns similar information, please?
+> 
+> yes, you can haz string descriptor:
+> 0e 03 0b 8b cb 56 08 00 ff 1f d8 13
+> 
+> Byte 12 are 13 are set and zero, as in your case.
 
-Signed-off-by: Fanjun Kong <bh1scw@gmail.com>
----
- kernel/sysctl.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+Sweet, that means that we are on the right track and the implementation
+can be generic... Meaning that we won't need to write and maintain a
+bunch of HID descriptors :)
+ 
+> > In case you want to have a look to the implementation, I'm working on
+> > this branch:
+> > https://github.com/JoseExposito/linux/commits/patch-xppen-deco-l
+> > 
+> > I had to introduce new functionalities to the templating system of the
+> > driver, that's the reason for the KUnit tests.
+> > The last patch is work in progress (hopefully I'll have time to finish
+> > it this weekend), only the HID descriptors are missing.
+> 
+> I hope you make it, but otherwise you can always use mine, as it's quite
+> the same as yours. Only the logical minimum and maximum are -60 and 60.
 
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index e52b6e372c60..e68a3e70d44e 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -492,12 +492,12 @@ static int __do_proc_dointvec(void *tbl_data, struct ctl_table *table,
- 	int *i, vleft, first = 1, err = 0;
- 	size_t left;
- 	char *p;
--	
-+
- 	if (!tbl_data || !table->maxlen || !*lenp || (*ppos && !write)) {
- 		*lenp = 0;
- 		return 0;
- 	}
--	
-+
- 	i = (int *) tbl_data;
- 	vleft = table->maxlen / sizeof(*i);
- 	left = *lenp;
-@@ -729,7 +729,7 @@ int proc_dobool(struct ctl_table *table, int write, void *buffer,
-  * @ppos: file position
-  *
-  * Reads/writes up to table->maxlen/sizeof(unsigned int) integer
-- * values from/to the user buffer, treated as an ASCII string. 
-+ * values from/to the user buffer, treated as an ASCII string.
-  *
-  * Returns 0 on success.
-  */
-@@ -1246,7 +1246,7 @@ static int do_proc_dointvec_ms_jiffies_conv(bool *negp, unsigned long *lvalp,
-  * @ppos: file position
-  *
-  * Reads/writes up to table->maxlen/sizeof(unsigned int) integer
-- * values from/to the user buffer, treated as an ASCII string. 
-+ * values from/to the user buffer, treated as an ASCII string.
-  * The values read are assumed to be in seconds, and are converted into
-  * jiffies.
-  *
-@@ -1268,8 +1268,8 @@ int proc_dointvec_jiffies(struct ctl_table *table, int write,
-  * @ppos: pointer to the file position
-  *
-  * Reads/writes up to table->maxlen/sizeof(unsigned int) integer
-- * values from/to the user buffer, treated as an ASCII string. 
-- * The values read are assumed to be in 1/USER_HZ seconds, and 
-+ * values from/to the user buffer, treated as an ASCII string.
-+ * The values read are assumed to be in 1/USER_HZ seconds, and
-  * are converted into jiffies.
-  *
-  * Returns 0 on success.
-@@ -1291,8 +1291,8 @@ int proc_dointvec_userhz_jiffies(struct ctl_table *table, int write,
-  * @ppos: the current position in the file
-  *
-  * Reads/writes up to table->maxlen/sizeof(unsigned int) integer
-- * values from/to the user buffer, treated as an ASCII string. 
-- * The values read are assumed to be in 1/1000 seconds, and 
-+ * values from/to the user buffer, treated as an ASCII string.
-+ * The values read are assumed to be in 1/1000 seconds, and
-  * are converted into jiffies.
-  *
-  * Returns 0 on success.
--- 
-2.36.0
+You are right, 60 and not 127 is the right value. Actually, I think
+that -61 - 60 is the correct range, because of the 0.
+Running "libinput-debug-tablet" makes it easier to debug.
 
+I also had to fix the descriptor to avoid an issue with the pressure
+causing issues with the Deco L, but other than that, it should be
+correct now.
+
+> > I'll cc you when in the patchset so you can add your IDs :)
+> 
+> Is that all you want me to do?
+
+Code comments and suggestions are very welcome, as well as testing.
+
+Also, I don't know if you have seen this error after connecting the
+tablet:
+
+  xhci_hcd 0000:2a:00.3: WARN urb submitted to disabled ep
+  usb 3-2: reset full-speed USB device number 6 using xhci_hcd
+  usb 3-2: reset full-speed USB device number 6 using xhci_hcd
+  [...]
+
+It happens with the Deco Mini 4, even when using the hid-generic
+driver. I need to rebase my patches on 5.19 and test again, just to
+make sure the problem is not somewhere else.
+
+Jose

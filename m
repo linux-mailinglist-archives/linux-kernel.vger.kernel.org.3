@@ -2,213 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3D375287E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC055287E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244899AbiEPPDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 11:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49308 "EHLO
+        id S233237AbiEPPDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 11:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbiEPPDF (ORCPT
+        with ESMTP id S244889AbiEPPDe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 11:03:05 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4163B546;
-        Mon, 16 May 2022 08:03:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1652713378; bh=g2WNRPhTJkGKr3gGAVCpuHs4QwNIkre+XOqlLFTxREo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ZYk45tK3RZHkE2O1xOgac3NkJ4XhYM66poTQ7PwYwQleliXHDQaVV2T1QuajbZybG
-         DcoCsmRm34ALRnZCfuTAXjBU2Nqkm9LWiHJ3CMEt0jw1c9p5thbhfuJv0pGlu8GBD9
-         zaeIH56QmV3058m0Yt+UMj+lnn6H0zS3hnR7JvOo=
-Received: from [192.168.9.172] (unknown [101.88.28.48])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id F226660691;
-        Mon, 16 May 2022 23:02:57 +0800 (CST)
-Message-ID: <6bb4c861-c310-18f8-f2f2-5c3f85c541b4@xen0n.name>
-Date:   Mon, 16 May 2022 23:02:57 +0800
+        Mon, 16 May 2022 11:03:34 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43183B3F7
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 08:03:32 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id a5so17139670wrp.7
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 08:03:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lPcoNO1j7RBUVdLDmW4cgoYiT4HTUVa7PDPtyl15FqY=;
+        b=eMwIf/WdD+xUFg7sdlHf5jtEkLN7vjUXCx+87mSlVcar7bIXsEfUCJTzQ1ATm+vFz5
+         FBJx/CPJZ6AGZDILpK9Kpa4OolZ34mcGsC8Spt+I7wPjclsLSOHPZ//fwCOSCSIuTIW7
+         jzWjVyI9fIJduPh1z5it/q7kHd8fQhyhhqT4AlkhpKbz49Va9/+3IV/hwZdQCQ2qB3BU
+         OhD3x0jIh2oSc9Cuhae9VdBXNyHhmliDZxWn5PqPdZKF/Zva/QRkJk0mAZTSz25hNsoq
+         O6P1GEXdmM7AzqdKEl5odHUbvv4CJPIu4J3c1uRqJjSl1QVwIEFu3uiRK6O9+MEJSnAy
+         79pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lPcoNO1j7RBUVdLDmW4cgoYiT4HTUVa7PDPtyl15FqY=;
+        b=k1jk7aV/UEocNrO642YS1UGTDm8rtdgHfJUb6LggwEbT3nYE21F/oY4+/VOuOCFd94
+         LluvRXFfWOvt1/5wwB0V5FJ3DXP+Y8qbBIJuw2Gytt51kveMIrC11zInHlkReMuc5x5Q
+         xp94jQdmPLOwdnuj5at52s3L6NEHDKEHQj/YOWLr4g/QAjLZljDcZpkTba0T+D25BXUE
+         9TKsXJFzy/3zB8FuiJKv53DNHp90Fdzi7TWGSToCMWQSkIypt3sEJQ5IsRyO77FO0Z5S
+         NLnOfgH1iP048MSeQE7epqx4+yT+PcSPfQFVwL3anKmRCQJmlMdZuQ2MAHJNP7Q2WELI
+         Xkng==
+X-Gm-Message-State: AOAM532tkRYiegp/2kknfkKSA5nU9lgTXIBnpRJIkQ2pTOlJlBEhRfjP
+        O2twF3wRPJqRw/9U0qTuXr5a80+aIO/Jj3o+BbooDQ==
+X-Google-Smtp-Source: ABdhPJwAiBWCzE3Q39L93qd73JMV1CCwtR75UcbTglNeEMc+h2FSFnSzvZd6HaawUGDnSDimqucIp1PajNZ8h/8l+TM=
+X-Received: by 2002:a5d:6d0b:0:b0:20c:4ecb:1113 with SMTP id
+ e11-20020a5d6d0b000000b0020c4ecb1113mr14301059wrq.203.1652713411223; Mon, 16
+ May 2022 08:03:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0a1
-Subject: Re: [PATCH V10 14/22] LoongArch: Add signal handling support
-Content-Language: en-US
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     Huacai Chen <chenhuacai@gmail.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch@vger.kernel.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Al Viro <viro@zeniv.linux.org.uk>
-References: <20220514080402.2650181-1-chenhuacai@loongson.cn>
- <20220514080402.2650181-15-chenhuacai@loongson.cn>
- <ef37e578-d843-6a2f-2108-2a26dc54bece@xen0n.name>
- <CAAhV-H7UwLJLiMtjkW0xxfsBBaCPXqkQ-d+ZW4rm+=igvVP6ew@mail.gmail.com>
- <b30e5b28-2a3a-f3a6-1bb1-592323f6eadd@xen0n.name>
- <87bkvxd12b.fsf@email.froward.int.ebiederm.org>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <87bkvxd12b.fsf@email.froward.int.ebiederm.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220405183953.2094007-1-pceballos@google.com>
+ <nycvar.YFH.7.76.2204210947590.30217@cbobk.fhfr.pm> <CAKdAkRQ7yxFFGJg41UxptxapKiP4bmHsfw7dRNE+LPzs1PRk=A@mail.gmail.com>
+ <nycvar.YFH.7.76.2205121252090.28985@cbobk.fhfr.pm> <CAO9JgFwA5ZhwOOY0cU3HpMOV69CTumQ50zEgU6SPNAF0zDbCGg@mail.gmail.com>
+ <Yn2OlQAa9I++N80B@penguin>
+In-Reply-To: <Yn2OlQAa9I++N80B@penguin>
+From:   Pablo Ceballos <pceballos@google.com>
+Date:   Mon, 16 May 2022 08:03:17 -0700
+Message-ID: <CAO9JgFwR1kjaPawL9YcSCuy5PFKKtFx+4o0t1B7SBkq9xTEGHA@mail.gmail.com>
+Subject: Re: [PATCH] HID: Driver for Google Hangouts Meet Speakermic
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/22 22:06, Eric W. Biederman wrote:
+On Thu, May 12, 2022 at 3:48 PM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
+>
+> On Thu, May 12, 2022 at 03:35:00PM -0700, Pablo Ceballos wrote:
+> > On Thu, May 12, 2022 at 3:53 AM Jiri Kosina <jikos@kernel.org> wrote:
+> > > On Thu, 12 May 2022, Dmitry Torokhov wrote:
+> > > > I am curious, could not this be achieved without a kernel driver by
+> > > > simply using udev to map this usage code to KEY_RESERVED?
+> > >
+> > > Hmm, good point, using KEY_RESERVED mapping to achieve the key being
+> > > actually ignored didn't immediately occur to me.
+> > >
+> > > Pablo, could you please verify that it behaves in the expected way, and
+> > > confirm that we could drop the 'driver' in favor of udev rule?
+Jiri, this driver can be dropped from 5.19. The udev rule works just as well.
 
-> WANG Xuerui <kernel@xen0n.name> writes:
+> >
+> > I think I've achieved the same result by adding the following to udev
+> > hwdb. Dmitry, is this what you had in mind, or is there a better way
+> > of doing this?
+> >
+> > evdev:input:b0003v18D1p8001*
+> >  KEYBOARD_KEY_b002f=reserved
 >
->> Hi,
->>
->> On 5/15/22 21:48, Huacai Chen wrote:
->>> diff --git a/arch/loongarch/include/uapi/asm/sigcontext.h b/arch/loongarch/include/uapi/asm/sigcontext.h
->>> new file mode 100644
->>> index 000000000000..efeb8b3f8236
->>> --- /dev/null
->>> +++ b/arch/loongarch/include/uapi/asm/sigcontext.h
->>> @@ -0,0 +1,63 @@
->>> +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
->>> +/*
->>> + * Author: Hanlu Li <lihanlu@loongson.cn>
->>> + *         Huacai Chen <chenhuacai@loongson.cn>
->>> + *
->>> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
->>> + */
->>> +#ifndef _UAPI_ASM_SIGCONTEXT_H
->>> +#define _UAPI_ASM_SIGCONTEXT_H
->>> +
->>> +#include <linux/types.h>
->>> +#include <linux/posix_types.h>
->>> +
->>> +/* FP context was used */
->>> +#define USED_FP                      (1 << 0)
->>> +/* Load/Store access flags for address error */
->>> +#define ADRERR_RD            (1 << 30)
->>> +#define ADRERR_WR            (1 << 31)
->>>> I've searched GitHub globally, and my local glibc checkout, for usages
->>>> of these 3 constants, and there seems to be none; please consider
->>>> removing these if doable. We don't want cruft in uapi right from the
->>>> beginning.
->>> They will be used in our glibc, I promise.
->> Okay then. Seems simple enough, and from my quick grepping these appear to be
->> original creations -- not carried over from somewhere else, so it's already
->> highly likely that some of the userland tools need these anyway, just not
->> released yet.
-> I can understand exporting these values but the names aren't very
-> well namespaced at all.  Which means they could accidentially
-> conflict with things.
->
-> It would probably be better to do:
-> SC_USED_FP
-> SC_ADDRERR_RD
-> SC_ADDRERR_WR
->
-> And with two D's please.  It breaks my fingers to have to
-> make a typo like that on purpose.
->
-> This is very much a bikeshed comment, but I think the
-> bikeshed should be painted.
-IIUC, the ADRERR spelling is because of influence of BUS_ADRERR. But the 
-prefix idea sounds good.
->>>>> +
->>>>> +struct sigcontext {
->>>>> +     __u64   sc_pc;
->>>>> +     __u64   sc_regs[32];
->>>>> +     __u32   sc_flags;
->>>>> +     __u64   sc_extcontext[0] __attribute__((__aligned__(16)));
->>>>> +};
->>>>> +
->>>>> +#define CONTEXT_INFO_ALIGN   16
->>>>> +struct _ctxinfo {
->>>>> +     __u32   magic;
->>>>> +     __u32   size;
->>>>> +     __u64   padding;        /* padding to 16 bytes */
->>>>> +};
->>>>> +
->>>>> +/* FPU context */
->>>>> +#define FPU_CTX_MAGIC                0x46505501
->>>>> +#define FPU_CTX_ALIGN                8
->>>>> +struct fpu_context {
->>>>> +     __u64   regs[32];
->>>>> +     __u64   fcc;
->>>>> +     __u32   fcsr;
->>>>> +};
->>>> The 3 structs above should already see usage downstream (glibc and other
->>>> low-level friends), so they probably shouldn't be touched by now. At
->>>> least I can't see problems.
->>>>> +
->>>>> +/* LSX context */
->>>>> +#define LSX_CTX_MAGIC                0x53580001
->>>>> +#define LSX_CTX_ALIGN                16
->>>>> +struct lsx_context {
->>>>> +     __u64   regs[2*32];
->>>>> +     __u64   fcc;
->>>>> +     __u32   fcsr;
->>>>> +     __u32   vcsr;
->>>>> +};
->>>>> +
->>>>> +/* LASX context */
->>>>> +#define LASX_CTX_MAGIC               0x41535801
->>>>> +#define LASX_CTX_ALIGN               32
->>>>> +struct lasx_context {
->>>>> +     __u64   regs[4*32];
->>>>> +     __u64   fcc;
->>>>> +     __u32   fcsr;
->>>>> +     __u32   vcsr;
->>>>> +};
->>>> Do we want to freeze the LSX/LASX layout this early, before any detail
->>>> of said extension are published? We'll need to update kernel later
->>>> anyway, so I'd recommend leaving them out for the initial bring-up.
->>> Yes, they are freezed.
->> Okay too, I remember these are the same values as in the old world, so it should
->> be easy to support both worlds at least in this regard.
-> You know.  I really don't like this including code for hardware that may
-> be frozen but is not publicly documented yet.  Especially when the plan
-> is to publicly document the hardware.  It has the real problem that no
-> one else can review the code.
->
-> In ever design I have worked with there have been places where the
-> people putting it together have had blind spots.  The only way I know to
-> get past blind spots is to get as many people as possible looking,
-> and to listen to the feedback.
->
-> Given that neither lsx_context nor lasx_context are used in the kernel
-> code yet I would very much prefer that their inclusion wait until there
-> is actual code that needs them.
->
-> If nothing else that will put the definitions in context so people can
-> more easily see the big picture and understand how the pieces fit.
-
-Hmm, thinking twice, the code actually doesn't get destroyed, nor 
-magically "thawed" and modified, if not upstreamed initially; just that 
-these same lines would go in later. Maybe I overlooked the problem 
-because I've tried to reverse-engineer the LSX/LASX back in the MIPS 
-days of Loongson, and that I've seen early version of the port that 
-contained the same handling, so all of this come as familiar.
-
-So actually removing the code is the sensible thing to do here. We don't 
-really lose anything or waste too much time for that.
+> No, that is exactly what I had in mind, thank you. Please submit this
+> entry to upstream systemd/udev project (and we can cherry-pick it into
+> our udev as well).
+The pull request is here: https://github.com/systemd/systemd/pull/23372
 
 >
-> Eric
+> In general I think we should try to avoid trivial "fixup" HID drivers if
+> it is possible. I also wondered if we could be supplying fixed-up HID
+> descriptors via request_firmware() for HID devices.
+
+Pablo

@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7973E5291B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:49:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8035290F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348827AbiEPU1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55868 "EHLO
+        id S1347519AbiEPT5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:57:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349954AbiEPUAh (ORCPT
+        with ESMTP id S1347725AbiEPTwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:00:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489FF45517;
-        Mon, 16 May 2022 12:54:43 -0700 (PDT)
+        Mon, 16 May 2022 15:52:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8EDC41FAA;
+        Mon, 16 May 2022 12:47:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3600FB81617;
-        Mon, 16 May 2022 19:53:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99FFFC385AA;
-        Mon, 16 May 2022 19:53:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0677660A6A;
+        Mon, 16 May 2022 19:47:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08EFFC385AA;
+        Mon, 16 May 2022 19:47:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730832;
-        bh=cUzcoaeHTlTCzNsg517wxzSG6ZQ2TVLim9ksCWTVrj8=;
+        s=korg; t=1652730470;
+        bh=7LQLF750A6OWLQ2+tAwZUqWvU+022dEv0p9CNMvLXF4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iBDRPEr7+gCdGqduPf5vD8dHhPaw+BVhe7pZQRRCprysobcSJXUXAYBQc3f5vbISp
-         eUN+nJ+aKE6j7K0rdEkuvWtzSpQ+SkPrIQdZsdxTB3o03UZkQPqiSGsVqCISHq3Gbp
-         7HV2lkMBzNAKhjOxCIkNyB6H+FqXwsu6JGYQ2drY=
+        b=CR42jwmTcE9OukT1qlJHLC+07kREjjnqyj1qkJb1/gJL/KULiXxqSrqCbNHK2C2zn
+         R5LOzM+cYkbifx9muhtV4Ngx24ndvJ9D7R3f5EuXG2sBWFuirZwl2ivCHOcx1hI6c5
+         hIi8pqNXrsyJ7icpAXLyAChioXvaisrntdt7BZ0o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,19 +38,19 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>,
         Sedat Dilek <sedat.dilek@gmail.com>
-Subject: [PATCH 5.17 002/114] iwlwifi: iwl-dbg: Use del_timer_sync() before freeing
+Subject: [PATCH 5.15 002/102] iwlwifi: iwl-dbg: Use del_timer_sync() before freeing
 Date:   Mon, 16 May 2022 21:35:36 +0200
-Message-Id: <20220516193625.563527053@linuxfoundation.org>
+Message-Id: <20220516193624.062202071@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
-References: <20220516193625.489108457@linuxfoundation.org>
+In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
+References: <20220516193623.989270214@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,10 +87,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c b/drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c
-index 42f6f8bb83be..901600ca6f0e 100644
+index 125479b5c0d6..fc4197bf2478 100644
 --- a/drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c
 +++ b/drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c
-@@ -362,7 +362,7 @@ void iwl_dbg_tlv_del_timers(struct iwl_trans *trans)
+@@ -322,7 +322,7 @@ void iwl_dbg_tlv_del_timers(struct iwl_trans *trans)
  	struct iwl_dbg_tlv_timer_node *node, *tmp;
  
  	list_for_each_entry_safe(node, tmp, timer_list, list) {

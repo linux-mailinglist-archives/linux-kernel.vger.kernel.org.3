@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5DDA529125
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F3552908D
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240762AbiEPUYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:24:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43302 "EHLO
+        id S1346843AbiEPT4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:56:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348576AbiEPT6o (ORCPT
+        with ESMTP id S1346889AbiEPTv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:58:44 -0400
+        Mon, 16 May 2022 15:51:29 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2B63DA4D;
-        Mon, 16 May 2022 12:50:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F3840917;
+        Mon, 16 May 2022 12:46:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E7E960ABE;
-        Mon, 16 May 2022 19:50:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72EADC34100;
-        Mon, 16 May 2022 19:50:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA7256151D;
+        Mon, 16 May 2022 19:45:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8E6EC385AA;
+        Mon, 16 May 2022 19:45:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730647;
-        bh=jpiRU41G7rib5KT8rX+ATDSBSQFLApOjYbiJIWyGoGA=;
+        s=korg; t=1652730359;
+        bh=tp+iY+5N+WnKZV1bBz/lKDeRyBo9XckND8D3YCkF+Ps=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FzBojgvKSlq6PdEqdqObIml/cSWWgbmMBhV47oM8/Jt+3Am2HBvVw+WWRcrSP214W
-         2dcdNlD5qXF5rfnjUlcL/k/lsEA7jQoKKIJICck1BtH8LeBm2CxNLepEnB875fC7NE
-         cpcBqSEV81gXxr9dryOHhy/7COj+bjsXA0jlm0zc=
+        b=Z8IcxtN5sHgIkor5hwOBmAdp4iJNXsh5k3ByqDdIDRo1Faz5OJf1yWw397H+G+9Nt
+         FxwmuJ4yRjYYQSM5MwemvoXdGfkPFlP6C998T9wBotuG3kJPSQkRZgDvZV6blA367u
+         13h8ZtlvYmRuGTaokEKu5Xqd72xgEtzbWZZRxqu8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Adrian-Ken Rueegsegger <ken@codelabs.ch>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Oscar Salvador <osalvador@suse.de>,
-        David Hildenbrand <david@redhat.com>
-Subject: [PATCH 5.15 066/102] x86/mm: Fix marking of unused sub-pmd ranges
-Date:   Mon, 16 May 2022 21:36:40 +0200
-Message-Id: <20220516193625.892146402@linuxfoundation.org>
+        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH 5.10 41/66] tty: n_gsm: fix mux activation issues in gsm_config()
+Date:   Mon, 16 May 2022 21:36:41 +0200
+Message-Id: <20220516193620.602120115@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
-References: <20220516193623.989270214@linuxfoundation.org>
+In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
+References: <20220516193619.400083785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +53,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adrian-Ken Rueegsegger <ken@codelabs.ch>
+From: Daniel Starke <daniel.starke@siemens.com>
 
-commit 280abe14b6e0a38de9cc86fe6a019523aadd8f70 upstream.
+commit edd5f60c340086891fab094ad61270d6c80f9ca4 upstream.
 
-The unused part precedes the new range spanned by the start, end parameters
-of vmemmap_use_new_sub_pmd(). This means it actually goes from
-ALIGN_DOWN(start, PMD_SIZE) up to start.
+The current implementation activates the mux if it was restarted and opens
+the control channel if the mux was previously closed and we are now acting
+as initiator instead of responder, which is the default setting.
+This has two issues.
+1) No mux is activated if we keep all default values and only switch to
+initiator. The control channel is not allocated but will be opened next
+which results in a NULL pointer dereference.
+2) Switching the configuration after it was once configured while keeping
+the initiator value the same will not reopen the control channel if it was
+closed due to parameter incompatibilities. The mux remains dead.
 
-Use the correct address when applying the mark using memset.
+Fix 1) by always activating the mux if it is dead after configuration.
+Fix 2) by always opening the control channel after mux activation.
 
-Fixes: 8d400913c231 ("x86/vmemmap: handle unpopulated sub-pmd ranges")
-Signed-off-by: Adrian-Ken Rueegsegger <ken@codelabs.ch>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Oscar Salvador <osalvador@suse.de>
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
 Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220509090637.24152-2-ken@codelabs.ch
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+Link: https://lore.kernel.org/r/20220504081733.3494-2-daniel.starke@siemens.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/mm/init_64.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/tty/n_gsm.c |   12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
---- a/arch/x86/mm/init_64.c
-+++ b/arch/x86/mm/init_64.c
-@@ -902,6 +902,8 @@ static void __meminit vmemmap_use_sub_pm
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -2276,6 +2276,7 @@ static void gsm_copy_config_values(struc
  
- static void __meminit vmemmap_use_new_sub_pmd(unsigned long start, unsigned long end)
+ static int gsm_config(struct gsm_mux *gsm, struct gsm_config *c)
  {
-+	const unsigned long page = ALIGN_DOWN(start, PMD_SIZE);
-+
- 	vmemmap_flush_unused_pmd();
++	int ret = 0;
+ 	int need_close = 0;
+ 	int need_restart = 0;
  
- 	/*
-@@ -914,8 +916,7 @@ static void __meminit vmemmap_use_new_su
- 	 * Mark with PAGE_UNUSED the unused parts of the new memmap range
+@@ -2343,10 +2344,13 @@ static int gsm_config(struct gsm_mux *gs
+ 	 * FIXME: We need to separate activation/deactivation from adding
+ 	 * and removing from the mux array
  	 */
- 	if (!IS_ALIGNED(start, PMD_SIZE))
--		memset((void *)start, PAGE_UNUSED,
--			start - ALIGN_DOWN(start, PMD_SIZE));
-+		memset((void *)page, PAGE_UNUSED, start - page);
+-	if (need_restart)
+-		gsm_activate_mux(gsm);
+-	if (gsm->initiator && need_close)
+-		gsm_dlci_begin_open(gsm->dlci[0]);
++	if (gsm->dead) {
++		ret = gsm_activate_mux(gsm);
++		if (ret)
++			return ret;
++		if (gsm->initiator)
++			gsm_dlci_begin_open(gsm->dlci[0]);
++	}
+ 	return 0;
+ }
  
- 	/*
- 	 * We want to avoid memset(PAGE_UNUSED) when populating the vmemmap of
 
 

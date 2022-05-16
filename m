@@ -2,93 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC3725286A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:12:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D255E52869D
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244474AbiEPOLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 10:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
+        id S244481AbiEPOLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 10:11:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244333AbiEPOLi (ORCPT
+        with ESMTP id S244456AbiEPOLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 10:11:38 -0400
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9900F117A;
-        Mon, 16 May 2022 07:11:37 -0700 (PDT)
-Received: from toolbox.int.toradex.com ([81.221.85.15]) by mrelay.perfora.net
- (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0LxQMu-1nnvbr0Qhe-016uMT;
- Mon, 16 May 2022 16:11:25 +0200
-From:   Marcel Ziswiler <marcel@ziswiler.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 20/24] ARM: dts: imx7-colibri: remove leading zero from reg address
-Date:   Mon, 16 May 2022 16:11:20 +0200
-Message-Id: <20220516141120.494428-1-marcel@ziswiler.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220516134734.493065-1-marcel@ziswiler.com>
-References: <20220516134734.493065-1-marcel@ziswiler.com>
+        Mon, 16 May 2022 10:11:51 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075D839170
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:11:47 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id b18so26005179lfv.9
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:11:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=V/pFhyZ7PlSKfX2hWY5gCxthekoCEZH2niVLMkmY+d0=;
+        b=qD8VsVBt4UMCA5G5JENPpcOuQCAaOzdAneycAjMg6LOQpyS4sAHT54G6k2mvmnIbv2
+         98ZRbpvEtB3simyFamItgL4TNTf2gC66bDXzAOVk3KfZx4B5KylFpRhyQOVdaccaASb6
+         ukhlSb9fZ8j+Wgz/yNsIUyFXGuMUcdlvYCr0lFYE2dlugp0M7wSdfF7IgzpGbAzh6OvN
+         schXFtDwJ4M122WVipx30WqBa4jFjkUshjkwu7ZfzRgyeZMBJmUNwKOVNzjTz9Qn4Jkv
+         w8chTblgTAdDv4rljzbioSWAPaJn1tma3WPLrONkCe87raEFv7lQZpEnPEA2l+6RiJYp
+         o5TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=V/pFhyZ7PlSKfX2hWY5gCxthekoCEZH2niVLMkmY+d0=;
+        b=mciMI52w/HRkSmvos91YUAixXTkAYaIQ9lZ1amL4KUuX4vCKPVL1hw3SsrocDZp5r6
+         ay2yv651ql/0gQo6vWS1uE9ykQsB0ysmwFVxVhQdLVPbbugS4ZaDC5+IqnKeFQejySca
+         ldvR11fso4KpelDsiF4D/8ZxYC0PdboKRJrNUnW0n3l7gI9crp/yC+Hgh/X9htrUStO+
+         cf3Ak4enbsjeQFdx4o3pd+e2Qv/33Ba9pnDYCoT8jxyWVnXSjJrrtoRZgFxEOj2zw46c
+         6MbdSSjOIvprOCpIwbK/QcOSPc1WvgcO3uCSbD8qzTyU/ay/ho8KHV3s1MMiS9pe4ZXt
+         sU9A==
+X-Gm-Message-State: AOAM530QvE2Ac3u84VXMofEO5JRNW8tO1Th/Jqn6i/Z4aHMbABCrCpHk
+        QegX0Ex8DUJ9m1MfMGYc390uQQ==
+X-Google-Smtp-Source: ABdhPJyMPsqvy8XDKgku0gZQwXhmnnZ5EpgXXspxlZSWVKx1viBGeZmSndZZ79xeXmlvrRfbouhPyQ==
+X-Received: by 2002:a05:6512:33c8:b0:473:9d8f:a01b with SMTP id d8-20020a05651233c800b004739d8fa01bmr13369570lfg.619.1652710304272;
+        Mon, 16 May 2022 07:11:44 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id b5-20020ac247e5000000b0047255d2116bsm1315538lfp.154.2022.05.16.07.11.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 07:11:43 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v2] dt-bindings: mfd: samsung,exynos5433-lpass: drop useless 'dma-channels/requests' properties
+Date:   Mon, 16 May 2022 16:11:23 +0200
+Message-Id: <20220516141123.4579-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:8KHUJfCuEQy14gIVdhN+LCRvu4wH1PdJdpoC734Fkpi3U5ZAGnR
- Wb2uupt/9jTzIvlSJ1aG4Xa/Tax79gGHmh7ivakA5BkPJY2IPtnw0sCxmr+hfM9nLgq/6Ub
- h71xOJh29IdEBN5kuz4gOSblB41WuP6e8quDmDzSUUZnk9MMmiHgteFfTFc4Sy2jTPk2NYv
- e0MEcdTPFIgf2HyhGzVyQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:PtEiIZzTocE=:iaK2PpvvlAiQw4fP3vSoez
- KU0Rhrp7DIjiT6PhqfWRzFPE8rjxQqpCdS4oiiFll4UZS1OqqYyWHkYm40XLa8cg6WTOM6UF7
- 4diC49kdgVuePhN0xHUIqu+e+MofkJ/3tzdzcJXbz/tjokNWDE7OqvBeCM+SIhsE9Wce8FJuR
- ouFjBG6HzjHAdV9C/gia+JPoY67rddhtk1Ad1HE7GLmn+M9CBOqykQwm2rg73G8oDrntqGDQl
- xgipFxrs8trLkf/T85qM/Uk4nHCrfT1bd7uWncqtGS3SNyyT4U3/C2GsVK0DUTOyAhXatsvCV
- q2ZwQOVwrg2N5dUxYrC7OQxwAYzTYqhSXPr6cpntX97MiW498LxKH8jipNr86uXHFRnxG5eTA
- TF2fqb47CDlFjM7Vb3yN78i0hsDFk4GZokpj/3uWG249oSWBghLL0E/0jy1XXzM8A/VVA6rZs
- Z76acMXiw329BKeavxhvj/Lu0RGsd1fEj+pkFyKjBLpe1hIFiEqZZDIFTlIMmNnuEgvOwJ0RU
- XDWTyaVym/P3MWn+sahyYD1WxuDSUIQVbH9zFk8ly/tSuGKuWjNJNKA0dXhwOinwcq1GOIJ9l
- /evKqlIZmUB+OtPGml+Uuou7yErRmwoROU8kqQewI6QmeWJowimnV073WWeUJ1oG1h4VdZbwx
- tdQmUuwzApBAzGpD3S59WIzugq60Rd2brveHEu8YlBbm3gc+ppgbuWXhZcc6z4J1ep2dnM+VF
- OuFrRsfZv7rD1bOq8fCjs4kboRQHablp9ix3ulFODmC/5YMbkMsnn2WTkcU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+The pl330 DMA controller provides number of DMA channels and requests
+through its registers, so duplicating this information (with a chance of
+mistakes) in DTS is pointless.  Additionally the DTS used always wrong
+property names which causes DT schema check failures - the bindings
+documented 'dma-channels' and 'dma-requests' properties without leading
+hash sign.
 
-Remove the unnecessary leading zero from the reg address.
+Reported-by: Rob Herring <robh@kernel.org>
+Fixes: e18183cefc8b ("mfd: Add DT bindings documentation for Samsung Exynos LPASS")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+Acked-by: Rob Herring <robh@kernel.org>
 
-Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 ---
 
-(no changes since v1)
+Changes since v1:
+1. v1 was ment to be applied but I cannot find it in MFD tree.
+2. Drop the properties entirely as turned out during discussions.
 
- arch/arm/boot/dts/imx7-colibri.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v1: https://lore.kernel.org/all/YmpkE0FgEhPNneg+@google.com/
+---
+ .../devicetree/bindings/mfd/samsung,exynos5433-lpass.yaml       | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/imx7-colibri.dtsi b/arch/arm/boot/dts/imx7-colibri.dtsi
-index 065d8f55f326..cbe4f072d4ef 100644
---- a/arch/arm/boot/dts/imx7-colibri.dtsi
-+++ b/arch/arm/boot/dts/imx7-colibri.dtsi
-@@ -398,7 +398,7 @@ codec: sgtl5000@a {
- 		compatible = "fsl,sgtl5000";
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&pinctrl_sai1_mclk>;
--		reg = <0x0a>;
-+		reg = <0xa>;
- 		VDDA-supply = <&reg_module_3v3_avdd>;
- 		VDDD-supply = <&reg_DCDC3>;
- 		VDDIO-supply = <&reg_module_3v3>;
+diff --git a/Documentation/devicetree/bindings/mfd/samsung,exynos5433-lpass.yaml b/Documentation/devicetree/bindings/mfd/samsung,exynos5433-lpass.yaml
+index f7bb67d10eff..69c15744c864 100644
+--- a/Documentation/devicetree/bindings/mfd/samsung,exynos5433-lpass.yaml
++++ b/Documentation/devicetree/bindings/mfd/samsung,exynos5433-lpass.yaml
+@@ -79,8 +79,6 @@ examples:
+             clocks = <&cmu_aud CLK_ACLK_DMAC>;
+             clock-names = "apb_pclk";
+             #dma-cells = <1>;
+-            #dma-channels = <8>;
+-            #dma-requests = <32>;
+             power-domains = <&pd_aud>;
+         };
+ 
 -- 
-2.35.1
+2.32.0
 

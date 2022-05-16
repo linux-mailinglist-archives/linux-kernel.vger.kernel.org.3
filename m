@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E66AF527DEA
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90D8E527DF1
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240589AbiEPGzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 02:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33944 "EHLO
+        id S240587AbiEPGzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 02:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240573AbiEPGzQ (ORCPT
+        with ESMTP id S240570AbiEPGzo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 02:55:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE88366B1
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:55:15 -0700 (PDT)
+        Mon, 16 May 2022 02:55:44 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460E6366A8
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:55:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E71B9B80B55
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:55:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2AEAC341C5
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:55:12 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7E743CE1101
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:55:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9F5EC36AE7
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:55:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652684112;
-        bh=wiA8FGI75YrhJytAH6LfccFoNYeTu2gqXP2d9q68wmE=;
+        s=k20201202; t=1652684136;
+        bh=VqIRCv2LMNB0QFdFUt96jLC25HR73ExKxi3u86pjpWE=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QBcl4ClJ6DSsqgG12TPkgIFLpZdex++xIZWM/ijBVeyIPLm7SFadVpGwPs6jFVfwS
-         f+K1Qe3VdyFNR+1ajdzAmUmUJ3rhTV67Wk16lBjlTGu/ichk+GFD3Yv48lDvDT0ncD
-         dewzk5kehdxZa3Gk9WEB0NIwks73bRUkPSArzey4aW/ZM/MHqlGwQcJHNPq3JBTEEh
-         edMNohwGZeiaynqVgSqz30fjAb5VYdtOP3jw8XONk9XiAWr0A/yxBgfRbB7TrHMhxf
-         hy6SVauBONMj33MHJtv8NIHf2+GKhZZKWi6myEWcQAgNkN3m6x+m5CbwG9H/nEwxvX
-         uh6eKoA4os53Q==
-Received: by mail-vs1-f49.google.com with SMTP id w124so14521096vsb.8
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:55:12 -0700 (PDT)
-X-Gm-Message-State: AOAM530B/LbICDBnmVD1C/xMwZF+r51mK/oO0B5zuWeQRaWIPzjU9nMN
-        HKEO659+++19tKySACWJ2NLfwg6/BwCX1dhIrzo=
-X-Google-Smtp-Source: ABdhPJxqZd+B6RKf18XydNXla4kQ0DeUyoAzG1PpmIb+sedlMpCmC9EXBvzh4A5Oqa7KT0dW2lW6LBCsjdOZBV2BUBo=
-X-Received: by 2002:a05:6102:390b:b0:32d:5fc3:bd2c with SMTP id
- e11-20020a056102390b00b0032d5fc3bd2cmr5079622vsu.51.1652684111598; Sun, 15
- May 2022 23:55:11 -0700 (PDT)
+        b=Qru5duK8wRBYYrhrERVxr3VWex79J7Nw+63a7Aegi/amXc63tnm9Lnl4KH2VR3bjy
+         WezbNMt1G3ZeDuJeUN2+cOU0TL/R6HOlmcxTmaym2uH5d7nEqmiFuLFs5R3zYD/ZHC
+         qZBuX6hY8fYIHQ2h+E7Bam7Cbg+2mbGDswRhsloejAvGDtm1Ijkmni3pjg+Ejekgoh
+         hhICXed1kIIujYIoqSN/DUaKtjlPo3QfCY6kKbQFiULvN8A4M3LIahmO7LwyjUB9U4
+         qHCVxD0kFrldnbmhQoaYMf1nz9Eb/98f7rLlorzE3RdfteoYAMOlhaBzFaCP6+9kki
+         oGHUU1S/6bIBg==
+Received: by mail-ua1-f51.google.com with SMTP id ay15so5450314uab.9
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:55:36 -0700 (PDT)
+X-Gm-Message-State: AOAM5319E2FSIiiiahVcJKqvPykBPSf5DjQw6thBBZzUHN1hcBuI0uP5
+        /g7qDrwoKgtz+AaLooEjsi47PcWhw+vQEo/0MKU=
+X-Google-Smtp-Source: ABdhPJxmtz2zRffn70WwdXZCEN/EtZzhyD5YAzH08JCQyLUCluirTTig9RHWjzPE9xvnfEBH+E790EU75vYagB1kBNc=
+X-Received: by 2002:a9f:23c2:0:b0:365:958:e807 with SMTP id
+ 60-20020a9f23c2000000b003650958e807mr5603921uao.114.1652684135694; Sun, 15
+ May 2022 23:55:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220511192921.2223629-1-heiko@sntech.de> <20220511192921.2223629-6-heiko@sntech.de>
-In-Reply-To: <20220511192921.2223629-6-heiko@sntech.de>
+References: <20220511192921.2223629-1-heiko@sntech.de> <20220511192921.2223629-7-heiko@sntech.de>
+In-Reply-To: <20220511192921.2223629-7-heiko@sntech.de>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 16 May 2022 14:55:00 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTR7WXDNfvxYaSsTaqjinyRBfQsfz+C7HvtKh4qyviFf6w@mail.gmail.com>
-Message-ID: <CAJF2gTR7WXDNfvxYaSsTaqjinyRBfQsfz+C7HvtKh4qyviFf6w@mail.gmail.com>
-Subject: Re: [PATCH 05/12] riscv: extend concatenated alternatives-lines to
- the same length
+Date:   Mon, 16 May 2022 14:55:24 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTDnqXKuEBGttN-1sJD9GH8Y5FLP2R5cpxnWnkfyqaFVA@mail.gmail.com>
+Message-ID: <CAJF2gTTDnqXKuEBGttN-1sJD9GH8Y5FLP2R5cpxnWnkfyqaFVA@mail.gmail.com>
+Subject: Re: [PATCH 06/12] riscv: prevent compressed instructions in alternatives
 To:     Heiko Stuebner <heiko@sntech.de>
 Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
@@ -88,58 +87,102 @@ Reviewed-by: Guo Ren <guoren@kernel.org>
 
 On Thu, May 12, 2022 at 3:29 AM Heiko Stuebner <heiko@sntech.de> wrote:
 >
-> ALT_NEW_CONTENT already uses same-length assembler lines, so
-> extend this to the other elements as well.
+> Instructions are opportunistically compressed by the RISC-V assembler
+> when possible, but in alternatives-blocks both the old and new content
+> need to be the same size, so having the toolchain do somewhat random
+> optimizations will cause strange side-effects like
+> "attempt to move .org backwards" compile-time errors.
 >
-> This makes it more readable when these elements need to be extended
-> in the future.
+> Already a simple "and" used in alternatives assembly will cause these
+> mismatched code sizes.
+>
+> So prevent compressed instructions to be generated in alternatives-
+> code and use option-push and -pop to only limit this to the relevant
+> code blocks
 >
 > Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
 > Reviewed-by: Philipp Tomsich <philipp.tomsich@vrull.eu>
 > ---
->  arch/riscv/include/asm/alternative-macros.h | 20 ++++++++++----------
->  1 file changed, 10 insertions(+), 10 deletions(-)
+>  arch/riscv/include/asm/alternative-macros.h | 24 +++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
 >
 > diff --git a/arch/riscv/include/asm/alternative-macros.h b/arch/riscv/include/asm/alternative-macros.h
-> index 9e04cd53afc8..8c2bbc7bbe50 100644
+> index 8c2bbc7bbe50..e13b1f6bb400 100644
 > --- a/arch/riscv/include/asm/alternative-macros.h
 > +++ b/arch/riscv/include/asm/alternative-macros.h
-> @@ -62,14 +62,14 @@
->  #include <asm/asm.h>
->  #include <linux/stringify.h>
+> @@ -21,7 +21,11 @@
+>         .popsection
+>         .subsection 1
+>  888 :
+> +       .option push
+> +       .option norvc
+> +       .option norelax
+>         \new_c
+> +       .option pop
+>  889 :
+>         .previous
+>         .org    . - (889b - 888b) + (887b - 886b)
+> @@ -31,7 +35,11 @@
 >
-> -#define ALT_ENTRY(oldptr, newptr, vendor_id, errata_id, newlen) \
-> -       RISCV_PTR " " oldptr "\n" \
-> -       RISCV_PTR " " newptr "\n" \
-> -       REG_ASM " " vendor_id "\n" \
-> -       REG_ASM " " newlen "\n" \
-> +#define ALT_ENTRY(oldptr, newptr, vendor_id, errata_id, newlen)                \
-> +       RISCV_PTR " " oldptr "\n"                                       \
-> +       RISCV_PTR " " newptr "\n"                                       \
-> +       REG_ASM " " vendor_id "\n"                                      \
-> +       REG_ASM " " newlen "\n"                                         \
->         ".word " errata_id "\n"
+>  .macro __ALTERNATIVE_CFG old_c, new_c, vendor_id, errata_id, enable
+>  886 :
+> +       .option push
+> +       .option norvc
+> +       .option norelax
+>         \old_c
+> +       .option pop
+>  887 :
+>         ALT_NEW_CONTENT \vendor_id, \errata_id, \enable, \new_c
+>  .endm
+> @@ -42,7 +50,11 @@
+>  .macro __ALTERNATIVE_CFG_2 old_c, new_c_1, vendor_id_1, errata_id_1, enable_1, \
+>                                   new_c_2, vendor_id_2, errata_id_2, enable_2
+>  886 :
+> +       .option push
+> +       .option norvc
+> +       .option norelax
+>         \old_c
+> +       .option pop
+>  887 :
+>         ALT_NEW_CONTENT \vendor_id_1, \errata_id_1, \enable_1, \new_c_1
+>         ALT_NEW_CONTENT \vendor_id_2, \errata_id_2, \enable_2, \new_c_2
+> @@ -76,7 +88,11 @@
+>         ".popsection\n"                                                 \
+>         ".subsection 1\n"                                               \
+>         "888 :\n"                                                       \
+> +       ".option push\n"                                                \
+> +       ".option norvc\n"                                               \
+> +       ".option norelax\n"                                             \
+>         new_c "\n"                                                      \
+> +       ".option pop\n"                                                 \
+>         "889 :\n"                                                       \
+>         ".previous\n"                                                   \
+>         ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
+> @@ -85,7 +101,11 @@
 >
-> -#define ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c) \
-> +#define ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)           \
->         ".if " __stringify(enable) " == 1\n"                            \
->         ".pushsection .alternative, \"a\"\n"                            \
->         ALT_ENTRY("886b", "888f", __stringify(vendor_id), __stringify(errata_id), "889f - 888f") \
-> @@ -83,10 +83,10 @@
->         ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
->         ".endif\n"
->
-> -#define __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, enable) \
-> -       "886 :\n"       \
-> -       old_c "\n"      \
-> -       "887 :\n"       \
-> +#define __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, enable)  \
-> +       "886 :\n"                                                       \
-> +       old_c "\n"                                                      \
-> +       "887 :\n"                                                       \
+>  #define __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, enable)  \
+>         "886 :\n"                                                       \
+> +       ".option push\n"                                                \
+> +       ".option norvc\n"                                               \
+> +       ".option norelax\n"                                             \
+>         old_c "\n"                                                      \
+> +       ".option pop\n"                                                 \
+>         "887 :\n"                                                       \
 >         ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
 >
->  #define _ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, CONFIG_k) \
+> @@ -97,7 +117,11 @@
+>                                    new_c_2, vendor_id_2, errata_id_2,   \
+>                                         enable_2)                       \
+>         "886 :\n"                                                       \
+> +       ".option push\n"                                                \
+> +       ".option norvc\n"                                               \
+> +       ".option norelax\n"                                             \
+>         old_c "\n"                                                      \
+> +       ".option pop\n"                                                 \
+>         "887 :\n"                                                       \
+>         ALT_NEW_CONTENT(vendor_id_1, errata_id_1, enable_1, new_c_1)    \
+>         ALT_NEW_CONTENT(vendor_id_2, errata_id_2, enable_2, new_c_2)
 > --
 > 2.35.1
 >

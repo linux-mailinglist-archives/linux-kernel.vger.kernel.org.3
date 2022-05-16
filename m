@@ -2,93 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 631F3528747
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:42:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE5452874E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240800AbiEPOmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 10:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49056 "EHLO
+        id S244463AbiEPOnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 10:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232814AbiEPOmg (ORCPT
+        with ESMTP id S239432AbiEPOnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 10:42:36 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCA32DD4C
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:42:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652712155; x=1684248155;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uokgEubVQ9i6ZsvjgXaoP93pmMIsQrs/2gbc1dQeuNQ=;
-  b=iORNAeVZtATqe/x2j7LN2jHujPzNO839G2oA8AaITXSAygJgBFD/J2Ay
-   c1Tz37XyJtDD98Mg2gsssL7TkP8eIILpCmaRBusyBDlCm3BCxsa8yO9ll
-   GN1g1PVEdStjvUkvVf/cuoTkha7WPXUZdndmBj12d38sDGEhKG7LOixVP
-   KmYE0WissxrzsJDbvjmF8GrQWNcCf+g9cYE1+MbThYY8SomoKp6mBnLjR
-   EyOdnYN4UqRp0k2T/ig+yWmyLYZD9pbtTyBx1a3ABsOz9aMUXab8z3sID
-   0/adlYqPI32V9YmMxCqYRuXwazyLpK5l7GeZ0QPgIaq4XNYjasHAw8dcl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="296121529"
-X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
-   d="scan'208";a="296121529"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 07:42:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
-   d="scan'208";a="699565857"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 16 May 2022 07:42:33 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nqbvc-00006f-ID;
-        Mon, 16 May 2022 14:42:32 +0000
-Date:   Mon, 16 May 2022 22:42:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: vmlinux.o: warning: objtool: __fentry__()+0x8d: call without frame
- pointer save/setup
-Message-ID: <202205162241.fTWJlbRp-lkp@intel.com>
+        Mon, 16 May 2022 10:43:50 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F172DD4C
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:43:49 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so14592524pjq.2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:43:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4xPd51zy939NVBEotrgpcfDeP3YTrS+eiImf3uuWQYk=;
+        b=URqpWG+tQCo0B0z+EiUx8eEm3LkP8jqdiCzJJcGqEyaaKqLZ6e9trHZgWE2mmdjirs
+         +VXwK5XZcro7CBTFKTWEC6zNiU1BTFjOExDHzdZbLSaa0TyNnJEFYtSr9QOaJHCM+MrP
+         h58HRtiLsFVtFuQiqScl44bLQ84bvYYaaQxZUut4P92muAa+1XeO7pKMeXSfhOTR8roX
+         4ZaI4G4xGiJqoH0SHf3OVf4bJbyPe5SJxUnwKCEs/PEu9DWq7s2aYtLyXWrldI8Zl+j0
+         Ov7NYS9s96FkukaTngcb5vLjzl7iPwCDXqK80r2Loho4mvlSCBTdzgOfnELR5tESFM8e
+         AO4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4xPd51zy939NVBEotrgpcfDeP3YTrS+eiImf3uuWQYk=;
+        b=DYlWGfMdUY8T7M9KOD5lXJ1YqNsgVVQfrfWOwlalaXTpffXbKAIy4646ILzg+6Zosx
+         Wm+2Ny9Yo5eV9oa39u887oPqjU6fAwTcooIO/ZLKHeWwptr6DdIHn+xtwb7U4odM3WgV
+         tuZHKg8SzIBg8wGxXms6ID2nb6lJC7kCWwvz4RYoVUeEBfGYJY3FIJEz8oCLihQnJpHC
+         jUqrKYtsHSwjq6U2zUlk7Sy4TjtBV/NEW98gnc6GQmqDogAIZCeUj9QGhwgL0vrMZ8xA
+         Em/g6UXpWgiHt2EvYGGHlW7c0jEGNiNGMwr0wErncNVeW4YLhkxeZG9EKD+rApLJG3oD
+         VItw==
+X-Gm-Message-State: AOAM532BRvpHUDM7LWFgp1cngLCuyPelE5ReYxY2EFrxufH/GtdqlouU
+        l+kBAhSoJvqAflyORAix8L1waKhHyvJMFp8Kx5qAQg==
+X-Google-Smtp-Source: ABdhPJyaT5uDQ4TotygR2N3udnaNMAmiSHsJCAkRMxVPOX+fzafhOA2wZgYN0W5QErhsEzGFMgAZujKPdTzdNUcQtHE=
+X-Received: by 2002:a17:90b:1e4e:b0:1dc:583c:398 with SMTP id
+ pi14-20020a17090b1e4e00b001dc583c0398mr19832864pjb.232.1652712229263; Mon, 16
+ May 2022 07:43:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220509140439.1361352-1-yangyingliang@huawei.com>
+In-Reply-To: <20220509140439.1361352-1-yangyingliang@huawei.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Mon, 16 May 2022 16:43:38 +0200
+Message-ID: <CAG3jFyv8rjx2M9vZPbqNqT=ngv5JNt8PskQFR839fd6Z9gDVUw@mail.gmail.com>
+Subject: Re: [PATCH] media: camss: csid: fix wrong size passed to devm_kmalloc_array()
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-media@vger.kernel.org, mchehab@kernel.org,
+        hverkuil-cisco@xs4all.nl, bryan.odonoghue@linaro.org,
+        vladimir.zapolskiy@linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+On Mon, 9 May 2022 at 15:53, Yang Yingliang <yangyingliang@huawei.com> wrote:
+>
+> 'supplies' is a pointer, the real size of struct regulator_bulk_data
+> should be pass to devm_kmalloc_array().
+>
+> Fixes: 0d8140179715 ("media: camss: Add regulator_bulk support")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  drivers/media/platform/qcom/camss/camss-csid.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
+> index f993f349b66b..80628801cf09 100644
+> --- a/drivers/media/platform/qcom/camss/camss-csid.c
+> +++ b/drivers/media/platform/qcom/camss/camss-csid.c
+> @@ -666,7 +666,7 @@ int msm_csid_subdev_init(struct camss *camss, struct csid_device *csid,
+>         if (csid->num_supplies) {
+>                 csid->supplies = devm_kmalloc_array(camss->dev,
+>                                                     csid->num_supplies,
+> -                                                   sizeof(csid->supplies),
+> +                                                   sizeof(*csid->supplies),
+>                                                     GFP_KERNEL);
+>                 if (!csid->supplies)
+>                         return -ENOMEM;
+> --
+> 2.25.1
+>
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   42226c989789d8da4af1de0c31070c96726d990c
-commit: ed53a0d971926e484d86cce617ec02a7ee85c3fe x86/alternative: Use .ibt_endbr_seal to seal indirect calls
-date:   9 weeks ago
-config: x86_64-randconfig-c022-20220516 (https://download.01.org/0day-ci/archive/20220516/202205162241.fTWJlbRp-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ed53a0d971926e484d86cce617ec02a7ee85c3fe
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout ed53a0d971926e484d86cce617ec02a7ee85c3fe
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   vmlinux.o: warning: objtool: ibt_selftest()+0x11: sibling call from callable instruction with modified stack frame
->> vmlinux.o: warning: objtool: __fentry__()+0x8d: call without frame pointer save/setup
-   vmlinux.o: warning: objtool: ibt_selftest()+0x1e: return with modified stack frame
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Reviewed-by: Robert Foss <robert.foss@linaro.org>

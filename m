@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D0F528E16
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC551528E2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345557AbiEPTkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44078 "EHLO
+        id S1345810AbiEPTjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345600AbiEPTi5 (ORCPT
+        with ESMTP id S1345692AbiEPTj1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:38:57 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71423F88C;
-        Mon, 16 May 2022 12:38:45 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id i40so4692715eda.7;
-        Mon, 16 May 2022 12:38:44 -0700 (PDT)
+        Mon, 16 May 2022 15:39:27 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2023EF1D;
+        Mon, 16 May 2022 12:38:56 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id tk15so7128786ejc.6;
+        Mon, 16 May 2022 12:38:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LebDF3RuPxmX1Cw/8NAKFfKs/e37d3Ws73/ZUWsOSYY=;
-        b=bseiz9mTWBFks9ltjnA8R2a+/W7/FVLzfkmSDHkJfeKfQX1rYGRuIyUViZL8yKA9mF
-         MLEAdCbqCH+RPshFcSqj8Y/AkfxtyUTdOtL2F5UnpHv0UXW0mf1LKw3QS/uRg9BEqWq7
-         QMATuJ+nvY4vq7d4KZnFOq4VS8QyGepI2Sam7Qz6f6IallvZ+rxo7sHaARhKMtw359gl
-         9H/CUYF9h8DrFCKvAY6T1zMs8VFaRAwHSyzzb1/zafJQy5vhl5bQ42vFNfVAh7T7ClI8
-         oRRmlyG0j5tAoD3DEzyuDLbHY6upzDkmAnY6zHLJ8BGTThl1mtVURC7BBqr7hvTVZUbw
-         kcCA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=4MqTQsyrPlGAY3ZVzPHFppwBaFcUmVAxjZ/gLZ8oCIM=;
+        b=DR4HwFyZjcgNl9bY9VS/vPVcdS9vGcZ4UcI0exJWuatVr6wqNn14ouE/TU7fKGYxzU
+         cUFuYJuiT3d+zuIik3iilAMuRUWnnj7sxuJ7/zGIdXqTrSvdbYMor2TAw0862NfjGKi2
+         gvUVdfusJ4TSHv5J3yCLisQ9nsjLQ+XgaiqXcG7uNWYdXAYlOJwOt2hbgKwagC/W5y81
+         GG0gSIXNzi5s5rnEfUbNqGOYBvhdh3hqKd3VgcId7RN1V+SWoo4A9F4xoSLklFztd48c
+         QJ5QmuYfxQz4foTVEE7QE2EsVgzh2s5LTvDi2SvJ77Q79KE5iApKjIjFqL29Dh2aOOMg
+         66gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LebDF3RuPxmX1Cw/8NAKFfKs/e37d3Ws73/ZUWsOSYY=;
-        b=bQAU7dH3n3ni1KT0j80EoabV5Q3NzXee7YMiF/RDOkdDdI0mfh4nwvKeA60967TDMB
-         hQds208CVNIYz+Y84XbzXe5m/H2sRwnXQPScqcAaFnbDTPaBr1KpygD4tBpk4hlDRJjs
-         R1tQNWwlOtZJi3IWSW7N2/IkkbmKWB8hkN8wDV1SXOquv1TtAa3g3o5K4bASsFUEz/4G
-         +2DFL21cAa1MPMisgszKLqyHfRWBPjzfzAtT2EhKEN7PHY5TQWbCR28qiPUO1OBt4Zi5
-         7WQG4oFlIk5R1znnYzzwhbgmFpZMtLFZLu/KR9Y0a6e7t1wEd/WEzCt6TGjhJEFCeizC
-         +kkA==
-X-Gm-Message-State: AOAM533Q6CzTq50rh+UzXdJrxu437jdpEQhqll4+4ePpZkitStn73OPm
-        Hf/lxjgW7CvqJv3HXkA2ik0=
-X-Google-Smtp-Source: ABdhPJyTP9Rwj4orjplkbScv8cYbfHA3DBy1Z17s4DcQWsXitJXORWnR2TTE2sCfqqK/ke8zXrzj6Q==
-X-Received: by 2002:a05:6402:f13:b0:428:a849:d0c1 with SMTP id i19-20020a0564020f1300b00428a849d0c1mr15059561eda.346.1652729923428;
-        Mon, 16 May 2022 12:38:43 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=4MqTQsyrPlGAY3ZVzPHFppwBaFcUmVAxjZ/gLZ8oCIM=;
+        b=MYtb1MiGnaPc0bDE2Pjm5d5YwwZB+5gxXeSfyW+fjkOa2KBCvtpu8v8fbM7aibZOro
+         l/7E4UaXF1ngBo2rWrPwmtBLWjpjZNWWZ6+0z2uc5cQOMWHQSNWk9bGWlr4Zemo3t3Gc
+         u6eYDxqq+4pZfMC/+aYiTarhuDFLZFlH7V5ZKsLyyulShQ+VkE7QG+BWNsUfMKlgPrvG
+         zlt+Y517hHcEDLv5QbFnDqbP8ZjVF3ms9EVBtIYBON0+pYUeGhCWn589fEj6pUwXfR6s
+         tGrbBNNQxy66QCQ/xKwxLIjuLkgW8cc/chMxJQycCpY/JYjUzuxawxqWfq4aoMuJE8oQ
+         SG7g==
+X-Gm-Message-State: AOAM532Xu1TPywuH8SUpq3kHaZxGwdRkWXHrh+a6PbuNC8vdYuGdSnn1
+        EoPysI+GeFWRyOHP9S3sEV8=
+X-Google-Smtp-Source: ABdhPJz99o3t2aqzUBbPpB8Umrag5RKOsZT6WcUNWQ0L92iB4gSTkFvsWzRTJzw4xvP5MgncWEnwkQ==
+X-Received: by 2002:a17:907:2d11:b0:6f4:7cf0:2275 with SMTP id gs17-20020a1709072d1100b006f47cf02275mr16523834ejc.72.1652729935167;
+        Mon, 16 May 2022 12:38:55 -0700 (PDT)
 Received: from adroid (102-167-184-091.ip-addr.vsenet.de. [91.184.167.102])
-        by smtp.gmail.com with ESMTPSA id s7-20020a170906220700b006f3ef214e45sm94042ejs.171.2022.05.16.12.38.42
+        by smtp.gmail.com with ESMTPSA id p25-20020a17090664d900b006f3ef214e41sm92831ejn.167.2022.05.16.12.38.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 12:38:43 -0700 (PDT)
+        Mon, 16 May 2022 12:38:54 -0700 (PDT)
 From:   =?UTF-8?q?Martin=20J=C3=BCcker?= <martin.juecker@gmail.com>
 To:     linux-samsung-soc@vger.kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -60,10 +60,12 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Sam Ravnborg <sam@ravnborg.org>,
         Thierry Reding <thierry.reding@gmail.com>,
         =?UTF-8?q?Martin=20J=C3=BCcker?= <martin.juecker@gmail.com>
-Subject: [PATCH 1/3] dt-bindings: display: simple: add support for Samsung LTL101AL01
-Date:   Mon, 16 May 2022 21:37:07 +0200
-Message-Id: <20220516193709.10037-1-martin.juecker@gmail.com>
+Subject: [PATCH 2/3] drm/panel: simple: add support for the Samsung LTL101AL01 panel
+Date:   Mon, 16 May 2022 21:37:08 +0200
+Message-Id: <20220516193709.10037-2-martin.juecker@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220516193709.10037-1-martin.juecker@gmail.com>
+References: <20220516193709.10037-1-martin.juecker@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -77,26 +79,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the Samsung LTL101AL01 WXGA LCD panel to the list.
+Add timings and panel description for the Samsung LTL101AL01 panel.
 
 Signed-off-by: Martin Jücker <martin.juecker@gmail.com>
 ---
- .../devicetree/bindings/display/panel/panel-simple.yaml         | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/panel/panel-simple.c | 34 ++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-index 1eb9dd4f8f58..9501b5a3c011 100644
---- a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-@@ -270,6 +270,8 @@ properties:
-       - samsung,atna33xc20
-         # Samsung 12.2" (2560x1600 pixels) TFT LCD panel
-       - samsung,lsn122dl01-c01
-+        # Samsung Electronics 10.1" WXGA (1280x800) TFT LCD panel
-+      - samsung,ltl101al01
-         # Samsung Electronics 10.1" WSVGA TFT LCD panel
-       - samsung,ltn101nt05
-         # Samsung Electronics 14" WXGA (1366x768) TFT LCD panel
+diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
+index a34f4198a534..e21f304315e4 100644
+--- a/drivers/gpu/drm/panel/panel-simple.c
++++ b/drivers/gpu/drm/panel/panel-simple.c
+@@ -3073,6 +3073,37 @@ static const struct panel_desc rocktech_rk101ii01d_ct = {
+ 	.connector_type = DRM_MODE_CONNECTOR_LVDS,
+ };
+ 
++static const struct display_timing samsung_ltl101al01_timing = {
++	.pixelclock = { 66663000, 66663000, 66663000 },
++	.hactive = { 1280, 1280, 1280 },
++	.hfront_porch = { 18, 18, 18 },
++	.hback_porch = { 36, 36, 36 },
++	.hsync_len = { 16, 16, 16 },
++	.vactive = { 800, 800, 800 },
++	.vfront_porch = { 4, 4, 4 },
++	.vback_porch = { 16, 16, 16 },
++	.vsync_len = { 3, 3, 3 },
++	.flags = DISPLAY_FLAGS_HSYNC_LOW | DISPLAY_FLAGS_VSYNC_LOW,
++};
++
++static const struct panel_desc samsung_ltl101al01 = {
++	.timings = &samsung_ltl101al01_timing,
++	.num_timings = 1,
++	.bpc = 8,
++	.size = {
++		.width = 217,
++		.height = 135,
++	},
++	.delay = {
++		.prepare = 40,
++		.enable = 300,
++		.disable = 200,
++		.unprepare = 600,
++	},
++	.bus_format = MEDIA_BUS_FMT_RGB888_1X7X4_SPWG,
++	.connector_type = DRM_MODE_CONNECTOR_LVDS,
++};
++
+ static const struct drm_display_mode samsung_ltn101nt05_mode = {
+ 	.clock = 54030,
+ 	.hdisplay = 1024,
+@@ -3966,6 +3997,9 @@ static const struct of_device_id platform_of_match[] = {
+ 	}, {
+ 		.compatible = "rocktech,rk101ii01d-ct",
+ 		.data = &rocktech_rk101ii01d_ct,
++	}, {
++		.compatible = "samsung,ltl101al01",
++		.data = &samsung_ltl101al01,
+ 	}, {
+ 		.compatible = "samsung,ltn101nt05",
+ 		.data = &samsung_ltn101nt05,
 -- 
 2.25.1
 

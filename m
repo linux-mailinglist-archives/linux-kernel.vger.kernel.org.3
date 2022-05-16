@@ -2,103 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40901527E77
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:21:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04318527E73
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240997AbiEPHU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 03:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56046 "EHLO
+        id S241040AbiEPHU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 03:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235701AbiEPHUY (ORCPT
+        with ESMTP id S241015AbiEPHUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 03:20:24 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7CB14082
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:20:22 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id 204so13281148pfx.3
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:20:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eCmVhbpaMLMmcTFdi6DgkFjueZN+yXGyrRASDyrwkks=;
-        b=MimcTO2WieI6l/6Khw/SNAmf82P6jKFwx547sGazZdWl8jRlMD2VMo9wPw1mUBdEz+
-         pYFe6FYiJfJKf2Ch4vXIvy2Fr/ZR7QNJS2lDlNL2jgRq1VvhGUA6OzLaxR8ZSupOeMJh
-         1HUdraWPUJkoDwqjXYts1EBLu27FtoRajh0DAb7TDQaTmQsPN5Ll3Wm4I4QgaE7MMrEH
-         /jgqad0rwlrhn8n1OChb3ksvHzDqPrJXPzhjjzcqkkUHN3c0VoHjPaE2NNFObHV8T39B
-         JuRjaTYsjiQm3kLDtI3kPME6aMd2f6kmZZtQB6pmzW5Jidmpg2q/EJTgWmfaqWZsDccQ
-         HSmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eCmVhbpaMLMmcTFdi6DgkFjueZN+yXGyrRASDyrwkks=;
-        b=WfyppNldKFfHKLyCSqyKUmNQhxTczBMIk5bdbsq40vXkyqcPto306merQX8JsI3ss5
-         vlwIg/yrt7dFS7pdk/rwTxiQwD/kR87tdEVNsqg2h3cDxUAXLhpSVe8hZWaX9WzUph3A
-         jndiRJiESI+P48ZrPUNu7dnEyGPMUdHBNLQ2t3a+qX+IDCO8amgnvHidDe8eFahEbweN
-         mWNZ38qNU94IwfmsV0kM1SqCzYt3QZTziUZ/wkcOU+A6RUQY4CumLIfXfkXOzNWUum2y
-         eS9rBxS1iwiDiL3P1NVN4ItqexPaw5rUAlubIhfqQMsajNcfgUF3laZJPdLvf0faHo+A
-         RWTA==
-X-Gm-Message-State: AOAM530JtcxHwZDPLwjrxEgctmiwDcXejBaVWYXpfFb5Q1MypnvsQAqZ
-        tju1M+b/YiMYwwselhBbzHc=
-X-Google-Smtp-Source: ABdhPJzf+Ui53KjS86ZZVJHXvuIFOxk2AVw75xGanp9kj3NyZDFE2NKOkhUVdf8WeXh/a/C5tCPwJg==
-X-Received: by 2002:a05:6a00:b52:b0:510:5cbd:de94 with SMTP id p18-20020a056a000b5200b005105cbdde94mr16009274pfo.19.1652685621649;
-        Mon, 16 May 2022 00:20:21 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id o130-20020a62cd88000000b0050dc7628179sm6035949pfg.83.2022.05.16.00.20.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 00:20:21 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Heiko Stuebner <heiko@sntech.de>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] soc: rockchip: Fix refcount leak in rockchip_grf_init
-Date:   Mon, 16 May 2022 11:20:10 +0400
-Message-Id: <20220516072013.19731-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 16 May 2022 03:20:54 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A0DBE0F;
+        Mon, 16 May 2022 00:20:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652685653; x=1684221653;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5Bmrym4ZBrZuWxcL4DbvzKLGJFYIJDTX69S3vd8Egxg=;
+  b=HHdhJkt4Uy0JAko18zXwuDaZT6xuJolbnr3XuUNobk5SBtZHx5oSomxI
+   XPh+IL6jTkA9xnJgtJ/6QPqup/R/NiprPlXLbKz93josntWePfubuPAUS
+   Mo4tSUAkiBGd02ZKRsiJXrI5U/fBU6ZlK2/c0RGo06kGo+HkN4e3OLUcH
+   K0glFQ9b0q07Ww1FpsPbgJhIe9H5FUUzb0xy4ir3LBQ0g5Qcj3IuBqJD2
+   ARpttl5x9MFpWuZnCQTOKCJZaqXgDVy6li27nHuvEZPuNJXZETEk4fx02
+   a7Iz4jdQqjK4fyCriIFhL5dqTY2qIDubCCEEcwFMP908t5vr+BI5HWvqt
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="269579094"
+X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
+   d="scan'208";a="269579094"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 00:20:52 -0700
+X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
+   d="scan'208";a="596388661"
+Received: from rhudecze-mobl.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.36.15])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 00:20:46 -0700
+Message-ID: <dd53c419-efc4-5b2f-9fdc-e23e7145dbd1@intel.com>
+Date:   Mon, 16 May 2022 10:20:42 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.8.1
+Subject: Re: [PATCH V2 03/11] perf/x86: Add support for TSC in nanoseconds as
+ a perf event clock
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        H Peter Anvin <hpa@zytor.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "sdeep@vmware.com" <sdeep@vmware.com>,
+        "pv-drivers@vmware.com" <pv-drivers@vmware.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "Andrew.Cooper3@citrix.com" <Andrew.Cooper3@citrix.com>,
+        "Hall, Christopher S" <christopher.s.hall@intel.com>
+References: <20220214110914.268126-1-adrian.hunter@intel.com>
+ <20220214110914.268126-4-adrian.hunter@intel.com>
+ <YiIXFmA4vpcTSk2L@hirez.programming.kicks-ass.net>
+ <853ce127-25f0-d0fe-1d8f-0b0dd4f3ce71@intel.com>
+ <YiXVgEk/1UClkygX@hirez.programming.kicks-ass.net>
+ <30383f92-59cb-2875-1e1b-ff1a0eacd235@intel.com>
+ <YiYZv+LOmjzi5wcm@hirez.programming.kicks-ass.net>
+ <013b5425-2a60-e4d4-b846-444a576f2b28@intel.com>
+ <6f07a7d4e1ad4440bf6c502c8cb6c2ed@intel.com>
+ <c3e1842b-79c3-634a-3121-938b5160ca4c@intel.com>
+ <50fd2671-6070-0eba-ea68-9df9b79ccac3@intel.com> <87ilqx33vk.ffs@tglx>
+ <ff1e190a-95e6-e2a6-dc01-a46f7ffd2162@intel.com> <87fsm114ax.ffs@tglx>
+ <c8033229-97a0-3e4c-66d5-74c0d1d4e15c@intel.com> <87ee1iw2ao.ffs@tglx>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <87ee1iw2ao.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_find_matching_node_and_match returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
-Add missing of_node_put() to avoid refcount leak.
+On 28/04/22 02:10, Thomas Gleixner wrote:
+> On Tue, Apr 26 2022 at 09:51, Adrian Hunter wrote:
+>> On 25/04/22 20:05, Thomas Gleixner wrote:
+>>> On Mon, Apr 25 2022 at 16:15, Adrian Hunter wrote:
+>>>> On 25/04/22 12:32, Thomas Gleixner wrote:
+>>>>> It's hillarious, that we still cling to this pvclock abomination, while
+>>>>> we happily expose TSC deadline timer to the guest. TSC virt scaling was
+>>>>> implemented in hardware for a reason.
+>>>>
+>>>> So you are talking about changing VMX TCS Offset on every VM-Entry to try to hide
+>>>> the time jumps when the VM is scheduled out?  Or neglect that and just let the time
+>>>> jumps happen?
+>>>>
+>>>> If changing VMX TCS Offset, how can TSC be kept consistent between each VCPU i.e.
+>>>> wouldn't that mean each VCPU has to have the same VMX TSC Offset?
+>>>
+>>> Obviously so. That's the only thing which makes sense, no?
+>>
+>> [ Sending this again, because I notice I messed up the email "From" ]
+>>
+>> But wouldn't that mean changing all the VCPUs VMX TSC Offset at the same time,
+>> which means when none are currently executing?  How could that be done?
+> 
+> Why would you change TSC offset after the point where a VM is started
+> and why would it be different per vCPU?
+> 
+> Time is global and time moves on when a vCPU is scheduled out. Anything
+> else is bonkers, really. If the hypervisor tries to screw with that then
+> how does the guest do timekeeping in a consistent way?
+> 
+>     CLOCK_REALTIME = CLOCK_MONOTONIC + offset
+> 
+> That offset changes when something sets the clock, i.e. clock_settime(),
+> settimeofday() or adjtimex() in case that NTP cannot compensate or for
+> the beloved leap seconds adjustment. At any other time the offset is
+> constant.
+> 
+> CLOCK_MONOTONIC is derived from the underlying clocksource which is
+> expected to increment with constant frequency and that has to be
+> consistent accross _all_ vCPUs of a particular VM.
+> 
+> So how would a hypervisor 'hide' scheduled out time w/o screwing up
+> timekeeping completely?
+> 
+> The guest TSC which is based on the host TSC is:
+> 
+>     guestTSC = offset + hostTSC * factor;
+> 
+> If you make offset different between guest vCPUs then timekeeping in the
+> guest is screwed.
+> 
+> The whole point of that paravirt clock was to handle migration between
+> hosts which did not have the VMCS TSC scaling/offset mechanism. The CPUs
+> which did not have that went EOL at least 10 years ago.
+> 
+> So what are you concerned about?
 
-Fixes: 4c58063d4258 ("soc: rockchip: add driver handling grf setup")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/soc/rockchip/grf.c | 2 ++
- 1 file changed, 2 insertions(+)
+Thanks for the explanation.
 
-diff --git a/drivers/soc/rockchip/grf.c b/drivers/soc/rockchip/grf.c
-index 494cf2b5bf7b..343ff61ccccb 100644
---- a/drivers/soc/rockchip/grf.c
-+++ b/drivers/soc/rockchip/grf.c
-@@ -148,12 +148,14 @@ static int __init rockchip_grf_init(void)
- 		return -ENODEV;
- 	if (!match || !match->data) {
- 		pr_err("%s: missing grf data\n", __func__);
-+		of_node_put(np);
- 		return -EINVAL;
- 	}
- 
- 	grf_info = match->data;
- 
- 	grf = syscon_node_to_regmap(np);
-+	of_node_put(np);
- 	if (IS_ERR(grf)) {
- 		pr_err("%s: could not get grf syscon\n", __func__);
- 		return PTR_ERR(grf);
--- 
-2.25.1
+Changing TSC offset / scaling makes it much harder for Intel PT on
+the host to use, so there is no sense in my pushing for that at this
+time when there is anyway kernel option no-kvmclock.
 

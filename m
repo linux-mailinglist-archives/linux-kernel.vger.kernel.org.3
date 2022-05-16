@@ -2,112 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25155527B94
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 03:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29ADB527B98
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 03:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239073AbiEPB4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 21:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
+        id S239204AbiEPB5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 21:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236803AbiEPBz4 (ORCPT
+        with ESMTP id S236803AbiEPB5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 21:55:56 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5919462C7
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 18:55:54 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id gj17-20020a17090b109100b001d8b390f77bso16013694pjb.1
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 18:55:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=KQnul6BomttjXRAElW8MXsYWinaGJAdMxQ34JNltdPE=;
-        b=lHEnF6heGEjJ30vDGmBAz//0dsf9/RNBPwzN+OFFUpaPvjAovS+THylUPUacjSp6df
-         12B4Wy+uYihi9szlnkEPWXJDvL5sd4FqIbsJ5+5K6L0zjbr5QUN7eFoVdz0Uqo2BxA9C
-         AqzLXKBpDNfAG1hXLUxIajsWYpek5ukHHrY1iwVscUHinDQK+XVisRXfGex8dOOya/Vq
-         rbNIwnbyZGCrS/iYhZWWm2k2qdzp22US3fvOjFOpxyFkL3psSHsu0SbMMbWyF+/OmN6q
-         A9ili3tCLYcJoQZ0wb1WqHEar+/5/bGXsjDXO9jmpd5ncQ5rs3Ca6oxtEI3vq/ZD1X3i
-         2z8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KQnul6BomttjXRAElW8MXsYWinaGJAdMxQ34JNltdPE=;
-        b=aij2v8fbqziCjmiZQ89BvJ6YRDniKe/ibRu99Us4Up9eSrzwL+mPCRDVBrmpnkFGlf
-         WvhWkQgYo4BYXgBOfkL//mYGJjk9rVbiZ3kQUgIfZFA6kzEfsY4I9pUbtvskq8IfK3lS
-         KM8sHAgbKd4SsO7yvhqSv+CypGmW4lPXGEvzz+LfuxQK9hEMUAbpqgPLHnf+Iw97KkGD
-         YmUeMdN+vgDyEcTmy59LasfI1T6EnIs5h505soY9PONXh1kTe8T2ayfc4pcH4fw48lOa
-         AgeUpJ92f5gw4xBZ8TDJEPE6VFy5Dvx3KeLXOMi38Nr3p1YB9fUlef34e346o0WUuuWQ
-         905w==
-X-Gm-Message-State: AOAM531mgp5SHX22lrYcFt4PqNnFqfZMfAD0NmSsZXr3aQE1ESuBVZyG
-        tDWq6pLHlmWDvTg+mJjSDZAcYA==
-X-Google-Smtp-Source: ABdhPJyidz87m6gcjue2sTWA10gYK/ag05Ahv7NiReHPxORN5OC8cn+XAhREd3c9YiJMe8mZbhq2CQ==
-X-Received: by 2002:a17:90b:1251:b0:1d7:f7ae:9f1 with SMTP id gx17-20020a17090b125100b001d7f7ae09f1mr28343920pjb.65.1652666153928;
-        Sun, 15 May 2022 18:55:53 -0700 (PDT)
-Received: from [10.71.57.194] ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id y6-20020a655a06000000b003f24a2be89asm3137216pgs.8.2022.05.15.18.55.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 15 May 2022 18:55:53 -0700 (PDT)
-Message-ID: <192be0a3-47dd-221d-0061-4e04e489ff89@bytedance.com>
-Date:   Mon, 16 May 2022 09:55:42 +0800
+        Sun, 15 May 2022 21:57:12 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9376AEE28
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 18:57:10 -0700 (PDT)
+Received: from fsav115.sakura.ne.jp (fsav115.sakura.ne.jp [27.133.134.242])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 24G1v2n4002859;
+        Mon, 16 May 2022 10:57:02 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav115.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp);
+ Mon, 16 May 2022 10:57:02 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 24G1v2ML002856
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 16 May 2022 10:57:02 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <bf5c8a1e-e922-fb78-32b8-a6288e434a3a@I-love.SAKURA.ne.jp>
+Date:   Mon, 16 May 2022 10:56:58 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [External] Re: [PATCH bpf-next v3 0/2] Introduce access remote
- cpu elem support in BPF percpu map
-To:     Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, jolsa@kernel.org, davemarchevsky@fb.com,
-        joannekoong@fb.com, geliang.tang@suse.com
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        songmuchun@bytedance.com, wangdongdong.6@bytedance.com,
-        cong.wang@bytedance.com, zhouchengming@bytedance.com,
-        yosryahmed@google.com
-References: <20220513063952.41794-1-zhoufeng.zf@bytedance.com>
- <d8447eee-31d0-f730-bc31-7e55c76135f4@iogearbox.net>
-From:   Feng Zhou <zhoufeng.zf@bytedance.com>
-In-Reply-To: <d8447eee-31d0-f730-bc31-7e55c76135f4@iogearbox.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v3 (repost)] workqueue: Warn flushing of kernel-global
+ workqueues
+Content-Language: en-US
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, Tejun Heo <tj@kernel.org>
+References: <2efd5461-fccd-f1d9-7138-0a6767cbf5fe@I-love.SAKURA.ne.jp>
+ <CAHk-=wgiCVcF4vJCOcg1hDw9PMT6zNSgt-pPuZL8ihWEcVv3eg@mail.gmail.com>
+ <e4203c4f-9c3d-6e33-06e8-052676cc5af1@I-love.SAKURA.ne.jp>
+ <YjivtdkpY+reW0Gt@slm.duckdns.org> <YnzjrnnP622mad1y@google.com>
+ <33772dcb-c5dd-c5e7-30c8-d2397d21b26c@I-love.SAKURA.ne.jp>
+ <Yn0H/68tagxaj/ke@google.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <Yn0H/68tagxaj/ke@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/5/13 下午11:01, Daniel Borkmann 写道:
-> On 5/13/22 8:39 AM, Feng zhou wrote:
-> [...]
->> Changelog:
->> ----------
->> v2->v3: Addressed comments from Andrii Nakryiko.
->> - use /* */ instead of //
->> - use libbpf_num_possible_cpus() instead of 
->> sysconf(_SC_NPROCESSORS_ONLN)
->> - use 8 bytes for value size
->> - fix memory leak
->> - use ASSERT_EQ instead of ASSERT_OK
->> - add bpf_loop to fetch values on each possible CPU
->> some details in here:
->> https://lore.kernel.org/lkml/20220511093854.411-1-zhoufeng.zf@bytedance.com/T/ 
->>
->
-> The v2 of your series is already in bpf-next tree, please just send a 
-> relative diff for
-> the selftest patch.
->
-> https://lore.kernel.org/lkml/165231901346.29050.11394051230756915389.git-patchwork-notify@kernel.org/ 
->
->
-> Thanks,
-> Daniel
+On 2022/05/12 22:13, Dmitry Torokhov wrote:
+> Also as far as I can see the patch was rejected.
 
-Ok, will do. Thanks.
+Not rejected. I sent
+https://lkml.kernel.org/r/7b2fecdb-59ae-2c54-5a5b-774ef7054d1b@I-love.SAKURA.ne.jp
+for 5.19.
 
+>> We currently don't have a flag to tell whether the caller is inside module unload
+>> path. And even inside module unload path, flushing the system-wide workqueue is
+>> problematic under e.g. GFP_NOFS/GFP_NOIO context.
+> 
+> Sorry, I do not follow here. Are there module unloading code that runs
+> as GFP_NOFS/GFP_NOIO?
+
+It is GFP_KERNEL context when module's __exit function is called. But whether
+flush_workqueue() is called from restricted context depends on what locks does
+the module's __exit function hold.
+
+If request_module() is called from some work function using one of system-wide WQs,
+and flush_workqueue() is called on that WQ from module's __exit function, the kernel
+might deadlock on module_mutex lock. Making sure that flush_workqueue() is not called
+on system-wide WQs is the safer choice.
 

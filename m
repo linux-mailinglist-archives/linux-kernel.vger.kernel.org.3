@@ -2,136 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E6B1529559
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 01:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A05F529562
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 01:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347927AbiEPXi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 19:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35344 "EHLO
+        id S1350426AbiEPXjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 19:39:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbiEPXi5 (ORCPT
+        with ESMTP id S1350404AbiEPXjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 19:38:57 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A535730557
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 16:38:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652744335; x=1684280335;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KkkLfc4fAEbkp53pbjYLSGYfnjBIhuUl1eB506Pyt84=;
-  b=RKs8DhMCVEKdOXx8nw2wVt4pIq7TpnEutm/JFinsmD9AlfhYf3HvYXQT
-   thEXOSNXxit1pMhlQ/l8OvQ6bSujAbcYcFF1Qh6XrTeLfNGrWpy3RR6R9
-   l7A3Ql6jBhKpOTDfOa/y/bWv7gjExPEhb26x+2sQQTN1FAS+2n5fvTAHI
-   ufsMLhip/9ZGHZC0ezSouTCh5NtHz9FpPnMIKKExMf1VS6MjGCcgNWNIl
-   RO3jvQZnonbexNaHbwxD2IVVzxQs5OPNgl5m1rpNvGiNn9FxC0986B0LU
-   tb5wXWawQ2utXoii2x5LONaP/aJwCECtqrekfM6djOBKxYL44ymsBA3zX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="269822006"
-X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
-   d="scan'208";a="269822006"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 16:38:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
-   d="scan'208";a="555498539"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 16 May 2022 16:38:53 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nqkIf-0000Pp-4l;
-        Mon, 16 May 2022 23:38:53 +0000
-Date:   Tue, 17 May 2022 07:38:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [hverkuil-media-tree:extron 2/2] ld.lld: error: undefined symbol:
- v4l2_device_register
-Message-ID: <202205170716.EOe20iPO-lkp@intel.com>
+        Mon, 16 May 2022 19:39:16 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBFF42EFE;
+        Mon, 16 May 2022 16:39:13 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L2G166yl7z4xZ2;
+        Tue, 17 May 2022 09:39:06 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1652744351;
+        bh=shMAgr3KnLfduKB2nfq7HCfF2fOXsMLLY0bGSFIz4Ms=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=QLY2t/FKtddLoKYu8LG0sSKbrlIDbQb907F8fJRC5dkfgoQ4VcE8ZYWVwVOoK7EM4
+         xzfu8+So2JKiaEzF7GSQJ9gueS9zaiy8W0ZSlhez0VFXy4Wb0j8KP+yhCabzAY1A+C
+         0FgNnaqMk20UWxmOM3R6jumDaJQD3hLDqa2kTOU3pR8ceSVpLscdB0G74mWPjxfypW
+         1YbJXhatDs5+BG95Jjxs9mw7zFQliQ6Q027nffmAN+9od+JVIb8Te0z/N9Z2mv7B/v
+         RTBKi84QByAmv5PC2z6tmhRB7b8jCnaApdBNfdiJ8XpCmLW2Ws4btTP6KU81mSwIaj
+         LQs8XWcGd88vg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Mark Brown <broonie@kernel.org>,
+        chris.packham@alliedtelesis.co.nz,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Anatolij Gustschin <agust@denx.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pantelis Antoniou <pantelis.antoniou@gmail.com>
+Subject: Re: [PATCH v2 4/4] powerpc/52xx: Convert to use fwnode API
+In-Reply-To: <YoJbaTNJFV2A1Etw@smile.fi.intel.com>
+References: <20220507100147.5802-1-andriy.shevchenko@linux.intel.com>
+ <20220507100147.5802-4-andriy.shevchenko@linux.intel.com>
+ <877d6l7fmy.fsf@mpe.ellerman.id.au> <YoJaGGwfoSYhaT13@smile.fi.intel.com>
+ <YoJbaTNJFV2A1Etw@smile.fi.intel.com>
+Date:   Tue, 17 May 2022 09:38:56 +1000
+Message-ID: <874k1p6oa7.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://linuxtv.org/hverkuil/media_tree.git extron
-head:   d25c7a9925ea4a748782ad0b1f951716be89d672
-commit: d25c7a9925ea4a748782ad0b1f951716be89d672 [2/2] cec/extron: add the Extron CEC driver
-config: x86_64-randconfig-r002-20220516 (https://download.01.org/0day-ci/archive/20220517/202205170716.EOe20iPO-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
-        git fetch --no-tags hverkuil-media-tree extron
-        git checkout d25c7a9925ea4a748782ad0b1f951716be89d672
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
+> On Mon, May 16, 2022 at 05:05:12PM +0300, Andy Shevchenko wrote:
+>> On Mon, May 16, 2022 at 11:48:05PM +1000, Michael Ellerman wrote:
+>> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
+>> > > We may convert the GPT driver to use fwnode API for the sake
+>> > > of consistency of the used APIs inside the driver.
+>> > 
+>> > I'm not sure about this one.
+>> > 
+>> > It's more consistent to use fwnode in this driver, but it's very
+>> > inconsistent with the rest of the powerpc code. We have basically no
+>> > uses of the fwnode APIs at the moment.
+>> 
+>> Fair point!
+>> 
+>> > It seems like a pretty straight-forward conversion, but there could
+>> > easily be a bug in there, I don't have any way to test it. Do you?
+>> 
+>> Nope, only compile testing. The important part of this series is to
+>> clean up of_node from GPIO library, so since here it's a user of
+>> it I want to do that. This patch is just ad-hoc conversion that I
+>> noticed is possible. But there is no any requirement to do so.
+>> 
+>> Lemme drop this from v3.
+>
+> I just realize that there is no point to send a v3. You can just apply
+> first 3 patches. Or is your comment against entire series?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+No, my comment is just about this patch.
 
-All errors (new ones prefixed by >>):
+I don't mind converting to new APIs when it's blocking some other
+cleanup. But given the age of this code I think it's probably better to
+just leave the rest of it as-is, unless someone volunteers to test it.
 
-   vmlinux.o: warning: objtool: bmi160_data_rdy_trigger_set_state()+0x8e: sibling call from callable instruction with modified stack frame
->> ld.lld: error: undefined symbol: v4l2_device_register
-   >>> referenced by fbdev.c
-   >>> vmlinux.o:(extron_connect)
---
->> ld.lld: error: undefined symbol: v4l2_device_unregister
-   >>> referenced by fbdev.c
-   >>> vmlinux.o:(extron_connect)
---
->> ld.lld: error: undefined symbol: v4l2_set_edid_phys_addr
-   >>> referenced by fbdev.c
-   >>> vmlinux.o:(extron_s_edid)
---
->> ld.lld: error: undefined symbol: video_device_release_empty
-   >>> referenced by fbdev.c
-   >>> vmlinux.o:(extron_videodev)
---
->> ld.lld: error: undefined symbol: v4l2_ctrl_poll
-   >>> referenced by fbdev.c
-   >>> vmlinux.o:(extron_fops)
---
->> ld.lld: error: undefined symbol: video_ioctl2
-   >>> referenced by fbdev.c
-   >>> vmlinux.o:(extron_fops)
---
->> ld.lld: error: undefined symbol: v4l2_fh_open
-   >>> referenced by fbdev.c
-   >>> vmlinux.o:(extron_fops)
---
->> ld.lld: error: undefined symbol: v4l2_fh_release
-   >>> referenced by fbdev.c
-   >>> vmlinux.o:(extron_fops)
---
->> ld.lld: error: undefined symbol: v4l2_ctrl_subscribe_event
-   >>> referenced by fbdev.c
-   >>> vmlinux.o:(extron_ioctl_ops)
---
->> ld.lld: error: undefined symbol: v4l2_event_unsubscribe
-   >>> referenced by fbdev.c
-   >>> vmlinux.o:(extron_ioctl_ops)
---
->> ld.lld: error: undefined symbol: video_unregister_device
-   >>> referenced by fbdev.c
-   >>> vmlinux.o:(extron_disconnect)
-   >>> referenced by fbdev.c
-   >>> vmlinux.o:(extron_setup_thread)
-   >>> referenced by fbdev.c
-   >>> vmlinux.o:(extron_setup_thread)
-..
+So yeah I'll just take patches 1-3 of this v2 series, no need to resend.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+cheers

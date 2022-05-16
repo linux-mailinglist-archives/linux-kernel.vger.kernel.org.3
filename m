@@ -2,118 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 773D5528935
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB6552894C
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245464AbiEPPxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 11:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53032 "EHLO
+        id S245469AbiEPPzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 11:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232784AbiEPPxc (ORCPT
+        with ESMTP id S229691AbiEPPzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 11:53:32 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E439CE09
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 08:53:29 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id b18so26563804lfv.9
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 08:53:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EbahZ8s//MhvZATU5N16vyp5s7VaSnO5nIae4gl0gk0=;
-        b=ZP4hri7brP1qH58wG7aKs9+/EslXVGswsHOgXd3Rly2rJt/+O76tPfhxL7OwmpIwKG
-         6wxQXWKip2N/EbSsEuz8ZCxYCRYXfvipes/E3nYbQNtQdToMtCFZTl+dbTP2aNk37M9M
-         gkn5YyTaHT7izE374+uIt7ybmQc99y30uNZ+augubzOaQ7Hme6ZJ8C9uj5dwxNr6yOrv
-         itifkK9fRB+fkvL/kQ47zp+yg5CvyBsRLWTxZrPn/3NM3P10rrFzAU7DsLksyzRXTWpQ
-         Ze+X+dmzPJiFyVH2T14K1fYnM7qMHdH0cQuOcMtHoY6Rv+G6cu0e6ghaQJ5PT6NS9ayK
-         5C/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EbahZ8s//MhvZATU5N16vyp5s7VaSnO5nIae4gl0gk0=;
-        b=1Ye6csIU6BL+F9V+ioPYYrCHkEFpNxHFAKS58CvIixARaYOszix3bFWPDlsneMyzzB
-         ndRr9S7vL186TzMerDEt4s6t8FZ6OU2/mJAykPzar9yY1uHCJFHx8vqHDhO1wljU0Afw
-         7rediUVBqUrKEQ9wdPJ1v+4/vLHLvEO1wgXSRmFcpgceUbneay18RwBe7tumqWSJGBnx
-         s9QUe3JHfxTjzCBdT149C8r1+ueNytQfmuDEvagKkhEcEuJdVngdrxv0eT9zQ7EO+/BJ
-         s3lU+Eu+7Kt9x6zZLgq1SIICNEkQ+IR+ayuaszrLfKZmeNN3u9O2jP/lsE85/YXL1+E4
-         LEKQ==
-X-Gm-Message-State: AOAM532F9iirleVcYO6o/fe0pDDK1JvZwHZPrQumf83rvYh9jXDR9to3
-        ouyxRzYV/LoEIBpACh4UzdDoVSGF1VhpQWv/WdCCyA==
-X-Google-Smtp-Source: ABdhPJxei5pzg/U2wRl0hGmPsf3kjsYStTXCMlzuL0wRt4xbfEY2ZaFF4tA7VhL8sWDgD3KFEkxl9RE8sbSWb/FOMc8=
-X-Received: by 2002:a05:6512:234c:b0:473:c3ba:2cf1 with SMTP id
- p12-20020a056512234c00b00473c3ba2cf1mr13694486lfu.402.1652716407646; Mon, 16
- May 2022 08:53:27 -0700 (PDT)
+        Mon, 16 May 2022 11:55:46 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8FA7BC9;
+        Mon, 16 May 2022 08:55:42 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GFJq6Y005103;
+        Mon, 16 May 2022 15:55:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=t0ClClYMkC/iTWfan5duQAMMKjqUnZwjHAs7zWUBZSk=;
+ b=eZlhNt/9v+LWvA6VpAUqGC1tq+Kucbn7n5VPqMPOHKThUwExB1023+JORnvbJ8KcuIls
+ 17aZoBY9yHzMx3jOprrEEISMKN6rii2d6CF89EHWxHgrocZF32Q4pZtVfLXJWmXXXr57
+ Rr8D3C13Tm6al8oyxGqtBwIYm165ztRwhEVLrBt/kzyl6c/VeYg8bRBj/Cu86EsHF015
+ NtYPbg9H6wDOzfn0b/Xff4qqP9qyYcxJUx45UTDBhqOL2gXElITFrzOM4kYG0r/vTMyI
+ 10Jt/9NtHyy1cwz8dHq6wTBiPnPuc4kesusS7nbVbAQhAZu9Pwfvy+Kq8KHZ76F1TSge Qw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3s5arq7r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 15:55:41 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24GFNf9p017257;
+        Mon, 16 May 2022 15:55:41 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3s5arq76-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 15:55:41 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24GFcHP1011961;
+        Mon, 16 May 2022 15:55:39 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 3g2429axtn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 15:55:39 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24GFta1036962736
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 16 May 2022 15:55:36 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6D1914C050;
+        Mon, 16 May 2022 15:55:36 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C1C904C040;
+        Mon, 16 May 2022 15:55:35 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.145.0.224])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 16 May 2022 15:55:35 +0000 (GMT)
+Date:   Mon, 16 May 2022 17:55:33 +0200
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Nico Boehr <nrb@linux.ibm.com>
+Cc:     kvm@vger.kernel.org, borntraeger@de.ibm.com, frankja@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, david@redhat.com,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        scgl@linux.ibm.com, mimu@linux.ibm.com
+Subject: Re: [PATCH v10 01/19] KVM: s390: pv: leak the topmost page table
+ when destroy fails
+Message-ID: <20220516175533.4bf3dd93@p-imbrenda>
+In-Reply-To: <560068a1e89c2ceec0d544fcc62fa3f95d390182.camel@linux.ibm.com>
+References: <20220414080311.1084834-1-imbrenda@linux.ibm.com>
+        <20220414080311.1084834-2-imbrenda@linux.ibm.com>
+        <560068a1e89c2ceec0d544fcc62fa3f95d390182.camel@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20220516154512.259759-1-john.allen@amd.com>
-In-Reply-To: <20220516154512.259759-1-john.allen@amd.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Mon, 16 May 2022 08:53:16 -0700
-Message-ID: <CAMkAt6oUxUFtNS4W0bzu13oWMdfnzfNrphH3OqwAkmxJcXhOqw@mail.gmail.com>
-Subject: Re: [PATCH v2] crypto: ccp - Use kzalloc for sev ioctl interfaces to
- prevent kernel memory leak
-To:     John Allen <john.allen@amd.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        Ashish Kalra <Ashish.Kalra@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Nguyen <theflow@google.com>,
-        David Rientjes <rientjes@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: NdHOyIzm-ngimXbtZNM6EmZZ8_2dNMtF
+X-Proofpoint-GUID: xFKmkhYpDwSeRdCE-aPd4fPxVtAFBupF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-16_14,2022-05-16_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 clxscore=1015 adultscore=0 mlxlogscore=999 phishscore=0
+ mlxscore=0 priorityscore=1501 malwarescore=0 spamscore=0 impostorscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205160090
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 8:46 AM John Allen <john.allen@amd.com> wrote:
->
-> For some sev ioctl interfaces, input may be passed that is less than or
-> equal to SEV_FW_BLOB_MAX_SIZE, but larger than the data that PSP
-> firmware returns. In this case, kmalloc will allocate memory that is the
-> size of the input rather than the size of the data. Since PSP firmware
-> doesn't fully overwrite the buffer, the sev ioctl interfaces with the
-> issue may return uninitialized slab memory.
->
-> Currently, all of the ioctl interfaces in the ccp driver are safe, but
-> to prevent future problems, change all ioctl interfaces that allocate
-> memory with kmalloc to use kzalloc.
->
-> Fixes: e799035609e15 ("crypto: ccp: Implement SEV_PEK_CSR ioctl command")
-> Fixes: 76a2b524a4b1d ("crypto: ccp: Implement SEV_PDH_CERT_EXPORT ioctl command")
-> Fixes: d6112ea0cb344 ("crypto: ccp - introduce SEV_GET_ID2 command")
-> Cc: stable@vger.kernel.org
-> Reported-by: Andy Nguyen <theflow@google.com>
-> Suggested-by: David Rientjes <rientjes@google.com>
-> Suggested-by: Peter Gonda <pgonda@google.com>
-> Signed-off-by: John Allen <john.allen@amd.com>
-> ---
-> v2:
->   - Add fixes tags and CC stable@vger.kernel.org
-> ---
+On Mon, 16 May 2022 09:22:09 +0200
+Nico Boehr <nrb@linux.ibm.com> wrote:
 
+> On Thu, 2022-04-14 at 10:02 +0200, Claudio Imbrenda wrote:
+>=20
+> [...]
+> > +/**
+> > + * s390_replace_asce - Try to replace the current ASCE of a gmap
+> > with
+> > + * another equivalent one.
+> > + * @gmap the gmap
+> > + *
+> > + * If the allocation of the new top level page table fails, the ASCE
+> > is not
+> > + * replaced.
+> > + * In any case, the old ASCE is always removed from the list.
+> > Therefore the
+> > + * caller has to make sure to save a pointer to it beforehands,
+> > unless an
+> > + * intentional leak is intended.
+> > + */
+> > +int s390_replace_asce(struct gmap *gmap)
+> > +{
+> >  =20
+> [...]
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Set new table origin whil=
+e preserving existing ASCE
+> > control bits */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0asce =3D (gmap->asce & ~_ASC=
+E_ORIGIN) | __pa(table);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0WRITE_ONCE(gmap->asce, asce)=
+; =20
+>=20
+> Can someone concurrently touch the control bits?
 
-static int sev_ioctl_do_platform_status(struct sev_issue_cmd *argp)
-{
-struct sev_user_data_status data;
-int ret;
+should not happen, nobody is using the ASCE while we replace it
 
-ret = __sev_do_cmd_locked(SEV_CMD_PLATFORM_STATUS, &data, &argp->error);
-if (ret)
-return ret;
-
-if (copy_to_user((void __user *)argp->data, &data, sizeof(data)))
-ret = -EFAULT;
-
-return ret;
-}
-
-Would it be safer to memset @data here to all zeros too?
+moreover, all callers of s390_replace_asce hold kvm->lock, as do all
+functions changing the ASCE

@@ -2,25 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E8405285E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 612D05285E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:49:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236283AbiEPNt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 09:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36836 "EHLO
+        id S233746AbiEPNty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 09:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243906AbiEPNtD (ORCPT
+        with ESMTP id S243910AbiEPNtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 09:49:03 -0400
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B89539164;
-        Mon, 16 May 2022 06:48:39 -0700 (PDT)
+        Mon, 16 May 2022 09:49:04 -0400
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2246539176;
+        Mon, 16 May 2022 06:48:41 -0700 (PDT)
 Received: from toolbox.int.toradex.com ([81.221.85.15]) by mrelay.perfora.net
- (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MC3mA-1nzQlx06Ou-008vD9;
- Mon, 16 May 2022 15:48:29 +0200
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0LaVpp-1nTOoR3q87-00mOQm;
+ Mon, 16 May 2022 15:48:33 +0200
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
-Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+Cc:     Oleksandr Suvorov <oleksandr.suvorov@toradex.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Fabio Estevam <festevam@gmail.com>,
         Frank Rowand <frowand.list@gmail.com>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -31,258 +32,100 @@ Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 09/24] ARM: dts: imx7-colibri: move regulators
-Date:   Mon, 16 May 2022 15:47:19 +0200
-Message-Id: <20220516134734.493065-10-marcel@ziswiler.com>
+Subject: [PATCH v2 10/24] ARM: dts: imx7-colibri: add delay for on-module phy supply
+Date:   Mon, 16 May 2022 15:47:20 +0200
+Message-Id: <20220516134734.493065-11-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220516134734.493065-1-marcel@ziswiler.com>
 References: <20220516134734.493065-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:lBw1IeizW6AgwCUPS6nx9JlnKp3vgP7F/P4cN+FnSAtAoUHeJuZ
- CwLG1uAoFss21ZmQw1+i5lI/+KnDGnvASst1x+HI8SwrwuisO73VbrkhzuSWjf7/6utGACw
- PcoXzTa19wytXrDY6Rx7zZjwOWmAeyWNczDsiKzEpnvif4rLepwrY/NDz49SFaojMalS9w3
- Q+MPITw09LmYruXON2FOA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:bybzdPiEJmM=:xZKOhaMXgJaZwdgTHspzpG
- lT5EV996CezuugJC4ekcSZ991Zvgz+ZlGxjW8VEpDuUVrsc2S0zJajDy4jgIvWlQKbIYYMiCr
- yCX6OhwxxD/YxRiNN81GWcPEYioIBfOlCaUvMa1+DWLNiNsqFxHbbjPTvPcYywliS0SC59N+7
- tVXyTAzQn3YPc3iFNM3r+LBLaY9rebV0GqMwGbDhtjTmMz5PTXVZ4UNvtuNQ79g1eC2q5Exft
- pkW/mwIHRJw99R5xs4T25x7pKQjFOAp3ZVu9kO3Z4OcMiXFl6WuS4lX/7LJc1tw4uLAErEbzT
- vmZrJCVIqh8ZWHuAHgDneoY2058H8yNS41NE6aC/BE91G0apkIoSC6thZPUH/Q4mSXI1/mI0l
- LfVkinY9yPQreeIR43nMdGGVdsOSC7VHE+QkP7s7yO7eRukNDcTr88EO/TltdkEek3UwI/INz
- CiCum+ynFe9DJOwaiQ4UMnPs1SjbRbCJ6gKlLnLypL4eXs9DE3a+gSrieozAFmtVfvBXEPB3l
- RB2aK/QG1mN9M/5UGROg2Rwo3VpH3S+w5nmQR+MtXu4jsjBiMvF2qgLjXYr0wLmDYu/aXd+Dj
- 4wqQVtx/QdCRQX1AvvfoO9KBS/OUZX8NO74nfeGEvZYQ1CjEVBuxm1FE0AUkAQ6pEoo7xylKk
- 3EahrCzJa27Tvk7UAJgXQ9AVBCnoCVEc3C51nurPkB9G0jbsC5wRYdU/6/aG5HxLl/MXpKwyK
- e4LVXgTaQ9SxvhaQ
+X-Provags-ID: V03:K1:MNItR7s/bmR+5uVBwwbJ3Zk1WETutn2ATdlnbs2j3z42Scnylfm
+ 3o086A00d6NkX4DbMpBv2MIgLvs6gtPK8fnC0R+f5E6ElelPR65nrPX7hXsIMVAYXbaq8xD
+ 0W+U8BjQLtPSdLrat2NAHW2Z9w8VMReW5RwL7fyHvhCVp9t/0NMYMy4QjVD8jSJJ/1ODvNs
+ +CB9I3c4mKoW6d5/CzLjA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:fCszss8YMos=:BEfF6oyMEQGpsrEXszJEZe
+ dD085/5lkLmY6IOtuu1YYetJPRQ3Ue/meHbWjZNqE1Hs0LpxEQgs462nh+d8AvlVt1XpSixDu
+ yNA6fIX8v7if7d/27qTr2xC1NsOm46tmQH1JJE5eVFKEhkp0Gzf7bGF+bjvDkdv6Nco69TZVR
+ IVzeX9K4257uja73niUOwnJlFUE1qC81kinJs7sTYenTDFbaIaN2DCTQg0ZV1hHV2VCLQuol3
+ Z8sm1coY0a1+RfLN1h8PPlb8Vs/pkEw4fIOIlQVzUBO65kPG/1UOtVwZxw7FNLGR2yBOcdy+3
+ xLVJ3Ka3MccPmnvi6Jf6A+JE1n/XNxG2H8sLPa4WJQz12YNw5qZHh73iSeIMACYKMg3g4eZPn
+ vBAcE7E+Qz/cyaR4Agm9CI+r5484p8+SbDNpGrBAxGG+g7cS0SJxdLcpYIH22rtAN2E1CQSRH
+ qALr+p5tl1ZQJXwhiukkOwsDVOulr3wH+GY74KZsUJyUGIw0OB3FxteYSHzrh6u4Ni0MPZoSZ
+ gr6VP6IH/ff6FsdmIsvnNRNatB6mjHbOMpWluXXaEa+4xVpkuFt5DJgCrq+TpPWjDRI8N+ZtO
+ 0+LKTCRX0E0JJVT9HP+xqq7y67Qp+rngqQriuhdpEogNBKYcPcF5lu6SE8Gzman/JKWovrT/R
+ O8oKa6fFPgh4Yar2bNE31qJ3gzwHlFhNLUd9HG9uj7znfwNrV17Uc1+6MR1lIuLaES7E=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+From: Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
 
-Move regulators to module-level device tree given they are standard
-Colibri functionalities.
+There is a significant time required for PHY Micrel KSZ8041 to power up.
+Add a delay on start-up/wake-up before the FEC starts communicating with
+the PHY.
 
+LDO1 takes 6 ms, R39 + C44 takes ~100ms, the KSZ8041 datasheet asks for
+~11 ms before starting any programming on the MIIM.
+
+Counting that, add a 200 ms delay to be sure the PHY is ready for
+programming. Also, add the same off delay time to give the capacitor
+time to discharge in order to properly reset.
+
+Signed-off-by: Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 ---
 
 (no changes since v1)
 
- arch/arm/boot/dts/imx7-colibri-aster.dtsi     | 27 -------------
- arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi   | 25 ------------
- arch/arm/boot/dts/imx7-colibri.dtsi           | 39 ++++++++++++++++---
- arch/arm/boot/dts/imx7d-colibri-aster.dts     |  1 -
- .../arm/boot/dts/imx7d-colibri-emmc-aster.dts |  1 -
- .../boot/dts/imx7d-colibri-emmc-eval-v3.dts   |  1 -
- arch/arm/boot/dts/imx7d-colibri-emmc.dtsi     |  1 +
- arch/arm/boot/dts/imx7d-colibri-eval-v3.dts   |  1 -
- arch/arm/boot/dts/imx7d-colibri.dtsi          |  1 +
- 9 files changed, 35 insertions(+), 62 deletions(-)
+ arch/arm/boot/dts/imx7-colibri.dtsi | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/imx7-colibri-aster.dtsi b/arch/arm/boot/dts/imx7-colibri-aster.dtsi
-index c12de1861c05..440f98dc323d 100644
---- a/arch/arm/boot/dts/imx7-colibri-aster.dtsi
-+++ b/arch/arm/boot/dts/imx7-colibri-aster.dtsi
-@@ -3,33 +3,6 @@
-  * Copyright 2017-2022 Toradex
-  */
- 
--/ {
--	reg_3v3: regulator-3v3 {
--		compatible = "regulator-fixed";
--		regulator-name = "3.3V";
--		regulator-min-microvolt = <3300000>;
--		regulator-max-microvolt = <3300000>;
--	};
--
--	reg_5v0: regulator-5v0 {
--		compatible = "regulator-fixed";
--		regulator-name = "5V";
--		regulator-min-microvolt = <5000000>;
--		regulator-max-microvolt = <5000000>;
--	};
--
--	reg_usbh_vbus: regulator-usbh-vbus {
--		compatible = "regulator-fixed";
--		pinctrl-names = "default";
--		pinctrl-0 = <&pinctrl_usbh_reg>;
--		regulator-name = "VCC_USB[1-4]";
--		regulator-min-microvolt = <5000000>;
--		regulator-max-microvolt = <5000000>;
--		gpio = <&gpio4 7 GPIO_ACTIVE_LOW>;
--		vin-supply = <&reg_5v0>;
--	};
--};
--
- &adc1 {
- 	status = "okay";
- };
-diff --git a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-index 2e6678f81af6..33a9cbbca0d2 100644
---- a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-+++ b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-@@ -10,31 +10,6 @@ clk16m: clk16m {
- 		#clock-cells = <0>;
- 		clock-frequency = <16000000>;
- 	};
--
--	reg_3v3: regulator-3v3 {
--		compatible = "regulator-fixed";
--		regulator-name = "3.3V";
--		regulator-min-microvolt = <3300000>;
--		regulator-max-microvolt = <3300000>;
--	};
--
--	reg_5v0: regulator-5v0 {
--		compatible = "regulator-fixed";
--		regulator-name = "5V";
--		regulator-min-microvolt = <5000000>;
--		regulator-max-microvolt = <5000000>;
--	};
--
--	reg_usbh_vbus: regulator-usbh-vbus {
--		compatible = "regulator-fixed";
--		pinctrl-names = "default";
--		pinctrl-0 = <&pinctrl_usbh_reg>;
--		regulator-name = "VCC_USB[1-4]";
--		regulator-min-microvolt = <5000000>;
--		regulator-max-microvolt = <5000000>;
--		gpio = <&gpio4 7 GPIO_ACTIVE_LOW>;
--		vin-supply = <&reg_5v0>;
--	};
- };
- 
- &adc1 {
 diff --git a/arch/arm/boot/dts/imx7-colibri.dtsi b/arch/arm/boot/dts/imx7-colibri.dtsi
-index c5a58949d664..329638985db6 100644
+index 329638985db6..09dbd262dad1 100644
 --- a/arch/arm/boot/dts/imx7-colibri.dtsi
 +++ b/arch/arm/boot/dts/imx7-colibri.dtsi
-@@ -62,20 +62,47 @@ lcd_panel_in: endpoint {
- 		};
+@@ -94,6 +94,17 @@ reg_module_3v3_avdd: regulator-module-3v3-avdd {
+ 		regulator-name = "+V3.3_AVDD_AUDIO";
  	};
  
--	reg_module_3v3: regulator-module-3v3 {
-+	reg_3v3: regulator-3v3 {
- 		compatible = "regulator-fixed";
--		regulator-name = "+V3.3";
--		regulator-min-microvolt = <3300000>;
-+		regulator-always-on;
- 		regulator-max-microvolt = <3300000>;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-name = "3.3V";
-+	};
-+
-+	reg_5v0: regulator-5v0 {
++	reg_module_3v3_eth: regulator-module-3v3-eth {
 +		compatible = "regulator-fixed";
- 		regulator-always-on;
-+		regulator-max-microvolt = <5000000>;
-+		regulator-min-microvolt = <5000000>;
-+		regulator-name = "5V";
- 	};
- 
--	reg_module_3v3_avdd: regulator-module-3v3-avdd {
-+	reg_module_3v3: regulator-module-3v3 {
- 		compatible = "regulator-fixed";
--		regulator-name = "+V3.3_AVDD_AUDIO";
--		regulator-min-microvolt = <3300000>;
-+		regulator-always-on;
- 		regulator-max-microvolt = <3300000>;
++		off-on-delay-us = <200000>;
++		regulator-name = "+V3.3_ETH";
 +		regulator-min-microvolt = <3300000>;
-+		regulator-name = "+V3.3";
-+	};
-+
-+	reg_module_3v3_avdd: regulator-module-3v3-avdd {
-+		compatible = "regulator-fixed";
- 		regulator-always-on;
 +		regulator-max-microvolt = <3300000>;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-name = "+V3.3_AVDD_AUDIO";
++		regulator-boot-on;
++		startup-delay-us = <200000>;
++		vin-supply = <&reg_LDO1>;
 +	};
 +
-+	reg_usbh_vbus: regulator-usbh-vbus {
-+		compatible = "regulator-fixed";
-+		gpio = <&gpio4 7 GPIO_ACTIVE_LOW>; /* SODIMM 129 / USBH_PEN */
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_usbh_reg>;
-+		regulator-max-microvolt = <5000000>;
-+		regulator-min-microvolt = <5000000>;
-+		regulator-name = "VCC_USB[1-4]";
-+		vin-supply = <&reg_5v0>;
- 	};
+ 	reg_usbh_vbus: regulator-usbh-vbus {
+ 		compatible = "regulator-fixed";
+ 		gpio = <&gpio4 7 GPIO_ACTIVE_LOW>; /* SODIMM 129 / USBH_PEN */
+@@ -153,7 +164,7 @@ &fec1 {
+ 	fsl,magic-packet;
+ 	phy-handle = <&ethphy0>;
+ 	phy-mode = "rmii";
+-	phy-supply = <&reg_LDO1>;
++	phy-supply = <&reg_module_3v3_eth>;
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&pinctrl_enet1>;
+ 	pinctrl-1 = <&pinctrl_enet1_sleep>;
+@@ -440,7 +451,7 @@ reg_DCDC4: DCDC4 { /* V1.35_DRAM */
+ 			};
  
- 	sound {
-diff --git a/arch/arm/boot/dts/imx7d-colibri-aster.dts b/arch/arm/boot/dts/imx7d-colibri-aster.dts
-index 2ed1823c4805..cfd75e3424fa 100644
---- a/arch/arm/boot/dts/imx7d-colibri-aster.dts
-+++ b/arch/arm/boot/dts/imx7d-colibri-aster.dts
-@@ -36,6 +36,5 @@ &panel_dpi {
- };
- 
- &usbotg2 {
--	vbus-supply = <&reg_usbh_vbus>;
- 	status = "okay";
- };
-diff --git a/arch/arm/boot/dts/imx7d-colibri-emmc-aster.dts b/arch/arm/boot/dts/imx7d-colibri-emmc-aster.dts
-index 33e1034b75a4..7b4451699478 100644
---- a/arch/arm/boot/dts/imx7d-colibri-emmc-aster.dts
-+++ b/arch/arm/boot/dts/imx7d-colibri-emmc-aster.dts
-@@ -17,6 +17,5 @@ / {
- };
- 
- &usbotg2 {
--	vbus-supply = <&reg_usbh_vbus>;
- 	status = "okay";
- };
-diff --git a/arch/arm/boot/dts/imx7d-colibri-emmc-eval-v3.dts b/arch/arm/boot/dts/imx7d-colibri-emmc-eval-v3.dts
-index 25d8d4583289..3e84018392ee 100644
---- a/arch/arm/boot/dts/imx7d-colibri-emmc-eval-v3.dts
-+++ b/arch/arm/boot/dts/imx7d-colibri-emmc-eval-v3.dts
-@@ -16,6 +16,5 @@ / {
- };
- 
- &usbotg2 {
--	vbus-supply = <&reg_usbh_vbus>;
- 	status = "okay";
- };
-diff --git a/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi b/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi
-index e77f0b26b6fb..45b12b0d8710 100644
---- a/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi
-+++ b/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi
-@@ -47,6 +47,7 @@ &gpio6 {
- 
- &usbotg2 {
- 	dr_mode = "host";
-+	vbus-supply = <&reg_usbh_vbus>;
- };
- 
- &usdhc3 {
-diff --git a/arch/arm/boot/dts/imx7d-colibri-eval-v3.dts b/arch/arm/boot/dts/imx7d-colibri-eval-v3.dts
-index 51561388fac5..7aabe5691459 100644
---- a/arch/arm/boot/dts/imx7d-colibri-eval-v3.dts
-+++ b/arch/arm/boot/dts/imx7d-colibri-eval-v3.dts
-@@ -47,6 +47,5 @@ &pwm3 {
- };
- 
- &usbotg2 {
--	vbus-supply = <&reg_usbh_vbus>;
- 	status = "okay";
- };
-diff --git a/arch/arm/boot/dts/imx7d-colibri.dtsi b/arch/arm/boot/dts/imx7d-colibri.dtsi
-index 48993abacae4..d1469aa8b025 100644
---- a/arch/arm/boot/dts/imx7d-colibri.dtsi
-+++ b/arch/arm/boot/dts/imx7d-colibri.dtsi
-@@ -29,4 +29,5 @@ &gpmi {
- 
- &usbotg2 {
- 	dr_mode = "host";
-+	vbus-supply = <&reg_usbh_vbus>;
- };
+ 			reg_LDO1: LDO1 { /* PWR_EN_+V3.3_ETH */
+-				regulator-min-microvolt = <1800000>;
++				regulator-min-microvolt = <3300000>;
+ 				regulator-max-microvolt = <3300000>;
+ 				regulator-boot-on;
+ 			};
 -- 
 2.35.1
 

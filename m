@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3234C528EDB
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4ED528F03
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:53:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232229AbiEPTn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
+        id S1345708AbiEPTrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346201AbiEPTlr (ORCPT
+        with ESMTP id S1346081AbiEPTmu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:41:47 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45883FDBB;
-        Mon, 16 May 2022 12:40:20 -0700 (PDT)
+        Mon, 16 May 2022 15:42:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522FA3F88E;
+        Mon, 16 May 2022 12:41:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 360EACE176C;
-        Mon, 16 May 2022 19:40:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45A79C34100;
-        Mon, 16 May 2022 19:40:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E30DD61510;
+        Mon, 16 May 2022 19:41:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECD60C34100;
+        Mon, 16 May 2022 19:41:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730017;
-        bh=PzICwLjlQo99NgdyMEC1XtS6+gYXW+gJUuLaUJcbn10=;
+        s=korg; t=1652730082;
+        bh=cAb6iKZxKeujnO0Osi+5GaP0dphhqEkPS32XNa6ZaxU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1G0ExOcwz7ofd0Z6TGYaLh+CP+GV2u/Iq2YxJJ66UBBPECXBxAHPFOXgBw0ajjRRD
-         auzFil85ly6+GY7u2fKNmEFqoVizB+xj4NtsfExvRdIIO0Q3CV6ut228onta20qjld
-         +KTIi9qA57TluUDwVREx+069MWCZs+MFevYHpXPo=
+        b=BF3MT4EjxBMJrUN4Lg8+AMOnQseFQRGiIJWQOmrby+9tRNlP0su/LMIRAHaAWT8yR
+         D04r5Y9M1pzzDACzckoiDnHsEbndgQB3qw6ZHrJPUhx2Jxhh9XARvJHn0woE38rCj0
+         3lxmsde9UT5CGcz2D3TWJkxC/ezYsDLmpVnZLTvw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Colin Ian King <colin.i.king@gmail.com>,
-        Alexandra Winter <wintera@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Florian Eckert <fe@dev.tdt.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 07/25] s390/ctcm: fix variable dereferenced before check
+Subject: [PATCH 4.19 07/32] hwmon: (ltq-cputemp) restrict it to SOC_XWAY
 Date:   Mon, 16 May 2022 21:36:21 +0200
-Message-Id: <20220516193614.906869440@linuxfoundation.org>
+Message-Id: <20220516193614.995667923@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193614.678319286@linuxfoundation.org>
-References: <20220516193614.678319286@linuxfoundation.org>
+In-Reply-To: <20220516193614.773450018@linuxfoundation.org>
+References: <20220516193614.773450018@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +58,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexandra Winter <wintera@linux.ibm.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 2c50c6867c85afee6f2b3bcbc50fc9d0083d1343 ]
+[ Upstream commit 151d6dcbed836270c6c240932da66f147950cbdb ]
 
-Found by cppcheck and smatch.
-smatch complains about
-drivers/s390/net/ctcm_sysfs.c:43 ctcm_buffer_write() warn: variable dereferenced before check 'priv' (see line 42)
+Building with SENSORS_LTQ_CPUTEMP=y with SOC_FALCON=y causes build
+errors since FALCON does not support the same features as XWAY.
 
-Fixes: 3c09e2647b5e ("ctcm: rename READ/WRITE defines to avoid redefinitions")
-Reported-by: Colin Ian King <colin.i.king@gmail.com>
-Signed-off-by: Alexandra Winter <wintera@linux.ibm.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Change this symbol to depend on SOC_XWAY since that provides the
+necessary interfaces.
+
+Repairs these build errors:
+
+../drivers/hwmon/ltq-cputemp.c: In function 'ltq_cputemp_enable':
+../drivers/hwmon/ltq-cputemp.c:23:9: error: implicit declaration of function 'ltq_cgu_w32'; did you mean 'ltq_ebu_w32'? [-Werror=implicit-function-declaration]
+   23 |         ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) | CGU_TEMP_PD, CGU_GPHY1_CR);
+../drivers/hwmon/ltq-cputemp.c:23:21: error: implicit declaration of function 'ltq_cgu_r32'; did you mean 'ltq_ebu_r32'? [-Werror=implicit-function-declaration]
+   23 |         ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) | CGU_TEMP_PD, CGU_GPHY1_CR);
+../drivers/hwmon/ltq-cputemp.c: In function 'ltq_cputemp_probe':
+../drivers/hwmon/ltq-cputemp.c:92:31: error: 'SOC_TYPE_VR9_2' undeclared (first use in this function)
+   92 |         if (ltq_soc_type() != SOC_TYPE_VR9_2)
+
+Fixes: 7074d0a92758 ("hwmon: (ltq-cputemp) add cpu temp sensor driver")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Florian Eckert <fe@dev.tdt.de>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: linux-hwmon@vger.kernel.org
+Link: https://lore.kernel.org/r/20220509234740.26841-1-rdunlap@infradead.org
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/s390/net/ctcm_sysfs.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/hwmon/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/s390/net/ctcm_sysfs.c b/drivers/s390/net/ctcm_sysfs.c
-index ded1930a00b2..e3813a7aa5e6 100644
---- a/drivers/s390/net/ctcm_sysfs.c
-+++ b/drivers/s390/net/ctcm_sysfs.c
-@@ -39,11 +39,12 @@ static ssize_t ctcm_buffer_write(struct device *dev,
- 	struct ctcm_priv *priv = dev_get_drvdata(dev);
- 	int rc;
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index c7adaca2ab01..d150d0cab1b6 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -791,7 +791,7 @@ config SENSORS_LTC4261
  
--	ndev = priv->channel[CTCM_READ]->netdev;
--	if (!(priv && priv->channel[CTCM_READ] && ndev)) {
-+	if (!(priv && priv->channel[CTCM_READ] &&
-+	      priv->channel[CTCM_READ]->netdev)) {
- 		CTCM_DBF_TEXT(SETUP, CTC_DBF_ERROR, "bfnondev");
- 		return -ENODEV;
- 	}
-+	ndev = priv->channel[CTCM_READ]->netdev;
- 
- 	rc = kstrtouint(buf, 0, &bs1);
- 	if (rc)
+ config SENSORS_LTQ_CPUTEMP
+ 	bool "Lantiq cpu temperature sensor driver"
+-	depends on LANTIQ
++	depends on SOC_XWAY
+ 	help
+ 	  If you say yes here you get support for the temperature
+ 	  sensor inside your CPU.
 -- 
 2.35.1
 

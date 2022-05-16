@@ -2,131 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C33B55280C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 11:22:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD5B5280B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 11:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231906AbiEPJVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 05:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
+        id S238705AbiEPJVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 05:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242129AbiEPJVe (ORCPT
+        with ESMTP id S229579AbiEPJVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 05:21:34 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED7D26100;
-        Mon, 16 May 2022 02:21:24 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24G8E5W1005786;
-        Mon, 16 May 2022 11:21:09 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=Q4W3Tjig+WlwJ7hKJLTi8rI/emUqtqXFj0FeCqRaQ3Q=;
- b=qsI4yD4DpV+Z45Pez3UNwySlSjWcJ/PvPbwCIRwr0Dd1WZGmEwouNqMRfB16+DQ0tZQM
- xtDh1Fn8SNIoUC1WHCD3bAsETNyoJ2+5FGJa4qye8plxHejH1SFwolBCwq3xJDpPDh51
- EI75uhr/lMRpEoxoygHz/hPZ5TfXe+HNbtrytXiH72IMfVJpTO+zGxOFUxbgIlLxBqv5
- 4rRzUt29spMX2U9kaMsDVgUuFipAG4/8OXQHiASpM566vCDw1glg0VbmF+Fyu14qykQk
- da7T6RQArxsFzrar7zt3rrzpksHW9QPw1ZM4c/4vW6CuT7yZzW8uEB4gQUW0rWEEWmmQ hA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3g21j8hxph-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 11:21:09 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EDCF810002A;
-        Mon, 16 May 2022 11:21:06 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E753F2171DB;
-        Mon, 16 May 2022 11:21:06 +0200 (CEST)
-Received: from localhost (10.75.127.45) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 16 May 2022 11:21:06
- +0200
-From:   Hugues Fruchet <hugues.fruchet@foss.st.com>
-To:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Mon, 16 May 2022 05:21:00 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1E726107;
+        Mon, 16 May 2022 02:20:56 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id m1so19615130wrb.8;
+        Mon, 16 May 2022 02:20:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2TczeHyUCAhehbHrGoveNks21qc/tTNmqgsMN+aZWG4=;
+        b=Qjz1eE1KFzUh9W6px5cIXQbJoqPPvCAp9uDpVBqSCswj4RhfvGneySnDgjvcwJTW7i
+         CH4fdFAtMZJizD2xZs4XVUefKfKUp4uwQYndg1se6xALCAXaAo8/VQqQk3qN0sPt0nu0
+         MQIkkcY3JbruyLrL5OeBeZTdUn+Z4xpMriaeWnTlDdX9ko2fl0o0QDpmefkljNBIRN/T
+         1jwqlz0xGs+2sEu50Y/uYmFrUPwKaSJAF11D2Bos1z95n2UfLuHBvjMsH+YGuBKMywg+
+         7xa51Jspop5WC2gq+E3cN7PlUs2B9rU1h6S4lD6RDuhq09qF+eQ/chC2BikHyX+gKIFx
+         dhFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2TczeHyUCAhehbHrGoveNks21qc/tTNmqgsMN+aZWG4=;
+        b=WNLSAxRtxdktU+Wd7br6pMv4fzqE5SzYMn1sQ2/tELEtz800+25bKIH3J/Nkre1VUB
+         F0ng6uH04cQ1sUl/gXA+p2RpjtOy5jGmhO4xaurH4AOtoDjynKvXPYjMTao6QDFBgOww
+         uLSqVnzOFPx5AgmZ7jXduxw/sb1W+bgF/p+1wTBEItx/Jx5ZytmWMxP+tz4e7qLIl9UM
+         jMR2aC20xpOPwBHYtWENXwm+VWpfARjexwFKXfjLinGUu5wD2MkqKMGSORHeVIsVb6tB
+         uSD+knpAzGToe3YUUgm0ob+JtN9ZYFRI6/adKYOW9uBOXJwuUp5mNv4zkiMc2ellisam
+         tarA==
+X-Gm-Message-State: AOAM5329rTXExjIM4z8znUAsz6hKuut58OxxjFLZer9/oCziNDDLuDX+
+        +hqMQKISss4TfL7lAz4+WzU1btoR2UE=
+X-Google-Smtp-Source: ABdhPJxxQuxBgrM/yM5YgvZaqXBz1UeUoUQt0t32Kdiox/VQ+Nl9pMKZfmdRj8DUNwaBXEiSLTsmTw==
+X-Received: by 2002:adf:d1ef:0:b0:20c:7595:4d68 with SMTP id g15-20020adfd1ef000000b0020c75954d68mr13075955wrd.155.1652692854735;
+        Mon, 16 May 2022 02:20:54 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id s20-20020adf9794000000b0020c5253d902sm8950335wrb.78.2022.05.16.02.20.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 02:20:54 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Michael Tretter <m.tretter@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-CC:     <linux-media@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Philippe CORNU <philippe.cornu@foss.st.com>,
-        Hugues Fruchet <hugues.fruchet@foss.st.com>
-Subject: [PATCH] media: stm32-dcmi: add support of 1X16 serial pixel formats variant
-Date:   Mon, 16 May 2022 11:20:48 +0200
-Message-ID: <20220516092048.264036-1-hugues.fruchet@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        linux-media@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: i2c: isl7998x: make const array isl7998x_video_in_chan_map static
+Date:   Mon, 16 May 2022 10:20:53 +0100
+Message-Id: <20220516092053.27619-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-16_05,2022-05-13_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hugues Fruchet <hugues.fruchet@st.com>
+Don't populate the read-only array isl7998x_video_in_chan_map on the
+stack but instead make it static. Also makes the object code a little
+smaller.
 
-Add support of 1X16 serial pixel formats in order to support
-CSI-2 camera sensor exposing 1x16 pixel formats only.
-
-Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- drivers/media/platform/st/stm32/stm32-dcmi.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ drivers/media/i2c/isl7998x.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
-index 09a743cd7004..b2ba4d95bfa3 100644
---- a/drivers/media/platform/st/stm32/stm32-dcmi.c
-+++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
-@@ -1592,25 +1592,31 @@ static int dcmi_set_default_fmt(struct stm32_dcmi *dcmi)
- 	return 0;
- }
- 
--/*
-- * FIXME: For the time being we only support subdevices
-- * which expose RGB & YUV "parallel form" mbus code (_2X8).
-- * Nevertheless, this allows to support serial source subdevices
-- * and serial to parallel bridges which conform to this.
-- */
- static const struct dcmi_format dcmi_formats[] = {
- 	{
- 		.fourcc = V4L2_PIX_FMT_RGB565,
- 		.mbus_code = MEDIA_BUS_FMT_RGB565_2X8_LE,
- 		.bpp = 2,
-+	}, {
-+		.fourcc = V4L2_PIX_FMT_RGB565,
-+		.mbus_code = MEDIA_BUS_FMT_RGB565_1X16,
-+		.bpp = 2,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_YUYV,
- 		.mbus_code = MEDIA_BUS_FMT_YUYV8_2X8,
- 		.bpp = 2,
-+	}, {
-+		.fourcc = V4L2_PIX_FMT_YUYV,
-+		.mbus_code = MEDIA_BUS_FMT_YUYV8_1X16,
-+		.bpp = 2,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_UYVY,
- 		.mbus_code = MEDIA_BUS_FMT_UYVY8_2X8,
- 		.bpp = 2,
-+	}, {
-+		.fourcc = V4L2_PIX_FMT_UYVY,
-+		.mbus_code = MEDIA_BUS_FMT_UYVY8_1X16,
-+		.bpp = 2,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_JPEG,
- 		.mbus_code = MEDIA_BUS_FMT_JPEG_1X8,
+diff --git a/drivers/media/i2c/isl7998x.c b/drivers/media/i2c/isl7998x.c
+index dc3068549dfa..94e60aa2786a 100644
+--- a/drivers/media/i2c/isl7998x.c
++++ b/drivers/media/i2c/isl7998x.c
+@@ -665,7 +665,7 @@ static int isl7998x_set_standard(struct isl7998x *isl7998x, v4l2_std_id norm)
+ static int isl7998x_init(struct isl7998x *isl7998x)
+ {
+ 	const unsigned int lanes = isl7998x->nr_mipi_lanes;
+-	const u32 isl7998x_video_in_chan_map[] = { 0x00, 0x11, 0x02, 0x02 };
++	static const u32 isl7998x_video_in_chan_map[] = { 0x00, 0x11, 0x02, 0x02 };
+ 	const struct reg_sequence isl7998x_init_seq_custom[] = {
+ 		{ ISL7998X_REG_P0_VIDEO_IN_CHAN_CTL,
+ 		  isl7998x_video_in_chan_map[isl7998x->nr_inputs - 1] },
 -- 
-2.25.1
+2.35.1
 

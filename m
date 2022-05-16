@@ -2,80 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2FF05281F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:25:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2745281F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242576AbiEPKZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 06:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37932 "EHLO
+        id S241449AbiEPKZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 06:25:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242802AbiEPKZF (ORCPT
+        with ESMTP id S242794AbiEPKZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 06:25:05 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFFBDEF5
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 03:25:02 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id f4so15373841iov.2
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 03:25:02 -0700 (PDT)
+        Mon, 16 May 2022 06:25:04 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB3D11165
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 03:24:52 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id e189so18019191oia.8
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 03:24:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dTo0qY4qQgxJkitwVcq8KgHfBlJlWID4iFoIHlxueiw=;
-        b=Dru+4XMrLKy46CAqyjByKC4XWPFK0jI7p3XA5l6APRqrSdI96JioqoD0fQvTtDjqzJ
-         Mom8RxPWUtGPP3N2x9FxhMXrKHLEGo8ZWpBxpJ6+WJYvspSkcZih8QXM362BZqBRwC+g
-         NMINHuHxAR8LOm3RNBCtJ41enhyyORWyIqPAIEtywX1rCjC2JTaJlXY3NCJgCyxDfa9n
-         f1J8ENAxM5i3H2V+YTS0MGpSiOlKnDUVNq3QKBx4o+vekhrE+nT1cg9LdnuA+7uYBEDp
-         GRhHsaEqOuI5MwsFJuzFPDbEGympXbYEplB95NtWdooQT1TJag7QL4W9E3O+KkaLCQrk
-         DnWQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=a2tnZgq+EVjyw+rOdY1r6GsOsQaQP/Lxu/X2gn6ZDPs=;
+        b=cb0gdPs0Aln8Y3T1wNUilKJE4d8bKpIRY+e2YmwlWPaWzOF+lZrl4YSCAngrloEohB
+         pPyfuu0FWZvggtdgFPCRTCrcvLxZ9er2dEXOl/hNdXAqOItq/U3lXg/lBB8E3/mMrqLx
+         7rYbW6fK+b8ttBWreFJWZQ5URFegtjexPT+ulYE0dBleLw6ERHb4BpEAdyFqI98+SNzu
+         pIwrgYU3iY5bkgeDdQ9dQNpkXR9MFf8SFaZtEQm4DeUSb81+vY517I9L2Psgeva/FMRj
+         XXvZj29DPjVhcdQr2JfrrpzpGgtj5e3hDLkHweo7YzNbRFehSj4z8wFktPgpKbyrCado
+         /gng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dTo0qY4qQgxJkitwVcq8KgHfBlJlWID4iFoIHlxueiw=;
-        b=VkVWJnu7+S+khNJQQDF1X4jeB6U3Up4FbzSPKlBsKzYLrXLD9uy8ZwlBH21Dpodazw
-         pbLzhBt8FI23om9bedVPUqf/k9ZB1FKTyQhrLtp95iiXhhju46NRa+mt99BkI3NdVE4g
-         zZ7jvNhbElk2e1TPa28lHMOdVKMwSbRmp/iY0GKcTmo9zkpgPokkcDlLaRHVGjttH8BD
-         D/lBDGAlw98TtilatFZFEPAIl2Ep1LzJPTXTcmBR+k42oWubH/3hs8AVoPCmUvgDOR2M
-         xoxU1rxjLKWc/n7gNBqS9r5x8khbbuRCP4vtyLZ77F1t0Ox1qXH7XCvFn/RA3QfBRtbU
-         3IYA==
-X-Gm-Message-State: AOAM532gA2unBeAHfISdddfL+75nlw4KU7Bq/7RQ/ykz1rDbvyDW9za2
-        K4r0mZ7hVCaBcpwMlJM974Y7rytlFwKGKZB44rLd6w==
-X-Google-Smtp-Source: ABdhPJxiwg+0C7eGGBCGUJ2Uvvu9Z4mJHyrzmaFOQeqpjtSlh1vTjwGP84gHeqkbo/KAnQd30xfguEZ8O0e+03cYWEE=
-X-Received: by 2002:a05:6602:1591:b0:60f:6acc:6979 with SMTP id
- e17-20020a056602159100b0060f6acc6979mr7772505iow.173.1652696702110; Mon, 16
- May 2022 03:25:02 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=a2tnZgq+EVjyw+rOdY1r6GsOsQaQP/Lxu/X2gn6ZDPs=;
+        b=yE6AQkeBDhPwuONudjb3zIVjsWbJ+U0ok8Eg9C4Qell8IAlGfeXoiXgKNnKxxe+Wpb
+         8933dGRSeJfovdsx83AS3Osr8nXt3AfzE/4X4cnCdaf9JSsTE8vfTqspzhZFAkK69qZ5
+         Z/oQvf6KPDDBjPzQ2Ht15nOr7RCl6EHWQ0xMS8rFj9L0eYxcaoXwRzdGC2VxUEOlj9yy
+         82dxXscZceX4FQV/GrCVcT7ibcVdKsDFArQiw4UAdgHsvbxhpYVRtjlzbBZTdZa4wAOp
+         CSVsOikVHrnLUE3KR+voWGbWeDtVy+O/KlB1YjDBgg6sZe66TozxGCqOe4L3a2D9XY7t
+         nyEQ==
+X-Gm-Message-State: AOAM5307reTIlSrgoxpw8ub8NqsAMJ6ZQwwHS2efK5DUffW08Mmn1A+A
+        W/LC1vJOE6Oss19gc4ToQ7y4+o+rQie7tb6SiBM=
+X-Google-Smtp-Source: ABdhPJxmBab7o3mU2rke48DYUCmw2MVRmUqNU5TkARViAjsx8KcXz006ZigHYLtEFHuBy0mbo1q6XlbnLOgKcXzbtgg=
+X-Received: by 2002:a05:6808:3091:b0:326:cd17:fed4 with SMTP id
+ bl17-20020a056808309100b00326cd17fed4mr13282306oib.51.1652696692027; Mon, 16
+ May 2022 03:24:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220516030251.42323-1-schspa@gmail.com>
-In-Reply-To: <20220516030251.42323-1-schspa@gmail.com>
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-Date:   Mon, 16 May 2022 11:24:50 +0100
-Message-ID: <CAKohpo==gvvyd2HxL3sLTqXS-VbFeprkgAdSAjU3mnbq4Qn-Jg@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] cpufreq: Abort show/store for half initialized policy
-To:     Schspa Shi <schspa@gmail.com>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Received: by 2002:a05:6838:6c25:0:0:0:0 with HTTP; Mon, 16 May 2022 03:24:51
+ -0700 (PDT)
+Reply-To: fundsrecoverycommittee@aol.com
+From:   Geoffrey Bristol - FUNDS RECOVERY COMMITTEE <bfranck976@gmail.com>
+Date:   Mon, 16 May 2022 03:24:51 -0700
+Message-ID: <CAOXQwByTKsqFujp8F+GmEpen2=Vk617XfGBJ6OSgn05c-i2=0Q@mail.gmail.com>
+Subject: COMPENSATION PROGRAM
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:22c listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [bfranck976[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [bfranck976[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 16 May 2022 at 04:03, Schspa Shi <schspa@gmail.com> wrote:
->
-> If policy initialization fails after the sysfs files are created,
-> there is a possibility that we may end up running show()/store()
-> callbacks for half initialized policies, which may have unpredictable
-> outcomes.
->
-> Abort show/store in such a case by making sure the policy is active.
-> Also inactivate the policy on such failures.
->
-> Signed-off-by: Schspa Shi <schspa@gmail.com>
+Dear victim,
+										
+The United Nations in conjunction with the European
+Union,International Monetary Fund and World Bank is offering
+compensation to internet fraud/scam victims globally.
+If you are interested kindly indicate with your response.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Geoffrey Bristol(Chairman)
+FUNDS RECOVERY COMMITTEE.

@@ -2,50 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 896EB528FD2
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1277352915D
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347055AbiEPUUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
+        id S1347977AbiEPUen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348929AbiEPT7E (ORCPT
+        with ESMTP id S1351073AbiEPUB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:59:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240E23ED3C;
-        Mon, 16 May 2022 12:53:00 -0700 (PDT)
+        Mon, 16 May 2022 16:01:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE40B3EF09;
+        Mon, 16 May 2022 12:58:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3F6660ABE;
-        Mon, 16 May 2022 19:52:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBD18C34100;
-        Mon, 16 May 2022 19:52:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 712C8B81615;
+        Mon, 16 May 2022 19:58:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB3CEC385AA;
+        Mon, 16 May 2022 19:58:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730779;
-        bh=YbsiaqMe5yBZdvF9hnBlQ3vhxcQzkb8TxDMCiVQAXOg=;
+        s=korg; t=1652731089;
+        bh=YMYJCd01UUyE8kNd9wRP9+bD6BDn8c+cckoyvOVsVpI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WDvEPLuekxmK/feHs64LIcsLPPcPGM3Q/mdJXYWYpzsEhCaVQlBxEeWlBIxyk9Bay
-         SA/aAnE0oeTwlO5IbegXBmoVfVoTcyiFkVwz5lJMKXCXLamg+eRJxtboepVv5m26w+
-         CJqLUb/a0bCSRJ85lYYl0zjipsoj+yt1zYCjOKVs=
+        b=R18+IUithdomFQMSOVIcVyBxXME4nQG3+jgCvyxwoZdk/77juIemM8rrB2JUS40Wk
+         YDnjWR4ifgDduGOLNgDVVcNHvYImyTV5kpBE4FCXqgsdYLWAfJWACPeqevON6CPgSS
+         +yU17R8KIrSuHgRoAZw0hYt4LTq8uTlQqdgqDdno=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        William Kucharski <william.kucharski@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.15 098/102] mm/hwpoison: use pr_err() instead of dump_page() in get_any_page()
-Date:   Mon, 16 May 2022 21:37:12 +0200
-Message-Id: <20220516193626.814874017@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Jordan Leppert <jordanleppert@protonmail.com>,
+        Holger Hoffstaette <holger@applied-asynchrony.com>,
+        Manuel Ullmann <labre@posteo.de>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH 5.17 099/114] net: atlantic: always deep reset on pm op, fixing up my null deref regression
+Date:   Mon, 16 May 2022 21:37:13 +0200
+Message-Id: <20220516193628.317989145@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
-References: <20220516193623.989270214@linuxfoundation.org>
+In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
+References: <20220516193625.489108457@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,93 +57,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+From: Manuel Ullmann <labre@posteo.de>
 
-commit 1825b93b626e99eb9a0f9f50342c7b2fa201b387 upstream.
+commit 1809c30b6e5a83a1de1435fe01aaa4de4d626a7c upstream.
 
-The following VM_BUG_ON_FOLIO() is triggered when memory error event
-happens on the (thp/folio) pages which are about to be freed:
+The impact of this regression is the same for resume that I saw on
+thaw: the kernel hangs and nothing except SysRq rebooting can be done.
 
-  [ 1160.232771] page:00000000b36a8a0f refcount:1 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x16a000
-  [ 1160.236916] page:00000000b36a8a0f refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x16a000
-  [ 1160.240684] flags: 0x57ffffc0800000(hwpoison|node=1|zone=2|lastcpupid=0x1fffff)
-  [ 1160.243458] raw: 0057ffffc0800000 dead000000000100 dead000000000122 0000000000000000
-  [ 1160.246268] raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
-  [ 1160.249197] page dumped because: VM_BUG_ON_FOLIO(!folio_test_large(folio))
-  [ 1160.251815] ------------[ cut here ]------------
-  [ 1160.253438] kernel BUG at include/linux/mm.h:788!
-  [ 1160.256162] invalid opcode: 0000 [#1] PREEMPT SMP PTI
-  [ 1160.258172] CPU: 2 PID: 115368 Comm: mceinj.sh Tainted: G            E     5.18.0-rc1-v5.18-rc1-220404-2353-005-g83111+ #3
-  [ 1160.262049] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35 04/01/2014
-  [ 1160.265103] RIP: 0010:dump_page.cold+0x27e/0x2bd
-  [ 1160.266757] Code: fe ff ff 48 c7 c6 81 f1 5a 98 e9 4c fe ff ff 48 c7 c6 a1 95 59 98 e9 40 fe ff ff 48 c7 c6 50 bf 5a 98 48 89 ef e8 9d 04 6d ff <0f> 0b 41 f7 c4 ff 0f 00 00 0f 85 9f fd ff ff 49 8b 04 24 a9 00 00
-  [ 1160.273180] RSP: 0018:ffffaa2c4d59fd18 EFLAGS: 00010292
-  [ 1160.274969] RAX: 000000000000003e RBX: 0000000000000001 RCX: 0000000000000000
-  [ 1160.277263] RDX: 0000000000000001 RSI: ffffffff985995a1 RDI: 00000000ffffffff
-  [ 1160.279571] RBP: ffffdc9c45a80000 R08: 0000000000000000 R09: 00000000ffffdfff
-  [ 1160.281794] R10: ffffaa2c4d59fb08 R11: ffffffff98940d08 R12: ffffdc9c45a80000
-  [ 1160.283920] R13: ffffffff985b6f94 R14: 0000000000000000 R15: ffffdc9c45a80000
-  [ 1160.286641] FS:  00007eff54ce1740(0000) GS:ffff99c67bd00000(0000) knlGS:0000000000000000
-  [ 1160.289498] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  [ 1160.291106] CR2: 00005628381a5f68 CR3: 0000000104712003 CR4: 0000000000170ee0
-  [ 1160.293031] Call Trace:
-  [ 1160.293724]  <TASK>
-  [ 1160.294334]  get_hwpoison_page+0x47d/0x570
-  [ 1160.295474]  memory_failure+0x106/0xaa0
-  [ 1160.296474]  ? security_capable+0x36/0x50
-  [ 1160.297524]  hard_offline_page_store+0x43/0x80
-  [ 1160.298684]  kernfs_fop_write_iter+0x11c/0x1b0
-  [ 1160.299829]  new_sync_write+0xf9/0x160
-  [ 1160.300810]  vfs_write+0x209/0x290
-  [ 1160.301835]  ksys_write+0x4f/0xc0
-  [ 1160.302718]  do_syscall_64+0x3b/0x90
-  [ 1160.303664]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-  [ 1160.304981] RIP: 0033:0x7eff54b018b7
+Fixes regression in commit cbe6c3a8f8f4 ("net: atlantic: invert deep
+par in pm functions, preventing null derefs"), where I disabled deep
+pm resets in suspend and resume, trying to make sense of the
+atl_resume_common() deep parameter in the first place.
 
-As shown in the RIP address, this VM_BUG_ON in folio_entire_mapcount() is
-called from dump_page("hwpoison: unhandlable page") in get_any_page().
-The below explains the mechanism of the race:
+It turns out, that atlantic always has to deep reset on pm
+operations. Even though I expected that and tested resume, I screwed
+up by kexec-rebooting into an unpatched kernel, thus missing the
+breakage.
 
-  CPU 0                                       CPU 1
+This fixup obsoletes the deep parameter of atl_resume_common, but I
+leave the cleanup for the maintainers to post to mainline.
 
-    memory_failure
-      get_hwpoison_page
-        get_any_page
-          dump_page
-            compound = PageCompound
-                                                free_pages_prepare
-                                                  page->flags &= ~PAGE_FLAGS_CHECK_AT_PREP
-            folio_entire_mapcount
-              VM_BUG_ON_FOLIO(!folio_test_large(folio))
+Suspend and hibernation were successfully tested by the reporters.
 
-So replace dump_page() with safer one, pr_err().
-
-Link: https://lkml.kernel.org/r/20220427053220.719866-1-naoya.horiguchi@linux.dev
-Fixes: 74e8ee4708a8 ("mm: Turn head_compound_mapcount() into folio_entire_mapcount()")
-Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Christoph Hellwig <hch@infradead.org>
-Cc: Jason Gunthorpe <jgg@nvidia.com>
-Cc: William Kucharski <william.kucharski@oracle.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Fixes: cbe6c3a8f8f4 ("net: atlantic: invert deep par in pm functions, preventing null derefs")
+Link: https://lore.kernel.org/regressions/9-Ehc_xXSwdXcvZqKD5aSqsqeNj5Izco4MYEwnx5cySXVEc9-x_WC4C3kAoCqNTi-H38frroUK17iobNVnkLtW36V6VWGSQEOHXhmVMm5iQ=@protonmail.com/
+Reported-by: Jordan Leppert <jordanleppert@protonmail.com>
+Reported-by: Holger Hoffstaette <holger@applied-asynchrony.com>
+Tested-by: Jordan Leppert <jordanleppert@protonmail.com>
+Tested-by: Holger Hoffstaette <holger@applied-asynchrony.com>
+CC: <stable@vger.kernel.org> # 5.10+
+Signed-off-by: Manuel Ullmann <labre@posteo.de>
+Link: https://lore.kernel.org/r/87bkw8dfmp.fsf@posteo.de
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/memory-failure.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -1217,7 +1217,7 @@ try_again:
- 	}
- out:
- 	if (ret == -EIO)
--		dump_page(p, "hwpoison: unhandlable page");
-+		pr_err("Memory failure: %#lx: unhandlable page.\n", page_to_pfn(p));
+--- a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
++++ b/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
+@@ -449,7 +449,7 @@ static int aq_pm_freeze(struct device *d
  
- 	return ret;
+ static int aq_pm_suspend_poweroff(struct device *dev)
+ {
+-	return aq_suspend_common(dev, false);
++	return aq_suspend_common(dev, true);
  }
+ 
+ static int aq_pm_thaw(struct device *dev)
+@@ -459,7 +459,7 @@ static int aq_pm_thaw(struct device *dev
+ 
+ static int aq_pm_resume_restore(struct device *dev)
+ {
+-	return atl_resume_common(dev, false);
++	return atl_resume_common(dev, true);
+ }
+ 
+ static const struct dev_pm_ops aq_pm_ops = {
 
 

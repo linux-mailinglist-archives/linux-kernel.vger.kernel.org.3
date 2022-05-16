@@ -2,146 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A86527E90
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 690C1527E92
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:29:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241120AbiEPH2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 03:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43936 "EHLO
+        id S241103AbiEPH3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 03:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232759AbiEPH2e (ORCPT
+        with ESMTP id S232759AbiEPH3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 03:28:34 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60931F614
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:28:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652686113; x=1684222113;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=q3m2ohYSgy6ZmyxlbpF3+joY8hSjHHJlesu9z1mgl+c=;
-  b=KDgrCbGAsr4SULpkNeq7pnZYANcVkIae82ToF9tS/W1gfxmM2GT5HftD
-   AWJrwjWxAHFYjhIXqM1X4LMlgFdTwcCF4SIVSzeR3/5gOdBAM5iHSzyXi
-   U0nI4xAEDv3NyZDcTzgOkVA/zFHMjlKfToYGlOFCVSBD/Gzhp+GECoMUJ
-   bl5x63/gEtr1oFi0/XVXDYedMbt2SSTWKRDFLcsv0SJhfN57JJTB6dwfF
-   oUWduojKmLDblH5ZLuAJZV3q6LYYwGXHZUqu4sQRLL8E5TxpwmSxpqHhJ
-   weCMa5q6XkP1tZNBkskGc6kOn4+ElPT5hHs1kBZSnW4CUpD+e/sl56SPi
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="331382945"
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="331382945"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 00:28:30 -0700
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="568201191"
-Received: from jrozansk-mobl.ger.corp.intel.com (HELO localhost) ([10.249.130.253])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 00:28:23 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Liu Yi L <yi.l.liu@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ning Sun <ning.sun@intel.com>
-Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Steve Wahl <steve.wahl@hpe.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        Lu Baolu <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH 4/7] drm/i915: Remove unnecessary include
-In-Reply-To: <20220514014322.2927339-5-baolu.lu@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220514014322.2927339-1-baolu.lu@linux.intel.com>
- <20220514014322.2927339-5-baolu.lu@linux.intel.com>
-Date:   Mon, 16 May 2022 10:28:19 +0300
-Message-ID: <877d6mhr70.fsf@intel.com>
+        Mon, 16 May 2022 03:29:37 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF62621811;
+        Mon, 16 May 2022 00:29:35 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L1rTW2qhnzhZCc;
+        Mon, 16 May 2022 15:28:47 +0800 (CST)
+Received: from [10.67.110.112] (10.67.110.112) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 16 May 2022 15:29:33 +0800
+Subject: Re: [PATCH -next] powerpc: add support for syscall stack
+ randomization
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        <benh@kernel.crashing.org>, <christophe.leroy@csgroup.eu>,
+        <mark.rutland@arm.com>, <paulus@samba.org>, <tglx@linutronix.de>
+CC:     <linux-hardening@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>
+References: <20220505111932.228814-1-xiujianfeng@huawei.com>
+ <1652173338.7bltwybi0c.astroid@bobo.none>
+ <a1dcd50b-0819-df54-a963-ebb0551e3356@huawei.com>
+ <87pmki7uwf.fsf@mpe.ellerman.id.au>
+From:   xiujianfeng <xiujianfeng@huawei.com>
+Message-ID: <bf8abb20-0aca-24b2-0f24-bc977af1fa1c@huawei.com>
+Date:   Mon, 16 May 2022 15:29:33 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <87pmki7uwf.fsf@mpe.ellerman.id.au>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.112]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 14 May 2022, Lu Baolu <baolu.lu@linux.intel.com> wrote:
-> intel-iommu.h is not needed in drm/i915 anymore. Remove its include.
 
-Thanks for the cleanups. Do you want to keep the patches together or
-want us to pick this up via drm-intel?
+在 2022/5/12 21:17, Michael Ellerman 写道:
+> xiujianfeng <xiujianfeng@huawei.com> writes:
+>> 在 2022/5/10 17:23, Nicholas Piggin 写道:
+>>> Excerpts from Xiu Jianfeng's message of May 5, 2022 9:19 pm:
+>>>> Add support for adding a random offset to the stack while handling
+>>>> syscalls. This patch uses mftb() instead of get_random_int() for better
+>>>> performance.
+> ...
+>>>> @@ -405,6 +407,7 @@ interrupt_exit_user_prepare_main(unsigned long ret, struct pt_regs *regs)
+>>>>
+>>>>    	/* Restore user access locks last */
+>>>>    	kuap_user_restore(regs);
+>>>> +	choose_random_kstack_offset(mftb() & 0xFF);
+>>>>
+>>>>    	return ret;
+>>>>    }
+>>> So this seems to be what x86 and s390 do, but why are we choosing a
+>>> new offset for every interrupt when it's only used on a syscall?
+>>> I would rather you do what arm64 does and just choose the offset
+>>> at the end of system_call_exception.
+>> thanks for you suggestion, will do in v2.
+>>> I wonder why the choose is separated from the add? I guess it's to
+>>> avoid a data dependency for stack access on an expensive random
+>>> function, so that makes sense (a comment would be nice in the
+>>> generic code).
+>>>
+>>> I don't actually know if mftb() is cheaper here than a RNG. It
+>>> may not be conditioned all that well either. I would be tempted
+>> #if defined(__powerpc64__) && (defined(CONFIG_PPC_CELL) ||
+>> defined(CONFIG_E500))
+>> #define mftb()          ({unsigned long rval;                           \
+>>                           asm volatile(                                   \
+>>                                   "90:    mfspr %0, %2;\n"                \
+>> ASM_FTR_IFSET(                          \
+>>                                           "97:    cmpwi %0,0;\n"          \
+>>                                           "       beq- 90b;\n", "", %1)   \
+>>                           : "=r" (rval) \
+>>                           : "i" (CPU_FTR_CELL_TB_BUG), "i" (SPRN_TBRL) :
+>> "cr0"); \
+>>                           rval;})
+>> #elif defined(CONFIG_PPC_8xx)
+>> #define mftb()          ({unsigned long rval;   \
+>>                           asm volatile("mftbl %0" : "=r" (rval)); rval;})
+>> #else
+>> #define mftb()          ({unsigned long rval;   \
+>>                           asm volatile("mfspr %0, %1" : \
+>>                                        "=r" (rval) : "i" (SPRN_TBRL));
+>> rval;})
+>> #endif /* !CONFIG_PPC_CELL */
+>>
+>> there are 3 implementations of mftb() in
+>> arch/powerpc/include/asm/vdso/timebase.h,
+>>
+>> the last two cases have only one instruction, It's obviously cheaper
+>> than get_random_int,
+> Just because it's one instruction doesn't mean it's obviously cheaper.
+> On some CPUs mftb takes 10s of cycles, and can also stall the pipeline.
+>
+> But looking at get_random_u32() it does look pretty complicated, it
+> takes a lock and so on. It's also silly to call get_random_u32() for
+> 4-bits of randomness.
+>
+> My initial impression was that mftb() is too predictable to be useful
+> against a determined attacker. But looking closer I see that
+> choose_random_kstack_offset() xor's the value we pass with the existing
+> value. So that makes me less worried about using mftb().
+>
+> We could additionally call choose_random_kstack_offset(get_random_int())
+> less regularly, eg. during context switch. But I guess that's too
+> infrequent to actually make any difference.
+>
+> But limiting it to 4-bits of randomness seems insufficient. It seems
+> like we should allow the full 6 (10) bits, and anyone turning this
+> option on should probably also consider increasing their stack size.
+>
+> Also did you check the help text about stack-protector under
+> HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET?
 
-If you want to keep the patches together,
+thanks for your reminder, will disable stack-protector for interrupt.c 
+in v2,
 
-Acked-by: Jani Nikula <jani.nikula@intel.com>
-
-for merging via whichever tree suits you best. Just let us know.
-
-BR,
-Jani.
-
+just like arm64 do.
 
 >
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> ---
->  drivers/gpu/drm/i915/i915_drv.h                | 1 -
->  drivers/gpu/drm/i915/display/intel_display.c   | 1 -
->  drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c | 1 -
->  3 files changed, 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_=
-drv.h
-> index fa14da84362e..f2a6982c3bef 100644
-> --- a/drivers/gpu/drm/i915/i915_drv.h
-> +++ b/drivers/gpu/drm/i915/i915_drv.h
-> @@ -36,7 +36,6 @@
->=20=20
->  #include <linux/i2c.h>
->  #include <linux/i2c-algo-bit.h>
-> -#include <linux/intel-iommu.h>
->  #include <linux/pm_qos.h>
->=20=20
->  #include <drm/drm_connector.h>
-> diff --git a/drivers/gpu/drm/i915/display/intel_display.c b/drivers/gpu/d=
-rm/i915/display/intel_display.c
-> index 7dfeb458aa65..686ddbeebadc 100644
-> --- a/drivers/gpu/drm/i915/display/intel_display.c
-> +++ b/drivers/gpu/drm/i915/display/intel_display.c
-> @@ -27,7 +27,6 @@
->  #include <acpi/video.h>
->  #include <linux/i2c.h>
->  #include <linux/input.h>
-> -#include <linux/intel-iommu.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/dma-resv.h>
-> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c b/drivers/gpu=
-/drm/i915/gem/i915_gem_execbuffer.c
-> index d42f437149c9..c9823528ea94 100644
-> --- a/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
-> +++ b/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
-> @@ -4,7 +4,6 @@
->   * Copyright =C2=A9 2008,2010 Intel Corporation
->   */
->=20=20
-> -#include <linux/intel-iommu.h>
->  #include <linux/dma-resv.h>
->  #include <linux/sync_file.h>
->  #include <linux/uaccess.h>
-
---=20
-Jani Nikula, Intel Open Source Graphics Center
+> cheers

@@ -2,102 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACC88529512
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 01:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F59552954B
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 01:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245714AbiEPXS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 19:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53486 "EHLO
+        id S1347568AbiEPX2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 19:28:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231344AbiEPXS5 (ORCPT
+        with ESMTP id S238157AbiEPX2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 19:18:57 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5C033A27;
-        Mon, 16 May 2022 16:18:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652743136; x=1684279136;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=i7wsPh2fobRlYAsrYMy+rFuqEKWx5TVdq2AvC5j5cTM=;
-  b=cKfVcab3x8TlxZMvvXgy1t6xPlZ+QB4xUaOzgfYQDAJdPwo/fFHkUtRK
-   LdbpUysTlea/lPTAvifA1yQk3BXFFyufA/4V42+pMwqK5zR/Vo0YuhkFW
-   XVKBEYApt9TPT/cFlAmvadYpDURXLQx1r93ZuDvzBj9XJRFoSyRrNpPM8
-   mxBEJ6Yqth0Ytoj0R4TOA3dR5MBS9P7FlzAkyFEn00HCPTzwmx0yA+VS2
-   flIkOISPO1rpSyZMgqOqfhSRGBvNpPG1sISdBqQEPnB84NZNaw8zWZpAR
-   AeFbeFAU2ER7Ornrxv8wygG7m2IbInjA1OvDTwRP2LVS6zpi76pkLj4Rn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="334034458"
-X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
-   d="scan'208";a="334034458"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 16:18:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
-   d="scan'208";a="555493661"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 16 May 2022 16:18:53 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nqjzI-0000PN-Ql;
-        Mon, 16 May 2022 23:18:52 +0000
-Date:   Tue, 17 May 2022 07:18:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Xiubo Li <xiubli@redhat.com>, jlayton@kernel.org,
-        viro@zeniv.linux.org.uk
-Cc:     kbuild-all@lists.01.org, idryomov@gmail.com, vshankar@redhat.com,
-        ceph-devel@vger.kernel.org, mcgrof@kernel.org,
-        akpm@linux-foundation.org, arnd@arndb.de,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiubo Li <xiubli@redhat.com>
-Subject: Re: [PATCH 2/2] ceph: wait the first reply of inflight unlink/rmdir
-Message-ID: <202205170751.AZfL9JiX-lkp@intel.com>
-References: <20220516122046.40655-3-xiubli@redhat.com>
+        Mon, 16 May 2022 19:28:07 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264D137030
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 16:28:04 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id i5so11611535ilv.0
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 16:28:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=aB42P+32Sum2YGY8sIwFisRp1PF9vp9paSBH6A92ZaE=;
+        b=Zv6HbJakhqS+8wMgeAmCsL+LluuM1WF/O/iD6PBZbTfwaeoxl+nGIXjE0bxK3qLegV
+         rZW7Cm8pz7iuOCC10rLuWZIo+EWIs3JKeOwt3XQu3Vv5z7pwl+sjDUwqFeUCC/RluqIs
+         EIx+Op8FRpoPxCIwiSmmxs5FlU8Ez8p/fHPf0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=aB42P+32Sum2YGY8sIwFisRp1PF9vp9paSBH6A92ZaE=;
+        b=p0gNQcnbcdihuI/FMYDpuYOk2VqgpFW40k7biZvydDEJtboBWKcDYuXuyTMCUdF0ac
+         t0L53LQGGwHIEJIqzxLuYRdsEtwYi2FxgxLPLXU5Wstml6cf1VZSHbHWpnBczRk3c/EH
+         IrM2OkZGBtFv+NYr0CK3fOrykmf/EmdN7lvGpjAoDgVHce3F5jWFmI2grFN46x4lpVY9
+         5NXagJ7ksiE9/pkpZzXlsTDRXGVBhclGW6kxS8VlhxPOEnlteDv97455+YW6Z1CY1Tsl
+         7eY0LM8bu7Mr0DEad8rSCP7/O851VIiXMvx3D4dCmGbfxZW7vaQ3jPCuJ8+mva8QCjkj
+         U5bw==
+X-Gm-Message-State: AOAM531Hke6rlsIqFB+iCA+l1CSXYdAMT59B79gOerR67Qlezug1qLSr
+        SFvVqJyiIen1gUYe7WHntwRaqA==
+X-Google-Smtp-Source: ABdhPJzjAxpWuSAl3NSm2jw1j14nzqb8OMF43VWfK8MkCFKfzvQ5EPRFC8NsalLmZGBu91pdgn8guQ==
+X-Received: by 2002:a05:6e02:1905:b0:2cf:1afa:7523 with SMTP id w5-20020a056e02190500b002cf1afa7523mr10791194ilu.234.1652743683444;
+        Mon, 16 May 2022 16:28:03 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id d76-20020a6bcd4f000000b0065a9e81df9dsm202417iog.4.2022.05.16.16.28.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 16:28:02 -0700 (PDT)
+Subject: Re: [PATCH v2 1/1] selftests: vm: add process_mrelease tests
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        David Rientjes <rientjes@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <guro@fb.com>, Minchan Kim <minchan@kernel.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jann Horn <jannh@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>, shuah@kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
+        kernel-team <kernel-team@android.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220516075538.1276644-1-surenb@google.com>
+ <78c3a163-551b-ef53-4018-7b6ba0640757@linuxfoundation.org>
+ <CAJuCfpEW3kif-QAVdFKyZikVRT5QrLGwJ5pzua+yuVq=A=bv8w@mail.gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <7f0fd407-18f5-2718-40b5-b16804163197@linuxfoundation.org>
+Date:   Mon, 16 May 2022 17:28:01 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220516122046.40655-3-xiubli@redhat.com>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAJuCfpEW3kif-QAVdFKyZikVRT5QrLGwJ5pzua+yuVq=A=bv8w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xiubo,
+On 5/16/22 2:47 PM, Suren Baghdasaryan wrote:
+> On Mon, May 16, 2022 at 1:29 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>
+>> On 5/16/22 1:55 AM, Suren Baghdasaryan wrote:
+>>> Introduce process_mrelease syscall sanity tests which include tests
+>>> which expect to fail:
+>>> - process_mrelease with invalid pidfd and flags inputs
+>>> - process_mrelease on a live process with no pending signals
+>>> and valid process_mrelease usage which is expected to succeed.
+>>> Because process_mrelease has to be used against a process with a pending
+>>> SIGKILL, it's possible that the process exits before process_mrelease
+>>> gets called. In such cases we retry the test with a victim that allocates
+>>> twice more memory up to 1GB. This would require the victim process to
+>>> spend more time during exit and process_mrelease has a better chance of
+>>> catching the process before it exits and succeeding.
+>>>
+>>> On success the test reports the amount of memory the child had to
+>>> allocate for reaping to succeed. Sample output:
+>>>       Success reaping a child with 1MB of memory allocations
+>>>
+>>> On failure the test reports the failure. Sample outputs:
+>>>       All process_mrelease attempts failed!
+>>>       process_mrelease: Invalid argument
+>>>
+>>
+>> Nit: Please format this better - include actual example output from the
+>> command and how to run the test examples.
+> 
+> Hmm... Those are the actual outputs from the command and it does not
+> take any input arguments. Do you mean smth like this:
+> 
+> $ mrelease_test
+> Success reaping a child with 1MB of memory allocations
+> 
+> $ mrelease_test
+> All process_mrelease attempts failed!
+> 
+> $ mrelease_test
+> process_mrelease: Invalid argument
+> 
+> ?
 
-I love your patch! Yet something to improve:
+This looks good.
 
-[auto build test ERROR on ceph-client/for-linus]
-[also build test ERROR on linus/master v5.18-rc7 next-20220516]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> 
+>>
+>>> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+>>> ---
+>>>    tools/testing/selftests/vm/.gitignore      |   1 +
+>>>    tools/testing/selftests/vm/Makefile        |   1 +
+>>>    tools/testing/selftests/vm/mrelease_test.c | 214 +++++++++++++++++++++
+>>>    tools/testing/selftests/vm/run_vmtests.sh  |  16 ++
+>>>    4 files changed, 232 insertions(+)
+>>>    create mode 100644 tools/testing/selftests/vm/mrelease_test.c
+>>>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Xiubo-Li/ceph-wait-async-unlink-to-finish/20220516-202249
-base:   https://github.com/ceph/ceph-client.git for-linus
-config: i386-debian-10.3-kselftests (https://download.01.org/0day-ci/archive/20220517/202205170751.AZfL9JiX-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/85d578952d01b70d71fccd86ccb0fdd1dbd0df8b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Xiubo-Li/ceph-wait-async-unlink-to-finish/20220516-202249
-        git checkout 85d578952d01b70d71fccd86ccb0fdd1dbd0df8b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+[snip]
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+>>
+>> Okay these above 3 routines are called once. I am not seeing any point
+>> in making these separate routines. I made the same comment on v1.
+> 
+> I must have misunderstood your previous comment. Will change.
+> 
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Thank you.
 
->> ERROR: modpost: "ceph_wait_on_conflict_unlink" [fs/ceph/ceph.ko] undefined!
+>>
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>>
+>> Now the above code can be a separate function which will make it readable.
+> 
+> Ack.
+> 
+>>
+
+>>> +
+>>
+>> Why do you need these ifdefs - syscall will return ENOSYS and you can
+>> key off that. Please take a look at other usages of syscall in the
+>> repo.
+> 
+> The issue is that I need to provide the syscall number when calling
+> syscall() (in my case __NR_pidfd_open and __NR_process_mrelease) and
+> if that number is not defined in the userspace headers on a given
+> system then what should I pass instead?
+> When implementing this I followed the examples of
+> https://elixir.bootlin.com/linux/latest/source/tools/testing/selftests/vm/memfd_secret.c#L30
+> and https://elixir.bootlin.com/linux/latest/source/tools/testing/selftests/vm/userfaultfd.c#L65.
+> My original implementation was modeled after this approach:
+> https://elixir.bootlin.com/linux/latest/source/tools/testing/selftests/vm/mlock2.h#L15.
+> If none of these are correct, could you please point me to the example
+> you want me to follow?
+> 
+
+kselftests include kernel headers. As long as these syscalls are
+defined in the kernel headers, the test will build.
+
+Looks it is defined in include/uapi/asm-generic/unistd.h
+
+You can assume it is defined and then if we find architectures that
+don't, you can follow what tools/testing/selftests/pidfd/pidfd.h
+does.
+
+This way the test can simply call syscall and handle ENOSYS.
+
+thanks,
+-- Shuah
+
+
+
+

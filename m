@@ -2,143 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 690C1527E92
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 430F3527E99
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241103AbiEPH3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 03:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45960 "EHLO
+        id S241135AbiEPHa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 03:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232759AbiEPH3h (ORCPT
+        with ESMTP id S240656AbiEPHaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 03:29:37 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF62621811;
-        Mon, 16 May 2022 00:29:35 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L1rTW2qhnzhZCc;
-        Mon, 16 May 2022 15:28:47 +0800 (CST)
-Received: from [10.67.110.112] (10.67.110.112) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 16 May 2022 15:29:33 +0800
-Subject: Re: [PATCH -next] powerpc: add support for syscall stack
- randomization
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        <benh@kernel.crashing.org>, <christophe.leroy@csgroup.eu>,
-        <mark.rutland@arm.com>, <paulus@samba.org>, <tglx@linutronix.de>
-CC:     <linux-hardening@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>
-References: <20220505111932.228814-1-xiujianfeng@huawei.com>
- <1652173338.7bltwybi0c.astroid@bobo.none>
- <a1dcd50b-0819-df54-a963-ebb0551e3356@huawei.com>
- <87pmki7uwf.fsf@mpe.ellerman.id.au>
-From:   xiujianfeng <xiujianfeng@huawei.com>
-Message-ID: <bf8abb20-0aca-24b2-0f24-bc977af1fa1c@huawei.com>
-Date:   Mon, 16 May 2022 15:29:33 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        Mon, 16 May 2022 03:30:55 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556D8F2D
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:30:52 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id bg25so8131698wmb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:30:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=NPhY2bRivndPO9ypmcyDBMt4UFQv/RM1UMuCHVzxwwo=;
+        b=Dp55FezJWQYvlBXps2+7sCaZUcdWQklUQKfUoJn1oHUMJtK1jBetICi9NYGPQ/gMAn
+         zn2dkZUl7MnKjarvXEx65nuZV8I8kTUq4hBC6yy2/HEyiocWa60DnbvpX9cdZClwEMWj
+         0PuUHm3UJV/J9GZWuq+lpDyrFwYJyqo6BE/EaR2w0h4y1qwJC8FUIO54/ue8kHx4Y9C+
+         H/WPgIAB/G4A9CTpZoa91EMucJH54IenI+1M5wAlGAIgwkxF0ZWIo2nwsxqdwFZd3o/G
+         UxizcWclR87hKlrN6UXiX3ejmu8N+LB9ZXl62v82ekHb1V1GS2LsWpuKMNv/QdVaatUe
+         SIDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=NPhY2bRivndPO9ypmcyDBMt4UFQv/RM1UMuCHVzxwwo=;
+        b=Dt41AG39JhLlCeWbQac86TqTs3DzGGHvNO9hJemnWo45UuJ3yGIJCbBBczmalMeCSl
+         uHlpEhLvbQd49kzE28+BtenllX+siU3du273Gj6PTaVY0d/CAeRJoBK8hK8m/54LUzZP
+         qLX5YIZIZo5uz0aw0/Uj45ofbLHoDdzG1w1Rl6LggWQHN1EzGCNwDpGFnc2prt9iUoKA
+         TUjY5/ajnkG0T88WT+kBSirNBiPQBY6S4OZPsR2TNUyi+pF0ZJ8uHG4wp5vtgi8KXQnA
+         aKDG/J1tlCRKGSaqu7eRYoHdXx3PACORjDLciz7u7Wu1Ina/K3Lewf+aJvqxVtXcEp3d
+         oe9g==
+X-Gm-Message-State: AOAM531OqBMiH6a3WP60++VQXttE/x4zn4aES8GtomrNEbfLKVoQx+Nh
+        dIkNe6Q4apdZYfkg8fbbA69SNw==
+X-Google-Smtp-Source: ABdhPJz6+ODhxpvzTQwFkv//+c83ewq2117c0KUzKdjqeGZoLLk+h26lrIkZ2M2yCFw4KQ19w6kbCw==
+X-Received: by 2002:a05:600c:26d2:b0:393:fb8c:dc31 with SMTP id 18-20020a05600c26d200b00393fb8cdc31mr26114507wmv.129.1652686250915;
+        Mon, 16 May 2022 00:30:50 -0700 (PDT)
+Received: from localhost ([2a01:cb19:85e6:1900:6d30:f384:3f7:365e])
+        by smtp.gmail.com with ESMTPSA id n19-20020adfc613000000b0020c5253d927sm8772239wrg.115.2022.05.16.00.30.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 00:30:50 -0700 (PDT)
+From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-input@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH 2/2] Input: mt6779-keypad - implement row/column
+ selection
+In-Reply-To: <YoHfUYmq49V5Bygd@google.com>
+References: <20220513151845.2802795-1-mkorpershoek@baylibre.com>
+ <20220513151845.2802795-3-mkorpershoek@baylibre.com>
+ <YoHfUYmq49V5Bygd@google.com>
+Date:   Mon, 16 May 2022 09:30:49 +0200
+Message-ID: <875ym6kk7q.fsf@baylibre.com>
 MIME-Version: 1.0
-In-Reply-To: <87pmki7uwf.fsf@mpe.ellerman.id.au>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.112]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Dmitry,
 
-在 2022/5/12 21:17, Michael Ellerman 写道:
-> xiujianfeng <xiujianfeng@huawei.com> writes:
->> 在 2022/5/10 17:23, Nicholas Piggin 写道:
->>> Excerpts from Xiu Jianfeng's message of May 5, 2022 9:19 pm:
->>>> Add support for adding a random offset to the stack while handling
->>>> syscalls. This patch uses mftb() instead of get_random_int() for better
->>>> performance.
-> ...
->>>> @@ -405,6 +407,7 @@ interrupt_exit_user_prepare_main(unsigned long ret, struct pt_regs *regs)
->>>>
->>>>    	/* Restore user access locks last */
->>>>    	kuap_user_restore(regs);
->>>> +	choose_random_kstack_offset(mftb() & 0xFF);
->>>>
->>>>    	return ret;
->>>>    }
->>> So this seems to be what x86 and s390 do, but why are we choosing a
->>> new offset for every interrupt when it's only used on a syscall?
->>> I would rather you do what arm64 does and just choose the offset
->>> at the end of system_call_exception.
->> thanks for you suggestion, will do in v2.
->>> I wonder why the choose is separated from the add? I guess it's to
->>> avoid a data dependency for stack access on an expensive random
->>> function, so that makes sense (a comment would be nice in the
->>> generic code).
->>>
->>> I don't actually know if mftb() is cheaper here than a RNG. It
->>> may not be conditioned all that well either. I would be tempted
->> #if defined(__powerpc64__) && (defined(CONFIG_PPC_CELL) ||
->> defined(CONFIG_E500))
->> #define mftb()          ({unsigned long rval;                           \
->>                           asm volatile(                                   \
->>                                   "90:    mfspr %0, %2;\n"                \
->> ASM_FTR_IFSET(                          \
->>                                           "97:    cmpwi %0,0;\n"          \
->>                                           "       beq- 90b;\n", "", %1)   \
->>                           : "=r" (rval) \
->>                           : "i" (CPU_FTR_CELL_TB_BUG), "i" (SPRN_TBRL) :
->> "cr0"); \
->>                           rval;})
->> #elif defined(CONFIG_PPC_8xx)
->> #define mftb()          ({unsigned long rval;   \
->>                           asm volatile("mftbl %0" : "=r" (rval)); rval;})
->> #else
->> #define mftb()          ({unsigned long rval;   \
->>                           asm volatile("mfspr %0, %1" : \
->>                                        "=r" (rval) : "i" (SPRN_TBRL));
->> rval;})
->> #endif /* !CONFIG_PPC_CELL */
->>
->> there are 3 implementations of mftb() in
->> arch/powerpc/include/asm/vdso/timebase.h,
->>
->> the last two cases have only one instruction, It's obviously cheaper
->> than get_random_int,
-> Just because it's one instruction doesn't mean it's obviously cheaper.
-> On some CPUs mftb takes 10s of cycles, and can also stall the pipeline.
->
-> But looking at get_random_u32() it does look pretty complicated, it
-> takes a lock and so on. It's also silly to call get_random_u32() for
-> 4-bits of randomness.
->
-> My initial impression was that mftb() is too predictable to be useful
-> against a determined attacker. But looking closer I see that
-> choose_random_kstack_offset() xor's the value we pass with the existing
-> value. So that makes me less worried about using mftb().
->
-> We could additionally call choose_random_kstack_offset(get_random_int())
-> less regularly, eg. during context switch. But I guess that's too
-> infrequent to actually make any difference.
->
-> But limiting it to 4-bits of randomness seems insufficient. It seems
-> like we should allow the full 6 (10) bits, and anyone turning this
-> option on should probably also consider increasing their stack size.
->
-> Also did you check the help text about stack-protector under
-> HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET?
+Thank you for your review,
 
-thanks for your reminder, will disable stack-protector for interrupt.c 
-in v2,
+On dim., mai 15, 2022 at 22:21, Dmitry Torokhov <dmitry.torokhov@gmail.com> wrote:
 
-just like arm64 do.
+> On Fri, May 13, 2022 at 05:18:45PM +0200, Mattijs Korpershoek wrote:
+>> The MediaTek keypad has a total of 6 input rows and 6 input columns.
+>> By default, rows/columns 0-2 are enabled.
+>> 
+>> This is controlled by the KP_SEL register:
+>> - bits[9:4]   control row selection
+>> - bits[15:10] control column selection
+>> 
+>> Each bit enables the corresponding row/column number (e.g KP_SEL[4]
+>> enables ROW0)
+>> 
+>> Depending on how the keypad is wired, this may result in wrong readings
+>> of the keypad state.
+>> 
+>> Program the KP_SEL register to limit the key detection to n_rows,
+>> n_cols we retrieve from the device tree.
+>> 
+>> Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+>> ---
+>>  drivers/input/keyboard/mt6779-keypad.c | 10 ++++++++++
+>>  1 file changed, 10 insertions(+)
+>> 
+>> diff --git a/drivers/input/keyboard/mt6779-keypad.c b/drivers/input/keyboard/mt6779-keypad.c
+>> index 23360de20da5..653dfc619696 100644
+>> --- a/drivers/input/keyboard/mt6779-keypad.c
+>> +++ b/drivers/input/keyboard/mt6779-keypad.c
+>> @@ -17,6 +17,11 @@
+>>  #define MTK_KPD_DEBOUNCE	0x0018
+>>  #define MTK_KPD_DEBOUNCE_MASK	GENMASK(13, 0)
+>>  #define MTK_KPD_DEBOUNCE_MAX_MS	256
+>> +#define MTK_KPD_SEL		0x0020
+>> +#define MTK_KPD_SEL_COL	GENMASK(15, 10)
+>> +#define MTK_KPD_SEL_ROW	GENMASK(9, 4)
+>> +#define MTK_KPD_SEL_COLMASK(c)	(MTK_KPD_SEL_COL >> (6 - (c)))
+>
+> Would it be clearer to say
+>
+> #define MTK_KPD_SEL_COLMASK(c)	GENMASK((c) + 3, 4)
+Per my understanding, GENMASK is mostly used for build-time constants
+since it does compile-time checks with BUILD_BUG_ON_ZERO.
+
+Since "c" is defined at run time (as it comes from keypad->n_cols, which
+comes from the device tree), it felt more appropriate to not use GENMASK.
+
+Looking again, i've found examples in sound/soc/codecs/cs35l41-lib.c
+that use GENMASK with a run-time value.
+
+Will send a v2 using GENMASK, thank you for the suggestion.
 
 >
-> cheers
+> ?
+>
+> Thanks.
+>
+> -- 
+> Dmitry

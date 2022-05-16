@@ -2,269 +2,320 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68EA6527F88
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 10:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D10527F8E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 10:23:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241616AbiEPIVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 04:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33152 "EHLO
+        id S241632AbiEPIWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 04:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240544AbiEPIVZ (ORCPT
+        with ESMTP id S232004AbiEPIWw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 04:21:25 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B4F33EA0;
-        Mon, 16 May 2022 01:21:23 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6F6206000C;
-        Mon, 16 May 2022 08:21:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1652689281;
+        Mon, 16 May 2022 04:22:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D17E5DFFF
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 01:22:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652689369;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=G+5Z07AXpDC+m8ZD/UOqhGxzRxmiuRFUVhakuqWjGWI=;
-        b=nSCwKNLvBv+xQvA6O0bbWRaPZ17U/nGihvdmOfAPbYvrYXGRzPelt/xhcGB2ReAC/8z5a/
-        5Hu5XrgN4tx/1ihVFEsart2BAT680TNxT2v1veeWgmhtQIB8oYYX8hbpybgLpu2eFPvZDn
-        hFAounrWucRhCX5I0BceU9b4nZ5kZRdHouN/jUmdid1TcGjQRwbP74EhlRPSMGnkJZ/QmK
-        PpIzdwpluRdF9+eiwdTuIoVnD0L3LEfzVe/b+MOpApjL/iZ1rzMR/p70j9MXXGnuB0UU+S
-        xdvCMl9EBaqe3JSs3TKZmNma6Wd7kPrldPXymhKM3WKvsobZPqKAOHthPbxE7A==
-Date:   Mon, 16 May 2022 10:21:15 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Mikhail Zhilkin <csharper2005@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJl?= =?UTF-8?B?Y2tp?= <rafal@milecki.pl>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Karim <Karimdplay@gmail.com>, M <x1@disroot.org>
-Subject: Re: [PATCH v3 2/3] dt-bindings: mtd: partitions: Extend
- fixed-partitions binding
-Message-ID: <20220516102115.4ab6fada@xps13>
-In-Reply-To: <CAL_JsqJdUm4p9qAq9dLeVTVC9PA2q2SP01kG2jyEb_f=Fo=bEQ@mail.gmail.com>
-References: <20220503155007.2339847-1-csharper2005@gmail.com>
-        <20220512152725.244872-1-miquel.raynal@bootlin.com>
-        <CAL_JsqJdUm4p9qAq9dLeVTVC9PA2q2SP01kG2jyEb_f=Fo=bEQ@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        bh=WNvDsFdKXXxNUzS9xa6p0OG+HdvP+Qe9tir/WG8T4Zw=;
+        b=b+i//+D63x/YH7ATPT3MObEphfXNJeCxze1+2pkMcfAIiG5VbHAlNPeuxKRkBBuSSa0B6m
+        zaH4S/bZ7u+vI3boDTob8F/j5w81WS29u+lgs2rbi1/xPfISWPGFnoeTOZXhYIE7HPczsQ
+        SceREEfubgxnmih2mdjNFpMo5UZRr6s=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-348-xO_UNQ7HOJ2WMjMFY6jptQ-1; Mon, 16 May 2022 04:22:48 -0400
+X-MC-Unique: xO_UNQ7HOJ2WMjMFY6jptQ-1
+Received: by mail-wm1-f72.google.com with SMTP id e9-20020a05600c4e4900b00394779649b1so9998737wmq.3
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 01:22:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WNvDsFdKXXxNUzS9xa6p0OG+HdvP+Qe9tir/WG8T4Zw=;
+        b=LfBaxDtWEKG4c8Laa4REhEQqUgk8ZUXk1yY8W/+xL5UjbbDnvNc5J8+L41mr++VgTw
+         UnrX3mVTDsrRzda+hnYhVFWtpWTGd5uEsL9Nf6GiC6HYuNFghWF/k7T3fI/W5YKasGPC
+         ge4YkppTJ7RgNsam9QjkLPt51r8g/MJclT9dhgjE84VDwrFXY5ycQXu/FKJlvTHniht+
+         mI62EsWn/7tFcvulM9iYIR60NnfHxV/eTLSMs8OFdBvjVbtUOibVAQ0WTzPnSuhRdcHu
+         yXsZeJViiqJgX+WfIIAfpNfHLxoW20An9gWJZr5BBuLUSQbaDsrdw9cj+z4Y68Cuns83
+         3HBw==
+X-Gm-Message-State: AOAM532iWGN+GUDLkwIUFxfCTg+7yUhoCdEPwaTEHnt+VTsEAo8v/vFK
+        /fymzK9r7GyfCfEHGlFOiLB+WpdP7hslKBZ+0W6kEpUZNWlrDmkUSJbGl/iTn8EM0YgmuxPVEiy
+        7tchKF89bSpuio5Iihs1bU2V8
+X-Received: by 2002:a1c:4456:0:b0:395:b9bf:57 with SMTP id r83-20020a1c4456000000b00395b9bf0057mr23439428wma.21.1652689367025;
+        Mon, 16 May 2022 01:22:47 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxejjGYUhnUK8sEqz50naB0K9MbMknqjB3nHtA62/D77/KpoFScxr6uUPVS4u9zWeA/TaNNSA==
+X-Received: by 2002:a1c:4456:0:b0:395:b9bf:57 with SMTP id r83-20020a1c4456000000b00395b9bf0057mr23439416wma.21.1652689366805;
+        Mon, 16 May 2022 01:22:46 -0700 (PDT)
+Received: from redhat.com ([2.55.141.66])
+        by smtp.gmail.com with ESMTPSA id o20-20020a1c4d14000000b0039453fe55a7sm12550284wmh.35.2022.05.16.01.22.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 01:22:46 -0700 (PDT)
+Date:   Mon, 16 May 2022 04:22:43 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Eli Cohen <elic@nvidia.com>
+Cc:     "jasowang@redhat.com" <jasowang@redhat.com>,
+        Cindy Lu <lulu@redhat.com>,
+        "hdanton@sina.com" <hdanton@sina.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RESEND V3 3/3] vdpa/mlx5: Use consistent RQT size
+Message-ID: <20220516041917-mutt-send-email-mst@kernel.org>
+References: <20220406085325.87644-1-elic@nvidia.com>
+ <DM8PR12MB5400507B1DA407DEC2E72195ABCF9@DM8PR12MB5400.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM8PR12MB5400507B1DA407DEC2E72195ABCF9@DM8PR12MB5400.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, May 16, 2022 at 08:17:18AM +0000, Eli Cohen wrote:
+> Hi Michael,
+> 
+> When are you going to pull this fix?
+> It fixes a real problem and was reviewed and acked.
 
-robh+dt@kernel.org wrote on Fri, 13 May 2022 09:12:03 -0500:
+Do I understand it correctly that this is a stand-alone patch?
+Sorry, my process have been thrown off by it being labeled 3/3 but not
+being part of a thread. Do not do this for single patches please.
+And I suspect 0-day machinery didn't process it either.
+Can you repost as a stand-along patch please?
+I will then process ASAP.
 
-> On Thu, May 12, 2022 at 10:27 AM Miquel Raynal
-> <miquel.raynal@bootlin.com> wrote:
-> >
-> > On Tue, 2022-05-03 at 15:50:07 UTC, Mikhail Zhilkin wrote: =20
-> > > Extend fixed-partitions binding for support of Sercomm partition pars=
-er
-> > > (add "sercomm,sc-partitions" compatible).
-> > >
-> > > Signed-off-by: Mikhail Zhilkin <csharper2005@gmail.com>
-> > > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =20
-> >
-> > Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.gi=
-t mtd/next, thanks. =20
->=20
-> Patch 1 is a dependency, please apply it too. Without it, we now get
-> in linux-next:
+Thanks!
 
-Only patch 3 was sent to me/the mtd ML. I'll drop the patch.
+> > -----Original Message-----
+> > From: Eli Cohen <elic@nvidia.com>
+> > Sent: Wednesday, April 6, 2022 11:53 AM
+> > To: mst@redhat.com; jasowang@redhat.com
+> > Cc: hdanton@sina.com; virtualization@lists.linux-foundation.org; linux-kernel@vger.kernel.org; Eli Cohen <elic@nvidia.com>
+> > Subject: [PATCH RESEND V3 3/3] vdpa/mlx5: Use consistent RQT size
+> > 
+> > The current code evaluates RQT size based on the configured number of
+> > virtqueues. This can raise an issue in the following scenario:
+> > 
+> > Assume MQ was negotiated.
+> > 1. mlx5_vdpa_set_map() gets called.
+> > 2. handle_ctrl_mq() is called setting cur_num_vqs to some value, lower
+> >    than the configured max VQs.
+> > 3. A second set_map gets called, but now a smaller number of VQs is used
+> >    to evaluate the size of the RQT.
+> > 4. handle_ctrl_mq() is called with a value larger than what the RQT can
+> >    hold. This will emit errors and the driver state is compromised.
+> > 
+> > To fix this, we use a new field in struct mlx5_vdpa_net to hold the
+> > required number of entries in the RQT. This value is evaluated in
+> > mlx5_vdpa_set_driver_features() where we have the negotiated features
+> > all set up.
+> > 
+> > In addition to that, we take into consideration the max capability of RQT
+> > entries early when the device is added so we don't need to take consider
+> > it when creating the RQT.
+> > 
+> > Last, we remove the use of mlx5_vdpa_max_qps() which just returns the
+> > max_vas / 2 and make the code clearer.
+> > 
+> > Fixes: 52893733f2c5 ("vdpa/mlx5: Add multiqueue support")
+> > Acked-by: Jason Wang <jasowang@redhat.com>
+> > Signed-off-by: Eli Cohen <elic@nvidia.com>
+> > ---
+> > V2 -> V3:
+> > Fix typo in change log
+> > Add acked-by Jason
+> > 
+> >  drivers/vdpa/mlx5/net/mlx5_vnet.c | 61 +++++++++++--------------------
+> >  1 file changed, 21 insertions(+), 40 deletions(-)
+> > 
+> > diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> > index 79001301b383..e0de44000d92 100644
+> > --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> > +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> > @@ -161,6 +161,7 @@ struct mlx5_vdpa_net {
+> >  	struct mlx5_flow_handle *rx_rule_mcast;
+> >  	bool setup;
+> >  	u32 cur_num_vqs;
+> > +	u32 rqt_size;
+> >  	struct notifier_block nb;
+> >  	struct vdpa_callback config_cb;
+> >  	struct mlx5_vdpa_wq_ent cvq_ent;
+> > @@ -204,17 +205,12 @@ static __virtio16 cpu_to_mlx5vdpa16(struct mlx5_vdpa_dev *mvdev, u16 val)
+> >  	return __cpu_to_virtio16(mlx5_vdpa_is_little_endian(mvdev), val);
+> >  }
+> > 
+> > -static inline u32 mlx5_vdpa_max_qps(int max_vqs)
+> > -{
+> > -	return max_vqs / 2;
+> > -}
+> > -
+> >  static u16 ctrl_vq_idx(struct mlx5_vdpa_dev *mvdev)
+> >  {
+> >  	if (!(mvdev->actual_features & BIT_ULL(VIRTIO_NET_F_MQ)))
+> >  		return 2;
+> > 
+> > -	return 2 * mlx5_vdpa_max_qps(mvdev->max_vqs);
+> > +	return mvdev->max_vqs;
+> >  }
+> > 
+> >  static bool is_ctrl_vq_idx(struct mlx5_vdpa_dev *mvdev, u16 idx)
+> > @@ -1236,25 +1232,13 @@ static void teardown_vq(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtqueue *
+> >  static int create_rqt(struct mlx5_vdpa_net *ndev)
+> >  {
+> >  	__be32 *list;
+> > -	int max_rqt;
+> >  	void *rqtc;
+> >  	int inlen;
+> >  	void *in;
+> >  	int i, j;
+> >  	int err;
+> > -	int num;
+> > -
+> > -	if (!(ndev->mvdev.actual_features & BIT_ULL(VIRTIO_NET_F_MQ)))
+> > -		num = 1;
+> > -	else
+> > -		num = ndev->cur_num_vqs / 2;
+> > 
+> > -	max_rqt = min_t(int, roundup_pow_of_two(num),
+> > -			1 << MLX5_CAP_GEN(ndev->mvdev.mdev, log_max_rqt_size));
+> > -	if (max_rqt < 1)
+> > -		return -EOPNOTSUPP;
+> > -
+> > -	inlen = MLX5_ST_SZ_BYTES(create_rqt_in) + max_rqt * MLX5_ST_SZ_BYTES(rq_num);
+> > +	inlen = MLX5_ST_SZ_BYTES(create_rqt_in) + ndev->rqt_size * MLX5_ST_SZ_BYTES(rq_num);
+> >  	in = kzalloc(inlen, GFP_KERNEL);
+> >  	if (!in)
+> >  		return -ENOMEM;
+> > @@ -1263,12 +1247,12 @@ static int create_rqt(struct mlx5_vdpa_net *ndev)
+> >  	rqtc = MLX5_ADDR_OF(create_rqt_in, in, rqt_context);
+> > 
+> >  	MLX5_SET(rqtc, rqtc, list_q_type, MLX5_RQTC_LIST_Q_TYPE_VIRTIO_NET_Q);
+> > -	MLX5_SET(rqtc, rqtc, rqt_max_size, max_rqt);
+> > +	MLX5_SET(rqtc, rqtc, rqt_max_size, ndev->rqt_size);
+> >  	list = MLX5_ADDR_OF(rqtc, rqtc, rq_num[0]);
+> > -	for (i = 0, j = 0; i < max_rqt; i++, j += 2)
+> > -		list[i] = cpu_to_be32(ndev->vqs[j % (2 * num)].virtq_id);
+> > +	for (i = 0, j = 0; i < ndev->rqt_size; i++, j += 2)
+> > +		list[i] = cpu_to_be32(ndev->vqs[j % ndev->cur_num_vqs].virtq_id);
+> > 
+> > -	MLX5_SET(rqtc, rqtc, rqt_actual_size, max_rqt);
+> > +	MLX5_SET(rqtc, rqtc, rqt_actual_size, ndev->rqt_size);
+> >  	err = mlx5_vdpa_create_rqt(&ndev->mvdev, in, inlen, &ndev->res.rqtn);
+> >  	kfree(in);
+> >  	if (err)
+> > @@ -1282,19 +1266,13 @@ static int create_rqt(struct mlx5_vdpa_net *ndev)
+> >  static int modify_rqt(struct mlx5_vdpa_net *ndev, int num)
+> >  {
+> >  	__be32 *list;
+> > -	int max_rqt;
+> >  	void *rqtc;
+> >  	int inlen;
+> >  	void *in;
+> >  	int i, j;
+> >  	int err;
+> > 
+> > -	max_rqt = min_t(int, roundup_pow_of_two(ndev->cur_num_vqs / 2),
+> > -			1 << MLX5_CAP_GEN(ndev->mvdev.mdev, log_max_rqt_size));
+> > -	if (max_rqt < 1)
+> > -		return -EOPNOTSUPP;
+> > -
+> > -	inlen = MLX5_ST_SZ_BYTES(modify_rqt_in) + max_rqt * MLX5_ST_SZ_BYTES(rq_num);
+> > +	inlen = MLX5_ST_SZ_BYTES(modify_rqt_in) + ndev->rqt_size * MLX5_ST_SZ_BYTES(rq_num);
+> >  	in = kzalloc(inlen, GFP_KERNEL);
+> >  	if (!in)
+> >  		return -ENOMEM;
+> > @@ -1305,10 +1283,10 @@ static int modify_rqt(struct mlx5_vdpa_net *ndev, int num)
+> >  	MLX5_SET(rqtc, rqtc, list_q_type, MLX5_RQTC_LIST_Q_TYPE_VIRTIO_NET_Q);
+> > 
+> >  	list = MLX5_ADDR_OF(rqtc, rqtc, rq_num[0]);
+> > -	for (i = 0, j = 0; i < max_rqt; i++, j += 2)
+> > +	for (i = 0, j = 0; i < ndev->rqt_size; i++, j += 2)
+> >  		list[i] = cpu_to_be32(ndev->vqs[j % num].virtq_id);
+> > 
+> > -	MLX5_SET(rqtc, rqtc, rqt_actual_size, max_rqt);
+> > +	MLX5_SET(rqtc, rqtc, rqt_actual_size, ndev->rqt_size);
+> >  	err = mlx5_vdpa_modify_rqt(&ndev->mvdev, in, inlen, ndev->res.rqtn);
+> >  	kfree(in);
+> >  	if (err)
+> > @@ -1625,7 +1603,7 @@ static virtio_net_ctrl_ack handle_ctrl_mq(struct mlx5_vdpa_dev *mvdev, u8 cmd)
+> > 
+> >  		newqps = mlx5vdpa16_to_cpu(mvdev, mq.virtqueue_pairs);
+> >  		if (newqps < VIRTIO_NET_CTRL_MQ_VQ_PAIRS_MIN ||
+> > -		    newqps > mlx5_vdpa_max_qps(mvdev->max_vqs))
+> > +		    newqps > ndev->rqt_size)
+> >  			break;
+> > 
+> >  		if (ndev->cur_num_vqs == 2 * newqps) {
+> > @@ -1989,7 +1967,7 @@ static int setup_virtqueues(struct mlx5_vdpa_dev *mvdev)
+> >  	int err;
+> >  	int i;
+> > 
+> > -	for (i = 0; i < 2 * mlx5_vdpa_max_qps(mvdev->max_vqs); i++) {
+> > +	for (i = 0; i < mvdev->max_vqs; i++) {
+> >  		err = setup_vq(ndev, &ndev->vqs[i]);
+> >  		if (err)
+> >  			goto err_vq;
+> > @@ -2060,9 +2038,11 @@ static int mlx5_vdpa_set_driver_features(struct vdpa_device *vdev, u64 features)
+> > 
+> >  	ndev->mvdev.actual_features = features & ndev->mvdev.mlx_features;
+> >  	if (ndev->mvdev.actual_features & BIT_ULL(VIRTIO_NET_F_MQ))
+> > -		ndev->cur_num_vqs = 2 * mlx5vdpa16_to_cpu(mvdev, ndev->config.max_virtqueue_pairs);
+> > +		ndev->rqt_size = mlx5vdpa16_to_cpu(mvdev, ndev->config.max_virtqueue_pairs);
+> >  	else
+> > -		ndev->cur_num_vqs = 2;
+> > +		ndev->rqt_size = 1;
+> > +
+> > +	ndev->cur_num_vqs = 2 * ndev->rqt_size;
+> > 
+> >  	update_cvq_info(mvdev);
+> >  	return err;
+> > @@ -2529,7 +2509,7 @@ static void init_mvqs(struct mlx5_vdpa_net *ndev)
+> >  	struct mlx5_vdpa_virtqueue *mvq;
+> >  	int i;
+> > 
+> > -	for (i = 0; i < 2 * mlx5_vdpa_max_qps(ndev->mvdev.max_vqs); ++i) {
+> > +	for (i = 0; i < ndev->mvdev.max_vqs; ++i) {
+> >  		mvq = &ndev->vqs[i];
+> >  		memset(mvq, 0, offsetof(struct mlx5_vdpa_virtqueue, ri));
+> >  		mvq->index = i;
+> > @@ -2671,7 +2651,8 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
+> >  		return -EOPNOTSUPP;
+> >  	}
+> > 
+> > -	max_vqs = MLX5_CAP_DEV_VDPA_EMULATION(mdev, max_num_virtio_queues);
+> > +	max_vqs = min_t(int, MLX5_CAP_DEV_VDPA_EMULATION(mdev, max_num_virtio_queues),
+> > +			1 << MLX5_CAP_GEN(mdev, log_max_rqt_size));
+> >  	if (max_vqs < 2) {
+> >  		dev_warn(mdev->device,
+> >  			 "%d virtqueues are supported. At least 2 are required\n",
+> > @@ -2742,7 +2723,7 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
+> >  		ndev->mvdev.mlx_features |= BIT_ULL(VIRTIO_NET_F_MAC);
+> >  	}
+> > 
+> > -	config->max_virtqueue_pairs = cpu_to_mlx5vdpa16(mvdev, mlx5_vdpa_max_qps(max_vqs));
+> > +	config->max_virtqueue_pairs = cpu_to_mlx5vdpa16(mvdev, max_vqs / 2);
+> >  	mvdev->vdev.dma_dev = &mdev->pdev->dev;
+> >  	err = mlx5_vdpa_alloc_resources(&ndev->mvdev);
+> >  	if (err)
+> > @@ -2769,7 +2750,7 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
+> >  	ndev->nb.notifier_call = event_handler;
+> >  	mlx5_notifier_register(mdev, &ndev->nb);
+> >  	mvdev->vdev.mdev = &mgtdev->mgtdev;
+> > -	err = _vdpa_register_device(&mvdev->vdev, 2 * mlx5_vdpa_max_qps(max_vqs) + 1);
+> > +	err = _vdpa_register_device(&mvdev->vdev, max_vqs + 1);
+> >  	if (err)
+> >  		goto err_reg;
+> > 
+> > --
+> > 2.35.1
 
-Mikhail, please resend the series including us on all your patches.
-
-> /builds/robherring/linux-dt/Documentation/devicetree/bindings/mtd/partiti=
-ons/fixed-partitions.example.dtb:
-> partition@0: 'sercomm,scpart-id' does not match any of the regexes:
-> '^#.*', '^(at25|bm|devbus|dmacap|dsa|exynos|fsi[ab]|gpio-fan|gpio-key|gpi=
-o|gpmc|hdmi|i2c-gpio),.*',
-> '^(keypad|m25p|max8952|max8997|max8998|mpmc),.*',
-> '^(pinctrl-single|#pinctrl-single|PowerPC),.*',
-> '^(pl022|pxa-mmc|rcar_sound|rotary-encoder|s5m8767|sdhci),.*',
-> '^(simple-audio-card|st-plgpio|st-spics|ts),.*', '^100ask,.*',
-> '^70mai,.*', '^8dev,.*', '^GEFanuc,.*', '^ORCL,.*', '^SUNW,.*',
-> '^[a-zA-Z0-9#_][a-zA-Z0-9+\\-._@]{0,63}$',
-> '^[a-zA-Z0-9+\\-._]*@[0-9a-zA-Z,]*$', '^abb,.*', '^abilis,.*',
-> '^abracon,.*', '^abt,.*', '^acer,.*', '^acme,.*', '^actions,.*',
-> '^active-semi,.*', '^ad,.*', '^adafruit,.*', '^adapteva,.*',
-> '^adaptrum,.*', '^adh,.*', '^adi,.*', '^advantech,.*',
-> '^aeroflexgaisler,.*', '^aesop,.*', '^airoha,.*', '^al,.*',
-> '^alcatel,.*', '^allegro,.*', '^allo,.*', '^allwinner,.*',
-> '^alphascale,.*', '^alps,.*', '^alt,.*', '^altr,.*', '^amarula,.*',
-> '^amazon,.*', '^amcc,.*', '^amd,.*', '^amediatech,.*', '^amlogic,.*',
-> '^ampere,.*', '^ampire,.*', '^ams,.*', '^amstaos,.*', '^analogix,.*',
-> '^andestech,.*', '^anvo,.*', '^apm,.*', '^apple,.*', '^aptina,.*',
-> '^arasan,.*', '^archermind,.*', '^arctic,.*', '^arcx,.*', '^aries,.*',
-> '^arm,.*', '^armadeus,.*', '^arrow,.*', '^artesyn,.*',
-> '^asahi-kasei,.*', '^asc,.*', '^asix,.*', '^aspeed,.*', '^asus,.*',
-> '^atlas,.*', '^atmel,.*', '^auo,.*', '^auvidea,.*', '^avago,.*',
-> '^avia,.*', '^avic,.*', '^avnet,.*', '^awinic,.*', '^axentia,.*',
-> '^axis,.*', '^azoteq,.*', '^azw,.*', '^baikal,.*', '^bananapi,.*',
-> '^beacon,.*', '^beagle,.*', '^bhf,.*', '^bitmain,.*', '^blutek,.*',
-> '^boe,.*', '^bosch,.*', '^boundary,.*', '^brcm,.*', '^broadmobi,.*',
-> '^bsh,.*', '^bticino,.*', '^buffalo,.*', '^bur,.*', '^calamp,.*',
-> '^calaosystems,.*', '^calxeda,.*', '^canaan,.*', '^caninos,.*',
-> '^capella,.*', '^cascoda,.*', '^catalyst,.*', '^cavium,.*',
-> '^cdns,.*', '^cdtech,.*', '^cellwise,.*', '^ceva,.*',
-> '^checkpoint,.*', '^chefree,.*', '^chipidea,.*', '^chipone,.*',
-> '^chipspark,.*', '^chrontel,.*', '^chrp,.*', '^chunghwa,.*',
-> '^chuwi,.*', '^ciaa,.*', '^cirrus,.*', '^cisco,.*',
-> '^cloudengines,.*', '^cnm,.*', '^cnxt,.*', '^colorfly,.*',
-> '^compulab,.*', '^congatec,.*', '^coreriver,.*', '^corpro,.*',
-> '^cortina,.*', '^cosmic,.*', '^crane,.*', '^creative,.*',
-> '^crystalfontz,.*', '^csky,.*', '^csq,.*', '^ctera,.*', '^ctu,.*',
-> '^cubietech,.*', '^cui,.*', '^cypress,.*', '^cyx,.*', '^cznic,.*',
-> '^dallas,.*', '^dataimage,.*', '^davicom,.*', '^dell,.*', '^delta,.*',
-> '^denx,.*', '^devantech,.*', '^dfi,.*', '^dh,.*', '^difrnce,.*',
-> '^digi,.*', '^digilent,.*', '^dioo,.*', '^dlc,.*', '^dlg,.*',
-> '^dlink,.*', '^dmo,.*', '^domintech,.*', '^dongwoon,.*',
-> '^dptechnics,.*', '^dragino,.*', '^ds,.*', '^dserve,.*',
-> '^dynaimage,.*', '^ea,.*', '^ebang,.*', '^ebs-systart,.*', '^ebv,.*',
-> '^eckelmann,.*', '^edimax,.*', '^edt,.*', '^eeti,.*',
-> '^einfochips,.*', '^eink,.*', '^elan,.*', '^element14,.*',
-> '^elgin,.*', '^elida,.*', '^elimo,.*', '^elpida,.*', '^embest,.*',
-> '^emlid,.*', '^emmicro,.*', '^empire-electronix,.*', '^emtrion,.*',
-> '^enclustra,.*', '^endless,.*', '^ene,.*', '^energymicro,.*',
-> '^engicam,.*', '^engleder,.*', '^epcos,.*', '^epfl,.*', '^epson,.*',
-> '^esp,.*', '^est,.*', '^ettus,.*', '^eukrea,.*', '^everest,.*',
-> '^everspin,.*', '^evervision,.*', '^exar,.*', '^excito,.*',
-> '^exegin,.*', '^ezchip,.*', '^facebook,.*', '^fairphone,.*',
-> '^faraday,.*', '^fastrax,.*', '^fcs,.*', '^feixin,.*', '^feiyang,.*',
-> '^fii,.*', '^firefly,.*', '^focaltech,.*', '^forlinx,.*', '^frida,.*',
-> '^friendlyarm,.*', '^fsl,.*', '^fujitsu,.*', '^fxtec,.*',
-> '^gardena,.*', '^gateworks,.*', '^gcw,.*', '^ge,.*', '^geekbuying,.*',
-> '^gef,.*', '^gemei,.*', '^geniatech,.*', '^giantec,.*',
-> '^giantplus,.*', '^globalscale,.*', '^globaltop,.*', '^gmt,.*',
-> '^goodix,.*', '^google,.*', '^grinn,.*', '^grmn,.*', '^gumstix,.*',
-> '^gw,.*', '^hannstar,.*', '^haochuangyi,.*', '^haoyu,.*',
-> '^hardkernel,.*', '^hideep,.*', '^himax,.*', '^hirschmann,.*',
-> '^hisi,.*', '^hisilicon,.*', '^hit,.*', '^hitex,.*', '^holt,.*',
-> '^holtek,.*', '^honestar,.*', '^honeywell,.*', '^hoperun,.*',
-> '^hp,.*', '^hpe,.*', '^hsg,.*', '^huawei,.*', '^hugsun,.*',
-> '^hwacom,.*', '^hycon,.*', '^hydis,.*', '^hynix,.*', '^hyundai,.*',
-> '^i2se,.*', '^ibm,.*', '^icplus,.*', '^idt,.*', '^ifi,.*',
-> '^ilitek,.*', '^imagis,.*', '^img,.*', '^imi,.*', '^incircuit,.*',
-> '^inet-tek,.*', '^infineon,.*', '^inforce,.*', '^ingenic,.*',
-> '^injoinic,.*', '^innolux,.*', '^inside-secure,.*', '^insignal,.*',
-> '^inspur,.*', '^intel,.*', '^intercontrol,.*', '^invensense,.*',
-> '^inversepath,.*', '^iom,.*', '^isee,.*', '^isil,.*', '^issi,.*',
-> '^ite,.*', '^itead,.*', '^itian,.*', '^ivo,.*', '^iwave,.*',
-> '^jdi,.*', '^jedec,.*', '^jesurun,.*', '^jethome,.*', '^jianda,.*',
-> '^joz,.*', '^kam,.*', '^karo,.*', '^keithkoep,.*', '^keymile,.*',
-> '^khadas,.*', '^kiebackpeter,.*', '^kinetic,.*', '^kingdisplay,.*',
-> '^kingnovel,.*', '^kionix,.*', '^kobo,.*', '^kobol,.*', '^koe,.*',
-> '^kontron,.*', '^kosagi,.*', '^kvg,.*', '^kyo,.*', '^lacie,.*',
-> '^laird,.*', '^lamobo,.*', '^lantiq,.*', '^lattice,.*', '^leadtek,.*',
-> '^leez,.*', '^lego,.*', '^lemaker,.*', '^lenovo,.*', '^lg,.*',
-> '^lgphilips,.*', '^libretech,.*', '^licheepi,.*', '^linaro,.*',
-> '^linksprite,.*', '^linksys,.*', '^linutronix,.*', '^linux,.*',
-> '^linx,.*', '^liteon,.*', '^litex,.*', '^lltc,.*', '^logicpd,.*',
-> '^logictechno,.*', '^longcheer,.*', '^lontium,.*', '^loongson,.*',
-> '^lsi,.*', '^lwn,.*', '^lxa,.*', '^m5stack,.*', '^macnica,.*',
-> '^mantix,.*', '^mapleboard,.*', '^marvell,.*', '^maxbotix,.*',
-> '^maxim,.*', '^mbvl,.*', '^mcube,.*', '^meas,.*', '^mecer,.*',
-> '^mediatek,.*', '^megachips,.*', '^mele,.*', '^melexis,.*',
-> '^melfas,.*', '^mellanox,.*', '^memsic,.*', '^menlo,.*', '^mentor,.*',
-> '^meraki,.*', '^merrii,.*', '^micrel,.*', '^microchip,.*',
-> '^microcrystal,.*', '^micron,.*', '^microsoft,.*', '^microsys,.*',
-> '^mikroe,.*', '^mikrotik,.*', '^miniand,.*', '^minix,.*',
-> '^miramems,.*', '^mitsubishi,.*', '^miyoo,.*', '^mntre,.*',
-> '^modtronix,.*', '^mosaixtech,.*', '^motorola,.*', '^moxa,.*',
-> '^mpl,.*', '^mps,.*', '^mqmaker,.*', '^mrvl,.*', '^mscc,.*',
-> '^msi,.*', '^mstar,.*', '^mti,.*', '^multi-inno,.*',
-> '^mundoreader,.*', '^murata,.*', '^mxic,.*', '^mxicy,.*', '^myir,.*',
-> '^national,.*', '^nec,.*', '^neonode,.*', '^netgear,.*',
-> '^netlogic,.*', '^netron-dy,.*', '^netronix,.*', '^netxeon,.*',
-> '^neweast,.*', '^newhaven,.*', '^nexbox,.*', '^nextthing,.*',
-> '^ni,.*', '^nintendo,.*', '^nlt,.*', '^nokia,.*', '^nordic,.*',
-> '^novtech,.*', '^nutsboard,.*', '^nuvoton,.*', '^nvd,.*',
-> '^nvidia,.*', '^nxp,.*', '^oceanic,.*', '^ocs,.*', '^oct,.*',
-> '^okaya,.*', '^oki,.*', '^olimex,.*', '^olpc,.*', '^oneplus,.*',
-> '^onion,.*', '^onnn,.*', '^ontat,.*', '^opalkelly,.*',
-> '^opencores,.*', '^openembed,.*', '^openrisc,.*', '^option,.*',
-> '^oranth,.*', '^orisetech,.*', '^ortustech,.*', '^osddisplays,.*',
-> '^osmc,.*', '^ouya,.*', '^overkiz,.*', '^ovti,.*', '^oxsemi,.*',
-> '^ozzmaker,.*', '^panasonic,.*', '^parade,.*', '^parallax,.*',
-> '^pda,.*', '^pericom,.*', '^pervasive,.*', '^phicomm,.*',
-> '^phytec,.*', '^picochip,.*', '^pine64,.*', '^pineriver,.*',
-> '^pixcir,.*', '^plantower,.*', '^plathome,.*', '^plda,.*', '^plx,.*',
-> '^ply,.*', '^pni,.*', '^pocketbook,.*', '^polaroid,.*',
-> '^portwell,.*', '^poslab,.*', '^pov,.*', '^powertip,.*',
-> '^powervr,.*', '^primux,.*', '^probox2,.*', '^prt,.*',
-> '^pulsedlight,.*', '^purism,.*', '^qca,.*', '^qcom,.*', '^qemu,.*',
-> '^qi,.*', '^qiaodian,.*', '^qihua,.*', '^qishenglong,.*', '^qnap,.*',
-> '^radxa,.*', '^raidsonic,.*', '^ralink,.*', '^ramtron,.*',
-> '^raspberrypi,.*', '^raydium,.*', '^rda,.*', '^realtek,.*',
-> '^remarkable,.*', '^renesas,.*', '^rervision,.*', '^revotics,.*',
-> '^rex,.*', '^richtek,.*', '^ricoh,.*', '^rikomagic,.*', '^riot,.*',
-> '^riscv,.*', '^rockchip,.*', '^rocktech,.*', '^rohm,.*', '^ronbo,.*',
-> '^roofull,.*', '^roseapplepi,.*', '^samsung,.*', '^samtec,.*',
-> '^sancloud,.*', '^sandisk,.*', '^satoz,.*', '^sbs,.*',
-> '^schindler,.*', '^seagate,.*', '^seeed,.*', '^seirobotics,.*',
-> '^semtech,.*', '^senseair,.*', '^sensirion,.*', '^sensortek,.*',
-> '^sff,.*', '^sgd,.*', '^sgmicro,.*', '^sgx,.*', '^sharp,.*',
-> '^shimafuji,.*', '^shiratech,.*', '^si-en,.*', '^si-linux,.*',
-> '^siemens,.*', '^sifive,.*', '^sigma,.*', '^sii,.*', '^sil,.*',
-> '^silabs,.*', '^silan,.*', '^silead,.*', '^silergy,.*',
-> '^silex-insight,.*', '^siliconfile,.*', '^siliconmitus,.*',
-> '^silvaco,.*', '^simtek,.*', '^sinlinx,.*', '^sinovoip,.*',
-> '^sinowealth,.*', '^sipeed,.*', '^sirf,.*', '^sis,.*', '^sitronix,.*',
-> '^skov,.*', '^skyworks,.*', '^smartlabs,.*', '^smsc,.*', '^snps,.*',
-> '^sochip,.*', '^socionext,.*', '^solidrun,.*', '^solomon,.*',
-> '^sony,.*', '^spansion,.*', '^sparkfun,.*', '^spinalhdl,.*',
-> '^sprd,.*', '^ssi,.*', '^sst,.*', '^sstar,.*', '^st,.*',
-> '^st-ericsson,.*', '^starfive,.*', '^starry,.*', '^startek,.*',
-> '^ste,.*', '^stericsson,.*', '^storlink,.*', '^storm,.*',
-> '^storopack,.*', '^summit,.*', '^sunchip,.*', '^sunplus,.*',
-> '^supermicro,.*', '^swir,.*', '^syna,.*', '^synology,.*',
-> '^synopsys,.*', '^tbs,.*', '^tbs-biometrics,.*', '^tcg,.*', '^tcl,.*',
-> '^tcs,.*', '^tdo,.*', '^team-source-display,.*', '^technexion,.*',
-> '^technologic,.*', '^techstar,.*', '^teltonika,.*', '^tempo,.*',
-> '^terasic,.*', '^tesla,.*', '^tfc,.*', '^thead,.*', '^thine,.*',
-> '^thingyjp,.*', '^thundercomm,.*', '^ti,.*', '^tianma,.*', '^tlm,.*',
-> '^tmt,.*', '^topeet,.*', '^topic,.*', '^toppoly,.*', '^topwise,.*',
-> '^toradex,.*', '^toshiba,.*', '^toumaz,.*', '^tpk,.*', '^tplink,.*',
-> '^tpo,.*', '^tq,.*', '^traverse,.*', '^tronfy,.*', '^tronsmart,.*',
-> '^truly,.*', '^tsd,.*', '^tyan,.*', '^u-blox,.*', '^u-boot,.*',
-> '^ubnt,.*', '^ucrobotics,.*', '^udoo,.*', '^ugoos,.*', '^uniwest,.*',
-> '^upisemi,.*', '^urt,.*', '^usi,.*', '^utoo,.*', '^v3,.*',
-> '^vaisala,.*', '^vamrs,.*', '^variscite,.*', '^vdl,.*',
-> '^vertexcom,.*', '^via,.*', '^vicor,.*', '^videostrong,.*',
-> '^virtio,.*', '^virtual,.*', '^vishay,.*', '^visionox,.*',
-> '^vitesse,.*', '^vivante,.*', '^vivax,.*', '^vocore,.*', '^voipac,.*',
-> '^vot,.*', '^vxt,.*', '^wanchanglong,.*', '^wand,.*', '^waveshare,.*',
-> '^wd,.*', '^we,.*', '^welltech,.*', '^wetek,.*', '^wexler,.*',
-> '^whwave,.*', '^wi2wi,.*', '^wiligear,.*', '^willsemi,.*',
-> '^winbond,.*', '^wingtech,.*', '^winlink,.*', '^winstar,.*',
-> '^wirelesstag,.*', '^wits,.*', '^wlf,.*', '^wm,.*', '^wobo,.*',
-> '^x-powers,.*', '^xen,.*', '^xes,.*', '^xiaomi,.*', '^xillybus,.*',
-> '^xingbangda,.*', '^xinpeng,.*', '^xiphera,.*', '^xlnx,.*',
-> '^xnano,.*', '^xunlong,.*', '^xylon,.*', '^yadro,.*', '^yamaha,.*',
-> '^yes-optoelectronics,.*', '^yic,.*', '^ylm,.*', '^yna,.*',
-> '^yones-toptech,.*', '^ys,.*', '^ysoft,.*', '^zarlink,.*',
-> '^zealz,.*', '^zeitec,.*', '^zidoo,.*', '^zii,.*', '^zinitix,.*',
-> '^zkmagic,.*', '^zte,.*', '^zyxel,.*'
->   From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindi=
-ngs/vendor-prefixes.yaml
->=20
-> Rob
-
-
-Thanks,
-Miqu=C3=A8l

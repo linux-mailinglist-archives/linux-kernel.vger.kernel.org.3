@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B04315291CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5837A528FBD
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242164AbiEPUdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
+        id S1347344AbiEPT5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351040AbiEPUB4 (ORCPT
+        with ESMTP id S1347039AbiEPTvf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:01:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288F54755F;
-        Mon, 16 May 2022 12:57:09 -0700 (PDT)
+        Mon, 16 May 2022 15:51:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76D13FBD6;
+        Mon, 16 May 2022 12:46:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B993560FA6;
-        Mon, 16 May 2022 19:57:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B72B8C385AA;
-        Mon, 16 May 2022 19:57:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C2F6604F5;
+        Mon, 16 May 2022 19:46:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D02FC385AA;
+        Mon, 16 May 2022 19:46:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652731028;
-        bh=GPeUlZ7dqcAiB0O1XvoRl8OE1TanIDmrxDmGkvO4ECk=;
+        s=korg; t=1652730403;
+        bh=2dqIFbD/1xq+mInJPqNxPK1QhNRQ0cRRfbZNWQ5TaYg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kmOO5iDmnXqOfPDp9AM+IAvR/ud18gx5ywmVlTw6/byRM9/8pet0OxflG4rgfQbPK
-         U9VaAL/7iIOTwJceNxdMFDhN6BZhqM5SnOifpytIfHpr25d8nGBYFs90HsffYMiJUL
-         TqZlJvEX3oQDNG6aQG49KjMY7lxDZFp4mgJbaayk=
+        b=Tc6pIGK1Equlu00j8A3VasCvTZPuMoSJl+NNlxt+nwXfNf4iBvaLcFAkDvC3CT5FQ
+         CqDY/m6JGoTOFo7QIVmMEAdiSs3LNat3XkpL4/t9rZKChfJgJSggudGE3JKNceMvTr
+         yeL18T2qm2CGz16zgj7fIogtqe2e8qmupkAPdOH4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH 5.17 080/114] usb: cdc-wdm: fix reading stuck on device close
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Gurucharan <gurucharanx.g@intel.com>
+Subject: [PATCH 5.10 54/66] i40e: i40e_main: fix a missing check on list iterator
 Date:   Mon, 16 May 2022 21:36:54 +0200
-Message-Id: <20220516193627.782422750@linuxfoundation.org>
+Message-Id: <20220516193620.971383985@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
-References: <20220516193625.489108457@linuxfoundation.org>
+In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
+References: <20220516193619.400083785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,56 +56,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergey Ryazanov <ryazanov.s.a@gmail.com>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-commit 01e01f5c89773c600a9f0b32c888de0146066c3a upstream.
+commit 3f95a7472d14abef284d8968734fe2ae7ff4845f upstream.
 
-cdc-wdm tracks whether a response reading request is in-progress and
-blocks the next request from being sent until the previous request is
-completed. As soon as last user closes the cdc-wdm device file, the
-driver cancels any ongoing requests, resets the pending response
-counter, but leaves the response reading in-progress flag
-(WDM_RESPONDING) untouched.
+The bug is here:
+	ret = i40e_add_macvlan_filter(hw, ch->seid, vdev->dev_addr, &aq_err);
 
-So if the user closes the device file during the response receive
-request is being performed, no more data will be obtained from the
-modem. The request will be cancelled, effectively preventing the
-WDM_RESPONDING flag from being reseted. Keeping the flag set will
-prevent a new response receive request from being sent, permanently
-blocking the read path. The read path will staying blocked until the
-module will be reloaded or till the modem will be re-attached.
+The list iterator 'ch' will point to a bogus position containing
+HEAD if the list is empty or no element is found. This case must
+be checked before any use of the iterator, otherwise it will
+lead to a invalid memory access.
 
-This stuck has been observed with a Huawei E3372 modem attached to an
-OpenWrt router and using the comgt utility to set up a network
-connection.
+To fix this bug, use a new variable 'iter' as the list iterator,
+while use the origin variable 'ch' as a dedicated pointer to
+point to the found element.
 
-Fix this issue by clearing the WDM_RESPONDING flag on the device file
-close.
-
-Without this fix, the device reading stuck can be easily reproduced in a
-few connection establishing attempts. With this fix, a load test for
-modem connection re-establishing worked for several hours without any
-issues.
-
-Fixes: 922a5eadd5a3 ("usb: cdc-wdm: Fix race between autosuspend and reading from the device")
-Signed-off-by: Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Cc: stable <stable@vger.kernel.org>
-Acked-by: Oliver Neukum <oneukum@suse.com>
-Link: https://lore.kernel.org/r/20220501175828.8185-1-ryazanov.s.a@gmail.com
+Cc: stable@vger.kernel.org
+Fixes: 1d8d80b4e4ff6 ("i40e: Add macvlan support on i40e")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Link: https://lore.kernel.org/r/20220510204846.2166999-1-anthony.l.nguyen@intel.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/class/cdc-wdm.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/intel/i40e/i40e_main.c |   27 ++++++++++++++-------------
+ 1 file changed, 14 insertions(+), 13 deletions(-)
 
---- a/drivers/usb/class/cdc-wdm.c
-+++ b/drivers/usb/class/cdc-wdm.c
-@@ -774,6 +774,7 @@ static int wdm_release(struct inode *ino
- 			poison_urbs(desc);
- 			spin_lock_irq(&desc->iuspin);
- 			desc->resp_count = 0;
-+			clear_bit(WDM_RESPONDING, &desc->flags);
- 			spin_unlock_irq(&desc->iuspin);
- 			desc->manage_power(desc->intf, 0);
- 			unpoison_urbs(desc);
+--- a/drivers/net/ethernet/intel/i40e/i40e_main.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
+@@ -7175,42 +7175,43 @@ static void i40e_free_macvlan_channels(s
+ static int i40e_fwd_ring_up(struct i40e_vsi *vsi, struct net_device *vdev,
+ 			    struct i40e_fwd_adapter *fwd)
+ {
++	struct i40e_channel *ch = NULL, *ch_tmp, *iter;
+ 	int ret = 0, num_tc = 1,  i, aq_err;
+-	struct i40e_channel *ch, *ch_tmp;
+ 	struct i40e_pf *pf = vsi->back;
+ 	struct i40e_hw *hw = &pf->hw;
+ 
+-	if (list_empty(&vsi->macvlan_list))
+-		return -EINVAL;
+-
+ 	/* Go through the list and find an available channel */
+-	list_for_each_entry_safe(ch, ch_tmp, &vsi->macvlan_list, list) {
+-		if (!i40e_is_channel_macvlan(ch)) {
+-			ch->fwd = fwd;
++	list_for_each_entry_safe(iter, ch_tmp, &vsi->macvlan_list, list) {
++		if (!i40e_is_channel_macvlan(iter)) {
++			iter->fwd = fwd;
+ 			/* record configuration for macvlan interface in vdev */
+ 			for (i = 0; i < num_tc; i++)
+ 				netdev_bind_sb_channel_queue(vsi->netdev, vdev,
+ 							     i,
+-							     ch->num_queue_pairs,
+-							     ch->base_queue);
+-			for (i = 0; i < ch->num_queue_pairs; i++) {
++							     iter->num_queue_pairs,
++							     iter->base_queue);
++			for (i = 0; i < iter->num_queue_pairs; i++) {
+ 				struct i40e_ring *tx_ring, *rx_ring;
+ 				u16 pf_q;
+ 
+-				pf_q = ch->base_queue + i;
++				pf_q = iter->base_queue + i;
+ 
+ 				/* Get to TX ring ptr */
+ 				tx_ring = vsi->tx_rings[pf_q];
+-				tx_ring->ch = ch;
++				tx_ring->ch = iter;
+ 
+ 				/* Get the RX ring ptr */
+ 				rx_ring = vsi->rx_rings[pf_q];
+-				rx_ring->ch = ch;
++				rx_ring->ch = iter;
+ 			}
++			ch = iter;
+ 			break;
+ 		}
+ 	}
+ 
++	if (!ch)
++		return -EINVAL;
++
+ 	/* Guarantee all rings are updated before we update the
+ 	 * MAC address filter.
+ 	 */
 
 

@@ -2,109 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A347527FDD
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 10:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E62527FE4
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 10:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241900AbiEPIlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 04:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
+        id S241851AbiEPImd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 04:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241869AbiEPIlG (ORCPT
+        with ESMTP id S239517AbiEPIm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 04:41:06 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD7F10E7
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 01:41:03 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id q4so13762982plr.11
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 01:41:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=M0tCKoDzsPTdc59i5aDsXZipsRf0A5iHp7WUamBhVp0=;
-        b=hp6/uhCc1vISll7TeQVh3UtY9N1H5PpJx964CmK3VKM2/cWxxbK9p36HVeUHT61Nc0
-         dprPwhpblfcBwOKtiih1xvq5ACP1/nETYJ2IcJTNzWU1R3QaeiIigM9Aa7lpMt0su1SY
-         SXNTjwZ8o4nYFEvhIFC6iGnMLKShkjX6dJgUGzYWDetNuoo69vqCGCWLSPqmG3yU/UpC
-         ZBecOJb0vRZDna24r7Y2NrVNCINeqZZw7NMAKe1MpHvYv61jQwR9rf4iuNVgp5Zc7bZt
-         dt8unfIFP58o5ciDcckvrKJAWmJ6k7hGG7dGcFe8JwyPpHqXPLpK+ns57b4z27tdTuax
-         L4wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=M0tCKoDzsPTdc59i5aDsXZipsRf0A5iHp7WUamBhVp0=;
-        b=dHOZU8p34XH1NJMtOj0rd8MXbcgrMyiwLXJxkMUXlk6l+DeKq342/bnj1CuKPHyfcg
-         kLnp/1jcLEsgvtrZHdXCHnZE0a5RTYcc8WMh8pFGL+meO5VrTVZf/1lQkR4/ar0Myktu
-         jQMOedRjxzIVZa5R36hRi2V/VCbwZix0eP+VRhKt9hOhS2mHMAT701yPJE4HWFlFDhqF
-         8+g5HqO6JC+6/G9G7/c8bTBS5h/9W1rmEjjpWNDlPol0/ZWuz4oGPRl8LaCjiJC76HU9
-         xTT9rZD3DQclT4ZWT0iFpse+mupxFiVf4SrDuq74sISbq9XliNmgZOWJLEKDjRqYW5/0
-         03Mg==
-X-Gm-Message-State: AOAM530iNu7HX6o9g/qBO59JqFZ+HxYxhZnQbw3INFRPzKOihWRCdkAt
-        qQOmgq2zUYM5HFj4qD0x58BKug==
-X-Google-Smtp-Source: ABdhPJwsfheq9ax2SfLs9SSyrtzzkZ954A2+1dyAFeSwkGK4ND2OiKKuyQ3hvNB7yKwYvE95gD8+DA==
-X-Received: by 2002:a17:90a:ec01:b0:1df:56aa:6b7b with SMTP id l1-20020a17090aec0100b001df56aa6b7bmr3847686pjy.230.1652690462892;
-        Mon, 16 May 2022 01:41:02 -0700 (PDT)
-Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.240])
-        by smtp.gmail.com with ESMTPSA id n8-20020a170902968800b0015e8d4eb26bsm6398763plp.181.2022.05.16.01.40.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 01:41:02 -0700 (PDT)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     tj@kernel.org, axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com, songmuchun@bytedance.com,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH] blk-iocost: fix very large vtime when iocg activate
-Date:   Mon, 16 May 2022 16:40:45 +0800
-Message-Id: <20220516084045.96004-1-zhouchengming@bytedance.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
+        Mon, 16 May 2022 04:42:26 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2104.outbound.protection.outlook.com [40.107.215.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA1E7648;
+        Mon, 16 May 2022 01:42:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KmvhwUyeBX6LTIyKUBKDuMhwCDZ8hyL8ecP6qS5EdPtA+iJuIjUX72qxw62Az8/uD/i7aEHsk+lP1/qRa8Su+nKBX+RQS1sYBL1FSZU4JSJ25OkZa6KbiAt1kk2PdcmZsOK0LMwoi8Qp3/Pm4Qn5yYlZr1CTlrVX11Q9JVX+ciXnQUKVGep9vGTgDkZm7QNJSpPR6EzBgVLn+3ml89gFwjzOlrKcHVi+oEySYdhlqcKNgLqPET602vDiW/0dyLDemHU0YoYC1GfcYXaj8pCOyMJ6flLk1iBIr5c52oYQtIhWNJLna8v9+GBdV6uBTNedEIokH3BhZkisHuQGsZMCtg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Zu1ZmmM8VbD5e/QYDVXA0vEgsmVCoSk1dQlKzmJXEG4=;
+ b=kDGfJPEoLkOkO+zh7NFRnQBjdq3LnPwUj7CE/hFXDecdiHAV106IylHMivnyZsrkC24WaPEuKud20KFa09h3a/ORoD5KVPWBiW0BRTa0gQJR8EHefSp3GbsXRdAdbN8IHYlx8J9oVPq9BILJM+0fQRpkIiAk+sS6/Ex/wqFOYhoSePu0ZFIbC1DR6C2uBF7srRo+kZhBJ2uh+OqtoMkIGDqVCLS2LD34LAJRGC2K0ifXvlW0JnoxvGfH/gZQx/M23zqNY6sVPLrhI/uo073fYJDmo3trtBxRuNYgGaj2CTd+H2pb308+OAexYtNuRkT6PR/d/upOSODmVv0ERg/bmQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Zu1ZmmM8VbD5e/QYDVXA0vEgsmVCoSk1dQlKzmJXEG4=;
+ b=aSekGfgVWxNKq+bTO/sOI2J+0sfBXb+lxx/QfMBogabOTtJLkE8glKIFuXnsfsEaMRErS7g8+WJ03rLNG25saAwWTa+NnoeI8Ay9Fw1+W8AaGBCktC4DdLjW+xe89EWYPZzFQeaf1h8Bju2nMCR4Z85BDNAve5NveLoIZF2+flM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
+ HK0PR06MB2977.apcprd06.prod.outlook.com (2603:1096:203:88::22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5250.18; Mon, 16 May 2022 08:42:22 +0000
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::ccb7:f612:80b2:64d5]) by SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::ccb7:f612:80b2:64d5%4]) with mapi id 15.20.5250.018; Mon, 16 May 2022
+ 08:42:22 +0000
+From:   Wan Jiabing <wanjiabing@vivo.com>
+To:     Vinod Koul <vkoul@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Wan Jiabing <wanjiabing@vivo.com>
+Subject: [PATCH 0/4] dmaengine: Remove unneeded ERROR checks before clk_xxx
+Date:   Mon, 16 May 2022 16:41:35 +0800
+Message-Id: <20220516084139.8864-1-wanjiabing@vivo.com>
+X-Mailer: git-send-email 2.36.1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR02CA0143.apcprd02.prod.outlook.com
+ (2603:1096:202:16::27) To SG2PR06MB3367.apcprd06.prod.outlook.com
+ (2603:1096:4:78::19)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d3727522-ad98-4b7e-99b9-08da3717fe6e
+X-MS-TrafficTypeDiagnostic: HK0PR06MB2977:EE_
+X-Microsoft-Antispam-PRVS: <HK0PR06MB29770C3E13A3B5E8D7D5DB4EABCF9@HK0PR06MB2977.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /yO7YQuklG485JGBY8pAzGmyQGJKSnKP37OXsfQP0EO2S604w9QBFq+cbvx331vRoT4mSXkti56G+ib0IafTqxtyrawIrGgfCiKzfdZgnJx8opPOZTYj7GATYGgKuH2L3gB8JfzTz8kYSu7VKBTglG7u6VGmo6GgerA9LGu/qeVCvnpqrYIBY1IgTgX8ms7SP9H02RUpJVVsAKYHGLnhnazJDEPRqmXUJOVolq5gatviJkCm19XaIqPoAowQqp91JQ/jufDcnXCWqiNREbDd88MU0yjvv2sCAEmousL4HK1sdsj6pz45N3577htC35f38gtj01z8cgU1+tCM6CKgthVQlgPyXj5/p/CHv3bpv7lP/B1s2fX5ZFd4HWiY2fpwaUt6h3Ni0KH3nVyG4Vbwft5c7p/PA016Ok9FLHgNif8G7yR6N5dI/g7ba4P1mCkw+enmgcBrR6CN2RdrjSdzvSMFzf9VEuZFIfvwOCKLkmaGOW+EdqP23cDftjmqgm12uoyZaPktJCXat72Q19sQot3UibV4YJYetVUnrpFb5znub4fs5D++Gv67ubjnPGXFIJrncMQg+r6+YObRGZzg/sffaFpdnG1Z2+WvNCQ5jA9UqnAM9jN/4QwYOM3BWMFXw1k6TsCvPx9EzYa7lhpj5vMHjhLihboU30y9LRhDJ6IG4rwg+gXMqLFBYzbSDdNjI3ze7UOsZieZELdjYc6ea5qrZpX1xNX86Rc3OBw9SMU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6666004)(2906002)(38350700002)(38100700002)(83380400001)(316002)(110136005)(52116002)(6512007)(66946007)(1076003)(186003)(6486002)(66556008)(66476007)(4326008)(8676002)(4744005)(5660300002)(508600001)(8936002)(26005)(6506007)(86362001)(36756003)(2616005)(107886003)(21314003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pYZKFo4vfMlMnBZldE3OBnkXt6a8qvK5DqotmEDlj8jI043cMRYqRbHXicNw?=
+ =?us-ascii?Q?OAY4dBzEweZf8Q3svcO+66KahxAnY86hVcyM61J/xKhwoGo2QSAHDFJ1mCtE?=
+ =?us-ascii?Q?jSO7q5VMUnvIRnL9+rcaiIZnkzGJOHOYNoIZx+Vxzk33shFpr4CjtesI+qyY?=
+ =?us-ascii?Q?6/dtrTB76ZZq9tErzCOUA/J/4BmB31s22Nsn+Ydcu+dh5WbD4hRnN+6vhvAa?=
+ =?us-ascii?Q?TbXeU9/U5HmMU2lgMbu3BzjKR22GZ2uE8FfzY3xJ63ULur3XAC6YXSBGfjqX?=
+ =?us-ascii?Q?n83bnnU7jy4AFjDPUa6gZJAMRkSNLTeXO6aCIHjq4BXji4kmg6gioicgNOYw?=
+ =?us-ascii?Q?TOWUn16KfZLMVUvAiWqVE7oe0+5sE8caH1MLze/zmDy/x5leGFnCunM0IpxM?=
+ =?us-ascii?Q?n6A2WRQBMFsVjWTM3Fep1KLjx1kyYPLMXD3yhyQnk2uQ5ZcGtNh2YbzJXza4?=
+ =?us-ascii?Q?KS2YoDlvBN7eDI9ASL7g24xYka4VUghcusQEq5PGfNR2S+MpdsYSCpD4asdl?=
+ =?us-ascii?Q?VcqTlvyGcq1dVeIu26KZdDIwER7s8UsR1JsgB5eFsT9wrW7BmBbF7Cc5nAW8?=
+ =?us-ascii?Q?1gMCCJSdF79yxFwHPKgzs+s4LfgSzWU78ioq2sPqXoLmb6s65sLDchfXFN1v?=
+ =?us-ascii?Q?URPouITK+/EJfygZ8X3KoRcPlDCKUF8OpO+uhjcUaBtREjEO6s3XntE3UkKj?=
+ =?us-ascii?Q?ROGolSCAh/RAfHOy2xGRTmFrJc+AOykjGOyiuNoU6t5axhvCoQuUTqrJRhUd?=
+ =?us-ascii?Q?ZeF6g2O5XfV8ObWcbsLIO4fxLVERAN96k1D0G+GVZ5/e7wpgII65WgIoKDai?=
+ =?us-ascii?Q?kP1gVQm9k4yM/qRi9SS/ez3/199ErU7AWhcwNBnZz/5o3gXKOWrO9eRIlZhN?=
+ =?us-ascii?Q?ovZNhnzdvUDa7sADTJhX8gfIbjlC3r+MTShPIORbH1+d1Np2ujSy1JplQ7yN?=
+ =?us-ascii?Q?KCI1aQMLkC48mwf7NzwPrMZXJUlRMlY32amYyDJ0wFbmrurr2TLQEb8L4Am+?=
+ =?us-ascii?Q?uv1voBfUHf1YUyHu/3Wrr2cElZ0SHV/K0VD3SBukN2g4eLy5YurUHMlL0yM1?=
+ =?us-ascii?Q?0Gj3444TI0j0d7Q7PMAl6c5hxGSM/ogevc0+tRcpylcwV7vGMXb1aleaMEbJ?=
+ =?us-ascii?Q?PZeplbjFTPIzQDU2grQyVzjs44K4Riv28beMulGBhKa4Xwhtub8BpQFIxeaM?=
+ =?us-ascii?Q?WI11eaA+9cMOituq/qufOTV0y1uKW5h3gY/yHIP4KCrevYhWbE4PYt8H4NpF?=
+ =?us-ascii?Q?vPzOGZhL1Y/fSfeNEWqHaobm3i6XyehbMKrFy22DQAJT5/TbFb5W4/rhXZ7D?=
+ =?us-ascii?Q?Vdd4sj1exDrl7I3UQzPHHPtttjhmmZG8VrZTCR56ooi0Wx/dsIB/mc9zQOYe?=
+ =?us-ascii?Q?Pm+qF1O7V3iFD52/ILA0iZOCJCjifkVT8vzUTu5v6jo+holJa8F6Ah/LG0dB?=
+ =?us-ascii?Q?HDeStq290GwNJFpFRu7vLgUjFywPCbFx2HFRFX03/Nkn7nUY9EWWKKgA7K6/?=
+ =?us-ascii?Q?BamLJB19kpkHBdIMa5J54Qky5BtXemazCBfM0OMI0TDO4ihOxm3pNeVgn0U9?=
+ =?us-ascii?Q?cxydNYWZfVIrwLwx88MTzotf6erpYqtM+JXIvXo2G4yCAB+woPn1wkeG/VYc?=
+ =?us-ascii?Q?WKCdiXehBNNT3nkrDcFWFirVMhvrhaCFtbV2lRlukJb1OfAfBXCdti5E0JX3?=
+ =?us-ascii?Q?seh4/Llj1A1lEctBPGtXRrWUvZUitDWCDlNfRGUK6ukitW+moIjbbxOJmh/7?=
+ =?us-ascii?Q?AKU2iJPmfA=3D=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d3727522-ad98-4b7e-99b9-08da3717fe6e
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2022 08:42:22.1282
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YUyiaExFEE+WEZJuvlrZQWvoKoIS8UoDjKIX34CQZS7Znlg1sPtlEP4ozymKYZMd1+0OqnkfGfGoHw399h/SNQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB2977
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the first iocg activate after blk_iocost_init(), now->vnow
-maybe smaller than ioc->margins.target, cause very large vtarget
-since it's u64.
+This patch set tries to remove unneeded ERROR check before clk_xxx.
+clk_put() already uses !clk and IS_ERR(clk) to check ERROR or NULL.
+clk_disable_unprepare() already checks ERROR by using IS_ERR_OR_NULL.
 
-	vtarget = now->vnow - ioc->margins.target;
-	atomic64_add(vtarget - vtime, &iocg->vtime);
+Remove unneeded ERROR or NULL check before them.
 
-Then the iocg's vtime will be very large too, larger than now->vnow.
+Wan Jiabing (4):
+  dmaengine: ep93xx_dma: Remove unneeded ERROR check before clk_put
+  dmaengine: sprd-dma: Remove unneeded ERROR check before clk_disable_unprepare
+  dmaengine: ste_dma40: Remove unneeded ERROR and NULL check in ste_dma40
+  dmaengine: xgene-dma: Remove unneeded ERROR check before clk_disable_unprepare
 
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
----
- block/blk-iocost.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/dma/ep93xx_dma.c |  3 +--
+ drivers/dma/sprd-dma.c   |  7 +------
+ drivers/dma/ste_dma40.c  | 10 ++++------
+ drivers/dma/xgene-dma.c  |  6 ++----
+ 4 files changed, 8 insertions(+), 18 deletions(-)
 
-diff --git a/block/blk-iocost.c b/block/blk-iocost.c
-index 5019dff524a4..a2ee12175c49 100644
---- a/block/blk-iocost.c
-+++ b/block/blk-iocost.c
-@@ -1248,7 +1248,7 @@ static bool iocg_activate(struct ioc_gq *iocg, struct ioc_now *now)
- {
- 	struct ioc *ioc = iocg->ioc;
- 	u64 last_period, cur_period;
--	u64 vtime, vtarget;
-+	u64 vtime, vtarget = 0;
- 	int i;
- 
- 	/*
-@@ -1290,7 +1290,8 @@ static bool iocg_activate(struct ioc_gq *iocg, struct ioc_now *now)
- 	 * Always start with the target budget. On deactivation, we throw away
- 	 * anything above it.
- 	 */
--	vtarget = now->vnow - ioc->margins.target;
-+	if (now->vnow > ioc->margins.target)
-+		vtarget = now->vnow - ioc->margins.target;
- 	vtime = atomic64_read(&iocg->vtime);
- 
- 	atomic64_add(vtarget - vtime, &iocg->vtime);
 -- 
 2.36.1
 

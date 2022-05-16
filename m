@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BDDA5285F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1271F5285F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244059AbiEPNuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 09:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
+        id S238153AbiEPNuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 09:50:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244071AbiEPNuJ (ORCPT
+        with ESMTP id S244059AbiEPNuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 09:50:09 -0400
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D4B3B298;
-        Mon, 16 May 2022 06:49:14 -0700 (PDT)
+        Mon, 16 May 2022 09:50:16 -0400
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D8D3A18D;
+        Mon, 16 May 2022 06:49:18 -0700 (PDT)
 Received: from toolbox.int.toradex.com ([81.221.85.15]) by mrelay.perfora.net
- (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0M7ZR3-1neGmD2tfT-00xGNg;
- Mon, 16 May 2022 15:48:59 +0200
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0M7IS8-1ndzez1WYY-00wzGX;
+ Mon, 16 May 2022 15:49:03 +0200
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
@@ -31,33 +31,33 @@ Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 17/24] ARM: dts: imx7-colibri: add clarifying comments
-Date:   Mon, 16 May 2022 15:47:27 +0200
-Message-Id: <20220516134734.493065-18-marcel@ziswiler.com>
+Subject: [PATCH v2 18/24] ARM: dts: imx7-colibri: alphabetical re-order
+Date:   Mon, 16 May 2022 15:47:28 +0200
+Message-Id: <20220516134734.493065-19-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220516134734.493065-1-marcel@ziswiler.com>
 References: <20220516134734.493065-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:neDi+m+pTaHKB2Q8oXHn1HXiJ2Sh1YhU4lBwqzZfvhta0xeodEb
- 95h9Yn7W0GcTF26H8zfeYD+273pnS5QUajhlHMNmyVbuTbTUQyd0M1tHp2fzdDEFThBaMPN
- C2V8FqJuBWO3u4XNzz9jle+ZIrGp4kHCwztvtkCWcq+n6DIYKKhz5kRWtUi0uPXWOER9NZ/
- gAN+V4WCxeTeuGOTe7IlA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:NQTn592N0wA=:LdOamR4YUaMo6/1hrlFhAR
- MaJN3dGDxNBsGlg0SmcOckzn8/R1Nz3RXtFThDwk+ImyD0xcwLHUpoZzqOmizzzKfLMrfJr2a
- R28wY8kzxAVkxC3UX37Ei5BYTB3dbD73PpHQ8Y4Dz4o9LPE+xc4NAi8tzNdG4j7W9uhSkH8hd
- Swdk8qw5yeuXHDSVQtP8u6z/7nCERLhtEhf2lqeTe8cGoVa4AuAVsOWKmUakFuXxzy4/EZeBz
- WqF3/0LDjsOh3tm9EhvZhyyM0zbTnCWfCz0sD0YYjj6fGj2uc+D7Muu6wTvOq8gEL68cpvQgS
- wVrd0y5f34vmVOVPV6QPYwPiKGI57oiEsCmuegjfg1dz7HW4gzv5A/SV3khqJcXPbse1PGszG
- vdnjvQ06D1/a3xqDT5tcMgyr6xH0iUdmRXaLYMewkrOnAdRj6PR4pRStT2WVbKW+3Qvn1X1y6
- WRuoLz2B2Pugks9wADq691/atO+QF+ndZX2tFa81xuIeR4J8i3gam87u3KGBx42OemFGDQkN5
- 0cS6b6Adw4yyp5ebegowsnyFN45W4JVaFxsyG/uK69+eIAQb5pAFFJL3InIYrt8Pck9hNVkTp
- eqikEXH9rqb95E+f+r0+Rg973M/j/6QIn/xqNWR9Qd3fBH0ncTKfC5ukymtLXWPFOjoSBSMoB
- F17MISBk3LiQpKyBkWETvl8mFHr0S2TywNcVp3QmcRzu3VTixVX71jw9n2BBt8kziqlX0czk1
- ad/qETEpqcihz0PH
+X-Provags-ID: V03:K1:epwPzq8L5S+/wuSoXiph1gPkkbfQuhNK/AXvIrhr8ap/waZSheh
+ iMSRY7NIDkLopA1Qto4bR+Yl/ge204yBB60qBDmewYhhhGqmv6/qq1Aryw7Wf0vDrEWOctp
+ gCE+46SXg7XpYaZRYfGE08XRGTKtnFUVpUoSwyYBpL/HcJFxyTbRQGAzw/1GEymwYaORu3/
+ l/uvC6JHDsXr6SrpswQlQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:sXL2l1pXvtE=:2PP7KeCTP4mQfUlFjDQUrR
+ /fWs+yvPmLh2fc2wm4Q7FyjkH3LLQWiW3BHvLyEDGBHTxsvzhOzUe1VynqjMLqYnEFVKCj33N
+ ZDPzmjlN9L32kTZ+0tUYSF7UWB6SJrR6mgCyvLvbGHESTE2JnnZOnZWJZx8zcUxC5Di/vAzjm
+ 89s6k2X6abhQ+nINbG39/XZ9Hb+L5bcXm1OsU6IKvi8KyZu6Ev4Yb7qbfrpo+daKMAC5OSFt+
+ nECmYFBP6ejlFpZRSYhXn5G5i3KxMlhYcGt2IjaeoAQ2rF0Gc6dW45prU0I21DNbcEavuxszD
+ 3jQ7moRmEnZkNWWtEGELPtuD6hWS9dVoB5ciKQFAg7qVyxjEse9RiszwiLCQMpd3J2IgWLq5C
+ DZSqgIfNH1LgBcwIf35PMs4CY9HZJFzMT8vH72fDy0tmONxVvTHESQ5nA4RA8dxJ0+JyejrZ8
+ +zfyYEiY8jXbaYllA7UeeXqOnVBbDMgzSiJDaQxAJMTCBQxiUwVd7DFFa8MA3mLE0kSy9BRYM
+ +i2if0cOOZU6FhQuJ9cQVsDydeMYmc83gF081lDHcDjayKkm0kW4tAxkU110WxytSLQ3hexzo
+ oRQ1i3J+FwDehpdjIWZ444hh1p14GTaFoqOHbFTwMVPVD8/5Cr0xyLTkBP0/mDyRX6Io0GqX8
+ +5YatjzMECcCzSROwc+Uaam1zn0xaJG6RCCFdlH+KaIcclBmul1A3X1kQalU09ip36g6w9LqP
+ PY6S5Cd8ldFx52gR
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,686 +66,711 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-- Add clarifying comments.
-- Remove spurious new line.
-- Add required new line.
+Alphabetically re-order device tree iomuxc pinctrl pads, nodes and
+properties.
 
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 ---
 
 (no changes since v1)
 
- arch/arm/boot/dts/imx7-colibri-aster.dtsi     |  11 ++
- arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi   |  15 ++
- arch/arm/boot/dts/imx7-colibri.dtsi           | 140 ++++++++++--------
- arch/arm/boot/dts/imx7d-colibri-aster.dts     |   2 +-
- .../arm/boot/dts/imx7d-colibri-emmc-aster.dts |   1 +
- .../boot/dts/imx7d-colibri-emmc-eval-v3.dts   |   1 +
- arch/arm/boot/dts/imx7d-colibri-emmc.dtsi     |   2 +
- arch/arm/boot/dts/imx7d-colibri-eval-v3.dts   |   5 +
- arch/arm/boot/dts/imx7d-colibri.dtsi          |   2 +
- arch/arm/boot/dts/imx7s-colibri-eval-v3.dts   |   4 +
- arch/arm/boot/dts/imx7s-colibri.dtsi          |   1 +
- 11 files changed, 121 insertions(+), 63 deletions(-)
+ arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi |   6 +-
+ arch/arm/boot/dts/imx7-colibri.dtsi         | 368 ++++++++++----------
+ 2 files changed, 186 insertions(+), 188 deletions(-)
 
-diff --git a/arch/arm/boot/dts/imx7-colibri-aster.dtsi b/arch/arm/boot/dts/imx7-colibri-aster.dtsi
-index 117965705814..fa488a6de0d4 100644
---- a/arch/arm/boot/dts/imx7-colibri-aster.dtsi
-+++ b/arch/arm/boot/dts/imx7-colibri-aster.dtsi
-@@ -3,6 +3,7 @@
-  * Copyright 2017-2022 Toradex
-  */
- 
-+/* Colibri AD0 to AD3 */
- &adc1 {
- 	status = "okay";
- };
-@@ -17,26 +18,32 @@ &gpio4 22 GPIO_ACTIVE_LOW /* SODIMM 85 / already muxed pinctrl_gpio2 as SPI_CE1_
- 	status = "okay";
- };
- 
-+/* Colibri Fast Ethernet */
- &fec1 {
- 	status = "okay";
- };
- 
-+/* Colibri I2C: I2C3_SDA/SCL on SODIMM 194/196 */
- &i2c4 {
- 	status = "okay";
- };
- 
-+/* Colibri PWM<A> */
- &pwm1 {
- 	status = "okay";
- };
- 
-+/* Colibri PWM<B> */
- &pwm2 {
- 	status = "okay";
- };
- 
-+/* Colibri PWM<C> */
- &pwm3 {
- 	status = "okay";
- };
- 
-+/* Colibri PWM<D> */
- &pwm4 {
- 	status = "okay";
- };
-@@ -46,18 +53,22 @@ &rtc {
- 	status = "okay";
- };
- 
-+/* Colibri UART_A */
- &uart1 {
- 	status = "okay";
- };
- 
-+/* Colibri UART_B */
- &uart2 {
- 	status = "okay";
- };
- 
-+/* Colibri UART_C */
- &uart3 {
- 	status = "okay";
- };
- 
-+/* Colibri USBC */
- &usbotg1 {
- 	status = "okay";
- };
 diff --git a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-index 6ae38c1f38d4..441331b09fb4 100644
+index 441331b09fb4..fea6e4c0d4d6 100644
 --- a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
 +++ b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-@@ -12,6 +12,7 @@ clk16m: clk16m {
- 	};
- };
- 
-+/* Colibri AD0 to AD3 */
- &adc1 {
- 	status = "okay";
- };
-@@ -28,6 +29,7 @@ &atmel_mxt_ts {
- 	status = "disabled";
- };
- 
-+/* Colibri SSP */
- &ecspi3 {
+@@ -34,13 +34,13 @@ &ecspi3 {
  	status = "okay";
  
-@@ -46,26 +48,34 @@ mcp2515: can@0 {
- 	};
- };
- 
-+/* Colibri Fast Ethernet */
- &fec1 {
- 	status = "okay";
- };
- 
-+/* Colibri I2C: I2C3_SDA/SCL on SODIMM 194/196 */
- &i2c4 {
- 	status = "okay";
- };
- 
-+/* Colibri PWM<A> */
- &pwm1 {
- 	status = "okay";
- };
- 
-+/* Colibri PWM<B> */
- &pwm2 {
-+	/* The pwm2 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
- 	status = "okay";
- };
- 
-+/* Colibri PWM<C> */
- &pwm3 {
-+	/* The pwm3 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
- 	status = "okay";
- };
- 
-+/* Colibri PWM<D> */
- &pwm4 {
- 	status = "okay";
- };
-@@ -75,22 +85,27 @@ &rtc {
- 	status = "okay";
- };
- 
-+/* Colibri UART_A */
- &uart1 {
- 	status = "okay";
- };
- 
-+/* Colibri UART_B */
- &uart2 {
- 	status = "okay";
- };
- 
-+/* Colibri UART_C */
- &uart3 {
- 	status = "okay";
- };
- 
-+/* Colibri USBC */
- &usbotg1 {
- 	status = "okay";
- };
- 
-+/* Colibri MMC/SD */
- &usdhc1 {
- 	status = "okay";
- };
+ 	mcp2515: can@0 {
++		clocks = <&clk16m>;
+ 		compatible = "microchip,mcp2515";
++		interrupt-parent = <&gpio5>;
++		interrupts = <2 IRQ_TYPE_EDGE_FALLING>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_can_int>;
+ 		reg = <0>;
+-		clocks = <&clk16m>;
+-		interrupt-parent = <&gpio5>;
+-		interrupts = <2 IRQ_TYPE_EDGE_FALLING>;
+ 		spi-max-frequency = <10000000>;
+ 		vdd-supply = <&reg_3v3>;
+ 		xceiver-supply = <&reg_5v0>;
 diff --git a/arch/arm/boot/dts/imx7-colibri.dtsi b/arch/arm/boot/dts/imx7-colibri.dtsi
-index 0fc4b33d97be..4416b7befbfe 100644
+index 4416b7befbfe..f29096fca54d 100644
 --- a/arch/arm/boot/dts/imx7-colibri.dtsi
 +++ b/arch/arm/boot/dts/imx7-colibri.dtsi
-@@ -122,6 +122,7 @@ sound {
- 		simple-audio-card,format = "i2s";
+@@ -118,18 +118,18 @@ reg_usbh_vbus: regulator-usbh-vbus {
+ 
+ 	sound {
+ 		compatible = "simple-audio-card";
+-		simple-audio-card,name = "imx7-sgtl5000";
+-		simple-audio-card,format = "i2s";
  		simple-audio-card,bitclock-master = <&dailink_master>;
++		simple-audio-card,format = "i2s";
  		simple-audio-card,frame-master = <&dailink_master>;
-+
++		simple-audio-card,name = "imx7-sgtl5000";
+ 
  		simple-audio-card,cpu {
  			sound-dai = <&sai1>;
  		};
-@@ -133,6 +134,7 @@ dailink_master: simple-audio-card,codec {
+ 
+ 		dailink_master: simple-audio-card,codec {
+-			sound-dai = <&codec>;
+ 			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
++			sound-dai = <&codec>;
+ 		};
  	};
  };
+@@ -150,9 +150,9 @@ &cpu0 {
  
-+/* Colibri AD0 to AD3 */
- &adc1 {
- 	vref-supply = <&reg_DCDC3>;
- };
-@@ -146,12 +148,14 @@ &cpu0 {
- 	cpu-supply = <&reg_DCDC2>;
- };
- 
-+/* Colibri SSP */
+ /* Colibri SSP */
  &ecspi3 {
++	cs-gpios = <&gpio4 11 GPIO_ACTIVE_LOW>; /* SODIMM 86 / SSPFRM */
  	pinctrl-names = "default";
  	pinctrl-0 = <&pinctrl_ecspi3 &pinctrl_ecspi3_cs>;
--	cs-gpios = <&gpio4 11 GPIO_ACTIVE_LOW>;
-+	cs-gpios = <&gpio4 11 GPIO_ACTIVE_LOW>; /* SODIMM 86 / SSPFRM */
+-	cs-gpios = <&gpio4 11 GPIO_ACTIVE_LOW>; /* SODIMM 86 / SSPFRM */
  };
  
-+/* Colibri Fast Ethernet */
- &fec1 {
- 	assigned-clock-parents = <&clks IMX7D_PLL_ENET_MAIN_100M_CLK>;
- 	assigned-clock-rates = <0>, <100000000>;
-@@ -174,6 +178,7 @@ mdio {
- 		#address-cells = <1>;
- 		#size-cells = <0>;
+ /* Colibri Fast Ethernet */
+@@ -380,11 +380,11 @@ &gpio7 {
  
-+		/* Micrel KSZ8041RNL */
- 		ethphy0: ethernet-phy@0 {
- 			compatible = "ethernet-phy-ieee802.3-c22";
- 			max-speed = <100>;
-@@ -373,6 +378,7 @@ &gpio7 {
- 			  "SODIMM_137";
- };
- 
-+/* NAND on such SKUs */
+ /* NAND on such SKUs */
  &gpmi {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_gpmi_nand>;
-@@ -381,6 +387,7 @@ &gpmi {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_gpmi_nand>;
+ 	fsl,use-minimum-ecc;
+-	nand-on-flash-bbt;
  	nand-ecc-mode = "hw";
++	nand-on-flash-bbt;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_gpmi_nand>;
  };
  
-+/* On-module Power I2C */
- &i2c1 {
- 	clock-frequency = <100000>;
- 	pinctrl-names = "default", "gpio";
-@@ -388,7 +395,6 @@ &i2c1 {
- 	pinctrl-1 = <&pinctrl_i2c1_recovery &pinctrl_i2c1_int>;
- 	scl-gpios = <&gpio1 4 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	sda-gpios = <&gpio1 5 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
--
+ /* On-module Power I2C */
+@@ -398,15 +398,15 @@ &i2c1 {
  	status = "okay";
  
  	codec: sgtl5000@a {
-@@ -488,6 +494,7 @@ reg_LDO5: LDO5 { /* PWR_EN_+V3.3 */
+-		compatible = "fsl,sgtl5000";
+ 		#sound-dai-cells = <0>;
+-		reg = <0x0a>;
+ 		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
++		compatible = "fsl,sgtl5000";
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_sai1_mclk>;
++		reg = <0x0a>;
+ 		VDDA-supply = <&reg_module_3v3_avdd>;
+-		VDDIO-supply = <&reg_module_3v3>;
+ 		VDDD-supply = <&reg_DCDC3>;
++		VDDIO-supply = <&reg_module_3v3>;
  	};
- };
  
-+/* Colibri I2C: I2C3_SDA/SCL on SODIMM 194/196 */
- &i2c4 {
- 	clock-frequency = <100000>;
- 	pinctrl-names = "default", "gpio";
-@@ -532,28 +539,32 @@ lcdif_out: endpoint {
+ 	ad7879_ts: touchscreen@2c {
+@@ -430,65 +430,65 @@ pmic@33 {
+ 
+ 		regulators {
+ 			reg_DCDC1: DCDC1 {  /* V1.0_SOC */
+-				regulator-min-microvolt = <1000000>;
+-				regulator-max-microvolt = <1100000>;
+-				regulator-boot-on;
+ 				regulator-always-on;
++				regulator-boot-on;
++				regulator-max-microvolt = <1100000>;
++				regulator-min-microvolt = <1000000>;
+ 			};
+ 
+ 			reg_DCDC2: DCDC2 { /* V1.1_ARM */
+-				regulator-min-microvolt = <975000>;
+-				regulator-max-microvolt = <1100000>;
+-				regulator-boot-on;
+ 				regulator-always-on;
++				regulator-boot-on;
++				regulator-max-microvolt = <1100000>;
++				regulator-min-microvolt = <975000>;
+ 			};
+ 
+ 			reg_DCDC3: DCDC3 { /* V1.8 */
+-				regulator-min-microvolt = <1800000>;
+-				regulator-max-microvolt = <1800000>;
+-				regulator-boot-on;
+ 				regulator-always-on;
++				regulator-boot-on;
++				regulator-max-microvolt = <1800000>;
++				regulator-min-microvolt = <1800000>;
+ 			};
+ 
+ 			reg_DCDC4: DCDC4 { /* V1.35_DRAM */
+-				regulator-min-microvolt = <1350000>;
+-				regulator-max-microvolt = <1350000>;
+-				regulator-boot-on;
+ 				regulator-always-on;
++				regulator-boot-on;
++				regulator-max-microvolt = <1350000>;
++				regulator-min-microvolt = <1350000>;
+ 			};
+ 
+ 			reg_LDO1: LDO1 { /* PWR_EN_+V3.3_ETH */
+-				regulator-min-microvolt = <3300000>;
+-				regulator-max-microvolt = <3300000>;
+ 				regulator-boot-on;
++				regulator-max-microvolt = <3300000>;
++				regulator-min-microvolt = <3300000>;
+ 			};
+ 
+ 			reg_LDO2: LDO2 { /* +V1.8_SD */
+-				regulator-min-microvolt = <1800000>;
+-				regulator-max-microvolt = <3300000>;
+-				regulator-boot-on;
+ 				regulator-always-on;
++				regulator-boot-on;
++				regulator-max-microvolt = <3300000>;
++				regulator-min-microvolt = <1800000>;
+ 			};
+ 
+ 			reg_LDO3: LDO3 { /* PWR_EN_+V3.3_LPSR */
+-				regulator-min-microvolt = <3300000>;
+-				regulator-max-microvolt = <3300000>;
+-				regulator-boot-on;
+ 				regulator-always-on;
++				regulator-boot-on;
++				regulator-max-microvolt = <3300000>;
++				regulator-min-microvolt = <3300000>;
+ 			};
+ 
+ 			reg_LDO4: LDO4 { /* V1.8_LPSR */
+-				regulator-min-microvolt = <1800000>;
+-				regulator-max-microvolt = <1800000>;
+-				regulator-boot-on;
+ 				regulator-always-on;
++				regulator-boot-on;
++				regulator-max-microvolt = <1800000>;
++				regulator-min-microvolt = <1800000>;
+ 			};
+ 
+ 			reg_LDO5: LDO5 { /* PWR_EN_+V3.3 */
+-				regulator-min-microvolt = <3300000>;
+-				regulator-max-microvolt = <3300000>;
+-				regulator-boot-on;
+ 				regulator-always-on;
++				regulator-boot-on;
++				regulator-max-microvolt = <3300000>;
++				regulator-min-microvolt = <3300000>;
+ 			};
+ 		};
  	};
- };
+@@ -575,31 +575,31 @@ &sai1 {
  
-+/* Colibri PWM<A> */
- &pwm1 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_pwm1>;
- };
- 
-+/* Colibri PWM<B> */
- &pwm2 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_pwm2>;
- };
- 
-+/* Colibri PWM<C> */
- &pwm3 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_pwm3>;
- };
- 
-+/* Colibri PWM<D> */
- &pwm4 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_pwm4>;
- };
- 
- &reg_1p0d {
--	vin-supply = <&reg_DCDC3>;
-+	vin-supply = <&reg_DCDC3>; /* VDDA_1P8_IN */
- };
- 
- &sai1 {
-@@ -562,6 +573,7 @@ &sai1 {
- 	status = "okay";
- };
- 
-+/* Colibri UART_A */
+ /* Colibri UART_A */
  &uart1 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_uart1 &pinctrl_uart1_ctrl1 &pinctrl_uart1_ctrl2>;
-@@ -571,6 +583,7 @@ &uart1 {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_uart1 &pinctrl_uart1_ctrl1 &pinctrl_uart1_ctrl2>;
+ 	assigned-clocks = <&clks IMX7D_UART1_ROOT_SRC>;
+ 	assigned-clock-parents = <&clks IMX7D_OSC_24M_CLK>;
+-	uart-has-rtscts;
  	fsl,dte-mode;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart1 &pinctrl_uart1_ctrl1 &pinctrl_uart1_ctrl2>;
++	uart-has-rtscts;
  };
  
-+/* Colibri UART_B */
+ /* Colibri UART_B */
  &uart2 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_uart2>;
-@@ -580,6 +593,7 @@ &uart2 {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_uart2>;
+ 	assigned-clocks = <&clks IMX7D_UART2_ROOT_SRC>;
+ 	assigned-clock-parents = <&clks IMX7D_OSC_24M_CLK>;
+-	uart-has-rtscts;
  	fsl,dte-mode;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart2>;
++	uart-has-rtscts;
  };
  
-+/* Colibri UART_C */
+ /* Colibri UART_C */
  &uart3 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_uart3>;
-@@ -588,6 +602,7 @@ &uart3 {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_uart3>;
+ 	assigned-clocks = <&clks IMX7D_UART3_ROOT_SRC>;
+ 	assigned-clock-parents = <&clks IMX7D_OSC_24M_CLK>;
  	fsl,dte-mode;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart3>;
  };
  
-+/* Colibri USBC */
- &usbotg1 {
- 	dr_mode = "otg";
- 	extcon = <0>, <&extcon_usbc_det>;
-@@ -608,6 +623,7 @@ &usdhc1 {
- 	wakeup-source;
- };
+ /* Colibri USBC */
+@@ -625,18 +625,18 @@ &usdhc1 {
  
-+/* eMMC on 1GB (eMMC) SKUs */
+ /* eMMC on 1GB (eMMC) SKUs */
  &usdhc3 {
- 	pinctrl-names = "default", "state_100mhz", "state_200mhz";
- 	pinctrl-0 = <&pinctrl_usdhc3>;
-@@ -778,15 +794,15 @@ MX7D_PAD_SD2_WP__GPIO5_IO10			0x0
+-	pinctrl-names = "default", "state_100mhz", "state_200mhz";
+-	pinctrl-0 = <&pinctrl_usdhc3>;
+-	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
+-	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
+ 	assigned-clocks = <&clks IMX7D_USDHC3_ROOT_CLK>;
+ 	assigned-clock-rates = <400000000>;
+ 	bus-width = <8>;
+ 	fsl,tuning-step = <2>;
+-	vmmc-supply = <&reg_module_3v3>;
+-	vqmmc-supply = <&reg_DCDC3>;
+ 	non-removable;
++	pinctrl-names = "default", "state_100mhz", "state_200mhz";
++	pinctrl-0 = <&pinctrl_usdhc3>;
++	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
++	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
+ 	sdhci-caps-mask = <0x80000000 0x0>;
++	vmmc-supply = <&reg_module_3v3>;
++	vqmmc-supply = <&reg_DCDC3>;
+ };
  
- 	pinctrl_ecspi3_cs: ecspi3-cs-grp {
- 		fsl,pins = <
--			MX7D_PAD_I2C2_SDA__GPIO4_IO11		0x14
-+			MX7D_PAD_I2C2_SDA__GPIO4_IO11		0x14 /* SODIMM 86 */
+ &iomuxc {
+@@ -663,13 +663,73 @@ MX7D_PAD_EPDC_DATA15__GPIO2_IO15	0x74 /* SODIMM 107 / INT */
  		>;
  	};
  
- 	pinctrl_ecspi3: ecspi3-grp {
- 		fsl,pins = <
--			MX7D_PAD_I2C1_SCL__ECSPI3_MISO		0x2
--			MX7D_PAD_I2C1_SDA__ECSPI3_MOSI		0x2
--			MX7D_PAD_I2C2_SCL__ECSPI3_SCLK		0x2
++	pinctrl_can_int: can-int-grp {
++		fsl,pins = <
++			MX7D_PAD_SD1_RESET_B__GPIO5_IO2		0X14 /* SODIMM 73 */
++		>;
++	};
++
++	pinctrl_ecspi3: ecspi3-grp {
++		fsl,pins = <
 +			MX7D_PAD_I2C1_SCL__ECSPI3_MISO		0x2 /* SODIMM 90 */
 +			MX7D_PAD_I2C1_SDA__ECSPI3_MOSI		0x2 /* SODIMM 92 */
 +			MX7D_PAD_I2C2_SCL__ECSPI3_SCLK		0x2 /* SODIMM 88 */
++		>;
++	};
++
++	pinctrl_ecspi3_cs: ecspi3-cs-grp {
++		fsl,pins = <
++			MX7D_PAD_I2C2_SDA__GPIO4_IO11		0x14 /* SODIMM 86 */
++		>;
++	};
++
++	pinctrl_enet1: enet1grp {
++		fsl,pins = <
++			MX7D_PAD_ENET1_RGMII_RD0__ENET1_RGMII_RD0	0x73
++			MX7D_PAD_ENET1_RGMII_RD1__ENET1_RGMII_RD1	0x73
++			MX7D_PAD_ENET1_RGMII_RXC__ENET1_RX_ER		0x73
++			MX7D_PAD_ENET1_RGMII_RX_CTL__ENET1_RGMII_RX_CTL	0x73
++			MX7D_PAD_ENET1_RGMII_TD0__ENET1_RGMII_TD0	0x73
++			MX7D_PAD_ENET1_RGMII_TD1__ENET1_RGMII_TD1	0x73
++			MX7D_PAD_ENET1_RGMII_TX_CTL__ENET1_RGMII_TX_CTL	0x73
++			MX7D_PAD_GPIO1_IO12__CCM_ENET_REF_CLK1		0x73
++			MX7D_PAD_SD2_CD_B__ENET1_MDIO			0x3
++			MX7D_PAD_SD2_WP__ENET1_MDC			0x3
++		>;
++	};
++
++	pinctrl_enet1_sleep: enet1sleepgrp {
++		fsl,pins = <
++			MX7D_PAD_ENET1_RGMII_RD0__GPIO7_IO0		0x0
++			MX7D_PAD_ENET1_RGMII_RD1__GPIO7_IO1		0x0
++			MX7D_PAD_ENET1_RGMII_RXC__GPIO7_IO5		0x0
++			MX7D_PAD_ENET1_RGMII_RX_CTL__GPIO7_IO4		0x0
++			MX7D_PAD_ENET1_RGMII_TD0__GPIO7_IO6		0x0
++			MX7D_PAD_ENET1_RGMII_TD1__GPIO7_IO7		0x0
++			MX7D_PAD_ENET1_RGMII_TX_CTL__GPIO7_IO10		0x0
++			MX7D_PAD_GPIO1_IO12__GPIO1_IO12			0x0
++			MX7D_PAD_SD2_CD_B__GPIO5_IO9			0x0
++			MX7D_PAD_SD2_WP__GPIO5_IO10			0x0
++		>;
++	};
++
++	pinctrl_flexcan1: flexcan1-grp {
++		fsl,pins = <
++			MX7D_PAD_ENET1_RGMII_RD2__FLEXCAN1_RX	0x79 /* SODIMM 63 */
++			MX7D_PAD_ENET1_RGMII_RD3__FLEXCAN1_TX	0x79 /* SODIMM 55 */
++		>;
++	};
++
++	pinctrl_flexcan2: flexcan2-grp {
++		fsl,pins = <
++			MX7D_PAD_GPIO1_IO14__FLEXCAN2_RX	0x79 /* SODIMM 188 */
++			MX7D_PAD_GPIO1_IO15__FLEXCAN2_TX	0x79 /* SODIMM 178 */
++		>;
++	};
++
+ 	pinctrl_gpio1: gpio1-grp {
+ 		fsl,pins = <
+-			MX7D_PAD_SAI1_RX_SYNC__GPIO6_IO16	0x14 /* SODIMM 77 */
+-			MX7D_PAD_EPDC_DATA09__GPIO2_IO9		0x14 /* SODIMM 89 */
+-			MX7D_PAD_EPDC_DATA08__GPIO2_IO8		0x74 /* SODIMM 91 */
+-			MX7D_PAD_LCD_RESET__GPIO3_IO4		0x14 /* SODIMM 93 */
+-			MX7D_PAD_EPDC_DATA10__GPIO2_IO10	0x74 /* SODIMM 105 */
++			MX7D_PAD_EPDC_BDR1__GPIO2_IO29		0x14 /* SODIMM 110 */
+ 			MX7D_PAD_EPDC_DATA00__GPIO2_IO0		0x14 /* SODIMM 111 */
+ 			MX7D_PAD_EPDC_DATA01__GPIO2_IO1		0x14 /* SODIMM 113 */
+ 			MX7D_PAD_EPDC_DATA02__GPIO2_IO2		0x14 /* SODIMM 115 */
+@@ -678,47 +738,51 @@ MX7D_PAD_EPDC_DATA04__GPIO2_IO4		0x14 /* SODIMM 119 */
+ 			MX7D_PAD_EPDC_DATA05__GPIO2_IO5		0x14 /* SODIMM 121 */
+ 			MX7D_PAD_EPDC_DATA06__GPIO2_IO6		0x14 /* SODIMM 123 */
+ 			MX7D_PAD_EPDC_DATA07__GPIO2_IO7		0x14 /* SODIMM 125 */
+-			MX7D_PAD_EPDC_SDCE2__GPIO2_IO22		0x14 /* SODIMM 127 */
+-			MX7D_PAD_UART3_RTS_B__GPIO4_IO6		0x14 /* SODIMM 131 */
++			MX7D_PAD_EPDC_DATA08__GPIO2_IO8		0x74 /* SODIMM 91 */
++			MX7D_PAD_EPDC_DATA09__GPIO2_IO9		0x14 /* SODIMM 89 */
++			MX7D_PAD_EPDC_DATA10__GPIO2_IO10	0x74 /* SODIMM 105 */
++			MX7D_PAD_EPDC_DATA11__GPIO2_IO11	0x14 /* SODIMM 152 */
++			MX7D_PAD_EPDC_DATA12__GPIO2_IO12	0x14 /* SODIMM 150 */
++			MX7D_PAD_EPDC_DATA14__GPIO2_IO14	0x14 /* SODIMM 126 */
++			MX7D_PAD_EPDC_GDCLK__GPIO2_IO24		0x14 /* SODIMM 132 */
++			MX7D_PAD_EPDC_GDOE__GPIO2_IO25		0x14 /* SODIMM 134 */
+ 			MX7D_PAD_EPDC_GDRL__GPIO2_IO26		0x14 /* SODIMM 133 */
+-			MX7D_PAD_SAI1_RX_DATA__GPIO6_IO12	0x14 /* SODIMM 169 */
+-			MX7D_PAD_SAI1_RX_BCLK__GPIO6_IO17	0x14 /* SODIMM 24 */
+-			MX7D_PAD_SD2_DATA2__GPIO5_IO16		0x14 /* SODIMM 100 */
+-			MX7D_PAD_SD2_DATA3__GPIO5_IO17		0x14 /* SODIMM 102 */
+ 			MX7D_PAD_EPDC_GDSP__GPIO2_IO27		0x14 /* SODIMM 104 */
+-			MX7D_PAD_EPDC_BDR1__GPIO2_IO29		0x14 /* SODIMM 110 */
+ 			MX7D_PAD_EPDC_PWR_COM__GPIO2_IO30	0x14 /* SODIMM 112 */
++			MX7D_PAD_EPDC_PWR_STAT__GPIO2_IO31	0x14 /* SODIMM 128 */
++			MX7D_PAD_EPDC_SDCE0__GPIO2_IO20		0x14 /* SODIMM 122 */
++			MX7D_PAD_EPDC_SDCE1__GPIO2_IO21		0x14 /* SODIMM 124 */
++			MX7D_PAD_EPDC_SDCE2__GPIO2_IO22		0x14 /* SODIMM 127 */
++			MX7D_PAD_EPDC_SDCE3__GPIO2_IO23		0x14 /* SODIMM 130 */
+ 			MX7D_PAD_EPDC_SDCLK__GPIO2_IO16		0x14 /* SODIMM 114 */
+ 			MX7D_PAD_EPDC_SDLE__GPIO2_IO17		0x14 /* SODIMM 116 */
+ 			MX7D_PAD_EPDC_SDOE__GPIO2_IO18		0x14 /* SODIMM 118 */
+ 			MX7D_PAD_EPDC_SDSHR__GPIO2_IO19		0x14 /* SODIMM 120 */
+-			MX7D_PAD_EPDC_SDCE0__GPIO2_IO20		0x14 /* SODIMM 122 */
+-			MX7D_PAD_EPDC_SDCE1__GPIO2_IO21		0x14 /* SODIMM 124 */
+-			MX7D_PAD_EPDC_DATA14__GPIO2_IO14	0x14 /* SODIMM 126 */
+-			MX7D_PAD_EPDC_PWR_STAT__GPIO2_IO31	0x14 /* SODIMM 128 */
+-			MX7D_PAD_EPDC_SDCE3__GPIO2_IO23		0x14 /* SODIMM 130 */
+-			MX7D_PAD_EPDC_GDCLK__GPIO2_IO24		0x14 /* SODIMM 132 */
+-			MX7D_PAD_EPDC_GDOE__GPIO2_IO25		0x14 /* SODIMM 134 */
+-			MX7D_PAD_EPDC_DATA12__GPIO2_IO12	0x14 /* SODIMM 150 */
+-			MX7D_PAD_EPDC_DATA11__GPIO2_IO11	0x14 /* SODIMM 152 */
++			MX7D_PAD_LCD_RESET__GPIO3_IO4		0x14 /* SODIMM 93 */
++			MX7D_PAD_SAI1_RX_BCLK__GPIO6_IO17	0x14 /* SODIMM 24 */
++			MX7D_PAD_SAI1_RX_DATA__GPIO6_IO12	0x14 /* SODIMM 169 */
++			MX7D_PAD_SAI1_RX_SYNC__GPIO6_IO16	0x14 /* SODIMM 77 */
+ 			MX7D_PAD_SD2_CLK__GPIO5_IO12		0x14 /* SODIMM 184 */
+ 			MX7D_PAD_SD2_CMD__GPIO5_IO13		0x14 /* SODIMM 186 */
++			MX7D_PAD_SD2_DATA2__GPIO5_IO16		0x14 /* SODIMM 100 */
++			MX7D_PAD_SD2_DATA3__GPIO5_IO17		0x14 /* SODIMM 102 */
++			MX7D_PAD_UART3_RTS_B__GPIO4_IO6		0x14 /* SODIMM 131 */
  		>;
  	};
  
-@@ -831,8 +847,8 @@ MX7D_PAD_SD3_DATA7__NAND_DATA07		0x71
+ 	pinctrl_gpio2: gpio2-grp { /* On X22 Camera interface */
+ 		fsl,pins = <
+-			MX7D_PAD_ECSPI2_SS0__GPIO4_IO23		0x14 /* SODIMM 65 */
+-			MX7D_PAD_SD1_CD_B__GPIO5_IO0		0x74 /* SODIMM 69 */
+-			MX7D_PAD_I2C4_SDA__GPIO4_IO15		0x14 /* SODIMM 75 */
+ 			MX7D_PAD_ECSPI1_MISO__GPIO4_IO18	0x14 /* SODIMM 79 */
+-			MX7D_PAD_I2C3_SCL__GPIO4_IO12		0x14 /* SODIMM 81 */
+-			MX7D_PAD_ECSPI2_MISO__GPIO4_IO22	0x14 /* SODIMM 85 */
+-			MX7D_PAD_ECSPI1_SS0__GPIO4_IO19		0x14 /* SODIMM 97 */
+-			MX7D_PAD_ECSPI1_SCLK__GPIO4_IO16	0x14 /* SODIMM 101 */
+ 			MX7D_PAD_ECSPI1_MOSI__GPIO4_IO17	0x14 /* SODIMM 103 */
++			MX7D_PAD_ECSPI1_SCLK__GPIO4_IO16	0x14 /* SODIMM 101 */
++			MX7D_PAD_ECSPI1_SS0__GPIO4_IO19		0x14 /* SODIMM 97 */
++			MX7D_PAD_ECSPI2_MISO__GPIO4_IO22	0x14 /* SODIMM 85 */
++			MX7D_PAD_ECSPI2_SS0__GPIO4_IO23		0x14 /* SODIMM 65 */
++			MX7D_PAD_I2C3_SCL__GPIO4_IO12		0x14 /* SODIMM 81 */
+ 			MX7D_PAD_I2C3_SDA__GPIO4_IO13		0x14 /* SODIMM 94 */
+ 			MX7D_PAD_I2C4_SCL__GPIO4_IO14		0x14 /* SODIMM 96 */
++			MX7D_PAD_I2C4_SDA__GPIO4_IO15		0x14 /* SODIMM 75 */
++			MX7D_PAD_SD1_CD_B__GPIO5_IO0		0x74 /* SODIMM 69 */
+ 			MX7D_PAD_SD2_RESET_B__GPIO5_IO11	0x14 /* SODIMM 98 */
+ 		>;
+ 	};
+@@ -736,87 +800,15 @@ MX7D_PAD_LCD_DATA23__GPIO3_IO28		0x74 /* SODIMM 146 */
+ 
+ 	pinctrl_gpio4: gpio4-grp { /* Alternatively CAN2 */
+ 		fsl,pins = <
+-			MX7D_PAD_GPIO1_IO15__GPIO1_IO15		0x14 /* SODIMM 178 */
+ 			MX7D_PAD_GPIO1_IO14__GPIO1_IO14		0x14 /* SODIMM 188 */
++			MX7D_PAD_GPIO1_IO15__GPIO1_IO15		0x14 /* SODIMM 178 */
+ 		>;
+ 	};
+ 
+ 	pinctrl_gpio7: gpio7-grp { /* Alternatively CAN1 */
+ 		fsl,pins = <
+-			MX7D_PAD_ENET1_RGMII_RD3__GPIO7_IO3	0x14 /* SODIMM 55 */
+ 			MX7D_PAD_ENET1_RGMII_RD2__GPIO7_IO2	0x14 /* SODIMM 63 */
+-		>;
+-	};
+-
+-	pinctrl_i2c1_int: i2c1-int-grp { /* PMIC / TOUCH */
+-		fsl,pins = <
+-			MX7D_PAD_GPIO1_IO13__GPIO1_IO13	0x79
+-		>;
+-	};
+-
+-	pinctrl_can_int: can-int-grp {
+-		fsl,pins = <
+-			MX7D_PAD_SD1_RESET_B__GPIO5_IO2		0X14 /* SODIMM 73 */
+-		>;
+-	};
+-
+-	pinctrl_enet1: enet1grp {
+-		fsl,pins = <
+-			MX7D_PAD_ENET1_RGMII_RX_CTL__ENET1_RGMII_RX_CTL	0x73
+-			MX7D_PAD_ENET1_RGMII_RD0__ENET1_RGMII_RD0	0x73
+-			MX7D_PAD_ENET1_RGMII_RD1__ENET1_RGMII_RD1	0x73
+-			MX7D_PAD_ENET1_RGMII_RXC__ENET1_RX_ER		0x73
+-
+-			MX7D_PAD_ENET1_RGMII_TX_CTL__ENET1_RGMII_TX_CTL	0x73
+-			MX7D_PAD_ENET1_RGMII_TD0__ENET1_RGMII_TD0	0x73
+-			MX7D_PAD_ENET1_RGMII_TD1__ENET1_RGMII_TD1	0x73
+-			MX7D_PAD_GPIO1_IO12__CCM_ENET_REF_CLK1		0x73
+-			MX7D_PAD_SD2_CD_B__ENET1_MDIO			0x3
+-			MX7D_PAD_SD2_WP__ENET1_MDC			0x3
+-		>;
+-	};
+-
+-	pinctrl_enet1_sleep: enet1sleepgrp {
+-		fsl,pins = <
+-			MX7D_PAD_ENET1_RGMII_RX_CTL__GPIO7_IO4		0x0
+-			MX7D_PAD_ENET1_RGMII_RD0__GPIO7_IO0		0x0
+-			MX7D_PAD_ENET1_RGMII_RD1__GPIO7_IO1		0x0
+-			MX7D_PAD_ENET1_RGMII_RXC__GPIO7_IO5		0x0
+-
+-			MX7D_PAD_ENET1_RGMII_TX_CTL__GPIO7_IO10		0x0
+-			MX7D_PAD_ENET1_RGMII_TD0__GPIO7_IO6		0x0
+-			MX7D_PAD_ENET1_RGMII_TD1__GPIO7_IO7		0x0
+-			MX7D_PAD_GPIO1_IO12__GPIO1_IO12			0x0
+-			MX7D_PAD_SD2_CD_B__GPIO5_IO9			0x0
+-			MX7D_PAD_SD2_WP__GPIO5_IO10			0x0
+-		>;
+-	};
+-
+-	pinctrl_ecspi3_cs: ecspi3-cs-grp {
+-		fsl,pins = <
+-			MX7D_PAD_I2C2_SDA__GPIO4_IO11		0x14 /* SODIMM 86 */
+-		>;
+-	};
+-
+-	pinctrl_ecspi3: ecspi3-grp {
+-		fsl,pins = <
+-			MX7D_PAD_I2C1_SCL__ECSPI3_MISO		0x2 /* SODIMM 90 */
+-			MX7D_PAD_I2C1_SDA__ECSPI3_MOSI		0x2 /* SODIMM 92 */
+-			MX7D_PAD_I2C2_SCL__ECSPI3_SCLK		0x2 /* SODIMM 88 */
+-		>;
+-	};
+-
+-	pinctrl_flexcan1: flexcan1-grp {
+-		fsl,pins = <
+-			MX7D_PAD_ENET1_RGMII_RD3__FLEXCAN1_TX	0x79 /* SODIMM 55 */
+-			MX7D_PAD_ENET1_RGMII_RD2__FLEXCAN1_RX	0x79 /* SODIMM 63 */
+-		>;
+-	};
+-
+-	pinctrl_flexcan2: flexcan2-grp {
+-		fsl,pins = <
+-			MX7D_PAD_GPIO1_IO14__FLEXCAN2_RX	0x79 /* SODIMM 188 */
+-			MX7D_PAD_GPIO1_IO15__FLEXCAN2_TX	0x79 /* SODIMM 178 */
++			MX7D_PAD_ENET1_RGMII_RD3__GPIO7_IO3	0x14 /* SODIMM 55 */
+ 		>;
+ 	};
+ 
+@@ -828,12 +820,10 @@ MX7D_PAD_SD1_WP__GPIO5_IO1		0x14 /* SODIMM 71 */
+ 
+ 	pinctrl_gpmi_nand: gpmi-nand-grp {
+ 		fsl,pins = <
+-			MX7D_PAD_SD3_CLK__NAND_CLE		0x71
+-			MX7D_PAD_SD3_CMD__NAND_ALE		0x71
+ 			MX7D_PAD_SAI1_TX_BCLK__NAND_CE0_B	0x71
+ 			MX7D_PAD_SAI1_TX_DATA__NAND_READY_B	0x74
+-			MX7D_PAD_SD3_STROBE__NAND_RE_B		0x71
+-			MX7D_PAD_SD3_RESET_B__NAND_WE_B		0x71
++			MX7D_PAD_SD3_CLK__NAND_CLE		0x71
++			MX7D_PAD_SD3_CMD__NAND_ALE		0x71
+ 			MX7D_PAD_SD3_DATA0__NAND_DATA00		0x71
+ 			MX7D_PAD_SD3_DATA1__NAND_DATA01		0x71
+ 			MX7D_PAD_SD3_DATA2__NAND_DATA02		0x71
+@@ -842,13 +832,21 @@ MX7D_PAD_SD3_DATA4__NAND_DATA04		0x71
+ 			MX7D_PAD_SD3_DATA5__NAND_DATA05		0x71
+ 			MX7D_PAD_SD3_DATA6__NAND_DATA06		0x71
+ 			MX7D_PAD_SD3_DATA7__NAND_DATA07		0x71
++			MX7D_PAD_SD3_RESET_B__NAND_WE_B		0x71
++			MX7D_PAD_SD3_STROBE__NAND_RE_B		0x71
++		>;
++	};
++
++	pinctrl_i2c1_int: i2c1-int-grp { /* PMIC / TOUCH */
++		fsl,pins = <
++			MX7D_PAD_GPIO1_IO13__GPIO1_IO13	0x79
+ 		>;
+ 	};
  
  	pinctrl_i2c4: i2c4-grp {
  		fsl,pins = <
--			MX7D_PAD_ENET1_RGMII_TD3__I2C4_SDA	0x4000007f
--			MX7D_PAD_ENET1_RGMII_TD2__I2C4_SCL	0x4000007f
+-			MX7D_PAD_ENET1_RGMII_TD3__I2C4_SDA	0x4000007f /* SODIMM 194 */
+ 			MX7D_PAD_ENET1_RGMII_TD2__I2C4_SCL	0x4000007f /* SODIMM 196 */
 +			MX7D_PAD_ENET1_RGMII_TD3__I2C4_SDA	0x4000007f /* SODIMM 194 */
-+			MX7D_PAD_ENET1_RGMII_TD2__I2C4_SCL	0x4000007f /* SODIMM 196 */
  		>;
  	};
  
-@@ -845,44 +861,44 @@ MX7D_PAD_ENET1_RGMII_TD3__GPIO7_IO9	0x4000007f
- 
- 	pinctrl_lcdif_dat: lcdif-dat-grp {
+@@ -897,8 +895,8 @@ pinctrl_lcdif_ctrl: lcdif-ctrl-grp {
  		fsl,pins = <
--			MX7D_PAD_LCD_DATA00__LCD_DATA0		0x79
--			MX7D_PAD_LCD_DATA01__LCD_DATA1		0x79
--			MX7D_PAD_LCD_DATA02__LCD_DATA2		0x79
--			MX7D_PAD_LCD_DATA03__LCD_DATA3		0x79
--			MX7D_PAD_LCD_DATA04__LCD_DATA4		0x79
--			MX7D_PAD_LCD_DATA05__LCD_DATA5		0x79
--			MX7D_PAD_LCD_DATA06__LCD_DATA6		0x79
--			MX7D_PAD_LCD_DATA07__LCD_DATA7		0x79
--			MX7D_PAD_LCD_DATA08__LCD_DATA8		0x79
--			MX7D_PAD_LCD_DATA09__LCD_DATA9		0x79
--			MX7D_PAD_LCD_DATA10__LCD_DATA10		0x79
--			MX7D_PAD_LCD_DATA11__LCD_DATA11		0x79
--			MX7D_PAD_LCD_DATA12__LCD_DATA12		0x79
--			MX7D_PAD_LCD_DATA13__LCD_DATA13		0x79
--			MX7D_PAD_LCD_DATA14__LCD_DATA14		0x79
--			MX7D_PAD_LCD_DATA15__LCD_DATA15		0x79
--			MX7D_PAD_LCD_DATA16__LCD_DATA16		0x79
--			MX7D_PAD_LCD_DATA17__LCD_DATA17		0x79
-+			MX7D_PAD_LCD_DATA00__LCD_DATA0		0x79 /* SODIMM 76 */
-+			MX7D_PAD_LCD_DATA01__LCD_DATA1		0x79 /* SODIMM 70 */
-+			MX7D_PAD_LCD_DATA02__LCD_DATA2		0x79 /* SODIMM 60 */
-+			MX7D_PAD_LCD_DATA03__LCD_DATA3		0x79 /* SODIMM 58 */
-+			MX7D_PAD_LCD_DATA04__LCD_DATA4		0x79 /* SODIMM 78 */
-+			MX7D_PAD_LCD_DATA05__LCD_DATA5		0x79 /* SODIMM 72 */
-+			MX7D_PAD_LCD_DATA06__LCD_DATA6		0x79 /* SODIMM 80 */
-+			MX7D_PAD_LCD_DATA07__LCD_DATA7		0x79 /* SODIMM 46 */
-+			MX7D_PAD_LCD_DATA08__LCD_DATA8		0x79 /* SODIMM 62 */
-+			MX7D_PAD_LCD_DATA09__LCD_DATA9		0x79 /* SODIMM 48 */
-+			MX7D_PAD_LCD_DATA10__LCD_DATA10		0x79 /* SODIMM 74 */
-+			MX7D_PAD_LCD_DATA11__LCD_DATA11		0x79 /* SODIMM 50 */
-+			MX7D_PAD_LCD_DATA12__LCD_DATA12		0x79 /* SODIMM 52 */
-+			MX7D_PAD_LCD_DATA13__LCD_DATA13		0x79 /* SODIMM 54 */
-+			MX7D_PAD_LCD_DATA14__LCD_DATA14		0x79 /* SODIMM 66 */
-+			MX7D_PAD_LCD_DATA15__LCD_DATA15		0x79 /* SODIMM 64 */
-+			MX7D_PAD_LCD_DATA16__LCD_DATA16		0x79 /* SODIMM 57 */
-+			MX7D_PAD_LCD_DATA17__LCD_DATA17		0x79 /* SODIMM 61 */
- 		>;
- 	};
- 
- 	pinctrl_lcdif_dat_24: lcdif-dat-24-grp {
- 		fsl,pins = <
--			MX7D_PAD_LCD_DATA18__LCD_DATA18		0x79
--			MX7D_PAD_LCD_DATA19__LCD_DATA19		0x79
--			MX7D_PAD_LCD_DATA20__LCD_DATA20		0x79
--			MX7D_PAD_LCD_DATA21__LCD_DATA21		0x79
--			MX7D_PAD_LCD_DATA22__LCD_DATA22		0x79
--			MX7D_PAD_LCD_DATA23__LCD_DATA23		0x79
-+			MX7D_PAD_LCD_DATA18__LCD_DATA18		0x79 /* SODIMM 136 */
-+			MX7D_PAD_LCD_DATA19__LCD_DATA19		0x79 /* SODIMM 138 */
-+			MX7D_PAD_LCD_DATA20__LCD_DATA20		0x79 /* SODIMM 140 */
-+			MX7D_PAD_LCD_DATA21__LCD_DATA21		0x79 /* SODIMM 142 */
-+			MX7D_PAD_LCD_DATA22__LCD_DATA22		0x79 /* SODIMM 144 */
-+			MX7D_PAD_LCD_DATA23__LCD_DATA23		0x79 /* SODIMM 146 */
- 		>;
- 	};
- 
- 	pinctrl_lcdif_ctrl: lcdif-ctrl-grp {
- 		fsl,pins = <
--			MX7D_PAD_LCD_CLK__LCD_CLK		0x79
--			MX7D_PAD_LCD_ENABLE__LCD_ENABLE		0x79
--			MX7D_PAD_LCD_VSYNC__LCD_VSYNC		0x79
--			MX7D_PAD_LCD_HSYNC__LCD_HSYNC		0x79
-+			MX7D_PAD_LCD_CLK__LCD_CLK		0x79 /* SODIMM 56 */
-+			MX7D_PAD_LCD_ENABLE__LCD_ENABLE		0x79 /* SODIMM 44 */
+ 			MX7D_PAD_LCD_CLK__LCD_CLK		0x79 /* SODIMM 56 */
+ 			MX7D_PAD_LCD_ENABLE__LCD_ENABLE		0x79 /* SODIMM 44 */
+-			MX7D_PAD_LCD_VSYNC__LCD_VSYNC		0x79 /* SODIMM 82 */
+ 			MX7D_PAD_LCD_HSYNC__LCD_HSYNC		0x79 /* SODIMM 68 */
 +			MX7D_PAD_LCD_VSYNC__LCD_VSYNC		0x79 /* SODIMM 82 */
-+			MX7D_PAD_LCD_HSYNC__LCD_HSYNC		0x79 /* SODIMM 68 */
  		>;
  	};
  
-@@ -897,70 +913,70 @@ MX7D_PAD_EPDC_DATA13__GPIO2_IO13        0x14 /* SODIMM 95 */
+@@ -913,8 +911,8 @@ MX7D_PAD_EPDC_DATA13__GPIO2_IO13        0x14 /* SODIMM 95 */
  
  	pinctrl_pwm1: pwm1-grp {
  		fsl,pins = <
--			MX7D_PAD_GPIO1_IO08__PWM1_OUT		0x79
--			MX7D_PAD_ECSPI2_MOSI__GPIO4_IO21	0x4
+-			MX7D_PAD_GPIO1_IO08__PWM1_OUT		0x79 /* SODIMM 59 */
+ 			MX7D_PAD_ECSPI2_MOSI__GPIO4_IO21	0x4  /* SODIMM 59 */
 +			MX7D_PAD_GPIO1_IO08__PWM1_OUT		0x79 /* SODIMM 59 */
-+			MX7D_PAD_ECSPI2_MOSI__GPIO4_IO21	0x4  /* SODIMM 59 */
  		>;
  	};
  
- 	pinctrl_pwm2: pwm2-grp {
- 		fsl,pins = <
--			MX7D_PAD_GPIO1_IO09__PWM2_OUT		0x79
-+			MX7D_PAD_GPIO1_IO09__PWM2_OUT		0x79 /* SODIMM 28 */
- 		>;
- 	};
- 
- 	pinctrl_pwm3: pwm3-grp {
- 		fsl,pins = <
--			MX7D_PAD_GPIO1_IO10__PWM3_OUT		0x79
-+			MX7D_PAD_GPIO1_IO10__PWM3_OUT		0x79 /* SODIMM 30 */
- 		>;
- 	};
+@@ -932,39 +930,39 @@ MX7D_PAD_GPIO1_IO10__PWM3_OUT		0x79 /* SODIMM 30 */
  
  	pinctrl_pwm4: pwm4-grp {
  		fsl,pins = <
--			MX7D_PAD_GPIO1_IO11__PWM4_OUT		0x79
--			MX7D_PAD_ECSPI2_SCLK__GPIO4_IO20	0x4
+-			MX7D_PAD_GPIO1_IO11__PWM4_OUT		0x79 /* SODIMM 67 */
+ 			MX7D_PAD_ECSPI2_SCLK__GPIO4_IO20	0x4  /* SODIMM 67 */
 +			MX7D_PAD_GPIO1_IO11__PWM4_OUT		0x79 /* SODIMM 67 */
-+			MX7D_PAD_ECSPI2_SCLK__GPIO4_IO20	0x4  /* SODIMM 67 */
  		>;
  	};
  
  	pinctrl_uart1: uart1-grp {
  		fsl,pins = <
--			MX7D_PAD_UART1_TX_DATA__UART1_DTE_RX	0x79
--			MX7D_PAD_UART1_RX_DATA__UART1_DTE_TX	0x79
--			MX7D_PAD_SAI2_TX_BCLK__UART1_DTE_CTS	0x79
--			MX7D_PAD_SAI2_TX_SYNC__UART1_DTE_RTS	0x79
-+			MX7D_PAD_UART1_TX_DATA__UART1_DTE_RX	0x79 /* SODIMM 33 */
+-			MX7D_PAD_UART1_TX_DATA__UART1_DTE_RX	0x79 /* SODIMM 33 */
+-			MX7D_PAD_UART1_RX_DATA__UART1_DTE_TX	0x79 /* SODIMM 35 */
+ 			MX7D_PAD_SAI2_TX_BCLK__UART1_DTE_CTS	0x79 /* SODIMM 25 */
+ 			MX7D_PAD_SAI2_TX_SYNC__UART1_DTE_RTS	0x79 /* SODIMM 27 */
 +			MX7D_PAD_UART1_RX_DATA__UART1_DTE_TX	0x79 /* SODIMM 35 */
-+			MX7D_PAD_SAI2_TX_BCLK__UART1_DTE_CTS	0x79 /* SODIMM 25 */
-+			MX7D_PAD_SAI2_TX_SYNC__UART1_DTE_RTS	0x79 /* SODIMM 27 */
++			MX7D_PAD_UART1_TX_DATA__UART1_DTE_RX	0x79 /* SODIMM 33 */
  		>;
  	};
  
  	pinctrl_uart1_ctrl1: uart1-ctrl1-grp {
  		fsl,pins = <
--			MX7D_PAD_SD2_DATA1__GPIO5_IO15		0x14 /* DCD */
--			MX7D_PAD_SD2_DATA0__GPIO5_IO14		0x14 /* DTR */
+-			MX7D_PAD_SD2_DATA1__GPIO5_IO15		0x14 /* SODIMM 31 / DCD */
+ 			MX7D_PAD_SD2_DATA0__GPIO5_IO14		0x14 /* SODIMM 23 / DTR */
 +			MX7D_PAD_SD2_DATA1__GPIO5_IO15		0x14 /* SODIMM 31 / DCD */
-+			MX7D_PAD_SD2_DATA0__GPIO5_IO14		0x14 /* SODIMM 23 / DTR */
  		>;
  	};
  
  	pinctrl_uart2: uart2-grp {
  		fsl,pins = <
--			MX7D_PAD_UART2_TX_DATA__UART2_DTE_RX 0x79
--			MX7D_PAD_UART2_RX_DATA__UART2_DTE_TX 0x79
--			MX7D_PAD_SAI2_RX_DATA__UART2_DTE_RTS 0x79
--			MX7D_PAD_SAI2_TX_DATA__UART2_DTE_CTS 0x79
-+			MX7D_PAD_UART2_TX_DATA__UART2_DTE_RX	0x79 /* SODIMM 36 */
+-			MX7D_PAD_UART2_TX_DATA__UART2_DTE_RX	0x79 /* SODIMM 36 */
+-			MX7D_PAD_UART2_RX_DATA__UART2_DTE_TX	0x79 /* SODIMM 38 */
+ 			MX7D_PAD_SAI2_RX_DATA__UART2_DTE_RTS	0x79 /* SODIMM 32 / CTS */
+ 			MX7D_PAD_SAI2_TX_DATA__UART2_DTE_CTS	0x79 /* SODIMM 34 / RTS */
 +			MX7D_PAD_UART2_RX_DATA__UART2_DTE_TX	0x79 /* SODIMM 38 */
-+			MX7D_PAD_SAI2_RX_DATA__UART2_DTE_RTS	0x79 /* SODIMM 32 / CTS */
-+			MX7D_PAD_SAI2_TX_DATA__UART2_DTE_CTS	0x79 /* SODIMM 34 / RTS */
++			MX7D_PAD_UART2_TX_DATA__UART2_DTE_RX	0x79 /* SODIMM 36 */
  		>;
  	};
  	pinctrl_uart3: uart3-grp {
  		fsl,pins = <
--			MX7D_PAD_UART3_TX_DATA__UART3_DTE_RX 0x79
--			MX7D_PAD_UART3_RX_DATA__UART3_DTE_TX 0x79
+-			MX7D_PAD_UART3_TX_DATA__UART3_DTE_RX	0x79 /* SODIMM 19 */
+ 			MX7D_PAD_UART3_RX_DATA__UART3_DTE_TX	0x79 /* SODIMM 21 */
 +			MX7D_PAD_UART3_TX_DATA__UART3_DTE_RX	0x79 /* SODIMM 19 */
-+			MX7D_PAD_UART3_RX_DATA__UART3_DTE_TX	0x79 /* SODIMM 21 */
  		>;
  	};
  
- 	pinctrl_usbc_det: gpio-usbc-det {
+@@ -1027,8 +1025,8 @@ MX7D_PAD_SD1_DATA3__SD1_DATA3		0x10
+ 
+ 	pinctrl_usdhc3: usdhc3grp {
  		fsl,pins = <
--			MX7D_PAD_ENET1_CRS__GPIO7_IO14	0x14
-+			MX7D_PAD_ENET1_CRS__GPIO7_IO14		0x14 /* SODIMM 137 / USBC_DET */
- 		>;
- 	};
+-			MX7D_PAD_SD3_CMD__SD3_CMD		0x59
+ 			MX7D_PAD_SD3_CLK__SD3_CLK		0x19
++			MX7D_PAD_SD3_CMD__SD3_CMD		0x59
+ 			MX7D_PAD_SD3_DATA0__SD3_DATA0		0x59
+ 			MX7D_PAD_SD3_DATA1__SD3_DATA1		0x59
+ 			MX7D_PAD_SD3_DATA2__SD3_DATA2		0x59
+@@ -1043,8 +1041,8 @@ MX7D_PAD_SD3_STROBE__SD3_STROBE         0x19
  
- 	pinctrl_usbh_reg: gpio-usbh-vbus {
+ 	pinctrl_usdhc3_100mhz: usdhc3grp_100mhz {
  		fsl,pins = <
--			MX7D_PAD_UART3_CTS_B__GPIO4_IO7	0x14 /* SODIMM 129 USBH PEN */
-+			MX7D_PAD_UART3_CTS_B__GPIO4_IO7		0x14 /* SODIMM 129 / USBH_PEN */
+-			MX7D_PAD_SD3_CMD__SD3_CMD		0x5a
+ 			MX7D_PAD_SD3_CLK__SD3_CLK		0x1a
++			MX7D_PAD_SD3_CMD__SD3_CMD		0x5a
+ 			MX7D_PAD_SD3_DATA0__SD3_DATA0		0x5a
+ 			MX7D_PAD_SD3_DATA1__SD3_DATA1		0x5a
+ 			MX7D_PAD_SD3_DATA2__SD3_DATA2		0x5a
+@@ -1059,8 +1057,8 @@ MX7D_PAD_SD3_STROBE__SD3_STROBE         0x1a
+ 
+ 	pinctrl_usdhc3_200mhz: usdhc3grp_200mhz {
+ 		fsl,pins = <
+-			MX7D_PAD_SD3_CMD__SD3_CMD		0x5b
+ 			MX7D_PAD_SD3_CLK__SD3_CLK		0x1b
++			MX7D_PAD_SD3_CMD__SD3_CMD		0x5b
+ 			MX7D_PAD_SD3_DATA0__SD3_DATA0		0x5b
+ 			MX7D_PAD_SD3_DATA1__SD3_DATA1		0x5b
+ 			MX7D_PAD_SD3_DATA2__SD3_DATA2		0x5b
+@@ -1075,10 +1073,10 @@ MX7D_PAD_SD3_STROBE__SD3_STROBE         0x1b
+ 
+ 	pinctrl_sai1: sai1-grp {
+ 		fsl,pins = <
+-			MX7D_PAD_ENET1_RX_CLK__SAI1_TX_BCLK     0x1f
+-			MX7D_PAD_SAI1_TX_SYNC__SAI1_TX_SYNC	0x1f
+ 			MX7D_PAD_ENET1_COL__SAI1_TX_DATA0	0x30
++			MX7D_PAD_ENET1_RX_CLK__SAI1_TX_BCLK     0x1f
+ 			MX7D_PAD_ENET1_TX_CLK__SAI1_RX_DATA0	0x1f
++			MX7D_PAD_SAI1_TX_SYNC__SAI1_TX_SYNC	0x1f
  		>;
  	};
  
-@@ -1079,14 +1095,14 @@ &iomuxc_lpsr {
+@@ -1093,6 +1091,18 @@ &iomuxc_lpsr {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_gpio_lpsr>;
  
++	pinctrl_cd_usdhc1: cdusdhc1grp {
++		fsl,pins = <
++			MX7D_PAD_LPSR_GPIO1_IO00__GPIO1_IO0	0x59 /* SODIMM 43 / MMC_CD */
++		>;
++	};
++
++	pinctrl_cd_usdhc1_sleep: cdusdhc1-slpgrp {
++		fsl,pins = <
++			MX7D_PAD_LPSR_GPIO1_IO00__GPIO1_IO0	0x0
++		>;
++	};
++
  	pinctrl_gpio_lpsr: gpio1-grp {
  		fsl,pins = <
--			MX7D_PAD_LPSR_GPIO1_IO02__GPIO1_IO2	0x59
--			MX7D_PAD_LPSR_GPIO1_IO03__GPIO1_IO3	0x59
-+			MX7D_PAD_LPSR_GPIO1_IO02__GPIO1_IO2	0x59 /* SODIMM 135 */
-+			MX7D_PAD_LPSR_GPIO1_IO03__GPIO1_IO3	0x59 /* SODIMM 22 */
- 		>;
- 	};
+ 			MX7D_PAD_LPSR_GPIO1_IO02__GPIO1_IO2	0x59 /* SODIMM 135 */
+@@ -1108,8 +1118,8 @@ MX7D_PAD_LPSR_GPIO1_IO01__GPIO1_IO1	0x19 /* SODIMM 45 / WAKE_UP */
  
- 	pinctrl_gpiokeys: gpiokeysgrp {
+ 	pinctrl_i2c1: i2c1-grp {
  		fsl,pins = <
--			MX7D_PAD_LPSR_GPIO1_IO01__GPIO1_IO1	0x19
-+			MX7D_PAD_LPSR_GPIO1_IO01__GPIO1_IO1	0x19 /* SODIMM 45 / WAKE_UP */
+-			MX7D_PAD_LPSR_GPIO1_IO05__I2C1_SDA	0x4000007f
+ 			MX7D_PAD_LPSR_GPIO1_IO04__I2C1_SCL	0x4000007f
++			MX7D_PAD_LPSR_GPIO1_IO05__I2C1_SDA	0x4000007f
  		>;
  	};
  
-@@ -1118,8 +1134,8 @@ MX7D_PAD_LPSR_GPIO1_IO00__GPIO1_IO0	0x0
+@@ -1120,22 +1130,10 @@ MX7D_PAD_LPSR_GPIO1_IO05__GPIO1_IO5	0x4000007f
+ 		>;
+ 	};
  
+-	pinctrl_cd_usdhc1: cdusdhc1grp {
+-		fsl,pins = <
+-			MX7D_PAD_LPSR_GPIO1_IO00__GPIO1_IO0	0x59 /* SODIMM 43 / MMC_CD */
+-		>;
+-	};
+-
+-	pinctrl_cd_usdhc1_sleep: cdusdhc1-slpgrp {
+-		fsl,pins = <
+-			MX7D_PAD_LPSR_GPIO1_IO00__GPIO1_IO0	0x0
+-		>;
+-	};
+-
  	pinctrl_uart1_ctrl2: uart1-ctrl2-grp {
  		fsl,pins = <
--			MX7D_PAD_LPSR_GPIO1_IO07__GPIO1_IO7	0x14 /* DSR */
--			MX7D_PAD_LPSR_GPIO1_IO06__GPIO1_IO6	0x14 /* RI */
+-			MX7D_PAD_LPSR_GPIO1_IO07__GPIO1_IO7	0x14 /* SODIMM 29 / DSR */
+ 			MX7D_PAD_LPSR_GPIO1_IO06__GPIO1_IO6	0x14 /* SODIMM 37 / RI */
 +			MX7D_PAD_LPSR_GPIO1_IO07__GPIO1_IO7	0x14 /* SODIMM 29 / DSR */
-+			MX7D_PAD_LPSR_GPIO1_IO06__GPIO1_IO6	0x14 /* SODIMM 37 / RI */
  		>;
  	};
- };
-diff --git a/arch/arm/boot/dts/imx7d-colibri-aster.dts b/arch/arm/boot/dts/imx7d-colibri-aster.dts
-index cfd75e3424fa..90aaeddfb4f6 100644
---- a/arch/arm/boot/dts/imx7d-colibri-aster.dts
-+++ b/arch/arm/boot/dts/imx7d-colibri-aster.dts
-@@ -1,7 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-or-later OR MIT
- /*
-  * Copyright 2017-2022 Toradex
-- *
-  */
- 
- /dts-v1/;
-@@ -35,6 +34,7 @@ &panel_dpi {
- 	status = "okay";
- };
- 
-+/* Colibri USBH */
- &usbotg2 {
- 	status = "okay";
- };
-diff --git a/arch/arm/boot/dts/imx7d-colibri-emmc-aster.dts b/arch/arm/boot/dts/imx7d-colibri-emmc-aster.dts
-index 7b4451699478..3ec9ef6baaa4 100644
---- a/arch/arm/boot/dts/imx7d-colibri-emmc-aster.dts
-+++ b/arch/arm/boot/dts/imx7d-colibri-emmc-aster.dts
-@@ -16,6 +16,7 @@ / {
- 		     "fsl,imx7d";
- };
- 
-+/* Colibri USBH */
- &usbotg2 {
- 	status = "okay";
- };
-diff --git a/arch/arm/boot/dts/imx7d-colibri-emmc-eval-v3.dts b/arch/arm/boot/dts/imx7d-colibri-emmc-eval-v3.dts
-index 3e84018392ee..6d505cb02aad 100644
---- a/arch/arm/boot/dts/imx7d-colibri-emmc-eval-v3.dts
-+++ b/arch/arm/boot/dts/imx7d-colibri-emmc-eval-v3.dts
-@@ -15,6 +15,7 @@ / {
- 		     "fsl,imx7d";
- };
- 
-+/* Colibri USBH */
- &usbotg2 {
- 	status = "okay";
- };
-diff --git a/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi b/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi
-index 2b4be7646631..2fb4d2133a1b 100644
---- a/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi
-+++ b/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi
-@@ -49,11 +49,13 @@ &gpio6 {
- 			  "SODIMM_34";
- };
- 
-+/* Colibri USBH */
- &usbotg2 {
- 	dr_mode = "host";
- 	vbus-supply = <&reg_usbh_vbus>;
- };
- 
-+/* eMMC */
- &usdhc3 {
- 	status = "okay";
- };
-diff --git a/arch/arm/boot/dts/imx7d-colibri-eval-v3.dts b/arch/arm/boot/dts/imx7d-colibri-eval-v3.dts
-index 7aabe5691459..c7a8b5aa2408 100644
---- a/arch/arm/boot/dts/imx7d-colibri-eval-v3.dts
-+++ b/arch/arm/boot/dts/imx7d-colibri-eval-v3.dts
-@@ -38,14 +38,19 @@ &panel_dpi {
- 	status = "okay";
- };
- 
-+/* Colibri PWM<B> */
- &pwm2 {
-+	/* The pwm2 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
- 	status = "okay";
- };
- 
-+/* Colibri PWM<C> */
- &pwm3 {
-+	/* The pwm3 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
- 	status = "okay";
- };
- 
-+/* Colibri USBH */
- &usbotg2 {
- 	status = "okay";
- };
-diff --git a/arch/arm/boot/dts/imx7d-colibri.dtsi b/arch/arm/boot/dts/imx7d-colibri.dtsi
-index d1469aa8b025..531a45b176a1 100644
---- a/arch/arm/boot/dts/imx7d-colibri.dtsi
-+++ b/arch/arm/boot/dts/imx7d-colibri.dtsi
-@@ -23,10 +23,12 @@ &cpu1 {
- 	cpu-supply = <&reg_DCDC2>;
- };
- 
-+/* NAND */
- &gpmi {
- 	status = "okay";
- };
- 
-+/* Colibri USBH */
- &usbotg2 {
- 	dr_mode = "host";
- 	vbus-supply = <&reg_usbh_vbus>;
-diff --git a/arch/arm/boot/dts/imx7s-colibri-eval-v3.dts b/arch/arm/boot/dts/imx7s-colibri-eval-v3.dts
-index 6589c4179177..38de76630d6a 100644
---- a/arch/arm/boot/dts/imx7s-colibri-eval-v3.dts
-+++ b/arch/arm/boot/dts/imx7s-colibri-eval-v3.dts
-@@ -38,10 +38,14 @@ &panel_dpi {
- 	status = "okay";
- };
- 
-+/* Colibri PWM<B> */
- &pwm2 {
-+	/* The pwm2 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
- 	status = "okay";
- };
- 
-+/* Colibri PWM<C> */
- &pwm3 {
-+	/* The pwm3 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
- 	status = "okay";
- };
-diff --git a/arch/arm/boot/dts/imx7s-colibri.dtsi b/arch/arm/boot/dts/imx7s-colibri.dtsi
-index 2ce102b7f5d4..ef51395d3537 100644
---- a/arch/arm/boot/dts/imx7s-colibri.dtsi
-+++ b/arch/arm/boot/dts/imx7s-colibri.dtsi
-@@ -13,6 +13,7 @@ memory@80000000 {
- 	};
- };
- 
-+/* NAND */
- &gpmi {
- 	status = "okay";
  };
 -- 
 2.35.1

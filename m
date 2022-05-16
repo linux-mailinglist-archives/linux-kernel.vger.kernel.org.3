@@ -2,99 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4B97529239
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6B7E529256
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348708AbiEPVE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 17:04:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53324 "EHLO
+        id S237004AbiEPVHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 17:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346316AbiEPVE2 (ORCPT
+        with ESMTP id S1348072AbiEPVGn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 17:04:28 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCBD5C66E
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 13:40:06 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nqhVa-0007jS-Ks; Mon, 16 May 2022 22:40:02 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 860AB7FBBC;
-        Mon, 16 May 2022 20:40:01 +0000 (UTC)
-Date:   Mon, 16 May 2022 22:40:00 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Max Staudt <max@enpas.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v3 1/4] can: slcan: use can_dropped_invalid_skb() instead
- of manual check
-Message-ID: <20220516204000.t7yhhtp3jtekg7ar@pengutronix.de>
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220514141650.1109542-1-mailhol.vincent@wanadoo.fr>
- <20220514141650.1109542-2-mailhol.vincent@wanadoo.fr>
+        Mon, 16 May 2022 17:06:43 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27411BE82;
+        Mon, 16 May 2022 13:45:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=oBgHeRTw46lB8VbDalNtQkk1rHR6/RluKxpwDwMO2Lo=; b=IHU66snTQUwaaTUEIkvgO8EA4O
+        QZS20N82CJaeH3XrvC4ENfRC2zSPOoKstH0rOoAuZMpRld56cAaZvNkXqbBqISEc0F/snhp1h7Gd9
+        XAaN7agEaYztFPIOQP7Mp984HJgoo9UqCYyVseM4CKdYI6+H4EkdcFfviA26Xo2sD8NTX0qv1TwzG
+        FyktxL3HS9dJplyg15aahnIv5q4+ETnrMu8Z590oQr+bQoFxYwnrJiXwVGiEt6LzaKWvScY7a2RUq
+        E87g+ow6KUD2AB2ctLQgmoFMk+xfmXUKLo9itTgLxv7bt+xLnUnY/XH2z1L1NnejV9T8UCyYtLg4N
+        q8QrIZSg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nqhaE-00AEGp-M1; Mon, 16 May 2022 20:44:50 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2B0DA980DCC; Mon, 16 May 2022 22:44:49 +0200 (CEST)
+Date:   Mon, 16 May 2022 22:44:49 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Christophe de Dinechin <dinechin@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] sched/core: Do not treat class list boundary markers as
+ arrays
+Message-ID: <20220516204449.GO76023@worktop.programming.kicks-ass.net>
+References: <20220516194241.3064242-1-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qi7wwt46b6orgwpu"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220514141650.1109542-2-mailhol.vincent@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220516194241.3064242-1-keescook@chromium.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 16, 2022 at 12:42:41PM -0700, Kees Cook wrote:
+> GCC 12 is very sensitive about array checking, and views all negative
+> array accesses as unsafe (a not unreasonable position). Avoid the
+> warnings about __begin_sched_classes being accessed via negative bounds
+> by converting them to the pointers they actually are. Silences this
+> warning:
 
---qi7wwt46b6orgwpu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yeah, this patch is *much* saner, thanks!
 
-On 14.05.2022 23:16:47, Vincent Mailhol wrote:
-> slcan does a manual check in slc_xmit() to verify if the skb is
-> valid. This check is incomplete, use instead
-> can_dropped_invalid_skb().
->=20
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-
-I've taken this patch into the latest pull request to net-next.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---qi7wwt46b6orgwpu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKCtp4ACgkQrX5LkNig
-0112AAf9EDMHiYNZoWtjw22NJonJySrZp/LhwR3Zxjqt8dzAScwqNu7By00++gid
-y2c/5koi0tRHl3dEfYwT+JqmaS2ywuHCIaovOFR9/8XW6gz3risdRyWisdKL1QaV
-ICgGVgWr0PdlmkKzacM2VAZjLfFQTrE4pjuTexPGNv+NGwdcoPQbvnlNVkFWFaCf
-EcDZT4X7I140UPwlA+59MPQkOp0WphjudRS6PeYprC6Io3m4fvQ/LCCCt33q4b1n
-JrkRLvNA5u0do0+4rq0ygbAYZUPLeJ8i6TWTDEagLQ8EFicGrOV57DifMrxGBHJu
-0Ejnhezuqw8XE0FgkIFmfCI2cjLAWg==
-=gWnZ
------END PGP SIGNATURE-----
-
---qi7wwt46b6orgwpu--
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index 8dccb34eb190..3d31ed9d33fa 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -2190,8 +2190,8 @@ const struct sched_class name##_sched_class \
+>  	__section("__" #name "_sched_class")
+>  
+>  /* Defined in include/asm-generic/vmlinux.lds.h */
+> -extern struct sched_class __begin_sched_classes[];
+> -extern struct sched_class __end_sched_classes[];
+> +extern struct sched_class *__begin_sched_classes;
+> +extern struct sched_class *__end_sched_classes;
+>  
+>  #define sched_class_highest (__end_sched_classes - 1)
+>  #define sched_class_lowest  (__begin_sched_classes - 1)
+> -- 
+> 2.32.0
+> 

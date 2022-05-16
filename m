@@ -2,97 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C42528D96
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E02528D9B
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345236AbiEPS7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 14:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33684 "EHLO
+        id S1345239AbiEPTCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:02:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345162AbiEPS7V (ORCPT
+        with ESMTP id S1345238AbiEPTCA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 14:59:21 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C862E3EB9D;
-        Mon, 16 May 2022 11:59:18 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652727557;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Bk6aAOMGXkpTA7bxdXvA2u7my35PykkS8vmgE62yIIg=;
-        b=YW/wI8S1ilWxdav/qldIAI1+xm8jljKSdGMgKWB447TQEgdq1ZnnCgTrLNgOWqR+4JloJf
-        2iOvsNOe1iYIS1LeU1ubMtf/N7LE/69zLFZ3qT9E2qu4Cy8b8DvppzATamANaU3YIAQb90
-        W9g3XeDMXF5YaHy1XsgOmIKipCLzQECK9R817dX5IyBdadPnMYxGcr6RzDoBEx/WlTuWG8
-        9PitS2mZkuORaHDoB7dgCoS3ojeJLH0WSf0wLCU0rqmXd/EP7K6CNJm/dLmJxf71+f8Kwx
-        LVS32ikvJpli17vDjh4pqyyY9e1gswKUA8SG3HAf+vq7X+RbhEqihk8Un9q9+g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652727557;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Bk6aAOMGXkpTA7bxdXvA2u7my35PykkS8vmgE62yIIg=;
-        b=BNVWYtXohtuR9SnP8sqhfaX9c0M30W8eKYbQ+zUKJrWSVZqHV5QzDMeJKOBGte6qZw01et
-        jEAn7i4G6gTHaxDA==
-To:     Max Mehl <max.mehl@fsfe.org>, LKML <linux-kernel@vger.kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@lst.de>, linux-spdx@vger.kernel.org
-Subject: Re: [patch 0/9] scripts/spdxcheck: Better statistics and exclude
- handling
-In-Reply-To: <87zgjhpawr.ffs@tglx>
-References: <20220516101901.475557433@linutronix.de>
- <1652706350.kh41opdwg4.2220@fsfe.org> <87zgjhpawr.ffs@tglx>
-Date:   Mon, 16 May 2022 20:59:16 +0200
-Message-ID: <87wnelpam3.ffs@tglx>
+        Mon, 16 May 2022 15:02:00 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883C71AD83
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:01:59 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id l16so19771465oil.6
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:01:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2YwGLCuXXdxzRprrcHdq2r25grm4OfvgiyP5rpgD0WM=;
+        b=f+c98yS52pFFzSziGTdh4U0utkDNkPrkyJ3jaPgino5h2ry6JhDNmX1+ByFNrJuLID
+         EicG9R+0V6WMX8WRh68G9zeTHPmAq4OhWwbiqGDmb1VVFcLGil2JD8CrMRkJ/EY4J81p
+         3gutEtWkh2Ul6LsBR7K/VN34qFPB8qVQuaO6rqfJfWypv0BTIZp88CYo4bR/IFtZrJS8
+         obKLBK7nxOuWfbQaGa9765nxoNpouqMIwiXwYYLb5qelHkTB89ykAuvxT6rbK3aCeqqq
+         QPsvB9sKTuH3GXaUzpFCDDM7/q5VMMovItVJC5D0OSwuBB+ctbPpiQMMSFUh9enh80N/
+         rrzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=2YwGLCuXXdxzRprrcHdq2r25grm4OfvgiyP5rpgD0WM=;
+        b=eTLZFIh+1fzIvJZQbMKxReNtHsDiY+wUyvQK4QIGWkfMMyVIaT13JJts/DznrCxYf1
+         04R70c17szhu2zoKHs6Gcpl5jI182JgC+/dqs+oX1xFOU0ktTdgmiKVnSQ3actE2JRqN
+         WzUXRREK37YujatAJYoGbbc0fbguhLpMbNH8XvEjJnuSyM2vBNF3u0GC3pg4htLOlujL
+         oyUp7Z+zg5IP03ciXwpV+6g+sc4+2wIpP+rh/RQkhYyPXTDvlUfgWOuf6wXRFr5hUcvE
+         WmZ+73kdcnsbe3YWZ59KFjvujjkPHeNZL+YYgl8nAgCCJzvtU2PVth4mcmS2n3esx+z0
+         WEiQ==
+X-Gm-Message-State: AOAM532iNNfisqsIc20Hxo7YrwpU9IpgJn7l7ll+vWNjWdNcNG22ZCpz
+        8SgX3moQ9PPK+ey3jR5eeQQcSECn5NxO9w==
+X-Google-Smtp-Source: ABdhPJwHKYJsUSxKUb+hfA4SZ+e/ATq0yLrdxUsdIDqCmOFioSLRPzG8JMhEChZDZDKZN9cT3QYxRQ==
+X-Received: by 2002:a05:6808:1809:b0:326:4e31:9965 with SMTP id bh9-20020a056808180900b003264e319965mr13791224oib.223.1652727718853;
+        Mon, 16 May 2022 12:01:58 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t18-20020a056870609200b000f1952c6bc1sm2621280oae.31.2022.05.16.12.01.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 12:01:57 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 16 May 2022 12:01:56 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux 5.18-rc7
+Message-ID: <20220516190156.GA3246860@roeck-us.net>
+References: <CAHk-=wg2eVUN0a1E5UnBF1ziGaU1yrMJtnFPg4R78O=FcRDqnA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wg2eVUN0a1E5UnBF1ziGaU1yrMJtnFPg4R78O=FcRDqnA@mail.gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16 2022 at 20:52, Thomas Gleixner wrote:
+On Sun, May 15, 2022 at 06:15:42PM -0700, Linus Torvalds wrote:
+> So things continue to be fairly calm, and as such this is likely the
+> last rc before 5.18 unless something bad happens next week.
+> 
+> All the stats here look normal, with the bulk of it being random
+> driver updates (network drivers, gpu, usb, etc).
+> 
+> There's a few filesystem fixes, some core networking, and some code
+> kernel stuff. And some selftest updates.
+> 
+> Sortlog appended, nothing really stands out (the most exciting thing
+> last week was literally that Andrew has started using git, which will
+> make my life easier, but that doesn't affect the *code*)
+> 
+> Please give it one last week of testing, so that we'll have a nice
+> solid 5.18 release.
+> 
 
-> On Mon, May 16 2022 at 15:14, Max Mehl wrote:
->> Thank you for picking up the effort to add license (and perhaps also
->> copyright) info to all files in the Kernel.
->
-> Adding copyright notices retroactively is not going to happen
-> ever. That's just impossible.
->
->>> The exclude of files and directories is hardcoded in the script which makes
->>> it hard to maintain and the information cannot be accessed by external tools.
->>
->> Unfortunately, excluding files (i.e. not adding machine-readable
->> license/copyright information to it) would also block reaching full
->> compliance with the REUSE best practices. Have you considered making
->> them available under GPL-2.0-only or a license similar to public domain
->> [^2]?
->
-> The LICENSE directory is already handled by spdxcheck as the license
-> information is read from there. And no, we cannot add a GPL-2.0-only
-> identifier to all of the files under the LICENSE directory for obvious
-> reasons.
->
-> license-rules.rst is not longer a problem as all incarnations have a
-> proper SPDX identifier today.
+Build results:
+	total: 151 pass: 151 fail: 0
+Qemu test results:
+	total: 489 pass: 489 fail: 0
 
-There is also an argument to be made whether we really need to have SPDX
-identifiers on trivial files:
-
-#include <someheader.h>
-<EOF>
-
-Such files are not copyrightable by any means. So what's the value of
-doubling the line count to add an SPDX identifier? Just to make nice
-statistics?
-
-Thanks,
-
-        tglx
+Guenter

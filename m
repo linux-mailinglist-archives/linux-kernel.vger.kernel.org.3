@@ -2,41 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F990529165
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:47:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3669528FDB
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349371AbiEPUcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
+        id S1345277AbiEPUcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351030AbiEPUB4 (ORCPT
+        with ESMTP id S1351032AbiEPUB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 16 May 2022 16:01:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9386947570;
-        Mon, 16 May 2022 12:56:53 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539CD4756D;
+        Mon, 16 May 2022 12:56:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FEE160EC4;
-        Mon, 16 May 2022 19:56:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B01AC34100;
-        Mon, 16 May 2022 19:56:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F18D1B81614;
+        Mon, 16 May 2022 19:56:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CCBAC385AA;
+        Mon, 16 May 2022 19:56:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652731012;
-        bh=4bf/UsuSgVW7vJNOHxwczts9LNMMkWBw0O6Z5qy8XRo=;
+        s=korg; t=1652731015;
+        bh=YEvJ+Z90ycumJC//xjiXZMSrJLry2O8DQ9GmHtH8Ezc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QBjez5k5PODob1praoe9Rrh4p3JY8n/1BzYvdFKuF+kbGo7PQoc9VdYFGNxB71HhA
-         8bgIEQuLYpuFgjs+2LZxeEz+BQkIgRaWtFcJlQT3L+735WHVFBzEo+UNDbIMPVARFK
-         2CTv8NHO+CcfjpiI1vtcExg3umsic6TURduOEU/4=
+        b=1PRq9D+MhfEkatl5TWO7P4ISkpXHkVwlnDCzvXlS+11U4/Fzc4wFnuAYMG+nnh2tD
+         z0hku95xGV4LzdXW2ILJHY+Xa+8LsvcPXB5qmp/cuHvE/5f0rbFA70KA938jFmnJ+4
+         kalcqGbv1HTb0SMokvjRwF1xc62rdXkGltswkgVs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        Baruch Siach <baruch@tkos.co.il>
-Subject: [PATCH 5.17 075/114] tty/serial: digicolor: fix possible null-ptr-deref in digicolor_uart_probe()
-Date:   Mon, 16 May 2022 21:36:49 +0200
-Message-Id: <20220516193627.641975283@linuxfoundation.org>
+        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH 5.17 076/114] tty: n_gsm: fix buffer over-read in gsm_dlci_data()
+Date:   Mon, 16 May 2022 21:36:50 +0200
+Message-Id: <20220516193627.669854974@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
 References: <20220516193625.489108457@linuxfoundation.org>
@@ -54,40 +53,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Daniel Starke <daniel.starke@siemens.com>
 
-commit 447ee1516f19f534a228dda237eddb202f23e163 upstream.
+commit fd442e5ba30aaa75ea47b32149e7a3110dc20a46 upstream.
 
-It will cause null-ptr-deref when using 'res', if platform_get_resource()
-returns NULL, so move using 'res' after devm_ioremap_resource() that
-will check it to avoid null-ptr-deref.
-And use devm_platform_get_and_ioremap_resource() to simplify code.
+'len' is decreased after each octet that has its EA bit set to 0, which
+means that the value is encoded with additional octets. However, the final
+octet does not decreases 'len' which results in 'len' being one byte too
+long. A buffer over-read may occur in tty_insert_flip_string() as it tries
+to read one byte more than the passed content size of 'data'.
+Decrease 'len' also for the final octet which has the EA bit set to 1 to
+write the correct number of bytes from the internal receive buffer to the
+virtual tty.
 
-Fixes: 5930cb3511df ("serial: driver for Conexant Digicolor USART")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Reviewed-by: Baruch Siach <baruch@tkos.co.il>
-Cc: stable <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220505124621.1592697-1-yangyingliang@huawei.com
+Fixes: 2e124b4a390c ("TTY: switch tty_flip_buffer_push")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+Link: https://lore.kernel.org/r/20220504081733.3494-1-daniel.starke@siemens.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/serial/digicolor-usart.c |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/tty/n_gsm.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/tty/serial/digicolor-usart.c
-+++ b/drivers/tty/serial/digicolor-usart.c
-@@ -471,11 +471,10 @@ static int digicolor_uart_probe(struct p
- 	if (IS_ERR(uart_clk))
- 		return PTR_ERR(uart_clk);
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	dp->port.mapbase = res->start;
--	dp->port.membase = devm_ioremap_resource(&pdev->dev, res);
-+	dp->port.membase = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
- 	if (IS_ERR(dp->port.membase))
- 		return PTR_ERR(dp->port.membase);
-+	dp->port.mapbase = res->start;
- 
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0)
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -1658,6 +1658,7 @@ static void gsm_dlci_data(struct gsm_dlc
+ 			if (len == 0)
+ 				return;
+ 		}
++		len--;
+ 		slen++;
+ 		tty = tty_port_tty_get(port);
+ 		if (tty) {
 
 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F8352913F
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 464705291C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236063AbiEPUXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
+        id S1347217AbiEPT5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348845AbiEPT67 (ORCPT
+        with ESMTP id S1347016AbiEPTve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:58:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F3826FA;
-        Mon, 16 May 2022 12:51:29 -0700 (PDT)
+        Mon, 16 May 2022 15:51:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD223FBC9;
+        Mon, 16 May 2022 12:46:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E9C10B81614;
-        Mon, 16 May 2022 19:51:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AA03C385AA;
-        Mon, 16 May 2022 19:51:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57E3F604F5;
+        Mon, 16 May 2022 19:46:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AF8DC34100;
+        Mon, 16 May 2022 19:46:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730686;
-        bh=VMbYmNs67UPfayg47OoF8phgYXKB0mbdTrEmCm1IkK8=;
+        s=korg; t=1652730393;
+        bh=hxQr3HJrF4KGHrYdn2UKe4Ty6jxRkxNLvEZh7rMK530=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ItlAuUaQIpRdDFMLxRM+A6RbRLB8cAeGlBqjU8yIa73H8e9qxuQs4zle9leBCHKs0
-         O3lNn3b2sEoR6hEwXx9ohHa3HIogUXPHreQgnWpEeSjPXIR22AUzLkfhGeuBoIKm9X
-         LJhOrLNko0CSb1A6F8yM0SkgErz8773PRB8S6URA=
+        b=Avgs0aRamOY6VpxiiOyouFkqb/R8/O+nxQFt6kHbMLTqYYn8ETxlHBgLPfw8gZDML
+         /XFAJ1Ltoc7KS6OCE47PjtREtyizxlGb32Yi2V0yKQAJH8N0DGieRCwC4FU7G5xtJk
+         ypDe9/xzRkV1H/c3+5HgrvoA0MOn11uGffdfCK/Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 5.15 077/102] slimbus: qcom: Fix IRQ check in qcom_slim_probe
+        stable@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 5.10 51/66] serial: 8250_mtk: Fix register address for XON/XOFF character
 Date:   Mon, 16 May 2022 21:36:51 +0200
-Message-Id: <20220516193626.205333403@linuxfoundation.org>
+Message-Id: <20220516193620.883724374@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
-References: <20220516193623.989270214@linuxfoundation.org>
+In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
+References: <20220516193619.400083785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,43 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-commit fe503887eed6ea528e144ec8dacfa1d47aa701ac upstream.
+commit e1bfdbc7daca171c74a577b3dd0b36d76bb0ffcc upstream.
 
-platform_get_irq() returns non-zero IRQ number on success,
-negative error number on failure.
-And the doc of platform_get_irq() provides a usage example:
+The XON1/XOFF1 character registers are at offset 0xa0 and 0xa8
+respectively, so we cannot use the definition in serial_port.h.
 
-    int irq = platform_get_irq(pdev, 0);
-    if (irq < 0)
-        return irq;
-
-Fix the check of return value to catch errors correctly.
-
-Fixes: ad7fcbc308b0 ("slimbus: qcom: Add Qualcomm Slimbus controller driver")
-Cc: stable@vger.kernel.org
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Link: https://lore.kernel.org/r/20220429164917.5202-2-srinivas.kandagatla@linaro.org
+Fixes: bdbd0a7f8f03 ("serial: 8250-mtk: modify baudrate setting")
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: stable <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220427132328.228297-4-angelogioacchino.delregno@collabora.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/slimbus/qcom-ctrl.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/tty/serial/8250/8250_mtk.c |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/drivers/slimbus/qcom-ctrl.c
-+++ b/drivers/slimbus/qcom-ctrl.c
-@@ -510,9 +510,9 @@ static int qcom_slim_probe(struct platfo
- 	}
+--- a/drivers/tty/serial/8250/8250_mtk.c
++++ b/drivers/tty/serial/8250/8250_mtk.c
+@@ -54,6 +54,9 @@
+ #define MTK_UART_TX_TRIGGER	1
+ #define MTK_UART_RX_TRIGGER	MTK_UART_RX_SIZE
  
- 	ctrl->irq = platform_get_irq(pdev, 0);
--	if (!ctrl->irq) {
-+	if (ctrl->irq < 0) {
- 		dev_err(&pdev->dev, "no slimbus IRQ\n");
--		return -ENODEV;
-+		return ctrl->irq;
- 	}
++#define MTK_UART_XON1		40	/* I/O: Xon character 1 */
++#define MTK_UART_XOFF1		42	/* I/O: Xoff character 1 */
++
+ #ifdef CONFIG_SERIAL_8250_DMA
+ enum dma_rx_status {
+ 	DMA_RX_START = 0,
+@@ -275,8 +278,8 @@ static void mtk8250_set_flow_ctrl(struct
+ 			(serial_in(up, MTK_UART_EFR) &
+ 			(~(MTK_UART_EFR_HW_FC | MTK_UART_EFR_SW_FC_MASK))));
  
- 	sctrl = &ctrl->ctrl;
+-		serial_out(up, UART_XON1, START_CHAR(port->state->port.tty));
+-		serial_out(up, UART_XOFF1, STOP_CHAR(port->state->port.tty));
++		serial_out(up, MTK_UART_XON1, START_CHAR(port->state->port.tty));
++		serial_out(up, MTK_UART_XOFF1, STOP_CHAR(port->state->port.tty));
+ 		serial_out(up, UART_LCR, lcr);
+ 		mtk8250_disable_intrs(up, MTK_UART_IER_CTSI|MTK_UART_IER_RTSI);
+ 		mtk8250_enable_intrs(up, MTK_UART_IER_XOFFI);
 
 

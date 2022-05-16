@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5929B527DA3
+	by mail.lfdr.de (Postfix) with ESMTP id F069D527DA5
 	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240338AbiEPGc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 02:32:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
+        id S240386AbiEPGce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 02:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240325AbiEPGcY (ORCPT
+        with ESMTP id S240314AbiEPGcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 02:32:24 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FCBF28E1B
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:32:21 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id bh5so1732734plb.6
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:32:21 -0700 (PDT)
+        Mon, 16 May 2022 02:32:25 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB7329800
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:32:24 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id s14so13536958plk.8
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:32:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ZnGJlvnGMiDx5UJTsjZY8cbmPSUgi63UDEbXgnLRWFI=;
-        b=QHdA8yNWeLoobNesmZ6p7lpMmSdLzZ0FYpXrljyxYz590HfGgy54FuWQPNoSu8RkfT
-         fxcQBt+3rypT1bV1OTvaUtgh9TBfuN8GzZso8WLwiwsFHwCykBIfbzs/eM2IJNlC+gwV
-         oPDbjluvXHurap4X5jOjeT9T+V2CXgUrXB51jGMwVxH/nUZCgt85s64/MPJmtB3jwDd/
-         huCSA9lh6XfLV3o12yh80LEW3vFmHJPPRQEemtQsOA46GojLIqxuQdqtnnRwT7P+O0PX
-         WiTxF8nze18d/7RwM7YPNzYPS1U8HwrA3MWT+3ceJRvv3NNDNxTxcj2JuZuLAEijW1rM
-         6H5w==
+        bh=QXhchf3VZKM2/quDawnPGLqCcD7r9Df6+XHBYX2DLsI=;
+        b=er+husaPM6oUMR/bWv0fOcpxSi2F07vVoxYoQRvWEU20qdK+AHjaR824zZ4BBvjdz2
+         9juGiROZhRQy45WF2Py9fdiQnSdtVUta1MELqb0a6ZzRpEyttkF4Dzj1C9EgrSH0sD4j
+         Qarm+ZmBChiwCacKzgsCYqDpRrlbyNPBwQBgdp0qcSmDZ/qMs6CMQiTIhs9zME5YV2cz
+         zdWgJzYVlei+u7i15OjihA4/RvkrR3RMu6BGx0ecJ8HY1cdvwYC23438yH9lSsTUJKz0
+         AD0LuTP8wW6SPGQfZXJDP+bMEgFobLChWxDHqw1GiHIYKKLqNF5mrNIMNf+DFVIDkPhu
+         rsJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ZnGJlvnGMiDx5UJTsjZY8cbmPSUgi63UDEbXgnLRWFI=;
-        b=PpjpYxZXT2qegr1rsP4GXAR1WoWAWmCZQKVFU0et+vzP2Oir/1YOaniZ/1YaqTMtWp
-         tFaAnnUsbfIcnwSzptp91j5ih+/RB+ntYQOrxTvGRRisCIUGl3C3EAIseKR6swY9v7gX
-         agcqe+wJals4zSZVIOwmfwMTOsseevCjJ1TO3CmayQpqEgTcas7dN9IksFw9MWxpGWM7
-         8sQUpuBtYnrVXu0L80zjOYO4osjNb521hKKm7xnM1FZ9P0LOdSdU74ZgrBqO3Lq57pDY
-         /TRzwz5PtxzsnUkJs+6bXY/TzQHsCmDNhMnYf+9aYZlM6im5bb4jELRxBxhwzskXCPhr
-         2kJQ==
-X-Gm-Message-State: AOAM531wMqGPmAXKV6lfwIB/lfZ982CyETBfjvi4ydO7RH6seUUUNU3h
-        YMDCQANpPYEJpQKjx0bzX3IZew==
-X-Google-Smtp-Source: ABdhPJwRDeYx9cR3OoMIgCswNSH0r6L5bJFZWM/OpX2bEdoyy3HWvdyW19fUKUK2a5nOI2m/jrfbaw==
-X-Received: by 2002:a17:902:a585:b0:14d:58ef:65 with SMTP id az5-20020a170902a58500b0014d58ef0065mr16394014plb.139.1652682740697;
-        Sun, 15 May 2022 23:32:20 -0700 (PDT)
+        bh=QXhchf3VZKM2/quDawnPGLqCcD7r9Df6+XHBYX2DLsI=;
+        b=tabaiI7eYJ8Ao9haIuSJZJHzccMS/YevDnHH7BfqRijxq2Wt6lCuX0Wle1h52XXjIW
+         hqP+UzzVidMROU7stedDFH/A/4d0PfuqM3z3Jw9jpyaGRfvugazSOtTRPYZFdaB+KDZQ
+         c5AsWW+1zan4PVLB5ICFbo3kWw8Gg1G283wZAWO6r737ItsjzYiCn9FG2QXoDr6T42L5
+         HuE8jOqTIoj9BSLrS1v9pVlypuV1Rm5nXuII68n3X+mOFnjXAAj+Pv1yopN2jRMxGPzv
+         zTSqEnMG5xsOlcXcSNAr6O3xXTKfNtFLqUE8M5yPNBgYa4coNyIELSpPqGpmaUUm1mr6
+         q2Ow==
+X-Gm-Message-State: AOAM533mEIEfJdG0daULtFxcU3ylc+rv1iKpKQu368KnUpCn4cdwb/25
+        jBaaYU4f+l/5EauPOwzdbffxrg==
+X-Google-Smtp-Source: ABdhPJw4tg2JjTIDpk5FTyBYQIZzrMbZuhGEPyGCIJmecDah5IQiCWbIKNXw1HQrXySzm9W2UOo0lg==
+X-Received: by 2002:a17:903:1205:b0:15e:8cbc:fd2b with SMTP id l5-20020a170903120500b0015e8cbcfd2bmr16225656plh.99.1652682744269;
+        Sun, 15 May 2022 23:32:24 -0700 (PDT)
 Received: from localhost.localdomain ([2401:4900:1c60:931c:dd30:fa99:963:d0be])
-        by smtp.gmail.com with ESMTPSA id t9-20020a1709027fc900b0015e8d4eb1e2sm6053647plb.44.2022.05.15.23.32.17
+        by smtp.gmail.com with ESMTPSA id t9-20020a1709027fc900b0015e8d4eb1e2sm6053647plb.44.2022.05.15.23.32.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 May 2022 23:32:20 -0700 (PDT)
+        Sun, 15 May 2022 23:32:24 -0700 (PDT)
 From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
         linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
         robh@kernel.org, linux-phy@lists.infradead.org, vkoul@kernel.org,
         konrad.dybcio@somainline.org
-Subject: [PATCH v4 3/4] dt-bindings: phy: qcom,qmp: Add 'power-domains' property
-Date:   Mon, 16 May 2022 12:01:54 +0530
-Message-Id: <20220516063155.1332683-4-bhupesh.sharma@linaro.org>
+Subject: [PATCH v4 4/4] arm64: dts: qcom: Remove unused 'vdda-max-microamp' & 'vdda-pll-max-microamp' properties
+Date:   Mon, 16 May 2022 12:01:55 +0530
+Message-Id: <20220516063155.1332683-5-bhupesh.sharma@linaro.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220516063155.1332683-1-bhupesh.sharma@linaro.org>
 References: <20220516063155.1332683-1-bhupesh.sharma@linaro.org>
@@ -72,34 +72,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following 'make dtbs_check' error with the 'qcom,qmp-phy'
-bindings:
- arch/arm64/boot/dts/qcom/sm8150-mtp.dtb: phy@1d87000:
-  'power-domains' does not match any of the regexes:
-   '^phy@[0-9a-f]+$', 'pinctrl-[0-9]+'
+As Bjorn noted in [1], since the qmp phy driver doesn't
+use the 'vdda-max-microamp' & 'vdda-pll-max-microamp' properties
+currently, let's remove them from the dts files as well.
+
+Otherwise, it leads to the following '$ make dtbs_check'
+warning(s):
+
+sm8350-microsoft-surface-duo2.dt.yaml: phy@1d87000:
+  'vdda-max-microamp', 'vdda-pll-max-microamp' do not match any of
+   the regexes: '^phy@[0-9a-f]+$', 'pinctrl-[0-9]+
+
+If later on the driver support is added, we can add these properties
+back to the dts files.
+
+[1]. https://lore.kernel.org/linux-arm-msm/YmQhpsmiYJzR99LK@ripper/
 
 Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Vinod Koul <vkoul@kernel.org>
 Cc: Rob Herring <robh@kernel.org>
 Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 ---
- Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts | 2 --
+ arch/arm64/boot/dts/qcom/sm8450-hdk.dts                    | 2 --
+ arch/arm64/boot/dts/qcom/sm8450-qrd.dts                    | 2 --
+ 3 files changed, 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
-index 60ab494df975..c5d4c8152699 100644
---- a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
-+++ b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
-@@ -102,6 +102,10 @@ properties:
-     description:
-       Phandle to a regulator supply to any specific refclk pll block.
+diff --git a/arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts b/arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts
+index 9a6faa9393dc..9c4cfd995ff2 100644
+--- a/arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts
++++ b/arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts
+@@ -336,9 +336,7 @@ &ufs_mem_phy {
+ 	status = "okay";
  
-+  power-domains:
-+    description: Phandle to the power domain node.
-+    maxItems: 1
-+
- #Required nodes:
- patternProperties:
-   "^phy@[0-9a-f]+$":
+ 	vdda-phy-supply = <&vreg_l5b_0p88>;
+-	vdda-max-microamp = <91600>;
+ 	vdda-pll-supply = <&vreg_l6b_1p2>;
+-	vdda-pll-max-microamp = <19000>;
+ };
+ 
+ &usb_1 {
+diff --git a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
+index 4e51a9d6af98..38ccd44620d0 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
++++ b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
+@@ -418,8 +418,6 @@ &ufs_mem_phy {
+ 
+ 	vdda-phy-supply = <&vreg_l5b_0p88>;
+ 	vdda-pll-supply = <&vreg_l6b_1p2>;
+-	vdda-max-microamp = <173000>;
+-	vdda-pll-max-microamp = <24900>;
+ };
+ 
+ &usb_1 {
+diff --git a/arch/arm64/boot/dts/qcom/sm8450-qrd.dts b/arch/arm64/boot/dts/qcom/sm8450-qrd.dts
+index 236e53974fdd..e58fc7399799 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450-qrd.dts
++++ b/arch/arm64/boot/dts/qcom/sm8450-qrd.dts
+@@ -424,8 +424,6 @@ &ufs_mem_phy {
+ 
+ 	vdda-phy-supply = <&vreg_l5b_0p88>;
+ 	vdda-pll-supply = <&vreg_l6b_1p2>;
+-	vdda-max-microamp = <173000>;
+-	vdda-pll-max-microamp = <24900>;
+ };
+ 
+ &usb_1 {
 -- 
 2.35.3
 

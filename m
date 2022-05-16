@@ -2,47 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B29D529578
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 01:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC4452957A
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 01:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348830AbiEPXrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 19:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51360 "EHLO
+        id S1349098AbiEPXsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 19:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232582AbiEPXrH (ORCPT
+        with ESMTP id S1348163AbiEPXsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 19:47:07 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEAFF25C5B
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 16:47:06 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: cristicc)
-        with ESMTPSA id BB36F1F44019
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652744821;
-        bh=DHUSCwf9UzRa0+0DDqpAhAGHmXhK7Som9a0VSUoUloA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WV/ydii3S9IARwutxe0d2LFbLFutuHDN83jr9tnlOq0+XjhcZ9Ow41EUEjhux8If/
-         f1KYOiQAcaG3abHVHHq+jADysHwNEJnB9eBJShO5Vl2oTo4T2qgmd2NQ5hUVTKLs/W
-         RSOqK8Fq9A0sBG3LzcYN6fTkOXQIWyQ8eewttw3fOty48bDXs35tl2I80+unOvDy9y
-         f/bDx0Up3KHMdB6FCU/GT6geFc+uwz/2jUDkpHQ+VUoPM/ASlnWvgoc81aSyfbLH2Q
-         q6TPSwNpz7o07duG+bn4X1H6Umsn6RRwx6M90o/f1WCVFwVDj6ZrboMOZ0CM/hH/Rn
-         UzaM/4CUkFLUA==
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Philip K. Gisslow" <ripxorip@gmail.com>,
-        Zhaoyu Liu <zackary.liu.pro@gmail.com>,
-        cristian.ciocaltea@collabora.com, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Subject: [PATCH] scripts/tags.sh: Invoke 'realpath' via 'xargs'
-Date:   Tue, 17 May 2022 02:46:46 +0300
-Message-Id: <20220516234646.531208-1-cristian.ciocaltea@collabora.com>
-X-Mailer: git-send-email 2.36.1
+        Mon, 16 May 2022 19:48:30 -0400
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1745D3E0FA;
+        Mon, 16 May 2022 16:48:29 -0700 (PDT)
+Received: by mail-oi1-f182.google.com with SMTP id m25so20564904oih.2;
+        Mon, 16 May 2022 16:48:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=x5LTIsaWOZ1f/mxn/cSQ8aiFsbE9yJUuVihPv1xCLlc=;
+        b=SGht4dtQ8vD76za2dV2LqCjwhXiJiVcMmFB+/NJmv/nDhIZBTAOflObUwuhqdfN/wk
+         KzeDMW/sO/zWQ94nd5MJtG4UXhVxgnqvJKUNvwvS6gdGEU8zaYgYKcW8kQ+LB26JkP8a
+         WwISY1HSmqXDewZEOw60AG5tRHhiFWeeAuqfI+vkdZENHjTj15ZEBir/T+FUhn9oa8qS
+         bf6dajoWPDuWES1LtCv1ezrhJfP/6XVb1yCCfgfFwNAlT1Gk+igOx3CCsasqmvAMiZdD
+         gdI8NKzXNa3hXeNHbiNc7Q9K9BbtkNJBm4cWxrCcyOAmkEPv2D2Dtmk9OUDbGmeHlIiK
+         E14Q==
+X-Gm-Message-State: AOAM533iq5/AhWOYQGIFViTQBZwUltcaclphpBPUpIbgmxeJyM/VvR09
+        O0kpWl+EJjpUVPFwDGDkQw==
+X-Google-Smtp-Source: ABdhPJzUTvob60phC3sXqn1ijohn0Mstb3isikonSGXRcErxRuL+nbisyBQbWnEoaQYItLPI3NWDgg==
+X-Received: by 2002:a05:6808:14c2:b0:326:c129:d308 with SMTP id f2-20020a05680814c200b00326c129d308mr8919957oiw.193.1652744908349;
+        Mon, 16 May 2022 16:48:28 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id fo26-20020a0568709a1a00b000e686d1387csm6038708oab.22.2022.05.16.16.48.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 16:48:27 -0700 (PDT)
+Received: (nullmailer pid 3562715 invoked by uid 1000);
+        Mon, 16 May 2022 23:48:26 -0000
+Date:   Mon, 16 May 2022 18:48:26 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Ikjoon Jang <ikjn@chromium.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        devicetree@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Weiyi Lu <weiyi.lu@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Sam Shih <sam.shih@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH 01/13] dt-bindings: clock: Add Mediatek MT6735 clock
+ bindings
+Message-ID: <20220516234826.GA3562658-robh@kernel.org>
+References: <20220504122601.335495-1-y.oudjana@protonmail.com>
+ <20220504122601.335495-2-y.oudjana@protonmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220504122601.335495-2-y.oudjana@protonmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,50 +81,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When COMPILED_SOURCE is set, running
+On Wed, 04 May 2022 16:25:50 +0400, Yassine Oudjana wrote:
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
+> 
+> Add clock definitions for Mediatek MT6735 clocks provided by
+> apmixedsys, topckgen, infracfg and pericfg.
+> 
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+> ---
+>  MAINTAINERS                                   | 10 +++
+>  .../clock/mediatek,mt6735-apmixedsys.h        | 16 ++++
+>  .../clock/mediatek,mt6735-infracfg.h          | 25 ++++++
+>  .../clock/mediatek,mt6735-pericfg.h           | 37 +++++++++
+>  .../clock/mediatek,mt6735-topckgen.h          | 79 +++++++++++++++++++
+>  5 files changed, 167 insertions(+)
+>  create mode 100644 include/dt-bindings/clock/mediatek,mt6735-apmixedsys.h
+>  create mode 100644 include/dt-bindings/clock/mediatek,mt6735-infracfg.h
+>  create mode 100644 include/dt-bindings/clock/mediatek,mt6735-pericfg.h
+>  create mode 100644 include/dt-bindings/clock/mediatek,mt6735-topckgen.h
+> 
 
-  make ARCH=x86_64 COMPILED_SOURCE=1 cscope tags
-
-could throw the following errors:
-
-scripts/tags.sh: line 98: /usr/bin/realpath: Argument list too long
-cscope: no source files found
-scripts/tags.sh: line 98: /usr/bin/realpath: Argument list too long
-ctags: No files specified. Try "ctags --help".
-
-This is most likely to happen when the kernel is configured to build a
-large number of modules, which has the consequence of passing too many
-arguments when calling 'realpath' in 'all_compiled_sources()'.
-
-Let's improve this by invoking 'realpath' through 'xargs', which takes
-care of properly limiting the argument list.
-
-Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
----
- scripts/tags.sh | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
-
-diff --git a/scripts/tags.sh b/scripts/tags.sh
-index 16d475b3e203..01fab3d4f90b 100755
---- a/scripts/tags.sh
-+++ b/scripts/tags.sh
-@@ -95,10 +95,13 @@ all_sources()
-
- all_compiled_sources()
- {
--	realpath -es $([ -z "$KBUILD_ABS_SRCTREE" ] && echo --relative-to=.) \
--		include/generated/autoconf.h $(find $ignore -name "*.cmd" -exec \
--		grep -Poh '(?(?=^source_.* \K).*|(?=^  \K\S).*(?= \\))' {} \+ |
--		awk '!a[$0]++') | sort -u
-+	{
-+		echo include/generated/autoconf.h
-+		find $ignore -name "*.cmd" -exec \
-+			grep -Poh '(?(?=^source_.* \K).*|(?=^  \K\S).*(?= \\))' {} \+ |
-+		awk '!a[$0]++'
-+	} | xargs realpath -es $([ -z "$KBUILD_ABS_SRCTREE" ] && echo --relative-to=.) |
-+	sort -u
- }
-
- all_target_sources()
---
-2.36.1
+Acked-by: Rob Herring <robh@kernel.org>

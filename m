@@ -2,102 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C15F527D8A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF78C527D8E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240256AbiEPGZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 02:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56992 "EHLO
+        id S236756AbiEPG0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 02:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234525AbiEPGZI (ORCPT
+        with ESMTP id S240326AbiEPG02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 02:25:08 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD0F252AF
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:25:06 -0700 (PDT)
-Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L1q362pTCzhZGv;
-        Mon, 16 May 2022 14:24:18 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by kwepemi500015.china.huawei.com
- (7.221.188.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 16 May
- 2022 14:25:04 +0800
-From:   Lu Wei <luwei32@huawei.com>
-To:     <perex@perex.cz>, <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH net-next] ALSA: ice1724: return void from snd_vt1724_chip_init()
-Date:   Mon, 16 May 2022 14:25:46 +0800
-Message-ID: <20220516062546.253656-1-luwei32@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 16 May 2022 02:26:28 -0400
+Received: from mout-u-107.mailbox.org (mout-u-107.mailbox.org [IPv6:2001:67c:2050:101:465::107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070952618
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:26:25 -0700 (PDT)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-u-107.mailbox.org (Postfix) with ESMTPS id 4L1q5V1TT4z9sy0;
+        Mon, 16 May 2022 08:26:22 +0200 (CEST)
+Message-ID: <fe4d398e-978c-6784-e3f6-01b83da3f249@denx.de>
+Date:   Mon, 16 May 2022 08:26:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500015.china.huawei.com (7.221.188.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH -next v2 1/2] i2c: mt7621: fix missing
+ clk_disable_unprepare() on error in mtk_i2c_probe()
+Content-Language: en-US
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
+Cc:     matthias.bgg@gmail.com, wsa@the-dreams.de,
+        christophe.jaillet@wanadoo.fr
+References: <20220514023148.305457-1-yangyingliang@huawei.com>
+From:   Stefan Roese <sr@denx.de>
+In-Reply-To: <20220514023148.305457-1-yangyingliang@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4L1q5V1TT4z9sy0
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Return int in snd_vt1724_chip_init() is useless since it always
-returns 0.
+On 14.05.22 04:31, Yang Yingliang wrote:
+> Fix the missing clk_disable_unprepare() before return
+> from mtk_i2c_probe() in the error handling case.
+> 
+> Fixes: d04913ec5f89 ("i2c: mt7621: Add MediaTek MT7621/7628/7688 I2C driver")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 
-Signed-off-by: Lu Wei <luwei32@huawei.com>
----
- sound/pci/ice1712/ice1724.c | 14 ++++----------
- 1 file changed, 4 insertions(+), 10 deletions(-)
+Reviewed-by: Stefan Roese <sr@denx.de>
 
-diff --git a/sound/pci/ice1712/ice1724.c b/sound/pci/ice1712/ice1724.c
-index 6fab2ad85bbe..dfef468ad6dc 100644
---- a/sound/pci/ice1712/ice1724.c
-+++ b/sound/pci/ice1712/ice1724.c
-@@ -2347,7 +2347,7 @@ static void snd_vt1724_chip_reset(struct snd_ice1712 *ice)
- 	msleep(10);
- }
- 
--static int snd_vt1724_chip_init(struct snd_ice1712 *ice)
-+static void snd_vt1724_chip_init(struct snd_ice1712 *ice)
- {
- 	outb(ice->eeprom.data[ICE_EEP2_SYSCONF], ICEREG1724(ice, SYS_CFG));
- 	outb(ice->eeprom.data[ICE_EEP2_ACLINK], ICEREG1724(ice, AC97_CFG));
-@@ -2369,8 +2369,6 @@ static int snd_vt1724_chip_init(struct snd_ice1712 *ice)
- 	 * since they cause machine lockups
- 	 */
- 	outb(VT1724_MULTI_FIFO_ERR, ICEMT1724(ice, DMA_INT_MASK));
--
--	return 0;
- }
- 
- static int snd_vt1724_spdif_build_controls(struct snd_ice1712 *ice)
-@@ -2506,8 +2504,8 @@ static int snd_vt1724_create(struct snd_card *card,
- 	snd_vt1724_chip_reset(ice);
- 	if (snd_vt1724_read_eeprom(ice, modelname) < 0)
- 		return -EIO;
--	if (snd_vt1724_chip_init(ice) < 0)
--		return -EIO;
-+
-+	snd_vt1724_chip_init(ice);
- 
- 	return 0;
- }
-@@ -2702,11 +2700,7 @@ static int snd_vt1724_resume(struct device *dev)
- 		return 0;
- 
- 	snd_vt1724_chip_reset(ice);
--
--	if (snd_vt1724_chip_init(ice) < 0) {
--		snd_card_disconnect(card);
--		return -EIO;
--	}
-+	snd_vt1724_chip_init(ice);
- 
- 	if (ice->pm_resume)
- 		ice->pm_resume(ice);
+Thanks,
+Stefan
+
+> ---
+>     v2: add return 0 in normal path.
+> ---
+>   drivers/i2c/busses/i2c-mt7621.c | 10 ++++++++--
+>   1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-mt7621.c b/drivers/i2c/busses/i2c-mt7621.c
+> index 45fe4a7fe0c0..901f0fb04fee 100644
+> --- a/drivers/i2c/busses/i2c-mt7621.c
+> +++ b/drivers/i2c/busses/i2c-mt7621.c
+> @@ -304,7 +304,8 @@ static int mtk_i2c_probe(struct platform_device *pdev)
+>   
+>   	if (i2c->bus_freq == 0) {
+>   		dev_warn(i2c->dev, "clock-frequency 0 not supported\n");
+> -		return -EINVAL;
+> +		ret = -EINVAL;
+> +		goto err_disable_clk;
+>   	}
+>   
+>   	adap = &i2c->adap;
+> @@ -322,10 +323,15 @@ static int mtk_i2c_probe(struct platform_device *pdev)
+>   
+>   	ret = i2c_add_adapter(adap);
+>   	if (ret < 0)
+> -		return ret;
+> +		goto err_disable_clk;
+>   
+>   	dev_info(&pdev->dev, "clock %u kHz\n", i2c->bus_freq / 1000);
+>   
+> +	return 0;
+> +
+> +err_disable_clk:
+> +	clk_disable_unprepare(i2c->clk);
+> +
+>   	return ret;
+>   }
+>   
+
+Viele Grüße,
+Stefan Roese
+
 -- 
-2.17.1
-
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Phone: (+49)-8142-66989-51 Fax: (+49)-8142-66989-80 Email: sr@denx.de

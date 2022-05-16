@@ -2,54 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 558CD5292B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:19:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE0052929F
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347620AbiEPVN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 17:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39398 "EHLO
+        id S1347945AbiEPVNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 17:13:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349416AbiEPVM4 (ORCPT
+        with ESMTP id S1349419AbiEPVM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 16 May 2022 17:12:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D7C1025
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 14:06:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E15AB61507
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 21:06:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1BB3C385AA;
-        Mon, 16 May 2022 21:06:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1652735181;
-        bh=Ft3I/yXXzukonb8keZt04JE4bLkRTsLc5hGPoDdn4Uo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=zAjekkEBLgFVfxbiE2VjdxIw5F6h8LoiroA17MJAXyoKI72CH2w/B8BBqaxVdZ/fV
-         Q/onCdq0E18mMzNhf2atxs14Lfrs8u7VtNX+ngILufMAl83aQy/5bZmIT/7BTgR2CF
-         ewe38DwQI09Y1VLQ6Y9bWXWlfi2KPAYZxvwrIwu4=
-Date:   Mon, 16 May 2022 14:06:20 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Maxim Zhukov <crazycdeveloper@gmail.com>
-Cc:     chi.minghao@zte.com.cn, varad.gautam@suse.com, arnd@arndb.de,
-        shakeelb@google.com, vasily.averin@linux.dev,
-        manfred@colorfullife.com, dbueso@suse.de,
-        linux-kernel@vger.kernel.org,
-        Maxim Zhukov <mussitantesmortem@gmail.com>
-Subject: Re: [RFC PATCH 1/1] ipc, sem: fix backward compatibility with
- x86-32 kernels
-Message-Id: <20220516140620.85f84d560c85d01d48dae917@linux-foundation.org>
-In-Reply-To: <20220515200103.1408370-2-mussitantesmortem@gmail.com>
-References: <20220515200103.1408370-1-mussitantesmortem@gmail.com>
-        <20220515200103.1408370-2-mussitantesmortem@gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4342F102E
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 14:06:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652735186; x=1684271186;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Ygp3oXCRuQhQlvfoUeEq342dl+zO8N9KolCKY7QcuiY=;
+  b=hfhtGe5OTDCgWjKQ2qMGIK5nA+9IRnjt5r1t/xZuJTZWH0Z21X3PHrq5
+   wgUFI1sV5QcDmrwxO+EupXkLyeGyFlCUFn1kTAFy8ypBGP2jhJbfhwmn4
+   2XB5YTMZRXSATPCFb70YKZ9nig8LVjhqhAiAPxwtwtrlV7CNcDLtqzXXg
+   f09NP1vYpdKzSQd2EghQe/r17Ex6bavDbiRHAEuTyBhTHi9P6NE7epHfp
+   SHUCLqwiI3jHXYFLncwpSe0HntRxvVUn+psFNud4cqGRjlJN9ZFFs88Sg
+   mG7kK++PJVsD2UwTi3Cr9XzIjqiyLhNCtOAQX68jM9HvSI4VeTxfQx/W2
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="251479352"
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="251479352"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 14:06:25 -0700
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="596722329"
+Received: from skechkar-mobl.ger.corp.intel.com (HELO [10.255.228.165]) ([10.255.228.165])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 14:06:25 -0700
+Message-ID: <546a73c4-9ffa-0d37-a5af-ea7902dc1931@linux.intel.com>
+Date:   Mon, 16 May 2022 14:06:24 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.8.1
+Subject: Re: [PATCH v6 1/5] x86/tdx: Add TDX Guest attestation interface
+ driver
+Content-Language: en-US
+To:     Wander Lairson Costa <wander@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+References: <20220512221952.3647598-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220512221952.3647598-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <YoKTDAeQPs5nQkg3@ovpn-116-50.gru2.redhat.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <YoKTDAeQPs5nQkg3@ovpn-116-50.gru2.redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,29 +76,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 15 May 2022 23:01:03 +0300 Maxim Zhukov <crazycdeveloper@gmail.com> wrote:
 
-> Since with commit 275f22148e87 ("ipc: rename old-style shmctl/semctl/msgctl syscalls")
-> we have changed behavior:
-> 
-> ksys_semctl lost parse ipc version (ipc_parse_version), because the
-> new syscall works with IPC_64 only, but the parse function has some
-> side effect - it removes IPC_64 bit from `cmd`.
-> 
-> Some libc forced sends IPC_64 bit in semctl syscall[1][2][3], this leads to
-> a bug - X86-32 kernel does not have compat headers and does not
-> correctly parse received command (cmd) from semctl syscall: cmd have actual
-> command and IPC_64 bit, thus throw EINVAL error in ksys_semctl
-> 
-> This commit forcibly removes IPC_64 bit from the cmd for restore
-> backward compatibility.
-> 
-> [1]: https://elixir.bootlin.com/uclibc-ng/v1.0.40/source/libc/misc/sysvipc/sem.c#L58
-> [2]: https://elixir.bootlin.com/musl/v1.2.3/source/src/ipc/semctl.c#L48 -> https://elixir.bootlin.com/musl/v1.2.3/source/src/ipc/ipc.h#L22
-> [3]: https://elixir.bootlin.com/glibc/glibc-2.35/source/sysdeps/unix/sysv/linux/semctl.c#L124
-> 
 
-Thanks.
+On 5/16/22 11:08 AM, Wander Lairson Costa wrote:
+>> +
+>> +static int __init tdx_attestation_init(void)
+>> +{
+>> +	long ret;
+> nit: the type of ret should be int
 
-275f22148e87 was three years ago.  Can you suggest why it took so long
-for this to be discovered?
+Agree. I will fix it in next version.
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

@@ -2,126 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E115291B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7751529144
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237559AbiEPUjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36028 "EHLO
+        id S243334AbiEPUjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:39:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347238AbiEPUXe (ORCPT
+        with ESMTP id S1348606AbiEPU1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:23:34 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907BA4B404
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 13:09:57 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id n10so15480070pjh.5
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 13:09:57 -0700 (PDT)
+        Mon, 16 May 2022 16:27:35 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6A217E16;
+        Mon, 16 May 2022 13:10:58 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id er5so6257947edb.12;
+        Mon, 16 May 2022 13:10:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wzx7NT/bkCjJnHFo5lwIctB7nDe602qxHRo5R1R5KC0=;
-        b=AMws03KWgp7hhyS5yH0ZZgkyrQGUxWWjom10rEHGW9HVJe/B39vQdFbOzZDngRLz85
-         11ztlJ90TsfQUyhk0y91m3LCis4j0lmBDTWy8wpzsiElk1XXuk6fnX788cAE6k8QrYwL
-         yT0zTxFfM5QPl22vfnBxoEpoR2ZT9FwAzIynCVhKMued/cmd7czQiTSWJbnLSO8jhzlw
-         6WSvtvN6wUH++ILH1ZQIUrxoVSwjrESLNF6kRwOXQ/lcD3Fp66CwtWMylB5F7do4Wmqj
-         S4qD+3iee59hXjru6GsfvY4Z89JrB+dkWA6OcH6fkzib1ntLAajlQQMdEXjuzmzzOscb
-         p/bg==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=j+pGwvii1jc/tNdHYIgSpOrAOOK3r8Jt2vj3y0L4fGM=;
+        b=U2JZNJI3sulLCkpj0n+9znizP3kQ8boz6tjbcSmp3lf+CQLXQhV+0RQFIHcIAtzGD2
+         XSAy44rTYzOQjFYDrjea1aTdngZDRFrWETv4+EWwm/bRXfoR9oQWShgTec5QDyqahXYU
+         cyvHpRaLeRgujgKl4nRPQxIyKxA+CVlDlhxA7QdYu4dKMuZfuVpMA+RSrQZpBOaNCmC7
+         RGczdslQx3geJ0AsaxfrDjxc9WQ0sTRwQfar/Cn4LEyWaCiH/ZBByD/KhKR9ZxmaR0ZO
+         SwQJ9erDavhIr4UXcNPnx03KoQRPH5bgcQLZZrelBBAcfuHEDvZwDdRX7Fkt0lH3FK/r
+         1G2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wzx7NT/bkCjJnHFo5lwIctB7nDe602qxHRo5R1R5KC0=;
-        b=8QRWnShN4M1dklF/u/SINslEeYHbo5EUBh6aIKcnIihgMgvWztvSIGZt52dUoBzVTa
-         0Werggna2d/xkbBu/jLown0FWGJNpj8+qhNQrJa0SSkEPffYfAh8nHtRQG2IMXzuMYUE
-         HoJBcGDFrFNTrmcRU2S0KmlCF27P5PqidoXGCYjUYStLnTVUUpJkVxTVBRzhOqrn6ecq
-         2bwWk3nEVesCq3U43Qxuw/dUoec7eJ/VxNUQvGHDpV45Y/ebgO4nSpyHgoC/2/DDUc9l
-         7trrDf7hm/p3ol90NRK5r2eI7rSsQBH2p+wqyYfQcFTsdg21/t3h/oU/uItpZ/jWepUu
-         47zA==
-X-Gm-Message-State: AOAM533R6TFIYrrjVgCGeBcZYCncYBDgM+WT8pMq0njW02QSpVo+7zMY
-        o18gKk+dsFXI+VbRKkCjV+SPpQ==
-X-Google-Smtp-Source: ABdhPJz0Ftz1ke7eSHpyZ28XpMixfb3ZztfsWTYIdzRosBnT6uhFx3Dm1ZEtu6S5LaqcUQfV0PLhHA==
-X-Received: by 2002:a17:903:1c9:b0:161:89e8:229 with SMTP id e9-20020a17090301c900b0016189e80229mr4616450plh.106.1652731796204;
-        Mon, 16 May 2022 13:09:56 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id p14-20020a170902780e00b00161a16f0050sm229094pll.222.2022.05.16.13.09.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 13:09:55 -0700 (PDT)
-Date:   Mon, 16 May 2022 20:09:52 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 15/34] KVM: x86: hyper-v: Introduce
- kvm_hv_is_tlb_flush_hcall()
-Message-ID: <YoKvkEfvyGJWNmAj@google.com>
-References: <20220414132013.1588929-1-vkuznets@redhat.com>
- <20220414132013.1588929-16-vkuznets@redhat.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=j+pGwvii1jc/tNdHYIgSpOrAOOK3r8Jt2vj3y0L4fGM=;
+        b=qcEE/xk9vBDiBpQTT/XgwGiuLLFo05NhEnnnJusqLElli/6idlfZA27SfirKmj3tWO
+         FW5l8qq68thXF7J4L3khV1Einakk14m4OBRxsgIu98FgxWnfdHhYQqJXMEsX1/6sJYHN
+         C1yiEpcT5opne1rD09fPukrW0G4iyqZlgoF9bo7tfKBVh/1T6ZsDhtdUmarBkFUc28I4
+         onmbFh9J1mtVpJX6mFF61zKLLeJgozDjObF6uCfZA0sxzgTWbMKxp+YApZwOdRSh9q1V
+         bZLYCqr8vJEoMY2gZtcFkO/EXNaSxvdTsEQmKMEQ1LN0jkD8mRCrgyk1nb2Zx+wQTGTf
+         EJLw==
+X-Gm-Message-State: AOAM533cUUccZN/wPnEHu434f6zh3jSIQffmde7fnhhvSVTyAWbYb4tR
+        kCxzygl9P9qcVNPVMOHyaqo=
+X-Google-Smtp-Source: ABdhPJxylhJTYmg6HhuUBuaR84WYzenXA4sDeCzrc+yAfT2f2j7gNohWKKabRT6wAuKGq7/bTasfAA==
+X-Received: by 2002:aa7:d659:0:b0:42a:b0d5:a64e with SMTP id v25-20020aa7d659000000b0042ab0d5a64emr7475335edr.157.1652731857280;
+        Mon, 16 May 2022 13:10:57 -0700 (PDT)
+Received: from [192.168.8.198] ([85.255.232.74])
+        by smtp.gmail.com with ESMTPSA id en21-20020a17090728d500b006f3ef214e6csm108579ejc.210.2022.05.16.13.10.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 13:10:56 -0700 (PDT)
+Message-ID: <c8b30350-6e1c-8ad5-0150-a38996bef13f@gmail.com>
+Date:   Mon, 16 May 2022 21:09:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414132013.1588929-16-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH net-next v3 02/10] udp/ipv6: move pending section of
+ udpv6_sendmsg
+Content-Language: en-US
+To:     Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-kernel@vger.kernel.org
+References: <cover.1652368648.git.asml.silence@gmail.com>
+ <a0e7477985ef08c5f08f35b8c7336587c8adce12.1652368648.git.asml.silence@gmail.com>
+ <b9844f3ce486c5aff8547e79abf4344488db6568.camel@redhat.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <b9844f3ce486c5aff8547e79abf4344488db6568.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022, Vitaly Kuznetsov wrote:
-> The newly introduced helper checks whether vCPU is performing a
-> Hyper-V TLB flush hypercall. This is required to filter out L2 TLB
-> flush hypercalls for processing.
+On 5/16/22 14:11, Paolo Abeni wrote:
+> On Fri, 2022-05-13 at 16:26 +0100, Pavel Begunkov wrote:
+>> Move up->pending section of udpv6_sendmsg() to the beginning of the
+>> function. Even though it require some code duplication for sin6 parsing,
+>> it clearly localises the pending handling in one place, removes an extra
+>> if and more importantly will prepare the code for further patches.
+>>
+>> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+>> ---
+>>   net/ipv6/udp.c | 70 ++++++++++++++++++++++++++++++--------------------
+>>   1 file changed, 42 insertions(+), 28 deletions(-)
+>>
+>> diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+>> index 11d44ed46953..85bff1252f5c 100644
+>> --- a/net/ipv6/udp.c
+>> +++ b/net/ipv6/udp.c
+>> @@ -1318,6 +1318,46 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+>>   	ipc6.sockc.tsflags = sk->sk_tsflags;
+>>   	ipc6.sockc.mark = sk->sk_mark;
+>>   
+>> +	/* Rough check on arithmetic overflow,
+>> +	   better check is made in ip6_append_data().
+>> +	   */
+>> +	if (unlikely(len > INT_MAX - sizeof(struct udphdr)))
+>> +		return -EMSGSIZE;
+>> +
+>> +	getfrag  =  is_udplite ?  udplite_getfrag : ip_generic_getfrag;
+>> +
+>> +	/* There are pending frames. */
+>> +	if (up->pending) {
+>> +		if (up->pending == AF_INET)
+>> +			return udp_sendmsg(sk, msg, len);
+>> +
+>> +		/* Do a quick destination sanity check before corking. */
+>> +		if (sin6) {
+>> +			if (msg->msg_namelen < offsetof(struct sockaddr, sa_data))
+>> +				return -EINVAL;
+>> +			if (sin6->sin6_family == AF_INET6) {
+>> +				if (msg->msg_namelen < SIN6_LEN_RFC2133)
+>> +					return -EINVAL;
+>> +				if (ipv6_addr_any(&sin6->sin6_addr) &&
+>> +				    ipv6_addr_v4mapped(&np->saddr))
+>> +					return -EINVAL;
 > 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/kvm/hyperv.h | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/hyperv.h b/arch/x86/kvm/hyperv.h
-> index d59f96700104..ca67c18cef2c 100644
-> --- a/arch/x86/kvm/hyperv.h
-> +++ b/arch/x86/kvm/hyperv.h
-> @@ -170,6 +170,24 @@ static inline void kvm_hv_vcpu_empty_flush_tlb(struct kvm_vcpu *vcpu)
->  	tlb_flush_ring = kvm_hv_get_tlb_flush_ring(vcpu);
->  	tlb_flush_ring->read_idx = tlb_flush_ring->write_idx;
->  }
-> +
-> +static inline bool kvm_hv_is_tlb_flush_hcall(struct kvm_vcpu *vcpu)
-> +{
-> +	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
-> +	u16 code;
-> +
-> +	if (!hv_vcpu)
-> +		return false;
-> +
-> +	code = is_64_bit_hypercall(vcpu) ? kvm_rcx_read(vcpu) :
-> +		kvm_rax_read(vcpu);
+> It looks like 'any' destination with ipv4 mapped source is now
+> rejected, while the existing code accept it.
 
-Nit, can you align the two expressions?
+It should be up->pending == AF_INET6 to get there, and previously it'd
+fall into udp_sendmsg() and fail
 
-	code = is_64_bit_hypercall(vcpu) ? kvm_rcx_read(vcpu) :
-					   kvm_rax_read(vcpu);
+if (unlikely(up->pending != AF_INET))
+         return -EINVAL;
 
-> +
-> +	return (code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE ||
-> +		code == HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST ||
-> +		code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX ||
-> +		code == HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX);
-> +}
-> +
->  void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu);
->  
->  
-> -- 
-> 2.35.1
-> 
+I don't see it anyhow rejecting cases that were working before.
+Can you elaborate a bit?
+
+-- 
+Pavel Begunkov

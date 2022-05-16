@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F310A528E82
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC3B528E1E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:42:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346365AbiEPTtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42568 "EHLO
+        id S1345643AbiEPTix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345873AbiEPTmn (ORCPT
+        with ESMTP id S1345555AbiEPTi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:42:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BFD41623;
-        Mon, 16 May 2022 12:40:54 -0700 (PDT)
+        Mon, 16 May 2022 15:38:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4ED3EF15;
+        Mon, 16 May 2022 12:38:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8BF09B81609;
-        Mon, 16 May 2022 19:40:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CABE3C34100;
-        Mon, 16 May 2022 19:40:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 11CC5B81607;
+        Mon, 16 May 2022 19:38:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5868FC34100;
+        Mon, 16 May 2022 19:38:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730052;
-        bh=sitUM+pO5GY8EG+P/wbijhz0f+x6injN+PYj6XrcbLo=;
+        s=korg; t=1652729899;
+        bh=QhK7PUB7yNqGI/huuaZDmFUQPMryOAaTHE/EDFra7Yc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pFKlwUMLRUAORV0FU2GvBzt2dQXnBlRClZmN/ZNNmF8LqN3UY9UeGU/zC1liR5bYV
-         ZVWgAs6mfQRCRqaOhtWN2Fvb1cLdg9ZT6myO5MyYHG+zNpRDlz0U76SDIz5KphWNXl
-         udsatxRrXAw96p9UDTUX2ATZeSPo9aMMO5bnhMnc=
+        b=ToCNSbd71rOjxRJIPo9awaoGGtw5ITPFC88sN4OlK0yPtVrcSeFVTidK4lZ3/Tck8
+         o1KMcrk5HKHRbglZbD1mUYUiPiV+H4Wfj+Y1qD45KD1OHDwIPDHVtvKV10d3KSVfHQ
+         JOGmZCLgqsSQztIUXDjhltqcJJlQ+66quQWrNa+A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 16/32] ASoC: max98090: Reject invalid values in custom control put()
+        stable@vger.kernel.org,
+        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 4.9 17/19] USB: serial: option: add Fibocom MA510 modem
 Date:   Mon, 16 May 2022 21:36:30 +0200
-Message-Id: <20220516193615.255604361@linuxfoundation.org>
+Message-Id: <20220516193614.012671355@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193614.773450018@linuxfoundation.org>
-References: <20220516193614.773450018@linuxfoundation.org>
+In-Reply-To: <20220516193613.497233635@linuxfoundation.org>
+References: <20220516193613.497233635@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +55,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Sven Schwermer <sven.schwermer@disruptive-technologies.com>
 
-[ Upstream commit 2fbe467bcbfc760a08f08475eea6bbd4c2874319 ]
+commit 07989eb981d862f7f2be68d233d753f2e7ccc119 upstream.
 
-The max98090 driver has a custom put function for some controls which can
-only be updated in certain circumstances which makes no effort to validate
-that input is suitable for the control, allowing out of spec values to be
-written to the hardware and presented to userspace. Fix this by returning
-an error when invalid values are written.
+The MA510 modem has 3 USB configurations that are configurable via the AT
+command AT+GTUSBMODE={30,31,32} which make the modem enumerate with the
+following interfaces, respectively:
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20220420193454.2647908-1-broonie@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+30: Diag + QDSS + Modem + RMNET
+31: Diag + Modem + AT + ECM
+32: Modem + AT + ECM
+
+The first configuration (30) reuses u-blox R410M's VID/PID with
+identical interface configuration.
+
+A detailed description of the USB configuration for each mode follows:
+
++GTUSBMODE: 30
+--------------
+T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=04 Dev#= 19 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=05c6 ProdID=90b2 Rev= 0.00
+S:  Manufacturer=Fibocom MA510 Modem
+S:  Product=Fibocom MA510 Modem
+S:  SerialNumber=55e2695b
+C:* #Ifs= 4 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=83(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+E:  Ad=85(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+
++GTUSBMODE: 31
+--------------
+T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=04 Dev#= 99 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=2cb7 ProdID=0106 Rev= 0.00
+S:  Manufacturer=Fibocom MA510 Modem
+S:  Product=Fibocom MA510 Modem
+S:  SerialNumber=55e2695b
+C:* #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
+A:  FirstIf#= 3 IfCount= 2 Cls=02(comm.) Sub=00 Prot=00
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=fe Prot=ff Driver=option
+E:  Ad=84(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
+E:  Ad=86(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+I:  If#= 4 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+I:* If#= 4 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+
++GTUSBMODE: 32
+--------------
+T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=04 Dev#=100 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=2cb7 ProdID=010a Rev= 0.00
+S:  Manufacturer=Fibocom MA510 Modem
+S:  Product=Fibocom MA510 Modem
+S:  SerialNumber=55e2695b
+C:* #Ifs= 4 Cfg#= 1 Atr=e0 MxPwr=500mA
+A:  FirstIf#= 2 IfCount= 2 Cls=02(comm.) Sub=00 Prot=00
+I:* If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=81(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=fe Prot=ff Driver=option
+E:  Ad=83(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
+E:  Ad=85(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+I:  If#= 3 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+I:* If#= 3 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+
+Signed-off-by: Sven Schwermer <sven.schwermer@disruptive-technologies.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/max98090.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/usb/serial/option.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/sound/soc/codecs/max98090.c b/sound/soc/codecs/max98090.c
-index a5b0c40ee545..6e5a4e757bf1 100644
---- a/sound/soc/codecs/max98090.c
-+++ b/sound/soc/codecs/max98090.c
-@@ -419,6 +419,9 @@ static int max98090_put_enab_tlv(struct snd_kcontrol *kcontrol,
- 
- 	val = (val >> mc->shift) & mask;
- 
-+	if (sel < 0 || sel > mc->max)
-+		return -EINVAL;
-+
- 	*select = sel;
- 
- 	/* Setting a volume is only valid if it is already On */
--- 
-2.35.1
-
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -2107,6 +2107,8 @@ static const struct usb_device_id option
+ 	  .driver_info = RSVD(4) | RSVD(5) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0105, 0xff),			/* Fibocom NL678 series */
+ 	  .driver_info = RSVD(6) },
++	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0106, 0xff) },			/* Fibocom MA510 (ECM mode w/ diag intf.) */
++	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x010a, 0xff) },			/* Fibocom MA510 (ECM mode) */
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x010b, 0xff, 0xff, 0x30) },	/* Fibocom FG150 Diag */
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x010b, 0xff, 0, 0) },		/* Fibocom FG150 AT */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x01a0, 0xff) },			/* Fibocom NL668-AM/NL652-EU (laptop MBIM) */
 
 

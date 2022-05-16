@@ -2,76 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03424527E68
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59DC0527E6E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240980AbiEPHSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 03:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52102 "EHLO
+        id S240985AbiEPHTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 03:19:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240955AbiEPHSh (ORCPT
+        with ESMTP id S240969AbiEPHS7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 03:18:37 -0400
-Received: from relay5.hostedemail.com (relay5.hostedemail.com [64.99.140.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F80513CDD
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:18:36 -0700 (PDT)
-Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay12.hostedemail.com (Postfix) with ESMTP id 6D6D21210F5;
-        Mon, 16 May 2022 07:18:35 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf10.hostedemail.com (Postfix) with ESMTPA id 707F040;
-        Mon, 16 May 2022 07:18:29 +0000 (UTC)
-Message-ID: <eaf82e8001a370d7be779bd15163f7210a968e8b.camel@perches.com>
-Subject: Re: [PATCH v3] workqueue: Wrap flush_workqueue() using a macro
-From:   Joe Perches <joe@perches.com>
-To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Tejun Heo <tj@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, gcc <gcc@gcc.gnu.org>
-Date:   Mon, 16 May 2022 00:18:28 -0700
-In-Reply-To: <1c1b272b-239c-e1d1-84de-47d02feb911e@I-love.SAKURA.ne.jp>
-References: <d34dac10-c12f-8bda-35c4-9cb158781db2@I-love.SAKURA.ne.jp>
-         <a6288570ed3534b0316723061f5604e3871accef.camel@perches.com>
-         <6e4ed62e-888b-6e7a-c13d-67656f39ca94@I-love.SAKURA.ne.jp>
-         <738afe71-2983-05d5-f0fc-d94efbdf7634@I-love.SAKURA.ne.jp>
-         <YnQKNea6KWFaWNis@slm.duckdns.org>
-         <a0d6b5e4-b9c8-1a43-570f-4c73b0f6fc0c@I-love.SAKURA.ne.jp>
-         <Yn0538VavQPv+/Ws@slm.duckdns.org>
-         <7b2fecdb-59ae-2c54-5a5b-774ef7054d1b@I-love.SAKURA.ne.jp>
-         <1c1b272b-239c-e1d1-84de-47d02feb911e@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Mon, 16 May 2022 03:18:59 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 64AB813CDD;
+        Mon, 16 May 2022 00:18:58 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B8CF31063;
+        Mon, 16 May 2022 00:18:57 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.2.236])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 028A63F718;
+        Mon, 16 May 2022 00:18:51 -0700 (PDT)
+Date:   Mon, 16 May 2022 08:18:32 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Xu Kuohai <xukuohai@huawei.com>
+Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        hpa@zytor.com, Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Delyan Kratunov <delyank@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v3 4/7] bpf, arm64: Impelment
+ bpf_arch_text_poke() for arm64
+Message-ID: <YoH6yAtmzPQtWiFM@FVFF77S0Q05N>
+References: <20220424154028.1698685-1-xukuohai@huawei.com>
+ <20220424154028.1698685-5-xukuohai@huawei.com>
+ <Yn5yb9F4uYkio4Xe@lakrids>
+ <264ecbe1-4514-d6c8-182b-3af4babb457e@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: ube18spr5b3crk3gobc31nifo7aa5b81
-X-Rspamd-Server: rspamout06
-X-Rspamd-Queue-Id: 707F040
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18jtvK0bs/QQC9DdHFRHLrEMs2Snoe06V0=
-X-HE-Tag: 1652685509-763519
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <264ecbe1-4514-d6c8-182b-3af4babb457e@huawei.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-05-16 at 14:00 +0900, Tetsuo Handa wrote:
-[]
-> Changes in v3:
->   Revert suggested change in v2, for kernel test robot <lkp@intel.com> found
+On Mon, May 16, 2022 at 02:55:46PM +0800, Xu Kuohai wrote:
+> On 5/13/2022 10:59 PM, Mark Rutland wrote:
+> > On Sun, Apr 24, 2022 at 11:40:25AM -0400, Xu Kuohai wrote:
+> >> Impelment bpf_arch_text_poke() for arm64, so bpf trampoline code can use
+> >> it to replace nop with jump, or replace jump with nop.
+> >>
+> >> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> >> Acked-by: Song Liu <songliubraving@fb.com>
+> >> ---
+> >>  arch/arm64/net/bpf_jit_comp.c | 63 +++++++++++++++++++++++++++++++++++
+> >>  1 file changed, 63 insertions(+)
+> >>
+> >> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+> >> index 8ab4035dea27..3f9bdfec54c4 100644
+> >> --- a/arch/arm64/net/bpf_jit_comp.c
+> >> +++ b/arch/arm64/net/bpf_jit_comp.c
+> >> @@ -9,6 +9,7 @@
+> >>  
+> >>  #include <linux/bitfield.h>
+> >>  #include <linux/bpf.h>
+> >> +#include <linux/memory.h>
+> >>  #include <linux/filter.h>
+> >>  #include <linux/printk.h>
+> >>  #include <linux/slab.h>
+> >> @@ -18,6 +19,7 @@
+> >>  #include <asm/cacheflush.h>
+> >>  #include <asm/debug-monitors.h>
+> >>  #include <asm/insn.h>
+> >> +#include <asm/patching.h>
+> >>  #include <asm/set_memory.h>
+> >>  
+> >>  #include "bpf_jit.h"
+> >> @@ -1529,3 +1531,64 @@ void bpf_jit_free_exec(void *addr)
+> >>  {
+> >>  	return vfree(addr);
+> >>  }
+> >> +
+> >> +static int gen_branch_or_nop(enum aarch64_insn_branch_type type, void *ip,
+> >> +			     void *addr, u32 *insn)
+> >> +{
+> >> +	if (!addr)
+> >> +		*insn = aarch64_insn_gen_nop();
+> >> +	else
+> >> +		*insn = aarch64_insn_gen_branch_imm((unsigned long)ip,
+> >> +						    (unsigned long)addr,
+> >> +						    type);
+> >> +
+> >> +	return *insn != AARCH64_BREAK_FAULT ? 0 : -EFAULT;
+> >> +}
+> >> +
+> >> +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
+> >> +		       void *old_addr, void *new_addr)
+> >> +{
+> >> +	int ret;
+> >> +	u32 old_insn;
+> >> +	u32 new_insn;
+> >> +	u32 replaced;
+> >> +	enum aarch64_insn_branch_type branch_type;
+> >> +
+> >> +	if (!is_bpf_text_address((long)ip))
+> >> +		/* Only poking bpf text is supported. Since kernel function
+> >> +		 * entry is set up by ftrace, we reply on ftrace to poke kernel
+> >> +		 * functions. For kernel funcitons, bpf_arch_text_poke() is only
+> >> +		 * called after a failed poke with ftrace. In this case, there
+> >> +		 * is probably something wrong with fentry, so there is nothing
+> >> +		 * we can do here. See register_fentry, unregister_fentry and
+> >> +		 * modify_fentry for details.
+> >> +		 */
+> >> +		return -EINVAL;
+> > 
+> > If you rely on ftrace to poke functions, why do you need to patch text
+> > at all? Why does the rest of this function exist?
+> > 
+> > I really don't like having another piece of code outside of ftrace
+> > patching the ftrace patch-site; this needs a much better explanation.
+> > 
 > 
->     warning: Function parameter or member 'flush_workqueue' not described in 'void'
->     warning: expecting prototype for flush_workqueue(). Prototype was for void() instead
+> Sorry for the incorrect explaination in the comment. I don't think it's
+> reasonable to patch ftrace patch-site without ftrace code either.
 > 
->   when built with W=1 option.
+> The patching logic in register_fentry, unregister_fentry and
+> modify_fentry is as follows:
+> 
+> if (tr->func.ftrace_managed)
+>         ret = register_ftrace_direct((long)ip, (long)new_addr);
+> else
+>         ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, NULL, new_addr,
+>                                  true);
+> 
+> ftrace patch-site is patched by ftrace code. bpf_arch_text_poke() is
+> only used to patch bpf prog and bpf trampoline, which are not managed by
+> ftrace.
 
-Odd, perhaps that not a valid error message and is a defect
-in gcc's parsing of function definitions.
+Sorry, I had misunderstood. Thanks for the correction!
 
-> Changes in v2:
->   Use "void (flush_workqueue)(struct workqueue_struct *wq)" and remove
->   "#undef flush_workqueue", suggested by Joe Perches <joe@perches.com>.
+I'll have another look with that in mind.
 
+> >> +
+> >> +	if (poke_type == BPF_MOD_CALL)
+> >> +		branch_type = AARCH64_INSN_BRANCH_LINK;
+> >> +	else
+> >> +		branch_type = AARCH64_INSN_BRANCH_NOLINK;
+> >> +
+> >> +	if (gen_branch_or_nop(branch_type, ip, old_addr, &old_insn) < 0)
+> >> +		return -EFAULT;
+> >> +
+> >> +	if (gen_branch_or_nop(branch_type, ip, new_addr, &new_insn) < 0)
+> >> +		return -EFAULT;
+> >> +
+> >> +	mutex_lock(&text_mutex);
+> >> +	if (aarch64_insn_read(ip, &replaced)) {
+> >> +		ret = -EFAULT;
+> >> +		goto out;
+> >> +	}
+> >> +
+> >> +	if (replaced != old_insn) {
+> >> +		ret = -EFAULT;
+> >> +		goto out;
+> >> +	}
+> >> +
+> >> +	ret = aarch64_insn_patch_text_nosync((void *)ip, new_insn);
+> > 
+> > ... and where does the actual synchronization come from in this case?
+> 
+> aarch64_insn_patch_text_nosync() replaces an instruction atomically, so
+> no other CPUs will fetch a half-new and half-old instruction.
+> 
+> The scenario here is that there is a chance that another CPU fetches the
+> old instruction after bpf_arch_text_poke() finishes, that is, different
+> CPUs may execute different versions of instructions at the same time.
+> 
+> 1. When a new trampoline is attached, it doesn't seem to be an issue for
+> different CPUs to jump to different trampolines temporarily.
+>
+> 2. When an old trampoline is freed, we should wait for all other CPUs to
+> exit the trampoline and make sure the trampoline is no longer reachable,
+> IIUC, bpf_tramp_image_put() function already uses percpu_ref and rcu
+> tasks to do this.
 
+It would be good to have a comment for these points.
 
+Thanks,
+Mark.

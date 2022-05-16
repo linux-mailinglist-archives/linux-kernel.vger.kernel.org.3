@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 775A5528EC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03BFD528E92
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234296AbiEPTtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
+        id S1346183AbiEPTrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:47:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345854AbiEPTmL (ORCPT
+        with ESMTP id S1346012AbiEPTnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:42:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9631041322;
-        Mon, 16 May 2022 12:40:44 -0700 (PDT)
+        Mon, 16 May 2022 15:43:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7F83FD98;
+        Mon, 16 May 2022 12:42:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2EE8614B6;
-        Mon, 16 May 2022 19:40:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F2B3C385AA;
-        Mon, 16 May 2022 19:40:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 857F9614EF;
+        Mon, 16 May 2022 19:42:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90F0AC34100;
+        Mon, 16 May 2022 19:42:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730043;
-        bh=oE7W6xw29WDDgIV+YB10Eo+LSQnZt2ZhTkmKIST7jmU=;
+        s=korg; t=1652730153;
+        bh=EYcgVGdFWwyKfLgL8Ti8r76qxdNyQFJY49TcMtPOAOo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cj5RNqlYMfUNKA/HtQm47LhZxAm41q3HWM02OTErwdT5SobsuXHeVGG41OkUTktyR
-         owtwmmlk3uv83QTVnqYFhvDp9mV6eq7UXBmrWA6K7Wfg6t9sH6Pykd5tHe9HvOX5wp
-         ns6hnyEDy64LgAg4Tb9mi3YroWBf8NAQaOXoyt6Q=
+        b=cHOJ3MpsWzAxrGGGEcfktgx8Kl1lg4d3P5UPg9nT/5BWV7l+gzfZlG9kz54GtPT41
+         dZ+gsNPypibuX4jhstjQ0Yzi1tx0fsf5fT2N2KDx+eUwc/6cG2ia/U6XJWPTvfCMcH
+         m8FIqth2tC2GJhy2Hl8q518EY03L9tkK0J8aSn8g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,19 +36,19 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Taehee Yoo <ap420073@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 13/32] net: sfc: ef10: fix memory leak in efx_ef10_mtd_probe()
+Subject: [PATCH 5.4 16/43] net: sfc: ef10: fix memory leak in efx_ef10_mtd_probe()
 Date:   Mon, 16 May 2022 21:36:27 +0200
-Message-Id: <20220516193615.169017131@linuxfoundation.org>
+Message-Id: <20220516193615.197328789@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193614.773450018@linuxfoundation.org>
-References: <20220516193614.773450018@linuxfoundation.org>
+In-Reply-To: <20220516193614.714657361@linuxfoundation.org>
+References: <20220516193614.714657361@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,10 +105,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 insertions(+)
 
 diff --git a/drivers/net/ethernet/sfc/ef10.c b/drivers/net/ethernet/sfc/ef10.c
-index 1f971d31ec30..6b0a4dc1ced1 100644
+index 0ec13f520e90..936e64dd81b5 100644
 --- a/drivers/net/ethernet/sfc/ef10.c
 +++ b/drivers/net/ethernet/sfc/ef10.c
-@@ -6146,6 +6146,11 @@ static int efx_ef10_mtd_probe(struct efx_nic *efx)
+@@ -6160,6 +6160,11 @@ static int efx_ef10_mtd_probe(struct efx_nic *efx)
  		n_parts++;
  	}
  

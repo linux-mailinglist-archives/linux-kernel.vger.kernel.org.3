@@ -2,142 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1D2B527DB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A9E527DB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240360AbiEPGkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 02:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60074 "EHLO
+        id S240378AbiEPGkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 02:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240347AbiEPGkD (ORCPT
+        with ESMTP id S229568AbiEPGkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 02:40:03 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D60B338AD;
-        Sun, 15 May 2022 23:40:01 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24G5OEn7005015;
-        Mon, 16 May 2022 06:40:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=DcLL7y2N8X7R3Q4gD9zmQ+4CbjMGdyO06C1r8lZBc54=;
- b=A4OWmrxl4EwYLoZN+DV+NyVIktOcnE3JI7neX2y9nshrEr1JoDFm8/ZtORhLR8C2Ji1c
- FOGlIY742etEPFbXOS7ymqlZZoKHTPBeG0lYesIeDDo3YJuQgahm5kpvjbTtNMjvXG3Z
- GjAaaT2MNnMOfGEbsWwX1O2JrURC503Ykrgm0XQzeX1kSqIzuaI76n0aZ1lVJVBH3mTT
- +M9dWmVniMbm1K1QTbG6ud3GkBjyMmJIcRTXnwFjSmjIpH5JKjPY17zmay2oGS21b6TM
- yLlHksWhMR2LVe3e1tuAWfm66yUsO/QnacR9mN7vYFoAEM0agQNv/gTBPV2kxOvrOfZb tg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3ge8h771-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 06:40:01 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24G6GnNo008856;
-        Mon, 16 May 2022 06:40:00 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3ge8h76g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 06:40:00 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24G68SVB016748;
-        Mon, 16 May 2022 06:39:58 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma05fra.de.ibm.com with ESMTP id 3g24291n56-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 06:39:58 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24G6dt2B40174078
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 16 May 2022 06:39:55 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C854E4C044;
-        Mon, 16 May 2022 06:39:55 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CB16C4C046;
-        Mon, 16 May 2022 06:39:53 +0000 (GMT)
-Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.41.34])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 16 May 2022 06:39:53 +0000 (GMT)
-From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
-To:     fstests@vger.kernel.org
-Cc:     zlang@redhat.com, riteshh@linux.ibm.com,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] common/rc: Modify _require_batched_discard to improve test coverage
-Date:   Mon, 16 May 2022 12:09:51 +0530
-Message-Id: <20220516063951.87838-1-ojaswin@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Fc-stSPmQNu3HczXZDnJ9etBJx865QbY
-X-Proofpoint-ORIG-GUID: VduchDHmEd_R5WWOixWOtniqCL0VB7JF
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 16 May 2022 02:40:46 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B4DDEB9
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:40:44 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id d15so24059768lfk.5
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:40:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=IezA8lFbZ3UBxt9oqnYwi09cIkKPiUW4FFJ1P5l8/O0=;
+        b=I0O/pU6cY2spaVMFaJQg1irJ6isUwl5e5ClKCDBGbpiUdQzS1pP3ncibY1xLbZZETg
+         vBW9p6Lpd+BtpNrqDG4mJ21n/B4zxxmO/6LHl1VmKb1PbeGm2SVTWk0dhxmNXIFEj8Il
+         SeR18wyfnPf0rXsq3QP3qHtY/aFEUoVlh4TCorcawpqxJlgXDwV5VDjOZuJzzfhqt6nV
+         BE4VwRhX4due6MEXRw9QYGdIsJ6Dh2eKZCZxR0DKwEB04NNOhHj3ALqp+QnSjUmFEE12
+         y7FD12UQKOA4t9UHw5P0k+2a+g64QrNf69Qa74FVbltOzwKxd077dhAAKIunNPpAE58z
+         ut2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IezA8lFbZ3UBxt9oqnYwi09cIkKPiUW4FFJ1P5l8/O0=;
+        b=NjHa6j4Nrah9xhDhDqtJJTx0Jpe6plL7vccsTlQ0oHN1pOk/LJ82wyaPjVRbtRl+gx
+         rpCeIr0V6Mwqn5e07djoF0OH7mnYZ7jarYQ1YwcaxmhfF2f2ra1wqFaoYIF7SOrAyVlF
+         66hrBqXsGuoI4hAQAZomf2tzDDlGTN+wIQje/T407pfbkB0u6LmhJU6oMFGqTI+Ff0MT
+         4mY0eqltQ8zAl/eDkC+6SYvHk7nNNdzC1bq1xVQ4erwM5hoinC843xXWSx3Gv9mr+j+Z
+         JgJA9hPzapj0uKK2kWkteaaz+6C/wiWIaGaRTJJETcF7fBMr4M3++ipBIL/eIorvD0iD
+         CZCQ==
+X-Gm-Message-State: AOAM533vg3W4+new+EE1misdrknfbP+CfkCSOeTHoGZkBTbyBqp0ffH2
+        IHUuXJKpqh00CX5mIdEf3Bzeyg==
+X-Google-Smtp-Source: ABdhPJwI3h/Hpn4jlgzq0+4Ulqw991mhhdevbVWHgRGyPrbW/AO6bgZHqym+63dMwfGIhekMCGcUmQ==
+X-Received: by 2002:a19:4348:0:b0:474:d376:45f3 with SMTP id m8-20020a194348000000b00474d37645f3mr11802453lfj.405.1652683242793;
+        Sun, 15 May 2022 23:40:42 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id f13-20020a2eb5ad000000b0024f3d1daedfsm1398118ljn.103.2022.05.15.23.40.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 May 2022 23:40:42 -0700 (PDT)
+Message-ID: <96686d6d-83a9-05a2-9fdc-f9fc4b4e7eed@linaro.org>
+Date:   Mon, 16 May 2022 08:40:41 +0200
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-15_11,2022-05-13_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1015 impostorscore=0 bulkscore=0 phishscore=0 mlxlogscore=752
- adultscore=0 mlxscore=0 malwarescore=0 spamscore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205160036
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 1/3] dt-bindings: arm: qcom: Add sc7180 Chromebook board
+ bindings
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Alexandru M Stan <amstan@chromium.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        "Joseph S . Barrera III" <joebar@chromium.org>,
+        Julius Werner <jwerner@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220512090429.1.I9804fcd5d6c8552ab25f598dd7a3ea71b15b55f0@changeid>
+ <828bc65f-e585-0fe7-c038-c750861c9446@linaro.org>
+ <48d96a4e-ce1b-03a1-1831-36555efd7080@linaro.org>
+ <CAD=FV=WNSv+kgTZwjHVq+YNQAG0uB42QUPaU-BPTV_W+j=5aYg@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAD=FV=WNSv+kgTZwjHVq+YNQAG0uB42QUPaU-BPTV_W+j=5aYg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A recent ext4 patch discussed [1] that some devices (eg LVMs) can
-have a discard granularity as big as 42MB which makes it larger
-than the group size of ext4 FS with 1k BS.  This causes the FITRIM
-IOCTL to fail.
+On 13/05/2022 19:00, Doug Anderson wrote:
+> Hi,
+> 
+> On Fri, May 13, 2022 at 2:01 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 13/05/2022 09:57, Krzysztof Kozlowski wrote:
+>>> On 12/05/2022 18:04, Douglas Anderson wrote:
+>>>> This copy-pastes compatibles from sc7180-based boards from the device
+>>>> trees to the yaml file so that `make dtbs_check` will be happy.
+>>>>
+>>>> NOTES:
+>>>> - I make no attempt to try to share an "item" for all sc7180 based
+>>>>   Chromebooks. Because of the revision matching scheme used by the
+>>>>   Chromebook bootloader, at times we need a different number of
+>>>>   revisions listed.
+>>>> - Some of the odd entries in here (like google,homestar-rev23 or the
+>>>>   fact that "Google Lazor Limozeen without Touchscreen" changed from
+>>>>   sku5 to sku6) are not typos but simply reflect reality.
+>>>> - Many revisions of boards here never actually went to consumers, but
+>>>>   they are still in use within various companies that were involved in
+>>>>   Chromebook development. Since Chromebooks are developed with an
+>>>>   "upstream first" methodology, having these revisions supported with
+>>>>   upstream Linux is important. Making it easy for Chromebooks to be
+>>>>   developed with an "upstream first" methodology is valuable to the
+>>>>   upstream community because it improves the quality of upstream and
+>>>>   gets Chromebooks supported with vanilla upstream faster.
+>>>>
+>>>> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+>>>> ---
+>>>>
+>>>>  .../devicetree/bindings/arm/qcom.yaml         | 180 ++++++++++++++++++
+>>>>  1 file changed, 180 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+>>>> index 5c06d1bfc046..399be67eb5d2 100644
+>>>> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
+>>>> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+>>>> @@ -214,11 +214,191 @@ properties:
+>>>>                - qcom,ipq8074-hk10-c2
+>>>>            - const: qcom,ipq8074
+>>>>
+>>>> +      # Qualcomm Technologies, Inc. SC7180 IDP
+>>>>        - items:
+>>>>            - enum:
+>>>>                - qcom,sc7180-idp
+>>>>            - const: qcom,sc7180
+>>>>
+>>>> +      # Google CoachZ (rev1 - 2)
+>>>> +      - items:
+>>>> +          - const: google,coachz-rev1
+>>>> +          - const: google,coachz-rev2
+>>>
+>>> The inverted pattern of old revision being compatible with the new one,
+>>> is done on purpose? You claim here every rev1 is always compatible with
+>>> rev2 ...
+>>>
+>>> I don't think we discussed such patterns in previous talk. I quickly
+>>> went through it and there were only skuX moving around, not rev1 being
+>>> newer then rev2.
+> 
+> Isn't this what we just had a whole discussion about?
+> 
+> Oh, I see. You're objecting to the fact that the order here lists
+> "rev1" first and "rev2" second.
+> 
+> I think the issue here is that for the purposes of booting Chromebooks
+> the order here doesn't matter. Certainly we can pick a fixed order and
+> we can validate that the order in the yaml matches the order in the
+> device tree, but for all intents and purposes it doesn't matter to
+> anything. The same device tree is compatible with _both_ rev1 and rev2
+> coachz devices. Neither of those two devices is inherently better
+> supported by this device tree than the other.
 
-This case was not correctly handled by this test since
-"_require_batched_discard" incorrectly interpreted the FITRIM
-failure as SCRATCH_DEV not supporting the IOCTL. This caused the test
-to report "not run" instead of "failed" in case of large discard granularity.
+OK, thanks for explanation. Since these were not documented maybe fixing
+existing DTS to more expected order (rev2 being the newest, rev1
+following) would make sense. But certainly please use such new order
+compatibles for new DTSes.
 
-Fix "_require_batched_discard" to use a more accurate method
-to determine if discard is supported.
+> 
+> We can reorder them if it's important for some reason, but it doesn't
+> change the facts of the matter. You can't tell whether you've booted a
+> "-rev1" Chromebook or a "-rev2" Chromebook based on the most specific
+> compatible string.
 
-[1] commit 173b6e383d2
-    ext4: avoid trim error on fs with small groups
+Of course you cannot, because DT is not for such case (when you can use
+different DT for booting on different hardware...)
 
-Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Reviewed-by: Ritesh Harjani <riteshh@linux.ibm.com>
----
+> 
+> As per the other discussion, we could "solve" this by making two
+> device trees that were exactly the same but one of them had the
+> compatible "-rev1" the other "-rev2". This would result in a big
+> explosion in the number of device trees in our FIT Image for very
+> little gain. It also fails to solve the "newest rev" problem.
+> 
+> 
+> OK, so I've written up a description of the whole system. Maybe it
+> will be clearer with that and we can continue the discussion in my v2
+> if needed.
+> 
+> https://lore.kernel.org/r/20220513095722.v2.1.I71e42c6174f1cec17da3024c9f73ba373263b9b6@changeid
+> 
+> -Doug
 
-Changes since v1 [1] 
 
-*  Changed $RET to a local variable
-*  Fixed the grep command 
-
-[1]
-https://lore.kernel.org/all/20220401055713.634842-1-ojaswin@linux.ibm.com/
-
- common/rc | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/common/rc b/common/rc
-index e2d3d72a..f366e409 100644
---- a/common/rc
-+++ b/common/rc
-@@ -3858,7 +3858,13 @@ _require_batched_discard()
- 		exit 1
- 	fi
- 	_require_fstrim
--	$FSTRIM_PROG $1 > /dev/null 2>&1 || _notrun "FITRIM not supported on $1"
-+
-+	grep -q "not supported" <($FSTRIM_PROG $1 2>&1)
-+	local ret=$?
-+	if [ "$ret" = "0" ]
-+	then
-+		_notrun "FITRIM not supported on $1"
-+	fi
- }
- 
- _require_dumpe2fs()
--- 
-2.27.0
-
+Best regards,
+Krzysztof

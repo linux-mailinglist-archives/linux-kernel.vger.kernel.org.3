@@ -2,82 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 758FE527F20
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 10:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1BFF527F24
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 10:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241430AbiEPICp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 04:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55478 "EHLO
+        id S241490AbiEPIFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 04:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241425AbiEPICm (ORCPT
+        with ESMTP id S238262AbiEPIFD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 04:02:42 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443202CDCA
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 01:02:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=40WKtHNpgYvlQ581J3rT1HA6i63DjPIBf8CHscK5pRw=; b=KA+gQelwKoYZBp/f8IKa+Ifrsi
-        eHZp1FcdWAGxgxVHfKWUP1BGicYgkN/pP/mrv8A5FriPPBzkvvO1cTFrFwQfD0rjdGyIB93VB1Qzq
-        H/GqQX50A1F2ZK+C+CyHpL5ly1VYCBAHQycEOmZIbnbpWBZAyOY9N8NNyb40c3oVwgm1RKkAjT9bS
-        e1sC6r37zLzMvsTkTPH7nc1w66rI4U9TbEBsID+2rBgH2xs0+d2MdVDefBkN2yCXQNUOQfdUp6r6u
-        8jTgjF8QoyVzFfjx2AGJ0nMmSb8AndPX9Y2RQYROczLylvxn6QwLaa1X7QvNP6SQRKtmv6qK93V5l
-        pFBTouxw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nqVgP-000u0c-LL; Mon, 16 May 2022 08:02:25 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4FE73300230;
-        Mon, 16 May 2022 10:02:23 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 387E6202674C1; Mon, 16 May 2022 10:02:23 +0200 (CEST)
-Date:   Mon, 16 May 2022 10:02:23 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [RFC PATCH v2 2/2] kbuild: call check-atomics.sh only if
- prerequisites change
-Message-ID: <YoIFD0zHTdy/Se2t@hirez.programming.kicks-ass.net>
-References: <20220426155229.436681-1-mailhol.vincent@wanadoo.fr>
- <20220507131146.834810-1-mailhol.vincent@wanadoo.fr>
- <20220507131146.834810-3-mailhol.vincent@wanadoo.fr>
- <CAK7LNATuvQhiZZ8A9+RcLYKmbugi6S61Aw5CStc3xbfGM-L34Q@mail.gmail.com>
- <20220514131448.GL76023@worktop.programming.kicks-ass.net>
- <20220514145551.GC100765@worktop.programming.kicks-ass.net>
- <CAK7LNAR+F5PspM+6CP+H+443nJYy+Rg3jmKp1NyJeepq9sSFQA@mail.gmail.com>
+        Mon, 16 May 2022 04:05:03 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CACC31233;
+        Mon, 16 May 2022 01:05:02 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24G7NGuB015125;
+        Mon, 16 May 2022 08:05:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=4cG4fZ4FABvZZmQJ6VpIHom+4B7L/DL86KLk4eOIYK4=;
+ b=KESwY1s3+VdVLFp5m7r5ueiRBHWfYIW9lCKb8DQqsNasuHN6KC1jPJpZuQ57/dcw9+mv
+ nmPGIc10MBMsLfax3HWFI+ldKsxm5uN9liBaruv8gAuCW+B0hQXgGCjk1QNiEqJiXtEt
+ ZudQn8a2EXfL4XIdmRGMNiFeyNK2viyz+gXeMB25XY0d0gVgUsMlyso9WS3F2mHDLqTM
+ KtD4H2TZ1vQ3SttgT2Vkz6G8HulnBR4j+SjJhba081bF4sT8TvS9DxRbp7QBC5XIl2c0
+ 76fv9f4E5mnck4BSS8Zs0fVuNerVN5OCyz3w4LiU20m8A3KDttQ0zUijKSNsb6D2nkRM Pg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3ey0c66c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 08:05:01 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24G7a1bS019675;
+        Mon, 16 May 2022 08:05:00 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3ey0c65u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 08:05:00 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24G84EdZ016964;
+        Mon, 16 May 2022 08:04:58 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma02fra.de.ibm.com with ESMTP id 3g2428hrr8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 08:04:58 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24G84t6Y49480168
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 16 May 2022 08:04:55 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5A3B611C054;
+        Mon, 16 May 2022 08:04:55 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D55ED11C04A;
+        Mon, 16 May 2022 08:04:54 +0000 (GMT)
+Received: from li-ca45c2cc-336f-11b2-a85c-c6e71de567f1.ibm.com (unknown [9.171.50.122])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 16 May 2022 08:04:54 +0000 (GMT)
+Message-ID: <6948806da404fd5822b59fd65b8a5a948e6bb317.camel@linux.ibm.com>
+Subject: Re: [PATCH v10 04/19] KVM: s390: pv: refactor s390_reset_acc
+From:   Nico Boehr <nrb@linux.ibm.com>
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     borntraeger@de.ibm.com, frankja@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, david@redhat.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
+        mimu@linux.ibm.com
+Date:   Mon, 16 May 2022 10:04:54 +0200
+In-Reply-To: <20220414080311.1084834-5-imbrenda@linux.ibm.com>
+References: <20220414080311.1084834-1-imbrenda@linux.ibm.com>
+         <20220414080311.1084834-5-imbrenda@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK7LNAR+F5PspM+6CP+H+443nJYy+Rg3jmKp1NyJeepq9sSFQA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: lsqWKg8fXlQr6SI_X27VJGgdaVMjHLwB
+X-Proofpoint-GUID: z3XyIGc9s1xEsN7Too8IHn4CIxKRVTGW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-16_03,2022-05-13_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ bulkscore=0 malwarescore=0 priorityscore=1501 impostorscore=0
+ mlxlogscore=999 spamscore=0 phishscore=0 lowpriorityscore=0 clxscore=1015
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205160045
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 15, 2022 at 01:26:23AM +0900, Masahiro Yamada wrote:
+On Thu, 2022-04-14 at 10:02 +0200, Claudio Imbrenda wrote:
+> Refactor s390_reset_acc so that it can be reused in upcoming patches.
+>=20
+> We don't want to hold all the locks used in a walk_page_range for too
+> long, and the destroy page UVC does take some time to complete.
+> Therefore we quickly gather the pages to destroy, and then destroy
+> them
+> without holding all the locks.
+>=20
+> The new refactored function optionally allows to return early without
+> completing if a fatal signal is pending (and return and appropriate
+> error code). Two wrappers are provided to call the new function.
+>=20
+> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
 
-> BTW, gen-atomics.sh takes more than 1 sec.
-> Do you think gen-atomics.sh can be much faster
-> if it is rewritten by Python or Perl?
-> Then, we can drop 5000 lines from the git repository.
+Reviewed-by: Nico Boehr <nrb@linux.ibm.com>
 
-I don't speak either; which would make it unsuitable for purpose.
+But see below with one naming suggestion you might want to take into
+account.
+
+[...]
+> diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
+> index e8904cb9dc38..a3a1f90f6ec1 100644
+> --- a/arch/s390/mm/gmap.c
+> +++ b/arch/s390/mm/gmap.c
+> @@ -2676,44 +2676,81 @@ void s390_reset_cmma(struct mm_struct *mm)
+> =C2=A0}
+> =C2=A0EXPORT_SYMBOL_GPL(s390_reset_cmma);
+> =C2=A0
+> -/*
+> - * make inaccessible pages accessible again
+> - */
+> -static int __s390_reset_acc(pte_t *ptep, unsigned long addr,
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 unsigned long next, struct mm_walk *walk)
+> +#define DESTROY_LOOP_THRESHOLD 32
+
+maybe GATHER_NUM_PAGE_REFS_TO_TAKE?

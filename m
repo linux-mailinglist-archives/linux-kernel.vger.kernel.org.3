@@ -2,149 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E8CD527C9C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 06:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0CF527CA0
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 06:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbiEPEQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 00:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51992 "EHLO
+        id S233328AbiEPEWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 00:22:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiEPEQK (ORCPT
+        with ESMTP id S229448AbiEPEWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 00:16:10 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2042.outbound.protection.outlook.com [40.107.244.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F03F8635C;
-        Sun, 15 May 2022 21:16:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z7toA82V/r37smYMshSC+P9Oxp1kTIkNes51LxCpk1BuI3Sk3LzQee6DSs4RsbI50/e3bUwHd+GqwSvVkhARNPGffl4xPDOc6jgYpdu8C94ldC9oTv5CsOK03ypaWWxfPh1FhhlVx7X2jmof5fceQO4Ye7a6cdp4CwFK4H8tfJD0Qq0dil97mEty7Fyw7GYz39pyuH4ARFcV4uLqtLsdM3qslOpBJPWF4/fCrtURGRrcxoz5FFEtsI+S1YjPEV11Js6WLnYKZIk+oUdEt3trNEaj1OXJOXtwJxMp6ihjydDdTFVej/RL///JZc+1uLALhdIqQ/dV5B/boVW8V/vPCg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4eueE9zP9QVSm8C1d+evmUVy+UCIAGZ29w0x3stv3NA=;
- b=GzFiTFx+mHv2eUtxbPIW9Ru5IyRSEbc1jtCvg5YHK051svP1ckD1DM1KzG165JEUieYqlQirNK1cV2pxAVNqdhT93aNuKcozkcpMqErUFhtolcPFSww1TcNAc8CIvU2wCDqUGDfKVKWWqQWaGnwFQAoKqLoAoetZ1kuOvGYZIggP8S1BpUC0QBKUMMnpuQyCl6OVEkc3ru/MEg+t2PwYx0QJbm44Y00DuaBsxTeGvM9WAfrpLwL1deebqWEKUub53G76UqM4zlGf2JPfUGDZ4j1OBfu0rbBF25fcubTWakx6VkPt7AGGTG7JVqzkQ6+cEI4FKDBOhXkWHt/u+xYesQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4eueE9zP9QVSm8C1d+evmUVy+UCIAGZ29w0x3stv3NA=;
- b=YFzA9npvkUatukL74HANA0/VmxDt8xHg1QcrNGfUyITe/HOcLHEuiwlUV6CDmWCNkeTRNQe7jj8tEtBY++7wx55eY82i4C85QmK6yz3kkX3LZAFWxuHqMhdo1/udgx87L1HS9kl4vO7oQJay4vOmr3sjLxlui0H7IatfIUb+VVQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
- by BL0PR12MB2547.namprd12.prod.outlook.com (2603:10b6:207:3e::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14; Mon, 16 May
- 2022 04:16:04 +0000
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::f1f6:dd2c:7e78:9770]) by PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::f1f6:dd2c:7e78:9770%6]) with mapi id 15.20.5250.013; Mon, 16 May 2022
- 04:16:04 +0000
-Message-ID: <3e3c1d82-581e-5a44-deed-05b5f880746c@amd.com>
-Date:   Mon, 16 May 2022 09:45:44 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v2 6/8] perf header: Parse non-cpu pmu capabilities
-Content-Language: en-US
-To:     acme@kernel.org, jolsa@kernel.org
-Cc:     peterz@infradead.org, rrichter@amd.com, mingo@redhat.com,
-        mark.rutland@arm.com, namhyung@kernel.org, tglx@linutronix.de,
-        bp@alien8.de, irogers@google.com, yao.jin@linux.intel.com,
-        james.clark@arm.com, leo.yan@linaro.org, kan.liang@linux.intel.com,
-        ak@linux.intel.com, eranian@google.com, like.xu.linux@gmail.com,
-        x86@kernel.org, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
-        ananth.narayan@amd.com, kim.phillips@amd.com,
-        santosh.shukla@amd.com, Ravi Bangoria <ravi.bangoria@amd.com>
-References: <20220509044914.1473-1-ravi.bangoria@amd.com>
- <20220509044914.1473-7-ravi.bangoria@amd.com>
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-In-Reply-To: <20220509044914.1473-7-ravi.bangoria@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN0PR01CA0009.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:4f::14) To PH7PR12MB6588.namprd12.prod.outlook.com
- (2603:10b6:510:210::10)
+        Mon, 16 May 2022 00:22:34 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B475A17065
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 21:22:32 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2f83983782fso139751857b3.6
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 21:22:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0nkqESAv6tMpbSBRO1BLmU1vakhvFx4KIbE/32MqTVs=;
+        b=Qf9df+8RRK2Pn8h98xUxCwoGP3oZdUkBILZoKZCUc5v9mJWXPsOGZTBHcpOXzYl86+
+         vO5cqI+sfF7l5ZuF9bTU6rXGWv0fVellRa807AG2Xr/mmXdC3FwDKX4poy6Ua9sEiKl6
+         TPU1It0iwZGT9Nrw+dKJzPNFTJ1NV/Ncya4AWuf9K55P/eVKB6t1hDS/xkggUb4ZAfzA
+         l1M3exmmML+deks8FOGq7A8UHaFIPDK5ZxtNSI11jjBUn/wx8qp0Po1EO+8AwjjdDnAQ
+         5/QKNklzSwjqE514VdpnhXxJ2D5ghiy4q4T30Fj/7awfhE9goh2WkGJhxzXCGlCVINFt
+         CTZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0nkqESAv6tMpbSBRO1BLmU1vakhvFx4KIbE/32MqTVs=;
+        b=7GO20KZA8DRNuAJBjoz4oz53hGlHuUhJM7BqiOqpP3wVlYITaM/ifSzSkvT5+7aSlF
+         RiDd4NmPZSl6waF4ENzE/p6eZM8oNSNq29ryPDcDNTEAlpOYW3X+i3GOOgSTTf+8eCLO
+         haiccKrYSpHCoHmfJfO2bPmNX1t5FS5ZhWDpXGBDLFEMWetlJyZ6q3JQBxfbg7fvfR1T
+         ReIq9EOg0fD2UWEx88SSwzigcsvtcefLrM9QyCv9vfh3tKDYa9vbNtY2GZIOs27do0Vm
+         r192kLy/lwzjC/lbYdvKSWykQNoggzK7Rc+GDBeh9z1M9v1ujlOaOCYvMlk4qQIweVqr
+         X+TA==
+X-Gm-Message-State: AOAM5305sAsgCkEwa7l91YFinqwVL6s04BzcKyBGFsILsGc7c21heAdo
+        8i7ji6WBLW6MNY82ZwcEkz/qsPmCu11tVkRHIqk+BA==
+X-Google-Smtp-Source: ABdhPJyJ8PN61ClxGsP8yTSb8wOvxHtQ5ucJxa02GXPGWd5/GA7yYOq5QFkoCc7NAfpauhLEAy2ENwTJacOOGUBIbY0=
+X-Received: by 2002:a81:1408:0:b0:2ff:43c:b777 with SMTP id
+ 8-20020a811408000000b002ff043cb777mr1552095ywu.55.1652674951381; Sun, 15 May
+ 2022 21:22:31 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f3e03167-0064-4bea-55d5-08da36f2cab5
-X-MS-TrafficTypeDiagnostic: BL0PR12MB2547:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR12MB254727F756DDC488CD84450BE0CF9@BL0PR12MB2547.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: l3DYnSM33MM79WTwTVWhG8RpzN9GIWJwN3uCAGBSExlU7ry3qAsw/8zWHdAlCE65qbwoIWuYMlOjgWcSzyDvhM8CAb3w6sTLp/aNIPkRqeHSDuALVvbqJumjEByQewd7hTpxroM9Sjeoo0X889ByZaInhcNi+IwZwsezKyyljeCeuWiVFvwFKIpTOT7X1HiYPRe46YSvkt2I+ckjTuLwTbwBe0aUcihvzSzwdjXSNW8JGS5Y0Fwx8XbBpZTuNOws49yMh3iow6cbH98zCI+z/5G8y08UKkPWzV4rlsk2OxtNOiAhRwniL53Eh92k5iCt6PmKUcYkHeUUti9V856UuWROtSN4Qda/10Yg824x8eRpd4RXqs7utManSZJ7KZczsP/XUZJE6JWdmus4sf1ngHzYvdfxtvzYWc6x+Tg00HEXn7dEFJOVUWD7fZfoYPQ1iM0OHx1uj6yr+D9vS+AYMfuXhXyhDTGNbihXHeY0WlbcBoqrRrLD0tTP9jQp4JMSi7hEc2Wc+xoUBxnofAgm29L8jTnnQmNWeoLUKB+lHICEjpBfYEW7ZhfZbFmOCA5XExLOA4YYw6aSlqb3IWNNB+yX0MG643pIaPeEE5Om3Tp3k1SXPUiBhriPTIY+dRf5iR7nDCcpInitkVZ3YOw2GgSYV/zfPTuddkASowxbkSne4nP+Wp9/jdScm8KuJONhiG7Dd7psO3N7v4YMS6rUSaAgT/34rgvKX+vnF3ce/qU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(36756003)(31686004)(186003)(316002)(6506007)(44832011)(2906002)(508600001)(6486002)(26005)(6512007)(53546011)(66476007)(66946007)(8676002)(4326008)(66556008)(6666004)(2616005)(5660300002)(7416002)(8936002)(31696002)(38100700002)(4744005)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZlF4R2ZTWlFHNTVwSmdGM1lCbDdUUGkwcHVLRS9TaktnT0lHTlBLemRoNEZC?=
- =?utf-8?B?dVQrNTltb2VyRjhPYnAzamtDemdza0FsdU9uRVdReFJ5bC95UmRLaktWSlJC?=
- =?utf-8?B?UUx4SnRTTmVFb2RkaVFDeWZyandOSVBJKzgzSEpYNUpmempkU1pWKzlWUVl4?=
- =?utf-8?B?Nzc0R2F5Z3NvVFZFT0hyMmNFUExjdVpaMVBYcGRRYk5MM3lRSEZUKzZnQmI2?=
- =?utf-8?B?OGdBVUxyVllZczNwWmlnQy9QL09VajdwZHJIdHEzakptUkZRUmQ2ZnU0emFk?=
- =?utf-8?B?cjR4Yk9Rdys0ZlVxSnNkR2dVa0tSenljemY2UzE5N3VIckYzS0g5SGlKS1Zh?=
- =?utf-8?B?YUIwK2RFREIzKzlpclU1VHE4UzJoMWNyTG1YdGx2V0pBa3RhdUppeW1yWVVJ?=
- =?utf-8?B?dHl4U0lSbUtIUkRUVjZ5RHZpNjFBaTlpSURWa0JWMzFySW1vVVNkOGZZdHJ0?=
- =?utf-8?B?SnF2RllhRGJETmNoR2xEa0g5OVlVQjgvc0dhSjVMOHFVUnRTalJVcXFZQndS?=
- =?utf-8?B?NTlBb0F5REh6ekdtc0Ewb0g4NWZmY1NKVXY1aURjNWpURnR1bkxHaldaa1Nn?=
- =?utf-8?B?VkVaQ1VBNXdnUVJJbDBhMzdZRnhFNDVJV0M3R0ZWWjNUNExUeVN2ZWZaSWdG?=
- =?utf-8?B?YkxHc2tucVBxT1BRZmdISGw4bUVHdjVlUUlZU0Rialkzb250YUQrMXBIa1Mv?=
- =?utf-8?B?eVF6ejlmMzllakhKa0FnY1VvVWZEbVFHcGpuSjU3VHNSVXZKbDhKRzRCdmww?=
- =?utf-8?B?RTJ3OFowUk5GWnVXU1loZzBKbHE2MDdKZTFLSGErSkR1Vm1QTy9hRDUweDFu?=
- =?utf-8?B?b01mbnRkT3dSWXk3RERYZWZqYlZCL0Nyd2JXV2ZpSjhFN3RUTjlKNTh3aEZT?=
- =?utf-8?B?eTNDUVMyWEt4R3RiQzgxd1FiVjU1dTZBZHM0WFNLK0M0R09hMkl3NmJ6Ykdw?=
- =?utf-8?B?Um1oTks0SGg3aTkxN2dhZk9mLzU3SDJxUHczVyttRGdDbTQ2VEtFeThHcjYx?=
- =?utf-8?B?Q0dVMXBkVk40aEE1MzYxTkFmSmVwMUoxZEZlVnN0cmJ0Rjhqd05iMlNOc210?=
- =?utf-8?B?VWxrVjR0dCtxZzUrQlE5OTdMZnlvR09iWWN1dzVwTExyeFc3RVVVOHBQQ0dS?=
- =?utf-8?B?WE9xWGttVlRZQmVFT2NYSHFuUkZqQVFCWlI0TXQ2MC9IUy9reGhBOVhqTnEr?=
- =?utf-8?B?MnVDTGhpNnZrZ2cyaWhEZXpGdjh5T0NRR0g2ei9kTVl2dXNpcml1Z1dsa0Vi?=
- =?utf-8?B?RnVFZTFKRi9VejFrLzgydFNKam5hZ052WExrWTFiRENUKytFaHJ2QndCT0xY?=
- =?utf-8?B?N01UV1d5N3FwelhKNngrQUpnNjludnBubXV0M1U2VXRjbVZrWG1BYlF6Z2lI?=
- =?utf-8?B?WlJZRXhQWlAvNllJM2pxZ2ordUNCSE5uRkhDNTVMcENFblhzRkFVbTU1OVRq?=
- =?utf-8?B?aFFmNjJaUWs2U1JXMGNyOXBGY2hyVzRjVVMwc2FMM2pZVFM3MmlkZnZVVTQ5?=
- =?utf-8?B?bmt5cmQ3R0I0NDZoc2N6bzVvUVBkSGZrUS9SMVdDM25FUFRFNjFhT205a0tt?=
- =?utf-8?B?Vld4VTNGYkYxczZrVmszWWlnZTBJcVEzTURVU2s1NURoT2ZlbU5pREszSkVW?=
- =?utf-8?B?b3BSdSs0dkFtOGxSVmVLdGRySHlNOE9tUEJzSXhPZ2lGNGpPcUtzYmV2b2Vx?=
- =?utf-8?B?TCtFYkZzYWtXTUJETklWQmlWdm04dXhUczQvdjdJY0pVYmdyQWNjaEoxZzIz?=
- =?utf-8?B?bzh5N1NIemVla0E1Mnh1Q3lsczRsNVdvYS9WQ0t5ZmVQZlJ0SEdnS1dNbXhN?=
- =?utf-8?B?ME5pd2tHUzUyUFFJUWd4L2NOSUZ1b1ErN3NFZmE1a0ozTlpCbFhwZ3EzZjFj?=
- =?utf-8?B?dFFXV09GdWx5T3Vhcnl2U3lCdG5xVWJOaXRJYjNKaytqcUtjeW43VW5IZnFs?=
- =?utf-8?B?TU9xeXZzUFlRcnkyMmNZZU4wZHFWTGJuQUFheUV6WUxjVjlLNU9CbFVtQ1Ft?=
- =?utf-8?B?TWRXOFFEbGtiRG9IbUtCT1I4c3JPcElaSFFodkFtaHBDZlQzaEhrQXlpWmRX?=
- =?utf-8?B?M2krV09vYUdpQzRNTzhNSlpxR2pzMm8wU01VbkJOTmsyU0xsZ2tvQkFwS2RG?=
- =?utf-8?B?TmVsdXJQeU9zeFd0eER1amRpc29qaEhDUXdTRzlKazR0RTVlT3hXSVNNYVQ1?=
- =?utf-8?B?d2ZXMEdtSTEwcGtzMTBtZGxkRHRjNGtkTng3ejZjNHFocEN2cFVKRC9scFpZ?=
- =?utf-8?B?QWhSKzJYZDZ0OUpoM3Z6REtaUDFaNWV3T1dpblhhQjg5MmNQZzJWK21CbHdI?=
- =?utf-8?B?dDBHbkhISW83bTd1cnhEMDFiZzE2NmVrNVkzTG5uQTdYU2dHeitoZz09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f3e03167-0064-4bea-55d5-08da36f2cab5
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2022 04:16:04.1431
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tZ5K83wWGVblo10caBrNbzE0GLPd89KXLXkE+FmZXyP76cPDiPLvaGWIpPX6UonoaEgSecV8Yfu1GQoAyvgvOQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB2547
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220516034519.184876-1-imagedong@tencent.com> <20220516034519.184876-9-imagedong@tencent.com>
+In-Reply-To: <20220516034519.184876-9-imagedong@tencent.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Sun, 15 May 2022 21:22:20 -0700
+Message-ID: <CANn89iLxVgZfBA98DcAphxV1_scH2dx2Upc=XZ7+t0DWj8WNdg@mail.gmail.com>
+Subject: Re: [PATCH net-next 8/9] net: tcp: add skb drop reasons to tcp tw
+ code path
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Talal Ahmad <talalahmad@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Dongli Zhang <dongli.zhang@oracle.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, May 15, 2022 at 8:46 PM <menglong8.dong@gmail.com> wrote:
+>
+> From: Menglong Dong <imagedong@tencent.com>
+>
+> In order to get the reasons of skb drops, add a function argument of
+> type 'enum skb_drop_reason *reason' to tcp_timewait_state_process().
+>
+> In the origin code, all packets to time-wait socket are treated as
+> dropping with kfree_skb(), which can make users confused. Therefore,
+> we use consume_skb() for the skbs that are 'good'. We can check the
+> value of 'reason' to decide use kfree_skb() or consume_skb().
+>
+> The new reason 'TIMEWAIT' is added for the case that the skb is dropped
+> as the socket in time-wait state.
+>
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> ---
+>  include/linux/skbuff.h   |  5 +++++
+>  include/net/tcp.h        |  7 ++++---
+>  net/ipv4/tcp_ipv4.c      | 11 +++++++++--
+>  net/ipv4/tcp_minisocks.c | 24 ++++++++++++++++++++----
+>  net/ipv6/tcp_ipv6.c      | 10 ++++++++--
+>  5 files changed, 46 insertions(+), 11 deletions(-)
+>
+> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> index 4578bbab5a3e..8d18fc5a5af6 100644
+> --- a/include/linux/skbuff.h
+> +++ b/include/linux/skbuff.h
+> @@ -560,6 +560,10 @@ struct sk_buff;
+>   * SKB_DROP_REASON_TCP_REQQFULLDROP
+>   *     request queue of the listen socket is full, corresponding to
+>   *     LINUX_MIB_TCPREQQFULLDROP
+> + *
+> + * SKB_DROP_REASON_TIMEWAIT
+> + *     socket is in time-wait state and all packet that received will
+> + *     be treated as 'drop', except a good 'SYN' packet
+>   */
+>  #define __DEFINE_SKB_DROP_REASON(FN)   \
+>         FN(NOT_SPECIFIED)               \
+> @@ -631,6 +635,7 @@ struct sk_buff;
+>         FN(TCP_ABORTONDATA)             \
+>         FN(LISTENOVERFLOWS)             \
+>         FN(TCP_REQQFULLDROP)            \
+> +       FN(TIMEWAIT)                    \
+>         FN(MAX)
+>
+>  /* The reason of skb drop, which is used in kfree_skb_reason().
+> diff --git a/include/net/tcp.h b/include/net/tcp.h
+> index 082dd0627e2e..88217b8d95ac 100644
+> --- a/include/net/tcp.h
+> +++ b/include/net/tcp.h
+> @@ -380,9 +380,10 @@ enum tcp_tw_status {
+>  };
+>
+>
+> -enum tcp_tw_status tcp_timewait_state_process(struct inet_timewait_sock *tw,
+> -                                             struct sk_buff *skb,
+> -                                             const struct tcphdr *th);
+> +enum tcp_tw_status
+> +tcp_timewait_state_process(struct inet_timewait_sock *tw, struct sk_buff *skb,
+> +                          const struct tcphdr *th,
+> +                          enum skb_drop_reason *reason);
+>  struct sock *tcp_check_req(struct sock *sk, struct sk_buff *skb,
+>                            struct request_sock *req, bool fastopen,
+>                            bool *lost_race);
+> diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+> index 708f92b03f42..9174ee162633 100644
+> --- a/net/ipv4/tcp_ipv4.c
+> +++ b/net/ipv4/tcp_ipv4.c
+> @@ -2134,7 +2134,8 @@ int tcp_v4_rcv(struct sk_buff *skb)
+>                 inet_twsk_put(inet_twsk(sk));
+>                 goto csum_error;
+>         }
+> -       switch (tcp_timewait_state_process(inet_twsk(sk), skb, th)) {
+> +       switch (tcp_timewait_state_process(inet_twsk(sk), skb, th,
+> +                                          &drop_reason)) {
+>         case TCP_TW_SYN: {
+>                 struct sock *sk2 = inet_lookup_listener(dev_net(skb->dev),
+>                                                         &tcp_hashinfo, skb,
+> @@ -2150,12 +2151,18 @@ int tcp_v4_rcv(struct sk_buff *skb)
+>                         refcounted = false;
+>                         goto process;
+>                 }
+> +               /* TCP_FLAGS or NO_SOCKET? */
+> +               SKB_DR_SET(drop_reason, TCP_FLAGS);
+>         }
+>                 /* to ACK */
+>                 fallthrough;
+>         case TCP_TW_ACK:
+>                 tcp_v4_timewait_ack(sk, skb);
+> -               break;
+> +               refcounted = false;
+> +               if (drop_reason)
+> +                       goto discard_it;
+> +               else
+> +                       goto put_and_return;
+>         case TCP_TW_RST:
+>                 tcp_v4_send_reset(sk, skb);
+>                 inet_twsk_deschedule_put(inet_twsk(sk));
+> diff --git a/net/ipv4/tcp_minisocks.c b/net/ipv4/tcp_minisocks.c
+> index 1a21018f6f64..329724118b7f 100644
+> --- a/net/ipv4/tcp_minisocks.c
+> +++ b/net/ipv4/tcp_minisocks.c
+> @@ -83,13 +83,15 @@ tcp_timewait_check_oow_rate_limit(struct inet_timewait_sock *tw,
+>   */
+>  enum tcp_tw_status
+>  tcp_timewait_state_process(struct inet_timewait_sock *tw, struct sk_buff *skb,
+> -                          const struct tcphdr *th)
+> +                          const struct tcphdr *th,
+> +                          enum skb_drop_reason *reason)
+>  {
+>         struct tcp_options_received tmp_opt;
+>         struct tcp_timewait_sock *tcptw = tcp_twsk((struct sock *)tw);
+>         bool paws_reject = false;
+>
+>         tmp_opt.saw_tstamp = 0;
+> +       *reason = SKB_DROP_REASON_NOT_SPECIFIED;
+>         if (th->doff > (sizeof(*th) >> 2) && tcptw->tw_ts_recent_stamp) {
+>                 tcp_parse_options(twsk_net(tw), skb, &tmp_opt, 0, NULL);
+>
+> @@ -113,11 +115,16 @@ tcp_timewait_state_process(struct inet_timewait_sock *tw, struct sk_buff *skb,
+>                         return tcp_timewait_check_oow_rate_limit(
+>                                 tw, skb, LINUX_MIB_TCPACKSKIPPEDFINWAIT2);
+>
+> -               if (th->rst)
+> +               if (th->rst) {
+> +                       SKB_DR_SET(*reason, TCP_RESET);
+>                         goto kill;
+> +               }
+>
+> -               if (th->syn && !before(TCP_SKB_CB(skb)->seq, tcptw->tw_rcv_nxt))
+> +               if (th->syn && !before(TCP_SKB_CB(skb)->seq,
+> +                                      tcptw->tw_rcv_nxt)) {
+> +                       SKB_DR_SET(*reason, TCP_FLAGS);
+>                         return TCP_TW_RST;
+> +               }
+>
+>                 /* Dup ACK? */
+>                 if (!th->ack ||
+> @@ -143,6 +150,9 @@ tcp_timewait_state_process(struct inet_timewait_sock *tw, struct sk_buff *skb,
+>                 }
+>
+>                 inet_twsk_reschedule(tw, TCP_TIMEWAIT_LEN);
+> +
+> +               /* skb should be free normally on this case. */
+> +               *reason = SKB_NOT_DROPPED_YET;
+>                 return TCP_TW_ACK;
+>         }
+>
+> @@ -174,6 +184,7 @@ tcp_timewait_state_process(struct inet_timewait_sock *tw, struct sk_buff *skb,
+>                          * protocol bug yet.
+>                          */
+>                         if (twsk_net(tw)->ipv4.sysctl_tcp_rfc1337 == 0) {
+> +                               SKB_DR_SET(*reason, TCP_RESET);
+>  kill:
+>                                 inet_twsk_deschedule_put(tw);
+>                                 return TCP_TW_SUCCESS;
+> @@ -216,11 +227,14 @@ tcp_timewait_state_process(struct inet_timewait_sock *tw, struct sk_buff *skb,
+>                 if (isn == 0)
+>                         isn++;
+>                 TCP_SKB_CB(skb)->tcp_tw_isn = isn;
+> +               *reason = SKB_NOT_DROPPED_YET;
+>                 return TCP_TW_SYN;
+>         }
+>
+> -       if (paws_reject)
+> +       if (paws_reject) {
+> +               SKB_DR_SET(*reason, TCP_RFC7323_PAWS);
+>                 __NET_INC_STATS(twsk_net(tw), LINUX_MIB_PAWSESTABREJECTED);
+> +       }
+>
+>         if (!th->rst) {
+>                 /* In this case we must reset the TIMEWAIT timer.
+> @@ -232,9 +246,11 @@ tcp_timewait_state_process(struct inet_timewait_sock *tw, struct sk_buff *skb,
+>                 if (paws_reject || th->ack)
+>                         inet_twsk_reschedule(tw, TCP_TIMEWAIT_LEN);
+>
+> +               SKB_DR_OR(*reason, TIMEWAIT);
+>                 return tcp_timewait_check_oow_rate_limit(
+>                         tw, skb, LINUX_MIB_TCPACKSKIPPEDTIMEWAIT);
+>         }
+> +       SKB_DR_SET(*reason, TCP_RESET);
+>         inet_twsk_put(tw);
+>         return TCP_TW_SUCCESS;
+>  }
+> diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
+> index 27c51991bd54..5c777006de3d 100644
+> --- a/net/ipv6/tcp_ipv6.c
+> +++ b/net/ipv6/tcp_ipv6.c
+> @@ -1795,7 +1795,8 @@ INDIRECT_CALLABLE_SCOPE int tcp_v6_rcv(struct sk_buff *skb)
+>                 goto csum_error;
+>         }
+>
+> -       switch (tcp_timewait_state_process(inet_twsk(sk), skb, th)) {
+> +       switch (tcp_timewait_state_process(inet_twsk(sk), skb, th,
+> +                                          &drop_reason)) {
+>         case TCP_TW_SYN:
+>         {
+>                 struct sock *sk2;
+> @@ -1815,12 +1816,17 @@ INDIRECT_CALLABLE_SCOPE int tcp_v6_rcv(struct sk_buff *skb)
+>                         refcounted = false;
+>                         goto process;
+>                 }
+> +               SKB_DR_SET(drop_reason, TCP_FLAGS);
+>         }
+>                 /* to ACK */
+>                 fallthrough;
+>         case TCP_TW_ACK:
+>                 tcp_v6_timewait_ack(sk, skb);
+> -               break;
+> +               refcounted = false;
+> +               if (drop_reason)
+> +                       goto discard_it;
+> +               else
+> +                       goto put_and_return;
 
-On 09-May-22 10:19 AM, Ravi Bangoria wrote:
-> Pmus advertise their capabilities via sysfs attribute files but
-> perf tool currently parses only core(cpu) pmu capabilities. Add
-> support for parsing non-cpu pmu capabilities.
+My brain exploded.
+I guarantee you that whoever is going to look at this code in one year
+will be completely lost.
+Adding so much complexity is crazy.
 
-Arnaldo, Jiri,
+About: refcounted = false ;
 
-Does tool side patches looks good to you? Please consider pulling them.
+This is not going to be used id "goto discard_it;" is taken.
 
-Thanks,
-Ravi
+If the "goto put_and_return;" is taken, this boils down to:
+
+return ret ? -1 : 0;
+
+Are you sure ret is even initialized at this point ?
+
+Why are we doing this ? We were doing "return 0;"
+
+Also, where is skb freed ?
+
+Are you calling tcp_v6_timewait_ack(sk, skb) after skb has been freed ???
+
+
+
+
+>         case TCP_TW_RST:
+>                 tcp_v6_send_reset(sk, skb);
+>                 inet_twsk_deschedule_put(inet_twsk(sk));
+> --
+> 2.36.1
+>

@@ -2,105 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2B48527BC0
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 04:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE62527BC4
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 04:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239251AbiEPCLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 22:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56704 "EHLO
+        id S239302AbiEPCMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 22:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbiEPCLW (ORCPT
+        with ESMTP id S231318AbiEPCMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 22:11:22 -0400
-Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id AC66B2019A;
-        Sun, 15 May 2022 19:11:19 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [106.117.76.98])
-        by mail-app4 (Coremail) with SMTP id cS_KCgB3yOCVsoFi_ldFAA--.5610S2;
-        Mon, 16 May 2022 10:10:40 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-kernel@vger.kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, gregkh@linuxfoundation.org,
-        alexander.deucher@amd.com, broonie@kernel.org,
-        netdev@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH net] NFC: hci: fix sleep in atomic context bugs in nfc_hci_hcp_message_tx
-Date:   Mon, 16 May 2022 10:10:28 +0800
-Message-Id: <20220516021028.54063-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cS_KCgB3yOCVsoFi_ldFAA--.5610S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFykCry7Cr15CF1UAr1xuFg_yoW8WryrpF
-        Wv9a4UZFWrJry8WFWvkw4Iqw1F93WkGFy7G39ruw4rZ39Iqr1xtFn5Ja4jvFZ5ArZ7Aay2
-        vFyjkr17WFy7A37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26rxl
-        6s0DM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
-        n2IY04v7MxkIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
-        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
-        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-        IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
-        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
-        DU0xZFpf9x0JUCg4hUUUUU=
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgkIAVZdtZqDiwBLsl
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 15 May 2022 22:12:38 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D7222518;
+        Sun, 15 May 2022 19:12:36 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L1jSf01XSz4xXJ;
+        Mon, 16 May 2022 12:12:33 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1652667155;
+        bh=IEla7Gt7PCntdFnq1ZgeZ7O6mAGwQWBXpjY0hOvftAM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Mj/STyxhI8LA9SuvEgRau5+Jj/i7FAChIXCBJF6egDgq4DvdqXWySPxf/LM0Fw7s1
+         0Ns0o+0IuA/liUOZTjEhcaM5tzugw25BsJWYldfd9cQaad0rB/8f+oQJ0aPk9bHMNy
+         lH80e3Bf25kjXYXlWMbTVBAq6Ro/1MIijkrXp9cTFOvT09Y2hlAeu7nB/p2KIbxHe7
+         IAvZJUvdbufNINaPGWqIU077kWSqtAFoEpLRMNkpitJSqaYNsNlejuj5/6wzxwANoJ
+         NM/IBmX4j+BMf1SMllSN+hBwHnASJI5010n1uVCGui5k0eh6FMx1pGxxCqJnbp9ZUO
+         HEOxz8OPezVqQ==
+Date:   Mon, 16 May 2022 12:12:32 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Sterba <dsterba@suse.cz>
+Cc:     Steven Whitehouse <swhiteho@redhat.com>,
+        Bob Peterson <rpeterso@redhat.com>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        David Sterba <dsterba@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the gfs2 tree with the btrfs tree
+Message-ID: <20220516121232.6cf7660b@canb.auug.org.au>
+In-Reply-To: <20220510102458.0ab0172f@canb.auug.org.au>
+References: <20220510102458.0ab0172f@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/h.ZQG5ILS8Fc//hgr+A6fQm";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are sleep in atomic context bugs when the request to secure
-element of st21nfca is timeout. The root cause is that kzalloc and
-alloc_skb with GFP_KERNEL parameter is called in st21nfca_se_wt_timeout
-which is a timer handler. The call tree shows the execution paths that
-could lead to bugs:
+--Sig_/h.ZQG5ILS8Fc//hgr+A6fQm
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-   (Interrupt context)
-st21nfca_se_wt_timeout
-  nfc_hci_send_event
-    nfc_hci_hcp_message_tx
-      kzalloc(..., GFP_KERNEL) //may sleep
-      alloc_skb(..., GFP_KERNEL) //may sleep
+Hi all,
 
-This patch changes allocation mode of kzalloc and alloc_skb from
-GFP_KERNEL to GFP_ATOMIC in order to prevent atomic context from
-sleeping. The GFP_ATOMIC flag makes memory allocation operation
-could be used in atomic context.
+On Tue, 10 May 2022 10:24:58 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the gfs2 tree got a conflict in:
+>=20
+>   fs/gfs2/file.c
+>=20
+> between commit:
+>=20
+>   39c93b0bf7a6 ("iomap: add per-iomap_iter private data")
+>=20
+> from the btrfs tree and commit:
+>=20
+>   db0c1968e935 ("gfs2: Variable rename")
+>=20
+> from the gfs2 tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+>=20
+> diff --cc fs/gfs2/file.c
+> index 76307a90bf81,d18a7c2201c0..000000000000
+> --- a/fs/gfs2/file.c
+> +++ b/fs/gfs2/file.c
+> @@@ -839,11 -839,12 +839,12 @@@ retry_under_glock
+>   	pagefault_disable();
+>   	to->nofault =3D true;
+>   	ret =3D iomap_dio_rw(iocb, to, &gfs2_iomap_ops, NULL,
+> - 			   IOMAP_DIO_PARTIAL, NULL, written);
+>  -			   IOMAP_DIO_PARTIAL, read);
+> ++			   IOMAP_DIO_PARTIAL, NULL, read);
+>   	to->nofault =3D false;
+>   	pagefault_enable();
+> + 	/* No increment (+=3D) because iomap_dio_rw returns a cumulative value=
+. */
+>   	if (ret > 0)
+> - 		written =3D ret;
+> + 		read =3D ret;
+>  =20
+>   	if (should_fault_in_pages(ret, to, &prev_count, &window_size)) {
+>   		size_t leftover;
+> @@@ -906,7 -908,7 +908,7 @@@ retry_under_glock
+>  =20
+>   	from->nofault =3D true;
+>   	ret =3D iomap_dio_rw(iocb, from, &gfs2_iomap_ops, NULL,
+> - 			   IOMAP_DIO_PARTIAL, NULL, read);
+>  -			   IOMAP_DIO_PARTIAL, written);
+> ++			   IOMAP_DIO_PARTIAL, NULL, written);
+>   	from->nofault =3D false;
+>  =20
+>   	if (ret =3D=3D -ENOTBLK)
 
-Fixes: 8b8d2e08bf0d ("NFC: HCI support")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
- net/nfc/hci/hcp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This is now a conflict between the btrfs tree and Linus' tree.
 
-diff --git a/net/nfc/hci/hcp.c b/net/nfc/hci/hcp.c
-index 05c60988f59..1caf9c2086f 100644
---- a/net/nfc/hci/hcp.c
-+++ b/net/nfc/hci/hcp.c
-@@ -30,7 +30,7 @@ int nfc_hci_hcp_message_tx(struct nfc_hci_dev *hdev, u8 pipe,
- 	int hci_len, err;
- 	bool firstfrag = true;
- 
--	cmd = kzalloc(sizeof(struct hci_msg), GFP_KERNEL);
-+	cmd = kzalloc(sizeof(*cmd), GFP_ATOMIC);
- 	if (cmd == NULL)
- 		return -ENOMEM;
- 
-@@ -58,7 +58,7 @@ int nfc_hci_hcp_message_tx(struct nfc_hci_dev *hdev, u8 pipe,
- 			  data_link_len + ndev->tx_tailroom;
- 		hci_len -= data_link_len;
- 
--		skb = alloc_skb(skb_len, GFP_KERNEL);
-+		skb = alloc_skb(skb_len, GFP_ATOMIC);
- 		if (skb == NULL) {
- 			err = -ENOMEM;
- 			goto out_skb_err;
--- 
-2.17.1
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/h.ZQG5ILS8Fc//hgr+A6fQm
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKBsxAACgkQAVBC80lX
+0GwqAgf/eoaGzhH2Jk43nCQIyBR9KIrveoOKlNQ1UA/yrJmsF+k9H+vQVsth/G/I
+lLHIXUeq47tT8lZwCdIJ9QylRqf+28Cnm8cQzX8CjcV3SdY8+KjlSWmlHCrLfHw4
+ScG4ZVae1px3kcvbm5K9pnmKx+SNyG0rlgKuXsg3kF65XAWCPoe5QL/ivixUl9pL
+gKg4RrctB1HCugoHrtiqsr0H2/mnUPoRfgCMi3o7JdWzuUb8qtJhIIRKpAP/8fp2
+nGiVXSg+HZmP5Gs50LiNDhzlvm7udfgurdfYGMg5TZt1MZ+N60I0r0oLYFutzISS
+JJFPDOWFw30RVQTFiHhF+xJbK9klgw==
+=mSgV
+-----END PGP SIGNATURE-----
+
+--Sig_/h.ZQG5ILS8Fc//hgr+A6fQm--

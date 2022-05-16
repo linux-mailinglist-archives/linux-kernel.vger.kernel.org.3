@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3DAC5292A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:19:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB73D5292AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349186AbiEPVRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 17:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50236 "EHLO
+        id S1349528AbiEPVSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 17:18:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349137AbiEPVRM (ORCPT
+        with ESMTP id S1349541AbiEPVRN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 17:17:12 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9243E1EE
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 14:14:54 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id c24so18511552lfv.11
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 14:14:54 -0700 (PDT)
+        Mon, 16 May 2022 17:17:13 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D061DD48
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 14:15:30 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id y19so19633085ljd.4
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 14:15:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=mVc949hLeA39MqSMbzTaJoP2sRl/dspbJRT8NSeNYX4=;
-        b=qJZIvLrGTuenzqr1yf456WkkwoQYRzEEhmvaKPROjmxi48ert0UqLLwuTsHL38UIzV
-         sUgW6e+E65UYTYc0N0GdjDaxi403ptbmk5FG17xpyGT6bfEWfYKawemPaS+zZVGjAPjC
-         CvRtjh2cCi4S8f8Xvxa6tYN9hR/zLhuq4D7FvfV9pymJr7N5SCAcqEwHZqmTQDlZQBhz
-         oyngojxpRgIECN0bthFX+TJedFsSLqUg4Hoi8SopeOcWPbAlw30v51yhzc60Ul4f33Uc
-         JFQRw+WiccEgtCRW8MUUL2Ik396GpL/BbsXBfWWkkXFCQURW+22M6evy6BZEppdTHKkN
-         C9ew==
+        bh=9UFmqTLgXbpwczKLduq38plLQ/lr1F/TDBh8Um5vXqc=;
+        b=T1jQobclTkKYDgkSunmYEk3nEUB51TTo++yg5EY8pb49+10Wic0i/7MuHzA/C/SoMX
+         RJVPoxTGvaIbpuagafGcHTx56zin7buxpmjWTQlD9biskxGrmqwc19Lsq6YQFOuotZED
+         31m/3vXsGTQ+rbrmut52Z9OxlpDFp40iyKdtbTo7mG1Mjj1zNjYkR50468bp/XUa2fI+
+         ccCh1XYyZ5lmk012tWRcrtgyYCFFR4pIjNgoZEEjz8HEObelcHdM1x5xeQfNVbHFm69J
+         zw+42P8cF8SpXqnA3mK3Di+uuUKCPt8vrSoVhKkBgjaVs0Nt4kLDAMprIAnUOI1+ySa5
+         CNsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mVc949hLeA39MqSMbzTaJoP2sRl/dspbJRT8NSeNYX4=;
-        b=0la7Cafxnz5Uy1lhE8a7kZvN6dbfhKdQrUr9Op+q3X/NUo1atSMzRiUcmJoRY/s5Rg
-         vXHF3OJ1dx/+FsbXnBKg9IQofJlq22FcWa2knzlLizqRljXWUmigRKY1FTzmKS1zLIHJ
-         rFCLQbDyuEI61yxHqOSms3MbFWy2LRWp5QNnScYudXrI6Qucrl2mAOH7toLU3fptdR62
-         pg2pnOy8w9LvfIo3RCtB7c6+hEWQUIi9SUJcKsQ8P79Mlj7pBTdiKbe016nMVNNtDwGc
-         MNjk3dPMPnoZny/fkVy8NOzjDDaXYlsKwC/Q/cPNpQMeCzgGUn6v+h5K7qEmRHn7l31d
-         /RSQ==
-X-Gm-Message-State: AOAM530+4D9s/E/2rr+Q+Q84G2H37gRuq0jO1WyDO1lm/TbpJW1LYWUY
-        efl5iX7GIqN5DY5docDmu6w037VS881OGt9B1dr8aw==
-X-Google-Smtp-Source: ABdhPJzcKckoHka00EJ/30FITGJtcoKgaVot2sHBtqy0fyvD5CZtw9xZHCwaV33GZBOg5Zh9WwV9MDsANeWz/ofXqX8=
-X-Received: by 2002:a05:6512:3047:b0:473:cf43:6d8f with SMTP id
- b7-20020a056512304700b00473cf436d8fmr14956460lfb.380.1652735692632; Mon, 16
- May 2022 14:14:52 -0700 (PDT)
+        bh=9UFmqTLgXbpwczKLduq38plLQ/lr1F/TDBh8Um5vXqc=;
+        b=aEH+GfMy5ZmWVviR9ck2tYNBaxVzUaRSw7k04oOXx8uvEt8zFVjJN0BIH3Y/Q5zpzA
+         4si/fIudE11K4gEEUiNwPC3cnODggHlmtX1VbRDoO0Wc0iiQv1gm+MBqtHQQl2PnUjDV
+         m/fCUxqIkW72KZZyJhj9ZAzxLOp+btt291BkGgzy6zqdkJeBBNFVh72fjXl73nXUymnI
+         59yVidMxL6/6dr1rlRboLEty1J8R6XO6j6q/C4GWzrN77+zLKOvz4z0ApgeEbXBxpAXu
+         ovI8ckkJCe3u202GfGaoWy6VFP5glJLLcCzgHcaL31rb8I7CvA1N7AIPNDpm52g7gv7I
+         o62g==
+X-Gm-Message-State: AOAM532eYXOueS9s8NctjbzJnSvno7bNmImsPO/xtKn+Dj4Re+kMqsOx
+        uGpGEJmJtrTpaoC9xu3PHNeR01sbMds07FwnhZMk6w==
+X-Google-Smtp-Source: ABdhPJwm7F6X+9wpW0K3DncDBuAm7g8hl5NtdF6Kl9htkJ4pkvaiH7FiVDJt5swiCxD7xV3JVddGLoXuenJ9BNZrK3A=
+X-Received: by 2002:a2e:aa8e:0:b0:251:f929:3e7d with SMTP id
+ bj14-20020a2eaa8e000000b00251f9293e7dmr12029409ljb.352.1652735728750; Mon, 16
+ May 2022 14:15:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220516210954.1660716-1-ndesaulniers@google.com>
-In-Reply-To: <20220516210954.1660716-1-ndesaulniers@google.com>
+References: <20220516210954.1660716-1-ndesaulniers@google.com> <20220516210954.1660716-2-ndesaulniers@google.com>
+In-Reply-To: <20220516210954.1660716-2-ndesaulniers@google.com>
 From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 16 May 2022 14:14:41 -0700
-Message-ID: <CAKwvOd=SkLwa-0i873oUDt9hRQxA=8dbc26v4Di_rysnE=pJpg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] pass -march= only to compiler
+Date:   Mon, 16 May 2022 14:15:17 -0700
+Message-ID: <CAKwvOd=UX8FXJzAZ_KYiaCMYiuwz3TQa04_Fj4FC8+QWkXBVpA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] ARM: remove lazy evaluation in Makefile
 To:     Arnd Bergmann <arnd@arndb.de>, Ard Biesheuvel <ardb@kernel.org>
 Cc:     Russell King <rmk+kernel@armlinux.org.uk>,
         Masahiro Yamada <masahiroy@kernel.org>,
@@ -77,74 +77,91 @@ https://lore.kernel.org/llvm/20220516210954.1660716-1-ndesaulniers@google.com/
 On Mon, May 16, 2022 at 2:10 PM Nick Desaulniers
 <ndesaulniers@google.com> wrote:
 >
-> When both -march= and -Wa,-march= are specified for assembler or
-> assembler-with-cpp sources, GCC and Clang will prefer the -Wa,-march=
-> value but Clang will warn that -march= is unused.
+> arch-y and tune-y used lazy evaluation since they used to contain
+> cc-option checks. They don't any longer, so just eagerly evaluate these
+> command line flags.
 >
-> warning: argument unused during compilation: '-march=armv6k'
-> [-Wunused-command-line-argument]
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+>  arch/arm/Makefile | 60 +++++++++++++++++++++--------------------------
+>  1 file changed, 27 insertions(+), 33 deletions(-)
 >
-> This is the top group of warnings we observe when using clang to
-> assemble the kernel via `ARCH=arm make LLVM=1`.
+> diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+> index a2391b8de5a5..99a7ed7e9f09 100644
+> --- a/arch/arm/Makefile
+> +++ b/arch/arm/Makefile
+> @@ -60,44 +60,38 @@ KBUILD_CFLAGS       += $(call cc-option,-fno-ipa-sra)
+>  # Note that GCC does not numerically define an architecture version
+>  # macro, but instead defines a whole series of macros which makes
+>  # testing for a specific architecture or later rather impossible.
+> -arch-$(CONFIG_CPU_32v7M)       =-D__LINUX_ARM_ARCH__=7 -march=armv7-m
+> -arch-$(CONFIG_CPU_32v7)                =-D__LINUX_ARM_ARCH__=7 -march=armv7-a
+> -arch-$(CONFIG_CPU_32v6)                =-D__LINUX_ARM_ARCH__=6 -march=armv6
+> -# Only override the compiler option if ARMv6. The ARMv6K extensions are
+> +arch-$(CONFIG_CPU_32v7M)       :=-D__LINUX_ARM_ARCH__=7 -march=armv7-m
+> +arch-$(CONFIG_CPU_32v7)                :=-D__LINUX_ARM_ARCH__=7 -march=armv7-a
+> +arch-$(CONFIG_CPU_32v6)                :=-D__LINUX_ARM_ARCH__=6 -march=armv6
+> +# Only override the compiler opt:ion if ARMv6. The ARMv6K extensions are
+>  # always available in ARMv7
+>  ifeq ($(CONFIG_CPU_32v6),y)
+> -arch-$(CONFIG_CPU_32v6K)       =-D__LINUX_ARM_ARCH__=6 -march=armv6k
+> +arch-$(CONFIG_CPU_32v6K)       :=-D__LINUX_ARM_ARCH__=6 -march=armv6k
+>  endif
+> -arch-$(CONFIG_CPU_32v5)                =-D__LINUX_ARM_ARCH__=5 -march=armv5te
+> -arch-$(CONFIG_CPU_32v4T)       =-D__LINUX_ARM_ARCH__=4 -march=armv4t
+> -arch-$(CONFIG_CPU_32v4)                =-D__LINUX_ARM_ARCH__=4 -march=armv4
+> -arch-$(CONFIG_CPU_32v3)                =-D__LINUX_ARM_ARCH__=3 -march=armv3m
+> -
+> -# Evaluate arch cc-option calls now
+> -arch-y := $(arch-y)
+> +arch-$(CONFIG_CPU_32v5)                :=-D__LINUX_ARM_ARCH__=5 -march=armv5te
+> +arch-$(CONFIG_CPU_32v4T)       :=-D__LINUX_ARM_ARCH__=4 -march=armv4t
+> +arch-$(CONFIG_CPU_32v4)                :=-D__LINUX_ARM_ARCH__=4 -march=armv4
+> +arch-$(CONFIG_CPU_32v3)                :=-D__LINUX_ARM_ARCH__=3 -march=armv3m
 >
-> Arnd sent a v2 of my previous patch
-> https://lore.kernel.org/linux-arm-kernel/20210928154143.2106903-14-arnd@kernel.org/
-> I added yet a few more instances I found since then.
+>  # This selects how we optimise for the processor.
+> -tune-$(CONFIG_CPU_ARM7TDMI)    =-mtune=arm7tdmi
+> -tune-$(CONFIG_CPU_ARM720T)     =-mtune=arm7tdmi
+> -tune-$(CONFIG_CPU_ARM740T)     =-mtune=arm7tdmi
+> -tune-$(CONFIG_CPU_ARM9TDMI)    =-mtune=arm9tdmi
+> -tune-$(CONFIG_CPU_ARM940T)     =-mtune=arm9tdmi
+> -tune-$(CONFIG_CPU_ARM946E)     =-mtune=arm9e
+> -tune-$(CONFIG_CPU_ARM920T)     =-mtune=arm9tdmi
+> -tune-$(CONFIG_CPU_ARM922T)     =-mtune=arm9tdmi
+> -tune-$(CONFIG_CPU_ARM925T)     =-mtune=arm9tdmi
+> -tune-$(CONFIG_CPU_ARM926T)     =-mtune=arm9tdmi
+> -tune-$(CONFIG_CPU_FA526)       =-mtune=arm9tdmi
+> -tune-$(CONFIG_CPU_SA110)       =-mtune=strongarm110
+> -tune-$(CONFIG_CPU_SA1100)      =-mtune=strongarm1100
+> -tune-$(CONFIG_CPU_XSCALE)      =-mtune=xscale
+> -tune-$(CONFIG_CPU_XSC3)                =-mtune=xscale
+> -tune-$(CONFIG_CPU_FEROCEON)    =-mtune=xscale
+> -tune-$(CONFIG_CPU_V6)          =-mtune=arm1136j-s
+> -tune-$(CONFIG_CPU_V6K)         =-mtune=arm1136j-s
+> -
+> -# Evaluate tune cc-option calls now
+> -tune-y := $(tune-y)
+> +tune-$(CONFIG_CPU_ARM7TDMI)    :=-mtune=arm7tdmi
+> +tune-$(CONFIG_CPU_ARM720T)     :=-mtune=arm7tdmi
+> +tune-$(CONFIG_CPU_ARM740T)     :=-mtune=arm7tdmi
+> +tune-$(CONFIG_CPU_ARM9TDMI)    :=-mtune=arm9tdmi
+> +tune-$(CONFIG_CPU_ARM940T)     :=-mtune=arm9tdmi
+> +tune-$(CONFIG_CPU_ARM946E)     :=-mtune=arm9e
+> +tune-$(CONFIG_CPU_ARM920T)     :=-mtune=arm9tdmi
+> +tune-$(CONFIG_CPU_ARM922T)     :=-mtune=arm9tdmi
+> +tune-$(CONFIG_CPU_ARM925T)     :=-mtune=arm9tdmi
+> +tune-$(CONFIG_CPU_ARM926T)     :=-mtune=arm9tdmi
+> +tune-$(CONFIG_CPU_FA526)       :=-mtune=arm9tdmi
+> +tune-$(CONFIG_CPU_SA110)       :=-mtune=strongarm110
+> +tune-$(CONFIG_CPU_SA1100)      :=-mtune=strongarm1100
+> +tune-$(CONFIG_CPU_XSCALE)      :=-mtune=xscale
+> +tune-$(CONFIG_CPU_XSC3)                :=-mtune=xscale
+> +tune-$(CONFIG_CPU_FEROCEON)    :=-mtune=xscale
+> +tune-$(CONFIG_CPU_V6)          :=-mtune=arm1136j-s
+> +tune-$(CONFIG_CPU_V6K)         :=-mtune=arm1136j-s
 >
-> Fixing this will allow us to enable
-> -Werror=unused-command-line-argument for clang builds.
->
-> Nick Desaulniers (4):
->   ARM: remove lazy evaluation in Makefile
->   ARM: use .arch directives instead of assembler command line flags
->   ARM: only use -mtp=cp15 for the compiler
->   ARM: pass -march= only to compiler
->
->  arch/arm/Makefile                   | 76 ++++++++++++++++-------------
->  arch/arm/boot/compressed/Makefile   |  1 -
->  arch/arm/common/Makefile            |  2 -
->  arch/arm/common/mcpm_head.S         |  2 +
->  arch/arm/common/vlock.S             |  2 +
->  arch/arm/kernel/Makefile            |  2 -
->  arch/arm/kernel/hyp-stub.S          |  2 +
->  arch/arm/kernel/swp_emulate.c       |  1 +
->  arch/arm/lib/Makefile               |  4 --
->  arch/arm/lib/delay-loop.S           |  4 ++
->  arch/arm/mach-at91/Makefile         |  3 --
->  arch/arm/mach-at91/pm_suspend.S     |  4 ++
->  arch/arm/mach-imx/Makefile          |  3 --
->  arch/arm/mach-imx/headsmp.S         |  2 +
->  arch/arm/mach-imx/resume-imx6.S     |  2 +
->  arch/arm/mach-imx/suspend-imx6.S    |  2 +
->  arch/arm/mach-mvebu/Makefile        |  3 --
->  arch/arm/mach-mvebu/coherency_ll.S  |  1 +
->  arch/arm/mach-mvebu/pmsu.c          |  1 +
->  arch/arm/mach-npcm/Makefile         |  2 -
->  arch/arm/mach-npcm/headsmp.S        |  2 +
->  arch/arm/mach-tegra/Makefile        |  2 -
->  arch/arm/mach-tegra/reset-handler.S |  2 +
->  arch/arm/mach-tegra/sleep-tegra20.S |  2 +
->  arch/arm/mach-tegra/sleep-tegra30.S |  2 +
->  arch/arm/mm/Makefile                | 15 ------
->  arch/arm/mm/abort-ev6.S             |  1 +
->  arch/arm/mm/abort-ev7.S             |  1 +
->  arch/arm/mm/cache-v6.S              |  2 +
->  arch/arm/mm/cache-v7.S              |  2 +
->  arch/arm/mm/cache-v7m.S             |  2 +
->  arch/arm/mm/copypage-feroceon.c     |  1 +
->  arch/arm/mm/proc-v6.S               |  2 +
->  arch/arm/mm/proc-v7-2level.S        |  2 +
->  arch/arm/mm/proc-v7.S               |  2 +
->  arch/arm/mm/tlb-v6.S                |  2 +
->  arch/arm/mm/tlb-v7.S                |  2 +
->  drivers/memory/Makefile             |  2 -
->  drivers/memory/ti-emif-sram-pm.S    |  1 +
->  drivers/soc/bcm/brcmstb/pm/Makefile |  1 -
->  drivers/soc/bcm/brcmstb/pm/s2-arm.S |  1 +
->  41 files changed, 94 insertions(+), 74 deletions(-)
->
->
-> base-commit: 0ac824f379fba2c2b17b75fd5ada69cd68c66348
+>  ifeq ($(CONFIG_AEABI),y)
+>  CFLAGS_ABI     :=-mabi=aapcs-linux -mfpu=vfp
 > --
 > 2.36.0.550.gb090851708-goog
 >

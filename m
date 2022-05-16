@@ -2,74 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B705281A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 403475281A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:18:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242356AbiEPKRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 06:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51278 "EHLO
+        id S242299AbiEPKSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 06:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242371AbiEPKRP (ORCPT
+        with ESMTP id S233302AbiEPKSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 06:17:15 -0400
-Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E61DEC6;
-        Mon, 16 May 2022 03:16:56 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
- (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Mon, 16 May
- 2022 18:16:54 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Mon, 16 May
- 2022 18:16:54 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     Sunil Goutham <sgoutham@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-CC:     Haowen Bai <baihaowen@meizu.com>,
-        <linux-arm-kernel@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] net: thunderx: remove null check after call container_of()
-Date:   Mon, 16 May 2022 18:16:52 +0800
-Message-ID: <1652696212-17516-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
+        Mon, 16 May 2022 06:18:16 -0400
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434E0DE97;
+        Mon, 16 May 2022 03:18:16 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id EB3D4300002A8;
+        Mon, 16 May 2022 12:18:14 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id DF4F129FE74; Mon, 16 May 2022 12:18:14 +0200 (CEST)
+Date:   Mon, 16 May 2022 12:18:14 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Gross <markgross@kernel.org>, Michael Buesch <m@bues.ch>,
+        Rafa?? Mi??ecki <zajec5@gmail.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        linux-gpio@vger.kernel.org, linux-wireless@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [RFC PATCH] genirq: Provide generic_handle_domain_irq_safe().
+Message-ID: <20220516101814.GA18490@wunner.de>
+References: <YnkfWFzvusFFktSt@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnkfWFzvusFFktSt@linutronix.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-container_of() will never return NULL, so remove useless code.
+On Mon, May 09, 2022 at 04:04:08PM +0200, Sebastian Andrzej Siewior wrote:
+> The problem with generic_handle_domain_irq() is that with `threadirqs'
+> it will trigger "WARN_ON_ONCE(!in_hardirq())".
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
- drivers/net/ethernet/cavium/thunder/nicvf_main.c | 3 ---
- 1 file changed, 3 deletions(-)
+Now silenced by:
+https://git.kernel.org/linus/792ea6a074ae
 
-diff --git a/drivers/net/ethernet/cavium/thunder/nicvf_main.c b/drivers/net/ethernet/cavium/thunder/nicvf_main.c
-index a04aa206fddc..768ea426d49f 100644
---- a/drivers/net/ethernet/cavium/thunder/nicvf_main.c
-+++ b/drivers/net/ethernet/cavium/thunder/nicvf_main.c
-@@ -2024,9 +2024,6 @@ static void nicvf_set_rx_mode_task(struct work_struct *work_arg)
- 	u8 mode;
- 	struct xcast_addr_list *mc;
- 
--	if (!vf_work)
--		return;
--
- 	/* Save message data locally to prevent them from
- 	 * being overwritten by next ndo_set_rx_mode call().
- 	 */
--- 
-2.7.4
 
+> +int generic_handle_domain_irq_safe(struct irq_domain *domain, unsigned int hwirq)
+> +{
+> +	unsigned long flags;
+> +	int ret;
+> +
+> +	local_irq_save(flags);
+> +	ret = handle_irq_desc(irq_resolve_mapping(domain, hwirq));
+> +	local_irq_restore(flags);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(generic_handle_domain_irq_safe);
+
+AFAICS you don't need to disable hardirqs at least for the "threadirqs"
+case because irq_forced_thread_fn() already does that.
+
+
+>  drivers/bcma/driver_gpio.c                 |  2 +-
+>  drivers/gpio/gpio-mlxbf2.c                 |  6 ++----
+>  drivers/pinctrl/pinctrl-amd.c              |  2 +-
+>  drivers/platform/x86/intel/int0002_vgpio.c |  3 +--
+>  drivers/ssb/driver_gpio.c                  |  6 ++++--
+
+From a quick look, the proper solution for all of those drivers is
+probably to just add IRQF_NO_THREAD and be done with it.
+
+Thanks,
+
+Lukas

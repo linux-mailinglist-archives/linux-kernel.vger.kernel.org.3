@@ -2,97 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E174F528848
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:16:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5291952884E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245080AbiEPPQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 11:16:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
+        id S245094AbiEPPQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 11:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245140AbiEPPQE (ORCPT
+        with ESMTP id S245051AbiEPPQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 11:16:04 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657823BF80;
-        Mon, 16 May 2022 08:15:58 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id i66so18924865oia.11;
-        Mon, 16 May 2022 08:15:58 -0700 (PDT)
+        Mon, 16 May 2022 11:16:45 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0DCD9F;
+        Mon, 16 May 2022 08:16:43 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id j25so19979239wrc.9;
+        Mon, 16 May 2022 08:16:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=HVTQV5qHFuS0fcvSzFn/v1hK/N8SUy19AKXaGffwBSA=;
+        b=KPemaBxWuVQ1rIAYWCVKXov/MCUd6HPBKz48HsgUTARmkggURV/6FOUEN70Xrh5Cov
+         x9V3oZZU90H8pIedbzSyfsdvlBgDzVVGgmnyOrkDaBq7/xRjfxy4V0ic/6qKuZYO3bVP
+         n+kTTCzDe5p+EaYxj8rgrefMu2D3B73l0zreudUuikf/Fgc5sPKsNSD/wg1kfnJTSUlo
+         jwiIZudrpm37w3pJhw21p9c9Ir9i4Ht7oGAdw7nTBxhBvxt/3aKkdx8R/ExtFonQ7LLd
+         kJVwBFdwPRFNP6d/gwi3r3vO68PcENpQW+cUZoi+6GiuVnU0JZ471me5KwyV4Ir4/pKN
+         ai+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rpyUOc+Ph8OhqWWweb6POPRF3kJtOe+oRe+i16xzVGk=;
-        b=WDngn2AEkT7HdKq4nGKwM9AiOtV4U+Z3B3CYwT688KkDejOJL0SYiGAcRWKid0GQpO
-         83GofFiC4cVi+61vBrHfArw/UpZhYJDLftfm+16yyzyzH1INhSDmOKxTOJBykkGWYfBf
-         a4oQyIdnQO+nZHnXmRkUuUSpdUYMJPx6TGoX1Ze2dnT0FymLNaZK9wgPakzB2cuIPQYX
-         //yisVIcE98uIMmR+VEDkNaSGIkiNis2WXBCP7aqORwkgUI7WeCjSRumA/nAE3UaE9t6
-         C/2sdUD6nI01+E1S9mgrsHxiCcy8MmgBFlk8yog/pBlp/wZha+IKM8X5UQgTq9MoWUdt
-         VCcw==
-X-Gm-Message-State: AOAM532u/gV/QlFSd6h2+x5JMJv0jKxqZ4hDoqqhFHe/3FpRUrxPN3Ia
-        gCiQCuowrnvbCukqZOGAfw==
-X-Google-Smtp-Source: ABdhPJx45RNkA2fwa4orCPJKw9hv/GNXxlNUhflyL24Pmr7ALmc9zOAHfZdEUnGx1c2vqPLz4LvIvg==
-X-Received: by 2002:a05:6808:de1:b0:326:c5dc:dc28 with SMTP id g33-20020a0568080de100b00326c5dcdc28mr8145783oic.108.1652714157711;
-        Mon, 16 May 2022 08:15:57 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l21-20020a4ae395000000b0035eb4e5a6bcsm4174094oov.18.2022.05.16.08.15.56
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=HVTQV5qHFuS0fcvSzFn/v1hK/N8SUy19AKXaGffwBSA=;
+        b=uR1Oa7ehx22/eCMfyiUecjiF3DySB47J/M2qotc2bvkyBFPruUoRv/qaZAxit8zut0
+         +FFdAR8p45xNkznVlcpoE56fG+Aalo+Moxa5TFYA7iCwZ6xBodXe2uY4Ufw3K/rvsHoG
+         7vl34YerjF9cc6XnY5/AMddMjPS5vrcB0kLC1bhlrzFs2FWWh769IypEMhds8gMPQ6UJ
+         1a01BVJxumIFD3f19bVTKkeqnZZcfrxUEOtv9kIN+8o3Vzn8whJcs2avxo5odanY5u/+
+         99jHEfiVUAtBWaIh047KbQ6niuo2d4PWRdPLc/4bdMVz9dAnh5f3+pJx6KJUCfvKjYdU
+         597Q==
+X-Gm-Message-State: AOAM5327HjzLi0JkOa17VqoiM16v0mL9ZtxteUa5Cg7aKNY49bGM1C4/
+        ndOgZIouguPg0guDN9zUA0A=
+X-Google-Smtp-Source: ABdhPJxE9JtdUShgYIcnY1MFsx4Ht/U1EUsaWSRetqNMiwbSzplE/vRPXAOT20I3A8TbSfY1ue4ZAw==
+X-Received: by 2002:a5d:4c4e:0:b0:20a:d006:79f8 with SMTP id n14-20020a5d4c4e000000b0020ad00679f8mr14099904wrt.600.1652714201691;
+        Mon, 16 May 2022 08:16:41 -0700 (PDT)
+Received: from vmu1804.lan ([2a06:a003:501a:a7ce::887])
+        by smtp.googlemail.com with ESMTPSA id r5-20020adfbb05000000b0020d00174eabsm6418438wrg.94.2022.05.16.08.16.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 08:15:57 -0700 (PDT)
-Received: (nullmailer pid 2660144 invoked by uid 1000);
-        Mon, 16 May 2022 15:15:56 -0000
-Date:   Mon, 16 May 2022 10:15:56 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        chrome-platform@lists.linux.dev,
-        Guenter Roeck <groeck@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Craig Hesling <hesling@chromium.org>,
-        Tom Hughes <tomhughes@chromium.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: Re: [PATCH v5 1/3] dt-bindings: cros-ec: Fix a typo in description
-Message-ID: <20220516151556.GA2659134-robh@kernel.org>
-References: <20220512013921.164637-1-swboyd@chromium.org>
- <20220512013921.164637-2-swboyd@chromium.org>
+        Mon, 16 May 2022 08:16:41 -0700 (PDT)
+From:   Mikhail Zhilkin <csharper2005@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Karim <Karimdplay@gmail.com>,
+        M <x1@disroot.org>, Mikhail Zhilkin <csharper2005@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v5 1/3] dt-bindings: Add Sercomm (Suzhou) Corporation vendor prefix
+Date:   Mon, 16 May 2022 15:16:37 +0000
+Message-Id: <20220516151637.885324-1-csharper2005@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220516151228.885222-1-csharper2005@gmail.com>
+References: <20220516151228.885222-1-csharper2005@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220512013921.164637-2-swboyd@chromium.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 06:39:19PM -0700, Stephen Boyd wrote:
-> A 's/pf/of/' on rpmsg-name description.
-> 
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: <devicetree@vger.kernel.org>
-> Cc: <chrome-platform@lists.linux.dev>
-> Cc: Guenter Roeck <groeck@chromium.org>
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Cc: Craig Hesling <hesling@chromium.org>
-> Cc: Tom Hughes <tomhughes@chromium.org>
-> Cc: Alexandru M Stan <amstan@chromium.org>
-> Cc: Tzung-Bi Shih <tzungbi@kernel.org>
-> Cc: Matthias Kaehlcke <mka@chromium.org>
-> Cc: Benson Leung <bleung@chromium.org>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
->  Documentation/devicetree/bindings/mfd/google,cros-ec.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Add "sercomm" vendor prefix for "Sercomm (Suzhou) Corporation".
 
-Acked-by: Rob Herring <robh@kernel.org>
+Company website:
+Link: https://www.sercomm.com/
+
+Signed-off-by: Mikhail Zhilkin <csharper2005@gmail.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 01430973ecec..65ff22364fb3 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -1082,6 +1082,8 @@ patternProperties:
+     description: Sensirion AG
+   "^sensortek,.*":
+     description: Sensortek Technology Corporation
++  "^sercomm,.*":
++    description: Sercomm (Suzhou) Corporation
+   "^sff,.*":
+     description: Small Form Factor Committee
+   "^sgd,.*":
+-- 
+2.25.1
+

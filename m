@@ -2,133 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D73B95292F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0545292F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:35:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349259AbiEPVey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 17:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35088 "EHLO
+        id S1349351AbiEPVfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 17:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbiEPVew (ORCPT
+        with ESMTP id S231365AbiEPVfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 17:34:52 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3745D403CA;
-        Mon, 16 May 2022 14:34:50 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id m20so31040722ejj.10;
-        Mon, 16 May 2022 14:34:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fItWFiuyh1cGZ4h69ovsW87CfNIqc4jgdwOX92BwTVQ=;
-        b=D3b+CxabH8UFSwZi+XYhQEFphLXfw5Tj77C7akvzmIMfUGZDkob8OOXQZ2A/kiBAIP
-         Nt/l0bEa/EDSwXGyWgLuosH28lT7yv5myJN/tFqpwl8v7XJUUVzB/1B/j6A2Xmk9VUwI
-         Qhhu9rkteXgldqsSlg3Wlm/E0jJ1Hv1N52f7p0CnAUK+mk2Alb3dkxn9G5vsi6GCHloq
-         K5jBr4mpbiZp3pVC77TgXTBoc7+8INMvWJHz0PLI5rRx/JN6Q3ZnfaSZMWrn9IFHcIzG
-         UPzFVbh/OMJGcF2kC4YU33WHsENRmpvowT2JYGoxBu0xWzboZC/XRvCGS207ENU3168o
-         0fRQ==
+        Mon, 16 May 2022 17:35:10 -0400
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E72403CA;
+        Mon, 16 May 2022 14:35:09 -0700 (PDT)
+Received: by mail-oi1-f172.google.com with SMTP id q10so20236079oia.9;
+        Mon, 16 May 2022 14:35:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=fItWFiuyh1cGZ4h69ovsW87CfNIqc4jgdwOX92BwTVQ=;
-        b=J1uCUdsJeTpQ+7E9ERLe56q1nlXk4bANyIz8THvaDuoS9H0eq3BP0cVpI0zaRi+65c
-         klVO+cwEBm736KbkU3MVd8A+96Jpkf68sECmVt882QNW5YNGRBpwklt0wwTD3K7sMdg0
-         qRbigIdawOZelrqM9qgL8JB1u2gb/J/ie6gpe2pf+iV/R+uH1w5NXj+5PlyzqBp4Tj8f
-         0KwDPCF8MbimVulkPLC4Xz4MGG1ajhNctHJ+o6OKRCQBETXXhqsyMURk4l3vNLt9vwE/
-         vfX8ChQ+2js2H2YbtMY8XouWGfCQqHXeCKjIIlBGb0hQTvUtwpQZnFYALyxPyvTHydGM
-         Vj4w==
-X-Gm-Message-State: AOAM533DKyk7xbsb+uIdkQbHQj1Kgyq4qw+/AEp9u9LkWNirOruEquo2
-        t+CFQSC0K4AfeCw7EBZ0bx0=
-X-Google-Smtp-Source: ABdhPJxefAwZPvKWXDdlJnNJzViw2UqAEK4X1lL4s0Y0h7DiMQqi1TWaaqOg27Q/dGkGh+f7+SdJQA==
-X-Received: by 2002:a17:907:7815:b0:6ce:5242:1280 with SMTP id la21-20020a170907781500b006ce52421280mr16881236ejc.217.1652736888805;
-        Mon, 16 May 2022 14:34:48 -0700 (PDT)
-Received: from krava ([83.240.61.17])
-        by smtp.gmail.com with ESMTPSA id ev6-20020a056402540600b0042aa5a74598sm3316476edb.52.2022.05.16.14.34.47
+        bh=QRRTVmbsOznarMBJuHotqu041qdpgdvGYlyrPqo5TcQ=;
+        b=6Twa4pjszQmTOk6HhVrTszWOhTVCNF40hi2fL+B3uyA1J/EBDNqtAbk/Ia6PINACaG
+         c6eJl9e2HPnEgmwoAGSTOzZ8/VAczv8+vviT9lPjKrCD08PNm3YZmN3LFoWLNSpOnNHB
+         9VeV0JFPhULfcOIZqv5OI66hqkdPtesDlKBYzOHcR8NdjvSvEVsIlYhEEVoPWwHWhouY
+         +gaqZt/IWOnCF8qrnNXuAdzZwOkAdNQPNcYSlMhpfL15EYt9jfhZK+ah4dwFmsrq0jaq
+         pHZ0mo0OnAXYEqxqn9ftkX9nYlwp5acyRqYpCnlYzWEhIQSI9I5n05VrOHFtMSaf0Qf4
+         rPIQ==
+X-Gm-Message-State: AOAM533woWAr1LYfLRkg44f8tZfzCq1iNKQFxlv2S3rUfgUP63TmO8JB
+        si51M8Hqjvi0Je0AZi6y0Q==
+X-Google-Smtp-Source: ABdhPJyg/bljvc3L69umiFFD/pWAfJ6St3S1czd9cyg99pTSQijW+nCzk8jOObbUB2RQvhUXn7OvfQ==
+X-Received: by 2002:aca:4b95:0:b0:326:1179:5414 with SMTP id y143-20020aca4b95000000b0032611795414mr14718839oia.256.1652736908283;
+        Mon, 16 May 2022 14:35:08 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i20-20020a056870345400b000f17905320esm4356783oah.13.2022.05.16.14.35.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 14:34:48 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Mon, 16 May 2022 23:34:45 +0200
-To:     Eugene Syromiatnikov <esyr@redhat.com>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf 1/4] bpf_trace: check size for overflow in
- bpf_kprobe_multi_link_attach
-Message-ID: <YoLDdaObEQePcIN+@krava>
-References: <20220516182708.GA29437@asgard.redhat.com>
+        Mon, 16 May 2022 14:35:07 -0700 (PDT)
+Received: (nullmailer pid 3336000 invoked by uid 1000);
+        Mon, 16 May 2022 21:35:06 -0000
+Date:   Mon, 16 May 2022 16:35:06 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rahul Tanwar <rtanwar@maxlinear.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 14/17] PCI: dwc: Check iATU in/outbound ranges setup
+ methods status
+Message-ID: <20220516213506.GA3296584-robh@kernel.org>
+References: <20220503214638.1895-1-Sergey.Semin@baikalelectronics.ru>
+ <20220503214638.1895-15-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220516182708.GA29437@asgard.redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220503214638.1895-15-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 08:27:08PM +0200, Eugene Syromiatnikov wrote:
-> Check that size would not overflow before calculation (and return
-> -EOVERFLOW if it will), to prevent potential out-of-bounds write
-> with the following copy_from_user.  Add the same check
-> to kprobe_multi_resolve_syms in case it will be called from elsewhere
-> in the future.
+On Wed, May 04, 2022 at 12:46:35AM +0300, Serge Semin wrote:
+> Let's make the DWC PCIe RC/EP safer and more verbose for the invalid or
+> failed inbound and outbound iATU windows setups. Needless to say that
+> silently ignoring iATU regions setup errors may cause unpredictable
+> errors. For instance if for some reason a cfg or IO window fails to be
+> activated, then any CFG/IO requested won't reach target PCIe devices and
+> the corresponding accessors will return platform-specific random values.
 > 
-> Fixes: 0dcac272540613d4 ("bpf: Add multi kprobe link")
-> Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
+> First of all we need to convert dw_pcie_ep_outbound_atu() method to check
+> whether the specified outbound iATU range is successfully setup. That
+> method is called by the pci_epc_ops.map_addr callback. Thus we'll make the
+> EP-specific CPU->PCIe memory mappings saver.
+> 
+> Secondly since the iATU outbound range programming method now returns the
+> operation status, it will be handy to take that status into account in the
+> pci_ops.{map_bus,read,write} methods. Thus any failed mapping will be
+> immediately noticeable by the PCIe CFG operations requesters.
+> 
+> Finally we need to convert the dw_pcie_setup_rc() method to returning the
+> operation status, since the iATU outbound ranges setup procedure may now
+> fail. It will be especially handy in case if the DW PCIe RC DT-node has
+> invalid/unsupported (dma-)ranges property. Note since the suggested
+> modification causes having too wide code indentation, it is reasonable
+> from maintainability and readability points of view to move the outbound
+> ranges setup procedure in the separate function.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > ---
->  kernel/trace/bpf_trace.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index d8553f4..e90c4ce7 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -2358,6 +2358,8 @@ kprobe_multi_resolve_syms(const void __user *usyms, u32 cnt,
->  	unsigned int i;
->  	char *func;
->  
-> +	if (check_mul_overflow(cnt, sizeof(*syms), &size))
-> +		return -EOVERFLOW;
+>  .../pci/controller/dwc/pcie-designware-ep.c   |   9 +-
+>  .../pci/controller/dwc/pcie-designware-host.c | 149 ++++++++++++------
+>  drivers/pci/controller/dwc/pcie-designware.h  |   5 +-
+>  drivers/pci/controller/dwc/pcie-intel-gw.c    |   6 +-
 
-there was an update already:
+I worry that this could regress some platforms that happened to work 
+before. But only one way to find out...
 
-  0236fec57a15 bpf: Resolve symbols with ftrace_lookup_symbols for kprobe multi link
-
-so this won't apply anymore, could you please rebase on top of the latest bpf-next/master?
-
-thanks,
-jirka
-
->  	size = cnt * sizeof(*syms);
->  	syms = kvzalloc(size, GFP_KERNEL);
->  	if (!syms)
-> @@ -2429,6 +2431,8 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
->  	if (!cnt)
->  		return -EINVAL;
->  
-> +	if (check_mul_overflow(cnt, (u32)sizeof(*addrs), &size))
-> +		return -EOVERFLOW;
->  	size = cnt * sizeof(*addrs);
->  	addrs = kvmalloc(size, GFP_KERNEL);
->  	if (!addrs)
-> -- 
-> 2.1.4
-> 
-
+Reviewed-by: Rob Herring <robh@kernel.org>
 

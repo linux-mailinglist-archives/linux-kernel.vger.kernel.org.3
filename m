@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373185290A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D339D5290E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346688AbiEPTz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
+        id S242938AbiEPUJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346755AbiEPTvW (ORCPT
+        with ESMTP id S1346807AbiEPT4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:51:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4958E4477E;
-        Mon, 16 May 2022 12:45:49 -0700 (PDT)
+        Mon, 16 May 2022 15:56:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21EAA47AC0;
+        Mon, 16 May 2022 12:49:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 567936156F;
-        Mon, 16 May 2022 19:45:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58B10C385AA;
-        Mon, 16 May 2022 19:45:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 21754B81613;
+        Mon, 16 May 2022 19:49:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 834A2C385AA;
+        Mon, 16 May 2022 19:49:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730347;
-        bh=HQ69QmLGVCRuwMvGfkn6ojTEcGyEb8m3+L4NpGnQ+Qg=;
+        s=korg; t=1652730555;
+        bh=AhnYl+ZcmT/1PsCkh76SmPzD+wrnGfBbdCPSpLDGwLs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HuhfJPOUAItAb3bEgUI0ShsJOwe0apRI2icbm4UwZjurHZRsWXpcJ6srPcy+y9ufx
-         NblvFQWUO/FpJpEuiEW9awJZLvfwIpjLVQDdvD8AAGAsCSYH2yyyqeLyJ67H3+Z203
-         9LPSkMUHVWqJjaiMWs/7yfPjhp0aMmpqLXZ42pp0=
+        b=E2xGjpU1ibEwvJEEdfsIGAlVM68RZA+3FTVLqAWA/6FbAFaP4CTdqXEasNyO9SkaN
+         dIPVlZ2j0K32+5wDxbqNfVkXJkOyjrIrikD8rM+kgWGNbn9DcMLQ9nAhn2pwQZml6r
+         T8zpZCSqDwXlU0UfREnQRRlVY6TMX2597HdfdImw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Felix Fietkau <nbd@nbd.name>, Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 09/66] net: mscc: ocelot: avoid corrupting hardware counters when moving VCAP filters
-Date:   Mon, 16 May 2022 21:36:09 +0200
-Message-Id: <20220516193619.687072312@linuxfoundation.org>
+Subject: [PATCH 5.15 036/102] net: ethernet: mediatek: ppe: fix wrong size passed to memset()
+Date:   Mon, 16 May 2022 21:36:10 +0200
+Message-Id: <20220516193625.036877528@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
-References: <20220516193619.400083785@linuxfoundation.org>
+In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
+References: <20220516193623.989270214@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,112 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit 93a8417088ea570b5721d2b526337a2d3aed9fa3 ]
+[ Upstream commit 00832b1d1a393dfb1b9491d085e5b27e8c25d103 ]
 
-Given the following order of operations:
+'foe_table' is a pointer, the real size of struct mtk_foe_entry
+should be pass to memset().
 
-(1) we add filter A using tc-flower
-(2) we send a packet that matches it
-(3) we read the filter's statistics to find a hit count of 1
-(4) we add a second filter B with a higher preference than A, and A
-    moves one position to the right to make room in the TCAM for it
-(5) we send another packet, and this matches the second filter B
-(6) we read the filter statistics again.
-
-When this happens, the hit count of filter A is 2 and of filter B is 1,
-despite a single packet having matched each filter.
-
-Furthermore, in an alternate history, reading the filter stats a second
-time between steps (3) and (4) makes the hit count of filter A remain at
-1 after step (6), as expected.
-
-The reason why this happens has to do with the filter->stats.pkts field,
-which is written to hardware through the call path below:
-
-               vcap_entry_set
-               /      |      \
-              /       |       \
-             /        |        \
-            /         |         \
-es0_entry_set   is1_entry_set   is2_entry_set
-            \         |         /
-             \        |        /
-              \       |       /
-        vcap_data_set(data.counter, ...)
-
-The primary role of filter->stats.pkts is to transport the filter hit
-counters from the last readout all the way from vcap_entry_get() ->
-ocelot_vcap_filter_stats_update() -> ocelot_cls_flower_stats().
-The reason why vcap_entry_set() writes it to hardware is so that the
-counters (saturating and having a limited bit width) are cleared
-after each user space readout.
-
-The writing of filter->stats.pkts to hardware during the TCAM entry
-movement procedure is an unintentional consequence of the code design,
-because the hit count isn't up to date at this point.
-
-So at step (4), when filter A is moved by ocelot_vcap_filter_add() to
-make room for filter B, the hardware hit count is 0 (no packet matched
-on it in the meantime), but filter->stats.pkts is 1, because the last
-readout saw the earlier packet. The movement procedure programs the old
-hit count back to hardware, so this creates the impression to user space
-that more packets have been matched than they really were.
-
-The bug can be seen when running the gact_drop_and_ok_test() from the
-tc_actions.sh selftest.
-
-Fix the issue by reading back the hit count to tmp->stats.pkts before
-migrating the VCAP filter. Sure, this is a best-effort technique, since
-the packets that hit the rule between vcap_entry_get() and
-vcap_entry_set() won't be counted, but at least it allows the counters
-to be reliably used for selftests where the traffic is under control.
-
-The vcap_entry_get() name is a bit unintuitive, but it only reads back
-the counter portion of the TCAM entry, not the entire entry.
-
-The index from which we retrieve the counter is also a bit unintuitive
-(i - 1 during add, i + 1 during del), but this is the way in which TCAM
-entry movement works. The "entry index" isn't a stored integer for a
-TCAM filter, instead it is dynamically computed by
-ocelot_vcap_block_get_filter_index() based on the entry's position in
-the &block->rules list. That position (as well as block->count) is
-automatically updated by ocelot_vcap_filter_add_to_block() on add, and
-by ocelot_vcap_block_remove_filter() on del. So "i" is the new filter
-index, and "i - 1" or "i + 1" respectively are the old addresses of that
-TCAM entry (we only support installing/deleting one filter at a time).
-
-Fixes: b596229448dd ("net: mscc: ocelot: Add support for tcam")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: ba37b7caf1ed ("net: ethernet: mtk_eth_soc: add support for initializing the PPE")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Acked-by: Felix Fietkau <nbd@nbd.name>
+Link: https://lore.kernel.org/r/20220511030829.3308094-1-yangyingliang@huawei.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mscc/ocelot_vcap.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/ethernet/mediatek/mtk_ppe.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mscc/ocelot_vcap.c b/drivers/net/ethernet/mscc/ocelot_vcap.c
-index 709b304fde67..118572590607 100644
---- a/drivers/net/ethernet/mscc/ocelot_vcap.c
-+++ b/drivers/net/ethernet/mscc/ocelot_vcap.c
-@@ -1142,6 +1142,8 @@ int ocelot_vcap_filter_add(struct ocelot *ocelot,
- 		struct ocelot_vcap_filter *tmp;
+diff --git a/drivers/net/ethernet/mediatek/mtk_ppe.c b/drivers/net/ethernet/mediatek/mtk_ppe.c
+index 3ad10c793308..66298e2235c9 100644
+--- a/drivers/net/ethernet/mediatek/mtk_ppe.c
++++ b/drivers/net/ethernet/mediatek/mtk_ppe.c
+@@ -395,7 +395,7 @@ static void mtk_ppe_init_foe_table(struct mtk_ppe *ppe)
+ 	static const u8 skip[] = { 12, 25, 38, 51, 76, 89, 102 };
+ 	int i, k;
  
- 		tmp = ocelot_vcap_block_find_filter_by_index(block, i);
-+		/* Read back the filter's counters before moving it */
-+		vcap_entry_get(ocelot, i - 1, tmp);
- 		vcap_entry_set(ocelot, i, tmp);
- 	}
+-	memset(ppe->foe_table, 0, MTK_PPE_ENTRIES * sizeof(ppe->foe_table));
++	memset(ppe->foe_table, 0, MTK_PPE_ENTRIES * sizeof(*ppe->foe_table));
  
-@@ -1199,6 +1201,8 @@ int ocelot_vcap_filter_del(struct ocelot *ocelot,
- 		struct ocelot_vcap_filter *tmp;
- 
- 		tmp = ocelot_vcap_block_find_filter_by_index(block, i);
-+		/* Read back the filter's counters before moving it */
-+		vcap_entry_get(ocelot, i + 1, tmp);
- 		vcap_entry_set(ocelot, i, tmp);
- 	}
- 
+ 	if (!IS_ENABLED(CONFIG_SOC_MT7621))
+ 		return;
 -- 
 2.35.1
 

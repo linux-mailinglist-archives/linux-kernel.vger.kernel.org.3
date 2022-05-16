@@ -2,76 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3D19528A63
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 18:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58B55528A5F
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 18:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343668AbiEPQ3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 12:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51772 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343645AbiEPQ3M (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1343644AbiEPQ3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 16 May 2022 12:29:12 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A8B3A5FC
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 09:29:11 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id i19so29696204eja.11
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 09:29:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Y5Y01zEzcSsKU36y1NINY4WVk0Q8FiEw0n1MhQ5vAp8=;
-        b=MzyxhcHxfpe4omR3oQIY9vDe3Ma0gJNH+l6vr8yMxzIcE7WLpzv3gQNngtko+7CHYK
-         wnP0JeSPU3TtjfSYW/enDtVoXotkr2zQaxjJ4/noQLVUmKYH/Evyj3q+VW9NG0M+7/sb
-         ytL/7GBUy8dZKftxMPUtkUWexMF7cLI54DvLkj9ENKp2ajx9lcLrjW/wH4upreuq5cYF
-         qM0rYYi40WxtyS/YxBSmjDaGd6XUd6zhO6FYmPFSzl9krsIP29DwGB1BnX/jGT0qMgxM
-         5L27yb+KWA/IP1ElTWNYxoAkEazXi+bOENadZ9R133tfM5XSvTKGWI9l0NBcNVKqxbtX
-         5PbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Y5Y01zEzcSsKU36y1NINY4WVk0Q8FiEw0n1MhQ5vAp8=;
-        b=BSr8VPh9H+hUL2ogMjCNaWtoFO7axQZ/m0Htn1N3SkHAcHeyTkz7rOolPUdKsLKvxu
-         uIlEelDpbgJVCrSVzw1nsP/ivWj2S5qY+PIZ+4r2NpxM/of3GU5HZMs0aX8cbb9j8p/F
-         Ms3p8cNI59QuT+JJJg2+1FTBHTeKXWxoupXHIFRLpFJ2uy8mBDNBO5iDjSIdLh9gfZXq
-         6037t/xrg+YvDwqbkKYQ+9G6lfMtncq8o6ky/B+1TFSgjoA1qdeZ7WVaZKEJstrIdikz
-         K06omywJmdKMQcyR/Kw01HqP35roLD2ByynHqIpAILTkUbaN5DxbtPzv7gat4TKgDoVi
-         I9WQ==
-X-Gm-Message-State: AOAM53242PeW6kLmPRk9p9oyVUFqFqSw5VXWouZRWKk0deSxBVkZGXqd
-        8JLPLFN77efTSJum517tS/c=
-X-Google-Smtp-Source: ABdhPJxCd+3OM7rVUlCJ415U5mos+W3z/pfP53EArLwIpkBM+GZj9NipDl9K9kC3z669g20z47imFg==
-X-Received: by 2002:a17:906:730e:b0:6f4:e9e7:4f4 with SMTP id di14-20020a170906730e00b006f4e9e704f4mr15402269ejc.509.1652718550402;
-        Mon, 16 May 2022 09:29:10 -0700 (PDT)
-Received: from linuxdev2.toradex.int (31-10-206-125.static.upc.ch. [31.10.206.125])
-        by smtp.gmail.com with ESMTPSA id 9-20020a170906004900b006f3ef214e3bsm58819ejg.161.2022.05.16.09.29.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 09:29:10 -0700 (PDT)
-From:   Max Krummenacher <max.oss.09@gmail.com>
-To:     max.krummenacher@toradex.com
-Cc:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Marek Vasut <marex@denx.de>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/2] drm/panel: simple: add bus-format support for panel-dpi
-Date:   Mon, 16 May 2022 18:28:26 +0200
-Message-Id: <20220516162826.23025-3-max.oss.09@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220516162826.23025-1-max.oss.09@gmail.com>
-References: <20220516162826.23025-1-max.oss.09@gmail.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343628AbiEPQ3J (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 16 May 2022 12:29:09 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951403B012;
+        Mon, 16 May 2022 09:29:08 -0700 (PDT)
+Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4L24PV63Xzz67h1V;
+        Tue, 17 May 2022 00:26:06 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 16 May 2022 18:29:06 +0200
+Received: from [10.47.25.151] (10.47.25.151) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 16 May
+ 2022 17:29:05 +0100
+Message-ID: <d874dd82-30fd-f8e0-b7ab-0c9d14e47324@huawei.com>
+Date:   Mon, 16 May 2022 17:29:04 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v8 4/8] perf arm: Refactor event list iteration in
+ auxtrace_record__init()
+To:     Yicong Yang <yangyicong@hisilicon.com>,
+        <gregkh@linuxfoundation.org>, <alexander.shishkin@linux.intel.com>,
+        <leo.yan@linaro.org>, <james.clark@arm.com>, <will@kernel.org>,
+        <robin.murphy@arm.com>, <acme@kernel.org>,
+        <jonathan.cameron@huawei.com>
+CC:     <helgaas@kernel.org>, <lorenzo.pieralisi@arm.com>,
+        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <mark.rutland@arm.com>, <joro@8bytes.org>,
+        <shameerali.kolothum.thodi@huawei.com>, <peterz@infradead.org>,
+        <mingo@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-pci@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <iommu@lists.linux-foundation.org>, <prime.zeng@huawei.com>,
+        <liuqi115@huawei.com>, <zhangshaokun@hisilicon.com>,
+        <linuxarm@huawei.com>
+References: <20220516125223.32012-1-yangyicong@hisilicon.com>
+ <20220516125223.32012-5-yangyicong@hisilicon.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <20220516125223.32012-5-yangyicong@hisilicon.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.25.151]
+X-ClientProxiedBy: lhreml714-chm.china.huawei.com (10.201.108.65) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,93 +67,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Max Krummenacher <max.krummenacher@toradex.com>
+On 16/05/2022 13:52, Yicong Yang wrote:
 
-Evaluate the device tree bus-format property to set bus_format for
-a 'panel-dpi' panel. Additionally infer the bpc value from the
-given bus-format.
+As requested before, please mention "perf tool" in the commit subject
 
-Valid values for bus-format are found in:
-<include/dt-bindings/display/dt-media-bus-format.h>
-
-This completes the addition of panel-dpi to completely specify
-a panel-simple panel from the device tree.
-
-Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
-
----
-
- drivers/gpu/drm/panel/panel-simple.c | 43 ++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
-
-diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
-index a34f4198a534..090c60abb014 100644
---- a/drivers/gpu/drm/panel/panel-simple.c
-+++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -21,6 +21,7 @@
-  * DEALINGS IN THE SOFTWARE.
-  */
- 
-+#include <dt-bindings/display/dt-media-bus-format.h>
- #include <linux/delay.h>
- #include <linux/gpio/consumer.h>
- #include <linux/module.h>
-@@ -453,6 +454,7 @@ static int panel_dpi_probe(struct device *dev,
- 	struct panel_desc *desc;
- 	unsigned int bus_flags;
- 	struct videomode vm;
-+	u32 bus_format;
- 	int ret;
- 
- 	np = dev->of_node;
-@@ -477,6 +479,47 @@ static int panel_dpi_probe(struct device *dev,
- 	of_property_read_u32(np, "width-mm", &desc->size.width);
- 	of_property_read_u32(np, "height-mm", &desc->size.height);
- 
-+	if (!of_property_read_u32(np, "bus-format", &bus_format)) {
-+		/* infer bpc from bus-format */
-+		switch (bus_format) {
-+		case DT_MEDIA_BUS_FMT_RGB565_1X16:
-+			desc->bus_format = MEDIA_BUS_FMT_RGB565_1X16;
-+			desc->bpc = 6;
-+			break;
-+		case DT_MEDIA_BUS_FMT_RGB666_1X18:
-+			desc->bus_format = MEDIA_BUS_FMT_RGB666_1X18;
-+			desc->bpc = 6;
-+			break;
-+		case DT_MEDIA_BUS_FMT_RGB666_1X24_CPADHI:
-+			desc->bus_format = MEDIA_BUS_FMT_RGB666_1X24_CPADHI;
-+			desc->bpc = 6;
-+			break;
-+		case DT_MEDIA_BUS_FMT_BGR888_1X24:
-+			desc->bus_format = MEDIA_BUS_FMT_BGR888_1X24;
-+			desc->bpc = 8;
-+			break;
-+		case DT_MEDIA_BUS_FMT_GBR888_1X24:
-+			desc->bus_format = MEDIA_BUS_FMT_GBR888_1X24;
-+			desc->bpc = 8;
-+			break;
-+		case DT_MEDIA_BUS_FMT_RBG888_1X24:
-+			desc->bus_format = MEDIA_BUS_FMT_RBG888_1X24;
-+			desc->bpc = 8;
-+			break;
-+		case DT_MEDIA_BUS_FMT_RGB888_1X24:
-+			desc->bus_format = MEDIA_BUS_FMT_RGB888_1X24;
-+			desc->bpc = 8;
-+			break;
-+		case DT_MEDIA_BUS_FMT_RGB888_1X32_PADHI:
-+			desc->bus_format = MEDIA_BUS_FMT_RGB888_1X32_PADHI;
-+			desc->bpc = 8;
-+			break;
-+		default:
-+			dev_err(dev, "%pOF: unknown bus-format property\n", np);
-+			return -EINVAL;
-+		}
-+	}
-+
- 	/* Extract bus_flags from display_timing */
- 	bus_flags = 0;
- 	vm.flags = timing->flags;
--- 
-2.20.1
+> From: Qi Liu <liuqi115@huawei.com>
+> 
+> Use find_pmu_for_event() to simplify logic in auxtrace_record__init().
+> 
+> Signed-off-by: Qi Liu <liuqi115@huawei.com>
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> ---
+>   tools/perf/arch/arm/util/auxtrace.c | 53 ++++++++++++++++++-----------
+>   1 file changed, 34 insertions(+), 19 deletions(-)
+> 
+> diff --git a/tools/perf/arch/arm/util/auxtrace.c b/tools/perf/arch/arm/util/auxtrace.c
+> index 5fc6a2a3dbc5..384c7cfda0fd 100644
+> --- a/tools/perf/arch/arm/util/auxtrace.c
+> +++ b/tools/perf/arch/arm/util/auxtrace.c
+> @@ -50,16 +50,32 @@ static struct perf_pmu **find_all_arm_spe_pmus(int *nr_spes, int *err)
+>   	return arm_spe_pmus;
+>   }
+>   
+> +static struct perf_pmu *find_pmu_for_event(struct perf_pmu **pmus,
+> +					   int pmu_nr, struct evsel *evsel)
+> +{
+> +	int i;
+> +
+> +	if (!pmus)
+> +		return NULL;
+> +
+> +	for (i = 0; i < pmu_nr; i++) {
+> +		if (evsel->core.attr.type == pmus[i]->type)
+> +			return pmus[i];
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+>   struct auxtrace_record
+>   *auxtrace_record__init(struct evlist *evlist, int *err)
+>   {
+> -	struct perf_pmu	*cs_etm_pmu;
+> +	struct perf_pmu	*cs_etm_pmu = NULL;
+> +	struct perf_pmu **arm_spe_pmus = NULL;
+>   	struct evsel *evsel;
+> -	bool found_etm = false;
+> +	struct perf_pmu *found_etm = NULL;
+>   	struct perf_pmu *found_spe = NULL;
+> -	struct perf_pmu **arm_spe_pmus = NULL;
+> +	int auxtrace_event_cnt = 0;
+>   	int nr_spes = 0;
+> -	int i = 0;
+>   
+>   	if (!evlist)
+>   		return NULL;
+> @@ -68,24 +84,23 @@ struct auxtrace_record
+>   	arm_spe_pmus = find_all_arm_spe_pmus(&nr_spes, err);
+>   
+>   	evlist__for_each_entry(evlist, evsel) {
+> -		if (cs_etm_pmu &&
+> -		    evsel->core.attr.type == cs_etm_pmu->type)
+> -			found_etm = true;
+> -
+> -		if (!nr_spes || found_spe)
+> -			continue;
+> -
+> -		for (i = 0; i < nr_spes; i++) {
+> -			if (evsel->core.attr.type == arm_spe_pmus[i]->type) {
+> -				found_spe = arm_spe_pmus[i];
+> -				break;
+> -			}
+> -		}
+> +		if (cs_etm_pmu && !found_etm)
+> +			found_etm = find_pmu_for_event(&cs_etm_pmu, 1, evsel);
+> +
+> +		if (arm_spe_pmus && !found_spe)
+> +			found_spe = find_pmu_for_event(arm_spe_pmus, nr_spes, evsel);
+>   	}
+> +
+>   	free(arm_spe_pmus);
+>   
+> -	if (found_etm && found_spe) {
+> -		pr_err("Concurrent ARM Coresight ETM and SPE operation not currently supported\n");
+> +	if (found_etm)
+> +		auxtrace_event_cnt++;
+> +
+> +	if (found_spe)
+> +		auxtrace_event_cnt++;
+> +
+> +	if (auxtrace_event_cnt > 1) {
+> +		pr_err("Concurrent AUX trace operation not currently supported\n");
+>   		*err = -EOPNOTSUPP;
+>   		return NULL;
+>   	}
 

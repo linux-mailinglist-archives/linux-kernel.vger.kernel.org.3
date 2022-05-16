@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3DBC52834B
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 13:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5532C528351
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 13:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbiEPLce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 07:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33500 "EHLO
+        id S243185AbiEPLc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 07:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbiEPLca (ORCPT
+        with ESMTP id S229527AbiEPLcv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 07:32:30 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB8538D8B;
-        Mon, 16 May 2022 04:32:29 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id w4so20048493wrg.12;
-        Mon, 16 May 2022 04:32:28 -0700 (PDT)
+        Mon, 16 May 2022 07:32:51 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317D138D8B;
+        Mon, 16 May 2022 04:32:50 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id p5-20020a1c2905000000b003970dd5404dso793881wmp.0;
+        Mon, 16 May 2022 04:32:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zNR2zgstDynxCnsgIvM+YFx8Mm5SD6bvInuiy+HlYH4=;
-        b=UyLd39lQXbSVZDC9Xe9aH0rJ2WKhYevQ0+yihicysr7I1lEyV0fbrXdI4kHtic0clt
-         oPex+0nC7Cflv6YTxnjp9D1s0oeGZvDcKRfE2b5gt3BzFjqRj29cxZth70WtoSOkHybZ
-         fkjHRYvNi0p9zdWjobA8DVTsQQJ5LqiJzGs6OHpZHT8qae7duw3R5YXawfiMpNyPgKx5
-         MumHCn8i5fLFkGibvUcLBCc8+ZRkRl8o+hGuZcUfhmGtnUy9r+RGqyIM2bkEIAbqVZWm
-         WNnwJoTOVhtDKr5Hg8kp7ZABxX/ClcW5Al3UKFgvHBTG8zmoCI5RuHL36vQ4Pz2pOO7Y
-         uN5Q==
+        bh=caeR1d5UF/OVvqIoQomSco97tJ43m4mKPZrJZyYHxJw=;
+        b=J9z9Eo4Uws1wL5DN7Apv1Nidg+AkLal3CFdoeL6/CmNOcfT+UuLdAwwacmvG72zOjp
+         AJfH7g3i4BHKEG3vxH0OCHDxdgDOWHtmgZoSfTjRvEhAPgwsfzY0PgDT0uDPZ2QzGsSb
+         K8e21Vw3Q/4L5V2DDzqveSFoIMTm4O8Z1Eg0AQxycGm9+FcRUhjuQvLyLzZLYXpZ8c+U
+         nxHnJEoTyKSxHH6VU5jLYXW8Wi5vz+8KgiL1r73b+mqpC6r6bX72GL53a/Zhjf8iroFY
+         FgUN9zRwN0Jo/Z88OXmjABQ34oU6ncA478+oJ1k1OXf0rZ3NbiEdheSVwWLMaHekGxx9
+         PJ2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=zNR2zgstDynxCnsgIvM+YFx8Mm5SD6bvInuiy+HlYH4=;
-        b=keZo2JhdqJskw1NxxhWaUl1IKfJz1T6di5WQuoU+UtVhgyd5b5rPZoEn9bt+FydmIU
-         z867I39pzJoqju2GCTXWgrVx9FqzvYgfyf8KBiERluBCZZyasyYutaPty8FYYFnpf8M+
-         GFAQRHE4KsNCNdRIrAl0vA2q2JhQYg9v6/BobMdo3sTGqifXkaT7wDn+UR5jIQOfmlqQ
-         PLxiFL/GMBIhUtKKA59vNlhdW0we/StExhaxQG9nTl28z4OetN0sOp1/X4x+6EuWF+ES
-         gwFMj+2QKdYzC1B47WFekFMDIVFu5mxgWDBOBlTIOu/sgtvoukm+Mw/j5wTbXxUBZU1c
-         wv9w==
-X-Gm-Message-State: AOAM53275WHHCqf/CQcdpNZ7vQU/wF65MvV7GRkklF0NFeoB7u6ITT6e
-        8UzWBrOQ7+OTn3buW8AR0TQ=
-X-Google-Smtp-Source: ABdhPJyub9eU480qKQjh8jFlPz4AgCb1FDgUdJPm9VqXaaDrLbu652HkHldv3AQz72yMU3flgGVLZQ==
-X-Received: by 2002:a5d:4dcc:0:b0:20a:ddaa:1c30 with SMTP id f12-20020a5d4dcc000000b0020addaa1c30mr13203540wru.419.1652700747506;
-        Mon, 16 May 2022 04:32:27 -0700 (PDT)
+        bh=caeR1d5UF/OVvqIoQomSco97tJ43m4mKPZrJZyYHxJw=;
+        b=XHcaxlv3YOf59u8YzLiGiCLkNsPGCTkkmBFittSgZbeFnBgcUiTcl+O5BxAwPl3tFp
+         r23kfXFYAyF7dIxL68zO5VREG6OH+T5UcPo+/9z1okER/FUvaRgx30SRxHsibKkE9ZvI
+         /rUyvNKmqcFk9s1P2lqXWTA97BFN+feMWIN41NMe0edho8jrzkOYuP7cKBFLQFgnTrqE
+         pz50LCaVC/B8uHwWbD0CKcNdScWuz1CqAbT2Qz0tJbBfb8rLo67W0sC1yZPQttMTR7zm
+         gpJ75RqafQzSaxkhHNfMRTJQPJQBVR2UOhCGzvZBBZoNlJDXLxlSd9Ok5xgr+kkQ/75A
+         sq9A==
+X-Gm-Message-State: AOAM532yCUiiCLGME1oQZiY5Rsxzjbnzvf4fGPJpk/2p5jTfw0xjmO6A
+        UZ1h7qFZatmKdn9oYIVqGIo=
+X-Google-Smtp-Source: ABdhPJz3pErEXVh6c5jSOm5lb9urUb/kznpC3Pzf2jcgE4pcvIh1nDHvdVZVd+IKCii501ptpAeCxw==
+X-Received: by 2002:a05:600c:154d:b0:394:8d64:9166 with SMTP id f13-20020a05600c154d00b003948d649166mr16485448wmg.102.1652700768735;
+        Mon, 16 May 2022 04:32:48 -0700 (PDT)
 Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id p2-20020adfaa02000000b0020cd0762f37sm9224270wrd.107.2022.05.16.04.32.26
+        by smtp.gmail.com with ESMTPSA id n12-20020adf8b0c000000b0020cdf6ecafbsm11529943wra.81.2022.05.16.04.32.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 04:32:26 -0700 (PDT)
-Message-ID: <6f96e6f2-b614-3219-3302-da1679565722@gmail.com>
-Date:   Mon, 16 May 2022 13:32:25 +0200
+        Mon, 16 May 2022 04:32:48 -0700 (PDT)
+Message-ID: <d602eb96-587d-5b1d-17af-2af83acde709@gmail.com>
+Date:   Mon, 16 May 2022 13:32:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH v2 2/2] memory: mtk-smi: Add support for MT6795 Helio X10
+Subject: Re: [PATCH v2 1/2] dt-bindings: memory: mtk-smi: Add MT6795 Helio X10
+ bindings
 Content-Language: en-US
 To:     AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>, yong.wu@mediatek.com
@@ -66,9 +67,9 @@ Cc:     krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
         phone-devel@vger.kernel.org, paul.bouchara@somainline.org,
         kernel@collabora.com
 References: <20220513150633.387200-1-angelogioacchino.delregno@collabora.com>
- <20220513150633.387200-3-angelogioacchino.delregno@collabora.com>
+ <20220513150633.387200-2-angelogioacchino.delregno@collabora.com>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220513150633.387200-3-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220513150633.387200-2-angelogioacchino.delregno@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,81 +85,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 13/05/2022 17:06, AngeloGioacchino Del Regno wrote:
-> The MediaTek Helio X10 (MT6795) SoC has 5 LARBs and one common SMI
-> instance without any sub-common and without GALS.
-> 
-> While the smi-common configuration is specific to this SoC, on the
-> LARB side, this is similar to MT8173, in the sense that it doesn't
-> need the port in LARB, and the register layout is also compatible
-> with that one, which makes us able to fully reuse the smi-larb
-> platform data struct that was introduced for MT8173.
+> Add SMI bindings for the MediaTek Helio X10 (MT6795) SoC
 > 
 > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
 Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 
 > ---
->   drivers/memory/mtk-smi.c | 17 +++++++++++++++++
->   1 file changed, 17 insertions(+)
+>   .../bindings/memory-controllers/mediatek,smi-common.yaml         | 1 +
+>   .../bindings/memory-controllers/mediatek,smi-larb.yaml           | 1 +
+>   2 files changed, 2 insertions(+)
 > 
-> diff --git a/drivers/memory/mtk-smi.c b/drivers/memory/mtk-smi.c
-> index 86a3d34f418e..7e7c3ede19e4 100644
-> --- a/drivers/memory/mtk-smi.c
-> +++ b/drivers/memory/mtk-smi.c
-> @@ -21,11 +21,13 @@
->   /* SMI COMMON */
->   #define SMI_L1LEN			0x100
->   
-> +#define SMI_L1_ARB			0x200
->   #define SMI_BUS_SEL			0x220
->   #define SMI_BUS_LARB_SHIFT(larbid)	((larbid) << 1)
->   /* All are MMU0 defaultly. Only specialize mmu1 here. */
->   #define F_MMU1_LARB(larbid)		(0x1 << SMI_BUS_LARB_SHIFT(larbid))
->   
-> +#define SMI_FIFO_TH0			0x230
->   #define SMI_M4U_TH			0x234
->   #define SMI_FIFO_TH1			0x238
->   #define SMI_FIFO_TH2			0x23c
-> @@ -360,6 +362,7 @@ static const struct of_device_id mtk_smi_larb_of_ids[] = {
->   	{.compatible = "mediatek,mt2701-smi-larb", .data = &mtk_smi_larb_mt2701},
->   	{.compatible = "mediatek,mt2712-smi-larb", .data = &mtk_smi_larb_mt2712},
->   	{.compatible = "mediatek,mt6779-smi-larb", .data = &mtk_smi_larb_mt6779},
-> +	{.compatible = "mediatek,mt6795-smi-larb", .data = &mtk_smi_larb_mt8173},
->   	{.compatible = "mediatek,mt8167-smi-larb", .data = &mtk_smi_larb_mt8167},
->   	{.compatible = "mediatek,mt8173-smi-larb", .data = &mtk_smi_larb_mt8173},
->   	{.compatible = "mediatek,mt8183-smi-larb", .data = &mtk_smi_larb_mt8183},
-> @@ -541,6 +544,13 @@ static struct platform_driver mtk_smi_larb_driver = {
->   	}
->   };
->   
-> +static const struct mtk_smi_reg_pair mtk_smi_common_mt6795_init[SMI_COMMON_INIT_REGS_NR] = {
-> +	{SMI_L1_ARB, 0x1b},
-> +	{SMI_M4U_TH, 0xce810c85},
-> +	{SMI_FIFO_TH1, 0x43214c8},
-> +	{SMI_FIFO_TH0, 0x191f},
-> +};
-> +
->   static const struct mtk_smi_reg_pair mtk_smi_common_mt8195_init[SMI_COMMON_INIT_REGS_NR] = {
->   	{SMI_L1LEN, 0xb},
->   	{SMI_M4U_TH, 0xe100e10},
-> @@ -565,6 +575,12 @@ static const struct mtk_smi_common_plat mtk_smi_common_mt6779 = {
->   		    F_MMU1_LARB(5) | F_MMU1_LARB(6) | F_MMU1_LARB(7),
->   };
->   
-> +static const struct mtk_smi_common_plat mtk_smi_common_mt6795 = {
-> +	.type	  = MTK_SMI_GEN2,
-> +	.bus_sel  = BIT(0),
-> +	.init     = mtk_smi_common_mt6795_init,
-> +};
-> +
->   static const struct mtk_smi_common_plat mtk_smi_common_mt8183 = {
->   	.type     = MTK_SMI_GEN2,
->   	.has_gals = true,
-> @@ -609,6 +625,7 @@ static const struct of_device_id mtk_smi_common_of_ids[] = {
->   	{.compatible = "mediatek,mt2701-smi-common", .data = &mtk_smi_common_gen1},
->   	{.compatible = "mediatek,mt2712-smi-common", .data = &mtk_smi_common_gen2},
->   	{.compatible = "mediatek,mt6779-smi-common", .data = &mtk_smi_common_mt6779},
-> +	{.compatible = "mediatek,mt6795-smi-common", .data = &mtk_smi_common_mt6795},
->   	{.compatible = "mediatek,mt8167-smi-common", .data = &mtk_smi_common_gen2},
->   	{.compatible = "mediatek,mt8173-smi-common", .data = &mtk_smi_common_gen2},
->   	{.compatible = "mediatek,mt8183-smi-common", .data = &mtk_smi_common_mt8183},
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
+> index a98b359bf909..71bc5cefb49c 100644
+> --- a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
+> +++ b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
+> @@ -32,6 +32,7 @@ properties:
+>             - mediatek,mt2701-smi-common
+>             - mediatek,mt2712-smi-common
+>             - mediatek,mt6779-smi-common
+> +          - mediatek,mt6795-smi-common
+>             - mediatek,mt8167-smi-common
+>             - mediatek,mt8173-smi-common
+>             - mediatek,mt8183-smi-common
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
+> index c886681f62a7..59dcd163668f 100644
+> --- a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
+> +++ b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
+> @@ -20,6 +20,7 @@ properties:
+>             - mediatek,mt2701-smi-larb
+>             - mediatek,mt2712-smi-larb
+>             - mediatek,mt6779-smi-larb
+> +          - mediatek,mt6795-smi-larb
+>             - mediatek,mt8167-smi-larb
+>             - mediatek,mt8173-smi-larb
+>             - mediatek,mt8183-smi-larb

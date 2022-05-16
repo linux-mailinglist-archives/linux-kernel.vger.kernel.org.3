@@ -2,111 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF92D5287FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F5A55287DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 17:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232483AbiEPPGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 11:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55640 "EHLO
+        id S244849AbiEPPCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 11:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244941AbiEPPGJ (ORCPT
+        with ESMTP id S244843AbiEPPCj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 11:06:09 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51D03B020;
-        Mon, 16 May 2022 08:06:07 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 16 May 2022 11:02:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738D53B3FD;
+        Mon, 16 May 2022 08:02:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 9F00421FEA;
-        Mon, 16 May 2022 15:06:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1652713566;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=c+0GsqPsSThaO2MnPpjoOsweO+GYaCoEg31L+IwHhqg=;
-        b=lKfTMpyCVoWa0JJn/rnPzzTlVHx2ecJ0azO4Oq8wJ918JZPwvcWiiwqptLzYfsfvHOcvva
-        eVKYcq2zMputu65NcBAD/BZxd32XuV4kL1bQPo4YcbyAmorFWXRa4KrC4saRreDnu2vpLQ
-        qSfuwKGQ4yAD8j7VmcEwQ2hgTQWYzRk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1652713566;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=c+0GsqPsSThaO2MnPpjoOsweO+GYaCoEg31L+IwHhqg=;
-        b=KUJhBgqvq8Nn18KvbQkJlvarVwEdcKV7K3hS0z2sv/TIdtUHzz4hHoz90zQ8V2mTb1xCeD
-        ficdnjVImsf/EiAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5404813ADC;
-        Mon, 16 May 2022 15:06:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7FWcE15ogmLfKQAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Mon, 16 May 2022 15:06:06 +0000
-Date:   Mon, 16 May 2022 17:01:48 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Qu Wenruo <quwenruo.btrfs@gmx.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, Qu Wenruo <wqu@suse.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH] btrfs: Fix an error handling path in
- btrfs_read_sys_array()
-Message-ID: <20220516150148.GX18596@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, Dan Carpenter <dan.carpenter@oracle.com>,
-        Qu Wenruo <quwenruo.btrfs@gmx.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, Qu Wenruo <wqu@suse.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-btrfs@vger.kernel.org
-References: <d915ceb4d459aff89c0264113db21592a6806db1.1652517184.git.christophe.jaillet@wanadoo.fr>
- <120e4c34-da48-7d86-4a50-c31a3804600d@gmx.com>
- <20220516135407.GM4009@kadam>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95159B811CF;
+        Mon, 16 May 2022 15:02:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A06E2C385AA;
+        Mon, 16 May 2022 15:02:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652713355;
+        bh=BrYg+P0E76QFC+K+QlgC5bvnhhpGso5mTlZran5yFn0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GVy9NZlxVi2S7kRNO3iFcEM/OKeHQmnKzyHXYl1CpDZh5ap4dSxopYPEQuxJRCL8p
+         Lc74BM+vfewteyA1lUiFR3IR6+BwiyYjIXGtvzr2PDUY3QNWB95aWxAf3/eWS6eoVo
+         +9+RnxHJ/logeTxspYuP8Py6CL2MxNLo+8NGQsHroOd2Hs6eDmcTvgQuHPYl4QrSpg
+         UJX68Z8B73ov64eyl6wXZFIPjaMCoh2JZS3RWVfHZh3gy2oJjIRpT+kwG4aW91zveg
+         x30jmjRu2uIdX4D9zhGOEdXjDKxdRcRLF1Om+4zT41XCvA83Jj4iwYPebx60ewnCSw
+         qTSNrzanBQmjQ==
+Date:   Mon, 16 May 2022 16:02:30 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Siddh Raman Pant <siddhpant.gh@gmail.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: alsa: Better error messages
+Message-ID: <YoJnhulbKk49rZsw@sirena.org.uk>
+References: <8598037d-0e24-9bc1-3f2c-a2751ec8e871@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cH4kqHwkCNRl3JMX"
 Content-Disposition: inline
-In-Reply-To: <20220516135407.GM4009@kadam>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <8598037d-0e24-9bc1-3f2c-a2751ec8e871@gmail.com>
+X-Cookie: May be too intense for some viewers.
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 04:54:07PM +0300, Dan Carpenter wrote:
-> On Sun, May 15, 2022 at 06:57:25AM +0800, Qu Wenruo wrote:
-> > 
-> > 
-> > On 2022/5/14 20:01, Christophe JAILLET wrote:
-> > > If alloc_dummy_extent_buffer() we should return an error code, not 0 that
-> > > would mean success.
-> > > 
-> > > Fixes: a1fc41ac28d3 ("btrfs: use dummy extent buffer for super block sys chunk array read")
-> > > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> > 
-> > Reviewed-by: Qu Wenruo <wqu@suse.com>
-> > 
-> > All my fault, thanks for catching it.
-> > Qu
-> > 
-> 
-> I sent this patch in January and David was going to fold it into the
-> original patch but it got lost.  Thanks, Christophe!
 
-I found my reply to your fix that I folded the fixup, but then it got
-lost for some reason. Probably because I picked the patchset from
-mailing list again and did not take the local branch. I'll fold the fix
-again as it' still in the unmerged branch. Thanks.
+--cH4kqHwkCNRl3JMX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, May 13, 2022 at 07:10:57PM +0530, Siddh Raman Pant wrote:
+
+> This allows for potentially better machine-parsing due to an
+> expected / fixed format. Also because of eyecandy reasons.
+
+As I said in reply to Takashi's mail I'm not convinced about all the
+changes in here, a lot of it's really bikesheddy at the best of times
+and to be honest there's more here that I don't like than do.  The
+changes aren't entirely consistent in the final style either so
+presumably not great if there is any machine parsing going on.  It'd be
+much better to split this up into separate commits for separate changes,
+that'd be a lot easier to review if nothing else.
+
+>  	if (err < 0) {
+> -		ksft_print_msg("Unable to parse custom alsa-lib configuration: %s\n",
+> +		ksft_print_msg("Unable to parse custom alsa-lib configuration (%s)\n",
+>  			       snd_strerror(err));
+
+I'm really unconvinced that replacing : with () is helping either people
+or machines - the form we have at the minute is probably more common for
+command line tools?
+
+> -				ksft_print_msg("%s getting info for %d\n",
+> -					       snd_strerror(err),
+> -					       ctl_data->name);
+> +				ksft_print_msg("%s : %s while getting info\n",
+> +					       ctl_data->name, snd_strerror(err));
+
+Why add the space before the : here?  That really is not idiomatic for
+Unix stuff, or just natural language.
+
+> @@ -542,11 +541,12 @@ static bool show_mismatch(struct ctl_data *ctl, int=
+ index,
+>  		/*
+>  		 * NOTE: The volatile attribute means that the hardware
+>  		 * can voluntarily change the state of control element
+> -		 * independent of any operation by software. =20
+> +		 * independent of any operation by software.
+>  		 */
+
+This should definitely be a separate commit.
+
+>  		bool is_volatile =3D snd_ctl_elem_info_is_volatile(ctl->info);
+> -		ksft_print_msg("%s.%d expected %lld but read %lld, is_volatile %d\n",
+> -			       ctl->name, index, expected_int, read_int, is_volatile);
+> +		ksft_print_msg("%s.%d : Expected %lld, but read %lld (%s)\n",
+> +			       ctl->name, index, expected_int, read_int,
+> +			       (is_volatile ? "Volatile" : "Non-volatile"));
+
+I don't understand the comma here?
+
+--cH4kqHwkCNRl3JMX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKCZ4UACgkQJNaLcl1U
+h9CEbgf9Eps4RQf5GwgggebMWvlsEDS4AHT1wMUSZOns3d44DpU8Em6Fg9BHGF19
+Y8qy5envpJ30adNWBZNS+hH/Cr1mzHsP4CXYxADNBTMLDvwHAT7v0xDThc5lGNhi
+TjMNxnYssD4uk5vwqEDjfukpqQ8ee2U5Mteysg3nNfvUK0Y4Ty7rLU11wHPdpsib
+iuwVlm56PbJwhJz/++DDj5JfAQKz+7K5ZMWmTYNyf4flwB2UyWdueeKknrNh7HrK
+etvB6eYnOddvoP1fLzsZxFWE6Kamk2Fb7UPfdmc9HX26XhvrSpQlre5e+Otbs9Ft
+cLadxKCsaQ6kn9eKdRiwUQwfDNvXEg==
+=9XeY
+-----END PGP SIGNATURE-----
+
+--cH4kqHwkCNRl3JMX--

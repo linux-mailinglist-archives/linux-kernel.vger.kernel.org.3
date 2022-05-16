@@ -2,40 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 077E9527C6C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 05:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA76A527C43
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 05:17:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239697AbiEPDdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 23:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
+        id S239622AbiEPDRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 23:17:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239716AbiEPDdF (ORCPT
+        with ESMTP id S238156AbiEPDRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 23:33:05 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D537D1FCC7;
-        Sun, 15 May 2022 20:33:03 -0700 (PDT)
-Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L1l7s0xgHzCsjb;
-        Mon, 16 May 2022 11:28:09 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by kwepemi500015.china.huawei.com
- (7.221.188.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 16 May
- 2022 11:33:00 +0800
-From:   Lu Wei <luwei32@huawei.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <asmaa@nvidia.com>, <davthompson@nvidia.com>,
-        <limings@nvidia.com>, <cai.huoqing@linux.dev>, <arnd@arndb.de>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH net-next] net/mlxbf_gige: use eth_zero_addr() to clear mac address
-Date:   Mon, 16 May 2022 11:33:43 +0800
-Message-ID: <20220516033343.329178-1-luwei32@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Sun, 15 May 2022 23:17:08 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DDF111C18;
+        Sun, 15 May 2022 20:17:07 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L1ksZ6DQlzgYHC;
+        Mon, 16 May 2022 11:15:46 +0800 (CST)
+Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 16 May 2022 11:17:05 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 16 May 2022 11:17:05 +0800
+From:   Chen Wandun <chenwandun@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <hannes@cmpxchg.org>,
+        <surenb@google.com>, <alexs@kernel.org>, <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>
+Subject: [PATCH 1/2] psi: add support for multi level pressure stall trigger
+Date:   Mon, 16 May 2022 11:35:23 +0800
+Message-ID: <20220516033524.3130816-1-chenwandun@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500015.china.huawei.com (7.221.188.92)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -46,26 +50,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use eth_zero_addr() to clear mac address instead of memset().
+Nowadays, psi events are triggered when stall time exceed
+stall threshold, but no any different between these events.
 
-Signed-off-by: Lu Wei <luwei32@huawei.com>
+Actually, events can be divide into multi level, each level
+represent a different stall pressure, that is help to identify
+pressure information more accurately.
+
+echo "some 150000 350000 1000000" > /proc/pressure/memory would
+add [150ms, 350ms) threshold for partial memory stall measured
+within 1sec time window.
+
+Signed-off-by: Chen Wandun <chenwandun@huawei.com>
 ---
- drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/psi_types.h |  3 ++-
+ kernel/sched/psi.c        | 19 +++++++++++++------
+ 2 files changed, 15 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_main.c b/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_main.c
-index 66ef0090755e..84621b4cb15b 100644
---- a/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_main.c
-+++ b/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_main.c
-@@ -69,7 +69,7 @@ static void mlxbf_gige_initial_mac(struct mlxbf_gige *priv)
- 	u8 mac[ETH_ALEN];
- 	u64 local_mac;
+diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+index c7fe7c089718..2b1393c8bf90 100644
+--- a/include/linux/psi_types.h
++++ b/include/linux/psi_types.h
+@@ -119,7 +119,8 @@ struct psi_trigger {
+ 	enum psi_states state;
  
--	memset(mac, 0, ETH_ALEN);
-+	eth_zero_addr(mac);
- 	mlxbf_gige_get_mac_rx_filter(priv, MLXBF_GIGE_LOCAL_MAC_FILTER_IDX,
- 				     &local_mac);
- 	u64_to_ether_addr(local_mac, mac);
+ 	/* User-spacified threshold in ns */
+-	u64 threshold;
++	u64 min_threshold;
++	u64 max_threshold;
+ 
+ 	/* List node inside triggers list */
+ 	struct list_head node;
+diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+index 6f9533c95b0a..17dd233b533a 100644
+--- a/kernel/sched/psi.c
++++ b/kernel/sched/psi.c
+@@ -541,7 +541,7 @@ static u64 update_triggers(struct psi_group *group, u64 now)
+ 
+ 			/* Calculate growth since last update */
+ 			growth = window_update(&t->win, now, total[t->state]);
+-			if (growth < t->threshold)
++			if (growth < t->min_threshold || growth >= t->max_threshold)
+ 				continue;
+ 
+ 			t->pending_event = true;
+@@ -1087,15 +1087,18 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
+ {
+ 	struct psi_trigger *t;
+ 	enum psi_states state;
+-	u32 threshold_us;
++	u32 min_threshold_us;
++	u32 max_threshold_us;
+ 	u32 window_us;
+ 
+ 	if (static_branch_likely(&psi_disabled))
+ 		return ERR_PTR(-EOPNOTSUPP);
+ 
+-	if (sscanf(buf, "some %u %u", &threshold_us, &window_us) == 2)
++	if (sscanf(buf, "some %u %u %u", &min_threshold_us,
++				&max_threshold_us, &window_us) == 3)
+ 		state = PSI_IO_SOME + res * 2;
+-	else if (sscanf(buf, "full %u %u", &threshold_us, &window_us) == 2)
++	else if (sscanf(buf, "full %u %u %u", &min_threshold_us,
++				&max_threshold_us, &window_us) == 3)
+ 		state = PSI_IO_FULL + res * 2;
+ 	else
+ 		return ERR_PTR(-EINVAL);
+@@ -1107,8 +1110,11 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
+ 		window_us > WINDOW_MAX_US)
+ 		return ERR_PTR(-EINVAL);
+ 
++	if (min_threshold_us >= max_threshold_us)
++		return ERR_PTR(-EINVAL);
++
+ 	/* Check threshold */
+-	if (threshold_us == 0 || threshold_us > window_us)
++	if (max_threshold_us > window_us)
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	t = kmalloc(sizeof(*t), GFP_KERNEL);
+@@ -1117,7 +1123,8 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
+ 
+ 	t->group = group;
+ 	t->state = state;
+-	t->threshold = threshold_us * NSEC_PER_USEC;
++	t->min_threshold = min_threshold_us * NSEC_PER_USEC;
++	t->max_threshold = max_threshold_us * NSEC_PER_USEC;
+ 	t->win.size = window_us * NSEC_PER_USEC;
+ 	window_reset(&t->win, 0, 0, 0);
+ 
 -- 
-2.17.1
+2.25.1
 

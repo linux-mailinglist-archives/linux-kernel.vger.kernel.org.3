@@ -2,168 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4912652958E
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 01:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC442529590
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 01:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350482AbiEPXvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 19:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58010 "EHLO
+        id S1345800AbiEPXwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 19:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350586AbiEPXvB (ORCPT
+        with ESMTP id S1350404AbiEPXv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 19:51:01 -0400
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BFA3167FB;
-        Mon, 16 May 2022 16:50:59 -0700 (PDT)
-Received: by mail-ot1-f53.google.com with SMTP id z15-20020a9d65cf000000b00605f064482cso11151959oth.6;
-        Mon, 16 May 2022 16:50:59 -0700 (PDT)
+        Mon, 16 May 2022 19:51:57 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E31B3FD91
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 16:51:55 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id a3so10719763ybg.5
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 16:51:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=i606HfEWVO/qnL8GVN8QjqxjzHn2kHFuQ0+GTOY9ccY=;
+        b=n+DIO+7/hs5dubTKEpbxjG3NWXawGNH+U5W3/PTMqu1oU0UFB9TtNUYil1wX+uO6yH
+         naYC4DdWVKhp384hBvQJSkpBNrFmunkQbfljVYDe7NdgbOZXE6OdvV/9UV5HaVzr4U/G
+         Ozw1o91PaZqKW+xWqVTDMRKC402IK5R8WjYODJ7cAJa65THZWGX8kut+xKsfzhfB37Et
+         7PvY2KVP3rbyrRpbJEv6snQanikc9Bm68A2JmNYS5qml1jJcp+wyNolOD5mxUs087RFM
+         w5OYrjpQs1PN36UXYIwvth6TRpSpIiHayEsbY2xabi0fhhvPRZoHX85Vb0McblFrLATl
+         KMNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hAZlTfSrsJjd8YPKa5lPR+jdJB2otw3VfDdAjcUM/Tk=;
-        b=JSiYyPOvqXYIc+lsEaXefJ80fl3bS/BshdFe7Q0v+s0uFJ4EeSCupzNVSgnFnfJf7v
-         4OJ92mEHll1rLUK1c2twPtMMmSTHQ9oLfsvQXmuFDAEurFVmlPflCr7dNClz/l6QVf0d
-         W+ssskUEDNCFiVwoDwFbzZqabxaAxs6wNxCr/gMElnxFhEmk3VNnat9jWEKqArE92M2+
-         L10Hp9mbNQMBZAUlXf6GLURCGEddSqqM1Aur2lrJzzfhCsQLkxWr5B9IapJIAFkco6Bq
-         0dlPZ8Bj92hyScf2hnZ11D8UBK9YMmNSWWeqRce9Cfnp973Khil59aCNFJ72/D3gyE6S
-         np0g==
-X-Gm-Message-State: AOAM5330+hFZBbKQrxepHRtn+HkHeNaeYFl210jbeSMWrALE/W75yB1r
-        YDaX4Y5VCZ48z4jmOpL2ug==
-X-Google-Smtp-Source: ABdhPJzCJr7RYLgraF/mlXq4mT3z7F4FFe2icQKEADzp0aPIlGvnKD6HvdtYUeFqKhg515C24pSyYg==
-X-Received: by 2002:a05:6830:2093:b0:605:6f01:1ed1 with SMTP id y19-20020a056830209300b006056f011ed1mr7220064otq.166.1652745058730;
-        Mon, 16 May 2022 16:50:58 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w195-20020aca30cc000000b0032906c0eab0sm735758oiw.31.2022.05.16.16.50.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 16:50:58 -0700 (PDT)
-Received: (nullmailer pid 3566937 invoked by uid 1000);
-        Mon, 16 May 2022 23:50:57 -0000
-Date:   Mon, 16 May 2022 18:50:57 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, krzk+dt@kernel.org,
-        jonathan@marek.ca, tdas@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Dmitry Baryshkov <dmityr.baryshkov@linaro.org>
-Subject: Re: [PATCH v3 3/6] dt-bindings: clock: Add Qcom SM8350 GPUCC bindings
-Message-ID: <20220516235057.GA3564535-robh@kernel.org>
-References: <20220504122725.179262-1-robert.foss@linaro.org>
- <20220504122725.179262-4-robert.foss@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=i606HfEWVO/qnL8GVN8QjqxjzHn2kHFuQ0+GTOY9ccY=;
+        b=FBOw14ZXXHYMKXfCLy8r+trrEJ+QtKxEOiNYEimFeu3OeSUVpTYhac0uMlr0DIclda
+         OKNf6hqFlhcIXFAEmZCQKD/0C3WhgJEFkqaDSw/HzB9KaXPpzqamWDIJJMdgi5skCyxG
+         er6Dcysat3/v0KPxXDrOkRC5fPcnKjfiMYId9W/9zBCHQF4BOof75KKdiZ3SRRFwEJWk
+         VTuflxMsTcKFejrTKrQFbC8VYmnvdgm8RMwKL88DdwR/CRQro8CA8c8HLV6Xof7nPnNb
+         XKg3wOLmYkJlRMGmYXrgEdfiqI8JK/EIu2PLIFaqOBxNptT4pbHGL4Ryalb2NpvO/EeI
+         mzWw==
+X-Gm-Message-State: AOAM532Ve4bMc1L4o6gRJgpRB+YWBlH8muR/RlpD8O7rwq2gKUlT52Mf
+        YOm/lIM+UGNCO0/XkFQgOnV0bxZB5UZbRWmgXM003w==
+X-Google-Smtp-Source: ABdhPJyTW5XuzXVi3sj4DqnD1ld6DZCkzmQw1+kKkUEO2Q4whnBJnGiGh0ctOzXzfOqXqHcJeD9HZd0WZDI5Y5IaHSQ=
+X-Received: by 2002:a05:6902:389:b0:633:31c1:d0f7 with SMTP id
+ f9-20020a056902038900b0063331c1d0f7mr19940675ybs.543.1652745114021; Mon, 16
+ May 2022 16:51:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220504122725.179262-4-robert.foss@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220516075538.1276644-1-surenb@google.com> <78c3a163-551b-ef53-4018-7b6ba0640757@linuxfoundation.org>
+ <CAJuCfpEW3kif-QAVdFKyZikVRT5QrLGwJ5pzua+yuVq=A=bv8w@mail.gmail.com> <7f0fd407-18f5-2718-40b5-b16804163197@linuxfoundation.org>
+In-Reply-To: <7f0fd407-18f5-2718-40b5-b16804163197@linuxfoundation.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 16 May 2022 16:51:43 -0700
+Message-ID: <CAJuCfpFn7aRoTJHmnR7oXuXY+LkhMF2R+W7h9pL_3hm9ynUJSA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] selftests: vm: add process_mrelease tests
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        David Rientjes <rientjes@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <guro@fb.com>, Minchan Kim <minchan@kernel.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jann Horn <jannh@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>, shuah@kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
+        kernel-team <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 02:27:22PM +0200, Robert Foss wrote:
-> Add device tree bindings for graphics clock controller for
-> Qualcomm Technology Inc's SM8350 SoCs.
-> 
-> Signed-off-by: Robert Foss <robert.foss@linaro.org>
-> Reviewed-by: Dmitry Baryshkov <dmityr.baryshkov@linaro.org>
-> ---
->  .../devicetree/bindings/clock/qcom,gpucc.yaml |  2 +
->  include/dt-bindings/clock/qcom,gpucc-sm8350.h | 52 +++++++++++++++++++
->  2 files changed, 54 insertions(+)
->  create mode 100644 include/dt-bindings/clock/qcom,gpucc-sm8350.h
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml b/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
-> index 9ebcb1943b0a..4090cc7ea2ae 100644
-> --- a/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
-> +++ b/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
-> @@ -20,6 +20,7 @@ description: |
->      dt-bindings/clock/qcom,gpucc-sm6350.h
->      dt-bindings/clock/qcom,gpucc-sm8150.h
->      dt-bindings/clock/qcom,gpucc-sm8250.h
-> +    dt-bindings/clock/qcom,gpucc-sm8350.h
->  
->  properties:
->    compatible:
-> @@ -31,6 +32,7 @@ properties:
->        - qcom,sm6350-gpucc
->        - qcom,sm8150-gpucc
->        - qcom,sm8250-gpucc
-> +      - qcom,sm8350-gpucc
->  
->    clocks:
->      items:
-> diff --git a/include/dt-bindings/clock/qcom,gpucc-sm8350.h b/include/dt-bindings/clock/qcom,gpucc-sm8350.h
-> new file mode 100644
-> index 000000000000..d2294e0d527e
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/qcom,gpucc-sm8350.h
-> @@ -0,0 +1,52 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
+On Mon, May 16, 2022 at 4:28 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> On 5/16/22 2:47 PM, Suren Baghdasaryan wrote:
+> > On Mon, May 16, 2022 at 1:29 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+> >>
+> >> On 5/16/22 1:55 AM, Suren Baghdasaryan wrote:
+> >>> Introduce process_mrelease syscall sanity tests which include tests
+> >>> which expect to fail:
+> >>> - process_mrelease with invalid pidfd and flags inputs
+> >>> - process_mrelease on a live process with no pending signals
+> >>> and valid process_mrelease usage which is expected to succeed.
+> >>> Because process_mrelease has to be used against a process with a pending
+> >>> SIGKILL, it's possible that the process exits before process_mrelease
+> >>> gets called. In such cases we retry the test with a victim that allocates
+> >>> twice more memory up to 1GB. This would require the victim process to
+> >>> spend more time during exit and process_mrelease has a better chance of
+> >>> catching the process before it exits and succeeding.
+> >>>
+> >>> On success the test reports the amount of memory the child had to
+> >>> allocate for reaping to succeed. Sample output:
+> >>>       Success reaping a child with 1MB of memory allocations
+> >>>
+> >>> On failure the test reports the failure. Sample outputs:
+> >>>       All process_mrelease attempts failed!
+> >>>       process_mrelease: Invalid argument
+> >>>
+> >>
+> >> Nit: Please format this better - include actual example output from the
+> >> command and how to run the test examples.
+> >
+> > Hmm... Those are the actual outputs from the command and it does not
+> > take any input arguments. Do you mean smth like this:
+> >
+> > $ mrelease_test
+> > Success reaping a child with 1MB of memory allocations
+> >
+> > $ mrelease_test
+> > All process_mrelease attempts failed!
+> >
+> > $ mrelease_test
+> > process_mrelease: Invalid argument
+> >
+> > ?
+>
+> This looks good.
+>
+> >
+> >>
+> >>> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> >>> ---
+> >>>    tools/testing/selftests/vm/.gitignore      |   1 +
+> >>>    tools/testing/selftests/vm/Makefile        |   1 +
+> >>>    tools/testing/selftests/vm/mrelease_test.c | 214 +++++++++++++++++++++
+> >>>    tools/testing/selftests/vm/run_vmtests.sh  |  16 ++
+> >>>    4 files changed, 232 insertions(+)
+> >>>    create mode 100644 tools/testing/selftests/vm/mrelease_test.c
+> >>>
+>
+> [snip]
+>
+> >>
+> >> Okay these above 3 routines are called once. I am not seeing any point
+> >> in making these separate routines. I made the same comment on v1.
+> >
+> > I must have misunderstood your previous comment. Will change.
+> >
+>
+> Thank you.
+>
+> >>
+>
+> >>
+> >> Now the above code can be a separate function which will make it readable.
+> >
+> > Ack.
+> >
+> >>
+>
+> >>> +
+> >>
+> >> Why do you need these ifdefs - syscall will return ENOSYS and you can
+> >> key off that. Please take a look at other usages of syscall in the
+> >> repo.
+> >
+> > The issue is that I need to provide the syscall number when calling
+> > syscall() (in my case __NR_pidfd_open and __NR_process_mrelease) and
+> > if that number is not defined in the userspace headers on a given
+> > system then what should I pass instead?
+> > When implementing this I followed the examples of
+> > https://elixir.bootlin.com/linux/latest/source/tools/testing/selftests/vm/memfd_secret.c#L30
+> > and https://elixir.bootlin.com/linux/latest/source/tools/testing/selftests/vm/userfaultfd.c#L65.
+> > My original implementation was modeled after this approach:
+> > https://elixir.bootlin.com/linux/latest/source/tools/testing/selftests/vm/mlock2.h#L15.
+> > If none of these are correct, could you please point me to the example
+> > you want me to follow?
+> >
+>
+> kselftests include kernel headers. As long as these syscalls are
+> defined in the kernel headers, the test will build.
+>
+> Looks it is defined in include/uapi/asm-generic/unistd.h
+>
+> You can assume it is defined and then if we find architectures that
+> don't, you can follow what tools/testing/selftests/pidfd/pidfd.h
+> does.
+>
+> This way the test can simply call syscall and handle ENOSYS.
 
-QCom reviewed and approved the license on this, right?
+Thanks for the guidance! I'll try that approach.
+Suren.
 
-Dual license.
-
-> +/*
-> + * Copyright (c) 2019-2020, The Linux Foundation. All rights reserved.
-> + */
-> +
-> +#ifndef _DT_BINDINGS_CLK_QCOM_GPU_CC_SM8350_H
-> +#define _DT_BINDINGS_CLK_QCOM_GPU_CC_SM8350_H
-> +
-> +/* GPU_CC clocks */
-> +#define GPU_CC_AHB_CLK			0
-> +#define GPU_CC_CB_CLK			1
-> +#define GPU_CC_CRC_AHB_CLK		2
-> +#define GPU_CC_CX_APB_CLK		3
-> +#define GPU_CC_CX_GMU_CLK		4
-> +#define GPU_CC_CX_QDSS_AT_CLK		5
-> +#define GPU_CC_CX_QDSS_TRIG_CLK		6
-> +#define GPU_CC_CX_QDSS_TSCTR_CLK	7
-> +#define GPU_CC_CX_SNOC_DVM_CLK		8
-> +#define GPU_CC_CXO_AON_CLK		9
-> +#define GPU_CC_CXO_CLK			10
-> +#define GPU_CC_FREQ_MEASURE_CLK		11
-> +#define GPU_CC_GMU_CLK_SRC		12
-> +#define GPU_CC_GX_GMU_CLK		13
-> +#define GPU_CC_GX_QDSS_TSCTR_CLK	14
-> +#define GPU_CC_GX_VSENSE_CLK		15
-> +#define GPU_CC_HLOS1_VOTE_GPU_SMMU_CLK	16
-> +#define GPU_CC_HUB_AHB_DIV_CLK_SRC	17
-> +#define GPU_CC_HUB_AON_CLK		18
-> +#define GPU_CC_HUB_CLK_SRC		19
-> +#define GPU_CC_HUB_CX_INT_CLK		20
-> +#define GPU_CC_HUB_CX_INT_DIV_CLK_SRC	21
-> +#define GPU_CC_MND1X_0_GFX3D_CLK	22
-> +#define GPU_CC_MND1X_1_GFX3D_CLK	23
-> +#define GPU_CC_PLL0			24
-> +#define GPU_CC_PLL1			25
-> +#define GPU_CC_SLEEP_CLK		26
-> +
-> +/* GPU_CC resets */
-> +#define GPUCC_GPU_CC_ACD_BCR		0
-> +#define GPUCC_GPU_CC_CB_BCR		1
-> +#define GPUCC_GPU_CC_CX_BCR		2
-> +#define GPUCC_GPU_CC_FAST_HUB_BCR	3
-> +#define GPUCC_GPU_CC_GFX3D_AON_BCR	4
-> +#define GPUCC_GPU_CC_GMU_BCR		5
-> +#define GPUCC_GPU_CC_GX_BCR		6
-> +#define GPUCC_GPU_CC_XO_BCR		7
-> +
-> +/* GPU_CC GDSCRs */
-> +#define GPU_CX_GDSC			0
-> +#define GPU_GX_GDSC			1
-> +
-> +#endif
-> -- 
-> 2.34.1
-> 
-> 
+>
+> thanks,
+> -- Shuah
+>
+>
+>
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+>

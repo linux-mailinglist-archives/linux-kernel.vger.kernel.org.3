@@ -2,96 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93B21528A49
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 18:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C34528A82
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 18:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235871AbiEPQ1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 12:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46432 "EHLO
+        id S1343807AbiEPQd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 12:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343585AbiEPQ0o (ORCPT
+        with ESMTP id S1343720AbiEPQdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 12:26:44 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0233A701;
-        Mon, 16 May 2022 09:26:43 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GGCOdp030439;
-        Mon, 16 May 2022 16:26:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=FW7LXEMJ9ccPDqxTB2fNIrNiMkgGgzIJb2LJamfTN1c=;
- b=RJ6MmqluV7IZwhEGYh5OC/kAjd842cjLpI0CvsAhXw9s8OHkVyI+o/yV2N/iI5RBtYlc
- UixYpW+thKJO+VPJRYO7kHIIyW60/fG3WR0Fp4xI1UeJq04zi7FLMcYTKGH0YzDrJmQx
- +wDk+c2wh1bXRI4abP/e5joYkPAarjeP2T2w8eJXyc4peanB4xggrX46Lho/wgmmVoar
- /9T1SgGL/WC//27Amif9g1ceK1wfmhCb63pDtt0i+vWnpg7amcllkZPvR/mXj/8Su+KR
- V8i8bkRPzx+/2sQLZiGr5Ow9jOdaRvUuy42K6l3awQSrYmmGnrd8Ip9r8Glw2gt0dQa+ oQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3swy09a7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 16:26:43 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24GGExP2008296;
-        Mon, 16 May 2022 16:26:42 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3swy099j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 16:26:42 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24GGAMV2012754;
-        Mon, 16 May 2022 16:26:40 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04fra.de.ibm.com with ESMTP id 3g2428tbhe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 16:26:39 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24GGQav041091544
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 16 May 2022 16:26:36 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 90FA3A4055;
-        Mon, 16 May 2022 16:26:36 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DBF29A404D;
-        Mon, 16 May 2022 16:26:35 +0000 (GMT)
-Received: from [9.171.15.172] (unknown [9.171.15.172])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 16 May 2022 16:26:35 +0000 (GMT)
-Message-ID: <15c52e89-d6cf-213a-fc03-413d3dcba90c@linux.ibm.com>
-Date:   Mon, 16 May 2022 18:30:24 +0200
+        Mon, 16 May 2022 12:33:15 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68A83CFC2;
+        Mon, 16 May 2022 09:33:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=snNEotF/NnF6oRsYP9tQxjPI6hsRS2uTTzGW3F44uFU=; b=IrCfuw38CFBNzUUmwO4z/x0ude
+        e9PSigrpJmmkANb9hFO8MYFTYKFJ+f2pDfg9ZWd+jWh0me4IY2UjT4bBJdJuG6aHpan97hS9RvfOH
+        pKOQ4g3CadR7oxkIRI3RkZhas481ugQtknW2dOyn8WDu4fqTLFzYzJFnX5BjK36hBguKTcosLNdPK
+        XLSo/vQGgUIYFydsMQwjF4Cl6fcPC+lWayRTRUcaC/1DW89DyT+5i4PUQlvBei/VhxE3uCiNyFXXu
+        //FxcgwLDGTfxmReP4BgKaOgOZfz1x9KSbEjS92ORoxS5FR3YrIsPaoJlMSUKXKS/BK4yktUJz/OW
+        jzuoL6kQ==;
+Received: from [177.183.162.244] (helo=[192.168.0.5])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nqdeI-006uBd-EQ; Mon, 16 May 2022 18:32:46 +0200
+Message-ID: <0a9ba385-84b2-4137-ced1-f7044efff562@igalia.com>
+Date:   Mon, 16 May 2022 13:32:14 -0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v9 1/3] s390x: KVM: ipte lock for SCA access should be
- contained in KVM
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 24/30] panic: Refactor the panic path
 Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
-        thuth@redhat.com, imbrenda@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, wintera@linux.ibm.com, seiden@linux.ibm.com,
-        nrb@linux.ibm.com
-References: <20220506092403.47406-1-pmorel@linux.ibm.com>
- <20220506092403.47406-2-pmorel@linux.ibm.com>
- <e23160b6-2d3c-ebdb-ac5a-c71311e7e5ec@redhat.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <e23160b6-2d3c-ebdb-ac5a-c71311e7e5ec@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     "michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
+        d.hatayama@jp.fujitsu.com, akpm@linux-foundation.org,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, dave.hansen@linux.intel.com, feng.tang@intel.com,
+        gregkh@linuxfoundation.org, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-25-gpiccoli@igalia.com> <Yn0TnsWVxCcdB2yO@alley>
+ <d313eec2-96b6-04e3-35cd-981f103d010e@igalia.com> <YoIlvFxbqoiDsD1l@alley>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <YoIlvFxbqoiDsD1l@alley>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: RIuCxaz11snyi8IfVRivkNE-DjSOn0Ha
-X-Proofpoint-GUID: CDHvPm2uNGaGKjFLqeu8NoyXsSodW2PT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-16_14,2022-05-16_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
- malwarescore=0 impostorscore=0 mlxscore=0 lowpriorityscore=0
- suspectscore=0 priorityscore=1501 spamscore=0 clxscore=1015 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205160091
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -100,31 +85,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 16/05/2022 07:21, Petr Mladek wrote:
+> [...]
+> Ah, it should have been:
+> 
+>      + notifiers vs. kmsg_dump
+>      + notifiers vs. crash_dump
+>      + crash_dump vs. kmsg_dump
+> 
+> I am sorry for the confusion. Even "crash_dump" is slightly
+> misleading because there is no function with this name.
+> But it seems to be easier to understand than __crash_kexec().
+
+Cool, thanks! Now it's totally clear for me =)
+I feel crash dump is the proper term, but I personally prefer kdump to
+avoid mess-up with user space "core dump" concept heheh
+Also, KDUMP is an entry on MAINTAINERS file.
 
 
-On 5/12/22 11:08, David Hildenbrand wrote:
-> On 06.05.22 11:24, Pierre Morel wrote:
->> The former check to chose between SIIF or not SIIF can be done
->> using the sclp.has_siif instead of accessing per vCPU structures
+> [...]
+>> Heheh OK, I appreciate your opinion, but I guess we'll need to agree in
+>> disagree here - I'm much more fond to this kind of code than a bunch of
+>> if/else blocks that almost give headaches. Encoding such "level" logic
+>> in the if/else scheme is very convoluted, generates a very big code. And
+>> the functions aren't so black magic - they map a level in bits, and the
+>> functions _once() are called...once! Although we switch the position in
+>> the code, so there are 2 calls, one of them is called and the other not.
+> 
+> I see. Well, I would consider this as a warning that the approach is
+> too complex. If the code, using if/then/else, would cause headaches
+> then also understanding of the behavior would cause headaches for
+> both users and programmers.
+> 
+> 
+>> But that's totally fine to change - especially if we're moving away from
+>> the "level" logic. I see below you propose a much simpler approach - if
+>> we follow that, definitely we won't need the "black magic" approach heheh
+> 
+> I do not say that my proposal is fully correct. But we really need
+> this kind of simpler approach.
+
+It's cool, I agree that your idea is much simpler and makes sense - mine
+seems to be an over-engineering effort. Let's see the opinions of the
+interested parties, I'm curious to see if everybody agrees here, that'd
+would be ideal (and kind of "wishful thinking" I guess heheh - panic
+path is polemic).
+
+
+> [...] 
+>> Here we have a very important point. Why do we need 2 variants of SMP
+>> CPU stopping functions? I disagree with that - my understanding of this
+>> after some study in architectures is that the crash_() variant is
+>> "stronger", should work in all cases and if not, we should fix that -
+>> that'd be a bug.
 >>
->> When accessing the SCA, ipte lock and ipte_unlock do not need
->> to access any vcpu structures but only the KVM structure.
+>> Such variant either maps to smp_send_stop() (in various architectures,
+>> including XEN/x86) or overrides the basic function with more proper
+>> handling for panic() case...I don't see why we still need such
+>> distinction, if you / others have some insight about that, I'd like to
+>> hear =)
+> 
+> The two variants were introduced by the commit 0ee59413c967c35a6dd
+> ("x86/panic: replace smp_send_stop() with kdump friendly version in
+> panic path")
+> 
+> It points to https://lkml.org/lkml/2015/6/24/44 that talks about
+> still running watchdogs.
+> 
+> It is possible that the problem could be fixed another way. It is
+> even possible that it has already been fixed by the notifiers
+> that disable the watchdogs.
+> 
+> Anyway, any change of the smp_send_stop() behavior should be done
+> in a separate patch. It will help with bisection of possible
+> regression. Also it would require a good explanation in
+> the commit message. I would personally do it in a separate
+> patch(set).
+
+Thanks for the archeology and interesting findings. I agree that is
+better to split in smaller patches. I'm planning a split in 3 patches
+for V2: clean-up (comment, console flushing idea, useless header), the
+refactor itself and finally, this SMP change.
+
+
+> [...] 
+>> You had the order of panic_reboot_list VS. consoles flushing inverted.
+>> It might make sense, although I didn't do that in V1...
+> 
+> IMHO, it makes sense:
+> 
+>   1. panic_reboot_list contains notifiers that do the reboot
+>      immediately, for example, xen_panic_event, alpha_panic_event.
+>      The consoles have to be flushed earlier.
+> 
+>   2. console_flush_on_panic() ignores the result of console_trylock()
+>      and always calls console_unlock(). As a result the lock should
+>      be unlocked at the end. And any further printk() should be able
+>      to printk the messages to the console immediately. It means
+>      that any messages printed by the reboot notifiers should appear
+>      on the console as well.
+> [...] 
+>> OK, I agree with you! It's indeed simpler and if others agree, I can
+>> happily change the logic to what you proposed. Although...currently the
+>> "crash_kexec_post_notifiers" allows to call _all_ panic_reboot_list
+>> callbacks _before kdump_.
 >>
->> Let's simplify the ipte handling.
->>
->> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
+>> We need to mention this change in the commit messages, but I really
+>> would like to hear the opinions of heavy users of notifiers (as
+>> Michael/Hyper-V) and the kdump interested parties (like Baoquan / Dave
+>> Young / Hayatama). If we all agree on such approach, will change that
+>> for V2 =)
 > 
-> Much better
+> Sure, we need to make sure that we call everything that is needed.
+> And it should be documented.
 > 
-> Reviewed-by: David Hildenbrand <david@redhat.com>
+> I believe that this is the right way because:
 > 
+>   + It was actually the motivation for this patchset. We split
+>     the notifiers into separate lists because we want to call
+>     only the really needed ones before kmsg_dump and crash_dump.
 > 
+>   + If anything is needed for crash_dump that it should be called
+>     even when crash_dump is called first. It should be either
+>     hardcoded into crash_dump() or we would need another notifier
+>     list that will be always called before crash_dump.
 
-Thanks,
-Regards,
+Ack, makes sense! Will do that in V2 =)
 
-Pierre
+For the "hardcoded" part, we have the custom machine_crash_kexec() in
+some archs (like x86), unfortunately not in all of them - this path is
+ideally for mandatory code that is required for a successful crash_kexec().
 
--- 
-Pierre Morel
-IBM Lab Boeblingen
+The problem is the "same old, same old" - architecture folks push that
+to panic notifiers; notifiers folks push it to the arch custom shutdown
+handler (see [0] heheh).
+(CCed Marc / Mark in case they want to chime-in here...)
+
+
+>[...] 
+> Thanks a lot for working on this.
+> 
+> Best Regards,
+> Petr
+
+
+You're welcome, _thank you_ for the great and detailed reviews!
+Cheers,
+
+
+Guilherme
+
+
+[0]
+https://lore.kernel.org/lkml/427a8277-49f0-4317-d6c3-4a15d7070e55@igalia.com/

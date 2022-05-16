@@ -2,81 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1E052930F
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA11E52930B
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349442AbiEPVms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 17:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
+        id S1348205AbiEPVm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 17:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240045AbiEPVmp (ORCPT
+        with ESMTP id S240045AbiEPVmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 17:42:45 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E68F41FAC
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 14:42:43 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5D8741F92F;
-        Mon, 16 May 2022 21:42:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1652737362; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HovTC6FiGf3ja40F9c2fQ83eYmm4tQXXZRRsLYbnnew=;
-        b=C4uCBBXfemb8MP3PaJvLlMu9yHsXfZqNCeK0/wzvpjZNdf6aNz5aWaRHx0KH4pl4kueyrB
-        FJGLewWXchFIshCwRnNFYpncf2B63+m1+M3wbEGERstAdf37CLhR/B6chyUuSRAhyXfDZR
-        uzcaEocfzBK/NNpFy9C8jpi5Q5KkWpM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1652737362;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HovTC6FiGf3ja40F9c2fQ83eYmm4tQXXZRRsLYbnnew=;
-        b=6x2VDOQWPLaOaelqHEiu5a2K30qWoyibm1xQOrvQu2BG7G0HPFg7eFDozfYY3bXC2VEcxw
-        vwDcUi/pKd3NTMBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 189A113AAB;
-        Mon, 16 May 2022 21:42:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6GyHBFLFgmIBOwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 16 May 2022 21:42:42 +0000
-Message-ID: <8eccb3bc-e6b1-354b-e1de-bd3d896dcb35@suse.cz>
-Date:   Mon, 16 May 2022 23:41:27 +0200
+        Mon, 16 May 2022 17:42:24 -0400
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B8241FA9;
+        Mon, 16 May 2022 14:42:23 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so21937019fac.7;
+        Mon, 16 May 2022 14:42:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=miM/1tXgf+EMfrnuisvw3gl4b5yUK9GRE+3nbD24k6w=;
+        b=J2BS1ngDxjlrGHmbE/LPCY9+YtO8oCSwTdW3N+lslWL/66vec8FWgXGnLt/CtBA5R7
+         7m9Umn+ScVxiJny0jtxrDgfhDni8E6sDpQFh2KgxMJ018zIzwTVDeTdXOMVHTsvXss9l
+         Ssyc5ALkVxXBF22S7ID0gk29gzFDhZSW/EFIy1WErywpE/8jCLoZeUS8K4pHLY06wQAz
+         UVn6zUhVLnF4S1pi+YD+Phyjm9gLvfiZ1kZAUTHWaGRPtpXBvd7ZnDturorZ8TP2y9dE
+         qyVIodju8b27BtbV7lYIXpo6USDsEqAzEEUJ7sCuO7hXehP0Cw0iVOTMmW9NEOr18p+Y
+         y9/A==
+X-Gm-Message-State: AOAM5308wzzo/8sxCkZdd+Gj33xdE/eIn5uXcztgDPuww3o9zqMJK7vn
+        is+7TYYrxTmTEi3g8QCOKw==
+X-Google-Smtp-Source: ABdhPJwlfoPVrO/78d0K4Yx5rMPYvlNVxl1Ly43cRjbP3YvRizhf5gwB83n/72cjgdooIBzjkmASNg==
+X-Received: by 2002:a05:6871:1cb:b0:f1:b503:d187 with SMTP id q11-20020a05687101cb00b000f1b503d187mr1673725oad.164.1652737342264;
+        Mon, 16 May 2022 14:42:22 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id f72-20020a9d03ce000000b0060603221270sm4296518otf.64.2022.05.16.14.42.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 14:42:21 -0700 (PDT)
+Received: (nullmailer pid 3347472 invoked by uid 1000);
+        Mon, 16 May 2022 21:42:20 -0000
+Date:   Mon, 16 May 2022 16:42:20 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 15/17] PCI: dwc: Introduce dma-ranges property support
+ for RC-host
+Message-ID: <20220516214220.GB3296584-robh@kernel.org>
+References: <20220503214638.1895-1-Sergey.Semin@baikalelectronics.ru>
+ <20220503214638.1895-16-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] tracing: add ACCOUNT flag for allocations from marked
- slab caches
-Content-Language: en-US
-To:     Shakeel Butt <shakeelb@google.com>, Vasily Averin <vvs@openvz.org>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        David Rientjes <rientjes@google.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Christoph Lameter <cl@linux.com>, kernel@openvz.org,
-        Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-References: <1fd21e25-b095-e055-fc2e-abda640a0575@openvz.org>
- <CALvZod6wmxxigoLVg8Q+upqOkyoh+nPuVT0yx_XTbu8RXYYFgA@mail.gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <CALvZod6wmxxigoLVg8Q+upqOkyoh+nPuVT0yx_XTbu8RXYYFgA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220503214638.1895-16-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,64 +74,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/22 21:10, Shakeel Butt wrote:
-> On Mon, May 16, 2022 at 11:53 AM Vasily Averin <vvs@openvz.org> wrote:
->>
->> Slab caches marked with SLAB_ACCOUNT force accounting for every
->> allocation from this cache even if __GFP_ACCOUNT flag is not passed.
->> Unfortunately, at the moment this flag is not visible in ftrace output,
->> and this makes it difficult to analyze the accounted allocations.
->>
->> This patch adds the __GFP_ACCOUNT flag for allocations from slab caches
->> marked with SLAB_ACCOUNT to the ftrace output.
->>
->> Signed-off-by: Vasily Averin <vvs@openvz.org>
->> ---
->>  mm/slab.c | 3 +++
->>  mm/slub.c | 3 +++
->>  2 files changed, 6 insertions(+)
->>
->> diff --git a/mm/slab.c b/mm/slab.c
->> index 0edb474edef1..4c3da8dfcbdb 100644
->> --- a/mm/slab.c
->> +++ b/mm/slab.c
->> @@ -3492,6 +3492,9 @@ void *__kmem_cache_alloc_lru(struct kmem_cache *cachep, struct list_lru *lru,
+On Wed, May 04, 2022 at 12:46:36AM +0300, Serge Semin wrote:
+> In accordance with the generic PCIe Root Port DT-bindings the "dma-ranges"
+> property has the same format as the "ranges" property. The only difference
+> is in their semantics. The "dma-ranges" property describes the PCIe-to-CPU
+> memory mapping in opposite to the CPU-to-PCIe mapping of the "ranges"
+> property. Even though the DW PCIe controllers are normally equipped with
+> internal Address Translation Unit which inbound and outbound tables can be
+> used to implement both properties semantics, it was surprise for me to
+> discover that the host-related part of the DW PCIe driver currently
+> supports the "ranges" property only while the "dma-ranges" windows are
+> just ignored. Having the "dma-ranges" supported in the driver would be
+> very handy for the platforms, that don't tolerate the 1:1 CPU-PCIe memory
+> mapping and require customized the PCIe memory layout. So let's fix that
+> by introducing the "dma-ranges" property support.
 > 
-> What about kmem_cache_alloc_node()?
+> First of all we suggest to rename the dw_pcie_prog_inbound_atu() method to
+> dw_pcie_prog_ep_inbound_atu() and create a new version of the
+> dw_pcie_prog_inbound_atu() function. Thus we'll have two methods for RC
+> and EP controllers respectively in the same way as it has been developed
+> for the outbound ATU setup methods.
 > 
->>  {
->>         void *ret = slab_alloc(cachep, lru, flags, cachep->object_size, _RET_IP_);
->>
->> +       if (cachep->flags & SLAB_ACCOUNT)
+> Secondly aside with the memory window index and type the new
+> dw_pcie_prog_inbound_atu() function will accept CPU address, PCIe address
+> and size as its arguments. These parameters define the PCIe and CPU memory
+> ranges which will be used to setup the respective inbound ATU mapping. The
+> passed parameters need to be verified against the ATU ranges constraints
+> in the same way as it is done for the outbound ranges.
 > 
-> Should this 'if' be unlikely() or should we trace cachep->flags
-> explicitly to avoid this branch altogether?
+> Finally the DMA-ranges detected for the PCIe controller need to be
+> converted into the inbound ATU entries during the host controller
+> initialization procedure. It will be done in the framework of the
+> dw_pcie_iatu_setup() method. Note before setting the inbound ranges up we
+> need to disable all the inbound ATU entries in order to prevent unexpected
+> PCIe TLPs translations defined by some third party software like
+> bootloader.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> ---
+>  .../pci/controller/dwc/pcie-designware-ep.c   |  4 +-
+>  .../pci/controller/dwc/pcie-designware-host.c | 32 ++++++++++-
+>  drivers/pci/controller/dwc/pcie-designware.c  | 57 ++++++++++++++++++-
+>  drivers/pci/controller/dwc/pcie-designware.h  |  6 +-
+>  4 files changed, 90 insertions(+), 9 deletions(-)
 
-Hm I think ideally the tracepoint accepts cachep instead of current
-cachep->*size parameters and does the necessary extraction and
-modification in its fast_assign.
-
-> 
->> +               flags |= __GFP_ACCOUNT;
->> +
->>         trace_kmem_cache_alloc(_RET_IP_, ret,
->>                                cachep->object_size, cachep->size, flags);
->>
->> diff --git a/mm/slub.c b/mm/slub.c
->> index ed5c2c03a47a..670bbfef9e49 100644
->> --- a/mm/slub.c
->> +++ b/mm/slub.c
->> @@ -3231,6 +3231,9 @@ void *__kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
->>  {
->>         void *ret = slab_alloc(s, lru, gfpflags, _RET_IP_, s->object_size);
->>
->> +       if (s->flags & SLAB_ACCOUNT)
->> +               gfpflags |= __GFP_ACCOUNT;
->> +
->>         trace_kmem_cache_alloc(_RET_IP_, ret, s->object_size,
->>                                 s->size, gfpflags);
->>
->> --
->> 2.25.1
->>
-
+Reviewed-by: Rob Herring <robh@kernel.org>

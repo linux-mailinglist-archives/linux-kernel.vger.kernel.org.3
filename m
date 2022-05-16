@@ -2,120 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66441527EB6
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25842527EB5
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241292AbiEPHlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 03:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41068 "EHLO
+        id S241210AbiEPHld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 03:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241235AbiEPHlK (ORCPT
+        with ESMTP id S241243AbiEPHlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 03:41:10 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04C82600
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:41:09 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id f10so1766274pjs.3
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:41:09 -0700 (PDT)
+        Mon, 16 May 2022 03:41:12 -0400
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3712261C;
+        Mon, 16 May 2022 00:41:10 -0700 (PDT)
+Received: by mail-vs1-xe32.google.com with SMTP id e19so14582843vsu.12;
+        Mon, 16 May 2022 00:41:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zv3IxfM9rqsBN5giYrSVliQlXB5yWJw2YJUUlPgHgY0=;
-        b=KIkAtTgwPJvQoPRr9kQ1tZV/jSmVC6GHNojs95fbMqX43hgUvjQWWZOS9+8+ZGBfWO
-         OhVjk5d6YCV+uouSxT1R+5DnYjyBpfgExMMczeeDVuMuQhsuEQZb7e4gTzztpnf6fjDL
-         34cC8mthpS7+5hLRZGFcSPXogWc9ceMjqDHSPuRII6IkFArZRMGIGbZQertEZYAUEnU6
-         G/kQShRY/7XBpLH57e6ZCkbN2VQpW8EnpTg2gEcjXk4qxFPAK1hF6w9ISXDpC7jDSYcJ
-         Nh79hC9zAUp0pK604fL34fe84p18BzkAlkbv2QvseTctH8DF7Ebq0aUXDPRtVzYkN95B
-         JCkg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=da0tSqTpoZccXNC6Mon6l1Je9BJX/v1Bpiwu4fXyLMQ=;
+        b=MN1SfpWtfgHZisIRElpcWhlOvw1hNBSnFuOn6GxqAoHNiqWAP+xjY4LJFLvdBIlqs4
+         feqjLC/vRblVTe6p5VqKxIKMbdCRPvbxiIVumSo9aPEeiegmwaZysWj07xAA+5c+xr1I
+         3aldzCwPPLPJPD9TeS8HXWUIFEqYictOfhlHrBk3vMIpsqci7LTd8PV3zxt5wrO0cNkp
+         HN3sA1u/ByVZwfxRIw0clGdONDzzq4jsXrdEFXIm0nvqKIHzZOghxcrUl2vyd0tY3kik
+         cXWFjffR95p+kRsRBjdXURg6F27B879a9uVv6QhsCM7KZtAG/RjUPInC/6GVqTVsyaYo
+         SqvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zv3IxfM9rqsBN5giYrSVliQlXB5yWJw2YJUUlPgHgY0=;
-        b=oWBor3PYvy8GohhOkoVLPMgxeJv7MPobi0PkONNgDRK/HMYYIXkWAQmb+Kvy0LB3LB
-         mQK9Cz0iUMGiJa2Fm+sSj94t6Jj769xNEp69dPVy/F/SqzzhZnJVylmlNDLCbHJvPol+
-         5bpOe4+A75EfgYmnNyedS+g0RaAKGMJ5ihGYfwKeMC4exRCX9QZt92zHatM55uONNGWm
-         HudHwVgkArsB0Kxpff1b59DCXAMwuyext8bVfwokv0yCUEfTEY53Xl7OtL3hrf4smI4T
-         LrWUXEeVdp5GjY7SEKSLfea5mpXvK1xYSFPtZ4l2ATcd66gFTE/Jwn6BovbrzcE+Vx1u
-         KT+g==
-X-Gm-Message-State: AOAM532T26SMfLVpaTkx8d0MZnzmj0vZeoLTz+Qs1Vo+Xu3mtJgAHrTf
-        Gw+G7u0FpY1eAVEdHXFALvk=
-X-Google-Smtp-Source: ABdhPJxRzUTJ5CbOjcZmRtE5V/PlMxtaQrKw43ndH8TAqTmZnio7gI8cDrdKjb+E+wlB30I3g0/9lg==
-X-Received: by 2002:a17:902:e747:b0:161:822b:5fa9 with SMTP id p7-20020a170902e74700b00161822b5fa9mr2961831plf.8.1652686868992;
-        Mon, 16 May 2022 00:41:08 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id q11-20020a056a00150b00b0050dc76281d9sm5698833pfu.179.2022.05.16.00.41.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 00:41:08 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Keerthy <j-keerthy@ti.com>, Tony Lindgren <tony@atomide.com>,
-        Dave Gerlach <d-gerlach@ti.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] soc: ti: pm33xx: Fix refcount leak in am33xx_pm_rtc_setup
-Date:   Mon, 16 May 2022 11:41:00 +0400
-Message-Id: <20220516074100.30599-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=da0tSqTpoZccXNC6Mon6l1Je9BJX/v1Bpiwu4fXyLMQ=;
+        b=N3lr3VJQ9z3tXglUxIKuRlYjYxn7GMKlFM3H6roU4IIe4TNixZUxoQ2KEGBqwd5JTf
+         t3Er/0BNeXtEI99tt+pn2rXePumCcNQXdZHQXWvJRsxToslV0m0CvWwB2lCyIpBaA1nX
+         gZHB+jB5vPo6PFQyEE/QDO84OA1kyU54gMoYq71XMbzQUmpYubNI2yBdqqxNgzZUVW+7
+         2EUgcPQD6EDj0INnrzgiOEwlLpaTXmWYDVnozf+b75YBdu7JtUU17SXKSv/PFN+PMWci
+         PHUperQBqY2Fcp9srg46YFN/0pYWBF7gxYUhmvSzaeLhrUzKEJsh5DJppJUZ6C/Iaun7
+         0jow==
+X-Gm-Message-State: AOAM531Uh6R16Ljjii1/x7I6DKAmMWGA9b6kuzceFC+lx8nZsn4hnMVT
+        ddGHP3iLCBKedlAl4LULjmeJLtn0XOTMarGts00=
+X-Google-Smtp-Source: ABdhPJwuWz80i/I8hD+856n9c8YC3uWj0GrQfY1p2XZMv4zghrLtnob8d/4S6HgnHY7H8AamoB81dntwIiiFApBBmww=
+X-Received: by 2002:a67:be0b:0:b0:32c:d82f:6723 with SMTP id
+ x11-20020a67be0b000000b0032cd82f6723mr6170771vsq.67.1652686869723; Mon, 16
+ May 2022 00:41:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220514080402.2650181-1-chenhuacai@loongson.cn> <CAK8P3a2Xu79zzJ=c3WJJEXAmcL2RT6NBZy-dd7s-Kz3Yk4yJzw@mail.gmail.com>
+In-Reply-To: <CAK8P3a2Xu79zzJ=c3WJJEXAmcL2RT6NBZy-dd7s-Kz3Yk4yJzw@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Mon, 16 May 2022 15:41:01 +0800
+Message-ID: <CAAhV-H5xSUoLv1rtrZTwEsd+yn8msHFFJ8eGRitzoxJ_XQDNNw@mail.gmail.com>
+Subject: Re: [PATCH V10 00/22] arch: Add basic LoongArch support
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_find_node_by_name() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
-Add missing of_node_put() to avoid refcount leak.
+Hi, Arnd,
 
-Fixes: 5a99ae0092fe ("soc: ti: pm33xx: AM437X: Add rtc_only with ddr in self-refresh support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/soc/ti/pm33xx.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+On Sun, May 15, 2022 at 4:55 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Sat, May 14, 2022 at 10:03 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> > Cross-compile tool chain to build kernel:
+> > https://github.com/loongson/build-tools/releases/download/2021.12.21/loongarch64-clfs-2022-03-03-cross-tools-gcc-glibc.tar.xz
+>
+> I also uploaded a clean build of gcc-12.1 with loongarch64 in the
+> https://mirrors.edge.kernel.org/pub/tools/crosstool/ builds.
+> I have not tried it yet.
+>
+> > This patchset is adding basic LoongArch support in mainline kernel, we
+> > can see a complete snapshot here:
+> > https://github.com/loongson/linux/tree/loongarch-next
+>
+> Note: I have pulled in the generic ticket lock series into the asm-generic tree.
+> Please rebase your series on top of
+> git://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux
+> generic-ticket-spinlocks-v6
+> to avoid duplicating the commits. As long as you are based on top of the
+> 9282d0996936 commit, that should be fine.
+>
+> > V9 -> V10:
+> > 1, Rebased on 5.18-rc6;
+> > 2, Use generic efi stub;
+> > 3, Use generic string library;
+> > 4, Use generic ticket spinlock;
+> > 5, Use more meaningful macro naming;
+> > 6, Remove the zboot patch;
+> > 7, Fix commit message and documentations;
+> > 8, Some other minor fixes and improvements.
+>
+> I think with this you have addressed the comments that I had in the past.
+> Xuerui Wang and some others had additional comments that of course
+> need to be addressed, but this is looking good to me.
+Thanks, I will solve the problems and send V11 ASAP.
 
-diff --git a/drivers/soc/ti/pm33xx.c b/drivers/soc/ti/pm33xx.c
-index 7bab4bbaf02d..b4d6e6ad85f4 100644
---- a/drivers/soc/ti/pm33xx.c
-+++ b/drivers/soc/ti/pm33xx.c
-@@ -445,8 +445,10 @@ static int am33xx_pm_rtc_setup(void)
- 	if (of_device_is_available(np)) {
- 		/* RTC interconnect target module clock */
- 		rtc_fck = of_clk_get_by_name(np->parent, "fck");
--		if (IS_ERR(rtc_fck))
--			return PTR_ERR(rtc_fck);
-+		if (IS_ERR(rtc_fck)) {
-+			error = PTR_ERR(rtc_fck);
-+			goto err_node_put;
-+		}
- 
- 		rtc_base_virt = of_iomap(np, 0);
- 		if (!rtc_base_virt) {
-@@ -479,6 +481,7 @@ static int am33xx_pm_rtc_setup(void)
- 	} else {
- 		pr_warn("PM: no-rtc available, rtc-only mode disabled.\n");
- 	}
-+	of_node_put(np);
- 
- 	return 0;
- 
-@@ -486,7 +489,8 @@ static int am33xx_pm_rtc_setup(void)
- 	iounmap(rtc_base_virt);
- err_clk_put:
- 	clk_put(rtc_fck);
--
-+err_node_put:
-+	of_node_put(np);
- 	return error;
- }
- 
--- 
-2.25.1
-
+Huacai
+>
+>        Arnd

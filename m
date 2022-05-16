@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8554528F98
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5009528F91
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348470AbiEPT6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:58:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33112 "EHLO
+        id S241941AbiEPURB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347511AbiEPTwK (ORCPT
+        with ESMTP id S1348441AbiEPT6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:52:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86FD241F8C;
-        Mon, 16 May 2022 12:47:37 -0700 (PDT)
+        Mon, 16 May 2022 15:58:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A7343AEB;
+        Mon, 16 May 2022 12:50:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DE769B81612;
-        Mon, 16 May 2022 19:47:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28483C385AA;
-        Mon, 16 May 2022 19:47:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 09665B81612;
+        Mon, 16 May 2022 19:50:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 705A1C385AA;
+        Mon, 16 May 2022 19:50:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730454;
-        bh=DMfk2C4x4pFjrWAncW3ibnLRZMa9P+J5sL+rXn/mBoE=;
+        s=korg; t=1652730637;
+        bh=Vac/Rm/MDFZxlgiWjKxf+XFwWFW0KieGzwYBnwj+aXE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JTC5kbKyeUrhzQUKNLCF5Eb8ts87J8myjJDhWLrH+X98ghC2KWtlNBWj8ars5O0CW
-         HdsLRqE7aStopY9fDAEHLHAvEP/EbGU5vycSU65BfFZh4BaT8SogfQt9ljXg60sZgs
-         La4mWPz2mfT1L3FLfnR1s6KSNz+xkYWRHY2bikDE=
+        b=wO8UhFEtozfu/FGe+btJz5vAsfKxAF51WelY1KewYYYTSRNk3UlHbT7uSk+PNSc9a
+         6OZnZNkPsBQjFz3M/NXdE+8J6wosaLpgjhrsANUFS8s67eDjWd2XRtQGQTHWnXDLE7
+         KRyoR2wZR8ezcenUkdprWZAZDq1H2lO0p7gBqhFU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Matthew Hagan <mnhagan88@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 37/66] net: sfp: Add tx-fault workaround for Huawei MA5671A SFP ONT
+        stable@vger.kernel.org,
+        =?UTF-8?q?Thi=C3=A9baud=20Weksteen?= <tweek@google.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: [PATCH 5.15 063/102] firmware_loader: use kernel credentials when reading firmware
 Date:   Mon, 16 May 2022 21:36:37 +0200
-Message-Id: <20220516193620.487852712@linuxfoundation.org>
+Message-Id: <20220516193625.805119386@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
-References: <20220516193619.400083785@linuxfoundation.org>
+In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
+References: <20220516193623.989270214@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,68 +56,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthew Hagan <mnhagan88@gmail.com>
+From: Thiébaud Weksteen <tweek@google.com>
 
-[ Upstream commit 2069624dac19d62c558bb6468fe03678553ab01d ]
+commit 581dd69830341d299b0c097fc366097ab497d679 upstream.
 
-As noted elsewhere, various GPON SFP modules exhibit non-standard
-TX-fault behaviour. In the tested case, the Huawei MA5671A, when used
-in combination with a Marvell mv88e6085 switch, was found to
-persistently assert TX-fault, resulting in the module being disabled.
+Device drivers may decide to not load firmware when probed to avoid
+slowing down the boot process should the firmware filesystem not be
+available yet. In this case, the firmware loading request may be done
+when a device file associated with the driver is first accessed. The
+credentials of the userspace process accessing the device file may be
+used to validate access to the firmware files requested by the driver.
+Ensure that the kernel assumes the responsibility of reading the
+firmware.
 
-This patch adds a quirk to ignore the SFP_F_TX_FAULT state, allowing the
-module to function.
+This was observed on Android for a graphic driver loading their firmware
+when the device file (e.g. /dev/mali0) was first opened by userspace
+(i.e. surfaceflinger). The security context of surfaceflinger was used
+to validate the access to the firmware file (e.g.
+/vendor/firmware/mali.bin).
 
-Change from v1: removal of erroneous return statment (Andrew Lunn)
+Previously, Android configurations were not setting up the
+firmware_class.path command line argument and were relying on the
+userspace fallback mechanism. In this case, the security context of the
+userspace daemon (i.e. ueventd) was consistently used to read firmware
+files. More Android devices are now found to set firmware_class.path
+which gives the kernel the opportunity to read the firmware directly
+(via kernel_read_file_from_path_initns). In this scenario, the current
+process credentials were used, even if unrelated to the loading of the
+firmware file.
 
-Signed-off-by: Matthew Hagan <mnhagan88@gmail.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Link: https://lore.kernel.org/r/20220502223315.1973376-1-mnhagan88@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Thiébaud Weksteen <tweek@google.com>
+Cc: <stable@vger.kernel.org> # 5.10
+Reviewed-by: Paul Moore <paul@paul-moore.com>
+Acked-by: Luis Chamberlain <mcgrof@kernel.org>
+Link: https://lore.kernel.org/r/20220502004952.3970800-1-tweek@google.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/phy/sfp.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/base/firmware_loader/main.c |   17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
-index efffa65f8214..96068e0d841a 100644
---- a/drivers/net/phy/sfp.c
-+++ b/drivers/net/phy/sfp.c
-@@ -249,6 +249,7 @@ struct sfp {
- 	struct sfp_eeprom_id id;
- 	unsigned int module_power_mW;
- 	unsigned int module_t_start_up;
-+	bool tx_fault_ignore;
+--- a/drivers/base/firmware_loader/main.c
++++ b/drivers/base/firmware_loader/main.c
+@@ -795,6 +795,8 @@ _request_firmware(const struct firmware
+ 		  size_t offset, u32 opt_flags)
+ {
+ 	struct firmware *fw = NULL;
++	struct cred *kern_cred = NULL;
++	const struct cred *old_cred;
+ 	bool nondirect = false;
+ 	int ret;
  
- #if IS_ENABLED(CONFIG_HWMON)
- 	struct sfp_diag diag;
-@@ -1893,6 +1894,12 @@ static int sfp_sm_mod_probe(struct sfp *sfp, bool report)
- 	else
- 		sfp->module_t_start_up = T_START_UP;
+@@ -811,6 +813,18 @@ _request_firmware(const struct firmware
+ 	if (ret <= 0) /* error or already assigned */
+ 		goto out;
  
-+	if (!memcmp(id.base.vendor_name, "HUAWEI          ", 16) &&
-+	    !memcmp(id.base.vendor_pn, "MA5671A         ", 16))
-+		sfp->tx_fault_ignore = true;
-+	else
-+		sfp->tx_fault_ignore = false;
++	/*
++	 * We are about to try to access the firmware file. Because we may have been
++	 * called by a driver when serving an unrelated request from userland, we use
++	 * the kernel credentials to read the file.
++	 */
++	kern_cred = prepare_kernel_cred(NULL);
++	if (!kern_cred) {
++		ret = -ENOMEM;
++		goto out;
++	}
++	old_cred = override_creds(kern_cred);
 +
- 	return 0;
- }
+ 	ret = fw_get_filesystem_firmware(device, fw->priv, "", NULL);
  
-@@ -2320,7 +2327,10 @@ static void sfp_check_state(struct sfp *sfp)
- 	mutex_lock(&sfp->st_mutex);
- 	state = sfp_get_state(sfp);
- 	changed = state ^ sfp->state;
--	changed &= SFP_F_PRESENT | SFP_F_LOS | SFP_F_TX_FAULT;
-+	if (sfp->tx_fault_ignore)
-+		changed &= SFP_F_PRESENT | SFP_F_LOS;
-+	else
-+		changed &= SFP_F_PRESENT | SFP_F_LOS | SFP_F_TX_FAULT;
+ 	/* Only full reads can support decompression, platform, and sysfs. */
+@@ -836,6 +850,9 @@ _request_firmware(const struct firmware
+ 	} else
+ 		ret = assign_fw(fw, device);
  
- 	for (i = 0; i < GPIO_MAX; i++)
- 		if (changed & BIT(i))
--- 
-2.35.1
-
++	revert_creds(old_cred);
++	put_cred(kern_cred);
++
+  out:
+ 	if (ret < 0) {
+ 		fw_abort_batch_reqs(fw);
 
 

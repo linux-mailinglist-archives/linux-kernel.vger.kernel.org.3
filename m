@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A56529060
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:44:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E195D52902A
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347420AbiEPT5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56696 "EHLO
+        id S1348313AbiEPUbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347451AbiEPTwH (ORCPT
+        with ESMTP id S1350866AbiEPUBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:52:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0113441999;
-        Mon, 16 May 2022 12:47:31 -0700 (PDT)
+        Mon, 16 May 2022 16:01:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5590E44753;
+        Mon, 16 May 2022 12:55:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 08EF1B81613;
-        Mon, 16 May 2022 19:47:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E343C34115;
-        Mon, 16 May 2022 19:47:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA36F60FD4;
+        Mon, 16 May 2022 19:55:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55FE6C385AA;
+        Mon, 16 May 2022 19:55:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730445;
-        bh=LPgWGFYVUKI8AXYB5cCTq9m4J4dr8kWxnRp48zoc8a8=;
+        s=korg; t=1652730959;
+        bh=zAIK8Scdfpm+47u/CP5vmP3dy1T/MXT6kt+ys0EhElw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OspnupbKUY5dutB1XumGdKunWrOqxkdn4u5cwbYGCC8Zm9FwIfWmGNodFRgP/OODa
-         2z/sywse4xmMm7ybFjJMbeaNbMcMTGZdtilIJG8+wYDVkGmNFCXUaXPBs4V+c9opXa
-         KjytOUregPGHq05MbVviiwF7TIJITLA7rIetR7pg=
+        b=pjaE8dFzGSUETlCgms0hoooQ5qNulQ7vvqn46zghIICLrfDm26z9wCWUG+9v3a+A2
+         Mm6liXQviq0OYbQyX7KNPic0emOFbZpPBFSxxwbltt75oYLBn9WaAZAvVM07sYeiJf
+         QCG2474KdrLnEald5mtHbHUX5hIdyaFN1KbCb5ms=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Matthew Hagan <mnhagan88@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 34/66] ASoC: ops: Validate input values in snd_soc_put_volsw_range()
+Subject: [PATCH 5.17 060/114] net: sfp: Add tx-fault workaround for Huawei MA5671A SFP ONT
 Date:   Mon, 16 May 2022 21:36:34 +0200
-Message-Id: <20220516193620.401446691@linuxfoundation.org>
+Message-Id: <20220516193627.217051769@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
-References: <20220516193619.400083785@linuxfoundation.org>
+In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
+References: <20220516193625.489108457@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,58 +55,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Matthew Hagan <mnhagan88@gmail.com>
 
-[ Upstream commit aa22125c57f9e577f0a667e4fa07fc3fa8ca1e60 ]
+[ Upstream commit 2069624dac19d62c558bb6468fe03678553ab01d ]
 
-Check that values written via snd_soc_put_volsw_range() are
-within the range advertised by the control, ensuring that we
-don't write out of spec values to the hardware.
+As noted elsewhere, various GPON SFP modules exhibit non-standard
+TX-fault behaviour. In the tested case, the Huawei MA5671A, when used
+in combination with a Marvell mv88e6085 switch, was found to
+persistently assert TX-fault, resulting in the module being disabled.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20220423131239.3375261-1-broonie@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+This patch adds a quirk to ignore the SFP_F_TX_FAULT state, allowing the
+module to function.
+
+Change from v1: removal of erroneous return statment (Andrew Lunn)
+
+Signed-off-by: Matthew Hagan <mnhagan88@gmail.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Link: https://lore.kernel.org/r/20220502223315.1973376-1-mnhagan88@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/soc-ops.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ drivers/net/phy/sfp.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/soc-ops.c b/sound/soc/soc-ops.c
-index 2bc9fa6a34b8..15bfcdbdfaa4 100644
---- a/sound/soc/soc-ops.c
-+++ b/sound/soc/soc-ops.c
-@@ -510,7 +510,15 @@ int snd_soc_put_volsw_range(struct snd_kcontrol *kcontrol,
- 	unsigned int mask = (1 << fls(max)) - 1;
- 	unsigned int invert = mc->invert;
- 	unsigned int val, val_mask;
--	int err, ret;
-+	int err, ret, tmp;
-+
-+	tmp = ucontrol->value.integer.value[0];
-+	if (tmp < 0)
-+		return -EINVAL;
-+	if (mc->platform_max && tmp > mc->platform_max)
-+		return -EINVAL;
-+	if (tmp > mc->max - mc->min + 1)
-+		return -EINVAL;
+diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
+index 4720b24ca51b..90dfefc1f5f8 100644
+--- a/drivers/net/phy/sfp.c
++++ b/drivers/net/phy/sfp.c
+@@ -250,6 +250,7 @@ struct sfp {
+ 	struct sfp_eeprom_id id;
+ 	unsigned int module_power_mW;
+ 	unsigned int module_t_start_up;
++	bool tx_fault_ignore;
  
- 	if (invert)
- 		val = (max - ucontrol->value.integer.value[0]) & mask;
-@@ -525,6 +533,14 @@ int snd_soc_put_volsw_range(struct snd_kcontrol *kcontrol,
- 	ret = err;
+ #if IS_ENABLED(CONFIG_HWMON)
+ 	struct sfp_diag diag;
+@@ -1945,6 +1946,12 @@ static int sfp_sm_mod_probe(struct sfp *sfp, bool report)
+ 	else
+ 		sfp->module_t_start_up = T_START_UP;
  
- 	if (snd_soc_volsw_is_stereo(mc)) {
-+		tmp = ucontrol->value.integer.value[1];
-+		if (tmp < 0)
-+			return -EINVAL;
-+		if (mc->platform_max && tmp > mc->platform_max)
-+			return -EINVAL;
-+		if (tmp > mc->max - mc->min + 1)
-+			return -EINVAL;
++	if (!memcmp(id.base.vendor_name, "HUAWEI          ", 16) &&
++	    !memcmp(id.base.vendor_pn, "MA5671A         ", 16))
++		sfp->tx_fault_ignore = true;
++	else
++		sfp->tx_fault_ignore = false;
 +
- 		if (invert)
- 			val = (max - ucontrol->value.integer.value[1]) & mask;
- 		else
+ 	return 0;
+ }
+ 
+@@ -2397,7 +2404,10 @@ static void sfp_check_state(struct sfp *sfp)
+ 	mutex_lock(&sfp->st_mutex);
+ 	state = sfp_get_state(sfp);
+ 	changed = state ^ sfp->state;
+-	changed &= SFP_F_PRESENT | SFP_F_LOS | SFP_F_TX_FAULT;
++	if (sfp->tx_fault_ignore)
++		changed &= SFP_F_PRESENT | SFP_F_LOS;
++	else
++		changed &= SFP_F_PRESENT | SFP_F_LOS | SFP_F_TX_FAULT;
+ 
+ 	for (i = 0; i < GPIO_MAX; i++)
+ 		if (changed & BIT(i))
 -- 
 2.35.1
 

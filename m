@@ -2,54 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 245225293CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 00:49:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 733415293D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 00:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349789AbiEPWtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 18:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
+        id S1349730AbiEPWtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 18:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349767AbiEPWtA (ORCPT
+        with ESMTP id S1349833AbiEPWtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 18:49:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E264161F
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 15:48:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5D22AB8169D
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 22:48:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE8A5C385B8;
-        Mon, 16 May 2022 22:48:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652741337;
-        bh=0a/C5Zh/EyYXf/vzC/E/LwVLfqbJzBzn8Mkz0TSW/yQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tWnzV72+IpwctV6Br6FbM1QcIOfi5j/S+mo0+UkMggtP03es0EHoIIM8FXr80ydlN
-         pU/iMMX7IiiFYYkMPykUzjkQ/rBELVMBM3ZgczPG+Df+Xf4JvmqeWRpnaplIQXADV3
-         ljdR/DzH36ziJ14mg/fQgOQZwpA3aKGJuMytrgVFUjcupuZ8L8ly4T0fUGHclcClJC
-         uPWzkwAkQXg19m1TXk/9yigHK8Xi9f+zd5bIi2u4bEOR6QyRG/pF3pV/l72MQ1UwKC
-         eHOfs3Jli4RLCkx7MhuwaX9PwWg82TqD6ZK3Q3XRji8jma+x6Jbeey+zHX9LgHn+r2
-         xIr0STsCpLCAA==
-Date:   Mon, 16 May 2022 15:48:55 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com
-Subject: Re: objtool "no non-local symbols" error with tip of tree LLVM
-Message-ID: <YoLU10rW+EZCDEfI@dev-arch.thelio-3990X>
-References: <YoK4U9RgQ9N+HhXJ@dev-arch.thelio-3990X>
- <20220516214005.GQ76023@worktop.programming.kicks-ass.net>
+        Mon, 16 May 2022 18:49:36 -0400
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C4C41988;
+        Mon, 16 May 2022 15:49:34 -0700 (PDT)
+Received: by mail-oi1-f174.google.com with SMTP id l16so20440376oil.6;
+        Mon, 16 May 2022 15:49:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mdM5qvrQm7rJky1mnAZGhGxpOiNhvwd5dv3eu9sS6CM=;
+        b=lWDjoaQUg03fGSGIVGclk9jrP8TsDroFYllOtC+LSaciHtcqDj4cxlufkYYY7/PzB0
+         rPyr9pAkKunFkefFAwJnW4vjIreGD39J3VZPk/vnUD1LluW4vydbbQ6xaG5BLJIxO6BA
+         aOGoH74cnbhwS8PgBm1ST69nerxe5zmnikRJ8dBECiFR7AuVCZ9N5tTJy9h5yrQLi10z
+         xI5zYlW2ceIpO48NiHQ6ae+UW6Yt7zPgnvYQiwRCS+X+uXlXB68hduBCnHIrWnCjSsCG
+         MorZ9iB3SEhjkPyHzXK0Xb2HWDLPT+NktFj910/1Fyc4wLH79+dfxKWp7Wq7fMNi1lkh
+         s8KA==
+X-Gm-Message-State: AOAM5322z3fuLb8iHqe+VWXhlRDolHxQoFmDREj6tZgFvKm7R715Sm58
+        n2Gr2WdeZlnqUW5S8s9hEg==
+X-Google-Smtp-Source: ABdhPJyCOm7HmYlOFO+xSDlzkoN0MiRoCx+anoUxdsRLlaxja49bMCTzfTXikwJn30vz5uh4WMnJzw==
+X-Received: by 2002:a05:6808:d49:b0:328:ed5c:f8da with SMTP id w9-20020a0568080d4900b00328ed5cf8damr5207399oik.64.1652741373805;
+        Mon, 16 May 2022 15:49:33 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j9-20020aca3c09000000b00326bab99fe5sm4305839oia.40.2022.05.16.15.49.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 15:49:33 -0700 (PDT)
+Received: (nullmailer pid 3462273 invoked by uid 1000);
+        Mon, 16 May 2022 22:49:32 -0000
+Date:   Mon, 16 May 2022 17:49:32 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] dt-bindings: cpufreq: apple,soc-cpufreq: Add
+ binding for Apple SoC cpufreq
+Message-ID: <20220516224932.GA3452552-robh@kernel.org>
+References: <20220504075153.185208-1-marcan@marcan.st>
+ <20220504075153.185208-3-marcan@marcan.st>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220516214005.GQ76023@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220504075153.185208-3-marcan@marcan.st>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,111 +73,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 11:40:05PM +0200, Peter Zijlstra wrote:
-> On Mon, May 16, 2022 at 01:47:15PM -0700, Nathan Chancellor wrote:
-> > Hi Josh and Peter,
-> > 
-> > After a recent change in LLVM [1], I see warnings (errors?) from objtool
-> > when building x86_64 allmodconfig on 5.15 and 5.17:
-> > 
-> >   $ make -skj"$(nproc)" KCONFIG_ALLCONFIG=<(echo CONFIG_WERROR) LLVM=1 allmodconfig all
-> >   ...
-> >   mm/highmem.o: warning: objtool: no non-local symbols !?
-> >   mm/highmem.o: warning: objtool: gelf_update_symshndx: invalid section index
-> >   make[2]: *** [scripts/Makefile.build:288: mm/highmem.o] Error 255
-> >   ...
-> >   security/tomoyo/load_policy.o: warning: objtool: no non-local symbols !?
-> >   security/tomoyo/load_policy.o: warning: objtool: gelf_update_symshndx: invalid section index
-> >   make[3]: *** [scripts/Makefile.build:288: security/tomoyo/load_policy.o] Error 255
-> >   ...
-> > 
-> > I don't see the same errors on x86_64 allmodconfig on mainline so I
-> > bisected the 5.17 branch and came upon commit 4abff6d48dbc ("objtool:
-> > Fix code relocs vs weak symbols"). I wanted to see what 5.17 might be
-> > missing and came to commit ed53a0d97192 ("x86/alternative: Use
-> > .ibt_endbr_seal to seal indirect calls") in mainline, which I think just
-> > hides the issue for allmodconfig. I can reproduce this problem with a
-> > more selective set of config values on mainline:
-> > 
-> >   $ make -skj"$(nproc)" LLVM=1 defconfig
-> > 
-> >   $ scripts/config -e KASAN -e SECURITY_TOMOYO -e SECURITY_TOMOYO_OMIT_USERSPACE_LOADER
-> > 
-> >   $ make -skj"$(nproc)" LLVM=1 olddefconfig security/tomoyo/load_policy.o
-> >   security/tomoyo/load_policy.o: warning: objtool: no non-local symbols !?
-> >   security/tomoyo/load_policy.o: warning: objtool: gelf_update_symshndx: invalid section index
-> >   make[3]: *** [scripts/Makefile.build:288: security/tomoyo/load_policy.o] Error 255
-> >   ...
-> > 
-> > Looking at the object file, the '.text.asan.module_ctor' section has
-> > disappeared.
-> > 
-> > Before:
-> > 
-> >   $ llvm-nm -S security/tomoyo/load_policy.o
-> >   0000000000000000 0000000000000001 t asan.module_ctor
-> > 
-> >   $ llvm-readelf -s security/tomoyo/load_policy.o
-> > 
-> >   Symbol table '.symtab' contains 4 entries:
-> >      Num:    Value          Size Type    Bind   Vis       Ndx Name
-> >        0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT   UND
-> >        1: 0000000000000000     0 FILE    LOCAL  DEFAULT   ABS load_policy.c
-> >        2: 0000000000000000     0 SECTION LOCAL  DEFAULT     3 .text.asan.module_ctor
-> >        3: 0000000000000000     1 FUNC    LOCAL  DEFAULT     3 asan.module_ctor
-> > 
-> > After:
-> > 
-> >   $ llvm-nm -S security/tomoyo/load_policy.o
-> >   0000000000000000 0000000000000001 t asan.module_ctor
-> > 
-> >   $ llvm-readelf -s security/tomoyo/load_policy.o
-> > 
-> >   Symbol table '.symtab' contains 3 entries:
-> >      Num:    Value          Size Type    Bind   Vis       Ndx Name
-> >        0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT   UND
-> >        1: 0000000000000000     0 FILE    LOCAL  DEFAULT   ABS load_policy.c
-> >        2: 0000000000000000     1 FUNC    LOCAL  DEFAULT     3 asan.module_ctor
-> > 
+On Wed, May 04, 2022 at 04:51:51PM +0900, Hector Martin wrote:
+> This binding represents the cpufreq/DVFS hardware present in Apple SoCs.
+> The hardware has an independent controller per CPU cluster, but we
+> represent them as a single cpufreq node since there can only be one
+> systemwide cpufreq device (and since in the future, interactions with
+> memory controller performance states will also involve cooperation
+> between multiple frequency domains).
 > 
-> The problem seems to be that we need to add a local symbols because LLVM
-> helpfully stripped all unused section symbols.
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  .../bindings/cpufreq/apple,soc-cpufreq.yaml   | 121 ++++++++++++++++++
+>  1 file changed, 121 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/apple,soc-cpufreq.yaml
 > 
-> The way we do that, is by moving a the first non-local symbol to the
-> end, thereby creating a hole where we can insert a new local symbol.
-> Because ELF very helpfully mandates that local symbols must come before
-> non-local symbols and keeps the symbols index of the first non-local in
-> sh_info.
-> 
-> Thing is, the above object files don't appear to have a non-local symbol
-> so the swizzle thing isn't needed, and apparently the value in sh_info
-> isn't valid either.
-> 
-> Does something simple like this work? If not, I'll try and reproduce
-> tomorrow, it shouldn't be too hard to fix.
+> diff --git a/Documentation/devicetree/bindings/cpufreq/apple,soc-cpufreq.yaml b/Documentation/devicetree/bindings/cpufreq/apple,soc-cpufreq.yaml
+> new file mode 100644
+> index 000000000000..f398c1bd5de5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/cpufreq/apple,soc-cpufreq.yaml
+> @@ -0,0 +1,121 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/cpufreq/apple,soc-cpufreq.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Apple SoC cpufreq device
+> +
+> +maintainers:
+> +  - Hector Martin <marcan@marcan.st>
+> +
+> +description: |
+> +  Apple SoCs (e.g. M1) have a per-cpu-cluster DVFS controller that is part of
+> +  the cluster management register block. This binding uses the standard
+> +  operating-points-v2 table to define the CPU performance states, with the
+> +  opp-level property specifying the hardware p-state index for that level.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - apple,t8103-soc-cpufreq
+> +          - apple,t6000-soc-cpufreq
+> +      - const: apple,soc-cpufreq
+> +
+> +  reg:
+> +    minItems: 1
+> +    maxItems: 6
+> +    description: One register region per CPU cluster DVFS controller
+> +
+> +  reg-names:
+> +    minItems: 1
+> +    items:
+> +      - const: cluster0
+> +      - const: cluster1
+> +      - const: cluster2
+> +      - const: cluster3
+> +      - const: cluster4
+> +      - const: cluster5
+> +
+> +  '#freq-domain-cells':
+> +    const: 1
 
-That diff obviously gets rid of the "no non-local symbols" message but I
-still see the "invalid section index" message. I'll be offline tomorrow
-but if you have issues reproducing it, I'll be happy to help on
-Wednesday. At the time I am writing this, apt.llvm.org packages have not
-been updated to include that LLVM change I mentioned; hopefully they
-will be soon.
+Copied QCom it seems. Use 'performance-domains' which is the common 
+binding.
 
-Thanks for the quick response!
-Nathan
-
-> diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-> index 583a3ec987b5..baabf38a2a11 100644
-> --- a/tools/objtool/elf.c
-> +++ b/tools/objtool/elf.c
-> @@ -618,8 +618,7 @@ static int elf_move_global_symbol(struct elf *elf, struct section *symtab,
->  
->  	sym = find_symbol_by_index(elf, first_non_local);
->  	if (!sym) {
-> -		WARN("no non-local symbols !?");
-> -		return first_non_local;
-> +		return symtab->sh.sh_size / sizeof(sym->sym);
->  	}
->  
->  	s = elf_getscn(elf->elf, symtab->idx);
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - '#freq-domain-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    // This example shows a single CPU per domain and 2 domains,
+> +    // with two p-states per domain.
+> +    // Shipping hardware has 2-4 CPUs per domain and 2-6 domains.
+> +    cpus {
+> +      #address-cells = <2>;
+> +      #size-cells = <0>;
+> +
+> +      cpu@0 {
+> +        compatible = "apple,icestorm";
+> +        device_type = "cpu";
+> +        reg = <0x0 0x0>;
+> +        operating-points-v2 = <&ecluster_opp>;
+> +        apple,freq-domain = <&cpufreq_hw 0>;
+> +      };
+> +
+> +      cpu@10100 {
+> +        compatible = "apple,firestorm";
+> +        device_type = "cpu";
+> +        reg = <0x0 0x10100>;
+> +        operating-points-v2 = <&pcluster_opp>;
+> +        apple,freq-domain = <&cpufreq_hw 1>;
+> +      };
+> +    };
+> +
+> +    ecluster_opp: opp-table-0 {
+> +      compatible = "operating-points-v2";
+> +      opp-shared;
+> +
+> +      opp01 {
+> +        opp-hz = /bits/ 64 <600000000>;
+> +        opp-level = <1>;
+> +        clock-latency-ns = <7500>;
+> +      };
+> +      opp02 {
+> +        opp-hz = /bits/ 64 <972000000>;
+> +        opp-level = <2>;
+> +        clock-latency-ns = <22000>;
+> +      };
+> +    };
+> +
+> +    pcluster_opp: opp-table-1 {
+> +      compatible = "operating-points-v2";
+> +      opp-shared;
+> +
+> +      opp01 {
+> +        opp-hz = /bits/ 64 <600000000>;
+> +        opp-level = <1>;
+> +        clock-latency-ns = <8000>;
+> +      };
+> +      opp02 {
+> +        opp-hz = /bits/ 64 <828000000>;
+> +        opp-level = <2>;
+> +        clock-latency-ns = <19000>;
+> +      };
+> +    };
+> +
+> +    soc {
+> +      #address-cells = <2>;
+> +      #size-cells = <2>;
+> +
+> +      cpufreq_hw: cpufreq@210e20000 {
+> +        compatible = "apple,t8103-soc-cpufreq", "apple,soc-cpufreq";
+> +        reg = <0x2 0x10e20000 0 0x1000>,
+> +              <0x2 0x11e20000 0 0x1000>;
+> +        reg-names = "cluster0", "cluster1";
+> +        #freq-domain-cells = <1>;
+> +      };
+> +    };
+> -- 
+> 2.35.1
+> 
 > 

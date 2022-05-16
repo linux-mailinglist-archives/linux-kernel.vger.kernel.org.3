@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF3A52914D
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:46:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F48E529017
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344129AbiEPUOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:14:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46630 "EHLO
+        id S1347472AbiEPT5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348512AbiEPT6m (ORCPT
+        with ESMTP id S1347749AbiEPTwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:58:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48844496AF;
-        Mon, 16 May 2022 12:50:44 -0700 (PDT)
+        Mon, 16 May 2022 15:52:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95EAF427D5;
+        Mon, 16 May 2022 12:47:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70EB660A14;
-        Mon, 16 May 2022 19:50:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7346DC385AA;
-        Mon, 16 May 2022 19:50:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0FA89B81613;
+        Mon, 16 May 2022 19:47:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A42BC385AA;
+        Mon, 16 May 2022 19:47:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730643;
-        bh=AfvNImvSajbT2lRm2lCrt5R+aKpmDHKgaIumFgk1JSE=;
+        s=korg; t=1652730460;
+        bh=Uj3lyYJac3hTdmS1S+asSpqVLL6qsv9Cd4vdF79qDb0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NxFe8m/GYKlMGkLzwkix6WgYa2/QXvgEXo3eMBl5gbLjBz9zoDSqhe8Yi9E8NV1iy
-         hWY0ZqkNOQncoCJWfE+OOi2k49S8S4OAKS8/NTaV6Cmm+H3KODdIvnsFAjSpa8ZOxN
-         W1WfdfWWhm8OHsVGpkXcYNElIIFq/X6Agr4rDeWc=
+        b=GtKgbxAO+AUDHiYyoakvllKHXdC1wkFhdQ20YujpP4QEKtAICxs6I8IvRkGB72w7L
+         XP6GX4A5u5se8ahhq57z1Hl8HbAKftnMoHwk09OcBDBGCE57a2PyOjG/EKf+RYBuUU
+         mFbfZBJJaVD77pzmKSg7LnOZuykvKdaT7ByywecE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chunfeng Yun <chunfeng.yun@mediatek.com>
-Subject: [PATCH 5.15 065/102] usb: xhci-mtk: fix fs isocs transfer error
+        stable@vger.kernel.org,
+        =?UTF-8?q?Thi=C3=A9baud=20Weksteen?= <tweek@google.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: [PATCH 5.10 39/66] firmware_loader: use kernel credentials when reading firmware
 Date:   Mon, 16 May 2022 21:36:39 +0200
-Message-Id: <20220516193625.863220429@linuxfoundation.org>
+Message-Id: <20220516193620.544847305@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
-References: <20220516193623.989270214@linuxfoundation.org>
+In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
+References: <20220516193619.400083785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,60 +56,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chunfeng Yun <chunfeng.yun@mediatek.com>
+From: Thiébaud Weksteen <tweek@google.com>
 
-commit c237566b78ad8c72bc0431c5d6171db8d12e6f94 upstream.
+commit 581dd69830341d299b0c097fc366097ab497d679 upstream.
 
-Due to the scheduler allocates the optimal bandwidth for FS ISOC endpoints,
-this may be not enough actually and causes data transfer error, so come up
-with an estimate that is no less than the worst case bandwidth used for
-any one mframe, but may be an over-estimate.
+Device drivers may decide to not load firmware when probed to avoid
+slowing down the boot process should the firmware filesystem not be
+available yet. In this case, the firmware loading request may be done
+when a device file associated with the driver is first accessed. The
+credentials of the userspace process accessing the device file may be
+used to validate access to the firmware files requested by the driver.
+Ensure that the kernel assumes the responsibility of reading the
+firmware.
 
-Fixes: 451d3912586a ("usb: xhci-mtk: update fs bus bandwidth by bw_budget_table")
-Cc: stable@vger.kernel.org
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-Link: https://lore.kernel.org/r/20220512064931.31670-1-chunfeng.yun@mediatek.com
+This was observed on Android for a graphic driver loading their firmware
+when the device file (e.g. /dev/mali0) was first opened by userspace
+(i.e. surfaceflinger). The security context of surfaceflinger was used
+to validate the access to the firmware file (e.g.
+/vendor/firmware/mali.bin).
+
+Previously, Android configurations were not setting up the
+firmware_class.path command line argument and were relying on the
+userspace fallback mechanism. In this case, the security context of the
+userspace daemon (i.e. ueventd) was consistently used to read firmware
+files. More Android devices are now found to set firmware_class.path
+which gives the kernel the opportunity to read the firmware directly
+(via kernel_read_file_from_path_initns). In this scenario, the current
+process credentials were used, even if unrelated to the loading of the
+firmware file.
+
+Signed-off-by: Thiébaud Weksteen <tweek@google.com>
+Cc: <stable@vger.kernel.org> # 5.10
+Reviewed-by: Paul Moore <paul@paul-moore.com>
+Acked-by: Luis Chamberlain <mcgrof@kernel.org>
+Link: https://lore.kernel.org/r/20220502004952.3970800-1-tweek@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/host/xhci-mtk-sch.c |   16 +++++++---------
- 1 file changed, 7 insertions(+), 9 deletions(-)
+ drivers/base/firmware_loader/main.c |   17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
---- a/drivers/usb/host/xhci-mtk-sch.c
-+++ b/drivers/usb/host/xhci-mtk-sch.c
-@@ -465,7 +465,7 @@ static int check_fs_bus_bw(struct mu3h_s
- 		 */
- 		for (j = 0; j < sch_ep->num_budget_microframes; j++) {
- 			k = XHCI_MTK_BW_INDEX(base + j);
--			tmp = tt->fs_bus_bw[k] + sch_ep->bw_budget_table[j];
-+			tmp = tt->fs_bus_bw[k] + sch_ep->bw_cost_per_microframe;
- 			if (tmp > FS_PAYLOAD_MAX)
- 				return -ESCH_BW_OVERFLOW;
- 		}
-@@ -539,19 +539,17 @@ static int check_sch_tt(struct mu3h_sch_
- static void update_sch_tt(struct mu3h_sch_ep_info *sch_ep, bool used)
+--- a/drivers/base/firmware_loader/main.c
++++ b/drivers/base/firmware_loader/main.c
+@@ -793,6 +793,8 @@ _request_firmware(const struct firmware
+ 		  size_t offset, u32 opt_flags)
  {
- 	struct mu3h_sch_tt *tt = sch_ep->sch_tt;
-+	int bw_updated;
- 	u32 base;
--	int i, j, k;
-+	int i, j;
+ 	struct firmware *fw = NULL;
++	struct cred *kern_cred = NULL;
++	const struct cred *old_cred;
+ 	bool nondirect = false;
+ 	int ret;
+ 
+@@ -809,6 +811,18 @@ _request_firmware(const struct firmware
+ 	if (ret <= 0) /* error or already assigned */
+ 		goto out;
+ 
++	/*
++	 * We are about to try to access the firmware file. Because we may have been
++	 * called by a driver when serving an unrelated request from userland, we use
++	 * the kernel credentials to read the file.
++	 */
++	kern_cred = prepare_kernel_cred(NULL);
++	if (!kern_cred) {
++		ret = -ENOMEM;
++		goto out;
++	}
++	old_cred = override_creds(kern_cred);
 +
-+	bw_updated = sch_ep->bw_cost_per_microframe * (used ? 1 : -1);
+ 	ret = fw_get_filesystem_firmware(device, fw->priv, "", NULL);
  
- 	for (i = 0; i < sch_ep->num_esit; i++) {
- 		base = sch_ep->offset + i * sch_ep->esit;
+ 	/* Only full reads can support decompression, platform, and sysfs. */
+@@ -834,6 +848,9 @@ _request_firmware(const struct firmware
+ 	} else
+ 		ret = assign_fw(fw, device);
  
--		for (j = 0; j < sch_ep->num_budget_microframes; j++) {
--			k = XHCI_MTK_BW_INDEX(base + j);
--			if (used)
--				tt->fs_bus_bw[k] += sch_ep->bw_budget_table[j];
--			else
--				tt->fs_bus_bw[k] -= sch_ep->bw_budget_table[j];
--		}
-+		for (j = 0; j < sch_ep->num_budget_microframes; j++)
-+			tt->fs_bus_bw[XHCI_MTK_BW_INDEX(base + j)] += bw_updated;
- 	}
- 
- 	if (used)
++	revert_creds(old_cred);
++	put_cred(kern_cred);
++
+  out:
+ 	if (ret < 0) {
+ 		fw_abort_batch_reqs(fw);
 
 

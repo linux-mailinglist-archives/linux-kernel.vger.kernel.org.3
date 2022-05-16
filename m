@@ -2,174 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC848528422
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 14:26:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A01528407
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 14:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234255AbiEPM0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 08:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35846 "EHLO
+        id S241481AbiEPMTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 08:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243459AbiEPM0N (ORCPT
+        with ESMTP id S232769AbiEPMTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 08:26:13 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C2A633C
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 05:26:09 -0700 (PDT)
-X-UUID: edbd5f950e044056a58f5462c8f61155-20220516
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:26ff3d68-52a5-405b-95d9-c12c8d23b6b3,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:105
-X-CID-INFO: VERSION:1.1.5,REQID:26ff3d68-52a5-405b-95d9-c12c8d23b6b3,OB:0,LOB:
-        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,AC
-        TION:quarantine,TS:105
-X-CID-META: VersionHash:2a19b09,CLOUDID:0f453194-563e-4fc2-8a0d-fda4821947ab,C
-        OID:40fffd665588,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:0,BEC:nil
-X-UUID: edbd5f950e044056a58f5462c8f61155-20220516
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <yf.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 206944733; Mon, 16 May 2022 20:26:05 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Mon, 16 May 2022 20:26:03 +0800
-Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Mon, 16 May 2022 20:26:02 +0800
-From:   <yf.wang@mediatek.com>
-To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        "Will Deacon" <will@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "open list:MEDIATEK IOMMU DRIVER" <iommu@lists.linux-foundation.org>,
-        "moderated list:MEDIATEK IOMMU DRIVER" 
-        <linux-mediatek@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list" <linux-kernel@vger.kernel.org>
-CC:     <wsd_upstream@mediatek.com>, Libo Kang <Libo.Kang@mediatek.com>,
-        Yong Wu <Yong.Wu@mediatek.com>,
-        Yunfei Wang <yf.wang@mediatek.com>,
-        Ning Li <ning.li@mediatek.com>
-Subject: [PATCH v4 2/2] iomm/mediatek: Allow page table PA up to 35bit
-Date:   Mon, 16 May 2022 20:18:50 +0800
-Message-ID: <20220516121852.8775-3-yf.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220516121852.8775-1-yf.wang@mediatek.com>
-References: <20220516121852.8775-1-yf.wang@mediatek.com>
+        Mon, 16 May 2022 08:19:01 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB1B2CCA4
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 05:19:00 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id c14so13882732pfn.2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 05:19:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=mauTUK/BbcN02BKF1E5WYv3nctbs4If/Xj3WrKUUUZQ=;
+        b=jCliMATnCO8tjtRg2mTj+wIggrHc1Ww95M+EpFTLeHPCom0/OxF6OWD8yQPneh4AlB
+         zhGjv7fVnX5G+btxOAZNayNSnKRmdGAXGw+PelbQosH/RdJ3NSYVeWEHhuYg2XJuaLTC
+         spem+JzWfbThl2xtEtJ0p8EAl+dealFC0vUqr59B8DUApioU5mHWVCc4/H44XcDlxZiV
+         K1aNpj/8/z0cqpQajSVsVdOktvjZePhDddDu7Cisp/HT/HzHn1capZu+tLOFWwoEkP2L
+         G+fAfZ09jL2H08kOHzh+j7tUXH3X58XT7ntG6kijy4IQSbUDCH6N8aoG7Ji768cToWv7
+         6JCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mauTUK/BbcN02BKF1E5WYv3nctbs4If/Xj3WrKUUUZQ=;
+        b=kPbMtRwhG5Tk6TfJm6lpWY1k9pQCfAvhpvRz0VvC2slzFMWtwWjfRnmVd5+YjGTrvg
+         Esm3J7K8f60y93KCAp+L1ZxiT3heZAQolqhAfc03IKevNa1CzDIvNhvwhtjP7Q4pF5pY
+         fEmN0WZ6y3GBDwrkVsB7bOhGcSm3Lc8uA/yt4q/eFRBa491hWHIvfRx2Bhf++L10qijG
+         566xggqluF8wMVMS3iSPQr9VPRHPHGg3QSbpS6li6kq4TbhZXcqfyelYR/rYs5FLAgGJ
+         58t79KUOytbOPS2d7mWXNKjCLiyLIL8lgM/cF1hmy/L8zMLUKrFGe17noMZuop0sZJij
+         JcNQ==
+X-Gm-Message-State: AOAM533vHOHtI7PZMcI7I/YOZhBPszoTJyi9MXxOjsHiMTwlt4YAKxrF
+        +U3LedrQp2cWT07M0jrIGnVQlw==
+X-Google-Smtp-Source: ABdhPJz3jVAkhdYsDGcE7BnBGbvfMWWBjs7MKFZpG91v2is0HkVS7WMpZr64iZpw1P+w2KDN2v3+Ow==
+X-Received: by 2002:a63:1e1d:0:b0:3c6:a36f:7b13 with SMTP id e29-20020a631e1d000000b003c6a36f7b13mr15195060pge.447.1652703540014;
+        Mon, 16 May 2022 05:19:00 -0700 (PDT)
+Received: from [10.254.222.110] ([139.177.225.240])
+        by smtp.gmail.com with ESMTPSA id d17-20020a170902aa9100b0015e8d4eb218sm6929028plr.98.2022.05.16.05.18.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 05:18:59 -0700 (PDT)
+Message-ID: <bbd8744f-d938-c4a5-cb02-145c9875ea53@bytedance.com>
+Date:   Mon, 16 May 2022 20:18:54 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [PATCH] blk-iocos: fix inuse clamp when iocg deactivate or free
+Content-Language: en-US
+To:     tj@kernel.org, axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com
+References: <20220516101909.99768-1-zhouchengming@bytedance.com>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <20220516101909.99768-1-zhouchengming@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yunfei Wang <yf.wang@mediatek.com>
+On 2022/5/16 18:19, Chengming Zhou wrote:
+> For an active leaf node, its inuse shouldn't be zero or exceed
+> its active, but it's not true when deactivate idle iocg or delete
+> iocg in ioc_pd_free().
+> 
+> Although inuse of 1 is very small, it could cause noticeable hwi
+> decrease in the long running server. So we'd better fix it.
+> 
+> And check iocg->child_active_sum is enough for inner iocg, remove
+> the needless list_empty check by the way.
+> 
+> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> ---
+>  block/blk-iocost.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/block/blk-iocost.c b/block/blk-iocost.c
+> index 2570732b92d1..84374ebcc402 100644
+> --- a/block/blk-iocost.c
+> +++ b/block/blk-iocost.c
+> @@ -1073,11 +1073,11 @@ static void __propagate_weights(struct ioc_gq *iocg, u32 active, u32 inuse,
+>  	 * @active. An active internal node's inuse is solely determined by the
+>  	 * inuse to active ratio of its children regardless of @inuse.
+>  	 */
+> -	if (list_empty(&iocg->active_list) && iocg->child_active_sum) {
+> +	if (iocg->child_active_sum) {
+>  		inuse = DIV64_U64_ROUND_UP(active * iocg->child_inuse_sum,
+>  					   iocg->child_active_sum);
+>  	} else {
+> -		inuse = clamp_t(u32, inuse, 1, active);
+> +		inuse = clamp_t(u32, inuse, 0, active);
 
-Add the quirk IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT support, so that allows
-page table PA up to 35bit, not only in ZONE_DMA32.
+I found the commit message is wrong after a second look at the test data,
+inuse value will be zero when active is zero, since:
 
-Signed-off-by: Ning Li <ning.li@mediatek.com>
-Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
----
- drivers/iommu/mtk_iommu.c | 29 +++++++++++++++++++++++++----
- 1 file changed, 25 insertions(+), 4 deletions(-)
+#define clamp_t(type, val, lo, hi) min_t(type, max_t(type, val, lo), hi)
 
-diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index 6fd75a60abd6..1b9a876ef271 100644
---- a/drivers/iommu/mtk_iommu.c
-+++ b/drivers/iommu/mtk_iommu.c
-@@ -33,6 +33,7 @@
- 
- #define REG_MMU_PT_BASE_ADDR			0x000
- #define MMU_PT_ADDR_MASK			GENMASK(31, 7)
-+#define MMU_PT_ADDR_2_0_MASK			GENMASK(2, 0)
- 
- #define REG_MMU_INVALIDATE			0x020
- #define F_ALL_INVLD				0x2
-@@ -118,6 +119,7 @@
- #define WR_THROT_EN			BIT(6)
- #define HAS_LEGACY_IVRP_PADDR		BIT(7)
- #define IOVA_34_EN			BIT(8)
-+#define PGTABLE_PA_35_EN		BIT(9)
- 
- #define MTK_IOMMU_HAS_FLAG(pdata, _x) \
- 		((((pdata)->flags) & (_x)) == (_x))
-@@ -401,6 +403,9 @@ static int mtk_iommu_domain_finalise(struct mtk_iommu_domain *dom,
- 		.iommu_dev = data->dev,
- 	};
- 
-+	if (MTK_IOMMU_HAS_FLAG(data->plat_data, PGTABLE_PA_35_EN))
-+		dom->cfg.quirks |= IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT;
-+
- 	if (MTK_IOMMU_HAS_FLAG(data->plat_data, HAS_4GB_MODE))
- 		dom->cfg.oas = data->enable_4GB ? 33 : 32;
- 	else
-@@ -450,6 +455,7 @@ static int mtk_iommu_attach_device(struct iommu_domain *domain,
- 	struct mtk_iommu_domain *dom = to_mtk_domain(domain);
- 	struct device *m4udev = data->dev;
- 	int ret, domid;
-+	u32 regval;
- 
- 	domid = mtk_iommu_get_domain_id(dev, data->plat_data);
- 	if (domid < 0)
-@@ -472,8 +478,14 @@ static int mtk_iommu_attach_device(struct iommu_domain *domain,
- 			return ret;
- 		}
- 		data->m4u_dom = dom;
--		writel(dom->cfg.arm_v7s_cfg.ttbr & MMU_PT_ADDR_MASK,
--		       data->base + REG_MMU_PT_BASE_ADDR);
-+
-+		/* Bits[6:3] are invalid for mediatek platform */
-+		if (MTK_IOMMU_HAS_FLAG(data->plat_data, PGTABLE_PA_35_EN))
-+			regval = (dom->cfg.arm_v7s_cfg.ttbr & MMU_PT_ADDR_MASK) |
-+				 (dom->cfg.arm_v7s_cfg.ttbr & MMU_PT_ADDR_2_0_MASK);
-+		else
-+			regval = dom->cfg.arm_v7s_cfg.ttbr & MMU_PT_ADDR_MASK;
-+		writel(regval, data->base + REG_MMU_PT_BASE_ADDR);
- 
- 		pm_runtime_put(m4udev);
- 	}
-@@ -987,6 +999,7 @@ static int __maybe_unused mtk_iommu_runtime_resume(struct device *dev)
- 	struct mtk_iommu_suspend_reg *reg = &data->reg;
- 	struct mtk_iommu_domain *m4u_dom = data->m4u_dom;
- 	void __iomem *base = data->base;
-+	u32 regval;
- 	int ret;
- 
- 	ret = clk_prepare_enable(data->bclk);
-@@ -1010,7 +1023,14 @@ static int __maybe_unused mtk_iommu_runtime_resume(struct device *dev)
- 	writel_relaxed(reg->int_main_control, base + REG_MMU_INT_MAIN_CONTROL);
- 	writel_relaxed(reg->ivrp_paddr, base + REG_MMU_IVRP_PADDR);
- 	writel_relaxed(reg->vld_pa_rng, base + REG_MMU_VLD_PA_RNG);
--	writel(m4u_dom->cfg.arm_v7s_cfg.ttbr & MMU_PT_ADDR_MASK, base + REG_MMU_PT_BASE_ADDR);
-+
-+	/* Bits[6:3] are invalid for mediatek platform */
-+	if (MTK_IOMMU_HAS_FLAG(data->plat_data, PGTABLE_PA_35_EN))
-+		regval = (m4u_dom->cfg.arm_v7s_cfg.ttbr & MMU_PT_ADDR_MASK) |
-+			 (m4u_dom->cfg.arm_v7s_cfg.ttbr & MMU_PT_ADDR_2_0_MASK);
-+	else
-+		regval = m4u_dom->cfg.arm_v7s_cfg.ttbr & MMU_PT_ADDR_MASK;
-+	writel(regval, base + REG_MMU_PT_BASE_ADDR);
- 
- 	/*
- 	 * Users may allocate dma buffer before they call pm_runtime_get,
-@@ -1038,7 +1058,8 @@ static const struct mtk_iommu_plat_data mt2712_data = {
- 
- static const struct mtk_iommu_plat_data mt6779_data = {
- 	.m4u_plat      = M4U_MT6779,
--	.flags         = HAS_SUB_COMM | OUT_ORDER_WR_EN | WR_THROT_EN,
-+	.flags         = HAS_SUB_COMM | OUT_ORDER_WR_EN | WR_THROT_EN |
-+			 PGTABLE_PA_35_EN,
- 	.inv_sel_reg   = REG_MMU_INV_SEL_GEN2,
- 	.iova_region   = single_domain,
- 	.iova_region_nr = ARRAY_SIZE(single_domain),
--- 
-2.18.0
+So clamp_t(u32, 0, 1, 0) will return 0, deactivate idle iocg or delete iocg
+will set its inuse to zero correctly.
 
+The inuse -> 1 happened in the test data turn out to be iocg_incur_debt(),
+which call __propagate_weights() with active = weight, inuse = 0, so
+clamp_t(u32, 0, 1, active) return 1.
+
+Then this effect is very small, unlikely to have an impact in practice. Should
+I modify the commit message to send v2 or just drop it?
+
+Thanks.
+
+>  	}
+>  
+>  	iocg->last_inuse = iocg->inuse;

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6888A528ED1
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E7BF528EE7
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:51:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346353AbiEPTuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:50:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36506 "EHLO
+        id S1346043AbiEPTrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:47:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346149AbiEPTpw (ORCPT
+        with ESMTP id S1346083AbiEPTmu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:45:52 -0400
+        Mon, 16 May 2022 15:42:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFDF40A2E;
-        Mon, 16 May 2022 12:43:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34853F32B;
+        Mon, 16 May 2022 12:41:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78F1D6154D;
-        Mon, 16 May 2022 19:43:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86D77C36AE2;
-        Mon, 16 May 2022 19:43:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 197F561512;
+        Mon, 16 May 2022 19:41:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17105C385AA;
+        Mon, 16 May 2022 19:41:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730197;
-        bh=F6PypLbVgvyHOdNaNCM5IHjYj9jD48TPiIylmzQwbWM=;
+        s=korg; t=1652730079;
+        bh=jXsRJZlhkkVNE5KFJ6uMHiXK5LPb7EkwA2pg9EW8UoA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PoWEZkifhiRN044kEfPQBO0BT9J9HmrK9LsF11W1vdao97DDe9PO81vcWy4HUiNPq
-         VCw362huBRZWQ1uWqz6mmKAmc05wYEAXtmUniRAPxYcpqK/n+p8YMl8UrefrEkk34X
-         n3+PMrynw674NauTkiHAryhxptf2DEGR6lwfP3v0=
+        b=jeIF6155DwepFbd8POLDNrVPixbVbwQo4llPFQD0tlC3sp5+sOa+xJGgNC8PjXaRx
+         ftF29XpFT3739QteWs+ctzPAbizNeFwVO6/Xc+Fr9hzURQSghZ1HCmxZIq1jyUnFvC
+         jFSGmDcej8qYjzFbJggU6almYzGwDOoiAKzf62LQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 09/43] dim: initialize all struct fields
+Subject: [PATCH 4.19 06/32] mac80211_hwsim: call ieee80211_tx_prepare_skb under RCU protection
 Date:   Mon, 16 May 2022 21:36:20 +0200
-Message-Id: <20220516193614.993227902@linuxfoundation.org>
+Message-Id: <20220516193614.966264764@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193614.714657361@linuxfoundation.org>
-References: <20220516193614.714657361@linuxfoundation.org>
+In-Reply-To: <20220516193614.773450018@linuxfoundation.org>
+References: <20220516193614.773450018@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,114 +54,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jesse Brandeburg <jesse.brandeburg@intel.com>
+From: Johannes Berg <johannes.berg@intel.com>
 
-[ Upstream commit ee1444b5e1df4155b591d0d9b1e72853a99ea861 ]
+[ Upstream commit 9e2db50f1ef2238fc2f71c5de1c0418b7a5b0ea2 ]
 
-The W=2 build pointed out that the code wasn't initializing all the
-variables in the dim_cq_moder declarations with the struct initializers.
-The net change here is zero since these structs were already static
-const globals and were initialized with zeros by the compiler, but
-removing compiler warnings has value in and of itself.
+This is needed since it might use (and pass out) pointers to
+e.g. keys protected by RCU. Can't really happen here as the
+frames aren't encrypted, but we need to still adhere to the
+rules.
 
-lib/dim/net_dim.c: At top level:
-lib/dim/net_dim.c:54:9: warning: missing initializer for field ‘comps’ of ‘const struct dim_cq_moder’ [-Wmissing-field-initializers]
-   54 |         NET_DIM_RX_EQE_PROFILES,
-      |         ^~~~~~~~~~~~~~~~~~~~~~~
-In file included from lib/dim/net_dim.c:6:
-./include/linux/dim.h:45:13: note: ‘comps’ declared here
-   45 |         u16 comps;
-      |             ^~~~~
-
-and repeats for the tx struct, and once you fix the comps entry then
-the cq_period_mode field needs the same treatment.
-
-Use the commonly accepted style to indicate to the compiler that we
-know what we're doing, and add a comma at the end of each struct
-initializer to clean up the issue, and use explicit initializers
-for the fields we are initializing which makes the compiler happy.
-
-While here and fixing these lines, clean up the code slightly with
-a fix for the super long lines by removing the word "_MODERATION" from a
-couple defines only used in this file.
-
-Fixes: f8be17b81d44 ("lib/dim: Fix -Wunused-const-variable warnings")
-Signed-off-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
-Link: https://lore.kernel.org/r/20220507011038.14568-1-jesse.brandeburg@intel.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: cacfddf82baf ("mac80211_hwsim: initialize ieee80211_tx_info at hw_scan_work")
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Link: https://lore.kernel.org/r/20220505230421.5f139f9de173.I77ae111a28f7c0e9fd1ebcee7f39dbec5c606770@changeid
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/dim/net_dim.c | 44 ++++++++++++++++++++++----------------------
- 1 file changed, 22 insertions(+), 22 deletions(-)
+ drivers/net/wireless/mac80211_hwsim.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/lib/dim/net_dim.c b/lib/dim/net_dim.c
-index a4db51c21266..dae3b51ac3d9 100644
---- a/lib/dim/net_dim.c
-+++ b/lib/dim/net_dim.c
-@@ -12,41 +12,41 @@
-  *        Each profile size must be of NET_DIM_PARAMS_NUM_PROFILES
-  */
- #define NET_DIM_PARAMS_NUM_PROFILES 5
--#define NET_DIM_DEFAULT_RX_CQ_MODERATION_PKTS_FROM_EQE 256
--#define NET_DIM_DEFAULT_TX_CQ_MODERATION_PKTS_FROM_EQE 128
-+#define NET_DIM_DEFAULT_RX_CQ_PKTS_FROM_EQE 256
-+#define NET_DIM_DEFAULT_TX_CQ_PKTS_FROM_EQE 128
- #define NET_DIM_DEF_PROFILE_CQE 1
- #define NET_DIM_DEF_PROFILE_EQE 1
+diff --git a/drivers/net/wireless/mac80211_hwsim.c b/drivers/net/wireless/mac80211_hwsim.c
+index c84ee5ba5381..3d8e17bb8a10 100644
+--- a/drivers/net/wireless/mac80211_hwsim.c
++++ b/drivers/net/wireless/mac80211_hwsim.c
+@@ -2082,11 +2082,13 @@ static void hw_scan_work(struct work_struct *work)
+ 			if (req->ie_len)
+ 				skb_put_data(probe, req->ie, req->ie_len);
  
- #define NET_DIM_RX_EQE_PROFILES { \
--	{1,   NET_DIM_DEFAULT_RX_CQ_MODERATION_PKTS_FROM_EQE}, \
--	{8,   NET_DIM_DEFAULT_RX_CQ_MODERATION_PKTS_FROM_EQE}, \
--	{64,  NET_DIM_DEFAULT_RX_CQ_MODERATION_PKTS_FROM_EQE}, \
--	{128, NET_DIM_DEFAULT_RX_CQ_MODERATION_PKTS_FROM_EQE}, \
--	{256, NET_DIM_DEFAULT_RX_CQ_MODERATION_PKTS_FROM_EQE}, \
-+	{.usec = 1,   .pkts = NET_DIM_DEFAULT_RX_CQ_PKTS_FROM_EQE,}, \
-+	{.usec = 8,   .pkts = NET_DIM_DEFAULT_RX_CQ_PKTS_FROM_EQE,}, \
-+	{.usec = 64,  .pkts = NET_DIM_DEFAULT_RX_CQ_PKTS_FROM_EQE,}, \
-+	{.usec = 128, .pkts = NET_DIM_DEFAULT_RX_CQ_PKTS_FROM_EQE,}, \
-+	{.usec = 256, .pkts = NET_DIM_DEFAULT_RX_CQ_PKTS_FROM_EQE,}  \
- }
- 
- #define NET_DIM_RX_CQE_PROFILES { \
--	{2,  256},             \
--	{8,  128},             \
--	{16, 64},              \
--	{32, 64},              \
--	{64, 64}               \
-+	{.usec = 2,  .pkts = 256,},             \
-+	{.usec = 8,  .pkts = 128,},             \
-+	{.usec = 16, .pkts = 64,},              \
-+	{.usec = 32, .pkts = 64,},              \
-+	{.usec = 64, .pkts = 64,}               \
- }
- 
- #define NET_DIM_TX_EQE_PROFILES { \
--	{1,   NET_DIM_DEFAULT_TX_CQ_MODERATION_PKTS_FROM_EQE},  \
--	{8,   NET_DIM_DEFAULT_TX_CQ_MODERATION_PKTS_FROM_EQE},  \
--	{32,  NET_DIM_DEFAULT_TX_CQ_MODERATION_PKTS_FROM_EQE},  \
--	{64,  NET_DIM_DEFAULT_TX_CQ_MODERATION_PKTS_FROM_EQE},  \
--	{128, NET_DIM_DEFAULT_TX_CQ_MODERATION_PKTS_FROM_EQE}   \
-+	{.usec = 1,   .pkts = NET_DIM_DEFAULT_TX_CQ_PKTS_FROM_EQE,},  \
-+	{.usec = 8,   .pkts = NET_DIM_DEFAULT_TX_CQ_PKTS_FROM_EQE,},  \
-+	{.usec = 32,  .pkts = NET_DIM_DEFAULT_TX_CQ_PKTS_FROM_EQE,},  \
-+	{.usec = 64,  .pkts = NET_DIM_DEFAULT_TX_CQ_PKTS_FROM_EQE,},  \
-+	{.usec = 128, .pkts = NET_DIM_DEFAULT_TX_CQ_PKTS_FROM_EQE,}   \
- }
- 
- #define NET_DIM_TX_CQE_PROFILES { \
--	{5,  128},  \
--	{8,  64},  \
--	{16, 32},  \
--	{32, 32},  \
--	{64, 32}   \
-+	{.usec = 5,  .pkts = 128,},  \
-+	{.usec = 8,  .pkts = 64,},  \
-+	{.usec = 16, .pkts = 32,},  \
-+	{.usec = 32, .pkts = 32,},  \
-+	{.usec = 64, .pkts = 32,}   \
- }
- 
- static const struct dim_cq_moder
++			rcu_read_lock();
+ 			if (!ieee80211_tx_prepare_skb(hwsim->hw,
+ 						      hwsim->hw_scan_vif,
+ 						      probe,
+ 						      hwsim->tmp_chan->band,
+ 						      NULL)) {
++				rcu_read_unlock();
+ 				kfree_skb(probe);
+ 				continue;
+ 			}
+@@ -2094,6 +2096,7 @@ static void hw_scan_work(struct work_struct *work)
+ 			local_bh_disable();
+ 			mac80211_hwsim_tx_frame(hwsim->hw, probe,
+ 						hwsim->tmp_chan);
++			rcu_read_unlock();
+ 			local_bh_enable();
+ 		}
+ 	}
 -- 
 2.35.1
 

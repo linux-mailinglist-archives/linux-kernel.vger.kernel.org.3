@@ -2,121 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C43529346
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E03529349
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 00:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349524AbiEPV7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 17:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40832 "EHLO
+        id S1345376AbiEPWBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 18:01:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349539AbiEPV7X (ORCPT
+        with ESMTP id S238657AbiEPWBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 17:59:23 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5554617E;
-        Mon, 16 May 2022 14:59:20 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id h14so2583615wrc.6;
-        Mon, 16 May 2022 14:59:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=HcmBvUgsVeNM17CUNnfRIku+R4yL2gP60EC6MoAvwrg=;
-        b=IFPjQkUx6GkRaADbf42xb/jtRznMIH61XR1C1J/SPH5ePYaVsHDqdqkBMX5LaBkHhr
-         1ytV3SU4nMwLxjZZExiByoLP8OLiiLdBwqhA1q5XXcXaOiFoap0YU536uOL7ro0kQys+
-         up0tQT2lFx0wwR5d43Via0+btZhUY9LPADgEfluawiYt+ZLWZzOGHpvEzF2VRAfpXUA/
-         G13Qjl+WWCjI5EIZ0eMCTEuT6rhpKy6PkubfuPMAFWm/j44uaIB7CqNBd3s2DMSo7ZLB
-         if1Fhlvd7BT1hnmFkEXuiGMx2Xp0Dat8nC/oM2DuDe6BVVj+VFyHQ+gN5Tspmd9ClJbd
-         PneQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HcmBvUgsVeNM17CUNnfRIku+R4yL2gP60EC6MoAvwrg=;
-        b=v/kssIvQEdHP8SqOFMEDdej7XLd/axE3lZqPpqdnFrSf1sD+83F4ktQkkwQrXHG7k5
-         WKIrd9zvyyyp5GYMWRg8/qdbVjtwY/I78cb6+QNlawZ6f0LOwnvGlk6wQrguwuGuOCn5
-         keUHDI4KmggtVyqZn+tpMJopoLvZpZo0NlOd2gcMZwLNhcNziQVswfCRojv7uFvCREr2
-         U7lNrgjbq851E0A2UpWJg+QzOs4oK0nK8tZY6Qz+SC3sMR58uuW/yokSjNgjHDYuQtpD
-         xNEHWXCEI1zw6yoZQnm8Ujvba53XF5TwS3D9xh9cxKiA+r7K2iVLrgx8ruPnNWOSuysx
-         T9BA==
-X-Gm-Message-State: AOAM533BmR3Fc1fFrmujmpIy36lAtfX4x0q7Q/Na/AXao23VA64Utpfh
-        KUsGuksnja+FhGEeEy4X6qU=
-X-Google-Smtp-Source: ABdhPJwNMVgFJjW9VU03XHirlfrHvC4J/bHqM3E3Dq2ucnd4p2MQKweoc23r9WDrtvbM5OJ/vuZH6w==
-X-Received: by 2002:a5d:47ac:0:b0:20c:550b:4cf2 with SMTP id 12-20020a5d47ac000000b0020c550b4cf2mr16005442wrb.420.1652738358559;
-        Mon, 16 May 2022 14:59:18 -0700 (PDT)
-Received: from leap.localnet (host-79-50-182-226.retail.telecomitalia.it. [79.50.182.226])
-        by smtp.gmail.com with ESMTPSA id e12-20020adfa44c000000b0020c5253d8dcsm10422969wra.40.2022.05.16.14.59.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 14:59:17 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Evgeniy Dushistov <dushistov@mail.ru>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Ira Weiny <ira.weiny@intel.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] fs/ufs: Replace kmap() with kmap_local_page()
-Date:   Mon, 16 May 2022 23:59:15 +0200
-Message-ID: <2117615.Icojqenx9y@leap>
-In-Reply-To: <YoJl+lh0QELbv/TL@casper.infradead.org>
-References: <20220516101925.15272-1-fmdefrancesco@gmail.com> <YoJl+lh0QELbv/TL@casper.infradead.org>
+        Mon, 16 May 2022 18:01:00 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1296C21BB
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 15:00:58 -0700 (PDT)
+Received: from mail-yb1-f175.google.com ([209.85.219.175]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MQ5jC-1oCfV22p6W-00M61c for <linux-kernel@vger.kernel.org>; Tue, 17 May
+ 2022 00:00:56 +0200
+Received: by mail-yb1-f175.google.com with SMTP id e78so8336383ybc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 15:00:56 -0700 (PDT)
+X-Gm-Message-State: AOAM530J9PsopS7SF7E/HNv//eNI919Crh28OL6j7BsgFL7KHhvAE0Gl
+        fY3YJbaUzNccZtSe67uihbfYpHl/lNlNcfZ83o4=
+X-Google-Smtp-Source: ABdhPJzOvJ1Nur3G1JX+IlZOcGaB7Oj05AJI5+nXjMqV097nGVWvQsIJehlQhKoegNzSX0crzcxnj6HgxTm7u9AM0ho=
+X-Received: by 2002:a25:cfd7:0:b0:64d:9526:1ed4 with SMTP id
+ f206-20020a25cfd7000000b0064d95261ed4mr8500297ybg.106.1652738455478; Mon, 16
+ May 2022 15:00:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220515200103.1408370-1-mussitantesmortem@gmail.com> <20220515200103.1408370-2-mussitantesmortem@gmail.com>
+In-Reply-To: <20220515200103.1408370-2-mussitantesmortem@gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 16 May 2022 23:00:33 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3UFFt8uf_64J-aRbmB-zdH8TpEaRHSdf9JzPk9SYzYgA@mail.gmail.com>
+Message-ID: <CAK8P3a3UFFt8uf_64J-aRbmB-zdH8TpEaRHSdf9JzPk9SYzYgA@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/1] ipc, sem: fix backward compatibility with x86-32 kernels
+To:     Maxim Zhukov <crazycdeveloper@gmail.com>
+Cc:     chi.minghao@zte.com.cn, varad.gautam@suse.com,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shakeel Butt <shakeelb@google.com>, vasily.averin@linux.dev,
+        Manfred Spraul <manfred@colorfullife.com>,
+        Davidlohr Bueso <dbueso@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Maxim Zhukov <mussitantesmortem@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:rpCXLAVmjklRkaamrBhhpN0BOk3gH1ffpix3l27wZHSmXY10VsF
+ PM4ZROuAxSSbGtULS1/Ob3vUxlt+RfXfGBlqHeYHRlXFozobNL+sUJwi2ZXjFZSy1Eox97B
+ YXxE5uDlHWE0J1FI69qQbC85gX2Yw66Yhj8idzu+AXmkyEoK4QT0HpXKQHFY1ClD2uWyHv+
+ rC4l53Vq2+gZz4T8HgLsA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Z8HD+dKUJ+I=:YBtEjj5X+9O5eE9i7XOLS4
+ rS+oFBZCsze4cwT8hPEOPEts3MN/0uU802/bPnX7T14RUtzg4IgfkHqGY7jVhSWn1T2esdQLL
+ X/TtzGjZ3+P+ORQ9hbFYiXGTd3W+qq5nVLX3ORmrqZGv/1JuK+3UtCSl1l1QD8RQPJdXvrU2S
+ 97aokfIHjB596913PUH7uNHydutuMQssaUj2aMz6dVA+f//5uaZ/GyrM24mN9xj6NnwKJByUC
+ 7+QniBO/bMNWtO+psiz/UfDokyNxrsmuw4nup4izQgDvqsvbc3qLIrYPyHPbGCOTrdcEZv1zd
+ 7DzI8O1U97fWVLH+MPxYxH01CBgDKSexZ1yrZlXlLqzTXfnrSyMBZPbcLQK4RxazcpmyhsrLa
+ m7ilYQPsiSr6lveqRobOu2RYd2ewrWzQLH58Uf13/CJ0SfokTI4i3Pgn7PSOUIWmV41sedl3s
+ KVfvejGXt4BOCQVbXaP2QdOGCdHNOuzAd8NtZqfTOn0rofbwPAPmImwRt5trNpk0BtKUsrrCF
+ nWTEgglDlzq00vS6K2DAk95J0Cxyj99aq3fOvDpB/XczSgeMTesqkdSnO7vGq/hDNWk9onrgR
+ KodcHTUOJGXVNKfVSdN03/ArBrqG4sOJJ7RcrJEavYgXDzAi6ZK1FMfZAHneierDRRSaJyNBu
+ hN0zxu1d14E6bamWtnYarUwWH2Mb/7EaW3xPBnfV7AG/sufpPjbsyBJBFiboWybmtl9iNcOQm
+ eDlFoKtqpIAO7+TpO1jFU1GEI3wsE6qtmEMrcoGUonb+rox9ejP+UKUxGZ45o3HzCLnehsZgB
+ GNyJQciMGlFHbaSDSt/vMVLYxQCaCbE8Pi4GrvrhzkBE6iQUiI=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On luned=C3=AC 16 maggio 2022 16:55:54 CEST Matthew Wilcox wrote:
-> On Mon, May 16, 2022 at 12:19:25PM +0200, Fabio M. De Francesco wrote:
-> > The use of kmap() is being deprecated in favor of kmap_local_page().=20
-With
-> > kmap_local_page(), the mapping is per thread, CPU local and not=20
-globally
-> > visible.
-> >=20
-> > The usage of kmap_local_page() in fs/ufs is pre-thread, therefore=20
-replace
-> > kmap() / kunmap() calls with kmap_local_page() / kunmap_local().
-> >=20
-> > kunmap_local() requires the mapping address, so return that address=20
-from
-> > ufs_get_page() to be used in ufs_put_page().
-> >=20
-> > These changes are essentially ported from fs/ext2 and are largely based=
-=20
-on
-> > commit 782b76d7abdf ("fs/ext2: Replace kmap() with kmap_local_page()").
-> >=20
-> > Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> > Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-> > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
->=20
-> Have you done more than compile-tested this?  I'd like to know that it's
-> been tested on a machine with HIGHMEM enabled (in a VM, presumably).
-> UFS doesn't get a lot of testing, and it'd be annoying to put out a
-> patch that breaks the kmap_local() rules.
->=20
-No, I have not done more than compile-testing.=20
+On Sun, May 15, 2022 at 9:01 PM Maxim Zhukov <crazycdeveloper@gmail.com> wrote:
+>
+> Since with commit 275f22148e87 ("ipc: rename old-style shmctl/semctl/msgctl syscalls")
+> we have changed behavior:
+>
+> ksys_semctl lost parse ipc version (ipc_parse_version), because the
+> new syscall works with IPC_64 only, but the parse function has some
+> side effect - it removes IPC_64 bit from `cmd`.
+>
+> Some libc forced sends IPC_64 bit in semctl syscall[1][2][3], this leads to
+> a bug - X86-32 kernel does not have compat headers and does not
+> correctly parse received command (cmd) from semctl syscall: cmd have actual
+> command and IPC_64 bit, thus throw EINVAL error in ksys_semctl
 
-However, I understand your concerns regarding these changes. I can only say
-that, while they may seem like mechanical replacements, I have carefully
-checked the code to be sure enough not to break the logic of the UFS and /
-or the rules of local mapping.
+That is unfortunate, and clearly against the intention of my commit
+from back then:
+the idea was that any libc that moves from the old to the new syscalls would
+drop support for the ancient IPC version and no longer have to pass the IPC_64
+flag.
 
-I have nothing against testing, but I think they are not needed here unless
-you see something that is potentially harmful or suspiciously broken and=20
-you explicitly request it. If so, I'll be testing the code by the end of
-this week (I cannot before).
+Given how long it took to run into this bug, let's try to figure out
+exactly what
+options we have to address this before applying any patch.
 
-Thanks,
+> This commit forcibly removes IPC_64 bit from the cmd for restore
+> backward compatibility.
+>
+> [1]: https://elixir.bootlin.com/uclibc-ng/v1.0.40/source/libc/misc/sysvipc/sem.c#L58
+> [2]: https://elixir.bootlin.com/musl/v1.2.3/source/src/ipc/semctl.c#L48 -> https://elixir.bootlin.com/musl/v1.2.3/source/src/ipc/ipc.h#L22
+> [3]: https://elixir.bootlin.com/glibc/glibc-2.35/source/sysdeps/unix/sysv/linux/semctl.c#L124
 
-=46abio
+I think musl handles it correctly here: it always calls the old-style
+ipc() syscall if that is
+available.
 
+For glibc, I'm not completely sure but I think that also does it
+correctly, defining
+IPC_64 to 0 for the configuration in which it calls sys_semctl().
 
+The uclibc-ng implementation is clearly wrong here, I assume that's what you
+tested with? While your patch would make uclibc-ng work on the affected
+architectures and not break the other libc implementations, it is still an
+ABI change to allow the 0x100 bit to be set in the "cmd" value. This is
+different from both the traditional behavior on the ipc() syscall, and from
+the traditional behavior on architectures that had semctl() without IPC_64.
 
+> Signed-off-by: Maxim Zhukov <mussitantesmortem@gmail.com>
+> ---
+>  ipc/sem.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/ipc/sem.c b/ipc/sem.c
+> index 0dbdb98fdf2d..824244170000 100644
+> --- a/ipc/sem.c
+> +++ b/ipc/sem.c
+> @@ -1706,7 +1706,7 @@ static long ksys_semctl(int semid, int semnum, int cmd, unsigned long arg, int v
+>
+>  SYSCALL_DEFINE4(semctl, int, semid, int, semnum, int, cmd, unsigned long, arg)
+>  {
+> -       return ksys_semctl(semid, semnum, cmd, arg, IPC_64);
+> +       return ksys_semctl(semid, semnum, cmd & (~IPC_64), arg, IPC_64);
+>  }
+
+I don't think it makes sense to do this for semctl but not also for
+shmctl and msqctl --
+whatever we end up doing should be the same across all three.
+
+       Arnd

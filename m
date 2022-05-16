@@ -2,166 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E11C15290DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE50529097
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348039AbiEPUfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:35:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
+        id S1347691AbiEPUfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351121AbiEPUCC (ORCPT
+        with ESMTP id S1351247AbiEPUCI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:02:02 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12F91114
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:59:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652731155; x=1684267155;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JVHTDrsnnqLUkVaLdHCsPY2iu0ZqZS0uhGRqoz753YU=;
-  b=CX6YMBKT2F87NR4MPSGwD70f7k8bJIjbzujsU1ozkLFk9LqgG9dTj0kj
-   D/qs9EQT7UoZCSy+I6J9pq6QS5iZaJsAIS+Gh4rDY0fBDui5EdBPQEtaV
-   VwrlZ7yRql2yV4iAHirADV6DAYtGPRKF/vxb1gxiWEd2wLM1DTo48P62J
-   Cqx/2xRDASLJIr4tLd7NK/kP6O7aJIEx7uKDQO+9pda7ClqJSpvCJke0y
-   +jFC+HDhsH/IApmqmo6yyLVprasENN2Ibeea5cWz9xr+9+2cPczp/rAMV
-   TR5Qrl/gtYrAlof82sewt9EtxHmSwij67GBZiyjS9f4Mi3FEGh20KrWGJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="331561823"
-X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
-   d="scan'208";a="331561823"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 12:59:14 -0700
-X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
-   d="scan'208";a="522602714"
-Received: from csalmon-mobl.amr.corp.intel.com (HELO localhost) ([10.212.118.70])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 12:59:14 -0700
-Date:   Mon, 16 May 2022 12:59:13 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     kbuild@lists.01.org, Dan Williams <dan.j.williams@intel.com>,
-        lkp@intel.com, kbuild-all@lists.01.org,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [cxl:preview 48/67] drivers/cxl/core/pci.c:302
- __cxl_hdm_decode_init() warn: ignoring unreachable code.
-Message-ID: <YoKtEeOPJPGSO6MM@iweiny-desk3>
-References: <202205130114.DpEOzjJn-lkp@intel.com>
+        Mon, 16 May 2022 16:02:08 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A032403F2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 13:01:10 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id e20so56983qvr.6
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 13:01:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ZkVPoKiRyxZYCKFlzur2Du6imn3HJo9Ujd09H1rvEZI=;
+        b=vZTbPP2pWMooTwGBeObJt4v/OCxVqBMUtRl4gbZrrAlmglNAeFTKpKTvI8pBBQYN9c
+         iqwo0hsTQ6M2urOAjmu0s5oyECHNDKV4KnVlwY6nOMTEdrAJ9NqVkrSARYKkYn/wwoFO
+         m+zVXG2ALswGiW+CS9Jh21tKovWXrZW+YRHz4yMcE/Ggs4ybkWkJUMkfbsZ5s90LQn77
+         e2o98eTC86/Ft/yL5wJbt69b21smwsBJNqGNjMH+Zm1QxWMvkFIlIIgSML55tuD2zjKt
+         83b5fFamCTAEiXM24TcMDjWVlr3rXOlwoXH0BafPlBO8IAUs6LbNf+qDt89E1wHEDtRT
+         pLQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ZkVPoKiRyxZYCKFlzur2Du6imn3HJo9Ujd09H1rvEZI=;
+        b=MSCDJXX0c7juqhTWFjjPgBToJIsbOSVQqb7PAJ5RfuHWxxrn+DjPtBmPRQdt2CYqxa
+         Qa5jS+hkZSbuvRbKWEZ2HJUCdIqJvbglu/wnurzNn5qnD5kD993IpBFvFGSjjmBnVeOk
+         QsNGBNNHlxi+1/lJ90L5nlMBYjGErFhrDqkHwIUWLi0QY/mucwTgC5kaJa8pM/JdUoso
+         FllAUZkG7sgRLIUACNFWCdQ9JmPHvfzCqe55BVbFQFGMSiKM33gZraXPlY8JFc0r18Z5
+         roDSuPIV/nkBTofppif7EcL8L5QErL6lHwZHR6sVSg42jFTFtFSah0wCJXM89CkWnHb9
+         Jqdw==
+X-Gm-Message-State: AOAM5328CbkmIIYT7mU2miPSIOAKIvsr0a0G5NUugOB6dLu/UIVN7XEq
+        lBKk25zWy3AL7UIeivo9fZaejA==
+X-Google-Smtp-Source: ABdhPJzSaErJBPK04dhEePAY++sXZsgqj/slLG7+mogeCU5HoTJdC06dGiGJMgPvAoEOV/vqfzjCNg==
+X-Received: by 2002:a05:6214:e6b:b0:45b:474:1035 with SMTP id jz11-20020a0562140e6b00b0045b04741035mr17194607qvb.39.1652731267078;
+        Mon, 16 May 2022 13:01:07 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::1:fcf2])
+        by smtp.gmail.com with ESMTPSA id o7-20020a37be07000000b0069fc13ce203sm6698397qkf.52.2022.05.16.13.01.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 13:01:06 -0700 (PDT)
+Date:   Mon, 16 May 2022 16:01:05 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Minchan Kim <minchan@kernel.org>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com
+Subject: Re: [PATCH v2 6/6] zswap: memcg accounting
+Message-ID: <YoKtgaxOAMBVKiCf@cmpxchg.org>
+References: <20220510152847.230957-1-hannes@cmpxchg.org>
+ <20220510152847.230957-7-hannes@cmpxchg.org>
+ <20220511173218.GB31592@blackbody.suse.cz>
+ <YnwJUL90fuoHs3YW@cmpxchg.org>
+ <20220513151426.GC16096@blackbody.suse.cz>
+ <Yn6QfdouzkcrygTR@cmpxchg.org>
+ <20220516143459.GA17557@blackbody.suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <202205130114.DpEOzjJn-lkp@intel.com>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220516143459.GA17557@blackbody.suse.cz>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 02:14:38PM +0300, Dan Carpenter wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git preview
-> head:   9c642abd8b31d895f34186bd72b7360083b58492
-> commit: 2263e9ed65887cc7c6e977f372596199d2c9f4af [48/67] cxl/port: Enable HDM Capability after validating DVSEC Ranges
-> config: x86_64-randconfig-m001-20220509 (https://download.01.org/0day-ci/archive/20220513/202205130114.DpEOzjJn-lkp@intel.com/config)
-> compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Hello Michal,
 
-Thanks great catch!
+On Mon, May 16, 2022 at 04:34:59PM +0200, Michal Koutný wrote:
+> On Fri, May 13, 2022 at 01:08:13PM -0400, Johannes Weiner <hannes@cmpxchg.org> wrote:
+> > Right, it's accounted as a subset rather than fully disjointed. But it
+> > is a limitable counter of its own, so I exported it as such, with a
+> > current and a max knob. This is comparable to the kmem counter in v1.
+> 
+> That counter and limit didn't turn out well. I liked the analogy to
+> writeback (and dirty limit) better.
 
-Ira
+Right, I was only talking about the design decision to add a usage
+knob alongside the limit. The counter failed for a different reason.
 
+> > From an API POV it would be quite strange to have max for a counter
+> > that has no current. Likewise it would be strange for a major memory
+> > consumer to be missing from memory.stat.
 > 
-> smatch warnings:
-> drivers/cxl/core/pci.c:302 __cxl_hdm_decode_init() warn: ignoring unreachable code.
+> My understanding would be to have all memory.stat entries as you
+> propose, no extra .current counter and the .max knob for zswap
+> configuration.
+
+There is a longer-term advantage of sticking to the usage+limit pair
+precedent. Even though the usage knob happens to correspond to a
+memory.stat item in this case, we had also discussed the possibility
+of breaking out a "Compressed" item in memory.stat instead, of which
+zswap would only be a subset. It didn't pan out this way this time -
+for unrelated reasons. But it's conceivable this will happen in
+another scenario down the line, and then you'd need a separate usage
+knob anyway. It's a good idea to stay consistent.
+
+There is also an immediate practical advantage. zswap is limitable, so
+an auto-tuning service might want to monitor its usage at a higher
+frequency, with a higher precision, and with a higher urgency than
+memory stats are ususally logged. A dedicated usage knob allows doing
+that. memory.stat does not: it is a bigger file that needs to be
+searched with a string parser for every sample; it's flushed lazily,
+so it can be less precise than desired; yet, when it does flush, it
+flushes the entire tree rather than just the target group, making it
+more expensive an erratic than desired as well.
+
+> > It needs to be configured to the workload's access frequency curve,
+> > which can be done with trial-and-error (reasonable balance between
+> > zswpins and pswpins) or in a more targeted manner using tools such as
+> > page_idle, damon etc.
+> > [...]
+> > Because for load tuning, bytes make much more sense. That's how you
+> > measure the workingset, so a percentage is an awkward indirection. At
+> > the cgroup level, it makes even less sense: all memcg tunables are in
+> > bytes, it would be quite weird to introduce a "max" that is 0-100. Add
+> > the confusion of how percentages would propagate down the hierarchy...
 > 
-> vim +302 drivers/cxl/core/pci.c
+> Thanks for the explanation. I guess there's no simple tranformation of
+> in-kernel available information that'd allow a more semantic
+> configuration of this value. The rather crude absolute value requires
+> (but also simply allows) some calibration or responsive tuning.
+
+Right.
+
+If you think about it, the same can be said about the memory limit
+itself. It's a crude, absolute number the kernel asks of you. Yet the
+optimal setting depends on the workload's ever-changing access
+frequency histogram, the speed of the storage backend for paging and
+swapping, and the workload's tolerances for paging latencies.
+
+Hopefully one day we'll be able to set a pressure/latency threshold on
+the cgroup, and have the kernel optimally distribute the workingset
+across RAM, zswap, second-tier memory, and storage - preferring the
+cheapest and slowest possible backing for every page while meeting the
+SLA. The proactive reclaim and memory offloading work is pursuing this.
+
+For now, we need the interface that allows tuning and exploring from
+userspace. When there is something that's ready for a general purpose
+OS kernel, those absolute knobs won't get in the way - just like
+memory.max doesn't get in the way of proactive reclaim today.
+
+Anyway, I'm just outlining where I'm coming from with this. It looks
+like we agree on the end result.
+
+> > Flushing unnecessary groups with a ratelimit doesn't sound like an
+> > improvement to me.
 > 
-> 18e7a07f5d584d Dan Williams 2022-05-01  270  static bool __cxl_hdm_decode_init(struct cxl_dev_state *cxlds,
-> 9382da4f1fd2c2 Dan Williams 2022-05-09  271  				  struct cxl_hdm *cxlhdm,
-> 18e7a07f5d584d Dan Williams 2022-05-01  272  				  struct cxl_endpoint_dvsec_info *info)
-> 18e7a07f5d584d Dan Williams 2022-05-01  273  {
-> 9382da4f1fd2c2 Dan Williams 2022-05-09  274  	void __iomem *hdm = cxlhdm->regs.hdm_decoder;
-> 2263e9ed65887c Dan Williams 2022-05-10  275  	struct cxl_port *port = cxlhdm->port;
-> 2263e9ed65887c Dan Williams 2022-05-10  276  	struct device *dev = cxlds->dev;
-> 2263e9ed65887c Dan Williams 2022-05-10  277  	struct cxl_port *root;
-> 18e7a07f5d584d Dan Williams 2022-05-01  278  	u32 global_ctrl;
-> 2263e9ed65887c Dan Williams 2022-05-10  279  	int i, rc;
-> 18e7a07f5d584d Dan Williams 2022-05-01  280  
-> 9382da4f1fd2c2 Dan Williams 2022-05-09  281  	global_ctrl = readl(hdm + CXL_HDM_DECODER_CTRL_OFFSET);
-> 18e7a07f5d584d Dan Williams 2022-05-01  282  
-> 2263e9ed65887c Dan Williams 2022-05-10  283  	/*
-> 2263e9ed65887c Dan Williams 2022-05-10  284  	 * If the HDM Decoder Capability is already enabled then assume
-> 2263e9ed65887c Dan Williams 2022-05-10  285  	 * that some other agent like platform firmware set it up.
-> 2263e9ed65887c Dan Williams 2022-05-10  286  	 */
-> 2263e9ed65887c Dan Williams 2022-05-10  287  	if (global_ctrl & CXL_HDM_DECODER_ENABLE) {
-> 2263e9ed65887c Dan Williams 2022-05-10  288  		rc = devm_cxl_enable_mem(&port->dev, cxlds);
-> 2263e9ed65887c Dan Williams 2022-05-10  289  		if (rc)
-> 9382da4f1fd2c2 Dan Williams 2022-05-09  290  			return false;
-> 2263e9ed65887c Dan Williams 2022-05-10  291  		return true;
-> 2263e9ed65887c Dan Williams 2022-05-10  292  	}
-> 2263e9ed65887c Dan Williams 2022-05-10  293  
-> 2263e9ed65887c Dan Williams 2022-05-10  294  	root = to_cxl_port(port->dev.parent);
-> 2263e9ed65887c Dan Williams 2022-05-10  295  	while (!is_cxl_root(root) && is_cxl_port(root->dev.parent))
-> 2263e9ed65887c Dan Williams 2022-05-10  296  		root = to_cxl_port(root->dev.parent);
-> 2263e9ed65887c Dan Williams 2022-05-10  297  	if (!is_cxl_root(root)) {
-> 2263e9ed65887c Dan Williams 2022-05-10  298  		dev_err(dev, "Failed to acquire root port for HDM enable\n");
-> 2263e9ed65887c Dan Williams 2022-05-10  299  		return false;
-> 2263e9ed65887c Dan Williams 2022-05-10  300  	}
-> 2263e9ed65887c Dan Williams 2022-05-10  301  
-> 2263e9ed65887c Dan Williams 2022-05-10 @302  	for (i = 0; i < info->ranges; i++) {
->                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> This only loops once.  if (info->ranges != 0) {?
+> Then I'm only concerned about a situation when there's a single deep
+> memcg that undergoes both workingset_refault() and zswap querying.
+> The latter (bare call to cgroup_rstat_flush()) won't reset
+> stats_flush_threshold, so the former (or the async flush more likely)
+> would attempt a flush too. The flush work (on the leaf memcg) would be
+> done twice even though it may be within the tolerance of cumulated
+> error the second time.
 > 
-> 
-> 2263e9ed65887c Dan Williams 2022-05-10  303  		struct device *cxld_dev;
-> 2263e9ed65887c Dan Williams 2022-05-10  304  
-> 2263e9ed65887c Dan Williams 2022-05-10  305  		if (!info->mem_enabled)
-> 2263e9ed65887c Dan Williams 2022-05-10  306  			break;
-> 2263e9ed65887c Dan Williams 2022-05-10  307  
-> 2263e9ed65887c Dan Williams 2022-05-10  308  		cxld_dev = device_find_child(&root->dev, &info->dvsec_range[i],
-> 2263e9ed65887c Dan Williams 2022-05-10  309  					     dvsec_range_allowed);
-> 2263e9ed65887c Dan Williams 2022-05-10  310  		if (!cxld_dev) {
-> 2263e9ed65887c Dan Williams 2022-05-10  311  			dev_dbg(dev, "Range%d disallowed by platform\n", i);
-> 2263e9ed65887c Dan Williams 2022-05-10  312  			cxl_set_mem_enable(cxlds, 0);
-> 2263e9ed65887c Dan Williams 2022-05-10  313  			info->mem_enabled = 0;
-> 2263e9ed65887c Dan Williams 2022-05-10  314  			break;
-> 2263e9ed65887c Dan Williams 2022-05-10  315  		}
-> 2263e9ed65887c Dan Williams 2022-05-10  316  		put_device(cxld_dev);
-> 2263e9ed65887c Dan Williams 2022-05-10  317  		break;
-> 
-> Or delete this break?
-> 
-> 2263e9ed65887c Dan Williams 2022-05-10  318  	}
-> 2263e9ed65887c Dan Williams 2022-05-10  319  	put_device(&root->dev);
-> 18e7a07f5d584d Dan Williams 2022-05-01  320  
-> 87aafd75cc537f Dan Williams 2022-04-30  321  	/*
-> 2263e9ed65887c Dan Williams 2022-05-10  322  	 * At least one DVSEC range is enabled and allowed, skip HDM
-> 2263e9ed65887c Dan Williams 2022-05-10  323  	 * Decoder Capability Enable
-> 87aafd75cc537f Dan Williams 2022-04-30  324  	 */
-> 2263e9ed65887c Dan Williams 2022-05-10  325  	if (info->mem_enabled)
-> 2263e9ed65887c Dan Williams 2022-05-10  326  		return false;
-> 2263e9ed65887c Dan Williams 2022-05-10  327  
-> 2263e9ed65887c Dan Williams 2022-05-10  328  	rc = devm_cxl_enable_hdm(&port->dev, cxlhdm);
-> 2263e9ed65887c Dan Williams 2022-05-10  329  	if (rc)
-> 2263e9ed65887c Dan Williams 2022-05-10  330  		return false;
-> 2263e9ed65887c Dan Williams 2022-05-10  331  
-> 2263e9ed65887c Dan Williams 2022-05-10  332  	rc = devm_cxl_enable_mem(&port->dev, cxlds);
-> 2263e9ed65887c Dan Williams 2022-05-10  333  	if (rc)
-> 2263e9ed65887c Dan Williams 2022-05-10  334  		return false;
-> 18e7a07f5d584d Dan Williams 2022-05-01  335  
-> 9382da4f1fd2c2 Dan Williams 2022-05-09  336  	return true;
-> 18e7a07f5d584d Dan Williams 2022-05-01  337  }
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
-> 
+> This is a thing that might require attention in the future (depending on
+> some data how it actually performs). I see how the current approach is
+> justified.
+
+Yes, we can optimize it should the need arise. So far it's been fine.
+
+Thanks for your thoughts, Michal.

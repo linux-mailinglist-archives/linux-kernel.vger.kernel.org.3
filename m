@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72B5C528FC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C984A5291C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348875AbiEPUb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58638 "EHLO
+        id S1347111AbiEPT4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351023AbiEPUB4 (ORCPT
+        with ESMTP id S1346969AbiEPTvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:01:56 -0400
+        Mon, 16 May 2022 15:51:32 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95EFB473BF;
-        Mon, 16 May 2022 12:56:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D157740A08;
+        Mon, 16 May 2022 12:46:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 32A7260A50;
-        Mon, 16 May 2022 19:56:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FDD4C385AA;
-        Mon, 16 May 2022 19:56:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B6CB61557;
+        Mon, 16 May 2022 19:46:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61234C385AA;
+        Mon, 16 May 2022 19:46:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652731000;
-        bh=jTf7Eh2bb4hOd52Orvy2/2LK5efSVJFs0rT6fhpo+Wc=;
+        s=korg; t=1652730370;
+        bh=knJ3yMlGUTuXhvAdX0tjShihmMNx/PRKpMM6L/mJ3F0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vc2f2UBQak/vAY6A2PijVGb1h9NulVx9nM+FzINEKdk7sWPIvbavqdgjfdHy1psJW
-         gaTjbBWp97CUvKWTZe6h79QbQL+biQOdGlTZEXGXxYvqeNbiW7LD6RpuYlxH7Em3cs
-         YFc8yvRY62TMSNbjwQO3R1Aj+leTOv1qGvGapvmI=
+        b=YfEKiGS3p5HwPCUwiKFINMKqt2DB5kZ7i074HJGxHrBipVcbXHmb1H/UUJtO0nYx5
+         pcgt2Dx+4ob+taMf/wDk+rwk/4SH4ZpXRaAOV8RLHuMjj+WAGUCWlT2XsagF4wzNMk
+         eJJAipTqeGPmRA+Srj2q4q8snu6ETfdc0Z8poEEY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Thi=C3=A9baud=20Weksteen?= <tweek@google.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH 5.17 071/114] firmware_loader: use kernel credentials when reading firmware
+        stable@vger.kernel.org, Scott Chen <scott@labau.com.tw>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 5.10 45/66] USB: serial: pl2303: add device id for HP LM930 Display
 Date:   Mon, 16 May 2022 21:36:45 +0200
-Message-Id: <20220516193627.529238328@linuxfoundation.org>
+Message-Id: <20220516193620.715724092@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
-References: <20220516193625.489108457@linuxfoundation.org>
+In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
+References: <20220516193619.400083785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,84 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thiébaud Weksteen <tweek@google.com>
+From: Scott Chen <scott@labau.com.tw>
 
-commit 581dd69830341d299b0c097fc366097ab497d679 upstream.
+commit 26a08f8bad3e1f98d3153f939fb8cd330da4cb26 upstream.
 
-Device drivers may decide to not load firmware when probed to avoid
-slowing down the boot process should the firmware filesystem not be
-available yet. In this case, the firmware loading request may be done
-when a device file associated with the driver is first accessed. The
-credentials of the userspace process accessing the device file may be
-used to validate access to the firmware files requested by the driver.
-Ensure that the kernel assumes the responsibility of reading the
-firmware.
+Add the device id for the HPLM930Display which is a PL2303GC based
+device.
 
-This was observed on Android for a graphic driver loading their firmware
-when the device file (e.g. /dev/mali0) was first opened by userspace
-(i.e. surfaceflinger). The security context of surfaceflinger was used
-to validate the access to the firmware file (e.g.
-/vendor/firmware/mali.bin).
-
-Previously, Android configurations were not setting up the
-firmware_class.path command line argument and were relying on the
-userspace fallback mechanism. In this case, the security context of the
-userspace daemon (i.e. ueventd) was consistently used to read firmware
-files. More Android devices are now found to set firmware_class.path
-which gives the kernel the opportunity to read the firmware directly
-(via kernel_read_file_from_path_initns). In this scenario, the current
-process credentials were used, even if unrelated to the loading of the
-firmware file.
-
-Signed-off-by: Thiébaud Weksteen <tweek@google.com>
-Cc: <stable@vger.kernel.org> # 5.10
-Reviewed-by: Paul Moore <paul@paul-moore.com>
-Acked-by: Luis Chamberlain <mcgrof@kernel.org>
-Link: https://lore.kernel.org/r/20220502004952.3970800-1-tweek@google.com
+Signed-off-by: Scott Chen <scott@labau.com.tw>
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/base/firmware_loader/main.c |   17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ drivers/usb/serial/pl2303.c |    1 +
+ drivers/usb/serial/pl2303.h |    1 +
+ 2 files changed, 2 insertions(+)
 
---- a/drivers/base/firmware_loader/main.c
-+++ b/drivers/base/firmware_loader/main.c
-@@ -735,6 +735,8 @@ _request_firmware(const struct firmware
- 		  size_t offset, u32 opt_flags)
- {
- 	struct firmware *fw = NULL;
-+	struct cred *kern_cred = NULL;
-+	const struct cred *old_cred;
- 	bool nondirect = false;
- 	int ret;
- 
-@@ -751,6 +753,18 @@ _request_firmware(const struct firmware
- 	if (ret <= 0) /* error or already assigned */
- 		goto out;
- 
-+	/*
-+	 * We are about to try to access the firmware file. Because we may have been
-+	 * called by a driver when serving an unrelated request from userland, we use
-+	 * the kernel credentials to read the file.
-+	 */
-+	kern_cred = prepare_kernel_cred(NULL);
-+	if (!kern_cred) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+	old_cred = override_creds(kern_cred);
-+
- 	ret = fw_get_filesystem_firmware(device, fw->priv, "", NULL);
- 
- 	/* Only full reads can support decompression, platform, and sysfs. */
-@@ -776,6 +790,9 @@ _request_firmware(const struct firmware
- 	} else
- 		ret = assign_fw(fw, device);
- 
-+	revert_creds(old_cred);
-+	put_cred(kern_cred);
-+
-  out:
- 	if (ret < 0) {
- 		fw_abort_batch_reqs(fw);
+--- a/drivers/usb/serial/pl2303.c
++++ b/drivers/usb/serial/pl2303.c
+@@ -106,6 +106,7 @@ static const struct usb_device_id id_tab
+ 	{ USB_DEVICE(HP_VENDOR_ID, HP_LCM220_PRODUCT_ID) },
+ 	{ USB_DEVICE(HP_VENDOR_ID, HP_LCM960_PRODUCT_ID) },
+ 	{ USB_DEVICE(HP_VENDOR_ID, HP_LM920_PRODUCT_ID) },
++	{ USB_DEVICE(HP_VENDOR_ID, HP_LM930_PRODUCT_ID) },
+ 	{ USB_DEVICE(HP_VENDOR_ID, HP_LM940_PRODUCT_ID) },
+ 	{ USB_DEVICE(HP_VENDOR_ID, HP_TD620_PRODUCT_ID) },
+ 	{ USB_DEVICE(CRESSI_VENDOR_ID, CRESSI_EDY_PRODUCT_ID) },
+--- a/drivers/usb/serial/pl2303.h
++++ b/drivers/usb/serial/pl2303.h
+@@ -135,6 +135,7 @@
+ #define HP_TD620_PRODUCT_ID	0x0956
+ #define HP_LD960_PRODUCT_ID	0x0b39
+ #define HP_LD381_PRODUCT_ID	0x0f7f
++#define HP_LM930_PRODUCT_ID	0x0f9b
+ #define HP_LCM220_PRODUCT_ID	0x3139
+ #define HP_LCM960_PRODUCT_ID	0x3239
+ #define HP_LD220_PRODUCT_ID	0x3524
 
 

@@ -2,86 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB9C65286F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:26:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ECDC528706
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:30:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244223AbiEPO0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 10:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36744 "EHLO
+        id S239477AbiEPO3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 10:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244540AbiEPO0d (ORCPT
+        with ESMTP id S231295AbiEPO3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 10:26:33 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CFA22B36
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:26:32 -0700 (PDT)
-Received: from canpemm500005.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L21jz0Q6QzgYJ3;
-        Mon, 16 May 2022 22:25:11 +0800 (CST)
-Received: from [10.67.110.73] (10.67.110.73) by canpemm500005.china.huawei.com
- (7.192.104.229) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 16 May
- 2022 22:26:30 +0800
-Message-ID: <147d2f77-43db-40b7-aa36-a06d558f1813@huawei.com>
-Date:   Mon, 16 May 2022 22:26:29 +0800
+        Mon, 16 May 2022 10:29:30 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035233A1B7;
+        Mon, 16 May 2022 07:29:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=dr1+fxlRa10p1m+vrzAuj1y5TNI2rJf4d/f63MyjB+M=; b=fYzY4ecO4EXD3ATClVXmZ0bJur
+        Dv8wK0czHKvUOBFU8VuldwMBw90SyqpgmdhMVGQ8nXO736KAANyIsoQXQP33B+3yyoD0JCNk+aqdE
+        wV4BChThAKeGVlTD0SJGL4Vxo4e8WEaw/u07Aef0GJ4zliM2Txb1MiVoO17nGrOaES7KtCdKD9gb0
+        sGHl/FYmvmjU5t6Sh9/lpO3xyoHOnkZh2Wlu5eWU81axQTiGRY/vWICGCkOGZAWHyJcpjaIpuAOez
+        xXU+abi85zQz75A1GTgWOD+LFSEreERO76kWgkEOfnkbC3cJ3TOsglz2ZOZKp2XuFNlT0F2Yx1p5e
+        +2fZkv1A==;
+Received: from [177.183.162.244] (helo=[192.168.0.5])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nqbiH-006jqF-NN; Mon, 16 May 2022 16:28:45 +0200
+Message-ID: <c6a55df0-11f5-21ae-8a61-b37141d2436b@igalia.com>
+Date:   Mon, 16 May 2022 11:28:10 -0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.0
-Subject: Re: [PATCH -next v2] vt: defkeymap.c_shipped remove unused variables
-To:     Jiri Slaby <jirislaby@kernel.org>, <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>
-References: <20220513015427.569539-1-chris.zjh@huawei.com>
- <49a7602f-dd79-cac3-e6e0-83c4c41fcd53@kernel.org>
-From:   "zhangjianhua (E)" <chris.zjh@huawei.com>
-In-Reply-To: <49a7602f-dd79-cac3-e6e0-83c4c41fcd53@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.73]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500005.china.huawei.com (7.192.104.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 20/30] panic: Add the panic informational notifier list
+Content-Language: en-US
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mike Leach <mike.leach@linaro.org>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-21-gpiccoli@igalia.com> <YoJbeuTNBXOIypSH@alley>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <YoJbeuTNBXOIypSH@alley>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 16/05/2022 11:11, Petr Mladek wrote:
+> [...]
+> 
+> All notifiers moved in this patch seems to fit well the "info"
+> notifier list. The patch looks good from this POV.
+> 
+> I still have to review the rest of the patches to see if it
+> is complete.
+> 
+> Best Regards,
+> Petr
 
-在 2022/5/16 15:00, Jiri Slaby 写道:
-> On 13. 05. 22, 3:54, Zhang Jianhua wrote:
->> The global variables 'funcbufptr' 'funcbufsize' and 'funcbufleft' have
->> been initialized but not used, they are redundant and remove them.
->>
->> Signed-off-by: Zhang Jianhua <chris.zjh@huawei.com>
->>
->> ---
->> No code changes since v1, only remove the redundant line "--------" in
->> v1 commit message.
->> ---
->>   drivers/tty/vt/defkeymap.c_shipped | 4 ----
->
-> The file header says:
-> /* Do not edit this file! It was automatically generated by   */
-> /*    loadkeys --mktable defkeymap.map > defkeymap.c */
->
-> So I'm not sure anyone wants to touch it.
-This notes will be copied to the file defkeymap.c completely which is 
-automatically generated, so it says to defkeymap.c rather than defkeymap.map
->
->> --- a/drivers/tty/vt/defkeymap.c_shipped
->> +++ b/drivers/tty/vt/defkeymap.c_shipped
->> @@ -185,10 +185,6 @@ char func_buf[] = {
->>       '\033', '[', 'P', 0,
->>   };
->>   -char *funcbufptr = func_buf;
->> -int funcbufsize = sizeof(func_buf);
->> -int funcbufleft = 0;          /* space left */
->> -
->>   char *func_table[MAX_NR_FUNC] = {
->>       func_buf + 0,
->>       func_buf + 5,
->
->
+Thanks a bunch for the review =)

@@ -2,602 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC955281B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1172C5281B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbiEPKTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 06:19:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56448 "EHLO
+        id S238042AbiEPKUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 06:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233754AbiEPKTg (ORCPT
+        with ESMTP id S242121AbiEPKT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 06:19:36 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F61DEAD;
-        Mon, 16 May 2022 03:19:33 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id m20so27633760ejj.10;
-        Mon, 16 May 2022 03:19:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JN6QYRNdTYLRRCFheZIkuXMeKAPa4lQhTCrQEIrlX2Q=;
-        b=GeFwRuFHTCXv5xm51pS329CuR17QpPBztWto4zx+JtEmFUsIYfsvrSukxpgsNE6dWH
-         ng6cg5Z8zxu4Na2jse1XqCWwp4WHr8H9fBjpD5T99ghfK8D1KUrAWYPAAIcnXoI2VEBx
-         egjuXjUrZdKwNpK13lLRsZx+7xVFiYe0QWLOCCihBPtLjspZlFDDNDuzgjZH9bBPOvcY
-         gd4FL+xCFTLVE8he8OriMm7u8Up+D2VkBkK/k2BWjTTZJSTa0OBjdj32HOlnLy4/CrdD
-         YzQKIcG5wT1cIp8yLrR6PX0xh7hV+gpgOFkZxPa8FZ8RE7J7Pnq+/XwoFYejbpSrdKlf
-         QVDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JN6QYRNdTYLRRCFheZIkuXMeKAPa4lQhTCrQEIrlX2Q=;
-        b=VeGaG8u5IIOsW8d+jOkHtkzJ1aH6x2AMTbRuKE6OAq9N+4U1324rTGM+5/dFj8uM2Z
-         9iKura0OoMwE3JpyLChPXS3xaH6WDmIa+o+JgsOzvHHGwoAfewdZ6TYp2gEpLL8rCg2x
-         GtUoVh9uhFVGtabVTg7YWCkbuZuK1P942EmXUU/yLhDl2V/1cXb7WPE2beAewYzUb1Nw
-         kmnz4Fa3XV+rEDCCRLxMdbeg3WzVRwdrnhChZ1/8/Q3o3lwFsB1GYAjO5pmlZac/KCYU
-         hWvslPmjephvhWxZGXnXaPH1V05eoRbu7gTFSR3knjY3pqZAnYdW9ZKXViG92cE/EmLh
-         zHww==
-X-Gm-Message-State: AOAM530RH6XOoluqqS46keF2LoYAr3hiUmoegOvClLd2v9mnQOV08w78
-        Q2K3PvFFFcgKpohOKDo2c6k=
-X-Google-Smtp-Source: ABdhPJwlirP39XmhuyJ+4A1VBI929F34aIEjez8ViPY1EsXYXK7ECZmQjq1pi7zHGu+Z85eFIyM3jg==
-X-Received: by 2002:a17:906:7751:b0:6ce:e3c:81a6 with SMTP id o17-20020a170906775100b006ce0e3c81a6mr13988000ejn.278.1652696371722;
-        Mon, 16 May 2022 03:19:31 -0700 (PDT)
-Received: from localhost.localdomain (host-79-50-182-226.retail.telecomitalia.it. [79.50.182.226])
-        by smtp.gmail.com with ESMTPSA id h8-20020a1709070b0800b006f3a8b81ff7sm3496945ejl.3.2022.05.16.03.19.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 03:19:30 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Evgeniy Dushistov <dushistov@mail.ru>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Ira Weiny <ira.weiny@intel.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: [PATCH v3] fs/ufs: Replace kmap() with kmap_local_page()
-Date:   Mon, 16 May 2022 12:19:25 +0200
-Message-Id: <20220516101925.15272-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 16 May 2022 06:19:59 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0276BDEB2;
+        Mon, 16 May 2022 03:19:57 -0700 (PDT)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GA1aNm024218;
+        Mon, 16 May 2022 10:19:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=heA/a/Vjq9adtkbXdF/L8qMvf1DUOfGrfsS8FQ2zZDc=;
+ b=gVm50wPawJR11DVSSRTatPRmWXy+XpXRmEMmK9vGFVWjd4ltKL/kiTu4/1VmY9bCO37/
+ vnd4XCbenOu0EazjPc6avyBdTfyjnka0vBDZXcw5j2sIggixjJxO6eC/JmPCASzU+ZOU
+ PTGtzipgXNea838u3HeeI2rsylaaRKqvFda8ZOqOdpqhn54tuqLmUBUXN7/9IBg2YXju
+ 6+lJJ8H5l4P+S1NMakjNnjaS1Lyjve0n3sFoMWpDOIP//fuIWvKMUc9vgR6UWT5+4SgU
+ GNT5m5LH1REQQtHcq5XTi2SmfSkaWkfihcTejbqFgi7rox313iJsChlULULvIMdJ7g4T bA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3mgdrata-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 10:19:55 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24GA4b9M030636;
+        Mon, 16 May 2022 10:19:54 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3mgdrasm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 10:19:54 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24GAJUUs011291;
+        Mon, 16 May 2022 10:19:52 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3g2429af31-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 10:19:51 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24GAJluw36766110
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 16 May 2022 10:19:47 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 66389A405B;
+        Mon, 16 May 2022 10:19:47 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E2D53A4054;
+        Mon, 16 May 2022 10:19:46 +0000 (GMT)
+Received: from osiris (unknown [9.145.19.162])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Mon, 16 May 2022 10:19:46 +0000 (GMT)
+Date:   Mon, 16 May 2022 12:19:45 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Jonas Paulsson <paulsson@linux.vnet.ibm.com>,
+        Ulrich Weigand <ulrich.weigand@de.ibm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andreas Krebbel <krebbel@linux.ibm.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH 4/8] s390/entry: workaround llvm's IAS limitations
+Message-ID: <YoIlQaWNy1wu39ak@osiris>
+References: <20220511120532.2228616-1-hca@linux.ibm.com>
+ <20220511120532.2228616-5-hca@linux.ibm.com>
+ <YnvynSZfF/8I8vmT@dev-arch.thelio-3990X>
+ <Yn1CyTcrZk1Kgvoq@osiris>
+ <YoIUX864ULCwu4pz@tuxmaker.boeblingen.de.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YoIUX864ULCwu4pz@tuxmaker.boeblingen.de.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: cznqW8sqX3mDTXjT8lDsfJQaXmNJw4vi
+X-Proofpoint-ORIG-GUID: Nm32b99yoNjb8327YiYrJNcuP-aiU3Q-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-16_06,2022-05-16_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
+ adultscore=0 spamscore=0 phishscore=0 priorityscore=1501 mlxscore=0
+ lowpriorityscore=0 bulkscore=0 suspectscore=0 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205160059
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The use of kmap() is being deprecated in favor of kmap_local_page(). With
-kmap_local_page(), the mapping is per thread, CPU local and not globally
-visible.
+On Mon, May 16, 2022 at 11:07:43AM +0200, Alexander Gordeev wrote:
+> > diff --git a/arch/s390/kernel/entry.S b/arch/s390/kernel/entry.S
+> > index a6b45eaa3450..f2f30bfba1e9 100644
+> > --- a/arch/s390/kernel/entry.S
+> > +++ b/arch/s390/kernel/entry.S
+> > @@ -172,9 +172,19 @@ _LPP_OFFSET	= __LC_LPP
+> >  	lgr	%r14,\reg
+> >  	larl	%r13,\start
+> >  	slgr	%r14,%r13
+> > -	lghi	%r13,\end - \start
+> > -	clgr	%r14,%r13
+> > +#ifdef CONFIG_AS_IS_LLVM
+> > +	clgfrl	%r14,.Lrange_size\@
+> > +#else
+> > +	clgfi	%r14,\end - \start
+> > +#endif
+> >  	jhe	\outside_label
+> > +#ifdef CONFIG_CC_IS_CLANG
+> > +	.section .rodata, "a"
+> > +	.align 4
+> > +.Lrange_size\@:
+> > +	.long	\end - \start
+> 
+> Isn't the machine check handler refers to this memory before checking
+> unrecoverable storage errors (with CHKSTG macro) as result of this change?
 
-The usage of kmap_local_page() in fs/ufs is pre-thread, therefore replace
-kmap() / kunmap() calls with kmap_local_page() / kunmap_local().
+Yes, indeed. However implementing this without another register will
+be quite of a challenge. So what I would prefer in any case: just
+assume that this minimal set of memory accesses work. Actually I'd
+seriously like to go a bit further, and even move the checks for
+storage errors back to C for two reasons:
 
-kunmap_local() requires the mapping address, so return that address from
-ufs_get_page() to be used in ufs_put_page().
+- this would make the machine check handler entry code easier again
+- it would also allow to enter the machine check handler with DAT on
 
-These changes are essentially ported from fs/ext2 and are largely based on
-commit 782b76d7abdf ("fs/ext2: Replace kmap() with kmap_local_page()").
+After all we rely anyway on the fact that at least the local lowcore +
+the page(s) which contain text are still accessible. Assuming that a
+couple of page tables also work won't make this much worse, but the
+code much easier.
 
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
+So I'd suggest: leave this code as is, and at some later point move
+"rework" the early machine check handler code.
 
-v1 -> v2: Correct some style's issues reported by checkpatch.pl.
-          Remove an "inline" compiler directive from fs/ufs/ufs.h,
-          Reported-by: kernel test robot <lkp@intel.com>
-
-v2 -> v3: Rename a variable for consistency (Ira Weiny). Add a
-	  "Reviewed-by" tag.
-
- fs/ufs/dir.c   | 116 +++++++++++++++++++++++++++++++------------------
- fs/ufs/namei.c |  38 ++++++++--------
- fs/ufs/ufs.h   |  12 +++--
- 3 files changed, 102 insertions(+), 64 deletions(-)
-
-diff --git a/fs/ufs/dir.c b/fs/ufs/dir.c
-index b721d0bda5e5..39e81547ebb9 100644
---- a/fs/ufs/dir.c
-+++ b/fs/ufs/dir.c
-@@ -61,9 +61,9 @@ static int ufs_commit_chunk(struct page *page, loff_t pos, unsigned len)
- 	return err;
- }
- 
--static inline void ufs_put_page(struct page *page)
-+inline void ufs_put_page(struct page *page, void *page_addr)
- {
--	kunmap(page);
-+	kunmap_local(page_addr);
- 	put_page(page);
- }
- 
-@@ -72,11 +72,12 @@ ino_t ufs_inode_by_name(struct inode *dir, const struct qstr *qstr)
- 	ino_t res = 0;
- 	struct ufs_dir_entry *de;
- 	struct page *page;
--	
--	de = ufs_find_entry(dir, qstr, &page);
-+	void *page_addr;
-+
-+	de = ufs_find_entry(dir, qstr, &page, &page_addr);
- 	if (de) {
- 		res = fs32_to_cpu(dir->i_sb, de->d_ino);
--		ufs_put_page(page);
-+		ufs_put_page(page, page_addr);
- 	}
- 	return res;
- }
-@@ -84,11 +85,11 @@ ino_t ufs_inode_by_name(struct inode *dir, const struct qstr *qstr)
- 
- /* Releases the page */
- void ufs_set_link(struct inode *dir, struct ufs_dir_entry *de,
--		  struct page *page, struct inode *inode,
--		  bool update_times)
-+		  struct page *page, void *page_addr,
-+		  struct inode *inode, bool update_times)
- {
- 	loff_t pos = page_offset(page) +
--			(char *) de - (char *) page_address(page);
-+			(char *)de - (char *)page_addr;
- 	unsigned len = fs16_to_cpu(dir->i_sb, de->d_reclen);
- 	int err;
- 
-@@ -100,18 +101,17 @@ void ufs_set_link(struct inode *dir, struct ufs_dir_entry *de,
- 	ufs_set_de_type(dir->i_sb, de, inode->i_mode);
- 
- 	err = ufs_commit_chunk(page, pos, len);
--	ufs_put_page(page);
-+	ufs_put_page(page, page_addr);
- 	if (update_times)
- 		dir->i_mtime = dir->i_ctime = current_time(dir);
- 	mark_inode_dirty(dir);
- }
- 
- 
--static bool ufs_check_page(struct page *page)
-+static bool ufs_check_page(struct page *page, char *kaddr)
- {
- 	struct inode *dir = page->mapping->host;
- 	struct super_block *sb = dir->i_sb;
--	char *kaddr = page_address(page);
- 	unsigned offs, rec_len;
- 	unsigned limit = PAGE_SIZE;
- 	const unsigned chunk_mask = UFS_SB(sb)->s_uspi->s_dirblksize - 1;
-@@ -186,21 +186,28 @@ static bool ufs_check_page(struct page *page)
- 	return false;
- }
- 
--static struct page *ufs_get_page(struct inode *dir, unsigned long n)
-+/*
-+ * Calls to ufs_get_page()/ufs_put_page() must be nested according to the
-+ * rules documented in kmap_local_page()/kunmap_local().
-+ *
-+ * NOTE: ufs_find_entry() and ufs_dotdot() act as calls to ufs_get_page()
-+ * and must be treated accordingly for nesting purposes.
-+ */
-+static struct page *ufs_get_page(struct inode *dir, unsigned long n, void **page_addr)
- {
- 	struct address_space *mapping = dir->i_mapping;
- 	struct page *page = read_mapping_page(mapping, n, NULL);
- 	if (!IS_ERR(page)) {
--		kmap(page);
-+		*page_addr = kmap_local_page(page);
- 		if (unlikely(!PageChecked(page))) {
--			if (PageError(page) || !ufs_check_page(page))
-+			if (PageError(page) || !ufs_check_page(page, *page_addr))
- 				goto fail;
- 		}
- 	}
- 	return page;
- 
- fail:
--	ufs_put_page(page);
-+	ufs_put_page(page, *page_addr);
- 	return ERR_PTR(-EIO);
- }
- 
-@@ -226,15 +233,29 @@ ufs_next_entry(struct super_block *sb, struct ufs_dir_entry *p)
- 					fs16_to_cpu(sb, p->d_reclen));
- }
- 
--struct ufs_dir_entry *ufs_dotdot(struct inode *dir, struct page **p)
-+/*
-+ * Return the '..' directory entry and the page in which the entry was found
-+ * (as a parameter - p).
-+ *
-+ * On Success ufs_put_page() should be called on *p.
-+ *
-+ * NOTE: Calls to ufs_get_page()/ufs_put_page() must be nested according to
-+ * the rules documented in kmap_local_page()/kunmap_local().
-+ *
-+ * ufs_find_entry() and ufs_dotdot() act as calls to ufs_get_page() and
-+ * must be treated accordingly for nesting purposes.
-+ */
-+struct ufs_dir_entry *ufs_dotdot(struct inode *dir, struct page **p, void **pa)
- {
--	struct page *page = ufs_get_page(dir, 0);
-+	void *page_addr;
-+	struct page *page = ufs_get_page(dir, 0, &page_addr);
- 	struct ufs_dir_entry *de = NULL;
- 
- 	if (!IS_ERR(page)) {
- 		de = ufs_next_entry(dir->i_sb,
--				    (struct ufs_dir_entry *)page_address(page));
-+				    (struct ufs_dir_entry *)page_addr);
- 		*p = page;
-+		*pa = page_addr;
- 	}
- 	return de;
- }
-@@ -246,9 +267,17 @@ struct ufs_dir_entry *ufs_dotdot(struct inode *dir, struct page **p)
-  * returns the page in which the entry was found, and the entry itself
-  * (as a parameter - res_dir). Page is returned mapped and unlocked.
-  * Entry is guaranteed to be valid.
-+ *
-+ * On Success ufs_put_page() should be called on *res_page.
-+ *
-+ * NOTE: Calls to ufs_get_page()/ufs_put_page() must be nested according to
-+ * the rules documented in kmap_local_page()/kunmap_local().
-+ *
-+ * ufs_find_entry() and ufs_dotdot() act as calls to ufs_get_page() and
-+ * must be treated accordingly for nesting purposes.
-  */
- struct ufs_dir_entry *ufs_find_entry(struct inode *dir, const struct qstr *qstr,
--				     struct page **res_page)
-+				     struct page **res_page, void **res_page_addr)
- {
- 	struct super_block *sb = dir->i_sb;
- 	const unsigned char *name = qstr->name;
-@@ -259,6 +288,7 @@ struct ufs_dir_entry *ufs_find_entry(struct inode *dir, const struct qstr *qstr,
- 	struct page *page = NULL;
- 	struct ufs_inode_info *ui = UFS_I(dir);
- 	struct ufs_dir_entry *de;
-+	void *page_addr;
- 
- 	UFSD("ENTER, dir_ino %lu, name %s, namlen %u\n", dir->i_ino, name, namelen);
- 
-@@ -267,6 +297,7 @@ struct ufs_dir_entry *ufs_find_entry(struct inode *dir, const struct qstr *qstr,
- 
- 	/* OFFSET_CACHE */
- 	*res_page = NULL;
-+	*res_page_addr = NULL;
- 
- 	start = ui->i_dir_start_lookup;
- 
-@@ -275,9 +306,10 @@ struct ufs_dir_entry *ufs_find_entry(struct inode *dir, const struct qstr *qstr,
- 	n = start;
- 	do {
- 		char *kaddr;
--		page = ufs_get_page(dir, n);
-+
-+		page = ufs_get_page(dir, n, &page_addr);
- 		if (!IS_ERR(page)) {
--			kaddr = page_address(page);
-+			kaddr = page_addr;
- 			de = (struct ufs_dir_entry *) kaddr;
- 			kaddr += ufs_last_byte(dir, n) - reclen;
- 			while ((char *) de <= kaddr) {
-@@ -285,7 +317,7 @@ struct ufs_dir_entry *ufs_find_entry(struct inode *dir, const struct qstr *qstr,
- 					goto found;
- 				de = ufs_next_entry(sb, de);
- 			}
--			ufs_put_page(page);
-+			ufs_put_page(page, page_addr);
- 		}
- 		if (++n >= npages)
- 			n = 0;
-@@ -295,6 +327,7 @@ struct ufs_dir_entry *ufs_find_entry(struct inode *dir, const struct qstr *qstr,
- 
- found:
- 	*res_page = page;
-+	*res_page_addr = page_addr;
- 	ui->i_dir_start_lookup = n;
- 	return de;
- }
-@@ -312,6 +345,7 @@ int ufs_add_link(struct dentry *dentry, struct inode *inode)
- 	const unsigned int chunk_size = UFS_SB(sb)->s_uspi->s_dirblksize;
- 	unsigned short rec_len, name_len;
- 	struct page *page = NULL;
-+	void *page_addr = NULL;
- 	struct ufs_dir_entry *de;
- 	unsigned long npages = dir_pages(dir);
- 	unsigned long n;
-@@ -329,12 +363,12 @@ int ufs_add_link(struct dentry *dentry, struct inode *inode)
- 	for (n = 0; n <= npages; n++) {
- 		char *dir_end;
- 
--		page = ufs_get_page(dir, n);
-+		page = ufs_get_page(dir, n, &page_addr);
- 		err = PTR_ERR(page);
- 		if (IS_ERR(page))
- 			goto out;
- 		lock_page(page);
--		kaddr = page_address(page);
-+		kaddr = page_addr;
- 		dir_end = kaddr + ufs_last_byte(dir, n);
- 		de = (struct ufs_dir_entry *)kaddr;
- 		kaddr += PAGE_SIZE - reclen;
-@@ -365,14 +399,14 @@ int ufs_add_link(struct dentry *dentry, struct inode *inode)
- 			de = (struct ufs_dir_entry *) ((char *) de + rec_len);
- 		}
- 		unlock_page(page);
--		ufs_put_page(page);
-+		ufs_put_page(page, page_addr);
- 	}
- 	BUG();
- 	return -EINVAL;
- 
- got_it:
- 	pos = page_offset(page) +
--			(char*)de - (char*)page_address(page);
-+			(char *)de - (char *)page_addr;
- 	err = ufs_prepare_chunk(page, pos, rec_len);
- 	if (err)
- 		goto out_unlock;
-@@ -396,7 +430,7 @@ int ufs_add_link(struct dentry *dentry, struct inode *inode)
- 	mark_inode_dirty(dir);
- 	/* OFFSET_CACHE */
- out_put:
--	ufs_put_page(page);
-+	ufs_put_page(page, page_addr);
- out:
- 	return err;
- out_unlock:
-@@ -441,7 +475,7 @@ ufs_readdir(struct file *file, struct dir_context *ctx)
- 		char *kaddr, *limit;
- 		struct ufs_dir_entry *de;
- 
--		struct page *page = ufs_get_page(inode, n);
-+		struct page *page = ufs_get_page(inode, n, (void **)&kaddr);
- 
- 		if (IS_ERR(page)) {
- 			ufs_error(sb, __func__,
-@@ -450,7 +484,6 @@ ufs_readdir(struct file *file, struct dir_context *ctx)
- 			ctx->pos += PAGE_SIZE - offset;
- 			return -EIO;
- 		}
--		kaddr = page_address(page);
- 		if (unlikely(need_revalidate)) {
- 			if (offset) {
- 				offset = ufs_validate_entry(sb, kaddr, offset, chunk_mask);
-@@ -476,13 +509,13 @@ ufs_readdir(struct file *file, struct dir_context *ctx)
- 					       ufs_get_de_namlen(sb, de),
- 					       fs32_to_cpu(sb, de->d_ino),
- 					       d_type)) {
--					ufs_put_page(page);
-+					ufs_put_page(page, kaddr);
- 					return 0;
- 				}
- 			}
- 			ctx->pos += fs16_to_cpu(sb, de->d_reclen);
- 		}
--		ufs_put_page(page);
-+		ufs_put_page(page, kaddr);
- 	}
- 	return 0;
- }
-@@ -493,10 +526,9 @@ ufs_readdir(struct file *file, struct dir_context *ctx)
-  * previous entry.
-  */
- int ufs_delete_entry(struct inode *inode, struct ufs_dir_entry *dir,
--		     struct page * page)
-+		     struct page *page, char *kaddr)
- {
- 	struct super_block *sb = inode->i_sb;
--	char *kaddr = page_address(page);
- 	unsigned from = ((char*)dir - kaddr) & ~(UFS_SB(sb)->s_uspi->s_dirblksize - 1);
- 	unsigned to = ((char*)dir - kaddr) + fs16_to_cpu(sb, dir->d_reclen);
- 	loff_t pos;
-@@ -522,7 +554,7 @@ int ufs_delete_entry(struct inode *inode, struct ufs_dir_entry *dir,
- 		de = ufs_next_entry(sb, de);
- 	}
- 	if (pde)
--		from = (char*)pde - (char*)page_address(page);
-+		from = (char *)pde - kaddr;
- 
- 	pos = page_offset(page) + from;
- 	lock_page(page);
-@@ -535,7 +567,7 @@ int ufs_delete_entry(struct inode *inode, struct ufs_dir_entry *dir,
- 	inode->i_ctime = inode->i_mtime = current_time(inode);
- 	mark_inode_dirty(inode);
- out:
--	ufs_put_page(page);
-+	ufs_put_page(page, kaddr);
- 	UFSD("EXIT\n");
- 	return err;
- }
-@@ -559,8 +591,7 @@ int ufs_make_empty(struct inode * inode, struct inode *dir)
- 		goto fail;
- 	}
- 
--	kmap(page);
--	base = (char*)page_address(page);
-+	base = kmap_local_page(page);
- 	memset(base, 0, PAGE_SIZE);
- 
- 	de = (struct ufs_dir_entry *) base;
-@@ -577,7 +608,7 @@ int ufs_make_empty(struct inode * inode, struct inode *dir)
- 	de->d_reclen = cpu_to_fs16(sb, chunk_size - UFS_DIR_REC_LEN(1));
- 	ufs_set_de_namlen(sb, de, 2);
- 	strcpy (de->d_name, "..");
--	kunmap(page);
-+	kunmap_local(base);
- 
- 	err = ufs_commit_chunk(page, 0, chunk_size);
- fail:
-@@ -592,17 +623,18 @@ int ufs_empty_dir(struct inode * inode)
- {
- 	struct super_block *sb = inode->i_sb;
- 	struct page *page = NULL;
-+	void *page_addr;
- 	unsigned long i, npages = dir_pages(inode);
- 
- 	for (i = 0; i < npages; i++) {
- 		char *kaddr;
- 		struct ufs_dir_entry *de;
--		page = ufs_get_page(inode, i);
- 
-+		page = ufs_get_page(inode, i, &page_addr);
- 		if (IS_ERR(page))
- 			continue;
- 
--		kaddr = page_address(page);
-+		kaddr = page_addr;
- 		de = (struct ufs_dir_entry *)kaddr;
- 		kaddr += ufs_last_byte(inode, i) - UFS_DIR_REC_LEN(1);
- 
-@@ -629,12 +661,12 @@ int ufs_empty_dir(struct inode * inode)
- 			}
- 			de = ufs_next_entry(sb, de);
- 		}
--		ufs_put_page(page);
-+		ufs_put_page(page, page_addr);
- 	}
- 	return 1;
- 
- not_empty:
--	ufs_put_page(page);
-+	ufs_put_page(page, page_addr);
- 	return 0;
- }
- 
-diff --git a/fs/ufs/namei.c b/fs/ufs/namei.c
-index 29d5a0e0c8f0..cdf3bcf9d02e 100644
---- a/fs/ufs/namei.c
-+++ b/fs/ufs/namei.c
-@@ -210,13 +210,14 @@ static int ufs_unlink(struct inode *dir, struct dentry *dentry)
- 	struct inode * inode = d_inode(dentry);
- 	struct ufs_dir_entry *de;
- 	struct page *page;
-+	void *page_addr;
- 	int err = -ENOENT;
- 
--	de = ufs_find_entry(dir, &dentry->d_name, &page);
-+	de = ufs_find_entry(dir, &dentry->d_name, &page, &page_addr);
- 	if (!de)
- 		goto out;
- 
--	err = ufs_delete_entry(dir, de, page);
-+	err = ufs_delete_entry(dir, de, page, page_addr);
- 	if (err)
- 		goto out;
- 
-@@ -250,27 +251,31 @@ static int ufs_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
- 	struct inode *old_inode = d_inode(old_dentry);
- 	struct inode *new_inode = d_inode(new_dentry);
- 	struct page *dir_page = NULL;
-+	void *dir_page_addr;
- 	struct ufs_dir_entry * dir_de = NULL;
- 	struct page *old_page;
-+	void *old_page_addr;
- 	struct ufs_dir_entry *old_de;
- 	int err = -ENOENT;
- 
- 	if (flags & ~RENAME_NOREPLACE)
- 		return -EINVAL;
- 
--	old_de = ufs_find_entry(old_dir, &old_dentry->d_name, &old_page);
-+	old_de = ufs_find_entry(old_dir, &old_dentry->d_name, &old_page,
-+				&old_page_addr);
- 	if (!old_de)
- 		goto out;
- 
- 	if (S_ISDIR(old_inode->i_mode)) {
- 		err = -EIO;
--		dir_de = ufs_dotdot(old_inode, &dir_page);
-+		dir_de = ufs_dotdot(old_inode, &dir_page, &dir_page_addr);
- 		if (!dir_de)
- 			goto out_old;
- 	}
- 
- 	if (new_inode) {
- 		struct page *new_page;
-+		void *new_page_addr;
- 		struct ufs_dir_entry *new_de;
- 
- 		err = -ENOTEMPTY;
-@@ -278,10 +283,11 @@ static int ufs_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
- 			goto out_dir;
- 
- 		err = -ENOENT;
--		new_de = ufs_find_entry(new_dir, &new_dentry->d_name, &new_page);
-+		new_de = ufs_find_entry(new_dir, &new_dentry->d_name, &new_page,
-+					&new_page_addr);
- 		if (!new_de)
- 			goto out_dir;
--		ufs_set_link(new_dir, new_de, new_page, old_inode, 1);
-+		ufs_set_link(new_dir, new_de, new_page, new_page_addr, old_inode, 1);
- 		new_inode->i_ctime = current_time(new_inode);
- 		if (dir_de)
- 			drop_nlink(new_inode);
-@@ -300,29 +306,25 @@ static int ufs_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
- 	 */
- 	old_inode->i_ctime = current_time(old_inode);
- 
--	ufs_delete_entry(old_dir, old_de, old_page);
-+	ufs_delete_entry(old_dir, old_de, old_page, old_page_addr);
- 	mark_inode_dirty(old_inode);
- 
- 	if (dir_de) {
- 		if (old_dir != new_dir)
--			ufs_set_link(old_inode, dir_de, dir_page, new_dir, 0);
--		else {
--			kunmap(dir_page);
--			put_page(dir_page);
--		}
-+			ufs_set_link(old_inode, dir_de, dir_page,
-+				     dir_page_addr, new_dir, 0);
-+		else
-+			ufs_put_page(dir_page, dir_page_addr);
- 		inode_dec_link_count(old_dir);
- 	}
- 	return 0;
- 
- 
- out_dir:
--	if (dir_de) {
--		kunmap(dir_page);
--		put_page(dir_page);
--	}
-+	if (dir_de)
-+		ufs_put_page(dir_page, dir_page_addr);
- out_old:
--	kunmap(old_page);
--	put_page(old_page);
-+	ufs_put_page(old_page, old_page_addr);
- out:
- 	return err;
- }
-diff --git a/fs/ufs/ufs.h b/fs/ufs/ufs.h
-index 550f7c5a3636..20d224c163ab 100644
---- a/fs/ufs/ufs.h
-+++ b/fs/ufs/ufs.h
-@@ -102,12 +102,16 @@ extern const struct inode_operations ufs_dir_inode_operations;
- extern int ufs_add_link (struct dentry *, struct inode *);
- extern ino_t ufs_inode_by_name(struct inode *, const struct qstr *);
- extern int ufs_make_empty(struct inode *, struct inode *);
--extern struct ufs_dir_entry *ufs_find_entry(struct inode *, const struct qstr *, struct page **);
--extern int ufs_delete_entry(struct inode *, struct ufs_dir_entry *, struct page *);
-+extern struct ufs_dir_entry *ufs_find_entry(struct inode *dir, const struct qstr *qstr,
-+					    struct page **res_page, void **res_page_addr);
-+extern int ufs_delete_entry(struct inode *inode, struct ufs_dir_entry *dir,
-+			    struct page *page, char *kaddr);
- extern int ufs_empty_dir (struct inode *);
--extern struct ufs_dir_entry *ufs_dotdot(struct inode *, struct page **);
-+extern struct ufs_dir_entry *ufs_dotdot(struct inode *dir, struct page **p, void **pa);
- extern void ufs_set_link(struct inode *dir, struct ufs_dir_entry *de,
--			 struct page *page, struct inode *inode, bool update_times);
-+			 struct page *page, void *page_addr,
-+			 struct inode *inode, bool update_times);
-+extern void ufs_put_page(struct page *page, void *page_addr);
- 
- /* file.c */
- extern const struct inode_operations ufs_file_inode_operations;
--- 
-2.34.1
-
+What do you think?

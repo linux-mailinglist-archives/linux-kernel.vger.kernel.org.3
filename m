@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DF57529041
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:44:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F990529165
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:47:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347145AbiEPT4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33104 "EHLO
+        id S1349371AbiEPUcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346999AbiEPTve (ORCPT
+        with ESMTP id S1351030AbiEPUB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:51:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9413F89F;
-        Mon, 16 May 2022 12:46:27 -0700 (PDT)
+        Mon, 16 May 2022 16:01:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9386947570;
+        Mon, 16 May 2022 12:56:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C9C5EB815F6;
-        Mon, 16 May 2022 19:46:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FBB7C34100;
-        Mon, 16 May 2022 19:46:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FEE160EC4;
+        Mon, 16 May 2022 19:56:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B01AC34100;
+        Mon, 16 May 2022 19:56:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730384;
-        bh=VMbYmNs67UPfayg47OoF8phgYXKB0mbdTrEmCm1IkK8=;
+        s=korg; t=1652731012;
+        bh=4bf/UsuSgVW7vJNOHxwczts9LNMMkWBw0O6Z5qy8XRo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y4FGJnEiuxE/w0ONNZZ4D7G9HY6avVHsgx9BxM5pLs1XKCh04sumBIV4Eqp4iJFP0
-         48cIJSFauG6wJtoaXECfk0RjJKcf7Bwv7qeylIlu7av2Fw/WXpR0CmW6GZfCkXGy3G
-         cmUNMo8NfVv5QI0ABVja+tF9HX26dWhse8S1B9X4=
+        b=QBjez5k5PODob1praoe9Rrh4p3JY8n/1BzYvdFKuF+kbGo7PQoc9VdYFGNxB71HhA
+         8bgIEQuLYpuFgjs+2LZxeEz+BQkIgRaWtFcJlQT3L+735WHVFBzEo+UNDbIMPVARFK
+         2CTv8NHO+CcfjpiI1vtcExg3umsic6TURduOEU/4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 5.10 49/66] slimbus: qcom: Fix IRQ check in qcom_slim_probe
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Baruch Siach <baruch@tkos.co.il>
+Subject: [PATCH 5.17 075/114] tty/serial: digicolor: fix possible null-ptr-deref in digicolor_uart_probe()
 Date:   Mon, 16 May 2022 21:36:49 +0200
-Message-Id: <20220516193620.828516037@linuxfoundation.org>
+Message-Id: <20220516193627.641975283@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
-References: <20220516193619.400083785@linuxfoundation.org>
+In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
+References: <20220516193625.489108457@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,43 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-commit fe503887eed6ea528e144ec8dacfa1d47aa701ac upstream.
+commit 447ee1516f19f534a228dda237eddb202f23e163 upstream.
 
-platform_get_irq() returns non-zero IRQ number on success,
-negative error number on failure.
-And the doc of platform_get_irq() provides a usage example:
+It will cause null-ptr-deref when using 'res', if platform_get_resource()
+returns NULL, so move using 'res' after devm_ioremap_resource() that
+will check it to avoid null-ptr-deref.
+And use devm_platform_get_and_ioremap_resource() to simplify code.
 
-    int irq = platform_get_irq(pdev, 0);
-    if (irq < 0)
-        return irq;
-
-Fix the check of return value to catch errors correctly.
-
-Fixes: ad7fcbc308b0 ("slimbus: qcom: Add Qualcomm Slimbus controller driver")
-Cc: stable@vger.kernel.org
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Link: https://lore.kernel.org/r/20220429164917.5202-2-srinivas.kandagatla@linaro.org
+Fixes: 5930cb3511df ("serial: driver for Conexant Digicolor USART")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+Cc: stable <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220505124621.1592697-1-yangyingliang@huawei.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/slimbus/qcom-ctrl.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/tty/serial/digicolor-usart.c |    5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
---- a/drivers/slimbus/qcom-ctrl.c
-+++ b/drivers/slimbus/qcom-ctrl.c
-@@ -510,9 +510,9 @@ static int qcom_slim_probe(struct platfo
- 	}
+--- a/drivers/tty/serial/digicolor-usart.c
++++ b/drivers/tty/serial/digicolor-usart.c
+@@ -471,11 +471,10 @@ static int digicolor_uart_probe(struct p
+ 	if (IS_ERR(uart_clk))
+ 		return PTR_ERR(uart_clk);
  
- 	ctrl->irq = platform_get_irq(pdev, 0);
--	if (!ctrl->irq) {
-+	if (ctrl->irq < 0) {
- 		dev_err(&pdev->dev, "no slimbus IRQ\n");
--		return -ENODEV;
-+		return ctrl->irq;
- 	}
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	dp->port.mapbase = res->start;
+-	dp->port.membase = devm_ioremap_resource(&pdev->dev, res);
++	dp->port.membase = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+ 	if (IS_ERR(dp->port.membase))
+ 		return PTR_ERR(dp->port.membase);
++	dp->port.mapbase = res->start;
  
- 	sctrl = &ctrl->ctrl;
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq < 0)
 
 

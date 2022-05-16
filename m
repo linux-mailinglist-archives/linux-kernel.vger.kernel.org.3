@@ -2,211 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D0F528654
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AED1652864D
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244277AbiEPOCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 10:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43984 "EHLO
+        id S239672AbiEPOCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 10:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237279AbiEPOCd (ORCPT
+        with ESMTP id S235347AbiEPOCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 10:02:33 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBBD03915C
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:02:31 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0412C5C0187;
-        Mon, 16 May 2022 10:02:28 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Mon, 16 May 2022 10:02:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1652709747; x=
-        1652796147; bh=5+yjKYHPE1yoR5qIVYd0h7SQNO3dMIP7wshVKU2tLos=; b=k
-        saUMyBATJHiD5hcBAlk1cIyhS1lpNsncGh0Ap4ZUTf/TWtLo6hce5e/Jb2UGcVPK
-        nL6NcXTFYOzPQZ5/mnYsjoB/jgPhJDJ624lQQA2wE7c5xPoMdMSqAr8HI0/3+CkW
-        eZr8gTDbC9l7Q/yiTwIIlFA8EtlwUY/FtcsgzZpZrQ+Lvbk+qXVtr/R1jQj34tpa
-        73t3PsRbsODttyToRASv9OjnPMFINxj5L443EkpRW/2I1UYw1u47sT2IiTp075os
-        6sRX0y6E/WPgQLABilj2gjj3SILxTVQv8bpt2FHNFCidB6Kldt9aS1JsYIBsGgb1
-        Uwh0zqORhAMD6ZPNF695A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1652709747; x=
-        1652796147; bh=5+yjKYHPE1yoR5qIVYd0h7SQNO3dMIP7wshVKU2tLos=; b=d
-        i4A6NuCbon46rmfCdiNtEeyRKml5bH1dEYMsdrOArpkzpHB+MJR47Ls7B9vh4ikQ
-        L0aZHA5SGNFR6RzZzTK/yPaqSXqe61DsdkXph2VK/JZqRJoMrFFGVUTe+6KpXr3n
-        U5NJ9Y+CVNpTeiFvSz8Y127Q/Mn29hbE1sG+CNoB/13dr7grorrV0DgkkEBF4e1X
-        koCzziX43Kr+9IwKHsgAW/iLx6qQiR6ohgzRNNhDTDXj0kDlDwIRvxeabG9U82jI
-        1KK3mSRMogtw6D5MsVbD8cJgLY8bJH98nJ1VZ7YdHXetoAzvUCFjbTs8DiHuCU8e
-        ibgZKTkheqrujPBH6PEDw==
-X-ME-Sender: <xms:c1mCYvN49R8q91siQAlAHSsDYwW9JX6GZJK7uZoLaRKffOvOFebWHQ>
-    <xme:c1mCYp_tKKjjaOLdt9zGxyRmVWfgWrXruRb4tYJdpuTXy0edv_fj3RYFSiLXCs0Rk
-    M8kLkS5aKhSg9E>
-X-ME-Received: <xmr:c1mCYuRe3kZa1gLTTNUF7kXoIR0FgzK0qPyXdMiHZ7Ba33AHz6qT_sPuTZEt>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrheehgdejtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeffvghmihcu
-    ofgrrhhivgcuqfgsvghnohhurhcuoeguvghmihesihhnvhhishhisghlvghthhhinhhgsh
-    hlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpeeutdehhfdtvdfffeejjedvhedvjeei
-    heffheekkeehgeelueelveeludetheetteenucffohhmrghinhepghhithhhuhgsrdgtoh
-    hmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepuggv
-    mhhisehinhhvihhsihgslhgvthhhihhnghhslhgrsgdrtghomh
-X-ME-Proxy: <xmx:c1mCYjurAm2dIPcJz8c-ZxluVFij2F_lxdkugh6HT3XxF5-0eFDUbQ>
-    <xmx:c1mCYneuoRBaZp8LHp0Id6aAjgpjNZ-v-sODI87jBmo56m3R5PFyVA>
-    <xmx:c1mCYv3OMOCsMbAlmIlcDY3-qItit44kex-WBnNpMPu847NOf50yqg>
-    <xmx:c1mCYl3PEyg0TK6EZxQeWxycISQ5zefM9PK3N-nYBIkxIx_RTfCwyw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 16 May 2022 10:02:26 -0400 (EDT)
-Date:   Mon, 16 May 2022 10:00:07 -0400
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Juergen Gross <jgross@suse.com>,
-        Xen developer discussion <xen-devel@lists.xenproject.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Boris Ostrovski <boris.ostrovsky@oracle.com>,
-        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Memory Management <linux-mm@kvack.org>
-Subject: Re: Hang in 5.17.4+ that appears to be due to Xen
-Message-ID: <YoJZcUsiE3y6oul5@itl-email>
-References: <Yn/Tgj1Ehs/BdpHp@itl-email>
- <55436ae1-8255-1898-00df-51261080cd41@suse.com>
+        Mon, 16 May 2022 10:02:03 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290271A389;
+        Mon, 16 May 2022 07:02:02 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 2362F21F5C;
+        Mon, 16 May 2022 14:02:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652709720; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6xX/Xo1YcyoxhDGVtD+3aF7M9NKMVvtDcsL11SFSAQU=;
+        b=UAEfoymfYf+QAbCzE3oYFS/LnW9rFBs924Unv93LKXY9GoxfXpJbDSZbNYQc1AwPujLxjA
+        jmh7TvIJcQUwFXF0iE9L66PiKtfkKtU88t+hUCpM3m0czPO3TM37NQr+8KouKC5lf5Okex
+        k2McswvfGUIvb+tozWKmApBRPL9ucl0=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id D43112C141;
+        Mon, 16 May 2022 14:01:57 +0000 (UTC)
+Date:   Mon, 16 May 2022 16:01:57 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        David Gow <davidgow@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dexuan Cui <decui@microsoft.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Evan Green <evgreen@chromium.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Julius Werner <jwerner@chromium.org>,
+        Justin Chen <justinpopo6@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Scott Branden <scott.branden@broadcom.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        zhenwei pi <pizhenwei@bytedance.com>
+Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
+Message-ID: <YoJZVZl/MH0KiE/J@alley>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-20-gpiccoli@igalia.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="YnCoB7CFMTtqXZKs"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <55436ae1-8255-1898-00df-51261080cd41@suse.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220427224924.592546-20-gpiccoli@igalia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed 2022-04-27 19:49:13, Guilherme G. Piccoli wrote:
+> The goal of this new panic notifier is to allow its users to register
+> callbacks to run very early in the panic path. This aims hypervisor/FW
+> notification mechanisms as well as simple LED functions, and any other
+> simple and safe mechanism that should run early in the panic path; more
+> dangerous callbacks should execute later.
+> 
+> For now, the patch is almost a no-op (although it changes a bit the
+> ordering in which some panic notifiers are executed). In a subsequent
+> patch, the panic path will be refactored, then the panic hypervisor
+> notifiers will effectively run very early in the panic path.
+> 
+> We also defer documenting it all properly in the subsequent refactor
+> patch. While at it, we removed some useless header inclusions and
+> fixed some notifiers return too (by using the standard NOTIFY_DONE).
 
---YnCoB7CFMTtqXZKs
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 16 May 2022 10:00:07 -0400
-From: Demi Marie Obenour <demi@invisiblethingslab.com>
-To: Juergen Gross <jgross@suse.com>,
-	Xen developer discussion <xen-devel@lists.xenproject.org>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: Boris Ostrovski <boris.ostrovsky@oracle.com>,
-	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>,
-	linux-kernel@vger.kernel.org,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-	Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-	DRI Development <dri-devel@lists.freedesktop.org>,
-	Linux Memory Management <linux-mm@kvack.org>
-Subject: Re: Hang in 5.17.4+ that appears to be due to Xen
+> --- a/arch/mips/sgi-ip22/ip22-reset.c
+> +++ b/arch/mips/sgi-ip22/ip22-reset.c
+> @@ -195,7 +195,7 @@ static int __init reboot_setup(void)
+>  	}
+>  
+>  	timer_setup(&blink_timer, blink_timeout, 0);
+> -	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
+> +	atomic_notifier_chain_register(&panic_hypervisor_list, &panic_block);
 
-On Mon, May 16, 2022 at 08:48:17AM +0200, Juergen Gross wrote:
-> On 14.05.22 17:55, Demi Marie Obenour wrote:
-> > In https://github.com/QubesOS/qubes-issues/issues/7481, a user reported
-> > that Xorg locked up when resizing a VM window.  While I do not have the
-> > same hardware the user does and thus cannot reproduce the bug, the stack
-> > trace seems to indicate a deadlock between xen_gntdev and i915.  It
-> > appears that gnttab_unmap_refs_sync() is waiting for i915 to free the
-> > pages, while i915 is waiting for the MMU notifier that called
-> > gnttab_unmap_refs_sync() to return.  Result: deadlock.
-> >=20
-> > The problem appears to be that a mapped grant in PV mode will stay in
-> > the =E2=80=9Cinvalidating=E2=80=9D state until it is freed.  While MMU =
-notifiers are
-> > allowed to sleep, it appears that they cannot wait for the page to be
-> > freed, as is happening here.  That said, I am not very familiar with
-> > this code, so my diagnosis might be incorrect.
->=20
-> All I can say for now is that your patch seems to be introducing a use af=
-ter
-> free issue, as the parameters of the delayed work might get freed now bef=
-ore
-> the delayed work is being executed.
+This notifier enables blinking. It is not much safe. It calls
+mod_timer() that takes a lock internally.
 
-I figured it was wrong, not least because I don=E2=80=99t think it compiles
-(invalid use of void value).  That said, the current behavior is quite
-suspicious to me.  For one, it appears that munmap() on a grant in a PV
-domain will not return until nobody else is using the page.  This is not
-what I would expect, and I can easily imagine it causing deadlocks in
-userspace.  Instead, I would expect for gntdev to automatically release
-the grant when the reference count hits zero.  This would also allow for
-the same grant to be mapped in multiple processes, and might even unlock
-DMA-BUF support.
+This kind of functionality should go into the last list called
+before panic() enters the infinite loop. IMHO, all the blinking
+stuff should go there.
 
-> I don't know why this is happening only with rather recent kernels, as the
-> last gntdev changes in this area have been made in kernel 4.13.
->=20
-> I'd suggest to look at i915, as quite some work has happened in the code
-> visible in your stack backtraces rather recently. Maybe it would be possi=
-ble
-> to free the pages in i915 before calling the MMU notifier?
+>  
+>  	return 0;
+>  }
+> diff --git a/arch/mips/sgi-ip32/ip32-reset.c b/arch/mips/sgi-ip32/ip32-reset.c
+> index 18d1c115cd53..9ee1302c9d13 100644
+> --- a/arch/mips/sgi-ip32/ip32-reset.c
+> +++ b/arch/mips/sgi-ip32/ip32-reset.c
+> @@ -145,7 +144,7 @@ static __init int ip32_reboot_setup(void)
+>  	pm_power_off = ip32_machine_halt;
+>  
+>  	timer_setup(&blink_timer, blink_timeout, 0);
+> -	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
+> +	atomic_notifier_chain_register(&panic_hypervisor_list, &panic_block);
 
-While I agree that the actual problem is almost certainly in i915, the
-gntdev code does appear rather fragile.  Since so few people use i915 +
-Xen, problems with the combination generally don=E2=80=99t show up until so=
-me
-Qubes user makes a bug report, which isn=E2=80=99t great.  It would be bett=
-er if
-Xen didn=E2=80=99t introduce requirements on other kernel code that did not=
- hold
-when not running on Xen.
+Same here. Should be done only before the "loop".
 
-In this case, if it is actually an invariant that one must not call MMU
-notifiers for pages that are still in use, it would be better if this
-was caught by a WARN_ON() or BUG_ON() in the core memory management
-code.  That would have found the bug instantly and deterministically on
-all platforms, whereas the current failure is nondeterministic and only
-happens under Xen.
+>  
+>  	return 0;
+>  }
+> --- a/drivers/firmware/google/gsmi.c
+> +++ b/drivers/firmware/google/gsmi.c
+> @@ -1034,7 +1034,7 @@ static __init int gsmi_init(void)
+>  
+>  	register_reboot_notifier(&gsmi_reboot_notifier);
+>  	register_die_notifier(&gsmi_die_notifier);
+> -	atomic_notifier_chain_register(&panic_notifier_list,
+> +	atomic_notifier_chain_register(&panic_hypervisor_list,
+>  				       &gsmi_panic_notifier);
 
-I also wonder if this is a bug in the core MMU notifier infrastructure.
-My reading of the mmu_interval_notifier_remove() documentation is that
-it should only wait for the specific notifier being removed to finish,
-not for all notifiers to finish.  Adding the memory management
-maintainers.
---=20
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
+I am not sure about this one. It looks like some logging or
+pre_reboot stuff.
 
---YnCoB7CFMTtqXZKs
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+>  
+>  	printk(KERN_INFO "gsmi version " DRIVER_VERSION " loaded\n");
+> --- a/drivers/leds/trigger/ledtrig-activity.c
+> +++ b/drivers/leds/trigger/ledtrig-activity.c
+> @@ -247,7 +247,7 @@ static int __init activity_init(void)
+>  	int rc = led_trigger_register(&activity_led_trigger);
+>  
+>  	if (!rc) {
+> -		atomic_notifier_chain_register(&panic_notifier_list,
+> +		atomic_notifier_chain_register(&panic_hypervisor_list,
+>  					       &activity_panic_nb);
 
-iQIzBAEBCAAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmKCWXEACgkQsoi1X/+c
-IsEjNBAAz3hf+qemY+7SSkjIjwueaAyZFhnYLKo7R0cNfYPKD12S5Rt0z0iQbVNN
-PSXBm7/9WS5C9a3x4poKuE5k+HUbpBiu/xrUHSvWQgoCpJCT7ZIruIKQYYj7Ok9C
-BRf3ZjB47o9ZYkRjanMjNeCYJpx8JpAU4Kq1DtLtZW9vtibKdk/Yhn4bl54rqBtQ
-8UGtYK85sfxTnBegkR3/T2bXAuymx3tbi6+VF1NjzH1SYSNp0kUX7FJGfQrNaXXO
-jzNW7rCsA9AEeitHavIsRgBMSMGbeq+QLdGhx5I8TKS9fplT99b6ZvnEg3qMDDKe
-Y6l7SM765IqeByc+oi1cmZ25djJiRUKM7OVgDLvkC73F3auBKEzA+H56JOvMJDHu
-rrKdUt4Mbo5eOBxRJn1l9C/C/2Gxuu2UW8KOAXVoLk+yjWjzqUYrpO8lm/T1o/m7
-0lwBFi5KV2iEPuGcfS9cMNPmjNtkFSgKpSSmAatwH0D7nQCPPoN6Xf1WzQN/mAyz
-XP8VvvKkzB+QLyu+/niOIWHWNED2EwOiR1rhJ8ElESpDTz03qBGrSpIoffmwVngB
-nojEVAMrgCyzwmfB90myQAZ2MUvdfgOUj5Cy6qAZYctv2RXAwBvZOmZdgWMLYJvl
-IoWWk34NY57aVwFxvWnDQls/YRqzO8DZUimCHIt1CxqK64u35yk=
-=bUCk
------END PGP SIGNATURE-----
+The notifier is trivial. It just sets a variable.
 
---YnCoB7CFMTtqXZKs--
+But still, it is about blinking and should be done
+in the last "loop" list.
+
+
+>  		register_reboot_notifier(&activity_reboot_nb);
+>  	}
+> --- a/drivers/leds/trigger/ledtrig-heartbeat.c
+> +++ b/drivers/leds/trigger/ledtrig-heartbeat.c
+> @@ -190,7 +190,7 @@ static int __init heartbeat_trig_init(void)
+>  	int rc = led_trigger_register(&heartbeat_led_trigger);
+>  
+>  	if (!rc) {
+> -		atomic_notifier_chain_register(&panic_notifier_list,
+> +		atomic_notifier_chain_register(&panic_hypervisor_list,
+>  					       &heartbeat_panic_nb);
+
+Same here. Blinking => loop list.
+
+>  		register_reboot_notifier(&heartbeat_reboot_nb);
+>  	}
+> diff --git a/drivers/misc/bcm-vk/bcm_vk_dev.c b/drivers/misc/bcm-vk/bcm_vk_dev.c
+> index a16b99bdaa13..d9d5199cdb2b 100644
+> --- a/drivers/misc/bcm-vk/bcm_vk_dev.c
+> +++ b/drivers/misc/bcm-vk/bcm_vk_dev.c
+> @@ -1446,7 +1446,7 @@ static int bcm_vk_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+>  
+>  	/* register for panic notifier */
+>  	vk->panic_nb.notifier_call = bcm_vk_on_panic;
+> -	err = atomic_notifier_chain_register(&panic_notifier_list,
+> +	err = atomic_notifier_chain_register(&panic_hypervisor_list,
+>  					     &vk->panic_nb);
+
+It seems to reset some hardware or so. IMHO, it should go into the
+pre-reboot list.
+
+
+>  	if (err) {
+>  		dev_err(dev, "Fail to register panic notifier\n");
+> --- a/drivers/power/reset/ltc2952-poweroff.c
+> +++ b/drivers/power/reset/ltc2952-poweroff.c
+> @@ -279,7 +279,7 @@ static int ltc2952_poweroff_probe(struct platform_device *pdev)
+>  	pm_power_off = ltc2952_poweroff_kill;
+>  
+>  	data->panic_notifier.notifier_call = ltc2952_poweroff_notify_panic;
+> -	atomic_notifier_chain_register(&panic_notifier_list,
+> +	atomic_notifier_chain_register(&panic_hypervisor_list,
+>  				       &data->panic_notifier);
+
+I looks like this somehow triggers the reboot. IMHO, it should go
+into the pre_reboot list.
+
+>  	dev_info(&pdev->dev, "probe successful\n");
+>  
+> --- a/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+> +++ b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+> @@ -814,7 +814,7 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+>  		goto out;
+>  	}
+>  
+> -	atomic_notifier_chain_register(&panic_notifier_list,
+> +	atomic_notifier_chain_register(&panic_hypervisor_list,
+>  				       &brcmstb_pm_panic_nb);
+
+I am not sure about this one. It instruct some HW to preserve DRAM.
+IMHO, it better fits into pre_reboot category but I do not have
+strong opinion.
+
+>  
+>  	pm_power_off = brcmstb_pm_poweroff;
+
+Best Regards,
+Petr

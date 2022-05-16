@@ -2,180 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61BEC5280FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 11:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7535280FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 11:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235366AbiEPJr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 05:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48970 "EHLO
+        id S238744AbiEPJri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 05:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiEPJrZ (ORCPT
+        with ESMTP id S229989AbiEPJrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 05:47:25 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2950F340F4;
-        Mon, 16 May 2022 02:47:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1652694441; x=1684230441;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=bTmgfokK/guhzQhV06npQ0Wx+DGXJ3E3m+fg0nIFsI4=;
-  b=vvN9/s2XKPe4GpSk9Nrssy3KzqBqcDFrpR6Q08upn3DFZF3GCWB9IGgS
-   J3HEH/NsFGHPccFvvwAo7Z2HTcEDdGHVWcBWWv+SFHQaHQoIbAGz7T1Zb
-   +PmY1L+YaVjSvrITFH9m6GjP8lmfT41XcBWsfC8BwCCc7tBwPKFlexoXB
-   E77tTWIK8blxQCICOUkxI3fkuBPKTGKkM3O3rDaLbFePla1HqarnvDuOv
-   EmH4jmnHPHGPI3Riw7LYJhNbIvh8T0ZLj5Ndz3vkYCvbGGw+IBmSUBbU+
-   lImpBPrwk/JDEBvsqwEUMW/HJVuGdCx8Y9SJ6+JdXL5SedLpTxrR8vIyw
-   A==;
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="173520729"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 May 2022 02:47:20 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 16 May 2022 02:47:19 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17 via Frontend Transport; Mon, 16 May 2022 02:47:19 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JhaOO3xh6bNeyJ91JRcerCX85P/eUhPrz7JNpZ8ks3E2kllLr178tNSs23A7gpkxOdj49VjiuZ3HeToiI+B7va+VcKNlkME6E6ruT6T2qABK5uzbmUQ2o3DbKLKa1q6Q/jVTRYq8KAj+VyhMdB4lDhnu2icgg5rtYZaPzMshStM8gQPl16m9CEWOzA770ZQf7Qtt1tb6Ej/tHIaILVFHIjqHiAhcsNKnEmB41F4uBd1qjUhTMGWn0Wgw60kuYHicBxusp0yflacovQj9KZNhi1W5fG0r2OPJeXRBAjuHyoBSJkIvM6OcwffhC7YyGo8xHQLh4zjcMuFOWjAgfrolOQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bTmgfokK/guhzQhV06npQ0Wx+DGXJ3E3m+fg0nIFsI4=;
- b=h3NZnE4+d+ayTz3y2jRBX4yvnY8uV3hynSwHatoAY3BPCOQOO1hDKeaQYuC8tNz3TG/SKKzVuO7m/R1ipABuOJkQ1asPcb2kmj1X/bqDXNoOaENXn0A5QdJySUZS0KlShpcZadBd1D5v1XaAeAbQRjUbxFWuDrfKjLL0p3oz+C3KxSp29crgWijgc+tq14hwBROY7rdrNP/3sEwAUHc3gPx3Qp6UGoUTf/IWzjcD2/SwxRwQTrpE6W4Brk8T0/cp8OWhnSKrZzIZQ2nQ8bX3RZC/MHPMp76UfASEg5bvMbNkOrQMcv0q6y8f0c6ddPNCocm644jsTxBo0j/mPluXew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        Mon, 16 May 2022 05:47:32 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7F6344DF;
+        Mon, 16 May 2022 02:47:30 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id r71so13251052pgr.0;
+        Mon, 16 May 2022 02:47:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bTmgfokK/guhzQhV06npQ0Wx+DGXJ3E3m+fg0nIFsI4=;
- b=akSed/wf07rXY/4Tg8X3gmdRWeWd80yogg39k4D4kFxCS1+/WbyYCt4c9psh7DX4J0JDcJJqRVMwb3cBA8lkyE6cq8k5gzItUR7dcCl7DjbdH0aWqSaTdBHqDTzeFsrUIZdRRrKCs/BFwcLn/s5EW2ovlkh4SEYkKWiCzr4J+eQ=
-Received: from PH0PR11MB5160.namprd11.prod.outlook.com (2603:10b6:510:3e::8)
- by BYAPR11MB3750.namprd11.prod.outlook.com (2603:10b6:a03:f9::33) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14; Mon, 16 May
- 2022 09:47:14 +0000
-Received: from PH0PR11MB5160.namprd11.prod.outlook.com
- ([fe80::d10f:cc33:cfd8:365e]) by PH0PR11MB5160.namprd11.prod.outlook.com
- ([fe80::d10f:cc33:cfd8:365e%8]) with mapi id 15.20.5250.018; Mon, 16 May 2022
- 09:47:14 +0000
-From:   <Conor.Dooley@microchip.com>
-To:     <geert@linux-m68k.org>
-CC:     <hch@lst.de>, <sfr@canb.auug.org.au>, <linux-next@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: Re: linux-next: Tree for May 3
-Thread-Topic: linux-next: Tree for May 3
-Thread-Index: AQHYX5FrH/BqiZa6/06OwkWdFdBwha0Wk2YAgAAKyQCAAAevAIABXEcAgAE9tgCAAAeAgP///8QAgAA4D4CABNswgIAC+esA
-Date:   Mon, 16 May 2022 09:47:14 +0000
-Message-ID: <b930a399-fe49-7fe0-d4cd-34d7b71a9cf4@microchip.com>
-References: <20220503172926.08215c77@canb.auug.org.au>
- <3f94c9a8-c927-5cc0-7d67-4b21c3d9dbaf@microchip.com>
- <9a424be9-380f-f99c-4126-25a00eba0271@microchip.com>
- <20220509141122.GA14555@lst.de>
- <dd946220-eaf6-773a-06b4-307cda466c9c@microchip.com>
- <505d41d1-1bc8-c8bc-5ebb-8a2b7934f3de@microchip.com>
- <20220511062232.GA32524@lst.de>
- <102578f2-5c10-e9c2-c1ef-e76ba90d011e@microchip.com>
- <20220511064832.GA761@lst.de>
- <2c0e2fbe-4e45-4acc-c2a7-4f4dcf9161a3@microchip.com>
- <CAMuHMdVJuErxg16jFQEJhMwTgAt2AcHOGck1REZY6j0OpWwH+w@mail.gmail.com>
-In-Reply-To: <CAMuHMdVJuErxg16jFQEJhMwTgAt2AcHOGck1REZY6j0OpWwH+w@mail.gmail.com>
-Accept-Language: en-IE, en-US
-Content-Language: en-IE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: de9a8729-fb08-4ff7-0311-08da37210ea1
-x-ms-traffictypediagnostic: BYAPR11MB3750:EE_
-x-microsoft-antispam-prvs: <BYAPR11MB3750A8E1D53F8F5383406ECF98CF9@BYAPR11MB3750.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: LaBl2HuOmtccVMiem5eSYOU3mhcB7gK7IQ3Ns6bROf+vjBdKEaKQEgm6r/jP0c3IV705GgLxFDpVaTFOdYoLMyCe8Bij07/hjXulv+IwjXUB+eSfZgNopoaTH84dMHXMZWRy5IoX3i0hX6bAUweqYoiqKEIhrTVTU+yFK77Exd4en+YoKIEA1gxGepxR2mZLVbl8YgHDpLbgXQ5ZMKKBzOed5Gnq3teF6RUrGUxgbc6cAK83RL6sZqRAOsyLseXH6W4eL3b5l1wqvtdAokd50XjDzKXPpS7C0BmWbwhnTYfe03tDlZ6lmhnu+Hofnbh/KzAEFVQrlPnBL7ThF0+DMvQD1+bfuh7R5j9RymbPpA9akpaoqclXnWIY1oZNfNEduPZFKHusVt43wGCEtIigtA2Ou8aJMq8QV5vjVHLx8iBwZb81sQBa0mkNmv3qkzJ4Gh8rHa8fX9k63ffIcl985wZstwP4b+Cukk9uZaqEk/hd2ylNc+/f8Wf4JZ0i6/Q4ffzXdF45q9lb6Q8qcUus6hPgDszA6nvIkfzDkFHEnt+T7B1vhpan9fQSH5l5OO4LsACGvt9ZHZOFBZOmS8eG6uKX3G9DJWX/bksNJWHjbCQajbtk4g3JLezsUbILYSCq3zwVh33bPLq2KgkaVn09SFZMv5nriNNwbSGwKDLNREjRhwTt9lAWY1y97XawDqHd3VqrSD+9wjuDwAFoi4vph2day+ccvk2X/RvNJd9YanBBG7s1FQvB2zn25nF6JeU+NCe7UT0+o5y08JDY0Axq4Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5160.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(54906003)(8936002)(4744005)(6916009)(316002)(36756003)(186003)(26005)(8676002)(53546011)(122000001)(71200400001)(38100700002)(31696002)(31686004)(76116006)(2906002)(66476007)(64756008)(66446008)(5660300002)(66556008)(508600001)(38070700005)(66946007)(4326008)(6486002)(86362001)(6506007)(2616005)(6512007)(91956017)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UXNZMmJoWjBLYzQzN1JCTytDODhTRGMvV2JoREloY3lkWkUvcDhrUHpGR0I0?=
- =?utf-8?B?cXNoZEdhVkF4akU2cnFzQlIyY3FxY29pNmpaMlZadWZYaDlCZlNaQVNxbjho?=
- =?utf-8?B?cXlCSjNQSHRsVDJrcS9NcFdndWdURVFQRWR2M3RHTkdWclF5UEdYTW1tcGcw?=
- =?utf-8?B?SmVqSzRzMHNHVlBXVDFNajJsaFJBNXNEU1U1RmxRTTM3STdVZUxueTdxbHJn?=
- =?utf-8?B?d0xkWW96QnpnclVGTFFsRUh5aE9CeVltTERZbXA3VjZHaHh2bjBiQXZyL1Nv?=
- =?utf-8?B?NktyelVXaUNHS3dZQmZkZ0xuSW9kaEQyQzZMOG03bnArMmVaamJmeHZvRzRN?=
- =?utf-8?B?UjBBZkYrNUVaM3BCTXZoSVdncTZ3eXduQ3UxT0FPYURWUGx0cTRMY2VQVi82?=
- =?utf-8?B?Qm5PWjVqT0J2T2d0T0pyamluQmY4MDZHdkJLM3dZdFc1YWYzcm9aOGllRzZZ?=
- =?utf-8?B?OGw1Y3ZGK3A4cTVNTWxjcHgvWmR1L3Z2ZUVkMXJJKzZ1d2Zad0dXMjJRWm5C?=
- =?utf-8?B?bGNqWTZVVzY5WjBaaXdweEhKaDdIL0syS0lvZmRUQWhBM2V0QXd5ODROeUMw?=
- =?utf-8?B?eFAybklXSFl4N1Q2YWRNUkpmbWRzQ1o2dFZwQzFzMERZdzJCOUNQOUJjVGJN?=
- =?utf-8?B?L1E3aVpSRjhXSHBweW5Wa2FkK1pseU93dFh0aWZkUnFZZTNDM3JTUVVETFFn?=
- =?utf-8?B?WFgxL0NZbnJ4NWVPZGFCQ0ZMdDFrVTRndyszeDJZRzRLd29CUThIaGJXTHhj?=
- =?utf-8?B?c1FTOHJRelJDd0xaL0hMU2NOWEJBNUZoMG9nYTBid2RydFR4amUvblU4NHV3?=
- =?utf-8?B?THJENWFIemY1ZXM0VnpjTFlGMWZoVis3L3hjQUlEZEp3dTJaZEdiM1p3bnEz?=
- =?utf-8?B?V1AyRGRhczlTRGFEZDgvUy92akRGeTc3Ti9lUWJ1dzhHUmxiOGVmQ2RUNU1B?=
- =?utf-8?B?L2xKTnl3TjJJSmtpQjllSVE0S1Z4RWlHbnRlY0ZUaVBRclo3TkgzUnk1bDBy?=
- =?utf-8?B?RW9NajBVM0E2ckd4L0tidEF0Rkdhbys0SVpHcmFtY0lkT0xzeXhHTzVUWXJJ?=
- =?utf-8?B?UzVwTXI1K3dFejBETm9UckxoQ3h3Si9Yc3BYQW1PcmtnMzcxME9iREJIYkN5?=
- =?utf-8?B?SmFhVDdnbTlUbmpsVVFaMjJSdmEwRkVVYzlHUEFrd1c1NTlyTUQzL2U0OGYz?=
- =?utf-8?B?MGt4eHdiREZHUTVLNWsyMUcwbFEzNGlvRTJGT2xYZGkrVjZkYTY3Q05kSFNp?=
- =?utf-8?B?VGpCaEhLcUF5YjRuWjVtUTB6MTZ3TU5RbTZpVkpOeXQwZUZmUzkwYzc5S3po?=
- =?utf-8?B?RkM5ZTV5bk5HV1NLZk9EMDErYlZpWFdJSURCUnJUcGJ6SG5ZZWZsNSt5Vk0w?=
- =?utf-8?B?Y3RFMy9HcmxMQUdya2tOM1NTUlJpR01HL1pCL2w0aHYrZUk4dm1EUGlUWWhF?=
- =?utf-8?B?dzZnVnJLRG1NMlR0VC90ZmtCZE10bzlDY3lCQmxabXVZbUxXWTg5UVBIOER2?=
- =?utf-8?B?dmpvNGtDM3pJZDZjSlMzMXdHaWl1WTU0cCthOURFUVozMW94TDR4bmNUZnF0?=
- =?utf-8?B?ejF2L2VlL2xBdFpzaHpzaTlMYVBDUk5IaE1nQlhlTlozRzFySzhLdlBtR0JQ?=
- =?utf-8?B?c1NHMmVBbDR6REZSaG0wdGw2UnU5WXdBakVzbkhUYjI3cjZEWTRMSUpXNllx?=
- =?utf-8?B?TVVQOGlUbGE3N2V2K1M2Wkd4blVZVGc2UkNicTN4bUZhT0plNkZQYTNiWmFs?=
- =?utf-8?B?S1Y2WEg4NTBabE1PZk5rSUhLL2hCT25YeHQ3ampWMzU0Z2ZVV1MyOVBTSk1U?=
- =?utf-8?B?Z1lTa2dPTHVRaFV0V29zcjZwbGJPRC9oa3dqVDMrazY5a3NqZXFRME9Xc0Vs?=
- =?utf-8?B?bmFDaEhWNDJMTUthTEpXUmtSQUNuam15czR3ZldMMTJpNUQvd1lMNEFOY3lq?=
- =?utf-8?B?amFVQXg4VkFiYkwvYTBZRDF5cEhQWmFsWVErZGoxd3UwdjQxQ1ZGR2lYZXZt?=
- =?utf-8?B?UWZ1c2Faa3hXWVRQR2F3blBCL1lSUnhXZmdoNFNWY2tmemtpdUlqT0FMcDhu?=
- =?utf-8?B?RkpUdWFlSU9sQ0llK1hac2YwVDcwRVNkQll1R3A5L3VLV3BVR3hPME8xbUtY?=
- =?utf-8?B?c1IwRDNjUWJXR3VZV1p1dWhwTWYzbEk3aXdRRmxtYkI0dnU0ZEt4L3RaTjYr?=
- =?utf-8?B?eXpCc2JpaTlQR1R3L3RMMG03c3ROUytsMjZ2eXkrYjkvOWlObGg0MXp1WGdk?=
- =?utf-8?B?Q0l3NFpwSVk2eHZoeUU0MUczK2ZqZGJRdlpVeTVSWlN1OW9ZcThVbG9LT0dC?=
- =?utf-8?B?enJFUlVmZ1cxUVp0akRQVFVocFVaTk5RaTlXNkhrcmkwb0pZRzN4QT09?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F52FFEA2F51095458A307BF3A0F15767@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=YHaY3VzzTKl05Ylig5G4revSeCBrE0n2SgEWey+VV4c=;
+        b=kJYGrFZKUFrWk0ImWW0YnAKs8rcQzfSr2AwwcnEDXieIovOXoMXhPfHwkPrRr2ZH7o
+         xG4giXUDJD8ISDP6iPnb9oDfLIB3221ksRJ3Rc9/Mv6j99u+uC7PEKZx6eC3T0wZU3sv
+         2KcBpyQhdSwtSPFTH022wws+PNTjY8P5kf8QzLrDotBClqNmhO+tZpxCwC1K69P2bk1J
+         DSR63mJwu57lsyUm8sjZv1CqSyMvJvMwNy6o9ELSPh2UdM2bVjfNA1+F4NUKYiXcrb3X
+         8bUu7QGJbpkb8qHWeSzKsZ5qhXTxtmauGydQ60t8cWQX0N5KZyAnIisHArUfo2x8Qryy
+         ORvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YHaY3VzzTKl05Ylig5G4revSeCBrE0n2SgEWey+VV4c=;
+        b=d8yAMePAWuAliGEZsTGvo6raPKfwriyMjnwQA5uJgZ+7PfoUxZVJmFAsv1DnOws2K3
+         9SpohhGqxAVu9hPDdUYgsocxpbwQ7YtbSX2wxH1PYZmhATE0FcqcT/uJ9y3Nz7wXKmBk
+         K8UBrA7qB2CsVKjjNnk6ASSlBG4JKlAgvgjZmQRMuISa5QjOqmPA2AoB4hnANspb7aza
+         YHgO7lITLS9gcXqdr3J3V31QOtB9biHBGJUZe3xGCrC6MpFRtBKBZS4X6kR6RhcFOtpX
+         6gbsbeqlvBhEzNy7D+9iBNcSF3CUI6eR/1qmcSTD/NcKgo5npxmSupnBtKECcrFvjlW4
+         PyaA==
+X-Gm-Message-State: AOAM530WbxAPbtnL/MgTgTzU6C4MSki65sfFLVIqMrqOvokdotGE4dvt
+        wcHuJyI1f1eoSsDzpOCyqA0=
+X-Google-Smtp-Source: ABdhPJzsEPBimYWFMWXuaEdMh9q0tebRm3TOASpMfV8I3pGO3mHPFBU2WdI48Hy0Ww1RHk20d2n66A==
+X-Received: by 2002:a05:6a00:e8e:b0:4fa:a52f:59cf with SMTP id bo14-20020a056a000e8e00b004faa52f59cfmr16610949pfb.84.1652694450244;
+        Mon, 16 May 2022 02:47:30 -0700 (PDT)
+Received: from localhost ([152.70.90.187])
+        by smtp.gmail.com with ESMTPSA id u23-20020a1709026e1700b0015e8d4eb1ffsm6639952plk.73.2022.05.16.02.47.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 02:47:29 -0700 (PDT)
+Date:   Mon, 16 May 2022 17:47:26 +0800
+From:   Wang Cheng <wanngchenng@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        syzbot+ad1b8c404f0959c4bfcc@syzkaller.appspotmail.com
+Subject: Re: [PATCH] mm/mempolicy: fix uninit-value in mpol_rebind_policy()
+Message-ID: <20220516094726.b5rrsjg7rvei2od5@ppc.localdomain>
+References: <20220512123428.fq3wofedp6oiotd4@ppc.localdomain>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5160.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: de9a8729-fb08-4ff7-0311-08da37210ea1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 May 2022 09:47:14.4603
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 7sHquWSD3FfZbl3KjDzVicuPaGwanhhPwZgWiDnhXtla6lKXvM/72UkBATQXBUyjnlQQxRgNK4d6ty13sxNf1vakLdXaKIRO037zdNUWZgE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB3750
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220512123428.fq3wofedp6oiotd4@ppc.localdomain>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTQvMDUvMjAyMiAxMzoxOCwgR2VlcnQgVXl0dGVyaG9ldmVuIHdyb3RlOg0KPiBFWFRFUk5B
-TCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlv
-dSBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUNCj4gDQo+IEhpIENvbm9yLA0KPiANCj4gT24gV2Vk
-LCBNYXkgMTEsIDIwMjIgYXQgMTI6MTMgUE0gPENvbm9yLkRvb2xleUBtaWNyb2NoaXAuY29tPiB3
-cm90ZToNCj4+IFsgICAgMC4wMDAwMDBdIEtlcm5lbCBjb21tYW5kIGxpbmU6IGVhcmx5Y29uPXNi
-aSBkZWJ1Zw0KPiANCj4gVGhhdCBzaG91bGQgd29yayB3aXRob3V0IHRoZSAiPXNiaSIgcGFydC4N
-Cj4gDQo+IEkndmUgdXNlZCAiZWFybHljb24iIGFuZCAiZWFybHljb24ga2VlcF9ib290Y29uIiBz
-dWNjZXNzZnVsbHkgb24NCj4gaWNpY2xlIGJlZm9yZS4NCg0KWWVhaCwgaG9uZXN0bHkganVzdCBl
-bnRpcmVseSBmb3Jnb3QgSSBjb3VsZCBkbyBpdCB3aXRob3V0ID1zYmksIGQnb2guDQpUaGFua3Mg
-Zm9yIHJlbWluZGluZyBtZSA6KQ0KDQpUaGUgSFNTIGlzIGhvZ2dpbmcgdGhlIHNiaSBjb25zb2xl
-ICYgdGhhdCB3YXMgd2hhdCBJIHdhcyB0cnlpbmcgdG8ga2ljay4NCg==
+On 22/05/12 08:34PM, Wang Cheng wrote:
+> mpol_set_nodemask()(mm/mempolicy.c) does not set up nodemask when
+> pol->mode is MPOL_LOCAL. Check pol->mode before access
+> pol->w.cpuset_mems_allowed in mpol_rebind_policy()(mm/mempolicy.c).
+> 
+> BUG: KMSAN: uninit-value in mpol_rebind_policy mm/mempolicy.c:352 [inline]
+> BUG: KMSAN: uninit-value in mpol_rebind_task+0x2ac/0x2c0 mm/mempolicy.c:368
+>  mpol_rebind_policy mm/mempolicy.c:352 [inline]
+>  mpol_rebind_task+0x2ac/0x2c0 mm/mempolicy.c:368
+>  cpuset_change_task_nodemask kernel/cgroup/cpuset.c:1711 [inline]
+>  cpuset_attach+0x787/0x15e0 kernel/cgroup/cpuset.c:2278
+>  cgroup_migrate_execute+0x1023/0x1d20 kernel/cgroup/cgroup.c:2515
+>  cgroup_migrate kernel/cgroup/cgroup.c:2771 [inline]
+>  cgroup_attach_task+0x540/0x8b0 kernel/cgroup/cgroup.c:2804
+>  __cgroup1_procs_write+0x5cc/0x7a0 kernel/cgroup/cgroup-v1.c:520
+>  cgroup1_tasks_write+0x94/0xb0 kernel/cgroup/cgroup-v1.c:539
+>  cgroup_file_write+0x4c2/0x9e0 kernel/cgroup/cgroup.c:3852
+>  kernfs_fop_write_iter+0x66a/0x9f0 fs/kernfs/file.c:296
+>  call_write_iter include/linux/fs.h:2162 [inline]
+>  new_sync_write fs/read_write.c:503 [inline]
+>  vfs_write+0x1318/0x2030 fs/read_write.c:590
+>  ksys_write+0x28b/0x510 fs/read_write.c:643
+>  __do_sys_write fs/read_write.c:655 [inline]
+>  __se_sys_write fs/read_write.c:652 [inline]
+>  __x64_sys_write+0xdb/0x120 fs/read_write.c:652
+>  do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+>  do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> Uninit was created at:
+>  slab_post_alloc_hook mm/slab.h:524 [inline]
+>  slab_alloc_node mm/slub.c:3251 [inline]
+>  slab_alloc mm/slub.c:3259 [inline]
+>  kmem_cache_alloc+0x902/0x11c0 mm/slub.c:3264
+>  mpol_new mm/mempolicy.c:293 [inline]
+>  do_set_mempolicy+0x421/0xb70 mm/mempolicy.c:853
+>  kernel_set_mempolicy mm/mempolicy.c:1504 [inline]
+>  __do_sys_set_mempolicy mm/mempolicy.c:1510 [inline]
+>  __se_sys_set_mempolicy+0x44c/0xb60 mm/mempolicy.c:1507
+>  __x64_sys_set_mempolicy+0xd8/0x110 mm/mempolicy.c:1507
+>  do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+>  do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> KMSAN: uninit-value in mpol_rebind_task (2)
+> https://syzkaller.appspot.com/bug?id=d6eb90f952c2a5de9ea718a1b873c55cb13b59dc
+> 
+> Reported-and-tested-by: syzbot+217f792c92599518a2ab@syzkaller.appspotmail.com
+> Signed-off-by: Wang Cheng <wanngchenng@gmail.com>
+> ---
+> The uninit-value is pol->w.cpuset_mems_allowed in
+> mpol_rebind_policy().
+> 
+> While syzkaller reproducer runs, I notice pol->mode is 4(MPOL_LOCAL) in
+>     mpol_set_nodemask()
+>   do_set_mempolicy()(mm/mempolicy.c)
+> that `nodemask` in `pol` is not initialized, which will be accessed in
+> mpol_rebind_policy().
+> 
+>  mm/mempolicy.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+> index 10e9c87260ed..18b74f02da71 100644
+> --- a/mm/mempolicy.c
+> +++ b/mm/mempolicy.c
+> @@ -347,7 +347,7 @@ static void mpol_rebind_preferred(struct mempolicy *pol,
+>   */
+>  static void mpol_rebind_policy(struct mempolicy *pol, const nodemask_t *newmask)
+>  {
+> -	if (!pol)
+> +	if (!pol || pol->mode == MPOL_LOCAL)
+>  		return;
+>  	if (!mpol_store_user_nodemask(pol) &&
+>  	    nodes_equal(pol->w.cpuset_mems_allowed, *newmask))
+> -- 
+> 2.30.2
+>
+
+Hi Andrew,
+
+Thank you for fixing the commit message.
+
+This patch seems to fix below bug too.
+KMSAN: uninit-value in mpol_rebind_mm (2)
+https://syzkaller.appspot.com/bug?id=f2fecd0d7013f54ec4162f60743a2b28df40926b
+
+The uninit-value is pol->w.cpuset_mems_allowed in mpol_rebind_policy().
+When syzkaller reproducer runs to the beginning of mpol_new(),
+
+	    mpol_new() mm/mempolicy.c
+	  do_mbind() mm/mempolicy.c
+	kernel_mbind() mm/mempolicy.c
+
+`mode` is 1(MPOL_PREFERRED), nodes_empty(*nodes) is `true` and `flags`
+is 0. Then
+
+	mode = MPOL_LOCAL;
+	...
+	policy->mode = mode;
+	policy->flags = flags;
+
+will be executed. So in mpol_set_nodemask(),
+
+	    mpol_set_nodemask() mm/mempolicy.c
+	  do_mbind()
+	kernel_mbind()
+
+pol->mode is 4(MPOL_LOCAL), that `nodemask` in `pol` is not initialized,
+which will be accessed in mpol_rebind_policy().
+
+IIUC, "#syz fix: mm/mempolicy: fix uninit-value in mpol_rebind_policy()"
+could be sent to syzbot+ad1b8c404f0959c4bfcc@syzkaller.appspotmail.com
+to attach the fixing commit to the bug. WDYT?
+
+thanks,
+- w
+

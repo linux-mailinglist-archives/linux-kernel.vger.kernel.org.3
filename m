@@ -2,149 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67FD0528261
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A1A52823A
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232831AbiEPKms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 06:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45154 "EHLO
+        id S242252AbiEPKhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 06:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242838AbiEPKk6 (ORCPT
+        with ESMTP id S229569AbiEPKhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 06:40:58 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678A3261C
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 03:40:48 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id bx33so17538744ljb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 03:40:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=PIStbMHPtan1KLlc0XW15FaN5Q5q5/G9moSTVEJOKR8=;
-        b=Okry26+6WYZDBL/wyrImejHnErmgQv2VjJ3jxlPsOdX4tWoDQ0KeVWRt3ereejd+P+
-         l+zojoW4rovfwGTHTaxCqbsItDrqLt4TsrXgsqA4EvvM5/JkYxncPvSfhKyEhjmbASZQ
-         TibF4DIkzbDmuy0xtgyjkkgUOdyUb27/kr9dXc3rzbncMVJyYudJD0o5udiVuAEQxY/I
-         5rzowjS35jGcEV/2e/UK+/sj7+IRhOMQANzlqR59j9MGraRJ6MnQvrJJBTDfrf82S9Pp
-         UH/Rnn2AJGZRxLprskHloIEFc1kh4AIDEMX+wordKF8SmSST+s4U96TB9CeldPcYSWND
-         Q8ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PIStbMHPtan1KLlc0XW15FaN5Q5q5/G9moSTVEJOKR8=;
-        b=usJeDRFepUvPSHV7HjVSaIROz7nm3en6aIedk70ygpUp0aAELWwWjMoNAQwuwlb6xv
-         m7Oi56gdZN6h6acIkUzEaRMfEOshJW8KUoSIKfSQx4HI9pN4D074twGyOg05vVWWE0i2
-         BcfShbVuZf8mJx5wYbzmhUiLtLciyAzx3PmCMVxYX04YmnoPoagBuf5lLSMgAfNx5S8W
-         YKeWho8b2LSlB0QY+SgwVXstTbTUNId/C3+wOE1Wn0cKjhG5ea74sTkKtdt94cLJ8q6X
-         0UjaxiF3w/f/DTcwHlDoYGRG/xwskDMYXUY2hQk6WzK8WQWNzv/XQlciBtm1PG9Dwrcj
-         ruNQ==
-X-Gm-Message-State: AOAM532o+eSeQnrsXW85zpJOBFQK0zLBTtLZxYARCTnz41iN1lB4grm0
-        Pp56QEjHux3uC5ylRwxolopi3g==
-X-Google-Smtp-Source: ABdhPJy1QZ8BxVhQaPE0U/RAWQGsWQF8ytlTewjrJGbgoAmLSxr4qWAyDEMSN3A6btYEAhDImT/3Rw==
-X-Received: by 2002:a05:651c:105a:b0:250:c5ec:bc2d with SMTP id x26-20020a05651c105a00b00250c5ecbc2dmr10737190ljm.321.1652697646673;
-        Mon, 16 May 2022 03:40:46 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id t28-20020ac243bc000000b0047255d21195sm1265267lfl.196.2022.05.16.03.40.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 03:40:46 -0700 (PDT)
-Message-ID: <9a94cf23-430e-56e2-1260-92a162d608e7@linaro.org>
-Date:   Mon, 16 May 2022 12:40:45 +0200
+        Mon, 16 May 2022 06:37:40 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E1322BD9;
+        Mon, 16 May 2022 03:37:40 -0700 (PDT)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GA1ZUm024127;
+        Mon, 16 May 2022 10:37:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=rFTakGOzsoG3Zd7IuRk7SId/Z4//vNBTvFgJnoCDjIk=;
+ b=KSMzNf0fjobFZjzTlN3iIvlClqeyEaud/Pw3HJu0TTj8ttrO+uMR+Id6kMBMR3N0+/iK
+ HKTzdKVdqI5hhYpD6g8D17O+lGAyE9rqVSEPhHAoNKzShi3z37b0xLCvqW8vxSBzUqWi
+ 7A07QMUUUwR1QXbV2CelBNVMl/IRPeaOMRr3GweaBfwUrAQXoQ+ty1z1DzxHlo5DlL/m
+ hiNZa7H1Vr1w8C2ZzF0U4Kzfnqx4dUdboVf/BS/LWnnIDqpYa5b9FS+G2fuWHSwWlIlE
+ tzDyw2fALq1ynTYx1uZuEDtIuDEOXKUJMSgOinn66LYxVPxu4EjEyPdK0XNOMzWhNX3e TQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3mgdrmrd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 10:37:39 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24GAMNld001989;
+        Mon, 16 May 2022 10:37:39 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3mgdrmqu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 10:37:39 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24GAKeKR013724;
+        Mon, 16 May 2022 10:37:37 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma02fra.de.ibm.com with ESMTP id 3g2428hx5e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 10:37:36 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24GAbXgc29622754
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 16 May 2022 10:37:33 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AC527A4057;
+        Mon, 16 May 2022 10:37:33 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0811FA4055;
+        Mon, 16 May 2022 10:37:33 +0000 (GMT)
+Received: from [9.171.15.172] (unknown [9.171.15.172])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 16 May 2022 10:37:32 +0000 (GMT)
+Message-ID: <9aa8db91-a9f5-2b9a-7333-b87b826fdb81@linux.ibm.com>
+Date:   Mon, 16 May 2022 12:41:21 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v7 1/2] dt-bindings: thermal: k3-j72xx: Add VTM bindings
- documentation
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v9 2/3] s390x: KVM: guest support for topology function
 Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Keerthy <j-keerthy@ti.com>, robh+dt@kernel.org,
-        rui.zhang@intel.com, amitk@kernel.org, kristo@kernel.org
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220511110657.16305-1-j-keerthy@ti.com>
- <20220511110657.16305-2-j-keerthy@ti.com>
- <4568653d-706e-8621-3fee-d4a853517256@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <4568653d-706e-8621-3fee-d4a853517256@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Janosch Frank <frankja@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        borntraeger@de.ibm.com, cohuck@redhat.com, david@redhat.com,
+        thuth@redhat.com, imbrenda@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, wintera@linux.ibm.com, seiden@linux.ibm.com,
+        nrb@linux.ibm.com
+References: <20220506092403.47406-1-pmorel@linux.ibm.com>
+ <20220506092403.47406-3-pmorel@linux.ibm.com>
+ <ecf827ee-4b07-c999-064d-96d77607cf1c@linux.ibm.com>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <ecf827ee-4b07-c999-064d-96d77607cf1c@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: nXkv0dJfz28-U7HtPUFyJzkgGKEpw7lW
+X-Proofpoint-ORIG-GUID: Z5aJkiufopv32RNqFF4fL4dLhkqHKpjL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-16_06,2022-05-16_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
+ adultscore=0 spamscore=0 phishscore=0 priorityscore=1501 mlxscore=0
+ lowpriorityscore=0 bulkscore=0 suspectscore=0 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205160062
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/05/2022 12:32, Daniel Lezcano wrote:
+
+
+On 5/12/22 13:41, Janosch Frank wrote:
+> On 5/6/22 11:24, Pierre Morel wrote:
+>> We let the userland hypervisor know if the machine support the CPU
+>> topology facility using a new KVM capability: KVM_CAP_S390_CPU_TOPOLOGY.
 > 
-> Cc'ing krzysztof.kozlowski@linaro.org
+> Nope, we indicate KVM's support which is based on the machine's support.
 
-Eh, I wished people used automatically scripts/get_maintainers.pl, so
-there will be no need to Cc someone. It's actually a bit weird because I
-was reviewing v6...
+OK I reword.
 
 > 
-> On 11/05/2022 13:06, Keerthy wrote:
->> Add VTM bindings documentation. In the Voltage Thermal
->> Management Module(VTM), K3 J72XX supplies a voltage
->> reference and a temperature sensor feature that are gathered in the band
->> gap voltage and temperature sensor (VBGAPTS) module. The band
->> gap provides current and voltage reference for its internal
->> circuits and other analog IP blocks. The analog-to-digital
->> converter (ADC) produces an output value that is proportional
->> to the silicon temperature.
->>
->> Signed-off-by: Keerthy <j-keerthy@ti.com>
+> On the same note: Shouldn't the CAP indication be part of the last 
+> patch? The resets are needed for a full support of this feature, no?
 
+Looks right, I will move it last.
 
-In any case this misses all the review-tags, so I don't know what we are
-supposed to do here.
-
-
-Keerthy,
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
-
-https://elixir.bootlin.com/linux/v5.13/source/Documentation/process/submitting-patches.rst#L543
-
-If a tag was not added on purpose, please state why and what changed.
-
->> ---
->>   .../bindings/thermal/ti,j72xx-thermal.yaml    | 64 +++++++++++++++++++
->>   1 file changed, 64 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
->> new file mode 100644
->> index 000000000000..83f8f444a133
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
->> @@ -0,0 +1,64 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/thermal/ti,j72xx-thermal.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Texas Instruments J72XX VTM (DTS) binding
->> +
->> +maintainers:
->> +  - Keerthy <j-keerthy@ti.com>
->> +
->> +properties:
->> +  compatible:
->> +    items:
->> +      - enum:
->> +          - ti,j721e-vtm
->> +          - ti,j7200-vtm
-
-No items, you have only one item.
-
-
-Best regards,
-Krzysztof
+-- 
+Pierre Morel
+IBM Lab Boeblingen

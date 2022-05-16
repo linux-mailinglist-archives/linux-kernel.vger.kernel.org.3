@@ -2,46 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AC9F52913D
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F4E529176
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:48:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347393AbiEPT5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:57:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
+        id S233542AbiEPUUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347268AbiEPTvz (ORCPT
+        with ESMTP id S1348899AbiEPT7C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:51:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F3040E7E;
-        Mon, 16 May 2022 12:47:18 -0700 (PDT)
+        Mon, 16 May 2022 15:59:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1513C11A25;
+        Mon, 16 May 2022 12:52:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5423960A5B;
-        Mon, 16 May 2022 19:47:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F56BC36AE5;
-        Mon, 16 May 2022 19:47:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4EBA60EC4;
+        Mon, 16 May 2022 19:52:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CB94C34100;
+        Mon, 16 May 2022 19:52:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730436;
-        bh=SbqfvGskKdYBGAxRWuOOZ55+4H8hLcqJIARXk06L9i4=;
+        s=korg; t=1652730738;
+        bh=QXojrCr7nRJCNk0udtwkEUMobSAQqpoeUp8T8wc32mo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a2gkDxw0/UwBsW7qskKNVY0Rl+P9zaNLvVbyUvAeakgVd1QYh6V0uqMQC6V0dcTXb
-         gc6DjkNU4UFn4H2arR21jbKeWwVYlMSupBQfWDj2wA/NnZoPKKVJWEvFcHPn6+lFIe
-         LrjQxLQnV1jtHzVz+NrPWU3F6LDed20Nnj8Jf7CE=
+        b=LvDSy+v+/8XHAv/knhv3HA9h8SXRjNI5hDPrGc4W8qXQ4Rcu7Xm/kuH2H3BdD2HMV
+         XUs0BOkie08M8jpZ64ye/tekr3EYeDkUIRevQ+Sbdba44RWi2NqTLQlU+jLTv3dy8X
+         EuxLFcdnFjF7H88+wCOUau+lpNMYOXUY+XrDuPsI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 64/66] ping: fix address binding wrt vrf
-Date:   Mon, 16 May 2022 21:37:04 +0200
-Message-Id: <20220516193621.262810606@linuxfoundation.org>
+        stable@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>,
+        "kernelci.org bot" <bot@kernelci.org>,
+        Mark Brown <broonie@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Tony Lindgren <tony@atomide.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.15 091/102] arm[64]/memremap: dont abuse pfn_valid() to ensure presence of linear map
+Date:   Mon, 16 May 2022 21:37:05 +0200
+Message-Id: <20220516193626.610488471@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
-References: <20220516193619.400083785@linuxfoundation.org>
+In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
+References: <20220516193623.989270214@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,75 +62,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-commit e1a7ac6f3ba6e157adcd0ca94d92a401f1943f56 upstream.
+commit 260364d112bc822005224667c0c9b1b17a53eafd upstream.
 
-When ping_group_range is updated, 'ping' uses the DGRAM ICMP socket,
-instead of an IP raw socket. In this case, 'ping' is unable to bind its
-socket to a local address owned by a vrflite.
+The semantics of pfn_valid() is to check presence of the memory map for a
+PFN and not whether a PFN is covered by the linear map.  The memory map
+may be present for NOMAP memory regions, but they won't be mapped in the
+linear mapping.  Accessing such regions via __va() when they are
+memremap()'ed will cause a crash.
 
-Before the patch:
-$ sysctl -w net.ipv4.ping_group_range='0  2147483647'
-$ ip link add blue type vrf table 10
-$ ip link add foo type dummy
-$ ip link set foo master blue
-$ ip link set foo up
-$ ip addr add 192.168.1.1/24 dev foo
-$ ip addr add 2001::1/64 dev foo
-$ ip vrf exec blue ping -c1 -I 192.168.1.1 192.168.1.2
-ping: bind: Cannot assign requested address
-$ ip vrf exec blue ping6 -c1 -I 2001::1 2001::2
-ping6: bind icmp socket: Cannot assign requested address
+On v5.4.y the crash happens on qemu-arm with UEFI [1]:
 
-CC: stable@vger.kernel.org
-Fixes: 1b69c6d0ae90 ("net: Introduce L3 Master device abstraction")
-Signed-off-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+<1>[    0.084476] 8<--- cut here ---
+<1>[    0.084595] Unable to handle kernel paging request at virtual address dfb76000
+<1>[    0.084938] pgd = (ptrval)
+<1>[    0.085038] [dfb76000] *pgd=5f7fe801, *pte=00000000, *ppte=00000000
+
+...
+
+<4>[    0.093923] [<c0ed6ce8>] (memcpy) from [<c16a06f8>] (dmi_setup+0x60/0x418)
+<4>[    0.094204] [<c16a06f8>] (dmi_setup) from [<c16a38d4>] (arm_dmi_init+0x8/0x10)
+<4>[    0.094408] [<c16a38d4>] (arm_dmi_init) from [<c0302e9c>] (do_one_initcall+0x50/0x228)
+<4>[    0.094619] [<c0302e9c>] (do_one_initcall) from [<c16011e4>] (kernel_init_freeable+0x15c/0x1f8)
+<4>[    0.094841] [<c16011e4>] (kernel_init_freeable) from [<c0f028cc>] (kernel_init+0x8/0x10c)
+<4>[    0.095057] [<c0f028cc>] (kernel_init) from [<c03010e8>] (ret_from_fork+0x14/0x2c)
+
+On kernels v5.10.y and newer the same crash won't reproduce on ARM because
+commit b10d6bca8720 ("arch, drivers: replace for_each_membock() with
+for_each_mem_range()") changed the way memory regions are registered in
+the resource tree, but that merely covers up the problem.
+
+On ARM64 memory resources registered in yet another way and there the
+issue of wrong usage of pfn_valid() to ensure availability of the linear
+map is also covered.
+
+Implement arch_memremap_can_ram_remap() on ARM and ARM64 to prevent access
+to NOMAP regions via the linear mapping in memremap().
+
+Link: https://lore.kernel.org/all/Yl65zxGgFzF1Okac@sirena.org.uk
+Link: https://lkml.kernel.org/r/20220426060107.7618-1-rppt@kernel.org
+Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Tested-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Tony Lindgren <tony@atomide.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: <stable@vger.kernel.org>	[5.4+]
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/ping.c |   15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ arch/arm/include/asm/io.h   |    3 +++
+ arch/arm/mm/ioremap.c       |    8 ++++++++
+ arch/arm64/include/asm/io.h |    4 ++++
+ arch/arm64/mm/ioremap.c     |    8 ++++++++
+ 4 files changed, 23 insertions(+)
 
---- a/net/ipv4/ping.c
-+++ b/net/ipv4/ping.c
-@@ -305,6 +305,7 @@ static int ping_check_bind_addr(struct s
- 	struct net *net = sock_net(sk);
- 	if (sk->sk_family == AF_INET) {
- 		struct sockaddr_in *addr = (struct sockaddr_in *) uaddr;
-+		u32 tb_id = RT_TABLE_LOCAL;
- 		int chk_addr_ret;
+--- a/arch/arm/include/asm/io.h
++++ b/arch/arm/include/asm/io.h
+@@ -436,6 +436,9 @@ extern void pci_iounmap(struct pci_dev *
+ #define ARCH_HAS_VALID_PHYS_ADDR_RANGE
+ extern int valid_phys_addr_range(phys_addr_t addr, size_t size);
+ extern int valid_mmap_phys_addr_range(unsigned long pfn, size_t size);
++extern bool arch_memremap_can_ram_remap(resource_size_t offset, size_t size,
++					unsigned long flags);
++#define arch_memremap_can_ram_remap arch_memremap_can_ram_remap
+ #endif
  
- 		if (addr_len < sizeof(*addr))
-@@ -320,8 +321,10 @@ static int ping_check_bind_addr(struct s
- 
- 		if (addr->sin_addr.s_addr == htonl(INADDR_ANY))
- 			chk_addr_ret = RTN_LOCAL;
--		else
--			chk_addr_ret = inet_addr_type(net, addr->sin_addr.s_addr);
-+		else {
-+			tb_id = l3mdev_fib_table_by_index(net, sk->sk_bound_dev_if) ? : tb_id;
-+			chk_addr_ret = inet_addr_type_table(net, addr->sin_addr.s_addr, tb_id);
-+		}
- 
- 		if ((!inet_can_nonlocal_bind(net, isk) &&
- 		     chk_addr_ret != RTN_LOCAL) ||
-@@ -357,6 +360,14 @@ static int ping_check_bind_addr(struct s
- 			if (!dev) {
- 				rcu_read_unlock();
- 				return -ENODEV;
-+			}
-+		}
+ /*
+--- a/arch/arm/mm/ioremap.c
++++ b/arch/arm/mm/ioremap.c
+@@ -479,3 +479,11 @@ void __init early_ioremap_init(void)
+ {
+ 	early_ioremap_setup();
+ }
 +
-+		if (!dev && sk->sk_bound_dev_if) {
-+			dev = dev_get_by_index_rcu(net, sk->sk_bound_dev_if);
-+			if (!dev) {
-+				rcu_read_unlock();
-+				return -ENODEV;
- 			}
- 		}
- 		has_addr = pingv6_ops.ipv6_chk_addr(net, &addr->sin6_addr, dev,
++bool arch_memremap_can_ram_remap(resource_size_t offset, size_t size,
++				 unsigned long flags)
++{
++	unsigned long pfn = PHYS_PFN(offset);
++
++	return memblock_is_map_memory(pfn);
++}
+--- a/arch/arm64/include/asm/io.h
++++ b/arch/arm64/include/asm/io.h
+@@ -192,4 +192,8 @@ extern void __iomem *ioremap_cache(phys_
+ extern int valid_phys_addr_range(phys_addr_t addr, size_t size);
+ extern int valid_mmap_phys_addr_range(unsigned long pfn, size_t size);
+ 
++extern bool arch_memremap_can_ram_remap(resource_size_t offset, size_t size,
++					unsigned long flags);
++#define arch_memremap_can_ram_remap arch_memremap_can_ram_remap
++
+ #endif	/* __ASM_IO_H */
+--- a/arch/arm64/mm/ioremap.c
++++ b/arch/arm64/mm/ioremap.c
+@@ -99,3 +99,11 @@ void __init early_ioremap_init(void)
+ {
+ 	early_ioremap_setup();
+ }
++
++bool arch_memremap_can_ram_remap(resource_size_t offset, size_t size,
++				 unsigned long flags)
++{
++	unsigned long pfn = PHYS_PFN(offset);
++
++	return pfn_is_map_memory(pfn);
++}
 
 

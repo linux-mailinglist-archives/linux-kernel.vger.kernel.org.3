@@ -2,139 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D295528F92
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D3BD5290FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348298AbiEPUgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55474 "EHLO
+        id S1346629AbiEPTy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:54:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351115AbiEPUCC (ORCPT
+        with ESMTP id S1346243AbiEPTu3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:02:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B66ECE0;
-        Mon, 16 May 2022 12:59:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7122B81613;
-        Mon, 16 May 2022 19:59:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39C80C385AA;
-        Mon, 16 May 2022 19:59:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652731148;
-        bh=wOIDV8q4QcRZSsv7ZtGikMXYBHgsMA3h+B5yP9HDWMk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OZwehqRumQwM1rAwTJ3uBu20HlAFG3AAWw3KM60adhSLGvohZdbhJyHcMAnzvxsFQ
-         WAIh0Gxm3ew9DOJVzG1CAK2TzPAD889QGavwSCsjZV6V6wF8/cYZqtOcZLy/axw+Xi
-         hL/jRszV1i5m8KFa2JlNUVFKM0XqOk9tAddIJklI=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Marco Elver <elver@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.17 114/114] mm/kfence: reset PG_slab and memcg_data before freeing __kfence_pool
-Date:   Mon, 16 May 2022 21:37:28 +0200
-Message-Id: <20220516193628.745366269@linuxfoundation.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
-References: <20220516193625.489108457@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Mon, 16 May 2022 15:50:29 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266FE43EF3
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:45:24 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id h29so27687406lfj.2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:45:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=uUfVm42ZQNq+014IW1sf3DQHsLIVj6aXXsUckSeTuwM=;
+        b=V+moZ65xYCfiJkcirAAUUuL5GWd5JL8+6D06wvLfUPuwIY6fNQFLXCAGe/bRJTef3D
+         dDtxNiVCSGvpF6a+vuzD4/4m62cQbzbEa8GF7YowgtPbzyuEmFkzUdXjuKBlkS0V9dZn
+         yfUZ0Vt/Q8KvCThJcOvDYklKjRzc7VRy+mapzNeeCaAw0lICrm+n0tgI9iRkNlBhdAgM
+         c/uBJL9pO7GAr52HJyVUOvhXHfJghKczv5N1p8pOCsztPc0Zz4SA/FsN20HeHrsRzHJ4
+         cn/uR0ZaUd4zFd8jIsYLDI0waodll597mK8FXXX/t2TaVZcv8Ya26f3XMJonPjDAar7F
+         FQjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=uUfVm42ZQNq+014IW1sf3DQHsLIVj6aXXsUckSeTuwM=;
+        b=Z5wYL8qXPAUjF2FbCBTfsRpDUX9iGmzgDxU5V1BFqlZw0RwZeEC+c214pEBc69nPHy
+         hx8BJcY6twLM1LGNeOx24QKulkzfr1VHVIyklwDx0y82pK1eVf88EHJlwSbAG+AYQeAJ
+         HYQuGFUTZ0/ZSKkEdZe4yrbXVyjgf/gS0w6bGGPsbWnfcSYlk5Y82wgG781hKeOgQ/gP
+         7kl+7Hyvw+XLcBDzFMzPQMLRquqN81CPLBaEyPLclkt1SvG2CeP0xZmsGg+4Yh4z7E9n
+         vnOknkuZXn5X8gpTEZOi9UvWq5IGwzjEemlUbyHR9U1PqLPwG87kLS+/lx2rTGAlvA1Y
+         YVxw==
+X-Gm-Message-State: AOAM530cTK6cq8J+6lF6h2mftrZG5R+Vasb/woDMuS4J0jQ5e/PAVoGZ
+        dgrY21F4twhwU54NKxzn2GkBAygux+Ky/A==
+X-Google-Smtp-Source: ABdhPJzhuBrUIgSvINGOPQFV34k2TU982jsDwjgoIihymBDOgC4KtnTFCODJapFZn8pyN89Sc2pNzg==
+X-Received: by 2002:a05:6512:1154:b0:472:65ab:4159 with SMTP id m20-20020a056512115400b0047265ab4159mr13927604lfg.411.1652730322328;
+        Mon, 16 May 2022 12:45:22 -0700 (PDT)
+Received: from [192.168.1.11] ([217.117.245.216])
+        by smtp.gmail.com with ESMTPSA id j10-20020a2e800a000000b002539c858cccsm1424256ljg.49.2022.05.16.12.45.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 12:45:21 -0700 (PDT)
+Message-ID: <7b926f43-8c6b-6eae-edc6-02dc16376eb0@gmail.com>
+Date:   Mon, 16 May 2022 22:45:20 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/3] staging: r8188eu: fix checkpatch.pl warnings in
+ rtw_pwrctrl
+Content-Language: en-US
+To:     Vihas Makwana <makvihas@gmail.com>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Straube <straube.linux@gmail.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>
+References: <20220516170306.6008-1-makvihas@gmail.com>
+ <20220516170306.6008-3-makvihas@gmail.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <20220516170306.6008-3-makvihas@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Hi Vihas,
 
-commit 2839b0999c20c9f6bf353849c69370e121e2fa1a upstream.
+On 5/16/22 20:03, Vihas Makwana wrote:
+> Refactor the code to fix following warnings:
+>      WARNING: Comparisons should place the constant on the right side of the test
+> 
+> Signed-off-by: Vihas Makwana <makvihas@gmail.com>
+> ---
 
-When kfence fails to initialize kfence pool, it frees the pool.  But it
-does not reset memcg_data and PG_slab flag.
+[code snip]
 
-Below is a BUG because of this. Let's fix it by resetting memcg_data
-and PG_slab flag before free.
+>   		if ((pwrpriv->smart_ps == smart_ps) &&
+> @@ -356,7 +356,7 @@ void rtw_init_pwrctrl_priv(struct adapter *padapter)
+>   
+>   	pwrctrlpriv->LpsIdleCount = 0;
+>   	pwrctrlpriv->power_mgnt = padapter->registrypriv.power_mgnt;/*  PS_MODE_MIN; */
+> -	pwrctrlpriv->bLeisurePs = PS_MODE_ACTIVE != pwrctrlpriv->power_mgnt;
+> +	pwrctrlpriv->bLeisurePs =  pwrctrlpriv->power_mgnt != PS_MODE_ACTIVE;
+>   
 
-[    0.089149] BUG: Bad page state in process swapper/0  pfn:3d8e06
-[    0.089149] page:ffffea46cf638180 refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x3d8e06
-[    0.089150] memcg:ffffffff94a475d1
-[    0.089150] flags: 0x17ffffc0000200(slab|node=0|zone=2|lastcpupid=0x1fffff)
-[    0.089151] raw: 0017ffffc0000200 ffffea46cf638188 ffffea46cf638188 0000000000000000
-[    0.089152] raw: 0000000000000000 0000000000000000 00000000ffffffff ffffffff94a475d1
-[    0.089152] page dumped because: page still charged to cgroup
-[    0.089153] Modules linked in:
-[    0.089153] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G    B   W         5.18.0-rc1+ #965
-[    0.089154] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
-[    0.089154] Call Trace:
-[    0.089155]  <TASK>
-[    0.089155]  dump_stack_lvl+0x49/0x5f
-[    0.089157]  dump_stack+0x10/0x12
-[    0.089158]  bad_page.cold+0x63/0x94
-[    0.089159]  check_free_page_bad+0x66/0x70
-[    0.089160]  __free_pages_ok+0x423/0x530
-[    0.089161]  __free_pages_core+0x8e/0xa0
-[    0.089162]  memblock_free_pages+0x10/0x12
-[    0.089164]  memblock_free_late+0x8f/0xb9
-[    0.089165]  kfence_init+0x68/0x92
-[    0.089166]  start_kernel+0x789/0x992
-[    0.089167]  x86_64_start_reservations+0x24/0x26
-[    0.089168]  x86_64_start_kernel+0xa9/0xaf
-[    0.089170]  secondary_startup_64_no_verify+0xd5/0xdb
-[    0.089171]  </TASK>
-
-Link: https://lkml.kernel.org/r/YnPG3pQrqfcgOlVa@hyeyoo
-Fixes: 0ce20dd84089 ("mm: add Kernel Electric-Fence infrastructure")
-Fixes: 8f0b36497303 ("mm: kfence: fix objcgs vector allocation")
-Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Reviewed-by: Marco Elver <elver@google.com>
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-Cc: Alexander Potapenko <glider@google.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- mm/kfence/core.c |   11 +++++++++++
- 1 file changed, 11 insertions(+)
-
---- a/mm/kfence/core.c
-+++ b/mm/kfence/core.c
-@@ -515,6 +515,7 @@ static bool __init kfence_init_pool(void
- {
- 	unsigned long addr = (unsigned long)__kfence_pool;
- 	struct page *pages;
-+	char *p;
- 	int i;
- 
- 	if (!__kfence_pool)
-@@ -598,6 +599,16 @@ err:
- 	 * fails for the first page, and therefore expect addr==__kfence_pool in
- 	 * most failure cases.
- 	 */
-+	for (p = (char *)addr; p < __kfence_pool + KFENCE_POOL_SIZE; p += PAGE_SIZE) {
-+		struct slab *slab = virt_to_slab(p);
-+
-+		if (!slab)
-+			continue;
-+#ifdef CONFIG_MEMCG
-+		slab->memcg_data = 0;
-+#endif
-+		__folio_clear_slab(slab_folio(slab));
-+	}
- 	memblock_free_late(__pa(addr), KFENCE_POOL_SIZE - (addr - (unsigned long)__kfence_pool));
- 	__kfence_pool = NULL;
- 	return false;
+Please remove extra space
 
 
+
+
+With regards,
+Pavel Skripkin

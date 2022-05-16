@@ -2,59 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D39C527E4C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FCC0527E49
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:10:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240804AbiEPHK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 03:10:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
+        id S235932AbiEPHKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 03:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240709AbiEPHKt (ORCPT
+        with ESMTP id S237000AbiEPHKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 03:10:49 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9FADFF4
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:10:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652685048; x=1684221048;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=osVtCMIQYinX4FphV0D5a3TGESr9bXGCHbW430bzhC8=;
-  b=AogQl1wrHkOlNUgWKSHxPoPdnaa2gUq3SF6mMWJia36tsupsUnPnhO2S
-   S/GQMM5y/VjrhvKKC4f4+FXXl9QI2dYBH36v0ajr/Fn6ArFeNEO+0YO0s
-   YOBJb4vy915BtB7vjcSJFAiXLjRiJHY/4WHpW29QWh3zi+SjDyg7yAukA
-   RAKnUwm5cWiBhsu023w82pUauK8V3pyuOATYTUvf9kYU0qWFhPnLMAB4H
-   qkxTZiiOPIpYK2pN0/ILFPCZyTV/YJ1KfdRG/efEm9kKgJZIP25SR/PjI
-   zukVB08wilucOaTq8JrOJZIPtbsk/KoL8AupTmnBJQHrn1rvUQoy+OFuG
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="269577251"
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="269577251"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 00:10:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="555128297"
-Received: from lkp-server01.sh.intel.com (HELO d1462bc4b09b) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 16 May 2022 00:10:43 -0700
-Received: from kbuild by d1462bc4b09b with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nqUsM-0002EF-4u;
-        Mon, 16 May 2022 07:10:42 +0000
-Date:   Mon, 16 May 2022 15:09:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [nsaenz-rpi:ct-work-defer-wip 22/25]
- kernel/context_tracking.c:719:47: error: 'struct context_tracking' has no
- member named 'active'
-Message-ID: <202205161511.pldvqjB0-lkp@intel.com>
+        Mon, 16 May 2022 03:10:15 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DA7E08F
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:10:04 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id b32so16996837ljf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:10:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=sxWW7nN1MX4qR5x7vYWxWhZdhe/dlQM1wOVqJQxUPUw=;
+        b=xfgSJvvTfpB3bhvG57n8DdOASbQWiiD0aJbEx2q9VQiFwTMWieLv+76CkJZ+U2n5nd
+         SeLg+QQPZ6V0nSyPBqobwtFuUOpjjzJSoROqSiq2V7Lj9xLXR9XI2j8rJYfID1yZzMj8
+         XYC4vFiYINn/Pu0Kw38I6/ttfnhseJChXYkyHSKswuerj7YUKcUcoGx6WrX3zTuWbAFj
+         BTqaz6IRcnWwUweLAZORhNAjK8LbQDIP25u3i0mgFmyuV3xVI+3yddr0b/HTBSLyGUff
+         JthW+Y2HVfZJFRs03mpTS0HA5Y3waFMYbEb0YtBrM8ENx2y/t+3UVmH84hiaV9lxEk+f
+         7xOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sxWW7nN1MX4qR5x7vYWxWhZdhe/dlQM1wOVqJQxUPUw=;
+        b=73oqqgTKc/OvalfrOeqvvL7ihkWvXH+wxPNNDTTOm1cfHDJp0CLyFiChhE/evMsZK5
+         aCa3Ct5eSZ2Ib8pSfZar+gQP+DrYsHHZDE8PvfyR27SHnFdcOGrV0BNRBlxEjg0UI0Zo
+         Va6/ubAD5AlqITxNgQ1y7IBBeNRJZkFWsZKJy/HjBoI+l1KtHBQ4dYtPUNH52Mu4dk2e
+         M9es4Kik91FO+1tJ1oleQTE14NAprLQVOjIki1W4PpH10tfUCTg+Gd4pFM9B3DUcA58G
+         Y7HqUw0yzNYK0ftfYRIAJBcaHt2U0T9mAFxUDoujP/Qpm40E5kGXQvlDKhXBNAOYnxsT
+         pVdg==
+X-Gm-Message-State: AOAM532cXyvh6LPnTZRiGksEyuze7UJBzbSE6wd4PW8cfNufxfqaIx2Y
+        hSH9BTXKIYPMwFU07crqe2fbzA==
+X-Google-Smtp-Source: ABdhPJzxRNYsZvOCN6MRG+JxA+WtxP3xo+m55ow/RQL6xD2LzouYeDYYoKb2Omp9nqb+r+aHW9F1iA==
+X-Received: by 2002:a2e:bc14:0:b0:24f:5060:1dc3 with SMTP id b20-20020a2ebc14000000b0024f50601dc3mr10335364ljf.432.1652685003164;
+        Mon, 16 May 2022 00:10:03 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id o5-20020a05651205c500b004758e4e6a96sm1222932lfo.245.2022.05.16.00.10.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 00:10:02 -0700 (PDT)
+Message-ID: <03e99a02-1233-3882-e1e5-24ab1bbaf257@linaro.org>
+Date:   Mon, 16 May 2022 09:10:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 5/7] arm64: dts: mediatek: mt6795: Add fixed clocks for
+ 32kHz and 26MHz XOs
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, robh+dt@kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
+        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, paul.bouchara@somainline.org,
+        kernel@collabora.com
+References: <20220513171617.504430-1-angelogioacchino.delregno@collabora.com>
+ <20220513171617.504430-6-angelogioacchino.delregno@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220513171617.504430-6-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,47 +82,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git ct-work-defer-wip
-head:   ed63029652239a6befad96dd473b16332913f889
-commit: 54d59ad9b9db31d840346a4196c3b83b5410a1bf [22/25] context-tracking: Introduce work deferral infrastructure
-config: microblaze-randconfig-r036-20220512 (https://download.01.org/0day-ci/archive/20220516/202205161511.pldvqjB0-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git/commit/?id=54d59ad9b9db31d840346a4196c3b83b5410a1bf
-        git remote add nsaenz-rpi https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git
-        git fetch --no-tags nsaenz-rpi ct-work-defer-wip
-        git checkout 54d59ad9b9db31d840346a4196c3b83b5410a1bf
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=microblaze SHELL=/bin/bash
+On 13/05/2022 19:16, AngeloGioacchino Del Regno wrote:
+> Add the 32kHz and 26MHz oscillators as fixed clocks in devicetree to
+> provide a good initial clock spec, since this SoC features two always
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I don't understand that part with actual patch. You claim here you add
+clocks, but in DTS they were already before.
 
-All errors (new ones prefixed by >>):
-
-   kernel/context_tracking.c: In function 'context_tracking_set_cpu_work':
->> kernel/context_tracking.c:719:47: error: 'struct context_tracking' has no member named 'active'
-     719 |         if (!context_tracking_enabled() || !ct->active)
-         |                                               ^~
+Additionally, these clocks do not belong to DTSI because, AFAIU, these
+are properties of boards. At least their frequencies should be moved to
+the board DTS.
 
 
-vim +719 kernel/context_tracking.c
 
-   709	
-   710	bool context_tracking_set_cpu_work(unsigned int cpu, unsigned int context,
-   711					   unsigned int work)
-   712	{
-   713		struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
-   714		unsigned int state;
-   715	
-   716		if (!IS_ENABLED(CONFIG_HAVE_CONTEXT_TRACKING_WORK))
-   717			return false;
-   718	
- > 719		if (!context_tracking_enabled() || !ct->active)
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Krzysztof

@@ -2,82 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C185C529221
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0998529235
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348888AbiEPVBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 17:01:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
+        id S1348290AbiEPVFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 17:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349475AbiEPVBW (ORCPT
+        with ESMTP id S1348999AbiEPVE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 17:01:22 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FA74507B;
-        Mon, 16 May 2022 13:38:59 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id ch13so30807930ejb.12;
-        Mon, 16 May 2022 13:38:59 -0700 (PDT)
+        Mon, 16 May 2022 17:04:26 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA565BE4D;
+        Mon, 16 May 2022 13:40:01 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id hh4so12958863qtb.10;
+        Mon, 16 May 2022 13:40:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=PMDosnlJ+gbQJYPokwfPZqLFLUpNmlvipt6Owk5quI0=;
-        b=IkakkWk3Q4TG07BcLysVVBAyu3U94fvCZ/O3a70ncHxWkfdAP6tmqUtRpUbw+Oegdl
-         LhFm2BB6hYEjOLl/hH8ybdoCdiOCFPYC4H2tE9zQL8qObGxorZaEkJA2XFBbuvO1sQoa
-         xTqHUFKiIsNs2Z8c5imcA/Hmdp44fgDIysSWCjDSj+iJD8dRKdvyRl17lHQ+HZxlkY9D
-         XB6b7LXSlm1Tw6GHT202BLrL8KC/HINZO5nBGwdh8QhpOq5/QyME0GBoqAC9RMRpU993
-         mb6nAKIOQY8DAPSoG2EP6wUxyNTv0j6Tv6yJttEYftrCWhjKsz28hZVf3YTLIRyfNTtO
-         q8kQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qRyYZy7MUY9Z/ZyS1jq+AuFFP7q0GxQUZ1g6iG97tyM=;
+        b=jRAPfAxvk37A+4zg3JePp6ctoOo27aHfPQzvPO/cLLDVov8JMSdbL5Goe5mzQ1GHVI
+         e1KgC/HsHj91CoO2A327UT8DcApUlzJIiPG5K38EJXtL5Vs+JLfh4mAoXfQQ/873B7EG
+         AIrLk+0G9EcwbbiYW2BGLPLYVFzo1g70p+B64FCCRYzTi6CCMkyQzG4rFAtzMZskHrUa
+         g238LZVFMqIHDDcFq8qJOGTvvMVmCyVIsDi3iLIy6iqzK0x4ZHwVnxSDwBlPpA6Uh9JR
+         ZrcCXwJZoMI0V4RLN5EVsFxxHRyuf5sTNC13xv4Btbgo37b+APRDSSp/tmoo+p5j77jI
+         XjLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=PMDosnlJ+gbQJYPokwfPZqLFLUpNmlvipt6Owk5quI0=;
-        b=7nk84d9LXuoROjsZVctQATie6hCJdvOeqm98jUo1GupuZqb/yB9U5H1D+tZ2/jdBfe
-         VOghVrTqL9ndupxlftu1qeXbxphD5M6KOtBGEO1JSDXkQh0K90xm1UFFwNcjSbooyG3S
-         AOiRMTvF8kAegnDJmeGB9mCA4FiLeengN4tOQvAUtCD6BWac5LOt1O2tti1xcQOI0fG9
-         s0f6+1m+PzOO0PyoRW7iEDNFBFole93ZS2Dy/oNWwxGvTpNN/mHPDJrgXFhB/C6ZOgpu
-         d/LwwHhFwHSYeEOoZD62a43u4GdFxLxbGtIEgz6CLkE3kc5qixveBde3svDWukIXrrqR
-         KDeQ==
-X-Gm-Message-State: AOAM532pKdVQWvMQLdfh0teSDUYhOLRz7/psPv7K1h7PYpVDBXkXkV7/
-        GSDiO8cKgCs7DGYGk9kY/y8=
-X-Google-Smtp-Source: ABdhPJyvjaqge3EUfdfKUmm9GYsq/s4wXVCTbrQsJ5QL72XCE8kZsSqE4VubYHvaw+TrXnvOSgf2eg==
-X-Received: by 2002:a17:906:14da:b0:6f4:e22a:3905 with SMTP id y26-20020a17090614da00b006f4e22a3905mr16660925ejc.737.1652733537825;
-        Mon, 16 May 2022 13:38:57 -0700 (PDT)
-Received: from krava ([83.240.63.110])
-        by smtp.gmail.com with ESMTPSA id ek27-20020a056402371b00b0042617ba63c0sm5483932edb.74.2022.05.16.13.38.56
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qRyYZy7MUY9Z/ZyS1jq+AuFFP7q0GxQUZ1g6iG97tyM=;
+        b=dauOcV08lfg+FmpNJVDRRO8fSs+d84+shxfrDnp4ivITeRiV8UCqPcSJxFtAEg7Jeb
+         auX5gyubBlHAUEol/ZGEPt0VBpajoBBDJS/kZg4PmKFe8bjgIvanl/6kX++cGqZ5saOB
+         gzGjJX1FSL/9oJ4ILeNVf1pzZl9O3n52p/qEi9QPy1qfJLPnShH+31Mwo5khhAgsb15m
+         qxrj/qD6GCkagXcz8V7ICEnE3Ver0tNv36bGaqaRdZ77FhcL9VhS0IzGK9ULcSEs8PL4
+         Wz0MqytTKvy59hku2KdkHZQ5iNQ0svKO+poE6NbajJr1ZBnGC5DxJh/MiByy46mTCJQP
+         ys5w==
+X-Gm-Message-State: AOAM530TKNeJaPaP3d9xGRTzPywbINb51XmygLXLGNMdR1bH/3r9x4Cg
+        L/TRUfr9E6Ag/NB5jdMnBw7A9RmVXqd9FA==
+X-Google-Smtp-Source: ABdhPJzxCGqOh+bB58fssYdqVlJzJSN0fs2Z5kI37E/iSL/1fO8Hyo71gRgar0YDeHHlg4FAjH1MeA==
+X-Received: by 2002:a05:622a:19a2:b0:2f3:cb4d:d4d9 with SMTP id u34-20020a05622a19a200b002f3cb4dd4d9mr16554824qtc.245.1652733599224;
+        Mon, 16 May 2022 13:39:59 -0700 (PDT)
+Received: from grrm.lan (bras-base-mtrlpq4809w-grc-17-70-53-205-21.dsl.bell.ca. [70.53.205.21])
+        by smtp.gmail.com with ESMTPSA id k67-20020a378846000000b006a00fabde68sm6364016qkd.10.2022.05.16.13.39.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 13:38:57 -0700 (PDT)
-Date:   Mon, 16 May 2022 22:38:54 +0200
-From:   Jiri Olsa <olsajiri@gmail.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Eugene Syromiatnikov <esyr@redhat.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf] bpf_trace: bail out from
- bpf_kprobe_multi_link_attach when in compat
-Message-ID: <YoK2XtfCYmYomW3i@krava>
-References: <20220506142148.GA24802@asgard.redhat.com>
- <CAADnVQKNkEX-caBjozegRaOb67g1HNOHn1e-enRk_s-7Gtt=gg@mail.gmail.com>
- <20220510184155.GA8295@asgard.redhat.com>
- <CAADnVQ+2gwhcMht4PuDnDOFKY68Wsq8QFz4Y69NBX_TLaSexQQ@mail.gmail.com>
+        Mon, 16 May 2022 13:39:58 -0700 (PDT)
+From:   Yannick Brosseau <yannick.brosseau@gmail.com>
+To:     jic23@kernel.org, lars@metafoo.de, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, fabrice.gasnier@foss.st.com,
+        olivier.moysan@foss.st.com
+Cc:     paul@crapouillou.net, linux-iio@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Yannick Brosseau <yannick.brosseau@gmail.com>
+Subject: [PATCH v2 0/2] iio: adc: stm32: Fix ADC IRQ handling on STM32F4
+Date:   Mon, 16 May 2022 16:39:37 -0400
+Message-Id: <20220516203939.3498673-1-yannick.brosseau@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQ+2gwhcMht4PuDnDOFKY68Wsq8QFz4Y69NBX_TLaSexQQ@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -88,51 +72,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 03:30:10PM -0700, Alexei Starovoitov wrote:
-> On Tue, May 10, 2022 at 11:42 AM Eugene Syromiatnikov <esyr@redhat.com> wrote:
-> >
-> > On Tue, May 10, 2022 at 11:10:35AM -0700, Alexei Starovoitov wrote:
-> > > On Fri, May 6, 2022 at 7:22 AM Eugene Syromiatnikov <esyr@redhat.com> wrote:
-> > > >
-> > > > Since bpf_kprobe_multi_link_attach doesn't support 32-bit kernels
-> > > > for whatever reason,
-> > >
-> > > Jiri,
-> > > why did you add this restriction?
+Changes to the STM32 ADC irq handling broke the STM32F4 platforms
+These two patches bring it back to a working state.
 
-sorry, I overlooked this email
+Changes:
+ * Removed spurious IRQs detection
+ * Updated comments and commit messages
 
-the reason for that check is that we link addrs array with cookies
-which are u64 and we need to swap cookies together with addrs when
-we sort them
+Yannick Brosseau (2):
+  iio: adc: stm32: Fix ADCs iteration in irq handler
+  iio: adc: stm32: Fix IRQs on STM32F4 by removing custom spurious IRQs
+    message
 
-but now when I look at that, that could perhaps work event if
-unsigned long is 32 bits, will check
+ drivers/iio/adc/stm32-adc-core.c |  7 ++++++-
+ drivers/iio/adc/stm32-adc.c      | 10 ----------
+ 2 files changed, 6 insertions(+), 11 deletions(-)
 
-> > >
-> > > > having it enabled for compat processes on 64-bit
-> > > > kernels makes even less sense due to discrepances in the type sizes
-> > > > that it does not handle.
-> > >
-> > > I don't follow this logic.
-> > > bpf progs are always 64-bit. Even when user space is 32-bit.
-> > > Jiri's check is for the kernel.
-> >
-> > The interface as defined (and implemented in libbpf) expects arrays of userspace
-> > pointers to be passed (for example, syms points to an array of userspace
-> > pointers—character strings; same goes for addrs, but with generic userspace
-> > pointers) without regard to possible difference in the pointer size in case
-> > of compat userspace.
-> 
-> I see. So kprobe_multi.syms and kprobe_multi.addrs will be 'long'
-> and 32-bit user space will have an issue with the 64-bit kernel.
-> Let's fix it properly.
-> We can remove sizeof(u64) != sizeof(void *) and keep libbpf as-is
-> by keeping syms and addrs 'long' in uapi.
-> As far as I can see 32-bit user space on a 32-bit kernel
-> should work with existing code.
-> in_compat_syscall() can be used to extend addrs/syms.
+-- 
+2.36.1
 
-I'll check Eugene's new patchset
-
-jirka

@@ -2,271 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC290527BE3
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 04:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FBD4527BF1
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 04:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239372AbiEPCZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 22:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53408 "EHLO
+        id S239399AbiEPCbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 22:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234618AbiEPCZR (ORCPT
+        with ESMTP id S239413AbiEPCbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 22:25:17 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9854D22B3C
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 19:25:11 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id ev18so2499623pjb.4
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 19:25:11 -0700 (PDT)
+        Sun, 15 May 2022 22:31:04 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB5915711;
+        Sun, 15 May 2022 19:31:01 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id d19so23462946lfj.4;
+        Sun, 15 May 2022 19:31:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WfneCJ7ubjXm5v0nJIFpBjx951ZQW+Ht588NQ+ae43Y=;
-        b=ieA2QnR1LlaeKK4Ml2MD2KPgnJh0CR+kVbWD2XLdXNcZpYWwZsg7yaicyIs7Fh/lwS
-         68ZXWiD6HQqanAgfqoWYmCrFDgVx8cFjeJj3z6QSsJPfhpYh8xrdpe7p0jn++NZdJbO8
-         j7hq+XlHeP04YToORz4E3cquojfidJY7BD+4xvs4/y6P7Z2OiN4G/vv8jsuYRhKFu3FE
-         XlvTdFrrE1BaFMAsUCDoj1ZhrMk2yCod30SFtci3oFufHmMjgNz/MEv8ik1rIt2emCJV
-         gdGv6diKd3f8ZlGTuezTJWEUvQyrcnmHbs+MFz/cz/HbPiXCUD7lxVQdCl2kInCQqvRA
-         cbQg==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=4s0OSmePhoJXuHiuMzZo1VwoeuQdSeAInIYJXLS5OyM=;
+        b=Qy577rTsVDyHwVUTciphWV+VNPU0RzZ4IdFO25T1sbgmjfn247DhYQoRqZJt/HbXFE
+         Zj8Mey1O+VdqkZZ75zH8Bm+J1PAP5/RrBud4ThJBNncM/Z42o929WNGKYOG4/MBvN2Nh
+         Q61UEZuPT1fm3yrTtQq9AQ+xgIQ39W8e1VCvdufdTFL0goCFzu7agfSiyJ3E/oqCjafc
+         Kk3PfZmbdiRqxvJfdvQaqQbSqvsIwc7cN0QFJqfI+srg1oLQV55jCxiOeM8dyAKl8olC
+         uwpBMzz7ZjXDprNlNz9GNVbpZF149gN4LpjWkkFxilg9y+WFyuiW58JfgXvtUl2ciLFw
+         H08w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WfneCJ7ubjXm5v0nJIFpBjx951ZQW+Ht588NQ+ae43Y=;
-        b=CiqNpxhVh1OxZSp8EIrSgBH62weH2foUBMl5XlwVvcZZ9oOlQJ1kp9lK6jO7XmQGsu
-         0TDX2BzNnU2PPsIptxpJjPBxeAYbQagLb+rqZoZjmzR9nrqKsHCgMU25P94K/MfT3wsc
-         lgNpNzGx3S1HqSdgo4ARADx2FT7K8Cx3YYw8EdChtf3lcYRje7+KWni+V9/srGxjKVvh
-         zbslZjf8g/yKuXWKiQDQShuyIGVKzpWoZlZbNqDemDcAsG3zf9Qd3e1eksyvqHx2vATH
-         aCeIuWCV9eSFn2JSX/El+vup5PKPO8SJfYRpY4MANd64w6SyZS3K3wDe5aaZUHJl0OzW
-         ZV7w==
-X-Gm-Message-State: AOAM533purx4lL6TkibFirjiHe+4ZBGpWGhXW5VpFEkFbjKgYw2++z4z
-        OVldmsEZWOtf8l6EZBGFOLNWXw==
-X-Google-Smtp-Source: ABdhPJx861tOUkl71zH5U9XehMVj6VQ9T4Q7NrI1B/1Gjhsr/+Az8f5dudSh1SGp6PlfGvit69j6Pw==
-X-Received: by 2002:a17:90b:4c0a:b0:1dc:e81a:f0c with SMTP id na10-20020a17090b4c0a00b001dce81a0f0cmr17311851pjb.2.1652667910767;
-        Sun, 15 May 2022 19:25:10 -0700 (PDT)
-Received: from C02F52LSML85.bytedance.net ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id q2-20020a170902edc200b0016173113c50sm1454013plk.92.2022.05.15.19.25.03
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 15 May 2022 19:25:10 -0700 (PDT)
-From:   Feng zhou <zhoufeng.zf@bytedance.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, jolsa@kernel.org, davemarchevsky@fb.com,
-        joannekoong@fb.com, geliang.tang@suse.com
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        songmuchun@bytedance.com, wangdongdong.6@bytedance.com,
-        cong.wang@bytedance.com, zhouchengming@bytedance.com,
-        zhoufeng.zf@bytedance.com, yosryahmed@google.com
-Subject: [PATCH bpf-next] selftests/bpf: fix some bugs in map_lookup_percpu_elem testcase
-Date:   Mon, 16 May 2022 10:24:53 +0800
-Message-Id: <20220516022453.68420-1-zhoufeng.zf@bytedance.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=4s0OSmePhoJXuHiuMzZo1VwoeuQdSeAInIYJXLS5OyM=;
+        b=mzwbI/b2jvLcbOhf/0Swv4UgIgPajHVC+Af/GIj3qOBpDI/+KSO879+4XfC3NsXxP4
+         GVVvSohmE6sxOViRWNA2w2/Cmc7ZYNWCsVgo9M6El1vNu7uuEM2PYPbYg/fG7YMm/7xQ
+         5s2aBFPIsqJVhcmAXkDwf4FaxE8jC9Jj9LRG/wThUnL3XDZ3t83VLCxHEAxw52ypRlT/
+         zKzEn2oXjz+aGYv9ImSC7U7M3xEPv/KaJYBLpUB2f4WRaTDrtcOZVV14ntJM2ZMjLGex
+         JrFT+OSRVWlJQQ9KMrPfARhnrAj+vNaBC3RGs66Y3fVJaLUFAiexFFSATGX6M2aqy6fV
+         1gWA==
+X-Gm-Message-State: AOAM531qzA+dGWuoX8IX/fTMHPSIJwgPEJea8lLAXDNuyusIshjtQ8rm
+        0KTMrAqURr/HUL0F2iyl3ZXawctEFgcWwo972WukX/5FBFo=
+X-Google-Smtp-Source: ABdhPJxZq6+lnoKQQOPMomvc/GGVcnlfK80rcb3L0qena45Z2EZ6GSg202Ym+IGA0gz340U5CzyhYcNIOBuICW8aYzY=
+X-Received: by 2002:a05:6512:c03:b0:447:7912:7e6b with SMTP id
+ z3-20020a0565120c0300b0044779127e6bmr11291271lfu.508.1652668259368; Sun, 15
+ May 2022 19:30:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220510031056.1657-1-ctcchien@nuvoton.com> <20220510031056.1657-3-ctcchien@nuvoton.com>
+ <8d46eeb8-7926-f842-6105-1975a5adc3fe@molgen.mpg.de>
+In-Reply-To: <8d46eeb8-7926-f842-6105-1975a5adc3fe@molgen.mpg.de>
+From:   Medad Young <medadyoung@gmail.com>
+Date:   Mon, 16 May 2022 10:30:48 +0800
+Message-ID: <CAHpyw9cvrEKMUpRBWYWp9hDZgA8ALHBkNAQr6ZDqjj4uH-MRTQ@mail.gmail.com>
+Subject: Re: [PATCH v9 2/3] dt-bindings: edac: nuvoton: add NPCM memory controller
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
+        tony.luck@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
+        devicetree <devicetree@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-edac <linux-edac@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Feng Zhou <zhoufeng.zf@bytedance.com>
+Dear Paul,
 
-comments from Andrii Nakryiko, details in here:
-https://lore.kernel.org/lkml/20220511093854.411-1-zhoufeng.zf@bytedance.com/T/
+thanks for your comment.
 
-use /* */ instead of //
-use libbpf_num_possible_cpus() instead of sysconf(_SC_NPROCESSORS_ONLN)
-use 8 bytes for value size
-fix memory leak
-use ASSERT_EQ instead of ASSERT_OK
-add bpf_loop to fetch values on each possible CPU
+Paul Menzel <pmenzel@molgen.mpg.de> =E6=96=BC 2022=E5=B9=B45=E6=9C=8810=E6=
+=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=882:14=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> Dear Medad,
+>
+>
+> Thank you for your patch.
+>
+> Am 10.05.22 um 05:10 schrieb Medad CChien:
+> > Document devicetree bindings for the Nuvoton BMC NPCM memory controller=
+.
+> >
+> > Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> > ---
+> >   .../edac/nuvoton,npcm-memory-controller.yaml  | 61 ++++++++++++++++++=
++
+> >   1 file changed, 61 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/edac/nuvoton,npc=
+m-memory-controller.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory=
+-controller.yaml b/Documentation/devicetree/bindings/edac/nuvoton,npcm-memo=
+ry-controller.yaml
+> > new file mode 100644
+> > index 000000000000..6f37211796a3
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-contro=
+ller.yaml
+> > @@ -0,0 +1,61 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/edac/nuvoton,npcm-memory-controller=
+.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Nuvoton NPCM Memory Controller
+> > +
+> > +maintainers:
+> > +  - Medad CChien <ctcchien@nuvoton.com>
+>
+> Just a side note, that in my experience functional like
+> <linux-npcm-memory-controller@nuvoton.com> instead of personal addresses
+> are useful, as you can configure on your side, who to deliver messages
+> to. For example, if you are on sick leave or vacation, you just
+> configure to deliver the message to a colleague of yours (or they get
+> messages in the first place anyway).
+>
+> Maybe you can bring that up at Nuvoton.
+>
 
-Fixes: ed7c13776e20c74486b0939a3c1de984c5efb6aa ("selftests/bpf: add test case for bpf_map_lookup_percpu_elem")
-Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
----
- .../bpf/prog_tests/map_lookup_percpu_elem.c   | 49 +++++++++------
- .../bpf/progs/test_map_lookup_percpu_elem.c   | 61 ++++++++++++-------
- 2 files changed, 70 insertions(+), 40 deletions(-)
+I understand, but we do not have group email  address.
+so maybe I should add more maintainers?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
-index 58b24c2112b0..89ca170f1c25 100644
---- a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
-+++ b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
-@@ -1,30 +1,39 @@
--// SPDX-License-Identifier: GPL-2.0
--// Copyright (c) 2022 Bytedance
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) 2022 Bytedance */
- 
- #include <test_progs.h>
- 
- #include "test_map_lookup_percpu_elem.skel.h"
- 
--#define TEST_VALUE  1
--
- void test_map_lookup_percpu_elem(void)
- {
- 	struct test_map_lookup_percpu_elem *skel;
--	int key = 0, ret;
--	int nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
--	int *buf;
-+	__u64 key = 0, sum;
-+	int ret, i;
-+	int nr_cpus = libbpf_num_possible_cpus();
-+	__u64 *buf;
- 
--	buf = (int *)malloc(nr_cpus*sizeof(int));
-+	buf = (__u64 *)malloc(nr_cpus*sizeof(__u64));
- 	if (!ASSERT_OK_PTR(buf, "malloc"))
- 		return;
--	memset(buf, 0, nr_cpus*sizeof(int));
--	buf[0] = TEST_VALUE;
- 
--	skel = test_map_lookup_percpu_elem__open_and_load();
--	if (!ASSERT_OK_PTR(skel, "test_map_lookup_percpu_elem__open_and_load"))
--		return;
-+	for (i=0; i<nr_cpus; i++)
-+		buf[i] = i;
-+	sum = (nr_cpus-1)*nr_cpus/2;
-+
-+	skel = test_map_lookup_percpu_elem__open();
-+	if (!ASSERT_OK_PTR(skel, "test_map_lookup_percpu_elem__open"))
-+		goto exit;
-+
-+	skel->rodata->nr_cpus = nr_cpus;
-+
-+	ret = test_map_lookup_percpu_elem__load(skel);
-+	if (!ASSERT_OK(ret, "test_map_lookup_percpu_elem__load"))
-+		goto cleanup;
-+
- 	ret = test_map_lookup_percpu_elem__attach(skel);
--	ASSERT_OK(ret, "test_map_lookup_percpu_elem__attach");
-+	if (!ASSERT_OK(ret, "test_map_lookup_percpu_elem__attach"))
-+		goto cleanup;
- 
- 	ret = bpf_map_update_elem(bpf_map__fd(skel->maps.percpu_array_map), &key, buf, 0);
- 	ASSERT_OK(ret, "percpu_array_map update");
-@@ -37,10 +46,14 @@ void test_map_lookup_percpu_elem(void)
- 
- 	syscall(__NR_getuid);
- 
--	ret = skel->bss->percpu_array_elem_val == TEST_VALUE &&
--	      skel->bss->percpu_hash_elem_val == TEST_VALUE &&
--	      skel->bss->percpu_lru_hash_elem_val == TEST_VALUE;
--	ASSERT_OK(!ret, "bpf_map_lookup_percpu_elem success");
-+	test_map_lookup_percpu_elem__detach(skel);
-+
-+	ASSERT_EQ(skel->bss->percpu_array_elem_sum, sum, "percpu_array lookup percpu elem");
-+	ASSERT_EQ(skel->bss->percpu_hash_elem_sum, sum, "percpu_hash lookup percpu elem");
-+	ASSERT_EQ(skel->bss->percpu_lru_hash_elem_sum, sum, "percpu_lru_hash lookup percpu elem");
- 
-+cleanup:
- 	test_map_lookup_percpu_elem__destroy(skel);
-+exit:
-+	free(buf);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c b/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
-index 5d4ef86cbf48..75479180571f 100644
---- a/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
-+++ b/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
-@@ -1,52 +1,69 @@
--// SPDX-License-Identifier: GPL-2.0
--// Copyright (c) 2022 Bytedance
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) 2022 Bytedance */
- 
- #include "vmlinux.h"
- #include <bpf/bpf_helpers.h>
- 
--int percpu_array_elem_val = 0;
--int percpu_hash_elem_val = 0;
--int percpu_lru_hash_elem_val = 0;
-+__u64 percpu_array_elem_sum = 0;
-+__u64 percpu_hash_elem_sum = 0;
-+__u64 percpu_lru_hash_elem_sum = 0;
-+const volatile int nr_cpus;
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
- 	__uint(max_entries, 1);
- 	__type(key, __u32);
--	__type(value, __u32);
-+	__type(value, __u64);
- } percpu_array_map SEC(".maps");
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_PERCPU_HASH);
- 	__uint(max_entries, 1);
--	__type(key, __u32);
--	__type(value, __u32);
-+	__type(key, __u64);
-+	__type(value, __u64);
- } percpu_hash_map SEC(".maps");
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_LRU_PERCPU_HASH);
- 	__uint(max_entries, 1);
--	__type(key, __u32);
--	__type(value, __u32);
-+	__type(key, __u64);
-+	__type(value, __u64);
- } percpu_lru_hash_map SEC(".maps");
- 
-+struct read_percpu_elem_ctx {
-+	void *map;
-+	__u64 sum;
-+};
-+
-+static int read_percpu_elem_callback(__u32 index, struct read_percpu_elem_ctx *ctx)
-+{
-+	__u64 key = 0;
-+	__u64 *value;
-+	value = bpf_map_lookup_percpu_elem(ctx->map, &key, index);
-+	if (value)
-+		ctx->sum += *value;
-+	return 0;
-+}
-+
- SEC("tp/syscalls/sys_enter_getuid")
- int sysenter_getuid(const void *ctx)
- {
--	__u32 key = 0;
--	__u32 cpu = 0;
--	__u32 *value;
-+	struct read_percpu_elem_ctx map_ctx;
- 
--	value = bpf_map_lookup_percpu_elem(&percpu_array_map, &key, cpu);
--	if (value)
--		percpu_array_elem_val = *value;
-+	map_ctx.map = &percpu_array_map;
-+	map_ctx.sum = 0;
-+	bpf_loop(nr_cpus, read_percpu_elem_callback, &map_ctx, 0);
-+	percpu_array_elem_sum = map_ctx.sum;
- 
--	value = bpf_map_lookup_percpu_elem(&percpu_hash_map, &key, cpu);
--	if (value)
--		percpu_hash_elem_val = *value;
-+	map_ctx.map = &percpu_hash_map;
-+	map_ctx.sum = 0;
-+	bpf_loop(nr_cpus, read_percpu_elem_callback, &map_ctx, 0);
-+	percpu_hash_elem_sum = map_ctx.sum;
- 
--	value = bpf_map_lookup_percpu_elem(&percpu_lru_hash_map, &key, cpu);
--	if (value)
--		percpu_lru_hash_elem_val = *value;
-+	map_ctx.map = &percpu_lru_hash_map;
-+	map_ctx.sum = 0;
-+	bpf_loop(nr_cpus, read_percpu_elem_callback, &map_ctx, 0);
-+	percpu_lru_hash_elem_sum = map_ctx.sum;
- 
- 	return 0;
- }
--- 
-2.20.1
+> [=E2=80=A6]
+>
+>
+> Kind regards,
+>
+> Paul
 
+B.R.
+Medad

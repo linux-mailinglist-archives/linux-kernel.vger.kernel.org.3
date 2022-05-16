@@ -2,372 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7EF45292FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A0E529302
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349400AbiEPVic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 17:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
+        id S1349424AbiEPVkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 17:40:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347346AbiEPVi0 (ORCPT
+        with ESMTP id S234718AbiEPVkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 17:38:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AB8419B4;
-        Mon, 16 May 2022 14:38:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42DBC6155F;
-        Mon, 16 May 2022 21:38:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 171C9C385AA;
-        Mon, 16 May 2022 21:38:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652737103;
-        bh=dm3KpxIPAfgzOgbWpj7usuwwLjCfBkVD3it/oOfLzm8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=G5c5HFUCWT0OcBfe9x7IowraWUmmHfhBmtz67mO9b52TujBzc+gc6JtlohHQ1iKMN
-         1UcWUUfszYi+eSaH7TwdGSotfUcgkFJkd9fTInsLCSk/EJ/RrGMRH4WzesW6ivlIpE
-         nxPJnWjLS8Imma2l7I9QWtxfAh3Z8hDP6exXIU+Y=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Subject: [PATCH 5.10 00/68] 5.10.117-rc2 review
-Date:   Mon, 16 May 2022 23:38:20 +0200
-Message-Id: <20220516213639.123296914@linuxfoundation.org>
-X-Mailer: git-send-email 2.36.1
+        Mon, 16 May 2022 17:40:17 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD1C419B2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 14:40:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=aCb2HiewM12GOnx9FEdB6E4pX5NJT/HZCa9UT6fkVvk=; b=OlCozzdRAQyf+vNMU2vVeuPHd/
+        qjdeQrKKntDC2H9t8AZ1ILZHIERUIF9f75hQRCxN4ftfUviI2YgdlATVvB5CaxsW7/4sm01G2sdpq
+        oTlngSGy3zMhVkJjMdH59yo+1VCti6N84pqoR+OU7ERpLIqK8rTMBay/IMTUWkZ6qXWnV+ZE/x20i
+        7EEtNsu65vlPwEvJpsFiibLuITp6Aeovj9RCPmJ45ftcE5inToCKc5sxSmD6U44WqobMuk/U2BFYe
+        Iiy6yxab5ivpBh39CBfuT4GgKovg5wzH+Eg2YSOqMQdXLzWhT3VhefsbImx1T6BW7Wrn9662ZHZkp
+        PS33ixMw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nqiRj-00120Q-1i; Mon, 16 May 2022 21:40:07 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 05E44980DCC; Mon, 16 May 2022 23:40:06 +0200 (CEST)
+Date:   Mon, 16 May 2022 23:40:05 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com
+Subject: Re: objtool "no non-local symbols" error with tip of tree LLVM
+Message-ID: <20220516214005.GQ76023@worktop.programming.kicks-ass.net>
+References: <YoK4U9RgQ9N+HhXJ@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.117-rc2.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-5.10.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 5.10.117-rc2
-X-KernelTest-Deadline: 2022-05-18T21:36+00:00
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YoK4U9RgQ9N+HhXJ@dev-arch.thelio-3990X>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 5.10.117 release.
-There are 68 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
-
-Responses should be made by Wed, 18 May 2022 21:35:34 +0000.
-Anything received after that time might be too late.
-
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.117-rc2.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-and the diffstat can be found below.
-
-thanks,
-
-greg k-h
-
--------------
-Pseudo-Shortlog of commits:
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 5.10.117-rc2
-
-Gustavo A. R. Silva <gustavoars@kernel.org>
-    SUNRPC: Fix fall-through warnings for Clang
-
-Jens Axboe <axboe@kernel.dk>
-    io_uring: always use original task when preparing req identity
-
-Dan Vacura <w36195@motorola.com>
-    usb: gadget: uvc: allow for application to cleanly shutdown
-
-Michael Tretter <m.tretter@pengutronix.de>
-    usb: gadget: uvc: rename function to be more consistent
-
-Nicolas Dichtel <nicolas.dichtel@6wind.com>
-    ping: fix address binding wrt vrf
-
-Mike Rapoport <rppt@kernel.org>
-    arm[64]/memremap: don't abuse pfn_valid() to ensure presence of linear map
-
-Francesco Dolcini <francesco.dolcini@toradex.com>
-    net: phy: Fix race condition on link status change
-
-Trond Myklebust <trond.myklebust@hammerspace.com>
-    SUNRPC: Ensure we flush any closed sockets before xs_xprt_free()
-
-Trond Myklebust <trond.myklebust@hammerspace.com>
-    SUNRPC: Don't call connect() more than once on a TCP socket
-
-Trond Myklebust <trond.myklebust@hammerspace.com>
-    SUNRPC: Prevent immediate close+reconnect
-
-Trond Myklebust <trond.myklebust@hammerspace.com>
-    SUNRPC: Clean up scheduling of autoclose
-
-Zack Rusin <zackr@vmware.com>
-    drm/vmwgfx: Initialize drm_mode_fb_cmd2
-
-Waiman Long <longman@redhat.com>
-    cgroup/cpuset: Remove cpus_allowed/mems_allowed setup in cpuset_init_smp()
-
-Manuel Ullmann <labre@posteo.de>
-    net: atlantic: always deep reset on pm op, fixing up my null deref regression
-
-Xiaomeng Tong <xiam0nd.tong@gmail.com>
-    i40e: i40e_main: fix a missing check on list iterator
-
-Robin Murphy <robin.murphy@arm.com>
-    drm/nouveau/tegra: Stop using iommu_present()
-
-Jeff Layton <jlayton@kernel.org>
-    ceph: fix setting of xattrs on async created inodes
-
-AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-    serial: 8250_mtk: Fix register address for XON/XOFF character
-
-AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-    serial: 8250_mtk: Fix UART_EFR register address
-
-Miaoqian Lin <linmq006@gmail.com>
-    slimbus: qcom: Fix IRQ check in qcom_slim_probe
-
-Sven Schwermer <sven.schwermer@disruptive-technologies.com>
-    USB: serial: option: add Fibocom MA510 modem
-
-Sven Schwermer <sven.schwermer@disruptive-technologies.com>
-    USB: serial: option: add Fibocom L610 modem
-
-Ethan Yang <etyang@sierrawireless.com>
-    USB: serial: qcserial: add support for Sierra Wireless EM7590
-
-Scott Chen <scott@labau.com.tw>
-    USB: serial: pl2303: add device id for HP LM930 Display
-
-ChiYuan Huang <cy_huang@richtek.com>
-    usb: typec: tcpci_mt6360: Update for BMC PHY setting
-
-Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-    usb: typec: tcpci: Don't skip cleanup in .remove() on error
-
-Sergey Ryazanov <ryazanov.s.a@gmail.com>
-    usb: cdc-wdm: fix reading stuck on device close
-
-Daniel Starke <daniel.starke@siemens.com>
-    tty: n_gsm: fix mux activation issues in gsm_config()
-
-Yang Yingliang <yangyingliang@huawei.com>
-    tty/serial: digicolor: fix possible null-ptr-deref in digicolor_uart_probe()
-
-Thiébaud Weksteen <tweek@google.com>
-    firmware_loader: use kernel credentials when reading firmware
-
-Eric Dumazet <edumazet@google.com>
-    tcp: resalt the secret every 10 seconds
-
-Matthew Hagan <mnhagan88@gmail.com>
-    net: sfp: Add tx-fault workaround for Huawei MA5671A SFP ONT
-
-Shravya Kumbham <shravya.kumbham@xilinx.com>
-    net: emaclite: Don't advertise 1000BASE-T and do auto negotiation
-
-Sven Schnelle <svens@linux.ibm.com>
-    s390: disable -Warray-bounds
-
-Mark Brown <broonie@kernel.org>
-    ASoC: ops: Validate input values in snd_soc_put_volsw_range()
-
-Mark Brown <broonie@kernel.org>
-    ASoC: max98090: Generate notifications on changes for custom control
-
-Mark Brown <broonie@kernel.org>
-    ASoC: max98090: Reject invalid values in custom control put()
-
-Ji-Ze Hong (Peter Hong) <hpeter@gmail.com>
-    hwmon: (f71882fg) Fix negative temperature
-
-Andreas Gruenbacher <agruenba@redhat.com>
-    gfs2: Fix filesystem block deallocation for short writes
-
-Maxim Mikityanskiy <maximmi@nvidia.com>
-    tls: Fix context leak on tls_device_down
-
-Taehee Yoo <ap420073@gmail.com>
-    net: sfc: ef10: fix memory leak in efx_ef10_mtd_probe()
-
-Guangguan Wang <guangguan.wang@linux.alibaba.com>
-    net/smc: non blocking recvmsg() return -EAGAIN when no data and signal_pending
-
-Florian Fainelli <f.fainelli@gmail.com>
-    net: dsa: bcm_sf2: Fix Wake-on-LAN with mac_link_down()
-
-Florian Fainelli <f.fainelli@gmail.com>
-    net: bcmgenet: Check for Wake-on-LAN interrupt probe deferral
-
-Paolo Abeni <pabeni@redhat.com>
-    net/sched: act_pedit: really ensure the skb is writable
-
-Alexandra Winter <wintera@linux.ibm.com>
-    s390/lcs: fix variable dereferenced before check
-
-Alexandra Winter <wintera@linux.ibm.com>
-    s390/ctcm: fix potential memory leak
-
-Alexandra Winter <wintera@linux.ibm.com>
-    s390/ctcm: fix variable dereferenced before check
-
-Joel Savitz <jsavitz@redhat.com>
-    selftests: vm: Makefile: rename TARGETS to VMTARGETS
-
-Randy Dunlap <rdunlap@infradead.org>
-    hwmon: (ltq-cputemp) restrict it to SOC_XWAY
-
-Jesse Brandeburg <jesse.brandeburg@intel.com>
-    dim: initialize all struct fields
-
-Yang Yingliang <yangyingliang@huawei.com>
-    ionic: fix missing pci_release_regions() on error in ionic_probe()
-
-Dan Aloni <dan.aloni@vastdata.com>
-    nfs: fix broken handling of the softreval mount option
-
-Johannes Berg <johannes.berg@intel.com>
-    mac80211_hwsim: call ieee80211_tx_prepare_skb under RCU protection
-
-Taehee Yoo <ap420073@gmail.com>
-    net: sfc: fix memory leak due to ptp channel
-
-Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-    sfc: Use swap() instead of open coding it
-
-Eric Dumazet <edumazet@google.com>
-    netlink: do not reset transport header in netlink_recvmsg()
-
-Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-    drm/nouveau: Fix a potential theorical leak in nouveau_get_backlight_name()
-
-Lokesh Dhoundiyal <lokesh.dhoundiyal@alliedtelesis.co.nz>
-    ipv4: drop dst in multicast routing path
-
-Vladimir Oltean <vladimir.oltean@nxp.com>
-    net: mscc: ocelot: avoid corrupting hardware counters when moving VCAP filters
-
-Vladimir Oltean <vladimir.oltean@nxp.com>
-    net: mscc: ocelot: restrict tc-trap actions to VCAP IS2 lookup 0
-
-Vladimir Oltean <vladimir.oltean@nxp.com>
-    net: mscc: ocelot: fix VCAP IS2 filters matching on both lookups
-
-Vladimir Oltean <vladimir.oltean@nxp.com>
-    net: mscc: ocelot: fix last VCAP IS1/IS2 filter persisting in hardware when deleted
-
-Tariq Toukan <tariqt@nvidia.com>
-    net: Fix features skip in for_each_netdev_feature()
-
-Manikanta Pubbisetty <quic_mpubbise@quicinc.com>
-    mac80211: Reset MBSSID parameters upon connection
-
-Camel Guo <camel.guo@axis.com>
-    hwmon: (tmp401) Add OF device ID table
-
-Guenter Roeck <linux@roeck-us.net>
-    iwlwifi: iwl-dbg: Use del_timer_sync() before freeing
-
-Sven Eckelmann <sven@narfation.org>
-    batman-adv: Don't skb_split skbuffs with frag_list
-
-
--------------
-
-Diffstat:
-
- Makefile                                           |  4 +-
- arch/arm/include/asm/io.h                          |  3 ++
- arch/arm/mm/ioremap.c                              |  8 ++++
- arch/arm64/include/asm/io.h                        |  4 ++
- arch/arm64/mm/ioremap.c                            |  9 +++++
- arch/s390/Makefile                                 | 10 +++++
- drivers/base/firmware_loader/main.c                | 17 ++++++++
- drivers/gpu/drm/nouveau/nouveau_backlight.c        |  9 +++--
- drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c |  2 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_fb.c                 |  2 +-
- drivers/hwmon/Kconfig                              |  2 +-
- drivers/hwmon/f71882fg.c                           |  5 ++-
- drivers/hwmon/tmp401.c                             | 11 ++++++
- drivers/net/dsa/bcm_sf2.c                          |  3 ++
- .../net/ethernet/aquantia/atlantic/aq_pci_func.c   |  4 +-
- drivers/net/ethernet/broadcom/genet/bcmgenet.c     |  4 ++
- drivers/net/ethernet/intel/i40e/i40e_main.c        | 27 ++++++-------
- drivers/net/ethernet/mscc/ocelot_flower.c          |  5 ++-
- drivers/net/ethernet/mscc/ocelot_vcap.c            |  9 ++++-
- .../net/ethernet/pensando/ionic/ionic_bus_pci.c    |  3 +-
- drivers/net/ethernet/sfc/ef10.c                    |  5 +++
- drivers/net/ethernet/sfc/efx_channels.c            | 21 +++++-----
- drivers/net/ethernet/sfc/ptp.c                     | 14 ++++++-
- drivers/net/ethernet/sfc/ptp.h                     |  1 +
- drivers/net/ethernet/xilinx/xilinx_emaclite.c      | 15 --------
- drivers/net/phy/phy.c                              | 45 +++++++++++++++++++---
- drivers/net/phy/sfp.c                              | 12 +++++-
- drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c   |  2 +-
- drivers/net/wireless/mac80211_hwsim.c              |  3 ++
- drivers/s390/net/ctcm_mpc.c                        |  6 +--
- drivers/s390/net/ctcm_sysfs.c                      |  5 ++-
- drivers/s390/net/lcs.c                             |  7 ++--
- drivers/slimbus/qcom-ctrl.c                        |  4 +-
- drivers/tty/n_gsm.c                                | 12 ++++--
- drivers/tty/serial/8250/8250_mtk.c                 | 22 ++++++-----
- drivers/tty/serial/digicolor-usart.c               |  5 +--
- drivers/usb/class/cdc-wdm.c                        |  1 +
- drivers/usb/gadget/function/f_uvc.c                | 32 +++++++++++++--
- drivers/usb/gadget/function/uvc.h                  |  2 +
- drivers/usb/gadget/function/uvc_v4l2.c             |  3 +-
- drivers/usb/serial/option.c                        |  4 ++
- drivers/usb/serial/pl2303.c                        |  1 +
- drivers/usb/serial/pl2303.h                        |  1 +
- drivers/usb/serial/qcserial.c                      |  2 +
- drivers/usb/typec/tcpm/tcpci.c                     |  2 +-
- drivers/usb/typec/tcpm/tcpci_mt6360.c              | 26 +++++++++++++
- fs/ceph/file.c                                     | 16 ++++++--
- fs/file_table.c                                    |  1 +
- fs/gfs2/bmap.c                                     | 11 +++---
- fs/io_uring.c                                      |  2 +-
- fs/nfs/fs_context.c                                |  2 +-
- include/linux/netdev_features.h                    |  4 +-
- include/linux/sunrpc/xprtsock.h                    |  1 +
- include/net/tc_act/tc_pedit.h                      |  1 +
- include/trace/events/sunrpc.h                      |  1 -
- kernel/cgroup/cpuset.c                             |  7 +++-
- lib/dim/net_dim.c                                  | 44 ++++++++++-----------
- net/batman-adv/fragmentation.c                     | 11 ++++++
- net/core/secure_seq.c                              | 12 ++++--
- net/ipv4/ping.c                                    | 15 +++++++-
- net/ipv4/route.c                                   |  1 +
- net/mac80211/mlme.c                                |  6 +++
- net/netlink/af_netlink.c                           |  1 -
- net/sched/act_pedit.c                              | 26 +++++++++++--
- net/smc/smc_rx.c                                   |  4 +-
- net/sunrpc/rpc_pipe.c                              |  1 +
- net/sunrpc/xprt.c                                  | 36 ++++++++---------
- net/sunrpc/xprtsock.c                              | 37 ++++++++++++------
- net/tls/tls_device.c                               |  3 ++
- sound/soc/codecs/max98090.c                        |  5 ++-
- sound/soc/soc-ops.c                                | 18 ++++++++-
- tools/testing/selftests/vm/Makefile                | 10 ++---
- 72 files changed, 486 insertions(+), 184 deletions(-)
-
+On Mon, May 16, 2022 at 01:47:15PM -0700, Nathan Chancellor wrote:
+> Hi Josh and Peter,
+> 
+> After a recent change in LLVM [1], I see warnings (errors?) from objtool
+> when building x86_64 allmodconfig on 5.15 and 5.17:
+> 
+>   $ make -skj"$(nproc)" KCONFIG_ALLCONFIG=<(echo CONFIG_WERROR) LLVM=1 allmodconfig all
+>   ...
+>   mm/highmem.o: warning: objtool: no non-local symbols !?
+>   mm/highmem.o: warning: objtool: gelf_update_symshndx: invalid section index
+>   make[2]: *** [scripts/Makefile.build:288: mm/highmem.o] Error 255
+>   ...
+>   security/tomoyo/load_policy.o: warning: objtool: no non-local symbols !?
+>   security/tomoyo/load_policy.o: warning: objtool: gelf_update_symshndx: invalid section index
+>   make[3]: *** [scripts/Makefile.build:288: security/tomoyo/load_policy.o] Error 255
+>   ...
+> 
+> I don't see the same errors on x86_64 allmodconfig on mainline so I
+> bisected the 5.17 branch and came upon commit 4abff6d48dbc ("objtool:
+> Fix code relocs vs weak symbols"). I wanted to see what 5.17 might be
+> missing and came to commit ed53a0d97192 ("x86/alternative: Use
+> .ibt_endbr_seal to seal indirect calls") in mainline, which I think just
+> hides the issue for allmodconfig. I can reproduce this problem with a
+> more selective set of config values on mainline:
+> 
+>   $ make -skj"$(nproc)" LLVM=1 defconfig
+> 
+>   $ scripts/config -e KASAN -e SECURITY_TOMOYO -e SECURITY_TOMOYO_OMIT_USERSPACE_LOADER
+> 
+>   $ make -skj"$(nproc)" LLVM=1 olddefconfig security/tomoyo/load_policy.o
+>   security/tomoyo/load_policy.o: warning: objtool: no non-local symbols !?
+>   security/tomoyo/load_policy.o: warning: objtool: gelf_update_symshndx: invalid section index
+>   make[3]: *** [scripts/Makefile.build:288: security/tomoyo/load_policy.o] Error 255
+>   ...
+> 
+> Looking at the object file, the '.text.asan.module_ctor' section has
+> disappeared.
+> 
+> Before:
+> 
+>   $ llvm-nm -S security/tomoyo/load_policy.o
+>   0000000000000000 0000000000000001 t asan.module_ctor
+> 
+>   $ llvm-readelf -s security/tomoyo/load_policy.o
+> 
+>   Symbol table '.symtab' contains 4 entries:
+>      Num:    Value          Size Type    Bind   Vis       Ndx Name
+>        0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT   UND
+>        1: 0000000000000000     0 FILE    LOCAL  DEFAULT   ABS load_policy.c
+>        2: 0000000000000000     0 SECTION LOCAL  DEFAULT     3 .text.asan.module_ctor
+>        3: 0000000000000000     1 FUNC    LOCAL  DEFAULT     3 asan.module_ctor
+> 
+> After:
+> 
+>   $ llvm-nm -S security/tomoyo/load_policy.o
+>   0000000000000000 0000000000000001 t asan.module_ctor
+> 
+>   $ llvm-readelf -s security/tomoyo/load_policy.o
+> 
+>   Symbol table '.symtab' contains 3 entries:
+>      Num:    Value          Size Type    Bind   Vis       Ndx Name
+>        0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT   UND
+>        1: 0000000000000000     0 FILE    LOCAL  DEFAULT   ABS load_policy.c
+>        2: 0000000000000000     1 FUNC    LOCAL  DEFAULT     3 asan.module_ctor
+> 
+
+The problem seems to be that we need to add a local symbols because LLVM
+helpfully stripped all unused section symbols.
+
+The way we do that, is by moving a the first non-local symbol to the
+end, thereby creating a hole where we can insert a new local symbol.
+Because ELF very helpfully mandates that local symbols must come before
+non-local symbols and keeps the symbols index of the first non-local in
+sh_info.
+
+Thing is, the above object files don't appear to have a non-local symbol
+so the swizzle thing isn't needed, and apparently the value in sh_info
+isn't valid either.
+
+Does something simple like this work? If not, I'll try and reproduce
+tomorrow, it shouldn't be too hard to fix.
+
+diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+index 583a3ec987b5..baabf38a2a11 100644
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -618,8 +618,7 @@ static int elf_move_global_symbol(struct elf *elf, struct section *symtab,
+ 
+ 	sym = find_symbol_by_index(elf, first_non_local);
+ 	if (!sym) {
+-		WARN("no non-local symbols !?");
+-		return first_non_local;
++		return symtab->sh.sh_size / sizeof(sym->sym);
+ 	}
+ 
+ 	s = elf_getscn(elf->elf, symtab->idx);
 

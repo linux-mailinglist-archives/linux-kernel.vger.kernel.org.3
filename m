@@ -2,42 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E07A5293C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 00:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F5CA5293CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 00:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348852AbiEPWr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 18:47:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
+        id S1349762AbiEPWsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 18:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348781AbiEPWrz (ORCPT
+        with ESMTP id S1349717AbiEPWsO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 18:47:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63644130C
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 15:47:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3DBCDB81699
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 22:47:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70BE3C385AA;
-        Mon, 16 May 2022 22:47:50 +0000 (UTC)
-Date:   Mon, 16 May 2022 23:47:46 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     will@kernel.org, akpm@linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, hch@infradead.org, arnd@arndb.de
-Subject: Re: [PATCH v2 resend 4/5] arm64: mm: Convert to GENERIC_IOREMAP
-Message-ID: <YoLUkg1I+BZwWbqG@arm.com>
-References: <20220429103225.75121-5-wangkefeng.wang@huawei.com>
- <20220502032751.21503-1-wangkefeng.wang@huawei.com>
+        Mon, 16 May 2022 18:48:14 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB00C4131B
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 15:48:10 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 7DE102C01C6;
+        Mon, 16 May 2022 22:48:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1652741288;
+        bh=1GS6Dpv7peXBo+oFsPrM70r4NHWXy3wXeFEEXUeukEY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=N1xkDZA60xwb9JDZp4pIqQn3aHzQ/Ya5SG4rUD30f3qmXokILitrD1mLvVo+suvUm
+         SoK9+SiC0lz17Ul4uKYFEyje7QMXXblOgDE184/X+d1VUNOF2bCWsELBdg0bazKV6S
+         VSQ01Xk8f7v4wBKSvopq2XrGQANUU+6tWyqZqi3gOnPYzoNl5oCmgrlddJQznaJAur
+         3XnYp0sLFGAECb9hgfdnH+uIf2QQ7bOXDhPKihb6N7fSmMX2ZLBoWo5TrIK+kakyZB
+         1XvjLMVRl68+3B73pvoieAtOlZSLOe2b6eTKTQNtwuUxOq53OeheZ6wSJhzKviK0Vg
+         iRHpWd/newY3Q==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B6282d4a80000>; Tue, 17 May 2022 10:48:08 +1200
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+        by pat.atlnz.lc (Postfix) with ESMTP id 3E0FC13ED7D;
+        Tue, 17 May 2022 10:48:08 +1200 (NZST)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id 360C92A0086; Tue, 17 May 2022 10:48:08 +1200 (NZST)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, andrew@lunn.ch,
+        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
+        kabel@kernel.org
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH 0/2] armada-3720-turris-mox and orion-mdio
+Date:   Tue, 17 May 2022 10:47:59 +1200
+Message-Id: <20220516224801.1656752-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220502032751.21503-1-wangkefeng.wang@huawei.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=U+Hs8tju c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=oZkIemNP1mAA:10 a=mjDiMDIlsi9F-Tf1zcUA:9
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,12 +65,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 11:27:51AM +0800, Kefeng Wang wrote:
-> Add hook for arm64's special operation when ioremap() and iounmap(),
-> then ioremap_wc/np/cache is converted to use ioremap_prot()
-> from GENERIC_IOREMAP, update the Copyright and kill the unused
-> inclusions.
-> 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+This is a follow up to the change that converted the orion-mdio dt-bindin=
+g from
+txt to DT schema format. At the time I thought the binding needed
+'unevaluatedProperties: false' because the core mdio.yaml binding didn't =
+handle
+the DSA switches. In reality it was simply the invalid reg property causi=
+ng the
+downstream nodes to be unevaluated. Fixing the reg nodes means we can set
+'unevaluatedProperties: true'
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Marek,
+
+I don't know if you had a change for the reg properties in flight. I didn=
+'t see
+anything on lore/lkml so sorry if this crosses with something you've done=
+.
+
+Chris Packham (2):
+  arm64: dts: armada-3720-turris-mox: Correct reg property for mdio
+    devices
+  dt-bindings: net: marvell,orion-mdio: Set unevaluatedProperties to
+    false
+
+ .../devicetree/bindings/net/marvell,orion-mdio.yaml  |  2 +-
+ .../boot/dts/marvell/armada-3720-turris-mox.dts      | 12 ++++++------
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+--=20
+2.36.1
+

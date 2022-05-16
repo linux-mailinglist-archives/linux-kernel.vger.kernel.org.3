@@ -2,169 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DABF9528E93
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D7AD528ED9
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:51:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345732AbiEPTpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43896 "EHLO
+        id S237464AbiEPTtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346056AbiEPTmt (ORCPT
+        with ESMTP id S231749AbiEPTn0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:42:49 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995273F334
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:41:12 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id s14so15431643plk.8
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:41:12 -0700 (PDT)
+        Mon, 16 May 2022 15:43:26 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26ACD3ED35
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:42:52 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id l14so4510216pjk.2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:42:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=NkuNZUIBL8MZdXmO1J6bie/4FoMF9dlGbvJ/EnJshUg=;
-        b=YSYkkeSYlazR/KnZ9A3FW/RivmtBBtfwOD590Y2/k8rYpyPkbUuOO+rwGs2/8RHYhV
-         jvz06DdSkgy4vQhhjr/YXryV5B9qyTetWcD0yxlDdQKdQD6xsBfjHe6w35CK+ecaogDy
-         t8NbscOxGVlR++e0P74FmdEVrpyZPXXKOWEko8abAtjkWwU5ME5mPT5c/rvp4azYvIga
-         QBkUI8VqyqQ0723yj0rYnoB9KlDwuBoqWUzd7kALSg45s1LqvYiDqdwAVytXc3sTyQFy
-         LYY/6iAlFXwrmbY1qhWCKl4EbDHptbmMarKlWiRWblBkCUhKixRRpXbfjJ636mxb9x8G
-         tgPg==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Hj5kYkQm+5pJCHACOG/iSMHm84jLQAzCIMv4tchrLiw=;
+        b=ZFlMXIq+IQUeeyDt6fafn2sjvdLxHOAjmD8mb8sFvqASHoEehVDVTCYMkCf1ElZy1X
+         p7FthQqGWMKsLygocu8Bd6oL/O7B6yP+HcMJxPBPO+3rCHhrFqtjaATafc7avEsv06QF
+         T81J0wbb5LOe3xLJDV/e9aH44Z65F/Iu+buYk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NkuNZUIBL8MZdXmO1J6bie/4FoMF9dlGbvJ/EnJshUg=;
-        b=h79+NfK4n2HsT6wkG+4McM+OjWiva4HI7IQr0wCwGmXnfysGRIda2Fa6ijvHw9SYkQ
-         tHCD2ZSDpi3KvQ3mDtk0YPFW0uwuriTksEEOe/RvKx0M8AiXRy3ejkPOJzPfhK6esqTX
-         Nd+mj7tqoDvaAK3LM9P4AkENFvMh/+GjbcTzI6Ux7lwxVx1z/la8KrgXnkR/r266qJ9X
-         hVaWED6KeOT1jrgfvjGJDG7nDUYyRPgOQEX0SH2VF4lff5zQTez656b1WIB4usi31qTD
-         TGe4Al4d5et/E0pFuUUqfckjsT2GcWDdL66fVmnoqR9q3JBoAILyYizEBN+Vex2+kbY/
-         h4EQ==
-X-Gm-Message-State: AOAM5333ezj5izO+4LdkB94Hm5HZfgyzyCdNu++Ab2NJrs27SBS1Vqh/
-        yXFYMQY3HA3LpMf1mBEkVWoJWw==
-X-Google-Smtp-Source: ABdhPJzhqjOIS7ooa6ljXBdDLvsM/Pulyqi/qmAlcWfUFcQwQ8Rv2LI1aAxACX8ZVtfXOR3acBcAow==
-X-Received: by 2002:a17:90b:33c6:b0:1dc:ba92:41bb with SMTP id lk6-20020a17090b33c600b001dcba9241bbmr20912338pjb.26.1652730071981;
-        Mon, 16 May 2022 12:41:11 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id e13-20020a170902ed8d00b0015e8d4eb1fcsm7467421plj.70.2022.05.16.12.41.11
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Hj5kYkQm+5pJCHACOG/iSMHm84jLQAzCIMv4tchrLiw=;
+        b=L5RV5X73Zezb0I/lcpR8fc3zyg4kd6Dx6arTkrZF+Mlh/VYmj5EJ0a8rOoIKKXHqG+
+         pbXVH0bNAuL1lw7jrd4v0wBehbfxt0gQIOhlesBRSGVRfcE/cK84721/i0OhTmLSRNzr
+         R81nZOXcA60xnGNEeMxoSekZBA85zGMJymrIxSnWz5qi1Mg38okshf5BF7lSX16ui7Z6
+         eZgBhxYszVpTTGwtuCMU2IaKWIjQu+0KbAlqUakdrEaaDahq3CXKo1kzHSdKFU+iyXoJ
+         vPuSmLx5heQjf1GNFDaznSodmQAF8zC64XCFOGiMe/ap3pmakTwHJx6Q8phCKk9VWmG+
+         ZzQA==
+X-Gm-Message-State: AOAM532XXqz/PIyNjyfyLVXg6Pf2x53fkwfCo/uz3bErbj493b8d66aR
+        C2+ibke2Hfdz736DTkTqM6Hacw==
+X-Google-Smtp-Source: ABdhPJy3Phtyoud6QuxnsCWAs2iVhdOIMa8wMQ852qGwOtvl+AjbMvDwUeZxRW8GzRvrrn9NebJA3A==
+X-Received: by 2002:a17:902:d483:b0:15e:9e44:8a07 with SMTP id c3-20020a170902d48300b0015e9e448a07mr19046812plg.77.1652730171655;
+        Mon, 16 May 2022 12:42:51 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h125-20020a62de83000000b0050dc7628173sm7282259pfg.77.2022.05.16.12.42.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 12:41:11 -0700 (PDT)
-Date:   Mon, 16 May 2022 19:41:08 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 04/34] KVM: x86: hyper-v: Handle
- HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls gently
-Message-ID: <YoKo1An5t7+owfzR@google.com>
-References: <20220414132013.1588929-1-vkuznets@redhat.com>
- <20220414132013.1588929-5-vkuznets@redhat.com>
+        Mon, 16 May 2022 12:42:51 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Christophe de Dinechin <dinechin@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] sched/core: Do not treat class list boundary markers as arrays
+Date:   Mon, 16 May 2022 12:42:41 -0700
+Message-Id: <20220516194241.3064242-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414132013.1588929-5-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2796; h=from:subject; bh=UUhCQXF+TJsScoULeerZiaeI/lJVAC/bHGDo6ByIWx0=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBigqkx7kVZ/e0yr2DdH/3zd4rgBLL7WPMgcNF3paNW LbCFk0CJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYoKpMQAKCRCJcvTf3G3AJiHPD/ 9lSb4utJjgIxavP3rGUgfkcC0PXcXc8Ps6ff/Rq75RS5jqff9QLpLrdgE/KbWOycSznvbAkWw2tZxe VX+xsllAAyK9NrZjrtIqfnwcYMe90VBDv98fdMgHdprktFx81hmnDKGJ6n6ulxTEM+54ADkxlcehTg PP+pQoptZI4EAYl3mtPMTdK1HXikH4gqegkilEl0DzGCfTBbuLjanKQ1+w0RqsNIhA0q8znQxVOVJC rHdEWa+1wm5nh6TT6sXVfCIAUVICqOQ5cpQcQ9cCODvFbi9pxKjOBzHPA7VKbT0uRltVcyWYDkDQn/ mrRO1JdlDi3qL2Te6q2lxcOoqjvjo0NySWt9dOBjvYWMW07Sev95E3OFyBWkYnOagSAjOFi76I1eIZ rZXEPnSy1eTAhpYyI6WyD58OVIxWkl9eXMVWfvpQgFCUyYYypEsroaxgoblsq1L1JYJgO1YP66XhFI iPiyrvyg8hYTA6GZxhxn6LFL/9pIW502TB1g+rlRT4DuDb/kVu4bi9hPPbTlhef7HybRsN+r7ZLtyb mcfMtMVr+EUTkEb2n1m3FiOdMlq2ZDUAEajMs3EYQUvEFyprvi1CYLmIfdHjVJKX1ZY/so/0VqCfHA u2jQBC8KUHUfiYlMb3Z5dmJXiuLGWpHhxL5uJdRJGLJOSWSZCq0wzQNxH+7Q==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022, Vitaly Kuznetsov wrote:
-> @@ -1862,15 +1890,58 @@ void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu)
->  {
->  	struct kvm_vcpu_hv_tlb_flush_ring *tlb_flush_ring;
->  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
-> +	struct kvm_vcpu_hv_tlb_flush_entry *entry;
-> +	int read_idx, write_idx;
-> +	u64 address;
-> +	u32 count;
-> +	int i, j;
->  
-> -	kvm_vcpu_flush_tlb_guest(vcpu);
-> -
-> -	if (!hv_vcpu)
-> +	if (!tdp_enabled || !hv_vcpu) {
-> +		kvm_vcpu_flush_tlb_guest(vcpu);
->  		return;
-> +	}
->  
->  	tlb_flush_ring = &hv_vcpu->tlb_flush_ring;
->  
-> -	tlb_flush_ring->read_idx = tlb_flush_ring->write_idx;
-> +	/*
-> +	 * TLB flush must be performed on the target vCPU so 'read_idx'
-> +	 * (AKA 'tail') cannot change underneath, the compiler is free
-> +	 * to re-read it.
-> +	 */
-> +	read_idx = tlb_flush_ring->read_idx;
-> +
-> +	/*
-> +	 * 'write_idx' (AKA 'head') can be concurently updated by a different
-> +	 * vCPU so we must be sure it's read once.
-> +	 */
-> +	write_idx = READ_ONCE(tlb_flush_ring->write_idx);
-> +
-> +	/* Pairs with smp_wmb() in hv_tlb_flush_ring_enqueue() */
-> +	smp_rmb();
-> +
-> +	for (i = read_idx; i != write_idx; i = (i + 1) % KVM_HV_TLB_FLUSH_RING_SIZE) {
-> +		entry = &tlb_flush_ring->entries[i];
-> +
-> +		if (entry->flush_all)
-> +			goto out_flush_all;
-> +
-> +		/*
-> +		 * Lower 12 bits of 'address' encode the number of additional
-> +		 * pages to flush.
-> +		 */
-> +		address = entry->addr & PAGE_MASK;
-> +		count = (entry->addr & ~PAGE_MASK) + 1;
-> +		for (j = 0; j < count; j++)
-> +			static_call(kvm_x86_flush_tlb_gva)(vcpu, address + j * PAGE_SIZE);
-> +	}
-> +	++vcpu->stat.tlb_flush;
+GCC 12 is very sensitive about array checking, and views all negative
+array accesses as unsafe (a not unreasonable position). Avoid the
+warnings about __begin_sched_classes being accessed via negative bounds
+by converting them to the pointers they actually are. Silences this
+warning:
 
-Bumping tlb_flush is inconsistent with how KVM handles INVLPG, and could be wrong
-if the ring is empty (might be impossible without a bug?).  And if my math is right,
-or at least in the ballpark, tlb_flush will be incremented once regardless of whether
-the loop flushed 1 page or 64k pages (completely full ring, full count on every one).
+In file included from kernel/sched/core.c:81:
+kernel/sched/core.c: In function ‘set_rq_online.part.0’:
+kernel/sched/sched.h:2197:52: error: array subscript -1 is outside array bounds of ‘struct sched_class[44343134792571037]’
+ [-Werror=array-bounds]
+ 2197 | #define sched_class_lowest  (__begin_sched_classes - 1)
+      |                                                    ^
+kernel/sched/sched.h:2200:41: note: in definition of macro ‘for_class_range’
+ 2200 |         for (class = (_from); class != (_to); class--)
+      |                                         ^~~
+kernel/sched/sched.h:2203:53: note: in expansion of macro ‘sched_class_lowest’
+ 2203 |for_class_range(class, sched_class_highest, sched_class_lowest)
+      |                                            ^~~~~~~~~~~~~~~~~~
+kernel/sched/core.c:9115:17: note: in expansion of macro ‘for_each_class’
+ 9115 |                 for_each_class(class) {
+      |                 ^~~~~~~~~~~~~~
+kernel/sched/sched.h:2193:27: note: at offset -208 into object ‘__begin_sched_classes’ of size [0, 9223372036854775807]
+ 2193 | extern struct sched_class __begin_sched_classes[];
+      |                           ^~~~~~~~~~~~~~~~~~~~~
 
-I'd prefer to either drop the stat adjustment entirely, or bump invlpg in the loop, e.g.
+Reported-by: Christophe de Dinechin <dinechin@redhat.com>
+Link: https://lore.kernel.org/lkml/20220414150855.2407137-2-dinechin@redhat.com/
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ben Segall <bsegall@google.com>
+Cc: Mel Gorman <mgorman@suse.de>
+Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ kernel/sched/sched.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-index 56f06cf85282..5654c9d56289 100644
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -1945,10 +1945,11 @@ void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu)
-        for (i = read_idx; i != write_idx; i = (i + 1) % KVM_HV_TLB_FLUSH_RING_SIZE) {
-                address = tlb_flush_ring->entries[i] & PAGE_MASK;
-                count = (tlb_flush_ring->entries[i] & ~PAGE_MASK) + 1;
--               for (j = 0; j < count; j++)
-+               for (j = 0; j < count; j++) {
-                        static_call(kvm_x86_flush_tlb_gva)(vcpu, address + j * PAGE_SIZE);
-+                       ++vcpu->stat.invlpg;
-+               }
-        }
--       ++vcpu->stat.tlb_flush;
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 8dccb34eb190..3d31ed9d33fa 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -2190,8 +2190,8 @@ const struct sched_class name##_sched_class \
+ 	__section("__" #name "_sched_class")
+ 
+ /* Defined in include/asm-generic/vmlinux.lds.h */
+-extern struct sched_class __begin_sched_classes[];
+-extern struct sched_class __end_sched_classes[];
++extern struct sched_class *__begin_sched_classes;
++extern struct sched_class *__end_sched_classes;
+ 
+ #define sched_class_highest (__end_sched_classes - 1)
+ #define sched_class_lowest  (__begin_sched_classes - 1)
+-- 
+2.32.0
 
- out_empty_ring:
-        tlb_flush_ring->read_idx = write_idx;
-
-
-> +	goto out_empty_ring;
-> +
-> +out_flush_all:
-> +	kvm_vcpu_flush_tlb_guest(vcpu);
-> +
-> +out_empty_ring:
-> +	tlb_flush_ring->read_idx = write_idx;
->  }
->  

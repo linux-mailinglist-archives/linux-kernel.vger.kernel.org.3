@@ -2,73 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B9D9528F97
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF5F52918A
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245629AbiEPUUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
+        id S1347705AbiEPUWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348896AbiEPT7C (ORCPT
+        with ESMTP id S1348923AbiEPT7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:59:02 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F88613F1C;
-        Mon, 16 May 2022 12:52:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1652730726;
-        bh=UNy2J4fkb7uNrb3sdw6sHacgYSf5R/YKgMseuZ9qomo=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=Fjz4O2JLj2wqI2k0QgbiyH2kXrx6LvpDfEBAcTqr0ZI6FUW9j8PY4F53LE0I5Y83G
-         90d1QoQx8ZBtPauOijPKcTi7wYphQO5FOj1y8qejkCj2tJAm0hlUTfHaVdpSW1o0An
-         3QQ/CuTjDvIR5xI20pZe/RD95oSU661YFNG50dUQ=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.33] ([46.223.3.15]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MxUrx-1nfu511aQ5-00xrE8; Mon, 16
- May 2022 21:52:06 +0200
-Subject: Re: [PATCH v4 1/6] tpm, tpm_tis_spi: Request threaded irq
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lukas@wunner.de,
-        p.rosenberger@kunbus.com, Lino Sanfilippo <l.sanfilippo@kunbus.com>
-References: <20220509080559.4381-1-LinoSanfilippo@gmx.de>
- <20220509080559.4381-2-LinoSanfilippo@gmx.de> <YnucgDH3I87RI8PN@kernel.org>
- <486cec01-ec02-3f11-0b81-037e0700c503@gmx.de> <Yn6esMyUl+QhECq+@kernel.org>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <1b306d56-c6b3-e51f-1d63-2f6725fa7557@gmx.de>
-Date:   Mon, 16 May 2022 21:52:05 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 16 May 2022 15:59:03 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A6A3ED35
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:52:57 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id oe17-20020a17090b395100b001df77d29587so344618pjb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:52:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MiA2IbbGB4PrztiBYAGqSxVhR5Rwcu/jU2Fpvn36Dl0=;
+        b=deJtJBiCfl3UmX5GrP4pGKU4l3G56jfiOmXHqodW6G/JMHuzegFzyHLrLeu+ZaHJkg
+         NmN40D91Pl+R2RlRC4Jo5htGdRwHzZhP5A/FL+L0HT4z5xXc5nOo22Qqc1DTZZ7VTcAO
+         W4mh6HvlyBjzkOcNSOcolsmPzM80BE14dVS/8ewQQuSd0OGpSfOVLvkpA+KWxYzObt+O
+         cPHv7+4KH2Dn3pa0srAGD45Z+roR2Z33UakwPw6V99hO6dKk1/cmC3CVpBlrDNZMJ//o
+         c8igbCLZxPOHU2OONg1QdnFk5l5IEkUTgpV6xdqR8UOxb+0bp6XrWxEuBMIFkarojoai
+         2qig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MiA2IbbGB4PrztiBYAGqSxVhR5Rwcu/jU2Fpvn36Dl0=;
+        b=MjIEJHpyOvbV/38HQktmIqKJ31U+pQB07O5uEnlYDsBI2+gpXTF2TtCPrzDKLCyhhL
+         Nroa49pSDtCyt0puEPRSkp+4+p27D+4y5W4uDdaumfNl1eraTsb0d9eKNH11j5mUIqBj
+         4Tln2AgPg8iwnlQ4T9yr7Z0uRwTKsJ6TP1eiSoFq5kLk4LOeXg3fz1Gx/8EbvjAKbpkH
+         iFA5Vye09T3wn8Edwcl+PEcuujnVRPWAB4WZl6D1KfyF044HWMA4SeXCZTuqBQENBaf7
+         WB63WOT+p3B1Cs7vi+EVhFU6E5/w3QiTHaQEbQR/Ya1VMkKGyGu2QyPsr05I6qlY/EVU
+         C9ow==
+X-Gm-Message-State: AOAM530SjkbXPsF/F25IOTEChqVO7EQty0aGNuYZ9Iq9TJ9U/wWQUIpp
+        ESfyM7IdoDnku+ul6ZVx7T+kdQ==
+X-Google-Smtp-Source: ABdhPJzNV/v9eBVXXMXhCt2k3rEPI8Qh5FZO4UU5+6FwTfuFJm8S0FMztukLIgePJ6T+WiIHqsbotQ==
+X-Received: by 2002:a17:90b:1482:b0:1df:5b39:8a4 with SMTP id js2-20020a17090b148200b001df5b3908a4mr6265490pjb.233.1652730776434;
+        Mon, 16 May 2022 12:52:56 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id q23-20020a170902bd9700b0015e8d4eb2e2sm7337538pls.300.2022.05.16.12.52.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 12:52:55 -0700 (PDT)
+Date:   Mon, 16 May 2022 19:52:52 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 09/34] KVM: x86: hyper-v: Don't use
+ sparse_set_to_vcpu_mask() in kvm_hv_send_ipi()
+Message-ID: <YoKrlMKq6o0dMfLt@google.com>
+References: <20220414132013.1588929-1-vkuznets@redhat.com>
+ <20220414132013.1588929-10-vkuznets@redhat.com>
+ <94cec439f345313c1a909f6a012665dd10686d47.camel@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <Yn6esMyUl+QhECq+@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:4mC90Cdt0908TfXcpU5kwIXZz/I20/o2aOoBpxBAi66+E7Wo5K/
- 9HAf13p9g462Tnkmpi2VW7QmLUEFEzu2E2yb51VYlr+cJdI4tQKFFgjG7kaNn8nbbV0x/Cj
- cs9pqMkVIibMHiar7fnJ5sFGY2MXVmfP32mgNCdnJbKWTOdvCOdRcyGOA9NPArg5lOrpAd5
- Dm+Tom95PQVg2+AOS3mZg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Ali3R6o1Nco=:FAflsnwg8QiH9PVILyYXGD
- GTRbwY9PsAKZwlgZiWSlnRQMZvVbiJXlEW2h2ORxTiHu8lmzir892Br2UPFmm29VM3Zn4pBRj
- sgPIymAHRgL1RNmdZJoO5jCEtiFbLm85LWbF+YCU1+l2v/JAMa23JT7izUAoORyqhQbEvxOQV
- 8C3WA9oIPfh5QhM6j+IbKYpCQcNVOaZB4rFZzfUzgb4mMGLLxaCQAgK3tkOJPlriChkZv8TiZ
- 9WjDTtOICTWfJsjvLhd0+kYzuff+/rXriOSmi+Sp8baBqecFDQ+La1yhoaeDZvkza5k5uflFt
- 1BbptbxzujRdpQW96/DRnBZ8d3j3zYpz4+94RxJbf27TwY3qnj4QT3DkAec2FBZxM8yzq+T6p
- IIOEZgwFcag2kqCilP/xhaDJIKefkS+F97NiWf3j/JbrdVIhPMoRy8kJB2lMkO8zxFUUDORx2
- 09CUiEYIA9JMglKC4bLNVafI+4WQSPUVJOFQVVZgMDlq88CxDOUOexSiaMmDeL0VMRDgw4Gui
- VgRGm0h6R6EKjF6PpnhgEqdnGV5oownSbAdSvHmKJGcV8wI73Kt/YMf0d6ELseFen+21iuBq7
- 9WLvuWUcUmxgJoPjGaG99E5X8JGQKjdcpq1w4u8T5v4YKWfkRZcYS0RCLAXJk7J1q05RTk8lG
- B+lWKMaJuVTbQiygNvAFUknvJ3f5/BVkGy+QAy2hc5HoDUMgyP9v4kVIOGq4l3DEFOpqSW0Fo
- ccbg20bVPoI+vZBr5JNBBBuiu8OpNPJWjDl3shd29Jdo32WrkP6EjGiVAj6CvCxMwtnT0znhX
- cEELp9zRqFdPWpvZ/lwvQODWxgDX1K3qo99nyLPUI+iJu8nR0CzK8QZSrG6l4HTGHANA6SOAJ
- o2+MT/Btwo3lBwzoocUeBiwTX1zVCltzJoFVUHiQRIft13S9gBg3bcYf+rsLMtNXvPiByjceb
- wazeHzMOodKIJvtRZuxIIw4f4N8deNHpEgWKXI5BmbD2OIdwZTEXxWkjrnClHfAvbWgdSspHz
- C9ZIaTp2qmEGPKuG0nCXKh4JvvZ1BdNmORkdYLgj1uqzsGq52ZS1/Gd32zipeZzHC+GeQW9q+
- mEhon8fngHIfaaGq7CTTnNNhCGUK4MvrFbG3vVm0drApIfSvTyOuQVe0Q==
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <94cec439f345313c1a909f6a012665dd10686d47.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,61 +79,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, May 11, 2022, Maxim Levitsky wrote:
+> On Thu, 2022-04-14 at 15:19 +0200, Vitaly Kuznetsov wrote:
+> > @@ -2089,8 +2108,8 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+> >  		((u64)hc->rep_cnt << HV_HYPERCALL_REP_COMP_OFFSET);
+> >  }
+> >  
+> > -static void kvm_send_ipi_to_many(struct kvm *kvm, u32 vector,
+> > -				 unsigned long *vcpu_bitmap)
+> > +static void kvm_hv_send_ipi_to_many(struct kvm *kvm, u32 vector,
+> > +				    u64 *sparse_banks, u64 valid_bank_mask)
+> I think the indentation is wrong here (was wrong before as well)
 
-On 13.05.22 at 20:08, Jarkko Sakkinen wrote:
-> On Wed, May 11, 2022 at 09:18:39PM +0200, Lino Sanfilippo wrote:
->> Hi,
->>
->> On 11.05.22 at 13:22, Jarkko Sakkinen wrote:
->>> On Mon, May 09, 2022 at 10:05:54AM +0200, Lino Sanfilippo wrote:
->>>> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->>>>
->>>> Interrupt handling at least includes reading and writing the interrup=
-t
->>>> status register within the interrupt routine. Since accesses over the=
- SPI
->>>> bus are synchronized by a mutex, request a threaded interrupt handler=
- to
->>>> ensure a sleepable context during interrupt processing.
->>>>
->>>> Fixes: 1a339b658d9d ("tpm_tis_spi: Pass the SPI IRQ down to the drive=
-r")
->>>> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->>>
->>> When you state that it needs a sleepable context, you should bring a
->>> context why it needs it. This not to disregard the code change overall=
-y but
->>> you cannot make even the most obvious claim without backing data.
->>>
->>
->> so what kind of backing data do you have in mind? Would it help to emph=
-asize more
->> that the irq handler is running in hard irq context in the current code=
- and thus
->> must not access registers over SPI since SPI uses a mutex (I consider i=
-t as basic
->> knowledge that a mutex must not be taken in hard irq context)?
->
-> There's zero mention about specific lock you are talking about. Providin=
-g
-> the basic knowledge what you are trying to do is the whole point of the
-> commit message in the first place. I'd presume this patch is related to =
-the
-> use bus_lock_mutex but it is fully ingored here.
->
+It's correct, the "+" from the diff/patch misaligns the first line because there's
+no tab to eat the extra character.  Amusingly, the misaligment just gets worse the
+more ">" / quotes that get added to the front.
 
-Ok, understood. I will amend the commit message to make more clear that
-reading and writing registers from the interrupt handler results in
-a call to tpm_tis_spi_transfer() which uses the bus_lock_mutex of the
-spi device and thus requires a sleepable context.
-
-
-Regards,
-Lino
-
-
-
-> BR, Jarkko
->
-
+I usually end up applying a patch to double check if I suspect indentation is
+wrong, it's too hard for me to tell based on the raw patch alone unless it's super
+bad/obvious.

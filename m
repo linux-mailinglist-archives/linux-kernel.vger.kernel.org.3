@@ -2,48 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59FC4528093
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 11:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E69C528095
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 11:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235042AbiEPJKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 05:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40710 "EHLO
+        id S242228AbiEPJLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 05:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242305AbiEPJKS (ORCPT
+        with ESMTP id S242389AbiEPJLF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 05:10:18 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF9723178;
-        Mon, 16 May 2022 02:10:08 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L1tkQ6Knjz4xZ0;
-        Mon, 16 May 2022 19:10:06 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1652692207;
-        bh=DE35ySMP0h4XzaWOeWC9ZcHADrXaFN46xR7GkH4tTiA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=d6vjt/XMZmAcyI5cW0QHscu6FxjLSFwCkbYgAhHPm03toEzetdtSIji4oRKeQd47X
-         AV+QZzmmE/ut1MhJyMGhsgcs8vz5YuCwHiWwzirrywvTpq3hy4Er9orb+i17M6c5zx
-         +URgVcDdbqIx/zoRdeebmCtgagbtiwPWka2q2ooz+S0uKNXCkKuQ5lDFdO0OV2VsFi
-         v53emveoAOfUiF+lHN2QDujQ4fO6tw/WP5OFmsGOBPTCimmJZZFIXQATV78dgXER4k
-         K2vkr5m/RcrLn27sbsZvN9M9nSC+Il9gRdj871D5LHkGceRjPfMsjD5a9wdnd4MJwB
-         pTvlQcn9kRqaQ==
-Date:   Mon, 16 May 2022 19:10:05 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Jane Chu <jane.chu@oracle.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the nvdimm tree
-Message-ID: <20220516191005.27cee43c@canb.auug.org.au>
+        Mon, 16 May 2022 05:11:05 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07727237E0
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 02:10:46 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VDHYTt8_1652692240;
+Received: from B-LB6YLVDL-0141.local(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VDHYTt8_1652692240)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 16 May 2022 17:10:41 +0800
+Subject: Re: [PATCH v2] RISC-V: Mark IORESOURCE_EXCLUSIVE for reserved mem
+ instead of IORESOURCE_BUSY
+To:     Conor.Dooley@microchip.com, mick@ics.forth.gr,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org,
+        akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
+        rppt@kernel.org, david@redhat.com, wangborong@cdjrlc.com,
+        twd2.me@gmail.com, seanjc@google.com, alex@ghiti.fr,
+        petr.pavlu@suse.com, atishp@rivosinc.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jianghuaming.jhm@alibaba-inc.com, guoren@kernel.org,
+        stable@kernel.org
+References: <20220512060910.601832-1-xianting.tian@linux.alibaba.com>
+ <e32a2228-2e2f-0da2-87e8-e364c0450dcd@linux.alibaba.com>
+ <2e62621a-1fb8-5de7-8d0e-e6c4019931a1@microchip.com>
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+Message-ID: <910efc8b-5d6f-820e-3b89-97c668e78cd8@linux.alibaba.com>
+Date:   Mon, 16 May 2022 17:10:40 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_RWmJ4HHf+Ym.ll_NWl4rSk";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <2e62621a-1fb8-5de7-8d0e-e6c4019931a1@microchip.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,94 +53,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/_RWmJ4HHf+Ym.ll_NWl4rSk
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+在 2022/5/16 下午5:03, Conor.Dooley@microchip.com 写道:
+> On 16/05/2022 09:50, Xianting Tian wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>
+>> Hi
+>>
+>> Could I get any comments for the v2 patch, thanks
+> Looks like you have 3 Reviewed-bys already & there's only been one full
+> working day since you sent the patch, probably just worth waiting a little
+> for Palmer to get around to picking it up :)
+> Thanks,
+> Conor.
 
-After merging the nvdimm tree, today's linux-next build (i386 defconfig)
-failed like this:
+thanks :)
 
-In file included from include/linux/bits.h:6,
-                 from include/linux/bitops.h:6,
-                 from include/linux/kernel.h:22,
-                 from arch/x86/include/asm/percpu.h:27,
-                 from arch/x86/include/asm/preempt.h:6,
-                 from include/linux/preempt.h:78,
-                 from include/linux/spinlock.h:55,
-                 from include/linux/wait.h:9,
-                 from include/linux/wait_bit.h:8,
-                 from include/linux/fs.h:6,
-                 from include/linux/highmem.h:5,
-                 from arch/x86/mm/pat/set_memory.c:6:
-arch/x86/mm/pat/set_memory.c: In function 'set_mce_nospec':
-include/vdso/bits.h:7:40: error: left shift count >=3D width of type [-Werr=
-or=3Dshift-count-overflow]
-    7 | #define BIT(nr)                 (UL(1) << (nr))
-      |                                        ^~
-arch/x86/mm/pat/set_memory.c:1941:59: note: in expansion of macro 'BIT'
- 1941 |         decoy_addr =3D (pfn << PAGE_SHIFT) + (PAGE_OFFSET ^ BIT(63)=
-);
-      |                                                           ^~~
+I just saw Heiko Stuebner gaved Review-by on patchwork.kernel.org, but I 
+didn't received the mail.
 
-Caused by commit
+Let's wait Palmer to pick up.
 
-  39702cf7885c ("x86/mce: relocate set{clear}_mce_nospec() functions")
-
-I applied the following patch for today.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 16 May 2022 19:00:54 +1000
-Subject: [PATCH] fix up for "x86/mce: relocate set{clear}_mce_nospec() func=
-tions"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- arch/x86/mm/pat/set_memory.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index 59d9efb4257c..9200e619d8b7 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -1914,6 +1914,7 @@ int set_memory_wb(unsigned long addr, int numpages)
- }
- EXPORT_SYMBOL(set_memory_wb);
-=20
-+#ifdef CONFIG_X86_64
- /* Prevent speculative access to a page by marking it not-present */
- int set_mce_nospec(unsigned long pfn)
- {
-@@ -1959,6 +1960,7 @@ int clear_mce_nospec(unsigned long pfn)
- 	return set_memory_present(&addr, 1);
- }
- EXPORT_SYMBOL_GPL(clear_mce_nospec);
-+#endif
-=20
- int set_memory_x(unsigned long addr, int numpages)
- {
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/_RWmJ4HHf+Ym.ll_NWl4rSk
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKCFO0ACgkQAVBC80lX
-0GzJjwf/cqb58N0ICl+hQmJRkPG6qO+2rr9z18FuZUlE8PENverKuiyg7R5vnnTj
-CiUCxItgEVkjwld4dKk+uI6YkWTAkoPQQMEbhP2XCogCAJowGerBQBGsOgfB+MgJ
-1sTOWxhxgbBpHCwa8EQuGUx/iGFNIlwlrdkiHiLoTgQdyJ3UNVGasFOKhWujjwVf
-rQfo37bO1KRYS6No5saDq2+FPMG5vxendJzjiGkVA9b1DfjimWDyjNLVEpRVsQof
-4aKwX+mp+zMo3gr2FmgZGSd+ZlZAGHb/Bxgw86FNYnEYxP3043mMSa+6QmQu63/9
-6QZXxlTp/vrM3NYDtGi2KfZ8OOZzsw==
-=RZ9Q
------END PGP SIGNATURE-----
-
---Sig_/_RWmJ4HHf+Ym.ll_NWl4rSk--
+>> 在 2022/5/12 下午2:09, Xianting Tian 写道:
+>>> Commit 00ab027a3b82 ("RISC-V: Add kernel image sections to the resource tree")
+>>> marked IORESOURCE_BUSY for reserved memory, which casued resource map
+>>> failed in subsequent operations of related driver, so remove the
+>>> IORESOURCE_BUSY flag. In order to prohibit userland mapping reserved
+>>> memory, mark IORESOURCE_EXCLUSIVE for it.
+>>>
+>>> The code to reproduce the issue,
+>>> dts:
+>>>           mem0: memory@a0000000 {
+>>>                   reg = <0x0 0xa0000000 0 0x1000000>;
+>>>                   no-map;
+>>>           };
+>>>
+>>>           &test {
+>>>                   status = "okay";
+>>>                   memory-region = <&mem0>;
+>>>           };
+>>>
+>>> code:
+>>>           np = of_parse_phandle(pdev->dev.of_node, "memory-region", 0);
+>>>           ret = of_address_to_resource(np, 0, &r);
+>>>           base = devm_ioremap_resource(&pdev->dev, &r);
+>>>           // base = -EBUSY
+>>>
+>>> Fixes: 00ab027a3b82 ("RISC-V: Add kernel image sections to the resource tree")
+>>> Reported-by: Huaming Jiang <jianghuaming.jhm@alibaba-inc.com>
+>>> Reviewed-by: Guo Ren <guoren@kernel.org>
+>>> Reviewed-by: Nick Kossifidis <mick@ics.forth.gr>
+>>> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+>>> ---
+>>>    arch/riscv/kernel/setup.c | 4 ++--
+>>>    1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+>>> index 834eb652a7b9..e0a00739bd13 100644
+>>> --- a/arch/riscv/kernel/setup.c
+>>> +++ b/arch/riscv/kernel/setup.c
+>>> @@ -189,7 +189,7 @@ static void __init init_resources(void)
+>>>                res = &mem_res[res_idx--];
+>>>
+>>>                res->name = "Reserved";
+>>> -             res->flags = IORESOURCE_MEM | IORESOURCE_BUSY;
+>>> +             res->flags = IORESOURCE_MEM | IORESOURCE_EXCLUSIVE;
+>>>                res->start = __pfn_to_phys(memblock_region_reserved_base_pfn(region));
+>>>                res->end = __pfn_to_phys(memblock_region_reserved_end_pfn(region)) - 1;
+>>>
+>>> @@ -214,7 +214,7 @@ static void __init init_resources(void)
+>>>
+>>>                if (unlikely(memblock_is_nomap(region))) {
+>>>                        res->name = "Reserved";
+>>> -                     res->flags = IORESOURCE_MEM | IORESOURCE_BUSY;
+>>> +                     res->flags = IORESOURCE_MEM | IORESOURCE_EXCLUSIVE;
+>>>                } else {
+>>>                        res->name = "System RAM";
+>>>                        res->flags = IORESOURCE_SYSTEM_RAM | IORESOURCE_BUSY;
+>> _______________________________________________
+>> linux-riscv mailing list
+>> linux-riscv@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-riscv

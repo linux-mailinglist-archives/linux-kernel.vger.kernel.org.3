@@ -2,248 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 377CD528274
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4530E528271
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242908AbiEPKoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 06:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
+        id S236839AbiEPKoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 06:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242812AbiEPKnl (ORCPT
+        with ESMTP id S242854AbiEPKnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 06:43:41 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8EFB1DC;
-        Mon, 16 May 2022 03:43:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652697810; x=1684233810;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bq57x6TVD4fbOFuNt0pXx4+SkjFnfxJO4hgo5uenDQs=;
-  b=R8aOpmx+J7CyN+Mi4wDWdb5vaHG0iLFSvjIBDhwj73GauQN3X6APDYuK
-   8QVnZFB5QbhoqB8U75kiKZ9WmNMRU9OraCwCSmai/J/r9umMJbLiztNAU
-   rOkZ99vZKfic9oWNLJrZJl6l1KSksP1Zafuq69kIvGx1m/U1SWcvM+Chy
-   cIS/gbSKM9FwLwVsUzX/btZCNCIVgHdTUaVpmvn1o0dhKUmOk9uk7KhZi
-   sCPHT7ocXiK2saXsFE7VyYVtE7M50mjn3aIwd6g+1vFrOZ0/Xftcje2hz
-   pLAGI4HAlT9TJ7prjx9kmClO/ODH04ekqig3kb8Y08Y0uLx0RFZH/pY7u
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="251306720"
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="251306720"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 03:43:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="672290564"
-Received: from lkp-server02.sh.intel.com (HELO 0628dcddc537) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 16 May 2022 03:43:27 -0700
-Received: from kbuild by 0628dcddc537 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nqYCE-000018-Gj;
-        Mon, 16 May 2022 10:43:26 +0000
-Date:   Mon, 16 May 2022 18:42:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anand Moon <linux.amoon@gmail.com>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Anand Moon <linux.amoon@gmail.com>
-Subject: Re: [PATCHv2 4/6] thermal: exynos: fixed the efuse min/max value for
- exynos5422
-Message-ID: <202205161820.8rHIcsvI-lkp@intel.com>
-References: <20220515064126.1424-5-linux.amoon@gmail.com>
+        Mon, 16 May 2022 06:43:32 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C99E248EC;
+        Mon, 16 May 2022 03:43:02 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GAV3F7011810;
+        Mon, 16 May 2022 10:42:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=ncD54g7wkJHCvpdHQtNwcfU/ssypel9ss6Wqx7eG4kA=;
+ b=rDqgfOIb6ptjKyB9fwPyp+U8anFbeSilSlfmfcnzqDeOiHNCF8MXO+fjZQvxUEzfFQ/T
+ J2S0Agj3xj1LlU8tn5XqjQLranNVCU9kDVGzDJIzUh8dOuNc5AhttlkAVYPz7TA8jni4
+ 3K+NJqzEh1gfk8eVz2h+KxXeSs0T6LwAhGyAfHuE88eQouPI85JsaW5WSnmDp3kTn9zj
+ MAdUC89LG26MrlZlbMNhjWqc5UIHK6/pxMmFPT1SIMQ0eumdnTPvDEElLfPQqgJlqNxc
+ 3mKtyXRanqBSnY061mdnxMnHPTXohu8Xj9LgiSIBDt9FxR/myClqwbd1Z0RxnRmKU280 nA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3mx98576-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 10:42:59 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24GAWIQY015146;
+        Mon, 16 May 2022 10:42:58 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3mx9856n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 10:42:58 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24GAcNvP011722;
+        Mon, 16 May 2022 10:42:56 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03fra.de.ibm.com with ESMTP id 3g2428sx3t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 10:42:56 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24GAgLMi30802186
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 16 May 2022 10:42:21 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F02154C040;
+        Mon, 16 May 2022 10:42:51 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 17E2F4C04A;
+        Mon, 16 May 2022 10:42:51 +0000 (GMT)
+Received: from [9.145.43.21] (unknown [9.145.43.21])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 16 May 2022 10:42:51 +0000 (GMT)
+Message-ID: <5bdad86b-3ab5-a1c2-7dcd-8c45c7aa4555@linux.vnet.ibm.com>
+Date:   Mon, 16 May 2022 12:42:50 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220515064126.1424-5-linux.amoon@gmail.com>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 4/8] s390/entry: workaround llvm's IAS limitations
+Content-Language: en-US
+To:     Heiko Carstens <hca@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Ulrich Weigand <ulrich.weigand@de.ibm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andreas Krebbel <krebbel@linux.ibm.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+References: <20220511120532.2228616-1-hca@linux.ibm.com>
+ <20220511120532.2228616-5-hca@linux.ibm.com>
+ <YnvynSZfF/8I8vmT@dev-arch.thelio-3990X> <Yn1CyTcrZk1Kgvoq@osiris>
+ <YoIUX864ULCwu4pz@tuxmaker.boeblingen.de.ibm.com> <YoIlQaWNy1wu39ak@osiris>
+From:   Jonas Paulsson <paulsson@linux.vnet.ibm.com>
+In-Reply-To: <YoIlQaWNy1wu39ak@osiris>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: kZqrCQfQy1VPDZ6Jutw2xP3BAwUz6_mQ
+X-Proofpoint-ORIG-GUID: fk-BFvK2Jv0N16rbrVKGs8mJnqN5C1YU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-16_06,2022-05-16_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ bulkscore=0 impostorscore=0 suspectscore=0 malwarescore=0 spamscore=0
+ lowpriorityscore=0 clxscore=1011 phishscore=0 mlxlogscore=999
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205160062
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anand,
+I will try to get a patch for clang ready soon... /Jonas
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on ec7f49619d8ee13e108740c82f942cd401b989e9]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Anand-Moon/Exynos-Thermal-code-inprovement/20220515-144336
-base:   ec7f49619d8ee13e108740c82f942cd401b989e9
-config: hexagon-randconfig-r033-20220516 (https://download.01.org/0day-ci/archive/20220516/202205161820.8rHIcsvI-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/eb50b0c2100fabd6d09b87abd11f52c5295512e8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Anand-Moon/Exynos-Thermal-code-inprovement/20220515-144336
-        git checkout eb50b0c2100fabd6d09b87abd11f52c5295512e8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/thermal/samsung/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/thermal/samsung/exynos_tmu.c:929:40: warning: overlapping comparisons always evaluate to false [-Wtautological-overlap-compare]
-                   if (data->soc == SOC_ARCH_EXYNOS5420 &&
-                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
-   1 warning generated.
-
-
-vim +929 drivers/thermal/samsung/exynos_tmu.c
-
-   865	
-   866	static int exynos_map_dt_data(struct platform_device *pdev)
-   867	{
-   868		struct exynos_tmu_data *data = platform_get_drvdata(pdev);
-   869		struct resource res;
-   870	
-   871		if (!data || !pdev->dev.of_node)
-   872			return -ENODEV;
-   873	
-   874		data->id = of_alias_get_id(pdev->dev.of_node, "tmuctrl");
-   875		if (data->id < 0)
-   876			data->id = 0;
-   877	
-   878		data->irq = irq_of_parse_and_map(pdev->dev.of_node, 0);
-   879		if (data->irq <= 0) {
-   880			dev_err(&pdev->dev, "failed to get IRQ\n");
-   881			return -ENODEV;
-   882		}
-   883	
-   884		if (of_address_to_resource(pdev->dev.of_node, 0, &res)) {
-   885			dev_err(&pdev->dev, "failed to get Resource 0\n");
-   886			return -ENODEV;
-   887		}
-   888	
-   889		data->base = devm_ioremap(&pdev->dev, res.start, resource_size(&res));
-   890		if (!data->base) {
-   891			dev_err(&pdev->dev, "Failed to ioremap memory\n");
-   892			return -EADDRNOTAVAIL;
-   893		}
-   894	
-   895		data->soc = (enum soc_type)of_device_get_match_data(&pdev->dev);
-   896	
-   897		switch (data->soc) {
-   898		case SOC_ARCH_EXYNOS4210:
-   899			data->tmu_set_trip_temp = exynos4210_tmu_set_trip_temp;
-   900			data->tmu_set_trip_hyst = exynos4210_tmu_set_trip_hyst;
-   901			data->tmu_initialize = exynos4210_tmu_initialize;
-   902			data->tmu_control = exynos4210_tmu_control;
-   903			data->tmu_read = exynos4210_tmu_read;
-   904			data->tmu_clear_irqs = exynos4210_tmu_clear_irqs;
-   905			data->ntrip = 4;
-   906			data->gain = 15;
-   907			data->reference_voltage = 7;
-   908			data->efuse_value = 55;
-   909			data->min_efuse_value = 40;
-   910			data->max_efuse_value = 100;
-   911			break;
-   912		case SOC_ARCH_EXYNOS3250:
-   913		case SOC_ARCH_EXYNOS4412:
-   914		case SOC_ARCH_EXYNOS5250:
-   915		case SOC_ARCH_EXYNOS5260:
-   916		case SOC_ARCH_EXYNOS5420:
-   917		case SOC_ARCH_EXYNOS5420_TRIMINFO:
-   918			data->tmu_set_trip_temp = exynos4412_tmu_set_trip_temp;
-   919			data->tmu_set_trip_hyst = exynos4412_tmu_set_trip_hyst;
-   920			data->tmu_initialize = exynos4412_tmu_initialize;
-   921			data->tmu_control = exynos4210_tmu_control;
-   922			data->tmu_read = exynos4412_tmu_read;
-   923			data->tmu_set_emulation = exynos4412_tmu_set_emulation;
-   924			data->tmu_clear_irqs = exynos4210_tmu_clear_irqs;
-   925			data->ntrip = 4;
-   926			data->gain = 8;
-   927			data->reference_voltage = 16;
-   928			data->efuse_value = 55;
- > 929			if (data->soc == SOC_ARCH_EXYNOS5420 &&
-   930			    data->soc == SOC_ARCH_EXYNOS5420_TRIMINFO) {
-   931				data->min_efuse_value = 16;
-   932				data->max_efuse_value = 76;
-   933			} else {
-   934				data->min_efuse_value = 40;
-   935				data->max_efuse_value = 100;
-   936			}
-   937			break;
-   938		case SOC_ARCH_EXYNOS5433:
-   939			data->tmu_set_trip_temp = exynos5433_tmu_set_trip_temp;
-   940			data->tmu_set_trip_hyst = exynos5433_tmu_set_trip_hyst;
-   941			data->tmu_initialize = exynos5433_tmu_initialize;
-   942			data->tmu_control = exynos5433_tmu_control;
-   943			data->tmu_read = exynos4412_tmu_read;
-   944			data->tmu_set_emulation = exynos4412_tmu_set_emulation;
-   945			data->tmu_clear_irqs = exynos4210_tmu_clear_irqs;
-   946			data->ntrip = 8;
-   947			data->gain = 8;
-   948			if (res.start == EXYNOS5433_G3D_BASE)
-   949				data->reference_voltage = 23;
-   950			else
-   951				data->reference_voltage = 16;
-   952			data->efuse_value = 75;
-   953			data->min_efuse_value = 40;
-   954			data->max_efuse_value = 150;
-   955			break;
-   956		case SOC_ARCH_EXYNOS7:
-   957			data->tmu_set_trip_temp = exynos7_tmu_set_trip_temp;
-   958			data->tmu_set_trip_hyst = exynos7_tmu_set_trip_hyst;
-   959			data->tmu_initialize = exynos7_tmu_initialize;
-   960			data->tmu_control = exynos7_tmu_control;
-   961			data->tmu_read = exynos7_tmu_read;
-   962			data->tmu_set_emulation = exynos4412_tmu_set_emulation;
-   963			data->tmu_clear_irqs = exynos4210_tmu_clear_irqs;
-   964			data->ntrip = 8;
-   965			data->gain = 9;
-   966			data->reference_voltage = 17;
-   967			data->efuse_value = 75;
-   968			data->min_efuse_value = 15;
-   969			data->max_efuse_value = 100;
-   970			break;
-   971		default:
-   972			dev_err(&pdev->dev, "Platform not supported\n");
-   973			return -EINVAL;
-   974		}
-   975	
-   976		data->cal_type = TYPE_ONE_POINT_TRIMMING;
-   977	
-   978		/*
-   979		 * Check if the TMU shares some registers and then try to map the
-   980		 * memory of common registers.
-   981		 */
-   982		if (data->soc != SOC_ARCH_EXYNOS5420_TRIMINFO)
-   983			return 0;
-   984	
-   985		if (of_address_to_resource(pdev->dev.of_node, 1, &res)) {
-   986			dev_err(&pdev->dev, "failed to get Resource 1\n");
-   987			return -ENODEV;
-   988		}
-   989	
-   990		data->base_second = devm_ioremap(&pdev->dev, res.start,
-   991						resource_size(&res));
-   992		if (!data->base_second) {
-   993			dev_err(&pdev->dev, "Failed to ioremap memory\n");
-   994			return -ENOMEM;
-   995		}
-   996	
-   997		return 0;
-   998	}
-   999	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+On 2022-05-16 12:19 em, Heiko Carstens wrote:
+> On Mon, May 16, 2022 at 11:07:43AM +0200, Alexander Gordeev wrote:
+>>> diff --git a/arch/s390/kernel/entry.S b/arch/s390/kernel/entry.S
+>>> index a6b45eaa3450..f2f30bfba1e9 100644
+>>> --- a/arch/s390/kernel/entry.S
+>>> +++ b/arch/s390/kernel/entry.S
+>>> @@ -172,9 +172,19 @@ _LPP_OFFSET	= __LC_LPP
+>>>   	lgr	%r14,\reg
+>>>   	larl	%r13,\start
+>>>   	slgr	%r14,%r13
+>>> -	lghi	%r13,\end - \start
+>>> -	clgr	%r14,%r13
+>>> +#ifdef CONFIG_AS_IS_LLVM
+>>> +	clgfrl	%r14,.Lrange_size\@
+>>> +#else
+>>> +	clgfi	%r14,\end - \start
+>>> +#endif
+>>>   	jhe	\outside_label
+>>> +#ifdef CONFIG_CC_IS_CLANG
+>>> +	.section .rodata, "a"
+>>> +	.align 4
+>>> +.Lrange_size\@:
+>>> +	.long	\end - \start
+>> Isn't the machine check handler refers to this memory before checking
+>> unrecoverable storage errors (with CHKSTG macro) as result of this change?
+> Yes, indeed. However implementing this without another register will
+> be quite of a challenge. So what I would prefer in any case: just
+> assume that this minimal set of memory accesses work. Actually I'd
+> seriously like to go a bit further, and even move the checks for
+> storage errors back to C for two reasons:
+>
+> - this would make the machine check handler entry code easier again
+> - it would also allow to enter the machine check handler with DAT on
+>
+> After all we rely anyway on the fact that at least the local lowcore +
+> the page(s) which contain text are still accessible. Assuming that a
+> couple of page tables also work won't make this much worse, but the
+> code much easier.
+>
+> So I'd suggest: leave this code as is, and at some later point move
+> "rework" the early machine check handler code.
+>
+> What do you think?

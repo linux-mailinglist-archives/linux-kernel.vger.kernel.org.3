@@ -2,112 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD017528600
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA32F528617
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238419AbiEPNyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 09:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50660 "EHLO
+        id S244089AbiEPN5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 09:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbiEPNyZ (ORCPT
+        with ESMTP id S244439AbiEPN4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 09:54:25 -0400
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38DCE273C
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:54:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1652709264; x=1684245264;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=xnJmZYtrUHPz/1pW+2iKsxdcyh17EmGmxKC7iEmOkHc=;
-  b=MLvu0V+aiQYQhGfJLAUAsP5ZDcw/08zFA8FvIMuO/BIbxxZWoA75HxKa
-   oBOMo4EIelTwlCyqjANq8zNMbTg4WOj1jvMToP4M34i9c3g9y/OUNcwOw
-   Is8OJvmCTNnpt1xoF8S9CGCfFTKCqjJCyKapIvILn+VaEhQrCGhUT1zmT
-   IZZBAWqYUZPd7DEX878cmYi76UvZOaCORMI4C5ock8adfqqhgzzBOSZSF
-   gF3HXpWUWQlg5vMybKicIAwd2A5T0MaGF/t+USGHd3n/UNjDskm9VZ2MN
-   K6QcUECXi0WXusRotG0EAcQZ6YAMyAEg+eP+PFJ3ikH0oggnh9hMpOgL/
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.91,229,1647273600"; 
-   d="scan'208";a="199259474"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 16 May 2022 21:54:21 +0800
-IronPort-SDR: itUlKCePvEL4JeST7338JCL/adcfCQLI6RI9D/Ddx0axPQOa8pTW0njP3s7DNqpceQkFlhs3Xn
- hhLBtQMVc/prYw5+lrgOX16y/fma1Fvm6chtFy4M2LtOB5uTeet1VkJiGS/NvIeHgk/zuoQalf
- u85TK1nGUte9N0UJ2MPLnvGZJ6rn1ZZxk3YEZFzQ4+aJ47qYLZ/Tj6W4ePmF5jsAuHt6ry91KH
- Q/catEwtHVSwj004HOdbiM3gRG99emo+7YjOToOGINMuJt2vcSSJBSogAGgA3PhqJG6uxJyujA
- SB0PyNf38th2aUXNLKWQ6Nnk
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 May 2022 06:18:14 -0700
-IronPort-SDR: xpjs9yZzswu7tHZmKJ0EkpIiV8BnJvbqJGJx0ahtZlZFVYTnWju8VJvXWifJOW1UraP0nIGaK0
- RBUmxgLMFtc8XLD4mL2s8/vFZUlPDSZ4pfrkr5Rm8Z8ebDr49r53/nKq4ZgGcya5chfjtdiUsB
- R0ofOEE/9Chl6z35XjLxghfBUARcpAE6cd+tHzSjIazNL3FiOiibWLoAiliKq/PpqZhjEPO/GB
- iOaio+9bOhZyVsHCbcTMhSh7aRnQSWg8Dd//ffPzg5M6b6MICJ07MmScnq8ffO4Z+lDeqMBCz0
- kwc=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 May 2022 06:54:22 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4L212N2pNwz1SVny
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:54:20 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1652709259; x=1655301260; bh=xnJmZYtrUHPz/1pW+2iKsxdcyh17EmGmxKC
-        7iEmOkHc=; b=UUHn+1Vyu14CMfOaCMgXraCj/MTu6WqTYOUVrT+4PUwPlX5ziiU
-        pSIvphH10gCc67fVq3XGywhvUeUqkqYl3C+JIeYNZL256XrllrM58UhqzOZaujF3
-        cbmBklJPJrOqfUwuSurt8JpO1UwMmikJGH4hvh5Qwx4pN/E2XnvxaPmNybMpFT83
-        xSpG9RchPPentNTApEt/m2/xRnaVgRJJKjnepi11fq5V05sUwhnpCcvU0f61+fwA
-        S+fDCn+IEtVKy285CWS8em7niz60i9Y+TCt+uHgrHXnSyVIC4Q8Mw6/XAy+RhYGq
-        bnKvHkQ9zRQTWYTH/DZejGfNQWFm7h+DJZQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id WKurJUZRHF1A for <linux-kernel@vger.kernel.org>;
-        Mon, 16 May 2022 06:54:19 -0700 (PDT)
-Received: from [10.225.1.43] (unknown [10.225.1.43])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4L212D5R0Cz1Rvlc;
-        Mon, 16 May 2022 06:54:12 -0700 (PDT)
-Message-ID: <487c9368-36fe-25ec-7a76-f6aa50c4d3d5@opensource.wdc.com>
-Date:   Mon, 16 May 2022 15:54:10 +0200
+        Mon, 16 May 2022 09:56:25 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB693B284
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:55:57 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id a23so10123824ljd.9
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:55:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MeiTmWKbfFkyUDAu36ZyhnVOygglTiIR0GOA0B1eY0c=;
+        b=YSvJoVFPtG6bnfTeQxzBBXy77ERTEhTsg7XgRIV7EvSdREsTC+AE70ohYj7+FaK3bh
+         OZ7sjzRe0LmR1tB7sIiFJ86bssbYh2hpR0Y+aNF/BknPMKa7voNiy1bXK6AW9VSd65yv
+         v93gBe0NGiYn3Ng3ITfp5tpi4Zm9UD8CupDajz7yaQAyoxRnLxRhMZUdN71V296ixtDP
+         dkyIm2FRzpKSi0w/RUH3Cd2tWDxZ+pd/bqglKQcNSg/Jn5paNs/SwNzOb+tRvGMX/LUe
+         855GCPqwIABjYfRzwwNyEXTYySq0ebhv/pRlBayaA8U/7pAbULFuWXgIj151YCTknIOb
+         X47g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MeiTmWKbfFkyUDAu36ZyhnVOygglTiIR0GOA0B1eY0c=;
+        b=IM0oCrXHKk5aH7TlAw4biWtoW2Bev6XcMXZJk30M9XuS5sXTg4nOqkLIzmiabdGjY/
+         D76HMLVeBvDZVss5jzW6z3C9Z49WG22Q36U+HA/DqahxjhCv3inI1M0Nt9ktbZOko/8P
+         1Xl9akM/lsc7x8ZHwTid+4HQR2jqValPVFR0kMVCE6FhrayfQk+W0GAJkJS3kRNr6vI0
+         HztgYPsqcqOPJatjwQEGDcsCuRTj0EEkE6nRVzX5NDpTGRd57o6kGmvTtqhYR0Z+GhXC
+         IyAVRZ4PYaKRRYuIWZus+xPGnVFB4ttLV1tY1gNFUZCc726flovLq2+Oj9gjcGumc+hm
+         tEew==
+X-Gm-Message-State: AOAM530Xr8tvXp6nyokQ4ydUThLzRnDAYMKLn7+KZ7QJm5v/j8tMedEm
+        6uhXlqzZJTkE/SrvKPsafAuMfNRIJgSZc4+QT5op2w==
+X-Google-Smtp-Source: ABdhPJwZ6Em0eLu7RM1SxBb2WiY0uU1ovRh7DwLWOyrbGByueTpyFAw3U7b/oAPWL/x87mDro49Q7VbiwqbPhOi6nCM=
+X-Received: by 2002:a2e:9e54:0:b0:250:d6c8:c2a6 with SMTP id
+ g20-20020a2e9e54000000b00250d6c8c2a6mr11865448ljk.16.1652709355591; Mon, 16
+ May 2022 06:55:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH v4 01/13] block: make blkdev_nr_zones and
- blk_queue_zone_no generic for npo2 zsze
-Content-Language: en-US
-To:     Pankaj Raghav <p.raghav@samsung.com>, axboe@kernel.dk,
-        naohiro.aota@wdc.com, Johannes.Thumshirn@wdc.com,
-        snitzer@kernel.org, dsterba@suse.com, jaegeuk@kernel.org,
-        hch@lst.de
-Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jonathan.derrick@linux.dev, bvanassche@acm.org,
-        Keith Busch <kbusch@kernel.org>, gost.dev@samsung.com,
-        linux-nvme@lists.infradead.org,
-        Johannes Thumshirn <jth@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        linux-block@vger.kernel.org, Alasdair Kergon <agk@redhat.com>,
-        matias.bjorling@wdc.com, Jens Axboe <axboe@fb.com>,
-        Sagi Grimberg <sagi@grimberg.me>, dm-devel@redhat.com,
-        jiangbo.365@bytedance.com, Chaitanya Kulkarni <kch@nvidia.com>,
-        linux-fsdevel@vger.kernel.org, Chris Mason <clm@fb.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Hannes Reinecke <hare@suse.de>
-References: <20220516133921.126925-1-p.raghav@samsung.com>
- <CGME20220516133924eucas1p1817f306e3f2442088bf49ab513657cbe@eucas1p1.samsung.com>
- <20220516133921.126925-2-p.raghav@samsung.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220516133921.126925-2-p.raghav@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <1652339993-27280-1-git-send-email-lakshmi.sai.krishna.potthuri@xilinx.com>
+In-Reply-To: <1652339993-27280-1-git-send-email-lakshmi.sai.krishna.potthuri@xilinx.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 16 May 2022 15:55:18 +0200
+Message-ID: <CAPDyKFoWdq+908f18Uz3TPj50M2eDiECC7iLU8UGGEuawCpo1w@mail.gmail.com>
+Subject: Re: [PATCH] mmc: sdhci-of-arasan: Add NULL check for data field
+To:     Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
+Cc:     Michal Simek <michal.simek@xilinx.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, git@xilinx.com,
+        saikrishna12468@gmail.com, sgoud@xilinx.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,82 +69,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/05/16 15:39, Pankaj Raghav wrote:
-> Adapt blkdev_nr_zones and blk_queue_zone_no function so that it can
-> also work for non-power-of-2 zone sizes.
-> 
-> As the existing deployments of zoned devices had power-of-2
-> assumption, power-of-2 optimized calculation is kept for those devices.
-> 
-> There are no direct hot paths modified and the changes just
-> introduce one new branch per call.
-> 
-> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-> Reviewed by: Adam Manzanares <a.manzanares@samsung.com>
-> Reviewed-by: Hannes Reinecke <hare@suse.de>
-> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
+On Thu, 12 May 2022 at 09:20, Sai Krishna Potthuri
+<lakshmi.sai.krishna.potthuri@xilinx.com> wrote:
+>
+> Add NULL check for data field retrieved from of_device_get_match_data()
+> before dereferencing the data.
+> Addresses-coverity: CID 305057:Dereference null return value (NULL_RETURNS)
+>
+> Signed-off-by: Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
+
+Applied for next, thanks!
+
+Kind regards
+Uffe
+
+
 > ---
->  block/blk-zoned.c      | 13 ++++++++++---
->  include/linux/blkdev.h |  8 +++++++-
->  2 files changed, 17 insertions(+), 4 deletions(-)
-> 
-> diff --git a/block/blk-zoned.c b/block/blk-zoned.c
-> index 38cd840d8..140230134 100644
-> --- a/block/blk-zoned.c
-> +++ b/block/blk-zoned.c
-> @@ -111,16 +111,23 @@ EXPORT_SYMBOL_GPL(__blk_req_zone_write_unlock);
->   * blkdev_nr_zones - Get number of zones
->   * @disk:	Target gendisk
->   *
-> - * Return the total number of zones of a zoned block device.  For a block
-> - * device without zone capabilities, the number of zones is always 0.
-> + * Return the total number of zones of a zoned block device, including the
-> + * eventual small last zone if present. For a block device without zone
-> + * capabilities, the number of zones is always 0.
->   */
->  unsigned int blkdev_nr_zones(struct gendisk *disk)
->  {
->  	sector_t zone_sectors = blk_queue_zone_sectors(disk->queue);
-> +	sector_t capacity = get_capacity(disk);
->  
->  	if (!blk_queue_is_zoned(disk->queue))
->  		return 0;
-> -	return (get_capacity(disk) + zone_sectors - 1) >> ilog2(zone_sectors);
+>  drivers/mmc/host/sdhci-of-arasan.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/mmc/host/sdhci-of-arasan.c b/drivers/mmc/host/sdhci-of-arasan.c
+> index 6a2e5a468424..757801dfc308 100644
+> --- a/drivers/mmc/host/sdhci-of-arasan.c
+> +++ b/drivers/mmc/host/sdhci-of-arasan.c
+> @@ -1577,6 +1577,9 @@ static int sdhci_arasan_probe(struct platform_device *pdev)
+>         const struct sdhci_arasan_of_data *data;
+>
+>         data = of_device_get_match_data(dev);
+> +       if (!data)
+> +               return -EINVAL;
 > +
-> +	if (is_power_of_2(zone_sectors))
-> +		return (capacity + zone_sectors - 1) >>
-> +		       ilog2(zone_sectors);
-
-Why the line break here ? This fits on one line, no ?
-
-> +
-> +	return div64_u64(capacity + zone_sectors - 1, zone_sectors);
->  }
->  EXPORT_SYMBOL_GPL(blkdev_nr_zones);
->  
-> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-> index 1b24c1fb3..22fe512ee 100644
-> --- a/include/linux/blkdev.h
-> +++ b/include/linux/blkdev.h
-> @@ -675,9 +675,15 @@ static inline unsigned int blk_queue_nr_zones(struct request_queue *q)
->  static inline unsigned int blk_queue_zone_no(struct request_queue *q,
->  					     sector_t sector)
->  {
-> +	sector_t zone_sectors = blk_queue_zone_sectors(q);
-> +
->  	if (!blk_queue_is_zoned(q))
->  		return 0;
-> -	return sector >> ilog2(q->limits.chunk_sectors);
-> +
-> +	if (is_power_of_2(zone_sectors))
-> +		return sector >> ilog2(zone_sectors);
-> +
-> +	return div64_u64(sector, zone_sectors);
->  }
->  
->  static inline bool blk_queue_zone_is_seq(struct request_queue *q,
-
-
--- 
-Damien Le Moal
-Western Digital Research
+>         host = sdhci_pltfm_init(pdev, data->pdata, sizeof(*sdhci_arasan));
+>
+>         if (IS_ERR(host))
+> --
+> 2.17.1
+>

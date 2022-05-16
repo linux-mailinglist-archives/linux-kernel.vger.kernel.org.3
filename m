@@ -2,135 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E54F15291F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DED75291F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245317AbiEPUsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
+        id S1347796AbiEPUsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:48:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349840AbiEPUr0 (ORCPT
+        with ESMTP id S244565AbiEPUr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:47:26 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6849052E64;
-        Mon, 16 May 2022 13:24:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1652732635;
-        bh=VyC8QyX7sgHGkbS2NC9o44wpKoZY8u3jPyic5oGJCMQ=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=JyBETNYbIOmIJ5k91O/YftGATrJceuQGpYWiOf1JVU5j8qd1Ux21s5W1ZQJpuy8m4
-         +R71LdUkh1lPkfT0JaKvsjkXhuuLhKXXOmjkjzcGFMnjwy6SQgrnBOUr+tFPQtgJp4
-         NSxQODiDkouq+oLlixY0/0pljgt8tXEwDolUY/ZU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.33] ([46.223.3.15]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MEm6F-1o5mDZ3Jrn-00GJ3d; Mon, 16
- May 2022 22:23:54 +0200
-Subject: Re: [PATCH v4 2/6] tpm, tpm_tis: Claim and release locality only once
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lukas@wunner.de,
-        p.rosenberger@kunbus.com, Lino Sanfilippo <l.sanfilippo@kunbus.com>
-References: <20220509080559.4381-1-LinoSanfilippo@gmx.de>
- <20220509080559.4381-3-LinoSanfilippo@gmx.de> <YnudhZZGXf87U3bd@kernel.org>
- <f576a24d-d175-0153-9992-f6dd80d57b62@gmx.de> <Yn6cjJTj1SdS73pY@kernel.org>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <dd421552-40f8-b5c2-5d5a-cc9ce3bdb760@gmx.de>
-Date:   Mon, 16 May 2022 22:23:54 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 16 May 2022 16:47:57 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AF4C53E39
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 13:24:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652732692; x=1684268692;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3xXC00ccf5Fatxhz0n7yx9QRAp7Ln7haOT15zcfvgVc=;
+  b=HJG6OhwRu3D9m1hPQ4LZINKzGKhBn/RLIZKthaT+fbbX4cdIBbzCWxva
+   Ag2qzAqxTGJyV4LtaS+pTYcwUtaSa2EylMkltgKhXsZqCYymeTSlrMnaz
+   EKYTQhA/30g5xOx+iPerMjiOg6A9Zn8bEzXfN6XQsC0WjyYSQmGAi0I+g
+   Ndy1XCgXCmLC4pwsUTJI2Vvbx2333eTF4Zvjjlqr+2cwh43ciVPwxY+ux
+   iodqrvggDP0nSqysC1H+E14Z7t9ZQ0tJ88KW+Ui4BDI59afL9S51pnU8J
+   qxZD+kxaefqgdovQtoeEHNJUnywRmzgUY9NqaeJjXsgHMik5BBjXN9l1Z
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="270645991"
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="270645991"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 13:24:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="638418038"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 16 May 2022 13:24:50 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nqhGr-0000JU-MW;
+        Mon, 16 May 2022 20:24:49 +0000
+Date:   Tue, 17 May 2022 04:24:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        0day robot <lkp@intel.com>
+Subject: include/linux/compiler_types.h:352:45: error: call to
+ '__compiletime_assert_481' declared with attribute error: Please avoid
+ flushing system_unbound_wq.
+Message-ID: <202205170301.QHEka2f9-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <Yn6cjJTj1SdS73pY@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:JdiFnnuOr3j3Ay6gbINZHdqdAYvdcIMcjwV6Y8CZubJGyCOvXcG
- LxHhyCxIr5DETHRXDa8lrpYY6lY3U9DFsy3cXik+2AZIexUNoTygxdsGsQ1T4JdeNmKYTFN
- tYAbG0cP/4zIUMmiar0Ot5sJEf1q703fZ20lLMRT3M3TiUyeEYj19V8xbcVWy5+aTQTKg9F
- opuJnXKjx5wfeuNAzV3lw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:/kq/WsybgU0=:eku5zHSUyA2FccUVfz8yFL
- bUq+vVbAvEbQQVZcgoLvzJH9gvocH9nAb09l56FtptOpxBUtETEKeNgb0y+/MUFZSUcx6SpBJ
- 266FvrOLJBZHf/pW4+dTnmBi4YxOaBSu3yUFlP4fED0oIwQuHXLWyCQB2v/oM7wtkH9UEhmV1
- VfEr1EexxlnAK1e03B0/NCngKfHsxvP7X6acNJMTYNQz0CzxkKSRx9T1P2HvyeHDGaYKoVwbY
- oXLo1kVKuISy4FdWAOll0Nm99PWTxeboFslRi3yG6qPkZUWtaMYJmCvqbS+kcRiBLloc1xdWk
- gX9s0Jz+QMhUahHJGfLuHUulzI148Uh47268F3Y7bLrYwdP0OtCOG7ctZAqBpxkIVZcWb3PnP
- 8V6j7GzcOeNF5FgS3S4kIo6MzjrPTC2aYe1E3CGTdgKNhNfArhK7qsp67jNPf4iuR/diQu56i
- p3g5KCR6yfGI5XD5SO+QYW34Tc6Y88WsLnsioBGf5IOCcODZBEEYUy31milDxusMudDytzL0W
- QSifPYFiTbsb7sR/b39rKIkKjEpNBfzgT7BNJOmNbQTeJ9ppBLGtk4gjamzwxmpuPdj15sCEm
- D4mN6Qr93KQyh0XZrLAPFeKZhMcuSXa9FIFN21YIEX4rsVlaGI6ypc3iF4SM3YS7NA3ZyyaAQ
- AE62/z4DCEo9W08aYGluUS82PlhTAU1fJEqUxqxcA6pwbbU7654/4jnIuiROOEAhaVuUEJ/G0
- C9yg9ldTcrHfVMSvaGcMfHSZk1qZIU+GcvZ6hTlIC9Y+xEYbn6GAZ7DUCX63nyhnRJ/Y+2XoN
- 8WSxFDH3jXaaODMi1Yu+a94bC749Sv2Kx5CPQMA9QHWUPoGy06pkgatqjAkfMIDe3q/PJb37p
- +bR1SeuvXG1bZhsJ3DbjNlDVqMxR471Mn2f2Mr6kt6TAsC7u9WZLHFDDsXvgumPm/Ou0tJgJq
- yUe4evty9ggGqXSsGGb++SYZ9S16F+q8ZG2thlyz0eMOuiv7qxmYy6TfMVwkn2DxjO/yXymP+
- Q9HXJ/dbCQF9rkYDgfSC2/yYEb8To+WviTOE31OTuOMIeEN6uNwdUkjLvFpgU6YaEF/lEace6
- xVXJZJflRl27QJiWxcNxuFe9f6WSLUJLd907Ofx1mH7nI3sdaegk3D/Pg==
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13.05.22 at 19:59, Jarkko Sakkinen wrote:
-> On Wed, May 11, 2022 at 09:29:57PM +0200, Lino Sanfilippo wrote:
->>
->>
->> On 11.05.22 at 13:27, Jarkko Sakkinen wrote:
->>> On Mon, May 09, 2022 at 10:05:55AM +0200, Lino Sanfilippo wrote:
->>>> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->>>>
->>>> It is not necessary to claim and release the default locality for eac=
-h TPM
->>>> command. Instead claim the locality once at driver startup and releas=
-e it
->>>> at driver shutdown.
->>>>
->>>> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->>>
->>> We are doing what we're being because of Intel TXT:
->>>
->>> https://lore.kernel.org/tpmdd-devel/20170315055738.11088-1-jarkko.sakk=
-inen@iki.fi/
->>>
->>> Unfortunately cannot accept this change.
->>>
->>
->> I do not see how the patch affects the crb code since the only changes =
-concern the
->> tpm_class_ops of the tis core. AFAICS crb uses its own set of tpm_class=
-_ops
->> which are still used to claim and release the locality.
->>
->> Or do I miss something?
->
-> Ugh, yes breaking everything when TXT is used with tpm_tis.
->
->> Regards,
->> Lino
->
-> BR, Jarkko
->
+tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220516-093322/Tetsuo-Handa/checkpatch-warn-about-flushing-system-wide-workqueues/20220425-073327
+head:   cd007363b7985a824de0ec5e05f0cb0705e59c88
+commit: cd007363b7985a824de0ec5e05f0cb0705e59c88 workqueue: Wrap flush_workqueue() using a macro
+date:   18 hours ago
+config: arm-randconfig-r002-20220516 (https://download.01.org/0day-ci/archive/20220517/202205170301.QHEka2f9-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/cd007363b7985a824de0ec5e05f0cb0705e59c88
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review UPDATE-20220516-093322/Tetsuo-Handa/checkpatch-warn-about-flushing-system-wide-workqueues/20220425-073327
+        git checkout cd007363b7985a824de0ec5e05f0cb0705e59c88
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/infiniband/core/
 
-Ok, I got it now. The idea of this patch was to maintain the locality 0 fo=
-r the whole
-driver lifetime, so that we can always be sure that the locality is alread=
-y claimed
-when the interrupt status register is read or written in the interrupt han=
-dler.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-But of course this does not work if some other instance like TXT also want=
-s
-to claim localities.
+All errors (new ones prefixed by >>):
 
-I will try another approach to make sure that the locality is already take=
-n when the
-irq handler is called and only released after the handler has finished.
+   In file included from <command-line>:
+   drivers/infiniband/core/device.c: In function 'ib_core_cleanup':
+>> include/linux/compiler_types.h:352:45: error: call to '__compiletime_assert_481' declared with attribute error: Please avoid flushing system_unbound_wq.
+     352 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:333:25: note: in definition of macro '__compiletime_assert'
+     333 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:352:9: note: in expansion of macro '_compiletime_assert'
+     352 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/workqueue.h:682:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+     682 |         BUILD_BUG_ON_MSG(__builtin_constant_p(&(wq) == &system_unbound_wq) && \
+         |         ^~~~~~~~~~~~~~~~
+   drivers/infiniband/core/device.c:2857:9: note: in expansion of macro 'flush_workqueue'
+    2857 |         flush_workqueue(system_unbound_wq);
+         |         ^~~~~~~~~~~~~~~
 
-Regards,
-Lino
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for NET_DSA_SMSC_LAN9303
+   Depends on NETDEVICES && NET_DSA && (VLAN_8021Q || VLAN_8021Q
+   Selected by
+   - NET_DSA_SMSC_LAN9303_I2C && NETDEVICES && NET_DSA && I2C
+   - NET_DSA_SMSC_LAN9303_MDIO && NETDEVICES && NET_DSA
 
+
+vim +/__compiletime_assert_481 +352 include/linux/compiler_types.h
+
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  338  
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  339  #define _compiletime_assert(condition, msg, prefix, suffix) \
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  340  	__compiletime_assert(condition, msg, prefix, suffix)
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  341  
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  342  /**
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  343   * compiletime_assert - break build and emit msg if condition is false
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  344   * @condition: a compile-time constant condition to check
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  345   * @msg:       a message to emit if condition is false
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  346   *
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  347   * In tradition of POSIX assert, this macro will break the build if the
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  348   * supplied condition is *false*, emitting the supplied error message if the
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  349   * compiler has support to do so.
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  350   */
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  351  #define compiletime_assert(condition, msg) \
+eb5c2d4b45e3d2d Will Deacon 2020-07-21 @352  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+eb5c2d4b45e3d2d Will Deacon 2020-07-21  353  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

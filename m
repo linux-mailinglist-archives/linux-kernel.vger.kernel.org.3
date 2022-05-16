@@ -2,89 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 218D05293D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 00:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D1F5293D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 00:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349764AbiEPWuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 18:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59152 "EHLO
+        id S238053AbiEPWuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 18:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349827AbiEPWtw (ORCPT
+        with ESMTP id S1349772AbiEPWuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 18:49:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DDF444133E
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 15:49:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652741388;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KZhtL4tUlsZFPZEaAEgqkk+4Z8H8nQR6vrRN0bB3kFI=;
-        b=EHDz+UM6yyUI1Ea0fOOWNzLsJ4XHfZtYKoWh6T6uRtXy2dkBHkVGMEq0hLaeUwHqBwDiHz
-        hrZJmgAhfgGUc+ptX5BFF4+4ZrVqkfTGVJPe0PdnqZRGl489euaAkV9NuiemCwAHVXJDGH
-        YjDlOeHbm/CvDIlD1GNrAg/EFRsQauE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-625-O9tZt2feNIWoLqP84GAYlA-1; Mon, 16 May 2022 18:49:41 -0400
-X-MC-Unique: O9tZt2feNIWoLqP84GAYlA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DA68F811E76;
-        Mon, 16 May 2022 22:49:40 +0000 (UTC)
-Received: from asgard.redhat.com (unknown [10.36.110.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 14F2C154EF1A;
-        Mon, 16 May 2022 22:49:36 +0000 (UTC)
-Date:   Tue, 17 May 2022 00:49:34 +0200
-From:   Eugene Syromiatnikov <esyr@redhat.com>
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf 1/4] bpf_trace: check size for overflow in
- bpf_kprobe_multi_link_attach
-Message-ID: <20220516224934.GA5013@asgard.redhat.com>
-References: <20220516182708.GA29437@asgard.redhat.com>
- <YoLDdaObEQePcIN+@krava>
+        Mon, 16 May 2022 18:50:12 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4CE443EFE;
+        Mon, 16 May 2022 15:50:11 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GKixHF017960;
+        Mon, 16 May 2022 22:50:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=gfTmdZg2R6iesNFeLO9g31D6moYj/CqEIy7Ppd+BVBs=;
+ b=b09tpDpGg1nroHs7o348ROGPDg2pu1bxRaf4yMIsNnMOTdNBAGVo/X9A2KrhQTcSI7I+
+ XFQSrtWsDLvwxjP6eHQ400dNEPVo0P7km9d9iGY4fjWiARSHvBCfap5nCRkibaetw29a
+ 0kppDrhvKL6FFEEhXCht8nESBJbIa/85aR30kj8D1yZFlDld0ep6H+WEgFhgczz4sEXM
+ RoKA7HviOC5zytvBU6Lw0AtMJQDw5akCZSvULY2QBbSgDTztXPOmBmaC0e6JqI3POvfk
+ xszZ8/4ACFC/jEraFXXDa+xwrH1jAu5duimRHuNvEDCTlVts9CODD7TMd+uPgsnJyXvT Iw== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3wx21v4e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 22:50:10 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24GMmChS019199;
+        Mon, 16 May 2022 22:50:08 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04fra.de.ibm.com with ESMTP id 3g2428tm5v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 22:50:08 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24GMo4DK47382838
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 16 May 2022 22:50:04 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DB4B7AE04D;
+        Mon, 16 May 2022 22:50:04 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0A9E9AE045;
+        Mon, 16 May 2022 22:50:04 +0000 (GMT)
+Received: from sig-9-65-83-206.ibm.com (unknown [9.65.83.206])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 16 May 2022 22:50:03 +0000 (GMT)
+Message-ID: <883edebc6d2260dc0c7480cac11805a30bf11931.camel@linux.ibm.com>
+Subject: Re: [PATCH] evm: Clean up some variables
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Date:   Mon, 16 May 2022 18:50:03 -0400
+In-Reply-To: <b01b3269-626f-5918-41c0-08c05518525a@linux.ibm.com>
+References: <20220513174105.3684229-1-stefanb@linux.ibm.com>
+         <6d91e146702bcaf361cb193eaca35c57e38482df.camel@linux.ibm.com>
+         <b01b3269-626f-5918-41c0-08c05518525a@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 3QTm2SA0L4JKEQ_QERyNvzb7OhyYbN_6
+X-Proofpoint-ORIG-GUID: 3QTm2SA0L4JKEQ_QERyNvzb7OhyYbN_6
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YoLDdaObEQePcIN+@krava>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-16_16,2022-05-16_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=695 spamscore=0
+ priorityscore=1501 bulkscore=0 phishscore=0 malwarescore=0 clxscore=1015
+ suspectscore=0 lowpriorityscore=0 adultscore=0 mlxscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205160124
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 11:34:45PM +0200, Jiri Olsa wrote:
-> On Mon, May 16, 2022 at 08:27:08PM +0200, Eugene Syromiatnikov wrote:
-> > +	if (check_mul_overflow(cnt, sizeof(*syms), &size))
-> > +		return -EOVERFLOW;
+On Mon, 2022-05-16 at 11:27 -0400, Stefan Berger wrote:
 > 
-> there was an update already:
+> On 5/16/22 10:50, Mimi Zohar wrote:
+> > On Fri, 2022-05-13 at 13:41 -0400, Stefan Berger wrote:
+> >> Make hmac_tfm static since it's not used anywhere else besides the file
+> >> it is in.
+> >>
+> >> Remove declaration of hash_tfm since it doesn't exist.
+> >>
+> >> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > 
+> > Thanks, Stefan.   Both this patch and "evm: Return INTEGRITY_PASS for
+> > enum integrity_status value '0'"  are now queued in next-integrity.
+> > 
+> > Mimi
+> > 
 > 
->   0236fec57a15 bpf: Resolve symbols with ftrace_lookup_symbols for kprobe multi link
+> There's also this one here:
 > 
-> so this won't apply anymore, could you please rebase on top of the latest bpf-next/master?
+> https://lore.kernel.org/all/20220421175205.798974-1-stefanb@linux.ibm.com/
 
-The issue that this specific check has to go in 4.18, as it covers
-possible out-of-bounds write, I'm not sure how to handle it, have
-a branch where it is merged manually?
+Thanks for the reminder.  It's now queued in next-integrity.
+
+Mimi
 

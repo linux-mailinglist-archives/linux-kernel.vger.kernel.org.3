@@ -2,132 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0D58528798
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E3F528799
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244758AbiEPOvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 10:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42386 "EHLO
+        id S244797AbiEPOwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 10:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240695AbiEPOvZ (ORCPT
+        with ESMTP id S244767AbiEPOvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 10:51:25 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E443C2ED56
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:51:24 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso14652782pjg.0
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:51:24 -0700 (PDT)
+        Mon, 16 May 2022 10:51:51 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E442ED5F
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:51:49 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id m1so20880179wrb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:51:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=9ILjHyAIIUvPIkL8gw9Y2opgc0fTj0MnOokGYowj0Rg=;
-        b=HPW1lLGvgicxdIdZx7J6FbwBhdhc/E/k/7kHKn89BOmoeaDSgeHpnnjs8nqWACIkrr
-         ksXHnX1pSxp3n29FSh3Pn+BH5hgRJjzsu2zn+w1VBZgeVihTe2yJC1rMoust4Jvydotl
-         ChH6TGn7uq7uTIim+10hIsSIB/h/cAivTqAB0S0BcYdOrJWLFbNZAaEoRdG79mY53PrW
-         hfIRLJbId9CzttGZmuIXsR+WtOO4n6/yyMrm+nj0mJeyLriKqQ+lSj4leGc3IRWq7NCu
-         lSIeygFSQjFnFP6ur2hviyw6k4IIGChgtK/Jdf0rYjc35lv0En9ii84aw4OpXmBB0Y9E
-         soHQ==
+        d=monstr-eu.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=SeZl4TVtX1UvBbSN4DhYGcCc+k3YwY/2lrXCgjw02qc=;
+        b=h6NL8HuUSflgfv5huQkfVvIRc6fUYJb5sAuaO7I8feGeCkPg0F/xpCzggKTOIk+bTv
+         taj297i3yCFnsulWdVt7u0uxpXOMiXB4Elalif58X2dLyFgQqFgnZZIOpDjuCEbMdP8Y
+         nL6x5SLUASyLD+e+SEUoMYFHaBhpNEl2BNXvC0Vg6NCOnnXIiZQ2OycdwYa/knil5MzN
+         FY7EqNfy4IH407IqKW+fEdDUEiqPbO7jT2kKKwP6xLqZuPw0VXOkrBDjbi3stypRLtzk
+         rWJ867Q5ShxOHBG1aKtYiZoObTWmuO1ULMbM349xI56L9dC99UDoJOWUUWcfWFhTASqk
+         Hbnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9ILjHyAIIUvPIkL8gw9Y2opgc0fTj0MnOokGYowj0Rg=;
-        b=P9Xk0FZpzpX/vDYEdCEXFAD2TeVygVwsRYaflxYTNDcyLY9D/fUDpmkwtJDu3HNzLi
-         bLV29zA94X9k1azV4mST7zI7H8AEtCE5DiVaxPBjky1w1+s5iEISbY+aEffqcJ9GlKY5
-         SF3VOAMyC3RG+SH6Tsw9GX9lrMIm6jdbpbsF4aBxUGbfihepWCLl5RuwcUzSBgVLwgVd
-         ww4W3nU3QXoTNRUdXYE/lVm4caSK9IlnqU6Pjv+ZUucEBjAEVdE0DoFywkoFOtvxI4N3
-         ixsaxN26I0PdOgIk4TlaXgOjjGW7AIP7AKUYbCzxRTJhcxW7Eg+FEnicaHk+F9LbaWTV
-         B5pA==
-X-Gm-Message-State: AOAM53245OtltEB873JTb3kLMJX5fATw1UF4UcxGRd0FTqVNNeoZU1NP
-        6DbgR+emXeR9+NS0Fp6P9jgX1w==
-X-Google-Smtp-Source: ABdhPJx5miUuYsn/qO3rSuAb1jzPXw7RaKWKRjd2bBzppVypLUjUx4PdgtMAga4y6yQ4W7Srwp1Xgw==
-X-Received: by 2002:a17:902:ec88:b0:15e:c17d:b092 with SMTP id x8-20020a170902ec8800b0015ec17db092mr18075607plg.88.1652712684426;
-        Mon, 16 May 2022 07:51:24 -0700 (PDT)
-Received: from [192.168.254.17] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id 74-20020a62174d000000b00512ee2f22acsm5531100pfx.97.2022.05.16.07.51.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 07:51:23 -0700 (PDT)
-Message-ID: <c9ab0896-b19b-b8b8-cf63-ad437a123270@linaro.org>
-Date:   Mon, 16 May 2022 07:51:22 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=SeZl4TVtX1UvBbSN4DhYGcCc+k3YwY/2lrXCgjw02qc=;
+        b=T/nctEzNvH2RhfIBxbFr3g4WE1K6Q5ai5gTkIQCTbkgy3Kb7WGfUdH8uRLoKfu2kOb
+         jaudynI87cHgfGSwUTnra0eiA3lElIh2deYs3ov7zL+w2yiPo3Loy50P6AinyQKS1LRn
+         fXYTtX3YagPUqElCOQEN0mvHOPUMmFi/iCen/bBx8n2NcuZETQsx2T+uVGLNcPp/4JsE
+         nK+SUeOMDegD3Ibo4PHFvluX/xtnGr7GG6MpXhN0+RS4VTZGRVoTXrpvs24k8+5rnQnc
+         bv59Js3mpS6UQ/6pZ5g2QFBu9Tr6qErBw0E3TYjWQME4hz9gYILVsKYYat778OAfjiia
+         ZRWg==
+X-Gm-Message-State: AOAM533bl9NovDUpv2TUUCAxX0tLzvuJvgcxLHOwlbGXyBshI/iQGihA
+        BAdqvJJvb28XICcf8xHnQFeRj8TxD32hvACjYAQD8aoDQ/o=
+X-Google-Smtp-Source: ABdhPJzMzMr8ZzyXjKRhmBkpNsByEBkHR9dp9V43tCWcNmr/M1lYQjyktipm65mjD4OZC+eiNGr2AjWR5PdU+b1li7o=
+X-Received: by 2002:a5d:64a6:0:b0:20c:64ef:c9cc with SMTP id
+ m6-20020a5d64a6000000b0020c64efc9ccmr15455360wrp.190.1652712708081; Mon, 16
+ May 2022 07:51:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 2/2] exfat: check if cluster num is valid
-Content-Language: en-US
-To:     Sungjong Seo <sj1557.seo@samsung.com>, linkinjeon@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+a4087e40b9c13aad7892@syzkaller.appspotmail.com
-References: <20220511185909.175110-1-tadeusz.struk@linaro.org>
- <CGME20220511185940epcas1p1e51c30e41ff82ae642f8f949ffa4b189@epcas1p1.samsung.com>
- <20220511185909.175110-2-tadeusz.struk@linaro.org>
- <000101d8686b$56d88750$048995f0$@samsung.com>
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-In-Reply-To: <000101d8686b$56d88750$048995f0$@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <c3480ba47ac9761903485ebfac127f297053d4da.1634289461.git.michal.simek@xilinx.com>
+In-Reply-To: <c3480ba47ac9761903485ebfac127f297053d4da.1634289461.git.michal.simek@xilinx.com>
+From:   Michal Simek <monstr@monstr.eu>
+Date:   Mon, 16 May 2022 16:51:36 +0200
+Message-ID: <CAHTX3dKJg6YLdOaz0uSY3fhcJ2KF2vXAYqBdePRQuE680WzjWg@mail.gmail.com>
+Subject: Re: [PATCH] arm64: zynqmp: Fix comment about number of gpio line names
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Michal Simek <monstr@monstr.eu>, git <git@xilinx.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-arm <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/15/22 07:52, Sungjong Seo wrote:
->> Syzbot reported slab-out-of-bounds read in exfat_clear_bitmap.
->> This was triggered by reproducer calling truncute with size 0, which
->> causes the following trace:
->>
->> BUG: KASAN: slab-out-of-bounds in exfat_clear_bitmap+0x147/0x490
->> fs/exfat/balloc.c:174 Read of size 8 at addr ffff888115aa9508 by task syz-
->> executor251/365
->>
->> Call Trace:
->>   __dump_stack lib/dump_stack.c:77 [inline]  dump_stack_lvl+0x1e2/0x24b
->> lib/dump_stack.c:118
->>   print_address_description+0x81/0x3c0 mm/kasan/report.c:233
->> __kasan_report mm/kasan/report.c:419 [inline]
->>   kasan_report+0x1a4/0x1f0 mm/kasan/report.c:436
->>   __asan_report_load8_noabort+0x14/0x20 mm/kasan/report_generic.c:309
->>   exfat_clear_bitmap+0x147/0x490 fs/exfat/balloc.c:174
->>   exfat_free_cluster+0x25a/0x4a0 fs/exfat/fatent.c:181
->>   __exfat_truncate+0x99e/0xe00 fs/exfat/file.c:217
->>   exfat_truncate+0x11b/0x4f0 fs/exfat/file.c:243
->>   exfat_setattr+0xa03/0xd40 fs/exfat/file.c:339
->>   notify_change+0xb76/0xe10 fs/attr.c:336
->>   do_truncate+0x1ea/0x2d0 fs/open.c:65
->>
->> Add checks to validate if cluster number is within valid range in
->> exfat_clear_bitmap() and exfat_set_bitmap()
->>
->> Cc: Namjae Jeon<linkinjeon@kernel.org>
->> Cc: Sungjong Seo<sj1557.seo@samsung.com>
->> Cc:linux-fsdevel@vger.kernel.org
->> Cc:stable@vger.kernel.org
->> Cc:linux-kernel@vger.kernel.org
->>
->> Link:https://protect2.fireeye.com/v1/url?k=24a746d8-45dcec51-24a6cd97-
->> 74fe48600034-8e4653a49a463f3c&q=1&e=0efc824d-6463-4253-9cd7-
->> ce3199dbf513&u=https%3A%2F%2Fsyzkaller.appspot.com%2Fbug%3Fid%3D50381fc738
->> 21ecae743b8cf24b4c9a04776f767c
->> Reported-by:syzbot+a4087e40b9c13aad7892@syzkaller.appspotmail.com
->> Fixes: 1e49a94cf707 ("exfat: add bitmap operations")
->> Signed-off-by: Tadeusz Struk<tadeusz.struk@linaro.org>
-> Looks good.
-> And it seems that WARN_ON() is no longer needed.
+p=C3=A1 15. 10. 2021 v 11:17 odes=C3=ADlatel Michal Simek
+<michal.simek@xilinx.com> napsal:
+>
+> ZynqMP has 174 gpio lines connected to PS controller but DT is describing
+> them from 0 to 173 not 174.
+>
+> Fixes: 7a4c31ee877a ("arm64: zynqmp: Add support for Xilinx Kria SOM boar=
+d")
+> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+> ---
+>
+>  arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts b/arch/arm=
+64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts
+> index 550b389153e6..bb2602dd2805 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts
+> @@ -285,5 +285,5 @@ &gpio {
+>                           "", "", "", "", "", /* 155 - 159 */
+>                           "", "", "", "", "", /* 160 - 164 */
+>                           "", "", "", "", "", /* 165 - 169 */
+> -                         "", "", "", ""; /* 170 - 174 */
+> +                         "", "", "", ""; /* 170 - 173 */
+>  };
+> --
+> 2.33.1
+>
 
-Right. Do you want me to send a follow up patch that drops the WARN_ONs?
+Applied.
+M
 
-> Reviewed-by: Sungjong Seo<sj1557.seo@samsung.com>
-> 
-
-Thank you.
-
--- 
-Thanks,
-Tadeusz
+--=20
+Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
+w: www.monstr.eu p: +42-0-721842854
+Maintainer of Linux kernel - Xilinx Microblaze
+Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
+U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs

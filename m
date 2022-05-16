@@ -2,232 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF71527DF5
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AFB5527DF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240797AbiEPG4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 02:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
+        id S240595AbiEPG5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 02:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240595AbiEPGzw (ORCPT
+        with ESMTP id S238086AbiEPG5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 02:55:52 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751C5B1D;
-        Sun, 15 May 2022 23:55:50 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L1qjw6brpzgYLZ;
-        Mon, 16 May 2022 14:54:28 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 16 May 2022 14:55:46 +0800
-Message-ID: <264ecbe1-4514-d6c8-182b-3af4babb457e@huawei.com>
-Date:   Mon, 16 May 2022 14:55:46 +0800
+        Mon, 16 May 2022 02:57:37 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418EF63E7
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:57:36 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id bu29so24202936lfb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:57:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Y8Vesh/AmVxnxCJXnP8z5e4vW7ZUtRIGODEmp5Y/tbk=;
+        b=j+ewMwyt9KnUxhaGO1rvjPKYvlgUgV6AeNdbrnBaLqnjcyVqfDu0GUypwCPnLmUfsD
+         zkSoH1jYNVPSOPe6eUhcqRbhEsMZ88DMjXd1LSyUzvyKITTJOttCYw6H46grPm+ZQs1V
+         zAlj3dBeuBFWcEdjQaOuo88H5SBZTQSj88DGW7SQZ8PGT5jngSUxmB/lwp5omgxLiVVx
+         q0dNoWkQjhnCpiEHtSeEeusdVspm1Ptuv1kGMMPgfegiMI+qAQXue5ZcKPTvOkqREFj5
+         cnY+35Wbd6y9tZVAFOlWByU9Furgbn2sWkZeFqwr3dvr6Ar2tHveng6vOdMURVG2hOw4
+         h+mQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Y8Vesh/AmVxnxCJXnP8z5e4vW7ZUtRIGODEmp5Y/tbk=;
+        b=LHUuDaQ4nS1pKDqsWnrWhBPJspzgedOGi82l878friwjOY89JcS2wxTXqO1q8DK6ZA
+         2k/Y/R+sMeZqXt34OAp3H3sgZPSXJxj0qyVr8TJsjJ67G3wu+x1bumUdZZ091iKbbX8c
+         SLfRe+8VI5nBhMtcuYlRCLvtEaC9vPON27TMgdHA2GPseGJT6hK6I7p+37XnbSyRPnkU
+         dJUS0ko15i6UOOVUIAjdf6ne1S39+w5jTeiDPf/EAvhttbLFN+yJscEtoJlUViK1YAKo
+         zUBL3bVyyB3LTve4NZynLzWnmNDQ4iFSkhAz1Ms6xxKojh349bJPaJW3jOYe3t9KdDrY
+         nI4w==
+X-Gm-Message-State: AOAM532ojhyrrrwdI8QfipJFQx5vEERTeV1azIiOPjoxYA2qE9LMSQvc
+        CG7n9RmE+0I/GXHVXssK6CR8XYwfuM+aEhs3
+X-Google-Smtp-Source: ABdhPJynSi/6C1PC63okLI4+titLAFaZWYwfsXSIet5E4k6/frGVrPt/Dk4pS0A7DbvLwuzW7eXvLw==
+X-Received: by 2002:a05:6512:2090:b0:472:2764:1f0c with SMTP id t16-20020a056512209000b0047227641f0cmr12585920lfr.482.1652684254591;
+        Sun, 15 May 2022 23:57:34 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id r8-20020ac252a8000000b0047415cd1ec3sm1217283lfm.165.2022.05.15.23.57.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 May 2022 23:57:34 -0700 (PDT)
+Message-ID: <d5438d2e-f387-170a-cea1-d5936cc8e15a@linaro.org>
+Date:   Mon, 16 May 2022 08:57:33 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next v3 4/7] bpf, arm64: Impelment
- bpf_arch_text_poke() for arm64
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 1/4] dt-bindings: Document how Chromebooks with
+ depthcharge boot
 Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>
-CC:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-References: <20220424154028.1698685-1-xukuohai@huawei.com>
- <20220424154028.1698685-5-xukuohai@huawei.com> <Yn5yb9F4uYkio4Xe@lakrids>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <Yn5yb9F4uYkio4Xe@lakrids>
-Content-Type: text/plain; charset="UTF-8"
+To:     Douglas Anderson <dianders@chromium.org>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Alexandru M Stan <amstan@chromium.org>,
+        Julius Werner <jwerner@chromium.org>,
+        "Joseph S . Barrera III" <joebar@chromium.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220513095722.v2.1.I71e42c6174f1cec17da3024c9f73ba373263b9b6@changeid>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220513095722.v2.1.I71e42c6174f1cec17da3024c9f73ba373263b9b6@changeid>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/13/2022 10:59 PM, Mark Rutland wrote:
-> On Sun, Apr 24, 2022 at 11:40:25AM -0400, Xu Kuohai wrote:
->> Impelment bpf_arch_text_poke() for arm64, so bpf trampoline code can use
->> it to replace nop with jump, or replace jump with nop.
->>
->> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
->> Acked-by: Song Liu <songliubraving@fb.com>
->> ---
->>  arch/arm64/net/bpf_jit_comp.c | 63 +++++++++++++++++++++++++++++++++++
->>  1 file changed, 63 insertions(+)
->>
->> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
->> index 8ab4035dea27..3f9bdfec54c4 100644
->> --- a/arch/arm64/net/bpf_jit_comp.c
->> +++ b/arch/arm64/net/bpf_jit_comp.c
->> @@ -9,6 +9,7 @@
->>  
->>  #include <linux/bitfield.h>
->>  #include <linux/bpf.h>
->> +#include <linux/memory.h>
->>  #include <linux/filter.h>
->>  #include <linux/printk.h>
->>  #include <linux/slab.h>
->> @@ -18,6 +19,7 @@
->>  #include <asm/cacheflush.h>
->>  #include <asm/debug-monitors.h>
->>  #include <asm/insn.h>
->> +#include <asm/patching.h>
->>  #include <asm/set_memory.h>
->>  
->>  #include "bpf_jit.h"
->> @@ -1529,3 +1531,64 @@ void bpf_jit_free_exec(void *addr)
->>  {
->>  	return vfree(addr);
->>  }
->> +
->> +static int gen_branch_or_nop(enum aarch64_insn_branch_type type, void *ip,
->> +			     void *addr, u32 *insn)
->> +{
->> +	if (!addr)
->> +		*insn = aarch64_insn_gen_nop();
->> +	else
->> +		*insn = aarch64_insn_gen_branch_imm((unsigned long)ip,
->> +						    (unsigned long)addr,
->> +						    type);
->> +
->> +	return *insn != AARCH64_BREAK_FAULT ? 0 : -EFAULT;
->> +}
->> +
->> +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
->> +		       void *old_addr, void *new_addr)
->> +{
->> +	int ret;
->> +	u32 old_insn;
->> +	u32 new_insn;
->> +	u32 replaced;
->> +	enum aarch64_insn_branch_type branch_type;
->> +
->> +	if (!is_bpf_text_address((long)ip))
->> +		/* Only poking bpf text is supported. Since kernel function
->> +		 * entry is set up by ftrace, we reply on ftrace to poke kernel
->> +		 * functions. For kernel funcitons, bpf_arch_text_poke() is only
->> +		 * called after a failed poke with ftrace. In this case, there
->> +		 * is probably something wrong with fentry, so there is nothing
->> +		 * we can do here. See register_fentry, unregister_fentry and
->> +		 * modify_fentry for details.
->> +		 */
->> +		return -EINVAL;
+On 13/05/2022 18:59, Douglas Anderson wrote:
+> This documents how many Chromebooks pick the device tree that will be
+> passed to the OS and can help understand the revisions / skus listed
+> as the top-level "compatible" in many Chromebooks.
 > 
-> If you rely on ftrace to poke functions, why do you need to patch text
-> at all? Why does the rest of this function exist?
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
 > 
-> I really don't like having another piece of code outside of ftrace
-> patching the ftrace patch-site; this needs a much better explanation.
+> Changes in v2:
+> - ("Document how Chromebooks with depthcharge boot") new for v2.
 > 
+>  .../devicetree/chromebook-boot-flow.rst       | 63 +++++++++++++++++++
+>  1 file changed, 63 insertions(+)
+>  create mode 100644 Documentation/devicetree/chromebook-boot-flow.rst
 
-Sorry for the incorrect explaination in the comment. I don't think it's
-reasonable to patch ftrace patch-site without ftrace code either.
+This is not a Devicetree (generic) document, so it is not the best place
+for it. Maybe regular vendor place, e.g . Documentation/arm/google/ ?
 
-The patching logic in register_fentry, unregister_fentry and
-modify_fentry is as follows:
-
-if (tr->func.ftrace_managed)
-        ret = register_ftrace_direct((long)ip, (long)new_addr);
-else
-        ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, NULL, new_addr,
-                                 true);
-
-ftrace patch-site is patched by ftrace code. bpf_arch_text_poke() is
-only used to patch bpf prog and bpf trampoline, which are not managed by
-ftrace.
-
->> +
->> +	if (poke_type == BPF_MOD_CALL)
->> +		branch_type = AARCH64_INSN_BRANCH_LINK;
->> +	else
->> +		branch_type = AARCH64_INSN_BRANCH_NOLINK;
->> +
->> +	if (gen_branch_or_nop(branch_type, ip, old_addr, &old_insn) < 0)
->> +		return -EFAULT;
->> +
->> +	if (gen_branch_or_nop(branch_type, ip, new_addr, &new_insn) < 0)
->> +		return -EFAULT;
->> +
->> +	mutex_lock(&text_mutex);
->> +	if (aarch64_insn_read(ip, &replaced)) {
->> +		ret = -EFAULT;
->> +		goto out;
->> +	}
->> +
->> +	if (replaced != old_insn) {
->> +		ret = -EFAULT;
->> +		goto out;
->> +	}
->> +
->> +	ret = aarch64_insn_patch_text_nosync((void *)ip, new_insn);
 > 
-> ... and where does the actual synchronization come from in this case?
-> 
+> diff --git a/Documentation/devicetree/chromebook-boot-flow.rst b/Documentation/devicetree/chromebook-boot-flow.rst
+> new file mode 100644
+> index 000000000000..84aeb0a17ee4
+> --- /dev/null
+> +++ b/Documentation/devicetree/chromebook-boot-flow.rst
+> @@ -0,0 +1,63 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +======================================
+> +Chromebook Boot Flow
+> +======================================
+> +
+> +Most recent Chromebooks that use device tree boot using the opensource
+> +depthcharge bootloader. Depthcharge expects the OS to be packaged as a "FIT
+> +Image" which contains an OS image as well as a collection of device trees. It
+> +is up to depthcharge to pick the right device tree from the FIT Image and
+> +provide it to the OS.
+> +
+> +The scheme that depthcharge uses to pick the device tree takes into account
+> +three variables:
+> +- Board name, specified at compile time.
+> +- Board revision number, read from GPIO strappings at boot time.
+> +- SKU number, read from GPIO strappings at boot time.
+> +
+> +For recent Chromebooks, depthcharge creates a match list that looks like this:
+> +- google,$(BOARD)-rev$(REV)-sku$(SKU)
+> +- google,$(BOARD)-rev$(REV)
+> +- google,$(BOARD)-sku$(SKU)
+> +- google,$(BOARD)
+> +
+> +Note that some older Chromebooks may use a slightly different list that may
+> +not include sku matching or may prioritize sku/rev differently.
+> +
+> +Note that for some boards there may be extra board-specific logic to inject
+> +extra compatibles into the list, but this is uncommon.
+> +
+> +Depthcharge will look through all device trees in the FIT image trying to
+> +find one that matches the most specific compatible. It will then look
+> +through all device trees in the FIT image trying to find the one that
+> +matches the _second most_ specific compatible, etc.
+> +
+> +When searching for a device tree, depthcharge doesn't care where the
+> +compatible falls within a given device tree. As an example, if we're on
+> +board "lazor", rev 4, sku 0 and we have two device trees:
+> +- "google,lazor-rev5-sku0", "google,lazor-rev4-sku0", "qcom,sc7180"
+> +- "google,lazor", "qcom,sc7180"
+> +
+> +Then depthcharge will pick the first device tree even though
+> +"google,lazor-rev4-sku0" was the second compatible listed in that device tree.
+> +This is because it is a more specific compatible than "google,lazor".
+> +
+> +It should be noted that depthcharge does not have any smarts to try to
+> +match board or SKU revisions that are "close by". That is to say that
+> +if depthcharge knows it's on "rev4" of a board but there is no "rev4"
+> +device tree that depthcharge _won't_ look for a "rev3" device tree.
+> +
+> +In general when any significant changes are made to a board the board
+> +revision number is increased even if none of those changes need to
+> +be reflected in the device tree. Thus it's fairly common to see device
+> +trees with multiple revisions.
+> +
+> +It should be noted that, taking into account the above system that the
+> +depthcharge has, the most flexibility is achieved if the device tree
+> +supporting the newest revision(s) of a board omits the "-rev{REV}"
+> +compatible strings. When this is done then if you get a new board
+> +revision and try to run old software on it then we'll at pick the most
+> +reasonable device tree. If it turns out that the new revision actually
+> +has no device-tree visible changes then we'll not only pick the most
+> +reasonable device tree, we'll pick the exact right one.
+> \ No newline at end of file
 
-aarch64_insn_patch_text_nosync() replaces an instruction atomically, so
-no other CPUs will fetch a half-new and half-old instruction.
+Missing new line.
 
-The scenario here is that there is a chance that another CPU fetches the
-old instruction after bpf_arch_text_poke() finishes, that is, different
-CPUs may execute different versions of instructions at the same time.
 
-1. When a new trampoline is attached, it doesn't seem to be an issue for
-different CPUs to jump to different trampolines temporarily.
-
-2. When an old trampoline is freed, we should wait for all other CPUs to
-exit the trampoline and make sure the trampoline is no longer reachable,
-IIUC, bpf_tramp_image_put() function already uses percpu_ref and rcu
-tasks to do this.
-
-> Thanks,
-> Mark.
-> 
->> +out:
->> +	mutex_unlock(&text_mutex);
->> +	return ret;
->> +}
->> -- 
->> 2.30.2
->>
-> .
-
+Best regards,
+Krzysztof

@@ -2,131 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BACBA528DC0
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6FC528DC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345333AbiEPTKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54362 "EHLO
+        id S1345338AbiEPTO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbiEPTKb (ORCPT
+        with ESMTP id S231625AbiEPTOZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:10:31 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018B2393CF
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:10:31 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id r71so14613474pgr.0
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:10:30 -0700 (PDT)
+        Mon, 16 May 2022 15:14:25 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C14B2B242
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:14:23 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id s23so16984394iog.13
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:14:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=k7syZc7e4IW6qXe22/aRGymPtljsSZmZ6kuls0rngww=;
-        b=pryikHjo//4oXh00NHAFRzEFc8xVE45r9L6sXoKJBVHQDNhL/LQklaC57uEu/17Q+b
-         dRvVFL9MqpXJp4B/km6LzslI9DUvI/G5fKF9unFpjw6x7+zroRzCQDD7oArwEpyCvtwJ
-         /M2XguzXXebiijMs7MLC1aRqG0m2tEguDg+/8rZZv+JY4A1mzaCokkL+pVa4DWGHQdI+
-         h5TyB39mAc5LVUYaKfPdMJnn1DBBlkJoTmK71AqBh94dysQqgUiiep3hy2A1jbJXDBAD
-         tkPH4amzgGTO8xqy/15Z/MQDy1lrpMOLfkfel27CzGH4NRYdEqm/nyFeSNCDT79nmcvo
-         Ispg==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=yu8jpBcESlRO41WVtwunoeenHnb5B2EXEF8tRgSzHgE=;
+        b=tqCZDZ0dx3cF6RCC1hPbCmSnLFGA3LUJA9FPT9yl/mq42q/ABuK1f4ejnoMS+6ky5L
+         sZV492OnuqI4ApfBjNxD/my1zZ8AwFpREQ1L/GBEJ32+4I6LJOEjUl2OgZalqTspT+p+
+         2mNM7tW92wIo49NXj9jlQ35oPO2uzhro/D/D0tz2/GPSuepEvmI3a9TXF0pwkODrPVxD
+         Z9XoZjpMtFeR0EceB3XQFrrJPstyipKo6XN44acrdN7iQWOBUT6EbQ3duotSqKjd1XR3
+         sSGEgWF7gL//m1iuVAY1+gkUbrNLBBX8g9luU4HxxMQUlozNuKRnPvzYT56wXGLm7anM
+         QWJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=k7syZc7e4IW6qXe22/aRGymPtljsSZmZ6kuls0rngww=;
-        b=qSQRoCtcjJTtCw9PMTSXKHHGZ5HHtNY8L9H/9Sc2Fi35dhvL4Y142Pp/6iN4eEjuyY
-         kU+lo6rYoYoTwI0gGJPiAysYUxOQkq1nyCohR2C6fIbEBFYuSiV9wExESaOs5ilmnOPl
-         Q5gj5SFCSYx54r6wzOZtOGO6gJTc1gxJODjgTw6LjjR9b/zHTrBGRW3z2nfhCxpL1Kxv
-         v0cqvTMPwtmlzmI+Ev1xpMiWpJRsDO4ZEkEiJ6goTU+kdDrE12SoapRtCZ1Pn04Zv8v9
-         5umSp3V47lIw+Bn9lEh6/r6noLeN7sCbaXWNBZ5yeA28mp3+k2MH1iJ3Y9mSSr0LwZJ7
-         yGfg==
-X-Gm-Message-State: AOAM530GXyKAURUa+LTzVu9KUwUEvnF14lh9uYZiwt5N+OyQD6Tx6TWw
-        02tUWeWNt3F8imtV2fMphJV/XdbeOEYOtA4HX/tMug==
-X-Google-Smtp-Source: ABdhPJxv79JhgA/Y27cIO4j/iP8xxQw8o9x2TXc7qHLtuGufyQqRW1cosxYGmLpfaoOdPJF4hTxN64c6uaicn0cpU1I=
-X-Received: by 2002:a65:6d06:0:b0:3c6:890:5609 with SMTP id
- bf6-20020a656d06000000b003c608905609mr16140622pgb.357.1652728230125; Mon, 16
- May 2022 12:10:30 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yu8jpBcESlRO41WVtwunoeenHnb5B2EXEF8tRgSzHgE=;
+        b=MO0ImhgXpFRGGNuyPUZ5QhEmieonjsG50Ax44LQXOQWacDumgAY5wMKnRZ/crke6RC
+         nK3Ag0Eihrc/HZRqyFjh7xJF2lr9k33vfHjkENnhFJPqbSK1Wn31bffQacgt3CsU2Ifv
+         kuZ/OqJl8YK0yETSt/N1uha7b4nQfrjdyB/t8zz/dy4pDnammo9dUAmYRdpj7OuXbE85
+         efgQ8rL4GmatP/dpTx+ULFIX4qJyOJZsqNo9mGx52J62yFXWkK5yjDgYfLtZAohKr8qe
+         74svcbGghFcpyOjQ2fCNVK3FJgP9YhiNJ0Rbq82aYInfgrvbDqr81808VyJSbCTb3y2j
+         P9WQ==
+X-Gm-Message-State: AOAM530UrqZYxi8JxF8Ec1trGzUfz5BKxyFMrKcGXFyNIqmjtuVKLEH5
+        mH80KWxr6zPvOxVnN6F/1lRbBA==
+X-Google-Smtp-Source: ABdhPJzXFsXpsavDxnMRAYebmJL6UV04urGytrVKDDgSBJcwMy3VAVKN7/BgDEhXPwIkvfb4FKH84Q==
+X-Received: by 2002:a02:7a06:0:b0:32b:1b83:649a with SMTP id a6-20020a027a06000000b0032b1b83649amr9861961jac.29.1652728462508;
+        Mon, 16 May 2022 12:14:22 -0700 (PDT)
+Received: from [192.168.1.172] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id w24-20020a6b4a18000000b0065a47e16f41sm63007iob.19.2022.05.16.12.14.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 12:14:21 -0700 (PDT)
+Message-ID: <143f0708-e446-9cfe-eba8-8731d52345db@kernel.dk>
+Date:   Mon, 16 May 2022 13:14:20 -0600
 MIME-Version: 1.0
-References: <1fd21e25-b095-e055-fc2e-abda640a0575@openvz.org>
-In-Reply-To: <1fd21e25-b095-e055-fc2e-abda640a0575@openvz.org>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Mon, 16 May 2022 12:10:19 -0700
-Message-ID: <CALvZod6wmxxigoLVg8Q+upqOkyoh+nPuVT0yx_XTbu8RXYYFgA@mail.gmail.com>
-Subject: Re: [PATCH] tracing: add ACCOUNT flag for allocations from marked
- slab caches
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        David Rientjes <rientjes@google.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Christoph Lameter <cl@linux.com>, kernel@openvz.org,
-        Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Michal Hocko <mhocko@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [REGRESSION] lxc-stop hang on 5.17.x kernels
+Content-Language: en-US
+To:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        Daniel Harding <dharding@living180.net>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Cc:     regressions@lists.linux.dev, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>
+References: <7925e262-e0d4-6791-e43b-d37e9d693414@living180.net>
+ <371c01dd-258c-e428-7428-ff390b664752@kernel.dk>
+ <2436d42c-85ca-d060-6508-350c769804f1@gmail.com>
+ <ad9c31e5-ee75-4df2-c16d-b1461be1901a@living180.net>
+ <fb0dbd71-9733-0208-48f2-c5d22ed17510@gmail.com>
+ <a204ba93-7261-5c6e-1baf-e5427e26b124@living180.net>
+ <bd932b5a-9508-e58f-05f8-001503e4bd2b@gmail.com>
+ <12a57dd9-4423-a13d-559b-2b1dd2fb0ef3@living180.net>
+ <897dc597-fc0a-34ec-84b8-7e1c4901e0fc@leemhuis.info>
+ <c2f956e2-b235-9937-d554-424ae44c68e4@living180.net>
+ <41c86189-0d1f-60f0-ca8e-f80b3ccf5130@gmail.com>
+ <da56fa5f-0624-413e-74a1-545993940d27@gmail.com>
+ <3fc08243-f9e0-9cec-4207-883c55ccff78@living180.net>
+ <13028ff4-3565-f09e-818c-19e5f95fa60f@living180.net>
+ <469e5a9b-c7e0-6365-c353-d831ff1c5071@leemhuis.info>
+ <eaee4ea1-8e5a-dde8-472d-44241d992037@kernel.dk>
+ <1ce76b24-9185-6b2e-844e-d6a0ce42bb0f@leemhuis.info>
+ <55ddaa3c-57a5-f17e-13a7-7427c5f1bb88@kernel.dk>
+ <735012d3-bbda-54df-11fb-8e7b561c598d@leemhuis.info>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <735012d3-bbda-54df-11fb-8e7b561c598d@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 11:53 AM Vasily Averin <vvs@openvz.org> wrote:
->
-> Slab caches marked with SLAB_ACCOUNT force accounting for every
-> allocation from this cache even if __GFP_ACCOUNT flag is not passed.
-> Unfortunately, at the moment this flag is not visible in ftrace output,
-> and this makes it difficult to analyze the accounted allocations.
->
-> This patch adds the __GFP_ACCOUNT flag for allocations from slab caches
-> marked with SLAB_ACCOUNT to the ftrace output.
->
-> Signed-off-by: Vasily Averin <vvs@openvz.org>
-> ---
->  mm/slab.c | 3 +++
->  mm/slub.c | 3 +++
->  2 files changed, 6 insertions(+)
->
-> diff --git a/mm/slab.c b/mm/slab.c
-> index 0edb474edef1..4c3da8dfcbdb 100644
-> --- a/mm/slab.c
-> +++ b/mm/slab.c
-> @@ -3492,6 +3492,9 @@ void *__kmem_cache_alloc_lru(struct kmem_cache *cachep, struct list_lru *lru,
+On 5/16/22 1:07 PM, Thorsten Leemhuis wrote:
+> 
+> 
+> On 16.05.22 20:39, Jens Axboe wrote:
+>> On 5/16/22 12:34 PM, Thorsten Leemhuis wrote:
+>>> On 16.05.22 20:22, Jens Axboe wrote:
+>>>> On 5/16/22 12:17 PM, Thorsten Leemhuis wrote:
+>>>>>>> Pavel, I had actually just started a draft email with the same theory
+>>>>>>> (although you stated it much more clearly than I could have).  I'm
+>>>>>>> working on debugging the LXC side, but I'm pretty sure the issue is
+>>>>>>> due to LXC using blocking reads and getting stuck exactly as you
+>>>>>>> describe.  If I can confirm this, I'll go ahead and mark this
+>>>>>>> regression as invalid and file an issue with LXC. Thanks for your help
+>>>>>>> and patience.
+>>>>>>
+>>>>>> Yes, it does appear that was the problem.  The attach POC patch against
+>>>>>> LXC fixes the hang.  The kernel is working as intended.
+>>>>>>
+>>>>>> #regzbot invalid:  userspace programming error
+>>>>>
+>>>>> Hmmm, not sure if I like this. So yes, this might be a bug in LXC, but
+>>>>> afaics it's a bug that was exposed by kernel change in 5.17 (correct me
+>>>>> if I'm wrong!). The problem thus still qualifies as a kernel regression
+>>>>> that normally needs to be fixed, as can be seen my some of the quotes
+>>>>> from Linus in this file:
+>>>>> https://www.kernel.org/doc/html/latest/process/handling-regressions.html
+>>>>
+>>>> Sorry, but that's really BS in this particularly case. This could always
+>>>> have triggered, it's the way multishot works. Will we count eg timing
+>>>> changes as potential regressions, because an application relied on
+>>>> something there? That does not make it ABI.
+>>>>
+>>>> In general I agree with Linus on this, a change in behavior breaking
+>>>> something should be investigated and figured out (and reverted, if need
+>>>> be). This is not that.
+>>>
+>>> Sorry, I have to deal with various subsystems and a lot of regressions
+>>> reports. I can't know the details of each of issue and there are
+>>> developers around that are not that familiar with all the practical
+>>> implications of the "no regressions". That's why I was just trying to
+>>> ensure that this is something safe to ignore. If you say it is, than I'm
+>>> totally happy and now rest my case. :-D
+>>
+>> It's just a slippery slope that quickly leads to the fact that _any_
+>> kernel change is a potential regressions,
+> 
+> I know, don't worry, that's why I'm trying to be careful. But I also had
+> cases already where someone (even a proper subsystem maintainer) said
+> "this is not a regression, it's a userspace bug" and it clearly was a
+> kernel regression (and Linus wasn't happy when he found out). That why I
 
-What about kmem_cache_alloc_node()?
+I get where you're coming from, and that is indeed what most maintainers
+would say :-)
 
->  {
->         void *ret = slab_alloc(cachep, lru, flags, cachep->object_size, _RET_IP_);
->
-> +       if (cachep->flags & SLAB_ACCOUNT)
+-- 
+Jens Axboe
 
-Should this 'if' be unlikely() or should we trace cachep->flags
-explicitly to avoid this branch altogether?
-
-> +               flags |= __GFP_ACCOUNT;
-> +
->         trace_kmem_cache_alloc(_RET_IP_, ret,
->                                cachep->object_size, cachep->size, flags);
->
-> diff --git a/mm/slub.c b/mm/slub.c
-> index ed5c2c03a47a..670bbfef9e49 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -3231,6 +3231,9 @@ void *__kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
->  {
->         void *ret = slab_alloc(s, lru, gfpflags, _RET_IP_, s->object_size);
->
-> +       if (s->flags & SLAB_ACCOUNT)
-> +               gfpflags |= __GFP_ACCOUNT;
-> +
->         trace_kmem_cache_alloc(_RET_IP_, ret, s->object_size,
->                                 s->size, gfpflags);
->
-> --
-> 2.25.1
->

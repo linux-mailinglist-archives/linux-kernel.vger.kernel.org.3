@@ -2,67 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0211528117
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 11:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B824152811A
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 11:58:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241439AbiEPJy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 05:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34806 "EHLO
+        id S242260AbiEPJ4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 05:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232901AbiEPJyx (ORCPT
+        with ESMTP id S242172AbiEPJ4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 05:54:53 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252816586;
-        Mon, 16 May 2022 02:54:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=/az5ZlpJQ8aDNMLY9MCE8GkO4AGEyZkSzsELYwgNYj4=; b=lA153z4CORR8RVuipFycT+rfic
-        VYFl4X19X2lFe4YCoQJqFTuj7YCFRxXTqHr/oLOJbHFxTWSK+uXWEdITDp5bgfRotRTOaZfRRckec
-        Sj+G268CI945tzUUXnEZksYhmTrG6Sy3FURbkbca+MHHJMoitg/2oU4DZEQkWfSD3i1+wCizpmJUc
-        dlg2eHo4m+ztUEhgMipVS5WpYEzcnPTHeW3BBkO49KLG/FfilI+bVdxrG52y/BTmPwqePK4s2GDO3
-        ZlqKClu94dUuJ8N8lzKak0iRlavTD1c72uGDJqj63oKFd7WRXFmCM5iFfxiE2e4LQUKJiXWSWQRSR
-        +LLHIwbA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nqXQy-009mOl-1R; Mon, 16 May 2022 09:54:36 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 242EE30018E;
-        Mon, 16 May 2022 11:54:33 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 041C020225E5F; Mon, 16 May 2022 11:54:32 +0200 (CEST)
-Date:   Mon, 16 May 2022 11:54:32 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-hardening@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
-Message-ID: <YoIfWENLV1AR2ijj@hirez.programming.kicks-ass.net>
-References: <20220513202159.1550547-1-samitolvanen@google.com>
- <20220513202159.1550547-21-samitolvanen@google.com>
+        Mon, 16 May 2022 05:56:24 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF11CF3;
+        Mon, 16 May 2022 02:56:22 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id B93361F96E;
+        Mon, 16 May 2022 09:56:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1652694980; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7+F73nyaWl4VHIELBoJanUWz3cOly/P+F7MNsQouHhM=;
+        b=OzZsmCVMz+rfmc5hlAiynT52OxYFLSVO+Q/FEhHlA4gFxrBIffWnVOeyV/r6zlWsjKMwdF
+        7wgs9fU+14feV1tXc967FKgUeLOSSJfSB1AYAi7FqG1L825Uym0TZUefZhTsbtDttrdhdE
+        ReNjTHZPFi4LWIzXq2oKfxAc8wUmNNw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1652694980;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7+F73nyaWl4VHIELBoJanUWz3cOly/P+F7MNsQouHhM=;
+        b=qlo8FVR7HQsAeslzqmoB4vcJSlVp9o6iljEIqcj27xg8rgabGNzG+CuZgIYyWehFndFT+a
+        l8W7WejgFVroujAg==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id A85952C141;
+        Mon, 16 May 2022 09:56:20 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 2F1ABA062F; Mon, 16 May 2022 11:56:20 +0200 (CEST)
+Date:   Mon, 16 May 2022 11:56:20 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     jack@suse.cz, paolo.valente@linaro.org, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH -next v2 2/2] block, bfq: make bfq_has_work() more
+ accurate
+Message-ID: <20220516095620.ge5gxmwrnbanfqea@quack3.lan>
+References: <20220513023507.2625717-1-yukuai3@huawei.com>
+ <20220513023507.2625717-3-yukuai3@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220513202159.1550547-21-samitolvanen@google.com>
+In-Reply-To: <20220513023507.2625717-3-yukuai3@huawei.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,62 +66,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 01:21:58PM -0700, Sami Tolvanen wrote:
-> With CONFIG_CFI_CLANG, the compiler injects a type preamble
-> immediately before each function and a check to validate the target
-> function type before indirect calls:
+On Fri 13-05-22 10:35:07, Yu Kuai wrote:
+> bfq_has_work() is using busy_queues currently, which is not accurate
+> because bfq_queue is busy doesn't represent that it has requests. Since
+> bfqd aready has a counter 'queued' to record how many requests are in
+> bfq, use it instead of busy_queues.
 > 
->   ; type preamble
->   __cfi_function:
->     int3
->     int3
->     mov <id>, %eax
->     int3
->     int3
->   function:
->     ...
+> Noted that bfq_has_work() can be called with 'bfqd->lock' held, thus the
+> lock can't be held in bfq_has_work() to protect 'bfqd->queued'.
+> 
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 
-When I enable CFI_CLANG and X86_KERNEL_IBT I get:
+Looks good. Feel free to add:
 
-0000000000000c80 <__cfi_io_schedule_timeout>:
-c80:   cc                      int3
-c81:   cc                      int3
-c82:   b8 b5 b1 39 b3          mov    $0xb339b1b5,%eax
-c87:   cc                      int3
-c88:   cc                      int3
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-0000000000000c89 <io_schedule_timeout>:
-c89:   f3 0f 1e fa             endbr64
+								Honza
 
-
-That seems unfortunate. Would it be possible to get an additional
-compiler option to suppress the endbr for all symbols that get a __cfi_
-preaamble?
-
-Also, perhaps s/CFI_CLANG/KERNEL_CFI/ or somesuch, so that GCC might
-also implement this same scheme (in time)?
-
->   ; indirect call check
->     cmpl    <id>, -6(%r11)
->     je      .Ltmp1
->     ud2
->   .Ltmp1:
->     call    __x86_indirect_thunk_r11
-
-The first one I try and find looks like:
-
-26:       41 81 7b fa a6 96 9e 38         cmpl   $0x389e96a6,-0x6(%r11)
-2e:       74 02                   je     32 <__traceiter_sched_kthread_stop+0x29>
-30:       0f 0b                   ud2
-32:       4c 89 f6                mov    %r14,%rsi
-35:       e8 00 00 00 00          call   3a <__traceiter_sched_kthread_stop+0x31> 36: R_X86_64_PLT32      __x86_indirect_thunk_r11-0x4
-
-This must not be. If I'm to rewrite that lot to:
-
-  movl	$\hash, %r10d
-  sub	$9, %r11
-  call	*%r11
-  .nop  4
-
-Then there must not be spurious instruction in between the ud2 and the
-indirect call/retpoline thing.
+> ---
+>  block/bfq-iosched.c | 16 ++++++++++++----
+>  1 file changed, 12 insertions(+), 4 deletions(-)
+> 
+> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+> index 61750696e87f..740dd83853a6 100644
+> --- a/block/bfq-iosched.c
+> +++ b/block/bfq-iosched.c
+> @@ -2210,7 +2210,11 @@ static void bfq_add_request(struct request *rq)
+>  
+>  	bfq_log_bfqq(bfqd, bfqq, "add_request %d", rq_is_sync(rq));
+>  	bfqq->queued[rq_is_sync(rq)]++;
+> -	bfqd->queued++;
+> +	/*
+> +	 * Updating of 'bfqd->queued' is protected by 'bfqd->lock', however, it
+> +	 * may be read without holding the lock in bfq_has_work().
+> +	 */
+> +	WRITE_ONCE(bfqd->queued, bfqd->queued + 1);
+>  
+>  	if (RB_EMPTY_ROOT(&bfqq->sort_list) && bfq_bfqq_sync(bfqq)) {
+>  		bfq_check_waker(bfqd, bfqq, now_ns);
+> @@ -2402,7 +2406,11 @@ static void bfq_remove_request(struct request_queue *q,
+>  	if (rq->queuelist.prev != &rq->queuelist)
+>  		list_del_init(&rq->queuelist);
+>  	bfqq->queued[sync]--;
+> -	bfqd->queued--;
+> +	/*
+> +	 * Updating of 'bfqd->queued' is protected by 'bfqd->lock', however, it
+> +	 * may be read without holding the lock in bfq_has_work().
+> +	 */
+> +	WRITE_ONCE(bfqd->queued, bfqd->queued - 1);
+>  	elv_rb_del(&bfqq->sort_list, rq);
+>  
+>  	elv_rqhash_del(q, rq);
+> @@ -5063,11 +5071,11 @@ static bool bfq_has_work(struct blk_mq_hw_ctx *hctx)
+>  	struct bfq_data *bfqd = hctx->queue->elevator->elevator_data;
+>  
+>  	/*
+> -	 * Avoiding lock: a race on bfqd->busy_queues should cause at
+> +	 * Avoiding lock: a race on bfqd->queued should cause at
+>  	 * most a call to dispatch for nothing
+>  	 */
+>  	return !list_empty_careful(&bfqd->dispatch) ||
+> -		bfq_tot_busy_queues(bfqd) > 0;
+> +		READ_ONCE(bfqd->queued);
+>  }
+>  
+>  static struct request *__bfq_dispatch_request(struct blk_mq_hw_ctx *hctx)
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

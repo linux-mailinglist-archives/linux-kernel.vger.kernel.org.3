@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF77E529159
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D95215291D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347596AbiEPT55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56666 "EHLO
+        id S1348211AbiEPUbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347759AbiEPTwS (ORCPT
+        with ESMTP id S1350803AbiEPUBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:52:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20C0427E6;
-        Mon, 16 May 2022 12:47:56 -0700 (PDT)
+        Mon, 16 May 2022 16:01:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0450F45067;
+        Mon, 16 May 2022 12:55:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8687BB81614;
-        Mon, 16 May 2022 19:47:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAC3EC385AA;
-        Mon, 16 May 2022 19:47:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8003EB81611;
+        Mon, 16 May 2022 19:55:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA9BEC34100;
+        Mon, 16 May 2022 19:55:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730464;
-        bh=dK7FvkxY95j5rtkl9TPq6ygVFfXCqeIs4v8TNpuGobQ=;
+        s=korg; t=1652730949;
+        bh=ZO5qsyXdW8wuKjQ+Ebr8/toVqnfcSnecFh2EH4y2c9E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kj3D1F+D7tjESIzq2TF+HgYdtNZrKZFXhRxCuEF7PVoKEA+lqa15T949Cv3zKYNL3
-         M5UEJrukBSRHbfHeF0r0cV8roQEjcoCoDcEAIHK1gMaGUzM4fgXnSsFw2MJ9S+F4+0
-         RAgr2vOS9KUrJzC5WRgAWLpkWS4bplsyVja4Awsw=
+        b=JN1FAyCLLj89aWoPBGRLrKFQJFirPc4FpszOnSMIwUGzgxfGyeiJPf8AlJ6H3u7VX
+         ZHj3RQY72FnAkTOS73B1zPHdRIVNxpTF6bhF5t0zlBz5e5znhueNm2qOcevfFC4VDR
+         ImetkBYos+UhW0MaKhcdr5Q4tZ7Jp/UwcqgUpbiA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andreas Gruenbacher <agruenba@redhat.com>,
+        stable@vger.kernel.org,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 30/66] gfs2: Fix filesystem block deallocation for short writes
-Date:   Mon, 16 May 2022 21:36:30 +0200
-Message-Id: <20220516193620.286938380@linuxfoundation.org>
+Subject: [PATCH 5.17 057/114] ASoC: SOF: Fix NULL pointer exception in sof_pci_probe callback
+Date:   Mon, 16 May 2022 21:36:31 +0200
+Message-Id: <20220516193627.132024996@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
-References: <20220516193619.400083785@linuxfoundation.org>
+In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
+References: <20220516193625.489108457@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,51 +58,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andreas Gruenbacher <agruenba@redhat.com>
+From: Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
 
-[ Upstream commit d031a8866e709c9d1ee5537a321b6192b4d2dc5b ]
+[ Upstream commit c61711c1c95791850be48dd65a1d72eb34ba719f ]
 
-When a write cannot be carried out in full, gfs2_iomap_end() releases
-blocks that have been allocated for this write but haven't been used.
+We are accessing "desc->ops" in sof_pci_probe without checking "desc"
+pointer. This results in NULL pointer exception if pci_id->driver_data
+i.e desc pointer isn't defined in sof device probe:
 
-To compute the end of the allocation, gfs2_iomap_end() incorrectly
-rounded the end of the attempted write down to the next block boundary
-to arrive at the end of the allocation.  It would have to round up, but
-the end of the allocation is also available as iomap->offset +
-iomap->length, so just use that instead.
+BUG: kernel NULL pointer dereference, address: 0000000000000060
+PGD 0 P4D 0
+Oops: 0000 [#1] PREEMPT SMP NOPTI
+RIP: 0010:sof_pci_probe+0x1e/0x17f [snd_sof_pci]
+Code: Unable to access opcode bytes at RIP 0xffffffffc043dff4.
+RSP: 0018:ffffac4b03b9b8d8 EFLAGS: 00010246
 
-In addition, use round_up() for computing the start of the unused range.
+Add NULL pointer check for sof_dev_desc pointer to avoid such exception.
 
-Fixes: 64bc06bb32ee ("gfs2: iomap buffered write support")
-Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
+Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Signed-off-by: Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Link: https://lore.kernel.org/r/20220426183357.102155-1-pierre-louis.bossart@linux.intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/gfs2/bmap.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ sound/soc/sof/sof-pci-dev.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/fs/gfs2/bmap.c b/fs/gfs2/bmap.c
-index 6c047570d6a9..b4fde3a8eeb4 100644
---- a/fs/gfs2/bmap.c
-+++ b/fs/gfs2/bmap.c
-@@ -1235,13 +1235,12 @@ static int gfs2_iomap_end(struct inode *inode, loff_t pos, loff_t length,
+diff --git a/sound/soc/sof/sof-pci-dev.c b/sound/soc/sof/sof-pci-dev.c
+index 20c6ca37dbc4..53e97abbe6e3 100644
+--- a/sound/soc/sof/sof-pci-dev.c
++++ b/sound/soc/sof/sof-pci-dev.c
+@@ -130,6 +130,11 @@ int sof_pci_probe(struct pci_dev *pci, const struct pci_device_id *pci_id)
  
- 	if (length != written && (iomap->flags & IOMAP_F_NEW)) {
- 		/* Deallocate blocks that were just allocated. */
--		loff_t blockmask = i_blocksize(inode) - 1;
--		loff_t end = (pos + length) & ~blockmask;
-+		loff_t hstart = round_up(pos + written, i_blocksize(inode));
-+		loff_t hend = iomap->offset + iomap->length;
+ 	dev_dbg(&pci->dev, "PCI DSP detected");
  
--		pos = (pos + written + blockmask) & ~blockmask;
--		if (pos < end) {
--			truncate_pagecache_range(inode, pos, end - 1);
--			punch_hole(ip, pos, end - pos);
-+		if (hstart < hend) {
-+			truncate_pagecache_range(inode, hstart, hend - 1);
-+			punch_hole(ip, hstart, hend - hstart);
- 		}
- 	}
- 
++	if (!desc) {
++		dev_err(dev, "error: no matching PCI descriptor\n");
++		return -ENODEV;
++	}
++
+ 	if (!desc->ops) {
+ 		dev_err(dev, "error: no matching PCI descriptor ops\n");
+ 		return -ENODEV;
 -- 
 2.35.1
 

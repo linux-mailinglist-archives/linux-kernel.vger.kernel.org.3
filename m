@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 805625290AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 985AB528FE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347448AbiEPT5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:57:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33090 "EHLO
+        id S1348498AbiEPUbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347481AbiEPTwI (ORCPT
+        with ESMTP id S1350983AbiEPUBy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:52:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF1C419B2;
-        Mon, 16 May 2022 12:47:34 -0700 (PDT)
+        Mon, 16 May 2022 16:01:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF7E4B866;
+        Mon, 16 May 2022 12:56:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2249560A5B;
-        Mon, 16 May 2022 19:47:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FEDEC385AA;
-        Mon, 16 May 2022 19:47:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8F5EB81612;
+        Mon, 16 May 2022 19:56:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EDC6C385AA;
+        Mon, 16 May 2022 19:56:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730451;
-        bh=BqXSrZZiqI4ZEBVwSNIkNmaULmQ019D8f2CB7OmswgA=;
+        s=korg; t=1652730971;
+        bh=jiZIGqimzJx7MG/LdMHB9cLF+AbHoKZ7IVmSgy0pbp8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y1npMAuvm8yhreF2JxbehntCy98N0r+KkIicx75GPXkfX9wuwJ2vhVZXbqG0U3fUt
-         3biPmo/WpxU+SlM0I3oJmChGyQzYxKXadWavESOvk8IMoqtDmjW4uneU7dn3oz/LsX
-         FWzFbc7B24OILNG3wRF6f5ajK5spKUU+HYE+9320=
+        b=VN4dw2esQzR8UfjiKoNmmJDl75mTHv1pk63V1+la2mDlnmWIn9bP07uLkhVPNMZpM
+         s+xMgwTOVVo/J1bjpfLnuT7ZJJwQslEcfsFg9zbvMG6+CEmvdcpZCqn4SiAxWJFocw
+         j106gYfeAdt9jXeB+q7CFlZ/swWfCik6rLLyZlzE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Shravya Kumbham <shravya.kumbham@xilinx.com>,
-        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>,
-        Andrew Lunn <andrew@lunn.ch>, Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Moshe Kol <moshe.kol@mail.huji.ac.il>,
+        Yossi Gilad <yossi.gilad@mail.huji.ac.il>,
+        Amit Klein <aksecurity@gmail.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, Willy Tarreau <w@1wt.eu>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 36/66] net: emaclite: Dont advertise 1000BASE-T and do auto negotiation
-Date:   Mon, 16 May 2022 21:36:36 +0200
-Message-Id: <20220516193620.459168547@linuxfoundation.org>
+Subject: [PATCH 5.17 063/114] tcp: resalt the secret every 10 seconds
+Date:   Mon, 16 May 2022 21:36:37 +0200
+Message-Id: <20220516193627.302439388@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
-References: <20220516193619.400083785@linuxfoundation.org>
+In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
+References: <20220516193625.489108457@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,60 +59,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shravya Kumbham <shravya.kumbham@xilinx.com>
+From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit b800528b97d0adc3a5ba42d78a8b0d3f07a31f44 ]
+[ Upstream commit 4dfa9b438ee34caca4e6a4e5e961641807367f6f ]
 
-In xemaclite_open() function we are setting the max speed of
-emaclite to 100Mb using phy_set_max_speed() function so,
-there is no need to write the advertising registers to stop
-giga-bit speed and the phy_start() function starts the
-auto-negotiation so, there is no need to handle it separately
-using advertising registers. Remove the phy_read and phy_write
-of advertising registers in xemaclite_open() function.
+In order to limit the ability for an observer to recognize the source
+ports sequence used to contact a set of destinations, we should
+periodically shuffle the secret. 10 seconds looks effective enough
+without causing particular issues.
 
-Signed-off-by: Shravya Kumbham <shravya.kumbham@xilinx.com>
-Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Cc: Moshe Kol <moshe.kol@mail.huji.ac.il>
+Cc: Yossi Gilad <yossi.gilad@mail.huji.ac.il>
+Cc: Amit Klein <aksecurity@gmail.com>
+Cc: Jason A. Donenfeld <Jason@zx2c4.com>
+Tested-by: Willy Tarreau <w@1wt.eu>
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/xilinx/xilinx_emaclite.c | 15 ---------------
- 1 file changed, 15 deletions(-)
+ net/core/secure_seq.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/xilinx/xilinx_emaclite.c b/drivers/net/ethernet/xilinx/xilinx_emaclite.c
-index e29b5523b19b..f6ea4a0ad5df 100644
---- a/drivers/net/ethernet/xilinx/xilinx_emaclite.c
-+++ b/drivers/net/ethernet/xilinx/xilinx_emaclite.c
-@@ -932,8 +932,6 @@ static int xemaclite_open(struct net_device *dev)
- 	xemaclite_disable_interrupts(lp);
+diff --git a/net/core/secure_seq.c b/net/core/secure_seq.c
+index 55aa5cc258e3..5f85e01d4093 100644
+--- a/net/core/secure_seq.c
++++ b/net/core/secure_seq.c
+@@ -22,6 +22,8 @@
+ static siphash_aligned_key_t net_secret;
+ static siphash_aligned_key_t ts_secret;
  
- 	if (lp->phy_node) {
--		u32 bmcr;
--
- 		lp->phy_dev = of_phy_connect(lp->ndev, lp->phy_node,
- 					     xemaclite_adjust_link, 0,
- 					     PHY_INTERFACE_MODE_MII);
-@@ -944,19 +942,6 @@ static int xemaclite_open(struct net_device *dev)
- 
- 		/* EmacLite doesn't support giga-bit speeds */
- 		phy_set_max_speed(lp->phy_dev, SPEED_100);
--
--		/* Don't advertise 1000BASE-T Full/Half duplex speeds */
--		phy_write(lp->phy_dev, MII_CTRL1000, 0);
--
--		/* Advertise only 10 and 100mbps full/half duplex speeds */
--		phy_write(lp->phy_dev, MII_ADVERTISE, ADVERTISE_ALL |
--			  ADVERTISE_CSMA);
--
--		/* Restart auto negotiation */
--		bmcr = phy_read(lp->phy_dev, MII_BMCR);
--		bmcr |= (BMCR_ANENABLE | BMCR_ANRESTART);
--		phy_write(lp->phy_dev, MII_BMCR, bmcr);
--
- 		phy_start(lp->phy_dev);
- 	}
- 
++#define EPHEMERAL_PORT_SHUFFLE_PERIOD (10 * HZ)
++
+ static __always_inline void net_secret_init(void)
+ {
+ 	net_get_random_once(&net_secret, sizeof(net_secret));
+@@ -100,11 +102,13 @@ u64 secure_ipv6_port_ephemeral(const __be32 *saddr, const __be32 *daddr,
+ 	const struct {
+ 		struct in6_addr saddr;
+ 		struct in6_addr daddr;
++		unsigned int timeseed;
+ 		__be16 dport;
+ 	} __aligned(SIPHASH_ALIGNMENT) combined = {
+ 		.saddr = *(struct in6_addr *)saddr,
+ 		.daddr = *(struct in6_addr *)daddr,
+-		.dport = dport
++		.timeseed = jiffies / EPHEMERAL_PORT_SHUFFLE_PERIOD,
++		.dport = dport,
+ 	};
+ 	net_secret_init();
+ 	return siphash(&combined, offsetofend(typeof(combined), dport),
+@@ -145,8 +149,10 @@ EXPORT_SYMBOL_GPL(secure_tcp_seq);
+ u64 secure_ipv4_port_ephemeral(__be32 saddr, __be32 daddr, __be16 dport)
+ {
+ 	net_secret_init();
+-	return siphash_3u32((__force u32)saddr, (__force u32)daddr,
+-			    (__force u16)dport, &net_secret);
++	return siphash_4u32((__force u32)saddr, (__force u32)daddr,
++			    (__force u16)dport,
++			    jiffies / EPHEMERAL_PORT_SHUFFLE_PERIOD,
++			    &net_secret);
+ }
+ EXPORT_SYMBOL_GPL(secure_ipv4_port_ephemeral);
+ #endif
 -- 
 2.35.1
 

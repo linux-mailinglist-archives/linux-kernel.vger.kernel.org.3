@@ -2,140 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA270527BF5
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 04:32:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B569F527C02
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 04:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239412AbiEPCca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 22:32:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38430 "EHLO
+        id S239421AbiEPCff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 22:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237347AbiEPCc1 (ORCPT
+        with ESMTP id S238200AbiEPCfd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 22:32:27 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2100.outbound.protection.outlook.com [40.107.237.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8420FB2F;
-        Sun, 15 May 2022 19:32:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oU7EMGokbbH9yyz+AXqTI2PJ0qIFZX84lET4z/9CsuMoKiSAt5thUSLCLbvwADnLOFpx3inwzh4r6RZzl9dN1Hhf8QnBn5W1jKfciZFBrAtUsU8H1s0kNRhIf7mJdxgHzeOVIwK6OGw0ZmYWiXSqnZG8b550MjkvZtW+RsAqHcvs3RUYxxeZkgXabDGDkbywRuBd4H62Je8hx4hK3/cWAC2LWG4rXtBUj7s5KIiIoiksiQ9StpXaKTeUi3+pxuugEf9G0BxG63FQAEH2g192ljXj6ko4fvHV6Ha4jLGwLZAk/q/DI+8of7WR1iUgcIfVohIVCSbPHmOTf104OARlEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C6sKrDrgYHUgXwcECj1+dOy7fpJ5Awx1w3spblHAoj0=;
- b=EZ5jLebIaQH+igcVqDeug1/1fo7FmMhFQAo1kXRs3pW4V7WnAo5uqMuLAu6F4N/xMo8ODH8wP4XWvEVC9ECnp2JhYzo0Tk9AF9l6Kf7bz1J0JyzwsKDKyW7/f066Y7bEz0JsWDu8iiHaiHzIYyDtfr4sW8QYbh0DfQ4EO9l+s9RirHdlSxbyxkfcuZzSH5CRi/WcYj5YcZPcPmg/4yESLRxIcBWVcn7sQXX+MeAWmoRXZHBLR9Po3P47rxner2d0l+JemsIaqTBstFoR8GR51SbKORHgJ2C1Ag7sY7am6NnMLkoFSyrc+GIdchAnooSv9VloZ26ZE3rkRB41NM+sXw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
+        Sun, 15 May 2022 22:35:33 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4CA1BE86;
+        Sun, 15 May 2022 19:35:32 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so18245894fac.7;
+        Sun, 15 May 2022 19:35:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C6sKrDrgYHUgXwcECj1+dOy7fpJ5Awx1w3spblHAoj0=;
- b=Eh36kZ3GQsNEgZPRSdggywQFNgkWBr/brk2eyuaBBbjKBc5u5Um0yC3YywlIZOMemR47+mKP+G06vAsH7CRlwIAnrSRZXVrmB+GblYx7DXUZye7konxYZHb6UM2FRviLAQDqZNntytToqG/PoxRn06OmogpZxhRtr4LFr0yJXX0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
- DM6PR01MB5099.prod.exchangelabs.com (2603:10b6:5:59::18) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5250.13; Mon, 16 May 2022 02:32:22 +0000
-Received: from SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::319b:4612:e6f4:f22c]) by SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::319b:4612:e6f4:f22c%3]) with mapi id 15.20.5250.018; Mon, 16 May 2022
- 02:32:22 +0000
-Message-ID: <fc422a06-c035-f6e5-231b-74ea6afe8467@os.amperecomputing.com>
-Date:   Mon, 16 May 2022 09:32:08 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH v7 3/3] i2c: aspeed: Assert NAK when slave is busy
-Content-Language: en-US
-To:     Wolfram Sang <wsa@kernel.org>, Corey Minyard <minyard@acm.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        openipmi-developer@lists.sourceforge.net,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-References: <20220422040803.2524940-1-quan@os.amperecomputing.com>
- <20220422040803.2524940-4-quan@os.amperecomputing.com>
- <Yn+9QBoPdH8fMm/m@shikoro>
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-In-Reply-To: <Yn+9QBoPdH8fMm/m@shikoro>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR01CA0152.apcprd01.prod.exchangelabs.com
- (2603:1096:4:8f::32) To SJ0PR01MB7282.prod.exchangelabs.com
- (2603:10b6:a03:3f2::24)
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=enzwvrzyIp/0YminlHhNbPW9IQQaCKODLmdUrFpveVU=;
+        b=JS6IS7Y0hVX+E6NtTzcdfWzdWKWHpLSNpWDuphr0m4HMHg7bDPbUZc7UurSq6n3Hyb
+         ilPTy0CeobNlKorpooVAjfgRCkoxon7KcJwmUsiMgEOQrFBurP2gDpU7CUKDU0DWHTnu
+         Snw/QPnX7gNdmF2CNjElYkOQNOW3G66rDShxzhi/vA98lkuKx4qiikJtBPmjtpj5qy6K
+         /d50xTAdxQM+9sxA0Nqq1qRsY2AsWKySVv6vbN7SQ+mH7PUr4hC7Z7ut4fCQEawKyjtM
+         yC837E2H8T82iq8CjEoOogMYFWmsTLUXbUzUljztP4pvpCmZxCq+/oKRyxUdHxeaxxvf
+         czVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=enzwvrzyIp/0YminlHhNbPW9IQQaCKODLmdUrFpveVU=;
+        b=cKK/81tg0ZfN3Zm8durA3QyPD1Y5v3kZYOS8FeLRQyVTBNDx96wCkjifMZYqKRDPme
+         7MEZtGIgTXPpMIypxtAhiX/RoCOkBMqDOibximdYt/z9QF4fYraexlSC6+p9286Uwlf1
+         upEDsYOJaAVig56QtOPsM7QY6+PC02EY+GsyIUG+tyW+Y+ijgVRRwLJnaYfjdqjAoJCC
+         l93Uu1U2iZhOrXY+DD9IguVRDBLupEFd5n4K92BGVtBRSOwS/L1nIezcqF7nMyNbfe3d
+         2z/biKenzGiJyJ50J67WnsLwzFiO0zNPonUukcZ68mA2NJ5CUo2ugQ3XLuo8MhWs14ZA
+         97yA==
+X-Gm-Message-State: AOAM530lnz9hqYATNE4Xg7qNeCfZgOfa0k9xfcMeS87NtAtIrzoKGXVs
+        c7NotS7gGapNAVaAmN+CRoay+GjmLRpynHH6wnQjoK+Y/XHHGg==
+X-Google-Smtp-Source: ABdhPJy38/3wt9TjBLylyzBj0WIlJgDznlZHFv8QS2VROsNjXt8Q8DAeNqyg9jOWHMn7b0nURZaSVMa1TCB+Rz6Me5E=
+X-Received: by 2002:a05:6870:8a0b:b0:f1:8e74:261f with SMTP id
+ p11-20020a0568708a0b00b000f18e74261fmr3015289oaq.276.1652668531154; Sun, 15
+ May 2022 19:35:31 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fdce3981-267d-4de2-48cb-08da36e44e39
-X-MS-TrafficTypeDiagnostic: DM6PR01MB5099:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR01MB5099C07C7AB070E5A60CF106F2CF9@DM6PR01MB5099.prod.exchangelabs.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: k89acXMin/kCS5QfJCCg74y0uLr5cIAB4L81v1enq6wKPQSJmEPtE7q5PRG0r0az1c2WX8G8S27RTTi/Qm6iV5aYOW7kH0As246IJ1tonLbM4XNIJ/X0kIIWRe7+JwoWP7gmULvfIZTNidPpj+hWV7GYpbif6eQuduJQCAtT462ky9Mwagqlg+jRlqZ+QkuGODbJmFFNLC5FZtJNZse/ypERT2BIfCBtFR6IIIWG7DfKQVdXtywZ5yK1kS6P24qHVX2yfzpsg60kQ7Br9+04npvmIvylJDsiKlnDkaNa00ESE7k3MnfI4y9H4roxcj10e7FlsjIx/6zU+Jcj+IFyx8VNG8HLOWaB8hJU1pcUNLAKXkMMzS+NixHyec+UmMiEz1t83z0mSF/NpLYSG/dOKweaauWYPQpdk0BCWC19AmxdIZqiC3EWmoapDuLdc5HAp0GetClDop+Twafp/ITo0MYlb5m+dIJ54wY2c1XoITkH4QOcdd5s//1SrdBT1y1Eat8gHe6EIvc9+947s6IZ2BI9ilYGLMmsKwG8dQ48crWDkPY2Lj5j/lVeKcP6S+f6lZ8KLEXEzuX5/VQON0UYINV6E9Mg+05jqFllsMY+EO0QRcZxItvxcDsPTGu0P2d12AjxnfOZjgarl++Lbks5WodBSb7T3t+xfZpkFJzwUZa8e0ycKjdxFgWaPWoHlz78c/9LRa09Z2XhpSY1a11Ig2xdcDfzRa+DOGgJeA4yviIUBbQ2/tUSlQEit19OXcCS
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(921005)(53546011)(2906002)(316002)(110136005)(52116002)(86362001)(186003)(6506007)(8676002)(83380400001)(31696002)(6666004)(26005)(2616005)(6512007)(8936002)(38350700002)(31686004)(6486002)(7416002)(5660300002)(508600001)(6636002)(66556008)(66946007)(38100700002)(66476007)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?emFqdlVOdTJkd2srdWg5UHorQm1Jd2hMb1Bxa0RPQUJ5S09aSCsrSDhRK1Uz?=
- =?utf-8?B?QkErKzZyd25vWjJRNnAxbCtZRW1ZWlN6eTcxSWlZelF2YmhmVWU2bFRBam5Q?=
- =?utf-8?B?d2tEdmR4SFpJdENHSHhqaFNGQm9YajI5MmUwTWJMdko5QTg3VWc5dzlLeEFU?=
- =?utf-8?B?OVE4NE55aGRnQk9uSDRLeVVadXY4VnNUNlNPaTh1TitGdXFJZzlFTHBSTTZ5?=
- =?utf-8?B?RXBPUGIxUXRmcU9qY2VoVEh0NWFvUEhnNEhSeTN4c0NLdEtLUG4wMDZiYTY2?=
- =?utf-8?B?T2taemdvRHBTdGFhNXM4NTVvb0oyZHB6U21oKzcvVitDcWRteWxUTm1FU3BD?=
- =?utf-8?B?ZGs2TVFUbklKUTh4dWJZbGZuMXJzSkw3aHBSUldUZUVlMHlTNHpCVUZTVGpy?=
- =?utf-8?B?L21oME5iS1pOMWlUL09MdnZNL1hCemZrN2hjR2xPWENGeW9lRDl2WFczTUpy?=
- =?utf-8?B?VTZGOUg4YlNKbGx2MHFhZTBuKzdMYWlSSFNDcW9sVTJuaHNWTkRab0FZQXVG?=
- =?utf-8?B?dmRwc080R3UrUGJqZWpod3NBc0E3amh2dDduMHRPdVZuUVlWaVVjTVU2cFJv?=
- =?utf-8?B?NHZJbWNBUXhhMjBFRU5kOHFiZzVsK0MxMGJPRUpMMFdwSkxqMStFZTdqUVM5?=
- =?utf-8?B?U08xMjFoMytqQUo0NWZ1Znc1ckw0VTcxSm4zazdTMnc3OHZUUUJuKytpSkpY?=
- =?utf-8?B?Y2NXOHZoZndDWnAyUEZOc1VGUTlXUHZlS0I3c3hZUlozQ0J5YWlrMTk2U0pS?=
- =?utf-8?B?VW0rODZyRVNjeW1DT1V6NUlSbDI5WWFZeit2ZUhtT2E3ZEF0aXJHVSs5TDln?=
- =?utf-8?B?M0ZESXlnQi9LZ2VzK2FXSG5rK2loODZOektiOFFtM3ZPdzdVYTROMnNUbFE5?=
- =?utf-8?B?S3AwbXgxUEltditFRjlJYk1zTGVLQUp6ckVBZ2U2OERnbVRlWTRCSkJlOS94?=
- =?utf-8?B?QjlUbHhqQm9mM0pVK1VRQUR0SnJwZGdSQ1JZNXZBNnlFcDdwVThVOXEzZjJY?=
- =?utf-8?B?c1dEVGJEZ09pbDN2REJpU0FORWxncXdjTHFBajFGQVRIWG02dHNTemRiRktl?=
- =?utf-8?B?VzkrMWpPMkFvU0RqUUZjbmVzaHhRUE93QytzUS9UU05KdThUNEZNREhjdjdw?=
- =?utf-8?B?cHg4MXdpYTRVaGlXOVlXdWdoS0V5ZVpqYU45eWJ1MWhhOUxwZGNZdElwdWdp?=
- =?utf-8?B?ck45LzhVT2lNSUkybkVwREEvUlNqUUhraWlqWXdVK1d3RG93NmxReElYN2VE?=
- =?utf-8?B?T3J2Nit0V3p6N1VrRTVXdnZMTURHQmhzTDVYM3Z0VCtKM05NWGlvYTdVekxO?=
- =?utf-8?B?a210M3d2cjZPQ29TaDQydDIvUVR1SmFHNEllWFpmd2d4SDhPTGRwNkphWWZ1?=
- =?utf-8?B?eE0rQzZkUTk3c2NQdGJxQjFtc1FuUTBDR1FpK3VjSXY4cEk4YUs0RHpTQWR1?=
- =?utf-8?B?Wno0VXBHU1ZWNHpwdUxYU3VVMUJ5T3VnSWh4a2ZKUVduenI0Wk9xRHNnYW5D?=
- =?utf-8?B?RnZ4NEVDN2xvN25ZODA5QlZlTlpsRjRUaFVLakdLdVlRK01ORG9xZlNBczFl?=
- =?utf-8?B?Z1FDdmsyQ2VZUGRHeUJhMnQ2Tm55R0ZWejlEaTJZRExiUzVFUkpmWk84N3BN?=
- =?utf-8?B?Y1c3Q1JOMDd1eWdVRkVTaGtlMGxvMmk2Sys3cUxxUTd1azhud0RScXRVSGlx?=
- =?utf-8?B?b2dQNlJxUlJ2MTZ3eXhCdlZLTkV4Q0llQ0loMjM2S1lhRk1Wdmd1LzhlZ3NP?=
- =?utf-8?B?dXhTeE9Ec21XMkR6VTE3a3k3aWZBMGdmUHJDWSsweXVXZlA4OEpRaFpORTNV?=
- =?utf-8?B?S2h2aGl3Yy8ra3J2bjIzMXhSUjhqVVBrYnBndXpiemJhRmhQZUd0T2J5TS9B?=
- =?utf-8?B?OGd2cFlydC9QYVlLZWlTSXZldHdaTUJPR2xhbTZYWExQeURseWkwN2VlbGNL?=
- =?utf-8?B?OGd3K0ZaTlc2NnIrU2IvMENjRkFObWpXMm9SZHhyMjk4TlVDQWhablpvQWxN?=
- =?utf-8?B?ZjUrRkNPMmlzd3ZiVXBzdGtGN21mNnZIUk90K2hiOENWOU41dUczc3REeE83?=
- =?utf-8?B?STIxU1VCb0htdExKSFNmd1BvNDBvWXdBalJSd3ZuaFBHdVBQOS9DQWdLSmpX?=
- =?utf-8?B?U0szekNjZ3NlNE05d1FhcGM1WHlpUXk0UjVHeS82bW5RUng5TFE3dlVTd0JD?=
- =?utf-8?B?eGV0YTNHYmJ0MVhiSC9JWGY3T0RBOTRNZ1psOG1lWlBQaUk4ckFFVnRkR1Bu?=
- =?utf-8?B?N0Q4eGpHWkVVMEs3Ykg2RUZJdTJ4K1lBNUZ4cmM2TGkzQ1YxWkV3VW80Mkx6?=
- =?utf-8?B?YTNldGQvSDc4NWIxcXVBNGRscGRtbHMvUE9NeFJLOStMcW1qY082Nm5NUXRE?=
- =?utf-8?Q?ZN71XmZHHCz3AGLscLUSwujhpIACeXd+1DKL4?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fdce3981-267d-4de2-48cb-08da36e44e39
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2022 02:32:22.3867
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /uCnwwLJDzgFj6UQIDq+LD1uKciF+v6P1+zEMw1+nZ+2uH6yDdI5DM5lyt1xP0NzfEGuZgBSxgvZPTYmQWxbeP0ThBVvGVCdqCWLjZK3lZo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR01MB5099
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220512135231.10076-2-schspa@gmail.com> <20220515095313.GE10578@xsang-OptiPlex-9020>
+In-Reply-To: <20220515095313.GE10578@xsang-OptiPlex-9020>
+From:   Schspa Shi <schspa@gmail.com>
+Date:   Mon, 16 May 2022 10:35:17 +0800
+Message-ID: <CAMA88TpnXVY-8X97+VfnoEmVVOqai2xmJqBiSNz3-bp1pnMgFg@mail.gmail.com>
+Subject: Re: [cpufreq] 0a020f0eff: WARNING:possible_recursive_locking_detected
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
+        lkp@lists.01.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -143,42 +68,202 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/05/2022 21:31, Wolfram Sang wrote:
-> On Fri, Apr 22, 2022 at 11:08:03AM +0700, Quan Nguyen wrote:
->> When processing I2C_SLAVE_WRITE_REQUESTED event, if slave returns
->> -EBUSY, i2c controller should issue RxCmdLast command to assert NAK
->> on the bus.
-> 
-> That should be I2C_SLAVE_WRITE_RECEIVED and it should be NAKed on all
-> errnos. Have you tested it?
-> 
+kernel test robot <oliver.sang@intel.com> writes:
 
-Dear Wolfram,
+> Greeting,
+>
+> FYI, we noticed the following commit (built with gcc-11):
+>
+> commit: 0a020f0efff0138b975eac68aebd2dd7d92df0f7 ("[PATCH v4 2/2] cpufreq: make interface functions and lock holding state clear")
+> url: https://github.com/intel-lab-lkp/linux/commits/Schspa-Shi/cpufreq-fix-race-on-cpufreq-online/20220512-215524
+> base: https://git.kernel.org/cgit/linux/kernel/git/rafael/linux-pm.git linux-next
+> patch link: https://lore.kernel.org/linux-pm/20220512135231.10076-2-schspa@gmail.com
+>
+> in testcase: boot
+>
+> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+>
+> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+>
+>
+>
+> If you fix the issue, kindly add following tag
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+>
+>
+> [   53.507882][  T196] WARNING: possible recursive locking detected
+> [   53.509102][  T196] 5.18.0-rc6-00115-g0a020f0efff0 #1 Not tainted
+> [   53.510334][  T196] --------------------------------------------
+> [   53.511579][  T196] systemd-udevd/196 is trying to acquire lock:
+> [ 53.512814][ T196] ffff888111694380 (&policy->rwsem){+.+.}-{3:3}, at: cpufreq_policy_put_kobj (drivers/cpufreq/cpufreq.c:1184)
+> [   53.514800][  T196]
+> [   53.514800][  T196] but task is already holding lock:
+> [ 53.516300][ T196] ffff888111694380 (&policy->rwsem){+.+.}-{3:3}, at: cpufreq_online (drivers/cpufreq/cpufreq.c:1348)
 
-Thanks for the comment.
+Dear Rafael and Vriesh:
 
-Yes, we have tested this patch with ast2500 and see it works well 
-without the need of the ugly slave_enable/disable() as before.
+     There is a BUG as reported, I will upload a v6 patch to fix it.
 
-When tested with ast2500, it is observed that there's always a 
-I2C_SLAVE_WRITE_REQUESTED comes first then other 
-I2C_SLAVE_WRITE_RECEIVED's follow for all transactions.
 
-In case slave is busy, the NAK will be asserted on the first occurrence 
-of I2C_SLAVE_WRITE_REQUESTED make host to stop the current transaction 
-(host later will retry with other transaction) until slave ready.
-
-This behavior is expected as we want host to drop all transactions while 
-slave is busy on working on the response. That is why we choose to 
-assert NAK on the first I2C_SLAVE_WRITE_REQUESTED of the transaction 
-instead of I2C_SLAVE_WRITE_RECEIVED.
-
-As we are interested in this specific case, ie: to assert NAK only when 
-slave busy, we dont want to force the current aspeed's slave to assert 
-NAK in all errno's. That is why we choose to NAK only when there is an 
-explicitly -EBUSY return from slave.
-
-Thank you for the review and hope to see further comments.
-Thanks,
-- Quan
-
+> [   53.518103][  T196]
+> [   53.518103][  T196] other info that might help us debug this:
+> [   53.521705][  T196]  Possible unsafe locking scenario:
+> [   53.521705][  T196]
+> [   53.523195][  T196]        CPU0
+> [   53.523945][  T196]        ----
+> [   53.524704][  T196]   lock(&policy->rwsem);
+> [   53.525633][  T196]   lock(&policy->rwsem);
+> [   53.526557][  T196]
+> [   53.526557][  T196]  *** DEADLOCK ***
+> [   53.526557][  T196]
+> [   53.528280][  T196]  May be due to missing lock nesting notation
+> [   53.528280][  T196]
+> [   53.529983][  T196] 3 locks held by systemd-udevd/196:
+> [ 53.531030][ T196] #0: ffffffff9fb79450 (cpu_hotplug_lock){++++}-{0:0}, at: cpufreq_register_driver (drivers/cpufreq/cpufreq.c:2828)
+> [ 53.535189][ T196] #1: ffff88839684a918 (subsys mutex#6){+.+.}-{3:3}, at: subsys_interface_register (drivers/base/bus.c:1033)
+> [ 53.537294][ T196] #2: ffff888111694380 (&policy->rwsem){+.+.}-{3:3}, at: cpufreq_online (drivers/cpufreq/cpufreq.c:1348)
+> [   53.539185][  T196]
+> [   53.539185][  T196] stack backtrace:
+> [   53.541720][  T196] CPU: 1 PID: 196 Comm: systemd-udevd Not tainted 5.18.0-rc6-00115-g0a020f0efff0 #1
+> [   53.543593][  T196] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
+> [   53.545677][  T196] Call Trace:
+> [   53.546400][  T196]  <TASK>
+> [ 53.547091][ T196] dump_stack_lvl (lib/dump_stack.c:107 (discriminator 4))
+> [ 53.548093][ T196] validate_chain.cold (kernel/locking/lockdep.c:2958 kernel/locking/lockdep.c:3001 kernel/locking/lockdep.c:3790)
+> [ 53.549116][ T196] ? check_prev_add (kernel/locking/lockdep.c:3759)
+> [ 53.550146][ T196] ? lock_release (kernel/locking/lockdep.c:436 kernel/locking/lockdep.c:5663)
+> [ 53.551118][ T196] ? start_flush_work (kernel/workqueue.c:3057)
+> [ 53.552186][ T196] __lock_acquire (kernel/locking/lockdep.c:5029)
+> [ 53.553152][ T196] lock_acquire (kernel/locking/lockdep.c:436 kernel/locking/lockdep.c:5643 kernel/locking/lockdep.c:5606)
+> [ 53.554068][ T196] ? cpufreq_policy_put_kobj (drivers/cpufreq/cpufreq.c:1184)
+> [ 53.555173][ T196] ? rcu_read_unlock (include/linux/rcupdate.h:723 (discriminator 5))
+> [ 53.556197][ T196] ? mark_held_locks (kernel/locking/lockdep.c:4208)
+> [ 53.557189][ T196] ? lockdep_hardirqs_on_prepare (kernel/locking/lockdep.c:4501)
+> [ 53.558486][ T196] ? lock_is_held_type (kernel/locking/lockdep.c:5382 kernel/locking/lockdep.c:5684)
+> [ 53.559880][ T196] down_write (include/linux/instrumented.h:101 include/linux/atomic/atomic-instrumented.h:1779 kernel/locking/rwsem.c:254 kernel/locking/rwsem.c:1258 kernel/locking/rwsem.c:1268 kernel/locking/rwsem.c:1515)
+> [ 53.560771][ T196] ? cpufreq_policy_put_kobj (drivers/cpufreq/cpufreq.c:1184)
+> [ 53.561868][ T196] ? down_write_killable_nested (kernel/locking/rwsem.c:1512)
+> [ 53.563032][ T196] ? rcu_read_lock_sched_held (kernel/rcu/update.c:125)
+> [ 53.564180][ T196] ? kfree (include/trace/events/kmem.h:118 mm/slub.c:4541)
+> [ 53.565075][ T196] cpufreq_policy_put_kobj (drivers/cpufreq/cpufreq.c:1184)
+> [ 53.566190][ T196] cpufreq_policy_free (drivers/cpufreq/cpufreq.c:1319)
+> [ 53.567207][ T196] cpufreq_online (drivers/cpufreq/cpufreq.c:1556)
+> [ 53.569227][ T196] ? lockdep_hardirqs_on_prepare (kernel/locking/lockdep.c:4501)
+> [ 53.570546][ T196] ? _raw_spin_unlock_irqrestore (arch/x86/include/asm/irqflags.h:45 arch/x86/include/asm/irqflags.h:80 arch/x86/include/asm/irqflags.h:138 include/linux/spinlock_api_smp.h:151 kernel/locking/spinlock.c:194)
+> [ 53.573947][ T196] cpufreq_add_dev (drivers/cpufreq/cpufreq.c:1572)
+> [ 53.574901][ T196] subsys_interface_register (drivers/base/bus.c:990 drivers/base/bus.c:1036)
+> [ 53.576041][ T196] ? subsys_interface_unregister (drivers/base/bus.c:1020)
+> [ 53.577226][ T196] cpufreq_register_driver (drivers/cpufreq/cpufreq.c:2855)
+> [ 53.578302][ T196] acpi_cpufreq_init (drivers/cpufreq/acpi-cpufreq.c:348) acpi_cpufreq
+> [ 53.579542][ T196] ? acpi_cpufreq_boost_init (drivers/cpufreq/acpi-cpufreq.c:929) acpi_cpufreq
+> [ 53.580875][ T196] do_one_initcall (init/main.c:1298)
+> [ 53.581831][ T196] ? trace_event_raw_event_initcall_level (init/main.c:1289)
+> [ 53.583183][ T196] ? rcu_read_lock_sched_held (kernel/rcu/update.c:125)
+> [ 53.584633][ T196] ? kasan_unpoison (mm/kasan/shadow.c:108 mm/kasan/shadow.c:142)
+> [ 53.585598][ T196] do_init_module (kernel/module.c:3731)
+> [ 53.586564][ T196] __do_sys_finit_module (kernel/module.c:4222)
+> [ 53.587619][ T196] ? __ia32_sys_init_module (kernel/module.c:4190)
+> [ 53.588681][ T196] ? __seccomp_filter (arch/x86/include/asm/bitops.h:214 include/asm-generic/bitops/instrumented-non-atomic.h:135 kernel/seccomp.c:351 kernel/seccomp.c:378 kernel/seccomp.c:410 kernel/seccomp.c:1183)
+> [ 53.589738][ T196] ? lockdep_hardirqs_on_prepare (kernel/locking/lockdep.c:4501)
+> [ 53.593133][ T196] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
+> [ 53.594043][ T196] ? lockdep_hardirqs_on_prepare (kernel/locking/lockdep.c:4501)
+> [ 53.595344][ T196] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:115)
+> [   53.596430][  T196] RIP: 0033:0x7f4373b51f59
+> [ 53.597308][ T196] Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 07 6f 0c 00 f7 d8 64 89 01 48
+> All code
+> ========
+>    0: 00 c3                   add    %al,%bl
+>    2: 66 2e 0f 1f 84 00 00    nopw   %cs:0x0(%rax,%rax,1)
+>    9: 00 00 00
+>    c: 0f 1f 44 00 00          nopl   0x0(%rax,%rax,1)
+>   11: 48 89 f8                mov    %rdi,%rax
+>   14: 48 89 f7                mov    %rsi,%rdi
+>   17: 48 89 d6                mov    %rdx,%rsi
+>   1a: 48 89 ca                mov    %rcx,%rdx
+>   1d: 4d 89 c2                mov    %r8,%r10
+>   20: 4d 89 c8                mov    %r9,%r8
+>   23: 4c 8b 4c 24 08          mov    0x8(%rsp),%r9
+>   28: 0f 05                   syscall
+>   2a:*        48 3d 01 f0 ff ff       cmp    $0xfffffffffffff001,%rax         <-- trapping instruction
+>   30: 73 01                   jae    0x33
+>   32: c3                      retq
+>   33: 48 8b 0d 07 6f 0c 00    mov    0xc6f07(%rip),%rcx        # 0xc6f41
+>   3a: f7 d8                   neg    %eax
+>   3c: 64 89 01                mov    %eax,%fs:(%rcx)
+>   3f: 48                      rex.W
+>
+> Code starting with the faulting instruction
+> ===========================================
+>    0: 48 3d 01 f0 ff ff       cmp    $0xfffffffffffff001,%rax
+>    6: 73 01                   jae    0x9
+>    8: c3                      retq
+>    9: 48 8b 0d 07 6f 0c 00    mov    0xc6f07(%rip),%rcx        # 0xc6f17
+>   10: f7 d8                   neg    %eax
+>   12: 64 89 01                mov    %eax,%fs:(%rcx)
+>   15: 48                      rex.W
+> [   53.600905][  T196] RSP: 002b:00007fffb900dc68 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
+> [   53.602564][  T196] RAX: ffffffffffffffda RBX: 000055ccf555cd00 RCX: 00007f4373b51f59
+> [   53.604332][  T196] RDX: 0000000000000000 RSI: 00007f4373a56cad RDI: 0000000000000006
+> [   53.605910][  T196] RBP: 00007f4373a56cad R08: 0000000000000000 R09: 000055ccf5541be0
+> [   53.607549][  T196] R10: 0000000000000006 R11: 0000000000000246 R12: 0000000000000000
+> [   53.609140][  T196] R13: 000055ccf5567130 R14: 0000000000020000 R15: 000055ccf555cd00
+> [   53.610725][  T196]  </TASK>
+> [  OK  ] Started D-Bus System Message Bus.
+> [  OK  ] Started Daily apt download activities.
+> [  OK  ] Started Daily apt upgrade and clean activities.
+> Starting System Logging Service...
+> [  OK  ] Started Daily rotation of log files.
+> [  OK  ] Reached target Timers.
+> Starting LSB: OpenIPMI Driver init script...
+> [  OK  ] Started Helper to synchronize boot up for ifupdown.
+> [   54.028963][  T200] piix4_smbus 0000:00:01.3: SMBus Host Controller at 0x700, revision 0
+> Starting LSB: Load kernel image with kexec...
+> Starting Raise network interfaces...
+> [  OK  ] Started Login Service.
+> [   54.258656][  T225] IPMI message handler: version 39.2
+> [   54.291478][  T225] ipmi device interface
+> [  OK  ] Started LSB: Load kernel image with kexec.
+> [  OK  ] Started Raise network interfaces.
+> [   54.379602][  T178] RAPL PMU: API unit is 2^-32 Joules, 0 fixed counters, 10737418240 ms ovfl timer
+> [  OK  ] Reached target Network.
+> [   54.413487][  T199] libata version 3.00 loaded.
+> Starting Permit User Sessions...
+> [   54.460902][  T244] ipmi_si: IPMI System Interface driver
+> [   54.462665][  T244] ipmi_si: Unable to find any System Interface(s)
+> Starting /etc/rc.local Compatibility...
+> [   54.500918][  T198] parport_pc 00:03: reported by Plug and Play ACPI
+> Starting OpenBSD Secure Shell server...
+> [   54.566683][  T198] parport0: PC-style at 0x378, irq 7 [PCSPP,TRISTATE]
+> Starting LKP bootstrap...
+> [FAILED] Failed to start LSB: OpenIPMI Driver init script.
+> See 'systemctl status openipmi.service' for details.
+> [   54.508949] rc.local[250]: PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/lkp/lkp/src/bin
+> [  OK  ] Started Permit User Sessions.
+> [  OK  ] Started /etc/rc.local Compatibility.
+> [   54.685664][  T199] ata_piix 0000:00:01.1: version 2.13
+> [   54.579006] rc.local[250]: /lkp/lkp/src/bin/lkp-setup-rootfs: 78: /lkp/lkp/src/bin/lkp-setup-rootfs: cannot create /sys/devices/system/cpu/microcode/reload: Directory nonexistent
+> [  OK  ] Started Getty on tty1.
+> [  OK  ] Reached target Login Prompts.
+> [  OK  ] Started OpenBSD Secure Shell server.
+> [   54.848488][  T199] scsi host0: ata_piix
+> [   54.890906][  T199] scsi host1: ata_piix
+> [   54.901762][  T199] ata1: PATA max MWDMA2 cmd 0x1f0 ctl 0x3f6 bmdma 0xc040 irq 14
+>
+>
+> To reproduce:
+>
+>         # build kernel
+>       cd linux
+>       cp config-5.18.0-rc6-00115-g0a020f0efff0 .config
+>       make HOSTCC=gcc-11 CC=gcc-11 ARCH=x86_64 olddefconfig prepare modules_prepare bzImage modules
+>       make HOSTCC=gcc-11 CC=gcc-11 ARCH=x86_64 INSTALL_MOD_PATH=<mod-install-dir> modules_install
+>       cd <mod-install-dir>
+>       find lib/ | cpio -o -H newc --quiet | gzip > modules.cgz
+>
+>
+>         git clone https://github.com/intel/lkp-tests.git
+>         cd lkp-tests
+>         bin/lkp qemu -k <bzImage> -m modules.cgz job-script # job-script is attached in this email
+>
+>         # if come across any failure that blocks the test,
+>         # please remove ~/.lkp and /lkp dir to run from a clean state.

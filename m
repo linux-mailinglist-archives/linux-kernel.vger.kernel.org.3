@@ -2,96 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0110E5281FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C42735281B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240886AbiEPKZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 06:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42514 "EHLO
+        id S242393AbiEPKTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 06:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233509AbiEPKZi (ORCPT
+        with ESMTP id S233754AbiEPKTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 06:25:38 -0400
-X-Greylist: delayed 387 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 16 May 2022 03:25:29 PDT
-Received: from azure-sdnproxy-3.icoremail.net (azure-sdnproxy.icoremail.net [20.232.28.96])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4D82C11A29;
-        Mon, 16 May 2022 03:25:28 -0700 (PDT)
-Received: by ajax-webmail-mail-app2 (Coremail) ; Mon, 16 May 2022 18:18:45
- +0800 (GMT+08:00)
-X-Originating-IP: [220.246.124.53]
-Date:   Mon, 16 May 2022 18:18:45 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        gregkh@linuxfoundation.org, alexander.deucher@amd.com,
-        broonie@kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net] NFC: hci: fix sleep in atomic context bugs in
- nfc_hci_hcp_message_tx
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <d5fdfe27-a6de-3030-ce51-9f4f45d552f3@linaro.org>
-References: <20220516021028.54063-1-duoming@zju.edu.cn>
- <d5fdfe27-a6de-3030-ce51-9f4f45d552f3@linaro.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Mon, 16 May 2022 06:19:23 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25576DEC3
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 03:19:20 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id i24so13608136pfa.7
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 03:19:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bW4la66s2/2Qkl9P/hRh2ka24n+8uceXtWH8mz/xliY=;
+        b=DlU+GBh2MfUhs6P6NuaPTzAk6CnKaIU25rlLqVbf9TmS7k560BONygkGBXfcGN1PWU
+         kiWPLIo6SQsYDD9On2cXonZktr/+RT+wBt2rKAprhyW7b7JO0f9jLHo8Y35iiL75zySQ
+         31HspQ7f9eOwvYMS1wd6418OCzJQpRKB3vJ72yz3UtDzYQBxdCBKlEQ0khnRe4FG++HD
+         HzOGGsKQlLaNL2OKEXI0D7D9rOJywmDc+GcsAtJFxyjnOSe407rX9Vl7B/qbaWWEabVZ
+         JI7sAX2aZN6LE7qPplxJztRNY87BGCg+GRukXatvKdLUfrl+II7xje4xZdHa6WFcWtK3
+         QZiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bW4la66s2/2Qkl9P/hRh2ka24n+8uceXtWH8mz/xliY=;
+        b=tedeg99gKwo/GY0b9r15IU2gS+e4nnN2c082uvw0yZbRuh1jwFLH7fzO7nwiecLEfS
+         zfKCDqdiFVv4xUXND77tADZMe7I8ZSN4faa1VVYEisnWTJKy8ABVMlUlUSANbTrWdTK6
+         YFO0N3My1KXynAd0b0igVeacc8HU9XgQvONqh+XCYRceCeq5G43QuEwi75gLSiD6u1bF
+         ooIiIZTyZoZuPOIucjYm5g6xZvfta7kYEm5+UNUy18B6gmynyMHjrZhfSge2eWZcMK/m
+         qV3nO/0QTNhudAt0/hd3rQjvsedGkXfNi0n12ssw4mI0IZ3Fhker4fhpAaJT9eLoJzJP
+         I8Cw==
+X-Gm-Message-State: AOAM5328e7ZsiziiS0eD50YDj0ySbG+Ai5G8i9vKrsbfBp/59bTAiU22
+        lclyE8ZfM6lfC/gwTLQSFgwSS2Fu9dZ5eA==
+X-Google-Smtp-Source: ABdhPJwIkvqG1MyMUXgY2WtuJDubBjCrD5lZ9usKKsCWanfaWY6veeD8QGmqb1vDcZJoENug8S59rg==
+X-Received: by 2002:a63:2b05:0:b0:3c2:3ed1:5fa9 with SMTP id r5-20020a632b05000000b003c23ed15fa9mr14676453pgr.220.1652696359590;
+        Mon, 16 May 2022 03:19:19 -0700 (PDT)
+Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.240])
+        by smtp.gmail.com with ESMTPSA id x14-20020a170902820e00b0015e8d4eb1efsm2509699pln.57.2022.05.16.03.19.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 03:19:19 -0700 (PDT)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     tj@kernel.org, axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Subject: [PATCH] blk-iocos: fix inuse clamp when iocg deactivate or free
+Date:   Mon, 16 May 2022 18:19:09 +0800
+Message-Id: <20220516101909.99768-1-zhouchengming@bytedance.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Message-ID: <6aba1413.196eb.180cc609bf1.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: by_KCgDH3EAFJYJiSn9MAA--.7122W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgIMAVZdtZs8KwAAs-
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpPbiBNb24sIDE2IE1heSAyMDIyIDA4OjQ0OjM5ICswMjAwIEtyenlzenRvZiB3cm90
-ZToKCj4gPiBUaGVyZSBhcmUgc2xlZXAgaW4gYXRvbWljIGNvbnRleHQgYnVncyB3aGVuIHRoZSBy
-ZXF1ZXN0IHRvIHNlY3VyZQo+ID4gZWxlbWVudCBvZiBzdDIxbmZjYSBpcyB0aW1lb3V0LiBUaGUg
-cm9vdCBjYXVzZSBpcyB0aGF0IGt6YWxsb2MgYW5kCj4gPiBhbGxvY19za2Igd2l0aCBHRlBfS0VS
-TkVMIHBhcmFtZXRlciBpcyBjYWxsZWQgaW4gc3QyMW5mY2Ffc2Vfd3RfdGltZW91dAo+ID4gd2hp
-Y2ggaXMgYSB0aW1lciBoYW5kbGVyLiBUaGUgY2FsbCB0cmVlIHNob3dzIHRoZSBleGVjdXRpb24g
-cGF0aHMgdGhhdAo+ID4gY291bGQgbGVhZCB0byBidWdzOgo+ID4gCj4gPiAgICAoSW50ZXJydXB0
-IGNvbnRleHQpCj4gPiBzdDIxbmZjYV9zZV93dF90aW1lb3V0Cj4gPiAgIG5mY19oY2lfc2VuZF9l
-dmVudAo+ID4gICAgIG5mY19oY2lfaGNwX21lc3NhZ2VfdHgKPiA+ICAgICAgIGt6YWxsb2MoLi4u
-LCBHRlBfS0VSTkVMKSAvL21heSBzbGVlcAo+ID4gICAgICAgYWxsb2Nfc2tiKC4uLiwgR0ZQX0tF
-Uk5FTCkgLy9tYXkgc2xlZXAKPiA+IAo+ID4gVGhpcyBwYXRjaCBjaGFuZ2VzIGFsbG9jYXRpb24g
-bW9kZSBvZiBremFsbG9jIGFuZCBhbGxvY19za2IgZnJvbQo+ID4gR0ZQX0tFUk5FTCB0byBHRlBf
-QVRPTUlDIGluIG9yZGVyIHRvIHByZXZlbnQgYXRvbWljIGNvbnRleHQgZnJvbQo+ID4gc2xlZXBp
-bmcuIFRoZSBHRlBfQVRPTUlDIGZsYWcgbWFrZXMgbWVtb3J5IGFsbG9jYXRpb24gb3BlcmF0aW9u
-Cj4gPiBjb3VsZCBiZSB1c2VkIGluIGF0b21pYyBjb250ZXh0Lgo+ID4gCj4gPiBGaXhlczogOGI4
-ZDJlMDhiZjBkICgiTkZDOiBIQ0kgc3VwcG9ydCIpCj4gPiBTaWduZWQtb2ZmLWJ5OiBEdW9taW5n
-IFpob3UgPGR1b21pbmdAemp1LmVkdS5jbj4KPiA+IC0tLQo+ID4gIG5ldC9uZmMvaGNpL2hjcC5j
-IHwgNCArKy0tCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlv
-bnMoLSkKPiA+IAo+ID4gZGlmZiAtLWdpdCBhL25ldC9uZmMvaGNpL2hjcC5jIGIvbmV0L25mYy9o
-Y2kvaGNwLmMKPiA+IGluZGV4IDA1YzYwOTg4ZjU5Li4xY2FmOWMyMDg2ZiAxMDA2NDQKPiA+IC0t
-LSBhL25ldC9uZmMvaGNpL2hjcC5jCj4gPiArKysgYi9uZXQvbmZjL2hjaS9oY3AuYwo+ID4gQEAg
-LTMwLDcgKzMwLDcgQEAgaW50IG5mY19oY2lfaGNwX21lc3NhZ2VfdHgoc3RydWN0IG5mY19oY2lf
-ZGV2ICpoZGV2LCB1OCBwaXBlLAo+ID4gIAlpbnQgaGNpX2xlbiwgZXJyOwo+ID4gIAlib29sIGZp
-cnN0ZnJhZyA9IHRydWU7Cj4gPiAgCj4gPiAtCWNtZCA9IGt6YWxsb2Moc2l6ZW9mKHN0cnVjdCBo
-Y2lfbXNnKSwgR0ZQX0tFUk5FTCk7Cj4gPiArCWNtZCA9IGt6YWxsb2Moc2l6ZW9mKCpjbWQpLCBH
-RlBfQVRPTUlDKTsKPiAKPiBObywgdGhpcyBkb2VzIG5vdCBsb29rIGNvcnJlY3QuIFRoaXMgZnVu
-Y3Rpb24gY2FuIHNsZWVwLCBzbyBpdCBjYW4gdXNlCj4gR0ZQX0tFUk5FTC4gUGxlYXNlIGp1c3Qg
-bG9vayBhdCB0aGUgZnVuY3Rpb24gYmVmb3JlIHJlcGxhY2luZyBhbnkgZmxhZ3MuLi4KCkkgYW0g
-c29ycnksIEkgZG9uYHQgdW5kZXJzdGFuZCB3aHkgbmZjX2hjaV9oY3BfbWVzc2FnZV90eCgpIGNh
-biBzbGVlcC4KCkkgdGhpbmsgc3QyMW5mY2Ffc2Vfd3RfdGltZW91dCgpIGlzIGEgdGltZXIgaGFu
-ZGxlciwgd2hpY2ggaXMgaW4gaW50ZXJydXB0IGNvbnRleHQuClRoZSBjYWxsIHRyZWUgc2hvd3Mg
-dGhlIGV4ZWN1dGlvbiBwYXRocyB0aGF0IGNvdWxkIGxlYWQgdG8gYnVnczoKCnN0MjFuZmNhX2hj
-aV9zZV9pbygpCiAgbW9kX3RpbWVyKCZpbmZvLT5zZV9pbmZvLmJ3aV90aW1lciwuLi4pCiAgICBz
-dDIxbmZjYV9zZV93dF90aW1lb3V0KCkgIC8vdGltZXIgaGFuZGxlciwgaW50ZXJydXB0IGNvbnRl
-eHQKICAgICAgbmZjX2hjaV9zZW5kX2V2ZW50KCkKICAgICAgICBuZmNfaGNpX2hjcF9tZXNzYWdl
-X3R4KCkKICAgICAgICAgIGt6YWxsb2MoLi4uLCBHRlBfS0VSTkVMKSAvL21heSBzbGVlcAogICAg
-ICAgICAgYWxsb2Nfc2tiKC4uLiwgR0ZQX0tFUk5FTCkgLy9tYXkgc2xlZXAKCldoYXRgcyBtb3Jl
-LCBJIHRoaW5rIHRoZSAibXV0ZXhfbG9jaygmaGRldi0+bXNnX3R4X211dGV4KSIgY2FsbGVkIGJ5
-IG5mY19oY2lfaGNwX21lc3NhZ2VfdHgoKQppcyBhbHNvIGltcHJvcGVyLgoKUGxlYXNlIGNvcnJl
-Y3QgbWUsIElmIHlvdSB0aGluayBJIGFtIHdyb25nLiBUaGFua3MgZm9yIHlvdXIgdGltZS4KCkJl
-c3QgcmVnYXJkcywKRHVvbWluZyBaaG91Cgo=
+For an active leaf node, its inuse shouldn't be zero or exceed
+its active, but it's not true when deactivate idle iocg or delete
+iocg in ioc_pd_free().
+
+Although inuse of 1 is very small, it could cause noticeable hwi
+decrease in the long running server. So we'd better fix it.
+
+And check iocg->child_active_sum is enough for inner iocg, remove
+the needless list_empty check by the way.
+
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+---
+ block/blk-iocost.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/block/blk-iocost.c b/block/blk-iocost.c
+index 2570732b92d1..84374ebcc402 100644
+--- a/block/blk-iocost.c
++++ b/block/blk-iocost.c
+@@ -1073,11 +1073,11 @@ static void __propagate_weights(struct ioc_gq *iocg, u32 active, u32 inuse,
+ 	 * @active. An active internal node's inuse is solely determined by the
+ 	 * inuse to active ratio of its children regardless of @inuse.
+ 	 */
+-	if (list_empty(&iocg->active_list) && iocg->child_active_sum) {
++	if (iocg->child_active_sum) {
+ 		inuse = DIV64_U64_ROUND_UP(active * iocg->child_inuse_sum,
+ 					   iocg->child_active_sum);
+ 	} else {
+-		inuse = clamp_t(u32, inuse, 1, active);
++		inuse = clamp_t(u32, inuse, 0, active);
+ 	}
+ 
+ 	iocg->last_inuse = iocg->inuse;
+-- 
+2.36.1
+

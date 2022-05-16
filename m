@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C0452916C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA9F529036
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349018AbiEPUhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57676 "EHLO
+        id S1346576AbiEPULg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351055AbiEPUB5 (ORCPT
+        with ESMTP id S1348069AbiEPT6X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:01:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D9D4757A;
-        Mon, 16 May 2022 12:57:44 -0700 (PDT)
+        Mon, 16 May 2022 15:58:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31ED48E6C;
+        Mon, 16 May 2022 12:50:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E3E560FA6;
-        Mon, 16 May 2022 19:57:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0727DC385AA;
-        Mon, 16 May 2022 19:57:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA60660A14;
+        Mon, 16 May 2022 19:50:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4D2AC385AA;
+        Mon, 16 May 2022 19:50:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652731063;
-        bh=nQmJl6KIuWA8NxoAIZbd1YvwbN2X3XD3DhhVKkDufWw=;
+        s=korg; t=1652730607;
+        bh=/84bqmGQIqpf1NHhIxHJn+3uZEVZpLH90DHVm07Ec9w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ge9RjQ8NHp+aEay9bZdqSLA1d+NL8O8nAiZTi0KVb2vf6iet0b9o0XChVNEmPoAxs
-         0CYscC9bNW/CoKEx5jT+ilYv0TK0GmVbXz2vfYzhfA/yrlrZOuDfdnZbYrxZO4fmTK
-         Pm/zcuGqYXAqaRMnRk2q7t6ALA5rNlmg8RkUEVW0=
+        b=d8FIRr5Mq3+Z206hi++sNau8LZ7KN3BCnIX8BaIye5DvUDoTtFXXspuyqOJmtcfoW
+         t2A+nL6kD37sij9tpFIewNYSopo6gaSTyaYBEzdCx5kJUEPWHLuHIy9fozG5JnG8d4
+         /BXsMxjQkChDD9+UQQ4humAc2OFFyxI+919Ie908=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 050/114] hwmon: (f71882fg) Fix negative temperature
+Subject: [PATCH 5.15 050/102] ASoC: ops: Validate input values in snd_soc_put_volsw_range()
 Date:   Mon, 16 May 2022 21:36:24 +0200
-Message-Id: <20220516193626.930806406@linuxfoundation.org>
+Message-Id: <20220516193625.434027239@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
-References: <20220516193625.489108457@linuxfoundation.org>
+In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
+References: <20220516193623.989270214@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,44 +54,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ji-Ze Hong (Peter Hong) <hpeter@gmail.com>
+From: Mark Brown <broonie@kernel.org>
 
-[ Upstream commit 4aaaaf0f279836f06d3b9d0ffeec7a1e1a04ceef ]
+[ Upstream commit aa22125c57f9e577f0a667e4fa07fc3fa8ca1e60 ]
 
-All temperature of Fintek superio hwmonitor that using 1-byte reg will use
-2's complement.
+Check that values written via snd_soc_put_volsw_range() are
+within the range advertised by the control, ensuring that we
+don't write out of spec values to the hardware.
 
-In show_temp()
-	temp = data->temp[nr] * 1000;
-
-When data->temp[nr] read as 255, it indicate -1C, but this code will report
-255C to userspace. It'll be ok when change to:
-	temp = ((s8)data->temp[nr]) * 1000;
-
-Signed-off-by: Ji-Ze Hong (Peter Hong) <hpeter+linux_kernel@gmail.com>
-Link: https://lore.kernel.org/r/20220418090706.6339-1-hpeter+linux_kernel@gmail.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/r/20220423131239.3375261-1-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/f71882fg.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ sound/soc/soc-ops.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/f71882fg.c b/drivers/hwmon/f71882fg.c
-index 938a8b9ec70d..6830e029995d 100644
---- a/drivers/hwmon/f71882fg.c
-+++ b/drivers/hwmon/f71882fg.c
-@@ -1578,8 +1578,9 @@ static ssize_t show_temp(struct device *dev, struct device_attribute *devattr,
- 		temp *= 125;
- 		if (sign)
- 			temp -= 128000;
--	} else
--		temp = data->temp[nr] * 1000;
-+	} else {
-+		temp = ((s8)data->temp[nr]) * 1000;
-+	}
+diff --git a/sound/soc/soc-ops.c b/sound/soc/soc-ops.c
+index 63ee35ebeaab..f32ba64c5dda 100644
+--- a/sound/soc/soc-ops.c
++++ b/sound/soc/soc-ops.c
+@@ -519,7 +519,15 @@ int snd_soc_put_volsw_range(struct snd_kcontrol *kcontrol,
+ 	unsigned int mask = (1 << fls(max)) - 1;
+ 	unsigned int invert = mc->invert;
+ 	unsigned int val, val_mask;
+-	int err, ret;
++	int err, ret, tmp;
++
++	tmp = ucontrol->value.integer.value[0];
++	if (tmp < 0)
++		return -EINVAL;
++	if (mc->platform_max && tmp > mc->platform_max)
++		return -EINVAL;
++	if (tmp > mc->max - mc->min + 1)
++		return -EINVAL;
  
- 	return sprintf(buf, "%d\n", temp);
- }
+ 	if (invert)
+ 		val = (max - ucontrol->value.integer.value[0]) & mask;
+@@ -534,6 +542,14 @@ int snd_soc_put_volsw_range(struct snd_kcontrol *kcontrol,
+ 	ret = err;
+ 
+ 	if (snd_soc_volsw_is_stereo(mc)) {
++		tmp = ucontrol->value.integer.value[1];
++		if (tmp < 0)
++			return -EINVAL;
++		if (mc->platform_max && tmp > mc->platform_max)
++			return -EINVAL;
++		if (tmp > mc->max - mc->min + 1)
++			return -EINVAL;
++
+ 		if (invert)
+ 			val = (max - ucontrol->value.integer.value[1]) & mask;
+ 		else
 -- 
 2.35.1
 

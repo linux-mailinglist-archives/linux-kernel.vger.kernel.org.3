@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8BC527D4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06409527D53
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240096AbiEPGBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 02:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39248 "EHLO
+        id S240111AbiEPGCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 02:02:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240250AbiEPGBT (ORCPT
+        with ESMTP id S239088AbiEPGCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 02:01:19 -0400
+        Mon, 16 May 2022 02:02:09 -0400
 Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9428C1BE96
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:01:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8701D0FE
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:02:07 -0700 (PDT)
 Received: by verein.lst.de (Postfix, from userid 2407)
-        id 4B9C868CFE; Mon, 16 May 2022 08:01:10 +0200 (CEST)
-Date:   Mon, 16 May 2022 08:01:07 +0200
+        id 6F80968D06; Mon, 16 May 2022 08:02:01 +0200 (CEST)
+Date:   Mon, 16 May 2022 08:01:59 +0200
 From:   Christoph Hellwig <hch@lst.de>
 To:     Heiko Stuebner <heiko@sntech.de>
 Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
@@ -31,14 +31,13 @@ Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
         allen.baum@esperantotech.com, jscheid@ventanamicro.com,
         rtrauben@gmail.com, samuel@sholland.org, cmuellner@linux.com,
         philipp.tomsich@vrull.eu
-Subject: Re: [PATCH 01/12] riscv: integrate alternatives better into the
- main architecture
-Message-ID: <20220516060107.GD12339@lst.de>
-References: <20220511192921.2223629-1-heiko@sntech.de> <20220511192921.2223629-2-heiko@sntech.de>
+Subject: Re: [PATCH 02/12] riscv: allow different stages with alternatives
+Message-ID: <20220516060159.GE12339@lst.de>
+References: <20220511192921.2223629-1-heiko@sntech.de> <20220511192921.2223629-3-heiko@sntech.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220511192921.2223629-2-heiko@sntech.de>
+In-Reply-To: <20220511192921.2223629-3-heiko@sntech.de>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no

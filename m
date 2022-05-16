@@ -2,136 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E316527C1C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 04:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6FB527C1D
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 04:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239449AbiEPCnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 22:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59054 "EHLO
+        id S239460AbiEPCor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 22:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236837AbiEPCnr (ORCPT
+        with ESMTP id S233714AbiEPCon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 22:43:47 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2080.outbound.protection.outlook.com [40.107.255.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634292CDF1
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 19:43:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cQSXvHOahHP0boYzVZO/DZ+Aig3wCudANl8ecx03fUHs//u3Ja7YkRwtMAOczoWtRg+ip2Y2N8mz5RD6CnJ7yky0J26H4Celx10PCT9x4QKNUZbFi8DAYg2aCAt1WHx1zGhMLAfEV2Lqt+RaWJg8FnzKV2li/GNxuCi+m5l+FC2cCVtFvlPvQERWIswzUA35LzFVIlgoYl6HTtLpaShV2LxYOFSve0mgiRyEDuZcFBvJP3vm4xRXFDvAA5GW8HZaqbTMwnXuFUhKyBJIg6azkzPtUr63EWJJlldGJZXyhTX39bEFyklM+Rtf8/kbxZQ88CfiEPsxTQ+4SmuNWKa+Qg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9YZD/WYTXbdV02IzloO4fhUWjAVu5fEQDcsnp84TvQ4=;
- b=i+crVkwf3J2sbXnWyAag+W1JJQ7H1fjPgg8/w75FhZLGwusOs5RegB4m4CreH+Bi0DCx/3h88u62X0whxmy52oVAPjcSQcXwZpWgakDMdFaiITnoDAsbsVqwpw6sFyG5TFfr2U0zajVRdpaLHieOJb5fj/NXh8ryHbhG14jJzJi80uZKK+jc+A/cwB8wq31ylXUViagT8FTOH/UnT9biBmc30WaHM5F6k8PXfxD/Pby342sSZlABDoz18P8wZHlz6V2njc0HA5H3fkofVN3IetMExuKQdx5o7nVxos+WW00WUFG1l5WQhXIEX6Hf2sqDDYFCJhaXCodTTnRvr7pBrA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
- dkim=pass header.d=oppo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9YZD/WYTXbdV02IzloO4fhUWjAVu5fEQDcsnp84TvQ4=;
- b=rAr4tXhZLuMUOZiScvQhHxwNmAHa+jOU67R/YWWw1BeHXBFkQOsiww70lydnz/yHU2v9qPWgQ3wCKgYYcCoYsX+UXhMgFEvxvEGZ2BOBnyjx8aK8FPnNVUHrGQeSoG7Iq5sz2u8jfEWNqXohZNsfNUGGNo0cA6IYiBNvKTecJ4A=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oppo.com;
-Received: from TY2PR02MB4431.apcprd02.prod.outlook.com
- (2603:1096:404:8003::13) by SEYPR02MB5968.apcprd02.prod.outlook.com
- (2603:1096:101:81::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.18; Mon, 16 May
- 2022 02:43:41 +0000
-Received: from TY2PR02MB4431.apcprd02.prod.outlook.com
- ([fe80::28e3:2379:30a7:c4d4]) by TY2PR02MB4431.apcprd02.prod.outlook.com
- ([fe80::28e3:2379:30a7:c4d4%3]) with mapi id 15.20.5250.018; Mon, 16 May 2022
- 02:43:40 +0000
-Date:   Mon, 16 May 2022 10:43:39 +0800
-From:   "lipeifeng@oppo.com" <lipeifeng@oppo.com>
-To:     michel <michel@lespinasse.org>
-Cc:     akpm <akpm@linux-foundation.org>, michel <michel@lespinasse.org>,
-        hughd <hughd@google.com>, linux-mm <linux-mm@kvack.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "Barry Song" <21cnbao@gmail.com>,
-        zhangshiming <zhangshiming@oppo.com>,
-        peifengl55 <peifengl55@gmail.com>
-Subject: Re: Re: [PATCH] mm: fix align-error when get_addr in unmapped_area_topdown
-References: <20220412081014.399-1-lipeifeng@oppo.com>, 
-        <20220412142238.93e36cc4095e4e0b362db348@linux-foundation.org>, 
-        <2022041310411426044561@oppo.com>, 
-        <2022050110235766139218@oppo.com>, 
-        <20220501181041.6d53cb9ed54bf697840e36cc@linux-foundation.org>, 
-        <2022050211305415626916@oppo.com>, 
-        <20220509114521.GA9512@lespinasse.org>
-X-GUID: 27D9FBE2-56B8-48E9-88B2-C7734AE45DC5
-X-Has-Attach: no
-X-Mailer: Foxmail 7.2.16.188[cn]
-Message-ID: <2022051610294089439420@oppo.com>
-Content-Type: text/plain;
-        charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-ClientProxiedBy: HK2PR02CA0164.apcprd02.prod.outlook.com
- (2603:1096:201:1f::24) To TY2PR02MB4431.apcprd02.prod.outlook.com
- (2603:1096:404:8003::13)
+        Sun, 15 May 2022 22:44:43 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3690C2DD41
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 19:44:41 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L1k88382Cz1JC8s;
+        Mon, 16 May 2022 10:43:20 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 16 May 2022 10:44:38 +0800
+Subject: Re: [PATCH v2 2/4] mm/migration: remove unneeded lock page and
+ PageMovable check
+To:     David Hildenbrand <david@redhat.com>
+CC:     <ying.huang@intel.com>, <hch@lst.de>, <dhowells@redhat.com>,
+        <cl@linux.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <akpm@linux-foundation.org>,
+        <mike.kravetz@oracle.com>, <naoya.horiguchi@nec.com>,
+        Minchan Kim <minchan@kernel.org>
+References: <20220425132723.34824-1-linmiaohe@huawei.com>
+ <20220425132723.34824-3-linmiaohe@huawei.com>
+ <525298ad-5e6a-2f8d-366d-4dcb7eebd093@redhat.com>
+ <f5f933dc-450c-f3ac-34e6-d6dc1d901efd@huawei.com>
+ <4cf144a9-fff5-d993-4fcb-7f2dfa6e71bb@redhat.com>
+ <924de987-202b-a97e-e6d2-6bdab530f190@huawei.com>
+ <c566dc2c-fc70-e410-5272-767fa28cbba4@redhat.com>
+ <025d0dc8-a446-b720-14a8-97c041055f48@huawei.com>
+ <143ab5dd-85a9-3338-53b7-e46c9060b20e@redhat.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <6ba7e2bd-28c1-53ff-a6b7-072c79714dee@huawei.com>
+Date:   Mon, 16 May 2022 10:44:37 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3d06392b-80f3-4636-6d2b-08da36e5e278
-X-MS-TrafficTypeDiagnostic: SEYPR02MB5968:EE_
-X-Microsoft-Antispam-PRVS: <SEYPR02MB59683F824B870F617DAEF087C6CF9@SEYPR02MB5968.apcprd02.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vOzah+NDFJZioBH1Iu1bWCPhFJsZl0br6YFX1vkul0DCqMClowKGj9ocafasTJY/A9tf4j5oe1F7RolVv6281bn4zKvFXgx037slkBaOR8kxnwXMMLnHSJ8QcaB81HBwrjc/C9IYdNBrl8kbYsjp7H4D7l/iAsHHHo/wcDLRcAqSIfbWU0Aj8tOokWMfsLPvsk+LZJ3oJdyyEFygJy+UPLYpJbTPyh3VxKZUg6IgjTljY2LnlRscuX+WnYgEdOTiGEqFc5jVi8ZdOoaZT/Pi0hMrDwk9HuGiBymGrEGA58/uO5KgoBAF3vD6Kctas7tOl4JYYDYIHM+KSxDRDu0K/7qLWgFQuHNFbzkENN6Dz4SVSHnIGapZ4tlLMIeU8Td1JHcbBTWdKv9gMX2119au9doKhmY2W/OtFERtEZBAGLHEm6d4XWPIWCfhMHPVq5dhjBpOVPPWh1RUHWmXl+IXoGHfltA9lYrpsVDUfuiSMxFc7D2doXBUPYLCq2Il8TUNZePjPCf2eG9XW2DNpqP7lk4EMNLKSbSoCJaPOF4wis8b16n43BMCQmGJUSjrQQSilmoQS+bO/yZftVvXv7DlZ9uOfXPojocgz2sZbzai8mpLDfaoKaJF3NNcy/HMcq2KkAORlbVJrZkR8zJP7IVFg5VKfTbClTLyZIPdlN1I3z4JBIlckrp3ezcRoLfoa1JVu55H3vtlDXs0vjpBAnFyvF0laWQZVfBhs9bXDVCddtjnw2nXoQIr2Y+gj+J4a74mlyaBI371MsqMvDP0tpgdDZx34PeMj25g91LZpL5XrCw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR02MB4431.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(98106002)(54906003)(53546011)(4326008)(66556008)(6916009)(36756003)(6506007)(1076003)(86362001)(316002)(26005)(52116002)(6512007)(8676002)(83380400001)(2616005)(966005)(508600001)(6486002)(186003)(66946007)(66476007)(8936002)(2906002)(58226001)(38350700002)(38100700002)(5660300002)(37786003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Mkh5blVvdW1XUVBUU0FKa2xBdXRhUlN1Y3FQZ3hNZExET2pNcmNlT0lXY2ow?=
- =?utf-8?B?V0ovQ1d6UkdLd1F6SnJkQjBYanpGdTZodEV4S0p1SHpqL1V5TFRzOU52a08x?=
- =?utf-8?B?NW9IeWVUdlBTZHJ6bnpSa2ZockdOajd0VG44RnY1cnBJWS9nUnYxeGxFSEM4?=
- =?utf-8?B?Vy9OR1BpSGQ5VGp6eVZNMnU1TVNwRUNhTXZHb1FCaC85SUpWbUpncWREamFr?=
- =?utf-8?B?dDdhM0ppMGFhWkdwNjVjaEQ0R3lzWDJVcUNzcXA0Y0xJOUxWVzI3OHFIVnJW?=
- =?utf-8?B?TjVrWGVsb1hRNTZTTHZsU0QzNWJhMmIyQ0tWNUg2N05yZGE3ODdYcEpLVTFP?=
- =?utf-8?B?Zm8wcy9NbWRKTlFvS1RFUm96d3JuSzl6Y253U2UyMXpOZlBrc3VqTTRWeStk?=
- =?utf-8?B?Uk94MHVWVzlIazNybmVPZEp0VU1QbGlDVHg3MzlTWWk2RWV4cXFuOHRwY3NN?=
- =?utf-8?B?WExHNy9Ed29KOXY5Z2p4b2t0ZkhTOVdGRFdjNldCaXpQdTZQQ0I2bnpkMDV6?=
- =?utf-8?B?SnFCekZkWU1DTFZxTWNxVE0rdzdCYzFMUTlOQjFOZDNuVUFPSnFrdUx0YVRI?=
- =?utf-8?B?L2FjSUZIVGtQeGRBV0cwSjF1WGtEMzhDMUFGbGxySHVvYWdKWVM0T3VMNHpL?=
- =?utf-8?B?SHpZNktEQXNQM0dwZG1WQlJsR3QwNmtHZm53eTAzLzhsbk5MRWVJalZTd2Ft?=
- =?utf-8?B?Tmo3K1BWcXhDTWVqR2FqSVpLclFJYTR2cG12NncrTzFSZmMvQnM5RWdWUGx2?=
- =?utf-8?B?aHkzc3crbUVQT1Y1VmRxdHBoaU90VjFBMWpVMDNMWHJUMllub0EvYjd3ZS9J?=
- =?utf-8?B?ekYyUVVsTHE4cGtVYzBVSk1PNGQ2Ny9pZUd0cWpmb2ZIWVVHSHprMHFIOWVU?=
- =?utf-8?B?OWlzVFdxc0FsbytmdkdBZ29FRVZyTlBGcTZmSjVsZ2ZDMTRrRnlLbVdyblRG?=
- =?utf-8?B?VTdqSENHYXY4UjF6WkNrNUN3NnFDNnZQa0pZUW5CYTFzSFFzWmR0TnRlNlJi?=
- =?utf-8?B?OFVLVW9DbFQxZmtyTndUMXRyZExCbXprL0E4ZmxBajRCSHd5eFlxVEtJbTEy?=
- =?utf-8?B?WUorZ0RxQ3I2RGR0NUxacDdITXJON2xPYUErU1V6SVBldm1jVHp6T2xKS2RQ?=
- =?utf-8?B?eTk5VCtZU2dBMFBORWNoSm9KcEhINWMrL1FKaHFwcmxaZTdCS3ZzdzhTcEFj?=
- =?utf-8?B?L3NZYmZuOW1QVnRXSHVTUU9lbFgrR3lRSjM5OUtTQ1lrK3NTRU5GSVkyMmVp?=
- =?utf-8?B?UVFvd3FSYVJjTHc1cjFaMmV4SW9wcVdtQ1FQUHZHUnhDWXEyeDJzbzJub0hC?=
- =?utf-8?B?R3JxN1Axek9OYVJ5Qy9DTWlJemw3VlZnVFFLNjdSY1RXODN0NjZiMUp0N2VX?=
- =?utf-8?B?cUIvL04rRG1vOGJRZTFCRTA1VkRyUTUwK0lZcVZEaVVnOUZwUG5sVUtvck1B?=
- =?utf-8?B?eTUweXJ2anRwa3dkUFJtRjZvWGtyME9nanBlZWVGVGtLQ05sMk1CUW9DR0Q0?=
- =?utf-8?B?SHpEd1Y2QWZHK1hqYzk4NTF1Vk1TbG1YVm5zay9UbmQ4Ykt5c0ptYko2ZGdx?=
- =?utf-8?B?bHAvdkNyR2Y4NVRpODdXSDdEUzRmZFJJOGxvY3o0MU9lMWl1VWVuRGdacTB2?=
- =?utf-8?B?NXdiUFpKejdjN1UrdU9mQSt1d2YzNzVIQm9kYjNhVjBLMk13VmpFVmlKUVk5?=
- =?utf-8?B?azc2NU9keGU0aHZVL05obGdtemFNQTRSZWRJb1V5Qy8xVlpzNUZmbjF1VjRx?=
- =?utf-8?B?djBPdkdVNTVLaXhZRXVPOWZoSmpvUCsyaXdreEZDR29kWnE3MjhFMGRwcUJU?=
- =?utf-8?B?NXZzdGszWDQ1Nm14VXgra0dock5RMFFGNCt5MFhOeTRrSXdWM3kzSjBkVmNX?=
- =?utf-8?B?TE1ESE5GNEpobng5cjFnYkQyOTRkMEwyVTdraDJIK3VXQXRmZTlaRFpXaEVh?=
- =?utf-8?B?TTJVa1B5UlNpR2RENTB2bmpmei8ybkZldkp4emgzWHVycVo3dW9SN1RRTGJU?=
- =?utf-8?B?SVNWajRiU0hoUWMxMzYrUk5xWGxwa1JMNE5jZW9sdnQ5cHRCcjNMbHJzOFo0?=
- =?utf-8?B?aWUyRTdIL01mdzF5SGZSdlVLazlVRXpLdFg1NHVNODhodlpQZTJXNjBTNXZl?=
- =?utf-8?B?SWxZeVZJZTF6WDVEZlRucVhCcEx0RnloSnlIRlF3Nis2YmtGVitrSnZqcDY2?=
- =?utf-8?B?cHE1TVYyMUZOWUkrK2x0WDc5NGU5QmFCdWRQd1ZQTllwSGFvV1FpaXhYNkFk?=
- =?utf-8?B?NU02RzgxSkl0Q3Y3K21LN3M2NTh3UHZhYTVNR2UrSkg3aEcrdVJMUXBHZlB5?=
- =?utf-8?B?V2lobWRlclVIWVE4dzdVTkdoNjZUR2xzUjJrdktnYnJWU2x3MEN1T25YcGcw?=
- =?utf-8?Q?B/TMu5V6bdWJkL/8=3D?=
-X-OriginatorOrg: oppo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3d06392b-80f3-4636-6d2b-08da36e5e278
-X-MS-Exchange-CrossTenant-AuthSource: TY2PR02MB4431.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2022 02:43:40.4111
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RlDmd+nlAKMrfI912wmU6H2WuZ719E4xbVxYBIvcP6QYXgUNrYzuJC+mDiJ7kZbHT7w2UOsg4WdoQzBuRuxwSQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR02MB5968
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <143ab5dd-85a9-3338-53b7-e46c9060b20e@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -139,119 +62,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgbWljaGVsOgoKVGhhbmsgeW91IGZvciB5b3VyIHJlcGx5LgpJIGFtIHNvcnJ5IGZvcsKgbXkg
-bGF0ZSByZXBseS4KCj4gVGhpcyBwcmV2aW91cyB0aHJlYWQgaXMgdmVyeSByZWxldmFudCBoZXJl
-Ogo+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xrbWwvQ0FOTjY4OUc2bUdMU09reWozMXltcEdn
-bnF4bkpvc1BWYzRFYWtXNWdZR3RBXzQ1TDdnQG1haWwuZ21haWwuY29tLwrCoAo+IEkgYW0gc29y
-cnkgdGhhdCBJIGhhZCBjb25mdXNlZCB5b3Ugd2l0aCB0aGUgb3JpZ2luYWwgcG9zdGVyIG9uIHRo
-YXQKPiB0aHJlYWQgLSB5b3VyIHByb3Bvc2VkIGNoYW5nZXMgYXJlIHZlcnkgc2ltaWxhci4gVGhh
-dCBzYWlkLCBJIHN0aWxsCj4gaGF2ZSB0aGUgZXhhY3Qgc2FtZSBjb25jZXJucyB0aGF0IEkgaGFk
-IGF0IHRoZSB0aW1lLiBUaGUgY3VycmVudAo+IHNlYXJjaCBhbGdvcml0aG0gaXMgZ3VhcmFudGVl
-ZCB0byBmaW5kIGEgZ2FwIGluIE8obG9nIE4pIHRpbWUsIGlmIHRoZXJlCj4gaXMgYW4gYXZhaWxh
-YmxlIGdhcCBvZiBzaXplIChyZXF1ZXN0ZWRfc2l6ZSArIGFsaWdubWVudCAtIHBhZ2Vfc2l6ZSku
-Cj4gVGhlIG1vZGlmaWVkIHNlYXJjaCBvbmx5IHJlcXVpcmVzIGFuIGF2YWlsYWJsZSBnYXAgb2Yg
-dGhlIHJlcXVlc3RlZAo+IHNpemUgYW5kIGFsaWdubWVudCwgYnV0IGl0IGNhbiB0YWtlIE8oTikg
-dGltZSB3aGljaCBtaWdodCBiZSB0b28gc2xvdy4KPiBNYXliZSB3ZSBjb3VsZCBhZmZvcmQgdGhl
-IHNsb3cgc2VhcmNoIGlmIGl0J3Mgb25seSB1c2VkIGFzIGEgZmFsbGJhY2sKPiB3aGVuIHRoZSBm
-YXN0IHNlYXJjaCBmYWlscywgYnV0IHZlcnkgZmV3IHBlb3BsZSB3b3VsZCBldmVyIGV4ZWN1dGUK
-PiB0aGF0IGZhbGxiYWNrIGFuZCB0aGF0IG1ha2VzIGl0IGhhcmQgdG8gdGVzdCAvIGVhc3kgZm9y
-IGJ1Z3MgdG8gaGlkZSBpbi4KCkluIG15IG9waW9ucywgbXkgbmV3IG1ldGhvZHMgdG8gc2VhcmNo
-IGFkZHIgdGFrZSBPKGxvZyBOKSB0aW1lIHRvbywKaXMgaXQgcmlnaHQ/IGkgd2lsbCBvbmx5IGFk
-ZCBtb3JlIGFjdGlvbiB0byBqdWRnZSBpZiB0aGUgc3BhY2UgaXMgYXZhaWxhYmxlCmF0IHRoZSBz
-YW1lIHRpbWUuCgo+IElmIEkgdW5kZXJzdGFuZCB5b3VyIG1lc3NhZ2UgYXQKPiBodHRwczovL2xv
-cmUua2VybmVsLm9yZy9sa21sLzIwMjIwNDI0MTgzMzQ1NDg0ODk1OEBvcHBvLmNvbS8gLAo+IGl0
-IHNlZW1zIGxpa2Ugc29tZSBhbmRvaWQgYXBwcyBzdWNoIGFzIHdlY2hhdCBhcmUgZmlsbGluZyB1
-cAo+IGEgMzItYml0IGFkZHJlc3Mgc3BhY2Ugc3VjaCBhcyB0aGVyZSBpcyBubyAxM01CIGdhcCBh
-dmFpbGFibGUgYW55bW9yZQo+IChhcyB3b3VsZCBiZSByZXF1aXJlZCBieSB0aGUgY3VycmVudCBz
-ZWFyY2gpLCBidXQgdGhlcmUgYXJlIHN0aWxsIHNvbWUKPiAxMk1CIGdhcHMgYWxpZ25lZCBvbiBh
-IDFNQiBib3VuZGFyeSwgd2hpY2ggdGhleSBhcmUgdGhlbiB0cnlpbmcgdG8KPiBhbGxvY2F0ZSBm
-cm9tLiBJdCBzZWVtcyB2ZXJ5IG9kZCB0byBtZSB0aGF0IG9uZSB3b3VsZCBmaW5kIHRoZW1zZWx2
-ZXMKPiBpbiB0aGF0IHNpdHVhdGlvbiwgY291bGQgeW91IGdpdmUgdXMgc29tZSBkZXRhaWxzIGFz
-IHRvIGhvdyB0aGF0IGhhcHBlbmVkID8KPiBEbyB5b3Uga25vdyB3aGF0IHRoZSBhcHAgaXMgdHJ5
-aW5nIHRvIGRvIHRvIGZpbGwgdGhlIGFkZHJlc3Mgc3BhY2UgdGhhdCB3YXkgPwo+IEFsc28sIHdo
-eSBpcyB0aGlzIG9kZCBiZWhhdmlvciBjb25zaWRlcmVkIHRvIGJlIGEga2VybmVsIGlzc3VlIC0g
-d2FzIHRoZQo+IGFwcCBwcmV2aW91c2x5IHJ1bm5pbmcgb24gYSAocXVpdGUgb2xkICEpIGtlcm5l
-bCB0aGF0IGRpZG4ndCBoYXZlIHRoZSBmYXN0Cj4gdm1hIGdhcCBzZWFyY2gsIGFuZCBpcyBub3cg
-ZmFpbGluZyB3aGVuIHBvcnRlZCB0byBhIG1vcmUgcmVjZW50IGtlcm5lbCA/CgoxLiBXZWNoYXQg
-anVzdCBvbmUgb2YgdGhlIGNhc2Ugd2UgZm91bmQgdG8gc3BhY2UgdW5zdWNjZXNzZnVsbHkgYnkg
-dGhlIG9sZCB3YXksCm90aGVycyBhcHAsIGxpa2Ugc2dhbWXjgIF0YW9iYW8gYW5kIHNvIG9u77yM
-IHdoaWNoIGhhdmUgYmVlbiBmb3VuZCB0aGUgc2FtZQppc3N1ZShUaGUgYWxsb2NhdGVkIHNpemUg
-aXMgMU1+MTJNKS4gwqBVbmZvcnR1bmF0ZWx5LCB3ZSBjYW4gbm90IHNlZSBob3cgdGhlIAphYm92
-ZSBhcHBzIG9wZXJhdGUuCgoyLiB0aGUgcGF0Y2ggd2lsbCBzb3ZsZSB0aGUgYW5vdGhlciBwcm9i
-bGVtcywgaXQgY2FuIGFkZCBtb3JlIHZtYS1tZXJnZSBpbiBzb21lCmNhc2UuIGUuZy4sIHNvbWUg
-Z3B1IHdpbGwgYWxsb2Mgdm1hLXNwYWNlwqDCoG9uIGEgMU1CIGJvdW5kYXJ5LCBpZiB0aGVyZSBh
-cmUgbXVjaAp2bWEtZnJlZS1zcGFjZShsZXNzIHRoYW4gMU0rNjRreXRlcykgaW4gc3lzdGVtLCBp
-dCBjYW4gbm90IGJlIGFsbG9jZWQgdG8gNjRrYnRlcwpvbiBhIDFNQiBib3VuZGFyeSwgc28gdGhh
-dCBtb3JlIHZtYSB3b3VsZCBiZSBuZWVkLgoKCgpsaXBlaWZlbmdAb3Bwby5jb20KwqAKRnJvbTrC
-oE1pY2hlbCBMZXNwaW5hc3NlCkRhdGU6wqAyMDIyLTA1LTA5wqAxOTo0NQpUbzrCoGxpcGVpZmVu
-Z0BvcHBvLmNvbQpDQzrCoGFrcG07IG1pY2hlbDsgaHVnaGQ7IGxpbnV4LW1tOyBsaW51eC1rZXJu
-ZWw7IEJhcnJ5IFNvbmc7IHpoYW5nc2hpbWluZzsgcGVpZmVuZ2w1NQpTdWJqZWN0OsKgUmU6IFJl
-OiBbUEFUQ0hdIG1tOiBmaXggYWxpZ24tZXJyb3Igd2hlbiBnZXRfYWRkciBpbiB1bm1hcHBlZF9h
-cmVhX3RvcGRvd24KT24gTW9uLCBNYXkgMDIsIDIwMjIgYXQgMTE6MzM6MThBTSArMDgwMCwgbGlw
-ZWlmZW5nQG9wcG8uY29tIHdyb3RlOgo+IEhpwqBBbmRyZXfvvJoKPgo+IFRoYW5rcyBmb3IgeW91
-ciBxdWljayByZXNwb25zZS4KPgo+ID4gVGhleSBjYXVzZWQgbWUgc29tZSBtZXJnZSBpc3N1ZXMg
-YWdhaW5zdCBtYXBsZXRyZWUsIHdoaWNoIEkgaGFkCj4gPiByZXNvbHZlZC4gwqBNYXBsZXRyZWUg
-aXMgZHJvcHBlZCBhdCBwcmVzZW50IHNvIEkgc2V0IHRoZXNlIHBhdGNoZXMgYXNpZGUKPiA+IHVu
-dGlsIHRoZSBuZXh0IHZlcnNpb24gb2YgdGhlIG1hcGxldHJlZSBwYXRjaGVzIGFyZSBhdmFpbGFi
-bGUuCj4KPiBEbyB3ZSBoYXZlIGEgZGVmaW5pdGUgdGltZSBmb3LCoHRoZSBuZXh0IGF2YWlsYWJs
-ZSB2ZXJzaW9uIG9mIHRoZSBtYXBsZXRyZWUgcGF0Y2hlcz8KPiBFeGN1c2UgbWUsIGlzIGl0IHBv
-c3NpYmxlIGZvciBvdXIgcGF0Y2ggdG8gYmUgaW5kZXBlbmRlbnQgb2YgbWFwbGV0cmVlIGFuZCBi
-cm91Z2h0IGluIHNlcGFyYXRlbHk/CsKgCkkgdGhpbmsgaXQncyB1bmF2b2lkYWJsZSB0aGF0IHRo
-ZXJlIHdpbGwgYmUgYSBjb25mbGljdCB3aXRoIG1hcGxlIHRyZWUKYmVjYXVzZSB0aGV5IGFyZSBj
-aGFuZ2luZyB0aGUgd2F5IHdlIHRyYWNrIGdhcHMgYmV0d2VlbiB2bWFzLgrCoAo+ID4gSSd2ZSBi
-ZWVuIGhvbGRpbmcgeW91ciBwYXRjaGVzIHVudGlsIE1pY2hlbCBMZXNwaW5hc3NlIGhhcyBoYWQg
-dGltZSB0bwo+ID4gcmV2aWV3IHRoZW0gKGFuZCBob3BlZnVsbHkgZXhwbGFpbiB0aGVtIHRvIG1l
-IDspKS4gwqBQbGVhc2UgcmV2aWV3Cj4gPiBlYXJsaWVyIGNvbW1lbnRzIHdoaWNoIE1pY2hlbCBo
-YXMgcHJvdmlkZWQgYW5kIGVuc3VyZSB0aGF0IHRob3NlCj4gPiBjb21tZW50cyBoYXZlIGJlZW4g
-ZnVsbHkgYWRkcmVzc2VkIHNvIHdlIGNhbiBob3BlZnVsbHkgbW92ZSBmb3J3YXJkIG9uCj4gPiB0
-aGlzLgo+Cj4gV2Ugd2lsbCByZXBseSBzb29uIGlmIE1yLkxlc3BpbmFzc2UgcHJvdmlkZWRzIGFu
-eSBhZHZpY2VzIG9yIHF1ZXN0aW9uLgo+IEFuZCBJIGhhdmVuJ3QgcmVjZWl2ZWQgYW55IHJlcGx5
-IGZyb20gTXIuTGVzcGluYXNzZSB5ZXQsIHBscyBsZXQgbWUga25vdwo+IGlmIEkgbWlzc2VkIHRo
-ZSByZXBseS4KwqAKVGhpcyBwcmV2aW91cyB0aHJlYWQgaXMgdmVyeSByZWxldmFudCBoZXJlOgpo
-dHRwczovL2xvcmUua2VybmVsLm9yZy9sa21sL0NBTk42ODlHNm1HTFNPa3lqMzF5bXBHZ25xeG5K
-b3NQVmM0RWFrVzVnWUd0QV80NUw3Z0BtYWlsLmdtYWlsLmNvbS8KwqAKSSBhbSBzb3JyeSB0aGF0
-IEkgaGFkIGNvbmZ1c2VkIHlvdSB3aXRoIHRoZSBvcmlnaW5hbCBwb3N0ZXIgb24gdGhhdAp0aHJl
-YWQgLSB5b3VyIHByb3Bvc2VkIGNoYW5nZXMgYXJlIHZlcnkgc2ltaWxhci4gVGhhdCBzYWlkLCBJ
-IHN0aWxsCmhhdmUgdGhlIGV4YWN0IHNhbWUgY29uY2VybnMgdGhhdCBJIGhhZCBhdCB0aGUgdGlt
-ZS4gVGhlIGN1cnJlbnQKc2VhcmNoIGFsZ29yaXRobSBpcyBndWFyYW50ZWVkIHRvIGZpbmQgYSBn
-YXAgaW4gTyhsb2cgTikgdGltZSwgaWYgdGhlcmUKaXMgYW4gYXZhaWxhYmxlIGdhcCBvZiBzaXpl
-IChyZXF1ZXN0ZWRfc2l6ZSArIGFsaWdubWVudCAtIHBhZ2Vfc2l6ZSkuClRoZSBtb2RpZmllZCBz
-ZWFyY2ggb25seSByZXF1aXJlcyBhbiBhdmFpbGFibGUgZ2FwIG9mIHRoZSByZXF1ZXN0ZWQKc2l6
-ZSBhbmQgYWxpZ25tZW50LCBidXQgaXQgY2FuIHRha2UgTyhOKSB0aW1lIHdoaWNoIG1pZ2h0IGJl
-IHRvbyBzbG93LgpNYXliZSB3ZSBjb3VsZCBhZmZvcmQgdGhlIHNsb3cgc2VhcmNoIGlmIGl0J3Mg
-b25seSB1c2VkIGFzIGEgZmFsbGJhY2sKd2hlbiB0aGUgZmFzdCBzZWFyY2ggZmFpbHMsIGJ1dCB2
-ZXJ5IGZldyBwZW9wbGUgd291bGQgZXZlciBleGVjdXRlCnRoYXQgZmFsbGJhY2sgYW5kIHRoYXQg
-bWFrZXMgaXQgaGFyZCB0byB0ZXN0IC8gZWFzeSBmb3IgYnVncyB0byBoaWRlIGluLgrCoApJZiBJ
-IHVuZGVyc3RhbmQgeW91ciBtZXNzYWdlIGF0Cmh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xrbWwv
-MjAyMjA0MjQxODMzNDU0ODQ4OTU4QG9wcG8uY29tLyAsCml0IHNlZW1zIGxpa2Ugc29tZSBhbmRv
-aWQgYXBwcyBzdWNoIGFzIHdlY2hhdCBhcmUgZmlsbGluZyB1cAphIDMyLWJpdCBhZGRyZXNzIHNw
-YWNlIHN1Y2ggYXMgdGhlcmUgaXMgbm8gMTNNQiBnYXAgYXZhaWxhYmxlIGFueW1vcmUKKGFzIHdv
-dWxkIGJlIHJlcXVpcmVkIGJ5IHRoZSBjdXJyZW50IHNlYXJjaCksIGJ1dCB0aGVyZSBhcmUgc3Rp
-bGwgc29tZQoxMk1CIGdhcHMgYWxpZ25lZCBvbiBhIDFNQiBib3VuZGFyeSwgd2hpY2ggdGhleSBh
-cmUgdGhlbiB0cnlpbmcgdG8KYWxsb2NhdGUgZnJvbS4gSXQgc2VlbXMgdmVyeSBvZGQgdG8gbWUg
-dGhhdCBvbmUgd291bGQgZmluZCB0aGVtc2VsdmVzCmluIHRoYXQgc2l0dWF0aW9uLCBjb3VsZCB5
-b3UgZ2l2ZSB1cyBzb21lIGRldGFpbHMgYXMgdG8gaG93IHRoYXQgaGFwcGVuZWQgPwpEbyB5b3Ug
-a25vdyB3aGF0IHRoZSBhcHAgaXMgdHJ5aW5nIHRvIGRvIHRvIGZpbGwgdGhlIGFkZHJlc3Mgc3Bh
-Y2UgdGhhdCB3YXkgPwpBbHNvLCB3aHkgaXMgdGhpcyBvZGQgYmVoYXZpb3IgY29uc2lkZXJlZCB0
-byBiZSBhIGtlcm5lbCBpc3N1ZSAtIHdhcyB0aGUKYXBwIHByZXZpb3VzbHkgcnVubmluZyBvbiBh
-IChxdWl0ZSBvbGQgISkga2VybmVsIHRoYXQgZGlkbid0IGhhdmUgdGhlIGZhc3QKdm1hIGdhcCBz
-ZWFyY2gsIGFuZCBpcyBub3cgZmFpbGluZyB3aGVuIHBvcnRlZCB0byBhIG1vcmUgcmVjZW50IGtl
-cm5lbCA/CsKgCj4gVGhhbmsgeW91IHZlcnkgbXVjaCBpbmRlZWQuCj4KPiBsaXBlaWZlbmdAb3Bw
-by5jb20KPiDCoAo+IEZyb206wqBBbmRyZXcgTW9ydG9uCj4gRGF0ZTrCoDIwMjItMDUtMDLCoDA5
-OjEwCj4gVG86wqBsaXBlaWZlbmdAb3Bwby5jb20KPiBDQzrCoG1pY2hlbDsgaHVnaGQ7IGxpbnV4
-LW1tOyBsaW51eC1rZXJuZWw7IEJhcnJ5IFNvbmc7IHpoYW5nc2hpbWluZzsgcGVpZmVuZ2w1NQo+
-IFN1YmplY3Q6wqBSZTogW1BBVENIXSBtbTogZml4IGFsaWduLWVycm9yIHdoZW4gZ2V0X2FkZHIg
-aW4gdW5tYXBwZWRfYXJlYV90b3Bkb3duCj4gT24gU3VuLCAxIE1heSAyMDIyIDEwOjI2OjM1ICsw
-ODAwICJsaXBlaWZlbmdAb3Bwby5jb20iIDxsaXBlaWZlbmdAb3Bwby5jb20+IHdyb3RlOgo+IMKg
-Cj4gPiBXaHkgZGlkIHRoZSB0d28gcGF0Y2hlcyBzdWRkZW5seSBkaXNhcHBlYXIgd2l0aG91dCBh
-bnkgZW1haWwgb3Igbm90aWNlIGZvciB1cz8KPiA+IEFuZCB0aGV5IGhhZCBiZWVuIG1lcmdlZCBp
-biBsaW51eC1uZXh0LmdpdCBvbiBBcHJpbCA1IGFuZCAxMy4KPiDCoAo+IFRoZXkgY2F1c2VkIG1l
-IHNvbWUgbWVyZ2UgaXNzdWVzIGFnYWluc3QgbWFwbGV0cmVlLCB3aGljaCBJIGhhZAo+IHJlc29s
-dmVkLsKgIE1hcGxldHJlZSBpcyBkcm9wcGVkIGF0IHByZXNlbnQgc28gSSBzZXQgdGhlc2UgcGF0
-Y2hlcyBhc2lkZQo+IHVudGlsIHRoZSBuZXh0IHZlcnNpb24gb2YgdGhlIG1hcGxldHJlZSBwYXRj
-aGVzIGFyZSBhdmFpbGFibGUuCj4gwqAKPiDCoAo+IEkndmUgYmVlbiBob2xkaW5nIHlvdXIgcGF0
-Y2hlcyB1bnRpbCBNaWNoZWwgTGVzcGluYXNzZSBoYXMgaGFkIHRpbWUgdG8KPiByZXZpZXcgdGhl
-bSAoYW5kIGhvcGVmdWxseSBleHBsYWluIHRoZW0gdG8gbWUgOykpLsKgIFBsZWFzZSByZXZpZXcK
-PiBlYXJsaWVyIGNvbW1lbnRzIHdoaWNoIE1pY2hlbCBoYXMgcHJvdmlkZWQgYW5kIGVuc3VyZSB0
-aGF0IHRob3NlCj4gY29tbWVudHMgaGF2ZSBiZWVuIGZ1bGx5IGFkZHJlc3NlZCBzbyB3ZSBjYW4g
-aG9wZWZ1bGx5IG1vdmUgZm9yd2FyZCBvbgo+IHRoaXMuCj4gwqAKPiDCoA==
+On 2022/5/13 0:50, David Hildenbrand wrote:
+> On 12.05.22 15:26, Miaohe Lin wrote:
+>> On 2022/5/12 15:10, David Hildenbrand wrote:
+>>>>> If PG_isolated is still set, it will get cleared in the buddy when
+>>>>> freeing the page via
+>>>>>
+>>>>> 	page->flags &= ~PAGE_FLAGS_CHECK_AT_PREP;
+>>>>
+>>>> Yes, check_free_page only complains about flags belonging to PAGE_FLAGS_CHECK_AT_FREE and PG_isolated
+>>>> will be cleared in the buddy when freeing the page. But it might not be a good idea to reply on this ?
+>>>> IMHO, it should be better to clear the PG_isolated explicitly ourselves.
+>>>
+>>> I think we can pretty much rely on this handling in the buddy :)
+>>
+>> So is the below code change what you're suggesting?
+>>
+>> 	if (page_count(page) == 1) {
+>> 		/* page was freed from under us. So we are done. */
+>> 		ClearPageActive(page);
+>> 		ClearPageUnevictable(page);
+>> -		if (unlikely(__PageMovable(page)))
+>> -			ClearPageIsolated(page);
+>> 		goto out;
+>> 	}
+> 
+> Yeah, unless I am missing something important :)
+> 
+>>>
+>>>>
+>>>>>
+>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>> Also, I am not sure how reliable that page count check is here: if we'd
+>>>>>>> have another speculative reference to the page, we might see
+>>>>>>> "page_count(page) > 1" and not take that path, although the previous
+>>>>>>> owner released the last reference.
+>>>>>>
+>>>>>> IIUC, there should not be such speculative reference. The driver should have taken care
+>>>>>> of it.
+>>>>>
+>>>>> How can you prevent any kind of speculative references?
+>>>>>
+>>>>> See isolate_movable_page() as an example, which grabs a speculative
+>>>>> reference to then find out that the page is already isolated by someone
+>>>>> else, to then back off.
+>>>>
+>>>> You're right. isolate_movable_page will be an speculative references case. But the page count check here
+>>>> is just an optimization. If we encounter speculative references, it still works with useless effort of
+>>>> migrating to be released page.
+>>>
+>>>
+>>> Not really. The issue is that PAGE_FLAGS_CHECK_AT_FREE contains
+>>> PG_active and PG_unevictable.
+>>>
+>>> We only clear those 2 flags if "page_count(page) == 1". Consequently,
+>>> with a speculative reference, we'll run into the check_free_page_bad()
+>>> when dropping the last reference.
+>>
+>> It seems if a speculative reference happens after the "page_count(page) == 1" check,
+>> it's ok because we cleared the PG_active and PG_unevictable. And if it happens before
+>> the check, this code block is skipped and the page will be freed after migration. The
+>> PG_active and PG_unevictable will be correctly cleared when page is actually freed via
+>> __folio_clear_active. (Please see below comment)
+>>
+>>>
+>>> This is just shaky. Special casing on "page_count(page) == 1" for
+>>> detecting "was this freed by the owner" is not 100% water proof.
+>>>
+>>> In an ideal world, we'd just get rid of that whole block of code and let
+>>> the actual freeing code clear PG_active and PG_unevictable. But that
+>>> would require changes to free_pages_prepare().
+>>>
+>>>
+>>> Now I do wonder, if we ever even have PG_active or PG_unevictable still
+>>> set when the page was freed by the owner in this code. IOW, maybe that
+>>> is dead code as well and we can just remove the whole shaky
+>>> "page_count(page) == 1" code block.
+>>
+>> Think about below common scene: Anonymous page is actively used by the sole owner process, so it
+>> will have PG_active set. Then process exited while vm tries to migrate that page. So the page
+>> should have refcnt == 1 while PG_active is set? Note normally PG_active should be cleared when
+>> the page is released:
+>>
+>> __put_single_page
+>>   PageLRU
+>>     __clear_page_lru_flags
+>>       __folio_clear_active
+>>       __folio_clear_unevictable
+>>
+>> But for isolated page, PageLRU is cleared. So when the isolated page is released, __clear_page_lru_flags
+>> won't be called. So we have to clear the PG_active and PG_unevictable here manully. So I think
+>> this code block works. Or am I miss something again?
+> 
+> Let's assume the following: page as freed by the owner and we enter
+> unmap_and_move().
+> 
+> 
+> #1: enter unmap_and_move() // page_count is 1
+> #2: enter isolate_movable_page() // page_count is 1
+> #2: get_page_unless_zero() // page_count is now 2
+> #1: if (page_count(page) == 1) { // does not trigger
+> #2: put_page(page); // page_count is now 1
+> #1: put_page(page); // page_count is now 0 -> freed
+> 
+> 
+> #1 will trigger __put_page() -> __put_single_page() ->
+> __page_cache_release() will not clear the flags because it's not an LRU
+> page at that point in time, right (-> isolated)?
+
+Sorry, you're right. I thought the old page will be freed via putback_lru_page which will
+set PageLRU back instead of put_page directly. So if the above race occurs, PG_active and
+PG_unevictable will remain set while page goes to the buddy and check_free_page will complain
+about it. But it seems this is never witnessed?
+
+> 
+> We did not run that code block that would clear PG_active and
+> PG_unevictable.
+> 
+> Which still leaves the questions:
+> 
+> a) If PG_active and PG_unevictable was cleared, where?
+
+For LRU pages, PG_active and PG_unevictable are cleared via __page_cache_release. And for isolated
+(LRU) pages, PG_active and PG_unevictable should be cleared ourselves?
+
+> b) Why is that code block that conditionally clears the flags of any
+> value and why can't we simply drop it?
+> 
+
+To fix the issue, should we clear PG_active and PG_unevictable unconditionally here?
+
+Thanks a lot!

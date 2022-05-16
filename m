@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F21985290CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 307D152901A
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239629AbiEPUId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53062 "EHLO
+        id S237583AbiEPTzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346510AbiEPTub (ORCPT
+        with ESMTP id S1346212AbiEPTux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:50:31 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 508C443EFA;
-        Mon, 16 May 2022 12:45:27 -0700 (PDT)
+        Mon, 16 May 2022 15:50:53 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E31443CE;
+        Mon, 16 May 2022 12:45:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A391ECE177C;
-        Mon, 16 May 2022 19:45:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1FDEC385AA;
-        Mon, 16 May 2022 19:45:23 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 982BCCE1798;
+        Mon, 16 May 2022 19:45:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3EDEC34100;
+        Mon, 16 May 2022 19:45:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730324;
-        bh=hPATElc54/KDQYX9llFyqa60kWj4dh/pn2gmQ06+Nic=;
+        s=korg; t=1652730327;
+        bh=eWA4IP9jXbZ4Dw5owvga1ugxXXjxeiJvUw4vGvqPllA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Gw+HCq/Qp9G+VF+hM+lfEyGmvNyobok/zw6wAS2mFqD27cDurO+O53xvfn+aNspEj
-         UhrPWTHv12p4NFMFPHOhhGwGY2AVrpln4RIetUdA+/SLm9XWzoUTWtpsvX7sqr1cXN
-         lk4FEtdDxR+Wbg+r83EqAIeQvilYLxQsjtuVVPOI=
+        b=0taIAyD32eo4azoyz70fvJscoOHyCt4IX/xoyOKlVqtiS3oI1Z/On/LZ/2PxKSkh8
+         DnTxuV+rw8kXpMaeDmAxdj3TFd74vtakoS5NjYdWtOe1TpGNgE7VZ9hmuRNqWKlfG9
+         SGtzfjltktU8baqCApIsR7P9WbphfVUx9KIIckoM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Martin Habets <habetsm.xilinx@gmail.com>,
-        Taehee Yoo <ap420073@gmail.com>,
+        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 28/66] net: sfc: ef10: fix memory leak in efx_ef10_mtd_probe()
-Date:   Mon, 16 May 2022 21:36:28 +0200
-Message-Id: <20220516193620.229881999@linuxfoundation.org>
+Subject: [PATCH 5.10 29/66] tls: Fix context leak on tls_device_down
+Date:   Mon, 16 May 2022 21:36:29 +0200
+Message-Id: <20220516193620.257989798@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
 References: <20220516193619.400083785@linuxfoundation.org>
@@ -56,70 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Taehee Yoo <ap420073@gmail.com>
+From: Maxim Mikityanskiy <maximmi@nvidia.com>
 
-[ Upstream commit 1fa89ffbc04545b7582518e57f4b63e2a062870f ]
+[ Upstream commit 3740651bf7e200109dd42d5b2fb22226b26f960a ]
 
-In the NIC ->probe() callback, ->mtd_probe() callback is called.
-If NIC has 2 ports, ->probe() is called twice and ->mtd_probe() too.
-In the ->mtd_probe(), which is efx_ef10_mtd_probe() it allocates and
-initializes mtd partiion.
-But mtd partition for sfc is shared data.
-So that allocated mtd partition data from last called
-efx_ef10_mtd_probe() will not be used.
-Therefore it must be freed.
-But it doesn't free a not used mtd partition data in efx_ef10_mtd_probe().
+The commit cited below claims to fix a use-after-free condition after
+tls_device_down. Apparently, the description wasn't fully accurate. The
+context stayed alive, but ctx->netdev became NULL, and the offload was
+torn down without a proper fallback, so a bug was present, but a
+different kind of bug.
 
-kmemleak reports:
-unreferenced object 0xffff88811ddb0000 (size 63168):
-  comm "systemd-udevd", pid 265, jiffies 4294681048 (age 348.586s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffffa3767749>] kmalloc_order_trace+0x19/0x120
-    [<ffffffffa3873f0e>] __kmalloc+0x20e/0x250
-    [<ffffffffc041389f>] efx_ef10_mtd_probe+0x11f/0x270 [sfc]
-    [<ffffffffc0484c8a>] efx_pci_probe.cold.17+0x3df/0x53d [sfc]
-    [<ffffffffa414192c>] local_pci_probe+0xdc/0x170
-    [<ffffffffa4145df5>] pci_device_probe+0x235/0x680
-    [<ffffffffa443dd52>] really_probe+0x1c2/0x8f0
-    [<ffffffffa443e72b>] __driver_probe_device+0x2ab/0x460
-    [<ffffffffa443e92a>] driver_probe_device+0x4a/0x120
-    [<ffffffffa443f2ae>] __driver_attach+0x16e/0x320
-    [<ffffffffa4437a90>] bus_for_each_dev+0x110/0x190
-    [<ffffffffa443b75e>] bus_add_driver+0x39e/0x560
-    [<ffffffffa4440b1e>] driver_register+0x18e/0x310
-    [<ffffffffc02e2055>] 0xffffffffc02e2055
-    [<ffffffffa3001af3>] do_one_initcall+0xc3/0x450
-    [<ffffffffa33ca574>] do_init_module+0x1b4/0x700
+Due to misunderstanding of the issue, the original patch dropped the
+refcount_dec_and_test line for the context to avoid the alleged
+premature deallocation. That line has to be restored, because it matches
+the refcount_inc_not_zero from the same function, otherwise the contexts
+that survived tls_device_down are leaked.
 
-Acked-by: Martin Habets <habetsm.xilinx@gmail.com>
-Fixes: 8127d661e77f ("sfc: Add support for Solarflare SFC9100 family")
-Signed-off-by: Taehee Yoo <ap420073@gmail.com>
-Link: https://lore.kernel.org/r/20220512054709.12513-1-ap420073@gmail.com
+This patch fixes the described issue by restoring refcount_dec_and_test.
+After this change, there is no leak anymore, and the fallback to
+software kTLS still works.
+
+Fixes: c55dcdd435aa ("net/tls: Fix use-after-free after the TLS device goes down and up")
+Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+Link: https://lore.kernel.org/r/20220512091830.678684-1-maximmi@nvidia.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/sfc/ef10.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ net/tls/tls_device.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/net/ethernet/sfc/ef10.c b/drivers/net/ethernet/sfc/ef10.c
-index 4fa72b573c17..6f950979d25e 100644
---- a/drivers/net/ethernet/sfc/ef10.c
-+++ b/drivers/net/ethernet/sfc/ef10.c
-@@ -3563,6 +3563,11 @@ static int efx_ef10_mtd_probe(struct efx_nic *efx)
- 		n_parts++;
+diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
+index 1f56225a10e3..3c82286e5bcc 100644
+--- a/net/tls/tls_device.c
++++ b/net/tls/tls_device.c
+@@ -1345,7 +1345,10 @@ static int tls_device_down(struct net_device *netdev)
+ 
+ 		/* Device contexts for RX and TX will be freed in on sk_destruct
+ 		 * by tls_device_free_ctx. rx_conf and tx_conf stay in TLS_HW.
++		 * Now release the ref taken above.
+ 		 */
++		if (refcount_dec_and_test(&ctx->refcount))
++			tls_device_free_ctx(ctx);
  	}
  
-+	if (!n_parts) {
-+		kfree(parts);
-+		return 0;
-+	}
-+
- 	rc = efx_mtd_add(efx, &parts[0].common, n_parts, sizeof(*parts));
- fail:
- 	if (rc)
+ 	up_write(&device_offload_lock);
 -- 
 2.35.1
 

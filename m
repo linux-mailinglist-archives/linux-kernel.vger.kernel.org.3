@@ -2,121 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FA42528280
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD24528282
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:47:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242791AbiEPKqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 06:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
+        id S240824AbiEPKrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 06:47:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239615AbiEPKpy (ORCPT
+        with ESMTP id S237017AbiEPKrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 06:45:54 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1451147D;
-        Mon, 16 May 2022 03:45:52 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id k30so7225519wrd.5;
-        Mon, 16 May 2022 03:45:52 -0700 (PDT)
+        Mon, 16 May 2022 06:47:31 -0400
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2120FDFDE
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 03:47:29 -0700 (PDT)
+Received: by mail-vk1-xa2d.google.com with SMTP id m203so7261091vke.13
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 03:47:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=punFsSWooaR/zkqiRvfCk7P2Q5fE22P5g6FkfwQb1y4=;
-        b=DqwzfO7hORJHGLUvl2vG9u2d8HM7PpJt2LdUrkKPwviPxq/M/Mn/0LZyWEsuCfEnwK
-         esQ9B3LlmA8xBAW1Nx45fJ6EUXd1L0SAYOCuIqfCXOwTutnHdLPXSrXWyuAd+mCIrL47
-         VGzC+GHdx2llI5Ab5I58r78dbA9V6O1ZKcTMOz+rzanynXzvmV9C8TpSuCqoFgsPdKiB
-         0iEVGedqnR9qVo7+ioj6xaafdb9iut0tiH83sMK9KtV/wZnZrNftCmYK2Dk990id0itF
-         Avl9cmHG44MZpUhXtxkp/L4Qrou3nUMyU1uieAnT8uX5rzw16uKEPyVtUdiag8UxORQt
-         Ix4Q==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cyzBmAuy85hTG407fSwXszxBhDeY0JEI9Vsim/drlp0=;
+        b=fYHp5Ibgf6MU75g8M8dbc1iSHzvS5K4/hMPc3yTsfMlxDqqNFVmGAcoDLdOXY1uZhe
+         kxXLoaC7sVNiyhGnqUUD2FPW4gu/Yr0Y4tvBzGtbxoBJiAr0NwSXfatjNeQaTMUYNbCF
+         u9IV+SW0L+bO2nvFYGIzQla+Mqp+mz/O9Wa8o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=punFsSWooaR/zkqiRvfCk7P2Q5fE22P5g6FkfwQb1y4=;
-        b=3PZ7QfOUCJOxPx3IVFlVYutVRM+YU7+2YmrC1LnXJoizSUWA2Ymr48qBrmYZrMn327
-         h4GjHpoa0pMjVaGF9GQp8vJmt8Uk1HRRqGiRLh6oBaEoj1Y4xTw8i4a4MIuCReml8kd5
-         8S5RH1aHr9kc3wUSvvva99LTDNFLaksgNRuGuhxGqqEG66w64fIJ5PH0gpCzUlqEKKZ4
-         WygsBy9nO/Vq8DUwGjh7n6WzgNwY2uHImykw1ZCzhJ3omn7dvwNDcrQDBaxvR7jjFvtl
-         9d3fuuFSdWKRz76ZNl9ZMwFX5ALZeRaXxnWJdnCNDNabItPPmhEn3WwpoOHAbCbWJoCC
-         aDYg==
-X-Gm-Message-State: AOAM532xEbyAC4PLkgZgXQ4gT2BUQaa7tUHZh1JiDblrdckXt4rKdvb7
-        1iKXqYz9c58oGxmJyep7G+U=
-X-Google-Smtp-Source: ABdhPJyMwU2zdo7BT7eoGn+hO0VI3lIF0I9GELIneRef+MrwbXkoT/UpWzO54SIm26FF7q7w55DzFg==
-X-Received: by 2002:adf:e310:0:b0:20c:7894:99ad with SMTP id b16-20020adfe310000000b0020c789499admr14039171wrj.73.1652697951311;
-        Mon, 16 May 2022 03:45:51 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:6d40:29d:ba85:78f8:3d80:548? ([2a02:810d:6d40:29d:ba85:78f8:3d80:548])
-        by smtp.gmail.com with ESMTPSA id v2-20020a05600c15c200b00395f15d993fsm4484148wmf.5.2022.05.16.03.45.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 03:45:50 -0700 (PDT)
-Message-ID: <140fe69a-c37a-cce4-c7c1-0344de6f1bf1@gmail.com>
-Date:   Mon, 16 May 2022 12:45:48 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cyzBmAuy85hTG407fSwXszxBhDeY0JEI9Vsim/drlp0=;
+        b=TIEs6c+zP0XHwN9mls6zSi+GHXRmnrW7ms36Ac2+ahzkVXlHu4X3abK+WACWvzJRrT
+         o2uJlzBzG+ecGlBhFcR6q0az8fTpsKYaoleQUrUJWZZT9f8xdS/lJ2BmccurSnAikTVU
+         wuk8gR6p6OkUZVm3zJF63DVy46Gt+cFdSF/XY3DCnJgtkROyffsjaYk5iqBQB1VXj54P
+         QljpNYx/vJ6syv+iZRe/gF/Y9tDUM0Qi4BYvgARRnGC0BYH1QI8cEyEZ732gT6lqcrmV
+         jeDUKB7b3vmGXBJSIXvie+bNzkdKqrv4dfgNjoBWi4uiJXDFPT4UyOzB8AFullRxrBR+
+         XvVw==
+X-Gm-Message-State: AOAM531VMomm8J+bZg/g2shRIHIwx3tWLk7bPE6QVxGvtr/aatDelehF
+        HU2X2pID2OyqJ6OLat0d8Jp+0Oqz3dV2/xahNMft2w==
+X-Google-Smtp-Source: ABdhPJw30mOuCBmzAFwBccM5ilcLCgr57LGu0Vj+MV2y0pvq4kJocvrhJbs9ahsylTcg8yw7LbLYezAiyeApW8mi718=
+X-Received: by 2002:a05:6122:da8:b0:331:3b30:8b40 with SMTP id
+ bc40-20020a0561220da800b003313b308b40mr5718489vkb.30.1652698048140; Mon, 16
+ May 2022 03:47:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: Status on hid xppen patch
-Content-Language: en-US
-To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com, spbnick@gmail.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <941a793a-d2f7-9c2c-59be-b3930e1acfec@gmail.com>
- <20220423172330.32585-1-jose.exposito89@gmail.com>
- <95576534-1f5e-c2e3-4f73-c1b0a8300b56@gmail.com>
- <20220424093239.GA4380@elementary> <20220512205952.GA8936@elementary>
- <ebb6d627-4974-beed-1dc6-60634ab2f034@gmail.com>
- <20220516090829.GA20623@elementary>
-From:   Stefan Berzl <stefanberzl@gmail.com>
-In-Reply-To: <20220516090829.GA20623@elementary>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220516104209.1407388-1-hsinyi@chromium.org>
+In-Reply-To: <20220516104209.1407388-1-hsinyi@chromium.org>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Mon, 16 May 2022 18:47:02 +0800
+Message-ID: <CAJMQK-gT6H1BM0i+tLM1ORuf+Tz+GNSJUJdKZOjPYzVJX84u1A@mail.gmail.com>
+Subject: Re: [PATCH 0/3] Implement readahead for squashfs
+To:     Phillip Lougher <phillip@squashfs.org.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Xiongwei Song <Xiongwei.Song@windriver.com>
+Cc:     Zheng Liang <zhengliang6@huawei.com>,
+        Zhang Yi <yi.zhang@huawei.com>, Hou Tao <houtao1@huawei.com>,
+        Miao Xie <miaoxie@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm @ kvack . org" <linux-mm@kvack.org>,
+        "squashfs-devel @ lists . sourceforge . net" 
+        <squashfs-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yo José,
+On Mon, May 16, 2022 at 6:42 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+>
+> Commit c1f6925e1091("mm: put readahead pages in cache earlier") requires
+> fs to implement readahead callback. Otherwise there will be a
+> performance regression.
+>
+> Commit 9eec1d897139("squashfs: provide backing_dev_info in order to
+> disable read-ahead") mitigates the performance drop issue for squashfs
+> by closing readahead for it.
+>
+> This series implements readahead callback for squashfs. The previous
+> discussion are in [1] and [2].
+>
+> [1] https://lore.kernel.org/all/CAJMQK-g9G6KQmH-V=BRGX0swZji9Wxe_2c7ht-MMAapdFy2pXw@mail.gmail.com/T/
+> [2] https://lore.kernel.org/linux-mm/Yn5Yij9pRPCzDozt@casper.infradead.org/t/#m4af4473b94f98a4996cb11756b633a07e5e059d1
+>
+> Hsin-Yi Wang (3):
+>   Revert "squashfs: Convert squashfs to read_folio"
+>   Revert "squashfs: provide backing_dev_info in order to disable
+>     read-ahead"
+>   squashfs: implement readahead
+>
+>  fs/squashfs/file.c    | 82 +++++++++++++++++++++++++++++++++++++++++--
+>  fs/squashfs/super.c   | 33 -----------------
+>  fs/squashfs/symlink.c |  5 ++-
+>  3 files changed, 81 insertions(+), 39 deletions(-)
+>
+> --
+> 2.36.0.550.gb090851708-goog
+>
 
->>> I had to introduce new functionalities to the templating system of the
->>> driver, that's the reason for the KUnit tests.
->>> The last patch is work in progress (hopefully I'll have time to finish
->>> it this weekend), only the HID descriptors are missing.
->>
->> I hope you make it, but otherwise you can always use mine, as it's quite
->> the same as yours. Only the logical minimum and maximum are -60 and 60.
-> 
-> You are right, 60 and not 127 is the right value. Actually, I think
-> that -61 - 60 is the correct range, because of the 0.
-> Running "libinput-debug-tablet" makes it easier to debug.
-> 
-> I also had to fix the descriptor to avoid an issue with the pressure
-> causing issues with the Deco L, but other than that, it should be
-> correct now.
-
-I don't think the two's complement thing has any bearing here, because
-there are still several numbers left in both directions. Also I couldn't
-get the mini 7 to produce tilt values either >60 or <-60,
-but I'm sure you'll get behind it.
-
-> Also, I don't know if you have seen this error after connecting the
-> tablet:
-> 
->   xhci_hcd 0000:2a:00.3: WARN urb submitted to disabled ep
->   usb 3-2: reset full-speed USB device number 6 using xhci_hcd
->   usb 3-2: reset full-speed USB device number 6 using xhci_hcd
->   [...]
-> 
-> It happens with the Deco Mini 4, even when using the hid-generic
-> driver. I need to rebase my patches on 5.19 and test again, just to
-> make sure the problem is not somewhere else.
-
-Can't say I have seen it. The only thing I can think of is that I was
-using the async urb functions and that delay did something about it.
-
-Kind regards
-
-Stefan Berzl
+hi, please ignore this for now. I'll resend a correct cover letter.

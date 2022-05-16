@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9676529038
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26FE6529025
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345750AbiEPURt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51608 "EHLO
+        id S1349472AbiEPUc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:32:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348813AbiEPT66 (ORCPT
+        with ESMTP id S1351027AbiEPUB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:58:58 -0400
+        Mon, 16 May 2022 16:01:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D088A43AD5;
-        Mon, 16 May 2022 12:51:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A633F4755A;
+        Mon, 16 May 2022 12:56:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6ACCC60A1C;
-        Mon, 16 May 2022 19:51:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57DBBC385AA;
-        Mon, 16 May 2022 19:51:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 407B960A50;
+        Mon, 16 May 2022 19:56:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39BA9C385AA;
+        Mon, 16 May 2022 19:56:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730667;
-        bh=18TsozEqMlpQhPgYryuK9UP4KaIWqrgwWG2uxJOE024=;
+        s=korg; t=1652731003;
+        bh=piennx7MVGXwLZLl+LxhpdRLDGUtTDyOZL9IGWdufG4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kDp33ArcBPWeKw3LMeAjaI/u+b19PWZHSKpVM0Ws+Ohwjpykh3gL35aoMuM25PJBG
-         4mdOrogbUmvduqAxI2MY8MvRBbd0sIbU7k07Jb2gNI0mMWVJc8EjoOQ00t8AwOdEKI
-         g0oH3twDtBIIJFTDOxwDXm8i9ScFu4g7a2TqMoTg=
+        b=cBMY1TC9eUWm6iopozjzioAzXaRMd1miNFdmS5FClZ1X4xWWgWr6s/PhK1taLNS15
+         OnCEyDn5P+sd5rrW195aL5PG8AjU9SA7Y60wNIyDUWokEJQFu2xgdm6ScTSFPfbydI
+         e/y8xLUi5xlJ6zY4BFzzJTGmzFmT3gSkuJaK6hS4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 5.15 071/102] usb: typec: tcpci: Dont skip cleanup in .remove() on error
-Date:   Mon, 16 May 2022 21:36:45 +0200
-Message-Id: <20220516193626.035772505@linuxfoundation.org>
+        stable@vger.kernel.org, Matt Evans <matt@ozlabs.org>,
+        Alexander Graf <graf@amazon.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.17 072/114] KVM: PPC: Book3S PR: Enable MSR_DR for switch_mmu_context()
+Date:   Mon, 16 May 2022 21:36:46 +0200
+Message-Id: <20220516193627.558495278@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
-References: <20220516193623.989270214@linuxfoundation.org>
+In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
+References: <20220516193625.489108457@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,50 +55,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+From: Alexander Graf <graf@amazon.com>
 
-commit bbc126ae381cf0a27822c1f822d0aeed74cc40d9 upstream.
+commit ee8348496c77e3737d0a6cda307a521f2cff954f upstream.
 
-Returning an error value in an i2c remove callback results in an error
-message being emitted by the i2c core, but otherwise it doesn't make a
-difference. The device goes away anyhow and the devm cleanups are
-called.
+Commit 863771a28e27 ("powerpc/32s: Convert switch_mmu_context() to C")
+moved the switch_mmu_context() to C. While in principle a good idea, it
+meant that the function now uses the stack. The stack is not accessible
+from real mode though.
 
-In this case the remove callback even returns early without stopping the
-tcpm worker thread and various timers. A work scheduled on the work
-queue, or a firing timer after tcpci_remove() returned probably results
-in a use-after-free situation because the regmap and driver data were
-freed. So better make sure that tcpci_unregister_port() is called even
-if disabling the irq failed.
+So to keep calling the function, let's turn on MSR_DR while we call it.
+That way, all pointer references to the stack are handled virtually.
 
-Also emit a more specific error message instead of the i2c core's
-"remove failed (EIO), will be ignored" and return 0 to suppress the
-core's warning.
+In addition, make sure to save/restore r12 on the stack, as it may get
+clobbered by the C function.
 
-This patch is (also) a preparation for making i2c remove callbacks
-return void.
-
-Fixes: 3ba76256fc4e ("usb: typec: tcpci: mask event interrupts when remove driver")
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Cc: stable <stable@vger.kernel.org>
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20220502080456.21568-1-u.kleine-koenig@pengutronix.de
+Fixes: 863771a28e27 ("powerpc/32s: Convert switch_mmu_context() to C")
+Cc: stable@vger.kernel.org # v5.14+
+Reported-by: Matt Evans <matt@ozlabs.org>
+Signed-off-by: Alexander Graf <graf@amazon.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220510123717.24508-1-graf@amazon.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/typec/tcpm/tcpci.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/powerpc/kvm/book3s_32_sr.S |   26 +++++++++++++++++++++-----
+ 1 file changed, 21 insertions(+), 5 deletions(-)
 
---- a/drivers/usb/typec/tcpm/tcpci.c
-+++ b/drivers/usb/typec/tcpm/tcpci.c
-@@ -877,7 +877,7 @@ static int tcpci_remove(struct i2c_clien
- 	/* Disable chip interrupts before unregistering port */
- 	err = tcpci_write16(chip->tcpci, TCPC_ALERT_MASK, 0);
- 	if (err < 0)
--		return err;
-+		dev_warn(&client->dev, "Failed to disable irqs (%pe)\n", ERR_PTR(err));
+--- a/arch/powerpc/kvm/book3s_32_sr.S
++++ b/arch/powerpc/kvm/book3s_32_sr.S
+@@ -122,11 +122,27 @@
  
- 	tcpci_unregister_port(chip->tcpci);
+ 	/* 0x0 - 0xb */
  
+-	/* 'current->mm' needs to be in r4 */
+-	tophys(r4, r2)
+-	lwz	r4, MM(r4)
+-	tophys(r4, r4)
+-	/* This only clobbers r0, r3, r4 and r5 */
++	/* switch_mmu_context() needs paging, let's enable it */
++	mfmsr   r9
++	ori     r11, r9, MSR_DR
++	mtmsr   r11
++	sync
++
++	/* switch_mmu_context() clobbers r12, rescue it */
++	SAVE_GPR(12, r1)
++
++	/* Calling switch_mmu_context(<inv>, current->mm, <inv>); */
++	lwz	r4, MM(r2)
+ 	bl	switch_mmu_context
+ 
++	/* restore r12 */
++	REST_GPR(12, r1)
++
++	/* Disable paging again */
++	mfmsr   r9
++	li      r6, MSR_DR
++	andc    r9, r9, r6
++	mtmsr	r9
++	sync
++
+ .endm
 
 

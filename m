@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05F3E52903E
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1F25291AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347808AbiEPUax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55938 "EHLO
+        id S1351596AbiEPUGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:06:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350830AbiEPUBm (ORCPT
+        with ESMTP id S1347001AbiEPTve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:01:42 -0400
+        Mon, 16 May 2022 15:51:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8184B1F2;
-        Mon, 16 May 2022 12:55:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFFE93F8AB;
+        Mon, 16 May 2022 12:46:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DCAD960A1C;
-        Mon, 16 May 2022 19:55:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D44F3C385AA;
-        Mon, 16 May 2022 19:55:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CE1A6027A;
+        Mon, 16 May 2022 19:46:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60937C385AA;
+        Mon, 16 May 2022 19:46:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730952;
-        bh=yH5M1c0ldN5R+FkK/zu3biDlTtfEvvdoiBULCRmiLhA=;
+        s=korg; t=1652730387;
+        bh=+m4xr2VstQvfmpmlbh/Hzx8ERJ0r2on0tJLdU5O4+6U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cs//EgUGpWkkZEFkKJ4D2LZGqfsQTRAqSmv+HD1/TNjZfHK06RxagdL2r52CLgXiD
-         F94N3FqMXGbYhfP5hBryILFfEYhShqwiTSIO55b0izEzYAgdrI8M9xa3LzOp1Gqctg
-         diLF9TOQN5MXR1T0sAFFPTgwsoQO1JdAQUvyGg8c=
+        b=JN3rDg5wexfXN8a5b1N9wxtBU7kX1TeoTBW0kNFN8ixan+/qFkkqbJwzOe8DLSzY1
+         htDZis7w9kQJFcN02W8kTLTLN60UwoUEZC5jCxAMe7IPK/N8gM2SFT8TzeXizTovhI
+         uJ97Tk5iujGot9bjdolBGABDNEynGGtWggaHiv5k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 058/114] io_uring: assign non-fixed early for async work
+Subject: [PATCH 5.10 32/66] ASoC: max98090: Reject invalid values in custom control put()
 Date:   Mon, 16 May 2022 21:36:32 +0200
-Message-Id: <20220516193627.160256625@linuxfoundation.org>
+Message-Id: <20220516193620.343485236@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
-References: <20220516193625.489108457@linuxfoundation.org>
+In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
+References: <20220516193619.400083785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,42 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: Mark Brown <broonie@kernel.org>
 
-[ Upstream commit a196c78b5443fc61af2c0490213b9d125482cbd1 ]
+[ Upstream commit 2fbe467bcbfc760a08f08475eea6bbd4c2874319 ]
 
-We defer file assignment to ensure that fixed files work with links
-between a direct accept/open and the links that follow it. But this has
-the side effect that normal file assignment is then not complete by the
-time that request submission has been done.
+The max98090 driver has a custom put function for some controls which can
+only be updated in certain circumstances which makes no effort to validate
+that input is suitable for the control, allowing out of spec values to be
+written to the hardware and presented to userspace. Fix this by returning
+an error when invalid values are written.
 
-For deferred execution, if the file is a regular file, assign it when
-we do the async prep anyway.
-
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/r/20220420193454.2647908-1-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/io_uring.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ sound/soc/codecs/max98090.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 87df37912055..a0680046ff3c 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -6572,7 +6572,12 @@ static int io_req_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+diff --git a/sound/soc/codecs/max98090.c b/sound/soc/codecs/max98090.c
+index 945a79e4f3eb..779845e3a9e3 100644
+--- a/sound/soc/codecs/max98090.c
++++ b/sound/soc/codecs/max98090.c
+@@ -413,6 +413,9 @@ static int max98090_put_enab_tlv(struct snd_kcontrol *kcontrol,
  
- static int io_req_prep_async(struct io_kiocb *req)
- {
--	if (!io_op_defs[req->opcode].needs_async_setup)
-+	const struct io_op_def *def = &io_op_defs[req->opcode];
+ 	val = (val >> mc->shift) & mask;
+ 
++	if (sel < 0 || sel > mc->max)
++		return -EINVAL;
 +
-+	/* assign early for deferred execution for non-fixed file */
-+	if (def->needs_file && !(req->flags & REQ_F_FIXED_FILE))
-+		req->file = io_file_get_normal(req, req->fd);
-+	if (!def->needs_async_setup)
- 		return 0;
- 	if (WARN_ON_ONCE(req_has_async_data(req)))
- 		return -EFAULT;
+ 	*select = sel;
+ 
+ 	/* Setting a volume is only valid if it is already On */
 -- 
 2.35.1
 

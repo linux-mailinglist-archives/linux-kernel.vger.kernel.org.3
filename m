@@ -2,118 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA515527DF6
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 864F2527DF9
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240600AbiEPHAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 03:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42782 "EHLO
+        id S240609AbiEPHBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 03:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236707AbiEPG75 (ORCPT
+        with ESMTP id S236707AbiEPHAv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 02:59:57 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3146ADFA5
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:59:56 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id g6so26773292ejw.1
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:59:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SH+DM8gWRShDh4xAKJ9hq9ZGV6WzwS40V7Ikj9JGnTU=;
-        b=aKJMP7FFPV4UsmM8hjbALJW38MNT+IhNk/fyIk0k+DzD6WAfnAvr5bgKwW5D1tTQWt
-         OhKgJhsvN9hDqnwoSO8fE/M5y3CxnnfBMfWuuOkU5N9dypEbs9+s9aElvnwnFn46Z6EN
-         1K+gRZq1tUfcB2BiIANmYaWh5IIk08T+yTMaJwn9QI5RX/K8IQplq2XSzrnoZ8K3dpXx
-         VnqUowRVTSH9v0IbVo6nSaooCYxuXagd4qtjAQlhdQTrVi4MfmWmPXduazz4hSf6jFm0
-         KH0P1TGu44ipz1q1VHAIP1ciG/k9ijhoWxlMacA7KvWp+P5qBc0lskRwzNjcaQa+LBA4
-         3sZw==
+        Mon, 16 May 2022 03:00:51 -0400
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9CC5C46
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:00:47 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id l18so26715372ejc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:00:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SH+DM8gWRShDh4xAKJ9hq9ZGV6WzwS40V7Ikj9JGnTU=;
-        b=CsA0sKPqT2gpmZtob7zCc+OiU2BB0TJGRps62RQWGqpBD1U6QW02f2IDMRCxJDV/GI
-         /iEPYi+KUshPhoKGC3ES6DDL+lD3hWRQPrwSklCT5eiU0vU3Hw5AjwnXXyOETQCs1Mgl
-         NWVA/UOYRw9itgfKZ+Ll4QL/H1i4W93w8MgAFZpH17HhlelYPPCdiKV/MK1m9ZjQfNWT
-         RnXqrDpB+HPqtdHnVYyqwGiuuPLfNOUaIw9w1WxJMCsXX2vMFefrxWxK8MG9rlQBq9sZ
-         +14VT/NAfvzMwsCUZdTMekIdrN88jUvPNKRVFOzc1hHyHSXrCyCH+RBL5LiN6CrEp60Y
-         oF8g==
-X-Gm-Message-State: AOAM532K7PC0OpCuPvh8hJutSn5eLT5aJ5o6/zenDopuB/X47YZanJ/u
-        E2b/LWsHGeQUIhJpHhECRfvq6EP5eAR61I0J6iIKYpppnCQ=
-X-Google-Smtp-Source: ABdhPJyRWL9sG7b4N57dKKmf+qijk6tKu6Uz08nhG0MhS/lMZv0z0BBWDuJPgIMS+41XqW/xAzsSvJ4z05GcAZJuP9w=
-X-Received: by 2002:a17:906:7309:b0:6f5:ea1:afa with SMTP id
- di9-20020a170906730900b006f50ea10afamr13666909ejc.170.1652684394688; Sun, 15
- May 2022 23:59:54 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cR8Hsiy9clKxAsJER0JNovDFDdlOniNfgaMdZde7koY=;
+        b=tJGAsYUBOQSJ9GLG9kezwefSDP58eZZFqFCwohpBvnFI7FWVSUikF6OXmbl+Yalgxt
+         I8g0HLJqp9z7RDrbw6B4fMFPMfpMA3no8hnqjtNsRnJsCiD1/A94PaqfRC0aHyB+MXiL
+         tekXKT/jobNRE/J/5DmHjJAwv2qJxWay6bThVVOg9hTFOmC3IDH6RDQOP2lOlbZLCicY
+         r8mQWQlwOP0wTP6VM3OtK6UFZScUbHa8qGt14/wvHj34hLm8A0FS0AvhHcKLiTj0tFZs
+         WEd/y37U9pfcv3CObitnXj0le0RQrKk7WQxZ6VIhSFWT9BpTxMPcA9pPcsJyqjEnj8T1
+         rhaw==
+X-Gm-Message-State: AOAM533tQurrSAF59Wc6K3aBJVj2fqWQMJHQF4j8Jw/RjOwQwEAgJbge
+        B7TD5EOYwkNLJN3Oo7dP4vs=
+X-Google-Smtp-Source: ABdhPJxWecW7+gEwU5kLk6tc2W1Xkxx0zCkE55qr4QBIHuQKF26l3v5gIJ9e/R1zFbkUkNIF+LB7ew==
+X-Received: by 2002:a17:907:8a0b:b0:6f4:4899:db98 with SMTP id sc11-20020a1709078a0b00b006f44899db98mr14009750ejc.622.1652684446417;
+        Mon, 16 May 2022 00:00:46 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id dq7-20020a170907734700b006f3ef214defsm3357616ejc.85.2022.05.16.00.00.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 00:00:45 -0700 (PDT)
+Message-ID: <49a7602f-dd79-cac3-e6e0-83c4c41fcd53@kernel.org>
+Date:   Mon, 16 May 2022 09:00:45 +0200
 MIME-Version: 1.0
-References: <20220513093433.425163-1-dietmar.eggemann@arm.com> <39be28ea-1645-30c3-316e-87a43b8738a8@arm.com>
-In-Reply-To: <39be28ea-1645-30c3-316e-87a43b8738a8@arm.com>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Mon, 16 May 2022 18:59:43 +1200
-Message-ID: <CAGsJ_4z=U=4mtkbjJKq3=_npLnqDtXnCwqr-9kbXkaRn4Jiydw@mail.gmail.com>
-Subject: Re: [PATCH] topology: Remove unused cpu_cluster_mask()
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH -next v2] vt: defkeymap.c_shipped remove unused variables
+Content-Language: en-US
+To:     Zhang Jianhua <chris.zjh@huawei.com>, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20220513015427.569539-1-chris.zjh@huawei.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220513015427.569539-1-chris.zjh@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 9:48 PM Dietmar Eggemann
-<dietmar.eggemann@arm.com> wrote:
->
-> - Barry Song <song.bao.hua@hisilicon.com> bounced
-> + Barry Song <21cnbao@gmail.com>
->
-> On 13/05/2022 11:34, Dietmar Eggemann wrote:
-> > default_topology[] uses cpu_clustergroup_mask() for the CLS level
-> > (guarded by CONFIG_SCHED_CLUSTER) which is currently provided by x86
-> > (arch/x86/kernel/smpboot.c) and arm64 (drivers/base/arch_topology.c).
-> >
-> > Fixes: 778c558f49a2c ("sched: Add cluster scheduler level in core and
-> > related Kconfig for ARM64")
-> >
-> > Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> > ---
-> >  include/linux/topology.h | 7 -------
-> >  1 file changed, 7 deletions(-)
-> >
-> > diff --git a/include/linux/topology.h b/include/linux/topology.h
-> > index f19bc3626297..4564faafd0e1 100644
-> > --- a/include/linux/topology.h
-> > +++ b/include/linux/topology.h
-> > @@ -240,13 +240,6 @@ static inline const struct cpumask *cpu_smt_mask(int cpu)
-> >  }
-> >  #endif
-> >
-> > -#if defined(CONFIG_SCHED_CLUSTER) && !defined(cpu_cluster_mask)
-> > -static inline const struct cpumask *cpu_cluster_mask(int cpu)
-> > -{
-> > -     return topology_cluster_cpumask(cpu);
-> > -}
-> > -#endif
-> > -
+On 13. 05. 22, 3:54, Zhang Jianhua wrote:
+> The global variables 'funcbufptr' 'funcbufsize' and 'funcbufleft' have
+> been initialized but not used, they are redundant and remove them.
+> 
+> Signed-off-by: Zhang Jianhua <chris.zjh@huawei.com>
+> 
+> ---
+> No code changes since v1, only remove the redundant line "--------" in
+> v1 commit message.
+> ---
+>   drivers/tty/vt/defkeymap.c_shipped | 4 ----
 
-Acked-by: Barry Song <baohua@kernel.org>
+The file header says:
+/* Do not edit this file! It was automatically generated by   */
+/*    loadkeys --mktable defkeymap.map > defkeymap.c          */
 
-I agree there are no users right now. I probably wrote it like cpu_smt_mask()
-and used it in kernel/sched for the wake_affine patch but forgot to remove it
-while sending patches without wake_affine.
+So I'm not sure anyone wants to touch it.
+
+> --- a/drivers/tty/vt/defkeymap.c_shipped
+> +++ b/drivers/tty/vt/defkeymap.c_shipped
+> @@ -185,10 +185,6 @@ char func_buf[] = {
+>   	'\033', '[', 'P', 0,
+>   };
+>   
+> -char *funcbufptr = func_buf;
+> -int funcbufsize = sizeof(func_buf);
+> -int funcbufleft = 0;          /* space left */
+> -
+>   char *func_table[MAX_NR_FUNC] = {
+>   	func_buf + 0,
+>   	func_buf + 5,
 
 
-> >  static inline const struct cpumask *cpu_cpu_mask(int cpu)
-> >  {
-> >       return cpumask_of_node(cpu_to_node(cpu));
->
-
-Thanks
-Barry
+-- 
+js
+suse labs

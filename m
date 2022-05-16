@@ -2,78 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E06DF527C0A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 04:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C9BD527C13
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 04:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239430AbiEPCgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 22:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
+        id S239378AbiEPCjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 22:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239435AbiEPCgF (ORCPT
+        with ESMTP id S235140AbiEPCjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 22:36:05 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95CBBCA8;
-        Sun, 15 May 2022 19:36:03 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id o22so15619865ljp.8;
-        Sun, 15 May 2022 19:36:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=pbnTlSg+9lkzJZgvRMdLa+9B8pVRxX5+A47ByjDRmu8=;
-        b=ZihCwqrl9PpeLm5+Am/uEriWZHH63ZwRI8vnxF3gIuEyRDQXqDuvh/FoZPifsun4aE
-         7Gq3Fnkn2ruUfRnNo54tKViEbwdechsO70HNeCFP7LEnmmyi/Y8JfVm28r9ujbTvs3PC
-         J4BKygK5jDTRjyOuPrg0dQWjdoj/mW+A2TGUYuhgqQvE+1CRRu318gOJcZwn9vWdgBGX
-         SBgZq1O622dabZMlssWzYRb+l1DXRbKg0HGdvSH9gUZtB4dSJyeAy2Ae9m2X6f3BgPlw
-         MQHWarm53k6ajCNzb3jmf+LiIey2bQZFaZTfvP9xE6+igCeU7bL/AYKSkzFFEh6PuUXa
-         iTRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=pbnTlSg+9lkzJZgvRMdLa+9B8pVRxX5+A47ByjDRmu8=;
-        b=JbLsIqhwRhB9XtwipTqTXw/LoHT5QADucaYluyXD1AxBO27jj/JQqntJj6Ld4EsL1d
-         MYh7qB4nT8R2PULgPnJod3T6XJAi9l8ZcucaK1TkQ/RsuSprHksEOEdeIu4VF7eq2pYq
-         mJHDf8VQr2pD5QJrpsY4+MdO0uGAjbRKQHVALFxe26P0ZvUfGJK8wxois6lliFxbFYkb
-         Ngkd6Y0tD9zMdC3L/yU+Km10+ZizGupXjqIAUcbTsmIUJCaWz269skq1I4+kX/N+vrdb
-         3Q/zr/KjMtOflKgD+MIJPqGjg7lNe0Lj+IcEhnYzKH8TBFw9RbYj7cKtjxgFMEvRPGtq
-         kc9Q==
-X-Gm-Message-State: AOAM530QoXEt9xfckEpXeY7nsfguF+FpnXseEUYxgulu6imW8NNnsqbb
-        YeVrdJtyAau1isoWSpQqwY7Ug9oK5OlKPGKu4Rc=
-X-Google-Smtp-Source: ABdhPJzzYv3UBxnxwNzl6OP7ju5c/5Mj2ZPE3GhdhiqDnR8gYF2Zyfq+Q3Pn4xGVcRozD8KllIWTw+lQmu8rolCRhKk=
-X-Received: by 2002:a2e:a801:0:b0:24a:ff0b:ae7a with SMTP id
- l1-20020a2ea801000000b0024aff0bae7amr9560575ljq.287.1652668561873; Sun, 15
- May 2022 19:36:01 -0700 (PDT)
+        Sun, 15 May 2022 22:39:39 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A490FD00
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 19:39:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652668778; x=1684204778;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rr5dtgu/wlB8YyV/1zjNYHWRK23YPLr8hnwK/EGLo24=;
+  b=DbVSj37MpN69nUYoGwc2OQDqenjtw9Fc6wpyvxzKvvAnDtfVNj76RVVr
+   uqC4Ke0/R5kr33i+YAY5SFECwl9E8y5BSmm4W6Pfn9tJPyUeQtfJe4oj9
+   F2g7K4jx6Mz4WEbFRYoeGxiVFZQ0WfH73UvNr1p7eE+CI82PxhjvQ0+mD
+   2KTzLCXV+eHAbsEN5z9VBVh8ll36eNu1JHVPZ9AyDJZf9MKuUWk6wPYxa
+   1SbXn3LXcxpDjLjDrWeEjehSGM3KidqbwtpblcN+YywBKanEPNYp2C+CT
+   m03Iql0s2SVwUWaRsQQ6As3cok1kgvUP4b9KprgzSc3PR6NEBe0K5B0QI
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="269536696"
+X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
+   d="scan'208";a="269536696"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2022 19:39:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
+   d="scan'208";a="713182353"
+Received: from lkp-server01.sh.intel.com (HELO d1462bc4b09b) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 15 May 2022 19:39:37 -0700
+Received: from kbuild by d1462bc4b09b with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nqQe0-00026X-C5;
+        Mon, 16 May 2022 02:39:36 +0000
+Date:   Mon, 16 May 2022 10:39:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        0day robot <lkp@intel.com>
+Subject: kernel/workqueue.c:2798: warning: expecting prototype for
+ flush_workqueue(). Prototype was for void() instead
+Message-ID: <202205161030.Dv3ad4T3-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220510031056.1657-1-ctcchien@nuvoton.com> <20220510031056.1657-4-ctcchien@nuvoton.com>
- <0a46ba6f-9eac-7138-c675-99df86750c83@molgen.mpg.de>
-In-Reply-To: <0a46ba6f-9eac-7138-c675-99df86750c83@molgen.mpg.de>
-From:   Medad Young <medadyoung@gmail.com>
-Date:   Mon, 16 May 2022 10:35:50 +0800
-Message-ID: <CAHpyw9epvs9E=DxHRD5oV3wzpiq7spogp+TZcuyNhD4Nk3exZg@mail.gmail.com>
-Subject: Re: [PATCH v9 3/3] EDAC: nuvoton: Add NPCM memory controller driver
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
-        tony.luck@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
-        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
-        devicetree <devicetree@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-edac <linux-edac@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,285 +62,192 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Paul,
+tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220516-093322/Tetsuo-Handa/checkpatch-warn-about-flushing-system-wide-workqueues/20220425-073327
+head:   cd007363b7985a824de0ec5e05f0cb0705e59c88
+commit: cd007363b7985a824de0ec5e05f0cb0705e59c88 workqueue: Wrap flush_workqueue() using a macro
+date:   63 minutes ago
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220516/202205161030.Dv3ad4T3-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/cd007363b7985a824de0ec5e05f0cb0705e59c88
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review UPDATE-20220516-093322/Tetsuo-Handa/checkpatch-warn-about-flushing-system-wide-workqueues/20220425-073327
+        git checkout cd007363b7985a824de0ec5e05f0cb0705e59c88
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
 
-thanks for your comments.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Paul Menzel <pmenzel@molgen.mpg.de> =E6=96=BC 2022=E5=B9=B45=E6=9C=8810=E6=
-=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=883:49=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> Dear Medad,
->
->
-> Am 10.05.22 um 05:10 schrieb Medad CChien:
-> > Add memory controller support for Nuvoton NPCM SoC.
->
-> It=E2=80=99d be great if you added the datasheet name, revision and secti=
-on used
-> to implement this.
->
+All warnings (new ones prefixed by >>):
 
-OK, I will add those information.
+   kernel/workqueue.c:2798: warning: Function parameter or member 'flush_workqueue' not described in 'void'
+>> kernel/workqueue.c:2798: warning: expecting prototype for flush_workqueue(). Prototype was for void() instead
 
-> > Note:
-> >     you can force an ecc event by writing a string to edac sysfs node
-> >     and remember to define CONFIG_EDAC_DEBUG to enable this feature
-> >     example: force a correctable event on checkcode bit 0
-> >     echo "CE checkcode 0" > /sys/devices/system/edac/mc/mc0/forced_ecc_=
-error
-> >
-> > Fix the following warnings and error:
-> > error:
-> >     error: macro "edac_printk" requires 4 arguments, but only 2 given i=
-n
-> >     driver/edac/npcm_edac.c
-> >     edac_printk(KERN_INFO, "bit_no for checkcode must be 0~7\n");
-> >
-> > warnings:
-> >     performing pointer arithmetic on a null pointer has undefined behav=
-ior.
-> >     logical not is only applied to the left hand side of this bitwise
-> >     operator.
-> >     mixing declarations and code is a C99 extension.
-> >
-> > Reported-by: kernel test robot <lkp@intel.com>
->
-> I find this line confusing as the kernel test robot did not report that
-> the memory controller driver is missing.
->
 
-Sorry, I did not get your point.
-but I add these due to kernel test robot reported some errors and warnings.
+vim +2798 kernel/workqueue.c
 
-> > Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
-> > ---
-> >   drivers/edac/Kconfig     |  10 +
-> >   drivers/edac/Makefile    |   1 +
-> >   drivers/edac/npcm_edac.c | 680 ++++++++++++++++++++++++++++++++++++++=
-+
-> >   3 files changed, 691 insertions(+)
-> >   create mode 100644 drivers/edac/npcm_edac.c
-> >
-> > diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-> > index 58ab63642e72..9c83202cbf65 100644
-> > --- a/drivers/edac/Kconfig
-> > +++ b/drivers/edac/Kconfig
-> > @@ -539,4 +539,14 @@ config EDAC_DMC520
-> >         Support for error detection and correction on the
-> >         SoCs with ARM DMC-520 DRAM controller.
-> >
-> > +config EDAC_NPCM
-> > +     tristate "Nuvoton NPCM DDR Memory Controller"
-> > +     depends on (ARCH_NPCM || COMPILE_TEST)
-> > +     help
-> > +       Support for error detection and correction on the Nuvoton NPCM =
-DDR
-> > +       memory controller.
->
-> Maybe add the information from the devicetree documentation:
->
-> The Nuvoton BMC SoC supports DDR4 memory with and without ECC (error
-> correction check).
->
-> The memory controller supports single bit error correction, double bit
-> error detection (in-line ECC in which a section (1/8th) of the memory
-> device used to store data is used for ECC storage).
->
+^1da177e4c3f41 Linus Torvalds 2005-04-16  2789  
+0fcb78c22f0634 Rolf Eike Beer 2006-07-30  2790  /**
+^1da177e4c3f41 Linus Torvalds 2005-04-16  2791   * flush_workqueue - ensure that any scheduled work has run to completion.
+0fcb78c22f0634 Rolf Eike Beer 2006-07-30  2792   * @wq: workqueue to flush
+^1da177e4c3f41 Linus Torvalds 2005-04-16  2793   *
+c5aa87bbf4b23f Tejun Heo      2013-03-13  2794   * This function sleeps until all work items which were queued on entry
+c5aa87bbf4b23f Tejun Heo      2013-03-13  2795   * have finished execution, but it is not livelocked by new incoming ones.
+^1da177e4c3f41 Linus Torvalds 2005-04-16  2796   */
+cd007363b7985a Tetsuo Handa   2022-05-16  2797  void (flush_workqueue)(struct workqueue_struct *wq)
+^1da177e4c3f41 Linus Torvalds 2005-04-16 @2798  {
+73f53c4aa732ec Tejun Heo      2010-06-29  2799  	struct wq_flusher this_flusher = {
+73f53c4aa732ec Tejun Heo      2010-06-29  2800  		.list = LIST_HEAD_INIT(this_flusher.list),
+73f53c4aa732ec Tejun Heo      2010-06-29  2801  		.flush_color = -1,
+fd1a5b04dfb899 Byungchul Park 2017-10-25  2802  		.done = COMPLETION_INITIALIZER_ONSTACK_MAP(this_flusher.done, wq->lockdep_map),
+73f53c4aa732ec Tejun Heo      2010-06-29  2803  	};
+73f53c4aa732ec Tejun Heo      2010-06-29  2804  	int next_color;
+f293ea92007419 Oleg Nesterov  2007-05-09  2805  
+3347fa0928210d Tejun Heo      2016-09-16  2806  	if (WARN_ON(!wq_online))
+3347fa0928210d Tejun Heo      2016-09-16  2807  		return;
+3347fa0928210d Tejun Heo      2016-09-16  2808  
+87915adc3f0acd Johannes Berg  2018-08-22  2809  	lock_map_acquire(&wq->lockdep_map);
+87915adc3f0acd Johannes Berg  2018-08-22  2810  	lock_map_release(&wq->lockdep_map);
+87915adc3f0acd Johannes Berg  2018-08-22  2811  
+3c25a55daadc7e Lai Jiangshan  2013-03-25  2812  	mutex_lock(&wq->mutex);
+73f53c4aa732ec Tejun Heo      2010-06-29  2813  
+73f53c4aa732ec Tejun Heo      2010-06-29  2814  	/*
+73f53c4aa732ec Tejun Heo      2010-06-29  2815  	 * Start-to-wait phase
+73f53c4aa732ec Tejun Heo      2010-06-29  2816  	 */
+73f53c4aa732ec Tejun Heo      2010-06-29  2817  	next_color = work_next_color(wq->work_color);
+73f53c4aa732ec Tejun Heo      2010-06-29  2818  
+73f53c4aa732ec Tejun Heo      2010-06-29  2819  	if (next_color != wq->flush_color) {
+73f53c4aa732ec Tejun Heo      2010-06-29  2820  		/*
+73f53c4aa732ec Tejun Heo      2010-06-29  2821  		 * Color space is not full.  The current work_color
+73f53c4aa732ec Tejun Heo      2010-06-29  2822  		 * becomes our flush_color and work_color is advanced
+73f53c4aa732ec Tejun Heo      2010-06-29  2823  		 * by one.
+73f53c4aa732ec Tejun Heo      2010-06-29  2824  		 */
+6183c009f6cd94 Tejun Heo      2013-03-12  2825  		WARN_ON_ONCE(!list_empty(&wq->flusher_overflow));
+73f53c4aa732ec Tejun Heo      2010-06-29  2826  		this_flusher.flush_color = wq->work_color;
+73f53c4aa732ec Tejun Heo      2010-06-29  2827  		wq->work_color = next_color;
+73f53c4aa732ec Tejun Heo      2010-06-29  2828  
+73f53c4aa732ec Tejun Heo      2010-06-29  2829  		if (!wq->first_flusher) {
+73f53c4aa732ec Tejun Heo      2010-06-29  2830  			/* no flush in progress, become the first flusher */
+6183c009f6cd94 Tejun Heo      2013-03-12  2831  			WARN_ON_ONCE(wq->flush_color != this_flusher.flush_color);
+73f53c4aa732ec Tejun Heo      2010-06-29  2832  
+73f53c4aa732ec Tejun Heo      2010-06-29  2833  			wq->first_flusher = &this_flusher;
+73f53c4aa732ec Tejun Heo      2010-06-29  2834  
+112202d9098aae Tejun Heo      2013-02-13  2835  			if (!flush_workqueue_prep_pwqs(wq, wq->flush_color,
+73f53c4aa732ec Tejun Heo      2010-06-29  2836  						       wq->work_color)) {
+73f53c4aa732ec Tejun Heo      2010-06-29  2837  				/* nothing to flush, done */
+73f53c4aa732ec Tejun Heo      2010-06-29  2838  				wq->flush_color = next_color;
+73f53c4aa732ec Tejun Heo      2010-06-29  2839  				wq->first_flusher = NULL;
+73f53c4aa732ec Tejun Heo      2010-06-29  2840  				goto out_unlock;
+73f53c4aa732ec Tejun Heo      2010-06-29  2841  			}
+73f53c4aa732ec Tejun Heo      2010-06-29  2842  		} else {
+73f53c4aa732ec Tejun Heo      2010-06-29  2843  			/* wait in queue */
+6183c009f6cd94 Tejun Heo      2013-03-12  2844  			WARN_ON_ONCE(wq->flush_color == this_flusher.flush_color);
+73f53c4aa732ec Tejun Heo      2010-06-29  2845  			list_add_tail(&this_flusher.list, &wq->flusher_queue);
+112202d9098aae Tejun Heo      2013-02-13  2846  			flush_workqueue_prep_pwqs(wq, -1, wq->work_color);
+73f53c4aa732ec Tejun Heo      2010-06-29  2847  		}
+73f53c4aa732ec Tejun Heo      2010-06-29  2848  	} else {
+73f53c4aa732ec Tejun Heo      2010-06-29  2849  		/*
+73f53c4aa732ec Tejun Heo      2010-06-29  2850  		 * Oops, color space is full, wait on overflow queue.
+73f53c4aa732ec Tejun Heo      2010-06-29  2851  		 * The next flush completion will assign us
+73f53c4aa732ec Tejun Heo      2010-06-29  2852  		 * flush_color and transfer to flusher_queue.
+73f53c4aa732ec Tejun Heo      2010-06-29  2853  		 */
+73f53c4aa732ec Tejun Heo      2010-06-29  2854  		list_add_tail(&this_flusher.list, &wq->flusher_overflow);
+73f53c4aa732ec Tejun Heo      2010-06-29  2855  	}
+73f53c4aa732ec Tejun Heo      2010-06-29  2856  
+fca839c00a12d6 Tejun Heo      2015-12-07  2857  	check_flush_dependency(wq, NULL);
+fca839c00a12d6 Tejun Heo      2015-12-07  2858  
+3c25a55daadc7e Lai Jiangshan  2013-03-25  2859  	mutex_unlock(&wq->mutex);
+73f53c4aa732ec Tejun Heo      2010-06-29  2860  
+73f53c4aa732ec Tejun Heo      2010-06-29  2861  	wait_for_completion(&this_flusher.done);
+73f53c4aa732ec Tejun Heo      2010-06-29  2862  
+73f53c4aa732ec Tejun Heo      2010-06-29  2863  	/*
+73f53c4aa732ec Tejun Heo      2010-06-29  2864  	 * Wake-up-and-cascade phase
+73f53c4aa732ec Tejun Heo      2010-06-29  2865  	 *
+73f53c4aa732ec Tejun Heo      2010-06-29  2866  	 * First flushers are responsible for cascading flushes and
+73f53c4aa732ec Tejun Heo      2010-06-29  2867  	 * handling overflow.  Non-first flushers can simply return.
+73f53c4aa732ec Tejun Heo      2010-06-29  2868  	 */
+00d5d15b0641f4 Chris Wilson   2020-03-10  2869  	if (READ_ONCE(wq->first_flusher) != &this_flusher)
+73f53c4aa732ec Tejun Heo      2010-06-29  2870  		return;
+73f53c4aa732ec Tejun Heo      2010-06-29  2871  
+3c25a55daadc7e Lai Jiangshan  2013-03-25  2872  	mutex_lock(&wq->mutex);
+73f53c4aa732ec Tejun Heo      2010-06-29  2873  
+4ce48b37bfedc2 Tejun Heo      2010-07-02  2874  	/* we might have raced, check again with mutex held */
+4ce48b37bfedc2 Tejun Heo      2010-07-02  2875  	if (wq->first_flusher != &this_flusher)
+4ce48b37bfedc2 Tejun Heo      2010-07-02  2876  		goto out_unlock;
+4ce48b37bfedc2 Tejun Heo      2010-07-02  2877  
+00d5d15b0641f4 Chris Wilson   2020-03-10  2878  	WRITE_ONCE(wq->first_flusher, NULL);
+73f53c4aa732ec Tejun Heo      2010-06-29  2879  
+6183c009f6cd94 Tejun Heo      2013-03-12  2880  	WARN_ON_ONCE(!list_empty(&this_flusher.list));
+6183c009f6cd94 Tejun Heo      2013-03-12  2881  	WARN_ON_ONCE(wq->flush_color != this_flusher.flush_color);
+73f53c4aa732ec Tejun Heo      2010-06-29  2882  
+73f53c4aa732ec Tejun Heo      2010-06-29  2883  	while (true) {
+73f53c4aa732ec Tejun Heo      2010-06-29  2884  		struct wq_flusher *next, *tmp;
+73f53c4aa732ec Tejun Heo      2010-06-29  2885  
+73f53c4aa732ec Tejun Heo      2010-06-29  2886  		/* complete all the flushers sharing the current flush color */
+73f53c4aa732ec Tejun Heo      2010-06-29  2887  		list_for_each_entry_safe(next, tmp, &wq->flusher_queue, list) {
+73f53c4aa732ec Tejun Heo      2010-06-29  2888  			if (next->flush_color != wq->flush_color)
+73f53c4aa732ec Tejun Heo      2010-06-29  2889  				break;
+73f53c4aa732ec Tejun Heo      2010-06-29  2890  			list_del_init(&next->list);
+73f53c4aa732ec Tejun Heo      2010-06-29  2891  			complete(&next->done);
+73f53c4aa732ec Tejun Heo      2010-06-29  2892  		}
+73f53c4aa732ec Tejun Heo      2010-06-29  2893  
+6183c009f6cd94 Tejun Heo      2013-03-12  2894  		WARN_ON_ONCE(!list_empty(&wq->flusher_overflow) &&
+73f53c4aa732ec Tejun Heo      2010-06-29  2895  			     wq->flush_color != work_next_color(wq->work_color));
+73f53c4aa732ec Tejun Heo      2010-06-29  2896  
+73f53c4aa732ec Tejun Heo      2010-06-29  2897  		/* this flush_color is finished, advance by one */
+73f53c4aa732ec Tejun Heo      2010-06-29  2898  		wq->flush_color = work_next_color(wq->flush_color);
+73f53c4aa732ec Tejun Heo      2010-06-29  2899  
+73f53c4aa732ec Tejun Heo      2010-06-29  2900  		/* one color has been freed, handle overflow queue */
+73f53c4aa732ec Tejun Heo      2010-06-29  2901  		if (!list_empty(&wq->flusher_overflow)) {
+73f53c4aa732ec Tejun Heo      2010-06-29  2902  			/*
+73f53c4aa732ec Tejun Heo      2010-06-29  2903  			 * Assign the same color to all overflowed
+73f53c4aa732ec Tejun Heo      2010-06-29  2904  			 * flushers, advance work_color and append to
+73f53c4aa732ec Tejun Heo      2010-06-29  2905  			 * flusher_queue.  This is the start-to-wait
+73f53c4aa732ec Tejun Heo      2010-06-29  2906  			 * phase for these overflowed flushers.
+73f53c4aa732ec Tejun Heo      2010-06-29  2907  			 */
+73f53c4aa732ec Tejun Heo      2010-06-29  2908  			list_for_each_entry(tmp, &wq->flusher_overflow, list)
+73f53c4aa732ec Tejun Heo      2010-06-29  2909  				tmp->flush_color = wq->work_color;
+73f53c4aa732ec Tejun Heo      2010-06-29  2910  
+73f53c4aa732ec Tejun Heo      2010-06-29  2911  			wq->work_color = work_next_color(wq->work_color);
+73f53c4aa732ec Tejun Heo      2010-06-29  2912  
+73f53c4aa732ec Tejun Heo      2010-06-29  2913  			list_splice_tail_init(&wq->flusher_overflow,
+73f53c4aa732ec Tejun Heo      2010-06-29  2914  					      &wq->flusher_queue);
+112202d9098aae Tejun Heo      2013-02-13  2915  			flush_workqueue_prep_pwqs(wq, -1, wq->work_color);
+73f53c4aa732ec Tejun Heo      2010-06-29  2916  		}
+73f53c4aa732ec Tejun Heo      2010-06-29  2917  
+73f53c4aa732ec Tejun Heo      2010-06-29  2918  		if (list_empty(&wq->flusher_queue)) {
+6183c009f6cd94 Tejun Heo      2013-03-12  2919  			WARN_ON_ONCE(wq->flush_color != wq->work_color);
+73f53c4aa732ec Tejun Heo      2010-06-29  2920  			break;
+73f53c4aa732ec Tejun Heo      2010-06-29  2921  		}
+73f53c4aa732ec Tejun Heo      2010-06-29  2922  
+73f53c4aa732ec Tejun Heo      2010-06-29  2923  		/*
+73f53c4aa732ec Tejun Heo      2010-06-29  2924  		 * Need to flush more colors.  Make the next flusher
+112202d9098aae Tejun Heo      2013-02-13  2925  		 * the new first flusher and arm pwqs.
+73f53c4aa732ec Tejun Heo      2010-06-29  2926  		 */
+6183c009f6cd94 Tejun Heo      2013-03-12  2927  		WARN_ON_ONCE(wq->flush_color == wq->work_color);
+6183c009f6cd94 Tejun Heo      2013-03-12  2928  		WARN_ON_ONCE(wq->flush_color != next->flush_color);
+73f53c4aa732ec Tejun Heo      2010-06-29  2929  
+73f53c4aa732ec Tejun Heo      2010-06-29  2930  		list_del_init(&next->list);
+73f53c4aa732ec Tejun Heo      2010-06-29  2931  		wq->first_flusher = next;
+73f53c4aa732ec Tejun Heo      2010-06-29  2932  
+112202d9098aae Tejun Heo      2013-02-13  2933  		if (flush_workqueue_prep_pwqs(wq, wq->flush_color, -1))
+73f53c4aa732ec Tejun Heo      2010-06-29  2934  			break;
+73f53c4aa732ec Tejun Heo      2010-06-29  2935  
+73f53c4aa732ec Tejun Heo      2010-06-29  2936  		/*
+73f53c4aa732ec Tejun Heo      2010-06-29  2937  		 * Meh... this color is already done, clear first
+73f53c4aa732ec Tejun Heo      2010-06-29  2938  		 * flusher and repeat cascading.
+73f53c4aa732ec Tejun Heo      2010-06-29  2939  		 */
+73f53c4aa732ec Tejun Heo      2010-06-29  2940  		wq->first_flusher = NULL;
+73f53c4aa732ec Tejun Heo      2010-06-29  2941  	}
+73f53c4aa732ec Tejun Heo      2010-06-29  2942  
+73f53c4aa732ec Tejun Heo      2010-06-29  2943  out_unlock:
+3c25a55daadc7e Lai Jiangshan  2013-03-25  2944  	mutex_unlock(&wq->mutex);
+^1da177e4c3f41 Linus Torvalds 2005-04-16  2945  }
+1dadafa86a7798 Tim Gardner    2015-08-04  2946  EXPORT_SYMBOL(flush_workqueue);
+^1da177e4c3f41 Linus Torvalds 2005-04-16  2947  
 
-OK, I will add that information.
-
-> > +
-> > +       First, ECC must be configured in the BootBlock header. Then, th=
-is driver
-> > +       will expose error counters via the EDAC kernel framework.
-> > +
-> >   endif # EDAC
-> > diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
-> > index 2d1641a27a28..db3c59d3ad84 100644
-> > --- a/drivers/edac/Makefile
-> > +++ b/drivers/edac/Makefile
-> > @@ -84,3 +84,4 @@ obj-$(CONFIG_EDAC_QCOM)                     +=3D qcom=
-_edac.o
-> >   obj-$(CONFIG_EDAC_ASPEED)           +=3D aspeed_edac.o
-> >   obj-$(CONFIG_EDAC_BLUEFIELD)                +=3D bluefield_edac.o
-> >   obj-$(CONFIG_EDAC_DMC520)           +=3D dmc520_edac.o
-> > +obj-$(CONFIG_EDAC_NPCM)                      +=3D npcm_edac.o
-> > diff --git a/drivers/edac/npcm_edac.c b/drivers/edac/npcm_edac.c
-> > new file mode 100644
-> > index 000000000000..5552dab242b1
-> > --- /dev/null
-> > +++ b/drivers/edac/npcm_edac.c
-> > @@ -0,0 +1,680 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +// Copyright (c) 2022 Nuvoton Technology corporation.
->
-> No dot/period is needed at the end, as corporation is not abbreviated.
-> Maybe also capitalize Corporation as done on the Web site.
-
-OK
-
->
-> > +
-> > +#include <linux/delay.h>
-> > +#include <linux/of_device.h>
-> > +
-> > +#include "edac_module.h"
-> > +
-> > +#define NPCM_EDAC_MOD_NAME "npcm-edac"
-> > +#define FORCED_ECC_ERR_EVENT_SUPPORT         BIT(1)
-> > +#define EDAC_MSG_SIZE                                                2=
-56
-> > +/* Granularity of reported error in bytes */
-> > +#define NPCM_EDAC_ERR_GRAIN                          1
-> > +
-> > +#define MEM_TYPE_DDR4                                                0=
-xA
-> > +
-> > +#define NPCM7XX_CHIP                                         0x700
-> > +#define NPCM8XX_CHIP                                         0x800
-> > +
-> > +/* Control register width definitions */
-> > +#define WDTH_16                                                       =
-       (2)
-> > +#define WDTH_32                                                       =
-       (1)
-> > +#define WDTH_64                                                       =
-       (0)
-> > +#define CTL_MEM_MAX_WIDTH_MASK                       GENMASK(4, 0)
-> > +#define CTL_REG_WIDTH_SHIFT                                  (32)
-> > +#define XOR_CHECK_BIT_SPLIT_WIDTH                    (16)
-> > +#define CTL_CONTROLLER_BUSY_FLAG                     BIT(0)
-> > +#define NPCM_ECC_CTL_FORCE_WC                                BIT(8)
-> > +#define NPCM_ECC_CTL_AUTO_WRITEBACK_EN       BIT(24)
-> > +#define NPCM_ECC_CTL_XOR_BITS_MASK                   GENMASK(23, 16)
-> > +#define NPCM_ECC_CTL_MTYPE_MASK                      GENMASK(11, 8)
-> > +#define NPCM_ECC_CTL_GLOBAL_INT_DISABLE              BIT(31)
-> > +
-> > +/* Syndrome values */
-> > +#define ECC_DOUBLE_MULTI_ERR_SYND                    0x03
-> > +
-> > +static char data_synd[] =3D {
-> > +                     0xf4, 0xf1, 0xec, 0xea, 0xe9, 0xe6, 0xe5, 0xe3,
-> > +                     0xdc, 0xda, 0xd9, 0xd6, 0xd5, 0xd3, 0xce, 0xcb,
-> > +                     0xb5, 0xb0, 0xad, 0xab, 0xa8, 0xa7, 0xa4, 0xa2,
-> > +                     0x9d, 0x9b, 0x98, 0x97, 0x94, 0x92, 0x8f, 0x8a,
-> > +                     0x75, 0x70, 0x6d, 0x6b, 0x68, 0x67, 0x64, 0x62,
-> > +                     0x5e, 0x5b, 0x58, 0x57, 0x54, 0x52, 0x4f, 0x4a,
-> > +                     0x34, 0x31, 0x2c, 0x2a, 0x29, 0x26, 0x25, 0x23,
-> > +                     0x1c, 0x1a, 0x19, 0x16, 0x15, 0x13, 0x0e, 0x0b
-> > +               };
->
-> This does not look correctly indented. At least the } should be at the
-> beginning. The values can just be indented by one tab I believe. (At
-> least that is what `indent --linux-style` does (GNU indent 2.2.12).
->
-
-OK
-
-> > +
-> > +static char check_synd[] =3D {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40=
-, 0x80};
->
-> At least `indent --linux-style` add a space after { and before }.
->
-
-OK
-
-> > +
-> > +struct npcm_edac_platform_data {
-> > +     /* force ECC event */
-> > +     u32 ip_features;
-> > +     u32 ddr_ctl_controller_busy_reg;
-> > +     u32 ecc_ctl_xor_check_bits_reg;
-> > +
-> > +     u32 chip;
-> > +
-> > +     /* DDR4 Controller Registers */
-> > +     u32 ddr_ctl_mem_type_reg;
-> > +     u32 ddr_ctl_mem_width_reg;
-> > +
-> > +     u32 ecc_ctl_en_reg;
-> > +     u32 ecc_ctl_int_mask;
-> > +     u32 ecc_ctl_int_status;
-> > +     u32 ecc_ctl_int_ack;
-> > +     u32 ecc_ctl_int_mask_master;
-> > +     u32 ecc_ctl_int_mask_ecc;
-> > +
-> > +     u32 ecc_sig_c_addr_l;
-> > +     u32 ecc_sig_c_addr_h;
-> > +     u32 ecc_sig_c_data_l;
-> > +     u32 ecc_sig_c_data_h;
-> > +     u32 ecc_sig_c_id;
-> > +     u32 ecc_sig_c_synd;
-> > +
-> > +     u32 ecc_sig_u_addr_l;
-> > +     u32 ecc_sig_u_addr_h;
-> > +     u32 ecc_sig_u_data_l;
-> > +     u32 ecc_sig_u_data_h;
-> > +     u32 ecc_sig_u_id;
-> > +     u32 ecc_sig_u_synd;
-> > +
-> > +     /* MASK */
-> > +     u32 ecc_ctl_ecc_enable_mask;
-> > +     u32 ecc_ctl_en_int_master_mask;
-> > +     u32 ecc_ctl_en_int_ecc_mask;
-> > +
-> > +     /* ECC IRQ Macros */
-> > +     u32 ecc_int_ce_event;
-> > +     u32 ecc_int_second_ce_event;
-> > +     u32 ecc_int_ue_event;
-> > +     u32 ecc_int_second_ue_event;
-> > +     u32 ecc_int_ce_ue_mask;
-> > +     u32 ecc_ce_intr_mask;
-> > +     u32 ecc_ue_intr_mask;
-> > +
-> > +     /* ECC Signature Macros */
-> > +     u32 ecc_sig_c_id_shift;
-> > +     u32 ecc_sig_c_synd_shift;
-> > +     u32 ecc_sig_c_addr_h_mask;
-> > +     u32 ecc_sig_c_id_mask;
-> > +     u32 ecc_sig_c_synd_mask;
-> > +
-> > +     u32 ecc_sig_u_id_shift;
-> > +     u32 ecc_sig_u_synd_shift;
-> > +     u32 ecc_sig_u_addr_h_mask;
-> > +     u32 ecc_sig_u_id_mask;
-> > +     u32 ecc_sig_u_synd_mask;
-> > +};
-> > +
-> > +struct priv_data {
-> > +     void __iomem *reg;
-> > +     u32 ce_cnt;
-> > +     u32 ue_cnt; > + char message[EDAC_MSG_SIZE];
-> > +     const struct npcm_edac_platform_data *npcm_chip;
-> > +};
-> > +
-> > +
-> > +static void init_mem_layout(struct mem_ctl_info *mci)
-> > +{
-> > +     struct priv_data *priv =3D mci->pvt_info;
-> > +     const struct npcm_edac_platform_data *npcm_chip =3D priv->npcm_ch=
-ip;
-> > +     struct csrow_info *csi;
-> > +     struct dimm_info *dimm;
-> > +     struct sysinfo info;
-> > +     enum mem_type mtype;
-> > +     u32 val, width;
-> > +     u32 size, row;
-> > +     u8 j;
->
-> At least for loop variables, the default size integers should be used [1]=
-.
->
-
-OK
-
-> [=E2=80=A6]
->
->
-> Kind regards,
->
-> Paul
->
->
-> [1]: https://notabs.org/coding/smallIntsBigPenalty.htm
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

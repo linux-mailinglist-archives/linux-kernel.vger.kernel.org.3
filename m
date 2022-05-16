@@ -2,69 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D21F8528D61
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E01E528D66
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345086AbiEPSqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 14:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34448 "EHLO
+        id S1345096AbiEPStT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 14:49:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345090AbiEPSqa (ORCPT
+        with ESMTP id S233372AbiEPStQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 14:46:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245C93EAB1;
-        Mon, 16 May 2022 11:46:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B79FB815E5;
-        Mon, 16 May 2022 18:46:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD4B3C34100;
-        Mon, 16 May 2022 18:46:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1652726782;
-        bh=zlgnlRmELcGmau1Sw6c2tactNK7bon8HlHT8OKvR7YQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=pT4PQcxtU1HVE0MtlkahTiXT4h7nQk/MnEHZfu7aaNWJp3AM17pSC5PLJFBLotj2z
-         2JZxPFhpNlxQvsdPr79JUzMBAeYnwj4Oq7DZ6ESTBg4JiBSOnR3v+ImQMEpigZVOwF
-         x1SQ3fAdO8mUWl/U0t2ySC0wYFrbB80D+IOMjbFU=
-Date:   Mon, 16 May 2022 11:46:20 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     corbet@lwn.net, mike.kravetz@oracle.com, mcgrof@kernel.org,
-        keescook@chromium.org, yzaikin@google.com, osalvador@suse.de,
-        david@redhat.com, masahiroy@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        duanxiongchun@bytedance.com, smuchun@gmail.com
-Subject: Re: [PATCH v12 0/7] add hugetlb_optimize_vmemmap sysctl
-Message-Id: <20220516114620.d4d85cb35690b4c8265953d6@linux-foundation.org>
-In-Reply-To: <20220516102211.41557-1-songmuchun@bytedance.com>
-References: <20220516102211.41557-1-songmuchun@bytedance.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 16 May 2022 14:49:16 -0400
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE993EAAD;
+        Mon, 16 May 2022 11:49:15 -0700 (PDT)
+Received: by mail-ot1-f44.google.com with SMTP id i25-20020a9d6259000000b00605df9afea7so10673652otk.1;
+        Mon, 16 May 2022 11:49:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TtCUUUT+nHAc8CW7oHLx12ILRqYzV6X9OXA+TWI+EEw=;
+        b=z0HbrgTnEKZxtnHVeZPk14h5kqRkhbW0mC3tagI4rdbbiF3yIMXNmWzVk61YGV16aI
+         X4SBmvTU0jmYwE93EQUCmTUCSfEpzxrIvBULPtfNUjlOID1vdb5nD65OF0QQon1EFDDl
+         SmAhjPX8dCrBVreFuhDDE+SOVSi9YSiiw2W4wkkDWTe5bLWmY733jsUu3j0dbZzIyH4W
+         xBlMbAibV7vJmxNuQCZ2BbO0i2JkVGGh5GWtTDg1RTP1RYa7009QQ9dCYCCbyC+LwAb1
+         8hI0DuBvG0WEGsVHcX3vwtjhM63eF6JDTGnjAUgZfhbv5d8VY4T5eRx/0Kaj18YRy+pA
+         igPw==
+X-Gm-Message-State: AOAM533MrgsVpcDHHhgONu+WCgRp+KMJ+3HDpdLdnCNrCkOJ/YNKcfBm
+        3QU1Q12P/At63+DcRG1q5Q==
+X-Google-Smtp-Source: ABdhPJxWWS6qu5qSJOpfAr1qWYqIWns8KVfKkkW1r2Y0uSLIoj2zOsjB8OHgBlBnp2+p9gsPvcRjZQ==
+X-Received: by 2002:a05:6830:264f:b0:606:7dbc:aebb with SMTP id f15-20020a056830264f00b006067dbcaebbmr6641366otu.93.1652726954709;
+        Mon, 16 May 2022 11:49:14 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id m19-20020a4add13000000b0035f627ac898sm4375618oou.10.2022.05.16.11.49.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 11:49:13 -0700 (PDT)
+Received: (nullmailer pid 3068015 invoked by uid 1000);
+        Mon, 16 May 2022 18:49:12 -0000
+Date:   Mon, 16 May 2022 13:49:12 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] dt-bindings: mtd: qcom_nandc: document
+ qcom,boot-pages binding
+Message-ID: <20220516184912.GA3063673-robh@kernel.org>
+References: <20220503154353.4367-1-ansuelsmth@gmail.com>
+ <20220503154353.4367-3-ansuelsmth@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220503154353.4367-3-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 16 May 2022 18:22:04 +0800 Muchun Song <songmuchun@bytedance.com> wrote:
+On Tue, May 03, 2022 at 05:43:53PM +0200, Ansuel Smith wrote:
+> Document new qcom,boot_pages binding used to apply special
 
-> This series amis to add hugetlb_optimize_vmemmap sysctl to enable or disable
-> the feature of optimizing vmemmap pages associated with HugeTLB pages.
+s/boot_pages/boot-pages/
+
+> read/write configuration to boot pages.
 > 
-> v12:
->   - Add patch 3 and patch 4 to handle the coexistence of hugetlb_free_vmemmap
->     and memory_hotplug.memmap_on_memory (David).
->   - Remove Reviewed-by from Mike in the last parch since it is changed.
+> QCOM apply a special configuration where spare data is not protected
+> by ECC for some special pages (used for boot partition). Add
+> Documentation on how to declare these special pages.
+> 
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>  .../devicetree/bindings/mtd/qcom,nandc.yaml   | 22 +++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml b/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
+> index 84ad7ff30121..fafeca0cafff 100644
+> --- a/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
+> +++ b/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
+> @@ -102,6 +102,26 @@ allOf:
+>              - const: rx
+>              - const: cmd
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,ipq8074-nand
+> +
+> +    then:
+> +      properties:
+> +        qcom,boot-pages:
+> +          $ref: /schemas/types.yaml#/definitions/uint32-matrix
 
-v11 is in mm-stable now, so please send patches against that.  AFAICT
-that will be quite straightforward.
+You need to define the dimensions. Something like this:
 
+             items:
+               items:
+                 - description: offset
+                 - description: size
+
+> +          description:
+> +            Some special page used by boot partition have spare data
+> +            not protected by ECC. Use this to declare these special page
+> +            by defining first the offset and then the size.
+> +
+> +            It's in the form of <offset1 size1 offset2 size2 offset3 ...>
+> +
+> +            Refer to the ipq8064 example on how to use this special binding.
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -135,6 +155,8 @@ examples:
+>          nand-ecc-strength = <4>;
+>          nand-bus-width = <8>;
+>  
+> +        qcom,boot-pages = <0x0 0x58a0000>;
+> +
+>          partitions {
+>            compatible = "fixed-partitions";
+>            #address-cells = <1>;
+> -- 
+> 2.34.1
+> 
+> 

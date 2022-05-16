@@ -2,64 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6289528278
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:45:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FA42528280
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237778AbiEPKp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 06:45:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52662 "EHLO
+        id S242791AbiEPKqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 06:46:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242891AbiEPKpB (ORCPT
+        with ESMTP id S239615AbiEPKpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 06:45:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3327725280;
-        Mon, 16 May 2022 03:44:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB8D960F27;
-        Mon, 16 May 2022 10:44:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBA7DC34119;
-        Mon, 16 May 2022 10:44:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652697898;
-        bh=8e86Bl8VYKJuozeVnXgHNviEIwU1zooEoIg8B9aysS8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=XNsx9Lp0Uyr3ubMiRW1dnbg/fR0pDdvuXh+0oYQBEMrDDUk7iAiW7GbC58D/yK3RE
-         8umVVFbUErwYkcH5VZhcqI6Ao/CAv4o3Tw1+81cBW+guGBXn/TjW6grLmokZ5X4cs0
-         EBfhCSbEvwKRrtNDDv41BtzLuySfmEZ+CXplj4sSzALvc9548rBa0Yqo/IodbscYA0
-         WzFDgN7rAgWx/IsNO6OYBSy1wbc/oCJYoYlECO2QN1MM55/s6IsdY8vW1QBkM2QXmC
-         enrtrJs8SXiTewhml8IOKlqFjFT11gu7bYe5S9TVetdtpO0oq/vxS/pWK4gZCJe8jc
-         UKY0TS8MNdvtw==
-Message-ID: <874f08d9-e67e-f7f3-4d98-89bdb8333ce5@kernel.org>
-Date:   Mon, 16 May 2022 12:44:52 +0200
+        Mon, 16 May 2022 06:45:54 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1451147D;
+        Mon, 16 May 2022 03:45:52 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id k30so7225519wrd.5;
+        Mon, 16 May 2022 03:45:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=punFsSWooaR/zkqiRvfCk7P2Q5fE22P5g6FkfwQb1y4=;
+        b=DqwzfO7hORJHGLUvl2vG9u2d8HM7PpJt2LdUrkKPwviPxq/M/Mn/0LZyWEsuCfEnwK
+         esQ9B3LlmA8xBAW1Nx45fJ6EUXd1L0SAYOCuIqfCXOwTutnHdLPXSrXWyuAd+mCIrL47
+         VGzC+GHdx2llI5Ab5I58r78dbA9V6O1ZKcTMOz+rzanynXzvmV9C8TpSuCqoFgsPdKiB
+         0iEVGedqnR9qVo7+ioj6xaafdb9iut0tiH83sMK9KtV/wZnZrNftCmYK2Dk990id0itF
+         Avl9cmHG44MZpUhXtxkp/L4Qrou3nUMyU1uieAnT8uX5rzw16uKEPyVtUdiag8UxORQt
+         Ix4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=punFsSWooaR/zkqiRvfCk7P2Q5fE22P5g6FkfwQb1y4=;
+        b=3PZ7QfOUCJOxPx3IVFlVYutVRM+YU7+2YmrC1LnXJoizSUWA2Ymr48qBrmYZrMn327
+         h4GjHpoa0pMjVaGF9GQp8vJmt8Uk1HRRqGiRLh6oBaEoj1Y4xTw8i4a4MIuCReml8kd5
+         8S5RH1aHr9kc3wUSvvva99LTDNFLaksgNRuGuhxGqqEG66w64fIJ5PH0gpCzUlqEKKZ4
+         WygsBy9nO/Vq8DUwGjh7n6WzgNwY2uHImykw1ZCzhJ3omn7dvwNDcrQDBaxvR7jjFvtl
+         9d3fuuFSdWKRz76ZNl9ZMwFX5ALZeRaXxnWJdnCNDNabItPPmhEn3WwpoOHAbCbWJoCC
+         aDYg==
+X-Gm-Message-State: AOAM532xEbyAC4PLkgZgXQ4gT2BUQaa7tUHZh1JiDblrdckXt4rKdvb7
+        1iKXqYz9c58oGxmJyep7G+U=
+X-Google-Smtp-Source: ABdhPJyMwU2zdo7BT7eoGn+hO0VI3lIF0I9GELIneRef+MrwbXkoT/UpWzO54SIm26FF7q7w55DzFg==
+X-Received: by 2002:adf:e310:0:b0:20c:7894:99ad with SMTP id b16-20020adfe310000000b0020c789499admr14039171wrj.73.1652697951311;
+        Mon, 16 May 2022 03:45:51 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:6d40:29d:ba85:78f8:3d80:548? ([2a02:810d:6d40:29d:ba85:78f8:3d80:548])
+        by smtp.gmail.com with ESMTPSA id v2-20020a05600c15c200b00395f15d993fsm4484148wmf.5.2022.05.16.03.45.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 03:45:50 -0700 (PDT)
+Message-ID: <140fe69a-c37a-cce4-c7c1-0344de6f1bf1@gmail.com>
+Date:   Mon, 16 May 2022 12:45:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCHv2 4/6] thermal: exynos: fixed the efuse min/max value for
- exynos5422
+Subject: Re: Status on hid xppen patch
 Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>,
-        Anand Moon <linux.amoon@gmail.com>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org
-References: <20220515064126.1424-5-linux.amoon@gmail.com>
- <202205161820.8rHIcsvI-lkp@intel.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <202205161820.8rHIcsvI-lkp@intel.com>
+To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com, spbnick@gmail.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <941a793a-d2f7-9c2c-59be-b3930e1acfec@gmail.com>
+ <20220423172330.32585-1-jose.exposito89@gmail.com>
+ <95576534-1f5e-c2e3-4f73-c1b0a8300b56@gmail.com>
+ <20220424093239.GA4380@elementary> <20220512205952.GA8936@elementary>
+ <ebb6d627-4974-beed-1dc6-60634ab2f034@gmail.com>
+ <20220516090829.GA20623@elementary>
+From:   Stefan Berzl <stefanberzl@gmail.com>
+In-Reply-To: <20220516090829.GA20623@elementary>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,42 +79,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/05/2022 12:42, kernel test robot wrote:
-> Hi Anand,
-> 
-> Thank you for the patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on ec7f49619d8ee13e108740c82f942cd401b989e9]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Anand-Moon/Exynos-Thermal-code-inprovement/20220515-144336
-> base:   ec7f49619d8ee13e108740c82f942cd401b989e9
-> config: hexagon-randconfig-r033-20220516 (https://download.01.org/0day-ci/archive/20220516/202205161820.8rHIcsvI-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/eb50b0c2100fabd6d09b87abd11f52c5295512e8
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Anand-Moon/Exynos-Thermal-code-inprovement/20220515-144336
->         git checkout eb50b0c2100fabd6d09b87abd11f52c5295512e8
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/thermal/samsung/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> drivers/thermal/samsung/exynos_tmu.c:929:40: warning: overlapping comparisons always evaluate to false [-Wtautological-overlap-compare]
->                    if (data->soc == SOC_ARCH_EXYNOS5420 &&
->                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
->    1 warning generated.
+Yo José,
 
-Ah, I did not notice it and it seems code was not compile-tested with W=1.
+>>> I had to introduce new functionalities to the templating system of the
+>>> driver, that's the reason for the KUnit tests.
+>>> The last patch is work in progress (hopefully I'll have time to finish
+>>> it this weekend), only the HID descriptors are missing.
+>>
+>> I hope you make it, but otherwise you can always use mine, as it's quite
+>> the same as yours. Only the logical minimum and maximum are -60 and 60.
+> 
+> You are right, 60 and not 127 is the right value. Actually, I think
+> that -61 - 60 is the correct range, because of the 0.
+> Running "libinput-debug-tablet" makes it easier to debug.
+> 
+> I also had to fix the descriptor to avoid an issue with the pressure
+> causing issues with the Deco L, but other than that, it should be
+> correct now.
 
-Anand, please be sure you compile your code with W=1...
+I don't think the two's complement thing has any bearing here, because
+there are still several numbers left in both directions. Also I couldn't
+get the mini 7 to produce tilt values either >60 or <-60,
+but I'm sure you'll get behind it.
 
+> Also, I don't know if you have seen this error after connecting the
+> tablet:
+> 
+>   xhci_hcd 0000:2a:00.3: WARN urb submitted to disabled ep
+>   usb 3-2: reset full-speed USB device number 6 using xhci_hcd
+>   usb 3-2: reset full-speed USB device number 6 using xhci_hcd
+>   [...]
+> 
+> It happens with the Deco Mini 4, even when using the hid-generic
+> driver. I need to rebase my patches on 5.19 and test again, just to
+> make sure the problem is not somewhere else.
 
-Best regards,
-Krzysztof
+Can't say I have seen it. The only thing I can think of is that I was
+using the async urb functions and that delay did something about it.
+
+Kind regards
+
+Stefan Berzl

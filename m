@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 510E25283BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 14:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4231D5283B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 14:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237762AbiEPMAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 08:00:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55988 "EHLO
+        id S243521AbiEPMAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 08:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243348AbiEPL7u (ORCPT
+        with ESMTP id S243355AbiEPL7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 07:59:50 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3B516596;
-        Mon, 16 May 2022 04:59:33 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id l18so28140973ejc.7;
-        Mon, 16 May 2022 04:59:33 -0700 (PDT)
+        Mon, 16 May 2022 07:59:51 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C391165AA;
+        Mon, 16 May 2022 04:59:34 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id m20so28116633ejj.10;
+        Mon, 16 May 2022 04:59:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ijndZeMokX/hEJkaDxQ/IoPAmAy206jKv8vbR7k2snk=;
-        b=h5qaa5vCkXXVcZNO1QqCMQAIp7ZLuKfNhYWysWVgoyL66gim/KjrgSjoS65AU29ud7
-         42VkFP/v6+QpOYN/xvPYgOYU7pH+d45e76LDj8m9c2kQkMkKimDNw8Ujco05BgFBpb7J
-         oGdHvEM6WK24fYWFs7UZaAtskaF/aEXdNkLFoYB+NKQX2Ka4121gbkk14WQ7HN7Q29M+
-         1ph4E5IbWsypBG4iqZGa0m5ERGhCvYQbTlYmYfcOoW2bjSnOtZp5GY1S5XOctWlGouGx
-         cplv1akofNnKwSptEpphegTQdkQGS7Ndbrt5UZ1rCz88Da1v/OIIkv/C5Ff0tpSDH40u
-         Qfrg==
+        bh=QCU7wfDMqrm19GcnwILuywiRx6koKWukaCjyLUMr2jY=;
+        b=lCL7qISvtKKvBfN7Fj5ilr1dpWU0aSKxE1M1Ycx2YiF1m2N2r20lHQkoMeOOoqphhM
+         zTFOOQUMcsoXp1Z4adiWU8brX19S+6CQq9pTptK5cmoiV8+lEF+gXgUiOsMwrWeCxDrW
+         j2zN0Ejt+en9ZZo6tsfnyWPX+Z1lC0eBCDaA59e6O81rGbZvhbE54AhMx9l0xq1+SwZW
+         +69tW4ajTk7H1BZJVhhBg3kEjl40Q/w5zI4Gz2zKxvnh0/UFkwTH7yrIwd97zvAXrQT0
+         ArtYz80hSDUH0XYrtLZ6tk7rJRk2XQ5h6FeBqTDaq89OdRBL0tvc5YZxcGs/1ebAHqvI
+         YZQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ijndZeMokX/hEJkaDxQ/IoPAmAy206jKv8vbR7k2snk=;
-        b=l3VxZvDAFIG7TiOeJfZ3GSscF8h+WLpZzvdsE/KP8AZF96qbk9xmD8UKMcdj+7ULcy
-         vMPwfybA65M2GeH80OPOzWv/lqgnFKv0FdZfNQSzs2qgj+t/SLzzSiDLtzR4zVr4TUOS
-         dnJKCTGpcV4as+lZyiNLEaubMq1kPoLz9To9Ui5QOnqu/uXTu1L1Cpd52KdxuOZs18Dl
-         Yiwt2qKOBpHZm/kKwqwyosCm0+mEimYdHWIgpgr7wmdtInp1UTFmh2g0ELnTmyKAL0cq
-         QUG8vSB7fOLtuF7uWBopFGHcT2Y6kX/Vb+xOCwFaO50EnLcn8LFU+LQNzTfsvaehYyvl
-         Yj0A==
-X-Gm-Message-State: AOAM5317w/LdiiOPiiwT2PB1meY1Dj/9ZcDxze1HZEepVVMBx52dHcMN
-        Rja6tDvh3jfCO6xVP5J1hgF7Vh85djo=
-X-Google-Smtp-Source: ABdhPJx/cDamiwiWlibYkBKC8V1pm/jPhnUWDYI8f8yVrHf0mOBKx1FpuyesASQq63NRQGd9mplA5Q==
-X-Received: by 2002:a17:906:4786:b0:6f9:635f:72a7 with SMTP id cw6-20020a170906478600b006f9635f72a7mr15385967ejc.326.1652702371721;
-        Mon, 16 May 2022 04:59:31 -0700 (PDT)
+        bh=QCU7wfDMqrm19GcnwILuywiRx6koKWukaCjyLUMr2jY=;
+        b=QuNakz6uezVHqnY3wrpnwy+E7VxwbpvHIhgR2/2FH1162taM/BjgTYTZo4vQMk9c7m
+         Pf+vcrCf0/wuDy+UPplzSzVzkHPQOOPBCPlRVNlZGzVaT51KIFk4549fV0Q+KqtBiAfh
+         Yejz/sCjRKNSI86OZNJ2HvtJWFfeSNuoFPq+REkuGy00J3E9FXs0urMSbD31qzH69Msu
+         zuG5HB8nTpJwRZm7/8X/CBBIUAMp5b56zR1J1CnVFh51POLVA4Z+K8mVbsvB7DIghefz
+         LwD994uSSyUwaqp2aAlPC5CpeLg1xZTcE9RhaZpbvzwPbcHgRe86js5JfLWylRSsDiLb
+         h5nw==
+X-Gm-Message-State: AOAM530Pn8UiGgV0k7jrRcXAahMUqd8pItFqRvnY/l0mzzfYu3bKwPxT
+        cEtdmBbwLen92GCyo9sK5UYz3Jkgl0E=
+X-Google-Smtp-Source: ABdhPJwy58Fv2Rln/V04XhYV65F1aWgT954hvfk2TNnITvkLvMQSdg+QATjeaXnqvWLQp8TCmUpQdw==
+X-Received: by 2002:a17:907:161f:b0:6f6:b288:b397 with SMTP id hb31-20020a170907161f00b006f6b288b397mr14865028ejc.303.1652702373233;
+        Mon, 16 May 2022 04:59:33 -0700 (PDT)
 Received: from linuxdev2.toradex.int (31-10-206-125.static.upc.ch. [31.10.206.125])
-        by smtp.gmail.com with ESMTPSA id s18-20020a170906779200b006f3ef214dacsm3711008ejm.18.2022.05.16.04.59.30
+        by smtp.gmail.com with ESMTPSA id s18-20020a170906779200b006f3ef214dacsm3711008ejm.18.2022.05.16.04.59.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 04:59:31 -0700 (PDT)
+        Mon, 16 May 2022 04:59:32 -0700 (PDT)
 From:   Max Krummenacher <max.oss.09@gmail.com>
 To:     max.krummenacher@toradex.com
-Cc:     Fabio Estevam <festevam@gmail.com>,
+Cc:     Oleksandr Suvorov <oleksandr.suvorov@toradex.com>,
+        Fabio Estevam <festevam@gmail.com>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         NXP Linux Team <linux-imx@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
@@ -58,9 +59,9 @@ Cc:     Fabio Estevam <festevam@gmail.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 09/17] ARM: dts: imx6q-apalis: Disable HDMI
-Date:   Mon, 16 May 2022 13:58:37 +0200
-Message-Id: <20220516115846.58328-10-max.oss.09@gmail.com>
+Subject: [PATCH v1 10/17] ARM: dts: imx6q-apalis: Disable stmpe touchscreen
+Date:   Mon, 16 May 2022 13:58:38 +0200
+Message-Id: <20220516115846.58328-11-max.oss.09@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220516115846.58328-1-max.oss.09@gmail.com>
 References: <20220516115846.58328-1-max.oss.09@gmail.com>
@@ -76,64 +77,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Max Krummenacher <max.krummenacher@toradex.com>
+From: Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
 
-This allows to enable it in an overlay per the current system
-configuration.
+Unify its label with other toradex SoM dtbs.
+This allows to enable it in an overlay per the current
+system configuration.
 
+Signed-off-by: Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
 Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 ---
 
- arch/arm/boot/dts/imx6q-apalis-eval.dts       | 4 ----
- arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts | 4 ----
- arch/arm/boot/dts/imx6q-apalis-ixora.dts      | 4 ----
- 3 files changed, 12 deletions(-)
+ arch/arm/boot/dts/imx6qdl-apalis.dtsi | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/imx6q-apalis-eval.dts b/arch/arm/boot/dts/imx6q-apalis-eval.dts
-index 948bbece3ab5..2436f9a1e18c 100644
---- a/arch/arm/boot/dts/imx6q-apalis-eval.dts
-+++ b/arch/arm/boot/dts/imx6q-apalis-eval.dts
-@@ -74,10 +74,6 @@
- 	status = "okay";
- };
+diff --git a/arch/arm/boot/dts/imx6qdl-apalis.dtsi b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
+index 428841cdaac2..506d040ea37a 100644
+--- a/arch/arm/boot/dts/imx6qdl-apalis.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
+@@ -578,7 +578,7 @@
+ 		/* ADC conversion time: 80 clocks */
+ 		st,sample-time = <4>;
  
--&hdmi {
--	status = "okay";
--};
--
- /* I2C1_SDA/SCL on MXM3 209/211 (e.g. RTC on carrier board) */
- &i2c1 {
- 	status = "okay";
-diff --git a/arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts b/arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts
-index beb1981fc775..b254e96d194a 100644
---- a/arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts
-+++ b/arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts
-@@ -81,10 +81,6 @@
- 	status = "okay";
- };
+-		stmpe_touchscreen: stmpe_touchscreen {
++		stmpe_ts: stmpe_touchscreen {
+ 			compatible = "st,stmpe-ts";
+ 			/* 8 sample average control */
+ 			st,ave-ctrl = <3>;
+@@ -593,6 +593,7 @@
+ 			st,settling = <3>;
+ 			/* 5 ms touch detect interrupt delay */
+ 			st,touch-det-delay = <5>;
++			status = "disabled";
+ 		};
  
--&hdmi {
--	status = "okay";
--};
--
- /* I2C1_SDA/SCL on MXM3 209/211 (e.g. RTC on carrier board) */
- &i2c1 {
- 	status = "okay";
-diff --git a/arch/arm/boot/dts/imx6q-apalis-ixora.dts b/arch/arm/boot/dts/imx6q-apalis-ixora.dts
-index 28e5d6b68530..97ddf4621bdf 100644
---- a/arch/arm/boot/dts/imx6q-apalis-ixora.dts
-+++ b/arch/arm/boot/dts/imx6q-apalis-ixora.dts
-@@ -80,10 +80,6 @@
- 	status = "okay";
- };
- 
--&hdmi {
--	status = "okay";
--};
--
- /* I2C1_SDA/SCL on MXM3 209/211 (e.g. RTC on carrier board) */
- &i2c1 {
- 	status = "okay";
+ 		stmpe_adc: stmpe_adc {
 -- 
 2.20.1
 

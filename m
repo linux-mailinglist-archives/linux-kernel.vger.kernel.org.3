@@ -2,234 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3852527F10
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 10:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3B1D527F01
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241419AbiEPH7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 03:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47802 "EHLO
+        id S241409AbiEPH6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 03:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232688AbiEPH6o (ORCPT
+        with ESMTP id S241379AbiEPH6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 03:58:44 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653D22AC4F;
-        Mon, 16 May 2022 00:58:41 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L1s2L3zc3zCskB;
-        Mon, 16 May 2022 15:53:46 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 16 May 2022 15:58:38 +0800
-Message-ID: <06b33393-8af5-9faa-6faa-acb5111865f6@huawei.com>
-Date:   Mon, 16 May 2022 15:58:37 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next v3 4/7] bpf, arm64: Impelment
- bpf_arch_text_poke() for arm64
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>
-CC:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-References: <20220424154028.1698685-1-xukuohai@huawei.com>
- <20220424154028.1698685-5-xukuohai@huawei.com> <Yn5yb9F4uYkio4Xe@lakrids>
- <264ecbe1-4514-d6c8-182b-3af4babb457e@huawei.com>
- <YoH6yAtmzPQtWiFM@FVFF77S0Q05N>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <YoH6yAtmzPQtWiFM@FVFF77S0Q05N>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 16 May 2022 03:58:42 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18552A73D
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:58:41 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 7106121E49;
+        Mon, 16 May 2022 07:58:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1652687920; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=534KhiaZT/bBcerXIobKXc8vEsTaaY9k8kLou0IPIXc=;
+        b=ipcsQSFcHuianLFi7sdm7/3vXDalY9d5IfKqtaXpoDAHC1+N59RV3FsE4Yw6OEHBKRW1+C
+        mBmNZHME7b4vRFsNjILUjDVUhYSf/jAW0bpla+tXfbOvLFORV0CgJ99fUEtS53jO8+OdQ1
+        3kxVfLVVxaRznjC2IGzp70s9rYmJfLY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1652687920;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=534KhiaZT/bBcerXIobKXc8vEsTaaY9k8kLou0IPIXc=;
+        b=Yryiunnf1vHJci2tfKLzhobLGdeQPFQYQuZE2hyIRs0Zq+EYWCgTj/imreQ0n+/dJnQbwp
+        SVuTtr3Nv4bqLxAA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 6366F2C141;
+        Mon, 16 May 2022 07:58:40 +0000 (UTC)
+Date:   Mon, 16 May 2022 09:58:40 +0200
+Message-ID: <s5hk0alkixb.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Vitaly Rodionov <vitalyr@opensource.cirrus.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Mark Brown <broonie@kernel.org>, <alsa-devel@alsa-project.org>,
+        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 00/26] *ALSA: hda: cirrus: Add initial DSP support and firmware loading
+In-Reply-To: <20220509214703.4482-1-vitalyr@opensource.cirrus.com>
+References: <20220509214703.4482-1-vitalyr@opensource.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/2022 3:18 PM, Mark Rutland wrote:
-> On Mon, May 16, 2022 at 02:55:46PM +0800, Xu Kuohai wrote:
->> On 5/13/2022 10:59 PM, Mark Rutland wrote:
->>> On Sun, Apr 24, 2022 at 11:40:25AM -0400, Xu Kuohai wrote:
->>>> Impelment bpf_arch_text_poke() for arm64, so bpf trampoline code can use
->>>> it to replace nop with jump, or replace jump with nop.
->>>>
->>>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
->>>> Acked-by: Song Liu <songliubraving@fb.com>
->>>> ---
->>>>  arch/arm64/net/bpf_jit_comp.c | 63 +++++++++++++++++++++++++++++++++++
->>>>  1 file changed, 63 insertions(+)
->>>>
->>>> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
->>>> index 8ab4035dea27..3f9bdfec54c4 100644
->>>> --- a/arch/arm64/net/bpf_jit_comp.c
->>>> +++ b/arch/arm64/net/bpf_jit_comp.c
->>>> @@ -9,6 +9,7 @@
->>>>  
->>>>  #include <linux/bitfield.h>
->>>>  #include <linux/bpf.h>
->>>> +#include <linux/memory.h>
->>>>  #include <linux/filter.h>
->>>>  #include <linux/printk.h>
->>>>  #include <linux/slab.h>
->>>> @@ -18,6 +19,7 @@
->>>>  #include <asm/cacheflush.h>
->>>>  #include <asm/debug-monitors.h>
->>>>  #include <asm/insn.h>
->>>> +#include <asm/patching.h>
->>>>  #include <asm/set_memory.h>
->>>>  
->>>>  #include "bpf_jit.h"
->>>> @@ -1529,3 +1531,64 @@ void bpf_jit_free_exec(void *addr)
->>>>  {
->>>>  	return vfree(addr);
->>>>  }
->>>> +
->>>> +static int gen_branch_or_nop(enum aarch64_insn_branch_type type, void *ip,
->>>> +			     void *addr, u32 *insn)
->>>> +{
->>>> +	if (!addr)
->>>> +		*insn = aarch64_insn_gen_nop();
->>>> +	else
->>>> +		*insn = aarch64_insn_gen_branch_imm((unsigned long)ip,
->>>> +						    (unsigned long)addr,
->>>> +						    type);
->>>> +
->>>> +	return *insn != AARCH64_BREAK_FAULT ? 0 : -EFAULT;
->>>> +}
->>>> +
->>>> +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
->>>> +		       void *old_addr, void *new_addr)
->>>> +{
->>>> +	int ret;
->>>> +	u32 old_insn;
->>>> +	u32 new_insn;
->>>> +	u32 replaced;
->>>> +	enum aarch64_insn_branch_type branch_type;
->>>> +
->>>> +	if (!is_bpf_text_address((long)ip))
->>>> +		/* Only poking bpf text is supported. Since kernel function
->>>> +		 * entry is set up by ftrace, we reply on ftrace to poke kernel
->>>> +		 * functions. For kernel funcitons, bpf_arch_text_poke() is only
->>>> +		 * called after a failed poke with ftrace. In this case, there
->>>> +		 * is probably something wrong with fentry, so there is nothing
->>>> +		 * we can do here. See register_fentry, unregister_fentry and
->>>> +		 * modify_fentry for details.
->>>> +		 */
->>>> +		return -EINVAL;
->>>
->>> If you rely on ftrace to poke functions, why do you need to patch text
->>> at all? Why does the rest of this function exist?
->>>
->>> I really don't like having another piece of code outside of ftrace
->>> patching the ftrace patch-site; this needs a much better explanation.
->>>
->>
->> Sorry for the incorrect explaination in the comment. I don't think it's
->> reasonable to patch ftrace patch-site without ftrace code either.
->>
->> The patching logic in register_fentry, unregister_fentry and
->> modify_fentry is as follows:
->>
->> if (tr->func.ftrace_managed)
->>         ret = register_ftrace_direct((long)ip, (long)new_addr);
->> else
->>         ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, NULL, new_addr,
->>                                  true);
->>
->> ftrace patch-site is patched by ftrace code. bpf_arch_text_poke() is
->> only used to patch bpf prog and bpf trampoline, which are not managed by
->> ftrace.
+On Mon, 09 May 2022 23:46:37 +0200,
+Vitaly Rodionov wrote:
 > 
-> Sorry, I had misunderstood. Thanks for the correction!
+> The CS35L41 Amplifier contains a DSP, capable of running firmware.
+> The firmware can run algorithms such as Speaker Protection, to ensure
+> that playback at high gains do not harm the speakers.
+> Adding support for CS35L41 firmware into the CS35L41 HDA driver also
+> allows us to support several extra features, such as hiberation 
+> and interrupts.
 > 
-> I'll have another look with that in mind.
->>>>> +
->>>> +	if (poke_type == BPF_MOD_CALL)
->>>> +		branch_type = AARCH64_INSN_BRANCH_LINK;
->>>> +	else
->>>> +		branch_type = AARCH64_INSN_BRANCH_NOLINK;
->>>> +
->>>> +	if (gen_branch_or_nop(branch_type, ip, old_addr, &old_insn) < 0)
->>>> +		return -EFAULT;
->>>> +
->>>> +	if (gen_branch_or_nop(branch_type, ip, new_addr, &new_insn) < 0)
->>>> +		return -EFAULT;
->>>> +
->>>> +	mutex_lock(&text_mutex);
->>>> +	if (aarch64_insn_read(ip, &replaced)) {
->>>> +		ret = -EFAULT;
->>>> +		goto out;
->>>> +	}
->>>> +
->>>> +	if (replaced != old_insn) {
->>>> +		ret = -EFAULT;
->>>> +		goto out;
->>>> +	}
->>>> +
->>>> +	ret = aarch64_insn_patch_text_nosync((void *)ip, new_insn);
->>>
->>> ... and where does the actual synchronization come from in this case?
->>
->> aarch64_insn_patch_text_nosync() replaces an instruction atomically, so
->> no other CPUs will fetch a half-new and half-old instruction.
->>
->> The scenario here is that there is a chance that another CPU fetches the
->> old instruction after bpf_arch_text_poke() finishes, that is, different
->> CPUs may execute different versions of instructions at the same time.
->>
->> 1. When a new trampoline is attached, it doesn't seem to be an issue for
->> different CPUs to jump to different trampolines temporarily.
->>
->> 2. When an old trampoline is freed, we should wait for all other CPUs to
->> exit the trampoline and make sure the trampoline is no longer reachable,
->> IIUC, bpf_tramp_image_put() function already uses percpu_ref and rcu
->> tasks to do this.
+> The chain adds support in stages:
+> - General fixes to improve generalization and code re-use inside
+>   the CS35L41 HDA driver.
+> - Add support for interrupts into the driver, which is required
+>   for complete support of the firmware.
+> - Refactor ASoC CS35L41 code which deals with firmware to allow
+>   for code re-use inside the CS35L41 HDA driver.
+> - Add support for loading firmware and tuning files from file system,
+>   and creating alsa controls to control it.
+> - Support firmware load paths for different hardware systems.
+> - Support suspend/resume in the driver when using firmware. The firmware
+>   supports hibernation, which allows the CS35L41 to drop into a low
+>   power mode during suspend.
+> - Support the ability to unload firmware, swap and reload the firmware.
+>   This is to allow different firmware to run during calibration.
 > 
-> It would be good to have a comment for these points>
+> The intended use-case is to load the firmware once on boot, and the driver
+> autmatically tries to load the firmware after it binds to the HDA driver.
+> This behaviour can be switched off using a kconfig, if desired.
+> 
+> Stefan Binding (25):
+>   ALSA: hda: cs35l41: Fix error in spi cs35l41 hda driver name
+>   ALSA: hda: cs35l41: Set Speaker Position for CLSA0100 Laptop
+>   ALSA: hda: cs35l41: Remove Set Channel Map api from binding
+>   ALSA: hda: cs35l41: Add Support for Interrupts
+>   ALSA: hda: cs35l41: Enable GPIO2 Interrupt for CLSA0100 laptops
+>   ASoC: cs35l41: Move cs35l41_set_cspl_mbox_cmd to shared code
+>   ASoC: cs35l41: Move cs35l41 fs errata into shared code
+>   ASoC: cs35l41: Move cs_dsp config struct into shared code
+>   ALSA: hda: cs35l41: Add Amp Name based on channel and index
+>   ALSA: hda: hda_cs_dsp_ctl: Add Library to support CS_DSP ALSA controls
+>   ALSA: hda: hda_cs_dsp_ctl: Add apis to write the controls directly
+>   ALSA: hda: cs35l41: Save codec object inside component struct
+>   ALSA: hda: cs35l41: Save Subsystem ID inside CS35L41 Driver
+>   ALSA: hda: cs35l41: Support reading subsystem id from ACPI
+>   ALSA: hda: cs35l41: Support multiple load paths for firmware
+>   ALSA: hda: cs35l41: Support Speaker ID for laptops
+>   ASoC: cs35l41: Move cs35l41 exit hibernate function into shared code
+>   ASoC: cs35l41: Do not print error when waking from hibernation
+>   ASoC: cs35l41: Add common cs35l41 enter hibernate function
+>   ALSA: hda: cs35l41: Support Hibernation during Suspend
+>   ALSA: hda: cs35l41: Read Speaker Calibration data from UEFI variables
+>   ALSA: hda: hda_cs_dsp_ctl: Add fw id strings
+>   ALSA: hda: cs35l41: Add defaulted values into dsp bypass config
+>     sequence
+>   ALSA: hda: cs35l41: Support Firmware switching and reloading
+>   ALSA: hda: cs35l41: Add kernel config to disable firmware autoload
+> 
+> Vitaly Rodionov (1):
+>   ALSA: hda: cs35l41: Add initial DSP support and firmware loading
 
-will add a comment for this in v4, thanks!
+Now I applied only partially from 01 to 09 out of 26 patches.
+Please resubmit the rest after brushing up and fixes.
 
-> Thanks,
-> Mark.
-> .
 
+thanks,
+
+Takashi

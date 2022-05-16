@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EFBB529126
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2226D529148
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347270AbiEPU2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44928 "EHLO
+        id S1346794AbiEPUQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:16:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349977AbiEPUAi (ORCPT
+        with ESMTP id S1346651AbiEPTy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:00:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AF2B4579D;
-        Mon, 16 May 2022 12:54:48 -0700 (PDT)
+        Mon, 16 May 2022 15:54:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8315747065;
+        Mon, 16 May 2022 12:49:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F782B81612;
-        Mon, 16 May 2022 19:54:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B253C385AA;
-        Mon, 16 May 2022 19:54:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 301B660C71;
+        Mon, 16 May 2022 19:49:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F4C2C385AA;
+        Mon, 16 May 2022 19:49:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730884;
-        bh=Ev+knGsV3BnS3a2c6ZPe8WPOAA0Zw2vLoqqN59ypFgE=;
+        s=korg; t=1652730549;
+        bh=AmaYw6vlMJ/ix2gnSAYCW40hx5gE0o8hqHhm/0kGeeA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N7PIepzul6NyHx2v5pjKVkbz7ogtKiIul+tuR/g6+5v6VtmQpj/Bg2OeUZokPbh4r
-         KvgPVp5j8oQ1kgAM8ZkRPU2iGLSFMbUOxRFzeIptZoLGomtBqbtCl04PYCrJdpEQXO
-         JzAL4crCrejaFcNy45gF4nqdK9khQa8qj1ZmXV1Q=
+        b=DUZ8Y5EuqluPGgwl3UTGYZHjK0rD1lyeDl4moUU0c9rcJImGgbvxeDoLq/x4AAgQv
+         vAsjFyJMj/6uWT1wt9J2QQcKe0iWVVhzKWlstelBW2vbcPqaIYvwqTmWNpqqKWrfXS
+         +FledJ7Hr+P5g186nAckpcxfx7Jk33AEH0GCmXJc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shunsuke Mie <mie@igel.co.jp>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
+        stable@vger.kernel.org, Alexandra Winter <wintera@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 034/114] virtio: fix virtio transitional ids
+Subject: [PATCH 5.15 034/102] s390/lcs: fix variable dereferenced before check
 Date:   Mon, 16 May 2022 21:36:08 +0200
-Message-Id: <20220516193626.470163973@linuxfoundation.org>
+Message-Id: <20220516193624.979735177@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
-References: <20220516193625.489108457@linuxfoundation.org>
+In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
+References: <20220516193623.989270214@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shunsuke Mie <mie@igel.co.jp>
+From: Alexandra Winter <wintera@linux.ibm.com>
 
-[ Upstream commit 7ff960a6fe399fdcbca6159063684671ae57eee9 ]
+[ Upstream commit 671bb35c8e746439f0ed70815968f9a4f20a8deb ]
 
-This commit fixes the transitional PCI device ID.
+smatch complains about
+drivers/s390/net/lcs.c:1741 lcs_get_control() warn: variable dereferenced before check 'card->dev' (see line 1739)
 
-Fixes: d61914ea6ada ("virtio: update virtio id table, add transitional ids")
-Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
-Link: https://lore.kernel.org/r/20220510102723.87666-1-mie@igel.co.jp
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Fixes: 27eb5ac8f015 ("[PATCH] s390: lcs driver bug fixes and improvements [1/2]")
+Signed-off-by: Alexandra Winter <wintera@linux.ibm.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/uapi/linux/virtio_ids.h | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/s390/net/lcs.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/include/uapi/linux/virtio_ids.h b/include/uapi/linux/virtio_ids.h
-index 80d76b75bccd..7aa2eb766205 100644
---- a/include/uapi/linux/virtio_ids.h
-+++ b/include/uapi/linux/virtio_ids.h
-@@ -73,12 +73,12 @@
-  * Virtio Transitional IDs
-  */
- 
--#define VIRTIO_TRANS_ID_NET		1000 /* transitional virtio net */
--#define VIRTIO_TRANS_ID_BLOCK		1001 /* transitional virtio block */
--#define VIRTIO_TRANS_ID_BALLOON		1002 /* transitional virtio balloon */
--#define VIRTIO_TRANS_ID_CONSOLE		1003 /* transitional virtio console */
--#define VIRTIO_TRANS_ID_SCSI		1004 /* transitional virtio SCSI */
--#define VIRTIO_TRANS_ID_RNG		1005 /* transitional virtio rng */
--#define VIRTIO_TRANS_ID_9P		1009 /* transitional virtio 9p console */
-+#define VIRTIO_TRANS_ID_NET		0x1000 /* transitional virtio net */
-+#define VIRTIO_TRANS_ID_BLOCK		0x1001 /* transitional virtio block */
-+#define VIRTIO_TRANS_ID_BALLOON		0x1002 /* transitional virtio balloon */
-+#define VIRTIO_TRANS_ID_CONSOLE		0x1003 /* transitional virtio console */
-+#define VIRTIO_TRANS_ID_SCSI		0x1004 /* transitional virtio SCSI */
-+#define VIRTIO_TRANS_ID_RNG		0x1005 /* transitional virtio rng */
-+#define VIRTIO_TRANS_ID_9P		0x1009 /* transitional virtio 9p console */
- 
- #endif /* _LINUX_VIRTIO_IDS_H */
+diff --git a/drivers/s390/net/lcs.c b/drivers/s390/net/lcs.c
+index 440219bcaa2b..06a322bdced6 100644
+--- a/drivers/s390/net/lcs.c
++++ b/drivers/s390/net/lcs.c
+@@ -1735,10 +1735,11 @@ lcs_get_control(struct lcs_card *card, struct lcs_cmd *cmd)
+ 			lcs_schedule_recovery(card);
+ 			break;
+ 		case LCS_CMD_STOPLAN:
+-			pr_warn("Stoplan for %s initiated by LGW\n",
+-				card->dev->name);
+-			if (card->dev)
++			if (card->dev) {
++				pr_warn("Stoplan for %s initiated by LGW\n",
++					card->dev->name);
+ 				netif_carrier_off(card->dev);
++			}
+ 			break;
+ 		default:
+ 			LCS_DBF_TEXT(5, trace, "noLGWcmd");
 -- 
 2.35.1
 

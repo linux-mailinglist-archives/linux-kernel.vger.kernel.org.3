@@ -2,73 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6C65282F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 13:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4BFA5282FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 13:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242993AbiEPLQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 07:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55882 "EHLO
+        id S241638AbiEPLRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 07:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242966AbiEPLQS (ORCPT
+        with ESMTP id S229441AbiEPLRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 07:16:18 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704AE63E6
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 04:16:16 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id b32so17698078ljf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 04:16:16 -0700 (PDT)
+        Mon, 16 May 2022 07:17:43 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2087.outbound.protection.outlook.com [40.107.93.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB6533349;
+        Mon, 16 May 2022 04:17:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IINLxNaCdZJ+g9+cUmnRuIkzkCpc2QBBPp5S2RnDb27JQBNdH0y0gWvO6Q3sQbptYsVpaEDNoYjLlqhmzGW5nCoXMiwsuDWdYZd8TQ9JnPcHy4iKdXcGW0sjA4WNteMsHAFFH7y8DCzcjb0KUtx+K7x90YFF4YOxEVDdZxyKfodNww06hxssxgf/6y3PBlFZjCQh6hfx/vQX1wJlQKknZKW3jgDIilDXbx/leSeh1VPvBOnYGj5b29mZ2UTJG+IMr9XtS+LAbsqVvLf5P565BJL7YWjLoZ+rt7Em36ujZ0hUares1tXJ3aCpzUmJ/9o0o7vvz2OzXgHQl654JBWgjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=s1RxZjtQrJIJxiGB72D5VVVYWIa+cW7bPcYynWO/LkQ=;
+ b=TvUzEQ8IALR2mHwcSLmYpj3fA51ORm/pNPS8nXdjejVEUqejZ/K116+az8gJnHTK97gTfg3TZxTEaemggRqUQ1tUI93smsDGc3NPvYza1jlkaZoTofy6zuOWhKn5zdz0qkZNgEWOIO1zL8YxHIIZWPL+1HfP8g3yJ9HX6gHuklhVM6AqbAyJswIyRUhaTW1C/ldULIqVfBNfdV9OkyOtXMHN16I/753m/O9+UVchRMS//f+B7DCTi9DvXYhBhKRKD/4i4X7GdMW3p9vW3rhydYX/LkJilUsAiCtLP9kmz3W7LY+HTDZjZ+p1bqXURURpgz1m8Lx8zt8cD5Lor2UfQw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=ltURKW8gvbadTPdBR99MO1ZYVrXD44ckRO80E//PPJI=;
-        b=EyP2QsX4G+DdHVs2wWffX4Ijt2YetlVRQxSeh12G/bUeDnrNuyxYVntYH9yqb3TH1K
-         VAGfQnmmMSav5oJxMmOB8XW7NjlrEuy4igrHjIrLgkC901y/c5PQsjFy1m7bAtToSynr
-         3nQBYS+dSv2AxMonV8rNSQtCRbDRmO68DaMRg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=ltURKW8gvbadTPdBR99MO1ZYVrXD44ckRO80E//PPJI=;
-        b=wGBYJ18P4efpTavDVxXKUrtwwDZMc9uMbtTt5oYccej/+SCblt5HA6OAX/q1N1sirX
-         jZOqB5uYom4TZal+rzUYxpmz4e+Efev47ppJdpt450NY6gJA6sM0oJMk/DrgQ2hknjlq
-         wuFGcxXnxoQGddLkcaTpUL1ZZn6JWa7yiQqobyPYcptuqrjQARKhX8k31hsFhCfFmGnp
-         gx67M/SOmk+Hl5PkMuqjFsbKVZOmiD2a4ZkQ2SOIz6GnB1UGWrp8+fLy8wz+J3quSsOq
-         BNcRP4tGuLEqIDeXxuA8iFhj3mG69NPTtCst0BcHt2f3J/5mnPgk62UN/PBrP90YgzOy
-         u5hQ==
-X-Gm-Message-State: AOAM533tSvhKBPe2IhbCxR18o1Tr5rSO6aBZMnqKRc94LZr6p5xELmuz
-        skfQpvF5QuVKK1wQZB4gxishQA==
-X-Google-Smtp-Source: ABdhPJywKeCUSJE/2pGhaU0NCO0q5MemgsrruYo6Q2m0bZAqygT4yu3cTvoPROEtejkGKGdjULT93w==
-X-Received: by 2002:a2e:9616:0:b0:250:80ec:2418 with SMTP id v22-20020a2e9616000000b0025080ec2418mr11109326ljh.359.1652699774703;
-        Mon, 16 May 2022 04:16:14 -0700 (PDT)
-Received: from [172.16.11.74] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id l5-20020ac25545000000b0047255d2111esm1280835lfk.77.2022.05.16.04.16.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 04:16:13 -0700 (PDT)
-Message-ID: <6f55c3f0-7c10-1697-17da-79b4807c2498@rasmusvillemoes.dk>
-Date:   Mon, 16 May 2022 13:16:12 +0200
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=s1RxZjtQrJIJxiGB72D5VVVYWIa+cW7bPcYynWO/LkQ=;
+ b=FjIwfGaQrsO6HxrfdHE+8xrx9Ntpz5PUfDP6no0MKzMUNYCLvoeaKBBg7Wn4EAFg/DNuEpN493Q+KXwdbSSMsZHqlu+45q3GaM54DbZm0euZ9S8ZsqDmflq29X1LDbw3A7z4B6+//ALVmRvHHDTkEmYY290qv2pYOHNb6Px6v0U=
+Received: from BN9P221CA0027.NAMP221.PROD.OUTLOOK.COM (2603:10b6:408:10a::21)
+ by BYAPR02MB5445.namprd02.prod.outlook.com (2603:10b6:a03:a4::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.18; Mon, 16 May
+ 2022 11:17:39 +0000
+Received: from BN1NAM02FT056.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:408:10a:cafe::57) by BN9P221CA0027.outlook.office365.com
+ (2603:10b6:408:10a::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.16 via Frontend
+ Transport; Mon, 16 May 2022 11:17:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT056.mail.protection.outlook.com (10.13.2.164) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5250.13 via Frontend Transport; Mon, 16 May 2022 11:17:38 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Mon, 16 May 2022 04:17:37 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Mon, 16 May 2022 04:17:37 -0700
+Envelope-to: linux-pci@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org,
+ lorenzo.pieralisi@arm.com,
+ bhelgaas@google.com,
+ robh@kernel.org
+Received: from [10.254.241.50] (port=33330)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1nqYjJ-0001at-LO; Mon, 16 May 2022 04:17:37 -0700
+Message-ID: <b9c36db0-fb4f-19d2-68af-25b926cd33b0@xilinx.com>
+Date:   Mon, 16 May 2022 13:17:35 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] lib: overflow: Always build 64-bit test cases
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2] dt-bindings: PCI: xilinx-cpm: Fix reg property order
 Content-Language: en-US
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        Vitor Massaru Iha <vitor@massaru.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20220511174531.1098548-1-keescook@chromium.org>
- <5304dada-51d2-e955-b620-c5c97f3b0dbd@rasmusvillemoes.dk>
-In-Reply-To: <5304dada-51d2-e955-b620-c5c97f3b0dbd@rasmusvillemoes.dk>
-Content-Type: text/plain; charset=UTF-8
+To:     Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>,
+        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     <lorenzo.pieralisi@arm.com>, <bhelgaas@google.com>,
+        <robh@kernel.org>
+References: <20220516102217.25960-1-bharat.kumar.gogada@xilinx.com>
+From:   Michal Simek <michal.simek@xilinx.com>
+In-Reply-To: <20220516102217.25960-1-bharat.kumar.gogada@xilinx.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b928f034-a8b9-4764-3eaf-08da372daf9f
+X-MS-TrafficTypeDiagnostic: BYAPR02MB5445:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR02MB54455D5623F95ADD42571E21C6CF9@BYAPR02MB5445.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hgTuSBZ3kATRnXJXVqcdwcbli39TlQ6sxxtyh9jbfANcY0rT5BxTeuMXhLJzh8cpOIhnA9yctTCU5Jzarc1WgWNn5ttluMPZsD/rn9zyKGsD7zB3bbHAzYKCbdvomcQHsHONFdKw8oMvc7AeQidgioIFFFUcXiIRDaq1VqAxW0e+tt3HllauhF08oivjFd5JYZiuADpZmBxdz+ISmF99GtElH+ymPka1Ih6s6n5nKv4KwNupZtkLCLufYxdrlWshRsGylmxQQnvxuHQEnKoIqmqls1Qj0ehC+1evHDE0UV0q49zWbrd7OC1sPkD6GwGDgEpmymDjmnXfZgT4hJ3FwUj8OnOOQSTfvuMuVtGDkHPJDLAnv98QVCn5MkfCAlB1xeIE4nAQZWkDHE4v6IfmROYnuATSjxcLKB6oLTrDv6dN2qPN9wE8CwdRCHBVN/5pZ4Zf/iT12SKdQvmthiwsQsKqZrlDh7hhzaPhHwRgHtrjfLCv9dCbulFVQ5f9H3LaTq3EzfmBDlGG3hYrcpAWMMQe+7r871w5vYHLOjaKf5SnC1f7uldpbSAWq0+xOvl9AeMexMZQbOxevjhB+I87hiKqeq+DPc70cZ2k9ojz4m7n5oYtPzVwAJAhCYyLl7CGsGHzvchaWHdtj+fCXXzwTkm0zZwEWPOrjWNaSxPBv5jS7w4XWXEoZ8kMWT/RMfzOkZhzawSqs855rsS4MzqR95ZWIbm9Ip3KvHNt/+4Bi/w=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(7636003)(26005)(356005)(186003)(9786002)(316002)(44832011)(53546011)(110136005)(36860700001)(2906002)(8936002)(54906003)(83380400001)(47076005)(40460700003)(82310400005)(508600001)(36756003)(70206006)(70586007)(426003)(31686004)(5660300002)(4326008)(31696002)(2616005)(8676002)(336012)(50156003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2022 11:17:38.4601
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b928f034-a8b9-4764-3eaf-08da372daf9f
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT056.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB5445
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,62 +116,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2022 14.10, Rasmus Villemoes wrote:
-> On 11/05/2022 19.45, Kees Cook wrote:
->> There shouldn't be a reason to not build the 64-bit test cases on 32-bit
->> systems; the types exist there too. Remove the #ifdefs.
->>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Link: https://lore.kernel.org/lkml/202205110324.7GrtxG8u-lkp@intel.com
->> Fixes: 455a35a6cdb6 ("lib: add runtime test of check_*_overflow functions")
+
+
+On 5/16/22 12:22, Bharat Kumar Gogada wrote:
+> All existing vendor DTSes are using "cpm_slcr" reg followed by "cfg" reg.
 > 
-> The patch is fine, but I disagree with that Fixes tag. Back then, i.e.
-> when the overflow checkers were implemented via macros on old enough
-> compilers, they simply didn't work for 64 bit types (because of the
-> usual 64 bit division problems) - so anybody trying to use the multiply
-> overflow checker, including of course the test suite, would get a build
-> error on old compilers. You yourself did that: "[kees: add output to
-> commit log, drop u64 tests on 32-bit]"
+> This order is also suggested by node name which is pcie@fca10000 which
+> suggests that cpm_slcr register should be the first.
 > 
+> Driver itself is using devm_platform_ioremap_resource_byname() for both
+> names that's why there is no functional change even on description which
+> are using current order.
+> 
+> But still prefer to change order to cover currently used description.
+> Fixes: e22fadb1d014 ("PCI: xilinx-cpm: Add YAML schemas for Versal CPM Root Port")
+> 
+> Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
+> ---
+>   .../devicetree/bindings/pci/xilinx-versal-cpm.yaml     | 10 +++++-----
+>   1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml b/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
+> index 32f4641085bc..cca395317a4c 100644
+> --- a/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
+> +++ b/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
+> @@ -18,13 +18,13 @@ properties:
+>   
+>     reg:
+>       items:
+> -      - description: Configuration space region and bridge registers.
+>         - description: CPM system level control and status registers.
+> +      - description: Configuration space region and bridge registers.
+>   
+>     reg-names:
+>       items:
+> -      - const: cfg
+>         - const: cpm_slcr
+> +      - const: cfg
+>   
+>     interrupts:
+>       maxItems: 1
+> @@ -86,9 +86,9 @@ examples:
+>                          ranges = <0x02000000 0x0 0xe0000000 0x0 0xe0000000 0x0 0x10000000>,
+>                                   <0x43000000 0x80 0x00000000 0x80 0x00000000 0x0 0x80000000>;
+>                          msi-map = <0x0 &its_gic 0x0 0x10000>;
+> -                       reg = <0x6 0x00000000 0x0 0x10000000>,
+> -                             <0x0 0xfca10000 0x0 0x1000>;
+> -                       reg-names = "cfg", "cpm_slcr";
+> +                       reg = <0x0 0xfca10000 0x0 0x1000>,
+> +                             <0x6 0x00000000 0x0 0x10000000>;
+> +                       reg-names = "cpm_slcr", "cfg";
+>                          pcie_intc_0: interrupt-controller {
+>                                  #address-cells = <0>;
+>                                  #interrupt-cells = <1>;
 
-And if you want something that can be backported, getting rid of that
-"defined but unused" warning while also enabling checking of the
-overflow fallbacks that were actually usable (the add and sub ones), you
-could do a two-step thing, the first step being something like
-(completely untested)
+Reviewed-by: Michal Simek <michal.simek@amd.com>
 
-diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
-index 475f0c064bf6..f46c0f6e26c4 100644
---- a/lib/overflow_kunit.c
-+++ b/lib/overflow_kunit.c
-@@ -236,8 +236,10 @@ static void do_test_ ## t(struct kunit *test, const
-struct test_ ## t *p) \
-        check_one_op(t, fmt, add, "+", p->a, p->b, p->sum, p->s_of);    \
-        check_one_op(t, fmt, add, "+", p->b, p->a, p->sum, p->s_of);    \
-        check_one_op(t, fmt, sub, "-", p->a, p->b, p->diff, p->d_of);   \
--       check_one_op(t, fmt, mul, "*", p->a, p->b, p->prod, p->p_of);   \
--       check_one_op(t, fmt, mul, "*", p->b, p->a, p->prod, p->p_of);   \
-+       if (BITS_PER_LONG == 64 || sizeof(t) < 8) {                     \
-+               check_one_op(t, fmt, mul, "*", p->a, p->b, p->prod,
-p->p_of); \
-+               check_one_op(t, fmt, mul, "*", p->b, p->a, p->prod,
-p->p_of); \
-+       }                                                               \
- }                                                                      \
-                                                                        \
- static void t ## _overflow_test(struct kunit *test) {                  \
-@@ -255,10 +257,8 @@ DEFINE_TEST_FUNC(u16, "%d");
- DEFINE_TEST_FUNC(s16, "%d");
- DEFINE_TEST_FUNC(u32, "%u");
- DEFINE_TEST_FUNC(s32, "%d");
--#if BITS_PER_LONG == 64
- DEFINE_TEST_FUNC(u64, "%llu");
- DEFINE_TEST_FUNC(s64, "%lld");
--#endif
-
- static void overflow_shift_test(struct kunit *test)
- {
-
-and then in a second, not-for-backporting, patch remove that if() again.
-
-Rasmus
+Thanks,
+Michal

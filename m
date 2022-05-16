@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E5FB528E0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AEE2528EB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345515AbiEPTiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41896 "EHLO
+        id S1345780AbiEPTso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345488AbiEPTiG (ORCPT
+        with ESMTP id S1346376AbiEPTmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:38:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4D93ED17;
-        Mon, 16 May 2022 12:38:05 -0700 (PDT)
+        Mon, 16 May 2022 15:42:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39AF818B;
+        Mon, 16 May 2022 12:40:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98354614B6;
-        Mon, 16 May 2022 19:38:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3BCFC385AA;
-        Mon, 16 May 2022 19:38:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7220B61538;
+        Mon, 16 May 2022 19:40:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AF0FC385AA;
+        Mon, 16 May 2022 19:40:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652729884;
-        bh=VkPH2GOgvW0jX6lgRUV/1Nazd4OVVZfSwSr6lOBKaK0=;
+        s=korg; t=1652730037;
+        bh=QCo496fYDmwgMawnPL1ftwATDrYep+6x7Q72Vwn/ptE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=awBF4OX3qtQDqYBs5sER4ecyV2/ul5W+kqOfiPyeA2kvZMSHYZcA/GYHPZU/rbsjd
-         HeWR/dk2JOycWRIDrm1Mm8tx1ppXzRmBHA8MyHw1fYvIpYRe02Uw4TDI5u+hdHKDtC
-         w6f3v5NjiPJO85Uk6FBfMLKohdCrwV0CnI/JgESo=
+        b=eGTy5YmRtDhj681AOVg3EyxO1pDOmmbHnBlG0gi6fQ08zLsB6riOBIRBoOukdvBaW
+         sdaCEA0d+lDm2/i01X6FK7ACCH/D1Ds5/Dz2TxzKdeT+UmRX1vlGfNVID14Ekw7yD4
+         qp9DrbuI3w6ndk4LQi6iduA23Kz5IXlvBsYWD5X8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Geliang Tang <geliang.tang@suse.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 12/19] ASoC: ops: Validate input values in snd_soc_put_volsw_range()
+Subject: [PATCH 4.19 11/32] net/sched: act_pedit: really ensure the skb is writable
 Date:   Mon, 16 May 2022 21:36:25 +0200
-Message-Id: <20220516193613.863630546@linuxfoundation.org>
+Message-Id: <20220516193615.111458274@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193613.497233635@linuxfoundation.org>
-References: <20220516193613.497233635@linuxfoundation.org>
+In-Reply-To: <20220516193614.773450018@linuxfoundation.org>
+References: <20220516193614.773450018@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,58 +59,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Paolo Abeni <pabeni@redhat.com>
 
-[ Upstream commit aa22125c57f9e577f0a667e4fa07fc3fa8ca1e60 ]
+[ Upstream commit 8b796475fd7882663a870456466a4fb315cc1bd6 ]
 
-Check that values written via snd_soc_put_volsw_range() are
-within the range advertised by the control, ensuring that we
-don't write out of spec values to the hardware.
+Currently pedit tries to ensure that the accessed skb offset
+is writable via skb_unclone(). The action potentially allows
+touching any skb bytes, so it may end-up modifying shared data.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20220423131239.3375261-1-broonie@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+The above causes some sporadic MPTCP self-test failures, due to
+this code:
+
+	tc -n $ns2 filter add dev ns2eth$i egress \
+		protocol ip prio 1000 \
+		handle 42 fw \
+		action pedit munge offset 148 u8 invert \
+		pipe csum tcp \
+		index 100
+
+The above modifies a data byte outside the skb head and the skb is
+a cloned one, carrying a TCP output packet.
+
+This change addresses the issue by keeping track of a rough
+over-estimate highest skb offset accessed by the action and ensuring
+such offset is really writable.
+
+Note that this may cause performance regressions in some scenarios,
+but hopefully pedit is not in the critical path.
+
+Fixes: db2c24175d14 ("act_pedit: access skb->data safely")
+Acked-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Tested-by: Geliang Tang <geliang.tang@suse.com>
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Link: https://lore.kernel.org/r/1fcf78e6679d0a287dd61bb0f04730ce33b3255d.1652194627.git.pabeni@redhat.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/soc-ops.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ include/net/tc_act/tc_pedit.h |  1 +
+ net/sched/act_pedit.c         | 26 ++++++++++++++++++++++----
+ 2 files changed, 23 insertions(+), 4 deletions(-)
 
-diff --git a/sound/soc/soc-ops.c b/sound/soc/soc-ops.c
-index 74968ddee49f..90ba5521c189 100644
---- a/sound/soc/soc-ops.c
-+++ b/sound/soc/soc-ops.c
-@@ -528,7 +528,15 @@ int snd_soc_put_volsw_range(struct snd_kcontrol *kcontrol,
- 	unsigned int mask = (1 << fls(max)) - 1;
- 	unsigned int invert = mc->invert;
- 	unsigned int val, val_mask;
--	int err, ret;
-+	int err, ret, tmp;
-+
-+	tmp = ucontrol->value.integer.value[0];
-+	if (tmp < 0)
-+		return -EINVAL;
-+	if (mc->platform_max && tmp > mc->platform_max)
-+		return -EINVAL;
-+	if (tmp > mc->max - mc->min + 1)
-+		return -EINVAL;
+diff --git a/include/net/tc_act/tc_pedit.h b/include/net/tc_act/tc_pedit.h
+index fac3ad4a86de..bd74e94527a2 100644
+--- a/include/net/tc_act/tc_pedit.h
++++ b/include/net/tc_act/tc_pedit.h
+@@ -14,6 +14,7 @@ struct tcf_pedit {
+ 	struct tc_action	common;
+ 	unsigned char		tcfp_nkeys;
+ 	unsigned char		tcfp_flags;
++	u32			tcfp_off_max_hint;
+ 	struct tc_pedit_key	*tcfp_keys;
+ 	struct tcf_pedit_key_ex	*tcfp_keys_ex;
+ };
+diff --git a/net/sched/act_pedit.c b/net/sched/act_pedit.c
+index ce14fafb36a1..fec0f7fdb015 100644
+--- a/net/sched/act_pedit.c
++++ b/net/sched/act_pedit.c
+@@ -148,7 +148,7 @@ static int tcf_pedit_init(struct net *net, struct nlattr *nla,
+ 	struct nlattr *pattr;
+ 	struct tcf_pedit *p;
+ 	int ret = 0, err;
+-	int ksize;
++	int i, ksize;
+ 	u32 index;
  
- 	if (invert)
- 		val = (max - ucontrol->value.integer.value[0]) & mask;
-@@ -543,6 +551,14 @@ int snd_soc_put_volsw_range(struct snd_kcontrol *kcontrol,
- 	ret = err;
- 
- 	if (snd_soc_volsw_is_stereo(mc)) {
-+		tmp = ucontrol->value.integer.value[1];
-+		if (tmp < 0)
-+			return -EINVAL;
-+		if (mc->platform_max && tmp > mc->platform_max)
-+			return -EINVAL;
-+		if (tmp > mc->max - mc->min + 1)
-+			return -EINVAL;
+ 	if (!nla) {
+@@ -221,6 +221,18 @@ static int tcf_pedit_init(struct net *net, struct nlattr *nla,
+ 		p->tcfp_nkeys = parm->nkeys;
+ 	}
+ 	memcpy(p->tcfp_keys, parm->keys, ksize);
++	p->tcfp_off_max_hint = 0;
++	for (i = 0; i < p->tcfp_nkeys; ++i) {
++		u32 cur = p->tcfp_keys[i].off;
 +
- 		if (invert)
- 			val = (max - ucontrol->value.integer.value[1]) & mask;
- 		else
++		/* The AT option can read a single byte, we can bound the actual
++		 * value with uchar max.
++		 */
++		cur += (0xff & p->tcfp_keys[i].offmask) >> p->tcfp_keys[i].shift;
++
++		/* Each key touches 4 bytes starting from the computed offset */
++		p->tcfp_off_max_hint = max(p->tcfp_off_max_hint, cur + 4);
++	}
+ 
+ 	p->tcfp_flags = parm->flags;
+ 	p->tcf_action = parm->action;
+@@ -298,13 +310,18 @@ static int tcf_pedit_act(struct sk_buff *skb, const struct tc_action *a,
+ 			 struct tcf_result *res)
+ {
+ 	struct tcf_pedit *p = to_pedit(a);
++	u32 max_offset;
+ 	int i;
+ 
+-	if (skb_unclone(skb, GFP_ATOMIC))
+-		return p->tcf_action;
+-
+ 	spin_lock(&p->tcf_lock);
+ 
++	max_offset = (skb_transport_header_was_set(skb) ?
++		      skb_transport_offset(skb) :
++		      skb_network_offset(skb)) +
++		     p->tcfp_off_max_hint;
++	if (skb_ensure_writable(skb, min(skb->len, max_offset)))
++		goto unlock;
++
+ 	tcf_lastuse_update(&p->tcf_tm);
+ 
+ 	if (p->tcfp_nkeys > 0) {
+@@ -393,6 +410,7 @@ static int tcf_pedit_act(struct sk_buff *skb, const struct tc_action *a,
+ 	p->tcf_qstats.overlimits++;
+ done:
+ 	bstats_update(&p->tcf_bstats, skb);
++unlock:
+ 	spin_unlock(&p->tcf_lock);
+ 	return p->tcf_action;
+ }
 -- 
 2.35.1
 

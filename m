@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF540529198
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:48:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7395291C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348027AbiEPUd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
+        id S1345272AbiEPUEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351133AbiEPUCD (ORCPT
+        with ESMTP id S1347380AbiEPTwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:02:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 863742AE9;
-        Mon, 16 May 2022 12:59:23 -0700 (PDT)
+        Mon, 16 May 2022 15:52:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1311A41323;
+        Mon, 16 May 2022 12:47:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 49A5DB81613;
-        Mon, 16 May 2022 19:59:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A953DC385AA;
-        Mon, 16 May 2022 19:59:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 718C360A52;
+        Mon, 16 May 2022 19:47:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E946C36AE3;
+        Mon, 16 May 2022 19:47:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652731161;
-        bh=hxQr3HJrF4KGHrYdn2UKe4Ty6jxRkxNLvEZh7rMK530=;
+        s=korg; t=1652730439;
+        bh=B8EOM9vBbkPdhtar3ADGJ5aolP581yg23JlHQd8gLLw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qnkWxOVs1r2pB4v8Do/JVyBn0/brXu9HynnLj2s/jSf/ia4hw0FxREJmAsqj6sSzZ
-         upXEnw8b0xDTzSHQUpr+IcgO+xhxt0tZMfP43Zw6QJF11X+3JmQNbsiDYv7FiNsj1M
-         8KR6qneWaZ8nm6q0vZRCvBipa66b1pq2ck8mzqQY=
+        b=OUCOh0m8BcEcM8O6D84YX+0zdh02oBicH8Z9q1ATY7S/Tphlxd+7fymon2XDZupuz
+         sUv1Y//luXEKXWN9/LWv6Fp8XsavdDEu7yFid2Yw4fGzZ1pLvAkN+yuuFEUwgEJx3m
+         eGWO6wxJnMkw1YiX6BkcYwuzrfEQdesD3JLgxVq8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 5.17 091/114] serial: 8250_mtk: Fix register address for XON/XOFF character
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Paul Elder <paul.elder@ideasonboard.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>
+Subject: [PATCH 5.10 65/66] usb: gadget: uvc: rename function to be more consistent
 Date:   Mon, 16 May 2022 21:37:05 +0200
-Message-Id: <20220516193628.089977074@linuxfoundation.org>
+Message-Id: <20220516193621.291427951@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
-References: <20220516193625.489108457@linuxfoundation.org>
+In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
+References: <20220516193619.400083785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +57,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+From: Michael Tretter <m.tretter@pengutronix.de>
 
-commit e1bfdbc7daca171c74a577b3dd0b36d76bb0ffcc upstream.
+commit e6bab2b66329b40462fb1bed6f98bc3fcf543a1c upstream.
 
-The XON1/XOFF1 character registers are at offset 0xa0 and 0xa8
-respectively, so we cannot use the definition in serial_port.h.
+When enabling info debugging for the uvc gadget, the bind and unbind
+infos use different formats. Change the unbind to visually match the
+bind.
 
-Fixes: bdbd0a7f8f03 ("serial: 8250-mtk: modify baudrate setting")
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: stable <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220427132328.228297-4-angelogioacchino.delregno@collabora.com
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Paul Elder <paul.elder@ideasonboard.com>
+Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Link: https://lore.kernel.org/r/20211017215017.18392-3-m.grzeschik@pengutronix.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/serial/8250/8250_mtk.c |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/usb/gadget/function/f_uvc.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
---- a/drivers/tty/serial/8250/8250_mtk.c
-+++ b/drivers/tty/serial/8250/8250_mtk.c
-@@ -54,6 +54,9 @@
- #define MTK_UART_TX_TRIGGER	1
- #define MTK_UART_RX_TRIGGER	MTK_UART_RX_SIZE
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -883,12 +883,13 @@ static void uvc_free(struct usb_function
+ 	kfree(uvc);
+ }
  
-+#define MTK_UART_XON1		40	/* I/O: Xon character 1 */
-+#define MTK_UART_XOFF1		42	/* I/O: Xoff character 1 */
-+
- #ifdef CONFIG_SERIAL_8250_DMA
- enum dma_rx_status {
- 	DMA_RX_START = 0,
-@@ -275,8 +278,8 @@ static void mtk8250_set_flow_ctrl(struct
- 			(serial_in(up, MTK_UART_EFR) &
- 			(~(MTK_UART_EFR_HW_FC | MTK_UART_EFR_SW_FC_MASK))));
+-static void uvc_unbind(struct usb_configuration *c, struct usb_function *f)
++static void uvc_function_unbind(struct usb_configuration *c,
++				struct usb_function *f)
+ {
+ 	struct usb_composite_dev *cdev = c->cdev;
+ 	struct uvc_device *uvc = to_uvc(f);
  
--		serial_out(up, UART_XON1, START_CHAR(port->state->port.tty));
--		serial_out(up, UART_XOFF1, STOP_CHAR(port->state->port.tty));
-+		serial_out(up, MTK_UART_XON1, START_CHAR(port->state->port.tty));
-+		serial_out(up, MTK_UART_XOFF1, STOP_CHAR(port->state->port.tty));
- 		serial_out(up, UART_LCR, lcr);
- 		mtk8250_disable_intrs(up, MTK_UART_IER_CTSI|MTK_UART_IER_RTSI);
- 		mtk8250_enable_intrs(up, MTK_UART_IER_XOFFI);
+-	uvcg_info(f, "%s\n", __func__);
++	uvcg_info(f, "%s()\n", __func__);
+ 
+ 	device_remove_file(&uvc->vdev.dev, &dev_attr_function_name);
+ 	video_unregister_device(&uvc->vdev);
+@@ -942,7 +943,7 @@ static struct usb_function *uvc_alloc(st
+ 	/* Register the function. */
+ 	uvc->func.name = "uvc";
+ 	uvc->func.bind = uvc_function_bind;
+-	uvc->func.unbind = uvc_unbind;
++	uvc->func.unbind = uvc_function_unbind;
+ 	uvc->func.get_alt = uvc_function_get_alt;
+ 	uvc->func.set_alt = uvc_function_set_alt;
+ 	uvc->func.disable = uvc_function_disable;
 
 

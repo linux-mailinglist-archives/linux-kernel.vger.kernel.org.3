@@ -2,123 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B359B52918C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C51DD52914B
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244704AbiEPUf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55996 "EHLO
+        id S1348258AbiEPUWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:22:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351122AbiEPUCC (ORCPT
+        with ESMTP id S1348892AbiEPT7C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:02:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D36B81;
-        Mon, 16 May 2022 12:59:17 -0700 (PDT)
+        Mon, 16 May 2022 15:59:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8198F2AE9;
+        Mon, 16 May 2022 12:52:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45458B81611;
-        Mon, 16 May 2022 19:59:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C4AFC385AA;
-        Mon, 16 May 2022 19:59:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 186AB60A50;
+        Mon, 16 May 2022 19:52:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2735AC385AA;
+        Mon, 16 May 2022 19:52:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652731155;
-        bh=yekZkhx9rr5WJWN+QNU/3YKvBuSdHExCR0fe0QC0v5Q=;
+        s=korg; t=1652730731;
+        bh=7IRXdIIB3uUDCTn2XfRF5RKZdbHbSc5GDTEByx2Mubs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FBRAsV77pS6dCN4zi1J1r6HUmy//ifirHU34g8VZwVkPg4TBwSFY19d6H85soDjK1
-         r1bK0jcbUvM4Y/LzqHlp2xoOmMvJr+1y4+g2D0deaHt1cWZHeXdH05Ak0V8FYk9JRx
-         KR6SzLDk792tUFL6HuRCE5T+TMOyWaPG7bFRvyO0=
+        b=juZNNpEFnH2/aa0mPFPhI7YIZFVvMMbh3HORWISghDrWfsAuBH3qPUjKrVWBlkJVH
+         /HMfNDyu/Cvx7IqeQV8hEs4IJq0Ng0LnWSk9Y7EHeh9Wr74OHPChlJ4FkrZz5Vra/o
+         BiSYHpzkc7C9n9lVTS9tlrlRES7IvXfkdreLaO5U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Octavian Purdila <octavian.purdila@nxp.com>
-Subject: [PATCH 5.17 089/114] genirq: Remove WARN_ON_ONCE() in generic_handle_domain_irq()
-Date:   Mon, 16 May 2022 21:37:03 +0200
-Message-Id: <20220516193628.034006734@linuxfoundation.org>
+        stable@vger.kernel.org, Waiman Long <longman@redhat.com>,
+        Feng Tang <feng.tang@intel.com>,
+        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+        Tejun Heo <tj@kernel.org>
+Subject: [PATCH 5.15 090/102] cgroup/cpuset: Remove cpus_allowed/mems_allowed setup in cpuset_init_smp()
+Date:   Mon, 16 May 2022 21:37:04 +0200
+Message-Id: <20220516193626.582236164@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
-References: <20220516193625.489108457@linuxfoundation.org>
+In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
+References: <20220516193623.989270214@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,TVD_SUBJ_WIPE_DEBT,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Wunner <lukas@wunner.de>
+From: Waiman Long <longman@redhat.com>
 
-commit 792ea6a074ae7ea5ab6f1b8b31f76bb0297de66c upstream.
+commit 2685027fca387b602ae565bff17895188b803988 upstream.
 
-Since commit 0953fb263714 ("irq: remove handle_domain_{irq,nmi}()"),
-generic_handle_domain_irq() warns if called outside hardirq context, even
-though the function calls down to handle_irq_desc(), which warns about the
-same, but conditionally on handle_enforce_irqctx().
+There are 3 places where the cpu and node masks of the top cpuset can
+be initialized in the order they are executed:
+ 1) start_kernel -> cpuset_init()
+ 2) start_kernel -> cgroup_init() -> cpuset_bind()
+ 3) kernel_init_freeable() -> do_basic_setup() -> cpuset_init_smp()
 
-The newly added warning is a false positive if the interrupt originates
-from any other irqchip than x86 APIC or ARM GIC/GICv3.  Those are the only
-ones for which handle_enforce_irqctx() returns true.  Per commit
-c16816acd086 ("genirq: Add protection against unsafe usage of
-generic_handle_irq()"):
+The first cpuset_init() call just sets all the bits in the masks.
+The second cpuset_bind() call sets cpus_allowed and mems_allowed to the
+default v2 values. The third cpuset_init_smp() call sets them back to
+v1 values.
 
- "In general calling generic_handle_irq() with interrupts disabled from non
-  interrupt context is harmless. For some interrupt controllers like the
-  x86 trainwrecks this is outright dangerous as it might corrupt state if
-  an interrupt affinity change is pending."
+For systems with cgroup v2 setup, cpuset_bind() is called once.  As a
+result, cpu and memory node hot add may fail to update the cpu and node
+masks of the top cpuset to include the newly added cpu or node in a
+cgroup v2 environment.
 
-Examples for interrupt chips where the warning is a false positive are
-USB-attached GPIO controllers such as drivers/gpio/gpio-dln2.c:
+For systems with cgroup v1 setup, cpuset_bind() is called again by
+rebind_subsystem() when the v1 cpuset filesystem is mounted as shown
+in the dmesg log below with an instrumented kernel.
 
-  USB gadgets are incapable of directly signaling an interrupt because they
-  cannot initiate a bus transaction by themselves.  All communication on
-  the bus is initiated by the host controller, which polls a gadget's
-  Interrupt Endpoint in regular intervals.  If an interrupt is pending,
-  that information is passed up the stack in softirq context, from which a
-  hardirq is synthesized via generic_handle_domain_irq().
+  [    2.609781] cpuset_bind() called - v2 = 1
+  [    3.079473] cpuset_init_smp() called
+  [    7.103710] cpuset_bind() called - v2 = 0
 
-Remove the warning to eliminate such false positives.
+smp_init() is called after the first two init functions.  So we don't
+have a complete list of active cpus and memory nodes until later in
+cpuset_init_smp() which is the right time to set up effective_cpus
+and effective_mems.
 
-Fixes: 0953fb263714 ("irq: remove handle_domain_{irq,nmi}()")
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-CC: Linus Walleij <linus.walleij@linaro.org>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Octavian Purdila <octavian.purdila@nxp.com>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220505113207.487861b2@kernel.org
-Link: https://lore.kernel.org/r/20220506203242.GA1855@wunner.de
-Link: https://lore.kernel.org/r/c3caf60bfa78e5fdbdf483096b7174da65d1813a.1652168866.git.lukas@wunner.de
+To fix this cgroup v2 mask setup problem, the potentially incorrect
+cpus_allowed & mems_allowed setting in cpuset_init_smp() are removed.
+For cgroup v2 systems, the initial cpuset_bind() call will set the masks
+correctly.  For cgroup v1 systems, the second call to cpuset_bind()
+will do the right setup.
+
+cc: stable@vger.kernel.org
+Signed-off-by: Waiman Long <longman@redhat.com>
+Tested-by: Feng Tang <feng.tang@intel.com>
+Reviewed-by: Michal Koutný <mkoutny@suse.com>
+Signed-off-by: Tejun Heo <tj@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/irq/irqdesc.c |    1 -
- 1 file changed, 1 deletion(-)
+ kernel/cgroup/cpuset.c |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/kernel/irq/irqdesc.c
-+++ b/kernel/irq/irqdesc.c
-@@ -678,7 +678,6 @@ EXPORT_SYMBOL_GPL(generic_handle_irq);
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -3347,8 +3347,11 @@ static struct notifier_block cpuset_trac
   */
- int generic_handle_domain_irq(struct irq_domain *domain, unsigned int hwirq)
+ void __init cpuset_init_smp(void)
  {
--	WARN_ON_ONCE(!in_irq());
- 	return handle_irq_desc(irq_resolve_mapping(domain, hwirq));
- }
- EXPORT_SYMBOL_GPL(generic_handle_domain_irq);
+-	cpumask_copy(top_cpuset.cpus_allowed, cpu_active_mask);
+-	top_cpuset.mems_allowed = node_states[N_MEMORY];
++	/*
++	 * cpus_allowd/mems_allowed set to v2 values in the initial
++	 * cpuset_bind() call will be reset to v1 values in another
++	 * cpuset_bind() call when v1 cpuset is mounted.
++	 */
+ 	top_cpuset.old_mems_allowed = top_cpuset.mems_allowed;
+ 
+ 	cpumask_copy(top_cpuset.effective_cpus, cpu_active_mask);
 
 

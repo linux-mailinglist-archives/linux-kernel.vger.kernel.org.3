@@ -2,130 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E25925286C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:18:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E8235286E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244427AbiEPOST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 10:18:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
+        id S244507AbiEPOXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 10:23:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbiEPOSP (ORCPT
+        with ESMTP id S244468AbiEPOXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 10:18:15 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2E83AA6B;
-        Mon, 16 May 2022 07:18:14 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GE252R018504;
-        Mon, 16 May 2022 14:18:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=yMNOKF07RUOwX1GCechJUNCl+HJAsH8hPOrtwMkUF3w=;
- b=i6+FF2JagaDhRxk6dpZgrOngcOMkTECHhcjd/vlP13567dQA3Tf0qdQn7qvkNu+r9WRP
- Q8ftkQKXJrb+6cWkcUJZen7k52gLl8RvkT2kJbYlKYSHMthUyYUy0eWIqOp+ybLbMBRy
- vUSbYJrLbVmRs9cBYFUhvr/UGxplRgXeMudWkh4ZGbxiq86l9AR7dVVTk7NQhGOZbPr8
- O286iPFGbNsZRpA752rj+xHlMXY+oKnu+9Tq6ow0AIIfwg2EMco2/SQxow95U1Nksvuk
- OEyWTY6ku2g+jcRnK5tdvd4bT6Hwnk8A8y/IjS45ba5ukv/k7jd+lGsXXTLHmCvAlODC jQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3r150dnr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 14:18:14 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24GE2JXk019751;
-        Mon, 16 May 2022 14:18:14 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3r150dmb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 14:18:13 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24GEI3Cx014376;
-        Mon, 16 May 2022 14:18:11 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3g23pjatnm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 14:18:10 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24GEHaLp34341120
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 16 May 2022 14:17:36 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 74292A404D;
-        Mon, 16 May 2022 14:18:07 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C489BA4040;
-        Mon, 16 May 2022 14:18:06 +0000 (GMT)
-Received: from [9.171.15.172] (unknown [9.171.15.172])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 16 May 2022 14:18:06 +0000 (GMT)
-Message-ID: <bae4e416-b0e9-31c6-c9d0-df6b5a5fd46f@linux.ibm.com>
-Date:   Mon, 16 May 2022 16:21:54 +0200
+        Mon, 16 May 2022 10:23:12 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830463B017;
+        Mon, 16 May 2022 07:23:10 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id z18so16080498iob.5;
+        Mon, 16 May 2022 07:23:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WfuLbMFnE6T2gqljbFDnxPAiIollkJqGTTqUZar1THg=;
+        b=mFTpIx7QJd9OPa2rfI+BdVzP84MpmVIgyY0ts0fmvC5ELBnjn8KhgXvspalPHgDl65
+         GAlhZDDcNlPTjVz9f0cysymZt577t9/Ltz+wYdsk6YiWL/ImRshShRPwYid59CfKfK3m
+         Gl8WoVDDixM/uYu0wDa8ACGVAbL9t+WWpAWDM8NWSX471CE4cVE8a7wQGgxhyRz9hCBH
+         ULKT4O8zR2VmqUkTgkbm6fZnn9M5Z0y3U1o5amDwNRtA9ndnEDrC27b+4EBgLoFqe32/
+         PY6NtQQx973ICwstG8vUooMm69SIHAYklrWJJPLJ4D+5OEcKjId8fRp2Q2LsmwmWtXth
+         9KIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WfuLbMFnE6T2gqljbFDnxPAiIollkJqGTTqUZar1THg=;
+        b=hTHgnIvUTzi2p5czXo2Bt++0uBikv25EHMTtmjRwsTbbIf7KzDfj7ZiDtEwhHwqXqr
+         +dkfJKF0pc6Y75Nu8+a9yneyac70wy+uFOIbS4ktwQO6IaKVRbxgQOoo37SbYOR87I0L
+         yRlUaqL3UVGy4BfRW96rzajw5QPkTxNzxtVqKjcDO8yQ+nX4Cv4LE9gNDJWwWtGGz5u3
+         0PWzK2MWvNug9hHX10Nx16SE4BrP5m6/MJUzVu9GwYxEMcx/mtmLp78iJmhFouSE1lCS
+         auIzvnqFK1lbmjbNHVvX8wxjN6p7FqHRv7Ic6k1u1evL5+zR/cATee/ElK9gdhdL2rff
+         IjEg==
+X-Gm-Message-State: AOAM533aByTjVs9EmfjDE60wMXXpNx1K5xb4/7VPDbY8geeTPEXJtbtf
+        tQ4Y3WEU3uNCxHiV/UVRby9qqBZL9wDuCO3HsdU=
+X-Google-Smtp-Source: ABdhPJwES2wc7TdMhiod+Gfl69w6wPnCgbe1YGCtJzOYOWtZ/sszBlzxfySY/AjwJEJtLVYes/CfhrG1dOOG8apzh38=
+X-Received: by 2002:a05:6638:110e:b0:32e:4068:fd99 with SMTP id
+ n14-20020a056638110e00b0032e4068fd99mr1425584jal.264.1652710988705; Mon, 16
+ May 2022 07:23:08 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v9 3/3] s390x: KVM: resetting the Topology-Change-Report
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, borntraeger@de.ibm.com,
-        frankja@linux.ibm.com, cohuck@redhat.com, thuth@redhat.com,
-        hca@linux.ibm.com, gor@linux.ibm.com, wintera@linux.ibm.com,
-        seiden@linux.ibm.com, nrb@linux.ibm.com
-References: <20220506092403.47406-1-pmorel@linux.ibm.com>
- <20220506092403.47406-4-pmorel@linux.ibm.com>
- <76fd0c11-5b9b-0032-183b-54db650f13b1@redhat.com>
- <20220512115250.2e20bfdf@p-imbrenda>
- <70a7d93c-c1b1-fa72-0eb4-02e3e2235f94@redhat.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <70a7d93c-c1b1-fa72-0eb4-02e3e2235f94@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: G9x7Bk-epVV11i7POlxqSnH3IOodtMW3
-X-Proofpoint-ORIG-GUID: Qcb0VTL_5kUfnZA07UnfESspfT1_K6bq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-16_13,2022-05-16_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- phishscore=0 suspectscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0
- mlxlogscore=966 bulkscore=0 priorityscore=1501 mlxscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205160079
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220516101901.475557433@linutronix.de> <20220516102615.884180377@linutronix.de>
+In-Reply-To: <20220516102615.884180377@linutronix.de>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Mon, 16 May 2022 16:22:57 +0200
+Message-ID: <CANiq72kSqKqoUsiFhg0+a65vc3KPTW4zpt-Dh8geVWUMPkWFwg@mail.gmail.com>
+Subject: Re: [patch 8/9] scripts/spdxcheck: Exclude dot files
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-spdx@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@lst.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 16, 2022 at 3:55 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> None of these files
+>
+>      .clang-format, .cocciconfig, .get_maintainer.ignore, .gitattributes,
+>      .gitignore, .mailmap
+>
+> have copyrightable content. They are configuration files which use a
+> publicly documented format.
 
+Should this files remove their SPDX-License-Identifier? If yes, we
+should do that for `.clang-format`.
 
-On 5/12/22 12:01, David Hildenbrand wrote:
->>>
->>> I think we prefer something like u16 when copying to user space.
->>
->> but then userspace also has to expect a u16, right?
-> 
-> Yep.
-> 
+As another suggestion, we should check that the ignored files actually
+do _not_ have the `SPDX-License-Identifier` (i.e. so the above case
+would trigger a diagnostic).
 
-Yes but in fact, inspired by previous discussion I had on the VFIO 
-interface, that is the reason why I did prefer an int.
-It is much simpler than a u16 and the definition of a bit.
-
-Despite a bit in a u16 is what the s3990 achitecture proposes I thought 
-we could make it easier on the KVM/QEMU interface.
-
-But if the discussion stops here, I will do as you both propose change 
-to u16 in KVM and userland and add the documentation for the interface.
-
-Regards,
-Pierre
-
--- 
-Pierre Morel
-IBM Lab Boeblingen
+Cheers,
+Miguel

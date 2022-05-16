@@ -2,234 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB4B5529591
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 01:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A4D4529595
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 01:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349386AbiEPXw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 19:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33376 "EHLO
+        id S1350490AbiEPXxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 19:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350531AbiEPXwU (ORCPT
+        with ESMTP id S242639AbiEPXwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 19:52:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B431346B03
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 16:52:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53DFAB816AF
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 23:52:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 988DAC385AA;
-        Mon, 16 May 2022 23:52:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652745128;
-        bh=d7+oC+7Tgf7T+0H3v3NwtYLr3AwLyKa8NrYvJT4rWmM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tVbUm52EGpssBkOelaAFZoleN6c4uBCJW9WpI9QLShUwgXHPyYg308qqR2IzfrdrP
-         Kj2SyiuurSZdKZmp5kGdFFqHRgkHC9pdgqszmI/qt3ZqnJQJ/12XFQ8beg/F9P6qsn
-         d5nwrZpthFSSSEbfN9PeFEoVVpX0LF4iVIl+V63p001GoaTBzf6DA0zXlkLwM8W4kj
-         MvagpXonIQuIKWDK6mVSjS4yXkFqO8aTwzUJ55mEz90iExyW775cog7TPnkwk/k4Y/
-         KNpt1obXWMHkZy7EufZWkxgjvyAH/SkwnJfc8ckY1KcwQVYBb0TmlcNCGTRFdquyL0
-         X18xHcXL9MVzg==
-Date:   Mon, 16 May 2022 16:52:06 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Nick Terrell <terrelln@fb.com>
-Cc:     Alexey Kardashevskiy <aik@ozlabs.ru>, linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH kernel v2] zstd: Fixing mixed module-builtin objects
-Message-ID: <YoLjpivvU7dRVTuL@dev-arch.thelio-3990X>
-References: <20220429053329.2278740-1-aik@ozlabs.ru>
+        Mon, 16 May 2022 19:52:54 -0400
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893E63ED2F;
+        Mon, 16 May 2022 16:52:52 -0700 (PDT)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-f165bc447fso12410958fac.6;
+        Mon, 16 May 2022 16:52:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oLYjtsgGlA07Qc3dBcMPR9s7GFGmrm0AkOOuD7W1saQ=;
+        b=LFl1cBxPWoUCkE1W+k1PIjY2Filc4of03ndVm3CoXLomb3jygZBVxTI8zmTIOPLSlE
+         KOeX9fx8akcj3qgXSiHA4qJUGDpZGGGYuUbNUelDMPkhu/aPuJ8gLCDmxe6eTEvuoHrN
+         ElnzXh9IjFNVXxOZnrnVZNOPMOUlD7VQe7rOvMLuQLWjVy79fK/sxVoCPQ/uEZg3qE77
+         NWNszNq2LWXBNtgPyL/ul3x60y2btL3VAs7gZW9q6yyz+5r/FL7Sit0eL+gJTQaMsHzT
+         cpyaC8Jhymt+1oaZzyEOPT/kIh03RFN+aEvqgWbcfn0mon79z8X33KEliTLiU3WB5RNd
+         JUzg==
+X-Gm-Message-State: AOAM530W2tUMkfLP+6BlCuPqmvi1SqUOsrWW8yo3skINma/p9fmO9jNa
+        JM2js2qI7jiVCqT7EdZrVQ==
+X-Google-Smtp-Source: ABdhPJzGVAd5OY/GykxaSm1uI0nwH0J0ngGxXZJsQ5IeSSSe+fV9RLKWsy4BBR/D9rZxTj9YblLnHg==
+X-Received: by 2002:a05:6870:b254:b0:ec:6ca4:c89f with SMTP id b20-20020a056870b25400b000ec6ca4c89fmr17070305oam.272.1652745171572;
+        Mon, 16 May 2022 16:52:51 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q9-20020aca5c09000000b00325cda1ffb6sm4263596oib.53.2022.05.16.16.52.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 16:52:50 -0700 (PDT)
+Received: (nullmailer pid 3570060 invoked by uid 1000);
+        Mon, 16 May 2022 23:52:49 -0000
+Date:   Mon, 16 May 2022 18:52:49 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Valentin Caron <valentin.caron@foss.st.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/6] dt-bindings: rtc: stm32: add st,lsco optional
+ property to select output
+Message-ID: <20220516235249.GA3567294-robh@kernel.org>
+References: <20220504130233.330983-1-valentin.caron@foss.st.com>
+ <20220504130233.330983-2-valentin.caron@foss.st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220429053329.2278740-1-aik@ozlabs.ru>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220504130233.330983-2-valentin.caron@foss.st.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nick,
-
-Did you have any thoughts on this patch? It is necessary for enabling
-LTO with PowerPC:
-
-https://lore.kernel.org/20220429064547.2334280-1-aik@ozlabs.ru/
-
-If you don't have anything to send to Linus for the next cycle, perhaps
-this patch could be carried by the PowerPC folks with your ack?
-
-Cheers,
-Nathan
-
-On Fri, Apr 29, 2022 at 03:33:29PM +1000, Alexey Kardashevskiy wrote:
-> With CONFIG_ZSTD_COMPRESS=m and CONFIG_ZSTD_DECOMPRESS=y we end up in
-> a situation when files from lib/zstd/common/ are compiled once to be
-> linked later for ZSTD_DECOMPRESS (build-in) and ZSTD_COMPRESS (module)
-> even though CFLAGS are different for builtins and modules.
-> So far somehow this was not a problem but enabling LLVM LTO exposes
-> the problem as:
+On Wed, May 04, 2022 at 03:02:28PM +0200, Valentin Caron wrote:
+> From: Amelie Delaunay <amelie.delaunay@foss.st.com>
 > 
-> ld.lld: error: linking module flags 'Code Model': IDs have conflicting values in 'lib/built-in.a(zstd_common.o at 5868)' and 'ld-temp.o'
+> STM32 RTC has three output pins: RTC_OUT1, RTC_OUT2 or RTC_OUT2_RMP.
 > 
-> This particular conflict is caused by KBUILD_CFLAGS=-mcmodel=medium vs.
-> KBUILD_CFLAGS_MODULE=-mcmodel=large , modules use the large model on
-> POWERPC as explained at
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/powerpc/Makefile?h=v5.18-rc4#n127
-> but the current use of common files is wrong anyway.
+> RTC Low-Speed Clock Output (LSCO) can be output on RTC_OUT1 or
+> RTC_OUT2_RMP.
 > 
-> This works around the issue by introducing a zstd_common module with
-> shared code.
+> This patch adds constants for RTC output bindings and adds st,lsco
+> optional property for stm32 rtc driver, to select and enable LSCO.
+> A pinctrl state is also optional to reserve pin for RTC output.
 > 
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
+> Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+> Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
 > ---
-> Changes:
-> v2:
-> * add a new module instead of inlining common bits
+>  .../devicetree/bindings/rtc/st,stm32-rtc.yaml | 20 +++++++++++++++++++
+>  include/dt-bindings/rtc/rtc-stm32.h           | 14 +++++++++++++
+>  2 files changed, 34 insertions(+)
+>  create mode 100644 include/dt-bindings/rtc/rtc-stm32.h
 > 
-> ---
->  lib/zstd/Makefile                | 18 ++++++++----------
->  lib/zstd/common/entropy_common.c |  4 +++-
->  lib/zstd/common/zstd_common.c    |  7 +++++++
->  lib/Kconfig                      |  8 ++++++--
->  4 files changed, 24 insertions(+), 13 deletions(-)
-> 
-> diff --git a/lib/zstd/Makefile b/lib/zstd/Makefile
-> index fc45339fc3a3..440bd0007ae2 100644
-> --- a/lib/zstd/Makefile
-> +++ b/lib/zstd/Makefile
-> @@ -10,14 +10,10 @@
->  # ################################################################
->  obj-$(CONFIG_ZSTD_COMPRESS) += zstd_compress.o
->  obj-$(CONFIG_ZSTD_DECOMPRESS) += zstd_decompress.o
-> +obj-$(CONFIG_ZSTD_COMMON) += zstd_common.o
+> diff --git a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
+> index 764717ce1873..56d46ea35c5d 100644
+> --- a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
+> @@ -52,6 +52,13 @@ properties:
+>        override default rtc_ck parent clock phandle of the new parent clock of rtc_ck
+>      maxItems: 1
 >  
->  zstd_compress-y := \
->  		zstd_compress_module.o \
-> -		common/debug.o \
-> -		common/entropy_common.o \
-> -		common/error_private.o \
-> -		common/fse_decompress.o \
-> -		common/zstd_common.o \
->  		compress/fse_compress.o \
->  		compress/hist.o \
->  		compress/huf_compress.o \
-> @@ -33,12 +29,14 @@ zstd_compress-y := \
->  
->  zstd_decompress-y := \
->  		zstd_decompress_module.o \
-> -		common/debug.o \
-> -		common/entropy_common.o \
-> -		common/error_private.o \
-> -		common/fse_decompress.o \
-> -		common/zstd_common.o \
->  		decompress/huf_decompress.o \
->  		decompress/zstd_ddict.o \
->  		decompress/zstd_decompress.o \
->  		decompress/zstd_decompress_block.o \
+> +  st,lsco:
+> +    $ref: "/schemas/types.yaml#/definitions/uint32"
+> +    description: |
+> +      To select and enable RTC Low Speed Clock Output.
+> +      Refer to <include/dt-bindings/rtc/rtc-stm32.h> for the supported values.
+> +      Pinctrl state named "default" may be defined to reserve pin for RTC output.
 > +
-> +zstd_common-y := \
-> +		common/debug.o \
-> +		common/entropy_common.o \
-> +		common/error_private.o \
-> +		common/fse_decompress.o \
-> +		common/zstd_common.o \
-> diff --git a/lib/zstd/common/entropy_common.c b/lib/zstd/common/entropy_common.c
-> index 53b47a2b52ff..f84612627471 100644
-> --- a/lib/zstd/common/entropy_common.c
-> +++ b/lib/zstd/common/entropy_common.c
-> @@ -15,6 +15,7 @@
->  /* *************************************
->  *  Dependencies
->  ***************************************/
-> +#include <linux/module.h>
->  #include "mem.h"
->  #include "error_private.h"       /* ERR_*, ERROR */
->  #define FSE_STATIC_LINKING_ONLY  /* FSE_MIN_TABLELOG */
-> @@ -239,7 +240,7 @@ size_t FSE_readNCount(
->  {
->      return FSE_readNCount_bmi2(normalizedCounter, maxSVPtr, tableLogPtr, headerBuffer, hbSize, /* bmi2 */ 0);
->  }
-> -
-> +EXPORT_SYMBOL_GPL(FSE_readNCount);
+>  allOf:
+>    - if:
+>        properties:
+> @@ -65,6 +72,9 @@ allOf:
+>            minItems: 1
+>            maxItems: 1
 >  
->  /*! HUF_readStats() :
->      Read compact Huffman tree, saved by HUF_writeCTable().
-> @@ -255,6 +256,7 @@ size_t HUF_readStats(BYTE* huffWeight, size_t hwSize, U32* rankStats,
->      U32 wksp[HUF_READ_STATS_WORKSPACE_SIZE_U32];
->      return HUF_readStats_wksp(huffWeight, hwSize, rankStats, nbSymbolsPtr, tableLogPtr, src, srcSize, wksp, sizeof(wksp), /* bmi2 */ 0);
->  }
-> +EXPORT_SYMBOL_GPL(HUF_readStats);
->  
->  FORCE_INLINE_TEMPLATE size_t
->  HUF_readStats_body(BYTE* huffWeight, size_t hwSize, U32* rankStats,
-> diff --git a/lib/zstd/common/zstd_common.c b/lib/zstd/common/zstd_common.c
-> index 3d7e35b309b5..06f62b2026d5 100644
-> --- a/lib/zstd/common/zstd_common.c
-> +++ b/lib/zstd/common/zstd_common.c
-> @@ -13,6 +13,7 @@
->  /*-*************************************
->  *  Dependencies
->  ***************************************/
-> +#include <linux/module.h>
->  #define ZSTD_DEPS_NEED_MALLOC
->  #include "zstd_deps.h"   /* ZSTD_malloc, ZSTD_calloc, ZSTD_free, ZSTD_memset */
->  #include "error_private.h"
-> @@ -59,6 +60,7 @@ void* ZSTD_customMalloc(size_t size, ZSTD_customMem customMem)
->          return customMem.customAlloc(customMem.opaque, size);
->      return ZSTD_malloc(size);
->  }
-> +EXPORT_SYMBOL_GPL(ZSTD_customMalloc);
->  
->  void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem)
->  {
-> @@ -71,6 +73,7 @@ void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem)
->      }
->      return ZSTD_calloc(1, size);
->  }
-> +EXPORT_SYMBOL_GPL(ZSTD_customCalloc);
->  
->  void ZSTD_customFree(void* ptr, ZSTD_customMem customMem)
->  {
-> @@ -81,3 +84,7 @@ void ZSTD_customFree(void* ptr, ZSTD_customMem customMem)
->              ZSTD_free(ptr);
->      }
->  }
-> +EXPORT_SYMBOL_GPL(ZSTD_customFree);
+> +        st,lsco:
+> +          maxItems: 0
+
+If disallowing the property is what you wanted, then 'st,lsco: false' is 
+the way. 'maxItems: 0' is never correct.
+
 > +
-> +MODULE_LICENSE("Dual BSD/GPL");
-> +MODULE_DESCRIPTION("Zstd Common");
-> diff --git a/lib/Kconfig b/lib/Kconfig
-> index 087e06b4cdfd..33f3a7054cdd 100644
-> --- a/lib/Kconfig
-> +++ b/lib/Kconfig
-> @@ -333,12 +333,16 @@ config LZ4HC_COMPRESS
->  config LZ4_DECOMPRESS
->  	tristate
+>          clock-names: false
 >  
-> +config ZSTD_COMMON
-> +	select XXHASH
-> +	tristate
+>        required:
+> @@ -82,6 +92,9 @@ allOf:
+>            minItems: 2
+>            maxItems: 2
+>  
+> +        st,lsco:
+> +          maxItems: 0
 > +
->  config ZSTD_COMPRESS
-> -	select XXHASH
-> +	select ZSTD_COMMON
->  	tristate
+>        required:
+>          - clock-names
+>          - st,syscfg
+> @@ -101,6 +114,9 @@ allOf:
+>          assigned-clocks: false
+>          assigned-clock-parents: false
 >  
->  config ZSTD_DECOMPRESS
-> -	select XXHASH
-> +	select ZSTD_COMMON
->  	tristate
+> +        st,lsco:
+> +          maxItems: 1
+> +
+>        required:
+>          - clock-names
 >  
->  source "lib/xz/Kconfig"
+> @@ -130,12 +146,16 @@ examples:
+>    - |
+>      #include <dt-bindings/interrupt-controller/arm-gic.h>
+>      #include <dt-bindings/clock/stm32mp1-clks.h>
+> +    #include <dt-bindings/rtc/rtc-stm32.h>
+>      rtc@5c004000 {
+>        compatible = "st,stm32mp1-rtc";
+>        reg = <0x5c004000 0x400>;
+>        clocks = <&rcc RTCAPB>, <&rcc RTC>;
+>        clock-names = "pclk", "rtc_ck";
+>        interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
+> +      st,lsco = <RTC_OUT2_RMP>;
+> +      pinctrl-0 = <&rtc_out2_rmp_pins_a>;
+> +      pinctrl-names = "default";
+>      };
+>  
+>  ...
+> diff --git a/include/dt-bindings/rtc/rtc-stm32.h b/include/dt-bindings/rtc/rtc-stm32.h
+> new file mode 100644
+> index 000000000000..2fd78c2e62d4
+> --- /dev/null
+> +++ b/include/dt-bindings/rtc/rtc-stm32.h
+> @@ -0,0 +1,14 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * This header provides constants for STM32_RTC bindings.
+> + */
+> +
+> +#ifndef _DT_BINDINGS_RTC_RTC_STM32_H
+> +#define _DT_BINDINGS_RTC_RTC_STM32_H
+> +
+> +#define RTC_NO_OUT	0
+> +#define RTC_OUT1	1
+> +#define RTC_OUT2	2
+> +#define RTC_OUT2_RMP	3
+> +
+> +#endif
 > -- 
-> 2.30.2
+> 2.25.1
 > 
 > 

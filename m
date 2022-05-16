@@ -2,42 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 231B5527B66
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 03:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80CBE527B86
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 03:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239112AbiEPBa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 21:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
+        id S239151AbiEPBuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 21:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238900AbiEPBay (ORCPT
+        with ESMTP id S233300AbiEPBuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 21:30:54 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322456421;
-        Sun, 15 May 2022 18:30:50 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L1hVy2RBQz1JCFc;
-        Mon, 16 May 2022 09:29:30 +0800 (CST)
-Received: from localhost.localdomain (10.175.127.227) by
- kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 16 May 2022 09:30:48 +0800
-From:   Zhang Wensheng <zhangwensheng5@huawei.com>
-To:     <tj@kernel.org>, <axboe@kernel.dk>
-CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <cgroups@vger.kernel.org>, <yukuai3@huawei.com>
-Subject: [PATCH -next] block: fix io hung of setting throttle limit frequently
-Date:   Mon, 16 May 2022 09:44:29 +0800
-Message-ID: <20220516014429.33723-1-zhangwensheng5@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Sun, 15 May 2022 21:50:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05AD5389B;
+        Sun, 15 May 2022 18:50:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A9E04B80E81;
+        Mon, 16 May 2022 01:50:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2D6E7C34100;
+        Mon, 16 May 2022 01:50:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652665812;
+        bh=jKN9jck8Cg4KOGCMfWWvP4ssROBon9ITJfnmgvrhoso=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=AWyTTFpfS8wz7J0MElpBgEKOdKrp6Yjd/crGpWxKcnne/5o7cMqYk5+LmiRJqKP+g
+         P7JIgzdRl7e6hhPO0cmx9SMKp1UyLz6ZOhTgs0M2xX2YJvL5TP0wKSbq80UkJG4U8+
+         XgimDq6ydh7d2Ha1yH7aQrzoX+7vRv2s+e1FJDOREevY+D62ZIHwyK0y+8grNAy+Qc
+         gCb2PYXT+FeI1E4oFw3k9T4B3JUSDgNEjmWc0VXAQRV9/NEaC6hCTuS262258m8qO2
+         Y5V0kD9lj9R06lsEhfM9IkinqKn2XRqqjKR4CWefkg53I2YdDnBXPT5Fi+jtM2J/WU
+         BfT3ZA8vEKSJw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 13A7DF0383D;
+        Mon, 16 May 2022 01:50:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500016.china.huawei.com (7.221.188.220)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v13] platform/chrome: Add ChromeOS ACPI device driver
+From:   patchwork-bot+chrome-platform@kernel.org
+Message-Id: <165266581207.6997.10229505003935532310.git-patchwork-notify@kernel.org>
+Date:   Mon, 16 May 2022 01:50:12 +0000
+References: <Yn4OKYrtV35Dv+nd@debian-BULLSEYE-live-builder-AMD64>
+In-Reply-To: <Yn4OKYrtV35Dv+nd@debian-BULLSEYE-live-builder-AMD64>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     rafael@kernel.org, lenb@kernel.org, hdegoede@redhat.com,
+        markgross@kernel.org, bleung@chromium.org, eballetbo@gmail.com,
+        gregkh@linuxfoundation.org, kernel@collabora.com,
+        groeck@chromium.org, dtor@chromium.org, gwendal@chromium.org,
+        vbendeb@chromium.org, andy@infradead.org, ayman.bagabas@gmail.com,
+        benjamin.tissoires@redhat.com, blaz@mxxn.io, dvhart@infradead.org,
+        dmitry.torokhov@gmail.com, jeremy@system76.com, 2pi@mok.nu,
+        mchehab+samsung@kernel.org, rajatja@google.com,
+        srinivas.pandruvada@linux.intel.com,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, rafael.j.wysocki@intel.com,
+        chrome-platform@lists.linux.dev
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -46,54 +67,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Our test find a io hung problem which could be simplified:
-setting throttle iops/bps limit to small, and to issue a big
-bio. if the io is limited to 10s, just wait 1s, continue to
-set same throttle iops/bps limit again, now, we could see
-that the new throttle time become 10s again, like this, if
-we distribute limit repeatedly within 10s, this io will always
-in throttle queue.
+Hello:
 
-when the throttle limit iops/bps is set to io. tg_conf_updated
-will be called, it will start a new slice and update a new
-dispatch time to pending timer which lead to wait again.
+This patch was applied to chrome-platform/linux.git (for-next)
+by Tzung-Bi Shih <tzungbi@kernel.org>:
 
-Because of commit 9f5ede3c01f9 ("block: throttle split bio in
-case of iops limit"), the io will work fine if limited by bps.
-which could fix part of the problem, not the root cause.
+On Fri, 13 May 2022 12:52:09 +0500 you wrote:
+> From: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+> 
+> The x86 Chromebooks have the ChromeOS ACPI device. This driver attaches
+> to the ChromeOS ACPI device and exports the values reported by ACPI in a
+> sysfs directory. This data isn't present in ACPI tables when read
+> through ACPI tools, hence a driver is needed to do it. The driver gets
+> data from firmware using the ACPI component of the kernel. The ACPI values
+> are presented in string form (numbers as decimal values) or binary
+> blobs, and can be accessed as the contents of the appropriate read only
+> files in the standard ACPI device's sysfs directory tree. This data is
+> consumed by the ChromeOS user space.
+> 
+> [...]
 
-To fix this problem, adding the judge before update dispatch time.
-if the pending timer is alive, we should not to update time.
+Here is the summary with links:
+  - [v13] platform/chrome: Add ChromeOS ACPI device driver
+    https://git.kernel.org/chrome-platform/c/0a4cad9c11ad
 
-Signed-off-by: Zhang Wensheng <zhangwensheng5@huawei.com>
----
- block/blk-throttle.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
-
-diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-index 469c483719be..8acb205dfa85 100644
---- a/block/blk-throttle.c
-+++ b/block/blk-throttle.c
-@@ -1321,12 +1321,14 @@ static void tg_conf_updated(struct throtl_grp *tg, bool global)
- 	 * that a group's limit are dropped suddenly and we don't want to
- 	 * account recently dispatched IO with new low rate.
- 	 */
--	throtl_start_new_slice(tg, READ);
--	throtl_start_new_slice(tg, WRITE);
-+	if (!timer_pending(&sq->parent_sq->pending_timer)) {
-+		throtl_start_new_slice(tg, READ);
-+		throtl_start_new_slice(tg, WRITE);
- 
--	if (tg->flags & THROTL_TG_PENDING) {
--		tg_update_disptime(tg);
--		throtl_schedule_next_dispatch(sq->parent_sq, true);
-+		if (tg->flags & THROTL_TG_PENDING) {
-+			tg_update_disptime(tg);
-+			throtl_schedule_next_dispatch(sq->parent_sq, true);
-+		}
- 	}
- }
- 
+You are awesome, thank you!
 -- 
-2.31.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

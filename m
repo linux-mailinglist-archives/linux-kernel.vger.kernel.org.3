@@ -2,180 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AFB5527DF3
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:57:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA515527DF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240595AbiEPG5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 02:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
+        id S240600AbiEPHAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 03:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238086AbiEPG5h (ORCPT
+        with ESMTP id S236707AbiEPG75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 02:57:37 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418EF63E7
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:57:36 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id bu29so24202936lfb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:57:36 -0700 (PDT)
+        Mon, 16 May 2022 02:59:57 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3146ADFA5
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:59:56 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id g6so26773292ejw.1
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:59:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Y8Vesh/AmVxnxCJXnP8z5e4vW7ZUtRIGODEmp5Y/tbk=;
-        b=j+ewMwyt9KnUxhaGO1rvjPKYvlgUgV6AeNdbrnBaLqnjcyVqfDu0GUypwCPnLmUfsD
-         zkSoH1jYNVPSOPe6eUhcqRbhEsMZ88DMjXd1LSyUzvyKITTJOttCYw6H46grPm+ZQs1V
-         zAlj3dBeuBFWcEdjQaOuo88H5SBZTQSj88DGW7SQZ8PGT5jngSUxmB/lwp5omgxLiVVx
-         q0dNoWkQjhnCpiEHtSeEeusdVspm1Ptuv1kGMMPgfegiMI+qAQXue5ZcKPTvOkqREFj5
-         cnY+35Wbd6y9tZVAFOlWByU9Furgbn2sWkZeFqwr3dvr6Ar2tHveng6vOdMURVG2hOw4
-         h+mQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SH+DM8gWRShDh4xAKJ9hq9ZGV6WzwS40V7Ikj9JGnTU=;
+        b=aKJMP7FFPV4UsmM8hjbALJW38MNT+IhNk/fyIk0k+DzD6WAfnAvr5bgKwW5D1tTQWt
+         OhKgJhsvN9hDqnwoSO8fE/M5y3CxnnfBMfWuuOkU5N9dypEbs9+s9aElvnwnFn46Z6EN
+         1K+gRZq1tUfcB2BiIANmYaWh5IIk08T+yTMaJwn9QI5RX/K8IQplq2XSzrnoZ8K3dpXx
+         VnqUowRVTSH9v0IbVo6nSaooCYxuXagd4qtjAQlhdQTrVi4MfmWmPXduazz4hSf6jFm0
+         KH0P1TGu44ipz1q1VHAIP1ciG/k9ijhoWxlMacA7KvWp+P5qBc0lskRwzNjcaQa+LBA4
+         3sZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Y8Vesh/AmVxnxCJXnP8z5e4vW7ZUtRIGODEmp5Y/tbk=;
-        b=LHUuDaQ4nS1pKDqsWnrWhBPJspzgedOGi82l878friwjOY89JcS2wxTXqO1q8DK6ZA
-         2k/Y/R+sMeZqXt34OAp3H3sgZPSXJxj0qyVr8TJsjJ67G3wu+x1bumUdZZ091iKbbX8c
-         SLfRe+8VI5nBhMtcuYlRCLvtEaC9vPON27TMgdHA2GPseGJT6hK6I7p+37XnbSyRPnkU
-         dJUS0ko15i6UOOVUIAjdf6ne1S39+w5jTeiDPf/EAvhttbLFN+yJscEtoJlUViK1YAKo
-         zUBL3bVyyB3LTve4NZynLzWnmNDQ4iFSkhAz1Ms6xxKojh349bJPaJW3jOYe3t9KdDrY
-         nI4w==
-X-Gm-Message-State: AOAM532ojhyrrrwdI8QfipJFQx5vEERTeV1azIiOPjoxYA2qE9LMSQvc
-        CG7n9RmE+0I/GXHVXssK6CR8XYwfuM+aEhs3
-X-Google-Smtp-Source: ABdhPJynSi/6C1PC63okLI4+titLAFaZWYwfsXSIet5E4k6/frGVrPt/Dk4pS0A7DbvLwuzW7eXvLw==
-X-Received: by 2002:a05:6512:2090:b0:472:2764:1f0c with SMTP id t16-20020a056512209000b0047227641f0cmr12585920lfr.482.1652684254591;
-        Sun, 15 May 2022 23:57:34 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id r8-20020ac252a8000000b0047415cd1ec3sm1217283lfm.165.2022.05.15.23.57.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 15 May 2022 23:57:34 -0700 (PDT)
-Message-ID: <d5438d2e-f387-170a-cea1-d5936cc8e15a@linaro.org>
-Date:   Mon, 16 May 2022 08:57:33 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SH+DM8gWRShDh4xAKJ9hq9ZGV6WzwS40V7Ikj9JGnTU=;
+        b=CsA0sKPqT2gpmZtob7zCc+OiU2BB0TJGRps62RQWGqpBD1U6QW02f2IDMRCxJDV/GI
+         /iEPYi+KUshPhoKGC3ES6DDL+lD3hWRQPrwSklCT5eiU0vU3Hw5AjwnXXyOETQCs1Mgl
+         NWVA/UOYRw9itgfKZ+Ll4QL/H1i4W93w8MgAFZpH17HhlelYPPCdiKV/MK1m9ZjQfNWT
+         RnXqrDpB+HPqtdHnVYyqwGiuuPLfNOUaIw9w1WxJMCsXX2vMFefrxWxK8MG9rlQBq9sZ
+         +14VT/NAfvzMwsCUZdTMekIdrN88jUvPNKRVFOzc1hHyHSXrCyCH+RBL5LiN6CrEp60Y
+         oF8g==
+X-Gm-Message-State: AOAM532K7PC0OpCuPvh8hJutSn5eLT5aJ5o6/zenDopuB/X47YZanJ/u
+        E2b/LWsHGeQUIhJpHhECRfvq6EP5eAR61I0J6iIKYpppnCQ=
+X-Google-Smtp-Source: ABdhPJyRWL9sG7b4N57dKKmf+qijk6tKu6Uz08nhG0MhS/lMZv0z0BBWDuJPgIMS+41XqW/xAzsSvJ4z05GcAZJuP9w=
+X-Received: by 2002:a17:906:7309:b0:6f5:ea1:afa with SMTP id
+ di9-20020a170906730900b006f50ea10afamr13666909ejc.170.1652684394688; Sun, 15
+ May 2022 23:59:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 1/4] dt-bindings: Document how Chromebooks with
- depthcharge boot
-Content-Language: en-US
-To:     Douglas Anderson <dianders@chromium.org>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Julius Werner <jwerner@chromium.org>,
-        "Joseph S . Barrera III" <joebar@chromium.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220513095722.v2.1.I71e42c6174f1cec17da3024c9f73ba373263b9b6@changeid>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220513095722.v2.1.I71e42c6174f1cec17da3024c9f73ba373263b9b6@changeid>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220513093433.425163-1-dietmar.eggemann@arm.com> <39be28ea-1645-30c3-316e-87a43b8738a8@arm.com>
+In-Reply-To: <39be28ea-1645-30c3-316e-87a43b8738a8@arm.com>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Mon, 16 May 2022 18:59:43 +1200
+Message-ID: <CAGsJ_4z=U=4mtkbjJKq3=_npLnqDtXnCwqr-9kbXkaRn4Jiydw@mail.gmail.com>
+Subject: Re: [PATCH] topology: Remove unused cpu_cluster_mask()
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/05/2022 18:59, Douglas Anderson wrote:
-> This documents how many Chromebooks pick the device tree that will be
-> passed to the OS and can help understand the revisions / skus listed
-> as the top-level "compatible" in many Chromebooks.
-> 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> 
-> Changes in v2:
-> - ("Document how Chromebooks with depthcharge boot") new for v2.
-> 
->  .../devicetree/chromebook-boot-flow.rst       | 63 +++++++++++++++++++
->  1 file changed, 63 insertions(+)
->  create mode 100644 Documentation/devicetree/chromebook-boot-flow.rst
+On Fri, May 13, 2022 at 9:48 PM Dietmar Eggemann
+<dietmar.eggemann@arm.com> wrote:
+>
+> - Barry Song <song.bao.hua@hisilicon.com> bounced
+> + Barry Song <21cnbao@gmail.com>
+>
+> On 13/05/2022 11:34, Dietmar Eggemann wrote:
+> > default_topology[] uses cpu_clustergroup_mask() for the CLS level
+> > (guarded by CONFIG_SCHED_CLUSTER) which is currently provided by x86
+> > (arch/x86/kernel/smpboot.c) and arm64 (drivers/base/arch_topology.c).
+> >
+> > Fixes: 778c558f49a2c ("sched: Add cluster scheduler level in core and
+> > related Kconfig for ARM64")
+> >
+> > Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> > ---
+> >  include/linux/topology.h | 7 -------
+> >  1 file changed, 7 deletions(-)
+> >
+> > diff --git a/include/linux/topology.h b/include/linux/topology.h
+> > index f19bc3626297..4564faafd0e1 100644
+> > --- a/include/linux/topology.h
+> > +++ b/include/linux/topology.h
+> > @@ -240,13 +240,6 @@ static inline const struct cpumask *cpu_smt_mask(int cpu)
+> >  }
+> >  #endif
+> >
+> > -#if defined(CONFIG_SCHED_CLUSTER) && !defined(cpu_cluster_mask)
+> > -static inline const struct cpumask *cpu_cluster_mask(int cpu)
+> > -{
+> > -     return topology_cluster_cpumask(cpu);
+> > -}
+> > -#endif
+> > -
 
-This is not a Devicetree (generic) document, so it is not the best place
-for it. Maybe regular vendor place, e.g . Documentation/arm/google/ ?
+Acked-by: Barry Song <baohua@kernel.org>
 
-> 
-> diff --git a/Documentation/devicetree/chromebook-boot-flow.rst b/Documentation/devicetree/chromebook-boot-flow.rst
-> new file mode 100644
-> index 000000000000..84aeb0a17ee4
-> --- /dev/null
-> +++ b/Documentation/devicetree/chromebook-boot-flow.rst
-> @@ -0,0 +1,63 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +======================================
-> +Chromebook Boot Flow
-> +======================================
-> +
-> +Most recent Chromebooks that use device tree boot using the opensource
-> +depthcharge bootloader. Depthcharge expects the OS to be packaged as a "FIT
-> +Image" which contains an OS image as well as a collection of device trees. It
-> +is up to depthcharge to pick the right device tree from the FIT Image and
-> +provide it to the OS.
-> +
-> +The scheme that depthcharge uses to pick the device tree takes into account
-> +three variables:
-> +- Board name, specified at compile time.
-> +- Board revision number, read from GPIO strappings at boot time.
-> +- SKU number, read from GPIO strappings at boot time.
-> +
-> +For recent Chromebooks, depthcharge creates a match list that looks like this:
-> +- google,$(BOARD)-rev$(REV)-sku$(SKU)
-> +- google,$(BOARD)-rev$(REV)
-> +- google,$(BOARD)-sku$(SKU)
-> +- google,$(BOARD)
-> +
-> +Note that some older Chromebooks may use a slightly different list that may
-> +not include sku matching or may prioritize sku/rev differently.
-> +
-> +Note that for some boards there may be extra board-specific logic to inject
-> +extra compatibles into the list, but this is uncommon.
-> +
-> +Depthcharge will look through all device trees in the FIT image trying to
-> +find one that matches the most specific compatible. It will then look
-> +through all device trees in the FIT image trying to find the one that
-> +matches the _second most_ specific compatible, etc.
-> +
-> +When searching for a device tree, depthcharge doesn't care where the
-> +compatible falls within a given device tree. As an example, if we're on
-> +board "lazor", rev 4, sku 0 and we have two device trees:
-> +- "google,lazor-rev5-sku0", "google,lazor-rev4-sku0", "qcom,sc7180"
-> +- "google,lazor", "qcom,sc7180"
-> +
-> +Then depthcharge will pick the first device tree even though
-> +"google,lazor-rev4-sku0" was the second compatible listed in that device tree.
-> +This is because it is a more specific compatible than "google,lazor".
-> +
-> +It should be noted that depthcharge does not have any smarts to try to
-> +match board or SKU revisions that are "close by". That is to say that
-> +if depthcharge knows it's on "rev4" of a board but there is no "rev4"
-> +device tree that depthcharge _won't_ look for a "rev3" device tree.
-> +
-> +In general when any significant changes are made to a board the board
-> +revision number is increased even if none of those changes need to
-> +be reflected in the device tree. Thus it's fairly common to see device
-> +trees with multiple revisions.
-> +
-> +It should be noted that, taking into account the above system that the
-> +depthcharge has, the most flexibility is achieved if the device tree
-> +supporting the newest revision(s) of a board omits the "-rev{REV}"
-> +compatible strings. When this is done then if you get a new board
-> +revision and try to run old software on it then we'll at pick the most
-> +reasonable device tree. If it turns out that the new revision actually
-> +has no device-tree visible changes then we'll not only pick the most
-> +reasonable device tree, we'll pick the exact right one.
-> \ No newline at end of file
-
-Missing new line.
+I agree there are no users right now. I probably wrote it like cpu_smt_mask()
+and used it in kernel/sched for the wake_affine patch but forgot to remove it
+while sending patches without wake_affine.
 
 
-Best regards,
-Krzysztof
+> >  static inline const struct cpumask *cpu_cpu_mask(int cpu)
+> >  {
+> >       return cpumask_of_node(cpu_to_node(cpu));
+>
+
+Thanks
+Barry

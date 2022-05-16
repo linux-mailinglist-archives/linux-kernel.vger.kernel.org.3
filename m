@@ -2,127 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB64A52922C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5C6529255
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244842AbiEPVG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 17:06:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54966 "EHLO
+        id S1349087AbiEPVHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 17:07:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349153AbiEPVGn (ORCPT
+        with ESMTP id S1349030AbiEPVHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 17:06:43 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F02248DE
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 13:45:04 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id v11so15082243pff.6
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 13:45:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=l5jUETdQtHEXCwQFA5Ufebx16mwsRUyyujdOiTy28og=;
-        b=GaemBa1gF02qzUZdNW2AE28Uzqwx+75YoAHrLpwUHFK1R8hxxzjrSh8Q5SZMGiEPXl
-         /FhnCNkUH6ejeeR6wOWUc9lqnC/0EEUljPupDtKy8+ETy8XDqPtWO4ziRtuK86sZu9Ev
-         SqLp+wIJq4/hnPdDgrw1XE6gGoVYtTidWQeH1DBVN1QXaTI9CjDMkZ7hpDPoy8ouxBC2
-         RwydQ7n1LENQqO30MwKKJf5W5P98Zml6TQ0efgBviMPmyclbGwciZEr7A4q4Hh3atmW2
-         zhNFDHyhOJRo3UBbRiY9/KJD2c2iGTWUPcINfwtzau5htXKjRWbCPdVyaMpkpLn7+NP9
-         +A6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=l5jUETdQtHEXCwQFA5Ufebx16mwsRUyyujdOiTy28og=;
-        b=KB1OIccUtgJupywKN4zX2rhPbIrQ9deyHtELpTU4HOJ4i+RkHHDDT2J5fzQm1VzTWc
-         9Pk2B6o1eJf28seSyJdw/NPwvuNWsOK2vV3XSr7+RESMlgxWnCsFbIHvXmLPEoLS6lN7
-         90LNAhsbVQUvKtGO31M7+VHIzjY6RaMZ2bKiRa6wHq1gZjP/Tbz6ci2BYtON0PEh7Uja
-         vZKRjXXvLBt14nGjPbJtxfp9ooWmp/OvjyXaCdCSJ6kg2V1tEb7qyBcu1oMTdSpUtTRq
-         QRORiAJV3m66VdXaf35a53qwT+TlKx0Sp9fv4tdtsoQ1ypw7XpYY/7VeyRWUaKxOHfaG
-         CtqQ==
-X-Gm-Message-State: AOAM531Ezkehibu8OgCEXaeJ9T1p2l1wSGDRKM6lfZeJKH+OtHYvDcKr
-        3RVlSv75ClAWln/pAX4DGpKbhA==
-X-Google-Smtp-Source: ABdhPJyRB0U0e6IhW4ELB2usOGhx6N4mS/LgNnRGAxfxluRfGpgT0F+X9R60+xNZF13kv2acFOHZhg==
-X-Received: by 2002:a63:3c05:0:b0:3f2:6ea8:aff2 with SMTP id j5-20020a633c05000000b003f26ea8aff2mr5855767pga.340.1652733904295;
-        Mon, 16 May 2022 13:45:04 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id 131-20020a621489000000b0050dc76281e9sm7211287pfu.195.2022.05.16.13.45.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 13:45:03 -0700 (PDT)
-Date:   Mon, 16 May 2022 20:45:00 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Avi Kivity <avi@redhat.com>, kvm@vger.kernel.org
-Subject: Re: [PATCH] kvm: x86/svm/nested: Cache PDPTEs for nested NPT in PAE
- paging mode
-Message-ID: <YoK3zEVj+DuIBEs7@google.com>
-References: <20220415103414.86555-1-jiangshanlai@gmail.com>
+        Mon, 16 May 2022 17:07:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCFA748398
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 13:47:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57178B8160F
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 20:47:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA677C385AA;
+        Mon, 16 May 2022 20:47:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652734037;
+        bh=5wO7R+yZo4gN5lTIMsqBqohYvbOxO4gvGse1hhlcptg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Y35VZRZ30EOlEPUaWb+FVp3fJosi92AYRAWjqVJvsXyhKD9K+IBvP/8HNkbT7yFBt
+         q5lpao2Ev+vbpmpASAeJ8o6wZKCw0qVbYnsgxhn/zBZbbIle517EKc4htb92+8Q8FU
+         Y3apr4K8prEuUHvorZgI12sZIjmJkQL/GJT264gDfL86kIMkASy1h7jXtVaQzRLcwR
+         RZ87SQ+TPJt8VWhwVDnwv2CHcp/teiX1YogK6Kd360L4zfE0igBr7unKXw3RwzWIjV
+         ZijilDizKRD0op5Qyi/w+lEzFfRXnFWkJN4POc3jIlustAdpONCXqnjKV4DJFI3VL7
+         AZd891RR3C6bA==
+Date:   Mon, 16 May 2022 13:47:15 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: objtool "no non-local symbols" error with tip of tree LLVM
+Message-ID: <YoK4U9RgQ9N+HhXJ@dev-arch.thelio-3990X>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220415103414.86555-1-jiangshanlai@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022, Lai Jiangshan wrote:
-> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> 
-> When NPT enabled L1 is PAE paging, vcpu->arch.mmu->get_pdptrs() which
-> is nested_svm_get_tdp_pdptr() reads the guest NPT's PDPTE from memroy
-> unconditionally for each call.
-> 
-> The guest PAE root page is not write-protected.
-> 
-> The mmu->get_pdptrs() in FNAME(walk_addr_generic) might get different
-> values every time or it is different from the return value of
-> mmu->get_pdptrs() in mmu_alloc_shadow_roots().
-> 
-> And it will cause FNAME(fetch) installs the spte in a wrong sp
-> or links a sp to a wrong parent since FNAME(gpte_changed) can't
-> check these kind of changes.
-> 
-> Cache the PDPTEs and the problem is resolved.  The guest is responsible
-> to info the host if its PAE root page is updated which will cause
-> nested vmexit and the host updates the cache when next nested run.
+Hi Josh and Peter,
 
-Hmm, no, the guest is responsible for invalidating translations that can be
-cached in the TLB, but the guest is not responsible for a full reload of PDPTEs.
-Per the APM, the PDPTEs can be cached like regular PTEs:
+After a recent change in LLVM [1], I see warnings (errors?) from objtool
+when building x86_64 allmodconfig on 5.15 and 5.17:
 
-  Under SVM, however, when the processor is in guest mode with PAE enabled, the
-  guest PDPT entries are not cached or validated at this point, but instead are
-  loaded and checked on demand in the normal course of address translation, just
-  like page directory and page table entries. Any reserved bit violations ared
-  etected at the point of use, and result in a page-fault (#PF) exception rather
-  than a general-protection (#GP) exception.
+  $ make -skj"$(nproc)" KCONFIG_ALLCONFIG=<(echo CONFIG_WERROR) LLVM=1 allmodconfig all
+  ...
+  mm/highmem.o: warning: objtool: no non-local symbols !?
+  mm/highmem.o: warning: objtool: gelf_update_symshndx: invalid section index
+  make[2]: *** [scripts/Makefile.build:288: mm/highmem.o] Error 255
+  ...
+  security/tomoyo/load_policy.o: warning: objtool: no non-local symbols !?
+  security/tomoyo/load_policy.o: warning: objtool: gelf_update_symshndx: invalid section index
+  make[3]: *** [scripts/Makefile.build:288: security/tomoyo/load_policy.o] Error 255
+  ...
 
-So if L1 modifies a PDPTE from !PRESENT (or RESERVED) to PRESENT (and valid), then
-any active L2 vCPUs should recognize the new PDPTE without a nested VM-Exit because
-the old entry can't have been cached in the TLB.
+I don't see the same errors on x86_64 allmodconfig on mainline so I
+bisected the 5.17 branch and came upon commit 4abff6d48dbc ("objtool:
+Fix code relocs vs weak symbols"). I wanted to see what 5.17 might be
+missing and came to commit ed53a0d97192 ("x86/alternative: Use
+.ibt_endbr_seal to seal indirect calls") in mainline, which I think just
+hides the issue for allmodconfig. I can reproduce this problem with a
+more selective set of config values on mainline:
 
-In practice, snapshotting at nested VMRUN would likely work, but architecturally
-it's wrong and could cause problems if L1+L2 are engange in paravirt shenanigans,
-e.g. async #PF comes to mind.
+  $ make -skj"$(nproc)" LLVM=1 defconfig
 
-I believe the correct way to fix this is to write-protect nNPT PDPTEs like all other
-shadow pages, which shouldn't be too awful to do as part of your series to route
-PDPTEs through kvm_mmu_get_page().
+  $ scripts/config -e KASAN -e SECURITY_TOMOYO -e SECURITY_TOMOYO_OMIT_USERSPACE_LOADER
+
+  $ make -skj"$(nproc)" LLVM=1 olddefconfig security/tomoyo/load_policy.o
+  security/tomoyo/load_policy.o: warning: objtool: no non-local symbols !?
+  security/tomoyo/load_policy.o: warning: objtool: gelf_update_symshndx: invalid section index
+  make[3]: *** [scripts/Makefile.build:288: security/tomoyo/load_policy.o] Error 255
+  ...
+
+Looking at the object file, the '.text.asan.module_ctor' section has
+disappeared.
+
+Before:
+
+  $ llvm-nm -S security/tomoyo/load_policy.o
+  0000000000000000 0000000000000001 t asan.module_ctor
+
+  $ llvm-readelf -s security/tomoyo/load_policy.o
+
+  Symbol table '.symtab' contains 4 entries:
+     Num:    Value          Size Type    Bind   Vis       Ndx Name
+       0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT   UND
+       1: 0000000000000000     0 FILE    LOCAL  DEFAULT   ABS load_policy.c
+       2: 0000000000000000     0 SECTION LOCAL  DEFAULT     3 .text.asan.module_ctor
+       3: 0000000000000000     1 FUNC    LOCAL  DEFAULT     3 asan.module_ctor
+
+After:
+
+  $ llvm-nm -S security/tomoyo/load_policy.o
+  0000000000000000 0000000000000001 t asan.module_ctor
+
+  $ llvm-readelf -s security/tomoyo/load_policy.o
+
+  Symbol table '.symtab' contains 3 entries:
+     Num:    Value          Size Type    Bind   Vis       Ndx Name
+       0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT   UND
+       1: 0000000000000000     0 FILE    LOCAL  DEFAULT   ABS load_policy.c
+       2: 0000000000000000     1 FUNC    LOCAL  DEFAULT     3 asan.module_ctor
+
+As far as I understand it, the kernel uses constructors for at least
+KASAN and KCSAN, hence why that change impacts the kernel. Beyond that,
+I am not really sure whether the LLVM change is problematic or objtool
+just is not accounting for something that it should. I am happy to
+provide any additional information that might help understand what is
+going wrong here.
+
+[1]: https://github.com/llvm/llvm-project/commit/badd088c57d7d18acd337b7868fe8c7974c88c5b
+
+Cheers,
+Nathan

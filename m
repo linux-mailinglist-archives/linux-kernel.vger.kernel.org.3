@@ -2,129 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE775284FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CEC5528507
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243713AbiEPNJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 09:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48490 "EHLO
+        id S243735AbiEPNKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 09:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235722AbiEPNJH (ORCPT
+        with ESMTP id S230259AbiEPNK1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 09:09:07 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920DE13E82;
-        Mon, 16 May 2022 06:09:06 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id q76so14018400pgq.10;
-        Mon, 16 May 2022 06:09:06 -0700 (PDT)
+        Mon, 16 May 2022 09:10:27 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4195013E83;
+        Mon, 16 May 2022 06:10:26 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id l16so18519550oil.6;
+        Mon, 16 May 2022 06:10:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:reply-to:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=hhS13NV1du4/5RVMnn0KKcWVRMzgQIx1d7kjkoctpig=;
-        b=dqff7cEf+YiKcmpwvNHD98s9Y/gznpGA1n0UHShTOIF3V276B2JTqhQx62EHWto6Na
-         xlKvL+P4npCqLCAegGKQ3FS+rLpmko+BwMvn7n7lj72p8KeYb3ZQmz1YKYU2IR0yPnDH
-         KRELbnohr2g5t0EdQnYkhgRaXNRU/ZgmtM+BrNSFtLCKLOWqSiXKggCLNUBvoPdLJcBE
-         9yP7JlJVBM5rPQM0yOV8kqj4U4zCHkVT9mvKvfvhfvWmU2GQwY2dvyTESAYdT38dKpJW
-         whanVpLF8jEGJqgaFIqkTaUg3sdKBBBKYtLguWa6zwHNzvGIU+a08GpAer4TE+DI8hNS
-         uKAA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=CaF92eBKzl8YhqaTS1Tzg7cnBN+wgBVFhVH+tqOT7PI=;
+        b=q0OW4Ll0d1esJg4Bsi1gSdlTXNns+dyRXpjhWwy3TYP4n4qr8/NV4nZJZKjjduBKRi
+         cA/1ac5Z/Sme7x9B3srXyZPtmX5SKG2ovm3cO9mWg1RmnkOoPJ3oT1jhhOpvYVxSxOtK
+         EETC7rAwge3lFdAza0DWk9nk5BgdUO+u4Mgw7bEh4ZYJNK3Aeh9oPPg2Ig7eRjDoosqU
+         UzYV1++XIwCfe0WO0MlnNE9IF9nupMaem9yK2ia5n1v/9WBmbIxEnxV0yjVXGEaFXtPd
+         F/Q36d9JPkZFcTSysTH5PQ0es9AeN0p4TfoGPkBlB9oAT02H+Hc1mjA9INBnW3qT0TLE
+         TCwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:reply-to
-         :subject:content-language:to:cc:references:from:organization
-         :in-reply-to:content-transfer-encoding;
-        bh=hhS13NV1du4/5RVMnn0KKcWVRMzgQIx1d7kjkoctpig=;
-        b=SHPL81aTBygGnv7I/N1yvO5KhNq5U397POzh7P7A1pEg8qZymN9h5/ISNp31KtItbP
-         +ZdoIcsUr+pLhe7VF5vCuF6lSHjqxr11v2GjWGuTh7grJgpxlv1Qvu5gJmNWHYYP1ssS
-         uPUCZ0n5EeuxDW9Sgd1NDq8c4Cu1RIBFS6vdv8AgE6knOI4nQ1tlCy1VWoXYqYhuqHbq
-         vR/ARqLP2mphwcVLI289nlvXnV4Tkr/C0BhiIlHxiw8isozS1ia+gACwADbAHZtPLmAW
-         C0aIFQtrVgAGhB3pfNYaGqLnS3dNzbFW14AdvFgseOX0JEDVKKrlBTXHPBvxw1mfE7bq
-         3Bew==
-X-Gm-Message-State: AOAM530Rp95IB72KcbYpsHl6qjjupTME0DuZGRoht6ATScWvAWK1iC91
-        ty3Ao1553tldTjeQhQZvD48=
-X-Google-Smtp-Source: ABdhPJy5OzuugvWNhSWVWfm3wmq6awyPhqi3qnfEcfsdsTuOnu5O0udXQ9MhGMXCLG+FQx4ZyJQnQQ==
-X-Received: by 2002:a63:1645:0:b0:3c2:4706:f62b with SMTP id 5-20020a631645000000b003c24706f62bmr15556314pgw.11.1652706546139;
-        Mon, 16 May 2022 06:09:06 -0700 (PDT)
-Received: from ?IPV6:2404:f801:0:5:8000::597? ([2404:f801:9000:18:efec::597])
-        by smtp.gmail.com with ESMTPSA id ju10-20020a17090b20ca00b001df313f6628sm3135246pjb.21.2022.05.16.06.09.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 06:09:05 -0700 (PDT)
-Message-ID: <ad2f9bcb-1aa7-0a35-942f-6a5f674823fe@gmail.com>
-Date:   Mon, 16 May 2022 21:08:58 +0800
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=CaF92eBKzl8YhqaTS1Tzg7cnBN+wgBVFhVH+tqOT7PI=;
+        b=7TmJduZbUEHSqwC6DA75Om5r7KUL4xteBvFna1nsjVqNcEvNXsfw2eoDswjTK8JOsC
+         n1HTVKPZbgpS9KCGTxtfhw7dcVVnKTV4Scrmawb9dFIXNUyGrqtzvoVymeKKpQ60M3tz
+         JjyVhsdr7LyHudh8PdrrQejIUiJTZwZi/4oy/nnE88PhmhgAuktM+WYpTs8gJskOjbF4
+         ciWFS8OnVk2L9yAMH6/RlJ0TOj0P796XFI6NE1El0LvMI2nRrlKninTVOBFEGvWLZzTJ
+         mCT5uA7OSNsaYsq79HTlrz9Ao3PSpAYXr8nf/jjeu7QC06XaOYjr2ixHgw+8S4iVjLpL
+         PyeA==
+X-Gm-Message-State: AOAM533T1UxYQtBz0aW5iXGa2TXNWdyISHGp2k8/vs1LuVX9bERFbpyx
+        Ec1FDzvWJ+B0SJ68AvbmRfs=
+X-Google-Smtp-Source: ABdhPJzuSlHddEfPdlSooNCiKn9gKqW9iethwrrpTKVRacgUq5xfLq0fJvrzlLVkrWbJmB72AUE4Hw==
+X-Received: by 2002:a05:6808:148a:b0:326:c71a:f33c with SMTP id e10-20020a056808148a00b00326c71af33cmr12758233oiw.153.1652706625572;
+        Mon, 16 May 2022 06:10:25 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r3-20020acac103000000b00325cda1ff95sm3795450oif.20.2022.05.16.06.10.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 06:10:24 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 16 May 2022 06:10:23 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev,
+        Jonathan Corbet <corbet@lwn.net>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        linux-arm-kernel@lists.infradead.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-btrfs@vger.kernel.org
+Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
+Message-ID: <20220516131023.GA2329080@roeck-us.net>
+References: <20220228103142.3301082-1-arnd@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Reply-To: tiala@microsoft.com
-Subject: Re: [RFC PATCH V2 1/2] swiotlb: Add Child IO TLB mem support
-Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     m.szyprowski@samsung.com, robin.murphy@arm.com,
-        michael.h.kelley@microsoft.com, kys@microsoft.com,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        vkuznets@redhat.com, brijesh.singh@amd.com, konrad.wilk@oracle.com,
-        hch@lst.de, wei.liu@kernel.org, parri.andrea@gmail.com,
-        thomas.lendacky@amd.com, linux-hyperv@vger.kernel.org,
-        andi.kleen@intel.com, kirill.shutemov@intel.com
-References: <20220502125436.23607-1-ltykernel@gmail.com>
- <20220502125436.23607-2-ltykernel@gmail.com> <YoH+mbxQAp/2XGyG@infradead.org>
-From:   Tianyu Lan <ltykernel@gmail.com>
-Organization: Microsft
-In-Reply-To: <YoH+mbxQAp/2XGyG@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220228103142.3301082-1-arnd@kernel.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/2022 3:34 PM, Christoph Hellwig wrote:
-> I don't really understand how 'childs' fit in here.  The code also
-> doesn't seem to be usable without patch 2 and a caller of the
-> new functions added in patch 2, so it is rather impossible to review.
-
-Hi Christoph:
-      OK. I will merge two patches and add a caller patch. The motivation
-is to avoid global spin lock when devices use swiotlb bounce buffer and
-this introduces overhead during high throughput cases. In my test
-environment, current code can achieve about 24Gb/s network throughput
-with SWIOTLB force enabled and it can achieve about 40Gb/s without
-SWIOTLB force. Storage also has the same issue.
-      Per-device IO TLB mem may resolve global spin lock issue among
-devices but device still may have multi queues. Multi queues still need
-to share one spin lock. This is why introduce child or IO tlb areas in
-the previous patches. Each device queues will have separate child IO TLB
-mem and single spin lock to manage their IO TLB buffers.
-      Otherwise, global spin lock still cost cpu usage during high 
-throughput even when there is performance regression. Each device queues 
-needs to spin on the different cpus to acquire the global lock. Child IO
-TLB mem also may resolve the cpu issue.
-
+On Mon, Feb 28, 2022 at 11:27:43AM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Also:
-> 
->   1) why is SEV/TDX so different from other cases that need bounce
->      buffering to treat it different and we can't work on a general
->      scalability improvement
+> During a patch discussion, Linus brought up the option of changing
+> the C standard version from gnu89 to gnu99, which allows using variable
+> declaration inside of a for() loop. While the C99, C11 and later standards
+> introduce many other features, most of these are already available in
+> gnu89 as GNU extensions as well.
 
-	Other cases also have global spin lock issue but it depends on
-         whether hits the bottleneck. The cpu usage issue may be ignored.
+The downside is that backporting affected patches to older kernel branches
+now fails with error messages such as
 
->   2) per previous discussions at how swiotlb itself works, it is
->      clear that another option is to just make pages we DMA to
->      shared with the hypervisor.  Why don't we try that at least
->      for larger I/O?
+mm/kfence/core.c: In function ‘kfence_init_pool’:
+mm/kfence/core.c:595:2: error: ‘for’ loop initial declarations are only allowed in C99 or C11 mode
 
-	For confidential VM(Both TDX and SEV), we need to use bounce
-	buffer to copy between private memory that hypervisor can't
-	access directly and shared memory. For security consideration,
-	confidential VM	should not share IO stack DMA pages with
-        	hypervisor directly to avoid attack from hypervisor when IO
-	stack handles the DMA data.
-	
+Just something to keep in mind when writing patches.
+
+Guenter

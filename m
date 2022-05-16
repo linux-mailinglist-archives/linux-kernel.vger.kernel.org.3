@@ -2,111 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D07F52900C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B41D5529059
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348098AbiEPUkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:40:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47618 "EHLO
+        id S1348130AbiEPUlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349471AbiEPUc0 (ORCPT
+        with ESMTP id S1348733AbiEPUhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:32:26 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8943ED13
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 13:17:05 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id kq17so30803646ejb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 13:17:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hxd7eLnFBnZ/Rq34pqmtOhmXz09WYv3YBBHEc2lj9Cc=;
-        b=JMAEbqpjk2GQB8cxV89W/ZM7dJMlTCtwY6E8HYMyIGRyYIL01pLt3i7so9JkSPyzaI
-         EfSAJ/toEX9h4fKY/xLsm2rFoFdurG4NBR8f0+FBa698CG60POD/yrpjoyKN8sy6AAOp
-         c5TL8c++fd+dYS7I3gIMTb0xaaogtLh/EtL7hEKgAlvuWx8LTqGI46Y2vdePIkvXyWAp
-         LOCy+yeSIUf7QK3bm7JSoDfwupR5+MSzSJXnNGDfZbI48Vb38Ac0HybcmpGss8U67w95
-         DvAgQwd2Vlmlv9opRGgvhTGtlSUgvE2kSp9ajlyo7p36FCl+CQf7c4TPZQDVOpsg36mg
-         Xj0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hxd7eLnFBnZ/Rq34pqmtOhmXz09WYv3YBBHEc2lj9Cc=;
-        b=Ic5pSn7rIyRJxahy+IYOsDdjkba5AE+Hi0NSxSgI7d0gT7TyX/udav9v1xqwTmdZ8k
-         CTVxi5RwVu25RE9cU/86hEqIpOssZAQnKuy2BCI4ESJNVKsV6Enurrd7Nqah8+qxsUSP
-         ByNiWlIlfnLOXGvfhpXjpGcd6TApRK6JYWxy3dUfML3UV4laxnHho3RsWZgRVSPus0cw
-         iEBPm8uNptSsROeiTErrR8yAmanrLtBs3FGZGAbFx97PWzQYazJPnQAfp6xGZp5ubrjL
-         N8H7tESL2pp38xeKuktwyURp/SgRzyPNG0OyOoVNTXaRF23ObLuTXVCWk4zs0lTS64QK
-         D/Ig==
-X-Gm-Message-State: AOAM530PfzeZfOR6uQ9to1J0OpBlVIWoWTPl7wbExcuXNkRKj5CNNPjl
-        ki5qUyM89wMxMzJ2qSkoB4f2nyvQ1CXcPiC141oLuw==
-X-Google-Smtp-Source: ABdhPJzP5ce030z+5h5VghXXiAdcgk0nyBWSumzV3QjWG71lZk5KvuFJWcG18hpwsCUWBG/uZ8NZQaPTEL/fET8ndDI=
-X-Received: by 2002:a17:907:3e28:b0:6f4:3900:78f8 with SMTP id
- hp40-20020a1709073e2800b006f4390078f8mr17439106ejc.736.1652732223724; Mon, 16
- May 2022 13:17:03 -0700 (PDT)
+        Mon, 16 May 2022 16:37:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0945001E;
+        Mon, 16 May 2022 13:18:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 973B96124D;
+        Mon, 16 May 2022 20:18:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9343CC34115;
+        Mon, 16 May 2022 20:18:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652732299;
+        bh=+6uDV10Sc3DTLJDwxFmU67G8zR9GmxWTjZaSRJ32XLg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=e4kdVQ/Dpfon3rGXiGajSkfjR9K2FBo1wKLw+wBBNeMi+8vyzfTWecKzDAW3TzJ7z
+         hxID2Br1Mj8PN/ghRReXgpxOIUhovVXSC7q6OCnTP0fBTK+2B045Dd01UGJQ+/SBmD
+         0YmUSh87/GSaM70G2VJ7hhy2LGITABy1w11uDcGncZMALgUpekTZHVRDOwD7Z8oqBq
+         pw3kHdktEP7gZuRSm0gpVZGAMiF996gaYID9Axl6FPHNQ7xMB93+ks+STQmDifhLkq
+         ulNVvCjlwUGzbchx+0ihF8VPGYcos2W0d5K1dYo2vpVvIgdbOGqEw4LN0ye0tNN+mg
+         cn2fff1GBOWxg==
+Date:   Mon, 16 May 2022 15:18:17 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     bhelgaas@google.com, lorenzo.pieralisi@arm.com, kbusch@kernel.org,
+        hch@lst.de, linux-nvme@lists.infradead.org,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, svarbanov@mm-sol.com,
+        bjorn.andersson@linaro.org, axboe@fb.com,
+        quic_vbadigan@quicinc.com, quic_krichai@quicinc.com,
+        quic_nitirawa@quicinc.com, vidyas@nvidia.com, sagi@grimberg.me
+Subject: Re: [PATCH 1/3] PCI: Add a flag to notify PCI drivers about
+ powerdown during suspend
+Message-ID: <20220516201817.GA1047280@bhelgaas>
 MIME-Version: 1.0
-References: <20220516085000.9861-1-wanjiabing@vivo.com>
-In-Reply-To: <20220516085000.9861-1-wanjiabing@vivo.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 16 May 2022 22:16:53 +0200
-Message-ID: <CAMRc=McM4X5--dUFUmGricbC_DYubpVk+CMD3odQLCkjxwFzWg@mail.gmail.com>
-Subject: Re: [PATCH] gpio: ftgpio: Remove unneeded ERROR check before clk_disable_unprepare
-To:     Wan Jiabing <wanjiabing@vivo.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220513110027.31015-2-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 10:50 AM Wan Jiabing <wanjiabing@vivo.com> wrote:
->
-> clk_disable_unprepare() already checks ERROR by using IS_ERR_OR_NULL.
-> Remove unneeded ERROR check for g->clk.
->
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+On Fri, May 13, 2022 at 04:30:25PM +0530, Manivannan Sadhasivam wrote:
+> On some systems like Chromebooks based on Qcom chipsets, the OS may
+> powerdown all PCIe devices during system suspend for aggressive
+> powersaving. In that case, the PCI host controller drivers need to notify
+> the PCI device drivers that the power will be taken off during system
+> suspend so that the drivers can prepare the devices accordingly.
+
+"The OS may powerdown all PCIe devices ..." makes it sound like this
+is an OS policy decision.  Where exactly (what function) is that?
+
+Or if it's not an OS policy decision, but rather some property of the
+hardware, say that specifically.
+
+> One prime example is the PCI NVMe driver. This flag can be used by the
+> driver to shutdown the NVMe device during suspend and recover it during
+> resume.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > ---
->  drivers/gpio/gpio-ftgpio010.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-ftgpio010.c b/drivers/gpio/gpio-ftgpio010.c
-> index b90a45c939a4..f422c3e129a0 100644
-> --- a/drivers/gpio/gpio-ftgpio010.c
-> +++ b/drivers/gpio/gpio-ftgpio010.c
-> @@ -315,8 +315,8 @@ static int ftgpio_gpio_probe(struct platform_device *pdev)
->         return 0;
->
->  dis_clk:
-> -       if (!IS_ERR(g->clk))
-> -               clk_disable_unprepare(g->clk);
-> +       clk_disable_unprepare(g->clk);
-> +
->         return ret;
->  }
->
-> @@ -324,8 +324,8 @@ static int ftgpio_gpio_remove(struct platform_device *pdev)
->  {
->         struct ftgpio_gpio *g = platform_get_drvdata(pdev);
->
-> -       if (!IS_ERR(g->clk))
-> -               clk_disable_unprepare(g->clk);
-> +       clk_disable_unprepare(g->clk);
-> +
->         return 0;
->  }
->
-> --
-> 2.36.1
->
-
-Applied, thanks!
-
-Bart
+>  include/linux/pci.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index 60adf42460ab..069caf1fe88d 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -578,6 +578,7 @@ struct pci_host_bridge {
+>  	unsigned int	preserve_config:1;	/* Preserve FW resource setup */
+>  	unsigned int	size_windows:1;		/* Enable root bus sizing */
+>  	unsigned int	msi_domain:1;		/* Bridge wants MSI domain */
+> +	unsigned int	suspend_poweroff:1;	/* OS may poweroff devices during system suspend */
+>  
+>  	/* Resource alignment requirements */
+>  	resource_size_t (*align_resource)(struct pci_dev *dev,
+> -- 
+> 2.25.1
+> 

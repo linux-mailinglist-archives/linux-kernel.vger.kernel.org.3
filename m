@@ -2,51 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28C4E528FCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD08528FA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349569AbiEPUcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57562 "EHLO
+        id S1346921AbiEPT4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351024AbiEPUB4 (ORCPT
+        with ESMTP id S1346953AbiEPTvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:01:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2713647384;
-        Mon, 16 May 2022 12:56:34 -0700 (PDT)
+        Mon, 16 May 2022 15:51:31 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2902140936;
+        Mon, 16 May 2022 12:46:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C63E8B81611;
-        Mon, 16 May 2022 19:56:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DD8FC385AA;
-        Mon, 16 May 2022 19:56:30 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8F166CE177C;
+        Mon, 16 May 2022 19:46:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C004C34100;
+        Mon, 16 May 2022 19:46:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730991;
-        bh=ow4X7BELWr3tuZ00ceGXC+8opjw2E6B2OH2F918kbsY=;
+        s=korg; t=1652730365;
+        bh=v7X2MWl0oE+xbp5LKfvTt4E6oRIiQmuCXUyhJysrXrs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RCjP5h/buMrrb+/+VBVYcJ2P9BrzwnczQ6Zt7NAWJuI8gNEqLGNJN+iiahN7pwLFa
-         1UJH0LCXRbRWmvqJYw6UI0OisnM66Hi9/yYUb2jwGTrYmxJ++vMZ+qxZopOhkHPmuK
-         7mqxAFj3vns1bd/q0gSuNz+oJ9MBlCMqmrxUpB/A=
+        b=SBXd+pyO4u+pdI554WSWsnDyOcfGbFFLBAylDVpGrqdHAqYR1mYrlctzpotybmnkA
+         Iabf1F0OE/XObbvghwYt2KK91p05bqiU+FGw/mR3+Yb75mGW6BnZhPkzXRHY5549Ke
+         7LsI958f/ZDxlJnJNr5Ptm64dJ97kwEt5nkPYLSM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Alex Elder <elder@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Mike Tipton <quic_mdtipton@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 069/114] interconnect: Restore sync state by ignoring ipa-virt in provider count
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 5.10 43/66] usb: typec: tcpci: Dont skip cleanup in .remove() on error
 Date:   Mon, 16 May 2022 21:36:43 +0200
-Message-Id: <20220516193627.471581830@linuxfoundation.org>
+Message-Id: <20220516193620.658444663@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
-References: <20220516193625.489108457@linuxfoundation.org>
+In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
+References: <20220516193619.400083785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,60 +57,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephen Boyd <swboyd@chromium.org>
+From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-[ Upstream commit 20ce30fb4750f2ffc130cdcb26232b1dd87cd0a5 ]
+commit bbc126ae381cf0a27822c1f822d0aeed74cc40d9 upstream.
 
-Ignore compatible strings for the IPA virt drivers that were removed in
-commits 2fb251c26560 ("interconnect: qcom: sdx55: Drop IP0
-interconnects") and 2f3724930eb4 ("interconnect: qcom: sc7180: Drop IP0
-interconnects") so that the sync state logic can kick in again.
-Otherwise all the interconnects in the system will stay pegged at max
-speeds because 'providers_count' is always going to be one larger than
-the number of drivers that will ever probe on sc7180 or sdx55. This
-fixes suspend on sc7180 and sdx55 devices when you don't have a
-devicetree patch to remove the ipa-virt compatible node.
+Returning an error value in an i2c remove callback results in an error
+message being emitted by the i2c core, but otherwise it doesn't make a
+difference. The device goes away anyhow and the devm cleanups are
+called.
 
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Doug Anderson <dianders@chromium.org>
-Cc: Alex Elder <elder@linaro.org>
-Cc: Taniya Das <quic_tdas@quicinc.com>
-Cc: Mike Tipton <quic_mdtipton@quicinc.com>
-Fixes: 2fb251c26560 ("interconnect: qcom: sdx55: Drop IP0 interconnects")
-Fixes: 2f3724930eb4 ("interconnect: qcom: sc7180: Drop IP0 interconnects")
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-Reviewed-by: Alex Elder <elder@linaro.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Link: https://lore.kernel.org/r/20220427013226.341209-1-swboyd@chromium.org
-Signed-off-by: Georgi Djakov <djakov@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+In this case the remove callback even returns early without stopping the
+tcpm worker thread and various timers. A work scheduled on the work
+queue, or a firing timer after tcpci_remove() returned probably results
+in a use-after-free situation because the regmap and driver data were
+freed. So better make sure that tcpci_unregister_port() is called even
+if disabling the irq failed.
+
+Also emit a more specific error message instead of the i2c core's
+"remove failed (EIO), will be ignored" and return 0 to suppress the
+core's warning.
+
+This patch is (also) a preparation for making i2c remove callbacks
+return void.
+
+Fixes: 3ba76256fc4e ("usb: typec: tcpci: mask event interrupts when remove driver")
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Cc: stable <stable@vger.kernel.org>
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/r/20220502080456.21568-1-u.kleine-koenig@pengutronix.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/interconnect/core.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/usb/typec/tcpm/tcpci.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index 9050ca1f4285..808f6e7a8048 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -1087,9 +1087,15 @@ static int of_count_icc_providers(struct device_node *np)
- {
- 	struct device_node *child;
- 	int count = 0;
-+	const struct of_device_id __maybe_unused ignore_list[] = {
-+		{ .compatible = "qcom,sc7180-ipa-virt" },
-+		{ .compatible = "qcom,sdx55-ipa-virt" },
-+		{}
-+	};
+--- a/drivers/usb/typec/tcpm/tcpci.c
++++ b/drivers/usb/typec/tcpm/tcpci.c
+@@ -709,7 +709,7 @@ static int tcpci_remove(struct i2c_clien
+ 	/* Disable chip interrupts before unregistering port */
+ 	err = tcpci_write16(chip->tcpci, TCPC_ALERT_MASK, 0);
+ 	if (err < 0)
+-		return err;
++		dev_warn(&client->dev, "Failed to disable irqs (%pe)\n", ERR_PTR(err));
  
- 	for_each_available_child_of_node(np, child) {
--		if (of_property_read_bool(child, "#interconnect-cells"))
-+		if (of_property_read_bool(child, "#interconnect-cells") &&
-+		    likely(!of_match_node(ignore_list, child)))
- 			count++;
- 		count += of_count_icc_providers(child);
- 	}
--- 
-2.35.1
-
+ 	tcpci_unregister_port(chip->tcpci);
+ 
 
 

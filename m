@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F48E529017
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A079C52916F
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:48:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347472AbiEPT5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:57:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56674 "EHLO
+        id S1349151AbiEPUiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:38:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347749AbiEPTwR (ORCPT
+        with ESMTP id S1350993AbiEPUBy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:52:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95EAF427D5;
-        Mon, 16 May 2022 12:47:54 -0700 (PDT)
+        Mon, 16 May 2022 16:01:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4655147561;
+        Mon, 16 May 2022 12:56:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0FA89B81613;
-        Mon, 16 May 2022 19:47:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A42BC385AA;
-        Mon, 16 May 2022 19:47:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 070C2B81607;
+        Mon, 16 May 2022 19:56:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70504C385AA;
+        Mon, 16 May 2022 19:56:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730460;
-        bh=Uj3lyYJac3hTdmS1S+asSpqVLL6qsv9Cd4vdF79qDb0=;
+        s=korg; t=1652730981;
+        bh=I5cs4rPMg6JZJCSn7sJ6TZVwO84ivOWm5OxLrZprd7k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GtKgbxAO+AUDHiYyoakvllKHXdC1wkFhdQ20YujpP4QEKtAICxs6I8IvRkGB72w7L
-         XP6GX4A5u5se8ahhq57z1Hl8HbAKftnMoHwk09OcBDBGCE57a2PyOjG/EKf+RYBuUU
-         mFbfZBJJaVD77pzmKSg7LnOZuykvKdaT7ByywecE=
+        b=ahwNEdnO3eRpO7hnldwjHKoPjQdMa/nrf6nCzbv8hZuP4wsIeGReAbEiV0kC92QeE
+         qwWpt+UJgGKwHMPBRTiWsCGYWfBvtGq9clpvyC9yKveTbHncGwEgwik95bBLtgOvId
+         4ov3rM76E6OiKxb7xhRJmQ8p4QLux3UfvC1TLVPc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Thi=C3=A9baud=20Weksteen?= <tweek@google.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH 5.10 39/66] firmware_loader: use kernel credentials when reading firmware
-Date:   Mon, 16 May 2022 21:36:39 +0200
-Message-Id: <20220516193620.544847305@linuxfoundation.org>
+        stable@vger.kernel.org, Moshe Kol <moshe.kol@mail.huji.ac.il>,
+        Yossi Gilad <yossi.gilad@mail.huji.ac.il>,
+        Amit Klein <aksecurity@gmail.com>,
+        Eric Dumazet <edumazet@google.com>, Willy Tarreau <w@1wt.eu>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 066/114] tcp: increase source port perturb table to 2^16
+Date:   Mon, 16 May 2022 21:36:40 +0200
+Message-Id: <20220516193627.387650809@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193619.400083785@linuxfoundation.org>
-References: <20220516193619.400083785@linuxfoundation.org>
+In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
+References: <20220516193625.489108457@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,84 +58,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thiébaud Weksteen <tweek@google.com>
+From: Willy Tarreau <w@1wt.eu>
 
-commit 581dd69830341d299b0c097fc366097ab497d679 upstream.
+[ Upstream commit 4c2c8f03a5ab7cb04ec64724d7d176d00bcc91e5 ]
 
-Device drivers may decide to not load firmware when probed to avoid
-slowing down the boot process should the firmware filesystem not be
-available yet. In this case, the firmware loading request may be done
-when a device file associated with the driver is first accessed. The
-credentials of the userspace process accessing the device file may be
-used to validate access to the firmware files requested by the driver.
-Ensure that the kernel assumes the responsibility of reading the
-firmware.
+Moshe Kol, Amit Klein, and Yossi Gilad reported being able to accurately
+identify a client by forcing it to emit only 40 times more connections
+than there are entries in the table_perturb[] table. The previous two
+improvements consisting in resalting the secret every 10s and adding
+randomness to each port selection only slightly improved the situation,
+and the current value of 2^8 was too small as it's not very difficult
+to make a client emit 10k connections in less than 10 seconds.
 
-This was observed on Android for a graphic driver loading their firmware
-when the device file (e.g. /dev/mali0) was first opened by userspace
-(i.e. surfaceflinger). The security context of surfaceflinger was used
-to validate the access to the firmware file (e.g.
-/vendor/firmware/mali.bin).
+Thus we're increasing the perturb table from 2^8 to 2^16 so that the
+same precision now requires 2.6M connections, which is more difficult in
+this time frame and harder to hide as a background activity. The impact
+is that the table now uses 256 kB instead of 1 kB, which could mostly
+affect devices making frequent outgoing connections. However such
+components usually target a small set of destinations (load balancers,
+database clients, perf assessment tools), and in practice only a few
+entries will be visited, like before.
 
-Previously, Android configurations were not setting up the
-firmware_class.path command line argument and were relying on the
-userspace fallback mechanism. In this case, the security context of the
-userspace daemon (i.e. ueventd) was consistently used to read firmware
-files. More Android devices are now found to set firmware_class.path
-which gives the kernel the opportunity to read the firmware directly
-(via kernel_read_file_from_path_initns). In this scenario, the current
-process credentials were used, even if unrelated to the loading of the
-firmware file.
+A live test at 1 million connections per second showed no performance
+difference from the previous value.
 
-Signed-off-by: Thiébaud Weksteen <tweek@google.com>
-Cc: <stable@vger.kernel.org> # 5.10
-Reviewed-by: Paul Moore <paul@paul-moore.com>
-Acked-by: Luis Chamberlain <mcgrof@kernel.org>
-Link: https://lore.kernel.org/r/20220502004952.3970800-1-tweek@google.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Moshe Kol <moshe.kol@mail.huji.ac.il>
+Reported-by: Yossi Gilad <yossi.gilad@mail.huji.ac.il>
+Reported-by: Amit Klein <aksecurity@gmail.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: Willy Tarreau <w@1wt.eu>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/base/firmware_loader/main.c |   17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ net/ipv4/inet_hashtables.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
---- a/drivers/base/firmware_loader/main.c
-+++ b/drivers/base/firmware_loader/main.c
-@@ -793,6 +793,8 @@ _request_firmware(const struct firmware
- 		  size_t offset, u32 opt_flags)
- {
- 	struct firmware *fw = NULL;
-+	struct cred *kern_cred = NULL;
-+	const struct cred *old_cred;
- 	bool nondirect = false;
- 	int ret;
+diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+index 48ca07853068..cc5f66328b47 100644
+--- a/net/ipv4/inet_hashtables.c
++++ b/net/ipv4/inet_hashtables.c
+@@ -726,11 +726,12 @@ EXPORT_SYMBOL_GPL(inet_unhash);
+  * Note that we use 32bit integers (vs RFC 'short integers')
+  * because 2^16 is not a multiple of num_ephemeral and this
+  * property might be used by clever attacker.
+- * RFC claims using TABLE_LENGTH=10 buckets gives an improvement,
+- * we use 256 instead to really give more isolation and
+- * privacy, this only consumes 1 KB of kernel memory.
++ * RFC claims using TABLE_LENGTH=10 buckets gives an improvement, though
++ * attacks were since demonstrated, thus we use 65536 instead to really
++ * give more isolation and privacy, at the expense of 256kB of kernel
++ * memory.
+  */
+-#define INET_TABLE_PERTURB_SHIFT 8
++#define INET_TABLE_PERTURB_SHIFT 16
+ #define INET_TABLE_PERTURB_SIZE (1 << INET_TABLE_PERTURB_SHIFT)
+ static u32 *table_perturb;
  
-@@ -809,6 +811,18 @@ _request_firmware(const struct firmware
- 	if (ret <= 0) /* error or already assigned */
- 		goto out;
- 
-+	/*
-+	 * We are about to try to access the firmware file. Because we may have been
-+	 * called by a driver when serving an unrelated request from userland, we use
-+	 * the kernel credentials to read the file.
-+	 */
-+	kern_cred = prepare_kernel_cred(NULL);
-+	if (!kern_cred) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+	old_cred = override_creds(kern_cred);
-+
- 	ret = fw_get_filesystem_firmware(device, fw->priv, "", NULL);
- 
- 	/* Only full reads can support decompression, platform, and sysfs. */
-@@ -834,6 +848,9 @@ _request_firmware(const struct firmware
- 	} else
- 		ret = assign_fw(fw, device);
- 
-+	revert_creds(old_cred);
-+	put_cred(kern_cred);
-+
-  out:
- 	if (ret < 0) {
- 		fw_abort_batch_reqs(fw);
+-- 
+2.35.1
+
 
 

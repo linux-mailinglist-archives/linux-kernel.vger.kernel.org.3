@@ -2,124 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE63527FCE
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 10:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C077527FDB
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 10:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241795AbiEPIgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 04:36:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32934 "EHLO
+        id S241862AbiEPIjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 04:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241840AbiEPIgZ (ORCPT
+        with ESMTP id S241852AbiEPIjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 04:36:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D698EE0C0;
-        Mon, 16 May 2022 01:36:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 71E1861208;
-        Mon, 16 May 2022 08:36:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E280C385AA;
-        Mon, 16 May 2022 08:36:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652690182;
-        bh=RFUuu65dv4iB6/1sFh3kQ42iMYe1058D2q5TSspj+KQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HCs+nExO5LAGap7FHBM6v6Y/qei7u0YxCf3vO7U2Ls5jqFYpJu/pjJnXbyaRktQzm
-         ekjlVdA80nimsoZ3w+NktSIZWPYl+c4QyNrczLChwpmnzqV9xg0MddiGPZLamsgs80
-         C8qC2jM8ic0nsrZ0f0FpcVB79cvU5jQuiWYHJtFHvuH2VV5iYaNgQgUXE4ZCPbdFfC
-         xp18ez6uMQiNPjVJJRuTDm15mVtxjb7PMui1BYGMc4ckN5OyycvawXozw2KwkC2lbk
-         S7nuDWGLlsKPU2r/HKN6jFs/FkGdPNcqIUOxOPxvyKF1/IcjrGlIU0DO3/7K6XNsqG
-         UoMfoKcewCgBA==
-Date:   Mon, 16 May 2022 10:36:15 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     Peter Rosin <peda@axentia.se>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 0/9] introduce fwnode in the I2C subsystem
-Message-ID: <YoIM/4O4UPaLRVjg@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Peter Rosin <peda@axentia.se>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>, Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220325113148.588163-1-clement.leger@bootlin.com>
- <Yn/BFKwzVLwrjF/F@shikoro>
- <12be48dc-b5d1-063c-87a0-050886cc2505@axentia.se>
- <20220516093418.0038845c@fixe.home>
+        Mon, 16 May 2022 04:39:20 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455D5E0DD;
+        Mon, 16 May 2022 01:39:19 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id t25so24484799lfg.7;
+        Mon, 16 May 2022 01:39:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=58VJTyS91eGqmdDXfaHsOWtLLXLnqdoRzKRAXC8kYBg=;
+        b=YVTJUSj/06UfDPLrm20dENmoGpPw2RJnksjmdtiMqOazR5RCC88+ZWL6zRO18B/o/B
+         9y/kX/HElg8zwwc6TZ5LZQET02cIH1M1OFTXBOSeyOgSS6KNwYbAuCjzIxCuLbxvjsDD
+         8EyhjCSDPM1Plw3hWzHYzL/z5yoiDWwlNvpZSXmFpi0t3lhmU2Bv1J8zGdXMJKFZHjJF
+         rUhIAPPwq+z+xJhJMOjJLVUwp60NbkpUQqNqPldCGMvk3ZrIKrm+GFvaurLQHmTVARhm
+         hDlKB2gdpPNayypGBUyaAuvpNymHS80rgVgB42nObLLsRGHhih+TH6JYo91Vsw4A0Kg1
+         yOMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=58VJTyS91eGqmdDXfaHsOWtLLXLnqdoRzKRAXC8kYBg=;
+        b=QqML4grVSPGqaCJBbJEoRkRuhmFb7/On7F5IeWlt7omOHvVOb2GqZ20nafIdCI3Lvj
+         JbJUKnx3rr/eIR0iJXFY4oPuIXfvJoHh+0BD1Yvc72L7yl5Pg66SFgf/jHlDZ5D/eO+j
+         eeDl7L5qmVMUJ/v7EMYjigOT7Uto8EIQXGQg+nWWkQ16pRri4rwCbSO83Aq6DigEnL+M
+         E9dz/MT8v0f269nYxlf71nW6HbYlVa9YwMqXeMtFNnFI+9X3mQjXd4LpLKP+8vCvwDrP
+         o4iaf8tmNxiU6VheDGeYm9FPrt3Y5OpnSxfZQJMmdMOGhN9D0uS8MTy57eFnfivim8mu
+         2xkg==
+X-Gm-Message-State: AOAM533wzo95DEg9bSrm1LTpbaqvUFPJ7NrfJ72gnjWHj1jtV6bgc22h
+        dOigWxiqiHMLXZIqZqH8ZXKMBcqhZDSz/xwR4b3FlUl3ZjI=
+X-Google-Smtp-Source: ABdhPJxEEbo+EAFfwfotAw1nk3krfv5ObqZpSLA1blGFWBxMNNAv0SeoagqdByHHQifh2R6BT5Gjsga8Q/x372A24ZQ=
+X-Received: by 2002:ac2:5456:0:b0:471:f9e6:7388 with SMTP id
+ d22-20020ac25456000000b00471f9e67388mr11665162lfn.504.1652690357642; Mon, 16
+ May 2022 01:39:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="WFP/yrmed1NCLdav"
-Content-Disposition: inline
-In-Reply-To: <20220516093418.0038845c@fixe.home>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220429201717.1946178-1-martin.fernandez@eclypsium.com>
+ <YnKr+aMf4PspDpHZ@zn.tnic> <CAKgze5YDD02AsrF0yESv2sptZ4qxyTMgCDmnOKcbQWjKQsJRsw@mail.gmail.com>
+ <YnUYLDjIThbIz/Uf@zn.tnic> <6d90c832-af4a-7ed6-4f72-dae08bb69c37@intel.com>
+ <CAPcyv4i73m6iPPfJE9CBdxf-OWGXahvGqvh6G-pqVO=3LB6ktQ@mail.gmail.com>
+ <47140A56-D3F8-4292-B355-5F92E3BA9F67@alien8.de> <6abea873-52a2-f506-b21b-4b567bee1874@intel.com>
+ <FDABC5C8-B80A-4977-9F97-5A8FC47F69D6@alien8.de> <4bc56567-e2ce-40ec-19ab-349c8de8d969@intel.com>
+ <CE52D65A-C9F4-408D-B18A-72D87495A433@alien8.de>
+In-Reply-To: <CE52D65A-C9F4-408D-B18A-72D87495A433@alien8.de>
+From:   Richard Hughes <hughsient@gmail.com>
+Date:   Mon, 16 May 2022 09:39:06 +0100
+Message-ID: <CAD2FfiHe3hCSNHEA0mSWPbH4LEWhj+FgxkhO83U1GgYEJR6wrw@mail.gmail.com>
+Subject: Re: [PATCH v8 0/8] x86: Show in sysfs if a memory node is able to do encryption
+To:     Boris Petkov <bp@alien8.de>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Martin Fernandez <martin.fernandez@eclypsium.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, daniel.gutson@eclypsium.com,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, X86 ML <x86@kernel.org>,
+        "Schofield, Alison" <alison.schofield@intel.com>,
+        alex.bazhaniuk@eclypsium.com, Greg KH <gregkh@linuxfoundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        "Huang, Kai" <kai.huang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 6 May 2022 at 20:02, Boris Petkov <bp@alien8.de> wrote:
+> Remember - this all started with "i wanna say that mem enc is active" and now we're so far deep down the rabbit hole...
 
---WFP/yrmed1NCLdav
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This is still something consumers need; at the moment users have no
+idea if data is *actually* being encrypted. I think Martin has done an
+admirable job going down the rabbit hole to add this functionality in
+the proper manner -- so it's actually accurate and useful for other
+use cases to that of fwupd.
 
+At the moment my professional advice to people asking about Intel
+memory encryption is to assume there is none, as there's no way of
+verifying that it's actually enabled and working. This is certainly a
+shame for something so promising, touted as an enterprise security
+feature.
 
-> While doing the same conversion on the reset subsystem, Rob Herring
-> stepped in and mention the fact that this could be done using
-> device-tree overlay (even on system with ACPI) .
-
-Thanks for the heads up, I'll drop this series then.
-
-
---WFP/yrmed1NCLdav
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKCDPsACgkQFA3kzBSg
-KbbHbw/+PGfOkObnz8N94i8/XJkTK5uDekSlAaYlBWilWLLcLzLa4PZX1xu4L9m3
-PZWQbl6zFCI+EmEXoNuUXuHtXTBn28TQ8Qp4e5GYmr+3A260AiuWvDc7pxBuhH8D
-BQGzLYeUUPdvbv81f52Abl3br8l2Kuzd2G4S3ozirjZhaTyWz/20+S5C9ngriIu6
-i9djDWgdhBEFM9/bxOYjAudAU4O7VEnlK9cBzijJv4lvQgXITc1G5x4smbXIooCk
-1t7ldL+Mis2J0Yl0IjfuKjKSuSocFKjhssZ6hssil8T2sVgA19WywSNeZdn1ND/x
-x+ttsX6OqRtVpyZRI3IekHgq4jEnAsW7d4AbrkmWGlS8Sfgt6xGEQGallp7wF/+F
-pMIEQzOGw929+SzRhBdxLa+fz9+0a6Edxz5SH4VaOLnSm9sXKqlFZzbRW4n9cDWZ
-zRFDNwYSqBVbTr5XgBW8Cv63CWcsot6DuCI74GZTi3+Hdb5/VXUZWBNl7Wr0Dvnr
-/Z7ZojFWM8Asgod6FIbZr7Qco/u+CRo3CWpbAaMnRJvko5ib622x3ngAiT/7vFw3
-EytV8+0DUFPYYEqHlhOU80r6Xlf8Wzmni54QpRqzM6BvnzDoF9mVi2NxjkD7EUym
-bCKTzRQM2aHyTJ1n2WjpSVMzrw93AtURknOcMatejClcDSFEdxM=
-=kMPE
------END PGP SIGNATURE-----
-
---WFP/yrmed1NCLdav--
+Richard

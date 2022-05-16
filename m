@@ -2,105 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF78C527D8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:26:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08677527D90
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236756AbiEPG0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 02:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
+        id S240278AbiEPG1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 02:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240326AbiEPG02 (ORCPT
+        with ESMTP id S235673AbiEPG12 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 02:26:28 -0400
-Received: from mout-u-107.mailbox.org (mout-u-107.mailbox.org [IPv6:2001:67c:2050:101:465::107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070952618
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:26:25 -0700 (PDT)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-u-107.mailbox.org (Postfix) with ESMTPS id 4L1q5V1TT4z9sy0;
-        Mon, 16 May 2022 08:26:22 +0200 (CEST)
-Message-ID: <fe4d398e-978c-6784-e3f6-01b83da3f249@denx.de>
-Date:   Mon, 16 May 2022 08:26:20 +0200
+        Mon, 16 May 2022 02:27:28 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE27E2611C;
+        Sun, 15 May 2022 23:27:25 -0700 (PDT)
+Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L1q614v33zgY7h;
+        Mon, 16 May 2022 14:26:49 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by kwepemi500015.china.huawei.com
+ (7.221.188.92) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 16 May
+ 2022 14:27:22 +0800
+From:   Lu Wei <luwei32@huawei.com>
+To:     <jreuter@yaina.de>, <ralf@linux-mips.org>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux-hams@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH net-next] ax25: merge repeat codes in ax25_dev_device_down()
+Date:   Mon, 16 May 2022 14:28:04 +0800
+Message-ID: <20220516062804.254742-1-luwei32@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Subject: Re: [PATCH -next v2 1/2] i2c: mt7621: fix missing
- clk_disable_unprepare() on error in mtk_i2c_probe()
-Content-Language: en-US
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Cc:     matthias.bgg@gmail.com, wsa@the-dreams.de,
-        christophe.jaillet@wanadoo.fr
-References: <20220514023148.305457-1-yangyingliang@huawei.com>
-From:   Stefan Roese <sr@denx.de>
-In-Reply-To: <20220514023148.305457-1-yangyingliang@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4L1q5V1TT4z9sy0
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500015.china.huawei.com (7.221.188.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.05.22 04:31, Yang Yingliang wrote:
-> Fix the missing clk_disable_unprepare() before return
-> from mtk_i2c_probe() in the error handling case.
-> 
-> Fixes: d04913ec5f89 ("i2c: mt7621: Add MediaTek MT7621/7628/7688 I2C driver")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Merge repeat codes to reduce the duplication.
 
-Reviewed-by: Stefan Roese <sr@denx.de>
+Signed-off-by: Lu Wei <luwei32@huawei.com>
+---
+ net/ax25/ax25_dev.c | 22 ++++++++++------------
+ 1 file changed, 10 insertions(+), 12 deletions(-)
 
-Thanks,
-Stefan
-
-> ---
->     v2: add return 0 in normal path.
-> ---
->   drivers/i2c/busses/i2c-mt7621.c | 10 ++++++++--
->   1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-mt7621.c b/drivers/i2c/busses/i2c-mt7621.c
-> index 45fe4a7fe0c0..901f0fb04fee 100644
-> --- a/drivers/i2c/busses/i2c-mt7621.c
-> +++ b/drivers/i2c/busses/i2c-mt7621.c
-> @@ -304,7 +304,8 @@ static int mtk_i2c_probe(struct platform_device *pdev)
->   
->   	if (i2c->bus_freq == 0) {
->   		dev_warn(i2c->dev, "clock-frequency 0 not supported\n");
-> -		return -EINVAL;
-> +		ret = -EINVAL;
-> +		goto err_disable_clk;
->   	}
->   
->   	adap = &i2c->adap;
-> @@ -322,10 +323,15 @@ static int mtk_i2c_probe(struct platform_device *pdev)
->   
->   	ret = i2c_add_adapter(adap);
->   	if (ret < 0)
-> -		return ret;
-> +		goto err_disable_clk;
->   
->   	dev_info(&pdev->dev, "clock %u kHz\n", i2c->bus_freq / 1000);
->   
-> +	return 0;
-> +
-> +err_disable_clk:
-> +	clk_disable_unprepare(i2c->clk);
-> +
->   	return ret;
->   }
->   
-
-Viele Grüße,
-Stefan Roese
-
+diff --git a/net/ax25/ax25_dev.c b/net/ax25/ax25_dev.c
+index d2a244e1c260..b80fccbac62a 100644
+--- a/net/ax25/ax25_dev.c
++++ b/net/ax25/ax25_dev.c
+@@ -115,23 +115,13 @@ void ax25_dev_device_down(struct net_device *dev)
+ 
+ 	if ((s = ax25_dev_list) == ax25_dev) {
+ 		ax25_dev_list = s->next;
+-		spin_unlock_bh(&ax25_dev_lock);
+-		ax25_dev_put(ax25_dev);
+-		dev->ax25_ptr = NULL;
+-		dev_put_track(dev, &ax25_dev->dev_tracker);
+-		ax25_dev_put(ax25_dev);
+-		return;
++		goto unlock_put;
+ 	}
+ 
+ 	while (s != NULL && s->next != NULL) {
+ 		if (s->next == ax25_dev) {
+ 			s->next = ax25_dev->next;
+-			spin_unlock_bh(&ax25_dev_lock);
+-			ax25_dev_put(ax25_dev);
+-			dev->ax25_ptr = NULL;
+-			dev_put_track(dev, &ax25_dev->dev_tracker);
+-			ax25_dev_put(ax25_dev);
+-			return;
++			goto unlock_put;
+ 		}
+ 
+ 		s = s->next;
+@@ -139,6 +129,14 @@ void ax25_dev_device_down(struct net_device *dev)
+ 	spin_unlock_bh(&ax25_dev_lock);
+ 	dev->ax25_ptr = NULL;
+ 	ax25_dev_put(ax25_dev);
++	return;
++
++unlock_put:
++	spin_unlock_bh(&ax25_dev_lock);
++	ax25_dev_put(ax25_dev);
++	dev->ax25_ptr = NULL;
++	dev_put_track(dev, &ax25_dev->dev_tracker);
++	ax25_dev_put(ax25_dev);
+ }
+ 
+ int ax25_fwd_ioctl(unsigned int cmd, struct ax25_fwd_struct *fwd)
 -- 
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-51 Fax: (+49)-8142-66989-80 Email: sr@denx.de
+2.17.1
+

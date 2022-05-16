@@ -2,135 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24A55528DEE
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECBD2528DF9
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345426AbiEPTbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47098 "EHLO
+        id S1345453AbiEPTc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345442AbiEPTba (ORCPT
+        with ESMTP id S239434AbiEPTc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:31:30 -0400
-Received: from mailgw.felk.cvut.cz (mailgw.felk.cvut.cz [147.32.82.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED9717E30;
-        Mon, 16 May 2022 12:31:27 -0700 (PDT)
-Received: from mailgw.felk.cvut.cz (localhost.localdomain [127.0.0.1])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTP id 735D730B2945;
-        Mon, 16 May 2022 21:31:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        cmp.felk.cvut.cz; h=cc:cc:content-transfer-encoding:content-type
-        :content-type:date:from:from:in-reply-to:message-id:mime-version
-        :references:reply-to:subject:subject:to:to; s=felkmail; bh=bxOMg
-        wvqttgq9P/9WQqucB3rNYax4JIqpBYk4OHI+2Y=; b=cWfow5MnS9l8mZEBD4rnO
-        0FPD7BIyeff9uSiJ0/BhSupm3Kh+l6VgeNeCTBNc8/tgsx9ZDGytLvraipGeY5Zq
-        l1zqKtwkYUgHVfYkcRGuGGNojiz0RjX5/SXmbAl5SmmBnRoDlnZvhS2ww4HMQOcq
-        OQeGOnpWvfFxR8YVnwpVnnxv9vss3Lz71sXB7xjiLqOCJrGj5/vHonBqHPiGjNhA
-        Y+svEq5w+rdxjGPbu8NueIruX4Pg6hCcwWxYpwudSy462eg4KyqRf7LYoUa7d89g
-        gvj0hMxEPNlDXHaBcNVf3XfUc6mwfzT+QGA1uP6yleP5PwBvI8JiPT/GWIPokwrT
-        A==
-Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTPS id A639830B2942;
-        Mon, 16 May 2022 21:31:25 +0200 (CEST)
-Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
-        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 24GJVPET031998;
-        Mon, 16 May 2022 21:31:25 +0200
-Received: (from pisa@localhost)
-        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 24GJVP0i031997;
-        Mon, 16 May 2022 21:31:25 +0200
-X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
-From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Subject: Re: [PATCH net-next v2] docs: ctucanfd: Use 'kernel-figure' directive instead of 'figure'
-Date:   Mon, 16 May 2022 21:31:02 +0200
-User-Agent: KMail/1.9.10
-Cc:     "Marc Kleine-Budde" <mkl@pengutronix.de>, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Martin Jerabek <martin.jerabek01@gmail.com>,
-        Ondrej Ille <ondrej.ille@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <05d491d4-c498-9bab-7085-9c892b636d68@gmail.com> <5986752a-1c2a-5d64-f91d-58b1e6decd17@gmail.com> <38d102ab-d0b6-3467-4dce-4a9d4aa9e39d@gmail.com>
-In-Reply-To: <38d102ab-d0b6-3467-4dce-4a9d4aa9e39d@gmail.com>
-X-KMail-QuotePrefix: > 
+        Mon, 16 May 2022 15:32:26 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5350D20F4E
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:32:25 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so21497275fac.7
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:32:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=J76YW6Wdlh5XkWvWlzC9gchLSjC+e1zZeLVaSHsN2OQ=;
+        b=d9CQktVULUaK6nXZ/QzkDqI6+WbJO6m8jOyWYhqDLe6AiSL43teR7zxEi4j/IT7G28
+         i0FvQpprMbKCLYaRtRu6xtCLzfxz4D+9LtFXrKoj5wr4IU1XrPGKgaW1ckZhsBjDGdDf
+         NM0oeFrayV7Db9eD5+OCdlhAGV0efJ6ydoh70=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=J76YW6Wdlh5XkWvWlzC9gchLSjC+e1zZeLVaSHsN2OQ=;
+        b=vfAYqTrA0sPRGfwDzjRjhTll+TL+/1kKg5CD2kassLKnlRB3ZPKXi7VGjEIUjlH52U
+         965v8+Dt2u7Y+9jV5kk2k/qmD+sgg1qOb1TroRGU5y7Zck51kNVl7YZZqSBtFxWSCp0c
+         u75/1e+SF+i5YTfHmIImBcfsKcZAxfF4xAubz0p3G1baMNty/GcilhSfr2H1XzApRIRT
+         fPL87AxpdjoG5hFrY6vxShYqZoCbSxb2QNkWXMPoKRTA0oLn30OxF+8ZJe/RyXURNPOc
+         uvt0byC+OGG3T+3faH1gTdFxjy5rXo1M9h7/xFrkYjTmDZWSG7cj62ZrMoNM2uQpQrkC
+         hNpw==
+X-Gm-Message-State: AOAM533tDr1yotZOPKgaf1aNIrXJfkjo0Oh0qOoub/1xHC9/5CP3J33u
+        Z2tBfDJ/ukEr31HbCq0ykmdfwVrTbq0HoqsRJarP0Q==
+X-Google-Smtp-Source: ABdhPJzJI92I4I96rEOhysGBJGD/K/e+0SB9aptCslRQ20O4rAnvh5bNk0UoYZG3ZWuAynzOHNF45aylQc9TEohySps=
+X-Received: by 2002:a05:6870:240d:b0:f1:b878:e97c with SMTP id
+ n13-20020a056870240d00b000f1b878e97cmr880663oap.193.1652729544662; Mon, 16
+ May 2022 12:32:24 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 16 May 2022 12:32:24 -0700
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-Message-Id: <202205162131.02560.pisa@cmp.felk.cvut.cz>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAD=FV=XfmU1GhXZPvUMoh9dqs8iei6s+0gu6Mve-aQ33A+7m3g@mail.gmail.com>
+References: <20220512013921.164637-1-swboyd@chromium.org> <20220512013921.164637-3-swboyd@chromium.org>
+ <CAD=FV=XfmU1GhXZPvUMoh9dqs8iei6s+0gu6Mve-aQ33A+7m3g@mail.gmail.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Mon, 16 May 2022 12:32:24 -0700
+Message-ID: <CAE-0n53nqrSmxZsnReE=yVzN0OkGw8BaNqFxX6mcRkJyxXyyJg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] dt-bindings: cros-ec: Reorganize property availability
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        chrome-platform@lists.linux.dev,
+        Guenter Roeck <groeck@chromium.org>,
+        Craig Hesling <hesling@chromium.org>,
+        Tom Hughes <tomhughes@chromium.org>,
+        Alexandru M Stan <amstan@chromium.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Akira,
-
-On Monday 16 of May 2022 13:24:49 Akira Yokosawa wrote:
-> On Wed, 11 May 2022 08:45:43 +0900, Akira Yokosawa wrote:
-> > Two issues were observed in the ReST doc added by commit c3a0addefbde
-> > ("docs: ctucanfd: CTU CAN FD open-source IP core documentation.")
-> > with Sphinx versions 2.4.4 and 4.5.0.
-> >
-> > The plain "figure" directive broke "make pdfdocs" due to a missing
-> > PDF figure.  For conversion of SVG -> PDF to work, the "kernel-figure"
-> > directive, which is an extension for kernel documentation, should
-> > be used instead.
-> >
-> > The directive of "code:: raw" causes a warning from both
-> > "make htmldocs" and "make pdfdocs", which reads:
-> >
-> >     [...]/can/ctu/ctucanfd-driver.rst:75: WARNING: Pygments lexer name
-> >     'raw' is not known
-> >
-> > A plain literal-block marker should suffice where no syntax
-> > highlighting is intended.
-> >
-> > Fix the issues by using suitable directive and marker.
-> >
-> > Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-> > Fixes: c3a0addefbde ("docs: ctucanfd: CTU CAN FD open-source IP core
-> > documentation.") Acked-by: Pavel Pisa <pisa@cmp.felk.cvut.cz>
-> > Cc: Martin Jerabek <martin.jerabek01@gmail.com>
-> > Cc: Ondrej Ille <ondrej.ille@gmail.com>
-> > Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-> > ---
-> > Changes in v1 -> v2
-> >  - no change in diff
-> >  - added explicit Sphinx versions the issues were observed
-> >  - picked Pavel's Acked-by
+Quoting Doug Anderson (2022-05-12 16:44:44)
+> On Wed, May 11, 2022 at 6:39 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> > +
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          not:
+> > +            contains:
+> > +              const: google,cros-ec-rpmsg
+> > +    then:
+> > +      properties:
+> > +        mediatek,rpmsg-name: false
+> > +
+> > +      required:
+> > +        - reg
+> > +        - interrupts
 >
-> Gentle ping to netdev maintainers.
+> Is it worth having an "else" clause here? to explicitly make
+> "mediatek,rpmsg-name" required for mediatek?
+
+I don't know if mediatek,rpmsg-name is required for a generic
+google,cros-ec-rpmsg. I would guess it isn't, because it's a vendor
+prefixed property. Maybe it could look at the parent node property to
+see that it is inside a mediatek remoteproc node but I'd rather leave
+that to future work.
+
 >
-> I believe this one should go upstream together with the
-> offending commit.
+> In any case, this seems right from my (albeit) limited yaml knowledge
+> and seems like an improvement.
+>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
-I think that the patch is on the right route thanks
-to Marc Kleine-Budde already, it is in the linux-can-next
-testing
-
-https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/commit/?h=testing&id=f898bbb9c92e33dcbe7ee29b8861b707c2cd509e
-
-I hope that it would reach net-next after next
-linux-can-next merge.
-
-Best wishes,
-
-                Pavel
--- 
-                Pavel Pisa
-    phone:      +420 603531357
-    e-mail:     pisa@cmp.felk.cvut.cz
-    Department of Control Engineering FEE CVUT
-    Karlovo namesti 13, 121 35, Prague 2
-    university: http://control.fel.cvut.cz/
-    personal:   http://cmp.felk.cvut.cz/~pisa
-    projects:   https://www.openhub.net/accounts/ppisa
-    CAN related:http://canbus.pages.fel.cvut.cz/
-    Open Technologies Research Education and Exchange Services
-    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
-
+Thanks!

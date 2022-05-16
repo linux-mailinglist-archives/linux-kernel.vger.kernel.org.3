@@ -2,108 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80FBE527BB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 04:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6E1527BB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 04:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239250AbiEPCAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 22:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36716 "EHLO
+        id S239170AbiEPCEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 22:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232963AbiEPCAs (ORCPT
+        with ESMTP id S231318AbiEPCEE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 22:00:48 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA32D12768
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 19:00:46 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L1j5N2m5zzCsmV;
-        Mon, 16 May 2022 09:55:52 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 16 May 2022 10:00:44 +0800
-Subject: Re: [PATCH 06/15] mm/swap: remove buggy cache->nr check in
- refill_swap_slots_cache
-To:     David Hildenbrand <david@redhat.com>, <akpm@linux-foundation.org>
-CC:     <willy@infradead.org>, <vbabka@suse.cz>, <dhowells@redhat.com>,
-        <neilb@suse.de>, <apopple@nvidia.com>, <surenb@google.com>,
-        <peterx@redhat.com>, <naoya.horiguchi@nec.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220509131416.17553-1-linmiaohe@huawei.com>
- <20220509131416.17553-7-linmiaohe@huawei.com>
- <fd5c6a00-ea0e-b5d8-999f-d7b65c193ae4@redhat.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <8b03aa8a-5023-6915-64c6-f6f298f19f36@huawei.com>
-Date:   Mon, 16 May 2022 10:00:43 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Sun, 15 May 2022 22:04:04 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656E9192BE
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 19:04:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652666643; x=1684202643;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=mw8DJE8yvOSuw3spkKWsSAhd7sIYW0oNHvTKwxzir2Y=;
+  b=ZArC2NGzT0y65F6cs+UgYiPWDubNdpfq+dJZ0Ty3J7Mwcts+9kgSi4dl
+   Jtf4TA+P6a/Sd/Dk7p7lcby5Oxci0GeI4VQQ8LGloFb1ZOS3zUGCgQK8u
+   XIO6LTE1unIC6Dc2cMCNniRnQMbQOKtTmuryCcUrhCwzmxCJvNg78VUdW
+   bC0rKNzuGtGzPVWFd004stWawg2miJt7JrArvlIinz7AAauq2mdjh7mCZ
+   OE3RCKAjZUDsbNjAvwSlK0JwaC963wP8h0BNpczBVCXvY6txVFLXjhQXM
+   oJZfI58Za5ydpdCyBeSDyDaJ4HIt+wgbntoOLXAMyWiYAf/fkQ1Fk0+DG
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="252778603"
+X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
+   d="scan'208";a="252778603"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2022 19:04:01 -0700
+X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
+   d="scan'208";a="522254130"
+Received: from yanjiepa-mobl.ccr.corp.intel.com (HELO [10.249.192.19]) ([10.249.192.19])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2022 19:03:56 -0700
+Message-ID: <90619325-ea39-410e-2e8b-a38895f0dabf@linux.intel.com>
+Date:   Mon, 16 May 2022 10:03:52 +0800
 MIME-Version: 1.0
-In-Reply-To: <fd5c6a00-ea0e-b5d8-999f-d7b65c193ae4@redhat.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Cc:     baolu.lu@linux.intel.com, "Tian, Kevin" <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 03/12] iommu: Add attach/detach_dev_pasid domain ops
 Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+References: <20220510061738.2761430-1-baolu.lu@linux.intel.com>
+ <20220510061738.2761430-4-baolu.lu@linux.intel.com>
+ <20220510140238.GD49344@nvidia.com>
+ <f56ea479-aa82-37ae-91c3-754816a4ed8b@linux.intel.com>
+ <BN9PR11MB5276100AC9BBB7DE5CB800CF8CC89@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <Yntrv+nq2t/IeVo2@myrica> <20220511120240.GY49344@nvidia.com>
+ <Ynywqxo4P+aEeS6c@myrica> <20220512115101.GU49344@nvidia.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20220512115101.GU49344@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/12 21:37, David Hildenbrand wrote:
-> On 09.05.22 15:14, Miaohe Lin wrote:
->> refill_swap_slots_cache is always called when cache->nr is 0. And if
->> cache->nr != 0, we should return cache->nr instead of 0. So remove
->> such buggy and confusing check.
+On 2022/5/12 19:51, Jason Gunthorpe wrote:
+> On Thu, May 12, 2022 at 08:00:59AM +0100, Jean-Philippe Brucker wrote:
 > 
-> Not sure about the "cache->nr != 0, we should return cache->nr instead
-> of 0" part, I'd just drop that from the patch description. We'd actually
-> end up overwriting cache->nr after your change, which doesn't sound
-> right and also different to what you describe here.
-
-Will do.
-
-> 
+>>> It is not "missing" it is just renamed to blocking_domain->ops->set_dev_pasid()
+>>>
+>>> The implementation of that function would be identical to
+>>> detach_dev_pasid.
 >>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>  mm/swap_slots.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>    attach(dev, pasid, sva_domain)
+>>    detach(dev, pasid, sva_domain)
 >>
->> diff --git a/mm/swap_slots.c b/mm/swap_slots.c
->> index 2f877e6f87d7..2a65a89b5b4d 100644
->> --- a/mm/swap_slots.c
->> +++ b/mm/swap_slots.c
->> @@ -258,7 +258,7 @@ void enable_swap_slots_cache(void)
->>  /* called with swap slot cache's alloc lock held */
->>  static int refill_swap_slots_cache(struct swap_slots_cache *cache)
->>  {
->> -	if (!use_swap_slot_cache || cache->nr)
->> +	if (!use_swap_slot_cache)
->>  		return 0;
->>  
->>  	cache->cur = 0;
+>> versus
+>>
+>>    set_dev_pasid(dev, pasid, sva_domain)
+>>    set_dev_pasid(dev, pasid, blocking)
+>>
+>> we loose the information of the domain previously attached, and the SMMU
+>> driver has to retrieve it to find the ASID corresponding to the mm.
 > 
-> I feel like if this function would be called with cache->nr, it would be
-> a BUG. So I'm fine with removing it, but we could also think about
-> turning it into some sort of WARN/BG to make it clearer that this is
-> unexpected.
+> It would be easy to have the old domain be an input as well - the core
+> code knows it.
 
-Since refill_swap_slots_cache is only called by folio_alloc_swap when cache->nr == 0. I think
-it might be too overkill to add a WARN/BG.
+Thanks a lot for all suggestions. I have posted a follow-up series for
+this:
 
-> 
-> 
-> Anyhow,
-> 
-> Acked-by: David Hildenbrand <david@redhat.com>
+https://lore.kernel.org/linux-iommu/20220516015759.2952771-1-baolu.lu@linux.intel.com/
 
-Many thanks for comment and Acked-by tag!
+Let's discuss this there.
 
-> 
-
+Best regards,
+baolu

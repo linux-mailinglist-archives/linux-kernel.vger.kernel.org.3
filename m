@@ -2,93 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27636528AC5
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 18:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFA6E528AC7
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 18:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343810AbiEPQn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 12:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55622 "EHLO
+        id S1343820AbiEPQoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 12:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343797AbiEPQny (ORCPT
+        with ESMTP id S244534AbiEPQog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 12:43:54 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275B23C4A7
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 09:43:52 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7FBB7240007;
-        Mon, 16 May 2022 16:43:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1652719431;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rKC2n8siaU3/m8tasFcxJwqALcqLnpcBpiJpKXLsFnY=;
-        b=LJKjhlCNv/6SLWNzKJbI8MOcEldHlSz24SX5QSvzlGevtWd6vdTvBou5qZVoCqnAKWm/OT
-        bV50TUXCGYQYd8g1kLGEgDAP7nJXxLH9yutuAS6A1b1oddUg+6ap+M/LgXJDZAeOMPywHZ
-        aMIKdpI3GouO3qpi+OCaVIxm23MMt/3CU9OB2lPQOjTK7at9diypdLBq8yeqNp49SzRvvH
-        cxAi8yMOxCdW130g2JZGhtkLmCCj9aGnVPGrTL1Aw67Qo9FWQo8+zl3Aub2Bd6WlHxksFl
-        EqRFRPlS+d8nHBVKjV1bEQn2JLpqlzXZP4cCe2TgUpPzQFhFjZo0aF19LGp8Tg==
-Date:   Mon, 16 May 2022 18:43:48 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     <linux-kernel@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <richard@nod.at>, <vigneshr@ti.com>
-Subject: Re: [PATCH -next v2] mtd: st_spi_fsm: add missing
- clk_disable_unprepare() in stfsm_remove()
-Message-ID: <20220516184348.77f5b39d@xps-13>
-In-Reply-To: <20220516092911.953066-1-yangyingliang@huawei.com>
-References: <20220516092911.953066-1-yangyingliang@huawei.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
+        Mon, 16 May 2022 12:44:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78763C4B1;
+        Mon, 16 May 2022 09:44:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 603BAB81263;
+        Mon, 16 May 2022 16:44:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4206C385AA;
+        Mon, 16 May 2022 16:44:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652719472;
+        bh=CYEvraFOukMkXu6WJZExhFsNqffzBStRQaubVucF2VE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hQ3raqWSwFK4Im/gQu5BrQ4j5EyxbLqHUz+Thyw+Air6BDVAOJuI4kc6nzyOZ25OU
+         b1AY5WRVxEfX6D07dcOBR9dytT7129POMhLMkPhRECoHIpow/eHniKQmN8v6TxqUJV
+         tJixyVk71SO7PdcAHVfTeXZiyZVkkd5CwEajyv+QDZqiavEnxLHiwL/2xdBqhdWSmN
+         4A3s5b1Svfd80b2zJy//vKyhJqZOMOaPIwhpcG+FpUJYzDEkcVA7zm4loAzpNzjGFT
+         Dleu4A7zeI1r9OS5GBL1rbamw5P5i4i0d7rnznuEpn/KsRQ8jpMJhqvFRfO1ZSnsZQ
+         1f1tFAW7qheOA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nqdpc-00Bfyr-Tm; Mon, 16 May 2022 17:44:29 +0100
+Date:   Mon, 16 May 2022 17:44:28 +0100
+Message-ID: <87ilq55swj.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v7 0/9] KVM: arm64: Add support for hypercall services selection
+In-Reply-To: <CAJHc60w1F7RAgJkv5PRuJtKjTw1gUaYmZk885AVhPLF2h6YbkQ@mail.gmail.com>
+References: <20220502233853.1233742-1-rananta@google.com>
+        <878rri8r78.wl-maz@kernel.org>
+        <CAJHc60xp=UQT_CX0zoiSjAmkS8JSe+NB5Gr+F5mmybjJAWkUtQ@mail.gmail.com>
+        <878rriicez.wl-maz@kernel.org>
+        <CAJHc60w1F7RAgJkv5PRuJtKjTw1gUaYmZk885AVhPLF2h6YbkQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: rananta@google.com, drjones@redhat.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, pbonzini@redhat.com, catalin.marinas@arm.com, will@kernel.org, pshier@google.com, ricarkol@google.com, oupton@google.com, reijiw@google.com, jingzhangos@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yang,
-
-yangyingliang@huawei.com wrote on Mon, 16 May 2022 17:29:11 +0800:
-
-> Clock source is prepared and enabled by clk_prepare_enable()
-> in probe function, but not disabled or unprepared in remove
-> function.
+On Tue, 03 May 2022 22:09:29 +0100,
+Raghavendra Rao Ananta <rananta@google.com> wrote:
 >=20
-
-Applied to mtd/next, thanks!
-
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
-> v2:
->   make the commit message and title more proper.
-> ---
->  drivers/mtd/devices/st_spi_fsm.c | 2 ++
->  1 file changed, 2 insertions(+)
+> On Tue, May 3, 2022 at 1:33 PM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Tue, 03 May 2022 19:49:13 +0100,
+> > Raghavendra Rao Ananta <rananta@google.com> wrote:
+> > >
+> > > Hi Marc,
+> > >
+> > > On Tue, May 3, 2022 at 10:24 AM Marc Zyngier <maz@kernel.org> wrote:
+> > > >
+> > > > On Tue, 03 May 2022 00:38:44 +0100,
+> > > > Raghavendra Rao Ananta <rananta@google.com> wrote:
+> > > > >
+> > > > > Hello,
+> > > > >
+> > > > > Continuing the discussion from [1], the series tries to add suppo=
+rt
+> > > > > for the userspace to elect the hypercall services that it wishes
+> > > > > to expose to the guest, rather than the guest discovering them
+> > > > > unconditionally. The idea employed by the series was taken from
+> > > > > [1] as suggested by Marc Z.
+> > > >
+> > > > As it took some time to get there, and that there was still a bunch=
+ of
+> > > > things to address, I've taken the liberty to apply my own fixes to =
+the
+> > > > series.
+> > > >
+> > > > Please have a look at [1], and let me know if you're OK with the
+> > > > result. If you are, I'll merge the series for 5.19.
+> > > >
+> > > > Thanks,
+> > > >
+> > > >         M.
+> > > >
+> > > Thank you for speeding up the process; appreciate it. However, the
+> > > series's selftest patches have a dependency on Oliver's
+> > > PSCI_SYSTEM_SUSPEND's selftest patches [1][2]. Can we pull them in
+> > > too?
+> >
+> > Urgh... I guess this is the time to set some ground rules:
+> >
+> > - Please don't introduce dependencies between series, that's
+> >   unmanageable. I really need to see each series independently, and if
+> >   there is a merge conflict, that's my job to fix (and I don't really
+> >   mind).
+> >
+> > - If there is a dependency between series, please post a version of
+> >   the required patches as a prefix to your series, assuming this
+> >   prefix is itself standalone. If it isn't, then something really is
+> >   wrong, and the series should be resplit.
+> >
+> > - You also should be basing your series on an *official* tag from
+> >   Linus' tree (preferably -rc1, -rc2 or -rc3), and not something
+> >   random like any odd commit from the KVM tree (I had conflicts while
+> >   applying this on -rc3, probably due to the non-advertised dependency
+> >   on Oliver's series).
+> >
+> Thanks for picking the dependency patches. I'll keep these mind the
+> next time I push changes.
 >=20
-> diff --git a/drivers/mtd/devices/st_spi_fsm.c b/drivers/mtd/devices/st_sp=
-i_fsm.c
-> index 983999c020d6..d3377b10fc0f 100644
-> --- a/drivers/mtd/devices/st_spi_fsm.c
-> +++ b/drivers/mtd/devices/st_spi_fsm.c
-> @@ -2126,6 +2126,8 @@ static int stfsm_remove(struct platform_device *pde=
-v)
->  {
->  	struct stfsm *fsm =3D platform_get_drvdata(pdev);
-> =20
-> +	clk_disable_unprepare(fsm->clk);
-> +
->  	return mtd_device_unregister(&fsm->mtd);
->  }
-> =20
+> > >
+> > > aarch64/hypercalls.c: In function =E2=80=98guest_test_hvc=E2=80=99:
+> > > aarch64/hypercalls.c:95:30: error: storage size of =E2=80=98res=E2=80=
+=99 isn=E2=80=99t known
+> > >    95 |         struct arm_smccc_res res;
+> > >       |                              ^~~
+> > > aarch64/hypercalls.c:103:17: warning: implicit declaration of function
+> > > =E2=80=98smccc_hvc=E2=80=99 [-Wimplicit-function-declaration]
+> > >   103 |                 smccc_hvc(hc_info->func_id, hc_info->arg1, 0,
+> > > 0, 0, 0, 0, 0, &res);
+> > >       |                 ^~~~~~~~~
+> > >
+> >
+> > I've picked the two patches, which means they will most likely appear
+> > twice in the history. In the future, please reach out so that we can
+> > organise this better.
+> >
+> > > Also, just a couple of readability nits in the fixed version:
+> > >
+> > > 1. Patch-2/9, hypercall.c:kvm_hvc_call_default_allowed(), in the
+> > > 'default' case, do you think we should probably add a small comment
+> > > that mentions we are checking for func_id in the PSCI range?
+> >
+> > Dumped a one-liner there.
+> >
+> > > 2. Patch-2/9, arm_hypercall.h, clear all the macros in this patch
+> > > itself instead of doing it in increments (unless there's some reason
+> > > that I'm missing)?
+> >
+> > Ah, rebasing leftovers, now gone.
+> >
+> > I've pushed an updated branch again, please have a look.
+> >
+> Thanks for addressing these. The series looks good now.
 
+Except it doesn't.
+
+I introduced a bug by overly simplifying kvm_arm_set_fw_reg_bmap(), as
+we have to allow userspace writing the *same* value. As it turns out,
+QEMU restores all the registers on each reboot. Which as the vcpus
+have all run. This in turns triggers another issue in QEMU, which
+instead of taking the hint ans stopping there, sends all the vcpus
+into the guest in one go with random states... Crap happens.
+
+I'll wear a brown paper bag for the rest of the day and add the
+following patch to the branch.
 
 Thanks,
-Miqu=C3=A8l
+
+	M.
+
+=46rom 528ada2811ba0bb2b2db5bf0f829b48c50f3c13c Mon Sep 17 00:00:00 2001
+From: Marc Zyngier <maz@kernel.org>
+Date: Mon, 16 May 2022 17:32:54 +0100
+Subject: [PATCH] KVM: arm64: Fix hypercall bitmap writeback when vcpus have
+ already run
+
+We generally want to disallow hypercall bitmaps being changed
+once vcpus have already run. But we must allow the write if
+the written value is unchanged so that userspace can rewrite
+the register file on reboot, for example.
+
+Without this, a QEMU-based VM will fail to reboot correctly.
+
+The original code was correct, and it is me that introduced
+the regression.
+
+Fixes: 05714cab7d63 ("KVM: arm64: Setup a framework for hypercall bitmap fi=
+rmware registers")
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+---
+ arch/arm64/kvm/hypercalls.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
+index ccbd3cefb91a..c9f401fa01a9 100644
+--- a/arch/arm64/kvm/hypercalls.c
++++ b/arch/arm64/kvm/hypercalls.c
+@@ -379,7 +379,8 @@ static int kvm_arm_set_fw_reg_bmap(struct kvm_vcpu *vcp=
+u, u64 reg_id, u64 val)
+=20
+ 	mutex_lock(&kvm->lock);
+=20
+-	if (test_bit(KVM_ARCH_FLAG_HAS_RAN_ONCE, &kvm->arch.flags)) {
++	if (test_bit(KVM_ARCH_FLAG_HAS_RAN_ONCE, &kvm->arch.flags) &&
++	    val !=3D *fw_reg_bmap) {
+ 		ret =3D -EBUSY;
+ 		goto out;
+ 	}
+--=20
+2.34.1
+
+
+--=20
+Without deviation from the norm, progress is not possible.

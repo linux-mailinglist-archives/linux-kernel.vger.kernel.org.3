@@ -2,99 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF5F52918A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FD1B5291A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347705AbiEPUWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:22:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44184 "EHLO
+        id S1349798AbiEPUiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348923AbiEPT7D (ORCPT
+        with ESMTP id S1350021AbiEPUAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:59:03 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A6A3ED35
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:52:57 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id oe17-20020a17090b395100b001df77d29587so344618pjb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:52:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MiA2IbbGB4PrztiBYAGqSxVhR5Rwcu/jU2Fpvn36Dl0=;
-        b=deJtJBiCfl3UmX5GrP4pGKU4l3G56jfiOmXHqodW6G/JMHuzegFzyHLrLeu+ZaHJkg
-         NmN40D91Pl+R2RlRC4Jo5htGdRwHzZhP5A/FL+L0HT4z5xXc5nOo22Qqc1DTZZ7VTcAO
-         W4mh6HvlyBjzkOcNSOcolsmPzM80BE14dVS/8ewQQuSd0OGpSfOVLvkpA+KWxYzObt+O
-         cPHv7+4KH2Dn3pa0srAGD45Z+roR2Z33UakwPw6V99hO6dKk1/cmC3CVpBlrDNZMJ//o
-         c8igbCLZxPOHU2OONg1QdnFk5l5IEkUTgpV6xdqR8UOxb+0bp6XrWxEuBMIFkarojoai
-         2qig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MiA2IbbGB4PrztiBYAGqSxVhR5Rwcu/jU2Fpvn36Dl0=;
-        b=MjIEJHpyOvbV/38HQktmIqKJ31U+pQB07O5uEnlYDsBI2+gpXTF2TtCPrzDKLCyhhL
-         Nroa49pSDtCyt0puEPRSkp+4+p27D+4y5W4uDdaumfNl1eraTsb0d9eKNH11j5mUIqBj
-         4Tln2AgPg8iwnlQ4T9yr7Z0uRwTKsJ6TP1eiSoFq5kLk4LOeXg3fz1Gx/8EbvjAKbpkH
-         iFA5Vye09T3wn8Edwcl+PEcuujnVRPWAB4WZl6D1KfyF044HWMA4SeXCZTuqBQENBaf7
-         WB63WOT+p3B1Cs7vi+EVhFU6E5/w3QiTHaQEbQR/Ya1VMkKGyGu2QyPsr05I6qlY/EVU
-         C9ow==
-X-Gm-Message-State: AOAM530SjkbXPsF/F25IOTEChqVO7EQty0aGNuYZ9Iq9TJ9U/wWQUIpp
-        ESfyM7IdoDnku+ul6ZVx7T+kdQ==
-X-Google-Smtp-Source: ABdhPJzNV/v9eBVXXMXhCt2k3rEPI8Qh5FZO4UU5+6FwTfuFJm8S0FMztukLIgePJ6T+WiIHqsbotQ==
-X-Received: by 2002:a17:90b:1482:b0:1df:5b39:8a4 with SMTP id js2-20020a17090b148200b001df5b3908a4mr6265490pjb.233.1652730776434;
-        Mon, 16 May 2022 12:52:56 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id q23-20020a170902bd9700b0015e8d4eb2e2sm7337538pls.300.2022.05.16.12.52.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 12:52:55 -0700 (PDT)
-Date:   Mon, 16 May 2022 19:52:52 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 09/34] KVM: x86: hyper-v: Don't use
- sparse_set_to_vcpu_mask() in kvm_hv_send_ipi()
-Message-ID: <YoKrlMKq6o0dMfLt@google.com>
-References: <20220414132013.1588929-1-vkuznets@redhat.com>
- <20220414132013.1588929-10-vkuznets@redhat.com>
- <94cec439f345313c1a909f6a012665dd10686d47.camel@redhat.com>
+        Mon, 16 May 2022 16:00:45 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F053A45AC7;
+        Mon, 16 May 2022 12:54:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652730891; x=1684266891;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fScrN08znRDZaq3DWOz2/SzfYqSDlpSGins4k3VDQok=;
+  b=C8vYxgEMQEXCfuZ2a8yqVSQ0BC12xHGEhkOND/PbkXlE0SpPHcoJXNzW
+   MnYO9PhcBwK1BbolpV3g0sB+JllxsEh6fzlK4x2JDenD08emyZ7ZC1Cg5
+   eD9Myq/CD1N4Tnzn5ydKCIzJk6rv+oYjGDbo79TzCwtKW2ZzIi0W8vZ+2
+   q6eaABVq2wGqvxppv1EkTWqEEygLwqnR+K4fFC3RUQ9UwJZ4VXW3OUwXZ
+   jz9sX4f1X5u/PetbjRxx3qs1EW/qbe8oSoImr3Km/IXwsBOQ38jmO1HKg
+   qxdPmVeLnvaBNVAPZBzCGBIsv/aR/HWs549P2GqzF0gZajeqA6oLU+480
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="333990653"
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="333990653"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 12:53:55 -0700
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="568501950"
+Received: from csalmon-mobl.amr.corp.intel.com (HELO localhost) ([10.212.118.70])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 12:53:54 -0700
+Date:   Mon, 16 May 2022 12:53:54 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Evgeniy Dushistov <dushistov@mail.ru>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] fs/ufs: Replace kmap() with kmap_local_page()
+Message-ID: <YoKr0rUEA6q2wYs4@iweiny-desk3>
+References: <20220516101925.15272-1-fmdefrancesco@gmail.com>
+ <YoJl+lh0QELbv/TL@casper.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <94cec439f345313c1a909f6a012665dd10686d47.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YoJl+lh0QELbv/TL@casper.infradead.org>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022, Maxim Levitsky wrote:
-> On Thu, 2022-04-14 at 15:19 +0200, Vitaly Kuznetsov wrote:
-> > @@ -2089,8 +2108,8 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
-> >  		((u64)hc->rep_cnt << HV_HYPERCALL_REP_COMP_OFFSET);
-> >  }
-> >  
-> > -static void kvm_send_ipi_to_many(struct kvm *kvm, u32 vector,
-> > -				 unsigned long *vcpu_bitmap)
-> > +static void kvm_hv_send_ipi_to_many(struct kvm *kvm, u32 vector,
-> > +				    u64 *sparse_banks, u64 valid_bank_mask)
-> I think the indentation is wrong here (was wrong before as well)
+On Mon, May 16, 2022 at 03:55:54PM +0100, Matthew Wilcox wrote:
+> On Mon, May 16, 2022 at 12:19:25PM +0200, Fabio M. De Francesco wrote:
+> > The use of kmap() is being deprecated in favor of kmap_local_page(). With
+> > kmap_local_page(), the mapping is per thread, CPU local and not globally
+> > visible.
+> > 
+> > The usage of kmap_local_page() in fs/ufs is pre-thread, therefore replace
+> > kmap() / kunmap() calls with kmap_local_page() / kunmap_local().
+> > 
+> > kunmap_local() requires the mapping address, so return that address from
+> > ufs_get_page() to be used in ufs_put_page().
+> > 
+> > These changes are essentially ported from fs/ext2 and are largely based on
+> > commit 782b76d7abdf ("fs/ext2: Replace kmap() with kmap_local_page()").
+> > 
+> > Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> > Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+> > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> 
+> Have you done more than compile-tested this?  I'd like to know that it's
+> been tested on a machine with HIGHMEM enabled (in a VM, presumably).
+> UFS doesn't get a lot of testing, and it'd be annoying to put out a
+> patch that breaks the kmap_local() rules.
 
-It's correct, the "+" from the diff/patch misaligns the first line because there's
-no tab to eat the extra character.  Amusingly, the misaligment just gets worse the
-more ">" / quotes that get added to the front.
+I'm not against trying to test.  But did you see a place which might break
+the kmap_local() rules?
 
-I usually end up applying a patch to double check if I suspect indentation is
-wrong, it's too hard for me to tell based on the raw patch alone unless it's super
-bad/obvious.
+Ira

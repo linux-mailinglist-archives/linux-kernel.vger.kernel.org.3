@@ -2,66 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EB2D528CF1
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:28:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBAB3528D09
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:30:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344835AbiEPS2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 14:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47438 "EHLO
+        id S1344842AbiEPS31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 14:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344803AbiEPS2H (ORCPT
+        with ESMTP id S1344888AbiEPS25 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 14:28:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C7AA3E0DC
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 11:28:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652725685;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=KGdQi8TuzBmFRXod035kvuaDB/iI4QyLpnvfOS0c72g=;
-        b=Z+qiwYbgHq84h4f/RqTEy37YNGe195/M/xkfnrt/dVFfJrZSyPAMBh+Wn5XO1C6qaD0Ogu
-        akjPS6MUvkfgU6pnvCITfSdH9QFlbPWG/c+YRC4020hGulQx3UamR0hkUhM/Q4BCAkPtuW
-        0FDAAYuTuI0P6zyvqEVLyGOL3Oh6mvI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-97-G2KT6AgpPKGayOWKZwieZg-1; Mon, 16 May 2022 14:28:01 -0400
-X-MC-Unique: G2KT6AgpPKGayOWKZwieZg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B1D83395AFE4;
-        Mon, 16 May 2022 18:28:00 +0000 (UTC)
-Received: from asgard.redhat.com (unknown [10.36.110.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 022005521E2;
-        Mon, 16 May 2022 18:27:56 +0000 (UTC)
-Date:   Mon, 16 May 2022 20:27:54 +0200
-From:   Eugene Syromiatnikov <esyr@redhat.com>
-To:     Jiri Olsa <jolsa@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf 4/4] bpf_trace: pass array of u64 values in
- kprobe_multi.addrs
-Message-ID: <20220516182754.GA30211@asgard.redhat.com>
+        Mon, 16 May 2022 14:28:57 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8516A3DDC3;
+        Mon, 16 May 2022 11:28:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652725735; x=1684261735;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=R32de3wh6TrT1gnFG0UBXSG3pbisE1mnMN7/ySz5rO0=;
+  b=HcF6/I8CkV2OqL4TjNOWuDtlWXwngIIpKvXHRJmLkOk5MtMQXn1wf2s0
+   yHBuAKlMYfaw4KyHA0rr1gBB+LlHr9rXeRMBNwGDlSnHI9KAKNhJhuvqR
+   9gxcyRtD2w4oVVp0eOMjziirLQsilqow+z/Aa/r/6SPVmENaeP8JpkPT2
+   Jt659fmXmPiDTEzSwaCXbpGgSVj4D/u7Eu0LJ3IbP+Lf2nSWgbYvv8xNX
+   FXKv61h0xQJg+XGdvO3KWw/dDeE9YVOBro8hj3v8EMTF5RTuNrsGfX9uj
+   9ntqCZAA0dHBKkW26eNUdgIfE61u/C0pN91cU+YiqaW81VTC/IsgEUNx2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="357336972"
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="357336972"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 11:28:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="574151701"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 16 May 2022 11:28:42 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nqfSU-0000G2-5F;
+        Mon, 16 May 2022 18:28:42 +0000
+Date:   Tue, 17 May 2022 02:28:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Neal Liu <neal_liu@aspeedtech.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Felipe Balbi <balbi@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Li Yang <leoyang.li@nxp.com>
+Cc:     kbuild-all@lists.01.org, Neal Liu <neal_liu@aspeedtech.com>,
+        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        BMC-SW@aspeedtech.com
+Subject: Re: [PATCH 1/3] usb: gadget: add Aspeed ast2600 udc driver
+Message-ID: <202205170249.uTUi0uir-lkp@intel.com>
+References: <20220513065728.857722-2-neal_liu@aspeedtech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20220513065728.857722-2-neal_liu@aspeedtech.com>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,162 +78,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the interface as defined, it is impossible to pass 64-bit kernel
-addresses from a 32-bit userspace process in BPF_LINK_TYPE_KPROBE_MULTI,
-which severly limits the useability of the interface, change the ABI
-to accept an array of u64 values instead of (kernel? user?) longs.
-Interestingly, the rest of the libbpf infrastructure uses 64-bit values
-for kallsyms addresses already, so this patch also eliminates
-the sym_addr cast in tools/lib/bpf/libbpf.c:resolve_kprobe_multi_cb().
+Hi Neal,
 
-Fixes: 0dcac272540613d4 ("bpf: Add multi kprobe link")
-Fixes: 5117c26e877352bc ("libbpf: Add bpf_link_create support for multi kprobes")
-Fixes: ddc6b04989eb0993 ("libbpf: Add bpf_program__attach_kprobe_multi_opts function")
-Fixes: f7a11eeccb111854 ("selftests/bpf: Add kprobe_multi attach test")
-Fixes: 9271a0c7ae7a9147 ("selftests/bpf: Add attach test for bpf_program__attach_kprobe_multi_opts")
-Fixes: 2c6401c966ae1fbe ("selftests/bpf: Add kprobe_multi bpf_cookie test")
-Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
----
- kernel/trace/bpf_trace.c                           | 25 ++++++++++++++++++----
- tools/lib/bpf/bpf.h                                |  2 +-
- tools/lib/bpf/libbpf.c                             |  8 +++----
- tools/lib/bpf/libbpf.h                             |  2 +-
- .../testing/selftests/bpf/prog_tests/bpf_cookie.c  |  2 +-
- .../selftests/bpf/prog_tests/kprobe_multi_test.c   |  2 +-
- 6 files changed, 29 insertions(+), 12 deletions(-)
+I love your patch! Perhaps something to improve:
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 5b0cf54..86a5544 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -2414,7 +2414,7 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
- 	void __user *ucookies;
- 	unsigned long *addrs;
- 	u32 flags, cnt, size, cookies_size;
--	void __user *uaddrs;
-+	u64 __user *uaddrs;
- 	u64 *cookies = NULL;
- 	void __user *usyms;
- 	int err;
-@@ -2447,9 +2447,26 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
- 		return -ENOMEM;
- 
- 	if (uaddrs) {
--		if (copy_from_user(addrs, uaddrs, size)) {
--			err = -EFAULT;
--			goto error;
-+		if (sizeof(*addrs) == sizeof(*uaddrs)) {
-+			if (copy_from_user(addrs, uaddrs, size)) {
-+				err = -EFAULT;
-+				goto error;
-+			}
-+		} else {
-+			u32 i;
-+			u64 addr;
-+
-+			for (i = 0; i < cnt; i++) {
-+				if (get_user(addr, uaddrs + i)) {
-+					err = -EFAULT;
-+					goto error;
-+				}
-+				if (addr > ULONG_MAX) {
-+					err = -EINVAL;
-+					goto error;
-+				}
-+				addrs[i] = addr;
-+			}
- 		}
- 	} else {
- 		err = kprobe_multi_resolve_syms(usyms, cnt, addrs);
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index f4b4afb..f677602 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -417,7 +417,7 @@ struct bpf_link_create_opts {
- 			__u32 flags;
- 			__u32 cnt;
- 			const char **syms;
--			const unsigned long *addrs;
-+			const __u64 *addrs;
- 			const __u64 *cookies;
- 		} kprobe_multi;
- 	};
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 809fe20..03a14a6 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -10279,7 +10279,7 @@ static bool glob_match(const char *str, const char *pat)
- 
- struct kprobe_multi_resolve {
- 	const char *pattern;
--	unsigned long *addrs;
-+	__u64 *addrs;
- 	size_t cap;
- 	size_t cnt;
- };
-@@ -10294,12 +10294,12 @@ resolve_kprobe_multi_cb(unsigned long long sym_addr, char sym_type,
- 	if (!glob_match(sym_name, res->pattern))
- 		return 0;
- 
--	err = libbpf_ensure_mem((void **) &res->addrs, &res->cap, sizeof(unsigned long),
-+	err = libbpf_ensure_mem((void **) &res->addrs, &res->cap, sizeof(__u64),
- 				res->cnt + 1);
- 	if (err)
- 		return err;
- 
--	res->addrs[res->cnt++] = (unsigned long) sym_addr;
-+	res->addrs[res->cnt++] = sym_addr;
- 	return 0;
- }
- 
-@@ -10314,7 +10314,7 @@ bpf_program__attach_kprobe_multi_opts(const struct bpf_program *prog,
- 	};
- 	struct bpf_link *link = NULL;
- 	char errmsg[STRERR_BUFSIZE];
--	const unsigned long *addrs;
-+	const __u64 *addrs;
- 	int err, link_fd, prog_fd;
- 	const __u64 *cookies;
- 	const char **syms;
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 05dde85..ec1cb61 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -431,7 +431,7 @@ struct bpf_kprobe_multi_opts {
- 	/* array of function symbols to attach */
- 	const char **syms;
- 	/* array of function addresses to attach */
--	const unsigned long *addrs;
-+	const __u64 *addrs;
- 	/* array of user-provided values fetchable through bpf_get_attach_cookie */
- 	const __u64 *cookies;
- 	/* number of elements in syms/addrs/cookies arrays */
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-index 923a613..5aa482a 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-@@ -137,7 +137,7 @@ static void kprobe_multi_link_api_subtest(void)
- 	cookies[6] = 7;
- 	cookies[7] = 8;
- 
--	opts.kprobe_multi.addrs = (const unsigned long *) &addrs;
-+	opts.kprobe_multi.addrs = (const __u64 *) &addrs;
- 	opts.kprobe_multi.cnt = ARRAY_SIZE(addrs);
- 	opts.kprobe_multi.cookies = (const __u64 *) &cookies;
- 	prog_fd = bpf_program__fd(skel->progs.test_kprobe);
-diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-index b9876b5..b58e2b0 100644
---- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-@@ -105,7 +105,7 @@ static void test_link_api_addrs(void)
- 	GET_ADDR("bpf_fentry_test7", addrs[6]);
- 	GET_ADDR("bpf_fentry_test8", addrs[7]);
- 
--	opts.kprobe_multi.addrs = (const unsigned long*) addrs;
-+	opts.kprobe_multi.addrs = (const __u64 *) addrs;
- 	opts.kprobe_multi.cnt = ARRAY_SIZE(addrs);
- 	test_link_api(&opts);
- }
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on robh/for-next v5.18-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Neal-Liu/add-Aspeed-udc-driver-for-ast2600/20220513-150314
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+config: mips-randconfig-s032-20220516 (https://download.01.org/0day-ci/archive/20220517/202205170249.uTUi0uir-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/272ae26f9fe89f60d584cf445431d0fa566eb24b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Neal-Liu/add-Aspeed-udc-driver-for-ast2600/20220513-150314
+        git checkout 272ae26f9fe89f60d584cf445431d0fa566eb24b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash drivers/usb/gadget/udc/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+   command-line: note: in included file:
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQUIRE redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_SEQ_CST redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQ_REL redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_RELEASE redefined
+   builtin:0:0: sparse: this was the original definition
+   drivers/usb/gadget/udc/aspeed_udc.c:1009:34: sparse: sparse: restricted __le16 degrades to integer
+   drivers/usb/gadget/udc/aspeed_udc.c:1037:32: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const volatile [noderef] __iomem *src @@     got struct usb_ctrlrequest *creq @@
+   drivers/usb/gadget/udc/aspeed_udc.c:1037:32: sparse:     expected void const volatile [noderef] __iomem *src
+   drivers/usb/gadget/udc/aspeed_udc.c:1037:32: sparse:     got struct usb_ctrlrequest *creq
+>> drivers/usb/gadget/udc/aspeed_udc.c:1066:25: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] val @@     got restricted __le16 [addressable] [usertype] wValue @@
+   drivers/usb/gadget/udc/aspeed_udc.c:1066:25: sparse:     expected unsigned int [usertype] val
+   drivers/usb/gadget/udc/aspeed_udc.c:1066:25: sparse:     got restricted __le16 [addressable] [usertype] wValue
+   drivers/usb/gadget/udc/aspeed_udc.c:1070:37: sparse: sparse: restricted __le16 degrades to integer
+   drivers/usb/gadget/udc/aspeed_udc.c:1075:37: sparse: sparse: restricted __le16 degrades to integer
+   drivers/usb/gadget/udc/aspeed_udc.c:1518:19: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct usb_ctrlrequest *creq @@     got void [noderef] __iomem * @@
+   drivers/usb/gadget/udc/aspeed_udc.c:1518:19: sparse:     expected struct usb_ctrlrequest *creq
+   drivers/usb/gadget/udc/aspeed_udc.c:1518:19: sparse:     got void [noderef] __iomem *
+   drivers/usb/gadget/udc/aspeed_udc.c:619:38: sparse: sparse: cast truncates bits from constant value (80 becomes 0)
+   drivers/usb/gadget/udc/aspeed_udc.c:625:12: sparse: sparse: context imbalance in 'ast_udc_ep_queue' - different lock contexts for basic block
+
+vim +1066 drivers/usb/gadget/udc/aspeed_udc.c
+
+  1027	
+  1028	static void ast_udc_ep0_handle_setup(struct ast_udc_dev *udc)
+  1029	{
+  1030		struct ast_udc_ep *ep = &udc->ep[0];
+  1031		struct ast_udc_request *req;
+  1032		struct usb_ctrlrequest crq;
+  1033		int req_num = 0;
+  1034		u16 ep_num = 0;
+  1035		int rc;
+  1036	
+  1037		memcpy_fromio(&crq, udc->creq, sizeof(crq));
+  1038	
+  1039		SETUP_DBG(udc, "SETEUP packet: %02x/%02x/%04x/%04x/%04x\n",
+  1040			  crq.bRequestType, crq.bRequest, le16_to_cpu(crq.wValue),
+  1041			  le16_to_cpu(crq.wIndex), le16_to_cpu(crq.wLength));
+  1042	
+  1043		/*
+  1044		 * Cleanup ep0 request(s) in queue because
+  1045		 * there is a new control setup comes.
+  1046		 */
+  1047		list_for_each_entry(req, &udc->ep[0].queue, queue) {
+  1048			req_num++;
+  1049			EP_DBG(ep, "there is req %p in ep0 queue !\n", req);
+  1050		}
+  1051	
+  1052		if (req_num)
+  1053			ast_udc_nuke(&udc->ep[0], -ETIMEDOUT);
+  1054	
+  1055		udc->ep[0].dir_in = crq.bRequestType & USB_DIR_IN;
+  1056	
+  1057		if ((crq.bRequestType & USB_TYPE_MASK) == USB_TYPE_STANDARD) {
+  1058			switch (crq.bRequest) {
+  1059			case USB_REQ_SET_ADDRESS:
+  1060				if (ast_udc_read(udc, AST_UDC_STS) & UDC_STS_HIGHSPEED)
+  1061					udc->gadget.speed = USB_SPEED_HIGH;
+  1062				else
+  1063					udc->gadget.speed = USB_SPEED_FULL;
+  1064	
+  1065				SETUP_DBG(udc, "set addr: 0x%x\n", crq.wValue);
+> 1066				ast_udc_write(udc, crq.wValue, AST_UDC_CONFIG);
+  1067				goto req_complete;
+  1068	
+  1069			case USB_REQ_CLEAR_FEATURE:
+  1070				ep_num = crq.wIndex & USB_ENDPOINT_NUMBER_MASK;
+  1071				SETUP_DBG(udc, "ep%d: CLEAR FEATURE\n", ep_num);
+  1072				goto req_driver;
+  1073	
+  1074			case USB_REQ_SET_FEATURE:
+  1075				ep_num = crq.wIndex & USB_ENDPOINT_NUMBER_MASK;
+  1076				SETUP_DBG(udc, "ep%d: SET FEATURE\n", ep_num);
+  1077				goto req_driver;
+  1078	
+  1079			case USB_REQ_GET_STATUS:
+  1080				ast_udc_getstatus(udc);
+  1081				return;
+  1082	
+  1083			default:
+  1084				goto req_driver;
+  1085			}
+  1086	
+  1087		}
+  1088	
+  1089	req_driver:
+  1090		if (udc->driver) {
+  1091			SETUP_DBG(udc, "Forwarding %s to gadget...\n",
+  1092				  udc->gadget.name);
+  1093	
+  1094			spin_unlock(&udc->lock);
+  1095			rc = udc->driver->setup(&udc->gadget, &crq);
+  1096			spin_lock(&udc->lock);
+  1097	
+  1098		} else
+  1099			SETUP_DBG(udc, "No gadget for request !\n");
+  1100	
+  1101		if (rc >= 0)
+  1102			return;
+  1103	
+  1104		/* Stall if gadget failed */
+  1105		SETUP_DBG(udc, "Stalling, rc:0x%x\n", rc);
+  1106		ast_udc_write(udc, ast_udc_read(udc, AST_UDC_EP0_CTRL) | EP0_STALL,
+  1107			      AST_UDC_EP0_CTRL);
+  1108		return;
+  1109	
+  1110	req_complete:
+  1111		SETUP_DBG(udc, "ep%d: Sending IN status without data\n", ep_num);
+  1112		ast_udc_write(udc, EP0_TX_BUFF_RDY, AST_UDC_EP0_CTRL);
+  1113	}
+  1114	
+
 -- 
-2.1.4
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

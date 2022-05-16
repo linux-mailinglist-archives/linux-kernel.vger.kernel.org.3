@@ -2,62 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE4E528689
+	by mail.lfdr.de (Postfix) with ESMTP id 893F952868A
 	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244378AbiEPOKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 10:10:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57420 "EHLO
+        id S244384AbiEPOKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 10:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244379AbiEPOK1 (ORCPT
+        with ESMTP id S244362AbiEPOKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 10:10:27 -0400
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B0F3AA48;
-        Mon, 16 May 2022 07:10:26 -0700 (PDT)
-Received: from toolbox.int.toradex.com ([81.221.85.15]) by mrelay.perfora.net
- (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0Lj04u-1nKHo13zmI-00dIkY;
- Mon, 16 May 2022 16:10:08 +0200
-From:   Marcel Ziswiler <marcel@ziswiler.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 19/24] ARM: dts: imx7-colibri: clean-up device enabling/disabling
-Date:   Mon, 16 May 2022 16:09:38 +0200
-Message-Id: <20220516140938.494289-1-marcel@ziswiler.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220516134734.493065-1-marcel@ziswiler.com>
-References: <20220516134734.493065-1-marcel@ziswiler.com>
+        Mon, 16 May 2022 10:10:22 -0400
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0AC23B001
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:10:20 -0700 (PDT)
+Received: by mail-oo1-xc34.google.com with SMTP id c19-20020a4a3813000000b0035ea4a3b97eso4020657ooa.12
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:10:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3L9ucVaR/Ejc1j0lbTxJ50RjR5DDft1mXnfjZbe8XHI=;
+        b=kAT+QhfzSE4Rv08p4UM1CjKAom7zKObZf2OKcy5fXfLNxtuRPYKKwYChwNtwR4Aqce
+         YgYMx7SOIRE6dF0bgdXbmewYbRR0B+MoL0E8fCjvpX5MNFsp1hsUY4lGVYuG09gelIGn
+         p/U41VzFdduU/yYeT2g6XzrPQHrKxNuQW8eXweG6qYsUCtI9hIzkeTtxXZlnUW7TjQG8
+         YLMjUZdJw17HouZps03Qo2ZJeR+UyX/uL+X+zoDH957b0E8IuMax5dazbUcfyb0Nannv
+         dR4S2vD9ss7OwjfmzGmG5lxLFgc8yDJOA1X1ij4oZoTSrXnlIFW39tmGV4yUHYHX8PfV
+         f8QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3L9ucVaR/Ejc1j0lbTxJ50RjR5DDft1mXnfjZbe8XHI=;
+        b=Fyr2FbSD+9FtVWYxzevieSuRiWztKutNK+M+2iThWnnFVl3vsoEjrr+1vPq6qF3eeQ
+         sBV5TBUX9l11/lxxz2epI7VN0rTJEV7Z6RnBJCSZmelPlCsi/FxBEt1LrKc96hqGmvfv
+         brkeDXqQ4+SJUbNrVDkgTTLRd+kdarLXKMcDPYj0zg2YoWCmbVkTryPtuydaYQ/iacpQ
+         rGqARUyWzUN/asyG5AorZvdNKUYN6t45YE+BDr/sq1p9azziLHBCnvR4zfysBKiKIGv+
+         uxoOrpbgahJfJRw4P9WySEIymr0ySDBu7ZAxz+wGpt1dIvGshvwtBT37UCQa7MmEDSnX
+         bBNw==
+X-Gm-Message-State: AOAM532Z7pqTMvJuRMlW/OkpUiH7nOns01HETl4mI8V7PaKa1kd6j2lF
+        IuCJHmcrFq0sx5ECn/EFntldRbpyLHZD+7joiyk=
+X-Google-Smtp-Source: ABdhPJyqMj2s7jfJDLnF/x95jeeMc9LMg+uGl/fQSL/8oDUhl/dYxxYmMXphzX9sA5hJ+jbtT7eycyWH/Ms4xPQo0L8=
+X-Received: by 2002:a4a:8c41:0:b0:362:19a7:7529 with SMTP id
+ v1-20020a4a8c41000000b0036219a77529mr6055010ooj.38.1652710219915; Mon, 16 May
+ 2022 07:10:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:f4KTShYxaHiJIBPORmg1zxtwPgLmVUsBya8yEKgOKdtcDIxhrHA
- KK6p8q/Z424xAxuGhIMU1g98ApfBG+aGNb1NvvLThFnxXP7WoXrNCI1fw/EX0C88p9qsqqK
- 2aXrvEakbUayRIr87JvL01QuQB5UzyLtwjdUrLchAQXwOdz25ahFaX+nz8NuYNssRi1ybIY
- YQvvZ+am18mx6MTtitDAg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:c9RdkB/YBJ8=:qzurQjombKI4eec/3WsQS4
- tMH0TXcoQjADBqPt+TqQc6lidlGS+uoUjqYx9mIVoEEfsrUTSjt7SXT9XjAkdOl+LRZNMst5N
- qzrqwoyyT3lHxqY9MkkZttxwQ2+fmwA2YSbvmt22s79z7YxTyV7IX5prOCYJQG6HIanoOLmQk
- uN0oJrrwB4VH8VDALYzvblki3lvuJfcxNpJAjaVoYaoXEsNywr+u8Un9/ryuzFxeE3Er+I007
- 8QtQzex8L+7uy0GYflL3GTD8li17ZxIsfXqfJmvsj42gmbnaL6qDX+5S2JkG0QvDs5nsBnUd2
- vTDZDze7MBLv30gTawiGuTzGmVs2TkKu7KW/RFW3DqgN6WkU4bmixCkRI/YOdFfOi6fwjzD0R
- QLGmIWgeEoinr7OFtT4Pz9J02m32js0YIeHcXRU3R3G0uZXqaHs4IDP1VbTdq7yT9R3hOldon
- Rj4S1P1T5um5FQDrT8UePJpvvTAtivKY0+yPdNQBKrSEfHYi8uVX2xr5w81yUVKx3xyXz9Ye6
- mDRyrziYHI6gZo3DJuT2MLMLERjWN7Kiyf0dAQ8HWS+5+yzZmnSXgREz0rHvrHlRgUI3NnIVj
- jSYrEvE+wbkSNgpBLTrLdmjaDIEzDv08x/5URvXMp9pblHfYawzNdWbeT9m9bcuOBmcQyN4KY
- QaHr75jPPNrRr/BD6xdv5gLYRi8KHSAWoPuBD8cODz/IcK6NvgeFyBeqdqcwWa8RHyhgNmEjh
- pNLm5BDnasCe1lI49b3TLTJL+KVWDS2dS37XZR/wlNU1unvxml0ei9JKvixV0ATUOyzrSohxa
- OQl8ilN/OinOjka/N6D5eUGw09DpqLIRS9ht7FQH3DEygTTEl2DK6tjpb2zXWc/4iMz1peX
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+References: <20220414143426.723168-1-gch981213@gmail.com> <20220414143426.723168-2-gch981213@gmail.com>
+ <05966ece-65c8-ff7c-cb44-55c4d5a5542e@kontron.de>
+In-Reply-To: <05966ece-65c8-ff7c-cb44-55c4d5a5542e@kontron.de>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Mon, 16 May 2022 22:10:08 +0800
+Message-ID: <CAJsYDVJ=WRT270mj2jNc+yy0v_XRpyH8N+GOmkNJv1zAh76rDA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] mtd: spinand: add support for detection with param page
+To:     Frieder Schrempf <frieder.schrempf@kontron.de>
+Cc:     linux-mtd@lists.infradead.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Palmer <daniel@0x0f.com>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,59 +75,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Hi!
 
-Disable most nodes on module-level to be enabled on carrier board-level.
+On Mon, May 16, 2022 at 3:38 PM Frieder Schrempf
+<frieder.schrempf@kontron.de> wrote:
+>
+> Hi Chuanhong,
+>
+> Am 14.04.22 um 16:34 schrieb Chuanhong Guo:
+> > SPI-NAND detection using chip ID isn't always reliable.
+> > Here are two known cases:
+> > 1. ESMT uses JEDEC ID from other vendors. This may collapse with future
+> >    chips.
+> > 2. Winbond W25N01KV uses the exact same JEDEC ID as W25N01GV while
+> >    having completely different chip parameters.
+>
+> I think they share the same first byte of the JEDEC ID, but the second
+> byte actually differs and would allow to differentiate between them, right?
 
-Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
----
+No. For the 128M version, all 3 bytes are the same between
+W25N01GV and W25N01KV.
 
-(no changes since v1)
+>
+> I have this patchset [1] that I didn't manage to send upstream yet which
+> adds support for the W25N02KV. I added the second ID byte to detect them.
+>
+> Still your approach using the ONFI data is more flexible of course and
+> probably a better way to handle this. I will see if I can find some time
+> to add support for the W25N02KV based on your patches.
 
- arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi | 1 -
- arch/arm/boot/dts/imx7-colibri.dtsi         | 5 -----
- 2 files changed, 6 deletions(-)
+Don't do that. I abandoned this patchset because I later found that
+some early W25N01GV doesn't contain a parameter page at all,
+which means detecting W25N01GV/KV using only the parameter
+page is unreliable.
+I think what Boris proposed earlier in v1 (use parameter page
+just to distinguish the two chips) is the correct way to go.
 
-diff --git a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-index fea6e4c0d4d6..826f13da5b81 100644
---- a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-+++ b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-@@ -44,7 +44,6 @@ mcp2515: can@0 {
- 		spi-max-frequency = <10000000>;
- 		vdd-supply = <&reg_3v3>;
- 		xceiver-supply = <&reg_5v0>;
--		status = "okay";
- 	};
- };
- 
-diff --git a/arch/arm/boot/dts/imx7-colibri.dtsi b/arch/arm/boot/dts/imx7-colibri.dtsi
-index f29096fca54d..065d8f55f326 100644
---- a/arch/arm/boot/dts/imx7-colibri.dtsi
-+++ b/arch/arm/boot/dts/imx7-colibri.dtsi
-@@ -140,9 +140,6 @@ &adc1 {
- };
- 
- /* ADC2 is not available as it conflicts with AD7879 resistive touchscreen. */
--&adc2 {
--	status = "disabled";
--};
- 
- &cpu0 {
- 	cpu-supply = <&reg_DCDC2>;
-@@ -191,13 +188,11 @@ ethphy0: ethernet-phy@0 {
- &flexcan1 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_flexcan1>;
--	status = "disabled";
- };
- 
- &flexcan2 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_flexcan2>;
--	status = "disabled";
- };
- 
- &gpio1 {
+BTW I was making this patchset for a potential future ID conflict
+between ESMT and GigaDevice, and I don't actually need to
+deal with the W25N01GV/KV nonsense now, so I don't have a
+plan for send a new version of this atm.
+
 -- 
-2.35.1
-
+Regards,
+Chuanhong Guo

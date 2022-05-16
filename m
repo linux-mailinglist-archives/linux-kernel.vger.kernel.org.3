@@ -2,263 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7B0528DFF
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 347F2528E01
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345473AbiEPTec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59198 "EHLO
+        id S1345458AbiEPTfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345458AbiEPTeZ (ORCPT
+        with ESMTP id S232405AbiEPTfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:34:25 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD943E0DC
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:34:23 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id q4so15389662plr.11
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:34:23 -0700 (PDT)
+        Mon, 16 May 2022 15:35:11 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926153EB8E
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:35:10 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id ev18so4759448pjb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:35:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=SVySbs/pKm8mD10Q6l48VCkei76vA+pLjRUGboIm7dc=;
-        b=p7y44Ny+pPHwQ6vqkUCviLhhrDaSlcmXlrI6cfZdH86cKMIypl6THg6HjORcWiYsNh
-         YSoiMwP7gDa7y7M56EFaQcJhFsdTE0TGr66r9STUHfVLGA6vhqlt42taBXl+qHb0ySxw
-         56lx5TozqEGglfi+zz8/B9SfuoP87nNtff7Y3hHKJ65zFG4Vn0Qk7Ry7FWp2Ix9Uf8+1
-         sUTs997MU8+uLkWaQuggs0IyEWHKcEyZ7A2PwoswEmTJ6tPNawtXlggR3fgmfuczQZFN
-         jB9VBUR6ZJtlcehIH8wBprKpE8CQAWHK2ju/mDxSsQx6ncBTUOlNeYXrmY8conH5dOis
-         plow==
+        bh=L7HskJWRuMiU99+hkHXykGvfHtSWUlmm80hgvb21NIA=;
+        b=gJrVJGg9f8wooWOkKB64seNV3Y9DZXpcdjoXjuuPOxiXlcP66WigXuu+Amy9BJUtn3
+         u3HIuSQ3Vj7xMV3RjDAAp9HbBGxztYKpqVq1zxv8ClC5y3HQj0KT172tBAjS7GdbFELT
+         yrt6iQxwGu49aljDYpDwbqHc5KCh9Ncmv1wbECFIGmCXHLRNvhWI4rbCeLkBLbfDIsGI
+         VIr+rdcZn/lP13UJSV7X1aOdA/55R5a+xJP1EK7t/pmevOLtcMui/qXpmKuvkrfZKmnW
+         gWfJXYJG4AhssF4f4ESfctbEvscFLqg+V+t56mdNMogk454u6SS5Fonr+BWU0aivVmYA
+         OIGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SVySbs/pKm8mD10Q6l48VCkei76vA+pLjRUGboIm7dc=;
-        b=C4/mCa4JMWV0LwSJXTNdp1ohIZCSxDDL63C5P907cZO076bNYIS0cdG2U1c5F2Jd2e
-         Gn1QyGfenyLYBsfrOuG2if5Rsgd3eDFo5Wiqe3Yzd5wZQ8nTjcuW/flo7ewzj0/C2Pvn
-         7MnrEkya6fspl0VR6HmW+Np7PnufjO76/yLDy4qzQZJGeBxtT8lyufF+Gcm2HBM2rgbq
-         rdsypnyf3O054evy8i/lZUwNA1IlcCZKL0DLiya5sfmWDav87p//qW3k1xys68QlAq5D
-         Br0ni8Zb9Sr6RJ0WuLOWeNc2AeszvyUHfejE5GiluFI43u4In9WnbiAKzUvPPiqpx2Wx
-         lbtw==
-X-Gm-Message-State: AOAM533B5a8EwR7+562Q9pquwfoXN23wnizR+694mrPsZtxOGRV4uDXw
-        3VK3zJbNDKG7HeqP37flTKFY/w==
-X-Google-Smtp-Source: ABdhPJxY72EdIlmFN++GGlCl07PuY39ucWWK9AfjTptXMi1q00EX780a08el01ir90s4XkdL+dNNIg==
-X-Received: by 2002:a17:90b:4d01:b0:1dc:9314:869f with SMTP id mw1-20020a17090b4d0100b001dc9314869fmr21033219pjb.140.1652729662242;
-        Mon, 16 May 2022 12:34:22 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id x12-20020a62860c000000b0050dc7628198sm7241146pfd.114.2022.05.16.12.34.21
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=L7HskJWRuMiU99+hkHXykGvfHtSWUlmm80hgvb21NIA=;
+        b=fS7b6ulRKQft9P02vfKohL7ofmOvaiVjNRz5XG8H9ssAZ7O7VR3G1Pgo8SdVzIRh5g
+         4y4jP8lVwR1hlLMy8rh2ud6P1lyiQVGpFe9sNtqVpqYJ5CS/pTRpA97rBlwMImFtmh3r
+         UagCYI6MH6CsmKz7rqgtB1Bpp2anGqWC0Z1VwR7KpjrMyp8EI71OIO6S+MtBwGHf96AO
+         GQnAwh1Eb4H2TwZQ2YXONWBiqkyNBX7kRi8BVRQoYQqnSyv53ipRSiWLZK6rfuDzyBNl
+         lL433eOwTyFzrMDNdSa9wi1CX1H8VXlrKYznUFivyRH1k11aIyICv9TCMfFMmVWtCv5T
+         e25A==
+X-Gm-Message-State: AOAM533DNzjY1TXIvWYz1boqNrDm2K1TEkcEM8X3VizwkoLPZCG9Zqut
+        zHfkNXE/mK0rLjaXzzL/Z5g=
+X-Google-Smtp-Source: ABdhPJy3GngRJ0n4QNJAd+T8tx3PdZjnc7aplXGOLXY5LunKkZNBOK7Bd1JY8RjBWpSSa6k0JJeiog==
+X-Received: by 2002:a17:90b:3ecd:b0:1dc:945e:41b1 with SMTP id rm13-20020a17090b3ecd00b001dc945e41b1mr21009292pjb.208.1652729709941;
+        Mon, 16 May 2022 12:35:09 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:62fc])
+        by smtp.gmail.com with ESMTPSA id p23-20020a62ab17000000b0050dc76281d6sm7427269pff.176.2022.05.16.12.35.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 12:34:21 -0700 (PDT)
-Date:   Mon, 16 May 2022 19:34:18 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 02/34] KVM: x86: hyper-v: Introduce TLB flush ring
-Message-ID: <YoKnOqR68SaaPCdT@google.com>
-References: <20220414132013.1588929-1-vkuznets@redhat.com>
- <20220414132013.1588929-3-vkuznets@redhat.com>
+        Mon, 16 May 2022 12:35:09 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 16 May 2022 09:35:07 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Imran Khan <imran.f.khan@oracle.com>
+Cc:     viro@zeniv.linux.org.uk, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/5] kernfs: make ->attr.open RCU protected.
+Message-ID: <YoKna/Ty+k9O+pjt@slm.duckdns.org>
+References: <20220428055431.3826852-1-imran.f.khan@oracle.com>
+ <20220428055431.3826852-3-imran.f.khan@oracle.com>
+ <YnQtL7+GYHwpo4n2@slm.duckdns.org>
+ <f5ff2554-580c-c817-b77f-25e2ef46411f@oracle.com>
+ <Yn0/RrgMRie2YPEb@slm.duckdns.org>
+ <526b46a7-7daa-9050-1276-e19836816991@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220414132013.1588929-3-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <526b46a7-7daa-9050-1276-e19836816991@oracle.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022, Vitaly Kuznetsov wrote:
-> To allow flushing individual GVAs instead of always flushing the whole
-> VPID a per-vCPU structure to pass the requests is needed. Introduce a
-> simple ring write-locked structure to hold two types of entries:
-> individual GVA (GFN + up to 4095 following GFNs in the lower 12 bits)
-> and 'flush all'.
-> 
-> The queuing rule is: if there's not enough space on the ring to put
-> the request and leave at least 1 entry for 'flush all' - put 'flush
-> all' entry.
-> 
-> The size of the ring is arbitrary set to '16'.
-> 
-> Note, kvm_hv_flush_tlb() only queues 'flush all' entries for now so
-> there's very small functional change but the infrastructure is
-> prepared to handle individual GVA flush requests.
-> 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/include/asm/kvm_host.h | 16 +++++++
->  arch/x86/kvm/hyperv.c           | 83 +++++++++++++++++++++++++++++++++
->  arch/x86/kvm/hyperv.h           | 13 ++++++
->  arch/x86/kvm/x86.c              |  5 +-
->  arch/x86/kvm/x86.h              |  1 +
->  5 files changed, 116 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 1de3ad9308d8..b4dd2ff61658 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -578,6 +578,20 @@ struct kvm_vcpu_hv_synic {
->  	bool dont_zero_synic_pages;
->  };
->  
-> +#define KVM_HV_TLB_FLUSH_RING_SIZE (16)
+Hello,
+
+On Mon, May 16, 2022 at 02:00:50AM +1000, Imran Khan wrote:
+> +/*
+> + * Deref RCU protected kn->attr.open.
+> + * If both @of->list and @kn->attr.open->files are non empty, we can safely
+> + * assume that @of is on @kn->attr.open and hence @kn->attr.open will not
+> + * vanish and derefeencing is safe here.
+> + */
+
+Maybe use proper function comment starting with /**?
+
+> +static struct kernfs_open_node *
+> +kernfs_deref_on_check(struct kernfs_open_file *of, struct kernfs_node *kn)
+> +{
+> +       struct kernfs_open_node *on;
 > +
-> +struct kvm_vcpu_hv_tlb_flush_entry {
-> +	u64 addr;
+> +       on = rcu_dereference_check(kn->attr.open, !list_empty(&of->list));
+> +
+> +       if (on && list_empty(&on->files))
+> +               return NULL;
+> +       else
+> +               return on;
+> +}
 
-"addr" misleading, this is overloaded to be both the virtual address and the count.
-I think we make it a moot point, but it led me astray in thinkin we could use the
-lower 12 bits for flags... until I realized those bits are already in use.
+Why does it need to return NULL on empty on->files? We wanna trigger lockdep
+warning cuz that's a bug but it's not like the caller can recover from it
+(short of causing unexpected user visible error), so I don't see what the
+point is.
 
-> +	u64 flush_all:1;
-> +	u64 pad:63;
+> If this looks okay then I can replace usage of kernfs_deref_on_raw with
+> kernfs_deref_on_check.
 
-This is rather odd, why not just use a bool?  But why even have a "flush_all"
-field, can't we just use a magic value for write_idx to indicate "flush_all"?
-E.g. either an explicit #define or -1.
+So, this is the main deref function without holding the mutex, right? Then
+name it kernfs_deref_open_node() (or on but it seem a bit confusing to me).
 
-Writers set write_idx to -1 to indicate "flush all", vCPU/reader goes straight
-to "flush all" if write_idx is -1/invalid.  That way, future writes can simply do
-nothing until read_idx == write_idx, and the vCPU/reader avoids unnecessary flushes
-if there's a "flush all" pending and other valid entries in the ring.
+> > and in the check condition, add the conditions that you need to make this
+> > not trigger warning when used in all the places that you wanna use it.
+> > 
+> 
+> Since ->attr.open is always accessed/modified under kernfs_open_file_mutex, I
+> have included this check in helper which should be used only while holding this
+> mutex. Do you mean that I should include some additional checks as well in the
+> below helper:
 
-And it allows deferring the "flush all" until the ring is truly full (unless there's
-an off-by-one / wraparound edge case I'm missing, which is likely...).
+Yeah, you're right. _protected makes sense for this one.
 
----
- arch/x86/include/asm/kvm_host.h |  8 +-----
- arch/x86/kvm/hyperv.c           | 47 +++++++++++++--------------------
- 2 files changed, 19 insertions(+), 36 deletions(-)
+Thanks.
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index b6b9a71a4591..bb45cc383ce4 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -605,16 +605,10 @@ enum hv_tlb_flush_rings {
- 	HV_NR_TLB_FLUSH_RINGS,
- };
-
--struct kvm_vcpu_hv_tlb_flush_entry {
--	u64 addr;
--	u64 flush_all:1;
--	u64 pad:63;
--};
--
- struct kvm_vcpu_hv_tlb_flush_ring {
- 	int read_idx, write_idx;
- 	spinlock_t write_lock;
--	struct kvm_vcpu_hv_tlb_flush_entry entries[KVM_HV_TLB_FLUSH_RING_SIZE];
-+	u64 entries[KVM_HV_TLB_FLUSH_RING_SIZE];
- };
-
- /* Hyper-V per vcpu emulation context */
-diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-index 1d6927538bc7..56f06cf85282 100644
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -1837,10 +1837,13 @@ static int kvm_hv_get_tlb_flush_entries(struct kvm *kvm, struct kvm_hv_hcall *hc
- static inline int hv_tlb_flush_ring_free(struct kvm_vcpu_hv *hv_vcpu,
- 					 int read_idx, int write_idx)
- {
-+	if (write_idx < 0)
-+		return 0;
-+
- 	if (write_idx >= read_idx)
--		return KVM_HV_TLB_FLUSH_RING_SIZE - (write_idx - read_idx) - 1;
-+		return KVM_HV_TLB_FLUSH_RING_SIZE - (write_idx - read_idx);
-
--	return read_idx - write_idx - 1;
-+	return read_idx - write_idx;
- }
-
- static void hv_tlb_flush_ring_enqueue(struct kvm_vcpu *vcpu,
-@@ -1869,6 +1872,9 @@ static void hv_tlb_flush_ring_enqueue(struct kvm_vcpu *vcpu,
- 	 */
- 	write_idx = tlb_flush_ring->write_idx;
-
-+	if (write_idx < 0 && read_idx == write_idx)
-+		read_idx = write_idx = 0;
-+
- 	ring_free = hv_tlb_flush_ring_free(hv_vcpu, read_idx, write_idx);
- 	/* Full ring always contains 'flush all' entry */
- 	if (!ring_free)
-@@ -1879,21 +1885,13 @@ static void hv_tlb_flush_ring_enqueue(struct kvm_vcpu *vcpu,
- 	 * entry in case another request comes in. In case there's not enough
- 	 * space, just put 'flush all' entry there.
- 	 */
--	if (!count || count >= ring_free - 1 || !entries) {
--		tlb_flush_ring->entries[write_idx].addr = 0;
--		tlb_flush_ring->entries[write_idx].flush_all = 1;
--		/*
--		 * Advance write index only after filling in the entry to
--		 * synchronize with lockless reader.
--		 */
--		smp_wmb();
--		tlb_flush_ring->write_idx = (write_idx + 1) % KVM_HV_TLB_FLUSH_RING_SIZE;
-+	if (!count || count > ring_free - 1 || !entries) {
-+		tlb_flush_ring->write_idx = -1;
- 		goto out_unlock;
- 	}
-
- 	for (i = 0; i < count; i++) {
--		tlb_flush_ring->entries[write_idx].addr = entries[i];
--		tlb_flush_ring->entries[write_idx].flush_all = 0;
-+		tlb_flush_ring->entries[write_idx] = entries[i];
- 		write_idx = (write_idx + 1) % KVM_HV_TLB_FLUSH_RING_SIZE;
- 	}
- 	/*
-@@ -1911,7 +1909,6 @@ void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu)
- {
- 	struct kvm_vcpu_hv_tlb_flush_ring *tlb_flush_ring;
- 	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
--	struct kvm_vcpu_hv_tlb_flush_entry *entry;
- 	int read_idx, write_idx;
- 	u64 address;
- 	u32 count;
-@@ -1940,26 +1937,18 @@ void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu)
- 	/* Pairs with smp_wmb() in hv_tlb_flush_ring_enqueue() */
- 	smp_rmb();
-
-+	if (write_idx < 0) {
-+		kvm_vcpu_flush_tlb_guest(vcpu);
-+		goto out_empty_ring;
-+	}
-+
- 	for (i = read_idx; i != write_idx; i = (i + 1) % KVM_HV_TLB_FLUSH_RING_SIZE) {
--		entry = &tlb_flush_ring->entries[i];
--
--		if (entry->flush_all)
--			goto out_flush_all;
--
--		/*
--		 * Lower 12 bits of 'address' encode the number of additional
--		 * pages to flush.
--		 */
--		address = entry->addr & PAGE_MASK;
--		count = (entry->addr & ~PAGE_MASK) + 1;
-+		address = tlb_flush_ring->entries[i] & PAGE_MASK;
-+		count = (tlb_flush_ring->entries[i] & ~PAGE_MASK) + 1;
- 		for (j = 0; j < count; j++)
- 			static_call(kvm_x86_flush_tlb_gva)(vcpu, address + j * PAGE_SIZE);
- 	}
- 	++vcpu->stat.tlb_flush;
--	goto out_empty_ring;
--
--out_flush_all:
--	kvm_vcpu_flush_tlb_guest(vcpu);
-
- out_empty_ring:
- 	tlb_flush_ring->read_idx = write_idx;
-
-base-commit: 62592c7c742ae78eb1f1005a63965ece19e6effe
---
-
+-- 
+tejun

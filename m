@@ -2,142 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41B04528512
+	by mail.lfdr.de (Postfix) with ESMTP id B4550528513
 	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233708AbiEPNNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 09:13:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
+        id S243763AbiEPNNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 09:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242905AbiEPNNW (ORCPT
+        with ESMTP id S237841AbiEPNNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 09:13:22 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2096.outbound.protection.outlook.com [40.107.215.96])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DDEF1EEC9;
-        Mon, 16 May 2022 06:13:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SjGxY04iwetvNIPowEOUqy793ZdbhRGF/n6P76E571xSAuoa4oFzGQElcR2U92n0Dxn4O8FyOLkJISdKcRjeVaUfzbmYAct3rbInm3mYPHA4EWHoGor76CcCczFarX2ZiWLceQxElDDWKVhWOWpysrrxjvmAYuc+7O8QLSF6udtVaLbLnMUpC1X8uAt6hlfX2RFMxzodzxGGxe2GwJyOfiMHJ4EkL22+IC4yQcFDJTd3VbwTP6C8njH0v7zwJdqhUzbAM4/0nWygGN8+lGLRhlxsaGCcdNpepxnjo9N7Kba7kBQb5S9/lGvzbwJVTsRYGcaZMfccrMDEWZD+C70YFw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aKBtXHgYlvP252Hp/ME5+RomaLAqJR00olQ/hbsWPqc=;
- b=hC2WqjkzXFmhZMDUJb2SHKjKmbh9zu2tga35oHSe5VIhPqnAtS2kCewviXd523nEN/+n1LAL4V9tyPsnDj9ecBxqgA2L7/sO79X5ce5Yc9MorBm/WRnUz97tNuCDDVxhovqsC6+/IRy3/21LaDhzQGDKAEZe1iJMbKWM3NeUnla9nPTWL35SmDurxQlzcfypt+v1avGxjUO6bR5MZE8IRtelGAeTGVVKKvV3S0K297098GfaoeIb/g+J4eOaHeB5fSgSrlDbrsHMTWG5+MVdS2NRloeXLowBgEazcdzj2RHz1OdVE6lgML3AAChz+7akAzxPS8jgVoEpV5wV3IVd4Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aKBtXHgYlvP252Hp/ME5+RomaLAqJR00olQ/hbsWPqc=;
- b=HOUe7+C3wrXu1gC1nIGz4TgFfkhcxwaM4ExTfMvsB2GHXAFYYDtHwjzSR8vabTfdTMvJ6GBfc1IwLuBCD3XzEIHNmMzB+RBrTQ201pn+sZgyIxtqt98bPo/NozePCsowWfZm9cyNjYIYzKTqpk+ZGFEgHx7zhth10U3xFhOAATQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
- SEYPR06MB5112.apcprd06.prod.outlook.com (2603:1096:101:58::10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5250.13; Mon, 16 May 2022 13:13:13 +0000
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::ccb7:f612:80b2:64d5]) by SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::ccb7:f612:80b2:64d5%4]) with mapi id 15.20.5250.018; Mon, 16 May 2022
- 13:13:13 +0000
-From:   Wan Jiabing <wanjiabing@vivo.com>
-To:     Patrice Chotard <patrice.chotard@foss.st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Wan Jiabing <wanjiabing@vivo.com>
-Subject: [PATCH] [media] c8sectpfe: Remove unneeded NULL check before clk_disable_unprepare
-Date:   Mon, 16 May 2022 21:12:54 +0800
-Message-Id: <20220516131254.13816-1-wanjiabing@vivo.com>
-X-Mailer: git-send-email 2.36.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR02CA0141.apcprd02.prod.outlook.com
- (2603:1096:202:16::25) To SG2PR06MB3367.apcprd06.prod.outlook.com
- (2603:1096:4:78::19)
+        Mon, 16 May 2022 09:13:21 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 32C92645A
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:13:19 -0700 (PDT)
+Received: from [10.40.53.182] (unknown [10.40.53.182])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxcNrhTYJiL0MYAA--.20951S3;
+        Mon, 16 May 2022 21:13:06 +0800 (CST)
+Subject: Re: [PATCH RFC 00/10] irqchip: Add LoongArch-related irqchip drivers
+To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+References: <1652585833-22526-1-git-send-email-lvjianmin@loongson.cn>
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+Message-ID: <9c99241f-6214-8c1c-7d15-7bbbc1b06b85@loongson.cn>
+Date:   Mon, 16 May 2022 21:13:05 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4eea71ff-9f58-4519-ca01-08da373dd46c
-X-MS-TrafficTypeDiagnostic: SEYPR06MB5112:EE_
-X-Microsoft-Antispam-PRVS: <SEYPR06MB5112C5BFA59817E2F399FC8FABCF9@SEYPR06MB5112.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sP8DLX0MJpSo+ptRLVvU8rVgLCELzN3Rpa6dhRszkEdeExZR5Eg/VYYWhLZ5/fSWhjqu202LDQ3CtEllL0K+WYs2hSlFYgyYSIZyhUheopZxHtUY8HbdFzrX1ijHs+7n0T+0GKKkv3BXBVnXN/Ax5G51qFIxqqSwdqCNSVjyRhkgftWAUA/bjbjYP2Mt6qqDNnBgHX9PITXqefoNo6oVgoEFcDjrx2ErTrUWUwDMR9XFkQZiGOG2vhieP83sJkgMR+wBHMnvaOK1n7mck+T5P0FjCwVEcG1sWveq53qDqkPpbViOAEjk/7LWRnfiL+8D1ibdQT18a7fwKNHp4dLJKeg4daWLZJck0baDTu2ZBQ791hWRW6addgePr2UeRTO2oC4whEuI3OoX1V0sNtAZKE2Tyj9xyAAcR5Ig8DRfSH5Gc5O0KS/EBWMy6yrzV7lANuOYyoCxDnLOqLvzCv7qIEviI/uwfIHBkvDvKg1oA7v0UdtQ2Tb5sog02fqH8b9c8ZygPJgzG3J4GqZ2YO41gY1sDiGciAcphvbdeXxlJ73R17NocfjC13keTM34xMrvJBEcBolpk1OLtgNB+Y/CY1NExpkkAECqcINi1o1H/+Ncnni1WvssepqExgPd9Vu54FAJiMh2mRIXLb8oFJ1C+sFi0RzZz4Nw/AbzhZu6T8BsENtFcP9vByDA7kiaeLOYrN21MSxEGD63pSfw1N50FBA+clSNUeNqM3eBsLfmpO4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66476007)(110136005)(66556008)(38350700002)(26005)(316002)(8936002)(38100700002)(36756003)(66946007)(6512007)(52116002)(83380400001)(8676002)(107886003)(4744005)(6486002)(6506007)(508600001)(6666004)(186003)(86362001)(4326008)(2906002)(1076003)(2616005)(5660300002)(32563001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tt74wvKN0pBpdeHGxgqv/cFaSpEHotFmnjiCBxgkfzyAfXBK+2Yx/zZOTDqj?=
- =?us-ascii?Q?IuV2nSO2KASYvSNDTkurVIjTCg1tDdcFSUBA9nVI6fJI+c/CoBtsMgW2j+a4?=
- =?us-ascii?Q?N8/BquQdTpfeU+yWFCoZWg6LruqFtlOoP1JKUPsC+hINwU0yuvJo4QhmFcBJ?=
- =?us-ascii?Q?QLwkdSG59LcvLPcB99iAIac+7CkkiJlDcXEpwBlAEfpqwZ8bbFZbW69AC0OK?=
- =?us-ascii?Q?0FCqXQClWMq1VxLgzeBtii+JPjAhddYxW9TIgnCaM17N19CEYabLCRQuLffF?=
- =?us-ascii?Q?AUSkY2ThXPR7rkpBCDzcwsnMYuZ/ZUK5XzhlTChQMTHrXznIZUdUzTXOT4gT?=
- =?us-ascii?Q?qFRyykglv1Kqpw+kCZCJDvp7v/FldkXOCtWqbrwj51jjUtXsnpz0ATfxnpcg?=
- =?us-ascii?Q?wuYYbQrM8s5Jb9o3A2S1lP8oS9gniRFHbcX6v7O/A57yVWVBvYW4eCDA587m?=
- =?us-ascii?Q?06B/qfKXdgmCttI9WWwY4iKgt5E42a8cTJ0FaUVHEeWXM+Zky1smtN9Eq9zC?=
- =?us-ascii?Q?K1BKQyqcaqtkEE9ZRf25xZYlFMEJaugLJMHwtOWkG6azyeBfrjVNNRdcYSCx?=
- =?us-ascii?Q?yE79v22djlWBuiECNXQ3+uO+mqdMXPMwE7sJDNH4lnLbVRQCLj2n7vLrgdtX?=
- =?us-ascii?Q?W0x43EMM91hRE/dGsi4hGw9h6Iv28KU40R+cSJQt9btDeV1tz/XOZckaQKkl?=
- =?us-ascii?Q?hTCTQ0cYRlm/+/Qofey65fTH1bHLc0sXCTst6GNTwpbxVkubLIaKV7FB5+Z8?=
- =?us-ascii?Q?omC31BFQSAp4GNytaBEBNdFw3YjMV1XaSp5uWbzIoN7eOO+DIOe+2A/FtkjT?=
- =?us-ascii?Q?TVOIZ2rRA3Rj0YZp+UsmEDRnVD9BTLpFG75OFgQ1XITa8JFMszM5cKuTxoYA?=
- =?us-ascii?Q?n/6PExeodRDvT0mjfEpcQzaKinh+OTdyeV3JUFBbx8EUiTPNVLqXSExvQRD9?=
- =?us-ascii?Q?sDN6FNfUyK2DLwq+LhOcXyD6C2UXwUctA04TullcxVZLbXrpFrhy3ldfVqpV?=
- =?us-ascii?Q?XP4iH7+CWhXqwRTXBS8W3ox5Jg3xuBfonn5kXn33TNtn6xio5ADL7jBKutfG?=
- =?us-ascii?Q?J+5abG7rJOw/wMsKKpI5ULjDjKMM/afRoTsyVSIgyiJGQJFBZAF+B68p8eLW?=
- =?us-ascii?Q?KPlh2GNvNy5za7qWyvQTQ5bC6BTM1pfEedYnkYgZ5CCaqZYwH1GWhLc7Rpzg?=
- =?us-ascii?Q?ZVRWZ0pjonWTzYlZQgIx+7zPuC44pNeSIZFe1ufFFMGQVN1WlFoUWFfkX+n2?=
- =?us-ascii?Q?ucEHq0qp4NBx9VKqo+EoEPhCLgRGXgxEyiPwJucsGwc4t11iWcaXGQVHYc7w?=
- =?us-ascii?Q?iAobvtWSZFFuMd6ryL/Y3OWNGUox7VMpYkZggQZlYLf9OrjGhZFTCefeJ841?=
- =?us-ascii?Q?VAhSI+0zfwkdByvmEGTqqh4DiqtX088Q4G3zx9PAh28fRSHR+iVJPIiEcq6+?=
- =?us-ascii?Q?ilS0Zas0Y+ThnQz64E/6oTZujA9ohFkXfEq/tRPQ04bjbX7V5iUd/q6sdgFD?=
- =?us-ascii?Q?aaqLw+ZhFpZnjy03dku6R/Fu7KbSl9ytcVidMT8NzWkvCb3Lua89xpP6seKb?=
- =?us-ascii?Q?gOwrSvNuzEDAnG6eneiz5d4gJf3YAie5Vp6zfXORaeeIpWLyzaO7Oi/8KuyM?=
- =?us-ascii?Q?a/OJWXDg4lwZ7i4omxBS8QM4AiuKNRnc7gq0UYpcYirZYf0OussSx/fa/OhN?=
- =?us-ascii?Q?w8RIml4k6vpRmDCR6wtI9QpcH+9MjWL/c63SNawm1i7JZdIQRcBfFqygQPFa?=
- =?us-ascii?Q?loG/YQcIZw=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4eea71ff-9f58-4519-ca01-08da373dd46c
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2022 13:13:12.5590
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gKcNfipQ8HC2Y5GbOZI13yZvUm1W/g6Hqjv+Mq3HgQcGuzsT8d167HAAGhcgnpKeACig/GQkkpxjc6wCqNhA9w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5112
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1652585833-22526-1-git-send-email-lvjianmin@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9BxcNrhTYJiL0MYAA--.20951S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3XFyfKry5CryUWF15Jw4xWFg_yoW3ZFyUpa
+        13Cr1aqF1UKry3XrnxJw48XFy5Jrn3Jw4DGa1xKryxXr1vyr1DGr1UAF1rXrZrAryxWw1j
+        vFW8tw18G3Z8AF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CEbIxv
+        r21lc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
+        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
+        AVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
+        CY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE
+        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa
+        7VUbXdbUUUUUU==
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clk_disable_unprepare() already checks NULL by using IS_ERR_OR_NULL.
-Remove unneeded NULL check for fei->c8sectpfeclk.
+On 2022/5/15 上午11:37, Jianmin Lv wrote:
+> LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
+> LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
+> version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
+> boot protocol LoongArch-specific interrupt controllers (similar to APIC)
+> are already added in the ACPI Specification 6.5(which may be published in
+> early June this year and the board is reviewing the draft).
+> 
+> Currently, LoongArch based processors (e.g. Loongson-3A5000) can only
+> work together with LS7A chipsets. The irq chips in LoongArch computers
+> include CPUINTC (CPU Core Interrupt Controller), LIOINTC (Legacy I/O
+> Interrupt Controller), EIOINTC (Extended I/O Interrupt Controller),
+> HTVECINTC (Hyper-Transport Vector Interrupt Controller), PCH-PIC (Main
+> Interrupt Controller in LS7A chipset), PCH-LPC (LPC Interrupt Controller
+> in LS7A chipset) and PCH-MSI (MSI Interrupt Controller).
+> 
+> CPUINTC is a per-core controller (in CPU), LIOINTC/EIOINTC/HTVECINTC are
+> per-package controllers (in CPU), while PCH-PIC/PCH-LPC/PCH-MSI are all
+> controllers out of CPU (i.e., in chipsets). These controllers (in other
+> words, irqchips) are linked in a hierarchy, and there are two models of
+> hierarchy (legacy model and extended model).
+> 
+> Legacy IRQ model:
+> 
+> In this model, the IPI (Inter-Processor Interrupt) and CPU Local Timer
+> interrupt go to CPUINTC directly, CPU UARTS interrupts go to LIOINTC,
+> while all other devices interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and
+> gathered by HTVECINTC, and then go to LIOINTC, and then CPUINTC.
+> 
+>   +---------------------------------------------+
+>   |                                             |
+>   |    +-----+     +---------+     +-------+    |
+>   |    | IPI | --> | CPUINTC | <-- | Timer |    |
+>   |    +-----+     +---------+     +-------+    |
+>   |                     ^                       |
+>   |                     |                       |
+>   |                +---------+     +-------+    |
+>   |                | LIOINTC | <-- | UARTs |    |
+>   |                +---------+     +-------+    |
+>   |                     ^                       |
+>   |                     |                       |
+>   |               +-----------+                 |
+>   |               | HTVECINTC |                 |
+>   |               +-----------+                 |
+>   |                ^         ^                  |
+>   |                |         |                  |
+>   |          +---------+ +---------+            |
+>   |          | PCH-PIC | | PCH-MSI |            |
+>   |          +---------+ +---------+            |
+>   |            ^     ^           ^              |
+>   |            |     |           |              |
+>   |    +---------+ +---------+ +---------+      |
+>   |    | PCH-LPC | | Devices | | Devices |      |
+>   |    +---------+ +---------+ +---------+      |
+>   |         ^                                   |
+>   |         |                                   |
+>   |    +---------+                              |
+>   |    | Devices |                              |
+>   |    +---------+                              |
+>   |                                             |
+>   |                                             |
+>   +---------------------------------------------+
+> 
+> Extended IRQ model:
+> 
+> In this model, the IPI (Inter-Processor Interrupt) and CPU Local Timer
+> interrupt go to CPUINTC directly, CPU UARTS interrupts go to LIOINTC,
+> while all other devices interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and
+> gathered by EIOINTC, and then go to to CPUINTC directly.
+> 
+>   +--------------------------------------------------------+
+>   |                                                        |
+>   |         +-----+     +---------+     +-------+          |
+>   |         | IPI | --> | CPUINTC | <-- | Timer |          |
+>   |         +-----+     +---------+     +-------+          |
+>   |                      ^       ^                         |
+>   |                      |       |                         |
+>   |               +---------+ +---------+     +-------+    |
+>   |               | EIOINTC | | LIOINTC | <-- | UARTs |    |
+>   |               +---------+ +---------+     +-------+    |
+>   |                ^       ^                               |
+>   |                |       |                               |
+>   |         +---------+ +---------+                        |
+>   |         | PCH-PIC | | PCH-MSI |                        |
+>   |         +---------+ +---------+                        |
+>   |           ^     ^           ^                          |
+>   |           |     |           |                          |
+>   |   +---------+ +---------+ +---------+                  |
+>   |   | PCH-LPC | | Devices | | Devices |                  |
+>   |   +---------+ +---------+ +---------+                  |
+>   |        ^                                               |
+>   |        |                                               |
+>   |   +---------+                                          |
+>   |   | Devices |                                          |
+>   |   +---------+                                          |
+>   |                                                        |
+>   |                                                        |
+>   +--------------------------------------------------------+
+> 
+> The hierarchy model is constructed by parsing irq contronler structures
+> in MADT. Some controllers((e.g. LIOINTC, HTVECINTC, EIOINTC and PCH-LPC)
+> are hardcodingly connected to their parents, so their irqdomins are
+> separately routed to their parents in a fixed way. Some controllers
+> (e.g. PCH-PIC and PCH-MSI) could be routed to different parents for different
+> CPU. The firmware will config EIOINTC for the newer CPU and config HTVECINTC
+> for old CPU in MADT. By this way, PCH-PIC and PCH-MSI irqdomain can only be
+> routed one parent irqdomin: HTVECINTC or EIOINTC.
+> 
+> Cross-compile tool chain to build kernel:
+> https://github.com/loongson/build-tools/releases/latest/download/loongarch64-clfs-20211202-cross-tools.tar.xz
+> 
+> A CLFS-based Linux distro:
+> https://github.com/loongson/build-tools/releases/latest/download/loongarch64-clfs-system-2021-12-02.tar.bz2
+> 
+> Loongson and LoongArch documentations:
+> https://github.com/loongson/LoongArch-Documentation
+> 
+> 
+> V1 -> V2:
+> 1, Remove queued patches;
+> 2, Move common logic of DT/ACPI probing to common functions;
+> 3, Split .suspend()/.resume() functions to separate patches.
+> 
+> V2 -> V3:
+> 1, Fix a bug for loongson-pch-pic probe;
+> 2, Some minor improvements for LPC controller.
+> 
+> V3 -> V4:
+> 1, Rework the CPU interrupt controller driver;
+> 2, Some minor improvements for other controllers.
+> 
+> V4 -> V5:
+> 1, Add a description of LoonArch's IRQ model;
+> 2, Support multiple EIOINTCs in one system;
+> 3, Some minor improvements for other controllers.
+> 
+> V5 -> V6:
+> 1, Attach a fwnode to CPUINTC irq domain;
+> 2, Use raw spinlock instead of generic spinlock;
+> 3, Improve the method of restoring EIOINTC state;
+> 4, Update documentation, comments and commit messages.
+> 
+> V6 -> V7:
+> 1, Fix build warnings reported by kernel test robot.
+> 
+> V7 -> V8:
+> 1, Add arguments sanity checking for irqchip init functions;
+> 2, Support Loongson-3C5000 (One NUMA Node includes 4 EIOINTC Node).
+> 
+> V8 -> V9:
+> 1, Rebase on 5.17-rc5;
+> 2, Update cover letter;
+> 3, Some small improvements.
+> 
+> V9 -> V10:
+> 1, Rebase on 5.17-rc6;
+> 2, Fix build warnings reported by kernel test robot.
+> 
+> V10 -> V11:
+> 1, Rebase on 5.18-rc4;
+> 2, Fix irq affinity setting for EIOINTC;
+> 3, Fix hwirq allocation failure for EIOINTC.
+> 
+> V11 -> RFC:
+> 1, Refactored the way to build irqchip hierarchy topology.
+> 
 
-Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
----
- drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Hi, Marc
 
-diff --git a/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c b/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
-index 7bb1384e4bad..7d63e56ae14c 100644
---- a/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
-+++ b/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
-@@ -915,8 +915,7 @@ static int c8sectpfe_remove(struct platform_device *pdev)
- 	if (readl(fei->io + SYS_OTHER_CLKEN))
- 		writel(0, fei->io + SYS_OTHER_CLKEN);
- 
--	if (fei->c8sectpfeclk)
--		clk_disable_unprepare(fei->c8sectpfeclk);
-+	clk_disable_unprepare(fei->c8sectpfeclk);
- 
- 	return 0;
- }
--- 
-2.36.1
+The irqchip topology building is refactored as following way in this RFC 
+patches according to my reply in V10, please help to review them if they 
+are correct, thanks very much!
+
+- Only call irqchip_init() in arch file.
+- Use IRQCHIP_ACPI_DECLARE to declare entry of CORE PIC.
+- Initialize irqdomains in fixed way from their parent irqdomain for 
+hardcodingly routing irqchips(liointc, htvec, eiointc and pch-lpc) in 
+hardware.
+- Initialize irqdomains in scaled way for scalable routing 
+irqchips(pch-pic and pch-msi).
+- For eiointc and htvec, they are exclusive, and only one kind of them 
+can be configured in MADT.
+
+> Huacai Chen (1):
+>    irqchip: Adjust Kconfig for Loongson
+> 
+> Jianmin Lv (9):
+>    irqchip: Add LoongArch CPU interrupt controller support
+>    irqchip/loongson-pch-pic: Add ACPI init support
+>    irqchip/loongson-pch-pic: Add suspend/resume support
+>    irqchip/loongson-pch-msi: Add ACPI init support
+>    irqchip/loongson-htvec: Add ACPI init support
+>    irqchip/loongson-htvec: Add suspend/resume support
+>    irqchip/loongson-liointc: Add ACPI init support
+>    irqchip: Add Loongson Extended I/O interrupt controller  support
+>    irqchip: Add Loongson PCH LPC controller support
+> 
+>   drivers/irqchip/Kconfig                    |  38 ++-
+>   drivers/irqchip/Makefile                   |   3 +
+>   drivers/irqchip/irq-loongarch-cpu.c        | 134 ++++++++++
+>   drivers/irqchip/irq-loongarch-pic-common.c |  66 +++++
+>   drivers/irqchip/irq-loongarch-pic-common.h |  22 ++
+>   drivers/irqchip/irq-loongson-eiointc.c     | 381 +++++++++++++++++++++++++++++
+>   drivers/irqchip/irq-loongson-htvec.c       | 148 ++++++++---
+>   drivers/irqchip/irq-loongson-liointc.c     | 215 ++++++++++------
+>   drivers/irqchip/irq-loongson-pch-lpc.c     | 225 +++++++++++++++++
+>   drivers/irqchip/irq-loongson-pch-msi.c     | 138 +++++++----
+>   drivers/irqchip/irq-loongson-pch-pic.c     | 214 ++++++++++++++--
+>   include/linux/cpuhotplug.h                 |   1 +
+>   12 files changed, 1398 insertions(+), 187 deletions(-)
+>   create mode 100644 drivers/irqchip/irq-loongarch-cpu.c
+>   create mode 100644 drivers/irqchip/irq-loongarch-pic-common.c
+>   create mode 100644 drivers/irqchip/irq-loongarch-pic-common.h
+>   create mode 100644 drivers/irqchip/irq-loongson-eiointc.c
+>   create mode 100644 drivers/irqchip/irq-loongson-pch-lpc.c
+> 
 

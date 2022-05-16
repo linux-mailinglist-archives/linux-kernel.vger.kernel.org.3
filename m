@@ -2,105 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CEC5528507
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA31528508
 	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243735AbiEPNKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 09:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49298 "EHLO
+        id S243119AbiEPNLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 09:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbiEPNK1 (ORCPT
+        with ESMTP id S243778AbiEPNLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 09:10:27 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4195013E83;
-        Mon, 16 May 2022 06:10:26 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id l16so18519550oil.6;
-        Mon, 16 May 2022 06:10:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=CaF92eBKzl8YhqaTS1Tzg7cnBN+wgBVFhVH+tqOT7PI=;
-        b=q0OW4Ll0d1esJg4Bsi1gSdlTXNns+dyRXpjhWwy3TYP4n4qr8/NV4nZJZKjjduBKRi
-         cA/1ac5Z/Sme7x9B3srXyZPtmX5SKG2ovm3cO9mWg1RmnkOoPJ3oT1jhhOpvYVxSxOtK
-         EETC7rAwge3lFdAza0DWk9nk5BgdUO+u4Mgw7bEh4ZYJNK3Aeh9oPPg2Ig7eRjDoosqU
-         UzYV1++XIwCfe0WO0MlnNE9IF9nupMaem9yK2ia5n1v/9WBmbIxEnxV0yjVXGEaFXtPd
-         F/Q36d9JPkZFcTSysTH5PQ0es9AeN0p4TfoGPkBlB9oAT02H+Hc1mjA9INBnW3qT0TLE
-         TCwA==
+        Mon, 16 May 2022 09:11:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 122FA167CE
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:11:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652706674;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hWqbVpSXlRnUW98z3sLnmKnw5Je1+k/fACI3ag9jrI4=;
+        b=QEzxDleZAqIlW2y5h3gOn6WRqOXGyvLL6lq2xnPls9ijE3bbThig+BqRWvLlox+GLKOvkp
+        LctfQIv9G+dvhfiURo5DHUwyiE4MGk77Ys4WjOoR/BBqiFZ6ayMduBAU76qBGqJDJVwGKA
+        f6KgeGUpFrAXNmUzeXCbLWWKkYh9oao=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-84-hGHr0rcQO5uehuXbsg8q2w-1; Mon, 16 May 2022 09:11:10 -0400
+X-MC-Unique: hGHr0rcQO5uehuXbsg8q2w-1
+Received: by mail-wm1-f72.google.com with SMTP id 26-20020a05600c021a00b003940660c053so6753920wmi.2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:11:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=CaF92eBKzl8YhqaTS1Tzg7cnBN+wgBVFhVH+tqOT7PI=;
-        b=7TmJduZbUEHSqwC6DA75Om5r7KUL4xteBvFna1nsjVqNcEvNXsfw2eoDswjTK8JOsC
-         n1HTVKPZbgpS9KCGTxtfhw7dcVVnKTV4Scrmawb9dFIXNUyGrqtzvoVymeKKpQ60M3tz
-         JjyVhsdr7LyHudh8PdrrQejIUiJTZwZi/4oy/nnE88PhmhgAuktM+WYpTs8gJskOjbF4
-         ciWFS8OnVk2L9yAMH6/RlJ0TOj0P796XFI6NE1El0LvMI2nRrlKninTVOBFEGvWLZzTJ
-         mCT5uA7OSNsaYsq79HTlrz9Ao3PSpAYXr8nf/jjeu7QC06XaOYjr2ixHgw+8S4iVjLpL
-         PyeA==
-X-Gm-Message-State: AOAM533T1UxYQtBz0aW5iXGa2TXNWdyISHGp2k8/vs1LuVX9bERFbpyx
-        Ec1FDzvWJ+B0SJ68AvbmRfs=
-X-Google-Smtp-Source: ABdhPJzuSlHddEfPdlSooNCiKn9gKqW9iethwrrpTKVRacgUq5xfLq0fJvrzlLVkrWbJmB72AUE4Hw==
-X-Received: by 2002:a05:6808:148a:b0:326:c71a:f33c with SMTP id e10-20020a056808148a00b00326c71af33cmr12758233oiw.153.1652706625572;
-        Mon, 16 May 2022 06:10:25 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r3-20020acac103000000b00325cda1ff95sm3795450oif.20.2022.05.16.06.10.24
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=hWqbVpSXlRnUW98z3sLnmKnw5Je1+k/fACI3ag9jrI4=;
+        b=YM8Pm9ElFefVztn6XP4acT2WCq1gTxPzrgHusQ5j+P/MEwyRCGsdk58Oxam2RKYv17
+         Q7tMTq+bb8PJXOlK2/D1K0ikn//l7FakLAqjunmP+Gs5DMblXXjVoUokUSxGxrheXRr0
+         WCZxLCB+LUNBADWDGFFhr+n/WQLrctXGUQ1cMyXN7DBZq3esslDcqZ67Jfm3WFTJQOgT
+         66sg/KFbukByV+27rRcs4E/xVAjxWm90Q+c4QKyrzjW8qY3qdt2t/V9CVgD2TKBAR5eO
+         UsmSrm0qeEr/06OhLxbEi59nh4PtNaT98pViEHoIUV2yNccYJnrSiG3dtcoCyYy7m0Xx
+         N+lQ==
+X-Gm-Message-State: AOAM531ijmUtvjjg+zprswQ5E2Db+2O7nwZfIA4R4UkuM6iMyVqTbaxD
+        HXCKFXo6Q+L3CAJs0uifSCWjdyC78KH39arfG8S37w88SbjxNLJOP0NYfYCGbRgtohkHfO46q+Z
+        oQkTvuSwM9G6do6+bfIdfbB6a
+X-Received: by 2002:a5d:6c64:0:b0:20d:599:ac5 with SMTP id r4-20020a5d6c64000000b0020d05990ac5mr5817857wrz.188.1652706669675;
+        Mon, 16 May 2022 06:11:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxMIpxXZkSv8yNPofszxOJdJeN+qIyr7YJ2LBcjlLRnEL3eW+abpUDrUBz1fM+68QQmFMF1HA==
+X-Received: by 2002:a5d:6c64:0:b0:20d:599:ac5 with SMTP id r4-20020a5d6c64000000b0020d05990ac5mr5817836wrz.188.1652706669339;
+        Mon, 16 May 2022 06:11:09 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-112-184.dyn.eolo.it. [146.241.112.184])
+        by smtp.gmail.com with ESMTPSA id l20-20020a1c7914000000b00394538d039esm13126585wme.6.2022.05.16.06.11.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 06:10:24 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 16 May 2022 06:10:23 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev,
-        Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-arm-kernel@lists.infradead.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
-Message-ID: <20220516131023.GA2329080@roeck-us.net>
-References: <20220228103142.3301082-1-arnd@kernel.org>
+        Mon, 16 May 2022 06:11:09 -0700 (PDT)
+Message-ID: <b9844f3ce486c5aff8547e79abf4344488db6568.camel@redhat.com>
+Subject: Re: [PATCH net-next v3 02/10] udp/ipv6: move pending section of
+ udpv6_sendmsg
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Pavel Begunkov <asml.silence@gmail.com>, netdev@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 16 May 2022 15:11:07 +0200
+In-Reply-To: <a0e7477985ef08c5f08f35b8c7336587c8adce12.1652368648.git.asml.silence@gmail.com>
+References: <cover.1652368648.git.asml.silence@gmail.com>
+         <a0e7477985ef08c5f08f35b8c7336587c8adce12.1652368648.git.asml.silence@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220228103142.3301082-1-arnd@kernel.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 11:27:43AM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Fri, 2022-05-13 at 16:26 +0100, Pavel Begunkov wrote:
+> Move up->pending section of udpv6_sendmsg() to the beginning of the
+> function. Even though it require some code duplication for sin6 parsing,
+> it clearly localises the pending handling in one place, removes an extra
+> if and more importantly will prepare the code for further patches.
 > 
-> During a patch discussion, Linus brought up the option of changing
-> the C standard version from gnu89 to gnu99, which allows using variable
-> declaration inside of a for() loop. While the C99, C11 and later standards
-> introduce many other features, most of these are already available in
-> gnu89 as GNU extensions as well.
+> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+> ---
+>  net/ipv6/udp.c | 70 ++++++++++++++++++++++++++++++--------------------
+>  1 file changed, 42 insertions(+), 28 deletions(-)
+> 
+> diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+> index 11d44ed46953..85bff1252f5c 100644
+> --- a/net/ipv6/udp.c
+> +++ b/net/ipv6/udp.c
+> @@ -1318,6 +1318,46 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+>  	ipc6.sockc.tsflags = sk->sk_tsflags;
+>  	ipc6.sockc.mark = sk->sk_mark;
+>  
+> +	/* Rough check on arithmetic overflow,
+> +	   better check is made in ip6_append_data().
+> +	   */
+> +	if (unlikely(len > INT_MAX - sizeof(struct udphdr)))
+> +		return -EMSGSIZE;
+> +
+> +	getfrag  =  is_udplite ?  udplite_getfrag : ip_generic_getfrag;
+> +
+> +	/* There are pending frames. */
+> +	if (up->pending) {
+> +		if (up->pending == AF_INET)
+> +			return udp_sendmsg(sk, msg, len);
+> +
+> +		/* Do a quick destination sanity check before corking. */
+> +		if (sin6) {
+> +			if (msg->msg_namelen < offsetof(struct sockaddr, sa_data))
+> +				return -EINVAL;
+> +			if (sin6->sin6_family == AF_INET6) {
+> +				if (msg->msg_namelen < SIN6_LEN_RFC2133)
+> +					return -EINVAL;
+> +				if (ipv6_addr_any(&sin6->sin6_addr) &&
+> +				    ipv6_addr_v4mapped(&np->saddr))
+> +					return -EINVAL;
 
-The downside is that backporting affected patches to older kernel branches
-now fails with error messages such as
+It looks like 'any' destination with ipv4 mapped source is now
+rejected, while the existing code accept it.
 
-mm/kfence/core.c: In function ‘kfence_init_pool’:
-mm/kfence/core.c:595:2: error: ‘for’ loop initial declarations are only allowed in C99 or C11 mode
+/P
 
-Just something to keep in mind when writing patches.
-
-Guenter

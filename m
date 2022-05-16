@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C738F52909E
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F24A752905D
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244644AbiEPUf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
+        id S1344004AbiEPUTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351116AbiEPUCC (ORCPT
+        with ESMTP id S1348888AbiEPT7C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 16:02:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535C72BE;
-        Mon, 16 May 2022 12:59:14 -0700 (PDT)
+        Mon, 16 May 2022 15:59:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001C110B0;
+        Mon, 16 May 2022 12:52:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0088BB81613;
-        Mon, 16 May 2022 19:59:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6310DC385AA;
-        Mon, 16 May 2022 19:59:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9061C60A50;
+        Mon, 16 May 2022 19:52:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0CB2C385AA;
+        Mon, 16 May 2022 19:52:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652731151;
-        bh=f2hGEdwI5KESCq279unJLIm61lGflU5bE9/b18+OZzw=;
+        s=korg; t=1652730728;
+        bh=3/viTrq2CJi48RpXpQDqdjV7P1sTUTEI5Kc8yZ9ijAU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S/89c5PhfSpOQrFsyL6GqaeYi3EH5BOEobIP6SQTZvclPlXbC7qS1ZCDpKrUOwpmI
-         l4n4u1/GcDFi4iB6NtjqTObBVVKEiQK1Jfki8IhNFXqzoyPqiARuOo1V6RjWThbaHi
-         0MRn868D6XqjAmOEpl9JIxtZ7BbJnZjR+jz2b6BQ=
+        b=XwGdYeAQuiwvCZgBmysyGvD6JL5nWDVTa+oW3de6kPhUmykp6hGgrSGxuJfJ6LbiG
+         6v+OvzefwwS2h/2oSAjCNHjVUE6EGjAxEi1WyKWaTXLE4NAnIag0BAQ3y7uH+i3rvr
+         DprsfwtXvnGd+89kQpczbNR0gsMlFFIlC0Vjw978=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Indan Zupancic <Indan.Zupancic@mep-info.com>
-Subject: [PATCH 5.17 088/114] fsl_lpuart: Dont enable interrupts too early
-Date:   Mon, 16 May 2022 21:37:02 +0200
-Message-Id: <20220516193628.005676316@linuxfoundation.org>
+        stable@vger.kernel.org, Jan Kara <jack@suse.cz>,
+        Christoph Hellwig <hch@lst.de>, Jing Xia <jing.xia@unisoc.com>
+Subject: [PATCH 5.15 089/102] writeback: Avoid skipping inode writeback
+Date:   Mon, 16 May 2022 21:37:03 +0200
+Message-Id: <20220516193626.553611508@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
-References: <20220516193625.489108457@linuxfoundation.org>
+In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
+References: <20220516193623.989270214@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,72 +54,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Indan Zupancic <Indan.Zupancic@mep-info.com>
+From: Jing Xia <jing.xia@unisoc.com>
 
-commit 401fb66a355eb0f22096cf26864324f8e63c7d78 upstream.
+commit 846a3351ddfe4a86eede4bb26a205c3f38ef84d3 upstream.
 
-If an irq is pending when devm_request_irq() is called, the irq
-handler will cause a NULL pointer access because initialisation
-is not done yet.
+We have run into an issue that a task gets stuck in
+balance_dirty_pages_ratelimited() when perform I/O stress testing.
+The reason we observed is that an I_DIRTY_PAGES inode with lots
+of dirty pages is in b_dirty_time list and standard background
+writeback cannot writeback the inode.
+After studing the relevant code, the following scenario may lead
+to the issue:
 
-Fixes: 9d7ee0e28da59 ("tty: serial: lpuart: avoid report NULL interrupt")
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Indan Zupancic <Indan.Zupancic@mep-info.com>
-Link: https://lore.kernel.org/r/20220505114750.45423-1-Indan.Zupancic@mep-info.com
+task1                                   task2
+-----                                   -----
+fuse_flush
+ write_inode_now //in b_dirty_time
+  writeback_single_inode
+   __writeback_single_inode
+                                 fuse_write_end
+                                  filemap_dirty_folio
+                                   __xa_set_mark:PAGECACHE_TAG_DIRTY
+    lock inode->i_lock
+    if mapping tagged PAGECACHE_TAG_DIRTY
+    inode->i_state |= I_DIRTY_PAGES
+    unlock inode->i_lock
+                                   __mark_inode_dirty:I_DIRTY_PAGES
+                                      lock inode->i_lock
+                                      -was dirty,inode stays in
+                                      -b_dirty_time
+                                      unlock inode->i_lock
+
+   if(!(inode->i_state & I_DIRTY_All))
+      -not true,so nothing done
+
+This patch moves the dirty inode to b_dirty list when the inode
+currently is not queued in b_io or b_more_io list at the end of
+writeback_single_inode.
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+CC: stable@vger.kernel.org
+Fixes: 0ae45f63d4ef ("vfs: add support for a lazytime mount option")
+Signed-off-by: Jing Xia <jing.xia@unisoc.com>
+Signed-off-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220510023514.27399-1-jing.xia@unisoc.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/serial/fsl_lpuart.c |   18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ fs/fs-writeback.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -2658,6 +2658,7 @@ static int lpuart_probe(struct platform_
- 	struct device_node *np = pdev->dev.of_node;
- 	struct lpuart_port *sport;
- 	struct resource *res;
-+	irq_handler_t handler;
- 	int ret;
- 
- 	sport = devm_kzalloc(&pdev->dev, sizeof(*sport), GFP_KERNEL);
-@@ -2735,17 +2736,11 @@ static int lpuart_probe(struct platform_
- 
- 	if (lpuart_is_32(sport)) {
- 		lpuart_reg.cons = LPUART32_CONSOLE;
--		ret = devm_request_irq(&pdev->dev, sport->port.irq, lpuart32_int, 0,
--					DRIVER_NAME, sport);
-+		handler = lpuart32_int;
- 	} else {
- 		lpuart_reg.cons = LPUART_CONSOLE;
--		ret = devm_request_irq(&pdev->dev, sport->port.irq, lpuart_int, 0,
--					DRIVER_NAME, sport);
-+		handler = lpuart_int;
- 	}
--
--	if (ret)
--		goto failed_irq_request;
--
- 	ret = uart_add_one_port(&lpuart_reg, &sport->port);
- 	if (ret)
- 		goto failed_attach_port;
-@@ -2767,13 +2762,18 @@ static int lpuart_probe(struct platform_
- 
- 	sport->port.rs485_config(&sport->port, &sport->port.rs485);
- 
-+	ret = devm_request_irq(&pdev->dev, sport->port.irq, handler, 0,
-+				DRIVER_NAME, sport);
-+	if (ret)
-+		goto failed_irq_request;
+--- a/fs/fs-writeback.c
++++ b/fs/fs-writeback.c
+@@ -1739,6 +1739,10 @@ static int writeback_single_inode(struct
+ 	 */
+ 	if (!(inode->i_state & I_DIRTY_ALL))
+ 		inode_cgwb_move_to_attached(inode, wb);
++	else if (!(inode->i_state & I_SYNC_QUEUED) &&
++		 (inode->i_state & I_DIRTY))
++		redirty_tail_locked(inode, wb);
 +
- 	return 0;
- 
-+failed_irq_request:
- failed_get_rs485:
- failed_reset:
- 	uart_remove_one_port(&lpuart_reg, &sport->port);
- failed_attach_port:
--failed_irq_request:
- 	lpuart_disable_clks(sport);
- failed_clock_enable:
- failed_out_of_range:
+ 	spin_unlock(&wb->list_lock);
+ 	inode_sync_complete(inode);
+ out:
 
 

@@ -2,117 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B88C7527E3E
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38B28527E7A
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 09:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235566AbiEPHJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 03:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33896 "EHLO
+        id S241028AbiEPHVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 03:21:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240899AbiEPHJX (ORCPT
+        with ESMTP id S241090AbiEPHVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 03:09:23 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F2EE005;
-        Mon, 16 May 2022 00:09:22 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24FLrGwa005786;
-        Mon, 16 May 2022 09:09:12 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=CCjhfkfdlZYAW6eOnthvQQ1I3uKY4V1Crq2D3uKf1Do=;
- b=clctPCYcG9o+i7MkeYUa/Iqvt3rbztQYbvVQIc7UcixXeh/NvPhC0Tl7j4QMmCc8ve0F
- RdcaKh6qxgUHD8fJOls1wBNxwkVT7CK0A+ajBrubAWczuqiawaJYAzPj7G+AWhmIo4qC
- mXTbIE/5xsUY0Vm/9AImG95EK+8nZUVTjBNHZ8otvxf/sDBL+m2Q8f9KsXl4C6NoxTpX
- OtaC5hZ3t1xGl3nySyLVgboa/d6W9HUeewbO2kXsjH1elf+Bq54qURWZcbb06NtpLI/c
- ZlpALffuVBhQPxtIRxByeIb8vDO+CEwex/4rI7/AwuiH3Bkxdq9HkGYqGsdDOrrRAbqq Jw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3g21j8h3jk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 09:09:12 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0721F100038;
-        Mon, 16 May 2022 09:09:12 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F404B21230D;
-        Mon, 16 May 2022 09:09:11 +0200 (CEST)
-Received: from localhost (10.75.127.48) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 16 May 2022 09:09:11
- +0200
-From:   <gabriel.fernandez@foss.st.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Gabriel Fernandez <gabriel.fernandez@foss.st.com>
-CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 14/14] ARM: dts: stm32: add optee reserved memory on stm32mp135f-dk
-Date:   Mon, 16 May 2022 09:06:00 +0200
-Message-ID: <20220516070600.7692-15-gabriel.fernandez@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220516070600.7692-1-gabriel.fernandez@foss.st.com>
-References: <20220516070600.7692-1-gabriel.fernandez@foss.st.com>
+        Mon, 16 May 2022 03:21:45 -0400
+X-Greylist: delayed 907 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 16 May 2022 00:21:41 PDT
+Received: from sender11-op-o11.zoho.eu (sender11-op-o11.zoho.eu [31.186.226.225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6439D17076
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 00:21:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1652684772; cv=none; 
+        d=zohomail.eu; s=zohoarc; 
+        b=Ngw7i+0UWu7Qdbil8j+grmG8yJ1wunVJtZJGAOxIqr/+JVsg6BMwqoocN/3bRvzdiiMgziQxTSHQEMO8cUSsqBFTE7PB93xr79hBNJBI7Vz5anbq0rGrrmrXd0LvNzvdd+OxhFfYcZ67TMi8yChrNpZLPGIRpH7T8V4GnDlRqnk=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
+        t=1652684772; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=LehfBAU/QvIra7OAgcW4TPq9bLABt9XwCeJZGewh1TA=; 
+        b=X0RAg8jgQ/SeF7bxmUVmj8bn3Vc4WNbf1DexcrxorAZL8Evkq7kfTL0l5WLmD/+dRgmS/6OuU5KJKI3FnkpiPX+t2YUnpT/gquf6W35yk5g6G/WB8ZuZCFAsHggzZW7vevpPk1hgwYsuLGrR3/TmyJNE4jW0PhP5PF0M2PQG5fA=
+ARC-Authentication-Results: i=1; mx.zohomail.eu;
+        dkim=pass  header.i=kempniu.pl;
+        spf=pass  smtp.mailfrom=kernel@kempniu.pl;
+        dmarc=pass header.from=<kernel@kempniu.pl>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1652684772;
+        s=zmail; d=kempniu.pl; i=kernel@kempniu.pl;
+        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=LehfBAU/QvIra7OAgcW4TPq9bLABt9XwCeJZGewh1TA=;
+        b=QhGQBq5FWlhvbilFYEJvQteh6s5HQJjUrrvUDpGtDn8+UoVoHhbNe0XKO9RCWXYb
+        PdTjTIww0Dg+n3cg3TvhkvnClCqcwIbfzMsJs6b5Xs4UZKSGV/j2XdSQ3GpmqH4Pg0k
+        /OMz2Ipt1wHfGC7YOPXBFIXL+jfIwiZGpl8ATyyc=
+Received: from larwa.hq.kempniu.pl (212.180.138.61 [212.180.138.61]) by mx.zoho.eu
+        with SMTPS id 16526847706676.485162993223867; Mon, 16 May 2022 09:06:10 +0200 (CEST)
+From:   =?UTF-8?q?Micha=C5=82=20K=C4=99pie=C5=84?= <kernel@kempniu.pl>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Message-ID: <20220516070601.11428-3-kernel@kempniu.pl>
+Subject: [PATCH 2/2] mtdchar: use kvmalloc() for potentially large allocations
+Date:   Mon, 16 May 2022 09:06:01 +0200
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220516070601.11428-1-kernel@kempniu.pl>
+References: <20220516070601.11428-1-kernel@kempniu.pl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-16_03,2022-05-13_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+mtdchar_write_ioctl() calls kmalloc() with the 'size' argument set to
+the smaller of two values: the write request's data/OOB length provided
+by user space and the erase block size of the MTD device.  If the latter
+is large, kmalloc() may not be able to serve such allocation requests.
+Use kvmalloc() instead.  Correspondingly, replace kfree() calls with
+kvfree() calls.
 
-Add the static OP-TEE reserved memory regions.
-
-Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Suggested-by: Richard Weinberger <richard@nod.at>
+Signed-off-by: Micha=C5=82 K=C4=99pie=C5=84 <kernel@kempniu.pl>
 ---
- arch/arm/boot/dts/stm32mp135f-dk.dts | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ drivers/mtd/mtdchar.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm/boot/dts/stm32mp135f-dk.dts b/arch/arm/boot/dts/stm32mp135f-dk.dts
-index 09d6226d598f..2c603ce3500b 100644
---- a/arch/arm/boot/dts/stm32mp135f-dk.dts
-+++ b/arch/arm/boot/dts/stm32mp135f-dk.dts
-@@ -26,6 +26,22 @@ memory@c0000000 {
- 		reg = <0xc0000000 0x20000000>;
- 	};
- 
-+	reserved-memory {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		optee_framebuffer@dd000000 {
-+			reg = <0xdd000000 0x1000000>;
-+			no-map;
-+		};
-+
-+		optee@de000000 {
-+			reg = <0xde000000 0x2000000>;
-+			no-map;
-+		};
-+	};
-+
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 
--- 
-2.25.1
+diff --git a/drivers/mtd/mtdchar.c b/drivers/mtd/mtdchar.c
+index b2700f8467ff..05860288a7af 100644
+--- a/drivers/mtd/mtdchar.c
++++ b/drivers/mtd/mtdchar.c
+@@ -623,16 +623,16 @@ static int mtdchar_write_ioctl(struct mtd_info *mtd,
+=20
+ =09datbuf_len =3D min_t(size_t, req.len, mtd->erasesize);
+ =09if (datbuf_len > 0) {
+-=09=09datbuf =3D kmalloc(datbuf_len, GFP_KERNEL);
++=09=09datbuf =3D kvmalloc(datbuf_len, GFP_KERNEL);
+ =09=09if (!datbuf)
+ =09=09=09return -ENOMEM;
+ =09}
+=20
+ =09oobbuf_len =3D min_t(size_t, req.ooblen, mtd->erasesize);
+ =09if (oobbuf_len > 0) {
+-=09=09oobbuf =3D kmalloc(oobbuf_len, GFP_KERNEL);
++=09=09oobbuf =3D kvmalloc(oobbuf_len, GFP_KERNEL);
+ =09=09if (!oobbuf) {
+-=09=09=09kfree(datbuf);
++=09=09=09kvfree(datbuf);
+ =09=09=09return -ENOMEM;
+ =09=09}
+ =09}
+@@ -682,8 +682,8 @@ static int mtdchar_write_ioctl(struct mtd_info *mtd,
+ =09=09usr_oob +=3D ops.oobretlen;
+ =09}
+=20
+-=09kfree(datbuf);
+-=09kfree(oobbuf);
++=09kvfree(datbuf);
++=09kvfree(oobbuf);
+=20
+ =09return ret;
+ }
+--=20
+2.36.1
+
 

@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 484EA528EA2
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B87528E24
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346221AbiEPTsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33184 "EHLO
+        id S1345573AbiEPTik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346014AbiEPTnU (ORCPT
+        with ESMTP id S1345519AbiEPTiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:43:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBAF03FD8D;
-        Mon, 16 May 2022 12:42:36 -0700 (PDT)
+        Mon, 16 May 2022 15:38:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF4A3E0DC;
+        Mon, 16 May 2022 12:38:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 87DB261553;
-        Mon, 16 May 2022 19:42:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82F99C385AA;
-        Mon, 16 May 2022 19:42:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 46362614B6;
+        Mon, 16 May 2022 19:38:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5072BC385AA;
+        Mon, 16 May 2022 19:38:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730155;
-        bh=BO0DyT3J8Z8jJIztXuh6s6+Ts0kppFb2DcBZxBghirE=;
+        s=korg; t=1652729893;
+        bh=Xr3Sm7ztXFyfUFVN7yvyGGdyW1XTRAYX2HVnhG0Z9gg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OqgRdcMm63O5XhRNGCMDITAYW27c2PvkRwesoBJGwIpFM/nSvfS2tTJyofWWSoiAY
-         3R3Yaz1iPjTuj8palvfrxquCvQfKxaPN2f/7YMKGJrTPMIcE7TSCvZf5sNvAmWEaD1
-         7tm/EOvtZAnz8JU4RPpHxenCv7Br6xPrGHcNrcdc=
+        b=OuZljHi/5k5dd36sdZlPqw3mva409P4sC/AbeIr7kmSrYwmIPYbGRj6Cti0/oJYSa
+         06A/FUpOccppmjJNIqQQrl+q/rYqe+ExpWHBtKUMAvZiO3hBRkoiQu+tj3w09rurm4
+         5TUa5NyxDgSRDnKuOXww3abyVzkjIl8fd8KThDeU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andreas Gruenbacher <agruenba@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 17/43] gfs2: Fix filesystem block deallocation for short writes
+        stable@vger.kernel.org, Ethan Yang <etyang@sierrawireless.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 4.9 15/19] USB: serial: qcserial: add support for Sierra Wireless EM7590
 Date:   Mon, 16 May 2022 21:36:28 +0200
-Message-Id: <20220516193615.226395080@linuxfoundation.org>
+Message-Id: <20220516193613.950315705@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193614.714657361@linuxfoundation.org>
-References: <20220516193614.714657361@linuxfoundation.org>
+In-Reply-To: <20220516193613.497233635@linuxfoundation.org>
+References: <20220516193613.497233635@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,53 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andreas Gruenbacher <agruenba@redhat.com>
+From: Ethan Yang <etyang@sierrawireless.com>
 
-[ Upstream commit d031a8866e709c9d1ee5537a321b6192b4d2dc5b ]
+commit 870b1eee2d844727b06e238c121d260bc5645580 upstream.
 
-When a write cannot be carried out in full, gfs2_iomap_end() releases
-blocks that have been allocated for this write but haven't been used.
+Add support for Sierra Wireless EM7590 0xc080/0xc081 compositions.
 
-To compute the end of the allocation, gfs2_iomap_end() incorrectly
-rounded the end of the attempted write down to the next block boundary
-to arrive at the end of the allocation.  It would have to round up, but
-the end of the allocation is also available as iomap->offset +
-iomap->length, so just use that instead.
-
-In addition, use round_up() for computing the start of the unused range.
-
-Fixes: 64bc06bb32ee ("gfs2: iomap buffered write support")
-Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Ethan Yang <etyang@sierrawireless.com>
+Link: https://lore.kernel.org/r/20220425055840.5693-1-etyang@sierrawireless.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/gfs2/bmap.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ drivers/usb/serial/qcserial.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/fs/gfs2/bmap.c b/fs/gfs2/bmap.c
-index dec5285a02e9..77a497a4b236 100644
---- a/fs/gfs2/bmap.c
-+++ b/fs/gfs2/bmap.c
-@@ -1233,13 +1233,12 @@ static int gfs2_iomap_end(struct inode *inode, loff_t pos, loff_t length,
- 
- 	if (length != written && (iomap->flags & IOMAP_F_NEW)) {
- 		/* Deallocate blocks that were just allocated. */
--		loff_t blockmask = i_blocksize(inode) - 1;
--		loff_t end = (pos + length) & ~blockmask;
-+		loff_t hstart = round_up(pos + written, i_blocksize(inode));
-+		loff_t hend = iomap->offset + iomap->length;
- 
--		pos = (pos + written + blockmask) & ~blockmask;
--		if (pos < end) {
--			truncate_pagecache_range(inode, pos, end - 1);
--			punch_hole(ip, pos, end - pos);
-+		if (hstart < hend) {
-+			truncate_pagecache_range(inode, hstart, hend - 1);
-+			punch_hole(ip, hstart, hend - hstart);
- 		}
- 	}
- 
--- 
-2.35.1
-
+--- a/drivers/usb/serial/qcserial.c
++++ b/drivers/usb/serial/qcserial.c
+@@ -170,6 +170,8 @@ static const struct usb_device_id id_tab
+ 	{DEVICE_SWI(0x1199, 0x9090)},	/* Sierra Wireless EM7565 QDL */
+ 	{DEVICE_SWI(0x1199, 0x9091)},	/* Sierra Wireless EM7565 */
+ 	{DEVICE_SWI(0x1199, 0x90d2)},	/* Sierra Wireless EM9191 QDL */
++	{DEVICE_SWI(0x1199, 0xc080)},	/* Sierra Wireless EM7590 QDL */
++	{DEVICE_SWI(0x1199, 0xc081)},	/* Sierra Wireless EM7590 */
+ 	{DEVICE_SWI(0x413c, 0x81a2)},	/* Dell Wireless 5806 Gobi(TM) 4G LTE Mobile Broadband Card */
+ 	{DEVICE_SWI(0x413c, 0x81a3)},	/* Dell Wireless 5570 HSPA+ (42Mbps) Mobile Broadband Card */
+ 	{DEVICE_SWI(0x413c, 0x81a4)},	/* Dell Wireless 5570e HSPA+ (42Mbps) Mobile Broadband Card */
 
 

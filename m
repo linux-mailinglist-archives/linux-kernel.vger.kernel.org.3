@@ -2,46 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D34A5528E49
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7707528E58
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345874AbiEPTmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43046 "EHLO
+        id S1345807AbiEPTnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345744AbiEPTkW (ORCPT
+        with ESMTP id S1345610AbiEPTkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:40:22 -0400
+        Mon, 16 May 2022 15:40:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79C13EF2B;
-        Mon, 16 May 2022 12:39:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 798823ED32;
+        Mon, 16 May 2022 12:39:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73CD1614FD;
-        Mon, 16 May 2022 19:39:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C12FC34100;
-        Mon, 16 May 2022 19:39:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C3A69614E2;
+        Mon, 16 May 2022 19:39:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2423C385AA;
+        Mon, 16 May 2022 19:39:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652729967;
-        bh=KuVmxcN1RR5gLpFNGJGar/lGk7b6M9imhOEuY6GRs6Y=;
+        s=korg; t=1652729971;
+        bh=+FAQbdGywGv1W7IEFqKFXTkIpVgAa5LatXhgDD2GBp8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HLMgldmpPfB+GSNvLzDRShKOPEGkmmSdKB6IaD2epFo/AnH8T1S5q9Xw4fagoP+/E
-         NJ1SKW9VLgSh3+OAoKDKNnsRYoMYoIhLYtDuAvrSWk3XVdrMY0J31Qz4DA+BxyNNkX
-         EY9XW7py6wWVSA24+wsLqoLETnvBF4qfE4cKlack=
+        b=sN6aXVepJOHKIVUAIU5M3YR3CeCJmRWy5RqlYyKPRReMaW1KntUEbb4Ulo0BuAP8i
+         BDhNI/Q/3+w70xY91AN8V98fihFLGp9KDV6PxEv108500azxgyOtFBy8QtqJCU1NRc
+         OCIsIvUQFWFXcvck9jWKK47EWMjPZ/13cq6bBkfc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Moshe Kol <moshe.kol@mail.huji.ac.il>,
-        Yossi Gilad <yossi.gilad@mail.huji.ac.il>,
-        Amit Klein <aksecurity@gmail.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, Willy Tarreau <w@1wt.eu>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 16/25] tcp: resalt the secret every 10 seconds
-Date:   Mon, 16 May 2022 21:36:30 +0200
-Message-Id: <20220516193615.175963347@linuxfoundation.org>
+        stable@vger.kernel.org, Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH 4.14 17/25] usb: cdc-wdm: fix reading stuck on device close
+Date:   Mon, 16 May 2022 21:36:31 +0200
+Message-Id: <20220516193615.204377503@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220516193614.678319286@linuxfoundation.org>
 References: <20220516193614.678319286@linuxfoundation.org>
@@ -59,70 +54,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Sergey Ryazanov <ryazanov.s.a@gmail.com>
 
-[ Upstream commit 4dfa9b438ee34caca4e6a4e5e961641807367f6f ]
+commit 01e01f5c89773c600a9f0b32c888de0146066c3a upstream.
 
-In order to limit the ability for an observer to recognize the source
-ports sequence used to contact a set of destinations, we should
-periodically shuffle the secret. 10 seconds looks effective enough
-without causing particular issues.
+cdc-wdm tracks whether a response reading request is in-progress and
+blocks the next request from being sent until the previous request is
+completed. As soon as last user closes the cdc-wdm device file, the
+driver cancels any ongoing requests, resets the pending response
+counter, but leaves the response reading in-progress flag
+(WDM_RESPONDING) untouched.
 
-Cc: Moshe Kol <moshe.kol@mail.huji.ac.il>
-Cc: Yossi Gilad <yossi.gilad@mail.huji.ac.il>
-Cc: Amit Klein <aksecurity@gmail.com>
-Cc: Jason A. Donenfeld <Jason@zx2c4.com>
-Tested-by: Willy Tarreau <w@1wt.eu>
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+So if the user closes the device file during the response receive
+request is being performed, no more data will be obtained from the
+modem. The request will be cancelled, effectively preventing the
+WDM_RESPONDING flag from being reseted. Keeping the flag set will
+prevent a new response receive request from being sent, permanently
+blocking the read path. The read path will staying blocked until the
+module will be reloaded or till the modem will be re-attached.
+
+This stuck has been observed with a Huawei E3372 modem attached to an
+OpenWrt router and using the comgt utility to set up a network
+connection.
+
+Fix this issue by clearing the WDM_RESPONDING flag on the device file
+close.
+
+Without this fix, the device reading stuck can be easily reproduced in a
+few connection establishing attempts. With this fix, a load test for
+modem connection re-establishing worked for several hours without any
+issues.
+
+Fixes: 922a5eadd5a3 ("usb: cdc-wdm: Fix race between autosuspend and reading from the device")
+Signed-off-by: Sergey Ryazanov <ryazanov.s.a@gmail.com>
+Cc: stable <stable@vger.kernel.org>
+Acked-by: Oliver Neukum <oneukum@suse.com>
+Link: https://lore.kernel.org/r/20220501175828.8185-1-ryazanov.s.a@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/secure_seq.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ drivers/usb/class/cdc-wdm.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/core/secure_seq.c b/net/core/secure_seq.c
-index 7232274de334..17683aea8a35 100644
---- a/net/core/secure_seq.c
-+++ b/net/core/secure_seq.c
-@@ -22,6 +22,8 @@
- static siphash_key_t net_secret __read_mostly;
- static siphash_key_t ts_secret __read_mostly;
- 
-+#define EPHEMERAL_PORT_SHUFFLE_PERIOD (10 * HZ)
-+
- static __always_inline void net_secret_init(void)
- {
- 	net_get_random_once(&net_secret, sizeof(net_secret));
-@@ -100,11 +102,13 @@ u32 secure_ipv6_port_ephemeral(const __be32 *saddr, const __be32 *daddr,
- 	const struct {
- 		struct in6_addr saddr;
- 		struct in6_addr daddr;
-+		unsigned int timeseed;
- 		__be16 dport;
- 	} __aligned(SIPHASH_ALIGNMENT) combined = {
- 		.saddr = *(struct in6_addr *)saddr,
- 		.daddr = *(struct in6_addr *)daddr,
--		.dport = dport
-+		.timeseed = jiffies / EPHEMERAL_PORT_SHUFFLE_PERIOD,
-+		.dport = dport,
- 	};
- 	net_secret_init();
- 	return siphash(&combined, offsetofend(typeof(combined), dport),
-@@ -144,8 +148,10 @@ u32 secure_tcp_seq(__be32 saddr, __be32 daddr,
- u32 secure_ipv4_port_ephemeral(__be32 saddr, __be32 daddr, __be16 dport)
- {
- 	net_secret_init();
--	return siphash_3u32((__force u32)saddr, (__force u32)daddr,
--			    (__force u16)dport, &net_secret);
-+	return siphash_4u32((__force u32)saddr, (__force u32)daddr,
-+			    (__force u16)dport,
-+			    jiffies / EPHEMERAL_PORT_SHUFFLE_PERIOD,
-+			    &net_secret);
- }
- EXPORT_SYMBOL_GPL(secure_ipv4_port_ephemeral);
- #endif
--- 
-2.35.1
-
+--- a/drivers/usb/class/cdc-wdm.c
++++ b/drivers/usb/class/cdc-wdm.c
+@@ -731,6 +731,7 @@ static int wdm_release(struct inode *ino
+ 			kill_urbs(desc);
+ 			spin_lock_irq(&desc->iuspin);
+ 			desc->resp_count = 0;
++			clear_bit(WDM_RESPONDING, &desc->flags);
+ 			spin_unlock_irq(&desc->iuspin);
+ 			desc->manage_power(desc->intf, 0);
+ 		} else {
 
 

@@ -2,50 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BCBB529294
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E57B15292BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 23:19:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350367AbiEPVM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 17:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56698 "EHLO
+        id S1348749AbiEPVMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 17:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349324AbiEPVKH (ORCPT
+        with ESMTP id S1349188AbiEPVKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 17:10:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEA91AF
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 13:55:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 88338614DE
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 20:55:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B30F4C385AA;
-        Mon, 16 May 2022 20:55:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1652734538;
-        bh=dugUPCYBgA8+hGXd7VCk99Ywg4RL56xDXuN95GI3f/I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=t9V8Kfrs85wyXWugBWf5HDM27Y6DeGms/QxZ1q5i5X/PCQKUDDyIqaquN6GAXPrgW
-         BCay57CEkeaCYfJdDFFkdHZrOhbBzwFb9S3P1smqgWsF7ww2x4F+3Pc7S/I6xHCaZG
-         d6hXl9Avj6g05HfnpMJ119E9h2abFZez1H1ASETM=
-Date:   Mon, 16 May 2022 13:55:37 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH mm v2] tracing: incorrect gfp_t conversion
-Message-Id: <20220516135537.8458fe08464d97bb45684252@linux-foundation.org>
-In-Reply-To: <20220515180903.37fc18e4@gandalf.local.home>
-References: <b8feb625dd2ba0d0dfc298a2f39ca1d8368ba5c9.camel@perches.com>
-        <20220515180903.37fc18e4@gandalf.local.home>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Mon, 16 May 2022 17:10:52 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278CDB31;
+        Mon, 16 May 2022 13:57:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652734624; x=1684270624;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=j7s6smruyWmhbNoHc6iTvZ7jsq4VNCTsuvEe6mBVoFQ=;
+  b=Bae+jCyzA1wsQJNXFDvCsPvvj44aemW05k3/N1OpgweOiVD1Dm+N9tcv
+   5z5gPlHfP8k22ZZavPXu2CcG1yqqI9xVNBkPFtHXtMtA2TqaH577DNMrc
+   OYBJzWh8+QgS60Bno683qLNAzhEUEOQqDcMxrEcsROtFqIASS/8zjGdEq
+   IlLH9ERf2aJvckzZ27i5876To611erEK1mjwWFFJVopvbia1iNUp7XSzZ
+   E46+fDdb8tnEA0WOyF5EBNVfe/Xy5664V3+XEiaLl/NmyqUt7symrkt8P
+   tVKxef0AnJd59Fiq902OkbuCpH9GIVJJB4M/D0cgmTHSaCiqRgaiT/mgf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="334004251"
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="334004251"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 13:57:01 -0700
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="596717394"
+Received: from rmarti10-mobl2.amr.corp.intel.com (HELO [10.209.84.135]) ([10.209.84.135])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 13:57:00 -0700
+Message-ID: <0b90f4f6-6911-017b-6d37-50354003900e@linux.intel.com>
+Date:   Mon, 16 May 2022 13:57:00 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH net-next] net: wwan: t7xx: fix GFP_KERNEL usage in
+ spin_lock context
+Content-Language: en-US
+To:     Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        Ziyang Xuan <william.xuanziyang@huawei.com>
+Cc:     "Devegowda, Chandrashekar" <chandrashekar.devegowda@intel.com>,
+        Intel Corporation <linuxwwan@intel.com>,
+        chiranjeevi.rapolu@linux.intel.com,
+        =?UTF-8?B?SGFpanVuIExpdSAo5YiY5rW35YabKQ==?= 
+        <haijun.liu@mediatek.com>,
+        M Chetan Kumar <m.chetan.kumar@linux.intel.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        David Miller <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220514091443.4150162-1-william.xuanziyang@huawei.com>
+ <CAHNKnsS0D8bRA5GY0xss2ZUCwY2HoLNMgeR0K4ecH-HfmdTefg@mail.gmail.com>
+From:   "Martinez, Ricardo" <ricardo.martinez@linux.intel.com>
+In-Reply-To: <CAHNKnsS0D8bRA5GY0xss2ZUCwY2HoLNMgeR0K4ecH-HfmdTefg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,26 +75,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 May 2022 10:20:39 +0300 Vasily Averin <vvs@openvz.org> wrote:
 
-> Fixes the following sparse warnings:
-> 
-> include/trace/events/*: sparse: cast to restricted gfp_t
-> include/trace/events/*: sparse: restricted gfp_t degrades to integer
-> 
-> gfp_t type is bitwise and requires __force attributes for any casts.
+On 5/16/2022 1:36 PM, Sergey Ryazanov wrote:
+> Hello Ziyang,
+>
+> On Sat, May 14, 2022 at 11:57 AM Ziyang Xuan
+> <william.xuanziyang@huawei.com> wrote:
+>> t7xx_cldma_clear_rxq() call t7xx_cldma_alloc_and_map_skb() in spin_lock
+>> context, But __dev_alloc_skb() in t7xx_cldma_alloc_and_map_skb() uses
+>> GFP_KERNEL, that will introduce scheduling factor in spin_lock context.
+>>
+>> Replace GFP_KERNEL with GFP_ATOMIC to fix it.
+> Would not it will be more reliable to just rework
+> t7xx_cldma_clear_rxq() to avoid calling t7xx_cldma_alloc_and_map_skb()
+> under the spin lock instead of doing each allocation with GFP_ATOMIC?
+> E.g. t7xx_cldma_gpd_rx_from_q() calls t7xx_cldma_alloc_and_map_skb()
+> avoiding any lock holding.
 
-I already moved the previous version into mm-stable.  Would prefer not
-to have to rebase it.
-
-> v2: 1) re-based to 5.18-rc6
->     2) re-defined __def_gfpflag_names array according to
-> 	akpm@, willy@ and Joe Perches recommendations
-
-Please redo this against the mm-stable or mm-unstable branches against
-git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm, or against your
-own previous version.
-
-The new patch will simply switch to the gfpflag_string() trick, so it will
-not be a "fix", so please let's position it as a "cleanup".
+t7xx_cldma_clear_rxq() is a helper for t7xx_cldma_clear_all_qs() which 
+is only called by t7xx_cldma_exception() after stopping CLDMA, so it 
+should be OK to remove the spin lock from t7xx_cldma_clear_rxq().
 

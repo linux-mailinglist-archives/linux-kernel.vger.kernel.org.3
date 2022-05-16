@@ -2,202 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE75C5286D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:22:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E25925286C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 16:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244160AbiEPOWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 10:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58556 "EHLO
+        id S244427AbiEPOST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 10:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbiEPOWg (ORCPT
+        with ESMTP id S230302AbiEPOSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 10:22:36 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699841EADB
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 07:22:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652710955; x=1684246955;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DEXNUePlUH324Ru0ZGL3Smq6hYqkFrrSzw/mQFjXSHc=;
-  b=Fe3qItPi5fO3uckK4nn95knTotYpJvV9vp9fQhemXanBAIhdo1nMYZY/
-   dATyFg2M/qKzDbXUu16vBwPWKmLYQ/0vpcrcvqcu1BDw+AWYerSj12eG7
-   HCGakft/ftPIFbTURd+JRsJtAv57RhPpS0Q4TA+SjYTBzxqcy+jlSRWLE
-   fjIf2XRfeNg3Q7gTTdmcInrq6agh0wrm0rNsoPf3KnqB7s2C+ZSL7Nubg
-   WlTvjfrL8Xc7Ir+Bz/27ZXn1uY4f4iHYP0GBDyJBkajhGehG+itLlOznz
-   OSjzPIHLMthYRAlQU/Zr7i7di/GT1Jk8MXsXEjnVhraJXBbSYCTG4E/0z
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="269673600"
-X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
-   d="scan'208";a="269673600"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 07:22:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
-   d="scan'208";a="713390768"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 16 May 2022 07:22:31 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nqbcF-00005V-3h;
-        Mon, 16 May 2022 14:22:31 +0000
-Date:   Mon, 16 May 2022 22:21:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Phillip Lougher <phillip@squashfs.org.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Xiongwei Song <Xiongwei.Song@windriver.com>
-Cc:     kbuild-all@lists.01.org, Zheng Liang <zhengliang6@huawei.com>,
-        Zhang Yi <yi.zhang@huawei.com>, Hou Tao <houtao1@huawei.com>,
-        Miao Xie <miaoxie@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        "squashfs-devel @ lists . sourceforge . net" 
-        <squashfs-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] squashfs: implement readahead
-Message-ID: <202205162245.LVgJF5HH-lkp@intel.com>
-References: <20220516105100.1412740-3-hsinyi@chromium.org>
+        Mon, 16 May 2022 10:18:15 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2E83AA6B;
+        Mon, 16 May 2022 07:18:14 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GE252R018504;
+        Mon, 16 May 2022 14:18:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=yMNOKF07RUOwX1GCechJUNCl+HJAsH8hPOrtwMkUF3w=;
+ b=i6+FF2JagaDhRxk6dpZgrOngcOMkTECHhcjd/vlP13567dQA3Tf0qdQn7qvkNu+r9WRP
+ Q8ftkQKXJrb+6cWkcUJZen7k52gLl8RvkT2kJbYlKYSHMthUyYUy0eWIqOp+ybLbMBRy
+ vUSbYJrLbVmRs9cBYFUhvr/UGxplRgXeMudWkh4ZGbxiq86l9AR7dVVTk7NQhGOZbPr8
+ O286iPFGbNsZRpA752rj+xHlMXY+oKnu+9Tq6ow0AIIfwg2EMco2/SQxow95U1Nksvuk
+ OEyWTY6ku2g+jcRnK5tdvd4bT6Hwnk8A8y/IjS45ba5ukv/k7jd+lGsXXTLHmCvAlODC jQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3r150dnr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 14:18:14 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24GE2JXk019751;
+        Mon, 16 May 2022 14:18:14 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3r150dmb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 14:18:13 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24GEI3Cx014376;
+        Mon, 16 May 2022 14:18:11 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3g23pjatnm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 14:18:10 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24GEHaLp34341120
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 16 May 2022 14:17:36 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 74292A404D;
+        Mon, 16 May 2022 14:18:07 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C489BA4040;
+        Mon, 16 May 2022 14:18:06 +0000 (GMT)
+Received: from [9.171.15.172] (unknown [9.171.15.172])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 16 May 2022 14:18:06 +0000 (GMT)
+Message-ID: <bae4e416-b0e9-31c6-c9d0-df6b5a5fd46f@linux.ibm.com>
+Date:   Mon, 16 May 2022 16:21:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220516105100.1412740-3-hsinyi@chromium.org>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v9 3/3] s390x: KVM: resetting the Topology-Change-Report
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, borntraeger@de.ibm.com,
+        frankja@linux.ibm.com, cohuck@redhat.com, thuth@redhat.com,
+        hca@linux.ibm.com, gor@linux.ibm.com, wintera@linux.ibm.com,
+        seiden@linux.ibm.com, nrb@linux.ibm.com
+References: <20220506092403.47406-1-pmorel@linux.ibm.com>
+ <20220506092403.47406-4-pmorel@linux.ibm.com>
+ <76fd0c11-5b9b-0032-183b-54db650f13b1@redhat.com>
+ <20220512115250.2e20bfdf@p-imbrenda>
+ <70a7d93c-c1b1-fa72-0eb4-02e3e2235f94@redhat.com>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <70a7d93c-c1b1-fa72-0eb4-02e3e2235f94@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: G9x7Bk-epVV11i7POlxqSnH3IOodtMW3
+X-Proofpoint-ORIG-GUID: Qcb0VTL_5kUfnZA07UnfESspfT1_K6bq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-16_13,2022-05-16_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ phishscore=0 suspectscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0
+ mlxlogscore=966 bulkscore=0 priorityscore=1501 mlxscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205160079
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hsin-Yi,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on next-20220513]
-[cannot apply to akpm-mm/mm-everything v5.18-rc7 v5.18-rc6 v5.18-rc5 v5.18-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hsin-Yi-Wang/Implement-readahead-for-squashfs/20220516-185438
-base:    1e1b28b936aed946122b4e0991e7144fdbbfd77e
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220516/202205162245.LVgJF5HH-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/573e1f2ced0df097c30c595d5bf5a9e7a5fcb8d5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Hsin-Yi-Wang/Implement-readahead-for-squashfs/20220516-185438
-        git checkout 573e1f2ced0df097c30c595d5bf5a9e7a5fcb8d5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash fs/squashfs/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   fs/squashfs/file.c: In function 'squashfs_readahead':
-   fs/squashfs/file.c:526:17: error: implicit declaration of function 'squashfs_page_actor_init_special'; did you mean 'squashfs_page_actor_init'? [-Werror=implicit-function-declaration]
-     526 |         actor = squashfs_page_actor_init_special(pages, max_pages, 0);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                 squashfs_page_actor_init
->> fs/squashfs/file.c:526:15: warning: assignment to 'struct squashfs_page_actor *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     526 |         actor = squashfs_page_actor_init_special(pages, max_pages, 0);
-         |               ^
-   fs/squashfs/file.c: At top level:
-   fs/squashfs/file.c:577:9: error: request for member 'readahead' in something not a structure or union
-     577 |         .readahead = squashfs_readahead
-         |         ^
-   cc1: some warnings being treated as errors
 
 
-vim +526 fs/squashfs/file.c
+On 5/12/22 12:01, David Hildenbrand wrote:
+>>>
+>>> I think we prefer something like u16 when copying to user space.
+>>
+>> but then userspace also has to expect a u16, right?
+> 
+> Yep.
+> 
 
-   498	
-   499	static void squashfs_readahead(struct readahead_control *ractl)
-   500	{
-   501		struct inode *inode = ractl->mapping->host;
-   502		struct squashfs_sb_info *msblk = inode->i_sb->s_fs_info;
-   503		size_t mask = (1UL << msblk->block_log) - 1;
-   504		size_t shift = msblk->block_log - PAGE_SHIFT;
-   505		loff_t req_end = readahead_pos(ractl) + readahead_length(ractl);
-   506		loff_t start = readahead_pos(ractl) &~ mask;
-   507		size_t len = readahead_length(ractl) + readahead_pos(ractl) - start;
-   508		struct squashfs_page_actor *actor;
-   509		unsigned int nr_pages = 0;
-   510		struct page **pages;
-   511		u64 block = 0;
-   512		int bsize, res, i, index;
-   513		int file_end = i_size_read(inode) >> msblk->block_log;
-   514		unsigned int max_pages = 1UL << shift;
-   515	
-   516		readahead_expand(ractl, start, (len | mask) + 1);
-   517	
-   518		if (readahead_pos(ractl) + readahead_length(ractl) < req_end ||
-   519		    file_end == 0)
-   520			return;
-   521	
-   522		pages = kmalloc_array(max_pages, sizeof(void *), GFP_KERNEL);
-   523		if (!pages)
-   524			return;
-   525	
- > 526		actor = squashfs_page_actor_init_special(pages, max_pages, 0);
-   527		if (!actor)
-   528			goto out;
-   529	
-   530		for (;;) {
-   531			nr_pages = __readahead_batch(ractl, pages, max_pages);
-   532			if (!nr_pages)
-   533				break;
-   534	
-   535			if (readahead_pos(ractl) >= i_size_read(inode) ||
-   536			    nr_pages < max_pages)
-   537				goto skip_pages;
-   538	
-   539			index = pages[0]->index >> shift;
-   540			if ((pages[nr_pages - 1]->index >> shift) != index)
-   541				goto skip_pages;
-   542	
-   543			bsize = read_blocklist(inode, index, &block);
-   544			if (bsize == 0)
-   545				goto skip_pages;
-   546	
-   547			res = squashfs_read_data(inode->i_sb, block, bsize, NULL,
-   548						 actor);
-   549	
-   550			if (res >= 0)
-   551				for (i = 0; i < nr_pages; i++)
-   552					SetPageUptodate(pages[i]);
-   553	
-   554			for (i = 0; i < nr_pages; i++) {
-   555				unlock_page(pages[i]);
-   556				put_page(pages[i]);
-   557			}
-   558		}
-   559	
-   560		kfree(actor);
-   561		kfree(pages);
-   562		return;
-   563	
-   564	skip_pages:
-   565		for (i = 0; i < nr_pages; i++) {
-   566			unlock_page(pages[i]);
-   567			put_page(pages[i]);
-   568		}
-   569	
-   570		kfree(actor);
-   571	out:
-   572		kfree(pages);
-   573	}
-   574	
+Yes but in fact, inspired by previous discussion I had on the VFIO 
+interface, that is the reason why I did prefer an int.
+It is much simpler than a u16 and the definition of a bit.
+
+Despite a bit in a u16 is what the s3990 achitecture proposes I thought 
+we could make it easier on the KVM/QEMU interface.
+
+But if the discussion stops here, I will do as you both propose change 
+to u16 in KVM and userland and add the documentation for the interface.
+
+Regards,
+Pierre
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Pierre Morel
+IBM Lab Boeblingen

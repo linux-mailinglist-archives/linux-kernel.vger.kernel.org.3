@@ -2,104 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A363527D71
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2B9527D75
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 08:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238940AbiEPGNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 02:13:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34682 "EHLO
+        id S240097AbiEPGPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 02:15:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234700AbiEPGNJ (ORCPT
+        with ESMTP id S231199AbiEPGP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 02:13:09 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BD118352
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:13:08 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id ks9so26572851ejb.2
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:13:08 -0700 (PDT)
+        Mon, 16 May 2022 02:15:26 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9131020F72
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:15:25 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id j4so23966843lfh.8
+        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 23:15:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UMivNP1yATOqWiy4xAV1dIXzJMIjL6HYMoQwwXh9g8U=;
-        b=U9k6OUws21OayeSqTQt3GmsNurJtExmOYfgxajIaoyI7I2td2Yq9miYkQhG8IEwl5/
-         uPFve13ZyNG/Nej7aDhOlaTCbpoPm2NysOSkOXHB3C/y1d90TwZFSGsfNsvoQ1/T6SHa
-         VCl7AFEAVUNFiXJcJxF2AzwSORetVgCErxNN9jbVM/z8Zy15uLTO0l2gFcTPfbpAPD1j
-         ftj3u8hnX7+Z73WN3VhdroO/P/EJO0w4FPwbH8wTM4QoVQzu2C2xML4qcBuTn9cHAweD
-         Lf2zS/7jBL06rclsoc+G+JBIx0SdEiS/0d+iZ+bFSx6EEbdryBxn7OaTrKnRoD2obMlv
-         DIPA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=MbrhUEcuzEes1MO/m14edarYcpIuUGvSuSikQjaR1hE=;
+        b=Sn1TX8yMxUDd9dFA7JN1VX/5hSF1sGO4sZJvAzgFrgMg1KXO5tIaUzIjFIZ9K2BPOB
+         xAdm3v8nzF/lx8oqHsP5ByfhezClrPlVVlyFcGU/XexJ/7j/lMWCuSmdl84r8qbZ1Gsv
+         d9I0ztX9ncvkuMuoKamGjK/HpjX2oklR6ZyuoJUkLK5+1SUKYJamnGJClMypAGH/qou/
+         5Lvcdfx7GsGyi4TDqQ92OSF3jHdSB/GSGbu4K5qKMIYA7OWUXtkA+s/eQpVUgU1zepug
+         fr85TEl+F00+3CxP7RNa9jKISw8ZB0zNbEXrAFxi47SQgc6UWXMkss91/96FCJr/9DxD
+         9ssQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UMivNP1yATOqWiy4xAV1dIXzJMIjL6HYMoQwwXh9g8U=;
-        b=cDDqueZBdnQ5QLcmPksS2BHlzxP75Ey3HhhHI9tU82GV+5z9+gxGORtJYSMLNrhbOe
-         DLbRklsS70PoFpTMiVKT+nU/9jO12DNzvrvf0a1aGh4pqnOqsqVi8H+MxYyWhoz6DEiu
-         +uIXU1nnKjPAczdrJd3DS4h4ZGX6d69ULGPysDePJts4dA0GLR6dvJLCNxbDhspF3J1L
-         oc7Rq4c1IsPr96RAzy++bgnSHuYkDchvp6fIupxarod5vdv2n76VE8+KT4yyOC00Srbn
-         UCQkI98SyQevoV6rDcZbGueAe6i9nYsIT1G0fI2+/C/i9ZYKC0yHcHyOyOUCoCxPhoH6
-         wNMg==
-X-Gm-Message-State: AOAM533QGkFha+fcb40TIv67jIESQkE6MPQDygleRDjeyk/6B4cnNcYS
-        6rJrH2Rid/PzrfbhtBnucMa7gOJtbFDqCKMIUr32
-X-Google-Smtp-Source: ABdhPJxwQU9n4T2vbv6zUUJLoz7qvcHSvdfpZ0OoVoSPI1Lmi3TIaOffSlIgVbg0SF0TtcFdY6c/pr0IlFrm5oX11lo=
-X-Received: by 2002:a17:906:dc8f:b0:6f4:e6df:a48d with SMTP id
- cs15-20020a170906dc8f00b006f4e6dfa48dmr14195693ejc.206.1652681587130; Sun, 15
- May 2022 23:13:07 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MbrhUEcuzEes1MO/m14edarYcpIuUGvSuSikQjaR1hE=;
+        b=STJphGoc2Sy/0+dJvF2hRNsbPKbcUoOK2Bgfx5sDgzFFVI5SYpj3h64ptONyH3Zk1d
+         /HPzobC7SMkIYmz/Rkccp8GJ4CSfuIKPr9mCxQgL1AvPCUtOL8gbLQtkZnV5L0OFZD2B
+         /2ZcnAKczrhu/RAvE47t2/S9WnAWC+3diBqMv86CrvbHUTfhSNxzSYhnyklwxrIaQdbz
+         G/2e4n0qYoV0jlkkLdX1h52EQOGpk/vPva5wWrxBrRlKoTS98yoGQQWS57Kktk1zktZA
+         uYvlwAd1A6CjQcYb04DuhTMzA9eAHUzfdhBZ+JOSGUwTY5StUulUTPqO77pEEHWRMf/P
+         ijFg==
+X-Gm-Message-State: AOAM532UB/CHfM9qKy4Dbdp7GWC/FOV6i6yeiaGDgAhmMSQQzXmajj0j
+        wNhxnbky+DCpyAkF+speREE5zw==
+X-Google-Smtp-Source: ABdhPJxWTtShK0m+i18kqeRDZwPku8a+AeCJwwbzUGTS9yC3+7/TdhrxlcYcBIMyy++49F3f2Rek/w==
+X-Received: by 2002:a05:6512:3d06:b0:473:fe9a:25e9 with SMTP id d6-20020a0565123d0600b00473fe9a25e9mr12487447lfv.449.1652681723885;
+        Sun, 15 May 2022 23:15:23 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id e13-20020ac2546d000000b0047255d211fcsm1203927lfn.299.2022.05.15.23.15.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 May 2022 23:15:23 -0700 (PDT)
+Message-ID: <9a7514ab-4c01-6abf-68e2-5945d9415867@linaro.org>
+Date:   Mon, 16 May 2022 08:15:22 +0200
 MIME-Version: 1.0
-References: <20211227091241.103-1-xieyongji@bytedance.com> <YjotekJZcSvwoZhp@localhost.localdomain>
- <CACycT3vz4hYTFpHo0Jphs-xE-k--y63+vedTFAaDRWhpi4_5rg@mail.gmail.com>
-In-Reply-To: <CACycT3vz4hYTFpHo0Jphs-xE-k--y63+vedTFAaDRWhpi4_5rg@mail.gmail.com>
-From:   Yongji Xie <xieyongji@bytedance.com>
-Date:   Mon, 16 May 2022 14:13:48 +0800
-Message-ID: <CACycT3vExVBrmE3JN=Bay7sqX=C+wXo5imswLJv_pODbyFFSMA@mail.gmail.com>
-Subject: Re: [PATCH v2] nbd: Don't use workqueue to handle recv work
-To:     Josef Bacik <josef@toxicpanda.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Bart Van Assche <bvanassche@acm.org>,
-        linux-block@vger.kernel.org, nbd@other.debian.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH net] NFC: nci: fix sleep in atomic context bugs caused by
+ nci_skb_alloc
+Content-Language: en-US
+To:     Duoming Zhou <duoming@zju.edu.cn>, netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        gregkh@linuxfoundation.org, alexander.deucher@amd.com,
+        broonie@kernel.org
+References: <20220513133355.113222-1-duoming@zju.edu.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220513133355.113222-1-duoming@zju.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ping.
+On 13/05/2022 15:33, Duoming Zhou wrote:
+> There are sleep in atomic context bugs when the request to secure
+> element of st-nci is timeout. The root cause is that nci_skb_alloc
+> with GFP_KERNEL parameter is called in st_nci_se_wt_timeout which is
+> a timer handler. The call paths that could trigger bugs are shown below:
+> 
+>     (interrupt context 1)
+> st_nci_se_wt_timeout
+>   nci_hci_send_event
+>     nci_hci_send_data
+>       nci_skb_alloc(..., GFP_KERNEL) //may sleep
+> 
+>    (interrupt context 2)
+> st_nci_se_wt_timeout
+>   nci_hci_send_event
+>     nci_hci_send_data
+>       nci_send_data
+>         nci_queue_tx_data_frags
+>           nci_skb_alloc(..., GFP_KERNEL) //may sleep
+> 
+> This patch changes allocation mode of nci_skb_alloc from GFP_KERNEL to
+> GFP_ATOMIC in order to prevent atomic context sleeping. The GFP_ATOMIC
+> flag makes memory allocation operation could be used in atomic context.
+> 
+> Fixes: 6a2968aaf50c ("NFC: basic NCI protocol implementation ")
+> Fixes: 11f54f228643 ("NFC: nci: Add HCI over NCI protocol support")
+> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
 
-On Wed, Mar 23, 2022 at 7:21 PM Yongji Xie <xieyongji@bytedance.com> wrote:
->
-> On Wed, Mar 23, 2022 at 4:11 AM Josef Bacik <josef@toxicpanda.com> wrote:
-> >
-> > On Mon, Dec 27, 2021 at 05:12:41PM +0800, Xie Yongji wrote:
-> > > The rescuer thread might take over the works queued on
-> > > the workqueue when the worker thread creation timed out.
-> > > If this happens, we have no chance to create multiple
-> > > recv threads which causes I/O hung on this nbd device.
-> > >
-> > > To fix it, we can not simply remove the WQ_MEM_RECLAIM
-> > > flag since the recv work is in the memory reclaim path.
-> > > So this patch tries to create kthreads directly to
-> > > handle the recv work instead of using workqueue.
-> > >
-> >
-> > I still don't understand why we can't drop WQ_MEM_RECLAIM.  IIRC your argument
-> > is that we need it because a reconnect could happen under memory pressure and we
-> > need to be able to queue work for that.  However your code makes it so we're
-> > just doing a kthread_create(), which isn't coming out of some emergency pool, so
-> > it's just as likely to fail as a !WQ_MEM_RECLAIM workqueue.  Thanks,
-> >
->
-> I think the key point is the context in which the work thread is
-> created. It's the context of the nbd process if using kthread_create()
-> to create a workthread (might do some allocation). Then we can benefit
-> from the PR_SET_IO_FLUSHER flag, so memory reclaim would never hit the
-> page cache on the nbd device. But using queue_work() to create a
-> workthread, the actual thread creation happens in the context of the
-> work thread rather than the nbd process, so we can't rely on the
-> PR_SET_IO_FLUSHER flag to avoid deadlock.
->
-> Thanks,
-> Yongji
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

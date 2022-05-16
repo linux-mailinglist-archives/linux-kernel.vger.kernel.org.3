@@ -2,167 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E985527B67
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 03:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 231B5527B66
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 03:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239060AbiEPBdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 21:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37936 "EHLO
+        id S239112AbiEPBa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 21:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231853AbiEPBdC (ORCPT
+        with ESMTP id S238900AbiEPBay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 21:33:02 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D473C10FF4
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 18:33:00 -0700 (PDT)
-Received: from fsav413.sakura.ne.jp (fsav413.sakura.ne.jp [133.242.250.112])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 24G1WmNd085346;
-        Mon, 16 May 2022 10:32:48 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav413.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav413.sakura.ne.jp);
- Mon, 16 May 2022 10:32:48 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav413.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 24G1WmWw085343
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 16 May 2022 10:32:48 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <7b2fecdb-59ae-2c54-5a5b-774ef7054d1b@I-love.SAKURA.ne.jp>
-Date:   Mon, 16 May 2022 10:32:43 +0900
+        Sun, 15 May 2022 21:30:54 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322456421;
+        Sun, 15 May 2022 18:30:50 -0700 (PDT)
+Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L1hVy2RBQz1JCFc;
+        Mon, 16 May 2022 09:29:30 +0800 (CST)
+Received: from localhost.localdomain (10.175.127.227) by
+ kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 16 May 2022 09:30:48 +0800
+From:   Zhang Wensheng <zhangwensheng5@huawei.com>
+To:     <tj@kernel.org>, <axboe@kernel.dk>
+CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <cgroups@vger.kernel.org>, <yukuai3@huawei.com>
+Subject: [PATCH -next] block: fix io hung of setting throttle limit frequently
+Date:   Mon, 16 May 2022 09:44:29 +0800
+Message-ID: <20220516014429.33723-1-zhangwensheng5@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: [PATCH v2] workqueue: Wrap flush_workqueue() using a macro
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-References: <d34dac10-c12f-8bda-35c4-9cb158781db2@I-love.SAKURA.ne.jp>
- <a6288570ed3534b0316723061f5604e3871accef.camel@perches.com>
- <6e4ed62e-888b-6e7a-c13d-67656f39ca94@I-love.SAKURA.ne.jp>
- <738afe71-2983-05d5-f0fc-d94efbdf7634@I-love.SAKURA.ne.jp>
- <YnQKNea6KWFaWNis@slm.duckdns.org>
- <a0d6b5e4-b9c8-1a43-570f-4c73b0f6fc0c@I-love.SAKURA.ne.jp>
- <Yn0538VavQPv+/Ws@slm.duckdns.org>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <Yn0538VavQPv+/Ws@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500016.china.huawei.com (7.221.188.220)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since flush operation synchronously waits for completion, flushing
-system-wide WQs (e.g. system_wq) might introduce possibility of deadlock
-due to unexpected locking dependency. Tejun Heo commented at [1] that it
-makes no sense at all to call flush_workqueue() on the shared WQs as the
-caller has no idea what it's gonna end up waiting for.
+Our test find a io hung problem which could be simplified:
+setting throttle iops/bps limit to small, and to issue a big
+bio. if the io is limited to 10s, just wait 1s, continue to
+set same throttle iops/bps limit again, now, we could see
+that the new throttle time become 10s again, like this, if
+we distribute limit repeatedly within 10s, this io will always
+in throttle queue.
 
-Although there is flush_scheduled_work() which flushes system_wq WQ with
-"Think twice before calling this function! It's very easy to get into
-trouble if you don't take great care." warning message, syzbot found a
-circular locking dependency caused by flushing system_wq WQ [2].
+when the throttle limit iops/bps is set to io. tg_conf_updated
+will be called, it will start a new slice and update a new
+dispatch time to pending timer which lead to wait again.
 
-Therefore, let's change the direction to that developers had better use
-their local WQs if flush_scheduled_work()/flush_workqueue(system_*_wq) is
-inevitable.
+Because of commit 9f5ede3c01f9 ("block: throttle split bio in
+case of iops limit"), the io will work fine if limited by bps.
+which could fix part of the problem, not the root cause.
 
-Steps for converting system-wide WQs into local WQs are explained at [3],
-and a conversion to stop flushing system-wide WQs is in progress. Now we
-want some mechanism for preventing developers who are not aware of this
-conversion from again start flushing system-wide WQs.
+To fix this problem, adding the judge before update dispatch time.
+if the pending timer is alive, we should not to update time.
 
-Since I found that WARN_ON() is complete but awkward approach for teaching
-developers about this problem, let's use BUILD_BUG_ON() for incomplete but
-handy approach. For completeness, we will also insert WARN_ON() into
-flush_workqueue() after all users stopped calling flush_scheduled_work().
-
-Link: https://lore.kernel.org/all/YgnQGZWT%2Fn3VAITX@slm.duckdns.org/ [1]
-Link: https://syzkaller.appspot.com/bug?extid=bde0f89deacca7c765b8 [2]
-Link: https://lkml.kernel.org/r/49925af7-78a8-a3dd-bce6-cfc02e1a9236@I-love.SAKURA.ne.jp [3]
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Signed-off-by: Zhang Wensheng <zhangwensheng5@huawei.com>
 ---
-Changes in v2:
-  Use "void (flush_workqueue)(struct workqueue_struct *wq)" and remove
-  "#undef flush_workqueue", suggested by Joe Perches <joe@perches.com>.
+ block/blk-throttle.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-This patch is expected to be sent to linux.git immediately before the merge
-window for 5.19 closes, for we need to wait until patches for removing
-flush_workqueue(system_*_wq) calls reached linux.git during the merge window
-for 5.19. Due to this ordering dependency, the kernel build bots complain like
-https://lkml.kernel.org/r/202205021448.6SzhD1Cz-lkp@intel.com , but it seems
-that simply ignoring these reports is the best choice.
-
-If it is inconvenient for you to send pull request twice from your wq.git tree
-(once for immediately after 5.18 is released, the other for immediately before
-the merge window for 5.19 closes), I can send pull request for this patch from
-my tree. In that case, please give me Acked-by: or Reviewed-by: response regarding
-this patch.
-
- include/linux/workqueue.h | 31 +++++++++++++++++++++++++++++++
- kernel/workqueue.c        |  2 +-
- 2 files changed, 32 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
-index 7fee9b6cfede..5bad503925de 100644
---- a/include/linux/workqueue.h
-+++ b/include/linux/workqueue.h
-@@ -663,4 +663,35 @@ int workqueue_offline_cpu(unsigned int cpu);
- void __init workqueue_init_early(void);
- void __init workqueue_init(void);
+diff --git a/block/blk-throttle.c b/block/blk-throttle.c
+index 469c483719be..8acb205dfa85 100644
+--- a/block/blk-throttle.c
++++ b/block/blk-throttle.c
+@@ -1321,12 +1321,14 @@ static void tg_conf_updated(struct throtl_grp *tg, bool global)
+ 	 * that a group's limit are dropped suddenly and we don't want to
+ 	 * account recently dispatched IO with new low rate.
+ 	 */
+-	throtl_start_new_slice(tg, READ);
+-	throtl_start_new_slice(tg, WRITE);
++	if (!timer_pending(&sq->parent_sq->pending_timer)) {
++		throtl_start_new_slice(tg, READ);
++		throtl_start_new_slice(tg, WRITE);
  
-+/*
-+ * Detect attempt to flush system-wide workqueues at compile time when possible.
-+ * See https://lkml.kernel.org/r/49925af7-78a8-a3dd-bce6-cfc02e1a9236@I-love.SAKURA.ne.jp for
-+ * reasons and steps for converting system-wide workqueues into local workqueues.
-+ */
-+#define flush_workqueue(wq)						\
-+({									\
-+	BUILD_BUG_ON_MSG(__builtin_constant_p(&(wq) == &system_wq) &&	\
-+			 &(wq) == &system_wq,				\
-+			 "Please avoid flushing system_wq.");		\
-+	BUILD_BUG_ON_MSG(__builtin_constant_p(&(wq) == &system_highpri_wq) && \
-+			 &(wq) == &system_highpri_wq,			\
-+			 "Please avoid flushing system_highpri_wq.");	\
-+	BUILD_BUG_ON_MSG(__builtin_constant_p(&(wq) == &system_long_wq) && \
-+			 &(wq) == &system_long_wq,			\
-+			 "Please avoid flushing system_long_wq.");	\
-+	BUILD_BUG_ON_MSG(__builtin_constant_p(&(wq) == &system_unbound_wq) && \
-+			 &(wq) == &system_unbound_wq,			\
-+			 "Please avoid flushing system_unbound_wq.");	\
-+	BUILD_BUG_ON_MSG(__builtin_constant_p(&(wq) == &system_freezable_wq) &&	\
-+			 &(wq) == &system_freezable_wq,			\
-+			 "Please avoid flushing system_freezable_wq."); \
-+	BUILD_BUG_ON_MSG(__builtin_constant_p(&(wq) == &system_power_efficient_wq) && \
-+			 &(wq) == &system_power_efficient_wq,		\
-+			 "Please avoid flushing system_power_efficient_wq."); \
-+	BUILD_BUG_ON_MSG(__builtin_constant_p(&(wq) == &system_freezable_power_efficient_wq) &&	\
-+			 &(wq) == &system_freezable_power_efficient_wq, \
-+			 "Please avoid flushing system_freezable_power_efficient_wq."); \
-+	flush_workqueue(wq);						\
-+})
-+
- #endif
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 0d2514b4ff0d..071a4eb7fd94 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -2794,7 +2794,7 @@ static bool flush_workqueue_prep_pwqs(struct workqueue_struct *wq,
-  * This function sleeps until all work items which were queued on entry
-  * have finished execution, but it is not livelocked by new incoming ones.
-  */
--void flush_workqueue(struct workqueue_struct *wq)
-+void (flush_workqueue)(struct workqueue_struct *wq)
- {
- 	struct wq_flusher this_flusher = {
- 		.list = LIST_HEAD_INIT(this_flusher.list),
+-	if (tg->flags & THROTL_TG_PENDING) {
+-		tg_update_disptime(tg);
+-		throtl_schedule_next_dispatch(sq->parent_sq, true);
++		if (tg->flags & THROTL_TG_PENDING) {
++			tg_update_disptime(tg);
++			throtl_schedule_next_dispatch(sq->parent_sq, true);
++		}
+ 	}
+ }
+ 
 -- 
-2.18.4
-
+2.31.1
 

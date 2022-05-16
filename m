@@ -2,51 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FFEE529145
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1403A5291AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 22:48:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351394AbiEPUDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 16:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33120 "EHLO
+        id S1348323AbiEPU11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 16:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346278AbiEPTxE (ORCPT
+        with ESMTP id S1349747AbiEPUAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:53:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E1B47042;
-        Mon, 16 May 2022 12:48:54 -0700 (PDT)
+        Mon, 16 May 2022 16:00:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B03C43EFC;
+        Mon, 16 May 2022 12:54:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BB528B81611;
-        Mon, 16 May 2022 19:48:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1C6DC385AA;
-        Mon, 16 May 2022 19:48:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA453B81612;
+        Mon, 16 May 2022 19:54:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8DE4C34100;
+        Mon, 16 May 2022 19:54:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652730531;
-        bh=cuKichH73sDTAWETAXC1JTIM2p/rWmO8HVY3pasalVI=;
+        s=korg; t=1652730861;
+        bh=MN5DrjPhuKaz6X+gSJol3l5D47LkryzVT7lFWe8dDqA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YYDRZiz5wvI1cq2IAIJLZ69ZqqdUOhcxa0tmhInI0+clkwSuqnRWbj9+zaVUfp09C
-         n6gQPXF+53WE7Sl5rRa/mEb+siccTk8HxRWy9+bbdLe3mVpQtt1HIpBDMjzQNtzNk2
-         IS3CBR1WhXpax9ZHbYOC9F0l2Vf9CsC0KcaMuBg0=
+        b=cujRespCD6uB95Bg3dLUofzau0P7+3FuuPxplqo5rVz2+AtPNbveqtMj8iZYiA18o
+         69lXmPdVO3VgVJDwbDYEZ2BhXP3SN/V35JHPBiN7vR3Mfw6UuARxxWWdN3Hpm1ovL+
+         OBviwR8L05XZt+1AmmWhZ/X9ZBD0R2K+ooEhY9A8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kalesh Singh <kaleshsingh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Hridya Valsaraju <hridya@google.com>,
-        Jann Horn <jannh@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 028/102] procfs: prevent unprivileged processes accessing fdinfo dir
+Subject: [PATCH 5.17 028/114] dim: initialize all struct fields
 Date:   Mon, 16 May 2022 21:36:02 +0200
-Message-Id: <20220516193624.808523501@linuxfoundation.org>
+Message-Id: <20220516193626.299689152@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
-References: <20220516193623.989270214@linuxfoundation.org>
+In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
+References: <20220516193625.489108457@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,89 +56,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kalesh Singh <kaleshsingh@google.com>
+From: Jesse Brandeburg <jesse.brandeburg@intel.com>
 
-[ Upstream commit 1927e498aee1757b3df755a194cbfc5cc0f2b663 ]
+[ Upstream commit ee1444b5e1df4155b591d0d9b1e72853a99ea861 ]
 
-The file permissions on the fdinfo dir from were changed from
-S_IRUSR|S_IXUSR to S_IRUGO|S_IXUGO, and a PTRACE_MODE_READ check was added
-for opening the fdinfo files [1].  However, the ptrace permission check
-was not added to the directory, allowing anyone to get the open FD numbers
-by reading the fdinfo directory.
+The W=2 build pointed out that the code wasn't initializing all the
+variables in the dim_cq_moder declarations with the struct initializers.
+The net change here is zero since these structs were already static
+const globals and were initialized with zeros by the compiler, but
+removing compiler warnings has value in and of itself.
 
-Add the missing ptrace permission check for opening the fdinfo directory.
+lib/dim/net_dim.c: At top level:
+lib/dim/net_dim.c:54:9: warning: missing initializer for field ‘comps’ of ‘const struct dim_cq_moder’ [-Wmissing-field-initializers]
+   54 |         NET_DIM_RX_EQE_PROFILES,
+      |         ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from lib/dim/net_dim.c:6:
+./include/linux/dim.h:45:13: note: ‘comps’ declared here
+   45 |         u16 comps;
+      |             ^~~~~
 
-[1] https://lkml.kernel.org/r/20210308170651.919148-1-kaleshsingh@google.com
+and repeats for the tx struct, and once you fix the comps entry then
+the cq_period_mode field needs the same treatment.
 
-Link: https://lkml.kernel.org/r/20210713162008.1056986-1-kaleshsingh@google.com
-Fixes: 7bc3fa0172a4 ("procfs: allow reading fdinfo with PTRACE_MODE_READ")
-Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Eric W. Biederman <ebiederm@xmission.com>
-Cc: Christian Brauner <christian.brauner@ubuntu.com>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: Hridya Valsaraju <hridya@google.com>
-Cc: Jann Horn <jannh@google.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Use the commonly accepted style to indicate to the compiler that we
+know what we're doing, and add a comma at the end of each struct
+initializer to clean up the issue, and use explicit initializers
+for the fields we are initializing which makes the compiler happy.
+
+While here and fixing these lines, clean up the code slightly with
+a fix for the super long lines by removing the word "_MODERATION" from a
+couple defines only used in this file.
+
+Fixes: f8be17b81d44 ("lib/dim: Fix -Wunused-const-variable warnings")
+Signed-off-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
+Link: https://lore.kernel.org/r/20220507011038.14568-1-jesse.brandeburg@intel.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/proc/fd.c | 23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
+ lib/dim/net_dim.c | 44 ++++++++++++++++++++++----------------------
+ 1 file changed, 22 insertions(+), 22 deletions(-)
 
-diff --git a/fs/proc/fd.c b/fs/proc/fd.c
-index 172c86270b31..913bef0d2a36 100644
---- a/fs/proc/fd.c
-+++ b/fs/proc/fd.c
-@@ -72,7 +72,7 @@ static int seq_show(struct seq_file *m, void *v)
- 	return 0;
+diff --git a/lib/dim/net_dim.c b/lib/dim/net_dim.c
+index 06811d866775..53f6b9c6e936 100644
+--- a/lib/dim/net_dim.c
++++ b/lib/dim/net_dim.c
+@@ -12,41 +12,41 @@
+  *        Each profile size must be of NET_DIM_PARAMS_NUM_PROFILES
+  */
+ #define NET_DIM_PARAMS_NUM_PROFILES 5
+-#define NET_DIM_DEFAULT_RX_CQ_MODERATION_PKTS_FROM_EQE 256
+-#define NET_DIM_DEFAULT_TX_CQ_MODERATION_PKTS_FROM_EQE 128
++#define NET_DIM_DEFAULT_RX_CQ_PKTS_FROM_EQE 256
++#define NET_DIM_DEFAULT_TX_CQ_PKTS_FROM_EQE 128
+ #define NET_DIM_DEF_PROFILE_CQE 1
+ #define NET_DIM_DEF_PROFILE_EQE 1
+ 
+ #define NET_DIM_RX_EQE_PROFILES { \
+-	{1,   NET_DIM_DEFAULT_RX_CQ_MODERATION_PKTS_FROM_EQE}, \
+-	{8,   NET_DIM_DEFAULT_RX_CQ_MODERATION_PKTS_FROM_EQE}, \
+-	{64,  NET_DIM_DEFAULT_RX_CQ_MODERATION_PKTS_FROM_EQE}, \
+-	{128, NET_DIM_DEFAULT_RX_CQ_MODERATION_PKTS_FROM_EQE}, \
+-	{256, NET_DIM_DEFAULT_RX_CQ_MODERATION_PKTS_FROM_EQE}, \
++	{.usec = 1,   .pkts = NET_DIM_DEFAULT_RX_CQ_PKTS_FROM_EQE,}, \
++	{.usec = 8,   .pkts = NET_DIM_DEFAULT_RX_CQ_PKTS_FROM_EQE,}, \
++	{.usec = 64,  .pkts = NET_DIM_DEFAULT_RX_CQ_PKTS_FROM_EQE,}, \
++	{.usec = 128, .pkts = NET_DIM_DEFAULT_RX_CQ_PKTS_FROM_EQE,}, \
++	{.usec = 256, .pkts = NET_DIM_DEFAULT_RX_CQ_PKTS_FROM_EQE,}  \
  }
  
--static int seq_fdinfo_open(struct inode *inode, struct file *file)
-+static int proc_fdinfo_access_allowed(struct inode *inode)
- {
- 	bool allowed = false;
- 	struct task_struct *task = get_proc_task(inode);
-@@ -86,6 +86,16 @@ static int seq_fdinfo_open(struct inode *inode, struct file *file)
- 	if (!allowed)
- 		return -EACCES;
- 
-+	return 0;
-+}
-+
-+static int seq_fdinfo_open(struct inode *inode, struct file *file)
-+{
-+	int ret = proc_fdinfo_access_allowed(inode);
-+
-+	if (ret)
-+		return ret;
-+
- 	return single_open(file, seq_show, inode);
+ #define NET_DIM_RX_CQE_PROFILES { \
+-	{2,  256},             \
+-	{8,  128},             \
+-	{16, 64},              \
+-	{32, 64},              \
+-	{64, 64}               \
++	{.usec = 2,  .pkts = 256,},             \
++	{.usec = 8,  .pkts = 128,},             \
++	{.usec = 16, .pkts = 64,},              \
++	{.usec = 32, .pkts = 64,},              \
++	{.usec = 64, .pkts = 64,}               \
  }
  
-@@ -348,12 +358,23 @@ static int proc_readfdinfo(struct file *file, struct dir_context *ctx)
- 				  proc_fdinfo_instantiate);
+ #define NET_DIM_TX_EQE_PROFILES { \
+-	{1,   NET_DIM_DEFAULT_TX_CQ_MODERATION_PKTS_FROM_EQE},  \
+-	{8,   NET_DIM_DEFAULT_TX_CQ_MODERATION_PKTS_FROM_EQE},  \
+-	{32,  NET_DIM_DEFAULT_TX_CQ_MODERATION_PKTS_FROM_EQE},  \
+-	{64,  NET_DIM_DEFAULT_TX_CQ_MODERATION_PKTS_FROM_EQE},  \
+-	{128, NET_DIM_DEFAULT_TX_CQ_MODERATION_PKTS_FROM_EQE}   \
++	{.usec = 1,   .pkts = NET_DIM_DEFAULT_TX_CQ_PKTS_FROM_EQE,},  \
++	{.usec = 8,   .pkts = NET_DIM_DEFAULT_TX_CQ_PKTS_FROM_EQE,},  \
++	{.usec = 32,  .pkts = NET_DIM_DEFAULT_TX_CQ_PKTS_FROM_EQE,},  \
++	{.usec = 64,  .pkts = NET_DIM_DEFAULT_TX_CQ_PKTS_FROM_EQE,},  \
++	{.usec = 128, .pkts = NET_DIM_DEFAULT_TX_CQ_PKTS_FROM_EQE,}   \
  }
  
-+static int proc_open_fdinfo(struct inode *inode, struct file *file)
-+{
-+	int ret = proc_fdinfo_access_allowed(inode);
-+
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
- const struct inode_operations proc_fdinfo_inode_operations = {
- 	.lookup		= proc_lookupfdinfo,
- 	.setattr	= proc_setattr,
- };
+ #define NET_DIM_TX_CQE_PROFILES { \
+-	{5,  128},  \
+-	{8,  64},  \
+-	{16, 32},  \
+-	{32, 32},  \
+-	{64, 32}   \
++	{.usec = 5,  .pkts = 128,},  \
++	{.usec = 8,  .pkts = 64,},  \
++	{.usec = 16, .pkts = 32,},  \
++	{.usec = 32, .pkts = 32,},  \
++	{.usec = 64, .pkts = 32,}   \
+ }
  
- const struct file_operations proc_fdinfo_operations = {
-+	.open		= proc_open_fdinfo,
- 	.read		= generic_read_dir,
- 	.iterate_shared	= proc_readfdinfo,
- 	.llseek		= generic_file_llseek,
+ static const struct dim_cq_moder
 -- 
 2.35.1
 

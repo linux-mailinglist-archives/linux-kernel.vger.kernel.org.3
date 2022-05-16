@@ -2,202 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D94528CC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:18:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 006F8528CCD
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:22:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344700AbiEPSSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 14:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
+        id S1344713AbiEPSWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 14:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244726AbiEPSSp (ORCPT
+        with ESMTP id S232736AbiEPSWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 14:18:45 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B268E2AC7E;
-        Mon, 16 May 2022 11:18:43 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d25so14743206pfo.10;
-        Mon, 16 May 2022 11:18:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=hCn3RQQIcxHj2Rc/MyeJGHLc1iD9mZE44u/P4nbCcLg=;
-        b=C2x5WF8ltPz6PxwtEL0p03qQkuJJtzoUgVnl6YM61tlhDfoYCNxHbRcGCkePehNzaU
-         bS5x29Y6paC3iRJnzR9EW8J8GAEqgxnh0hXwoK5t4JPmMxVxkbkT3iBAZZXCdfioKn+G
-         nbBQBW42nhyd/YPaVfzp8KbwnDrDiTqKaidmFBJL/mD4jz2MQSxYC0lRcSoT2/cUGW4A
-         qY2s2aa9w8uV0Zs/kU1A2WdGCtwvU388V6XH2rd7hc0ujPI06fmC9CKx0lRf1vBB0VnW
-         k74qPeCQ04uAtx/yeYVPpnpW2vzHAnNmebvVxZJzqpCdiPAO0xulP/p68OoTJYpTKEPn
-         gRuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=hCn3RQQIcxHj2Rc/MyeJGHLc1iD9mZE44u/P4nbCcLg=;
-        b=DcEcAKnNzc9XwuitM6xsxRN4BR/UxYRed5WCxJtqXA1qJCcjcB7IPxYeVxck3p1Od5
-         TgtOETjcRHIvYDY66/74eQO0JIW8G8mHw0Ryr4PFF+lI0lv//WImLlaM6hENhmxfDIop
-         v9H8iIS9zylqjwIuSJjuBQrMnyiPNwOgGQsgLRWT4+XaToZBvVU1GDBR0xp+MloA+mA0
-         pml594D8W26N6EGrA/V5z8xTHKWCIZuXwHztKEItRrg+PFDXJjHEZdoc57j5k+oRrQU6
-         K5+Kh77l5ax9Xdhqt5nnxNMH9VlrbKbGK5QeFglc3Z4l5WoaaDBPQNVpy3EinPPO477R
-         RFIQ==
-X-Gm-Message-State: AOAM530dJdESuUaWpEJ8IXfqWbnZM2Iyz4F0s/MeQWbVmaVgMoYdaVtb
-        tGSbZt6uzyeBMWb34uKmc+E=
-X-Google-Smtp-Source: ABdhPJx6iFibzmvKsdYDNLS5qdtLCfbmKWlJnNW881Ro+J5x/aIIxM8PJ/wm8i01ECKpOqMKUB1Rcg==
-X-Received: by 2002:a65:6e9b:0:b0:3c5:f761:2d94 with SMTP id bm27-20020a656e9b000000b003c5f7612d94mr16035851pgb.79.1652725122894;
-        Mon, 16 May 2022 11:18:42 -0700 (PDT)
-Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id o16-20020a17090ac09000b001d7d8b33121sm19355pjs.5.2022.05.16.11.18.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 11:18:42 -0700 (PDT)
-Date:   Mon, 16 May 2022 11:18:40 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     "Von Dentz, Luiz" <luiz.von.dentz@intel.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the bluetooth tree
-Message-ID: <YoKVgMKgr1iqdXvl@yury-laptop>
-References: <PH0PR11MB51264FB7874380983C3A653BD3CF9@PH0PR11MB5126.namprd11.prod.outlook.com>
+        Mon, 16 May 2022 14:22:11 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C232B27D;
+        Mon, 16 May 2022 11:22:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652725329; x=1684261329;
+  h=subject:from:to:cc:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=oLHQEvkPPnYrdI/9V6HkCwio6IKvCNslsChgOGiucHs=;
+  b=LalQesig/VJuMFnKwAbkpin4NJPs+KeNgSPaO09/9ETboqoZ9babFYCN
+   f5KxSMtKUmc4/NekXBgztrTKEokSDh1k9gUyAZ+1Acw/93V+LjLDre18G
+   tcOopP4fNYTK2P3Pys8aCuLpYojbl2ifTsRMt4Y9cy8qkB1dLoRPgnZgu
+   yX6wzgs8aNQ2GkLG4MOJ/uV4TBHM+35DqltIAU4IXnrEKTO5BQOcfP7Qg
+   1W02eIZrn7fYoZ0gdt4W0qo0acmd/JpIT55sJt6tItiCn3RN/Yg2YtOtr
+   H8LKBQKJVLSIqsL2VHAd6PhMe767zlRfcY9Os+Sn8pXKNwSdXlulXq2Pt
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="270866548"
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="270866548"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 11:21:47 -0700
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="816519835"
+Received: from dwillia2-desk3.jf.intel.com (HELO dwillia2-desk3.amr.corp.intel.com) ([10.54.39.25])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 11:21:46 -0700
+Subject: [PATCH v11 2/7] x86/mce: relocate set{clear}_mce_nospec() functions
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Christoph Hellwig <hch@lst.de>, Jane Chu <jane.chu@oracle.com>,
+        Borislav Petkov <bp@suse.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>, x86@kernel.org,
+        nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org
+Date:   Mon, 16 May 2022 11:21:46 -0700
+Message-ID: <165272527328.90175.8336008202048685278.stgit@dwillia2-desk3.amr.corp.intel.com>
+In-Reply-To: <165247798860.4117683.4554602198740624216.stgit@dwillia2-desk3.amr.corp.intel.com>
+References: <165247798860.4117683.4554602198740624216.stgit@dwillia2-desk3.amr.corp.intel.com>
+User-Agent: StGit/0.18-3-g996c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <PH0PR11MB51264FB7874380983C3A653BD3CF9@PH0PR11MB5126.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 04:58:44PM +0000, Von Dentz, Luiz wrote:
-> Hi Stephen,
-> 
-> Interesting, so we may want to stop using bitmap_from_u64 and replace with
-> bitmap_from_arr32 given the former seems to expect at least 8 bytes:
+From: Jane Chu <jane.chu@oracle.com>
 
-Hi Luiz,
+Relocate the twin mce functions to arch/x86/mm/pat/set_memory.c
+file where they belong.
 
-The problem is that br_params->flags and hdev->conn_flags are bitmaps
-(declared with DECLARE_BITMAP), while cp->current_flags is declared
-as u32.
+While at it, fixup a function name in a comment.
 
-Is it possible to declare cp->current_flags with DECLARE_BITMAP, or
-declare local current_flags as unsigned long?
-        DECLARE_BITMAP(current_flags, __HCI_CONN_NUM_FLAGS) = {cp->current_flags};
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Signed-off-by: Jane Chu <jane.chu@oracle.com>
+Acked-by: Borislav Petkov <bp@suse.de>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+[sfr: gate {set,clear}_mce_nospec() by CONFIG_X86_64]
+Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+---
+Changes since v10:
+- Fix a compile error with 32-bit builds (Stephen)
 
-If so, you can drop this conversion to and from fixed size arrays,
-in the following code and use bitmap API more consistently.
+ arch/x86/include/asm/set_memory.h |   52 -------------------------------------
+ arch/x86/mm/pat/set_memory.c      |   50 ++++++++++++++++++++++++++++++++++--
+ include/linux/set_memory.h        |    8 +++---
+ 3 files changed, 52 insertions(+), 58 deletions(-)
 
-For example the line 
-        if ((supported_flags | current_flags) != supported_flags)
-would turn to:
-        if (bitmap_subset(supported_flags, current_flags))
-
-Alternatively, because __HCI_CONN_NUM_FLAGS == 2, and if you don't
-expect adding 30+ new any flags soon, you can drop bitmap API here
-and use hweight32/64 as appropriate.
-
-Thanks,
-Yury
+diff --git a/arch/x86/include/asm/set_memory.h b/arch/x86/include/asm/set_memory.h
+index 78ca53512486..b45c4d27fd46 100644
+--- a/arch/x86/include/asm/set_memory.h
++++ b/arch/x86/include/asm/set_memory.h
+@@ -86,56 +86,4 @@ bool kernel_page_present(struct page *page);
  
->  diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
-> index 74937a834648..878be1cac5b7 100644
-> --- a/net/bluetooth/mgmt.c
-> +++ b/net/bluetooth/mgmt.c
-> @@ -4519,7 +4519,8 @@ static int set_device_flags(struct sock *sk, struct
-> hci_dev *hdev, void *data,
->                                                               cp->addr.type);
->  
->                 if (br_params) {
-> -                       bitmap_from_u64(br_params->flags, current_flags);
-> +                       bitmap_from_arr32(br_params->flags, &current_flags,
-> +                                         __HCI_CONN_NUM_FLAGS);
->                         status = MGMT_STATUS_SUCCESS;
->                 } else {
->                         bt_dev_warn(hdev, "No such BR/EDR device %pMR (0x%x)",
-> @@ -4531,7 +4532,8 @@ static int set_device_flags(struct sock *sk, struct
-> hci_dev *hdev, void *data,
->                 if (params) {
->                         DECLARE_BITMAP(flags, __HCI_CONN_NUM_FLAGS);
->  
-> -                       bitmap_from_u64(flags, current_flags);
-> +                       bitmap_from_arr32(flags, &current_flags,
-> +                                         __HCI_CONN_NUM_FLAGS);
->  
->                         /* Devices using RPAs can only be programmed in the
->                          * acceptlist LL Privacy has been enable otherwise they
-> @@ -4546,7 +4548,8 @@ static int set_device_flags(struct sock *sk, struct
-> hci_dev *hdev, void *data,
->                                 goto unlock;
->                         }
->  
-> -                       bitmap_from_u64(params->flags, current_flags);
-> +                       bitmap_from_arr32(params->flags, &current_flags,
-> +                                         __HCI_CONN_NUM_FLAGS);
->                         status = MGMT_STATUS_SUCCESS;
->  
->                         /* Update passive scan if HCI_CONN_FLAG_DEVICE_PRIVACY
-> 
-> 
-> ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-> From: Stephen Rothwell
-> Sent: Monday, May 16, 2022 12:57 AM
-> To: Marcel Holtmann; Johan Hedberg; Yury Norov
-> Cc: Von Dentz, Luiz; Linux Kernel Mailing List; Linux Next Mailing List
-> Subject: linux-next: build warning after merge of the bluetooth tree
-> 
-> Hi all,
-> 
-> After merging the bluetooth tree, today's linux-next build (arm
-> multi_v7_defconfig) produced this warning:
-> 
-> In file included from include/linux/cpumask.h:12,
->                  from include/linux/mm_types_task.h:14,
->                  from include/linux/mm_types.h:5,
->                  from include/linux/buildid.h:5,
->                  from include/linux/module.h:14,
->                  from net/bluetooth/mgmt.c:27:
-> In function 'bitmap_copy',
->     inlined from 'bitmap_copy_clear_tail' at include/linux/bitmap.h:270:2,
->     inlined from 'bitmap_from_u64' at include/linux/bitmap.h:622:2,
->     inlined from 'set_device_flags' at net/bluetooth/mgmt.c:4534:4:
-> include/linux/bitmap.h:261:9: warning: 'memcpy' forming offset [4, 7] is out of
-> the bounds [0, 4] of object 'flags' with type 'long unsigned int[1]'
-> [-Warray-bounds]
->   261 |         memcpy(dst, src, len);
->       |         ^~~~~~~~~~~~~~~~~~~~~
-> In file included from include/linux/kasan-checks.h:5,
->                  from include/asm-generic/rwonce.h:26,
->                  from ./arch/arm/include/generated/asm/rwonce.h:1,
->                  from include/linux/compiler.h:248,
->                  from include/linux/build_bug.h:5,
->                  from include/linux/container_of.h:5,
->                  from include/linux/list.h:5,
->                  from include/linux/module.h:12,
->                  from net/bluetooth/mgmt.c:27:
-> net/bluetooth/mgmt.c: In function 'set_device_flags':
-> net/bluetooth/mgmt.c:4532:40: note: 'flags' declared here
->  4532 |                         DECLARE_BITMAP(flags, __HCI_CONN_NUM_FLAGS);
->       |                                        ^~~~~
-> include/linux/types.h:11:23: note: in definition of macro 'DECLARE_BITMAP'
->    11 |         unsigned long name[BITS_TO_LONGS(bits)]
->       |                       ^~~~
-> 
-> Introduced by commit
-> 
->   a9a347655d22 ("Bluetooth: MGMT: Add conditions for setting
-> HCI_CONN_FLAG_REMOTE_WAKEUP")
-> 
-> Bitmaps consist of unsigned longs (in this case 32 bits) ...
-> 
-> (This warning only happens due to chnges in the bitmap tree.)
-> 
-> --
-> Cheers,
-> Stephen Rothwell
+ extern int kernel_set_to_readonly;
+ 
+-#ifdef CONFIG_X86_64
+-/*
+- * Prevent speculative access to the page by either unmapping
+- * it (if we do not require access to any part of the page) or
+- * marking it uncacheable (if we want to try to retrieve data
+- * from non-poisoned lines in the page).
+- */
+-static inline int set_mce_nospec(unsigned long pfn, bool unmap)
+-{
+-	unsigned long decoy_addr;
+-	int rc;
+-
+-	/* SGX pages are not in the 1:1 map */
+-	if (arch_is_platform_page(pfn << PAGE_SHIFT))
+-		return 0;
+-	/*
+-	 * We would like to just call:
+-	 *      set_memory_XX((unsigned long)pfn_to_kaddr(pfn), 1);
+-	 * but doing that would radically increase the odds of a
+-	 * speculative access to the poison page because we'd have
+-	 * the virtual address of the kernel 1:1 mapping sitting
+-	 * around in registers.
+-	 * Instead we get tricky.  We create a non-canonical address
+-	 * that looks just like the one we want, but has bit 63 flipped.
+-	 * This relies on set_memory_XX() properly sanitizing any __pa()
+-	 * results with __PHYSICAL_MASK or PTE_PFN_MASK.
+-	 */
+-	decoy_addr = (pfn << PAGE_SHIFT) + (PAGE_OFFSET ^ BIT(63));
+-
+-	if (unmap)
+-		rc = set_memory_np(decoy_addr, 1);
+-	else
+-		rc = set_memory_uc(decoy_addr, 1);
+-	if (rc)
+-		pr_warn("Could not invalidate pfn=0x%lx from 1:1 map\n", pfn);
+-	return rc;
+-}
+-#define set_mce_nospec set_mce_nospec
+-
+-/* Restore full speculative operation to the pfn. */
+-static inline int clear_mce_nospec(unsigned long pfn)
+-{
+-	return set_memory_wb((unsigned long) pfn_to_kaddr(pfn), 1);
+-}
+-#define clear_mce_nospec clear_mce_nospec
+-#else
+-/*
+- * Few people would run a 32-bit kernel on a machine that supports
+- * recoverable errors because they have too much memory to boot 32-bit.
+- */
+-#endif
+-
+ #endif /* _ASM_X86_SET_MEMORY_H */
+diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+index abf5ed76e4b7..0caf4b0edcbc 100644
+--- a/arch/x86/mm/pat/set_memory.c
++++ b/arch/x86/mm/pat/set_memory.c
+@@ -19,6 +19,7 @@
+ #include <linux/vmstat.h>
+ #include <linux/kernel.h>
+ #include <linux/cc_platform.h>
++#include <linux/set_memory.h>
+ 
+ #include <asm/e820/api.h>
+ #include <asm/processor.h>
+@@ -29,7 +30,6 @@
+ #include <asm/pgalloc.h>
+ #include <asm/proto.h>
+ #include <asm/memtype.h>
+-#include <asm/set_memory.h>
+ #include <asm/hyperv-tlfs.h>
+ #include <asm/mshyperv.h>
+ 
+@@ -1816,7 +1816,7 @@ static inline int cpa_clear_pages_array(struct page **pages, int numpages,
+ }
+ 
+ /*
+- * _set_memory_prot is an internal helper for callers that have been passed
++ * __set_memory_prot is an internal helper for callers that have been passed
+  * a pgprot_t value from upper layers and a reservation has already been taken.
+  * If you want to set the pgprot to a specific page protocol, use the
+  * set_memory_xx() functions.
+@@ -1925,6 +1925,52 @@ int set_memory_wb(unsigned long addr, int numpages)
+ }
+ EXPORT_SYMBOL(set_memory_wb);
+ 
++/*
++ * Prevent speculative access to the page by either unmapping
++ * it (if we do not require access to any part of the page) or
++ * marking it uncacheable (if we want to try to retrieve data
++ * from non-poisoned lines in the page).
++ */
++#ifdef CONFIG_X86_64
++int set_mce_nospec(unsigned long pfn, bool unmap)
++{
++	unsigned long decoy_addr;
++	int rc;
++
++	/* SGX pages are not in the 1:1 map */
++	if (arch_is_platform_page(pfn << PAGE_SHIFT))
++		return 0;
++	/*
++	 * We would like to just call:
++	 *      set_memory_XX((unsigned long)pfn_to_kaddr(pfn), 1);
++	 * but doing that would radically increase the odds of a
++	 * speculative access to the poison page because we'd have
++	 * the virtual address of the kernel 1:1 mapping sitting
++	 * around in registers.
++	 * Instead we get tricky.  We create a non-canonical address
++	 * that looks just like the one we want, but has bit 63 flipped.
++	 * This relies on set_memory_XX() properly sanitizing any __pa()
++	 * results with __PHYSICAL_MASK or PTE_PFN_MASK.
++	 */
++	decoy_addr = (pfn << PAGE_SHIFT) + (PAGE_OFFSET ^ BIT(63));
++
++	if (unmap)
++		rc = set_memory_np(decoy_addr, 1);
++	else
++		rc = set_memory_uc(decoy_addr, 1);
++	if (rc)
++		pr_warn("Could not invalidate pfn=0x%lx from 1:1 map\n", pfn);
++	return rc;
++}
++
++/* Restore full speculative operation to the pfn. */
++int clear_mce_nospec(unsigned long pfn)
++{
++	return set_memory_wb((unsigned long) pfn_to_kaddr(pfn), 1);
++}
++EXPORT_SYMBOL_GPL(clear_mce_nospec);
++#endif /* CONFIG_X86_64 */
++
+ int set_memory_x(unsigned long addr, int numpages)
+ {
+ 	if (!(__supported_pte_mask & _PAGE_NX))
+diff --git a/include/linux/set_memory.h b/include/linux/set_memory.h
+index f36be5166c19..683a6c3f7179 100644
+--- a/include/linux/set_memory.h
++++ b/include/linux/set_memory.h
+@@ -42,14 +42,14 @@ static inline bool can_set_direct_map(void)
+ #endif
+ #endif /* CONFIG_ARCH_HAS_SET_DIRECT_MAP */
+ 
+-#ifndef set_mce_nospec
++#ifdef CONFIG_X86_64
++int set_mce_nospec(unsigned long pfn, bool unmap);
++int clear_mce_nospec(unsigned long pfn);
++#else
+ static inline int set_mce_nospec(unsigned long pfn, bool unmap)
+ {
+ 	return 0;
+ }
+-#endif
+-
+-#ifndef clear_mce_nospec
+ static inline int clear_mce_nospec(unsigned long pfn)
+ {
+ 	return 0;
+

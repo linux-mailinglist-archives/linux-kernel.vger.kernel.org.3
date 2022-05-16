@@ -2,80 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA31528508
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C849D52850E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 15:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243119AbiEPNLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 09:11:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51132 "EHLO
+        id S243102AbiEPNNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 09:13:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243778AbiEPNLQ (ORCPT
+        with ESMTP id S237841AbiEPNM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 09:11:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 122FA167CE
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:11:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652706674;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hWqbVpSXlRnUW98z3sLnmKnw5Je1+k/fACI3ag9jrI4=;
-        b=QEzxDleZAqIlW2y5h3gOn6WRqOXGyvLL6lq2xnPls9ijE3bbThig+BqRWvLlox+GLKOvkp
-        LctfQIv9G+dvhfiURo5DHUwyiE4MGk77Ys4WjOoR/BBqiFZ6ayMduBAU76qBGqJDJVwGKA
-        f6KgeGUpFrAXNmUzeXCbLWWKkYh9oao=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-84-hGHr0rcQO5uehuXbsg8q2w-1; Mon, 16 May 2022 09:11:10 -0400
-X-MC-Unique: hGHr0rcQO5uehuXbsg8q2w-1
-Received: by mail-wm1-f72.google.com with SMTP id 26-20020a05600c021a00b003940660c053so6753920wmi.2
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 06:11:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=hWqbVpSXlRnUW98z3sLnmKnw5Je1+k/fACI3ag9jrI4=;
-        b=YM8Pm9ElFefVztn6XP4acT2WCq1gTxPzrgHusQ5j+P/MEwyRCGsdk58Oxam2RKYv17
-         Q7tMTq+bb8PJXOlK2/D1K0ikn//l7FakLAqjunmP+Gs5DMblXXjVoUokUSxGxrheXRr0
-         WCZxLCB+LUNBADWDGFFhr+n/WQLrctXGUQ1cMyXN7DBZq3esslDcqZ67Jfm3WFTJQOgT
-         66sg/KFbukByV+27rRcs4E/xVAjxWm90Q+c4QKyrzjW8qY3qdt2t/V9CVgD2TKBAR5eO
-         UsmSrm0qeEr/06OhLxbEi59nh4PtNaT98pViEHoIUV2yNccYJnrSiG3dtcoCyYy7m0Xx
-         N+lQ==
-X-Gm-Message-State: AOAM531ijmUtvjjg+zprswQ5E2Db+2O7nwZfIA4R4UkuM6iMyVqTbaxD
-        HXCKFXo6Q+L3CAJs0uifSCWjdyC78KH39arfG8S37w88SbjxNLJOP0NYfYCGbRgtohkHfO46q+Z
-        oQkTvuSwM9G6do6+bfIdfbB6a
-X-Received: by 2002:a5d:6c64:0:b0:20d:599:ac5 with SMTP id r4-20020a5d6c64000000b0020d05990ac5mr5817857wrz.188.1652706669675;
-        Mon, 16 May 2022 06:11:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxMIpxXZkSv8yNPofszxOJdJeN+qIyr7YJ2LBcjlLRnEL3eW+abpUDrUBz1fM+68QQmFMF1HA==
-X-Received: by 2002:a5d:6c64:0:b0:20d:599:ac5 with SMTP id r4-20020a5d6c64000000b0020d05990ac5mr5817836wrz.188.1652706669339;
-        Mon, 16 May 2022 06:11:09 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-112-184.dyn.eolo.it. [146.241.112.184])
-        by smtp.gmail.com with ESMTPSA id l20-20020a1c7914000000b00394538d039esm13126585wme.6.2022.05.16.06.11.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 06:11:09 -0700 (PDT)
-Message-ID: <b9844f3ce486c5aff8547e79abf4344488db6568.camel@redhat.com>
-Subject: Re: [PATCH net-next v3 02/10] udp/ipv6: move pending section of
- udpv6_sendmsg
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Pavel Begunkov <asml.silence@gmail.com>, netdev@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 16 May 2022 15:11:07 +0200
-In-Reply-To: <a0e7477985ef08c5f08f35b8c7336587c8adce12.1652368648.git.asml.silence@gmail.com>
-References: <cover.1652368648.git.asml.silence@gmail.com>
-         <a0e7477985ef08c5f08f35b8c7336587c8adce12.1652368648.git.asml.silence@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Mon, 16 May 2022 09:12:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9811EEC8;
+        Mon, 16 May 2022 06:12:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7F3FB811B6;
+        Mon, 16 May 2022 13:12:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DB10C385B8;
+        Mon, 16 May 2022 13:12:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652706775;
+        bh=8FPoe1RAON30o/pCWwFs0A713UVrLNGUKmHerCIG1qQ=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=nH3efThIppw0sM26m2Bc3LimWeB3POnLRTd7U7offMmfKpz5GMVyiXJfNT2O43Dro
+         o6f5MFYs2Hi4cCnaIYHK43gb63YOh8OvzhAvt1bxSbKnhC9DfDhOkEhLIhC5jHtqVZ
+         b/wXmwCA1cLA/3CXjBCSHFyat4voaYzevS5dtPrWtRrWgptCQzRrNSwtdsRzYEswWQ
+         mGGx7MN3qLkYeYJMzyXFJXRK+CW2AKE1wHkQ46s6vkpu+o60fm3GHAqhqASscElFOY
+         dmUZ295Z2emRo84c+TrzUPokDHemLm3Y/ozZTAOo3tJAsCCNSkvs1HKnE6TfE44pxN
+         Tw2Sud2GlExvg==
+Message-ID: <2412ef109c2af459189b9cce9a39c2ed34eb7b61.camel@kernel.org>
+Subject: Re: [PATCH 1/2] fs/dcache: add d_compare() helper support
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Xiubo Li <xiubli@redhat.com>, viro@zeniv.linux.org.uk
+Cc:     idryomov@gmail.com, vshankar@redhat.com,
+        ceph-devel@vger.kernel.org, mcgrof@kernel.org,
+        akpm@linux-foundation.org, arnd@arndb.de,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 16 May 2022 09:12:53 -0400
+In-Reply-To: <20220516122046.40655-2-xiubli@redhat.com>
+References: <20220516122046.40655-1-xiubli@redhat.com>
+         <20220516122046.40655-2-xiubli@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,51 +58,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-05-13 at 16:26 +0100, Pavel Begunkov wrote:
-> Move up->pending section of udpv6_sendmsg() to the beginning of the
-> function. Even though it require some code duplication for sin6 parsing,
-> it clearly localises the pending handling in one place, removes an extra
-> if and more importantly will prepare the code for further patches.
-> 
-> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+On Mon, 2022-05-16 at 20:20 +0800, Xiubo Li wrote:
+> Signed-off-by: Xiubo Li <xiubli@redhat.com>
 > ---
->  net/ipv6/udp.c | 70 ++++++++++++++++++++++++++++++--------------------
->  1 file changed, 42 insertions(+), 28 deletions(-)
-> 
-> diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-> index 11d44ed46953..85bff1252f5c 100644
-> --- a/net/ipv6/udp.c
-> +++ b/net/ipv6/udp.c
-> @@ -1318,6 +1318,46 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
->  	ipc6.sockc.tsflags = sk->sk_tsflags;
->  	ipc6.sockc.mark = sk->sk_mark;
->  
-> +	/* Rough check on arithmetic overflow,
-> +	   better check is made in ip6_append_data().
-> +	   */
-> +	if (unlikely(len > INT_MAX - sizeof(struct udphdr)))
-> +		return -EMSGSIZE;
+>  fs/dcache.c            | 15 +++++++++++++++
+>  include/linux/dcache.h |  2 ++
+>  2 files changed, 17 insertions(+)
+>=20
+> diff --git a/fs/dcache.c b/fs/dcache.c
+> index 93f4f5ee07bf..95a72f92a94b 100644
+> --- a/fs/dcache.c
+> +++ b/fs/dcache.c
+> @@ -2262,6 +2262,21 @@ static inline bool d_same_name(const struct dentry=
+ *dentry,
+>  				       name) =3D=3D 0;
+>  }
+> =20
+> +/**
+> + * d_compare - compare dentry name with case-exact name
+> + * @parent: parent dentry
+> + * @dentry: the negative dentry that was passed to the parent's lookup f=
+unc
+> + * @name:   the case-exact name to be associated with the returned dentr=
+y
+> + *
+> + * Return: 0 if names are same, or 1
+> + */
+> +bool d_compare(const struct dentry *parent, const struct dentry *dentry,
+> +	       const struct qstr *name)
+> +{
+> +	return !d_same_name(dentry, parent, name);
+> +}
+> +EXPORT_SYMBOL(d_compare);
 > +
-> +	getfrag  =  is_udplite ?  udplite_getfrag : ip_generic_getfrag;
-> +
-> +	/* There are pending frames. */
-> +	if (up->pending) {
-> +		if (up->pending == AF_INET)
-> +			return udp_sendmsg(sk, msg, len);
-> +
-> +		/* Do a quick destination sanity check before corking. */
-> +		if (sin6) {
-> +			if (msg->msg_namelen < offsetof(struct sockaddr, sa_data))
-> +				return -EINVAL;
-> +			if (sin6->sin6_family == AF_INET6) {
-> +				if (msg->msg_namelen < SIN6_LEN_RFC2133)
-> +					return -EINVAL;
-> +				if (ipv6_addr_any(&sin6->sin6_addr) &&
-> +				    ipv6_addr_v4mapped(&np->saddr))
-> +					return -EINVAL;
+>  /**
+>   * __d_lookup_rcu - search for a dentry (racy, store-free)
+>   * @parent: parent dentry
+> diff --git a/include/linux/dcache.h b/include/linux/dcache.h
+> index f5bba51480b2..444b2230e5c3 100644
+> --- a/include/linux/dcache.h
+> +++ b/include/linux/dcache.h
+> @@ -233,6 +233,8 @@ extern struct dentry * d_alloc_parallel(struct dentry=
+ *, const struct qstr *,
+>  					wait_queue_head_t *);
+>  extern struct dentry * d_splice_alias(struct inode *, struct dentry *);
+>  extern struct dentry * d_add_ci(struct dentry *, struct inode *, struct =
+qstr *);
+> +extern bool d_compare(const struct dentry *parent, const struct dentry *=
+dentry,
+> +		      const struct qstr *name);
+>  extern struct dentry * d_exact_alias(struct dentry *, struct inode *);
+>  extern struct dentry *d_find_any_alias(struct inode *inode);
+>  extern struct dentry * d_obtain_alias(struct inode *);
 
-It looks like 'any' destination with ipv4 mapped source is now
-rejected, while the existing code accept it.
+I wonder if we ought to just un-inline and export d_same_name instead?
+Still, this is less disruptive and the dcache code is hugely performance
+sensitive. It's possible that inlining that function makes a difference.
 
-/P
-
+Reviewed-by: Jeff Layton <jlayton@kernel.org>

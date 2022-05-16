@@ -2,197 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE22528986
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 18:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D64CA528979
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 18:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245619AbiEPQHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 12:07:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57188 "EHLO
+        id S245581AbiEPQGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 12:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245614AbiEPQHB (ORCPT
+        with ESMTP id S245296AbiEPQGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 12:07:01 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D70B37038;
-        Mon, 16 May 2022 09:06:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=hkxxY/QtEmLaEz91h3ZbibgaO5mIVJpTDxNjCMnCCRs=; b=QJKb57mFKwMFscTO5WFY4RSj23
-        KQ6n8H9l2g2SttLbeQWPGo2evZPJbMnkbERgI1GrlJbCyaovBQ7YNgsYgYWZV4AUB43bBYpAdAI4t
-        tSUTgJhvOvNj6CgwWpUnZT0VvP1nPFnrhSTYeteC8TI+m63sh71ROWTeeLMsXDtJw57P/+L4voDEA
-        fAA2sLoZLSjWU8escrCVSpKI49cJB+42jd6GXOMXbMkFbQNvfMy7UNTlghfu62nr5uAdPO/Hn/wFd
-        nMAbmXIqsuv6JnFGW2A+NmrSU+Aj1YnRvsm6Le3RHEDyDM6bMieEJqNdqhsYzjUU2qgiLiCJOh07u
-        ze5flEbQ==;
-Received: from [177.183.162.244] (helo=[192.168.0.5])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nqdEm-006s2D-Fy; Mon, 16 May 2022 18:06:24 +0200
-Message-ID: <63a74b56-89ef-8d1f-d487-cdb986aab798@igalia.com>
-Date:   Mon, 16 May 2022 13:05:44 -0300
+        Mon, 16 May 2022 12:06:15 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2057.outbound.protection.outlook.com [40.107.92.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FE0BC0A
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 09:06:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fIH+lSYhgI1pf1gRflmGMTMvzD5zEFwbQJjddVXZeldbNESNBSycdUl6000gFyi2XOfvziFigzE4ZYtDi9IRoDhMlQosWvrrpUxvUPU5VUwESlyXINIgax902uFTuCqJiX7yXA3xL1A0AvhNulioiefnSXyd+/bSv8OV7n5EwjVY/TNc3a/PALy9+F9J3lju+gcmxt+a1+Guf/FpmNWWiGjsUiBJ8LowsOtwhq0s/13USx9qBV1rAmuWugABNKaJ52M9BKLiMKzPLZE1MFIoOy4HFt+STeVRBIxlOP+HiaHDyPh+40o975gBoMo8rtweBokoTQqJ417YxGUXka3eIQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZqAkpoJWpLRnjjfnuKnFgR4CnuxpYKWLVl7mvSaDMv0=;
+ b=lxLGmU8Ws56nTGlgGXcIilMvjCBAEo4rZkTiGXk5LxzpbqjqdheKsrT0HQee88HTf89ppyyad/WzlmJiV1bvnC4y9uYrqggQaYXZtjeXzmfmXGgtdv7Z9FAWcu+bFLttC5HwCmCGt8SUROSU02So65ZhsKOZBOBfJa0fO1tdfoG8kZV4g7JONWS33vXZsGLPeMywKF2Zy6gtbhlEEIE7TQ7nunFl8c/yGzuoj7wpjoviSLL5nObLb9bILKwu2oM1VWNxvoVKM+tz2dUASA0lGhENBMmdMJMCMvqrc1Ve6h7YyGNqd9weHqyOeH5dmNBe6MzK0P+GM4c1E1NMY3wjjw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZqAkpoJWpLRnjjfnuKnFgR4CnuxpYKWLVl7mvSaDMv0=;
+ b=qSkafjHVuvB7AKmkIIaIkDup7gUDCiUSMLSVrB8MzsIdnbhBPWQIST2ypbEUbE1lJ+7e4GmRZE/gBp/9HhY91LlJlmyM2cfy02S0OOWZwTRLUSdVAGIru0h3CKzjZx0ymJ21SYburvZvWCDyCwiGdnUhWCJH72g55tC6tNllt9Y=
+Received: from MW4PR03CA0170.namprd03.prod.outlook.com (2603:10b6:303:8d::25)
+ by DM4PR12MB5119.namprd12.prod.outlook.com (2603:10b6:5:392::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13; Mon, 16 May
+ 2022 16:06:09 +0000
+Received: from CO1NAM11FT012.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8d:cafe::a) by MW4PR03CA0170.outlook.office365.com
+ (2603:10b6:303:8d::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14 via Frontend
+ Transport; Mon, 16 May 2022 16:06:09 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT012.mail.protection.outlook.com (10.13.175.192) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5250.13 via Frontend Transport; Mon, 16 May 2022 16:06:08 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 16 May
+ 2022 11:06:07 -0500
+Received: from sof-System-Product-Name.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.24
+ via Frontend Transport; Mon, 16 May 2022 11:05:59 -0500
+From:   V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
+To:     <broonie@kernel.org>, <alsa-devel@alsa-project.org>
+CC:     <Vijendar.Mukunda@amd.com>, <Basavaraj.Hiregoudar@amd.com>,
+        <Sunil-kumar.Dommati@amd.com>, <ajitkumar.pandey@amd.com>,
+        "V sujith kumar Reddy" <Vsujithkumar.Reddy@amd.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "Ajit Kumar Pandey" <AjitKumar.Pandey@amd.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 1/2] Revert "ASoC: amd: acp: Set gpio_spkr_en to None for max speaker amplifer in machine driver"
+Date:   Mon, 16 May 2022 21:36:09 +0530
+Message-ID: <20220516160619.17832-1-Vsujithkumar.Reddy@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 21/30] panic: Introduce the panic pre-reboot notifier list
-Content-Language: en-US
-To:     Petr Mladek <pmladek@suse.com>, Tony Luck <tony.luck@intel.com>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Alex Elder <elder@kernel.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Chris Zankel <chris@zankel.net>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Corey Minyard <minyard@acm.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        James Morse <james.morse@arm.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
-        Richard Weinberger <richard@nod.at>,
-        Robert Richter <rric@kernel.org>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, Wei Liu <wei.liu@kernel.org>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-22-gpiccoli@igalia.com> <YoJgcC8c6LaKADZV@alley>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <YoJgcC8c6LaKADZV@alley>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3b8476e5-4ed9-4f02-df81-08da3755fd82
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5119:EE_
+X-Microsoft-Antispam-PRVS: <DM4PR12MB511946CF508008325D82A73092CF9@DM4PR12MB5119.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1fXUeTm/Pbqu/WS2/M1m0UKUv9A4xuyQ2JDeBrYJYINwaNSc4M5s9d4LCUsR8bOaoDv7x+Vtj/6b0cfpr7+l/JjawJESFw183ppEc0QCUXMr1LSlgXLyrruo2B+vgCvlE9n52lXigDofvhrJM0CuLBwCW/EIalbhLEkDqG84nLQQJlneEO9doyFZsAgp9yvXEyJr6/eZcQv2Z8k2ngfO/fnfyE1rTnEde2DZnuU3kvRQicCtHhMDdNRqy4Lz4Fn2lw0mbvOMAKRXmti5P5OUX9TLI0I7ErPJ5TjpRctfCQGMDt2VJvwS23ivLtbGMgBPyAo1HLXpCNijJgRUT3IkgBWDo4P1rsFTEgDYSDL+MOrG3bDRngRiWLoDHAT/NBsFC6vXfMPy3ntM8YYXbyML/YJHqgevphAhnzm4Ulw9498Kz2Ms9qUnTQtEk7HB+0kAS53o/LUtnBKfwLESXG163NfAXhK+QpGZ+PgP9J6a2KphsC6fRPbGuYs+O7Hu7Yis0ybCMYMgnxbMs6qtGX+p/8vbJooX6/vo2w3W1WiYbcERoTU3qoMB2EUkXKEPRsnh+XMSePOlyYmIchMfB9RNi+Wruyg/WVeh8TslBgl8xVE3xuN+3DTEEPcUyjB0LryF16GFOLObs3j46EKrQ4K3+5M+KZxd47gHiLt/KL+p6dhMJQIhuQgSSVztpgE/TciCzyq+76S/SB+1keOSU+dFuAFLhujN0zWd+lNGymZYmuPgNt+fyIeo0T3E5e4asuqe
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(4326008)(426003)(6666004)(36860700001)(86362001)(356005)(83380400001)(70586007)(70206006)(82310400005)(7696005)(2906002)(508600001)(336012)(81166007)(5660300002)(36756003)(54906003)(1076003)(8676002)(40460700003)(8936002)(110136005)(2616005)(186003)(316002)(47076005)(26005)(461764006)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2022 16:06:08.9275
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3b8476e5-4ed9-4f02-df81-08da3755fd82
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT012.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5119
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks again for the review! Comments inline below:
+ASoC: amd : acp : Set Speaker enable/disable pin through rt1019 codec driver.
 
+RT1019 codec has two ways of controlling the en_spkr.
+one way is controlling through gpio pin method the another way is through codec register update through driver.
 
-On 16/05/2022 11:33, Petr Mladek wrote:
-> [...]
->> --- a/drivers/edac/altera_edac.c
->> +++ b/drivers/edac/altera_edac.c
->> @@ -2163,7 +2162,7 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
->>  		int dberror, err_addr;
->>  
->>  		edac->panic_notifier.notifier_call = s10_edac_dberr_handler;
->> -		atomic_notifier_chain_register(&panic_notifier_list,
->> +		atomic_notifier_chain_register(&panic_pre_reboot_list,
-> 
-> My understanding is that this notifier first prints info about ECC
-> errors and then triggers reboot. It might make sense to split it
-> into two notifiers.
+Now Speaker enable/disable is controlled  through codec register updated by codec driver.
+This patch reverts gpio logic.
 
-I disagree here - looping the maintainers for comments (CCing Dinh /
-Tony). BTW, sorry for not having you on CC already Dinh, it was my mistake.
+This reverts commit 7fa5c33d043160eba3be9fb8e21588dff2a467c7.
 
-So, my reasoning here is: this notifier should fit the info list,
-definitely! But...it's very high risk for kdump. It deep dives into the
-regmap API (there are locks in such code) plus there is an (MM)IO write
-to the device and an ARM firmware call. So, despite the nature of this
-notifier _fits the informational list_, the _code is risky_ so we should
-avoid running it before a kdump.
+Signed-off-by: V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
+---
+ sound/soc/amd/acp/acp-mach.h     | 1 +
+ sound/soc/amd/acp/acp-sof-mach.c | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-Now, we indeed have a chicken/egg problem: want to avoid it before
-kdump, BUT in case kdump is not set, kmsg_dump() (and console flushing,
-after your suggestion Petr) will run before it and not save collected
-information from EDAC PoV.
+diff --git a/sound/soc/amd/acp/acp-mach.h b/sound/soc/amd/acp/acp-mach.h
+index c855f50d6b34..fd6299844ebe 100644
+--- a/sound/soc/amd/acp/acp-mach.h
++++ b/sound/soc/amd/acp/acp-mach.h
+@@ -21,6 +21,7 @@
+ #include <linux/gpio/consumer.h>
+ 
+ #define EN_SPKR_GPIO_GB                0x11F
++#define EN_SPKR_GPIO_NK                0x146
+ #define EN_SPKR_GPIO_NONE      -EINVAL
+ 
+ enum be_id {
+diff --git a/sound/soc/amd/acp/acp-sof-mach.c b/sound/soc/amd/acp/acp-sof-mach.c
+index bf61a1726f0e..8243765d490f 100644
+--- a/sound/soc/amd/acp/acp-sof-mach.c
++++ b/sound/soc/amd/acp/acp-sof-mach.c
+@@ -37,7 +37,7 @@ static struct acp_card_drvdata sof_rt5682_max_data = {
+ 	.hs_codec_id = RT5682,
+ 	.amp_codec_id = MAX98360A,
+ 	.dmic_codec_id = DMIC,
+-	.gpio_spkr_en = EN_SPKR_GPIO_NONE,
++	.gpio_spkr_en = EN_SPKR_GPIO_NK,
+ };
+ 
+ static struct acp_card_drvdata sof_rt5682s_rt1019_data = {
+@@ -56,7 +56,7 @@ static struct acp_card_drvdata sof_rt5682s_max_data = {
+ 	.hs_codec_id = RT5682S,
+ 	.amp_codec_id = MAX98360A,
+ 	.dmic_codec_id = DMIC,
+-	.gpio_spkr_en = EN_SPKR_GPIO_NONE,
++	.gpio_spkr_en = EN_SPKR_GPIO_NK,
+ };
+ 
+ static const struct snd_kcontrol_new acp_controls[] = {
+-- 
+2.25.1
 
-My idea: I could call a second kmsg_dump() or at least a panic console
-flush for within such notifier. Let me know what you think Petr (also
-Dinh / Tony and all interested parties).
-
-
-> [...] 
->> --- a/drivers/leds/trigger/ledtrig-panic.c
->> +++ b/drivers/leds/trigger/ledtrig-panic.c
->> @@ -64,7 +63,7 @@ static long led_panic_blink(int state)
->>  
->>  static int __init ledtrig_panic_init(void)
->>  {
->> -	atomic_notifier_chain_register(&panic_notifier_list,
->> +	atomic_notifier_chain_register(&panic_pre_reboot_list,
->>  				       &led_trigger_panic_nb);
-> 
-> Blinking => should go to the last "post_reboot/loop" list.
-> [...] 
->> --- a/drivers/misc/ibmasm/heartbeat.c
->> +++ b/drivers/misc/ibmasm/heartbeat.c
->> @@ -32,20 +31,23 @@ static int suspend_heartbeats = 0;
->>  static int panic_happened(struct notifier_block *n, unsigned long val, void *v)
->>  {
->>  	suspend_heartbeats = 1;
->> -	return 0;
->> +	return NOTIFY_DONE;
->>  }
->>  
->> -static struct notifier_block panic_notifier = { panic_happened, NULL, 1 };
->> +static struct notifier_block panic_notifier = {
->> +	.notifier_call = panic_happened,
->> +};
->>  
->>  void ibmasm_register_panic_notifier(void)
->>  {
->> -	atomic_notifier_chain_register(&panic_notifier_list, &panic_notifier);
->> +	atomic_notifier_chain_register(&panic_pre_reboot_list,
->> +					&panic_notifier);
-> 
-> Same here. Blinking => should go to the last "post_reboot/loop" list.
-
-Ack on both.
-
-IBMasm is not blinking IIUC, but still fits properly the loop list. This
-notifier would make a heartbeat mechanism stop, and once it's stopped,
-service processor is allowed to reboot - that's my understanding.
-
-
-Cheers,
-
-
-Guilherme

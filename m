@@ -2,192 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB13D527F83
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 10:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68EA6527F88
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 10:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241587AbiEPIVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 04:21:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33002 "EHLO
+        id S241616AbiEPIVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 04:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239368AbiEPIVV (ORCPT
+        with ESMTP id S240544AbiEPIVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 04:21:21 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33598DFE6
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 01:21:20 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id o80so5879311ybg.1
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 01:21:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gcDrgEE8+ufft+133OXOeWQ5ZtQDTItctw119Lp4C8M=;
-        b=LH+fw6Yl3DE/OkBEuwzktTWz1jNIVsgr2XlwrxfvRdGedqmHXErHQni+HbcgAypnms
-         9E8Fahl2BUSXruc62YAjjZBzk++iA8kKYmeSuYsKS2bJ7pqGRPrwchiqUY3s6qFcL46z
-         UYHxpiaCV1LoWbo36wLzywbp9/zEKCx1fTJZM9Y+CkJHEjEpTaxMBbrd1+hjOkUisOca
-         W6ro6RA3Zy3Yn7vQcUqry9e6eMobfUaonc3A7nTnmYOO3SzzcexZ4zSvpvB4Jb4/P5rE
-         3CKrVhslMY0uyvqd6sTiSlP08gl2b1Dwn7XSvft9lFTSdITlNYgV0SvSV5lZcQ5e+/gC
-         j67Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gcDrgEE8+ufft+133OXOeWQ5ZtQDTItctw119Lp4C8M=;
-        b=XkmPuYBdyAC/djdKUg6KHkeNdQ8pqwo85kx+aU+TaR0BiZaWLw6vOUkzBXvx6nFygj
-         SPvLXkapFn4rtPoFy+e/F3VV2EKtpL7bwGGCGZHbIlY9kb6d3HuS2mjuJsb8z2Bk1JYz
-         B5Al39Cm755eDIBkBUbWhJL0xhW2p7A4M6kaeUVbNjs+c8aKiDF+7LpR8UdeVM+pA2Nx
-         BVxq3EbGUhqCanudy9gLGWC9CDSXOyMqP5vIlSh0eP19UihtWa2bf4KTWiBDqWILJdjm
-         YYE00thSYRZIwNXertb8MwwaQxRp+UBw/kDBw0I2FK/N2XcLP3usLR/efmt9kaZP9w+R
-         V8fQ==
-X-Gm-Message-State: AOAM530eZ1gpEZwaH+1xTGhxRqcBu3nCA+Lp2A14j7lmu4IRyk4xauV4
-        rF1wMljVilySqGB94awZ4hmrDycBOrxg37WU+n4TZg+FFXZqDw==
-X-Google-Smtp-Source: ABdhPJxd71F2+o6MJg3AADQlM2jqGN8X/KpBIdT6utFlBAV9somzgv4OMDbADoveD1+xao8hpwlofJjhOGAm+IyfCXU=
-X-Received: by 2002:a25:b683:0:b0:64b:8700:1358 with SMTP id
- s3-20020a25b683000000b0064b87001358mr14996619ybj.282.1652689279168; Mon, 16
- May 2022 01:21:19 -0700 (PDT)
+        Mon, 16 May 2022 04:21:25 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B4F33EA0;
+        Mon, 16 May 2022 01:21:23 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 6F6206000C;
+        Mon, 16 May 2022 08:21:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1652689281;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G+5Z07AXpDC+m8ZD/UOqhGxzRxmiuRFUVhakuqWjGWI=;
+        b=nSCwKNLvBv+xQvA6O0bbWRaPZ17U/nGihvdmOfAPbYvrYXGRzPelt/xhcGB2ReAC/8z5a/
+        5Hu5XrgN4tx/1ihVFEsart2BAT680TNxT2v1veeWgmhtQIB8oYYX8hbpybgLpu2eFPvZDn
+        hFAounrWucRhCX5I0BceU9b4nZ5kZRdHouN/jUmdid1TcGjQRwbP74EhlRPSMGnkJZ/QmK
+        PpIzdwpluRdF9+eiwdTuIoVnD0L3LEfzVe/b+MOpApjL/iZ1rzMR/p70j9MXXGnuB0UU+S
+        xdvCMl9EBaqe3JSs3TKZmNma6Wd7kPrldPXymhKM3WKvsobZPqKAOHthPbxE7A==
+Date:   Mon, 16 May 2022 10:21:15 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Mikhail Zhilkin <csharper2005@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJl?= =?UTF-8?B?Y2tp?= <rafal@milecki.pl>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Karim <Karimdplay@gmail.com>, M <x1@disroot.org>
+Subject: Re: [PATCH v3 2/3] dt-bindings: mtd: partitions: Extend
+ fixed-partitions binding
+Message-ID: <20220516102115.4ab6fada@xps13>
+In-Reply-To: <CAL_JsqJdUm4p9qAq9dLeVTVC9PA2q2SP01kG2jyEb_f=Fo=bEQ@mail.gmail.com>
+References: <20220503155007.2339847-1-csharper2005@gmail.com>
+        <20220512152725.244872-1-miquel.raynal@bootlin.com>
+        <CAL_JsqJdUm4p9qAq9dLeVTVC9PA2q2SP01kG2jyEb_f=Fo=bEQ@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220516033524.3130816-1-chenwandun@huawei.com> <30b37eeb-e77b-882e-fc24-3367321a8ca3@gmail.com>
-In-Reply-To: <30b37eeb-e77b-882e-fc24-3367321a8ca3@gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 16 May 2022 01:21:08 -0700
-Message-ID: <CAJuCfpE7fBsp8ntYVeLsW7Cd0Z09OmxN75X9Az_Qco0GJrz3Wg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] psi: add support for multi level pressure stall trigger
-To:     Alex Shi <seakeel@gmail.com>
-Cc:     Chen Wandun <chenwandun@huawei.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Alex Shi <alexs@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 15, 2022 at 11:20 PM Alex Shi <seakeel@gmail.com> wrote:
->
->
->
-> On 5/16/22 11:35, Chen Wandun wrote:
-> > Nowadays, psi events are triggered when stall time exceed
-> > stall threshold, but no any different between these events.
-> >
-> > Actually, events can be divide into multi level, each level
-> > represent a different stall pressure, that is help to identify
-> > pressure information more accurately.
+Hi,
 
-IIUC by defining min and max, you want the trigger to activate when
-the stall is between min and max thresholds. But I don't see why you
-would need that. If you want to have several levels, you can create
-multiple triggers and monitor them separately. For your example, that
-would be:
+robh+dt@kernel.org wrote on Fri, 13 May 2022 09:12:03 -0500:
 
-echo "some 150000 1000000" > /proc/pressure/memory
-echo "some 350000 1000000" > /proc/pressure/memory
+> On Thu, May 12, 2022 at 10:27 AM Miquel Raynal
+> <miquel.raynal@bootlin.com> wrote:
+> >
+> > On Tue, 2022-05-03 at 15:50:07 UTC, Mikhail Zhilkin wrote: =20
+> > > Extend fixed-partitions binding for support of Sercomm partition pars=
+er
+> > > (add "sercomm,sc-partitions" compatible).
+> > >
+> > > Signed-off-by: Mikhail Zhilkin <csharper2005@gmail.com>
+> > > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =20
+> >
+> > Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.gi=
+t mtd/next, thanks. =20
+>=20
+> Patch 1 is a dependency, please apply it too. Without it, we now get
+> in linux-next:
 
-Your first trigger will fire whenever the stall exceeds 150ms within
-each 1sec and the second one will trigger when it exceeds 350ms. It is
-true that if the stall jumps sharply above 350ms, you would get both
-triggers firing. I'm guessing that's why you want this functionality
-so that 150ms trigger does not fire when 350ms one is firing but why
-is that a problem? Can't userspace pick the highest level one and
-ignore all the lower ones when this happens? Or are you addressing
-some other requirement?
+Only patch 3 was sent to me/the mtd ML. I'll drop the patch.
 
-> >
-> > echo "some 150000 350000 1000000" > /proc/pressure/memory would
->
-> This breaks the old ABI. And why you need this new function?
+Mikhail, please resend the series including us on all your patches.
 
-Both great points.
+> /builds/robherring/linux-dt/Documentation/devicetree/bindings/mtd/partiti=
+ons/fixed-partitions.example.dtb:
+> partition@0: 'sercomm,scpart-id' does not match any of the regexes:
+> '^#.*', '^(at25|bm|devbus|dmacap|dsa|exynos|fsi[ab]|gpio-fan|gpio-key|gpi=
+o|gpmc|hdmi|i2c-gpio),.*',
+> '^(keypad|m25p|max8952|max8997|max8998|mpmc),.*',
+> '^(pinctrl-single|#pinctrl-single|PowerPC),.*',
+> '^(pl022|pxa-mmc|rcar_sound|rotary-encoder|s5m8767|sdhci),.*',
+> '^(simple-audio-card|st-plgpio|st-spics|ts),.*', '^100ask,.*',
+> '^70mai,.*', '^8dev,.*', '^GEFanuc,.*', '^ORCL,.*', '^SUNW,.*',
+> '^[a-zA-Z0-9#_][a-zA-Z0-9+\\-._@]{0,63}$',
+> '^[a-zA-Z0-9+\\-._]*@[0-9a-zA-Z,]*$', '^abb,.*', '^abilis,.*',
+> '^abracon,.*', '^abt,.*', '^acer,.*', '^acme,.*', '^actions,.*',
+> '^active-semi,.*', '^ad,.*', '^adafruit,.*', '^adapteva,.*',
+> '^adaptrum,.*', '^adh,.*', '^adi,.*', '^advantech,.*',
+> '^aeroflexgaisler,.*', '^aesop,.*', '^airoha,.*', '^al,.*',
+> '^alcatel,.*', '^allegro,.*', '^allo,.*', '^allwinner,.*',
+> '^alphascale,.*', '^alps,.*', '^alt,.*', '^altr,.*', '^amarula,.*',
+> '^amazon,.*', '^amcc,.*', '^amd,.*', '^amediatech,.*', '^amlogic,.*',
+> '^ampere,.*', '^ampire,.*', '^ams,.*', '^amstaos,.*', '^analogix,.*',
+> '^andestech,.*', '^anvo,.*', '^apm,.*', '^apple,.*', '^aptina,.*',
+> '^arasan,.*', '^archermind,.*', '^arctic,.*', '^arcx,.*', '^aries,.*',
+> '^arm,.*', '^armadeus,.*', '^arrow,.*', '^artesyn,.*',
+> '^asahi-kasei,.*', '^asc,.*', '^asix,.*', '^aspeed,.*', '^asus,.*',
+> '^atlas,.*', '^atmel,.*', '^auo,.*', '^auvidea,.*', '^avago,.*',
+> '^avia,.*', '^avic,.*', '^avnet,.*', '^awinic,.*', '^axentia,.*',
+> '^axis,.*', '^azoteq,.*', '^azw,.*', '^baikal,.*', '^bananapi,.*',
+> '^beacon,.*', '^beagle,.*', '^bhf,.*', '^bitmain,.*', '^blutek,.*',
+> '^boe,.*', '^bosch,.*', '^boundary,.*', '^brcm,.*', '^broadmobi,.*',
+> '^bsh,.*', '^bticino,.*', '^buffalo,.*', '^bur,.*', '^calamp,.*',
+> '^calaosystems,.*', '^calxeda,.*', '^canaan,.*', '^caninos,.*',
+> '^capella,.*', '^cascoda,.*', '^catalyst,.*', '^cavium,.*',
+> '^cdns,.*', '^cdtech,.*', '^cellwise,.*', '^ceva,.*',
+> '^checkpoint,.*', '^chefree,.*', '^chipidea,.*', '^chipone,.*',
+> '^chipspark,.*', '^chrontel,.*', '^chrp,.*', '^chunghwa,.*',
+> '^chuwi,.*', '^ciaa,.*', '^cirrus,.*', '^cisco,.*',
+> '^cloudengines,.*', '^cnm,.*', '^cnxt,.*', '^colorfly,.*',
+> '^compulab,.*', '^congatec,.*', '^coreriver,.*', '^corpro,.*',
+> '^cortina,.*', '^cosmic,.*', '^crane,.*', '^creative,.*',
+> '^crystalfontz,.*', '^csky,.*', '^csq,.*', '^ctera,.*', '^ctu,.*',
+> '^cubietech,.*', '^cui,.*', '^cypress,.*', '^cyx,.*', '^cznic,.*',
+> '^dallas,.*', '^dataimage,.*', '^davicom,.*', '^dell,.*', '^delta,.*',
+> '^denx,.*', '^devantech,.*', '^dfi,.*', '^dh,.*', '^difrnce,.*',
+> '^digi,.*', '^digilent,.*', '^dioo,.*', '^dlc,.*', '^dlg,.*',
+> '^dlink,.*', '^dmo,.*', '^domintech,.*', '^dongwoon,.*',
+> '^dptechnics,.*', '^dragino,.*', '^ds,.*', '^dserve,.*',
+> '^dynaimage,.*', '^ea,.*', '^ebang,.*', '^ebs-systart,.*', '^ebv,.*',
+> '^eckelmann,.*', '^edimax,.*', '^edt,.*', '^eeti,.*',
+> '^einfochips,.*', '^eink,.*', '^elan,.*', '^element14,.*',
+> '^elgin,.*', '^elida,.*', '^elimo,.*', '^elpida,.*', '^embest,.*',
+> '^emlid,.*', '^emmicro,.*', '^empire-electronix,.*', '^emtrion,.*',
+> '^enclustra,.*', '^endless,.*', '^ene,.*', '^energymicro,.*',
+> '^engicam,.*', '^engleder,.*', '^epcos,.*', '^epfl,.*', '^epson,.*',
+> '^esp,.*', '^est,.*', '^ettus,.*', '^eukrea,.*', '^everest,.*',
+> '^everspin,.*', '^evervision,.*', '^exar,.*', '^excito,.*',
+> '^exegin,.*', '^ezchip,.*', '^facebook,.*', '^fairphone,.*',
+> '^faraday,.*', '^fastrax,.*', '^fcs,.*', '^feixin,.*', '^feiyang,.*',
+> '^fii,.*', '^firefly,.*', '^focaltech,.*', '^forlinx,.*', '^frida,.*',
+> '^friendlyarm,.*', '^fsl,.*', '^fujitsu,.*', '^fxtec,.*',
+> '^gardena,.*', '^gateworks,.*', '^gcw,.*', '^ge,.*', '^geekbuying,.*',
+> '^gef,.*', '^gemei,.*', '^geniatech,.*', '^giantec,.*',
+> '^giantplus,.*', '^globalscale,.*', '^globaltop,.*', '^gmt,.*',
+> '^goodix,.*', '^google,.*', '^grinn,.*', '^grmn,.*', '^gumstix,.*',
+> '^gw,.*', '^hannstar,.*', '^haochuangyi,.*', '^haoyu,.*',
+> '^hardkernel,.*', '^hideep,.*', '^himax,.*', '^hirschmann,.*',
+> '^hisi,.*', '^hisilicon,.*', '^hit,.*', '^hitex,.*', '^holt,.*',
+> '^holtek,.*', '^honestar,.*', '^honeywell,.*', '^hoperun,.*',
+> '^hp,.*', '^hpe,.*', '^hsg,.*', '^huawei,.*', '^hugsun,.*',
+> '^hwacom,.*', '^hycon,.*', '^hydis,.*', '^hynix,.*', '^hyundai,.*',
+> '^i2se,.*', '^ibm,.*', '^icplus,.*', '^idt,.*', '^ifi,.*',
+> '^ilitek,.*', '^imagis,.*', '^img,.*', '^imi,.*', '^incircuit,.*',
+> '^inet-tek,.*', '^infineon,.*', '^inforce,.*', '^ingenic,.*',
+> '^injoinic,.*', '^innolux,.*', '^inside-secure,.*', '^insignal,.*',
+> '^inspur,.*', '^intel,.*', '^intercontrol,.*', '^invensense,.*',
+> '^inversepath,.*', '^iom,.*', '^isee,.*', '^isil,.*', '^issi,.*',
+> '^ite,.*', '^itead,.*', '^itian,.*', '^ivo,.*', '^iwave,.*',
+> '^jdi,.*', '^jedec,.*', '^jesurun,.*', '^jethome,.*', '^jianda,.*',
+> '^joz,.*', '^kam,.*', '^karo,.*', '^keithkoep,.*', '^keymile,.*',
+> '^khadas,.*', '^kiebackpeter,.*', '^kinetic,.*', '^kingdisplay,.*',
+> '^kingnovel,.*', '^kionix,.*', '^kobo,.*', '^kobol,.*', '^koe,.*',
+> '^kontron,.*', '^kosagi,.*', '^kvg,.*', '^kyo,.*', '^lacie,.*',
+> '^laird,.*', '^lamobo,.*', '^lantiq,.*', '^lattice,.*', '^leadtek,.*',
+> '^leez,.*', '^lego,.*', '^lemaker,.*', '^lenovo,.*', '^lg,.*',
+> '^lgphilips,.*', '^libretech,.*', '^licheepi,.*', '^linaro,.*',
+> '^linksprite,.*', '^linksys,.*', '^linutronix,.*', '^linux,.*',
+> '^linx,.*', '^liteon,.*', '^litex,.*', '^lltc,.*', '^logicpd,.*',
+> '^logictechno,.*', '^longcheer,.*', '^lontium,.*', '^loongson,.*',
+> '^lsi,.*', '^lwn,.*', '^lxa,.*', '^m5stack,.*', '^macnica,.*',
+> '^mantix,.*', '^mapleboard,.*', '^marvell,.*', '^maxbotix,.*',
+> '^maxim,.*', '^mbvl,.*', '^mcube,.*', '^meas,.*', '^mecer,.*',
+> '^mediatek,.*', '^megachips,.*', '^mele,.*', '^melexis,.*',
+> '^melfas,.*', '^mellanox,.*', '^memsic,.*', '^menlo,.*', '^mentor,.*',
+> '^meraki,.*', '^merrii,.*', '^micrel,.*', '^microchip,.*',
+> '^microcrystal,.*', '^micron,.*', '^microsoft,.*', '^microsys,.*',
+> '^mikroe,.*', '^mikrotik,.*', '^miniand,.*', '^minix,.*',
+> '^miramems,.*', '^mitsubishi,.*', '^miyoo,.*', '^mntre,.*',
+> '^modtronix,.*', '^mosaixtech,.*', '^motorola,.*', '^moxa,.*',
+> '^mpl,.*', '^mps,.*', '^mqmaker,.*', '^mrvl,.*', '^mscc,.*',
+> '^msi,.*', '^mstar,.*', '^mti,.*', '^multi-inno,.*',
+> '^mundoreader,.*', '^murata,.*', '^mxic,.*', '^mxicy,.*', '^myir,.*',
+> '^national,.*', '^nec,.*', '^neonode,.*', '^netgear,.*',
+> '^netlogic,.*', '^netron-dy,.*', '^netronix,.*', '^netxeon,.*',
+> '^neweast,.*', '^newhaven,.*', '^nexbox,.*', '^nextthing,.*',
+> '^ni,.*', '^nintendo,.*', '^nlt,.*', '^nokia,.*', '^nordic,.*',
+> '^novtech,.*', '^nutsboard,.*', '^nuvoton,.*', '^nvd,.*',
+> '^nvidia,.*', '^nxp,.*', '^oceanic,.*', '^ocs,.*', '^oct,.*',
+> '^okaya,.*', '^oki,.*', '^olimex,.*', '^olpc,.*', '^oneplus,.*',
+> '^onion,.*', '^onnn,.*', '^ontat,.*', '^opalkelly,.*',
+> '^opencores,.*', '^openembed,.*', '^openrisc,.*', '^option,.*',
+> '^oranth,.*', '^orisetech,.*', '^ortustech,.*', '^osddisplays,.*',
+> '^osmc,.*', '^ouya,.*', '^overkiz,.*', '^ovti,.*', '^oxsemi,.*',
+> '^ozzmaker,.*', '^panasonic,.*', '^parade,.*', '^parallax,.*',
+> '^pda,.*', '^pericom,.*', '^pervasive,.*', '^phicomm,.*',
+> '^phytec,.*', '^picochip,.*', '^pine64,.*', '^pineriver,.*',
+> '^pixcir,.*', '^plantower,.*', '^plathome,.*', '^plda,.*', '^plx,.*',
+> '^ply,.*', '^pni,.*', '^pocketbook,.*', '^polaroid,.*',
+> '^portwell,.*', '^poslab,.*', '^pov,.*', '^powertip,.*',
+> '^powervr,.*', '^primux,.*', '^probox2,.*', '^prt,.*',
+> '^pulsedlight,.*', '^purism,.*', '^qca,.*', '^qcom,.*', '^qemu,.*',
+> '^qi,.*', '^qiaodian,.*', '^qihua,.*', '^qishenglong,.*', '^qnap,.*',
+> '^radxa,.*', '^raidsonic,.*', '^ralink,.*', '^ramtron,.*',
+> '^raspberrypi,.*', '^raydium,.*', '^rda,.*', '^realtek,.*',
+> '^remarkable,.*', '^renesas,.*', '^rervision,.*', '^revotics,.*',
+> '^rex,.*', '^richtek,.*', '^ricoh,.*', '^rikomagic,.*', '^riot,.*',
+> '^riscv,.*', '^rockchip,.*', '^rocktech,.*', '^rohm,.*', '^ronbo,.*',
+> '^roofull,.*', '^roseapplepi,.*', '^samsung,.*', '^samtec,.*',
+> '^sancloud,.*', '^sandisk,.*', '^satoz,.*', '^sbs,.*',
+> '^schindler,.*', '^seagate,.*', '^seeed,.*', '^seirobotics,.*',
+> '^semtech,.*', '^senseair,.*', '^sensirion,.*', '^sensortek,.*',
+> '^sff,.*', '^sgd,.*', '^sgmicro,.*', '^sgx,.*', '^sharp,.*',
+> '^shimafuji,.*', '^shiratech,.*', '^si-en,.*', '^si-linux,.*',
+> '^siemens,.*', '^sifive,.*', '^sigma,.*', '^sii,.*', '^sil,.*',
+> '^silabs,.*', '^silan,.*', '^silead,.*', '^silergy,.*',
+> '^silex-insight,.*', '^siliconfile,.*', '^siliconmitus,.*',
+> '^silvaco,.*', '^simtek,.*', '^sinlinx,.*', '^sinovoip,.*',
+> '^sinowealth,.*', '^sipeed,.*', '^sirf,.*', '^sis,.*', '^sitronix,.*',
+> '^skov,.*', '^skyworks,.*', '^smartlabs,.*', '^smsc,.*', '^snps,.*',
+> '^sochip,.*', '^socionext,.*', '^solidrun,.*', '^solomon,.*',
+> '^sony,.*', '^spansion,.*', '^sparkfun,.*', '^spinalhdl,.*',
+> '^sprd,.*', '^ssi,.*', '^sst,.*', '^sstar,.*', '^st,.*',
+> '^st-ericsson,.*', '^starfive,.*', '^starry,.*', '^startek,.*',
+> '^ste,.*', '^stericsson,.*', '^storlink,.*', '^storm,.*',
+> '^storopack,.*', '^summit,.*', '^sunchip,.*', '^sunplus,.*',
+> '^supermicro,.*', '^swir,.*', '^syna,.*', '^synology,.*',
+> '^synopsys,.*', '^tbs,.*', '^tbs-biometrics,.*', '^tcg,.*', '^tcl,.*',
+> '^tcs,.*', '^tdo,.*', '^team-source-display,.*', '^technexion,.*',
+> '^technologic,.*', '^techstar,.*', '^teltonika,.*', '^tempo,.*',
+> '^terasic,.*', '^tesla,.*', '^tfc,.*', '^thead,.*', '^thine,.*',
+> '^thingyjp,.*', '^thundercomm,.*', '^ti,.*', '^tianma,.*', '^tlm,.*',
+> '^tmt,.*', '^topeet,.*', '^topic,.*', '^toppoly,.*', '^topwise,.*',
+> '^toradex,.*', '^toshiba,.*', '^toumaz,.*', '^tpk,.*', '^tplink,.*',
+> '^tpo,.*', '^tq,.*', '^traverse,.*', '^tronfy,.*', '^tronsmart,.*',
+> '^truly,.*', '^tsd,.*', '^tyan,.*', '^u-blox,.*', '^u-boot,.*',
+> '^ubnt,.*', '^ucrobotics,.*', '^udoo,.*', '^ugoos,.*', '^uniwest,.*',
+> '^upisemi,.*', '^urt,.*', '^usi,.*', '^utoo,.*', '^v3,.*',
+> '^vaisala,.*', '^vamrs,.*', '^variscite,.*', '^vdl,.*',
+> '^vertexcom,.*', '^via,.*', '^vicor,.*', '^videostrong,.*',
+> '^virtio,.*', '^virtual,.*', '^vishay,.*', '^visionox,.*',
+> '^vitesse,.*', '^vivante,.*', '^vivax,.*', '^vocore,.*', '^voipac,.*',
+> '^vot,.*', '^vxt,.*', '^wanchanglong,.*', '^wand,.*', '^waveshare,.*',
+> '^wd,.*', '^we,.*', '^welltech,.*', '^wetek,.*', '^wexler,.*',
+> '^whwave,.*', '^wi2wi,.*', '^wiligear,.*', '^willsemi,.*',
+> '^winbond,.*', '^wingtech,.*', '^winlink,.*', '^winstar,.*',
+> '^wirelesstag,.*', '^wits,.*', '^wlf,.*', '^wm,.*', '^wobo,.*',
+> '^x-powers,.*', '^xen,.*', '^xes,.*', '^xiaomi,.*', '^xillybus,.*',
+> '^xingbangda,.*', '^xinpeng,.*', '^xiphera,.*', '^xlnx,.*',
+> '^xnano,.*', '^xunlong,.*', '^xylon,.*', '^yadro,.*', '^yamaha,.*',
+> '^yes-optoelectronics,.*', '^yic,.*', '^ylm,.*', '^yna,.*',
+> '^yones-toptech,.*', '^ys,.*', '^ysoft,.*', '^zarlink,.*',
+> '^zealz,.*', '^zeitec,.*', '^zidoo,.*', '^zii,.*', '^zinitix,.*',
+> '^zkmagic,.*', '^zte,.*', '^zyxel,.*'
+>   From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindi=
+ngs/vendor-prefixes.yaml
+>=20
+> Rob
 
->
-> Thanks
->
-> > add [150ms, 350ms) threshold for partial memory stall measured
-> > within 1sec time window.
-> >
-> > Signed-off-by: Chen Wandun <chenwandun@huawei.com>
-> > ---
-> >  include/linux/psi_types.h |  3 ++-
-> >  kernel/sched/psi.c        | 19 +++++++++++++------
-> >  2 files changed, 15 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
-> > index c7fe7c089718..2b1393c8bf90 100644
-> > --- a/include/linux/psi_types.h
-> > +++ b/include/linux/psi_types.h
-> > @@ -119,7 +119,8 @@ struct psi_trigger {
-> >       enum psi_states state;
-> >
-> >       /* User-spacified threshold in ns */
-> > -     u64 threshold;
-> > +     u64 min_threshold;
-> > +     u64 max_threshold;
-> >
-> >       /* List node inside triggers list */
-> >       struct list_head node;
-> > diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> > index 6f9533c95b0a..17dd233b533a 100644
-> > --- a/kernel/sched/psi.c
-> > +++ b/kernel/sched/psi.c
-> > @@ -541,7 +541,7 @@ static u64 update_triggers(struct psi_group *group, u64 now)
-> >
-> >                       /* Calculate growth since last update */
-> >                       growth = window_update(&t->win, now, total[t->state]);
-> > -                     if (growth < t->threshold)
-> > +                     if (growth < t->min_threshold || growth >= t->max_threshold)
-> >                               continue;
-> >
-> >                       t->pending_event = true;
-> > @@ -1087,15 +1087,18 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
-> >  {
-> >       struct psi_trigger *t;
-> >       enum psi_states state;
-> > -     u32 threshold_us;
-> > +     u32 min_threshold_us;
-> > +     u32 max_threshold_us;
-> >       u32 window_us;
-> >
-> >       if (static_branch_likely(&psi_disabled))
-> >               return ERR_PTR(-EOPNOTSUPP);
-> >
-> > -     if (sscanf(buf, "some %u %u", &threshold_us, &window_us) == 2)
-> > +     if (sscanf(buf, "some %u %u %u", &min_threshold_us,
-> > +                             &max_threshold_us, &window_us) == 3)
-> >               state = PSI_IO_SOME + res * 2;
-> > -     else if (sscanf(buf, "full %u %u", &threshold_us, &window_us) == 2)
-> > +     else if (sscanf(buf, "full %u %u %u", &min_threshold_us,
-> > +                             &max_threshold_us, &window_us) == 3)
-> >               state = PSI_IO_FULL + res * 2;
-> >       else
-> >               return ERR_PTR(-EINVAL);
-> > @@ -1107,8 +1110,11 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
-> >               window_us > WINDOW_MAX_US)
-> >               return ERR_PTR(-EINVAL);
-> >
-> > +     if (min_threshold_us >= max_threshold_us)
-> > +             return ERR_PTR(-EINVAL);
-> > +
-> >       /* Check threshold */
-> > -     if (threshold_us == 0 || threshold_us > window_us)
-> > +     if (max_threshold_us > window_us)
-> >               return ERR_PTR(-EINVAL);
-> >
-> >       t = kmalloc(sizeof(*t), GFP_KERNEL);
-> > @@ -1117,7 +1123,8 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
-> >
-> >       t->group = group;
-> >       t->state = state;
-> > -     t->threshold = threshold_us * NSEC_PER_USEC;
-> > +     t->min_threshold = min_threshold_us * NSEC_PER_USEC;
-> > +     t->max_threshold = max_threshold_us * NSEC_PER_USEC;
-> >       t->win.size = window_us * NSEC_PER_USEC;
-> >       window_reset(&t->win, 0, 0, 0);
-> >
+
+Thanks,
+Miqu=C3=A8l

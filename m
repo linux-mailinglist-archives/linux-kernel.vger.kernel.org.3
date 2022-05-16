@@ -2,64 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9389D5293C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 00:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46BC15293CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 00:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349743AbiEPWsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 18:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55088 "EHLO
+        id S1349820AbiEPWt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 18:49:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244956AbiEPWsN (ORCPT
+        with ESMTP id S1349871AbiEPWsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 18:48:13 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C136C41319
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 15:48:10 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id B34652C02EB;
-        Mon, 16 May 2022 22:48:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1652741288;
-        bh=ACc6IEVM0bn4IqAX/7zUWdQYsuQJlsTvqpTaLUAizYM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Yuw5zMByE5Ust6J4bHCiROIHJy7u4Dehfhvx7/lmkFvbuphuXrnNOz+tzgaVUf3JE
-         O2hqCYvPFe0bmI1zx92CZdh62rC02j8TkpnVS29F8b9jun//PnpmceH4skZlt7sp9w
-         6mKRwVqG5vFZPE+7Akzrd96TSuhBWrUtF9h+QWBMAfzPm7tH+1YaUVxqtchdkeiJeF
-         wwgw1K/lbs6f26iPFTWLGyypWWqF0p8seGCzCQ2jSKKQdzGCqbgAh8oi0odspnimap
-         yKFEC+JS3sNkhYLf60WOpYLvXDiVHoksy8urBUgipflbPv/KhWjzx8SQJQsXDPyTbe
-         igTY9qD8byXow==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B6282d4a80002>; Tue, 17 May 2022 10:48:08 +1200
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-        by pat.atlnz.lc (Postfix) with ESMTP id 72E8913ED7D;
-        Tue, 17 May 2022 10:48:08 +1200 (NZST)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id 700E92A0086; Tue, 17 May 2022 10:48:08 +1200 (NZST)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, andrew@lunn.ch,
-        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
-        kabel@kernel.org
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH 2/2] dt-bindings: net: marvell,orion-mdio: Set unevaluatedProperties to false
-Date:   Tue, 17 May 2022 10:48:01 +1200
-Message-Id: <20220516224801.1656752-3-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516224801.1656752-1-chris.packham@alliedtelesis.co.nz>
-References: <20220516224801.1656752-1-chris.packham@alliedtelesis.co.nz>
+        Mon, 16 May 2022 18:48:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6934132F
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 15:48:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79744B81681
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 22:48:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2776C385AA;
+        Mon, 16 May 2022 22:48:39 +0000 (UTC)
+Date:   Mon, 16 May 2022 23:48:36 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     will@kernel.org, akpm@linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, hch@infradead.org, arnd@arndb.de
+Subject: Re: [PATCH v2 5/5] arm64: Add HAVE_IOREMAP_PROT support
+Message-ID: <YoLUxPyTsuANbKQX@arm.com>
+References: <20220429103225.75121-1-wangkefeng.wang@huawei.com>
+ <20220429103225.75121-6-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=U+Hs8tju c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=oZkIemNP1mAA:10 a=QXzqMLctjYEMqmhBL2EA:9
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220429103225.75121-6-wangkefeng.wang@huawei.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,33 +45,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the binding was converted it appeared necessary to set
-'unevaluatedProperties: true' because of the switch devices on the
-turris-mox board. Actually the error was because of the reg property
-being incorrect causing the rest of the properties to be unevaluated.
+On Fri, Apr 29, 2022 at 06:32:25PM +0800, Kefeng Wang wrote:
+> With ioremap_prot() defination from generic ioremap, also move
+> pte_pgprot() from hugetlbpage.c into pgtable.h, then arm64 could
+> have HAVE_IOREMAP_PROT, which will enable generic_access_phys()
+> code.
+> 
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 
-After the reg properties are fixed for turris-mox we can set
-'unevaluatedProperties: false' as is generally expected.
-
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
- Documentation/devicetree/bindings/net/marvell,orion-mdio.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/net/marvell,orion-mdio.yam=
-l b/Documentation/devicetree/bindings/net/marvell,orion-mdio.yaml
-index fe3a3412f093..d2906b4a0f59 100644
---- a/Documentation/devicetree/bindings/net/marvell,orion-mdio.yaml
-+++ b/Documentation/devicetree/bindings/net/marvell,orion-mdio.yaml
-@@ -39,7 +39,7 @@ required:
-   - compatible
-   - reg
-=20
--unevaluatedProperties: true
-+unevaluatedProperties: false
-=20
- examples:
-   - |
---=20
-2.36.1
-
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>

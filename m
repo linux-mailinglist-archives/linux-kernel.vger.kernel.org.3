@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E2B5284BE
+	by mail.lfdr.de (Postfix) with ESMTP id DF6E45284BF
 	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 14:55:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243594AbiEPMzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 08:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42146 "EHLO
+        id S243743AbiEPMyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 08:54:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243606AbiEPMyY (ORCPT
+        with ESMTP id S243542AbiEPMy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 08:54:24 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED013A1BE
+        Mon, 16 May 2022 08:54:27 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23C53A1BF
         for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 05:53:48 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id n6-20020a05600c3b8600b0039492b44ce7so8569008wms.5
+Received: by mail-wr1-x42b.google.com with SMTP id u3so20422875wrg.3
         for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 05:53:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4Tb/G+5lkfHnvtEKe+geJ9MpHVXcxF0ik9q8tJTT9QY=;
-        b=MBJ5UVxFXZQ3Bbmw7lohTUXD9BhgHvbzqqUwZ4d8YFzAN3UuUh1QCM6pq0g7YLfYMN
-         eW3GbDhSHySEAVroDk/PVm39k7ugxJM3/2Yvh/OCdZBBjQPqlGVV8kT2LGQA12Hd5RWi
-         Vi9VWMnTegV11lKhOk+gdtP1wq93Fx6WXHJGPTHT85och0Y0yMoNzKJnJtoFkKstu6M2
-         YrjodRqz2tfFBKib14RA5CsIQAy9EAItKkqAwpTXk94o/m5cG1bVZUapEORJRwPEmcen
-         HKMEOMscXgAfTJC82gnQMt3UrVaUhiFkkds5FM4ZxRrSd9Z/M43rAE7HWm7Yk36041Tf
-         4RIQ==
+        bh=A0rWI2lLONIT7+b9pf3JkzKqaAFR6Sio8Kh0BbPP5t4=;
+        b=cRNQBWUSaU8ZTb3mLWayUvSt2WgVFapHE6E+2n78CQWApmnv3YTT/1CpT4J0OFjVJG
+         cxoaZ1tDhKtqOChZ7/K0lynsretSamTSt56kDmZm+L/iPkMCrJ/EYEG4mAd+2qPVZM1r
+         3TDktZv12TOO4Fk7YUIfYwtHTCYKew20BwJDx5nbPVZ2Wxwd8DvKuGflHem6KlM/hGCM
+         EYLyNgYr4OWW6EIgl9g+nkgrTyms4tm8LnIUCtQQoe0Ep+3Eon/PhxktLFMBA79iBGue
+         ed9l1U4fNmaYQG663niRCxbqgrZAnq8MmVhgFh/IVrmu+4zRK+Qm52lXqPYo+8ViWh0D
+         5nxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4Tb/G+5lkfHnvtEKe+geJ9MpHVXcxF0ik9q8tJTT9QY=;
-        b=aifIrokk76LBw+gpcZbNqyb5n9QqWJK3H5ySfNZqtXoOPDtC3N9U07j7voI5eNWyb1
-         udGzYohBYfEA5c7os1U5taC1IMG7zo8I/dFkNoTIiXiubYaiTzRc7tIfZWRJ7pfEHDGl
-         Ee42BBbRgx8H1o6eVspEmvRX9fbhgeUVdQSGNUbPciXLinu+RYnUALVBOD+i47ezjm9G
-         gbqgStZ6S3YeDnOTw5z+vPYSMYkgfBnrIX6TAM1qLKIAQUiQV3ajUIjFVvpS3KK3rIPU
-         9eUpbrdc5hSIsq4Fydis8SzPbMeKx78Ftbzw71Si2+gfdczDEk6J4U0rGl+zfHfHJPcD
-         mCRQ==
-X-Gm-Message-State: AOAM531GRYsDmxbFWlelEdu+3Y1WADnLF1zgmcAYOcrqj0iupQJ9vUhn
-        jc4pky8gHb6zZ4/k39YnAyA=
-X-Google-Smtp-Source: ABdhPJyPytLIRy+Nv9XrDz0YVXtUAseeu631D+FB5fIf9KftrEScobtVidHF58lNQ04ZrdDKgsBybQ==
-X-Received: by 2002:a05:600c:20e:b0:394:2985:6d0c with SMTP id 14-20020a05600c020e00b0039429856d0cmr26778458wmi.106.1652705626579;
+        bh=A0rWI2lLONIT7+b9pf3JkzKqaAFR6Sio8Kh0BbPP5t4=;
+        b=v12N5+/LEoiMmp7Fk2Bm2jN7cSULx241nzAIWz2VHQkJ+tot/QYMTWUQNoBd1hvRJl
+         XXN2rhBf/z9jia1eXrYsFTl6J7HVhyIwNnTot9D5/H8nmwR2lMC42nrMks1KBIqOoKnd
+         XcuZ5IO99r/9DVDZWzVotMZrWkJG3C8BaeQ8fILOxJH967YbUrmcdjuBHZVuaKSHvHXr
+         nZ6Nk/Ul0STLFoXfwo3Pg8yKPGkeu9qhIGp9QVDlvPaq2Azj/cjQk71fj8hOGO5KFJFv
+         KuXsbFjDlaJqTqofSDyxhyhFSo9KfC1HrnZ4Er8CaU8ILOR7e6fxAZ9BrMFGAAIYobEm
+         IbBw==
+X-Gm-Message-State: AOAM531STquDzD4RY41ACJp3VtCfqFwgbEAQ9uYpTndmDarko3I7Ywve
+        vl6ply0Aw7063v6DBZ6sCpU=
+X-Google-Smtp-Source: ABdhPJyskl20gRCnwQJxLVV5hqWKuOYrDBxhqPI4L3BVflIiUd4SYWT46rl95XELnlRm0Wb4JJgd0w==
+X-Received: by 2002:adf:eb8e:0:b0:20c:b378:67b2 with SMTP id t14-20020adfeb8e000000b0020cb37867b2mr14465715wrn.164.1652705626101;
         Mon, 16 May 2022 05:53:46 -0700 (PDT)
 Received: from orion.localdomain ([93.99.228.15])
-        by smtp.gmail.com with ESMTPSA id r15-20020a7bc08f000000b00394615cf468sm13162481wmh.28.2022.05.16.05.53.45
+        by smtp.gmail.com with ESMTPSA id l11-20020adfbd8b000000b0020c5253d91esm9607279wrh.106.2022.05.16.05.53.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 16 May 2022 05:53:45 -0700 (PDT)
 Received: by orion.localdomain (Postfix, from userid 1003)
-        id 92F45A0E78; Mon, 16 May 2022 14:54:07 +0200 (CEST)
+        id 96D23A0E79; Mon, 16 May 2022 14:54:07 +0200 (CEST)
 From:   =?UTF-8?q?Jakub=20Mat=C4=9Bna?= <matenajakub@gmail.com>
 To:     linux-mm@kvack.org
 Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
@@ -58,9 +58,9 @@ Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
         kirill@shutemov.name, riel@surriel.com, rostedt@goodmis.org,
         peterz@infradead.org, david@redhat.com,
         =?UTF-8?q?Jakub=20Mat=C4=9Bna?= <matenajakub@gmail.com>
-Subject: [RFC PATCH v3 3/6] [PATCH 3/6] mm: add migration waiting and rmap locking to pagewalk
-Date:   Mon, 16 May 2022 14:54:02 +0200
-Message-Id: <20220516125405.1675-4-matenajakub@gmail.com>
+Subject: [RFC PATCH v3 4/6] [PATCH 4/6] mm: adjust page offset in mremap
+Date:   Mon, 16 May 2022 14:54:03 +0200
+Message-Id: <20220516125405.1675-5-matenajakub@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220516125405.1675-1-matenajakub@gmail.com>
 References: <20220516125405.1675-1-matenajakub@gmail.com>
@@ -77,311 +77,591 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following patches need to wait for migration and take rmap locks before
-they work with the pte itself. This feature is a compact change and is
-therefore extracted into this patch.
+Adjust page offset of a VMA when it's moved to a new location by mremap.
+This is made possible for all VMAs that do not share their anonymous
+pages with other processes and it is checked by going through the anon_vma
+tree and looking for parent child relationship. Also and maybe
+redundantly this is checked for individual struct pages belonging to the
+given vma by looking at their mapcount or swap entry reference count if
+the page is swapped out. This is all done in can_update_faulted_pgoff(),
+is_shared_pte().
 
-In order to wait for migration when a page is being migrated, new flag
-is added to pagewalk to optionally enable waiting for migration at the
-walk_pte_range_inner() level. Similar flag was added to take rmap locks
-at the same level.
+If none of the pages is shared then we proceed with the
+page offset update. This means updating page offset in the copy_vma()
+which is used when creating the VMA copy or possibly when deciding
+whether to merge with a neighboring VMA. We also set pgoff_updatable to
+true to later update page offsets of individual pages.
+This is done later in move_page_tables() when moving
+individual pte entries to the target VMA. The page offset update
+actually forces the move to happen at the pte level by using
+move_ptes(). It is necessary because the page update must happen
+atomically with the move and that is not possible when moving bigger
+entries like pmd or pud. We do not need to update swapped out pages,
+because in that case page offset is reconstructed automatically from VMA
+after the page is swapped in.
+As mentioned above there is a small amount of time between checking and
+actually updating the page offset of pages as well as between merging VMAs
+and again updating the pages. This could potencially interfere with rmap
+walk, but fortunately in that case rmap walk can use the still existing old
+VMA, as it would before the mremap started. Any other potential changes
+to the VMA or pages is prevented by mmap_lock, which prevents forking and
+therefore also COW and hence raising the mapcount. Because pages are not
+shared, but belong to only one process, there is no other process which
+might fork and in that way increase mapcount of the pages in question.
 
-When waiting for migration pte lock and rmap locks must be dropped and
-taken again after the migration has ended. Similar mechanism is taken if
-pte_entry() sets ACTION_AGAIN, which happens in the following patch when
-a deadlock is encountered, because of a different lock order used during
-the page update.
-
-Migration waiting is done only at the PTE level and is presumes no pmd
-entry is specified. If pmd_entry() is set together with page migration
-flag a warning is logged. PMD migration waiting can implemented later if
-anyone needs it.
-
-At this time flags can be specified only by calling walk_page_vma(). If
-needed flags can also be added to other pagewalk API calls.
+If a page is shared we can't update page offset of the page, because
+that would interfere with the page offset for the other processes using
+the page. Page offset is basically immutable as long as the page is used
+by more than one process.
+Previously, adjusting page offset was possible only for not yet faulted
+VMAs, even though a page offset matching the virtual address of the
+anonymous VMA is necessary to successfully merge with another VMA.
 
 Signed-off-by: Jakub Matěna <matenajakub@gmail.com>
 ---
- fs/proc/task_mmu.c       |  4 +--
- include/linux/pagewalk.h | 11 ++++++-
- include/linux/rmap.h     |  2 ++
- mm/mremap.c              | 17 +---------
- mm/pagewalk.c            | 71 +++++++++++++++++++++++++++++++++++++---
- mm/rmap.c                | 16 +++++++++
- 6 files changed, 97 insertions(+), 24 deletions(-)
+ fs/exec.c                |   2 +-
+ include/linux/mm.h       |   4 +-
+ include/linux/pagewalk.h |   2 +
+ include/linux/rmap.h     |   2 +
+ mm/mmap.c                | 113 +++++++++++++++++++++++++++++++------
+ mm/mremap.c              | 117 +++++++++++++++++++++++++++++++++------
+ mm/pagewalk.c            |   2 +-
+ mm/rmap.c                |  41 ++++++++++++++
+ 8 files changed, 244 insertions(+), 39 deletions(-)
 
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index f46060eb91b5..fd72263456e9 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -794,7 +794,7 @@ static void smap_gather_stats(struct vm_area_struct *vma,
- #endif
- 	/* mmap_lock is held in m_start */
- 	if (!start)
--		walk_page_vma(vma, ops, mss);
-+		walk_page_vma(vma, ops, mss, 0);
- 	else
- 		walk_page_range(vma->vm_mm, start, vma->vm_end, ops, mss);
- }
-@@ -1938,7 +1938,7 @@ static int show_numa_map(struct seq_file *m, void *v)
- 		seq_puts(m, " huge");
+diff --git a/fs/exec.c b/fs/exec.c
+index e3e55d5e0be1..207f60fcb2b4 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -709,7 +709,7 @@ static int shift_arg_pages(struct vm_area_struct *vma, unsigned long shift)
+ 	 * process cleanup to remove whatever mess we made.
+ 	 */
+ 	if (length != move_page_tables(vma, old_start,
+-				       vma, new_start, length, false))
++				       vma, new_start, length, false, false))
+ 		return -ENOMEM;
  
- 	/* mmap_lock is held by m_start */
--	walk_page_vma(vma, &show_numa_ops, md);
-+	walk_page_vma(vma, &show_numa_ops, md, 0);
+ 	lru_add_drain();
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index e34edb775334..d8e482aef901 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1951,7 +1951,7 @@ int get_cmdline(struct task_struct *task, char *buffer, int buflen);
+ extern unsigned long move_page_tables(struct vm_area_struct *vma,
+ 		unsigned long old_addr, struct vm_area_struct *new_vma,
+ 		unsigned long new_addr, unsigned long len,
+-		bool need_rmap_locks);
++		bool need_rmap_locks, bool update_pgoff);
  
- 	if (!md->pages)
- 		goto out;
+ /*
+  * Flags used by change_protection().  For now we make it a bitmap so
+@@ -2637,7 +2637,7 @@ extern void __vma_link_rb(struct mm_struct *, struct vm_area_struct *,
+ extern void unlink_file_vma(struct vm_area_struct *);
+ extern struct vm_area_struct *copy_vma(struct vm_area_struct **,
+ 	unsigned long addr, unsigned long len, pgoff_t pgoff,
+-	bool *need_rmap_locks);
++	bool *need_rmap_locks, bool *update_pgoff);
+ extern void exit_mmap(struct mm_struct *);
+ 
+ static inline int check_data_rlimit(unsigned long rlim,
 diff --git a/include/linux/pagewalk.h b/include/linux/pagewalk.h
-index ac7b38ad5903..07345df51324 100644
+index 07345df51324..11c99c8d343b 100644
 --- a/include/linux/pagewalk.h
 +++ b/include/linux/pagewalk.h
-@@ -70,6 +70,13 @@ enum page_walk_action {
- 	ACTION_AGAIN = 2
- };
- 
-+/* Walk flags */
-+
-+/* Wait for migration before pte entry, not implemented for pmd entries */
-+#define WALK_MIGRATION  0x1
-+/* Take rmap locks before pte entries */
-+#define WALK_LOCK_RMAP	0x2
-+
- /**
-  * struct mm_walk - walk_page_range data
-  * @ops:	operation to call during the walk
-@@ -77,6 +84,7 @@ enum page_walk_action {
-  * @pgd:	pointer to PGD; only valid with no_vma (otherwise set to NULL)
-  * @vma:	vma currently walked (NULL if walking outside vmas)
-  * @action:	next action to perform (see enum page_walk_action)
-+ * @flags:	flags performing additional operations (see walk flags)
-  * @no_vma:	walk ignoring vmas (vma will always be NULL)
-  * @private:	private data for callbacks' usage
-  *
-@@ -88,6 +96,7 @@ struct mm_walk {
- 	pgd_t *pgd;
- 	struct vm_area_struct *vma;
- 	enum page_walk_action action;
-+	unsigned long flags;
- 	bool no_vma;
+@@ -101,6 +101,8 @@ struct mm_walk {
  	void *private;
  };
-@@ -100,7 +109,7 @@ int walk_page_range_novma(struct mm_struct *mm, unsigned long start,
- 			  pgd_t *pgd,
- 			  void *private);
- int walk_page_vma(struct vm_area_struct *vma, const struct mm_walk_ops *ops,
--		void *private);
-+		void *private, unsigned long flags);
- int walk_page_mapping(struct address_space *mapping, pgoff_t first_index,
- 		      pgoff_t nr, const struct mm_walk_ops *ops,
- 		      void *private);
+ 
++int walk_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
++			struct mm_walk *walk);
+ int walk_page_range(struct mm_struct *mm, unsigned long start,
+ 		unsigned long end, const struct mm_walk_ops *ops,
+ 		void *private);
 diff --git a/include/linux/rmap.h b/include/linux/rmap.h
-index 17230c458341..d2d5e511dd93 100644
+index d2d5e511dd93..9fee804f47ea 100644
 --- a/include/linux/rmap.h
 +++ b/include/linux/rmap.h
-@@ -138,6 +138,8 @@ static inline void anon_vma_unlock_read(struct anon_vma *anon_vma)
-  */
- void anon_vma_init(void);	/* create anon_vma_cachep */
- int  __anon_vma_prepare(struct vm_area_struct *);
-+void take_rmap_locks(struct vm_area_struct *vma);
-+void drop_rmap_locks(struct vm_area_struct *vma);
- void unlink_anon_vmas(struct vm_area_struct *);
+@@ -144,6 +144,8 @@ void unlink_anon_vmas(struct vm_area_struct *);
  int anon_vma_clone(struct vm_area_struct *, struct vm_area_struct *);
  int anon_vma_fork(struct vm_area_struct *, struct vm_area_struct *);
+ 
++bool rbt_no_children(struct anon_vma *av);
++
+ static inline int anon_vma_prepare(struct vm_area_struct *vma)
+ {
+ 	if (likely(vma->anon_vma))
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 4a4611443593..3ca78baaee13 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -48,6 +48,8 @@
+ #include <linux/pkeys.h>
+ #include <linux/oom.h>
+ #include <linux/sched/mm.h>
++#include <linux/pagewalk.h>
++#include <linux/swapops.h>
+ 
+ #include <linux/uaccess.h>
+ #include <asm/cacheflush.h>
+@@ -3189,28 +3191,100 @@ int insert_vm_struct(struct mm_struct *mm, struct vm_area_struct *vma)
+ 	return 0;
+ }
+ 
++/*
++ * is_shared_pte() - Check if the given pte points to a page that is not shared between processes.
++ * @pte: pte to check
++ * @addr: Address where the page is mapped
++ * @end: Not used
++ * @walk: Pagewalk structure holding pointer to VMA where the page belongs
++ */
++static int is_shared_pte(pte_t *pte, unsigned long addr,
++				unsigned long end, struct mm_walk *walk)
++{
++	int err;
++	struct page *page;
++	struct vm_area_struct *old = walk->vma;
++
++	if (is_swap_pte(*pte)) {
++		swp_entry_t entry = pte_to_swp_entry(*pte);
++		struct swap_info_struct *info = swp_swap_info(entry);
++		/*
++		 * If the reference count is higher than one than the swap slot is used by
++		 * more than one process or the swap cache is active, which means that the
++		 * page is mapped by at least one process and swapped out by at least one
++		 * process, so in both cases this means the page is shared.
++		 * There can also exist continuation pages if the reference count is too
++		 * high to fit in just one cell. This is specified by the flag COUNT_CONTINUED,
++		 * which again triggers the below condition if set.
++		 */
++		return info->swap_map[swp_offset(entry)] > 1;
++	}
++
++	if (!pte_present(*pte))
++		return 0;
++	page = vm_normal_page(old, addr, *pte);
++	if (page == NULL)
++		return 0;
++	/* Check page is not shared with other processes */
++	err = page_mapcount(page) + page_swapcount(page) > 1;
++	return err;
++}
++
++/**
++ * can_update_faulted_pgoff() - Check if pgoff update is possible for faulted pages of a vma
++ * @vma: VMA which should be moved
++ * @addr: new virtual address
++ * If the vma and its pages are not shared with another process, updating
++ * the new pgoff and also updating index parameter (copy of the pgoff) in
++ * all faulted pages is possible.
++ */
++static bool can_update_faulted_pgoff(struct vm_area_struct *vma, unsigned long addr)
++{
++	const struct mm_walk_ops can_update_pgoff_ops = {
++		.pte_entry = is_shared_pte
++	};
++
++	/* Check vma is not shared with other processes */
++	if (vma->anon_vma->root != vma->anon_vma || !rbt_no_children(vma->anon_vma))
++		return 1;
++	/* walk_page_vma() returns 0 on success */
++	return !walk_page_vma(vma, &can_update_pgoff_ops, NULL, WALK_MIGRATION | WALK_LOCK_RMAP);
++}
++
+ /*
+  * Copy the vma structure to a new location in the same mm,
+  * prior to moving page table entries, to effect an mremap move.
+  */
+ struct vm_area_struct *copy_vma(struct vm_area_struct **vmap,
+ 	unsigned long addr, unsigned long len, pgoff_t pgoff,
+-	bool *need_rmap_locks)
++	bool *need_rmap_locks, bool *update_pgoff)
+ {
+ 	struct vm_area_struct *vma = *vmap;
+ 	unsigned long vma_start = vma->vm_start;
+ 	struct mm_struct *mm = vma->vm_mm;
+ 	struct vm_area_struct *new_vma, *prev;
+ 	struct rb_node **rb_link, *rb_parent;
+-	bool faulted_in_anon_vma = true;
++	bool anon_pgoff_updated = false;
++	*need_rmap_locks = false;
++	*update_pgoff = false;
+ 
+ 	/*
+-	 * If anonymous vma has not yet been faulted, update new pgoff
++	 * Try to update new pgoff for anonymous vma
+ 	 * to match new location, to increase its chance of merging.
+ 	 */
+-	if (unlikely(vma_is_anonymous(vma) && !vma->anon_vma)) {
+-		pgoff = addr >> PAGE_SHIFT;
+-		faulted_in_anon_vma = false;
++	if (unlikely(vma_is_anonymous(vma))) {
++		if (!vma->anon_vma) {
++			pgoff = addr >> PAGE_SHIFT;
++			anon_pgoff_updated = true;
++		} else {
++			anon_pgoff_updated = can_update_faulted_pgoff(vma, addr);
++			if (anon_pgoff_updated) {
++				/* Update pgoff of the copied VMA */
++				pgoff = addr >> PAGE_SHIFT;
++				*update_pgoff = true;
++				*need_rmap_locks = true;
++			}
++		}
+ 	}
+ 
+ 	if (find_vma_links(mm, addr, addr + len, &prev, &rb_link, &rb_parent))
+@@ -3227,19 +3301,25 @@ struct vm_area_struct *copy_vma(struct vm_area_struct **vmap,
+ 			/*
+ 			 * The only way we can get a vma_merge with
+ 			 * self during an mremap is if the vma hasn't
+-			 * been faulted in yet and we were allowed to
+-			 * reset the dst vma->vm_pgoff to the
+-			 * destination address of the mremap to allow
+-			 * the merge to happen. mremap must change the
+-			 * vm_pgoff linearity between src and dst vmas
+-			 * (in turn preventing a vma_merge) to be
+-			 * safe. It is only safe to keep the vm_pgoff
+-			 * linear if there are no pages mapped yet.
++			 * been faulted in yet or is not shared and
++			 * we were allowed to reset the dst
++			 * vma->vm_pgoff to the destination address of
++			 * the mremap to allow the merge to happen.
++			 * mremap must change the vm_pgoff linearity
++			 * between src and dst vmas (in turn
++			 * preventing a vma_merge) to be safe. It is
++			 * only safe to keep the vm_pgoff linear if
++			 * there are no pages mapped yet or the none
++			 * of the pages are shared with another process.
+ 			 */
+-			VM_BUG_ON_VMA(faulted_in_anon_vma, new_vma);
++			VM_BUG_ON_VMA(!anon_pgoff_updated, new_vma);
+ 			*vmap = vma = new_vma;
+ 		}
+-		*need_rmap_locks = (new_vma->vm_pgoff <= vma->vm_pgoff);
++		/*
++		 * If new_vma is located before the old vma, rmap traversal order is altered
++		 * and we need to apply rmap locks on vma later.
++		 */
++		*need_rmap_locks |= (new_vma->vm_pgoff <= vma->vm_pgoff);
+ 	} else {
+ 		new_vma = vm_area_dup(vma);
+ 		if (!new_vma)
+@@ -3256,7 +3336,6 @@ struct vm_area_struct *copy_vma(struct vm_area_struct **vmap,
+ 		if (new_vma->vm_ops && new_vma->vm_ops->open)
+ 			new_vma->vm_ops->open(new_vma);
+ 		vma_link(mm, new_vma, prev, rb_link, rb_parent);
+-		*need_rmap_locks = false;
+ 	}
+ 	return new_vma;
+ 
 diff --git a/mm/mremap.c b/mm/mremap.c
-index 75cda854ec58..309fab7ed706 100644
+index 309fab7ed706..2ef444abb08a 100644
 --- a/mm/mremap.c
 +++ b/mm/mremap.c
 @@ -24,6 +24,7 @@
  #include <linux/mmu_notifier.h>
  #include <linux/uaccess.h>
  #include <linux/userfaultfd_k.h>
-+#include <linux/rmap.h>
++#include <linux/pagewalk.h>
+ #include <linux/rmap.h>
  
  #include <asm/cacheflush.h>
- #include <asm/tlb.h>
-@@ -101,22 +102,6 @@ static pmd_t *alloc_new_pmd(struct mm_struct *mm, struct vm_area_struct *vma,
- 	return pmd;
- }
- 
--static void take_rmap_locks(struct vm_area_struct *vma)
--{
--	if (vma->vm_file)
--		i_mmap_lock_write(vma->vm_file->f_mapping);
--	if (vma->anon_vma)
--		anon_vma_lock_write(vma->anon_vma);
--}
--
--static void drop_rmap_locks(struct vm_area_struct *vma)
--{
--	if (vma->anon_vma)
--		anon_vma_unlock_write(vma->anon_vma);
--	if (vma->vm_file)
--		i_mmap_unlock_write(vma->vm_file->f_mapping);
--}
--
- static pte_t move_soft_dirty_pte(pte_t pte)
- {
- 	/*
-diff --git a/mm/pagewalk.c b/mm/pagewalk.c
-index 9b3db11a4d1d..0bfb8c9255f3 100644
---- a/mm/pagewalk.c
-+++ b/mm/pagewalk.c
-@@ -3,6 +3,9 @@
- #include <linux/highmem.h>
- #include <linux/sched.h>
- #include <linux/hugetlb.h>
-+#include <linux/swap.h>
-+#include <linux/swapops.h>
-+#include <linux/rmap.h>
- 
- /*
-  * We want to know the real level where a entry is located ignoring any
-@@ -20,14 +23,62 @@ static int real_depth(int depth)
- 	return depth;
+@@ -117,10 +118,66 @@ static pte_t move_soft_dirty_pte(pte_t pte)
+ 	return pte;
  }
  
 +/*
-+ * Relock pte lock and optionally rmap locks to prevent possible deadlock
-+ * @pte: Locked pte
-+ * @addr: Address of the pte
-+ * @walk: Pagewalk structure
-+ * @ptl: Pte spinlock
-+ * @pmd: Pmd to wait for migration *
++ * update_pgoff_page() - Update page offset stored in page->index, if the page is not NULL.
++ * @addr: new address to calculate the page offset.
++ * @page: page to update
 + */
-+static void walk_pte_relock(pte_t **pte, unsigned long addr, struct mm_walk *walk,
-+			spinlock_t *ptl, pmd_t *pmd)
++static int update_pgoff_page(unsigned long addr, struct page *page)
 +{
-+	if (walk->no_vma)
-+		pte_unmap(*pte);
-+	else
-+		pte_unmap_unlock(*pte, ptl);
-+
-+	if (walk->flags & WALK_LOCK_RMAP)
-+		drop_rmap_locks(walk->vma);
-+
-+	if (walk->flags & WALK_MIGRATION)
-+		migration_entry_wait(walk->mm, pmd, addr);
-+
-+	if (walk->flags & WALK_LOCK_RMAP)
-+		take_rmap_locks(walk->vma);
-+
-+	if (walk->no_vma)
-+		*pte = pte_offset_map(pmd, addr);
-+	else
-+		*pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
++	if (page != NULL) {
++		get_page(page);
++		if (!trylock_page(page)) {
++			put_page(page);
++			return -1;
++		}
++		page->index = addr >> PAGE_SHIFT;
++		unlock_page(page);
++		put_page(page);
++	}
++	return 0;
 +}
 +
- static int walk_pte_range_inner(pte_t *pte, unsigned long addr,
--				unsigned long end, struct mm_walk *walk)
-+				unsigned long end, struct mm_walk *walk,
-+				spinlock_t *ptl, pmd_t *pmd)
- {
- 	const struct mm_walk_ops *ops = walk->ops;
- 	int err = 0;
- 
- 	for (;;) {
-+		walk->action = ACTION_SUBTREE;
-+		if ((walk->flags & WALK_MIGRATION) && !pte_present(*pte)) {
++/*
++ * update_pgoff_pte_inner() - Wait for migration and update page offset of
++ * a page represented by pte, if the pte points to mapped page.
++ */
++static int update_pgoff_pte_inner(pte_t *old_pte, unsigned long old_addr,
++					struct vm_area_struct *vma, spinlock_t *old_ptl,
++					pmd_t *old_pmd, unsigned long new_addr)
++{
++	struct page *page;
++	/*
++	 * If pte is in migration state then wait for migration
++	 * and return with -1 to trigger relocking mechanism in move_ptes().
++	 */
++	if (!pte_present(*old_pte)) {
++		if (!pte_none(*old_pte)) {
 +			swp_entry_t entry;
-+
-+			if (!pte_none(*pte)) {
-+				entry = pte_to_swp_entry(*pte);
-+				if (is_migration_entry(entry)) {
-+					walk_pte_relock(&pte, addr, walk, ptl, pmd);
-+					continue; /* retry iteration */
-+				}
++			entry = pte_to_swp_entry(*old_pte);
++			if (is_migration_entry(entry)) {
++				migration_entry_wait(vma->vm_mm, old_pmd, old_addr);
++				return -1;
 +			}
 +		}
- 		err = ops->pte_entry(pte, addr, addr + PAGE_SIZE, walk);
-+		if (walk->action == ACTION_AGAIN) {
-+			walk_pte_relock(&pte, addr, walk, ptl, pmd);
-+			continue; /* retry iteration */
-+		}
- 		if (err)
- 		       break;
- 		if (addr >= end - PAGE_SIZE)
-@@ -45,16 +96,22 @@ static int walk_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
- 	int err = 0;
- 	spinlock_t *ptl;
- 
-+	if (walk->flags & WALK_LOCK_RMAP)
-+		take_rmap_locks(walk->vma);
++		/*
++		 * If there is no migration entry, but at the same
++		 * time the page is not present then the page offset
++		 * will be reconstructed automatically from the
++		 * VMA after the page is moved back into RAM.
++		 */
++		return 0;
++	}
 +
- 	if (walk->no_vma) {
- 		pte = pte_offset_map(pmd, addr);
--		err = walk_pte_range_inner(pte, addr, end, walk);
-+		err = walk_pte_range_inner(pte, addr, end, walk, ptl, pmd);
- 		pte_unmap(pte);
- 	} else {
- 		pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
--		err = walk_pte_range_inner(pte, addr, end, walk);
-+		err = walk_pte_range_inner(pte, addr, end, walk, ptl, pmd);
- 		pte_unmap_unlock(pte, ptl);
++	page = vm_normal_page(vma, old_addr, *old_pte);
++	return update_pgoff_page(new_addr, page);
++}
++
+ static void move_ptes(struct vm_area_struct *vma, pmd_t *old_pmd,
+ 		unsigned long old_addr, unsigned long old_end,
+ 		struct vm_area_struct *new_vma, pmd_t *new_pmd,
+-		unsigned long new_addr, bool need_rmap_locks)
++		unsigned long new_addr, bool need_rmap_locks,
++		bool update_pgoff)
+ {
+ 	struct mm_struct *mm = vma->vm_mm;
+ 	pte_t *old_pte, *new_pte, pte;
+@@ -146,6 +203,8 @@ static void move_ptes(struct vm_area_struct *vma, pmd_t *old_pmd,
+ 	 *   serialize access to individual ptes, but only rmap traversal
+ 	 *   order guarantees that we won't miss both the old and new ptes).
+ 	 */
++
++retry:
+ 	if (need_rmap_locks)
+ 		take_rmap_locks(vma);
+ 
+@@ -166,6 +225,10 @@ static void move_ptes(struct vm_area_struct *vma, pmd_t *old_pmd,
+ 		if (pte_none(*old_pte))
+ 			continue;
+ 
++		if (update_pgoff)
++			if (update_pgoff_pte_inner(old_pte, old_addr, vma, old_ptl,
++						old_pmd, new_addr))
++				break; /* Causes unlock after for cycle and goto retry */
+ 		pte = ptep_get_and_clear(mm, old_addr, old_pte);
+ 		/*
+ 		 * If we are remapping a valid PTE, make sure
+@@ -194,6 +257,8 @@ static void move_ptes(struct vm_area_struct *vma, pmd_t *old_pmd,
+ 	pte_unmap_unlock(old_pte - 1, old_ptl);
+ 	if (need_rmap_locks)
+ 		drop_rmap_locks(vma);
++	if (old_addr < old_end)
++		goto retry;
+ }
+ 
+ #ifndef arch_supports_page_table_move
+@@ -422,11 +487,19 @@ static __always_inline unsigned long get_extent(enum pgt_entry entry,
+  * pgt_entry. Returns true if the move was successful, else false.
+  */
+ static bool move_pgt_entry(enum pgt_entry entry, struct vm_area_struct *vma,
+-			unsigned long old_addr, unsigned long new_addr,
+-			void *old_entry, void *new_entry, bool need_rmap_locks)
++			struct vm_area_struct *new_vma,	unsigned long old_addr,
++			unsigned long new_addr,	void *old_entry, void *new_entry,
++			bool need_rmap_locks, bool update_pgoff)
+ {
+ 	bool moved = false;
+ 
++	/*
++	 * In case of page offset update move must be done
++	 * at the pte level using move_ptes()
++	 */
++	if (update_pgoff)
++		return false;
++
+ 	/* See comment in move_ptes() */
+ 	if (need_rmap_locks)
+ 		take_rmap_locks(vma);
+@@ -465,7 +538,7 @@ static bool move_pgt_entry(enum pgt_entry entry, struct vm_area_struct *vma,
+ unsigned long move_page_tables(struct vm_area_struct *vma,
+ 		unsigned long old_addr, struct vm_area_struct *new_vma,
+ 		unsigned long new_addr, unsigned long len,
+-		bool need_rmap_locks)
++		bool need_rmap_locks, bool update_pgoff)
+ {
+ 	unsigned long extent, old_end;
+ 	struct mmu_notifier_range range;
+@@ -492,7 +565,14 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
+ 		 * If extent is PUD-sized try to speed up the move by moving at the
+ 		 * PUD level if possible.
+ 		 */
+-		extent = get_extent(NORMAL_PUD, old_addr, old_end, new_addr);
++		if (update_pgoff)
++			/*
++			 * In case of pgoff update, extent is set to PMD
++			 * and is done using move_ptes()
++			 */
++			extent = get_extent(NORMAL_PMD, old_addr, old_end, new_addr);
++		else
++			extent = get_extent(NORMAL_PUD, old_addr, old_end, new_addr);
+ 
+ 		old_pud = get_old_pud(vma->vm_mm, old_addr);
+ 		if (!old_pud)
+@@ -502,15 +582,15 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
+ 			break;
+ 		if (pud_trans_huge(*old_pud) || pud_devmap(*old_pud)) {
+ 			if (extent == HPAGE_PUD_SIZE) {
+-				move_pgt_entry(HPAGE_PUD, vma, old_addr, new_addr,
+-					       old_pud, new_pud, need_rmap_locks);
++				move_pgt_entry(HPAGE_PUD, vma, new_vma, old_addr, new_addr,
++					       old_pud, new_pud, need_rmap_locks, update_pgoff);
+ 				/* We ignore and continue on error? */
+ 				continue;
+ 			}
+ 		} else if (IS_ENABLED(CONFIG_HAVE_MOVE_PUD) && extent == PUD_SIZE) {
+ 
+-			if (move_pgt_entry(NORMAL_PUD, vma, old_addr, new_addr,
+-					   old_pud, new_pud, true))
++			if (move_pgt_entry(NORMAL_PUD, vma, new_vma, old_addr, new_addr,
++					   old_pud, new_pud, true, update_pgoff))
+ 				continue;
+ 		}
+ 
+@@ -524,8 +604,8 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
+ 		if (is_swap_pmd(*old_pmd) || pmd_trans_huge(*old_pmd) ||
+ 		    pmd_devmap(*old_pmd)) {
+ 			if (extent == HPAGE_PMD_SIZE &&
+-			    move_pgt_entry(HPAGE_PMD, vma, old_addr, new_addr,
+-					   old_pmd, new_pmd, need_rmap_locks))
++			    move_pgt_entry(HPAGE_PMD, vma, new_vma, old_addr, new_addr,
++					   old_pmd, new_pmd, need_rmap_locks, update_pgoff))
+ 				continue;
+ 			split_huge_pmd(vma, old_pmd, old_addr);
+ 			if (pmd_trans_unstable(old_pmd))
+@@ -536,15 +616,15 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
+ 			 * If the extent is PMD-sized, try to speed the move by
+ 			 * moving at the PMD level if possible.
+ 			 */
+-			if (move_pgt_entry(NORMAL_PMD, vma, old_addr, new_addr,
+-					   old_pmd, new_pmd, true))
++			if (move_pgt_entry(NORMAL_PMD, vma, new_vma, old_addr, new_addr,
++					   old_pmd, new_pmd, true, update_pgoff))
+ 				continue;
+ 		}
+ 
+ 		if (pte_alloc(new_vma->vm_mm, new_pmd))
+ 			break;
+ 		move_ptes(vma, old_pmd, old_addr, old_addr + extent, new_vma,
+-			  new_pmd, new_addr, need_rmap_locks);
++			  new_pmd, new_addr, need_rmap_locks, update_pgoff);
  	}
  
-+	if (walk->flags & WALK_LOCK_RMAP)
-+		drop_rmap_locks(walk->vma);
-+
+ 	mmu_notifier_invalidate_range_end(&range);
+@@ -568,7 +648,8 @@ static unsigned long move_vma(struct vm_area_struct *vma,
+ 	unsigned long hiwater_vm;
+ 	int split = 0;
+ 	int err = 0;
+-	bool need_rmap_locks;
++	bool need_rmap_locks = false;
++	bool update_pgoff = false;
+ 
+ 	/*
+ 	 * We'd prefer to avoid failure later on in do_munmap:
+@@ -608,7 +689,7 @@ static unsigned long move_vma(struct vm_area_struct *vma,
+ 
+ 	new_pgoff = vma->vm_pgoff + ((old_addr - vma->vm_start) >> PAGE_SHIFT);
+ 	new_vma = copy_vma(&vma, new_addr, new_len, new_pgoff,
+-			   &need_rmap_locks);
++			   &need_rmap_locks, &update_pgoff);
+ 	if (!new_vma) {
+ 		if (vm_flags & VM_ACCOUNT)
+ 			vm_unacct_memory(to_account >> PAGE_SHIFT);
+@@ -616,7 +697,7 @@ static unsigned long move_vma(struct vm_area_struct *vma,
+ 	}
+ 
+ 	moved_len = move_page_tables(vma, old_addr, new_vma, new_addr, old_len,
+-				     need_rmap_locks);
++				     need_rmap_locks, update_pgoff);
+ 	if (moved_len < old_len) {
+ 		err = -ENOMEM;
+ 	} else if (vma->vm_ops && vma->vm_ops->mremap) {
+@@ -630,7 +711,7 @@ static unsigned long move_vma(struct vm_area_struct *vma,
+ 		 * and then proceed to unmap new area instead of old.
+ 		 */
+ 		move_page_tables(new_vma, new_addr, vma, old_addr, moved_len,
+-				 true);
++				 true, update_pgoff);
+ 		vma = new_vma;
+ 		old_len = new_len;
+ 		old_addr = new_addr;
+diff --git a/mm/pagewalk.c b/mm/pagewalk.c
+index 0bfb8c9255f3..d603962ddd52 100644
+--- a/mm/pagewalk.c
++++ b/mm/pagewalk.c
+@@ -89,7 +89,7 @@ static int walk_pte_range_inner(pte_t *pte, unsigned long addr,
  	return err;
  }
  
-@@ -124,8 +181,11 @@ static int walk_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
- 		 * This implies that each ->pmd_entry() handler
- 		 * needs to know about pmd_trans_huge() pmds
- 		 */
--		if (ops->pmd_entry)
-+		if (ops->pmd_entry) {
-+			/* Migration waiting is not implemented for pmd entries */
-+			WARN_ON_ONCE(walk->flags & WALK_MIGRATION);
- 			err = ops->pmd_entry(pmd, addr, next, walk);
-+		}
- 		if (err)
- 			break;
- 
-@@ -507,13 +567,14 @@ int walk_page_range_novma(struct mm_struct *mm, unsigned long start,
- }
- 
- int walk_page_vma(struct vm_area_struct *vma, const struct mm_walk_ops *ops,
--		void *private)
-+		void *private, unsigned long flags)
+-static int walk_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
++int walk_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
+ 			  struct mm_walk *walk)
  {
- 	struct mm_walk walk = {
- 		.ops		= ops,
- 		.mm		= vma->vm_mm,
- 		.vma		= vma,
- 		.private	= private,
-+		.flags		= flags
- 	};
- 	int err;
- 
+ 	pte_t *pte;
 diff --git a/mm/rmap.c b/mm/rmap.c
-index fedb82371efe..d4d95ada0946 100644
+index d4d95ada0946..b1bddabd21c6 100644
 --- a/mm/rmap.c
 +++ b/mm/rmap.c
-@@ -2200,6 +2200,22 @@ int make_device_exclusive_range(struct mm_struct *mm, unsigned long start,
- EXPORT_SYMBOL_GPL(make_device_exclusive_range);
- #endif
+@@ -389,6 +389,47 @@ int anon_vma_fork(struct vm_area_struct *vma, struct vm_area_struct *pvma)
+ 	return -ENOMEM;
+ }
  
-+void take_rmap_locks(struct vm_area_struct *vma)
++
++/*
++ * rbst_no_children() - Used by rbt_no_children to check node subtree.
++ * Check if none of the VMAs connected to the node subtree via
++ * anon_vma_chain are in child relationship to the given anon_vma.
++ * @av: anon_vma to check
++ * @node: node to check in this level
++ */
++static bool rbst_no_children(struct anon_vma *av, struct rb_node *node)
 +{
-+	if (vma->vm_file)
-+		i_mmap_lock_write(vma->vm_file->f_mapping);
-+	if (vma->anon_vma)
-+		anon_vma_lock_write(vma->anon_vma);
++	struct anon_vma_chain *model;
++	struct anon_vma_chain *avc;
++
++	if (node == NULL) /* leaf node */
++		return true;
++	avc = container_of(node, typeof(*(model)), rb);
++	if (avc->vma->anon_vma != av)
++		/*
++		 * Inequality implies avc belongs
++		 * to a VMA of a child process
++		 */
++		return false;
++	return (rbst_no_children(av, node->rb_left) &&
++	rbst_no_children(av, node->rb_right));
 +}
 +
-+void drop_rmap_locks(struct vm_area_struct *vma)
++/*
++ * rbt_no_children() - Check if none of the VMAs connected to the given
++ * anon_vma via anon_vma_chain are in child relationship
++ * @av: anon_vma to check if it has children
++ */
++bool rbt_no_children(struct anon_vma *av)
 +{
-+	if (vma->anon_vma)
-+		anon_vma_unlock_write(vma->anon_vma);
-+	if (vma->vm_file)
-+		i_mmap_unlock_write(vma->vm_file->f_mapping);
++	struct rb_node *root_node;
++
++	if (av == NULL || av->degree <= 1) /* Higher degree might not necessarily imply children */
++		return true;
++	root_node = av->rb_root.rb_root.rb_node;
++	return rbst_no_children(av, root_node);
 +}
 +
- void __put_anon_vma(struct anon_vma *anon_vma)
+ void unlink_anon_vmas(struct vm_area_struct *vma)
  {
- 	struct anon_vma *root = anon_vma->root;
+ 	struct anon_vma_chain *avc, *next;
 -- 
 2.35.1
 

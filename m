@@ -2,112 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB93E528473
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 14:49:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4857528485
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 14:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240517AbiEPMsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 08:48:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58332 "EHLO
+        id S242545AbiEPMsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 08:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238540AbiEPMsW (ORCPT
+        with ESMTP id S241098AbiEPMso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 08:48:22 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0B138BE4
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 05:48:20 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id h14so710777wrc.6
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 05:48:20 -0700 (PDT)
+        Mon, 16 May 2022 08:48:44 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C443038BE4
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 05:48:42 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id tk15so4959122ejc.6
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 05:48:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2emP0o2Jt7FbRySNCidIZURKJdhheIYK6xxEQgSB/+c=;
-        b=FF8MBGabC1OTjVtSlzqUERFu9GkOOE8GzlCF6uY+tbZo5HZvGMZ7usLj40S5ouMMtl
-         3qmHrikNsc8FaFr/q5ybLQgUXT0d4CLi576CtTz+neYkWmOFC5hEbdyaWa/LgDcSHQtW
-         ghHCNWougnmWNi/JVNWGNainF0D4jt09jDnEPy6+SOfpFgtksYepAhrr1L5JdJuVXmpn
-         lIs5K87TFVSvisb4KjB299zrYV84tkoJJYmGSe3i3XyI9B5yWHGwPLnl1ZaduJtSLPSS
-         tCKjDUk2BBmYnSkjNg9Z//nAaQ1yN3NdHiZFWz0xBKpUc3l5yS6EtMGqw4XFC9FIBpix
-         0gNQ==
+        d=sartura-hr.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hMdyF4If6ae6Tmly543kWlCuV298toa6OvkNM2U0cEM=;
+        b=k3iAgjmc3ZkJRc3VOJ/SKmPGYWWzWQmCcwT2XhmXLs/SygErr4+WC9yo/tcrhvQn18
+         8lmjEvTLjbcaS1jwZfhtLFRA9uGX3p2AWf9z4x8YvTt9anlpxaLblYyhV5n2t7bArO3t
+         VaDCXhtjnpxqNzamjY+YTLEHe45niAyrabL40jp0DGYz8hNSLNiSzsgxg+Wr9UD69WIN
+         bRXMe5+IlXQg793oUbiWbvN5xzfazuYhsWtZE7v/6ag34jpZKCwacPQrA2p39BwClsuZ
+         PZJxFFe4C6wOi2uNwE+C2E3fvnsIpZzCInxij0D7nH0qrvxRjj1Ot5rpyCaH9LEMPfNf
+         uGNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=2emP0o2Jt7FbRySNCidIZURKJdhheIYK6xxEQgSB/+c=;
-        b=BhxIXqKomeiAbNp387VyEW5BEwF/422I9KiKvascY3B0Pehgy4b00BFTtd+ejRZ6CX
-         GOHUQgOp7dpnMqBfN4hZPY2wVKeTKvl9K0rSHiTzGtpYQF7u2yDqNaTr6rAcu0TghNze
-         DPqSb4lCplDxoz9prb2NezJVXhvh/+TkB0yQ7Cq/9n6TikVO039maZjKwSA+zPHBHRFm
-         qbrjqUdMPCXE4+gVpLWgJpHV8tMEOFhDr3wgkt0Q9x9HOCWemTnhR+mX9J+R7G5mjiuF
-         kwqRUbP3IqIYZTnQWQvIa9CbfDW65YfLMIGQdszuNkPJB9jg2F/HtVNx/wF1fOok37lo
-         v+RQ==
-X-Gm-Message-State: AOAM530MgsYA7b29eE8KK2EkazE9p2sgLDJ4WVeqnJ0NA/ETIuKKEvPs
-        Wk8tFxxtooXtlX5IJFC4KD3SRg==
-X-Google-Smtp-Source: ABdhPJzGnZylZxNFjLHsyNSQjMM0vFq/pqOBHD613P+R/DQTEbtQIQ4qXWDIluB0FBk/5i0UlafO7w==
-X-Received: by 2002:a05:6000:2c2:b0:20c:c6e1:e881 with SMTP id o2-20020a05600002c200b0020cc6e1e881mr13981371wry.333.1652705298776;
-        Mon, 16 May 2022 05:48:18 -0700 (PDT)
-Received: from ?IPV6:2a01:e34:ed2f:f020:b464:e524:6a1d:33d0? ([2a01:e34:ed2f:f020:b464:e524:6a1d:33d0])
-        by smtp.googlemail.com with ESMTPSA id z10-20020a7bc7ca000000b003942a244ee7sm9913913wmk.44.2022.05.16.05.48.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 05:48:18 -0700 (PDT)
-Message-ID: <c80f78d9-f846-82af-2151-14423c9bac22@linaro.org>
-Date:   Mon, 16 May 2022 14:48:16 +0200
+        bh=hMdyF4If6ae6Tmly543kWlCuV298toa6OvkNM2U0cEM=;
+        b=KJ12LOdCn+xb620UIo6NN5ddGz1bwf7IojlF49IUFb+yFT8gX1lyPjvw56Mck89AtJ
+         Hhq4ijaX0h3IlEyNqLhotHZMZPk/Oi6RpXzWGQA5H+KMmVTHuIauyyhbNe93jcupRoJD
+         p65fjKCxHd9zM1ovjbsG5bh1ZZJZrfjVkf+9xIfkMBudfym8i5WI2ZvkJyTd0tjKdH82
+         jR+F5wr4MuQuqj9zE5zLwxWdi6b9nlYkdLQPGn8z3HZ5YbdDQkZKmt2sK0dXfGr3b5U4
+         mJPyqGPe8/+m2y+hDrhyKxsRu8A1Ea2KDt4QaypzK/okJlyVengIJJlMVnDBY8HQbC0/
+         X7YA==
+X-Gm-Message-State: AOAM533hZveZUj0EyokJP9t6ua3HQVFTwMFdu4zHQrC0De5gOCo519CK
+        GEBaWN0XcGRe/49N7XWN2lFGVA==
+X-Google-Smtp-Source: ABdhPJwoIt83C38GsHPHd0kwSgf5SyF3isyKvMAg7kwCZJ0B+A8znq6BEPh+8ju0i1Nz/EwHGucT+A==
+X-Received: by 2002:a17:906:328a:b0:6f4:8045:3fe3 with SMTP id 10-20020a170906328a00b006f480453fe3mr15700188ejw.752.1652705321266;
+        Mon, 16 May 2022 05:48:41 -0700 (PDT)
+Received: from fedora.robimarko.hr (dh207-98-105.xnet.hr. [88.207.98.105])
+        by smtp.googlemail.com with ESMTPSA id e10-20020a056402330a00b0042617ba6386sm5093331eda.16.2022.05.16.05.48.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 05:48:40 -0700 (PDT)
+From:   Robert Marko <robert.marko@sartura.hr>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        andrew@lunn.ch, gregory.clement@bootlin.com,
+        sebastian.hesselbarth@gmail.com, kostap@marvell.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Robert Marko <robert.marko@sartura.hr>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4 01/10] dt-bindings: vendor-prefixes: add Methode Electronics
+Date:   Mon, 16 May 2022 14:48:19 +0200
+Message-Id: <20220516124828.45144-1-robert.marko@sartura.hr>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] thermal: core: fix memory leak in
- __thermal_cooling_device_register()
-Content-Language: en-US
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com
-References: <20220511020605.3096734-1-yangyingliang@huawei.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220511020605.3096734-1-yangyingliang@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/05/2022 04:06, Yang Yingliang wrote:
-> I got memory leak as follows when doing fault injection test:
-> 
-> unreferenced object 0xffff888010080000 (size 264312):
->    comm "182", pid 102533, jiffies 4296434960 (age 10.100s)
->    hex dump (first 32 bytes):
->      00 00 00 00 ad 4e ad de ff ff ff ff 00 00 00 00  .....N..........
->      ff ff ff ff ff ff ff ff 40 7f 1f b9 ff ff ff ff  ........@.......
->    backtrace:
->      [<0000000038b2f4fc>] kmalloc_order_trace+0x1d/0x110 mm/slab_common.c:969
->      [<00000000ebcb8da5>] __kmalloc+0x373/0x420 include/linux/slab.h:510
->      [<0000000084137f13>] thermal_cooling_device_setup_sysfs+0x15d/0x2d0 include/linux/slab.h:586
->      [<00000000352b8755>] __thermal_cooling_device_register+0x332/0xa60 drivers/thermal/thermal_core.c:927
->      [<00000000fb9f331b>] devm_thermal_of_cooling_device_register+0x6b/0xf0 drivers/thermal/thermal_core.c:1041
->      [<000000009b8012d2>] max6650_probe.cold+0x557/0x6aa drivers/hwmon/max6650.c:211
->      [<00000000da0b7e04>] i2c_device_probe+0x472/0xac0 drivers/i2c/i2c-core-base.c:561
-> 
-> If device_register() fails, thermal_cooling_device_destroy_sysfs() need be called
-> to free the memory allocated in thermal_cooling_device_setup_sysfs().
-> 
-> Fixes: 8ea229511e06 ("thermal: Add cooling device's statistics in sysfs")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->   drivers/thermal/thermal_core.c | 1 +
->   1 file changed, 1 insertion(+)
+Add vendor prefix for Methode Electronics, Inc. (https://www.methode.com)
 
-Applied, thanks
+Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 8fc6ed566cf9..2ee5a62363ea 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -768,6 +768,8 @@ patternProperties:
+     description: Cisco Meraki, LLC
+   "^merrii,.*":
+     description: Merrii Technology Co., Ltd.
++  "^methode,.*":
++    description: Methode Electronics, Inc.
+   "^micrel,.*":
+     description: Micrel Inc.
+   "^microchip,.*":
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.36.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog

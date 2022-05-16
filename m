@@ -2,158 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033AB528DE3
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:23:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C1FB528DE8
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345399AbiEPTXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59036 "EHLO
+        id S245748AbiEPT3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:29:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234997AbiEPTXF (ORCPT
+        with ESMTP id S233560AbiEPT3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:23:05 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86091AF19
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:23:04 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id e189so19818065oia.8
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 12:23:04 -0700 (PDT)
+        Mon, 16 May 2022 15:29:15 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBB72B195;
+        Mon, 16 May 2022 12:29:14 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id a191so15013318pge.2;
+        Mon, 16 May 2022 12:29:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=3+ILikSdsnfT9ktihZ+njcMiBi6avoeWbTpOVrY1NxM=;
-        b=m8Od8lrXE/NoExJmTS7XYRL0JEh+rwgZMGX6AMz7iGgPCJc+7D9DU49rvjnaOgoaSu
-         1G0dIbZbcsjRTfCHNk3yV9IwLJlxvC01/HihdispeZ/uNg8WgXECd9mxIK5QBKHx8kb2
-         uE6ftP61i4XGhdJd+DVeLgywcC9UVbt3gWTZA=
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mXWRWurGOojMt9BoJ/ZUzDoEo2cNP5eq4Kyj7hbR+eI=;
+        b=YQsJY8b5fAVtiYmvMVSWoltJPRNnqMY3pKrwMyJDgJmEUKtZKCtCKahQQJM5+X8LC9
+         uOmw7vSwYGbgzB4AqWOaQK3LVp9h+50SfmIuNtD8LYZYCYN9eIuZ/r/BGgpLsDcR4TEl
+         FJXKlfrpNTlFkDGl3guVkFdEYjbxNgcBYkFkKYHnOb1EloheVPX8UnOQBM2Mu7DDqD8W
+         EKsO+bc55zlCuxwpg3oKT/psVgapFxAezTVnF+ijUcwAMpPBOl/2GPkGi3Age9azCjnp
+         v/QPcVVBo3hTi7jpSKCIvmm1xnN1VMaEGLLvdS5+Lsg9TSeduxOpSZh/h+Ego3oZrSU6
+         OSRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=3+ILikSdsnfT9ktihZ+njcMiBi6avoeWbTpOVrY1NxM=;
-        b=DrOwF7MaHD2Niw50uWq+XzM2WAC0pjykk90295+nxeCv991e7blmYGrIrBTeoG7rqL
-         Lh8Q4z2l1Lkw240wVGwhutmcie/lXH5dmMstP9CL4+JtsTJNWMUIsh3yBCe93Gx4di3f
-         QYf3Jh1r1hmE65Klrn2MJkhDQYfovOegPtXe5AR0UxTFRP4H70ShSp11heZO/mT1Im1m
-         jmdOFPS8HvB8QOX6Ai+RKgI+/DXW3ZERBUaCzgpA9Jl0i/CZzpA4wD0L+llqSrez9CcI
-         jLpPLRKqD12l97tCJ7jTgalsp/Yk7wF+yjOPKUAEmyNdXvJyfdscT4YqNG/Vo6nOYhSQ
-         2RzQ==
-X-Gm-Message-State: AOAM530jZH7SKAj4TO1py5EsR5yXRoI0k5691Vyrg6i5jNiOSYDEMiry
-        eVWtS4sxZu+9cXa/eo3x6LT0qjJVtt34GgxhcJE3SQ==
-X-Google-Smtp-Source: ABdhPJyvNeXlbvxsN4Ayayznt+WzvPNN7/UsJfK9N/bTxb48FVDCVCp9ZryMgViVY+QlGSrW/dp0YsJFpfAHJoPOIhk=
-X-Received: by 2002:a05:6808:23c3:b0:326:bd8d:7993 with SMTP id
- bq3-20020a05680823c300b00326bd8d7993mr8665634oib.63.1652728984111; Mon, 16
- May 2022 12:23:04 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 16 May 2022 12:23:03 -0700
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=mXWRWurGOojMt9BoJ/ZUzDoEo2cNP5eq4Kyj7hbR+eI=;
+        b=AIM99f5egRak9wjMFl53fDURiZTo0ReMrpAY6ZDpMVgkD3+Hk+nEHLcgaEcSF5dDZq
+         kXrND9wogtYOFYdh2bcEoQzvBs4cJZLZaDH7dngNHn+xb9EzP0oyBMuz8MoVF7bO+aYJ
+         WrwOx6NryuMnHyPlQRiBun8jrm5ZnC2aGoP8XL6PZNdRWOMtTynDmXJlSdOe9ZdF/rEf
+         23MU9Uw/zDWHkvX+W01fdrCFmouiMbi+fy4CiZVDO8oOtQpIPhiJUD8M5rYpUBKdW2R+
+         B9YULHVxGEdtQ0zzWZdwYJNK1krxpWTnZu6ZDv1JRfMR4naJ1FYgk599N1E+IAcB/poo
+         p9Aw==
+X-Gm-Message-State: AOAM5316U47RMIJqNWb7WSztIXwYQxu/TbI779ORcYTIt5TfLuJ1B+MR
+        D0XJVvLo8W1uYs9Md5YUgrc=
+X-Google-Smtp-Source: ABdhPJw6hBzA9K8aN7MLWKU4EqiK5gb5wqxfIjClPwNyTuXppc0KM+WyBWQFSU9cef1SAhHHjvKffg==
+X-Received: by 2002:a62:170b:0:b0:50a:6901:b633 with SMTP id 11-20020a62170b000000b0050a6901b633mr18849708pfx.34.1652729354389;
+        Mon, 16 May 2022 12:29:14 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:62fc])
+        by smtp.gmail.com with ESMTPSA id e16-20020a17090301d000b0015f2d549b46sm7397092plh.237.2022.05.16.12.29.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 12:29:13 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 16 May 2022 09:29:12 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Zhang Wensheng <zhangwensheng5@huawei.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        yukuai3@huawei.com
+Subject: Re: [PATCH -next] block: fix io hung of setting throttle limit
+ frequently
+Message-ID: <YoKmCOAzwzw3Lz7g@slm.duckdns.org>
+References: <20220516014429.33723-1-zhangwensheng5@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <20220516152003.GB2659134-robh@kernel.org>
-References: <20220512013921.164637-1-swboyd@chromium.org> <20220512013921.164637-4-swboyd@chromium.org>
- <20220516152003.GB2659134-robh@kernel.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Mon, 16 May 2022 12:23:03 -0700
-Message-ID: <CAE-0n53p1mKME=vfed2SB7UXrg9K+-vbp6JPHJBchJc-Pp1Hgg@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] dt-bindings: cros-ec: Add ChromeOS fingerprint binding
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        chrome-platform@lists.linux.dev,
-        Guenter Roeck <groeck@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Craig Hesling <hesling@chromium.org>,
-        Tom Hughes <tomhughes@chromium.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220516014429.33723-1-zhangwensheng5@huawei.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Rob Herring (2022-05-16 08:20:03)
-> On Wed, May 11, 2022 at 06:39:21PM -0700, Stephen Boyd wrote:
-> > diff --git a/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml b/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
-> > index 409ecef967ce..e5fe60beb9fe 100644
-> > --- a/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
-> > +++ b/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
-> > @@ -19,15 +19,19 @@ description:
-> >  properties:
-> >    compatible:
-> >      oneOf:
-> > -      - description:
-> > -          For implementations of the EC is connected through I2C.
-> > -        const: google,cros-ec-i2c
-> > -      - description:
-> > -          For implementations of the EC is connected through SPI.
-> > -        const: google,cros-ec-spi
-> > -      - description:
-> > -          For implementations of the EC is connected through RPMSG.
-> > -        const: google,cros-ec-rpmsg
-> > +      # For implementations of the EC is connected through I2C.
->
-> Using 'description' was preferred.
+On Mon, May 16, 2022 at 09:44:29AM +0800, Zhang Wensheng wrote:
+> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
+> index 469c483719be..8acb205dfa85 100644
+> --- a/block/blk-throttle.c
+> +++ b/block/blk-throttle.c
+> @@ -1321,12 +1321,14 @@ static void tg_conf_updated(struct throtl_grp *tg, bool global)
+>  	 * that a group's limit are dropped suddenly and we don't want to
+>  	 * account recently dispatched IO with new low rate.
+>  	 */
+> -	throtl_start_new_slice(tg, READ);
+> -	throtl_start_new_slice(tg, WRITE);
+> +	if (!timer_pending(&sq->parent_sq->pending_timer)) {
+> +		throtl_start_new_slice(tg, READ);
+> +		throtl_start_new_slice(tg, WRITE);
+>  
+> -	if (tg->flags & THROTL_TG_PENDING) {
+> -		tg_update_disptime(tg);
+> -		throtl_schedule_next_dispatch(sq->parent_sq, true);
+> +		if (tg->flags & THROTL_TG_PENDING) {
+> +			tg_update_disptime(tg);
+> +			throtl_schedule_next_dispatch(sq->parent_sq, true);
+> +		}
 
-I just learned that I should use anyOf instead of oneOf. Confusing!
+Yeah, but this ends up breaking the reason why it's starting the new slices
+in the first place explained in the commit above, right? I'm not sure what
+the right solution is but this likely isn't it.
 
->
-> > +      - items:
-> > +          - const: google,cros-ec-i2c
-> > +      # For implementations of the FPMCU connected through SPI.
-> > +      - items:
-> > +          - const: google,cros-ec-fp
-> > +          - const: google,cros-ec-spi
-> > +      # For implementations of the EC is connected through SPI.
-> > +      - items:
-> > +          - const: google,cros-ec-spi
-> > +      # For implementations of the EC is connected through RPMSG.
-> > +      - items:
-> > +          - const: google,cros-ec-rpmsg
-> >
-> >    controller-data:
-> >      description:
-> > @@ -176,6 +189,37 @@ allOf:
-> >          - reg
-> >          - interrupts
-> >
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            const: google,cros-ec-fp
-> > +    then:
-> > +      properties:
-> > +        '#address-cells': false
-> > +        '#size-cells': false
-> > +        typec: false
-> > +        ec-pwm: false
-> > +        keyboard-controller: false
-> > +        proximity: false
-> > +        codecs: false
-> > +        cbas: false
-> > +
-> > +      patternProperties:
-> > +        "^i2c-tunnel[0-9]*$": false
-> > +        "^regulator@[0-9]+$": false
-> > +        "^extcon[0-9]*$": false
->
-> Is the list of what's allowed shorter? If so, you could list those
-> properties and use 'additionalProperties: false'.
+Thanks.
 
-Yes.
-
->
-> Or maybe this is a sign that this should be a separate schema document.
-
-I couldn't figure that out. I tried to add new properties here but it
-didn't work. And then when I tried to make a different schema document
-it complained that the example for google,cros-ec-spi in here had a
-problem. Can properties be defined in this section? Or only listed and
-then additionalProperties be marked false?
+-- 
+tejun

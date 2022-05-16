@@ -2,107 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA27A5280D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 11:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 349B65280D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 11:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232111AbiEPJYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 05:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39502 "EHLO
+        id S238242AbiEPJ0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 05:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiEPJYp (ORCPT
+        with ESMTP id S229606AbiEPJZz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 05:24:45 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADAB7286E9;
-        Mon, 16 May 2022 02:24:43 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id m23so17382501ljc.0;
-        Mon, 16 May 2022 02:24:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=z7SVVP/oC8iSudRPuuLzmqr3tHRZCL2jrSL6ZB0fSOU=;
-        b=lJue4HZt/225QfsuUkRTSvHYS5Cbg3mp+Lpr9wUcZw7loJcdma/LoRNWTuYqIl1GbL
-         PCEFtvcIfGi1zIDzClS9SlFOnTPbno0eL4lPtB+WSG2FcdAIWqqJHAcVNWpTfShSC2r5
-         iKbFrRtscXD8b0XuKDb+TlCueomIWLfj9bvlummAjUJs90IJ/Hd1e+YpN1MES50jUipz
-         c/Sni45fE53n5BQtCLxEh1Sdw2M+kOhGY710ghZRkRIU1CuVDeFeTxOzNXDrSLMONVnH
-         ANcVAzhPPU032K+CZAHtg5RHB+P78ZyjVDNpIb81RtqcePbRZQltRCzrWqptCynWdRv3
-         ddog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=z7SVVP/oC8iSudRPuuLzmqr3tHRZCL2jrSL6ZB0fSOU=;
-        b=AhtcAgtJbZU/keMFCxq9J9uGlPXss+dLvdELSStCd2ti1hc08pqbzuOnTU+WjtrHag
-         o4Za4TwQFBPEgcTf8G04NjrWtL5WN4Tx5SKwidaFac3nNCo0KVh+SA8Bq3RpmZ7MAJrX
-         VWLAGy0jLjYPNGQ2JDViHwrF6jZ+e72e7bndlBJbQ4U5vouBdXslP6EDFYI6iwylBaQc
-         cWUqumUvDugQ58No2Dn5J8MXB4xkxxHA9OZHO5s7O+4IAmzERIpzdApyc2CVrwZROXEb
-         ICVzMfU5K3FE2HqyvuZxOm29ytHGFdYH2qoxwdmunrQ/W3tGkOkYYMtKfnFJJpx1O3uQ
-         3CPA==
-X-Gm-Message-State: AOAM530FysvN+gtxlzsM216m2sckva5csd5pfbCaL66RghOotr+E7GLQ
-        5bEvC2/Bbmsib59Xka6JsvIomrPSvV6YgoQH
-X-Google-Smtp-Source: ABdhPJzoYNjvZDXsDHxWNAIeb11uNTP0eP24NR050plG37dSFPwxbVnz75RZ7RT0JGIZIO0LUtD+sQ==
-X-Received: by 2002:a2e:878d:0:b0:24f:2bf2:5a79 with SMTP id n13-20020a2e878d000000b0024f2bf25a79mr10947871lji.497.1652693081939;
-        Mon, 16 May 2022 02:24:41 -0700 (PDT)
-Received: from localhost.localdomain (81-231-252-146-no39.tbcn.telia.com. [81.231.252.146])
-        by smtp.gmail.com with ESMTPSA id o23-20020ac24e97000000b0047255d2118asm1251739lfr.185.2022.05.16.02.24.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 02:24:41 -0700 (PDT)
-From:   Isak Ellmer <isak01@gmail.com>
-To:     masahiroy@kernel.org
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Isak Ellmer <isak01@gmail.com>
-Subject: [PATCH] scripts: kconfig: nconf: make nconfig accept jk keybindings
-Date:   Mon, 16 May 2022 11:24:23 +0200
-Message-Id: <20220516092423.14327-1-isak01@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 16 May 2022 05:25:55 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D78F7212;
+        Mon, 16 May 2022 02:25:54 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 966641063;
+        Mon, 16 May 2022 02:25:54 -0700 (PDT)
+Received: from [10.57.4.89] (unknown [10.57.4.89])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4734D3F66F;
+        Mon, 16 May 2022 02:25:52 -0700 (PDT)
+Message-ID: <3b0e1226-91bd-a470-3d18-9fdd465eca4e@arm.com>
+Date:   Mon, 16 May 2022 10:25:49 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [PATCH 00/20] perf vendors events arm64: Multiple Arm CPUs
+To:     John Garry <john.garry@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+References: <20220510104758.64677-1-nick.forrington@arm.com>
+ <YnqJwMfi/bcDmN4H@kernel.org>
+ <b1081013-2cd9-f223-8125-d7e51d784f90@huawei.com>
+ <eec03f0d-d491-511c-d9b0-694c6d527b38@arm.com>
+ <1062b28d-9c7b-89fb-d3bf-519f84029b96@huawei.com>
+From:   Nick Forrington <nick.forrington@arm.com>
+In-Reply-To: <1062b28d-9c7b-89fb-d3bf-519f84029b96@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make nconfig accept jk keybindings for movement in addition to arrow keys.
+On 12/05/2022 16:52, John Garry wrote:
+> Generally this looks ok:
+>
+> Reviewed-by: John Garry <john.garry@huawei.com>
+>
+> If you are feeling particularly helpful then you can add support for 
+> any events missing to pre-existing core support, like a57-a72.
 
-Signed-off-by: Isak Ellmer <isak01@gmail.com>
----
- scripts/kconfig/nconf.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Thanks John.
 
-diff --git a/scripts/kconfig/nconf.c b/scripts/kconfig/nconf.c
-index 7b371bd7fb36..ded40e5aabf8 100644
---- a/scripts/kconfig/nconf.c
-+++ b/scripts/kconfig/nconf.c
-@@ -1105,9 +1105,11 @@ static void conf(struct menu *menu)
- 				break;
- 			switch (res) {
- 			case KEY_DOWN:
-+			case 'j':
- 				menu_driver(curses_menu, REQ_DOWN_ITEM);
- 				break;
- 			case KEY_UP:
-+			case 'k':
- 				menu_driver(curses_menu, REQ_UP_ITEM);
- 				break;
- 			case KEY_NPAGE:
-@@ -1287,9 +1289,11 @@ static void conf_choice(struct menu *menu)
- 				break;
- 			switch (res) {
- 			case KEY_DOWN:
-+			case 'j':
- 				menu_driver(curses_menu, REQ_DOWN_ITEM);
- 				break;
- 			case KEY_UP:
-+			case 'k':
- 				menu_driver(curses_menu, REQ_UP_ITEM);
- 				break;
- 			case KEY_NPAGE:
--- 
-2.35.1
+I'll submit a separate patch for A57/A72.
+
+Nick
 

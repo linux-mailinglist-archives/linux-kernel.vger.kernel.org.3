@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E853527BBE
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 04:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2B48527BC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 04:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239195AbiEPCKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 May 2022 22:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54710 "EHLO
+        id S239251AbiEPCLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 May 2022 22:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbiEPCKT (ORCPT
+        with ESMTP id S231318AbiEPCLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 May 2022 22:10:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE871F62C
-        for <linux-kernel@vger.kernel.org>; Sun, 15 May 2022 19:10:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5CEC7B80E84
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 02:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E3D13C34115;
-        Mon, 16 May 2022 02:10:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652667015;
-        bh=swuw51O1x2bA/U6rRhQ7wcVLkX/uGaV02Fh03ESd894=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=it6SWEOPCPW8jz2QgX6KPm0O6AQhVDStdonay1ZslnodTkL1/zXiJPXJZsX6V2Sfm
-         qcZGjP1Uqkwl09oxeA0qCBEP3LlD8/t2JZkPz+W13axwt9Jshkz2HFDKppZxBNQEVT
-         Fw6Jp8Ttu85viKJL8wnPPg0BXB9XpHYwNWTJ5+ksfuofvsplEZq9jZn/6B5roTgF+F
-         Ajw7Wuw4mmL807pEPmngb01ulrgA09zdIQtGq9Piv+Iaue1cJScVipO6uKsoE/Kd14
-         /xS6q3SbB9V5bCXtevFfjRX710QdJbxdWLwxDdgb+yjPJs8nbuSEhSwAiaDIoKirR3
-         A4NxYfiRblA+g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C5504F03939;
-        Mon, 16 May 2022 02:10:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 0/7] platform/chrome: get rid of BUG_ON()
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <165266701479.14602.4419757446992775203.git-patchwork-notify@kernel.org>
-Date:   Mon, 16 May 2022 02:10:14 +0000
-References: <20220513044143.1045728-1-tzungbi@kernel.org>
-In-Reply-To: <20220513044143.1045728-1-tzungbi@kernel.org>
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     bleung@chromium.org, groeck@chromium.org,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Sun, 15 May 2022 22:11:22 -0400
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id AC66B2019A;
+        Sun, 15 May 2022 19:11:19 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [106.117.76.98])
+        by mail-app4 (Coremail) with SMTP id cS_KCgB3yOCVsoFi_ldFAA--.5610S2;
+        Mon, 16 May 2022 10:10:40 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, gregkh@linuxfoundation.org,
+        alexander.deucher@amd.com, broonie@kernel.org,
+        netdev@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH net] NFC: hci: fix sleep in atomic context bugs in nfc_hci_hcp_message_tx
+Date:   Mon, 16 May 2022 10:10:28 +0800
+Message-Id: <20220516021028.54063-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cS_KCgB3yOCVsoFi_ldFAA--.5610S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFykCry7Cr15CF1UAr1xuFg_yoW8WryrpF
+        Wv9a4UZFWrJry8WFWvkw4Iqw1F93WkGFy7G39ruw4rZ39Iqr1xtFn5Ja4jvFZ5ArZ7Aay2
+        vFyjkr17WFy7A37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26rxl
+        6s0DM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
+        n2IY04v7MxkIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
+        DU0xZFpf9x0JUCg4hUUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgkIAVZdtZqDiwBLsl
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,41 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+There are sleep in atomic context bugs when the request to secure
+element of st21nfca is timeout. The root cause is that kzalloc and
+alloc_skb with GFP_KERNEL parameter is called in st21nfca_se_wt_timeout
+which is a timer handler. The call tree shows the execution paths that
+could lead to bugs:
 
-This series was applied to chrome-platform/linux.git (for-kernelci)
-by Tzung-Bi Shih <tzungbi@kernel.org>:
+   (Interrupt context)
+st21nfca_se_wt_timeout
+  nfc_hci_send_event
+    nfc_hci_hcp_message_tx
+      kzalloc(..., GFP_KERNEL) //may sleep
+      alloc_skb(..., GFP_KERNEL) //may sleep
 
-On Fri, 13 May 2022 12:41:36 +0800 you wrote:
-> The series gets rid of BUG_ON()s in drivers/platform/chrome/.  Most of them
-> can be replaced by returning proper return code.
-> 
-> The 2nd patch makes callers of cros_ec_prepare_tx() to take care of the
-> return code.
-> 
-> The 3rd patch turns cros_ec_prepare_tx() to return error code if any.
-> 
-> [...]
+This patch changes allocation mode of kzalloc and alloc_skb from
+GFP_KERNEL to GFP_ATOMIC in order to prevent atomic context from
+sleeping. The GFP_ATOMIC flag makes memory allocation operation
+could be used in atomic context.
 
-Here is the summary with links:
-  - [v2,1/7] platform/chrome: cros_ec_proto: drop unneeded BUG_ON() in prepare_packet()
-    https://git.kernel.org/chrome-platform/c/42701e7c0cd2
-  - [v2,2/7] platform/chrome: correct cros_ec_prepare_tx() usage
-    https://git.kernel.org/chrome-platform/c/71d3ae7fb640
-  - [v2,3/7] platform/chrome: cros_ec_proto: drop BUG_ON() in cros_ec_prepare_tx()
-    https://git.kernel.org/chrome-platform/c/c2dcb1b06053
-  - [v2,4/7] platform/chrome: cros_ec_proto: drop BUG_ON() in cros_ec_get_host_event()
-    https://git.kernel.org/chrome-platform/c/20a264c97bc8
-  - [v2,5/7] platform/chrome: cros_ec_i2c: drop BUG_ON() in cros_ec_pkt_xfer_i2c()
-    https://git.kernel.org/chrome-platform/c/8bff946c4199
-  - [v2,6/7] platform/chrome: cros_ec_spi: drop unneeded BUG_ON()
-    https://git.kernel.org/chrome-platform/c/ddec8e9e90ce
-  - [v2,7/7] platform/chrome: cros_ec_spi: drop BUG_ON() if `din` isn't large enough
-    https://git.kernel.org/chrome-platform/c/bbd43a37ec7a
+Fixes: 8b8d2e08bf0d ("NFC: HCI support")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+ net/nfc/hci/hcp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-You are awesome, thank you!
+diff --git a/net/nfc/hci/hcp.c b/net/nfc/hci/hcp.c
+index 05c60988f59..1caf9c2086f 100644
+--- a/net/nfc/hci/hcp.c
++++ b/net/nfc/hci/hcp.c
+@@ -30,7 +30,7 @@ int nfc_hci_hcp_message_tx(struct nfc_hci_dev *hdev, u8 pipe,
+ 	int hci_len, err;
+ 	bool firstfrag = true;
+ 
+-	cmd = kzalloc(sizeof(struct hci_msg), GFP_KERNEL);
++	cmd = kzalloc(sizeof(*cmd), GFP_ATOMIC);
+ 	if (cmd == NULL)
+ 		return -ENOMEM;
+ 
+@@ -58,7 +58,7 @@ int nfc_hci_hcp_message_tx(struct nfc_hci_dev *hdev, u8 pipe,
+ 			  data_link_len + ndev->tx_tailroom;
+ 		hci_len -= data_link_len;
+ 
+-		skb = alloc_skb(skb_len, GFP_KERNEL);
++		skb = alloc_skb(skb_len, GFP_ATOMIC);
+ 		if (skb == NULL) {
+ 			err = -ENOMEM;
+ 			goto out_skb_err;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.17.1
 

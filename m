@@ -2,102 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 686A652826B
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91CC1528272
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 12:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234121AbiEPKno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 06:43:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50380 "EHLO
+        id S229848AbiEPKoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 06:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236729AbiEPKna (ORCPT
+        with ESMTP id S242897AbiEPKnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 06:43:30 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA3718B05
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 03:42:52 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 191so2542553pgf.4
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 03:42:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gGywS9bHxk5TZLlg9cekFTB0weMYTqUUeiNtr9tZHho=;
-        b=aF8Vk35o5gqPuerIPs6Aw+pBQ/K6j6dF1s+VEzN+mv48EULn6pi4887t2cp7eG1SuV
-         Cg5So539af0OUXOeoR0S8BqNWeEEh72naBPz0RlsSudJ5mqA5Q4b1SZJ1Sm7pyluQGG2
-         Rt3Fr0G55MrmNV1QJwj3LwOPs5TGPB+XMwDJQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gGywS9bHxk5TZLlg9cekFTB0weMYTqUUeiNtr9tZHho=;
-        b=R4tFdj1RsMRMqAwVTqciqso+923JePk7lrQHtyhdglGK4ZfGsXnmoAQnrOuEDRyHid
-         q3oezvcDNfQDNIJAEN7nyZJjw8Qi322gUDVp1jkaKraG7P/gN8Yxjk3gkKCL/W2KNZk/
-         HTnOVkscxythNAW2B42nHMDZlWXzAOTkGg6hRCGfxSbZAp4OpZEWHaYXKdK+rVpq4hGF
-         P9MnZFeaECqmasHkWERoRjGIikLoRoAhwbn+FYBeRp1q9oA9aElbLO7dT9tB9vHujjX6
-         oM5cITlZ8+eqXQ9SxPPyzknqOjtGDvWSJKI/M4J5uB/KKHhzLxLX9i3T/0xZXRZ8krlI
-         hf+Q==
-X-Gm-Message-State: AOAM533/ZMz5/qLl67bm+v9QLbo5mdOY6B+u+kAI/rkzh2xLHL6V4ZBw
-        VaPY58jBUbY/7dUQPfiejBQdNg==
-X-Google-Smtp-Source: ABdhPJyncUK3MZU/GJsE8dgsnjOCQKmWoiGt3yIx9nl/FcnEK7brtYhcPM7Q3kN1VggUz9jh08uisg==
-X-Received: by 2002:a62:6410:0:b0:4f3:9654:266d with SMTP id y16-20020a626410000000b004f39654266dmr16640705pfb.59.1652697772064;
-        Mon, 16 May 2022 03:42:52 -0700 (PDT)
-Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:cdcb:c865:6f65:d875])
-        by smtp.gmail.com with ESMTPSA id 10-20020a17090a01ca00b001cd4989ff70sm6191232pjd.55.2022.05.16.03.42.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 03:42:51 -0700 (PDT)
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-To:     Phillip Lougher <phillip@squashfs.org.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Xiongwei Song <Xiongwei.Song@windriver.com>
-Cc:     Zheng Liang <zhengliang6@huawei.com>,
-        Zhang Yi <yi.zhang@huawei.com>, Hou Tao <houtao1@huawei.com>,
-        Miao Xie <miaoxie@huawei.com>,
+        Mon, 16 May 2022 06:43:41 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1586324598
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 03:43:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652697811; x=1684233811;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Owx64G3ecx8UOtuzhqX3Xd3y5R0C4s+r3X/71tgzngY=;
+  b=FAQ72zdyTH75wtBwMgUwiUW3tXilfBVQt7aHPf0J0+E4hsUjqQnwTcds
+   +hcOyZRQ3pdZrJGs0IWmM3Vzt3r6Rw7LZAcDmmH+eQ+nLvSRT0wIAYpCz
+   kO0PL5qX9oVbqfaLEqAcpmCfDbPTogVzU9tgHO0SljK0AtJP37JMFjtv0
+   BgULJfS4AdQWuJT2803rChQo/yycFWpF/hxkokMdfzwiaxv81boXF+7/u
+   E0utFeNXj3AYh90bsnwrVEg/AUz42TWmBgYoss80k5G0fUmzh34zizGO/
+   EBtUIrlOjZG74i2G+0fq1ajIrHn+10Jgic25+s9AcU6PSZ706I+cxWghj
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="258363991"
+X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
+   d="scan'208";a="258363991"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 03:43:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
+   d="scan'208";a="713310177"
+Received: from lkp-server02.sh.intel.com (HELO 0628dcddc537) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 16 May 2022 03:43:27 -0700
+Received: from kbuild by 0628dcddc537 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nqYCE-00001I-Ja;
+        Mon, 16 May 2022 10:43:26 +0000
+Date:   Mon, 16 May 2022 18:42:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tong Tiangen <tongtiangen@huawei.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm @ kvack . org" <linux-mm@kvack.org>,
-        "squashfs-devel @ lists . sourceforge . net" 
-        <squashfs-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 0/3] Implement readahead for squashfs
-Date:   Mon, 16 May 2022 18:42:08 +0800
-Message-Id: <20220516104209.1407388-1-hsinyi@chromium.org>
-X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>
+Subject: [akpm-mm:mm-stable 118/151] arch/riscv/include/asm/pgtable.h:662:16:
+ error: implicit declaration of function 'pud_leaf'; did you mean 'pmd_leaf'?
+Message-ID: <202205161811.2nLxmN2O-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit c1f6925e1091("mm: put readahead pages in cache earlier") requires
-fs to implement readahead callback. Otherwise there will be a
-performance regression.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-stable
+head:   bbe832b9db2e1ad21522f8f0bf02775fff8a0e0e
+commit: 3fee229a8eb936b96933c6b2cd02d2e87a4cc997 [118/151] riscv/mm: enable ARCH_SUPPORTS_PAGE_TABLE_CHECK
+config: riscv-randconfig-p002-20220516 (https://download.01.org/0day-ci/archive/20220516/202205161811.2nLxmN2O-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?id=3fee229a8eb936b96933c6b2cd02d2e87a4cc997
+        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
+        git fetch --no-tags akpm-mm mm-stable
+        git checkout 3fee229a8eb936b96933c6b2cd02d2e87a4cc997
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv prepare
 
-Commit 9eec1d897139("squashfs: provide backing_dev_info in order to
-disable read-ahead") mitigates the performance drop issue for squashfs
-by closing readahead for it.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-This series implements readahead callback for squashfs. The previous
-discussion are in [1] and [2].
+All errors (new ones prefixed by >>):
 
-[1] https://lore.kernel.org/all/CAJMQK-g9G6KQmH-V=BRGX0swZji9Wxe_2c7ht-MMAapdFy2pXw@mail.gmail.com/T/
-[2] https://lore.kernel.org/linux-mm/Yn5Yij9pRPCzDozt@casper.infradead.org/t/#m4af4473b94f98a4996cb11756b633a07e5e059d1
+   In file included from include/linux/pgtable.h:6,
+                    from include/linux/mm.h:29,
+                    from arch/riscv/kernel/asm-offsets.c:10:
+   arch/riscv/include/asm/pgtable.h: In function 'pud_user_accessible_page':
+>> arch/riscv/include/asm/pgtable.h:662:16: error: implicit declaration of function 'pud_leaf'; did you mean 'pmd_leaf'? [-Werror=implicit-function-declaration]
+     662 |         return pud_leaf(pud) && pud_user(pud);
+         |                ^~~~~~~~
+         |                pmd_leaf
+   cc1: some warnings being treated as errors
+   make[2]: *** [scripts/Makefile.build:120: arch/riscv/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1194: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-Hsin-Yi Wang (3):
-  Revert "squashfs: Convert squashfs to read_folio"
-  Revert "squashfs: provide backing_dev_info in order to disable
-    read-ahead"
-  squashfs: implement readahead
 
- fs/squashfs/file.c    | 82 +++++++++++++++++++++++++++++++++++++++++--
- fs/squashfs/super.c   | 33 -----------------
- fs/squashfs/symlink.c |  5 ++-
- 3 files changed, 81 insertions(+), 39 deletions(-)
+vim +662 arch/riscv/include/asm/pgtable.h
+
+   659	
+   660	static inline bool pud_user_accessible_page(pud_t pud)
+   661	{
+ > 662		return pud_leaf(pud) && pud_user(pud);
+   663	}
+   664	#endif
+   665	
 
 -- 
-2.36.0.550.gb090851708-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

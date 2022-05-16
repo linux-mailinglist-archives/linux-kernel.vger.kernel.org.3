@@ -2,317 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89CD8528CC3
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:18:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D94528CC6
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 20:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344684AbiEPSSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 14:18:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
+        id S1344700AbiEPSSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 14:18:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344716AbiEPSSU (ORCPT
+        with ESMTP id S244726AbiEPSSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 14:18:20 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDEAD2AC77;
-        Mon, 16 May 2022 11:17:59 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nqfI5-0007Uo-CC; Mon, 16 May 2022 20:17:57 +0200
-Message-ID: <469e5a9b-c7e0-6365-c353-d831ff1c5071@leemhuis.info>
-Date:   Mon, 16 May 2022 20:17:56 +0200
+        Mon, 16 May 2022 14:18:45 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B268E2AC7E;
+        Mon, 16 May 2022 11:18:43 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d25so14743206pfo.10;
+        Mon, 16 May 2022 11:18:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=hCn3RQQIcxHj2Rc/MyeJGHLc1iD9mZE44u/P4nbCcLg=;
+        b=C2x5WF8ltPz6PxwtEL0p03qQkuJJtzoUgVnl6YM61tlhDfoYCNxHbRcGCkePehNzaU
+         bS5x29Y6paC3iRJnzR9EW8J8GAEqgxnh0hXwoK5t4JPmMxVxkbkT3iBAZZXCdfioKn+G
+         nbBQBW42nhyd/YPaVfzp8KbwnDrDiTqKaidmFBJL/mD4jz2MQSxYC0lRcSoT2/cUGW4A
+         qY2s2aa9w8uV0Zs/kU1A2WdGCtwvU388V6XH2rd7hc0ujPI06fmC9CKx0lRf1vBB0VnW
+         k74qPeCQ04uAtx/yeYVPpnpW2vzHAnNmebvVxZJzqpCdiPAO0xulP/p68OoTJYpTKEPn
+         gRuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=hCn3RQQIcxHj2Rc/MyeJGHLc1iD9mZE44u/P4nbCcLg=;
+        b=DcEcAKnNzc9XwuitM6xsxRN4BR/UxYRed5WCxJtqXA1qJCcjcB7IPxYeVxck3p1Od5
+         TgtOETjcRHIvYDY66/74eQO0JIW8G8mHw0Ryr4PFF+lI0lv//WImLlaM6hENhmxfDIop
+         v9H8iIS9zylqjwIuSJjuBQrMnyiPNwOgGQsgLRWT4+XaToZBvVU1GDBR0xp+MloA+mA0
+         pml594D8W26N6EGrA/V5z8xTHKWCIZuXwHztKEItRrg+PFDXJjHEZdoc57j5k+oRrQU6
+         K5+Kh77l5ax9Xdhqt5nnxNMH9VlrbKbGK5QeFglc3Z4l5WoaaDBPQNVpy3EinPPO477R
+         RFIQ==
+X-Gm-Message-State: AOAM530dJdESuUaWpEJ8IXfqWbnZM2Iyz4F0s/MeQWbVmaVgMoYdaVtb
+        tGSbZt6uzyeBMWb34uKmc+E=
+X-Google-Smtp-Source: ABdhPJx6iFibzmvKsdYDNLS5qdtLCfbmKWlJnNW881Ro+J5x/aIIxM8PJ/wm8i01ECKpOqMKUB1Rcg==
+X-Received: by 2002:a65:6e9b:0:b0:3c5:f761:2d94 with SMTP id bm27-20020a656e9b000000b003c5f7612d94mr16035851pgb.79.1652725122894;
+        Mon, 16 May 2022 11:18:42 -0700 (PDT)
+Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
+        by smtp.gmail.com with ESMTPSA id o16-20020a17090ac09000b001d7d8b33121sm19355pjs.5.2022.05.16.11.18.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 11:18:42 -0700 (PDT)
+Date:   Mon, 16 May 2022 11:18:40 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     "Von Dentz, Luiz" <luiz.von.dentz@intel.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the bluetooth tree
+Message-ID: <YoKVgMKgr1iqdXvl@yury-laptop>
+References: <PH0PR11MB51264FB7874380983C3A653BD3CF9@PH0PR11MB5126.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [REGRESSION] lxc-stop hang on 5.17.x kernels
-Content-Language: en-US
-To:     Daniel Harding <dharding@living180.net>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Cc:     regressions@lists.linux.dev, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Christian Brauner <christian.brauner@ubuntu.com>
-References: <7925e262-e0d4-6791-e43b-d37e9d693414@living180.net>
- <6ad38ecc-b2a9-f0e9-f7c7-f312a2763f97@kernel.dk>
- <ccf6cea1-1139-cd73-c4e5-dc9799708bdd@living180.net>
- <bb283ff5-6820-d096-2fca-ae7679698a50@kernel.dk>
- <371c01dd-258c-e428-7428-ff390b664752@kernel.dk>
- <2436d42c-85ca-d060-6508-350c769804f1@gmail.com>
- <ad9c31e5-ee75-4df2-c16d-b1461be1901a@living180.net>
- <fb0dbd71-9733-0208-48f2-c5d22ed17510@gmail.com>
- <a204ba93-7261-5c6e-1baf-e5427e26b124@living180.net>
- <bd932b5a-9508-e58f-05f8-001503e4bd2b@gmail.com>
- <12a57dd9-4423-a13d-559b-2b1dd2fb0ef3@living180.net>
- <897dc597-fc0a-34ec-84b8-7e1c4901e0fc@leemhuis.info>
- <c2f956e2-b235-9937-d554-424ae44c68e4@living180.net>
- <41c86189-0d1f-60f0-ca8e-f80b3ccf5130@gmail.com>
- <da56fa5f-0624-413e-74a1-545993940d27@gmail.com>
- <3fc08243-f9e0-9cec-4207-883c55ccff78@living180.net>
- <13028ff4-3565-f09e-818c-19e5f95fa60f@living180.net>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <13028ff4-3565-f09e-818c-19e5f95fa60f@living180.net>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1652725079;9603d8f0;
-X-HE-SMSGID: 1nqfI5-0007Uo-CC
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <PH0PR11MB51264FB7874380983C3A653BD3CF9@PH0PR11MB5126.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 16.05.22 17:13, Daniel Harding wrote:
-> On 5/16/22 16:57, Daniel Harding wrote:
->> On 5/16/22 16:25, Pavel Begunkov wrote:
->>> On 5/16/22 13:12, Pavel Begunkov wrote:
->>>> On 5/15/22 19:34, Daniel Harding wrote:
->>>>> On 5/15/22 11:20, Thorsten Leemhuis wrote:
->>>>>> On 04.05.22 08:54, Daniel Harding wrote:
->>>>>>> On 5/3/22 17:14, Pavel Begunkov wrote:
->>>>>>>> On 5/3/22 08:37, Daniel Harding wrote:
->>>>>>>>> [Resend with a smaller trace]
->>>>>>>>> On 5/3/22 02:14, Pavel Begunkov wrote:
->>>>>>>>>> On 5/2/22 19:49, Daniel Harding wrote:
->>>>>>>>>>> On 5/2/22 20:40, Pavel Begunkov wrote:
->>>>>>>>>>>> On 5/2/22 18:00, Jens Axboe wrote:
->>>>>>>>>>>>> On 5/2/22 7:59 AM, Jens Axboe wrote:
->>>>>>>>>>>>>> On 5/2/22 7:36 AM, Daniel Harding wrote:
->>>>>>>>>>>>>>> On 5/2/22 16:26, Jens Axboe wrote:
->>>>>>>>>>>>>>>> On 5/2/22 7:17 AM, Daniel Harding wrote:
->>>>>>>>>>>>>>>>> I use lxc-4.0.12 on Gentoo, built with io-uring support
->>>>>>>>>>>>>>>>> (--enable-liburing), targeting liburing-2.1.  My kernel
->>>>>>>>>>>>>>>>> config is a
->>>>>>>>>>>>>>>>> very lightly modified version of Fedora's generic kernel
->>>>>>>>>>>>>>>>> config. After
->>>>>>>>>>>>>>>>> moving from the 5.16.x series to the 5.17.x kernel
->>>>>>>>>>>>>>>>> series, I
->>>>>>>>>>>>>>>>> started
->>>>>>>>>>>>>>>>> noticed frequent hangs in lxc-stop. It doesn't happen 100%
->>>>>>>>>>>>>>>>> of the
->>>>>>>>>>>>>>>>> time, but definitely more than 50% of the time. Bisecting
->>>>>>>>>>>>>>>>> narrowed
->>>>>>>>>>>>>>>>> down the issue to commit
->>>>>>>>>>>>>>>>> aa43477b040251f451db0d844073ac00a8ab66ee:
->>>>>>>>>>>>>>>>> io_uring: poll rework. Testing indicates the problem is
->>>>>>>>>>>>>>>>> still
->>>>>>>>>>>>>>>>> present
->>>>>>>>>>>>>>>>> in 5.18-rc5. Unfortunately I do not have the expertise
->>>>>>>>>>>>>>>>> with the
->>>>>>>>>>>>>>>>> codebases of either lxc or io-uring to try to debug the
->>>>>>>>>>>>>>>>> problem
->>>>>>>>>>>>>>>>> further on my own, but I can easily apply patches to
->>>>>>>>>>>>>>>>> any of the
->>>>>>>>>>>>>>>>> involved components (lxc, liburing, kernel) and rebuild
->>>>>>>>>>>>>>>>> for
->>>>>>>>>>>>>>>>> testing or
->>>>>>>>>>>>>>>>> validation.  I am also happy to provide any further
->>>>>>>>>>>>>>>>> information that
->>>>>>>>>>>>>>>>> would be helpful with reproducing or debugging the
->>>>>>>>>>>>>>>>> problem.
->>>>>>>>>>>>>>>> Do you have a recipe to reproduce the hang? That would
->>>>>>>>>>>>>>>> make it
->>>>>>>>>>>>>>>> significantly easier to figure out.
->>>>>>>>>>>>>>> I can reproduce it with just the following:
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>       sudo lxc-create --n lxc-test --template download
->>>>>>>>>>>>>>> --bdev
->>>>>>>>>>>>>>> dir --dir /var/lib/lxc/lxc-test/rootfs -- -d ubuntu -r
->>>>>>>>>>>>>>> bionic
->>>>>>>>>>>>>>> -a amd64
->>>>>>>>>>>>>>>       sudo lxc-start -n lxc-test
->>>>>>>>>>>>>>>       sudo lxc-stop -n lxc-test
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>>> The lxc-stop command never exits and the container continues
->>>>>>>>>>>>>>> running.
->>>>>>>>>>>>>>> If that isn't sufficient to reproduce, please let me know.
->>>>>>>>>>>>>> Thanks, that's useful! I'm at a conference this week and
->>>>>>>>>>>>>> hence have
->>>>>>>>>>>>>> limited amount of time to debug, hopefully Pavel has time to
->>>>>>>>>>>>>> take a look
->>>>>>>>>>>>>> at this.
->>>>>>>>>>>>> Didn't manage to reproduce. Can you try, on both the good
->>>>>>>>>>>>> and bad
->>>>>>>>>>>>> kernel, to do:
->>>>>>>>>>>> Same here, it doesn't reproduce for me
->>>>>>>>>>> OK, sorry it wasn't something simple.
->>>>>>>>>>>> # echo 1 > /sys/kernel/debug/tracing/events/io_uring/enable
->>>>>>>>>>>>> run lxc-stop
->>>>>>>>>>>>>
->>>>>>>>>>>>> # cp /sys/kernel/debug/tracing/trace ~/iou-trace
->>>>>>>>>>>>>
->>>>>>>>>>>>> so we can see what's going on? Looking at the source, lxc
->>>>>>>>>>>>> is just
->>>>>>>>>>>>> using
->>>>>>>>>>>>> plain POLL_ADD, so I'm guessing it's not getting a
->>>>>>>>>>>>> notification
->>>>>>>>>>>>> when it
->>>>>>>>>>>>> expects to, or it's POLL_REMOVE not doing its job. If we
->>>>>>>>>>>>> have a
->>>>>>>>>>>>> trace
->>>>>>>>>>>>> from both a working and broken kernel, that might shed some
->>>>>>>>>>>>> light
->>>>>>>>>>>>> on it.
->>>>>>>>>>> It's late in my timezone, but I'll try to work on getting those
->>>>>>>>>>> traces tomorrow.
->>>>>>>>>> I think I got it, I've attached a trace.
->>>>>>>>>>
->>>>>>>>>> What's interesting is that it issues a multi shot poll but I
->>>>>>>>>> don't
->>>>>>>>>> see any kind of cancellation, neither cancel requests nor
->>>>>>>>>> task/ring
->>>>>>>>>> exit. Perhaps have to go look at lxc to see how it's supposed
->>>>>>>>>> to work
->>>>>>>>> Yes, that looks exactly like my bad trace.  I've attached good
->>>>>>>>> trace
->>>>>>>>> (captured with linux-5.16.19) and a bad trace (captured with
->>>>>>>>> linux-5.17.5).  These are the differences I noticed with just a
->>>>>>>>> visual scan:
->>>>>>>>>
->>>>>>>>> * Both traces have three io_uring_submit_sqe calls at the very
->>>>>>>>> beginning, but in the good trace, there are further
->>>>>>>>> io_uring_submit_sqe calls throughout the trace, while in the bad
->>>>>>>>> trace, there are none.
->>>>>>>>> * The good trace uses a mask of c3 for io_uring_task_add much more
->>>>>>>>> often than the bad trace:  the bad trace uses a mask of c3 only
->>>>>>>>> for
->>>>>>>>> the very last call to io_uring_task_add, but a mask of 41 for the
->>>>>>>>> other calls.
->>>>>>>>> * In the good trace, many of the io_uring_complete calls have a
->>>>>>>>> result of 195, while in the bad trace, they all have a result
->>>>>>>>> of 1.
->>>>>>>>>
->>>>>>>>> I don't know whether any of those things are significant or
->>>>>>>>> not, but
->>>>>>>>> that's what jumped out at me.
->>>>>>>>>
->>>>>>>>> I have also attached a copy of the script I used to generate the
->>>>>>>>> traces.  If there is anything further I can to do help debug,
->>>>>>>>> please
->>>>>>>>> let me know.
->>>>>>>> Good observations! thanks for traces.
->>>>>>>>
->>>>>>>> It sounds like multi-shot poll requests were getting downgraded
->>>>>>>> to one-shot, which is a valid behaviour and was so because we
->>>>>>>> didn't fully support some cases. If that's the reason, than
->>>>>>>> the userspace/lxc is misusing the ABI. At least, that's the
->>>>>>>> working hypothesis for now, need to check lxc.
->>>>>>> So, I looked at the lxc source code, and it appears to at least
->>>>>>> try to
->>>>>>> handle the case of multi-shot being downgraded to one-shot.  I don't
->>>>>>> know enough to know if the code is actually correct however:
->>>>>>>
->>>>>>> https://github.com/lxc/lxc/blob/7e37cc96bb94175a8e351025d26cc35dc2d10543/src/lxc/mainloop.c#L165-L189
->>>>>>>
->>>>>>> https://github.com/lxc/lxc/blob/7e37cc96bb94175a8e351025d26cc35dc2d10543/src/lxc/mainloop.c#L254
->>>>>>>
->>>>>>> https://github.com/lxc/lxc/blob/7e37cc96bb94175a8e351025d26cc35dc2d10543/src/lxc/mainloop.c#L288-L290
->>>>>>>
->>>>>> Hi, this is your Linux kernel regression tracker. Nothing happened
->>>>>> here
->>>>>> for round about ten days now afaics; or did the discussion continue
->>>>>> somewhere else.
->>>>>>
->>>>>>  From what I gathered from this discussion is seems the root cause
->>>>>> might
->>>>>> be in LXC, but it was exposed by kernel change. That makes it sill a
->>>>>> kernel regression that should be fixed; or is there a strong
->>>>>> reason why
->>>>>> we should let this one slip?
->>>>>
->>>>> No, there hasn't been any discussion since the email you replied
->>>>> to. I've done a bit more testing on my end, but without anything
->>>>> conclusive.  The one thing I can say is that my testing shows that
->>>>> LXC does correctly handle multi-shot poll requests which were being
->>>>> downgraded to one-shot in 5.16.x kernels, which I think invalidates
->>>>> Pavel's theory.  In 5.17.x kernels, those same poll requests are no
->>>>> longer being downgraded to one-shot requests, and thus under 5.17.x
->>>>> LXC is no longer re-arming those poll requests (but also shouldn't
->>>>> need to, according to what is being returned by the kernel). I
->>>>> don't know if this change in kernel behavior is related to the
->>>>> hang, or if it is just a side effect of other io-uring changes that
->>>>> made it into 5.17.  Nothing in the LXC's usage of io-uring seems
->>>>> obviously incorrect to me, but I am far from an expert.  I also did
->>>>> some work toward creating a simpler reproducer, without success (I
->>>>> was able to get a simple program using io-uring running, but never
->>>>> could get it to hang).  ISTM that this is still a kernel
->>>>> regression, unless someone can point out a definite fault in the
->>>>> way LXC is using io-uring.
->>>>
->>>> Haven't had time to debug it. Apparently LXC is stuck on
->>>> read(2) terminal fd. Not yet clear what is the reason.
->>>
->>> How it was with oneshots:
->>>
->>> 1: kernel: poll fires, add a CQE
->>> 2: kernel: remove poll
->>> 3: userspace: get CQE
->>> 4: userspace: read(terminal_fd);
->>> 5: userspace: add new poll
->>> 6: goto 1)
->>>
->>> What might happen and actually happens with multishot:
->>>
->>> 1: kernel: poll fires, add CQE1
->>> 2: kernel: poll fires again, add CQE2
->>> 3: userspace: get CQE1
->>> 4: userspace: read(terminal_fd); // reads all data, for both CQE1 and
->>> CQE2
->>> 5: userspace: get CQE2
->>> 6: userspace: read(terminal_fd); // nothing to read, hangs here
->>>
->>> It should be the read in lxc_terminal_ptx_io().
->>>
->>> IMHO, it's not a regression but a not perfect feature API and/or
->>> an API misuse.
->>>
->>> Cc: Christian Brauner
->>>
->>> Christian, in case you may have some input on the LXC side of things.
->>> Daniel reported an LXC problem when it uses io_uring multishot poll
->>> requests.
->>> Before aa43477b04025 ("io_uring: poll rework"), multishot poll
->>> requests for
->>> tty/pty and some other files were always downgraded to oneshots,
->>> which had
->>> been fixed by the commit and exposed the problem. I hope the example
->>> above
->>> explains it, but please let me know if it needs more details
->>
->> Pavel, I had actually just started a draft email with the same theory
->> (although you stated it much more clearly than I could have).  I'm
->> working on debugging the LXC side, but I'm pretty sure the issue is
->> due to LXC using blocking reads and getting stuck exactly as you
->> describe.  If I can confirm this, I'll go ahead and mark this
->> regression as invalid and file an issue with LXC. Thanks for your help
->> and patience.
+On Mon, May 16, 2022 at 04:58:44PM +0000, Von Dentz, Luiz wrote:
+> Hi Stephen,
 > 
-> Yes, it does appear that was the problem.  The attach POC patch against
-> LXC fixes the hang.  The kernel is working as intended.
+> Interesting, so we may want to stop using bitmap_from_u64 and replace with
+> bitmap_from_arr32 given the former seems to expect at least 8 bytes:
+
+Hi Luiz,
+
+The problem is that br_params->flags and hdev->conn_flags are bitmaps
+(declared with DECLARE_BITMAP), while cp->current_flags is declared
+as u32.
+
+Is it possible to declare cp->current_flags with DECLARE_BITMAP, or
+declare local current_flags as unsigned long?
+        DECLARE_BITMAP(current_flags, __HCI_CONN_NUM_FLAGS) = {cp->current_flags};
+
+If so, you can drop this conversion to and from fixed size arrays,
+in the following code and use bitmap API more consistently.
+
+For example the line 
+        if ((supported_flags | current_flags) != supported_flags)
+would turn to:
+        if (bitmap_subset(supported_flags, current_flags))
+
+Alternatively, because __HCI_CONN_NUM_FLAGS == 2, and if you don't
+expect adding 30+ new any flags soon, you can drop bitmap API here
+and use hweight32/64 as appropriate.
+
+Thanks,
+Yury
+ 
+>  diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
+> index 74937a834648..878be1cac5b7 100644
+> --- a/net/bluetooth/mgmt.c
+> +++ b/net/bluetooth/mgmt.c
+> @@ -4519,7 +4519,8 @@ static int set_device_flags(struct sock *sk, struct
+> hci_dev *hdev, void *data,
+>                                                               cp->addr.type);
+>  
+>                 if (br_params) {
+> -                       bitmap_from_u64(br_params->flags, current_flags);
+> +                       bitmap_from_arr32(br_params->flags, &current_flags,
+> +                                         __HCI_CONN_NUM_FLAGS);
+>                         status = MGMT_STATUS_SUCCESS;
+>                 } else {
+>                         bt_dev_warn(hdev, "No such BR/EDR device %pMR (0x%x)",
+> @@ -4531,7 +4532,8 @@ static int set_device_flags(struct sock *sk, struct
+> hci_dev *hdev, void *data,
+>                 if (params) {
+>                         DECLARE_BITMAP(flags, __HCI_CONN_NUM_FLAGS);
+>  
+> -                       bitmap_from_u64(flags, current_flags);
+> +                       bitmap_from_arr32(flags, &current_flags,
+> +                                         __HCI_CONN_NUM_FLAGS);
+>  
+>                         /* Devices using RPAs can only be programmed in the
+>                          * acceptlist LL Privacy has been enable otherwise they
+> @@ -4546,7 +4548,8 @@ static int set_device_flags(struct sock *sk, struct
+> hci_dev *hdev, void *data,
+>                                 goto unlock;
+>                         }
+>  
+> -                       bitmap_from_u64(params->flags, current_flags);
+> +                       bitmap_from_arr32(params->flags, &current_flags,
+> +                                         __HCI_CONN_NUM_FLAGS);
+>                         status = MGMT_STATUS_SUCCESS;
+>  
+>                         /* Update passive scan if HCI_CONN_FLAG_DEVICE_PRIVACY
 > 
-> #regzbot invalid:  userspace programming error
-
-Hmmm, not sure if I like this. So yes, this might be a bug in LXC, but
-afaics it's a bug that was exposed by kernel change in 5.17 (correct me
-if I'm wrong!). The problem thus still qualifies as a kernel regression
-that normally needs to be fixed, as can be seen my some of the quotes
-from Linus in this file:
-https://www.kernel.org/doc/html/latest/process/handling-regressions.html
-
-Reg. the "normally": there are situations when we let a regression like
-this slip -- for example if this particular use case is really odd, so
-that the regression only occurs for very very few users. Is that the
-case here? Or will most systems with a current or older version of LXC
-show the reported problem if they are updated to 5.17 without updating
-to a fixed LXC version as well? Then I'd say we likely should try to
-find a workaround, as Linus otherwise won't be happy if he ever stumbles
-about this thread.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight
+> 
+> ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+> From: Stephen Rothwell
+> Sent: Monday, May 16, 2022 12:57 AM
+> To: Marcel Holtmann; Johan Hedberg; Yury Norov
+> Cc: Von Dentz, Luiz; Linux Kernel Mailing List; Linux Next Mailing List
+> Subject: linux-next: build warning after merge of the bluetooth tree
+> 
+> Hi all,
+> 
+> After merging the bluetooth tree, today's linux-next build (arm
+> multi_v7_defconfig) produced this warning:
+> 
+> In file included from include/linux/cpumask.h:12,
+>                  from include/linux/mm_types_task.h:14,
+>                  from include/linux/mm_types.h:5,
+>                  from include/linux/buildid.h:5,
+>                  from include/linux/module.h:14,
+>                  from net/bluetooth/mgmt.c:27:
+> In function 'bitmap_copy',
+>     inlined from 'bitmap_copy_clear_tail' at include/linux/bitmap.h:270:2,
+>     inlined from 'bitmap_from_u64' at include/linux/bitmap.h:622:2,
+>     inlined from 'set_device_flags' at net/bluetooth/mgmt.c:4534:4:
+> include/linux/bitmap.h:261:9: warning: 'memcpy' forming offset [4, 7] is out of
+> the bounds [0, 4] of object 'flags' with type 'long unsigned int[1]'
+> [-Warray-bounds]
+>   261 |         memcpy(dst, src, len);
+>       |         ^~~~~~~~~~~~~~~~~~~~~
+> In file included from include/linux/kasan-checks.h:5,
+>                  from include/asm-generic/rwonce.h:26,
+>                  from ./arch/arm/include/generated/asm/rwonce.h:1,
+>                  from include/linux/compiler.h:248,
+>                  from include/linux/build_bug.h:5,
+>                  from include/linux/container_of.h:5,
+>                  from include/linux/list.h:5,
+>                  from include/linux/module.h:12,
+>                  from net/bluetooth/mgmt.c:27:
+> net/bluetooth/mgmt.c: In function 'set_device_flags':
+> net/bluetooth/mgmt.c:4532:40: note: 'flags' declared here
+>  4532 |                         DECLARE_BITMAP(flags, __HCI_CONN_NUM_FLAGS);
+>       |                                        ^~~~~
+> include/linux/types.h:11:23: note: in definition of macro 'DECLARE_BITMAP'
+>    11 |         unsigned long name[BITS_TO_LONGS(bits)]
+>       |                       ^~~~
+> 
+> Introduced by commit
+> 
+>   a9a347655d22 ("Bluetooth: MGMT: Add conditions for setting
+> HCI_CONN_FLAG_REMOTE_WAKEUP")
+> 
+> Bitmaps consist of unsigned longs (in this case 32 bits) ...
+> 
+> (This warning only happens due to chnges in the bitmap tree.)
+> 
+> --
+> Cheers,
+> Stephen Rothwell

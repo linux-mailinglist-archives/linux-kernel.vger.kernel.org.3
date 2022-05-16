@@ -2,362 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47526528DDB
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 933FE528DE1
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 May 2022 21:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237889AbiEPTVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 15:21:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
+        id S1345391AbiEPTWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 15:22:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345352AbiEPTVa (ORCPT
+        with ESMTP id S1345387AbiEPTWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 15:21:30 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2064.outbound.protection.outlook.com [40.107.244.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2187641;
-        Mon, 16 May 2022 12:21:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FtSAl7ODjQk6IL0s9vNkPJxf0kyG0C1Gz8iQA/WnkkMbJtsHBWGl2mh4BCuNMcCq5UlZFC4RpotKAwWDJLPHfHnQpXQ5njaq0/gkeTiT6WaKFxOvNXw7iLrQIyILi3TNxXPvBXSj5F6gjd4gJSbjFAkfWg8LCifC7V4vIhhxFQAKcBxpgf5H07g1pJ5XsNxodQ3xQltuodx5p/3BSoQ3g006SnjMUCq96SwJ5pxNjnq4jgrYDuipE5SNi8GnL9AVElNoyc1VYLXpNNZvU4DesNIQ9lPR6p0Xf+g/niRDf4Wq0ORSWV8nReWRGBfEQ3MzlSxAE3hsOLGKvdKDQXRl6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6PX6hDR9L1rpUB+MOkMfQi2Q+XKRtuTq4VcgFYA5JcI=;
- b=CcXxXcc8dpU9NcXVGj+q51ximhsV6iz+9xum9ah9mj+9dSzoiSpJ07ecoJcBFQYXbsZ00QaL7M5E3rM95OHivRU7aMQC1LxOg09s78ATFxUO1+EXJ9VUZseCzOb7cEPVt2gFCiPumd4wlyZwoCJ1kOyvKvVg70O1TWh90bJx/VeJwzsdJTp/YQEfNYNcx7df9wFySAGynPBzOS2CCgUQabdxQBMIzr6xUzOAVp6cLgkJD7W8CNPIkZpbu0dZwqQYylMOA6nQt3Zx5kySMF2hM9AQXQ9loc1XwBov+1dhYNfY34bp8cljJRl9+kc7kBlyBwWeISFj7586jHeGjRs/tA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6PX6hDR9L1rpUB+MOkMfQi2Q+XKRtuTq4VcgFYA5JcI=;
- b=dtUP5xmu83FqawCBswRp9BE2TYVy989JosWrtIi4cyMlXjc52Yf9F8zQ2jw129FlOaIbdbsNLkDrIefbhPHquIydj0iPA2FL+51AdGJSH1+BWHtT5y5XDARrjX2QJSGH41sD0vweG6lLYzxaL9/HkBuTZdlRoDkQoClYJclV8sI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by SA0PR12MB4509.namprd12.prod.outlook.com (2603:10b6:806:9e::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13; Mon, 16 May
- 2022 19:21:26 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::7146:65ee:8fd3:dd03]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::7146:65ee:8fd3:dd03%4]) with mapi id 15.20.5250.018; Mon, 16 May 2022
- 19:21:26 +0000
-Message-ID: <0875fa95-3a25-a354-1433-201fca81ed3e@amd.com>
-Date:   Mon, 16 May 2022 21:21:16 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2] dma-buf: Move sysfs work out of DMA-BUF export path
-Content-Language: en-US
-To:     "T.J. Mercier" <tjmercier@google.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Greg Kroah-Hartman <gregkh@google.com>,
-        John Stultz <jstultz@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Hridya Valsaraju <hridya@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel-team@android.com, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org
-References: <20220516171315.2400578-1-tjmercier@google.com>
- <175c5af3-9224-9c8e-0784-349dad9a2954@amd.com>
- <CABdmKX2GcgCs1xANYPBp8OEtk9qqH7AvCzpdppj9rHXvMqWSAw@mail.gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <CABdmKX2GcgCs1xANYPBp8OEtk9qqH7AvCzpdppj9rHXvMqWSAw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AS9PR06CA0153.eurprd06.prod.outlook.com
- (2603:10a6:20b:45c::17) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Mon, 16 May 2022 15:22:10 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9653E1AF19;
+        Mon, 16 May 2022 12:22:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1652728896;
+        bh=n3B1tFZFIsJ89uIoiL7dX/rVRMmDUZ1088RdBsJpfxE=;
+        h=X-UI-Sender-Class:Date:In-Reply-To:References:Subject:Reply-to:To:
+         CC:From;
+        b=iAqc3i/yie0yQ2RO4KjEodO6JlsmEeoCluKIjQQeD5VvGXK2FMakTvhlaCwZTxZSO
+         +AzMBHyTlzQIQMaEQ316PydcD87/HFx5pXYq2+cMNj7A9Gvv91zdDVmJwriY3yGh6i
+         6WBPQ5hsPF1ev6OmpV54UGGyP8a06ZCPvBlzup2c=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from frank-s9 ([80.245.74.14]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MGyxX-1o3ajL2Lzf-00E7Xg; Mon, 16
+ May 2022 21:21:36 +0200
+Date:   Mon, 16 May 2022 21:21:31 +0200
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20220516173537.GA2942634-robh@kernel.org>
+References: <20220514115946.8858-1-linux@fw-web.de> <20220514115946.8858-2-linux@fw-web.de> <1652570081.002742.3276245.nullmailer@robh.at.kernel.org> <trinity-02ad648c-f6f8-4383-b389-a0578d5a02d2-1652615387162@3c-app-gmx-bap15> <20220516173537.GA2942634-robh@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f5261c67-b0b3-464d-a8f2-08da37714546
-X-MS-TrafficTypeDiagnostic: SA0PR12MB4509:EE_
-X-Microsoft-Antispam-PRVS: <SA0PR12MB450932F0ED6CCE9ABE641FC783CF9@SA0PR12MB4509.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TThEDnqH72PjjeUUoogYQVCm1MGHRugJRqhXv8dqrbQnRhPCbltHuRKTbDS4qlWDhfS8jf6lGrTNlrRVRF2HN1qU9PKErUrJXllMI+CSqFgQQ70HHvGsURkMz/92NVV6foYHuqqwZdUByV4zAyeXCryr/h07HfDo3ftz11PccVetoYCqFucEAihdOx1jovova1O48XuZxWM6QivvSpUadUM0rbRy0exVZgujjDKHoCjJsuCeaPDh6qDFdZON8dvg22zqQJyZCwNfQrMnGEKYEU1H6fnDR+WPUwKm/tU0TN//lCkOo0jNHI1gfbiLuDhISGraioJa4bF4TA1yjdtlQobE5gW1P29VL4spz30EN9PWrtNuySEIkUqzttqa1reCuU0QrwwBCmGAaQr6YnrVN4rWIoez8FY6qJhmSa5hJbyZKwsFRICQvxjG05CgbDrH6cRWkOGavAdP5mvN4e0xLJcxMZh7AgfZVGgSFBtX9P7Mgy4vvp4Qzl3Nf2pHFosGqCk6gytetCRGE1dbPvf5awVsgol1sQdfD1YLsjd4V8QdtYH7dS8nr6oyiFYqG1C0FQrRqi/PwQ+3p2tcvCTLGjhNqo6DD2UHi3wSJuiq6OtwN6xqLBlNfNjy0XAaBJGZbzizjMmrb1yXPbUEVCZO4Vhdnt5wNyz/eZygZjEO6WiNFdkk0iLknuV5uiXA0JH2j6cYb9ilwgCNmTXvjzLgkOq+phNXYpkJKnjwWHrk76hBgw6UTbw3pr+m/vByOVlAULFg+PAo2JuDJQJXiFylWLQC8hjc3K+vomnyEnntJJ1vmDYl0k0aoYOc8H+u6sHdvIb2Y+5Qi7NFLS3hnMco/5Kag0ylxhua2mihfqUXNOQQ3O7zZ6vEz0Xn6VFqxEwZ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(4326008)(26005)(8676002)(66476007)(66556008)(66946007)(31696002)(6486002)(966005)(53546011)(8936002)(508600001)(186003)(6916009)(7416002)(5660300002)(38100700002)(45080400002)(2906002)(54906003)(6666004)(6512007)(316002)(2616005)(36756003)(83380400001)(31686004)(66574015)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dzEzRjhDbTdJSUY0ek1wMHgybDQxQXZ0ZDhjUkMvbll0RlNrR0twamRKZGMx?=
- =?utf-8?B?eVhubVgyRE1OOWc1R0o2S3k5T0REczM5TEN0YUk5Qit5cmRZY2VFazU5dTcw?=
- =?utf-8?B?N2t0MVdGLzFScWtPNlUreDBIcVoxZk5jZHd4NEQ3dlAyYnJZUU5adzdDenpv?=
- =?utf-8?B?YW4vcFFhb0hhN2tjUXNWaGIxTThZVDZNdHRDMm5LaEFFVDQ4clZaeUNrUGxQ?=
- =?utf-8?B?OXNpOVd6My92VHJBZTk3U1BDV0RyNlBuQjFnRHhTMzZEekFQZUlOUVM5a0Ny?=
- =?utf-8?B?L2hRT0s5U1VnNFBod1A2RHkxQldXNVFPMFJ3NnFXSG14N0I1QWN5SjdUYUlY?=
- =?utf-8?B?R2M0aWdzS25oUHI4MTIwS0Rmd3gvN0hUY0dUdC90cmRTTkttTGNpNjkxNkFo?=
- =?utf-8?B?U0tWdkp0ajhudm5MMjlCeTZ5eCtDeW0ybXU5RUhMNURTZkhRUlViWXZ1RFha?=
- =?utf-8?B?TTBZV1FPSXIxU01PWlY1L1hGZ0pMSHdyUmhvRUNLVHpaZ2JUU3puRnNRMWFi?=
- =?utf-8?B?QnF6UU8rdWl4c2c4MENncFc4WTcyZTNrZ3d1THhpbmEzbEZicnpaQnVhZU9y?=
- =?utf-8?B?ODg2R2NqS1dVNkluNDdTb2FETWZ6NUFvajc1R3Jmck9oRW1VWUdZSmNuaURx?=
- =?utf-8?B?TldDbjZxR0hWWDVWTTZIaUNsSktBY2hqQTNDV3Vtdytpb0hLUXBWNTVHWWow?=
- =?utf-8?B?dlFKeU5pVkdHTTRRTlFveWt1bCsvZk8wbjgzNVIxMjhoQUpzRmdhQnJLTk8y?=
- =?utf-8?B?TGV0aWhDcmtIK3M1SkcveVkzc05XbTRMNlliS21ic3FnOFl4R2Z0YmxoekZL?=
- =?utf-8?B?eVdtQzk2UjF4REJVV3dUbDV0SFZwWml3L0hvSXNwN2NpYlJ4bkhlSnlncmY0?=
- =?utf-8?B?bGhPc1R3NHVkOEw0M3pnanJnOHE4Z0R2R3RSaWpralZuUWVBc1ZjMkRHck5L?=
- =?utf-8?B?SjBwcit1RzVUK09ERGVIa291Q1hkK3AxTS80bUJhdW1lVjR6eDdmTU55dTdV?=
- =?utf-8?B?VnlXM3JmOE1rN3E5SkpzVnd3TEJHNlFmWFNab0hycmRlQ3owNEFzOGh6Zldl?=
- =?utf-8?B?NjFsNTJ1WnJaWmxCckhjOWZnMzA3NXVUbWkrcHl2b3lnUW5IazdGeXJOQk5H?=
- =?utf-8?B?T3JTQzl3Mmx5VndQZUYyR0tOQkhWd3VIdG5OR2I0bHRMTlU0OTNtZmlyTVYr?=
- =?utf-8?B?WGwyd0ppa2EwZXZ6QXJzdTVFcmU0UGIveU9PSDN3d0pBb2FlandMVnNHVmlZ?=
- =?utf-8?B?Vllza3MvcUp2cGU3a3BFTGNIOFNuNU1YeHJxT1pzMWkrQ2Z3OEczMDQyMnRF?=
- =?utf-8?B?amYrN1FEQ2Z3eU96c2hZZmlmVkpyWFBZUmRzbW9GcXQ2RE1XVWVob1ovNWhU?=
- =?utf-8?B?bDYyR05HR2pZd0h6NkwrOEZtMVdYR1hQblFCZ2hnZm12TmsrSytsRzMrVTFM?=
- =?utf-8?B?RFF3VGlEQ3pGdEIvMVByNUczMkt6d3lkUGR0SFNHRXhMd0N0Y1NEQ2dhVW11?=
- =?utf-8?B?MXp0RVdpV2JETXI2K25Na2xacm1QQXFZcWdvRktFUThMMUQ2OGpjM095emdE?=
- =?utf-8?B?UDhORVdXcjVoRm5XWTdtTGRleDFDOFBYRkdtNGRyV3pVbkRZYmR4L1JsWlRh?=
- =?utf-8?B?V083QjhmRHVJUkFiWm9wU2ZPazBQTDdOaENyNTRFeExkYlVaSnNUT1loSHlF?=
- =?utf-8?B?Wm1pbFVEcUlya3o3Q0FTUVpPTFdTRWNYNEJ5WHZDVnZmcWdnZUFEbzgwcUVJ?=
- =?utf-8?B?TlVnaXFHTWQ2bVVvNzdhQ1JnWTFTT3VkODJ5enQ5Rnp4ZmljYjdtcmdsZXc2?=
- =?utf-8?B?eVI1YnlpSTlRY2gxZFhTM21TSDBNb0JhRms3MUJzd0YxRHlHVFBBcUVxd0p6?=
- =?utf-8?B?ZHdkZldjeFo0RFBJNzNabFR3Um9VVFhlbEpXV013TzVyMTE2NHo3ZXR4R0Fs?=
- =?utf-8?B?SGZTRVJCMzZwYng2cDllVzlyS2pYemd6dGwwWTR5b2tQKzNDRmo2ekFBemo2?=
- =?utf-8?B?d2QxRWx0dU05eEliN0FLUnMrM1U2emZRNjB2OHZ6VVBtQ1JLL2JmVWJ5UlYv?=
- =?utf-8?B?a1BJSGF5NFZBb1IvcThLcm5TNUJIQllMOWx2cmZQUk1jdWt1Z2dwM2ZlNXNR?=
- =?utf-8?B?eGdEMVorbS9yY3lUMFhQK3hzUit1S1lKWkROSVcwZnhCRXVLaEd6cmdkcHRW?=
- =?utf-8?B?REtpQy9EMVJCY0lBME11YlBhMnJDZ1JvYXFOaWRFUVBOcVp5bE10TG1HNktD?=
- =?utf-8?B?VmhObVlCZWMycUpLZ0dtMVU0TG1qWkNHbCtCVTBXUnhoQW5TOGh2OWtVMWR3?=
- =?utf-8?B?dWVrRTU4VzFoOHZiWTFaMTdPRlcxREFIbU5ybkkrQ2dHWjMzWVZKZz09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f5261c67-b0b3-464d-a8f2-08da37714546
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2022 19:21:26.1468
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: L9dA5gCVbFcHT2TKIEB+BHzrk9qrAIciuvDtm4jWDDkEaCXYQZMrjU1v4Ys+Df4H
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4509
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: Re: [RFC v3 1/5] dt-bindings: phy: rockchip: add PCIe v3 phy
+Reply-to: frank-w@public-files.de
+To:     Rob Herring <robh@kernel.org>
+CC:     Frank Wunderlich <linux@fw-web.de>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Vinod Koul <vkoul@kernel.org>,
+        Johan Jonker <jbx6244@gmail.com>,
+        linux-rockchip@lists.infradead.org, linux-pci@vger.kernel.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>
+From:   Frank Wunderlich <frank-w@public-files.de>
+Message-ID: <9496CAFB-6CB6-4BDA-A539-3A6E1B562299@public-files.de>
+X-Provags-ID: V03:K1:f5Irn2u3e6Zhnd5do173aOUv5ETb+hLAEAT30DBf0+1ZrVkoATS
+ Fhws/gr/3BwWNsggKEhfSKQkuKdL2wcpALEinrn8h6gKmm20zJmzf3QTFk3lHJlZjBMttx8
+ SBN/2jVpFWVUSFkg+pdar6rvQxC24N68914q1lpLgr6mh56mrI47hOdOOiqsN2BIO4LVmoA
+ 55GtwGo3goKFxsQZm5N6Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:mRgqnWkK9Sg=:YTdRH5LtJInU/r+qpgpHTp
+ RkdHzdHcEvxu7D7CwcHrfaWdoYRljfDrihJYlHodROSRLr7fcp7ZVLDwlAfAj2SQ7ABS6rvix
+ FUSMNn7R1Uw/eep6ikgEjSetAPpQ3ovZr6hPl1H26FBChTQX8uEQg0fji9RBXE4hkMfLEYgRj
+ qi1IThmmCXf8ruHD3NZF+MtfyAm+yMlowRrf/hAeb494As4sPPs8qjUjZ0uGZ8XKDzi0WPZGb
+ pUfNnutYtGbnB129EOlQEMxbdeKCczFMhHimE/8ajesstSfHFzd1JNbjDmDcCg7rpzidmQdXr
+ 4Z7wy/UB5TcHfzptUdOZZSWGOXNkGMPFiBVhusjhAY2scwkxwXAPd5G++7Q1ZBTagos7sp3pU
+ 3g5r8paoFTrw0u/zBC5b7THS8qm7ojKQoY3ABU5rBo181Dcax8wW5R9Mwea4ylhEdbmRhL0WI
+ HctnSZH8CP89tV+aFOIvDuWKV7y5Vs0MmczPLz95pmq/5AaEwzPCbbjbn2etye/9Rl7tih67O
+ D/aHepkA7IUWi6rDA7GSPTa6cXxYNslD7+suV7ReIBLuIdKd3ptfM2xMsofZ6Vg1mwq1dEnVC
+ pE4fe4ypJ6EZ1c14gUDANN8b3eGXA+3XqEuO0AqaM71t5Q4CM4rAmNcDXMcHtaVgtUJN7/Xbf
+ MzdP+CJo81lBGDeth+6cW8nkP6ias3KfYPNg67lR8Zp7Sb/ErzQPZ3aW7eLTwHrYZsgaX1rvP
+ QBBMBjBeK9gib4axMHxAX7UoCGuY2SNoNYqc63ymHbj2Vw8UJVw19bVtqdjXdFiuzZATlDzyX
+ MP2H5mKv8T6PlnNdFzn85gFEqS3J07cyApRMrAjM5PFlK7DE4qs4+dspPeOBEHPa18BMnBHT/
+ DufwIomMAa2L65GCXfO3zLkPu6ZRWp5vdMNbMvxXO52yCnLqn6beF8z5fRLkoTYh7Wr7nZ/Rs
+ CnOGakp5eqt3eMJXbdyPlIBwfjg+0j05Z/hEX55/wYUxOlety08eHvKqD58ZzN2cG77jclmci
+ xQ19HjerZpf+P4LlW+Y0ZJ/wm0PfvAjH1E0Xix1ywyrrXTHJrBNH95hpbZWZyOqELguiFVRlc
+ flu7VLme4boB+0=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 16.05.22 um 20:08 schrieb T.J. Mercier:
-> On Mon, May 16, 2022 at 10:20 AM Christian König
-> <christian.koenig@amd.com> wrote:
->> Am 16.05.22 um 19:13 schrieb T.J. Mercier:
->>> Recently, we noticed an issue where a process went into direct reclaim
->>> while holding the kernfs rw semaphore for sysfs in write (exclusive)
->>> mode. This caused processes who were doing DMA-BUF exports and releases
->>> to go into uninterruptible sleep since they needed to acquire the same
->>> semaphore for the DMA-BUF sysfs entry creation/deletion. In order to avoid
->>> blocking DMA-BUF export for an indeterminate amount of time while
->>> another process is holding the sysfs rw semaphore in exclusive mode,
->>> this patch moves the per-buffer sysfs file creation to the default work
->>> queue. Note that this can lead to a short-term inaccuracy in the dmabuf
->>> sysfs statistics, but this is a tradeoff to prevent the hot path from
->>> being blocked. A work_struct is added to dma_buf to achieve this, but as
->>> it is unioned with the kobject in the sysfs_entry, dma_buf does not
->>> increase in size.
->> I'm still not very keen of this approach as it strongly feels like we
->> are working around shortcoming somewhere else.
+Am 16=2E Mai 2022 19:35:37 MESZ schrieb Rob Herring <robh@kernel=2Eorg>:
+>On Sun, May 15, 2022 at 01:49:47PM +0200, Frank Wunderlich wrote:
+>> Hi
+>>=20
+>> > Gesendet: Sonntag, 15=2E Mai 2022 um 01:14 Uhr
+>> > Von: "Rob Herring" <robh@kernel=2Eorg>
+>>=20
+>> > On Sat, 14 May 2022 13:59:42 +0200, Frank Wunderlich wrote:
+
+>Documentation/devicetree/bindings/phy/rockchip,pcie3-phy=2Eyaml
+>> > >
+>> >
+>> > My bot found errors running 'make DT_CHECKER_FLAGS=3D-m
+>dt_binding_check'
+>> > on your patch (DT_CHECKER_FLAGS is new in v5=2E13):
+>> >
+>> > yamllint warnings/errors:
+>> >
+>> > dtschema/dtc warnings/errors:
+>> >
+>/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/=
+rockchip,pcie3-phy=2Eyaml:
+>properties:clock-names: 'oneOf' conditional failed, one must be fixed:
+>> > 	[{'const': 'refclk_m'}, {'const': 'refclk_n'}, {'const': 'pclk'}]
+>is too long
+>> > 	[{'const': 'refclk_m'}, {'const': 'refclk_n'}, {'const': 'pclk'}]
+>is too short
+>> > 	False schema does not allow 3
+>> > 	1 was expected
+>> > 	3 is greater than the maximum of 2
+>> > 	hint: "minItems" is only needed if less than the "items" list
+>length
+>> > 	from schema $id: http://devicetree=2Eorg/meta-schemas/items=2Eyaml#
+>> >
+>/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/=
+rockchip,pcie3-phy=2Eyaml:
+>ignoring, error in schema: properties: clock-names
+>> >
+>Documentation/devicetree/bindings/phy/rockchip,pcie3-phy=2Eexample=2Edtb:=
+0:0:
+>/example-0/phy@fe8c0000: failed to match any schema with compatible:
+>['rockchip,rk3568-pcie3-phy']
+>>=20
+>> seems this is fixed when i remove the "minItems: 3" from clock names=20
+>> (which is already fixed length because of the list)=2E
+>
+>Yes=2E
+>
+>> needed to change type of lane-map to this:
+>>=20
+>> $ref: /schemas/types=2Eyaml#/definitions/uint8-array
+>
+>Why? That's not a standard property though, so needs a 'rockchip'=20
+>prefix=2E Though maybe a common property would be appropriate here=2E
+
+Originally it was a bool property named "rockchip,bifurcation" and we chan=
+ged it (after comments) to be a more generic property "lane-map" that can b=
+e re-used on other vendors/controllers/phys=2E
+
+Driver reads as u8 array and range is small enough for u8 even if used for=
+ larger controllers (e=2Eg=2E PCIe x16)=2E
+
+>> then it looks clean for it=2E=2E=2E=2E
+>>=20
+>> -m causes many errors unrelated to this schema-file even if i pass
 >>
-> My read of the thread for the last version is that we're running into
-> a situation where sysfs is getting used for something it wasn't
-> originally intended for, but we're also stuck with this sysfs
-> functionality for dmabufs.
+>DT_SCHEMA_FILES=3DDocumentation/devicetree/bindings/phy/rockchip,pcie3-ph=
+y=2Eyaml
 >
->>> Fixes: bdb8d06dfefd ("dmabuf: Add the capability to expose DMA-BUF stats in sysfs")
->>> Originally-by: Hridya Valsaraju <hridya@google.com>
->>> Signed-off-by: T.J. Mercier <tjmercier@google.com>
->>>
->>> ---
->>> See the originally submitted patch by Hridya Valsaraju here:
->>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.org%2Flkml%2F2022%2F1%2F4%2F1066&amp;data=05%7C01%7Cchristian.koenig%40amd.com%7C794614324d114880a25508da37672e4b%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637883213566903705%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=bGlA2FeubfSeL5XDHYyWMZqUXfScoCphZjjK4jrqQJs%3D&amp;reserved=0
->>>
->>> v2 changes:
->>> - Defer only sysfs creation instead of creation and teardown per
->>> Christian König
->>>
->>> - Use a work queue instead of a kthread for deferred work per
->>> Christian König
->>> ---
->>>    drivers/dma-buf/dma-buf-sysfs-stats.c | 56 ++++++++++++++++++++-------
->>>    include/linux/dma-buf.h               | 14 ++++++-
->>>    2 files changed, 54 insertions(+), 16 deletions(-)
->>>
->>> diff --git a/drivers/dma-buf/dma-buf-sysfs-stats.c b/drivers/dma-buf/dma-buf-sysfs-stats.c
->>> index 2bba0babcb62..67b0a298291c 100644
->>> --- a/drivers/dma-buf/dma-buf-sysfs-stats.c
->>> +++ b/drivers/dma-buf/dma-buf-sysfs-stats.c
->>> @@ -11,6 +11,7 @@
->>>    #include <linux/printk.h>
->>>    #include <linux/slab.h>
->>>    #include <linux/sysfs.h>
->>> +#include <linux/workqueue.h>
->>>
->>>    #include "dma-buf-sysfs-stats.h"
->>>
->>> @@ -168,10 +169,46 @@ void dma_buf_uninit_sysfs_statistics(void)
->>>        kset_unregister(dma_buf_stats_kset);
->>>    }
->>>
->>> +static void sysfs_add_workfn(struct work_struct *work)
->>> +{
->>> +     struct dma_buf_sysfs_entry *sysfs_entry =
->>> +             container_of(work, struct dma_buf_sysfs_entry, sysfs_add_work);
->>> +     struct dma_buf *dmabuf = sysfs_entry->dmabuf;
->>> +
->>> +     /*
->>> +      * A dmabuf is ref-counted via its file member. If this handler holds the only
->>> +      * reference to the dmabuf, there is no need for sysfs kobject creation. This is an
->>> +      * optimization and a race; when the reference count drops to 1 immediately after
->>> +      * this check it is not harmful as the sysfs entry will still get cleaned up in
->>> +      * dma_buf_stats_teardown, which won't get called until the final dmabuf reference
->>> +      * is released, and that can't happen until the end of this function.
->>> +      */
->>> +     if (file_count(dmabuf->file) > 1) {
->> Please completely drop that. I see absolutely no justification for this
->> additional complexity.
->>
-> This case gets hit around 5% of the time in my testing so the else is
-> not a completely unused branch.
+>The fix is fixing the remaining 40 or so '-m' errors=2E
 
-Well I can only repeat myself: This means that your userspace is 
-severely broken!
+So now clean for you(r bot), too? Did only get a bunch of other unrelated =
+messages=2E
 
-DMA-buf are meant to be long living objects and when you create and 
-destroy it faster than a work item can create the sysfs entries than 
-there is some serious design issue here.
-
-My suspicion is that your IOCTL to create the DMA-buf is somehow 
-interrupted/aborted after it was already exported which results in it's 
-immediate destruction.
-
-Regards,
-Christian.
-
->   It's only 3 extra lines of actual
-> code. I'd prefer to keep it, but I'll remove it to reduce complexity.
-> This means doing work that we know is useless some of the time, and
-> adding contention for a global kernfs lock which this patch is aimed
-> at avoiding (on the hot path), but at least that work is on a worker
-> thread with this patch.
+>Rob
 
 
->
->>> +             /*
->>> +              * kobject_init_and_add expects kobject to be zero-filled, but we have populated it
->>> +              * (the sysfs_add_work union member) to trigger this work function.
->>> +              */
->>> +             memset(&dmabuf->sysfs_entry->kobj, 0, sizeof(dmabuf->sysfs_entry->kobj));
->>> +             dmabuf->sysfs_entry->kobj.kset = dma_buf_per_buffer_stats_kset;
->>> +             if (kobject_init_and_add(&dmabuf->sysfs_entry->kobj, &dma_buf_ktype, NULL,
->>> +                                             "%lu", file_inode(dmabuf->file)->i_ino)) {
->>> +                     kobject_put(&dmabuf->sysfs_entry->kobj);
->>> +                     dmabuf->sysfs_entry = NULL;
->>> +             }
->>> +     } else {
->>> +             /*
->>> +              * Free the sysfs_entry and reset the pointer so dma_buf_stats_teardown doesn't
->>> +              * attempt to operate on it.
->>> +              */
->>> +             kfree(dmabuf->sysfs_entry);
->>> +             dmabuf->sysfs_entry = NULL;
->>> +     }
->>> +     dma_buf_put(dmabuf);
->>> +}
->>> +
->>>    int dma_buf_stats_setup(struct dma_buf *dmabuf)
->>>    {
->>>        struct dma_buf_sysfs_entry *sysfs_entry;
->>> -     int ret;
->>>
->>>        if (!dmabuf || !dmabuf->file)
->>>                return -EINVAL;
->>> @@ -181,25 +218,16 @@ int dma_buf_stats_setup(struct dma_buf *dmabuf)
->>>                return -EINVAL;
->>>        }
->>>
->>> -     sysfs_entry = kzalloc(sizeof(struct dma_buf_sysfs_entry), GFP_KERNEL);
->>> +     sysfs_entry = kmalloc(sizeof(struct dma_buf_sysfs_entry), GFP_KERNEL);
->>>        if (!sysfs_entry)
->>>                return -ENOMEM;
->>>
->>> -     sysfs_entry->kobj.kset = dma_buf_per_buffer_stats_kset;
->>>        sysfs_entry->dmabuf = dmabuf;
->>> -
->>>        dmabuf->sysfs_entry = sysfs_entry;
->>>
->>> -     /* create the directory for buffer stats */
->>> -     ret = kobject_init_and_add(&sysfs_entry->kobj, &dma_buf_ktype, NULL,
->>> -                                "%lu", file_inode(dmabuf->file)->i_ino);
->>> -     if (ret)
->>> -             goto err_sysfs_dmabuf;
->>> +     INIT_WORK(&dmabuf->sysfs_entry->sysfs_add_work, sysfs_add_workfn);
->>> +     get_dma_buf(dmabuf); /* This reference will be dropped in sysfs_add_workfn. */
->>> +     schedule_work(&dmabuf->sysfs_entry->sysfs_add_work);
->>>
->>>        return 0;
->>> -
->>> -err_sysfs_dmabuf:
->>> -     kobject_put(&sysfs_entry->kobj);
->>> -     dmabuf->sysfs_entry = NULL;
->>> -     return ret;
->>>    }
->>> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
->>> index 2097760e8e95..0200caa3c515 100644
->>> --- a/include/linux/dma-buf.h
->>> +++ b/include/linux/dma-buf.h
->>> @@ -22,6 +22,7 @@
->>>    #include <linux/fs.h>
->>>    #include <linux/dma-fence.h>
->>>    #include <linux/wait.h>
->>> +#include <linux/workqueue.h>
->>>
->>>    struct device;
->>>    struct dma_buf;
->>> @@ -365,7 +366,7 @@ struct dma_buf {
->>>         */
->>>        const char *name;
->>>
->>> -     /** @name_lock: Spinlock to protect name acces for read access. */
->>> +     /** @name_lock: Spinlock to protect name access for read access. */
->>>        spinlock_t name_lock;
->>>
->>>        /**
->>> @@ -441,6 +442,7 @@ struct dma_buf {
->>>
->>>                __poll_t active;
->>>        } cb_in, cb_out;
->>> +
->> Those changes are unrelated.
->>
-> I included it here because I thought it was bad form to submit a
-> typo-only patch. Will remove.
->
->
->
->
->> Regards,
->> Christian.
->>
->>>    #ifdef CONFIG_DMABUF_SYSFS_STATS
->>>        /**
->>>         * @sysfs_entry:
->>> @@ -449,7 +451,15 @@ struct dma_buf {
->>>         * `DMA-BUF statistics`_ for the uapi this enables.
->>>         */
->>>        struct dma_buf_sysfs_entry {
->>> -             struct kobject kobj;
->>> +             union {
->>> +                     struct kobject kobj;
->>> +
->>> +                     /** @sysfs_add_work:
->>> +                      *
->>> +                      * For deferred sysfs kobject creation using a workqueue.
->>> +                      */
->>> +                     struct work_struct sysfs_add_work;
->>> +             };
->>>                struct dma_buf *dmabuf;
->>>        } *sysfs_entry;
->>>    #endif
-
+regards Frank

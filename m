@@ -2,70 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9717252A156
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6555752A161
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344934AbiEQMQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 08:16:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37034 "EHLO
+        id S1345902AbiEQMWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 08:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233456AbiEQMQu (ORCPT
+        with ESMTP id S231894AbiEQMV6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 08:16:50 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7603E264B
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:16:49 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id k2so14143751qtp.1
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:16:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=iLF/Jj6XGtMs56rxYAeYQ7aazvooOov9erMd/9bEfPQ=;
-        b=fiOi4pYO3Ucyf+7FuK4zet1/Jrh5FNueHMfQsBWQeNmM+oiOJyxTdNlbr1t9VLdyhg
-         9nnuVkUKb83uryRngEDhnS5o94eiJe93lwhXp+wpS27xl4TkStjDfTZ715iptprz+jW3
-         MpUxDvL0fKMOFtw9rmvkf7xeoYp8nB4XyP6+DfgmKDQAuDpUcTIYTMRdjg5ZPEHMLPFv
-         vEHCKfmt8hSMAxR5k6e+5RnlwzI1nEYkjjupaI3/vYVZ5H1fV95C4RMgRL4Me2GUjMyf
-         7zq9XS1+bSeDTII8ZcaHbw1b1aj1fuqGvo2v1P/BppYVXOnnl6DQleSxHipNy6pGcHvr
-         UzIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iLF/Jj6XGtMs56rxYAeYQ7aazvooOov9erMd/9bEfPQ=;
-        b=l4dXGRGSeQvT2+gSCZ3kxpJTUZrRMEtVMeheVfwTl0IRKwkhp3ucYwzM5ik2NnsXQ0
-         OYeK9aUeDdPqA+vBky8RZM3xOaQeUEqZ8yicm0WQwdlqf0WfYXOW5nin2HfLkMqChgU2
-         FpqUnYT9FyMYCGGVwGWZGRtEFFWmcv3qDOft2rFNUAjMHEMWBBLO34W/ralW8GxwzYrK
-         KgFcZdvlTRJCOaJmruNp3HK3Gpn9PuzLTz+lWAXFS1hoWr+1PrIPK6DhhzK7jJ/JP38m
-         5fy3Qy4DQflzE06zbwdEfKF1gly/ndoxndk2IMTN72JUn5PHzB1MbPtRROhmc13/elVF
-         z+dg==
-X-Gm-Message-State: AOAM531QGNbpDYnoaom/aeuBJR/iITcEO06Azbl0FIAsfhpp0WUKCmDP
-        l5FYp6Ft0Y5vT27+Y3JO/X9yyQ==
-X-Google-Smtp-Source: ABdhPJyM0PjqPIZlBBrcOc/L+rNk+S3zVViqLlxik9IW8PIxUqbzj0SfEK7pvUwiKoa9Oml5VkNn/A==
-X-Received: by 2002:a05:622a:8d:b0:2f3:ba67:a0ba with SMTP id o13-20020a05622a008d00b002f3ba67a0bamr19347798qtw.129.1652789808588;
-        Tue, 17 May 2022 05:16:48 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id o11-20020ac8554b000000b002f3ca56e6edsm625334qtr.8.2022.05.17.05.16.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 05:16:47 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1nqw86-007z0H-QE; Tue, 17 May 2022 09:16:46 -0300
-Date:   Tue, 17 May 2022 09:16:46 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] RDMA: remove null check after call container_of()
-Message-ID: <20220517121646.GE63055@ziepe.ca>
-References: <1652751208-23211-1-git-send-email-baihaowen@meizu.com>
+        Tue, 17 May 2022 08:21:58 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF7645ADC
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:21:57 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nqwD5-0004h1-Nl; Tue, 17 May 2022 14:21:55 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 959A78055C;
+        Tue, 17 May 2022 12:21:54 +0000 (UTC)
+Date:   Tue, 17 May 2022 14:21:53 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Max Staudt <max@enpas.org>
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] can: skb:: move can_dropped_invalid_skb and
+ can_skb_headroom_valid to skb.c
+Message-ID: <20220517122153.4r6n6kkbdslsa2hv@pengutronix.de>
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+ <20220514141650.1109542-1-mailhol.vincent@wanadoo.fr>
+ <20220514141650.1109542-4-mailhol.vincent@wanadoo.fr>
+ <7b1644ad-c117-881e-a64f-35b8d8b40ef7@hartkopp.net>
+ <CAMZ6RqKZMHXB7rQ70GrXcVE7x7kytAAGfE+MOpSgWgWgp0gD2g@mail.gmail.com>
+ <20220517060821.akuqbqxro34tj7x6@pengutronix.de>
+ <CAMZ6RqJ3sXYUOpw7hEfDzj14H-vXK_i+eYojBk2Lq=h=7cm7Jg@mail.gmail.com>
+ <20220517104545.eslountqjppvcnz2@pengutronix.de>
+ <e054f6d4-7ed1-98ac-8364-425f4ef0f760@hartkopp.net>
+ <20220517141404.578d188a.max@enpas.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6yob3xezug2i52qe"
 Content-Disposition: inline
-In-Reply-To: <1652751208-23211-1-git-send-email-baihaowen@meizu.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20220517141404.578d188a.max@enpas.org>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,11 +65,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 09:33:28AM +0800, Haowen Bai wrote:
-> container_of() will never return NULL, so remove useless code.
 
-It is confusing here, but it can be null. If you want to do this then
-you have to split out the _ib_alloc_device call and check it
-seperately.
+--6yob3xezug2i52qe
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Jason
+On 17.05.2022 14:14:04, Max Staudt wrote:
+> > After looking through drivers/net/can/Kconfig I would probably phrase
+> > it like this:
+> >=20
+> > Select CAN devices (hw/sw) -> we compile a can_dev module. E.g. to=20
+> > handle the skb stuff for vcan's.
+> >=20
+> > Select hardware CAN devices -> we compile the netlink stuff into
+> > can_dev and offer CAN_CALC_BITTIMING and CAN_LEDS to be compiled into
+> > can_dev too.
+> >=20
+> > In the latter case: The selection of flexcan, ti_hecc and mcp251xfd=20
+> > automatically selects CAN_RX_OFFLOAD which is then also compiled into=
+=20
+> > can_dev.
+> >=20
+> > Would that fit in terms of complexity?
+>=20
+> IMHO these should always be compiled into can-dev. Out of tree drivers
+> are fairly common here, and having to determine which kind of can-dev
+> (stripped or not) the user has on their system is a nightmare waiting to
+> happen.
+
+I personally don't care about out-of-tree drivers.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--6yob3xezug2i52qe
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKDk14ACgkQrX5LkNig
+013nswf/crAeAo5zG26rSgyiO4+0Drl9nH1Ptc+d3qXd6HIClrOU2nT5hFOvM/K6
+Woz8yqddAltpBRIccYjfYuDD02sR9U+PnhJOFohObcDr1nJiwUR1hKkZdoeKfc6B
+BoMaKtUxX+a54BT3AyzK2hrTm+2SwGEcmzWDkYp6e2HDLlrE66/bP55WleFIGzru
+hbkX387AAnKvUcEPLAb06eoYwOSyXD5I8qouMtHPVkxfRRxgN3Bl4dtvOAPs4m/M
+PK4cTOV+p0mPDWJn9IK1rSr+/oySE+Ashr0YisONu14ayjLaCJ70ZnAPviTpf/p5
+wa5dG4B4FxGhfz8GU7dnfruvfUg30w==
+=gM/F
+-----END PGP SIGNATURE-----
+
+--6yob3xezug2i52qe--

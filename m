@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1F352A060
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 907D752A05B
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345203AbiEQL1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 07:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57682 "EHLO
+        id S1345133AbiEQLZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 07:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiEQL04 (ORCPT
+        with ESMTP id S229760AbiEQLZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 07:26:56 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8F231930;
-        Tue, 17 May 2022 04:26:55 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L2YfR5nbFzGp2r;
-        Tue, 17 May 2022 19:23:59 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.174.58) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 17 May 2022 19:26:53 +0800
-From:   Xiu Jianfeng <xiujianfeng@huawei.com>
-To:     <tj@kernel.org>, <lizefan.x@bytedance.com>, <hannes@cmpxchg.org>
-CC:     <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] cgroup: Make cgroup_debug static
-Date:   Tue, 17 May 2022 19:25:23 +0800
-Message-ID: <20220517112523.243386-1-xiujianfeng@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 17 May 2022 07:25:43 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532AF4BBB5;
+        Tue, 17 May 2022 04:25:40 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1nqvKW-0000ij-Fb; Tue, 17 May 2022 13:25:32 +0200
+Date:   Tue, 17 May 2022 13:25:32 +0200
+From:   Florian Westphal <fw@strlen.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the net-next tree
+Message-ID: <20220517112532.GE5118@breakpoint.cc>
+References: <20220517110303.723a7148@canb.auug.org.au>
+ <20220517190332.4506f7e8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.58]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220517190332.4506f7e8@canb.auug.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,39 +45,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make cgroup_debug static since it's only used in cgroup.c
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> Hi all,
+> 
+> On Tue, 17 May 2022 11:03:03 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > After merging the net-next tree, today's linux-next build (powerpc
+> > ppc64_defconfig) produced this warning:
+> > 
+> > net/netfilter/nf_conntrack_netlink.c:1717:12: warning: 'ctnetlink_dump_one_entry' defined but not used [-Wunused-function]
+> >  1717 | static int ctnetlink_dump_one_entry(struct sk_buff *skb,
+> >       |            ^~~~~~~~~~~~~~~~~~~~~~~~
+> > 
+> > Introduced by commit
+> > 
+> >   8a75a2c17410 ("netfilter: conntrack: remove unconfirmed list")
+> 
+> So for my i386 defconfig build this became on error, so I have applied
+> the following patch for today.
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Tue, 17 May 2022 18:58:43 +1000
+> Subject: [PATCH] fix up for "netfilter: conntrack: remove unconfirmed list"
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
----
- kernel/cgroup/cgroup-internal.h | 1 -
- kernel/cgroup/cgroup.c          | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+Thanks Stephen.
 
-diff --git a/kernel/cgroup/cgroup-internal.h b/kernel/cgroup/cgroup-internal.h
-index 6e36e854b512..5da09c74228d 100644
---- a/kernel/cgroup/cgroup-internal.h
-+++ b/kernel/cgroup/cgroup-internal.h
-@@ -12,7 +12,6 @@
- #define TRACE_CGROUP_PATH_LEN 1024
- extern spinlock_t trace_cgroup_path_lock;
- extern char trace_cgroup_path[TRACE_CGROUP_PATH_LEN];
--extern bool cgroup_debug;
- extern void __init enable_debug_cgroup(void);
- 
- /*
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index adb820e98f24..a97fd051430b 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -96,7 +96,7 @@ EXPORT_SYMBOL_GPL(css_set_lock);
- 
- DEFINE_SPINLOCK(trace_cgroup_path_lock);
- char trace_cgroup_path[TRACE_CGROUP_PATH_LEN];
--bool cgroup_debug __read_mostly;
-+static bool cgroup_debug __read_mostly;
- 
- /*
-  * Protects cgroup_idr and css_idr so that IDs can be released without
--- 
-2.17.1
-
+Acked-by: Florian Westphal <fw@strlen.de>

@@ -2,133 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7467852AE0D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 00:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B21C52ADFD
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 00:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbiEQWXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 18:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
+        id S230397AbiEQWV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 18:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbiEQWXO (ORCPT
+        with ESMTP id S229527AbiEQWV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 18:23:14 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063934CD5D;
-        Tue, 17 May 2022 15:23:14 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id n10so176348pjh.5;
-        Tue, 17 May 2022 15:23:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=e1pWMCgBviY11E7PKryYO1nXt87Yr/reQMp8Kk+5kvg=;
-        b=GyLFU443PaMI0LYXccQ6xTFEe0FAFeKT5j+xLBdobHYlJccRr0wYD1SULa+0LJ15pj
-         CbRXEM4fkhZtwS0vQ3U3VTeaDGY+LJ+7aKRlCmQCHpTctdWeKYYtZewVfGe8xd5dGora
-         a2326aWXbHXwoeRNpiKaQiNGIkT8fjjcoMUvV0zYgsNEiTQq8kzk0XwzAGY9UhMGZkVG
-         oqOHHAMm1erKkxCFKqTrZ29hcu4REYCGyCFw+VPNGFk/6cm4tOWAyOdcEm+R9cov7T7w
-         ua1LeRrX7QsrrypjviQSZokWZn1BshVMJaVq8mnOst44zk1gXTAHU8DOJL7UuNTJQnj3
-         61sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=e1pWMCgBviY11E7PKryYO1nXt87Yr/reQMp8Kk+5kvg=;
-        b=owwOALXnVwtCZUOXBQVfMC3LUt/9oYDWvLOpwVcH2lz47tXEnArpeOCvyV2s+OrBBz
-         San0wD3UoCzS171NUjXbjBssErBlIHue5iSK9ynoN+qLQAiVF/xCSsvEAZ7qXKlh7UzM
-         qcjS2pDIiFbcp5pIqFngVSFq+Raypl45RkkUEcfw4hxxlsrYd6voirQoyTmVR2KDHExm
-         HQgtafLYQ7pVbx2gwPDftFxC762atoeAMUefcowDsONM0XJKcbm0evwBdr0cQXKgzY8U
-         SAW+0Wd9aDVgS9Ft+41qoqSehEyUROdkwNIHFFDoRf2H4q1WixFrCBfiWdsVi58QBkjU
-         Hbrg==
-X-Gm-Message-State: AOAM5310elamjpiRzRPMOPui3wybAXPvwBfJ5iy/cBQ5aX1uLuho66Oz
-        O9kyTYHwx7LhRtdX8WfvuxE=
-X-Google-Smtp-Source: ABdhPJw7+oocr4KRLhZyU1jJUHnJ1T6v3nxM4zdgPK/CSu9aTWwC6DRkyPOHiHR0RbT6tuuSq4thYw==
-X-Received: by 2002:a17:902:e850:b0:15f:3641:9cf3 with SMTP id t16-20020a170902e85000b0015f36419cf3mr24720729plg.30.1652826193434;
-        Tue, 17 May 2022 15:23:13 -0700 (PDT)
-Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id x11-20020a170902a38b00b0015e9d4a5d27sm131394pla.23.2022.05.17.15.23.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 15:23:13 -0700 (PDT)
-Date:   Tue, 17 May 2022 15:21:00 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Christophe de Dinechin <dinechin@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] bitmap: Fix return values to be unsigned
-Message-ID: <YoQfzJGaDF5BQ7E4@yury-laptop>
-References: <20220517212234.868181-1-keescook@chromium.org>
+        Tue, 17 May 2022 18:21:26 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DFD28E18;
+        Tue, 17 May 2022 15:21:25 -0700 (PDT)
+Date:   Tue, 17 May 2022 22:21:21 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652826082;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JvThGW9rVy0Y7k8i4EwpLIQqeX5s0xfJpDrQQUJOyDU=;
+        b=IXSwyGFSHO4ns+FEmYrkmWjTHXnLOcStFOStsyc0d5XjgPj2KVCMWvALHptEL+U36enodN
+        wD/m+URpVwkJI520Th1vposIfKH7jeNKKOBnw3fx6NbHBiLd3I33NDuHes9aDtJIFik9Ee
+        LY60Y6vNG+1bOT48PXqH3xkyeLzmfiMyiGOKnb3p2wWCGHP4TvHDRz5fZ9IJjmu19XtZGS
+        conlonApUyuBaIwXsWmAhekaQmASArMntB3jmqRo2LKMiXzELcF1sTlCYAAXyBlVjIlXZY
+        6YlsfqWtsiA3HWq6U6fZXCJjqotpuSD6ofMGJLLw5pqk/iEz10d5tl3Bsov59g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652826082;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JvThGW9rVy0Y7k8i4EwpLIQqeX5s0xfJpDrQQUJOyDU=;
+        b=+E8ZB2hhEGZhHVeI0xdvszJaknwjE4bg4ceHvZcpCkHMx7xbvzsFXh3YobJ1asvPCCTnYA
+        Obsk5BXw4MqlRtCA==
+From:   "tip-bot2 for Uros Bizjak" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: locking/core] locking/atomic/x86: Introduce arch_try_cmpxchg64
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220515184205.103089-3-ubizjak@gmail.com>
+References: <20220515184205.103089-3-ubizjak@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220517212234.868181-1-keescook@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <165282608130.4207.11491865757790296043.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 02:22:32PM -0700, Kees Cook wrote:
-> Hi,
-> 
-> As mentioned in the last patch:
-> 
-> Both nodemask and bitmap routines had mixed return values that provided
-> potentially signed results that could never happen. This was leading to
-> the compiler getting confusing about the range of possible return values
-> (it was thinking things could be negative where they could not be). Fix
-> all the nodemask and bitmap routines that should be returning unsigned
-> (or bool) values. Silences GCC 12 warnings:
-> 
->  mm/swapfile.c: In function ‘setup_swap_info’:
->  mm/swapfile.c:2291:47: error: array subscript -1 is below array bounds of ‘struct plist_node[]’ [-Werror=array-bounds]
->   2291 |                                 p->avail_lists[i].prio = 1;
->        |                                 ~~~~~~~~~~~~~~^~~
->  In file included from mm/swapfile.c:16:
->  ./include/linux/swap.h:292:27: note: while referencing ‘avail_lists’
->    292 |         struct plist_node avail_lists[]; /*
->        |                           ^~~~~~~~~~~
-> 
-> This splits up the patch into the bitmap and nodemask halves, and drops
-> a needless change to the random node helper.
-> 
-> I note that Alexey and Rasmus touched on this area in the past, fixing
-> up node ids to be unsigned:
-> 
-> ce0725f78a56 ("numa: make "nr_online_nodes" unsigned int")
-> b9726c26dc21 ("numa: make "nr_node_ids" unsigned int")
-> 33c4fa8c6763 ("linux/nodemask.h: update bitmap wrappers to take unsigned int")
-> 
-> If anyone else would like to carry this, please let me know. I'm happy
-> to carry it in my tree.
+The following commit has been merged into the locking/core branch of tip:
 
-I think it should go thru my tree, if no objections.
+Commit-ID:     c2df0a6af177b6c06a859806a876f92b072dc624
+Gitweb:        https://git.kernel.org/tip/c2df0a6af177b6c06a859806a876f92b072dc624
+Author:        Uros Bizjak <ubizjak@gmail.com>
+AuthorDate:    Sun, 15 May 2022 20:42:04 +02:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Wed, 18 May 2022 00:08:28 +02:00
+
+locking/atomic/x86: Introduce arch_try_cmpxchg64
+
+Introduce arch_try_cmpxchg64 for 64-bit and 32-bit targets to improve
+code using cmpxchg64.  On 64-bit targets, the generated assembly improves
+from:
+
+  ab:	89 c8                	mov    %ecx,%eax
+  ad:	48 89 4c 24 60       	mov    %rcx,0x60(%rsp)
+  b2:	83 e0 fd             	and    $0xfffffffd,%eax
+  b5:	89 54 24 64          	mov    %edx,0x64(%rsp)
+  b9:	88 44 24 60          	mov    %al,0x60(%rsp)
+  bd:	48 89 c8             	mov    %rcx,%rax
+  c0:	c6 44 24 62 f2       	movb   $0xf2,0x62(%rsp)
+  c5:	48 8b 74 24 60       	mov    0x60(%rsp),%rsi
+  ca:	f0 49 0f b1 34 24    	lock cmpxchg %rsi,(%r12)
+  d0:	48 39 c1             	cmp    %rax,%rcx
+  d3:	75 cf                	jne    a4 <t+0xa4>
+
+to:
+
+  b3:	89 c2                	mov    %eax,%edx
+  b5:	48 89 44 24 60       	mov    %rax,0x60(%rsp)
+  ba:	83 e2 fd             	and    $0xfffffffd,%edx
+  bd:	89 4c 24 64          	mov    %ecx,0x64(%rsp)
+  c1:	88 54 24 60          	mov    %dl,0x60(%rsp)
+  c5:	c6 44 24 62 f2       	movb   $0xf2,0x62(%rsp)
+  ca:	48 8b 54 24 60       	mov    0x60(%rsp),%rdx
+  cf:	f0 48 0f b1 13       	lock cmpxchg %rdx,(%rbx)
+  d4:	75 d5                	jne    ab <t+0xab>
+
+where a move and a compare after cmpxchg is saved.  The improvements
+for 32-bit targets are even more noticeable, because dual-word compare
+after cmpxchg8b gets eliminated.
+
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20220515184205.103089-3-ubizjak@gmail.com
+---
+ arch/x86/include/asm/cmpxchg_32.h | 21 +++++++++++++++++++++
+ arch/x86/include/asm/cmpxchg_64.h |  6 ++++++
+ 2 files changed, 27 insertions(+)
+
+diff --git a/arch/x86/include/asm/cmpxchg_32.h b/arch/x86/include/asm/cmpxchg_32.h
+index 0a7fe03..215f5a6 100644
+--- a/arch/x86/include/asm/cmpxchg_32.h
++++ b/arch/x86/include/asm/cmpxchg_32.h
+@@ -42,6 +42,9 @@ static inline void set_64bit(volatile u64 *ptr, u64 value)
+ #define arch_cmpxchg64_local(ptr, o, n)					\
+ 	((__typeof__(*(ptr)))__cmpxchg64_local((ptr), (unsigned long long)(o), \
+ 					       (unsigned long long)(n)))
++#define arch_try_cmpxchg64(ptr, po, n)					\
++	__try_cmpxchg64((ptr), (unsigned long long *)(po), \
++			(unsigned long long)(n))
+ #endif
  
-> -Kees
-> 
-> Kees Cook (2):
->   bitmap: Fix return values to be unsigned
->   nodemask: Fix return values to be unsigned
-
-Can you please also add patch for tools?
-
-Thanks,
-Yury
-
->  include/linux/bitmap.h   | 14 +++++++-------
->  include/linux/nodemask.h | 38 +++++++++++++++++++-------------------
->  lib/bitmap.c             | 28 ++++++++++++++--------------
->  lib/nodemask.c           |  2 +-
->  4 files changed, 41 insertions(+), 41 deletions(-)
-> 
-> -- 
-> 2.32.0
+ static inline u64 __cmpxchg64(volatile u64 *ptr, u64 old, u64 new)
+@@ -70,6 +73,24 @@ static inline u64 __cmpxchg64_local(volatile u64 *ptr, u64 old, u64 new)
+ 	return prev;
+ }
+ 
++static inline bool __try_cmpxchg64(volatile u64 *ptr, u64 *pold, u64 new)
++{
++	bool success;
++	u64 old = *pold;
++	asm volatile(LOCK_PREFIX "cmpxchg8b %[ptr]"
++		     CC_SET(z)
++		     : CC_OUT(z) (success),
++		       [ptr] "+m" (*ptr),
++		       "+A" (old)
++		     : "b" ((u32)new),
++		       "c" ((u32)(new >> 32))
++		     : "memory");
++
++	if (unlikely(!success))
++		*pold = old;
++	return success;
++}
++
+ #ifndef CONFIG_X86_CMPXCHG64
+ /*
+  * Building a kernel capable running on 80386 and 80486. It may be necessary
+diff --git a/arch/x86/include/asm/cmpxchg_64.h b/arch/x86/include/asm/cmpxchg_64.h
+index 072e545..250187a 100644
+--- a/arch/x86/include/asm/cmpxchg_64.h
++++ b/arch/x86/include/asm/cmpxchg_64.h
+@@ -19,6 +19,12 @@ static inline void set_64bit(volatile u64 *ptr, u64 val)
+ 	arch_cmpxchg_local((ptr), (o), (n));				\
+ })
+ 
++#define arch_try_cmpxchg64(ptr, po, n)					\
++({									\
++	BUILD_BUG_ON(sizeof(*(ptr)) != 8);				\
++	arch_try_cmpxchg((ptr), (po), (n));				\
++})
++
+ #define system_has_cmpxchg_double() boot_cpu_has(X86_FEATURE_CX16)
+ 
+ #endif /* _ASM_X86_CMPXCHG_64_H */

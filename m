@@ -2,135 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BE5152A0BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97DE052A0C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345475AbiEQLxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 07:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34952 "EHLO
+        id S1345506AbiEQLxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 07:53:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbiEQLxM (ORCPT
+        with ESMTP id S230254AbiEQLxp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 07:53:12 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354B62F390
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:53:11 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id 204so16675371pfx.3
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:53:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CVgegZfYyke/xy3ajF4ERWjyVdzQLTtIY0n6Ao3JXc0=;
-        b=lSW/P0b3k3p66ylal3rfH5748HQl8RXVC8gtA/IkQnIK0pD63m7chLp/uej+sYTVVg
-         u/GJSgWgb8vKD9tu2FxJXllCuER2L42QXKQiKHQNbdFISzaNLuXR0ErQA/uG1ctd1NXa
-         zTjaDPGsBmQXG1NT5mmBr1+ZG7/olsnwp5phb44w9nSxoDBETBVXsGLE+XNv9PQn1R9x
-         iKPjpXgs3AS1Ls8QfEOxa3AXRVYHLdb+f22Uylmi3lVTzOKgx3Q1JdJcAGE90Jo3LF9Y
-         rebP7uwhdg8sXlK0hLUBMFq9AKjKU2wmka6ILGSy0vLvrRxrSu/FE96UylEC8x/2MNXW
-         7mrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CVgegZfYyke/xy3ajF4ERWjyVdzQLTtIY0n6Ao3JXc0=;
-        b=79qnegYokQTQDH4DjkctWQlrZNBTBjvuwV6FcXlvpxFIMpQaMd6OnphAuSJZe/ej5k
-         A5tbH+iOJmfD+VYqN3sRhZKnJSAz5poSIhWrtyzkJHlv4K9YgoQT4sXisqXisZhz/dZm
-         fw52sBp0C2vVPwnMMzAB8lP7h2sJRzcJJuLRbZXfCh6b4FCPUQH7ECJGlDDpguT5z6gq
-         IwxiRGmT1WSzE7C8eR2x+tr/H3kKU2SdnPdWkQsspsnvpJ3LAFxBu/FIBvV0bs5bbQPL
-         lZtqAYKM8yB+QS94cGvC7g0uZeHp2SsCL3/emO5QLkG0zn6fKpNzG6LL0iWBfd0iwZwY
-         E7Ng==
-X-Gm-Message-State: AOAM532Dj76++DesQ5g6P4xtfrUtbFgjBiFmgkX7VTxzpX84ahYMcjuM
-        vdcSx1hmXpqbZqbiudyXubU=
-X-Google-Smtp-Source: ABdhPJxRtoCo+i5tFV+cQxsgNEs1aFQJFfBRf0uqUhicibOKg24YxH4y0Pvt4vfr+oAHE/fmF1XOYA==
-X-Received: by 2002:a62:d445:0:b0:50d:b868:47bc with SMTP id u5-20020a62d445000000b0050db86847bcmr21959290pfl.73.1652788390678;
-        Tue, 17 May 2022 04:53:10 -0700 (PDT)
-Received: from hyeyoo ([114.29.24.243])
-        by smtp.gmail.com with ESMTPSA id a3-20020a1709027d8300b0015e8d4eb26dsm8829443plm.183.2022.05.17.04.53.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 04:53:09 -0700 (PDT)
-Date:   Tue, 17 May 2022 20:53:03 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
+        Tue, 17 May 2022 07:53:45 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01B432EE2
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:53:43 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24HBJxPK009345;
+        Tue, 17 May 2022 11:53:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=7M/AUCM5LDndiMCVtoFCjZbAO3V6u+Lryd3PMq1ph9g=;
+ b=Z17EwHjI4EQHfHrHIq7DOav7jIoRrA/eMGq6U5KcMa9LV4aFOSDTkjmhz7QVKsRnxDaU
+ gn4CXSzsOrq51GWavQLTiV8w6aP8L5ulViRVfs6BF4KMw6sET+EW+Q7j0j38xrTIR0TY
+ V7+FR05XogTIQNjLuyAqg2UtZMfKq4evMHmWrjeeC+mIedBzET3HIAWL8mHl/NWahnjI
+ 16H5uGoNTVbKoaHungXtO6KuaPJUx4MFaKqb7Z++bRHLVZeSEFZOyHLm7GCJm/O4apEB
+ CicabWlOPnogPjxaDGAHXXsHTpl35P9vG1HBgG4XoK7jWY/hbT5HvFkvQQlE3CTcRxjL nQ== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4ar78nq3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 May 2022 11:53:28 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24HBqQG1026043;
+        Tue, 17 May 2022 11:53:26 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03ams.nl.ibm.com with ESMTP id 3g2429c59a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 May 2022 11:53:26 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24HBrNb457737684
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 17 May 2022 11:53:24 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DF582A405C;
+        Tue, 17 May 2022 11:53:23 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 96AA2A4054;
+        Tue, 17 May 2022 11:53:23 +0000 (GMT)
+Received: from osiris (unknown [9.145.73.41])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue, 17 May 2022 11:53:23 +0000 (GMT)
+Date:   Tue, 17 May 2022 13:53:22 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     Sven Schnelle <svens@linux.ibm.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        David Rientjes <rientjes@google.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Christoph Lameter <cl@linux.com>, kernel@openvz.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@suse.com>
-Subject: Re: [PATCH] tracing: add ACCOUNT flag for allocations from marked
- slab caches
-Message-ID: <YoOMn+Cwwgz/hPnh@hyeyoo>
-References: <1fd21e25-b095-e055-fc2e-abda640a0575@openvz.org>
-MIME-Version: 1.0
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mapletree-vs-khugepaged
+Message-ID: <YoOMsmq24FWsWWyr@osiris>
+References: <20220428172040.GA3623323@roeck-us.net>
+ <YmvVkKXJWBoGqWFx@osiris>
+ <yt9dk0apbicu.fsf@linux.ibm.com>
+ <20220513165955.mkg5wvfi4dwpzoer@revolver>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1fd21e25-b095-e055-fc2e-abda640a0575@openvz.org>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220513165955.mkg5wvfi4dwpzoer@revolver>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: -NdFa35NCeB_6brhUSOoTgn0ddyOZKaX
+X-Proofpoint-GUID: -NdFa35NCeB_6brhUSOoTgn0ddyOZKaX
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-17_02,2022-05-17_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 impostorscore=0 lowpriorityscore=0 suspectscore=0
+ mlxscore=0 mlxlogscore=807 malwarescore=0 bulkscore=0 adultscore=0
+ clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205170069
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 09:53:32PM +0300, Vasily Averin wrote:
-> Slab caches marked with SLAB_ACCOUNT force accounting for every
-> allocation from this cache even if __GFP_ACCOUNT flag is not passed.
-> Unfortunately, at the moment this flag is not visible in ftrace output,
-> and this makes it difficult to analyze the accounted allocations.
+On Fri, May 13, 2022 at 05:00:31PM +0000, Liam Howlett wrote:
+> * Sven Schnelle <svens@linux.ibm.com> [220513 10:46]:
+> > Heiko Carstens <hca@linux.ibm.com> writes:
+> > > FWIW, same on s390 - linux-next is completely broken. Note: I didn't
+> > > bisect, but given that the call trace, and even the failing address
+> > > match, I'm quite confident it is the same reason.
+> > IS that issue supposed to be fixed? git bisect pointed me to
+> > 
+> > # bad: [76535d42eb53485775a8c54ea85725812b75543f] Merge branch
+> >   'mm-everything' of
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> > 
+> > which isn't really helpful.
+> > 
+> > Anything we could help with debugging this?
 > 
-> This patch adds the __GFP_ACCOUNT flag for allocations from slab caches
-> marked with SLAB_ACCOUNT to the ftrace output.
+> I tested the maple tree on top of the s390 as it was the same crash and
+> it was okay.  I haven't tested the mm-everything branch though.  Can you
+> test mm-unstable?
 > 
-> Signed-off-by: Vasily Averin <vvs@openvz.org>
-> ---
->  mm/slab.c | 3 +++
->  mm/slub.c | 3 +++
->  2 files changed, 6 insertions(+)
-> 
-> diff --git a/mm/slab.c b/mm/slab.c
-> index 0edb474edef1..4c3da8dfcbdb 100644
-> --- a/mm/slab.c
-> +++ b/mm/slab.c
-> @@ -3492,6 +3492,9 @@ void *__kmem_cache_alloc_lru(struct kmem_cache *cachep, struct list_lru *lru,
->  {
->  	void *ret = slab_alloc(cachep, lru, flags, cachep->object_size, _RET_IP_);
->  
-> +	if (cachep->flags & SLAB_ACCOUNT)
-> +		flags |= __GFP_ACCOUNT;
-> +
->  	trace_kmem_cache_alloc(_RET_IP_, ret,
->  			       cachep->object_size, cachep->size, flags);
->  
-> diff --git a/mm/slub.c b/mm/slub.c
-> index ed5c2c03a47a..670bbfef9e49 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -3231,6 +3231,9 @@ void *__kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
->  {
->  	void *ret = slab_alloc(s, lru, gfpflags, _RET_IP_, s->object_size);
->  
-> +	if (s->flags & SLAB_ACCOUNT)
-> +		gfpflags |= __GFP_ACCOUNT;
-> +
->  	trace_kmem_cache_alloc(_RET_IP_, ret, s->object_size,
->  				s->size, gfpflags);
->  
-> -- 
-> 2.25.1
-> 
-> 
+> I'll continue setting up a sparc VM for testing here and test
+> mm-everything on that and the s390
 
-To me it sounds like it would confuse memory cgroup because:
-	1) For now objects are charged only in slab memcg hooks
-	2) This patch makes buddy allocator charge the page too
+So due to reports here I did some sort of "special bisect": with today's
+linux-next I did a hard reset to commit 562340595cbb ("Merge branch
+'for-next/kspp' of
+git://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git"),
+started a bisect on Andrew's tree between mm-stable and mm-unstable, and
+merged whatever commit was about to be bisected into 562340595cbb.
 
--- 
-Thanks,
-Hyeonggon
+This lead finally to commit f1297d3a2cb7 ("mm/mmap: reorganize munmap to
+use maple states") as "first bad commit".
+
+So given that we are shortly before the merge window and linux-next is
+completely broken for s390, how do we proceed? Right now I have no idea if
+there is anything else in linux-next that would break s390 because of this.
+
+Even though I'm sure you won't like to hear this, but I'd appreciate if
+this code could be removed from linux-next again.

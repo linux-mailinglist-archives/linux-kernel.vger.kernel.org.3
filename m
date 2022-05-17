@@ -2,62 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7026452A169
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD5552A16C
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345963AbiEQMYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 08:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51330 "EHLO
+        id S1344575AbiEQMZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 08:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243673AbiEQMYm (ORCPT
+        with ESMTP id S1345972AbiEQMZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 08:24:42 -0400
-Received: from azure-sdnproxy-3.icoremail.net (azure-sdnproxy.icoremail.net [20.232.28.96])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id C45B647047;
-        Tue, 17 May 2022 05:24:38 -0700 (PDT)
-Received: by ajax-webmail-mail-app4 (Coremail) ; Tue, 17 May 2022 20:24:35
- +0800 (GMT+08:00)
-X-Originating-IP: [124.236.130.193]
-Date:   Tue, 17 May 2022 20:24:35 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net] NFC: hci: fix sleep in atomic context bugs in
- nfc_hci_hcp_message_tx
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <171c13bb-9fc9-0807-e872-6859dfa2603d@linaro.org>
-References: <20220516021028.54063-1-duoming@zju.edu.cn>
- <d5fdfe27-a6de-3030-ce51-9f4f45d552f3@linaro.org>
- <6aba1413.196eb.180cc609bf1.Coremail.duoming@zju.edu.cn>
- <ea2af2f9-002a-5681-4293-a05718ce9dcd@linaro.org>
- <fc6a78c.196ab.180d1a98cc9.Coremail.duoming@zju.edu.cn>
- <171c13bb-9fc9-0807-e872-6859dfa2603d@linaro.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Tue, 17 May 2022 08:25:21 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B1048392
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:25:19 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id i8so3247185plr.13
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:25:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=IrIkpbmuHKrrFsBUcjgqjjP93rmoX31NTGTCvMbPP4Y=;
+        b=NBnYbNP+J+JpzURJ6Bf3exMaOrCVSX0qu7AbJU/g5utF6PrfU0h0Z3iopcGlBvlMaC
+         GPNDDKiTgAOxADt5l7Ze5F7iIYg0EeQWUaoI2NkGxf4FSSIbbwRwWPxUNQHvoCM9b3Fd
+         RbW2rvRzAo+Kf46ym8S/g4GDjZXkuFzjGEU4H3BLIEeBLDIPm0KvzYVaZDnPOKrlJalB
+         LrmgUM3YBO579B1Rq/5vGNGBTpVc80eg0Z+iMNjWSBL4pDDBAUriFACI5YQWiy0QYXAt
+         foThqezPvxPmiwv0HisQ9imencOBCyxh/lJ9aQxB2Y3NH3Iqr81CvzDrcRTWh0DqwQ6S
+         gtwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IrIkpbmuHKrrFsBUcjgqjjP93rmoX31NTGTCvMbPP4Y=;
+        b=lcEwYTNtQBnQ2ruBXzgbrF4BhApPZbQ4hxY5Ob6YnG0T2oz2Hu0FGb7prny2H3GrU5
+         8wm/ktWz2Y3Ef74W7794xYiwS5or3Gz1Fono7MNr2262xwDjYNDtYSQWuo8k3bwfmpl+
+         QGCV1eIvs92jTGG0EHsEhQCbAviHgPxnz6cnMaJBlXngCM42LGcIzt0MquT98gESvCKg
+         aoIO7Q0FMnQSskx93oBv1YSr6kBt5LDTUJpt+R4j4jtaSN+chfZdXGqNPCG+APIY0v/V
+         IILOthVg/wevA/g57JS2oRn5UVyFem+HC4/TqgYg2hbuCTswUU9c73iKZhg9JF2lonvq
+         II4g==
+X-Gm-Message-State: AOAM531tCImGYe1Sr5VARDxLXoASvx2grvFRUaPFFKmgpjfZNq634xbJ
+        kIjqqGOAXXex4AFeIg0LCLwZfwnN/Tr5tg==
+X-Google-Smtp-Source: ABdhPJz+aD1l14DXBGFrAfTzh04KGDyvg7BAjkXVZnm/y60aPmtYxeB2+8D7hg4SfmHCGxIXoIkF7g==
+X-Received: by 2002:a17:90b:4a51:b0:1df:7617:bcfb with SMTP id lb17-20020a17090b4a5100b001df7617bcfbmr6584943pjb.207.1652790319084;
+        Tue, 17 May 2022 05:25:19 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id b8-20020a17090a990800b001df6216e89dsm1542814pjp.28.2022.05.17.05.25.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 05:25:18 -0700 (PDT)
+Message-ID: <d503d5ff-4bc5-2bd0-00d3-cd7b0a0724cb@kernel.dk>
+Date:   Tue, 17 May 2022 06:25:17 -0600
 MIME-Version: 1.0
-Message-ID: <147574ae.199bb.180d1fa2bba.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cS_KCgDXQCADlINiGyFbAA--.8584W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgcNAVZdtZvEjQAAsl
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VW7Jw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [REPORT] Use-after-free Read in __fdget_raw in v5.10.y
+Content-Language: en-US
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <YoOJ/T4QRKC+fAZE@google.com>
+ <97cba3e1-4ef7-0a17-8456-e0787d6702c6@kernel.dk>
+ <YoOT7Cyobsed5IE3@google.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <YoOT7Cyobsed5IE3@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpPbiBUdWUsIDE3IE1heSAyMDIyIDEzOjM5OjQ0ICswMjAwIHdyb3RlOgoKPiBZb3Ug
-c2VudCB2MiBvbmUgbWludXRlIGJlZm9yZSByZXBseWluZyBoZXJlLi4uIHRoYXQncyBub3QgaG93
-IGRpc2N1c3Npb24KPiB3b3JrLiBQbGVhc2UgZG8gbm90IHNlbnQgbmV4dCB2ZXJzaW9uIGJlZm9y
-ZSByZWFjaGluZyBzb21lIGNvbnNlbnN1cy4KCkkgYW0gc29ycnkuIEJlZm9yZSByZWFjaGluZyBz
-b21lIGNvbnNlbnN1cywgSSB3aWxsIG5vdCBzZW5kIG5leHQgdmVyc2lvbiBpbiB0aGUgZnV0dXJl
-LgpUaGFua3MgZm9yIHlvdXIgZ3VpZGFuY2UuCgpCZXN0IHJlZ2FyZHMsCkR1b21pbmcgWmhvdQo=
+On 5/17/22 6:24 AM, Lee Jones wrote:
+> On Tue, 17 May 2022, Jens Axboe wrote:
+> 
+>> On 5/17/22 5:41 AM, Lee Jones wrote:
+>>> Good afternoon Jens, Pavel, et al.,
+>>>
+>>> Not sure if you are presently aware, but there appears to be a
+>>> use-after-free issue affecting the io_uring worker driver (fs/io-wq.c)
+>>> in Stable v5.10.y.
+>>>
+>>> The full sysbot report can be seen below [0].
+>>>
+>>> The C-reproducer has been placed below that [1].
+>>>
+>>> I had great success running this reproducer in an infinite loop.
+>>>
+>>> My colleague reverse-bisected the fixing commit to:
+>>>
+>>>   commit fb3a1f6c745ccd896afadf6e2d6f073e871d38ba
+>>>   Author: Jens Axboe <axboe@kernel.dk>
+>>>   Date:   Fri Feb 26 09:47:20 2021 -0700
+>>>
+>>>        io-wq: have manager wait for all workers to exit
+>>>
+>>>        Instead of having to wait separately on workers and manager, just have
+>>>        the manager wait on the workers. We use an atomic_t for the reference
+>>>        here, as we need to start at 0 and allow increment from that. Since the
+>>>        number of workers is naturally capped by the allowed nr of processes,
+>>>        and that uses an int, there is no risk of overflow.
+>>>
+>>>        Signed-off-by: Jens Axboe <axboe@kernel.dk>
+>>>
+>>>     fs/io-wq.c | 30 ++++++++++++++++++++++--------
+>>>     1 file changed, 22 insertions(+), 8 deletions(-)
+>>
+>> Does this fix it:
+>>
+>> commit 886d0137f104a440d9dfa1d16efc1db06c9a2c02
+>> Author: Jens Axboe <axboe@kernel.dk>
+>> Date:   Fri Mar 5 12:59:30 2021 -0700
+>>
+>>     io-wq: fix race in freeing 'wq' and worker access
+>>
+>> Looks like it didn't make it into 5.10-stable, but we can certainly
+>> rectify that.
+> 
+> Thanks for your quick response Jens.
+> 
+> This patch doesn't apply cleanly to v5.10.y.
+
+This is probably why it never made it into 5.10-stable :-/
+
+> I'll have a go at back-porting it.  Please bear with me.
+
+Let me know if you into issues with that and I can help out.
+
+-- 
+Jens Axboe
 

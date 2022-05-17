@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4520152A9E2
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22EE152A9DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351742AbiEQSED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 14:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38732 "EHLO
+        id S1351807AbiEQSEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 14:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351749AbiEQSDk (ORCPT
+        with ESMTP id S1351755AbiEQSDm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 14:03:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 670FF3FD82
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:03:39 -0700 (PDT)
+        Tue, 17 May 2022 14:03:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A3243FD82
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:03:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652810618;
+        s=mimecast20190719; t=1652810620;
         h=from:from:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CnCWlrvOuByIlEVDNDjERkUYUe621hDfK19VjaNe7rI=;
-        b=jQS1uYfBwR0GSPUsN9ymQGqhLILTRZs1dPSpOjLOBxDiPoQBnxuLtqmkdzacrPAXiJrlmF
-        qcVX3kmx7/iRyljjkU6iFlIW8hSucBbQ2v9cFJeqfya4ZTQyroLV0tstIqKD9e01gT5Y64
-        JEcDBl2WvJF4Jfh/b3vMkSbRjkQFd7I=
+        bh=pYMVqMFm1U/Csh/eNKPFnJ0fYLpXDdjO8eETCSzIUiY=;
+        b=WDxOgIsFQ9Q4pniRNsz52B8zCNYNzDNTnifl4mqK0sbQShnU7iVetUoZWpKwwD96767Q5M
+        Wj0i59QeCiIaHU+RzVio7gbVY2kUURXjP9Efgw9HzVOjyumJ51fytcAg3jX6IzcrIt+fSk
+        ZlduFSmnTP9MF2j3NWm1KJPL39d3Zug=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-661-uxq5u6OMMA6XcMYme95wZA-1; Tue, 17 May 2022 14:03:35 -0400
-X-MC-Unique: uxq5u6OMMA6XcMYme95wZA-1
+ us-mta-26-H_9N_WmiO9GqAi7YwU1VNA-1; Tue, 17 May 2022 14:03:36 -0400
+X-MC-Unique: H_9N_WmiO9GqAi7YwU1VNA-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A7AA52999B20;
-        Tue, 17 May 2022 18:03:34 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A40573C16199;
+        Tue, 17 May 2022 18:03:35 +0000 (UTC)
 Received: from dqiao.bos.com (unknown [10.22.10.187])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4EFB540CF8F0;
-        Tue, 17 May 2022 18:03:34 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4DF0D400DFB5;
+        Tue, 17 May 2022 18:03:35 +0000 (UTC)
 From:   Donghai Qiao <dqiao@redhat.com>
 To:     akpm@linux-foundation.org, sfr@canb.auug.org.au, arnd@arndb.de,
         peterz@infradead.org, heying24@huawei.com,
@@ -45,9 +45,9 @@ To:     akpm@linux-foundation.org, sfr@canb.auug.org.au, arnd@arndb.de,
         rdunlap@infradead.org, tglx@linutronix.de, gor@linux.ibm.com
 Cc:     donghai.w.qiao@gmail.com, linux-kernel@vger.kernel.org,
         Donghai Qiao <dqiao@redhat.com>
-Subject: [PATCH v3 04/11] smp: replace smp_call_function_single() with  smp_call()
-Date:   Tue, 17 May 2022 14:03:19 -0400
-Message-Id: <20220517180326.997129-5-dqiao@redhat.com>
+Subject: [PATCH v3 05/11] smp: replace smp_call_function_single_async with smp_call_csd
+Date:   Tue, 17 May 2022 14:03:20 -0400
+Message-Id: <20220517180326.997129-6-dqiao@redhat.com>
 In-Reply-To: <20220517180326.997129-1-dqiao@redhat.com>
 References: <20220517180326.997129-1-dqiao@redhat.com>
 Reply-To: dqiao@redhat.com
@@ -64,128 +64,220 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eliminated the percpu global csd_data and temporarily hooked up
-smp_call_function_single() to smp_call().
+Replaced smp_call_function_single_async with smp_call_csd and extended
+it to support one CPU synchronous call with preallocated csd structure.
 
 Signed-off-by: Donghai Qiao <dqiao@redhat.com>
 ---
-v1 -> v2: Removed 'x' from the function names and change XCALL to
+v1 -> v2: removed 'x' from the function names and change XCALL to
 	  SMP_CALL from the new macros
- kernel/smp.c | 74 ++++++++++++++++++----------------------------------
- 1 file changed, 25 insertions(+), 49 deletions(-)
+v2 -> v3: Changed the call of smp_call_private() to smp_call_csd()
+ include/linux/smp.h |   3 +-
+ kernel/smp.c        | 157 ++++++++++++++++++++------------------------
+ 2 files changed, 75 insertions(+), 85 deletions(-)
 
-diff --git a/kernel/smp.c b/kernel/smp.c
-index 101a48d1d8af..8fdea9547502 100644
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -414,8 +414,6 @@ static __always_inline void csd_unlock(struct __call_single_data *csd)
- 	smp_store_release(&csd->node.u_flags, 0);
- }
+diff --git a/include/linux/smp.h b/include/linux/smp.h
+index 06a20454fd53..b4885e45690b 100644
+--- a/include/linux/smp.h
++++ b/include/linux/smp.h
+@@ -193,7 +193,8 @@ int smp_call_function_single(int cpuid, smp_call_func_t func, void *info,
+ void on_each_cpu_cond_mask(smp_cond_func_t cond_func, smp_call_func_t func,
+ 			   void *info, bool wait, const struct cpumask *mask);
  
--static DEFINE_PER_CPU_SHARED_ALIGNED(call_single_data_t, csd_data);
--
- void __smp_call_single_queue(int cpu, struct llist_node *node)
- {
- #ifdef CONFIG_CSD_LOCK_WAIT_DEBUG
-@@ -649,6 +647,9 @@ void flush_smp_call_function_from_idle(void)
- }
+-int smp_call_function_single_async(int cpu, struct __call_single_data *csd);
++#define	smp_call_function_single_async(cpu, csd) \
++	smp_call_csd(cpu, csd, SMP_CALL_TYPE_ASYNC)
  
  /*
-+ * This is a temporarily hook up. This function will be eliminated
-+ * with a later patch in this series.
-+ *
-  * smp_call_function_single - Run a function on a specific CPU
-  * @func: The function to run. This must be fast and non-blocking.
-  * @info: An arbitrary pointer to pass to the function.
-@@ -657,59 +658,21 @@ void flush_smp_call_function_from_idle(void)
-  * Returns 0 on success, else a negative status code.
-  */
- int smp_call_function_single(int cpu, smp_call_func_t func, void *info,
--			     int wait)
-+			int wait)
- {
--	call_single_data_t *csd;
--	call_single_data_t csd_stack = {
--		.node = { .u_flags = CSD_FLAG_LOCK | CSD_TYPE_SYNC, },
--	};
--	int this_cpu;
--	int err;
--
--	/*
--	 * prevent preemption and reschedule on another processor,
--	 * as well as CPU removal
--	 */
--	this_cpu = get_cpu();
--
--	/*
--	 * Can deadlock when called with interrupts disabled.
--	 * We allow cpu's that are not yet online though, as no one else can
--	 * send smp call function interrupt to this cpu and as such deadlocks
--	 * can't happen.
--	 */
--	WARN_ON_ONCE(cpu_online(this_cpu) && irqs_disabled()
--		     && !oops_in_progress);
-+	unsigned int flags = 0;
+  * Cpus stopping functions in panic. All have default weak definitions.
+diff --git a/kernel/smp.c b/kernel/smp.c
+index 8fdea9547502..f08135ad70e3 100644
+--- a/kernel/smp.c
++++ b/kernel/smp.c
+@@ -444,41 +444,6 @@ void __smp_call_single_queue(int cpu, struct llist_node *node)
+ 		send_call_function_single_ipi(cpu);
+ }
  
--	/*
--	 * When @wait we can deadlock when we interrupt between llist_add() and
--	 * arch_send_call_function_ipi*(); when !@wait we can deadlock due to
--	 * csd_lock() on because the interrupt context uses the same csd
--	 * storage.
--	 */
--	WARN_ON_ONCE(!in_task());
+-/*
+- * Insert a previously allocated call_single_data_t element
+- * for execution on the given CPU. data must already have
+- * ->func, ->info, and ->flags set.
+- */
+-static int generic_exec_single(int cpu, struct __call_single_data *csd)
+-{
+-	if (cpu == smp_processor_id()) {
+-		smp_call_func_t func = csd->func;
+-		void *info = csd->info;
+-		unsigned long flags;
 -
--	csd = &csd_stack;
--	if (!wait) {
--		csd = this_cpu_ptr(&csd_data);
--		csd_lock(csd);
+-		/*
+-		 * We can unlock early even for the synchronous on-stack case,
+-		 * since we're doing this from the same CPU..
+-		 */
+-		csd_lock_record(csd);
+-		csd_unlock(csd);
+-		local_irq_save(flags);
+-		func(info);
+-		csd_lock_record(NULL);
+-		local_irq_restore(flags);
+-		return 0;
 -	}
 -
--	csd->func = func;
--	csd->info = info;
--#ifdef CONFIG_CSD_LOCK_WAIT_DEBUG
--	csd->node.src = smp_processor_id();
--	csd->node.dst = cpu;
--#endif
+-	if ((unsigned)cpu >= nr_cpu_ids || !cpu_online(cpu)) {
+-		csd_unlock(csd);
+-		return -ENXIO;
+-	}
 -
--	err = generic_exec_single(cpu, csd);
-+	if ((unsigned int)cpu >= nr_cpu_ids || !cpu_online(cpu))
-+		return -ENXIO;
- 
- 	if (wait)
--		csd_lock_wait(csd);
-+		flags = SMP_CALL_TYPE_SYNC;
-+	else
-+		flags = SMP_CALL_TYPE_ASYNC;
- 
--	put_cpu();
-+	smp_call(cpu, func, info, flags);
- 
--	return err;
-+	return 0;
+-	__smp_call_single_queue(cpu, &csd->node.llist);
+-
+-	return 0;
+-}
+-
+ /**
+  * generic_smp_call_function_single_interrupt - Execute SMP IPI callbacks
+  *
+@@ -676,52 +641,6 @@ int smp_call_function_single(int cpu, smp_call_func_t func, void *info,
  }
  EXPORT_SYMBOL(smp_call_function_single);
  
-@@ -1175,6 +1138,19 @@ void __smp_call_mask_cond(const struct cpumask *mask,
- 		smp_cond_func_t cond_func, bool local_cpu,
- 		unsigned int flags)
+-/**
+- * smp_call_function_single_async() - Run an asynchronous function on a
+- * 			         specific CPU.
+- * @cpu: The CPU to run on.
+- * @csd: Pre-allocated and setup data structure
+- *
+- * Like smp_call_function_single(), but the call is asynchonous and
+- * can thus be done from contexts with disabled interrupts.
+- *
+- * The caller passes his own pre-allocated data structure
+- * (ie: embedded in an object) and is responsible for synchronizing it
+- * such that the IPIs performed on the @csd are strictly serialized.
+- *
+- * If the function is called with one csd which has not yet been
+- * processed by previous call to smp_call_function_single_async(), the
+- * function will return immediately with -EBUSY showing that the csd
+- * object is still in progress.
+- *
+- * NOTE: Be careful, there is unfortunately no current debugging facility to
+- * validate the correctness of this serialization.
+- *
+- * Return: %0 on success or negative errno value on error
+- */
+-int smp_call_function_single_async(int cpu, struct __call_single_data *csd)
+-{
+-	int err = 0;
+-
+-	preempt_disable();
+-
+-	if (csd->node.u_flags & CSD_FLAG_LOCK) {
+-		err = -EBUSY;
+-		goto out;
+-	}
+-
+-	csd->node.u_flags = CSD_FLAG_LOCK;
+-	smp_wmb();
+-
+-	err = generic_exec_single(cpu, csd);
+-
+-out:
+-	preempt_enable();
+-
+-	return err;
+-}
+-EXPORT_SYMBOL_GPL(smp_call_function_single_async);
+-
+ /*
+  * smp_call_function_any - Run a function on any of the given cpus
+  * @mask: The mask of cpus it can run on.
+@@ -1304,15 +1223,85 @@ EXPORT_SYMBOL(smp_call_mask_cond);
+  * Because of that, this function can be used from the contexts with disabled
+  * interrupts.
+  *
+- * Parameters
++ * The bit CSD_FLAG_LOCK will be set to csd->node.u_flags only if the call
++ * is made as type CSD_TYPE_SYNC or CSD_TYPE_ASYNC.
+  *
++ * Parameters
+  * cpu:   Must be a positive value less than nr_cpu_id.
+  * csd:   The private csd provided by the callers.
+- *
+  * Others: see smp_call().
++ *
++ * Return: %0 on success or negative errno value on error.
++ *
++ * The following comments are from smp_call_function_single_async():
++ *
++ *   The call is asynchronous and can thus be done from contexts with
++ *   disabled interrupts. If the function is called with one csd which
++ *   has not yet been processed by previous call, the function will
++ *   return immediately with -EBUSY showing that the csd object is
++ *   still in progress.
++ *
++ *   NOTE: Be careful, there is unfortunately no current debugging
++ *   facility to validate the correctness of this serialization.
+  */
+ int smp_call_csd(int cpu, call_single_data_t *csd, unsigned int flags)
  {
-+	bool wait = false;
+-	return 0;
++	int err = 0;
 +
-+	if (flags == SMP_CALL_TYPE_SYNC)
-+		wait = true;
++	if ((unsigned int)cpu >= nr_cpu_ids || !cpu_online(cpu)) {
++		pr_warn("cpu ID must be a positive number < nr_cpu_ids and must be currently online\n");
++		return -EINVAL;
++	}
++
++	if (csd == NULL) {
++		pr_warn("csd must not be NULL\n");
++		return -EINVAL;
++	}
 +
 +	preempt_disable();
++	if (csd->node.u_flags & CSD_FLAG_LOCK) {
++		err = -EBUSY;
++		goto out;
++	}
 +
 +	/*
-+	 * This is temporarily hook. The function smp_call_function_many_cond()
-+	 * will be inlined here with a later patch in this series.
++	 * CSD_FLAG_LOCK is set for CSD_TYPE_SYNC or CSD_TYPE_ASYNC only.
 +	 */
-+	smp_call_function_many_cond(mask, func, info, local_cpu, wait, cond_func);
++	if ((flags & ~(CSD_TYPE_SYNC | CSD_TYPE_ASYNC)) == 0)
++		csd->node.u_flags = CSD_FLAG_LOCK | flags;
++	else
++		csd->node.u_flags = flags;
++
++	if (cpu == smp_processor_id()) {
++		smp_call_func_t func = csd->func;
++		void *info = csd->info;
++		unsigned long flags;
++
++		/*
++		 * We can unlock early even for the synchronous on-stack case,
++		 * since we're doing this from the same CPU..
++		 */
++		csd_lock_record(csd);
++		csd_unlock(csd);
++		local_irq_save(flags);
++		func(info);
++		csd_lock_record(NULL);
++		local_irq_restore(flags);
++		goto out;
++	}
++
++	/*
++	 * Ensure the flags are visible before the csd
++	 * goes to the queue.
++	 */
++	smp_wmb();
++
++	__smp_call_single_queue(cpu, &csd->node.llist);
++
++	if (flags & CSD_TYPE_SYNC)
++		csd_lock_wait(csd);
++out:
 +	preempt_enable();
++	return err;
  }
- 
- /*
+ EXPORT_SYMBOL(smp_call_csd);
 -- 
 2.27.0
 

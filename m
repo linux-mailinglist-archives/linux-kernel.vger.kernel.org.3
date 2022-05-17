@@ -2,436 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ACA0529DFB
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B07D0529E02
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244857AbiEQJ1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 05:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
+        id S241956AbiEQJ2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 05:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244909AbiEQJ1Y (ORCPT
+        with ESMTP id S244938AbiEQJ1o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 05:27:24 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BC0396AE
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:27:08 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id n8so16828775plh.1
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:27:08 -0700 (PDT)
+        Tue, 17 May 2022 05:27:44 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E155369FF
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:27:42 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id n23so6641882edy.0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:27:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sCdB8SY5NgwEYS11KPsEvbneXbAkyfzNn3ogCW0CDBo=;
-        b=fIKPoB3yoJzgBWBcwM+JBQN/pMWjaFfpT2mJnHanzoJyhSBZ3223oPRPnqJPE8Vm6Z
-         svEm7jbeHwgzYG0tqKXV6yl7gqVThQpEXrbYf8TscOddXHKbyVGUyrJjiGbrABw9mZBX
-         X+POGJ9oK9eLuLbEpPZ4D1AltOlJYfpdTLXAwlX95bZ3xXn5OQwlxyt/5maQ6u2EPZEN
-         BJsSzckIAO58uvDmCE1RDbMH9Q2+14dAkB2t3fFT3QwPslee8qwLrY7CekcDS/sLLu8S
-         rbr/xyQvsVLBNb32egFeQmJZ2VSlEo2juwgK478l+ZpLFTLC/Iqo2bwuaicBEVMtmaIp
-         59cQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=+Bea/1kwLPLMANr+6NgNy10zL15qCdn8qnw++x3HnA0=;
+        b=xxLnCXUtEW5fxRgMioDY8NGbWM9/b6UlHcv6nb802IcZMqXMZnlsH7sTGmYs4jsctE
+         xW49eFdgQrsXgFx7PlGWtCuNZcRGs3ZL9uWiBSYncRqIJKerZUZqANnLcM3I8W+8Yaqj
+         NZeycqJAJWo3Tzu16FCKekXrJhffsOyltk5OYNTJxO2jERiswpdGmtqUSgmRhnv36DLU
+         UWYVfm/b9+ipT06qw2JU8WFEeATDOMbPZ7sLmcwDuzO6mWi82XEkeeJmY9XRbIhqmuyE
+         hYDGcwrp84Xf8Yh2IjL3XAUYzRJRXcneS3OEpIlTulw3YNRoyv/LE6gWoZJP5UPAq9b8
+         Arxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=sCdB8SY5NgwEYS11KPsEvbneXbAkyfzNn3ogCW0CDBo=;
-        b=6VGDqhBROnWGA6rX9TfGm4zUwT30xdYTJgZ0FPYuVzi9lUMsk7Rw0nocuogPJ/2fjN
-         oOSTeKeoHe0xcxLFvvZNEpEdwIlWg9L6d/1RM7hBllmvU+I9PdrRSUiHz0GGcROZliHR
-         MSnQS2Rn08ngQeHTUeJTWEaKEZhkUPd+Qx4Xqdy2kROQruEq3IlfyLf5UzHMWLe1kLC2
-         Nur72kxkaHt3SYUaEkHcFXB/i7dqj11HMtCAMvz5sKQ+hWy9aByRuOdW/ahrJ/L3R4SH
-         slYv3fEFQLsW52DwQ6SlP5HZWmnj+BK2tLy9ROhAp+W5y4IhtUXDaa6lcIZUh9nWeCNr
-         uIuw==
-X-Gm-Message-State: AOAM532MpfKQuHUmqzokj93v6svGd3QTYsyMCyOv3q8viTMwAwinCrSl
-        GLtiV1kvBkHeEBAB218KpY4=
-X-Google-Smtp-Source: ABdhPJx1P8AqPWwa7FSsZIfSXCdlepNRW0cS522hzWSKuIVmaKVlerbPTx3u9yMk/+bkKlAe5SdrUw==
-X-Received: by 2002:a17:902:d191:b0:161:5c4f:ce9e with SMTP id m17-20020a170902d19100b001615c4fce9emr13516050plb.159.1652779628003;
-        Tue, 17 May 2022 02:27:08 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id by13-20020a056a00400d00b0050dc76281aasm8184298pfb.132.2022.05.17.02.27.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 02:27:07 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: xu.xin16@zte.com.cn
-To:     akpm@linux-foundation.org
-Cc:     ammarfaizi2@gnuweeb.org, oleksandr@natalenko.name,
-        willy@infradead.org, linux-mm@kvack.org, corbet@lwn.net,
-        linux-kernel@vger.kernel.org, xu xin <xu.xin16@zte.com.cn>,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        wangyong <wang.yong12@zte.com.cn>,
-        Yunkai Zhang <zhang.yunkai@zte.com.cn>,
-        Jiang Xuexin <jiang.xuexin@zte.com.cn>,
-        CGEL <cgel.zte@gmail.com>
-Subject: [PATCH] mm/ksm: introduce ksm_enabled for each process
-Date:   Tue, 17 May 2022 09:27:01 +0000
-Message-Id: <20220517092701.1662641-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        bh=+Bea/1kwLPLMANr+6NgNy10zL15qCdn8qnw++x3HnA0=;
+        b=Sjf2SmMfdPqsDTpD95q2u+G0tmAwwNGtPxUS1DuSct0pvdAg4r/EiLErOfTcW/HclQ
+         Sv6zLBDYXlpOmbNKSxVr7oaPoxjlxhY4mAf/FllBxkOINonnq0BJ379UY/kdmFSaDGuq
+         HgnJOZ6IJtu1OdU9pFrAJ0SnhcvSWqrmDYsgLR4Of4kvsA9tP+wLP37l0XX2w6C56yZD
+         x68IL2QgGAUVCH6mjJd7Qp89bv+mzIzTVL3blvdnCYC0WBrPyyPE/2eX3DLT335zuZDd
+         VIwpsom6Q8t2fE3OJdWuoPRTco9HVOPkVyfb610AYccteq7CHJxp/BVlE+9gEe1QyQw0
+         0dlg==
+X-Gm-Message-State: AOAM533NaTOwm9iPmIBdPhqCl7sWxK4NLUrPEZ0SOEW8tj6qQBdlZXYF
+        zhXYWG8T97EPny7YG/markOKEw==
+X-Google-Smtp-Source: ABdhPJxkK6D609wnZyhOBBPss88JqHb2/WL6V+Dfu3UdhY5WiudqXoWhoDjLezs3xugslmugvV3ttw==
+X-Received: by 2002:aa7:d8c2:0:b0:42a:b9fa:bad8 with SMTP id k2-20020aa7d8c2000000b0042ab9fabad8mr7136657eds.304.1652779661183;
+        Tue, 17 May 2022 02:27:41 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id mm8-20020a170906cc4800b006f3ef214df0sm807181ejb.86.2022.05.17.02.27.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 02:27:40 -0700 (PDT)
+Message-ID: <3bdb65cd-cdad-6e10-c921-5ec3a9b4c9dd@linaro.org>
+Date:   Tue, 17 May 2022 11:27:39 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 00/13] dt-bindings/arm64: dts: qcom: minor cleanups with
+ DT schema
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>, arm-soc <soc@kernel.org>
+References: <20220504131923.214367-1-krzysztof.kozlowski@linaro.org>
+ <CAMuHMdVc3kShpp8wieX1SSA8-37m8PbxpqKRs5+gxz8Dm6QwsA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAMuHMdVc3kShpp8wieX1SSA8-37m8PbxpqKRs5+gxz8Dm6QwsA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xu xin <xu.xin16@zte.com.cn>
+On 17/05/2022 11:19, Geert Uytterhoeven wrote:
+> On Wed, May 4, 2022 at 5:13 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>> The patches are independent, so they can be picked up as is (or everything
+>> through Qualcomm SoC tree).
+>>
+>> Best regards,
+>> Krzysztof
+>>
+>> Krzysztof Kozlowski (13):
+>>   dt-bindings: soc: qcom: aoss: document qcom,sm8450-aoss-qmp
+>>   dt-bindings: soc: qcom: qcom,smd-rpm: add power-controller
+>>   dt-bindings: usb: qcom,dwc3: add IPQ8074, MSM8994, QCS404 and SM6125
+>>   dt-bindings: usb: qcom,dwc3: fix clock matching
+>>   arm64: dts: qcom: add missing AOSS QMP compatible fallback
+>>   arm64: dts: qcom: correct DWC3 node names and unit addresses
+>>   arm64: dts: qcom: ipq8074: add dedicated qcom,ipq8074-dwc3 compatible
+>>   arm64: dts: qcom: msm8994: add dedicated qcom,msm8994-dwc3 compatible
+>>   arm64: dts: qcom: sm6125: add dedicated qcom,sm6125-dwc3 compatible
+>>   arm64: dts: qcom: qcs404: add dedicated qcom,qcs404-dwc3 compatible
+>>   arm64: dts: qcom: msm8996: add clock-names to DWC3 USB node
+>>   arm64: dts: qcom: align DWC3 USB clocks with DT schema
+>>   arm64: dts: qcom: align DWC3 USB interrupts with DT schema
+> 
+> Looks like all but the first two were applied to usb-next by Greg,
+> causing conflicts with the soc/for-next tree.
 
-For now, if we want to use KSM to merge pages of some apps, we have to
-explicitly call madvise() in application code, which means installed
-apps on OS needs to be uninstall and source code needs to be modified.
-It is very inconvenient because sometimes users or app developers are not
-willing to modify their app source codes for any reasons.
+Also this one was not applied:
+arm64: dts: qcom: add missing AOSS QMP compatible fallback
 
-So to use KSM more flexibly, we provide a new proc file "ksm_enabled" under
-/proc/<pid>/. We can pass parameter into this file with one of three values
-as follows:
+However I did not get any conflict message...
 
-	always:
-		force all anonymous and eligible VMAs of this process to be
-		scanned by ksmd.
-	madvise:
-		the default state, unless user code call madvise, ksmd
-		doesn't scan this process.
-	never:
-		this process will never be scanned by ksmd and no merged
-		pages occurred in this process.
+The DTS patches should not go via Greg's tree. They are sent together so
+there will be no warnings from Rob's bot. This is a common practice for
+dt-binding fixes.
 
-With this patch, we can control KSM with ``/proc/<pid>/ksm_enabled``
-based on every process. KSM for each process can be entirely disabled
-(mostly for debugging purposes) or only enabled inside MADV_MERGEABLE
-regions (to avoid the risk of consuming more cpu resources to scan for
-ksmd) or enabled entirely for a process.
+Bjorn,
+Any preference from you? Shall I send missing three patches to you?
 
-Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
-Reviewed-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
-Reviewed-by: wangyong <wang.yong12@zte.com.cn>
-Reviewed-by: Yunkai Zhang <zhang.yunkai@zte.com.cn>
-Reviewed-by: Jiang Xuexin <jiang.xuexin@zte.com.cn>
-Signed-off-by: CGEL <cgel.zte@gmail.com>
----
- Documentation/admin-guide/mm/ksm.rst |  24 ++++++-
- Documentation/filesystems/proc.rst   |  14 ++++
- fs/proc/base.c                       | 102 ++++++++++++++++++++++++++-
- include/linux/ksm.h                  |   5 ++
- include/linux/mm_types.h             |  10 +++
- mm/ksm.c                             |  35 ++++++++-
- 6 files changed, 185 insertions(+), 5 deletions(-)
+What about conflicts with Greg's tree?
 
-diff --git a/Documentation/admin-guide/mm/ksm.rst b/Documentation/admin-guide/mm/ksm.rst
-index b244f0202a03..91326198e37f 100644
---- a/Documentation/admin-guide/mm/ksm.rst
-+++ b/Documentation/admin-guide/mm/ksm.rst
-@@ -32,7 +32,7 @@ are swapped back in: ksmd must rediscover their identity and merge again).
- Controlling KSM with madvise
- ============================
- 
--KSM only operates on those areas of address space which an application
-+KSM can operate on those areas of address space which an application
- has advised to be likely candidates for merging, by using the madvise(2)
- system call::
- 
-@@ -70,6 +70,28 @@ Applications should be considerate in their use of MADV_MERGEABLE,
- restricting its use to areas likely to benefit.  KSM's scans may use a lot
- of processing power: some installations will disable KSM for that reason.
- 
-+Controlling KSM with procfs
-+===========================
-+We can also control KSM with ``/proc/<pid>/ksm_enabled`` based on every
-+process. KSM for each process can be entirely disabled (mostly for
-+debugging purposes) or only enabled inside MADV_MERGEABLE regions (to avoid
-+the risk of consuming more cpu resources to scan for ksmd) or enabled entirely
-+for a process. This can be achieved with one of::
-+
-+    echo always > /proc/<pid>/ksm_enabled
-+    echo madvise > /proc/<pid>/ksm_enabled
-+    echo never > /proc/<pid>/ksm_enabled
-+
-+always:
-+        force all anonymous and eligible VMAs of this process to be scanned
-+        by ksmd.
-+madvise:
-+        the default state, unless user code call madvise, ksmd doesn't scan
-+        this process.
-+never:
-+        this process will never be scanned by ksmd and no merged pages
-+	occurred in this process.
-+
- .. _ksm_sysfs:
- 
- KSM daemon sysfs interface
-diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-index 1bc91fb8c321..ea7e08a1c143 100644
---- a/Documentation/filesystems/proc.rst
-+++ b/Documentation/filesystems/proc.rst
-@@ -47,6 +47,7 @@ fixes/update part 1.1  Stefani Seibold <stefani@seibold.net>    June 9 2009
-   3.10  /proc/<pid>/timerslack_ns - Task timerslack value
-   3.11	/proc/<pid>/patch_state - Livepatch patch operation state
-   3.12	/proc/<pid>/arch_status - Task architecture specific information
-+  3.13  /proc/<pid>/ksm_enabled - Controlling KSM based on process
- 
-   4	Configuring procfs
-   4.1	Mount options
-@@ -2140,6 +2141,19 @@ AVX512_elapsed_ms
-   the task is unlikely an AVX512 user, but depends on the workload and the
-   scheduling scenario, it also could be a false negative mentioned above.
- 
-+3.13 /proc/<pid>/ksm_enabled - Controlling KSM based on process
-+---------------------------------------------------------------
-+When CONFIG_KSM is enabled, this file can be used to specify how this
-+process's anonymous memory gets involved in KSM scanning.
-+
-+If writing "always" to this file, it will force all anonymous and eligible
-+VMAs of this process to be scanned by ksmd.
-+
-+If writing "madvise" to this file, turn to the default state, unless user
-+code call madvise, ksmd doesn't scan this process.
-+
-+If writing "never" to this file, this process will never be scanned by ksmd.
-+
- Chapter 4: Configuring procfs
- =============================
- 
-diff --git a/fs/proc/base.c b/fs/proc/base.c
-index 617816168748..760ceeab4aa1 100644
---- a/fs/proc/base.c
-+++ b/fs/proc/base.c
-@@ -96,6 +96,7 @@
- #include <linux/time_namespace.h>
- #include <linux/resctrl.h>
- #include <linux/cn_proc.h>
-+#include <linux/ksm.h>
- #include <trace/events/oom.h>
- #include "internal.h"
- #include "fd.h"
-@@ -3171,7 +3172,104 @@ static int proc_pid_ksm_merging_pages(struct seq_file *m, struct pid_namespace *
- 
- 	return 0;
- }
--#endif /* CONFIG_KSM */
-+
-+static int ksm_enabled_show(struct seq_file *m, void *v)
-+{
-+	struct inode *inode = m->private;
-+	struct mm_struct *mm;
-+	struct task_struct *task = get_proc_task(inode);
-+
-+	if (!task)
-+		return -ESRCH;
-+
-+	mm = get_task_mm(task);
-+	if (mm) {
-+		if (mm->ksm_enabled == KSM_PROC_ALWAYS)
-+			seq_puts(m, "[always] madvise never\n");
-+		else if (mm->ksm_enabled == KSM_PROC_MADVISE)
-+			seq_puts(m, "always [madvise] never\n");
-+		else
-+			seq_puts(m, "always madvise [never]\n");
-+		mmput(mm);
-+	}
-+
-+	put_task_struct(task);
-+	return 0;
-+}
-+
-+static ssize_t ksm_enabled_write(struct file *file, const char __user *buf,
-+								size_t count, loff_t *ppos)
-+{
-+	struct task_struct *task;
-+	struct mm_struct *mm;
-+	char buffer[PROC_NUMBUF];
-+	int value;
-+	int err = 0;
-+	long str_len;
-+
-+	if (count > sizeof(buffer) - 1)
-+		count = sizeof(buffer) - 1;
-+	str_len = strncpy_from_user(buffer, buf, count);
-+	if (str_len < 0)
-+		return -EFAULT;
-+	buffer[str_len - 1] = '\0';
-+
-+	if (!strcmp("always", buffer))
-+		value = KSM_PROC_ALWAYS;
-+	else if (!strcmp("madvise", buffer))
-+		value = KSM_PROC_MADVISE;
-+	else if (!strcmp("never", buffer))
-+		value = KSM_PROC_NEVER;
-+	else
-+		return -EINVAL;
-+
-+	task = get_proc_task(file_inode(file));
-+	if (!task)
-+		return -ESRCH;
-+	mm = get_task_mm(task);
-+	if (!mm)
-+		goto out_put_task;
-+
-+	if (mm->ksm_enabled != value) {
-+		if (mmap_write_lock_killable(mm)) {
-+			err = -EINTR;
-+			goto out_mmput;
-+		}
-+		if (value == KSM_PROC_NEVER)
-+			mm->ksm_enabled = value;
-+		else {
-+			/*
-+			 * No matter whether it's KSM_PROC_ALWAYS or KSM_PROC_MADVISE, we need
-+			 * to recheck mm->flags to guarantee that this mm is in ksm_scan.
-+			 */
-+			if (!test_bit(MMF_VM_MERGEABLE, &mm->flags))
-+				err = __ksm_enter(mm);
-+			if (!err)
-+				mm->ksm_enabled = value;
-+		}
-+		mmap_write_unlock(mm);
-+	}
-+
-+out_mmput:
-+	mmput(mm);
-+out_put_task:
-+	put_task_struct(task);
-+	return err < 0 ? err : count;
-+}
-+
-+static int ksm_enabled_open(struct inode *inode, struct file *filp)
-+{
-+	return single_open(filp, ksm_enabled_show, inode);
-+}
-+
-+static const struct file_operations proc_pid_ksm_enabled_operations = {
-+	.open       = ksm_enabled_open,
-+	.read		= seq_read,
-+	.write		= ksm_enabled_write,
-+	.llseek		= seq_lseek,
-+	.release	= single_release,
-+};
-+#endif /*CONFIG_KSM */
- 
- #ifdef CONFIG_STACKLEAK_METRICS
- static int proc_stack_depth(struct seq_file *m, struct pid_namespace *ns,
-@@ -3306,6 +3404,7 @@ static const struct pid_entry tgid_base_stuff[] = {
- #endif
- #ifdef CONFIG_KSM
- 	ONE("ksm_merging_pages",  S_IRUSR, proc_pid_ksm_merging_pages),
-+	REG("ksm_enabled", S_IRUGO|S_IWUSR, proc_pid_ksm_enabled_operations),
- #endif
- };
- 
-@@ -3642,6 +3741,7 @@ static const struct pid_entry tid_base_stuff[] = {
- #endif
- #ifdef CONFIG_KSM
- 	ONE("ksm_merging_pages",  S_IRUSR, proc_pid_ksm_merging_pages),
-+	REG("ksm_enabled", S_IRUGO|S_IWUSR, proc_pid_ksm_enabled_operations),
- #endif
- };
- 
-diff --git a/include/linux/ksm.h b/include/linux/ksm.h
-index 0b4f17418f64..29d23d208b54 100644
---- a/include/linux/ksm.h
-+++ b/include/linux/ksm.h
-@@ -19,6 +19,11 @@ struct stable_node;
- struct mem_cgroup;
- 
- #ifdef CONFIG_KSM
-+
-+#define KSM_PROC_MADVISE	0
-+#define KSM_PROC_ALWAYS		1
-+#define KSM_PROC_NEVER		2
-+
- int ksm_madvise(struct vm_area_struct *vma, unsigned long start,
- 		unsigned long end, int advice, unsigned long *vm_flags);
- int __ksm_enter(struct mm_struct *mm);
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 417ef1519475..29fd4c84d08c 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -649,6 +649,16 @@ struct mm_struct {
- 		 * merging.
- 		 */
- 		unsigned long ksm_merging_pages;
-+
-+		/*
-+		 * Represent the state of this mm involing in KSM, with 3 states:
-+		 * 1) KSM_PROC_ALWAYS:  force all anonymous VMAs of this process to
-+		 *						be scanned.
-+		 * 2) KSM_PROC_MADVISE: the default state, unless user code call
-+		 *						madvise, don't scan this process.
-+		 * 3) KSM_PROC_NEVER: never be involed in KSM.
-+		 */
-+		int ksm_enabled;
- #endif
- 	} __randomize_layout;
- 
-diff --git a/mm/ksm.c b/mm/ksm.c
-index 26da7f813f23..90cc8eda8bca 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -334,6 +334,35 @@ static void __init ksm_slab_free(void)
- 	mm_slot_cache = NULL;
- }
- 
-+static bool vma_scannable(struct vm_area_struct *vma)
-+{
-+	unsigned long vm_flags = vma->vm_flags;
-+	struct mm_struct *mm = vma->vm_mm;
-+
-+	if (mm->ksm_enabled == KSM_PROC_NEVER ||
-+			(!(vma->vm_flags & VM_MERGEABLE) &&
-+			mm->ksm_enabled != KSM_PROC_ALWAYS))
-+		return false;
-+
-+	if (vm_flags & (VM_SHARED	| VM_MAYSHARE	|
-+			VM_PFNMAP	| VM_IO | VM_DONTEXPAND |
-+			VM_HUGETLB	| VM_MIXEDMAP))
-+		return false;       /* just ignore this vma*/
-+
-+	if (vma_is_dax(vma))
-+		return false;
-+#ifdef VM_SAO
-+	if (vm_flags & VM_SAO)
-+		return false;
-+#endif
-+#ifdef VM_SPARC_ADI
-+	if (vm_flags & VM_SPARC_ADI)
-+		return false;
-+#endif
-+
-+	return true;
-+}
-+
- static __always_inline bool is_stable_node_chain(struct stable_node *chain)
- {
- 	return chain->rmap_hlist_len == STABLE_NODE_CHAIN;
-@@ -523,7 +552,7 @@ static struct vm_area_struct *find_mergeable_vma(struct mm_struct *mm,
- 	if (ksm_test_exit(mm))
- 		return NULL;
- 	vma = vma_lookup(mm, addr);
--	if (!vma || !(vma->vm_flags & VM_MERGEABLE) || !vma->anon_vma)
-+	if (!vma || !vma_scannable(vma) || !vma->anon_vma)
- 		return NULL;
- 	return vma;
- }
-@@ -990,7 +1019,7 @@ static int unmerge_and_remove_all_rmap_items(void)
- 		for_each_vma(vmi, vma) {
- 			if (ksm_test_exit(mm))
- 				break;
--			if (!(vma->vm_flags & VM_MERGEABLE) || !vma->anon_vma)
-+			if (!vma_scannable(vma) || !vma->anon_vma)
- 				continue;
- 			err = unmerge_ksm_pages(vma,
- 						vma->vm_start, vma->vm_end);
-@@ -2300,7 +2329,7 @@ static struct rmap_item *scan_get_next_rmap_item(struct page **page)
- 		goto no_vmas;
- 
- 	for_each_vma(vmi, vma) {
--		if (!(vma->vm_flags & VM_MERGEABLE))
-+		if (!vma_scannable(vma))
- 			continue;
- 		if (ksm_scan.address < vma->vm_start)
- 			ksm_scan.address = vma->vm_start;
--- 
-2.25.1
 
+Best regards,
+Krzysztof

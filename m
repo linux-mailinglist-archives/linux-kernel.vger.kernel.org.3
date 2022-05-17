@@ -2,55 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5CA52A4EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BA352A4F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:34:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348987AbiEQOdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 10:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
+        id S1349021AbiEQOeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 10:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238736AbiEQOdR (ORCPT
+        with ESMTP id S245165AbiEQOeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 10:33:17 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F25926136
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:33:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=DOvkIYxnhh8zIthAtg4aATCVKR+GZV6U2k2WThVQMyQ=; b=Qhz1miOtR0kpZViQJiqORGxYsS
-        EOLRC934ob+9SOwHx1Ttwr7wVVusX2M0SmuB4wobKZgZTqmkQqkPwkpHp376mbKXHnazO7OymprEt
-        5xi5dUmcXubzk0kQjhdJLs2LGO+mMngCzAkRC9iczkGdpU4Dz6bH1BYPdCF1pmXk7mciSZ9bmf1zZ
-        dZGHTHEe0O8BOpAoMsrqP65uRXGLlg0zYe0wyL+D73JFws1JhDlG+FUX1ukZhdpowX4/cNyHDTnrD
-        cLG5rUYmZ6PF7PhXz5aUtw+SECtMSIwpPaX2lBnKc6qmG9M42DH+l+VD3by3MmTfRMjqKipBzriUv
-        Qo4a6iEw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60746)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nqyG9-0000PR-CT; Tue, 17 May 2022 15:33:13 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nqyG9-0004VU-8i; Tue, 17 May 2022 15:33:13 +0100
-Date:   Tue, 17 May 2022 15:33:13 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Juerg Haefliger <juerg.haefliger@canonical.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Juerg Haefliger <juergh@canonical.com>
-Subject: Re: [PATCH 1/3] ARM: Kconfig: Fix indentation and add comments
-Message-ID: <YoOyKb/0Mj849mt3@shell.armlinux.org.uk>
-References: <20220517141424.331759-1-juergh@canonical.com>
- <20220517141424.331759-2-juergh@canonical.com>
+        Tue, 17 May 2022 10:34:07 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07DE4248D
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:34:06 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id v11so17052615pff.6
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:34:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GKG9qxJvJLAopP/NwMsxDvVc37jrWfz1QwXOphMi9Y8=;
+        b=JyAKK1rb3nhhl2JjdhenF9b0O10x5C7tuNv0qKiYrhvbA5xE8sUS+n9njtNo/yEBZ7
+         JraV3gJU6BShw4Vg49/tyeK5FPQNdkYzyBp+BZwqv19MVeuYGstHX4mrEhdnQR8gHkkH
+         cY9b4hq4p3h/8FXoRWG+LtG+5FISfqd13nVdUVkYxGPj8TXFlouZL5e2pjOh17uJQZ6+
+         CRoW8upGF0VzYXozNIXhzo7SWIZmDkMUXDx2VlT3e/AWEE6S5M3QL6vjwC98n8Q3OZfZ
+         yWMDfgIUFHC6azNevfCmNxcQTuJq7T3sLOv7dKBhVbHZTibQWfX7QBzXi1Ac6zF6KIVE
+         n/uA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GKG9qxJvJLAopP/NwMsxDvVc37jrWfz1QwXOphMi9Y8=;
+        b=zFZhOUs9iScvy1Wj7cocRMYg8QGw2vgjaeMQX6l8dtK0+NYIARjhxrySWdHtqiR4pv
+         Koz8e0xpZI782aiCHrShJgA4oss31Ej/zB6Cs5ekQI60AnrJblwbv9K9AjwTs5krYw1k
+         9E3kLo/8zm8S5szCIjKAlHAeFAsmW9XfudZUO8/Fs23dMByksCTMkLJg7eMwFxSjwRCA
+         Z9Yv0n5S1gZOxOAjGUHl7Bu8dpmLW3eaC31Fh3quRqw9mvgM4OiQE+2yvsabeoMx9S0K
+         emNXQRvBcV99Qbkm9ooo38fxHT9Z8NtRQCYPf0pbNaawLnqOLTttu721xuEd32tozmNE
+         Wj8Q==
+X-Gm-Message-State: AOAM530+2gLXNsfvlWajZZNrE1gGgHj2NfraAoO6BPO8qMclv1XRw29q
+        1FNkWzuTHReO3HxkcpgW8IBoRXGmQJJFnQ==
+X-Google-Smtp-Source: ABdhPJzdN10p6+jbRjBFVRujrjZAADIa/P2a60o0SCXs9HIaozOdkvhMLB8ygpgDW/Jp8iZgEa0YxA==
+X-Received: by 2002:a05:6a00:801:b0:50d:ec66:fac0 with SMTP id m1-20020a056a00080100b0050dec66fac0mr22894471pfk.23.1652798046431;
+        Tue, 17 May 2022 07:34:06 -0700 (PDT)
+Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.250])
+        by smtp.gmail.com with ESMTPSA id iz19-20020a17090ae79300b001cd4989ff53sm1733855pjb.26.2022.05.17.07.34.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 07:34:06 -0700 (PDT)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev,
+        shakeelb@google.com
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH] MAINTAINERS: add myself as a memcg reviewer
+Date:   Tue, 17 May 2022 22:33:20 +0800
+Message-Id: <20220517143320.99649-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.32.1 (Apple Git-133)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517141424.331759-2-juergh@canonical.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,25 +68,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+I have been focusing on mm for the past two years. e.g. developing,
+fixing bugs, reviewing.  I have fixed lots of races (including memcg).
+I would like to help people working on memcg or related by reviewing
+their work.  Let me be Cc'd on patches related to memcg.
 
-On Tue, May 17, 2022 at 04:14:22PM +0200, Juerg Haefliger wrote:
-> The convention for indentation seems to be a single tab. Help text is
-> further indented by an additional two whitespaces. Fix the lines that
-> violate these rules.
-> 
-> While add it, add trailing comments to endif and endmenu statements for
-> better readability.
+Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-I have never been a fan of that practice, but I understand that some
-people really like it. At the end of the day, it's subjective, so
-let's leave it as-is for the time being.
-
-The other changes are worth having though. Please send a patch making
-just those changes.
-
-Thanks.
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9ce78f2275dc..0d5de0c553aa 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5057,6 +5057,7 @@ M:	Johannes Weiner <hannes@cmpxchg.org>
+ M:	Michal Hocko <mhocko@kernel.org>
+ M:	Roman Gushchin <roman.gushchin@linux.dev>
+ M:	Shakeel Butt <shakeelb@google.com>
++R:	Muchun Song <songmuchun@bytedance.com>
+ L:	cgroups@vger.kernel.org
+ L:	linux-mm@kvack.org
+ S:	Maintained
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.11.0
+

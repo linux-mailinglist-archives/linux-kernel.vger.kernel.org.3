@@ -2,63 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BFB852A44B
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3158552A452
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348486AbiEQOHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 10:07:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46180 "EHLO
+        id S1348424AbiEQOIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 10:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348455AbiEQOHC (ORCPT
+        with ESMTP id S243536AbiEQOIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 10:07:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D721D4CD7A
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:06:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652796406;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3bg665HrNuvrqLGhtUkpmUDqyIrWAj2xvJx1ld4vx7g=;
-        b=S7AaVWsK+7WhkmOPELa5dP/ROtV1o2Yx1itIWkTtVPHDPFHm0qcxuHeLBr6OTmUTpmXUIG
-        w9zNemTO6uKDCJASnPywA/d8A6t6RXykoZTzBAwA9EGMmjPLnUxLeNR7tU9EEAwffmxYu7
-        TggT7i/HC+DpRWax/9H+1TwlhI1KfMI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-500-YNL4P8y7OJaFDTHMxVXhGw-1; Tue, 17 May 2022 10:06:39 -0400
-X-MC-Unique: YNL4P8y7OJaFDTHMxVXhGw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 446E11C0CE7B;
-        Tue, 17 May 2022 14:06:36 +0000 (UTC)
-Received: from localhost (unknown [10.39.194.27])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9CB63400DFB5;
-        Tue, 17 May 2022 14:06:35 +0000 (UTC)
-Date:   Tue, 17 May 2022 15:06:34 +0100
-From:   Stefan Hajnoczi <stefanha@redhat.com>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Harris James R <james.r.harris@intel.com>,
-        io-uring@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-Subject: Re: [PATCH V2 0/1] ubd: add io_uring based userspace block driver
-Message-ID: <YoOr6jBfgVm8GvWg@stefanha-x1.localdomain>
-References: <20220517055358.3164431-1-ming.lei@redhat.com>
+        Tue, 17 May 2022 10:08:06 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865513E0C1
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:08:05 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id g16so21924321lja.3
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:08:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ILPQc7G+oPlM/aZP4m6NBhLYqFjSTocczgW3af4op68=;
+        b=PE0JV6pDh4rHpGkCg1JqfCrHmzxmw7W7Qyd2ouQl31by/orybXkuDp+LYNUJnW0YAG
+         gbapK+/sRL5cVKr1ZIDwjrJMXsSOzHFGNn+wuLKiMyY/Ja+vxqqwzauLl1sOfOR87fPE
+         ZB5Ya95oWKEVOK+4qG1lmjSP/UgREmLZORaqoI+0ARqwiOI3ylXI1OrmwvfJIVJ+s+zm
+         jgkTnIeNKvWg793waaxKfpfGTRrYzU88uPEwCeWDm7pDEBDRakDyblxoj0jtACfCWwEd
+         pi3r05xkqDeTfbUjUvhKNRuGA3WSqjWdY3wWd1lmqFG2iR2S2VPbYSCeg+r18WGv9zCe
+         hetg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ILPQc7G+oPlM/aZP4m6NBhLYqFjSTocczgW3af4op68=;
+        b=ZQhV8z3XHvo9jgL+e2Tin2ZPtPs8cR2ZkPizAsGQp+mA2Myk6QGfYWMcknkdR0vNuK
+         m29w17F2CO7rqgbfzE2i27TctOgtgQovmpnNTZVwy2xvhHB7dLUkwSlIESDotuaDzLCK
+         z9hyqh5qf0GadlOO8At6gI1ALEpDiEwkpAO2DzfCd5z5o3Mt1LA3ThniVQC5lTR6k1Nl
+         PnaQZT3vyqWsKiJk3Mo5kCOYgTdcf0gJkcGrZbtQSM065COF4vr5xRbg6aPUEAb/XprX
+         bsDzTrmN2xlosjlTlJchRjF5zNzKVdaB9EEp8fVSj1L68+1nzsOCCr/iCgyZNyTBDmri
+         JT7Q==
+X-Gm-Message-State: AOAM531Ce1PlDH1vUaQE/xwq9aWEcXYqmdGP6T38BHUflGsrya1iq4/T
+        0pF9UsLSNmqmY8TkjFH//0ELxQ==
+X-Google-Smtp-Source: ABdhPJxtqwhZWJ7dYHgMkZjWCVF34+2Hgq6B9aXDbdtKuyujaW+ust3Tn4JGyVEsqcwnFCqS839YWw==
+X-Received: by 2002:a05:651c:893:b0:249:4023:3818 with SMTP id d19-20020a05651c089300b0024940233818mr15040800ljq.44.1652796483809;
+        Tue, 17 May 2022 07:08:03 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id u8-20020ac24c28000000b0047255d211c7sm1597601lfq.246.2022.05.17.07.08.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 07:08:03 -0700 (PDT)
+Message-ID: <2eb61c98-6e1e-1fea-4af6-7a9deff11b11@linaro.org>
+Date:   Tue, 17 May 2022 16:08:02 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="uCYJ7l6rM0lflhAj"
-Content-Disposition: inline
-In-Reply-To: <20220517055358.3164431-1-ming.lei@redhat.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 1/2] dt-bindings: microchip-otpc: document Microchip
+ OTPC
+Content-Language: en-US
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
+        krzk+dt@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20220517125822.579580-1-claudiu.beznea@microchip.com>
+ <20220517125822.579580-2-claudiu.beznea@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220517125822.579580-2-claudiu.beznea@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,75 +78,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 17/05/2022 14:58, Claudiu Beznea wrote:
+> Document Microchip OTP controller.
+> 
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> ---
+>  .../nvmem/microchip-sama7g5,otpc.yaml         | 50 +++++++++++++++++++
+>  .../nvmem/microchip-sama7g5,otpc.h            | 12 +++++
+>  2 files changed, 62 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/nvmem/microchip-sama7g5,otpc.yaml
 
---uCYJ7l6rM0lflhAj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+comma after vendor, dash after Soc, so:
+microchip,sama7g5-otpc.yaml
 
-Here are some more thoughts on the ubd-control device:
-
-The current patch provides a ubd-control device for processes with
-suitable permissions (i.e. root) to create, start, stop, and fetch
-information about devices.
-
-There is no isolation between devices created by one process and those
-created by another. Therefore two processes that do not trust each other
-cannot both use UBD without potential interference. There is also no
-isolation for containers.
-
-I think it would be a mistake to keep the ubd-control interface in its
-current form since the current global/root model is limited. Instead I
-suggest:
-- Creating a device returns a new file descriptor instead of a global
-  dev_id. The device can be started/stopped/configured through this (and
-  only through this) per-device file descriptor. The device is not
-  visible to other processes through ubd-control so interference is not
-  possible. In order to give another process control over the device the
-  fd can be passed (e.g. SCM_RIGHTS).=20
-
-Now multiple applications/containers/etc can use ubd-control without
-interfering with each other. The security model still requires root
-though since devices can be malicious.
-
-FUSE allows unprivileged mounts (see fuse_allow_current_process()). Only
-processes with the same uid as the FUSE daemon can access such mounts
-(in the default configuration). This prevents security issues while
-still allowing unprivileged use cases.
-
-I suggest adapting the FUSE security model to block devices:
-- Devices can be created without CAP_SYS_ADMIN but they have an
-  'unprivileged' flag set to true.
-- Unprivileged devices are not probed for partitions and LVM doesn't
-  touch them. This means the kernel doesn't access these devices via
-  code paths that might be exploitable.
-- When another process with a different uid from ubdsrv opens an
-  unprivileged device, -EACCES is returned. This protects other
-  uids from the unprivileged device.
-- When another process with a different uid from ubdsrv opens a
-  _privileged_ device there is no special access check because ubdsrv is
-  privileged.
-
-With these changes UBD can be used by unprivileged processes and
-containers. I think it's worth discussing the details and having this
-model from the start so UBD can be used in a wide range of use cases.
-
-Stefan
-
---uCYJ7l6rM0lflhAj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmKDq+oACgkQnKSrs4Gr
-c8gciAf+JxH0nZCAHY7X+muFxCm6VDyKoarHuOh9NAWV2JRk5Bb12LHTTfl0+1yn
-UeZAQuRg7ez0Ur8CXPkc+5FCgBR/Ahqm7iThJ6tns+mErvKkducPXLiLXudZn11o
-mdFgAI8bi2W/REoCKLYAweBWHLm2WnKVsL/wVfCDnpXWjE6HCVsFlYmQlBCWN0wD
-HolEityrNvgAQeW/hVYV/2Lo6/OVBiLqU6gxMrHUvWlj0WMoLhkhLA4FIDNxs04i
-RJYZODQv9jr+tDjYZ+s1ZN8H8AnKkRVTCcMpg76ADhuNMUQjQINGdgSty7uixy4a
-BrIMVdd/t/ldnse1423hFtYsqmKnPg==
-=OqHO
------END PGP SIGNATURE-----
-
---uCYJ7l6rM0lflhAj--
-
+Best regards,
+Krzysztof

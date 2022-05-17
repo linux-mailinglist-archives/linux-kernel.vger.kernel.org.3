@@ -2,119 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F171529B6C
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7690E529B6F
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240322AbiEQHu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 03:50:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43314 "EHLO
+        id S241639AbiEQHv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 03:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241486AbiEQHuQ (ORCPT
+        with ESMTP id S242175AbiEQHvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 03:50:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B6E8744775
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:50:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652773814;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fcxa52FaP/LJSTmTsYRMIBzyizNUgowBuXRZOO4RnAA=;
-        b=b3R4XK7HNx9P1R7A20Yxi5XBsmG3a/NcGsgCAzhvlASXFrNLix94UujfIzyxRtPnuiySLs
-        q8wdsm6Tj7HZ2OWJEUetK9qCQ2NMJ34GhvZG/rAuAdQB8N1gTaxPLfAjQt/K11H7BKxXGV
-        4/5dGbNt+0zjviJVFNmhikBVQ8WS7q8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-433-zzZy4rXjM0e348ewSnTnaA-1; Tue, 17 May 2022 03:50:10 -0400
-X-MC-Unique: zzZy4rXjM0e348ewSnTnaA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B12DE3C138A6;
-        Tue, 17 May 2022 07:50:09 +0000 (UTC)
-Received: from T590 (ovpn-8-20.pek2.redhat.com [10.72.8.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 309F9154A380;
-        Tue, 17 May 2022 07:50:03 +0000 (UTC)
-Date:   Tue, 17 May 2022 15:49:58 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     "yukuai (C)" <yukuai3@huawei.com>
-Cc:     Tejun Heo <tj@kernel.org>,
-        Zhang Wensheng <zhangwensheng5@huawei.com>, axboe@kernel.dk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org
-Subject: Re: [PATCH -next] block: fix io hung of setting throttle limit
- frequently
-Message-ID: <YoNTpswO2+tEWbWo@T590>
-References: <20220516014429.33723-1-zhangwensheng5@huawei.com>
- <YoKmCOAzwzw3Lz7g@slm.duckdns.org>
- <ca251645-8d52-7a93-6ac2-579d97922a9e@huawei.com>
+        Tue, 17 May 2022 03:51:22 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E22618382
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:51:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652773881; x=1684309881;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=LWIEB4/lPMy65N4AJNM7XhWmKfMhu8OaBtUPWfYPFRM=;
+  b=oBQvk/8x+ysG+UXf+EL7cwQUiVXMrkP+DXGzRx6WpNvsb63Irvb8PcE6
+   zgpf0HFN3P2ppYmVflZAA+1eLxMFpdMSVVx3qP+tIQ7UMr5pejI1Xow4Q
+   vy8HB0kuKzGRAuHMisl5PR5mtRCBjYxslIT6q9XYyoFN29tzM7m/jkfis
+   TDWo1WuKmRKPEXt0PNtjlsu8M9n7TQvz+06ZcV4O+Qj/BpWrpdVjtxknL
+   kucm0DWy4qQOiBXmDJAHf6htGFSX+UqycSPhOMjuifmib4Jpx58kxQDYO
+   +eO6UWBns30tzhXrGYgNefDZ44bYunFkDqhYStHztIRylSayxJQmM6tSZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="271045377"
+X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
+   d="scan'208";a="271045377"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 00:51:19 -0700
+X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
+   d="scan'208";a="568758921"
+Received: from psagan-mobl.ger.corp.intel.com (HELO localhost) ([10.249.132.13])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 00:51:16 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Mark Yacoub <markyacoub@chromium.org>
+Cc:     David Airlie <airlied@linux.ie>, markyacoub@chromium.org,
+        linux-kernel@vger.kernel.org, seanpaul@chromium.org,
+        dri-devel@lists.freedesktop.org,
+        Thomas Zimmermann <tzimmermann@suse.de>, markyacoub@google.com
+Subject: Re: [PATCH] drm: Add a debug message when getting a prop is missing
+In-Reply-To: <20220510182810.1223574-1-markyacoub@chromium.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220510182810.1223574-1-markyacoub@chromium.org>
+Date:   Tue, 17 May 2022 10:51:14 +0300
+Message-ID: <87bkvwfvgt.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ca251645-8d52-7a93-6ac2-579d97922a9e@huawei.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 11:12:28AM +0800, yukuai (C) wrote:
-> 在 2022/05/17 3:29, Tejun Heo 写道:
-> > On Mon, May 16, 2022 at 09:44:29AM +0800, Zhang Wensheng wrote:
-> > > diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-> > > index 469c483719be..8acb205dfa85 100644
-> > > --- a/block/blk-throttle.c
-> > > +++ b/block/blk-throttle.c
-> > > @@ -1321,12 +1321,14 @@ static void tg_conf_updated(struct throtl_grp *tg, bool global)
-> > >   	 * that a group's limit are dropped suddenly and we don't want to
-> > >   	 * account recently dispatched IO with new low rate.
-> > >   	 */
-> > > -	throtl_start_new_slice(tg, READ);
-> > > -	throtl_start_new_slice(tg, WRITE);
-> > > +	if (!timer_pending(&sq->parent_sq->pending_timer)) {
-> > > +		throtl_start_new_slice(tg, READ);
-> > > +		throtl_start_new_slice(tg, WRITE);
-> > > -	if (tg->flags & THROTL_TG_PENDING) {
-> > > -		tg_update_disptime(tg);
-> > > -		throtl_schedule_next_dispatch(sq->parent_sq, true);
-> > > +		if (tg->flags & THROTL_TG_PENDING) {
-> > > +			tg_update_disptime(tg);
-> > > +			throtl_schedule_next_dispatch(sq->parent_sq, true);
-> > > +		}
-> > 
-> > Yeah, but this ends up breaking the reason why it's starting the new slices
-> > in the first place explained in the commit above, right? I'm not sure what
-> > the right solution is but this likely isn't it.
-> > 
-> Hi, Tejun
-> 
-> Ming added a condition in tg_with_in_bps_limit():
-> -       if (bps_limit == U64_MAX) {
-> +       /* no need to throttle if this bio's bytes have been accounted */
-> +       if (bps_limit == U64_MAX || bio_flagged(bio, BIO_THROTTLED)) {
-> 
-> Which will let the first throttled bio to be issued immediately once
-> the config if updated.
-> 
-> Do you think this behaviour is OK? If so, we can do the same for
-> tg_with_in_iops_limit.
+On Tue, 10 May 2022, Mark Yacoub <markyacoub@chromium.org> wrote:
+> [Why]
+> If a connector property is attached but
+> drm_atomic_connector_get_property doesn't handle a case for it,
+> modeteset will crash with a segfault without.
+>
+> [How]
+> Add a debug message indicating that a connector property is not handled
+> when user space is trying to read it.
+>
+> TEST=modetest
+>
+> Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
+> ---
+>  drivers/gpu/drm/drm_atomic_uapi.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/drm_atomic_uapi.c b/drivers/gpu/drm/drm_atomic_uapi.c
+> index acb1ee93d206..36b0f664dd80 100644
+> --- a/drivers/gpu/drm/drm_atomic_uapi.c
+> +++ b/drivers/gpu/drm/drm_atomic_uapi.c
+> @@ -884,6 +884,12 @@ drm_atomic_connector_get_property(struct drm_connector *connector,
+>  		return connector->funcs->atomic_get_property(connector,
+>  				state, property, val);
+>  	} else {
+> +		// LOG that the kernel is missing handling this property as a case here.
 
-IMO, you can't do that for iops limit. If BIO_THROTTLED is set for one
-bio, all its bytes have been accounted, so no need to throttle this bio
-in case of bps limit. iops limit is another story, since io account is
-done in request IO which is based on split bio, so the bio(split bio)
-still need to be check & throttle in case of iops limit.
+The comment is unnecessary, and we also don't use // comments.
 
+> +		drm_dbg_atomic(
+> +			dev,
+> +			"[CONNECTOR:%d:%s] Get Property [PROP:%d:%s] is not handled\n",
+> +			connector->base.id, connector->name, property->base.id,
+> +			property->name);
 
-Thanks,
-Ming
+Why not use the same message as in drm_atomic_connector_set_property()?
 
+Blank line here.
+
+BR,
+Jani.
+
+>  		return -EINVAL;
+>  	}
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center

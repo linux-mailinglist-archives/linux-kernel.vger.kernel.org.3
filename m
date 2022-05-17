@@ -2,86 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D80529C3E
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 10:20:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14DB5529C42
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 10:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242638AbiEQIUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 04:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34302 "EHLO
+        id S232381AbiEQIVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 04:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232381AbiEQIUO (ORCPT
+        with ESMTP id S243111AbiEQIV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 04:20:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CBA960D8;
-        Tue, 17 May 2022 01:20:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC41261243;
-        Tue, 17 May 2022 08:20:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 52365C34117;
-        Tue, 17 May 2022 08:20:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652775612;
-        bh=QyxujttSv5a8CJWHbBKBQU0yq5VwviWomahOUnym0wo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=G8/Na8eMEhOYe/YEA3/vLYzZKAZM/KPBBc9iv8S33tC2lmljcWoibHrpyKTbc+uSe
-         87Vnzz+I2y4WfMeJ9RUGEwKha3lXwPDRQuLhI4i+EIl7BPyMO407RkLIuzKnTUcibo
-         UB29XOEeD0lfM7wHb869ttmAhjy6ImBskxFVDe+cVzkni7wACc6CQpwVWT8XUQNi9n
-         adwehYbq9h27DobAkv5U4PbkfIO3Amj7QkptFReMlllfWPgam9tganUEE3EWFHQAet
-         +gvZlDcyBdW3ydlhERyQCAgE4XL+wZK5GLwAp3NAZ2TFHotZEbkrWXIDb2uI6zSRuq
-         +AWkNu/Kx971w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 32770F0389D;
-        Tue, 17 May 2022 08:20:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 17 May 2022 04:21:27 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D046BCB1;
+        Tue, 17 May 2022 01:21:25 -0700 (PDT)
+Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4L2TXG147Gz67x9g;
+        Tue, 17 May 2022 16:18:22 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 17 May 2022 10:21:22 +0200
+Received: from [10.47.88.19] (10.47.88.19) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 17 May
+ 2022 09:21:21 +0100
+Message-ID: <f1e5309d-d330-faf1-32c5-78962b125f66@huawei.com>
+Date:   Tue, 17 May 2022 09:21:21 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v8 2/8] hwtracing: hisi_ptt: Add trace function support
+ for HiSilicon PCIe Tune and Trace device
+To:     Yicong Yang <yangyicong@huawei.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        <gregkh@linuxfoundation.org>, <alexander.shishkin@linux.intel.com>,
+        <leo.yan@linaro.org>, <james.clark@arm.com>, <will@kernel.org>,
+        <robin.murphy@arm.com>, <acme@kernel.org>,
+        <jonathan.cameron@huawei.com>
+CC:     <helgaas@kernel.org>, <lorenzo.pieralisi@arm.com>,
+        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <mark.rutland@arm.com>, <joro@8bytes.org>,
+        <shameerali.kolothum.thodi@huawei.com>, <peterz@infradead.org>,
+        <mingo@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-pci@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <iommu@lists.linux-foundation.org>, <prime.zeng@huawei.com>,
+        <liuqi115@huawei.com>, <zhangshaokun@hisilicon.com>,
+        <linuxarm@huawei.com>
+References: <20220516125223.32012-1-yangyicong@hisilicon.com>
+ <20220516125223.32012-3-yangyicong@hisilicon.com>
+ <90aafbc1-b7f6-1cc9-8f94-c72f05150f70@huawei.com>
+ <31113797-29c5-1400-f7ac-bff79853b3fe@huawei.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <31113797-29c5-1400-f7ac-bff79853b3fe@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: lan966x: Fix assignment of the MAC address
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165277561220.28744.11715921270225705422.git-patchwork-notify@kernel.org>
-Date:   Tue, 17 May 2022 08:20:12 +0000
-References: <20220513180030.3076793-1-horatiu.vultur@microchip.com>
-In-Reply-To: <20220513180030.3076793-1-horatiu.vultur@microchip.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.47.88.19]
+X-ClientProxiedBy: lhreml743-chm.china.huawei.com (10.201.108.193) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Fri, 13 May 2022 20:00:30 +0200 you wrote:
-> The following two scenarios were failing for lan966x.
-> 1. If the port had the address X and then trying to assign the same
->    address, then the HW was just removing this address because first it
->    tries to learn new address and then delete the old one. As they are
->    the same the HW remove it.
-> 2. If the port eth0 was assigned the same address as one of the other
->    ports eth1 then when assigning back the address to eth0 then the HW
->    was deleting the address of eth1.
+On 17/05/2022 09:09, Yicong Yang wrote:
+>>> +    target = cpumask_any(cpumask_of_node(dev_to_node(&hisi_ptt->pdev->dev)));
+>>> +    if (target < nr_cpumask_bits) {
+>> the comment for cpumask_any() hints to check against nr_cpu_ids - any specific reason to check against nr_cpumask_bits?
+>>
+> here should be:
+> 	if (target >= nr_cpumask_bits) {
 > 
-> [...]
+> will fix this up.
+> 
 
-Here is the summary with links:
-  - [net] net: lan966x: Fix assignment of the MAC address
-    https://git.kernel.org/netdev/net/c/af8ca6eaa9b2
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+I am still not sure that using nr_cpumask_bits is correct.

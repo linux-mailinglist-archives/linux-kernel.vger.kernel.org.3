@@ -2,95 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC8752A5DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF7352A5E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349799AbiEQPT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 11:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
+        id S1349759AbiEQPTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 11:19:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349759AbiEQPTX (ORCPT
+        with ESMTP id S1349788AbiEQPTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 11:19:23 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99383B579
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:19:22 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso2560405pjg.0
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:19:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=NtCVu5kwlt/0GeeCJHb+/bnS0itYTikVVYx8LL9uX0w=;
-        b=3RKQV6tsbyrmUfidQNrHgRSDxahUsw5KwHXeTnnuzXwmOO18WyoB6EVhZRXSLdFM4j
-         zhKtx7nP76meXVYhp6sQx/QMcfYgtsiaFpTnDO86tdqLDdvxA0bCTrmjvlmZISP5TF74
-         M6vIq8BT7levvC+TleV3x9XzZHcvBWx4E8V7E++SXUVQvSk+20pqNJeTU26CVDOe65Lm
-         eKfT6swZRtxVqSSk5TDWZTCof+IXc0eiwsclaJWZ7VOyBUUwUZIvNxx6DzGSBUGog4O1
-         E93CV0Ocu5nWcuXRgZrxWu8sGpGTGuj0ygKK7NO9RR02tXT8ctEw8u+Sr1h1ovusMGW4
-         55Tw==
+        Tue, 17 May 2022 11:19:37 -0400
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52BA3BA51;
+        Tue, 17 May 2022 08:19:30 -0700 (PDT)
+Received: by mail-oi1-f169.google.com with SMTP id q10so22639629oia.9;
+        Tue, 17 May 2022 08:19:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=NtCVu5kwlt/0GeeCJHb+/bnS0itYTikVVYx8LL9uX0w=;
-        b=LPJrOQegaO6kU6xH2ru8e08ud3fujGSyxSrV/9TRRRmMgFYBWDc70tWIJW8YR+21j/
-         6ycFMUyJAG+wzq0BnfKm09P5Hrb1a8UdbAZtTKVCJxvGNSfz44mD8jPuXP4nKhg9O9Ug
-         X7Hrd/1uwyVCaj6cpN6PKsr3QEQdrebQAn6+GCPsXCGodVxi0UUp1eZUhnZvnwJ+3EQX
-         S+O3tMAc5U4utd9j2sw7krk2z8uwL1+RPixgtEZPCMF+wd0tFq/ClPGp0F7AhvoDFUJo
-         ER6kBwJuFXMeZaIinIC/kv92lp0MmrujDu8EHrDe/Nk7Q3dTab1NzYRj9i3i68ChX8co
-         rx8A==
-X-Gm-Message-State: AOAM530UFmVKyVIqLswr/lPqdRM1ffJcYkWinL5wpOgBr+GK4BmnAT2J
-        +1vi7AhHafphRaj7GBwRozaflw==
-X-Google-Smtp-Source: ABdhPJwfcOh/4LoIXBpkam4xGXt5zJ1nliaKG8JzVlw5Aie6/aZ/7LkEJQUh+M7FdG8XsHexJ6E/Zg==
-X-Received: by 2002:a17:903:248:b0:155:e660:b774 with SMTP id j8-20020a170903024800b00155e660b774mr22794133plh.174.1652800762271;
-        Tue, 17 May 2022 08:19:22 -0700 (PDT)
-Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
-        by smtp.gmail.com with ESMTPSA id z11-20020a1709027e8b00b0016144a84c31sm7127822pla.119.2022.05.17.08.19.20
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=sk7To/cnY408tAi0eEPtXkxFL35aqCypY0kkg/jqdLw=;
+        b=qXuq+37RMMViL9Fs9LXQM/JJwpqf3Ne9edCD8fuXYrN8jmeXs8TFcj9eukf/dxTuev
+         fO4HgOv/QWWAd6or7PUTkUZ1CH0+JNSbeBRI6oLY5YB5L2nmoWOFG1ftZTNDZ211Da6E
+         fCJI9aHDOxXnEaldvf4JQLOWljshL5vUjVV4TReTZ2EhJEjr0Btwd8YP2hksoofVzVh8
+         1VWWHEDpeMtFjNuNBjqaIQYb/Rt6OhpAvqTMfuw3Vp+juIonL/At7rLEyCJgQMqtwkkB
+         84LuGMGF8g5zQaa/RbmGzp5h0w+lB2lPQ77pXLge+nQis+TMOCJ8vjxdwn+mcLR0PFfQ
+         tZOA==
+X-Gm-Message-State: AOAM533CC2JMG8T8bTaHHFkxLTg9MU9Sl2XCZyBfGndtxFa5mZbP5E1M
+        ih58EGPv2XzPdvyz5DZNHg==
+X-Google-Smtp-Source: ABdhPJwkcmCqKlXiFmdWk4FKdCcrkh4JqOk5ARujtp8mTS1TQ2XWBLTKQX3OKemV6gUSZmTCnpa9nw==
+X-Received: by 2002:a05:6808:1201:b0:325:75e1:25a8 with SMTP id a1-20020a056808120100b0032575e125a8mr16753250oil.18.1652800770085;
+        Tue, 17 May 2022 08:19:30 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h9-20020a056870538900b000edae17a8cesm6801068oan.3.2022.05.17.08.19.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 08:19:21 -0700 (PDT)
-Date:   Tue, 17 May 2022 08:19:18 -0700
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     longli@linuxonhyperv.com
-Cc:     longli@microsoft.com, "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org
-Subject: Re: [PATCH 03/12] net: mana: Handle vport sharing between devices
-Message-ID: <20220517081918.655fe626@hermes.local>
-In-Reply-To: <1652778276-2986-4-git-send-email-longli@linuxonhyperv.com>
-References: <1652778276-2986-1-git-send-email-longli@linuxonhyperv.com>
-        <1652778276-2986-4-git-send-email-longli@linuxonhyperv.com>
+        Tue, 17 May 2022 08:19:29 -0700 (PDT)
+Received: (nullmailer pid 1056432 invoked by uid 1000);
+        Tue, 17 May 2022 15:19:28 -0000
+Date:   Tue, 17 May 2022 10:19:28 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     shawnguo@kernel.org, festevam@gmail.com,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        kernel@pengutronix.de, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, mathieu.poirier@linaro.org,
+        linux-arm-kernel@lists.infradead.org, Peng Fan <peng.fan@nxp.com>,
+        s.hauer@pengutronix.de, bjorn.andersson@linaro.org,
+        linux-remoteproc@vger.kernel.org, robh+dt@kernel.org
+Subject: Re: [PATCH V3 1/6] dt-bindings: remoteproc: imx_rproc: support
+ i.MX8QXP
+Message-ID: <20220517151928.GA1056374-robh@kernel.org>
+References: <20220517064937.4033441-1-peng.fan@oss.nxp.com>
+ <20220517064937.4033441-2-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220517064937.4033441-2-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 May 2022 02:04:27 -0700
-longli@linuxonhyperv.com wrote:
+On Tue, 17 May 2022 14:49:32 +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Add i.MX8QXP compatible
+> 
+> Add a new property fsl,resource-id for SoC which supports SCFW.
+> This property is used to check whether remote process is under control
+> of Linux or not.
+> 
+> Add fsl,entry-address to specify the entry address which used by SCFW
+> to kick M4.
+> 
+> To i.MX8QM/QXP, when M4 is in the same hardware partition with Cortex-A
+> cores, need power up M4 through SCFW, then M4 could start. So introduce
+> power-domains property
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  .../bindings/remoteproc/fsl,imx-rproc.yaml        | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
 
-> diff --git a/drivers/net/ethernet/microsoft/mana/mana.h b/drivers/net/ethernet/microsoft/mana/mana.h
-> index 51bff91b63ee..26f14fcb6a61 100644
-> --- a/drivers/net/ethernet/microsoft/mana/mana.h
-> +++ b/drivers/net/ethernet/microsoft/mana/mana.h
-> @@ -375,6 +375,7 @@ struct mana_port_context {
->  	unsigned int num_queues;
->  
->  	mana_handle_t port_handle;
-> +	atomic_t port_use_count;
-
-Could this be a refcount_t instead?
-The refcount_t has protections against under/overflow.
+Reviewed-by: Rob Herring <robh@kernel.org>

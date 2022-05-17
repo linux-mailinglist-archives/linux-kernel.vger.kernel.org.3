@@ -2,353 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B96652A89B
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 18:52:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 958DA52A8A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 18:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351238AbiEQQvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 12:51:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52574 "EHLO
+        id S1351241AbiEQQyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 12:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351230AbiEQQvr (ORCPT
+        with ESMTP id S1350665AbiEQQyt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 12:51:47 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE69442ED0
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 09:51:45 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 4-20020a251004000000b0064df0151b18so2660287ybq.21
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 09:51:45 -0700 (PDT)
+        Tue, 17 May 2022 12:54:49 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08A240934
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 09:54:47 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2fedd26615cso81418747b3.7
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 09:54:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=yVeJ/l1zFFHfNij/tUELDZcgR6A+wVfPGWPNavnMVI8=;
-        b=ba+HQVnJiLu1CbzkcVlGQCU0YSk1X7T/+QDWzK1b1nXbW/pufbEzOCgqLGUpu07mX4
-         YwdiDX64+IvyZ9hJI65ktjGENvDWYLKwwLkY2sbyVuOCba5ExMeshtYI7s4kEFPtXQMj
-         96UJW5R/GJeRjWLO74ZNv2Jg3vk0dTCCTdauYGrY4vJGbIHq+r+laKXMb9VsOj1cd4bx
-         p7ZBRbA8gBhorUA3OkON8Yh4rdsF4sCi5vDYDW+G6btJtbw6YfWCgTZsFurde3HMKQsp
-         sIOUAtszy3ZrgzLwuWUl1ccda/uHj4NkF45DcLwfUkQC+yoaa3BoKwOW6/HtW7biVYfz
-         0bAg==
+        bh=qfrwpsR8dVYRSweWV/3B4/qVRy2oFwVXna3I/qpO720=;
+        b=bcV6Yy2SmG5kbc6Q0/RO4eqS91H09JPCZebLeSw/NxhJKasEo8+GNMY59lxoJsum9M
+         4jhBAuevZyGJx/xmKU4uYQQDy80mfVv4+vgTUAXPqKwYLR9nQw6fT9+oOCredKi7qDEK
+         8qdIv3GRuzTYuddp1+5eme1J94/10qJRcw24MD95o/z7LY86Gyy11dij26G6Tdqr+FFZ
+         VThcInGlWbQWOcS+SAW8xp1YsvTAsNQl+0ImPTGcGWBoCogXWE1LG4TvVtypNzumze7E
+         ys2MDAEwmPlKYvf714pL37hPyu7ozSRB4HqhPYZ24Qkq3npQqvoFsVqWZ0uiso3RqGam
+         LL4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=yVeJ/l1zFFHfNij/tUELDZcgR6A+wVfPGWPNavnMVI8=;
-        b=ZrSNA7wCxKQd+wgq4vOi0QpFfoMSAkoRSBRNcWREi4dxcM4lh50IBECRfrjoD6oHm9
-         sqRNdXG+ZREElkEgNLB43OcTRhi/waotJjVFoVYystxnUC5KqrV4zI5abjKVEfYh9cwJ
-         7VzSnh30wFx0aoSw7LDQ2HVlmemAWoUmfr1u1rahS8wOslEH6UY9DWskUBahCl3A69w6
-         qhtDMVtcfwdltbfpn2WL3TAhnKVptvgTPUTJxhbjs+B5jkLoFdACdmsYRA9aaNEOVVYX
-         xX1G+b4D18eTFVybV9GarWUlfaXp1bQtn6g/6anROUpmzwu2PLH6UuFXVSHl4MaqBpzF
-         kL3Q==
-X-Gm-Message-State: AOAM530q1AvsU5S7t3T8B8aRMHmOh9YB2tAkbglpoY0YHrnDYtYi8poS
-        iC/eyy2L2YlfjHJ4tNlUg1T2nP2tFCY2
-X-Google-Smtp-Source: ABdhPJz8oEtIaNWt0iuyiAo3TBHkBF5kPB0a4gqwI2Vm8DJAFl7UJx+QcL4FClzBZw674Xez1TcYcNbH6HYy
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:a5a1:af73:fe09:fd5])
- (user=irogers job=sendgmr) by 2002:a81:1dd4:0:b0:2dc:1bf:fb9d with SMTP id
- d203-20020a811dd4000000b002dc01bffb9dmr27049666ywd.69.1652806305118; Tue, 17
- May 2022 09:51:45 -0700 (PDT)
-Date:   Tue, 17 May 2022 09:51:36 -0700
-In-Reply-To: <20220517165136.479226-1-irogers@google.com>
-Message-Id: <20220517165136.479226-3-irogers@google.com>
-Mime-Version: 1.0
-References: <20220517165136.479226-1-irogers@google.com>
-X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [PATCH v2 2/2] perf test: Json format checking
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Claire Jensen <cjense@google.com>, Alyssa Ross <hi@alyssa.is>,
-        Like Xu <likexu@tencent.com>,
-        James Clark <james.clark@arm.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Claire Jensen <clairej735@gmail.com>
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qfrwpsR8dVYRSweWV/3B4/qVRy2oFwVXna3I/qpO720=;
+        b=J5z6SGRcQDTakUyV6LxHCS/LNa1TQyJjuOlNPyZlaT1GlVJdSAahA3QB5SwpEuHWgX
+         RDJ01ruSat1cIMDZBBkCBj+5xJN6ncY+gYwZhtRraLywPJoJhAXERKiTruCRKStjcVvW
+         HO7/PuUCI3EJWz0ZYPWw3Er3VoUD6AGRhtWYy4zDHlVzHGxBFGQstAyn2OqRPmU1D+uw
+         pxH/grTRh6I+h20kC0DL7bAhHITmLtFfpF+jb4s+/z9MKly2nrtq+9UgwD0urORTRdkl
+         u9CcUpSmfPrzOj+ey2OigqRiG3Eb0uA6omN2qo6thqG6qV+3QeMWzt5ng0UTiXlX31Ct
+         jdIA==
+X-Gm-Message-State: AOAM5336kukDLrbV0WcJosUN9F6NwTRdyw7Jy0ev7iuVA+h9Ezk4Ha00
+        Tq+o/DirPHNX9s1oUnlnbk5DCCzRdw5RJ8sczOGmfw==
+X-Google-Smtp-Source: ABdhPJxRWXaAW/s7NQiyicZLAUVWqeo8BUdGCRUR2iOWAW29E0H0E6iMG/OCQUnBO3WNAZSnwEP4KifL6o+gmc2+wiI=
+X-Received: by 2002:a0d:d4d0:0:b0:2fe:b86b:472d with SMTP id
+ w199-20020a0dd4d0000000b002feb86b472dmr24665158ywd.469.1652806487018; Tue, 17
+ May 2022 09:54:47 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220517101410.3493781-1-andre.przywara@arm.com> <20220517153444.GA1057027-robh@kernel.org>
+In-Reply-To: <20220517153444.GA1057027-robh@kernel.org>
+From:   Peter Maydell <peter.maydell@linaro.org>
+Date:   Tue, 17 May 2022 17:54:36 +0100
+Message-ID: <CAFEAcA8sE8Rj0GmF71ox4BdDr0UcaS4QwiLUVUUFH5oj+hDhfA@mail.gmail.com>
+Subject: Re: [PATCH] of/fdt: Ignore disabled memory nodes
+To:     Rob Herring <robh@kernel.org>
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Ross Burton <ross.burton@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Russell King <linux@armlinux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Claire Jensen <cjense@google.com>
+On Tue, 17 May 2022 at 16:34, Rob Herring <robh@kernel.org> wrote:
+>
+> On Tue, May 17, 2022 at 11:14:10AM +0100, Andre Przywara wrote:
+> > When we boot a machine using a devicetree, the generic DT code goes
+> > through all nodes with a 'device_type = "memory"' property, and collects
+> > all memory banks mentioned there. However it does not check for the
+> > status property, so any nodes which are explicitly "disabled" will still
+> > be added as a memblock.
+> > This ends up badly for QEMU, when booting with secure firmware on
+> > arm/arm64 machines, because QEMU adds a node describing secure-only
+> > memory:
+> > ===================
+> >       secram@e000000 {
+>
+> BTW, 'memory' is the correct node name.
 
-Add field checking tests for perf stat JSON output.
-Sanity checks the expected number of fields are present, that the
-expected keys are present and they have the correct values.
+We already have a 'memory' node, which is for the NS
+memory. This one's for the secure-only RAM block,
+which is why I gave it a name that hopefully helps in
+spotting that when a human is reading the DT.
 
-Signed-off-by: Claire Jensen <cjense@google.com>
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- .../tests/shell/lib/perf_json_output_lint.py  |  92 +++++++++++
- tools/perf/tests/shell/stat+json_output.sh    | 147 ++++++++++++++++++
- 2 files changed, 239 insertions(+)
- create mode 100644 tools/perf/tests/shell/lib/perf_json_output_lint.py
- create mode 100755 tools/perf/tests/shell/stat+json_output.sh
+I'm not really sure to what extent node names in device trees are
+"this is just an identifying textual label" and to what extent
+they are "this is really ABI and you need to follow the standard",
+though -- nothing in practice seems to care what they are,
+suggesting the "textual label" theory, but some bits of tooling
+complain if you do things like forget the address value or use the
+same address for two different nodes, suggesting the "really ABI"
+theory.
 
-diff --git a/tools/perf/tests/shell/lib/perf_json_output_lint.py b/tools/perf/tests/shell/lib/perf_json_output_lint.py
-new file mode 100644
-index 000000000000..608eb8f5caf2
---- /dev/null
-+++ b/tools/perf/tests/shell/lib/perf_json_output_lint.py
-@@ -0,0 +1,92 @@
-+#!/usr/bin/python
-+# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+# Basic sanity check of perf JSON output as specified in the man page.
-+
-+from __future__ import print_function
-+import argparse
-+import sys
-+import json
-+
-+ap = argparse.ArgumentParser()
-+ap.add_argument('--no-args', action='store_true')
-+ap.add_argument('--interval', action='store_true')
-+ap.add_argument('--system-wide-no-aggr', action='store_true')
-+ap.add_argument('--system-wide', action='store_true')
-+ap.add_argument('--event', action='store_true')
-+ap.add_argument('--per-core', action='store_true')
-+ap.add_argument('--per-thread', action='store_true')
-+ap.add_argument('--per-die', action='store_true')
-+ap.add_argument('--per-node', action='store_true')
-+ap.add_argument('--per-socket', action='store_true')
-+args = ap.parse_args()
-+
-+Lines = sys.stdin.readlines()
-+
-+def isfloat(num):
-+  try:
-+    float(num)
-+    return True
-+  except ValueError:
-+    return False
-+
-+
-+def isint(num):
-+  try:
-+    int(num)
-+    return True
-+  except ValueError:
-+    return False
-+
-+def is_counter_value(num):
-+  return isfloat(num) or num == '<not counted>' or num == '<not supported>'
-+
-+def check_json_output(expected_items):
-+  if expected_items != -1:
-+    for line in Lines:
-+      if 'failed' not in line:
-+        count = 0
-+        count = line.count(',')
-+        if count != expected_items:
-+          raise RuntimeError('wrong number of fields. counted {0}'
-+                             ' expected {1} in {2}\n'.format(count, exp, line))
-+  checks = {
-+      'aggregate-number': lambda x: isfloat(x),
-+      'core': lambda x: True,
-+      'counter-value': lambda x: is_counter_value(x),
-+      'cgroup': lambda x: True,
-+      'cpu': lambda x: isint(x),
-+      'die': lambda x: True,
-+      'event': lambda x: True,
-+      'event-runtime': lambda x: isfloat(x),
-+      'interval': lambda x: isfloat(x),
-+      'metric-unit': lambda x: True,
-+      'metric-value': lambda x: isfloat(x),
-+      'node': lambda x: True,
-+      'pcnt-running': lambda x: isfloat(x),
-+      'socket': lambda x: True,
-+      'thread': lambda x: True,
-+      'unit': lambda x: True,
-+  }
-+  input = '[\n' + ','.join(Lines) + '\n]'
-+  for item in json.loads(input):
-+    for key, value in item.items():
-+      if key not in checks:
-+        raise RuntimeError(f'Unexpected key: key={key} value={value}')
-+      if not checks[key](value):
-+        raise RuntimeError(f'Check failed for: key={key} value={value}')
-+
-+
-+try:
-+  if args.no_args or args.system_wide or args.event:
-+    expected_items = 6
-+  elif args.interval or args.per_thread or args.system_wide_no_aggr:
-+    expected_items = 7
-+  elif args.per_core or args.per_socket or args.per_node or args.per_die:
-+    expected_items = 8
-+  else:
-+    # If no option is specified, don't check the number of items.
-+    expected_items = -1
-+  check_json_output(expected_items)
-+except:
-+  print('Test failed for input:\n' + '\n'.join(Lines))
-+  raise
-diff --git a/tools/perf/tests/shell/stat+json_output.sh b/tools/perf/tests/shell/stat+json_output.sh
-new file mode 100755
-index 000000000000..7748b677f2f9
---- /dev/null
-+++ b/tools/perf/tests/shell/stat+json_output.sh
-@@ -0,0 +1,147 @@
-+#!/bin/bash
-+# perf stat JSON output linter
-+# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+# Checks various perf stat JSON output commands for the
-+# correct number of fields.
-+
-+set -e
-+
-+pythonchecker=$(dirname $0)/lib/perf_json_output_lint.py
-+if [ "x$PYTHON" == "x" ]
-+then
-+	if which python3 > /dev/null
-+	then
-+		PYTHON=python3
-+	elif which python > /dev/null
-+	then
-+		PYTHON=python
-+	else
-+		echo Skipping test, python not detected please set environment variable PYTHON.
-+		exit 2
-+	fi
-+fi
-+
-+# Return true if perf_event_paranoid is > $1 and not running as root.
-+function ParanoidAndNotRoot()
-+{
-+	 [ $(id -u) != 0 ] && [ $(cat /proc/sys/kernel/perf_event_paranoid) -gt $1 ]
-+}
-+
-+check_no_args()
-+{
-+	echo -n "Checking json output: no args "
-+	perf stat -j true 2>&1 | $PYTHON $pythonchecker --no-args
-+	echo "[Success]"
-+}
-+
-+check_system_wide()
-+{
-+	echo -n "Checking json output: system wide "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] parnoia and not root"
-+		return
-+	fi
-+	perf stat -j -a true 2>&1 | $PYTHON $pythonchecker --system-wide
-+	echo "[Success]"
-+}
-+
-+check_system_wide_no_aggr()
-+{
-+	echo -n "Checking json output: system wide "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] parnoia and not root"
-+		return
-+	fi
-+	echo -n "Checking json output: system wide no aggregation "
-+	perf stat -j -A -a --no-merge true 2>&1 | $PYTHON $pythonchecker --system-wide-no-aggr
-+	echo "[Success]"
-+}
-+
-+check_interval()
-+{
-+	echo -n "Checking json output: interval "
-+	perf stat -j -I 1000 true 2>&1 | $PYTHON $pythonchecker --interval
-+	echo "[Success]"
-+}
-+
-+
-+check_event()
-+{
-+	echo -n "Checking json output: event "
-+	perf stat -j -e cpu-clock true 2>&1 | $PYTHON $pythonchecker --event
-+	echo "[Success]"
-+}
-+
-+check_per_core()
-+{
-+	echo -n "Checking json output: per core "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] parnoia and not root"
-+		return
-+	fi
-+	perf stat -j --per-core -a true 2>&1 | $PYTHON $pythonchecker --per-core
-+	echo "[Success]"
-+}
-+
-+check_per_thread()
-+{
-+	echo -n "Checking json output: per thread "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] parnoia and not root"
-+		return
-+	fi
-+	perf stat -j --per-thread -a true 2>&1 | $PYTHON $pythonchecker --per-thread
-+	echo "[Success]"
-+}
-+
-+check_per_die()
-+{
-+	echo -n "Checking json output: per die "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] parnoia and not root"
-+		return
-+	fi
-+	perf stat -j --per-die -a true 2>&1 | $PYTHON $pythonchecker --per-die
-+	echo "[Success]"
-+}
-+
-+check_per_node()
-+{
-+	echo -n "Checking json output: per node "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] parnoia and not root"
-+		return
-+	fi
-+	perf stat -j --per-node -a true 2>&1 | $PYTHON $pythonchecker --per-node
-+	echo "[Success]"
-+}
-+
-+check_per_socket()
-+{
-+	echo -n "Checking json output: per socket "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] parnoia and not root"
-+		return
-+	fi
-+	perf stat -j --per-socket -a true 2>&1 | $PYTHON $pythonchecker --per-socket
-+	echo "[Success]"
-+}
-+
-+check_no_args
-+check_system_wide
-+check_system_wide_no_aggr
-+check_interval
-+check_event
-+check_per_core
-+check_per_thread
-+check_per_die
-+check_per_node
-+check_per_socket
-+exit 0
--- 
-2.36.0.550.gb090851708-goog
-
+thanks
+-- PMM

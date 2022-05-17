@@ -2,56 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B21D52AE60
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 01:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EBE052AE63
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 01:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231590AbiEQXGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 19:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
+        id S231601AbiEQXGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 19:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbiEQXGF (ORCPT
+        with ESMTP id S231597AbiEQXGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 19:06:05 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25C1205FA
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 16:06:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=piTVpL+EgRF0+LYEUQ5kkEfL1vSIzB3sfEWYQjLexdg=; b=nsqM4YF+8oKWtRaaWARS/1f6Fg
-        i7SizxaScgumuK6EAWKZmnMEBjLsbnKdI6va42+ZFhApmFpoihSltt7qo6+FxdYsoGo1LN3PEQzM4
-        qnJK9hefhPzCCRY0EtiuB2cci0M9id+0gchSBsyx8yLf/uYqo/BrPZq5hqUJE7R8LVJgSXH0AOWAg
-        hECfVTW4JjBjh5wkw7Er6qwhHw7AQDTHn5JDNPNWAvEUm3x5RNlwkVqvVO/RHcUuCcL/+4VmnK9+/
-        lS15wT3W5NnP/775lLUA/6AbV0ycTPJ5uTz2r0fsZnSkM8PEaLccz1ufLw5zIS3djOlfbsNhnoA0b
-        hAjF+mDw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nr6GG-001N06-1o; Tue, 17 May 2022 23:05:52 +0000
-Message-ID: <78e67e42-7e1e-e9fa-036d-441168100731@infradead.org>
-Date:   Tue, 17 May 2022 16:05:46 -0700
+        Tue, 17 May 2022 19:06:35 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342EF2496E
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 16:06:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652828794; x=1684364794;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=g4WPYgaq9OyQo3O40xrtni2x9Looh9Fp0cHWCY/CocQ=;
+  b=HZoowDlC7OI+OmgF3ThBhy6I6+wGje8TjJfA2A6V0VW4Y2sH4izW51Op
+   UexMrljBIoLUJkVh7wrWunNZGMFp4MS241572cwv8JlPWHYfYd9K+EgeK
+   j9+K4ecSL/4qGvjRka+h6Me/gpJzkgZFb07pAT3i13R98BwNiIM+eDeOm
+   Yx8RqC0PQ95sBVKHtmf1fIYNqSxSDrAJu/XAc5SxGqiSOCvAuN6qmbXdw
+   z9Cu1jY0fBuqPkCDxTVNxoz6OTUfE/amG8yJLevRzscWAQRhC3jvreMhR
+   Rl6iETT4RgfrvMNLDWAzsdamm3nmkhivJmBGTv7FBmYjU0lygiEeXZyTs
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="270198807"
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="270198807"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 16:06:32 -0700
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="545128039"
+Received: from jaimeavi-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.2.102])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 16:06:28 -0700
+Message-ID: <40caabe4c708b35844c246ec6a01b4ee03cbfa63.camel@intel.com>
+Subject: Re: [PATCH v6 5/5] x86/tdx: Add Quote generation support
+From:   Kai Huang <kai.huang@intel.com>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 18 May 2022 11:06:26 +1200
+In-Reply-To: <145b19b7-00e1-3542-a99d-866539081add@linux.intel.com>
+References: <20220512221952.3647598-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220512221952.3647598-6-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220513185824.GB2913259@ls.amr.corp.intel.com>
+         <c07c9fa1-ff6a-df8a-6050-60ade29367f3@linux.intel.com>
+         <38a7c7406f0b0c65e68679fb8399ffe3fae05cb2.camel@intel.com>
+         <145b19b7-00e1-3542-a99d-866539081add@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 11/11] drm/i915: Fix undefined behavior due to shift
- overflowing the constant
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>, LKML <linux-kernel@vger.kernel.org>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-References: <20220405151517.29753-1-bp@alien8.de>
- <20220405151517.29753-12-bp@alien8.de>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220405151517.29753-12-bp@alien8.de>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,136 +76,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/5/22 08:15, Borislav Petkov wrote:
-> From: Borislav Petkov <bp@suse.de>
+On Tue, 2022-05-17 at 13:08 -0700, Sathyanarayanan Kuppuswamy wrote:
 > 
-> Fix:
+> On 5/16/22 7:58 PM, Kai Huang wrote:
+> > On Fri, 2022-05-13 at 12:29 -0700, Sathyanarayanan Kuppuswamy wrote:
+> > > > 
+> > > > 
+> > > > > +
+> > > > > +	/* Wait for attestation completion */
+> > > > > +	ret = wait_for_completion_interruptible(&entry->compl);
+> > > > > +	if (ret < 0) {
+> > > > > +		/*
+> > > > > +		 * For premature termination, since VMM still owns the
+> > > > > +		 * shared buffer, mark the request invalid to let
+> > > > > +		 * quote_callback_handler() handle the memory cleanup
+> > > > > +		 * function.
+> > > > > +		 */
+> > > > > +		invalidate_quote_request(entry);
+> > > > 
+> > > > Interrupt can arrive after signal interrupt.  So invalidate_quote_request()
+> > > > should check if the request is already processed, and return 0 or -EINTR.
+> > > > Probably check the state always and del_list under single lock/unlock pair.
+> > > 
+> > > Agree. But I think we should return -EINTR for the interrupted case
+> > > irrespective of the processed status (so no return 0).
+> > > 
+> > > I will hold the lock and handle the cleanup for the processed
+> > > status.
+> > 
+> > Even if we check the buffer status in invalidate_quote_request(), there's no
+> > guarantee the VMM won't change the buffer status _after_ we do the check, so
+> > looks such check isn't necessary.
+> > 
 > 
->   In file included from <command-line>:0:0:
->   drivers/gpu/drm/i915/gt/uc/intel_guc.c: In function ‘intel_guc_send_mmio’:
->   ././include/linux/compiler_types.h:352:38: error: call to ‘__compiletime_assert_1047’ \
->   declared with attribute error: FIELD_PREP: mask is not constant
->     _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+> Consider the case where we get a callback interrupt, and before we
+> complete the processing for it, user terminates the request. In this
+> scenario,  quote_callback_handler() will consider the request is
+> still valid and no do the memory cleanup. To handle this case,
+> we need to check the status in invalidate_quote_request() and do
+> the cleanup if required.
 > 
-> and other build errors due to shift overflowing values.
+> /* Handles early termination of GetQuote requests */
+> void invalidate_quote_request(struct quote_entry *entry)
+> {
+>          struct tdx_quote_hdr *quote_hdr;
 > 
-> See https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic for the gory
-> details as to why it triggers with older gccs only.
+>          /*
+>           * For early termination, if the request is not yet
+>           * processed by VMM (GET_QUOTE_IN_FLIGHT), the VMM
+>           * still owns the shared buffer, so mark the request
+>           * invalid to let quote_callback_handler() handle the
+>           * memory cleanup function. If the request is already
+>           * processed, then do the cleanup and return.
+>           */
 > 
+>          mutex_lock(&quote_lock);
+>          quote_hdr = (struct tdx_quote_hdr *)entry->buf->vmaddr;
+>          if (quote_hdr->status == GET_QUOTE_IN_FLIGHT) {
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
+What prevents VMM from updating quote_hdr->status from IN_FLIGHT to DONE _after_
+this check?
 
-Is this merged anywhere?
-It could/should at least be in linux-next so that other people
-don't waste time on it.
+If you want to add such check, you should check against GET_QUOTE_DONE, but not
+IN_FLIGHT.  Only after status is DONE,  VMM will not update the buffer.  Perhaps
+something like below:
 
-thanks.
+	mutex_lock(&quote_lock);
+	/* Skip invalidate the buffer if VMM has done with the buffer */
+	if (quote_hdr->status == GET_QUOTE_DONE) {
+		mutex_unlock(&quote_lock);
+		return 0;
+	}
 
-> Signed-off-by: Borislav Petkov <bp@suse.de>
-> Cc: Jani Nikula <jani.nikula@linux.intel.com>
-> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: intel-gfx@lists.freedesktop.org
-> Cc: dri-devel@lists.freedesktop.org
-> ---
->  .../gpu/drm/i915/gt/uc/abi/guc_actions_abi.h   |  2 +-
->  .../i915/gt/uc/abi/guc_communication_ctb_abi.h |  2 +-
->  .../gpu/drm/i915/gt/uc/abi/guc_messages_abi.h  |  2 +-
->  drivers/gpu/drm/i915/gt/uc/intel_guc_reg.h     |  2 +-
->  drivers/gpu/drm/i915/i915_reg.h                | 18 +++++++++---------
->  5 files changed, 13 insertions(+), 13 deletions(-)
+And in the IOCTL, you can perhaps to choose to return 0, instead of -EINTR in
+this case, as the Quote has been finished already.
+
+But I am not sure whether this is necessary.  The worst case is one finished
+Quote is wasted I guess.
+
+>                  entry->valid = false;
+>                  mutex_unlock(&quote_lock);
+>                  return;
+>          }
+>          _del_quote_entry(entry);
+>          mutex_unlock(&quote_lock);
+> }
 > 
-> diff --git a/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h b/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h
-> index 7afdadc7656f..e835f28c0020 100644
-> --- a/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h
-> +++ b/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h
-> @@ -50,7 +50,7 @@
->  
->  #define HOST2GUC_SELF_CFG_REQUEST_MSG_LEN		(GUC_HXG_REQUEST_MSG_MIN_LEN + 3u)
->  #define HOST2GUC_SELF_CFG_REQUEST_MSG_0_MBZ		GUC_HXG_REQUEST_MSG_0_DATA0
-> -#define HOST2GUC_SELF_CFG_REQUEST_MSG_1_KLV_KEY		(0xffff << 16)
-> +#define HOST2GUC_SELF_CFG_REQUEST_MSG_1_KLV_KEY		(0xffffU << 16)
->  #define HOST2GUC_SELF_CFG_REQUEST_MSG_1_KLV_LEN		(0xffff << 0)
->  #define HOST2GUC_SELF_CFG_REQUEST_MSG_2_VALUE32		GUC_HXG_REQUEST_MSG_n_DATAn
->  #define HOST2GUC_SELF_CFG_REQUEST_MSG_3_VALUE64		GUC_HXG_REQUEST_MSG_n_DATAn
-> diff --git a/drivers/gpu/drm/i915/gt/uc/abi/guc_communication_ctb_abi.h b/drivers/gpu/drm/i915/gt/uc/abi/guc_communication_ctb_abi.h
-> index c9086a600bce..df83c1cc7c7a 100644
-> --- a/drivers/gpu/drm/i915/gt/uc/abi/guc_communication_ctb_abi.h
-> +++ b/drivers/gpu/drm/i915/gt/uc/abi/guc_communication_ctb_abi.h
-> @@ -82,7 +82,7 @@ static_assert(sizeof(struct guc_ct_buffer_desc) == 64);
->  #define GUC_CTB_HDR_LEN				1u
->  #define GUC_CTB_MSG_MIN_LEN			GUC_CTB_HDR_LEN
->  #define GUC_CTB_MSG_MAX_LEN			256u
-> -#define GUC_CTB_MSG_0_FENCE			(0xffff << 16)
-> +#define GUC_CTB_MSG_0_FENCE			(0xffffU << 16)
->  #define GUC_CTB_MSG_0_FORMAT			(0xf << 12)
->  #define   GUC_CTB_FORMAT_HXG			0u
->  #define GUC_CTB_MSG_0_RESERVED			(0xf << 8)
-> diff --git a/drivers/gpu/drm/i915/gt/uc/abi/guc_messages_abi.h b/drivers/gpu/drm/i915/gt/uc/abi/guc_messages_abi.h
-> index 29ac823acd4c..7d5ba4d97d70 100644
-> --- a/drivers/gpu/drm/i915/gt/uc/abi/guc_messages_abi.h
-> +++ b/drivers/gpu/drm/i915/gt/uc/abi/guc_messages_abi.h
-> @@ -40,7 +40,7 @@
->   */
->  
->  #define GUC_HXG_MSG_MIN_LEN			1u
-> -#define GUC_HXG_MSG_0_ORIGIN			(0x1 << 31)
-> +#define GUC_HXG_MSG_0_ORIGIN			(0x1U << 31)
->  #define   GUC_HXG_ORIGIN_HOST			0u
->  #define   GUC_HXG_ORIGIN_GUC			1u
->  #define GUC_HXG_MSG_0_TYPE			(0x7 << 28)
-> diff --git a/drivers/gpu/drm/i915/gt/uc/intel_guc_reg.h b/drivers/gpu/drm/i915/gt/uc/intel_guc_reg.h
-> index 66027a42cda9..ad570fa002a6 100644
-> --- a/drivers/gpu/drm/i915/gt/uc/intel_guc_reg.h
-> +++ b/drivers/gpu/drm/i915/gt/uc/intel_guc_reg.h
-> @@ -28,7 +28,7 @@
->  #define   GS_MIA_HALT_REQUESTED		  (0x02 << GS_MIA_SHIFT)
->  #define   GS_MIA_ISR_ENTRY		  (0x04 << GS_MIA_SHIFT)
->  #define   GS_AUTH_STATUS_SHIFT		30
-> -#define   GS_AUTH_STATUS_MASK		  (0x03 << GS_AUTH_STATUS_SHIFT)
-> +#define   GS_AUTH_STATUS_MASK		  (0x03U << GS_AUTH_STATUS_SHIFT)
->  #define   GS_AUTH_STATUS_BAD		  (0x01 << GS_AUTH_STATUS_SHIFT)
->  #define   GS_AUTH_STATUS_GOOD		  (0x02 << GS_AUTH_STATUS_SHIFT)
->  
-> diff --git a/drivers/gpu/drm/i915/i915_reg.h b/drivers/gpu/drm/i915/i915_reg.h
-> index 3c87d77d2cf6..f3ba3d0a430b 100644
-> --- a/drivers/gpu/drm/i915/i915_reg.h
-> +++ b/drivers/gpu/drm/i915/i915_reg.h
-> @@ -7555,19 +7555,19 @@ enum skl_power_gate {
->  #define  PORT_CLK_SEL_LCPLL_810		(2 << 29)
->  #define  PORT_CLK_SEL_SPLL		(3 << 29)
->  #define  PORT_CLK_SEL_WRPLL(pll)	(((pll) + 4) << 29)
-> -#define  PORT_CLK_SEL_WRPLL1		(4 << 29)
-> -#define  PORT_CLK_SEL_WRPLL2		(5 << 29)
-> -#define  PORT_CLK_SEL_NONE		(7 << 29)
-> -#define  PORT_CLK_SEL_MASK		(7 << 29)
-> +#define  PORT_CLK_SEL_WRPLL1		(4U << 29)
-> +#define  PORT_CLK_SEL_WRPLL2		(5U << 29)
-> +#define  PORT_CLK_SEL_NONE		(7U << 29)
-> +#define  PORT_CLK_SEL_MASK		(7U << 29)
->  
->  /* On ICL+ this is the same as PORT_CLK_SEL, but all bits change. */
->  #define DDI_CLK_SEL(port)		PORT_CLK_SEL(port)
->  #define  DDI_CLK_SEL_NONE		(0x0 << 28)
-> -#define  DDI_CLK_SEL_MG			(0x8 << 28)
-> -#define  DDI_CLK_SEL_TBT_162		(0xC << 28)
-> -#define  DDI_CLK_SEL_TBT_270		(0xD << 28)
-> -#define  DDI_CLK_SEL_TBT_540		(0xE << 28)
-> -#define  DDI_CLK_SEL_TBT_810		(0xF << 28)
-> +#define  DDI_CLK_SEL_MG			(0x8U << 28)
-> +#define  DDI_CLK_SEL_TBT_162		(0xCU << 28)
-> +#define  DDI_CLK_SEL_TBT_270		(0xDU << 28)
-> +#define  DDI_CLK_SEL_TBT_540		(0xEU << 28)
-> +#define  DDI_CLK_SEL_TBT_810		(0xFU << 28)
->  #define  DDI_CLK_SEL_MASK		(0xF << 28)
->  
->  /* Transcoder clock selection */
+> 
 
 -- 
-~Randy
+Thanks,
+-Kai
+
+

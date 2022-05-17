@@ -2,164 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9908252A894
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 18:51:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B366652A899
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 18:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351211AbiEQQvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 12:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49820 "EHLO
+        id S1351223AbiEQQvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 12:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351207AbiEQQu7 (ORCPT
+        with ESMTP id S1351207AbiEQQvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 12:50:59 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5AE2BE7;
-        Tue, 17 May 2022 09:50:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652806257; x=1684342257;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9E/vttDFy0EFq5zSJDnsg0HX9OScE43/QxlsTcLOYjs=;
-  b=UJP/OC/2KaLR5AWSQouaN1Gn86vjq8OiJlF4rj4czHPCzl1W20K28/yj
-   E48d3/mnsQq9MGhMPHzQhwRhrS6Y9ylFqNVpHBMnlQzakcyonIljuzsw2
-   /Wlm3MGAXM1oMtPb2hLe8UQuNX3atEIBNZ9vkcedVhvpUGBy4ergUvyFX
-   USfbcdLREcD1wZsXsiZkkCqkqs3CEOdeqtxwb/KkLBc1nYuLP1tD28tAR
-   WclN2XblDZRwtPIi/cwTw74EfMRQWhqcVg5SJNkZoebwdvVUp/h9Mi/k8
-   UV1rn/PnmsWXLJovpJLIVBzc1DbLDpUNsAlV4eHBj+wSiX16F1JMgMiJl
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="271371030"
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="271371030"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 09:50:57 -0700
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="672939443"
-Received: from abhuwalk-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.212.246.60])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 09:50:55 -0700
-Message-ID: <7b1a9f3b5b5087f47bf4839858c7bfebdb60aa2f.camel@linux.intel.com>
-Subject: Re: [PATCH v2 01/14] thermal/core: Change thermal_zone_ops to
- thermal_sensor_ops
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linexp.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>, Len Brown <lenb@kernel.org>,
-        Raju Rangoju <rajur@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Kalle Valo <kvalo@kernel.org>, Peter Kaestle <peter@piie.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Niklas =?ISO-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>,
-        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Chuansheng Liu <chuansheng.liu@intel.com>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Antoine Tenart <atenart@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "open list:ACPI THERMAL DRIVER" <linux-acpi@vger.kernel.org>,
-        "open list:CXGB4 ETHERNET DRIVER (CXGB4)" <netdev@vger.kernel.org>,
-        "open list:INTEL WIRELESS WIFI LINK (iwlwifi)" 
-        <linux-wireless@vger.kernel.org>,
-        "open list:ACER ASPIRE ONE TEMPERATURE AND FAN DRIVER" 
-        <platform-driver-x86@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>
-Date:   Tue, 17 May 2022 09:50:54 -0700
-In-Reply-To: <CAJZ5v0ik_JQ4Awtw7iR68W4-9ZL8FRDsDd-kWmL-n09fgg3reg@mail.gmail.com>
-References: <20220507125443.2766939-1-daniel.lezcano@linexp.org>
-         <20220507125443.2766939-2-daniel.lezcano@linexp.org>
-         <CAJZ5v0ik_JQ4Awtw7iR68W4-9ZL8FRDsDd-kWmL-n09fgg3reg@mail.gmail.com>
+        Tue, 17 May 2022 12:51:42 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDBC4090A
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 09:51:41 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2fed274f3fbso75146737b3.17
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 09:51:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=g2f4uvZg1OcpFGX2p8frlvTRX1+Tckj3KS/ktxrHk0U=;
+        b=KBtLDSOQDN4CFp4UIghgcQ3ZBvT6TcmYf/vyAAE00IVbD8yOelUIzlITkm2MKrJhVg
+         EuQZsVUoCNk/2XD7/A7mN6pUw1Sb5tvJGl10A5Hvodn/A5p5RGqaQGn7epS3fk2/dd8p
+         wARMBv0ZqnZIXVGmuv1xOPpbgUozdHYDCNSpzf8FM/nOIqf4m6RDY+YJZr817HfMOI71
+         gsqB0p1zGCP+Syyhu66PGxrra2f2/FUTGFHtKMmMQhjJuMiEpluBooZiw4DyPWGaTQXv
+         q5bS5VYrVdwFHrDR3DmDEWmpmKdJUffZrdYCPLdxuB0zYeGxTtQl6STIU3QFhmqiXlls
+         M7dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=g2f4uvZg1OcpFGX2p8frlvTRX1+Tckj3KS/ktxrHk0U=;
+        b=LyeQnGqzzmWyrIXOOcqQym8zvE89xtuXHpv9tUQBbh1zDK8fH3TNAgBDhpTbbgjUNC
+         UmsjRfvP7tfB0r0B6oGwsuHeKEsGP2tEkk9pNfohjQfIcA9qUVYtAqmP6hpJxEfRwjEP
+         08psD1lnWJQVNcMfaIZEtpsDkFESGn/x2ArUtEOzFynp6bvg2M/skiog8Hrtih13BWTG
+         pNI5iHm7btU8l+ua20fN5DKlx8XztFnvKs9GweuWTAXyebjcWsM3ke8hGR47X+6+GtqF
+         qvm83VJ1EcJ/v4+yk0UVCtpxHKEWw1nQ9hM5vYaVVBRCCjApMHR8s5a6U4Is4X8ZhpUv
+         zOGw==
+X-Gm-Message-State: AOAM532wOwGD59IpCHMDubLxCpkfAWceobCfc50f18LtXN4XFwqehhOz
+        c/advLfWLaRWPWH6jyDxzzKCz6fmCksY
+X-Google-Smtp-Source: ABdhPJxnIXgI1cz6JmZ4YxDm1wQ3taF1Gug1SeXiL9AUaVPryKXUYqnzY8V+X518Ny5XwSUKJivzkTnhHYkw
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:a5a1:af73:fe09:fd5])
+ (user=irogers job=sendgmr) by 2002:a05:6902:114d:b0:644:ba0d:e95c with SMTP
+ id p13-20020a056902114d00b00644ba0de95cmr24868885ybu.516.1652806300551; Tue,
+ 17 May 2022 09:51:40 -0700 (PDT)
+Date:   Tue, 17 May 2022 09:51:34 -0700
+Message-Id: <20220517165136.479226-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
+Subject: [PATCH v2 0/2] JSON output for perf stat
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Claire Jensen <cjense@google.com>, Alyssa Ross <hi@alyssa.is>,
+        Like Xu <likexu@tencent.com>,
+        James Clark <james.clark@arm.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Claire Jensen <clairej735@gmail.com>
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-05-17 at 17:42 +0200, Rafael J. Wysocki wrote:
-> On Sat, May 7, 2022 at 2:55 PM Daniel Lezcano
-> <daniel.lezcano@linexp.org> wrote:
-> > 
-> > A thermal zone is software abstraction of a sensor associated with
-> > properties and cooling devices if any.
-> > 
-> > The fact that we have thermal_zone and thermal_zone_ops mixed is
-> > confusing and does not clearly identify the different components
-> > entering in the thermal management process. A thermal zone appears
-> > to
-> > be a sensor while it is not.
-> 
-> Well, the majority of the operations in thermal_zone_ops don't apply
-> to thermal sensors.  For example, ->set_trips(), ->get_trip_type(),
-> ->get_trip_temp().
-> 
-In past we discussed adding thermal sensor sysfs with threshold to
-notify temperature.
+Parsing the CSV or text output of perf stat can be problematic when
+new output is added (columns in CSV format). JSON names values and
+simplifies the job of parsing. Add a JSON output option to perf-stat
+then add unit test that parses and validates the output.
 
-So sensor can have set/get_threshold() functions instead of the
-set/get_trip for zones.
+This is a resend of two v2 patches:
+https://lore.kernel.org/lkml/20210813220754.2104922-1-cjense@google.com/
+https://lore.kernel.org/lkml/20210813220936.2105426-1-cjense@google.com/
+with a few formatting changes and improvements to the linter.
 
-Like we have /sys/class/thermal_zone* we can have
-/sys/class/thermal_sensor*.
+v2. Fixes the system wide no aggregation test to not run if the
+    paranoia is wrong. It also makes the counter-value check handle
+    the "<not counted>" and "<not supported>" cases.
 
-Thermal sensor(s) are bound to  thermal zones. This can also include
-multiple sensors in a zone and can create a virtual sensor also.
+Claire Jensen (2):
+  perf stat: Add JSON output option
+  perf test: Json format checking
 
-Thanks,
-Srinivas
+ tools/perf/Documentation/perf-stat.txt        |  21 +
+ tools/perf/builtin-stat.c                     |   2 +
+ .../tests/shell/lib/perf_json_output_lint.py  |  92 +++++
+ tools/perf/tests/shell/stat+json_output.sh    | 147 +++++++
+ tools/perf/util/stat-display.c                | 365 +++++++++++++-----
+ tools/perf/util/stat.h                        |   1 +
+ 6 files changed, 542 insertions(+), 86 deletions(-)
+ create mode 100644 tools/perf/tests/shell/lib/perf_json_output_lint.py
+ create mode 100755 tools/perf/tests/shell/stat+json_output.sh
 
-> > In order to set the scene for multiple thermal sensors aggregated
-> > into
-> > a single thermal zone. Rename the thermal_zone_ops to
-> > thermal_sensor_ops, that will appear clearyl the thermal zone is
-> > not a
-> > sensor but an abstraction of one [or multiple] sensor(s).
-> 
-> So I'm not convinced that the renaming mentioned above is
-> particularly
-> clean either.
-> 
-> IMV the way to go would be to split the thermal sensor operations,
-> like ->get_temp(), out of thermal_zone_ops.
-> 
-> But then it is not clear what a thermal zone with multiple sensors in
-> it really means.  I guess it would require an aggregation function to
-> combine the thermal sensors in it that would produce an effective
-> temperature to check against the trip points.
-> 
-> Honestly, I don't think that setting a separate set of trips for each
-> sensor in a thermal zone would make a lot of sense.
+-- 
+2.36.0.550.gb090851708-goog
 

@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 371F152A9EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9E0852A9FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351963AbiEQSF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 14:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40690 "EHLO
+        id S236820AbiEQSFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 14:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351904AbiEQSF1 (ORCPT
+        with ESMTP id S1351931AbiEQSF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 17 May 2022 14:05:27 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF3150B2C
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B8E5158D
         for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:04:33 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id i20-20020a05600c355400b0039456976dcaso1437406wmq.1
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:04:32 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id p5-20020a1c2905000000b003970dd5404dso1694989wmp.0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:04:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=feA34fPwxNphtEeiKXjdqUR+G6zWJkwwZL1pSvCtX0M=;
-        b=R9tybJsPD2LXpfmErzHoPXBX5wnEtfuDO/IJAB6QCSqRFyn0tmpyLs+kAw80+IaSbH
-         pjiCvnnNRDCffcM9mu3d1ood+LURdpWIFg78PL2VKrwl9A2+kkifa3UGVHKprWGRSwfX
-         aJuwVKVPiDt2NhFn2R/zUgVFXVPxPu4aYOjQvc7E2AUAJqRj+Rs9KT9EU49neFZttysM
-         434/nYP+gHYgcCFdpQy9EGyZuPKMjwt5uUgjwQHcsN+Xtuwf7j0WR+K35KIBX1GDPKNH
-         QtuU5Tp2Hk/cePtJTq5KyBfyFVkEn7SMd5tpbIGwcJuVggfFrSFTTvHd6Oa2KpyhqP4k
-         erTQ==
+        bh=xUxnvY0wWYvQFwVkkKnZ0hYzB77/1hWqL1wilzE489c=;
+        b=kb8ddVNGcr5cVeafnyHPeYNXQERd/qF31HFkfUdq2R0uWdYsIrV5qJc5rqOLz8AJ2R
+         LeqlzPakVREbISyj+rzFqGHtWdSCexiQvfb3BzQZY4Gb6WIGH1gnWvSpBsaSAoOAgJPw
+         Y2gQVbghkdgpguWD5R6ZUeT1mykXPwp1lsXvUamDbQaFqmfp7ZJs19gwZMPPJzKo2yI5
+         qsxQdCIXfE44XW+Ui9ZV8j0XprUOYnEv+bHcF2+ibhH3I9NCtjxHxMwKRYDXdrArzigQ
+         AkB6D1SgJLfFBjy+aEuoy/qrUgNvZwQus2tAbvnVgDGakrkC9Xvt3cWzsnYci380bHt5
+         MjFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=feA34fPwxNphtEeiKXjdqUR+G6zWJkwwZL1pSvCtX0M=;
-        b=wqhws+AqdrtERLGauLSVdlN0TgoBe75PEpXOyI92jhmSVg3ttl8nnUyRo4F5JSvfbP
-         s3zyyKKCFRtGbogHU8lceoe6Gu/nQ5MTZgNlr2LCEBoNYY/s4espes9wBjGh4bZVI7HB
-         L0ywZb9ItoYd2L3OuAXOdB/vmS0TbyhE9zttXfTGo+hsPk5kH7Hmqx2qkK+gD+AgAmr9
-         FU55m7VdjiMmKhQXKc3NTg9XenNwkV97DjMnjFn/Otee/to2AmG8cHS2tAky05cDXBem
-         S7yjjmwrm8Q05s7jMKjKEVjt0Et6KF3AU96hpckU+7Lbq19gB/bwJdzlHDcx5NAiZDG1
-         +QnA==
-X-Gm-Message-State: AOAM531TwHi4eCypqtJyoHbzkqWdg1cyaHdIaqRxw+3zmRLOAWZVVZ7a
-        u+qVT4l0zFhMj/PGFMvk2m4=
-X-Google-Smtp-Source: ABdhPJz7TB36wEMhYWeFrz4ToySZ+jaRfOo1ZPZFJbivzuABi6OYRgg8cTziB7YMzVs5jZu3iWnS7Q==
-X-Received: by 2002:a1c:4c06:0:b0:394:65c4:bd03 with SMTP id z6-20020a1c4c06000000b0039465c4bd03mr22488549wmf.8.1652810671355;
-        Tue, 17 May 2022 11:04:31 -0700 (PDT)
+        bh=xUxnvY0wWYvQFwVkkKnZ0hYzB77/1hWqL1wilzE489c=;
+        b=rJ3sRgpdWQjRsPrMVGIVDDw9mAyP62EFJA32M0pAF+iewIGG6150dKGjar9oerkoju
+         DhDYxAq40E2gi+c3eKytSpPR+/7AimuK9YClA+M7mTsKTKodEu90mFf9KzyLVDiyBc8X
+         PvnBJkW3BXiR/G2yueRzWCSeb2DJF1S7+V8oOs5aO8WY0JoQSHx6AVNDHlPvMsnM0DSa
+         rvx7lhdMtEwquvJMM5awP6lF6G5bQ1M05NW+MSqphvv58MD6KMw3qeCy0BNS0FaYp+m4
+         lZq63t5ej8c5VlYOun/iqhaJ3PEzSBHLpwvRlYB5Im2+5+Of14Pp2oRGUwYKwEJ3aWQq
+         p3sQ==
+X-Gm-Message-State: AOAM5334ui9/7PAXtpZU/icfmRfXVwG45gYFXhxGgEfI/K9POYSAWkSt
+        eXK+dDxQtX25fg3VJUiANQE=
+X-Google-Smtp-Source: ABdhPJzy8So6LUCbbqsaVyGqZpkGWh1nIJifHTvsH6tXSl1Cxhg/tQhSmkYmww8KULDXmX3Xv/O7fQ==
+X-Received: by 2002:a05:600c:1989:b0:394:8dc0:b57f with SMTP id t9-20020a05600c198900b003948dc0b57fmr33101152wmq.110.1652810672320;
+        Tue, 17 May 2022 11:04:32 -0700 (PDT)
 Received: from otyshchenko.router ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id c3-20020adfc6c3000000b0020c5253d8dasm12978625wrh.38.2022.05.17.11.04.30
+        by smtp.gmail.com with ESMTPSA id c3-20020adfc6c3000000b0020c5253d8dasm12978625wrh.38.2022.05.17.11.04.31
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 17 May 2022 11:04:30 -0700 (PDT)
+        Tue, 17 May 2022 11:04:31 -0700 (PDT)
 From:   Oleksandr Tyshchenko <olekstysh@gmail.com>
 To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
 Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
         Stefano Stabellini <sstabellini@kernel.org>,
         Boris Ostrovsky <boris.ostrovsky@oracle.com>,
         Juergen Gross <jgross@suse.com>, Julien Grall <julien@xen.org>
-Subject: [RFC PATCH 1/2] xen/unpopulated-alloc: Introduce helpers for DMA allocations
-Date:   Tue, 17 May 2022 21:04:17 +0300
-Message-Id: <1652810658-27810-2-git-send-email-olekstysh@gmail.com>
+Subject: [RFC PATCH 2/2] xen/grant-table: Use unpopulated DMAable pages instead of real RAM ones
+Date:   Tue, 17 May 2022 21:04:18 +0300
+Message-Id: <1652810658-27810-3-git-send-email-olekstysh@gmail.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1652810658-27810-1-git-send-email-olekstysh@gmail.com>
 References: <1652810658-27810-1-git-send-email-olekstysh@gmail.com>
@@ -71,255 +71,77 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
 
-Add ability to allocate unpopulated DMAable (contiguous) pages
-suitable for grant mapping into. This is going to be used by gnttab
-code (see gnttab_dma_alloc_pages()).
+Depends on CONFIG_XEN_UNPOPULATED_ALLOC. If enabled then unpopulated
+DMAable (contiguous) pages will be allocated for grant mapping into
+instead of ballooning out real RAM pages.
 
-TODO: There is a code duplication in fill_dma_pool(). Also pool
-oparations likely need to be protected by the lock.
+TODO: Fallback to real RAM pages if xen_alloc_unpopulated_dma_pages()
+fails.
 
 Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
 ---
- drivers/xen/unpopulated-alloc.c | 167 ++++++++++++++++++++++++++++++++++++++++
- include/xen/xen.h               |  15 ++++
- 2 files changed, 182 insertions(+)
+ drivers/xen/grant-table.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/drivers/xen/unpopulated-alloc.c b/drivers/xen/unpopulated-alloc.c
-index a39f2d3..bca0198 100644
---- a/drivers/xen/unpopulated-alloc.c
-+++ b/drivers/xen/unpopulated-alloc.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <linux/errno.h>
-+#include <linux/genalloc.h>
- #include <linux/gfp.h>
- #include <linux/kernel.h>
- #include <linux/mm.h>
-@@ -16,6 +17,8 @@ static DEFINE_MUTEX(list_lock);
- static struct page *page_list;
- static unsigned int list_count;
- 
-+static struct gen_pool *dma_pool;
-+
- static struct resource *target_resource;
- 
- /*
-@@ -230,6 +233,161 @@ void xen_free_unpopulated_pages(unsigned int nr_pages, struct page **pages)
- }
- EXPORT_SYMBOL(xen_free_unpopulated_pages);
- 
-+static int fill_dma_pool(unsigned int nr_pages)
-+{
-+	struct dev_pagemap *pgmap;
-+	struct resource *res, *tmp_res = NULL;
-+	void *vaddr;
-+	unsigned int alloc_pages = round_up(nr_pages, PAGES_PER_SECTION);
-+	struct range mhp_range;
-+	int ret;
-+
-+	res = kzalloc(sizeof(*res), GFP_KERNEL);
-+	if (!res)
-+		return -ENOMEM;
-+
-+	res->name = "Xen DMA pool";
-+	res->flags = IORESOURCE_MEM | IORESOURCE_BUSY;
-+
-+	mhp_range = mhp_get_pluggable_range(true);
-+
-+	ret = allocate_resource(target_resource, res,
-+				alloc_pages * PAGE_SIZE, mhp_range.start, mhp_range.end,
-+				PAGES_PER_SECTION * PAGE_SIZE, NULL, NULL);
-+	if (ret < 0) {
-+		pr_err("Cannot allocate new IOMEM resource\n");
-+		goto err_resource;
-+	}
-+
-+	/*
-+	 * Reserve the region previously allocated from Xen resource to avoid
-+	 * re-using it by someone else.
-+	 */
-+	if (target_resource != &iomem_resource) {
-+		tmp_res = kzalloc(sizeof(*tmp_res), GFP_KERNEL);
-+		if (!res) {
-+			ret = -ENOMEM;
-+			goto err_insert;
-+		}
-+
-+		tmp_res->name = res->name;
-+		tmp_res->start = res->start;
-+		tmp_res->end = res->end;
-+		tmp_res->flags = res->flags;
-+
-+		ret = request_resource(&iomem_resource, tmp_res);
-+		if (ret < 0) {
-+			pr_err("Cannot request resource %pR (%d)\n", tmp_res, ret);
-+			kfree(tmp_res);
-+			goto err_insert;
-+		}
-+	}
-+
-+	pgmap = kzalloc(sizeof(*pgmap), GFP_KERNEL);
-+	if (!pgmap) {
-+		ret = -ENOMEM;
-+		goto err_pgmap;
-+	}
-+
-+	pgmap->type = MEMORY_DEVICE_GENERIC;
-+	pgmap->range = (struct range) {
-+		.start = res->start,
-+		.end = res->end,
-+	};
-+	pgmap->nr_range = 1;
-+	pgmap->owner = res;
-+
-+	vaddr = memremap_pages(pgmap, NUMA_NO_NODE);
-+	if (IS_ERR(vaddr)) {
-+		pr_err("Cannot remap memory range\n");
-+		ret = PTR_ERR(vaddr);
-+		goto err_memremap;
-+	}
-+
-+	ret = gen_pool_add_virt(dma_pool, (unsigned long)vaddr, res->start,
-+			alloc_pages * PAGE_SIZE, NUMA_NO_NODE);
-+	if (ret)
-+		goto err_pool;
-+
-+	return 0;
-+
-+err_pool:
-+	memunmap_pages(pgmap);
-+err_memremap:
-+	kfree(pgmap);
-+err_pgmap:
-+	if (tmp_res) {
-+		release_resource(tmp_res);
-+		kfree(tmp_res);
-+	}
-+err_insert:
-+	release_resource(res);
-+err_resource:
-+	kfree(res);
-+	return ret;
-+}
-+
-+/**
-+ * xen_alloc_unpopulated_dma_pages - alloc unpopulated DMAable pages
-+ * @dev: valid struct device pointer
-+ * @nr_pages: Number of pages
-+ * @pages: pages returned
-+ * @return 0 on success, error otherwise
-+ */
-+int xen_alloc_unpopulated_dma_pages(struct device *dev, unsigned int nr_pages,
-+		struct page **pages)
-+{
-+	void *vaddr;
-+	bool filled = false;
-+	unsigned int i;
-+	int ret;
-+
-+	if (!dma_pool)
-+		return -ENODEV;
-+
-+	/* XXX Handle devices which support 64-bit DMA address only for now */
-+	if (dma_get_mask(dev) != DMA_BIT_MASK(64))
-+		return -EINVAL;
-+
-+	while (!(vaddr = (void *)gen_pool_alloc(dma_pool, nr_pages * PAGE_SIZE))) {
-+		if (filled)
-+			return -ENOMEM;
-+		else {
-+			ret = fill_dma_pool(nr_pages);
-+			if (ret)
-+				return ret;
-+
-+			filled = true;
-+		}
-+	}
-+
-+	for (i = 0; i < nr_pages; i++)
-+		pages[i] = virt_to_page(vaddr + PAGE_SIZE * i);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL(xen_alloc_unpopulated_dma_pages);
-+
-+/**
-+ * xen_free_unpopulated_dma_pages - return unpopulated DMAable pages
-+ * @dev: valid struct device pointer
-+ * @nr_pages: Number of pages
-+ * @pages: pages to return
-+ */
-+void xen_free_unpopulated_dma_pages(struct device *dev, unsigned int nr_pages,
-+		struct page **pages)
-+{
-+	void *vaddr;
-+
-+	if (!dma_pool)
-+		return;
-+
-+	vaddr = page_to_virt(pages[0]);
-+
-+	gen_pool_free(dma_pool, (unsigned long)vaddr, nr_pages * PAGE_SIZE);
-+}
-+EXPORT_SYMBOL(xen_free_unpopulated_dma_pages);
-+
- static int __init unpopulated_init(void)
+diff --git a/drivers/xen/grant-table.c b/drivers/xen/grant-table.c
+index 8ccccac..2bb4392 100644
+--- a/drivers/xen/grant-table.c
++++ b/drivers/xen/grant-table.c
+@@ -864,6 +864,25 @@ EXPORT_SYMBOL_GPL(gnttab_free_pages);
+  */
+ int gnttab_dma_alloc_pages(struct gnttab_dma_alloc_args *args)
  {
- 	int ret;
-@@ -241,8 +399,17 @@ static int __init unpopulated_init(void)
- 	if (ret) {
- 		pr_err("xen:unpopulated: Cannot initialize target resource\n");
- 		target_resource = NULL;
++#ifdef CONFIG_XEN_UNPOPULATED_ALLOC
++	int ret;
++
++	ret = xen_alloc_unpopulated_dma_pages(args->dev, args->nr_pages,
++			args->pages);
++	if (ret < 0)
 +		return ret;
- 	}
- 
-+	dma_pool = gen_pool_create(PAGE_SHIFT, NUMA_NO_NODE);
-+	if (!dma_pool) {
-+		pr_err("xen:unpopulated: Cannot create DMA pool\n");
-+		return -ENOMEM;
++
++	ret = gnttab_pages_set_private(args->nr_pages, args->pages);
++	if (ret < 0) {
++		gnttab_dma_free_pages(args);
++		return ret;
 +	}
 +
-+	gen_pool_set_algo(dma_pool, gen_pool_best_fit, NULL);
++	args->vaddr = page_to_virt(args->pages[0]);
++	args->dev_bus_addr = page_to_phys(args->pages[0]);
 +
++	return ret;
++#else
+ 	unsigned long pfn, start_pfn;
+ 	size_t size;
+ 	int i, ret;
+@@ -910,6 +929,7 @@ int gnttab_dma_alloc_pages(struct gnttab_dma_alloc_args *args)
+ fail:
+ 	gnttab_dma_free_pages(args);
  	return ret;
++#endif
  }
- early_initcall(unpopulated_init);
-diff --git a/include/xen/xen.h b/include/xen/xen.h
-index a99bab8..a6a7a59 100644
---- a/include/xen/xen.h
-+++ b/include/xen/xen.h
-@@ -52,9 +52,15 @@ bool xen_biovec_phys_mergeable(const struct bio_vec *vec1,
- extern u64 xen_saved_max_mem_size;
- #endif
+ EXPORT_SYMBOL_GPL(gnttab_dma_alloc_pages);
  
-+struct device;
-+
- #ifdef CONFIG_XEN_UNPOPULATED_ALLOC
- int xen_alloc_unpopulated_pages(unsigned int nr_pages, struct page **pages);
- void xen_free_unpopulated_pages(unsigned int nr_pages, struct page **pages);
-+int xen_alloc_unpopulated_dma_pages(struct device *dev, unsigned int nr_pages,
-+		struct page **pages);
-+void xen_free_unpopulated_dma_pages(struct device *dev, unsigned int nr_pages,
-+		struct page **pages);
- #include <linux/ioport.h>
- int arch_xen_unpopulated_init(struct resource **res);
- #else
-@@ -69,6 +75,15 @@ static inline void xen_free_unpopulated_pages(unsigned int nr_pages,
+@@ -919,6 +939,12 @@ EXPORT_SYMBOL_GPL(gnttab_dma_alloc_pages);
+  */
+ int gnttab_dma_free_pages(struct gnttab_dma_alloc_args *args)
  {
- 	xen_free_ballooned_pages(nr_pages, pages);
- }
-+static inline int xen_alloc_unpopulated_dma_pages(struct device *dev,
-+		unsigned int nr_pages, struct page **pages)
-+{
-+	return -1;
-+}
-+static inline void xen_free_unpopulated_dma_pages(struct device *dev,
-+		unsigned int nr_pages, struct page **pages)
-+{
-+}
- #endif
++#ifdef CONFIG_XEN_UNPOPULATED_ALLOC
++	gnttab_pages_clear_private(args->nr_pages, args->pages);
++	xen_free_unpopulated_dma_pages(args->dev, args->nr_pages, args->pages);
++
++	return 0;
++#else
+ 	size_t size;
+ 	int i, ret;
  
- #endif	/* _XEN_XEN_H */
+@@ -946,6 +972,7 @@ int gnttab_dma_free_pages(struct gnttab_dma_alloc_args *args)
+ 		dma_free_wc(args->dev, size,
+ 			    args->vaddr, args->dev_bus_addr);
+ 	return ret;
++#endif
+ }
+ EXPORT_SYMBOL_GPL(gnttab_dma_free_pages);
+ #endif
 -- 
 2.7.4
 

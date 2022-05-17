@@ -2,111 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02A8B529F59
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B28529F60
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243372AbiEQKZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 06:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52594 "EHLO
+        id S242729AbiEQK1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 06:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344271AbiEQKY6 (ORCPT
+        with ESMTP id S1343929AbiEQKZJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 06:24:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA2613CEC;
-        Tue, 17 May 2022 03:23:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58B3FB81822;
-        Tue, 17 May 2022 10:23:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DDF8C385B8;
-        Tue, 17 May 2022 10:23:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652783033;
-        bh=rReOvOmhDEHjFGqHgf89jVP6b2wbvBVISjGbIlFVMfU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ax+B0LvHN+fGTU2qRbOnMAeBdyPtqmbOWfX91NMKl4fyZ30ALqFs/H4jGul7dNMsH
-         Giy0aYr0b7toT8SaD8XiFejt3j8hpPGPX2kKHCVqiM0QALP6zwBGLCjp7WlZFO+OBa
-         32lZwWUakuJ4cNHG9qOqvnO9Hdtz9Uo0eBy/AtHQ=
-Date:   Tue, 17 May 2022 12:23:46 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yuanjun Gong <ruc_gongyuanjun@163.com>
-Cc:     Benson Leung <bleung@chromium.org>,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 1/1] platform/chrome: check *dest of memcpy
-Message-ID: <YoN3su+KZFwjypXc@kroah.com>
-References: <20220517095521.6897-1-ruc_gongyuanjun@163.com>
+        Tue, 17 May 2022 06:25:09 -0400
+Received: from mail.toke.dk (mail.toke.dk [45.145.95.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A7D182;
+        Tue, 17 May 2022 03:24:33 -0700 (PDT)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
+        t=1652783072; bh=4NsMZH0iSGXiN/MjWHJRukAiwqP9eAfEKGtYlhI1X8M=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=bXESjwSXOba8zLy/g5zj29ZEl0pCaDX/d6sdqyGgElBYYKXZiDnPjNwoPpYNmI5F4
+         pe7KpZ04y6ncl0ZlzpUyBBSQ4FkEABaPfSybvvH/lZHM8XXdBEePUoFYjuQWbjnECv
+         JCE1bioYK7Jzvt6OuTv1wuecXeK73bAKBXA7NWtChcyUv2HimMlPPyG4tY2s4oMyXo
+         z0Fp4wozyWSOhw5sgmaWv7YfYeKoZTa5ZjvXe7mKp46KbR3Zq4J7mSDfVlzjHocezS
+         OUZkr3mhTw1tRIviqsN5zv4CFXZUf8ThtUY+4HoTb0T6BOLsIyuvPK4KRMH1nrG8qO
+         9KG9HodwfmpLg==
+To:     Guo Zhengkui <guozhengkui@vivo.com>, Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "open list:QUALCOMM ATHEROS ATH9K WIRELESS DRIVER" 
+        <linux-wireless@vger.kernel.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     zhengkui_guo@outlook.com, Guo Zhengkui <guozhengkui@vivo.com>
+Subject: Re: [PATCH linux-next v2] net: ath9k: replace ternary operator with
+ max()
+In-Reply-To: <20220517024106.77050-1-guozhengkui@vivo.com>
+References: <874k1pxvca.fsf@kernel.org>
+ <20220517024106.77050-1-guozhengkui@vivo.com>
+Date:   Tue, 17 May 2022 12:24:31 +0200
+X-Clacks-Overhead: GNU Terry Pratchett
+Message-ID: <87wnekbgo0.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517095521.6897-1-ruc_gongyuanjun@163.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 05:55:21PM +0800, Yuanjun Gong wrote:
-> From: Gong Yuanjun <ruc_gongyuanjun@163.com>
-> 
-> In regulator/cros-ec-regulator.c, cros_ec_cmd is sometimes called
-> with *indata set to NULL.
-> 
-> static int cros_ec_regulator_enable(struct regulator_dev *dev){
-> ...
->      cros_ec_cmd(data->ec_dev, 0, EC_CMD_REGULATOR_ENABLE, &cmd,
-> 			  sizeof(cmd), NULL, 0)
-> ...}
-> 
-> Don't do memcpy if indata is NULL.
-> 
-> Signed-off-by: Gong Yuanjun <ruc_gongyuanjun@163.com>
-> ---
->  drivers/platform/chrome/cros_ec_proto.c | 2 +-
->  drivers/regulator/cros-ec-regulator.c   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-> index c4caf2e2de82..da175c57cff7 100644
-> --- a/drivers/platform/chrome/cros_ec_proto.c
-> +++ b/drivers/platform/chrome/cros_ec_proto.c
-> @@ -938,7 +938,7 @@ int cros_ec_command(struct cros_ec_device *ec_dev,
->  	if (ret < 0)
->  		goto error;
->  
-> -	if (insize)
-> +	if (indata && insize)
->  		memcpy(indata, msg->data, insize);
->  error:
->  	kfree(msg);
-> diff --git a/drivers/regulator/cros-ec-regulator.c b/drivers/regulator/cros-ec-regulator.c
-> index c4754f3cf233..1c7ff085e492 100644
-> --- a/drivers/regulator/cros-ec-regulator.c
-> +++ b/drivers/regulator/cros-ec-regulator.c
-> @@ -44,7 +44,7 @@ static int cros_ec_cmd(struct cros_ec_device *ec, u32 version, u32 command,
->  	if (ret < 0)
->  		goto cleanup;
->  
-> -	if (insize)
-> +	if (indata && insize)
->  		memcpy(indata, msg->data, insize);
->  
->  cleanup:
-> -- 
-> 2.17.1
-> 
+Guo Zhengkui <guozhengkui@vivo.com> writes:
 
-<formletter>
+> Fix the following coccicheck warning:
+>
+> drivers/net/wireless/ath/ath9k/dfs.c:249:28-30: WARNING
+> opportunity for max()
+>
+> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
 
-This is not the correct way to submit patches for inclusion in the
-stable kernel tree.  Please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-for how to do this properly.
-
-</formletter>
+Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk>

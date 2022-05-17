@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA4A52AE23
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 00:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8443A52AE27
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 00:29:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbiEQW2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 18:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59362 "EHLO
+        id S231197AbiEQW24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 18:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbiEQW16 (ORCPT
+        with ESMTP id S230011AbiEQW2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 18:27:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEAE84F9D5;
-        Tue, 17 May 2022 15:27:57 -0700 (PDT)
+        Tue, 17 May 2022 18:28:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A02252E56;
+        Tue, 17 May 2022 15:28:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89C0FB81CA8;
-        Tue, 17 May 2022 22:27:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FB1CC34113;
-        Tue, 17 May 2022 22:27:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E2DEB81CA8;
+        Tue, 17 May 2022 22:28:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2C17C385B8;
+        Tue, 17 May 2022 22:28:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652826475;
-        bh=YRNg4fUJchn2hn6EXpKMnrT7d/thkCzgxNDNr+EhcWM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=aQvLPLWSVFJ6A2aBESvJvAKy6Ha8ipgadZRTF0RbEtHztIX/Rl7hezbc9haclggwv
-         egFR8HsIbMvNjHIzbG49fnyLRlrJS+dKZA3h5Z1ENOha+4Wv+lFeMc5WNE3XSpXnVg
-         eN66ndseY0Pas3rVb+KzXtK2rcBNTLZWy9PFKiAmxm772N4TCu/2ghbwNMtkOApKJU
-         IHp9QsIHL2bMbX/ZGYsXMn5vdcl9qQTllkUva8YNab3+pB1uPs6QeYRCeCShTpmaam
-         HPN3rOrADs5Lgit1lMijJC/1wKlC56kJDlKjrVvr2/MrmolY/LNnSETCtNB+fu/oNv
-         3BKsmx1quweNg==
-Date:   Tue, 17 May 2022 15:27:53 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Michael Trimarchi <michael@amarulasolutions.com>
-Cc:     Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] net: fec: Avoid to allocate rx buffer using ATOMIC
- in ndo_open
-Message-ID: <20220517152753.78685d6c@kernel.org>
-In-Reply-To: <20220517100544.2326499-1-michael@amarulasolutions.com>
-References: <20220517100544.2326499-1-michael@amarulasolutions.com>
+        s=k20201202; t=1652826532;
+        bh=qVAlvmeQlhu1YZJFufPFz1VtxpX4m7jT2Rh3w53ctKU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=IyMMjg5hPEBP2Jmo+GjF51uM92OIvbH6Q3C8C91C6uQuRiuebTZ7WiIBZBKVYyvfg
+         U5SlB1hNbffYdgVFgO9Yue4sAiylnTd7T6fNGfB/d2iKwGusrRmgQ9NkimEJHp9R5X
+         lOjX7AoREotjGFTZEsOwnN05E0m6U+IDEsNJ7uYnY/2mIW9P3z1zhEeZ/7fibNHqK/
+         CHVrNKMenpSFpUJJBntAoRyu/wZRowkRJJxf1gBDutpnsMRu48g0DZpqxlSp8jnWSw
+         IHVrJJaASVQMd5itvpL+8DNI2gVI6VGyQ869CXfl1mrRuyBZGBFfiVxUD9x/TYoVZ8
+         67L+/jmOqpDCg==
+Date:   Tue, 17 May 2022 17:28:49 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Oliver OHalloran <oohall@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v3] PCI/AER: Handle Multi UnCorrectable/Correctable
+ errors properly
+Message-ID: <20220517222849.GA1113887@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <54ab824c-44a9-239a-9380-2f051f26a079@linux.intel.com>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,33 +57,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 May 2022 12:05:44 +0200 Michael Trimarchi wrote:
-> Subject: [RFC PATCH] net: fec: Avoid to allocate rx buffer using ATOMIC in ndo_open
-
-nit: "Avoid allocating"
-
-We need a commit message, guessing your motivation something like this
-would be enough IMHO:
-
- Make ndo_open less sensitive to memory pressure.
-
-> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-> ---
->  drivers/net/ethernet/freescale/fec_main.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, May 11, 2022 at 05:29:45PM -0700, Sathyanarayanan Kuppuswamy wrote:
 > 
-> diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-> index 9f33ec838b52..09eb6ea9a584 100644
-> --- a/drivers/net/ethernet/freescale/fec_main.c
-> +++ b/drivers/net/ethernet/freescale/fec_main.c
-> @@ -3076,7 +3076,7 @@ fec_enet_alloc_rxq_buffers(struct net_device *ndev, unsigned int queue)
->  	rxq = fep->rx_queue[queue];
->  	bdp = rxq->bd.base;
->  	for (i = 0; i < rxq->bd.ring_size; i++) {
-> -		skb = netdev_alloc_skb(ndev, FEC_ENET_RX_FRSIZE);
-> +		skb = __netdev_alloc_skb(ndev, FEC_ENET_RX_FRSIZE, GFP_KERNEL);
->  		if (!skb)
->  			goto err_alloc;
->  
+> 
+> On 5/11/22 4:40 PM, Bjorn Helgaas wrote:
+> > On Mon, Apr 18, 2022 at 03:02:37PM +0000, Kuppuswamy Sathyanarayanan wrote:
+> > > Currently the aer_irq() handler returns IRQ_NONE for cases without bits
+> > > PCI_ERR_ROOT_UNCOR_RCV or PCI_ERR_ROOT_COR_RCV are set. But this
+> > > assumption is incorrect.
+> > > 
+> > > Consider a scenario where aer_irq() is triggered for a correctable
+> > > error, and while we process the error and before we clear the error
+> > > status in "Root Error Status" register, if the same kind of error
+> > > is triggered again, since aer_irq() only clears events it saw, the
+> > > multi-bit error is left in tact. This will cause the interrupt to fire
+> > > again, resulting in entering aer_irq() with just the multi-bit error
+> > > logged in the "Root Error Status" register.
+> > > 
+> > > Repeated AER recovery test has revealed this condition does happen
+> > > and this prevents any new interrupt from being triggered. Allow to
+> > > process interrupt even if only multi-correctable (BIT 1) or
+> > > multi-uncorrectable bit (BIT 3) is set.
+> > > 
+> > > Also note that, for cases with only multi-bit error is set, since this
+> > > is not the first occurrence of the error, PCI_ERR_ROOT_ERR_SRC may have
+> > > zero or some junk value. So we cannot cleanly process this error
+> > > information using aer_isr_one_error(). All we are attempting with this
+> > > fix is to make sure error interrupt processing can continue in this
+> > > scenario.
+> > > 
+> > > This error can be reproduced by making following changes to the
+> > > aer_irq() function and by executing the given test commands.
+> > > 
+> > >   static irqreturn_t aer_irq(int irq, void *context)
+> > >           struct aer_err_source e_src = {};
+> > > 
+> > >           pci_read_config_dword(rp, aer + PCI_ERR_ROOT_STATUS,
+> > > 				&e_src.status);
+> > >   +       pci_dbg(pdev->port, "Root Error Status: %04x\n",
+> > >   +		e_src.status);
+> > >           if (!(e_src.status & AER_ERR_STATUS_MASK))
+> > 
+> > Do you mean
+> > 
+> >    if (!(e_src.status & (PCI_ERR_ROOT_UNCOR_RCV|PCI_ERR_ROOT_COR_RCV)))
+> > 
+> > here?  AER_ERR_STATUS_MASK would be after this fix.
+> 
+> Yes. You are correct. Do you want me to update it and Fixes tag
+> and send next version?
 
-The patch LGTM, feel free to repost as non-RFC.
+I moved the repro details to a bugzilla, updated the commit log as
+below, and applied to pci/error for v5.19, thanks!
+
+
+commit 203926da2bff ("PCI/AER: Clear MULTI_ERR_COR/UNCOR_RCV bits")
+Author: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Date:   Mon Apr 18 15:02:37 2022 +0000
+
+    PCI/AER: Clear MULTI_ERR_COR/UNCOR_RCV bits
+    
+    When a Root Port or Root Complex Event Collector receives an error Message
+    e.g., ERR_COR, it sets PCI_ERR_ROOT_COR_RCV in the Root Error Status
+    register and logs the Requester ID in the Error Source Identification
+    register.  If it receives a second ERR_COR Message before software clears
+    PCI_ERR_ROOT_COR_RCV, hardware sets PCI_ERR_ROOT_MULTI_COR_RCV and the
+    Requester ID is lost.
+    
+    In the following scenario, PCI_ERR_ROOT_MULTI_COR_RCV was never cleared:
+    
+      - hardware receives ERR_COR message
+      - hardware sets PCI_ERR_ROOT_COR_RCV
+      - aer_irq() entered
+      - aer_irq(): status = pci_read_config_dword(PCI_ERR_ROOT_STATUS)
+      - aer_irq(): now status == PCI_ERR_ROOT_COR_RCV
+      - hardware receives second ERR_COR message
+      - hardware sets PCI_ERR_ROOT_MULTI_COR_RCV
+      - aer_irq(): pci_write_config_dword(PCI_ERR_ROOT_STATUS, status)
+      - PCI_ERR_ROOT_COR_RCV is cleared; PCI_ERR_ROOT_MULTI_COR_RCV is set
+      - aer_irq() entered again
+      - aer_irq(): status = pci_read_config_dword(PCI_ERR_ROOT_STATUS)
+      - aer_irq(): now status == PCI_ERR_ROOT_MULTI_COR_RCV
+      - aer_irq() exits because PCI_ERR_ROOT_COR_RCV not set
+      - PCI_ERR_ROOT_MULTI_COR_RCV is still set
+    
+    The same problem occurred with ERR_NONFATAL/ERR_FATAL Messages and
+    PCI_ERR_ROOT_UNCOR_RCV and PCI_ERR_ROOT_MULTI_UNCOR_RCV.
+    
+    Fix the problem by queueing an AER event and clearing the Root Error Status
+    bits when any of these bits are set:
+    
+      PCI_ERR_ROOT_COR_RCV
+      PCI_ERR_ROOT_UNCOR_RCV
+      PCI_ERR_ROOT_MULTI_COR_RCV
+      PCI_ERR_ROOT_MULTI_UNCOR_RCV
+    
+    See the bugzilla link for details from Eric about how to reproduce this
+    problem.
+    
+    [bhelgaas: commit log, move repro details to bugzilla]
+    Fixes: e167bfcaa4cd ("PCI: aerdrv: remove magical ROOT_ERR_STATUS_MASKS")
+    Link: https://bugzilla.kernel.org/show_bug.cgi?id=215992
+    Link: https://lore.kernel.org/r/20220418150237.1021519-1-sathyanarayanan.kuppuswamy@linux.intel.com
+    Reported-by: Eric Badger <ebadger@purestorage.com>
+    Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+    Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+    Reviewed-by: Ashok Raj <ashok.raj@intel.com>

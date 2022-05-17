@@ -2,136 +2,341 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6AA52A730
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C0452A73F
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350460AbiEQPmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 11:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57714 "EHLO
+        id S240468AbiEQPn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 11:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350545AbiEQPlm (ORCPT
+        with ESMTP id S1350608AbiEQPnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 11:41:42 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F22F40E7C;
-        Tue, 17 May 2022 08:41:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652802101; x=1684338101;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=FYcsQ3yBA55TzunpKA1JkgwmQnJRWTNGqxFrZwfAGHg=;
-  b=YGfYu0skA9Xwc3MFkt+fDBGl0T/xkDkn8yBxgBb6vxyvEMMJUDhIxrlW
-   w62Yzx5/dhKhr4Gnhs0rmlerSiVfzv1S1Xp2eHNKvqPrq3L/GPfz87n0W
-   +NubFSAjH9qzeqzj+mKbIsr4OfojbR/lUrMjdzpuqexpLuBXD9ayUC6sw
-   qoRpV33QoJTSn5lu6txNKSn842Qqfoyv5f6iuvApXWFn6ic2yzoLrzdE7
-   m+YpWidQkd68qxRFcUbG6UGYAgBR1E2wSgNa32P5j46rnXTxzirD/tKND
-   VcuonhfQSINuWZg1G3Kau4ZPMdAa3CZeereSr4EZ2vPnPYHMiIfHHo9tk
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="357632118"
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="357632118"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 08:41:36 -0700
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="626533614"
-Received: from embargo.jf.intel.com ([10.165.9.183])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 08:41:36 -0700
-From:   Yang Weijiang <weijiang.yang@intel.com>
-To:     pbonzini@redhat.com, jmattson@google.com, seanjc@google.com,
-        like.xu.linux@gmail.com, vkuznets@redhat.com,
-        kan.liang@linux.intel.com, wei.w.wang@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Yang Weijiang <weijiang.yang@intel.com>,
-        Like Xu <like.xu@linux.intel.com>
-Subject: [PATCH v12 16/16] KVM: x86/cpuid: Advertise Arch LBR feature in CPUID
-Date:   Tue, 17 May 2022 11:41:00 -0400
-Message-Id: <20220517154100.29983-17-weijiang.yang@intel.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220517154100.29983-1-weijiang.yang@intel.com>
-References: <20220517154100.29983-1-weijiang.yang@intel.com>
+        Tue, 17 May 2022 11:43:15 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DCEB50B3B
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:42:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=C8bFBcYQ8gfp+jZZiMampXlgPGTpsfmScw6kMFrgs3U=; b=UWuNvE0x8LsLtL/c7YtTLBqfmp
+        mjTcSO2ASvIM2tNUw3mLFqt8evsaGid/2l2LFDysiimrcSduyHp/uHz8mxA6UIXAite02w5iexLtE
+        +lcWMFycrvlSjqVrVyO9YDZ+3kPJupACACj3jLSfaUe6TssTo77o1r5phFw58WQBxX2rKcpCPoEQV
+        ddf5FVH41IUvFfiyaVwgKwq6ZbyJo30xAcALAh4Qp/0jQac4i1CDanEJqi5r0ADqxGL7Wvd/2pimO
+        2zAUEHI6D93D1A2xnRQpe3NYXqHnOnDPgDBRHmXMegGtednF88HANYe/LCmvvtdrhilClDCvkkLZK
+        Ed16ySRQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nqzKo-001H0b-MG; Tue, 17 May 2022 15:42:07 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7B57D3003AA;
+        Tue, 17 May 2022 17:42:04 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6036A2040ACD7; Tue, 17 May 2022 17:42:04 +0200 (CEST)
+Date:   Tue, 17 May 2022 17:42:04 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com
+Subject: Re: objtool "no non-local symbols" error with tip of tree LLVM
+Message-ID: <YoPCTEYjoPqE4ZxB@hirez.programming.kicks-ass.net>
+References: <YoK4U9RgQ9N+HhXJ@dev-arch.thelio-3990X>
+ <20220516214005.GQ76023@worktop.programming.kicks-ass.net>
+ <YoPAZ6JfsF0LrQNc@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YoPAZ6JfsF0LrQNc@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Arch LBR feature bit in CPU cap-mask to expose the feature.
-Only max LBR depth is supported for guest, and it's consistent
-with host Arch LBR settings.
+On Tue, May 17, 2022 at 05:33:59PM +0200, Peter Zijlstra wrote:
+> On Mon, May 16, 2022 at 11:40:06PM +0200, Peter Zijlstra wrote:
+> > Does something simple like this work? If not, I'll try and reproduce
+> > tomorrow, it shouldn't be too hard to fix.
+> 
+> Oh, man, I so shouldn't have said that :/
+> 
+> I have something that almost works, except it now mightly upsets
+> modpost.
+> 
+> I'm not entirely sure how the old code worked as well as it did. Oh
+> well, I'll get it sorted.
 
-Co-developed-by: Like Xu <like.xu@linux.intel.com>
-Signed-off-by: Like Xu <like.xu@linux.intel.com>
-Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+Pff, it's been a *long* day.. here this works.
+
 ---
- arch/x86/kvm/cpuid.c | 33 ++++++++++++++++++++++++++++++++-
- 1 file changed, 32 insertions(+), 1 deletion(-)
+ tools/objtool/elf.c | 191 ++++++++++++++++++++++++++++++++++------------------
+ 1 file changed, 125 insertions(+), 66 deletions(-)
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index b88609847188..1a2fb9a8c0d5 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -102,6 +102,16 @@ static int kvm_check_cpuid(struct kvm_vcpu *vcpu,
- 		if (vaddr_bits != 48 && vaddr_bits != 57 && vaddr_bits != 0)
- 			return -EINVAL;
+diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+index ebf2ba5755c1..a9c3e27527de 100644
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -600,24 +600,24 @@ static void elf_dirty_reloc_sym(struct elf *elf, struct symbol *sym)
+ }
+ 
+ /*
+- * Move the first global symbol, as per sh_info, into a new, higher symbol
+- * index. This fees up the shndx for a new local symbol.
++ * The libelf API is terrible; gelf_update_sym*() takes a data block relative
++ * index value. As such, iterate the data blocks and adjust index until it fits.
++ *
++ * If no data block is found, allow adding a new data block provided the index
++ * is only one past the end.
+  */
+-static int elf_move_global_symbol(struct elf *elf, struct section *symtab,
+-				  struct section *symtab_shndx)
++static int elf_update_symbol(struct elf *elf, struct section *symtab,
++			     struct section *symtab_shndx, struct symbol *sym)
+ {
+-	Elf_Data *data, *shndx_data = NULL;
+-	Elf32_Word first_non_local;
+-	struct symbol *sym;
+-	Elf_Scn *s;
++	Elf_Data *symtab_data = NULL, *shndx_data = NULL;
++	Elf32_Word shndx = sym->sec->idx;
++	Elf_Scn *s, *t = NULL;
++	int size, idx = sym->idx;
+ 
+-	first_non_local = symtab->sh.sh_info;
+-
+-	sym = find_symbol_by_index(elf, first_non_local);
+-	if (!sym) {
+-		WARN("no non-local symbols !?");
+-		return first_non_local;
+-	}
++	if (elf->ehdr.e_ident[EI_CLASS] == ELFCLASS32)
++		size = sizeof(Elf32_Sym);
++	else
++		size = sizeof(Elf64_Sym);
+ 
+ 	s = elf_getscn(elf->elf, symtab->idx);
+ 	if (!s) {
+@@ -625,79 +625,120 @@ static int elf_move_global_symbol(struct elf *elf, struct section *symtab,
+ 		return -1;
  	}
-+	best = cpuid_entry2_find(entries, nent, 0x1c, 0);
-+	if (best) {
-+		unsigned int eax, ebx, ecx, edx;
-+
-+		/* Reject user-space CPUID if depth is different from host's.*/
-+		cpuid_count(0x1c, 0, &eax, &ebx, &ecx, &edx);
-+
-+		if ((best->eax & 0xff) != BIT(fls(eax & 0xff) - 1))
-+			return -EINVAL;
-+	}
  
- 	/*
- 	 * Exposing dynamic xfeatures to the guest requires additional
-@@ -598,7 +608,7 @@ void kvm_set_cpu_caps(void)
- 		F(SPEC_CTRL_SSBD) | F(ARCH_CAPABILITIES) | F(INTEL_STIBP) |
- 		F(MD_CLEAR) | F(AVX512_VP2INTERSECT) | F(FSRM) |
- 		F(SERIALIZE) | F(TSXLDTRK) | F(AVX512_FP16) |
--		F(AMX_TILE) | F(AMX_INT8) | F(AMX_BF16)
-+		F(AMX_TILE) | F(AMX_INT8) | F(AMX_BF16) | F(ARCH_LBR)
- 	);
- 
- 	/* TSC_ADJUST and ARCH_CAPABILITIES are emulated in software. */
-@@ -1038,6 +1048,27 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 				goto out;
- 		}
- 		break;
-+	/* Architectural LBR */
-+	case 0x1c: {
-+		u32 lbr_depth_mask = entry->eax & 0xff;
-+
-+		if (!lbr_depth_mask ||
-+		    !kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR)) {
-+			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
-+			break;
+-	data = elf_newdata(s);
+-	if (!data) {
+-		WARN_ELF("elf_newdata");
+-		return -1;
++	if (symtab_shndx) {
++		t = elf_getscn(elf->elf, symtab_shndx->idx);
++		if (!t) {
++			WARN_ELF("elf_getscn");
++			return -1;
 +		}
-+		/*
-+		 * KVM only exposes the maximum supported depth, which is the
-+		 * fixed value used on the host side.
-+		 * KVM doesn't allow VMM userspace to adjust LBR depth because
-+		 * guest LBR emulation depends on the configuration of host LBR
-+		 * driver.
-+		 */
-+		lbr_depth_mask = BIT((fls(lbr_depth_mask) - 1));
-+		entry->eax &= ~0xff;
-+		entry->eax |= lbr_depth_mask;
-+		break;
+ 	}
+ 
+-	data->d_buf = &sym->sym;
+-	data->d_size = sizeof(sym->sym);
+-	data->d_align = 1;
+-	data->d_type = ELF_T_SYM;
++	for (;;) {
++		symtab_data = elf_getdata(s, symtab_data);
++		if (t)
++			shndx_data = elf_getdata(t, shndx_data);
+ 
+-	sym->idx = symtab->sh.sh_size / sizeof(sym->sym);
+-	elf_dirty_reloc_sym(elf, sym);
++		if (!symtab_data) {
++			if (!idx) {
++				void *buf;
+ 
+-	symtab->sh.sh_info += 1;
+-	symtab->sh.sh_size += data->d_size;
+-	symtab->changed = true;
++				symtab_data = elf_newdata(s);
++				if (t)
++					shndx_data = elf_newdata(t);
+ 
+-	if (symtab_shndx) {
+-		s = elf_getscn(elf->elf, symtab_shndx->idx);
+-		if (!s) {
+-			WARN_ELF("elf_getscn");
++				buf = calloc(1, size);
++				if (!buf) {
++					WARN("malloc");
++					return -1;
++				}
++
++				symtab_data->d_buf = buf;
++				symtab_data->d_size = size;
++				symtab_data->d_align = 1;
++				symtab_data->d_type = ELF_T_SYM;
++
++				symtab->sh.sh_size += size;
++				symtab->changed = true;
++
++				if (t) {
++					shndx_data->d_buf = &sym->sec->idx;
++					shndx_data->d_size = sizeof(Elf32_Word);
++					shndx_data->d_align = 4;
++					shndx_data->d_type = ELF_T_WORD;
++
++					symtab_shndx->sh.sh_size += 4;
++					symtab_shndx->changed = true;
++				}
++
++				break;
++			}
++
++			WARN("index out of range");
+ 			return -1;
+ 		}
+ 
+-		shndx_data = elf_newdata(s);
+-		if (!shndx_data) {
+-			WARN_ELF("elf_newshndx_data");
++		if (!symtab_data->d_size) {
++			WARN("zero size data");
+ 			return -1;
+ 		}
+ 
+-		shndx_data->d_buf = &sym->sec->idx;
+-		shndx_data->d_size = sizeof(Elf32_Word);
+-		shndx_data->d_align = 4;
+-		shndx_data->d_type = ELF_T_WORD;
++		if (idx * size < symtab_data->d_size)
++			break;
+ 
+-		symtab_shndx->sh.sh_size += 4;
+-		symtab_shndx->changed = true;
++		idx -= symtab_data->d_size / size;
+ 	}
+ 
+-	return first_non_local;
++	if (idx < 0) {
++		WARN("negative index");
++		return -1;
 +	}
- 	/* Intel AMX TILE */
- 	case 0x1d:
- 		if (!kvm_cpu_cap_has(X86_FEATURE_AMX_TILE)) {
--- 
-2.27.0
-
++
++	if (shndx >= SHN_UNDEF && shndx < SHN_LORESERVE) {
++		sym->sym.st_shndx = shndx;
++		if (!shndx_data)
++			shndx = 0;
++	} else {
++		sym->sym.st_shndx = SHN_XINDEX;
++		if (!shndx_data) {
++			WARN("no .symtab_shndx");
++			return -1;
++		}
++	}
++
++	if (!gelf_update_symshndx(symtab_data, shndx_data, idx, &sym->sym, shndx)) {
++		WARN_ELF("gelf_update_symshndx");
++		return -1;
++	}
++
++	return 0;
+ }
+ 
+ static struct symbol *
+ elf_create_section_symbol(struct elf *elf, struct section *sec)
+ {
+ 	struct section *symtab, *symtab_shndx;
+-	Elf_Data *shndx_data = NULL;
+-	struct symbol *sym;
+-	Elf32_Word shndx;
++	Elf32_Word first_non_local, new;
++	struct symbol *sym, *old;
++	int size;
++
++	if (elf->ehdr.e_ident[EI_CLASS] == ELFCLASS32)
++		size = sizeof(Elf32_Sym);
++	else
++		size = sizeof(Elf64_Sym);
+ 
+ 	symtab = find_section_by_name(elf, ".symtab");
+ 	if (symtab) {
+ 		symtab_shndx = find_section_by_name(elf, ".symtab_shndx");
+-		if (symtab_shndx)
+-			shndx_data = symtab_shndx->data;
+ 	} else {
+ 		WARN("no .symtab");
+ 		return NULL;
+ 	}
+ 
+-	sym = malloc(sizeof(*sym));
++	sym = calloc(1, sizeof(*sym));
+ 	if (!sym) {
+ 		perror("malloc");
+ 		return NULL;
+ 	}
+-	memset(sym, 0, sizeof(*sym));
+-
+-	sym->idx = elf_move_global_symbol(elf, symtab, symtab_shndx);
+-	if (sym->idx < 0) {
+-		WARN("elf_move_global_symbol");
+-		return NULL;
+-	}
+ 
+ 	sym->name = sec->name;
+ 	sym->sec = sec;
+@@ -707,24 +748,42 @@ elf_create_section_symbol(struct elf *elf, struct section *sec)
+ 	// st_other 0
+ 	// st_value 0
+ 	// st_size 0
+-	shndx = sec->idx;
+-	if (shndx >= SHN_UNDEF && shndx < SHN_LORESERVE) {
+-		sym->sym.st_shndx = shndx;
+-		if (!shndx_data)
+-			shndx = 0;
+-	} else {
+-		sym->sym.st_shndx = SHN_XINDEX;
+-		if (!shndx_data) {
+-			WARN("no .symtab_shndx");
++
++	new = symtab->sh.sh_size / size;
++
++	/*
++	 * Move the first global symbol, as per sh_info, into a new, higher
++	 * symbol index. This fees up a spot for a new local symbol.
++	 */
++	first_non_local = symtab->sh.sh_info;
++	old = find_symbol_by_index(elf, first_non_local);
++	if (old) {
++		old->idx = new;
++
++		hlist_del(&old->hash);
++		elf_hash_add(symbol, &old->hash, old->idx);
++
++		elf_dirty_reloc_sym(elf, old);
++
++		if (elf_update_symbol(elf, symtab, symtab_shndx, old)) {
++			WARN("elf_update_symbol move");
+ 			return NULL;
+ 		}
++
++		new = first_non_local;
+ 	}
+ 
+-	if (!gelf_update_symshndx(symtab->data, shndx_data, sym->idx, &sym->sym, shndx)) {
+-		WARN_ELF("gelf_update_symshndx");
++	sym->idx = new;
++	if (elf_update_symbol(elf, symtab, symtab_shndx, sym)) {
++		WARN("elf_update_symbol");
+ 		return NULL;
+ 	}
+ 
++	/*
++	 * Either way, we added a LOCAL symbol.
++	 */
++	symtab->sh.sh_info += 1;
++
+ 	elf_add_symbol(elf, sym);
+ 
+ 	return sym;

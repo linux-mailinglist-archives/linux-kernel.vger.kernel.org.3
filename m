@@ -2,220 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFFF552AA65
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E4B52AA6E
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350503AbiEQSPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 14:15:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38554 "EHLO
+        id S1351929AbiEQSS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 14:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbiEQSP3 (ORCPT
+        with ESMTP id S244889AbiEQSSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 14:15:29 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7671FA68
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:15:28 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id f10so6223263pjs.3
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:15:28 -0700 (PDT)
+        Tue, 17 May 2022 14:18:22 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B27506EC
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:18:21 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id kq17so36286731ejb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:18:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=5MIOs9ZQETChvxlBzZ2KtZj7CH5Bf4PZZcNMjN//C1k=;
-        b=h1lh0h2PqCf/2EMtqQu1F0SuL1g0y217799nXSUL5/7B5fU8rLVVPXFvUSkKAectXV
-         7HdRbbdT6JcKa4emntE25nmplanhnH3cbgCLQKp2d+nYNsNEOxaeFFvc5j7kYkkWmkhS
-         znE55a3AQKWyqZxlySMSgC26Fa4EuhRaDGxR0XF6TvmEfdkENRMlJbu72J3toc1a+vo0
-         io5DqAHOlHaFpe0OpHohBUwlyxNEGP0RTWHKj3aGg7m17m2/maiH8mSDWCrZ1Bp5B28/
-         873yowgAb6lgzHkg6flnvhxJ+U/4/JL5YBvixqK1u8w92iB9g9wAo8WrXXkVWOkKCdqz
-         XY6w==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qH8JUwLx+nM2xLEZwshDyeOy6cvrct0hZrP49LTkuDM=;
+        b=EY9f44uXKvLkOY8iZd14BHawAhNUN5U4GqSLHNYuqKHcKS0Qke1+e4dR2Lr2q+pgtm
+         PuNJGHYdn8j0Q/PHfKAhuitiiKnVmprU51irprKmrChcHh4UC7xaOLSS3bNfv3rRF2Ws
+         I6aoIAW3INBzIFcGpdp5JQMEl5AHmprHor3Xc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5MIOs9ZQETChvxlBzZ2KtZj7CH5Bf4PZZcNMjN//C1k=;
-        b=mBwglY3+dmZGeeEz0ODEWub1PpP36PW9yV54ypvjK5E6cl5OlT18QBCFy2Zl+dCoHn
-         Z21lKErkW9dT667ffSEFJV94+wddPFYcJiof5G5xvbWZODmbuA05kleSk01u+plc8qhs
-         hUD4YAfV6s/fPvldMRtfPYAQsGcCTW8ol3d9n8S2D5gXaCZnfak1gZ66OanuJsPasK17
-         WFaxFyGJDIC2fRujTCin5gf4isJfNJaJH2wpvQ+D2763fefi8U5WMWM29DGuAvuWdXkM
-         qg46fmx5YYft6Dgu6QRyWRO/h8VUlysLrRHsiNnpAuKlciRjr8B64x2U3huloU32XsAS
-         Kl/g==
-X-Gm-Message-State: AOAM531RCFaOSSkglKo9+VFDNH2niFauo7Pe1OjtkrzoA2d5MWI4bqm3
-        Lqky4u+sUHSGB1TV0j9tT4g=
-X-Google-Smtp-Source: ABdhPJzfdrUX0I3Ef9b6ZfFUov+il2klRQ8ibKsEmlWT//prbekfuPElSeJkHOF4iRqKgDpjHbA64g==
-X-Received: by 2002:a17:902:700b:b0:15f:a51a:cdeb with SMTP id y11-20020a170902700b00b0015fa51acdebmr23136711plk.137.1652811327660;
-        Tue, 17 May 2022 11:15:27 -0700 (PDT)
-Received: from [172.30.1.37] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id d2-20020a170902cec200b0015e8d4eb2dasm9528150plg.292.2022.05.17.11.15.24
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qH8JUwLx+nM2xLEZwshDyeOy6cvrct0hZrP49LTkuDM=;
+        b=O0+dHJGvYh1PuKF3ZtRxTUqvAn0yHX54QBdvo0/FMpWFwSAnWbFVosRjpkCHisrmIC
+         xlDwTRFXGRwN/H/PqcUPwIe4unSSOcjtM7E6hKXqef3hFSHTFSa6K5WtoebMMpTCRriZ
+         hlyAMiqyff7NFRzPmqJNcemTyBXqjaOX6V/mxunzjAFLN2cPxLrDiBPS16nuao2IwUlo
+         YcqIDSmM6KQSRWfBMSO/sYV4PCCGiLwHQvsq1z66/RJBvOKFCfUWj5jnsTXURHu3QEhV
+         0era1JiwAbGTtrgn9vbHz0qiBzp/tUuw2qcF5IrPGDDNd3oQTbm1CA6oLeOJmYVhi7ow
+         lDag==
+X-Gm-Message-State: AOAM531Wl8Yv/4cnWwWg0rZ5HNJNpM1PIGE0kKd8mlNYWQEBbEULQbjJ
+        kCbDkCDHUMEHQy3jGgycAAlXNVTep37blw==
+X-Google-Smtp-Source: ABdhPJze1DT8GG3WBrZ5xs5TA3Q4dQCOfoC7sTVApB6Z4s95DbFlBXY3SMIeLOFjeErymvrSN2O3EQ==
+X-Received: by 2002:a17:907:2ce4:b0:6f4:352b:bb9b with SMTP id hz4-20020a1709072ce400b006f4352bbb9bmr20962155ejc.398.1652811499993;
+        Tue, 17 May 2022 11:18:19 -0700 (PDT)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
+        by smtp.gmail.com with ESMTPSA id u2-20020aa7db82000000b0042617ba63a7sm7260746edt.49.2022.05.17.11.18.17
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 11:15:27 -0700 (PDT)
-Message-ID: <3f917cf0-72c7-91ab-c8e9-eef02889c7b1@gmail.com>
-Date:   Wed, 18 May 2022 03:15:23 +0900
+        Tue, 17 May 2022 11:18:18 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id j25so24828816wrc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:18:17 -0700 (PDT)
+X-Received: by 2002:a5d:5009:0:b0:20d:846:f4da with SMTP id
+ e9-20020a5d5009000000b0020d0846f4damr10202605wrt.301.1652811497320; Tue, 17
+ May 2022 11:18:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 2/2] extcon: Add extcon-regulator driver
-Content-Language: en-US
-To:     Zev Weiss <zev@bewilderbeest.net>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        openbmc@lists.ozlabs.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-References: <20220505232557.10936-1-zev@bewilderbeest.net>
- <20220505232557.10936-3-zev@bewilderbeest.net>
- <e27ff1b2-c82f-8335-340f-ae1fa914ed30@gmail.com>
- <YnkyIBh2HnXXLHw3@sirena.org.uk>
- <CGME20220517010322epcas1p45d7fdaa06d23f07533350b7d0cf9e9d6@epcas1p4.samsung.com>
- <YoL0UGR+TiZojL9Y@hatter.bewilderbeest.net>
- <bc6595c8-5f05-ac2c-63e0-f442f9ec83be@samsung.com>
- <YoNz9NPLkYSd8i/s@hatter.bewilderbeest.net>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <YoNz9NPLkYSd8i/s@hatter.bewilderbeest.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <1652808360-9830-1-git-send-email-quic_khsieh@quicinc.com> <1652808360-9830-2-git-send-email-quic_khsieh@quicinc.com>
+In-Reply-To: <1652808360-9830-2-git-send-email-quic_khsieh@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 17 May 2022 11:18:05 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=U0Ba0th-jmF+3t9BPEisXU2ZmjiahV7YFUqC0fbUrvJQ@mail.gmail.com>
+Message-ID: <CAD=FV=U0Ba0th-jmF+3t9BPEisXU2ZmjiahV7YFUqC0fbUrvJQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] phy/qcom: add regulator_set_load to edp/dp phy
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Vinod Koul <vkoul@kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
+        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22. 5. 17. 19:07, Zev Weiss wrote:
-> On Mon, May 16, 2022 at 08:15:31PM PDT, Chanwoo Choi wrote:
->> Hi Mark, Zev,
->>
->> On 5/17/22 10:03 AM, Zev Weiss wrote:
->>> [Adding Sebastian for drivers/power discussion]
->>>
->>> On Mon, May 09, 2022 at 08:24:16AM PDT, Mark Brown wrote:
->>>> On Mon, May 09, 2022 at 09:24:39PM +0900, Chanwoo Choi wrote:
->>>>> Hi Zev,
->>>>>
->>>>> I checked this patch. But, it doesn't look like the extcon provider
->>>>> driver. Because basically, extcon provider driver need the circuit
->>>>> in order to detect the kind of external connector. But, there are
->>>>> no any code for detection. Just add the specific sysfs attribute
->>>>> for only this driver. It is not standard interface.
->>>>
->>>> OTOH it's something where if I look at the physical system with the
->>>> hardware there's a clearly visible external connector that I can point
->>>> to - it just happens to not support hotplug.  It's not clear what other
->>>> system it would sit in, and it seems like an application that displays
->>>> external connections on a system in a UI would be able to do something
->>>> sensible with it.
->>>
->>> Chanwoo, any further thoughts on Mark's reasoning above?
->>>
->>> I certainly understand the reluctance to add an extcon driver that 
->>> doesn't really do anything with the extcon API, and I have no idea when 
->>> we might end up enhancing it to do something more meaningful with that 
->>> API (I don't know of any hardware at the moment that would need it).
->>>
->>> That said, as Mark points out, the hardware *is* ultimately an "external 
->>> connector" (if a very simplistic one).
->>>
->>> Do you have any other ideas for where this functionality could go?  Greg 
->>> wasn't enthusiastic about a previous revision that had it in 
->>> drivers/misc -- though now a fair amount of what was in that version is 
->>> now going to be in the regulator core, so maybe that could be 
->>> reconsidered?
->>>
->>> Or maybe something under drivers/power, though it's not really a supply 
->>> or a reset device...drivers/power/output.c or something?
->>>
->>> Personally I don't have any terribly strong opinions on this, I'd just 
->>> like to reach a mutually-agreeable consensus on a place for it to live.
->>>
->>
->> After Mark's reply, I considered extcon provider driver without hotplug
->> feature. I think that extcon need to support the following something:
->>
->> 1. Need to specify the type of external connector instead of EXTCON_NONE.
->> 2. extcon subsystem provides the standard sysfs interface
->>    for non-hotplug extcon provider driver.
->> 3. User can control the state of external connector via
->>    the standard extcon sysfs attributes.
->>
->>
->> For example of extcon provider driver,
->> static const unsigned int supported_cables[] = {
->> 	EXTCON_USB,
->> 	EXTCON_NONE,
->> };
->>
->> int extcon_usb_callback(int connector_id, int property_id, int state, void *data) {
->> 	struct extcon_dev *edev = data;
->>
->> 	if (id == EXTCON_USB && property_id == EXTCON_NOT_HOTPLUG) {
->> 		regulator_enable() or regulator_disable()
->> 	}
->>
->> 	return 0;
->> }
->>
->> int extcon_provider_probe(...) {
->> 	edev = devm_extcon_dev_allocate(dev, supported_cables);
->>
->> 	devm_extcon_dev_register(dev, edev);
->>
->> 	extcon_set_property_capability(edev, EXTCON_USB, EXTCON_NOT_HOTPLUG);
->> 	extcon_set_property_callback(edev, EXTCON_USB, extcon_usb_callback);
->>
->> 	...
->> }
->>
->> And then user can change the state of each external connector
->> via '/sys/class/extcon/extcon0/cable.0/state' 
->> if cable.0 contains the EXTCON_NOT_HOTPLUG property.
->>
->> I'm designing this approach. But it has not yet decided
->> because try to check that this approach is right or not.
->>
-> 
-> Okay, so if I'm understanding correctly we'd be using the extcon 
-> subsystem's existing attached/detached state to model (and control) the 
-> on/off state of the power output?
+Hi,
 
-The extcon provides the sysfs interface to control the state of each cable
-and then passes the extra role to each extcon provider driver with using
-the registered callback. The extcon core don't care the detailed operation
-in registered callback. Just provide the interface from sysfs interface
-to extcon provider driver and then handle the state of external connector.
+On Tue, May 17, 2022 at 10:26 AM Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+>
+> This patch add regulator_set_load() to both eDP and DP phy driver
+> to have totally control regulators.
+>
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>  drivers/phy/qualcomm/phy-qcom-edp.c | 25 +++++++++++++++++++++----
+>  drivers/phy/qualcomm/phy-qcom-qmp.c | 24 ++++++++++++++++++++++++
+>  2 files changed, 45 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/phy/qualcomm/phy-qcom-edp.c b/drivers/phy/qualcomm/phy-qcom-edp.c
+> index cacd32f..9b55095 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-edp.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-edp.c
+> @@ -87,17 +87,24 @@ struct qcom_edp {
+>
+>         struct clk_bulk_data clks[2];
+>         struct regulator_bulk_data supplies[2];
+> +       int enable_load[2];
+> +       int disable_load[2];
+>  };
+>
+>  static int qcom_edp_phy_init(struct phy *phy)
+>  {
+>         struct qcom_edp *edp = phy_get_drvdata(phy);
+>         int ret;
+> +       int num_consumers = ARRAY_SIZE(edp->supplies);
+> +       int i;
+>
+> -       ret = regulator_bulk_enable(ARRAY_SIZE(edp->supplies), edp->supplies);
+> +       ret = regulator_bulk_enable(num_consumers, edp->supplies);
+>         if (ret)
+>                 return ret;
+>
+> +       for (i = num_consumers - 1; i >= 0; --i)
+> +               regulator_set_load(edp->supplies[i].consumer, edp->enable_load[i]);
+> +
+>         ret = clk_bulk_prepare_enable(ARRAY_SIZE(edp->clks), edp->clks);
+>         if (ret)
+>                 goto out_disable_supplies;
+> @@ -425,9 +432,15 @@ static int qcom_edp_phy_power_off(struct phy *phy)
+>  static int qcom_edp_phy_exit(struct phy *phy)
+>  {
+>         struct qcom_edp *edp = phy_get_drvdata(phy);
+> +       int num_consumers = ARRAY_SIZE(edp->supplies);
+> +       int i;
+>
+>         clk_bulk_disable_unprepare(ARRAY_SIZE(edp->clks), edp->clks);
+> -       regulator_bulk_disable(ARRAY_SIZE(edp->supplies), edp->supplies);
+> +
+> +       for (i = num_consumers - 1; i >= 0; --i)
+> +               regulator_set_load(edp->supplies[i].consumer, edp->disable_load[i]);
+> +
+> +       regulator_bulk_disable(num_consumers, edp->supplies);
+>
+>         return 0;
+>  }
+> @@ -633,8 +646,12 @@ static int qcom_edp_phy_probe(struct platform_device *pdev)
+>         if (ret)
+>                 return ret;
+>
+> -       edp->supplies[0].supply = "vdda-phy";
+> -       edp->supplies[1].supply = "vdda-pll";
+> +       edp->supplies[0].supply = "vdda-1p2";
+> +       edp->supplies[1].supply = "vdda-0p9";
+> +       edp->enable_load[0] = 21800;    /* 1.2 V */
+> +       edp->enable_load[1] = 36000;    /* 1.2 V */
+> +       edp->disable_load[0] = 4;       /* 0.9 V */
+> +       edp->disable_load[1] = 4;       /* 10.9V */
 
-In your case, you might enable/disable the regulator on the registered callback
-like extcon_usb_callback in example.
-
-> 
-> That could work for the particular hardware I'm dealing with at the 
-> moment, though I'd be a bit concerned that conflating the two might 
-> constrain things in the future if there's some similar but slightly more 
-> sophisticated hardware we'd want to extend the same driver to support.  
-> For example on a power connector with some capability for presence 
-> detection, we might want to be able to support "attached but powered 
-> off" as a valid state for it to be in -- would the above approach be 
-> able to do that?
-
-Yes. As I mentioned above, the regulator control is extra role
-for the specific extcon provider driver. Any extcon provider driver
-without hotplug feature might control the audio volume in the registered
-callback like extcon_usb_callback in example. The extra job depends
-on the extcon provider driver.
-
-> 
-> 
-> Thanks,
-> Zev
-> 
+10.9V? That's a lot!
 
 
--- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+>         ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(edp->supplies), edp->supplies);
+>         if (ret)
+>                 return ret;
+> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
+> index b144ae1..c589231 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-qmp.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
+> @@ -3130,6 +3130,8 @@ struct qmp_phy_cfg {
+>         int num_resets;
+>         /* regulators to be requested */
+>         const char * const *vreg_list;
+> +       const unsigned int *vreg_enable_load;
+> +       const unsigned int *vreg_disable_load;
+>         int num_vregs;
+>
+>         /* array of registers with different offsets */
+> @@ -3346,6 +3348,14 @@ static const char * const qmp_phy_vreg_l[] = {
+>         "vdda-phy", "vdda-pll",
+>  };
+>
+> +static const unsigned int qmp_phy_vreg_enable_load[] = {
+> +       21800, 36000
+> +};
+> +
+> +static const unsigned int qmp_phy_vreg_disable_load[] = {
+> +       4, 32
+> +};
+> +
+>  static const struct qmp_phy_cfg ipq8074_usb3phy_cfg = {
+>         .type                   = PHY_TYPE_USB3,
+>         .nlanes                 = 1,
+> @@ -4072,6 +4082,8 @@ static const struct qmp_phy_cfg sm8250_usb3phy_cfg = {
+>         .reset_list             = msm8996_usb3phy_reset_l,
+>         .num_resets             = ARRAY_SIZE(msm8996_usb3phy_reset_l),
+>         .vreg_list              = qmp_phy_vreg_l,
+> +       .vreg_enable_load       = qmp_phy_vreg_enable_load,
+> +       .vreg_disable_load      = qmp_phy_vreg_disable_load,
+>         .num_vregs              = ARRAY_SIZE(qmp_phy_vreg_l),
+>         .regs                   = qmp_v4_usb3phy_regs_layout,
+>
+> @@ -4139,6 +4151,8 @@ static const struct qmp_phy_cfg sm8250_dpphy_cfg = {
+>         .reset_list             = msm8996_usb3phy_reset_l,
+>         .num_resets             = ARRAY_SIZE(msm8996_usb3phy_reset_l),
+>         .vreg_list              = qmp_phy_vreg_l,
+> +       .vreg_enable_load       = qmp_phy_vreg_enable_load,
+> +       .vreg_disable_load      = qmp_phy_vreg_disable_load,
+>         .num_vregs              = ARRAY_SIZE(qmp_phy_vreg_l),
+>         .regs                   = qmp_v4_usb3phy_regs_layout,
+>
+> @@ -5015,6 +5029,11 @@ static int qcom_qmp_phy_com_init(struct qmp_phy *qphy)
+>                 goto err_reg_enable;
+>         }
+>
+> +       if (cfg->vreg_enable_load) {
+> +               for (i = cfg->num_vregs - 1; i >= 0; --i)
+> +                       regulator_set_load(qmp->vregs[i].consumer, cfg->vreg_enable_load[i]);
+> +       }
+> +
+>         for (i = 0; i < cfg->num_resets; i++) {
+>                 ret = reset_control_assert(qmp->resets[i]);
+>                 if (ret) {
+> @@ -5116,6 +5135,11 @@ static int qcom_qmp_phy_com_exit(struct qmp_phy *qphy)
+>
+>         clk_bulk_disable_unprepare(cfg->num_clks, qmp->clks);
+>
+> +       if (cfg->vreg_disable_load[i]) {
+> +               for (i = cfg->num_vregs - 1; i >= 0; --i)
+> +                       regulator_set_load(qmp->vregs[i].consumer, cfg->vreg_disable_load[i]);
+> +       }
+> +
+>         regulator_bulk_disable(cfg->num_vregs, qmp->vregs);
+
+You don't haven't needed the regulator_set_load() on
+regulator_bulk_disable() for many years now. See commit 5451781dadf8
+("regulator: core: Only count load for enabled consumers")
+
+...so the only place you should set the load is in qcom_edp_phy_init()
+
+-Doug

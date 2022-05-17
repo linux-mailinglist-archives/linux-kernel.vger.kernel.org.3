@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5FC529F97
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC10529F91
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344515AbiEQKgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 06:36:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53296 "EHLO
+        id S1344428AbiEQKgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 06:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344598AbiEQKgH (ORCPT
+        with ESMTP id S1344528AbiEQKgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 06:36:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D176417;
-        Tue, 17 May 2022 03:35:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69B516165E;
-        Tue, 17 May 2022 10:35:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6701C385B8;
-        Tue, 17 May 2022 10:35:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652783758;
-        bh=lAksy8oepqE8iH2ITwCihZnI9L3nnQyBWYqoVUXqlUo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=J4VVh6cFjDb1jIJK8SYjto2TV3c/jw1kHwiDZN006Xmam81unpFPSThWn4ldxHTYE
-         DKpLfJC312AWUUSiZ4/T7FCDwjprWzSu4EWs/G0YLfZL8Zor4UUK+KMtDudRLjJU0X
-         tNiMAYBysrP0AAoM6IgFtmeQeUz+Nxo5PMA+gPR1XgeFUmmp6gcCcUjBzCVFYRvBIP
-         kxB3p4o/cCq+jdbZzhkIJ58GRY8uzjGbTRG7imw25kyUCbfjbzrF0YmqB370oE1zgz
-         GslT0WoKU0CbEadEdAAMZxd9ilOd3HbshVQ1irycMGx81GI0UXmJue+znaU9kgM4nW
-         EHSC/xgMTuKjg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1nquYX-00048Z-OB; Tue, 17 May 2022 12:35:57 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [RFC] ath11k: fix netdev open race
-Date:   Tue, 17 May 2022 12:34:36 +0200
-Message-Id: <20220517103436.15867-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Tue, 17 May 2022 06:36:05 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2AE5F9E
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 03:35:51 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id CE2101F44492
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652783750;
+        bh=wpmWddblxYyDkBmT+shBpq8yfbqgog90VUPSoVh9U78=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=QV0ki/Z8y09yodZ2xxdyb0epnntinN05WbfPtvPW7os5p9uqkYFgi10FEYcuA2AhF
+         LR4xSTOcpw5+u7037yRzO622+rc+TqcXTxWRPGTGfFDYBqYVp7Eo2Ry62RMydmeVnM
+         hD++8l2KKSLzi5F9sWqcc9w7N+lDX0DAvEye/kt0NPVWTtrCOifeJR2ME74hJt6FIV
+         GJ2RQLsWuorKNkNWhfKLwTC++Ikb/W3emy6hBJHRZ9mY/YITDykiVUzjpvfmBC+4cb
+         GqkIUWiV3qz4gFxVi+g7nT1kAMX9dSdXIVYngBVY3KCpx4afYMxtfKJGmB23DcpeTZ
+         m20C0aYGtQQ0A==
+Message-ID: <7f4f12ef-4fda-2092-1129-d0be498c7b20@collabora.com>
+Date:   Tue, 17 May 2022 12:35:47 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v3 3/5] soc: mediatek: pwrap: Move and check return value
+ of platform_get_irq()
+Content-Language: en-US
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        nfraprado@collabora.com, rex-bc.chen@mediatek.com,
+        zhiyong.tao@mediatek.com
+References: <20220516124659.69484-1-angelogioacchino.delregno@collabora.com>
+ <20220516124659.69484-4-angelogioacchino.delregno@collabora.com>
+ <ad736290-2e01-f867-d2ec-867a4385005a@gmail.com>
+ <03ac9b18-cb5d-5ff6-d220-f2f4062cea7e@collabora.com>
+ <bb1aea80-a926-8545-646e-bb526bc5cb84@gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <bb1aea80-a926-8545-646e-bb526bc5cb84@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,85 +61,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make sure to allocate resources needed before registering the device.
+Il 17/05/22 11:49, Matthias Brugger ha scritto:
+> 
+> 
+> On 17/05/2022 11:34, AngeloGioacchino Del Regno wrote:
+>> Il 17/05/22 11:18, Matthias Brugger ha scritto:
+>>>
+>>>
+>>> On 16/05/2022 14:46, AngeloGioacchino Del Regno wrote:
+>>>> Move the call to platform_get_irq() earlier in the probe function
+>>>> and check for its return value: if no interrupt is specified, it
+>>>> wouldn't make sense to try to call devm_request_irq() so, in that
+>>>> case, we can simply return early.
+>>>>
+>>>> Moving the platform_get_irq() call also makes it possible to use
+>>>> one less goto, as clocks aren't required at that stage.
+>>>>
+>>>> Signed-off-by: AngeloGioacchino Del Regno 
+>>>> <angelogioacchino.delregno@collabora.com>
+>>>> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+>>>> Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+>>>> ---
+>>>>   drivers/soc/mediatek/mtk-pmic-wrap.c | 5 ++++-
+>>>>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c 
+>>>> b/drivers/soc/mediatek/mtk-pmic-wrap.c
+>>>> index 852514366f1f..332cbcabc299 100644
+>>>> --- a/drivers/soc/mediatek/mtk-pmic-wrap.c
+>>>> +++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
+>>>> @@ -2204,6 +2204,10 @@ static int pwrap_probe(struct platform_device *pdev)
+>>>>       if (!wrp)
+>>>>           return -ENOMEM;
+>>>> +    irq = platform_get_irq(pdev, 0);
+>>>> +    if (irq < 0)
+>>>> +        return irq;
+>>>> +
+>>>>       platform_set_drvdata(pdev, wrp);
+>>>>       wrp->master = of_device_get_match_data(&pdev->dev);
+>>>> @@ -2316,7 +2320,6 @@ static int pwrap_probe(struct platform_device *pdev)
+>>>>       if (HAS_CAP(wrp->master->caps, PWRAP_CAP_INT1_EN))
+>>>>           pwrap_writel(wrp, wrp->master->int1_en_all, PWRAP_INT1_EN);
+>>>> -    irq = platform_get_irq(pdev, 0);
+>>>
+>>> For better readability of the code I'd prefer to keep platform_get_irq next to 
+>>> devm_request_irq. I understand that you did this change so that you don't have 
+>>> to code
+>>> if (irq < 0) {
+>>>      ret = irq;
+>>>      goto err_out2;
+>>> }
+>>>
+>>> Or do I miss something?
+>>>
+>>
+>> That's for the sake of reducing gotos in the code... but there's a bigger
+>> picture that I haven't explained in this commit and that will come later
+>> because I currently don't have the necessary time to perform a "decent"
+>> testing.
+>>
+>> As I was explaining - the bigger pictures implies adding a new function for
+>> clock teardown, that we will add as a devm action:
+>>
+>> devm_add_action_or_reset(&pdev->dev, pwrap_clk_disable_unprepare, wrp)
+>>
+>> ...so that we will be able to remove *all* gotos from the probe function.
+>>
+>> Sounds good?
+>>
+> 
+> Sounds good, but that means we could get rid of the goto as well. Anyway I prefer 
+> to have platform_get_irq next to devm_request_irq. If we can get rid of the goto in 
+> the future, great.
 
-This specifically avoids having a racing open() trigger a BUG_ON() in
-mod_timer() when ath11k_mac_op_start() is called before the
-mon_reap_timer as been set up.
+Oki, then I'll send a v4 and avoid to move that one elsewhere - will keep the goto
+as well.
 
-Fixes: d5c65159f289 ("ath11k: driver for Qualcomm IEEE 802.11ax devices")
-Fixes: 840c36fa727a ("ath11k: dp: stop rx pktlog before suspend")
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
+Looking back at it, effectively, it doesn't really make sense to move that call!
 
-I started hitting a BUG_ON() during ath11k probe due to a timer which
-hasn't been initialised. Turns out the netdev is registered before
-having been fully set up:
-
-[  421.232410] ath11k_core_pdev_create
-[  421.233854] ath11k_dp_pdev_alloc
-[  421.233863] ath11k_dp_rx_pdev_srng_alloc
-[  421.259161] ath11k_mac_config_mon_status_default - NULL reap timer function
-[  421.259165] ath11k_pci 0006:01:00.0: failed to configure monitor status ring with default rx_filter: (-22)
-[  421.373066] ath11k_dp_rx_pdev_srng_alloc - reap timer setup
-
-Sending as an RFC as I'm not familiar with the code. It looks like
-ath11k_dp_pdev_alloc() may need to be split in an alloc and attach
-function.
-
-Johan
-
-
- drivers/net/wireless/ath/ath11k/core.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/net/wireless/ath/ath11k/core.c b/drivers/net/wireless/ath/ath11k/core.c
-index ea073be60c12..e090dfbfa4e2 100644
---- a/drivers/net/wireless/ath/ath11k/core.c
-+++ b/drivers/net/wireless/ath/ath11k/core.c
-@@ -1218,23 +1218,23 @@ static int ath11k_core_pdev_create(struct ath11k_base *ab)
- 		return ret;
- 	}
- 
--	ret = ath11k_mac_register(ab);
-+	ret = ath11k_dp_pdev_alloc(ab);
- 	if (ret) {
--		ath11k_err(ab, "failed register the radio with mac80211: %d\n", ret);
-+		ath11k_err(ab, "failed to attach DP pdev: %d\n", ret);
- 		goto err_pdev_debug;
- 	}
- 
--	ret = ath11k_dp_pdev_alloc(ab);
-+	ret = ath11k_mac_register(ab);
- 	if (ret) {
--		ath11k_err(ab, "failed to attach DP pdev: %d\n", ret);
--		goto err_mac_unregister;
-+		ath11k_err(ab, "failed register the radio with mac80211: %d\n", ret);
-+		goto err_dp_pdev_free;
- 	}
- 
- 	ret = ath11k_thermal_register(ab);
- 	if (ret) {
- 		ath11k_err(ab, "could not register thermal device: %d\n",
- 			   ret);
--		goto err_dp_pdev_free;
-+		goto err_mac_unregister;
- 	}
- 
- 	ret = ath11k_spectral_init(ab);
-@@ -1247,10 +1247,10 @@ static int ath11k_core_pdev_create(struct ath11k_base *ab)
- 
- err_thermal_unregister:
- 	ath11k_thermal_unregister(ab);
--err_dp_pdev_free:
--	ath11k_dp_pdev_free(ab);
- err_mac_unregister:
- 	ath11k_mac_unregister(ab);
-+err_dp_pdev_free:
-+	ath11k_dp_pdev_free(ab);
- err_pdev_debug:
- 	ath11k_debugfs_pdev_destroy(ab);
- 
--- 
-2.35.1
+Cheers,
+Angelo
 

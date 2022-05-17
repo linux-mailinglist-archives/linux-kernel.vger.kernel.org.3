@@ -2,147 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3BB529F31
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:18:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A87F0529F2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343769AbiEQKRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 06:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32868 "EHLO
+        id S1344065AbiEQKSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 06:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344382AbiEQKQu (ORCPT
+        with ESMTP id S1344390AbiEQKQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 06:16:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6554E1D335;
-        Tue, 17 May 2022 03:13:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 01F49615A2;
-        Tue, 17 May 2022 10:13:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C545C385B8;
-        Tue, 17 May 2022 10:13:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652782428;
-        bh=pwPflkY6883sgamo1V6UO6qAd1DW0795Cg7hqZS4LZg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ykhO7ngSFIqUuUkptf+X/kohsqKTZ54ModnsOpD4KyVBRPnV3KZ5tnhFcybG2L3DY
-         cYhO76EsdNFgojIIAqxdBJAMBXqfDMj53iZCT19Xv4sz0xbDgT9X3XwUzjtGW+QAvg
-         lUn62ixjbTT4bKKKNvRnrEYbH5eETCMFNs3l07U0=
-Date:   Tue, 17 May 2022 12:13:40 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Tanjore Suresh <tansuresh@google.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-nvme <linux-nvme@lists.infradead.org>,
-        Linux PCI <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] driver core: Support asynchronous driver shutdown
-Message-ID: <YoN1VC0v4RNFC+0s@kroah.com>
-References: <20220412224348.1038613-1-tansuresh@google.com>
- <20220412224348.1038613-2-tansuresh@google.com>
- <CAJZ5v0ivNq3aYCEcxPYMosLJCAyWiAnucwOCmRBzkM=sbyPWgQ@mail.gmail.com>
- <CALVARr6v5hcY0Vcf1izPUX-tXNJyyNXBMANbKX4CW9wfRf-pYQ@mail.gmail.com>
- <YmzqrqfVLQ9/4KXp@kroah.com>
- <CALVARr50MWexNpCf_PoZ4-pdnexiZiibz7Nd0PH+b-EVnBUN6w@mail.gmail.com>
- <CALVARr71u8VD0+zaWbm=6A-1_6gO=bYUm7OM4K5b6kOVz09XOA@mail.gmail.com>
+        Tue, 17 May 2022 06:16:51 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526794C7A1;
+        Tue, 17 May 2022 03:13:50 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id g12so6404808edq.4;
+        Tue, 17 May 2022 03:13:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pcZRdurBSN4nJPC8w1CaK4NSR1CQaP6KW/Ui8E5bIkg=;
+        b=EXz7bbzqjPPM2JEaA3Cof1ejuwXtUYJBP4fAvxFiFqmmKgDlPvnTbPGOYS0/RyEJao
+         3y/0Z4Patjm+EcQMpZO6jkjCIMzDhYeicRRbHGmzYDcDRqp/Rko6fYpRsjxYzjAcgN/U
+         34I51QD1n+GyPfB1bBPLL4PoCeh0xwsQv0hvfDPE92ZPvioSjdcwf46Gu4ACKZVh8BU2
+         j8do3nRQ/Shn2cq9DMV7fwq4A7RTAWgF/V2ced9sjFncBK1/0pvqQeTcxVh7EeLaPeWO
+         UO/4xATFinSmw7z+ulZ/sGShvbWukkKXvZujIUcSEyFboFOfzdBhktOdBuV7WT9NnBJW
+         hN4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pcZRdurBSN4nJPC8w1CaK4NSR1CQaP6KW/Ui8E5bIkg=;
+        b=6Rn1hYsf4FlctBMu2wweWGLBl1ObbbSYiIGOTvrgJEWX7iWRqfYlZZzHYAbsYqkhko
+         9tmElW4u8S+SLVJfsAwGRRnE3uUxkaR3CEJ3UGQnkgoTbelwcP0xZLCMaOs4t0FmoIvV
+         JtGAWjuQpoSAGah/9r2++erjBHWQL288qBVS2GM+krPaK9ggvbclltgb+eDzUcvTgMkT
+         YyB0p+ndPGdU33EgC+mmVjWwNvGOXU6AbHSfza48Ej4M8I3rwoj3PkS+MUw8MGfkv0zY
+         PGw78LbwTyK+fvkaJ43X+bsLnLY+u47Bs/2N4ZBQyBoR3eNNnurn7b1kSCQhUuDT3JpK
+         GXHQ==
+X-Gm-Message-State: AOAM530FimGyyncrXJHx5QIpB9dpV2GxVHnHgAHX54+nJnB0ZR7Kh/sm
+        exyh0/JVHI/E7mIJZVumNyc=
+X-Google-Smtp-Source: ABdhPJzU9534uohCsOtM++1lYyJGdQ9OYTEWax6NEX51VUdc+bPDRH3fyPitWL0JtHRFK7JLtbu08g==
+X-Received: by 2002:a05:6402:2d6:b0:42a:bb5f:a7d2 with SMTP id b22-20020a05640202d600b0042abb5fa7d2mr6565732edx.96.1652782428912;
+        Tue, 17 May 2022 03:13:48 -0700 (PDT)
+Received: from krava ([193.85.244.190])
+        by smtp.gmail.com with ESMTPSA id eg16-20020a056402289000b0042abb914d6asm1929187edb.69.2022.05.17.03.13.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 03:13:48 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Tue, 17 May 2022 12:13:45 +0200
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH bpf-next 1/2] cpuidle/rcu: Making arch_cpu_idle and
+ rcu_idle_exit noinstr
+Message-ID: <YoN1WULUoKtMKx8v@krava>
+References: <20220515203653.4039075-1-jolsa@kernel.org>
+ <20220516042535.GV1790663@paulmck-ThinkPad-P17-Gen-1>
+ <20220516114922.GA349949@lothringen>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALVARr71u8VD0+zaWbm=6A-1_6gO=bYUm7OM4K5b6kOVz09XOA@mail.gmail.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220516114922.GA349949@lothringen>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 02:02:08PM -0700, Tanjore Suresh wrote:
-> Greg
+On Mon, May 16, 2022 at 01:49:22PM +0200, Frederic Weisbecker wrote:
+> On Sun, May 15, 2022 at 09:25:35PM -0700, Paul E. McKenney wrote:
+> > On Sun, May 15, 2022 at 10:36:52PM +0200, Jiri Olsa wrote:
+> > > Making arch_cpu_idle and rcu_idle_exit noinstr. Both functions run
+> > > in rcu 'not watching' context and if there's tracer attached to
+> > > them, which uses rcu (e.g. kprobe multi interface) it will hit RCU
+> > > warning like:
+> > > 
+> > >   [    3.017540] WARNING: suspicious RCU usage
+> > >   ...
+> > >   [    3.018363]  kprobe_multi_link_handler+0x68/0x1c0
+> > >   [    3.018364]  ? kprobe_multi_link_handler+0x3e/0x1c0
+> > >   [    3.018366]  ? arch_cpu_idle_dead+0x10/0x10
+> > >   [    3.018367]  ? arch_cpu_idle_dead+0x10/0x10
+> > >   [    3.018371]  fprobe_handler.part.0+0xab/0x150
+> > >   [    3.018374]  0xffffffffa00080c8
+> > >   [    3.018393]  ? arch_cpu_idle+0x5/0x10
+> > >   [    3.018398]  arch_cpu_idle+0x5/0x10
+> > >   [    3.018399]  default_idle_call+0x59/0x90
+> > >   [    3.018401]  do_idle+0x1c3/0x1d0
+> > > 
+> > > The call path is following:
+> > > 
+> > > default_idle_call
+> > >   rcu_idle_enter
+> > >   arch_cpu_idle
+> > >   rcu_idle_exit
+> > > 
+> > > The arch_cpu_idle and rcu_idle_exit are the only ones from above
+> > > path that are traceble and cause this problem on my setup.
+> > > 
+> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > 
+> > From an RCU viewpoint:
+> > 
+> > Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+> > 
+> > [ I considered asking for an instrumentation_on() in rcu_idle_exit(),
+> > but there is no point given that local_irq_restore() isn't something
+> > you instrument anyway. ]
 > 
-> On Mon, May 2, 2022 at 12:13 PM Tanjore Suresh <tansuresh@google.com> wrote:
-> >
-> > On Sat, Apr 30, 2022 at 12:52 AM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > A: http://en.wikipedia.org/wiki/Top_post
-> > > Q: Were do I find info about this thing called top-posting?
-> > > A: Because it messes up the order in which people normally read text.
-> > > Q: Why is top-posting such a bad thing?
-> > > A: Top-posting.
-> > > Q: What is the most annoying thing in e-mail?
-> > >
-> > > A: No.
-> > > Q: Should I include quotations after my reply?
-> > >
-> > > http://daringfireball.net/2007/07/on_top
-> > >
-> > > On Fri, Apr 29, 2022 at 11:03:07AM -0700, Tanjore Suresh wrote:
-> > > > Rafael,
-> > > >
-> > > > That is a good observation, however, many of the use cases in data
-> > > > centers (deployment of devices in data centers) do not exploit device
-> > > > power management. Therefore, I'm not sure that is the right way to
-> > > > design this.
-> > >
-> > > Yes it is, enable device power management and use that interface please.
-> > > Devices in data centers should of course be doing the same thing as
-> > > everyone else, as it actually saves real money in power costs.  To not
-> > > do so is very odd.
-> > >
-> >
-> > I guess we are intermixing the  terminology of device power management
-> > with shutdown.
-> > My second, third reasoning in my previous e-mail, thought it brings
-> > out that difference. Maybe not.
-> > I will try one more time, my thought process on this one.
-> >
-> > This patch is only for shutdown. The shutdown can be done in a system
-> > in various flavors,
-> > (this may include a power being pulled from the system components when
-> > all the devices
-> > are quiescent and it can also be soft shutdown, where power is not
-> > removed from the system, but system
-> > could be attempting a reboot)
-> >
-> > The device power management allows the device to bring down any
-> > devices that may be idle to various power states that
-> > device may support in a selective manner & based on the transition
-> > allowed by the device. Such a transition initiated by
-> > the system can be achieved using the 'dpm' interface for runtime power
-> > management (more for extending laptop battery life).
-> > It can also be exploited for system sleep models (suspend and resume -
-> > where state is preserved and restarted from where it left off
-> > --> More applicable for laptops/desktops). That does not mean data
-> > center devices cannot exploit, but they worry about slight latency
-> > variation in any
-> > I/O initiated to any device. Such power management could introduce
-> > more latency when it transitions from one state to another.
-> > Therefore, the use case is more apt for Laptops, in certain cases
-> > desktops in my opinion or understanding.
-> >
-> > The shutdown entry point has been traditionally different and the
-> > semantics is that the whole system is going down to a
-> > quiescent state and power may be pulled or may not be, IMO, i am
-> > seeing both are independent requirements, in my view.
-> > Let me know if I am mistaken. I am not sure why we should break the
-> > shutdown semantics as understood by driver developers and
-> > overload it with dpm requirements?
-> >
+> So local_irq_save() in the beginning of rcu_idle_exit() is unsafe because
+> it is instrumentable by the function (graph)  tracers and the irqsoff tracer.
 > 
-> I have not seen additional comments, I request your help
-> in moving this further, please. If i have missed something,
-> Please let me know.
+> Also it calls into lockdep that might make use of RCU.
+> 
+> That's why rcu_idle_exit() is not noinstr yet. See this patch:
+> 
+> https://lore.kernel.org/lkml/20220503100051.2799723-4-frederic@kernel.org/
 
-Please rebase and resubmit your series with the extra information you
-have provided here in the changelog text so we can review it again.  The
-patch series is long gone from my queue, sorry.
+I see, could we mark it at least with notrace meanwhile?
 
-thanks,
-
-greg k-h
+jirka

@@ -2,125 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E8B52999C
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 08:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E8D65299A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 08:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239270AbiEQGcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 02:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59110 "EHLO
+        id S239944AbiEQGhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 02:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbiEQGcQ (ORCPT
+        with ESMTP id S231146AbiEQGht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 02:32:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FE01CEE
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 23:32:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652769134;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tyrw7Fs5af1WocF+1NFu5sorailBB9qMhsdDA/eQUgs=;
-        b=YUYNagvkuYIXft2zKJ5teBun/WeHFyeZn959jLqOiNgho0o7QZx4cFIFLCqvQlK+nh0McO
-        ZfD6Xsb5snIn+u9eVXOb9upXUK9rU2AQFZGuPRuk+C4mTjADlpUrdlHPEbZoyMeBC29AMD
-        f1MeFLbIJ+qyCdwk2dTs6EaalmahOZA=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-413-f91azWUHNFyctSTJ_kEDmQ-1; Tue, 17 May 2022 02:32:13 -0400
-X-MC-Unique: f91azWUHNFyctSTJ_kEDmQ-1
-Received: by mail-lj1-f199.google.com with SMTP id l26-20020a2e99da000000b0024f02d881cdso4056782ljj.6
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 23:32:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tyrw7Fs5af1WocF+1NFu5sorailBB9qMhsdDA/eQUgs=;
-        b=OnT1lv3K6bDGucENcP2Ye/82o8PgyepZMieZCdPlmqjMzNSc+mpUanIBBMHYtwNS+h
-         SezufakPKuOda9+TX+rh795eXIWr/e3gZ4r51DjDG/H4jLAr742bhCGyjDZWXGZQ6VwY
-         /YFDh/tECDHYEzXeUa1p+0fdtbp8vcxGAwIAuVtpRi2ZiQmZxLjOfJMj6cy74ezebmho
-         omRip6UgzO5yQINejffCCgnMussHo5Kq8qsyXFldN17Wm112mXYI0L8SKim4PyosO4o5
-         03UFj2ASC3rBzLzx3hgEpU6CRFeaa+1jB+lz0Duy/e21A7m4Hq1/o8alTrdv8T0pIacM
-         Z6fQ==
-X-Gm-Message-State: AOAM5338coj3BOsZlH5s0jqAHVATxyrMG3SRCy6JZN+PWT3s+qUQJkv0
-        vjhGOjBLfdjw13uydE8UxcUCNfnnByojhZhb7UyDdy/dcGE7zzraXvz5fxKq2GBCIVahs4knOQZ
-        l+h+aFkCUCuSNwU8Vy9rruV/ZhIkV9pHrbyuw94z7
-X-Received: by 2002:a05:6512:33d0:b0:473:a25e:f9fb with SMTP id d16-20020a05651233d000b00473a25ef9fbmr15703955lfg.98.1652769131562;
-        Mon, 16 May 2022 23:32:11 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx6g8tOmupVRqttN7WDRP44n6fuYeMH5lXesAtmPnbagzn8zytd8vAd7VMUwdVlbWPpI9ns+9bblO+ugjvA7ZM=
-X-Received: by 2002:a05:6512:33d0:b0:473:a25e:f9fb with SMTP id
- d16-20020a05651233d000b00473a25ef9fbmr15703935lfg.98.1652769131310; Mon, 16
- May 2022 23:32:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220512112347.18717-1-andrew@daynix.com>
-In-Reply-To: <20220512112347.18717-1-andrew@daynix.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 17 May 2022 14:32:00 +0800
-Message-ID: <CACGkMEvH1yE0CZYdstAK32DkEucejNO+V7PEAZD_641+rp2aKA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 0/5] TUN/VirtioNet USO features support.
-To:     Andrew Melnychenko <andrew@daynix.com>
-Cc:     davem <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, mst <mst@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        Yan Vugenfirer <yan@daynix.com>,
-        Yuri Benditovich <yuri.benditovich@daynix.com>
+        Tue, 17 May 2022 02:37:49 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77B92BB16;
+        Mon, 16 May 2022 23:37:43 -0700 (PDT)
+X-UUID: 1be3c25555d747e0b02388ea4d6ebf8b-20220517
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:c863057f-9fd9-4192-988f-bb7b614463c7,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:4b5473e2-edbf-4bd4-8a34-dfc5f7bb086d,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 1be3c25555d747e0b02388ea4d6ebf8b-20220517
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 838221604; Tue, 17 May 2022 14:37:38 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 17 May 2022 14:37:37 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 17 May 2022 14:37:36 +0800
+Message-ID: <cf2442b9c7124ebf1ce62ae5df597f003fa447d7.camel@mediatek.com>
+Subject: Re: [PATCH v2 2/2] memory: mtk-smi: Add support for MT6795 Helio X10
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+CC:     <krzysztof.kozlowski@linaro.org>, <robh+dt@kernel.org>,
+        <matthias.bgg@gmail.com>, <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <konrad.dybcio@somainline.org>, <marijn.suijten@somainline.org>,
+        <martin.botka@somainline.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        <phone-devel@vger.kernel.org>, <paul.bouchara@somainline.org>,
+        <kernel@collabora.com>, <yi.kuo@mediatek.com>,
+        <anthony.huang@mediatek.com>, <wendy-st.lin@mediatek.com>
+Date:   Tue, 17 May 2022 14:37:36 +0800
+In-Reply-To: <20220513150633.387200-3-angelogioacchino.delregno@collabora.com>
+References: <20220513150633.387200-1-angelogioacchino.delregno@collabora.com>
+         <20220513150633.387200-3-angelogioacchino.delregno@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 7:33 PM Andrew Melnychenko <andrew@daynix.com> wrote:
->
-> Added new offloads for TUN devices TUN_F_USO4 and TUN_F_USO6.
-> Technically they enable NETIF_F_GSO_UDP_L4
-> (and only if USO4 & USO6 are set simultaneously).
-> It allows to transmission of large UDP packets.
->
-> Different features USO4 and USO6 are required for qemu where Windows guests can
-> enable disable USO receives for IPv4 and IPv6 separately.
-> On the other side, Linux can't really differentiate USO4 and USO6, for now.
-> For now, to enable USO for TUN it requires enabling USO4 and USO6 together.
-> In the future, there would be a mechanism to control UDP_L4 GSO separately.
->
-> Test it WIP Qemu https://github.com/daynix/qemu/tree/Dev_USOv2
->
-> New types for VirtioNet already on mailing:
-> https://lists.oasis-open.org/archives/virtio-comment/202110/msg00010.html
->
-> Also, there is a known issue with transmitting packages between two guests.
+On Fri, 2022-05-13 at 17:06 +0200, AngeloGioacchino Del Regno wrote:
+> The MediaTek Helio X10 (MT6795) SoC has 5 LARBs and one common SMI
+> instance without any sub-common and without GALS.
+> 
+> While the smi-common configuration is specific to this SoC, on the
+> LARB side, this is similar to MT8173, in the sense that it doesn't
+> need the port in LARB, and the register layout is also compatible
+> with that one, which makes us able to fully reuse the smi-larb
+> platform data struct that was introduced for MT8173.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/memory/mtk-smi.c | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/drivers/memory/mtk-smi.c b/drivers/memory/mtk-smi.c
+> index 86a3d34f418e..7e7c3ede19e4 100644
+> --- a/drivers/memory/mtk-smi.c
+> +++ b/drivers/memory/mtk-smi.c
+> @@ -21,11 +21,13 @@
+>  /* SMI COMMON */
+>  #define SMI_L1LEN			0x100
+>  
+> +#define SMI_L1_ARB			0x200
+>  #define SMI_BUS_SEL			0x220
+>  #define SMI_BUS_LARB_SHIFT(larbid)	((larbid) << 1)
+>  /* All are MMU0 defaultly. Only specialize mmu1 here. */
+>  #define F_MMU1_LARB(larbid)		(0x1 <<
+> SMI_BUS_LARB_SHIFT(larbid))
+>  
+> +#define SMI_FIFO_TH0			0x230
 
-Could you explain this more? It looks like a bug. (Or any pointer to
-the discussion)
+Does the name come from the coda you got?
+It is called SMI_READ_FIFO_TH in my coda.
 
-Thanks
+>  #define SMI_M4U_TH			0x234
+>  #define SMI_FIFO_TH1			0x238
+>  #define SMI_FIFO_TH2			0x23c
+> @@ -360,6 +362,7 @@ static const struct of_device_id
+> mtk_smi_larb_of_ids[] = {
+>  	{.compatible = "mediatek,mt2701-smi-larb", .data =
+> &mtk_smi_larb_mt2701},
+>  	{.compatible = "mediatek,mt2712-smi-larb", .data =
+> &mtk_smi_larb_mt2712},
+>  	{.compatible = "mediatek,mt6779-smi-larb", .data =
+> &mtk_smi_larb_mt6779},
+> +	{.compatible = "mediatek,mt6795-smi-larb", .data =
+> &mtk_smi_larb_mt8173},
+>  	{.compatible = "mediatek,mt8167-smi-larb", .data =
+> &mtk_smi_larb_mt8167},
+>  	{.compatible = "mediatek,mt8173-smi-larb", .data =
+> &mtk_smi_larb_mt8173},
+>  	{.compatible = "mediatek,mt8183-smi-larb", .data =
+> &mtk_smi_larb_mt8183},
+> @@ -541,6 +544,13 @@ static struct platform_driver
+> mtk_smi_larb_driver = {
+>  	}
+>  };
+>  
+> +static const struct mtk_smi_reg_pair
+> mtk_smi_common_mt6795_init[SMI_COMMON_INIT_REGS_NR] = {
+> +	{SMI_L1_ARB, 0x1b},
+> +	{SMI_M4U_TH, 0xce810c85},
+> +	{SMI_FIFO_TH1, 0x43214c8},
+> +	{SMI_FIFO_TH0, 0x191f},
+> +};
+> +
+>  static const struct mtk_smi_reg_pair
+> mtk_smi_common_mt8195_init[SMI_COMMON_INIT_REGS_NR] = {
+>  	{SMI_L1LEN, 0xb},
+>  	{SMI_M4U_TH, 0xe100e10},
+> @@ -565,6 +575,12 @@ static const struct mtk_smi_common_plat
+> mtk_smi_common_mt6779 = {
+>  		    F_MMU1_LARB(5) | F_MMU1_LARB(6) | F_MMU1_LARB(7),
+>  };
+>  
+> +static const struct mtk_smi_common_plat mtk_smi_common_mt6795 = {
+> +	.type	  = MTK_SMI_GEN2,
+> +	.bus_sel  = BIT(0),
 
-> Without hacks with skb's GSO - packages are still segmented on the host's postrouting.
->
-> Andrew (5):
->   uapi/linux/if_tun.h: Added new offload types for USO4/6.
->   driver/net/tun: Added features for USO.
->   uapi/linux/virtio_net.h: Added USO types.
->   linux/virtio_net.h: Support USO offload in vnet header.
->   drivers/net/virtio_net.c: Added USO support.
->
->  drivers/net/tap.c               | 10 ++++++++--
->  drivers/net/tun.c               |  8 +++++++-
->  drivers/net/virtio_net.c        | 19 +++++++++++++++----
->  include/linux/virtio_net.h      |  9 +++++++++
->  include/uapi/linux/if_tun.h     |  2 ++
->  include/uapi/linux/virtio_net.h |  4 ++++
->  6 files changed, 45 insertions(+), 7 deletions(-)
->
-> --
-> 2.35.1
->
+Like the other larbs, use F_MMU1_LARB(0) here?
+
+
+After the two changes,
+
+Reviewed-by: Yong Wu <yong.wu@mediatek.com>
+
+Thanks.
+
+> +	.init     = mtk_smi_common_mt6795_init,
+> +};
+> +
+>  static const struct mtk_smi_common_plat mtk_smi_common_mt8183 = {
+>  	.type     = MTK_SMI_GEN2,
+>  	.has_gals = true,
+> @@ -609,6 +625,7 @@ static const struct of_device_id
+> mtk_smi_common_of_ids[] = {
+>  	{.compatible = "mediatek,mt2701-smi-common", .data =
+> &mtk_smi_common_gen1},
+>  	{.compatible = "mediatek,mt2712-smi-common", .data =
+> &mtk_smi_common_gen2},
+>  	{.compatible = "mediatek,mt6779-smi-common", .data =
+> &mtk_smi_common_mt6779},
+> +	{.compatible = "mediatek,mt6795-smi-common", .data =
+> &mtk_smi_common_mt6795},
+>  	{.compatible = "mediatek,mt8167-smi-common", .data =
+> &mtk_smi_common_gen2},
+>  	{.compatible = "mediatek,mt8173-smi-common", .data =
+> &mtk_smi_common_gen2},
+>  	{.compatible = "mediatek,mt8183-smi-common", .data =
+> &mtk_smi_common_mt8183},
 

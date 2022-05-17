@@ -2,81 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D8E52A7BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 18:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9998652A7BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 18:19:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350827AbiEQQTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 12:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52754 "EHLO
+        id S1350812AbiEQQTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 12:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350825AbiEQQTB (ORCPT
+        with ESMTP id S230062AbiEQQTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 12:19:01 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EAE83A5FC
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 09:19:00 -0700 (PDT)
+        Tue, 17 May 2022 12:19:30 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9083A716
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 09:19:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652804340; x=1684340340;
+  t=1652804369; x=1684340369;
   h=message-id:date:subject:to:cc:references:from:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=IuMkq9Ly0sIgsmHUHF552qOv7ZPO3TrbCViCGgenYmo=;
-  b=UF5uMbUV0rRwZ2yatSK8dBYHqK+NZbHu6qJqOl4K9xzuV0drLW8po9i5
-   jYLGpC1RPREU2nXeWCB7+djcoFI1YDCJs09Suzved6fD0nAgTXxjeLRA1
-   gXTZsrStrRkBj5u90GoPsgjfUYVyu7i71jVrEXu1I1HYRb/TZFztBD9Gv
-   d0uUDYUTF3J1PscbgI7ECCgPHtjesDMZ4R921L/5rhI/QOjs/t758S361
-   IEjvrqQ6A6z+ZL+I57xviUE6VXF6RtCFjxUC+n4I9wxJCP1BjRVsKzlr0
-   9pnOiKBtdZ/6H94NS/8UgWJilhq/4MlSAm9f5DCg49DUUQG7hoYpYuw5B
+  bh=URyIEGimmFAH22gQbZDvDrfkgc9XfITldggBfu8ZcLM=;
+  b=DSJkrWbKBMEnDykbpHcePQjz9zsNGVn5mAQQ7VcKs5A7uYUvftORySG/
+   NobuSEZBLrpklmCynLrGE2ZZ/7MWZU3MUgm99hXZamYXxkOGL7ZXYnS7x
+   bmTYy5gvJShFmcdW7YSU48uusCNPq8jdn2h5aTfjchFSJk+IBaBFZumNn
+   hQm5V4IQD6+EFvIdZbWV5zMN0ztJM9q7iof0UIorDG7g9eodsA75URa4g
+   MpGOimrVikBMIzeDDXvpo2zWB0K08owKCiVTEQIe0jx2sYj+Ta+qu5RT7
+   QvETQ5gc/h7Pwht1F6DazOobdrdo5betERsrI5EPc7V9ebvFUzM7hqreX
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="251748967"
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="334281724"
 X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="251748967"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 09:19:00 -0700
+   d="scan'208";a="334281724"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 09:19:29 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="713917615"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga001.fm.intel.com with ESMTP; 17 May 2022 09:19:00 -0700
-Received: from fmsmsx605.amr.corp.intel.com (10.18.126.85) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+   d="scan'208";a="660681940"
+Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
+  by FMSMGA003.fm.intel.com with ESMTP; 17 May 2022 09:19:29 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 17 May 2022 09:18:59 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ 15.1.2308.27; Tue, 17 May 2022 09:19:28 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Tue, 17 May 2022 09:18:59 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.176)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ 15.1.2308.27; Tue, 17 May 2022 09:19:28 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Tue, 17 May 2022 09:19:28 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.100)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Tue, 17 May 2022 09:18:59 -0700
+ 15.1.2308.27; Tue, 17 May 2022 09:19:28 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G9J5Ckq/A9Cf+TdwbFA1A/Yg1z/sxbSASXFhf28MOBIFZtzxVqPRhUbhjzfmslxfZdipTVrIB9xgTWWzbdvx/M1DrEj1FaIBcfXW7zZZ7+Bkyw74TmFq+SBte4/9EiWFSJ10WUhuG+QDYavOkFdApcbnrGB7Tf+AaULIgQmp+9d4E7SRVOh5pSN0N3gQKA9+UlZ+NzLrR/ieXNLxj6ASyBlHUPY0pJ6UO6ZnX1xmSFcYV6oPIbi7HBzTEJjp0ItuoItlnFeBaHNr3Dx0NaZItN1waml5GuGgqL8wNr8Ca1fAAKdi03RuAB3+95qOTTvXSfqpGulwpy7M9wbHvAh7bw==
+ b=hBUvCeawMtQ73/QTGOy+DZJ+KLf4rSptU6ZtWgD13LAV0McnyAxkA3O+oGuiUdH1mfPaW8c0X8zdJDgtju4EEZovUq3dHCsqgMBF6vHEbWeUsEzgYut5t/OP4LoI6B2x305sJyTTfmYSpcfECjfdhFiBMiqzbOWiWxz6A4RkmwCMbcE6izvwW0HL+AbM2Gh1Y9MMaJFRlBLfooOVbQAxEagVKk7hE8YnL2o9Y1YG98qFDsudZ6QxHxTkF1AmrBKJ0pMrKoMD64zxjQMl/ViIxxHEuFZziR0qiwbxmyo6lHyiK/dvdDKR60LtGCQESBN34tgNJWQFR9TdWULmzzcLSQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=m1xjh66iCQg1wibHuzRqK2vJFSIPApgjqdlMstRv0rw=;
- b=eReBCFVKG+PytXZAEv4sgmF3DBQCvKbNYsPoim87XIA4akGeKuIwkxMUucxw0TmhSEugj2SitxBZA8Skr0XKacTEIFH26fjdiAELORIkxuHdONiaMoMMNQ6J9gs9YQmlAtQr8D41DRAw/o2i2z0U3I+LgcjOQ2tBcRAahfY6VZpWc+woLFf+BDFCaJ0hdFr93cqSvi960TkHK/Jd2ycjNNW0pOI9Mx22+4YkXrnjyNwFYRoo2AWW1+YKjY3+Cv26y4yqKIRcxP9xAL7OsiDd9oL/b2HxLuKHLj/XN79Rmh1lqb5rctvH6vkFdz6eZ1hpCVGoCldSJ1dnBx7lpDQvrQ==
+ bh=PDdia3otQ3WCm7P+oWbBWkgRPXbQOGi3yAqCdzWFX2c=;
+ b=XV9wr070IzpCQNxxZ748OWWtlTOCMc9AmGibn8hO4KEv2f7pCp3S+rajHhIEB7sGObrJdIXm/FNnSUcmcXJQqhTeOuqqrNsLLws1uN5YU2oTTaJvFd1Bmhe4cfIbvZQKsq8H+td1LGhX0IY5SiSifiWYFI+hLi+uE/31/YTZ9fSYWN9QywxaErRNGED1seV5Gdg9E8kRGJ9Ns9iG5C3/5B8G586YGU3+iR+E6WVws/UrT4jVqpFHpZCFAQowugh6LlkYKdABmGbMpPm2H9hr8fJHPRw9larrr3qYlzcz41ithdPa/o8u5eViSLnnbjGr1jOXtDRU4MWMClzrran+mQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from BN0PR11MB5744.namprd11.prod.outlook.com (2603:10b6:408:166::16)
- by CO1PR11MB4787.namprd11.prod.outlook.com (2603:10b6:303:95::23) with
+ by PH0PR11MB4853.namprd11.prod.outlook.com (2603:10b6:510:40::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13; Tue, 17 May
- 2022 16:18:58 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.13; Tue, 17 May
+ 2022 16:19:26 +0000
 Received: from BN0PR11MB5744.namprd11.prod.outlook.com
  ([fe80::5459:7151:e684:6525]) by BN0PR11MB5744.namprd11.prod.outlook.com
  ([fe80::5459:7151:e684:6525%2]) with mapi id 15.20.5250.018; Tue, 17 May 2022
- 16:18:58 +0000
-Message-ID: <7f1c23cd-486d-9bbd-2bcc-c2db0fa1e5c2@intel.com>
-Date:   Tue, 17 May 2022 09:18:53 -0700
+ 16:19:26 +0000
+Message-ID: <93459560-0740-57f3-ed15-caae370aa80a@intel.com>
+Date:   Tue, 17 May 2022 09:19:21 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Firefox/91.0 Thunderbird/91.9.0
-Subject: Re: [PATCH v4 07/21] x86/resctrl: Create mba_sc configuration in the
- rdt_domain
+Subject: Re: [PATCH v4 08/21] x86/resctrl: Switch over to the resctrl mbps_val
+ list
 Content-Language: en-US
 To:     James Morse <james.morse@arm.com>, <x86@kernel.org>,
         <linux-kernel@vger.kernel.org>
@@ -93,76 +97,76 @@ CC:     Fenghua Yu <fenghua.yu@intel.com>,
         "Xin Hao" <xhao@linux.alibaba.com>, <xingxin.hx@openanolis.org>,
         <baolin.wang@linux.alibaba.com>
 References: <20220412124419.30689-1-james.morse@arm.com>
- <20220412124419.30689-8-james.morse@arm.com>
+ <20220412124419.30689-9-james.morse@arm.com>
 From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <20220412124419.30689-8-james.morse@arm.com>
+In-Reply-To: <20220412124419.30689-9-james.morse@arm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR02CA0017.namprd02.prod.outlook.com
- (2603:10b6:a02:ee::30) To BN0PR11MB5744.namprd11.prod.outlook.com
+X-ClientProxiedBy: BYAPR02CA0030.namprd02.prod.outlook.com
+ (2603:10b6:a02:ee::43) To BN0PR11MB5744.namprd11.prod.outlook.com
  (2603:10b6:408:166::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f0d24228-43be-4f1f-45db-08da3820f204
-X-MS-TrafficTypeDiagnostic: CO1PR11MB4787:EE_
+X-MS-Office365-Filtering-Correlation-Id: c8fd6c3a-eec6-4e73-7c04-08da382102b0
+X-MS-TrafficTypeDiagnostic: PH0PR11MB4853:EE_
 X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <CO1PR11MB478762DF8C8629EF8B5ACFC3F8CE9@CO1PR11MB4787.namprd11.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <PH0PR11MB485356157F5F240E781696B9F8CE9@PH0PR11MB4853.namprd11.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 668Sed+14dFhx+k/8X3Uo43JJt+9yq6f3Yzh03lg6sliNPoaC1cXkIwdexjkFQbLA73Shvf6IFu9EbwM8OoRSAwL6DWlTDPtacRf9TvjpE/vR2y9CuIqAvqJ6A4P/m8levOwGVxNJ+UvMZuMnWVnLxeAYAvgIiRvp88qpcZ21TFjciX9hIdH1ZjkEK3IC69yiRuVQiZYUfDENSbFlA3Z85I9fALZdUVDumJM8HvugQxloxNHLKLT7fOfQrjmnPcZoJa6eYJcTMBuGi/cdWjl7HvfTbxQRsO2WxP5QdjMcc/6ZhXtU7Voh10PMWA/HJMLc4Sm82PTKsVvxIWRiS8tjsZtr32G7OKgyaWJwAD59BID6fbLSaNH8Z2/C4ueRZkWRoRbqr5QCx7E1S2mZWjeFpekBWUfQsA58t+4/Wmhs6Gi2rZ184zCB8/Kg1rEvf/yVvcVf6M/WtYh+xxcJT1sepVOu+rCscO64abL4eRlgbafp7M9QiT3xLpHtI69yZQI63KOwuCE14s9AWqlzQcSJHuKg89jfC0jV5DYpTCogttPz/kDnFPEFFK7+vLRXkAfcqnxiT8+oRI9WUHDVpsRGei9S0CEgF6GXLU7SrmcpT0c7IBsrjPEhqkUMIXKt68+qpndJHWy1Gaw6+HgAFu9Ue1106RVXMRbhJuso6bitdOuvW23Tkzzeq4j3fV7nrz2VTGwPfGW9gpbFA08ax3/f63nVRIH1tc6yYyu10SaDMw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(6486002)(83380400001)(5660300002)(54906003)(66476007)(316002)(66556008)(4326008)(53546011)(8936002)(44832011)(31696002)(86362001)(66946007)(2616005)(6512007)(2906002)(7416002)(6506007)(26005)(6666004)(8676002)(82960400001)(186003)(38100700002)(36756003)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: 6haGT5HLmYVV1x+h0VAOYeEroYGEtqrjvAhcKpnPIUZT5VcLzy/rGjNxygwb5UzVBZ5WW0mspcPJs1UPmM+1Dj0QJvdbWicAhGgWjmlT95gnnkn8zCv495rfNXvqf+27a3budc1Y8kFK4h+ADxXya9+6l/stvVr3un4Pp1zJh2sdbB/FGJgvxmw6aixEjjkyCdLwYSbAztzlDeQudkTpt1LrNmGrz+/+uBsK3wXYfo/sIYCXnSDgK1khYNHM9e3RbNTbKhUqu8qjnnYuZLQSd+fF/YpM6NyWJYjjusyQAumqyATnXUobpbisqQM6ybNgZ9b1EPRkitRra10lRE158KCnzVZvNEK7vdKpYcJMlsjGeRt8w0QRs7ZLBMFysi8JQbbx3dCs0kBWpHK12yIXyk7sMM1/TZlc0IiOq+A1EPlHV6U7eUAgqVGitwjL78fiT+VFRbtLjmy8Eg304lqH0CwpFDMqApcPqoNspUYkDl+9VmwYnH5FZ4hBGCp6j7zZNgR8x8eWbZth/tibJ6Ekc9RVf25ZgJ9T4mqDH3fgSNiSQ5h17HXdDs7aS+NvLzfTomMbuoKUJIls3RX/3/zVftuZtvkMLSEjFwzKVpdzzuMlS0jeKypp4Gq07qRMBlHLrqxLprx0OSZSbBN1FDYGQzyhuGzKNGpJIDyB6sRmr5/XDFjcTdTRKFOlvFHSb6BwPlw6NcfXGp5AYudSyPzr803Y4RllHy4BAJ46NxBe/4U=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(316002)(38100700002)(6512007)(54906003)(31696002)(86362001)(186003)(66556008)(66476007)(83380400001)(53546011)(26005)(6506007)(44832011)(8676002)(5660300002)(66946007)(4326008)(6666004)(8936002)(31686004)(2616005)(82960400001)(6486002)(7416002)(2906002)(508600001)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?THZMcGZ1b3cxMEl1c3V1M2NvVVVtcFpFMm81NkFmaWtxM21yK1k5YWFiSExx?=
- =?utf-8?B?Nlp3ZVpjc3VZMVJTbDdXaXBXZExtbmJUWWUySXNweWU5YkhrS20wMklMR2kv?=
- =?utf-8?B?OUp5cnJEdWZtMWNWTGd1NW9HSlVnZzAzOS92Nkxtdng2eHJpVVNWM3J5MHUy?=
- =?utf-8?B?bGE5MmNqK053UDNvYnFsbVVOUDI5Z3N5YXgxSVFIOTlkTHJ1eWl5MWxvSUZC?=
- =?utf-8?B?c3NoU2Z6MFJGSlZmbjJRakk0L08yVEpMU1JYS2xXWUtTRVNKc0hiY29nRVVK?=
- =?utf-8?B?MjdFTUZaYlQxdGd1d3hHcnRtRVdacXFRUjM4UkU0QThLZWN3Y3JISmJFMGhz?=
- =?utf-8?B?N0RnNGVzdUtYaFBRL0d2VHo3Z2FxcFh6UlpqNFFXSGZ3WnRoWHZBNXhmakFO?=
- =?utf-8?B?amE3WmV4NlNsdVJaQUNiT0RuN2t3VWFhRTN1bVNCUUgrd1VoNEFENWloRjIy?=
- =?utf-8?B?M1BPSDV5U1NIcVo4cVVOUjFHZ2w1Y2lpQU5xbWZlZXB6eVYwd0VUUXBoaUcz?=
- =?utf-8?B?UGpYdHVxemgwSURZQlF4RDhCSDhnRGFVWjZNS3o5bzlUYUxld2d3dmV0WnhF?=
- =?utf-8?B?MEQvbmhuU1p0Y0oybFg2bGlTb3ByNlAyR09iM1BrS1hBM1NJZnhVLzIwSkhm?=
- =?utf-8?B?WlBkUXQwQ3FiRk5qaW1XQll0eFZVY21oSXBpdWtzek9leUQ0Q1d1RHNPYlpS?=
- =?utf-8?B?ZnphS25WUWFFeUhYV3FpLzkxM0ZzZGhQZWJLSTRkVEx5VWVtai9mVDFCOHV0?=
- =?utf-8?B?L0hOclY3YWd5VkNGN3FCdzJBWHNJbkY5aFliKzlGUC90YkpQKzhnYUoxWUJw?=
- =?utf-8?B?bHZUVGwwalNwcTVXbDZOZlZuYUw3YUU0ZnoxcDNOd09ISkpSTWRPOTBmZFBa?=
- =?utf-8?B?YmZBYW9yWlpRZitIZlljdUpLOVUvdkp6a293WWljclFrNllEYjBBWHdrc0FT?=
- =?utf-8?B?c3k3bG0yM2lZcUs1VXdWdkhURURzb1kzTlpUUVdtQXozSTdaakl5bDVWU09p?=
- =?utf-8?B?WitWWkZHeDNnblhRYXRwU0tPYUxHeHA0NUFMdFNRZExIOXdUbmw4SWloTWdl?=
- =?utf-8?B?Q0J5eUVNc0ZET3RxQjF3MWRTRS94Sk5ZVW5XMlpwQTlMdERMR3l4MUVSVldv?=
- =?utf-8?B?dlJlK1N1ZWVSSkw5OGx5SHdZN0xmUFJXQzB5YTJCRDJrRENsTU5yNnV2SjRZ?=
- =?utf-8?B?a201VGNXeTVuMDJRaXV3cTZwVnkraEhLZHg5UERkaWZSUjZpcHRFOGJqQ1R1?=
- =?utf-8?B?bHJ4cWtpT0dZcVNiUmNFV1c2OTBzbkhxU3ZqajFna2JTVlhlZldTQTRuc3Jq?=
- =?utf-8?B?N1NzNG81OHA1YWNPWjZZR0czcGpIZENGZ2FEY2tUcy9QaXE0VXFvRERTN2s4?=
- =?utf-8?B?a1VqWXVBakkxVGtFKzBvQmpnME5xNDdTTmh4ODU3TUZxTDIrZzlKT3JsMTE5?=
- =?utf-8?B?Z0RRUXlheHovODlUQWd0VTdpUGxEZnBTWnM1ZFZkVmJPN2Uxd2t3R0Vrc1Iv?=
- =?utf-8?B?aWhZdWJwNUNHR3luZmhveVBoamJXRmUzTGYyZHN5OHo4Vkhsd000bkJqemRa?=
- =?utf-8?B?MlhvS1cvT3RCeUg0ZDhUWWFZZ1FZSG5vN0FEdzBLcEx6VkxZK2lwb2JLOUFp?=
- =?utf-8?B?VVUvMVdrNjdVZnloZ1NSZFZrQnBTQXdSMmJyNjNoZ084TlkxNTNXaTM4bHBt?=
- =?utf-8?B?Yi9MdXQ5UjE3U3RWWkJLak1jK2dzSlQvZ0l2Y3RuWWR5UWlSRm1QdnFha2RT?=
- =?utf-8?B?VmViU01kVTJBVmllRFZPa0lvNjZWejNqTGIxa2NRSklWSjNwR3R6Q3g2aUo0?=
- =?utf-8?B?c1k3WWp4b2F1Zi90TFhvaDFKZ3dETVFoNHdsRkFGNG4xZy9iTUJuVUJOUk4y?=
- =?utf-8?B?TWpaaG95Z2c1dlhYOHJQSU9jYm5IZW9lUXR1K2c5WWRYSmtFTWlnMVNWcm5J?=
- =?utf-8?B?YkRQT1FjOXlNM21wdzZTUDVVM0swRi8wTTBKUVByZGVtalZBdHZmeEVPQnZo?=
- =?utf-8?B?MWlpdko4UW1VS3ZmTW5ZTVJ5QTF5cGE5UDdyNmRhc3FsT3kwZGVmemV2L1Q0?=
- =?utf-8?B?VE1pbjg4L2V3SVZ0YmxEK1ZOMU1OMllNZnJjQ2hWMDN2YXNsNDNUcHh3azhr?=
- =?utf-8?B?ZVhzb3VBMmhSTCtkZHlkbzRYb0NzQSt3bHdQQXJGeHE2bEVRekMzSFI1bEZD?=
- =?utf-8?B?YmdSYUJ3dS91TUZJR0Z1WnIzYnRQbEhEczlmOHBaYlVrTzdJci9LSUVNWkxk?=
- =?utf-8?B?SGE1eFpQa3I3OWUyU0hJMVNhdnV2Ulk1dmpJRGZWS0xidkRtT2l3UHVVUyt3?=
- =?utf-8?B?UWV1MXYwV0JqMHM0RE9pWjdNYmVOZ2dUamxXT2Q4Vlh0a0JhQ2xSeXJzb01a?=
- =?utf-8?Q?OTmfXlBoADV+rOKE=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: f0d24228-43be-4f1f-45db-08da3820f204
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RlNUTS9XNmgxbHFzWUVPc3JCRmh0SDRnYmxTVUZGNXpndGloNzkyRGdLdkNJ?=
+ =?utf-8?B?RjlySC9EMVRreUZnSWg3bUZCREFya25zNUhjcGxJTTNldTEva0lQM29SWnhQ?=
+ =?utf-8?B?c2NlV2pRNFNEZTB1TTJXQS9hcFIrdS9WQ2s3cU1abG9rNkZkV3k4emt1cE0y?=
+ =?utf-8?B?b1k2M3QyRkN3T1Y1dVBuNytWRWFsdm9oN3NpWXZyc0hSaUdLOU5WSmlOcWox?=
+ =?utf-8?B?b3M3d09HU2hqY3RHNDI0TitraUFpUzh0Z05aTDRMc0ZPSUh3aFdUUEVURjNy?=
+ =?utf-8?B?dkRNVzNwQjdrdkJ2ZXB4TEt2MzNkWXVOOGc1NGlRWkxyWjYvdDBnMjNCejJu?=
+ =?utf-8?B?THMxMTBUVFVLbEw4dHlzc1hMc0NwS0FHaTZJUUNGR20xV2pjNXlvSXNURzIy?=
+ =?utf-8?B?NWhOak5tYXgyWFh6RUtEK2JNWlNRL2dtMVpQSFZJbTlpM0hocXpjOCtMb3dH?=
+ =?utf-8?B?Uk1iNU84ckZvMW1hYUpGME0rYjZMRC9xODhwcU5xcnFueTdNT3FmdGJ1NW9p?=
+ =?utf-8?B?dDBDcUU0blFEclBlVDVRQklIcjVlOXdlYjV0M2tYZ0l1VmkvSGxSdkRZSXZh?=
+ =?utf-8?B?akp5L0tHNzNyNCsxbjIvL2I3WEQ2WVVkNmFEamVueTRQRTAyWlFCUW51UlAw?=
+ =?utf-8?B?Z3Bac0U2cUlvZE9wK1FLaTVhUGtDZjYrMENmOVl0N280N1ltd2VLYUtlM1k3?=
+ =?utf-8?B?RUlEYXFvckd3VlVYSlI0R3dJdVFzYjVpNlFOQ0ZlWi9IWXpuZ3RiRk9hUGRi?=
+ =?utf-8?B?S2VDLzlDa1lOS0g1U2x3dzdpRm1OZTY5OFZ1dVg4TFl5a3RnRWtTOUU4Q0xt?=
+ =?utf-8?B?UnZjdWh5bnJMa1l0NHRVS2pISDV1RnpwQmJLYUJjQWxXdjh2YTEvL3BmRlZy?=
+ =?utf-8?B?V1JrUWFYdi9YK1ZJam9hZ3ZVNDBYOEFhUWluSGR6U3pSSm02Z1JTTTZXM0pD?=
+ =?utf-8?B?dkJ0akdQRGg4QzBxTzdiVHlGSHg5am1lczRxd3VicndNNnRjMU01QS94SzRr?=
+ =?utf-8?B?YzFreVpyV3VJMWJmL2ZZSkRBNUliYWg5MVRKN3ZRQURGS2NoL0ZtMm5MdlIr?=
+ =?utf-8?B?eHJSRWlUM0JHVXErUGhiM2tXU2V2TC9jU29DVTNSNXEydWZPaitFb1lWQlRa?=
+ =?utf-8?B?OTQ0SXJOQVpQZVBJOUxXNWZUMldHVWlmWThuTDFwVUpQRGhLTjJ2dFNaMXZZ?=
+ =?utf-8?B?MFlWb1ZNcmNBYStXcHBiZktMdnBOVmM2disvSnIzanVjWDBudnFrbWJOR0dl?=
+ =?utf-8?B?TVVQWjdIajZsZ3VsL2RSOVhGUWhnc3hTbFkwb0llS2xkNi9DZWlBL0xobGdB?=
+ =?utf-8?B?dTZOOTVJY0xVSXdGcDFzNW9BWWMvcFhLYm5yamhNem4rYTNDRjQ0U0w0YnUw?=
+ =?utf-8?B?TjczZDVoSFVFWHA1KzhKWW5Ib0FNZFV5QlVyK2htbndxcktMc0pmd3VISGc3?=
+ =?utf-8?B?UE4wLzZyN2F6VmxWeFJwUUxWTUVEa2lqV21mTXp4MTh2aEQ1RjY3clhqWkh5?=
+ =?utf-8?B?QktYL005TWRWNWFGcGtFbnIxRDgzMDNNWk1UWFdubC9mZHQ5OXpwcTlPOTF1?=
+ =?utf-8?B?a1NYMCtMUkV0KzQ5RnA4UGRuclBFVGRNRGE3alNyc09xV0hOUU0zUVREdEdo?=
+ =?utf-8?B?NjRoMzRpVWJxaGZlRkNMd2xML3ZQek9OQkZwWlJXVHYybExaWnMzbThvVm5t?=
+ =?utf-8?B?NnBZdjZVQ0V5YTBXTlMyT04rREFzNGJFNlFWdytpWG1SVzFsbWgzSmZSK3d1?=
+ =?utf-8?B?RWh4Tytuck9JejhDVHBRWUFqZUs3NHQyQUx6My93b2FoQ0cwREFuSnk0bDBV?=
+ =?utf-8?B?MkNFUFdtUkgvZ041NlZIaXBmbEhDTkNOYVh5ZnFqeHpSZEJoTk0zRDMwMjJF?=
+ =?utf-8?B?RmhwWWlMMEJ3Z2hITzJ6VnVzOWZzT2ZjLzc2cDVRLy91Nkl4cmZVMzZEZ2Fk?=
+ =?utf-8?B?YUdQTmZuZ3kxQjcvSmFEVlhidkVpYW55OHNJREY5dDVzbmpoZmZteXlmVS9V?=
+ =?utf-8?B?dVZaWk9iK0E1Nyt1cFdGemlGOGFVZUtPK09TVkZlVEROalU4NldnZHNERXJV?=
+ =?utf-8?B?dWFGQi9MQXEyRVg0eW05dmFvUjF5Qy9aMzJzUE5icGxtSEZrV1VwRlk2QWdt?=
+ =?utf-8?B?M1NOKzJGZmczbGhmMzNEcG1aQUVLSjNrcFg4QmZWQmJuY2pFbzR3N2IzUFV4?=
+ =?utf-8?B?ejBzTm11SWRySEhydklkLzZEZ1hyd0REQUxxcDcxYzNMOXYrak5XUWovZ3pY?=
+ =?utf-8?B?VHVRQ0pIekdqenUvbUUvS3JhVDJSbFNJVlZZMWFxMlRwcDk1Rlg5Z1NxTkpX?=
+ =?utf-8?B?VUZqeVlRc0NXNms5NGpDWGVGNTJrVktHRjd6KzdPNFhDNWgrZjVLb3hxbWhY?=
+ =?utf-8?Q?6s8Zr4BnJn1s3/PE=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: c8fd6c3a-eec6-4e73-7c04-08da382102b0
 X-MS-Exchange-CrossTenant-AuthSource: BN0PR11MB5744.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2022 16:18:57.9492
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2022 16:19:26.3573
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9/V0BjrxbmbL+/l7uBa3m9aMIiffr8Hs5kXQIEN9nx3jDYKizukgRPjTNzcEfECluyBte3jECYfc8DC65sa5b1TObuNnDE6TVpzg50IKNGk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4787
+X-MS-Exchange-CrossTenant-UserPrincipalName: U2nn1lDG1zfox3JYlnCRE1xS0Lj871CSKUnuf9cZFrdUoKISG3gTal7wR/hbtYW9E7BdM+vL7ZWxpUoBwpIJfPLR3b0dlu7/02XbJOEEZe4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4853
 X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
@@ -177,131 +181,170 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Hi James,
 
 On 4/12/2022 5:44 AM, James Morse wrote:
+> Updates to resctrl's software controller follow the same path as
+> other configuration updates, but they don't modify the hardware state.
+> rdtgroup_schemata_write() uses parse_line() and the resource's
+> parse_ctrlval() function to stage the configuration.
+> resctrl_arch_update_domains() then updates the mbps_val[] array
+> instead, and resctrl_arch_update_domains() skips the rdt_ctrl_update()
+> call that would update hardware.
+> 
+> This complicates the interface between resctrl's filesystem parts
+> and architecture specific code. It should be possible for mba_sc
+> to be completely implemented by the filesystem parts of resctrl. This
+> would allow it to work on a second architecture with no additional code.
+> resctrl_arch_update_domains() using the mbps_val[] array prevents this.
+> 
+> Change parse_bw() to write the configuration value directly to the
+> mbps_val[] array in the domain structure. Change rdtgroup_schemata_write()
+> to skip the call to resctrl_arch_update_domains(), meaning all the
+> mba_sc specific code in resctrl_arch_update_domains() can be removed.
+> On the read-side, show_doms() and update_mba_bw() are changed to read
+> the mbps_val[] array from the domain structure. With this,
+> resctrl_arch_get_config() no longer needs to consider mba_sc resources.
+> 
 
-...
+This sounds like a good cleanup and I understand it to not intend 
+functional change, so a bit more information is needed on the change
+in rdtgroup_init_alloc(). More below.
 
-> @@ -3263,6 +3295,7 @@ void resctrl_offline_domain(struct rdt_resource *r, struct rdt_domain *d)
->  		cancel_delayed_work(&d->cqm_limbo);
+> diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
+> index 497cadf3285d..5cc1e6b229d4 100644
+> --- a/arch/x86/kernel/cpu/resctrl/monitor.c
+> +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
+> @@ -447,13 +447,11 @@ static void update_mba_bw(struct rdtgroup *rgrp, struct rdt_domain *dom_mbm)
+>  	hw_dom_mba = resctrl_to_arch_dom(dom_mba);
+>  
+>  	cur_bw = pmbm_data->prev_bw;
+> -	user_bw = resctrl_arch_get_config(r_mba, dom_mba, closid, CDP_NONE);
+> +	user_bw = dom_mba->mbps_val[closid];
+>  	delta_bw = pmbm_data->delta_bw;
+> -	/*
+> -	 * resctrl_arch_get_config() chooses the mbps/ctrl value to return
+> -	 * based on is_mba_sc(). For now, reach into the hw_dom.
+> -	 */
+> -	cur_msr_val = hw_dom_mba->ctrl_val[closid];
+> +
+> +	/* MBA monitor resource doesn't support CDP */
+
+MBA resource does not support monitoring. Perhaps instead:
+/* MBA resource doesn't support CDP. */
+
+> +	cur_msr_val = resctrl_arch_get_config(r_mba, dom_mba, closid, CDP_NONE);
+>  
+>  	/*
+>  	 * For Ctrl groups read data from child monitor groups.
+> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> index 9d5be6a73644..07904308245c 100644
+> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> @@ -1356,11 +1356,13 @@ static int rdtgroup_size_show(struct kernfs_open_file *of,
+>  			      struct seq_file *s, void *v)
+>  {
+>  	struct resctrl_schema *schema;
+> +	enum resctrl_conf_type type;
+>  	struct rdtgroup *rdtgrp;
+>  	struct rdt_resource *r;
+>  	struct rdt_domain *d;
+>  	unsigned int size;
+>  	int ret = 0;
+> +	u32 closid;
+>  	bool sep;
+>  	u32 ctrl;
+>  
+> @@ -1386,8 +1388,11 @@ static int rdtgroup_size_show(struct kernfs_open_file *of,
+>  		goto out;
 >  	}
 >  
-> +	mba_sc_domain_destroy(r, d);
->  	domain_destroy_mon_state(d);
+> +	closid = rdtgrp->closid;
+> +
+>  	list_for_each_entry(schema, &resctrl_schema_all, list) {
+>  		r = schema->res;
+> +		type = schema->conf_type;
+>  		sep = false;
+>  		seq_printf(s, "%*s:", max_name_width, schema->name);
+>  		list_for_each_entry(d, &r->domains, list) {
+> @@ -1396,9 +1401,12 @@ static int rdtgroup_size_show(struct kernfs_open_file *of,
+>  			if (rdtgrp->mode == RDT_MODE_PSEUDO_LOCKSETUP) {
+>  				size = 0;
+>  			} else {
+> -				ctrl = resctrl_arch_get_config(r, d,
+> -							       rdtgrp->closid,
+> -							       schema->conf_type);
+> +				if (is_mba_sc(r))
+> +					ctrl = d->mbps_val[closid];
+> +				else
+> +					ctrl = resctrl_arch_get_config(r, d,
+> +								       closid,
+> +								       type);
+>  				if (r->rid == RDT_RESOURCE_MBA)
+>  					size = ctrl;
+>  				else
+> @@ -1922,9 +1930,6 @@ static void mba_sc_domain_destroy(struct rdt_resource *r,
+>  static int set_mba_sc(bool mba_sc)
+>  {
+>  	struct rdt_resource *r = &rdt_resources_all[RDT_RESOURCE_MBA].r_resctrl;
+> -	u32 num_closid = resctrl_arch_get_num_closid(r);
+> -	struct rdt_domain *d;
+> -	int i;
+>  
+>  	if (!is_mbm_enabled() || !is_mba_linear() ||
+>  	    mba_sc == is_mba_sc(r))
+> @@ -1932,11 +1937,6 @@ static int set_mba_sc(bool mba_sc)
+>  
+>  	r->membw.mba_sc = mba_sc;
+>  
+> -	list_for_each_entry(d, &r->domains, list) {
+> -		for (i = 0; i < num_closid; i++)
+> -			d->mbps_val[i] = MBA_MAX_MBPS;
+> -	}
+> -
+>  	return 0;
 >  }
 
-It is not clear to me how rdt_domain->mbps_val will be released via the above call.
-
-After patch 3/21 and the hunk below resctrl_online_domain() would look like:
-
-resctrl_online_domain() {
-	
-	int err;
-
-	lockdep_assert_held(&rdtgroup_mutex);
-
-	if (is_mbm_enabled() && r->rid == RDT_RESOURCE_MBA) {
-		err = mba_sc_domain_allocate(r, d);
-		if (err)
-			return err;
-	}
-	
-	if (!r->mon_capable)
-		return 0;
-
-	...
-}
-	
-If I understand the above correctly, if MBM is enabled then all domains
-of resource RDT_RESOURCE_MBA will have rdt_domain->mbps_val allocated via
-resctrl_online_domain().
-
-RDT_RESOURCE_MBA is not mon_capable, so at the time its domains go
-offline, the freeing of rdt_domain->mbps_val will be skipped because	
-after patch 5/21 resctrl_offline_domain() would look like below so
-I do not see how the hunk added above will ever end up cleaning up
-allocated memory:
-
-resctrl_offline_domain() {
-
-	lockdep_assert_held(&rdtgroup_mutex);
-
-	if (!r->mon_capable) /* RDT_RESOURCE_MBA is not mon_capable */
-		return 0;
-
-	...
-
-	
-	mba_sc_domain_destroy(r, d); /* Not reached for rdt_domains of RDT_RESOURCE_MBA */
-	domain_destroy_mon_state(d);
-}
+With this removed, where is rdt_domain->mbps_val reset on remount of resctrl?
 
 >  
-> @@ -3302,12 +3335,20 @@ int resctrl_online_domain(struct rdt_resource *r, struct rdt_domain *d)
+> @@ -2809,15 +2809,18 @@ static int rdtgroup_init_cat(struct resctrl_schema *s, u32 closid)
+>  }
 >  
->  	lockdep_assert_held(&rdtgroup_mutex);
+>  /* Initialize MBA resource with default values. */
+> -static void rdtgroup_init_mba(struct rdt_resource *r)
+> +static void rdtgroup_init_mba(struct rdt_resource *r, u32 closid)
+>  {
+>  	struct resctrl_staged_config *cfg;
+>  	struct rdt_domain *d;
 >  
-> +	if (is_mbm_enabled() && r->rid == RDT_RESOURCE_MBA) {
-
-This introduces only half of the checks that are later replaced in
-patch 10 "x86/resctrl: Abstract and use supports_mba_mbps()". Could the
-full check be used here for that patch to be cleaner or perhaps patch 10
-could be moved to be before this patch?
-
-> +		err = mba_sc_domain_allocate(r, d);
-> +		if (err)
-> +			return err;
-> +	}
+>  	list_for_each_entry(d, &r->domains, list) {
+>  		cfg = &d->staged_config[CDP_NONE];
+> -		cfg->new_ctrl = is_mba_sc(r) ? MBA_MAX_MBPS : r->default_ctrl;
+> +		cfg->new_ctrl = r->default_ctrl;
+>  		cfg->have_new_ctrl = true;
 > +
->  	if (!r->mon_capable)
->  		return 0;
+> +		if (is_mba_sc(r))
+> +			d->mbps_val[closid] = MBA_MAX_MBPS;
+>  	}
+>  }
 >  
->  	err = domain_setup_mon_state(r, d);
-> -	if (err)
-> +	if (err) {
-> +		mba_sc_domain_destroy(r, d);
->  		return err;
-> +	}
+> @@ -2831,7 +2834,7 @@ static int rdtgroup_init_alloc(struct rdtgroup *rdtgrp)
+>  	list_for_each_entry(s, &resctrl_schema_all, list) {
+>  		r = s->res;
+>  		if (r->rid == RDT_RESOURCE_MBA) {
+> -			rdtgroup_init_mba(r);
+> +			rdtgroup_init_mba(r, rdtgrp->closid);
+>  		} else {
+>  			ret = rdtgroup_init_cat(s, rdtgrp->closid);
+>  			if (ret < 0)
 
-Cleaning up after the error is reasonable but this allocation would only
-ever happen if the resource is RDT_RESOURCE_MBA and it is not mon_capable.
-Something would thus have gone really wrong if this cleanup is necessary.
-Considering that only mon_capable resources are initialized at this point,
-why not just exit right after calling mba_sc_domain_allocate()?
+What follows this hunk and continues to be called is:
 
+	ret = resctrl_arch_update_domains(r, rdtgrp->closid);
 
->  
->  	if (is_mbm_enabled()) {
->  		INIT_DELAYED_WORK(&d->mbm_over, mbm_handle_overflow);
-> diff --git a/include/linux/resctrl.h b/include/linux/resctrl.h
-> index 5d283bdd6162..46ab9fb5562e 100644
-> --- a/include/linux/resctrl.h
-> +++ b/include/linux/resctrl.h
-> @@ -15,6 +15,9 @@ int proc_resctrl_show(struct seq_file *m,
->  
->  #endif
->  
-> +/* max value for struct rdt_domain's mbps_val */
-> +#define MBA_MAX_MBPS   U32_MAX
-> +
->  /**
->   * enum resctrl_conf_type - The type of configuration.
->   * @CDP_NONE:	No prioritisation, both code and data are controlled or monitored.
-> @@ -53,6 +56,9 @@ struct resctrl_staged_config {
->   * @cqm_work_cpu:	worker CPU for CQM h/w counters
->   * @plr:		pseudo-locked region (if any) associated with domain
->   * @staged_config:	parsed configuration to be applied
-> + * @mbps_val:		When mba_sc is enabled, this holds the array of user
-> + * 			specified control values for mba_sc in MBps, indexed
-> + *			by closid
->   */
->  struct rdt_domain {
->  	struct list_head		list;
-> @@ -67,6 +73,7 @@ struct rdt_domain {
->  	int				cqm_work_cpu;
->  	struct pseudo_lock_region	*plr;
->  	struct resctrl_staged_config	staged_config[CDP_NUM_TYPES];
-> +	u32				*mbps_val;
->  };
->  
->  /**
+before this patch resctrl_arch_update_domains() would just have updated
+the mbps_val but not made any configuration changed if is_mba_sc() is true.
+Before this patch configuration changes done in
+resctrl_arch_update_domains() is omitted when is_mba_sc() is true
+but after earlier change in this patch it proceeds and will result in
+configuration change.
 
 Reinette

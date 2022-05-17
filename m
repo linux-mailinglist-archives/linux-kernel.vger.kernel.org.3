@@ -2,52 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E57C3529626
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 02:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ECFA52962A
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 02:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234245AbiEQAqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 20:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43386 "EHLO
+        id S229970AbiEQArN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 20:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbiEQAqx (ORCPT
+        with ESMTP id S234427AbiEQArJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 20:46:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142E613D40;
-        Mon, 16 May 2022 17:46:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BD39CB815CE;
-        Tue, 17 May 2022 00:46:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23A7DC385AA;
-        Tue, 17 May 2022 00:46:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652748409;
-        bh=ufFkiJ8jCbR/3dqnyjJjzAoF4JiGJFufQ2JZEyKasEc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cYfIWaInZxzuaTCW8ZZGogzVczuFa/lI6hVHNOYimJny12nEj2xtBAer+2L40UwW0
-         1PBafMkcy7A2UsOMMCeiaPkiEQl/akHfNvB/rgo+XLSpJDN8Q5HILG36ixNN+kuAI9
-         Rmg9mIUHAXDIEtxAArtxRvHPbW5U26LeSIMJWGY2VseSuwo/w+EbzCBX+FxXu3mWb+
-         y8tXDC/kdRUeP5Ocp5mLpOkHL1W6Ms/TPZwVydMQ/w42von+yqvlBpbwtfEGeuc4J0
-         KmnFf3K887uCjs4lllDu30NPBy0fGCfLO4Q46PfEyRK8l51wsphfGqXEOtIH1ooZM/
-         biIncuFF7jwow==
-Date:   Mon, 16 May 2022 17:46:47 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Ming Yan <yanming@tju.edu.cn>, Chao Yu <chao.yu@oppo.com>
-Subject: Re: [PATCH v3] f2fs: fix to do sanity check for inline inode
-Message-ID: <YoLwd3CUBIFn7+rS@google.com>
-References: <20220515090547.1914-1-chao@kernel.org>
+        Mon, 16 May 2022 20:47:09 -0400
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A00A13E29;
+        Mon, 16 May 2022 17:47:07 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id r1so20666995oie.4;
+        Mon, 16 May 2022 17:47:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iJgSIj5Vbgqm2lP3FwW0wvqzkGV+5Vch0R+WtavPeG0=;
+        b=W6Iaxo2tTFnThXN2NtnFkpzgiSOSvv5Irqvx6XBdsnSbQcR4kQ1Q2l/rO+o76W0Ky6
+         Ncv5M4w6c/XHLsbqcUbZkd9CJb1/y+awEgq/Dd06FPkUwbCoqJaIteTFNyAzUmbv3sJU
+         AhPzCeQ0p8AThNuf8Epc7ax6dfQkKIlunk61k3ShWNTbs3oHQXuiaXzSjMj58o1qN4pb
+         YyJ9fKLbxqDzmRgpqEpfeiKR2+XxU93/sJwuP4vtAp3c48qvTaO2tkjG3HRUR2h6hrwX
+         yu8IAaz72LGJPRq/jEq/1Pec8LFVRFqi3tqtnNWZ/DZyng5jm7+oJc2fv6WNCGriPMxW
+         C3kA==
+X-Gm-Message-State: AOAM531qgZP4KLzD2R3a+N1zBPKPTaHFp/obln92Vq8pKQaBeEzaY9Xt
+        PFzxpn8zxYEuZpMNtjWKwQ==
+X-Google-Smtp-Source: ABdhPJzxUe7lRWwSsk4LYTIlf0trAXfo6l1O3t5y3u2IE0dc+3FfnlSJCRjFtF4GffGFbK7487ochw==
+X-Received: by 2002:a05:6808:1585:b0:326:6477:64b2 with SMTP id t5-20020a056808158500b00326647764b2mr9172703oiw.173.1652748426873;
+        Mon, 16 May 2022 17:47:06 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id g9-20020a05683030a900b0060603221248sm4499696ots.24.2022.05.16.17.47.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 17:47:06 -0700 (PDT)
+Received: (nullmailer pid 3682863 invoked by uid 1000);
+        Tue, 17 May 2022 00:47:04 -0000
+Date:   Mon, 16 May 2022 19:47:04 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Mark Brown <broonie@kernel.org>,
+        LABBE Corentin <clabbe@baylibre.com>,
+        alexandre.torgue@foss.st.com, calvin.johnson@oss.nxp.com,
+        davem@davemloft.net, edumazet@google.com, hkallweit1@gmail.com,
+        jernej.skrabec@gmail.com, joabreu@synopsys.com,
+        krzysztof.kozlowski+dt@linaro.org, kuba@kernel.org,
+        lgirdwood@gmail.com, linux@armlinux.org.uk, pabeni@redhat.com,
+        peppe.cavallaro@st.com, samuel@sholland.org, wens@csie.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 3/6] dt-bindings: net: Add documentation for phy-supply
+Message-ID: <20220517004704.GA3654797-robh@kernel.org>
+References: <20220509074857.195302-1-clabbe@baylibre.com>
+ <20220509074857.195302-4-clabbe@baylibre.com>
+ <YnkGV8DyTlCuT92R@lunn.ch>
+ <YnkWl+xYCX8r9DE7@Red>
+ <Ynk7L07VH/RFVzl6@lunn.ch>
+ <Ynk9ccoVh32Deg45@sirena.org.uk>
+ <YnlDbbegQ1IbbaHy@lunn.ch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220515090547.1914-1-chao@kernel.org>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <YnlDbbegQ1IbbaHy@lunn.ch>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,77 +77,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/15, Chao Yu wrote:
-> Yanming reported a kernel bug in Bugzilla kernel [1], which can be
-> reproduced. The bug message is:
+On Mon, May 09, 2022 at 06:38:05PM +0200, Andrew Lunn wrote:
+> > No, that's not a thing - the supplies are individual, named properties
+> > and even if there were a list we'd still want them to be named so it's
+> > clear what's going on.
 > 
-> The kernel message is shown below:
-> 
-> kernel BUG at fs/inode.c:611!
-> Call Trace:
->  evict+0x282/0x4e0
->  __dentry_kill+0x2b2/0x4d0
->  dput+0x2dd/0x720
->  do_renameat2+0x596/0x970
->  __x64_sys_rename+0x78/0x90
->  do_syscall_64+0x3b/0x90
-> 
-> [1] https://bugzilla.kernel.org/show_bug.cgi?id=215895
-> 
-> The bug is due to fuzzed inode has both inline_data and encrypted flags.
-> During f2fs_evict_inode(), as the inode was deleted by rename(), it
-> will cause inline data conversion due to conflicting flags. The page
-> cache will be polluted and the panic will be triggered in clear_inode().
-> 
-> Try fixing the bug by doing more sanity checks for inline data inode in
-> sanity_check_inode().
-> 
-> Cc: stable@vger.kernel.org
-> Reported-by: Ming Yan <yanming@tju.edu.cn>
-> Signed-off-by: Chao Yu <chao.yu@oppo.com>
-> ---
-> v3:
-> - clean up commit message suggested by Bagas Sanjaya.
->  fs/f2fs/f2fs.h  | 8 ++++++++
->  fs/f2fs/inode.c | 3 +--
->  2 files changed, 9 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> index 492af5b96de1..0dc2461ef02c 100644
-> --- a/fs/f2fs/f2fs.h
-> +++ b/fs/f2fs/f2fs.h
-> @@ -4126,6 +4126,14 @@ static inline void f2fs_set_encrypted_inode(struct inode *inode)
->   */
->  static inline bool f2fs_post_read_required(struct inode *inode)
->  {
-> +	/*
-> +	 * used by sanity_check_inode(), when disk layout fields has not
-> +	 * been synchronized to inmem fields.
-> +	 */
-> +	if (S_ISREG(inode->i_mode) && (file_is_encrypt(inode) ||
-> +		F2FS_I(inode)->i_flags & F2FS_COMPR_FL ||
-> +		file_is_verity(inode)))
-> +		return true;
+> So we have a collection of regulators, varying in numbers between
+> different PHYs, with different vendor names and purposes. In general,
+> they all should be turned on. Yet we want them named so it is clear
+> what is going on.
 
-Again, I prefer to check this in sanity_check_inode(), since we don't need to
-check all the time here.
+In what order do we turn the supplies on? How much time in between each 
+one? Does an external clock need to be running before or after (and how 
+long after). Oh, and what about resets and the order and timing of them 
+relative to everything else?
 
->  	return f2fs_encrypted_file(inode) || fsverity_active(inode) ||
->  		f2fs_compressed_file(inode);
->  }
-> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
-> index 2fce8fa0dac8..5e494c98e3c2 100644
-> --- a/fs/f2fs/inode.c
-> +++ b/fs/f2fs/inode.c
-> @@ -276,8 +276,7 @@ static bool sanity_check_inode(struct inode *inode, struct page *node_page)
->  		}
->  	}
->  
-> -	if (f2fs_has_inline_data(inode) &&
-> -			(!S_ISREG(inode->i_mode) && !S_ISLNK(inode->i_mode))) {
-> +	if (f2fs_has_inline_data(inode) && !f2fs_may_inline_data(inode)) {
->  		set_sbi_flag(sbi, SBI_NEED_FSCK);
->  		f2fs_warn(sbi, "%s: inode (ino=%lx, mode=%u) should not have inline_data, run fsck to fix",
->  			  __func__, inode->i_ino, inode->i_mode);
-> -- 
-> 2.32.0
+This always happens in the same order. First, it's just one resource 
+like a regulator or reset. Then one more. Then another device with some 
+timing constraints. If we wanted a generic solution in DT, it would need 
+to be able to describe any power sequencing waveform. But we don't have 
+that because we don't want it. 
+
+> Is there a generic solution here so that the phylib core can somehow
+> enumerate them and turn them on, without actually knowing what they
+> are called because they have vendor specific names in order to be
+> clear what they are?
+
+Other devices have specific compatibles so that the device can be 
+identified and powered up. Once again, MDIO should not be special here.
+
+> There must be a solution to this, phylib cannot be the first subsystem
+> to have this requirement, so if you could point to an example, that
+> would be great.
+
+Well, no one seems to want to make non-discoverable devices on 
+'discoverable' buses work. Still an issue for PCI and USB. I thought 
+MDIO had a solution here to probe any devices in the DT even if not 
+discovered.
+
+Rob

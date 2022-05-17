@@ -2,181 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F55529962
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 08:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A4D529966
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 08:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239082AbiEQGNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 02:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48816 "EHLO
+        id S235204AbiEQGQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 02:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231996AbiEQGNe (ORCPT
+        with ESMTP id S230079AbiEQGQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 02:13:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7919B443C6;
-        Mon, 16 May 2022 23:13:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1E96B816EA;
-        Tue, 17 May 2022 06:13:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4B4BC385B8;
-        Tue, 17 May 2022 06:13:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652768008;
-        bh=OluTkCLxVeKSfegoojJgsJodih/APBSYOWtV2jU6qDs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0lYCqDwjr5OYoqicVtqSeJAN0ZLbYKsMFKfl9UaOceG2HPSbwvA854qd10G0b87b/
-         Kv0pMNwDnZ8EI0snXGxoHXBin+GcRbqOe6rNeFHvZhJc4a5MhXftkPvEiJhD4y5Twm
-         TGtN9umVRlTw08eUyq2RPakU5ZNvxFrXIASNpOl0=
-Date:   Tue, 17 May 2022 08:13:24 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "T.J. Mercier" <tjmercier@google.com>
-Cc:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Greg Kroah-Hartman <gregkh@google.com>,
-        John Stultz <jstultz@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Hridya Valsaraju <hridya@google.com>, kernel-team@android.com,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] dma-buf: Move sysfs work out of DMA-BUF export path
-Message-ID: <YoM9BAwybcjG7K/H@kroah.com>
-References: <20220516171315.2400578-1-tjmercier@google.com>
- <175c5af3-9224-9c8e-0784-349dad9a2954@amd.com>
- <CABdmKX2GcgCs1xANYPBp8OEtk9qqH7AvCzpdppj9rHXvMqWSAw@mail.gmail.com>
- <0875fa95-3a25-a354-1433-201fca81ed3e@amd.com>
- <CABdmKX1+VYfdzyVYOS5MCsr4ptGTygmuUP9ikyh-vW6DgKk2kg@mail.gmail.com>
+        Tue, 17 May 2022 02:16:08 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2760377F6;
+        Mon, 16 May 2022 23:16:05 -0700 (PDT)
+Received: from kwepemi100018.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L2Qln5BPLzGpnN;
+        Tue, 17 May 2022 14:13:09 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100018.china.huawei.com (7.221.188.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 17 May 2022 14:16:03 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 17 May 2022 14:16:02 +0800
+Subject: Re: [PATCH -next] block: fix io hung of setting throttle limit
+ frequently
+To:     Tejun Heo <tj@kernel.org>
+CC:     Zhang Wensheng <zhangwensheng5@huawei.com>,
+        "ming.lei@redhat.com >> Ming Lei" <ming.lei@redhat.com>,
+        <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <cgroups@vger.kernel.org>
+References: <20220516014429.33723-1-zhangwensheng5@huawei.com>
+ <YoKmCOAzwzw3Lz7g@slm.duckdns.org>
+ <ca251645-8d52-7a93-6ac2-579d97922a9e@huawei.com>
+ <YoMiJIUehq1UyzgQ@slm.duckdns.org>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <8abf8186-c5c3-47c1-7acd-9116f127fd03@huawei.com>
+Date:   Tue, 17 May 2022 14:16:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <YoMiJIUehq1UyzgQ@slm.duckdns.org>
+Content-Type: text/plain; charset="gbk"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABdmKX1+VYfdzyVYOS5MCsr4ptGTygmuUP9ikyh-vW6DgKk2kg@mail.gmail.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 05:08:05PM -0700, T.J. Mercier wrote:
-> On Mon, May 16, 2022 at 12:21 PM Christian König
-> <christian.koenig@amd.com> wrote:
-> >
-> > Am 16.05.22 um 20:08 schrieb T.J. Mercier:
-> > > On Mon, May 16, 2022 at 10:20 AM Christian König
-> > > <christian.koenig@amd.com> wrote:
-> > >> Am 16.05.22 um 19:13 schrieb T.J. Mercier:
-> > >>> Recently, we noticed an issue where a process went into direct reclaim
-> > >>> while holding the kernfs rw semaphore for sysfs in write (exclusive)
-> > >>> mode. This caused processes who were doing DMA-BUF exports and releases
-> > >>> to go into uninterruptible sleep since they needed to acquire the same
-> > >>> semaphore for the DMA-BUF sysfs entry creation/deletion. In order to avoid
-> > >>> blocking DMA-BUF export for an indeterminate amount of time while
-> > >>> another process is holding the sysfs rw semaphore in exclusive mode,
-> > >>> this patch moves the per-buffer sysfs file creation to the default work
-> > >>> queue. Note that this can lead to a short-term inaccuracy in the dmabuf
-> > >>> sysfs statistics, but this is a tradeoff to prevent the hot path from
-> > >>> being blocked. A work_struct is added to dma_buf to achieve this, but as
-> > >>> it is unioned with the kobject in the sysfs_entry, dma_buf does not
-> > >>> increase in size.
-> > >> I'm still not very keen of this approach as it strongly feels like we
-> > >> are working around shortcoming somewhere else.
-> > >>
-> > > My read of the thread for the last version is that we're running into
-> > > a situation where sysfs is getting used for something it wasn't
-> > > originally intended for, but we're also stuck with this sysfs
-> > > functionality for dmabufs.
-> > >
-> > >>> Fixes: bdb8d06dfefd ("dmabuf: Add the capability to expose DMA-BUF stats in sysfs")
-> > >>> Originally-by: Hridya Valsaraju <hridya@google.com>
-> > >>> Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> > >>>
-> > >>> ---
-> > >>> See the originally submitted patch by Hridya Valsaraju here:
-> > >>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.org%2Flkml%2F2022%2F1%2F4%2F1066&amp;data=05%7C01%7Cchristian.koenig%40amd.com%7C794614324d114880a25508da37672e4b%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637883213566903705%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=bGlA2FeubfSeL5XDHYyWMZqUXfScoCphZjjK4jrqQJs%3D&amp;reserved=0
-> > >>>
-> > >>> v2 changes:
-> > >>> - Defer only sysfs creation instead of creation and teardown per
-> > >>> Christian König
-> > >>>
-> > >>> - Use a work queue instead of a kthread for deferred work per
-> > >>> Christian König
-> > >>> ---
-> > >>>    drivers/dma-buf/dma-buf-sysfs-stats.c | 56 ++++++++++++++++++++-------
-> > >>>    include/linux/dma-buf.h               | 14 ++++++-
-> > >>>    2 files changed, 54 insertions(+), 16 deletions(-)
-> > >>>
-> > >>> diff --git a/drivers/dma-buf/dma-buf-sysfs-stats.c b/drivers/dma-buf/dma-buf-sysfs-stats.c
-> > >>> index 2bba0babcb62..67b0a298291c 100644
-> > >>> --- a/drivers/dma-buf/dma-buf-sysfs-stats.c
-> > >>> +++ b/drivers/dma-buf/dma-buf-sysfs-stats.c
-> > >>> @@ -11,6 +11,7 @@
-> > >>>    #include <linux/printk.h>
-> > >>>    #include <linux/slab.h>
-> > >>>    #include <linux/sysfs.h>
-> > >>> +#include <linux/workqueue.h>
-> > >>>
-> > >>>    #include "dma-buf-sysfs-stats.h"
-> > >>>
-> > >>> @@ -168,10 +169,46 @@ void dma_buf_uninit_sysfs_statistics(void)
-> > >>>        kset_unregister(dma_buf_stats_kset);
-> > >>>    }
-> > >>>
-> > >>> +static void sysfs_add_workfn(struct work_struct *work)
-> > >>> +{
-> > >>> +     struct dma_buf_sysfs_entry *sysfs_entry =
-> > >>> +             container_of(work, struct dma_buf_sysfs_entry, sysfs_add_work);
-> > >>> +     struct dma_buf *dmabuf = sysfs_entry->dmabuf;
-> > >>> +
-> > >>> +     /*
-> > >>> +      * A dmabuf is ref-counted via its file member. If this handler holds the only
-> > >>> +      * reference to the dmabuf, there is no need for sysfs kobject creation. This is an
-> > >>> +      * optimization and a race; when the reference count drops to 1 immediately after
-> > >>> +      * this check it is not harmful as the sysfs entry will still get cleaned up in
-> > >>> +      * dma_buf_stats_teardown, which won't get called until the final dmabuf reference
-> > >>> +      * is released, and that can't happen until the end of this function.
-> > >>> +      */
-> > >>> +     if (file_count(dmabuf->file) > 1) {
-> > >> Please completely drop that. I see absolutely no justification for this
-> > >> additional complexity.
-> > >>
-> > > This case gets hit around 5% of the time in my testing so the else is
-> > > not a completely unused branch.
-> >
-> > Well I can only repeat myself: This means that your userspace is
-> > severely broken!
-> >
-> > DMA-buf are meant to be long living objects
-> This patch addresses export *latency* regardless of how long-lived the
-> object is. Even a single, long-lived export will benefit from this
-> change if it would otherwise be blocked on adding an object to sysfs.
-> I think attempting to improve this latency still has merit.
+ÔÚ 2022/05/17 12:18, Tejun Heo Ð´µÀ:
+> On Tue, May 17, 2022 at 11:12:28AM +0800, yukuai (C) wrote:
+>> Ming added a condition in tg_with_in_bps_limit():
+>> -       if (bps_limit == U64_MAX) {
+>> +       /* no need to throttle if this bio's bytes have been accounted */
+>> +       if (bps_limit == U64_MAX || bio_flagged(bio, BIO_THROTTLED)) {
+>>
+>> Which will let the first throttled bio to be issued immediately once
+>> the config if updated.
+>>
+>> Do you think this behaviour is OK? If so, we can do the same for
+>> tg_with_in_iops_limit.
+> 
+> So, the current behavior is that if the user is being silly, it will get
+> slower and slower. The new behavior would be that if the user is being
+> silly, it can issue IOs faster and faster, which creates a perverse
+> incentive to be silly.
+Yes,
 
-Fixing the latency is nice, but as it's just pushing the needed work off
-to another code path, it will take longer overall for the sysfs stuff to
-be ready for userspace to see.
+I just found that Ming's patch introduce a new problem:
 
-Perhaps we need to step back and understand what this code is supposed
-to be doing.  As I recall, it was created because some systems do not
-allow debugfs anymore, and they wanted the debugging information that
-the dmabuf code was exposing to debugfs on a "normal" system.  Moving
-that logic to sysfs made sense, but now I am wondering why we didn't see
-these issues in the debugfs code previously?
+If multiple bios are throttled, then they will be issued one by one with
+corresponding time. However, after Ming's patch, all throttled bios will
+be issued immediately once the waiting time of first bio is reached. And
+such behaviour is definitely a problem...
 
-Perhaps we should go just one step further and make a misc device node
-for dmabug debugging information to be in and just have userspace
-poll/read on the device node and we spit the info that used to be in
-debugfs out through that?  That way this only affects systems when they
-want to read the information and not normal code paths?  Yeah that's a
-hack, but this whole thing feels overly complex now.
+> 
+> Probably the right thing to do is probably something like translating the
+> existing budget in light of the new configuration so that config change
+> neither gives or takes away the budget which has already accumulated. That
+> said, are you guys seeing this becoming an issue in practice?
 
-thanks,
+Agreed, the solution sounds reasonable. And this problem is found during
+test, which issue a large io and in the meantime updating config with
+random value.
 
-greg k-h
+Thanks,
+Kuai
+> 
+> Thanks.
+> 

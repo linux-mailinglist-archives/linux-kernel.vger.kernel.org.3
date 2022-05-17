@@ -2,135 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E9B52A1F1
+	by mail.lfdr.de (Postfix) with ESMTP id 8D7EA52A1F2
 	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343804AbiEQMsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 08:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
+        id S1346401AbiEQMsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 08:48:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243529AbiEQMsR (ORCPT
+        with ESMTP id S243529AbiEQMsj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 08:48:17 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7F13F333;
-        Tue, 17 May 2022 05:48:16 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L2bV55dh0zgYBb;
-        Tue, 17 May 2022 20:46:53 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 17 May 2022 20:48:14 +0800
-CC:     <linux-kernel@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [RESEND PATCH v5] PCI: Make sure the bus bridge powered on when
- scanning bus
-To:     <bhelgaas@google.com>, <linux-pci@vger.kernel.org>
-References: <20220517124319.47125-1-yangyicong@hisilicon.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <eb120037-d22b-15ca-1bb0-8bfe728a6055@huawei.com>
-Date:   Tue, 17 May 2022 20:48:13 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Tue, 17 May 2022 08:48:39 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6883C70B
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:48:38 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L2bX221Lwz4xZ2;
+        Tue, 17 May 2022 22:48:34 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1652791714;
+        bh=TDeqjo10z/lPZ0BTlKdpVqFzl6dlu8tIpR5fp3YJtjE=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=QiiFptg0D+ihDZM7seo2f+wYINfaOQNzMLR2VUHUpdeOE9fgLMzgZG8P6+JxAZ/EZ
+         s9p7+wdZZVWhxWP+MfhjuHYudBMb/UAx8dzeYhWd0diY2cArjEdh5wsZzEkYcX3cmb
+         9tJUCVSHBHPpqLwbQMheLzEZzX3kcPFW+b2JIDzYWKapSFKpzGd+wnGbLMsx7cEGCO
+         Hu1/l2PeemupH2wtS6DrVtVfhQwkPHPgYNkC5ukyXdHX2iahKgUglygE2HH9PgOKVL
+         WNDGK6AT5tNxuDYULhkA/m1akdKYydLpFO1S65TSHdqOjwwz4zeVE6uLGr9aq/XGTC
+         R4Ly3ybYFX18Q==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] powerpc/irq: Remove arch_local_irq_restore() for
+ !CONFIG_CC_HAS_ASM_GOTO
+In-Reply-To: <58df50c9e77e2ed945bacdead30412770578886b.1652715336.git.christophe.leroy@csgroup.eu>
+References: <58df50c9e77e2ed945bacdead30412770578886b.1652715336.git.christophe.leroy@csgroup.eu>
+Date:   Tue, 17 May 2022 22:48:32 +1000
+Message-ID: <871qwspbof.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-In-Reply-To: <20220517124319.47125-1-yangyicong@hisilicon.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/17 20:43, Yicong Yang wrote:
-> When the bus bridge is runtime suspended, we'll fail to rescan
-> the devices through sysfs as we cannot access the configuration
-> space correctly when the bridge is in D3hot.
-> It can be reproduced like:
-> 
-> $ echo 1 > /sys/bus/pci/devices/0000:80:00.0/0000:81:00.1/remove
-> $ echo 1 > /sys/bus/pci/devices/0000:80:00.0/pci_bus/0000:81/rescan
-> 
-> 0000:80:00.0 is a Root Port and it is runtime-suspended, so
-> 0000:81:00.1 is unreachable after a rescan.
-> 
-> Power up the bridge when scanning the child bus and allow it to
-> suspend again by adding pm_runtime_get_sync()/pm_runtime_put()
-> in pci_scan_child_bus_extend().
-> 
-> Cc: Rafael J. Wysocki <rafael@kernel.org>
-> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
+Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+> All supported versions of GCC support asm goto.
 
-Attach the change log here. Sorry for my forgetness..
+I thought clang was the one that only recently added support for asm
+goto.
 
-Change since v4:
-- rephrase the commit suggested by Rafael
-Link: https://lore.kernel.org/lkml/20220422080404.27724-1-yangyicong@hisilicon.com/
+<looks>
 
-Change since v3:
-- retain the pm_runtime_*() calls in pci_scan_bridge_extend() as Rafael points
-  out that it's necessary when the brigde is in D3cold
-Link: https://lore.kernel.org/linux-pci/20220414123736.34150-1-yangyicong@hisilicon.com/
+Apparently clang added support in 2019, in clang 9. The earliest clang
+we claim to support is 11.
 
-Change since v2:
-- just rebase it on v5.18-rc2
-Link: https://lore.kernel.org/linux-pci/1601029386-4928-1-git-send-email-yangyicong@hisilicon.com/
+So this patch is good, I'll just adjust the change log to say GCC/clang.
 
-Change since v1:
-- use an intermediate variable *bridge as suggested
-- remove the pm_runtime_*() calls in pci_scan_bridge_extend()
-Link: https://lore.kernel.org/linux-pci/1596022223-4765-1-git-send-email-yangyicong@hisilicon.com/
+cheers
 
->  drivers/pci/probe.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-> index 17a969942d37..b108e72b6586 100644
-> --- a/drivers/pci/probe.c
-> +++ b/drivers/pci/probe.c
-> @@ -2859,11 +2859,20 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
->  	unsigned int used_buses, normal_bridges = 0, hotplug_bridges = 0;
->  	unsigned int start = bus->busn_res.start;
->  	unsigned int devfn, fn, cmax, max = start;
-> +	struct pci_dev *bridge = bus->self;
->  	struct pci_dev *dev;
->  	int nr_devs;
+> diff --git a/arch/powerpc/kernel/irq.c b/arch/powerpc/kernel/irq.c
+> index c768cde03e36..dd09919c3c66 100644
+> --- a/arch/powerpc/kernel/irq.c
+> +++ b/arch/powerpc/kernel/irq.c
+> @@ -216,7 +216,6 @@ static inline void replay_soft_interrupts_irqrestore(void)
+>  #define replay_soft_interrupts_irqrestore() replay_soft_interrupts()
+>  #endif
 >  
->  	dev_dbg(&bus->dev, "scanning bus\n");
+> -#ifdef CONFIG_CC_HAS_ASM_GOTO
+>  notrace void arch_local_irq_restore(unsigned long mask)
+>  {
+>  	unsigned char irq_happened;
+> @@ -312,82 +311,6 @@ notrace void arch_local_irq_restore(unsigned long mask)
+>  	__hard_irq_enable();
+>  	preempt_enable();
+>  }
+> -#else
+> -notrace void arch_local_irq_restore(unsigned long mask)
+> -{
+> -	unsigned char irq_happened;
+> -
+> -	/* Write the new soft-enabled value */
+> -	irq_soft_mask_set(mask);
+> -	if (mask)
+> -		return;
+> -
+> -	if (IS_ENABLED(CONFIG_PPC_IRQ_SOFT_MASK_DEBUG))
+> -		WARN_ON_ONCE(in_nmi() || in_hardirq());
+> -
+> -	/*
+> -	 * From this point onward, we can take interrupts, preempt,
+> -	 * etc... unless we got hard-disabled. We check if an event
+> -	 * happened. If none happened, we know we can just return.
+> -	 *
+> -	 * We may have preempted before the check below, in which case
+> -	 * we are checking the "new" CPU instead of the old one. This
+> -	 * is only a problem if an event happened on the "old" CPU.
+> -	 *
+> -	 * External interrupt events will have caused interrupts to
+> -	 * be hard-disabled, so there is no problem, we
+> -	 * cannot have preempted.
+> -	 */
+> -	irq_happened = get_irq_happened();
+> -	if (!irq_happened) {
+> -		if (IS_ENABLED(CONFIG_PPC_IRQ_SOFT_MASK_DEBUG))
+> -			WARN_ON_ONCE(!(mfmsr() & MSR_EE));
+> -		return;
+> -	}
+> -
+> -	/* We need to hard disable to replay. */
+> -	if (!(irq_happened & PACA_IRQ_HARD_DIS)) {
+> -		if (IS_ENABLED(CONFIG_PPC_IRQ_SOFT_MASK_DEBUG))
+> -			WARN_ON_ONCE(!(mfmsr() & MSR_EE));
+> -		__hard_irq_disable();
+> -		local_paca->irq_happened |= PACA_IRQ_HARD_DIS;
+> -	} else {
+> -		/*
+> -		 * We should already be hard disabled here. We had bugs
+> -		 * where that wasn't the case so let's dbl check it and
+> -		 * warn if we are wrong. Only do that when IRQ tracing
+> -		 * is enabled as mfmsr() can be costly.
+> -		 */
+> -		if (IS_ENABLED(CONFIG_PPC_IRQ_SOFT_MASK_DEBUG)) {
+> -			if (WARN_ON_ONCE(mfmsr() & MSR_EE))
+> -				__hard_irq_disable();
+> -		}
+> -
+> -		if (irq_happened == PACA_IRQ_HARD_DIS) {
+> -			local_paca->irq_happened = 0;
+> -			__hard_irq_enable();
+> -			return;
+> -		}
+> -	}
+> -
+> -	/*
+> -	 * Disable preempt here, so that the below preempt_enable will
+> -	 * perform resched if required (a replayed interrupt may set
+> -	 * need_resched).
+> -	 */
+> -	preempt_disable();
+> -	irq_soft_mask_set(IRQS_ALL_DISABLED);
+> -	trace_hardirqs_off();
+> -
+> -	replay_soft_interrupts_irqrestore();
+> -	local_paca->irq_happened = 0;
+> -
+> -	trace_hardirqs_on();
+> -	irq_soft_mask_set(IRQS_ENABLED);
+> -	__hard_irq_enable();
+> -	preempt_enable();
+> -}
+> -#endif
+>  EXPORT_SYMBOL(arch_local_irq_restore);
 >  
-> +	/*
-> +	 * Make sure the bus bridge is powered on, otherwise we may not be
-> +	 * able to scan the devices as we may fail to access the configuration
-> +	 * space of subordinates.
-> +	 */
-> +	if (bridge)
-> +		pm_runtime_get_sync(&bridge->dev);
-> +
->  	/* Go find them, Rover! */
->  	for (devfn = 0; devfn < 256; devfn += 8) {
->  		nr_devs = pci_scan_slot(bus, devfn);
-> @@ -2976,6 +2985,9 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
->  		}
->  	}
->  
-> +	if (bridge)
-> +		pm_runtime_put(&bridge->dev);
-> +
->  	/*
->  	 * We've scanned the bus and so we know all about what's on
->  	 * the other side of any bridges that may be on this bus plus
-> 
+>  /*
+> -- 
+> 2.35.1

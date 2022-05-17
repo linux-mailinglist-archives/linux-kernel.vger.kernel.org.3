@@ -2,141 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCC752ABD1
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 21:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EEC152ABD4
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 21:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352661AbiEQTUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 15:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46830 "EHLO
+        id S1352671AbiEQTUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 15:20:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348534AbiEQTUA (ORCPT
+        with ESMTP id S241252AbiEQTUc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 15:20:00 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9045427C0
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 12:19:59 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2f83983782fso1401987b3.6
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 12:19:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2eoz2FUrFUdjGA8OgTVmDbdUGsT/gwE/rSjYW1YpgfY=;
-        b=ihKzkeBc+Xb/IoVLp0fS7Sr0sxJjfhS1Yqo/VO13B+NX8DQrnuSiCBe9gpENlnq01r
-         ebTJJP3C0S0avc8TXWvc01/zvZ+tw/+jgS+5d1VY5zDY06zNOqru2fXQB/ItakDrQ3ow
-         cne2MBsJ8hEm/+vnBcY2LiW+eDmS55w+G7kSUwkDfuOZIpsvJnKs3dgrdsrO1CJhTKdt
-         wER5VlGEGFR3K2VU0nTgQ3rtlR/EcIsNeu2lJeDOKnvMxO3X0Vvc+WZJJyzAOO9lK73f
-         LTyvMHRtNq7EsyvwSLf0yuIiMNguhyDeI+NwpWwKslbnOs4wH+DfNICmm/g3jHORiZCB
-         VaxQ==
+        Tue, 17 May 2022 15:20:32 -0400
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85094427C5;
+        Tue, 17 May 2022 12:20:30 -0700 (PDT)
+Received: by mail-ot1-f52.google.com with SMTP id y14-20020a9d460e000000b00605ee347da1so12849616ote.8;
+        Tue, 17 May 2022 12:20:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2eoz2FUrFUdjGA8OgTVmDbdUGsT/gwE/rSjYW1YpgfY=;
-        b=xcYLgWanMvbYtBx2lHrSVbAnta1QUbd81c28uO+g75COs32yo60uo9/rCXup+Y7tZH
-         Sfx5S4NQFp/OM5bMj9QgtGbN20mSFYvy46iq1cnEt8C2zVk5McKUq3Mru8EEqGIM+0gM
-         NBdBVcC6dtapAH3idvfOsJkuQHURLzAVdkQgl6WD5W4InOs1ym2NJqTjt6haxY2j31AF
-         lh+mvCesnAIm8I6H5XcWao6ewttFilEQoav5rCLxvvZDxN1jO5SDmv/ISE4uB3V+qK2p
-         SiVTCk31IDbDQVySG3wYTK5c+WKjC6RDLrW/UfY1dqzGSP3wuCpUAxn6yaDtDKax7vA9
-         CIkA==
-X-Gm-Message-State: AOAM533NJ7NxaWFGhn8VeRRhXdi9jlL5Wt+Fh3piNV6v2fGjdcEWoBsU
-        xZOmmsLF1ulvPcOBW3hiXNyMr6UGiBG+wbKD41l9Ng==
-X-Google-Smtp-Source: ABdhPJy3AGEf/jdtpQoDRNYkU8ty9svrivAgusrhZV72ZWDTtuhp26qWGxVrqU1OZm5SU1BIJUJ5zWr+riqgYean1io=
-X-Received: by 2002:a81:6904:0:b0:2fe:e670:318a with SMTP id
- e4-20020a816904000000b002fee670318amr14914838ywc.329.1652815198932; Tue, 17
- May 2022 12:19:58 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=jMly9zZBObNQRlIQNVFaY06sIaIahtck7cQNpLIcDRE=;
+        b=KKoXsBtHuSNOScxelpdcaXSSyde0uepEm+1Ux+7wgTUTXxBsGkBRIwtGfDennVrdC/
+         evN14D9bjfi3tXZclJiES0gg7zLekoeeAvisaPBWkxOEGp+8Ssb2gK7JRqIibGR589PJ
+         2z5lRLQPDfNy7h7sdGWFngY2GGbRE7fnDsfb0POp5cmM0Tx0jsJ70EtxnEXTuSiN0+lZ
+         hC1jERIwYSfXAXB6zKHG2fLQrMU3BQfVwtBad4dnER57esbvs7/V/KdET0ogJ/EIXV4W
+         Krt5BhZT5W2/cma9kcdqjbTG6X0EtzuNcGeU4S9EtBMyiq5WZ3W3fTfXDSU5kYjJnnfU
+         WK4g==
+X-Gm-Message-State: AOAM530fRhiVxTknSA2Y+miEsxAtZ/JBKLdgtMoayhKaXOVSf7t9vbg6
+        X1NOHGzc/juuf7K9lNQwmUOaXimBSA==
+X-Google-Smtp-Source: ABdhPJxxgh/F0v4j8Y3VuOwu8SOZrLN5lBS78tigzQM+mMPyMT6Ic8wZDNl1+FvOjbANN75Eh0ioYg==
+X-Received: by 2002:a9d:4d8c:0:b0:606:2a57:7f5 with SMTP id u12-20020a9d4d8c000000b006062a5707f5mr8721462otk.78.1652815229742;
+        Tue, 17 May 2022 12:20:29 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p12-20020a9d454c000000b00606b237d850sm98549oti.13.2022.05.17.12.20.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 12:20:29 -0700 (PDT)
+Received: (nullmailer pid 1461903 invoked by uid 1000);
+        Tue, 17 May 2022 19:20:28 -0000
+Date:   Tue, 17 May 2022 14:20:28 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 12/23] dt-bindings: ata: ahci: Add platform capability
+ properties
+Message-ID: <20220517192028.GA1453662-robh@kernel.org>
+References: <20220511231810.4928-1-Sergey.Semin@baikalelectronics.ru>
+ <20220511231810.4928-13-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-References: <20220517101410.3493781-1-andre.przywara@arm.com>
- <20220517153444.GA1057027-robh@kernel.org> <CAFEAcA8sE8Rj0GmF71ox4BdDr0UcaS4QwiLUVUUFH5oj+hDhfA@mail.gmail.com>
- <CAL_JsqLRvEn2E7cpTzQJRCJ=aeLjUtKhDimWat=nPtm3QP+cfA@mail.gmail.com>
-In-Reply-To: <CAL_JsqLRvEn2E7cpTzQJRCJ=aeLjUtKhDimWat=nPtm3QP+cfA@mail.gmail.com>
-From:   Peter Maydell <peter.maydell@linaro.org>
-Date:   Tue, 17 May 2022 20:19:47 +0100
-Message-ID: <CAFEAcA_DRoJmnFdyEEcSvCxtPYignZFqQFnHyWkcpyijCBSrCg@mail.gmail.com>
-Subject: Re: [PATCH] of/fdt: Ignore disabled memory nodes
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ross Burton <ross.burton@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220511231810.4928-13-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 May 2022 at 18:48, Rob Herring <robh@kernel.org> wrote:
->
-> On Tue, May 17, 2022 at 11:54 AM Peter Maydell <peter.maydell@linaro.org> wrote:
-> >
-> > On Tue, 17 May 2022 at 16:34, Rob Herring <robh@kernel.org> wrote:
-> > >
-> > > On Tue, May 17, 2022 at 11:14:10AM +0100, Andre Przywara wrote:
-> > > > When we boot a machine using a devicetree, the generic DT code goes
-> > > > through all nodes with a 'device_type = "memory"' property, and collects
-> > > > all memory banks mentioned there. However it does not check for the
-> > > > status property, so any nodes which are explicitly "disabled" will still
-> > > > be added as a memblock.
-> > > > This ends up badly for QEMU, when booting with secure firmware on
-> > > > arm/arm64 machines, because QEMU adds a node describing secure-only
-> > > > memory:
-> > > > ===================
-> > > >       secram@e000000 {
-> > >
-> > > BTW, 'memory' is the correct node name.
-> >
-> > We already have a 'memory' node, which is for the NS
-> > memory. This one's for the secure-only RAM block,
-> > which is why I gave it a name that hopefully helps in
-> > spotting that when a human is reading the DT.
->
-> You can do: secram: memory@e000000 {
->
-> Where 'secram' is only a source level label until overlays come into
-> the picture.
+On Thu, May 12, 2022 at 02:17:59AM +0300, Serge Semin wrote:
+> In case if the platform doesn't have BIOS or a comprehensive firmware
+> installed then the HBA capability flags will be left uninitialized. As a
+> good alternative we can define a set AHCI DT-node properties to describe
+> all of HW-init capabilities flags. Luckily there aren't too many of them.
+> SSS - Staggered Spin-up support and MPS - Mechanical Presence Switch
+> support determine the corresponding feature availability for whole HBA by
+> means of the "hba-sss" and "hba-smps" properties.  Each port can have the
+> "hba-{hpcp,mpsp,cpd,esp,fbscp}" defined indicatating that the port
+> supports the next functionality: HPCP - HotPlug capable port, MPSP -
+> Mechanical Presence Switch attached to a port, CPD - Cold Plug detection,
+> ESP - External SATA Port (eSATA), FBSCP - FIS-based switching capable
+> port.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> ---
+> 
+> Alternatively we could define them as a bitfield, but having a set of
+> boolean properties seemed a better idea since in that case we can
+> implement a simple inter-dependency rules for them, which can't be done
+> should we take the bitfields path.
 
-We generate the DTB with libfdt, so source-only information
-isn't something we can put in, I think. (The quoted DT fragment
-in this patch's commit message is the result of decompiling
-the runtime generated DT binary blob with dtc.)
+I would just provide a CAP register override and be done with it.
 
-> > I'm not really sure to what extent node names in device trees are
-> > "this is just an identifying textual label" and to what extent
-> > they are "this is really ABI and you need to follow the standard",
-> > though -- nothing in practice seems to care what they are,
-> > suggesting the "textual label" theory, but some bits of tooling
-> > complain if you do things like forget the address value or use the
-> > same address for two different nodes, suggesting the "really ABI"
-> > theory.
->
-> Node names are supposed to follow the class of device and there's a
-> list of established names in the spec.
->
-> Sometimes it's ABI and sometimes not. Much of it is just good hygiene.
-> memory nodes are also special because 'device_type' is used to
-> identify them, but device_type is generally deprecated for FDT as its
-> meaning in OpenFirmware doesn't apply (it defines what callable
-> methods exist). We could use the nodename (without unit address)
-> instead, but that would fail in some cases as other names have been
-> used.
+The boolean fields only let you set a capability, but not unset one. 
+They would need to be tristate.
 
-This seems kind of odd to me as a design, compared to
-"have the node have a property that says what it is
-and let the name of the node just be, well, its name"
-(especially since 'device_type' and 'compatible' look an
-awful lot like "this is the property that tells you what this
-node actually is".)
-Are we just stuck with what we have for historical reasons ?
-
--- PMM
+> ---
+>  .../devicetree/bindings/ata/ahci-common.yaml  | 66 +++++++++++++++++++
+>  .../bindings/ata/ahci-platform.yaml           | 11 ++++
+>  2 files changed, 77 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/ata/ahci-common.yaml b/Documentation/devicetree/bindings/ata/ahci-common.yaml
+> index a7d1a8353de3..a29edfbb25db 100644
+> --- a/Documentation/devicetree/bindings/ata/ahci-common.yaml
+> +++ b/Documentation/devicetree/bindings/ata/ahci-common.yaml
+> @@ -75,6 +75,19 @@ properties:
+>    phy-names:
+>      const: sata-phy
+>  
+> +  hba-sss:
+> +    type: boolean
+> +    description:
+> +      Staggered Spin-up Support. Indicates whether the HBA supports the
+> +      staggered spin-up on its ports, for use in balancing power spikes.
+> +
+> +  hba-smps:
+> +    type: boolean
+> +    description:
+> +      Mechanical Presence Switch Support. Indicates whether the HBA supports
+> +      mechanical presence switches on its ports for use in hot plug
+> +      operations.
+> +
+>    ports-implemented:
+>      $ref: '/schemas/types.yaml#/definitions/uint32'
+>      description:
+> @@ -97,6 +110,40 @@ patternProperties:
+>          minimum: 0
+>          maximum: 31
+>  
+> +      hba-hpcp:
+> +        type: boolean
+> +        description:
+> +          Hot Plug Capable Port. Indicates that this port’s signal and power
+> +          connectors are externally accessible via a joint signal and power
+> +          connector for blindmate device hot plug. It is mutually exclusive
+> +          with the ESP feature.
+> +
+> +      hba-mpsp:
+> +        type: boolean
+> +        description:
+> +          Mechanical Presence Switch Attached to Port. Indicates whether
+> +          the platform an mechanical presence switch attached to this
+> +          port.
+> +
+> +      hba-cpd:
+> +        type: boolean
+> +        description:
+> +          Cold Presence Detection. Indicates whether the platform supports
+> +          cold presence detection on this port.
+> +
+> +      hba-esp:
+> +        type: boolean
+> +        description:
+> +          External SATA Port. Indicates that this port’s signal connector
+> +          is externally accessible on a signal only connector (e.g. eSATA
+> +          connector).
+> +
+> +      hba-fbscp:
+> +        type: boolean
+> +        description:
+> +          FIS-based Switching Capable Port. Indicates whether this port
+> +          supports Port Multiplier FIS-based switching.
+> +
+>        phys:
+>          description: Individual AHCI SATA port PHY
+>          maxItems: 1
+> @@ -111,6 +158,25 @@ patternProperties:
+>      required:
+>        - reg
+>  
+> +    # eSATA can't be enabled together with the HotPlug capability
+> +    oneOf:
+> +      - required:
+> +          - hba-hpcp
+> +      - required:
+> +          - hba-esp
+> +      - not:
+> +          anyOf:
+> +            - required:
+> +                - hba-hpcp
+> +            - required:
+> +                - hba-esp
+> +
+> +    # HotPlug capability must be enabled together with Cold Plug
+> +    # Detection and Mechanical Presence Switching.
+> +    dependencies:
+> +      hba-cpd: ["hba-hpcp"]
+> +      hba-mpsp: ["hba-hpcp"]
+> +
+>      additionalProperties: true
+>  
+>  required:
+> diff --git a/Documentation/devicetree/bindings/ata/ahci-platform.yaml b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
+> index 76075d3c8987..6cad7e86f3bb 100644
+> --- a/Documentation/devicetree/bindings/ata/ahci-platform.yaml
+> +++ b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
+> @@ -117,14 +117,25 @@ examples:
+>          #address-cells = <1>;
+>          #size-cells = <0>;
+>  
+> +        hba-smps;
+> +
+>          sata0: sata-port@0 {
+>              reg = <0>;
+> +
+> +            hba-fbscp;
+> +            hba-esp;
+> +
+>              phys = <&sata_phy 0>;
+>              target-supply = <&reg_sata0>;
+>          };
+>  
+>          sata1: sata-port@1 {
+>              reg = <1>;
+> +
+> +            hba-fbscp;
+> +            hba-hpcp;
+> +            hba-mpsp;
+> +
+>              phys = <&sata_phy 1>;
+>              target-supply = <&reg_sata1>;
+>          };
+> -- 
+> 2.35.1
+> 
+> 

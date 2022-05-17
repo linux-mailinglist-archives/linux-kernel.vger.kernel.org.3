@@ -2,136 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02135529D30
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F0A529D31
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243986AbiEQJDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 05:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
+        id S243993AbiEQJDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 05:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236567AbiEQJDp (ORCPT
+        with ESMTP id S235185AbiEQJDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 17 May 2022 05:03:45 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427B53EF1C;
-        Tue, 17 May 2022 02:03:37 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L2VXQ6sSBz4xLb;
-        Tue, 17 May 2022 19:03:34 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1652778216;
-        bh=PvHKH9C7qcFJ1DB3vXvZC31uK1pYg4dsP3wXn6Ovzp0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=P51d5V9sgBiwjmwO1K5WJzcx62IPxOQ2S2JU0qSlIpKdEA/xzGCKUDJcT5skrUPxu
-         dBlIMAMxSyfoYUhRgiUV/xvaTsuMf5uqwfXuOzRwel8ulOIbatPs+rWkJ0wHWJYwJG
-         kwTVwK2GezuuChZT0WOoRlq8b+BD6GUugcQWNKktls4k2DtNLYzvm69kzO2OOxPNXg
-         g5wlSTJFyNqK0DIIGqtv07THAZTdXqP9bYINi6tgRSbcxt426h6Rq6VYJH7rtlEavU
-         xldVyJG/9Z/Z6Yce7s3skw8b7qG0hd93ktwzKgA0gyrpGlRoetKuQ/xeYzAQVLPs8P
-         UgOS1J4oMjXkQ==
-Date:   Tue, 17 May 2022 19:03:32 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the net-next tree
-Message-ID: <20220517190332.4506f7e8@canb.auug.org.au>
-In-Reply-To: <20220517110303.723a7148@canb.auug.org.au>
-References: <20220517110303.723a7148@canb.auug.org.au>
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF2F1D0FC
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:03:44 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id E6B331F4439C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652778223;
+        bh=UYubMcn9ZLqkxXynnDr3S5Ixi/XQwp/zcG8Jzl6yAGY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=nsd51A3QHf00rG6Hi57mYXcMCohcrFDwfxP2vm41heblBqYqP8pdbTedoIPenjYQg
+         mbQs94iUCp2qwefb47xG401nrdU2yt+Rl+winnnME+eFXM/JThc01Nnazdb30flLt5
+         XBQJtCZRigSTDLWb0i8lZAU8dxwVCkcGHPpnnJWxpRXXH/CvT0e65pnL1AOhyyxbaV
+         UGu92yeY7/xGcFT9j0CZtSm1lM9cXCpZebKiLCHAs+utdb0q4mWslt+1OPZaqRzDli
+         qOPYmdS5+29ArJIlZ9xwgkIkD0IJdXpkSA2njVHjVL41vHJRs1tE2FhBs46O8X/XRL
+         LHWsl9p/kuutA==
+Message-ID: <ef88ec2c-77b5-fa0d-49d1-fdd2451713b7@collabora.com>
+Date:   Tue, 17 May 2022 12:03:39 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/MVHAGlvNapLv1B+3dFq=KEu";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v1] drm/scheduler: Don't kill jobs in interrupt context
+Content-Language: en-US
+To:     Erico Nunes <nunes.erico@gmail.com>,
+        Steven Price <steven.price@arm.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Rob Herring <robh@kernel.org>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+References: <20220411221536.283312-1-dmitry.osipenko@collabora.com>
+ <a78343c8-2a6d-b223-4219-6b6b0a4fcb1f@arm.com>
+ <CAK4VdL2hCEoshWZbCh5mkHuS6wYMiPFR3v4MWTnrEKM9zyv6Mw@mail.gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <CAK4VdL2hCEoshWZbCh5mkHuS6wYMiPFR3v4MWTnrEKM9zyv6Mw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/MVHAGlvNapLv1B+3dFq=KEu
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 5/17/22 10:40, Erico Nunes wrote:
+> On Wed, Apr 13, 2022 at 12:05 PM Steven Price <steven.price@arm.com> wrote:
+>>
+>> On 11/04/2022 23:15, Dmitry Osipenko wrote:
+>>> Interrupt context can't sleep. Drivers like Panfrost and MSM are taking
+>>> mutex when job is released, and thus, that code can sleep. This results
+>>> into "BUG: scheduling while atomic" if locks are contented while job is
+>>> freed. There is no good reason for releasing scheduler's jobs in IRQ
+>>> context, hence use normal context to fix the trouble.
+>>>
+>>> Cc: stable@vger.kernel.org
+>>> Fixes: 542cff7893a3 ("drm/sched: Avoid lockdep spalt on killing a processes")
+>>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>>
+>> Reviewed-by: Steven Price <steven.price@arm.com>
+> 
+> Is there something blocking this patch?
+> Mesa CI is still hitting the issue and I have been waiting for it to
+> be applied/backported to update CI with it.
+> Thanks
 
-Hi all,
+If this patch won't be picked up anytime soon, then I'll include it into
+my "memory shrinker" patchset together with the rest of the fixes, so it
+won't get lost.
 
-On Tue, 17 May 2022 11:03:03 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the net-next tree, today's linux-next build (powerpc
-> ppc64_defconfig) produced this warning:
->=20
-> net/netfilter/nf_conntrack_netlink.c:1717:12: warning: 'ctnetlink_dump_on=
-e_entry' defined but not used [-Wunused-function]
->  1717 | static int ctnetlink_dump_one_entry(struct sk_buff *skb,
->       |            ^~~~~~~~~~~~~~~~~~~~~~~~
->=20
-> Introduced by commit
->=20
->   8a75a2c17410 ("netfilter: conntrack: remove unconfirmed list")
-
-So for my i386 defconfig build this became on error, so I have applied
-the following patch for today.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 17 May 2022 18:58:43 +1000
-Subject: [PATCH] fix up for "netfilter: conntrack: remove unconfirmed list"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- net/netfilter/nf_conntrack_netlink.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/net/netfilter/nf_conntrack_netlink.c b/net/netfilter/nf_conntr=
-ack_netlink.c
-index e768f59741a6..722af5e309ba 100644
---- a/net/netfilter/nf_conntrack_netlink.c
-+++ b/net/netfilter/nf_conntrack_netlink.c
-@@ -1714,6 +1714,7 @@ static int ctnetlink_done_list(struct netlink_callbac=
-k *cb)
- 	return 0;
- }
-=20
-+#ifdef CONFIG_NF_CONNTRACK_EVENTS
- static int ctnetlink_dump_one_entry(struct sk_buff *skb,
- 				    struct netlink_callback *cb,
- 				    struct nf_conn *ct,
-@@ -1754,6 +1755,7 @@ static int ctnetlink_dump_one_entry(struct sk_buff *s=
-kb,
-=20
- 	return res;
- }
-+#endif
-=20
- static int
- ctnetlink_dump_unconfirmed(struct sk_buff *skb, struct netlink_callback *c=
-b)
---=20
-2.35.1
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/MVHAGlvNapLv1B+3dFq=KEu
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKDZOQACgkQAVBC80lX
-0GwWtwf9Gym5VoAzMup2/OcuiIuikDIJdyDG8Nm8Y14zQRJLVgm2fMv8NnqwpTMJ
-ojQMTM5JYY/2u+Tn4O1KqetkDN8mmHEtRmG/vpZZqU1QP1E2Ie7zrd+nf74Qa1en
-Y4ECWgRK6LY1zSel3VgvSu0gippdWe7F3bmyztCbRkWhmeqg81TLQK6agf+Wzp9Y
-6sCzF+f3/Y2BjP9a93ADeqnPtmAVIpWpO1iOzRr9SA4N+MrXsZ+qtb6nCA2vuDn5
-3IUd56Jp1jPvPo74trHN1I6V923g0Ahs53afh3Nd1+sAo3lH3NANuFvAVzko1cbO
-Cch90NdSTwmN/kSpNPQtltxkVRjT0Q==
-=fni1
------END PGP SIGNATURE-----
-
---Sig_/MVHAGlvNapLv1B+3dFq=KEu--
+-- 
+Best regards,
+Dmitry

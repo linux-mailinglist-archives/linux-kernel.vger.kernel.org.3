@@ -2,221 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1342C529706
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 03:57:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 792D4529709
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 03:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235554AbiEQB5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 21:57:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
+        id S238608AbiEQB6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 21:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238542AbiEQB5o (ORCPT
+        with ESMTP id S232318AbiEQB6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 21:57:44 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66FFC27B38;
-        Mon, 16 May 2022 18:57:43 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id n8so16101009plh.1;
-        Mon, 16 May 2022 18:57:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3a9HyiIRBM4wCH9QPbga5zq5KSGL3bFe4oIwKIdI5E4=;
-        b=GYr55paZ8TIT7tq6qQkePhatMRmdh7D+PtqLx6vy02JCPGjQAUiwkQIRJwwfdm9Uye
-         jSnG4k791tnDD2QEDT+k4Iql0Oy4c9wwvVTfaVFUSrSIeDIsDMt5AOrEUARxg7LF/qmW
-         EtXnCmCD5a5LH69Wc2+osbJrPVZ9kxuD92c4m+yA8cwBZC478wEWTeqpqlKJgzD3IAxy
-         4VegSWsTfFuhUgCtMdpFJKg6WNwk0QaX/HO4zdpO34GdhCE2ONBLbv9jAbi1FqLzRObi
-         P7cxJJs7r6lUvmunhrgU4abcu09L5ONJeGByGM/IbxYKH4lzH3FrwATnMCQocpvVpr+e
-         lzRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3a9HyiIRBM4wCH9QPbga5zq5KSGL3bFe4oIwKIdI5E4=;
-        b=v3a0tge5410n52I1aYjujzzpk/SifbArQQ1CkfjpErx2H1yNZQzR5S4M2YP90V0OQh
-         8+yMdSH1yLeCrdx1mzXvZ09NVojRI8En0AOo2oCXMq2N54yb4vjEe5Qjd0lItexDOlIW
-         4LVgYM4sH6m5i6z+QAbxEZiLKMje+3J5ZPLf+A79sS2yISZ5QYXyuL2v4tGVfTQwtxQz
-         19RtZO+m3xQBIsnjG+pk4C1QWLWW23OZQlx6Juqhj9TMuKCPypvbzHzhQU5Lh9IEBIJr
-         Kf7L5gvSQPEw0H1fwnUJjd88po2A18fUvXlWcKAW8xUvJKwaSe1ptGfnUbm3RkIoSQ/w
-         5XgQ==
-X-Gm-Message-State: AOAM533LJM1tkxe0yyxrWQGM4ajLlUUg1PiCrjAfbABe+GP4UuAGbgJX
-        oYOL0gLyb0QB5pUzK3ROkjM=
-X-Google-Smtp-Source: ABdhPJxrfeTqop3Yx7uhR0Fu1ohY0L6VmDw1Hx3oiYpsTV3TEZ991DxjRyJA8qoHF1OFrjr7/QvOyw==
-X-Received: by 2002:a17:903:496:b0:161:6377:8024 with SMTP id jj22-20020a170903049600b0016163778024mr10803104plb.90.1652752662587;
-        Mon, 16 May 2022 18:57:42 -0700 (PDT)
-Received: from CHENGDONGLI-MB0.localdomain ([203.205.141.21])
-        by smtp.gmail.com with ESMTPSA id z4-20020a62d104000000b0050dc7628184sm7708267pfg.94.2022.05.16.18.57.40
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 16 May 2022 18:57:41 -0700 (PDT)
-From:   Chengdong Li <brytonlee01@gmail.com>
-X-Google-Original-From: Chengdong Li <chengdongli@tencent.com>
-Received: by CHENGDONGLI-MB0.localdomain (Postfix, from userid 501)
-        id 8C14F808B887; Tue, 17 May 2022 09:57:34 +0800 (CST)
-To:     alexey.v.bayduraev@linux.intel.com, peterz@infradead.org,
-        mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, rickyman7@gmail.com, adrian.hunter@intel.com,
-        irogers@google.com, german.gomez@arm.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     ak@linux.intel.com, likexu@tencent.com, chengdongli@tencent.com
-Subject: [RESEND PATCH v2] perf tools: fix callstack entries and nr print message
-Date:   Tue, 17 May 2022 09:57:26 +0800
-Message-Id: <20220517015726.96131-1-chengdongli@tencent.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <Ynka4u+jCvFefgwJ@krava>
-References: <Ynka4u+jCvFefgwJ@krava>
+        Mon, 16 May 2022 21:58:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 789A140E66
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 18:58:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652752723;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Dan4b7oMniQEPDBtcHcK4omWqrnS96Raov0S3bkdiog=;
+        b=OMmGEHL+4FxZfsehvWXcHFmfI6KzVRUuuDoAm2bq9LoM5ke4/kRVGAs6kHwfjefDv8MZ5h
+        2aGetYOrdDfrfrAq1XMVoJkxgdaFIVgnl5Gvac0Fu3DVh47rFWh/c+RHeSDXqlQqpTIaKE
+        2wgL9PHkGa4yUqUJJkGpDTAn/B16fx0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-19-hM4Qy6dFPTmRJTsFajiPog-1; Mon, 16 May 2022 21:58:38 -0400
+X-MC-Unique: hM4Qy6dFPTmRJTsFajiPog-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E425B3AF42A2;
+        Tue, 17 May 2022 01:58:37 +0000 (UTC)
+Received: from T590 (ovpn-8-20.pek2.redhat.com [10.72.8.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1FFD72026D64;
+        Tue, 17 May 2022 01:58:02 +0000 (UTC)
+Date:   Tue, 17 May 2022 09:57:56 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Stefan Hajnoczi <stefanha@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        kwolf@redhat.com, sgarzare@redhat.com
+Subject: Re: [RFC PATCH] ubd: add io_uring based userspace block driver
+Message-ID: <YoMBJMk0GhXk+13E@T590>
+References: <20220509092312.254354-1-ming.lei@redhat.com>
+ <YoKmFYjIe1AWk/P8@stefanha-x1.localdomain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YoKmFYjIe1AWk/P8@stefanha-x1.localdomain>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chengdong Li <chengdongli@tencent.com>
+Hello Stefan,
 
-when generating callstack information from branch_stack(Intel LBR),
-the actual number of callstack entry should be bigger than the number
-of branch_stack, for example:
+On Mon, May 16, 2022 at 08:29:25PM +0100, Stefan Hajnoczi wrote:
+> Hi,
+> This looks interesting! I have some questions:
 
-	branch_stack records:
-		B() -> C()
-		A() -> B()
-	converted callstack records should be:
-		C()
-		B()
-		A()
-though, the number of callstack equals
-to the number of branch stack plus 1.
+Thanks for your comment!
 
-This patch fixes above issue in branch_stack__printf(). For example,
+> 
+> 1. What is the ubdsrv permission model?
+> 
+> A big usability challenge for *-in-userspace interfaces is the balance
+> between security and allowing unprivileged processes to use these
+> features.
+> 
+> - Does /dev/ubd-control need to be privileged? I guess the answer is
+>   yes since an evil ubdsrv can hang I/O and corrupt data in hopes of
+>   triggering file system bugs.
 
-	# echo 'scale=2000; 4*a(1)' > cmd
-	# perf record --call-graph lbr bc -l < cmd
+Yes, I think so.
 
-Before applying this patch, `perf script -D` output:
+UBD should be in same position with NBD which does require
+capable(CAP_SYS_ADMIN).
 
-	1220022677386876 0x2a40 [0xd8]: PERF_RECORD_SAMPLE(IP, 0x4002): 17990/17990: 0x40a6d6 period: 894172 addr: 0
-	... LBR call chain: nr:8
-	.....  0: fffffffffffffe00
-	.....  1: 000000000040a410
-	.....  2: 000000000040573c
-	.....  3: 0000000000408650
-	.....  4: 00000000004022f2
-	.....  5: 00000000004015f5
-	.....  6: 00007f5ed6dcb553
-	.....  7: 0000000000401698
-	... FP chain: nr:2
-	.....  0: fffffffffffffe00
-	.....  1: 000000000040a6d8
-	... branch callstack: nr:6    # which is not consistent with LBR records.
-	.....  0: 000000000040a410
-	.....  1: 0000000000408650    # ditto
-	.....  2: 00000000004022f2
-	.....  3: 00000000004015f5
-	.....  4: 00007f5ed6dcb553
-	.....  5: 0000000000401698
-	 ... thread: bc:17990
-	 ...... dso: /usr/bin/bc
-	bc 17990 1220022.677386:     894172 cycles:
-			  40a410 [unknown] (/usr/bin/bc)
-			  40573c [unknown] (/usr/bin/bc)
-			  408650 [unknown] (/usr/bin/bc)
-			  4022f2 [unknown] (/usr/bin/bc)
-			  4015f5 [unknown] (/usr/bin/bc)
-		    7f5ed6dcb553 __libc_start_main+0xf3 (/usr/lib64/libc-2.17.so)
-			  401698 [unknown] (/usr/bin/bc)
+> - Can multiple processes that don't trust each other use UBD at the same
+>   time? I guess not since ubd_index_idr is global.
 
-After applied:
+Only single process can open /dev/ubdcN for communicating with ubd
+driver, see ubd_ch_open().
 
-	1220022677386876 0x2a40 [0xd8]: PERF_RECORD_SAMPLE(IP, 0x4002): 17990/17990: 0x40a6d6 period: 894172 addr: 0
-	... LBR call chain: nr:8
-	.....  0: fffffffffffffe00
-	.....  1: 000000000040a410
-	.....  2: 000000000040573c
-	.....  3: 0000000000408650
-	.....  4: 00000000004022f2
-	.....  5: 00000000004015f5
-	.....  6: 00007f5ed6dcb553
-	.....  7: 0000000000401698
-	... FP chain: nr:2
-	.....  0: fffffffffffffe00
-	.....  1: 000000000040a6d8
-	... branch callstack: nr:7
-	.....  0: 000000000040a410
-	.....  1: 000000000040573c
-	.....  2: 0000000000408650
-	.....  3: 00000000004022f2
-	.....  4: 00000000004015f5
-	.....  5: 00007f5ed6dcb553
-	.....  6: 0000000000401698
-	 ... thread: bc:17990
-	 ...... dso: /usr/bin/bc
-	bc 17990 1220022.677386:     894172 cycles:
-			  40a410 [unknown] (/usr/bin/bc)
-			  40573c [unknown] (/usr/bin/bc)
-			  408650 [unknown] (/usr/bin/bc)
-			  4022f2 [unknown] (/usr/bin/bc)
-			  4015f5 [unknown] (/usr/bin/bc)
-		    7f5ed6dcb553 __libc_start_main+0xf3 (/usr/lib64/libc-2.17.so)
-			  401698 [unknown] (/usr/bin/bc)
+> - What about containers and namespaces? They currently have (write)
+>   access to the same global ubd_index_idr.
 
-Change from v1:
-	- refined code style according to Jiri's review comments.
+I understand contrainers/namespaces only need to see /dev/ubdbN, and
+the usage model should be same with kernel loop: the global ubd_index_idr
+is same with loop's loop_index_idr too.
 
-Signed-off-by: Chengdong Li <chengdongli@tencent.com>
----
- tools/perf/util/session.c | 26 +++++++++++++++++++++-----
- 1 file changed, 21 insertions(+), 5 deletions(-)
+Or can you explain a bit in detail if I misunderstood your point.
 
-diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
-index f9a320694b85..a7f93f5a1ac8 100644
---- a/tools/perf/util/session.c
-+++ b/tools/perf/util/session.c
-@@ -1151,9 +1151,20 @@ static void branch_stack__printf(struct perf_sample *sample, bool callstack)
- 	struct branch_entry *entries = perf_sample__branch_entries(sample);
- 	uint64_t i;
- 
--	printf("%s: nr:%" PRIu64 "\n",
--		!callstack ? "... branch stack" : "... branch callstack",
--		sample->branch_stack->nr);
-+	if (!callstack) {
-+		printf("%s: nr:%" PRIu64 "\n", "... branch stack", sample->branch_stack->nr);
-+	} else {
-+		/* the reason of adding 1 to nr is because after expanding
-+		 * branch stack it generates nr + 1 callstack records. e.g.,
-+		 *         B()->C()
-+		 *         A()->B()
-+		 * the final callstack should be:
-+		 *         C()
-+		 *         B()
-+		 *         A()
-+		 */
-+		printf("%s: nr:%" PRIu64 "\n", "... branch callstack", sample->branch_stack->nr+1);
-+	}
- 
- 	for (i = 0; i < sample->branch_stack->nr; i++) {
- 		struct branch_entry *e = &entries[i];
-@@ -1169,8 +1180,13 @@ static void branch_stack__printf(struct perf_sample *sample, bool callstack)
- 				(unsigned)e->flags.reserved,
- 				e->flags.type ? branch_type_name(e->flags.type) : "");
- 		} else {
--			printf("..... %2"PRIu64": %016" PRIx64 "\n",
--				i, i > 0 ? e->from : e->to);
-+			if (i == 0) {
-+				printf("..... %2"PRIu64": %016" PRIx64 "\n"
-+				       "..... %2"PRIu64": %016" PRIx64 "\n",
-+						i, e->to, i+1, e->from);
-+			} else {
-+				printf("..... %2"PRIu64": %016" PRIx64 "\n", i+1, e->from);
-+			}
- 		}
- 	}
- }
--- 
-2.27.0
+> - Maybe there should be a struct ubd_device "owner" (struct
+>   task_struct *) so only devices created by the current process can be
+>   modified?
+
+I guess it isn't needed since /dev/ubdcN is opened by single process.
+
+> 
+> 2. io_uring_cmd design
+> 
+> The rationale for the io_uring_cmd design is not explained in the cover
+> letter. I think it's worth explaining the design. Here are my guesses:
+> 
+> The same thing can be achieved with just file_operations and io_uring.
+> ubdsrv could read I/O submissions with IORING_OP_READ and write I/O
+> completions with IORING_OP_WRITE. That would require 2 sqes per
+> roundtrip instead of 1, but the same number of io_uring_enter(2) calls
+> since multiple sqes/cqes can be batched per syscall:
+> 
+> - IORING_OP_READ, addr=(struct ubdsrv_io_desc*) (for submission)
+> - IORING_OP_WRITE, addr=(struct ubdsrv_io_cmd*) (for completion)
+> 
+> Both operations require a copy_to/from_user() to access the command
+> metadata.
+
+Yes, but it can't be efficient as io_uring command.
+
+Two OPs require two long code path for read and write which are supposed
+for handling fs io, so reusing complicated FS IO interface for sending
+command via cha dev is really overkill, and nvme passthrough has shown
+better IOPS than read/write interface with io_uring command, and extra
+copy_to/from_user() may fault with extra meta copy, which can slow down
+the ubd server.
+
+Also for IORING_OP_READ, copy_to_user() has to be done in the ubq daemon
+context, even though that isn't a big deal, but with extra cost(cpu utilization)
+in the ubq deamon context or sleep for handling page fault, that is
+really what should be avoided, we need to save more CPU for handling user
+space IO logic in that context.
+
+> 
+> The io_uring_cmd approach works differently. The IORING_OP_URING_CMD sqe
+> carries a 40-byte payload so it's possible to embed struct ubdsrv_io_cmd
+> inside it. The struct ubdsrv_io_desc mmap gets around the fact that
+> io_uring cqes contain no payload. The driver therefore needs a
+> side-channel to transfer the request submission details to ubdsrv. I
+> don't see much of a difference between IORING_OP_READ and the mmap
+> approach though.
+
+At least the performance difference, ->uring_cmd() requires much less
+code path(single simple o_uring command) than read/write, without any copy
+on command data, without fault in copy_to/from_user(), without two long/
+complicated FS IO code path.
+
+Single command of UBD_IO_COMMIT_AND_FETCH_REQ can handle both fetching
+io request desc and commit command result in one trip.
+
+> 
+> It's not obvious to me how much more efficient the io_uring_cmd approach
+> is, but taking fewer trips around the io_uring submission/completion
+> code path is likely to be faster. Something similar can be done with
+> file_operations ->ioctl(), but I guess the point of using io_uring is
+> that is composes. If ubdsrv itself wants to use io_uring for other I/O
+> activity (e.g. networking, disk I/O, etc) then it can do so and won't be
+> stuck in a blocking ioctl() syscall.
+
+ioctl can't be a choice, since we will lose the benefit of batching
+handling.
+
+> 
+> It would be nice if you could write 2 or 3 paragraphs explaining why the
+> io_uring_cmd design and the struct ubdsrv_io_desc mmap was chosen.
+
+Fine, I guess most are the above inline comment?
+
+> 
+> 3. Miscellaneous stuff
+> 
+> - There isn't much in the way of memory ordering in the code. I worry a
+>   little that changes to the struct ubdsrv_io_desc mmap may not be
+>   visible at the expected time with respect to the io_uring cq ring.
+
+I believe io_uring_cmd_done() with userspace cqe helper implies enough memory
+barrier, once the cqe is observed in userspace, any memory OP done before
+io_uring_cmd_done() should be observed by user side cqe handling code,
+otherwise it can be thought as io_uring bug.
+
+If it isn't this way, we still can avoid any barrier by moving
+setting io desc into ubq daemon context(ubd_rq_task_work_fn), but I
+really want to save cpu in that context, and don't think it is needed.
+
+
+Thanks, 
+Ming
 

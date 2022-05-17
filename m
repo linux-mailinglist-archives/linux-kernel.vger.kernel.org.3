@@ -2,215 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83FEF529A66
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2947529A64
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:06:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234806AbiEQHGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 03:06:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49174 "EHLO
+        id S236552AbiEQHGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 03:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235750AbiEQHFy (ORCPT
+        with ESMTP id S235983AbiEQHGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 03:05:54 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFCC635C
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:05:52 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id bh5so4760858plb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:05:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=wuqROjGK5NGFVKd47141nF0XHj01jigssNIAbAq8B7w=;
-        b=TwiatshiqLTe6R9OtUH8skwX03a0UE77zNGTyfDoIfR/3ZEerC9XS/Lx4GoMYbPfU5
-         zntS8jK5Kj2ShMWTd7YYBr40HJ5nfaRudQDZAwBUGt0h6gcuHbAP8LRMld+osh8H63E4
-         zqbAfe7+MxBOF+IpX6Q9+PGuodYki5I7YJ/h0CVqDXbB8TrWlJ7s734aY35SyxkksWvc
-         bGnJdFwau8UVSQuu7GSTCE2ZqzVuh42u/1rcPIh9B4VSTj/k7h9hjEB9xMwpzW41NEIP
-         wuwEJs7wsQ/fSh5SYdITgfW+3gu+vWWNSTIE7kssIk8izpsn/fnWCwgUWAmhxdjKC6tv
-         k43Q==
+        Tue, 17 May 2022 03:06:19 -0400
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD65546B37;
+        Tue, 17 May 2022 00:06:18 -0700 (PDT)
+Received: by mail-qk1-f172.google.com with SMTP id j6so13937535qkp.9;
+        Tue, 17 May 2022 00:06:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wuqROjGK5NGFVKd47141nF0XHj01jigssNIAbAq8B7w=;
-        b=GRCWr+NSOQXS/sgt0sAzpTq6rrdSlSeigM9CtLKcCCeykcbCMkn8Z/jVTPlv2sA7dj
-         NssP0DIzfdnOyO9exjFgTmjo/nGsBWGvbeQrbPWBuOjJVnrhAWw0Ua4j/9WfGUKc2SgE
-         jRmkM12RA04xFWtoM788u8eMBsPETbm/7NTuh/Y90Jh7pGaDuRpYKYPgJMbf9xIqlBqA
-         xLnRmPxLuO8G5EH+afwdI7v7YGuSd5aFjmHrZB/uhkL3f99DgQ/YN+0mZNDAJYoTZ02w
-         usJhOipZ/38Nq4Kssns/rIkoC4DmDwul+jwycaNKvSNZElOBSOtWbBTW4H+6EnFns0+4
-         EQeg==
-X-Gm-Message-State: AOAM533UBnGzxNHhtO8smY1pnaUOddfz/5pdtP/irTGuWKpC+Y/g37ty
-        /GYv3L84lwnSNR6JrA0LgCkeKw==
-X-Google-Smtp-Source: ABdhPJxOxQjsL6w9g0OLpHPCjF+bnU3XWXaFNVPHygxmeypO7lQGstrEd7PdWU4Q87yKtJNiFpHfmg==
-X-Received: by 2002:a17:90b:48c6:b0:1df:99d9:997f with SMTP id li6-20020a17090b48c600b001df99d9997fmr35838pjb.242.1652771151939;
-        Tue, 17 May 2022 00:05:51 -0700 (PDT)
-Received: from [10.71.57.194] ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id e17-20020a62ee11000000b0050dc76281b8sm8188698pfi.146.2022.05.17.00.05.44
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4FNoWTSP55ndOPeC+jkUPZPRKqM/W1oOHqIRSNLtrZE=;
+        b=OBx16Kqb7r/+WLcnb5FTGr2Kr9wGIVdq5Jdby5mqBuZLdpVHcHK3E1WQF78mNvBBeh
+         XJDuNNkbP+cUaa3VCXcy6yju/xlqzLEZ4ocvbhDJ7xqUnBL/8lH1aoHAlhp6QPIdlKO3
+         XPJuMEq+d/3uCgAsJlskKVeBlvqFj2ssSuxFKY+/TU/NX+w/3gWu7N8D5C4xzANoZm5J
+         g8fZ5uCzYvEppngqlHoOtvuqeYwMvNvV/Tsy79ZeTFBGNr7ZIC78/0sYJJU0Ac5sG9lc
+         j9oAyiOEkOY1PFRt93WBfXgVMBV7HdsQzomoxxZB+TRErkdWHf6FSx0pS3Q9W1Wn9QCv
+         Q28g==
+X-Gm-Message-State: AOAM53303j8WQceCZHMUttYYLwqLBqrQuEmXDkAjEy94U+IuVG1ZCB93
+        n2hPm80moYX7m4Y/6+GQmw7fhDXxs1ZQFg==
+X-Google-Smtp-Source: ABdhPJyEQwLmWKk1r/vhQKb0WeaL4Uaac06SPYPu9OOYJ0V4eBPWc3vpFy/F66G7LnfhB9F/dbHjdw==
+X-Received: by 2002:a05:620a:859:b0:6a0:15d6:60ca with SMTP id u25-20020a05620a085900b006a015d660camr15091013qku.350.1652771177812;
+        Tue, 17 May 2022 00:06:17 -0700 (PDT)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id c4-20020ac81104000000b002f3b82571b1sm7326984qtj.1.2022.05.17.00.06.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 00:05:51 -0700 (PDT)
-Message-ID: <44a30595-6a50-6ded-5ecc-18fd1e56abda@bytedance.com>
-Date:   Tue, 17 May 2022 15:05:42 +0800
+        Tue, 17 May 2022 00:06:17 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id o80so11135242ybg.1;
+        Tue, 17 May 2022 00:06:17 -0700 (PDT)
+X-Received: by 2002:a25:e04d:0:b0:64d:6f23:b906 with SMTP id
+ x74-20020a25e04d000000b0064d6f23b906mr13099556ybg.380.1652771177087; Tue, 17
+ May 2022 00:06:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [External] Re: [PATCH bpf-next] selftests/bpf: fix some bugs in
- map_lookup_percpu_elem testcase
-To:     Yonghong Song <yhs@fb.com>, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, jolsa@kernel.org, davemarchevsky@fb.com,
-        joannekoong@fb.com, geliang.tang@suse.com
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        songmuchun@bytedance.com, wangdongdong.6@bytedance.com,
-        cong.wang@bytedance.com, zhouchengming@bytedance.com,
-        yosryahmed@google.com
-References: <20220516022453.68420-1-zhoufeng.zf@bytedance.com>
- <80ab09cf-6072-a75a-082d-2721f6f907ef@fb.com>
-From:   Feng Zhou <zhoufeng.zf@bytedance.com>
-In-Reply-To: <80ab09cf-6072-a75a-082d-2721f6f907ef@fb.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220517033526.2035735-1-zhangjialin11@huawei.com>
+In-Reply-To: <20220517033526.2035735-1-zhangjialin11@huawei.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 17 May 2022 09:06:05 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW4Zm+iAu5Pwwsf4cF-QUSk-aqQXosK5VpL56Y1EOPXyw@mail.gmail.com>
+Message-ID: <CAMuHMdW4Zm+iAu5Pwwsf4cF-QUSk-aqQXosK5VpL56Y1EOPXyw@mail.gmail.com>
+Subject: Re: [PATCH] iio: adc: rzg2l_adc: add missing fwnode_handle_put() in rzg2l_adc_parse_properties()
+To:     Jialin Zhang <zhangjialin11@huawei.com>
+Cc:     "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-iio@vger.kernel.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/5/17 上午11:09, Yonghong Song 写道:
+On Tue, May 17, 2022 at 6:44 AM Jialin Zhang <zhangjialin11@huawei.com> wrote:
+> fwnode_handle_put() should be used when terminating
+> device_for_each_child_node() iteration with break or
+> return to prevent stale device node references from
+> being left behind.
 >
->
-> On 5/15/22 7:24 PM, Feng zhou wrote:
->> From: Feng Zhou <zhoufeng.zf@bytedance.com>
->>
->> comments from Andrii Nakryiko, details in here:
->> https://lore.kernel.org/lkml/20220511093854.411-1-zhoufeng.zf@bytedance.com/T/ 
->>
->>
->> use /* */ instead of //
->> use libbpf_num_possible_cpus() instead of sysconf(_SC_NPROCESSORS_ONLN)
->> use 8 bytes for value size
->> fix memory leak
->> use ASSERT_EQ instead of ASSERT_OK
->> add bpf_loop to fetch values on each possible CPU
->>
->> Fixes: ed7c13776e20c74486b0939a3c1de984c5efb6aa ("selftests/bpf: add 
->> test case for bpf_map_lookup_percpu_elem")
->> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
->
-> LGTM with a few nits below.
-> Acked-by: Yonghong Song <yhs@fb.com>
->
-Ok, will do. Thanks.
+> Fixes: d484c21bacfa ("iio: adc: Add driver for Renesas RZ/G2L A/D converter")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Jialin Zhang <zhangjialin11@huawei.com>
 
->> ---
->>   .../bpf/prog_tests/map_lookup_percpu_elem.c   | 49 +++++++++------
->>   .../bpf/progs/test_map_lookup_percpu_elem.c   | 61 ++++++++++++-------
->>   2 files changed, 70 insertions(+), 40 deletions(-)
->>
->> diff --git 
->> a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c 
->> b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
->> index 58b24c2112b0..89ca170f1c25 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
->> @@ -1,30 +1,39 @@
->> -// SPDX-License-Identifier: GPL-2.0
->> -// Copyright (c) 2022 Bytedance
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/* Copyright (c) 2022 Bytedance */
->>     #include <test_progs.h>
->
-> The above empty line is unnecessary.
->
->>   #include "test_map_lookup_percpu_elem.skel.h"
->>   -#define TEST_VALUE  1
->> -
->>   void test_map_lookup_percpu_elem(void)
->>   {
->>       struct test_map_lookup_percpu_elem *skel;
->> -    int key = 0, ret;
->> -    int nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
->> -    int *buf;
->> +    __u64 key = 0, sum;
->> +    int ret, i;
->> +    int nr_cpus = libbpf_num_possible_cpus();
->> +    __u64 *buf;
->>   -    buf = (int *)malloc(nr_cpus*sizeof(int));
->> +    buf = (__u64 *)malloc(nr_cpus*sizeof(__u64));
->>       if (!ASSERT_OK_PTR(buf, "malloc"))
->>           return;
->> -    memset(buf, 0, nr_cpus*sizeof(int));
->> -    buf[0] = TEST_VALUE;
->>   -    skel = test_map_lookup_percpu_elem__open_and_load();
->> -    if (!ASSERT_OK_PTR(skel, 
->> "test_map_lookup_percpu_elem__open_and_load"))
->> -        return;
->> +    for (i=0; i<nr_cpus; i++)
->> +        buf[i] = i;
->> +    sum = (nr_cpus-1)*nr_cpus/2;
->> +
->> +    skel = test_map_lookup_percpu_elem__open();
->> +    if (!ASSERT_OK_PTR(skel, "test_map_lookup_percpu_elem__open"))
->> +        goto exit;
->> +
->> +    skel->rodata->nr_cpus = nr_cpus;
->> +
->> +    ret = test_map_lookup_percpu_elem__load(skel);
->> +    if (!ASSERT_OK(ret, "test_map_lookup_percpu_elem__load"))
->> +        goto cleanup;
->> +
->>       ret = test_map_lookup_percpu_elem__attach(skel);
->> -    ASSERT_OK(ret, "test_map_lookup_percpu_elem__attach");
->> +    if (!ASSERT_OK(ret, "test_map_lookup_percpu_elem__attach"))
->> +        goto cleanup;
->>         ret = 
->> bpf_map_update_elem(bpf_map__fd(skel->maps.percpu_array_map), &key, 
->> buf, 0);
->>       ASSERT_OK(ret, "percpu_array_map update");
->> @@ -37,10 +46,14 @@ void test_map_lookup_percpu_elem(void)
->>         syscall(__NR_getuid);
->>   -    ret = skel->bss->percpu_array_elem_val == TEST_VALUE &&
->> -          skel->bss->percpu_hash_elem_val == TEST_VALUE &&
->> -          skel->bss->percpu_lru_hash_elem_val == TEST_VALUE;
->> -    ASSERT_OK(!ret, "bpf_map_lookup_percpu_elem success");
->> +    test_map_lookup_percpu_elem__detach(skel);
->> +
->> +    ASSERT_EQ(skel->bss->percpu_array_elem_sum, sum, "percpu_array 
->> lookup percpu elem");
->> +    ASSERT_EQ(skel->bss->percpu_hash_elem_sum, sum, "percpu_hash 
->> lookup percpu elem");
->> +    ASSERT_EQ(skel->bss->percpu_lru_hash_elem_sum, sum, 
->> "percpu_lru_hash lookup percpu elem");
->>   +cleanup:
->>       test_map_lookup_percpu_elem__destroy(skel);
->> +exit:
->> +    free(buf);
->>   }
-> [...]
->> +struct read_percpu_elem_ctx {
->> +    void *map;
->> +    __u64 sum;
->> +};
->> +
->> +static int read_percpu_elem_callback(__u32 index, struct 
->> read_percpu_elem_ctx *ctx)
->> +{
->> +    __u64 key = 0;
->> +    __u64 *value;
->
-> Please add an empty line here.
->
->> +    value = bpf_map_lookup_percpu_elem(ctx->map, &key, index);
->> +    if (value)
->> +        ctx->sum += *value;
->> +    return 0;
->> +}
->> +
-> [...]
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

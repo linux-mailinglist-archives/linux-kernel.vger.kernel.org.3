@@ -2,68 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9099452AE4A
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 00:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B579152AE4E
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 00:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbiEQWtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 18:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
+        id S231491AbiEQWvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 18:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231447AbiEQWt1 (ORCPT
+        with ESMTP id S231489AbiEQWvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 18:49:27 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83CA552E6E
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 15:49:26 -0700 (PDT)
+        Tue, 17 May 2022 18:51:04 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F7A4F455
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 15:51:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652827766; x=1684363766;
+  t=1652827862; x=1684363862;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=eW9eeCQ/ZnkVlQzYhrGw1tL7ydi/5swHvLwwK3+msYw=;
-  b=KW0YKMPMHh9jm84ggUkMVPwKKOogXdXo6lACmg6OLYJajbhpC5oExT8u
-   TCjQUzBLtEQe1LbQ8Imhpxv/vK7HUBRQA8aqj3m+v0sp8cZbv5u0uz5G0
-   BUDQIKfBaQ81TCPHJVaqlnNIyH9qjsmwEnGOt5Wm4lmWal2Cp/8/2ylS0
-   cflszpzJ8APD/LE4QUQhXtuJnLJiAIw0BlvxBOQhYCz3OW7CTzM+Zj81c
-   jKgWu0giJU+BhDT9A6xpdHfuMvouxCFQbAobiMB37WPTXctjwJ2i4dyBw
-   8OUYyLKLozM6eLRrcDYTRLayD58i+krSeEQSQ7NLsZRkRMeEk6l5GmKbB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="331980533"
+  bh=Zzsg2WuJh6uzhJovq8XCrnmcAqakpF47E+0Mjk8izlQ=;
+  b=Mh/zA90wHaa8IFQn2f2jnLCbmi/O2VIOSYlevYAzw6yV0zzCMYjK62Yi
+   fZbpItEcukbDLIbv4aKGJ95B7vfdxZUt49cEfO/Iqq2+rmXpX75Z0W16j
+   nQk+ODyMeYdjfNKT1tpKuEi3J3NJ+Gfyicag2u4BtVJkFk0+s5lZzABLW
+   7aWrjpJXuCal+QHM8lfFxnKlcQZ4p2JG8mXNIDcJyornvWLTQdWflz2f5
+   DsFnZ8wf5SdAGvVp0dQvKoJvWOG5tx5VdriJ/qnhGo+DZzCyUjuVdY4vM
+   dfSQU5yMIT/lrhwxQnYyLtFmRe9dtZgFcvtRce3DAT7nxEzWTMtoORy+B
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="251879809"
 X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="331980533"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 15:49:26 -0700
+   d="scan'208";a="251879809"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 15:51:02 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="626709312"
+   d="scan'208";a="660835593"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga008.fm.intel.com with ESMTP; 17 May 2022 15:49:25 -0700
-Date:   Tue, 17 May 2022 15:53:08 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 17 May 2022 15:51:00 -0700
+Date:   Tue, 17 May 2022 15:54:43 -0700
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Nicholas Piggin <npiggin@gmail.com>, x86@kernel.org,
+Cc:     x86@kernel.org, Tony Luck <tony.luck@intel.com>,
         Andi Kleen <ak@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        David Woodhouse <dwmw2@infradead.org>,
         Stephane Eranian <eranian@google.com>,
-        iommu@lists.linux-foundation.org, Joerg Roedel <joro@8bytes.org>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
         "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
         Ricardo Neri <ricardo.neri@intel.com>,
-        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
-        Tony Luck <tony.luck@intel.com>
-Subject: Re: [PATCH v6 28/29] x86/tsc: Restart NMI watchdog after refining
- tsc_khz
-Message-ID: <20220517225308.GC6711@ranerica-svr.sc.intel.com>
+        iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 15/29] x86/hpet: Add helper function
+ hpet_set_comparator_periodic()
+Message-ID: <20220517225443.GA8069@ranerica-svr.sc.intel.com>
 References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
- <20220506000008.30892-29-ricardo.neri-calderon@linux.intel.com>
- <1652180070.1r874kr0tg.astroid@bobo.none>
- <87ilqdpq7u.ffs@tglx>
+ <20220506000008.30892-16-ricardo.neri-calderon@linux.intel.com>
+ <87mtfufifa.ffs@tglx>
+ <20220513211944.GE22683@ranerica-svr.sc.intel.com>
+ <87pmkgsf31.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87ilqdpq7u.ffs@tglx>
+In-Reply-To: <87pmkgsf31.ffs@tglx>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -75,54 +77,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 01:44:05PM +0200, Thomas Gleixner wrote:
-> On Tue, May 10 2022 at 21:16, Nicholas Piggin wrote:
-> > Excerpts from Ricardo Neri's message of May 6, 2022 10:00 am:
-> >> +	/*
-> >> +	 * If in use, the HPET hardlockup detector relies on tsc_khz.
-> >> +	 * Reconfigure it to make use of the refined tsc_khz.
-> >> +	 */
-> >> +	lockup_detector_reconfigure();
+On Sat, May 14, 2022 at 10:17:38AM +0200, Thomas Gleixner wrote:
+> On Fri, May 13 2022 at 14:19, Ricardo Neri wrote:
+> > On Fri, May 06, 2022 at 11:41:13PM +0200, Thomas Gleixner wrote:
+> >> The argument about not bloating the code
+> >> with an "obvious???" function which is quite small is slightly beyond my
+> >> comprehension level.
 > >
-> > I don't know if the API is conceptually good.
+> > That obvious function would look like this:
 > >
-> > You change something that the lockup detector is currently using, 
-> > *while* the detector is running asynchronously, and then reconfigure
-> > it. What happens in the window? If this code is only used for small
-> > adjustments maybe it does not really matter but in principle it's
-> > a bad API to export.
+> > void hpet_set_comparator_one_shot(int channel, u32 delta)
+> > {
+> > 	u32 count;
 > >
-> > lockup_detector_reconfigure as an internal API is okay because it
-> > reconfigures things while the watchdog is stopped [actually that
-> > looks untrue for soft dog which uses watchdog_thresh in
-> > is_softlockup(), but that should be fixed].
-> >
-> > You're the arch so you're allowed to stop the watchdog and configure
-> > it, e.g., hardlockup_detector_perf_stop() is called in arch/.
-> >
-> > So you want to disable HPET watchdog if it was enabled, then update
-> > wherever you're using tsc_khz, then re-enable.
+> > 	count = hpet_readl(HPET_COUNTER);
+> > 	count += delta;
+> > 	hpet_writel(count, HPET_Tn_CMP(channel));
+> > }
 > 
-> The real question is whether making this refined tsc_khz value
-> immediately effective matters at all. IMO, it does not because up to
-> that point the watchdog was happily using the coarse calibrated value
-> and the whole use TSC to assess whether the HPET fired mechanism is just
-> a guestimate anyway. So what's the point of trying to guess 'more
-> correct'.
+> This function only works reliably when the delta is large. See
+> hpet_clkevt_set_next_event().
 
-In some of my test systems I observed that, the TSC value does not fall
-within the expected error window the first time the HPET channel expires.
-
-I inferred that the error computed using the coarser tsc_khz was wrong.
-Recalculating the error window with refined tsc_khz would correct it.
-
-However, restarting the timer has the side-effect of kicking the timer and,
-therefore pushing the first HPET NMI further in the future.
-
-Perhaps kicking HPET channel, not recomputing the error window, corrected
-(masked?) the problem.
-
-I will investigate further and rework or drop this patch as needed.
+That is a good point. One more reason to not have a
+hpet_set_comparator_one_shot(), IMO.
 
 Thanks and BR,
 Ricardo

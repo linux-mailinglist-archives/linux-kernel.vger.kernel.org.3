@@ -2,64 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC5152A910
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 19:20:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87C4352A912
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 19:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351371AbiEQRTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 13:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46844 "EHLO
+        id S1346615AbiEQRVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 13:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346615AbiEQRTr (ORCPT
+        with ESMTP id S1351413AbiEQRU5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 13:19:47 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A0CE4B1D2;
-        Tue, 17 May 2022 10:19:46 -0700 (PDT)
-Received: from [10.137.112.111] (unknown [131.107.147.111])
-        by linux.microsoft.com (Postfix) with ESMTPSA id E00F820F7231;
-        Tue, 17 May 2022 10:19:45 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E00F820F7231
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1652807986;
-        bh=ypNvq8FCpCAia+a4RS7PtzIPVGCK/n5HPzHBm+DeERo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=n918+O2Mx+1LvMATk1unBhL/S2DsRtRaY8ZIABbTSXFL9JxrhkGurgK9fqJIV9IQ1
-         P4xgXGEzu3IXcqrRuE7CFnLkpMYywjeQMuQTK1LnZyzDX/TwEpDYp7fRICPfjycIsG
-         frTnPl8PfK/F2TMTylX7yu/nuCA53SYrZLIMs+3Y=
-Message-ID: <08651a15-14d8-236e-7e13-a22d50f17f4e@linux.microsoft.com>
-Date:   Tue, 17 May 2022 10:19:45 -0700
+        Tue, 17 May 2022 13:20:57 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01032B48F
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 10:20:51 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso2890218pjg.0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 10:20:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=qqJFZR8hTHMEpR03D7fICklADGJ1sACe7dmVDrtTPPA=;
+        b=ysKA7bOi5+9RdlYYFAsM9Hnm1Y0faip7O/uZx4Jtrfz0r6k4k9vYUggKvc5yQ1exMX
+         0Pwj7rSiWyjhXnLuAa1fGnu86owf5xZB9vxKXt7HfttlGj2yZzMka+qecyCOX9uSp5cY
+         UqTpAmywLrPUduIU5lo9vkJltg04KLwc8vGzsN4HDy2Jnt5RmvGUqK7ghg+RU4exZ6vV
+         utDNHvGDt6AEwWhhCSMvNpL88PIS7CnKCStA4CTurHtGE66zyvTeVATQ/VFDPEqYO0Ey
+         7jxg4aj0txKQirK+i5UXExqVypOCrnjFbiHxI/V18PcD3EcvzB9R2TEgawxCCzAaKEnG
+         43qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=qqJFZR8hTHMEpR03D7fICklADGJ1sACe7dmVDrtTPPA=;
+        b=7VMYTUbVlIQh/ibe1n/9HFosAW45Oeh8/SoNlM4xEjQXcUBMU9Y63CVnbBW66kOi2B
+         K9D0YBVH6jjxQZjrcyBA0wKKIiJY9gmhYMxp/F8026rSyM0pr2LvC/0X0pTw07gDmsZs
+         ZYTrm37767D2r84K1uIfMP0Hn4GDR4DT/z7MTLMg0eMLzTLju6sptLouQV7T97OVuUrR
+         MEHw/VBevGRq++NZx19wCQL0btvLiURKO5W95CVaSFPg1UKYw2dipfih+Mwv2+LRUhL+
+         hY6ZUVCBLvnvMnm/WVPxV04EfMJHSjkwsof1oLTLx+XQwjHVMMA+3OtSK1fNozPrd1xf
+         q2sQ==
+X-Gm-Message-State: AOAM5305nVk1mmqu4F9D4UatxJQWBJ811mdGqjntupresRNsLqZL2kaX
+        OZiSBRp0CxZDl9RpOA20Ejmd
+X-Google-Smtp-Source: ABdhPJyhG3jIHWQ/4DWEUJffCPPujUE5uN8SWJy3rwsGgWf/e3ngmDrUje9ryR1pgmwqMjvcBEexhg==
+X-Received: by 2002:a17:90a:8b91:b0:1be:db25:eecd with SMTP id z17-20020a17090a8b9100b001bedb25eecdmr25779420pjn.10.1652808051232;
+        Tue, 17 May 2022 10:20:51 -0700 (PDT)
+Received: from thinkpad ([117.207.31.8])
+        by smtp.gmail.com with ESMTPSA id i7-20020a63cd07000000b003c14af5063esm8882115pgg.86.2022.05.17.10.20.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 10:20:50 -0700 (PDT)
+Date:   Tue, 17 May 2022 22:50:42 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 15/17] PCI: dwc: Introduce dma-ranges property support
+ for RC-host
+Message-ID: <20220517172042.GC4528@thinkpad>
+References: <20220503214638.1895-1-Sergey.Semin@baikalelectronics.ru>
+ <20220503214638.1895-16-Sergey.Semin@baikalelectronics.ru>
+ <20220512135708.GC35848@thinkpad>
+ <20220512194135.ku73pae2xdvyocx7@mobilestation>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v4] x86/kexec: Carry forward IMA measurement log on kexec
-Content-Language: en-US
-To:     Jonathan McDowell <noodles@fb.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-References: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
- <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
- <YnuJCH75GrhVm0Tp@noodles-fedora.dhcp.thefacebook.com>
- <Yn01Cfb3Divf49g7@noodles-fedora.dhcp.thefacebook.com>
- <8bffb420-46d9-eb57-a944-b2389570f88d@linux.microsoft.com>
- <YoJqg/MUkQS4pDMh@noodles-fedora.dhcp.thefacebook.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-In-Reply-To: <YoJqg/MUkQS4pDMh@noodles-fedora.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-21.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220512194135.ku73pae2xdvyocx7@mobilestation>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,255 +86,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
->>> diff --git a/arch/x86/kernel/kexec-bzimage64.c b/arch/x86/kernel/kexec-bzimage64.c
->>> index 170d0fd68b1f..54bd4ce5f908 100644
->>> --- a/arch/x86/kernel/kexec-bzimage64.c
->>> +++ b/arch/x86/kernel/kexec-bzimage64.c
->>> @@ -186,6 +186,33 @@ setup_efi_state(struct boot_params *params, unsigned long params_load_addr,
->>>    }
->>>    #endif /* CONFIG_EFI */
->>> +static void
->>> +setup_ima_state(const struct kimage *image, struct boot_params *params,
->>> +		unsigned long params_load_addr,
->>> +		unsigned int ima_setup_data_offset)
->>> +{
->>> +#ifdef CONFIG_IMA_KEXEC
->>> +	struct setup_data *sd = (void *)params + ima_setup_data_offset;
->>> +	unsigned long setup_data_phys;
->>> +	struct ima_setup_data *ima;
->>> +
->>> +	if (!image->ima_buffer_size)
->>> +		return;
->>> +
->>> +	sd->type = SETUP_IMA;
->>> +	sd->len = sizeof(*ima);
->>> +
->>> +	ima = (void *)sd + sizeof(struct setup_data);
->>> +	ima->addr = image->ima_buffer_addr;
->>> +	ima->size = image->ima_buffer_size;
->>> +
->>> +	/* Add setup data */
->>> +	setup_data_phys = params_load_addr + ima_setup_data_offset;
->>> +	sd->next = params->hdr.setup_data;
->>> +	params->hdr.setup_data = setup_data_phys;
->>> +#endif /* CONFIG_IMA_KEXEC */
->>> +}
->>> +
->>>    static int
->>>    setup_boot_parameters(struct kimage *image, struct boot_params *params,
->>>    		      unsigned long params_load_addr,
->>> @@ -247,6 +274,13 @@ setup_boot_parameters(struct kimage *image, struct boot_params *params,
->>>    	setup_efi_state(params, params_load_addr, efi_map_offset, efi_map_sz,
->>>    			efi_setup_data_offset);
->>>    #endif
->>> +
->>> +	/* Setup IMA log buffer state */
->>> +	setup_ima_state(image, params, params_load_addr,
->>> +			efi_setup_data_offset +
->>> +			sizeof(struct setup_data) +
->>> +			sizeof(struct efi_setup_data));
->> Here you could check image->ima_buffer_size and call setup_ima_state() only
->> if it is non-zero.
+On Thu, May 12, 2022 at 10:41:35PM +0300, Serge Semin wrote:
+> On Thu, May 12, 2022 at 07:27:08PM +0530, Manivannan Sadhasivam wrote:
+> > On Wed, May 04, 2022 at 12:46:36AM +0300, Serge Semin wrote:
+> > > In accordance with the generic PCIe Root Port DT-bindings the "dma-ranges"
+> > > property has the same format as the "ranges" property. The only difference
+> > > is in their semantics. The "dma-ranges" property describes the PCIe-to-CPU
+> > > memory mapping in opposite to the CPU-to-PCIe mapping of the "ranges"
+> > > property. Even though the DW PCIe controllers are normally equipped with
+> > > internal Address Translation Unit which inbound and outbound tables can be
+> > > used to implement both properties semantics, it was surprise for me to
+> > > discover that the host-related part of the DW PCIe driver currently
+> > > supports the "ranges" property only while the "dma-ranges" windows are
+> > > just ignored. Having the "dma-ranges" supported in the driver would be
+> > > very handy for the platforms, that don't tolerate the 1:1 CPU-PCIe memory
+> > > mapping and require customized the PCIe memory layout. So let's fix that
+> > > by introducing the "dma-ranges" property support.
+> > > 
+> > > First of all we suggest to rename the dw_pcie_prog_inbound_atu() method to
+> > > dw_pcie_prog_ep_inbound_atu() and create a new version of the
+> > > dw_pcie_prog_inbound_atu() function. Thus we'll have two methods for RC
+> > > and EP controllers respectively in the same way as it has been developed
+> > > for the outbound ATU setup methods.
+> > > 
+> > > Secondly aside with the memory window index and type the new
+> > > dw_pcie_prog_inbound_atu() function will accept CPU address, PCIe address
+> > > and size as its arguments. These parameters define the PCIe and CPU memory
+> > > ranges which will be used to setup the respective inbound ATU mapping. The
+> > > passed parameters need to be verified against the ATU ranges constraints
+> > > in the same way as it is done for the outbound ranges.
+> > > 
+> > > Finally the DMA-ranges detected for the PCIe controller need to be
+> > > converted into the inbound ATU entries during the host controller
+> > > initialization procedure. It will be done in the framework of the
+> > > dw_pcie_iatu_setup() method. Note before setting the inbound ranges up we
+> > > need to disable all the inbound ATU entries in order to prevent unexpected
+> > > PCIe TLPs translations defined by some third party software like
+> > > bootloader.
+> > > 
+> > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > > ---
+> > >  .../pci/controller/dwc/pcie-designware-ep.c   |  4 +-
+> > >  .../pci/controller/dwc/pcie-designware-host.c | 32 ++++++++++-
+> > >  drivers/pci/controller/dwc/pcie-designware.c  | 57 ++++++++++++++++++-
+> > >  drivers/pci/controller/dwc/pcie-designware.h  |  6 +-
+> > >  4 files changed, 90 insertions(+), 9 deletions(-)
+> > > 
+> > > diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
+> > > index c62640201246..9b0540cfa9e8 100644
+> > > --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
+> > > +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
+> > > @@ -167,8 +167,8 @@ static int dw_pcie_ep_inbound_atu(struct dw_pcie_ep *ep, u8 func_no, int type,
+> > >  		return -EINVAL;
+> > >  	}
+> > >  
+> > > -	ret = dw_pcie_prog_inbound_atu(pci, func_no, free_win, type,
+> > > -				       cpu_addr, bar);
+> > > +	ret = dw_pcie_prog_ep_inbound_atu(pci, func_no, free_win, type,
+> > > +					  cpu_addr, bar);
+> > >  	if (ret < 0) {
+> > >  		dev_err(pci->dev, "Failed to program IB window\n");
+> > >  		return ret;
+> > > diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
+> > > index 7caca6c575a5..9cb406f5c185 100644
+> > > --- a/drivers/pci/controller/dwc/pcie-designware-host.c
+> > > +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+> > > @@ -612,12 +612,15 @@ static int dw_pcie_iatu_setup(struct pcie_port *pp)
+> > >  	}
+> > >  
+> > >  	/*
+> > > -	 * Ensure all outbound windows are disabled before proceeding with
+> > > -	 * the MEM/IO ranges setups.
+> > > +	 * Ensure all out/inbound windows are disabled before proceeding with
+> > > +	 * the MEM/IO (dma-)ranges setups.
+> > >  	 */
+> > >  	for (i = 0; i < pci->num_ob_windows; i++)
+> > >  		dw_pcie_disable_atu(pci, PCIE_ATU_REGION_DIR_OB, i);
+> > >  
+> > > +	for (i = 0; i < pci->num_ib_windows; i++)
+> > > +		dw_pcie_disable_atu(pci, PCIE_ATU_REGION_DIR_IB, i);
+> > > +
+> > >  	i = 0;
+> > >  	resource_list_for_each_entry(entry, &pp->bridge->windows) {
+> > >  		if (resource_type(entry->res) != IORESOURCE_MEM)
+> > > @@ -654,9 +657,32 @@ static int dw_pcie_iatu_setup(struct pcie_port *pp)
+> > >  	}
+> > >  
+> > >  	if (pci->num_ob_windows <= i)
+> > > -		dev_warn(pci->dev, "Resources exceed number of ATU entries (%d)\n",
+> > > +		dev_warn(pci->dev, "Ranges exceed outbound iATU size (%d)\n",
+> > >  			 pci->num_ob_windows);
+> > >  
+> > > +	i = 0;
+> > > +	resource_list_for_each_entry(entry, &pp->bridge->dma_ranges) {
+> > > +		if (resource_type(entry->res) != IORESOURCE_MEM)
+> > > +			continue;
+> > > +
+> > > +		if (pci->num_ib_windows <= i)
+> > > +			break;
+> > > +
+> > > +		ret = dw_pcie_prog_inbound_atu(pci, i++, PCIE_ATU_TYPE_MEM,
+> > > +					       entry->res->start,
+> > > +					       entry->res->start - entry->offset,
+> > > +					       resource_size(entry->res));
+> > > +		if (ret) {
+> > > +			dev_err(pci->dev, "Failed to set DMA range %pr\n",
+> > > +				entry->res);
+> > > +			return ret;
+> > > +		}
+> > > +	}
+> > > +
+> > > +	if (pci->num_ib_windows <= i)
+> > > +		dev_warn(pci->dev, "Dma-ranges exceed inbound iATU size (%u)\n",
+> > > +			 pci->num_ib_windows);
+> > > +
+> > >  	return 0;
+> > >  }
+> > >  
+> > > diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> > > index 747e252c09e6..33718ed6c511 100644
+> > > --- a/drivers/pci/controller/dwc/pcie-designware.c
+> > > +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> > > @@ -397,8 +397,61 @@ static inline void dw_pcie_writel_atu_ib(struct dw_pcie *pci, u32 index, u32 reg
+> > >  	dw_pcie_writel_atu(pci, PCIE_ATU_REGION_DIR_IB, index, reg, val);
+> > >  }
+> > >  
+> > > -int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, u8 func_no, int index,
+> > > -			     int type, u64 cpu_addr, u8 bar)
+> > > +int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, int index, int type,
+> > > +			     u64 cpu_addr, u64 pci_addr, u64 size)
+> > > +{
+> > > +	u64 limit_addr = pci_addr + size - 1;
+> > > +	u32 retries, val;
+> > > +
+> > > +	if ((limit_addr & ~pci->region_limit) != (pci_addr & ~pci->region_limit) ||
+> > > +	    !IS_ALIGNED(cpu_addr, pci->region_align) ||
+> > > +	    !IS_ALIGNED(pci_addr, pci->region_align) ||
+> > > +	    !IS_ALIGNED(size, pci->region_align) ||
+> > 
 > 
-> setup_ima_state() has this check already.
-
-Yes - I noticed that.
-I was just suggesting a minor optimization - avoid making this function 
-call if IMA buffer is not present.
-
+> > Why do you want the size to be aligned? What if I want to transfer a small size
+> > buffer?
+> > 
+> > Same question applies to outbound programming as well.
 > 
->>> +
->>>    	/* Setup EDD info */
->>>    	memcpy(params->eddbuf, boot_params.eddbuf,
->>>    				EDDMAXNR * sizeof(struct edd_info));
->>> @@ -403,6 +437,10 @@ static void *bzImage64_load(struct kimage *image, char *kernel,
->>>    				sizeof(struct setup_data) +
->>>    				sizeof(struct efi_setup_data);
->>> +	if (IS_ENABLED(CONFIG_IMA_KEXEC))
->>> +		kbuf.bufsz += sizeof(struct setup_data) +
->>> +			      sizeof(struct ima_setup_data);
->>> +
->>>    	params = kzalloc(kbuf.bufsz, GFP_KERNEL);
->>>    	if (!params)
->>>    		return ERR_PTR(-ENOMEM);
->>> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
->>> index 249981bf3d8a..ab5e7a351845 100644
->>> --- a/arch/x86/kernel/setup.c
->>> +++ b/arch/x86/kernel/setup.c
->>> @@ -11,6 +11,7 @@
->>>    #include <linux/dma-map-ops.h>
->>>    #include <linux/dmi.h>
->>>    #include <linux/efi.h>
->>> +#include <linux/ima.h>
->>>    #include <linux/init_ohci1394_dma.h>
->>>    #include <linux/initrd.h>
->>>    #include <linux/iscsi_ibft.h>
->>> @@ -145,6 +146,11 @@ __visible unsigned long mmu_cr4_features __ro_after_init;
->>>    __visible unsigned long mmu_cr4_features __ro_after_init = X86_CR4_PAE;
->>>    #endif
->>> +#ifdef CONFIG_IMA
->>> +static phys_addr_t ima_kexec_buffer_phys;
->>> +static size_t ima_kexec_buffer_size;
->>> +#endif
->>> +
->>>    /* Boot loader ID and version as integers, for the benefit of proc_dointvec */
->>>    int bootloader_type, bootloader_version;
->>> @@ -335,6 +341,59 @@ static void __init reserve_initrd(void)
->>>    }
->>>    #endif /* CONFIG_BLK_DEV_INITRD */
->>> +static void __init add_early_ima_buffer(u64 phys_addr)
->>> +{
->>> +#ifdef CONFIG_IMA
->>> +	struct ima_setup_data *data;
->>> +
->>> +	data = early_memremap(phys_addr + sizeof(struct setup_data),
->>> +			      sizeof(*data));
->>> +	if (!data) {
->>> +		pr_warn("setup: failed to memremap ima_setup_data entry\n");
->>> +		return;
->>> +	}
->> Here if memory allocation fails, would kexec system call fail or would it
->> only not add IMA buffer, but continue with the system call?
+> You can't program a region with the unaligned size by the DW PCIe CSRs
+> design. The limit address lower bits are read-only and fixed with
+> one's in accordance with the IP-core synthesize parameter
+> CX_ATU_MIN_REGION_SIZE. So the mapping is always performed in the
+> CX_ATU_MIN_REGION_SIZE chunks.
 > 
-> This is run in the context of the *new* kernel. Boot will continue, but
-> the IMA buffer will not be successfully passed across. Effectively that
-> puts us in the same situation as now; things like TPM PCRs will have
-> been updated, but we won't have the log showing us how we got to the
-> current state.
-I think it is better to treat this error as a critical failure.
-
+> IATU_LIMIT_ADDR_OFF_{IN,OUT}BOUND.LIMIT_ADDR_HW = 
+> {(CX_ATU_MIN_REGION_SIZE == 65536) ? "0xffff" :
+>  (CX_ATU_MIN_REGION_SIZE == 32768) ? "0x7fff" :
+>  (CX_ATU_MIN_REGION_SIZE == 16384) ? "0x3fff" :
+>  (CX_ATU_MIN_REGION_SIZE == 8192)  ? "0x1fff" :
+>  (CX_ATU_MIN_REGION_SIZE == 4096)  ? "0xfff" : "0xffff"}
 > 
->>> +	if (data->size != 0) {
->>> +		memblock_reserve(data->addr, data->size);
->>> +		ima_kexec_buffer_phys = data->addr;
->>> +		ima_kexec_buffer_size = data->size;
->>> +	}
->>> +	early_memunmap(data, sizeof(*data));
->>> +#else
->>> +	pr_warn("Passed IMA kexec data, but CONFIG_IMA not set. Ignoring.\n");
->> Is this warning message useful? Can we just inline (NOP) this function if
->> CONFIG_IMA is not set?
+
+Right. Even though the minimum size that could be mapped is 4k, I could still
+use that 4k size for mapping small buffers also. So you should not be erroring
+out here if the size is not aligned. I know that it is a waste of memory but
+that doesn't mean that it won't work.
+
+Thanks,
+Mani
+
+> -Sergey
 > 
-> It seems useful to me to know if the previous kernel is trying to pass
-> us IMA information but we're not configured for IMA, and it's not a lot
-> of overhead in terms of code in a path that's only actually executed if
-> we *are* passed the IMA kexec info.
+> > 
+> > Thanks,
+> > Mani
+> > 
+> > -- 
+> > மணிவண்ணன் சதாசிவம்
 
-okay.
-
-> 
->>> +#endif
->>> +}
->>> +
->>> +#if defined(CONFIG_IMA) && !defined(CONFIG_OF_FLATTREE)
->>> +int __meminit ima_free_kexec_buffer(void)
->>> +{
->> ima_free_kexec_buffer() should be invoked if the previous kernel had passed
->> the IMA buffer (i.e., CONFIG_HAVE_IMA_KEXEC is set). CONFIG_HAVE_IMA_KEXEC
->> would be set only if CONFIG_IMA is set. Is the above check still required?
-> 
-> If we don't have IMA configured there's no point compiling this code in,
-> as there will be no callers of it. The OF_FLATTREE piece is to handle
-> the fact that the x86 platforms that use device tree (see previous
-> discussion in this thread about the fact there only seem to be 2 of
-> them, and they're both 32 bit) will end up needing to wire up the device
-> tree kexec passing if they want to use this functionality (and in fact
-> device tree passing across x86 kexec generally).
-
-okay.
-
-  -lakshmi
-
->>
->>> +	int rc;
->>> +
->>> +	if (ima_kexec_buffer_size == 0)
->>> +		return -ENOENT;
->>> +
->>> +	rc = memblock_phys_free(ima_kexec_buffer_phys,
->>> +				ima_kexec_buffer_size);
->>> +	if (rc)
->>> +		return rc;
->>> +
->>> +	ima_kexec_buffer_phys = 0;
->>> +	ima_kexec_buffer_size = 0;
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +int __init ima_get_kexec_buffer(void **addr, size_t *size)
->>> +{
->>> +	if (ima_kexec_buffer_size == 0)
->>> +		return -ENOENT;
->>> +
->>> +	*addr = __va(ima_kexec_buffer_phys);
->>> +	*size = ima_kexec_buffer_size;
->>> +
->>> +	return 0;
->>> +}
->>> +#endif
->>> +
->>>    static void __init parse_setup_data(void)
->>>    {
->>>    	struct setup_data *data;
->>> @@ -360,6 +419,9 @@ static void __init parse_setup_data(void)
->>>    		case SETUP_EFI:
->>>    			parse_efi_setup(pa_data, data_len);
->>>    			break;
->>> +		case SETUP_IMA:
->>> +			add_early_ima_buffer(pa_data);
->>> +			break;
->>>    		default:
->>>    			break;
->>>    		}
->>> diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
->>> index b9bd1cff1793..74fdd490f7c0 100644
->>> --- a/drivers/of/kexec.c
->>> +++ b/drivers/of/kexec.c
->>> @@ -9,6 +9,7 @@
->>>     *  Copyright (C) 2016  IBM Corporation
->>>     */
->>> +#include <linux/ima.h>
->>>    #include <linux/kernel.h>
->>>    #include <linux/kexec.h>
->>>    #include <linux/memblock.h>
->>> diff --git a/include/linux/ima.h b/include/linux/ima.h
->>> index 426b1744215e..ff4bd993e432 100644
->>> --- a/include/linux/ima.h
->>> +++ b/include/linux/ima.h
->>> @@ -140,6 +140,11 @@ static inline int ima_measure_critical_data(const char *event_label,
->>>    #endif /* CONFIG_IMA */
->>> +#ifdef CONFIG_HAVE_IMA_KEXEC
->>> +int ima_free_kexec_buffer(void);
->>> +int ima_get_kexec_buffer(void **addr, size_t *size);
->>> +#endif
->>> +
->>>    #ifdef CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT
->>>    extern bool arch_ima_get_secureboot(void);
->>>    extern const char * const *arch_get_ima_policy(void);
->>> diff --git a/include/linux/of.h b/include/linux/of.h
->>> index 04971e85fbc9..c2f58d2e3a0e 100644
->>> --- a/include/linux/of.h
->>> +++ b/include/linux/of.h
->>> @@ -441,8 +441,6 @@ void *of_kexec_alloc_and_setup_fdt(const struct kimage *image,
->>>    				   unsigned long initrd_load_addr,
->>>    				   unsigned long initrd_len,
->>>    				   const char *cmdline, size_t extra_fdt_size);
->>> -int ima_get_kexec_buffer(void **addr, size_t *size);
->>> -int ima_free_kexec_buffer(void);
->>>    #else /* CONFIG_OF */
->>>    static inline void of_core_init(void)
->>> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
->>> index 13753136f03f..419dc405c831 100644
->>> --- a/security/integrity/ima/ima_kexec.c
->>> +++ b/security/integrity/ima/ima_kexec.c
->>> @@ -137,7 +137,7 @@ void ima_add_kexec_buffer(struct kimage *image)
->>>    /*
->>>     * Restore the measurement list from the previous kernel.
->>>     */
->>> -void ima_load_kexec_buffer(void)
->>> +void __init ima_load_kexec_buffer(void)
->>>    {
->>>    	void *kexec_buffer = NULL;
->>>    	size_t kexec_buffer_size = 0;
+-- 
+மணிவண்ணன் சதாசிவம்

@@ -2,294 +2,419 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD7752A2D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:12:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B87352A2D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347488AbiEQNLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 09:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52112 "EHLO
+        id S238868AbiEQNKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 09:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347456AbiEQNLF (ORCPT
+        with ESMTP id S1347244AbiEQNKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 09:11:05 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7653616F;
-        Tue, 17 May 2022 06:10:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652793048; x=1684329048;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=BSepHG6NLjphmtN4/CabMFGbJVm7iu8RDaTfkt+svNE=;
-  b=C5Ontgvj0DOfXBtesznzQTh5AZyAoIt0sFNUNzOm50DRLPKO9moQXqKB
-   0weefZhYF3ry5JSQeH2NyHWVezGkGAoYjFnmwDlwebvASxG8IymNKuEt4
-   4vktl/hK+fxY5vjC5xkkGnLPfpy5iB3ct0//pEGkiZ3uOja4coTksru1m
-   swxhBEvgJ/H/ITAhHjTsLedTySyUNlhYqYARAnIOvSVbvZjWiAi9JxsSk
-   cgyQy6v2pf5fRpHBYIRf7UpilKMIUCY6g+tNWr/T8B/gp2gOe4z9T3wsI
-   pPkxKbJtiKyp4Ufq1OgPhWxLnV9Y7vzZxI0Wd6Rom9fw1E17Vzzq6cw+8
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="357588679"
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="357588679"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 06:10:44 -0700
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="713844376"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO ahunter-VirtualBox.home\044ger.corp.intel.com) ([10.252.52.217])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 06:10:41 -0700
-From:   Adrian Hunter <adrian.hunter@intel.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, Leo Yan <leo.yan@linaro.org>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, kvm@vger.kernel.org
-Subject: [PATCH V2 6/6] perf intel-pt: Add guest_code support
-Date:   Tue, 17 May 2022 16:10:11 +0300
-Message-Id: <20220517131011.6117-7-adrian.hunter@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220517131011.6117-1-adrian.hunter@intel.com>
-References: <20220517131011.6117-1-adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+        Tue, 17 May 2022 09:10:34 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB0A3527F
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:10:33 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id u35so14205228qtc.13
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:10:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=gmcEONG9+1ciQ4BCBbXzW8ZQDb+rsVHZqrgwG8DaMVQ=;
+        b=YJ0ED44z23pbl+P0XROevtNAm0SqaJo88E/l43ihL8FMAQhguoBMua+P2AaUk8FsXS
+         zxfm+aHHe6u+sRwL+RxlSkGYKRgAi9kET9lKDdYsoCCB5ogXqlUSc5BO03OsEJRpukEu
+         MqzzaIVr8znWiQV7p0LyOGTIXgrf4+c+dyRpGXYIFGL4+t5ztE0dYrav98i8lHGVnbq0
+         5i210eusk5r+5pzembYuRgi1Y6jFkx7LXeXo/L4uMEMPxnMZ7ETQzkEZb6KAmxmy10qi
+         2VjbmkgU9V6sqYlnwzk+mD+IFABCj2a1fvNJ+22LmAR6/iwcePsR0mXa6DYUxfXqhOMV
+         Dd4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=gmcEONG9+1ciQ4BCBbXzW8ZQDb+rsVHZqrgwG8DaMVQ=;
+        b=hBn9oIRjS1Rg/4fA+fjd07DExPsPI1LAebsxbO510w1U9wSyLzBLUcScDw/182TJTM
+         eehHRkrMRHXpd+X6SysaDOaqFILzzLsNhMRxjfZ8CoaQR0W1VXrUoGXZUwqLgj15Z0/i
+         NuuWSPTJL2bNsq5gTm4ZkGGYzSDEAeApkTc7LO8Yd7eovcQUemtzQPQIGimwe2dBc4k+
+         4Y1Y+WlfkvHSgHyWyS19JeXGiH20tO/2GFasABnx7ODp2d5WPkgrR+ud0y7emH+74Al0
+         2wuStc2MavFxP6AYkcYaTV36SK/c8bbOsywFQEj63reUxhZZkt1+WPyUtdYOZpqhWbsY
+         rRkQ==
+X-Gm-Message-State: AOAM532wyBTwpEjX0ofYDbSGAk6cGFnHQs9LV2+2ETlZ2u03wZJr5wpQ
+        gahAc8MD9hDlR9RY/y5Ny3Q9UV15lP+o8AFcLKOE+IuI0u/tpA==
+X-Google-Smtp-Source: ABdhPJxW5436ieTpqMAgy8L7fLhNe6yUCi6stTzb+m969x6iSFVNEBg+amjnzNevI6b2UqXe20N9hOQuBoCrx/AAB7Q=
+X-Received: by 2002:ac8:4e4f:0:b0:2f8:f64a:ee94 with SMTP id
+ e15-20020ac84e4f000000b002f8f64aee94mr6285219qtw.97.1652793031974; Tue, 17
+ May 2022 06:10:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CGME20220509073953epcas1p127f2d36186316642068c92c5d9dee1c4@epcas1p1.samsung.com>
+ <20220509074330.4822-1-jaewon31.kim@samsung.com> <20220516173321.67402b7f09eacc43d4e476f4@linux-foundation.org>
+ <YoNcBG6kQnmLZ3Z9@linux.ibm.com> <CAJrd-UuzTh-0Ee9+rMRES9onP_EkvJS-VpPP66J4M4n0Ku0ZWA@mail.gmail.com>
+ <YoObTJcBUjeW+2l2@linux.ibm.com>
+In-Reply-To: <YoObTJcBUjeW+2l2@linux.ibm.com>
+From:   Jaewon Kim <jaewon31.kim@gmail.com>
+Date:   Tue, 17 May 2022 22:10:20 +0900
+Message-ID: <CAJrd-UtYqEMy+Yr9gP0v0dZ3HZ=fCHe67dTRe=5YtLWrbmd1UQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] page_ext: create page extension for all memblock
+ memory regions
+To:     Mike Rapoport <rppt@linux.ibm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jaewon Kim <jaewon31.kim@samsung.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Joonsoo Kim <iamjoonsoo.kim@lge.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A common case for KVM test programs is that the test program acts as the
-hypervisor, creating, running and destroying the virtual machine, and
-providing the guest object code from its own object code. In this case,
-the VM is not running an OS, but only the functions loaded into it by the
-hypervisor test program, and conveniently, loaded at the same virtual
-addresses.
+64
+59
 
-To support that, a new option "--guest-code" has been added in
-previous patches.
+2022=EB=85=84 5=EC=9B=94 17=EC=9D=BC (=ED=99=94) =EC=98=A4=ED=9B=84 9:55, M=
+ike Rapoport <rppt@linux.ibm.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+>
+> On Tue, May 17, 2022 at 08:38:18PM +0900, Jaewon Kim wrote:
+> > Hello Mike Rapoport
+> > Thank you for your comment.
+> >
+> > Oh really? Could you point out the code or the commit regarding 'all
+> > struct pages in any section should be valid and
+> > properly initialized' ?
+>
+> There were several commits that refactored the memory map initialization,
+> freeing of the unused memory map and abuse of pfn_valid() as a substitute
+> of "is memory valid" semantics.
+>
+> > Actually I am using v5.10 based source tree on an arm64 device.
+>
+> Then most probably your change is not relevant for the upstream kernel.
+> Did you observe any issues with page_ext initialization on v5.18-rcN
+> kernels?
 
-In this patch, add support also to Intel PT.
+Actually I observed only 59 sections were initialized for page_ext and
+missed 5 sections.
+It should be totally 64 sections * 128 MB =3D 8,192 MB
 
-In particular, ensure guest_code thread is set up before attempting to
-walk object code or synthesize samples.
+>
+> > I tried to look up and found the following commit in v5.16-rc1, did
+> > you mean this?
+> > 3de360c3fdb3 arm64/mm: drop HAVE_ARCH_PFN_VALID
+>
+> Yes, this is one of those commits.
+>
+> > I guess memblock_is_memory code in pfn_valid in arch/arm64/mm/init.c, v=
+5.10
+> > might affect the page_ext_init.
+>
+> Yes. In 5.10 the pfn_valid() test in page_ext_init() will skip an entire
+> section if the first pfn in that section is not memory that can be mapped
+> in the linear map.
+>
+> But again, this should be fixed in the latest kernels.
 
-Example:
+Great! Thank you for your explanation.
+I will check it someday later when I use the latest kernel on our devices.
+The next version on our devices seems to be v5.15 though.
 
- # perf record --kcore -e intel_pt/cyc/ -- tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test
- [ perf record: Woken up 1 times to write data ]
- [ perf record: Captured and wrote 0.280 MB perf.data ]
- # perf script --guest-code --itrace=bep --ns -F-period,+addr,+flags
- [SNIP]
-   tsc_msrs_test 18436 [007] 10897.962087733:      branches:   call                   ffffffffc13b2ff5 __vmx_vcpu_run+0x15 (vmlinux) => ffffffffc13b2f50 vmx_update_host_rsp+0x0 (vmlinux)
-   tsc_msrs_test 18436 [007] 10897.962087733:      branches:   return                 ffffffffc13b2f5d vmx_update_host_rsp+0xd (vmlinux) => ffffffffc13b2ffa __vmx_vcpu_run+0x1a (vmlinux)
-   tsc_msrs_test 18436 [007] 10897.962087733:      branches:   call                   ffffffffc13b303b __vmx_vcpu_run+0x5b (vmlinux) => ffffffffc13b2f80 vmx_vmenter+0x0 (vmlinux)
-   tsc_msrs_test 18436 [007] 10897.962087836:      branches:   vmentry                ffffffffc13b2f82 vmx_vmenter+0x2 (vmlinux) =>                0 [unknown] ([unknown])
-   [guest/18436] 18436 [007] 10897.962087836:      branches:   vmentry                               0 [unknown] ([unknown]) =>           402c81 guest_code+0x131 (/home/ahunter/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test)
-   [guest/18436] 18436 [007] 10897.962087836:      branches:   call                             402c81 guest_code+0x131 (/home/ahunter/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test) =>           40dba0 ucall+0x0 (/home/ahunter/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test)
-   [guest/18436] 18436 [007] 10897.962088248:      branches:   vmexit                           40dba0 ucall+0x0 (/home/ahunter/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test) =>                0 [unknown] ([unknown])
-   tsc_msrs_test 18436 [007] 10897.962088248:      branches:   vmexit                                0 [unknown] ([unknown]) => ffffffffc13b2fa0 vmx_vmexit+0x0 (vmlinux)
-   tsc_msrs_test 18436 [007] 10897.962088248:      branches:   jmp                    ffffffffc13b2fa0 vmx_vmexit+0x0 (vmlinux) => ffffffffc13b2fd2 vmx_vmexit+0x32 (vmlinux)
-   tsc_msrs_test 18436 [007] 10897.962088256:      branches:   return                 ffffffffc13b2fd2 vmx_vmexit+0x32 (vmlinux) => ffffffffc13b3040 __vmx_vcpu_run+0x60 (vmlinux)
-   tsc_msrs_test 18436 [007] 10897.962088270:      branches:   return                 ffffffffc13b30b6 __vmx_vcpu_run+0xd6 (vmlinux) => ffffffffc13b2f2e vmx_vcpu_enter_exit+0x4e (vmlinux)
- [SNIP]
-   tsc_msrs_test 18436 [007] 10897.962089321:      branches:   call                   ffffffffc13b2ff5 __vmx_vcpu_run+0x15 (vmlinux) => ffffffffc13b2f50 vmx_update_host_rsp+0x0 (vmlinux)
-   tsc_msrs_test 18436 [007] 10897.962089321:      branches:   return                 ffffffffc13b2f5d vmx_update_host_rsp+0xd (vmlinux) => ffffffffc13b2ffa __vmx_vcpu_run+0x1a (vmlinux)
-   tsc_msrs_test 18436 [007] 10897.962089321:      branches:   call                   ffffffffc13b303b __vmx_vcpu_run+0x5b (vmlinux) => ffffffffc13b2f80 vmx_vmenter+0x0 (vmlinux)
-   tsc_msrs_test 18436 [007] 10897.962089424:      branches:   vmentry                ffffffffc13b2f82 vmx_vmenter+0x2 (vmlinux) =>                0 [unknown] ([unknown])
-   [guest/18436] 18436 [007] 10897.962089424:      branches:   vmentry                               0 [unknown] ([unknown]) =>           40dba0 ucall+0x0 (/home/ahunter/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test)
-   [guest/18436] 18436 [007] 10897.962089701:      branches:   jmp                              40dc1b ucall+0x7b (/home/ahunter/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test) =>           40dc39 ucall+0x99 (/home/ahunter/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test)
-   [guest/18436] 18436 [007] 10897.962089701:      branches:   jcc                              40dc3c ucall+0x9c (/home/ahunter/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test) =>           40dc20 ucall+0x80 (/home/ahunter/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test)
-   [guest/18436] 18436 [007] 10897.962089701:      branches:   jcc                              40dc3c ucall+0x9c (/home/ahunter/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test) =>           40dc20 ucall+0x80 (/home/ahunter/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test)
-   [guest/18436] 18436 [007] 10897.962089701:      branches:   jcc                              40dc37 ucall+0x97 (/home/ahunter/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test) =>           40dc50 ucall+0xb0 (/home/ahunter/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test)
-   [guest/18436] 18436 [007] 10897.962089878:      branches:   vmexit                           40dc55 ucall+0xb5 (/home/ahunter/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test) =>                0 [unknown] ([unknown])
-   tsc_msrs_test 18436 [007] 10897.962089878:      branches:   vmexit                                0 [unknown] ([unknown]) => ffffffffc13b2fa0 vmx_vmexit+0x0 (vmlinux)
-   tsc_msrs_test 18436 [007] 10897.962089878:      branches:   jmp                    ffffffffc13b2fa0 vmx_vmexit+0x0 (vmlinux) => ffffffffc13b2fd2 vmx_vmexit+0x32 (vmlinux)
-   tsc_msrs_test 18436 [007] 10897.962089887:      branches:   return                 ffffffffc13b2fd2 vmx_vmexit+0x32 (vmlinux) => ffffffffc13b3040 __vmx_vcpu_run+0x60 (vmlinux)
-   tsc_msrs_test 18436 [007] 10897.962089901:      branches:   return                 ffffffffc13b30b6 __vmx_vcpu_run+0xd6 (vmlinux) => ffffffffc13b2f2e vmx_vcpu_enter_exit+0x4e (vmlinux)
- [SNIP]
+Thank you
+Jaewon Kim
 
- # perf kvm --guest-code --guest --host report -i perf.data --stdio | head -20
+>
+> > Thank you
+> >
+> > 2022=EB=85=84 5=EC=9B=94 17=EC=9D=BC (=ED=99=94) =EC=98=A4=ED=9B=84 5:2=
+5, Mike Rapoport <rppt@linux.ibm.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+> > >
+> > > On Mon, May 16, 2022 at 05:33:21PM -0700, Andrew Morton wrote:
+> > > > On Mon,  9 May 2022 16:43:30 +0900 Jaewon Kim <jaewon31.kim@samsung=
+.com> wrote:
+> > > >
+> > > > > The page extension can be prepared for each section. But if the f=
+irst
+> > > > > page is not valid, the page extension for the section was not
+> > > > > initialized though there were many other valid pages within the s=
+ection.
+> > >
+> > > What do you mean by "first page [in a section] is not valid"?
+> > > In recent kernels all struct pages in any section should be valid and
+> > > properly initialized.
+> > >
+> > > > > To support the page extension for all sections, refer to memblock=
+ memory
+> > > > > regions. If the page is valid use the nid from pfn_to_nid, otherw=
+ise use
+> > > > > the previous nid.
+> > > > >
+> > > > > Also this pagech changed log to include total sections and a sect=
+ion
+> > > > > size.
+> > > > >
+> > > > > i.e.
+> > > > > allocated 100663296 bytes of page_ext for 64 sections (1 section =
+: 0x8000000)
+> > > >
+> > > > Cc Joonsoo, who wrote this code.
+> > > > Cc Mike, for memblock.
+> > > >
+> > > > Thanks.
+> > > >
+> > > > >
+> > > > > diff --git a/mm/page_ext.c b/mm/page_ext.c
+> > > > > index 2e66d934d63f..506d58b36a1d 100644
+> > > > > --- a/mm/page_ext.c
+> > > > > +++ b/mm/page_ext.c
+> > > > > @@ -381,41 +381,43 @@ static int __meminit page_ext_callback(stru=
+ct notifier_block *self,
+> > > > >  void __init page_ext_init(void)
+> > > > >  {
+> > > > >     unsigned long pfn;
+> > > > > -   int nid;
+> > > > > +   int nid =3D 0;
+> > > > > +   struct memblock_region *rgn;
+> > > > > +   int nr_section =3D 0;
+> > > > > +   unsigned long next_section_pfn =3D 0;
+> > > > >
+> > > > >     if (!invoke_need_callbacks())
+> > > > >             return;
+> > > > >
+> > > > > -   for_each_node_state(nid, N_MEMORY) {
+> > > > > +   /*
+> > > > > +    * iterate each memblock memory region and do not skip a sect=
+ion having
+> > > > > +    * !pfn_valid(pfn)
+> > > > > +    */
+> > > > > +   for_each_mem_region(rgn) {
+> > > > >             unsigned long start_pfn, end_pfn;
+> > > > >
+> > > > > -           start_pfn =3D node_start_pfn(nid);
+> > > > > -           end_pfn =3D node_end_pfn(nid);
+> > > > > -           /*
+> > > > > -            * start_pfn and end_pfn may not be aligned to SECTIO=
+N and the
+> > > > > -            * page->flags of out of node pages are not initializ=
+ed.  So we
+> > > > > -            * scan [start_pfn, the biggest section's pfn < end_p=
+fn) here.
+> > > > > -            */
+> > > > > +           start_pfn =3D (unsigned long)(rgn->base >> PAGE_SHIFT=
+);
+> > > > > +           end_pfn =3D start_pfn + (unsigned long)(rgn->size >> =
+PAGE_SHIFT);
+> > > > > +
+> > > > > +           if (start_pfn < next_section_pfn)
+> > > > > +                   start_pfn =3D next_section_pfn;
+> > > > > +
+> > > > >             for (pfn =3D start_pfn; pfn < end_pfn;
+> > > > >                     pfn =3D ALIGN(pfn + 1, PAGES_PER_SECTION)) {
+> > > > >
+> > > > > -                   if (!pfn_valid(pfn))
+> > > > > -                           continue;
+> > > > > -                   /*
+> > > > > -                    * Nodes's pfns can be overlapping.
+> > > > > -                    * We know some arch can have a nodes layout =
+such as
+> > > > > -                    * -------------pfn-------------->
+> > > > > -                    * N0 | N1 | N2 | N0 | N1 | N2|....
+> > > > > -                    */
+> > > > > -                   if (pfn_to_nid(pfn) !=3D nid)
+> > > > > -                           continue;
+> > > > > +                   if (pfn_valid(pfn))
+> > > > > +                           nid =3D pfn_to_nid(pfn);
+> > > > > +                   nr_section++;
+> > > > >                     if (init_section_page_ext(pfn, nid))
+> > > > >                             goto oom;
+> > > > >                     cond_resched();
+> > > > >             }
+> > > > > +           next_section_pfn =3D pfn;
+> > > > >     }
+> > > > > +
+> > > > >     hotplug_memory_notifier(page_ext_callback, 0);
+> > > > > -   pr_info("allocated %ld bytes of page_ext\n", total_usage);
+> > > > > +   pr_info("allocated %ld bytes of page_ext for %d sections (1 s=
+ection : 0x%x)\n",
+> > > > > +           total_usage, nr_section, (1 << SECTION_SIZE_BITS));
+> > > > >     invoke_init_callbacks();
+> > > > >     return;
+> > > > >
+> > > > > --
+> > > > > 2.17.1
+> > > > >
+> > >
+> > > --
+> > > Sincerely yours,
+> > > Mike.
+>
+> --
+> Sincerely yours,
+> Mike.
 
- # To display the perf.data header info, please use --header/--header-only options.
- #
- #
- # Total Lost Samples: 0
- #
- # Samples: 12  of event 'instructions'
- # Event count (approx.): 2274583
- #
- # Children      Self  Command        Shared Object         Symbol
- # ........  ........  .............  ....................  ...........................................
- #
-    54.70%     0.00%  tsc_msrs_test  [kernel.vmlinux]      [k] entry_SYSCALL_64_after_hwframe
-            |
-            ---entry_SYSCALL_64_after_hwframe
-               do_syscall_64
-               |
-               |--29.44%--syscall_exit_to_user_mode
-               |          exit_to_user_mode_prepare
-               |          task_work_run
-               |          __fput
-
-For more information about Perf tools support for Intel® Processor Trace
-refer:
-
-  https://perf.wiki.kernel.org/index.php/Perf_tools_support_for_Intel%C2%AE_Processor_Trace
-
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
----
- tools/perf/Documentation/perf-intel-pt.txt | 70 ++++++++++++++++++++++
- tools/perf/util/intel-pt.c                 | 20 ++++++-
- 2 files changed, 88 insertions(+), 2 deletions(-)
-
-diff --git a/tools/perf/Documentation/perf-intel-pt.txt b/tools/perf/Documentation/perf-intel-pt.txt
-index 92532d0d3618..74370fc47246 100644
---- a/tools/perf/Documentation/perf-intel-pt.txt
-+++ b/tools/perf/Documentation/perf-intel-pt.txt
-@@ -1398,6 +1398,76 @@ There were none.
-           :17006 17006 [001] 11500.262869216:  ffffffff8220116e error_entry+0xe ([guest.kernel.kallsyms])               pushq  %rax
- 
- 
-+Tracing Virtual Machines - Guest Code
-+-------------------------------------
-+
-+A common case for KVM test programs is that the test program acts as the
-+hypervisor, creating, running and destroying the virtual machine, and
-+providing the guest object code from its own object code. In this case,
-+the VM is not running an OS, but only the functions loaded into it by the
-+hypervisor test program, and conveniently, loaded at the same virtual
-+addresses. To support that, option "--guest-code" has been added to perf script
-+and perf kvm report.
-+
-+Here is an example tracing a test program from the kernel's KVM selftests:
-+
-+ # perf record --kcore -e intel_pt/cyc/ -- tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test
-+ [ perf record: Woken up 1 times to write data ]
-+ [ perf record: Captured and wrote 0.280 MB perf.data ]
-+ # perf script --guest-code --itrace=bep --ns -F-period,+addr,+flags
-+ [SNIP]
-+   tsc_msrs_test 18436 [007] 10897.962087733:      branches:   call                   ffffffffc13b2ff5 __vmx_vcpu_run+0x15 (vmlinux) => ffffffffc13b2f50 vmx_update_host_rsp+0x0 (vmlinux)
-+   tsc_msrs_test 18436 [007] 10897.962087733:      branches:   return                 ffffffffc13b2f5d vmx_update_host_rsp+0xd (vmlinux) => ffffffffc13b2ffa __vmx_vcpu_run+0x1a (vmlinux)
-+   tsc_msrs_test 18436 [007] 10897.962087733:      branches:   call                   ffffffffc13b303b __vmx_vcpu_run+0x5b (vmlinux) => ffffffffc13b2f80 vmx_vmenter+0x0 (vmlinux)
-+   tsc_msrs_test 18436 [007] 10897.962087836:      branches:   vmentry                ffffffffc13b2f82 vmx_vmenter+0x2 (vmlinux) =>                0 [unknown] ([unknown])
-+   [guest/18436] 18436 [007] 10897.962087836:      branches:   vmentry                               0 [unknown] ([unknown]) =>           402c81 guest_code+0x131 (/home/user/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test)
-+   [guest/18436] 18436 [007] 10897.962087836:      branches:   call                             402c81 guest_code+0x131 (/home/user/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test) =>           40dba0 ucall+0x0 (/home/user/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test)
-+   [guest/18436] 18436 [007] 10897.962088248:      branches:   vmexit                           40dba0 ucall+0x0 (/home/user/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test) =>                0 [unknown] ([unknown])
-+   tsc_msrs_test 18436 [007] 10897.962088248:      branches:   vmexit                                0 [unknown] ([unknown]) => ffffffffc13b2fa0 vmx_vmexit+0x0 (vmlinux)
-+   tsc_msrs_test 18436 [007] 10897.962088248:      branches:   jmp                    ffffffffc13b2fa0 vmx_vmexit+0x0 (vmlinux) => ffffffffc13b2fd2 vmx_vmexit+0x32 (vmlinux)
-+   tsc_msrs_test 18436 [007] 10897.962088256:      branches:   return                 ffffffffc13b2fd2 vmx_vmexit+0x32 (vmlinux) => ffffffffc13b3040 __vmx_vcpu_run+0x60 (vmlinux)
-+   tsc_msrs_test 18436 [007] 10897.962088270:      branches:   return                 ffffffffc13b30b6 __vmx_vcpu_run+0xd6 (vmlinux) => ffffffffc13b2f2e vmx_vcpu_enter_exit+0x4e (vmlinux)
-+ [SNIP]
-+   tsc_msrs_test 18436 [007] 10897.962089321:      branches:   call                   ffffffffc13b2ff5 __vmx_vcpu_run+0x15 (vmlinux) => ffffffffc13b2f50 vmx_update_host_rsp+0x0 (vmlinux)
-+   tsc_msrs_test 18436 [007] 10897.962089321:      branches:   return                 ffffffffc13b2f5d vmx_update_host_rsp+0xd (vmlinux) => ffffffffc13b2ffa __vmx_vcpu_run+0x1a (vmlinux)
-+   tsc_msrs_test 18436 [007] 10897.962089321:      branches:   call                   ffffffffc13b303b __vmx_vcpu_run+0x5b (vmlinux) => ffffffffc13b2f80 vmx_vmenter+0x0 (vmlinux)
-+   tsc_msrs_test 18436 [007] 10897.962089424:      branches:   vmentry                ffffffffc13b2f82 vmx_vmenter+0x2 (vmlinux) =>                0 [unknown] ([unknown])
-+   [guest/18436] 18436 [007] 10897.962089424:      branches:   vmentry                               0 [unknown] ([unknown]) =>           40dba0 ucall+0x0 (/home/user/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test)
-+   [guest/18436] 18436 [007] 10897.962089701:      branches:   jmp                              40dc1b ucall+0x7b (/home/user/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test) =>           40dc39 ucall+0x99 (/home/user/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test)
-+   [guest/18436] 18436 [007] 10897.962089701:      branches:   jcc                              40dc3c ucall+0x9c (/home/user/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test) =>           40dc20 ucall+0x80 (/home/user/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test)
-+   [guest/18436] 18436 [007] 10897.962089701:      branches:   jcc                              40dc3c ucall+0x9c (/home/user/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test) =>           40dc20 ucall+0x80 (/home/user/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test)
-+   [guest/18436] 18436 [007] 10897.962089701:      branches:   jcc                              40dc37 ucall+0x97 (/home/user/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test) =>           40dc50 ucall+0xb0 (/home/user/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test)
-+   [guest/18436] 18436 [007] 10897.962089878:      branches:   vmexit                           40dc55 ucall+0xb5 (/home/user/git/work/tools/testing/selftests/kselftest_install/kvm/tsc_msrs_test) =>                0 [unknown] ([unknown])
-+   tsc_msrs_test 18436 [007] 10897.962089878:      branches:   vmexit                                0 [unknown] ([unknown]) => ffffffffc13b2fa0 vmx_vmexit+0x0 (vmlinux)
-+   tsc_msrs_test 18436 [007] 10897.962089878:      branches:   jmp                    ffffffffc13b2fa0 vmx_vmexit+0x0 (vmlinux) => ffffffffc13b2fd2 vmx_vmexit+0x32 (vmlinux)
-+   tsc_msrs_test 18436 [007] 10897.962089887:      branches:   return                 ffffffffc13b2fd2 vmx_vmexit+0x32 (vmlinux) => ffffffffc13b3040 __vmx_vcpu_run+0x60 (vmlinux)
-+   tsc_msrs_test 18436 [007] 10897.962089901:      branches:   return                 ffffffffc13b30b6 __vmx_vcpu_run+0xd6 (vmlinux) => ffffffffc13b2f2e vmx_vcpu_enter_exit+0x4e (vmlinux)
-+ [SNIP]
-+
-+ # perf kvm --guest-code --guest --host report -i perf.data --stdio | head -20
-+
-+ # To display the perf.data header info, please use --header/--header-only options.
-+ #
-+ #
-+ # Total Lost Samples: 0
-+ #
-+ # Samples: 12  of event 'instructions'
-+ # Event count (approx.): 2274583
-+ #
-+ # Children      Self  Command        Shared Object         Symbol
-+ # ........  ........  .............  ....................  ...........................................
-+ #
-+    54.70%     0.00%  tsc_msrs_test  [kernel.vmlinux]      [k] entry_SYSCALL_64_after_hwframe
-+            |
-+            ---entry_SYSCALL_64_after_hwframe
-+               do_syscall_64
-+               |
-+               |--29.44%--syscall_exit_to_user_mode
-+               |          exit_to_user_mode_prepare
-+               |          task_work_run
-+               |          __fput
-+
-+
- Event Trace
- -----------
- 
-diff --git a/tools/perf/util/intel-pt.c b/tools/perf/util/intel-pt.c
-index ec43d364d0de..66f23006cfff 100644
---- a/tools/perf/util/intel-pt.c
-+++ b/tools/perf/util/intel-pt.c
-@@ -192,6 +192,7 @@ struct intel_pt_queue {
- 	pid_t next_tid;
- 	struct thread *thread;
- 	struct machine *guest_machine;
-+	struct thread *guest_thread;
- 	struct thread *unknown_guest_thread;
- 	pid_t guest_machine_pid;
- 	bool exclude_kernel;
-@@ -688,6 +689,11 @@ static int intel_pt_get_guest(struct intel_pt_queue *ptq)
- 	ptq->guest_machine = NULL;
- 	thread__zput(ptq->unknown_guest_thread);
- 
-+	if (symbol_conf.guest_code) {
-+		thread__zput(ptq->guest_thread);
-+		ptq->guest_thread = machines__findnew_guest_code(machines, pid);
-+	}
-+
- 	machine = machines__find_guest(machines, pid);
- 	if (!machine)
- 		return -1;
-@@ -729,11 +735,16 @@ static int intel_pt_walk_next_insn(struct intel_pt_insn *intel_pt_insn,
- 	cpumode = intel_pt_nr_cpumode(ptq, *ip, nr);
- 
- 	if (nr) {
--		if (cpumode != PERF_RECORD_MISC_GUEST_KERNEL ||
-+		if ((!symbol_conf.guest_code && cpumode != PERF_RECORD_MISC_GUEST_KERNEL) ||
- 		    intel_pt_get_guest(ptq))
- 			return -EINVAL;
- 		machine = ptq->guest_machine;
--		thread = ptq->unknown_guest_thread;
-+		thread = ptq->guest_thread;
-+		if (!thread) {
-+			if (cpumode != PERF_RECORD_MISC_GUEST_KERNEL)
-+				return -EINVAL;
-+			thread = ptq->unknown_guest_thread;
-+		}
- 	} else {
- 		thread = ptq->thread;
- 		if (!thread) {
-@@ -1300,6 +1311,7 @@ static void intel_pt_free_queue(void *priv)
- 	if (!ptq)
- 		return;
- 	thread__zput(ptq->thread);
-+	thread__zput(ptq->guest_thread);
- 	thread__zput(ptq->unknown_guest_thread);
- 	intel_pt_decoder_free(ptq->decoder);
- 	zfree(&ptq->event_buf);
-@@ -2372,6 +2384,10 @@ static int intel_pt_sample(struct intel_pt_queue *ptq)
- 		ptq->sample_ipc = ptq->state->flags & INTEL_PT_SAMPLE_IPC;
- 	}
- 
-+	/* Ensure guest code maps are set up */
-+	if (symbol_conf.guest_code && (state->from_nr || state->to_nr))
-+		intel_pt_get_guest(ptq);
-+
- 	/*
- 	 * Do PEBS first to allow for the possibility that the PEBS timestamp
- 	 * precedes the current timestamp.
--- 
-2.25.1
-
+2022=EB=85=84 5=EC=9B=94 17=EC=9D=BC (=ED=99=94) =EC=98=A4=ED=9B=84 9:55, M=
+ike Rapoport <rppt@linux.ibm.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+>
+> On Tue, May 17, 2022 at 08:38:18PM +0900, Jaewon Kim wrote:
+> > Hello Mike Rapoport
+> > Thank you for your comment.
+> >
+> > Oh really? Could you point out the code or the commit regarding 'all
+> > struct pages in any section should be valid and
+> > properly initialized' ?
+>
+> There were several commits that refactored the memory map initialization,
+> freeing of the unused memory map and abuse of pfn_valid() as a substitute
+> of "is memory valid" semantics.
+>
+> > Actually I am using v5.10 based source tree on an arm64 device.
+>
+> Then most probably your change is not relevant for the upstream kernel.
+> Did you observe any issues with page_ext initialization on v5.18-rcN
+> kernels?
+>
+> > I tried to look up and found the following commit in v5.16-rc1, did
+> > you mean this?
+> > 3de360c3fdb3 arm64/mm: drop HAVE_ARCH_PFN_VALID
+>
+> Yes, this is one of those commits.
+>
+> > I guess memblock_is_memory code in pfn_valid in arch/arm64/mm/init.c, v=
+5.10
+> > might affect the page_ext_init.
+>
+> Yes. In 5.10 the pfn_valid() test in page_ext_init() will skip an entire
+> section if the first pfn in that section is not memory that can be mapped
+> in the linear map.
+>
+> But again, this should be fixed in the latest kernels.
+>
+> > Thank you
+> >
+> > 2022=EB=85=84 5=EC=9B=94 17=EC=9D=BC (=ED=99=94) =EC=98=A4=ED=9B=84 5:2=
+5, Mike Rapoport <rppt@linux.ibm.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+> > >
+> > > On Mon, May 16, 2022 at 05:33:21PM -0700, Andrew Morton wrote:
+> > > > On Mon,  9 May 2022 16:43:30 +0900 Jaewon Kim <jaewon31.kim@samsung=
+.com> wrote:
+> > > >
+> > > > > The page extension can be prepared for each section. But if the f=
+irst
+> > > > > page is not valid, the page extension for the section was not
+> > > > > initialized though there were many other valid pages within the s=
+ection.
+> > >
+> > > What do you mean by "first page [in a section] is not valid"?
+> > > In recent kernels all struct pages in any section should be valid and
+> > > properly initialized.
+> > >
+> > > > > To support the page extension for all sections, refer to memblock=
+ memory
+> > > > > regions. If the page is valid use the nid from pfn_to_nid, otherw=
+ise use
+> > > > > the previous nid.
+> > > > >
+> > > > > Also this pagech changed log to include total sections and a sect=
+ion
+> > > > > size.
+> > > > >
+> > > > > i.e.
+> > > > > allocated 100663296 bytes of page_ext for 64 sections (1 section =
+: 0x8000000)
+> > > >
+> > > > Cc Joonsoo, who wrote this code.
+> > > > Cc Mike, for memblock.
+> > > >
+> > > > Thanks.
+> > > >
+> > > > >
+> > > > > diff --git a/mm/page_ext.c b/mm/page_ext.c
+> > > > > index 2e66d934d63f..506d58b36a1d 100644
+> > > > > --- a/mm/page_ext.c
+> > > > > +++ b/mm/page_ext.c
+> > > > > @@ -381,41 +381,43 @@ static int __meminit page_ext_callback(stru=
+ct notifier_block *self,
+> > > > >  void __init page_ext_init(void)
+> > > > >  {
+> > > > >     unsigned long pfn;
+> > > > > -   int nid;
+> > > > > +   int nid =3D 0;
+> > > > > +   struct memblock_region *rgn;
+> > > > > +   int nr_section =3D 0;
+> > > > > +   unsigned long next_section_pfn =3D 0;
+> > > > >
+> > > > >     if (!invoke_need_callbacks())
+> > > > >             return;
+> > > > >
+> > > > > -   for_each_node_state(nid, N_MEMORY) {
+> > > > > +   /*
+> > > > > +    * iterate each memblock memory region and do not skip a sect=
+ion having
+> > > > > +    * !pfn_valid(pfn)
+> > > > > +    */
+> > > > > +   for_each_mem_region(rgn) {
+> > > > >             unsigned long start_pfn, end_pfn;
+> > > > >
+> > > > > -           start_pfn =3D node_start_pfn(nid);
+> > > > > -           end_pfn =3D node_end_pfn(nid);
+> > > > > -           /*
+> > > > > -            * start_pfn and end_pfn may not be aligned to SECTIO=
+N and the
+> > > > > -            * page->flags of out of node pages are not initializ=
+ed.  So we
+> > > > > -            * scan [start_pfn, the biggest section's pfn < end_p=
+fn) here.
+> > > > > -            */
+> > > > > +           start_pfn =3D (unsigned long)(rgn->base >> PAGE_SHIFT=
+);
+> > > > > +           end_pfn =3D start_pfn + (unsigned long)(rgn->size >> =
+PAGE_SHIFT);
+> > > > > +
+> > > > > +           if (start_pfn < next_section_pfn)
+> > > > > +                   start_pfn =3D next_section_pfn;
+> > > > > +
+> > > > >             for (pfn =3D start_pfn; pfn < end_pfn;
+> > > > >                     pfn =3D ALIGN(pfn + 1, PAGES_PER_SECTION)) {
+> > > > >
+> > > > > -                   if (!pfn_valid(pfn))
+> > > > > -                           continue;
+> > > > > -                   /*
+> > > > > -                    * Nodes's pfns can be overlapping.
+> > > > > -                    * We know some arch can have a nodes layout =
+such as
+> > > > > -                    * -------------pfn-------------->
+> > > > > -                    * N0 | N1 | N2 | N0 | N1 | N2|....
+> > > > > -                    */
+> > > > > -                   if (pfn_to_nid(pfn) !=3D nid)
+> > > > > -                           continue;
+> > > > > +                   if (pfn_valid(pfn))
+> > > > > +                           nid =3D pfn_to_nid(pfn);
+> > > > > +                   nr_section++;
+> > > > >                     if (init_section_page_ext(pfn, nid))
+> > > > >                             goto oom;
+> > > > >                     cond_resched();
+> > > > >             }
+> > > > > +           next_section_pfn =3D pfn;
+> > > > >     }
+> > > > > +
+> > > > >     hotplug_memory_notifier(page_ext_callback, 0);
+> > > > > -   pr_info("allocated %ld bytes of page_ext\n", total_usage);
+> > > > > +   pr_info("allocated %ld bytes of page_ext for %d sections (1 s=
+ection : 0x%x)\n",
+> > > > > +           total_usage, nr_section, (1 << SECTION_SIZE_BITS));
+> > > > >     invoke_init_callbacks();
+> > > > >     return;
+> > > > >
+> > > > > --
+> > > > > 2.17.1
+> > > > >
+> > >
+> > > --
+> > > Sincerely yours,
+> > > Mike.
+>
+> --
+> Sincerely yours,
+> Mike.

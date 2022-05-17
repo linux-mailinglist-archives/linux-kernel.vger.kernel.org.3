@@ -2,158 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E33B652A4A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C3C52A4A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348736AbiEQOUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 10:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
+        id S1348784AbiEQOVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 10:21:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241014AbiEQOUC (ORCPT
+        with ESMTP id S1348881AbiEQOVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 10:20:02 -0400
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8AE44BBA1;
-        Tue, 17 May 2022 07:20:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1652797200; x=1684333200;
-  h=from:to:cc:subject:date:message-id:references:
-   content-transfer-encoding:mime-version;
-  bh=Lqh2rLFfJWb0/AnvbgICnGACUhxOuLi45Oz1BCPwGE0=;
-  b=TrOjRXI2jFfzau/uUWN1R2JCwqd5mT4sNnBbsolsMJvcE3cnib1YIwS2
-   70xj9RBtKcwZ6NKSXgCtNaB6qSvXkh1rrr1xCvnznycYcxy06qFf3l7Ml
-   6CtIOHT8l22ByiqJmM2vQaCZF7UBGJfL4EDTs2wwQ0AJmDm3P+mpCkjVu
-   Oe9Y8qQ/n6UPYMfKuFffSwRjTkgDCzk6T50GpjmujKgOtIEb4aZPbq3xK
-   vV4VfDdnGWrxQohpRrmK1PzUhbi1KvQudlg8qb//GNMAf5WU2ypcF4j0o
-   zyKeBZbdu6YQsOYyhkTDdNoHkSpD3NbNU/aM9yuVEdOHVnYPBi7d+0rf/
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.91,233,1647273600"; 
-   d="scan'208";a="205432452"
-Received: from mail-bn1nam07lp2045.outbound.protection.outlook.com (HELO NAM02-BN1-obe.outbound.protection.outlook.com) ([104.47.51.45])
-  by ob1.hgst.iphmx.com with ESMTP; 17 May 2022 22:19:57 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YSYGm2eaXA+aFde/GhnprNibYMUqCrInYmvtQVB2//AiiB7v62iNP7wjK8DTbmLEgQtC4d1uJwzgCsiyEM8FK6Jk+Dv9hxoV/3XjeTw+cHzY9Dl4hHWunJ8NOCBdrI6xDaiPtaUS2SsNsfwJeQrJoNEYHlaJgPVoec1ji9UxA4LMotm6iGtsruAwMzsR2hz8emuXaYrFUqNz2rpIU2zm+pCtQ3DC2fjjsIIuWcs3JNsRiJbHu8m36kf6M70j6LdTyFOZknU5/LoTHFZEW5V20/77yO7FiXURB9dejWNuQOgi1fbo6O6WSq0+l5ES7+m9jYB3+jokJ+V3SrVLRnD9Yg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Lqh2rLFfJWb0/AnvbgICnGACUhxOuLi45Oz1BCPwGE0=;
- b=HBcUY5WvMcl/wVZZsvZZPJNrR+PX8nUgfOE9AMyUSOtyO3FqMrRkl9rlyJh45SAin9V7PJsCavZbyVAtRPNbPnnPBOPI7zVXqGqY5AS8FwOC3EzIk/a/5Vt/ah/iXk3OBwOZ8Sv96yqpjz781HKsS9cD/Y8o3DjAQIz647og2BOqNrP80pRypws4FyyoFljr8m7XQINbvQ52LhdJc0tXifWhDDfw7tcnJLyue4P5XKJnZqo+0M6DP30dGwLa4HAApNxvu8rrUomDko6V27G6+gtbB0NopQWSaN/80eKW3heWgaLYMlSJrhdhCPdOLNTByqTW38u4QQlVkH/fBd7pWA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
+        Tue, 17 May 2022 10:21:13 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB93F2D1F7
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:21:11 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id h14so5339064wrc.6
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:21:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Lqh2rLFfJWb0/AnvbgICnGACUhxOuLi45Oz1BCPwGE0=;
- b=eQUifDkFnOenfG8VnDqO1vdjU/c2fnMB5vph0sWPSVPUQCNfOa3uU/JJJDVUgpKCOModK9tp6sD2DWo1kLs92e+yDNvXGpsPzkQeQi+ZQoa75NCB2yFL0BbMiiPui6dNNzbp5YAemb9rTd6vxH9m6BUDUrVMG3rCYK/wRkCSG9Q=
-Received: from PH0PR04MB7416.namprd04.prod.outlook.com (2603:10b6:510:12::17)
- by BYAPR04MB5462.namprd04.prod.outlook.com (2603:10b6:a03:c4::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14; Tue, 17 May
- 2022 14:19:56 +0000
-Received: from PH0PR04MB7416.namprd04.prod.outlook.com
- ([fe80::6cfd:b252:c66e:9e12]) by PH0PR04MB7416.namprd04.prod.outlook.com
- ([fe80::6cfd:b252:c66e:9e12%3]) with mapi id 15.20.5250.018; Tue, 17 May 2022
- 14:19:56 +0000
-From:   Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
-To:     Pankaj Raghav <p.raghav@samsung.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
-        "pankydev8@gmail.com" <pankydev8@gmail.com>,
-        "dsterba@suse.com" <dsterba@suse.com>, "hch@lst.de" <hch@lst.de>
-CC:     "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        "jiangbo.365@bytedance.com" <jiangbo.365@bytedance.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "gost.dev@samsung.com" <gost.dev@samsung.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.de>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: Re: [PATCH v4 04/13] nvmet: Allow ZNS target to support
- non-power_of_2 zone sizes
-Thread-Topic: [PATCH v4 04/13] nvmet: Allow ZNS target to support
- non-power_of_2 zone sizes
-Thread-Index: AQHYaUWk3AoK5tKSj0OEio55edQW9Q==
-Date:   Tue, 17 May 2022 14:19:56 +0000
-Message-ID: <PH0PR04MB7416FD8C80A78B635891B6339BCE9@PH0PR04MB7416.namprd04.prod.outlook.com>
-References: <20220516165416.171196-1-p.raghav@samsung.com>
- <CGME20220516165424eucas1p2ee38cd64260539e5cac8d1fa4d0cba38@eucas1p2.samsung.com>
- <20220516165416.171196-5-p.raghav@samsung.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wdc.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9a3ba53c-3c55-45ef-079c-08da381051a4
-x-ms-traffictypediagnostic: BYAPR04MB5462:EE_
-x-microsoft-antispam-prvs: <BYAPR04MB5462EACD51011B87849243EA9BCE9@BYAPR04MB5462.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: cuxVqwHnUBFip96+TLTaA8hbOMEeX3XAL3BXPhPaD/hxKWL3FXNQ2/ODE+/TugOIh7PlLAu8OWfhWoUT4dWy1oGFCtVCOOmPmDECKQEcQRI2gvAyF9qUlzjx59dadfk0VP6ERO2nT0nqvXnyqTn2ZhzAv8gaoiSpUBdSE8N96+s+a0TJkKzxJ5phCCwZqzqlqryQspB5e22zT1HHE48/FmmPOZyOxex/i3XyeFdaLt7IiDXSDUM0aziNhq8ofbPDQ9f2QmWyI1cYX9Dla5p3jQDel/qFn5ZEcNVP/3hnslUjjA0/oYTsp5FOYvKmd3qv9w5bEt/gM0jdn2V5SNztY6FJ7lS2D80ntLOJwxIddQcynYLL5ZHyj4pzMl9casi1pce32kPEhRUIc7MRFj5R86VCw8m8AjlYSttNFMiMf2zw1pxLNb58h/us8fyZ/F7qiUc/0J9tkSHCVTEUyocErLF+k/fygBvEX3otK1q8BGTTWMVYKk5LHc7wOWvSDugG79wYwyamR02+FOvj2Iv/SK+Qg9E31A7J+lDDwQow0bvc0IqTtNNDfXEko03CJh7UWT5xPBsOdVO86A/vn6CVge9Vl/z4LO56/MNkAHTbnVchxQDSy4HHSFqbKXfSLFFSgNx9n4+e7PhGcxFDCdsu6egvyNFf4F1ttb8BweOEa2StDWWDdl8io4gaNTtlLpot/r5ohr/5toETDJ+m+Buu3g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR04MB7416.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(110136005)(316002)(54906003)(55016003)(6506007)(4326008)(8676002)(8936002)(66446008)(9686003)(64756008)(66476007)(33656002)(86362001)(558084003)(508600001)(186003)(71200400001)(91956017)(52536014)(122000001)(38070700005)(5660300002)(7416002)(38100700002)(82960400001)(2906002)(66556008)(76116006)(66946007)(7696005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 2
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?wXyWym6rXdZ1Kj9RG+pOQuEqLgnJWYijKXDgUTDhFBCvHFCze9hnGd7GtIl4?=
- =?us-ascii?Q?FvPs6f/4RNPhlS5Qcphw7OnA29uQihbTAh4RN6ZLj4pb7qyt4g1V1A7z6Tzu?=
- =?us-ascii?Q?4IzFCEX7ngA5MXlceOZTdSmOl/jpnZhLXyeCUKh9ISgScb6LlP+O7s+fMs+Y?=
- =?us-ascii?Q?p4PmYDCotxo9BEMR2OlnTflPe0M+UQEpyiI72lW93+8Spn+Q7yoFYNEns7+W?=
- =?us-ascii?Q?4kKLiBZppSkEnK69E18dfaSAFPjvWnGk1UM1i4IdhKxIno6tOPd5fndcxWZR?=
- =?us-ascii?Q?PxVaBHqBsQyxHbJs5rb4/4JVoQK+MQIPnlkLDK6oNeTWfZM5haWZOuqnR5nx?=
- =?us-ascii?Q?cofEcCQi0APFAZdUiWCFfJPpanJfvkBSvvs5KxkgQb5JqBk7euGySoEfesOw?=
- =?us-ascii?Q?xGDFhkIZWco9PT9BYxlV/5OUlM1DIorLG9yEWHiviOtONznpxj5wkOYW/c/R?=
- =?us-ascii?Q?xEO/6LtexnKMmPsugd1k5IuXuaDIrM4b3IySlUIAJz69O69LFqIx4R0UdAfg?=
- =?us-ascii?Q?a24+FAF6ghRY11e/jwRnWTB3eyuvbw5H97VrI6h4bTQiipY8ZYaqiIGkNWg7?=
- =?us-ascii?Q?J8KqlbGyplw5QBNL7mwu9A+B7+nYXH4jDgpSs3PeWhzad6GDsBC/i/mrhAGG?=
- =?us-ascii?Q?jtW8RSCR22eGYfAbk+RZWeaggG+nOOjfAWMHtChHL40DvmdMfkn7WIDtL/PN?=
- =?us-ascii?Q?fYVEwlZwNnE6fsQYgGHJOF2Z8L06bDfDOV+gwyucCtpvvkU3auQkWmPqb7Uf?=
- =?us-ascii?Q?yWTOQbbROVLvfIa7KY5c+NHmKSSSDy5zr5YpbHEnSyTGMKukUeAaLYKSqoz8?=
- =?us-ascii?Q?3tuV93JPUd43o8MbAuZ7rlzsu+mco27Zwm9O1xQ/Dz5D3XxsgmLREML8jHAy?=
- =?us-ascii?Q?FRlu+Xyp/mcvf4/mjmCLnADVOwtdKUwZ+RLJg7XZVFWnIPT3PgjY4/cUn1cm?=
- =?us-ascii?Q?hiW8hgSMR6VKTyC8tBxp9ooXIawdSAXLQDiapVsLqOG16+6YuBYfMdC//6R8?=
- =?us-ascii?Q?zxk5+xBe2a0zBt+DN001SE+Wx7ftkpVstKZ+rAui9DiCmams5Z+ekiZQtZ3V?=
- =?us-ascii?Q?MzEoj1aL9cTM2On5f2QZUShp+DX6oAo5xdTiYggVHnuErn8Zg97IUjozu0ZB?=
- =?us-ascii?Q?PWHwzk0wN2mw8OUay6A5lYJK8T8VrrrERsy7Foy1z0+4eXnY8nCZ/7K1Q3GR?=
- =?us-ascii?Q?nsj6cZvEbGEGw62fqGNNGGbAXtfCUaWw2cD0H8L6YSHH8CZP0Lj4iQVunLsW?=
- =?us-ascii?Q?+znzJkZCpm3VRrYZAo2glNJi7i4tKAETG4X1AAVGXKp2HTrKgFQ3+hlmMcf0?=
- =?us-ascii?Q?bMFq+XLFvdZtGeDsOce7EY230p8ooh3KbyyMJbyqGBJVlrVQq0Dv3plj4wW0?=
- =?us-ascii?Q?HflhZ7TWrpasxKX0y40OWf0lZNEN55e/3Lyka2uE+1bllvWwKFMXkNUDZ35j?=
- =?us-ascii?Q?dp1fz6OcjATn/AtmhZHs1IFRXORBuiVd6inbkzxFGhLHOkXaOynR0tGaAyPj?=
- =?us-ascii?Q?sFskbvbtE7olUedyB7mEhZB5rvFQGMJPV811sYLHYQOnJmXghiyt+EcUKev2?=
- =?us-ascii?Q?vIqVCo4Omqrq8XpOVf2BxQD8/CS3xrEigjoP/5BkHMHPESKhGxX6Hf60RMT9?=
- =?us-ascii?Q?n7B7mzhAtr4q3qPQatQDqNb/69H+ZQIMyoLi2o5FGcdqjEHv3Gsbf2nfe9T7?=
- =?us-ascii?Q?If5TqlmRp6FqAIaEMnu9a1OxFMTCSEudCyr05s4ET/Uqe5fJJWHGCUtHFVAL?=
- =?us-ascii?Q?r3zIz6BBw1aqVT6WxCXvLgktMGuXW4CbJZFGr9bLCnvWQUtqH8U+r49UjRZ4?=
-x-ms-exchange-antispam-messagedata-1: E+DYvtfpoHJfwfCfyeGM53tZyNW3K9Au3oiYzjj/NyJ5ZqD95cEoPJ90
-Content-Type: text/plain; charset="us-ascii"
+        d=linaro.org; s=google;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=w3FmS8E9GJtG8KLMLCBP6OvEjEYRbncgJvuz92a9Y3Q=;
+        b=reiEdp1V5nE0JJpdbBW2qBOflS79Ztgb8g8CdO/Li+I37z7PR/59XE+Leg1L75CqQw
+         9BK6faOl2tdi01jeq7p0CxMeqwUAP/8qr1OWlOck10571SjEiPhn6wA1kqE+GEt4S8br
+         pjJjOypYrTSGrc73ECniAR48ENwqW0G+dWPV5cohLnjN5DEtKiGZXQwy1eEldaU12TVp
+         i3GTSqcC/HcH+zoKUymPtYAbdOwPYjViLp0qOIuU/MNmtJQFiFAwJKrmQcIZOhvZSoYq
+         1TO4gDor+UHW9mcxYF1TSzosi3or36/MC5o0jiEJB3EPIpv9Dij9oTYF5qrTs9T5Ar7K
+         Fubg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=w3FmS8E9GJtG8KLMLCBP6OvEjEYRbncgJvuz92a9Y3Q=;
+        b=qXu4JLsYlORxcilqtfT5Jx/49xEZ+O2Ka2rB/hiMuZER5uOblijcx4AmRlUsUFH4Ng
+         KfNgl0tTKjTV3EZx8Xeri7e6dvy0wSR+C+9hgviqOJ6UR7t28HABknxZ8WZfkBvBOTXN
+         004sOMg3aquSfljDW1hmpjHf+KlpjLIeR23GdgLzSTzAJ6TxMe4y+hTPXNPQNbBkPZhq
+         mZSWYZXh7IBp7ajDSKKwUCLuKk8kP/8tmvWq2o/naQGh/3lbV2zRQvneWwLo2MvoGE0M
+         QLvrP8KZhvgwflp6w5rAB9lw+xrDp0jZNp8oQBpjPLzDufnsOzNZcFOyNYVPLSaUiQpR
+         BpvA==
+X-Gm-Message-State: AOAM531+4v7n0wwOYvDsBTbb47NoZOY5APX3WBdeVXUIfDyqRwMRkmQV
+        x2O9Vxt4joZ7dvzjYpXuGBo9VuKsUp5dmg==
+X-Google-Smtp-Source: ABdhPJzDo6M41lTh6LfJJOPr5Ccy1udQgFveVfW+rzJ2VmZxCOHS/lYnJrFJ8GYXESDMFs6f/GY+dA==
+X-Received: by 2002:adf:ed01:0:b0:20c:c137:aaeb with SMTP id a1-20020adfed01000000b0020cc137aaebmr19194049wro.638.1652797270323;
+        Tue, 17 May 2022 07:21:10 -0700 (PDT)
+Received: from [192.168.0.17] ([83.216.184.132])
+        by smtp.gmail.com with ESMTPSA id g16-20020a7bc4d0000000b003942a244ed6sm1987123wmk.27.2022.05.17.07.21.09
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 17 May 2022 07:21:09 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH -next v2 2/2] block, bfq: make bfq_has_work() more
+ accurate
+From:   Paolo Valente <paolo.valente@linaro.org>
+In-Reply-To: <20220516095620.ge5gxmwrnbanfqea@quack3.lan>
+Date:   Tue, 17 May 2022 16:21:08 +0200
+Cc:     Yu Kuai <yukuai3@huawei.com>, Jens Axboe <axboe@kernel.dk>,
+        linux-block <linux-block@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
 Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR04MB7416.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a3ba53c-3c55-45ef-079c-08da381051a4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 May 2022 14:19:56.6058
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: It57Z7bP9Qz2ngmJ9rvHDvhOGfNGMOdaZRq8ISab8AciVLVMo/W2nI3BEcSBarV7I6p+PuLHYBZT9Qk2+B3K/UwX9yyzeInPBTi77xP54pU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR04MB5462
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <740D270D-8723-4399-82CC-26CD861843D7@linaro.org>
+References: <20220513023507.2625717-1-yukuai3@huawei.com>
+ <20220513023507.2625717-3-yukuai3@huawei.com>
+ <20220516095620.ge5gxmwrnbanfqea@quack3.lan>
+To:     Jan Kara <jack@suse.cz>
+X-Mailer: Apple Mail (2.3445.104.11)
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I think this is useful even without the rest of the npo2 patches.=0A=
-=0A=
-Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>=0A=
+
+
+> Il giorno 16 mag 2022, alle ore 11:56, Jan Kara <jack@suse.cz> ha =
+scritto:
+>=20
+> On Fri 13-05-22 10:35:07, Yu Kuai wrote:
+>> bfq_has_work() is using busy_queues currently, which is not accurate
+>> because bfq_queue is busy doesn't represent that it has requests. =
+Since
+>> bfqd aready has a counter 'queued' to record how many requests are in
+>> bfq, use it instead of busy_queues.
+>>=20
+
+The number of requests queued is not equal to the number of busy
+queues (it is >=3D).  If this patch is based on this assumption then
+unfortunately it is wrong :(
+
+Paolo
+
+>> Noted that bfq_has_work() can be called with 'bfqd->lock' held, thus =
+the
+>> lock can't be held in bfq_has_work() to protect 'bfqd->queued'.
+>>=20
+>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>=20
+> Looks good. Feel free to add:
+>=20
+> Reviewed-by: Jan Kara <jack@suse.cz>
+>=20
+> 								Honza
+>=20
+>> ---
+>> block/bfq-iosched.c | 16 ++++++++++++----
+>> 1 file changed, 12 insertions(+), 4 deletions(-)
+>>=20
+>> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+>> index 61750696e87f..740dd83853a6 100644
+>> --- a/block/bfq-iosched.c
+>> +++ b/block/bfq-iosched.c
+>> @@ -2210,7 +2210,11 @@ static void bfq_add_request(struct request =
+*rq)
+>>=20
+>> 	bfq_log_bfqq(bfqd, bfqq, "add_request %d", rq_is_sync(rq));
+>> 	bfqq->queued[rq_is_sync(rq)]++;
+>> -	bfqd->queued++;
+>> +	/*
+>> +	 * Updating of 'bfqd->queued' is protected by 'bfqd->lock', =
+however, it
+>> +	 * may be read without holding the lock in bfq_has_work().
+>> +	 */
+>> +	WRITE_ONCE(bfqd->queued, bfqd->queued + 1);
+>>=20
+>> 	if (RB_EMPTY_ROOT(&bfqq->sort_list) && bfq_bfqq_sync(bfqq)) {
+>> 		bfq_check_waker(bfqd, bfqq, now_ns);
+>> @@ -2402,7 +2406,11 @@ static void bfq_remove_request(struct =
+request_queue *q,
+>> 	if (rq->queuelist.prev !=3D &rq->queuelist)
+>> 		list_del_init(&rq->queuelist);
+>> 	bfqq->queued[sync]--;
+>> -	bfqd->queued--;
+>> +	/*
+>> +	 * Updating of 'bfqd->queued' is protected by 'bfqd->lock', =
+however, it
+>> +	 * may be read without holding the lock in bfq_has_work().
+>> +	 */
+>> +	WRITE_ONCE(bfqd->queued, bfqd->queued - 1);
+>> 	elv_rb_del(&bfqq->sort_list, rq);
+>>=20
+>> 	elv_rqhash_del(q, rq);
+>> @@ -5063,11 +5071,11 @@ static bool bfq_has_work(struct blk_mq_hw_ctx =
+*hctx)
+>> 	struct bfq_data *bfqd =3D hctx->queue->elevator->elevator_data;
+>>=20
+>> 	/*
+>> -	 * Avoiding lock: a race on bfqd->busy_queues should cause at
+>> +	 * Avoiding lock: a race on bfqd->queued should cause at
+>> 	 * most a call to dispatch for nothing
+>> 	 */
+>> 	return !list_empty_careful(&bfqd->dispatch) ||
+>> -		bfq_tot_busy_queues(bfqd) > 0;
+>> +		READ_ONCE(bfqd->queued);
+>> }
+>>=20
+>> static struct request *__bfq_dispatch_request(struct blk_mq_hw_ctx =
+*hctx)
+>> --=20
+>> 2.31.1
+>>=20
+> --=20
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR
+

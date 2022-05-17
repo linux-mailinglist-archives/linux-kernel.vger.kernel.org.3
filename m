@@ -2,80 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B59CA52AE8A
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 01:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5205D52AE97
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 01:30:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231733AbiEQX1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 19:27:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37726 "EHLO
+        id S231758AbiEQXaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 19:30:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231715AbiEQX1h (ORCPT
+        with ESMTP id S231644AbiEQXas (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 19:27:37 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2693584C
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 16:27:36 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2fed823dd32so6603657b3.12
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 16:27:36 -0700 (PDT)
+        Tue, 17 May 2022 19:30:48 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4E864F0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 16:30:42 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id n10so618385ejk.5
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 16:30:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=o3Jcn1iAarxojLmeUPOFMO73FT+c4hfJanwaPilfZzg=;
-        b=QqrrLB9fcAAqWfAdPHgvPg1TR8H44QppAqFbge8zxueoMw3Lc78YQjaMIqeRxQYjWy
-         yEglKnCqd4+ukyd5esKDU04HjYYF9BJ8LclvkX/9OU/h+JmVwmnTsiyuc4j/BZVo4hVb
-         kEuj9+XxADeB2pPPFs88jkAACTQbS6YqGGt8Y=
+        bh=kje1fxePklyTYdwuahnUd7jrh3kjOYPr65ooSYjVE44=;
+        b=BZgE0jkbkeLVvFmb8ruOV8av8A5Vi/cJesgkFUe7yW3/UIFp5JuLCAIksYmq6dxaPC
+         UTmFxH4fn4hS3/gzRePwOA9Zgz2QoeR/e7KsL6wHOQMvCBYOzvoW2yP96YAu1wlsdo/W
+         OYW4HOnAUXA1JVGJiazKgXoK/bUipg6BPRZaPd0iU4I6XDCU9CWewInibc8sy+vWJYxb
+         GbGtI+anWZDqWuOTylV0pzWc9p1n+hpH4zF0jqzCG43N/eDSdV5LLd69UT0bGeoGyGse
+         0mKYTvfzrYVwqtPqL3gqbyjVL7SFmO6Pfdv96YRbeDf3urkh47YcrQa2GcXbFgbNtfr9
+         LXxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=o3Jcn1iAarxojLmeUPOFMO73FT+c4hfJanwaPilfZzg=;
-        b=BMpBOVax3oCOHigc2Tv97EHZIdub561TkYrsT/GCLqsYSQ8GOiOJZiCRnzrC6Ts8Q2
-         2mRNgGC+k5PqqeT6qkccwx7NeUeBhkHT5Up0Ry/CNiZbNgteBs8M+278wNsEqJiZWtCJ
-         dU/EeSAeEEuYvejWOIx2btIW71m5Qj1BFRfXPZlAqH1zWz0eyyMRk1pUeglL8PtJc9Du
-         5NzSP/Bth9QC3YL1feC0XKEKJejDQtXbCI485nHBMR1fp3ejhK6xOxfjgDCBBfyQbtH5
-         dYiRr2qn8CHJGdG3eIHelLh/Dv5lrn9bbx2d7waPkcTaEnrvhtvy8Tmay1nSWkoawhsM
-         jsLg==
-X-Gm-Message-State: AOAM533syNE6H7thptEoq5eqzliih/FORXpkrUCew5XcHGngjwPRbWlG
-        GcsRZ/zU2QsvAQYSiB7n6j+EQisYjsLH74Qk6y9BeQ==
-X-Google-Smtp-Source: ABdhPJwrRA7kBmvE15oZulIgerECBDp5F44haVqE1VZK01HEAhB7hYdgStNdM2eQvN61omEB1Q9v0hIVM/WTgwwNGOc=
-X-Received: by 2002:a81:604:0:b0:2e6:6b45:4812 with SMTP id
- 4-20020a810604000000b002e66b454812mr28130840ywg.266.1652830055463; Tue, 17
- May 2022 16:27:35 -0700 (PDT)
+        bh=kje1fxePklyTYdwuahnUd7jrh3kjOYPr65ooSYjVE44=;
+        b=FlDsZigN3MXysJ66pGfD4K1P7V6RW5MT4AsEStGZO5PkAS3k0fEsr9ePLWNXBWedRx
+         u5bywjVri27tlmLxEW7gJaQ+BHhxpt30gXBwy/2OPvRu8fiVcw6b3yqRn6YOrheRg4ub
+         pdZAsDtv5MBwkyK/KegI50RO4bMztSEWOwz9EznOBngYcYM7N72VYLPmwuBjJi4zJNuQ
+         eG5TrX1g3KemUoo5H2AjHa0OIkXI0nf3fk/SPszH3+vkjy0x+0Ry6lak/99gXUtbjn9u
+         ayRcT7GSRAbJXlV2sKN5mIN1HSq8ZZVrUQREZD4ak+3QEVTWzEwRQ6jLENaxif5XPs6J
+         NMkg==
+X-Gm-Message-State: AOAM530GyO9q5bvoXvXxyvhrzExZlL8y6p3YnLmo1eQI7AEts5q833eX
+        olMTY8L8eMfbw5lKjJt7ff/+M9Q7B5utuTJuyEdMVw==
+X-Google-Smtp-Source: ABdhPJynpuiODXlilJ4ccPPw09Oypx2Cww6BUXEGpKKQ1/r4bC3SNcHdzpBPpWcDWLBl7XOueU5+lIF135DZSaWqEEs=
+X-Received: by 2002:a17:906:6a10:b0:6f5:5e4:9d5 with SMTP id
+ qw16-20020a1709066a1000b006f505e409d5mr21615657ejc.122.1652830241187; Tue, 17
+ May 2022 16:30:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220511222910.635307-1-dlunev@chromium.org> <20220512082832.v2.2.I692165059274c30b59bed56940b54a573ccb46e4@changeid>
- <YoQfls6hFcP3kCaH@zeniv-ca.linux.org.uk> <YoQihi4OMjJj2Mj0@zeniv-ca.linux.org.uk>
-In-Reply-To: <YoQihi4OMjJj2Mj0@zeniv-ca.linux.org.uk>
-From:   Daniil Lunev <dlunev@chromium.org>
-Date:   Wed, 18 May 2022 09:27:23 +1000
-Message-ID: <CAONX=-fhM-TkOVyS+65WzyRoLwnL8nqd5HDNUv8sUvQyzw0-fw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] FUSE: Retire superblock on force unmount
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-fsdevel@vger.kernel.org, hch@infradead.org,
-        fuse-devel@lists.sourceforge.net, tytso@mit.edu, miklos@szeredi.hu,
-        linux-kernel@vger.kernel.org
+References: <20220510235653.933868-1-tjmercier@google.com> <3365cd1d750e84fedc8e75d646a77ffd85619d35.camel@ndufresne.ca>
+ <CABdmKX3ZV6-u-oLvW_wWavAMBfrsZ=C_rCgK_Uz4VjxcRvRFew@mail.gmail.com>
+ <81026ef07c1ce20f8673b75b17bab79a2b39c548.camel@ndufresne.ca>
+ <CABdmKX2LxZ6zZR=fhXfnuWCB2BR+gzDd1-t1DD2A2XP24wvuGQ@mail.gmail.com> <Yn6DpUsoSz1/15Kc@slm.duckdns.org>
+In-Reply-To: <Yn6DpUsoSz1/15Kc@slm.duckdns.org>
+From:   "T.J. Mercier" <tjmercier@google.com>
+Date:   Tue, 17 May 2022 16:30:29 -0700
+Message-ID: <CABdmKX1xvm87WMEDkMc9Aye46E4zv1-scenwgaRxHesrOCsaYg@mail.gmail.com>
+Subject: Re: [PATCH v7 0/6] Proposal for a GPU cgroup controller
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Shuah Khan <shuah@kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
+        John Stultz <jstultz@google.com>,
+        Carlos Llamas <cmllamas@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kernel-team@android.com, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Al,
-Here is my v1 version of the patch which does skip the node in testing super
-https://lore.kernel.org/linux-fsdevel/20220511013057.245827-1-dlunev@chromium.org/T/#u
-I am not particular which version is to be used. However note, it still needs
-to remove the bdi node since otherwise the new mount will have a conflict.
-The bdi put should not kill the bdi if it has more references (and then
-conflict would still occur, but chances of bdi being opened for a long time
-is low AFAIU), thus this should be safe, but I might be missing something.
-Note, that FUSE super block at the time is barely alive, it may have open
-filehandles/references, but the connection with user space is already cut
-and all of the ops would return transport error.
-Let me know what you think and how we can address it better maybe?
-Thanks,
-Daniil
+On Fri, May 13, 2022 at 9:13 AM Tejun Heo <tj@kernel.org> wrote:
+>
+> Hello,
+>
+> On Thu, May 12, 2022 at 08:43:52PM -0700, T.J. Mercier wrote:
+> > > I'm actually happy I've asked this question, wasn't silly after all. I think the
+> > > problem here is a naming issue. What you really are monitor is "video memory",
+> > > which consist of a memory segment allocated to store data used to render images
+> > > (its not always images of course, GPU an VPU have specialized buffers for their
+> > > purpose).
+> > >
+> > > Whether this should be split between what is used specifically by the GPU
+> > > drivers, the display drivers, the VPU (CODEC and pre/post-processor) or camera
+> > > drivers is something that should be discussed. But in the current approach, you
+> > > really meant Video memory as a superset of the above. Personally, I think
+> > > generically (to de-Andronized your work), en-globing all video memory is
+> > > sufficient. What I fail to understand is how you will manage to distinguished
+> > > DMABuf Heap allocation (which are used outside of Android btw), from Video
+> > > allocation or other type of usage. I'm sure non-video usage will exist in the
+> > > future (think of machine learning, compute, other high bandwidth streaming
+> > > thingy ...)
+> > >
+> > Ok thank you for pointing out the naming issue. The naming is a
+> > consequence of the initial use case, but I guess it's too specific.
+> > What I want out of this change is that android can track dmabufs that
+> > come out of heaps, and drm can track gpu memory. But other drivers
+> > could track different resources under different names. Imagine this
+> > were called a buffer cgroup controller instead of a GPU cgroup
+> > controller. Then the use component ("video memory") isn't tied up with
+> > the name of the controller, but it's up to the name of the bucket the
+> > resource is tracked under. I think this meets the needs of the two use
+> > cases I'm aware of now, while leaving the door open to other future
+> > needs. Really the controller is just enabling abstract named buckets
+> > for tracking and eventually limiting a type of resource.
+>
+> So, there hasn't been whole lot of discussion w/ other GPU folks and what
+> comes up still seems to indicate that we're still long way away from having
+> a meaningful gpu controller.
+>
+Yes, and I would still be happy to collaborate.
+
+> For your use case, would it make sense to just
+> add dmabuf as a key to the misc controller?
+>
+Thanks for your suggestion. This almost works. "dmabuf" as a key could
+work, but I'd actually like to account for each heap. Since heaps can
+be dynamically added, I can't accommodate every potential heap name by
+hardcoding registrations in the misc controller.
+
+> I'm not sure it makes sense to
+> push "gpu controller" forward if there's no conceptual consensus around what
+> resources are.
+>
+> Thanks.
+>
+> --
+> tejun

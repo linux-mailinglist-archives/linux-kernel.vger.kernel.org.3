@@ -2,116 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51BF45296E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 03:46:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7130B5296EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 03:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236096AbiEQBqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 21:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37602 "EHLO
+        id S235562AbiEQBuc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 16 May 2022 21:50:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237880AbiEQBqG (ORCPT
+        with ESMTP id S229881AbiEQBu3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 21:46:06 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3139027CF3;
-        Mon, 16 May 2022 18:46:05 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id bh5so4273941plb.6;
-        Mon, 16 May 2022 18:46:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EPzXnjqGBoKUSwMfOnRB4WealJxyf+zAfiRWCAG8cJI=;
-        b=jJiuUNa5v8rogNVYljE2jP8mNUf7yu2SAtnYwjlSgtZR7lXQq/cy/I7PTqOjUrQ/Xg
-         bnnbmf5EzLoBO1UviRKV++IflXu3P5FoQxvKI2aLhaafAUJxwCvMOg7saOuhTw/cH3Kf
-         cggxDMlLT6HdnpDMQF1qQqyso8vAd8UHbQreGG0KYVEDswn8LPrPuZgMa7fe67jp5INX
-         zVqMCr+ka6rq6V6xD2XNLBYLnVu/QidFNXHyBoccTkTq6GiS80Ft86dSfMZQ1gFdMCJ8
-         dWyaeQonJrc/XCxa7+xDaNVgdJWqI5Tft0rC/HuQXZQ6rJaicz9QIYsI05Yo3LZxzXvG
-         NIxw==
+        Mon, 16 May 2022 21:50:29 -0400
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2282827CEF;
+        Mon, 16 May 2022 18:50:28 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id d137so10929718ybc.13;
+        Mon, 16 May 2022 18:50:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EPzXnjqGBoKUSwMfOnRB4WealJxyf+zAfiRWCAG8cJI=;
-        b=S07RIgS/XEZu5P9Uz38FSGBDLuaWH80c7aeJb7SXXHGAFTw7bGWApBJGcc4Us+rILp
-         N7YZdxDNnhLzz/eMTceYmmiZWgca0w4U2JmQgfng1LOESomIuugS9/oW1+9hOrjakO6C
-         r7AivOmONMCbAEGzm3VndKh0FSdFqmg74c7b9I69GMgNFb//7lJGCSzUqTycN8d0vpeN
-         K+dmcgffSsnJ1JYIgf5aaItk/z1uBmeCGwiRNTEYL1VsPLw+ZMU4fkXImKRhqH8eVdyC
-         YP3S7hL0jni35fPYWaRDUn/EtPXZALRXlGtA0swf3KMPP0Po9RJE1odeBg2Amgg4tAId
-         QU/w==
-X-Gm-Message-State: AOAM5303ON9FxhhkOyuCtF5OB5yj3dGjVLf1lgbNwxMdZs29TEhRxfOI
-        yQvUrBBubMkWMH34iVebs6aTWxgym92X9aVhCkcM0NWEASs=
-X-Google-Smtp-Source: ABdhPJy6Wce9xA6NUB7pq4rf3jfiGgaWIljqAiscSttVZawINcOjbSzgSuTCIgND7606T2IiV+PWDuyR49HGz64IzYo=
-X-Received: by 2002:a17:90b:1e4b:b0:1dc:7b66:55d6 with SMTP id
- pi11-20020a17090b1e4b00b001dc7b6655d6mr22558088pjb.80.1652751964635; Mon, 16
- May 2022 18:46:04 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=HAQnHQkvvpfj4UWRUX9L3RaXSVUszfpcXLBvvM7+tw8=;
+        b=wQ/ypxNrN/iFv/cYUPJTwpSSUQfSVV4XBxNYHrhMzbE6qeig8gfdHPWrdmflUMrSvT
+         0ztNqrzrKLF0el2nmh499EWRDRcPesDezAMatL4pBxTPhk7Lc7Qe2t4Um0DqdEhZSB1s
+         cuBdsqbyHNFh9QJod8aQv8qBFaw4gNPqXDyTSgtPORFDtsCntfvj76iq8lOD87f1LLIV
+         JPto/tFGLu4KgaxbbeHy/TLyYgObXcedowQx6gdsiBnmo09PYLvPKO341TiEXcoE9EJB
+         NfHqak5lHXt4r+qts9DDjRWYMbNAmLeK6yECp9Vd2JrjBVRbAv4tvts8N1HB7E+B0uJH
+         zqbQ==
+X-Gm-Message-State: AOAM5336sowx5yL7EB8UAqb9kAGx2qftzWKkUGIXgB3dyE8O/v/mUCM/
+        DhAuFMh2zeQvzJ+zw29jjTli8WPpt4+ZStvNkSg=
+X-Google-Smtp-Source: ABdhPJzWdOTPcCnkYNgmduZHSmNH9ivwxv5LGSE4dNqt9li2/a5ScUyfMMUVpuGjRGzeql3MBWJuqzLaGVHVm2b4LHk=
+X-Received: by 2002:a25:e093:0:b0:64d:6c85:6bc6 with SMTP id
+ x141-20020a25e093000000b0064d6c856bc6mr12326409ybg.500.1652752227297; Mon, 16
+ May 2022 18:50:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220516193625.489108457@linuxfoundation.org>
-In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
-From:   Zan Aziz <zanaziz313@gmail.com>
-Date:   Mon, 16 May 2022 19:45:53 -0600
-Message-ID: <CAFU3qoYWAoffx9vDAb1qppCtXq8Rx5X53HyniKpGY8e8NVmC9Q@mail.gmail.com>
-Subject: Re: [PATCH 5.17 000/114] 5.17.9-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+ <20220514141650.1109542-1-mailhol.vincent@wanadoo.fr> <20220514141650.1109542-4-mailhol.vincent@wanadoo.fr>
+ <7b1644ad-c117-881e-a64f-35b8d8b40ef7@hartkopp.net>
+In-Reply-To: <7b1644ad-c117-881e-a64f-35b8d8b40ef7@hartkopp.net>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 17 May 2022 10:50:16 +0900
+Message-ID: <CAMZ6RqKZMHXB7rQ70GrXcVE7x7kytAAGfE+MOpSgWgWgp0gD2g@mail.gmail.com>
+Subject: Re: [PATCH v3 3/4] can: skb:: move can_dropped_invalid_skb and
+ can_skb_headroom_valid to skb.c
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Max Staudt <max@enpas.org>,
+        netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 2:21 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+Hi Oliver,
+
+On Mon. 16 May 2022 at 04:17, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+> Hi Vincent,
 >
-> This is the start of the stable review cycle for the 5.17.9 release.
-> There are 114 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> On 14.05.22 16:16, Vincent Mailhol wrote:
+> > The functions can_dropped_invalid_skb() and can_skb_headroom_valid()
+> > grew a lot over the years to a point which it does not make much sense
+> > to have them defined as static inline in header files. Move those two
+> > functions to the .c counterpart of skb.h.
+> >
+> > can_skb_headroom_valid() only caller being can_dropped_invalid_skb(),
+> > the declaration is removed from the header. Only
+> > can_dropped_invalid_skb() gets its symbol exported.
 >
-> Responses should be made by Wed, 18 May 2022 19:36:02 +0000.
-> Anything received after that time might be too late.
+> I can see your point but the need for can-dev was always given for
+> hardware specific stuff like bitrates, TDC, transceivers, whatever.
+
+I also see your point :)
+Actually, I raised the exact same idea in a previous message:
+https://lore.kernel.org/linux-can/CAMZ6RqLU-Wg0Cau3cM=QsU-t-7Lyzmo1nJ_VAA4Mbw3u0jnNtw@mail.gmail.com/
+
+But you were not in CC and it seems that there is a lot of congestion
+recently on the mailing list so I wouldn’t be surprised if you tell me
+you did not receive it.
+
+> As there would be more things in slcan (e.g. dev_alloc_skb() could be
+> unified with alloc_can_skb())
+
+And also the can_{put,get}_echo_skb() I guess.
+
+> would it probably make sense to
+> introduce a new can-skb module that could be used by all CAN
+> virtual/software interfaces?
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.9-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+> Or some other split-up ... any idea?
 
-Hi Greg,
+My concern is: what would be the merrit? If we do not split, the users
+of slcan and v(x)can would have to load the can-dev module which will
+be slightly bloated for their use, but is this really an issue? I do
+not see how this can become a performance bottleneck, so what is the
+problem?
+I could also argue that most of the devices do not depend on
+rx-offload.o. So should we also split this one out of can-dev on the
+same basis and add another module dependency?
+The benefit (not having to load a bloated module for three drivers)
+does not outweigh the added complexity: all hardware modules will have
+one additional modprobe dependency on the tiny can-skb module.
 
-Compiled and booted on my test system Lenovo P50s: Intel Core i7
-No emergency and critical messages in the dmesg
+But as said above, I am not fully opposed to the split, I am just
+strongly divided. If we go for the split, creating a can-skb module is
+the natural and only option I see.
+If the above argument does not convince you, I will send a v3 with that split.
 
-./perf bench sched all
-# Running sched/messaging benchmark...
-# 20 sender and receiver processes per group
-# 10 groups == 400 processes run
 
-     Total time: 0.439 [sec]
-
-# Running sched/pipe benchmark...
-# Executed 1000000 pipe operations between two processes
-
-     Total time: 11.491 [sec]
-
-      11.491534 usecs/op
-          87020 ops/sec
-
-Tested-by: Zan Aziz <zanaziz313@gmail.com>
-
-Thanks
--Zan
+Yours sincerely,
+Vincent Mailhol

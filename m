@@ -2,121 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C89452AD1B
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 22:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D767452AD1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 22:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353045AbiEQU4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 16:56:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
+        id S245613AbiEQU41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 16:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353138AbiEQU4K (ORCPT
+        with ESMTP id S237362AbiEQU4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 16:56:10 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B636B55BC
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:56:09 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id fu47so291537qtb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:56:09 -0700 (PDT)
+        Tue, 17 May 2022 16:56:16 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212116335;
+        Tue, 17 May 2022 13:56:14 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id r6-20020a1c2b06000000b00396fee5ebc9so13903wmr.1;
+        Tue, 17 May 2022 13:56:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=IlwUjNSLf76IqlK4dytNhwOeLSPnXacyr795IjKBjN0=;
-        b=OhMMKe4D/Xy4ZfBgi4xNp/2vinjcK1iw9/dAHtcgVHLrurwYDrxu+nvOuw6/1QxysI
-         6QaUP0Xphjt8+WFHFz9mMPJCGlJ8cxXARBeTpcubZhogfi32h9bDuDPIM/ehqlanH+FG
-         zQC/R8uYxpXzjBokrAVv5F8CsznHIAKSvPdVLo2hXgt1ygUGIIN/PBS1VvfNQAUbj58r
-         iNqUWGaaQm4bqgvRit1H7duT8ehgKFPB94Dx3olM0Z3T2PlaC4kTe2Pci1ypIZU2kVLp
-         3LZqfU/RjwK3UIQjoEHTLemGexjTRhgHH6cF99pf93CP6bGgM/fe6fPUO/W8yVtiocm7
-         +Rmg==
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=SttB0Al2SmA1Ml2eTj/wShEo5Nwp1X2GJB1Zw/Jq5fs=;
+        b=XAvJ64DTg2filoPTc7irccoZINdkOQRv9oxEwoMQGDhK4O1U80pzXCFuZjJVE3FjWp
+         wzyfulpgNydLZVyljEzJHhtWMj9TFHHiioK0yIligTXDdr1L2F7tFsWbpKCz8Nm7vjD1
+         yiDrUo8mdB8Jqn5GQhTTPNZVk4ZnTLL07oF7cdSEAGneTPaznZcwQrFAIlMth93g4PyC
+         sW2qatOQM3Lek969GECns1t2VlOEOK2/0KvGW+q6kJJ7DqrATSSGGlpJd9aWE8fozGGl
+         r7K5fNQnME+1rDbh7xE5bhnLOB9GWe+Ucl/mHSw8/fHLTtRSNGDk5iq8NcGtQP8hlqGG
+         h67A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IlwUjNSLf76IqlK4dytNhwOeLSPnXacyr795IjKBjN0=;
-        b=MJfdj32LxGTcUXDRfTFHNBO9D1yLab5//rX7uXOHp1HiD9HnfC07pr8eAYoLQfPgKJ
-         8lngkZChTvAWxfx1UWNg+mmEA3/+zqYpddskUEJaz69YhuFdIJLoEuY50g6uTcsUEH0i
-         JLCtSqCw6tNCxEgnCbDq9Q1EZbTV1MXoSrBWxGA7byfgT43v/A0zEbnqvK2MGT1dphDo
-         USbsdsARztaEHs8z0xrjiOyJ+cG6R6bvo9I6c7H00zeMp4VUJxKXiDAWM9GLxkGJOpEn
-         UpdYMSQTZFh278hjaGeiZQpHRAXqudHYYS2YvHy0tkV3nzS5TP/ziK1bKVYJ9aOywnlo
-         yhpA==
-X-Gm-Message-State: AOAM532TEBtLR2imKIfJeTo9wicDv0EOk9cPUwQSPavJPyQmm5MwcSI+
-        qiURvJmMNXlnFesK3yuuN/xAqWpyU/g52A==
-X-Google-Smtp-Source: ABdhPJzI8jTA6RPSQ/jSxS3vrh06ZHXlk0E56JG7bV/rr2t7IxudeVW3ddgVrP3RbcBI/Af2Qwrl9w==
-X-Received: by 2002:a05:622a:1a24:b0:2f3:bc7c:dade with SMTP id f36-20020a05622a1a2400b002f3bc7cdademr21557051qtb.647.1652820968738;
-        Tue, 17 May 2022 13:56:08 -0700 (PDT)
-Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id 78-20020a370a51000000b0069ffe63228fsm112755qkk.121.2022.05.17.13.56.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 13:56:07 -0700 (PDT)
-Message-ID: <1cbd12ad-4147-5d97-ef7f-4104b630244b@linaro.org>
-Date:   Tue, 17 May 2022 15:56:06 -0500
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SttB0Al2SmA1Ml2eTj/wShEo5Nwp1X2GJB1Zw/Jq5fs=;
+        b=vrw7919geKxjaOng9yRjR3oHJwGJcWur8bkKUKNMqoKTxyjng4IdYiwKnumdNsEHkX
+         Hn4MzApmPMoCRwPRNw6Q3Y7nS/olQb1qqeyUZeiibCso5BJiag8unlxSO/v83yLMIsKh
+         6lSHTGlYe155U+zFK7nv39smYll8FI4glS5SjneK8WKCfQ5a0EnGkixppXJShfG+hum7
+         fO+8RllMD/e3MzoTUEKFkvy0Bw27EJympRf5HL7paBJ1V2vayV5Hw0wsfreQJUCLMh3L
+         /MDQjbVWILO9QGSzvwsAtqvwAW/yghBz99w76/oNjlz02vlMegWnDbVW8zzGZC8xrq/k
+         ddhA==
+X-Gm-Message-State: AOAM5330FBIT5FABY1nzucW94gmcMdJ62dvK/hef0OKOUUo4ouR744Od
+        k0BrOIXrj1Hf18FcSrOdXCxOSZ3t2gc=
+X-Google-Smtp-Source: ABdhPJxlpNKQuhQSJ2hEFYuSL2olvE3fgInpxw9a5UdtqtVkXl3QVdrp6UlvAJnusHS8jfSHPkGvdg==
+X-Received: by 2002:a7b:c5cd:0:b0:38c:8b1b:d220 with SMTP id n13-20020a7bc5cd000000b0038c8b1bd220mr22753995wmk.118.1652820972354;
+        Tue, 17 May 2022 13:56:12 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id e25-20020adfa459000000b0020c5253d8dcsm73870wra.40.2022.05.17.13.56.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 13:56:11 -0700 (PDT)
+Message-ID: <62840beb.1c69fb81.9bdaf.070c@mx.google.com>
+X-Google-Original-Message-ID: <YoQL6ULpjb9muRvn@Ansuel-xps.>
+Date:   Tue, 17 May 2022 22:56:09 +0200
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] dt-bindings: mtd: qcom_nandc: document
+ qcom,boot-pages binding
+References: <20220503154353.4367-1-ansuelsmth@gmail.com>
+ <20220503154353.4367-3-ansuelsmth@gmail.com>
+ <20220516184912.GA3063673-robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] arm64: dts: qcom: sc7180: Remove ipa_fw_mem node on
- trogdor
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>
-References: <20220517193307.3034602-1-swboyd@chromium.org>
- <ceb32b66-1341-d54f-a60a-5c342119c784@linaro.org>
- <CAE-0n50rUW7Lqk4CwfSUgKYEJzwjXuVohAnbj9uKA=kEkXikyw@mail.gmail.com>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <CAE-0n50rUW7Lqk4CwfSUgKYEJzwjXuVohAnbj9uKA=kEkXikyw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220516184912.GA3063673-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/17/22 3:06 PM, Stephen Boyd wrote:
-> Quoting Alex Elder (2022-05-17 12:51:34)
->> On 5/17/22 2:33 PM, Stephen Boyd wrote:
->>> We don't use this carveout on trogdor boards, and having it defined in
->>> the sc7180 SoC file causes an overlap message to be printed at boot.
->>>
->>>    OF: reserved mem: OVERLAP DETECTED!
->>>    memory@86000000 (0x0000000086000000--0x000000008ec00000) overlaps with memory@8b700000 (0x000000008b700000--0x000000008b710000)
->>>
->>> Delete the node in the trogdor dtsi file to fix the overlap problem and
->>> remove the error message.'
->>
->> Is the mpss_mem node (which defines 0x86000000-0x8ec00000) correct?
+On Mon, May 16, 2022 at 01:49:12PM -0500, Rob Herring wrote:
+> On Tue, May 03, 2022 at 05:43:53PM +0200, Ansuel Smith wrote:
+> > Document new qcom,boot_pages binding used to apply special
 > 
-> I think it is. Modem is working for me.
+> s/boot_pages/boot-pages/
 > 
->>
->> You're right, we don't use that memory on Chrome OS, but I just
->> wondered whether the other node might also have a problem.
+> > read/write configuration to boot pages.
+> > 
+> > QCOM apply a special configuration where spare data is not protected
+> > by ECC for some special pages (used for boot partition). Add
+> > Documentation on how to declare these special pages.
+> > 
+> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > ---
+> >  .../devicetree/bindings/mtd/qcom,nandc.yaml   | 22 +++++++++++++++++++
+> >  1 file changed, 22 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml b/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
+> > index 84ad7ff30121..fafeca0cafff 100644
+> > --- a/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
+> > +++ b/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
+> > @@ -102,6 +102,26 @@ allOf:
+> >              - const: rx
+> >              - const: cmd
+> >  
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - qcom,ipq8074-nand
+> > +
+> > +    then:
+> > +      properties:
+> > +        qcom,boot-pages:
+> > +          $ref: /schemas/types.yaml#/definitions/uint32-matrix
 > 
-> What sort of problem are you thinking about?
+> You need to define the dimensions. Something like this:
+> 
+>              items:
+>                items:
+>                  - description: offset
+>                  - description: size
+>
 
-At some point in the past I think some of these carved out
-areas got updated (perhaps on sdm845?).  I.e. they were
-wrong, and got corrected later.  Some things worked despite
-that.  So the problem, for example, might be that the
-mpss region is bigger than it needs to be.
+Considering this is not limited to one item how should I declare that an
+user can declare multiple items? (the user can declare multiple zones)
+Declaring minItems without a maxItems? 
 
-I don't *assume* there's a problem, I was just asking,
-and maybe Bjorn or someone else can verify what's right.
+I assume in the suggested form it's assumed
+minItems: 1
+maxItems: 1
+so this would be problematic.
 
-I'm done for the day right now; otherwise I'd spend a
-little more time trying to track the information down
-myself...
+> > +          description:
+> > +            Some special page used by boot partition have spare data
+> > +            not protected by ECC. Use this to declare these special page
+> > +            by defining first the offset and then the size.
+> > +
+> > +            It's in the form of <offset1 size1 offset2 size2 offset3 ...>
+> > +
+> > +            Refer to the ipq8064 example on how to use this special binding.
+> > +
+> >  required:
+> >    - compatible
+> >    - reg
+> > @@ -135,6 +155,8 @@ examples:
+> >          nand-ecc-strength = <4>;
+> >          nand-bus-width = <8>;
+> >  
+> > +        qcom,boot-pages = <0x0 0x58a0000>;
+> > +
+> >          partitions {
+> >            compatible = "fixed-partitions";
+> >            #address-cells = <1>;
+> > -- 
+> > 2.34.1
+> > 
+> > 
 
-					-Alex
-
-
->>
->> I don't actually know...  Bjorn, do you?
->>
-
+-- 
+	Ansuel

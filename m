@@ -2,122 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC6E0529981
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 08:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E18B529985
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 08:26:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237724AbiEQGZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 02:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42992 "EHLO
+        id S239400AbiEQGZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 02:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234274AbiEQGZI (ORCPT
+        with ESMTP id S231972AbiEQGZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 02:25:08 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DDB44A07
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 23:25:07 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id j6so32622479ejc.13
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 23:25:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=3daWTLjDfemU4LkrKKjdRnCWKXpzBvPuFNd5zc6Jz5A=;
-        b=vIJLb1XmiUQPDP9LOfnswgdPT30ag0zLABpNg2EIJgJs2dbD59ExZ9WUB7x+eYPK6X
-         Jslp8ywU4Hv087437vHZZU9nXb9vKhQX/L14b3tlk+MDDLRf3cca5lcufwyhwljuTjnt
-         s5GFG9HB0v5hkcwJZANsjt0QilC53+46snkcntiPjWX6KrA4GVm+qcBkm/38Vb7Us47v
-         KNILJhRgUP1FPvNNz4itwGOK/GlNv1LeZesIqlaPqmsxoPA7ZMy8Ut5NgCbk5v3cS45M
-         Hwn8YUKh4fYKptSijHt2fHmUN1daqd7kMu5XXbTE9P6N+LH9it5YDUH7nW3o2DQ1Cxdl
-         ir4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3daWTLjDfemU4LkrKKjdRnCWKXpzBvPuFNd5zc6Jz5A=;
-        b=S3zLboOOVI44TTo71rcEL4ydh8m8P1cZk5LJTuYvflpXWjgUWF6sQ64E4qqlQGXVQR
-         OLqq7EDN2buLhtj9FYN87l6mgy/NS/GUSGj+ra2lAgHXiN24mbIdTKfat+c48wtp9MBz
-         WX6moVrt15dyxSzB6s8GOQPg+0lW0VazBgFwHc8w25vIIJFN+aBVctYy21Mqr6VvuK8/
-         ZDl/D8NxMFfJsBveUsLZsCt34+r3qRS18Lewzd2zUonfOhtrBXiTsWvBHuTkE2GuM/2B
-         HCTeIIfjUL3nRDhRtFzcNKFIbwjBwz4MuvBXXD5FHx6wO44w3sGwfBNQNpP387LDR9K8
-         7Clg==
-X-Gm-Message-State: AOAM533q9tEgx+/j+eHgGt9f/TA2lS7jBy1lZB1Dznf/vnYmHh52ZrU7
-        jKPI02ubPhuc2quUy2mC/80zBg==
-X-Google-Smtp-Source: ABdhPJxgmYu5bIUVNvFE7VgPMR99LUdMU6vwmBGEWTqhqDIZd9L+Ct0KgypnuqluDaoO5/INba8bTg==
-X-Received: by 2002:a17:907:1c06:b0:6df:b257:cbb3 with SMTP id nc6-20020a1709071c0600b006dfb257cbb3mr18607442ejc.631.1652768706063;
-        Mon, 16 May 2022 23:25:06 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id hv6-20020a17090760c600b006f3ef214e4dsm628655ejc.179.2022.05.16.23.25.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 23:25:05 -0700 (PDT)
-Message-ID: <4889a6cd-ef96-595e-a117-2965aab97a54@linaro.org>
-Date:   Tue, 17 May 2022 08:25:04 +0200
+        Tue, 17 May 2022 02:25:51 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2114.outbound.protection.outlook.com [40.107.255.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76CBEE29
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 23:25:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gYNEIuC5HT5nmTn2x/Ows/oPGGpk3CQXaAoUiWdZhvPJPYS0RCYBsxRr//3ndXANI9e2Ra/hS3n0v8i4L5+Lf+MSGl39JpGtXf9nF35aKtoJaeI9Pk7OyXQju5DaTJnH7qIbaFCseLK0/etHnlTTkP45KTAgNjiMUshaEXTg2ZtEY/8U2pykbAQDer6OTUzoE32N8B5UxWCpf2peEnwSMPEAIX4UDAECwAX4qXqd0xpulVtrAz9oDCjQVjwJ2DJX5p+TwIvd+dpiz2uevABjbR5WAonjOiPN3rs3tI88NLxUZfmcxCSo28he5U082GBbrAfX39K1HkSPA7JVdomjSw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=z6h4OGgH5AArgm4dBZY9qJK2CYUQSP/+/rriK+B3Bqw=;
+ b=J1ytwN3L01L//y33wWpheakF3pw/VWitOTpjLEEE2R7tN0jAoXQAVit+UxA5905bM5ietFqLegD2DG50VypVuhpyuiXwpm5witRddihhL01o+MWcInMBcjO4UtYPi1a9YhjoK6jXiSJ+TJYGsn1WV05IoGrkUjkEoZKRj6GCJts1d8SZIiq5yITQHdUoltOycXEzG5PdOHHYnnRL4orOLo+iPb5rPUxXiJ2X4uX2/TNaWB40o/KDurYQMtLaW1rsE7qXPb1fF7Q5+VG967YsyvmRkny6r6H7Xu1odQkK0FzcecOKj0pbJpf50PYFfA2fHUaZiu7TkrPEkHOVkakq4g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=z6h4OGgH5AArgm4dBZY9qJK2CYUQSP/+/rriK+B3Bqw=;
+ b=RblpqCAFp2RdemOrZGJQkwvdJpggEsb/0EFJh+pnU7p8NCI0FCzef/Z/9KDatTvUDaTKijKp2l0PMzA5viidaMihWGUx7o3hlBjGMiLW3y3iMR9K43oROi9byGVLhELMQVX7jNOuZKL88ODPCr0otQMA5CEAwJ9ExwylhDjUDQI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from HK2PR06MB3492.apcprd06.prod.outlook.com (2603:1096:202:2f::10)
+ by PSAPR06MB4501.apcprd06.prod.outlook.com (2603:1096:301:89::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14; Tue, 17 May
+ 2022 06:25:46 +0000
+Received: from HK2PR06MB3492.apcprd06.prod.outlook.com
+ ([fe80::88e1:dc04:6851:ad08]) by HK2PR06MB3492.apcprd06.prod.outlook.com
+ ([fe80::88e1:dc04:6851:ad08%7]) with mapi id 15.20.5250.018; Tue, 17 May 2022
+ 06:25:46 +0000
+From:   Guo Zhengkui <guozhengkui@vivo.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Guo Zhengkui <guozhengkui@vivo.com>,
+        alsa-devel@alsa-project.org (moderated list:SOUND),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     zhengkui_guo@outlook.com
+Subject: [PATCH] ALSA: seq: replace ternary operator with max()
+Date:   Tue, 17 May 2022 14:25:17 +0800
+Message-Id: <20220517062518.123292-1-guozhengkui@vivo.com>
+X-Mailer: git-send-email 2.20.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TYAPR01CA0154.jpnprd01.prod.outlook.com
+ (2603:1096:404:7e::22) To HK2PR06MB3492.apcprd06.prod.outlook.com
+ (2603:1096:202:2f::10)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH net v2] NFC: nci: fix sleep in atomic context bugs caused
- by nci_skb_alloc
-Content-Language: en-US
-To:     Duoming Zhou <duoming@zju.edu.cn>, linux-kernel@vger.kernel.org,
-        kuba@kernel.org
-Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        gregkh@linuxfoundation.org, alexander.deucher@amd.com,
-        broonie@kernel.org, netdev@vger.kernel.org
-References: <20220517012530.75714-1-duoming@zju.edu.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220517012530.75714-1-duoming@zju.edu.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6d31a701-1598-4a07-366e-08da37ce1364
+X-MS-TrafficTypeDiagnostic: PSAPR06MB4501:EE_
+X-Microsoft-Antispam-PRVS: <PSAPR06MB450148464D54673389944C79C7CE9@PSAPR06MB4501.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: a6xrbsLPsSe00Don+dao+Xoo4eoiAVnS5bBzgwR1tD/ZiTb1k3TY0DZ2qN8oAm4xHihibq1OEDoCJ0H7gbHiXAaTYxXelVPglhKdjE/6SfTLL1kjkwaBFtAXLkovw4n/v3L3BmW/dzHYy2uFxAi/AxkQSWhtzKIMKswXMltjzcHRLKPUaTs99KsFoQrGitpYH658m1IRq+/kDgOIG2iEZF/7tVac7SiqENqFCV5aXuP2LsXmVWbrHWcminZYqOCuAWab7FvoN9c2DivPWXnQ9susFV1ALHPSsM0zcOdKpKaIvCX9Rr065ZctaJ2bqGQUYEiMcJa2vUQiLhA0440VzCjG+DEjNFfukKep0IP6yqbzLB8WFDXe8+Be8EJ7QR1VT32gaNFXuchapQXt5Wp1W8rlLMM1KINyFFEPOr0EXeelKsM9qyZzWOuvjqgDgM4eyJEim6oewJ7lYHUaLOp2O4TBh3ly70K5nVoWWSNOmVv/fSmurfTw5oDq7PnhmD7PLHB0lmj2uR8ebTmm3eTiGxQW9axW2YikUd0IjfW3zLUtMUCJ4k+l6mZoReXoHNQ6DrS9MZujnkQfoeBtoQCIV3uZre/cHfRsxUUmAFnPWwc7HeS6F9aJDteQHNrWXx34DKgvet4g9i4ZQRMJ7YoDLvgPTn1la7sbaWMr9uW6T87+DCc3ESkY9jLKvxjVJ1xO
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR06MB3492.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(186003)(52116002)(316002)(83380400001)(4744005)(38350700002)(38100700002)(1076003)(5660300002)(6486002)(26005)(8936002)(508600001)(110136005)(4326008)(66946007)(66476007)(66556008)(36756003)(8676002)(2616005)(2906002)(6666004)(6512007)(6506007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zoEfsT0akEULcFGWUeg7Jf6KNAjIIqP2toYD1I3jRipl3r44h0PIZ0vS4He6?=
+ =?us-ascii?Q?pjyljEWpVNC4Eou/XMKuGdzxt0z2LmSGkWrYUq6rVX9minKsICqEX1cFebxa?=
+ =?us-ascii?Q?IaxJZLaT1h/Ep1lBhZpFF57fTfPw4UFeh3LSUf+Rycr09AZ/bCfdXW89Ktq7?=
+ =?us-ascii?Q?hfFPENraMsQDFLfuv06Boby8voZb0xRl8J/XiCPo6zA5RYMWrzQzv5JK9B4C?=
+ =?us-ascii?Q?HfMIcUun1IsoNAQ/hEA6sbmOb4CEjXXoy1ulifVV7V74Ra5HsUQfMusFMAKy?=
+ =?us-ascii?Q?EIrP3p77FFg/NJZI2s7MqUlDJ/Zd/oB64q9MczGfC0ITX30CQzEayqfrgLzy?=
+ =?us-ascii?Q?Z4kVg0JZFxYkP7MaiejDLODDxcPvYQmwkYDI/WHNrK93wROV6qQdKAleBCUO?=
+ =?us-ascii?Q?pv3oDoVqujRV583kd74AA0Y2DLRZZ30oP7AnKvk/S5GZGN8v9qVyZrIXSjp0?=
+ =?us-ascii?Q?Ch5PNCeAEyWiEgslIcZIx0pDg4hMFVw12yJw7VXBffLB0oEXXPJIwwg8hYFQ?=
+ =?us-ascii?Q?rpaIPL1g5fRcbSAIWInZTTdi4SmCsROuENs/mTSebWyuVCYa6RelhMMHL7NL?=
+ =?us-ascii?Q?kawNVvcoRLAPXjv+d4LIeWx8An7hB63C3yVwOMUuU5E/XtxIkeLhLQDs3EuM?=
+ =?us-ascii?Q?pRH0VzSfJHCS4b04leNL1y7oqmSCc98EGxfERlBK7uwPKbjvz4f+at+ZnYs2?=
+ =?us-ascii?Q?fQmkbPyMcWjlBmPu4o8o5s3mMD19CxBxfq4KuaheFcvM9lGOe1MULqx6MIHi?=
+ =?us-ascii?Q?DNfuAJ8njyko1+sbJOleZoBscDbGvw2mFlwi1NPh5GHws331rI5P8rsomvM3?=
+ =?us-ascii?Q?4Tx6BHhtu1wnfpAueZLy1GYC1TvQJQeCaTfybTAc9GesGRU6gAmLoRQXPyPN?=
+ =?us-ascii?Q?+Q6vrTFYNy+X7lHlGUC6D28IqMBRVnsW3qNPlfZu19BH3tYrrR0Lxvwmt34x?=
+ =?us-ascii?Q?KP5P4mCxuw/oZYEAXFnRlvK7BU1IA6VCC1QZO/bo2bRAijfzyHZNUMFyCj7L?=
+ =?us-ascii?Q?kqPdRHycux7BpsmL9/jUXVIWKvdMJoSvNWIMJ9rewOhQxrxcTj//bextkjPM?=
+ =?us-ascii?Q?39xTFTN8qZ7YQyBJLOP2Dd4mtwvxouJg3F6WhVBUAE1H+WX3hoYLWt72JdO1?=
+ =?us-ascii?Q?NWnd3MgiGt3WgaN1P/lm4zrCWOBsnV7qv77pOS79hbsICDVdko6DOyy3Tspj?=
+ =?us-ascii?Q?aHoauetZu4Vh+fQnbtR5sMU62PiYsJ8hJ0LTDbEmO0jZNAxwdVcsJKQ+eIrK?=
+ =?us-ascii?Q?lyfUzFPURaBdj2rNPn4edG0kG0QxIoCxbKO4+lEnSmS7eSuym6L0tWIb9/1D?=
+ =?us-ascii?Q?STtAb/KicHu2K7gzvU4p+Y0GCiZwYHhTOCTS4pHna1/4j4lPfLFq9D1v6+i1?=
+ =?us-ascii?Q?RgKH9sM5VvgPIV07vSPWNVm9lu9WTWda2sd019Cbq2P+GnDe1RjNaDYRVLjq?=
+ =?us-ascii?Q?tJLNWByem/qcNEFlIDV3FvYOs0lJ4NnrDJ4oaF2WrKZh/UKS048pWXjOmQFO?=
+ =?us-ascii?Q?3UKjHA2I8AufyRUF+P8qK0EazOYhpkkWO15IEI5+Mtcb7mkG4m90PtmeMNro?=
+ =?us-ascii?Q?YeN3gurxGFd9uPZ12anVTIw5HNi1lRehidKtPyyrgrpqvK13LtnmiiiGODRV?=
+ =?us-ascii?Q?cZ4nHUq6vLYosDZqKUOnhBoAptiswFCXN0Uy0iiggCDzAtT2oKY7xr0HB6+0?=
+ =?us-ascii?Q?95PDkQkUmjspUgrnHHJUnJQaiveiJtWyh71AdM00OW3hvOc9U3OR7Fh1uPfS?=
+ =?us-ascii?Q?3MWrNPK12g=3D=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d31a701-1598-4a07-366e-08da37ce1364
+X-MS-Exchange-CrossTenant-AuthSource: HK2PR06MB3492.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2022 06:25:45.8221
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fM68BPCiK72twMlzpXmBTvCmba4gPv41tZ4tjI9jbqp8mbTOS17Pl8+xAiI8k59kzqZ4EpSNQQwhsTVXv7W2eg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR06MB4501
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2022 03:25, Duoming Zhou wrote:
-> There are sleep in atomic context bugs when the request to secure
-> element of st-nci is timeout. The root cause is that nci_skb_alloc
-> with GFP_KERNEL parameter is called in st_nci_se_wt_timeout which is
-> a timer handler. The call paths that could trigger bugs are shown below:
-> 
->     (interrupt context 1)
-> st_nci_se_wt_timeout
->   nci_hci_send_event
->     nci_hci_send_data
->       nci_skb_alloc(..., GFP_KERNEL) //may sleep
-> 
->    (interrupt context 2)
-> st_nci_se_wt_timeout
->   nci_hci_send_event
->     nci_hci_send_data
->       nci_send_data
->         nci_queue_tx_data_frags
->           nci_skb_alloc(..., GFP_KERNEL) //may sleep
-> 
-> This patch changes allocation mode of nci_skb_alloc from GFP_KERNEL to
-> GFP_ATOMIC in order to prevent atomic context sleeping. The GFP_ATOMIC
-> flag makes memory allocation operation could be used in atomic context.
-> 
-> Fixes: ed06aeefdac3 ("nfc: st-nci: Rename st21nfcb to st-nci")
-> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-> ---
-> Changes in v2:
->   - Change the Fixes tag to commit st_nci_se_wt_timeout was added.
+Fix the following coccicheck warning:
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
+sound/core/seq/seq_ports.c:142:12-14: WARNING opportunity for max()
 
-https://elixir.bootlin.com/linux/v5.13/source/Documentation/process/submitting-patches.rst#L543
+Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+---
+ sound/core/seq/seq_ports.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If a tag was not added on purpose, please state why and what changed.
+diff --git a/sound/core/seq/seq_ports.c b/sound/core/seq/seq_ports.c
+index 84d78630463e..25fcf5a2c71c 100644
+--- a/sound/core/seq/seq_ports.c
++++ b/sound/core/seq/seq_ports.c
+@@ -139,7 +139,7 @@ struct snd_seq_client_port *snd_seq_create_port(struct snd_seq_client *client,
+ 	port_subs_info_init(&new_port->c_dest);
+ 	snd_use_lock_use(&new_port->use_lock);
+ 
+-	num = port >= 0 ? port : 0;
++	num = max(port, 0);
+ 	mutex_lock(&client->ports_mutex);
+ 	write_lock_irq(&client->ports_lock);
+ 	list_for_each_entry(p, &client->ports_list_head, list) {
+-- 
+2.20.1
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof

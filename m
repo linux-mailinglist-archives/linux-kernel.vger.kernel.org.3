@@ -2,85 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 774E652ACDC
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 22:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB8052ACE0
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 22:39:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242725AbiEQUjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 16:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46414 "EHLO
+        id S1353024AbiEQUjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 16:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiEQUi5 (ORCPT
+        with ESMTP id S1353005AbiEQUjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 16:38:57 -0400
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E99427C1;
-        Tue, 17 May 2022 13:38:56 -0700 (PDT)
-Received: by mail-oi1-f177.google.com with SMTP id w123so269518oiw.5;
-        Tue, 17 May 2022 13:38:56 -0700 (PDT)
+        Tue, 17 May 2022 16:39:09 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C0252B07
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:39:08 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id eg11so387958edb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:39:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qFAZEBFOY9SmpYWcYe+bNPVMfKhT4EeYmR3/AEfOrRQ=;
+        b=qIiIfGP9SJn0HMWqwfthodh2jdAShSFM+ARfk4Nkfuuq8BK7um/fiyvlR1vEIcas9+
+         HVS/vce71sLHrnBlACXe1owCUDxTy/QUgnYmAjoyVtlBnBeQpXJiOvVUne0noESMRvn9
+         f0XGtGuocAgpHYwyvUuCA/Vno1McJGfiyo1+NWyAG+Ubj6kqD1bZ0CZ5eH22dpX20Swc
+         DyZbbhelV8FPN6fi1AxTXfmvhPR0k3toUWTZNx08pJbUVyo7MqDzQQcg+m2b5ykQq+uL
+         5cswuWypGHzD8OM0v20Ka0e4Yc1grf9HfaGIe2imIMbicrz/2au6ocz1v1vTnPFFHeSU
+         D2cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=76acAsy+SpmXuXdcwFP1XutJCmMfZGECecrBN17zFW8=;
-        b=JTOw18T/KXwOzdgJWxFAsnQ2MuVsXxgyARK3WI2XfK8+i1ihAz+97jLb+vsbVPBE+F
-         wtJB0iTqYhGJZMZpU1ZUb/nGOI4yHFWmJk3VLmbQJMlGxnOhwQF+ZNJ+W/cqMcnkraj6
-         4Fxnfkyy8jPPkavs9B5HmaSATfk7RlPam0n9nzWGm7ueptiZLtvBFZNHoOzOT6pZlPeA
-         KbZDQh0AcoWSXqpwl+0lXlV+iqHmu9Iseny0LY9Mwi4CzWIWORVHAc6LtjCShJcgUrCe
-         QKImrz9hQq5EcLMPJpVEAdhFzp3f8HDMIwHCOEh4VIkF0GCsiSLlJn/XfY1uytIxIkR5
-         g64w==
-X-Gm-Message-State: AOAM5300/NGrh0GTkZocY71CKNy8OnlzzKZT1hmlNyT9zd24s370HWRK
-        LShEBDRBjZ0kiXEYrKERdw==
-X-Google-Smtp-Source: ABdhPJxlSCs3AI+SN/yRG4xckkFiyuJMzASwJux1bkbcf5hDQi5L76hWTxDrOghHmhidJsbaJkhsUw==
-X-Received: by 2002:a05:6808:114d:b0:328:aaa2:10c9 with SMTP id u13-20020a056808114d00b00328aaa210c9mr11583137oiu.217.1652819936072;
-        Tue, 17 May 2022 13:38:56 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r5-20020a9d5cc5000000b006060322124bsm160989oti.27.2022.05.17.13.38.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 13:38:55 -0700 (PDT)
-Received: (nullmailer pid 1597094 invoked by uid 1000);
-        Tue, 17 May 2022 20:38:54 -0000
-Date:   Tue, 17 May 2022 15:38:54 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Robert Foss <robert.foss@linaro.org>,
-        Del Regno <angelogioacchino.delregno@somainline.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Todor Tomov <todor.too@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 1/4] media: dt-bindings: qcom,sdm660-camss: document
- interconnects
-Message-ID: <20220517203854.GA1597034-robh@kernel.org>
-References: <20220509144714.144154-1-krzysztof.kozlowski@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qFAZEBFOY9SmpYWcYe+bNPVMfKhT4EeYmR3/AEfOrRQ=;
+        b=q7LuB9ww/TAyLUBGU3KF32qLaSwSWxzkah2Lu4sWi7zXa7nj2UwY5dpeshPx/WFaqB
+         xmJ1k16mzoX6BWyRgOP97N/wQoiZ/kGse6rdgM+Yb8lufqGGdCjkniNZ634Ntr2a9xVo
+         xhS1cLOox0gTNvrvrpKB7UQwsRIMCQdz3IhHdbg90qTLzTVYZ9fSwMGe5CVfaBTzGoKk
+         8AO/xHEpYFFX8ejDDY24cdkXQguUkAFxUo767ZBbHO6+/ozhFGMycN3yDygzie9MIFam
+         40HgdohVLwgwJLpfcitkvQFzlrg1mNEDtP0e7DML5C3pSxjvWdWwJUQ7fQnzfk0/197p
+         SXCg==
+X-Gm-Message-State: AOAM532gcg/7w0IcY9gyIoF4Hf4U4Li72bXflWO2cNGe5WwThc/jko+d
+        zRSBenUFIubqHKcT6RnNM2Wa/EaEZ3YjDFdXn90R1w==
+X-Google-Smtp-Source: ABdhPJxeRR3pFJJ2Mj54dRvGTD1BK3KI9tP1xr/8Cxp2b/FUFIwyROHJj8wRMRSi8RBvS0sEGWkbtxTYO+wZnLyvh/w=
+X-Received: by 2002:a05:6402:51c8:b0:427:b374:6af4 with SMTP id
+ r8-20020a05640251c800b00427b3746af4mr21002593edd.349.1652819946747; Tue, 17
+ May 2022 13:39:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220509144714.144154-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220513085108.3567310-1-davidgow@google.com>
+In-Reply-To: <20220513085108.3567310-1-davidgow@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 17 May 2022 16:38:55 -0400
+Message-ID: <CAFd5g47zzgs8eWU44aboYcUVtiQAoFFioNuTvRTMwGgOg0a8ng@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: Use qemu-system-i386 for i386 runs
+To:     David Gow <davidgow@google.com>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 09 May 2022 16:47:11 +0200, Krzysztof Kozlowski wrote:
-> Document the interconnect properties used in the Qualcomm CAMSS on
-> SDM660:
-> 
->   sdm630-sony-xperia-nile-discovery.dtb: camss@ca00000: 'interconnect-names', 'interconnects' do not match any of the regexes: 'pinctrl-[0-9]+'
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/media/qcom,sdm660-camss.yaml       | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
+On Fri, May 13, 2022 at 4:51 AM David Gow <davidgow@google.com> wrote:
+>
+> We're currently using the x86_64 qemu for i386 builds. While this is not
+> incorrect, it's probably more sensible to use the i386 one, which will
+> at least fail properly if we accidentally were to build a 64-bit kernel.
+>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-Acked-by: Rob Herring <robh@kernel.org>
+A very sensible thing to do! When I was writing this, I probably
+copied and pasted the x64_64 qemu config and then forgot to change
+everything to i386 - whoops.
+
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

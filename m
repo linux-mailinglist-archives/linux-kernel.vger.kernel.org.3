@@ -2,88 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38AC652A370
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:31:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 724DF52A373
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347082AbiEQNbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 09:31:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45964 "EHLO
+        id S1347052AbiEQNcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 09:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347953AbiEQNbQ (ORCPT
+        with ESMTP id S1346737AbiEQNcI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 09:31:16 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB5642EC6;
-        Tue, 17 May 2022 06:31:14 -0700 (PDT)
-Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4L2cNx3J2Jz6GCtF;
-        Tue, 17 May 2022 21:27:29 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Tue, 17 May 2022 15:31:12 +0200
-Received: from [10.47.88.19] (10.47.88.19) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 17 May
- 2022 14:31:10 +0100
-Message-ID: <86bef30d-4439-251b-5048-c7c57a5ecf17@huawei.com>
-Date:   Tue, 17 May 2022 14:31:10 +0100
+        Tue, 17 May 2022 09:32:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3593942ED4
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:32:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652794326;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YPrrrGrtPJ0UPVeEiIe+RRjxIITOoG2J++Tlpsjpjrg=;
+        b=dARIyjmiCmYRILxxg/elpJwh7jq5ER4/xtfU9tVQUQfQgeWPT89esYSufmlJOGD+P4uISR
+        o6tn0Qf80K2TfN7XmmPKeMMEKxVePwfCFcC9SeLrim4CBiF40WkHgy71lMlWx488suslvr
+        2UTzqE6NIZtppQFR7P7lzDuOBE9maJM=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-9-_LxC0o0wO8qWyrYuknNIkA-1; Tue, 17 May 2022 09:32:01 -0400
+X-MC-Unique: _LxC0o0wO8qWyrYuknNIkA-1
+Received: by mail-wr1-f70.google.com with SMTP id x4-20020a5d4444000000b0020d130e8a36so829202wrr.9
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:32:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=YPrrrGrtPJ0UPVeEiIe+RRjxIITOoG2J++Tlpsjpjrg=;
+        b=GNyjgUd+OYy9bX2bJopUwSrvi1COyc5Tsf0Hzw0cLpMDytNAFu3Y1BL3VcksX2ck+m
+         lw9dEhSx3trAtMZ5aZ5TAnzVfjQGnMQc+ORl/3M2oAnBmNPrXCnHa0dxfKYHE1boRreH
+         uJtUXMwFvlO8rKZLfTBQ3fOtS7PNC2V3cYldK3keSPbpscCPncGCxnuOaaWn+TunWkm5
+         v0QqGWxmCon/7yLU4eIFYxSvFRaYmyjPe+vL7gg+UypGFhni3pjy7w8cV2z84GnhkrGu
+         nwvQV5OtrVyfBA1/y1aaAPaDDHcVy2eDkAo7srxO2yPz8Am4NNt4ejwoPU0AIyG8uEVl
+         v6LQ==
+X-Gm-Message-State: AOAM532TEXrFEhjWjBBYICO7cQ8gJbG8iHmR3wlWKV04F6TwIUBLRN7n
+        7AxTKaS3nyqC5QpVEzOA9IvDXtmiPTinebf+/AF6Q6A9TqiiUDnLZNCIuBE5g1KooaH+LDKQzBf
+        J2tU8lyQlGEtOfJ/EtFWJzMUIVD+37RShBLpZxSbGRUyd/tzizXtp6CQy8FULOZRZXctUMXv/ri
+        8Q
+X-Received: by 2002:adf:ebc7:0:b0:20c:d65d:3f19 with SMTP id v7-20020adfebc7000000b0020cd65d3f19mr18628895wrn.613.1652794320387;
+        Tue, 17 May 2022 06:32:00 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzVmQD/MUnZFDRT5bU85jS2BMM9lXxe1L7hniFLhaNb6tRdo5rfdhJyWG2PMCMsIvPkjWmDVQ==
+X-Received: by 2002:adf:ebc7:0:b0:20c:d65d:3f19 with SMTP id v7-20020adfebc7000000b0020cd65d3f19mr18628856wrn.613.1652794319991;
+        Tue, 17 May 2022 06:31:59 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id x16-20020adfbb50000000b0020d11ee1bcesm3432180wrg.82.2022.05.17.06.31.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 06:31:59 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 02/34] KVM: x86: hyper-v: Introduce TLB flush ring
+In-Reply-To: <YoKnOqR68SaaPCdT@google.com>
+References: <20220414132013.1588929-1-vkuznets@redhat.com>
+ <20220414132013.1588929-3-vkuznets@redhat.com>
+ <YoKnOqR68SaaPCdT@google.com>
+Date:   Tue, 17 May 2022 15:31:58 +0200
+Message-ID: <87pmkcuvxt.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v2 3/7] perf vendor events: Fix Ivytown UNC_M_ACT_COUNT.RD
- umask
-To:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        "Namhyung Kim" <namhyung@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        "Felix Fietkau" <nbd@nbd.name>, Qi Liu <liuqi115@huawei.com>,
-        Like Xu <likexu@tencent.com>, <linux-kernel@vger.kernel.org>,
-        <linux-perf-users@vger.kernel.org>,
-        Nick Forrington <nick.forrington@arm.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>, Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        <ananth.narayan@amd.com>, <ravi.bangoria@amd.com>,
-        <santosh.shukla@amd.com>, <sandipan.das@amd.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Kshipra Bopardikar <kshipra.bopardikar@intel.com>
-CC:     Stephane Eranian <eranian@google.com>
-References: <20220511211526.1021908-1-irogers@google.com>
- <20220511211526.1021908-4-irogers@google.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220511211526.1021908-4-irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.88.19]
-X-ClientProxiedBy: lhreml743-chm.china.huawei.com (10.201.108.193) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/05/2022 22:15, Ian Rogers wrote:
-> The event had two umasks with the umask of 3 being correct.
-> Note: this change wasn't automatically generated as there is no CSV for
-> Ivytown uncore events at:
-> https://github.com/intel/event-converter-for-linux-perf
-> 
-> Signed-off-by: Ian Rogers<irogers@google.com>
+Sean Christopherson <seanjc@google.com> writes:
 
-Reviewed-by: John Garry <john.garry@huawei.com>
+> On Thu, Apr 14, 2022, Vitaly Kuznetsov wrote:
+>> To allow flushing individual GVAs instead of always flushing the whole
+>> VPID a per-vCPU structure to pass the requests is needed. Introduce a
+>> simple ring write-locked structure to hold two types of entries:
+>> individual GVA (GFN + up to 4095 following GFNs in the lower 12 bits)
+>> and 'flush all'.
+>> 
+>> The queuing rule is: if there's not enough space on the ring to put
+>> the request and leave at least 1 entry for 'flush all' - put 'flush
+>> all' entry.
+>> 
+>> The size of the ring is arbitrary set to '16'.
+>> 
+>> Note, kvm_hv_flush_tlb() only queues 'flush all' entries for now so
+>> there's very small functional change but the infrastructure is
+>> prepared to handle individual GVA flush requests.
+>> 
+>> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+>> ---
+>>  arch/x86/include/asm/kvm_host.h | 16 +++++++
+>>  arch/x86/kvm/hyperv.c           | 83 +++++++++++++++++++++++++++++++++
+>>  arch/x86/kvm/hyperv.h           | 13 ++++++
+>>  arch/x86/kvm/x86.c              |  5 +-
+>>  arch/x86/kvm/x86.h              |  1 +
+>>  5 files changed, 116 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+>> index 1de3ad9308d8..b4dd2ff61658 100644
+>> --- a/arch/x86/include/asm/kvm_host.h
+>> +++ b/arch/x86/include/asm/kvm_host.h
+>> @@ -578,6 +578,20 @@ struct kvm_vcpu_hv_synic {
+>>  	bool dont_zero_synic_pages;
+>>  };
+>>  
+>> +#define KVM_HV_TLB_FLUSH_RING_SIZE (16)
+>> +
+>> +struct kvm_vcpu_hv_tlb_flush_entry {
+>> +	u64 addr;
+>
+> "addr" misleading, this is overloaded to be both the virtual address and the count.
+> I think we make it a moot point, but it led me astray in thinkin we could use the
+> lower 12 bits for flags... until I realized those bits are already in use.
+>
+>> +	u64 flush_all:1;
+>> +	u64 pad:63;
+>
+> This is rather odd, why not just use a bool?  
+
+My initial plan was to eventually put more flags here, i.e. there are
+two additional flags which we don't currently handle:
+
+HV_FLUSH_ALL_VIRTUAL_ADDRESS_SPACES (as we don't actually look at
+ HV_ADDRESS_SPACE_ID)
+HV_FLUSH_NON_GLOBAL_MAPPINGS_ONLY
+
+> But why even have a "flush_all" field, can't we just use a magic value
+> for write_idx to indicate "flush_all"? E.g. either an explicit #define
+> or -1.
+
+Sure, a magic value would do too and will allow us to make 'struct
+kvm_vcpu_hv_tlb_flush_entry' 8 bytes instead of 16 (for the time being
+as if we are to add HV_ADDRESS_SPACE_ID/additional flags the net win is
+going to be zero).
+
+>
+> Writers set write_idx to -1 to indicate "flush all", vCPU/reader goes straight
+> to "flush all" if write_idx is -1/invalid.  That way, future writes can simply do
+> nothing until read_idx == write_idx, and the vCPU/reader avoids unnecessary flushes
+> if there's a "flush all" pending and other valid entries in the ring.
+>
+> And it allows deferring the "flush all" until the ring is truly full (unless there's
+> an off-by-one / wraparound edge case I'm missing, which is likely...).
+
+Thanks for the patch! I am, however, going to look at Maxim's suggestion
+to use 'kfifo' to avoid all these uncertainties, funky locking etc. At
+first glance it has everything I need here.
+
+>
+> ---
+>  arch/x86/include/asm/kvm_host.h |  8 +-----
+>  arch/x86/kvm/hyperv.c           | 47 +++++++++++++--------------------
+>  2 files changed, 19 insertions(+), 36 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index b6b9a71a4591..bb45cc383ce4 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -605,16 +605,10 @@ enum hv_tlb_flush_rings {
+>  	HV_NR_TLB_FLUSH_RINGS,
+>  };
+>
+> -struct kvm_vcpu_hv_tlb_flush_entry {
+> -	u64 addr;
+> -	u64 flush_all:1;
+> -	u64 pad:63;
+> -};
+> -
+>  struct kvm_vcpu_hv_tlb_flush_ring {
+>  	int read_idx, write_idx;
+>  	spinlock_t write_lock;
+> -	struct kvm_vcpu_hv_tlb_flush_entry entries[KVM_HV_TLB_FLUSH_RING_SIZE];
+> +	u64 entries[KVM_HV_TLB_FLUSH_RING_SIZE];
+>  };
+>
+>  /* Hyper-V per vcpu emulation context */
+> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+> index 1d6927538bc7..56f06cf85282 100644
+> --- a/arch/x86/kvm/hyperv.c
+> +++ b/arch/x86/kvm/hyperv.c
+> @@ -1837,10 +1837,13 @@ static int kvm_hv_get_tlb_flush_entries(struct kvm *kvm, struct kvm_hv_hcall *hc
+>  static inline int hv_tlb_flush_ring_free(struct kvm_vcpu_hv *hv_vcpu,
+>  					 int read_idx, int write_idx)
+>  {
+> +	if (write_idx < 0)
+> +		return 0;
+> +
+>  	if (write_idx >= read_idx)
+> -		return KVM_HV_TLB_FLUSH_RING_SIZE - (write_idx - read_idx) - 1;
+> +		return KVM_HV_TLB_FLUSH_RING_SIZE - (write_idx - read_idx);
+>
+> -	return read_idx - write_idx - 1;
+> +	return read_idx - write_idx;
+>  }
+>
+>  static void hv_tlb_flush_ring_enqueue(struct kvm_vcpu *vcpu,
+> @@ -1869,6 +1872,9 @@ static void hv_tlb_flush_ring_enqueue(struct kvm_vcpu *vcpu,
+>  	 */
+>  	write_idx = tlb_flush_ring->write_idx;
+>
+> +	if (write_idx < 0 && read_idx == write_idx)
+> +		read_idx = write_idx = 0;
+> +
+>  	ring_free = hv_tlb_flush_ring_free(hv_vcpu, read_idx, write_idx);
+>  	/* Full ring always contains 'flush all' entry */
+>  	if (!ring_free)
+> @@ -1879,21 +1885,13 @@ static void hv_tlb_flush_ring_enqueue(struct kvm_vcpu *vcpu,
+>  	 * entry in case another request comes in. In case there's not enough
+>  	 * space, just put 'flush all' entry there.
+>  	 */
+> -	if (!count || count >= ring_free - 1 || !entries) {
+> -		tlb_flush_ring->entries[write_idx].addr = 0;
+> -		tlb_flush_ring->entries[write_idx].flush_all = 1;
+> -		/*
+> -		 * Advance write index only after filling in the entry to
+> -		 * synchronize with lockless reader.
+> -		 */
+> -		smp_wmb();
+> -		tlb_flush_ring->write_idx = (write_idx + 1) % KVM_HV_TLB_FLUSH_RING_SIZE;
+> +	if (!count || count > ring_free - 1 || !entries) {
+> +		tlb_flush_ring->write_idx = -1;
+>  		goto out_unlock;
+>  	}
+>
+>  	for (i = 0; i < count; i++) {
+> -		tlb_flush_ring->entries[write_idx].addr = entries[i];
+> -		tlb_flush_ring->entries[write_idx].flush_all = 0;
+> +		tlb_flush_ring->entries[write_idx] = entries[i];
+>  		write_idx = (write_idx + 1) % KVM_HV_TLB_FLUSH_RING_SIZE;
+>  	}
+>  	/*
+> @@ -1911,7 +1909,6 @@ void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu)
+>  {
+>  	struct kvm_vcpu_hv_tlb_flush_ring *tlb_flush_ring;
+>  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> -	struct kvm_vcpu_hv_tlb_flush_entry *entry;
+>  	int read_idx, write_idx;
+>  	u64 address;
+>  	u32 count;
+> @@ -1940,26 +1937,18 @@ void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu)
+>  	/* Pairs with smp_wmb() in hv_tlb_flush_ring_enqueue() */
+>  	smp_rmb();
+>
+> +	if (write_idx < 0) {
+> +		kvm_vcpu_flush_tlb_guest(vcpu);
+> +		goto out_empty_ring;
+> +	}
+> +
+>  	for (i = read_idx; i != write_idx; i = (i + 1) % KVM_HV_TLB_FLUSH_RING_SIZE) {
+> -		entry = &tlb_flush_ring->entries[i];
+> -
+> -		if (entry->flush_all)
+> -			goto out_flush_all;
+> -
+> -		/*
+> -		 * Lower 12 bits of 'address' encode the number of additional
+> -		 * pages to flush.
+> -		 */
+> -		address = entry->addr & PAGE_MASK;
+> -		count = (entry->addr & ~PAGE_MASK) + 1;
+> +		address = tlb_flush_ring->entries[i] & PAGE_MASK;
+> +		count = (tlb_flush_ring->entries[i] & ~PAGE_MASK) + 1;
+>  		for (j = 0; j < count; j++)
+>  			static_call(kvm_x86_flush_tlb_gva)(vcpu, address + j * PAGE_SIZE);
+>  	}
+>  	++vcpu->stat.tlb_flush;
+> -	goto out_empty_ring;
+> -
+> -out_flush_all:
+> -	kvm_vcpu_flush_tlb_guest(vcpu);
+>
+>  out_empty_ring:
+>  	tlb_flush_ring->read_idx = write_idx;
+>
+> base-commit: 62592c7c742ae78eb1f1005a63965ece19e6effe
+> --
+>
+
+-- 
+Vitaly
+

@@ -2,102 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 962BD52AAF7
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB6CD52AB00
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344657AbiEQSeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 14:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
+        id S1352264AbiEQSgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 14:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347695AbiEQSeF (ORCPT
+        with ESMTP id S1352263AbiEQSfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 14:34:05 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA5645509
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:34:03 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id o190so20192109iof.10
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:34:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=+4eO+6dsz/WjJ3Ziz2RakmC3CRqePaTzJgHcVdw/yuA=;
-        b=T/UuAwa9f6bwKJmONQbjyNo5Hb7Fp9P0zXqLJje0MYM9+5aaIiZoQSIHy/gPOeLk+5
-         PUVq6z4bgcWhq7mK6xzFGHj7E7r2/sLw+5+LnBiE3v+uoUvco1h7RGvyoNg4z2ZIDMi+
-         J4YHwSUbg47cRabbEzljDvBjlS287TWAsu2qjSojdSk/Z+t5SWNh4fdzyvYoa6lxd6fG
-         gw1g651qXiIblfAzmnZQU0uL0Un6awAgrjZwoJX6QKZ5zJCbDL8IuIqAOGBDf5hRaCiT
-         w7KcIQeUDv8axGmEzgogeVw4M1XLWII18COO3ZL3qcLmSPgNhMXZP5NxAYlUaa7+k9xi
-         sw6A==
+        Tue, 17 May 2022 14:35:54 -0400
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E568C17;
+        Tue, 17 May 2022 11:35:52 -0700 (PDT)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-d39f741ba0so25253174fac.13;
+        Tue, 17 May 2022 11:35:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+4eO+6dsz/WjJ3Ziz2RakmC3CRqePaTzJgHcVdw/yuA=;
-        b=pQ5cIHkbj1PKOOafJv7pB35bl73oaZz0u7QtTjFeSlkTWiumAxmfaE37jDUC+9Fg6z
-         i/5pNnxgHfS6D3VNOYTU/Cr+72cknZEGOMnpLZck6GnoQL5o+SoZ0ZvDPCik8G13pGh5
-         0uWquaAT4OfNkieqEGr0Y2nSUGOBVOfDD8Uk+EvfAb55OyTWvt8+kFJs+mva5c3z+Iz0
-         GKTOi+80fWFCFXEB8eWkj9WJgLHhWkqAdaAzwQbl702yRE73sfb2MS/K/UoxBIZrvZt1
-         /uKRljYhx4C2AKSvTrnbuEi/ak9lN1fAHFlZjjJLWy0mx8RbJjPI64mGtHIZTRzcC4vi
-         RozA==
-X-Gm-Message-State: AOAM533sLvfb2ddAVk120ECuHcXLoktwHs876hCBttvyYaw08dXqKjfG
-        oPZDby1NTDDD92EM3pRkNHlPLGiA8tEc9A==
-X-Google-Smtp-Source: ABdhPJzBW4iVMCeI6E+uwI5T5nFEuqU2cNQ6snGSVakcyzU6iKhhwGbkQeHi2Qo7cEVby0yYvmHrhg==
-X-Received: by 2002:a05:6638:134d:b0:32b:af0d:f49 with SMTP id u13-20020a056638134d00b0032baf0d0f49mr12992488jad.249.1652812442760;
-        Tue, 17 May 2022 11:34:02 -0700 (PDT)
-Received: from [192.168.1.172] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id y14-20020a92950e000000b002cde6e352c1sm13833ilh.11.2022.05.17.11.34.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 11:34:01 -0700 (PDT)
-Message-ID: <8cf1ef4e-03b6-4da2-530f-65058c57a9d1@kernel.dk>
-Date:   Tue, 17 May 2022 12:34:00 -0600
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uT4mlGSo9wkGcsmi1CtjInRJB/kA6igNndb7eOFpdHc=;
+        b=HDPT+ZTgz2H6kdptO+Zkb0Hoo+zpvbFQrRCklyDsVoo7P+5qxHDsh3TApi+UdiCllL
+         havTadYDc3WA/8kuXCS4vauFLVlZ0UuhE+G7jkTHggAlu5bfkGWSwvK6hCiGm4rws22u
+         aqgn2R0hExyphjm5U8vHTkCEdsOZUIwHla3FBuZhmAqzXWUtZfjVTUhF6TqN8MFVfXyS
+         Hn/Q4F7GbKDKnnwB/VbtTJ7a3dlKJ1Eu1oXraRR14asfJqu1mVTJ/LhEDf4C0qWAC5rA
+         HWDvgdKtxvw6lhrbygFcopvayIHnBI/yIxOWhzNX5pAS6nraV0ct1If+mUcJ+0XHvNw0
+         8C2w==
+X-Gm-Message-State: AOAM530xMmf++RXinfZL706LkN+kFdSpipTMqUDNMggKaPSVbodajdCX
+        Aiv/EV1derzCXeIkOxqs8YptLBQ5jg==
+X-Google-Smtp-Source: ABdhPJzUR8Qm1+s37SFKkN3y3YVTp69fOdZZUeq8CYIbwWDdBHEW2LD9zUy8Dm7A0l84PqMmkVSVww==
+X-Received: by 2002:a05:6870:b40a:b0:d7:5c87:64ab with SMTP id x10-20020a056870b40a00b000d75c8764abmr13350053oap.168.1652812552134;
+        Tue, 17 May 2022 11:35:52 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l10-20020a4a434a000000b0035eb4e5a6d2sm47454ooj.40.2022.05.17.11.35.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 11:35:51 -0700 (PDT)
+Received: (nullmailer pid 1387304 invoked by uid 1000);
+        Tue, 17 May 2022 18:35:50 -0000
+Date:   Tue, 17 May 2022 13:35:50 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        kernel@collabora.com, matthias.bgg@gmail.com,
+        linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
+        nfraprado@collabora.com, sean.wang@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linus.walleij@linaro.org
+Subject: Re: [PATCH v4 1/2] dt-bindings: pinctrl: Add MediaTek MT6795 pinctrl
+ bindings
+Message-ID: <20220517183550.GA1387243-robh@kernel.org>
+References: <20220517083957.11816-1-angelogioacchino.delregno@collabora.com>
+ <20220517083957.11816-2-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference in
- io_do_iopoll
-Content-Language: en-US
-To:     syzbot <syzbot+1a0a53300ce782f8b3ad@syzkaller.appspotmail.com>,
-        asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <00000000000093a60105df3918eb@google.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <00000000000093a60105df3918eb@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220517083957.11816-2-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/17/22 12:13 PM, syzbot wrote:
-> Hello,
+On Tue, 17 May 2022 10:39:56 +0200, AngeloGioacchino Del Regno wrote:
+> Add devicetree and pinfunc bindings for MediaTek Helio X10 MT6795.
 > 
-> syzbot found the following issue on:
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  .../pinctrl/mediatek,pinctrl-mt6795.yaml      | 224 +++++
+>  include/dt-bindings/pinctrl/mt6795-pinfunc.h  | 908 ++++++++++++++++++
+>  2 files changed, 1132 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
+>  create mode 100644 include/dt-bindings/pinctrl/mt6795-pinfunc.h
 > 
-> HEAD commit:    42226c989789 Linux 5.18-rc7
-> git tree:       upstream
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=125b807ef00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=902c5209311d387c
-> dashboard link: https://syzkaller.appspot.com/bug?extid=1a0a53300ce782f8b3ad
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=149eb59ef00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17cc57c6f00000
-> 
-> The issue was bisected to:
-> 
-> commit 3f1d52abf098c85b177b8c6f5b310e8347d1bc42
-> Author: Jens Axboe <axboe@kernel.dk>
-> Date:   Tue Mar 29 16:43:56 2022 +0000
-> 
->     io_uring: defer msg-ring file validity check until command issue
 
-#syz test git://git.kernel.dk/linux-block io_uring-5.18
-
--- 
-Jens Axboe
-
+Reviewed-by: Rob Herring <robh@kernel.org>

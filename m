@@ -2,108 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A82B52A071
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56ED452A06F
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:32:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345264AbiEQLcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 07:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40326 "EHLO
+        id S1345217AbiEQLb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 07:31:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345257AbiEQLcL (ORCPT
+        with ESMTP id S233488AbiEQLb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 07:32:11 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C0127177;
-        Tue, 17 May 2022 04:32:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652787130; x=1684323130;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=0cl+rkmtmTmZKgTuf6PUoBtPHgmWZT9BcBjwdiNcxa8=;
-  b=lDmthmvx3rnZyMYP9ItKpZoff6jwftcqNVkPAvpuX9Ch/pBwzGvxKK8t
-   vvuxaOWv/1GYuoPSPQpo5OOJehjwc1JkQsR5QrPJkRq/Gss31nuflcTOh
-   Gr3469gO/ZVfMjhhpRic///CPnWb8bcZNuF9FvrCsPhucCOtuq4GuwIkU
-   ONLZAqlH9WP3E4dUb4X0nLvNIiVk4yoM3od+eRcXAaJweJxRG9MyKYjK0
-   Brf21isp0RazVJcccx5nd9mYx11KKNvqr52dp06KVUTd3Ubtp0/3HurX4
-   77dlnDwHKzMoErYCZG5ybrdDgxsrfFlAZfuO3zI+qnhlUfV7YmY/0zqIn
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="296427742"
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="296427742"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 04:32:04 -0700
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="568840984"
-Received: from yangweij-mobl.ccr.corp.intel.com (HELO [10.255.31.115]) ([10.255.31.115])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 04:32:01 -0700
-Message-ID: <84f4eb85-0ab4-07f8-e0a0-4b172d420c4d@intel.com>
-Date:   Tue, 17 May 2022 19:31:51 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v11 14/16] KVM: x86/vmx: Flip Arch LBREn bit on guest
- state change
-Content-Language: en-US
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     "jmattson@google.com" <jmattson@google.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "kan.liang@linux.intel.com" <kan.liang@linux.intel.com>,
-        "like.xu.linux@gmail.com" <like.xu.linux@gmail.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Tue, 17 May 2022 07:31:57 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD47027175
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:31:56 -0700 (PDT)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L2Yjx0jCkzCskY;
+        Tue, 17 May 2022 19:27:01 +0800 (CST)
+Received: from [10.174.179.215] (10.174.179.215) by
+ canpemm500007.china.huawei.com (7.192.104.62) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 17 May 2022 19:31:54 +0800
+Subject: Re: [PATCH -next] powerpc/book3e: Fix build error
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "paulus@samba.org" <paulus@samba.org>
+CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220506033305.5135-1-weijiang.yang@intel.com>
- <20220506033305.5135-15-weijiang.yang@intel.com>
- <9f19a5eb-3eb0-58a2-e4ee-612f3298ba82@redhat.com>
- <9e2b5e9f-25a2-b724-c6d7-282dc987aa99@intel.com>
- <8a15c4b4-cabe-7bc3-bd98-bd669d586616@redhat.com>
- <5f264701-b6d5-8660-55ae-a5039d6a9d3a@intel.com>
- <d68f61ab-d122-809b-913e-4eaf89b337c4@intel.com>
- <6212bdfe-ecd2-3787-a2cb-b285318b102a@redhat.com>
-From:   "Yang, Weijiang" <weijiang.yang@intel.com>
-In-Reply-To: <6212bdfe-ecd2-3787-a2cb-b285318b102a@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+References: <20220517094830.27560-1-yuehaibing@huawei.com>
+ <0e8b7931-9bfb-1948-c141-c4e612ba0fe6@csgroup.eu>
+From:   YueHaibing <yuehaibing@huawei.com>
+Message-ID: <8b169642-5d32-4135-93a7-4969515d1ab0@huawei.com>
+Date:   Tue, 17 May 2022 19:31:54 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
+MIME-Version: 1.0
+In-Reply-To: <0e8b7931-9bfb-1948-c141-c4e612ba0fe6@csgroup.eu>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 5/17/2022 5:01 PM, Paolo Bonzini wrote:
-> On 5/17/22 10:56, Yang, Weijiang wrote:
->>> I added more things to ease migration handling in SMM because: 1) qemu
->>> checks LBREn before transfer Arch LBR MSRs.
-> I think it should always transfer them instead?  There's time to post a
-> fixup patch.
-OK, I'll send a fix patch.
->
->>> 2) Perf event is created when
->>> LBREn is being set.  Two things are not certain: 1) IA32_LBR_CTL doesn't have
->>> corresponding slot in SMRAM,not sure if we need to rely on it to transfer the MSR.
->>> I chose 0x7f10 as the offset(CET takes 0x7f08) for storage, need you double check if
->>> it's free or used.
-> 0x7f10 sounds good.
->
->> Hi, Paolo,
+On 2022/5/17 18:45, Christophe Leroy wrote:
+> 
+> 
+> Le 17/05/2022 à 11:48, YueHaibing a écrit :
+>> arch/powerpc/mm/nohash/fsl_book3e.c: In function ‘relocate_init’:
+>> arch/powerpc/mm/nohash/fsl_book3e.c:348:2: error: implicit declaration of function ‘early_get_first_memblock_info’ [-Werror=implicit-function-declaration]
+>>    early_get_first_memblock_info(__va(dt_ptr), &size);
+>>    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 >>
->> I found there're some rebase conflicts between this series and your kvm
->> queue branch due to PEBS patches, I can re-post a new version based on
->> your queue branch if necessary.
-> Yes, please.
-Sure, I'll post  v12 soon.
->
->> Waiting for your comments on this patch...
-> I already commented that using bit 63 is not good, didn't I?
-Clear :-D, thanks!
->
-> Paolo
->
+>> Add missing include file linux/of_fdt.h to fix this.
+>>
+>> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> 
+> Thats for fixing that.
+> 
+> Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> 
+> It means we don't have any defconfig for 32 bits booke with 
+> CONFIG_RELOCATABLE ?
+
+Indeed, there is no defconfig with CONFIG_RELOCATABLE under arch/powerpc/configs
+> 
+>> ---
+>>   arch/powerpc/mm/nohash/fsl_book3e.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/arch/powerpc/mm/nohash/fsl_book3e.c b/arch/powerpc/mm/nohash/fsl_book3e.c
+>> index 08a984e29433..093da4dbdee1 100644
+>> --- a/arch/powerpc/mm/nohash/fsl_book3e.c
+>> +++ b/arch/powerpc/mm/nohash/fsl_book3e.c
+>> @@ -36,6 +36,7 @@
+>>   #include <linux/delay.h>
+>>   #include <linux/highmem.h>
+>>   #include <linux/memblock.h>
+>> +#include <linux/of_fdt.h>
+>>   
+>>   #include <asm/io.h>
+>>   #include <asm/mmu_context.h>

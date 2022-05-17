@@ -2,108 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C28752A857
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 18:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4432252A878
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 18:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351091AbiEQQmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 12:42:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54976 "EHLO
+        id S1351159AbiEQQqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 12:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351081AbiEQQmP (ORCPT
+        with ESMTP id S1351098AbiEQQqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 12:42:15 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35136403C3
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 09:42:14 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id d15so32312753lfk.5
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 09:42:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=X+ZIsvVjUuwlh/wMsd673AwYnSIKugcP1RnbxXgeB7M=;
-        b=V8osDecpKG1CjUJgHbXhszmxjy2U6L5nGE72cpZ9wzdBseZt01yt+Z4mmHiEAt594M
-         BNqhFNGWjAm8E9llNlZJhF++9DHOQfxrAZVLSUa3Axy8oqQ+ReQqs74mJBVZgyQZa4lT
-         qOpPZirzW3loPIh1wPdjoJshtTrfYXMGx/KgiEQMCw5CVv0fVVqc0R5kTe6xea1aoeRo
-         UCxDV8YnZi0hgkTAF5f38w3ARVMhSRvJbZt0TIhplhn9V70cOcfuemjsVkA+vfLl5GYQ
-         fnELcWbYh9v4jj6y6/n6LCNH9i8RWUqtgra/HnsQkQlsOI8pNTwR4uTbKE3aFuawAaZl
-         6jVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=X+ZIsvVjUuwlh/wMsd673AwYnSIKugcP1RnbxXgeB7M=;
-        b=6i6kPYZ9xaNRX6NNTBzl2SJO+6CJzpvBRjDAH6wQogAVG7Zbg1+0DIGtVNz8SX/BVM
-         J7HhexbuiRvFsRjjQLWIl0+5ZDFkhvKFZvzOKwfeLYdzL6XzeF9iRPgWBJ45MGodtmIY
-         aHzjDKGxNQ2I6iBzdHdgY2TDth7VH8/KhZnauqZwPG5/ccvFTwfSHpod0MQchUFg/qy5
-         a2Wd2G/S2tTiFqvojl4++o9qVYgLYdpTHaz06dfAX+vMXWluv6hYl3EZGBUz5VnAfNrQ
-         eBkNRrh/R8unHHLyQ1Qy5c66dY1+20VmUL+2idrEb6g1KeBkx61yuAOXI2jFRqIVBpGB
-         WNAg==
-X-Gm-Message-State: AOAM53118vfqW0BLOrzhImYSi7jfx4cYMKnEBFRHD0gjh64UnQVPHkFH
-        zfDkv67Vh2jhsTdYIamYeaX/aA==
-X-Google-Smtp-Source: ABdhPJxmKZP+YUmR4TA93TjSj+0oUrnGYJTJhLZ9zVqZmhZg9tbge+VD7odfkhYj4w2QPj6YTGDhpQ==
-X-Received: by 2002:a05:6512:4008:b0:450:bd56:50b3 with SMTP id br8-20020a056512400800b00450bd5650b3mr17936796lfb.552.1652805732538;
-        Tue, 17 May 2022 09:42:12 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id a2-20020a056512390200b00477b38eabd1sm6624lfu.94.2022.05.17.09.42.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 09:42:11 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 74B9F10453E; Tue, 17 May 2022 19:44:03 +0300 (+03)
-Date:   Tue, 17 May 2022 19:44:03 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Jakub =?utf-8?Q?Mat=C4=9Bna?= <matenajakub@gmail.com>
-Cc:     linux-mm@kvack.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, vbabka@suse.cz, mhocko@kernel.org,
-        mgorman@techsingularity.net, willy@infradead.org,
-        liam.howlett@oracle.com, hughd@google.com, riel@surriel.com,
-        rostedt@goodmis.org, peterz@infradead.org, david@redhat.com
-Subject: Re: [RFC PATCH v3 0/6] Removing limitations of merging anonymous VMAs
-Message-ID: <20220517164403.nabrtbkezex7uof4@box.shutemov.name>
-References: <20220516125405.1675-1-matenajakub@gmail.com>
+        Tue, 17 May 2022 12:46:51 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07464EDF0;
+        Tue, 17 May 2022 09:46:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=SayoV/bDRPXgJ3Ch+E1XrP+3ZKBsDTlU6fUN8lp8tUA=; b=NFkpBbcNKXWz56FUYb1Bkzyxr7
+        6pY/CyDxLh4gcyoAU547/3Tabh/NOqK7gz3NyBwq82xJqiEBF4takjF5Ea4MxM1+r5wku8pOVYUcB
+        ywM/ZaJlNeBGlkQDKAAkvdKcd6hk5MAb9a5XNcjDCG3MlNSgk+v7vfXWUOesl/qG/NSZ4K/pjk0dM
+        SubvLJBNURMO5WMoXdrxUQfhd0uSTHup7fDjOSHoKefOTjSKlQG/UGn8QEvdGVnYTtMgbwm4d3/K8
+        B+J9kKyINLLhiDLqbwoDlrvd49iM915Hk5YhXi74qG93lapXX9eWm/gnnOawNxBPCH4bdsTvQIyr9
+        Yagr/AQw==;
+Received: from 200-161-159-120.dsl.telesp.net.br ([200.161.159.120] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nr0L8-008hJL-On; Tue, 17 May 2022 18:46:30 +0200
+Message-ID: <599b72f6-76a4-8e6d-5432-56fb1ffd7e0b@igalia.com>
+Date:   Tue, 17 May 2022 13:45:51 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220516125405.1675-1-matenajakub@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 21/30] panic: Introduce the panic pre-reboot notifier list
+Content-Language: en-US
+To:     Petr Mladek <pmladek@suse.com>, "Luck, Tony" <tony.luck@intel.com>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "bhe@redhat.com" <bhe@redhat.com>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "openipmi-developer@lists.sourceforge.net" 
+        <openipmi-developer@lists.sourceforge.net>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
+        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
+        "halves@canonical.com" <halves@canonical.com>,
+        "fabiomirmar@gmail.com" <fabiomirmar@gmail.com>,
+        "alejandro.j.jimenez@oracle.com" <alejandro.j.jimenez@oracle.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "d.hatayama@jp.fujitsu.com" <d.hatayama@jp.fujitsu.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "dyoung@redhat.com" <dyoung@redhat.com>,
+        "Tang, Feng" <feng.tang@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "mikelley@microsoft.com" <mikelley@microsoft.com>,
+        "hidehiro.kawai.ez@hitachi.com" <hidehiro.kawai.ez@hitachi.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "vgoyal@redhat.com" <vgoyal@redhat.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "will@kernel.org" <will@kernel.org>, Alex Elder <elder@kernel.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Chris Zankel <chris@zankel.net>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Corey Minyard <minyard@acm.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        James Morse <james.morse@arm.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Richard Weinberger <richard@nod.at>,
+        Robert Richter <rric@kernel.org>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, Wei Liu <wei.liu@kernel.org>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-22-gpiccoli@igalia.com> <YoJgcC8c6LaKADZV@alley>
+ <63a74b56-89ef-8d1f-d487-cdb986aab798@igalia.com>
+ <bed66b9467254a5a8bafc1983dad643a@intel.com>
+ <e895ce94-e6b9-caf6-e5d3-06bf0149445c@igalia.com> <YoOs9GJ5Ovq63u5Q@alley>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <YoOs9GJ5Ovq63u5Q@alley>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 02:53:59PM +0200, Jakub Matěna wrote:
-> This is a series of patches that try to improve merge success rate when
-> VMAs are being moved, resized or otherwise modified.
+On 17/05/2022 11:11, Petr Mladek wrote:
+> [...]
+>>> Then notifiers could make an informed choice on whether to deep dive to
+>>> get all the possible details (when there is no kdump) or just skim the high
+>>> level stuff (to maximize chance of getting a successful kdump).
+>>>
+>>> -Tony
+>>
+>> Good idea Tony! What if I wire a kexec_crash_loaded() in the notifier?
 > 
-> Motivation
-> In the current kernel it is impossible to merge two anonymous VMAs
-> if one of them was moved. That is because VMA's page offset is
-> set according to the virtual address where it was created and in
-> order to merge two VMAs page offsets need to follow up.
-> Another problem when merging two faulted VMA's is their anon_vma. In
-> current kernel these anon_vmas have to be the one and the same.
-> Otherwise merge is again not allowed.
-> There are several places from which vma_merge() is called and therefore
-> several use cases that might profit from this upgrade. These include
-> mmap (that fills a hole between two VMAs), mremap (that moves VMA next
-> to another one or again perfectly fills a hole), mprotect (that modifies
-> protection and allows merging with a neighbor) and brk (that expands VMA
-> so that it is adjacent to a neighbor).
-> Missed merge opportunities increase the number of VMAs of a process
-> and in some cases can cause problems when a max count is reached.
+> I like this idea.
+> 
+> One small problem is that kexec_crash_loaded() has valid result
+> only under kexec_mutex. On the other hand, it should stay true
+> once loaded so that the small race window should be innocent.
+> 
+>> With that, are you/Petr/Dinh OK in moving it for the info list?
+> 
+> Sounds good to me.
+> 
+> Best Regards,
+> Petr
 
-Hm. You are talking about missed opportunities, but do you know any
-workload that would measurably benefit from the change?
+Perfect, I'll do that for V2 then =)
 
-The changes are not trivial. And rmap code is complex enough as it is.
+Tony / Dinh - can I just *skip* this notifier *if kdump* is set or else
+we run the code as-is? Does that make sense to you?
 
-I expect common cases to get slower due to additional checks that do not
-result in more merges. I donno, the effort looks dubious to me as of now.
+I'll postpone it to run almost in the end of info list (last position is
+for panic_print).
 
--- 
- Kirill A. Shutemov
+Thanks,
+
+
+Guilherme

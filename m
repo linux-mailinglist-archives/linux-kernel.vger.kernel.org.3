@@ -2,130 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 644D752A407
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A489552A402
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243508AbiEQN6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 09:58:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
+        id S1348137AbiEQN5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 09:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242695AbiEQN5p (ORCPT
+        with ESMTP id S232153AbiEQN5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 09:57:45 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5363C4A1
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:57:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652795864; x=1684331864;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aWy8bNPEpHjAHXLrQDnZZEbIzZhyAqm2BwDjDzXiW1U=;
-  b=giRDkdzXs2m06IkxsD4zaAPE6RFAdCnQR2V1KGhR4sfQNY1fRBeO/bXW
-   s64+74pSVRfDaBrh+ydRWEbOfQX++DpNDnvrDbqmXl8KmDildEJpNHXRI
-   k15pbZZnkTtP6J7t2fGU6YGPhocXM4J51/OE4TynFfgH4SN3Kbp94ovlx
-   Skc3l1Hc6qjDuYjZrRevcxKc8hmttnmdRFWXkxOsb/gpKczw4kiAL4RFH
-   7k9lVd7f9Wm6MYNj2kLWzivXkyPLoiCAGbOG9HJUP2EY+1zvPswLvOkHp
-   uSsi79302UeZdpjXN+O0TIKCN+2nCXSz6IujeViwDqZyLqxZA9lLhb6MH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="357600931"
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="357600931"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 06:57:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="605368886"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 17 May 2022 06:57:42 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nqxhl-00010T-Jj;
-        Tue, 17 May 2022 13:57:41 +0000
-Date:   Tue, 17 May 2022 21:56:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [arm-integrator:kernel-in-vmalloc-v5.18-rc1 8/9]
- lib/test_free_pages.c:20:36: warning: incompatible integer to pointer
- conversion passing 'unsigned long' to parameter of type 'const void *'
-Message-ID: <202205172107.C9n2wfmb-lkp@intel.com>
+        Tue, 17 May 2022 09:57:37 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94673C4A1;
+        Tue, 17 May 2022 06:57:35 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 5FD4E1F8CA;
+        Tue, 17 May 2022 13:57:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652795854; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=F/28g65NUYRrE0kqo9hb+aIMt4lDnxj7qFXJPB2SFKQ=;
+        b=La0hw1fimyOXZWGy7NhUralYCHdeUAgxZ7Jx2l4teL3ZObgxCoYN3MJlutKivdf7Tw8ScF
+        Jcou2BEeZy+SMDvZr2KkytW34i2oUnUQq/Rvj3HIt6rmBgE0M6mmkljwufeUEZWWTXnkMR
+        l7FZzEHlQDvQ7gIrbLVQoj/qRxAknBE=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 47D802C141;
+        Tue, 17 May 2022 13:57:32 +0000 (UTC)
+Date:   Tue, 17 May 2022 15:57:29 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     David Gow <davidgow@google.com>, Evan Green <evgreen@chromium.org>,
+        Julius Werner <jwerner@chromium.org>,
+        Scott Branden <scott.branden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        akpm@linux-foundation.org, bhe@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dexuan Cui <decui@microsoft.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        zhenwei pi <pizhenwei@bytedance.com>
+Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
+Message-ID: <YoOpyW1+q+Z5as78@alley>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-20-gpiccoli@igalia.com>
+ <YoJZVZl/MH0KiE/J@alley>
+ <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.18-rc1
-head:   67a8d6eb3d015908f35d6091c02f17d7c3b55bf3
-commit: 52cbc963c5c9daba74109e9782e3487cdf48fe5c [8/9] ARM: Compile the kernel into VMALLOC
-config: arm-randconfig-r021-20220516 (https://download.01.org/0day-ci/archive/20220517/202205172107.C9n2wfmb-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=52cbc963c5c9daba74109e9782e3487cdf48fe5c
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.18-rc1
-        git checkout 52cbc963c5c9daba74109e9782e3487cdf48fe5c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash lib/
+On Mon 2022-05-16 12:06:17, Guilherme G. Piccoli wrote:
+> Thanks for the review!
+> 
+> I agree with the blinking stuff, I can rework and add all LED/blinking
+> stuff into the loop list, it does make sense. I'll comment a bit in the
+> others below...
+> 
+> On 16/05/2022 11:01, Petr Mladek wrote:
+> >> --- a/drivers/firmware/google/gsmi.c
+> >> +++ b/drivers/firmware/google/gsmi.c
+> >> @@ -1034,7 +1034,7 @@ static __init int gsmi_init(void)
+> >>  
+> >>  	register_reboot_notifier(&gsmi_reboot_notifier);
+> >>  	register_die_notifier(&gsmi_die_notifier);
+> >> -	atomic_notifier_chain_register(&panic_notifier_list,
+> >> +	atomic_notifier_chain_register(&panic_hypervisor_list,
+> >>  				       &gsmi_panic_notifier);
+> > 
+> > I am not sure about this one. It looks like some logging or
+> > pre_reboot stuff.
+> > 
+> 
+> Disagree here. I'm looping Google maintainers, so they can comment.
+> (CCed Evan, David, Julius)
+> 
+> This notifier is clearly a hypervisor notification mechanism. I've fixed
+> a locking stuff there (in previous patch), I feel it's low-risk but even
+> if it's mid-risk, the class of such callback remains a perfect fit with
+> the hypervisor list IMHO.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+It is similar to drivers/soc/bcm/brcmstb/pm/pm-arm.c.
+See below for another idea.
 
-All warnings (new ones prefixed by >>):
+> >> --- a/drivers/misc/bcm-vk/bcm_vk_dev.c
+> >> +++ b/drivers/misc/bcm-vk/bcm_vk_dev.c
+> >> @@ -1446,7 +1446,7 @@ static int bcm_vk_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+> >>  
+> >>  	/* register for panic notifier */
+> >>  	vk->panic_nb.notifier_call = bcm_vk_on_panic;
+> >> -	err = atomic_notifier_chain_register(&panic_notifier_list,
+> >> +	err = atomic_notifier_chain_register(&panic_hypervisor_list,
+> >>  					     &vk->panic_nb);
+> > 
+> > It seems to reset some hardware or so. IMHO, it should go into the
+> > pre-reboot list.
+> 
+> Mixed feelings here, I'm looping Broadcom maintainers to comment.
+> (CC Scott and Broadcom list)
+> 
+> I'm afraid it breaks kdump if this device is not reset beforehand - it's
+> a doorbell write, so not high risk I think...
+> 
+> But in case the not-reset device can be probed normally in kdump kernel,
+> then I'm fine in moving this to the reboot list! I don't have the HW to
+> test myself.
 
->> lib/test_free_pages.c:20:36: warning: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const void *' [-Wint-conversion]
-                   struct page *page = virt_to_page(addr);
-                                                    ^~~~
-   arch/arm/include/asm/memory.h:442:53: note: expanded from macro 'virt_to_page'
-   #define virt_to_page(kaddr)     pfn_to_page(virt_to_pfn(kaddr))
-                                                           ^~~~~
-   include/asm-generic/memory_model.h:40:27: note: expanded from macro '__pfn_to_page'
-   ({      unsigned long __pfn = (pfn);                    \
-                                  ^~~
-   arch/arm/include/asm/memory.h:323:53: note: passing argument to parameter 'p' here
-   static inline unsigned long virt_to_pfn(const void *p)
-                                                       ^
-   1 warning generated.
+Good question. Well, it if has to be called before kdump then
+even "hypervisor" list is a wrong place because is not always
+called before kdump.
 
 
-vim +20 lib/test_free_pages.c
+> >> --- a/drivers/power/reset/ltc2952-poweroff.c
+> >> +++ b/drivers/power/reset/ltc2952-poweroff.c
+> >> @@ -279,7 +279,7 @@ static int ltc2952_poweroff_probe(struct platform_device *pdev)
+> >>  	pm_power_off = ltc2952_poweroff_kill;
+> >>  
+> >>  	data->panic_notifier.notifier_call = ltc2952_poweroff_notify_panic;
+> >> -	atomic_notifier_chain_register(&panic_notifier_list,
+> >> +	atomic_notifier_chain_register(&panic_hypervisor_list,
+> >>  				       &data->panic_notifier);
+> > 
+> > I looks like this somehow triggers the reboot. IMHO, it should go
+> > into the pre_reboot list.
+> 
+> Mixed feeling again here - CCing the maintainers for comments (Sebastian
+> / PM folks).
+> 
+> This is setting a variable only, and once it's set (data->kernel_panic
+> is the bool's name), it just bails out the IRQ handler and a timer
+> setting - this timer seems kinda tricky, so bailing out ASAP makes sense
+> IMHO.
 
-e320d3012d25b1 Matthew Wilcox (Oracle  2020-10-13  13) 
-e320d3012d25b1 Matthew Wilcox (Oracle  2020-10-13  14) static void test_free_pages(gfp_t gfp)
-e320d3012d25b1 Matthew Wilcox (Oracle  2020-10-13  15) {
-e320d3012d25b1 Matthew Wilcox (Oracle  2020-10-13  16) 	unsigned int i;
-e320d3012d25b1 Matthew Wilcox (Oracle  2020-10-13  17) 
-e320d3012d25b1 Matthew Wilcox (Oracle  2020-10-13  18) 	for (i = 0; i < 1000 * 1000; i++) {
-e320d3012d25b1 Matthew Wilcox (Oracle  2020-10-13  19) 		unsigned long addr = __get_free_pages(gfp, 3);
-e320d3012d25b1 Matthew Wilcox (Oracle  2020-10-13 @20) 		struct page *page = virt_to_page(addr);
-e320d3012d25b1 Matthew Wilcox (Oracle  2020-10-13  21) 
-e320d3012d25b1 Matthew Wilcox (Oracle  2020-10-13  22) 		/* Simulate page cache getting a speculative reference */
-e320d3012d25b1 Matthew Wilcox (Oracle  2020-10-13  23) 		get_page(page);
-e320d3012d25b1 Matthew Wilcox (Oracle  2020-10-13  24) 		free_pages(addr, 3);
-e320d3012d25b1 Matthew Wilcox (Oracle  2020-10-13  25) 		put_page(page);
-e320d3012d25b1 Matthew Wilcox (Oracle  2020-10-13  26) 	}
-e320d3012d25b1 Matthew Wilcox (Oracle  2020-10-13  27) }
-e320d3012d25b1 Matthew Wilcox (Oracle  2020-10-13  28) 
+IMHO, the timer informs the hardware that the system is still alive
+in the middle of panic(). If the timer is not working then the
+hardware (chip) will think that the system frozen in panic()
+and will power off the system. See the comments in
+drivers/power/reset/ltc2952-poweroff.c:
 
-:::::: The code at line 20 was first introduced by commit
-:::::: e320d3012d25b1fb5f3df4edb7bd44a1c362ec10 mm/page_alloc.c: fix freeing non-compound pages
+ * The following GPIOs are used:
+ * - trigger (input)
+ *     A level change indicates the shut-down trigger. If it's state reverts
+ *     within the time-out defined by trigger_delay, the shut down is not
+ *     executed. If no pin is assigned to this input, the driver will start the
+ *     watchdog toggle immediately. The chip will only power off the system if
+ *     it is requested to do so through the kill line.
+ *
+ * - watchdog (output)
+ *     Once a shut down is triggered, the driver will toggle this signal,
+ *     with an internal (wde_interval) to stall the hardware shut down.
 
-:::::: TO: Matthew Wilcox (Oracle) <willy@infradead.org>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+IMHO, we really have to keep it alive until we reach the reboot stage.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Another question is how it actually works when the interrupts are
+disabled during panic() and the timer callbacks are not handled.
+
+
+> > [...]
+> >> --- a/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+> >> +++ b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+> >> @@ -814,7 +814,7 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+> >>  		goto out;
+> >>  	}
+> >>  
+> >> -	atomic_notifier_chain_register(&panic_notifier_list,
+> >> +	atomic_notifier_chain_register(&panic_hypervisor_list,
+> >>  				       &brcmstb_pm_panic_nb);
+> > 
+> > I am not sure about this one. It instruct some HW to preserve DRAM.
+> > IMHO, it better fits into pre_reboot category but I do not have
+> > strong opinion.
+> 
+> Disagree here, I'm CCing Florian for information.
+> 
+> This notifier preserves RAM so it's *very interesting* if we have
+> kmsg_dump() for example, but maybe might be also relevant in case kdump
+> kernel is configured to store something in a persistent RAM (then,
+> without this notifier, after kdump reboots the system data would be lost).
+
+I see. It is actually similar problem as with
+drivers/firmware/google/gsmi.c.
+
+I does similar things like kmsg_dump() so it should be called in
+the same location (after info notifier list and before kdump).
+
+A solution might be to put it at these notifiers at the very
+end of the "info" list or make extra "dump" notifier list.
+
+Best Regards,
+Petr

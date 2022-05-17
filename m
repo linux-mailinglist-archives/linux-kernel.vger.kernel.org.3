@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50011529F54
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:23:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D6D529F4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343980AbiEQKXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 06:23:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46536 "EHLO
+        id S237419AbiEQKWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 06:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344810AbiEQKV6 (ORCPT
+        with ESMTP id S1344825AbiEQKV7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 06:21:58 -0400
+        Tue, 17 May 2022 06:21:59 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E22084BFD0;
-        Tue, 17 May 2022 03:20:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 269AA4BFDA;
+        Tue, 17 May 2022 03:20:23 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AF2B912FC;
-        Tue, 17 May 2022 03:20:19 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E270213D5;
+        Tue, 17 May 2022 03:20:22 -0700 (PDT)
 Received: from e121896.warwick.arm.com (e121896.warwick.arm.com [10.32.33.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3F8EC3F66F;
-        Tue, 17 May 2022 03:20:17 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6B5003F66F;
+        Tue, 17 May 2022 03:20:20 -0700 (PDT)
 From:   James Clark <james.clark@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
         broonie@kernel.org, acme@kernel.org
@@ -36,9 +36,9 @@ Cc:     german.gomez@arm.com, leo.yan@linaro.org,
         Jiri Olsa <jolsa@kernel.org>,
         Namhyung Kim <namhyung@kernel.org>,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 1/4] perf tools: arm64: Copy perf_regs.h from the kernel
-Date:   Tue, 17 May 2022 11:20:02 +0100
-Message-Id: <20220517102005.3022017-2-james.clark@arm.com>
+Subject: [PATCH v2 2/4] perf tools: Use dynamic register set for Dwarf unwind
+Date:   Tue, 17 May 2022 11:20:03 +0100
+Message-Id: <20220517102005.3022017-3-james.clark@arm.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20220517102005.3022017-1-james.clark@arm.com>
 References: <20220517102005.3022017-1-james.clark@arm.com>
@@ -53,30 +53,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Get the updated header for the newly added VG register.
+Architectures can detect availability of extra registers at
+runtime so use this more complete set for unwinding. This
+will include the VG register on arm64 in a later commit.
+
+If the function isn't implemented then PERF_REGS_MASK is
+returned and there is no change.
 
 Signed-off-by: James Clark <james.clark@arm.com>
 ---
- tools/arch/arm64/include/uapi/asm/perf_regs.h | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ tools/perf/util/evsel.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/arch/arm64/include/uapi/asm/perf_regs.h b/tools/arch/arm64/include/uapi/asm/perf_regs.h
-index d54daafa89e3..fd157f46727e 100644
---- a/tools/arch/arm64/include/uapi/asm/perf_regs.h
-+++ b/tools/arch/arm64/include/uapi/asm/perf_regs.h
-@@ -36,6 +36,11 @@ enum perf_event_arm_regs {
- 	PERF_REG_ARM64_LR,
- 	PERF_REG_ARM64_SP,
- 	PERF_REG_ARM64_PC,
--	PERF_REG_ARM64_MAX,
-+
-+	/* Extended/pseudo registers */
-+	PERF_REG_ARM64_VG = 46, // SVE Vector Granule
-+
-+	PERF_REG_ARM64_MAX = PERF_REG_ARM64_PC + 1,
-+	PERF_REG_ARM64_EXTENDED_MAX = PERF_REG_ARM64_VG + 1
- };
- #endif /* _ASM_ARM64_PERF_REGS_H */
+diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+index 5fd7924f8eb3..787bbcbcd2ae 100644
+--- a/tools/perf/util/evsel.c
++++ b/tools/perf/util/evsel.c
+@@ -896,7 +896,7 @@ static void __evsel__config_callchain(struct evsel *evsel, struct record_opts *o
+ 					   "specifying a subset with --user-regs may render DWARF unwinding unreliable, "
+ 					   "so the minimal registers set (IP, SP) is explicitly forced.\n");
+ 			} else {
+-				attr->sample_regs_user |= PERF_REGS_MASK;
++				attr->sample_regs_user |= arch__user_reg_mask();
+ 			}
+ 			attr->sample_stack_user = param->dump_size;
+ 			attr->exclude_callchain_user = 1;
 -- 
 2.28.0
 

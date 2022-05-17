@@ -2,131 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D361529AC5
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75323529B59
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239496AbiEQH2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 03:28:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50606 "EHLO
+        id S238957AbiEQHsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 03:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240906AbiEQH13 (ORCPT
+        with ESMTP id S229797AbiEQHr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 03:27:29 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC3743EF4;
-        Tue, 17 May 2022 00:27:28 -0700 (PDT)
-Received: from kwepemi100018.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L2SL90wTHzGpxl;
-        Tue, 17 May 2022 15:24:33 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi100018.china.huawei.com (7.221.188.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 17 May 2022 15:27:26 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 17 May 2022 15:27:25 +0800
-From:   Tong Tiangen <tongtiangen@huawei.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Arnd Bergmann <arnd@arndb.de>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>, <linux-arch@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        <wangkefeng.wang@huawei.com>, Guohanjun <guohanjun@huawei.com>,
-        Xie XiuQi <xiexiuqi@huawei.com>
-Subject: [PATCH -next 2/2] arm64/mm: fix page table check compile error for CONFIG_PGTABLE_LEVELS=2
-Date:   Tue, 17 May 2022 07:45:48 +0000
-Message-ID: <20220517074548.2227779-3-tongtiangen@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220517074548.2227779-1-tongtiangen@huawei.com>
-References: <20220517074548.2227779-1-tongtiangen@huawei.com>
+        Tue, 17 May 2022 03:47:56 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486242ED76;
+        Tue, 17 May 2022 00:47:53 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D2EE51F383;
+        Tue, 17 May 2022 07:47:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1652773671; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ghycn6t5xJ3FJyT4xCbUwPxtWo84lq0XciIN7RNaQPw=;
+        b=i868hRhnCUZBdkwQJa44Asp8b1Nc0V/TynvKKK44LKL3NafC+P3RNwyXMfDY3KbBG+R/Na
+        QdJYGCO+I4wuL88+HbcyfHGK2GjIZhYTN7K/FceKkrk0akPVhVfISw3W42ziV+/uv2tpu8
+        brVz8X3/ql+x4n1JTJm778CHu2zXdBY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1652773671;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ghycn6t5xJ3FJyT4xCbUwPxtWo84lq0XciIN7RNaQPw=;
+        b=Q9pVjJenIkTEi5h+JnIgeYZNGJuWpAXJulbLyZhBh6PUEVTplPxsxls8rVimwa1DseFClU
+        x/giIQLPPpKrznAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 391BD13305;
+        Tue, 17 May 2022 07:47:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xvtrCiZTg2ILfwAAMHmgww
+        (envelope-from <osalvador@suse.de>); Tue, 17 May 2022 07:47:50 +0000
+Date:   Tue, 17 May 2022 09:47:48 +0200
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     corbet@lwn.net, mike.kravetz@oracle.com, akpm@linux-foundation.org,
+        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
+        david@redhat.com, masahiroy@kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        duanxiongchun@bytedance.com, smuchun@gmail.com
+Subject: Re: [PATCH v12 3/7] mm: memory_hotplug: enumerate all supported
+ section flags
+Message-ID: <YoNTJNfhUO7/oUrn@localhost.localdomain>
+References: <20220516102211.41557-1-songmuchun@bytedance.com>
+ <20220516102211.41557-4-songmuchun@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220516102211.41557-4-songmuchun@bytedance.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If CONFIG_PGTABLE_LEVELS=2 and CONFIG_ARCH_SUPPORTS_PAGE_TABLE_CHECK=y,
-then we trigger a compile error:
+On Mon, May 16, 2022 at 06:22:07PM +0800, Muchun Song wrote:
+> We are almost running out of free slots, only one bit is available in the
 
-  error: implicit declaration of function 'pte_user_accessible_page'
+I would be more precise about what are we running out of. Free slots of
+what?
 
-Move the definition of page table check helper out of branch
-CONFIG_PGTABLE_LEVELS > 2
+> worst case (powerpc with 256k pages).  However, there are still some free
+> slots on other architectures (e.g. x86_64 has 10 bits available, arm64
+> has 8 bits available with worst case of 64K pages).  We have hard coded
+> those numbers in code, it is inconvenient to use those bits on other
+> architectures except powerpc.  So transfer those section flags to
+> enumeration to make it easy to add new section flags in the future. Also,
+> move SECTION_TAINT_ZONE_DEVICE into the scope of CONFIG_ZONE_DEVICE
+> to save a bit on non-zone-device case.
+> 
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> ---
+...
+> --- a/include/linux/mmzone.h
+> +++ b/include/linux/mmzone.h
+> @@ -1418,16 +1418,37 @@ extern size_t mem_section_usage_size(void);
+>   *      (equal SECTION_SIZE_BITS - PAGE_SHIFT), and the
+>   *      worst combination is powerpc with 256k pages,
+>   *      which results in PFN_SECTION_SHIFT equal 6.
+> - * To sum it up, at least 6 bits are available.
+> + * To sum it up, at least 6 bits are available on all architectures.
+> + * However, we can exceed 6 bits on some other architectures except
+> + * powerpc (e.g. 15 bits are available on x86_64, 13 bits are available
+> + * with the worst case of 64K pages on arm64) if we make sure the
+> + * exceeded bit is not applicable to powerpc.
+>   */
+> -#define SECTION_MARKED_PRESENT		(1UL<<0)
+> -#define SECTION_HAS_MEM_MAP		(1UL<<1)
+> -#define SECTION_IS_ONLINE		(1UL<<2)
+> -#define SECTION_IS_EARLY		(1UL<<3)
+> -#define SECTION_TAINT_ZONE_DEVICE	(1UL<<4)
+> -#define SECTION_MAP_LAST_BIT		(1UL<<5)
+> +#define ENUM_SECTION_FLAG(MAPPER)						\
+> +	MAPPER(MARKED_PRESENT)							\
+> +	MAPPER(HAS_MEM_MAP)							\
+> +	MAPPER(IS_ONLINE)							\
+> +	MAPPER(IS_EARLY)							\
+> +	MAPPER(TAINT_ZONE_DEVICE, CONFIG_ZONE_DEVICE)				\
+> +	MAPPER(MAP_LAST_BIT)
+> +
+> +#define __SECTION_SHIFT_FLAG_MAPPER_0(x)
+> +#define __SECTION_SHIFT_FLAG_MAPPER_1(x)	SECTION_##x##_SHIFT,
+> +#define __SECTION_SHIFT_FLAG_MAPPER(x, ...)	\
+> +	__PASTE(__SECTION_SHIFT_FLAG_MAPPER_, IS_ENABLED(__VA_ARGS__))(x)
+> +
+> +#define __SECTION_FLAG_MAPPER_0(x)
+> +#define __SECTION_FLAG_MAPPER_1(x)		SECTION_##x = BIT(SECTION_##x##_SHIFT),
+> +#define __SECTION_FLAG_MAPPER(x, ...)		\
+> +	__PASTE(__SECTION_FLAG_MAPPER_, IS_ENABLED(__VA_ARGS__))(x)
+> +
+> +enum {
+> +	ENUM_SECTION_FLAG(__SECTION_SHIFT_FLAG_MAPPER)
+> +	ENUM_SECTION_FLAG(__SECTION_FLAG_MAPPER)
+> +};
+> +
+>  #define SECTION_MAP_MASK		(~(SECTION_MAP_LAST_BIT-1))
+> -#define SECTION_NID_SHIFT		6
+> +#define SECTION_NID_SHIFT		SECTION_MAP_LAST_BIT_SHIFT
 
-Fixes: daf214c14dbe ("arm64/mm: enable ARCH_SUPPORTS_PAGE_TABLE_CHECK")
-Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
----
- arch/arm64/include/asm/pgtable.h | 33 ++++++++++++++++----------------
- 1 file changed, 17 insertions(+), 16 deletions(-)
+Is this really worth the extra code? And it might be me that I am not
+familiar with all this magic, but it looks overcomplicated.
+Maybe some comments here and there help clarifying what it is going on
+here.
 
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index 4e61cde27f9f..979601528f1e 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -667,22 +667,6 @@ static inline unsigned long pmd_page_vaddr(pmd_t pmd)
- #define pud_valid(pud)		pte_valid(pud_pte(pud))
- #define pud_user(pud)		pte_user(pud_pte(pud))
- 
--#ifdef CONFIG_PAGE_TABLE_CHECK
--static inline bool pte_user_accessible_page(pte_t pte)
--{
--	return pte_present(pte) && (pte_user(pte) || pte_user_exec(pte));
--}
--
--static inline bool pmd_user_accessible_page(pmd_t pmd)
--{
--	return pmd_present(pmd) && (pmd_user(pmd) || pmd_user_exec(pmd));
--}
--
--static inline bool pud_user_accessible_page(pud_t pud)
--{
--	return pud_present(pud) && pud_user(pud);
--}
--#endif
- 
- static inline void set_pud(pud_t *pudp, pud_t pud)
- {
-@@ -855,6 +839,23 @@ static inline int pgd_devmap(pgd_t pgd)
- }
- #endif
- 
-+#ifdef CONFIG_PAGE_TABLE_CHECK
-+static inline bool pte_user_accessible_page(pte_t pte)
-+{
-+	return pte_present(pte) && (pte_user(pte) || pte_user_exec(pte));
-+}
-+
-+static inline bool pmd_user_accessible_page(pmd_t pmd)
-+{
-+	return pmd_present(pmd) && (pmd_user(pmd) || pmd_user_exec(pmd));
-+}
-+
-+static inline bool pud_user_accessible_page(pud_t pud)
-+{
-+	return pud_present(pud) && pud_user(pud);
-+}
-+#endif
-+
- /*
-  * Atomic pte/pmd modifications.
-  */
+>  static inline struct page *__section_mem_map_addr(struct mem_section *section)
+>  {
+> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+> index 111684878fd9..aef3f041dec7 100644
+> --- a/mm/memory_hotplug.c
+> +++ b/mm/memory_hotplug.c
+> @@ -655,12 +655,18 @@ static void __meminit resize_pgdat_range(struct pglist_data *pgdat, unsigned lon
+>  
+>  }
+>  
+> +#ifdef CONFIG_ZONE_DEVICE
+>  static void section_taint_zone_device(unsigned long pfn)
+>  {
+>  	struct mem_section *ms = __pfn_to_section(pfn);
+>  
+>  	ms->section_mem_map |= SECTION_TAINT_ZONE_DEVICE;
+>  }
+> +#else
+> +static inline void section_taint_zone_device(unsigned long pfn)
+> +{
+> +}
+> +#endif
+>  
+>  /*
+>   * Associate the pfn range with the given zone, initializing the memmaps
+> -- 
+> 2.11.0
+> 
+> 
+
 -- 
-2.25.1
-
+Oscar Salvador
+SUSE Labs

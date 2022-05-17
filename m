@@ -2,88 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B68529F4B
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:22:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D29C9529F47
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344254AbiEQKUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 06:20:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60870 "EHLO
+        id S1344091AbiEQKUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 06:20:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344071AbiEQKUN (ORCPT
+        with ESMTP id S1344102AbiEQKUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 06:20:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8468E4BFE1;
-        Tue, 17 May 2022 03:18:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E462615E8;
-        Tue, 17 May 2022 10:18:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46240C34117;
-        Tue, 17 May 2022 10:18:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652782725;
-        bh=v2apwGjWbFjt3W1NYCU1hTCmO/tsOL6niZc398NrbFo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sFjsCyG6q/I/b5u7wJ4bTjJVBE8nbiSwnbqKZ4rAqBtAuk40QuOLsD+neuNpefXTO
-         kNQdD4ZcWSircc26ULALAo3KLkiN1U+oPX+4VUssma0Z845mgrPaj3VKaaEr+BfA7B
-         sijcOfMIDg6khvpRjhbTJlpFAJJ7nGOPmv1FadsQ=
-Date:   Tue, 17 May 2022 12:18:38 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        zbr@ioremap.net, jdelvare@suse.com, linux@roeck-us.net
-Subject: Re: [PATCH -next] drivers: w1: use kfree_sensitive()
-Message-ID: <YoN2fn5zRyNEnaUT@kroah.com>
-References: <20220511064954.3401381-1-yangyingliang@huawei.com>
- <YntbdfHLjeHzAb9/@kroah.com>
- <2cf24169-ea56-9c72-fa95-a1e6625c8545@huawei.com>
+        Tue, 17 May 2022 06:20:15 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B24B4C7B1
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 03:19:01 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 07EF31042;
+        Tue, 17 May 2022 03:19:01 -0700 (PDT)
+Received: from [10.57.82.55] (unknown [10.57.82.55])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9DADC3F66F;
+        Tue, 17 May 2022 03:18:59 -0700 (PDT)
+Message-ID: <0e9356ee-9ae0-fd6d-b4ba-b1f05d8ba144@arm.com>
+Date:   Tue, 17 May 2022 11:18:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2cf24169-ea56-9c72-fa95-a1e6625c8545@huawei.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] iommu/dma: Fix check for error return from
+ iommu_map_sg_atomic()
+Content-Language: en-GB
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
+References: <20220513153948.310119-1-schnelle@linux.ibm.com>
+ <20220517083657.GA16377@lst.de>
+ <27ae8b9f8e61dce4b31a37622e98b1c57b21b104.camel@linux.ibm.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <27ae8b9f8e61dce4b31a37622e98b1c57b21b104.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 03:25:52PM +0800, Yang Yingliang wrote:
-> Hi,
+On 2022-05-17 11:17, Niklas Schnelle wrote:
+> On Tue, 2022-05-17 at 10:36 +0200, Christoph Hellwig wrote:
+>> On Fri, May 13, 2022 at 05:39:48PM +0200, Niklas Schnelle wrote:
+>>> In __iommu_dma_alloc_noncontiguous() the value returned by
+>>> iommu_map_sg_atomic() is checked for being smaller than size. Before
+>>> commit ad8f36e4b6b1 ("iommu: return full error code from
+>>> iommu_map_sg[_atomic]()") this simply checked if the requested size was
+>>> successfully mapped.
+>>>
+>>> After that commit iommu_map_sg_atomic() may also return a negative
+>>> error value. In principle this too would be covered by the existing
+>>> check. There is one problem however, as size is of type size_t while the
+>>> return type of iommu_map_sg_atomic() is now of type ssize_t the latter gets
+>>> converted to size_t and negative error values end up as very large
+>>> positive values making the check succeed. Fix this by making the return
+>>> type visible with a local variable and add an explicit cast to ssize_t.
+>>>
+>>> Fixes: ad8f36e4b6b1 ("iommu: return full error code from iommu_map_sg[_atomic]()")
+>>> Cc: stable@vger.kernel.org
+>>> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+>>
+>> I don't see what the point of the newly added local variable is here.
+>> Just casting size should be all that is needed as far as I can tell.
 > 
-> On 2022/5/11 14:45, Greg KH wrote:
-> > On Wed, May 11, 2022 at 02:49:54PM +0800, Yang Yingliang wrote:
-> > > Use kfree_sensitive() instead of open-coding it.
-> > > 
-> > > Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> > > ---
-> > >   drivers/w1/w1.c | 3 +--
-> > >   1 file changed, 1 insertion(+), 2 deletions(-)
-> > > 
-> > > diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
-> > > index f2ae2e563dc5..a0a6c3c739d9 100644
-> > > --- a/drivers/w1/w1.c
-> > > +++ b/drivers/w1/w1.c
-> > > @@ -73,8 +73,7 @@ static void w1_master_release(struct device *dev)
-> > >   	struct w1_master *md = dev_to_w1_master(dev);
-> > >   	dev_dbg(dev, "%s: Releasing %s.\n", __func__, md->name);
-> > > -	memset(md, 0, sizeof(struct w1_master) + sizeof(struct w1_bus_master));
-> > > -	kfree(md);
-> > > +	kfree_sensitive(md);
-> > Does this actually change anything?  Why is the memset being called here
-> > at all?
-> It's no functional change and I got this by
-> scripts/coccinelle/api/kfree_sensitive.cocci.
-> I'm not sure why using memset() here.
+> No technical reason just found it easier to read and more descriptive.
+> I'll sent a v2 with just the cast, it does simplify the commit message.
 
-I think the memset() can just be dropped.  Can you make that change and
-test it to verify it still works properly with that change?
+Note that this is already fixed upstream, though:
 
-thanks,
+https://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git/commit/?h=core&id=a3884774d731f03d3a3dd4fb70ec2d9341ceb39d
 
-greg k-h
+Robin.

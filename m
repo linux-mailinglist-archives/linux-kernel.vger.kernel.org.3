@@ -2,105 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 958DA52A8A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 18:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43C5852A8B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 18:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351241AbiEQQyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 12:54:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
+        id S1351266AbiEQQ5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 12:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350665AbiEQQyt (ORCPT
+        with ESMTP id S1350068AbiEQQ5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 12:54:49 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08A240934
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 09:54:47 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2fedd26615cso81418747b3.7
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 09:54:47 -0700 (PDT)
+        Tue, 17 May 2022 12:57:21 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BAD14FC56
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 09:57:20 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 202so17432777pgc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 09:57:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qfrwpsR8dVYRSweWV/3B4/qVRy2oFwVXna3I/qpO720=;
-        b=bcV6Yy2SmG5kbc6Q0/RO4eqS91H09JPCZebLeSw/NxhJKasEo8+GNMY59lxoJsum9M
-         4jhBAuevZyGJx/xmKU4uYQQDy80mfVv4+vgTUAXPqKwYLR9nQw6fT9+oOCredKi7qDEK
-         8qdIv3GRuzTYuddp1+5eme1J94/10qJRcw24MD95o/z7LY86Gyy11dij26G6Tdqr+FFZ
-         VThcInGlWbQWOcS+SAW8xp1YsvTAsNQl+0ImPTGcGWBoCogXWE1LG4TvVtypNzumze7E
-         ys2MDAEwmPlKYvf714pL37hPyu7ozSRB4HqhPYZ24Qkq3npQqvoFsVqWZ0uiso3RqGam
-         LL4Q==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZrkN+YgQcy8TmBn9IQj258ckKwGL6KgYMAMdpFCzl+0=;
+        b=Z0W6Fesmppi/k/m0+l3fvjlzx5G0H6gVZ2f07+JAuuTTeO8m8XLKP2G4bvCdR4dshd
+         oxnaIOLfzq6QRhRPG81rI5zqY7jSD9YM2LBq3QOcTjY0VHXuOngQiif1S5TCwBDxysoh
+         h0AjbNgPsSqPSwxx8oHr6i7jDH0j2OqWACyL+wN/ouZNo22OZiQDYFxaRZUY2QwsZ3xW
+         mcVqrIxTzRpSucPGRzuSVseoBxdg6sRhV8Q3S5WsxEloHQXn/6jPnnLECkDP0k0v7XSy
+         mr6KKhu8xhvceslqQ2zU98fQkxEHsOKLCQawz1a5xxLIiwNxN0+dzNgZRRhn1fndgvCT
+         1G6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qfrwpsR8dVYRSweWV/3B4/qVRy2oFwVXna3I/qpO720=;
-        b=J5z6SGRcQDTakUyV6LxHCS/LNa1TQyJjuOlNPyZlaT1GlVJdSAahA3QB5SwpEuHWgX
-         RDJ01ruSat1cIMDZBBkCBj+5xJN6ncY+gYwZhtRraLywPJoJhAXERKiTruCRKStjcVvW
-         HO7/PuUCI3EJWz0ZYPWw3Er3VoUD6AGRhtWYy4zDHlVzHGxBFGQstAyn2OqRPmU1D+uw
-         pxH/grTRh6I+h20kC0DL7bAhHITmLtFfpF+jb4s+/z9MKly2nrtq+9UgwD0urORTRdkl
-         u9CcUpSmfPrzOj+ey2OigqRiG3Eb0uA6omN2qo6thqG6qV+3QeMWzt5ng0UTiXlX31Ct
-         jdIA==
-X-Gm-Message-State: AOAM5336kukDLrbV0WcJosUN9F6NwTRdyw7Jy0ev7iuVA+h9Ezk4Ha00
-        Tq+o/DirPHNX9s1oUnlnbk5DCCzRdw5RJ8sczOGmfw==
-X-Google-Smtp-Source: ABdhPJxRWXaAW/s7NQiyicZLAUVWqeo8BUdGCRUR2iOWAW29E0H0E6iMG/OCQUnBO3WNAZSnwEP4KifL6o+gmc2+wiI=
-X-Received: by 2002:a0d:d4d0:0:b0:2fe:b86b:472d with SMTP id
- w199-20020a0dd4d0000000b002feb86b472dmr24665158ywd.469.1652806487018; Tue, 17
- May 2022 09:54:47 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZrkN+YgQcy8TmBn9IQj258ckKwGL6KgYMAMdpFCzl+0=;
+        b=1Ii2dX5PWRb88caWXRI+Xr1Be2oBMbQTMu2m01bmBNo2CjUzlatO0lqsdPzhrCkno0
+         4dhG6S9RB7yWTNkDO8D1Jnt4Ymm67oJLGv9RnaR71qNPm2mGnrgDFQWfIxDgQCSNKHUF
+         qgUT0MDDZdT8ui6/sWR+S84oZuYIL5EqeeDxkXcklljKjqVTDcmqJaL2W9+iaGdE2DOu
+         v0ycXAkTxPjIBUIwec/o2Pr6BLln/24padH4ncQDCLMLk/2G735Mq868lJNIe1fWpYjQ
+         eErkjCS8BtgRoZWSZi48tTztUgw7fgG7hTXybfS+KSlgvivZLdAFejdM3h+M9ie8I/4v
+         WUpQ==
+X-Gm-Message-State: AOAM530q+q5Uqd30UbYTmPkIijIGLfPBP9pm9p5TZW7cuYQZD4RtJye+
+        re6rwwlPIGu7FQxjkOT0CrvAMQ==
+X-Google-Smtp-Source: ABdhPJzWpE20upem7cs6BX2VWWBhtrwf10SFgIkk8EyDuL9wYbTgCsRbrxH8glHRNtY+fLSZh/J0rw==
+X-Received: by 2002:a62:a209:0:b0:510:3c47:7888 with SMTP id m9-20020a62a209000000b005103c477888mr23212920pff.14.1652806639519;
+        Tue, 17 May 2022 09:57:19 -0700 (PDT)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id cs20-20020a17090af51400b001df5dea7d4bsm1912045pjb.43.2022.05.17.09.57.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 09:57:18 -0700 (PDT)
+Date:   Tue, 17 May 2022 16:57:14 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH V2 6/7] KVM: X86/MMU: Allocate mmu->pae_root for PAE
+ paging on-demand
+Message-ID: <YoPT6petoQUnF4vB@google.com>
+References: <20220503150735.32723-1-jiangshanlai@gmail.com>
+ <20220503150735.32723-7-jiangshanlai@gmail.com>
 MIME-Version: 1.0
-References: <20220517101410.3493781-1-andre.przywara@arm.com> <20220517153444.GA1057027-robh@kernel.org>
-In-Reply-To: <20220517153444.GA1057027-robh@kernel.org>
-From:   Peter Maydell <peter.maydell@linaro.org>
-Date:   Tue, 17 May 2022 17:54:36 +0100
-Message-ID: <CAFEAcA8sE8Rj0GmF71ox4BdDr0UcaS4QwiLUVUUFH5oj+hDhfA@mail.gmail.com>
-Subject: Re: [PATCH] of/fdt: Ignore disabled memory nodes
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Ross Burton <ross.burton@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220503150735.32723-7-jiangshanlai@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 May 2022 at 16:34, Rob Herring <robh@kernel.org> wrote:
->
-> On Tue, May 17, 2022 at 11:14:10AM +0100, Andre Przywara wrote:
-> > When we boot a machine using a devicetree, the generic DT code goes
-> > through all nodes with a 'device_type = "memory"' property, and collects
-> > all memory banks mentioned there. However it does not check for the
-> > status property, so any nodes which are explicitly "disabled" will still
-> > be added as a memblock.
-> > This ends up badly for QEMU, when booting with secure firmware on
-> > arm/arm64 machines, because QEMU adds a node describing secure-only
-> > memory:
-> > ===================
-> >       secram@e000000 {
->
-> BTW, 'memory' is the correct node name.
+On Tue, May 03, 2022 at 11:07:34PM +0800, Lai Jiangshan wrote:
+> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> 
+> mmu->pae_root for non-PAE paging is allocated on-demand, but
+> mmu->pae_root for PAE paging is allocated early when struct kvm_mmu is
+> being created.
+> 
+> Simplify the code to allocate mmu->pae_root for PAE paging and make
+> it on-demand.
+> 
+> Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c          | 99 ++++++++++++++-------------------
+>  arch/x86/kvm/mmu/mmu_internal.h | 10 ----
+>  2 files changed, 42 insertions(+), 67 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index bcb3e2730277..c97f830c5f8c 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -691,6 +691,41 @@ static void walk_shadow_page_lockless_end(struct kvm_vcpu *vcpu)
+>  	}
+>  }
+>  
+> +static int mmu_alloc_pae_root(struct kvm_vcpu *vcpu)
+> +{
+> +	struct page *page;
+> +
+> +	if (vcpu->arch.mmu->root_role.level != PT32E_ROOT_LEVEL)
+> +		return 0;
+> +	if (vcpu->arch.mmu->pae_root)
+> +		return 0;
+> +
+> +	/*
+> +	 * Allocate a page to hold the four PDPTEs for PAE paging when emulating
+> +	 * 32-bit mode.  CR3 is only 32 bits even on x86_64 in this case.
+> +	 * Therefore we need to allocate the PDP table in the first 4GB of
+> +	 * memory, which happens to fit the DMA32 zone.
+> +	 */
+> +	page = alloc_page(GFP_KERNEL_ACCOUNT | __GFP_ZERO | __GFP_DMA32);
+> +	if (!page)
+> +		return -ENOMEM;
+> +	vcpu->arch.mmu->pae_root = page_address(page);
+> +
+> +	/*
+> +	 * CR3 is only 32 bits when PAE paging is used, thus it's impossible to
+> +	 * get the CPU to treat the PDPTEs as encrypted.  Decrypt the page so
+> +	 * that KVM's writes and the CPU's reads get along.  Note, this is
+> +	 * only necessary when using shadow paging, as 64-bit NPT can get at
+> +	 * the C-bit even when shadowing 32-bit NPT, and SME isn't supported
+> +	 * by 32-bit kernels (when KVM itself uses 32-bit NPT).
+> +	 */
+> +	if (!tdp_enabled)
+> +		set_memory_decrypted((unsigned long)vcpu->arch.mmu->pae_root, 1);
+> +	else
+> +		WARN_ON_ONCE(shadow_me_value);
+> +	return 0;
+> +}
+> +
+>  static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_indirect)
+>  {
+>  	int r;
+> @@ -5031,6 +5066,9 @@ int kvm_mmu_load(struct kvm_vcpu *vcpu)
+>  	r = mmu_topup_memory_caches(vcpu, !vcpu->arch.mmu->root_role.direct);
+>  	if (r)
+>  		goto out;
+> +	r = mmu_alloc_pae_root(vcpu);
+> +	if (r)
+> +		return r;
+>  	r = mmu_alloc_special_roots(vcpu);
+>  	if (r)
+>  		goto out;
+> @@ -5495,63 +5533,18 @@ static void free_mmu_pages(struct kvm_mmu *mmu)
+>  	free_page((unsigned long)mmu->pml5_root);
+>  }
+>  
+> -static int __kvm_mmu_create(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu)
+> +static void __kvm_mmu_create(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu)
 
-We already have a 'memory' node, which is for the NS
-memory. This one's for the secure-only RAM block,
-which is why I gave it a name that hopefully helps in
-spotting that when a human is reading the DT.
+vcpu is now unused.
 
-I'm not really sure to what extent node names in device trees are
-"this is just an identifying textual label" and to what extent
-they are "this is really ABI and you need to follow the standard",
-though -- nothing in practice seems to care what they are,
-suggesting the "textual label" theory, but some bits of tooling
-complain if you do things like forget the address value or use the
-same address for two different nodes, suggesting the "really ABI"
-theory.
+>  {
+> -	struct page *page;
+>  	int i;
+>  
+>  	mmu->root.hpa = INVALID_PAGE;
+>  	mmu->root.pgd = 0;
+>  	for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS; i++)
+>  		mmu->prev_roots[i] = KVM_MMU_ROOT_INFO_INVALID;
 
-thanks
--- PMM
+optional: Consider open-coding this directly in kvm_mmu_create() and
+drop __kvm_mmu_create().
+
+> -
+> -	/* vcpu->arch.guest_mmu isn't used when !tdp_enabled. */
+> -	if (!tdp_enabled && mmu == &vcpu->arch.guest_mmu)
+> -		return 0;
+> -
+> -	/*
+> -	 * When using PAE paging, the four PDPTEs are treated as 'root' pages,
+> -	 * while the PDP table is a per-vCPU construct that's allocated at MMU
+> -	 * creation.  When emulating 32-bit mode, cr3 is only 32 bits even on
+> -	 * x86_64.  Therefore we need to allocate the PDP table in the first
+> -	 * 4GB of memory, which happens to fit the DMA32 zone.  TDP paging
+> -	 * generally doesn't use PAE paging and can skip allocating the PDP
+> -	 * table.  The main exception, handled here, is SVM's 32-bit NPT.  The
+> -	 * other exception is for shadowing L1's 32-bit or PAE NPT on 64-bit
+> -	 * KVM; that horror is handled on-demand by mmu_alloc_special_roots().
+> -	 */
+> -	if (tdp_enabled && kvm_mmu_get_tdp_level(vcpu) > PT32E_ROOT_LEVEL)
+> -		return 0;
+> -
+> -	page = alloc_page(GFP_KERNEL_ACCOUNT | __GFP_DMA32);
+> -	if (!page)
+> -		return -ENOMEM;
+> -
+> -	mmu->pae_root = page_address(page);
+> -
+> -	/*
+> -	 * CR3 is only 32 bits when PAE paging is used, thus it's impossible to
+> -	 * get the CPU to treat the PDPTEs as encrypted.  Decrypt the page so
+> -	 * that KVM's writes and the CPU's reads get along.  Note, this is
+> -	 * only necessary when using shadow paging, as 64-bit NPT can get at
+> -	 * the C-bit even when shadowing 32-bit NPT, and SME isn't supported
+> -	 * by 32-bit kernels (when KVM itself uses 32-bit NPT).
+> -	 */
+> -	if (!tdp_enabled)
+> -		set_memory_decrypted((unsigned long)mmu->pae_root, 1);
+> -	else
+> -		WARN_ON_ONCE(shadow_me_value);
+> -
+> -	for (i = 0; i < 4; ++i)
+> -		mmu->pae_root[i] = INVALID_PAE_ROOT;
+> -
+> -	return 0;
+>  }
+>  
+>  int kvm_mmu_create(struct kvm_vcpu *vcpu)
+
+kvm_mmu_create() could return void now too.
+
+>  {
+> -	int ret;
+> -
+>  	vcpu->arch.mmu_pte_list_desc_cache.kmem_cache = pte_list_desc_cache;
+>  	vcpu->arch.mmu_pte_list_desc_cache.gfp_zero = __GFP_ZERO;
+>  
+> @@ -5563,18 +5556,10 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
+>  	vcpu->arch.mmu = &vcpu->arch.root_mmu;
+>  	vcpu->arch.walk_mmu = &vcpu->arch.root_mmu;
+>  
+> -	ret = __kvm_mmu_create(vcpu, &vcpu->arch.guest_mmu);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = __kvm_mmu_create(vcpu, &vcpu->arch.root_mmu);
+> -	if (ret)
+> -		goto fail_allocate_root;
+> +	__kvm_mmu_create(vcpu, &vcpu->arch.guest_mmu);
+> +	__kvm_mmu_create(vcpu, &vcpu->arch.root_mmu);
+>  
+> -	return ret;
+> - fail_allocate_root:
+> -	free_mmu_pages(&vcpu->arch.guest_mmu);
+> -	return ret;
+> +	return 0;
+>  }
+>  
+>  #define BATCH_ZAP_PAGES	10
+> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+> index 1bff453f7cbe..d5673a42680f 100644
+> --- a/arch/x86/kvm/mmu/mmu_internal.h
+> +++ b/arch/x86/kvm/mmu/mmu_internal.h
+> @@ -20,16 +20,6 @@ extern bool dbg;
+>  #define MMU_WARN_ON(x) do { } while (0)
+>  #endif
+>  
+> -/*
+> - * Unlike regular MMU roots, PAE "roots", a.k.a. PDPTEs/PDPTRs, have a PRESENT
+> - * bit, and thus are guaranteed to be non-zero when valid.  And, when a guest
+> - * PDPTR is !PRESENT, its corresponding PAE root cannot be set to INVALID_PAGE,
+> - * as the CPU would treat that as PRESENT PDPTR with reserved bits set.  Use
+> - * '0' instead of INVALID_PAGE to indicate an invalid PAE root.
+> - */
+> -#define INVALID_PAE_ROOT	0
+> -#define IS_VALID_PAE_ROOT(x)	(!!(x))
+> -
+>  typedef u64 __rcu *tdp_ptep_t;
+>  
+>  struct kvm_mmu_page {
+> -- 
+> 2.19.1.6.gb485710b
+> 

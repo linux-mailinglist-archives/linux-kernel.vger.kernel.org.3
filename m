@@ -2,60 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAB59529635
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 02:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F87529639
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 02:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236515AbiEQAza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 20:55:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
+        id S236883AbiEQAze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 20:55:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiEQAz1 (ORCPT
+        with ESMTP id S236482AbiEQAza (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 20:55:27 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8761344C8
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 17:55:26 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id q4so15979892plr.11
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 17:55:26 -0700 (PDT)
+        Mon, 16 May 2022 20:55:30 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83BAF344F3
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 17:55:29 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id w17-20020a17090a529100b001db302efed6so892934pjh.4
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 17:55:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+xTvUZ/MZ/hBMOv0pU4miRbRa4E1wCeud/j7eErPbOM=;
-        b=At1cMaJ1YI6mdPHBhH3EPPsHY6nby2Qx29Higj+fSkAGshMg27QehHqxn0Qw60C7WG
-         rmyP9l5SX7+5F1EKSb6XFioQ46dBJFzb20vro+6u5Di0S6qxt4ID+ywnzkrDF4pLUWSU
-         UQtHCGBdEY37uV+5XzXfWif/D0H+dbaUJr4k8uAxypOo2w4BwZzYOl9rs2goqvNolCr9
-         HCUijfCdjwZs61FHuQ0RJLRCWmPqinCtzR/SCKWVYT7liaWWT4vhMET+ZZd5djczY38Q
-         ByvA2k9qUemcnjyzOyghUseZVCwrNSPUsHDX3buS62/jkabqMnSinkoQIqrB/DczqS+D
-         +cdQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=H2M3w87N8EOgC0/E1kAJwjCB00j3VlGn1SiaTA0GCI4=;
+        b=oBdS6oGKMONo6W7KiHyC44QKcc6QdwUE0uChA6qKnet4V/Bq5PQUYToWMMltiIqZn8
+         D9HOEyqT1XBgJ9tUkWvKLZm4SX2kqk/hbHnlN2kPPDZl5K5OhQPRKGpNoPJoHMs/QKEZ
+         zBwnjtGSpv3PebkKGv2D9mBORqNd2lBc1ZR3LeYtKES6PbSzRef0uOOOThSX4Z5QdagE
+         mW0iMqK+L0ABtC1NS5Ni/EV+N3vPaUam8aprpyqFTTyBsG21fHhzN/jJWJyw1aRGjute
+         SY3zAtmi8iiI9eKWKo9gyeEZxslBu/nRu2GxcEQDY38QEpleGsFUm8EO2DwjXAd2BvyH
+         L/cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+xTvUZ/MZ/hBMOv0pU4miRbRa4E1wCeud/j7eErPbOM=;
-        b=yZWhiPNIXDoAxFeL4k6g7OP0J3gzCZb6iHpV+XLQ2vKKqMz3PcT54Hdjbhis6iym0v
-         CHUiXw4r0nZSqmjl3mBBikESl+RL64NDu+fmMdzOjlJo1rFOIELgNFNaSkvhpp2O4yXp
-         +YHAERKPPQzg3ElaQWdUcAah+H5x+eKidfWEMnpxRwnVYInuplCBMA32a5IlEbgwxuXw
-         A84s8EXaQZ0KrFRYyyoxBjsdCQueAiczDm0Uj92PzHMY6jE7B4QGEJsY1Pi+apHxaZa+
-         qyJRLa0uB+iyxl9PqQ/dKpiqC6gjsBx6tzZIWf3Z+aYqHvAtR5PK4SDGqAWrkHqPPcGX
-         b+TA==
-X-Gm-Message-State: AOAM533QFn3nGRguB+emK6vljcFok6bZY1B+hmWJ41uqGBdcWakOsykt
-        4z8EBRLCnWdTQs6UKhRt4U6nW50gVUc=
-X-Google-Smtp-Source: ABdhPJyag62O3xF/5d9ATebbPs62aYvEzfoSK6yl9zsJiq2cgZwzvUpHoCEpuDyZIqK2SUIzuJ74aQ==
-X-Received: by 2002:a17:902:7e01:b0:15e:caea:d6 with SMTP id b1-20020a1709027e0100b0015ecaea00d6mr19997264plm.33.1652748925641;
-        Mon, 16 May 2022 17:55:25 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=H2M3w87N8EOgC0/E1kAJwjCB00j3VlGn1SiaTA0GCI4=;
+        b=gB+t5bo9jZMVCutp4UItWZiPN8+QyIiVcvcycwAJf27lvtEWJTtkxKoCrEdNbepXrh
+         Pz4k+twaQLoYTZMdNuVO7Za0mKNxraUwXHHSQXDiZ5UjgZ/ZexmgxwlybmW7HVP/Y6Xw
+         jHopwK/kvx0jdMAFTtZF0aESBknK/N04LJFGv21FOw+bFOfBhakEhS0+jt1OjcBDFQcV
+         nrmtFbGkSQBwfTP4lUoSgduFyJ2XqNlUbWKmi7bXQiemvHCxy6yEltaEdfJVr7mDRtO4
+         0r1YsdMyV8RV6FXa5jRH91RXcDFuglfOMovFhT1R43wQFGDaizjR4fLaPuhuRQpzsbVA
+         Mtwg==
+X-Gm-Message-State: AOAM531Xx0NM2wcZmbCy3PJxDbrY5Bkr1Qsu5J+KdEBc4P1Ad0iQG9ZK
+        sEx6mLyEox+bAZ2jVsgimCHcgoNUFMc=
+X-Google-Smtp-Source: ABdhPJzricSwjwhsyYUriiO42PXB0BfxYRb3I3qa8uLhZwnsRNsV5LadGCU21WU8vjpqDMrKzBvETw==
+X-Received: by 2002:a17:90b:3649:b0:1db:a201:5373 with SMTP id nh9-20020a17090b364900b001dba2015373mr22178032pjb.175.1652748928539;
+        Mon, 16 May 2022 17:55:28 -0700 (PDT)
 Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id w2-20020a63fb42000000b003ed6b3dc52esm5486685pgj.55.2022.05.16.17.55.24
+        by smtp.gmail.com with ESMTPSA id x9-20020a628609000000b0050dc7628193sm7353806pfd.109.2022.05.16.17.55.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 17:55:25 -0700 (PDT)
+        Mon, 16 May 2022 17:55:27 -0700 (PDT)
 From:   Stafford Horne <shorne@gmail.com>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Openrisc <openrisc@lists.librecores.org>,
-        Stafford Horne <shorne@gmail.com>
-Subject: [PATCH v2 00/13]  OpenRISC misc cleanups for 5.19
-Date:   Tue, 17 May 2022 09:54:57 +0900
-Message-Id: <20220517005510.3500105-1-shorne@gmail.com>
+        Stafford Horne <shorne@gmail.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+Subject: [PATCH v2 01/13] openrisc: Add gcc machine instruction flag configuration
+Date:   Tue, 17 May 2022 09:54:58 +0900
+Message-Id: <20220517005510.3500105-2-shorne@gmail.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220517005510.3500105-1-shorne@gmail.com>
+References: <20220517005510.3500105-1-shorne@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,48 +72,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a collection of misc cleanups I have accumulated when working on some
-recent OpenRISC projects.
+OpenRISC GCC supports flags to enable the backend to output instructions
+if they are supported by a target processor.  This patch adds
+configuration flags to enable configuring these flags to tune the kernel
+for a particular CPU configuration.
 
-The patch themes:
- - Sparse warning cleanups
- - Removal of dead code
- - Emergency debug fixups in head.S
- - Support for gcc machine instruction flags
- - defconfig updates for litex
+In the future we could also enable all of these flags by default and
+provide instruction emulation in the kernel to make these choices easier
+for users but this is what we provide for now.
 
-I have tested these patches when verifying the glibc port by running the glibc
-test suite.
+Signed-off-by: Stafford Horne <shorne@gmail.com>
+---
+ arch/openrisc/Kconfig  | 53 ++++++++++++++++++++++++++++++++++++++++++
+ arch/openrisc/Makefile | 17 ++++++++++++++
+ 2 files changed, 70 insertions(+)
 
-Changes since v1:
- - Fix if/elif issue in emergency print fixes pointed out by Samuel Holland
-
-Stafford Horne (13):
-  openrisc: Add gcc machine instruction flag configuration
-  openrisc: Cleanup emergency print handling
-  openrisc: Add support for liteuart emergency printing
-  openrisc: Add syscall details to emergency syscall debugging
-  openrisc: Pretty print show_registers memory dumps
-  openrisc: Update litex defconfig to support glibc userland
-  openrisc/traps: Declare file scope symbols as static
-  openrisc/traps: Remove die_if_kernel function
-  openrisc/traps: Declare unhandled_exception for asmlinkage
-  openrisc/time: Fix symbol scope warnings
-  openrisc/delay: Add include to fix symbol not declared warning
-  openrisc/fault: Fix symbol scope warnings
-  openrisc: Remove unused IMMU tlb workardound
-
- arch/openrisc/Kconfig                     |  53 ++++
- arch/openrisc/Makefile                    |  17 +
- arch/openrisc/configs/or1klitex_defconfig |  33 ++
- arch/openrisc/kernel/entry.S              |  20 +-
- arch/openrisc/kernel/head.S               | 368 ++++++----------------
- arch/openrisc/kernel/time.c               |   3 +-
- arch/openrisc/kernel/traps.c              |  63 ++--
- arch/openrisc/lib/delay.c                 |   1 +
- arch/openrisc/mm/fault.c                  |   4 +-
- 9 files changed, 255 insertions(+), 307 deletions(-)
-
+diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
+index 0d68adf6e02b..ea7eac20911a 100644
+--- a/arch/openrisc/Kconfig
++++ b/arch/openrisc/Kconfig
+@@ -114,6 +114,59 @@ config OPENRISC_HAVE_INST_DIV
+ 	default y
+ 	help
+ 	  Select this if your implementation has a hardware divide instruction
++
++config OPENRISC_HAVE_INST_CMOV
++	bool "Have instruction l.cmov for conditional move"
++	default y
++	help
++	  This config enables gcc to generate l.cmov instructions when compiling
++	  the kernel which in general will improve performance and reduce the
++	  binary size.
++
++	  Select this if your implementation has support for the Class II
++	  l.cmov conistional move instruction.
++
++	  Say N if you are unsure.
++
++config OPENRISC_HAVE_INST_ROR
++	bool "Have instruction l.ror for rotate right"
++	default y
++	help
++	  This config enables gcc to generate l.ror instructions when compiling
++	  the kernel which in general will improve performance and reduce the
++	  binary size.
++
++	  Select this if your implementation has support for the Class II
++	  l.ror rotate right instruction.
++
++	  Say N if you are unsure.
++
++config OPENRISC_HAVE_INST_RORI
++	bool "Have instruction l.rori for rotate right with immediate"
++	default y
++	help
++	  This config enables gcc to generate l.rori instructions when compiling
++	  the kernel which in general will improve performance and reduce the
++	  binary size.
++
++	  Select this if your implementation has support for the Class II
++	  l.rori rotate right with immediate instruction.
++
++	  Say N if you are unsure.
++
++config OPENRISC_HAVE_INST_SEXT
++	bool "Have instructions l.ext* for sign extension"
++	default y
++	help
++	  This config enables gcc to generate l.ext* instructions when compiling
++	  the kernel which in general will improve performance and reduce the
++	  binary size.
++
++	  Select this if your implementation has support for the Class II
++	  l.exths, l.extbs, l.exthz and l.extbz size extend instructions.
++
++	  Say N if you are unsure.
++
+ endmenu
+ 
+ config NR_CPUS
+diff --git a/arch/openrisc/Makefile b/arch/openrisc/Makefile
+index 760b734fb822..b446510173cd 100644
+--- a/arch/openrisc/Makefile
++++ b/arch/openrisc/Makefile
+@@ -21,6 +21,7 @@ OBJCOPYFLAGS    := -O binary -R .note -R .comment -S
+ LIBGCC 		:= $(shell $(CC) $(KBUILD_CFLAGS) -print-libgcc-file-name)
+ 
+ KBUILD_CFLAGS	+= -pipe -ffixed-r10 -D__linux__
++KBUILD_CFLAGS	+= -msfimm -mshftimm
+ 
+ all: vmlinux.bin
+ 
+@@ -38,6 +39,22 @@ else
+ 	KBUILD_CFLAGS += $(call cc-option,-msoft-div)
+ endif
+ 
++ifeq ($(CONFIG_OPENRISC_HAVE_INST_CMOV),y)
++	KBUILD_CFLAGS += $(call cc-option,-mcmov)
++endif
++
++ifeq ($(CONFIG_OPENRISC_HAVE_INST_ROR),y)
++	KBUILD_CFLAGS += $(call cc-option,-mror)
++endif
++
++ifeq ($(CONFIG_OPENRISC_HAVE_INST_RORI),y)
++	KBUILD_CFLAGS += $(call cc-option,-mrori)
++endif
++
++ifeq ($(CONFIG_OPENRISC_HAVE_INST_SEXT),y)
++	KBUILD_CFLAGS += $(call cc-option,-msext)
++endif
++
+ head-y 		:= arch/openrisc/kernel/head.o
+ 
+ libs-y		+= $(LIBGCC)
 -- 
 2.31.1
 

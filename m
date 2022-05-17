@@ -2,71 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0BAA52A3BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5128652A3C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348079AbiEQNoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 09:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47720 "EHLO
+        id S1348050AbiEQNo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 09:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348033AbiEQNnz (ORCPT
+        with ESMTP id S243712AbiEQNox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 09:43:55 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7322B4B851;
-        Tue, 17 May 2022 06:43:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652795034; x=1684331034;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/CrgiSc59n20HmuyDaVZJ30MmKZxGwlUAzTZtAd8oek=;
-  b=OI68qJ2vC6SSrd45+1cAD+WBqZkBX0vBLNuwGqlpVw2uHsj364GQ8UVl
-   DDAzVc2hgUvSMz2fPgBNU5GsEQELPODpbRhOTUMKS+W0qpOGf+wuWIRZC
-   v4vxNYLihLwP8Sjj2olvv8nVtC6+9Yyty66ENiGuXSlM9r1dHRs0bkkRv
-   zUQLdWanWJRKywZBy643eR8HNhTPp4FeYgAz9z58UOqTbldEsG36oKH39
-   61JyrBmQ1eyjPSWnY6W0BNYbYXu+hNwitl1fgLD7b4GX+6JyBpyXUlFVv
-   5vOX9i6FYtzp6Nk6H/Uzm48nzMyF993IpVAYI8tYiM3IFQoMst2R4Uv76
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="268770233"
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="268770233"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 06:43:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="713856488"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga001.fm.intel.com with ESMTP; 17 May 2022 06:43:53 -0700
-Received: from [10.252.209.74] (kliang2-MOBL.ccr.corp.intel.com [10.252.209.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 58CA558094D;
-        Tue, 17 May 2022 06:43:52 -0700 (PDT)
-Message-ID: <46c1257c-779f-8473-5531-fcc9f6380da7@linux.intel.com>
-Date:   Tue, 17 May 2022 09:43:51 -0400
+        Tue, 17 May 2022 09:44:53 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E814B868
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:44:52 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id q76so16963853pgq.10
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:44:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pt9MMK51ZD888dBndiS0dCoASz75vrxRph8/MPvQlS8=;
+        b=S3DU+VBR0vm772cv1uuDUnEMbgqi5yllUJiH1XBd8ZgQ4Aa6e3xzZKy/FSRlhnfEjm
+         7KwPw1ZSSGIIpXU9+ll+6Bspg6BaRGB+ZMNu9SvgRA6OsgIwgPx5KMqgyRt9SE0ufuWL
+         c6oamKAdAHZvfeiBmoeFJd1Bw3EYnZffuqldI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pt9MMK51ZD888dBndiS0dCoASz75vrxRph8/MPvQlS8=;
+        b=5TN8h0yYEK//Mp+hnyrXn8VB2pnmuOa6gHq1Kvv3PyD104e9rVaHxfc4HESaKrHiIP
+         /pTZTdA+WSj2KPrUOBmPv1qppfqtM1DrqW0M5ytysk3DCD51iXYrFFCtseX6C3urtRVP
+         1Cou4brHlRxjdgEMQj26tzv6erTa+ThZww6Kq3viz2FhM03w/DI0QkvjWqN3HjpnNBEx
+         wqY2WlSh/VkAo10Ns+aQzpd3p4RQS2ZUWwqukHsaNADe9yLqYRumAkxz1Xrk4LydquFk
+         M1MEtLCPu8qyX4gJg7z6F1P1ghGReEu9tM+qiBC2vud5aL7fYY3hLxwarBNqh2AoPSTN
+         67Jg==
+X-Gm-Message-State: AOAM533ECPDhQ6eA/CUXr1sevQQyiM9r0wD2CI9cs47wXNRKhGlhX+uD
+        pOBtXKhusuNaPCYCp/ezn9mzj28LBqjgV3GZ9tOACw==
+X-Google-Smtp-Source: ABdhPJywjPgdoOw/JtyQqrp/ClohzClPu2c7khu0+BbVFnTWtqh85DgsiXbxBLueR83+PuwsPeQwxmrLYwQItGP6LFw=
+X-Received: by 2002:a05:6a00:1891:b0:50d:e6e7:acae with SMTP id
+ x17-20020a056a00189100b0050de6e7acaemr22569699pfh.26.1652795091779; Tue, 17
+ May 2022 06:44:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH V2 2/4] perf stat: Always keep perf metrics topdown events
- in a group
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>
-Cc:     acme@kernel.org, mingo@redhat.com, jolsa@kernel.org,
-        namhyung@kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, peterz@infradead.org,
-        zhengjun.xing@linux.intel.com, adrian.hunter@intel.com,
-        ak@linux.intel.com, eranian@google.com
-References: <20220516152436.1104757-1-kan.liang@linux.intel.com>
- <20220516152436.1104757-3-kan.liang@linux.intel.com>
- <CAP-5=fUpUtWAME1wCmEycONzSwEe5m76b4jB14M8+B6Ptks3jQ@mail.gmail.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <CAP-5=fUpUtWAME1wCmEycONzSwEe5m76b4jB14M8+B6Ptks3jQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220517133540.2456987-1-michael@amarulasolutions.com> <bd342e6be1723daa3787c7088c3510d0@denx.de>
+In-Reply-To: <bd342e6be1723daa3787c7088c3510d0@denx.de>
+From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date:   Tue, 17 May 2022 15:44:40 +0200
+Message-ID: <CAOf5uw=QxFM=CCFLZ=fZCfn9BBz1aFpkPQuED1uHxHRABwMHMQ@mail.gmail.com>
+Subject: Re: [PATCH] arm: dts: imx6ulz-bsh-smm-m2: Support proper board power off
+To:     Fabio Estevam <festevam@denx.de>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-amarula@amarulasolutions.com,
+        Rob Herring <robh+dt@kernel.org>,
+        "Ariel D'Alessandro" <ariel.dalessandro@collabora.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Simon Holesch <simon.holesch@bshg.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,185 +70,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Fabio
+
+On Tue, May 17, 2022 at 3:41 PM Fabio Estevam <festevam@denx.de> wrote:
+>
+> Hi Michael,
+>
+> On 17/05/2022 10:35, Michael Trimarchi wrote:
+> > From: Simon Holesch <simon.holesch@bshg.com>
+> >
+> > Supports initiating poweroff on SNVS_PMIC_ON_REQ signal.
+> >
+> > Signed-off-by: Simon Holesch <simon.holesch@bshg.com>
+>
+> You missed your own Signed-off-by tag here.
+
+It's fine, I can add Tested-by: Michael Trimarchi <michael@amarulasolutions.com>
+
+Michael
 
 
-On 5/16/2022 11:11 PM, Ian Rogers wrote:
-> On Mon, May 16, 2022 at 8:25 AM <kan.liang@linux.intel.com> wrote:
->>
->> From: Kan Liang <kan.liang@linux.intel.com>
->>
->> If any member in a group has a different cpu mask than the other
->> members, the current perf stat disables group. when the perf metrics
->> topdown events are part of the group, the below <not supported> error
->> will be triggered.
->>
->> $ perf stat -e "{slots,topdown-retiring,uncore_imc_free_running_0/dclk/}" -a sleep 1
->> WARNING: grouped events cpus do not match, disabling group:
->>    anon group { slots, topdown-retiring, uncore_imc_free_running_0/dclk/ }
->>
->>   Performance counter stats for 'system wide':
->>
->>         141,465,174      slots
->>     <not supported>      topdown-retiring
->>       1,605,330,334      uncore_imc_free_running_0/dclk/
->>
->> The perf metrics topdown events must always be grouped with a slots
->> event as leader.
->>
->> Factor out evsel__remove_from_group() to only remove the regular events
->> from the group.
->>
->> Remove evsel__must_be_in_group(), since no one use it anymore.
->>
->> With the patch, the topdown events aren't broken from the group for the
->> splitting.
->>
->> $ perf stat -e "{slots,topdown-retiring,uncore_imc_free_running_0/dclk/}" -a sleep 1
->> WARNING: grouped events cpus do not match, disabling group:
->>    anon group { slots, topdown-retiring, uncore_imc_free_running_0/dclk/ }
->>
->>   Performance counter stats for 'system wide':
->>
->>         346,110,588      slots
->>         124,608,256      topdown-retiring
->>       1,606,869,976      uncore_imc_free_running_0/dclk/
->>
->>         1.003877592 seconds time elapsed
->>
->> Fixes: a9a1790247bd ("perf stat: Ensure group is defined on top of the same cpu mask")
->> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
->> ---
->>   tools/perf/builtin-stat.c |  7 +++----
->>   tools/perf/util/evlist.c  |  6 +-----
->>   tools/perf/util/evsel.c   | 13 +++++++++++--
->>   tools/perf/util/evsel.h   |  2 +-
->>   4 files changed, 16 insertions(+), 12 deletions(-)
->>
->> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
->> index a96f106dc93a..75c88c7939b1 100644
->> --- a/tools/perf/builtin-stat.c
->> +++ b/tools/perf/builtin-stat.c
->> @@ -271,10 +271,9 @@ static void evlist__check_cpu_maps(struct evlist *evlist)
->>                          pr_warning("     %s: %s\n", evsel->name, buf);
->>                  }
->>
->> -               for_each_group_evsel(pos, leader) {
->> -                       evsel__set_leader(pos, pos);
->> -                       pos->core.nr_members = 0;
->> -               }
->> +               for_each_group_evsel(pos, leader)
->> +                       evsel__remove_from_group(pos, leader);
->> +
->>                  evsel->core.leader->nr_members = 0;
-> 
-> This shouldn't be necessary now.
 
-It should point to itself which has been updated in 
-evsel__remove_from_group().
+-- 
+Michael Nazzareno Trimarchi
+Co-Founder & Chief Executive Officer
+M. +39 347 913 2170
+michael@amarulasolutions.com
+__________________________________
 
-I will remove it in V3.
-
-> 
->>          }
->>   }
->> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
->> index dfa65a383502..7fc544330fea 100644
->> --- a/tools/perf/util/evlist.c
->> +++ b/tools/perf/util/evlist.c
->> @@ -1795,11 +1795,7 @@ struct evsel *evlist__reset_weak_group(struct evlist *evsel_list, struct evsel *
->>                           * them. Some events, like Intel topdown, require being
->>                           * in a group and so keep these in the group.
->>                           */
->> -                       if (!evsel__must_be_in_group(c2) && c2 != leader) {
->> -                               evsel__set_leader(c2, c2);
->> -                               c2->core.nr_members = 0;
->> -                               leader->core.nr_members--;
->> -                       }
->> +                       evsel__remove_from_group(c2, leader);
->>
->>                          /*
->>                           * Set this for all former members of the group
->> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
->> index b98882cbb286..deb428ee5e50 100644
->> --- a/tools/perf/util/evsel.c
->> +++ b/tools/perf/util/evsel.c
->> @@ -3083,7 +3083,16 @@ bool __weak arch_evsel__must_be_in_group(const struct evsel *evsel __maybe_unuse
->>          return false;
->>   }
->>
->> -bool evsel__must_be_in_group(const struct evsel *evsel)
->> +/*
->> + * Remove an event from a given group (leader).
->> + * Some events, e.g., perf metrics Topdown events,
->> + * must always be grouped. Ignore the events.
->> + */
->> +void evsel__remove_from_group(struct evsel *evsel, struct evsel *leader)
->>   {
->> -       return arch_evsel__must_be_in_group(evsel);
->> +       if (!arch_evsel__must_be_in_group(evsel) && evsel != leader) {
->> +               evsel__set_leader(evsel, evsel);
->> +               evsel->core.nr_members = 0;
->> +               leader->core.nr_members--;
->> +       }
-> 
-> Should we also have:
-> 
-> if (leader->core.nr_members == 1)
->       leader->core.nr_members = 0;
-> 
-> Other wise say:
-> 
-> {instructions,cycles}
-> 
-> with a remove of cycles becomes:
-> 
-> {instructions}, cycles
-> 
-> rather than the previous:
-> 
-> instructions,cycles
-> 
-> Actually, looking at:
-> https://lore.kernel.org/lkml/20220512061308.1152233-2-irogers@google.com/
-> 
-> + /* Reset the leader count if all entries were removed. */
-> + if (leader->core.nr_members)
-> + leader->core.nr_members = 0;
-> 
-> is wrong and should be:
-> 
-> + /* Reset the leader count if all entries were removed. */
-> + if (leader->core.nr_members == 1)
-> + leader->core.nr_members = 0;
-> 
-
-For a perf metrics topdown group, the leader's nr_members must be > 1 
-after the reset. We should not clear it.
-For the other weak group, the leader's nr_members should equal to 1 
-after the reset. We only need to clear it for this case.
-I think it makes sense.
-
-
-Thanks,
-Kan
-> I'll fix and re-send.
-> > Thanks,
-> Ian
-> 
->>   }
->> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
->> index a36172ed4cf6..47f65f8e7c74 100644
->> --- a/tools/perf/util/evsel.h
->> +++ b/tools/perf/util/evsel.h
->> @@ -483,7 +483,7 @@ bool evsel__has_leader(struct evsel *evsel, struct evsel *leader);
->>   bool evsel__is_leader(struct evsel *evsel);
->>   void evsel__set_leader(struct evsel *evsel, struct evsel *leader);
->>   int evsel__source_count(const struct evsel *evsel);
->> -bool evsel__must_be_in_group(const struct evsel *evsel);
->> +void evsel__remove_from_group(struct evsel *evsel, struct evsel *leader);
->>
->>   bool arch_evsel__must_be_in_group(const struct evsel *evsel);
->>
->> --
->> 2.35.1
->>
+Amarula Solutions BV
+Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+T. +31 (0)85 111 9172
+info@amarulasolutions.com
+www.amarulasolutions.com

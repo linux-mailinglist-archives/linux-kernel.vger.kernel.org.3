@@ -2,51 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E80E2529FD4
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C7BE529FD5
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344683AbiEQK5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 06:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51166 "EHLO
+        id S1344668AbiEQK5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 06:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344572AbiEQK5A (ORCPT
+        with ESMTP id S1344811AbiEQK5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 06:57:00 -0400
-Received: from zg8tndyumtaxlji0oc4xnzya.icoremail.net (zg8tndyumtaxlji0oc4xnzya.icoremail.net [46.101.248.176])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id BA67A483AA;
-        Tue, 17 May 2022 03:56:54 -0700 (PDT)
-Received: by ajax-webmail-mail-app4 (Coremail) ; Tue, 17 May 2022 18:56:31
- +0800 (GMT+08:00)
-X-Originating-IP: [124.236.130.193]
-Date:   Tue, 17 May 2022 18:56:31 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        gregkh@linuxfoundation.org, alexander.deucher@amd.com,
-        broonie@kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net] NFC: hci: fix sleep in atomic context bugs in
- nfc_hci_hcp_message_tx
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <ea2af2f9-002a-5681-4293-a05718ce9dcd@linaro.org>
-References: <20220516021028.54063-1-duoming@zju.edu.cn>
- <d5fdfe27-a6de-3030-ce51-9f4f45d552f3@linaro.org>
- <6aba1413.196eb.180cc609bf1.Coremail.duoming@zju.edu.cn>
- <ea2af2f9-002a-5681-4293-a05718ce9dcd@linaro.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Tue, 17 May 2022 06:57:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 12D2749FA0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 03:57:22 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D2AB91042;
+        Tue, 17 May 2022 03:57:21 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B32B73F66F;
+        Tue, 17 May 2022 03:57:20 -0700 (PDT)
+Date:   Tue, 17 May 2022 11:57:18 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Qing Wang <wangqing@vivo.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] arch_topology: Use llc_id instead of package_id
+Message-ID: <20220517105718.tvpmj2xxb2qj3bev@bogus>
+References: <20220513083400.343706-1-dietmar.eggemann@arm.com>
+ <20220513090330.z25fwthekn4rjkwq@bogus>
+ <afafbb0c-5279-bee8-1ef4-434733e2a552@arm.com>
+ <20220513110312.wy6g5avs7ngkmhfu@bogus>
+ <634a4b8c-84d2-51a9-ef54-33b81683c849@arm.com>
+ <20220516103524.35swlxp2367baxx6@bogus>
+ <beda044e-0b91-4359-c6bf-5e34c285fc5c@arm.com>
 MIME-Version: 1.0
-Message-ID: <fc6a78c.196ab.180d1a98cc9.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cS_KCgDHnyJff4NiljNaAA--.8491W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAggNAVZdtZu2IgADs0
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <beda044e-0b91-4359-c6bf-5e34c285fc5c@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,59 +53,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpPbiBNb24sIDE2IE1heSAyMDIyIDEyOjQzOjA3ICswMjAwIEtyenlzenRvZiB3cm90
-ZToKCj4gPj4+IFRoZXJlIGFyZSBzbGVlcCBpbiBhdG9taWMgY29udGV4dCBidWdzIHdoZW4gdGhl
-IHJlcXVlc3QgdG8gc2VjdXJlCj4gPj4+IGVsZW1lbnQgb2Ygc3QyMW5mY2EgaXMgdGltZW91dC4g
-VGhlIHJvb3QgY2F1c2UgaXMgdGhhdCBremFsbG9jIGFuZAo+ID4+PiBhbGxvY19za2Igd2l0aCBH
-RlBfS0VSTkVMIHBhcmFtZXRlciBpcyBjYWxsZWQgaW4gc3QyMW5mY2Ffc2Vfd3RfdGltZW91dAo+
-ID4+PiB3aGljaCBpcyBhIHRpbWVyIGhhbmRsZXIuIFRoZSBjYWxsIHRyZWUgc2hvd3MgdGhlIGV4
-ZWN1dGlvbiBwYXRocyB0aGF0Cj4gPj4+IGNvdWxkIGxlYWQgdG8gYnVnczoKPiA+Pj4KPiA+Pj4g
-ICAgKEludGVycnVwdCBjb250ZXh0KQo+ID4+PiBzdDIxbmZjYV9zZV93dF90aW1lb3V0Cj4gPj4+
-ICAgbmZjX2hjaV9zZW5kX2V2ZW50Cj4gPj4+ICAgICBuZmNfaGNpX2hjcF9tZXNzYWdlX3R4Cj4g
-Pj4+ICAgICAgIGt6YWxsb2MoLi4uLCBHRlBfS0VSTkVMKSAvL21heSBzbGVlcAo+ID4+PiAgICAg
-ICBhbGxvY19za2IoLi4uLCBHRlBfS0VSTkVMKSAvL21heSBzbGVlcAo+ID4+Pgo+ID4+PiBUaGlz
-IHBhdGNoIGNoYW5nZXMgYWxsb2NhdGlvbiBtb2RlIG9mIGt6YWxsb2MgYW5kIGFsbG9jX3NrYiBm
-cm9tCj4gPj4+IEdGUF9LRVJORUwgdG8gR0ZQX0FUT01JQyBpbiBvcmRlciB0byBwcmV2ZW50IGF0
-b21pYyBjb250ZXh0IGZyb20KPiA+Pj4gc2xlZXBpbmcuIFRoZSBHRlBfQVRPTUlDIGZsYWcgbWFr
-ZXMgbWVtb3J5IGFsbG9jYXRpb24gb3BlcmF0aW9uCj4gPj4+IGNvdWxkIGJlIHVzZWQgaW4gYXRv
-bWljIGNvbnRleHQuCj4gPj4+Cj4gPj4+IEZpeGVzOiA4YjhkMmUwOGJmMGQgKCJORkM6IEhDSSBz
-dXBwb3J0IikKPiA+Pj4gU2lnbmVkLW9mZi1ieTogRHVvbWluZyBaaG91IDxkdW9taW5nQHpqdS5l
-ZHUuY24+Cj4gPj4+IC0tLQo+ID4+PiAgbmV0L25mYy9oY2kvaGNwLmMgfCA0ICsrLS0KPiA+Pj4g
-IDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4gPj4+Cj4g
-Pj4+IGRpZmYgLS1naXQgYS9uZXQvbmZjL2hjaS9oY3AuYyBiL25ldC9uZmMvaGNpL2hjcC5jCj4g
-Pj4+IGluZGV4IDA1YzYwOTg4ZjU5Li4xY2FmOWMyMDg2ZiAxMDA2NDQKPiA+Pj4gLS0tIGEvbmV0
-L25mYy9oY2kvaGNwLmMKPiA+Pj4gKysrIGIvbmV0L25mYy9oY2kvaGNwLmMKPiA+Pj4gQEAgLTMw
-LDcgKzMwLDcgQEAgaW50IG5mY19oY2lfaGNwX21lc3NhZ2VfdHgoc3RydWN0IG5mY19oY2lfZGV2
-ICpoZGV2LCB1OCBwaXBlLAo+ID4+PiAgCWludCBoY2lfbGVuLCBlcnI7Cj4gPj4+ICAJYm9vbCBm
-aXJzdGZyYWcgPSB0cnVlOwo+ID4+PiAgCj4gPj4+IC0JY21kID0ga3phbGxvYyhzaXplb2Yoc3Ry
-dWN0IGhjaV9tc2cpLCBHRlBfS0VSTkVMKTsKPiA+Pj4gKwljbWQgPSBremFsbG9jKHNpemVvZigq
-Y21kKSwgR0ZQX0FUT01JQyk7Cj4gPj4KPiA+PiBObywgdGhpcyBkb2VzIG5vdCBsb29rIGNvcnJl
-Y3QuIFRoaXMgZnVuY3Rpb24gY2FuIHNsZWVwLCBzbyBpdCBjYW4gdXNlCj4gPj4gR0ZQX0tFUk5F
-TC4gUGxlYXNlIGp1c3QgbG9vayBhdCB0aGUgZnVuY3Rpb24gYmVmb3JlIHJlcGxhY2luZyBhbnkg
-ZmxhZ3MuLi4KPiA+IAo+ID4gSSBhbSBzb3JyeSwgSSBkb25gdCB1bmRlcnN0YW5kIHdoeSBuZmNf
-aGNpX2hjcF9tZXNzYWdlX3R4KCkgY2FuIHNsZWVwLgo+IAo+IFdoeT8gYmVjYXVzZSBpbiBsaW5l
-IDkzIGl0IHVzZXMgYSBtdXRleCAod2hpY2ggaXMgYSBzbGVlcGluZyBwcmltaXR2ZSkuCj4gCj4g
-PiAKPiA+IEkgdGhpbmsgc3QyMW5mY2Ffc2Vfd3RfdGltZW91dCgpIGlzIGEgdGltZXIgaGFuZGxl
-ciwgd2hpY2ggaXMgaW4gaW50ZXJydXB0IGNvbnRleHQuCj4gPiBUaGUgY2FsbCB0cmVlIHNob3dz
-IHRoZSBleGVjdXRpb24gcGF0aHMgdGhhdCBjb3VsZCBsZWFkIHRvIGJ1Z3M6Cj4gPiAKPiA+IHN0
-MjFuZmNhX2hjaV9zZV9pbygpCj4gPiAgIG1vZF90aW1lcigmaW5mby0+c2VfaW5mby5id2lfdGlt
-ZXIsLi4uKQo+ID4gICAgIHN0MjFuZmNhX3NlX3d0X3RpbWVvdXQoKSAgLy90aW1lciBoYW5kbGVy
-LCBpbnRlcnJ1cHQgY29udGV4dAo+ID4gICAgICAgbmZjX2hjaV9zZW5kX2V2ZW50KCkKPiA+ICAg
-ICAgICAgbmZjX2hjaV9oY3BfbWVzc2FnZV90eCgpCj4gPiAgICAgICAgICAga3phbGxvYyguLi4s
-IEdGUF9LRVJORUwpIC8vbWF5IHNsZWVwCj4gPiAgICAgICAgICAgYWxsb2Nfc2tiKC4uLiwgR0ZQ
-X0tFUk5FTCkgLy9tYXkgc2xlZXAKPiA+IAo+ID4gV2hhdGBzIG1vcmUsIEkgdGhpbmsgdGhlICJt
-dXRleF9sb2NrKCZoZGV2LT5tc2dfdHhfbXV0ZXgpIiBjYWxsZWQgYnkgbmZjX2hjaV9oY3BfbWVz
-c2FnZV90eCgpCj4gPiBpcyBhbHNvIGltcHJvcGVyLgo+ID4gCj4gPiBQbGVhc2UgY29ycmVjdCBt
-ZSwgSWYgeW91IHRoaW5rIEkgYW0gd3JvbmcuIFRoYW5rcyBmb3IgeW91ciB0aW1lLgo+IAo+IFlv
-dXIgcGF0Y2ggaXMgbm90IGNvcnJlY3QgaW4gY3VycmVudCBzZW1hbnRpY3Mgb2YgdGhpcyBmdW5j
-dGlvbi4gVGhpcwo+IGZ1bmN0aW9uIGNhbiBzbGVlcCAoYmVjYXVzZSBpdCB1c2VzIGEgbXV0ZXgp
-LCBzbyB0aGUgbWlzdGFrZSBpcyByYXRoZXIKPiBjYWxsaW5nIGl0IGZyb20gaW50ZXJydXB0IGNv
-bnRleHQuCgpXZSBoYXZlIHRvIGNhbGwgbmZjX2hjaV9zZW5kX2V2ZW50KCkgaW4gc3QyMW5mY2Ff
-c2Vfd3RfdGltZW91dCgpLCBiZWNhdXNlIHdlIG5lZWQgdG8gc2VuZCAKYSByZXNldCByZXF1ZXN0
-IGFzIHJlY292ZXJ5IHByb2NlZHVyZS4gSSB0aGluayByZXBsYWNlIEdGUF9LRVJORUwgdG8gR0ZQ
-X0FUT01JQyBhbmQgcmVwbGFjZQptdXRleF9sb2NrIHRvIHNwaW5fbG9jayBpbiBuZmNfaGNpX2hj
-cF9tZXNzYWdlX3R4KCkgaXMgYmV0dGVyLgoKV2hhdCdzIG1vcmUsIGluIG9yZGVyIHRvIHN5bmNo
-cm9uaXplIHdpdGggb3RoZXIgZnVuY3Rpb25zIHJlbGF0ZWQgd2l0aCBoY2kgbWVzc2FnZSBUWCwg
-CldlIG5lZWQgdG8gcmVwbGFjZSB0aGUgbXV0ZXhfbG9jaygmaGRldi0+bXNnX3R4X211dGV4KSB0
-byBzcGluX2xvY2sgaW4gb3RoZXIgZnVuY3Rpb25zCmFzIHdlbGwuIEkgc2VudCAicGF0Y2ggdjIi
-IGp1c3Qgbm93LgoKQmVzdCByZWdhcmRzLApEdW9taW5nIFpob3UK
+Hi Dietmar,
+
+Thanks for the detailed response.
+
+On Tue, May 17, 2022 at 11:14:44AM +0200, Dietmar Eggemann wrote:
+> On 16/05/2022 12:35, Sudeep Holla wrote:
+> > On Fri, May 13, 2022 at 02:04:29PM +0200, Dietmar Eggemann wrote:
+> >> On 13/05/2022 13:03, Sudeep Holla wrote:
+> >>> On Fri, May 13, 2022 at 12:42:00PM +0200, Dietmar Eggemann wrote:
+> >>>> On 13/05/2022 11:03, Sudeep Holla wrote:
+> >>>>> On Fri, May 13, 2022 at 10:34:00AM +0200, Dietmar Eggemann wrote:
+> 
+> [...]
+> 
+> >> cat /sys/kernel/debug/sched/domains/cpu0/domain*/name
+> >> CLS
+> >> MC
+> >> ... I skip the NUMA levels
+> >>
+> >> # cat /proc/schedstat | awk '{print $1 " " $2 }' | grep ^[cd] | head -5
+> >> cpu0 0
+> >> domain0 00000000,00000000,0000000f <--  4 CPUs <-- cluster_id
+> >> domain1 00000000,00000000,00ffffff <-- 24 CPUs
+> >>
+> >> If you use cluster_id for 1. level cluster then you cover MC's 24 CPUs
+> > 
+> > OK, the way I am looking at this from CPU topology perspective seem to be
+> > different from what you are expecting here w.r.t sched_domains.
+> > 
+> > IMO, these cpumasks on its own must represent real CPU topology and how it
+> > is used via cpu_*_mask by the scheduler domains is different.
+> 
+> I'm afraid that in case we want to change the mapping of scheduler
+> (topology) flags (like SD_SHARE_PKG_RESOURCES) via `*_flags()` of
+> default_topology[] we would have to consider all ACPI corner cases (see
+> cpu_coregroup_mask()) as well.
+> 
+> See (1) further down.
+>
+
+Understood.
+
+> [...]
+> 
+> > I see on Juno with SCHED_CLUSTER and cluster masks set, I see CLS and MC
+> > domains.
+> 
+> Right but that's not really correct from the scheduler's POV.
+>
+
+OK
+
+> Juno has LLC on cpumasks [0,3-5] and [1-2], not on [0-5]. So the most
+> important information is the highest Sched Domain with the
+> SD_SHARE_PKG_RESOURCES flag. This is the MC layer (cpu_core_flags() in
+> default_topology[]). So the scheduler would think that [0-5] are sharing
+> LLC.
+>
+
+Ah OK, but if LLC sibling masks are updated, cpu_coregroup_mask() takes
+care of it IIUC, right ?
+
+> You have LLC at:
+> 
+> cat /sys/devices/system/cpu/cpu0/cache/index2/shared_cpu_list
+>                                        ^^^^^^
+> 0,3-5
+> 
+> but the scheduler sees the highest SD_SHARE_PKG_RESOURCES on MC:
+> 
+> cat /sys/kernel/debug/sched/domains/cpu0/domain1/flags
+>                                          ^^^^^^^
+> ... SD_SHARE_PKG_RESOURCES ...
+> 
+> [...]
+> 
+> >> For one level (MC) yes, but not for 2 (MC and CLS). And cluster_id was
+> >> introduces for the 2. level.
+> >>
+> > 
+> > That sounds wrong and not what ACPI PPTT code says. My series just aligns
+> > with what is done with ACPI PPTT IIUC. I need to check that again if my
+> > understand differs from what is being done. But the example of Kunpeng920
+> > aligns with my understanding.
+> 
+> (1) IMHO, as long as we don't consider cache (llc) information in DT we
+> can't have the same coverage as ACPI.
+>
+
+Agreed. But we are not changing any topology masks as per sched domain
+requirements as they get exposed to the userspace as is.
+
+> Let's take an ACPI !CONFIG_NUMA Kunpeng920 as an example.
+> 
+> # cat /sys/kernel/debug/sched/domains/cpu0/domain*/name
+> CLS
+> MC
+> DIE
+> 
+> # cat /sys/kernel/debug/sched/domains/cpu0/domain*/flags
+> SD_BALANCE_NEWIDLE SD_BALANCE_EXEC SD_BALANCE_FORK SD_WAKE_AFFINE
+>   SD_SHARE_PKG_RESOURCES SD_PREFER_SIBLING
+>   ^^^^^^^^^^^^^^^^^^^^^^
+> SD_BALANCE_NEWIDLE SD_BALANCE_EXEC SD_BALANCE_FORK SD_WAKE_AFFINE
+>   SD_SHARE_PKG_RESOURCES SD_PREFER_SIBLING
+>   ^^^^^^^^^^^^^^^^^^^^^^
+> SD_BALANCE_NEWIDLE SD_BALANCE_EXEC SD_BALANCE_FORK SD_WAKE_AFFINE
+>   SD_PREFER_SIBLING
+> 
+> cat /proc/schedstat | awk '{print $1 " " $2 }' | grep ^[cd] | head -4
+> cpu0 0
+> domain0 00000000,00000000,0000000f
+> domain1 00000000,00000000,00ffffff <-- (2)
+> domain2 ffffffff,ffffffff,ffffffff
+> 
+> cat /sys/devices/system/cpu/cpu0/topology/thread_siblings_list
+> 0
+> cat /sys/devices/system/cpu/cpu0/topology/core_cpus_list
+> 0
+> cat /sys/devices/system/cpu/cpu0/topology/cluster_cpus_list
+> 0-3
+> cat /sys/devices/system/cpu/cpu0/topology/core_siblings_list
+> 0-47
+> cat /sys/devices/system/cpu/cpu0/topology/package_cpus_list
+> 0-47
+> 
+> The MC mask 00ffffff is not derived from any topology mask but from the
+> llc (index3) mask:
+> 
+> cat /sys/devices/system/cpu/cpu0/cache/index3/shared_cpu_list
+>                                        ^^^^^^
+> 0-23 <-- (2)
+>
+
+Understood and on Juno if we get llc_siblings right, the sched domains
+must be sorted correctly ?
+
+>
+> Coming back to the original request (the support of Armv9 L2 complexes
+> in Android) from Qing on systems like QC SM8450:
+>
+>       .---------------.
+> CPU   |0 1 2 3 4 5 6 7|
+>       +---------------+
+> uarch |l l l l m m m b| (so called tri-gear: little, medium, big)
+>       +---------------+
+>   L2  |   |   | | | | |
+>       +---------------+
+>   L3  |<--         -->|
+>       +---------------+
+>       |<-- cluster -->|
+>       +---------------+
+>       |<--   DSU   -->|
+>       '---------------'
+>
+> This still wouldn't be possible. We know that Phantom Domain (grouping
+> after uarch) is not supported in mainline but heavily used in Android
+> (legacy deps).
+>
+
+Correct, unless you convince to get a suitable notion of *whatever*
+phantom domains represent into the DT bindings, they don't exist.
+If someone wants to support this config, they must first represent that
+in the firmware so that OS can infer information from the same.
+
+> If we say we only support L2 sharing (asymmetric here since only CPU0-3
+> have it !!!) and we don't support Phantom then your approach will work
+> for such systems.
+
+Thanks, as I said what is *Phantom* domain ;) ? Can you point me to the
+DT or ACPI binding for the same ? Just kidding, I know they don't exist.
+
+Anyways, I understand your concern that llc_sibling must go with my set
+of topology changes which I agree. Is that the only concern ?
+
+--
+Regards,
+Sudeep

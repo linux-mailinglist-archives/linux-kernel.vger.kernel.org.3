@@ -2,139 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C57D52A9C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 609FD52A9C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:01:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351690AbiEQSAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 14:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58702 "EHLO
+        id S1351747AbiEQSBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 14:01:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351684AbiEQSAC (ORCPT
+        with ESMTP id S1351724AbiEQSBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 14:00:02 -0400
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6665006C;
-        Tue, 17 May 2022 11:00:01 -0700 (PDT)
-Received: by mail-oi1-f180.google.com with SMTP id r1so23236483oie.4;
-        Tue, 17 May 2022 11:00:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=l7jwPeZVluBx37sWW9p9486vXPERkHZmYslmM7IERC4=;
-        b=43XkGRcVuTTh230Pv5bQyUCpPPNsX2IgRO3LJuMOiWh9q6wY9fxPfzNMPtM21RkokF
-         K5eI3N+KQX9yIsdsWr7fGwfI5fnDTyf8WLuzCy8Lp88VcLytOiVjJRi45iIpu52Q6uaP
-         fhdp0oPniDCmw/OQPJsJPZWLA4MwKmZKR8jZ4MitHdLiRtBbD/sAdFomnaeOWmeTPe4l
-         CUNgvBuMVrPctwIeTPXzi25YaBS+jHQe1sPLQ0HzaRdD8BLbF5mdJnbsUqsfgFNJ+0lS
-         LYanbBz/OmJLSY1Z4baOGyNIZiUUXgJglbkkqZ1cTZXRm3ikskFrMMw9B6KA1pLskq0U
-         j2aA==
-X-Gm-Message-State: AOAM530pZo3eyg2AW9O0gF9DUk4dtwKpCcUbPCzGrHcQYQy9Vn13K6qK
-        SD2vCAmdSitv9b+Vanuncw==
-X-Google-Smtp-Source: ABdhPJx4RCb0btBoBhki2+B8BgBEyjjkwfHWi2cScgsuArwHCQwCh02D1YsNTXiRT5shZKje2MpLpA==
-X-Received: by 2002:aca:1108:0:b0:328:ef13:311c with SMTP id 8-20020aca1108000000b00328ef13311cmr6474612oir.220.1652810400759;
-        Tue, 17 May 2022 11:00:00 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i204-20020acab8d5000000b00326414c1bb7sm63836oif.35.2022.05.17.10.59.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 11:00:00 -0700 (PDT)
-Received: (nullmailer pid 1327168 invoked by uid 1000);
-        Tue, 17 May 2022 17:59:58 -0000
-Date:   Tue, 17 May 2022 12:59:58 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Alexandre Bailon <abailon@baylibre.com>, krzk+dt@kernel.org,
-        matthias.bgg@gmail.com, p.zabel@pengutronix.de, rafael@kernel.org,
-        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        michael.kao@mediatek.com, ben.tseng@mediatek.com,
-        ethan.chang@mediatek.com, frank-w@public-files.de,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, khilman@baylibre.com
-Subject: Re: [PATCH v6 2/7] dt-bindings: thermal: Add binding document for
- mt6873 thermal controller
-Message-ID: <20220517175958.GA1321687-robh@kernel.org>
-References: <20220512122433.1399802-1-abailon@baylibre.com>
- <20220512122433.1399802-3-abailon@baylibre.com>
- <546ddbd4-927d-2e28-6e82-a67b4584a17f@linaro.org>
+        Tue, 17 May 2022 14:01:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DCC38DA7;
+        Tue, 17 May 2022 11:01:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5F7861475;
+        Tue, 17 May 2022 18:01:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4C14C385B8;
+        Tue, 17 May 2022 18:00:57 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="IWaU0P9Y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1652810456;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DIvWyHfOQIR1tPAdB9mF+GPuZBnqjHJbDDlA9qL55rA=;
+        b=IWaU0P9YKirAbyAX2ryUkPQEA2hxEes0Y3qkw4mt+f8Cgoci+m4YJBKKeQMoXBV9PoUhoO
+        GpySOT4hW+NN0ZjwRCALfKVgGdXUqAKdVug0vEuomby3JhkiHBqTcJi9f4PfGqo0OYmcmT
+        XTqCCA6DFbm5vzXk+2GZBFZsadB6B2U=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8ca48184 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 17 May 2022 18:00:55 +0000 (UTC)
+Date:   Tue, 17 May 2022 20:00:45 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>, kernel@pengutronix.de,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        David Gstir <david@sigma-star.at>,
+        Michael Walle <michael@walle.cc>,
+        John Ernberg <john.ernberg@actia.se>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Franck LENORMAND <franck.lenormand@nxp.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v10 2/7] KEYS: trusted: allow use of kernel RNG for key
+ material
+Message-ID: <YoPizavHFXHah2z3@zx2c4.com>
+References: <20220513145705.2080323-1-a.fatoum@pengutronix.de>
+ <20220513145705.2080323-3-a.fatoum@pengutronix.de>
+ <YoPa7C8xs8lgKtwv@zx2c4.com>
+ <21250bc0-623b-f11d-7dbf-458d144b7963@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <546ddbd4-927d-2e28-6e82-a67b4584a17f@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <21250bc0-623b-f11d-7dbf-458d144b7963@pengutronix.de>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 04:25:51PM +0200, Krzysztof Kozlowski wrote:
-> On 12/05/2022 14:24, Alexandre Bailon wrote:
-> > From: Michael Kao <michael.kao@mediatek.com>
-> > 
-> > This patch adds binding document for mt6873 thermal controller.
-> 
-> Thank you for your patch. There is something to discuss/improve.
-> 
-> > 
-> > Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-> > Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
-> > ---
-> >  .../thermal/mediatek-thermal-lvts.yaml        | 81 +++++++++++++++++++
-> >  1 file changed, 81 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml b/Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml
-> > new file mode 100644
-> > index 000000000000..69ffe7b14c21
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml
-> 
-> filename: vendor,device
-> so something like mediatek,mt6873-lvts.yaml or
-> mediatek,mt6873-lvts-thermal.yaml
-> 
-> > @@ -0,0 +1,81 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/thermal/mediatek-thermal-lvts.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Mediatek SoC LVTS thermal controller (DTS) binding
-> 
-> s/(DTS) binding//
-> (unless DTS means something related to hardware)
-> 
-> > +
-> > +maintainers:
-> > +  - Yu-Chia Chang <ethan.chang@mediatek.com>
-> > +  - Ben Tseng <ben.tseng@mediatek.com>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: mediatek,mt6873-lvts
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    maxItems: 1
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: lvts_clk
-> 
-> Skip "_clk" suffix, so just lvts.
+Hi Ahmad,
 
-Or drop altogether. There's generally no good name when there's only one 
-entry so folks just make up 'clk', 'phy', 'rst', etc. or $block for the 
-name.
+On Tue, May 17, 2022 at 07:52:51PM +0200, Ahmad Fatoum wrote:
+> Hello Jason,
+> 
+> On 17.05.22 19:27, Jason A. Donenfeld wrote:
+> > On Fri, May 13, 2022 at 04:57:00PM +0200, Ahmad Fatoum wrote:
+> >> +	trusted.rng=	[KEYS]
+> >> +			Format: <string>
+> >> +			The RNG used to generate key material for trusted keys.
+> >> +			Can be one of:
+> >> +			- "kernel"
+> >> +			- the same value as trusted.source: "tpm" or "tee"
+> >> +			- "default"
+> >> +			If not specified, "default" is used. In this case,
+> >> +			the RNG's choice is left to each individual trust source.
+> >> +
+> > 
+> > As a general mechanism, I object to this. The kernel's RNG must be
+> > trusted in the first place for key material. That's the whole point of
+> > it.
+> > 
+> > However, it sounds like you're not proposing a general mechanism, but
+> > just something particular to this "trusted keys" business.
+> 
+> The two currently upstream trust sources (trusted key backends) each provide
+> their own RNG callback. This series adds a third backend that uses kernel RNG
+> and additionally provides users of the two existing trust sources the option
+> to benefit from kernel RNG as well.
+> 
+> > this should be a module flag, and thus not documented here, but rather
+> > some place namespaced to your trusted keys stuff. "trusted_keys.preferred_rng={whatever}"
+> 
+> The trusted keys module is trusted.ko and directly before my added lines is
+> the trusted.source=  documentation, so I think this is already at the correct place.
 
-Rob
+My apologies; I should have looked at the file itself instead of just
+relying on git line context. You're right, the module itself is called
+trusted.ko. This is confusing (shouldn't it be trusted_keys or
+something?) , but what you propose sounds consistent from a namespacing
+perspective with what's already there.
+
+Jason

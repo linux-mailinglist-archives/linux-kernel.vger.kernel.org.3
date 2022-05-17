@@ -2,100 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B385A52AB27
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E501552AB2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352330AbiEQSpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 14:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47864 "EHLO
+        id S1352352AbiEQSqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 14:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243849AbiEQSpU (ORCPT
+        with ESMTP id S242864AbiEQSqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 14:45:20 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE38410FE8;
-        Tue, 17 May 2022 11:45:19 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id i15so3340573ilk.5;
-        Tue, 17 May 2022 11:45:19 -0700 (PDT)
+        Tue, 17 May 2022 14:46:43 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EA1387B1
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:46:43 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id f4so20249235iov.2
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:46:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0Y+qkluu9VKepyBlMDfrx+r7tkG/mdYwtfblWpe2z9Y=;
-        b=l01OyNeB/A6Q+vxByyTAVu9qpdFA+aYn0Vst3ljF3PdrG+pxPeaVtNZoGSu7FLkowE
-         Yv0cCkilWvXuTPTKNaduH7p2F3IXPEF+IpKomUf2I3XNmR82SeOU9cIUja0gC2qsWXLR
-         siDaHE4Ysl4MQ5igmKCslQMAPvYKAl/Mw0TslVwfWwH5KOSQU5iDbM6agJBoVx/sBd2g
-         Byhqm2GjIY2MTlWkZlPk7kfyjL7mUFtvUzpNAyiNayWscrlKwGOOZ/IrH4IxOWY/6HHk
-         5rwiOFR9ninFTSDwXx5K33CyeZwCX3VBFVaHGdAcTNi7+iUZr2dt/OjisLAQqT+r6apD
-         JrLw==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=YIMbxTsLbrtbEFkaDSucwQrnGbAU6ETE/HBk7HXw4BM=;
+        b=ASYaeDqOr6ZY8Y43feyxwUMnrIDRCO57Y0tCwbWFl1fPRaCrgk/PQQRdq2efcvraln
+         /X+FbfFi9Q7SGYrJGRc0XaOjGtseOysVsi+cTdhgdSw1qncp9S3OgZB5D6DbqMyiJ5hN
+         86YVYr8OEX0vDEhnAx/TE5NQmgBAFAwiHUMFkJ37NIGbDJ70ANJQWV1RjiSHL8rUc81z
+         x3WLf6UbNTuBElaOYFc4+qMVk9N8FDx13MuSQJ2yk4WG7UtrEW81OFX7nRoxlOooDEUk
+         Q0b5EjP7m4bBifoBEtc0mcnsvU18uL2OjPW/kEmoXC36Mo2Clp5Bl/Gr/WczDz9LUWtq
+         GmOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0Y+qkluu9VKepyBlMDfrx+r7tkG/mdYwtfblWpe2z9Y=;
-        b=ivUejRwnZ1QJkYOsK0tbKYn1MVzfopBwkc/MLvX/11bStQvNJyysA3UGB//gcu3VPL
-         7d4Sq2TFPwOFlSHEItuWa38ziV7kv358JPym1GAIEC7U/6fIJNPU7z4YmuQtvoACm35x
-         hTvP64LEpUxREiOZm1QHky1aVhSB7VOb7RdkisMDbW1tQewJM0fTH3I9Xa0LBDQMZC8G
-         UJsutIJu2+CfBQgOCHdhAv6uP0Z1YSykcBq4fNo2c/mZ+y2gAf6lvfoBHCb3L0Ep0ybr
-         8rmXLuz9rZB5D9QoCry946alVPLzFnn/QpLA7Ga48ZQvUt2rfX8MmELm0JJf2xhVzR2v
-         Je6Q==
-X-Gm-Message-State: AOAM532asPJ7tglwgCG2+LGG4oHM2RK+96yAcwcuXF2xaOH8N2A8sp0m
-        KXd19fdH0mXz/akX7kBKJnxL/9NTuRyJvDdwvy4=
-X-Google-Smtp-Source: ABdhPJzwZftXXY/3Ig3lS+yWjDaVrpZMGecxql4yV/QR4m8oYDw3NDhTzg479ocUa4qwGUyh5cDXiEz4Kdn33DnzV6Q=
-X-Received: by 2002:a05:6e02:188a:b0:2cf:7adc:7a86 with SMTP id
- o10-20020a056e02188a00b002cf7adc7a86mr12780302ilu.276.1652813119437; Tue, 17
- May 2022 11:45:19 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YIMbxTsLbrtbEFkaDSucwQrnGbAU6ETE/HBk7HXw4BM=;
+        b=cu6aaaKP19iZ/ebgOsKCNMyV8GgcaRgxwbKTiMQbJnvjlj5E/1RFcG9He9PC9/mZdl
+         aOA57qY0fag1KQ3rb/MOroHHM+pDyeJ1y8YAVWdT4+QaQC8OmNz6jMrc+HISFyo6UA8g
+         SWXHyB04dUXJgFZfkviiv0IsMX1lJcbr0u08e45TliBCvcJp1G4hxpC6Rrh5kmheKZmX
+         UPI6W7wSzBndfr+cd9TBt6v2Dsv1jDNdkChXpG/1yQKBE2ig9RbOPDvFTczqQeN/jomW
+         DUCMUT+3h0dOE5tRHYY9SLQOInIgjPitf6EHUdRwVgHIayQUhAh3BM6RNIx9o4FW1Zfx
+         a6Dg==
+X-Gm-Message-State: AOAM533M/JbzKXVxOUof4nxcEPMP7RMts2M6bET/2Fpl45M0S3nx1Fq5
+        kacPDwI5iV0W3G2pOZZNlhPi0A==
+X-Google-Smtp-Source: ABdhPJwhs6oUxOuuvG3hk5YOfiQ6EgXRITTlIrL7zUmPYKqYM4mtvC+cg2zwyv9nGK+ZbzyvqCoyFg==
+X-Received: by 2002:a05:6602:1510:b0:65a:edd4:cdb4 with SMTP id g16-20020a056602151000b0065aedd4cdb4mr10853963iow.143.1652813202389;
+        Tue, 17 May 2022 11:46:42 -0700 (PDT)
+Received: from [192.168.1.172] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id o13-20020a056638124d00b0032e30453802sm1804804jas.47.2022.05.17.11.46.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 11:46:41 -0700 (PDT)
+Message-ID: <b6f36795-97ac-fac0-ab07-98de8255e4f9@kernel.dk>
+Date:   Tue, 17 May 2022 12:46:40 -0600
 MIME-Version: 1.0
-References: <20220515064126.1424-1-linux.amoon@gmail.com> <20220515064126.1424-7-linux.amoon@gmail.com>
- <79b727f8-0631-5a96-fbc6-6e5d637bab7d@linaro.org>
-In-Reply-To: <79b727f8-0631-5a96-fbc6-6e5d637bab7d@linaro.org>
-From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Wed, 18 May 2022 00:15:04 +0530
-Message-ID: <CANAwSgSY=4zOLjw22GN+a7cc5j=myWWkD7gEQ4_3sgEaTS74Rw@mail.gmail.com>
-Subject: Re: [PATCHv2 6/6] thermal: exynos: Add runtime power management for tmu
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference in
+ io_do_iopoll
+Content-Language: en-US
+To:     syzbot <syzbot+1a0a53300ce782f8b3ad@syzkaller.appspotmail.com>,
+        asml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <000000000000c1bd6505df39865e@google.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <000000000000c1bd6505df39865e@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On 5/17/22 12:44 PM, syzbot wrote:
+> Hello,
+> 
+> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+> BUG: unable to handle kernel NULL pointer dereference in io_do_iopoll
 
-On Sun, 15 May 2022 at 15:18, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 15/05/2022 08:41, Anand Moon wrote:
-> > Add runtime power management for exynos thermal driver.
->
-> First of all - why? Second, I do not see it being added. Where are the
-> runtime callbacks?
->
+Gah, backport ended up putting the hunk in the wrong spot, not very useful.
 
-To control runtime control PMU, did I miss something?
-I looked into imx thermal driver # drivers/thermal/imx_thermal.c
-to enable run-time power management for exynos driver.
+#syz test git://git.kernel.dk/linux-block io_uring-5.18
 
->
-> Best regards,
-> Krzysztof
+-- 
+Jens Axboe
 
-Thanks & Regards
-
-
--Anand

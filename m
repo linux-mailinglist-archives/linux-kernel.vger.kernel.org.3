@@ -2,106 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFAB752ADA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 23:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37AB552ADA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 23:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbiEQVoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 17:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46124 "EHLO
+        id S229610AbiEQVoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 17:44:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiEQVnu (ORCPT
+        with ESMTP id S229487AbiEQVoC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 17:43:50 -0400
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF1F50441;
-        Tue, 17 May 2022 14:43:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3MN9R0ncE8uUAxzrbD9D9kHBacmiEBQxp8Szamm8Dr4=; b=pWFJRn3NyAvA7NK+RkLv0kJiJs
-        VBDQ6yEpt4u26gcaTk1U+5+K+FS8UZ8Voegl441DMsSZd1IY56qTPhXIaXeZ6I71rJH4jaKD93DiZ
-        9Nx1X9TxTEwJ7ZAZQsD+l8bA2AZeTjy5ywW811CBhaiTqo/9rjnlGr8aoR86lAeBKYOC8te19VqNO
-        zMtRn1TL8STcuT/cym0BXOz//P3q0x4JRwpuzhuGn/veX7GUSCr+wD3ajPINs9BcYQgWHr+wXZ8fu
-        jiCNIyE+PYhgokvcfbFabgyXuX3ws3CCMtR9PTDJP16HSHBWJVVXPGzWBkPFi/ssLdOYET7Rvz+9l
-        Zihc79yw==;
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nr4yg-00FqGx-3D; Tue, 17 May 2022 21:43:38 +0000
-Date:   Tue, 17 May 2022 21:43:38 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Yongzhi Liu <lyz_cs@pku.edu.cn>
-Cc:     serge@hallyn.com, jmorris@namei.org, dhowells@redhat.com,
-        ebiederm@xmission.com, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] commoncap: check return value to avoid null pointer
- dereference
-Message-ID: <YoQXClv8jlNcOg1p@zeniv-ca.linux.org.uk>
-References: <1652722802-66170-1-git-send-email-lyz_cs@pku.edu.cn>
+        Tue, 17 May 2022 17:44:02 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818C750445;
+        Tue, 17 May 2022 14:43:52 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652823829;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=38MBY5TPzPDWJJ7wfIQbCIMC4tpzXNoTQctp5Q2omdE=;
+        b=qZ3I2loQXge4Fi5CVcicg69+ghn9lriVgyi3NPWmWzPAuEX4KXYC/io9C4AXS96a19FZvx
+        sk1Umv9m5xJUUCYUQidygcv20wzvES58fTIPGUWt0HIL1u/BmyZdNqbM5FBXKK5ZXJIU0o
+        IwORWcFZnh1x4G9pJZ42qKzguh2Xm6q6vcOIWCmplWNOrx00Xh8cYmEN3xKCCQJ0r+c5jw
+        +zXFQBy0yHB/DcGyPRPBTS9NrvwdKbO349DVwwFkmaupoE5CSeEK+sbcC3lOXhDL/FPGr3
+        VHXaGq808dpm0+s5+EGiQ7S1/uOkK2esRwO6IJSSDj5CRwxKkfdO+o168nD1KA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652823829;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=38MBY5TPzPDWJJ7wfIQbCIMC4tpzXNoTQctp5Q2omdE=;
+        b=if0dLSyC9FrNTNSWRenQex+bMgszw9+Et1v5yB1Ku/+X13/fdyfRbbOCPfr0sAhB0cGrJk
+        aExYqttNsV6KH+AA==
+To:     Max Mehl <max.mehl@fsfe.org>, LKML <linux-kernel@vger.kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@lst.de>, linux-spdx@vger.kernel.org
+Subject: Re: [patch 0/9] scripts/spdxcheck: Better statistics and exclude
+ handling
+In-Reply-To: <1652775347.3cr9dmk5qv.2220@fsfe.org>
+References: <20220516101901.475557433@linutronix.de>
+ <1652706350.kh41opdwg4.2220@fsfe.org> <87zgjhpawr.ffs@tglx>
+ <87wnelpam3.ffs@tglx> <1652775347.3cr9dmk5qv.2220@fsfe.org>
+Date:   Tue, 17 May 2022 23:43:49 +0200
+Message-ID: <8735h7ltre.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1652722802-66170-1-git-send-email-lyz_cs@pku.edu.cn>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 10:40:02AM -0700, Yongzhi Liu wrote:
-> The pointer inode is dereferenced before a null pointer
-> check on inode, hence if inode is actually null we will
-> get a null pointer dereference. Fix this by only dereferencing
-> inode after the null pointer check on inode.
-> 
-> Fixes: c6f493d631c ("VFS: security/: d_backing_inode() annotations")
-> Fixes: 8db6c34 ("Introduce v3 namespaced file capabilities")
-> 
-> Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
-> ---
->  security/commoncap.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/security/commoncap.c b/security/commoncap.c
-> index 5fc8986..978f011 100644
-> --- a/security/commoncap.c
-> +++ b/security/commoncap.c
-> @@ -298,6 +298,8 @@ int cap_inode_need_killpriv(struct dentry *dentry)
->  	struct inode *inode = d_backing_inode(dentry);
->  	int error;
->  
-> +	if (!inode)
-> +		return 0;
->  	error = __vfs_getxattr(dentry, inode, XATTR_NAME_CAPS, NULL, 0);
->  	return error > 0;
->  }
+On Tue, May 17 2022 at 10:25, Max Mehl wrote:
+> ~ Thomas Gleixner [2022-05-16 20:59 +0200]:
+>> There is also an argument to be made whether we really need to have SPDX
+>> identifiers on trivial files:
+>> 
+>> #include <someheader.h>
+>> <EOF>
+>> 
+>> Such files are not copyrightable by any means. So what's the value of
+>> doubling the line count to add an SPDX identifier? Just to make nice
+>> statistics?
+>
+> We agree that such files are not copyrightable. But where is the
+> threshold? Lines of code? Creativity? Number of used functions? And how
+> to embed this threshold in tooling? So instead of fuzzy exclusion of
+> such files in tools like spdxcheck or REUSE, it makes sense to treat
+> them as every other file with the cost of adding two comment lines.
+>
+> This clear-cut rule eases maintaining and growing the effort you and
+> others did because developers would know exactly what to add to a new
+> file (license + copyright) without requiring looking up the thresholds
+> or a manual review by maintainers who can interpret them.
 
+Seriously no. I'm outright refusing to add my copyright to a trivial
+file with one or two includes or a silly comment like '/* empty because */.
 
-	Huh?  AFAICS, that has all of two callers - notify_change() and
-dentry_needs_remove_privs().  Both of them should never be called on
-negative dentries and both would have blown up well before the call of
-security_inode_need_killpriv().
+     There is nothing copyrightable there.
 
-> @@ -545,11 +547,13 @@ int cap_convert_nscap(struct user_namespace *mnt_userns, struct dentry *dentry,
->  	const struct vfs_cap_data *cap = *ivalue;
->  	__u32 magic, nsmagic;
->  	struct inode *inode = d_backing_inode(dentry);
-> -	struct user_namespace *task_ns = current_user_ns(),
-> -		*fs_ns = inode->i_sb->s_user_ns;
-> +	struct user_namespace *task_ns = current_user_ns(), *fs_ns;
->  	kuid_t rootid;
->  	size_t newsize;
->  
-> +	if (!inode)
-> +		return -EINVAL;
-> +	fs_ns = inode->i_sb->s_user_ns;
->  	if (!*ivalue)
->  		return -EINVAL;
->  	if (!validheader(size, cap))
+I'm not going to make myself a fool just to make tools happy, which can
+figure out on their own whether there is reasonable content in the vast
+majority of cases.
 
-... and that one come from vfs_setxattr().  Again, calling that on a negative
-dentry is an oopsable bug.  If you have any reproducers, please post the stack
-traces so it would be possible to deal with the underlying problem.
+Also you need some exclude rules in any case. Why?
+
+  - How do you tell a tool that a file is generated, e.g. in the kernel
+    the default configuration files?
+
+    Yes, the file content depends on human input to the generator tool,
+    but I'm looking forward for the explanation how this is
+    copyrightable especially with multiple people updating this file
+    over time where some of the updates are just done by invoking the
+    generator tool itself.
+
+  - How do you tell a tool that a file contains licensing documentation?
+
+    Go and look what license scanners make out of all the various
+    license-rules.rst files.
+
+  - ....
+
+  Do all scanners have to grow heuristics for ignoring the content past
+  the topmost SPDX License identifier in certain files or for figuring
+  out what might be generated content?
+
+You also might need to add information about binary blobs, which
+obviously cannot be part of the binary blobs themself.
+
+The exclude rules I added are lazy and mostly focussed on spdxcheck, but
+I'm happy to make them more useful and let them carry information about
+the nature of the exclude or morph them into a general scanner info
+which also contains binary blob info and other helpful information. But
+that needs a larger discussion about the format and rules for such a
+file.
+
+That said, I'm all for clear cut rules, but rules just for the rules
+sake are almost as bad as no rules at all.
+
+As always you have to apply common sense and look at the bigger picture
+and come up with solutions which are practicable, enforcable and useful
+for the larger eco-system.
+
+Your goal of having SPDX ids and copyright notices in every file of a
+project is honorable, but impractical for various reasons.
+
+See above.
+
+Aside of that you cannot replace a full blown license scanner by REUSE
+even if your project is SPDX and Copyright notice clean at the top level
+of a file. You still need to verify that there is no other information
+in a 'clean' file which might be contradicting or supplemental. You
+cannot add all of this functionality to REUSE or whatever.
+
+Thanks,
+
+        tglx

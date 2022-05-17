@@ -2,60 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 290D5529E24
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FCB4529E25
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244794AbiEQJgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 05:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
+        id S244863AbiEQJhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 05:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239029AbiEQJgu (ORCPT
+        with ESMTP id S243364AbiEQJgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 05:36:50 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B7133E2B;
-        Tue, 17 May 2022 02:36:49 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id kq17so33557141ejb.4;
-        Tue, 17 May 2022 02:36:49 -0700 (PDT)
+        Tue, 17 May 2022 05:36:52 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854CE33E3C;
+        Tue, 17 May 2022 02:36:50 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id fd25so9015055edb.3;
+        Tue, 17 May 2022 02:36:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
         bh=uvIkZ+SZSnuVFUBNtp24/kBbyO+aODjZMJiPGY46AQE=;
-        b=P7Zet47QTOLxAMMploN/gtFcpCsQahUrwANNEMf5srQdoy0K4SamF3yyncJKNsDWXM
-         5776p+7csXvkuXke9lFLjFr67J3ITueWrn9ZBI1jMeZ0KT0JCqDT/leSy0+IKMs4yfvq
-         owpKAoUAxZYmrYSkBVhQC3/8/84uNYugqLZ34fco+r4rrHv2J1enCptzzABiESd8Rlvj
-         2nFwbEUpuAIMcw7yW3TxsCW2DZmJR2jMXEvk84rbspWa7yNNwsz1EwM7Zhlyq1dQXrrg
-         0xa6ObPg/2tq+56ZVl5ZmftEdpjxMJ57E5KffvLAAbhryi/tg6u9BULJzt0ZT5xf6vWg
-         ViUA==
+        b=hZy9xMRoeMjucGbLNTRVbjQzweG34s/HHZiePWY8egY5hToreKw6isov44Nib2PTzO
+         FCx66HVsM8Oz2KQXRuHDxzOQXtqMH+LV3yMXZUv/N+96pChUkE6uBNLPmaDmaUY+kkk/
+         jC5Rw6dSJvrUNOwdSaFcRnOPNP/CUbBczzmurEOx/d8eSfbLgDBWZZ3Ycl1MhIDD8yUZ
+         aYz4hP2TyqCT/DHTDbpO2fLitzhtZbuSbfdkJh0nfeItaekFFZ62BodDTtCIHQr5h1pp
+         ooayMP5lqRWWLWDbiA4yjmjUx2XLFxUn1B+qxxZhKlZTrZC1/f4/9Z7uzQJwTlU0Sdp+
+         ZsyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
         bh=uvIkZ+SZSnuVFUBNtp24/kBbyO+aODjZMJiPGY46AQE=;
-        b=W0z0FaYF9EBpbJhBp2xLAAcqQAv6UFtfOGkBXCkLTpeFjIMVlwxLrNc0UbmnyP0YnX
-         282frEHlP1xciIOq2npnyyJ/JjyL14FZdOU7bDG2Bs0g+EP+ZQEpBEHXJBjENjCPdf1Y
-         V888f9SUUFffltLmjyllmGBOWJP1/1iigbmIkFCy5fU5JNEONnwzKR7tG67o+lFM9hEM
-         Xs4pM2+G39y40kVWT7c7LI7SCifPO41GVrHuVcZ8OQyahrLMLBjpCRHJ1COQUJYxfnDm
-         b7U4OcqHkBFXTv3TPLpCgNWCb3z0VfP4JuhiJa9eIVb7d7EPqjx615KxiC5VE+Z4UKTS
-         oZAw==
-X-Gm-Message-State: AOAM5336DGUEoVCyuxLB+ninVMIJQuYKhg+t7xVXCEXdFJA8QpGAAMsX
-        S+KMKm6uCCoIwwsVXQQGSD0=
-X-Google-Smtp-Source: ABdhPJyudOovXBvAo9oOsyE0ZzGQys4UBYK3amp163if6al1uIl7HOLPapjy43U9xX6w/NLuhOESDQ==
-X-Received: by 2002:a17:907:2d8d:b0:6f8:5c3c:7217 with SMTP id gt13-20020a1709072d8d00b006f85c3c7217mr19004815ejc.1.1652780208030;
-        Tue, 17 May 2022 02:36:48 -0700 (PDT)
+        b=WrM4Gvw85v2w+3gFW4y4C0pjchObFrnisnXzsZMfxJZR9v/ItBiaR5S+yM9q6OJ6xB
+         mlWNyYefzPq8hGPhJ9/spCH8BuHziTMX+HasTWUQeDRtcxA5mwHoegjyH0RuIAgnStHY
+         SVLyJe9b3JRgFSRysKOYmxt2vvMLxH7PQCOcnOCZJxY5l/djBIeDqE55Q5tzuLtdqu0I
+         k2oSn2zvu4TAPsXvso9RqLbdmsu3/iVTti9CGxXJvjnzaKpZPuzY7mbHaJdEXRm5W3BN
+         wtaxiRnhW8QHM46hS4cu01l3oaoUAEIMxuX4Hd+tcn7lM42tETF1S2QqBKwXJDQrG07I
+         aNng==
+X-Gm-Message-State: AOAM533JOavgC1O7BjRrlq9iNBpz/VTFv9sQ07TW7mX01shr5K1GiFGE
+        5PpRdbL317TUmdzc3FWg3P3zrj+ww+TRWQ==
+X-Google-Smtp-Source: ABdhPJzkJ1+hct8RVYLZUQys4gtJGoLHdQdl+zoZJQX+sv/QCfHsqiv5nvS1l/4DtAk/g3zzoROvCA==
+X-Received: by 2002:a05:6402:26ca:b0:427:c181:b0ed with SMTP id x10-20020a05640226ca00b00427c181b0edmr17810926edd.400.1652780209084;
+        Tue, 17 May 2022 02:36:49 -0700 (PDT)
 Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id 2-20020a508e02000000b0042617ba63a9sm6730603edw.51.2022.05.17.02.36.47
+        by smtp.gmail.com with ESMTPSA id bx12-20020a170906a1cc00b006f3ef214db7sm827867ejb.29.2022.05.17.02.36.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 02:36:47 -0700 (PDT)
+        Tue, 17 May 2022 02:36:48 -0700 (PDT)
 From:   Colin Ian King <colin.i.king@gmail.com>
 To:     Anton Altaparmakov <anton@tuxera.com>,
         linux-ntfs-dev@lists.sourceforge.net
 Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: [PATCH] fs/ntfs: remove redundant variable idx
-Date:   Tue, 17 May 2022 10:36:45 +0100
-Message-Id: <20220517093646.93628-1-colin.i.king@gmail.com>
+Date:   Tue, 17 May 2022 10:36:46 +0100
+Message-Id: <20220517093646.93628-2-colin.i.king@gmail.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220517093646.93628-1-colin.i.king@gmail.com>
+References: <20220517093646.93628-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit

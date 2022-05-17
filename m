@@ -2,67 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC9B529AA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF052529AAA
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235882AbiEQHRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 03:17:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
+        id S239551AbiEQHSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 03:18:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230227AbiEQHRP (ORCPT
+        with ESMTP id S236427AbiEQHSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 03:17:15 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4076C3617F;
-        Tue, 17 May 2022 00:17:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652771834; x=1684307834;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=1jTU5KHo259xMf0l/RnxXGGu/AAe/sE0TQK8+z7eBQc=;
-  b=OiF2LfvUqDZvAEp6veTlqxRWapyysRPBGWw0FwA5gfOXo6MBCrgoCsvx
-   kQRhyL1GfmIil3EwWPADuqU9kBuqbrvkctb8Aq3YTClfDKuj4p6x3yIpP
-   cwL6dRLNGWwsWnqjdoidRUjgVk1Mgui7voWn9hOyXNhD3+VHT6AE7Y3rr
-   N6BJBW3LKp6K0nmitHqOtT6R3zahc8xWsnbnPIHlxNdUelFkjW8q81QZd
-   TVo9oDhlH+9P5HAw166xwuI+KKo00/TiZc/FbE2R6MZioiTM8Atq+eU0p
-   +1Q4majp+/8JP31cVkp6l4V5NzXoDEGnex6vCzKwhBwO3m663ETjvYz27
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="357502518"
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="357502518"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 00:17:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="638621112"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 17 May 2022 00:17:11 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nqrSB-0000iV-8K;
-        Tue, 17 May 2022 07:17:11 +0000
-Date:   Tue, 17 May 2022 15:16:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
-        jikos@kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        benjamin.tissoires@redhat.com, spbnick@gmail.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stefanberzl@gmail.com,
-        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-Subject: Re: [PATCH for-5.19/uclogic 2/4] HID: uclogic: Add KUnit tests for
- uclogic_rdesc_template_apply()
-Message-ID: <202205171527.RQ8sqqya-lkp@intel.com>
-References: <20220516181323.59554-3-jose.exposito89@gmail.com>
+        Tue, 17 May 2022 03:18:30 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6AD473A9
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:18:28 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <uol@pengutronix.de>)
+        id 1nqrTJ-0008Rr-6Q; Tue, 17 May 2022 09:18:21 +0200
+Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <uol@pengutronix.de>)
+        id 1nqrTJ-002p58-2w; Tue, 17 May 2022 09:18:19 +0200
+Received: from uol by dude03.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <uol@pengutronix.de>)
+        id 1nqrTG-00FDTz-Rt; Tue, 17 May 2022 09:18:18 +0200
+From:   =?UTF-8?q?Ulrich=20=C3=96lmann?= <u.oelmann@pengutronix.de>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     NXP Linux Team <linux-imx@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Juergen Borleis <jbe@pengutronix.de>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        =?UTF-8?q?S=C3=B8ren=20Andersen?= <san@skov.dk>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        =?UTF-8?q?Ulrich=20=C3=96lmann?= <u.oelmann@pengutronix.de>
+Subject: [PATCH] ARM: dts: imx6: skov: add pwm-regulator to control the panel's VCOM
+Date:   Tue, 17 May 2022 09:18:14 +0200
+Message-Id: <20220517071814.3626702-1-u.oelmann@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220516181323.59554-3-jose.exposito89@gmail.com>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: uol@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,38 +64,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "José,
+Skov's i.MX6 based boards come in different flavors which have different panels
+attached. For optimal contrast experience each panel type needs an individual
+common voltage (VCOM) to drive its TFT backplane. The latter is generated by an
+LCD bias supply IC controlled by a pwm as input signal. Introduce a pwm-
+regulator to describe this hardware property and parameterize it appropriately
+for the different boards.
 
-Thank you for the patch! Yet something to improve:
+Signed-off-by: Ulrich Ã–lmann <u.oelmann@pengutronix.de>
+---
+ arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts |  6 ++++++
+ arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi              | 10 ++++++++++
+ 2 files changed, 16 insertions(+)
 
-[auto build test ERROR on f7d8e387d9aeff963e6691c0166269b8042b4ff9]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jos-Exp-sito/Add-support-for-XP-PEN-Deco-L/20220517-021641
-base:   f7d8e387d9aeff963e6691c0166269b8042b4ff9
-config: riscv-randconfig-r036-20220516 (https://download.01.org/0day-ci/archive/20220517/202205171527.RQ8sqqya-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/59e13d6c9ab96d326e1575bd6cd2f0ca0c98f561
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jos-Exp-sito/Add-support-for-XP-PEN-Deco-L/20220517-021641
-        git checkout 59e13d6c9ab96d326e1575bd6cd2f0ca0c98f561
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
-ERROR: modpost: missing MODULE_LICENSE() in drivers/hid/hid-uclogic-rdesc.o
-ERROR: modpost: missing MODULE_LICENSE() in drivers/hid/hid-uclogic-rdesc-test.o
->> ERROR: modpost: "uclogic_rdesc_template_apply" [drivers/hid/hid-uclogic-rdesc-test.ko] undefined!
-
+diff --git a/arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts b/arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts
+index 7f1f19b74bfa..a3f247c722b4 100644
+--- a/arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts
++++ b/arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts
+@@ -125,3 +125,9 @@ MX6QDL_PAD_EIM_D23__GPIO3_IO23		0x1b0b0
+ 		>;
+ 	};
+ };
++
++&reg_tft_vcom {
++	regulator-min-microvolt = <3160000>;
++	regulator-max-microvolt = <3160000>;
++	voltage-table = <3160000 73>;
++};
+diff --git a/arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi b/arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi
+index 77a91a97e6cf..3def1b621c8e 100644
+--- a/arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi
+@@ -149,6 +149,16 @@ reg_can2_stby: regulator-can2-stby {
+ 		gpio = <&gpio4 11 GPIO_ACTIVE_LOW>;
+ 	};
+ 
++	reg_tft_vcom: regulator-tft-vcom {
++		compatible = "pwm-regulator";
++		pwms = <&pwm3 0 20000 0>;
++		regulator-name = "tft_vcom";
++		regulator-min-microvolt = <3600000>;
++		regulator-max-microvolt = <3600000>;
++		regulator-always-on;
++		voltage-table = <3600000 26>;
++	};
++
+ 	reg_vcc_mmc: regulator-vcc-mmc {
+ 		compatible = "regulator-fixed";
+ 		pinctrl-names = "default";
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.30.2
+

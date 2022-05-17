@@ -2,150 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C14D52A1D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:44:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F9D52A1DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:46:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346271AbiEQMoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 08:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36600 "EHLO
+        id S1346281AbiEQMqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 08:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346238AbiEQMon (ORCPT
+        with ESMTP id S243543AbiEQMqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 08:44:43 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7C626AE4
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:44:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652791482; x=1684327482;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IkVHA2JCH0Qh851pc3u8+00EuRv9GkNsBAg+GwhSWok=;
-  b=U4qMuwZvFY7OdVNyk4MiFjaIecFddX58w6/bTT6xVKJDD6CZopF3K0To
-   /d9y0ENZo0zW3iynPWpWc+MrKAWFvoRdgJObmVK+tQiIHuEPTzfqpP6GA
-   dJS7o7N+trnU8Ll/TBDFqo4FzXqnUQSPcJvilOckCflo07EOvGToHkoOS
-   IJrzPfQqQtXCMU2/DR/prd2X6Yj4NOWcMiwvva7iQO0Rl2VfdIyIa7qff
-   xV8PskIa7UPliDCpvWsXd8xIrzSvEO4dkY2r2NI/W7HS2krPm/LHs1eEw
-   QD+NNHK6XberYJwJtSpdXnXuecgEXjoqkVcyTlyYMtDrOqnK/26YJcZfw
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="258732625"
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="258732625"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 05:44:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="626462812"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 17 May 2022 05:44:41 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nqwZ6-0000xt-Cj;
-        Tue, 17 May 2022 12:44:40 +0000
-Date:   Tue, 17 May 2022 20:44:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Tue, 17 May 2022 08:46:45 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEB22A71A;
+        Tue, 17 May 2022 05:46:42 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id p12-20020a9d4e0c000000b00606b40860a3so12089848otf.11;
+        Tue, 17 May 2022 05:46:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MyAFOCGSRf6QgAs8MMUC3Q4pwMEz6l2XeUjHz0qfbRg=;
+        b=LGqm08ChnahL6Pfjt885QTfjJuXqxYr/qozfd3TXG4SgTM/A8YFWAHu0NZ4qrWb5In
+         +Yxuj1PB5994EhbnMBrqYB6LkSJABMd/C6kXFSMiCgq6OSPkUPjvqK8c4/nP9fMy6SBJ
+         eBzsVzHIfKEgMebDPSF/8JHsdONOxTH9p8MD877BCQ9Mc3gI35cD68/Il12A4kG5RQ0J
+         /PZeTTwUxaJ0cMKAp3BcHWUw1ycteaXHX2isxW0EteU2eF5Lv8AmGY3oYpiFaTRbg0PV
+         g2DBqO1PZihIBsvORgrbvVzzNskomImCnPvgG6LfPl+X+JoKOQKl3HC5Scin/oTHflQ5
+         hzyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=MyAFOCGSRf6QgAs8MMUC3Q4pwMEz6l2XeUjHz0qfbRg=;
+        b=pvyxzEi0poL7Qk6scmYuFgkPpTvufwVwE0JYOyaGtkujsEdSf+9gzP9gOUabyz9Syv
+         bxmpJ11KUnuUSFdnfTVcJ6uxvoMoiyTMWx6q1YV/Oahwq4AAPUUPCs/CGOBoJ/ACQ7uc
+         h9GBH+fymbJsfxLOaVeLYqCBZwJ4UdCjBThBU/xbAcXzkpVpfOUXkB2Uo78Mrb3GHLq9
+         Kl0xSuhHcaLnvC2oNfmsgqkQCUBVAmViza4e2Zl77jjYAQbotlAUn5R8mE33nCbMWZnY
+         ur3Ht6YshK4phigbJaXvoKRfIIaYQPIX/dzDZMJCIbaYWOWOC1XHLKQpH4sWwkPuVSm4
+         Xkpw==
+X-Gm-Message-State: AOAM532FB3fHDNKL+7TMlNHC3cAEvrsGgGlOeGsLcgflRSsLcbuykT9U
+        +XX8YmEZaqtj7ZfRZJoadmM=
+X-Google-Smtp-Source: ABdhPJyVxDyJkdmFmkr3TwRR7XNow1e1Wqca7l42zAD8ucJtmdixsdftO82djtxyZTo0srcE3933Zw==
+X-Received: by 2002:a05:6830:1e2b:b0:606:d74:dce8 with SMTP id t11-20020a0568301e2b00b006060d74dce8mr7864328otr.373.1652791601865;
+        Tue, 17 May 2022 05:46:41 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z30-20020a056870461e00b000e686d1389fsm6666814oao.57.2022.05.17.05.46.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 05:46:41 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 17 May 2022 05:46:40 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [arm-integrator:kernel-in-vmalloc-v5.18-rc1 8/9]
- arch/arm/mm/mmu.c:1562:13: warning: no previous prototype for function
- 'vm_reserve_kernel'
-Message-ID: <202205172000.5CrHBa46-lkp@intel.com>
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) fix Formula VIII definition
+Message-ID: <20220517124640.GA3400378@roeck-us.net>
+References: <20220517080508.1910953-1-eugene.shalygin@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220517080508.1910953-1-eugene.shalygin@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.18-rc1
-head:   67a8d6eb3d015908f35d6091c02f17d7c3b55bf3
-commit: 52cbc963c5c9daba74109e9782e3487cdf48fe5c [8/9] ARM: Compile the kernel into VMALLOC
-config: arm-buildonly-randconfig-r002-20220516 (https://download.01.org/0day-ci/archive/20220517/202205172000.5CrHBa46-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=52cbc963c5c9daba74109e9782e3487cdf48fe5c
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.18-rc1
-        git checkout 52cbc963c5c9daba74109e9782e3487cdf48fe5c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mm/
+On Tue, May 17, 2022 at 10:05:08AM +0200, Eugene Shalygin wrote:
+> The ROG CROSSHAIR VIII FORMULA board has the same sensors as the
+> CROSSHAIR VIII HERO [1] thus let's join their definitions which adds
+> missing sensors for Formula.
+> 
+> [1] https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/pull/740
+> 
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Applied.
 
-All warnings (new ones prefixed by >>):
+Thanks,
+Guenter
 
-   arch/arm/mm/mmu.c:118:13: warning: no previous prototype for function 'init_default_cache_policy' [-Wmissing-prototypes]
-   void __init init_default_cache_policy(unsigned long pmd)
-               ^
-   arch/arm/mm/mmu.c:118:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init init_default_cache_policy(unsigned long pmd)
-   ^
-   static 
-   arch/arm/mm/mmu.c:1161:13: warning: no previous prototype for function 'adjust_lowmem_bounds' [-Wmissing-prototypes]
-   void __init adjust_lowmem_bounds(void)
-               ^
-   arch/arm/mm/mmu.c:1161:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init adjust_lowmem_bounds(void)
-   ^
-   static 
->> arch/arm/mm/mmu.c:1562:13: warning: no previous prototype for function 'vm_reserve_kernel' [-Wmissing-prototypes]
-   void __init vm_reserve_kernel(struct map_desc *md)
-               ^
-   arch/arm/mm/mmu.c:1562:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init vm_reserve_kernel(struct map_desc *md)
-   ^
-   static 
-   arch/arm/mm/mmu.c:1762:13: warning: no previous prototype for function 'paging_init' [-Wmissing-prototypes]
-   void __init paging_init(const struct machine_desc *mdesc)
-               ^
-   arch/arm/mm/mmu.c:1762:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init paging_init(const struct machine_desc *mdesc)
-   ^
-   static 
-   arch/arm/mm/mmu.c:1795:13: warning: no previous prototype for function 'early_mm_init' [-Wmissing-prototypes]
-   void __init early_mm_init(const struct machine_desc *mdesc)
-               ^
-   arch/arm/mm/mmu.c:1795:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init early_mm_init(const struct machine_desc *mdesc)
-   ^
-   static 
-   5 warnings generated.
-
-
-vim +/vm_reserve_kernel +1562 arch/arm/mm/mmu.c
-
-  1560	
-  1561	/* Reserve memory used by the kernel when placing the kernel inside VMALLOC */
-> 1562	void __init vm_reserve_kernel(struct map_desc *md)
-  1563	{
-  1564		struct vm_struct *vm;
-  1565		struct static_vm *svm;
-  1566	
-  1567		svm = early_alloc(sizeof(*svm));
-  1568	
-  1569		vm = &svm->vm;
-  1570		vm->addr = (void *)(md->virtual & PAGE_MASK);
-  1571		vm->size = PAGE_ALIGN(md->length + (md->virtual & ~PAGE_MASK));
-  1572		vm->phys_addr = __pfn_to_phys(md->pfn);
-  1573		vm->flags = VM_MAP | VM_ARM_STATIC_MAPPING;
-  1574		vm->flags |= VM_ARM_MTYPE(md->type);
-  1575		vm->caller = vm_reserve_kernel;
-  1576		add_static_vm_early(svm);
-  1577	}
-  1578	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+>  drivers/hwmon/asus-ec-sensors.c | 12 ++----------
+>  1 file changed, 2 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+> index 611e897429b1..57e11b2bab74 100644
+> --- a/drivers/hwmon/asus-ec-sensors.c
+> +++ b/drivers/hwmon/asus-ec-sensors.c
+> @@ -54,7 +54,7 @@ static char *mutex_path_override;
+>  /* ACPI mutex for locking access to the EC for the firmware */
+>  #define ASUS_HW_ACCESS_MUTEX_ASMX	"\\AMW0.ASMX"
+>  
+> -#define MAX_IDENTICAL_BOARD_VARIATIONS	2
+> +#define MAX_IDENTICAL_BOARD_VARIATIONS	3
+>  
+>  /* Moniker for the ACPI global lock (':' is not allowed in ASL identifiers) */
+>  #define ACPI_GLOBAL_LOCK_PSEUDO_PATH	":GLOBAL_LOCK"
+> @@ -257,17 +257,9 @@ static const struct ec_board_info board_info[] = {
+>  		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
+>  		.family = family_amd_500_series,
+>  	},
+> -	{
+> -		.board_names = {"ROG CROSSHAIR VIII FORMULA"},
+> -		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+> -			SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
+> -			SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET |
+> -			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
+> -		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
+> -		.family = family_amd_500_series,
+> -	},
+>  	{
+>  		.board_names = {
+> +			"ROG CROSSHAIR VIII FORMULA"
+>  			"ROG CROSSHAIR VIII HERO",
+>  			"ROG CROSSHAIR VIII HERO (WI-FI)",
+>  		},

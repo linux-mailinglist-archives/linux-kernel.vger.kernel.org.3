@@ -2,155 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5205D52AE97
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 01:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D5A52AE9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 01:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231758AbiEQXaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 19:30:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
+        id S231790AbiEQXbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 19:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231644AbiEQXas (ORCPT
+        with ESMTP id S231715AbiEQXbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 19:30:48 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4E864F0
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 16:30:42 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id n10so618385ejk.5
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 16:30:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kje1fxePklyTYdwuahnUd7jrh3kjOYPr65ooSYjVE44=;
-        b=BZgE0jkbkeLVvFmb8ruOV8av8A5Vi/cJesgkFUe7yW3/UIFp5JuLCAIksYmq6dxaPC
-         UTmFxH4fn4hS3/gzRePwOA9Zgz2QoeR/e7KsL6wHOQMvCBYOzvoW2yP96YAu1wlsdo/W
-         OYW4HOnAUXA1JVGJiazKgXoK/bUipg6BPRZaPd0iU4I6XDCU9CWewInibc8sy+vWJYxb
-         GbGtI+anWZDqWuOTylV0pzWc9p1n+hpH4zF0jqzCG43N/eDSdV5LLd69UT0bGeoGyGse
-         0mKYTvfzrYVwqtPqL3gqbyjVL7SFmO6Pfdv96YRbeDf3urkh47YcrQa2GcXbFgbNtfr9
-         LXxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kje1fxePklyTYdwuahnUd7jrh3kjOYPr65ooSYjVE44=;
-        b=FlDsZigN3MXysJ66pGfD4K1P7V6RW5MT4AsEStGZO5PkAS3k0fEsr9ePLWNXBWedRx
-         u5bywjVri27tlmLxEW7gJaQ+BHhxpt30gXBwy/2OPvRu8fiVcw6b3yqRn6YOrheRg4ub
-         pdZAsDtv5MBwkyK/KegI50RO4bMztSEWOwz9EznOBngYcYM7N72VYLPmwuBjJi4zJNuQ
-         eG5TrX1g3KemUoo5H2AjHa0OIkXI0nf3fk/SPszH3+vkjy0x+0Ry6lak/99gXUtbjn9u
-         ayRcT7GSRAbJXlV2sKN5mIN1HSq8ZZVrUQREZD4ak+3QEVTWzEwRQ6jLENaxif5XPs6J
-         NMkg==
-X-Gm-Message-State: AOAM530GyO9q5bvoXvXxyvhrzExZlL8y6p3YnLmo1eQI7AEts5q833eX
-        olMTY8L8eMfbw5lKjJt7ff/+M9Q7B5utuTJuyEdMVw==
-X-Google-Smtp-Source: ABdhPJynpuiODXlilJ4ccPPw09Oypx2Cww6BUXEGpKKQ1/r4bC3SNcHdzpBPpWcDWLBl7XOueU5+lIF135DZSaWqEEs=
-X-Received: by 2002:a17:906:6a10:b0:6f5:5e4:9d5 with SMTP id
- qw16-20020a1709066a1000b006f505e409d5mr21615657ejc.122.1652830241187; Tue, 17
- May 2022 16:30:41 -0700 (PDT)
+        Tue, 17 May 2022 19:31:13 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F612B180;
+        Tue, 17 May 2022 16:31:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652830271; x=1684366271;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=KbP9bBNoJQH+BgtArjeJnCSjiZshkm0O+Ej8OeaI8dI=;
+  b=Jnzbhb8TKRFS8QrdCziOSArXfjKe2ttz/YPw/6ybzx9E7V7JEIluQSkE
+   /FZfdM1rKs/DGR18zMe/Pk4ZaJvAcf01BIznXrDLCwVsa60xO2QDNQkO4
+   ZbFzEO/Wzz2WAF8tNspC4j8JTvW9RRUJkE+hpUNZ+tJ2+ttOOwa86OOFv
+   1KPivWgKts64nO3ADtmzDd9K/Uyz1dbd0MEM5e3xeg4aObuCm58fXQdJN
+   yP9X/8a5QaUV0zlVekxGUU3PYuEAZQELtOtJNXA01IN+9Tk4q0fUlOeSs
+   PavrVda66k8v3odXMMKSKNdKGMMdYO9a79bF2o6WGxOl5L1JF55HXulQk
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="270206655"
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="270206655"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 16:31:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="523203349"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 17 May 2022 16:31:08 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nr6eh-0001ZJ-QY;
+        Tue, 17 May 2022 23:31:07 +0000
+Date:   Wed, 18 May 2022 07:30:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        jikos@kernel.org
+Cc:     kbuild-all@lists.01.org, benjamin.tissoires@redhat.com,
+        spbnick@gmail.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stefanberzl@gmail.com,
+        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+Subject: Re: [PATCH for-5.19/uclogic 3/4] HID: uclogic: Allow to generate
+ frame templates
+Message-ID: <202205180755.I9jze1Z4-lkp@intel.com>
+References: <20220516181323.59554-4-jose.exposito89@gmail.com>
 MIME-Version: 1.0
-References: <20220510235653.933868-1-tjmercier@google.com> <3365cd1d750e84fedc8e75d646a77ffd85619d35.camel@ndufresne.ca>
- <CABdmKX3ZV6-u-oLvW_wWavAMBfrsZ=C_rCgK_Uz4VjxcRvRFew@mail.gmail.com>
- <81026ef07c1ce20f8673b75b17bab79a2b39c548.camel@ndufresne.ca>
- <CABdmKX2LxZ6zZR=fhXfnuWCB2BR+gzDd1-t1DD2A2XP24wvuGQ@mail.gmail.com> <Yn6DpUsoSz1/15Kc@slm.duckdns.org>
-In-Reply-To: <Yn6DpUsoSz1/15Kc@slm.duckdns.org>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Tue, 17 May 2022 16:30:29 -0700
-Message-ID: <CABdmKX1xvm87WMEDkMc9Aye46E4zv1-scenwgaRxHesrOCsaYg@mail.gmail.com>
-Subject: Re: [PATCH v7 0/6] Proposal for a GPU cgroup controller
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Shuah Khan <shuah@kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
-        John Stultz <jstultz@google.com>,
-        Carlos Llamas <cmllamas@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kernel-team@android.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220516181323.59554-4-jose.exposito89@gmail.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 9:13 AM Tejun Heo <tj@kernel.org> wrote:
->
-> Hello,
->
-> On Thu, May 12, 2022 at 08:43:52PM -0700, T.J. Mercier wrote:
-> > > I'm actually happy I've asked this question, wasn't silly after all. I think the
-> > > problem here is a naming issue. What you really are monitor is "video memory",
-> > > which consist of a memory segment allocated to store data used to render images
-> > > (its not always images of course, GPU an VPU have specialized buffers for their
-> > > purpose).
-> > >
-> > > Whether this should be split between what is used specifically by the GPU
-> > > drivers, the display drivers, the VPU (CODEC and pre/post-processor) or camera
-> > > drivers is something that should be discussed. But in the current approach, you
-> > > really meant Video memory as a superset of the above. Personally, I think
-> > > generically (to de-Andronized your work), en-globing all video memory is
-> > > sufficient. What I fail to understand is how you will manage to distinguished
-> > > DMABuf Heap allocation (which are used outside of Android btw), from Video
-> > > allocation or other type of usage. I'm sure non-video usage will exist in the
-> > > future (think of machine learning, compute, other high bandwidth streaming
-> > > thingy ...)
-> > >
-> > Ok thank you for pointing out the naming issue. The naming is a
-> > consequence of the initial use case, but I guess it's too specific.
-> > What I want out of this change is that android can track dmabufs that
-> > come out of heaps, and drm can track gpu memory. But other drivers
-> > could track different resources under different names. Imagine this
-> > were called a buffer cgroup controller instead of a GPU cgroup
-> > controller. Then the use component ("video memory") isn't tied up with
-> > the name of the controller, but it's up to the name of the bucket the
-> > resource is tracked under. I think this meets the needs of the two use
-> > cases I'm aware of now, while leaving the door open to other future
-> > needs. Really the controller is just enabling abstract named buckets
-> > for tracking and eventually limiting a type of resource.
->
-> So, there hasn't been whole lot of discussion w/ other GPU folks and what
-> comes up still seems to indicate that we're still long way away from having
-> a meaningful gpu controller.
->
-Yes, and I would still be happy to collaborate.
+Hi "José,
 
-> For your use case, would it make sense to just
-> add dmabuf as a key to the misc controller?
->
-Thanks for your suggestion. This almost works. "dmabuf" as a key could
-work, but I'd actually like to account for each heap. Since heaps can
-be dynamically added, I can't accommodate every potential heap name by
-hardcoding registrations in the misc controller.
+Thank you for the patch! Perhaps something to improve:
 
-> I'm not sure it makes sense to
-> push "gpu controller" forward if there's no conceptual consensus around what
-> resources are.
->
-> Thanks.
->
-> --
-> tejun
+[auto build test WARNING on f7d8e387d9aeff963e6691c0166269b8042b4ff9]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jos-Exp-sito/Add-support-for-XP-PEN-Deco-L/20220517-021641
+base:   f7d8e387d9aeff963e6691c0166269b8042b4ff9
+config: mips-randconfig-s032-20220516 (https://download.01.org/0day-ci/archive/20220518/202205180755.I9jze1Z4-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/d296b420a45eab3527916c73203ed045b65af58e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jos-Exp-sito/Add-support-for-XP-PEN-Deco-L/20220517-021641
+        git checkout d296b420a45eab3527916c73203ed045b65af58e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash drivers/hid/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+   command-line: note: in included file:
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQUIRE redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_SEQ_CST redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQ_REL redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_RELEASE redefined
+   builtin:0:0: sparse: this was the original definition
+   drivers/hid/hid-uclogic-rdesc.c:1014:25: sparse: sparse: incorrect type in assignment (different base types) @@     expected signed int x @@     got restricted __le32 [usertype] @@
+   drivers/hid/hid-uclogic-rdesc.c:1014:25: sparse:     expected signed int x
+   drivers/hid/hid-uclogic-rdesc.c:1014:25: sparse:     got restricted __le32 [usertype]
+>> drivers/hid/hid-uclogic-rdesc.c:1020:44: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] val @@     got restricted __le16 [usertype] @@
+   drivers/hid/hid-uclogic-rdesc.c:1020:44: sparse:     expected unsigned short [usertype] val
+   drivers/hid/hid-uclogic-rdesc.c:1020:44: sparse:     got restricted __le16 [usertype]
+
+vim +1020 drivers/hid/hid-uclogic-rdesc.c
+
+   974	
+   975	const size_t uclogic_rdesc_xppen_deco01_frame_size =
+   976				sizeof(uclogic_rdesc_xppen_deco01_frame_arr);
+   977	
+   978	/**
+   979	 * uclogic_rdesc_template_apply() - apply report descriptor parameters to a
+   980	 * report descriptor template, creating a report descriptor. Copies the
+   981	 * template over to the new report descriptor and replaces every occurrence of
+   982	 * the template placeholders, followed by an index byte, with the value from the
+   983	 * parameter list at that index.
+   984	 *
+   985	 * @template_ptr:	Pointer to the template buffer.
+   986	 * @template_size:	Size of the template buffer.
+   987	 * @param_list:		List of template parameters.
+   988	 * @param_num:		Number of parameters in the list.
+   989	 *
+   990	 * Returns:
+   991	 *	Kmalloc-allocated pointer to the created report descriptor,
+   992	 *	or NULL if allocation failed.
+   993	 */
+   994	__u8 *uclogic_rdesc_template_apply(const __u8 *template_ptr,
+   995					   size_t template_size,
+   996					   const s32 *param_list,
+   997					   size_t param_num)
+   998	{
+   999		static const __u8 btn_head[] = {UCLOGIC_RDESC_FRAME_PH_BTN_HEAD};
+  1000		static const __u8 pen_head[] = {UCLOGIC_RDESC_PEN_PH_HEAD};
+  1001		__u8 *rdesc_ptr;
+  1002		__u8 *p;
+  1003		s32 v;
+  1004	
+  1005		rdesc_ptr = kmemdup(template_ptr, template_size, GFP_KERNEL);
+  1006		if (rdesc_ptr == NULL)
+  1007			return NULL;
+  1008	
+  1009		for (p = rdesc_ptr; p + sizeof(btn_head) < rdesc_ptr + template_size;) {
+  1010			if (p + sizeof(pen_head) < rdesc_ptr + template_size &&
+  1011			    memcmp(p, pen_head, sizeof(pen_head)) == 0 &&
+  1012			    p[sizeof(pen_head)] < param_num) {
+  1013				v = param_list[p[sizeof(pen_head)]];
+  1014				put_unaligned(cpu_to_le32(v), (s32 *)p);
+  1015				p += sizeof(pen_head) + 1;
+  1016			} else if (memcmp(p, btn_head, sizeof(btn_head)) == 0 &&
+  1017				   p[sizeof(btn_head)] < param_num) {
+  1018				v = param_list[p[sizeof(btn_head)]];
+  1019				put_unaligned((__u8)0x2A, p); /* Usage Maximum */
+> 1020				put_unaligned_le16(cpu_to_le16(v), p + 1);
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

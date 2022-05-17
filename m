@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA4AE52A803
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 18:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4535752A83D
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 18:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350946AbiEQQet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 12:34:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34842 "EHLO
+        id S1351013AbiEQQhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 12:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347238AbiEQQeq (ORCPT
+        with ESMTP id S1351072AbiEQQgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 12:34:46 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168BB4ECFB;
-        Tue, 17 May 2022 09:34:46 -0700 (PDT)
+        Tue, 17 May 2022 12:36:07 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5E7CE1B
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 09:36:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652805286; x=1684341286;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pXKemmWg0zSWkgtz6B7q39wTF2OVnZlv0Mo1h+/mPWY=;
-  b=as9/b+/SC4irfepoGIfgNDBJIi60cVLGqsUUCCjZXCGFkPARqQ7LuUW4
-   3wOAG7xy84NEra6v5cxVhryrcXVnWeYemzMHQ1o22Rd6JBjjHjH8z1hFJ
-   YzH0wifG7CMjGUzxe5mOMxbOYUSf0fEBgJ/Xcv0TVKICyhbr0jvT0hymS
-   GMKZbXADbS6Aa1UajVEVLj4t6E7sbL43CMb/BQ4fgcJ7Gkv0TWDpFw19V
-   szBhuqVA0IhqcRhj9M2NneVqRJs14Z4xJeKJE7sajaj2gGoFS+7VyrCNt
-   AD8lZ0ef6bUavN93gN4DYlBebrjGAKdNvImAk7UM3iprmWV0VtmcN0OFJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="251754276"
+  t=1652805365; x=1684341365;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=C2Z0RiuXriPADgGLLBzT0TeztOBn4bNSdseruseNy80=;
+  b=HCIw3dA6ldATu9E+/btWKGsgIWZS7Af96zuymmtuuwJZg5hPjdd2AoCx
+   m35PNqOzAJhbYsQ7rVCWMSSDGbMJ73GHjCFPIpAqlLw1GwXw3v7u+ZGci
+   x9LCuixPyhmaysEUElwXm8CxXMAfUVRsf4HdpKyJWxjM1Sp484Qdmw3H/
+   YuUlacXYxHyPJmsau62B2u9OPSmLb1UYG636r9FIAGEPzCZOvsRVYwsaJ
+   pdTr00pQmnVwX4CVZy9lpiFvFNUJpvTq37YFZ9S3pOOwoXpCaqvZZ5iYT
+   4NghWJ1pewX9+H5dwK2edK2TwJGqQxwh6bvObhLnHfGxgzeT1l4bmO4vE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="296525672"
 X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="251754276"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 09:34:45 -0700
+   d="scan'208";a="296525672"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 09:36:04 -0700
 X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="626563924"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 09:34:44 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nr09h-0008CZ-Ni;
-        Tue, 17 May 2022 19:34:41 +0300
-Date:   Tue, 17 May 2022 19:34:41 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v1 1/1] pinctrl: cherryview: Use GPIO chip pointer in
- chv_gpio_irq_mask_unmask()
-Message-ID: <YoPOof6cckysGT3g@smile.fi.intel.com>
-References: <20220516185500.32304-1-andriy.shevchenko@linux.intel.com>
- <YoNz34dfCIrKYn6n@lahna>
+   d="scan'208";a="672931173"
+Received: from danielga-mobl.amr.corp.intel.com (HELO [10.212.245.96]) ([10.212.245.96])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 09:36:03 -0700
+Message-ID: <e73cb19e-7dab-2fc1-b947-fac70fd607d2@intel.com>
+Date:   Tue, 17 May 2022 09:36:03 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YoNz34dfCIrKYn6n@lahna>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] x86/tdx: Handle load_unaligned_zeropad() page-cross to a
+ shared page
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
+        dan.j.williams@intel.com, david@redhat.com, hpa@zytor.com,
+        seanjc@google.com, thomas.lendacky@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220517153021.11116-1-kirill.shutemov@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220517153021.11116-1-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,20 +68,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 01:07:27PM +0300, Mika Westerberg wrote:
-> On Mon, May 16, 2022 at 09:55:00PM +0300, Andy Shevchenko wrote:
-> > The callers already have dereferenced pointer to GPIO chip, no need to
-> > do it again in chv_gpio_irq_mask_unmask(). Hence, replace IRQ data pointer
-> > by GPIO chip pointer.
-> > 
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On 5/17/22 08:30, Kirill A. Shutemov wrote:
+> load_unaligned_zeropad() can lead to unwanted loads across page boundaries.
+> The unwanted loads are typically harmless. But, they might be made to
+> totally unrelated or even unmapped memory. load_unaligned_zeropad()
+> relies on exception fixup (#PF, #GP and now #VE) to recover from these
+> unwanted loads.
 > 
-> Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> In TDX guest the second page can be shared page and VMM may configure it
+> to trigger #VE.
+> 
+> Kernel assumes that #VE on a shared page is MMIO access and tries to
+> decode instruction to handle it. In case of load_unaligned_zeropad() it
+> may result in confusion as it is not MMIO access.
+> 
+> Check fixup table before trying to handle MMIO.
 
-Pushed to my review and testing queue, thanks!
+Is this a theoretical problem or was it found in practice?
 
--- 
-With Best Regards,
-Andy Shevchenko
+> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+> index 03deb4d6920d..5fbdda2f2b86 100644
+> --- a/arch/x86/coco/tdx/tdx.c
+> +++ b/arch/x86/coco/tdx/tdx.c
+> @@ -11,6 +11,8 @@
+>  #include <asm/insn.h>
+>  #include <asm/insn-eval.h>
+>  #include <asm/pgtable.h>
+> +#include <asm/trapnr.h>
+> +#include <asm/extable.h>
+>  
+>  /* TDX module Call Leaf IDs */
+>  #define TDX_GET_INFO			1
+> @@ -296,6 +298,26 @@ static bool handle_mmio(struct pt_regs *regs, struct ve_info *ve)
+>  	if (WARN_ON_ONCE(user_mode(regs)))
+>  		return false;
+>  
+> +	/*
+> +	 * load_unaligned_zeropad() relies on exception fixups in case of the
+> +	 * word being a page-crosser and the second page is not accessible.
+> +	 *
+> +	 * In TDX guest the second page can be shared page and VMM may
 
+	In TDX guests,
 
+> +	 * configure it to trigger #VE.
+> +	 *
+> +	 * Kernel assumes that #VE on a shared page is MMIO access and tries to
+> +	 * decode instruction to handle it. In case of load_unaligned_zeropad()
+> +	 * it may result in confusion as it is not MMIO access.
+> +	 *
+> +	 * Check fixup table before trying to handle MMIO.
+> +	 */
+> +	if (fixup_exception(regs, X86_TRAP_VE, 0, ve->gla)) {
+> +		/* regs->ip is adjusted by fixup_exception() */
+> +		ve->instr_len = 0;
+> +
+> +		return true;
+> +	}
+
+This 've->instr_len = ' stuff is just a hack.
+
+ve_info is a software structure.  Why not just add a:
+
+	bool ip_adjusted;
+
+which defaults to false, then we have:
+
+	/*
+	 * Adjust RIP if the exception was handled
+	 * but RIP was not adjusted.
+	 */
+	if (!ret && !ve_info->ip_adjusted)
+		regs->ip += ve_info->instr_len;
+
+One other oddity I just stumbled upon:
+
+static bool handle_mmio(struct pt_regs *regs, struct ve_info *ve)
+{
+...
+        ve->instr_len = insn.length;
+
+Why does that need to override 've->instr_len'?  What was wrong with the
+gunk in r10 that came out of TDX_GET_VEINFO?

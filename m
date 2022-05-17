@@ -2,97 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0D35299B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 08:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA815299B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 08:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234600AbiEQGo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 02:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52220 "EHLO
+        id S240176AbiEQGow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 02:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbiEQGoY (ORCPT
+        with ESMTP id S240105AbiEQGop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 02:44:24 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6183FD84;
-        Mon, 16 May 2022 23:44:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=aLCWNoCxYV5Hh6OVMOjiRNyULq/N1kxDOoi8F+4cMeU=; b=PSN4Ub/0JDasSDDQLijbie5jNh
-        g+io1dJsLgtWtc6cdiweuX5JlJDzqN8g6tQcYSNnFhdKQxamJhAdnxZThcYde0lRC7Y6vrEZg9Lt0
-        xBleWifse8gR+mWC1H8WAKgoXMa/4lX7w1uofiZa3I0LJ/LUySOpvfqidM0PSDuVW3HssnQd89UN7
-        90Xh/GBOpOrwHgx653Q+yW01BNhPgCkytHscLw+aR8x7M8u0VpIvdzPZZYkWpoQp5YgA8e2fiqq16
-        YNkTILeSIMrMlZolzrEo1cyk49A0HIWrVaLmiKR4u24ZbgY0gMPZbcrTFaB+4/bwvFcSe4nhV5N6Q
-        J/wSStJg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nqqwC-00AbBn-Pk; Tue, 17 May 2022 06:44:08 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B073130031C;
-        Tue, 17 May 2022 08:44:06 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9B7BF2023D64A; Tue, 17 May 2022 08:44:06 +0200 (CEST)
-Date:   Tue, 17 May 2022 08:44:06 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     David Laight <David.Laight@aculab.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: Re: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
-Message-ID: <YoNENqdLBK6tLmpa@hirez.programming.kicks-ass.net>
-References: <20220513202159.1550547-1-samitolvanen@google.com>
- <20220513202159.1550547-21-samitolvanen@google.com>
- <f65c01979b884174965802a13cf6b077@AcuMS.aculab.com>
- <CABCJKueo+cw1DHH6N2dUjD-U7OKqmkJUyimm0ychv1drt5U9Rg@mail.gmail.com>
- <19b3e040302d4d8aa240eee43427dfaa@AcuMS.aculab.com>
- <20220516214414.GR76023@worktop.programming.kicks-ass.net>
- <CABCJKucPMgMQ-D_yByvMSx6yutjsBXGAwirmheOYejWHARi9iQ@mail.gmail.com>
+        Tue, 17 May 2022 02:44:45 -0400
+X-Greylist: delayed 73528 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 16 May 2022 23:44:41 PDT
+Received: from zg8tndyumtaxlji0oc4xnzya.icoremail.net (zg8tndyumtaxlji0oc4xnzya.icoremail.net [46.101.248.176])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7B2103FBED;
+        Mon, 16 May 2022 23:44:41 -0700 (PDT)
+Received: by ajax-webmail-mail-app4 (Coremail) ; Tue, 17 May 2022 14:44:08
+ +0800 (GMT+08:00)
+X-Originating-IP: [124.236.130.193]
+Date:   Tue, 17 May 2022 14:44:08 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, kuba@kernel.org, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, gregkh@linuxfoundation.org,
+        alexander.deucher@amd.com, broonie@kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH net v2] NFC: nci: fix sleep in atomic context bugs
+ caused by nci_skb_alloc
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <4889a6cd-ef96-595e-a117-2965aab97a54@linaro.org>
+References: <20220517012530.75714-1-duoming@zju.edu.cn>
+ <4889a6cd-ef96-595e-a117-2965aab97a54@linaro.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABCJKucPMgMQ-D_yByvMSx6yutjsBXGAwirmheOYejWHARi9iQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Message-ID: <71f3cea1.18444.180d0c27b1a.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cS_KCgC3COE4RINimSVXAA--.6312W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgkNAVZdtZuKGAAAsw
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 03:03:02PM -0700, Sami Tolvanen wrote:
-> On Mon, May 16, 2022 at 2:44 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Mon, May 16, 2022 at 09:32:55PM +0000, David Laight wrote:
-> >
-> > > > The compiler always generates this specific instruction sequence.
-> > >
-> > > Yes, but there are several ways to encode 'cmpl imm,-6(reg)'.
-> >
-> > Yes, but we don't care. This *always* uses the 32bit immediate form.
-> > Even if the immediate is small.
-> 
-> Yes, that part is not a problem, but it's a valid point that LLVM
-> might not always use r8-r15 here, so I will have to check for the REX
-> prefix before blindly attempting to decode the instruction.
-
-LLVM has always used r11 for indirect calls, will that change?
+SGVsbG8sCgpPbiBUdWUsIDE3IE1heSAyMDIyIDA4OjI1OjA0ICswMjAwIEtyenlzenRvZiB3cm90
+ZToKCj4gT24gMTcvMDUvMjAyMiAwMzoyNSwgRHVvbWluZyBaaG91IHdyb3RlOgo+ID4gVGhlcmUg
+YXJlIHNsZWVwIGluIGF0b21pYyBjb250ZXh0IGJ1Z3Mgd2hlbiB0aGUgcmVxdWVzdCB0byBzZWN1
+cmUKPiA+IGVsZW1lbnQgb2Ygc3QtbmNpIGlzIHRpbWVvdXQuIFRoZSByb290IGNhdXNlIGlzIHRo
+YXQgbmNpX3NrYl9hbGxvYwo+ID4gd2l0aCBHRlBfS0VSTkVMIHBhcmFtZXRlciBpcyBjYWxsZWQg
+aW4gc3RfbmNpX3NlX3d0X3RpbWVvdXQgd2hpY2ggaXMKPiA+IGEgdGltZXIgaGFuZGxlci4gVGhl
+IGNhbGwgcGF0aHMgdGhhdCBjb3VsZCB0cmlnZ2VyIGJ1Z3MgYXJlIHNob3duIGJlbG93Ogo+ID4g
+Cj4gPiAgICAgKGludGVycnVwdCBjb250ZXh0IDEpCj4gPiBzdF9uY2lfc2Vfd3RfdGltZW91dAo+
+ID4gICBuY2lfaGNpX3NlbmRfZXZlbnQKPiA+ICAgICBuY2lfaGNpX3NlbmRfZGF0YQo+ID4gICAg
+ICAgbmNpX3NrYl9hbGxvYyguLi4sIEdGUF9LRVJORUwpIC8vbWF5IHNsZWVwCj4gPiAKPiA+ICAg
+IChpbnRlcnJ1cHQgY29udGV4dCAyKQo+ID4gc3RfbmNpX3NlX3d0X3RpbWVvdXQKPiA+ICAgbmNp
+X2hjaV9zZW5kX2V2ZW50Cj4gPiAgICAgbmNpX2hjaV9zZW5kX2RhdGEKPiA+ICAgICAgIG5jaV9z
+ZW5kX2RhdGEKPiA+ICAgICAgICAgbmNpX3F1ZXVlX3R4X2RhdGFfZnJhZ3MKPiA+ICAgICAgICAg
+ICBuY2lfc2tiX2FsbG9jKC4uLiwgR0ZQX0tFUk5FTCkgLy9tYXkgc2xlZXAKPiA+IAo+ID4gVGhp
+cyBwYXRjaCBjaGFuZ2VzIGFsbG9jYXRpb24gbW9kZSBvZiBuY2lfc2tiX2FsbG9jIGZyb20gR0ZQ
+X0tFUk5FTCB0bwo+ID4gR0ZQX0FUT01JQyBpbiBvcmRlciB0byBwcmV2ZW50IGF0b21pYyBjb250
+ZXh0IHNsZWVwaW5nLiBUaGUgR0ZQX0FUT01JQwo+ID4gZmxhZyBtYWtlcyBtZW1vcnkgYWxsb2Nh
+dGlvbiBvcGVyYXRpb24gY291bGQgYmUgdXNlZCBpbiBhdG9taWMgY29udGV4dC4KPiA+IAo+ID4g
+Rml4ZXM6IGVkMDZhZWVmZGFjMyAoIm5mYzogc3QtbmNpOiBSZW5hbWUgc3QyMW5mY2IgdG8gc3Qt
+bmNpIikKPiA+IFNpZ25lZC1vZmYtYnk6IER1b21pbmcgWmhvdSA8ZHVvbWluZ0B6anUuZWR1LmNu
+Pgo+ID4gLS0tCj4gPiBDaGFuZ2VzIGluIHYyOgo+ID4gICAtIENoYW5nZSB0aGUgRml4ZXMgdGFn
+IHRvIGNvbW1pdCBzdF9uY2lfc2Vfd3RfdGltZW91dCB3YXMgYWRkZWQuCj4gCj4gUGxlYXNlIGFk
+ZCBBY2tlZC1ieS9SZXZpZXdlZC1ieSB0YWdzIHdoZW4gcG9zdGluZyBuZXcgdmVyc2lvbnMuIEhv
+d2V2ZXIsCj4gdGhlcmUncyBubyBuZWVkIHRvIHJlcG9zdCBwYXRjaGVzICpvbmx5KiB0byBhZGQg
+dGhlIHRhZ3MuIFRoZSB1cHN0cmVhbQo+IG1haW50YWluZXIgd2lsbCBkbyB0aGF0IGZvciBhY2tz
+IHJlY2VpdmVkIG9uIHRoZSB2ZXJzaW9uIHRoZXkgYXBwbHkuCj4gCj4gaHR0cHM6Ly9lbGl4aXIu
+Ym9vdGxpbi5jb20vbGludXgvdjUuMTMvc291cmNlL0RvY3VtZW50YXRpb24vcHJvY2Vzcy9zdWJt
+aXR0aW5nLXBhdGNoZXMucnN0I0w1NDMKPiAKPiBJZiBhIHRhZyB3YXMgbm90IGFkZGVkIG9uIHB1
+cnBvc2UsIHBsZWFzZSBzdGF0ZSB3aHkgYW5kIHdoYXQgY2hhbmdlZC4KClRoYW5rIHlvdSB2ZXJ5
+IG11Y2gsIEkgd2lsbCByZWFkIHRoZSBkb2N1bWVudGF0aW9uIGNhcmVmdWxseS4KSSdtIHNvcnJ5
+LCBJIGZvcmdvdCB0aGUgUmV2aWV3ZWQtYnkgdGFnLgogCj4gUmV2aWV3ZWQtYnk6IEtyenlzenRv
+ZiBLb3psb3dza2kgPGtyenlzenRvZi5rb3psb3dza2lAbGluYXJvLm9yZz4KCkJlc3QgcmVnYXJk
+cywKRHVvbWluZyBaaG91

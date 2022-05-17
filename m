@@ -2,58 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EDC752A840
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 18:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D5DB52A841
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 18:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351043AbiEQQia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 12:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47442 "EHLO
+        id S1349568AbiEQQig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 12:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243067AbiEQQi0 (ORCPT
+        with ESMTP id S1351035AbiEQQi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 12:38:26 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F4E33E17;
-        Tue, 17 May 2022 09:38:25 -0700 (PDT)
+        Tue, 17 May 2022 12:38:28 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1710633E86;
+        Tue, 17 May 2022 09:38:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652805505; x=1684341505;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=zl8YweXi0s0RV+9G0WFQmftqGmOUyvjXqU37od8/iVs=;
-  b=YpyeGdEpLF5wSnr69rYF0Idi+fJsjcGzsURJQEGtXOGlpWSDo+kKlElK
-   sC4NwRa7bMnwslG4WbsWj+DNSOz63AIlcqVGY8bT7inWs66BXdt3N8rYJ
-   xcyNChADQdZioXXoftQke90OC0tYHCODLqUR3Xa/DGmoklI4LANUsRaQo
-   oxFcDPw5k49gAEzu36om6QQPnaEJ20lw60hHVgpWxHyG1L7CyrKCwNUFu
-   KfMVASH1y1r6QokAzPP3q1G8qmmToOTHtJSlb/QLnqUsyiolDYS3STFfK
-   VEkmCRIyR+wCcZeYlyCxRSkG3T76KxfPLaDv97VvToXa97l6PD0KphvMT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="251755452"
+  t=1652805507; x=1684341507;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=T7Duo2KDAAYE18QSBhb5vxqT20qzgjq8uzh+AeSioMY=;
+  b=C8wMroHU/SfyTs06kBG+JOonmnuOiyXsp5EJ5jEHBgRxBsBYz0dCEBLJ
+   l5XGtfdE0SN/KvJtRXThU2zJtuFZq0e5MeSxHz5LwyvYVJ2Tw17vULhZz
+   60BIQ7pPaCwIfzqQLfaatmWulHfO20AsYIXLKYq5u4wSAc0RVMDfASYNz
+   KSV0f4bMR5ZChtFEmqr+qDscEXyzbRSSMuapEEIN72w5xjJH8JmMTLGKj
+   RKqmO5Y/whzsq0MDpWoPqChgX1mqsOnJ2HqIhbUYLT5Zmma+ll72MnTYf
+   BL3aJTS/frMQMr5xpj32P1TRlxNlggcxZmby41VrbLYX4cyB1e1eFewmg
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="268827681"
 X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="251755452"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 09:38:24 -0700
+   d="scan'208";a="268827681"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 09:38:26 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="605441639"
+   d="scan'208";a="597225299"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 17 May 2022 09:38:22 -0700
+  by orsmga008.jf.intel.com with ESMTP; 17 May 2022 09:38:23 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 1A1C4109; Tue, 17 May 2022 19:38:22 +0300 (EEST)
+        id BF64B159; Tue, 17 May 2022 19:38:23 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
         Andy Shevchenko <andy@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v2 1/2] pinctrl: intel: make irq_chip immutable
-Date:   Tue, 17 May 2022 19:38:19 +0300
-Message-Id: <20220517163820.86768-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 2/2] pinctrl: intel: Drop unsued irqchip member in struct intel_pinctrl
+Date:   Tue, 17 May 2022 19:38:20 +0300
+Message-Id: <20220517163820.86768-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220517163820.86768-1-andriy.shevchenko@linux.intel.com>
+References: <20220517163820.86768-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,109 +64,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since recently, the kernel is nagging about mutable irq_chips:
-
-   "not an immutable chip, please consider fixing it!"
-
-Drop the unneeded copy, flag it as IRQCHIP_IMMUTABLE, add the new
-helper functions and call the appropriate gpiolib functions.
+There is no users of irqchip member in struct intel_pinctrl. Drop it.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
-v2: dropped renaming part (Mika)
- drivers/pinctrl/intel/pinctrl-intel.c | 40 +++++++++++++++++----------
- 1 file changed, 25 insertions(+), 15 deletions(-)
+v2: no changes
+ drivers/pinctrl/intel/pinctrl-intel.h | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/pinctrl/intel/pinctrl-intel.c b/drivers/pinctrl/intel/pinctrl-intel.c
-index 826d494f3cc6..4845d0b74df9 100644
---- a/drivers/pinctrl/intel/pinctrl-intel.c
-+++ b/drivers/pinctrl/intel/pinctrl-intel.c
-@@ -1039,15 +1039,14 @@ static void intel_gpio_irq_ack(struct irq_data *d)
- 	}
- }
- 
--static void intel_gpio_irq_mask_unmask(struct irq_data *d, bool mask)
-+static void intel_gpio_irq_mask_unmask(struct gpio_chip *gc, irq_hw_number_t hwirq, bool mask)
- {
--	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
- 	struct intel_pinctrl *pctrl = gpiochip_get_data(gc);
- 	const struct intel_community *community;
- 	const struct intel_padgroup *padgrp;
- 	int pin;
- 
--	pin = intel_gpio_to_pin(pctrl, irqd_to_hwirq(d), &community, &padgrp);
-+	pin = intel_gpio_to_pin(pctrl, hwirq, &community, &padgrp);
- 	if (pin >= 0) {
- 		unsigned int gpp, gpp_offset;
- 		unsigned long flags;
-@@ -1077,12 +1076,20 @@ static void intel_gpio_irq_mask_unmask(struct irq_data *d, bool mask)
- 
- static void intel_gpio_irq_mask(struct irq_data *d)
- {
--	intel_gpio_irq_mask_unmask(d, true);
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
-+	irq_hw_number_t hwirq = irqd_to_hwirq(d);
-+
-+	intel_gpio_irq_mask_unmask(gc, hwirq, true);
-+	gpiochip_disable_irq(gc, hwirq);
- }
- 
- static void intel_gpio_irq_unmask(struct irq_data *d)
- {
--	intel_gpio_irq_mask_unmask(d, false);
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
-+	irq_hw_number_t hwirq = irqd_to_hwirq(d);
-+
-+	gpiochip_enable_irq(gc, hwirq);
-+	intel_gpio_irq_mask_unmask(gc, hwirq, false);
- }
- 
- static int intel_gpio_irq_type(struct irq_data *d, unsigned int type)
-@@ -1157,6 +1164,17 @@ static int intel_gpio_irq_wake(struct irq_data *d, unsigned int on)
- 	return 0;
- }
- 
-+static const struct irq_chip intel_gpio_irq_chip = {
-+	.name		= "intel-gpio",
-+	.irq_ack	= intel_gpio_irq_ack,
-+	.irq_mask	= intel_gpio_irq_mask,
-+	.irq_unmask	= intel_gpio_irq_unmask,
-+	.irq_set_type	= intel_gpio_irq_type,
-+	.irq_set_wake	= intel_gpio_irq_wake,
-+	.flags		= IRQCHIP_MASK_ON_SUSPEND | IRQCHIP_IMMUTABLE,
-+	GPIOCHIP_IRQ_RESOURCE_HELPERS,
-+};
-+
- static int intel_gpio_community_irq_handler(struct intel_pinctrl *pctrl,
- 					    const struct intel_community *community)
- {
-@@ -1319,15 +1337,6 @@ static int intel_gpio_probe(struct intel_pinctrl *pctrl, int irq)
- 	pctrl->chip.add_pin_ranges = intel_gpio_add_pin_ranges;
- 	pctrl->irq = irq;
- 
--	/* Setup IRQ chip */
--	pctrl->irqchip.name = dev_name(pctrl->dev);
--	pctrl->irqchip.irq_ack = intel_gpio_irq_ack;
--	pctrl->irqchip.irq_mask = intel_gpio_irq_mask;
--	pctrl->irqchip.irq_unmask = intel_gpio_irq_unmask;
--	pctrl->irqchip.irq_set_type = intel_gpio_irq_type;
--	pctrl->irqchip.irq_set_wake = intel_gpio_irq_wake;
--	pctrl->irqchip.flags = IRQCHIP_MASK_ON_SUSPEND;
--
- 	/*
- 	 * On some platforms several GPIO controllers share the same interrupt
- 	 * line.
-@@ -1340,8 +1349,9 @@ static int intel_gpio_probe(struct intel_pinctrl *pctrl, int irq)
- 		return ret;
- 	}
- 
-+	/* Setup IRQ chip */
- 	girq = &pctrl->chip.irq;
--	girq->chip = &pctrl->irqchip;
-+	gpio_irq_chip_set_chip(girq, &intel_gpio_irq_chip);
- 	/* This will let us handle the IRQ in the driver */
- 	girq->parent_handler = NULL;
- 	girq->num_parents = 0;
+diff --git a/drivers/pinctrl/intel/pinctrl-intel.h b/drivers/pinctrl/intel/pinctrl-intel.h
+index c4fef03b663f..710341bb67cc 100644
+--- a/drivers/pinctrl/intel/pinctrl-intel.h
++++ b/drivers/pinctrl/intel/pinctrl-intel.h
+@@ -223,7 +223,6 @@ struct intel_pinctrl_context {
+  * @pctldesc: Pin controller description
+  * @pctldev: Pointer to the pin controller device
+  * @chip: GPIO chip in this pin controller
+- * @irqchip: IRQ chip in this pin controller
+  * @soc: SoC/PCH specific pin configuration data
+  * @communities: All communities in this pin controller
+  * @ncommunities: Number of communities in this pin controller
+@@ -236,7 +235,6 @@ struct intel_pinctrl {
+ 	struct pinctrl_desc pctldesc;
+ 	struct pinctrl_dev *pctldev;
+ 	struct gpio_chip chip;
+-	struct irq_chip irqchip;
+ 	const struct intel_pinctrl_soc_data *soc;
+ 	struct intel_community *communities;
+ 	size_t ncommunities;
 -- 
 2.35.1
 

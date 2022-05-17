@@ -2,155 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A98529DBA
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D51529DBB
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238764AbiEQJRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 05:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53070 "EHLO
+        id S244592AbiEQJSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 05:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244904AbiEQJQ0 (ORCPT
+        with ESMTP id S244789AbiEQJQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 05:16:26 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B4E1EC5E
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:16:24 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id c14so16369063pfn.2
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:16:24 -0700 (PDT)
+        Tue, 17 May 2022 05:16:19 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9C16351
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:16:15 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id s14so16808115plk.8
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:16:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VbT9MivaGcVQLFLyZe58CMZOydl8bMnPHecbxMnGlAA=;
-        b=K926XyreguR/4XEGI2/XdLSg8xqkk79XZxpz2krQ3cDJULT8zIyem67TELbGWBtmTg
-         b05B8JjUy+SFZn96XQv2wbJdy6P1+68y3XmUl2REMzKOsiCerWpY4gxfkPaXYimAbdMw
-         aPDfZjT5rKLnZhvekRWx46Led/eHS37TdbpQ+k2rA3u5jcJAA1qE4EjEdY61h/y1aGDJ
-         HwKKYCRVUMiHvXIhC9uLV+1DSufpqUQKWO7jZmK8YgLeFAdxBOwUCCjPXoideDBIZwgv
-         +DFJROmmKg7yUnB015J5PHMAo6BmnjJV06lEU25NzkLOxPGGWKOdzM+q3EK1WrqC3yTM
-         NXyQ==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=onNloPT2vOHeOV/PSAtr8Uk19Uz1c04GpqkHIaBzWIY=;
+        b=ZyE57yWZL+SFAnt+RCxLDdFdvh/Ti2hIPUBotwr6QjEtQZ6l+iylAXCbEacALkbQjL
+         VvDYdcDpxNWpvmCuw5V6kkBxIerpdJ1it39e1AcUARaymO6JLB+O9Q2if8mkrwmK3JxQ
+         pP8r9pMKAMaTlidnbgZyBS3sDVguddEuzS3BrrAdAjJCAVpsmfQu99GPH+e/3GfF+ZRw
+         gr8Kgwnq/h6eSIkM7JunuCmfFQFqRSgzPd37lqeuYAcsHpE9d6raEHZyBAU16UlMgGD2
+         KyHaf/GpDUjppELMMCFtwNgH+yIEj+lXLFGEaWxdZ+pqQ4MZ0CDr4gHHnGe3vaQSc5kE
+         P+Ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VbT9MivaGcVQLFLyZe58CMZOydl8bMnPHecbxMnGlAA=;
-        b=1GTFNaH0ZipH19BdIL9v3fks7Z2JjS2B4gYdGeteVcdEbToYDHz4OS6cws+kTZu4Br
-         UHOxTKkVR3WdTVN20UbEN1cmfjJFIamF50gzFB26D4l3OEXbL12fxzme2dOOAKXYz1YJ
-         kIxO6tiIaNyUa4qC1a1wLoI7n7l63Y8iTdtUZxZtHd4TcvJ23AiApYifERCCHpKJoecH
-         +Vw/vWaAV/kCmw7VDf+eGttRNtiSwWiNEqj11+pc1SK/2MG8Jxmizziz6jrEZuvLBEjq
-         o+UgU/f56yuoD3lWlZrvt4JpgwEEmA2VWk7OUVSK7kOtLgkMkAaQEbA6gftySBHuppbX
-         qXKA==
-X-Gm-Message-State: AOAM533HurWjR7r/KI69ck6EGe/gIoClfEcDSYiHTMet7CSpzW/ifPoJ
-        XcQsuv2q7yKLk2PYwEp//hftQyQixuU12DOP39Q=
-X-Google-Smtp-Source: ABdhPJwb7TUPydJ5uJgGFBM3zIUz6PP1+ayvhR0HdyDTVVnTuilVTQ3Ohszxg4ss5MiddupCWgYYK0W77rGbKie7r8Q=
-X-Received: by 2002:a63:4d4:0:b0:3c1:f13f:a9a1 with SMTP id
- 203-20020a6304d4000000b003c1f13fa9a1mr18365793pge.398.1652778984401; Tue, 17
- May 2022 02:16:24 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=onNloPT2vOHeOV/PSAtr8Uk19Uz1c04GpqkHIaBzWIY=;
+        b=40nk5ZOHcu0MnZtgZmaNntFhzykcSIWvO2MLKB2oWeojMCWVubvcPlCnYfaoXTt/8C
+         f1nU7GWBY5dwsDym2KvbgybUDMiGmb8xiQjNwoRzakGLu/kVaNYGY1Sud+ylAZUEI6MR
+         wQNUU7RUj1CsidUxDB7UmXdjYucYQV2whrCofN0iPX7DUoNrUuxstfKTnwwZ6PsJyQWo
+         ydRp9BM8WqlWGEZYq61kkZJQ9t/GVSgfIUhptZTrF+z8XTbphBURwcp+uk+ad8OJMy4i
+         PxLlfuZykLHCK/IQ2VXVkyYru6jFN74p86G4O2v6ghy4C5A8yc0ObxTJH1WZ63VxbzCz
+         TqjQ==
+X-Gm-Message-State: AOAM530LG7yfREmITQj2yI2qEF8CsTvs/19CTi3c9uv+o0kpiEAybqj9
+        /oe/WvzTiK/h4EtiFHtdlArRTw==
+X-Google-Smtp-Source: ABdhPJzuvNI99GDvviBh8Cb0S0VbIbzNldV4sCEMh/Ae6AtvyqRplmKR8tJnUOPkZJWORgAZgncEPQ==
+X-Received: by 2002:a17:903:2d0:b0:14d:8a8d:cb1 with SMTP id s16-20020a17090302d000b0014d8a8d0cb1mr21430704plk.50.1652778975070;
+        Tue, 17 May 2022 02:16:15 -0700 (PDT)
+Received: from localhost ([139.177.225.250])
+        by smtp.gmail.com with ESMTPSA id jc13-20020a17090325cd00b001618b4d86b3sm2978176plb.180.2022.05.17.02.16.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 02:16:14 -0700 (PDT)
+Date:   Tue, 17 May 2022 17:16:11 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Oscar Salvador <osalvador@suse.de>
+Cc:     corbet@lwn.net, mike.kravetz@oracle.com, akpm@linux-foundation.org,
+        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
+        david@redhat.com, masahiroy@kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        duanxiongchun@bytedance.com, smuchun@gmail.com
+Subject: Re: [PATCH v12 7/7] mm: hugetlb_vmemmap: add
+ hugetlb_optimize_vmemmap sysctl
+Message-ID: <YoNn2+8VG7XxQ20Y@FVFYT0MHHV2J.usts.net>
+References: <20220516102211.41557-1-songmuchun@bytedance.com>
+ <20220516102211.41557-8-songmuchun@bytedance.com>
+ <YoNXm2c5fJq8luqf@localhost.localdomain>
 MIME-Version: 1.0
-References: <20220517082650.2005840-1-hsinyi@chromium.org> <20220517082650.2005840-2-hsinyi@chromium.org>
-In-Reply-To: <20220517082650.2005840-2-hsinyi@chromium.org>
-From:   Xiongwei Song <sxwjean@gmail.com>
-Date:   Tue, 17 May 2022 17:15:58 +0800
-Message-ID: <CAEVVKH8vOYov+edGWOWbrgi=5UAnNN4FzcAV5i3EVJ8S7_NSDw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] Revert "squashfs: provide backing_dev_info in
- order to disable read-ahead"
-To:     Hsin-Yi Wang <hsinyi@chromium.org>
-Cc:     Phillip Lougher <phillip@squashfs.org.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Xiongwei Song <Xiongwei.Song@windriver.com>,
-        Zheng Liang <zhengliang6@huawei.com>,
-        Zhang Yi <yi.zhang@huawei.com>, Hou Tao <houtao1@huawei.com>,
-        Miao Xie <miaoxie@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm @ kvack . org" <linux-mm@kvack.org>,
-        "squashfs-devel @ lists . sourceforge . net" 
-        <squashfs-devel@lists.sourceforge.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YoNXm2c5fJq8luqf@localhost.localdomain>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 4:27 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
->
-> This reverts commit 9eec1d897139e5de287af5d559a02b811b844d82.
->
-> Revert closing the readahead to squashfs since the readahead callback
-> for squashfs is implemented.
->
-> Suggested-by: Xiongwei Song <sxwjean@gmail.com>
+On Tue, May 17, 2022 at 10:06:51AM +0200, Oscar Salvador wrote:
+> On Mon, May 16, 2022 at 06:22:11PM +0800, Muchun Song wrote:
+> > We must add hugetlb_free_vmemmap=on (or "off") to the boot cmdline and
+> > reboot the server to enable or disable the feature of optimizing vmemmap
+> > pages associated with HugeTLB pages.  However, rebooting usually takes a
+> > long time.  So add a sysctl to enable or disable the feature at runtime
+> > without rebooting.  Why we need this?  There are 3 use cases.
+> > 
+> > 1) The feature of minimizing overhead of struct page associated with each
+> > HugeTLB is disabled by default without passing "hugetlb_free_vmemmap=on"
+> > to the boot cmdline. When we (ByteDance) deliver the servers to the
+> > users who want to enable this feature, they have to configure the grub
+> > (change boot cmdline) and reboot the servers, whereas rebooting usually
+> > takes a long time (we have thousands of servers).  It's a very bad
+> > experience for the users.  So we need a approach to enable this feature
+> > after rebooting. This is a use case in our practical environment.
+> > 
+> > 2) Some use cases are that HugeTLB pages are allocated 'on the fly'
+> > instead of being pulled from the HugeTLB pool, those workloads would be
+> > affected with this feature enabled.  Those workloads could be identified
+> > by the characteristics of they never explicitly allocating huge pages
+> > with 'nr_hugepages' but only set 'nr_overcommit_hugepages' and then let
+> > the pages be allocated from the buddy allocator at fault time.  We can
+> > confirm it is a real use case from the commit 099730d67417.  For those
+> > workloads, the page fault time could be ~2x slower than before. We
+> > suspect those users want to disable this feature if the system has enabled
+> > this before and they don't think the memory savings benefit is enough to
+> > make up for the performance drop.
+> > 
+> > 3) If the workload which wants vmemmap pages to be optimized and the
+> > workload which wants to set 'nr_overcommit_hugepages' and does not want
+> > the extera overhead at fault time when the overcommitted pages be
+> > allocated from the buddy allocator are deployed in the same server.
+> > The user could enable this feature and set 'nr_hugepages' and
+> > 'nr_overcommit_hugepages', then disable the feature.  In this case,
+> > the overcommited HugeTLB pages will not encounter the extra overhead
+> > at fault time.
+> 
+> I am having issues parsing point 3), specially the first part.
+> IIUC, you are saying we have two kind of different workloads:
+> 
+> - one that wants to have hugetlb vmemmap pages optimized
+> - one that wants to allocate hugetlb pages at fault time rather than
+>   allocating them via /proc/..., but does not want to suffer the
+>   overhead of optimizing the vmemmap pages when faulting them
 
-I'd like to use "xiongwei.song@windriver.com" in my tag.
+I need to clarify this workload, the one that does not want to
+suffer the overhead of optimizing the vmemmap pages when faulting
+them instead of wanting to allocate hugetlb pages at fault time.
+It is different from the one in the case 2). This one usually
+configures 'nr_overcommit_hugepages' as well as 'nr_hugepages',
+if it does not want to suffer the overhead of optimizing the
+vmemmap pages when faulting pages (must be overcommitted pages),
+then they could follow the steps mentioned above.
 
-> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> ---
->  fs/squashfs/super.c | 33 ---------------------------------
->  1 file changed, 33 deletions(-)
+> 
+> Then you say the user could enable the optimization and allocate
+> those pages via nr_hugepages, and then disable the feature.
+> So, when we fault in those pages, the pages are already in the
+> pool, right? And are already optimized.
 >
-> diff --git a/fs/squashfs/super.c b/fs/squashfs/super.c
-> index 6d594ba2ed28..32565dafa7f3 100644
-> --- a/fs/squashfs/super.c
-> +++ b/fs/squashfs/super.c
-> @@ -29,7 +29,6 @@
->  #include <linux/module.h>
->  #include <linux/magic.h>
->  #include <linux/xattr.h>
-> -#include <linux/backing-dev.h>
->
->  #include "squashfs_fs.h"
->  #include "squashfs_fs_sb.h"
-> @@ -113,24 +112,6 @@ static const struct squashfs_decompressor *supported_squashfs_filesystem(
->         return decompressor;
->  }
->
-> -static int squashfs_bdi_init(struct super_block *sb)
-> -{
-> -       int err;
-> -       unsigned int major = MAJOR(sb->s_dev);
-> -       unsigned int minor = MINOR(sb->s_dev);
-> -
-> -       bdi_put(sb->s_bdi);
-> -       sb->s_bdi = &noop_backing_dev_info;
-> -
-> -       err = super_setup_bdi_name(sb, "squashfs_%u_%u", major, minor);
-> -       if (err)
-> -               return err;
-> -
-> -       sb->s_bdi->ra_pages = 0;
-> -       sb->s_bdi->io_pages = 0;
-> -
-> -       return 0;
-> -}
->
->  static int squashfs_fill_super(struct super_block *sb, struct fs_context *fc)
->  {
-> @@ -146,20 +127,6 @@ static int squashfs_fill_super(struct super_block *sb, struct fs_context *fc)
->
->         TRACE("Entered squashfs_fill_superblock\n");
->
-> -       /*
-> -        * squashfs provides 'backing_dev_info' in order to disable read-ahead. For
-> -        * squashfs, I/O is not deferred, it is done immediately in read_folio,
-> -        * which means the user would always have to wait their own I/O. So the effect
-> -        * of readahead is very weak for squashfs. squashfs_bdi_init will set
-> -        * sb->s_bdi->ra_pages and sb->s_bdi->io_pages to 0 and close readahead for
-> -        * squashfs.
-> -        */
-> -       err = squashfs_bdi_init(sb);
-> -       if (err) {
-> -               errorf(fc, "squashfs init bdi failed");
-> -               return err;
-> -       }
-> -
->         sb->s_fs_info = kzalloc(sizeof(*msblk), GFP_KERNEL);
->         if (sb->s_fs_info == NULL) {
->                 ERROR("Failed to allocate squashfs_sb_info\n");
-> --
-> 2.36.0.550.gb090851708-goog
->
->
+
+I mean the overcommitted pages (it could be allocated at fault
+time) as explained above.
+
+Thanks.

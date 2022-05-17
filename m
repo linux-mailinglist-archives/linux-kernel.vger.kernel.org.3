@@ -2,144 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37AB552ADA2
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 23:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB7152ADA7
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 23:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbiEQVoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 17:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
+        id S229642AbiEQVr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 17:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiEQVoC (ORCPT
+        with ESMTP id S229573AbiEQVr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 17:44:02 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818C750445;
-        Tue, 17 May 2022 14:43:52 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652823829;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=38MBY5TPzPDWJJ7wfIQbCIMC4tpzXNoTQctp5Q2omdE=;
-        b=qZ3I2loQXge4Fi5CVcicg69+ghn9lriVgyi3NPWmWzPAuEX4KXYC/io9C4AXS96a19FZvx
-        sk1Umv9m5xJUUCYUQidygcv20wzvES58fTIPGUWt0HIL1u/BmyZdNqbM5FBXKK5ZXJIU0o
-        IwORWcFZnh1x4G9pJZ42qKzguh2Xm6q6vcOIWCmplWNOrx00Xh8cYmEN3xKCCQJ0r+c5jw
-        +zXFQBy0yHB/DcGyPRPBTS9NrvwdKbO349DVwwFkmaupoE5CSeEK+sbcC3lOXhDL/FPGr3
-        VHXaGq808dpm0+s5+EGiQ7S1/uOkK2esRwO6IJSSDj5CRwxKkfdO+o168nD1KA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652823829;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=38MBY5TPzPDWJJ7wfIQbCIMC4tpzXNoTQctp5Q2omdE=;
-        b=if0dLSyC9FrNTNSWRenQex+bMgszw9+Et1v5yB1Ku/+X13/fdyfRbbOCPfr0sAhB0cGrJk
-        aExYqttNsV6KH+AA==
-To:     Max Mehl <max.mehl@fsfe.org>, LKML <linux-kernel@vger.kernel.org>
+        Tue, 17 May 2022 17:47:56 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3DAE52B18
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:47:54 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id n10so110340pjh.5
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:47:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=I7pyy6E2RnWeIWkxBWEXgMm6xwmOUjrAOyo0FwZHE3M=;
+        b=i5ZizIgKjPC5FWkkv4pQ9fzdJ2F9jey36U2ePt8A2qFCy/BSpVAkfHeucHfnA2aJdl
+         3h1wzls8pry+KvjypLKRkqVS+B6RWmHgI67Oq+m/nCYuzzZdFoamUlfS29sl0uKSSl6P
+         QsH/kFcc4Kn1Je1iJOByK9mYHr04kVaT9/Jnk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=I7pyy6E2RnWeIWkxBWEXgMm6xwmOUjrAOyo0FwZHE3M=;
+        b=hLqfqiY0fPmtW6GBynAzp1BmDqVlaReC/pwMZEOtiXv7IGZI+yW2gZ4BN6l0Fsq+jZ
+         iZ//7ELlbv77+K43HuJ3zxvFRRiUyXSIwjRKvQzV+JKbOOTAqTPt2BgYk8lHxCap9Ppm
+         Eyo7QtF7qCoguNIZ3T7uJJKpgnSYjMNXoKXq5EkGIOWh/V3DQDVwu1pZen7V4lmlvjWe
+         Hy6+PDJkJmey40fBDfTsnXTNgMqLokbLgHsQUvSmIKsJsy9ztOnah/wtdk1GCs7ClgJr
+         nomxwIWFF944cuQ7LEv8nOkGDRfw7FDj+NGUDrzEUNIMp1yyU3ircBRzSMB6TByiMV/D
+         txKA==
+X-Gm-Message-State: AOAM531oV3r9N7+hf+wcdUqha5vV1XxXS24zBRN9K8Xa5Jwvi2T2QiTf
+        nwkjz1RBrQQOVWF8EY9FOpAbmBtHB5Y1Sg==
+X-Google-Smtp-Source: ABdhPJwcOvKdR0sEAIITObq8HPR9LzoCRWxSkOWIKeyktUa3Hag3FVvj7utF86QSQvkLCYPpQPNXhA==
+X-Received: by 2002:a17:90b:1b47:b0:1dc:3c0a:dde3 with SMTP id nv7-20020a17090b1b4700b001dc3c0adde3mr26988737pjb.52.1652824074462;
+        Tue, 17 May 2022 14:47:54 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id r24-20020a635d18000000b003c1bf4c064fsm25644pgb.72.2022.05.17.14.47.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 14:47:54 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Kees Cook <keescook@chromium.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@lst.de>, linux-spdx@vger.kernel.org
-Subject: Re: [patch 0/9] scripts/spdxcheck: Better statistics and exclude
- handling
-In-Reply-To: <1652775347.3cr9dmk5qv.2220@fsfe.org>
-References: <20220516101901.475557433@linutronix.de>
- <1652706350.kh41opdwg4.2220@fsfe.org> <87zgjhpawr.ffs@tglx>
- <87wnelpam3.ffs@tglx> <1652775347.3cr9dmk5qv.2220@fsfe.org>
-Date:   Tue, 17 May 2022 23:43:49 +0200
-Message-ID: <8735h7ltre.ffs@tglx>
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] lkdtm/heap: Hide allocation size from -Warray-bounds
+Date:   Tue, 17 May 2022 14:47:52 -0700
+Message-Id: <20220517214752.877892-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1809; h=from:subject; bh=r1vvWyPMo+weXnHfU6apxX06asx5XlIDPRF3oTBkz4Y=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBihBgHWCusDKC4hKbABxxKuztggfit8AvSMH+iVFLV XdNdeyWJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYoQYBwAKCRCJcvTf3G3AJjcZD/ 9DCny8GCVsW0cFQv+UlrgbRciJZMVxV3sPQg0y69mLu1L2uZrYtntwxnxGEW3/L5Ppak9V7w+XgAdQ wUv3G+wT9o/3SkTYMUWbhXbGCTGou1pBPK6lUfWqhPAT/UTmyiYrLC852k2SkubodYpOI085tfSlVA udqJUNCTnR85JZZ/WcXjDocQpTIebmaPSZ7HFLqIF6VjDPJKQBLXWHn5r6711D+6wrUJzgVFK3jErv sHm6Cx9y00dfrkh17PTZsU0BR5g6V4vqarf9Z/lK0UnhPyg3N/+SeJTo5ji4XbofJXm2uCRVOyL5Cs odMp+7d/eHr2WAa88EU+FzUrJfnZeOVzgvlqbsFL6hiyDAleGBKmxL46RHC5YavCUyp5IGbBvjRmdv qmz2dORdoU0C1dilfNKFhsbe19+ahllY9gcyd1wr+L9LFt4r6RvE6YDkUyWwWzjkRGff3oxRh1i6oG aVfYYSzSp+6NYviKODolr/tUl5ujVBopySkGylOB2U58ClcIWo0VEHXbraO6Aog9J0nyJ4d922toqb 2NgXkbtoD3a3gtQ8wrbztQnp/ZtIAaY3KeBc/ZMmDM6HSgsH+COMjWY7+8bam0l/uDbAHG3vVzNuAp KQQMVyYiGQ2sk4XxdPK5lkfNz2ertlaoshGJ8Ym5Ly4UeywnFczLZyUerx8g==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17 2022 at 10:25, Max Mehl wrote:
-> ~ Thomas Gleixner [2022-05-16 20:59 +0200]:
->> There is also an argument to be made whether we really need to have SPDX
->> identifiers on trivial files:
->> 
->> #include <someheader.h>
->> <EOF>
->> 
->> Such files are not copyrightable by any means. So what's the value of
->> doubling the line count to add an SPDX identifier? Just to make nice
->> statistics?
->
-> We agree that such files are not copyrightable. But where is the
-> threshold? Lines of code? Creativity? Number of used functions? And how
-> to embed this threshold in tooling? So instead of fuzzy exclusion of
-> such files in tools like spdxcheck or REUSE, it makes sense to treat
-> them as every other file with the cost of adding two comment lines.
->
-> This clear-cut rule eases maintaining and growing the effort you and
-> others did because developers would know exactly what to add to a new
-> file (license + copyright) without requiring looking up the thresholds
-> or a manual review by maintainers who can interpret them.
+With the kmalloc() size annotations, GCC is smart enough to realize that
+LKDTM is intentionally writing past the end of the buffer. This is on
+purpose, of course, so hide the buffer from the optimizer. Silences:
 
-Seriously no. I'm outright refusing to add my copyright to a trivial
-file with one or two includes or a silly comment like '/* empty because */.
+../drivers/misc/lkdtm/heap.c: In function 'lkdtm_SLAB_LINEAR_OVERFLOW':
+../drivers/misc/lkdtm/heap.c:59:13: warning: array subscript 256 is outside array bounds of 'void[1020]' [-Warray-bounds]
+   59 |         data[1024 / sizeof(u32)] = 0x12345678;
+      |         ~~~~^~~~~~~~~~~~~~~~~~~~
+In file included from ../drivers/misc/lkdtm/heap.c:7:
+In function 'kmalloc',
+    inlined from 'lkdtm_SLAB_LINEAR_OVERFLOW' at ../drivers/misc/lkdtm/heap.c:54:14:
+../include/linux/slab.h:581:24: note: at offset 1024 into object of size 1020 allocated by 'kmem_cache_alloc_trace'
+  581 |                 return kmem_cache_alloc_trace(
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~
+  582 |                                 kmalloc_caches[kmalloc_type(flags)][index],
+      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  583 |                                 flags, size);
+      |                                 ~~~~~~~~~~~~
 
-     There is nothing copyrightable there.
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/misc/lkdtm/heap.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-I'm not going to make myself a fool just to make tools happy, which can
-figure out on their own whether there is reasonable content in the vast
-majority of cases.
+diff --git a/drivers/misc/lkdtm/heap.c b/drivers/misc/lkdtm/heap.c
+index 5d3b92cd23bd..62516078a619 100644
+--- a/drivers/misc/lkdtm/heap.c
++++ b/drivers/misc/lkdtm/heap.c
+@@ -56,6 +56,7 @@ static void lkdtm_SLAB_LINEAR_OVERFLOW(void)
+ 		return;
+ 
+ 	pr_info("Attempting slab linear overflow ...\n");
++	OPTIMIZER_HIDE_VAR(data);
+ 	data[1024 / sizeof(u32)] = 0x12345678;
+ 	kfree(data);
+ }
+-- 
+2.32.0
 
-Also you need some exclude rules in any case. Why?
-
-  - How do you tell a tool that a file is generated, e.g. in the kernel
-    the default configuration files?
-
-    Yes, the file content depends on human input to the generator tool,
-    but I'm looking forward for the explanation how this is
-    copyrightable especially with multiple people updating this file
-    over time where some of the updates are just done by invoking the
-    generator tool itself.
-
-  - How do you tell a tool that a file contains licensing documentation?
-
-    Go and look what license scanners make out of all the various
-    license-rules.rst files.
-
-  - ....
-
-  Do all scanners have to grow heuristics for ignoring the content past
-  the topmost SPDX License identifier in certain files or for figuring
-  out what might be generated content?
-
-You also might need to add information about binary blobs, which
-obviously cannot be part of the binary blobs themself.
-
-The exclude rules I added are lazy and mostly focussed on spdxcheck, but
-I'm happy to make them more useful and let them carry information about
-the nature of the exclude or morph them into a general scanner info
-which also contains binary blob info and other helpful information. But
-that needs a larger discussion about the format and rules for such a
-file.
-
-That said, I'm all for clear cut rules, but rules just for the rules
-sake are almost as bad as no rules at all.
-
-As always you have to apply common sense and look at the bigger picture
-and come up with solutions which are practicable, enforcable and useful
-for the larger eco-system.
-
-Your goal of having SPDX ids and copyright notices in every file of a
-project is honorable, but impractical for various reasons.
-
-See above.
-
-Aside of that you cannot replace a full blown license scanner by REUSE
-even if your project is SPDX and Copyright notice clean at the top level
-of a file. You still need to verify that there is no other information
-in a 'clean' file which might be contradicting or supplemental. You
-cannot add all of this functionality to REUSE or whatever.
-
-Thanks,
-
-        tglx

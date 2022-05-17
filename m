@@ -2,81 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FDBA52A6EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B14F52A701
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:37:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350576AbiEQPgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 11:36:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36852 "EHLO
+        id S1349361AbiEQPhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 11:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350219AbiEQPfU (ORCPT
+        with ESMTP id S1350364AbiEQPfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 11:35:20 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAD65007A;
-        Tue, 17 May 2022 08:35:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652801712; x=1684337712;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=OKRcLw6QsuGpSKY4/BO13xavP65NgCLYIODNZJ7MeM4=;
-  b=dbtZI3y2Y3r1LRtyGe7F6r22+6KEO/uVKXb3/58OMsyr+2xKpq2fOt+V
-   4bZxkLl2gvxvRAw9oozwdrEDziQhlcQlsQyIED95MT4c1zNjeYldPEXxT
-   PZDzBFBt6SI9FNDzM4xfHxmHdMcNPDI3iuCkNC4b78kfLCzWUW/5ptSRJ
-   +CpeB2agYD6t+7LLlSV5jEF5r3VG+MtSfNLsToQFxQhrJ0Ofma0K1W1NU
-   TIB8/SqaKr1TcNCX+eAGxPYuRNXbk3Lf43UEEiVxX+PO8/RqnN5p6m06m
-   ebQbbAg87i+MfsYpYvh6V58k3ub5RqnVy4o2lzCZMgnxXvb4NQ8M73kJG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="270911635"
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="270911635"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 08:35:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="672905613"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 17 May 2022 08:35:05 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 03686EAF; Tue, 17 May 2022 18:34:50 +0300 (EEST)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv6 15/15] mm/vmstat: Add counter for memory accepting
-Date:   Tue, 17 May 2022 18:34:44 +0300
-Message-Id: <20220517153444.11195-16-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220517153444.11195-1-kirill.shutemov@linux.intel.com>
-References: <20220517153444.11195-1-kirill.shutemov@linux.intel.com>
+        Tue, 17 May 2022 11:35:54 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F67506D9;
+        Tue, 17 May 2022 08:35:35 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 24HFYsQ9026768
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 May 2022 11:34:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1652801701; bh=vMDcL1Sj3ecZF/PHO33RMl8MajLs+NitzTG2owdTZQA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=QWWYv+c38E0Js5EJ5O4LH7stm0/N/0G+zlZGaxwbAbrJcoBFiFX+I8aMjlxDXtdcH
+         HpQFgO3vNojUXJc8f+tn6qApIq1oq89uILHK6aqbgkyPptilbkipvXh8b+UDCORwcJ
+         NTcZRZaecteMkr4C9FEtPqcOV8/1Z/mJK25oUPZYeYBBp6sBYjgpZEf9xgcokZgDBW
+         jWBIxHO+AVv5V5gBQlM1SENquz5Y+sM7mT5fnlB7PvD9DdOkb+WioPJCoeulEVoACn
+         ngUKDte0snQOFU95pMNMLZkRMx8s9GtBCC6kwv6i26eYPhX3g2IKwzeEwICOgNvimy
+         LqJbC9V4JwF5A==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 8636C15C3EC0; Tue, 17 May 2022 11:34:54 -0400 (EDT)
+Date:   Tue, 17 May 2022 11:34:54 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Pankaj Raghav <p.raghav@samsung.com>, axboe@kernel.dk,
+        pankydev8@gmail.com, gost.dev@samsung.com,
+        damien.lemoal@opensource.wdc.com, jiangbo.365@bytedance.com,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        dm-devel@redhat.com, dsterba@suse.com, linux-btrfs@vger.kernel.org
+Subject: Re: [dm-devel] [PATCH v4 00/13] support non power of 2 zoned devices
+Message-ID: <YoPAnj9ufkt5nh1G@mit.edu>
+References: <CGME20220516165418eucas1p2be592d9cd4b35f6b71d39ccbe87f3fef@eucas1p2.samsung.com>
+ <20220516165416.171196-1-p.raghav@samsung.com>
+ <20220517081048.GA13947@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220517081048.GA13947@lst.de>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,58 +59,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The counter increased every time kernel accepts a memory region.
+On Tue, May 17, 2022 at 10:10:48AM +0200, Christoph Hellwig wrote:
+> I'm a little surprised about all this activity.
+> 
+> I though the conclusion at LSF/MM was that for Linux itself there
+> is very little benefit in supporting this scheme.  It will massively
+> fragment the supported based of devices and applications, while only
+> having the benefit of supporting some Samsung legacy devices.
 
-The counter allows to see if memory acceptation is still ongoing and
-contributes to memory allocation latency.
+FWIW,
 
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
----
- arch/x86/mm/unaccepted_memory.c | 1 +
- include/linux/vm_event_item.h   | 3 +++
- mm/vmstat.c                     | 3 +++
- 3 files changed, 7 insertions(+)
+That wasn't my impression from that LSF/MM session, but once the
+videos become available, folks can decide for themselves.
 
-diff --git a/arch/x86/mm/unaccepted_memory.c b/arch/x86/mm/unaccepted_memory.c
-index 6ecd79101922..fe1dabfae326 100644
---- a/arch/x86/mm/unaccepted_memory.c
-+++ b/arch/x86/mm/unaccepted_memory.c
-@@ -74,6 +74,7 @@ void accept_memory(phys_addr_t start, phys_addr_t end)
- 		}
- 
- 		bitmap_clear(bitmap, range_start, len);
-+		count_vm_events(ACCEPT_MEMORY, len * PMD_SIZE / PAGE_SIZE);
- 
- 		/* In early boot nr_unaccepted is not yet initialized */
- 		if (nr_unaccepted) {
-diff --git a/include/linux/vm_event_item.h b/include/linux/vm_event_item.h
-index 16a0a4fd000b..6a468164a2f9 100644
---- a/include/linux/vm_event_item.h
-+++ b/include/linux/vm_event_item.h
-@@ -136,6 +136,9 @@ enum vm_event_item { PGPGIN, PGPGOUT, PSWPIN, PSWPOUT,
- #ifdef CONFIG_X86
- 		DIRECT_MAP_LEVEL2_SPLIT,
- 		DIRECT_MAP_LEVEL3_SPLIT,
-+#endif
-+#ifdef CONFIG_UNACCEPTED_MEMORY
-+		ACCEPT_MEMORY,
- #endif
- 		NR_VM_EVENT_ITEMS
- };
-diff --git a/mm/vmstat.c b/mm/vmstat.c
-index b75b1a64b54c..4c9197f32406 100644
---- a/mm/vmstat.c
-+++ b/mm/vmstat.c
-@@ -1397,6 +1397,9 @@ const char * const vmstat_text[] = {
- 	"direct_map_level2_splits",
- 	"direct_map_level3_splits",
- #endif
-+#ifdef CONFIG_UNACCEPTED_MEMORY
-+	"accept_memory",
-+#endif
- #endif /* CONFIG_VM_EVENT_COUNTERS || CONFIG_MEMCG */
- };
- #endif /* CONFIG_PROC_FS || CONFIG_SYSFS || CONFIG_NUMA || CONFIG_MEMCG */
--- 
-2.35.1
-
+       	      		       	   	  - Ted

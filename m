@@ -2,64 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA6C152AC9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 22:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC9D52ACA3
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 22:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345910AbiEQUTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 16:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36188 "EHLO
+        id S242117AbiEQUVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 16:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234652AbiEQUTJ (ORCPT
+        with ESMTP id S1352961AbiEQUVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 16:19:09 -0400
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94E451E6C;
-        Tue, 17 May 2022 13:19:05 -0700 (PDT)
-Received: by mail-oi1-f171.google.com with SMTP id w130so260749oig.0;
-        Tue, 17 May 2022 13:19:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=qF0K1DNnjaqSBBuzSNA0jml+7NSOTcoHRSVNExgb0IU=;
-        b=hHxYZavkNduQqYTY3Ya4UnZVleO/DbFMEXONXPjmAAt+XPY/9xbaeJI6CBavrtJ1Ro
-         KUaLikVyP9Amuk8pUD5Mq9daAYiu6ElJDAZumBFYVqNI0eRwunya7OBD4phZrarnLnNM
-         j7Xee9fbkUIVqbt6fdWVGzQH3+vH81O31yPIOpQncQFF3wkRFQE+Q75/9GE+8czZICqh
-         bcrwVi09W2R9iIxf+b3EWNwe1hPT7udN1cKM4BPCyWW8sG6twxfBKqGPqYxn3cKRAQID
-         AJd7YW2IPQDnSN8J5AAb9q+iZKXdvHfHC/8KhNU9m469EE1KjXMpMSZy9mQZIp3jrnJ8
-         XVrA==
-X-Gm-Message-State: AOAM530/WMwNEog31+1l9dFzViaBOrvPhsH3HcGGnAeOLO4xMuVXdugI
-        +zgxaziJNsOAbIwi09omVA==
-X-Google-Smtp-Source: ABdhPJyD6elI9HCVkd6AnLnBYNqOkkIRVTo1++KX2zvPCfJvAtcXP8v/Qto20xBUQ7sIQ4K661TKyg==
-X-Received: by 2002:aca:bc57:0:b0:326:b2b6:2535 with SMTP id m84-20020acabc57000000b00326b2b62535mr16655453oif.107.1652818745220;
-        Tue, 17 May 2022 13:19:05 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q19-20020a4a8353000000b00333220959b9sm207184oog.1.2022.05.17.13.19.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 13:19:04 -0700 (PDT)
-Received: (nullmailer pid 1561450 invoked by uid 1000);
-        Tue, 17 May 2022 20:19:03 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Smitha T Murthy <smitha.t@samsung.com>
-Cc:     ezequiel@vanguardiasur.com.ar, benjamin.gaignard@collabora.com,
-        david.plowman@raspberrypi.com, stanimir.varbanov@linaro.org,
-        mark.rutland@arm.com, andi@etezian.org, aswani.reddy@samsung.com,
-        mchehab@kernel.org, linux-kernel@vger.kernel.org,
-        m.szyprowski@samsung.com, dillon.minfei@gmail.com,
-        andrzej.hajda@intel.com, linux-arm-kernel@lists.infradead.org,
-        pankaj.dubey@samsung.com, jernej.skrabec@gmail.com,
-        krzk+dt@kernel.org, devicetree@vger.kernel.org, robh+dt@kernel.org,
-        alim.akhtar@samsung.com, linux-media@vger.kernel.org,
-        linux-fsd@tesla.com, hverkuil-cisco@xs4all.nl
-In-Reply-To: <20220517125548.14746-3-smitha.t@samsung.com>
-References: <20220517125548.14746-1-smitha.t@samsung.com>        <CGME20220517125554epcas5p4e87a71471525056281f1578f4f80f760@epcas5p4.samsung.com> <20220517125548.14746-3-smitha.t@samsung.com>
-Subject: Re: [PATCH 02/20] dt-bindings: media: s5p-mfc: Convert s5p-mfc.txt to new DT schema
-Date:   Tue, 17 May 2022 15:19:03 -0500
-Message-Id: <1652818743.270476.1561449.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Tue, 17 May 2022 16:21:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979DD31DEC
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:21:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0ECCDB81C50
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 20:21:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A465CC385B8;
+        Tue, 17 May 2022 20:21:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652818875;
+        bh=FUw9l4CEWJbA9/ZM7b1TCp7eWq+8/wCm8DPSvUGG3T4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=r4KUhRHhufPM63pNUB6CmLAX4u4xMJo5dlQGS2SMPpOWhshwbXRO/d66JtnfYOO5q
+         0LbTnM7jIHPi4aa6j/kxlk+UXIh/KXQQg3C05ODO02/e8MxJcF/08bnl1EUXljw39F
+         jFHhuhOAYWqTUAOlF20+Z4IUlmlvWjgvgP2FEh1fS7/st8pxPHfliv6dTXQ7smWUXa
+         Fa5ZG0ZxoCVnb6YHe6Rd/cToc11p2hb5gVQHYHsHZOba/yYJ5dlu5IGhB6DYOfQYiD
+         JbzxyCcn/muQruVQz2t10S6lUmnVXX4p3emmkDkQvtMm6OHDwZlePrqUtEo+17yyaR
+         r+XVcgvdcDJ0w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 41A4E5C086D; Tue, 17 May 2022 13:21:15 -0700 (PDT)
+Date:   Tue, 17 May 2022 13:21:15 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        John Dias <joaodias@google.com>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH v4] mm: fix is_pinnable_page against on cma page
+Message-ID: <20220517202115.GE1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <f7ff4186-e629-a5da-3f4d-ec629b0c8dd9@nvidia.com>
+ <20220512004949.GK1790663@paulmck-ThinkPad-P17-Gen-1>
+ <YnxczoehQJ+x6m9Y@google.com>
+ <0accce46-fac6-cdfb-db7f-d08396bf9d35@nvidia.com>
+ <aafc0954-80df-dceb-03f2-2caea29cbbda@nvidia.com>
+ <YnyCqwY4DxcZ/NjM@google.com>
+ <20220517140049.GF63055@ziepe.ca>
+ <ef901bdb-6117-bad4-2f26-c80df270b86e@nvidia.com>
+ <20220517192825.GM63055@ziepe.ca>
+ <b6eef200-43d1-7913-21ed-176b05fcb4fe@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b6eef200-43d1-7913-21ed-176b05fcb4fe@nvidia.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,162 +70,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 May 2022 18:25:30 +0530, Smitha T Murthy wrote:
-> Adds DT schema for s5p-mfc in yaml format.
+On Tue, May 17, 2022 at 01:12:02PM -0700, John Hubbard wrote:
+> On 5/17/22 12:28, Jason Gunthorpe wrote:
+> > > If you compare this to the snippet above, you'll see that there is
+> > > an extra mov statement, and that one dereferences a pointer from
+> > > %rax:
+> > > 
+> > >      mov    (%rax),%rbx
+> > 
+> > That is the same move as:
+> > 
+> >     mov    0x8(%rdx,%rax,8),%rbx
+> > 
+> > Except that the EA calculation was done in advance and stored in rax.
+> > 
+> > lea isn't a memory reference, it is just computing the pointer value
+> > that 0x8(%rdx,%rax,8) represents. ie the lea computes
+> > 
+> >    %rax = %rdx + %rax*8 + 6
+> > 
+> > Which is then fed into the mov. Maybe it is an optimization to allow
+> > one pipe to do the shr and an other to the EA - IDK, seems like a
+> > random thing for the compiler to do.
+
+Maybe an optimization suppressed due to the volatile nature of the
+load?  If so, perhaps it might be considered a compiler bug.  Though
+it is quite difficult to get optimization bugs involving volatile
+to be taken seriously.
+
+> Apologies for getting that wrong, and thanks for walking me through the
+> asm.
 > 
-> Cc: linux-fsd@tesla.com
-> Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
-> ---
->  .../devicetree/bindings/media/s5p-mfc.txt     | 77 +--------------
->  .../devicetree/bindings/media/s5p-mfc.yaml    | 98 +++++++++++++++++++
->  2 files changed, 99 insertions(+), 76 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/media/s5p-mfc.yaml
+> [...]
+> > 
+> > Paul can correct me, but I understand we do not have a list of allowed
+> > operations that are exempted from the READ_ONCE() requirement. ie it
+> > is not just conditional branching that requires READ_ONCE().
+> > 
+> > This is why READ_ONCE() must always be on the memory load, because the
+> > point is to sanitize away the uncertainty that comes with an unlocked
+> > read of unstable memory contents. READ_ONCE() samples the value in
+> > memory, and removes all tearing, multiload, etc "instability" that may
+> > effect down stream computations. In this way down stream compulations
+> > become reliable.
+> > 
+> > Jason
 > 
+> So then:
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+Works for me!
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+Acked-by: Paul E. McKenney <paulmck@kernel.org>
 
-Full log is available here: https://patchwork.ozlabs.org/patch/
+							Thanx, Paul
 
-
-codec@11000000: 'iommu-names', 'power-domains' do not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/exynos5250-arndale.dtb
-	arch/arm/boot/dts/exynos5250-smdk5250.dtb
-	arch/arm/boot/dts/exynos5250-snow.dtb
-	arch/arm/boot/dts/exynos5250-snow-rev5.dtb
-	arch/arm/boot/dts/exynos5250-spring.dtb
-	arch/arm/boot/dts/exynos5420-arndale-octa.dtb
-	arch/arm/boot/dts/exynos5420-chagall-wifi.dtb
-	arch/arm/boot/dts/exynos5420-klimt-wifi.dtb
-	arch/arm/boot/dts/exynos5420-peach-pit.dtb
-	arch/arm/boot/dts/exynos5420-smdk5420.dtb
-	arch/arm/boot/dts/exynos5422-odroidhc1.dtb
-	arch/arm/boot/dts/exynos5422-odroidxu3.dtb
-	arch/arm/boot/dts/exynos5422-odroidxu3-lite.dtb
-	arch/arm/boot/dts/exynos5422-odroidxu4.dtb
-	arch/arm/boot/dts/exynos5800-peach-pi.dtb
-
-codec@13400000: clock-names: ['mfc', 'sclk_mfc'] is too long
-	arch/arm/boot/dts/exynos3250-artik5-eval.dtb
-	arch/arm/boot/dts/exynos3250-monk.dtb
-	arch/arm/boot/dts/exynos3250-rinato.dtb
-	arch/arm/boot/dts/exynos4210-i9100.dtb
-	arch/arm/boot/dts/exynos4210-origen.dtb
-	arch/arm/boot/dts/exynos4210-smdkv310.dtb
-	arch/arm/boot/dts/exynos4210-trats.dtb
-	arch/arm/boot/dts/exynos4210-universal_c210.dtb
-	arch/arm/boot/dts/exynos4412-i9300.dtb
-	arch/arm/boot/dts/exynos4412-i9305.dtb
-	arch/arm/boot/dts/exynos4412-itop-elite.dtb
-	arch/arm/boot/dts/exynos4412-n710x.dtb
-	arch/arm/boot/dts/exynos4412-odroidu3.dtb
-	arch/arm/boot/dts/exynos4412-odroidx2.dtb
-	arch/arm/boot/dts/exynos4412-odroidx.dtb
-	arch/arm/boot/dts/exynos4412-origen.dtb
-	arch/arm/boot/dts/exynos4412-p4note-n8010.dtb
-	arch/arm/boot/dts/exynos4412-smdk4412.dtb
-	arch/arm/boot/dts/exynos4412-tiny4412.dtb
-	arch/arm/boot/dts/exynos4412-trats2.dtb
-
-codec@13400000: clocks: [[5, 273], [5, 170]] is too long
-	arch/arm/boot/dts/exynos4210-i9100.dtb
-	arch/arm/boot/dts/exynos4210-origen.dtb
-	arch/arm/boot/dts/exynos4210-smdkv310.dtb
-	arch/arm/boot/dts/exynos4210-trats.dtb
-	arch/arm/boot/dts/exynos4210-universal_c210.dtb
-
-codec@13400000: clocks: [[7, 178], [7, 228]] is too long
-	arch/arm/boot/dts/exynos3250-artik5-eval.dtb
-	arch/arm/boot/dts/exynos3250-monk.dtb
-	arch/arm/boot/dts/exynos3250-rinato.dtb
-
-codec@13400000: clocks: [[7, 273], [7, 170]] is too long
-	arch/arm/boot/dts/exynos4412-i9300.dtb
-	arch/arm/boot/dts/exynos4412-i9305.dtb
-	arch/arm/boot/dts/exynos4412-itop-elite.dtb
-	arch/arm/boot/dts/exynos4412-n710x.dtb
-	arch/arm/boot/dts/exynos4412-odroidu3.dtb
-	arch/arm/boot/dts/exynos4412-odroidx2.dtb
-	arch/arm/boot/dts/exynos4412-odroidx.dtb
-	arch/arm/boot/dts/exynos4412-origen.dtb
-	arch/arm/boot/dts/exynos4412-p4note-n8010.dtb
-	arch/arm/boot/dts/exynos4412-smdk4412.dtb
-	arch/arm/boot/dts/exynos4412-tiny4412.dtb
-	arch/arm/boot/dts/exynos4412-trats2.dtb
-
-codec@13400000: 'iommu-names', 'power-domains' do not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/exynos4210-i9100.dtb
-	arch/arm/boot/dts/exynos4210-origen.dtb
-	arch/arm/boot/dts/exynos4210-smdkv310.dtb
-	arch/arm/boot/dts/exynos4210-trats.dtb
-	arch/arm/boot/dts/exynos4210-universal_c210.dtb
-	arch/arm/boot/dts/exynos4412-i9300.dtb
-	arch/arm/boot/dts/exynos4412-i9305.dtb
-	arch/arm/boot/dts/exynos4412-itop-elite.dtb
-	arch/arm/boot/dts/exynos4412-n710x.dtb
-	arch/arm/boot/dts/exynos4412-odroidu3.dtb
-	arch/arm/boot/dts/exynos4412-odroidx2.dtb
-	arch/arm/boot/dts/exynos4412-odroidx.dtb
-	arch/arm/boot/dts/exynos4412-origen.dtb
-	arch/arm/boot/dts/exynos4412-p4note-n8010.dtb
-	arch/arm/boot/dts/exynos4412-smdk4412.dtb
-	arch/arm/boot/dts/exynos4412-tiny4412.dtb
-	arch/arm/boot/dts/exynos4412-trats2.dtb
-
-codec@13400000: iommus: [[36]] is too short
-	arch/arm/boot/dts/exynos3250-monk.dtb
-
-codec@13400000: iommus: [[40]] is too short
-	arch/arm/boot/dts/exynos3250-artik5-eval.dtb
-
-codec@13400000: iommus: [[47]] is too short
-	arch/arm/boot/dts/exynos3250-rinato.dtb
-
-codec@13400000: 'power-domains' does not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/exynos3250-artik5-eval.dtb
-	arch/arm/boot/dts/exynos3250-monk.dtb
-	arch/arm/boot/dts/exynos3250-rinato.dtb
-
-codec@152e0000: clock-names: ['pclk', 'aclk', 'aclk_xiu'] is too long
-	arch/arm64/boot/dts/exynos/exynos5433-tm2.dtb
-	arch/arm64/boot/dts/exynos/exynos5433-tm2e.dtb
-
-codec@152e0000: clocks: [[34, 16], [34, 9], [34, 6]] is too long
-	arch/arm64/boot/dts/exynos/exynos5433-tm2.dtb
-	arch/arm64/boot/dts/exynos/exynos5433-tm2e.dtb
-
-codec@152e0000: 'iommu-names', 'power-domains' do not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm64/boot/dts/exynos/exynos5433-tm2.dtb
-	arch/arm64/boot/dts/exynos/exynos5433-tm2e.dtb
-
-codec@f1700000: clock-names: ['sclk_mfc', 'mfc'] is too long
-	arch/arm/boot/dts/s5pv210-aquila.dtb
-	arch/arm/boot/dts/s5pv210-fascinate4g.dtb
-	arch/arm/boot/dts/s5pv210-galaxys.dtb
-	arch/arm/boot/dts/s5pv210-goni.dtb
-	arch/arm/boot/dts/s5pv210-smdkc110.dtb
-	arch/arm/boot/dts/s5pv210-smdkv210.dtb
-	arch/arm/boot/dts/s5pv210-torbreck.dtb
-
-codec@f1700000: clocks: [[2, 60], [2, 92]] is too long
-	arch/arm/boot/dts/s5pv210-aquila.dtb
-	arch/arm/boot/dts/s5pv210-fascinate4g.dtb
-	arch/arm/boot/dts/s5pv210-galaxys.dtb
-	arch/arm/boot/dts/s5pv210-goni.dtb
-	arch/arm/boot/dts/s5pv210-smdkc110.dtb
-	arch/arm/boot/dts/s5pv210-smdkv210.dtb
-	arch/arm/boot/dts/s5pv210-torbreck.dtb
-
-codec@f1700000: 'iommus' is a required property
-	arch/arm/boot/dts/s5pv210-aquila.dtb
-	arch/arm/boot/dts/s5pv210-fascinate4g.dtb
-	arch/arm/boot/dts/s5pv210-galaxys.dtb
-	arch/arm/boot/dts/s5pv210-goni.dtb
-	arch/arm/boot/dts/s5pv210-smdkc110.dtb
-	arch/arm/boot/dts/s5pv210-smdkv210.dtb
-	arch/arm/boot/dts/s5pv210-torbreck.dtb
-
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 0e42038382c1..b404f87e2682 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -482,7 +482,12 @@ unsigned long __get_pfnblock_flags_mask(const struct page *page,
+>         word_bitidx = bitidx / BITS_PER_LONG;
+>         bitidx &= (BITS_PER_LONG-1);
+> 
+> -       word = bitmap[word_bitidx];
+> +       /*
+> +        * This races, without locks, with set_pageblock_migratetype(). Ensure
+> +        * a consistent (non-tearing) read of the memory array, so that results,
+> +        * even though racy, are not corrupted.
+> +        */
+> +       word = READ_ONCE(bitmap[word_bitidx]);
+>         return (word >> bitidx) & mask;
+>  }
+> 
+> 
+> thanks,
+> -- 
+> John Hubbard
+> NVIDIA

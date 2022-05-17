@@ -2,282 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B791C52A888
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 18:47:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEABC52A889
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 18:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351163AbiEQQrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 12:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42496 "EHLO
+        id S1351192AbiEQQsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 12:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351171AbiEQQrd (ORCPT
+        with ESMTP id S1351176AbiEQQsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 12:47:33 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789D94EF50;
-        Tue, 17 May 2022 09:47:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652806048; x=1684342048;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=pFrlG/jLKFzpLJVweZ20xehKFD4QV202aDt+sp57KbM=;
-  b=l2l+0rpBC3zh41v7SF7eZaug8bH4L2uavegy+tMCXgPVdAJ9luoruMPy
-   KmUVsIqLzUe5O+pZtX0oosmb2kApgl05umgog+ZPwfPs34KnV35oSnism
-   fmMJPbZDnfYTnzJtbjqX9tMYTzY3A7vwA4ItBdfsRtPFbE/TZsM17gvD3
-   ITf2EzheC/X1hFI2aoOxDpHMdeiAZU6iMXsf9v4o7MG+31AnBjAjtGeUJ
-   hY6ii/5C6tAlHg89Z9MYfR1c4zic+PicquQBCsb+U5af8fjhkoNIBgJT2
-   /SEk25qks4q3p2BhcIE2PkQyAAyzEPuHHOiJEV/tDfHZSKJhBPO2Hr/Zg
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="253295374"
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="253295374"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 09:47:27 -0700
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="816980699"
-Received: from kcaccard-mobl.amr.corp.intel.com (HELO kcaccard-mobl1.jf.intel.com) ([10.209.37.16])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 09:47:26 -0700
-From:   Kristen Carlson Accardi <kristen@linux.intel.com>
-To:     linux-sgx@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tue, 17 May 2022 12:48:00 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5E14EF4D
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 09:47:59 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id i17so17824276pla.10
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 09:47:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EBasZC6YLIGG+8ebkH1QLdEFicqNV7dhlVlz53XQa0g=;
+        b=Lmv+/OShourHoBUs+tURSbEj9Ks1XGiGMRM1OA2iE9dUBahc5HLA478PsXXz7goCEk
+         oWj8FTCW5ak98bLmlPS8M39fBTM6883huUiR2o2OTG0IUprf+o9MMW58JrB8kaJhjwBB
+         rSmIX/EVnANSjwuReBISK8mk29tv18UFf44sovifAskP6YHXlmF7KPRbh6pOTYI3exrD
+         nChhxdff6K0M4caV4KluMckdE/abpp0X3Y5PpHytyh1u/znF1JO4NbwVQG18nDDFWr+6
+         Lo85CQkuRy3rfW59Lh92dLP/q808AX5DHZAhfG+S4d3Dm5HvzM5xKlInnAIrtCEosfpt
+         Gg5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EBasZC6YLIGG+8ebkH1QLdEFicqNV7dhlVlz53XQa0g=;
+        b=m0sqEVtaL40WREaJLAnnSlOyo3lqX6ZyQ5ZbS998bukiaBjBYniU8tII/ZuOsf+NCG
+         tkBS7m0bsRP4z+ed8oAzIh8xBBIZdhz4UGaabHJ7Knv1i5e7G7xLkAEaHStX+s8cMX55
+         6d7lHA8z4uo26JEfbTdeMkXRSCB2TdIPng/MaGn9bRNhSdUstSl/iVCq+30Pm2bMJzcu
+         PrYN7rhDET6knJfGWIlsLueyaGomEauuyC0ogqiH+YXMCZZAcyhomCC+CBiNaPaaG0Za
+         5gaZvFavtKXhLTiYjdmJdTvKP4kShZBXiDfVycQe7NeNKhNFacGhcy7rjdG2GKdaxlT5
+         +klw==
+X-Gm-Message-State: AOAM53072suKadVpgNR2uJofMUazpe8Ppe/o9PZKLMz3/L52QLYSQUTd
+        sF0wKDJ2M2dNuSOghniRYVEoKQ==
+X-Google-Smtp-Source: ABdhPJwedacUE1vAqgT/wmFPcMSU3He4JFWbqObgpC8o4yG5zSA3Tap0Mjo0P4Uz/5VfkOYxfjqnDQ==
+X-Received: by 2002:a17:903:124b:b0:15e:84d0:ded6 with SMTP id u11-20020a170903124b00b0015e84d0ded6mr22605889plh.141.1652806078925;
+        Tue, 17 May 2022 09:47:58 -0700 (PDT)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id i7-20020a63cd07000000b003c14af5063esm8853588pgg.86.2022.05.17.09.47.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 09:47:58 -0700 (PDT)
+Date:   Tue, 17 May 2022 16:47:54 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Kristen Carlson Accardi <kristen@linux.intel.com>
-Subject: [PATCH] x86/sgx: Set active memcg prior to shmem allocation
-Date:   Tue, 17 May 2022 09:47:13 -0700
-Message-Id: <20220517164713.4610-1-kristen@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH V2 5/7] KVM: X86/MMU: Remove the check of the return
+ value of to_shadow_page()
+Message-ID: <YoPRuh2T/9RvWih4@google.com>
+References: <20220503150735.32723-1-jiangshanlai@gmail.com>
+ <20220503150735.32723-6-jiangshanlai@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220503150735.32723-6-jiangshanlai@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the system runs out of enclave memory, SGX can reclaim EPC pages
-by swapping to normal RAM. These backing pages are allocated via a
-per-enclave shared memory area. Since SGX allows unlimited over
-commit on EPC memory, the reclaimer thread can allocate a large
-number of backing RAM pages in response to EPC memory pressure.
+On Tue, May 03, 2022 at 11:07:33PM +0800, Lai Jiangshan wrote:
+> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> 
+> Remove the check of the return value of to_shadow_page() in
+> mmu_free_root_page(), kvm_mmu_free_guest_mode_roots(), is_unsync_root()
+> and is_tdp_mmu() because it can not return NULL.
+> 
+> Remove the check of the return value of to_shadow_page() in
+> is_page_fault_stale() and is_obsolete_root() because it can not return
+> NULL and the obsoleting for special shadow page is already handled by
+> a different way.
+> 
+> When the obsoleting process is done, all the obsoleted shadow pages are
+> already unlinked from the special pages by the help of the parent rmap
+> of the children and the special pages become theoretically valid again.
+> The special shadow page can be freed if is_obsolete_sp() return true,
+> or be reused if is_obsolete_sp() return false.
+> 
+> Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-When the shared memory backing RAM allocation occurs during
-the reclaimer thread context, the shared memory is charged to
-the root memory control group, and the shmem usage of the enclave
-is not properly accounted for, making cgroups ineffective at
-limiting the amount of RAM an enclave can consume.
+Reviewed-by: David Matlack <dmatlack@google.com>
 
-For example, when using a cgroup to launch a set of test
-enclaves, the kernel does not properly account for 50% - 75% of
-shmem page allocations on average. In the worst case, when
-nearly all allocations occur during the reclaimer thread, the
-kernel accounts less than a percent of the amount of shmem used
-by the enclave's cgroup to the correct cgroup.
-
-SGX currently stores a list of mm_structs that are associated with
-an enclave. In order to allow the enclave's cgroup to more accurately
-reflect the shmem usage, the memory control group (struct mem_cgroup)
-of one of these mm_structs can be set as the active memory cgroup
-prior to allocating any EPC backing pages. This will make any shmem
-allocations be charged to a memory control group associated with the
-enclave's cgroup. This will allow memory cgroup limits to restrict
-RAM usage more effectively.
-
-This patch will create a new function - sgx_encl_alloc_backing().
-This function will be used whenever a new backing storage page
-needs to be allocated. Previously the same function was used for
-page allocation as well as retrieving a previously allocated page.
-Prior to backing page allocation, if there is a mm_struct associated
-with the enclave that is requesting the allocation, it will be set
-as the active memory control group.
-
-Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
----
- arch/x86/kernel/cpu/sgx/encl.c | 111 ++++++++++++++++++++++++++++++++-
- arch/x86/kernel/cpu/sgx/encl.h |   6 +-
- arch/x86/kernel/cpu/sgx/main.c |   4 +-
- 3 files changed, 115 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
-index 001808e3901c..c3a5e57040bc 100644
---- a/arch/x86/kernel/cpu/sgx/encl.c
-+++ b/arch/x86/kernel/cpu/sgx/encl.c
-@@ -32,7 +32,7 @@ static int __sgx_encl_eldu(struct sgx_encl_page *encl_page,
- 	else
- 		page_index = PFN_DOWN(encl->size);
- 
--	ret = sgx_encl_get_backing(encl, page_index, &b);
-+	ret = sgx_encl_lookup_backing(encl, page_index, &b);
- 	if (ret)
- 		return ret;
- 
-@@ -574,7 +574,7 @@ static struct page *sgx_encl_get_backing_page(struct sgx_encl *encl,
-  *   0 on success,
-  *   -errno otherwise.
-  */
--int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
-+static int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
- 			 struct sgx_backing *backing)
- {
- 	pgoff_t pcmd_index = PFN_DOWN(encl->size) + 1 + (page_index >> 5);
-@@ -601,6 +601,113 @@ int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
- 	return 0;
- }
- 
-+static struct mem_cgroup * sgx_encl_set_active_memcg(struct sgx_encl *encl)
-+{
-+	struct mm_struct *mm = current->mm;
-+	struct sgx_encl_mm *encl_mm;
-+	struct mem_cgroup *memcg;
-+	int idx;
-+
-+	/*
-+	 * If current->mm is NULL, get_mem_cgroup_from_mm() will return
-+	 * the currently active mem_cgroup. This may be the root mem_cgroup
-+	 * if there is no active mem_cgroup set.
-+	 */
-+	memcg = get_mem_cgroup_from_mm(mm);
-+
-+	/*
-+	 * If we already have an mm, we are not in thread context and the
-+	 * mem_cgroup for the enclave will be charged for any allocations.
-+	 */
-+	if (mm)
-+		return memcg;
-+
-+	/*
-+	 * If there is no mm, it means that we are in thread context,
-+	 * and any backing RAM allocations would be charged to the root
-+	 * mem_cgroup unless the active mem_cgroup is set. Search the
-+	 * enclave's mm_list to find any mm associated with this enclave.
-+	 */
-+	idx = srcu_read_lock(&encl->srcu);
-+
-+	list_for_each_entry_rcu(encl_mm, &encl->mm_list, list) {
-+		if (encl_mm->mm == NULL)
-+			continue;
-+
-+		mm = encl_mm->mm;
-+		break;
-+
-+	}
-+
-+	srcu_read_unlock(&encl->srcu, idx);
-+
-+	/*
-+	 * If an associated mm was not found, the allocation will just
-+	 * need to be charged to the root mem_cgroup.
-+	 */
-+	if (!mm)
-+		return memcg;
-+
-+	memcg = get_mem_cgroup_from_mm(mm);
-+
-+	/*
-+	 * set_active_memcg() returns the previous active memcg.
-+	 */
-+	return set_active_memcg(memcg);
-+}
-+
-+/**
-+ * sgx_encl_alloc_backing() - allocate a new backing storage page
-+ * @encl:	an enclave pointer
-+ * @page_index:	enclave page index
-+ * @backing:	data for accessing backing storage for the page
-+ *
-+ * If this function is called from the kernel thread, it will set
-+ * the active memcg to one of the enclaves mm's in order to ensure
-+ * that shmem page allocations are charged to the enclave when they
-+ * are retrieved. Upon exit, the old memcg (if it existed at all)
-+ * will be restored.
-+ *
-+ * Return:
-+ *   0 on success,
-+ *   -errno otherwise.
-+ */
-+int sgx_encl_alloc_backing(struct sgx_encl *encl, unsigned long page_index,
-+			   struct sgx_backing *backing)
-+{
-+	struct mem_cgroup *old_memcg;
-+	int ret;
-+
-+	old_memcg = sgx_encl_set_active_memcg(encl);
-+
-+	ret = sgx_encl_get_backing(encl, page_index, backing);
-+
-+	set_active_memcg(old_memcg);
-+
-+	return ret;
-+}
-+
-+/**
-+ * sgx_encl_lookup_backing() - retrieve an existing backing storage page
-+ * @encl:	an enclave pointer
-+ * @page_index:	enclave page index
-+ * @backing:	data for accessing backing storage for the page
-+ *
-+ * Retrieve a backing page for loading data back into an EPC page with ELDU.
-+ * It is the caller's responsibility to ensure that it is appropriate to use
-+ * sgx_encl_lookup_backing() rather than sgx_encl_alloc_backing(). If lookup is
-+ * not used correctly, this will cause an allocation which is not accounted for.
-+ *
-+ * Return:
-+ *   0 on success,
-+ *   -errno otherwise.
-+ */
-+int sgx_encl_lookup_backing(struct sgx_encl *encl, unsigned long page_index,
-+			   struct sgx_backing *backing)
-+{
-+	return sgx_encl_get_backing(encl, page_index, backing);
-+}
-+
- /**
-  * sgx_encl_put_backing() - Unpin the backing storage
-  * @backing:	data for accessing backing storage for the page
-diff --git a/arch/x86/kernel/cpu/sgx/encl.h b/arch/x86/kernel/cpu/sgx/encl.h
-index fec43ca65065..7816cfe8f832 100644
---- a/arch/x86/kernel/cpu/sgx/encl.h
-+++ b/arch/x86/kernel/cpu/sgx/encl.h
-@@ -105,8 +105,10 @@ int sgx_encl_may_map(struct sgx_encl *encl, unsigned long start,
- 
- void sgx_encl_release(struct kref *ref);
- int sgx_encl_mm_add(struct sgx_encl *encl, struct mm_struct *mm);
--int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
--			 struct sgx_backing *backing);
-+int sgx_encl_lookup_backing(struct sgx_encl *encl, unsigned long page_index,
-+			    struct sgx_backing *backing);
-+int sgx_encl_alloc_backing(struct sgx_encl *encl, unsigned long page_index,
-+			   struct sgx_backing *backing);
- void sgx_encl_put_backing(struct sgx_backing *backing, bool do_write);
- int sgx_encl_test_and_clear_young(struct mm_struct *mm,
- 				  struct sgx_encl_page *page);
-diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
-index 4b41efc9e367..7d41c8538795 100644
---- a/arch/x86/kernel/cpu/sgx/main.c
-+++ b/arch/x86/kernel/cpu/sgx/main.c
-@@ -310,7 +310,7 @@ static void sgx_reclaimer_write(struct sgx_epc_page *epc_page,
- 	encl->secs_child_cnt--;
- 
- 	if (!encl->secs_child_cnt && test_bit(SGX_ENCL_INITIALIZED, &encl->flags)) {
--		ret = sgx_encl_get_backing(encl, PFN_DOWN(encl->size),
-+		ret = sgx_encl_alloc_backing(encl, PFN_DOWN(encl->size),
- 					   &secs_backing);
- 		if (ret)
- 			goto out;
-@@ -381,7 +381,7 @@ static void sgx_reclaim_pages(void)
- 			goto skip;
- 
- 		page_index = PFN_DOWN(encl_page->desc - encl_page->encl->base);
--		ret = sgx_encl_get_backing(encl_page->encl, page_index, &backing[i]);
-+		ret = sgx_encl_alloc_backing(encl_page->encl, page_index, &backing[i]);
- 		if (ret)
- 			goto skip;
- 
--- 
-2.20.1
-
+> ---
+>  arch/x86/kvm/mmu/mmu.c     | 44 +++-----------------------------------
+>  arch/x86/kvm/mmu/tdp_mmu.h |  7 +-----
+>  2 files changed, 4 insertions(+), 47 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 6f626d7e8ebb..bcb3e2730277 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -3318,8 +3318,6 @@ static void mmu_free_root_page(struct kvm *kvm, hpa_t *root_hpa,
+>  		return;
+>  
+>  	sp = to_shadow_page(*root_hpa & PT64_BASE_ADDR_MASK);
+> -	if (WARN_ON(!sp))
+> -		return;
+>  
+>  	if (is_tdp_mmu_page(sp))
+>  		kvm_tdp_mmu_put_root(kvm, sp, false);
+> @@ -3422,8 +3420,7 @@ void kvm_mmu_free_guest_mode_roots(struct kvm *kvm, struct kvm_mmu *mmu)
+>  		if (!VALID_PAGE(root_hpa))
+>  			continue;
+>  
+> -		if (!to_shadow_page(root_hpa) ||
+> -			to_shadow_page(root_hpa)->role.guest_mode)
+> +		if (to_shadow_page(root_hpa)->role.guest_mode)
+>  			roots_to_free |= KVM_MMU_ROOT_PREVIOUS(i);
+>  	}
+>  
+> @@ -3673,13 +3670,6 @@ static bool is_unsync_root(hpa_t root)
+>  	smp_rmb();
+>  	sp = to_shadow_page(root);
+>  
+> -	/*
+> -	 * PAE roots (somewhat arbitrarily) aren't backed by shadow pages, the
+> -	 * PDPTEs for a given PAE root need to be synchronized individually.
+> -	 */
+> -	if (WARN_ON_ONCE(!sp))
+> -		return false;
+> -
+>  	if (sp->unsync || sp->unsync_children)
+>  		return true;
+>  
+> @@ -3975,21 +3965,7 @@ static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+>  static bool is_page_fault_stale(struct kvm_vcpu *vcpu,
+>  				struct kvm_page_fault *fault, int mmu_seq)
+>  {
+> -	struct kvm_mmu_page *sp = to_shadow_page(vcpu->arch.mmu->root.hpa);
+> -
+> -	/* Special roots, e.g. pae_root, are not backed by shadow pages. */
+> -	if (sp && is_obsolete_sp(vcpu->kvm, sp))
+> -		return true;
+> -
+> -	/*
+> -	 * Roots without an associated shadow page are considered invalid if
+> -	 * there is a pending request to free obsolete roots.  The request is
+> -	 * only a hint that the current root _may_ be obsolete and needs to be
+> -	 * reloaded, e.g. if the guest frees a PGD that KVM is tracking as a
+> -	 * previous root, then __kvm_mmu_prepare_zap_page() signals all vCPUs
+> -	 * to reload even if no vCPU is actively using the root.
+> -	 */
+> -	if (!sp && kvm_test_request(KVM_REQ_MMU_FREE_OBSOLETE_ROOTS, vcpu))
+> +	if (is_obsolete_sp(vcpu->kvm, to_shadow_page(vcpu->arch.mmu->root.hpa)))
+>  		return true;
+>  
+>  	return fault->slot &&
+> @@ -5094,24 +5070,10 @@ void kvm_mmu_unload(struct kvm_vcpu *vcpu)
+>  
+>  static bool is_obsolete_root(struct kvm *kvm, hpa_t root_hpa)
+>  {
+> -	struct kvm_mmu_page *sp;
+> -
+>  	if (!VALID_PAGE(root_hpa))
+>  		return false;
+>  
+> -	/*
+> -	 * When freeing obsolete roots, treat roots as obsolete if they don't
+> -	 * have an associated shadow page.  This does mean KVM will get false
+> -	 * positives and free roots that don't strictly need to be freed, but
+> -	 * such false positives are relatively rare:
+> -	 *
+> -	 *  (a) only PAE paging and nested NPT has roots without shadow pages
+> -	 *  (b) remote reloads due to a memslot update obsoletes _all_ roots
+> -	 *  (c) KVM doesn't track previous roots for PAE paging, and the guest
+> -	 *      is unlikely to zap an in-use PGD.
+> -	 */
+> -	sp = to_shadow_page(root_hpa);
+> -	return !sp || is_obsolete_sp(kvm, sp);
+> +	return is_obsolete_sp(kvm, to_shadow_page(root_hpa));
+>  }
+>  
+>  static void __kvm_mmu_free_obsolete_roots(struct kvm *kvm, struct kvm_mmu *mmu)
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.h b/arch/x86/kvm/mmu/tdp_mmu.h
+> index c163f7cc23ca..5779a2a7161e 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.h
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.h
+> @@ -78,13 +78,8 @@ static inline bool is_tdp_mmu(struct kvm_mmu *mmu)
+>  	if (WARN_ON(!VALID_PAGE(hpa)))
+>  		return false;
+>  
+> -	/*
+> -	 * A NULL shadow page is legal when shadowing a non-paging guest with
+> -	 * PAE paging, as the MMU will be direct with root_hpa pointing at the
+> -	 * pae_root page, not a shadow page.
+> -	 */
+>  	sp = to_shadow_page(hpa);
+> -	return sp && is_tdp_mmu_page(sp) && sp->root_count;
+> +	return is_tdp_mmu_page(sp) && sp->root_count;
+>  }
+>  #else
+>  static inline int kvm_mmu_init_tdp_mmu(struct kvm *kvm) { return 0; }
+> -- 
+> 2.19.1.6.gb485710b
+> 

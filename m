@@ -2,158 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCE505299AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 08:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0D35299B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 08:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbiEQGnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 02:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
+        id S234600AbiEQGo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 02:44:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240062AbiEQGnE (ORCPT
+        with ESMTP id S230059AbiEQGoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 02:43:04 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3CB403ED;
-        Mon, 16 May 2022 23:43:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B4FA1CE1839;
-        Tue, 17 May 2022 06:43:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBBB0C34117;
-        Tue, 17 May 2022 06:42:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652769779;
-        bh=IkgpZRMDRokE+i/qDVN1ZJ1bBXEnwTYuhU5I2MyVykw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BBbc+U3g516zRPvEHx6rR68oL63QDxOu6wmXrjg6ADJO7EZDspBWQFoopYxLpfGQx
-         frdUv3YMua7gwvI8cgEtySJErWg9kk/jBfUpAzku6n2SQy2UtstYXKprFU0VppTMKC
-         7nRo9uSZldhoaC+FyNxb0siRDcErTgLlWWNbxyWRMHBk6Yxv+gxIogOWMBIyYiQb5c
-         uleQ7S5GU5lEjEki14B7DlRx963LKsGu+T28cPvbcbMvPA/O6Rk6y2Ktubww4I2rqk
-         9Gsz4/vNTxLzm71kpUqX5jtMnneLgFsoPoVCDnqkD25GjHaDm1SQRK26KKH34jXa9M
-         Jav6CRyXFQsXA==
-Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nqqv1-00Bp6o-EV; Tue, 17 May 2022 07:42:55 +0100
-Date:   Tue, 17 May 2022 07:42:54 +0100
-Message-ID: <87mtfgmzgx.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
-        "kostap@marvell.com" <kostap@marvell.com>,
-        "robert.marko@sartura.hr" <robert.marko@sartura.hr>,
-        "vadym.kochan@plvision.eu" <vadym.kochan@plvision.eu>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Tue, 17 May 2022 02:44:24 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6183FD84;
+        Mon, 16 May 2022 23:44:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=aLCWNoCxYV5Hh6OVMOjiRNyULq/N1kxDOoi8F+4cMeU=; b=PSN4Ub/0JDasSDDQLijbie5jNh
+        g+io1dJsLgtWtc6cdiweuX5JlJDzqN8g6tQcYSNnFhdKQxamJhAdnxZThcYde0lRC7Y6vrEZg9Lt0
+        xBleWifse8gR+mWC1H8WAKgoXMa/4lX7w1uofiZa3I0LJ/LUySOpvfqidM0PSDuVW3HssnQd89UN7
+        90Xh/GBOpOrwHgx653Q+yW01BNhPgCkytHscLw+aR8x7M8u0VpIvdzPZZYkWpoQp5YgA8e2fiqq16
+        YNkTILeSIMrMlZolzrEo1cyk49A0HIWrVaLmiKR4u24ZbgY0gMPZbcrTFaB+4/bwvFcSe4nhV5N6Q
+        J/wSStJg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nqqwC-00AbBn-Pk; Tue, 17 May 2022 06:44:08 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B073130031C;
+        Tue, 17 May 2022 08:44:06 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9B7BF2023D64A; Tue, 17 May 2022 08:44:06 +0200 (CEST)
+Date:   Tue, 17 May 2022 08:44:06 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     David Laight <David.Laight@aculab.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v7 2/3] arm64: dts: marvell: Add Armada 98DX2530 SoC and RD-AC5X board
-In-Reply-To: <db5c3366-ac81-261b-ff32-3ccf94a930f6@alliedtelesis.co.nz>
-References: <20220512042501.3339775-1-chris.packham@alliedtelesis.co.nz>
-        <20220512042501.3339775-3-chris.packham@alliedtelesis.co.nz>
-        <87wnermc9c.wl-maz@kernel.org>
-        <5c01f20a-acd3-da15-081d-7cf878f8a77a@alliedtelesis.co.nz>
-        <a69eaf73-8c3c-dfd7-16e5-70460c68877e@alliedtelesis.co.nz>
-        <87mtfh6c58.wl-maz@kernel.org>
-        <db5c3366-ac81-261b-ff32-3ccf94a930f6@alliedtelesis.co.nz>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.104.136.29
-X-SA-Exim-Rcpt-To: Chris.Packham@alliedtelesis.co.nz, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, catalin.marinas@arm.com, will@kernel.org, andrew@lunn.ch, gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com, kostap@marvell.com, robert.marko@sartura.hr, vadym.kochan@plvision.eu, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        <linux-arm-kernel@lists.infradead.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: Re: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
+Message-ID: <YoNENqdLBK6tLmpa@hirez.programming.kicks-ass.net>
+References: <20220513202159.1550547-1-samitolvanen@google.com>
+ <20220513202159.1550547-21-samitolvanen@google.com>
+ <f65c01979b884174965802a13cf6b077@AcuMS.aculab.com>
+ <CABCJKueo+cw1DHH6N2dUjD-U7OKqmkJUyimm0ychv1drt5U9Rg@mail.gmail.com>
+ <19b3e040302d4d8aa240eee43427dfaa@AcuMS.aculab.com>
+ <20220516214414.GR76023@worktop.programming.kicks-ass.net>
+ <CABCJKucPMgMQ-D_yByvMSx6yutjsBXGAwirmheOYejWHARi9iQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABCJKucPMgMQ-D_yByvMSx6yutjsBXGAwirmheOYejWHARi9iQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 16 May 2022 22:56:44 +0100,
-Chris Packham <Chris.Packham@alliedtelesis.co.nz> wrote:
-> 
-> >>>> Please fix your firmware to program CNTFRQ_EL0, and
-> >>>> remove this useless property.
-> >>> I'm kind of at the mercy of what Marvell have provided for ATF. I am
-> >>> working on the bootloader portion in parallel and am getting things
-> >>> ready for submitting the u-boot support upstream. I was hoping to
-> >>> leave ATF alone I can at least see if they haven't fixed this already
-> >>> (the original dtsi I started with was fairly old) and if they haven't
-> >>> I'll raise it via their support system.
-> >> Seems to work fine without the clock so I'll drop it.
-> > Thanks. If you can, please verify that this is set on both CPUs (I
-> > have seen plenty of firmware only setting it on CPU0 in the past).
-> The arch_timer interrupts are counting up on both CPUs and things 
-> generally seem to be getting scheduled (I don't have much of a userland 
-> at the moment so it's not exactly a stress test). Do you think that is 
-> sufficient to say the clock property is unnecessary and whatever 
-> firmware I have is working as expected.
-
-No, the counter always count, and CNTFRQ_EL0 is only an indication of
-the frequency for SW to find out. You can directly read CNTFRQ_EL0
-from userspace on each CPU and find whether they have the same value.
-
-> >>>> You are also missing a PPI for the EL2 virtual timer which is present
-> >>>> on any ARMv8.1+ CPU (and since this system is using A55, it definitely
-> >>>> has it).
-> >>>>
-> >>>> [...]
-> >>> Will add.
-> >> I assume you're talking about the 5th PPI per the
-> >> timer/arm,arch_timer.yaml ("hypervisor virtual timer irq").
-> > Indeed.
+On Mon, May 16, 2022 at 03:03:02PM -0700, Sami Tolvanen wrote:
+> On Mon, May 16, 2022 at 2:44 PM Peter Zijlstra <peterz@infradead.org> wrote:
 > >
-> >> Helpfully
-> >> Marvell don't include the PPI interrupt numbers in their datasheet. But
-> >> then I also notice that none of the other boards that have a
-> >> "arm,armv8-timer" provide a 5th interrupt either, have I misunderstood
-> >> something?
-> > This was only recently added to the DT binding, but the interrupt
-> > definitely exist at the CPU level for anything that implements ARMv8.1
-> > and up. AFAIK, the M1 is the only machine to expose this interrupt in
-> > DT, but this doesn't mean the interrupt doesn't exist on all the other
-> > systems that have the same architecture revision.
+> > On Mon, May 16, 2022 at 09:32:55PM +0000, David Laight wrote:
 > >
-> > If you have contacts in Marvell, maybe try and find out whether they
-> > have simply decided not to wire the interrupt (I wouldn't be
-> > surprised). In this case, please add a comment.
+> > > > The compiler always generates this specific instruction sequence.
+> > >
+> > > Yes, but there are several ways to encode 'cmpl imm,-6(reg)'.
+> >
+> > Yes, but we don't care. This *always* uses the 32bit immediate form.
+> > Even if the immediate is small.
 > 
-> I've reached out via their customer support portal. So far they just 
-> want to know why I'm refusing to use their out of date SDK (maybe I 
-> should direct them at some of Jon Corbet's presentations :P).
+> Yes, that part is not a problem, but it's a valid point that LLVM
+> might not always use r8-r15 here, so I will have to check for the REX
+> prefix before blindly attempting to decode the instruction.
 
-The fact that they are asking is already saying everything there is to
-know, sadly...
-
-> These integrated chips are sometimes a bit problematic because the 
-> support goes via the Switching group but these questions are really 
-> about IP blocks that have been taken from the SoC group. It may take a 
-> while before I get a response from someone that actually knows the 
-> internals.
-
-Fair enough. Until then, please drop a comment in the DT indicating
-that the fate of this PPI is unknown. If you eventually find out, just
-add it to the DT (it is easy to add things, much harder to remove
-them).
-
-Thanks,
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+LLVM has always used r11 for indirect calls, will that change?

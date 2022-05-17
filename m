@@ -2,125 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF86952994C
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 08:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE82529950
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 08:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238364AbiEQGId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 02:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37408 "EHLO
+        id S238558AbiEQGJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 02:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233340AbiEQGI1 (ORCPT
+        with ESMTP id S231177AbiEQGJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 02:08:27 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA9437A37
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 23:08:27 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nqqNc-0006wY-Km; Tue, 17 May 2022 08:08:24 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 80C417FF92;
-        Tue, 17 May 2022 06:08:22 +0000 (UTC)
-Date:   Tue, 17 May 2022 08:08:21 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Max Staudt <max@enpas.org>, netdev@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] can: skb:: move can_dropped_invalid_skb and
- can_skb_headroom_valid to skb.c
-Message-ID: <20220517060821.akuqbqxro34tj7x6@pengutronix.de>
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220514141650.1109542-1-mailhol.vincent@wanadoo.fr>
- <20220514141650.1109542-4-mailhol.vincent@wanadoo.fr>
- <7b1644ad-c117-881e-a64f-35b8d8b40ef7@hartkopp.net>
- <CAMZ6RqKZMHXB7rQ70GrXcVE7x7kytAAGfE+MOpSgWgWgp0gD2g@mail.gmail.com>
+        Tue, 17 May 2022 02:09:18 -0400
+Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3399537A37;
+        Mon, 16 May 2022 23:09:18 -0700 (PDT)
+Received: by mail-vk1-xa29.google.com with SMTP id y27so8553885vkl.8;
+        Mon, 16 May 2022 23:09:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=X3p/bJpggzYIlRPwptvT4yV9Dv1X4oCHyy6l5VIG8EM=;
+        b=AwPZC/c3Z9TSGTZRgivdf8rrE7Z+UwN+w8JlZlCF+Xg1e0bCfvOvyTnpSE5ve3+Wl8
+         rMYGCZD5m6z2jwvW3Bn1HV1nDLYwWX6/h/0o+GgOvOzQASOebkBEWjUuDyuw9XeWlCjH
+         ehRDXSuDNo0JXNRQ/82tPQ8OBb348SWgJA57PxQST/OE5Sw/ewF+1ld0mZ7gsMRancXy
+         i0SP3xItR4NOphFHCnAv6+7wzZ3rs1P+RVfjmDPCdlfSDmOXp2ylRsfcZ6zOutcWb0ic
+         0j5AMtl/1TgssVjgY22To693SgD3ldeGVx0iPtq4hFt6aq9HuM7qTwebpCaeCXiaMZJw
+         16pA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=X3p/bJpggzYIlRPwptvT4yV9Dv1X4oCHyy6l5VIG8EM=;
+        b=s8Dchm7EpI4iboN+wJ21vmqum2lAx3Huht7gHi0SqYlAEOzvg/isRvIuXiiXJuAIeV
+         G25IH6koB3Steui+Pqu3LosJK5IOOxlDkSxMKSARuP0RV01nAXuBFVs64rvNLiya9Ga0
+         R1Atgl7GjuvOU8uNLGt4MiCAFgqleiAtbe4IcyuM3M99z7wVYoVZVcKcW4987HxOFlAb
+         H+vxTSzWcFK9jmhY5KxM5IRpBeWFje70TRU3lLiWG49FXL8os+AI8iFiuDIzjNJHeY4j
+         3ieN9VXtY/e0pqA4cU46RZyi9qLc11ShdS2YrDm53N0KtsQo0l7vq+MNxWZLALGDpZ/M
+         kxHw==
+X-Gm-Message-State: AOAM530wFnHUUfADLHEMjQZb+vIFLZ6OVBjJw8D/wFis+iY95dtFmdeC
+        N/C6jSOw5bDFKRFiQGn5Vfnca7EfeWWSyH8nWw==
+X-Google-Smtp-Source: ABdhPJx31C9WjnaA9Ui9cwwZ1/uZK5DCWJXNtlPrRxpk2SIkz1TMVt6x3UUJ2oy3erDGaLz95TXTNxD5ZEF34kG90kQ=
+X-Received: by 2002:a1f:3254:0:b0:34e:b02d:bdd7 with SMTP id
+ y81-20020a1f3254000000b0034eb02dbdd7mr7928465vky.11.1652767757269; Mon, 16
+ May 2022 23:09:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3brhaeolxdtxpqfu"
-Content-Disposition: inline
-In-Reply-To: <CAMZ6RqKZMHXB7rQ70GrXcVE7x7kytAAGfE+MOpSgWgWgp0gD2g@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220510091654.8498-1-warp5tw@gmail.com> <20220510091654.8498-3-warp5tw@gmail.com>
+ <YoKqdfLSeJ69WFhi@kunai> <CACD3sJa3koHGsC3PBbfZuBhTfVHhjF=3g3YysxZ0+TvQ1qwfyA@mail.gmail.com>
+ <YoM63XoYZbFGJ8s7@kunai>
+In-Reply-To: <YoM63XoYZbFGJ8s7@kunai>
+From:   Tyrone Ting <warp5tw@gmail.com>
+Date:   Tue, 17 May 2022 14:09:05 +0800
+Message-ID: <CACD3sJaJbmoR-txb2V3Q=YkKpMD76S4zvF5_5SyVmUkPh9tvMQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/9] i2c: npcm: Change the way of getting GCR regmap
+To:     Wolfram Sang <wsa@kernel.org>, Tyrone Ting <warp5tw@gmail.com>,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
+        semen.protsenko@linaro.org, sven@svenpeter.dev, jsd@semihalf.com,
+        lukas.bulwahn@gmail.com, olof@lixom.net, arnd@arndb.de,
+        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, krzysztof.kozlowski@canonical.com,
+        jie.deng@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Wolfram:
 
---3brhaeolxdtxpqfu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Got it and thank you for your help.
 
-On 17.05.2022 10:50:16, Vincent MAILHOL wrote:
-> > would it probably make sense to
-> > introduce a new can-skb module that could be used by all CAN
-> > virtual/software interfaces?
-> >
-> > Or some other split-up ... any idea?
->=20
-> My concern is: what would be the merrit? If we do not split, the users
-> of slcan and v(x)can would have to load the can-dev module which will
-> be slightly bloated for their use, but is this really an issue?
+I'll come up with the new patch set with the corrected SoBs.
 
-If you use modprobe all required modules are loaded automatically.
-
-> I do
-> not see how this can become a performance bottleneck, so what is the
-> problem?
-> I could also argue that most of the devices do not depend on
-> rx-offload.o. So should we also split this one out of can-dev on the
-> same basis and add another module dependency?
-
-We can add a non user visible Kconfig symbol for rx-offload and let the
-drivers that need it do a "select" on it. If selected the rx-offload
-would be compiled into to can-dev module.
-
-> The benefit (not having to load a bloated module for three drivers)
-> does not outweigh the added complexity: all hardware modules will have
-> one additional modprobe dependency on the tiny can-skb module.
+Wolfram Sang <wsa@kernel.org> =E6=96=BC 2022=E5=B9=B45=E6=9C=8817=E6=97=A5 =
+=E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=882:04=E5=AF=AB=E9=81=93=EF=BC=9A
 >
-> But as said above, I am not fully opposed to the split, I am just
-> strongly divided. If we go for the split, creating a can-skb module is
-> the natural and only option I see.
-> If the above argument does not convince you, I will send a v3 with that s=
-plit.
+>
+> > After reviewing these two links, we decided to keep only the author's
+> > SoB for each commit.
+> >
+> > https://lore.kernel.org/lkml/YiCZlhJoXPLpQ6%2FD@smile.fi.intel.com/
+> > https://lore.kernel.org/lkml/YiCb7LNY9tmMCZx7@smile.fi.intel.com/
+>
+> When Andy said "chain is wrong", he meant the order. You must add your
+> SoB, otherwise I can't take the patches. But yours should be last. The
+> SoBs need to be in the order people worked on it.
+>
+> Does that make sense to you?
+>
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---3brhaeolxdtxpqfu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKDO9MACgkQrX5LkNig
-013nNQgAs6sXnBTJ3oYKGxGuF0zVVmtQc7oenY5YfI2tsw0mDOYsyaPSrvt5hSwV
-MYGVyp3pFx5D6wQJlmZnjK3ZLStPm6nw9wuHcrZDcSazZVOGwTm6+DNI0neUfjI1
-kjEXywoc5taDm47he6CnHSc0dvXzgXQLuCrJRsi7P2zUcPdmhgQL1L+0QmuC6dJD
-biLKlIt5LxE2iiGB87k1r5qak8x3qO9EpomYM68Od0wfIKEQo+ivpFYFClBROxbT
-HdQcAKxpH8D8oYR967690GN9lbpJgzrOfTy+sgeSfb/MnirmJOUFppTd+TJat1tW
-LWPcfpQ6aXMwU5eD6+W7iMLMOpN9HA==
-=ZwuT
------END PGP SIGNATURE-----
-
---3brhaeolxdtxpqfu--
+Best Regards,
+Tyrone

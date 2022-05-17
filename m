@@ -2,55 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 909D052ADE2
+	by mail.lfdr.de (Postfix) with ESMTP id DF22552ADE3
 	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 00:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbiEQWOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 18:14:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50934 "EHLO
+        id S230286AbiEQWOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 18:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbiEQWOh (ORCPT
+        with ESMTP id S230234AbiEQWOi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 18:14:37 -0400
+        Tue, 17 May 2022 18:14:38 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3D14A3EB;
-        Tue, 17 May 2022 15:14:36 -0700 (PDT)
-Date:   Tue, 17 May 2022 22:14:33 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A747245523;
+        Tue, 17 May 2022 15:14:37 -0700 (PDT)
+Date:   Tue, 17 May 2022 22:14:34 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652825675;
+        s=2020; t=1652825676;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NvSyRGfLgzvvEMxHc9NtKvK2OOjl8fGFwwMnKjFNqmU=;
-        b=TtsGX6O/DA8MMBs4GOKlIo0yV9oOLFw1+qDj4wk20imp3Qdl3CTVk1xSkamCDmZzEwtbD1
-        Q9wxTe8vMoiCplHnlj/AwpJTP9+H9BdAicpaBgJxrjNmSTsPpadw6vkRvCYk84Ott7vWZp
-        1eDzEmTNQWM7lOXWyWYD3r2KivwQ9n8Rb19N3ww9G5F+K2t23i28/u4PBfuWz4p3Wlrv/6
-        n50sHSW1gYOzvUAqtZUvV9OrJdrLVJWEVT4q5OTEnbZWStSlWMtDkIUo7GrTp9aeyEBckU
-        hDdEAM7d5yQciqPu38yjqJ7ryxd7ZJemWKG6DdePJSaQCJWyBK0WuBXncnzlmQ==
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=ZkW25diCjZhhJiIeWzEaepfs+AscLxtkOsxOdut4Bxk=;
+        b=h5TezNhRyghH/9o4IflJ2M3p0L6N+YMUWGRO1Zdc3NAygyLs1vT/E0cbiCYWejFzw0QTjj
+        ZEldu3XxINxCdi+b7OieIMXq/aXSGAtGYXFxPvZCkRHM6es/sMr+XTyHsg9dZ81TDAbh4g
+        XAlPSzWyf4eNU+gUb6pQEam+Npk0JilGgQNBQx64RQoynwAD0GMlGRULrxCPfAS9r5Sm3p
+        9hCQibGAIud6PKXC3Fuxc7wuiU909vUqDCYeIFtodZXqHRSnNfBwpisa03NeMClcZmK5Nv
+        LL/+wv1TAPYcoTLGdQyXPvh4jCF+odJ3uvOf/Ffp1/nN4IQHLgx2EIdRVKvdpQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652825675;
+        s=2020e; t=1652825676;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NvSyRGfLgzvvEMxHc9NtKvK2OOjl8fGFwwMnKjFNqmU=;
-        b=4p9GY1q5F0VtLb9GFgFMH3VdsZKdioIciXILgsrYoFk8fvdhc5rZTPrr0E9oKI0Mwl6MJP
-        00vIdSLFNNtCOsAw==
-From:   "tip-bot2 for Borislav Petkov" <tip-bot2@linutronix.de>
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=ZkW25diCjZhhJiIeWzEaepfs+AscLxtkOsxOdut4Bxk=;
+        b=iz9WaRRx9zxKx0zNPcIP4BOX5W1vUenA1F6c3Ff57rBO4HJjpYBvskTeY69AdwYperIAkZ
+        1/TvTIO9XjD465Cg==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf/x86/amd: Run AMD BRS code only on supported hw
-Cc:     Borislav Petkov <bp@suse.de>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+Subject: [tip: perf/core] perf/x86/amd: Fix AMD BRS period adjustment
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220516154838.7044-1-bp@alien8.de>
-References: <20220516154838.7044-1-bp@alien8.de>
 MIME-Version: 1.0
-Message-ID: <165282567343.4207.14036565580250908800.tip-bot2@tip-bot2>
+Message-ID: <165282567475.4207.12287002853279789468.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,75 +60,123 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/core branch of tip:
 
-Commit-ID:     841b51e4a3590866d17fa2663c64688c25b891b1
-Gitweb:        https://git.kernel.org/tip/841b51e4a3590866d17fa2663c64688c25b891b1
-Author:        Borislav Petkov <bp@suse.de>
-AuthorDate:    Mon, 16 May 2022 17:48:38 +02:00
+Commit-ID:     3c27b0c6ea48bc61492a138c410e262735d660ab
+Gitweb:        https://git.kernel.org/tip/3c27b0c6ea48bc61492a138c410e262735d660ab
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Tue, 10 May 2022 21:22:04 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Wed, 18 May 2022 00:08:26 +02:00
+CommitterDate: Wed, 18 May 2022 00:08:25 +02:00
 
-perf/x86/amd: Run AMD BRS code only on supported hw
+perf/x86/amd: Fix AMD BRS period adjustment
 
-This fires on a Fam16h machine here:
+There's two problems with the current amd_brs_adjust_period() code:
 
- unchecked MSR access error: WRMSR to 0xc000010f (tried to write 0x0000000000000018) \
-    at rIP: 0xffffffff81007db1 (amd_brs_reset+0x11/0x50)
- Call Trace:
-  <TASK>
-  amd_pmu_cpu_starting
-  ? x86_pmu_dead_cpu
-  x86_pmu_starting_cpu
-  cpuhp_invoke_callback
-  ? x86_pmu_starting_cpu
-  ? x86_pmu_dead_cpu
-  cpuhp_issue_call
-  ? x86_pmu_starting_cpu
-  __cpuhp_setup_state_cpuslocked
-  ? x86_pmu_dead_cpu
-  ? x86_pmu_starting_cpu
-  __cpuhp_setup_state
-  ? map_vsyscall
-  init_hw_perf_events
-  ? map_vsyscall
-  do_one_initcall
-  ? _raw_spin_unlock_irqrestore
-  ? try_to_wake_up
-  kernel_init_freeable
-  ? rest_init
-  kernel_init
-  ret_from_fork
+ - it isn't in fact AMD specific and wil always adjust the period;
 
-because that CPU hotplug callback gets executed on any AMD CPU - not
-only on the BRS-enabled ones. Check the BRS feature bit properly.
+ - it adjusts the period, while it should only adjust the event count,
+   resulting in repoting a short period.
 
-Signed-off-by: Borislav Petkov <bp@suse.de>
+Fix this by using x86_pmu.limit_period, this makes it specific to the
+AMD BRS case and ensures only the event count is adjusted while the
+reported period is unmodified.
+
+Fixes: ba2fe7500845 ("perf/x86/amd: Add AMD branch sampling period adjustment")
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-By: Stephane Eranian <eranian@google.com>
-Link: https://lkml.kernel.org/r/20220516154838.7044-1-bp@alien8.de
 ---
- arch/x86/events/amd/brs.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ arch/x86/events/amd/core.c   | 13 +++++++++++++
+ arch/x86/events/core.c       |  7 -------
+ arch/x86/events/perf_event.h | 18 ------------------
+ 3 files changed, 13 insertions(+), 25 deletions(-)
 
-diff --git a/arch/x86/events/amd/brs.c b/arch/x86/events/amd/brs.c
-index 895c821..bee8765 100644
---- a/arch/x86/events/amd/brs.c
-+++ b/arch/x86/events/amd/brs.c
-@@ -57,7 +57,7 @@ static inline u64 get_debug_extn_cfg(void)
+diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
+index d81eac2..3eee59c 100644
+--- a/arch/x86/events/amd/core.c
++++ b/arch/x86/events/amd/core.c
+@@ -1255,6 +1255,18 @@ static void amd_pmu_sched_task(struct perf_event_context *ctx,
+ 		amd_pmu_brs_sched_task(ctx, sched_in);
+ }
  
- static bool __init amd_brs_detect(void)
- {
--	if (!boot_cpu_has(X86_FEATURE_BRS))
-+	if (!cpu_feature_enabled(X86_FEATURE_BRS))
- 		return false;
- 
- 	switch (boot_cpu_data.x86) {
-@@ -112,6 +112,9 @@ static inline int amd_brs_get_tos(union amd_debug_extn_cfg *cfg)
-  */
- void amd_brs_reset(void)
- {
-+	if (!cpu_feature_enabled(X86_FEATURE_BRS))
-+		return;
++static u64 amd_pmu_limit_period(struct perf_event *event, u64 left)
++{
++	/*
++	 * Decrease period by the depth of the BRS feature to get the last N
++	 * taken branches and approximate the desired period
++	 */
++	if (has_branch_stack(event) && left > x86_pmu.lbr_nr)
++		left -= x86_pmu.lbr_nr;
 +
++	return left;
++}
++
+ static __initconst const struct x86_pmu amd_pmu = {
+ 	.name			= "AMD",
+ 	.handle_irq		= amd_pmu_handle_irq,
+@@ -1415,6 +1427,7 @@ static int __init amd_core_pmu_init(void)
+ 	if (boot_cpu_data.x86 >= 0x19 && !amd_brs_init()) {
+ 		x86_pmu.get_event_constraints = amd_get_event_constraints_f19h;
+ 		x86_pmu.sched_task = amd_pmu_sched_task;
++		x86_pmu.limit_period = amd_pmu_limit_period;
+ 		/*
+ 		 * put_event_constraints callback same as Fam17h, set above
+ 		 */
+diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+index b08052b..3078889 100644
+--- a/arch/x86/events/core.c
++++ b/arch/x86/events/core.c
+@@ -1375,13 +1375,6 @@ int x86_perf_event_set_period(struct perf_event *event)
+ 		return x86_pmu.set_topdown_event_period(event);
+ 
  	/*
- 	 * Reset config
+-	 * decrease period by the depth of the BRS feature to get
+-	 * the last N taken branches and approximate the desired period
+-	 */
+-	if (has_branch_stack(event))
+-		period = amd_brs_adjust_period(period);
+-
+-	/*
+ 	 * If we are way outside a reasonable range then just skip forward:
  	 */
+ 	if (unlikely(left <= -period)) {
+diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
+index 3b03245..21a5482 100644
+--- a/arch/x86/events/perf_event.h
++++ b/arch/x86/events/perf_event.h
+@@ -1254,14 +1254,6 @@ static inline void amd_pmu_brs_del(struct perf_event *event)
+ }
+ 
+ void amd_pmu_brs_sched_task(struct perf_event_context *ctx, bool sched_in);
+-
+-static inline s64 amd_brs_adjust_period(s64 period)
+-{
+-	if (period > x86_pmu.lbr_nr)
+-		return period - x86_pmu.lbr_nr;
+-
+-	return period;
+-}
+ #else
+ static inline int amd_brs_init(void)
+ {
+@@ -1290,11 +1282,6 @@ static inline void amd_pmu_brs_sched_task(struct perf_event_context *ctx, bool s
+ {
+ }
+ 
+-static inline s64 amd_brs_adjust_period(s64 period)
+-{
+-	return period;
+-}
+-
+ static inline void amd_brs_enable_all(void)
+ {
+ }
+@@ -1324,11 +1311,6 @@ static inline void amd_brs_enable_all(void)
+ static inline void amd_brs_disable_all(void)
+ {
+ }
+-
+-static inline s64 amd_brs_adjust_period(s64 period)
+-{
+-	return period;
+-}
+ #endif /* CONFIG_CPU_SUP_AMD */
+ 
+ static inline int is_pebs_pt(struct perf_event *event)

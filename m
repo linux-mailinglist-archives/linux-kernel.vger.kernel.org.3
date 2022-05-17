@@ -2,107 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D69152A3DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0A552A3DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348060AbiEQNwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 09:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34456 "EHLO
+        id S1347500AbiEQNxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 09:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344429AbiEQNwA (ORCPT
+        with ESMTP id S232850AbiEQNxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 09:52:00 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A336240
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:51:59 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id q10so22325331oia.9
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:51:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dqs07Jep3liZKF0qlg72VGmG+rgWTVuefUqFlS6fV4E=;
-        b=DiyJpaLtLiYYlr+WkATrplEODo5bpr5osxh2vS/3wvBAVDg1+JkKE+BoRb/ttsfyxR
-         oyGcWzpr8/ipWcCIG1yqypp3VD5SCK5bpCmQ8+b0t/LwlQQ1LRSzngujpNhBVwqW0qlN
-         yI4eubrQloteLw4cIuZ4Uvom4nlBVe0o8aM4W6lG/RTxYc/HFY1yvowv9/qGN4I09tEk
-         4aeEaBU3bCgsrByt+TIHgA6Ig/WKhID3AuRuRmrK9FzIHkZKm8p4s0osfPr9hwLfegpm
-         QfzFD8+BNwyg+FWKLL3TAH6bEtftK+2esD3jqnRtviYJ/lZTlhvbJFLu7JTZxUN+dBKY
-         vnmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dqs07Jep3liZKF0qlg72VGmG+rgWTVuefUqFlS6fV4E=;
-        b=UL/l6BMrP+omegmJ5gpVU+gZqUHK3oObotoY/rasIfyfZr1VxKk0sdvCUHkdok3Z1D
-         hqwRsApR9iuIT2X+/mUPC4TNWXZPISFOwSGtrQ277EZAnKuK8Wyddsi4BAGjH7X9yXfu
-         7mVPsreUXQCJe1UYynZu8ogz8sVrsCAyXWojeQijQe3/FJEvCFf44VocLs0mmyUiKmtZ
-         Y8CU0YmcK5RwWJmKzepi4V8QPb7ecnXdA4VsOdVmGhiSwQMESXRfqtmTi5Zh56AQDqdQ
-         SZtvBZB9xZk3t0sfuVIyCO9FnQwZK8xQyOzSglv4Jr4vQsGXRvYXGNWem3GjqY/rj85B
-         VLCQ==
-X-Gm-Message-State: AOAM531Cji/c7ZAH1O2X5yYV3tVPFvGtx2ATsQ5BONFDF43W5pMZZvsL
-        8Io5Liaktgc4b9uYdegOdaWCk/1SIcMGchyPdYfrHSy8Qp0=
-X-Google-Smtp-Source: ABdhPJwryDf71vdU031pJAEI8zXEOUflzmYA497rKIyES5J2JKlDPPLwnq9rb0Qv4oal9+7ZDUMhhtoygFYY1XXmzsY=
-X-Received: by 2002:aca:39d5:0:b0:326:b279:592 with SMTP id
- g204-20020aca39d5000000b00326b2790592mr16218328oia.276.1652795518396; Tue, 17
- May 2022 06:51:58 -0700 (PDT)
+        Tue, 17 May 2022 09:53:44 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342646240;
+        Tue, 17 May 2022 06:53:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652795623; x=1684331623;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qntudTR6UjQ9xuy4RHR1VXPdymqaf+mRmNGJmowhCTI=;
+  b=UsTh2OZlJYdtjoHxRyXEvJ6EWqZwYgB9kTD8vNvKBsUtASKwaSGRgBzJ
+   lIe33GP0ZwDEiidEc3mHEXcO/RUjeOC8WzY20T4I1pRimKjCP1dqpxHHg
+   WIKXsvflzqVnuFTd12Pr3WGTUkR2jIrhSftZ6RjhZaLRMQmr68izSSWer
+   WHWEIYrWy82REc5/+Cd6Kf8GoYI8YilIUWi56Sj9MRiXwdJzTVwuTAPpv
+   Y0fgO7TqTuBaW2tFHlcdIEzNKJ3xnXOHo+LnmiwFzfdyq81cIziteJBOj
+   i07l2csOF/NZUs9aag09olUkzIHvxEeDGFYQdG38wqXZad/bbVBu3H9XE
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="251084458"
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="251084458"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 06:53:42 -0700
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="544915273"
+Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.23])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 06:53:35 -0700
+Date:   Tue, 17 May 2022 21:53:26 +0800
+From:   Chao Gao <chao.gao@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Zeng Guang <guang.zeng@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hu, Robert" <robert.hu@intel.com>
+Subject: Re: [PATCH v9 0/9] IPI virtualization support for VM
+Message-ID: <20220517135321.GA31556@gao-cwp>
+References: <20220419153155.11504-1-guang.zeng@intel.com>
+ <2d33b71a-13e5-d377-abc2-c20958526497@redhat.com>
+ <cf178428-8c98-e7b3-4317-8282938976fd@intel.com>
+ <f0e633b3-38ea-f288-c74d-487387cefddc@redhat.com>
+ <YoK48P2UrrjxaRrJ@google.com>
 MIME-Version: 1.0
-References: <20220516170306.6008-1-makvihas@gmail.com> <20220516170306.6008-3-makvihas@gmail.com>
- <7b926f43-8c6b-6eae-edc6-02dc16376eb0@gmail.com>
-In-Reply-To: <7b926f43-8c6b-6eae-edc6-02dc16376eb0@gmail.com>
-From:   Vihas Makwana <makvihas@gmail.com>
-Date:   Tue, 17 May 2022 19:21:47 +0530
-Message-ID: <CAH1kMwTM9oT+wr7D7km68LXYWxs1TvsjhsFizq9Bm2juvQpJyg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] staging: r8188eu: fix checkpatch.pl warnings in rtw_pwrctrl
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Straube <straube.linux@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YoK48P2UrrjxaRrJ@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 1:15 AM Pavel Skripkin <paskripkin@gmail.com> wrote:
+On Mon, May 16, 2022 at 08:49:52PM +0000, Sean Christopherson wrote:
+>On Tue, May 03, 2022, Paolo Bonzini wrote:
+>> On 5/3/22 09:32, Zeng Guang wrote:
+>> > 
+>> > I don't see "[PATCH v9 4/9] KVM: VMX: Report tertiary_exec_control field in
+>> > dump_vmcs()" in kvm/queue. Does it not need ?
+>> 
+>> Added now (somehow the patches were not threaded, so I had to catch them one
+>> by one from lore).
+>> 
+>> > Selftests for KVM_CAP_MAX_VCPU_ID is posted in V2 which is revised on top of
+>> > kvm/queue.
+>> > ([PATCH v2] kvm: selftests: Add KVM_CAP_MAX_VCPU_ID cap test - Zeng
+>> > Guang (kernel.org) <https://lore.kernel.org/lkml/20220503064037.10822-1-guang.zeng@intel.com/>)
+>> 
+>> Queued, thanks.
 >
-> Hi Vihas,
->
-> On 5/16/22 20:03, Vihas Makwana wrote:
-> > Refactor the code to fix following warnings:
-> >      WARNING: Comparisons should place the constant on the right side of the test
-> >
-> > Signed-off-by: Vihas Makwana <makvihas@gmail.com>
-> > ---
->
-> [code snip]
->
-> >               if ((pwrpriv->smart_ps == smart_ps) &&
-> > @@ -356,7 +356,7 @@ void rtw_init_pwrctrl_priv(struct adapter *padapter)
-> >
-> >       pwrctrlpriv->LpsIdleCount = 0;
-> >       pwrctrlpriv->power_mgnt = padapter->registrypriv.power_mgnt;/*  PS_MODE_MIN; */
-> > -     pwrctrlpriv->bLeisurePs = PS_MODE_ACTIVE != pwrctrlpriv->power_mgnt;
-> > +     pwrctrlpriv->bLeisurePs =  pwrctrlpriv->power_mgnt != PS_MODE_ACTIVE;
-> >
->
-> Please remove extra space
->
-Oh sorry, my bad. Will submit a v2.
->
->
-> With regards,
-> Pavel Skripkin
+>Shouldn't we have a solution for the read-only APIC_ID mess before this is merged?
 
+We can add a new inhibit to disable APICv if guest attempts to change APIC
+ID when IPIv (or AVIC) is enabled. Maxim also thinks using a new inhibit is
+the right direction [1].
 
+If no objection to this approach and Maxim doesn't have the patch, we can post
+one. But we will rely on Maxim to fix APIC ID mess for nested AVIC.
 
--- 
-Thanks,
-Vihas
+[1] https://lore.kernel.org/all/6475522c58aec5db3ee0a5ccd3230c63a2f013a9.camel@redhat.com/

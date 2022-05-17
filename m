@@ -2,165 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2DE529704
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 03:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1342C529706
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 03:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238274AbiEQB5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 21:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33156 "EHLO
+        id S235554AbiEQB5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 21:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238216AbiEQB5V (ORCPT
+        with ESMTP id S238542AbiEQB5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 21:57:21 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6238D13F3F;
-        Mon, 16 May 2022 18:57:20 -0700 (PDT)
-Received: from kwepemi100001.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L2Jyw5mJqzCsjB;
-        Tue, 17 May 2022 09:52:24 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- kwepemi100001.china.huawei.com (7.221.188.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 17 May 2022 09:57:18 +0800
-Received: from [10.67.101.67] (10.67.101.67) by kwepemm600003.china.huawei.com
- (7.193.23.202) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 17 May
- 2022 09:57:17 +0800
-Subject: Re: [PATCH v8 5/8] perf tool: Add support for HiSilicon PCIe Tune and
- Trace device driver
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Yicong Yang <yangyicong@hisilicon.com>
-CC:     <gregkh@linuxfoundation.org>, <alexander.shishkin@linux.intel.com>,
-        <leo.yan@linaro.org>, <james.clark@arm.com>, <will@kernel.org>,
-        <robin.murphy@arm.com>, <acme@kernel.org>, <john.garry@huawei.com>,
-        <helgaas@kernel.org>, <lorenzo.pieralisi@arm.com>,
-        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <mark.rutland@arm.com>, <joro@8bytes.org>,
-        <shameerali.kolothum.thodi@huawei.com>, <peterz@infradead.org>,
-        <mingo@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-pci@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <iommu@lists.linux-foundation.org>, <prime.zeng@huawei.com>,
-        <zhangshaokun@hisilicon.com>, <linuxarm@huawei.com>
-References: <20220516125223.32012-1-yangyicong@hisilicon.com>
- <20220516125223.32012-6-yangyicong@hisilicon.com>
- <20220516152022.00001ab9@Huawei.com>
-From:   "liuqi (BA)" <liuqi115@huawei.com>
-Message-ID: <3b952043-53a0-b15e-47bb-e4680c1860c9@huawei.com>
-Date:   Tue, 17 May 2022 09:57:17 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Mon, 16 May 2022 21:57:44 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66FFC27B38;
+        Mon, 16 May 2022 18:57:43 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id n8so16101009plh.1;
+        Mon, 16 May 2022 18:57:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=3a9HyiIRBM4wCH9QPbga5zq5KSGL3bFe4oIwKIdI5E4=;
+        b=GYr55paZ8TIT7tq6qQkePhatMRmdh7D+PtqLx6vy02JCPGjQAUiwkQIRJwwfdm9Uye
+         jSnG4k791tnDD2QEDT+k4Iql0Oy4c9wwvVTfaVFUSrSIeDIsDMt5AOrEUARxg7LF/qmW
+         EtXnCmCD5a5LH69Wc2+osbJrPVZ9kxuD92c4m+yA8cwBZC478wEWTeqpqlKJgzD3IAxy
+         4VegSWsTfFuhUgCtMdpFJKg6WNwk0QaX/HO4zdpO34GdhCE2ONBLbv9jAbi1FqLzRObi
+         P7cxJJs7r6lUvmunhrgU4abcu09L5ONJeGByGM/IbxYKH4lzH3FrwATnMCQocpvVpr+e
+         lzRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=3a9HyiIRBM4wCH9QPbga5zq5KSGL3bFe4oIwKIdI5E4=;
+        b=v3a0tge5410n52I1aYjujzzpk/SifbArQQ1CkfjpErx2H1yNZQzR5S4M2YP90V0OQh
+         8+yMdSH1yLeCrdx1mzXvZ09NVojRI8En0AOo2oCXMq2N54yb4vjEe5Qjd0lItexDOlIW
+         4LVgYM4sH6m5i6z+QAbxEZiLKMje+3J5ZPLf+A79sS2yISZ5QYXyuL2v4tGVfTQwtxQz
+         19RtZO+m3xQBIsnjG+pk4C1QWLWW23OZQlx6Juqhj9TMuKCPypvbzHzhQU5Lh9IEBIJr
+         Kf7L5gvSQPEw0H1fwnUJjd88po2A18fUvXlWcKAW8xUvJKwaSe1ptGfnUbm3RkIoSQ/w
+         5XgQ==
+X-Gm-Message-State: AOAM533LJM1tkxe0yyxrWQGM4ajLlUUg1PiCrjAfbABe+GP4UuAGbgJX
+        oYOL0gLyb0QB5pUzK3ROkjM=
+X-Google-Smtp-Source: ABdhPJxrfeTqop3Yx7uhR0Fu1ohY0L6VmDw1Hx3oiYpsTV3TEZ991DxjRyJA8qoHF1OFrjr7/QvOyw==
+X-Received: by 2002:a17:903:496:b0:161:6377:8024 with SMTP id jj22-20020a170903049600b0016163778024mr10803104plb.90.1652752662587;
+        Mon, 16 May 2022 18:57:42 -0700 (PDT)
+Received: from CHENGDONGLI-MB0.localdomain ([203.205.141.21])
+        by smtp.gmail.com with ESMTPSA id z4-20020a62d104000000b0050dc7628184sm7708267pfg.94.2022.05.16.18.57.40
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 16 May 2022 18:57:41 -0700 (PDT)
+From:   Chengdong Li <brytonlee01@gmail.com>
+X-Google-Original-From: Chengdong Li <chengdongli@tencent.com>
+Received: by CHENGDONGLI-MB0.localdomain (Postfix, from userid 501)
+        id 8C14F808B887; Tue, 17 May 2022 09:57:34 +0800 (CST)
+To:     alexey.v.bayduraev@linux.intel.com, peterz@infradead.org,
+        mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, rickyman7@gmail.com, adrian.hunter@intel.com,
+        irogers@google.com, german.gomez@arm.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     ak@linux.intel.com, likexu@tencent.com, chengdongli@tencent.com
+Subject: [RESEND PATCH v2] perf tools: fix callstack entries and nr print message
+Date:   Tue, 17 May 2022 09:57:26 +0800
+Message-Id: <20220517015726.96131-1-chengdongli@tencent.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <Ynka4u+jCvFefgwJ@krava>
+References: <Ynka4u+jCvFefgwJ@krava>
 MIME-Version: 1.0
-In-Reply-To: <20220516152022.00001ab9@Huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.101.67]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Chengdong Li <chengdongli@tencent.com>
 
+when generating callstack information from branch_stack(Intel LBR),
+the actual number of callstack entry should be bigger than the number
+of branch_stack, for example:
 
-On 2022/5/16 22:20, Jonathan Cameron wrote:
-> On Mon, 16 May 2022 20:52:20 +0800
-> Yicong Yang <yangyicong@hisilicon.com> wrote:
-> 
->> From: Qi Liu <liuqi115@huawei.com>
->>
->> HiSilicon PCIe tune and trace device (PTT) could dynamically tune
->> the PCIe link's events, and trace the TLP headers).
->>
->> This patch add support for PTT device in perf tool, so users could
->> use 'perf record' to get TLP headers trace data.
->>
->> Signed-off-by: Qi Liu <liuqi115@huawei.com>
->> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> 
-> One query inline.
-> 
-> 
->> diff --git a/tools/perf/arch/arm/util/auxtrace.c b/tools/perf/arch/arm/util/auxtrace.c
->> index 384c7cfda0fd..297fffedf45e 100644
->> --- a/tools/perf/arch/arm/util/auxtrace.c
->> +++ b/tools/perf/arch/arm/util/auxtrace.c
-> 
-> ...
-> 
->>   static struct perf_pmu *find_pmu_for_event(struct perf_pmu **pmus,
->>   					   int pmu_nr, struct evsel *evsel)
->>   {
->> @@ -71,17 +120,21 @@ struct auxtrace_record
->>   {
->>   	struct perf_pmu	*cs_etm_pmu = NULL;
->>   	struct perf_pmu **arm_spe_pmus = NULL;
->> +	struct perf_pmu **hisi_ptt_pmus = NULL;
->>   	struct evsel *evsel;
->>   	struct perf_pmu *found_etm = NULL;
->>   	struct perf_pmu *found_spe = NULL;
->> +	struct perf_pmu *found_ptt = NULL;
->>   	int auxtrace_event_cnt = 0;
->>   	int nr_spes = 0;
->> +	int nr_ptts = 0;
->>   
->>   	if (!evlist)
->>   		return NULL;
->>   
->>   	cs_etm_pmu = perf_pmu__find(CORESIGHT_ETM_PMU_NAME);
->>   	arm_spe_pmus = find_all_arm_spe_pmus(&nr_spes, err);
->> +	hisi_ptt_pmus = find_all_hisi_ptt_pmus(&nr_ptts, err);
->>   
->>   	evlist__for_each_entry(evlist, evsel) {
->>   		if (cs_etm_pmu && !found_etm)
->> @@ -89,9 +142,13 @@ struct auxtrace_record
->>   
->>   		if (arm_spe_pmus && !found_spe)
->>   			found_spe = find_pmu_for_event(arm_spe_pmus, nr_spes, evsel);
->> +
->> +		if (arm_spe_pmus && !found_spe)
-> 
-> 		if (hisi_ptt_pmus && !found_ptt) ?
-> 
-> Otherwise, I'm not sure what the purpose of the checking against spe is.
-> 
+	branch_stack records:
+		B() -> C()
+		A() -> B()
+	converted callstack records should be:
+		C()
+		B()
+		A()
+though, the number of callstack equals
+to the number of branch stack plus 1.
 
-yes...it's a typo here, thanks for the reminder!
+This patch fixes above issue in branch_stack__printf(). For example,
 
-Qi
->> +			found_ptt = find_pmu_for_event(hisi_ptt_pmus, nr_ptts, evsel);
->>   	}
->>   
->>   	free(arm_spe_pmus);
->> +	free(hisi_ptt_pmus);
->>   
->>   	if (found_etm)
->>   		auxtrace_event_cnt++;
->> @@ -99,6 +156,9 @@ struct auxtrace_record
->>   	if (found_spe)
->>   		auxtrace_event_cnt++;
->>   
->> +	if (found_ptt)
->> +		auxtrace_event_cnt++;
->> +
->>   	if (auxtrace_event_cnt > 1) {
->>   		pr_err("Concurrent AUX trace operation not currently supported\n");
->>   		*err = -EOPNOTSUPP;
->> @@ -111,6 +171,9 @@ struct auxtrace_record
->>   #if defined(__aarch64__)
->>   	if (found_spe)
->>   		return arm_spe_recording_init(err, found_spe);
->> +
->> +	if (found_ptt)
->> +		return hisi_ptt_recording_init(err, found_ptt);
->>   #endif
->>   
-> .
-> 
+	# echo 'scale=2000; 4*a(1)' > cmd
+	# perf record --call-graph lbr bc -l < cmd
+
+Before applying this patch, `perf script -D` output:
+
+	1220022677386876 0x2a40 [0xd8]: PERF_RECORD_SAMPLE(IP, 0x4002): 17990/17990: 0x40a6d6 period: 894172 addr: 0
+	... LBR call chain: nr:8
+	.....  0: fffffffffffffe00
+	.....  1: 000000000040a410
+	.....  2: 000000000040573c
+	.....  3: 0000000000408650
+	.....  4: 00000000004022f2
+	.....  5: 00000000004015f5
+	.....  6: 00007f5ed6dcb553
+	.....  7: 0000000000401698
+	... FP chain: nr:2
+	.....  0: fffffffffffffe00
+	.....  1: 000000000040a6d8
+	... branch callstack: nr:6    # which is not consistent with LBR records.
+	.....  0: 000000000040a410
+	.....  1: 0000000000408650    # ditto
+	.....  2: 00000000004022f2
+	.....  3: 00000000004015f5
+	.....  4: 00007f5ed6dcb553
+	.....  5: 0000000000401698
+	 ... thread: bc:17990
+	 ...... dso: /usr/bin/bc
+	bc 17990 1220022.677386:     894172 cycles:
+			  40a410 [unknown] (/usr/bin/bc)
+			  40573c [unknown] (/usr/bin/bc)
+			  408650 [unknown] (/usr/bin/bc)
+			  4022f2 [unknown] (/usr/bin/bc)
+			  4015f5 [unknown] (/usr/bin/bc)
+		    7f5ed6dcb553 __libc_start_main+0xf3 (/usr/lib64/libc-2.17.so)
+			  401698 [unknown] (/usr/bin/bc)
+
+After applied:
+
+	1220022677386876 0x2a40 [0xd8]: PERF_RECORD_SAMPLE(IP, 0x4002): 17990/17990: 0x40a6d6 period: 894172 addr: 0
+	... LBR call chain: nr:8
+	.....  0: fffffffffffffe00
+	.....  1: 000000000040a410
+	.....  2: 000000000040573c
+	.....  3: 0000000000408650
+	.....  4: 00000000004022f2
+	.....  5: 00000000004015f5
+	.....  6: 00007f5ed6dcb553
+	.....  7: 0000000000401698
+	... FP chain: nr:2
+	.....  0: fffffffffffffe00
+	.....  1: 000000000040a6d8
+	... branch callstack: nr:7
+	.....  0: 000000000040a410
+	.....  1: 000000000040573c
+	.....  2: 0000000000408650
+	.....  3: 00000000004022f2
+	.....  4: 00000000004015f5
+	.....  5: 00007f5ed6dcb553
+	.....  6: 0000000000401698
+	 ... thread: bc:17990
+	 ...... dso: /usr/bin/bc
+	bc 17990 1220022.677386:     894172 cycles:
+			  40a410 [unknown] (/usr/bin/bc)
+			  40573c [unknown] (/usr/bin/bc)
+			  408650 [unknown] (/usr/bin/bc)
+			  4022f2 [unknown] (/usr/bin/bc)
+			  4015f5 [unknown] (/usr/bin/bc)
+		    7f5ed6dcb553 __libc_start_main+0xf3 (/usr/lib64/libc-2.17.so)
+			  401698 [unknown] (/usr/bin/bc)
+
+Change from v1:
+	- refined code style according to Jiri's review comments.
+
+Signed-off-by: Chengdong Li <chengdongli@tencent.com>
+---
+ tools/perf/util/session.c | 26 +++++++++++++++++++++-----
+ 1 file changed, 21 insertions(+), 5 deletions(-)
+
+diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
+index f9a320694b85..a7f93f5a1ac8 100644
+--- a/tools/perf/util/session.c
++++ b/tools/perf/util/session.c
+@@ -1151,9 +1151,20 @@ static void branch_stack__printf(struct perf_sample *sample, bool callstack)
+ 	struct branch_entry *entries = perf_sample__branch_entries(sample);
+ 	uint64_t i;
+ 
+-	printf("%s: nr:%" PRIu64 "\n",
+-		!callstack ? "... branch stack" : "... branch callstack",
+-		sample->branch_stack->nr);
++	if (!callstack) {
++		printf("%s: nr:%" PRIu64 "\n", "... branch stack", sample->branch_stack->nr);
++	} else {
++		/* the reason of adding 1 to nr is because after expanding
++		 * branch stack it generates nr + 1 callstack records. e.g.,
++		 *         B()->C()
++		 *         A()->B()
++		 * the final callstack should be:
++		 *         C()
++		 *         B()
++		 *         A()
++		 */
++		printf("%s: nr:%" PRIu64 "\n", "... branch callstack", sample->branch_stack->nr+1);
++	}
+ 
+ 	for (i = 0; i < sample->branch_stack->nr; i++) {
+ 		struct branch_entry *e = &entries[i];
+@@ -1169,8 +1180,13 @@ static void branch_stack__printf(struct perf_sample *sample, bool callstack)
+ 				(unsigned)e->flags.reserved,
+ 				e->flags.type ? branch_type_name(e->flags.type) : "");
+ 		} else {
+-			printf("..... %2"PRIu64": %016" PRIx64 "\n",
+-				i, i > 0 ? e->from : e->to);
++			if (i == 0) {
++				printf("..... %2"PRIu64": %016" PRIx64 "\n"
++				       "..... %2"PRIu64": %016" PRIx64 "\n",
++						i, e->to, i+1, e->from);
++			} else {
++				printf("..... %2"PRIu64": %016" PRIx64 "\n", i+1, e->from);
++			}
+ 		}
+ 	}
+ }
+-- 
+2.27.0
+

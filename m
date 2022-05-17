@@ -2,118 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E20695295F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 02:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 875B25295F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 02:20:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238406AbiEQASX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 20:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
+        id S240488AbiEQAUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 20:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiEQASV (ORCPT
+        with ESMTP id S231895AbiEQAUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 20:18:21 -0400
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3710245AF1;
-        Mon, 16 May 2022 17:18:20 -0700 (PDT)
-Received: by mail-oi1-f175.google.com with SMTP id l16so20620175oil.6;
-        Mon, 16 May 2022 17:18:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=GPUFIY49jVOLB0PCg0hcdHV6Ri73fGCHmtlekomUChM=;
-        b=NPgz3MMf5+bjZKCVRca3NdXWMHnBh0wl2BcJ8SLFcju9YjwIYxWui8JmnZwA2yN5Cp
-         ndokBO5iCsia1PGQZKD1b54rAnpazY5qdxXJhlzKqe/PpFlYrnWAmmfh6PMGEmUYZ2AF
-         MQcWQXSW3zc0rkQWx+5MHwHVC5v895JVIMonQRlfqgyWjqgQHCHEJRbteIA2lPGrwmPF
-         o6F74o1JnqXHBzgZwIa1vHo+28ncDboqKutaCbdWGtRAvXpu8tM8Y/d28Jl1hpGXUnG8
-         MQRz55v3Srisndb+qJ5tatnfVG2m7x01RnBBzPmintP1TaK3QgpjSVYuy8+aPDle+QXi
-         i92A==
-X-Gm-Message-State: AOAM532Mymjhl7ybURi7AwS3x9H8aDjOx+LE+AtHjSsN83Hk5GEpYT27
-        hbLTaUNtc6U4nE7sgqIY5A==
-X-Google-Smtp-Source: ABdhPJyoOUMiRrvr83FjYScfsZOHKuD0JIOvH2MR2SrWlETM1o5zPl+aB9buWtlZMSv2NfO8ZGVhHA==
-X-Received: by 2002:a05:6808:218c:b0:328:c5e6:b2a with SMTP id be12-20020a056808218c00b00328c5e60b2amr10874658oib.173.1652746699562;
-        Mon, 16 May 2022 17:18:19 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z18-20020a544592000000b00325cda1ffb2sm4334484oib.49.2022.05.16.17.18.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 17:18:18 -0700 (PDT)
-Received: (nullmailer pid 3632950 invoked by uid 1000);
-        Tue, 17 May 2022 00:18:17 -0000
-Date:   Mon, 16 May 2022 19:18:17 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/6] dt-bindings: irqchip: armada-370-xp: Update
- information about MPIC SoC Error
-Message-ID: <20220517001817.GA3629501-robh@kernel.org>
-References: <20220506134029.21470-1-pali@kernel.org>
- <20220506134029.21470-2-pali@kernel.org>
+        Mon, 16 May 2022 20:20:00 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1CC4614B
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 17:19:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652746800; x=1684282800;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RAKtHpxnO63k2u5Hg8G0usU4BU1kONxht9kfRZB89Cg=;
+  b=axFF7o6SpgOP8D8ovck6PifPp8DMcSsTm9P8zUzBhi345MNFch4C7HID
+   f3QjEfy3UTrF21eus1ra/e8tchRWq3kgRf3lbiABaMBei7f2CkIU4U+sz
+   8cP7kXDYsZyXVVwmVcAdgvC0cgh5pjuZuqMec7MS1OYpC7v4RxwCluOAU
+   RVZwWXykOZANuvdBE8Zi43Lmbf88fyhp0vVxdhWsttBYxnnDKjE8a//HQ
+   8P3FycY99Lx+Md1HxTXg7b2CSRHQEmKvsfPDc/i0z3DnNqiLaNoKgvhv6
+   FqGRfeQ21mpKHZ8QvrahJ2hoTdiXJ26InV2ZdfegdXXR8aBIinIjiFRdH
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="258564116"
+X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
+   d="scan'208";a="258564116"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 17:19:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
+   d="scan'208";a="544611645"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 16 May 2022 17:19:57 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nqkwO-0000RN-Og;
+        Tue, 17 May 2022 00:19:56 +0000
+Date:   Tue, 17 May 2022 08:19:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [linux-stable-rc:linux-5.17.y 765/2373] drivers/iio/accel/mma8452.o:
+ warning: objtool: mma8452_write_raw()+0x4d: unreachable instruction
+Message-ID: <202205170814.FXKeCNQL-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220506134029.21470-2-pali@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 06, 2022 at 03:40:24PM +0200, Pali Rohár wrote:
-> Signed-off-by: Pali Rohár <pali@kernel.org>
+Hi Hans,
 
-Why do we need/want this change?
+FYI, the error/warning still remains.
 
-> ---
->  .../interrupt-controller/marvell,armada-370-xp-mpic.txt  | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/marvell,armada-370-xp-mpic.txt b/Documentation/devicetree/bindings/interrupt-controller/marvell,armada-370-xp-mpic.txt
-> index 5fc03134a999..8cddbc16ddbd 100644
-> --- a/Documentation/devicetree/bindings/interrupt-controller/marvell,armada-370-xp-mpic.txt
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/marvell,armada-370-xp-mpic.txt
-> @@ -24,6 +24,11 @@ Optional properties:
->    connected as a slave to the Cortex-A9 GIC. The provided interrupt
->    indicate to which GIC interrupt the MPIC output is connected.
->  
-> +Optional subnodes:
-> +
-> +- interrupt-controller@20 with interrupt-controller property for
-> +  MPIC SoC Error IRQ controller
-> +
->  Example:
->  
->          mpic: interrupt-controller@d0020000 {
-> @@ -35,4 +40,8 @@ Example:
->                msi-controller;
->                reg = <0xd0020a00 0x1d0>,
->                      <0xd0021070 0x58>;
-> +              soc_err: interrupt-controller@20 {
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+head:   e1382731ef4e5e1634896596ebe74e48b9ed2b73
+commit: 0646c782086f2a6081186a9898d40ea8886b8ade [765/2373] iio: mma8452: Fix probe failing when an i2c_device_id is used
+config: x86_64-randconfig-r011-20220516 (https://download.01.org/0day-ci/archive/20220517/202205170814.FXKeCNQL-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=0646c782086f2a6081186a9898d40ea8886b8ade
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.17.y
+        git checkout 0646c782086f2a6081186a9898d40ea8886b8ade
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/iio/ net/
 
-unit address without 'reg' is an error.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +                    interrupt-controller;
-> +                    #interrupt-cells = <1>;
-> +              };
->          };
-> -- 
-> 2.20.1
-> 
-> 
+All warnings (new ones prefixed by >>):
+
+>> drivers/iio/accel/mma8452.o: warning: objtool: mma8452_write_raw()+0x4d: unreachable instruction
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

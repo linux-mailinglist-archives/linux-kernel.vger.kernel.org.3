@@ -2,124 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6531D529D27
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02135529D30
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243934AbiEQJCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 05:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48160 "EHLO
+        id S243986AbiEQJDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 05:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238173AbiEQJCF (ORCPT
+        with ESMTP id S236567AbiEQJDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 05:02:05 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CFC1AD85
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:02:03 -0700 (PDT)
-Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4L2VR854Wrz67L0F;
-        Tue, 17 May 2022 16:59:00 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 17 May 2022 11:02:01 +0200
-Received: from [10.47.88.19] (10.47.88.19) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 17 May
- 2022 10:02:00 +0100
-Message-ID: <3e7c4d27-a0cb-2d9e-ca79-248ce26c6787@huawei.com>
-Date:   Tue, 17 May 2022 10:02:00 +0100
+        Tue, 17 May 2022 05:03:45 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427B53EF1C;
+        Tue, 17 May 2022 02:03:37 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L2VXQ6sSBz4xLb;
+        Tue, 17 May 2022 19:03:34 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1652778216;
+        bh=PvHKH9C7qcFJ1DB3vXvZC31uK1pYg4dsP3wXn6Ovzp0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=P51d5V9sgBiwjmwO1K5WJzcx62IPxOQ2S2JU0qSlIpKdEA/xzGCKUDJcT5skrUPxu
+         dBlIMAMxSyfoYUhRgiUV/xvaTsuMf5uqwfXuOzRwel8ulOIbatPs+rWkJ0wHWJYwJG
+         kwTVwK2GezuuChZT0WOoRlq8b+BD6GUugcQWNKktls4k2DtNLYzvm69kzO2OOxPNXg
+         g5wlSTJFyNqK0DIIGqtv07THAZTdXqP9bYINi6tgRSbcxt426h6Rq6VYJH7rtlEavU
+         xldVyJG/9Z/Z6Yce7s3skw8b7qG0hd93ktwzKgA0gyrpGlRoetKuQ/xeYzAQVLPs8P
+         UgOS1J4oMjXkQ==
+Date:   Tue, 17 May 2022 19:03:32 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the net-next tree
+Message-ID: <20220517190332.4506f7e8@canb.auug.org.au>
+In-Reply-To: <20220517110303.723a7148@canb.auug.org.au>
+References: <20220517110303.723a7148@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [RFC PATCH] dma-iommu: Add iommu_dma_max_mapping_size()
-To:     Christoph Hellwig <hch@lst.de>
-CC:     <joro@8bytes.org>, <will@kernel.org>, <robin.murphy@arm.com>,
-        <m.szyprowski@samsung.com>, <chenxiang66@hisilicon.com>,
-        <thunder.leizhen@huawei.com>, <iommu@lists.linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>, <liyihang6@hisilicon.com>
-References: <1652706361-92557-1-git-send-email-john.garry@huawei.com>
- <20220517083834.GA16965@lst.de>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220517083834.GA16965@lst.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.88.19]
-X-ClientProxiedBy: lhreml743-chm.china.huawei.com (10.201.108.193) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/MVHAGlvNapLv1B+3dFq=KEu";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2022 09:38, Christoph Hellwig wrote:
-> On Mon, May 16, 2022 at 09:06:01PM +0800, John Garry wrote:
->> For streaming DMA mappings involving an IOMMU and whose IOVA len regularly
->> exceeds the IOVA rcache upper limit (meaning that they are not cached),
->> performance can be reduced.
->>
->> Add the IOMMU callback for DMA mapping API dma_max_mapping_size(), which
->> allows the drivers to know the mapping limit and thus limit the requested
->> IOVA lengths.
->>
->> This resolves the performance issue originally reported in [0] for a SCSI
->> HBA driver which was regularly mapping SGLs which required IOVAs in
->> excess of the IOVA caching limit. In this case the block layer limits the
->> max sectors per request - as configured in __scsi_init_queue() - which
->> will limit the total SGL length the driver tries to map and in turn limits
->> IOVA lengths requested.
+--Sig_/MVHAGlvNapLv1B+3dFq=KEu
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-BTW, on a separate topic, I noticed that even with this change my ATA 
-devices have max_hw_sectors_kb of 32767, as opposed to 128 for SAS 
-devices. It seems that libata-scsi - specifically ata_scsi_dev_config() 
-- doesn't honour the shost max_sectors limit. I guess that is not 
-intentional.
+Hi all,
 
->>
->> [0] https://lore.kernel.org/linux-iommu/20210129092120.1482-1-thunder.leizhen@huawei.com/
->>
->> Signed-off-by: John Garry <john.garry@huawei.com>
->> ---
->> Sending as an RFC as iommu_dma_max_mapping_size() is a soft limit, and not
->> a hard limit which I expect is the semantics of dma_map_ops.max_mapping_size
->>
->> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
->> index 09f6e1c0f9c0..e2d5205cde37 100644
->> --- a/drivers/iommu/dma-iommu.c
->> +++ b/drivers/iommu/dma-iommu.c
->> @@ -1442,6 +1442,21 @@ static unsigned long iommu_dma_get_merge_boundary(struct device *dev)
->>   	return (1UL << __ffs(domain->pgsize_bitmap)) - 1;
->>   }
->>   
-> 
->> +	if (!domain)
->> +		return 0;
->> +
->> +	cookie = domain->iova_cookie;
->> +	if (!cookie || cookie->type != IOMMU_DMA_IOVA_COOKIE)
->> +		return 0;
-> 
-> Can these conditions even be true here?
+On Tue, 17 May 2022 11:03:03 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the net-next tree, today's linux-next build (powerpc
+> ppc64_defconfig) produced this warning:
+>=20
+> net/netfilter/nf_conntrack_netlink.c:1717:12: warning: 'ctnetlink_dump_on=
+e_entry' defined but not used [-Wunused-function]
+>  1717 | static int ctnetlink_dump_one_entry(struct sk_buff *skb,
+>       |            ^~~~~~~~~~~~~~~~~~~~~~~~
+>=20
+> Introduced by commit
+>=20
+>   8a75a2c17410 ("netfilter: conntrack: remove unconfirmed list")
 
-I don't think so. Paranoia on my part.
+So for my i386 defconfig build this became on error, so I have applied
+the following patch for today.
 
-> 
->> +static inline unsigned long iova_rcache_range(void)
->> +{
->> +	return 0;
->> +}
-> 
-> Given that IOMMU_DMA select IOMMU_IOVA there is no need for this stub.
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 17 May 2022 18:58:43 +1000
+Subject: [PATCH] fix up for "netfilter: conntrack: remove unconfirmed list"
 
-hmmm.. ok. Policy was to be stub everything but I think that it has changed.
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ net/netfilter/nf_conntrack_netlink.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> 
-> Otherwise this looks sensible to me.
-> 
-> .
+diff --git a/net/netfilter/nf_conntrack_netlink.c b/net/netfilter/nf_conntr=
+ack_netlink.c
+index e768f59741a6..722af5e309ba 100644
+--- a/net/netfilter/nf_conntrack_netlink.c
++++ b/net/netfilter/nf_conntrack_netlink.c
+@@ -1714,6 +1714,7 @@ static int ctnetlink_done_list(struct netlink_callbac=
+k *cb)
+ 	return 0;
+ }
+=20
++#ifdef CONFIG_NF_CONNTRACK_EVENTS
+ static int ctnetlink_dump_one_entry(struct sk_buff *skb,
+ 				    struct netlink_callback *cb,
+ 				    struct nf_conn *ct,
+@@ -1754,6 +1755,7 @@ static int ctnetlink_dump_one_entry(struct sk_buff *s=
+kb,
+=20
+ 	return res;
+ }
++#endif
+=20
+ static int
+ ctnetlink_dump_unconfirmed(struct sk_buff *skb, struct netlink_callback *c=
+b)
+--=20
+2.35.1
+--=20
+Cheers,
+Stephen Rothwell
 
-Great, thanks.
+--Sig_/MVHAGlvNapLv1B+3dFq=KEu
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKDZOQACgkQAVBC80lX
+0GwWtwf9Gym5VoAzMup2/OcuiIuikDIJdyDG8Nm8Y14zQRJLVgm2fMv8NnqwpTMJ
+ojQMTM5JYY/2u+Tn4O1KqetkDN8mmHEtRmG/vpZZqU1QP1E2Ie7zrd+nf74Qa1en
+Y4ECWgRK6LY1zSel3VgvSu0gippdWe7F3bmyztCbRkWhmeqg81TLQK6agf+Wzp9Y
+6sCzF+f3/Y2BjP9a93ADeqnPtmAVIpWpO1iOzRr9SA4N+MrXsZ+qtb6nCA2vuDn5
+3IUd56Jp1jPvPo74trHN1I6V923g0Ahs53afh3Nd1+sAo3lH3NANuFvAVzko1cbO
+Cch90NdSTwmN/kSpNPQtltxkVRjT0Q==
+=fni1
+-----END PGP SIGNATURE-----
+
+--Sig_/MVHAGlvNapLv1B+3dFq=KEu--

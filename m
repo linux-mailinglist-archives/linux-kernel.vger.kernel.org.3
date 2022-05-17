@@ -2,125 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15E94529B96
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6B6529B99
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 10:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236961AbiEQH7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 03:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35768 "EHLO
+        id S239120AbiEQIAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 04:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiEQH7K (ORCPT
+        with ESMTP id S229548AbiEQIAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 03:59:10 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7E348E55
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:59:07 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24H7hJDH011815;
-        Tue, 17 May 2022 07:58:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : message-id : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=AJZL22UqzSZu0UvrmsNg3hl1xbVu9uMb/EIUOgJ0hrQ=;
- b=WL/rW8rR3oiBE2NMBSWC7TCsK/iE7mbw4tdWIDGTAUnydIfoIBiXEkca3gYIwnaRGU0i
- SokiST0gbfrBuu6I1DzNn3CokSa0fPx1w9EFdWLseh/LIrgCcGgvO/5vNJH4+hB4HYhP
- 1qf6PKtjaaTTVxAhitJ1fWmsi/GmyPMNYRE6Hl4IcUnBvBYuwImsQPh1UfqB6dmO9IJs
- ye4SH4y+K2auNpsY0ufT4lNhDPpYqVnPXxDCuGx4aCgJaZ7/eXpjR/eNKnzKIX+dO6qx
- splm8uU4cC1xfPWqzgVc9c6bgERCxaPdjtVn4hQz9Rn+SlodXYYM3suhqSYSGk4xRT0j sQ== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g47jjgaaj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 07:58:50 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24H7vfao022874;
-        Tue, 17 May 2022 07:58:48 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 3g2429bu21-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 07:58:48 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24H7wkW556295818
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 May 2022 07:58:46 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0A6A942042;
-        Tue, 17 May 2022 07:58:46 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8BDC942041;
-        Tue, 17 May 2022 07:58:45 +0000 (GMT)
-Received: from localhost (unknown [9.43.12.56])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 17 May 2022 07:58:45 +0000 (GMT)
-Date:   Tue, 17 May 2022 13:28:44 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH] kexec_file: Drop pr_err in weak implementations of
- arch_kexec_apply_relocations[_add]
-To:     Eric Biederman <ebiederm@xmission.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-References: <20220425174128.11455-1-naveen.n.rao@linux.vnet.ibm.com>
-In-Reply-To: <20220425174128.11455-1-naveen.n.rao@linux.vnet.ibm.com>
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1652773499.wq57us3gto.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: s6DclNqzAeKk5RA5urcRtKgKbz3SoS10
-X-Proofpoint-ORIG-GUID: s6DclNqzAeKk5RA5urcRtKgKbz3SoS10
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 17 May 2022 04:00:19 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2B249258
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 01:00:17 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R871e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VDT5j9R_1652774413;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VDT5j9R_1652774413)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 17 May 2022 16:00:14 +0800
+Date:   Tue, 17 May 2022 16:00:12 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Chao Yu <chao@kernel.org>
+Cc:     xiang@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, Chao Yu <chao.yu@oppo.com>
+Subject: Re: [PATCH] erofs: support idmapped mounts
+Message-ID: <YoNWDHI5u76qk6TM@B-P7TQMD6M-0146.local>
+References: <20220517073210.3569589-1-chao@kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-17_01,2022-05-16_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
- malwarescore=0 phishscore=0 impostorscore=0 mlxlogscore=647 spamscore=0
- adultscore=0 priorityscore=1501 mlxscore=0 bulkscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205170044
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220517073210.3569589-1-chao@kernel.org>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Naveen N. Rao wrote:
-> kexec_load_purgatory() can fail for many reasons - there is no need to
-> print an error when encountering unsupported relocations.
->=20
-> This solves a build issue on powerpc with binutils v2.36 and newer [1].
-> Since commit d1bcae833b32f1 ("ELF: Don't generate unused section
-> symbols") [2], binutils started dropping section symbols that it thought
-> were unused.  This isn't an issue in general, but with kexec_file.c, gcc
-> is placing kexec_arch_apply_relocations[_add] into a separate
-> .text.unlikely section and the section symbol ".text.unlikely" is being
-> dropped. Due to this, recordmcount is unable to find a non-weak symbol
-> in .text.unlikely to generate a relocation record against. Dropping
-> pr_err() calls results in these functions being left in .text section,
-> enabling recordmcount to emit a proper relocation record.
->=20
-> [1] https://github.com/linuxppc/issues/issues/388
-> [2] https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=3Dd1bca=
-e833b32f1
->=20
-> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+Hi Chao,
+
+On Tue, May 17, 2022 at 03:32:10PM +0800, Chao Yu wrote:
+> This patch enables idmapped mounts for erofs, since all dedicated helpers
+> for this functionality existsm, so, in this patch we just pass down the
+> user_namespace argument from the VFS methods to the relevant helpers.
+> 
+> Simple idmap example on erofs image:
+> 
+> 1. mkdir dir
+> 2. touch dir/file
+> 3. mkfs.erofs erofs.img dir
+> 4. mount -t erofs -o loop erofs.img  /mnt/erofs/
+> 
+> 5. ls -ln /mnt/erofs/
+> total 0
+> -rw-rw-r-- 1 1000 1000 0 May 17 15:26 file
+> 
+> 6. mount-idmapped --map-mount b:0:1001:1 /mnt/erofs/ /mnt/scratch_erofs/
+> 
+> 7. ls -ln /mnt/scratch_erofs/
+> total 0
+> -rw-rw-r-- 1 65534 65534 0 May 17 15:26 file
+> 
+> Signed-off-by: Chao Yu <chao.yu@oppo.com>
+
+Thanks, yeah, I think it's enough to enable idmapped mount for EROFS:
+Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+
+Thanks,
+Gao Xiang
+
 > ---
->  kernel/kexec_file.c | 2 --
->  1 file changed, 2 deletions(-)
-
-Eric,
-Any comments on this? There have been many reports of build breakages=20
-due to this.
-
-FWIW, there have been similar fixes in the past:
-- https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
-/init/initramfs.c?id=3D55d5b7dd6451b58489ce384282ca5a4a289eb8d5
-- https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
-/include/linux/elfcore.h?id=3D6e7b64b9dd6d96537d816ea07ec26b7dedd397b9
-
-
-- Naveen
-
+>  fs/erofs/inode.c | 2 +-
+>  fs/erofs/super.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/erofs/inode.c b/fs/erofs/inode.c
+> index e8b37ba5e9ad..5320bf52c1ce 100644
+> --- a/fs/erofs/inode.c
+> +++ b/fs/erofs/inode.c
+> @@ -370,7 +370,7 @@ int erofs_getattr(struct user_namespace *mnt_userns, const struct path *path,
+>  	stat->attributes_mask |= (STATX_ATTR_COMPRESSED |
+>  				  STATX_ATTR_IMMUTABLE);
+>  
+> -	generic_fillattr(&init_user_ns, inode, stat);
+> +	generic_fillattr(mnt_userns, inode, stat);
+>  	return 0;
+>  }
+>  
+> diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+> index 0c4b41130c2f..7dc5f2e8ddee 100644
+> --- a/fs/erofs/super.c
+> +++ b/fs/erofs/super.c
+> @@ -781,7 +781,7 @@ static struct file_system_type erofs_fs_type = {
+>  	.name           = "erofs",
+>  	.init_fs_context = erofs_init_fs_context,
+>  	.kill_sb        = erofs_kill_sb,
+> -	.fs_flags       = FS_REQUIRES_DEV,
+> +	.fs_flags       = FS_REQUIRES_DEV | FS_ALLOW_IDMAP,
+>  };
+>  MODULE_ALIAS_FS("erofs");
+>  
+> -- 
+> 2.25.1

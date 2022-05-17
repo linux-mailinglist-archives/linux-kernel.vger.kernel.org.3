@@ -2,243 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 089C3529B88
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0604E529B90
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239389AbiEQHzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 03:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54026 "EHLO
+        id S242202AbiEQHz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 03:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231159AbiEQHzb (ORCPT
+        with ESMTP id S241711AbiEQHzs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 03:55:31 -0400
-Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00131.outbound.protection.outlook.com [40.107.0.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A58343493;
-        Tue, 17 May 2022 00:55:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cjcKGPnCzsI8h446ft/weukIlxQj+iHGZMQZqqeaAR1SdzmbiqgyPML7C7jkSW9DyKVn1IPKX4YLAJOsdL/GQLBpX4GY68CFdbSjZw9nORyrg/yeSrjLeniYAmOiuN8AWHwba/34iu0yVs3JOj6ghVAflDA8Fyci7YjgWD6+4zEqfEOmzDMgS5O6j6Z2VtDtbHf5vIFJ3zUPBIkm/m262QTPvrQpmjjrLcwAzDRURvspksm7P8mfk/F3Ud9AvzQs5JSPRh92ppaDHbinFh9m/PVzZAuEnW7KaLV/vz7JeMyQaZxU3Ccxx3fNy554x1pPGb+YI7OPUPvEgevHEpl4Fg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eW0rm3/3X65cbejMyndCWKt542Cy0QjC/qJPhQ96lII=;
- b=J3QHdv/yeICmj4g+cJt197Y5lgFHlkvwC8mwYyvZmFFU1+HFOngEBl/BVxrKxIY2khNNHX781YKGjsoRmQZ16FEpoaDm48RuRQTHqIRTBI99QRUfIykyeXaP89zTh46sdFh0HvWbGZ6GiHhOuF8z/75PwJNhon2RrQH2gi8f92sYGyjv/8MqN6O3SiItfASHNl69UcI2Oe+vgGeYh1NUXIpNr9+jKpXkzkWNtXtQ+8XZWeN1lkobAp7wFMpDA74wydAT9kYqo1fiD3SqbzNZgbYvSOB/urKDsUs877o4X5uaCrZP4oHXlICw575CN+msw00iHQ0mD8qzodx16LvaUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 131.228.2.8) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nokia.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=nokia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eW0rm3/3X65cbejMyndCWKt542Cy0QjC/qJPhQ96lII=;
- b=EKb1PvW7qb1Qc1gYrXRg3eojtMGcUlewVPfh/jT+Nby3j2vxGXlc4EeIusa48T7t5BcepuduryIfpuY+lU6sOgTmL4FreQs/VhnEgDZZTDDV2g9RO1yWYDywV+L07RVJr98vgyNGYCAM5KMTUEVKJLu4n+1RkfAjLg1HA/SAlOM=
-Received: from AM6P194CA0108.EURP194.PROD.OUTLOOK.COM (2603:10a6:209:8f::49)
- by HE1PR0702MB3547.eurprd07.prod.outlook.com (2603:10a6:7:85::31) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.12; Tue, 17 May
- 2022 07:55:27 +0000
-Received: from VE1EUR03FT045.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:209:8f:cafe::ef) by AM6P194CA0108.outlook.office365.com
- (2603:10a6:209:8f::49) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.13 via Frontend
- Transport; Tue, 17 May 2022 07:55:26 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.2.8)
- smtp.mailfrom=nokia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nokia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nokia.com designates
- 131.228.2.8 as permitted sender) receiver=protection.outlook.com;
- client-ip=131.228.2.8; helo=fihe3nok0734.emea.nsn-net.net;
-Received: from fihe3nok0734.emea.nsn-net.net (131.228.2.8) by
- VE1EUR03FT045.mail.protection.outlook.com (10.152.19.51) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5250.13 via Frontend Transport; Tue, 17 May 2022 07:55:26 +0000
-Received: from ulegcparamis.emea.nsn-net.net (ulegcparamis.emea.nsn-net.net [10.151.74.146])
-        by fihe3nok0734.emea.nsn-net.net (GMO) with ESMTP id 24H7tO3I015141;
-        Tue, 17 May 2022 07:55:25 GMT
-From:   Alexander A Sverdlin <alexander.sverdlin@nokia.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: core: Workaround false-positive LOCKDEP in delete_device
-Date:   Tue, 17 May 2022 09:55:18 +0200
-Message-Id: <20220517075518.43613-1-alexander.sverdlin@nokia.com>
-X-Mailer: git-send-email 2.10.2
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
+        Tue, 17 May 2022 03:55:48 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7366540
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:55:45 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220517075541euoutp0257cd85de5868c84efaa461fc66d24b32~v1VM_Yylz0802408024euoutp02R
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:55:41 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220517075541euoutp0257cd85de5868c84efaa461fc66d24b32~v1VM_Yylz0802408024euoutp02R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1652774141;
+        bh=bx0GajEor3WyGMo16Q7LjJjnXX5wkXjOwejR898IHlA=;
+        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
+        b=I8+Az9lIdGVLHbV0AzkHCRWe5RYyWlIrvzpTwFyxkR4fAuFs1sTkhDYjXSuCEBmTc
+         RyvVuWdBiuMAOPzKJ93pJHAiB6vESnyFzwC4ID4waMa48KLl4ncMn1aYJhWvELHtXh
+         h4vasnqKTB+7eK3SYUBkb2F9kKkJNZvwCJVhzh8M=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220517075541eucas1p28071cc51330ce204f2f8758a16b48970~v1VMfzl7Q0562505625eucas1p2h;
+        Tue, 17 May 2022 07:55:41 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id F6.99.10260.DF453826; Tue, 17
+        May 2022 08:55:41 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220517075540eucas1p126d19be7cc8d727e072f48bd3212684d~v1VMGc8rS2733227332eucas1p1h;
+        Tue, 17 May 2022 07:55:40 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220517075540eusmtrp17e72e2a8e0edb40b9b0ccb6231156131~v1VMFdVfT1822418224eusmtrp1f;
+        Tue, 17 May 2022 07:55:40 +0000 (GMT)
+X-AuditID: cbfec7f5-bf3ff70000002814-d0-628354fd157b
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id DE.47.09522.CF453826; Tue, 17
+        May 2022 08:55:40 +0100 (BST)
+Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220517075540eusmtip108cb51d13511e557ffec5666fa5ad2f5~v1VL8TtDG1204312043eusmtip10;
+        Tue, 17 May 2022 07:55:40 +0000 (GMT)
+Received: from [192.168.8.130] (106.210.248.7) by CAMSVWEXC01.scsc.local
+        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Tue, 17 May 2022 08:55:38 +0100
+Message-ID: <bfcab01e-dbc8-a990-17b1-4aeadffa5685@samsung.com>
+Date:   Tue, 17 May 2022 09:55:37 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: f8bc34c1-c158-4ce2-4fd1-08da37da9acc
-X-MS-TrafficTypeDiagnostic: HE1PR0702MB3547:EE_
-X-Microsoft-Antispam-PRVS: <HE1PR0702MB3547ABA2A343EE17B539FCAB88CE9@HE1PR0702MB3547.eurprd07.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Tw7taR2Ypre/oxtE53iKXb49uwzBo3YVmNPWGNKk9IV8CQAa7ZwZul6wJu2A3iS0q+A8ApNG+NcSCiWYYWu/accAX3qeyeD7RkUmPzUAAucKH+RVImFlGuo9aMuEgWGb92WUyjbqe7C7hV0E0pe+dgDcPYSlpZqNWa94MsPfQhAIpbt3AH7TJiKGhfjcg36PJ2Nrgmv5Lpm5Cc7nrVrazylsx3EGDucNzXKTDseq0JmolBM+upmfGlkdl8J4TV61qGCEKny59tErWYqHoxz49+evsc4YAXmhhPKnnIegUGMDyw/0yWzRlGxhIAz4GkgMX2vphgHUsPoJGlIN6PfVlSfuAyFfxikK1lCpL3hkAsB7+TnzV9HrK++p9lvjNRXx3Sk+alg9RLzkCrAIGkIdiPNJ1rf1LoWrxhKvuDinf4cJIOsuQaf3csemqAPnG1XJ9cofmWehvqZFYx58c5IGxrw840ih3z0/u5pAYyhcCIt6gq4Af04FXTZnf+JQwldM2V5NYd0VUUaZwOAkBjmmFw5gYbDRadVASiFPhpC7KCKsCPuy/eeuYMoWAOwLE5qT8TxqtD5jRIt0Ick9kdiNjtkrIxsYioAr4JO6HnUModK/npJ65naUXHQsJyKzXHeTR1B+CVNaY1LETGnewiEVJn/dV7MdLH6wQ8mmHHX7bdplwOFH25iGjlA1V8uELKgMkyj6B0uRFUzeOQE92YzgZeWHU6YsPiveuIBN6oRTe9Vy3ckvD9nUW+pcn7uWNfaYRkt++ZcVK9nFCTLJwIGMQw==
-X-Forefront-Antispam-Report: CIP:131.228.2.8;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fihe3nok0734.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(82310400005)(40460700003)(36860700001)(54906003)(356005)(6666004)(186003)(81166007)(316002)(6916009)(8936002)(5660300002)(508600001)(70206006)(70586007)(26005)(82960400001)(2906002)(36756003)(83380400001)(86362001)(336012)(2616005)(4326008)(47076005)(8676002)(1076003)(36900700001);DIR:OUT;SFP:1102;
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2022 07:55:26.5044
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f8bc34c1-c158-4ce2-4fd1-08da37da9acc
-X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.2.8];Helo=[fihe3nok0734.emea.nsn-net.net]
-X-MS-Exchange-CrossTenant-AuthSource: VE1EUR03FT045.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0702MB3547
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+        Thunderbird/91.8.1
+Subject: Re: [PATCH v4 05/13] btrfs: zoned: Cache superblock location in
+ btrfs_zoned_device_info
+Content-Language: en-US
+To:     <dsterba@suse.cz>
+CC:     <pankydev8@gmail.com>, <dsterba@suse.com>, <hch@lst.de>,
+        <linux-nvme@lists.infradead.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-btrfs@vger.kernel.org>, <jiangbo.365@bytedance.com>,
+        <linux-block@vger.kernel.org>, <gost.dev@samsung.com>,
+        <linux-kernel@vger.kernel.org>, <dm-devel@redhat.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+From:   Pankaj Raghav <p.raghav@samsung.com>
+In-Reply-To: <20220516215826.GZ18596@twin.jikos.cz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [106.210.248.7]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrBKsWRmVeSWpSXmKPExsWy7djP87p/Q5qTDFbf47HY+242q8WFH41M
+        Fot/f2exWLn6KJNFz4EPLBZ7b2lbXHq8gt1iz96TLBaXd81hs5i/7Cm7xY0JTxkt1tx8yuLA
+        4/HvxBo2j52z7rJ7bFrVyeaxeUm9x+6bDWwe7/ddZfNYv+Uqi8eZBUfYPT5vkgvgjOKySUnN
+        ySxLLdK3S+DKWNKcW9DGUdH08w5TA+NRti5GTg4JAROJpoP32EFsIYEVjBK/DjlC2F8YJW7v
+        suxi5AKyPzNKzP9xEa7h4o6TLBCJ5YwSt07/ZIKrern7LFRmJ6PEufNfgOZycPAK2EkcWCcC
+        0s0ioCrRvfsbI4jNKyAocXLmExYQW1QgQmLarDNgG4QFkiR2PPgAVsMsIC5x68l8JhBbREBU
+        4tL+FWDzmQVuMEksu7KXBWQ+m4CWRGMn2AucAsYSr1u3sUD0akq0bv/NDmHLS2x/O4cZ4gNF
+        iZsrf0F9Uyux9tgZdpCZEgKHOSV+XYVJuEis+nodqkFY4tXxLewQtozE6ck9LBB2tcTTG7+Z
+        IZpbGCX6d65nAzlIQsBaou9MDkSNo0RT3weoMJ/EjbeCEPfwSUzaNp15AqPqLKSgmIXk5VlI
+        XpiF5IUFjCyrGMVTS4tz01OLjfNSy/WKE3OLS/PS9ZLzczcxAhPb6X/Hv+5gXPHqo94hRiYO
+        xkOMEhzMSiK8BhUNSUK8KYmVValF+fFFpTmpxYcYpTlYlMR5kzM3JAoJpCeWpGanphakFsFk
+        mTg4pRqYOOIuqSb8XmOhYnp4e2LYfZ0qOaMYVW3PG7tbNZ8LXHH46RuqJVws1WXkxGtnInz/
+        6Z5D4W4Nsvy/Vq5MY7D3jNBbvvSBw/fpgbol2ZOrmFVuz7dx+6V+z/HsKpeipKeRG3981Lpf
+        +qyW+YXv/8aTk4VPP7X+ZXlKi9v8ue7xRQrP1LJ6eWp0NA9mZCp659274l2etUGOx8zodj+r
+        saiJ/x+ZSXU8F7ITbws/5YrtVpz0hG3XKsM7X177bmYMSnmwXF7OTL91fzFvR6WFVKlR8D79
+        jd98qz91SjCHTt0j45qZsXB2CouGhb/Oj7gDYfI3+7wOlqZHMXxSPS3f8DvdWOWtyJHfF/Km
+        cW82VmIpzkg01GIuKk4EAN5Uwi7bAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrPIsWRmVeSWpSXmKPExsVy+t/xu7p/QpqTDI5/1rXY+242q8WFH41M
+        Fot/f2exWLn6KJNFz4EPLBZ7b2lbXHq8gt1iz96TLBaXd81hs5i/7Cm7xY0JTxkt1tx8yuLA
+        4/HvxBo2j52z7rJ7bFrVyeaxeUm9x+6bDWwe7/ddZfNYv+Uqi8eZBUfYPT5vkgvgjNKzKcov
+        LUlVyMgvLrFVija0MNIztLTQMzKx1DM0No+1MjJV0rezSUnNySxLLdK3S9DLWNKcW9DGUdH0
+        8w5TA+NRti5GTg4JAROJiztOsnQxcnEICSxllOj40scIkZCR+HTlIzuELSzx51oXG0TRR0aJ
+        eRu3MUM4Oxkl/h55w9TFyMHBK2AncWCdCEgDi4CqRPfub2CDeAUEJU7OfMICYosKREg82H2W
+        FcQWFkiS2PHgA1gNs4C4xK0n85lAbBEBUYlL+1dAXfSCUaL/0nKwzcwCN5gkll3ZywKyjE1A
+        S6KxE+w6TgFjidet21ggBmlKtG7/zQ5hy0tsfzuHGeIDRYmbK39BvVwr8er+bsYJjKKzkNw3
+        C8kds5CMmoVk1AJGllWMIqmlxbnpucWGesWJucWleel6yfm5mxiBKWHbsZ+bdzDOe/VR7xAj
+        EwfjIUYJDmYlEV6DioYkId6UxMqq1KL8+KLSnNTiQ4ymwECayCwlmpwPTEp5JfGGZgamhiZm
+        lgamlmbGSuK8ngUdiUIC6YklqdmpqQWpRTB9TBycUg1MUeHPhW7ptaWvmbnOQvlmVln5oQDB
+        U8xe0uvK7ViXp9qK3Xfa/lrnhkKfjPL5CHf3fXsYJuSzfn0p+FfFjjP59L/HWy/ETpHQVNtW
+        q53T8v2hFtu5+NwF/wOrdhQLXE2xXjb7vYXS8uVr9/e6n1qp2GEVnqC7wuSvTctb80VnHK2D
+        dScxBykzWLL9EC+Z1edpENz66dSstLMFXot3dBgc0r7DFDr7yu5L5xeaSWaa575g3bc/JY4r
+        RNE7MTO5qOa1wK+3uSqeCbZTElis+ZdoGwe3eJ8KmTb3cChD5PaDbskrD74542l+JvnnjWsv
+        A700wpriP2w49jtMy8OhlyGTZ73ivY5/Kl2Ox24ENiixFGckGmoxFxUnAgCKt6OGkgMAAA==
+X-CMS-MailID: 20220517075540eucas1p126d19be7cc8d727e072f48bd3212684d
+X-Msg-Generator: CA
+X-RootMTR: 20220516165425eucas1p29fcd11d7051d9d3a9a9efc17cd3b6999
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220516165425eucas1p29fcd11d7051d9d3a9a9efc17cd3b6999
+References: <20220516165416.171196-1-p.raghav@samsung.com>
+        <CGME20220516165425eucas1p29fcd11d7051d9d3a9a9efc17cd3b6999@eucas1p2.samsung.com>
+        <20220516165416.171196-6-p.raghav@samsung.com>
+        <20220516215826.GZ18596@twin.jikos.cz>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
-
-Drop the mutex earlier in the loop so that LOCKDEP is not being provoked:
-
-WARNING: possible circular locking dependency detected
-.../9201 is trying to acquire lock:
-ffffff85656d4e78 (kn->count#159){++++}, at: kernfs_remove_by_name_ns+0x5c/0xac
-
-but task is already holding lock:
-ffffff857b329e80 (&adap->userspace_clients_lock){+.+.}, at: i2c_sysfs_delete_device+0x8c/0x1f0
-
-which lock already depends on the new lock.
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (&adap->userspace_clients_lock){+.+.}:
-       __mutex_lock+0xa4/0x924
-       mutex_lock_nested+0x48/0x5c
-       i2c_sysfs_new_device+0x108/0x220
-       dev_attr_store+0x48/0x60
-       sysfs_kf_write+0x54/0x80
-       kernfs_fop_write+0x120/0x240
-       __vfs_write+0x4c/0x90
-       vfs_write+0xe8/0x1d0
-       ksys_write+0x7c/0x104
-       __arm64_sys_write+0x28/0x3c
-       el0_svc_handler+0x90/0x200
-       el0_svc+0x8/0x16c
-
--> #0 (kn->count#159){++++}:
-       __lock_acquire+0xe8c/0x1a90
-       lock_acquire+0xd8/0x270
-       __kernfs_remove+0x2fc/0x360
-       kernfs_remove_by_name_ns+0x5c/0xac
-       remove_files+0x48/0x90
-       sysfs_remove_group+0x50/0xa0
-       sysfs_remove_groups+0x44/0x60
-       device_remove_attrs+0x60/0x80
-       device_del+0x134/0x360
-       device_unregister+0x28/0x80
-       i2c_del_adapter+0x210/0x2a4
-       i2c_mux_del_adapters+0xa4/0xfc
-       pca9641_remove+0x24/0x34 [i2c_mux_pca9641]
-       i2c_device_remove+0x60/0xd4
-       __device_release_driver+0x164/0x1f4
-       device_release_driver+0x38/0x4c
-       bus_remove_device+0xe0/0x15c
-       device_del+0x13c/0x360
-       device_unregister+0x28/0x80
-       i2c_unregister_device+0x5c/0x70
-       i2c_sysfs_delete_device+0x1b8/0x1f0
-       dev_attr_store+0x48/0x60
-       sysfs_kf_write+0x54/0x80
-       kernfs_fop_write+0x120/0x240
-       __vfs_write+0x4c/0x90
-       vfs_write+0xe8/0x1d0
-       ksys_write+0x7c/0x104
-       __arm64_sys_write+0x28/0x3c
-       el0_svc_handler+0x90/0x200
-       el0_svc+0x8/0x16c
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&adap->userspace_clients_lock);
-                               lock(kn->count#159);
-                               lock(&adap->userspace_clients_lock);
-  lock(kn->count#159);
-
- *** DEADLOCK ***
-
-5 locks held by .../9201:
- #0: ffffff83f29c3ce0 (&f->f_pos_lock){+.+.}, at: __fdget_pos+0x74/0xe0
- #1: ffffff857a2f0410 (sb_writers#4){.+.+}, at: vfs_write+0x174/0x1d0
- #2: ffffff856bbbe680 (&of->mutex){+.+.}, at: kernfs_fop_write+0xf0/0x240
- #3: ffffff857b329e80 (&adap->userspace_clients_lock){+.+.}, at: i2c_sysfs_delete_device+0x8c/0x1f0
- #4: ffffff83f134ad80 (&dev->mutex){....}, at: device_release_driver+0x2c/0x4c
-
-stack backtrace:
-Call trace:
- dump_backtrace+0x0/0x180
- show_stack+0x28/0x3c
- dump_stack+0xf4/0x150
- print_circular_bug+0x21c/0x22c
- check_noncircular+0x15c/0x1e0
- __lock_acquire+0xe8c/0x1a90
- lock_acquire+0xd8/0x270
- __kernfs_remove+0x2fc/0x360
- kernfs_remove_by_name_ns+0x5c/0xac
- remove_files+0x48/0x90
- sysfs_remove_group+0x50/0xa0
- sysfs_remove_groups+0x44/0x60
- device_remove_attrs+0x60/0x80
- device_del+0x134/0x360
- device_unregister+0x28/0x80
- i2c_del_adapter+0x210/0x2a4
- i2c_mux_del_adapters+0xa4/0xfc
- pca9641_remove+0x24/0x34 [i2c_mux_pca9641]
- i2c_device_remove+0x60/0xd4
- __device_release_driver+0x164/0x1f4
- device_release_driver+0x38/0x4c
- bus_remove_device+0xe0/0x15c
- device_del+0x13c/0x360
- device_unregister+0x28/0x80
- i2c_unregister_device+0x5c/0x70
- i2c_sysfs_delete_device+0x1b8/0x1f0
- dev_attr_store+0x48/0x60
- sysfs_kf_write+0x54/0x80
- kernfs_fop_write+0x120/0x240
- __vfs_write+0x4c/0x90
- vfs_write+0xe8/0x1d0
- ksys_write+0x7c/0x104
- __arm64_sys_write+0x28/0x3c
- el0_svc_handler+0x90/0x200
- el0_svc+0x8/0x16c
-
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
----
- drivers/i2c/i2c-core-base.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index d43db2c..bd2e3e4 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -1272,9 +1272,14 @@ delete_device_store(struct device *dev, struct device_attribute *attr,
- 				 "delete_device", client->name, client->addr);
- 
- 			list_del(&client->detected);
-+			/*
-+			 * We drop the mutex here, because device unregister
-+			 * will take sysfs lock (kn->count) which, as LOCKDEP
-+			 * would think, depends on this mutex
-+			 */
-+			mutex_unlock(&adap->userspace_clients_lock);
- 			i2c_unregister_device(client);
--			res = count;
--			break;
-+			return count;
- 		}
- 	}
- 	mutex_unlock(&adap->userspace_clients_lock);
--- 
-2.10.2
-
+On 2022-05-16 23:58, David Sterba wrote:
+>> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+>> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
+>> ---
+>>  fs/btrfs/zoned.c | 13 +++++++++----
+>>  fs/btrfs/zoned.h |  1 +
+>>  2 files changed, 10 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/fs/btrfs/zoned.c b/fs/btrfs/zoned.c
+>> index 06f22c021..e8c7cebb2 100644
+>> --- a/fs/btrfs/zoned.c
+>> +++ b/fs/btrfs/zoned.c
+>> @@ -511,6 +511,11 @@ int btrfs_get_dev_zone_info(struct btrfs_device *device, bool populate_cache)
+>>  			   max_active_zones - nactive);
+>>  	}
+>>  
+>> +	/* Cache the sb zone number */
+>> +	for (i = 0; i < BTRFS_SUPER_MIRROR_MAX; ++i) {
+>> +		zone_info->sb_zone_location[i] =
+>> +			sb_zone_number(zone_info->zone_size_shift, i);
+>> +	}
+> 
+> I don't think we need to cache the value right now, it's not in any hot
+> path and call to bdev_zone_no is relatively cheap (only dereferencing a
+> few pointers, all in-memory values).
+Ok. I will fix it up in the next revision! Thanks.

@@ -2,116 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5701652A74F
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD2152A74E
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350397AbiEQPqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 11:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59730 "EHLO
+        id S1350450AbiEQPqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 11:46:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350829AbiEQPqJ (ORCPT
+        with ESMTP id S1350954AbiEQPqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 11:46:09 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C4453B42
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:44:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0AE06CE1B02
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 15:44:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64429C385B8;
-        Tue, 17 May 2022 15:44:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652802258;
-        bh=3JSsXFST9KyoIwls6TvVF+LwrCQkhOldDosferXWQ40=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:From;
-        b=jyCOSe3sU2KM84gZWi0Cr0liF05JQ9Vs2NENC6Cy8KJUyEM6GbI+TbhJnS+4mSeu2
-         rZn05+rg0iOX2y+CNgnmqUpLmByMKy9SoL++HGXhzppm24/3THyBuIv6/N8B4R+gFU
-         SOYtSRCLZgEoAxEFe0PX63ZN7bSMKzrfGHW+7xwbqUfnLOhzDU9+DFSpnlmBSDv+pn
-         KMmTYEvlRzrAPNljiJf1sdG772Fu6aJ1hmPvllxErNfuGrlXMYf7ruoLC+5MHYGS2P
-         qCKv7LwRhj2MgTMKOh3t29vq1mDBiCO+ATHxCG71Dzyw5evXlcJQ/bvaUFULOCwmqg
-         4CQxHry6eaQXA==
-From:   SeongJae Park <sj@kernel.org>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     SeongJae Park <sj@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: damon: Use HPAGE_PMD_SIZE
-Date:   Tue, 17 May 2022 08:44:16 -0700
-Message-Id: <20220517154416.32646-1-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220517145120.118523-1-wangkefeng.wang@huawei.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 17 May 2022 11:46:18 -0400
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB1BDCD;
+        Tue, 17 May 2022 08:45:59 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2fedd26615cso79230487b3.7;
+        Tue, 17 May 2022 08:45:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YYWNzMuuewxR1SV/ukbRTxfo/sdpKRPPvAFXL4eruR8=;
+        b=6XqMOD8uig4GB0Zemf0k0haKksXwhLBiIE8SA18r80Z3ssHwQqnybXwg1GszlAQwR1
+         L6rAua2PC3iq2lBO2ZWMQVEQYwh4fMc244dVv4QF+Zqe1NHR8Bew42T+AvlA5W2lxE5G
+         +bx2dyrtPCWBXbYcvpEMYrsDQswgMWPKUSp7wkgS+q0yx4j7Ykpie9f8486pVIlg2+Ff
+         tEDRx4LYqTasZtWpWg9wOBUUtTVZQ49ih13QA3AbgAY21Pxd1p8O14O4nZ9gaN+lq8zN
+         qryzsKC2HJlib5tcBDhrgSVwAh0ZD7weMxjgGKHaEUW6gVEClbyzsOlv2bnfOe5u2VTt
+         YoVQ==
+X-Gm-Message-State: AOAM532x5t3PcW5P5IxchrKKSgIO9aMHO4nfRmHVBFNYCWmJOKpljgfe
+        XFSvLvOGtm594a7EhgPmO1i3FrlVijrtSCPvZaV8hk6u
+X-Google-Smtp-Source: ABdhPJyZF4TFOOHUnKIQbbE6OWyLZ7lurMBsWJS+zPoAHDBvBWAUU9dMN0H3v61AiA1KxsbQ2EKFYjLAckJbsa6oFc8=
+X-Received: by 2002:a0d:c5c7:0:b0:2fe:e955:2c45 with SMTP id
+ h190-20020a0dc5c7000000b002fee9552c45mr14037451ywd.19.1652802359160; Tue, 17
+ May 2022 08:45:59 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220507125443.2766939-1-daniel.lezcano@linexp.org> <20220507125443.2766939-4-daniel.lezcano@linexp.org>
+In-Reply-To: <20220507125443.2766939-4-daniel.lezcano@linexp.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 17 May 2022 17:45:48 +0200
+Message-ID: <CAJZ5v0iYf0DQ+4DuN7ad4QSTmzE66MR9cgiSUn1Nh5Vu+EDBWA@mail.gmail.com>
+Subject: Re: [PATCH v2 03/14] thermal/core: Remove duplicate information when
+ an error occurs
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kefeng,
-
-On Tue, 17 May 2022 22:51:20 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
-
-> Using HPAGE_PMD_SIZE instead of open code.
-> 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-
-Reviewed-by: SeongJae Park <sj@kernel.org>
-
-
-Thanks,
-SJ
-
+On Sat, May 7, 2022 at 2:55 PM Daniel Lezcano <daniel.lezcano@linexp.org> wrote:
+>
+> The pr_err already tells it is an error, it is pointless to add the
+> 'Error:' string in the messages. Remove them.
+>
+> Cc: Alexandre Bailon <abailon@baylibre.com>
+> Cc: Kevin Hilman <khilman@baylibre.com>
+> Cc; Eduardo Valentin <eduval@amazon.com>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
 > ---
->  mm/damon/ops-common.c | 3 +--
->  mm/damon/paddr.c      | 2 +-
->  mm/damon/vaddr.c      | 2 +-
->  3 files changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/mm/damon/ops-common.c b/mm/damon/ops-common.c
-> index e346cc10d143..10ef20b2003f 100644
-> --- a/mm/damon/ops-common.c
-> +++ b/mm/damon/ops-common.c
-> @@ -73,8 +73,7 @@ void damon_pmdp_mkold(pmd_t *pmd, struct mm_struct *mm, unsigned long addr)
->  	}
->  
->  #ifdef CONFIG_MMU_NOTIFIER
-> -	if (mmu_notifier_clear_young(mm, addr,
-> -				addr + ((1UL) << HPAGE_PMD_SHIFT)))
-> +	if (mmu_notifier_clear_young(mm, addr, addr + HPAGE_PMD_SIZE))
->  		referenced = true;
->  #endif /* CONFIG_MMU_NOTIFIER */
->  
-> diff --git a/mm/damon/paddr.c b/mm/damon/paddr.c
-> index 21474ae63bc7..b40ff5811bb2 100644
-> --- a/mm/damon/paddr.c
-> +++ b/mm/damon/paddr.c
-> @@ -106,7 +106,7 @@ static bool __damon_pa_young(struct folio *folio, struct vm_area_struct *vma,
->  			result->accessed = pmd_young(*pvmw.pmd) ||
->  				!folio_test_idle(folio) ||
->  				mmu_notifier_test_young(vma->vm_mm, addr);
-> -			result->page_sz = ((1UL) << HPAGE_PMD_SHIFT);
-> +			result->page_sz = HPAGE_PMD_SIZE;
->  #else
->  			WARN_ON_ONCE(1);
->  #endif	/* CONFIG_TRANSPARENT_HUGEPAGE */
-> diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
-> index 9a56ff60f244..5767be72c181 100644
-> --- a/mm/damon/vaddr.c
-> +++ b/mm/damon/vaddr.c
-> @@ -443,7 +443,7 @@ static int damon_young_pmd_entry(pmd_t *pmd, unsigned long addr,
->  		if (pmd_young(*pmd) || !page_is_idle(page) ||
->  					mmu_notifier_test_young(walk->mm,
->  						addr)) {
-> -			*priv->page_sz = ((1UL) << HPAGE_PMD_SHIFT);
-> +			*priv->page_sz = HPAGE_PMD_SIZE;
->  			priv->young = true;
->  		}
->  		put_page(page);
-> -- 
-> 2.35.3
+>  drivers/thermal/thermal_core.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 1a405854748a..dc5a03d51f5c 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -1197,23 +1197,23 @@ thermal_zone_device_register(const char *type, int trips, int mask,
+>         struct thermal_governor *governor;
+>
+>         if (!type || strlen(type) == 0) {
+> -               pr_err("Error: No thermal zone type defined\n");
+> +               pr_err("No thermal zone type defined\n");
+>                 return ERR_PTR(-EINVAL);
+>         }
+>
+>         if (type && strlen(type) >= THERMAL_NAME_LENGTH) {
+> -               pr_err("Error: Thermal zone name (%s) too long, should be under %d chars\n",
+> +               pr_err("Thermal zone name (%s) too long, should be under %d chars\n",
+>                        type, THERMAL_NAME_LENGTH);
+>                 return ERR_PTR(-EINVAL);
+>         }
+>
+>         if (trips > THERMAL_MAX_TRIPS || trips < 0 || mask >> trips) {
+> -               pr_err("Error: Incorrect number of thermal trips\n");
+> +               pr_err("Incorrect number of thermal trips\n");
+>                 return ERR_PTR(-EINVAL);
+>         }
+>
+>         if (!ops) {
+> -               pr_err("Error: Thermal zone device ops not defined\n");
+> +               pr_err("Thermal zone device ops not defined\n");
+>                 return ERR_PTR(-EINVAL);
+>         }
+>
+> --
+
+Do these need to be pr_err() messages at all?  They all seem to be
+debug-type messages regarding thermal zone drivers.

@@ -2,62 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 792D4529709
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 03:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C7652970F
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 04:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238608AbiEQB6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 21:58:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36754 "EHLO
+        id S234746AbiEQCBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 22:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232318AbiEQB6p (ORCPT
+        with ESMTP id S232719AbiEQCA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 21:58:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 789A140E66
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 18:58:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652752723;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Dan4b7oMniQEPDBtcHcK4omWqrnS96Raov0S3bkdiog=;
-        b=OMmGEHL+4FxZfsehvWXcHFmfI6KzVRUuuDoAm2bq9LoM5ke4/kRVGAs6kHwfjefDv8MZ5h
-        2aGetYOrdDfrfrAq1XMVoJkxgdaFIVgnl5Gvac0Fu3DVh47rFWh/c+RHeSDXqlQqpTIaKE
-        2wgL9PHkGa4yUqUJJkGpDTAn/B16fx0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-19-hM4Qy6dFPTmRJTsFajiPog-1; Mon, 16 May 2022 21:58:38 -0400
-X-MC-Unique: hM4Qy6dFPTmRJTsFajiPog-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E425B3AF42A2;
-        Tue, 17 May 2022 01:58:37 +0000 (UTC)
-Received: from T590 (ovpn-8-20.pek2.redhat.com [10.72.8.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1FFD72026D64;
-        Tue, 17 May 2022 01:58:02 +0000 (UTC)
-Date:   Tue, 17 May 2022 09:57:56 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Stefan Hajnoczi <stefanha@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        kwolf@redhat.com, sgarzare@redhat.com
-Subject: Re: [RFC PATCH] ubd: add io_uring based userspace block driver
-Message-ID: <YoMBJMk0GhXk+13E@T590>
-References: <20220509092312.254354-1-ming.lei@redhat.com>
- <YoKmFYjIe1AWk/P8@stefanha-x1.localdomain>
+        Mon, 16 May 2022 22:00:59 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD44DEB8;
+        Mon, 16 May 2022 19:00:56 -0700 (PDT)
+Received: from canpemm100009.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L2K792DWNzgYH5;
+        Tue, 17 May 2022 09:59:33 +0800 (CST)
+Received: from dggpeml500026.china.huawei.com (7.185.36.106) by
+ canpemm100009.china.huawei.com (7.192.105.213) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 17 May 2022 10:00:53 +0800
+Received: from dggpeml500026.china.huawei.com ([7.185.36.106]) by
+ dggpeml500026.china.huawei.com ([7.185.36.106]) with mapi id 15.01.2375.024;
+ Tue, 17 May 2022 10:00:53 +0800
+From:   shaozhengchao <shaozhengchao@huawei.com>
+To:     =?utf-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "hawk@kernel.org" <hawk@kernel.org>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kafai@fb.com" <kafai@fb.com>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
+        "yhs@fb.com" <yhs@fb.com>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>
+CC:     "weiyongjun (A)" <weiyongjun1@huawei.com>,
+        yuehaibing <yuehaibing@huawei.com>
+Subject: =?utf-8?B?562U5aSNOiDnrZTlpI06IFtQQVRDSCBicGYtbmV4dF0gc2FtcGxlcy9icGY6?=
+ =?utf-8?Q?_check_detach_prog_exist_or_not_in_xdp=5Ffwd?=
+Thread-Topic: =?utf-8?B?562U5aSNOiBbUEFUQ0ggYnBmLW5leHRdIHNhbXBsZXMvYnBmOiBjaGVjayBk?=
+ =?utf-8?Q?etach_prog_exist_or_not_in_xdp=5Ffwd?=
+Thread-Index: AQHYYz67ysyf9xnyEEa5gXY59XVHBq0VxqsAgACPrJD//4OmgIAMgjnQ
+Date:   Tue, 17 May 2022 02:00:52 +0000
+Message-ID: <942eaafecf074ae8a5bb336c18658453@huawei.com>
+References: <20220509005105.271089-1-shaozhengchao@huawei.com>
+ <87pmknyr6b.fsf@toke.dk> <f9c85578b94a4a38b3f7b9c796810a30@huawei.com>
+ <87h75zynz2.fsf@toke.dk>
+In-Reply-To: <87h75zynz2.fsf@toke.dk>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.178.66]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YoKmFYjIe1AWk/P8@stefanha-x1.localdomain>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,136 +72,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Stefan,
-
-On Mon, May 16, 2022 at 08:29:25PM +0100, Stefan Hajnoczi wrote:
-> Hi,
-> This looks interesting! I have some questions:
-
-Thanks for your comment!
-
-> 
-> 1. What is the ubdsrv permission model?
-> 
-> A big usability challenge for *-in-userspace interfaces is the balance
-> between security and allowing unprivileged processes to use these
-> features.
-> 
-> - Does /dev/ubd-control need to be privileged? I guess the answer is
->   yes since an evil ubdsrv can hang I/O and corrupt data in hopes of
->   triggering file system bugs.
-
-Yes, I think so.
-
-UBD should be in same position with NBD which does require
-capable(CAP_SYS_ADMIN).
-
-> - Can multiple processes that don't trust each other use UBD at the same
->   time? I guess not since ubd_index_idr is global.
-
-Only single process can open /dev/ubdcN for communicating with ubd
-driver, see ubd_ch_open().
-
-> - What about containers and namespaces? They currently have (write)
->   access to the same global ubd_index_idr.
-
-I understand contrainers/namespaces only need to see /dev/ubdbN, and
-the usage model should be same with kernel loop: the global ubd_index_idr
-is same with loop's loop_index_idr too.
-
-Or can you explain a bit in detail if I misunderstood your point.
-
-> - Maybe there should be a struct ubd_device "owner" (struct
->   task_struct *) so only devices created by the current process can be
->   modified?
-
-I guess it isn't needed since /dev/ubdcN is opened by single process.
-
-> 
-> 2. io_uring_cmd design
-> 
-> The rationale for the io_uring_cmd design is not explained in the cover
-> letter. I think it's worth explaining the design. Here are my guesses:
-> 
-> The same thing can be achieved with just file_operations and io_uring.
-> ubdsrv could read I/O submissions with IORING_OP_READ and write I/O
-> completions with IORING_OP_WRITE. That would require 2 sqes per
-> roundtrip instead of 1, but the same number of io_uring_enter(2) calls
-> since multiple sqes/cqes can be batched per syscall:
-> 
-> - IORING_OP_READ, addr=(struct ubdsrv_io_desc*) (for submission)
-> - IORING_OP_WRITE, addr=(struct ubdsrv_io_cmd*) (for completion)
-> 
-> Both operations require a copy_to/from_user() to access the command
-> metadata.
-
-Yes, but it can't be efficient as io_uring command.
-
-Two OPs require two long code path for read and write which are supposed
-for handling fs io, so reusing complicated FS IO interface for sending
-command via cha dev is really overkill, and nvme passthrough has shown
-better IOPS than read/write interface with io_uring command, and extra
-copy_to/from_user() may fault with extra meta copy, which can slow down
-the ubd server.
-
-Also for IORING_OP_READ, copy_to_user() has to be done in the ubq daemon
-context, even though that isn't a big deal, but with extra cost(cpu utilization)
-in the ubq deamon context or sleep for handling page fault, that is
-really what should be avoided, we need to save more CPU for handling user
-space IO logic in that context.
-
-> 
-> The io_uring_cmd approach works differently. The IORING_OP_URING_CMD sqe
-> carries a 40-byte payload so it's possible to embed struct ubdsrv_io_cmd
-> inside it. The struct ubdsrv_io_desc mmap gets around the fact that
-> io_uring cqes contain no payload. The driver therefore needs a
-> side-channel to transfer the request submission details to ubdsrv. I
-> don't see much of a difference between IORING_OP_READ and the mmap
-> approach though.
-
-At least the performance difference, ->uring_cmd() requires much less
-code path(single simple o_uring command) than read/write, without any copy
-on command data, without fault in copy_to/from_user(), without two long/
-complicated FS IO code path.
-
-Single command of UBD_IO_COMMIT_AND_FETCH_REQ can handle both fetching
-io request desc and commit command result in one trip.
-
-> 
-> It's not obvious to me how much more efficient the io_uring_cmd approach
-> is, but taking fewer trips around the io_uring submission/completion
-> code path is likely to be faster. Something similar can be done with
-> file_operations ->ioctl(), but I guess the point of using io_uring is
-> that is composes. If ubdsrv itself wants to use io_uring for other I/O
-> activity (e.g. networking, disk I/O, etc) then it can do so and won't be
-> stuck in a blocking ioctl() syscall.
-
-ioctl can't be a choice, since we will lose the benefit of batching
-handling.
-
-> 
-> It would be nice if you could write 2 or 3 paragraphs explaining why the
-> io_uring_cmd design and the struct ubdsrv_io_desc mmap was chosen.
-
-Fine, I guess most are the above inline comment?
-
-> 
-> 3. Miscellaneous stuff
-> 
-> - There isn't much in the way of memory ordering in the code. I worry a
->   little that changes to the struct ubdsrv_io_desc mmap may not be
->   visible at the expected time with respect to the io_uring cq ring.
-
-I believe io_uring_cmd_done() with userspace cqe helper implies enough memory
-barrier, once the cqe is observed in userspace, any memory OP done before
-io_uring_cmd_done() should be observed by user side cqe handling code,
-otherwise it can be thought as io_uring bug.
-
-If it isn't this way, we still can avoid any barrier by moving
-setting io desc into ubq daemon context(ubd_rq_task_work_fn), but I
-really want to save cpu in that context, and don't think it is needed.
-
-
-Thanks, 
-Ming
-
+DQoNCi0tLS0t6YKu5Lu25Y6f5Lu2LS0tLS0NCuWPkeS7tuS6ujogVG9rZSBIw7hpbGFuZC1Kw7hy
+Z2Vuc2VuIFttYWlsdG86dG9rZUBrZXJuZWwub3JnXSANCuWPkemAgeaXtumXtDogMjAyMuW5tDXm
+nIg55pelIDE4OjU1DQrmlLbku7bkuro6IHNoYW96aGVuZ2NoYW8gPHNoYW96aGVuZ2NoYW9AaHVh
+d2VpLmNvbT47IGJwZkB2Z2VyLmtlcm5lbC5vcmc7IG5ldGRldkB2Z2VyLmtlcm5lbC5vcmc7IGxp
+bnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IGFzdEBrZXJuZWwub3JnOyBkYW5pZWxAaW9nZWFy
+Ym94Lm5ldDsgZGF2ZW1AZGF2ZW1sb2Z0Lm5ldDsga3ViYUBrZXJuZWwub3JnOyBoYXdrQGtlcm5l
+bC5vcmc7IGpvaG4uZmFzdGFiZW5kQGdtYWlsLmNvbTsgYW5kcmlpQGtlcm5lbC5vcmc7IGthZmFp
+QGZiLmNvbTsgc29uZ2xpdWJyYXZpbmdAZmIuY29tOyB5aHNAZmIuY29tOyBrcHNpbmdoQGtlcm5l
+bC5vcmcNCuaKhOmAgTogd2VpeW9uZ2p1biAoQSkgPHdlaXlvbmdqdW4xQGh1YXdlaS5jb20+OyB5
+dWVoYWliaW5nIDx5dWVoYWliaW5nQGh1YXdlaS5jb20+DQrkuLvpopg6IFJlOiDnrZTlpI06IFtQ
+QVRDSCBicGYtbmV4dF0gc2FtcGxlcy9icGY6IGNoZWNrIGRldGFjaCBwcm9nIGV4aXN0IG9yIG5v
+dCBpbiB4ZHBfZndkDQoNCnNoYW96aGVuZ2NoYW8gPHNoYW96aGVuZ2NoYW9AaHVhd2VpLmNvbT4g
+d3JpdGVzOg0KDQo+IC0tLS0t6YKu5Lu25Y6f5Lu2LS0tLS0NCj4g5Y+R5Lu25Lq6OiBUb2tlIEjD
+uGlsYW5kLUrDuHJnZW5zZW4gW21haWx0bzp0b2tlQGtlcm5lbC5vcmddDQo+IOWPkemAgeaXtumX
+tDogMjAyMuW5tDXmnIg55pelIDE3OjQ2DQo+IOaUtuS7tuS6ujogc2hhb3poZW5nY2hhbyA8c2hh
+b3poZW5nY2hhb0BodWF3ZWkuY29tPjsgYnBmQHZnZXIua2VybmVsLm9yZzsgDQo+IG5ldGRldkB2
+Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IGFzdEBrZXJuZWwu
+b3JnOyANCj4gZGFuaWVsQGlvZ2VhcmJveC5uZXQ7IGRhdmVtQGRhdmVtbG9mdC5uZXQ7IGt1YmFA
+a2VybmVsLm9yZzsgDQo+IGhhd2tAa2VybmVsLm9yZzsgam9obi5mYXN0YWJlbmRAZ21haWwuY29t
+OyBhbmRyaWlAa2VybmVsLm9yZzsgDQo+IGthZmFpQGZiLmNvbTsgc29uZ2xpdWJyYXZpbmdAZmIu
+Y29tOyB5aHNAZmIuY29tOyBrcHNpbmdoQGtlcm5lbC5vcmcNCj4g5oqE6YCBOiB3ZWl5b25nanVu
+IChBKSA8d2VpeW9uZ2p1bjFAaHVhd2VpLmNvbT47IHNoYW96aGVuZ2NoYW8gDQo+IDxzaGFvemhl
+bmdjaGFvQGh1YXdlaS5jb20+OyB5dWVoYWliaW5nIDx5dWVoYWliaW5nQGh1YXdlaS5jb20+DQo+
+IOS4u+mimDogUmU6IFtQQVRDSCBicGYtbmV4dF0gc2FtcGxlcy9icGY6IGNoZWNrIGRldGFjaCBw
+cm9nIGV4aXN0IG9yIG5vdCANCj4gaW4geGRwX2Z3ZA0KPg0KPiBaaGVuZ2NoYW8gU2hhbyA8c2hh
+b3poZW5nY2hhb0BodWF3ZWkuY29tPiB3cml0ZXM6DQo+DQo+PiBCZWZvcmUgZGV0YWNoIHRoZSBw
+cm9nLCB3ZSBzaG91bGQgY2hlY2sgZGV0YWNoIHByb2cgZXhpc3Qgb3Igbm90Lg0KPg0KPiBJZiB3
+ZSdyZSBhZGRpbmcgc3VjaCBhIGNoZWNrIHdlIHNob3VsZCBhbHNvIGNoZWNrIHRoYXQgaXQncyB0
+aGUgKnJpZ2h0KiBwcm9ncmFtLiBJLmUuLCBxdWVyeSB0aGUgSUQgZm9yIHRoZSBwcm9ncmFtIG5h
+bWUgYW5kIGNoZWNrIHRoYXQgaXQgbWF0Y2hlcyB3aGF0IHRoZSBwcm9ncmFtIGF0dGFjaGVkLCB0
+aGVuIG9idGFpbiBhbiBmZCBhbmQgcGFzcyB0aGF0IGFzIFhEUF9FWFBFQ1RFRF9GRCBvbiBkZXRh
+Y2ggdG8gbWFrZSBzdXJlIGl0IHdhc24ndCBzd2FwcGVkIG91dCBpbiB0aGUgbWVhbnRpbWUuLi4N
+Cj4NCj4gLVRva2UNCj4NCj4gVGhhbmsgeW91IGZvciB5b3VyIHJlcGx5LiBXaGVuIGZpbmlzaCBy
+dW5uaW5nIHhkcF9md2QgdG8gYXR0YXRjaCBwcm9nLCANCj4gdGhlIHByb2dyYW0gd2lsbCBleGl0
+IGFuZCBjYW4ndCBzdG9yZSBmZCBhcyBYRFBfRVhQRUNURURfRkQuDQo+DQo+IEkgdGhpbmsgdGhl
+IHNhbXBsZSB4ZHBfZndkIC1kIGlzIGp1c3QgZGV0YWNoIHByb2cgYW5kIGRvbid0IGNhcmUgaWYg
+DQo+IHRoZSBmZCBpcyBleHBlY3RlZC4NCg0KU28gd2h5IGFyZSB5b3UgYWRkaW5nIHRoZSBjaGVj
+az8gRWl0aGVyIGtlZXAgaXQgdGhlIHdheSBpdCBpcywgb3IgYWRkIGEgcHJvcGVyIGNoZWNrIHRo
+YXQgZXhhbWluZXMgdGhlIHByb2dyYW0gdHlwZTsgeW91J3JlIHJpZ2h0IHRoYXQgaXQgZG9lc24n
+dCBzdG9yZSB0aGUgcHJvZyBGRCwgYnV0IHlvdSBjYW4gc3RpbGwgY2hlY2sgdGhlIHByb2dyYW0g
+bmFtZSBhbmQgc2VlIGlmIGl0IG1hdGNoZXMgdG8gZ2V0IHNvbWUgaWRlYSB0aGF0IGl0J3Mgbm90
+IGEgdG90YWxseSBzZXBhcmF0ZSBwcm9ncmFtIHRoYXQncyBsb2FkZWQuIEkgdGhpbmsgZG9pbmcg
+c28gd291bGQgYmUgYW4gaW1wcm92ZW1lbnQgdG8gdGhlIHNhbXBsZSwgYnV0IGp1c3QgYWRkaW5n
+IGEgY2hlY2sgaWYgYSBwcm9ncmFtIGlzIGxvYWRlZCBpcyBub3QsIHJlYWxseS4uLg0KDQotVG9r
+ZQ0KDQoNCkNvdWxkIEkgYWRkIGhlbHBlciBmdW5jdGlvbiB0byBpbXBsZW1lbnQgdGhpcyBmdW5j
+dGlvbiB3aGljaCBjYW4gY2hlY2sgdGhlIHByb2dyYW0gbmFtZSBhbmQgc2VlIGlmIGl0IGF0dGFj
+aCB0byB0aGUgZGV2aWNlLg0KDQotWmhlbmdjaGFvIFNoYW8NCg==

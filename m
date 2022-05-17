@@ -2,226 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FCA552A1E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E3752A1CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346388AbiEQMrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 08:47:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42316 "EHLO
+        id S1345926AbiEQMnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 08:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346352AbiEQMrT (ORCPT
+        with ESMTP id S242996AbiEQMnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 08:47:19 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A813C707;
-        Tue, 17 May 2022 05:47:17 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 441B71F8B9;
-        Tue, 17 May 2022 12:47:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1652791636;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0W2aB+gcSjG4kNtv/FxRZAREXphQHFMH1ilNeTwZmUA=;
-        b=k2psAUXokp98i31xB04jcbNRqFQR14AQgy9tjflO6J9LysSMujnjCejo/Fa4zbTev0ooEg
-        2CQo/BW+ZU4ZxpUSPql0p60m5wulSKEgwd8XwK7XH+s52P8eXn7I41Pn2OYcJUUrWI0U7c
-        fs2AfbH+hzjOovyl3SuUEr76V/g/Ov8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1652791636;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0W2aB+gcSjG4kNtv/FxRZAREXphQHFMH1ilNeTwZmUA=;
-        b=fRTsocok6zVIpkBsGGHYSn41srt0D7U7KTJM2r3q1Rhulmrl8S1WyQKNhUEKW3h/Rnw2yw
-        P1TzucC02HahBQCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D82C413305;
-        Tue, 17 May 2022 12:47:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id x6q+M1OZg2KuHgAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Tue, 17 May 2022 12:47:15 +0000
-Date:   Tue, 17 May 2022 14:42:57 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Pankaj Raghav <p.raghav@samsung.com>
-Cc:     axboe@kernel.dk, damien.lemoal@opensource.wdc.com,
-        pankydev8@gmail.com, dsterba@suse.com, hch@lst.de,
-        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, jiangbo.365@bytedance.com,
-        linux-block@vger.kernel.org, gost.dev@samsung.com,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com
-Subject: Re: [PATCH v4 08/13] btrfs:zoned: make sb for npo2 zone devices
- align with sb log offsets
-Message-ID: <20220517124257.GD18596@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, Pankaj Raghav <p.raghav@samsung.com>,
-        axboe@kernel.dk, damien.lemoal@opensource.wdc.com,
-        pankydev8@gmail.com, dsterba@suse.com, hch@lst.de,
-        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, jiangbo.365@bytedance.com,
-        linux-block@vger.kernel.org, gost.dev@samsung.com,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com
-References: <20220516165416.171196-1-p.raghav@samsung.com>
- <CGME20220516165429eucas1p272c8b4325a488675f08f2d7016aa6230@eucas1p2.samsung.com>
- <20220516165416.171196-9-p.raghav@samsung.com>
+        Tue, 17 May 2022 08:43:12 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4A10626556
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:43:11 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0726B1042;
+        Tue, 17 May 2022 05:43:11 -0700 (PDT)
+Received: from [10.57.82.55] (unknown [10.57.82.55])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 05AA13F66F;
+        Tue, 17 May 2022 05:43:08 -0700 (PDT)
+Message-ID: <f971aea9-8ae1-95f8-b10a-cd77e9704dc0@arm.com>
+Date:   Tue, 17 May 2022 13:43:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220516165416.171196-9-p.raghav@samsung.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 2/5] iommu: Add blocking_domain_ops field in iommu_ops
+Content-Language: en-GB
+To:     Baolu Lu <baolu.lu@linux.intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+References: <20220516015759.2952771-1-baolu.lu@linux.intel.com>
+ <20220516015759.2952771-3-baolu.lu@linux.intel.com>
+ <8a0fc6cf-f46e-f17e-2b76-099ada1683c3@arm.com>
+ <20220516135741.GV1343366@nvidia.com>
+ <c8492b29-bc27-ae12-d5c4-9fbbc797e310@linux.intel.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <c8492b29-bc27-ae12-d5c4-9fbbc797e310@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 06:54:11PM +0200, Pankaj Raghav wrote:
-> Superblocks for zoned devices are fixed as 2 zones at 0, 512GB and 4TB.
-> These are fixed at these locations so that recovery tools can reliably
-> retrieve the superblocks even if one of the mirror gets corrupted.
+On 2022-05-17 03:37, Baolu Lu wrote:
+> Hi Jason,
 > 
-> power of 2 zone sizes align at these offsets irrespective of their
-> value but non power of 2 zone sizes will not align.
+> On 2022/5/16 21:57, Jason Gunthorpe wrote:
+>> On Mon, May 16, 2022 at 12:22:08PM +0100, Robin Murphy wrote:
+>>> On 2022-05-16 02:57, Lu Baolu wrote:
+>>>> Each IOMMU driver must provide a blocking domain ops. If the hardware
+>>>> supports detaching domain from device, setting blocking domain equals
+>>>> detaching the existing domain from the deivce. Otherwise, an UNMANAGED
+>>>> domain without any mapping will be used instead.
+>>> Unfortunately that's backwards - most of the implementations of 
+>>> .detach_dev
+>>> are disabling translation entirely, meaning the device ends up 
+>>> effectively
+>>> in passthrough rather than blocked.
+>> Ideally we'd convert the detach_dev of every driver into either
+>> a blocking or identity domain. The trick is knowing which is which..
 > 
-> To make sure the first zone at mirror 1 and mirror 2 align, write zero
-> operation is performed to move the write pointer of the first zone to
-> the expected offset. This operation is performed only after a zone reset
-> of the first zone, i.e., when the second zone that contains the sb is FULL.
-
-Is it a good idea to do the "write zeros", instead of a plain "set write
-pointer"? I assume setting write pointer is instant, while writing
-potentially hundreds of megabytes may take significiant time. As the
-functions may be called from random contexts, the increased time may
-become a problem.
-
-> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
-> ---
->  fs/btrfs/zoned.c | 68 ++++++++++++++++++++++++++++++++++++++++++++----
->  1 file changed, 63 insertions(+), 5 deletions(-)
+> I am still a bit puzzled about how the blocking_domain should be used 
+> when it is extended to support ->set_dev_pasid.
 > 
-> diff --git a/fs/btrfs/zoned.c b/fs/btrfs/zoned.c
-> index 3023c871e..805aeaa76 100644
-> --- a/fs/btrfs/zoned.c
-> +++ b/fs/btrfs/zoned.c
-> @@ -760,11 +760,44 @@ int btrfs_check_mountopts_zoned(struct btrfs_fs_info *info)
->  	return 0;
->  }
->  
-> +static int fill_sb_wp_offset(struct block_device *bdev, struct blk_zone *zone,
-> +			     int mirror, u64 *wp_ret)
-> +{
-> +	u64 offset = 0;
-> +	int ret = 0;
-> +
-> +	ASSERT(!is_power_of_two_u64(zone->len));
-> +	ASSERT(zone->wp == zone->start);
-> +	ASSERT(mirror != 0);
+> If it's a blocking domain, the IOMMU driver knows that setting the
+> blocking domain to device pasid means detaching the existing one.
+> 
+> But if it's an identity domain, how could the IOMMU driver choose
+> between:
+> 
+>   - setting the input domain to the pasid on device; or,
+>   - detaching the existing domain.
+> 
+> I've ever thought about below solutions:
+> 
+> - Checking the domain types and dispatching them to different
+>    operations.
+> - Using different blocking domains for different types of domains.
+> 
+> But both look rough.
+> 
+>>
+>> Guessing going down the list:
+>>   apple dart - blocking, detach_dev calls apple_dart_hw_disable_dma() 
+>> same as
+>>                IOMMU_DOMAIN_BLOCKED
+>>           [I wonder if this drive ris wrong in other ways though because
+>>                 I dont see a remove_streams in attach_dev]
+>>   exynos - this seems to disable the 'sysmmu' so I'm guessing this is
+>>            identity
+>>   iommu-vmsa - Comment says 'disable mmu translaction' so I'm guessing
+>>                this is idenity
+>>   mkt_v1 - Code looks similar to mkt, which is probably identity.
+>>   rkt - No idea
+>>   sprd - No idea
+>>   sun50i - This driver confusingly treats identity the same as
+>>            unmanaged, seems wrong, no idea.
+>>   amd - Not sure, clear_dte_entry() seems to set translation on but 
+>> points
+>>         the PTE to 0 ? Based on the spec table 8 I would have expected
+>>         TV to be clear which would be blocking. Maybe a bug??
+>>   arm smmu qcomm - not sure
+>>   intel - blocking
+>>
+>> These doesn't support default domains, so detach_dev should return
+>> back to DMA API ownership, which is either identity or something weird:
+>>   fsl_pamu - identity due to the PPC use of dma direct
+>>   msm
+>>   mkt
+>>   omap
+>>   s390 - platform DMA ops
+>>   terga-gart - Usually something called a GART would be 0 length once
+>>                disabled, guessing blocking?
+>>   tegra-smmu
+>>
+>> So, the approach here should be to go driver by driver and convert
+>> detach_dev to either identity, blocking or just delete it entirely,
+>> excluding the above 7 that don't support default domains. And get acks
+>> from the driver owners.
+>>
+> 
+> Agreed. There seems to be a long way to go. I am wondering if we could
+> decouple this refactoring from my new SVA API work? We can easily switch
+> .detach_dev_pasid to using blocking domain later.
 
-This could simply accept 0 as the mirror offset too, the calculation is
-trivial.
+FWIW from my point of view I'm happy with having a .detach_dev_pasid op 
+meaning implicitly-blocked access for now. On SMMUv3, PASIDs don't mix 
+with our current notion of IOMMU_DOMAIN_IDENTITY (nor the potential one 
+for IOMMU_DOMAIN_BLOCKED), so giving PASIDs functional symmetry with 
+devices would need significantly more work anyway.
 
-> +
-> +	switch (mirror) {
-> +	case 1:
-> +		div64_u64_rem(BTRFS_SB_LOG_FIRST_OFFSET >> SECTOR_SHIFT,
-> +			      zone->len, &offset);
-> +		break;
-> +	case 2:
-> +		div64_u64_rem(BTRFS_SB_LOG_SECOND_OFFSET >> SECTOR_SHIFT,
-> +			      zone->len, &offset);
-> +		break;
-> +	}
-> +
-> +	ret =  blkdev_issue_zeroout(bdev, zone->start, offset, GFP_NOFS, 0);
-> +	if (ret)
-> +		return ret;
-> +
-> +	zone->wp += offset;
-> +	zone->cond = BLK_ZONE_COND_IMP_OPEN;
-> +	*wp_ret = zone->wp << SECTOR_SHIFT;
-> +
-> +	return 0;
-> +}
-> +
->  static int sb_log_location(struct block_device *bdev, struct blk_zone *zones,
-> -			   int rw, u64 *bytenr_ret)
-> +			   int rw, int mirror, u64 *bytenr_ret)
->  {
->  	u64 wp;
->  	int ret;
-> +	bool zones_empty = false;
->  
->  	if (zones[0].type == BLK_ZONE_TYPE_CONVENTIONAL) {
->  		*bytenr_ret = zones[0].start << SECTOR_SHIFT;
-> @@ -775,13 +808,31 @@ static int sb_log_location(struct block_device *bdev, struct blk_zone *zones,
->  	if (ret != -ENOENT && ret < 0)
->  		return ret;
->  
-> +	if (ret == -ENOENT)
-> +		zones_empty = true;
-> +
->  	if (rw == WRITE) {
->  		struct blk_zone *reset = NULL;
-> +		bool is_sb_offset_write_req = false;
-> +		u32 reset_zone_nr = -1;
->  
-> -		if (wp == zones[0].start << SECTOR_SHIFT)
-> +		if (wp == zones[0].start << SECTOR_SHIFT) {
->  			reset = &zones[0];
-> -		else if (wp == zones[1].start << SECTOR_SHIFT)
-> +			reset_zone_nr = 0;
-> +		} else if (wp == zones[1].start << SECTOR_SHIFT) {
->  			reset = &zones[1];
-> +			reset_zone_nr = 1;
-> +		}
-> +
-> +		/*
-> +		 * Non po2 zone sizes will not align naturally at
-> +		 * mirror 1 (512GB) and mirror 2 (4TB). The wp of the
-> +		 * 1st zone in those superblock mirrors need to be
-> +		 * moved to align at those offsets.
-> +		 */
-
-Please move this comment to the helper fill_sb_wp_offset itself, there
-it's more discoverable.
-
-> +		is_sb_offset_write_req =
-> +			(zones_empty || (reset_zone_nr == 0)) && mirror &&
-> +			!is_power_of_2(zones[0].len);
-
-Accepting 0 as the mirror number would also get rid of this wild
-expression substituting and 'if'.
-
->  
->  		if (reset && reset->cond != BLK_ZONE_COND_EMPTY) {
->  			ASSERT(sb_zone_is_full(reset));
-> @@ -795,6 +846,13 @@ static int sb_log_location(struct block_device *bdev, struct blk_zone *zones,
->  			reset->cond = BLK_ZONE_COND_EMPTY;
->  			reset->wp = reset->start;
->  		}
-> +
-> +		if (is_sb_offset_write_req) {
-
-And get rid of the conditional. The point of supporting both po2 and
-nonpo2 is to hide any implementation details to wrappers as much as
-possible.
-
-> +			ret = fill_sb_wp_offset(bdev, &zones[0], mirror, &wp);
-> +			if (ret)
-> +				return ret;
-> +		}
-> +
->  	} else if (ret != -ENOENT) {
->  		/*
->  		 * For READ, we want the previous one. Move write pointer to
+Thanks,
+Robin.

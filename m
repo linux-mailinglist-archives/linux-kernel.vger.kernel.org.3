@@ -2,102 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C9952A0BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BE5152A0BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344904AbiEQLwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 07:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59430 "EHLO
+        id S1345475AbiEQLxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 07:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbiEQLwJ (ORCPT
+        with ESMTP id S230254AbiEQLxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 07:52:09 -0400
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B08CE0E;
-        Tue, 17 May 2022 04:52:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1652788322;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=v4GkYgTTABh4HPSdojrqVvE6+lNCX1q0yeD6U3RA25Q=;
-    b=Hxe9PyozAcYw2b678Pt2M8Dqa4rBFAZ2vIug+BOA/nO2j+W8XHdnvY+DyFSRv8mTu6
-    BpqPOWQ5YXDHavWBs9bJpHAI9J8iTHhmt0YCkP2QH+WGZFsLDGLP7bquZEpm1JdR38Qt
-    uqBuJx1DxKWGZDb9eQhUVcZfHwiZUw7aUOc+3mA7gHOxCLDhK5y9y+GPUM8p2Id4lThf
-    TO2grjmERUqGu5H8Mwn7u+vmUGe0umbf4ac0NSHMpeKSVTNsMNolcRaazpfVb31863xS
-    3xgg1bwGLTR3jyTLnWxdcHP8kgvmItaQzbaQZl/U4ng+N05clGNKihw0rcPEuhPYmh16
-    9XHw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdBqPeOuh2krLEWFUg=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cff:5b00::b82]
-    by smtp.strato.de (RZmta 47.45.0 AUTH)
-    with ESMTPSA id R0691fy4HBq1Dq4
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 17 May 2022 13:52:01 +0200 (CEST)
-Message-ID: <e054f6d4-7ed1-98ac-8364-425f4ef0f760@hartkopp.net>
-Date:   Tue, 17 May 2022 13:51:57 +0200
+        Tue, 17 May 2022 07:53:12 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354B62F390
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:53:11 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id 204so16675371pfx.3
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:53:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CVgegZfYyke/xy3ajF4ERWjyVdzQLTtIY0n6Ao3JXc0=;
+        b=lSW/P0b3k3p66ylal3rfH5748HQl8RXVC8gtA/IkQnIK0pD63m7chLp/uej+sYTVVg
+         u/GJSgWgb8vKD9tu2FxJXllCuER2L42QXKQiKHQNbdFISzaNLuXR0ErQA/uG1ctd1NXa
+         zTjaDPGsBmQXG1NT5mmBr1+ZG7/olsnwp5phb44w9nSxoDBETBVXsGLE+XNv9PQn1R9x
+         iKPjpXgs3AS1Ls8QfEOxa3AXRVYHLdb+f22Uylmi3lVTzOKgx3Q1JdJcAGE90Jo3LF9Y
+         rebP7uwhdg8sXlK0hLUBMFq9AKjKU2wmka6ILGSy0vLvrRxrSu/FE96UylEC8x/2MNXW
+         7mrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CVgegZfYyke/xy3ajF4ERWjyVdzQLTtIY0n6Ao3JXc0=;
+        b=79qnegYokQTQDH4DjkctWQlrZNBTBjvuwV6FcXlvpxFIMpQaMd6OnphAuSJZe/ej5k
+         A5tbH+iOJmfD+VYqN3sRhZKnJSAz5poSIhWrtyzkJHlv4K9YgoQT4sXisqXisZhz/dZm
+         fw52sBp0C2vVPwnMMzAB8lP7h2sJRzcJJuLRbZXfCh6b4FCPUQH7ECJGlDDpguT5z6gq
+         IwxiRGmT1WSzE7C8eR2x+tr/H3kKU2SdnPdWkQsspsnvpJ3LAFxBu/FIBvV0bs5bbQPL
+         lZtqAYKM8yB+QS94cGvC7g0uZeHp2SsCL3/emO5QLkG0zn6fKpNzG6LL0iWBfd0iwZwY
+         E7Ng==
+X-Gm-Message-State: AOAM532Dj76++DesQ5g6P4xtfrUtbFgjBiFmgkX7VTxzpX84ahYMcjuM
+        vdcSx1hmXpqbZqbiudyXubU=
+X-Google-Smtp-Source: ABdhPJxRtoCo+i5tFV+cQxsgNEs1aFQJFfBRf0uqUhicibOKg24YxH4y0Pvt4vfr+oAHE/fmF1XOYA==
+X-Received: by 2002:a62:d445:0:b0:50d:b868:47bc with SMTP id u5-20020a62d445000000b0050db86847bcmr21959290pfl.73.1652788390678;
+        Tue, 17 May 2022 04:53:10 -0700 (PDT)
+Received: from hyeyoo ([114.29.24.243])
+        by smtp.gmail.com with ESMTPSA id a3-20020a1709027d8300b0015e8d4eb26dsm8829443plm.183.2022.05.17.04.53.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 04:53:09 -0700 (PDT)
+Date:   Tue, 17 May 2022 20:53:03 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        David Rientjes <rientjes@google.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Christoph Lameter <cl@linux.com>, kernel@openvz.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH] tracing: add ACCOUNT flag for allocations from marked
+ slab caches
+Message-ID: <YoOMn+Cwwgz/hPnh@hyeyoo>
+References: <1fd21e25-b095-e055-fc2e-abda640a0575@openvz.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v3 3/4] can: skb:: move can_dropped_invalid_skb and
- can_skb_headroom_valid to skb.c
-Content-Language: en-US
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Max Staudt <max@enpas.org>, netdev@vger.kernel.org
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220514141650.1109542-1-mailhol.vincent@wanadoo.fr>
- <20220514141650.1109542-4-mailhol.vincent@wanadoo.fr>
- <7b1644ad-c117-881e-a64f-35b8d8b40ef7@hartkopp.net>
- <CAMZ6RqKZMHXB7rQ70GrXcVE7x7kytAAGfE+MOpSgWgWgp0gD2g@mail.gmail.com>
- <20220517060821.akuqbqxro34tj7x6@pengutronix.de>
- <CAMZ6RqJ3sXYUOpw7hEfDzj14H-vXK_i+eYojBk2Lq=h=7cm7Jg@mail.gmail.com>
- <20220517104545.eslountqjppvcnz2@pengutronix.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20220517104545.eslountqjppvcnz2@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1fd21e25-b095-e055-fc2e-abda640a0575@openvz.org>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 17.05.22 12:45, Marc Kleine-Budde wrote:
-> On 17.05.2022 16:04:53, Vincent MAILHOL wrote:
->> So slcan, v(x)can and can-dev will select can-skb, and some of the
->> hardware drivers (still have to figure out the list) will select
->> can-rx-offload (other dependencies will stay as it is today).
+On Mon, May 16, 2022 at 09:53:32PM +0300, Vasily Averin wrote:
+> Slab caches marked with SLAB_ACCOUNT force accounting for every
+> allocation from this cache even if __GFP_ACCOUNT flag is not passed.
+> Unfortunately, at the moment this flag is not visible in ftrace output,
+> and this makes it difficult to analyze the accounted allocations.
 > 
-> For rx-offload that's flexcan, ti_hecc and mcp251xfd
+> This patch adds the __GFP_ACCOUNT flag for allocations from slab caches
+> marked with SLAB_ACCOUNT to the ftrace output.
 > 
->> I think that splitting the current can-dev into can-skb + can-dev +
->> can-rx-offload is enough. Please let me know if you see a need for
->> more.
+> Signed-off-by: Vasily Averin <vvs@openvz.org>
+> ---
+>  mm/slab.c | 3 +++
+>  mm/slub.c | 3 +++
+>  2 files changed, 6 insertions(+)
+> 
+> diff --git a/mm/slab.c b/mm/slab.c
+> index 0edb474edef1..4c3da8dfcbdb 100644
+> --- a/mm/slab.c
+> +++ b/mm/slab.c
+> @@ -3492,6 +3492,9 @@ void *__kmem_cache_alloc_lru(struct kmem_cache *cachep, struct list_lru *lru,
+>  {
+>  	void *ret = slab_alloc(cachep, lru, flags, cachep->object_size, _RET_IP_);
+>  
+> +	if (cachep->flags & SLAB_ACCOUNT)
+> +		flags |= __GFP_ACCOUNT;
+> +
+>  	trace_kmem_cache_alloc(_RET_IP_, ret,
+>  			       cachep->object_size, cachep->size, flags);
+>  
+> diff --git a/mm/slub.c b/mm/slub.c
+> index ed5c2c03a47a..670bbfef9e49 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -3231,6 +3231,9 @@ void *__kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
+>  {
+>  	void *ret = slab_alloc(s, lru, gfpflags, _RET_IP_, s->object_size);
+>  
+> +	if (s->flags & SLAB_ACCOUNT)
+> +		gfpflags |= __GFP_ACCOUNT;
+> +
+>  	trace_kmem_cache_alloc(_RET_IP_, ret, s->object_size,
+>  				s->size, gfpflags);
+>  
+> -- 
+> 2.25.1
+> 
+> 
 
-After looking through drivers/net/can/Kconfig I would probably phrase it 
-like this:
+To me it sounds like it would confuse memory cgroup because:
+	1) For now objects are charged only in slab memcg hooks
+	2) This patch makes buddy allocator charge the page too
 
-Select CAN devices (hw/sw) -> we compile a can_dev module. E.g. to 
-handle the skb stuff for vcan's.
-
-Select hardware CAN devices -> we compile the netlink stuff into can_dev 
-and offer CAN_CALC_BITTIMING and CAN_LEDS to be compiled into can_dev too.
-
-In the latter case: The selection of flexcan, ti_hecc and mcp251xfd 
-automatically selects CAN_RX_OFFLOAD which is then also compiled into 
-can_dev.
-
-Would that fit in terms of complexity?
-
-Best,
-Oliver
+-- 
+Thanks,
+Hyeonggon

@@ -2,162 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 905F552AC61
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 22:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F30852AC6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 22:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352423AbiEQUDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 16:03:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54858 "EHLO
+        id S1352870AbiEQUER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 16:04:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345642AbiEQUDJ (ORCPT
+        with ESMTP id S241347AbiEQUEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 16:03:09 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1408343499
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:03:07 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id q10so122225oia.9
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:03:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ume0/+SZoFFON8dc+uE515Wu0Ph4fGUZ38Tn0hMV9MM=;
-        b=HyAewg8gxIOA2pd/BFLiNGcS7NiS5LwNVEPsXhAaFyAlQdl9eTkItVKwfAf77I2vUY
-         pVs7DhVb9DJf/o/q0SmfIVnBm1ZrEjN2cpGqsABTfMPkBngFX6e+7RTp2JolNY3o18F1
-         78ynrzkGIz7P34UOYlN8Ac4pqeo0s6VR+hVxg=
+        Tue, 17 May 2022 16:04:14 -0400
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5524CD72;
+        Tue, 17 May 2022 13:04:13 -0700 (PDT)
+Received: by mail-ot1-f47.google.com with SMTP id a22-20020a9d3e16000000b00606aeb12ab6so12912772otd.7;
+        Tue, 17 May 2022 13:04:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ume0/+SZoFFON8dc+uE515Wu0Ph4fGUZ38Tn0hMV9MM=;
-        b=lPr1nQlokLDYUNY3DFzxRUp+N2F8FV8rVHTsuSB7AOhBdAsT1M1RAtPKqvRfSektRk
-         qZbS3czmzc1t+Q6oXw+wXf7bHyRnf4e2BeaGvVJAsQJgSqlCxfzMStHgg/kAmTZOJX6c
-         Q0WMSxTbWSA/klHGRL4Gcmpvl0r6/0v1tAuSe6t8UDgPbx6jQTLX7ibaj1KMnemckeuG
-         9dXKnyneZ7tXHrSSQuekrcsmcXP3bLEh4vMnq43OkjWp0o3lrNpAfHRbZbHEXpwMgJE1
-         A7IJlNQkA2DRgKLWm/WpGTTtUBz+Y9yz7BSLvuHPL7wwKgGyBhs8LmcOQ04O6GAyxuJP
-         Gaig==
-X-Gm-Message-State: AOAM531vXi0AYJ8g97jot60EvmZlRFQOtmnbnrwsKOS7MVQwbNoijDXR
-        xfN9mHo/1C+iEmIyguYuP2vbwA==
-X-Google-Smtp-Source: ABdhPJzAe/MomCsoT65bGybnIprRY0kptNVht3n5CUB9wUCyAGfYnZEKqJLcSJKtq9HKpaG+A95QQg==
-X-Received: by 2002:a05:6808:2108:b0:326:51c9:73a2 with SMTP id r8-20020a056808210800b0032651c973a2mr11187694oiw.175.1652817787190;
-        Tue, 17 May 2022 13:03:07 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id k22-20020a056870959600b000e686d1386asm241432oao.4.2022.05.17.13.03.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 13:03:06 -0700 (PDT)
-Subject: Re: [PATCH V5 0/3] Add unit test module for AMD P-State driver
-To:     Huang Rui <ray.huang@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220505022913.329259-1-li.meng@amd.com>
- <YnNxlzRW2NGCx5dO@amd.com>
- <615adab4-515c-7d61-5662-bd342b759d6d@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <27434868-1d0f-4493-3265-bea4e1dc8494@linuxfoundation.org>
-Date:   Tue, 17 May 2022 14:03:05 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IIaQA4b3hHv2itAgFRZqCZtPkNhj3dWRuktwztUeYB0=;
+        b=tkzuaoxfNVnHWLOyzE359WoNf7Zr0mWZ5CEebi4Fr/F3ejDpYUUuAbiUvIGJXnRx4B
+         ZAQpLHS/sIl7rSmjcqDz0DXNKivGg5q83S7/KP1Gn8vjeIv5GNYtvFKH0LJ5Vm3u6zm3
+         Qjk0q6oCxZ8WvpLqUke/M31dr7YuOohsj2hvqQmBk/ee6UruK4Hzp9zSTXb+H67vmY0t
+         YU+QYT0ozhvjewtqtgY7ocPe9kUG3oN2Pw66js/La2wImOAULD5eva0eawpi/Bt+UwD0
+         ysS1nsNhG1Xh+95Psa2tDIHlFp9N9Ef/Y85n8AY2ioDAfsrRufPic3+BnDL+IbbEg67J
+         XYWg==
+X-Gm-Message-State: AOAM5339vD9Wpx7pen5xCN9EgpH0wf4l4xUfhHsiKoP3CK5l9zlDjgXF
+        gl6pfEG2+Eu9n25FEaL0IQ==
+X-Google-Smtp-Source: ABdhPJzK+76emXX7coEe6iFrJmT3kQ+hsQh9vVP0K86w/fEgQvyGQUjTO8KvNZGDC6AVcfxP09fXog==
+X-Received: by 2002:a9d:eec:0:b0:606:bc42:9b3e with SMTP id 99-20020a9d0eec000000b00606bc429b3emr8924788otj.105.1652817853015;
+        Tue, 17 May 2022 13:04:13 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id k12-20020a4a2a0c000000b0035eb4e5a6bbsm174260oof.17.2022.05.17.13.04.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 13:04:12 -0700 (PDT)
+Received: (nullmailer pid 1535050 invoked by uid 1000);
+        Tue, 17 May 2022 20:04:11 -0000
+Date:   Tue, 17 May 2022 15:04:11 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 18/23] dt-bindings: ata: ahci: Add DWC AHCI SATA
+ controller DT schema
+Message-ID: <20220517200411.GA1462130-robh@kernel.org>
+References: <20220511231810.4928-1-Sergey.Semin@baikalelectronics.ru>
+ <20220511231810.4928-19-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-In-Reply-To: <615adab4-515c-7d61-5662-bd342b759d6d@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511231810.4928-19-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/17/22 8:45 AM, Shuah Khan wrote:
-> On 5/5/22 12:41 AM, Huang Rui wrote:
->> On Thu, May 05, 2022 at 10:29:10AM +0800, Meng, Li (Jassmine) wrote:
->>> Hi all:
->>>
->>> AMD P-State unit test(amd-pstate-ut) is a kernel module for testing
->>> the functions of amd-pstate driver.
->>> It could import as a module to launch some test tasks.
->>> 1) It can help all users to verify their processor support (SBIOS/
->>> Firmware or Hardware).
->>> 2) Kernel can have a basic function test to avoid the kernel regression
->>> during the update.
->>> 3) We can introduce more functional or performance tests to align the
->>> together, it will benefit power and performance scale optimization.
->>>
->>> We upstream out AMD P-state driver into Linux kernel and use this unit
->>> test module to verify the required conditions and basic functions of
->>> amd-pstate before integration test.
->>>
->>> We use test module in the kselftest frameworks to implement it.
->>> We create amd-pstate-ut module and tie it into kselftest.
->>>
->>> For example: The test case aput_acpi_cpc is used to check whether the
->>> _CPC object is exist in SBIOS.
->>> The amd-pstate initialization will fail if the _CPC in ACPI SBIOS is not
->>> existed at the detected processor, so it is a necessary condition.
->>>
->>> At present, it only implements the basic framework and some simple test
->>> cases.
->>>
->>> TODO : 1) we will add more test cases to improve the depth and coverage of
->>> the test.
->>>
->>> Please check the documentation amd-pstate.rst for details of the test steps.
->>>
->>> See patch series in below git repo:
->>> V1: https://lore.kernel.org/linux-pm/20220323071502.2674156-1-li.meng@amd.com/
->>> V2: https://lore.kernel.org/lkml/20220413090510.4039589-1-li.meng@amd.com/
->>> V3: https://lore.kernel.org/lkml/20220421074152.599419-1-li.meng@amd.com/
->>> V4: https://lore.kernel.org/lkml/20220427135315.3447550-1-li.meng@amd.com/
->>>
+On Thu, May 12, 2022 at 02:18:05AM +0300, Serge Semin wrote:
+> Synopsys AHCI SATA controller is mainly compatible with the generic AHCI
+> SATA controller except a few peculiarities and the platform environment
+> requirements. In particular it can have one or two reference clocks to
+> feed up its AXI/AHB interface and SATA PHYs domain and at least one reset
+> control for the application clock domain. In addition to that the DMA
+> interface of each port can be tuned up to work with the predefined maximum
+> data chunk size. Note unlike generic AHCI controller DWC AHCI can't have
+> more than 8 ports. All of that is reflected in the new DWC AHCI SATA
+> device DT binding.
 > 
->>> Changes from V4 -> V5:
->>> - selftests: amd-pstate:
->>> - - add print the current scaling_driver.
->>> - - add amd-pstate-ut.ko into TEST_GEN_FILES.
->>> - - move "insmod/rmmod amd-pstate-ut.ko" stuff into script amd_pstate_ut.sh
->>> - - add a check of read back from X86_FEATURE_CPPC in get_shared_mem().
->>> - Documentation: amd-pstate:
->>> - - delete the test step about insmod/rmmod amd-pstate-ut.ko
->>>
->>> Thanks,
->>> Jasmine
->>>
+> Note the DWC AHCI SATA controller DT-schema has been created in a way so
+> to be reused for the vendor-specific DT-schemas (see for example the
+> "snps,dwc-ahci" compatible string binding). One of which we are about to
+> introduce.
 > 
-> Sorry for the delay on this. I will review the series in the next couple
-> of days.
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > 
-> Did you consider using KUnit for this? I think asked that question when
-> reviewing the previous version.
+> ---
 > 
+> Changelog v2:
+> - Replace min/max constraints of the snps,{tx,rx}-ts-max property with
+>   enum [ 1, 2, 4, ..., 1024 ]. (@Rob)
+> ---
+>  .../bindings/ata/ahci-platform.yaml           |   8 --
+>  .../bindings/ata/snps,dwc-ahci.yaml           | 123 ++++++++++++++++++
+>  2 files changed, 123 insertions(+), 8 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/ata/ahci-platform.yaml b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
+> index 6cad7e86f3bb..4b65966ec23b 100644
+> --- a/Documentation/devicetree/bindings/ata/ahci-platform.yaml
+> +++ b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
+> @@ -30,8 +30,6 @@ select:
+>            - marvell,armada-3700-ahci
+>            - marvell,armada-8k-ahci
+>            - marvell,berlin2q-ahci
+> -          - snps,dwc-ahci
+> -          - snps,spear-ahci
+>    required:
+>      - compatible
+>  
+> @@ -48,17 +46,11 @@ properties:
+>                - marvell,berlin2-ahci
+>                - marvell,berlin2q-ahci
+>            - const: generic-ahci
+> -      - items:
+> -          - enum:
+> -              - rockchip,rk3568-dwc-ahci
+> -          - const: snps,dwc-ahci
+>        - enum:
+>            - cavium,octeon-7130-ahci
+>            - hisilicon,hisi-ahci
+>            - ibm,476gtr-ahci
+>            - marvell,armada-3700-ahci
+> -          - snps,dwc-ahci
+> -          - snps,spear-ahci
+>  
+>    reg:
+>      minItems: 1
+> diff --git a/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml b/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
+> new file mode 100644
+> index 000000000000..a13fd77a451f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
+> @@ -0,0 +1,123 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/ata/snps,dwc-ahci.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Synopsys DWC AHCI SATA controller
+> +
+> +maintainers:
+> +  - Serge Semin <fancer.lancer@gmail.com>
+> +
+> +description:
+> +  This document defines device tree bindings for the Synopsys DWC
+> +  implementation of the AHCI SATA controller.
+> +
+> +allOf:
+> +  - $ref: ahci-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - description: Synopsys AHCI SATA-compatible devices
+> +        contains:
+> +          const: snps,dwc-ahci
+> +      - description: SPEAr1340 AHCI SATA device
+> +        const: snps,spear-ahci
+> +      - description: Rockhip RK3568 ahci controller
+> +        const: rockchip,rk3568-dwc-ahci
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description:
+> +      Basic DWC AHCI SATA clock sources like application AXI/AHB BIU clock
+> +      and embedded PHYs reference clock together with vendor-specific set
+> +      of clocks.
+> +    minItems: 1
+> +    maxItems: 4
+> +
+> +  clock-names:
+> +    contains:
+> +      anyOf:
+> +        - description: Application AXI/AHB BIU clock source
+> +          enum:
+> +            - aclk
+> +            - sata
+> +        - description: SATA Ports reference clock
+> +          enum:
+> +            - ref
+> +            - sata_ref
+> +
+> +  resets:
+> +    description:
+> +      At least basic core and application clock domains reset is normally
+> +      supported by the DWC AHCI SATA controller. Some platform specific
+> +      clocks can be also specified though.
+> +
+> +  reset-names:
+> +    contains:
+> +      description: Core and application clock domains reset control
+> +      const: arst
+> +
+> +patternProperties:
+> +  "^sata-port@[0-9a-e]$":
+> +    type: object
+> +
+> +    properties:
+> +      reg:
+> +        minimum: 0
+> +        maximum: 7
+> +
+> +      snps,tx-ts-max:
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        description: Maximal size of Tx DMA transactions in FIFO words
+> +        enum: [ 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024 ]
+> +
+> +      snps,rx-ts-max:
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        description: Maximal size of Rx DMA transactions in FIFO words
+> +        enum: [ 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024 ]
+> +
+> +      additionalProperties: true
 
-I reviewed the patches and the test driver amd-pstate-ut doesn't belong under
-selftests. I would recommend the following approach:
+You just defined a DT property called 'additionalProperties'. For this 
+reason, I prefer placing additionalProperties above 'properties'.
 
-- add this test driver under drivers/cpufreq
+As mentioned the way 'sata-port' schemas are done here doesn't work.
 
-- KUnit is a better fit for this unit test driver unless you want
-   to be able to run this without KUnit configured
-
-- add the test script under selftests - the script then can load the
-   test driver and run tests and unload the driver.
-
-thanks,
--- Shuah
-
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    sata@122f0000 {
+> +      compatible = "snps,dwc-ahci";
+> +      reg = <0x122F0000 0x1ff>;
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +      clocks = <&clock1>, <&clock2>;
+> +      clock-names = "aclk", "ref";
+> +
+> +      phys = <&sata_phy>;
+> +      phy-names = "sata-phy";
+> +
+> +      ports-implemented = <0x1>;
+> +
+> +      sata-port@0 {
+> +        reg = <0>;
+> +
+> +        hba-fbscp;
+> +        snps,tx-ts-max = <512>;
+> +        snps,rx-ts-max = <512>;
+> +      };
+> +    };
+> +...
+> -- 
+> 2.35.1
+> 
+> 

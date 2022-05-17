@@ -2,208 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E72F152A26A
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:00:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C158552A247
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:58:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347222AbiEQM76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 08:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45088 "EHLO
+        id S1347269AbiEQM6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 08:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347073AbiEQM7o (ORCPT
+        with ESMTP id S1346616AbiEQMz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 08:59:44 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906A54EF49
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:58:41 -0700 (PDT)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220517125836epoutp027072e75946c6ce49df46f6b2303b2489~v5drUa2ma1344913449epoutp02R
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 12:58:36 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220517125836epoutp027072e75946c6ce49df46f6b2303b2489~v5drUa2ma1344913449epoutp02R
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1652792316;
-        bh=wksUEOOixEoJf+qUS9NTctY/uVgxqstDTAlEr0YTLg8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QSLIMPgrjWwgbsfIimaHdQjztEXgYbFna6Vy7Lxbmuw895ZtmiNCVhmIMekOxhaN7
-         FUXw6fzS2iQIz/Tcv3qAcLBCZbUgbfZAlXQJjTaD9PsmZcndOQ1+/DN5N5dYi+6B/j
-         XB8gSfrcvjT3n6K3JwPCqt8SjZ7r9QcCd/Tyk70k=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20220517125834epcas5p1e93a035cefd90fe02a76421c084b7769~v5dqBgx1u1659716597epcas5p16;
-        Tue, 17 May 2022 12:58:34 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.175]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4L2blW20FFz4x9Pt; Tue, 17 May
-        2022 12:58:31 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C7.3C.09762.7FB93826; Tue, 17 May 2022 21:58:31 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220517125629epcas5p4c99993ea5e464b296ff6dfec85b4c441~v5b0zi5Qn1555515555epcas5p4G;
-        Tue, 17 May 2022 12:56:29 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220517125629epsmtrp1808d294c8a1c859dd031f084186f6da6~v5b0yYx2r3276532765epsmtrp1f;
-        Tue, 17 May 2022 12:56:29 +0000 (GMT)
-X-AuditID: b6c32a4b-213ff70000002622-00-62839bf78b1c
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        8F.36.08924.C7B93826; Tue, 17 May 2022 21:56:28 +0900 (KST)
-Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
-        [107.108.73.139]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220517125625epsmtip15dfdf361e5a98fcfcd651138a8597f84~v5bxp9J0t1799817998epsmtip1Q;
-        Tue, 17 May 2022 12:56:25 +0000 (GMT)
-From:   Smitha T Murthy <smitha.t@samsung.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
-        benjamin.gaignard@collabora.com, stanimir.varbanov@linaro.org,
-        dillon.minfei@gmail.com, david.plowman@raspberrypi.com,
-        mark.rutland@arm.com, robh+dt@kernel.org, krzk+dt@kernel.org,
-        andi@etezian.org, alim.akhtar@samsung.com,
-        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
-        Smitha T Murthy <smitha.t@samsung.com>, linux-fsd@tesla.com
-Subject: [PATCH 12/20] media: s5p-mfc: Add support for DMABUF for encoder
-Date:   Tue, 17 May 2022 18:25:40 +0530
-Message-Id: <20220517125548.14746-13-smitha.t@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220517125548.14746-1-smitha.t@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA0WTf0xbVRTHve/157TkBVDuGD9fhgYi0EIpFwLzB2CeYSaYxSwRFAu8FaS0
-        XV/BOafrBmzQDIdzSEaBNYBWESeUn+taBdYJ25QMQdDJr1EnYz+UUAYbkM3WFv3vc77ne+45
-        OfdeHu59nePPK1BoaLVCKic521g9F8Ofi1zTl+YIy+1cNNfYw0HNDxYwNNvsYKHBzm4u6hrX
-        48g41M9GZ20jbNQ7MM9CHbec2dEz0yy0cPYcQIt1Mxxksk+w0Y3be9GYuZ6DTrR3s9E3tmku
-        +nxyFENfmDYx1NS9wkXlVhsXTVt6ACo7ZsNe9KPaGtsA1TfdAqjJlmWcOl83zaWaLYsYZWqt
-        5FBTExYO1dlymCq/tM6iPu5qBdSjow1cSmeb5FAOUxB15b6Dm+H1ZmFSPi3No9UhtCJXmVeg
-        kCWT6XuyU7LjJEJRpCgBxZMhCmkRnUym7s6IfKVA7twAGVIilRc7pQwpw5DRu5LUymINHZKv
-        ZDTJJK3Kk6vEqihGWsQUK2RRClqTKBIKY+KcxncK8+dmJzHVNXjgvNHA1oLTvjrA50FCDNse
-        jnB0YBvPm7gAYM2IEbiDZQCrOzpxd+AAsLf7Ar5VMmr8wZMwA3i//idPUIbBnusNmMvFIZ6H
-        q39f5bjYlzgCoL1C42Kc2MDhmfEgF/sQr8LOWovTz+OxiDBYa4txyQIiEVYt3+G6mwXDr9v7
-        cZeF79QbHr3lagWJxzzY/JWd7fakwi+Pz7Dc7ANvD3V5av3h4sljHpbBWUcpcLMKNmi7MDe/
-        APvH61mu83EiHH5rjnbLgbDmyjnMPbEXrNr4w2MXwL7GLSZh04/DnuMh/OVet2ccCrZUNGHu
-        lVQBOKTTs6tBUN3/LQwAtILttIopktFMnCpWQb/336XlKotM4N9HHpHeB+bnlqIGAcYDgwDy
-        cNJXIDygzfEW5EnfP0irldnqYjnNDII45/o+wf2fzlU6f4lCky0SJwjFEolEnBArEZF+AuLx
-        kRxvQibV0IU0raLVW3UYj++vxbKMlSWbjZej99cH6HoTwp6tXbvR3hE/T3qNPqHJ1HmF96/m
-        C6JkrKV9h3U0ih8WBX+4a70qVx/5snl7k/XuyAo11PVu8wlrTtn8KS5/p+DnqQczh0L3Zjqy
-        WIaNlB0Ro6LQYOa7PzP3RYfe8w+4+uS1ipXMmPGXjHue8rl11MFu+K00DcZLIkdW/pr5QF65
-        IylqNeRgKZ3yjGC3JTCz6fjd14PtjcyE3/efLVkH9Fr1hjW2JgWrZgepfdYNeWEfWcjsizdX
-        Ty1slvATx6xZm5eGXxubXej/3Z5qUj38dYMxl7592Xxn/2mQHk+LxwPS+J8GqnYOhEnXbqZp
-        9FOGQ28YSBaTLxVF4GpG+g9/PQ3gbQQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAAzWRW1CMYRzGe79z22w+q5leMqmdQZKlWN7UYFzwhQsX5DATNn2KdtfaTRSR
-        KMq5KZ0UKdLqwGYTs6JaORRTw7Qju2pVFlFNK0NRWo2753l+v5n/xZ/BRReJacxuZQyvVsrk
-        YkpAVDeIPecdzjsevqDnUwDqLKimUNFPG4Y6iuwEqq/S0+jumzwclTx9TKIrxlckulf3gUB3
-        Po3T1hwLgWxXKgD6nPueQrquNhJZv2xCrx9cptCZ23oSlRstNLpuasXQDd1vDF3Tf6dR8kMj
-        jSyGaoBOpBixFe5cWUEZ4GosxYAzFQ/i3P1cC80VGT5jnE6bSnHmNgPFVRUf5ZKfDBPcubta
-        wI0m5dNcmtFEcXadJ/diyE6vd90qCI7g5btjefX8ZTsEUZ0dJkzVAg/eL7lKJoIMtzTgzEB2
-        EWwtacTTgIARsTUADtdlkRMAwtKRdDCRp8DSURs9ISVh8EZvE+YAFOsHf/Q3UQ7gxiYDaCpN
-        xRwFZy8SMMM0jDusKWwIrMoyjAOGIdiZMMsY4JiF7FJ4drCXnrgwA966/Rh3KM7je/5omCOK
-        2EDY8whdAK5XgZMWTOVVGkWkQuOvClDyByQamUKzXxkp2blXoQP/vubrWwMM2gFJPcAYUA8g
-        g4vdhAsOJoaLhBGyuHhevXe7er+c19QDD4YQuwtb0p5vF7GRshg+mudVvPo/xRjnaYlY4+nV
-        SzzI5XREenS/30ks2Gz9/ZX8ssod71tYMBZUK27PKRRsOXxMsz700XTJmkztjEOlLuVhrxNu
-        Kr1tRc4KuVdTi3ho5J2P1Eva4lM5+USH9xwpv0FOftu1r/AXXvKRDrT3T/9z/hJm9X5Qkb+4
-        IcfsReS4fTzrUnkhPOjZkYaYMa88Qe3GyFfCSbxt6Usqvsd9stNQxts5538eCjJ3v9j2NsHc
-        bEvd4KHAjy/rk2RbPaOTrMv9LhUP6OedCgxt/i5QZ9bZmc1O3enRlYJ9/m3mk7H+K4/deVM1
-        qyt7NATN/QCb9TNrY1WDs9tTGuOkUWuP7gEhqnVxe9qloVpTnpjQRMn8fXG1RvYXtHuRiSQD
-        AAA=
-X-CMS-MailID: 20220517125629epcas5p4c99993ea5e464b296ff6dfec85b4c441
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220517125629epcas5p4c99993ea5e464b296ff6dfec85b4c441
-References: <20220517125548.14746-1-smitha.t@samsung.com>
-        <CGME20220517125629epcas5p4c99993ea5e464b296ff6dfec85b4c441@epcas5p4.samsung.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Tue, 17 May 2022 08:55:58 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA22E63BC
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:55:57 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24HCLlZq010020;
+        Tue, 17 May 2022 12:55:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=pp1;
+ bh=YrPfjDANUD45n3Zdgz895KDNs9u9b5h3UTyNbQxL5mM=;
+ b=tgvayBDGBtaPau1L7BNC79xzgzDdA8xjXFw77XfaI0Tlx+Z8mxlZvgTw2XmQsqNONvRC
+ 8HlLV4w5v5hWGibUDXr0t47UZ02WXmBcbNVDkqbum8pUrRH3vriVJKohkPTXd0dzgirf
+ VYkGK2/hC8+pbSfQCXxVtWWY7Z3OwTt9o43eqlTHUVGL9CGyWKEA/nYXYZttjTK0QKw6
+ HXot4psYrc3hjv6lk+j30PYfn9DLY8MSVdsj8v5OsWBEIb+smhBCAOo5uPJJhVrjGCuQ
+ 0wEJtuwezSFoXX8iXxBEhylK0/hfwd7AxYxG99QRu/akCWKIpFMHzEpoT/F1SQ/rK2aZ 5g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4bn58y39-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 May 2022 12:55:48 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24HCfPk5007842;
+        Tue, 17 May 2022 12:55:47 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4bn58y22-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 May 2022 12:55:47 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24HCr3xo027106;
+        Tue, 17 May 2022 12:55:45 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma05fra.de.ibm.com with ESMTP id 3g24293c9g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 May 2022 12:55:44 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24HCtgjS52101610
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 17 May 2022 12:55:42 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BABEF5204F;
+        Tue, 17 May 2022 12:55:42 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.145.2.119])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 189345204E;
+        Tue, 17 May 2022 12:55:42 +0000 (GMT)
+Date:   Tue, 17 May 2022 15:55:40 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Jaewon Kim <jaewon31.kim@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jaewon Kim <jaewon31.kim@samsung.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Joonsoo Kim <iamjoonsoo.kim@lge.com>
+Subject: Re: [RFC PATCH] page_ext: create page extension for all memblock
+ memory regions
+Message-ID: <YoObTJcBUjeW+2l2@linux.ibm.com>
+References: <CGME20220509073953epcas1p127f2d36186316642068c92c5d9dee1c4@epcas1p1.samsung.com>
+ <20220509074330.4822-1-jaewon31.kim@samsung.com>
+ <20220516173321.67402b7f09eacc43d4e476f4@linux-foundation.org>
+ <YoNcBG6kQnmLZ3Z9@linux.ibm.com>
+ <CAJrd-UuzTh-0Ee9+rMRES9onP_EkvJS-VpPP66J4M4n0Ku0ZWA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJrd-UuzTh-0Ee9+rMRES9onP_EkvJS-VpPP66J4M4n0Ku0ZWA@mail.gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 5YVPBFhqjLEYLYFotIEAw6eaMXRQIfXc
+X-Proofpoint-ORIG-GUID: 4jHQNVHVKyD_zTvEqWkYF-S_Zx8M_e7S
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-17_03,2022-05-17_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
+ phishscore=0 mlxscore=0 malwarescore=0 mlxlogscore=999 adultscore=0
+ priorityscore=1501 lowpriorityscore=0 suspectscore=0 impostorscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205170076
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add dmabuf support for mfc encoder
+On Tue, May 17, 2022 at 08:38:18PM +0900, Jaewon Kim wrote:
+> Hello Mike Rapoport
+> Thank you for your comment.
+> 
+> Oh really? Could you point out the code or the commit regarding 'all
+> struct pages in any section should be valid and
+> properly initialized' ?
 
-Cc: linux-fsd@tesla.com
-Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
----
- .../media/platform/samsung/s5p-mfc/s5p_mfc.c  |  4 ++--
- .../platform/samsung/s5p-mfc/s5p_mfc_enc.c    | 21 +++++++++++--------
- 2 files changed, 14 insertions(+), 11 deletions(-)
+There were several commits that refactored the memory map initialization,
+freeing of the unused memory map and abuse of pfn_valid() as a substitute
+of "is memory valid" semantics.
 
-diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
-index a4e3df24b4ae..a6e50981bdd6 100644
---- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
-@@ -850,7 +850,7 @@ static int s5p_mfc_open(struct file *file)
- 		q->io_modes = VB2_MMAP;
- 		q->ops = get_dec_queue_ops();
- 	} else if (vdev == dev->vfd_enc) {
--		q->io_modes = VB2_MMAP | VB2_USERPTR;
-+		q->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
- 		q->ops = get_enc_queue_ops();
- 	} else {
- 		ret = -ENOENT;
-@@ -877,7 +877,7 @@ static int s5p_mfc_open(struct file *file)
- 		q->io_modes = VB2_MMAP;
- 		q->ops = get_dec_queue_ops();
- 	} else if (vdev == dev->vfd_enc) {
--		q->io_modes = VB2_MMAP | VB2_USERPTR;
-+		q->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
- 		q->ops = get_enc_queue_ops();
- 	} else {
- 		ret = -ENOENT;
-diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c
-index 9b624f17e32b..57b4397f2b03 100644
---- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c
-@@ -1703,9 +1703,10 @@ static int vidioc_reqbufs(struct file *file, void *priv,
- 	struct s5p_mfc_ctx *ctx = fh_to_ctx(priv);
- 	int ret = 0;
+> Actually I am using v5.10 based source tree on an arm64 device.
+
+Then most probably your change is not relevant for the upstream kernel.
+Did you observe any issues with page_ext initialization on v5.18-rcN
+kernels?
+
+> I tried to look up and found the following commit in v5.16-rc1, did
+> you mean this?
+> 3de360c3fdb3 arm64/mm: drop HAVE_ARCH_PFN_VALID
+
+Yes, this is one of those commits.
  
--	/* if memory is not mmp or userptr return error */
-+	/* if memory is not mmp or userptr or dmabuf return error */
- 	if ((reqbufs->memory != V4L2_MEMORY_MMAP) &&
--		(reqbufs->memory != V4L2_MEMORY_USERPTR))
-+		(reqbufs->memory != V4L2_MEMORY_USERPTR) &&
-+		(reqbufs->memory != V4L2_MEMORY_DMABUF))
- 		return -EINVAL;
- 	if (reqbufs->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) {
- 		if (reqbufs->count == 0) {
-@@ -1782,9 +1783,10 @@ static int vidioc_querybuf(struct file *file, void *priv,
- 	struct s5p_mfc_ctx *ctx = fh_to_ctx(priv);
- 	int ret = 0;
+> I guess memblock_is_memory code in pfn_valid in arch/arm64/mm/init.c, v5.10
+> might affect the page_ext_init.
+
+Yes. In 5.10 the pfn_valid() test in page_ext_init() will skip an entire
+section if the first pfn in that section is not memory that can be mapped
+in the linear map.
+
+But again, this should be fixed in the latest kernels.
  
--	/* if memory is not mmp or userptr return error */
-+	/* if memory is not mmp or userptr or dmabuf return error */
- 	if ((buf->memory != V4L2_MEMORY_MMAP) &&
--		(buf->memory != V4L2_MEMORY_USERPTR))
-+		(buf->memory != V4L2_MEMORY_USERPTR) &&
-+		(buf->memory != V4L2_MEMORY_DMABUF))
- 		return -EINVAL;
- 	if (buf->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) {
- 		if (ctx->state != MFCINST_GOT_INST) {
-@@ -2840,11 +2842,12 @@ static int s5p_mfc_start_streaming(struct vb2_queue *q, unsigned int count)
- 						S5P_MFC_R2H_CMD_SEQ_DONE_RET,
- 						0);
- 		}
--
--		if (ctx->src_bufs_cnt < ctx->pb_count) {
--			mfc_err("Need minimum %d OUTPUT buffers\n",
--					ctx->pb_count);
--			return -ENOBUFS;
-+		if (q->memory != V4L2_MEMORY_DMABUF) {
-+			if (ctx->src_bufs_cnt < ctx->pb_count) {
-+				mfc_err("Need minimum %d OUTPUT buffers\n",
-+						ctx->pb_count);
-+				return -ENOBUFS;
-+			}
- 		}
- 	}
- 
+> Thank you
+> 
+> 2022년 5월 17일 (화) 오후 5:25, Mike Rapoport <rppt@linux.ibm.com>님이 작성:
+> >
+> > On Mon, May 16, 2022 at 05:33:21PM -0700, Andrew Morton wrote:
+> > > On Mon,  9 May 2022 16:43:30 +0900 Jaewon Kim <jaewon31.kim@samsung.com> wrote:
+> > >
+> > > > The page extension can be prepared for each section. But if the first
+> > > > page is not valid, the page extension for the section was not
+> > > > initialized though there were many other valid pages within the section.
+> >
+> > What do you mean by "first page [in a section] is not valid"?
+> > In recent kernels all struct pages in any section should be valid and
+> > properly initialized.
+> >
+> > > > To support the page extension for all sections, refer to memblock memory
+> > > > regions. If the page is valid use the nid from pfn_to_nid, otherwise use
+> > > > the previous nid.
+> > > >
+> > > > Also this pagech changed log to include total sections and a section
+> > > > size.
+> > > >
+> > > > i.e.
+> > > > allocated 100663296 bytes of page_ext for 64 sections (1 section : 0x8000000)
+> > >
+> > > Cc Joonsoo, who wrote this code.
+> > > Cc Mike, for memblock.
+> > >
+> > > Thanks.
+> > >
+> > > >
+> > > > diff --git a/mm/page_ext.c b/mm/page_ext.c
+> > > > index 2e66d934d63f..506d58b36a1d 100644
+> > > > --- a/mm/page_ext.c
+> > > > +++ b/mm/page_ext.c
+> > > > @@ -381,41 +381,43 @@ static int __meminit page_ext_callback(struct notifier_block *self,
+> > > >  void __init page_ext_init(void)
+> > > >  {
+> > > >     unsigned long pfn;
+> > > > -   int nid;
+> > > > +   int nid = 0;
+> > > > +   struct memblock_region *rgn;
+> > > > +   int nr_section = 0;
+> > > > +   unsigned long next_section_pfn = 0;
+> > > >
+> > > >     if (!invoke_need_callbacks())
+> > > >             return;
+> > > >
+> > > > -   for_each_node_state(nid, N_MEMORY) {
+> > > > +   /*
+> > > > +    * iterate each memblock memory region and do not skip a section having
+> > > > +    * !pfn_valid(pfn)
+> > > > +    */
+> > > > +   for_each_mem_region(rgn) {
+> > > >             unsigned long start_pfn, end_pfn;
+> > > >
+> > > > -           start_pfn = node_start_pfn(nid);
+> > > > -           end_pfn = node_end_pfn(nid);
+> > > > -           /*
+> > > > -            * start_pfn and end_pfn may not be aligned to SECTION and the
+> > > > -            * page->flags of out of node pages are not initialized.  So we
+> > > > -            * scan [start_pfn, the biggest section's pfn < end_pfn) here.
+> > > > -            */
+> > > > +           start_pfn = (unsigned long)(rgn->base >> PAGE_SHIFT);
+> > > > +           end_pfn = start_pfn + (unsigned long)(rgn->size >> PAGE_SHIFT);
+> > > > +
+> > > > +           if (start_pfn < next_section_pfn)
+> > > > +                   start_pfn = next_section_pfn;
+> > > > +
+> > > >             for (pfn = start_pfn; pfn < end_pfn;
+> > > >                     pfn = ALIGN(pfn + 1, PAGES_PER_SECTION)) {
+> > > >
+> > > > -                   if (!pfn_valid(pfn))
+> > > > -                           continue;
+> > > > -                   /*
+> > > > -                    * Nodes's pfns can be overlapping.
+> > > > -                    * We know some arch can have a nodes layout such as
+> > > > -                    * -------------pfn-------------->
+> > > > -                    * N0 | N1 | N2 | N0 | N1 | N2|....
+> > > > -                    */
+> > > > -                   if (pfn_to_nid(pfn) != nid)
+> > > > -                           continue;
+> > > > +                   if (pfn_valid(pfn))
+> > > > +                           nid = pfn_to_nid(pfn);
+> > > > +                   nr_section++;
+> > > >                     if (init_section_page_ext(pfn, nid))
+> > > >                             goto oom;
+> > > >                     cond_resched();
+> > > >             }
+> > > > +           next_section_pfn = pfn;
+> > > >     }
+> > > > +
+> > > >     hotplug_memory_notifier(page_ext_callback, 0);
+> > > > -   pr_info("allocated %ld bytes of page_ext\n", total_usage);
+> > > > +   pr_info("allocated %ld bytes of page_ext for %d sections (1 section : 0x%x)\n",
+> > > > +           total_usage, nr_section, (1 << SECTION_SIZE_BITS));
+> > > >     invoke_init_callbacks();
+> > > >     return;
+> > > >
+> > > > --
+> > > > 2.17.1
+> > > >
+> >
+> > --
+> > Sincerely yours,
+> > Mike.
+
 -- 
-2.17.1
-
+Sincerely yours,
+Mike.

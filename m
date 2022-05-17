@@ -2,104 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FAB952A42E
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B4152A43B
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346447AbiEQOEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 10:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
+        id S1348209AbiEQOEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 10:04:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348386AbiEQOEe (ORCPT
+        with ESMTP id S1348374AbiEQOEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 10:04:34 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831A04CD59
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:04:29 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id p22so2153253lfo.10
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:04:29 -0700 (PDT)
+        Tue, 17 May 2022 10:04:44 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED094C424
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:04:42 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id m12so17436955plb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:04:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HxevckGVY6484BDcCMWwYM+P+Lh2VVUYP1tDRnPQllY=;
-        b=UmA6TUUe8O9+iPvqZ9lo899YQcmXeuocGCH2dwLlLprVVobAErQ9shCQc95jRhzSfw
-         8YSg76gGX46QuDj0xF5mDZmoiIYAaNgZBFaJadAorojQsyTgdy5SGveX35f0t6zioVq/
-         CycPQFhzltr82H1EJ9gJ/1PsGl8LOAqb+71rjlzYdRMA55K0T4ocDUWuIGACy9WfdlEq
-         cUvYowSxcUbNBlZJvF9lPvb4fJUexPVl1lYetCTnSbQogKg7kDeVxsBzW5Wk2O09nWEv
-         OIjmEuRzMsLDboh7w2yhUw1sKiu5HAqv0/XVND8xYkIGFsmcVz91t6uKtyFANxF2BhY5
-         8TYA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FL8Ln+qoBhX9Z9FzXxUqdcLvxSZEspo40DkXeEXhtoc=;
+        b=JaoGHjtrtmahXTjOEk2a2EB4qunemIRJYfJ5tpCsscKfgRqLqN/Z7hJ369fh3UUdOF
+         ui7KgZXcB83KE7l4oo/LITOB78y7n5hsj7ayEtp5IVpIVNaW1jb0FHR92R9VZiUe5EF7
+         TJHHWfycpEo/mb+f2n2c/h6x3OfmWKpLhypxDemrTm+1B3pFFjv9jdc7u5eYiu4NQoaW
+         5eOd2T5hm5QdCEkC0oJNGroSW3uKegHK9ib3SBkWzdCeo6O6uyIojKc2pLC/vRZfe1Ow
+         Vsgsun3kdtvd+v6HRJBBhE1Ko2ylHo0wRbA3PBE06QkaiA2AaKziUM4wvbQWKfLojZ6E
+         FyDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HxevckGVY6484BDcCMWwYM+P+Lh2VVUYP1tDRnPQllY=;
-        b=3g8I9saTQzmRW8To0HO3ntqXQ7DSENWFexefCGXIaAqDwI2TFlKPW745Krdsn86Cyh
-         tyLPW7WfuL6hwdtiftlFePStUFGQYil2UrDPQBeV5BnNpKzS23c3auLMqnrDuskaRknz
-         CYk3iNYg5xFJpOuAggLV6aIyHEmoPjvzlTqOZQujslgeCICqH8ntQuIOxYsawqtpaRmO
-         xMBf1XzlSQN7dYGlduaodiP0UWc5Qx+5I8jFwz6oPeUCpGIiXIA5MEdoAz/PmHBwIIPx
-         dfhNGR33AIJ8/Qr5ZeOqWHYj5hGLY4W3LE5XqMI5o7za/9vjMFQZiVgdqw2nHDK7wYDt
-         mU7Q==
-X-Gm-Message-State: AOAM5303Dp67VM01LMiLaEv59UX9GA5GiHLBz5v8m3acjpTJ1igCRsba
-        QSfJF78hJLIU8n4Aq0ESO2uZxQ==
-X-Google-Smtp-Source: ABdhPJy+tyMS3HM225HxfOU5Ksranc+y83SOvuoAIRBZum36K0pUiei5sRYqAd+BViUCgfknOuW4gw==
-X-Received: by 2002:a05:6512:228e:b0:473:dc4d:2a52 with SMTP id f14-20020a056512228e00b00473dc4d2a52mr17089184lfu.413.1652796267537;
-        Tue, 17 May 2022 07:04:27 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id w21-20020ac254b5000000b0047255d2112asm1601570lfk.89.2022.05.17.07.04.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 07:04:27 -0700 (PDT)
-Message-ID: <b7dc85c5-acaf-95f4-2409-3c25d9fd8274@linaro.org>
-Date:   Tue, 17 May 2022 16:04:25 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FL8Ln+qoBhX9Z9FzXxUqdcLvxSZEspo40DkXeEXhtoc=;
+        b=A8eGWc7t56+cRmAuNc3M4VoeJRQeSfK+NzaFYUWCoy/wNwvw9dZl5SWN1MbjbWo/XZ
+         12oApb6pz9sKZxUzwUlCniIV5+xMsxJVsWw0SloyjlFjxUhagPlaqV6jKLWQgICLN/Ha
+         RxceMxAFlIabXfyxWI+ZWTeGv2saK4LkU9FA4YzlquYgWbvSO/QVf7g+5FpkTClwzuHy
+         cbVxNlictjIqQGG44lGv/jk4F2XeRF1UVuBEIwYRlGKgTHUpJ41LXIASqMHd8saeogUI
+         A5WCnCFo867wxam/gGbtuz9n06aSQkKSmMdi8SoQMj+RuQit89Oox+DihF4L1fJsYn4b
+         95Ng==
+X-Gm-Message-State: AOAM531yDlo4XhmHiVtUSu0l4hy5YkGWkQgbHE7OiFRyZQEEwwSuiNjQ
+        6GNVc2jwpKyOqPcRLUKskHS9eQ==
+X-Google-Smtp-Source: ABdhPJwmn22f1sBhUOHh7YAS6Vi2ghXPT3IC1P1JAdjnNQBZ3qawrb+j203LVSupTRggD/UU9gWRRg==
+X-Received: by 2002:a17:903:2308:b0:15f:3797:a755 with SMTP id d8-20020a170903230800b0015f3797a755mr22473094plh.122.1652796281822;
+        Tue, 17 May 2022 07:04:41 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id cm17-20020a17090afa1100b001d954837197sm1684392pjb.22.2022.05.17.07.04.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 07:04:39 -0700 (PDT)
+Date:   Tue, 17 May 2022 14:04:35 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 11/34] KVM: x86: hyper-v: Use preallocated buffer in
+ 'struct kvm_vcpu_hv' instead of on-stack 'sparse_banks'
+Message-ID: <YoOrc2hPF/QpJNeo@google.com>
+References: <20220414132013.1588929-1-vkuznets@redhat.com>
+ <20220414132013.1588929-12-vkuznets@redhat.com>
+ <YoKunaNKDjYx7C21@google.com>
+ <87k0akuv1o.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 17/20] media: s5p-mfc: Clear workbit to handle error
- condition
-Content-Language: en-US
-To:     Smitha T Murthy <smitha.t@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
-        benjamin.gaignard@collabora.com, stanimir.varbanov@linaro.org,
-        dillon.minfei@gmail.com, david.plowman@raspberrypi.com,
-        mark.rutland@arm.com, robh+dt@kernel.org, krzk+dt@kernel.org,
-        andi@etezian.org, alim.akhtar@samsung.com,
-        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
-        linux-fsd@tesla.com
-References: <20220517125548.14746-1-smitha.t@samsung.com>
- <CGME20220517125648epcas5p22201053e8a71dcd5ccc8d0566511b635@epcas5p2.samsung.com>
- <20220517125548.14746-18-smitha.t@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220517125548.14746-18-smitha.t@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87k0akuv1o.fsf@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2022 14:55, Smitha T Murthy wrote:
-> During error on CLOSE_INSTANCE command, ctx_work_bits
-> was not getting cleared. During consequent mfc execution
-> NULL pointer dereferencing of this context led to kernel
-> panic. This patch fixes this issue by making sure to
-> clear ctx_work_bits always.
+On Tue, May 17, 2022, Vitaly Kuznetsov wrote:
+> Sean Christopherson <seanjc@google.com> writes:
 > 
-> Cc: linux-fsd@tesla.com
-> Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
+> > On Thu, Apr 14, 2022, Vitaly Kuznetsov wrote:
+> >> To make kvm_hv_flush_tlb() ready to handle L2 TLB flush requests, KVM needs
+> >> to allow for all 64 sparse vCPU banks regardless of KVM_MAX_VCPUs as L1
+> >> may use vCPU overcommit for L2. To avoid growing on-stack allocation, make
+> >> 'sparse_banks' part of per-vCPU 'struct kvm_vcpu_hv' which is allocated
+> >> dynamically.
+> >> 
+> >> Note: sparse_set_to_vcpu_mask() keeps using on-stack allocation as it
+> >> won't be used to handle L2 TLB flush requests.
+> >
+> > I think it's worth using stronger language; handling TLB flushes for L2 _can't_
+> > use sparse_set_to_vcpu_mask() because KVM has no idea how to translate an L2
+> > vCPU index to an L1 vCPU.  I found the above mildly confusing because it didn't
+> > call out "vp_bitmap" and so I assumed the note referred to yet another sparse_banks
+> > "allocation".  And while vp_bitmap is related to sparse_banks, it tracks something
+> > entirely different.
+> >
+> > Something like?
+> >
+> > Note: sparse_set_to_vcpu_mask() can never be used to handle L2 requests as
+> > KVM can't translate L2 vCPU indices to L1 vCPUs, i.e. its vp_bitmap array
+> > is still bounded by the number of L1 vCPUs and so can remain an on-stack
+> > allocation.
+> 
+> My brain is probably tainted by looking at all this for some time so I
+> really appreciate such improvements, thanks :)
+> 
+> I wouldn't, however, say "never" ('never say never' :-)): KVM could've
+> kept 2-level reverse mapping up-to-date:
+> 
+> KVM -> L2 VM list -> L2 vCPU ids -> L1 vCPUs which run them
+> 
+> making it possible for KVM to quickly translate between L2 VP IDs and L1
+> vCPUs. I don't do this in the series and just record L2 VM_ID/VP_ID for
+> each L1 vCPU so I have to go over them all for each request. The
+> optimization is, however, possible and we may get to it if really big
+> Windows VMs become a reality.
 
-This looks like a bugfix so:
-1. Send it separately please.
-2. Add Fixes tag.
-3. Add Cc stable tag.
-
-Best regards,
-Krzysztof
+Out of curiosity, is L1 "required" to provides the L2 => L1 translation/map?

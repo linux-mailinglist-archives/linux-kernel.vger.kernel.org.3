@@ -2,122 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E41E529FE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA074529FEA
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:59:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343773AbiEQK7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 06:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59712 "EHLO
+        id S1344809AbiEQK7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 06:59:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232650AbiEQK7Y (ORCPT
+        with ESMTP id S1344899AbiEQK7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 17 May 2022 06:59:24 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB42B4B41B;
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769774B418;
         Tue, 17 May 2022 03:58:53 -0700 (PDT)
-Date:   Tue, 17 May 2022 10:58:48 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652785130;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qq22VJKbqTDmP1HhOQj3CkRWDuZ6tAV0hl6p/bOyx3w=;
-        b=zZRNLb73NmYEHumOPqdjKTbdLGv4BcCFhaNdfmjLZXXU9Fy6m+r4o4DxaRpEu2xFdaLAwC
-        w1KxE0BlKQRCvw1bPW/vUvkSGw+/usor3Npa0MdwVsezfXBd6zFOaE224q/CDyMhM/a0ZU
-        5EcJodc9BTO6q2w2ejnCWkjwroYYQJtj/mHQqglicWzYemPtvyKRcxhpVm5le/Br0TyGzB
-        FaXfWQwKOlYB/b5Y72QwGYi4CYCiqhDVvDuBfuc44SkSFPoOeFxOe0BKNSvRZgtDEMXEn8
-        H0TvvahZW7xjdSQ/HAtelz18lSaEO3xxxQ7XWgyVgFm5M8Q9nzFGHbCjh7QaHQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652785130;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qq22VJKbqTDmP1HhOQj3CkRWDuZ6tAV0hl6p/bOyx3w=;
-        b=uY5vygZkyTTy69Ymlaxx8Mt3duXIZ8G2oNbML+FpIf0i0Ncze44jzHTa7+M+fNM0sRKIy6
-        FO4q7w+13CZn+0CA==
-From:   "tip-bot2 for Colin Ian King" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/sev] x86/sev: Remove duplicated assignment to variable info
-Cc:     Colin Ian King <colin.i.king@gmail.com>,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220516184215.51841-1-colin.i.king@gmail.com>
-References: <20220516184215.51841-1-colin.i.king@gmail.com>
+Received: by mail-wm1-x32d.google.com with SMTP id v191-20020a1cacc8000000b00397001398c0so1141376wme.5;
+        Tue, 17 May 2022 03:58:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TC0kU0kx+y+RWbBCqsAsP+HQ3aEjY5q2DVAO89IeC9s=;
+        b=FA5r+NX/lZ6cGo1t613iezlHCeUvETSbCJt0C6O1VgaCyU6YyuylO+cyX6HtRu1R0N
+         SAFWjtumDwvnU421Jv1/jdQuDnIQ7rbne9UuXWX1ATR4Sh45j/9b7uPVbkrkd8n24XZP
+         DAKx+h271EWgpWbniGbSgCUSJe1mhmJXMkAETQjgDja55vjd4xxIwhRTYAhxMSQqsFCK
+         +x64/icFr+/F4THXp7Vo6KBhiac54xeCWr6c23hACEpZbjtJS41fff4++cLP8L6tUMB6
+         bvOIAkSA2VYMEVtZWWTV8K6MvLkTQqwEQLgBxy4V0JVrhH+qutsXTxOYoxiMcD+BmirV
+         V+4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TC0kU0kx+y+RWbBCqsAsP+HQ3aEjY5q2DVAO89IeC9s=;
+        b=2BmtYCq3DGQVGIbzwBFk16GtHmu01o+ccyTZt9cLyXMEwUDVhrsR6CYlZ3iAV3njwH
+         lL2PIvJOAoSlJxuQfeH7NDzteN9HIGQTVUcgY/lqsEXMM4ps1eDUY5XVWPGxkcjyyxdv
+         CUDy/zVP1bMAF4f/acUOk0dO+UEUISXIWSky9FHhG9+Ypz6e2nLhHJz5vGscfKDps91T
+         /a4NOvJ8dbz3tMIJ1R/4RYxWu2GmPIMLCtHIDJgv9A00LhtHQLfbcUik7U5mJkzPFrB9
+         k92MSohigysX4Rp3MZ454/1+wFAMaNxwOjv/oXVlTb34qn4hS2qrzTkvvQvD0Pietfd2
+         wXFQ==
+X-Gm-Message-State: AOAM530fB7WLOYagCWxsFsOQXaCtI5mYifRR+xFqPKRpn3eKpyClAZxb
+        TLpCBb5xGPVIQ029TEKoNipo0hxgrOU=
+X-Google-Smtp-Source: ABdhPJxr+0d+xg6WXoTCcA+d7OTzh/bY9pK52Mpf6fsQ2xUBaC9j4joKbBWfLuzJKShLqdcTx65yNw==
+X-Received: by 2002:a05:600c:1d18:b0:394:6469:abec with SMTP id l24-20020a05600c1d1800b003946469abecmr20876498wms.89.1652785131942;
+        Tue, 17 May 2022 03:58:51 -0700 (PDT)
+Received: from debian (host-2-98-37-191.as13285.net. [2.98.37.191])
+        by smtp.gmail.com with ESMTPSA id j8-20020a05600c1c0800b003958af7d0c8sm1584389wms.45.2022.05.17.03.58.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 03:58:51 -0700 (PDT)
+Date:   Tue, 17 May 2022 11:58:49 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 4.19 00/32] 4.19.244-rc1 review
+Message-ID: <YoN/6fcgA+1V375I@debian>
+References: <20220516193614.773450018@linuxfoundation.org>
 MIME-Version: 1.0
-Message-ID: <165278512876.4207.18026967254271145899.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220516193614.773450018@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/sev branch of tip:
+Hi Greg,
 
-Commit-ID:     0621210ab7693e6d50585ca689d95d57df617455
-Gitweb:        https://git.kernel.org/tip/0621210ab7693e6d50585ca689d95d57df617455
-Author:        Colin Ian King <colin.i.king@gmail.com>
-AuthorDate:    Mon, 16 May 2022 19:42:15 +01:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Tue, 17 May 2022 12:52:37 +02:00
+On Mon, May 16, 2022 at 09:36:14PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.244 release.
+> There are 32 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 18 May 2022 19:36:02 +0000.
+> Anything received after that time might be too late.
 
-x86/sev: Remove duplicated assignment to variable info
+Build test:
+mips (gcc version 12.1.0): 63 configs -> no  failure
+arm (gcc version 12.1.0): 116 configs -> no new failure
+arm64 (gcc version 12.1.0): 2 configs -> no failure
+x86_64 (gcc version 12.1.0): 4 configs -> no failure
 
-Variable info is being assigned the same value twice, remove the
-redundant assignment. Also assign variable v in the declaration.
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
 
-Cleans up clang scan warning:
-  warning: Value stored to 'info' during its initialization is never read [deadcode.DeadStores]
+[1]. https://openqa.qa.codethink.co.uk/tests/1154
 
-No code changed:
 
-  # arch/x86/kernel/sev.o:
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
-   text    data     bss     dec     hex filename
-  19878    4487    4112   28477    6f3d sev.o.before
-  19878    4487    4112   28477    6f3d sev.o.after
+--
+Regards
+Sudip
 
-md5:
-   bfbaa515af818615fd01fea91e7eba1b  sev.o.before.asm
-   bfbaa515af818615fd01fea91e7eba1b  sev.o.after.asm
-
-  [ bp: Running the before/after check on sev.c because sev-shared.c
-    gets included into it. ]
-
-Fixes: 597cfe48212a ("x86/boot/compressed/64: Setup a GHCB-based VC Exception handler")
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220516184215.51841-1-colin.i.king@gmail.com
----
- arch/x86/kernel/sev-shared.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
-index 2b4270d..b478edf 100644
---- a/arch/x86/kernel/sev-shared.c
-+++ b/arch/x86/kernel/sev-shared.c
-@@ -201,10 +201,7 @@ static enum es_result verify_exception_info(struct ghcb *ghcb, struct es_em_ctxt
- 
- 	if (ret == 1) {
- 		u64 info = ghcb->save.sw_exit_info_2;
--		unsigned long v;
--
--		info = ghcb->save.sw_exit_info_2;
--		v = info & SVM_EVTINJ_VEC_MASK;
-+		unsigned long v = info & SVM_EVTINJ_VEC_MASK;
- 
- 		/* Check if exception information from hypervisor is sane. */
- 		if ((info & SVM_EVTINJ_VALID) &&
